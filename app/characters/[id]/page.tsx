@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useCurrentUser } from '@/context/UserContext';
 import {
   getCharacterById,
@@ -10,6 +11,7 @@ import {
 } from '@/store/memory-store';
 import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
 import type { AttributeKey } from '@/systems/dnd5e';
+import type { DnD5eCharacter } from '@/systems/dnd5e';
 import AttributesSection from '@/components/AttributesSection';
 
 export default function CharacterDetailPage() {
@@ -17,7 +19,14 @@ export default function CharacterDetailPage() {
   const router = useRouter();
   const { currentUser } = useCurrentUser();
   const id = params?.id as string;
-  const character = id ? getCharacterById(id) : null;
+  const [character, setCharacter] = useState<DnD5eCharacter | null>(() =>
+    id ? getCharacterById(id) ?? null : null
+  );
+
+  useEffect(() => {
+    const c = id ? getCharacterById(id) : null;
+    setCharacter(c ?? null);
+  }, [id]);
 
   if (!currentUser) {
     return (
@@ -47,10 +56,10 @@ export default function CharacterDetailPage() {
 
   const handleAttributeChange = (key: AttributeKey, value: number) => {
     if (!currentUser) return;
-    updateCharacter(character.id, currentUser.username, {
+    const updated = updateCharacter(character.id, currentUser.username, {
       attributes: { ...character.attributes, [key]: value },
     });
-    router.refresh();
+    if (updated) setCharacter(updated);
   };
 
   const pb = getProficiencyBonus(character.level);
