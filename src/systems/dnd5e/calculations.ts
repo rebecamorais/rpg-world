@@ -1,0 +1,10 @@
+export function getModifier(value: number): number {
+  return Math.floor((value - 10) / 2);
+}
+
+/**
+ * D&D 5e: +2 at level 1–4, +1 every 4 levels after.
+ */
+export function getProficiencyBonus(level: number): number {
+  return 2 + Math.floor((level - 1) / 4);
+}
