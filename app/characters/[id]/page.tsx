@@ -3,15 +3,15 @@
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useCurrentUser } from '../../../src/context/UserContext';
+import { useCurrentUser } from '@/context/UserContext';
 import {
   getCharacterById,
   updateCharacter,
   deleteCharacter,
-} from '../../../src/store/memory-store';
-import { getProficiencyBonus } from '../../../src/systems/dnd5e/calculations';
-import type { AttributeKey, DnD5eCharacter } from '../../../src/systems/dnd5e';
-import AttributesSection from '../../../src/components/AttributesSection';
+} from '@/store/memory-store';
+import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
+import type { AttributeKey, DnD5eCharacter } from '@/systems/dnd5e';
+import AttributesSection from '@/components/AttributesSection';
 
 export default function CharacterDetailPage() {
   const params = useParams();
