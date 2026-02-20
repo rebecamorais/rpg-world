@@ -107,7 +107,7 @@ export default function NewCharacterPage() {
             type="number"
             min={1}
             value={level}
-            onChange={(e) => setLevel(e.target.value)}
+            onChange={(e) => setLevel(Number(e.target.value))}
             className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800"
           />
         </div>
