@@ -36,6 +36,18 @@ export function getAllUsernames(): string[] {
 }
 
 export function addCharacter(character: DnD5eCharacter): DnD5eCharacter {
+  const currentChars = getCharactersByOwner(character.ownerUsername);
+  if (currentChars.length >= 2) {
+    throw new Error('Limite máximo de 2 personagens atingido.');
+  }
+
+  // Validate values
+  character.level = Math.max(1, Math.floor(character.level));
+  for (const key of Object.keys(character.attributes)) {
+    const k = key as keyof typeof character.attributes;
+    character.attributes[k] = Math.max(1, Math.min(30, Math.floor(character.attributes[k])));
+  }
+
   characters.set(character.id, { ...character });
   return character;
 }
@@ -58,6 +70,14 @@ export function updateCharacter(
   const existing = characters.get(id);
   if (!existing || existing.ownerUsername !== ownerUsername) return null;
   const updated: DnD5eCharacter = { ...existing, ...updates };
+
+  // Validate limits before persisting
+  updated.level = Math.max(1, Math.floor(updated.level));
+  for (const key of Object.keys(updated.attributes)) {
+    const k = key as keyof typeof updated.attributes;
+    updated.attributes[k] = Math.max(1, Math.min(30, Math.floor(updated.attributes[k])));
+  }
+
   characters.set(id, updated);
   return updated;
 }

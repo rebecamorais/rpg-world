@@ -51,6 +51,8 @@ export default function CharacterDetailPage() {
     );
   }
 
+  const [error, setError] = useState('');
+
   const handleDelete = () => {
     if (confirm('Excluir este personagem? Não é possível desfazer.')) {
       const ok = deleteCharacter(character.id, currentUser.username);
@@ -60,26 +62,41 @@ export default function CharacterDetailPage() {
 
   const handleAttributeChange = (key: AttributeKey, value: number) => {
     if (!currentUser) return;
-    const updated = updateCharacter(character.id, currentUser.username, {
-      attributes: { ...character.attributes, [key]: value },
-    });
-    if (updated) setCharacter(updated);
+    try {
+      setError('');
+      const updated = updateCharacter(character.id, currentUser.username, {
+        attributes: { ...character.attributes, [key]: value },
+      });
+      if (updated) setCharacter(updated);
+    } catch (err: any) {
+      setError(err.message || 'Erro ao atualizar atributo');
+    }
   };
 
   const handleSkillChange = (key: SkillKey, skillData: CharacterSkill) => {
     if (!currentUser) return;
-    const updated = updateCharacter(character.id, currentUser.username, {
-      skills: { ...character.skills, [key]: skillData },
-    });
-    if (updated) setCharacter(updated);
+    try {
+      setError('');
+      const updated = updateCharacter(character.id, currentUser.username, {
+        skills: { ...character.skills, [key]: skillData },
+      });
+      if (updated) setCharacter(updated);
+    } catch (err: any) {
+      setError(err.message || 'Erro ao atualizar perícia');
+    }
   };
 
   const handleSavingThrowChange = (key: AttributeKey, isProficient: boolean) => {
     if (!currentUser) return;
-    const updated = updateCharacter(character.id, currentUser.username, {
-      savingThrowProficiencies: { ...character.savingThrowProficiencies, [key]: isProficient },
-    });
-    if (updated) setCharacter(updated);
+    try {
+      setError('');
+      const updated = updateCharacter(character.id, currentUser.username, {
+        savingThrowProficiencies: { ...character.savingThrowProficiencies, [key]: isProficient },
+      });
+      if (updated) setCharacter(updated);
+    } catch (err: any) {
+      setError(err.message || 'Erro ao atualizar salvaguarda');
+    }
   };
 
   const pb = getProficiencyBonus(character.level);
@@ -101,6 +118,7 @@ export default function CharacterDetailPage() {
           Excluir
         </button>
       </div>
+      {error && <p className="text-sm text-red-600 dark:text-red-400 mb-4 bg-red-50 dark:bg-red-900/20 p-2 rounded">{error}</p>}
       <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
         {character.name}
       </h1>

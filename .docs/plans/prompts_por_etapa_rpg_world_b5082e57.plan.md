@@ -22,7 +22,7 @@ todos:
     status: completed
   - id: f7-integrity
     content: F7 – Integridade e validações (valores derivados não editáveis, validações + UX)
-    status: pending
+    status: completed
 isProject: false
 ---
 

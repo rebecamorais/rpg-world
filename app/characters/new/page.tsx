@@ -40,12 +40,16 @@ export default function NewCharacterPage() {
       hpMax: levelNum * 8,
       hpCurrent: levelNum * 8,
     });
-    const id = crypto.randomUUID();
-    const character = addCharacter({
-      ...base,
-      id,
-    });
-    router.push(`/characters/${character.id}`);
+    try {
+      const id = crypto.randomUUID();
+      const character = addCharacter({
+        ...base,
+        id,
+      });
+      router.push(`/characters/${character.id}`);
+    } catch (err: any) {
+      setError(err.message || 'Erro ao criar personagem.');
+    }
   };
 
   return (
