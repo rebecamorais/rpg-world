@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { User } from '@/types/user';
-import { getOrCreateUser } from '@/store/memory-store';
+import { getOrCreateUser } from '@/backend/store/memory-store';
 
 interface UserContextValue {
   currentUser: User | null;

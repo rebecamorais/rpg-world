@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useCurrentUser } from '@/context/UserContext';
-import { addCharacter } from '@/store/memory-store';
+import { useCurrentUser } from '@/frontend/context/UserContext';
+import { addCharacter } from '@/backend/store/memory-store';
 import { createDnD5eCharacter } from '@/systems/dnd5e/factory';
 
 export default function NewCharacterPage() {
@@ -47,8 +47,8 @@ export default function NewCharacterPage() {
         id,
       });
       router.push(`/characters/${character.id}`);
-    } catch (err: any) {
-      setError(err.message || 'Erro ao criar personagem.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Erro ao criar personagem.');
     }
   };
 

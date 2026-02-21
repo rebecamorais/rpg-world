@@ -2,19 +2,19 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useCurrentUser } from '@/context/UserContext';
+import { useState } from 'react';
+import { useCurrentUser } from '@/frontend/context/UserContext';
 import {
   getCharacterById,
   updateCharacter,
   deleteCharacter,
-} from '@/store/memory-store';
+} from '@/backend/store/memory-store';
 import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
 import type { AttributeKey, DnD5eCharacter } from '@/systems/dnd5e';
-import AttributesSection from '@/components/AttributesSection';
-import SkillsSection from '@/components/SkillsSection';
-import SavingThrowsSection from '@/components/SavingThrowsSection';
-import PassivePerception from '@/components/PassivePerception';
+import AttributesSection from '@/frontend/components/AttributesSection';
+import SkillsSection from '@/frontend/components/SkillsSection';
+import SavingThrowsSection from '@/frontend/components/SavingThrowsSection';
+import PassivePerception from '@/frontend/components/PassivePerception';
 import {
   Shield,
   Heart,
@@ -24,22 +24,21 @@ import {
 } from 'lucide-react';
 import type { SkillKey } from '@/systems/dnd5e/constants';
 import type { CharacterSkill } from '@/systems/dnd5e/types';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent } from '@/frontend/components/ui/card';
+import { Input } from '@/frontend/components/ui/input';
 
 export default function CharacterDetailPage() {
   const params = useParams();
   const router = useRouter();
+
+  const [error, setError] = useState('');
+
   const { currentUser } = useCurrentUser();
   const id = params?.id as string;
+
   const [character, setCharacter] = useState<DnD5eCharacter | null>(() =>
     id ? getCharacterById(id) ?? null : null
   );
-
-  useEffect(() => {
-    const c = id ? getCharacterById(id) : null;
-    setCharacter(c ?? null);
-  }, [id]);
 
   if (!currentUser) {
     return (
@@ -60,7 +59,6 @@ export default function CharacterDetailPage() {
     );
   }
 
-  const [error, setError] = useState('');
 
   const handleDelete = () => {
     if (confirm('Excluir este personagem? Não é possível desfazer.')) {
@@ -77,8 +75,8 @@ export default function CharacterDetailPage() {
         attributes: { ...character.attributes, [key]: value },
       });
       if (updated) setCharacter(updated);
-    } catch (err: any) {
-      setError(err.message || 'Erro ao atualizar atributo');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Erro ao atualizar atributo');
     }
   };
 
@@ -90,8 +88,8 @@ export default function CharacterDetailPage() {
         skills: { ...character.skills, [key]: skillData },
       });
       if (updated) setCharacter(updated);
-    } catch (err: any) {
-      setError(err.message || 'Erro ao atualizar perícia');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Erro ao atualizar perícia');
     }
   };
 
@@ -103,8 +101,8 @@ export default function CharacterDetailPage() {
         savingThrowProficiencies: { ...character.savingThrowProficiencies, [key]: isProficient },
       });
       if (updated) setCharacter(updated);
-    } catch (err: any) {
-      setError(err.message || 'Erro ao atualizar salvaguarda');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Erro ao atualizar salvaguarda');
     }
   };
 
@@ -116,8 +114,8 @@ export default function CharacterDetailPage() {
         [field]: value,
       } as Partial<DnD5eCharacter>);
       if (updated) setCharacter(updated);
-    } catch (err: any) {
-      setError(err.message || 'Erro ao atualizar personagem');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Erro ao atualizar personagem');
     }
   };
 

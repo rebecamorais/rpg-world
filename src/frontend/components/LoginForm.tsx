@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useCurrentUser } from '@/context/UserContext';
+import { useCurrentUser } from '@/frontend/context/UserContext';
 
 export default function LoginForm() {
   const { login } = useCurrentUser();

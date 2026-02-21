@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useCurrentUser } from '@/context/UserContext';
-import { getCharactersByOwner } from '@/store/memory-store';
+import { useCurrentUser } from '@/frontend/context/UserContext';
+import { getCharactersByOwner } from '@/backend/store/memory-store';
 
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();

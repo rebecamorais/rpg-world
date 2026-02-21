@@ -1,7 +1,7 @@
 'use client';
 
-import { useCurrentUser } from '@/context/UserContext';
-import CharacterList from '@/components/CharacterList';
+import { useCurrentUser } from '@/frontend/context/UserContext';
+import CharacterList from '@/frontend/components/CharacterList';
 
 export default function CharactersPage() {
   const { currentUser } = useCurrentUser();

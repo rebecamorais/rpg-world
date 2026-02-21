@@ -4,8 +4,8 @@ import React from 'react';
 import { ATTRIBUTE_KEYS, ATTRIBUTE_LABELS } from '@/systems/dnd5e/constants';
 import { calculateSavingThrow } from '@/systems/dnd5e/calculations';
 import type { AttributeKey } from '@/systems/dnd5e/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/frontend/components/ui/card';
+import { cn } from '@/backend/lib/utils';
 
 interface Props {
     attributes: Record<AttributeKey, number>;

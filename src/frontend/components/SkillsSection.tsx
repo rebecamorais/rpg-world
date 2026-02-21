@@ -5,8 +5,8 @@ import { SKILL_KEYS, SKILLS_CATALOG, type SkillKey } from '@/systems/dnd5e/const
 import { calculateSkillValue } from '@/systems/dnd5e/calculations';
 import type { CharacterSkill } from '@/systems/dnd5e/types';
 import type { AttributeKey } from '@/systems/dnd5e';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/frontend/components/ui/card';
+import { cn } from '@/backend/lib/utils';
 
 interface Props {
     attributes: Record<AttributeKey, number>;

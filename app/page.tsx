@@ -1,8 +1,8 @@
 'use client';
 
-import { useCurrentUser } from '@/context/UserContext';
-import LoginForm from '@/components/LoginForm';
-import CharacterList from '@/components/CharacterList';
+import { useCurrentUser } from '@/frontend/context/UserContext';
+import LoginForm from '@/frontend/components/LoginForm';
+import CharacterList from '@/frontend/components/CharacterList';
 
 export default function Home() {
   const { currentUser, logout } = useCurrentUser();
