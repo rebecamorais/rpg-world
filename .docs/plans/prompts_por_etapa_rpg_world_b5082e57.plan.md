@@ -23,6 +23,15 @@ todos:
   - id: f7-integrity
     content: F7 – Integridade e validações (valores derivados não editáveis, validações + UX)
     status: completed
+  - id: f8-refactor-ui
+    content: F8 – Refatoração Ficha UI e Imagem (UI unificada densa, atributos/perícias na mesma tela + Foto)
+    status: completed
+  - id: f9-spells-api
+    content: F9 – Drawer de Magias (Integração https://www.dnd5eapi.co/ pronta para Google Tradutor)
+    status: unstarted
+  - id: f10-supabase
+    content: F10 – Migração para Supabase (Auth Manual, BD e Storage para as imagens)
+    status: unstarted
 isProject: false
 ---
 
