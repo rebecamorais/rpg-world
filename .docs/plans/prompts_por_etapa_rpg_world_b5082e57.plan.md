@@ -19,7 +19,7 @@ todos:
     status: completed
   - id: f6-saves-perception
     content: F6 – Salvaguardas e percepção passiva (modelo + cálculo, somente leitura)
-    status: pending
+    status: completed
   - id: f7-integrity
     content: F7 – Integridade e validações (valores derivados não editáveis, validações + UX)
     status: pending

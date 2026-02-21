@@ -13,6 +13,8 @@ import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
 import type { AttributeKey, DnD5eCharacter } from '@/systems/dnd5e';
 import AttributesSection from '@/components/AttributesSection';
 import SkillsSection from '@/components/SkillsSection';
+import SavingThrowsSection from '@/components/SavingThrowsSection';
+import PassivePerception from '@/components/PassivePerception';
 import type { SkillKey } from '@/systems/dnd5e/constants';
 import type { CharacterSkill } from '@/systems/dnd5e/types';
 
@@ -72,6 +74,14 @@ export default function CharacterDetailPage() {
     if (updated) setCharacter(updated);
   };
 
+  const handleSavingThrowChange = (key: AttributeKey, isProficient: boolean) => {
+    if (!currentUser) return;
+    const updated = updateCharacter(character.id, currentUser.username, {
+      savingThrowProficiencies: { ...character.savingThrowProficiencies, [key]: isProficient },
+    });
+    if (updated) setCharacter(updated);
+  };
+
   const pb = getProficiencyBonus(character.level);
 
   return (
@@ -117,12 +127,25 @@ export default function CharacterDetailPage() {
           attributes={character.attributes}
           onAttributeChange={handleAttributeChange}
         />
+        <SavingThrowsSection
+          attributes={character.attributes}
+          level={character.level}
+          savingThrows={character.savingThrowProficiencies}
+          onSavingThrowChange={handleSavingThrowChange}
+        />
         <SkillsSection
           attributes={character.attributes}
           level={character.level}
           skills={character.skills ?? {}}
           onSkillChange={handleSkillChange}
         />
+        <div className="mt-8">
+          <PassivePerception
+            wisValue={character.attributes.WIS ?? 10}
+            level={character.level}
+            perceptionSkillData={character.skills?.PERCEPTION}
+          />
+        </div>
       </div>
     </div>
   );

@@ -24,3 +24,23 @@ export function calculateSkillValue(
   return mod + bonus;
 }
 
+export function calculateSavingThrow(
+  attributeValue: number,
+  level: number,
+  isProficient: boolean
+): number {
+  const mod = getModifier(attributeValue);
+  const pb = isProficient ? getProficiencyBonus(level) : 0;
+  return mod + pb;
+}
+
+export function calculatePassivePerception(
+  wisValue: number,
+  level: number,
+  isPerceptionProficient: boolean,
+  hasPerceptionExpertise: boolean = false
+): number {
+  return 10 + calculateSkillValue(wisValue, level, isPerceptionProficient, hasPerceptionExpertise);
+}
+
+
