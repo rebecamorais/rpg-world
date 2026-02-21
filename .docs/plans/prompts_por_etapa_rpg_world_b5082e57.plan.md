@@ -16,7 +16,7 @@ todos:
     status: completed
   - id: f5-skills
     content: F5 – Perícias D&D (catálogo 18 perícias, vínculo atributo, cálculo valor, integridade)
-    status: pending
+    status: completed
   - id: f6-saves-perception
     content: F6 – Salvaguardas e percepção passiva (modelo + cálculo, somente leitura)
     status: pending

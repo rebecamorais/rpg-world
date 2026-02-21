@@ -11,9 +11,14 @@ const defaultAttributes: Record<AttributeKey, number> = {
   CHA: 10,
 };
 
-function defaultSkillProficiencies(): Record<string, boolean> {
+import type { CharacterSkill } from './types';
+import type { SkillKey } from './constants';
+
+function defaultSkills(): Partial<Record<SkillKey, CharacterSkill>> {
+
   return {};
 }
+
 
 function defaultSavingThrowProficiencies(): Record<AttributeKey, boolean> {
   return ATTRIBUTE_KEYS.reduce(
@@ -39,7 +44,7 @@ export function createDnD5eCharacter(
     ac: overrides?.ac ?? 10,
     initiative: overrides?.initiative ?? 0,
     attributes: { ...defaultAttributes, ...overrides?.attributes },
-    skillProficiencies: overrides?.skillProficiencies ?? defaultSkillProficiencies(),
+    skills: overrides?.skills ?? defaultSkills(),
     savingThrowProficiencies:
       overrides?.savingThrowProficiencies ?? defaultSavingThrowProficiencies(),
   };

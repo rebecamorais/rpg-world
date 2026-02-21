@@ -8,3 +8,19 @@ export function getModifier(value: number): number {
 export function getProficiencyBonus(level: number): number {
   return 2 + Math.floor((level - 1) / 4);
 }
+
+export function calculateSkillValue(
+  attributeValue: number,
+  level: number,
+  isProficient: boolean,
+  expertise: boolean = false
+): number {
+  const mod = getModifier(attributeValue);
+  let bonus = 0;
+  if (isProficient) {
+    const pb = getProficiencyBonus(level);
+    bonus = expertise ? pb * 2 : pb;
+  }
+  return mod + bonus;
+}
+

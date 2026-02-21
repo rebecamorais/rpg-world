@@ -12,6 +12,9 @@ import {
 import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
 import type { AttributeKey, DnD5eCharacter } from '@/systems/dnd5e';
 import AttributesSection from '@/components/AttributesSection';
+import SkillsSection from '@/components/SkillsSection';
+import type { SkillKey } from '@/systems/dnd5e/constants';
+import type { CharacterSkill } from '@/systems/dnd5e/types';
 
 export default function CharacterDetailPage() {
   const params = useParams();
@@ -61,6 +64,14 @@ export default function CharacterDetailPage() {
     if (updated) setCharacter(updated);
   };
 
+  const handleSkillChange = (key: SkillKey, skillData: CharacterSkill) => {
+    if (!currentUser) return;
+    const updated = updateCharacter(character.id, currentUser.username, {
+      skills: { ...character.skills, [key]: skillData },
+    });
+    if (updated) setCharacter(updated);
+  };
+
   const pb = getProficiencyBonus(character.level);
 
   return (
@@ -105,6 +116,12 @@ export default function CharacterDetailPage() {
         <AttributesSection
           attributes={character.attributes}
           onAttributeChange={handleAttributeChange}
+        />
+        <SkillsSection
+          attributes={character.attributes}
+          level={character.level}
+          skills={character.skills ?? {}}
+          onSkillChange={handleSkillChange}
         />
       </div>
     </div>

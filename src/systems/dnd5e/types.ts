@@ -1,6 +1,13 @@
 import type { CharacterBase } from '@/types/character';
+import type { SkillKey } from './constants';
 
 export type AttributeKey = 'STR' | 'DEX' | 'CON' | 'INT' | 'WIS' | 'CHA';
+
+export interface CharacterSkill {
+  isProficient: boolean;
+  expertise?: boolean;
+}
+
 
 export interface DnD5eCharacterData {
   race: string;
@@ -10,7 +17,7 @@ export interface DnD5eCharacterData {
   ac: number;
   initiative: number;
   attributes: Record<AttributeKey, number>;
-  skillProficiencies: Record<string, boolean>;
+  skills: Partial<Record<SkillKey, CharacterSkill>>;
   savingThrowProficiencies: Record<AttributeKey, boolean>;
 }
 
