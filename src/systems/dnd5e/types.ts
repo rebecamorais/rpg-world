@@ -22,6 +22,7 @@ export interface DnD5eCharacterData {
   skills: Partial<Record<SkillKey, CharacterSkill>>;
   savingThrowProficiencies: Record<AttributeKey, boolean>;
   spells?: string[];
+  passivePerception?: number;
 }
 
 export type DnD5eCharacter = CharacterBase & {

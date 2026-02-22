@@ -19,6 +19,7 @@ export interface UpdateCharacterInput {
         skills?: Partial<Record<SkillKey, CharacterSkill>>;
         savingThrowProficiencies?: Record<AttributeKey, boolean>;
         spells?: string[];
+        passivePerception?: number;
     };
 }
 
@@ -49,6 +50,7 @@ export class UpdateCharacterUseCase {
         if (u.ac !== undefined) character.ac = u.ac;
         if (u.speed !== undefined) character.speed = u.speed;
         if (u.initiative !== undefined) character.initiative = u.initiative;
+        if (u.passivePerception !== undefined) character.passivePerception = u.passivePerception;
 
         if (u.hpCurrent !== undefined || u.hpMax !== undefined) {
             const currentHp = u.hpCurrent !== undefined ? u.hpCurrent : character.hp.status.current;

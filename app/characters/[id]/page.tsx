@@ -127,13 +127,40 @@ export default function CharacterDetailPage() {
 
   const handleAttributeChange = (key: AttributeKey, value: number) => {
     setError('');
-    setCharacter(prev => prev ? { ...prev, attributes: { ...prev.attributes, [key]: value } as Record<AttributeKey, number> } as DnD5eCharacter : null);
+
+    // Recalcular Percepção Passiva caso WIS seja modificado
+    let newPassivePerception = character?.passivePerception ?? 10;
+    if (key === 'WIS' && character) {
+      const wisMod = Math.floor((value - 10) / 2);
+      const isProficient = character.skills?.PERCEPTION?.isProficient;
+      newPassivePerception = 10 + wisMod + (isProficient ? getProficiencyBonus(character.level) : 0);
+    }
+
+    setCharacter(prev => prev ? {
+      ...prev,
+      attributes: { ...prev.attributes, [key]: value } as Record<AttributeKey, number>,
+      passivePerception: newPassivePerception
+    } as DnD5eCharacter : null);
+
     setHasUnsavedChanges(true);
   };
 
   const handleSkillChange = (key: SkillKey, skillData: CharacterSkill) => {
     setError('');
-    setCharacter(prev => prev ? { ...prev, skills: { ...prev.skills, [key]: skillData } } as DnD5eCharacter : null);
+
+    // Recalcular Percepção Passiva caso Percepção seja alterada
+    let newPassivePerception = character?.passivePerception ?? 10;
+    if (key === 'PERCEPTION' && character) {
+      const wisMod = character.attributes.WIS ? Math.floor((character.attributes.WIS - 10) / 2) : 0;
+      newPassivePerception = 10 + wisMod + (skillData.isProficient ? getProficiencyBonus(character.level) : 0);
+    }
+
+    setCharacter(prev => prev ? {
+      ...prev,
+      skills: { ...prev.skills, [key]: skillData },
+      passivePerception: newPassivePerception
+    } as DnD5eCharacter : null);
+
     setHasUnsavedChanges(true);
   };
 
@@ -328,7 +355,7 @@ export default function CharacterDetailPage() {
             <div className="z-10 flex flex-col items-center">
               <Eye className="text-blue-500 w-6 h-6 mb-2 drop-shadow-md" />
               <span className="text-3xl font-bold text-zinc-100 h-10 flex items-center justify-center">
-                {(character.attributes.WIS ? Math.floor((character.attributes.WIS - 10) / 2) : 0) + 10 + (character.skills?.PERCEPTION?.isProficient ? pb : 0)}
+                {character.passivePerception ?? 10}
               </span>
               <span className="text-[10px] uppercase font-bold text-zinc-500 mt-1">Percepção Passiva</span>
             </div>

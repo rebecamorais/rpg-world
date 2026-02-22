@@ -19,6 +19,7 @@ export class DnD5eCharacter extends Character {
     public skills: Partial<Record<SkillKey, CharacterSkill>>;
     public savingThrowProficiencies: Record<AttributeKey, boolean>;
     public spells: string[];
+    public passivePerception: number;
 
     constructor(
         id: string,
@@ -34,7 +35,8 @@ export class DnD5eCharacter extends Character {
         initiative: number = 0,
         skills: Partial<Record<SkillKey, CharacterSkill>> = {},
         savingThrowProficiencies: Partial<Record<AttributeKey, boolean>> = {},
-        spells: string[] = []
+        spells: string[] = [],
+        passivePerception: number = 10
     ) {
         super(id, name, 'DnD_5e', ownerUsername, attributes, hp, level);
         this.characterClass = characterClass;
@@ -45,6 +47,7 @@ export class DnD5eCharacter extends Character {
         this.skills = skills;
         this.savingThrowProficiencies = this.normalizeSavingThrows(savingThrowProficiencies);
         this.spells = spells;
+        this.passivePerception = passivePerception;
     }
 
     private normalizeSavingThrows(saves: Partial<Record<AttributeKey, boolean>>): Record<AttributeKey, boolean> {
@@ -80,10 +83,6 @@ export class DnD5eCharacter extends Character {
         return mod + pb;
     }
 
-    calculatePassivePerception(): number {
-        return 10 + this.calculateSkillValue('Perception', 'WIS');
-    }
-
     getCombatStats(): Record<string, unknown> {
         return {
             ac: this.ac,
@@ -108,6 +107,7 @@ export class DnD5eCharacter extends Character {
             ac: this.ac,
             speed: this.speed,
             initiative: this.initiative,
+            passivePerception: this.passivePerception,
             skills: this.skills,
             savingThrowProficiencies: this.savingThrowProficiencies,
             spells: this.spells

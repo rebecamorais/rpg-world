@@ -61,12 +61,6 @@ describe('DnD5eCharacter (Domain Entity)', () => {
         expect(char.calculateSavingThrow('STR')).toBe(0); // 10 base -> mod 0
     });
 
-    it('deve calcular percepção passiva', () => {
-        // mod(+3) + prof(+2) + 10 = 15
-        const char = buildCharacter({ WIS: 16 }, 1, { Perception: { isProficient: true } });
-        expect(char.calculatePassivePerception()).toBe(15);
-    });
-
     it('deve exportar corretamente via toJSON (Data Transfer Object)', () => {
         const char = buildCharacter({ STR: 18 }, 1, {}, {});
         char.spells = ['fireball', 'shield'];
