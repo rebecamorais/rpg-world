@@ -262,7 +262,7 @@ export default function CharacterDetailPage() {
   const pb = getProficiencyBonus(character.level);
 
   return (
-    <div className="mx-auto max-w-2xl p-4">
+    <div className="mx-auto max-w-5xl p-4">
       <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-4">
           <Link
@@ -466,12 +466,12 @@ export default function CharacterDetailPage() {
                   onChange={(e) =>
                     handleBasicInfoChange(
                       'speed',
-                      parseInt(e.target.value) || 0,
+                      parseFloat(e.target.value) || 0,
                     )
                   }
                   className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
                 />
-                <span className="text-muted-foreground text-sm">ft</span>
+                <span className="text-muted-foreground text-sm">m</span>
               </div>
               <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
                 Deslocamento
