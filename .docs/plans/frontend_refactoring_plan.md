@@ -81,7 +81,7 @@ Eliminar a dependência de `useEffect` para carregar dados vitais nas páginas p
                     ├── page.tsx  <-- Agregador (Server Component)
                     └── loading.tsx
     ```
-- [ ] Atualizar todos os `Links` e roteamentos (`router.push`) espalhados pelo frontend e componentes para respeitar a injecao de `[system_name]`. Exemplo: `/characters/${c.id}` vira `/system/${c.system || 'dnd5e'}/character/${c.id}`.
+- [ ] Atualizar todos os `Links` e roteamentos (`router.push`) espalhados pelo frontend e componentes para respeitar a injecao de `[system_name]`. Exemplo: `/characters/${c.id}` vira `/system/${c.system}/character/${c.id}`.
 - [ ] Atualizar o retorno do Endpoint `/api/characters` (e demais) se necessário para sempre incluir o `system`.
 - [ ] Utilizar a página `page.tsx` agregadora como Server Component puro para realizar os `awaits` de banco de dados e passar para a View.
 - [ ] Implementar estados de Loading com o arquivo nativo `loading.tsx` do Next.js, substituindo os retornos manuais de `<p>Carregando...</p>` por "Skeletons" focados daquela aba de ficha.

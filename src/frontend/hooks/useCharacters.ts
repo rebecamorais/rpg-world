@@ -1,12 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-interface CharacterSummary {
-  id: string;
-  name: string;
-  level: number;
-  characterClass?: string;
-  race?: string;
-}
+import type { CharacterSummary } from '@/types/character';
 
 export function useCharacters(currentUser: { username: string } | null) {
   const query = useQuery({

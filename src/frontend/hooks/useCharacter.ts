@@ -39,7 +39,7 @@ export function useCharacter(
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['character'] });
       toast.success('Personagem excluído com sucesso.');
-      router.push('/characters');
+      router.push('/');
     },
     onError: (err: Error) => {
       toast.error(err.message);

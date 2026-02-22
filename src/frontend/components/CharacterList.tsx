@@ -59,7 +59,7 @@ export default function CharacterList() {
         {characters.map((c) => (
           <li key={c.id}>
             <Link
-              href={`/characters/${c.id}`}
+              href={`/system/${c.system}/character/${c.id}`}
               className="hover:bg-muted -mx-2 block rounded px-2 py-3"
             >
               <span className="text-foreground font-medium">{c.name}</span>

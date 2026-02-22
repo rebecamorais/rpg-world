@@ -7,7 +7,6 @@ import { useParams } from 'next/navigation';
 
 import {
   BookOpen,
-  Eye,
   Footprints,
   Heart,
   HeartPulse,

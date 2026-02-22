@@ -28,10 +28,10 @@ export function useCreateCharacter(tSuccess: string, tError: string) {
 
       return res.json() as Promise<{ id: string }>;
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['characters'] });
       toast.success(tSuccess);
-      router.push(`/characters/${data.id}`);
+      router.push(`/system/${variables.system}/character/${data.id}`);
     },
     onError: (error: Error) => {
       toast.error(error.message);

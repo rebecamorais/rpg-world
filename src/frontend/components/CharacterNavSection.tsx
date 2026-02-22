@@ -29,12 +29,12 @@ export default function CharacterNavSection({
       </p>
       <div className="flex flex-col gap-1">
         <NavItem
-          href={`/characters/${characterId}`}
+          href={`/system/${character.system}/character/${characterId}`}
           label={tDash('attributes')}
           isSubItem
         />
         <NavItem
-          href={`/characters/${characterId}/spells`}
+          href={`/system/${character.system}/character/${characterId}/spells`}
           label={tDash('spells')}
           isSubItem
         />

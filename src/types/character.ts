@@ -7,3 +7,11 @@ export interface CharacterBase {
   name: string;
   level: number;
 }
+
+export interface CharacterSummary {
+  id: string;
+  name: string;
+  level: number;
+  characterClass?: string;
+  system: GameSystem;
+}
