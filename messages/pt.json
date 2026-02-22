@@ -59,7 +59,22 @@
     "saveSuccess": "Personagem salvo com sucesso!",
     "saveError": "Falha ao salvar no servidor.",
     "unsavedChanges": "Você tem alterações não salvas.",
-    "passivePerception": "Percepção Passiva"
+    "passivePerception": "Percepção Passiva",
+    "preparedSpells": "Magias Preparadas",
+    "forgetSpell": "Esquecer magia"
+  },
+  "magicSystem": {
+    "titleConfig": "Configuração do Sistema Mágico",
+    "systemUsed": "Sistema Usado",
+    "slotsOfficial": "Spell Slots Oficial",
+    "manaHomebrew": "Mana / Homebrew",
+    "slotsCapacity": "Capacidade de Slots por Nível",
+    "circle": "Círculo {level}",
+    "noSlotsConfigured": "Sem Slots configurados.",
+    "done": "Concluir",
+    "spellPoints": "Spell Points",
+    "spellSlots": "Spell Slots",
+    "level": "Nv {level}"
   },
   "dashboard": {
     "menu": "Menu",

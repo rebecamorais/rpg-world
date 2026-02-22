@@ -7,18 +7,19 @@ import { useParams } from 'next/navigation';
 
 import {
   BookOpen,
-  Droplet,
   Eye,
   Footprints,
   Heart,
   HeartPulse,
   Shield,
   Swords,
+  X,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import AttributesSection from '@/frontend/components/AttributesSection';
 import CharacterHeader from '@/frontend/components/CharacterHeader';
+import MagicSystemCard from '@/frontend/components/MagicSystemCard';
 import PassivePerception from '@/frontend/components/PassivePerception';
 import SavingThrowsSection from '@/frontend/components/SavingThrowsSection';
 import SkillsSection from '@/frontend/components/SkillsSection';
@@ -237,6 +238,30 @@ export default function CharacterDetailPage() {
     setHasUnsavedChanges(true);
   };
 
+  const handleSpellSlotsChange = (level: string, max: number, used: number) => {
+    setError('');
+    setCharacter((prev) =>
+      prev
+        ? ({
+            ...prev,
+            spellSlots: {
+              ...prev.spellSlots,
+              [level]: { max, used },
+            },
+          } as DnD5eCharacter)
+        : null,
+    );
+    setHasUnsavedChanges(true);
+  };
+
+  const handleSpellcastingSystemChange = (system: 'slots' | 'points') => {
+    setError('');
+    setCharacter((prev) =>
+      prev ? ({ ...prev, spellcastingSystem: system } as DnD5eCharacter) : null,
+    );
+    setHasUnsavedChanges(true);
+  };
+
   const handleLearnSpell = (spellIndex: string) => {
     const currentSpells = character.spellsKnown || [];
     if (!currentSpells.includes(spellIndex)) {
@@ -420,40 +445,6 @@ export default function CharacterDetailPage() {
 
           <Card className="border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
             <div className="z-10 flex flex-col items-center">
-              <Droplet className="mb-2 h-6 w-6 text-blue-500 drop-shadow-md" />
-              <div className="flex items-baseline justify-center gap-1">
-                <Input
-                  type="number"
-                  value={character.spellPoints?.current ?? 0}
-                  onChange={(e) =>
-                    handleSpellPointsChange(
-                      'current',
-                      parseInt(e.target.value) || 0,
-                    )
-                  }
-                  className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-right text-3xl font-bold focus-visible:ring-2"
-                />
-                <span className="text-muted-foreground">/</span>
-                <Input
-                  type="number"
-                  value={character.spellPoints?.max ?? 0}
-                  onChange={(e) =>
-                    handleSpellPointsChange(
-                      'max',
-                      parseInt(e.target.value) || 0,
-                    )
-                  }
-                  className="focus-visible:ring-primary text-muted-foreground h-10 w-12 border-transparent bg-transparent p-0 text-left text-xl font-bold focus-visible:ring-2"
-                />
-              </div>
-              <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
-                Mana / Slots
-              </span>
-            </div>
-          </Card>
-
-          <Card className="border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
-            <div className="z-10 flex flex-col items-center">
               <Footprints className="mb-2 h-6 w-6 text-emerald-500 drop-shadow-md" />
               <div className="flex items-baseline justify-center gap-1">
                 <Input
@@ -508,39 +499,9 @@ export default function CharacterDetailPage() {
           </Card>
         </div>
 
-        {/* Magias Conhecidas (Se houver) */}
-        {character.spellsKnown && character.spellsKnown.length > 0 && (
-          <Card className="border-border bg-card shadow-md">
-            <CardContent className="p-4">
-              <h3 className="text-foreground mb-3 flex items-center gap-2 text-sm font-bold tracking-wider uppercase">
-                <BookOpen size={16} className="text-primary" />
-                Magias Preparadas
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {character.spellsKnown.map((spellIndex: string) => (
-                  <div
-                    key={spellIndex}
-                    className="bg-secondary text-secondary-foreground border-border flex items-center gap-2 rounded-full border"
-                  >
-                    <span className="capitalize">
-                      {spellIndex.replace(/-/g, ' ')}
-                    </span>
-                    <button
-                      onClick={() => handleForgetSpell(spellIndex)}
-                      className="text-muted-foreground transition-colors hover:text-red-400"
-                      title="Esquecer magia"
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Main Grid: Attr on Left, Rest on Right */}
+        {/* Main Grid: Attr on Left, Saves/Skills on Center, Spells on Right */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+          {/* Col 1: Attributes */}
           <div className="md:col-span-3">
             <AttributesSection
               attributes={character.attributes}
@@ -548,7 +509,8 @@ export default function CharacterDetailPage() {
             />
           </div>
 
-          <div className="flex flex-col gap-6 md:col-span-9">
+          {/* Col 2: Saving Throws, Skills, Passive Perception */}
+          <div className="flex flex-col gap-6 md:col-span-5">
             <SavingThrowsSection
               attributes={character.attributes}
               level={character.level}
@@ -570,6 +532,47 @@ export default function CharacterDetailPage() {
                 perceptionSkillData={character.skills?.PERCEPTION}
               />
             </div>
+          </div>
+
+          {/* Col 3: Magic System and Known Spells */}
+          <div className="flex flex-col gap-6 md:col-span-4">
+            <MagicSystemCard
+              character={character}
+              onChangeSystem={handleSpellcastingSystemChange}
+              onChangePoints={handleSpellPointsChange}
+              onChangeSlots={handleSpellSlotsChange}
+            />
+
+            {/* Magias Conhecidas (Se houver) */}
+            {character.spellsKnown && character.spellsKnown.length > 0 && (
+              <Card className="border-border bg-card shadow-md">
+                <CardContent className="p-4">
+                  <h3 className="text-foreground mb-3 flex items-center gap-2 text-sm font-bold tracking-wider uppercase">
+                    <BookOpen size={16} className="text-primary" />
+                    {t('preparedSpells')}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {character.spellsKnown.map((spellIndex: string) => (
+                      <div
+                        key={spellIndex}
+                        className="bg-secondary text-secondary-foreground border-border flex items-center gap-1 rounded-full border py-1 pr-1 pl-3"
+                      >
+                        <span className="text-sm font-medium capitalize">
+                          {spellIndex.replace(/-/g, ' ')}
+                        </span>
+                        <button
+                          onClick={() => handleForgetSpell(spellIndex)}
+                          className="text-muted-foreground rounded-full p-1 transition-colors hover:bg-red-500/10 hover:text-red-500"
+                          title={t('forgetSpell')}
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
