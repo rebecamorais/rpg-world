@@ -27,6 +27,7 @@ Ideias e melhorias futuras para não perdermos o foco na Sprint atual. Um reposi
 - **Tratamento Global de Erros (Error Boundaries):** Adicionar arquivos `error.tsx` em rotas estratégicas do Next.js. Evita que a página inteira fique branca se um componente isolado (ex: "Spells") quebrar por falha de API ou banco.
 - **Internacionalização (i18n):** Preparar arquitetura de componentes e banco de dados para suportar múltiplos idiomas (ex: prever que o atributo da API venha "Strength" mas precise renderizar "Força"), evitando refatorações futuras.
 - **Gestão de Assets (Imagens e Ícones):** Utilizar ícones do `lucide-react` (já integrado via shadcn/ui). Para as fotos de personagens, preparar uso nativo do `next/image` visando performance, salvando as URLs no `Supabase Storage`.
+- **Layout de Personagem e Magias:** Refatorar a visualização do personagem para manter o Header (Nome, Classe, Nível, Raça) fixo. Criar uma navegação intra-personagem (menu lateral) separando "Atributos" (ficha principal) de "Spells" (página completa dedicada a lista e busca de magias). A adição de novas magias poderá abrir um modal, removendo a necessidade do atual botão de "Grimório" espremido na tela de atributos.
 
 ## Segurança Legal e Conteúdo (SRD 5.1 & Safe Harbor)
 - **Revisão de Conteúdo SRD vs Próprio:** Garantir que o sistema forneça apenas ferramentas e regras mecânicas SRD (CC-BY-4.0), evitando colisão com PI da Wizards (Distribuir subclasses pagas, Drizzt, Mind Flayers, Beholders, etc).
