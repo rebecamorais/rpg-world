@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 import {
   BookOpen,
@@ -15,6 +15,7 @@ import {
   Shield,
   Swords,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import AttributesSection from '@/frontend/components/AttributesSection';
 import CharacterHeader from '@/frontend/components/CharacterHeader';
@@ -44,7 +45,6 @@ import type { CharacterSkill } from '@/systems/dnd5e/types';
 
 export default function CharacterDetailPage() {
   const params = useParams();
-  const router = useRouter();
 
   const [error, setError] = useState('');
   const [isSpellsOpen, setIsSpellsOpen] = useState(false);
@@ -52,6 +52,8 @@ export default function CharacterDetailPage() {
 
   const { currentUser } = useCurrentUser();
   const id = params?.id as string;
+  const t = useTranslations('characters');
+  const tCommon = useTranslations('common');
 
   const {
     character: fetchedCharacter,
@@ -108,9 +110,7 @@ export default function CharacterDetailPage() {
   if (!currentUser) {
     return (
       <div className="flex flex-1 items-center justify-center p-4">
-        <p className="text-muted-foreground">
-          Faça login para ver o personagem.
-        </p>
+        <p className="text-muted-foreground">{t('requireLogin')}</p>
       </div>
     );
   }
@@ -118,7 +118,7 @@ export default function CharacterDetailPage() {
   if (isLoading) {
     return (
       <div className="flex flex-1 items-center justify-center p-4">
-        <p className="text-muted-foreground">Carregando...</p>
+        <p className="text-muted-foreground">{tCommon('loading')}</p>
       </div>
     );
   }
@@ -126,11 +126,9 @@ export default function CharacterDetailPage() {
   if (!character || character.ownerUsername !== currentUser.username) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center p-4">
-        <p className="text-muted-foreground">
-          Personagem não encontrado ou você não tem permissão.
-        </p>
+        <p className="text-muted-foreground">{t('notFoundOrNoPermission')}</p>
         <Link href="/characters" className="mt-2 text-sm underline">
-          Voltar à lista
+          {tCommon('back')}
         </Link>
       </div>
     );

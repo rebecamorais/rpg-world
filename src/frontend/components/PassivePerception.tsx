@@ -1,6 +1,7 @@
 'use client';
 
 import { Info } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import {
   Tooltip,
@@ -22,6 +23,7 @@ export default function PassivePerception({
   level,
   perceptionSkillData,
 }: Props) {
+  const t = useTranslations('characters');
   const isProficient = perceptionSkillData?.isProficient ?? false;
   const expertise = perceptionSkillData?.expertise ?? false;
 
@@ -37,7 +39,7 @@ export default function PassivePerception({
       <TooltipTrigger asChild>
         <div className="border-border bg-secondary hover:border-primary/50 flex cursor-help items-center justify-between rounded border p-3 transition-colors">
           <span className="text-secondary-foreground flex items-center gap-2 text-sm font-semibold">
-            Percepção Passiva
+            {t('passivePerception')}
             <Info className="text-muted-foreground h-4 w-4" />
           </span>
           <span className="text-foreground font-mono text-lg font-bold">

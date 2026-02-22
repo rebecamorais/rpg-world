@@ -45,6 +45,22 @@
     "success": "Character successfully created!",
     "error": "Error creating character."
   },
+  "characters": {
+    "loading": "Loading characters...",
+    "emptyState": "No characters yet.",
+    "createFirst": "Create first character",
+    "title": "Characters",
+    "newButton": "+ New",
+    "level": "Level {level}",
+    "requireLogin": "Please log in to see your characters.",
+    "notFoundOrNoPermission": "Character not found or you don't have permission.",
+    "deleteSuccess": "Character deleted successfully.",
+    "deleteError": "Error deleting character.",
+    "saveSuccess": "Character saved successfully!",
+    "saveError": "Failed to save on the server.",
+    "unsavedChanges": "You have unsaved changes.",
+    "passivePerception": "Passive Perception"
+  },
   "dashboard": {
     "menu": "Menu",
     "myCharacters": "My Characters",

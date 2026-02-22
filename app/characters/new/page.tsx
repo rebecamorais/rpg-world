@@ -1,14 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button } from '@/frontend/components/ui/button';
@@ -36,13 +32,13 @@ import {
   SelectValue,
 } from '@/frontend/components/ui/select';
 import { useCurrentUser } from '@/frontend/context/UserContext';
+import { useCreateCharacter } from '@/frontend/hooks/useCreateCharacter';
 
 export default function NewCharacterPage() {
   const { currentUser } = useCurrentUser();
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const t = useTranslations('characterCreation');
   const tCommon = useTranslations('common');
+  const createMutation = useCreateCharacter(t('success'), t('error'));
 
   const newCharacterSchema = z.object({
     name: z.string().min(1, t('nameLabel').replace(' *', '')),
@@ -67,34 +63,20 @@ export default function NewCharacterPage() {
     );
   }
 
-  const onSubmit = async (data: NewCharacterFormValues) => {
-    try {
-      setIsSubmitting(true);
-      const res = await fetch('/api/characters', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: data.name.trim(),
-          ownerUsername: currentUser.username,
-          system: data.system,
-        }),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || t('error'));
-      }
-
-      const { id } = await res.json();
-      toast.success(t('success'));
-      router.push(`/characters/${id}`);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : t('error');
-      toast.error(msg);
-      form.setError('root', { message: msg });
-    } finally {
-      setIsSubmitting(false);
-    }
+  const onSubmit = (data: NewCharacterFormValues) => {
+    if (!currentUser) return;
+    createMutation.mutate(
+      {
+        name: data.name.trim(),
+        system: data.system,
+        ownerUsername: currentUser.username,
+      },
+      {
+        onError: (err: Error) => {
+          form.setError('root', { message: err.message });
+        },
+      },
+    );
   };
 
   return (
@@ -123,7 +105,7 @@ export default function NewCharacterPage() {
                     <FormLabel>{t('nameLabel')}</FormLabel>
                     <FormControl>
                       <Input
-                        disabled={isSubmitting}
+                        disabled={createMutation.isPending}
                         placeholder={t('namePlaceholder')}
                         {...field}
                       />
@@ -140,7 +122,7 @@ export default function NewCharacterPage() {
                   <FormItem>
                     <FormLabel>{t('systemLabel')}</FormLabel>
                     <Select
-                      disabled={isSubmitting}
+                      disabled={createMutation.isPending}
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
@@ -166,8 +148,8 @@ export default function NewCharacterPage() {
               )}
 
               <div className="flex gap-2">
-                <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? t('submitting') : t('submit')}
+                <Button type="submit" disabled={createMutation.isPending}>
+                  {createMutation.isPending ? t('submitting') : t('submit')}
                 </Button>
                 <Button variant="outline" asChild>
                   <Link href="/characters">{tCommon('cancel')}</Link>

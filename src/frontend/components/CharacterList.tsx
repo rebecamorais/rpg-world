@@ -2,19 +2,14 @@
 
 import Link from 'next/link';
 
+import { useTranslations } from 'next-intl';
+
 import { useCurrentUser } from '@/frontend/context/UserContext';
 import { useCharacters } from '@/frontend/hooks/useCharacters';
 
-interface CharacterSummary {
-  id: string;
-  name: string;
-  level: number;
-  characterClass?: string;
-  race?: string;
-}
-
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();
+  const t = useTranslations('characters');
   const { characters, isLoading, error } = useCharacters(currentUser);
 
   if (!currentUser) return null;
@@ -27,12 +22,10 @@ export default function CharacterList() {
     );
   }
 
-  if (!currentUser) return null;
-
   if (isLoading) {
     return (
       <div className="text-muted-foreground p-6 text-center">
-        <p>Carregando personagens...</p>
+        <p>{t('loading')}</p>
       </div>
     );
   }
@@ -40,12 +33,12 @@ export default function CharacterList() {
   if (characters.length === 0) {
     return (
       <div className="border-border text-muted-foreground rounded-lg border p-6 text-center">
-        <p>Nenhum personagem ainda.</p>
+        <p>{t('emptyState')}</p>
         <Link
           href="/characters/new"
           className="text-foreground mt-3 inline-block text-sm font-medium hover:underline"
         >
-          Criar primeiro personagem
+          {t('createFirst')}
         </Link>
       </div>
     );
@@ -54,12 +47,12 @@ export default function CharacterList() {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h2 className="text-foreground text-lg font-semibold">Personagens</h2>
+        <h2 className="text-foreground text-lg font-semibold">{t('title')}</h2>
         <Link
           href="/characters/new"
           className="text-muted-foreground hover:text-foreground text-sm font-medium"
         >
-          + Novo
+          {t('newButton')}
         </Link>
       </div>
       <ul className="divide-border divide-y">
@@ -71,7 +64,7 @@ export default function CharacterList() {
             >
               <span className="text-foreground font-medium">{c.name}</span>
               <span className="text-muted-foreground ml-2 text-sm">
-                Nível {c.level}
+                {t('level', { level: c.level })}
                 {c.characterClass ? ` · ${c.characterClass}` : ''}
               </span>
             </Link>

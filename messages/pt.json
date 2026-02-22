@@ -45,6 +45,22 @@
     "success": "Personagem criado com sucesso!",
     "error": "Erro ao criar personagem."
   },
+  "characters": {
+    "loading": "Carregando personagens...",
+    "emptyState": "Nenhum personagem ainda.",
+    "createFirst": "Criar primeiro personagem",
+    "title": "Personagens",
+    "newButton": "+ Novo",
+    "level": "Nível {level}",
+    "requireLogin": "Faça login para ver seus personagens.",
+    "notFoundOrNoPermission": "Personagem não encontrado ou você não tem permissão.",
+    "deleteSuccess": "Personagem excluído com sucesso.",
+    "deleteError": "Erro ao deletar personagem.",
+    "saveSuccess": "Personagem salvo com sucesso!",
+    "saveError": "Falha ao salvar no servidor.",
+    "unsavedChanges": "Você tem alterações não salvas.",
+    "passivePerception": "Percepção Passiva"
+  },
   "dashboard": {
     "menu": "Menu",
     "myCharacters": "Meus Personagens",
