@@ -389,7 +389,7 @@ export default function CharacterDetailPage() {
       <SpellsDrawer
         isOpen={isSpellsOpen}
         onClose={() => setIsSpellsOpen(false)}
-        learnedSpells={character.spells || []}
+        learnedSpells={character?.spells || []}
         onLearnSpell={handleLearnSpell}
         onForgetSpell={handleForgetSpell}
       />

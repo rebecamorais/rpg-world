@@ -4,10 +4,11 @@ import { UpdateCharacterUseCase } from '@/backend/contexts/characters/applicatio
 import { DeleteCharacterUseCase } from '@/backend/contexts/characters/application/delete-character/delete-character.use-case';
 import { repo } from '../route';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const useCase = new GetCharacterUseCase(repo);
-        const character = await useCase.execute(params.id);
+        const character = await useCase.execute(id);
 
         // Convert Domain Entity to DTO (JSON) via polymorphic encapsulation
         return NextResponse.json(character.toJSON());
@@ -19,15 +20,16 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const body = await req.json();
 
         if (!body.ownerUsername) throw new Error("ownerUsername query is required for update validation");
 
         const useCase = new UpdateCharacterUseCase(repo);
         const character = await useCase.execute({
-            id: params.id,
+            id: id,
             ownerUsername: body.ownerUsername,
             updates: body.updates
         });
@@ -41,15 +43,16 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const { searchParams } = new URL(req.url);
         const ownerUsername = searchParams.get('ownerUsername');
 
         if (!ownerUsername) throw new Error("ownerUsername query is required for deletion");
 
         const useCase = new DeleteCharacterUseCase(repo);
-        await useCase.execute(params.id, ownerUsername);
+        await useCase.execute(id, ownerUsername);
 
         return NextResponse.json({ deleted: true });
     } catch (err: unknown) {
