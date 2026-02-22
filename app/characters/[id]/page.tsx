@@ -15,7 +15,6 @@ import {
   Shield,
   Swords,
 } from 'lucide-react';
-import { toast } from 'sonner';
 
 import AttributesSection from '@/frontend/components/AttributesSection';
 import CharacterHeader from '@/frontend/components/CharacterHeader';
@@ -37,6 +36,7 @@ import {
 } from '@/frontend/components/ui/dialog';
 import { Input } from '@/frontend/components/ui/input';
 import { useCurrentUser } from '@/frontend/context/UserContext';
+import { useCharacter } from '@/frontend/hooks/useCharacter';
 import type { AttributeKey, DnD5eCharacter } from '@/systems/dnd5e';
 import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
 import type { SkillKey } from '@/systems/dnd5e/constants';
@@ -48,31 +48,62 @@ export default function CharacterDetailPage() {
 
   const [error, setError] = useState('');
   const [isSpellsOpen, setIsSpellsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const { currentUser } = useCurrentUser();
   const id = params?.id as string;
 
+  const {
+    character: fetchedCharacter,
+    isLoading,
+    error: queryError,
+    deleteCharacter,
+    updateCharacter,
+    isSaving,
+  } = useCharacter(id, currentUser);
+
   const [character, setCharacter] = useState<DnD5eCharacter | null>(null);
 
-  useEffect(() => {
-    if (!currentUser || !id) return;
+  const handleDelete = () => {
+    if (character) {
+      deleteCharacter(character);
+    }
+  };
 
-    setIsLoading(true);
-    fetch(`/api/characters/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          setError(data.error);
-        } else {
-          setCharacter(data as DnD5eCharacter);
-        }
-      })
-      .catch((err) => setError(err.message))
-      .finally(() => setIsLoading(false));
-  }, [id, currentUser]);
+  const updateCharacterInBackend = () => {
+    if (character) {
+      updateCharacter(character, {
+        onSuccess: () => {
+          setHasUnsavedChanges(false);
+        },
+      });
+    }
+  };
+
+  // Sync fetched data to local state buffer for optimistic UI edits
+  useEffect(() => {
+    let active = true;
+    Promise.resolve().then(() => {
+      if (active && fetchedCharacter && !hasUnsavedChanges) {
+        setCharacter(fetchedCharacter);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, [fetchedCharacter, hasUnsavedChanges]);
+
+  useEffect(() => {
+    let active = true;
+    Promise.resolve().then(() => {
+      if (active && queryError) {
+        setError(queryError.message);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, [queryError]);
 
   if (!currentUser) {
     return (
@@ -104,56 +135,6 @@ export default function CharacterDetailPage() {
       </div>
     );
   }
-
-  const handleDelete = async () => {
-    try {
-      const res = await fetch(
-        `/api/characters/${character.id}?ownerUsername=${encodeURIComponent(currentUser.username)}`,
-        {
-          method: 'DELETE',
-        },
-      );
-      if (res.ok) {
-        toast.success('Personagem excluído com sucesso.');
-        router.push('/characters');
-      } else {
-        const data = await res.json();
-        const msg = data.error || 'Erro ao deletar personagem.';
-        setError(msg);
-        toast.error(msg);
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Erro na requisição.';
-      setError(msg);
-      toast.error(msg);
-    }
-  };
-
-  const updateCharacterInBackend = async () => {
-    try {
-      setIsSaving(true);
-      const res = await fetch(`/api/characters/${character?.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ownerUsername: currentUser.username,
-          updates: character, // We send the whole character state buffered in React
-        }),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Falha ao salvar no servidor.');
-      }
-      setHasUnsavedChanges(false);
-      toast.success('Personagem salvo com sucesso!');
-    } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : 'Falha ao salvar no servidor.',
-      );
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
   const handleAttributeChange = (key: AttributeKey, value: number) => {
     setError('');

@@ -1,11 +1,9 @@
 'use client';
-
-import { useEffect, useState } from 'react';
-
 import { useTranslations } from 'next-intl';
 
 import { NavItem } from '@/frontend/components/nav-item';
 import { useCurrentUser } from '@/frontend/context/UserContext';
+import { useCharacter } from '@/frontend/hooks/useCharacter';
 
 export default function CharacterNavSection({
   characterId,
@@ -14,29 +12,10 @@ export default function CharacterNavSection({
 }) {
   const { currentUser } = useCurrentUser();
   const tDash = useTranslations('dashboard');
-  const [characterName, setCharacterName] = useState<string>('');
 
-  useEffect(() => {
-    if (!characterId || !currentUser) return;
-    let active = true;
+  const { character } = useCharacter(characterId, currentUser);
 
-    Promise.resolve().then(() => {
-      if (active) setCharacterName('');
-    });
-
-    fetch(`/api/characters/${characterId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (active && !data.error && data.name) {
-          setCharacterName(data.name);
-        }
-      })
-      .catch((err) => console.error('Failed to fetch character name', err));
-
-    return () => {
-      active = false;
-    };
-  }, [characterId, currentUser]);
+  const characterName = character?.name;
 
   if (!characterName) return null;
 

@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import Link from 'next/link';
 
 import { useCurrentUser } from '@/frontend/context/UserContext';
+import { useCharacters } from '@/frontend/hooks/useCharacters';
 
 interface CharacterSummary {
   id: string;
@@ -16,28 +15,21 @@ interface CharacterSummary {
 
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();
-  const [characters, setCharacters] = useState<CharacterSummary[]>([]);
-  const [loading, setLoading] = useState(!!currentUser);
-
-  useEffect(() => {
-    if (!currentUser) return;
-
-    fetch(
-      `/api/characters?ownerUsername=${encodeURIComponent(currentUser.username)}`,
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setCharacters(data);
-        }
-      })
-      .catch((err) => console.error('Failed to fetch characters', err))
-      .finally(() => setLoading(false));
-  }, [currentUser]);
+  const { characters, isLoading, error } = useCharacters(currentUser);
 
   if (!currentUser) return null;
 
-  if (loading) {
+  if (error) {
+    return (
+      <div className="text-destructive p-6 text-center">
+        <p>Erro ao carregar personagens: {error.message}</p>
+      </div>
+    );
+  }
+
+  if (!currentUser) return null;
+
+  if (isLoading) {
     return (
       <div className="text-muted-foreground p-6 text-center">
         <p>Carregando personagens...</p>

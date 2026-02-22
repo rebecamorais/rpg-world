@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 import GlobalHeader from '@/frontend/components/GlobalHeader';
 import LanguageProvider from '@/frontend/components/LanguageProvider';
+import QueryProvider from '@/frontend/components/QueryProvider';
 import { Toaster } from '@/frontend/components/ui/sonner';
 import { TooltipProvider } from '@/frontend/components/ui/tooltip';
 import { UserProvider } from '@/frontend/context/UserContext';
@@ -34,14 +35,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground flex min-h-screen flex-col antialiased`}
       >
-        <LanguageProvider>
-          <UserProvider>
-            <TooltipProvider>
-              <GlobalHeader />
-              {children}
-            </TooltipProvider>
-          </UserProvider>
-        </LanguageProvider>
+        <QueryProvider>
+          <LanguageProvider>
+            <UserProvider>
+              <TooltipProvider>
+                <GlobalHeader />
+                {children}
+              </TooltipProvider>
+            </UserProvider>
+          </LanguageProvider>
+        </QueryProvider>
         <Toaster />
       </body>
     </html>
