@@ -44,5 +44,11 @@
     "requireLogin": "Please sign in to create a character.",
     "success": "Character successfully created!",
     "error": "Error creating character."
+  },
+  "dashboard": {
+    "menu": "Menu",
+    "myCharacters": "My Characters",
+    "attributes": "Attributes",
+    "spells": "Spells"
   }
 }

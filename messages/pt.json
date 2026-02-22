@@ -44,5 +44,11 @@
     "requireLogin": "Faça login para criar personagem.",
     "success": "Personagem criado com sucesso!",
     "error": "Erro ao criar personagem."
+  },
+  "dashboard": {
+    "menu": "Menu",
+    "myCharacters": "Meus Personagens",
+    "attributes": "Atributos",
+    "spells": "Magias"
   }
 }
