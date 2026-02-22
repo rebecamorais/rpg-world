@@ -19,11 +19,21 @@ Este documento estabelece as diretrizes e as etapas para refatorar e elevar a ma
 
 ### Fase 1: Padronização de Componentes UI (Design System)
 Refinar os componentes base para não precisarmos reescrever classes do Tailwind. Os componentes base (shadcn/ui, como `<Card>` ou `<Tooltip>`) serão agnósticos e compartilhados entre sistemas, mas a composição e os dados exibidos neles mudarão conforme a lógica do sistema selecionado.
-- [ ] Aplicar estruturação completa usando componentes isolados.
+
+#### Fase 1.1: Estruturação Base e Cards
+- [ ] Aplicar estruturação completa usando componentes isolados do shadcn/ui.
 - [ ] Refatorar os "God Cards" (Painéis gigantes) em componentes reutilizáveis (`<Card>`, `<CardHeader>`, `<CardContent>`).
-- [ ] Implementar sistema unificado de Notificações (`Toast`) para substituir os alertas nativos do navegador (`alert()`).
-- [ ] Implementar `Dialog` (Modais) para interações intrusivas, que exigem que o usuário interaja com o modal antes de continuar. (Ex: Ver descrição de magias e habilidades)
-- [ ] Implementar `Tooltip` não intrusivos que vao requerer pequenos textos. (Ex: Ver calculo de atributos)
+
+#### Fase 1.2: Feedback Visual (Toasters)
+- [ ] Instalar o componente auxiliar de `Toast`/`Toaster` do shadcn.
+- [ ] Substituir os alertas nativos do navegador (`alert()`) por Notificações (`Toast`) em ações como "Personagem Salvo", "Falha de Login", "Exclusão".
+
+#### Fase 1.3: Sobreposição e Interatividade (Dialogs)
+- [ ] Implementar `Dialog` (Modais) para interações intrusivas, que exigem que o usuário feche a tela antes de continuar. (Ex: Editar Atributos, Confirmar Exclusão).
+- [ ] Adequar o `SpellsDrawer` ou componentes similares para uma experiência modal consistente.
+
+#### Fase 1.4: Contexto e Informativos (Tooltips)
+- [ ] Implementar `Tooltip` não intrusivos para informações auxiliares de UI. (Ex: Mostrar o cálculo matemático exato que compôs a CA ou Limiar de Sanidade ao passar o mouse).
 
 ### Fase 2: Gestão de Formulários e Validações
 Remover os estados manuais excessivos e delegar a estabilidade para bibliotecas prontas.
