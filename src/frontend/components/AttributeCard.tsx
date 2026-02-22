@@ -14,7 +14,13 @@ import {
 } from '@/frontend/components/ui/dialog';
 import { Input } from '@/frontend/components/ui/input';
 import { Label } from '@/frontend/components/ui/label';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/frontend/components/ui/tooltip';
 import { getModifier } from '@/systems/dnd5e/calculations';
+import rules from '@/systems/dnd5e/rules.json';
 
 const MIN_ATTR = 1;
 const MAX_ATTR = 30;
@@ -62,17 +68,31 @@ export default function AttributeCard({ label, value, onChange }: Props) {
             {label}
           </span>
 
-          {/* Modificador principal */}
-          <span className="text-foreground mb-2 font-mono text-3xl font-bold">
-            {modifier >= 0 ? `+${modifier}` : modifier}
-          </span>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex flex-col items-center">
+                {/* Modificador principal */}
+                <span className="text-foreground mb-2 font-mono text-3xl font-bold">
+                  {modifier >= 0 ? `+${modifier}` : modifier}
+                </span>
 
-          {/* Valor de Exibição (Pequeno, na base oval) */}
-          <div className="border-border bg-secondary pointer-events-none z-10 mt-[-10px] flex w-14 items-center justify-center rounded-full border px-2 py-0.5">
-            <span className="text-secondary-foreground text-center text-sm font-bold">
-              {clamped}
-            </span>
-          </div>
+                {/* Valor de Exibição (Pequeno, na base oval) */}
+                <div className="border-border bg-secondary pointer-events-none z-10 mt-[-10px] flex w-14 items-center justify-center rounded-full border px-2 py-0.5">
+                  <span className="text-secondary-foreground text-center text-sm font-bold">
+                    {clamped}
+                  </span>
+                </div>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <div className="flex flex-col gap-1 text-sm">
+                <p className="font-semibold">Cálculo do Modificador</p>
+                <p className="text-muted-foreground">
+                  {rules.formulas.attributeModifier}
+                </p>
+              </div>
+            </TooltipContent>
+          </Tooltip>
         </button>
       </DialogTrigger>
 

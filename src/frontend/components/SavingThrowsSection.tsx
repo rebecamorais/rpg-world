@@ -6,9 +6,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/frontend/components/ui/card';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/frontend/components/ui/tooltip';
 import { cn } from '@/frontend/lib/utils';
 import { calculateSavingThrow } from '@/systems/dnd5e/calculations';
 import { ATTRIBUTE_KEYS, ATTRIBUTE_LABELS } from '@/systems/dnd5e/constants';
+import rules from '@/systems/dnd5e/rules.json';
 import type { AttributeKey } from '@/systems/dnd5e/types';
 
 interface Props {
@@ -64,15 +70,31 @@ export default function SavingThrowsSection({
                 >
                   {ATTRIBUTE_LABELS[key]}
                 </span>
-                <span
-                  className={cn(
-                    'mx-2 font-mono font-bold',
-                    isProficient ? 'text-foreground' : 'text-muted-foreground',
-                  )}
-                >
-                  {sign}
-                  {finalValue}
-                </span>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span
+                      className={cn(
+                        'mx-2 cursor-help font-mono font-bold underline decoration-dotted underline-offset-4',
+                        isProficient
+                          ? 'text-foreground'
+                          : 'text-muted-foreground',
+                      )}
+                    >
+                      {sign}
+                      {finalValue}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <div className="flex flex-col gap-1 text-sm">
+                      <p className="font-semibold">
+                        Salvaguarda de {ATTRIBUTE_LABELS[key]}
+                      </p>
+                      <p className="text-muted-foreground">
+                        {rules.formulas.savingThrow}
+                      </p>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
           );

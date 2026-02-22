@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { Toaster } from '@/frontend/components/ui/sonner';
+import { TooltipProvider } from '@/frontend/components/ui/tooltip';
 import { UserProvider } from '@/frontend/context/UserContext';
 
 import './globals.css';
@@ -31,7 +32,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <UserProvider>{children}</UserProvider>
+        <UserProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </UserProvider>
         <Toaster />
       </body>
     </html>
