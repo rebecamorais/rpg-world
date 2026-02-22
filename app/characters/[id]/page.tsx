@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 
 import { BookOpen, Eye, Footprints, Heart, Shield, Swords } from 'lucide-react';
+import { toast } from 'sonner';
 
 import AttributesSection from '@/frontend/components/AttributesSection';
 import PassivePerception from '@/frontend/components/PassivePerception';
@@ -93,15 +94,18 @@ export default function CharacterDetailPage() {
           },
         );
         if (res.ok) {
+          toast.success('Personagem excluído com sucesso.');
           router.push('/characters');
         } else {
           const data = await res.json();
-          setError(data.error || 'Erro ao deletar personagem.');
+          const msg = data.error || 'Erro ao deletar personagem.';
+          setError(msg);
+          toast.error(msg);
         }
       } catch (err: unknown) {
-        setError(
-          err instanceof Error ? err.message : 'Erro ao deletar personagem',
-        );
+        const msg = err instanceof Error ? err.message : 'Erro na requisição.';
+        setError(msg);
+        toast.error(msg);
       }
     }
   };
@@ -122,7 +126,7 @@ export default function CharacterDetailPage() {
         throw new Error(data.error || 'Falha ao salvar no servidor.');
       }
       setHasUnsavedChanges(false);
-      alert('Personagem salvo com sucesso!');
+      toast.success('Personagem salvo com sucesso!');
     } catch (err: unknown) {
       setError(
         err instanceof Error ? err.message : 'Falha ao salvar no servidor.',

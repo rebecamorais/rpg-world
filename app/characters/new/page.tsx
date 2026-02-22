@@ -5,6 +5,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { toast } from 'sonner';
+
 import { Button } from '@/frontend/components/ui/button';
 import {
   Card,
@@ -62,11 +64,13 @@ export default function NewCharacterPage() {
       }
 
       const { id } = await res.json();
+      toast.success('Personagem criado com sucesso!');
       router.push(`/characters/${id}`);
     } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : 'Erro ao criar personagem.',
-      );
+      const msg =
+        err instanceof Error ? err.message : 'Erro ao criar personagem.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }

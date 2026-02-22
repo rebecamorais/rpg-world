@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { toast } from 'sonner';
+
 import { Button } from '@/frontend/components/ui/button';
 import {
   Card,
@@ -25,9 +27,19 @@ export default function LoginForm() {
     const trimmed = username.trim();
     if (!trimmed) {
       setError('Username é obrigatório.');
+      toast.error('Username é obrigatório.');
       return;
     }
-    login(trimmed, displayName.trim() || undefined);
+
+    try {
+      login(trimmed, displayName.trim() || undefined);
+      toast.success(`Bem-vindo, ${displayName.trim() || trimmed}!`);
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error ? err.message : 'Falha ao realizar login.';
+      setError(msg);
+      toast.error(msg);
+    }
   };
 
   return (
