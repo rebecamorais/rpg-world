@@ -13,7 +13,18 @@ import PassivePerception from '@/frontend/components/PassivePerception';
 import SavingThrowsSection from '@/frontend/components/SavingThrowsSection';
 import SkillsSection from '@/frontend/components/SkillsSection';
 import SpellsDrawer from '@/frontend/components/SpellsDrawer';
+import { Button } from '@/frontend/components/ui/button';
 import { Card, CardContent } from '@/frontend/components/ui/card';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/frontend/components/ui/dialog';
 import { Input } from '@/frontend/components/ui/input';
 import { useCurrentUser } from '@/frontend/context/UserContext';
 import type { AttributeKey, DnD5eCharacter } from '@/systems/dnd5e';
@@ -85,28 +96,26 @@ export default function CharacterDetailPage() {
   }
 
   const handleDelete = async () => {
-    if (confirm('Excluir este personagem? Não é possível desfazer.')) {
-      try {
-        const res = await fetch(
-          `/api/characters/${character.id}?ownerUsername=${encodeURIComponent(currentUser.username)}`,
-          {
-            method: 'DELETE',
-          },
-        );
-        if (res.ok) {
-          toast.success('Personagem excluído com sucesso.');
-          router.push('/characters');
-        } else {
-          const data = await res.json();
-          const msg = data.error || 'Erro ao deletar personagem.';
-          setError(msg);
-          toast.error(msg);
-        }
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : 'Erro na requisição.';
+    try {
+      const res = await fetch(
+        `/api/characters/${character.id}?ownerUsername=${encodeURIComponent(currentUser.username)}`,
+        {
+          method: 'DELETE',
+        },
+      );
+      if (res.ok) {
+        toast.success('Personagem excluído com sucesso.');
+        router.push('/characters');
+      } else {
+        const data = await res.json();
+        const msg = data.error || 'Erro ao deletar personagem.';
         setError(msg);
         toast.error(msg);
       }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Erro na requisição.';
+      setError(msg);
+      toast.error(msg);
     }
   };
 
@@ -277,13 +286,43 @@ export default function CharacterDetailPage() {
           >
             {isSaving ? 'Salvando...' : 'Salvar Alterações'}
           </button>
-          <button
-            type="button"
-            onClick={handleDelete}
-            className="text-sm text-red-600 hover:underline dark:text-red-400"
-          >
-            Excluir
-          </button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                type="button"
+                className="text-sm text-red-600 hover:underline dark:text-red-400"
+              >
+                Excluir
+              </button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Excluir personagem?</DialogTitle>
+                <DialogDescription>
+                  Tem certeza que deseja excluir o personagem{' '}
+                  <span className="text-foreground font-bold">
+                    {character?.name}
+                  </span>
+                  ? Essa ação não poderá ser desfeita e todos os dados serão
+                  perdidos.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="mt-4 gap-2 sm:justify-end">
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Cancelar
+                  </Button>
+                </DialogClose>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={handleDelete}
+                >
+                  Confirmar Exclusão
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
       {error && (
