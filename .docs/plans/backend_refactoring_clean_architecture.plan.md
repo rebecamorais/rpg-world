@@ -16,6 +16,9 @@ todos:
     status: unstarted
   - id: br5-interfaces-nextjs
     content: BR5 – Interfaces (Controllers API do Next.js e Injeção de Dependência)
+    status: completed
+  - id: br6-testing
+    content: BR6 – Testes Automatizados (Unitários e Integração no mesmo nível dos arquivos)
     status: unstarted
 isProject: false
 ---
