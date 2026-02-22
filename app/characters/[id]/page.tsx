@@ -76,7 +76,7 @@ export default function CharacterDetailPage() {
 
   if (!currentUser) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-4">
+      <div className="flex flex-1 items-center justify-center p-4">
         <p className="text-muted-foreground">
           Faça login para ver o personagem.
         </p>
@@ -86,7 +86,7 @@ export default function CharacterDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-4">
+      <div className="flex flex-1 items-center justify-center p-4">
         <p className="text-muted-foreground">Carregando...</p>
       </div>
     );
@@ -94,11 +94,11 @@ export default function CharacterDetailPage() {
 
   if (!character || character.ownerUsername !== currentUser.username) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-4">
+      <div className="flex flex-1 flex-col items-center justify-center p-4">
         <p className="text-muted-foreground">
           Personagem não encontrado ou você não tem permissão.
         </p>
-        <Link href="/characters" className="mt-2 block text-sm underline">
+        <Link href="/characters" className="mt-2 text-sm underline">
           Voltar à lista
         </Link>
       </div>

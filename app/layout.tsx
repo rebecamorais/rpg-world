@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
+import GlobalHeader from '@/frontend/components/GlobalHeader';
 import LanguageProvider from '@/frontend/components/LanguageProvider';
-import LanguageSwitcher from '@/frontend/components/LanguageSwitcher';
 import { Toaster } from '@/frontend/components/ui/sonner';
 import { TooltipProvider } from '@/frontend/components/ui/tooltip';
 import { UserProvider } from '@/frontend/context/UserContext';
@@ -32,13 +32,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground flex min-h-screen flex-col antialiased`}
       >
         <LanguageProvider>
           <UserProvider>
             <TooltipProvider>
+              <GlobalHeader />
               {children}
-              <LanguageSwitcher />
             </TooltipProvider>
           </UserProvider>
         </LanguageProvider>
