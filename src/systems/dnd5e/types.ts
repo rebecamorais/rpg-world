@@ -15,6 +15,9 @@ export interface DnD5eCharacterData {
   level: number;
   hpCurrent: number;
   hpMax: number;
+  hpTemp?: number;
+  manaCurrent?: number;
+  manaMax?: number;
   ac: number;
   speed: number;
   initiative: number;

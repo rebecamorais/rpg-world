@@ -35,6 +35,10 @@ Refinar os componentes base para não precisarmos reescrever classes do Tailwind
 #### Fase 1.4: Contexto e Informativos (Tooltips)
 - [x] Implementar `Tooltip` não intrusivos para informações auxiliares de UI. (Ex: Mostrar o cálculo matemático exato que compôs a CA ou Limiar de Sanidade ao passar o mouse).
 
+#### Fase 1.5: Character Sheet Polish e Status Avançados
+- [x] Adicionar suporte a Vida Temporária (`hpTemp`) e Mana (`manaCurrent`/`manaMax`).
+- [x] Abstrair o Header Fixo do Personagem para melhor reutilização (`CharacterHeader.tsx`).
+
 ### Fase 2: Gestão de Formulários e Validações
 Remover os estados manuais excessivos e delegar a estabilidade para bibliotecas prontas.
 - [ ] Instalar e configurar `react-hook-form` em conjunto com `@hookform/resolvers/zod` e `zod`.

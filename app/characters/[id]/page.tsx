@@ -5,10 +5,20 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 
-import { BookOpen, Eye, Footprints, Heart, Shield, Swords } from 'lucide-react';
+import {
+  BookOpen,
+  Droplet,
+  Eye,
+  Footprints,
+  Heart,
+  HeartPulse,
+  Shield,
+  Swords,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 import AttributesSection from '@/frontend/components/AttributesSection';
+import CharacterHeader from '@/frontend/components/CharacterHeader';
 import PassivePerception from '@/frontend/components/PassivePerception';
 import SavingThrowsSection from '@/frontend/components/SavingThrowsSection';
 import SkillsSection from '@/frontend/components/SkillsSection';
@@ -332,79 +342,18 @@ export default function CharacterDetailPage() {
       )}
       <div className="flex flex-col gap-6">
         {/* Header Block Editable */}
-        <Card className="border-border bg-card">
-          <CardContent className="flex flex-col p-0 md:flex-row">
-            <div className="flex flex-col justify-end border-b border-zinc-800 p-6 md:w-2/3 md:border-r md:border-b-0">
-              <Input
-                value={character.name}
-                onChange={(e) => handleBasicInfoChange('name', e.target.value)}
-                className="focus-visible:border-primary h-auto rounded-none border-transparent bg-transparent px-0 text-3xl font-bold focus-visible:border-b focus-visible:ring-0"
-                placeholder="Nome do Personagem"
-              />
-              <div className="mt-2 flex gap-4">
-                <div className="text-muted-foreground text-sm">
-                  Bônus de Proficiência:{' '}
-                  <span className="text-primary font-bold">+{pb}</span>
-                </div>
-              </div>
-            </div>
-            <div className="bg-muted grid grid-cols-2 gap-4 p-6 md:w-1/3">
-              <div>
-                <label className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-                  Classe
-                </label>
-                <Input
-                  value={character.class || ''}
-                  onChange={(e) =>
-                    handleBasicInfoChange('class', e.target.value)
-                  }
-                  className="focus-visible:border-primary h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:ring-0"
-                />
-              </div>
-              <div>
-                <label className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-                  Nível
-                </label>
-                <Input
-                  type="number"
-                  min={1}
-                  value={character.level}
-                  onChange={(e) =>
-                    handleBasicInfoChange(
-                      'level',
-                      parseInt(e.target.value) || 1,
-                    )
-                  }
-                  className="focus-visible:border-primary h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:ring-0"
-                />
-              </div>
-              <div className="col-span-2">
-                <label className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-                  Raça
-                </label>
-                <Input
-                  value={character.race || ''}
-                  onChange={(e) =>
-                    handleBasicInfoChange('race', e.target.value)
-                  }
-                  className="focus-visible:border-primary h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:ring-0"
-                />
-              </div>
-              <div className="col-span-2 mt-2">
-                <button
-                  onClick={() => setIsSpellsOpen(true)}
-                  className="border-primary/30 bg-primary/10 hover:bg-primary/20 flex w-full items-center justify-center gap-2 rounded border py-2 text-xs font-semibold text-[#be8be8] transition-colors"
-                >
-                  <BookOpen size={14} />
-                  Grimório de Magias
-                </button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <CharacterHeader
+          name={character.name}
+          classNameStr={character.class || ''}
+          level={character.level}
+          race={character.race || ''}
+          pb={pb}
+          onBasicInfoChange={handleBasicInfoChange}
+          onOpenSpells={() => setIsSpellsOpen(true)}
+        />
 
         {/* Combat Stats Block (Lucide Icons) */}
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-7">
           <Card className="group border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
             <div className="z-10 flex flex-col items-center">
               <Shield className="text-primary mb-2 h-6 w-6 drop-shadow-md" />
@@ -452,6 +401,57 @@ export default function CharacterDetailPage() {
               </div>
               <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
                 Pontos de Vida
+              </span>
+            </div>
+          </Card>
+
+          <Card className="border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
+            <div className="z-10 flex flex-col items-center">
+              <HeartPulse className="mb-2 h-6 w-6 text-yellow-500 drop-shadow-md" />
+              <Input
+                type="number"
+                value={character.hpTemp || 0}
+                onChange={(e) =>
+                  handleBasicInfoChange('hpTemp', parseInt(e.target.value) || 0)
+                }
+                className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
+              />
+              <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
+                Vida Temp
+              </span>
+            </div>
+          </Card>
+
+          <Card className="border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
+            <div className="z-10 flex flex-col items-center">
+              <Droplet className="mb-2 h-6 w-6 text-blue-500 drop-shadow-md" />
+              <div className="flex items-baseline justify-center gap-1">
+                <Input
+                  type="number"
+                  value={character.manaCurrent || 0}
+                  onChange={(e) =>
+                    handleBasicInfoChange(
+                      'manaCurrent',
+                      parseInt(e.target.value) || 0,
+                    )
+                  }
+                  className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-right text-3xl font-bold focus-visible:ring-2"
+                />
+                <span className="text-muted-foreground">/</span>
+                <Input
+                  type="number"
+                  value={character.manaMax || 0}
+                  onChange={(e) =>
+                    handleBasicInfoChange(
+                      'manaMax',
+                      parseInt(e.target.value) || 0,
+                    )
+                  }
+                  className="focus-visible:ring-primary text-muted-foreground h-10 w-12 border-transparent bg-transparent p-0 text-left text-xl font-bold focus-visible:ring-2"
+                />
+              </div>
+              <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
+                Mana / Slots
               </span>
             </div>
           </Card>
