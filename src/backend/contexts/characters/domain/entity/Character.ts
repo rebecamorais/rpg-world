@@ -30,4 +30,5 @@ export abstract class Character {
 
     // Business rules all characters must implement
     abstract getCombatStats(): Record<string, unknown>;
+    abstract toJSON(): Record<string, unknown>;
 }

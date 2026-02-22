@@ -1,16 +1,45 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useCurrentUser } from '@/frontend/context/UserContext';
-import { getCharactersByOwner } from '@/backend/store/memory-store';
+
+interface CharacterSummary {
+  id: string;
+  name: string;
+  level: number;
+  characterClass?: string;
+  race?: string;
+}
 
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();
-  const characters = currentUser
-    ? getCharactersByOwner(currentUser.username)
-    : [];
+  const [characters, setCharacters] = useState<CharacterSummary[]>([]);
+  const [loading, setLoading] = useState(!!currentUser);
+
+  useEffect(() => {
+    if (!currentUser) return;
+
+    fetch(`/api/characters?ownerUsername=${encodeURIComponent(currentUser.username)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setCharacters(data);
+        }
+      })
+      .catch(err => console.error("Failed to fetch characters", err))
+      .finally(() => setLoading(false));
+  }, [currentUser]);
 
   if (!currentUser) return null;
+
+  if (loading) {
+    return (
+      <div className="p-6 text-center text-zinc-500">
+        <p>Carregando personagens...</p>
+      </div>
+    );
+  }
 
   if (characters.length === 0) {
     return (
@@ -51,7 +80,7 @@ export default function CharacterList() {
               </span>
               <span className="text-zinc-500 dark:text-zinc-400 text-sm ml-2">
                 Nível {c.level}
-                {c.class ? ` · ${c.class}` : ''}
+                {c.characterClass ? ` · ${c.characterClass}` : ''}
               </span>
             </Link>
           </li>

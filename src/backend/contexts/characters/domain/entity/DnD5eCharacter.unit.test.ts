@@ -66,4 +66,21 @@ describe('DnD5eCharacter (Domain Entity)', () => {
         const char = buildCharacter({ WIS: 16 }, 1, { Perception: { isProficient: true } });
         expect(char.calculatePassivePerception()).toBe(15);
     });
+
+    it('deve exportar corretamente via toJSON (Data Transfer Object)', () => {
+        const char = buildCharacter({ STR: 18 }, 1, {}, {});
+        char.spells = ['fireball', 'shield'];
+
+        const json = char.toJSON();
+
+        expect(json.id).toBeDefined();
+        expect(json.name).toBe('Thor');
+        expect(json.system).toBe('DnD_5e');
+
+        // Atributos foram convertidos para object standard?
+        expect((json.attributes as any).STR).toBe(18);
+
+        // Array de spells veio puro?
+        expect(json.spells).toContain('fireball');
+    });
 });

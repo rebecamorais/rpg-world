@@ -2,25 +2,22 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCurrentUser } from '@/frontend/context/UserContext';
-import {
-  getCharacterById,
-  updateCharacter,
-  deleteCharacter,
-} from '@/backend/store/memory-store';
 import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
 import type { AttributeKey, DnD5eCharacter } from '@/systems/dnd5e';
 import AttributesSection from '@/frontend/components/AttributesSection';
 import SkillsSection from '@/frontend/components/SkillsSection';
 import SavingThrowsSection from '@/frontend/components/SavingThrowsSection';
 import PassivePerception from '@/frontend/components/PassivePerception';
+import SpellsDrawer from '@/frontend/components/SpellsDrawer';
 import {
   Shield,
   Heart,
   Footprints,
   Swords,
-  Eye
+  Eye,
+  BookOpen
 } from 'lucide-react';
 import type { SkillKey } from '@/systems/dnd5e/constants';
 import type { CharacterSkill } from '@/systems/dnd5e/types';
@@ -32,13 +29,30 @@ export default function CharacterDetailPage() {
   const router = useRouter();
 
   const [error, setError] = useState('');
+  const [isSpellsOpen, setIsSpellsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { currentUser } = useCurrentUser();
   const id = params?.id as string;
 
-  const [character, setCharacter] = useState<DnD5eCharacter | null>(() =>
-    id ? getCharacterById(id) ?? null : null
-  );
+  const [character, setCharacter] = useState<DnD5eCharacter | null>(null);
+
+  useEffect(() => {
+    if (!currentUser || !id) return;
+
+    setIsLoading(true);
+    fetch(`/api/characters/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          setError(data.error);
+        } else {
+          setCharacter(data as DnD5eCharacter);
+        }
+      })
+      .catch(err => setError(err.message))
+      .finally(() => setIsLoading(false));
+  }, [id, currentUser]);
 
   if (!currentUser) {
     return (
@@ -48,10 +62,18 @@ export default function CharacterDetailPage() {
     );
   }
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <p className="text-zinc-500">Carregando...</p>
+      </div>
+    );
+  }
+
   if (!character || character.ownerUsername !== currentUser.username) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <p className="text-zinc-500">Personagem não encontrado.</p>
+        <p className="text-zinc-500">Personagem não encontrado ou você não tem permissão.</p>
         <Link href="/characters" className="mt-2 block text-sm underline">
           Voltar à lista
         </Link>
@@ -59,64 +81,87 @@ export default function CharacterDetailPage() {
     );
   }
 
-
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirm('Excluir este personagem? Não é possível desfazer.')) {
-      const ok = deleteCharacter(character.id, currentUser.username);
-      if (ok) router.push('/characters');
+      try {
+        const res = await fetch(`/api/characters/${character.id}?ownerUsername=${encodeURIComponent(currentUser.username)}`, {
+          method: 'DELETE'
+        });
+        if (res.ok) {
+          router.push('/characters');
+        } else {
+          const data = await res.json();
+          setError(data.error || 'Erro ao deletar personagem.');
+        }
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Erro ao deletar personagem');
+      }
+    }
+  };
+
+  const updateCharacterInBackend = async (updates: Partial<DnD5eCharacter>) => {
+    try {
+      const res = await fetch(`/api/characters/${character.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ownerUsername: currentUser.username,
+          updates
+        })
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Falha ao salvar no servidor.');
+      }
+      // Success, locally update optimistic
+      setCharacter(prev => prev ? { ...prev, ...updates } as DnD5eCharacter : null);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Falha ao salvar no servidor.');
     }
   };
 
   const handleAttributeChange = (key: AttributeKey, value: number) => {
-    if (!currentUser) return;
-    try {
-      setError('');
-      const updated = updateCharacter(character.id, currentUser.username, {
-        attributes: { ...character.attributes, [key]: value },
-      });
-      if (updated) setCharacter(updated);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Erro ao atualizar atributo');
-    }
+    setError('');
+    updateCharacterInBackend({
+      attributes: { ...character.attributes, [key]: value } as Record<AttributeKey, number>
+    });
   };
 
   const handleSkillChange = (key: SkillKey, skillData: CharacterSkill) => {
-    if (!currentUser) return;
-    try {
-      setError('');
-      const updated = updateCharacter(character.id, currentUser.username, {
-        skills: { ...character.skills, [key]: skillData },
-      });
-      if (updated) setCharacter(updated);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Erro ao atualizar perícia');
-    }
+    setError('');
+    updateCharacterInBackend({
+      skills: { ...character.skills, [key]: skillData }
+    });
   };
 
   const handleSavingThrowChange = (key: AttributeKey, isProficient: boolean) => {
-    if (!currentUser) return;
-    try {
-      setError('');
-      const updated = updateCharacter(character.id, currentUser.username, {
-        savingThrowProficiencies: { ...character.savingThrowProficiencies, [key]: isProficient },
-      });
-      if (updated) setCharacter(updated);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Erro ao atualizar salvaguarda');
-    }
+    setError('');
+    updateCharacterInBackend({
+      savingThrowProficiencies: { ...character.savingThrowProficiencies, [key]: isProficient } as Record<AttributeKey, boolean>
+    });
   };
 
   const handleBasicInfoChange = (field: keyof DnD5eCharacter, value: string | number) => {
-    if (!currentUser) return;
-    try {
-      setError('');
-      const updated = updateCharacter(character.id, currentUser.username, {
-        [field]: value,
-      } as Partial<DnD5eCharacter>);
-      if (updated) setCharacter(updated);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Erro ao atualizar personagem');
+    setError('');
+    updateCharacterInBackend({
+      [field]: value
+    });
+  };
+
+  const handleLearnSpell = (spellIndex: string) => {
+    const currentSpells = character.spells || [];
+    if (!currentSpells.includes(spellIndex)) {
+      updateCharacterInBackend({
+        spells: [...currentSpells, spellIndex]
+      });
     }
+  };
+
+  const handleForgetSpell = (spellIndex: string) => {
+    const currentSpells = character.spells || [];
+    updateCharacterInBackend({
+      spells: currentSpells.filter(s => s !== spellIndex)
+    });
   };
 
   const pb = getProficiencyBonus(character.level);
@@ -140,45 +185,58 @@ export default function CharacterDetailPage() {
       </div>
       {error && <p className="text-sm text-red-600 dark:text-red-400 mb-4 bg-red-50 dark:bg-red-900/20 p-2 rounded">{error}</p>}
       <div className="flex flex-col gap-6">
+
         {/* Header Block Editable */}
         <Card className="bg-[#1a1a1a] border-zinc-800">
-          <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-              <div className="md:col-span-8 flex flex-col justify-end">
+          <CardContent className="p-0 flex flex-col md:flex-row">
+            <div className="p-6 md:w-2/3 flex flex-col justify-end border-b md:border-b-0 md:border-r border-zinc-800">
+              <Input
+                value={character.name}
+                onChange={e => handleBasicInfoChange('name', e.target.value)}
+                className="text-3xl font-bold bg-transparent border-transparent px-0 h-auto rounded-none focus-visible:ring-0 focus-visible:border-b focus-visible:border-[#663399]"
+                placeholder="Nome do Personagem"
+              />
+              <div className="flex gap-4 mt-2">
+                <div className="text-sm text-zinc-400">
+                  Bônus de Proficiência: <span className="font-bold text-[#663399]">+{pb}</span>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 md:w-1/3 grid grid-cols-2 gap-4 bg-black/20">
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Classe</label>
                 <Input
-                  value={character.name}
-                  onChange={e => handleBasicInfoChange('name', e.target.value)}
-                  className="text-3xl font-bold bg-transparent border-transparent px-0 h-auto rounded-none focus-visible:ring-0 focus-visible:border-b focus-visible:border-[#663399]"
-                  placeholder="Nome do Personagem"
+                  value={character.class || ''}
+                  onChange={e => handleBasicInfoChange('class', e.target.value)}
+                  className="bg-transparent border-b border-zinc-800 px-1 py-0 h-7 rounded-none focus-visible:ring-0 focus-visible:border-[#663399] text-sm"
                 />
               </div>
-              <div className="md:col-span-4 grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Classe</label>
-                  <Input
-                    value={character.class || ''}
-                    onChange={e => handleBasicInfoChange('class', e.target.value)}
-                    className="bg-transparent border-b border-zinc-800 px-1 py-0 h-7 rounded-none focus-visible:ring-0 focus-visible:border-[#663399]"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nível</label>
-                  <Input
-                    type="number"
-                    min={1}
-                    value={character.level}
-                    onChange={e => handleBasicInfoChange('level', parseInt(e.target.value) || 1)}
-                    className="bg-transparent border-b border-zinc-800 px-1 py-0 h-7 rounded-none focus-visible:ring-0 focus-visible:border-[#663399]"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Raça</label>
-                  <Input
-                    value={character.race || ''}
-                    onChange={e => handleBasicInfoChange('race', e.target.value)}
-                    className="bg-transparent border-b border-zinc-800 px-1 py-0 h-7 rounded-none focus-visible:ring-0 focus-visible:border-[#663399]"
-                  />
-                </div>
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nível</label>
+                <Input
+                  type="number"
+                  min={1}
+                  value={character.level}
+                  onChange={e => handleBasicInfoChange('level', parseInt(e.target.value) || 1)}
+                  className="bg-transparent border-b border-zinc-800 px-1 py-0 h-7 rounded-none focus-visible:ring-0 focus-visible:border-[#663399] text-sm"
+                />
+              </div>
+              <div className="col-span-2">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Raça</label>
+                <Input
+                  value={character.race || ''}
+                  onChange={e => handleBasicInfoChange('race', e.target.value)}
+                  className="bg-transparent border-b border-zinc-800 px-1 py-0 h-7 rounded-none focus-visible:ring-0 focus-visible:border-[#663399] text-sm"
+                />
+              </div>
+              <div className="col-span-2 mt-2">
+                <button
+                  onClick={() => setIsSpellsOpen(true)}
+                  className="w-full flex items-center justify-center gap-2 py-2 bg-[#663399]/10 hover:bg-[#663399]/20 text-[#be8be8] text-xs font-semibold rounded border border-[#663399]/30 transition-colors"
+                >
+                  <BookOpen size={14} />
+                  Grimório de Magias
+                </button>
               </div>
             </div>
           </CardContent>
@@ -186,10 +244,10 @@ export default function CharacterDetailPage() {
 
         {/* Combat Stats Block (Lucide Icons) */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative group">
-            <Shield className="absolute text-[#663399]/10 w-24 h-24" />
+          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative group overflow-hidden bg-[#1a1a1a]">
+            <Shield className="absolute text-[#663399]/5 w-24 h-24 scale-150 rotate-12" />
             <div className="z-10 flex flex-col items-center">
-              <Shield className="text-[#663399] w-6 h-6 mb-2" />
+              <Shield className="text-[#663399] w-6 h-6 mb-2 drop-shadow-md" />
               <Input
                 type="number"
                 value={character.ac}
@@ -200,10 +258,10 @@ export default function CharacterDetailPage() {
             </div>
           </Card>
 
-          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative">
-            <Heart className="absolute text-red-500/10 w-24 h-24" />
+          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
+            <Heart className="absolute text-red-500/5 w-24 h-24 scale-150 -rotate-12" />
             <div className="z-10 flex flex-col items-center">
-              <Heart className="text-red-500 w-6 h-6 mb-2" />
+              <Heart className="text-red-500 w-6 h-6 mb-2 drop-shadow-md" />
               <div className="flex items-baseline justify-center gap-1">
                 <Input
                   type="number"
@@ -223,10 +281,10 @@ export default function CharacterDetailPage() {
             </div>
           </Card>
 
-          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative">
-            <Footprints className="absolute text-purple-400/5 w-24 h-24" />
+          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
+            <Footprints className="absolute text-emerald-500/5 w-24 h-24 scale-150 rotate-6" />
             <div className="z-10 flex flex-col items-center">
-              <Footprints className="text-purple-400 w-6 h-6 mb-2" />
+              <Footprints className="text-emerald-500 w-6 h-6 mb-2 drop-shadow-md" />
               <div className="flex items-baseline justify-center gap-1">
                 <Input
                   type="number"
@@ -240,10 +298,10 @@ export default function CharacterDetailPage() {
             </div>
           </Card>
 
-          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative">
-            <Swords className="absolute text-purple-400/5 w-24 h-24" />
+          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
+            <Swords className="absolute text-orange-500/5 w-24 h-24 scale-150 -rotate-6" />
             <div className="z-10 flex flex-col items-center">
-              <Swords className="text-purple-400 w-6 h-6 mb-2" />
+              <Swords className="text-orange-500 w-6 h-6 mb-2 drop-shadow-md" />
               <Input
                 type="number"
                 value={character.initiative}
@@ -254,10 +312,10 @@ export default function CharacterDetailPage() {
             </div>
           </Card>
 
-          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative">
-            <Eye className="absolute text-purple-400/5 w-24 h-24" />
+          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
+            <Eye className="absolute text-blue-500/5 w-24 h-24 scale-150 rotate-12" />
             <div className="z-10 flex flex-col items-center">
-              <Eye className="text-purple-400 w-6 h-6 mb-2" />
+              <Eye className="text-blue-500 w-6 h-6 mb-2 drop-shadow-md" />
               <span className="text-3xl font-bold text-zinc-100 h-10 flex items-center justify-center">
                 {(character.attributes.WIS ? Math.floor((character.attributes.WIS - 10) / 2) : 0) + 10 + (character.skills?.PERCEPTION?.isProficient ? pb : 0)}
               </span>
@@ -265,6 +323,33 @@ export default function CharacterDetailPage() {
             </div>
           </Card>
         </div>
+
+        {/* Magias Conhecidas (Se houver) */}
+        {character.spells && character.spells.length > 0 && (
+          <Card className="bg-[#1a1a1a] border-zinc-800 shadow-md">
+            <CardContent className="p-4">
+              <h3 className="text-sm font-bold text-zinc-100 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <BookOpen size={16} className="text-[#663399]" />
+                Magias Preparadas
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {character.spells.map(spellIndex => (
+                  <div key={spellIndex} className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1.5 rounded-full flex items-center gap-2 border border-zinc-700">
+                    <span className="capitalize">{spellIndex.replace(/-/g, ' ')}</span>
+                    <button
+                      onClick={() => handleForgetSpell(spellIndex)}
+                      className="text-zinc-500 hover:text-red-400 transition-colors"
+                      title="Esquecer magia"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Main Grid: Attr on Left, Rest on Right */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           <div className="md:col-span-3">
@@ -299,6 +384,15 @@ export default function CharacterDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Drawer Extensível de Magias */}
+      <SpellsDrawer
+        isOpen={isSpellsOpen}
+        onClose={() => setIsSpellsOpen(false)}
+        learnedSpells={character.spells || []}
+        onLearnSpell={handleLearnSpell}
+        onForgetSpell={handleForgetSpell}
+      />
     </div>
   );
 }

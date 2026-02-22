@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCurrentUser } from '@/frontend/context/UserContext';
-import { addCharacter } from '@/backend/store/memory-store';
-import { createDnD5eCharacter } from '@/systems/dnd5e/factory';
 
 export default function NewCharacterPage() {
   const { currentUser } = useCurrentUser();
@@ -15,6 +13,7 @@ export default function NewCharacterPage() {
   const [class_, setClass_] = useState('');
   const [level, setLevel] = useState(1);
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!currentUser) {
     return (
@@ -24,31 +23,44 @@ export default function NewCharacterPage() {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
     const trimmedName = name.trim();
     if (!trimmedName) {
       setError('Nome do personagem é obrigatório.');
       return;
     }
+
     const levelNum = Math.max(1, Math.floor(Number(level)) || 1);
-    const base = createDnD5eCharacter(currentUser.username, trimmedName, {
-      race: race.trim(),
-      class: class_.trim(),
-      level: levelNum,
-      hpMax: levelNum * 8,
-      hpCurrent: levelNum * 8,
-    });
+
     try {
-      const id = crypto.randomUUID();
-      const character = addCharacter({
-        ...base,
-        id,
+      setIsSubmitting(true);
+      const res = await fetch('/api/characters', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: trimmedName,
+          ownerUsername: currentUser.username,
+          system: 'DnD_5e',
+          class: class_.trim(),
+          race: race.trim(),
+          level: levelNum
+        })
       });
-      router.push(`/characters/${character.id}`);
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Erro ao criar personagem.');
+      }
+
+      const { id } = await res.json();
+      router.push(`/characters/${id}`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Erro ao criar personagem.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -76,6 +88,7 @@ export default function NewCharacterPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800"
+            disabled={isSubmitting}
           />
         </div>
         <div>
@@ -88,6 +101,7 @@ export default function NewCharacterPage() {
             value={race}
             onChange={(e) => setRace(e.target.value)}
             className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800"
+            disabled={isSubmitting}
           />
         </div>
         <div>
@@ -100,6 +114,7 @@ export default function NewCharacterPage() {
             value={class_}
             onChange={(e) => setClass_(e.target.value)}
             className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800"
+            disabled={isSubmitting}
           />
         </div>
         <div>
@@ -113,15 +128,17 @@ export default function NewCharacterPage() {
             value={level}
             onChange={(e) => setLevel(Number(e.target.value))}
             className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800"
+            disabled={isSubmitting}
           />
         </div>
         {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         <div className="flex gap-2">
           <button
             type="submit"
-            className="px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-md font-medium"
+            disabled={isSubmitting}
+            className="px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-md font-medium disabled:opacity-50"
           >
-            Criar
+            {isSubmitting ? 'Criando...' : 'Criar'}
           </button>
           <Link
             href="/characters"

@@ -3,9 +3,16 @@ import { GetCharacterUseCase } from './get-characters.use-case';
 import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-character.repository';
 import { Character } from '../../domain/entity/Character';
 
+import { Attributes } from '../../domain/value-object/Attributes';
+import { HealthPoints } from '../../domain/value-object/HealthPoints';
+
 class MockCharacter extends Character {
     getCombatStats() {
         return {};
+    }
+
+    toJSON() {
+        return { id: this.id, name: this.name };
     }
 }
 
@@ -20,7 +27,7 @@ describe('GetCharacterUseCase (Integration)', () => {
 
     it('deve retornar um personagem existente', async () => {
         // Mock Setup
-        const mockChar = new MockCharacter('char-123', 'Hero', 'Generic', 'user1', {} as any, {} as any, 1);
+        const mockChar = new MockCharacter('char-123', 'Hero', 'Generic', 'user1', new Attributes(), new HealthPoints(10, 10), 1);
         await repo.save(mockChar);
 
         // Act

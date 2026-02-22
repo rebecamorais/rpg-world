@@ -18,6 +18,7 @@ export class DnD5eCharacter extends Character {
     public initiative: number;
     public skills: Partial<Record<SkillKey, CharacterSkill>>;
     public savingThrowProficiencies: Record<AttributeKey, boolean>;
+    public spells: string[];
 
     constructor(
         id: string,
@@ -32,7 +33,8 @@ export class DnD5eCharacter extends Character {
         speed: number = 30,
         initiative: number = 0,
         skills: Partial<Record<SkillKey, CharacterSkill>> = {},
-        savingThrowProficiencies: Partial<Record<AttributeKey, boolean>> = {}
+        savingThrowProficiencies: Partial<Record<AttributeKey, boolean>> = {},
+        spells: string[] = []
     ) {
         super(id, name, 'DnD_5e', ownerUsername, attributes, hp, level);
         this.characterClass = characterClass;
@@ -42,6 +44,7 @@ export class DnD5eCharacter extends Character {
         this.initiative = initiative;
         this.skills = skills;
         this.savingThrowProficiencies = this.normalizeSavingThrows(savingThrowProficiencies);
+        this.spells = spells;
     }
 
     private normalizeSavingThrows(saves: Partial<Record<AttributeKey, boolean>>): Record<AttributeKey, boolean> {
@@ -88,6 +91,26 @@ export class DnD5eCharacter extends Character {
             speed: this.speed,
             initiative: this.initiative + this.getModifier('DEX'), // Initiative normally is just DEX mod, plus possible bonuses
             proficiencyBonus: this.proficiencyBonus
+        };
+    }
+
+    toJSON(): Record<string, unknown> {
+        return {
+            id: this.id,
+            name: this.name,
+            system: this.system,
+            ownerUsername: this.ownerUsername,
+            level: this.level,
+            attributes: this.attributes.getAll(),
+            hp: this.hp.status,
+            characterClass: this.characterClass,
+            race: this.race,
+            ac: this.ac,
+            speed: this.speed,
+            initiative: this.initiative,
+            skills: this.skills,
+            savingThrowProficiencies: this.savingThrowProficiencies,
+            spells: this.spells
         };
     }
 }
