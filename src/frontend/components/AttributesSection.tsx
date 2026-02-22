@@ -16,9 +16,7 @@ export default function AttributesSection({
 }: Props) {
   return (
     <div>
-      <h3 className="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-        Atributos
-      </h3>
+      <h3 className="text-foreground mb-2 text-sm font-semibold">Atributos</h3>
       <div className="flex flex-wrap gap-4">
         {ATTRIBUTE_KEYS.map((key) => (
           <AttributeCard

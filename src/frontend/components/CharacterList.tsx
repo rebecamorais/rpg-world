@@ -39,7 +39,7 @@ export default function CharacterList() {
 
   if (loading) {
     return (
-      <div className="p-6 text-center text-zinc-500">
+      <div className="text-muted-foreground p-6 text-center">
         <p>Carregando personagens...</p>
       </div>
     );
@@ -47,11 +47,11 @@ export default function CharacterList() {
 
   if (characters.length === 0) {
     return (
-      <div className="rounded-lg border border-zinc-200 p-6 text-center text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
+      <div className="border-border text-muted-foreground rounded-lg border p-6 text-center">
         <p>Nenhum personagem ainda.</p>
         <Link
           href="/characters/new"
-          className="mt-3 inline-block text-sm font-medium text-zinc-900 hover:underline dark:text-zinc-100"
+          className="text-foreground mt-3 inline-block text-sm font-medium hover:underline"
         >
           Criar primeiro personagem
         </Link>
@@ -62,27 +62,23 @@ export default function CharacterList() {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          Personagens
-        </h2>
+        <h2 className="text-foreground text-lg font-semibold">Personagens</h2>
         <Link
           href="/characters/new"
-          className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+          className="text-muted-foreground hover:text-foreground text-sm font-medium"
         >
           + Novo
         </Link>
       </div>
-      <ul className="divide-y divide-zinc-200 dark:divide-zinc-700">
+      <ul className="divide-border divide-y">
         {characters.map((c) => (
           <li key={c.id}>
             <Link
               href={`/characters/${c.id}`}
-              className="-mx-2 block rounded px-2 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+              className="hover:bg-muted -mx-2 block rounded px-2 py-3"
             >
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                {c.name}
-              </span>
-              <span className="ml-2 text-sm text-zinc-500 dark:text-zinc-400">
+              <span className="text-foreground font-medium">{c.name}</span>
+              <span className="text-muted-foreground ml-2 text-sm">
                 Nível {c.level}
                 {c.characterClass ? ` · ${c.characterClass}` : ''}
               </span>

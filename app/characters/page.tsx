@@ -9,7 +9,9 @@ export default function CharactersPage() {
   if (!currentUser) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
-        <p className="text-zinc-500">Faça login para ver seus personagens.</p>
+        <p className="text-muted-foreground">
+          Faça login para ver seus personagens.
+        </p>
       </div>
     );
   }

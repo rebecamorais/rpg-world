@@ -25,11 +25,11 @@ export default function PassivePerception({
   );
 
   return (
-    <div className="flex items-center justify-between rounded border border-zinc-200 bg-zinc-100 p-3 dark:border-zinc-800 dark:bg-zinc-900">
-      <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+    <div className="border-border bg-secondary flex items-center justify-between rounded border p-3">
+      <span className="text-secondary-foreground text-sm font-semibold">
         Percepção Passiva
       </span>
-      <span className="font-mono text-lg font-bold text-zinc-900 dark:text-zinc-100">
+      <span className="text-foreground font-mono text-lg font-bold">
         {passiveValue}
       </span>
     </div>

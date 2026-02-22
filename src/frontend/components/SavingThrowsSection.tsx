@@ -25,9 +25,9 @@ export default function SavingThrowsSection({
   onSavingThrowChange,
 }: Props) {
   return (
-    <Card className="border-zinc-800 bg-[#1a1a1a]">
-      <CardHeader className="border-b border-zinc-800 bg-[#121212]/50 px-4 py-3">
-        <CardTitle className="text-sm tracking-wider text-zinc-400 uppercase">
+    <Card className="border-border bg-card">
+      <CardHeader className="border-border bg-muted/50 border-b px-4 py-3">
+        <CardTitle className="text-muted-foreground text-sm tracking-wider uppercase">
           Salvaguardas
         </CardTitle>
       </CardHeader>
@@ -42,7 +42,7 @@ export default function SavingThrowsSection({
           return (
             <div
               key={key}
-              className="group flex items-center gap-3 rounded p-1 transition-colors hover:bg-zinc-800/50"
+              className="group hover:bg-muted flex items-center gap-3 rounded p-1 transition-colors"
             >
               <button
                 type="button"
@@ -52,14 +52,14 @@ export default function SavingThrowsSection({
                   'h-3 w-3 flex-shrink-0 rounded-full border transition-all',
                   isProficient
                     ? 'border-primary bg-primary'
-                    : 'border-zinc-600 bg-transparent group-hover:border-zinc-400',
+                    : 'border-muted-foreground group-hover:border-foreground bg-transparent',
                 )}
               />
               <div className="flex flex-1 items-center justify-between text-sm">
                 <span
                   className={cn(
                     'font-medium transition-colors',
-                    isProficient ? 'text-zinc-100' : 'text-zinc-400',
+                    isProficient ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >
                   {ATTRIBUTE_LABELS[key]}
@@ -67,7 +67,7 @@ export default function SavingThrowsSection({
                 <span
                   className={cn(
                     'mx-2 font-mono font-bold',
-                    isProficient ? 'text-zinc-100' : 'text-zinc-500',
+                    isProficient ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >
                   {sign}

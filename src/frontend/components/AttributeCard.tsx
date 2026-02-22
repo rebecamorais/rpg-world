@@ -22,26 +22,26 @@ export default function AttributeCard({ label, value, onChange }: Props) {
   };
 
   return (
-    <div className="group relative flex w-24 flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-zinc-700 bg-[#1a1a1a] p-3 shadow-sm">
+    <div className="group border-border bg-card relative flex w-24 flex-col items-center justify-center overflow-hidden rounded-lg border-2 p-3 shadow-sm">
       <div className="bg-primary/50 group-hover:bg-primary absolute top-0 h-1 w-full transition-colors" />
-      <span className="mb-1 text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
+      <span className="text-muted-foreground mb-1 text-[10px] font-bold tracking-wider uppercase">
         {label}
       </span>
 
       {/* Modificador principal */}
-      <span className="mb-2 font-mono text-3xl font-bold text-zinc-100">
+      <span className="text-foreground mb-2 font-mono text-3xl font-bold">
         {modifier >= 0 ? `+${modifier}` : modifier}
       </span>
 
       {/* Valor Editável (Pequeno, na base oval) */}
-      <div className="z-10 mt-[-10px] flex w-14 items-center justify-center rounded-full border border-zinc-700 bg-[#121212] px-2">
+      <div className="border-border bg-secondary z-10 mt-[-10px] flex w-14 items-center justify-center rounded-full border px-2">
         <input
           type="number"
           min={MIN_ATTR}
           max={MAX_ATTR}
           value={clamped}
           onChange={handleChange}
-          className="focus:ring-primary w-full rounded-full bg-transparent py-0.5 text-center text-sm font-bold text-zinc-300 outline-none focus:ring-2"
+          className="focus:ring-primary text-secondary-foreground w-full rounded-full bg-transparent py-0.5 text-center text-sm font-bold outline-none focus:ring-2"
         />
       </div>
     </div>

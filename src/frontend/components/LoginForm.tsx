@@ -26,7 +26,7 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex max-w-sm flex-col gap-4">
-      <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+      <h2 className="text-foreground text-xl font-semibold">
         Entrar no RPG World
       </h2>
       <div>

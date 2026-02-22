@@ -9,7 +9,7 @@ export default function Home() {
 
   if (!currentUser) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 dark:bg-zinc-950">
+      <div className="bg-background flex min-h-screen items-center justify-center p-4">
         <LoginForm />
       </div>
     );
@@ -18,29 +18,25 @@ export default function Home() {
   const displayLabel = currentUser.displayName || currentUser.username;
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-      <header className="flex items-center justify-between border-b border-zinc-200 bg-white px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900">
-        <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          RPG World
-        </h1>
+    <div className="bg-background text-foreground min-h-screen">
+      <header className="border-border bg-card flex items-center justify-between border-b px-4 py-3">
+        <h1 className="text-lg font-semibold">RPG World</h1>
         <div className="flex items-center gap-3">
-          <span className="text-sm text-zinc-600 dark:text-zinc-400">
+          <span className="text-muted-foreground text-sm">
             {displayLabel}{' '}
-            <span className="text-zinc-400">(@{currentUser.username})</span>
+            <span className="opacity-70">(@{currentUser.username})</span>
           </span>
           <button
             type="button"
             onClick={logout}
-            className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
+            className="text-muted-foreground hover:text-foreground text-sm"
           >
             Sair
           </button>
         </div>
       </header>
       <main className="mx-auto max-w-3xl p-4">
-        <p className="mb-4 text-zinc-600 dark:text-zinc-400">
-          Olá, {displayLabel}.
-        </p>
+        <p className="text-muted-foreground mb-4">Olá, {displayLabel}.</p>
         <CharacterList />
       </main>
     </div>

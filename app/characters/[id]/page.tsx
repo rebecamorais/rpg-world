@@ -55,7 +55,9 @@ export default function CharacterDetailPage() {
   if (!currentUser) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
-        <p className="text-zinc-500">Faça login para ver o personagem.</p>
+        <p className="text-muted-foreground">
+          Faça login para ver o personagem.
+        </p>
       </div>
     );
   }
@@ -63,7 +65,7 @@ export default function CharacterDetailPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
-        <p className="text-zinc-500">Carregando...</p>
+        <p className="text-muted-foreground">Carregando...</p>
       </div>
     );
   }
@@ -71,7 +73,7 @@ export default function CharacterDetailPage() {
   if (!character || character.ownerUsername !== currentUser.username) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
-        <p className="text-zinc-500">
+        <p className="text-muted-foreground">
           Personagem não encontrado ou você não tem permissão.
         </p>
         <Link href="/characters" className="mt-2 block text-sm underline">
@@ -252,7 +254,7 @@ export default function CharacterDetailPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/characters"
-            className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
+            className="text-muted-foreground hover:text-foreground text-sm"
           >
             ← Voltar
           </Link>
@@ -287,7 +289,7 @@ export default function CharacterDetailPage() {
       )}
       <div className="flex flex-col gap-6">
         {/* Header Block Editable */}
-        <Card className="border-zinc-800 bg-[#1a1a1a]">
+        <Card className="border-border bg-card">
           <CardContent className="flex flex-col p-0 md:flex-row">
             <div className="flex flex-col justify-end border-b border-zinc-800 p-6 md:w-2/3 md:border-r md:border-b-0">
               <Input
@@ -297,15 +299,15 @@ export default function CharacterDetailPage() {
                 placeholder="Nome do Personagem"
               />
               <div className="mt-2 flex gap-4">
-                <div className="text-sm text-zinc-400">
+                <div className="text-muted-foreground text-sm">
                   Bônus de Proficiência:{' '}
                   <span className="text-primary font-bold">+{pb}</span>
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 bg-black/20 p-6 md:w-1/3">
+            <div className="bg-muted grid grid-cols-2 gap-4 p-6 md:w-1/3">
               <div>
-                <label className="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">
+                <label className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
                   Classe
                 </label>
                 <Input
@@ -317,7 +319,7 @@ export default function CharacterDetailPage() {
                 />
               </div>
               <div>
-                <label className="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">
+                <label className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
                   Nível
                 </label>
                 <Input
@@ -334,7 +336,7 @@ export default function CharacterDetailPage() {
                 />
               </div>
               <div className="col-span-2">
-                <label className="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">
+                <label className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
                   Raça
                 </label>
                 <Input
@@ -360,7 +362,7 @@ export default function CharacterDetailPage() {
 
         {/* Combat Stats Block (Lucide Icons) */}
         <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
-          <Card className="group relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
+          <Card className="group border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
             <div className="z-10 flex flex-col items-center">
               <Shield className="text-primary mb-2 h-6 w-6 drop-shadow-md" />
               <Input
@@ -369,15 +371,15 @@ export default function CharacterDetailPage() {
                 onChange={(e) =>
                   handleBasicInfoChange('ac', parseInt(e.target.value) || 0)
                 }
-                className="focus-visible:ring-primary h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2"
+                className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
               />
-              <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
+              <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
                 Classe Armadura
               </span>
             </div>
           </Card>
 
-          <Card className="relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
+          <Card className="border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
             <div className="z-10 flex flex-col items-center">
               <Heart className="mb-2 h-6 w-6 text-red-500 drop-shadow-md" />
               <div className="flex items-baseline justify-center gap-1">
@@ -390,9 +392,9 @@ export default function CharacterDetailPage() {
                       parseInt(e.target.value) || 0,
                     )
                   }
-                  className="focus-visible:ring-primary h-10 w-16 border-transparent bg-transparent p-0 text-right text-3xl font-bold text-zinc-100 focus-visible:ring-2"
+                  className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-right text-3xl font-bold focus-visible:ring-2"
                 />
-                <span className="text-zinc-500">/</span>
+                <span className="text-muted-foreground">/</span>
                 <Input
                   type="number"
                   value={character.hpMax}
@@ -402,16 +404,16 @@ export default function CharacterDetailPage() {
                       parseInt(e.target.value) || 0,
                     )
                   }
-                  className="focus-visible:ring-primary h-10 w-12 border-transparent bg-transparent p-0 text-left text-xl font-bold text-zinc-500 focus-visible:ring-2"
+                  className="focus-visible:ring-primary text-muted-foreground h-10 w-12 border-transparent bg-transparent p-0 text-left text-xl font-bold focus-visible:ring-2"
                 />
               </div>
-              <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
+              <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
                 Pontos de Vida
               </span>
             </div>
           </Card>
 
-          <Card className="relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
+          <Card className="border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
             <div className="z-10 flex flex-col items-center">
               <Footprints className="mb-2 h-6 w-6 text-emerald-500 drop-shadow-md" />
               <div className="flex items-baseline justify-center gap-1">
@@ -424,17 +426,17 @@ export default function CharacterDetailPage() {
                       parseInt(e.target.value) || 0,
                     )
                   }
-                  className="focus-visible:ring-primary h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2"
+                  className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
                 />
-                <span className="text-sm text-zinc-500">ft</span>
+                <span className="text-muted-foreground text-sm">ft</span>
               </div>
-              <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
+              <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
                 Deslocamento
               </span>
             </div>
           </Card>
 
-          <Card className="relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
+          <Card className="border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
             <div className="z-10 flex flex-col items-center">
               <Swords className="mb-2 h-6 w-6 text-orange-500 drop-shadow-md" />
               <Input
@@ -446,21 +448,21 @@ export default function CharacterDetailPage() {
                     parseInt(e.target.value) || 0,
                   )
                 }
-                className="focus-visible:ring-primary h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2"
+                className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
               />
-              <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
+              <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
                 Iniciativa
               </span>
             </div>
           </Card>
 
-          <Card className="relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
+          <Card className="border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
             <div className="z-10 flex flex-col items-center">
               <Eye className="mb-2 h-6 w-6 text-blue-500 drop-shadow-md" />
-              <span className="flex h-10 items-center justify-center text-3xl font-bold text-zinc-100">
+              <span className="text-foreground flex h-10 items-center justify-center text-3xl font-bold">
                 {character.passivePerception ?? 10}
               </span>
-              <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
+              <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
                 Percepção Passiva
               </span>
             </div>
@@ -469,9 +471,9 @@ export default function CharacterDetailPage() {
 
         {/* Magias Conhecidas (Se houver) */}
         {character.spells && character.spells.length > 0 && (
-          <Card className="border-zinc-800 bg-[#1a1a1a] shadow-md">
+          <Card className="border-border bg-card shadow-md">
             <CardContent className="p-4">
-              <h3 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-wider text-zinc-100 uppercase">
+              <h3 className="text-foreground mb-3 flex items-center gap-2 text-sm font-bold tracking-wider uppercase">
                 <BookOpen size={16} className="text-primary" />
                 Magias Preparadas
               </h3>
@@ -479,14 +481,14 @@ export default function CharacterDetailPage() {
                 {character.spells.map((spellIndex) => (
                   <div
                     key={spellIndex}
-                    className="flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-300"
+                    className="bg-secondary text-secondary-foreground border-border flex items-center gap-2 rounded-full border"
                   >
                     <span className="capitalize">
                       {spellIndex.replace(/-/g, ' ')}
                     </span>
                     <button
                       onClick={() => handleForgetSpell(spellIndex)}
-                      className="text-zinc-500 transition-colors hover:text-red-400"
+                      className="text-muted-foreground transition-colors hover:text-red-400"
                       title="Esquecer magia"
                     >
                       &times;

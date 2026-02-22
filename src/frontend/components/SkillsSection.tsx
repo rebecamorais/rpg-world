@@ -30,9 +30,9 @@ export default function SkillsSection({
   onSkillChange,
 }: Props) {
   return (
-    <Card className="border-zinc-800 bg-[#1a1a1a]">
-      <CardHeader className="border-b border-zinc-800 bg-[#121212]/50 px-4 py-3">
-        <CardTitle className="text-sm tracking-wider text-zinc-400 uppercase">
+    <Card className="border-border bg-card">
+      <CardHeader className="border-border bg-muted/50 border-b px-4 py-3">
+        <CardTitle className="text-muted-foreground text-sm tracking-wider uppercase">
           Perícias
         </CardTitle>
       </CardHeader>
@@ -57,7 +57,7 @@ export default function SkillsSection({
           return (
             <div
               key={key}
-              className="group flex items-center gap-3 rounded p-1 transition-colors hover:bg-zinc-800/50"
+              className="group hover:bg-muted flex items-center gap-3 rounded p-1 transition-colors"
             >
               <button
                 type="button"
@@ -72,25 +72,29 @@ export default function SkillsSection({
                   'h-3 w-3 flex-shrink-0 rounded-full border transition-all',
                   skillData.isProficient
                     ? 'border-primary bg-primary'
-                    : 'border-zinc-600 bg-transparent group-hover:border-zinc-400',
+                    : 'border-muted-foreground group-hover:border-foreground bg-transparent',
                 )}
               />
               <div className="flex flex-1 text-sm">
                 <span
                   className={cn(
                     'flex-1 truncate font-medium transition-colors',
-                    skillData.isProficient ? 'text-zinc-100' : 'text-zinc-400',
+                    skillData.isProficient
+                      ? 'text-foreground'
+                      : 'text-muted-foreground',
                   )}
                 >
                   {cat.label}
                 </span>
-                <span className="w-8 shrink-0 self-center text-center font-mono text-[10px] text-zinc-600">
+                <span className="text-muted-foreground w-8 shrink-0 self-center text-center font-mono text-[10px]">
                   ({cat.attribute.slice(0, 3)})
                 </span>
                 <span
                   className={cn(
                     'mx-2 w-6 shrink-0 text-right font-mono font-bold',
-                    skillData.isProficient ? 'text-zinc-100' : 'text-zinc-500',
+                    skillData.isProficient
+                      ? 'text-foreground'
+                      : 'text-muted-foreground',
                   )}
                 >
                   {sign}

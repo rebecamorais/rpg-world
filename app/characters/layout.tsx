@@ -13,9 +13,9 @@ export default function CharactersLayout({
   const characterId = params?.id;
 
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-zinc-100">
+    <div className="bg-sidebar flex min-h-screen text-zinc-100">
       {/* Sidebar */}
-      <aside className="fixed h-full w-64 overflow-y-auto border-r border-zinc-800 bg-[#09090b] p-6">
+      <aside className="bg-sidebar fixed h-full w-64 overflow-y-auto border-r border-zinc-800 p-6">
         <div className="mb-8 flex items-center gap-2 px-2">
           <div className="bg-primary h-6 w-6 rounded" />
           <span className="font-bold tracking-tight">RPG WORLD</span>
