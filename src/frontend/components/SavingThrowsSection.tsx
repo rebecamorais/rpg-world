@@ -37,7 +37,7 @@ export default function SavingThrowsSection({
           Salvaguardas
         </CardTitle>
       </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-2 p-4 sm:grid-cols-2 lg:grid-cols-3">
+      <CardContent className="grid grid-cols-1 gap-2 p-4">
         {ATTRIBUTE_KEYS.map((key) => {
           const attrVal = attributes[key] ?? 10;
           const isProficient = savingThrows[key] ?? false;

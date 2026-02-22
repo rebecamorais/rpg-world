@@ -374,7 +374,7 @@ export default function CharacterDetailPage() {
         />
 
         {/* Combat Stats Block (Lucide Icons) */}
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-7">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
           <Card className="group border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
             <div className="z-10 flex flex-col items-center">
               <Shield className="text-primary mb-2 h-6 w-6 drop-shadow-md" />
@@ -485,24 +485,12 @@ export default function CharacterDetailPage() {
               </span>
             </div>
           </Card>
-
-          <Card className="border-border bg-card relative flex flex-col items-center justify-center overflow-hidden py-4">
-            <div className="z-10 flex flex-col items-center">
-              <Eye className="mb-2 h-6 w-6 text-blue-500 drop-shadow-md" />
-              <span className="text-foreground flex h-10 items-center justify-center text-3xl font-bold">
-                {character.passivePerception ?? 10}
-              </span>
-              <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
-                Percepção Passiva
-              </span>
-            </div>
-          </Card>
         </div>
 
         {/* Main Grid: Attr on Left, Saves/Skills on Center, Spells on Right */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
           {/* Col 1: Attributes */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-2">
             <AttributesSection
               attributes={character.attributes}
               onAttributeChange={handleAttributeChange}
@@ -510,7 +498,13 @@ export default function CharacterDetailPage() {
           </div>
 
           {/* Col 2: Saving Throws, Skills, Passive Perception */}
-          <div className="flex flex-col gap-6 md:col-span-5">
+          <div className="flex flex-col gap-6 md:col-span-4">
+            <PassivePerception
+              wisValue={character.attributes.WIS ?? 10}
+              level={character.level}
+              perceptionSkillData={character.skills?.PERCEPTION}
+            />
+
             <SavingThrowsSection
               attributes={character.attributes}
               level={character.level}
@@ -524,14 +518,6 @@ export default function CharacterDetailPage() {
               skills={character.skills ?? {}}
               onSkillChange={handleSkillChange}
             />
-
-            <div className="mt-4">
-              <PassivePerception
-                wisValue={character.attributes.WIS ?? 10}
-                level={character.level}
-                perceptionSkillData={character.skills?.PERCEPTION}
-              />
-            </div>
           </div>
 
           {/* Col 3: Magic System and Known Spells */}

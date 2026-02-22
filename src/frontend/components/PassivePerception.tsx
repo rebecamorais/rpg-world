@@ -1,6 +1,6 @@
 'use client';
 
-import { Info } from 'lucide-react';
+import { Eye, Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import {
@@ -37,12 +37,14 @@ export default function PassivePerception({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className="border-border bg-secondary hover:border-primary/50 flex cursor-help items-center justify-between rounded border p-3 transition-colors">
-          <span className="text-secondary-foreground flex items-center gap-2 text-sm font-semibold">
-            {t('passivePerception')}
-            <Info className="text-muted-foreground h-4 w-4" />
-          </span>
-          <span className="text-foreground font-mono text-lg font-bold">
+        <div className="border-border bg-card hover:border-primary/50 flex cursor-help items-center justify-between rounded-lg border p-4 shadow-sm transition-colors">
+          <div className="flex items-center gap-3">
+            <Eye className="h-6 w-6 text-blue-500 drop-shadow-sm" />
+            <span className="text-foreground flex items-center gap-2 text-sm font-bold">
+              {t('passivePerception')}
+            </span>
+          </div>
+          <span className="text-foreground font-mono text-xl font-bold">
             {passiveValue}
           </span>
         </div>

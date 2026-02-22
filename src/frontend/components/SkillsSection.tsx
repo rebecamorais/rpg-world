@@ -36,7 +36,7 @@ export default function SkillsSection({
           Perícias
         </CardTitle>
       </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-2 p-4 sm:grid-cols-2 lg:grid-cols-3">
+      <CardContent className="grid grid-cols-1 gap-2 p-4">
         {SKILL_KEYS.map((key) => {
           const cat = SKILLS_CATALOG[key];
           const attrVal = attributes[cat.attribute] ?? 10;

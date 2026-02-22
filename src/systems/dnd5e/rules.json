@@ -1,7 +1,7 @@
 {
   "formulas": {
-    "passivePerception": "Percepção Passiva = 10 + SAB + PB (se proficiente) + PB (se expertise)",
-    "savingThrow": "Salvaguarda = Modificador da Base + PB (se proficiente)",
-    "attributeModifier": "Modificador = ArredondaParaBaixo((Atributo - 10) / 2)"
+    "passivePerception": "passivePerception = 10 + SAB + PB (prof) + PB (expert)",
+    "savingThrow": "savingThrow = base + PB (prof)",
+    "attributeModifier": "attributeModifier = round((atrib - 10) / 2)"
   }
 }
