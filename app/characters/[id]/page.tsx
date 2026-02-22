@@ -359,7 +359,7 @@ export default function CharacterDetailPage() {
               <Shield className="text-primary mb-2 h-6 w-6 drop-shadow-md" />
               <Input
                 type="number"
-                value={character.ac}
+                value={character.ac ?? 0}
                 onChange={(e) =>
                   handleBasicInfoChange('ac', parseInt(e.target.value) || 0)
                 }
@@ -377,7 +377,7 @@ export default function CharacterDetailPage() {
               <div className="flex items-baseline justify-center gap-1">
                 <Input
                   type="number"
-                  value={character.hpCurrent}
+                  value={character.hpCurrent ?? 0}
                   onChange={(e) =>
                     handleBasicInfoChange(
                       'hpCurrent',
@@ -389,7 +389,7 @@ export default function CharacterDetailPage() {
                 <span className="text-muted-foreground">/</span>
                 <Input
                   type="number"
-                  value={character.hpMax}
+                  value={character.hpMax ?? 0}
                   onChange={(e) =>
                     handleBasicInfoChange(
                       'hpMax',
@@ -410,7 +410,7 @@ export default function CharacterDetailPage() {
               <HeartPulse className="mb-2 h-6 w-6 text-yellow-500 drop-shadow-md" />
               <Input
                 type="number"
-                value={character.hpTemp || 0}
+                value={character.hpTemp ?? 0}
                 onChange={(e) =>
                   handleBasicInfoChange('hpTemp', parseInt(e.target.value) || 0)
                 }
@@ -428,7 +428,7 @@ export default function CharacterDetailPage() {
               <div className="flex items-baseline justify-center gap-1">
                 <Input
                   type="number"
-                  value={character.manaCurrent || 0}
+                  value={character.manaCurrent ?? 0}
                   onChange={(e) =>
                     handleBasicInfoChange(
                       'manaCurrent',
@@ -440,7 +440,7 @@ export default function CharacterDetailPage() {
                 <span className="text-muted-foreground">/</span>
                 <Input
                   type="number"
-                  value={character.manaMax || 0}
+                  value={character.manaMax ?? 0}
                   onChange={(e) =>
                     handleBasicInfoChange(
                       'manaMax',
