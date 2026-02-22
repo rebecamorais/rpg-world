@@ -31,6 +31,8 @@ export default function CharacterDetailPage() {
   const [error, setError] = useState('');
   const [isSpellsOpen, setIsSpellsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const { currentUser } = useCurrentUser();
   const id = params?.id as string;
@@ -99,89 +101,103 @@ export default function CharacterDetailPage() {
     }
   };
 
-  const updateCharacterInBackend = async (updates: Partial<DnD5eCharacter>) => {
+  const updateCharacterInBackend = async () => {
     try {
-      const res = await fetch(`/api/characters/${character.id}`, {
+      setIsSaving(true);
+      const res = await fetch(`/api/characters/${character?.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ownerUsername: currentUser.username,
-          updates
+          updates: character // We send the whole character state buffered in React
         })
       });
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || 'Falha ao salvar no servidor.');
       }
-      // Success, locally update optimistic
-      setCharacter(prev => prev ? { ...prev, ...updates } as DnD5eCharacter : null);
+      setHasUnsavedChanges(false);
+      alert('Personagem salvo com sucesso!');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Falha ao salvar no servidor.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const handleAttributeChange = (key: AttributeKey, value: number) => {
     setError('');
-    updateCharacterInBackend({
-      attributes: { ...character.attributes, [key]: value } as Record<AttributeKey, number>
-    });
+    setCharacter(prev => prev ? { ...prev, attributes: { ...prev.attributes, [key]: value } as Record<AttributeKey, number> } as DnD5eCharacter : null);
+    setHasUnsavedChanges(true);
   };
 
   const handleSkillChange = (key: SkillKey, skillData: CharacterSkill) => {
     setError('');
-    updateCharacterInBackend({
-      skills: { ...character.skills, [key]: skillData }
-    });
+    setCharacter(prev => prev ? { ...prev, skills: { ...prev.skills, [key]: skillData } } as DnD5eCharacter : null);
+    setHasUnsavedChanges(true);
   };
 
   const handleSavingThrowChange = (key: AttributeKey, isProficient: boolean) => {
     setError('');
-    updateCharacterInBackend({
-      savingThrowProficiencies: { ...character.savingThrowProficiencies, [key]: isProficient } as Record<AttributeKey, boolean>
-    });
+    setCharacter(prev => prev ? { ...prev, savingThrowProficiencies: { ...prev.savingThrowProficiencies, [key]: isProficient } as Record<AttributeKey, boolean> } as DnD5eCharacter : null);
+    setHasUnsavedChanges(true);
   };
 
   const handleBasicInfoChange = (field: keyof DnD5eCharacter, value: string | number) => {
     setError('');
-    updateCharacterInBackend({
-      [field]: value
-    });
+    setCharacter(prev => prev ? { ...prev, [field]: value } as DnD5eCharacter : null);
+    setHasUnsavedChanges(true);
   };
 
   const handleLearnSpell = (spellIndex: string) => {
     const currentSpells = character.spells || [];
     if (!currentSpells.includes(spellIndex)) {
-      updateCharacterInBackend({
-        spells: [...currentSpells, spellIndex]
-      });
+      setCharacter(prev => prev ? { ...prev, spells: [...currentSpells, spellIndex] } as DnD5eCharacter : null);
+      setHasUnsavedChanges(true);
     }
   };
 
   const handleForgetSpell = (spellIndex: string) => {
     const currentSpells = character.spells || [];
-    updateCharacterInBackend({
-      spells: currentSpells.filter(s => s !== spellIndex)
-    });
+    setCharacter(prev => prev ? { ...prev, spells: currentSpells.filter(s => s !== spellIndex) } as DnD5eCharacter : null);
+    setHasUnsavedChanges(true);
   };
 
   const pb = getProficiencyBonus(character.level);
 
   return (
     <div className="max-w-2xl mx-auto p-4">
-      <div className="mb-4 flex justify-between items-center">
-        <Link
-          href="/characters"
-          className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
-        >
-          ← Voltar
-        </Link>
-        <button
-          type="button"
-          onClick={handleDelete}
-          className="text-sm text-red-600 dark:text-red-400 hover:underline"
-        >
-          Excluir
-        </button>
+      <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex items-center gap-4">
+          <Link
+            href="/characters"
+            className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
+          >
+            ← Voltar
+          </Link>
+          {hasUnsavedChanges && (
+            <span className="text-xs font-semibold px-2 py-1 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded">
+              Alterações não salvas
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={updateCharacterInBackend}
+            disabled={!hasUnsavedChanges || isSaving}
+            className="text-sm px-4 py-2 bg-[#663399] text-white rounded font-medium disabled:opacity-50 transition-opacity"
+          >
+            {isSaving ? 'Salvando...' : 'Salvar Alterações'}
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="text-sm text-red-600 dark:text-red-400 hover:underline"
+          >
+            Excluir
+          </button>
+        </div>
       </div>
       {error && <p className="text-sm text-red-600 dark:text-red-400 mb-4 bg-red-50 dark:bg-red-900/20 p-2 rounded">{error}</p>}
       <div className="flex flex-col gap-6">

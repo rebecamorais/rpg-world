@@ -9,9 +9,7 @@ export default function NewCharacterPage() {
   const { currentUser } = useCurrentUser();
   const router = useRouter();
   const [name, setName] = useState('');
-  const [race, setRace] = useState('');
-  const [class_, setClass_] = useState('');
-  const [level, setLevel] = useState(1);
+  const [system, setSystem] = useState('DnD_5e');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,8 +31,6 @@ export default function NewCharacterPage() {
       return;
     }
 
-    const levelNum = Math.max(1, Math.floor(Number(level)) || 1);
-
     try {
       setIsSubmitting(true);
       const res = await fetch('/api/characters', {
@@ -43,10 +39,7 @@ export default function NewCharacterPage() {
         body: JSON.stringify({
           name: trimmedName,
           ownerUsername: currentUser.username,
-          system: 'DnD_5e',
-          class: class_.trim(),
-          race: race.trim(),
-          level: levelNum
+          system: system
         })
       });
 
@@ -92,44 +85,19 @@ export default function NewCharacterPage() {
           />
         </div>
         <div>
-          <label htmlFor="race" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-            Raça
+          <label htmlFor="system" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+            Sistema RPG
           </label>
-          <input
-            id="race"
-            type="text"
-            value={race}
-            onChange={(e) => setRace(e.target.value)}
+          <select
+            id="system"
+            value={system}
+            onChange={(e) => setSystem(e.target.value)}
             className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800"
             disabled={isSubmitting}
-          />
-        </div>
-        <div>
-          <label htmlFor="class" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-            Classe
-          </label>
-          <input
-            id="class"
-            type="text"
-            value={class_}
-            onChange={(e) => setClass_(e.target.value)}
-            className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800"
-            disabled={isSubmitting}
-          />
-        </div>
-        <div>
-          <label htmlFor="level" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-            Nível
-          </label>
-          <input
-            id="level"
-            type="number"
-            min={1}
-            value={level}
-            onChange={(e) => setLevel(Number(e.target.value))}
-            className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800"
-            disabled={isSubmitting}
-          />
+          >
+            <option value="DnD_5e">D&D 5ª Edição</option>
+            {/* Future systems will be added here */}
+          </select>
         </div>
         {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         <div className="flex gap-2">
