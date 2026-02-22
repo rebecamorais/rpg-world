@@ -261,7 +261,6 @@ export default function CharacterDetailPage() {
         {/* Combat Stats Block (Lucide Icons) */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative group overflow-hidden bg-[#1a1a1a]">
-            <Shield className="absolute text-[#663399]/5 w-24 h-24 scale-150 rotate-12" />
             <div className="z-10 flex flex-col items-center">
               <Shield className="text-[#663399] w-6 h-6 mb-2 drop-shadow-md" />
               <Input
@@ -275,7 +274,6 @@ export default function CharacterDetailPage() {
           </Card>
 
           <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
-            <Heart className="absolute text-red-500/5 w-24 h-24 scale-150 -rotate-12" />
             <div className="z-10 flex flex-col items-center">
               <Heart className="text-red-500 w-6 h-6 mb-2 drop-shadow-md" />
               <div className="flex items-baseline justify-center gap-1">
@@ -298,7 +296,6 @@ export default function CharacterDetailPage() {
           </Card>
 
           <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
-            <Footprints className="absolute text-emerald-500/5 w-24 h-24 scale-150 rotate-6" />
             <div className="z-10 flex flex-col items-center">
               <Footprints className="text-emerald-500 w-6 h-6 mb-2 drop-shadow-md" />
               <div className="flex items-baseline justify-center gap-1">
@@ -315,7 +312,6 @@ export default function CharacterDetailPage() {
           </Card>
 
           <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
-            <Swords className="absolute text-orange-500/5 w-24 h-24 scale-150 -rotate-6" />
             <div className="z-10 flex flex-col items-center">
               <Swords className="text-orange-500 w-6 h-6 mb-2 drop-shadow-md" />
               <Input
@@ -329,7 +325,6 @@ export default function CharacterDetailPage() {
           </Card>
 
           <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
-            <Eye className="absolute text-blue-500/5 w-24 h-24 scale-150 rotate-12" />
             <div className="z-10 flex flex-col items-center">
               <Eye className="text-blue-500 w-6 h-6 mb-2 drop-shadow-md" />
               <span className="text-3xl font-bold text-zinc-100 h-10 flex items-center justify-center">
