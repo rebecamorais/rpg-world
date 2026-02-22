@@ -37,8 +37,8 @@ export function getAllUsernames(): string[] {
 
 export function addCharacter(character: DnD5eCharacter): DnD5eCharacter {
   const currentChars = getCharactersByOwner(character.ownerUsername);
-  if (currentChars.length >= 2) {
-    throw new Error('Limite máximo de 2 personagens atingido.');
+  if (currentChars.length >= 10) {
+    throw new Error('Limite máximo de 10 personagens atingido.');
   }
 
   // Validate values
