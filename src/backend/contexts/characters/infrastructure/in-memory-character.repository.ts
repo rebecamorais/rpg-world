@@ -2,9 +2,17 @@ import { CharacterRepo } from "../domain/repository";
 import { Character } from "../domain/entity/Character";
 
 export class InMemoryCharacterRepository implements CharacterRepo {
-    private characters: Character[] = [];
+    private characters: Map<string, Character> = new Map();
 
     async findById(id: string): Promise<Character | null> {
-        return this.characters.find((character) => character.id === id) || null;
+        return this.characters.get(id) || null;
+    }
+
+    async save(character: Character): Promise<void> {
+        this.characters.set(character.id, character);
+    }
+
+    async delete(id: string): Promise<boolean> {
+        return this.characters.delete(id);
     }
 }

@@ -1,18 +1,31 @@
 // app/api/characters/[id]/route.ts
-import { CharacterController } from '@/backend/contexts/characters/interfaces/character.controller';
+import { NextResponse } from 'next/server';
+import { GetCharacterUseCase } from '@/backend/contexts/characters/application/get-characters/get-characters.use-case';
+import { InMemoryCharacterRepository } from '@/backend/contexts/characters/infrastructure/in-memory-character.repository';
 
-// BUSCAR UM PERSONAGEM
+// We instantiate the dependencies once for now (since we use in-memory it must persist across requests in dev mode ideally, but we'll mock it here)
+// In a real app with Supabase, this would be a SupabaseRepo
+const repo = new InMemoryCharacterRepository();
+
 export async function GET(req: Request, { params }: { params: { id: string } }) {
-    return CharacterController.getById(params.id);
+    try {
+        const useCase = new GetCharacterUseCase(repo);
+        const character = await useCase.execute(params.id);
+
+        // Convert Domain Entity to DTO (JSON)
+        return NextResponse.json({
+            id: character.id,
+            name: character.name,
+            system: character.system,
+            ownerUsername: character.ownerUsername,
+            attributes: character.attributes.getAll(),
+            hp: character.hp.status,
+            level: character.level
+        });
+    } catch (err: unknown) {
+        return NextResponse.json(
+            { error: err instanceof Error ? err.message : 'Unknown error' },
+            { status: 404 }
+        );
+    }
 }
-
-// // ATUALIZAR UM PERSONAGEM (Atributos, HP, XP, etc)
-// export async function PUT(req: Request, { params }: { params: { id: string } }) {
-//     const body = await req.json();
-//     return CharacterController.update(params.id, body);
-// }
-
-// // EXCLUIR UM PERSONAGEM
-// export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-//     return CharacterController.delete(params.id);
-// }

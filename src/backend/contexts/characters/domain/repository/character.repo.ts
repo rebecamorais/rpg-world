@@ -1,5 +1,7 @@
 import { Character } from "../entity/Character";
 
-export type CharacterRepo = {
+export interface CharacterRepo {
     findById(id: string): Promise<Character | null>;
-};
+    save(character: Character): Promise<void>;
+    delete(id: string): Promise<boolean>;
+}
