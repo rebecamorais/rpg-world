@@ -1,5 +1,5 @@
-import type { User } from '@/types/user';
 import type { DnD5eCharacter } from '@/systems/dnd5e';
+import type { User } from '@/types/user';
 
 const users = new Map<string, User>();
 const characters = new Map<string, DnD5eCharacter>();
@@ -45,7 +45,10 @@ export function addCharacter(character: DnD5eCharacter): DnD5eCharacter {
   character.level = Math.max(1, Math.floor(character.level));
   for (const key of Object.keys(character.attributes)) {
     const k = key as keyof typeof character.attributes;
-    character.attributes[k] = Math.max(1, Math.min(30, Math.floor(character.attributes[k])));
+    character.attributes[k] = Math.max(
+      1,
+      Math.min(30, Math.floor(character.attributes[k])),
+    );
   }
 
   characters.set(character.id, { ...character });
@@ -58,14 +61,14 @@ export function getCharacterById(id: string): DnD5eCharacter | undefined {
 
 export function getCharactersByOwner(ownerUsername: string): DnD5eCharacter[] {
   return Array.from(characters.values()).filter(
-    (c) => c.ownerUsername === ownerUsername
+    (c) => c.ownerUsername === ownerUsername,
   );
 }
 
 export function updateCharacter(
   id: string,
   ownerUsername: string,
-  updates: Partial<Omit<DnD5eCharacter, 'id' | 'ownerUsername' | 'system'>>
+  updates: Partial<Omit<DnD5eCharacter, 'id' | 'ownerUsername' | 'system'>>,
 ): DnD5eCharacter | null {
   const existing = characters.get(id);
   if (!existing || existing.ownerUsername !== ownerUsername) return null;
@@ -75,7 +78,10 @@ export function updateCharacter(
   updated.level = Math.max(1, Math.floor(updated.level));
   for (const key of Object.keys(updated.attributes)) {
     const k = key as keyof typeof updated.attributes;
-    updated.attributes[k] = Math.max(1, Math.min(30, Math.floor(updated.attributes[k])));
+    updated.attributes[k] = Math.max(
+      1,
+      Math.min(30, Math.floor(updated.attributes[k])),
+    );
   }
 
   characters.set(id, updated);

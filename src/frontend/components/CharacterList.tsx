@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import Link from 'next/link';
+
 import { useCurrentUser } from '@/frontend/context/UserContext';
 
 interface CharacterSummary {
@@ -20,14 +22,16 @@ export default function CharacterList() {
   useEffect(() => {
     if (!currentUser) return;
 
-    fetch(`/api/characters?ownerUsername=${encodeURIComponent(currentUser.username)}`)
-      .then(res => res.json())
-      .then(data => {
+    fetch(
+      `/api/characters?ownerUsername=${encodeURIComponent(currentUser.username)}`,
+    )
+      .then((res) => res.json())
+      .then((data) => {
         if (Array.isArray(data)) {
           setCharacters(data);
         }
       })
-      .catch(err => console.error("Failed to fetch characters", err))
+      .catch((err) => console.error('Failed to fetch characters', err))
       .finally(() => setLoading(false));
   }, [currentUser]);
 
@@ -43,11 +47,11 @@ export default function CharacterList() {
 
   if (characters.length === 0) {
     return (
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-700 p-6 text-center text-zinc-500 dark:text-zinc-400">
+      <div className="rounded-lg border border-zinc-200 p-6 text-center text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
         <p>Nenhum personagem ainda.</p>
         <Link
           href="/characters/new"
-          className="mt-3 inline-block text-sm font-medium text-zinc-900 dark:text-zinc-100 hover:underline"
+          className="mt-3 inline-block text-sm font-medium text-zinc-900 hover:underline dark:text-zinc-100"
         >
           Criar primeiro personagem
         </Link>
@@ -57,13 +61,13 @@ export default function CharacterList() {
 
   return (
     <div className="space-y-2">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           Personagens
         </h2>
         <Link
           href="/characters/new"
-          className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+          className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
         >
           + Novo
         </Link>
@@ -73,12 +77,12 @@ export default function CharacterList() {
           <li key={c.id}>
             <Link
               href={`/characters/${c.id}`}
-              className="block py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 rounded px-2 -mx-2"
+              className="-mx-2 block rounded px-2 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
             >
               <span className="font-medium text-zinc-900 dark:text-zinc-100">
                 {c.name}
               </span>
-              <span className="text-zinc-500 dark:text-zinc-400 text-sm ml-2">
+              <span className="ml-2 text-sm text-zinc-500 dark:text-zinc-400">
                 Nível {c.level}
                 {c.characterClass ? ` · ${c.characterClass}` : ''}
               </span>

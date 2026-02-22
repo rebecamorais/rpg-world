@@ -22,24 +22,26 @@ export default function AttributeCard({ label, value, onChange }: Props) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-3 border-2 border-zinc-700 bg-[#1a1a1a] rounded-lg shadow-sm w-24 relative overflow-hidden group">
-      <div className="absolute top-0 w-full h-1 bg-[#663399]/50 group-hover:bg-[#663399] transition-colors" />
-      <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">{label}</span>
+    <div className="group relative flex w-24 flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-zinc-700 bg-[#1a1a1a] p-3 shadow-sm">
+      <div className="absolute top-0 h-1 w-full bg-[#663399]/50 transition-colors group-hover:bg-[#663399]" />
+      <span className="mb-1 text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
+        {label}
+      </span>
 
       {/* Modificador principal */}
-      <span className="text-3xl font-bold font-mono text-zinc-100 mb-2">
+      <span className="mb-2 font-mono text-3xl font-bold text-zinc-100">
         {modifier >= 0 ? `+${modifier}` : modifier}
       </span>
 
       {/* Valor Editável (Pequeno, na base oval) */}
-      <div className="bg-[#121212] border border-zinc-700 rounded-full px-2 w-14 flex items-center justify-center mt-[-10px] z-10">
+      <div className="z-10 mt-[-10px] flex w-14 items-center justify-center rounded-full border border-zinc-700 bg-[#121212] px-2">
         <input
           type="number"
           min={MIN_ATTR}
           max={MAX_ATTR}
           value={clamped}
           onChange={handleChange}
-          className="w-full text-center text-sm font-bold bg-transparent text-zinc-300 outline-none focus:ring-2 focus:ring-[#663399] rounded-full py-0.5"
+          className="w-full rounded-full bg-transparent py-0.5 text-center text-sm font-bold text-zinc-300 outline-none focus:ring-2 focus:ring-[#663399]"
         />
       </div>
     </div>

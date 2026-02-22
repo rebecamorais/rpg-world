@@ -48,7 +48,9 @@ pnpm dev
 Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
 
 ## 🤝 Próximos Passos
+
 O planejamento completo detalhado, contendo todas as Fases e os prompts de IA geradores da estrutura fundamental pode ser encontrado no nosso plano mestre em `.docs/plans/prompts_por_etapa_rpg_world_b5082e57.plan.md`.
 
 ---
+
 Desenvolvido com 💜 por Rebeca.

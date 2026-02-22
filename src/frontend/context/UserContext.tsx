@@ -1,15 +1,16 @@
 'use client';
 
 import {
+  type ReactNode,
   createContext,
   useCallback,
   useContext,
   useMemo,
   useState,
-  type ReactNode,
 } from 'react';
-import type { User } from '@/types/user';
+
 import { getOrCreateUser } from '@/backend/store/memory-store';
+import type { User } from '@/types/user';
 
 interface UserContextValue {
   currentUser: User | null;
@@ -34,14 +35,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<UserContextValue>(
     () => ({ currentUser, login, logout }),
-    [currentUser, login, logout]
+    [currentUser, login, logout],
   );
 
-  return (
-    <UserContext.Provider value={value}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
 export function useCurrentUser(): UserContextValue {

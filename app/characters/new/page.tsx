@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
 import { useCurrentUser } from '@/frontend/context/UserContext';
 
 export default function NewCharacterPage() {
@@ -15,7 +17,7 @@ export default function NewCharacterPage() {
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="flex min-h-screen items-center justify-center p-4">
         <p className="text-zinc-500">Faça login para criar personagem.</p>
       </div>
     );
@@ -39,8 +41,8 @@ export default function NewCharacterPage() {
         body: JSON.stringify({
           name: trimmedName,
           ownerUsername: currentUser.username,
-          system: system
-        })
+          system: system,
+        }),
       });
 
       if (!res.ok) {
@@ -51,14 +53,16 @@ export default function NewCharacterPage() {
       const { id } = await res.json();
       router.push(`/characters/${id}`);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Erro ao criar personagem.');
+      setError(
+        err instanceof Error ? err.message : 'Erro ao criar personagem.',
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-lg mx-auto p-4">
+    <div className="mx-auto max-w-lg p-4">
       <div className="mb-4">
         <Link
           href="/characters"
@@ -67,12 +71,15 @@ export default function NewCharacterPage() {
           ← Voltar
         </Link>
       </div>
-      <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
+      <h1 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-100">
         Novo personagem
       </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+          <label
+            htmlFor="name"
+            className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          >
             Nome *
           </label>
           <input
@@ -80,37 +87,42 @@ export default function NewCharacterPage() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800"
+            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 dark:border-zinc-600 dark:bg-zinc-800"
             disabled={isSubmitting}
           />
         </div>
         <div>
-          <label htmlFor="system" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+          <label
+            htmlFor="system"
+            className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          >
             Sistema RPG
           </label>
           <select
             id="system"
             value={system}
             onChange={(e) => setSystem(e.target.value)}
-            className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800"
+            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 dark:border-zinc-600 dark:bg-zinc-800"
             disabled={isSubmitting}
           >
             <option value="DnD_5e">D&D 5ª Edição</option>
             {/* Future systems will be added here */}
           </select>
         </div>
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+        {error && (
+          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        )}
         <div className="flex gap-2">
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-md font-medium disabled:opacity-50"
+            className="rounded-md bg-zinc-900 px-4 py-2 font-medium text-white disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900"
           >
             {isSubmitting ? 'Criando...' : 'Criar'}
           </button>
           <Link
             href="/characters"
-            className="px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md"
+            className="rounded-md border border-zinc-300 px-4 py-2 dark:border-zinc-600"
           >
             Cancelar
           </Link>

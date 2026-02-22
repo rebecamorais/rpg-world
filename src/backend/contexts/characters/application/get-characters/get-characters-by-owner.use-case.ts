@@ -1,11 +1,11 @@
-import { CharacterRepo } from "../../domain/repository";
-import { Character } from "../../domain/entity/Character";
+import { Character } from '../../domain/entity/Character';
+import { CharacterRepo } from '../../domain/repository';
 
 export class GetCharactersByOwnerUseCase {
-    constructor(private repository: CharacterRepo) { }
+  constructor(private repository: CharacterRepo) {}
 
-    async execute(ownerUsername: string): Promise<Character[]> {
-        if (!ownerUsername) throw new Error("Owner username is required");
-        return this.repository.findByOwner(ownerUsername);
-    }
+  async execute(ownerUsername: string): Promise<Character[]> {
+    if (!ownerUsername) throw new Error('Owner username is required');
+    return this.repository.findByOwner(ownerUsername);
+  }
 }

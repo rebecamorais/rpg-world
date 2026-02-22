@@ -2,6 +2,7 @@
 
 import type { AttributeKey } from '@/systems/dnd5e';
 import { ATTRIBUTE_KEYS, ATTRIBUTE_LABELS } from '@/systems/dnd5e/constants';
+
 import AttributeCard from './AttributeCard';
 
 interface Props {
@@ -9,10 +10,13 @@ interface Props {
   onAttributeChange: (key: AttributeKey, value: number) => void;
 }
 
-export default function AttributesSection({ attributes, onAttributeChange }: Props) {
+export default function AttributesSection({
+  attributes,
+  onAttributeChange,
+}: Props) {
   return (
     <div>
-      <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
+      <h3 className="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
         Atributos
       </h3>
       <div className="flex flex-wrap gap-4">

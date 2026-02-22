@@ -1,6 +1,8 @@
+import { ATTRIBUTE_KEYS } from './constants';
+import type { SkillKey } from './constants';
 import type { AttributeKey } from './types';
 import type { DnD5eCharacter } from './types';
-import { ATTRIBUTE_KEYS } from './constants';
+import type { CharacterSkill } from './types';
 
 const defaultAttributes: Record<AttributeKey, number> = {
   STR: 10,
@@ -11,26 +13,21 @@ const defaultAttributes: Record<AttributeKey, number> = {
   CHA: 10,
 };
 
-import type { CharacterSkill } from './types';
-import type { SkillKey } from './constants';
-
 function defaultSkills(): Partial<Record<SkillKey, CharacterSkill>> {
-
   return {};
 }
-
 
 function defaultSavingThrowProficiencies(): Record<AttributeKey, boolean> {
   return ATTRIBUTE_KEYS.reduce(
     (acc, key) => ({ ...acc, [key]: false }),
-    {} as Record<AttributeKey, boolean>
+    {} as Record<AttributeKey, boolean>,
   );
 }
 
 export function createDnD5eCharacter(
   ownerUsername: string,
   name: string,
-  overrides?: Partial<Omit<DnD5eCharacter, 'id' | 'ownerUsername' | 'system'>>
+  overrides?: Partial<Omit<DnD5eCharacter, 'id' | 'ownerUsername' | 'system'>>,
 ): Omit<DnD5eCharacter, 'id'> {
   return {
     ownerUsername,

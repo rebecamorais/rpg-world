@@ -1,28 +1,24 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { useCurrentUser } from '@/frontend/context/UserContext';
-import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
-import type { AttributeKey, DnD5eCharacter } from '@/systems/dnd5e';
+import { useParams, useRouter } from 'next/navigation';
+
+import { BookOpen, Eye, Footprints, Heart, Shield, Swords } from 'lucide-react';
+
 import AttributesSection from '@/frontend/components/AttributesSection';
-import SkillsSection from '@/frontend/components/SkillsSection';
-import SavingThrowsSection from '@/frontend/components/SavingThrowsSection';
 import PassivePerception from '@/frontend/components/PassivePerception';
+import SavingThrowsSection from '@/frontend/components/SavingThrowsSection';
+import SkillsSection from '@/frontend/components/SkillsSection';
 import SpellsDrawer from '@/frontend/components/SpellsDrawer';
-import {
-  Shield,
-  Heart,
-  Footprints,
-  Swords,
-  Eye,
-  BookOpen
-} from 'lucide-react';
-import type { SkillKey } from '@/systems/dnd5e/constants';
-import type { CharacterSkill } from '@/systems/dnd5e/types';
 import { Card, CardContent } from '@/frontend/components/ui/card';
 import { Input } from '@/frontend/components/ui/input';
+import { useCurrentUser } from '@/frontend/context/UserContext';
+import type { AttributeKey, DnD5eCharacter } from '@/systems/dnd5e';
+import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
+import type { SkillKey } from '@/systems/dnd5e/constants';
+import type { CharacterSkill } from '@/systems/dnd5e/types';
 
 export default function CharacterDetailPage() {
   const params = useParams();
@@ -44,21 +40,21 @@ export default function CharacterDetailPage() {
 
     setIsLoading(true);
     fetch(`/api/characters/${id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.error) {
           setError(data.error);
         } else {
           setCharacter(data as DnD5eCharacter);
         }
       })
-      .catch(err => setError(err.message))
+      .catch((err) => setError(err.message))
       .finally(() => setIsLoading(false));
   }, [id, currentUser]);
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="flex min-h-screen items-center justify-center p-4">
         <p className="text-zinc-500">Faça login para ver o personagem.</p>
       </div>
     );
@@ -66,7 +62,7 @@ export default function CharacterDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="flex min-h-screen items-center justify-center p-4">
         <p className="text-zinc-500">Carregando...</p>
       </div>
     );
@@ -74,8 +70,10 @@ export default function CharacterDetailPage() {
 
   if (!character || character.ownerUsername !== currentUser.username) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <p className="text-zinc-500">Personagem não encontrado ou você não tem permissão.</p>
+      <div className="flex min-h-screen items-center justify-center p-4">
+        <p className="text-zinc-500">
+          Personagem não encontrado ou você não tem permissão.
+        </p>
         <Link href="/characters" className="mt-2 block text-sm underline">
           Voltar à lista
         </Link>
@@ -86,9 +84,12 @@ export default function CharacterDetailPage() {
   const handleDelete = async () => {
     if (confirm('Excluir este personagem? Não é possível desfazer.')) {
       try {
-        const res = await fetch(`/api/characters/${character.id}?ownerUsername=${encodeURIComponent(currentUser.username)}`, {
-          method: 'DELETE'
-        });
+        const res = await fetch(
+          `/api/characters/${character.id}?ownerUsername=${encodeURIComponent(currentUser.username)}`,
+          {
+            method: 'DELETE',
+          },
+        );
         if (res.ok) {
           router.push('/characters');
         } else {
@@ -96,7 +97,9 @@ export default function CharacterDetailPage() {
           setError(data.error || 'Erro ao deletar personagem.');
         }
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Erro ao deletar personagem');
+        setError(
+          err instanceof Error ? err.message : 'Erro ao deletar personagem',
+        );
       }
     }
   };
@@ -109,8 +112,8 @@ export default function CharacterDetailPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ownerUsername: currentUser.username,
-          updates: character // We send the whole character state buffered in React
-        })
+          updates: character, // We send the whole character state buffered in React
+        }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -119,7 +122,9 @@ export default function CharacterDetailPage() {
       setHasUnsavedChanges(false);
       alert('Personagem salvo com sucesso!');
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Falha ao salvar no servidor.');
+      setError(
+        err instanceof Error ? err.message : 'Falha ao salvar no servidor.',
+      );
     } finally {
       setIsSaving(false);
     }
@@ -133,14 +138,22 @@ export default function CharacterDetailPage() {
     if (key === 'WIS' && character) {
       const wisMod = Math.floor((value - 10) / 2);
       const isProficient = character.skills?.PERCEPTION?.isProficient;
-      newPassivePerception = 10 + wisMod + (isProficient ? getProficiencyBonus(character.level) : 0);
+      newPassivePerception =
+        10 + wisMod + (isProficient ? getProficiencyBonus(character.level) : 0);
     }
 
-    setCharacter(prev => prev ? {
-      ...prev,
-      attributes: { ...prev.attributes, [key]: value } as Record<AttributeKey, number>,
-      passivePerception: newPassivePerception
-    } as DnD5eCharacter : null);
+    setCharacter((prev) =>
+      prev
+        ? ({
+            ...prev,
+            attributes: { ...prev.attributes, [key]: value } as Record<
+              AttributeKey,
+              number
+            >,
+            passivePerception: newPassivePerception,
+          } as DnD5eCharacter)
+        : null,
+    );
 
     setHasUnsavedChanges(true);
   };
@@ -151,50 +164,91 @@ export default function CharacterDetailPage() {
     // Recalcular Percepção Passiva caso Percepção seja alterada
     let newPassivePerception = character?.passivePerception ?? 10;
     if (key === 'PERCEPTION' && character) {
-      const wisMod = character.attributes.WIS ? Math.floor((character.attributes.WIS - 10) / 2) : 0;
-      newPassivePerception = 10 + wisMod + (skillData.isProficient ? getProficiencyBonus(character.level) : 0);
+      const wisMod = character.attributes.WIS
+        ? Math.floor((character.attributes.WIS - 10) / 2)
+        : 0;
+      newPassivePerception =
+        10 +
+        wisMod +
+        (skillData.isProficient ? getProficiencyBonus(character.level) : 0);
     }
 
-    setCharacter(prev => prev ? {
-      ...prev,
-      skills: { ...prev.skills, [key]: skillData },
-      passivePerception: newPassivePerception
-    } as DnD5eCharacter : null);
+    setCharacter((prev) =>
+      prev
+        ? ({
+            ...prev,
+            skills: { ...prev.skills, [key]: skillData },
+            passivePerception: newPassivePerception,
+          } as DnD5eCharacter)
+        : null,
+    );
 
     setHasUnsavedChanges(true);
   };
 
-  const handleSavingThrowChange = (key: AttributeKey, isProficient: boolean) => {
+  const handleSavingThrowChange = (
+    key: AttributeKey,
+    isProficient: boolean,
+  ) => {
     setError('');
-    setCharacter(prev => prev ? { ...prev, savingThrowProficiencies: { ...prev.savingThrowProficiencies, [key]: isProficient } as Record<AttributeKey, boolean> } as DnD5eCharacter : null);
+    setCharacter((prev) =>
+      prev
+        ? ({
+            ...prev,
+            savingThrowProficiencies: {
+              ...prev.savingThrowProficiencies,
+              [key]: isProficient,
+            } as Record<AttributeKey, boolean>,
+          } as DnD5eCharacter)
+        : null,
+    );
     setHasUnsavedChanges(true);
   };
 
-  const handleBasicInfoChange = (field: keyof DnD5eCharacter, value: string | number) => {
+  const handleBasicInfoChange = (
+    field: keyof DnD5eCharacter,
+    value: string | number,
+  ) => {
     setError('');
-    setCharacter(prev => prev ? { ...prev, [field]: value } as DnD5eCharacter : null);
+    setCharacter((prev) =>
+      prev ? ({ ...prev, [field]: value } as DnD5eCharacter) : null,
+    );
     setHasUnsavedChanges(true);
   };
 
   const handleLearnSpell = (spellIndex: string) => {
     const currentSpells = character.spells || [];
     if (!currentSpells.includes(spellIndex)) {
-      setCharacter(prev => prev ? { ...prev, spells: [...currentSpells, spellIndex] } as DnD5eCharacter : null);
+      setCharacter((prev) =>
+        prev
+          ? ({
+              ...prev,
+              spells: [...currentSpells, spellIndex],
+            } as DnD5eCharacter)
+          : null,
+      );
       setHasUnsavedChanges(true);
     }
   };
 
   const handleForgetSpell = (spellIndex: string) => {
     const currentSpells = character.spells || [];
-    setCharacter(prev => prev ? { ...prev, spells: currentSpells.filter(s => s !== spellIndex) } as DnD5eCharacter : null);
+    setCharacter((prev) =>
+      prev
+        ? ({
+            ...prev,
+            spells: currentSpells.filter((s) => s !== spellIndex),
+          } as DnD5eCharacter)
+        : null,
+    );
     setHasUnsavedChanges(true);
   };
 
   const pb = getProficiencyBonus(character.level);
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="mx-auto max-w-2xl p-4">
+      <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-4">
           <Link
             href="/characters"
@@ -203,7 +257,7 @@ export default function CharacterDetailPage() {
             ← Voltar
           </Link>
           {hasUnsavedChanges && (
-            <span className="text-xs font-semibold px-2 py-1 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded">
+            <span className="rounded bg-amber-500/20 px-2 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
               Alterações não salvas
             </span>
           )}
@@ -213,69 +267,88 @@ export default function CharacterDetailPage() {
             type="button"
             onClick={updateCharacterInBackend}
             disabled={!hasUnsavedChanges || isSaving}
-            className="text-sm px-4 py-2 bg-[#663399] text-white rounded font-medium disabled:opacity-50 transition-opacity"
+            className="rounded bg-[#663399] px-4 py-2 text-sm font-medium text-white transition-opacity disabled:opacity-50"
           >
             {isSaving ? 'Salvando...' : 'Salvar Alterações'}
           </button>
           <button
             type="button"
             onClick={handleDelete}
-            className="text-sm text-red-600 dark:text-red-400 hover:underline"
+            className="text-sm text-red-600 hover:underline dark:text-red-400"
           >
             Excluir
           </button>
         </div>
       </div>
-      {error && <p className="text-sm text-red-600 dark:text-red-400 mb-4 bg-red-50 dark:bg-red-900/20 p-2 rounded">{error}</p>}
+      {error && (
+        <p className="mb-4 rounded bg-red-50 p-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+          {error}
+        </p>
+      )}
       <div className="flex flex-col gap-6">
-
         {/* Header Block Editable */}
-        <Card className="bg-[#1a1a1a] border-zinc-800">
-          <CardContent className="p-0 flex flex-col md:flex-row">
-            <div className="p-6 md:w-2/3 flex flex-col justify-end border-b md:border-b-0 md:border-r border-zinc-800">
+        <Card className="border-zinc-800 bg-[#1a1a1a]">
+          <CardContent className="flex flex-col p-0 md:flex-row">
+            <div className="flex flex-col justify-end border-b border-zinc-800 p-6 md:w-2/3 md:border-r md:border-b-0">
               <Input
                 value={character.name}
-                onChange={e => handleBasicInfoChange('name', e.target.value)}
-                className="text-3xl font-bold bg-transparent border-transparent px-0 h-auto rounded-none focus-visible:ring-0 focus-visible:border-b focus-visible:border-[#663399]"
+                onChange={(e) => handleBasicInfoChange('name', e.target.value)}
+                className="h-auto rounded-none border-transparent bg-transparent px-0 text-3xl font-bold focus-visible:border-b focus-visible:border-[#663399] focus-visible:ring-0"
                 placeholder="Nome do Personagem"
               />
-              <div className="flex gap-4 mt-2">
+              <div className="mt-2 flex gap-4">
                 <div className="text-sm text-zinc-400">
-                  Bônus de Proficiência: <span className="font-bold text-[#663399]">+{pb}</span>
+                  Bônus de Proficiência:{' '}
+                  <span className="font-bold text-[#663399]">+{pb}</span>
                 </div>
               </div>
             </div>
-            <div className="p-6 md:w-1/3 grid grid-cols-2 gap-4 bg-black/20">
+            <div className="grid grid-cols-2 gap-4 bg-black/20 p-6 md:w-1/3">
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Classe</label>
+                <label className="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">
+                  Classe
+                </label>
                 <Input
                   value={character.class || ''}
-                  onChange={e => handleBasicInfoChange('class', e.target.value)}
-                  className="bg-transparent border-b border-zinc-800 px-1 py-0 h-7 rounded-none focus-visible:ring-0 focus-visible:border-[#663399] text-sm"
+                  onChange={(e) =>
+                    handleBasicInfoChange('class', e.target.value)
+                  }
+                  className="h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:border-[#663399] focus-visible:ring-0"
                 />
               </div>
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nível</label>
+                <label className="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">
+                  Nível
+                </label>
                 <Input
                   type="number"
                   min={1}
                   value={character.level}
-                  onChange={e => handleBasicInfoChange('level', parseInt(e.target.value) || 1)}
-                  className="bg-transparent border-b border-zinc-800 px-1 py-0 h-7 rounded-none focus-visible:ring-0 focus-visible:border-[#663399] text-sm"
+                  onChange={(e) =>
+                    handleBasicInfoChange(
+                      'level',
+                      parseInt(e.target.value) || 1,
+                    )
+                  }
+                  className="h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:border-[#663399] focus-visible:ring-0"
                 />
               </div>
               <div className="col-span-2">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Raça</label>
+                <label className="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">
+                  Raça
+                </label>
                 <Input
                   value={character.race || ''}
-                  onChange={e => handleBasicInfoChange('race', e.target.value)}
-                  className="bg-transparent border-b border-zinc-800 px-1 py-0 h-7 rounded-none focus-visible:ring-0 focus-visible:border-[#663399] text-sm"
+                  onChange={(e) =>
+                    handleBasicInfoChange('race', e.target.value)
+                  }
+                  className="h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:border-[#663399] focus-visible:ring-0"
                 />
               </div>
               <div className="col-span-2 mt-2">
                 <button
                   onClick={() => setIsSpellsOpen(true)}
-                  className="w-full flex items-center justify-center gap-2 py-2 bg-[#663399]/10 hover:bg-[#663399]/20 text-[#be8be8] text-xs font-semibold rounded border border-[#663399]/30 transition-colors"
+                  className="flex w-full items-center justify-center gap-2 rounded border border-[#663399]/30 bg-[#663399]/10 py-2 text-xs font-semibold text-[#be8be8] transition-colors hover:bg-[#663399]/20"
                 >
                   <BookOpen size={14} />
                   Grimório de Magias
@@ -286,97 +359,134 @@ export default function CharacterDetailPage() {
         </Card>
 
         {/* Combat Stats Block (Lucide Icons) */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative group overflow-hidden bg-[#1a1a1a]">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+          <Card className="group relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
             <div className="z-10 flex flex-col items-center">
-              <Shield className="text-[#663399] w-6 h-6 mb-2 drop-shadow-md" />
+              <Shield className="mb-2 h-6 w-6 text-[#663399] drop-shadow-md" />
               <Input
                 type="number"
                 value={character.ac}
-                onChange={e => handleBasicInfoChange('ac', parseInt(e.target.value) || 0)}
-                className="text-3xl font-bold text-center w-16 h-10 bg-transparent border-transparent focus-visible:ring-2 focus-visible:ring-[#663399] text-zinc-100 p-0"
+                onChange={(e) =>
+                  handleBasicInfoChange('ac', parseInt(e.target.value) || 0)
+                }
+                className="h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2 focus-visible:ring-[#663399]"
               />
-              <span className="text-[10px] uppercase font-bold text-zinc-500 mt-1">Classe Armadura</span>
+              <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
+                Classe Armadura
+              </span>
             </div>
           </Card>
 
-          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
+          <Card className="relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
             <div className="z-10 flex flex-col items-center">
-              <Heart className="text-red-500 w-6 h-6 mb-2 drop-shadow-md" />
+              <Heart className="mb-2 h-6 w-6 text-red-500 drop-shadow-md" />
               <div className="flex items-baseline justify-center gap-1">
                 <Input
                   type="number"
                   value={character.hpCurrent}
-                  onChange={e => handleBasicInfoChange('hpCurrent', parseInt(e.target.value) || 0)}
-                  className="text-3xl font-bold text-right w-16 h-10 bg-transparent border-transparent focus-visible:ring-2 focus-visible:ring-[#663399] text-zinc-100 p-0"
+                  onChange={(e) =>
+                    handleBasicInfoChange(
+                      'hpCurrent',
+                      parseInt(e.target.value) || 0,
+                    )
+                  }
+                  className="h-10 w-16 border-transparent bg-transparent p-0 text-right text-3xl font-bold text-zinc-100 focus-visible:ring-2 focus-visible:ring-[#663399]"
                 />
                 <span className="text-zinc-500">/</span>
                 <Input
                   type="number"
                   value={character.hpMax}
-                  onChange={e => handleBasicInfoChange('hpMax', parseInt(e.target.value) || 0)}
-                  className="text-xl font-bold text-left w-12 h-10 bg-transparent border-transparent focus-visible:ring-2 focus-visible:ring-[#663399] text-zinc-500 p-0"
+                  onChange={(e) =>
+                    handleBasicInfoChange(
+                      'hpMax',
+                      parseInt(e.target.value) || 0,
+                    )
+                  }
+                  className="h-10 w-12 border-transparent bg-transparent p-0 text-left text-xl font-bold text-zinc-500 focus-visible:ring-2 focus-visible:ring-[#663399]"
                 />
               </div>
-              <span className="text-[10px] uppercase font-bold text-zinc-500 mt-1">Pontos de Vida</span>
+              <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
+                Pontos de Vida
+              </span>
             </div>
           </Card>
 
-          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
+          <Card className="relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
             <div className="z-10 flex flex-col items-center">
-              <Footprints className="text-emerald-500 w-6 h-6 mb-2 drop-shadow-md" />
+              <Footprints className="mb-2 h-6 w-6 text-emerald-500 drop-shadow-md" />
               <div className="flex items-baseline justify-center gap-1">
                 <Input
                   type="number"
                   value={character.speed || 30}
-                  onChange={e => handleBasicInfoChange('speed', parseInt(e.target.value) || 0)}
-                  className="text-3xl font-bold text-center w-16 h-10 bg-transparent border-transparent focus-visible:ring-2 focus-visible:ring-[#663399] text-zinc-100 p-0"
+                  onChange={(e) =>
+                    handleBasicInfoChange(
+                      'speed',
+                      parseInt(e.target.value) || 0,
+                    )
+                  }
+                  className="h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2 focus-visible:ring-[#663399]"
                 />
                 <span className="text-sm text-zinc-500">ft</span>
               </div>
-              <span className="text-[10px] uppercase font-bold text-zinc-500 mt-1">Deslocamento</span>
+              <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
+                Deslocamento
+              </span>
             </div>
           </Card>
 
-          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
+          <Card className="relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
             <div className="z-10 flex flex-col items-center">
-              <Swords className="text-orange-500 w-6 h-6 mb-2 drop-shadow-md" />
+              <Swords className="mb-2 h-6 w-6 text-orange-500 drop-shadow-md" />
               <Input
                 type="number"
                 value={character.initiative}
-                onChange={e => handleBasicInfoChange('initiative', parseInt(e.target.value) || 0)}
-                className="text-3xl font-bold text-center w-16 h-10 bg-transparent border-transparent focus-visible:ring-2 focus-visible:ring-[#663399] text-zinc-100 p-0"
+                onChange={(e) =>
+                  handleBasicInfoChange(
+                    'initiative',
+                    parseInt(e.target.value) || 0,
+                  )
+                }
+                className="h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2 focus-visible:ring-[#663399]"
               />
-              <span className="text-[10px] uppercase font-bold text-zinc-500 mt-1">Iniciativa</span>
+              <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
+                Iniciativa
+              </span>
             </div>
           </Card>
 
-          <Card className="flex flex-col items-center justify-center py-4 border-zinc-800 relative overflow-hidden bg-[#1a1a1a]">
+          <Card className="relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
             <div className="z-10 flex flex-col items-center">
-              <Eye className="text-blue-500 w-6 h-6 mb-2 drop-shadow-md" />
-              <span className="text-3xl font-bold text-zinc-100 h-10 flex items-center justify-center">
+              <Eye className="mb-2 h-6 w-6 text-blue-500 drop-shadow-md" />
+              <span className="flex h-10 items-center justify-center text-3xl font-bold text-zinc-100">
                 {character.passivePerception ?? 10}
               </span>
-              <span className="text-[10px] uppercase font-bold text-zinc-500 mt-1">Percepção Passiva</span>
+              <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
+                Percepção Passiva
+              </span>
             </div>
           </Card>
         </div>
 
         {/* Magias Conhecidas (Se houver) */}
         {character.spells && character.spells.length > 0 && (
-          <Card className="bg-[#1a1a1a] border-zinc-800 shadow-md">
+          <Card className="border-zinc-800 bg-[#1a1a1a] shadow-md">
             <CardContent className="p-4">
-              <h3 className="text-sm font-bold text-zinc-100 uppercase tracking-wider mb-3 flex items-center gap-2">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-wider text-zinc-100 uppercase">
                 <BookOpen size={16} className="text-[#663399]" />
                 Magias Preparadas
               </h3>
               <div className="flex flex-wrap gap-2">
-                {character.spells.map(spellIndex => (
-                  <div key={spellIndex} className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1.5 rounded-full flex items-center gap-2 border border-zinc-700">
-                    <span className="capitalize">{spellIndex.replace(/-/g, ' ')}</span>
+                {character.spells.map((spellIndex) => (
+                  <div
+                    key={spellIndex}
+                    className="flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-300"
+                  >
+                    <span className="capitalize">
+                      {spellIndex.replace(/-/g, ' ')}
+                    </span>
                     <button
                       onClick={() => handleForgetSpell(spellIndex)}
-                      className="text-zinc-500 hover:text-red-400 transition-colors"
+                      className="text-zinc-500 transition-colors hover:text-red-400"
                       title="Esquecer magia"
                     >
                       &times;
@@ -389,7 +499,7 @@ export default function CharacterDetailPage() {
         )}
 
         {/* Main Grid: Attr on Left, Rest on Right */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
           <div className="md:col-span-3">
             <AttributesSection
               attributes={character.attributes}
@@ -397,7 +507,7 @@ export default function CharacterDetailPage() {
             />
           </div>
 
-          <div className="md:col-span-9 flex flex-col gap-6">
+          <div className="flex flex-col gap-6 md:col-span-9">
             <SavingThrowsSection
               attributes={character.attributes}
               level={character.level}
