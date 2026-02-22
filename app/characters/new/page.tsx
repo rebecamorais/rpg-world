@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -36,17 +37,19 @@ import {
 } from '@/frontend/components/ui/select';
 import { useCurrentUser } from '@/frontend/context/UserContext';
 
-const newCharacterSchema = z.object({
-  name: z.string().min(1, 'Nome do personagem é obrigatório.'),
-  system: z.string().min(1, 'Selecione um sistema RPG.'),
-});
-
-type NewCharacterFormValues = z.infer<typeof newCharacterSchema>;
-
 export default function NewCharacterPage() {
   const { currentUser } = useCurrentUser();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const t = useTranslations('characterCreation');
+  const tCommon = useTranslations('common');
+
+  const newCharacterSchema = z.object({
+    name: z.string().min(1, t('nameLabel').replace(' *', '')),
+    system: z.string().min(1, t('systemPlaceholder')),
+  });
+
+  type NewCharacterFormValues = z.infer<typeof newCharacterSchema>;
 
   const form = useForm<NewCharacterFormValues>({
     resolver: zodResolver(newCharacterSchema),
@@ -59,7 +62,7 @@ export default function NewCharacterPage() {
   if (!currentUser) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
-        <p className="text-zinc-500">Faça login para criar personagem.</p>
+        <p className="text-zinc-500">{t('requireLogin')}</p>
       </div>
     );
   }
@@ -79,15 +82,14 @@ export default function NewCharacterPage() {
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || 'Erro ao criar personagem.');
+        throw new Error(errorData.error || t('error'));
       }
 
       const { id } = await res.json();
-      toast.success('Personagem criado com sucesso!');
+      toast.success(t('success'));
       router.push(`/characters/${id}`);
     } catch (err: unknown) {
-      const msg =
-        err instanceof Error ? err.message : 'Erro ao criar personagem.';
+      const msg = err instanceof Error ? err.message : t('error');
       toast.error(msg);
       form.setError('root', { message: msg });
     } finally {
@@ -102,15 +104,13 @@ export default function NewCharacterPage() {
           href="/characters"
           className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
         >
-          ← Voltar
+          {tCommon('back')}
         </Link>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Novo personagem</CardTitle>
-          <CardDescription>
-            Defina o nome e escolha o sistema de regras.
-          </CardDescription>
+          <CardTitle>{t('title')}</CardTitle>
+          <CardDescription>{t('description')}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -120,11 +120,11 @@ export default function NewCharacterPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome *</FormLabel>
+                    <FormLabel>{t('nameLabel')}</FormLabel>
                     <FormControl>
                       <Input
                         disabled={isSubmitting}
-                        placeholder="Nome do personagem"
+                        placeholder={t('namePlaceholder')}
                         {...field}
                       />
                     </FormControl>
@@ -138,7 +138,7 @@ export default function NewCharacterPage() {
                 name="system"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Sistema RPG</FormLabel>
+                    <FormLabel>{t('systemLabel')}</FormLabel>
                     <Select
                       disabled={isSubmitting}
                       onValueChange={field.onChange}
@@ -146,7 +146,7 @@ export default function NewCharacterPage() {
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Selecione o Sistema" />
+                          <SelectValue placeholder={t('systemPlaceholder')} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -167,10 +167,10 @@ export default function NewCharacterPage() {
 
               <div className="flex gap-2">
                 <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? 'Criando...' : 'Criar'}
+                  {isSubmitting ? t('submitting') : t('submit')}
                 </Button>
                 <Button variant="outline" asChild>
-                  <Link href="/characters">Cancelar</Link>
+                  <Link href="/characters">{tCommon('cancel')}</Link>
                 </Button>
               </div>
             </form>

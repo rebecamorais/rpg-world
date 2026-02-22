@@ -58,12 +58,12 @@ Remover os estados manuais excessivos e delegar a estabilidade para bibliotecas 
 - [x] Refatorar a página `app/characters/new/page.tsx` para usar o React Hook Form.
 - [x] Desdobrar o objeto Character e conectar todo `Input` ao sistema do react-hook-form (substituindo onChange manuais).
 
-### Fase 3: Internacionalização (i18n) com `next-intl`
-Implementação usando a biblioteca padrão do ecossistema App Router para suporte otimizado a traduções em Server Components.
-- [ ] Mover todo conteúdo da pasta `app/` para um dynamic segment de rota `app/[locale]/`.
-- [ ] Criar arquivo `i18n.ts` na raiz do `src/` e `middleware.ts` no diretório principal.
-- [ ] Configurar os dicionários JSON em `/messages/en.json` e `/messages/pt.json`.
-- [ ] Refatorar componentes (`LoginForm`, `CharacterHeader`, `NewCharacterPage`) para usar o `useTranslations()`.
+### Fase 3: Internacionalização (i18n) Client Locale
+Uso do `next-intl` focando exclusivamente via Client Component Provider para não atrelar a linguagem à URL final (dispensando uso das rotas `[locale]/`).
+- [x] Popular os Dicionários JSON `/messages/pt.json` e `/messages/en.json`.
+- [x] Criar Provider Client-Side envelopando as pages no Root Layout (`NextIntlClientProvider`).
+- [x] Injetar Cookie Helper ou LocalStorage para salvar a preferência do idioma.
+- [x] Refatorar componentes (`LoginForm`, `CharacterHeader`, `NewCharacterPage`) para usar o `useTranslations()`.
 
 ### Fase 4: Data Fetching e Arquitetura Next.js (App Router)
 Eliminar a dependência de `useEffect` para carregar dados vitais nas páginas principais e abraçar o polimorfismo de UI.

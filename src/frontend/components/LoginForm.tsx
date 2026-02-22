@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -23,15 +24,16 @@ import {
 import { Input } from '@/frontend/components/ui/input';
 import { useCurrentUser } from '@/frontend/context/UserContext';
 
-const loginSchema = z.object({
-  username: z.string().min(1, { message: 'Username é obrigatório.' }),
-  displayName: z.string().optional(),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
-
 export default function LoginForm() {
   const { login } = useCurrentUser();
+  const t = useTranslations('login');
+
+  const loginSchema = z.object({
+    username: z.string().min(1, { message: t('usernameRequiredError') }),
+    displayName: z.string().optional(),
+  });
+
+  type LoginFormValues = z.infer<typeof loginSchema>;
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -47,10 +49,11 @@ export default function LoginForm() {
       const trimmedDisplayName = data.displayName?.trim();
 
       login(trimmedUsername, trimmedDisplayName || undefined);
-      toast.success(`Bem-vindo, ${trimmedDisplayName || trimmedUsername}!`);
+      toast.success(
+        t('welcome', { name: trimmedDisplayName || trimmedUsername }),
+      );
     } catch (err: unknown) {
-      const msg =
-        err instanceof Error ? err.message : 'Falha ao realizar login.';
+      const msg = err instanceof Error ? err.message : t('loginFailed');
       toast.error(msg);
       form.setError('root', { message: msg });
     }
@@ -59,7 +62,7 @@ export default function LoginForm() {
   return (
     <Card className="mx-auto w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Entrar no RPG World</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -72,10 +75,10 @@ export default function LoginForm() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username *</FormLabel>
+                  <FormLabel>{t('usernameLabel')}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="seu_id"
+                      placeholder={t('usernamePlaceholder')}
                       autoComplete="username"
                       {...field}
                     />
@@ -90,9 +93,12 @@ export default function LoginForm() {
               name="displayName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome de exibição (opcional)</FormLabel>
+                  <FormLabel>{t('displayNameLabel')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Como quer ser chamado" {...field} />
+                    <Input
+                      placeholder={t('displayNamePlaceholder')}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -105,7 +111,7 @@ export default function LoginForm() {
               </p>
             )}
 
-            <Button type="submit">Entrar</Button>
+            <Button type="submit">{t('submit')}</Button>
           </form>
         </Form>
       </CardContent>

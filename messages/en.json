@@ -1,0 +1,39 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "← Back",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loading": "Loading...",
+    "logout": "Log out"
+  },
+  "login": {
+    "title": "Sign in to RPG World",
+    "usernameLabel": "Username *",
+    "usernamePlaceholder": "your_id",
+    "displayNameLabel": "Display Name (optional)",
+    "displayNamePlaceholder": "How do you want to be called",
+    "submit": "Sign In",
+    "usernameRequiredError": "Username is required.",
+    "loginFailed": "Failed to login.",
+    "welcome": "Welcome, {name}!"
+  },
+  "home": {
+    "greeting": "Hello, {name}.",
+    "title": "RPG World"
+  },
+  "characterCreation": {
+    "title": "New character",
+    "description": "Define the name and choose the ruleset system.",
+    "nameLabel": "Name *",
+    "namePlaceholder": "Character name",
+    "systemLabel": "RPG System",
+    "systemPlaceholder": "Select the System",
+    "submit": "Create",
+    "submitting": "Creating...",
+    "requireLogin": "Please sign in to create a character.",
+    "success": "Character successfully created!",
+    "error": "Error creating character."
+  }
+}
