@@ -58,7 +58,14 @@ Remover os estados manuais excessivos e delegar a estabilidade para bibliotecas 
 - [x] Refatorar a página `app/characters/new/page.tsx` para usar o React Hook Form.
 - [x] Desdobrar o objeto Character e conectar todo `Input` ao sistema do react-hook-form (substituindo onChange manuais).
 
-### Fase 3: Data Fetching e Arquitetura Next.js (App Router)
+### Fase 3: Internacionalização (i18n) com `next-intl`
+Implementação usando a biblioteca padrão do ecossistema App Router para suporte otimizado a traduções em Server Components.
+- [ ] Mover todo conteúdo da pasta `app/` para um dynamic segment de rota `app/[locale]/`.
+- [ ] Criar arquivo `i18n.ts` na raiz do `src/` e `middleware.ts` no diretório principal.
+- [ ] Configurar os dicionários JSON em `/messages/en.json` e `/messages/pt.json`.
+- [ ] Refatorar componentes (`LoginForm`, `CharacterHeader`, `NewCharacterPage`) para usar o `useTranslations()`.
+
+### Fase 4: Data Fetching e Arquitetura Next.js (App Router)
 Eliminar a dependência de `useEffect` para carregar dados vitais nas páginas principais e abraçar o polimorfismo de UI.
 - [ ] Reestruturar as URLs para suportar múltiplos sistemas com Pastas Dinâmicas (`app/system/[system_name]/character/[id]`). 
   - **Estrutura Proposta:**
@@ -80,7 +87,7 @@ Eliminar a dependência de `useEffect` para carregar dados vitais nas páginas p
 - [ ] Implementar estados de Loading com o arquivo nativo `loading.tsx` do Next.js, substituindo os retornos manuais de `<p>Carregando...</p>` por "Skeletons" focados daquela aba de ficha.
 - [ ] Refatorar as chamadas para a API de manipulação (criação e deleção) em **Server Actions** (`actions.ts`).
 
-### Fase 4: Decomposição de Componentes Gigantes ("God Components")
+### Fase 5: Decomposição de Componentes Gigantes ("God Components")
 Dividir para conquistar. Ao mover para `[system_name]`, precisaremos dos componentes isolados daquele sistema.
 - [ ] Criar pastas `_components/` dentro de cada sistema suportado (`app/system/[system_name]/_components/`).
 - [ ] Implementar um componente de "Fábrica" no `page.tsx` principal de layout da ficha daquele sistema para fazer switch seguro (ou apenas assumir um client component de root daquele sistema).
