@@ -30,6 +30,7 @@ export default function LoginForm() {
 
   const loginSchema = z.object({
     username: z.string().min(1, { message: t('usernameRequiredError') }),
+    password: z.string().min(1, { message: t('passwordRequiredError') }),
     displayName: z.string().optional(),
   });
 
@@ -39,6 +40,7 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
     defaultValues: {
       username: '',
+      password: '',
       displayName: '',
     },
   });
@@ -80,6 +82,25 @@ export default function LoginForm() {
                     <Input
                       placeholder={t('usernamePlaceholder')}
                       autoComplete="username"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('passwordLabel')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder={t('passwordPlaceholder')}
+                      autoComplete="current-password"
                       {...field}
                     />
                   </FormControl>

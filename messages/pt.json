@@ -12,12 +12,21 @@
     "title": "Entrar no RPG World",
     "usernameLabel": "Username *",
     "usernamePlaceholder": "seu_id",
+    "passwordLabel": "Senha *",
+    "passwordPlaceholder": "Digite sua senha",
     "displayNameLabel": "Nome de exibição (opcional)",
     "displayNamePlaceholder": "Como quer ser chamado",
     "submit": "Entrar",
     "usernameRequiredError": "Username é obrigatório.",
+    "passwordRequiredError": "Senha é obrigatória.",
     "loginFailed": "Falha ao realizar login.",
     "welcome": "Bem-vindo, {name}!"
+  },
+  "landing": {
+    "heroTitle": "O seu companheiro definitivo de RPG.",
+    "heroSubtitle": "Gerencie todas as suas fichas, acompanhe atributos, magias e combates sem esforço.",
+    "ctaStart": "Começar a Jogar",
+    "ctaDashboard": "Acessar o Painel"
   },
   "home": {
     "greeting": "Olá, {name}.",

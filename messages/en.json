@@ -12,12 +12,21 @@
     "title": "Sign in to RPG World",
     "usernameLabel": "Username *",
     "usernamePlaceholder": "your_id",
+    "passwordLabel": "Password *",
+    "passwordPlaceholder": "Enter your password",
     "displayNameLabel": "Display Name (optional)",
     "displayNamePlaceholder": "How do you want to be called",
     "submit": "Sign In",
     "usernameRequiredError": "Username is required.",
+    "passwordRequiredError": "Password is required.",
     "loginFailed": "Failed to login.",
     "welcome": "Welcome, {name}!"
+  },
+  "landing": {
+    "heroTitle": "Your ultimate RPG companion.",
+    "heroSubtitle": "Manage your character sheets, track attributes, spells and combat effortlessly.",
+    "ctaStart": "Start Playing",
+    "ctaDashboard": "Go to Dashboard"
   },
   "home": {
     "greeting": "Hello, {name}.",

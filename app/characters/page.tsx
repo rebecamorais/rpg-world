@@ -4,7 +4,7 @@ import CharacterList from '@/frontend/components/CharacterList';
 import { useCurrentUser } from '@/frontend/context/UserContext';
 
 export default function CharactersPage() {
-  const { currentUser } = useCurrentUser();
+  const { currentUser, logout } = useCurrentUser();
 
   if (!currentUser) {
     return (
@@ -16,9 +16,29 @@ export default function CharactersPage() {
     );
   }
 
+  const displayLabel = currentUser.displayName || currentUser.username;
+
   return (
-    <div className="mx-auto max-w-2xl p-4">
-      <CharacterList />
+    <div className="bg-background text-foreground min-h-screen">
+      <header className="border-border bg-card flex items-center justify-between border-b px-4 py-3">
+        <h1 className="text-lg font-semibold">RPG World</h1>
+        <div className="flex items-center gap-3">
+          <span className="text-muted-foreground hidden text-sm sm:inline-block">
+            {displayLabel}{' '}
+            <span className="opacity-70">(@{currentUser.username})</span>
+          </span>
+          <button
+            type="button"
+            onClick={logout}
+            className="text-muted-foreground hover:text-foreground text-sm"
+          >
+            Sair
+          </button>
+        </div>
+      </header>
+      <main className="mx-auto max-w-3xl p-4">
+        <CharacterList />
+      </main>
     </div>
   );
 }

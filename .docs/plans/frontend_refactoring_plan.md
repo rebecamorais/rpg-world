@@ -97,6 +97,13 @@ Dividir para conquistar. Ao mover para `[system_name]`, precisaremos dos compone
   - `AttributesSection.tsx`
 - [ ] Abstrair o estado global complexo do Personagem, como reações na UI, em um Contexto ou Contextos menores (`useReducer`).
 
+### Fase 6: Autenticação e Landing Page (Novo)
+Substituir o modelo de home/login mesclado para apresentar um site e dar acesso seguro através de senha.
+- [ ] Separar a Rota `/` (Home) para ser uma Landing Page convidativa ao invés de forçar o login direto.
+- [ ] Mover todo o processo de entrada para a rota dedicada `/login`.
+- [ ] Inserir campo de "Senha" no `LoginForm.tsx` (mesmo aceitando qualquer valor temporariamente).
+- [ ] (Backlog) Implementar Provider de autenticação real no backend (NextAuth / Supabase).
+
 ---
 
 ## Boas Práticas Acordadas
