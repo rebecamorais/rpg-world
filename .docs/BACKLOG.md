@@ -17,12 +17,16 @@ Ideias e melhorias futuras para não perdermos o foco na Sprint atual. Um reposi
 - [Fase 10] Migrar do repositório `MemoryStore` atual para um banco de dados real via **Supabase** (PostgreSQL).
 - Implementar Autenticação completa e segura (OAuth/Github/Google via Supabase Auth ou NextAuth).
 - Configuração de CI/CD para automação de deploy (Vercel ou Github Actions).
+- **Pre-commit Hooks (Husky):** Configurar `husky` para rodar `npm run lint` e `prettier` antes de cada git commit, garantindo código sempre limpo no repositório.
 - **Cache sob Demanda (Lazy Loading) de API Externa:** Sincronizar dados da dnd5eapi.co com o nosso banco. Quando um usuário buscar uma magia, procurar primeiro no DB local; se não existir, fazer fetch na API, salvar no DB enriquecendo (ex: traduções?) e retornar, aumentando a resiliência e diminuindo a latência.
 
 ## UX/UI
 - Otimizar acessibilidade (A11y): navegação via teclado sólida e compatibilidade com leitores de tela em elementos interativos (`Dialogs`).
 - Adicionar sons de interface sutis (SFX) para interações críticas (como uma rolagem de acerto crítico).
 - Switch de Tema (Modo Escuro / Claro / Sistema) acoplado diretamente as variáveis criadas.
+- **Tratamento Global de Erros (Error Boundaries):** Adicionar arquivos `error.tsx` em rotas estratégicas do Next.js. Evita que a página inteira fique branca se um componente isolado (ex: "Spells") quebrar por falha de API ou banco.
+- **Internacionalização (i18n):** Preparar arquitetura de componentes e banco de dados para suportar múltiplos idiomas (ex: prever que o atributo da API venha "Strength" mas precise renderizar "Força"), evitando refatorações futuras.
+- **Gestão de Assets (Imagens e Ícones):** Utilizar ícones do `lucide-react` (já integrado via shadcn/ui). Para as fotos de personagens, preparar uso nativo do `next/image` visando performance, salvando as URLs no `Supabase Storage`.
 
 ## Segurança Legal e Conteúdo (SRD 5.1 & Safe Harbor)
 - **Revisão de Conteúdo SRD vs Próprio:** Garantir que o sistema forneça apenas ferramentas e regras mecânicas SRD (CC-BY-4.0), evitando colisão com PI da Wizards (Distribuir subclasses pagas, Drizzt, Mind Flayers, Beholders, etc).
