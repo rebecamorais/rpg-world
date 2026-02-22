@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import LanguageProvider from '@/frontend/components/LanguageProvider';
+import LanguageSwitcher from '@/frontend/components/LanguageSwitcher';
 import { Toaster } from '@/frontend/components/ui/sonner';
 import { TooltipProvider } from '@/frontend/components/ui/tooltip';
 import { UserProvider } from '@/frontend/context/UserContext';
@@ -35,7 +36,10 @@ export default function RootLayout({
       >
         <LanguageProvider>
           <UserProvider>
-            <TooltipProvider>{children}</TooltipProvider>
+            <TooltipProvider>
+              {children}
+              <LanguageSwitcher />
+            </TooltipProvider>
           </UserProvider>
         </LanguageProvider>
         <Toaster />

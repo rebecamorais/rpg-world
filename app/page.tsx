@@ -44,29 +44,6 @@ export default function Home() {
           <p className="text-muted-foreground">
             {tHome('greeting', { name: displayLabel })}
           </p>
-          <div className="flex gap-2">
-            <button
-              onClick={() =>
-                (
-                  window as unknown as { __changeLocale: (v: string) => void }
-                ).__changeLocale('en')
-              }
-              className="text-muted-foreground hover:text-primary text-xs transition-colors"
-            >
-              EN
-            </button>
-            <span className="text-muted-foreground/30 text-xs">|</span>
-            <button
-              onClick={() =>
-                (
-                  window as unknown as { __changeLocale: (v: string) => void }
-                ).__changeLocale('pt')
-              }
-              className="text-muted-foreground hover:text-primary text-xs transition-colors"
-            >
-              PT
-            </button>
-          </div>
         </div>
         <CharacterList />
       </main>
