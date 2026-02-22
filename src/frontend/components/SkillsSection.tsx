@@ -71,7 +71,7 @@ export default function SkillsSection({
                 className={cn(
                   'h-3 w-3 flex-shrink-0 rounded-full border transition-all',
                   skillData.isProficient
-                    ? 'border-[#663399] bg-[#663399]'
+                    ? 'border-primary bg-primary'
                     : 'border-zinc-600 bg-transparent group-hover:border-zinc-400',
                 )}
               />

@@ -267,7 +267,7 @@ export default function CharacterDetailPage() {
             type="button"
             onClick={updateCharacterInBackend}
             disabled={!hasUnsavedChanges || isSaving}
-            className="rounded bg-[#663399] px-4 py-2 text-sm font-medium text-white transition-opacity disabled:opacity-50"
+            className="bg-primary rounded px-4 py-2 text-sm font-medium text-white transition-opacity disabled:opacity-50"
           >
             {isSaving ? 'Salvando...' : 'Salvar Alterações'}
           </button>
@@ -293,13 +293,13 @@ export default function CharacterDetailPage() {
               <Input
                 value={character.name}
                 onChange={(e) => handleBasicInfoChange('name', e.target.value)}
-                className="h-auto rounded-none border-transparent bg-transparent px-0 text-3xl font-bold focus-visible:border-b focus-visible:border-[#663399] focus-visible:ring-0"
+                className="focus-visible:border-primary h-auto rounded-none border-transparent bg-transparent px-0 text-3xl font-bold focus-visible:border-b focus-visible:ring-0"
                 placeholder="Nome do Personagem"
               />
               <div className="mt-2 flex gap-4">
                 <div className="text-sm text-zinc-400">
                   Bônus de Proficiência:{' '}
-                  <span className="font-bold text-[#663399]">+{pb}</span>
+                  <span className="text-primary font-bold">+{pb}</span>
                 </div>
               </div>
             </div>
@@ -313,7 +313,7 @@ export default function CharacterDetailPage() {
                   onChange={(e) =>
                     handleBasicInfoChange('class', e.target.value)
                   }
-                  className="h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:border-[#663399] focus-visible:ring-0"
+                  className="focus-visible:border-primary h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:ring-0"
                 />
               </div>
               <div>
@@ -330,7 +330,7 @@ export default function CharacterDetailPage() {
                       parseInt(e.target.value) || 1,
                     )
                   }
-                  className="h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:border-[#663399] focus-visible:ring-0"
+                  className="focus-visible:border-primary h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:ring-0"
                 />
               </div>
               <div className="col-span-2">
@@ -342,13 +342,13 @@ export default function CharacterDetailPage() {
                   onChange={(e) =>
                     handleBasicInfoChange('race', e.target.value)
                   }
-                  className="h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:border-[#663399] focus-visible:ring-0"
+                  className="focus-visible:border-primary h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:ring-0"
                 />
               </div>
               <div className="col-span-2 mt-2">
                 <button
                   onClick={() => setIsSpellsOpen(true)}
-                  className="flex w-full items-center justify-center gap-2 rounded border border-[#663399]/30 bg-[#663399]/10 py-2 text-xs font-semibold text-[#be8be8] transition-colors hover:bg-[#663399]/20"
+                  className="border-primary/30 bg-primary/10 hover:bg-primary/20 flex w-full items-center justify-center gap-2 rounded border py-2 text-xs font-semibold text-[#be8be8] transition-colors"
                 >
                   <BookOpen size={14} />
                   Grimório de Magias
@@ -362,14 +362,14 @@ export default function CharacterDetailPage() {
         <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
           <Card className="group relative flex flex-col items-center justify-center overflow-hidden border-zinc-800 bg-[#1a1a1a] py-4">
             <div className="z-10 flex flex-col items-center">
-              <Shield className="mb-2 h-6 w-6 text-[#663399] drop-shadow-md" />
+              <Shield className="text-primary mb-2 h-6 w-6 drop-shadow-md" />
               <Input
                 type="number"
                 value={character.ac}
                 onChange={(e) =>
                   handleBasicInfoChange('ac', parseInt(e.target.value) || 0)
                 }
-                className="h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2 focus-visible:ring-[#663399]"
+                className="focus-visible:ring-primary h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2"
               />
               <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
                 Classe Armadura
@@ -390,7 +390,7 @@ export default function CharacterDetailPage() {
                       parseInt(e.target.value) || 0,
                     )
                   }
-                  className="h-10 w-16 border-transparent bg-transparent p-0 text-right text-3xl font-bold text-zinc-100 focus-visible:ring-2 focus-visible:ring-[#663399]"
+                  className="focus-visible:ring-primary h-10 w-16 border-transparent bg-transparent p-0 text-right text-3xl font-bold text-zinc-100 focus-visible:ring-2"
                 />
                 <span className="text-zinc-500">/</span>
                 <Input
@@ -402,7 +402,7 @@ export default function CharacterDetailPage() {
                       parseInt(e.target.value) || 0,
                     )
                   }
-                  className="h-10 w-12 border-transparent bg-transparent p-0 text-left text-xl font-bold text-zinc-500 focus-visible:ring-2 focus-visible:ring-[#663399]"
+                  className="focus-visible:ring-primary h-10 w-12 border-transparent bg-transparent p-0 text-left text-xl font-bold text-zinc-500 focus-visible:ring-2"
                 />
               </div>
               <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
@@ -424,7 +424,7 @@ export default function CharacterDetailPage() {
                       parseInt(e.target.value) || 0,
                     )
                   }
-                  className="h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2 focus-visible:ring-[#663399]"
+                  className="focus-visible:ring-primary h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2"
                 />
                 <span className="text-sm text-zinc-500">ft</span>
               </div>
@@ -446,7 +446,7 @@ export default function CharacterDetailPage() {
                     parseInt(e.target.value) || 0,
                   )
                 }
-                className="h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2 focus-visible:ring-[#663399]"
+                className="focus-visible:ring-primary h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold text-zinc-100 focus-visible:ring-2"
               />
               <span className="mt-1 text-[10px] font-bold text-zinc-500 uppercase">
                 Iniciativa
@@ -472,7 +472,7 @@ export default function CharacterDetailPage() {
           <Card className="border-zinc-800 bg-[#1a1a1a] shadow-md">
             <CardContent className="p-4">
               <h3 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-wider text-zinc-100 uppercase">
-                <BookOpen size={16} className="text-[#663399]" />
+                <BookOpen size={16} className="text-primary" />
                 Magias Preparadas
               </h3>
               <div className="flex flex-wrap gap-2">

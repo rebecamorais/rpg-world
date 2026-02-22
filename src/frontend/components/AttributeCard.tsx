@@ -23,7 +23,7 @@ export default function AttributeCard({ label, value, onChange }: Props) {
 
   return (
     <div className="group relative flex w-24 flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-zinc-700 bg-[#1a1a1a] p-3 shadow-sm">
-      <div className="absolute top-0 h-1 w-full bg-[#663399]/50 transition-colors group-hover:bg-[#663399]" />
+      <div className="bg-primary/50 group-hover:bg-primary absolute top-0 h-1 w-full transition-colors" />
       <span className="mb-1 text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
         {label}
       </span>
@@ -41,7 +41,7 @@ export default function AttributeCard({ label, value, onChange }: Props) {
           max={MAX_ATTR}
           value={clamped}
           onChange={handleChange}
-          className="w-full rounded-full bg-transparent py-0.5 text-center text-sm font-bold text-zinc-300 outline-none focus:ring-2 focus:ring-[#663399]"
+          className="focus:ring-primary w-full rounded-full bg-transparent py-0.5 text-center text-sm font-bold text-zinc-300 outline-none focus:ring-2"
         />
       </div>
     </div>
