@@ -6,6 +6,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/frontend/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/frontend/components/ui/card';
 import { Input } from '@/frontend/components/ui/input';
 import { Label } from '@/frontend/components/ui/label';
 import { SingleSelect } from '@/frontend/components/ui/single-select';
@@ -75,47 +82,54 @@ export default function NewCharacterPage() {
           ← Voltar
         </Link>
       </div>
-      <h1 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-        Novo personagem
-      </h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <Label htmlFor="name">Nome *</Label>
-          <Input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            disabled={isSubmitting}
-          />
-        </div>
-        <div>
-          <Label htmlFor="system">Sistema RPG</Label>
-          <SingleSelect
-            id="system"
-            value={system}
-            onChange={(e) => setSystem(e.target.value)}
-            disabled={isSubmitting}
-          >
-            <option value="DnD_5e">D&D 5ª Edição</option>
-            {/* Future systems will be added here */}
-          </SingleSelect>
-        </div>
-        {error && (
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-        )}
-        <div className="flex gap-2">
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Criando...' : 'Criar'}
-          </Button>
-          <Link
-            href="/characters"
-            className="rounded-md border border-zinc-300 px-4 py-2 dark:border-zinc-600"
-          >
-            Cancelar
-          </Link>
-        </div>
-      </form>
+      <Card>
+        <CardHeader>
+          <CardTitle>Novo personagem</CardTitle>
+          <CardDescription>
+            Defina o nome e escolha o sistema de regras.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="name">Nome *</Label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                disabled={isSubmitting}
+              />
+            </div>
+            <div>
+              <Label htmlFor="system">Sistema RPG</Label>
+              <SingleSelect
+                id="system"
+                value={system}
+                onChange={(e) => setSystem(e.target.value)}
+                disabled={isSubmitting}
+              >
+                <option value="DnD_5e">D&D 5ª Edição</option>
+                {/* Future systems will be added here */}
+              </SingleSelect>
+            </div>
+            {error && (
+              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+            )}
+            <div className="flex gap-2">
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Criando...' : 'Criar'}
+              </Button>
+              <Link
+                href="/characters"
+                className="rounded-md border border-zinc-300 px-4 py-2 dark:border-zinc-600"
+              >
+                Cancelar
+              </Link>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

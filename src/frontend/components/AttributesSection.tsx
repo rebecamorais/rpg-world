@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/frontend/components/ui/card';
 import type { AttributeKey } from '@/systems/dnd5e';
 import { ATTRIBUTE_KEYS, ATTRIBUTE_LABELS } from '@/systems/dnd5e/constants';
 
@@ -15,9 +21,13 @@ export default function AttributesSection({
   onAttributeChange,
 }: Props) {
   return (
-    <div>
-      <h3 className="text-foreground mb-2 text-sm font-semibold">Atributos</h3>
-      <div className="flex flex-wrap gap-4">
+    <Card className="border-border bg-card h-full">
+      <CardHeader className="border-border bg-muted/50 border-b px-4 py-3">
+        <CardTitle className="text-muted-foreground text-sm tracking-wider uppercase">
+          Atributos
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-wrap justify-center gap-4 p-4">
         {ATTRIBUTE_KEYS.map((key) => (
           <AttributeCard
             key={key}
@@ -26,7 +36,7 @@ export default function AttributesSection({
             onChange={(value) => onAttributeChange(key, value)}
           />
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
