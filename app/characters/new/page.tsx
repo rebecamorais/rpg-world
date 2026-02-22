@@ -17,7 +17,13 @@ import {
 } from '@/frontend/components/ui/card';
 import { Input } from '@/frontend/components/ui/input';
 import { Label } from '@/frontend/components/ui/label';
-import { SingleSelect } from '@/frontend/components/ui/single-select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/frontend/components/ui/select';
 import { useCurrentUser } from '@/frontend/context/UserContext';
 
 export default function NewCharacterPage() {
@@ -107,15 +113,19 @@ export default function NewCharacterPage() {
             </div>
             <div>
               <Label htmlFor="system">Sistema RPG</Label>
-              <SingleSelect
-                id="system"
+              <Select
                 value={system}
-                onChange={(e) => setSystem(e.target.value)}
+                onValueChange={(val) => setSystem(val)}
                 disabled={isSubmitting}
               >
-                <option value="DnD_5e">D&D 5ª Edição</option>
-                {/* Future systems will be added here */}
-              </SingleSelect>
+                <SelectTrigger id="system" className="w-full">
+                  <SelectValue placeholder="Selecione o Sistema" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="DnD_5e">D&D 5ª Edição</SelectItem>
+                  {/* Future systems will be added here */}
+                </SelectContent>
+              </Select>
             </div>
             {error && (
               <p className="text-sm text-red-600 dark:text-red-400">{error}</p>

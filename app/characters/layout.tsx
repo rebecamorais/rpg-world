@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 
-import { NavItem } from '@/frontend/components/ui/nav-item';
+import { NavItem } from '@/frontend/components/nav-item';
 
 export default function CharactersLayout({
   children,
