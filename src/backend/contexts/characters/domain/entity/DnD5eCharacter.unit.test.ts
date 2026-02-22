@@ -78,7 +78,7 @@ describe('DnD5eCharacter (Domain Entity)', () => {
         expect(json.system).toBe('DnD_5e');
 
         // Atributos foram convertidos para object standard?
-        expect((json.attributes as any).STR).toBe(18);
+        expect((json.attributes as unknown as { STR: number }).STR).toBe(18);
 
         // Array de spells veio puro?
         expect(json.spells).toContain('fireball');
