@@ -44,11 +44,11 @@ Remover os estados manuais excessivos e delegar a estabilidade para bibliotecas 
 
 #### Fase 2.1: Instalação e Componentes Base
 - [x] Instalar `react-hook-form`, `zod` e `@hookform/resolvers/zod`.
-- [ ] Incorporar componentes do Shadcn UI (`Form`, `FormControl`, `FormField`, `FormItem`, `FormLabel`, `FormMessage`).
+- [x] Incorporar componentes do Shadcn UI (`Form`, `FormControl`, `FormField`, `FormItem`, `FormLabel`, `FormMessage`).
 
 #### Fase 2.2: Refatoração do Componente Genérico de Login
-- [ ] Converter o estado flexível (`useState` livre) do `LoginForm.tsx` num ecossistema tipado Zod.
-- [ ] Validar formato do email e min/max de senha direto no form.
+- [x] Converter o estado flexível (`useState` livre) do `LoginForm.tsx` num ecossistema tipado Zod.
+- [x] Validar formato do email e min/max de senha direto no form.
 
 #### Fase 2.3: Schemas Zod de Domínio (Opcional antecipado)
 - [ ] Criar arquivo `src/systems/dnd5e/schemas.ts`.

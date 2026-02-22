@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { Button } from '@/frontend/components/ui/button';
 import {
@@ -11,34 +12,47 @@ import {
   CardHeader,
   CardTitle,
 } from '@/frontend/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/frontend/components/ui/form';
 import { Input } from '@/frontend/components/ui/input';
-import { Label } from '@/frontend/components/ui/label';
 import { useCurrentUser } from '@/frontend/context/UserContext';
+
+const loginSchema = z.object({
+  username: z.string().min(1, { message: 'Username é obrigatório.' }),
+  displayName: z.string().optional(),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const { login } = useCurrentUser();
-  const [username, setUsername] = useState('');
-  const [displayName, setDisplayName] = useState('');
-  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    const trimmed = username.trim();
-    if (!trimmed) {
-      setError('Username é obrigatório.');
-      toast.error('Username é obrigatório.');
-      return;
-    }
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      username: '',
+      displayName: '',
+    },
+  });
 
+  const onSubmit = (data: LoginFormValues) => {
     try {
-      login(trimmed, displayName.trim() || undefined);
-      toast.success(`Bem-vindo, ${displayName.trim() || trimmed}!`);
+      const trimmedUsername = data.username.trim();
+      const trimmedDisplayName = data.displayName?.trim();
+
+      login(trimmedUsername, trimmedDisplayName || undefined);
+      toast.success(`Bem-vindo, ${trimmedDisplayName || trimmedUsername}!`);
     } catch (err: unknown) {
       const msg =
         err instanceof Error ? err.message : 'Falha ao realizar login.';
-      setError(msg);
       toast.error(msg);
+      form.setError('root', { message: msg });
     }
   };
 
@@ -48,33 +62,52 @@ export default function LoginForm() {
         <CardTitle>Entrar no RPG World</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div>
-            <Label htmlFor="username">Username *</Label>
-            <Input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="seu_id"
-              autoComplete="username"
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username *</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="seu_id"
+                      autoComplete="username"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div>
-            <Label htmlFor="displayName">Nome de exibição (opcional)</Label>
-            <Input
-              id="displayName"
-              type="text"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              placeholder="Como quer ser chamado"
+
+            <FormField
+              control={form.control}
+              name="displayName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome de exibição (opcional)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Como quer ser chamado" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          {error && (
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-          )}
-          <Button type="submit">Entrar</Button>
-        </form>
+
+            {form.formState.errors.root && (
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {form.formState.errors.root.message}
+              </p>
+            )}
+
+            <Button type="submit">Entrar</Button>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );
