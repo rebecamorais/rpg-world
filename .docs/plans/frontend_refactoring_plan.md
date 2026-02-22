@@ -1,0 +1,71 @@
+# Plano de Ação: Refatoração e Melhorias de Frontend (RPG World)
+
+Este documento estabelece as diretrizes e as etapas para refatorar e elevar a maturidade do código frontend da aplicação, focando em performance, manutenibilidade e experiência do usuário (UX).
+
+## Objetivos Principais
+1. Eliminar recargas de página desnecessárias e reduzir "waterfalls" de carregamento.
+2. Isolar lógicas complexas de Estado e Interface (separação de responsabilidades).
+3. Garantir consistência visual através de uso intensivo de Design System padronizado.
+4. Adotar padrões modernos do Next.js (App Router, Server Components e Server Actions).
+
+### Por que suportar Múltiplos Sistemas (Polimorfismo de UI)?
+- **Polimorfismo de UI:** Uma ficha de D&D 5e é radicalmente diferente de uma ficha de Vampiro: A Máscara ou Ordem Paranormal. Ter o sistema na URL permite que o Next.js escolha o "layout engine" correto para aquele personagem.
+- **Isolamento de Erros:** Um bug na renderização de "Spells" de D&D não afetará os jogadores de sistemas que não usam magias.
+- **SEO e Organização:** Fica claro na URL (ex: `/system/[system_name]/character/[id]`) e na estrutura de pastas qual lógica de negócio está sendo aplicada, facilitando a renderização de componentes específicos de cada sistema.
+
+---
+
+## Fases de Execução
+
+### Fase 1: Padronização de Componentes UI (Design System)
+Refinar os componentes base para não precisarmos reescrever classes do Tailwind. Os componentes base (shadcn/ui, como `<Card>` ou `<Tooltip>`) serão agnósticos e compartilhados entre sistemas, mas a composição e os dados exibidos neles mudarão conforme a lógica do sistema selecionado.
+- [ ] Aplicar estruturação completa usando componentes isolados.
+- [ ] Refatorar os "God Cards" (Painéis gigantes) em componentes reutilizáveis (`<Card>`, `<CardHeader>`, `<CardContent>`).
+- [ ] Implementar sistema unificado de Notificações (`Toast`) para substituir os alertas nativos do navegador (`alert()`).
+- [ ] Implementar `Dialog` (Modais) para interações intrusivas, que exigem que o usuário interaja com o modal antes de continuar. (Ex: Ver descrição de magias e habilidades)
+- [ ] Implementar `Tooltip` não intrusivos que vao requerer pequenos textos. (Ex: Ver calculo de atributos)
+
+### Fase 2: Gestão de Formulários e Validações
+Remover os estados manuais excessivos e delegar a estabilidade para bibliotecas prontas.
+- [ ] Instalar e configurar `react-hook-form` em conjunto com `@hookform/resolvers/zod` e `zod`.
+- [ ] Refatorar o componente `LoginForm.tsx` para o novo padrão.
+- [ ] Refatorar a página de Criação de Personagem (`app/characters/new/page.tsx`) com formulário tipado.
+
+### Fase 3: Data Fetching e Arquitetura Next.js (App Router)
+Eliminar a dependência de `useEffect` para carregar dados vitais nas páginas principais e abraçar o polimorfismo de UI.
+- [ ] Reestruturar as URLs para suportar múltiplos sistemas com Pastas Dinâmicas (`app/system/[system_name]/character/[id]`). 
+  - **Estrutura Proposta:**
+    ```text
+    app/
+    ├── characters/
+    │   └── new/
+    │       └── page.tsx      <-- Criação unificada
+    └── system/               <-- Raiz para todos os diferentes RPGs
+        └── [system_name]/    <-- dnd5e, coc, etc.
+            └── character/    <-- Visualização da ficha
+                └── [id]/
+                    ├── page.tsx  <-- Agregador (Server Component)
+                    └── loading.tsx
+    ```
+- [ ] Atualizar todos os `Links` e roteamentos (`router.push`) espalhados pelo frontend e componentes para respeitar a injecao de `[system_name]`. Exemplo: `/characters/${c.id}` vira `/system/${c.system || 'dnd5e'}/character/${c.id}`.
+- [ ] Atualizar o retorno do Endpoint `/api/characters` (e demais) se necessário para sempre incluir o `system`.
+- [ ] Utilizar a página `page.tsx` agregadora como Server Component puro para realizar os `awaits` de banco de dados e passar para a View.
+- [ ] Implementar estados de Loading com o arquivo nativo `loading.tsx` do Next.js, substituindo os retornos manuais de `<p>Carregando...</p>` por "Skeletons" focados daquela aba de ficha.
+- [ ] Refatorar as chamadas para a API de manipulação (criação e deleção) em **Server Actions** (`actions.ts`).
+
+### Fase 4: Decomposição de Componentes Gigantes ("God Components")
+Dividir para conquistar. Ao mover para `[system_name]`, precisaremos dos componentes isolados daquele sistema.
+- [ ] Criar pastas `_components/` dentro de cada sistema suportado (`app/system/[system_name]/_components/`).
+- [ ] Implementar um componente de "Fábrica" no `page.tsx` principal de layout da ficha daquele sistema para fazer switch seguro (ou apenas assumir um client component de root daquele sistema).
+- [ ] Recortar os sub-layouts do sistema D&D 5e (atualmente na raiz de detalhes em +500 linhas) em "Feature Components" nas suas repectivas pastas `_components/`:
+  - `CharacterHeader.tsx` (Apresentação geral, Nível)
+  - `CombatStats.tsx` (CA, Vida, etc)
+  - `AttributesSection.tsx`
+- [ ] Abstrair o estado global complexo do Personagem, como reações na UI, em um Contexto ou Contextos menores (`useReducer`).
+
+---
+
+## Boas Práticas Acordadas
+- **Server-First:** Toda página que depende de dados do banco tentará primeiro ser um Server Component e buscar a informação de maneira "awaited".
+- **Sem Cores Diretas:** Qualquer necessidade de cor deve referenciar uma cor temática do arquivo Tailwind (`primary`, `muted`, `background`).
+- **Formulários Protegidos:** Nenhum "submit" será enviado à API sem antes passar pelo crivo do cliente via `Zod`.
