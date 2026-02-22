@@ -23,8 +23,21 @@ export interface UpdateCharacterInput {
     attributes?: Record<AttributeKey, number>;
     skills?: Partial<Record<SkillKey, CharacterSkill>>;
     savingThrowProficiencies?: Record<AttributeKey, boolean>;
-    spells?: string[];
+    spellsKnown?: string[];
     passivePerception?: number;
+    subclass?: string;
+    background?: string;
+    alignment?: string;
+    xp?: number;
+    hitDice?: { total: string; current: number };
+    deathSaves?: { successes: number; failures: number };
+    spellcastingSystem?: 'slots' | 'points';
+    spellcastingAbility?: AttributeKey;
+    spellSaveDc?: number;
+    spellAttackBonus?: number;
+    spellSlots?: Record<string, { max: number; used: number }>;
+    spellPoints?: { max: number; current: number };
+    coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
   };
 }
 
@@ -76,16 +89,34 @@ export class UpdateCharacterUseCase {
       character.skills = { ...character.skills, ...u.skills };
     }
 
-    if (u.savingThrowProficiencies) {
-      character.savingThrowProficiencies = {
-        ...character.savingThrowProficiencies,
-        ...u.savingThrowProficiencies,
-      };
+    if (u.savingThrowProficiencies !== undefined) {
+      character.savingThrowProficiencies = u.savingThrowProficiencies as Record<
+        AttributeKey,
+        boolean
+      >;
     }
 
-    if (u.spells !== undefined) {
-      character.spells = u.spells;
+    if (u.spellsKnown !== undefined) {
+      character.spellsKnown = u.spellsKnown;
     }
+
+    // Novas propriedades
+    if (u.subclass !== undefined) character.subclass = u.subclass;
+    if (u.background !== undefined) character.background = u.background;
+    if (u.alignment !== undefined) character.alignment = u.alignment;
+    if (u.xp !== undefined) character.xp = u.xp;
+    if (u.hitDice !== undefined) character.hitDice = u.hitDice;
+    if (u.deathSaves !== undefined) character.deathSaves = u.deathSaves;
+    if (u.spellcastingSystem !== undefined)
+      character.spellcastingSystem = u.spellcastingSystem;
+    if (u.spellcastingAbility !== undefined)
+      character.spellcastingAbility = u.spellcastingAbility as AttributeKey;
+    if (u.spellSaveDc !== undefined) character.spellSaveDc = u.spellSaveDc;
+    if (u.spellAttackBonus !== undefined)
+      character.spellAttackBonus = u.spellAttackBonus;
+    if (u.spellSlots !== undefined) character.spellSlots = u.spellSlots;
+    if (u.spellPoints !== undefined) character.spellPoints = u.spellPoints;
+    if (u.coins !== undefined) character.coins = u.coins;
 
     await this.repository.save(character);
 

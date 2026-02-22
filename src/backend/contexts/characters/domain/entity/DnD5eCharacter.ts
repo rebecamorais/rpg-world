@@ -36,8 +36,25 @@ export class DnD5eCharacter extends Character {
   public initiative: number;
   public skills: Partial<Record<SkillKey, CharacterSkill>>;
   public savingThrowProficiencies: Record<AttributeKey, boolean>;
-  public spells: string[];
   public passivePerception: number;
+
+  public subclass?: string;
+  public background?: string;
+  public alignment?: string;
+  public xp?: number;
+
+  public hitDice?: { total: string; current: number };
+  public deathSaves?: { successes: number; failures: number };
+
+  public spellcastingSystem?: 'slots' | 'points';
+  public spellcastingAbility?: AttributeKey;
+  public spellSaveDc?: number;
+  public spellAttackBonus?: number;
+  public spellSlots?: Record<string, { max: number; used: number }>;
+  public spellPoints?: { max: number; current: number };
+  public spellsKnown?: string[];
+
+  public coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
 
   constructor(
     id: string,
@@ -53,8 +70,21 @@ export class DnD5eCharacter extends Character {
     initiative: number = 0,
     skills: Partial<Record<SkillKey, CharacterSkill>> = {},
     savingThrowProficiencies: Partial<Record<AttributeKey, boolean>> = {},
-    spells: string[] = [],
     passivePerception: number = 10,
+    subclass?: string,
+    background?: string,
+    alignment?: string,
+    xp?: number,
+    hitDice?: { total: string; current: number },
+    deathSaves?: { successes: number; failures: number },
+    spellcastingSystem?: 'slots' | 'points',
+    spellcastingAbility?: AttributeKey,
+    spellSaveDc?: number,
+    spellAttackBonus?: number,
+    spellSlots?: Record<string, { max: number; used: number }>,
+    spellPoints?: { max: number; current: number },
+    spellsKnown: string[] = [],
+    coins?: { cp: number; sp: number; ep: number; gp: number; pp: number },
   ) {
     super(id, name, 'DnD_5e', ownerUsername, attributes, hp, level);
     this.characterClass = characterClass;
@@ -66,8 +96,21 @@ export class DnD5eCharacter extends Character {
     this.savingThrowProficiencies = this.normalizeSavingThrows(
       savingThrowProficiencies,
     );
-    this.spells = spells;
     this.passivePerception = passivePerception;
+    this.subclass = subclass;
+    this.background = background;
+    this.alignment = alignment;
+    this.xp = xp;
+    this.hitDice = hitDice;
+    this.deathSaves = deathSaves;
+    this.spellcastingSystem = spellcastingSystem;
+    this.spellcastingAbility = spellcastingAbility;
+    this.spellSaveDc = spellSaveDc;
+    this.spellAttackBonus = spellAttackBonus;
+    this.spellSlots = spellSlots;
+    this.spellPoints = spellPoints;
+    this.spellsKnown = spellsKnown;
+    this.coins = coins;
   }
 
   private normalizeSavingThrows(
@@ -142,7 +185,23 @@ export class DnD5eCharacter extends Character {
       passivePerception: this.passivePerception,
       skills: this.skills,
       savingThrowProficiencies: this.savingThrowProficiencies,
-      spells: this.spells,
+
+      subclass: this.subclass,
+      background: this.background,
+      alignment: this.alignment,
+      xp: this.xp,
+      hitDice: this.hitDice,
+      deathSaves: this.deathSaves,
+
+      spellcastingSystem: this.spellcastingSystem,
+      spellcastingAbility: this.spellcastingAbility,
+      spellSaveDc: this.spellSaveDc,
+      spellAttackBonus: this.spellAttackBonus,
+      spellSlots: this.spellSlots,
+      spellPoints: this.spellPoints,
+      spellsKnown: this.spellsKnown,
+
+      coins: this.coins,
     };
   }
 }

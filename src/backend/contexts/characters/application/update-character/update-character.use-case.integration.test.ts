@@ -32,14 +32,14 @@ describe('UpdateCharacterUseCase (Integration)', () => {
       updates: {
         name: 'Test Updated',
         hpCurrent: 5,
-        spells: ['fireball'],
+        spellsKnown: ['fireball'],
       },
     });
 
     const updated = (await repo.findById('char-1')) as DnD5eCharacter;
     expect(updated.name).toBe('Test Updated');
     expect(updated.hp.status.current).toBe(5);
-    expect(updated.spells).toContain('fireball');
+    expect(updated.spellsKnown).toContain('fireball');
   });
 
   it('não deve permitir alteração se não for o dono', async () => {

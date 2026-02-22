@@ -73,7 +73,7 @@ describe('DnD5eCharacter (Domain Entity)', () => {
 
   it('deve exportar corretamente via toJSON (Data Transfer Object)', () => {
     const char = buildCharacter({ STR: 18 }, 1, {}, {});
-    char.spells = ['fireball', 'shield'];
+    char.spellsKnown = ['fireball', 'shield'];
 
     const json = char.toJSON();
 
@@ -85,6 +85,6 @@ describe('DnD5eCharacter (Domain Entity)', () => {
     expect((json.attributes as unknown as { STR: number }).STR).toBe(18);
 
     // Array de spells veio puro?
-    expect(json.spells).toContain('fireball');
+    expect(json.spellsKnown).toEqual(['fireball', 'shield']);
   });
 });

@@ -220,14 +220,31 @@ export default function CharacterDetailPage() {
     setHasUnsavedChanges(true);
   };
 
+  const handleSpellPointsChange = (field: 'current' | 'max', value: number) => {
+    setError('');
+    setCharacter((prev) =>
+      prev
+        ? ({
+            ...prev,
+            spellPoints: {
+              current: prev.spellPoints?.current ?? 0,
+              max: prev.spellPoints?.max ?? 0,
+              [field]: value,
+            },
+          } as DnD5eCharacter)
+        : null,
+    );
+    setHasUnsavedChanges(true);
+  };
+
   const handleLearnSpell = (spellIndex: string) => {
-    const currentSpells = character.spells || [];
+    const currentSpells = character.spellsKnown || [];
     if (!currentSpells.includes(spellIndex)) {
       setCharacter((prev) =>
         prev
           ? ({
               ...prev,
-              spells: [...currentSpells, spellIndex],
+              spellsKnown: [...currentSpells, spellIndex],
             } as DnD5eCharacter)
           : null,
       );
@@ -236,12 +253,12 @@ export default function CharacterDetailPage() {
   };
 
   const handleForgetSpell = (spellIndex: string) => {
-    const currentSpells = character.spells || [];
+    const currentSpells = character.spellsKnown || [];
     setCharacter((prev) =>
       prev
         ? ({
             ...prev,
-            spells: currentSpells.filter((s) => s !== spellIndex),
+            spellsKnown: currentSpells.filter((s) => s !== spellIndex),
           } as DnD5eCharacter)
         : null,
     );
@@ -407,10 +424,10 @@ export default function CharacterDetailPage() {
               <div className="flex items-baseline justify-center gap-1">
                 <Input
                   type="number"
-                  value={character.manaCurrent ?? 0}
+                  value={character.spellPoints?.current ?? 0}
                   onChange={(e) =>
-                    handleBasicInfoChange(
-                      'manaCurrent',
+                    handleSpellPointsChange(
+                      'current',
                       parseInt(e.target.value) || 0,
                     )
                   }
@@ -419,10 +436,10 @@ export default function CharacterDetailPage() {
                 <span className="text-muted-foreground">/</span>
                 <Input
                   type="number"
-                  value={character.manaMax ?? 0}
+                  value={character.spellPoints?.max ?? 0}
                   onChange={(e) =>
-                    handleBasicInfoChange(
-                      'manaMax',
+                    handleSpellPointsChange(
+                      'max',
                       parseInt(e.target.value) || 0,
                     )
                   }
@@ -492,7 +509,7 @@ export default function CharacterDetailPage() {
         </div>
 
         {/* Magias Conhecidas (Se houver) */}
-        {character.spells && character.spells.length > 0 && (
+        {character.spellsKnown && character.spellsKnown.length > 0 && (
           <Card className="border-border bg-card shadow-md">
             <CardContent className="p-4">
               <h3 className="text-foreground mb-3 flex items-center gap-2 text-sm font-bold tracking-wider uppercase">
@@ -500,7 +517,7 @@ export default function CharacterDetailPage() {
                 Magias Preparadas
               </h3>
               <div className="flex flex-wrap gap-2">
-                {character.spells.map((spellIndex) => (
+                {character.spellsKnown.map((spellIndex: string) => (
                   <div
                     key={spellIndex}
                     className="bg-secondary text-secondary-foreground border-border flex items-center gap-2 rounded-full border"
@@ -561,7 +578,7 @@ export default function CharacterDetailPage() {
       <SpellsDrawer
         isOpen={isSpellsOpen}
         onClose={() => setIsSpellsOpen(false)}
-        learnedSpells={character?.spells || []}
+        learnedSpells={character?.spellsKnown || []}
         onLearnSpell={handleLearnSpell}
         onForgetSpell={handleForgetSpell}
       />
