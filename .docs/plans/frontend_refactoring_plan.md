@@ -40,11 +40,23 @@ Refinar os componentes base para não precisarmos reescrever classes do Tailwind
 - [x] Abstrair o Header Fixo do Personagem para melhor reutilização (`CharacterHeader.tsx`).
 
 ### Fase 2: Gestão de Formulários e Validações
-Remover os estados manuais excessivos e delegar a estabilidade para bibliotecas prontas.
-- [ ] Instalar e configurar `react-hook-form` em conjunto com `@hookform/resolvers/zod` e `zod`.
-- [ ] Refatorar o componente `LoginForm.tsx` para o novo padrão.
-- [ ] Refatorar a página de Criação de Personagem (`app/characters/new/page.tsx`) com formulário tipado.
+Remover os estados manuais excessivos e delegar a estabilidade para bibliotecas prontas (`react-hook-form` e `zod`).
 
+#### Fase 2.1: Instalação e Componentes Base
+- [x] Instalar `react-hook-form`, `zod` e `@hookform/resolvers/zod`.
+- [ ] Incorporar componentes do Shadcn UI (`Form`, `FormControl`, `FormField`, `FormItem`, `FormLabel`, `FormMessage`).
+
+#### Fase 2.2: Refatoração do Componente Genérico de Login
+- [ ] Converter o estado flexível (`useState` livre) do `LoginForm.tsx` num ecossistema tipado Zod.
+- [ ] Validar formato do email e min/max de senha direto no form.
+
+#### Fase 2.3: Schemas Zod de Domínio (Opcional antecipado)
+- [ ] Criar arquivo `src/systems/dnd5e/schemas.ts`.
+- [ ] Abstrair a tipagem `DnD5eCharacterData` para um Schema Zod de validação de Formulário rigorosa.
+
+#### Fase 2.4: Criação de Personagem Tipada (New Character Page)
+- [ ] Refatorar a página `app/characters/new/page.tsx` para usar o React Hook Form.
+- [ ] Desdobrar o objeto Character e conectar todo `Input` ao sistema do react-hook-form (substituindo onChange manuais).
 ### Fase 3: Data Fetching e Arquitetura Next.js (App Router)
 Eliminar a dependência de `useEffect` para carregar dados vitais nas páginas principais e abraçar o polimorfismo de UI.
 - [ ] Reestruturar as URLs para suportar múltiplos sistemas com Pastas Dinâmicas (`app/system/[system_name]/character/[id]`). 
