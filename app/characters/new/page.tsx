@@ -5,7 +5,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { Button } from '@/frontend/components/ui/button';
 import {
@@ -15,8 +18,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/frontend/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/frontend/components/ui/form';
 import { Input } from '@/frontend/components/ui/input';
-import { Label } from '@/frontend/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -26,13 +36,25 @@ import {
 } from '@/frontend/components/ui/select';
 import { useCurrentUser } from '@/frontend/context/UserContext';
 
+const newCharacterSchema = z.object({
+  name: z.string().min(1, 'Nome do personagem é obrigatório.'),
+  system: z.string().min(1, 'Selecione um sistema RPG.'),
+});
+
+type NewCharacterFormValues = z.infer<typeof newCharacterSchema>;
+
 export default function NewCharacterPage() {
   const { currentUser } = useCurrentUser();
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [system, setSystem] = useState('DnD_5e');
-  const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm<NewCharacterFormValues>({
+    resolver: zodResolver(newCharacterSchema),
+    defaultValues: {
+      name: '',
+      system: 'DnD_5e',
+    },
+  });
 
   if (!currentUser) {
     return (
@@ -42,31 +64,22 @@ export default function NewCharacterPage() {
     );
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    const trimmedName = name.trim();
-    if (!trimmedName) {
-      setError('Nome do personagem é obrigatório.');
-      return;
-    }
-
+  const onSubmit = async (data: NewCharacterFormValues) => {
     try {
       setIsSubmitting(true);
       const res = await fetch('/api/characters', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: trimmedName,
+          name: data.name.trim(),
           ownerUsername: currentUser.username,
-          system: system,
+          system: data.system,
         }),
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Erro ao criar personagem.');
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Erro ao criar personagem.');
       }
 
       const { id } = await res.json();
@@ -75,8 +88,8 @@ export default function NewCharacterPage() {
     } catch (err: unknown) {
       const msg =
         err instanceof Error ? err.message : 'Erro ao criar personagem.';
-      setError(msg);
       toast.error(msg);
+      form.setError('root', { message: msg });
     } finally {
       setIsSubmitting(false);
     }
@@ -100,48 +113,68 @@ export default function NewCharacterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="name">Nome *</Label>
-              <Input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                disabled={isSubmitting}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nome *</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isSubmitting}
+                        placeholder="Nome do personagem"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="system">Sistema RPG</Label>
-              <Select
-                value={system}
-                onValueChange={(val) => setSystem(val)}
-                disabled={isSubmitting}
-              >
-                <SelectTrigger id="system" className="w-full">
-                  <SelectValue placeholder="Selecione o Sistema" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="DnD_5e">D&D 5ª Edição</SelectItem>
-                  {/* Future systems will be added here */}
-                </SelectContent>
-              </Select>
-            </div>
-            {error && (
-              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-            )}
-            <div className="flex gap-2">
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Criando...' : 'Criar'}
-              </Button>
-              <Link
-                href="/characters"
-                className="rounded-md border border-zinc-300 px-4 py-2 dark:border-zinc-600"
-              >
-                Cancelar
-              </Link>
-            </div>
-          </form>
+
+              <FormField
+                control={form.control}
+                name="system"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sistema RPG</FormLabel>
+                    <Select
+                      disabled={isSubmitting}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Selecione o Sistema" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="DnD_5e">D&D 5ª Edição</SelectItem>
+                        {/* Future systems will be added here */}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {form.formState.errors.root && (
+                <p className="text-sm text-red-600 dark:text-red-400">
+                  {form.formState.errors.root.message}
+                </p>
+              )}
+
+              <div className="flex gap-2">
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Criando...' : 'Criar'}
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link href="/characters">Cancelar</Link>
+                </Button>
+              </div>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>

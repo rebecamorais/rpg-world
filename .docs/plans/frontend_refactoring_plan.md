@@ -55,8 +55,9 @@ Remover os estados manuais excessivos e delegar a estabilidade para bibliotecas 
 - [x] Abstrair a tipagem `DnD5eCharacterData` para um Schema Zod de validação de Formulário rigorosa.
 
 #### Fase 2.4: Criação de Personagem Tipada (New Character Page)
-- [ ] Refatorar a página `app/characters/new/page.tsx` para usar o React Hook Form.
-- [ ] Desdobrar o objeto Character e conectar todo `Input` ao sistema do react-hook-form (substituindo onChange manuais).
+- [x] Refatorar a página `app/characters/new/page.tsx` para usar o React Hook Form.
+- [x] Desdobrar o objeto Character e conectar todo `Input` ao sistema do react-hook-form (substituindo onChange manuais).
+
 ### Fase 3: Data Fetching e Arquitetura Next.js (App Router)
 Eliminar a dependência de `useEffect` para carregar dados vitais nas páginas principais e abraçar o polimorfismo de UI.
 - [ ] Reestruturar as URLs para suportar múltiplos sistemas com Pastas Dinâmicas (`app/system/[system_name]/character/[id]`). 
