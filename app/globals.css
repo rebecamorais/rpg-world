@@ -12,7 +12,11 @@
   --secondary-foreground: #18181b;
   --border: #e4e4e7;
   --input: #e4e4e7;
-  --ring: #663399;
+  --ring: var(--primary);
+  /* The default primary color. Can be overridden in JS */
+  --primary: #663399;
+  --primary-foreground: #ffffff;
+  --sidebar: #09090b;
 }
 
 @theme inline {
@@ -27,6 +31,9 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-sidebar: var(--sidebar);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -43,7 +50,8 @@
     --secondary-foreground: #fafafa;
     --border: #27272a;
     --input: #27272a;
-    --ring: #663399;
+    --ring: var(--primary);
+    /* --primary: O usuário continua com sua escolha mesmo no modo escuro */
   }
 }
 
