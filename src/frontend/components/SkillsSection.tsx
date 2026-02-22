@@ -1,14 +1,12 @@
 'use client';
 
-import React from 'react';
-
-import { cn } from '@/backend/lib/utils';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/frontend/components/ui/card';
+import { cn } from '@/frontend/lib/utils';
 import type { AttributeKey } from '@/systems/dnd5e';
 import { calculateSkillValue } from '@/systems/dnd5e/calculations';
 import {
