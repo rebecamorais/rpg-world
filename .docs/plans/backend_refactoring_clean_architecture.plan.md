@@ -4,22 +4,22 @@ overview: "Diretrizes e planejamento para estruturar a camada de backend do RPG 
 todos:
   - id: br1-core-domain
     content: BR1 – Core Domain (Entidades abstratas Character, Value Objects base como Attributes e HP)
-    status: unstarted
+    status: completed
   - id: br2-dnd5e-domain
     content: BR2 – D&D 5e Domain (DnD5eCharacter, lógicas de modificadores e proficiências)
-    status: unstarted
+    status: completed
   - id: br3-application-ports
     content: BR3 – Application & Ports (Casos de Uso, interfaces para Repositórios e Serviços Externos)
-    status: unstarted
+    status: completed
   - id: br4-infrastructure
     content: BR4 – Infrastructure & Adapters (Repositórios em Memória, Clientes de API Externa isolados)
-    status: unstarted
+    status: completed
   - id: br5-interfaces-nextjs
     content: BR5 – Interfaces (Controllers API do Next.js e Injeção de Dependência)
     status: completed
   - id: br6-testing
     content: BR6 – Testes Automatizados (Unitários e Integração no mesmo nível dos arquivos)
-    status: unstarted
+    status: completed
 isProject: false
 ---
 

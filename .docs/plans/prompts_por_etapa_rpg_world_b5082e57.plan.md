@@ -28,7 +28,7 @@ todos:
     status: completed
   - id: f9-spells-api
     content: F9 – Drawer de Magias (Integração https://www.dnd5eapi.co/ pronta para Google Tradutor)
-    status: unstarted
+    status: in-progress
   - id: f10-supabase
     content: F10 – Migração para Supabase (Auth Manual, BD e Storage para as imagens)
     status: unstarted
