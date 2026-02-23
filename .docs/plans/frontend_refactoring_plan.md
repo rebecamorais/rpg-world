@@ -67,7 +67,7 @@ Uso do `next-intl` focando exclusivamente via Client Component Provider para nã
 
 ### Fase 4: Data Fetching e Arquitetura Next.js (App Router)
 Eliminar a dependência de `useEffect` para carregar dados vitais nas páginas principais e abraçar o polimorfismo de UI.
-- [ ] Reestruturar as URLs para suportar múltiplos sistemas com Pastas Dinâmicas (`app/system/[system_name]/character/[id]`). 
+- [x] Reestruturar as URLs para suportar múltiplos sistemas com Pastas Dinâmicas (`app/system/[system_name]/character/[id]`). 
   - **Estrutura Proposta:**
     ```text
     app/
@@ -81,10 +81,10 @@ Eliminar a dependência de `useEffect` para carregar dados vitais nas páginas p
                     ├── page.tsx  <-- Agregador (Server Component)
                     └── loading.tsx
     ```
-- [ ] Atualizar todos os `Links` e roteamentos (`router.push`) espalhados pelo frontend e componentes para respeitar a injecao de `[system_name]`. Exemplo: `/characters/${c.id}` vira `/system/${c.system}/character/${c.id}`.
-- [ ] Atualizar o retorno do Endpoint `/api/characters` (e demais) se necessário para sempre incluir o `system`.
+- [x] Atualizar todos os `Links` e roteamentos (`router.push`) espalhados pelo frontend e componentes para respeitar a injecao de `[system_name]`. Exemplo: `/characters/${c.id}` vira `/system/${c.system}/character/${c.id}`.
+- [x] Atualizar o retorno do Endpoint `/api/characters` (e demais) se necessário para sempre incluir o `system`. *(já retornava via `toJSON()`)*
 - [ ] Utilizar a página `page.tsx` agregadora como Server Component puro para realizar os `awaits` de banco de dados e passar para a View.
-- [ ] Implementar estados de Loading com o arquivo nativo `loading.tsx` do Next.js, substituindo os retornos manuais de `<p>Carregando...</p>` por "Skeletons" focados daquela aba de ficha.
+- [x] Implementar estados de Loading com o arquivo nativo `loading.tsx` do Next.js, substituindo os retornos manuais de `<p>Carregando...</p>` por "Skeletons" focados daquela aba de ficha.
 - [ ] Refatorar as chamadas para a API de manipulação (criação e deleção) em **Server Actions** (`actions.ts`).
 
 ### Fase 5: Decomposição de Componentes Gigantes ("God Components")
