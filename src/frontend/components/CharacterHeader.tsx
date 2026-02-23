@@ -1,6 +1,7 @@
 'use client';
 
 import { BookOpen } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Card, CardContent } from '@/frontend/components/ui/card';
 import { Input } from '@/frontend/components/ui/input';
@@ -28,6 +29,7 @@ export default function CharacterHeader({
   onBasicInfoChange,
   onOpenSpells,
 }: Props) {
+  const t = useTranslations('characterHeader');
   return (
     <Card className="border-border bg-card">
       <CardContent className="flex flex-col p-0 md:flex-row">
@@ -36,11 +38,11 @@ export default function CharacterHeader({
             value={name || ''}
             onChange={(e) => onBasicInfoChange('name', e.target.value)}
             className="focus-visible:border-primary h-auto rounded-none border-transparent bg-transparent px-0 text-3xl font-bold focus-visible:border-b focus-visible:ring-0"
-            placeholder="Nome do Personagem"
+            placeholder={t('namePlaceholder')}
           />
           <div className="mt-2 flex gap-4">
             <div className="text-muted-foreground text-sm">
-              Bônus de Proficiência:{' '}
+              {t('proficiencyBonus')}:{' '}
               <span className="text-primary font-bold">+{pb}</span>
             </div>
           </div>
@@ -48,7 +50,7 @@ export default function CharacterHeader({
         <div className="bg-muted grid grid-cols-2 gap-4 p-6 md:w-1/3">
           <div>
             <label className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-              Classe
+              {t('class')}
             </label>
             <Input
               value={classNameStr || ''}
@@ -58,7 +60,7 @@ export default function CharacterHeader({
           </div>
           <div>
             <label className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-              Nível
+              {t('level')}
             </label>
             <Input
               type="number"
@@ -72,7 +74,7 @@ export default function CharacterHeader({
           </div>
           <div className="col-span-2">
             <label className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-              Raça
+              {t('race')}
             </label>
             <Input
               value={race || ''}
@@ -86,7 +88,7 @@ export default function CharacterHeader({
               className="border-primary/30 bg-primary/10 hover:bg-primary/20 flex w-full items-center justify-center gap-2 rounded border py-2 text-xs font-semibold text-[#be8be8] transition-colors"
             >
               <BookOpen size={14} />
-              Grimório de Magias
+              {t('spellbook')}
             </button>
           </div>
         </div>

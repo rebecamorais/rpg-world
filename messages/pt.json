@@ -1,12 +1,16 @@
 {
   "common": {
     "save": "Salvar",
+    "saving": "Salvando...",
     "cancel": "Cancelar",
     "back": "← Voltar",
     "edit": "Editar",
     "delete": "Excluir",
     "loading": "Carregando...",
-    "logout": "Sair"
+    "logout": "Sair",
+    "confirm": "Confirmar",
+    "saveChanges": "Salvar Alterações",
+    "unsavedChanges": "Alterações não salvas"
   },
   "login": {
     "title": "Entrar no RPG World",
@@ -61,7 +65,41 @@
     "unsavedChanges": "Você tem alterações não salvas.",
     "passivePerception": "Percepção Passiva",
     "preparedSpells": "Magias Preparadas",
-    "forgetSpell": "Esquecer magia"
+    "forgetSpell": "Esquecer magia",
+    "loadError": "Erro ao carregar personagens: {message}",
+    "deleteDialogTitle": "Excluir personagem?",
+    "deleteDialogDescription": "Tem certeza que deseja excluir o personagem {name}? Essa ação não poderá ser desfeita e todos os dados serão perdidos.",
+    "confirmDelete": "Confirmar Exclusão",
+    "namePlaceholder": "Nome do Personagem",
+    "editAttribute": "Editar {label}"
+  },
+  "characterHeader": {
+    "namePlaceholder": "Nome do Personagem",
+    "proficiencyBonus": "Bônus de Proficiência",
+    "class": "Classe",
+    "level": "Nível",
+    "race": "Raça",
+    "spellbook": "Grimório de Magias"
+  },
+  "attributeCard": {
+    "modifierCalc": "Cálculo do Modificador",
+    "adjustValue": "Ajuste o valor base deste atributo (1 a 30).",
+    "baseValue": "Valor Base"
+  },
+  "combatStats": {
+    "armorClass": "Classe Armadura",
+    "hitPoints": "Pontos de Vida",
+    "tempHp": "Vida Temp",
+    "speed": "Deslocamento",
+    "initiative": "Iniciativa",
+    "speedUnit": "m"
+  },
+  "spellsDrawer": {
+    "searchPlaceholder": "Nome da magia (ex: fireball)",
+    "learn": "Aprender",
+    "title": "Grimório de Magias",
+    "description": "Gerencie as magias conhecidas pelo seu personagem.",
+    "emptyState": "Nenhuma magia aprendida ainda."
   },
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",

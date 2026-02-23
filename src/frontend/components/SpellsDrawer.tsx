@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { BookOpen, Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/frontend/components/ui/button';
 import {
@@ -30,6 +31,7 @@ export default function SpellsDrawer({
   onForgetSpell,
 }: Props) {
   const [newSpell, setNewSpell] = useState('');
+  const t = useTranslations('spellsDrawer');
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,26 +46,24 @@ export default function SpellsDrawer({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <BookOpen className="text-primary h-5 w-5" />
-            Grimório de Magias
+            {t('title')}
           </DialogTitle>
-          <DialogDescription>
-            Gerencie as magias conhecidas pelo seu personagem.
-          </DialogDescription>
+          <DialogDescription>{t('description')}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleAdd} className="my-2 flex gap-2">
           <Input
-            placeholder="Nome da magia (ex: fireball)"
+            placeholder={t('searchPlaceholder')}
             value={newSpell}
             onChange={(e) => setNewSpell(e.target.value)}
           />
-          <Button type="submit">Aprender</Button>
+          <Button type="submit">{t('learn')}</Button>
         </form>
 
         <div className="flex-1 overflow-y-auto pr-2">
           {learnedSpells.length === 0 ? (
             <p className="text-muted-foreground mt-8 text-center text-sm">
-              Nenhuma magia aprendida ainda.
+              {t('emptyState')}
             </p>
           ) : (
             <ul className="space-y-2">

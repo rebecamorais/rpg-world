@@ -1,6 +1,7 @@
 'use client';
 
 import { Footprints, Heart, HeartPulse, Shield, Swords } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Card } from '@/frontend/components/ui/card';
 import { Input } from '@/frontend/components/ui/input';
@@ -18,6 +19,8 @@ export default function CombatStatsSection({
   character,
   onBasicInfoChange,
 }: CombatStatsSectionProps) {
+  const t = useTranslations('combatStats');
+
   return (
     <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
       {/* Classe Armadura */}
@@ -33,7 +36,7 @@ export default function CombatStatsSection({
             className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
           />
           <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
-            Classe Armadura
+            {t('armorClass')}
           </span>
         </div>
       </Card>
@@ -62,7 +65,7 @@ export default function CombatStatsSection({
             />
           </div>
           <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
-            Pontos de Vida
+            {t('hitPoints')}
           </span>
         </div>
       </Card>
@@ -80,7 +83,7 @@ export default function CombatStatsSection({
             className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
           />
           <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
-            Vida Temp
+            {t('tempHp')}
           </span>
         </div>
       </Card>
@@ -98,10 +101,12 @@ export default function CombatStatsSection({
               }
               className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
             />
-            <span className="text-muted-foreground text-sm">m</span>
+            <span className="text-muted-foreground text-sm">
+              {t('speedUnit')}
+            </span>
           </div>
           <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
-            Deslocamento
+            {t('speed')}
           </span>
         </div>
       </Card>
@@ -119,7 +124,7 @@ export default function CombatStatsSection({
             className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
           />
           <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
-            Iniciativa
+            {t('initiative')}
           </span>
         </div>
       </Card>

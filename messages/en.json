@@ -1,12 +1,16 @@
 {
   "common": {
     "save": "Save",
+    "saving": "Saving...",
     "cancel": "Cancel",
     "back": "← Back",
     "edit": "Edit",
     "delete": "Delete",
     "loading": "Loading...",
-    "logout": "Log out"
+    "logout": "Log out",
+    "confirm": "Confirm",
+    "saveChanges": "Save Changes",
+    "unsavedChanges": "Unsaved changes"
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -61,7 +65,41 @@
     "unsavedChanges": "You have unsaved changes.",
     "passivePerception": "Passive Perception",
     "preparedSpells": "Prepared Spells",
-    "forgetSpell": "Forget spell"
+    "forgetSpell": "Forget spell",
+    "loadError": "Error loading characters: {message}",
+    "deleteDialogTitle": "Delete character?",
+    "deleteDialogDescription": "Are you sure you want to delete the character {name}? This action cannot be undone and all data will be lost.",
+    "confirmDelete": "Confirm Deletion",
+    "namePlaceholder": "Character Name",
+    "editAttribute": "Edit {label}"
+  },
+  "characterHeader": {
+    "namePlaceholder": "Character Name",
+    "proficiencyBonus": "Proficiency Bonus",
+    "class": "Class",
+    "level": "Level",
+    "race": "Race",
+    "spellbook": "Spellbook"
+  },
+  "attributeCard": {
+    "modifierCalc": "Modifier Calculation",
+    "adjustValue": "Adjust the base value of this attribute (1 to 30).",
+    "baseValue": "Base Value"
+  },
+  "combatStats": {
+    "armorClass": "Armor Class",
+    "hitPoints": "Hit Points",
+    "tempHp": "Temp HP",
+    "speed": "Speed",
+    "initiative": "Initiative",
+    "speedUnit": "ft"
+  },
+  "spellsDrawer": {
+    "searchPlaceholder": "Spell name (e.g.: fireball)",
+    "learn": "Learn",
+    "title": "Spellbook",
+    "description": "Manage your character's known spells.",
+    "emptyState": "No spells learned yet."
   },
   "magicSystem": {
     "titleConfig": "Magic System Configuration",

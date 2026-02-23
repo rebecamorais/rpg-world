@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@/frontend/components/ui/button';
 import {
   Dialog,
@@ -34,6 +36,9 @@ interface Props {
 export default function AttributeCard({ label, value, onChange }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [tempValue, setTempValue] = useState(value);
+  const tAttr = useTranslations('attributeCard');
+  const t = useTranslations('characters');
+  const tCommon = useTranslations('common');
 
   const clamped = Math.min(MAX_ATTR, Math.max(MIN_ATTR, value));
   const modifier = getModifier(clamped);
@@ -86,7 +91,7 @@ export default function AttributeCard({ label, value, onChange }: Props) {
             </TooltipTrigger>
             <TooltipContent>
               <div className="flex flex-col gap-1 text-sm">
-                <p className="font-semibold">Cálculo do Modificador</p>
+                <p className="font-semibold">{tAttr('modifierCalc')}</p>
                 <p className="text-muted-foreground">
                   {rules.formulas.attributeModifier}
                 </p>
@@ -98,14 +103,12 @@ export default function AttributeCard({ label, value, onChange }: Props) {
 
       <DialogContent className="sm:max-w-xs">
         <DialogHeader>
-          <DialogTitle>Editar {label}</DialogTitle>
-          <DialogDescription>
-            Ajuste o valor base deste atributo (1 a 30).
-          </DialogDescription>
+          <DialogTitle>{t('editAttribute', { label })}</DialogTitle>
+          <DialogDescription>{tAttr('adjustValue')}</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4 py-4">
           <div className="flex flex-col gap-2">
-            <Label htmlFor={`attr-${label}`}>Valor Base</Label>
+            <Label htmlFor={`attr-${label}`}>{tAttr('baseValue')}</Label>
             <Input
               id={`attr-${label}`}
               type="number"
@@ -121,7 +124,7 @@ export default function AttributeCard({ label, value, onChange }: Props) {
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handleSave}>Salvar</Button>
+          <Button onClick={handleSave}>{tCommon('save')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

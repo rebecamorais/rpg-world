@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@/frontend/components/ui/button';
 import {
   Dialog,
@@ -29,6 +31,9 @@ export default function CharacterActionBar({
   onSave,
   onDelete,
 }: CharacterActionBarProps) {
+  const tCommon = useTranslations('common');
+  const t = useTranslations('characters');
+
   return (
     <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
       <div className="flex items-center gap-4">
@@ -36,11 +41,11 @@ export default function CharacterActionBar({
           href="/characters"
           className="text-muted-foreground hover:text-foreground text-sm"
         >
-          ← Voltar
+          {tCommon('back')}
         </Link>
         {hasUnsavedChanges && (
           <span className="rounded bg-amber-500/20 px-2 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
-            Alterações não salvas
+            {tCommon('unsavedChanges')}
           </span>
         )}
       </div>
@@ -51,7 +56,7 @@ export default function CharacterActionBar({
           disabled={!hasUnsavedChanges || isSaving}
           className="bg-primary rounded px-4 py-2 text-sm font-medium text-white transition-opacity disabled:opacity-50"
         >
-          {isSaving ? 'Salvando...' : 'Salvar Alterações'}
+          {isSaving ? tCommon('saving') : tCommon('saveChanges')}
         </button>
         <Dialog>
           <DialogTrigger asChild>
@@ -59,29 +64,24 @@ export default function CharacterActionBar({
               type="button"
               className="text-sm text-red-600 hover:underline dark:text-red-400"
             >
-              Excluir
+              {tCommon('delete')}
             </button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Excluir personagem?</DialogTitle>
+              <DialogTitle>{t('deleteDialogTitle')}</DialogTitle>
               <DialogDescription>
-                Tem certeza que deseja excluir o personagem{' '}
-                <span className="text-foreground font-bold">
-                  {characterName}
-                </span>
-                ? Essa ação não poderá ser desfeita e todos os dados serão
-                perdidos.
+                {t('deleteDialogDescription', { name: characterName })}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="mt-4 gap-2 sm:justify-end">
               <DialogClose asChild>
                 <Button type="button" variant="secondary">
-                  Cancelar
+                  {tCommon('cancel')}
                 </Button>
               </DialogClose>
               <Button type="button" variant="destructive" onClick={onDelete}>
-                Confirmar Exclusão
+                {t('confirmDelete')}
               </Button>
             </DialogFooter>
           </DialogContent>

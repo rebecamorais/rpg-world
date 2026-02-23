@@ -17,7 +17,7 @@ export default function CharacterList() {
   if (error) {
     return (
       <div className="text-destructive p-6 text-center">
-        <p>Erro ao carregar personagens: {error.message}</p>
+        <p>{t('loadError', { message: error.message })}</p>
       </div>
     );
   }
