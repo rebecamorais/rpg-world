@@ -91,10 +91,11 @@ Eliminar a dependência de `useEffect` para carregar dados vitais nas páginas p
 Dividir para conquistar. Ao mover para `[system_name]`, precisaremos dos componentes isolados daquele sistema.
 - [ ] Criar pastas `_components/` dentro de cada sistema suportado (`app/system/[system_name]/_components/`).
 - [ ] Implementar um componente de "Fábrica" no `page.tsx` principal de layout da ficha daquele sistema para fazer switch seguro (ou apenas assumir um client component de root daquele sistema).
-- [ ] Recortar os sub-layouts do sistema D&D 5e (atualmente na raiz de detalhes em +500 linhas) em "Feature Components" nas suas repectivas pastas `_components/`:
-  - `CharacterHeader.tsx` (Apresentação geral, Nível)
-  - `CombatStats.tsx` (CA, Vida, etc)
-  - `AttributesSection.tsx`
+- [x] Recortar os sub-layouts do sistema D&D 5e (atualmente na raiz de detalhes em +500 linhas) em "Feature Components" nas suas repectivas pastas `_components/`:
+  - `CharacterHeader.tsx` (Apresentação geral, Nível) ✅
+  - `CombatStats.tsx` (CA, Vida, etc) ✅
+  - `AttributesSection.tsx` ✅
+  - `KnownSpellsCard.tsx` (Magias conhecidas) ✅
 - [ ] Abstrair o estado global complexo do Personagem, como reações na UI, em um Contexto ou Contextos menores (`useReducer`).
 
 ### Fase 6: Autenticação e Landing Page (Novo)
