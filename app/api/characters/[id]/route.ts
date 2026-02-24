@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { DeleteCharacterUseCase } from '@/backend/contexts/characters/application/delete-character/delete-character.use-case';
-import { GetCharacterUseCase } from '@/backend/contexts/characters/application/get-characters/get-characters.use-case';
-import { UpdateCharacterUseCase } from '@/backend/contexts/characters/application/update-character/update-character.use-case';
-
-import { repo } from '../route';
+import { container } from '@/backend/shared/infrastructure/container';
 
 export async function GET(
   req: Request,
@@ -12,10 +8,8 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const useCase = new GetCharacterUseCase(repo);
-    const character = await useCase.execute(id);
+    const character = await container.contexts.character.getById(id);
 
-    // Convert Domain Entity to DTO (JSON) via polymorphic encapsulation
     return NextResponse.json(character.toJSON());
   } catch (err: unknown) {
     return NextResponse.json(
@@ -36,12 +30,11 @@ export async function PUT(
     if (!body.ownerUsername)
       throw new Error('ownerUsername query is required for update validation');
 
-    const useCase = new UpdateCharacterUseCase(repo);
-    const character = await useCase.execute({
-      id: id,
-      ownerUsername: body.ownerUsername,
-      updates: body.updates,
-    });
+    const character = await container.contexts.character.update(
+      id,
+      body.ownerUsername,
+      body.updates,
+    );
 
     return NextResponse.json({ id: character.id });
   } catch (err: unknown) {
@@ -64,8 +57,7 @@ export async function DELETE(
     if (!ownerUsername)
       throw new Error('ownerUsername query is required for deletion');
 
-    const useCase = new DeleteCharacterUseCase(repo);
-    await useCase.execute(id, ownerUsername);
+    await container.contexts.character.delete(id, ownerUsername);
 
     return NextResponse.json({ deleted: true });
   } catch (err: unknown) {
