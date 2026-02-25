@@ -12,10 +12,13 @@ import {
   TooltipTrigger,
 } from '@/frontend/components/ui/tooltip';
 import { cn } from '@/frontend/lib/utils';
-import { calculateSavingThrow } from '@/systems/dnd5e/calculations';
-import { ATTRIBUTE_KEYS, ATTRIBUTE_LABELS } from '@/systems/dnd5e/constants';
-import rules from '@/systems/dnd5e/rules.json';
-import type { AttributeKey } from '@/systems/dnd5e/types';
+import { calculateSavingThrow } from '@/shared/systems/dnd5e/calculations';
+import {
+  ATTRIBUTE_KEYS,
+  ATTRIBUTE_LABELS,
+} from '@/shared/systems/dnd5e/constants';
+import rules from '@/shared/systems/dnd5e/rules.json';
+import type { AttributeKey } from '@/shared/systems/dnd5e/types';
 
 interface Props {
   attributes: Record<AttributeKey, number>;

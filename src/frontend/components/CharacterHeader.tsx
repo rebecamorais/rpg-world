@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 
 import { Card, CardContent } from '@/frontend/components/ui/card';
 import { Input } from '@/frontend/components/ui/input';
-import type { DnD5eCharacter } from '@/systems/dnd5e/types';
+import type { DnD5eCharacter } from '@/shared/systems/dnd5e/types';
 
 interface Props {
   name: string;

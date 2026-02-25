@@ -1,5 +1,5 @@
-import type { DnD5eCharacter } from '@/systems/dnd5e';
-import type { User } from '@/types/user';
+import type { DnD5eCharacter } from '@/shared/systems/dnd5e';
+import type { User } from '@/shared/types/user';
 
 const users = new Map<string, User>();
 const characters = new Map<string, DnD5eCharacter>();

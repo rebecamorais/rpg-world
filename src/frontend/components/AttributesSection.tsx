@@ -6,8 +6,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/frontend/components/ui/card';
-import type { AttributeKey } from '@/systems/dnd5e';
-import { ATTRIBUTE_KEYS, ATTRIBUTE_LABELS } from '@/systems/dnd5e/constants';
+import type { AttributeKey } from '@/shared/systems/dnd5e';
+import {
+  ATTRIBUTE_KEYS,
+  ATTRIBUTE_LABELS,
+} from '@/shared/systems/dnd5e/constants';
 
 import AttributeCard from './AttributeCard';
 

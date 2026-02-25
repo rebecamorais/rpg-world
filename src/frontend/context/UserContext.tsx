@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 
-import type { User } from '@/types/user';
+import type { User } from '@/shared/types/user';
 
 interface UserContextValue {
   currentUser: User | null;

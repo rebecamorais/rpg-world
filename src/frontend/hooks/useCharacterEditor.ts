@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import type { AttributeKey, DnD5eCharacter } from '@/systems/dnd5e';
-import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
-import type { SkillKey } from '@/systems/dnd5e/constants';
-import type { CharacterSkill } from '@/systems/dnd5e/types';
+import type { AttributeKey, DnD5eCharacter } from '@/shared/systems/dnd5e';
+import { getProficiencyBonus } from '@/shared/systems/dnd5e/calculations';
+import type { SkillKey } from '@/shared/systems/dnd5e/constants';
+import type { CharacterSkill } from '@/shared/systems/dnd5e/types';
 
 interface UseCharacterEditorOptions {
   fetchedCharacter: DnD5eCharacter | undefined;

@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import type { DnD5eCharacter } from '@/systems/dnd5e';
+import type { DnD5eCharacter } from '@/shared/systems/dnd5e';
 
 export function useCharacter(
   id: string,

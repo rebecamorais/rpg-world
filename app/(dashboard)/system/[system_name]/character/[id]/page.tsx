@@ -18,7 +18,7 @@ import SpellsDrawer from '@/frontend/components/SpellsDrawer';
 import { useCurrentUser } from '@/frontend/context/UserContext';
 import { useCharacter } from '@/frontend/hooks/useCharacter';
 import { useCharacterEditor } from '@/frontend/hooks/useCharacterEditor';
-import { getProficiencyBonus } from '@/systems/dnd5e/calculations';
+import { getProficiencyBonus } from '@/shared/systems/dnd5e/calculations';
 
 export default function CharacterDetailPage() {
   const params = useParams();
