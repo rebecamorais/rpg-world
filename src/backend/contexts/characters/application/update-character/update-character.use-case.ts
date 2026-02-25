@@ -40,11 +40,15 @@ export interface CharacterUpdates {
 export class UpdateCharacterUseCase {
   constructor(private repository: CharacterRepo) {}
 
-  async execute(
-    id: string,
-    ownerUsername: string,
-    updates: CharacterUpdates,
-  ): Promise<DnD5eCharacter> {
+  async execute({
+    id,
+    ownerUsername,
+    updates,
+  }: {
+    id: string;
+    ownerUsername: string;
+    updates: CharacterUpdates;
+  }): Promise<DnD5eCharacter> {
     const character = await this.repository.findById(id);
 
     if (!character) {

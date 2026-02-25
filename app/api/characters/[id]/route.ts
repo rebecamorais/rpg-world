@@ -30,11 +30,11 @@ export async function PUT(
     if (!body.ownerUsername)
       throw new Error('ownerUsername query is required for update validation');
 
-    const character = await api.characters.update(
+    const character = await api.characters.update({
       id,
-      body.ownerUsername,
-      body.updates,
-    );
+      ownerUsername: body.ownerUsername,
+      updates: body.updates,
+    });
 
     return NextResponse.json({ id: character.id });
   } catch (err: unknown) {
