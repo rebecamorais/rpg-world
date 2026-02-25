@@ -18,7 +18,8 @@ Este documento define as diretrizes de engenharia que DEVEM ser seguidas em toda
 - Não aceitar códigos que ignorem erros de tipagem (`any` é proibido) e `unknown` só deve
 
 ## 🚀 Estratégia de Renderização (Server-First)
-- **Default para Server Components:** Todo componente é um Server Component por padrão. O uso de `'use client'` deve ser a exceção, não a regra.
+- **Default para Server Components:** Todo componente é um Server Component por padrão. O uso de `'use client'` deve ser a exceção, não a regra. Só adicione `'use client'` se precisar de `useState`, `useEffect` ou Event Listeners.
 - **Isolamento de Interatividade:** O `'use client'` deve ser empurrado para as "folhas" da árvore de componentes (ex: apenas o botão ou o input, não o formulário inteiro se não for necessário).
 - **Data Fetching:** Toda busca de dados inicial deve ocorrer em Server Components. O Cliente apenas recebe os dados prontos (via props) ou interage via Server Actions.
+- **Complexidade:** Se um componente Client está ficando muito grande, quebre-o em sub-componentes Server onde a lógica for apenas visual.
 - **Segurança:** Lógicas que utilizam chaves privadas ou acessam o banco diretamente (via Repository) NUNCA devem estar em arquivos com `'use client'`.
