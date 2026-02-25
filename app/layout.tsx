@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
+import { getLocale, getMessages, getTimeZone } from 'next-intl/server';
+
 import GlobalHeader from '@/frontend/components/GlobalHeader';
-import LanguageProvider from '@/frontend/components/LanguageProvider';
-import QueryProvider from '@/frontend/components/QueryProvider';
+import Providers from '@/frontend/components/Providers';
 import { Toaster } from '@/frontend/components/ui/sonner';
-import { TooltipProvider } from '@/frontend/components/ui/tooltip';
-import { UserProvider } from '@/frontend/context/UserContext';
 
 import './globals.css';
 
@@ -25,26 +24,24 @@ export const metadata: Metadata = {
   description: 'Gestão de fichas de personagens para RPG',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+  const timeZone = await getTimeZone();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground flex min-h-screen flex-col antialiased`}
       >
-        <QueryProvider>
-          <LanguageProvider>
-            <UserProvider>
-              <TooltipProvider>
-                <GlobalHeader />
-                {children}
-              </TooltipProvider>
-            </UserProvider>
-          </LanguageProvider>
-        </QueryProvider>
+        <Providers locale={locale} messages={messages} timeZone={timeZone}>
+          <GlobalHeader />
+          {children}
+        </Providers>
         <Toaster />
       </body>
     </html>

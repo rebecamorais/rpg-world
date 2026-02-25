@@ -1,5 +1,3 @@
-'use client';
-
 import Sidebar from '@/frontend/components/Sidebar';
 
 export default function CharactersLayout({

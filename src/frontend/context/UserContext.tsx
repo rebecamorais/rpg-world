@@ -9,6 +9,8 @@ import {
   useState,
 } from 'react';
 
+import { RPGWorldApi } from '@client';
+
 import type { User } from '@/shared/types/user';
 
 interface UserContextValue {
@@ -23,23 +25,16 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const login = useCallback(async (username: string, displayName?: string) => {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    try {
+      const user = await RPGWorldApi.post<User>('/api/auth/login', {
         username: username.trim(),
         displayName: displayName?.trim(),
-      }),
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || 'Failed to login');
+      });
+      setCurrentUser(user);
+      return user;
+    } catch (error: unknown) {
+      throw error;
     }
-
-    const user = await res.json();
-    setCurrentUser(user);
-    return user;
   }, []);
 
   const logout = useCallback(() => {

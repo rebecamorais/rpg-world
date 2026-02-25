@@ -22,7 +22,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@api": ["src/backend/index"],
-      "@services": ["src/services/index"]
+      "@client": ["src/frontend/lib/api-client"]
     }
   },
   "include": [
