@@ -1,36 +1,19 @@
-'use client';
+import Link from 'next/link';
 
-import { useEffect } from 'react';
-
-import { useRouter } from 'next/navigation';
-
+import AuthRedirect from '@/frontend/components/AuthRedirect';
 import LoginForm from '@/frontend/components/LoginForm';
-import { useCurrentUser } from '@/frontend/context/UserContext';
 
 export default function LoginPage() {
-  const { currentUser } = useCurrentUser();
-  const router = useRouter();
-
-  // If already logged in, push to Dashboard
-  useEffect(() => {
-    if (currentUser) {
-      router.push('/characters');
-    }
-  }, [currentUser, router]);
-
-  if (currentUser) {
-    return null;
-  }
-
   return (
     <div className="bg-background relative flex min-h-screen items-center justify-center p-4">
+      <AuthRedirect />
       <div className="absolute top-4 left-4">
-        <button
-          onClick={() => router.push('/')}
+        <Link
+          href="/"
           className="text-muted-foreground hover:text-foreground text-sm transition-colors"
         >
           &larr; Voltar
-        </button>
+        </Link>
       </div>
       <LoginForm />
     </div>
