@@ -1,11 +1,16 @@
 // src/backend/shared/infrastructure/container.ts
+import { CharacterRepo } from '@/backend/contexts/characters/domain/repository/character.repo';
 import { InMemoryCharacterRepository } from '@/backend/contexts/characters/infrastructure/in-memory-character.repository';
 
 import { Contexts } from './contexts';
 
+export interface ContainerRegistry {
+  characterRepo: CharacterRepo;
+}
+
 class Container {
   private static instance: Container;
-  private dependencies: Map<string, any> = new Map();
+  private dependencies: Map<keyof ContainerRegistry, unknown> = new Map();
   private _contexts: Contexts;
 
   private constructor() {
@@ -27,16 +32,19 @@ class Container {
     return this._contexts;
   }
 
-  register(name: string, dependency: any) {
+  register<K extends keyof ContainerRegistry>(
+    name: K,
+    dependency: ContainerRegistry[K],
+  ) {
     this.dependencies.set(name, dependency);
   }
 
-  get<T>(name: string): T {
+  get<K extends keyof ContainerRegistry>(name: K): ContainerRegistry[K] {
     const dependency = this.dependencies.get(name);
     if (!dependency) {
-      throw new Error(`Dependency "${name}" not found in container.`);
+      throw new Error(`Dependency "${name as string}" not found in container.`);
     }
-    return dependency as T;
+    return dependency as ContainerRegistry[K];
   }
 }
 

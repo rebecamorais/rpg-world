@@ -17,7 +17,9 @@ export async function GET(req: Request) {
     const characters =
       await container.contexts.character.getByOwner(ownerUsername);
 
-    return NextResponse.json(characters.map((c: any) => c.toJSON()));
+    return NextResponse.json(
+      characters.map((c: { toJSON: () => unknown }) => c.toJSON()),
+    );
   } catch (err: unknown) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Unknown error' },
