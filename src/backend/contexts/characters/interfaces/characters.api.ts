@@ -21,12 +21,20 @@ export const makeCharactersApi = (characterService: ICharacterService) => ({
     return { id: character.id };
   },
 
-  update: async (
-    id: string,
-    ownerUsername: string,
-    updates: CharacterUpdates,
-  ) => {
-    const character = await characterService.update(id, ownerUsername, updates);
+  update: async ({
+    id,
+    ownerUsername,
+    updates,
+  }: {
+    id: string;
+    ownerUsername: string;
+    updates: CharacterUpdates;
+  }) => {
+    const character = await characterService.update({
+      id,
+      ownerUsername,
+      updates,
+    });
     return { id: character.id };
   },
 

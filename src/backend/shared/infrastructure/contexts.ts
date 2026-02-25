@@ -1,4 +1,3 @@
-// src/backend/shared/infrastructure/contexts.ts
 import { createCharacterContext } from '@/backend/contexts/characters';
 
 import type { ContainerRegistry } from './container';
@@ -14,8 +13,7 @@ export class Contexts {
 
   get character() {
     if (!this._character) {
-      const repo = this.container.get('characterRepo');
-      this._character = createCharacterContext(repo);
+      this._character = createCharacterContext();
     }
     return this._character;
   }
