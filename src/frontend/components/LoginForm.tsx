@@ -45,12 +45,12 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = (data: LoginFormValues) => {
+  const onSubmit = async (data: LoginFormValues) => {
     try {
       const trimmedUsername = data.username.trim();
       const trimmedDisplayName = data.displayName?.trim();
 
-      login(trimmedUsername, trimmedDisplayName || undefined);
+      await login(trimmedUsername, trimmedDisplayName || undefined);
       toast.success(
         t('welcome', { name: trimmedDisplayName || trimmedUsername }),
       );
