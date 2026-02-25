@@ -1,4 +1,6 @@
 // src/backend/shared/infrastructure/container.ts
+import { SupabaseClient, createClient } from '@supabase/supabase-js';
+
 import { CharacterRepo } from '@/backend/contexts/characters/domain/repository/character.repo';
 import { InMemoryCharacterRepository } from '@/backend/contexts/characters/infrastructure/in-memory-character.repository';
 
@@ -6,6 +8,8 @@ import { Contexts } from './contexts';
 
 export interface ContainerRegistry {
   characterRepo: CharacterRepo;
+  dbClient: SupabaseClient;
+  authClient: SupabaseClient;
 }
 
 class Container {
@@ -14,9 +18,21 @@ class Container {
   private _contexts: Contexts;
 
   private constructor() {
-    // Eagerly initialize core dependencies
     const characterRepo = new InMemoryCharacterRepository();
     this.register('characterRepo', characterRepo);
+
+    const dbClient = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    );
+    this.register('dbClient', dbClient);
+
+    const authClient = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, // Mesmo client porem somente para validar usuários
+    );
+
+    this.register('authClient', authClient);
 
     this._contexts = new Contexts(this);
   }
