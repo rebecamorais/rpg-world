@@ -1,17 +1,13 @@
-'use client';
-
 import Link from 'next/link';
 
 import { Sparkles } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 import LanguageSwitcher from '@/frontend/components/LanguageSwitcher';
-import { useCurrentUser } from '@/frontend/context/UserContext';
+import UserMenu from '@/frontend/components/UserMenu';
 
-export default function GlobalHeader() {
-  const { currentUser, logout } = useCurrentUser();
-  const tHome = useTranslations('home');
-  const tCommon = useTranslations('common');
+export default async function GlobalHeader() {
+  const tHome = await getTranslations('home');
 
   return (
     <header className="border-border bg-card flex shrink-0 items-center justify-between border-b px-4 py-3">
@@ -25,22 +21,7 @@ export default function GlobalHeader() {
 
       <div className="flex items-center gap-4">
         <LanguageSwitcher />
-
-        {currentUser && (
-          <div className="border-border ml-1 flex items-center gap-3 border-l pl-4">
-            <span className="text-muted-foreground hidden text-sm sm:inline-block">
-              {currentUser.displayName || currentUser.username}{' '}
-              <span className="opacity-70">(@{currentUser.username})</span>
-            </span>
-            <button
-              type="button"
-              onClick={logout}
-              className="text-muted-foreground hover:text-foreground text-sm font-medium"
-            >
-              {tCommon('logout')}
-            </button>
-          </div>
-        )}
+        <UserMenu />
       </div>
     </header>
   );
