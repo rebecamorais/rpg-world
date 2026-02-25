@@ -51,7 +51,7 @@ Remover os estados manuais excessivos e delegar a estabilidade para bibliotecas 
 - [x] Validar formato do email e min/max de senha direto no form.
 
 #### Fase 2.3: Schemas Zod de Domínio (Opcional antecipado)
-- [x] Criar arquivo `src/systems/dnd5e/schemas.ts`.
+- [x] Criar arquivo `src/shared/systems/dnd5e/schemas.ts`.
 - [x] Abstrair a tipagem `DnD5eCharacterData` para um Schema Zod de validação de Formulário rigorosa.
 
 #### Fase 2.4: Criação de Personagem Tipada (New Character Page)

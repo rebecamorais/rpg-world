@@ -7,51 +7,55 @@ import {
 import { CharacterRepo } from '../../domain/repository';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
 
-export interface UpdateCharacterInput {
-  id: string;
-  ownerUsername: string;
-  updates: {
-    name?: string;
-    characterClass?: string;
-    race?: string;
-    level?: number;
-    ac?: number;
-    speed?: number;
-    initiative?: number;
-    hpCurrent?: number;
-    hpMax?: number;
-    attributes?: Record<AttributeKey, number>;
-    skills?: Partial<Record<SkillKey, CharacterSkill>>;
-    savingThrowProficiencies?: Record<AttributeKey, boolean>;
-    spellsKnown?: string[];
-    passivePerception?: number;
-    subclass?: string;
-    background?: string;
-    alignment?: string;
-    xp?: number;
-    hitDice?: { total: string; current: number };
-    deathSaves?: { successes: number; failures: number };
-    spellcastingSystem?: 'slots' | 'points';
-    spellcastingAbility?: AttributeKey;
-    spellSaveDc?: number;
-    spellAttackBonus?: number;
-    spellSlots?: Record<string, { max: number; used: number }>;
-    spellPoints?: { max: number; current: number };
-    coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
-  };
+export interface CharacterUpdates {
+  name?: string;
+  characterClass?: string;
+  race?: string;
+  level?: number;
+  ac?: number;
+  speed?: number;
+  initiative?: number;
+  hpCurrent?: number;
+  hpMax?: number;
+  attributes?: Record<AttributeKey, number>;
+  skills?: Partial<Record<SkillKey, CharacterSkill>>;
+  savingThrowProficiencies?: Record<AttributeKey, boolean>;
+  spellsKnown?: string[];
+  passivePerception?: number;
+  subclass?: string;
+  background?: string;
+  alignment?: string;
+  xp?: number;
+  hitDice?: { total: string; current: number };
+  deathSaves?: { successes: number; failures: number };
+  spellcastingSystem?: 'slots' | 'points';
+  spellcastingAbility?: AttributeKey;
+  spellSaveDc?: number;
+  spellAttackBonus?: number;
+  spellSlots?: Record<string, { max: number; used: number }>;
+  spellPoints?: { max: number; current: number };
+  coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
 }
 
 export class UpdateCharacterUseCase {
   constructor(private repository: CharacterRepo) {}
 
-  async execute(input: UpdateCharacterInput): Promise<DnD5eCharacter> {
-    const character = await this.repository.findById(input.id);
+  async execute({
+    id,
+    ownerUsername,
+    updates,
+  }: {
+    id: string;
+    ownerUsername: string;
+    updates: CharacterUpdates;
+  }): Promise<DnD5eCharacter> {
+    const character = await this.repository.findById(id);
 
     if (!character) {
       throw new Error('Personagem não encontrado.');
     }
 
-    if (character.ownerUsername !== input.ownerUsername) {
+    if (character.ownerUsername !== ownerUsername) {
       throw new Error('Não autorizado a modificar este personagem.');
     }
 
@@ -59,7 +63,7 @@ export class UpdateCharacterUseCase {
       throw new Error('Suporte apenas para D&D 5e no momento.');
     }
 
-    const u = input.updates;
+    const u = updates;
 
     if (u.name !== undefined) character.name = u.name;
     if (u.characterClass !== undefined)

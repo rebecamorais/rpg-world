@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { DeleteCharacterUseCase } from '@/backend/contexts/characters/application/delete-character/delete-character.use-case';
-import { GetCharacterUseCase } from '@/backend/contexts/characters/application/get-characters/get-characters.use-case';
-import { UpdateCharacterUseCase } from '@/backend/contexts/characters/application/update-character/update-character.use-case';
-
-import { repo } from '../route';
+import { api } from '@api';
 
 export async function GET(
   req: Request,
@@ -12,11 +8,9 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const useCase = new GetCharacterUseCase(repo);
-    const character = await useCase.execute(id);
+    const character = await api.characters.getById(id);
 
-    // Convert Domain Entity to DTO (JSON) via polymorphic encapsulation
-    return NextResponse.json(character.toJSON());
+    return NextResponse.json(character);
   } catch (err: unknown) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Unknown error' },
@@ -36,9 +30,8 @@ export async function PUT(
     if (!body.ownerUsername)
       throw new Error('ownerUsername query is required for update validation');
 
-    const useCase = new UpdateCharacterUseCase(repo);
-    const character = await useCase.execute({
-      id: id,
+    const character = await api.characters.update({
+      id,
       ownerUsername: body.ownerUsername,
       updates: body.updates,
     });
@@ -64,8 +57,7 @@ export async function DELETE(
     if (!ownerUsername)
       throw new Error('ownerUsername query is required for deletion');
 
-    const useCase = new DeleteCharacterUseCase(repo);
-    await useCase.execute(id, ownerUsername);
+    await api.characters.delete(id, ownerUsername);
 
     return NextResponse.json({ deleted: true });
   } catch (err: unknown) {

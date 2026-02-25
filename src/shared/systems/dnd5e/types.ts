@@ -1,4 +1,4 @@
-import type { CharacterBase } from '@/types/character';
+import type { CharacterBase } from '@/shared/types/character';
 
 import type { SkillKey } from './constants';
 

@@ -1,0 +1,20 @@
+import { CreateCharacterInput } from '../application/create-character/create-character.use-case';
+import { CharacterUpdates } from '../application/update-character/update-character.use-case';
+import { Character } from './entity/Character';
+import { DnD5eCharacter } from './entity/DnD5eCharacter';
+
+export interface ICharacterService {
+  getById(id: string): Promise<Character | null>;
+  getByOwner(ownerUsername: string): Promise<Character[]>;
+  create(data: CreateCharacterInput): Promise<DnD5eCharacter>;
+  update({
+    id,
+    ownerUsername,
+    updates,
+  }: {
+    id: string;
+    ownerUsername: string;
+    updates: CharacterUpdates;
+  }): Promise<DnD5eCharacter>;
+  delete(id: string, ownerUsername: string): Promise<boolean>;
+}

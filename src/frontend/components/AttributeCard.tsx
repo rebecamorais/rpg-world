@@ -21,8 +21,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/frontend/components/ui/tooltip';
-import { getModifier } from '@/systems/dnd5e/calculations';
-import rules from '@/systems/dnd5e/rules.json';
+import { getModifier } from '@/shared/systems/dnd5e/calculations';
+import rules from '@/shared/systems/dnd5e/rules.json';
 
 const MIN_ATTR = 1;
 const MAX_ATTR = 30;

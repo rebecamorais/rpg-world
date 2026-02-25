@@ -20,7 +20,9 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@api": ["src/backend/index"],
+      "@services": ["src/services/index"]
     }
   },
   "include": [

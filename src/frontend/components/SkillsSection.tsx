@@ -7,14 +7,14 @@ import {
   CardTitle,
 } from '@/frontend/components/ui/card';
 import { cn } from '@/frontend/lib/utils';
-import type { AttributeKey } from '@/systems/dnd5e';
-import { calculateSkillValue } from '@/systems/dnd5e/calculations';
+import type { AttributeKey } from '@/shared/systems/dnd5e';
+import { calculateSkillValue } from '@/shared/systems/dnd5e/calculations';
 import {
   SKILLS_CATALOG,
   SKILL_KEYS,
   type SkillKey,
-} from '@/systems/dnd5e/constants';
-import type { CharacterSkill } from '@/systems/dnd5e/types';
+} from '@/shared/systems/dnd5e/constants';
+import type { CharacterSkill } from '@/shared/systems/dnd5e/types';
 
 interface Props {
   attributes: Record<AttributeKey, number>;

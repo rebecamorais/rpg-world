@@ -4,13 +4,13 @@ import { Attributes } from '../../domain/value-object/Attributes';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
 
 export interface CreateCharacterInput {
-  id: string; // Optional if we want the backend to generate, but left here for simplicity
+  id?: string;
   name: string;
   ownerUsername: string;
-  system: string;
-  characterClass: string;
-  race: string;
-  level: number;
+  system?: string;
+  characterClass?: string;
+  race?: string;
+  level?: number;
 }
 
 export class CreateCharacterUseCase {
@@ -27,14 +27,14 @@ export class CreateCharacterUseCase {
     const hp = new HealthPoints(10, 10); // Valor chumbado pra criar, poderia calcular baseado no level
 
     const character = new DnD5eCharacter(
-      input.id,
+      input.id || crypto.randomUUID(),
       input.name.trim(),
       input.ownerUsername,
       attributes,
       hp,
-      input.level,
-      input.characterClass,
-      input.race,
+      input.level || 1,
+      input.characterClass || '',
+      input.race || '',
     );
 
     await this.repository.save(character);
