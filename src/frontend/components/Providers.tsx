@@ -1,20 +1,44 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { type ReactNode, useEffect } from 'react';
 
-import LanguageProvider from '@/frontend/components/LanguageProvider';
+import { NextIntlClientProvider } from 'next-intl';
+
 import QueryProvider from '@/frontend/components/QueryProvider';
 import { TooltipProvider } from '@/frontend/components/ui/tooltip';
 import { UserProvider } from '@/frontend/context/UserContext';
 
-export default function Providers({ children }: { children: ReactNode }) {
+interface ProvidersProps {
+  children: ReactNode;
+  locale: string;
+  messages: Record<string, unknown>;
+  timeZone: string;
+}
+
+export default function Providers({
+  children,
+  locale,
+  messages,
+  timeZone,
+}: ProvidersProps) {
+  useEffect(() => {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (tz) {
+      document.cookie = `NEXT_TIMEZONE=${tz};path=/;max-age=31536000`;
+    }
+  }, []);
+
   return (
     <QueryProvider>
-      <LanguageProvider>
+      <NextIntlClientProvider
+        locale={locale}
+        messages={messages}
+        timeZone={timeZone}
+      >
         <UserProvider>
           <TooltipProvider>{children}</TooltipProvider>
         </UserProvider>
-      </LanguageProvider>
+      </NextIntlClientProvider>
     </QueryProvider>
   );
 }

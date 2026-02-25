@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { useLocale } from 'next-intl';
 
 import {
@@ -12,16 +14,13 @@ import {
 
 export default function LanguageSwitcher() {
   const locale = useLocale();
+  const router = useRouter();
 
   const handleValueChange = (newLocale: string) => {
-    if (typeof window !== 'undefined') {
-      (
-        window as unknown as { __changeLocale: (v: string) => void }
-      ).__changeLocale?.(newLocale);
-    }
+    document.cookie = `NEXT_LOCALE=${newLocale};path=/;max-age=31536000`;
+    router.refresh();
   };
 
-  // We only render English and Portuguese
   return (
     <Select value={locale} onValueChange={handleValueChange}>
       <SelectTrigger className="bg-background h-9 w-[130px] text-sm">
