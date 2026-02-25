@@ -1,46 +1,37 @@
-import { container } from '@/backend/shared/infrastructure/container';
+import {
+  CharacterUpdates,
+  CreateCharacterInput,
+  ICharacterService,
+} from '../index';
 
-export const charactersApi = {
+export const makeCharactersApi = (characterService: ICharacterService) => ({
   getById: async (id: string) => {
-    const character = await container.contexts.character.getById(id);
+    const character = await characterService.getById(id);
+    if (!character) throw new Error('Não encontrado.');
     return character.toJSON();
   },
 
   getByOwner: async (ownerUsername: string) => {
-    const characters =
-      await container.contexts.character.getByOwner(ownerUsername);
-    return characters.map((c: { toJSON: () => unknown }) => c.toJSON());
+    const characters = await characterService.getByOwner(ownerUsername);
+    return characters.map((c) => c.toJSON());
   },
 
-  create: async (data: {
-    id?: string;
-    name: string;
-    ownerUsername: string;
-    system?: string;
-    class?: string;
-    characterClass?: string;
-    race: string;
-    level?: number;
-  }) => {
-    const character = await container.contexts.character.create(data);
+  create: async (data: CreateCharacterInput) => {
+    const character = await characterService.create(data);
     return { id: character.id };
   },
 
   update: async (
     id: string,
     ownerUsername: string,
-    updates: Record<string, unknown>,
+    updates: CharacterUpdates,
   ) => {
-    const character = await container.contexts.character.update(
-      id,
-      ownerUsername,
-      updates,
-    );
+    const character = await characterService.update(id, ownerUsername, updates);
     return { id: character.id };
   },
 
   delete: async (id: string, ownerUsername: string) => {
-    await container.contexts.character.delete(id, ownerUsername);
+    await characterService.delete(id, ownerUsername);
     return { deleted: true };
   },
-};
+});

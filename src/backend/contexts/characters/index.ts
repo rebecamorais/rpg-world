@@ -1,4 +1,3 @@
-// src/backend/contexts/characters/index.ts
 import { GetCharacterUseCase } from './application';
 import {
   CreateCharacterInput,
@@ -7,12 +6,18 @@ import {
 import { DeleteCharacterUseCase } from './application/delete-character/delete-character.use-case';
 import { GetCharactersByOwnerUseCase } from './application/get-characters/get-characters-by-owner.use-case';
 import {
-  UpdateCharacterInput,
+  CharacterUpdates,
   UpdateCharacterUseCase,
 } from './application/update-character/update-character.use-case';
+import { ICharacterService } from './domain/ICharacterService';
 import { CharacterRepo } from './domain/repository/character.repo';
+import { InMemoryCharacterRepository } from './infrastructure/in-memory-character.repository';
 
-export const createCharacterContext = (repository: CharacterRepo) => {
+export type { CharacterUpdates, CreateCharacterInput, ICharacterService };
+
+export const createCharacterContext = (): ICharacterService => {
+  const repository: CharacterRepo = new InMemoryCharacterRepository();
+
   const getCharacterUseCase = new GetCharacterUseCase(repository);
   const getCharactersByOwnerUseCase = new GetCharactersByOwnerUseCase(
     repository,
@@ -22,35 +27,12 @@ export const createCharacterContext = (repository: CharacterRepo) => {
   const deleteCharacterUseCase = new DeleteCharacterUseCase(repository);
 
   return {
-    getById: (id: string) => getCharacterUseCase.execute(id),
-    getByOwner: (ownerUsername: string) =>
-      getCharactersByOwnerUseCase.execute(ownerUsername),
-    create: (
-      data: Omit<
-        CreateCharacterInput,
-        'id' | 'system' | 'characterClass' | 'level'
-      > & {
-        id?: string;
-        system?: string;
-        characterClass?: string;
-        level?: number;
-      },
-    ) =>
-      createCharacterUseCase.execute({
-        id: data.id || crypto.randomUUID(),
-        name: data.name,
-        ownerUsername: data.ownerUsername,
-        system: data.system || 'DnD_5e',
-        characterClass: data.characterClass || '',
-        race: data.race,
-        level: data.level || 1,
-      }),
-    update: (
-      id: string,
-      ownerUsername: string,
-      updates: UpdateCharacterInput['updates'],
-    ) => updateCharacterUseCase.execute({ id, ownerUsername, updates }),
-    delete: (id: string, ownerUsername: string) =>
-      deleteCharacterUseCase.execute(id, ownerUsername),
+    getById: getCharacterUseCase.execute.bind(getCharacterUseCase),
+    getByOwner: getCharactersByOwnerUseCase.execute.bind(
+      getCharactersByOwnerUseCase,
+    ),
+    create: createCharacterUseCase.execute.bind(createCharacterUseCase),
+    update: updateCharacterUseCase.execute.bind(updateCharacterUseCase),
+    delete: deleteCharacterUseCase.execute.bind(deleteCharacterUseCase),
   };
 };

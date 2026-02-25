@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { container } from '@/backend/shared/infrastructure/container';
+import { api } from '@api';
 
 export async function GET(req: Request) {
   try {
@@ -14,12 +14,9 @@ export async function GET(req: Request) {
       );
     }
 
-    const characters =
-      await container.contexts.character.getByOwner(ownerUsername);
+    const characters = await api.characters.getByOwner(ownerUsername);
 
-    return NextResponse.json(
-      characters.map((c: { toJSON: () => unknown }) => c.toJSON()),
-    );
+    return NextResponse.json(characters);
   } catch (err: unknown) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Unknown error' },
@@ -31,7 +28,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const character = await container.contexts.character.create(body);
+    const character = await api.characters.create(body);
 
     return NextResponse.json({ id: character.id }, { status: 201 });
   } catch (err: unknown) {

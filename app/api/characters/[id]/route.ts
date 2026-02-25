@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { container } from '@/backend/shared/infrastructure/container';
+import { api } from '@api';
 
 export async function GET(
   req: Request,
@@ -8,9 +8,9 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const character = await container.contexts.character.getById(id);
+    const character = await api.characters.getById(id);
 
-    return NextResponse.json(character.toJSON());
+    return NextResponse.json(character);
   } catch (err: unknown) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Unknown error' },
@@ -30,7 +30,7 @@ export async function PUT(
     if (!body.ownerUsername)
       throw new Error('ownerUsername query is required for update validation');
 
-    const character = await container.contexts.character.update(
+    const character = await api.characters.update(
       id,
       body.ownerUsername,
       body.updates,
@@ -57,7 +57,7 @@ export async function DELETE(
     if (!ownerUsername)
       throw new Error('ownerUsername query is required for deletion');
 
-    await container.contexts.character.delete(id, ownerUsername);
+    await api.characters.delete(id, ownerUsername);
 
     return NextResponse.json({ deleted: true });
   } catch (err: unknown) {

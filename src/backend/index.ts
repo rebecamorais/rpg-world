@@ -1,7 +1,6 @@
-// src/api/index.ts
-import { charactersApi } from '@/backend/contexts/characters/interfaces/characters.api';
+import { makeCharactersApi } from '@/backend/contexts/characters/interfaces/characters.api';
+import { container } from '@/backend/shared/infrastructure/container';
 
 export const api = {
-  characters: charactersApi,
-  // users: usersApi,
+  characters: makeCharactersApi(container.contexts.character),
 };
