@@ -1,5 +1,6 @@
 import { useRouter } from 'next/navigation';
 
+import { RPGWorldApi } from '@client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -15,18 +16,15 @@ export function useCreateCharacter(tSuccess: string, tError: string) {
 
   return useMutation({
     mutationFn: async (variables: CreateCharacterVariables) => {
-      const res = await fetch('/api/characters', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(variables),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || tError);
+      try {
+        const data = await RPGWorldApi.post<{ id: string }>(
+          '/api/characters',
+          variables,
+        );
+        return data;
+      } catch (error: unknown) {
+        throw error;
       }
-
-      return res.json() as Promise<{ id: string }>;
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['characters'] });
@@ -34,7 +32,7 @@ export function useCreateCharacter(tSuccess: string, tError: string) {
       router.push(`/system/${variables.system}/character/${data.id}`);
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      toast.error(`${tError}: ${error.message}`);
     },
   });
 }
