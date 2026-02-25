@@ -17,6 +17,9 @@ src/
 │   ├── context/         # Estados globais (UserContext, etc)
 │   ├── hooks/           # Data fetching (React Query)
 │   └── lib/             # Clientes/Utils exclusivos do frontend
+├── shared/              # Código compartilhado entre frontend e backend
+│   ├── systems/         # Regras específicas e schemas de cada RPG (ex: dnd5e)
+│   └── types/           # Tipagens globais (Character, User)
 └── app/                 # Next.js Routes (The Glue)
     └── api/             # HTTP endpoints que chamam o @api (backend)
 ```
