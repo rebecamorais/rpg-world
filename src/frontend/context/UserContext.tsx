@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 
-import { RPGWorldApi } from '@client';
+import { rpgWorldApi } from '@client';
 
 import type { User } from '@/shared/types/user';
 
@@ -26,7 +26,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (username: string, displayName?: string) => {
     try {
-      const user = await RPGWorldApi.post<User>('/api/auth/login', {
+      const user = await rpgWorldApi.post<User>('/api/auth/login', {
         username: username.trim(),
         displayName: displayName?.trim(),
       });

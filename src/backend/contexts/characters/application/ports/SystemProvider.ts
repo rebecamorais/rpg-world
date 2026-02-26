@@ -1,4 +1,4 @@
-export interface ISystemProvider {
+export interface SystemProvider {
   /**
    * Busca os detalhes de uma magia em uma API externa ou banco estático
    * @param spellIndex Identificador único da magia

@@ -1,10 +1,10 @@
 import {
+  CharacterService,
   CharacterUpdates,
   CreateCharacterInput,
-  ICharacterService,
 } from '../index';
 
-export const makeCharactersApi = (characterService: ICharacterService) => ({
+export const makeCharactersApi = (characterService: CharacterService) => ({
   getById: async (id: string) => {
     const character = await characterService.getById(id);
     if (!character) throw new Error('Não encontrado.');

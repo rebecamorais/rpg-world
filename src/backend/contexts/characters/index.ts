@@ -9,13 +9,13 @@ import {
   CharacterUpdates,
   UpdateCharacterUseCase,
 } from './application/update-character/update-character.use-case';
-import { ICharacterService } from './domain/ICharacterService';
+import { CharacterService } from './domain/CharacterService';
 import { CharacterRepo } from './domain/repository/character.repo';
 import { InMemoryCharacterRepository } from './infrastructure/in-memory-character.repository';
 
-export type { CharacterUpdates, CreateCharacterInput, ICharacterService };
+export type { CharacterUpdates, CreateCharacterInput, CharacterService };
 
-export const createCharacterContext = (): ICharacterService => {
+export const createCharacterContext = (): CharacterService => {
   const repository: CharacterRepo = new InMemoryCharacterRepository();
 
   const getCharacterUseCase = new GetCharacterUseCase(repository);

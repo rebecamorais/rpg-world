@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 
-import { RPGWorldApi } from '@client';
+import { rpgWorldApi } from '@client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -17,7 +17,7 @@ export function useCharacter(
     queryKey: ['character', id],
     queryFn: async () => {
       try {
-        const data = await RPGWorldApi.get<DnD5eCharacter>(
+        const data = await rpgWorldApi.get<DnD5eCharacter>(
           `/api/characters/${id}`,
         );
         return data;
@@ -31,7 +31,7 @@ export function useCharacter(
   const deleteMutation = useMutation({
     mutationFn: async (character: DnD5eCharacter) => {
       try {
-        await RPGWorldApi.delete(
+        await rpgWorldApi.delete(
           `/api/characters/${character.id}?ownerUsername=${encodeURIComponent(currentUser?.username || '')}`,
         );
       } catch (error: unknown) {
@@ -51,7 +51,7 @@ export function useCharacter(
   const updateMutation = useMutation({
     mutationFn: async (character: DnD5eCharacter) => {
       try {
-        await RPGWorldApi.put(`/api/characters/${character.id}`, {
+        await rpgWorldApi.put(`/api/characters/${character.id}`, {
           ownerUsername: currentUser?.username,
           updates: character,
         });
