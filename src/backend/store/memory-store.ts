@@ -1,10 +1,15 @@
 import type { DnD5eCharacter } from '@/shared/systems/dnd5e';
-import type { User } from '@/shared/types/user';
 
-const users = new Map<string, User>();
+// Legacy in-memory user shape — not the same as the Supabase User entity
+interface InMemoryUser {
+  username: string;
+  displayName?: string;
+}
+
+const users = new Map<string, InMemoryUser>();
 const characters = new Map<string, DnD5eCharacter>();
 
-export function addUser(user: User): User {
+export function addUser(user: InMemoryUser): InMemoryUser {
   if (users.has(user.username)) {
     return users.get(user.username)!;
   }
@@ -12,11 +17,14 @@ export function addUser(user: User): User {
   return users.get(user.username)!;
 }
 
-export function getUserByUsername(username: string): User | undefined {
+export function getUserByUsername(username: string): InMemoryUser | undefined {
   return users.get(username);
 }
 
-export function getOrCreateUser(username: string, displayName?: string): User {
+export function getOrCreateUser(
+  username: string,
+  displayName?: string,
+): InMemoryUser {
   const existing = users.get(username);
   if (existing) {
     if (displayName !== undefined) {
@@ -26,7 +34,7 @@ export function getOrCreateUser(username: string, displayName?: string): User {
     }
     return existing;
   }
-  const user: User = { username, displayName };
+  const user: InMemoryUser = { username, displayName };
   users.set(username, user);
   return user;
 }

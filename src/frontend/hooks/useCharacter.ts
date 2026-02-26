@@ -5,11 +5,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import type { DnD5eCharacter } from '@/shared/systems/dnd5e';
+import type { User } from '@/shared/types/user';
 
-export function useCharacter(
-  id: string,
-  currentUser: { username: string } | null,
-) {
+export function useCharacter(id: string, currentUser: User | null) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -32,7 +30,7 @@ export function useCharacter(
     mutationFn: async (character: DnD5eCharacter) => {
       try {
         await rpgWorldApi.delete(
-          `/api/characters/${character.id}?ownerUsername=${encodeURIComponent(currentUser?.username || '')}`,
+          `/api/characters/${character.id}?ownerUsername=${encodeURIComponent(currentUser?.id || '')}`,
         );
       } catch (error: unknown) {
         throw error;
@@ -52,7 +50,7 @@ export function useCharacter(
     mutationFn: async (character: DnD5eCharacter) => {
       try {
         await rpgWorldApi.put(`/api/characters/${character.id}`, {
-          ownerUsername: currentUser?.username,
+          ownerUsername: currentUser?.id,
           updates: character,
         });
       } catch (error: unknown) {

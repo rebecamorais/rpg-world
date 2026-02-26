@@ -5,20 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/frontend/components/ui/button';
-import { useCurrentUser } from '@/frontend/context/UserContext';
 
 export default function HeroCTA() {
-  const { currentUser } = useCurrentUser();
   const tLanding = useTranslations('landing');
   const router = useRouter();
-
-  const handleCtaClick = () => {
-    if (currentUser) {
-      router.push('/characters');
-    } else {
-      router.push('/login');
-    }
-  };
 
   return (
     <>
@@ -30,10 +20,10 @@ export default function HeroCTA() {
       </p>
       <Button
         size="lg"
-        onClick={handleCtaClick}
+        onClick={() => router.push('/login')}
         className="px-8 py-6 text-lg font-semibold"
       >
-        {currentUser ? tLanding('ctaDashboard') : tLanding('ctaStart')}
+        {tLanding('ctaStart')}
       </Button>
     </>
   );

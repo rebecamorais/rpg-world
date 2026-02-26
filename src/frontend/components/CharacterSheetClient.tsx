@@ -82,7 +82,7 @@ export default function CharacterSheetClient() {
     );
   }
 
-  if (!character || character.ownerUsername !== currentUser.username) {
+  if (!character || character.ownerUsername !== currentUser.id) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center p-4">
         <p className="text-muted-foreground">{t('notFoundOrNoPermission')}</p>
