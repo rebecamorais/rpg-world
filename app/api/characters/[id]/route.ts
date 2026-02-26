@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { api } from '@api';
+import { getApi } from '@api';
 
 export async function GET(
   req: Request,
@@ -8,7 +8,8 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const character = await api.characters.getById(id);
+    const { charactersApi } = await getApi();
+    const character = await charactersApi.getById(id);
 
     return NextResponse.json(character);
   } catch (err: unknown) {
@@ -27,10 +28,8 @@ export async function PUT(
     const { id } = await params;
     const body = await req.json();
 
-    if (!body.ownerUsername)
-      throw new Error('ownerUsername query is required for update validation');
-
-    const character = await api.characters.update({
+    const { charactersApi } = await getApi();
+    const character = await charactersApi.update({
       id,
       ownerUsername: body.ownerUsername,
       updates: body.updates,
@@ -57,7 +56,8 @@ export async function DELETE(
     if (!ownerUsername)
       throw new Error('ownerUsername query is required for deletion');
 
-    await api.characters.delete(id, ownerUsername);
+    const { charactersApi } = await getApi();
+    await charactersApi.delete(id, ownerUsername);
 
     return NextResponse.json({ deleted: true });
   } catch (err: unknown) {
