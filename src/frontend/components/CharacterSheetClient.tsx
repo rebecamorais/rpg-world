@@ -34,7 +34,7 @@ export default function CharacterSheetClient() {
     deleteCharacter,
     updateCharacter,
     isSaving,
-  } = useCharacter(id, currentUser);
+  } = useCharacter(id);
 
   const {
     character,

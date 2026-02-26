@@ -13,7 +13,7 @@ export default function CharacterNavSection({
   const { currentUser } = useCurrentUser();
   const tDash = useTranslations('dashboard');
 
-  const { character } = useCharacter(characterId, currentUser);
+  const { character } = useCharacter(characterId);
 
   const characterName = character?.name;
 

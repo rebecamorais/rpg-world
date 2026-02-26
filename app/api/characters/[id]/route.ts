@@ -1,69 +1,37 @@
-import { NextResponse } from 'next/server';
-
 import { getApi } from '@api';
 
-export async function GET(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  try {
-    const { id } = await params;
-    const { charactersApi } = await getApi();
-    const character = await charactersApi.getById(id);
+import { withAuth } from '@/backend/shared/http/route-handler';
 
-    return NextResponse.json(character);
-  } catch (err: unknown) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Unknown error' },
-      { status: 404 },
-    );
+type UpdateBody = {
+  updates: Record<string, unknown>;
+};
+
+export const GET = withAuth(async (user, _body, ctx) => {
+  const { id } = await ctx.params;
+  const { charactersApi } = await getApi();
+  const character = await charactersApi.getById(id);
+
+  if (!character || character.ownerUsername !== user.id) {
+    throw Object.assign(new Error('Not found'), { status: 404 });
   }
-}
 
-export async function PUT(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  try {
-    const { id } = await params;
-    const body = await req.json();
+  return character;
+});
 
-    const { charactersApi } = await getApi();
-    const character = await charactersApi.update({
-      id,
-      ownerUsername: body.ownerUsername,
-      updates: body.updates,
-    });
+export const PUT = withAuth<UpdateBody>(async (user, body, ctx) => {
+  const { id } = await ctx.params;
+  const { charactersApi } = await getApi();
+  const character = await charactersApi.update({
+    id,
+    ownerUsername: user.id,
+    updates: body.updates,
+  });
+  return { id: character.id };
+});
 
-    return NextResponse.json({ id: character.id });
-  } catch (err: unknown) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Unknown error' },
-      { status: 400 },
-    );
-  }
-}
-
-export async function DELETE(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  try {
-    const { id } = await params;
-    const { searchParams } = new URL(req.url);
-    const ownerUsername = searchParams.get('ownerUsername');
-
-    if (!ownerUsername)
-      throw new Error('ownerUsername query is required for deletion');
-
-    const { charactersApi } = await getApi();
-    await charactersApi.delete(id, ownerUsername);
-
-    return NextResponse.json({ deleted: true });
-  } catch (err: unknown) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Unknown error' },
-      { status: 400 },
-    );
-  }
-}
+export const DELETE = withAuth(async (user, _body, ctx) => {
+  const { id } = await ctx.params;
+  const { charactersApi } = await getApi();
+  await charactersApi.delete(id, user.id);
+  return null; // → 204 No Content
+});

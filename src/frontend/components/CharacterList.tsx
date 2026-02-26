@@ -10,7 +10,7 @@ import { useCharacters } from '@/frontend/hooks/useCharacters';
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();
   const t = useTranslations('characters');
-  const { characters, isLoading, error } = useCharacters(currentUser);
+  const { characters, isLoading, error } = useCharacters();
 
   if (!currentUser) return null;
 
