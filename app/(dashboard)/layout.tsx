@@ -1,10 +1,21 @@
+import { redirect } from 'next/navigation';
+
+import { getApi } from '@api';
+
 import Sidebar from '@/frontend/components/Sidebar';
 
-export default function CharactersLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { authApi } = await getApi();
+  const user = await authApi.getSessionUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
   return (
     <div className="bg-sidebar flex flex-1 text-zinc-100">
       {/* Sidebar */}
