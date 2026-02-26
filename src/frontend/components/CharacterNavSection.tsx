@@ -1,7 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 
-import { NavItem } from '@/frontend/components/nav-item';
+import { NavItem } from '@/frontend/components/ui/nav-item';
 import { useCurrentUser } from '@/frontend/context/UserContext';
 import { useCharacter } from '@/frontend/hooks/useCharacter';
 
