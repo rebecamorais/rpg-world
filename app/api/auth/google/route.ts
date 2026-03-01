@@ -19,10 +19,7 @@ export async function GET(req: Request) {
 
   if (error || !data.url) {
     return NextResponse.redirect(
-      new URL(
-        `/auth/error?message=${encodeURIComponent(error?.message || 'Failed to initialize Google OAuth')}`,
-        requestUrl.origin,
-      ),
+      new URL('/login?error=google_unavailable', requestUrl.origin),
     );
   }
 

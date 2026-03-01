@@ -24,6 +24,8 @@
     "usernameRequiredError": "Username is required.",
     "passwordRequiredError": "Password is required.",
     "loginFailed": "Failed to login.",
+    "googleUnavailable": "Google sign-in is temporarily unavailable. Please use the magic link instead.",
+    "authCallbackFailed": "Authentication failed. Please try again.",
     "welcome": "Welcome, {name}!"
   },
   "landing": {
