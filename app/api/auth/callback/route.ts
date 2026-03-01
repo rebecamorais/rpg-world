@@ -5,7 +5,7 @@ import { getApi } from '@api';
 export async function GET(req: Request) {
   const requestUrl = new URL(req.url);
   const code = requestUrl.searchParams.get('code');
-  const next = requestUrl.searchParams.get('next') ?? '/system';
+  const next = requestUrl.searchParams.get('next') ?? '/characters';
 
   if (!code) {
     return NextResponse.redirect(
