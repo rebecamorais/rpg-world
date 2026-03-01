@@ -9,7 +9,7 @@ export async function GET(req: Request) {
 
   if (!code) {
     return NextResponse.redirect(
-      new URL(`/auth/error?message=No+code+provided`, requestUrl.origin),
+      new URL('/login?error=auth_callback_failed', requestUrl.origin),
     );
   }
 
@@ -19,13 +19,10 @@ export async function GET(req: Request) {
 
     // Redirect to the intended page or default system dashboard
     return NextResponse.redirect(new URL(next, requestUrl.origin));
-  } catch (error) {
-    // If exchange fails (e.g., link expired), redirect to error page
+  } catch {
+    // If exchange fails (e.g., link expired), redirect back to login with error
     return NextResponse.redirect(
-      new URL(
-        `/auth/error?message=${encodeURIComponent((error as Error).message)}`,
-        requestUrl.origin,
-      ),
+      new URL('/login?error=auth_callback_failed', requestUrl.origin),
     );
   }
 }

@@ -24,6 +24,8 @@
     "usernameRequiredError": "Username é obrigatório.",
     "passwordRequiredError": "Senha é obrigatória.",
     "loginFailed": "Falha ao realizar login.",
+    "googleUnavailable": "Login com Google indisponível no momento. Use o link mágico.",
+    "authCallbackFailed": "Falha na autenticação. Tente novamente.",
     "welcome": "Bem-vindo, {name}!"
   },
   "landing": {

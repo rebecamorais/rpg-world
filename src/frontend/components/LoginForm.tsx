@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { useSearchParams } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
@@ -36,7 +38,17 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function LoginForm() {
   const { sendMagicLink } = useAuth();
   const t = useTranslations('login');
+  const searchParams = useSearchParams();
   const [emailSent, setEmailSent] = useState(false);
+
+  useEffect(() => {
+    const error = searchParams.get('error');
+    if (error === 'google_unavailable') {
+      toast.error(t('googleUnavailable'));
+    } else if (error === 'auth_callback_failed') {
+      toast.error(t('authCallbackFailed'));
+    }
+  }, [searchParams, t]);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
