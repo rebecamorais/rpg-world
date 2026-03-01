@@ -1,19 +1,23 @@
 {
   "name": "rpg-world",
   "version": "0.1.0",
+  "engines": {
+    "node": "24.x"
+  },
   "private": true,
   "scripts": {
-    "dev": "supabase start && next dev",
+    "dev": "npm run db:start && next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
     "test": "vitest",
     "prepare": "husky",
-    "db:open": "open http://localhost:54323 && open http://localhost:54324",
-    "db:reset": "supabase db reset",
     "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
     "db:status": "supabase status",
-    "db:stop": "supabase stop"
+    "db:open": "open http://localhost:54323 && open http://localhost:54324"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

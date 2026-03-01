@@ -42,5 +42,5 @@ yarn-error.log*
 next-env.d.ts
 
 # Supabase local
-supabase/.branches/
-supabase/.temp/
+supabase/.branches
+supabase/.temp
