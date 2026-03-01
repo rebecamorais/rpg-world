@@ -3,18 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "supabase start && next dev",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
     "test": "vitest",
     "prepare": "husky",
-    "db:start": "supabase start",
-    "db:stop": "supabase stop",
-    "db:status": "supabase status",
+    "db:open": "open http://localhost:54323 && open http://localhost:54324",
     "db:reset": "supabase db reset",
-    "db:studio": "supabase studio"
+    "db:start": "supabase start",
+    "db:status": "supabase status",
+    "db:stop": "supabase stop"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
