@@ -9,7 +9,12 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "test": "vitest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:status": "supabase status",
+    "db:reset": "supabase db reset",
+    "db:studio": "supabase studio"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -49,6 +54,7 @@
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
+    "supabase": "^2.76.15",
     "tailwindcss": "^4",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5",
