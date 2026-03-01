@@ -1,6 +1,6 @@
-import { ISystemProvider } from '../../application/ports/ISystemProvider';
+import { SystemProvider } from '../../application/ports/SystemProvider';
 
-export class DnD5eAPIAdapter implements ISystemProvider {
+export class DnD5eAPIAdapter implements SystemProvider {
   private baseUrl = 'https://www.dnd5eapi.co/api';
 
   async getSpellDetails(

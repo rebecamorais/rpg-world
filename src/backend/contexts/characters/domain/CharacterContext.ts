@@ -3,7 +3,7 @@ import { CharacterUpdates } from '../application/update-character/update-charact
 import { Character } from './entity/Character';
 import { DnD5eCharacter } from './entity/DnD5eCharacter';
 
-export interface ICharacterService {
+export interface CharacterContext {
   getById(id: string): Promise<Character | null>;
   getByOwner(ownerUsername: string): Promise<Character[]>;
   create(data: CreateCharacterInput): Promise<DnD5eCharacter>;

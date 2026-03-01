@@ -1,4 +1,6 @@
-// src/backend/shared/infrastructure/container.ts
+import { SupabaseClient } from '@supabase/supabase-js';
+import 'server-only';
+
 import { CharacterRepo } from '@/backend/contexts/characters/domain/repository/character.repo';
 import { InMemoryCharacterRepository } from '@/backend/contexts/characters/infrastructure/in-memory-character.repository';
 
@@ -6,26 +8,21 @@ import { Contexts } from './contexts';
 
 export interface ContainerRegistry {
   characterRepo: CharacterRepo;
+  dbClient: SupabaseClient;
+  authClient: SupabaseClient;
 }
 
-class Container {
-  private static instance: Container;
+export class Container {
   private dependencies: Map<keyof ContainerRegistry, unknown> = new Map();
   private _contexts: Contexts;
 
-  private constructor() {
-    // Eagerly initialize core dependencies
+  constructor(authClient: SupabaseClient, dbClient: SupabaseClient) {
     const characterRepo = new InMemoryCharacterRepository();
     this.register('characterRepo', characterRepo);
+    this.register('dbClient', dbClient);
+    this.register('authClient', authClient);
 
     this._contexts = new Contexts(this);
-  }
-
-  public static getInstance(): Container {
-    if (!Container.instance) {
-      Container.instance = new Container();
-    }
-    return Container.instance;
   }
 
   get contexts() {
@@ -47,5 +44,3 @@ class Container {
     return dependency as ContainerRegistry[K];
   }
 }
-
-export const container = Container.getInstance();

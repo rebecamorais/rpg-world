@@ -35,7 +35,7 @@ export default function Providers({
         messages={messages}
         timeZone={timeZone}
       >
-        <UserProvider>
+        <UserProvider user={null}>
           <TooltipProvider>{children}</TooltipProvider>
         </UserProvider>
       </NextIntlClientProvider>

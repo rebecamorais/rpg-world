@@ -64,12 +64,11 @@ export default function NewCharacterForm() {
   }
 
   const onSubmit = (data: NewCharacterFormValues) => {
-    if (!currentUser) return;
     createMutation.mutate(
       {
         name: data.name.trim(),
         system: data.system,
-        ownerUsername: currentUser.username,
+        ownerUsername: currentUser.id,
       },
       {
         onError: (err: Error) => {

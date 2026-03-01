@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 
-import { RPGWorldApi } from '@client';
+import { rpgWorldApi } from '@client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -17,7 +17,7 @@ export function useCreateCharacter(tSuccess: string, tError: string) {
   return useMutation({
     mutationFn: async (variables: CreateCharacterVariables) => {
       try {
-        const data = await RPGWorldApi.post<{ id: string }>(
+        const data = await rpgWorldApi.post<{ id: string }>(
           '/api/characters',
           variables,
         );

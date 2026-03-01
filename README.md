@@ -12,12 +12,12 @@ Um aplicativo web para criação e gestão de fichas de personagens de RPG de me
 - **APIs Externas:** [D&D 5e API](https://www.dnd5eapi.co/) (Magias e recursos adicionais)
 - **Banco de Dados/Auth:** Supabase (Planejado / Em andamento), versão inicial com persistência em JSON estrito.
 
-## ✨ Funcionalidades Principais (Fase 1)
+## ✨ Funcionalidades Principais (Fase 1 Em Desenvolvimento)
 
 O projeto está atualmente focado em fechar sua base funcional com as seguintes metas:
 
 1. **Gestão e Escopo de Contas:** Controle de personagens amarrado à usuários cadastrados (via banco de dados).
-2. **Limite de 2 Personagens:** Restrição inicial por usuário para manter o escopo seguro e focado.
+2. **Limite de 10 Personagens:** Restrição inicial por usuário para manter o escopo seguro e focado.
 3. **Múltiplos Sistemas (Arquitetura):** Código modular para permitir adicionar mais sistemas além do D&D 5e facilmente no futuro.
 4. **Ficha Completa em uma Single Page:** Todos os atributos, perícias, salvaguardas, PV, CA e Iniciativa numa tela compacta com suporte para foto de perfil do personagem.
 5. **Automação das Regras (D&D 5e):** Cálculo automático e estrito de Modificadores, Bônus de Proficiência e Percepção Passiva a partir de Atributos Base.

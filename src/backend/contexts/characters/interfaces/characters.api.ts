@@ -1,23 +1,23 @@
 import {
+  CharacterContext,
   CharacterUpdates,
   CreateCharacterInput,
-  ICharacterService,
 } from '../index';
 
-export const makeCharactersApi = (characterService: ICharacterService) => ({
+export const makeCharactersApi = (characterContext: CharacterContext) => ({
   getById: async (id: string) => {
-    const character = await characterService.getById(id);
+    const character = await characterContext.getById(id);
     if (!character) throw new Error('Não encontrado.');
     return character.toJSON();
   },
 
   getByOwner: async (ownerUsername: string) => {
-    const characters = await characterService.getByOwner(ownerUsername);
+    const characters = await characterContext.getByOwner(ownerUsername);
     return characters.map((c) => c.toJSON());
   },
 
   create: async (data: CreateCharacterInput) => {
-    const character = await characterService.create(data);
+    const character = await characterContext.create(data);
     return { id: character.id };
   },
 
@@ -30,7 +30,7 @@ export const makeCharactersApi = (characterService: ICharacterService) => ({
     ownerUsername: string;
     updates: CharacterUpdates;
   }) => {
-    const character = await characterService.update({
+    const character = await characterContext.update({
       id,
       ownerUsername,
       updates,
@@ -39,7 +39,7 @@ export const makeCharactersApi = (characterService: ICharacterService) => ({
   },
 
   delete: async (id: string, ownerUsername: string) => {
-    await characterService.delete(id, ownerUsername);
+    await characterContext.delete(id, ownerUsername);
     return { deleted: true };
   },
 });

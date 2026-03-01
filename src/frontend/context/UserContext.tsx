@@ -1,49 +1,25 @@
 'use client';
 
-import {
-  type ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
-
-import { RPGWorldApi } from '@client';
+import { type ReactNode, createContext, useContext, useMemo } from 'react';
 
 import type { User } from '@/shared/types/user';
 
 interface UserContextValue {
   currentUser: User | null;
-  login: (username: string, displayName?: string) => Promise<User>;
-  logout: () => void;
 }
 
 const UserContext = createContext<UserContextValue | null>(null);
 
-export function UserProvider({ children }: { children: ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-  const login = useCallback(async (username: string, displayName?: string) => {
-    try {
-      const user = await RPGWorldApi.post<User>('/api/auth/login', {
-        username: username.trim(),
-        displayName: displayName?.trim(),
-      });
-      setCurrentUser(user);
-      return user;
-    } catch (error: unknown) {
-      throw error;
-    }
-  }, []);
-
-  const logout = useCallback(() => {
-    setCurrentUser(null);
-  }, []);
-
+export function UserProvider({
+  user,
+  children,
+}: {
+  user: User | null;
+  children: ReactNode;
+}) {
   const value = useMemo<UserContextValue>(
-    () => ({ currentUser, login, logout }),
-    [currentUser, login, logout],
+    () => ({ currentUser: user }),
+    [user],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
