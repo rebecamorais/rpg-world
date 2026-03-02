@@ -11,13 +11,20 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "test": "vitest",
     "prepare": "husky",
     "db:start": "supabase start",
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
     "db:status": "supabase status",
-    "db:open": "open http://localhost:54323 && open http://localhost:54324"
+    "db:open": "open http://localhost:54323 && open http://localhost:54324",
+    "test:start": "supabase start --config supabase-test/config.toml",
+    "test:stop": "supabase stop --config supabase-test/config.toml",
+    "test:reset": "supabase db reset --config supabase-test/config.toml",
+    "test:status": "supabase status --config supabase-test/config.toml",
+    "start-deps": "npm run db:start & npm run test:start",
+    "stop-deps": "npm run db:stop & npm run test:stop",
+    "test": "vitest",
+    "test:integration": "npm run test:reset && vitest run --config vitest.config.integration.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

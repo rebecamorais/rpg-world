@@ -1,0 +1,22 @@
+# supabase-test/config.toml
+
+project_id = "rpg-world-test" # ID diferente para não chocar no Docker
+
+[api]
+port = 54331 # Dev usa 54321
+
+[db]
+port = 54332 # Dev usa 54322
+major_version = 17
+
+[db.migrations]
+migrations_path = "../database/migrations"
+
+[studio]
+port = 54333 # Dev usa 54323
+
+[inbucket]
+port = 54334 # Dev usa 54324
+
+[auth]
+site_url = "http://localhost:3000"

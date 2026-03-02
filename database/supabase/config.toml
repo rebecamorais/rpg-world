@@ -56,6 +56,7 @@ enabled = true
 # Specifies an ordered list of schema files that describe your database.
 # Supports glob patterns relative to supabase directory: "./schemas/*.sql"
 schema_paths = []
+migrations_path = "../database/migrations"
 
 [db.seed]
 # If enabled, seeds the database after migrations during a db reset.
