@@ -2,7 +2,7 @@
 
 Um aplicativo web para criação e gestão de fichas de personagens de RPG de mesa, focado inicialmente no sistema **Dungeons & Dragons 5ª Edição**. Projetado para ser rápido, acessível e expansível.
 
-🔗 **Acesse o projeto online:** [rpg-world-nu.vercel.app](https://rpg-world-nu.vercel.app/)
+🔗 **Acesse o projeto online:** [rpgworldapp.com](https://rpgworldapp.com/)
 
 ## 🚀 Tecnologias
 

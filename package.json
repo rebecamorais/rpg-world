@@ -24,7 +24,7 @@
     "start-deps": "npm run db:start & npm run test:start",
     "stop-deps": "npm run db:stop & npm run test:stop",
     "test": "vitest",
-    "test:integration": "npm run test:reset && vitest run --config vitest.config.integration.ts"
+    "test:integration": "npm run test:reset && vitest run --config ./tests/vitest.config.integration.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
