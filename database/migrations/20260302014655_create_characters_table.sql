@@ -43,16 +43,16 @@ ALTER TABLE public.characters ENABLE ROW LEVEL SECURITY;
 -- Policies com nomenclatura técnica
 CREATE POLICY "characters_select_owner" 
   ON public.characters FOR SELECT 
-  USING ( (SELECT auth.uid()) = id );
+  USING ( (SELECT auth.uid()) = owner_id );
 
 CREATE POLICY "characters_insert_owner" 
   ON public.characters FOR INSERT 
-  WITH CHECK ( (SELECT auth.uid()) = id );
+  WITH CHECK ( (SELECT auth.uid()) = owner_id );
 
 CREATE POLICY "characters_update_owner" 
   ON public.characters FOR UPDATE 
-  USING ( (SELECT auth.uid()) = id );
+  USING ( (SELECT auth.uid()) = owner_id );
 
 CREATE POLICY "characters_delete_owner" 
   ON public.characters FOR DELETE 
-  USING ( (SELECT auth.uid()) = id );
+  USING ( (SELECT auth.uid()) = owner_id );

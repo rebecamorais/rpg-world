@@ -2,7 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
 import { CharacterRepo } from '@/backend/contexts/characters/domain/repository/character.repo';
-import { InMemoryCharacterRepository } from '@/backend/contexts/characters/infrastructure/in-memory-character.repository';
+import { SupabaseCharacterRepository } from '@/backend/contexts/characters/infrastructure/repositories/supabase-character.repository';
 
 import { Contexts } from './contexts';
 
@@ -17,7 +17,7 @@ export class Container {
   private _contexts: Contexts;
 
   constructor(authClient: SupabaseClient, dbClient: SupabaseClient) {
-    const characterRepo = new InMemoryCharacterRepository();
+    const characterRepo = new SupabaseCharacterRepository(dbClient);
     this.register('characterRepo', characterRepo);
     this.register('dbClient', dbClient);
     this.register('authClient', authClient);

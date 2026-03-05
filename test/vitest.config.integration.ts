@@ -11,6 +11,10 @@ export default defineConfig({
     include: ['src/**/*.integration.test.ts'],
     globals: true,
     testTimeout: 30000,
+    setupFiles: [
+      path.resolve(__dirname, './setup-vitest.ts'),
+      path.resolve(__dirname, './setup-integration.ts'),
+    ],
   },
   resolve: {
     alias: {
