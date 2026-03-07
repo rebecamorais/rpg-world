@@ -9,7 +9,19 @@ export function useAuth() {
     email: string,
     password: string,
   ): Promise<void> => {
-    await rpgWorldApi.post<void>('/api/auth/login', { email, password });
+    const response = await rpgWorldApi.post<{
+      passwordChangeRequired: boolean;
+    }>('/api/auth/login', { email, password });
+
+    if (response.passwordChangeRequired) {
+      window.location.href = '/change-password';
+    } else {
+      window.location.href = '/characters';
+    }
+  };
+
+  const updatePassword = async (newPassword: string): Promise<void> => {
+    await rpgWorldApi.post<void>('/api/auth/update-password', { newPassword });
     window.location.href = '/characters';
   };
 
@@ -18,5 +30,5 @@ export function useAuth() {
     window.location.href = '/login';
   };
 
-  return { sendMagicLink, signInWithPassword, signOut };
+  return { sendMagicLink, signInWithPassword, updatePassword, signOut };
 }

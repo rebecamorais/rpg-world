@@ -10,6 +10,7 @@ describe('SignInWithMagicLinkUseCase', () => {
       signInWithOtp: vi.fn().mockResolvedValue(undefined),
       signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
+      updatePassword: vi.fn(),
       signOut: vi.fn(),
     };
 
@@ -28,6 +29,7 @@ describe('SignInWithMagicLinkUseCase', () => {
       signInWithOtp: vi.fn(),
       signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
+      updatePassword: vi.fn(),
       signOut: vi.fn(),
     };
 

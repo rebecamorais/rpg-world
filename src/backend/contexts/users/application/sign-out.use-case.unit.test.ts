@@ -10,6 +10,7 @@ describe('SignOutUseCase', () => {
       signInWithOtp: vi.fn(),
       signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
+      updatePassword: vi.fn(),
       signOut: vi.fn().mockResolvedValue(undefined),
     };
 

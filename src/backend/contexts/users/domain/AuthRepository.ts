@@ -5,5 +5,6 @@ export interface AuthRepository {
   signInWithOtp(email: string, redirectTo: string): Promise<void>;
   signInWithPassword(email: string, password: string): Promise<void>;
   exchangeCodeForSession(code: string): Promise<void>;
+  updatePassword(newPassword: string): Promise<void>;
   signOut(): Promise<void>;
 }

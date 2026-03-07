@@ -126,5 +126,18 @@
     "myCharacters": "Meus Personagens",
     "attributes": "Atributos",
     "spells": "Magias"
+  },
+  "changePassword": {
+    "title": "Altere sua Senha",
+    "subtitle": "Você está usando uma senha temporária. Para sua segurança, escolha uma nova senha.",
+    "newPasswordLabel": "Nova Senha",
+    "newPasswordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Confirmar Nova Senha",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Atualizar Senha",
+    "processing": "Atualizando...",
+    "success": "Senha atualizada com sucesso!",
+    "error": "Falha ao atualizar senha.",
+    "passwordsDoNotMatch": "As senhas não coincidem."
   }
 }

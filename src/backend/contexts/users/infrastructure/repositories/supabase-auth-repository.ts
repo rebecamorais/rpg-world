@@ -55,6 +55,16 @@ export class SupabaseAuthRepository implements AuthRepository {
     }
   }
 
+  async updatePassword(newPassword: string): Promise<void> {
+    const { error } = await this.authClient.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (error) {
+      throw new Error(`Failed to update password: ${error.message}`);
+    }
+  }
+
   async signOut(): Promise<void> {
     const { error } = await this.authClient.auth.signOut();
 

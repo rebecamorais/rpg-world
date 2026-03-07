@@ -4,19 +4,19 @@ import { getApi } from '@api';
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json();
+    const { newPassword } = await req.json();
 
-    if (!email || !password) {
+    if (!newPassword) {
       return NextResponse.json(
-        { error: 'Email and password are required' },
+        { error: 'New password is required' },
         { status: 400 },
       );
     }
 
     const { authApi } = await getApi();
-    const result = await authApi.signInWithPassword(email, password);
+    await authApi.updatePassword(newPassword);
 
-    return NextResponse.json(result, { status: 200 });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (err: unknown) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Unknown error' },

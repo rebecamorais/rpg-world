@@ -10,6 +10,7 @@ describe('CallbackExchangeUseCase', () => {
       signInWithOtp: vi.fn(),
       signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn().mockResolvedValue(undefined),
+      updatePassword: vi.fn(),
       signOut: vi.fn(),
     };
 
@@ -27,6 +28,7 @@ describe('CallbackExchangeUseCase', () => {
       signInWithOtp: vi.fn(),
       signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
+      updatePassword: vi.fn(),
       signOut: vi.fn(),
     };
 

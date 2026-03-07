@@ -126,5 +126,18 @@
     "myCharacters": "My Characters",
     "attributes": "Attributes",
     "spells": "Spells"
+  },
+  "changePassword": {
+    "title": "Change Your Password",
+    "subtitle": "You are using a temporary password. For your security, please choose a new one.",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Update Password",
+    "processing": "Updating...",
+    "success": "Password updated successfully!",
+    "error": "Failed to update password.",
+    "passwordsDoNotMatch": "Passwords do not match."
   }
 }
