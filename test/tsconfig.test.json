@@ -1,7 +1,15 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "types": ["node", "vitest/globals"]
+    "types": ["node", "vitest/globals"],
+    "baseUrl": ".."
   },
-  "include": ["../src/**/*.test.ts", "../src/**/*.test.tsx", "./**/*.ts"]
+  "include": [
+    "../src/**/*.test.ts",
+    "../src/**/*.test.tsx",
+    "../src/**/*.integration.test.ts",
+    "./**/*.ts",
+    "../lib/**/*.ts",
+    "../shared/**/*.ts"
+  ]
 }

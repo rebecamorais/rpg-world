@@ -23,14 +23,16 @@
     "db:test:stop": "supabase stop --workdir database/db-test",
     "db:test:reset": "supabase db reset --workdir database/db-test",
     "db:test:status": "supabase status --workdir database/db-test",
-    "types:update": "supabase gen types typescript --local --workdir database/db-dev > src/lib/types/database.ts",
+    "types:update": "supabase gen types typescript --local --workdir database/db-dev > lib/types/database.ts",
     "infra:clean": "docker stop $(docker ps -aq) 2>/dev/null || true && docker system prune --volumes -f",
     "infra:init": "npm run setup && npm run infra:clean && npm run infra:start",
     "infra:start": "npm run db:dev:start && npm run db:test:start",
     "infra:stop": "npm run db:dev:stop && npm run db:test:stop",
-    "test": "vitest",
+    "test": "npm run test:unit && npm run infra:start && npm run test:integration",
+    "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "test:integration": "npm run db:test:start && vitest run --config ./test/vitest.config.integration.ts"
+    "test:unit": "vitest run --config ./test/vitest.config.unit.ts",
+    "test:integration": "vitest run --config ./test/vitest.config.integration.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -77,6 +79,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.21.0",
     "typescript": "^5",
+    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.0.18"
   },
   "lint-staged": {
