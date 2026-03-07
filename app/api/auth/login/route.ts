@@ -1,27 +1,26 @@
 import { NextResponse } from 'next/server';
 
-import { getOrCreateUser } from '@backend/store/memory-store';
+import { getApi } from '@api';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const { email, password } = await req.json();
 
-    if (!body.username) {
+    if (!email || !password) {
       return NextResponse.json(
-        { error: 'Username is required' },
+        { error: 'Email and password are required' },
         { status: 400 },
       );
     }
 
-    // Temporary implementation using memory store directly
-    // This will be replaced by container.contexts.user later
-    const user = getOrCreateUser(body.username, body.displayName);
+    const { authApi } = await getApi();
+    await authApi.signInWithPassword(email, password);
 
-    return NextResponse.json(user, { status: 200 });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (err: unknown) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Unknown error' },
-      { status: 500 },
+      { status: 400 },
     );
   }
 }

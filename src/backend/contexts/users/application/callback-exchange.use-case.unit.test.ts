@@ -8,6 +8,7 @@ describe('CallbackExchangeUseCase', () => {
     const mockRepository: AuthRepository = {
       getSessionUser: vi.fn(),
       signInWithOtp: vi.fn(),
+      signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn().mockResolvedValue(undefined),
       signOut: vi.fn(),
     };
@@ -24,6 +25,7 @@ describe('CallbackExchangeUseCase', () => {
     const mockRepository: AuthRepository = {
       getSessionUser: vi.fn(),
       signInWithOtp: vi.fn(),
+      signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
       signOut: vi.fn(),
     };

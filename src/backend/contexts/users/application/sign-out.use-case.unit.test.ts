@@ -8,6 +8,7 @@ describe('SignOutUseCase', () => {
     const mockRepository: AuthRepository = {
       getSessionUser: vi.fn(),
       signInWithOtp: vi.fn(),
+      signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
       signOut: vi.fn().mockResolvedValue(undefined),
     };

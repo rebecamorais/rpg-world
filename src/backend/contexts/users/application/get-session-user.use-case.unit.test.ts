@@ -9,6 +9,7 @@ describe('GetSessionUserUseCase', () => {
     const mockRepository: AuthRepository = {
       getSessionUser: vi.fn().mockResolvedValue(mockUser),
       signInWithOtp: vi.fn(),
+      signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
       signOut: vi.fn(),
     };
@@ -24,6 +25,7 @@ describe('GetSessionUserUseCase', () => {
     const mockRepository: AuthRepository = {
       getSessionUser: vi.fn().mockResolvedValue(null),
       signInWithOtp: vi.fn(),
+      signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
       signOut: vi.fn(),
     };

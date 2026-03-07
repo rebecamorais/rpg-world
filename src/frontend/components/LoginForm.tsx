@@ -27,26 +27,39 @@ import {
 import { Input } from '@/frontend/components/ui/input';
 import { useAuth } from '@/frontend/hooks/useAuth';
 
-const loginSchema = z.object({
-  email: z.string().email({ message: 'E-mail inválido.' }),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
+interface LoginFormValues {
+  email: string;
+  password?: string;
+}
 
 export default function LoginForm() {
-  const { sendMagicLink } = useAuth();
+  const { sendMagicLink, signInWithPassword } = useAuth();
   const t = useTranslations('login');
   const [emailSent, setEmailSent] = useState(false);
+  const [authMode, setAuthMode] = useState<'magic' | 'password'>('password');
+
+  const loginSchema = z.object({
+    email: z.string().email({ message: t('invalidEmailError') }),
+    password: z.string().optional(),
+  });
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: '' },
+    defaultValues: { email: '', password: '' },
   });
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      await sendMagicLink(data.email);
-      setEmailSent(true);
+      if (authMode === 'magic') {
+        await sendMagicLink(data.email);
+        setEmailSent(true);
+      } else {
+        if (!data.password) {
+          form.setError('password', { message: t('passwordRequiredError') });
+          return;
+        }
+        await signInWithPassword(data.email, data.password);
+      }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : t('loginFailed');
       toast.error(msg);
@@ -60,13 +73,16 @@ export default function LoginForm() {
 
   if (emailSent) {
     return (
-      <Card className="mx-auto w-full max-w-sm">
+      <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 backdrop-blur-md">
         <CardHeader>
-          <CardTitle>Verifique seu e-mail 📬</CardTitle>
-          <CardDescription>
-            Enviamos um link mágico para{' '}
-            <strong>{form.getValues('email')}</strong>. Clique no link para
-            entrar.
+          <CardTitle className="text-white">{t('verifyEmailTitle')}</CardTitle>
+          <CardDescription className="text-gray-400">
+            {t.rich('verifyEmailDescription', {
+              email: form.getValues('email'),
+              bold: (chunks) => (
+                <strong className="text-white">{chunks}</strong>
+              ),
+            })}
           </CardDescription>
         </CardHeader>
       </Card>
@@ -74,14 +90,39 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-sm">
+    <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
       <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
-        <CardDescription>
-          Acesse sua conta com um link mágico por e-mail ou Google.
+        <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
+          {t('title')}
+        </CardTitle>
+        <CardDescription className="text-gray-400">
+          {t('subtitle')}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
+        <div className="flex rounded-lg bg-white/5 p-1">
+          <button
+            onClick={() => setAuthMode('magic')}
+            className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-all ${
+              authMode === 'magic'
+                ? 'bg-blue-600 text-white shadow-lg'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            {t('magicLinkTab')}
+          </button>
+          <button
+            onClick={() => setAuthMode('password')}
+            className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-all ${
+              authMode === 'password'
+                ? 'bg-blue-600 text-white shadow-lg'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            {t('passwordTab')}
+          </button>
+        </div>
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -92,12 +133,15 @@ export default function LoginForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>E-mail</FormLabel>
+                  <FormLabel className="text-gray-300">
+                    {t('emailLabel')}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="email"
-                      placeholder="seu@email.com"
+                      placeholder={t('emailPlaceholder')}
                       autoComplete="email"
+                      className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
                       {...field}
                     />
                   </FormControl>
@@ -106,41 +150,82 @@ export default function LoginForm() {
               )}
             />
 
+            {authMode === 'password' && (
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-300">
+                      {t('passwordLabel')}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder={t('passwordPlaceholder')}
+                        autoComplete="current-password"
+                        className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {authMode === 'magic' && (
+              <div className="rounded-md border border-yellow-500/20 bg-yellow-500/10 p-2.5">
+                <p className="text-center text-xs text-yellow-500/80">
+                  {t('magicLinkDisabledWarning')}
+                </p>
+              </div>
+            )}
+
             {form.formState.errors.root && (
-              <p className="text-sm text-red-600 dark:text-red-400">
+              <p className="text-sm text-red-400">
                 {form.formState.errors.root.message}
               </p>
             )}
 
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting}
-              className="w-full"
+              disabled={authMode === 'magic' || form.formState.isSubmitting}
+              className={`mt-2 w-full font-semibold transition-all ${
+                authMode === 'magic'
+                  ? 'cursor-not-allowed bg-blue-600/30 opacity-50'
+                  : 'bg-blue-600 hover:bg-blue-700'
+              }`}
             >
               {form.formState.isSubmitting
-                ? 'Enviando...'
-                : 'Enviar link mágico'}
+                ? t('processing')
+                : authMode === 'magic'
+                  ? t('magicLinkDisabledButton')
+                  : t('submit')}
             </Button>
           </form>
         </Form>
 
-        <div className="relative">
+        <div className="relative my-2">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
+            <span className="w-full border-t border-white/10" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background text-muted-foreground px-2">ou</span>
+            <span className="bg-black/60 px-2 text-gray-500">
+              {t('dividerText')}
+            </span>
           </div>
         </div>
 
         <Button
           type="button"
           variant="outline"
-          className="w-full"
+          className="w-full cursor-not-allowed border-white/10 bg-white/5 text-gray-300 opacity-50 hover:bg-white/10 hover:text-white"
+          disabled
           onClick={handleGoogleSignIn}
         >
           <GoogleIcon />
-          Continuar com Google
+          {t('googleLogin')}
         </Button>
       </CardContent>
     </Card>

@@ -8,6 +8,7 @@ describe('SignInWithMagicLinkUseCase', () => {
     const mockRepository: AuthRepository = {
       getSessionUser: vi.fn(),
       signInWithOtp: vi.fn().mockResolvedValue(undefined),
+      signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
       signOut: vi.fn(),
     };
@@ -25,6 +26,7 @@ describe('SignInWithMagicLinkUseCase', () => {
     const mockRepository: AuthRepository = {
       getSessionUser: vi.fn(),
       signInWithOtp: vi.fn(),
+      signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
       signOut: vi.fn(),
     };

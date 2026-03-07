@@ -36,6 +36,17 @@ export class SupabaseAuthRepository implements AuthRepository {
     }
   }
 
+  async signInWithPassword(email: string, password: string): Promise<void> {
+    const { error } = await this.authClient.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      throw new Error(`Failed to sign in with password: ${error.message}`);
+    }
+  }
+
   async exchangeCodeForSession(code: string): Promise<void> {
     const { error } = await this.authClient.auth.exchangeCodeForSession(code);
 
