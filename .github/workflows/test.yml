@@ -1,0 +1,54 @@
+name: CI - RPG World Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: http://localhost:54421
+      SUPABASE_URL: http://localhost:54421
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_test
+      SUPABASE_SERVICE_ROLE_KEY: sb_secret_test
+      GOOGLE_CLIENT_ID: mock
+      GOOGLE_CLIENT_SECRET: mock
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Type Check
+        run: npx tsc --noEmit
+
+      - name: Run Lint
+        run: npm run lint
+
+      # 1. Rodar Testes Unitários Primeiro (Fail Fast)
+      - name: Run Unit Tests
+        run: npm run test
+
+      # 2. Preparar Infraestrutura de Integração
+      - name: Initialize Database Structure (Symlinks)
+        run: npm run setup
+
+      - name: Start Supabase Test Environment
+        run: npm run db:test:start
+
+      - name: Run Migrations & Seed
+        run: npm run db:test:reset
+
+      # 3. Rodar Testes de Integração
+      - name: Run Integration Tests
+        run: npm run test:integration
