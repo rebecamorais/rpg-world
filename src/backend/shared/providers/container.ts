@@ -16,8 +16,6 @@ export class Container {
   private _contexts: Contexts;
 
   constructor(authClient: SupabaseClient, dbClient: SupabaseClient) {
-    const characterRepo = new SupabaseCharacterRepository(dbClient);
-    this.register('characterRepo', characterRepo);
     this.register('dbClient', dbClient);
     this.register('authClient', authClient);
 

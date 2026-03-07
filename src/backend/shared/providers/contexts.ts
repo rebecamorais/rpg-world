@@ -15,7 +15,7 @@ export class Contexts {
 
   get character() {
     if (!this._character) {
-      this._character = createCharacterContext();
+      this._character = createCharacterContext(this.container.get('dbClient'));
     }
     return this._character;
   }

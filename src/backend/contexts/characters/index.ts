@@ -1,3 +1,5 @@
+import { SupabaseClient } from '@supabase/supabase-js';
+
 import { GetCharacterUseCase } from './application';
 import {
   CreateCharacterInput,
@@ -10,14 +12,14 @@ import {
   UpdateCharacterUseCase,
 } from './application/update-character/update-character.use-case';
 import { CharacterContext } from './domain/CharacterContext';
-import { CharacterRepo } from './domain/repository/character.repo';
-import { InMemoryCharacterRepository } from './infrastructure/in-memory-character.repository';
+import { SupabaseCharacterRepository } from './infrastructure/repositories/supabase-character.repository';
 
 export type { CharacterContext, CharacterUpdates, CreateCharacterInput };
 
-export const createCharacterContext = (): CharacterContext => {
-  const repository: CharacterRepo = new InMemoryCharacterRepository();
-
+export const createCharacterContext = (
+  dbClient: SupabaseClient,
+): CharacterContext => {
+  const repository = new SupabaseCharacterRepository(dbClient);
   const getCharacterUseCase = new GetCharacterUseCase(repository);
   const getCharactersByOwnerUseCase = new GetCharactersByOwnerUseCase(
     repository,
