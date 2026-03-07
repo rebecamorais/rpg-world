@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 import { Droplet, Settings2, Wand2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -16,7 +17,6 @@ import {
 } from '@/frontend/components/ui/dialog';
 import { Input } from '@/frontend/components/ui/input';
 import { Label } from '@/frontend/components/ui/label';
-import { DnD5eCharacter } from '@/shared/systems/dnd5e/types';
 
 interface MagicSystemCardProps {
   character: DnD5eCharacter;

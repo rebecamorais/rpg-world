@@ -1,5 +1,5 @@
-import { makeCharactersApi } from '@/backend/contexts/characters/interfaces/characters.api';
-import { makeAuthApi } from '@/backend/contexts/users/interfaces/auth.api';
+import { makeCharactersApi } from '@backend/contexts/characters/interfaces/characters.api';
+import { makeAuthApi } from '@backend/contexts/users/interfaces/auth.api';
 
 import { getContainer } from './shared/infrastructure/get-container';
 

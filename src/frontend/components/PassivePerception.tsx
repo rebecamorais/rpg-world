@@ -1,5 +1,8 @@
 'use client';
 
+import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
+import rules from '@shared/systems/dnd5e/rules.json';
+import type { CharacterSkill } from '@shared/systems/dnd5e/types';
 import { Eye } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -8,9 +11,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/frontend/components/ui/tooltip';
-import { calculatePassivePerception } from '@/shared/systems/dnd5e/calculations';
-import rules from '@/shared/systems/dnd5e/rules.json';
-import type { CharacterSkill } from '@/shared/systems/dnd5e/types';
 
 interface Props {
   wisValue: number;

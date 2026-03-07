@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
+import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 import { useTranslations } from 'next-intl';
 
 import AttributesSection from '@/frontend/components/AttributesSection';
@@ -18,7 +19,6 @@ import SpellsDrawer from '@/frontend/components/SpellsDrawer';
 import { useCurrentUser } from '@/frontend/context/UserContext';
 import { useCharacter } from '@/frontend/hooks/useCharacter';
 import { useCharacterEditor } from '@/frontend/hooks/useCharacterEditor';
-import { getProficiencyBonus } from '@/shared/systems/dnd5e/calculations';
 
 export default function CharacterSheetClient() {
   const params = useParams();

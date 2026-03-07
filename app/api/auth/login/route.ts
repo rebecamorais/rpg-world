@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getOrCreateUser } from '@/backend/store/memory-store';
+import { getOrCreateUser } from '@backend/store/memory-store';
 
 export async function POST(req: Request) {
   try {

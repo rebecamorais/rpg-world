@@ -1,4 +1,4 @@
-import type { DnD5eCharacter } from '@/shared/systems/dnd5e';
+import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 
 // Legacy in-memory user shape — not the same as the Supabase User entity
 interface InMemoryUser {

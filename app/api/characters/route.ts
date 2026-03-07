@@ -1,6 +1,5 @@
 import { getApi } from '@api';
-
-import { withAuth } from '@/backend/shared/http/route-handler';
+import { withAuth } from '@shared/http/route-handler';
 
 type CreateBody = {
   name: string;

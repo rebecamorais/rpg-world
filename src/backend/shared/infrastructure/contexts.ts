@@ -1,5 +1,5 @@
-import { createCharacterContext } from '@/backend/contexts/characters';
-import { createUserContext } from '@/backend/contexts/users';
+import { createCharacterContext } from '@backend/contexts/characters';
+import { createUserContext } from '@backend/contexts/users';
 
 import type { ContainerRegistry } from './container';
 

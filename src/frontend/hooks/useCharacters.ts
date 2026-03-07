@@ -1,7 +1,6 @@
 import { rpgWorldApi } from '@client';
+import type { CharacterSummary } from '@shared/types/character';
 import { useQuery } from '@tanstack/react-query';
-
-import type { CharacterSummary } from '@/shared/types/character';
 
 export function useCharacters() {
   const query = useQuery({

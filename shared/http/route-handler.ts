@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 
 import { getApi } from '@api';
+import type { User } from '@shared/types/user';
 import 'server-only';
-
-import type { User } from '@/shared/types/user';
 
 type RouteContext = { params: Promise<Record<string, string>> };
 
