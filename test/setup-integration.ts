@@ -1,6 +1,5 @@
+import { SupabaseFactory } from '@lib/supabase';
 import { beforeEach } from 'vitest';
-
-import { SupabaseFactory } from '../src/lib/supabase';
 
 type AdminWithTruncate = {
   rpc(

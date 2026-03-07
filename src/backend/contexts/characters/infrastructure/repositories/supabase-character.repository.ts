@@ -1,7 +1,6 @@
+import { Database, Json } from '@database-types';
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
-
-import { Database, Json } from '@/lib/types/database';
 
 import { Character } from '../../domain/entity/Character';
 import {

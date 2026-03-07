@@ -23,7 +23,12 @@
       "@/*": ["src/*"],
       "@tests/*": ["tests/*"],
       "@api": ["src/backend/index"],
-      "@client": ["src/frontend/lib/api-client"]
+      "@client": ["src/frontend/lib/api-client"],
+      "@lib/*": ["lib/*"],
+      "@shared/*": ["shared/*"],
+      "@backend/*": ["src/backend/*"],
+      "@frontend/*": ["src/frontend/*"],
+      "@database-types": ["lib/types/database.ts"]
     }
   },
   "include": [
