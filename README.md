@@ -2,7 +2,7 @@
 
 Um aplicativo web para criação e gestão de fichas de personagens de RPG de mesa, focado inicialmente no sistema **Dungeons & Dragons 5ª Edição**. Projetado para ser rápido, acessível e expansível.
 
-🔗 **Acesse o projeto online:** [rpg-world-nu.vercel.app](https://rpg-world-nu.vercel.app/)
+🔗 **Acesse o projeto online:** [rpgworldapp.com](https://rpgworldapp.com/)
 
 ## 🚀 Tecnologias
 
@@ -25,27 +25,72 @@ O projeto está atualmente focado em fechar sua base funcional com as seguintes 
 
 ## 🛠️ Como rodar o projeto localmente
 
-Primeiro, instale as dependências:
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) 20+
+- [Docker](https://www.docker.com/) (necessário para o banco de dados local)
+
+### 1. Instale as dependências
 
 ```bash
 npm install
-# ou
-yarn install
-# ou
-pnpm install
 ```
 
-Depois, rode o servidor de desenvolvimento:
+### 2. Configure as variáveis de ambiente
+
+Copie o arquivo de exemplo:
+
+```bash
+cp .example.env.local .env.local
+```
+
+### 3. Suba o banco de dados local (Supabase)
+
+> O Docker precisa estar rodando antes deste passo.
+
+```bash
+npm run db:start
+```
+
+Ao finalizar, o terminal exibirá as chaves geradas. Copie os valores para o `.env.local`:
+
+```
+API URL        →  SUPABASE_URL            (já configurado como localhost:54321)
+Anon key       →  NEXT_PUBLIC_SUPABASE_ANON_KEY
+Service role   →  SUPABASE_SERVICE_ROLE_KEY
+```
+
+> **Dica:** este passo só precisa ser feito **uma vez por sessão**. Enquanto o Docker continuar rodando, o banco permanece ativo.
+
+### 4. Rode o servidor de desenvolvimento
 
 ```bash
 npm run dev
-# ou
-yarn dev
-# ou
-pnpm dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
+Acesse [http://localhost:3000](http://localhost:3000) no navegador.
+
+### URLs do ambiente local
+
+| Serviço              | URL                    |
+| -------------------- | ---------------------- |
+| Aplicação            | http://localhost:3000  |
+| Supabase API / Auth  | http://localhost:54321 |
+| Supabase Studio (UI) | http://localhost:54323 |
+| Inbucket (emails)    | http://localhost:54324 |
+
+> O **Inbucket** intercepta os emails enviados pelo auth (Magic Link, OTP) localmente — não é necessário um email real para testar.
+
+### Scripts disponíveis
+
+| Comando             | Descrição                            |
+| ------------------- | ------------------------------------ |
+| `npm run dev`       | Inicia o servidor de desenvolvimento |
+| `npm run db:start`  | Sobe o Supabase local (Docker)       |
+| `npm run db:stop`   | Para os containers do Supabase       |
+| `npm run db:status` | Exibe as URLs e chaves do ambiente   |
+| `npm run db:reset`  | Reseta o banco e roda as migrations  |
+| `npm run db:studio` | Abre o Supabase Studio no browser    |
 
 ## 🤝 Próximos Passos
 

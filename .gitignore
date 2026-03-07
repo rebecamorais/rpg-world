@@ -40,3 +40,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Supabase CLI runtime (gerado automaticamente)
+# Pasta supabase e config.toml precis ser comitada sempre
+**/supabase/.branches/
+**/supabase/.temp/
+**/.branches/
+**/.temp/
+# Ignorar links simbólicos criados pelo script
+**/supabase/migrations
+**/supabase/seeds
+**/supabase/snippets

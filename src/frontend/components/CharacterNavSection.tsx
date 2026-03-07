@@ -2,7 +2,6 @@
 import { useTranslations } from 'next-intl';
 
 import { NavItem } from '@/frontend/components/ui/nav-item';
-import { useCurrentUser } from '@/frontend/context/UserContext';
 import { useCharacter } from '@/frontend/hooks/useCharacter';
 
 export default function CharacterNavSection({
@@ -10,7 +9,6 @@ export default function CharacterNavSection({
 }: {
   characterId: string;
 }) {
-  const { currentUser } = useCurrentUser();
   const tDash = useTranslations('dashboard');
 
   const { character } = useCharacter(characterId);

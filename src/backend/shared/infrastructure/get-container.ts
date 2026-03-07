@@ -2,9 +2,9 @@ import { cache } from 'react';
 
 import { cookies } from 'next/headers';
 
-import { createServerClient } from '@supabase/ssr';
-import { createClient } from '@supabase/supabase-js';
 import 'server-only';
+
+import { SupabaseFactory } from '@/lib/supabase';
 
 import { Container } from './container';
 
@@ -16,34 +16,9 @@ import { Container } from './container';
 export const getContainer = cache(async () => {
   const cookieStore = await cookies();
 
-  // The Auth Client is specific to the current user's request (tied to their cookies)
-  const authClient = createServerClient(
-    process.env.SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options);
-            });
-          } catch (error) {
-            console.log('error from Server Component ignored', error);
-            // Ignore errors when called from Server Components during render phase
-          }
-        },
-      },
-    },
-  );
+  const adminClient = SupabaseFactory.createAdmin();
 
-  // The DB Client is an administrative (Service Role) client
-  const dbClient = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  );
+  const authClient = SupabaseFactory.createClient(cookieStore);
 
-  return new Container(authClient, dbClient);
+  return new Container(authClient, adminClient);
 });
