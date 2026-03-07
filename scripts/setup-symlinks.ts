@@ -9,7 +9,7 @@ const symlinks: [string, string][] = [
   ['database/db-test/supabase/migrations', '../../migrations'],
 
   // Linka a pasta de seeds global só pra dev
-  ['database/db-dev/supabase/seeds', '../../seeds'],
+  ['database/db-dev/supabase/seeds', '../seeds'],
 ];
 
 for (const [linkPath, targetPath] of symlinks) {
