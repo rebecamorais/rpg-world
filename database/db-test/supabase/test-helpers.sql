@@ -18,7 +18,7 @@ BEGIN
 
     -- 2. Remove usuários do Auth via DELETE (evita problema de ownership em sequences do auth)
     --    O CASCADE elimina identidades, sessões e fatores de MFA via FK
-    DELETE FROM auth.users;
+    DELETE FROM auth.users WHERE true;
 END;
 $$;
 

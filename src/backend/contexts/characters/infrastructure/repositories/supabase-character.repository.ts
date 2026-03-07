@@ -1,14 +1,24 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
+import { Database, Json } from '@/lib/types/database';
+
 import { Character } from '../../domain/entity/Character';
-import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';
+import {
+  AttributeKey,
+  CharacterSkill,
+  DnD5eCharacter,
+  SkillKey,
+} from '../../domain/entity/DnD5eCharacter';
 import { CharacterRepo } from '../../domain/repository/character.repo';
 import { Attributes } from '../../domain/value-object/Attributes';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
 
+type DbCharacterRow = Database['public']['Tables']['characters']['Row'];
+type DbCharacterInsert = Database['public']['Tables']['characters']['Insert'];
+
 export class SupabaseCharacterRepository implements CharacterRepo {
-  constructor(private readonly client: SupabaseClient) {}
+  constructor(private readonly client: SupabaseClient<Database>) {}
 
   async findById(id: string): Promise<Character | null> {
     const { data, error } = await this.client
@@ -39,16 +49,20 @@ export class SupabaseCharacterRepository implements CharacterRepo {
     const json = character.toJSON();
     const { hp, attributes, system, ...rest } = json;
 
-    const dbRow = {
+    const hpData = hp as { current: number; max: number };
+
+    const dbRow: DbCharacterInsert = {
       id: character.id,
       name: character.name,
       owner_id: character.ownerUsername,
-      system: (system as string).toLowerCase() as any,
+      system: (
+        system as string
+      ).toLowerCase() as Database['public']['Enums']['rpg_system'],
       level: character.level,
-      hp_current: (hp as any).current,
-      hp_max: (hp as any).max,
-      attributes: attributes,
-      system_data: rest,
+      hp_current: hpData.current,
+      hp_max: hpData.max,
+      attributes: attributes as Json,
+      system_data: rest as Json,
       updated_at: new Date().toISOString(),
     };
 
@@ -68,12 +82,12 @@ export class SupabaseCharacterRepository implements CharacterRepo {
     return !error;
   }
 
-  private mapToDomain(row: any): Character {
+  private mapToDomain(row: DbCharacterRow): Character {
     const hp = new HealthPoints(row.hp_current, row.hp_max);
-    const attributes = new Attributes(row.attributes);
+    const attributes = new Attributes(row.attributes as Record<string, number>);
 
     if (row.system === 'dnd_5e') {
-      const dndData = row.system_data || {};
+      const dndData = (row.system_data as Record<string, unknown>) || {};
       return new DnD5eCharacter(
         row.id,
         row.name,
@@ -81,28 +95,36 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         attributes,
         hp,
         row.level,
-        dndData.characterClass,
-        dndData.race,
-        dndData.ac,
-        dndData.speed,
-        dndData.initiative,
-        dndData.skills,
-        dndData.savingThrowProficiencies,
-        dndData.passivePerception,
-        dndData.subclass,
-        dndData.background,
-        dndData.alignment,
-        dndData.xp,
-        dndData.hitDice,
-        dndData.deathSaves,
-        dndData.spellcastingSystem,
-        dndData.spellcastingAbility,
-        dndData.spellSaveDc,
-        dndData.spellAttackBonus,
-        dndData.spellSlots,
-        dndData.spellPoints,
-        dndData.spellsKnown,
-        dndData.coins,
+        (dndData.characterClass as string) || '',
+        (dndData.race as string) || '',
+        (dndData.ac as number) || 10,
+        (dndData.speed as number) || 30,
+        (dndData.initiative as number) || 0,
+        (dndData.skills as Partial<Record<SkillKey, CharacterSkill>>) || {},
+        (dndData.savingThrowProficiencies as Partial<
+          Record<AttributeKey, boolean>
+        >) || {},
+        (dndData.passivePerception as number) || 10,
+        dndData.subclass as string | undefined,
+        dndData.background as string | undefined,
+        dndData.alignment as string | undefined,
+        dndData.xp as number | undefined,
+        dndData.hitDice as { total: string; current: number } | undefined,
+        dndData.deathSaves as
+          | { successes: number; failures: number }
+          | undefined,
+        dndData.spellcastingSystem as 'slots' | 'points' | undefined,
+        dndData.spellcastingAbility as AttributeKey | undefined,
+        dndData.spellSaveDc as number | undefined,
+        dndData.spellAttackBonus as number | undefined,
+        dndData.spellSlots as
+          | Record<string, { max: number; used: number }>
+          | undefined,
+        dndData.spellPoints as { max: number; current: number } | undefined,
+        (dndData.spellsKnown as string[]) || [],
+        dndData.coins as
+          | { cp: number; sp: number; ep: number; gp: number; pp: number }
+          | undefined,
       );
     }
 
