@@ -1,4 +1,5 @@
 -- 1. Criar a tabela de perfis (public.profile)
+
 CREATE TABLE public.profile (
   -- FK vinculada ao motor de Auth do Supabase
   id         UUID         PRIMARY KEY REFERENCES auth.users (id) ON DELETE CASCADE,

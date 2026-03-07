@@ -1,4 +1,5 @@
 -- 1. Criar o Enum para o sistema de RPG
+
 DO $$ BEGIN
     CREATE TYPE public.rpg_system AS ENUM ('dnd_5e', 'ezd6', 'pathfinder_2e');
 EXCEPTION

@@ -22,6 +22,16 @@ jobs:
 
       - name: Link Project
         run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }} -p ${{ secrets.SUPABASE_DB_PASSWORD }}
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+      - name: Create Symlink for Supabase CLI
+        # Isso engana o CLI fazendo-o achar que as migrations estão no lugar "padrão"
+        run: |
+          mkdir -p supabase
+          ln -s ../database/migrations ./supabase/migrations
 
       - name: Deploy Migrations
         run: supabase db push
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
