@@ -1,7 +1,7 @@
 import { makeCharactersApi } from '@backend/contexts/characters/interfaces/characters.api';
 import { makeAuthApi } from '@backend/contexts/users/interfaces/auth.api';
 
-import { getContainer } from './shared/infrastructure/get-container';
+import { getContainer } from './shared/providers/get-container';
 
 export const getApi = async () => {
   const container = await getContainer();

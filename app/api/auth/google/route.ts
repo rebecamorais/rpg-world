@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getContainer } from '@backend/shared/infrastructure/get-container';
+import { getContainer } from '@/backend/shared/providers/get-container';
 
 export async function GET(req: Request) {
   const requestUrl = new URL(req.url);
