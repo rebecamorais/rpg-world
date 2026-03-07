@@ -27,6 +27,7 @@ enabled = false
 [db]
 # Port to use for the local database URL.
 port = 54432
+password = 'postgres'
 # Port used by db diff command to initialize the shadow database.
 shadow_port = 54430
 # Maximum amount of time to wait for health check when starting the local database.
@@ -149,6 +150,8 @@ max_indexes = 5
 
 [auth]
 enabled = true
+anon_key = "sb_publishable_test"
+service_role_key = "sb_secret_test"
 # The base URL of your website. Used as an allow-list for redirects and for constructing URLs used
 # in emails.
 site_url = "http://localhost:3000"
