@@ -19,5 +19,9 @@ export default defineConfig({
       path.resolve(__dirname, './setup-vitest.ts'),
       path.resolve(__dirname, './setup-integration.ts'),
     ],
+    pool: 'threads',
+    fileParallelism: false,
+    maxWorkers: 1,
+    isolate: false,
   },
 });

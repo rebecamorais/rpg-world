@@ -1,5 +1,4 @@
 import { CharacterRepo } from '@backend/contexts/characters/domain/repository/character.repo';
-import { SupabaseCharacterRepository } from '@backend/contexts/characters/infrastructure/repositories/supabase-character.repository';
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
