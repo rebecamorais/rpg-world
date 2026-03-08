@@ -1,52 +1,46 @@
-# Reference: Regras de Sistemas de RPG
+# RPG World - Princípios de Desenvolvimento & Regras de Ouro
 
-O RPG World implementa regras originais dos livros básicos dos sistemas para realizar cálculos matemáticos automáticos na Interface. Este documento espelha os "contratos lógicos" para traduzir o livro de regras para o código.
+## 1. Infraestrutura de Banco
 
----
+* **Ambientes Isolados**:
+* **Development**: Porta **54321** (configurado em `supabase/config.toml`).
+* **Testing**: Porta **54331** (configurado em `supabase-test/config.toml`).
 
-## Dungeons & Dragons 5ª Edição (dnd5e)
+* **Migrations**: Centralizadas em `database/migrations/` e compartilhadas entre os ambientes.
+* **Seeds**: Exclusivos para o ambiente de desenvolvimento (`db-dev`) localizados em `database/db-dev/seeds`.
 
-### 1. Modificadores de Atributos
-A fórmula matemática para converter um atributo absoluto (ex: Força 16) em seu modificador:
-```typescript
-Modificador = Math.floor((Atributo - 10) / 2)
-```
+## 2. Estratégia de Testes (Colocation)
 
-### 2. Bônus de Proficiência (PB / Proficiency Bonus)
-Baseado no Nível Geral do Personagem:
-| Níveis do Personagem | PB Bônus |
-|----------------------|----------|
-| 1 a 4                | +2       |
-| 5 a 8                | +3       |
-| 9 a 12               | +4       |
-| 13 a 16              | +5       |
-| 17 a 20              | +6       |
+* **Localização**: Testes unitários (`.unit.test.ts`) e de integração (`.integration.test.ts`) devem residir na mesma pasta do arquivo alvo dentro de `src/`.
+* **Setup Dinâmico**: Os testes de integração utilizam o script `tests/setup-env.ts` para injetar credenciais dinâmicas capturadas via `supabase status`.
 
-*Cálculo:* `PB = Math.ceil(level / 4) + 1`
+## 3. Autenticação & Ciclo de Vida do Usuário
 
-### 3. Classe de Armadura (CA) Base
-Se nenhuma armadura estiver equipada (e classes sem *Unarmored Defense*):
-```typescript
-CA = 10 + Modificador(Destreza)
-```
+* **Criação de Conta**: Novos usuários são criados **manualmente** via Dashboard do Supabase (medida temporária).
+* **Senha de Primeiro Acesso**: Senha padrão obrigatória: `123MudarASenha@`.
+* **Política de Troca**: O sistema deve interceptar usuários com a senha padrão ou onde `last_password_change == null`, forçando o redirecionamento para `/settings/change-password`.
+* **Auth Server-Side**: Autenticação 100% via Supabase SSR (Proxy Pattern). O `middleware.ts` gerencia apenas o refresh do token JWT.
 
-### 4. Percepção Passiva
-Calculada como um limiar mental automático (sem dados rodados):
-```typescript
-Passivo = 10 + Modificador(Sabedoria) + (Se proficiente ? PB : 0)
-```
+## 4. Arquitetura (Clean Architecture & SOLID)
 
-### 5. Distribuição de Perícias Clássicas
-As perícias do sistema são intimamente interligadas ao seu Atributo regente:
-- **Força (STR):** Atletismo
-- **Destreza (DEX):** Acrobacia, Furtividade, Prestidigitação
-- **Inteligência (INT):** Arcanismo, História, Investigação, Natureza, Religião
-- **Sabedoria (WIS):** Adestrar Animais, Intuição, Medicina, Percepção, Sobrevivência
-- **Carisma (CHA):** Atuação, Enganação, Intimidação, Persuasão
+* **Isolamento Total**: O Frontend comunica-se exclusivamente com a API layer e desconhece detalhes de persistência (Supabase).
+* **Inversão de Dependência (DIP)**: Casos de uso dependem de interfaces (abstrações), nunca de implementações concretas como repositórios Supabase.
+* **Single Source of Truth**: Regras de negócio e cálculos de RPG residem exclusivamente no Domínio/Backend.
+* **Request-Scoped Container**: O container de DI é instanciado via `React.cache()` por requisição, proibindo Singletons globais para evitar vazamento de estado.
+* **Segurança das APIs**: Rotas autenticadas devem sempre ler a identidade do usuário da sessão do servidor via `authApi.getSessionUser()`.
 
-Cálculo de Rolagem Final da Perícia na ficha:
-`Final = Modificador do Atributo + (Proficiente ? PB : 0) + (Expertise ? PB : 0)`
+## 5. Estratégia de Renderização (Server-First)
 
----
+* **Default**: Todo componente é um Server Component por padrão. O uso de `'use client'` é restrito à interatividade folha.
+* **Data Fetching**: Buscas iniciais de dados ocorrem sempre no servidor.
+* **Segurança de Código**: Arquivos com lógica sensível ou acesso direto ao banco devem utilizar `import 'server-only'`.
 
-*Nota Arquitetural: Se formos adicionar Homebrews ou variantes, criar ramificações dessas fórmulas com flags separadas.*
+## 6. Nomenclatura de Arquivos
+
+| Camada / Tipo | Formato | Exemplo |
+| --- | --- | --- |
+| **Domínio (Entidades/Interfaces)** | `PascalCase.ts` | `User.ts`, `AuthRepository.ts` |
+| **Application/Infra (Backend)** | `kebab-case.ts` | `supabase-auth-repository.ts` |
+| **Componentes React (Frontend)** | `PascalCase.tsx` | `LoginForm.tsx` |
+| **UI Components (Shadcn)** | `kebab-case.tsx` | `button.tsx` |
+| **Hooks / Utils** | `camelCase.ts` | `useAuth.ts` |
