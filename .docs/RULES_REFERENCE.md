@@ -44,3 +44,37 @@
 | **Componentes React (Frontend)** | `PascalCase.tsx` | `LoginForm.tsx` |
 | **UI Components (Shadcn)** | `kebab-case.tsx` | `button.tsx` |
 | **Hooks / Utils** | `camelCase.ts` | `useAuth.ts` |
+
+## 7. Internacionalização (i18n) & Frontend
+
+* **Obrigatoriedade**: Nenhum texto em "hardcoded string" é permitido em componentes de UI. Todo conteúdo textual deve passar pela camada de internacionalização.
+* **Stack**: Uso mandatório de `next-intl` (ou similar compatível com Server Components) utilizando o hook `useTranslations`.
+* **Idiomas Suportados**: Inglês (`en`) e Português (`pt-br`).
+* **Localização de Dicionários**: Arquivos JSON organizados por escopo (ex: `messages/pt-br.json`).
+* **Convenção de Chaves**: Uso de `camelCase` para chaves de tradução, seguindo a hierarquia do componente (ex: `Common.buttons.save`).
+
+---
+
+### Exemplo Prático de Implementação (Padronizado)
+
+Para manter a consistência que você definiu na **Rebs Tech Studio**, todo componente deve seguir este padrão:
+
+```tsx
+'use client';
+
+import { useTranslations } from 'next-intl';
+
+export function LoginButton() {
+  const t = useTranslations('Auth');
+
+  return (
+    <button type="submit">
+      {t('loginLabel')}
+    </button>
+  );
+}
+
+```
+
+
+---

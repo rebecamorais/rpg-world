@@ -124,8 +124,11 @@
   "dashboard": {
     "menu": "Menu",
     "myCharacters": "My Characters",
+    "myProfile": "My Profile",
     "attributes": "Attributes",
-    "spells": "Spells"
+    "spells": "Spells",
+    "settingsTitle": "Settings",
+    "settingsSubtitle": "Manage your adventurer profile information."
   },
   "changePassword": {
     "title": "Change Your Password",
@@ -139,5 +142,26 @@
     "success": "Password updated successfully!",
     "error": "Failed to update password.",
     "passwordsDoNotMatch": "Passwords do not match."
+  },
+  "profileForm": {
+    "title": "Edit Profile",
+    "subtitle": "Customize your adventurer profile information.",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "e.g.: dark_elf_42",
+    "fullNameLabel": "Full Name",
+    "fullNamePlaceholder": "e.g.: Rebeca Morais",
+    "avatarUrlLabel": "Avatar URL",
+    "avatarUrlPlaceholder": "https://...",
+    "save": "Save Profile",
+    "saving": "Saving...",
+    "saveSuccess": "Profile updated successfully!",
+    "saveError": "Error updating profile.",
+    "validation": {
+      "usernameMin": "Username must be at least 3 characters.",
+      "usernameMax": "Username must be at most 30 characters.",
+      "usernamePattern": "Only lowercase letters, numbers, and underscores are allowed.",
+      "fullNameMax": "Name must be at most 100 characters.",
+      "avatarUrlInvalid": "Invalid URL."
+    }
   }
 }

@@ -24,6 +24,7 @@ export default function Sidebar() {
           <p className="mb-2 px-3 text-[10px] font-bold tracking-widest text-zinc-500 uppercase">
             {tDash('menu')}
           </p>
+          <NavItem href="/settings/profile" label={tDash('myProfile')} />
           <NavItem href="/characters" label={tDash('myCharacters')} />
         </section>
 

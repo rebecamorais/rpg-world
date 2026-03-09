@@ -1,5 +1,6 @@
 import { makeCharactersApi } from '@backend/contexts/characters/interfaces/characters.api';
 import { makeAuthApi } from '@backend/contexts/users/interfaces/auth.api';
+import { makeProfileApi } from '@backend/contexts/users/interfaces/profile.api';
 
 import { getContainer } from './shared/providers/get-container';
 
@@ -8,5 +9,6 @@ export const getApi = async () => {
   return {
     charactersApi: makeCharactersApi(container.contexts.character),
     authApi: makeAuthApi(container.contexts.user),
+    profileApi: makeProfileApi(container.contexts.user),
   };
 };

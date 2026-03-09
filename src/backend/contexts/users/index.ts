@@ -6,11 +6,17 @@ import { SignInWithMagicLinkUseCase } from './application/sign-in-with-magic-lin
 import { SignInWithPasswordUseCase } from './application/sign-in-with-password.use-case';
 import { SignOutUseCase } from './application/sign-out.use-case';
 import { UpdatePasswordUseCase } from './application/update-password.use-case';
+import {
+  GetProfileUseCase,
+  UpdateProfileUseCase,
+} from './application/update-profile.use-case';
 import { User } from './domain/User';
 import { SupabaseAuthRepository } from './infrastructure/repositories/supabase-auth-repository';
+import { SupabaseProfileRepository } from './infrastructure/repositories/supabase-profile-repository';
 
 export interface UserContextConfig {
   authClient: SupabaseClient;
+  dbClient: SupabaseClient;
 }
 
 export interface UserContext {
@@ -20,12 +26,15 @@ export interface UserContext {
   updatePassword: UpdatePasswordUseCase;
   callbackExchange: CallbackExchangeUseCase;
   signOut: SignOutUseCase;
+  getProfile: GetProfileUseCase;
+  updateProfile: UpdateProfileUseCase;
 }
 
 export type { User };
 
 export const createUserContext = (config: UserContextConfig): UserContext => {
   const authRepository = new SupabaseAuthRepository(config.authClient);
+  const profileRepository = new SupabaseProfileRepository(config.dbClient);
 
   return {
     getSession: new GetSessionUserUseCase(authRepository),
@@ -34,5 +43,7 @@ export const createUserContext = (config: UserContextConfig): UserContext => {
     updatePassword: new UpdatePasswordUseCase(authRepository),
     callbackExchange: new CallbackExchangeUseCase(authRepository),
     signOut: new SignOutUseCase(authRepository),
+    getProfile: new GetProfileUseCase(profileRepository),
+    updateProfile: new UpdateProfileUseCase(profileRepository),
   };
 };

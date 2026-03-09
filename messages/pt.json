@@ -124,8 +124,11 @@
   "dashboard": {
     "menu": "Menu",
     "myCharacters": "Meus Personagens",
+    "myProfile": "Meu Perfil",
     "attributes": "Atributos",
-    "spells": "Magias"
+    "spells": "Magias",
+    "settingsTitle": "Configurações",
+    "settingsSubtitle": "Gerencie as informações do seu perfil de aventureiro."
   },
   "changePassword": {
     "title": "Altere sua Senha",
@@ -139,5 +142,26 @@
     "success": "Senha atualizada com sucesso!",
     "error": "Falha ao atualizar senha.",
     "passwordsDoNotMatch": "As senhas não coincidem."
+  },
+  "profileForm": {
+    "title": "Editar Perfil",
+    "subtitle": "Personalize as informações do seu perfil de aventureiro.",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "ex: elfo_negro_42",
+    "fullNameLabel": "Nome Completo",
+    "fullNamePlaceholder": "ex: Rebeca Morais",
+    "avatarUrlLabel": "URL do Avatar",
+    "avatarUrlPlaceholder": "https://...",
+    "save": "Salvar Perfil",
+    "saving": "Salvando...",
+    "saveSuccess": "Perfil atualizado com sucesso!",
+    "saveError": "Erro ao atualizar perfil.",
+    "validation": {
+      "usernameMin": "Username deve ter ao menos 3 caracteres.",
+      "usernameMax": "Username deve ter no máximo 30 caracteres.",
+      "usernamePattern": "Apenas letras minúsculas, números e underscores são permitidos.",
+      "fullNameMax": "Nome deve ter no máximo 100 caracteres.",
+      "avatarUrlInvalid": "URL inválida."
+    }
   }
 }

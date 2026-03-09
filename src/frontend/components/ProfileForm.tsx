@@ -1,0 +1,207 @@
+'use client';
+
+import { useEffect } from 'react';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
+import { Button } from '@/frontend/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/frontend/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/frontend/components/ui/form';
+import { Input } from '@/frontend/components/ui/input';
+import { Skeleton } from '@/frontend/components/ui/skeleton';
+import { useProfile } from '@/frontend/hooks/useProfile';
+
+export default function ProfileForm() {
+  const t = useTranslations('profileForm');
+
+  const profileSchema = z.object({
+    username: z
+      .string()
+      .min(3, t('validation.usernameMin'))
+      .max(30, t('validation.usernameMax'))
+      .regex(/^[a-z0-9_]+$/, t('validation.usernamePattern'))
+      .optional()
+      .or(z.literal('')),
+    fullName: z
+      .string()
+      .max(100, t('validation.fullNameMax'))
+      .optional()
+      .or(z.literal('')),
+    avatarUrl: z
+      .string()
+      .url(t('validation.avatarUrlInvalid'))
+      .optional()
+      .or(z.literal('')),
+  });
+
+  type ProfileFormValues = z.infer<typeof profileSchema>;
+
+  const { profile, isLoading, updateProfile, isUpdating } = useProfile();
+
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      username: '',
+      fullName: '',
+      avatarUrl: '',
+    },
+  });
+
+  // Populate form when profile data loads
+  useEffect(() => {
+    if (profile) {
+      form.reset({
+        username: profile.username ?? '',
+        fullName: profile.fullName ?? '',
+        avatarUrl: profile.avatarUrl ?? '',
+      });
+    }
+  }, [profile, form]);
+
+  const onSubmit = async (data: ProfileFormValues) => {
+    try {
+      await updateProfile({
+        username: data.username || undefined,
+        fullName: data.fullName || undefined,
+        avatarUrl: data.avatarUrl || undefined,
+      });
+      toast.success(t('saveSuccess'));
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : t('saveError');
+      toast.error(msg);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Card className="mx-auto w-full max-w-lg border-white/10 bg-black/60 backdrop-blur-md">
+        <CardHeader>
+          <Skeleton className="h-7 w-48 bg-white/10" />
+          <Skeleton className="h-4 w-72 bg-white/10" />
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <Skeleton className="h-10 w-full bg-white/10" />
+          <Skeleton className="h-10 w-full bg-white/10" />
+          <Skeleton className="h-10 w-full bg-white/10" />
+          <Skeleton className="h-10 w-full bg-white/10" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="mx-auto w-full max-w-lg border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
+      <CardHeader>
+        <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
+          {t('title')}
+        </CardTitle>
+        <CardDescription className="text-gray-400">
+          {t('subtitle')}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-5"
+          >
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-300">
+                    {t('usernameLabel')}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t('usernamePlaceholder')}
+                      autoComplete="username"
+                      className="border-white/10 bg-white/5 text-white placeholder:text-gray-600 focus:border-blue-500/50"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-300">
+                    {t('fullNameLabel')}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t('fullNamePlaceholder')}
+                      autoComplete="name"
+                      className="border-white/10 bg-white/5 text-white placeholder:text-gray-600 focus:border-blue-500/50"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="avatarUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-300">
+                    {t('avatarUrlLabel')}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="url"
+                      placeholder={t('avatarUrlPlaceholder')}
+                      autoComplete="url"
+                      className="border-white/10 bg-white/5 text-white placeholder:text-gray-600 focus:border-blue-500/50"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {form.formState.errors.root && (
+              <p className="text-sm text-red-400">
+                {form.formState.errors.root.message}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              disabled={isUpdating || form.formState.isSubmitting}
+              className="mt-2 w-full bg-blue-600 font-semibold transition-all hover:bg-blue-700 disabled:opacity-50"
+            >
+              {isUpdating ? t('saving') : t('save')}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
+  );
+}
