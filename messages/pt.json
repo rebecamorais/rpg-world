@@ -148,10 +148,8 @@
     "subtitle": "Personalize as informações do seu perfil de aventureiro.",
     "usernameLabel": "Username",
     "usernamePlaceholder": "ex: elfo_negro_42",
-    "fullNameLabel": "Nome Completo",
-    "fullNamePlaceholder": "ex: Rebeca Morais",
-    "avatarUrlLabel": "URL do Avatar",
-    "avatarUrlPlaceholder": "https://...",
+    "fullNameLabel": "Nome",
+    "fullNamePlaceholder": "ex: Rebeca",
     "save": "Salvar Perfil",
     "saving": "Salvando...",
     "saveSuccess": "Perfil atualizado com sucesso!",
@@ -163,5 +161,11 @@
       "fullNameMax": "Nome deve ter no máximo 100 caracteres.",
       "avatarUrlInvalid": "URL inválida."
     }
+  },
+  "avatarUpload": {
+    "button": "Alterar Avatar",
+    "loading": "Enviando...",
+    "currentAlt": "Avatar atual",
+    "error": "Erro ao carregar imagem."
   }
 }

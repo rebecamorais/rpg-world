@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import { CallbackExchangeUseCase } from './application/callback-exchange.use-case';
 import { GetSessionUserUseCase } from './application/get-session-user.use-case';
 import { SignInWithMagicLinkUseCase } from './application/sign-in-with-magic-link.use-case';
@@ -10,6 +11,7 @@ import {
   GetProfileUseCase,
   UpdateProfileUseCase,
 } from './application/update-profile.use-case';
+import { UploadAvatarUseCase } from './application/upload-avatar.use-case';
 import { User } from './domain/User';
 import { SupabaseAuthRepository } from './infrastructure/repositories/supabase-auth-repository';
 import { SupabaseProfileRepository } from './infrastructure/repositories/supabase-profile-repository';
@@ -28,6 +30,7 @@ export interface UserContext {
   signOut: SignOutUseCase;
   getProfile: GetProfileUseCase;
   updateProfile: UpdateProfileUseCase;
+  uploadAvatar: UploadAvatarUseCase;
 }
 
 export type { User };
@@ -35,6 +38,7 @@ export type { User };
 export const createUserContext = (config: UserContextConfig): UserContext => {
   const authRepository = new SupabaseAuthRepository(config.authClient);
   const profileRepository = new SupabaseProfileRepository(config.dbClient);
+  const storageRepository = new SupabaseStorageRepository(config.dbClient);
 
   return {
     getSession: new GetSessionUserUseCase(authRepository),
@@ -45,5 +49,6 @@ export const createUserContext = (config: UserContextConfig): UserContext => {
     signOut: new SignOutUseCase(authRepository),
     getProfile: new GetProfileUseCase(profileRepository),
     updateProfile: new UpdateProfileUseCase(profileRepository),
+    uploadAvatar: new UploadAvatarUseCase(storageRepository),
   };
 };

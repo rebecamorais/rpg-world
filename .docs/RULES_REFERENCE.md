@@ -53,8 +53,6 @@
 * **Localização de Dicionários**: Arquivos JSON organizados por escopo (ex: `messages/pt-br.json`).
 * **Convenção de Chaves**: Uso de `camelCase` para chaves de tradução, seguindo a hierarquia do componente (ex: `Common.buttons.save`).
 
----
-
 ### Exemplo Prático de Implementação (Padronizado)
 
 Para manter a consistência que você definiu na **Rebs Tech Studio**, todo componente deve seguir este padrão:
@@ -76,5 +74,26 @@ export function LoginButton() {
 
 ```
 
+## 8. Path Aliases & Estrutura de Importação
 
----
+Para manter a modularidade e facilitar a manutenção, utilizamos aliases configurados no `tsconfig.json`. É proibido o uso de caminhos relativos longos (ex: `../../../`).
+
+### Mapeamento de Aliases
+
+| Alias | Destino | Uso Principal |
+| --- | --- | --- |
+| `@/*` | `src/*` | Acesso genérico à pasta source. |
+| `@tests/*` | `tests/*` | Suítes de teste e mocks globais. |
+| `@api` | `src/backend/index` | Entrypoint principal da camada de API. |
+| `@client` | `src/frontend/lib/api-client` | Instância configurada do Supabase/Fetch client. |
+| `@lib/*` | `lib/*` | Utilitários agnósticos, tipos de banco e helpers. |
+| `@shared/*` | `shared/*` | Constantes e tipos compartilhados entre Front e Back. |
+| `@backend/*` | `src/backend/*` | Lógica de domínio, repositórios e serviços. |
+| `@frontend/*` | `src/frontend/*` | Componentes, hooks e stores de UI. |
+| `@database-types` | `lib/types/database.ts` | Tipagens geradas automaticamente pelo Supabase CLI. |
+
+### Regras para Imports
+
+* **Circular Dependencies**: Evite importar de `@frontend` dentro de `@backend`. O fluxo de dependência deve ser sempre **Frontend -> Backend -> Shared/Lib**.
+* **Database Types**: Utilize sempre `@database-types` para garantir que as queries estejam sincronizadas com o schema local.
+* **Organização**: Imports devem ser agrupados: (1) Externos/Node, (2) Aliases de infra (`@api`, `@client`), (3) Componentes/Lógica (`@frontend`, `@backend`).

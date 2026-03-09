@@ -9,4 +9,8 @@ export const makeProfileApi = (userContext: UserContext) => ({
   updateProfile: async (profile: Profile): Promise<void> => {
     await userContext.updateProfile.execute(profile);
   },
+
+  uploadAvatar: async (userId: string, file: Blob): Promise<string> => {
+    return userContext.uploadAvatar.execute(userId, file);
+  },
 });

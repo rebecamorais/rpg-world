@@ -148,10 +148,8 @@
     "subtitle": "Customize your adventurer profile information.",
     "usernameLabel": "Username",
     "usernamePlaceholder": "e.g.: dark_elf_42",
-    "fullNameLabel": "Full Name",
-    "fullNamePlaceholder": "e.g.: Rebeca Morais",
-    "avatarUrlLabel": "Avatar URL",
-    "avatarUrlPlaceholder": "https://...",
+    "fullNameLabel": "Name",
+    "fullNamePlaceholder": "e.g.: Rebeca",
     "save": "Save Profile",
     "saving": "Saving...",
     "saveSuccess": "Profile updated successfully!",
@@ -163,5 +161,11 @@
       "fullNameMax": "Name must be at most 100 characters.",
       "avatarUrlInvalid": "Invalid URL."
     }
+  },
+  "avatarUpload": {
+    "button": "Change Avatar",
+    "loading": "Uploading...",
+    "currentAlt": "Current avatar",
+    "error": "Error uploading image."
   }
 }

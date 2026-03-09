@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import AvatarUpload from '@/frontend/components/AvatarUpload';
 import { Button } from '@/frontend/components/ui/button';
 import {
   Card,
@@ -30,6 +31,7 @@ import { useProfile } from '@/frontend/hooks/useProfile';
 
 export default function ProfileForm() {
   const t = useTranslations('profileForm');
+  const tAvatar = useTranslations('avatarUpload');
 
   const profileSchema = z.object({
     username: z
@@ -75,6 +77,17 @@ export default function ProfileForm() {
     }
   }, [profile, form]);
 
+  // Called by AvatarUpload when the upload completes — update the form field
+  const handleAvatarUploadSuccess = (url: string) => {
+    form.setValue('avatarUrl', url);
+    toast.success(t('saveSuccess'));
+  };
+
+  const handleAvatarUploadError = (err: unknown) => {
+    const msg = err instanceof Error ? err.message : tAvatar('error');
+    toast.error(msg);
+  };
+
   const onSubmit = async (data: ProfileFormValues) => {
     try {
       await updateProfile({
@@ -96,8 +109,8 @@ export default function ProfileForm() {
           <Skeleton className="h-7 w-48 bg-white/10" />
           <Skeleton className="h-4 w-72 bg-white/10" />
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <Skeleton className="h-10 w-full bg-white/10" />
+        <CardContent className="flex flex-col items-center gap-4">
+          <Skeleton className="h-24 w-24 rounded-full bg-white/10" />
           <Skeleton className="h-10 w-full bg-white/10" />
           <Skeleton className="h-10 w-full bg-white/10" />
           <Skeleton className="h-10 w-full bg-white/10" />
@@ -122,6 +135,15 @@ export default function ProfileForm() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-5"
           >
+            {/* Avatar upload — at the top, centered */}
+            <div className="flex justify-center">
+              <AvatarUpload
+                currentUrl={form.watch('avatarUrl')}
+                onUploadSuccess={handleAvatarUploadSuccess}
+                onUploadError={handleAvatarUploadError}
+              />
+            </div>
+
             <FormField
               control={form.control}
               name="username"
@@ -155,28 +177,6 @@ export default function ProfileForm() {
                     <Input
                       placeholder={t('fullNamePlaceholder')}
                       autoComplete="name"
-                      className="border-white/10 bg-white/5 text-white placeholder:text-gray-600 focus:border-blue-500/50"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="avatarUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-300">
-                    {t('avatarUrlLabel')}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="url"
-                      placeholder={t('avatarUrlPlaceholder')}
-                      autoComplete="url"
                       className="border-white/10 bg-white/5 text-white placeholder:text-gray-600 focus:border-blue-500/50"
                       {...field}
                     />
