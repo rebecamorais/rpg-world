@@ -10,7 +10,7 @@ const run = (cmd: string, stepName: string) => {
   try {
     execSync(cmd, { stdio: 'inherit' });
   } catch (e) {
-    console.error(`❌ Falha em: ${stepName}`);
+    console.error(`❌ Falha em: ${stepName}: ${e}`);
     process.exit(1);
   }
 };

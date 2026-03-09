@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -64,6 +64,11 @@ export default function ProfileForm() {
       fullName: '',
       avatarUrl: '',
     },
+  });
+
+  const avatarUrl = useWatch({
+    control: form.control,
+    name: 'avatarUrl',
   });
 
   // Populate form when profile data loads
@@ -138,7 +143,7 @@ export default function ProfileForm() {
             {/* Avatar upload — at the top, centered */}
             <div className="flex justify-center">
               <AvatarUpload
-                currentUrl={form.watch('avatarUrl')}
+                currentUrl={avatarUrl}
                 onUploadSuccess={handleAvatarUploadSuccess}
                 onUploadError={handleAvatarUploadError}
               />
