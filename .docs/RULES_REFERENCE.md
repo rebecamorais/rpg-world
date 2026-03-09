@@ -97,3 +97,37 @@ Para manter a modularidade e facilitar a manutenção, utilizamos aliases config
 * **Circular Dependencies**: Evite importar de `@frontend` dentro de `@backend`. O fluxo de dependência deve ser sempre **Frontend -> Backend -> Shared/Lib**.
 * **Database Types**: Utilize sempre `@database-types` para garantir que as queries estejam sincronizadas com o schema local.
 * **Organização**: Imports devem ser agrupados: (1) Externos/Node, (2) Aliases de infra (`@api`, `@client`), (3) Componentes/Lógica (`@frontend`, `@backend`).
+
+
+## 9. Gestão de Banco de Dados & Migrations
+
+O ciclo de vida do banco de dados no **RPG World** é estritamente controlado via Supabase CLI e orquestrado pelo script `infra.ts`.
+
+### Comandos de Operação (npm)
+
+| Comando | Função | Quando usar? |
+| --- | --- | --- |
+| `npm run infra up` | Sobe Docker, Sync de pastas e gera tipos. | Início do dia ou após trocar de branch. |
+| `npm run clean` | Hard Reset: apaga volumes e recria o banco. | **Botão de pânico:** Erros de schema ou Auth corrupto. |
+| `npm run db:ui` | Abre o Studio (DB) e o Inbucket (E-mails). | Debugar dados ou fluxos de confirmação de conta. |
+| `npm run test` | Pipeline de teste completo (Unit + Infra + Integ). | Antes de abrir um Pull Request. |
+
+### Fluxo de Criação de Migrations
+
+Como as migrations são compartilhadas entre **Dev** e **Test**, utilize sempre o `--workdir` de desenvolvimento para criá-las:
+
+1. **Criar Migration Vazia**:
+`npx supabase migrations new nome_da_minha_migration --workdir database/db-dev`
+2. **Aplicar Mudanças Locais**:
+As migrations são aplicadas automaticamente ao rodar `npm run infra up` ou:
+- `npx supabase db reset --workdir database/db-dev`
+- `npx supabase db reset --workdir database/db-test`
+
+3. **Gerar Tipos TypeScript**:
+Sempre rode `npm run types:update` (ou `npm run infra up`) após qualquer alteração no schema para manter o `@database-types` sincronizado.
+
+### Boas Práticas de Banco
+
+* **Idempotência**: Scripts de `seed` devem sempre limpar os dados antes de inserir (`DELETE FROM ...`) ou usar `ON CONFLICT DO NOTHING`.
+* **Versionamento**: Nunca altere uma migration que já foi "commitada" e compartilhada. Crie uma nova migration para corrigir a anterior.
+* **Schema Auth**: Alterações no schema `auth` são desencorajadas. Prefira estender dados na tabela `public.profiles`.

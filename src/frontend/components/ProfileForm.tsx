@@ -51,6 +51,11 @@ export default function ProfileForm() {
       .url(t('validation.avatarUrlInvalid'))
       .optional()
       .or(z.literal('')),
+    primaryColor: z
+      .string()
+      .regex(/^#[0-9a-fA-F]{6}$/, 'Invalid hex color')
+      .optional()
+      .or(z.literal('')),
   });
 
   type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -63,6 +68,7 @@ export default function ProfileForm() {
       username: '',
       fullName: '',
       avatarUrl: '',
+      primaryColor: '#663399',
     },
   });
 
@@ -78,6 +84,7 @@ export default function ProfileForm() {
         username: profile.username ?? '',
         fullName: profile.fullName ?? '',
         avatarUrl: profile.avatarUrl ?? '',
+        primaryColor: profile.primaryColor ?? '#663399',
       });
     }
   }, [profile, form]);
@@ -99,6 +106,7 @@ export default function ProfileForm() {
         username: data.username || undefined,
         fullName: data.fullName || undefined,
         avatarUrl: data.avatarUrl || undefined,
+        primaryColor: data.primaryColor || undefined,
       });
       toast.success(t('saveSuccess'));
     } catch (err: unknown) {
@@ -185,6 +193,40 @@ export default function ProfileForm() {
                       className="border-white/10 bg-white/5 text-white placeholder:text-gray-600 focus:border-blue-500/50"
                       {...field}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="primaryColor"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-300">
+                    {t('primaryColorLabel')}
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="color"
+                        value={field.value ?? '#663399'}
+                        onChange={(e) => {
+                          field.onChange(e.target.value);
+                          // Live preview — update the CSS variable immediately
+                          document.documentElement.style.setProperty(
+                            '--primary',
+                            e.target.value,
+                          );
+                        }}
+                        className="h-9 w-12 cursor-pointer rounded-md border border-white/10 bg-transparent p-0.5"
+                        id="primary-color-picker"
+                      />
+                      <span className="font-mono text-sm text-gray-400">
+                        {field.value ?? '#663399'}
+                      </span>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

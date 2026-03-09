@@ -3,5 +3,6 @@ export interface Profile {
   username?: string;
   fullName?: string;
   avatarUrl?: string;
+  primaryColor?: string;
   updatedAt?: string;
 }

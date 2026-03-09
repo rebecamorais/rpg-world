@@ -150,6 +150,7 @@
     "usernamePlaceholder": "e.g.: dark_elf_42",
     "fullNameLabel": "Name",
     "fullNamePlaceholder": "e.g.: Rebeca",
+    "primaryColorLabel": "Theme Color",
     "save": "Save Profile",
     "saving": "Saving...",
     "saveSuccess": "Profile updated successfully!",

@@ -5,6 +5,7 @@ import { type ReactNode, useEffect } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 
 import QueryProvider from '@/frontend/components/QueryProvider';
+import ThemeProvider from '@/frontend/components/ThemeProvider';
 import { TooltipProvider } from '@/frontend/components/ui/tooltip';
 import { UserProvider } from '@/frontend/context/UserContext';
 
@@ -36,6 +37,7 @@ export default function Providers({
         timeZone={timeZone}
       >
         <UserProvider user={null}>
+          <ThemeProvider />
           <TooltipProvider>{children}</TooltipProvider>
         </UserProvider>
       </NextIntlClientProvider>

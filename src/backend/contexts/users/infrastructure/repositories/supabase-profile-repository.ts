@@ -23,6 +23,7 @@ export class SupabaseProfileRepository implements ProfileRepository {
       username: data.username ?? undefined,
       fullName: data.full_name ?? undefined,
       avatarUrl: data.avatar_url ?? undefined,
+      primaryColor: data.primary_color ?? undefined,
       updatedAt: data.updated_at ?? undefined,
     };
   }
@@ -34,6 +35,7 @@ export class SupabaseProfileRepository implements ProfileRepository {
         username: profile.username,
         full_name: profile.fullName,
         avatar_url: profile.avatarUrl,
+        primary_color: profile.primaryColor,
       })
       .eq('id', profile.id);
 
