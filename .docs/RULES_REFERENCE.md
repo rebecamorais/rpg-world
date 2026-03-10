@@ -3,8 +3,8 @@
 ## 1. Infraestrutura de Banco
 
 * **Ambientes Isolados**:
-* **Development**: Porta **54321** (configurado em `supabase/config.toml`).
-* **Testing**: Porta **54331** (configurado em `supabase-test/config.toml`).
+* **Development**: Porta **54321** (configurado em `database/db-dev/supabase/config.toml`).
+* **Testing**: Porta **54421** (configurado em `database/db-test/supabase/config.toml`).
 
 * **Migrations**: Centralizadas em `database/migrations/` e compartilhadas entre os ambientes.
 * **Seeds**: Exclusivos para o ambiente de desenvolvimento (`db-dev`) localizados em `database/db-dev/seeds`.

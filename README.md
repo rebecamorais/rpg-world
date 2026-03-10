@@ -44,15 +44,17 @@ Copie o arquivo de exemplo:
 cp .example.env.local .env.local
 ```
 
-### 3. Suba o banco de dados local (Supabase)
+### 3. Suba a infraestrutura local (Supabase & Docker)
 
 > O Docker precisa estar rodando antes deste passo.
 
 ```bash
-npm run db:start
+npm run infra up
 ```
 
-Ao finalizar, o terminal exibirá as chaves geradas. Copie os valores para o `.env.local`:
+Este comando irá subir os containers do Supabase (Dev e Test), configurar os symlinks necessários e gerar as tipagens do banco de dados automaticamente.
+
+Ao finalizar, o terminal exibirá as chaves geradas para o ambiente de **Dev**. Copie os valores para o `.env.local`:
 
 ```
 API URL        →  SUPABASE_URL            (já configurado como localhost:54321)
@@ -60,7 +62,7 @@ Anon key       →  NEXT_PUBLIC_SUPABASE_ANON_KEY
 Service role   →  SUPABASE_SERVICE_ROLE_KEY
 ```
 
-> **Dica:** este passo só precisa ser feito **uma vez por sessão**. Enquanto o Docker continuar rodando, o banco permanece ativo.
+> **Dica:** O ambiente de testes roda na porta **54421** de forma isolada.
 
 ### 4. Rode o servidor de desenvolvimento
 
@@ -75,26 +77,34 @@ Acesse [http://localhost:3000](http://localhost:3000) no navegador.
 | Serviço              | URL                    |
 | -------------------- | ---------------------- |
 | Aplicação            | http://localhost:3000  |
-| Supabase API / Auth  | http://localhost:54321 |
 | Supabase Studio (UI) | http://localhost:54323 |
 | Inbucket (emails)    | http://localhost:54324 |
+| Supabase API (Dev)   | http://localhost:54321 |
+| Supabase API (Test)  | http://localhost:54421 |
 
 > O **Inbucket** intercepta os emails enviados pelo auth (Magic Link, OTP) localmente — não é necessário um email real para testar.
 
-### Scripts disponíveis
+## 📜 Documentação Interna
 
-| Comando             | Descrição                            |
-| ------------------- | ------------------------------------ |
-| `npm run dev`       | Inicia o servidor de desenvolvimento |
-| `npm run db:start`  | Sobe o Supabase local (Docker)       |
-| `npm run db:stop`   | Para os containers do Supabase       |
-| `npm run db:status` | Exibe as URLs e chaves do ambiente   |
-| `npm run db:reset`  | Reseta o banco e roda as migrations  |
-| `npm run db:studio` | Abre o Supabase Studio no browser    |
+Para detalhes técnicos mais profundos, consulte nossos guias:
 
-## 🤝 Próximos Passos
+- [🗺️ Mapa e Estrutura do Projeto](.docs/MAP_AND_STRUCTURE.md) - Guia de navegação por diretórios e arquitetura.
+- [🏆 Regras de Ouro & Princípios](.docs/RULES_REFERENCE.md) - Padrões de código, banco de dados e testes.
 
-O planejamento completo detalhado, contendo todas as Fases e os prompts de IA geradores da estrutura fundamental pode ser encontrado no nosso plano mestre em `.docs/plans/prompts_por_etapa_rpg_world_b5082e57.plan.md`.
+## 🛠️ Scripts Disponíveis
+
+| Comando              | Descrição                                                    |
+| -------------------- | ------------------------------------------------------------ |
+| `npm run dev`        | Inicia o servidor de desenvolvimento                         |
+| `npm run infra up`   | Sobe Docker, sincroniza pastas e gera tipos                  |
+| `npm run infra down` | Para todos os containers da infraestrutura                   |
+| `npm run clean`      | Reset total: apaga volumes, recria o banco e limpa o docker  |
+| `npm run db:ui`      | Abre o Supabase Studio e o Inbucket no navegador             |
+| `npm run test`       | Executa a pipeline completa (Unitários + Infra + Integração) |
+| `npm run test:unit`  | Executa apenas os testes unitários                           |
+| `npm run test:ui`    | Abre a interface visual do Vitest                            |
+| `npm run lint`       | Verifica erros de linting                                    |
+| `npm run format`     | Formata o código usando Prettier                             |
 
 ---
 

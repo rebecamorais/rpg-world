@@ -6,11 +6,10 @@ Este documento serve como um guia de navegação para desenvolvedores e agentes 
 
 - **`.docs/`**: Documentação técnica e regras de ouro (Single Source of Truth).
 - **`app/`**: Rotas do Next.js (App Router), layouts e Route Handlers da API.
-- **`database/`**: Migrations do banco de dados e scripts de seed.
+- **`database/`**: Migrations do banco de dados, seeds e configurações locais (Dev/Test) do Supabase.
 - **`public/`**: Assets estáticos (imagens, ícones, fontes).
 - **`scripts/`**: Utilitários de automação e manutenção.
 - **`src/`**: Código-fonte principal da aplicação.
-- **`supabase/`**: Configurações locais do Supabase (local dev).
 - **`test/`**: Testes E2E e configurações globais de teste.
 
 ## 🏗️ Estrutura em `src/`
