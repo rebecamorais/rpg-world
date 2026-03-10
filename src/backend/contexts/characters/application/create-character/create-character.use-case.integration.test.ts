@@ -18,7 +18,7 @@ describe('CreateCharacterUseCase (Integration)', () => {
       name: 'Gimli',
       ownerUsername: 'user1',
       system: 'DnD_5e',
-      characterClass: 'Fighter',
+      class: 'Fighter',
       race: 'Dwarf',
       level: 1,
     });
@@ -38,7 +38,7 @@ describe('CreateCharacterUseCase (Integration)', () => {
         name: '   ',
         ownerUsername: 'u',
         system: 'D',
-        characterClass: 'C',
+        class: 'C',
         race: 'R',
         level: 1,
       }),

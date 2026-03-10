@@ -46,9 +46,18 @@ export class SupabaseCharacterRepository implements CharacterRepo {
 
   async save(character: Character): Promise<void> {
     const json = character.toJSON();
-    const { hp, attributes, system, ...rest } = json;
-
-    const hpData = hp as { current: number; max: number };
+    const {
+      hpCurrent,
+      hpMax,
+      hpTemp,
+      attributes,
+      system,
+      id,
+      name,
+      ownerUsername,
+      level,
+      ...rest
+    } = json;
 
     const dbRow: DbCharacterInsert = {
       id: character.id,
@@ -58,10 +67,10 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         system as string
       ).toLowerCase() as Database['public']['Enums']['rpg_system'],
       level: character.level,
-      hp_current: hpData.current,
-      hp_max: hpData.max,
+      hp_current: hpCurrent as number,
+      hp_max: hpMax as number,
       attributes: attributes as Json,
-      system_data: rest as Json,
+      system_data: { ...rest, hpTemp: hpTemp ?? 0 } as unknown as Json,
       updated_at: new Date().toISOString(),
     };
 
@@ -94,7 +103,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         attributes,
         hp,
         row.level,
-        (dndData.characterClass as string) || '',
+        (dndData.class as string) || '',
         (dndData.race as string) || '',
         (dndData.ac as number) || 10,
         (dndData.speed as number) || 30,
@@ -124,6 +133,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         dndData.coins as
           | { cp: number; sp: number; ep: number; gp: number; pp: number }
           | undefined,
+        (dndData.hpTemp as number) || 0,
       );
     }
 

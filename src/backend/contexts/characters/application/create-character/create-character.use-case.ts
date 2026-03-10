@@ -8,7 +8,7 @@ export interface CreateCharacterInput {
   name: string;
   ownerUsername: string;
   system?: string;
-  characterClass?: string;
+  class?: string;
   race?: string;
   level?: number;
 }
@@ -33,7 +33,7 @@ export class CreateCharacterUseCase {
       attributes,
       hp,
       input.level || 1,
-      input.characterClass || '',
+      input.class || '',
       input.race || '',
     );
 

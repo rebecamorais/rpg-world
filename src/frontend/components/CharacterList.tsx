@@ -65,7 +65,7 @@ export default function CharacterList() {
               <span className="text-foreground font-medium">{c.name}</span>
               <span className="text-muted-foreground ml-2 text-sm">
                 {t('level', { level: c.level })}
-                {c.characterClass ? ` · ${c.characterClass}` : ''}
+                {c.class ? ` · ${c.class}` : ''}
               </span>
             </Link>
           </li>

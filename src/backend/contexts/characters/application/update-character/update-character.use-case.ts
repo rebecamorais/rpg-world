@@ -9,7 +9,7 @@ import { HealthPoints } from '../../domain/value-object/HealthPoints';
 
 export interface CharacterUpdates {
   name?: string;
-  characterClass?: string;
+  class?: string;
   race?: string;
   level?: number;
   ac?: number;
@@ -17,6 +17,7 @@ export interface CharacterUpdates {
   initiative?: number;
   hpCurrent?: number;
   hpMax?: number;
+  hpTemp?: number;
   attributes?: Record<AttributeKey, number>;
   skills?: Partial<Record<SkillKey, CharacterSkill>>;
   savingThrowProficiencies?: Record<AttributeKey, boolean>;
@@ -66,8 +67,7 @@ export class UpdateCharacterUseCase {
     const u = updates;
 
     if (u.name !== undefined) character.name = u.name;
-    if (u.characterClass !== undefined)
-      character.characterClass = u.characterClass;
+    if (u.class !== undefined) character.class = u.class;
     if (u.race !== undefined) character.race = u.race;
     if (u.level !== undefined) character.level = Math.max(1, u.level);
     if (u.ac !== undefined) character.ac = u.ac;
@@ -75,11 +75,12 @@ export class UpdateCharacterUseCase {
     if (u.initiative !== undefined) character.initiative = u.initiative;
     if (u.passivePerception !== undefined)
       character.passivePerception = u.passivePerception;
+    if (u.hpTemp !== undefined) character.hpTemp = u.hpTemp;
 
     if (u.hpCurrent !== undefined || u.hpMax !== undefined) {
       const currentHp =
-        u.hpCurrent !== undefined ? u.hpCurrent : character.hp.status.current;
-      const maxHp = u.hpMax !== undefined ? u.hpMax : character.hp.status.max;
+        u.hpCurrent !== undefined ? u.hpCurrent : character.hp.current;
+      const maxHp = u.hpMax !== undefined ? u.hpMax : character.hp.max;
       character.hp = new HealthPoints(currentHp, maxHp);
     }
 

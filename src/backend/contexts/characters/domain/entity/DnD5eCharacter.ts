@@ -29,11 +29,12 @@ export interface CharacterSkill {
 }
 
 export class DnD5eCharacter extends Character {
-  public characterClass: string;
+  public class: string;
   public race: string;
   public ac: number;
   public speed: number;
   public initiative: number;
+  public hpTemp: number;
   public skills: Partial<Record<SkillKey, CharacterSkill>>;
   public savingThrowProficiencies: Record<AttributeKey, boolean>;
   public passivePerception: number;
@@ -63,7 +64,7 @@ export class DnD5eCharacter extends Character {
     attributes: Attributes,
     hp: HealthPoints,
     level: number,
-    characterClass: string = '',
+    classStr: string = '',
     race: string = '',
     ac: number = 10,
     speed: number = 30,
@@ -85,13 +86,15 @@ export class DnD5eCharacter extends Character {
     spellPoints?: { max: number; current: number },
     spellsKnown: string[] = [],
     coins?: { cp: number; sp: number; ep: number; gp: number; pp: number },
+    hpTemp: number = 0,
   ) {
     super(id, name, 'DnD_5e', ownerUsername, attributes, hp, level);
-    this.characterClass = characterClass;
+    this.class = classStr;
     this.race = race;
     this.ac = ac;
     this.speed = speed;
     this.initiative = initiative;
+    this.hpTemp = hpTemp;
     this.skills = skills;
     this.savingThrowProficiencies = this.normalizeSavingThrows(
       savingThrowProficiencies,
@@ -161,7 +164,9 @@ export class DnD5eCharacter extends Character {
   getCombatStats(): Record<string, unknown> {
     return {
       ac: this.ac,
-      hp: this.hp.status,
+      hpCurrent: this.hp.current,
+      hpMax: this.hp.max,
+      hpTemp: this.hpTemp,
       speed: this.speed,
       initiative: this.initiative + this.getModifier('DEX'), // Initiative normally is just DEX mod, plus possible bonuses
       proficiencyBonus: this.proficiencyBonus,
@@ -176,8 +181,10 @@ export class DnD5eCharacter extends Character {
       ownerUsername: this.ownerUsername,
       level: this.level,
       attributes: this.attributes.getAll(),
-      hp: this.hp.status,
-      characterClass: this.characterClass,
+      hpCurrent: this.hp.current,
+      hpMax: this.hp.max,
+      hpTemp: this.hpTemp,
+      class: this.class,
       race: this.race,
       ac: this.ac,
       speed: this.speed,

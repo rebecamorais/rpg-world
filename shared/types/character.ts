@@ -12,6 +12,6 @@ export interface CharacterSummary {
   id: string;
   name: string;
   level: number;
-  characterClass?: string;
+  class?: string;
   system: GameSystem;
 }
