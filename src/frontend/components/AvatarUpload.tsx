@@ -2,8 +2,9 @@
 
 import { useRef, useState } from 'react';
 
-import { useProfile } from '@frontend/hooks/useProfile';
 import { useTranslations } from 'next-intl';
+
+import { useProfile } from '@frontend/hooks/useProfile';
 
 interface AvatarUploadProps {
   currentUrl?: string;
@@ -53,27 +54,17 @@ export default function AvatarUpload({
         className="group relative h-24 w-24 overflow-hidden rounded-full border-2 border-white/10 bg-white/5 transition-all hover:border-blue-500/50 disabled:opacity-60"
       >
         {displayUrl ? (
-          <img
-            src={displayUrl}
-            alt={t('currentAlt')}
-            className="h-full w-full object-cover"
-          />
+          <img src={displayUrl} alt={t('currentAlt')} className="h-full w-full object-cover" />
         ) : (
-          <span className="flex h-full w-full items-center justify-center text-4xl">
-            🧙
-          </span>
+          <span className="flex h-full w-full items-center justify-center text-4xl">🧙</span>
         )}
 
         {/* Upload overlay */}
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
           {isUploadingAvatar ? (
-            <span className="text-xs font-medium text-white">
-              {t('loading')}
-            </span>
+            <span className="text-xs font-medium text-white">{t('loading')}</span>
           ) : (
-            <span className="text-xs font-medium text-white">
-              {t('button')}
-            </span>
+            <span className="text-xs font-medium text-white">{t('button')}</span>
           )}
         </div>
       </button>

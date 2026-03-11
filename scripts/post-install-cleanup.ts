@@ -1,9 +1,6 @@
 import { existsSync, rmSync } from 'node:fs';
 
-const paths = [
-  'database/db-dev/supabase/.temp',
-  'database/db-test/supabase/.temp',
-];
+const paths = ['database/db-dev/supabase/.temp', 'database/db-test/supabase/.temp'];
 
 paths.forEach((p) => {
   if (existsSync(p)) {

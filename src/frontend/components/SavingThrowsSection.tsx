@@ -1,22 +1,11 @@
 'use client';
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@frontend/components/ui/card';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@frontend/components/ui/tooltip';
+import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { cn } from '@frontend/lib/utils';
+
 import { calculateSavingThrow } from '@shared/systems/dnd5e/calculations';
-import {
-  ATTRIBUTE_KEYS,
-  ATTRIBUTE_LABELS,
-} from '@shared/systems/dnd5e/constants';
+import { ATTRIBUTE_KEYS, ATTRIBUTE_LABELS } from '@shared/systems/dnd5e/constants';
 import rules from '@shared/systems/dnd5e/rules.json';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
@@ -78,9 +67,7 @@ export default function SavingThrowsSection({
                     <span
                       className={cn(
                         'mx-2 cursor-help font-mono font-bold underline decoration-dotted underline-offset-4',
-                        isProficient
-                          ? 'text-foreground'
-                          : 'text-muted-foreground',
+                        isProficient ? 'text-foreground' : 'text-muted-foreground',
                       )}
                     >
                       {sign}
@@ -89,12 +76,8 @@ export default function SavingThrowsSection({
                   </TooltipTrigger>
                   <TooltipContent>
                     <div className="flex flex-col gap-1 text-sm">
-                      <p className="font-semibold">
-                        Salvaguarda de {ATTRIBUTE_LABELS[key]}
-                      </p>
-                      <p className="text-muted-foreground">
-                        {rules.formulas.savingThrow}
-                      </p>
+                      <p className="font-semibold">Salvaguarda de {ATTRIBUTE_LABELS[key]}</p>
+                      <p className="text-muted-foreground">{rules.formulas.savingThrow}</p>
                     </div>
                   </TooltipContent>
                 </Tooltip>

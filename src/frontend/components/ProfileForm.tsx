@@ -2,6 +2,12 @@
 
 import { useEffect } from 'react';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useForm, useWatch } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
 import AvatarUpload from '@frontend/components/AvatarUpload';
 import { Button } from '@frontend/components/ui/button';
 import {
@@ -22,11 +28,6 @@ import {
 import { Input } from '@frontend/components/ui/input';
 import { Skeleton } from '@frontend/components/ui/skeleton';
 import { useProfile } from '@frontend/hooks/useProfile';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useForm, useWatch } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
 
 export default function ProfileForm() {
   const t = useTranslations('profileForm');
@@ -40,16 +41,8 @@ export default function ProfileForm() {
       .regex(/^[a-z0-9_]+$/, t('validation.usernamePattern'))
       .optional()
       .or(z.literal('')),
-    fullName: z
-      .string()
-      .max(100, t('validation.fullNameMax'))
-      .optional()
-      .or(z.literal('')),
-    avatarUrl: z
-      .string()
-      .url(t('validation.avatarUrlInvalid'))
-      .optional()
-      .or(z.literal('')),
+    fullName: z.string().max(100, t('validation.fullNameMax')).optional().or(z.literal('')),
+    avatarUrl: z.string().url(t('validation.avatarUrlInvalid')).optional().or(z.literal('')),
     primaryColor: z
       .string()
       .regex(/^#[0-9a-fA-F]{6}$/, 'Invalid hex color')
@@ -137,16 +130,11 @@ export default function ProfileForm() {
         <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
           {t('title')}
         </CardTitle>
-        <CardDescription className="text-gray-400">
-          {t('subtitle')}
-        </CardDescription>
+        <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-5"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
             {/* Avatar upload — at the top, centered */}
             <div className="flex justify-center">
               <AvatarUpload
@@ -161,9 +149,7 @@ export default function ProfileForm() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">
-                    {t('usernameLabel')}
-                  </FormLabel>
+                  <FormLabel className="text-gray-300">{t('usernameLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder={t('usernamePlaceholder')}
@@ -182,9 +168,7 @@ export default function ProfileForm() {
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">
-                    {t('fullNameLabel')}
-                  </FormLabel>
+                  <FormLabel className="text-gray-300">{t('fullNameLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder={t('fullNamePlaceholder')}
@@ -203,9 +187,7 @@ export default function ProfileForm() {
               name="primaryColor"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">
-                    {t('primaryColorLabel')}
-                  </FormLabel>
+                  <FormLabel className="text-gray-300">{t('primaryColorLabel')}</FormLabel>
                   <FormControl>
                     <div className="flex items-center gap-3">
                       <input
@@ -214,10 +196,7 @@ export default function ProfileForm() {
                         onChange={(e) => {
                           field.onChange(e.target.value);
                           // Live preview — update the CSS variable immediately
-                          document.documentElement.style.setProperty(
-                            '--primary',
-                            e.target.value,
-                          );
+                          document.documentElement.style.setProperty('--primary', e.target.value);
                         }}
                         className="h-9 w-12 cursor-pointer rounded-md border border-white/10 bg-transparent p-0.5"
                         id="primary-color-picker"
@@ -233,9 +212,7 @@ export default function ProfileForm() {
             />
 
             {form.formState.errors.root && (
-              <p className="text-sm text-red-400">
-                {form.formState.errors.root.message}
-              </p>
+              <p className="text-sm text-red-400">{form.formState.errors.root.message}</p>
             )}
 
             <Button

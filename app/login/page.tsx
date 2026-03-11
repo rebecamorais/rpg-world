@@ -1,7 +1,8 @@
 import Link from 'next/link';
 
-import LoginForm from '@frontend/components/LoginForm';
 import { useTranslations } from 'next-intl';
+
+import LoginForm from '@frontend/components/LoginForm';
 
 export default function LoginPage() {
   const t = useTranslations('common');

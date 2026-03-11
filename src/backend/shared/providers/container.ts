@@ -1,6 +1,7 @@
-import { CharacterRepo } from '@backend/contexts/characters/domain/repository/character.repo';
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
+
+import { CharacterRepo } from '@backend/contexts/characters/domain/repository/character.repo';
 
 import { Contexts } from './contexts';
 
@@ -25,10 +26,7 @@ export class Container {
     return this._contexts;
   }
 
-  register<K extends keyof ContainerRegistry>(
-    name: K,
-    dependency: ContainerRegistry[K],
-  ) {
+  register<K extends keyof ContainerRegistry>(name: K, dependency: ContainerRegistry[K]) {
     this.dependencies.set(name, dependency);
   }
 

@@ -2,10 +2,9 @@ import { execSync } from 'child_process';
 
 export function setupTestEnvironment() {
   try {
-    const statusJson = execSync(
-      'npx supabase status -o json --workdir database/db-test',
-      { encoding: 'utf-8' },
-    );
+    const statusJson = execSync('npx supabase status -o json --workdir database/db-test', {
+      encoding: 'utf-8',
+    });
 
     const status = JSON.parse(statusJson);
 

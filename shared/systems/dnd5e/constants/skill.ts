@@ -20,10 +20,7 @@ export type SkillKey =
   | 'STEALTH'
   | 'SURVIVAL';
 
-export const SKILLS_CATALOG: Record<
-  SkillKey,
-  { label: string; attribute: AttributeKey }
-> = {
+export const SKILLS_CATALOG: Record<SkillKey, { label: string; attribute: AttributeKey }> = {
   ACROBATICS: { label: 'Acrobacia', attribute: 'DEX' },
   ANIMAL_HANDLING: { label: 'Adestrar Animais', attribute: 'WIS' },
   ARCANA: { label: 'Arcanismo', attribute: 'INT' },

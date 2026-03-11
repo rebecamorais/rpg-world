@@ -44,10 +44,7 @@ const actions = {
   clean: () => {
     console.log(chalk.magenta('🧹 Limpeza profunda...'));
     run(`npx supabase stop --no-backup --workdir ${WORKDIRS.dev}`, 'Reset Dev');
-    run(
-      `npx supabase stop --no-backup --workdir ${WORKDIRS.test}`,
-      'Reset Test',
-    );
+    run(`npx supabase stop --no-backup --workdir ${WORKDIRS.test}`, 'Reset Test');
     run('docker system prune --volumes -f', 'Docker Prune');
     actions.up(); // O up já vai chamar o sync automaticamente
   },
@@ -55,28 +52,14 @@ const actions = {
 
 const prog = sade('infra');
 
-prog
-  .version('1.0.0')
-  .describe('Gerenciar infraestrutura do projeto (Supabase, Docker, etc)');
+prog.version('1.0.0').describe('Gerenciar infraestrutura do projeto (Supabase, Docker, etc)');
 
-prog
-  .command('up')
-  .describe('Sobe a infraestrutura local (Dev e Test)')
-  .action(actions.up);
+prog.command('up').describe('Sobe a infraestrutura local (Dev e Test)').action(actions.up);
 
-prog
-  .command('down')
-  .describe('Para a infraestrutura local')
-  .action(actions.down);
+prog.command('down').describe('Para a infraestrutura local').action(actions.down);
 
-prog
-  .command('clean')
-  .describe('Gera um reset total e sobe novamente')
-  .action(actions.clean);
+prog.command('clean').describe('Gera um reset total e sobe novamente').action(actions.clean);
 
-prog
-  .command('sync')
-  .describe('Sincroniza symlinks de migrations e seeds')
-  .action(actions.sync);
+prog.command('sync').describe('Sincroniza symlinks de migrations e seeds').action(actions.sync);
 
 prog.parse(process.argv);

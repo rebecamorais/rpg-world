@@ -2,6 +2,12 @@
 
 import Link from 'next/link';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -20,11 +26,6 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useAuth } from '@frontend/hooks/useAuth';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
 
 export default function ChangePasswordPage() {
   const t = useTranslations('changePassword');
@@ -75,24 +76,17 @@ export default function ChangePasswordPage() {
           <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
             {t('title')}
           </CardTitle>
-          <CardDescription className="text-gray-400">
-            {t('subtitle')}
-          </CardDescription>
+          <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-4"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-300">
-                      {t('newPasswordLabel')}
-                    </FormLabel>
+                    <FormLabel className="text-gray-300">{t('newPasswordLabel')}</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -111,9 +105,7 @@ export default function ChangePasswordPage() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-300">
-                      {t('confirmPasswordLabel')}
-                    </FormLabel>
+                    <FormLabel className="text-gray-300">{t('confirmPasswordLabel')}</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -128,9 +120,7 @@ export default function ChangePasswordPage() {
               />
 
               {form.formState.errors.root && (
-                <p className="text-sm text-red-400">
-                  {form.formState.errors.root.message}
-                </p>
+                <p className="text-sm text-red-400">{form.formState.errors.root.message}</p>
               )}
 
               <Button

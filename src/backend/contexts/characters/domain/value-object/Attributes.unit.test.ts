@@ -30,8 +30,6 @@ describe('Attributes (Value Object)', () => {
 
   it('deve lançar erro se tentar setar um valor menor que 1', () => {
     const attr = new Attributes();
-    expect(() => attr.set('STR', 0)).toThrowError(
-      'Atributo não pode ser menor que 1',
-    );
+    expect(() => attr.set('STR', 0)).toThrowError('Atributo não pode ser menor que 1');
   });
 });

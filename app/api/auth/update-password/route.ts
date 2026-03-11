@@ -7,10 +7,7 @@ export async function POST(req: Request) {
     const { newPassword } = await req.json();
 
     if (!newPassword) {
-      return NextResponse.json(
-        { error: 'New password is required' },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'New password is required' }, { status: 400 });
     }
 
     const { authApi } = await getApi();

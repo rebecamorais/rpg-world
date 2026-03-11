@@ -1,10 +1,12 @@
 'use client';
 
-import { Card, CardContent } from '@frontend/components/ui/card';
-import { Input } from '@frontend/components/ui/input';
-import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 import { BookOpen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+
+import { Card, CardContent } from '@frontend/components/ui/card';
+import { Input } from '@frontend/components/ui/input';
+
+import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 interface Props {
   name: string;
@@ -12,10 +14,7 @@ interface Props {
   level: number;
   race: string;
   pb: number;
-  onBasicInfoChange: (
-    field: keyof DnD5eCharacter,
-    value: string | number,
-  ) => void;
+  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
   onOpenSpells: () => void;
 }
 
@@ -41,8 +40,7 @@ export default function CharacterHeader({
           />
           <div className="mt-2 flex gap-4">
             <div className="text-muted-foreground text-sm">
-              {t('proficiencyBonus')}:{' '}
-              <span className="text-primary font-bold">+{pb}</span>
+              {t('proficiencyBonus')}: <span className="text-primary font-bold">+{pb}</span>
             </div>
           </div>
         </div>
@@ -65,9 +63,7 @@ export default function CharacterHeader({
               type="number"
               min={1}
               value={level || 1}
-              onChange={(e) =>
-                onBasicInfoChange('level', parseInt(e.target.value) || 1)
-              }
+              onChange={(e) => onBasicInfoChange('level', parseInt(e.target.value) || 1)}
               className="focus-visible:border-primary h-7 rounded-none border-b border-zinc-800 bg-transparent px-1 py-0 text-sm focus-visible:ring-0"
             />
           </div>

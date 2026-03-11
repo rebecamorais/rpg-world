@@ -23,11 +23,7 @@ export class UploadAvatarUseCase {
     const extension = file.type.split('/')[1];
     const path = `${userId}/avatar.${extension}`;
 
-    const publicUrl = await this.storageRepository.upload(
-      AVATAR_BUCKET,
-      path,
-      file,
-    );
+    const publicUrl = await this.storageRepository.upload(AVATAR_BUCKET, path, file);
 
     return publicUrl;
   }

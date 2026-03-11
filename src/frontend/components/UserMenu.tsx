@@ -1,7 +1,8 @@
 'use client';
 
-import { useAuth } from '@frontend/hooks/useAuth';
 import { useTranslations } from 'next-intl';
+
+import { useAuth } from '@frontend/hooks/useAuth';
 
 export default function UserMenu() {
   const { signOut } = useAuth();

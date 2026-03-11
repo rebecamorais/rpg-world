@@ -1,8 +1,9 @@
 import { useRouter } from 'next/navigation';
 
-import { rpgWorldApi } from '@client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+
+import { rpgWorldApi } from '@client';
 
 interface CreateCharacterVariables {
   name: string;
@@ -17,10 +18,7 @@ export function useCreateCharacter(tSuccess: string, tError: string) {
   return useMutation({
     mutationFn: async (variables: CreateCharacterVariables) => {
       try {
-        const data = await rpgWorldApi.post<{ id: string }>(
-          '/api/characters',
-          variables,
-        );
+        const data = await rpgWorldApi.post<{ id: string }>('/api/characters', variables);
         return data;
       } catch (error: unknown) {
         throw error;

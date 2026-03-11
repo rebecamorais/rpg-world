@@ -1,7 +1,8 @@
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
-import { SupabaseFactory } from '@lib/supabase';
 import { beforeEach, describe, expect, it } from 'vitest';
+
+import { SupabaseFactory } from '@lib/supabase';
 
 import { SupabaseAuthRepository } from '../infrastructure/repositories/supabase-auth-repository';
 import { SignInWithPasswordUseCase } from './sign-in-with-password.use-case';
@@ -14,8 +15,7 @@ const mockCookieStore = {
     const value = cookieJar.get(name);
     return value ? { name, value } : undefined;
   },
-  getAll: () =>
-    Array.from(cookieJar.entries()).map(([name, value]) => ({ name, value })),
+  getAll: () => Array.from(cookieJar.entries()).map(([name, value]) => ({ name, value })),
   set: (name: string, value: string) => cookieJar.set(name, value),
   remove: (name: string) => cookieJar.delete(name),
 } as unknown as ReadonlyRequestCookies;

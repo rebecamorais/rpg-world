@@ -1,18 +1,16 @@
 'use client';
 
-import { Card, CardContent } from '@frontend/components/ui/card';
 import { BookOpen, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+
+import { Card, CardContent } from '@frontend/components/ui/card';
 
 interface KnownSpellsCardProps {
   spellsKnown: string[];
   onForgetSpell: (spellIndex: string) => void;
 }
 
-export default function KnownSpellsCard({
-  spellsKnown,
-  onForgetSpell,
-}: KnownSpellsCardProps) {
+export default function KnownSpellsCard({ spellsKnown, onForgetSpell }: KnownSpellsCardProps) {
   const t = useTranslations('characters');
 
   if (!spellsKnown || spellsKnown.length === 0) return null;

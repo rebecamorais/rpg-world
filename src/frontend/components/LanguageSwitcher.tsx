@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
+import { useLocale } from 'next-intl';
+
 import {
   Select,
   SelectContent,
@@ -9,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@frontend/components/ui/select';
-import { useLocale } from 'next-intl';
 
 export default function LanguageSwitcher() {
   const locale = useLocale();

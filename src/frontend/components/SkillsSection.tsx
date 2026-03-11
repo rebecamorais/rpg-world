@@ -1,19 +1,11 @@
 'use client';
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@frontend/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 import { cn } from '@frontend/lib/utils';
+
 import type { AttributeKey } from '@shared/systems/dnd5e';
 import { calculateSkillValue } from '@shared/systems/dnd5e/calculations';
-import {
-  SKILLS_CATALOG,
-  SKILL_KEYS,
-  type SkillKey,
-} from '@shared/systems/dnd5e/constants';
+import { SKILLS_CATALOG, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import type { CharacterSkill } from '@shared/systems/dnd5e/types';
 
 interface Props {
@@ -23,12 +15,7 @@ interface Props {
   onSkillChange: (key: SkillKey, skillData: CharacterSkill) => void;
 }
 
-export default function SkillsSection({
-  attributes,
-  level,
-  skills,
-  onSkillChange,
-}: Props) {
+export default function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
   return (
     <Card className="border-border bg-card">
       <CardHeader className="border-border bg-muted/50 border-b px-4 py-3">
@@ -79,9 +66,7 @@ export default function SkillsSection({
                 <span
                   className={cn(
                     'flex-1 truncate font-medium transition-colors',
-                    skillData.isProficient
-                      ? 'text-foreground'
-                      : 'text-muted-foreground',
+                    skillData.isProficient ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >
                   {cat.label}
@@ -92,9 +77,7 @@ export default function SkillsSection({
                 <span
                   className={cn(
                     'mx-2 w-6 shrink-0 text-right font-mono font-bold',
-                    skillData.isProficient
-                      ? 'text-foreground'
-                      : 'text-muted-foreground',
+                    skillData.isProficient ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >
                   {sign}

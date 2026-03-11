@@ -1,14 +1,11 @@
 import { redirect } from 'next/navigation';
 
 import { getApi } from '@api';
+
 import Sidebar from '@frontend/components/Sidebar';
 import { UserProvider } from '@frontend/context/UserContext';
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { authApi } = await getApi();
   const user = await authApi.getSessionUser();
 
@@ -23,9 +20,7 @@ export default async function DashboardLayout({
         <Sidebar />
 
         {/* Main Content Area */}
-        <main className="flex w-full flex-1 flex-col items-center">
-          {children}
-        </main>
+        <main className="flex w-full flex-1 flex-col items-center">{children}</main>
       </div>
     </UserProvider>
   );

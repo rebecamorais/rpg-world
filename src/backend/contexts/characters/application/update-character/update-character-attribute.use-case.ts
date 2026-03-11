@@ -1,7 +1,4 @@
-import {
-  AttributeKey,
-  DnD5eCharacter,
-} from '../../domain/entity/DnD5eCharacter';
+import { AttributeKey, DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';
 import { CharacterRepo } from '../../domain/repository';
 
 export interface UpdateAttributeInput {

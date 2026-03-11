@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+import { Droplet, Settings2, Wand2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@frontend/components/ui/button';
 import { Card } from '@frontend/components/ui/card';
 import {
@@ -13,9 +16,8 @@ import {
 } from '@frontend/components/ui/dialog';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
+
 import { DnD5eCharacter } from '@shared/systems/dnd5e/types';
-import { Droplet, Settings2, Wand2 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 
 interface MagicSystemCardProps {
   character: DnD5eCharacter;
@@ -63,18 +65,14 @@ export default function MagicSystemCard({
               <Input
                 type="number"
                 value={character.spellPoints?.current ?? 0}
-                onChange={(e) =>
-                  onChangePoints('current', parseInt(e.target.value) || 0)
-                }
+                onChange={(e) => onChangePoints('current', parseInt(e.target.value) || 0)}
                 className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-right text-3xl font-bold focus-visible:ring-2"
               />
               <span className="text-muted-foreground">/</span>
               <Input
                 type="number"
                 value={character.spellPoints?.max ?? 0}
-                onChange={(e) =>
-                  onChangePoints('max', parseInt(e.target.value) || 0)
-                }
+                onChange={(e) => onChangePoints('max', parseInt(e.target.value) || 0)}
                 className="focus-visible:ring-primary text-muted-foreground h-10 w-12 border-transparent bg-transparent p-0 text-left text-xl font-bold focus-visible:ring-2"
               />
             </div>
@@ -88,16 +86,12 @@ export default function MagicSystemCard({
 
             <div className="mt-2 flex w-full flex-col gap-2">
               {/* Itera sobre os slots se existirem, caso contrário mostra um placeholder elegante */}
-              {character.spellSlots &&
-              Object.keys(character.spellSlots).length > 0 ? (
+              {character.spellSlots && Object.keys(character.spellSlots).length > 0 ? (
                 // Ordernar chaves numéricas do 1 ao 9
                 Object.entries(character.spellSlots)
                   .sort(([a], [b]) => parseInt(a) - parseInt(b))
                   .map(([lvl, data]) => (
-                    <div
-                      key={lvl}
-                      className="flex items-center justify-between text-sm"
-                    >
+                    <div key={lvl} className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground mr-2 font-bold">
                         {t('level', { level: lvl })}
                       </span>
@@ -106,12 +100,7 @@ export default function MagicSystemCard({
                           <button
                             key={i}
                             onClick={() =>
-                              handleSlotToggle(
-                                lvl,
-                                data.used,
-                                data.max,
-                                i >= data.used,
-                              )
+                              handleSlotToggle(lvl, data.used, data.max, i >= data.used)
                             }
                             className={`h-4 w-4 rounded-full border-2 transition-colors ${
                               i < data.used
@@ -173,13 +162,8 @@ export default function MagicSystemCard({
                   used: 0,
                 };
                 return (
-                  <div
-                    key={lvl}
-                    className="flex items-center justify-between gap-4"
-                  >
-                    <Label className="min-w-16">
-                      {t('circle', { level: lvl })}
-                    </Label>
+                  <div key={lvl} className="flex items-center justify-between gap-4">
+                    <Label className="min-w-16">{t('circle', { level: lvl })}</Label>
                     <Input
                       type="number"
                       min="0"
@@ -189,10 +173,7 @@ export default function MagicSystemCard({
                         onChangeSlots(
                           lvl.toString(),
                           parseInt(e.target.value) || 0,
-                          Math.min(
-                            currentData.used,
-                            parseInt(e.target.value) || 0,
-                          ),
+                          Math.min(currentData.used, parseInt(e.target.value) || 0),
                         )
                       }
                       className="w-20"

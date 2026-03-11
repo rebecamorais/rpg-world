@@ -56,9 +56,7 @@ export const dnd5eCharacterSchema = z.object({
   passivePerception: z.number().int().nonnegative().optional().default(10),
 
   spellcastingSystem: z.enum(['slots', 'points']).optional(),
-  spellcastingAbility: z
-    .enum(ATTRIBUTE_KEYS as [string, ...string[]])
-    .optional(),
+  spellcastingAbility: z.enum(ATTRIBUTE_KEYS as [string, ...string[]]).optional(),
   spellSaveDc: z.number().int().optional(),
   spellAttackBonus: z.number().int().optional(),
   spellSlots: z

@@ -7,10 +7,7 @@ export interface SignInWithPasswordResult {
 export class SignInWithPasswordUseCase {
   constructor(private readonly authRepository: AuthRepository) {}
 
-  async execute(
-    email: string,
-    password: string,
-  ): Promise<SignInWithPasswordResult> {
+  async execute(email: string, password: string): Promise<SignInWithPasswordResult> {
     if (!email || !password) {
       throw new Error('Email e senha são obrigatórios');
     }

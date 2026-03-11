@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
@@ -13,7 +15,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@frontend/components/ui/dialog';
-import { useTranslations } from 'next-intl';
 
 interface CharacterActionBarProps {
   characterName: string;
@@ -36,10 +37,7 @@ export default function CharacterActionBar({
   return (
     <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
       <div className="flex items-center gap-4">
-        <Link
-          href="/characters"
-          className="text-muted-foreground hover:text-foreground text-sm"
-        >
+        <Link href="/characters" className="text-muted-foreground hover:text-foreground text-sm">
           {tCommon('back')}
         </Link>
         {hasUnsavedChanges && (

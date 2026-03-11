@@ -1,8 +1,4 @@
-import {
-  CharacterContext,
-  CharacterUpdates,
-  CreateCharacterInput,
-} from '../index';
+import { CharacterContext, CharacterUpdates, CreateCharacterInput } from '../index';
 
 export const makeCharactersApi = (characterContext: CharacterContext) => ({
   getById: async (id: string) => {

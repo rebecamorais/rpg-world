@@ -17,10 +17,7 @@ export async function POST(req: Request) {
     const { authApi } = await getApi();
     await authApi.signInWithMagicLink(email, redirectTo);
 
-    return NextResponse.json(
-      { message: 'Magic link sent successfully' },
-      { status: 200 },
-    );
+    return NextResponse.json({ message: 'Magic link sent successfully' }, { status: 200 });
   } catch (err: unknown) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Unknown error' },

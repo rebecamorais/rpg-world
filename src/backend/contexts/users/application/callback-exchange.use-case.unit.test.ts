@@ -17,9 +17,7 @@ describe('CallbackExchangeUseCase', () => {
     const useCase = new CallbackExchangeUseCase(mockRepository);
     await useCase.execute('valid-auth-code');
 
-    expect(mockRepository.exchangeCodeForSession).toHaveBeenCalledWith(
-      'valid-auth-code',
-    );
+    expect(mockRepository.exchangeCodeForSession).toHaveBeenCalledWith('valid-auth-code');
   });
 
   it('deve lançar erro se o código não for preenchido', async () => {

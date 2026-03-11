@@ -96,9 +96,7 @@ export class DnD5eCharacter extends Character {
     this.initiative = initiative;
     this.hpTemp = hpTemp;
     this.skills = skills;
-    this.savingThrowProficiencies = this.normalizeSavingThrows(
-      savingThrowProficiencies,
-    );
+    this.savingThrowProficiencies = this.normalizeSavingThrows(savingThrowProficiencies);
     this.passivePerception = passivePerception;
     this.subclass = subclass;
     this.background = background;
@@ -140,17 +138,12 @@ export class DnD5eCharacter extends Character {
     return 2 + Math.floor((this.level - 1) / 4);
   }
 
-  calculateSkillValue(
-    skillKey: SkillKey,
-    relatedAttribute: AttributeKey,
-  ): number {
+  calculateSkillValue(skillKey: SkillKey, relatedAttribute: AttributeKey): number {
     const mod = this.getModifier(relatedAttribute);
     const skill = this.skills[skillKey];
     if (!skill?.isProficient) return mod;
 
-    const bonus = skill.expertise
-      ? this.proficiencyBonus * 2
-      : this.proficiencyBonus;
+    const bonus = skill.expertise ? this.proficiencyBonus * 2 : this.proficiencyBonus;
     return mod + bonus;
   }
 

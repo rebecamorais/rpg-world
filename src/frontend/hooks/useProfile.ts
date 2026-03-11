@@ -1,6 +1,8 @@
-import { Profile } from '@backend/contexts/users/domain/Profile';
-import { rpgWorldApi } from '@client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { rpgWorldApi } from '@client';
+
+import { Profile } from '@backend/contexts/users/domain/Profile';
 
 export function useProfile() {
   const queryClient = useQueryClient();
@@ -11,8 +13,7 @@ export function useProfile() {
   });
 
   const mutation = useMutation<void, Error, Partial<Profile>>({
-    mutationFn: (data) =>
-      rpgWorldApi.patch<void, Partial<Profile>>('/api/profile', data),
+    mutationFn: (data) => rpgWorldApi.patch<void, Partial<Profile>>('/api/profile', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
     },

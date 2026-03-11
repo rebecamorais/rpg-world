@@ -22,10 +22,7 @@ export async function POST(req: Request) {
   const file = formData.get('avatar');
 
   if (!file || !(file instanceof File)) {
-    return NextResponse.json(
-      { error: 'Missing "avatar" file field' },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: 'Missing "avatar" file field' }, { status: 400 });
   }
 
   try {
@@ -35,8 +32,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: publicUrl }, { status: 200 });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Upload failed';
-    const status =
-      message.includes('size') || message.includes('type') ? 422 : 400;
+    const status = message.includes('size') || message.includes('type') ? 422 : 400;
     return NextResponse.json({ error: message }, { status });
   }
 }

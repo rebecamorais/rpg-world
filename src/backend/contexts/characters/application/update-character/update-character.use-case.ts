@@ -73,13 +73,11 @@ export class UpdateCharacterUseCase {
     if (u.ac !== undefined) character.ac = u.ac;
     if (u.speed !== undefined) character.speed = u.speed;
     if (u.initiative !== undefined) character.initiative = u.initiative;
-    if (u.passivePerception !== undefined)
-      character.passivePerception = u.passivePerception;
+    if (u.passivePerception !== undefined) character.passivePerception = u.passivePerception;
     if (u.hpTemp !== undefined) character.hpTemp = u.hpTemp;
 
     if (u.hpCurrent !== undefined || u.hpMax !== undefined) {
-      const currentHp =
-        u.hpCurrent !== undefined ? u.hpCurrent : character.hp.current;
+      const currentHp = u.hpCurrent !== undefined ? u.hpCurrent : character.hp.current;
       const maxHp = u.hpMax !== undefined ? u.hpMax : character.hp.max;
       character.hp = new HealthPoints(currentHp, maxHp);
     }
@@ -112,13 +110,11 @@ export class UpdateCharacterUseCase {
     if (u.xp !== undefined) character.xp = u.xp;
     if (u.hitDice !== undefined) character.hitDice = u.hitDice;
     if (u.deathSaves !== undefined) character.deathSaves = u.deathSaves;
-    if (u.spellcastingSystem !== undefined)
-      character.spellcastingSystem = u.spellcastingSystem;
+    if (u.spellcastingSystem !== undefined) character.spellcastingSystem = u.spellcastingSystem;
     if (u.spellcastingAbility !== undefined)
       character.spellcastingAbility = u.spellcastingAbility as AttributeKey;
     if (u.spellSaveDc !== undefined) character.spellSaveDc = u.spellSaveDc;
-    if (u.spellAttackBonus !== undefined)
-      character.spellAttackBonus = u.spellAttackBonus;
+    if (u.spellAttackBonus !== undefined) character.spellAttackBonus = u.spellAttackBonus;
     if (u.spellSlots !== undefined) character.spellSlots = u.spellSlots;
     if (u.spellPoints !== undefined) character.spellPoints = u.spellPoints;
     if (u.coins !== undefined) character.coins = u.coins;

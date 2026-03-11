@@ -7,10 +7,7 @@ import { SignInWithMagicLinkUseCase } from './application/sign-in-with-magic-lin
 import { SignInWithPasswordUseCase } from './application/sign-in-with-password.use-case';
 import { SignOutUseCase } from './application/sign-out.use-case';
 import { UpdatePasswordUseCase } from './application/update-password.use-case';
-import {
-  GetProfileUseCase,
-  UpdateProfileUseCase,
-} from './application/update-profile.use-case';
+import { GetProfileUseCase, UpdateProfileUseCase } from './application/update-profile.use-case';
 import { UploadAvatarUseCase } from './application/upload-avatar.use-case';
 import { User } from './domain/User';
 import { SupabaseAuthRepository } from './infrastructure/repositories/supabase-auth-repository';

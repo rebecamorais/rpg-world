@@ -9,9 +9,7 @@ export class InMemoryCharacterRepository implements CharacterRepo {
   }
 
   async findByOwner(ownerUsername: string): Promise<Character[]> {
-    return Array.from(this.characters.values()).filter(
-      (c) => c.ownerUsername === ownerUsername,
-    );
+    return Array.from(this.characters.values()).filter((c) => c.ownerUsername === ownerUsername);
   }
 
   async save(character: Character): Promise<void> {

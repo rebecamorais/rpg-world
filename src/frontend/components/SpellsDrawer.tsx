@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+import { BookOpen, Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
@@ -11,8 +14,6 @@ import {
   DialogTitle,
 } from '@frontend/components/ui/dialog';
 import { Input } from '@frontend/components/ui/input';
-import { BookOpen, Trash2 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 
 interface Props {
   isOpen: boolean;
@@ -61,9 +62,7 @@ export default function SpellsDrawer({
 
         <div className="flex-1 overflow-y-auto pr-2">
           {learnedSpells.length === 0 ? (
-            <p className="text-muted-foreground mt-8 text-center text-sm">
-              {t('emptyState')}
-            </p>
+            <p className="text-muted-foreground mt-8 text-center text-sm">{t('emptyState')}</p>
           ) : (
             <ul className="space-y-2">
               {learnedSpells.map((spell, i) => (

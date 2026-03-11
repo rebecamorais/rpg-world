@@ -1,5 +1,6 @@
-import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 import { describe, expect, it, vi } from 'vitest';
+
+import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 
 import {
   ALLOWED_AVATAR_TYPES,
@@ -19,9 +20,7 @@ describe('UploadAvatarUseCase', () => {
   it('deve fazer upload e retornar a URL pública', async () => {
     const repository = mockStorageRepository();
     const publicUrl = 'https://cdn.example.com/avatars/user-1/avatar.webp';
-    (repository.upload as ReturnType<typeof vi.fn>).mockResolvedValue(
-      publicUrl,
-    );
+    (repository.upload as ReturnType<typeof vi.fn>).mockResolvedValue(publicUrl);
 
     const useCase = new UploadAvatarUseCase(repository);
     const file = makeBlob('image/webp', 1024);
@@ -29,11 +28,7 @@ describe('UploadAvatarUseCase', () => {
     const result = await useCase.execute('user-1', file);
 
     expect(result).toBe(publicUrl);
-    expect(repository.upload).toHaveBeenCalledWith(
-      'avatars',
-      'user-1/avatar.webp',
-      file,
-    );
+    expect(repository.upload).toHaveBeenCalledWith('avatars', 'user-1/avatar.webp', file);
   });
 
   it('deve lançar erro quando userId não for fornecido', async () => {
@@ -41,9 +36,7 @@ describe('UploadAvatarUseCase', () => {
     const useCase = new UploadAvatarUseCase(repository);
     const file = makeBlob('image/webp', 1024);
 
-    await expect(useCase.execute('', file)).rejects.toThrow(
-      'User ID is required',
-    );
+    await expect(useCase.execute('', file)).rejects.toThrow('User ID is required');
     expect(repository.upload).not.toHaveBeenCalled();
   });
 
@@ -63,24 +56,19 @@ describe('UploadAvatarUseCase', () => {
     const useCase = new UploadAvatarUseCase(repository);
     const invalidFile = makeBlob('image/gif', 1024);
 
-    await expect(useCase.execute('user-1', invalidFile)).rejects.toThrow(
-      'Invalid file type',
-    );
+    await expect(useCase.execute('user-1', invalidFile)).rejects.toThrow('Invalid file type');
     expect(repository.upload).not.toHaveBeenCalled();
   });
 
-  it.each(ALLOWED_AVATAR_TYPES)(
-    'deve aceitar o tipo de arquivo %s',
-    async (type) => {
-      const repository = mockStorageRepository();
-      (repository.upload as ReturnType<typeof vi.fn>).mockResolvedValue(
-        'https://cdn.example.com/url',
-      );
+  it.each(ALLOWED_AVATAR_TYPES)('deve aceitar o tipo de arquivo %s', async (type) => {
+    const repository = mockStorageRepository();
+    (repository.upload as ReturnType<typeof vi.fn>).mockResolvedValue(
+      'https://cdn.example.com/url',
+    );
 
-      const useCase = new UploadAvatarUseCase(repository);
-      const file = makeBlob(type, 1024);
+    const useCase = new UploadAvatarUseCase(repository);
+    const file = makeBlob(type, 1024);
 
-      await expect(useCase.execute('user-1', file)).resolves.toBeDefined();
-    },
-  );
+    await expect(useCase.execute('user-1', file)).resolves.toBeDefined();
+  });
 });

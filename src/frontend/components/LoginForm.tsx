@@ -2,6 +2,12 @@
 
 import { useState } from 'react';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -20,11 +26,6 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useAuth } from '@frontend/hooks/useAuth';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
 
 interface LoginFormValues {
   email: string;
@@ -78,9 +79,7 @@ export default function LoginForm() {
           <CardDescription className="text-gray-400">
             {t.rich('verifyEmailDescription', {
               email: form.getValues('email'),
-              bold: (chunks) => (
-                <strong className="text-white">{chunks}</strong>
-              ),
+              bold: (chunks) => <strong className="text-white">{chunks}</strong>,
             })}
           </CardDescription>
         </CardHeader>
@@ -94,9 +93,7 @@ export default function LoginForm() {
         <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
           {t('title')}
         </CardTitle>
-        <CardDescription className="text-gray-400">
-          {t('subtitle')}
-        </CardDescription>
+        <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div className="flex rounded-lg bg-white/5 p-1">
@@ -123,18 +120,13 @@ export default function LoginForm() {
         </div>
 
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">
-                    {t('emailLabel')}
-                  </FormLabel>
+                  <FormLabel className="text-gray-300">{t('emailLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
@@ -155,9 +147,7 @@ export default function LoginForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-300">
-                      {t('passwordLabel')}
-                    </FormLabel>
+                    <FormLabel className="text-gray-300">{t('passwordLabel')}</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -182,9 +172,7 @@ export default function LoginForm() {
             )}
 
             {form.formState.errors.root && (
-              <p className="text-sm text-red-400">
-                {form.formState.errors.root.message}
-              </p>
+              <p className="text-sm text-red-400">{form.formState.errors.root.message}</p>
             )}
 
             <Button
@@ -210,9 +198,7 @@ export default function LoginForm() {
             <span className="w-full border-t border-white/10" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-black/60 px-2 text-gray-500">
-              {t('dividerText')}
-            </span>
+            <span className="bg-black/60 px-2 text-gray-500">{t('dividerText')}</span>
           </div>
         </div>
 
@@ -233,11 +219,7 @@ export default function LoginForm() {
 
 function GoogleIcon() {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      className="mr-2 h-4 w-4"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
       <path
         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
         fill="#4285F4"

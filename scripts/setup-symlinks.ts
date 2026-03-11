@@ -23,8 +23,7 @@ for (const [linkPath, targetPath] of symlinks) {
     // 2. Verifica se algo já existe no caminho do link
     if (!existsSync(linkPath)) {
       // No Windows, symlink de diretório precisa do terceiro argumento 'dir'
-      const type =
-        targetPath.endsWith('/') || !targetPath.includes('.') ? 'dir' : 'file';
+      const type = targetPath.endsWith('/') || !targetPath.includes('.') ? 'dir' : 'file';
 
       symlinkSync(targetPath, linkPath, type);
       console.log(`✅ Symlink criado: ${linkPath} → ${targetPath}`);
@@ -32,9 +31,7 @@ for (const [linkPath, targetPath] of symlinks) {
       console.log(`ℹ️  Symlink ou diretório já existe: ${linkPath}`);
     }
   } catch (error: unknown) {
-    console.error(
-      `❌ Erro ao criar symlink para ${linkPath}: ${JSON.stringify(error)}`,
-    );
+    console.error(`❌ Erro ao criar symlink para ${linkPath}: ${JSON.stringify(error)}`);
     // Não mata o processo para não quebrar o npm install, mas avisa o dev
   }
 }

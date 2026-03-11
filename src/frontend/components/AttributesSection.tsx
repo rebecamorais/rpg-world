@@ -1,16 +1,9 @@
 'use client';
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@frontend/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
+
 import type { AttributeKey } from '@shared/systems/dnd5e';
-import {
-  ATTRIBUTE_KEYS,
-  ATTRIBUTE_LABELS,
-} from '@shared/systems/dnd5e/constants';
+import { ATTRIBUTE_KEYS, ATTRIBUTE_LABELS } from '@shared/systems/dnd5e/constants';
 
 import AttributeCard from './AttributeCard';
 
@@ -19,10 +12,7 @@ interface Props {
   onAttributeChange: (key: AttributeKey, value: number) => void;
 }
 
-export default function AttributesSection({
-  attributes,
-  onAttributeChange,
-}: Props) {
+export default function AttributesSection({ attributes, onAttributeChange }: Props) {
   return (
     <Card className="border-border bg-card h-full">
       <CardHeader className="border-border bg-muted/50 border-b px-4 py-3">

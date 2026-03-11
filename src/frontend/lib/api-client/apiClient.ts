@@ -64,10 +64,7 @@ export class ApiClient {
     return response.json() as Promise<T>;
   }
 
-  public get<T = unknown>(
-    url: string,
-    options?: Omit<RequestOptions, 'method' | 'body'>,
-  ) {
+  public get<T = unknown>(url: string, options?: Omit<RequestOptions, 'method' | 'body'>) {
     return this.fetchWrapper<T>(url, { ...options, method: 'GET' });
   }
 
@@ -95,10 +92,7 @@ export class ApiClient {
     return this.fetchWrapper<T, B>(url, { ...options, method: 'PATCH', body });
   }
 
-  public delete<T = unknown>(
-    url: string,
-    options?: Omit<RequestOptions, 'method' | 'body'>,
-  ) {
+  public delete<T = unknown>(url: string, options?: Omit<RequestOptions, 'method' | 'body'>) {
     return this.fetchWrapper<T>(url, { ...options, method: 'DELETE' });
   }
 }

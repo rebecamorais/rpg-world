@@ -2,11 +2,12 @@
 
 import { type ReactNode, useEffect } from 'react';
 
+import { NextIntlClientProvider } from 'next-intl';
+
 import QueryProvider from '@frontend/components/QueryProvider';
 import ThemeProvider from '@frontend/components/ThemeProvider';
 import { TooltipProvider } from '@frontend/components/ui/tooltip';
 import { UserProvider } from '@frontend/context/UserContext';
-import { NextIntlClientProvider } from 'next-intl';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -15,12 +16,7 @@ interface ProvidersProps {
   timeZone: string;
 }
 
-export default function Providers({
-  children,
-  locale,
-  messages,
-  timeZone,
-}: ProvidersProps) {
+export default function Providers({ children, locale, messages, timeZone }: ProvidersProps) {
   useEffect(() => {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     if (tz) {
@@ -30,11 +26,7 @@ export default function Providers({
 
   return (
     <QueryProvider>
-      <NextIntlClientProvider
-        locale={locale}
-        messages={messages}
-        timeZone={timeZone}
-      >
+      <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
         <UserProvider user={null}>
           <ThemeProvider />
           <TooltipProvider>{children}</TooltipProvider>

@@ -16,23 +16,17 @@ import { SupabaseCharacterRepository } from './infrastructure/repositories/supab
 
 export type { CharacterContext, CharacterUpdates, CreateCharacterInput };
 
-export const createCharacterContext = (
-  dbClient: SupabaseClient,
-): CharacterContext => {
+export const createCharacterContext = (dbClient: SupabaseClient): CharacterContext => {
   const repository = new SupabaseCharacterRepository(dbClient);
   const getCharacterUseCase = new GetCharacterUseCase(repository);
-  const getCharactersByOwnerUseCase = new GetCharactersByOwnerUseCase(
-    repository,
-  );
+  const getCharactersByOwnerUseCase = new GetCharactersByOwnerUseCase(repository);
   const createCharacterUseCase = new CreateCharacterUseCase(repository);
   const updateCharacterUseCase = new UpdateCharacterUseCase(repository);
   const deleteCharacterUseCase = new DeleteCharacterUseCase(repository);
 
   return {
     getById: getCharacterUseCase.execute.bind(getCharacterUseCase),
-    getByOwner: getCharactersByOwnerUseCase.execute.bind(
-      getCharactersByOwnerUseCase,
-    ),
+    getByOwner: getCharactersByOwnerUseCase.execute.bind(getCharactersByOwnerUseCase),
     create: createCharacterUseCase.execute.bind(createCharacterUseCase),
     update: updateCharacterUseCase.execute.bind(updateCharacterUseCase),
     delete: deleteCharacterUseCase.execute.bind(deleteCharacterUseCase),

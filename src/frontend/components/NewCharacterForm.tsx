@@ -2,6 +2,11 @@
 
 import Link from 'next/link';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -28,10 +33,6 @@ import {
 } from '@frontend/components/ui/select';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCreateCharacter } from '@frontend/hooks/useCreateCharacter';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 export default function NewCharacterForm() {
   const { currentUser } = useCurrentUser();

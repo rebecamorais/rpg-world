@@ -3,9 +3,7 @@ import { SystemProvider } from '../../application/ports/SystemProvider';
 export class DnD5eAPIAdapter implements SystemProvider {
   private baseUrl = 'https://www.dnd5eapi.co/api';
 
-  async getSpellDetails(
-    spellIndex: string,
-  ): Promise<Record<string, unknown> | null> {
+  async getSpellDetails(spellIndex: string): Promise<Record<string, unknown> | null> {
     try {
       const res = await fetch(`${this.baseUrl}/spells/${spellIndex}`);
       if (!res.ok) return null;
@@ -16,10 +14,7 @@ export class DnD5eAPIAdapter implements SystemProvider {
     }
   }
 
-  async searchEntity(
-    query: string,
-    type: 'monster' | 'item' | 'spell',
-  ): Promise<unknown[]> {
+  async searchEntity(query: string, type: 'monster' | 'item' | 'spell'): Promise<unknown[]> {
     let endpoint = '';
     if (type === 'spell') endpoint = 'spells';
     else if (type === 'monster') endpoint = 'monsters';
@@ -28,9 +23,7 @@ export class DnD5eAPIAdapter implements SystemProvider {
     if (!endpoint) return [];
 
     try {
-      const res = await fetch(
-        `${this.baseUrl}/${endpoint}?name=${encodeURIComponent(query)}`,
-      );
+      const res = await fetch(`${this.baseUrl}/${endpoint}?name=${encodeURIComponent(query)}`);
       if (!res.ok) return [];
       const data = await res.json();
       return data.results || [];

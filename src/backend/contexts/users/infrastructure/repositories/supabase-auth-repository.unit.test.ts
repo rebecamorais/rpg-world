@@ -1,9 +1,4 @@
-import {
-  AuthError,
-  Session,
-  SupabaseClient,
-  User,
-} from '@supabase/supabase-js';
+import { AuthError, Session, SupabaseClient, User } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SupabaseAuthRepository } from './supabase-auth-repository';
@@ -28,8 +23,7 @@ describe('SupabaseAuthRepository', () => {
     repository = new SupabaseAuthRepository(mockAuthClient);
   });
 
-  const mockAuthError = (message: string): AuthError =>
-    new AuthError(message, 400, 'mock_error');
+  const mockAuthError = (message: string): AuthError => new AuthError(message, 400, 'mock_error');
 
   describe('getSessionUser', () => {
     it('deve retornar o usuário mapeado quando sucesso', async () => {
@@ -83,38 +77,32 @@ describe('SupabaseAuthRepository', () => {
         error: mockAuthError('Rate limit exceeded'),
       });
 
-      await expect(
-        repository.signInWithOtp('t@example.com', '/path'),
-      ).rejects.toThrow('Failed to sign in with OTP: Rate limit exceeded');
+      await expect(repository.signInWithOtp('t@example.com', '/path')).rejects.toThrow(
+        'Failed to sign in with OTP: Rate limit exceeded',
+      );
     });
   });
 
   describe('exchangeCodeForSession', () => {
     it('deve realizar a troca do pkce code sem erro', async () => {
-      vi.mocked(
-        mockAuthClient.auth.exchangeCodeForSession,
-      ).mockResolvedValueOnce({
+      vi.mocked(mockAuthClient.auth.exchangeCodeForSession).mockResolvedValueOnce({
         data: { user: {} as User, session: {} as Session },
         error: null,
       });
 
       await repository.exchangeCodeForSession('secret-code');
-      expect(mockAuthClient.auth.exchangeCodeForSession).toHaveBeenCalledWith(
-        'secret-code',
-      );
+      expect(mockAuthClient.auth.exchangeCodeForSession).toHaveBeenCalledWith('secret-code');
     });
 
     it('deve lançar erro caso falhe a troca', async () => {
-      vi.mocked(
-        mockAuthClient.auth.exchangeCodeForSession,
-      ).mockResolvedValueOnce({
+      vi.mocked(mockAuthClient.auth.exchangeCodeForSession).mockResolvedValueOnce({
         data: { user: null, session: null },
         error: mockAuthError('Invalid code'),
       });
 
-      await expect(
-        repository.exchangeCodeForSession('wrong-code'),
-      ).rejects.toThrow('Failed to exchange code for session: Invalid code');
+      await expect(repository.exchangeCodeForSession('wrong-code')).rejects.toThrow(
+        'Failed to exchange code for session: Invalid code',
+      );
     });
   });
 
@@ -133,9 +121,7 @@ describe('SupabaseAuthRepository', () => {
         error: mockAuthError('Server disconnect'),
       });
 
-      await expect(repository.signOut()).rejects.toThrow(
-        'Failed to sign out: Server disconnect',
-      );
+      await expect(repository.signOut()).rejects.toThrow('Failed to sign out: Server disconnect');
     });
   });
 });

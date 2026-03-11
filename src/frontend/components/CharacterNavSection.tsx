@@ -1,12 +1,9 @@
 'use client';
-import { useCharacter } from '@frontend/hooks/useCharacter';
 import { useTranslations } from 'next-intl';
 
-export default function CharacterNavSection({
-  characterId,
-}: {
-  characterId: string;
-}) {
+import { useCharacter } from '@frontend/hooks/useCharacter';
+
+export default function CharacterNavSection({ characterId }: { characterId: string }) {
   const tDash = useTranslations('dashboard');
 
   const { character } = useCharacter(characterId);

@@ -8,8 +8,5 @@ export interface SystemProvider {
   /**
    * Busca uma lista de monstros, itens ou outras entidades externas baseadas no nome.
    */
-  searchEntity(
-    query: string,
-    type: 'monster' | 'item' | 'spell',
-  ): Promise<unknown[]>;
+  searchEntity(query: string, type: 'monster' | 'item' | 'spell'): Promise<unknown[]>;
 }

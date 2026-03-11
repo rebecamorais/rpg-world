@@ -1,6 +1,7 @@
-import { Database, Json } from '@database-types';
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
+
+import { Database, Json } from '@database-types';
 
 import { Character } from '../../domain/entity/Character';
 import {
@@ -63,9 +64,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       id: character.id,
       name: character.name,
       owner_id: character.ownerUsername,
-      system: (
-        system as string
-      ).toLowerCase() as Database['public']['Enums']['rpg_system'],
+      system: (system as string).toLowerCase() as Database['public']['Enums']['rpg_system'],
       level: character.level,
       hp_current: hpCurrent as number,
       hp_max: hpMax as number,
@@ -109,36 +108,26 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         (dndData.speed as number) || 30,
         (dndData.initiative as number) || 0,
         (dndData.skills as Partial<Record<SkillKey, CharacterSkill>>) || {},
-        (dndData.savingThrowProficiencies as Partial<
-          Record<AttributeKey, boolean>
-        >) || {},
+        (dndData.savingThrowProficiencies as Partial<Record<AttributeKey, boolean>>) || {},
         (dndData.passivePerception as number) || 10,
         dndData.subclass as string | undefined,
         dndData.background as string | undefined,
         dndData.alignment as string | undefined,
         dndData.xp as number | undefined,
         dndData.hitDice as { total: string; current: number } | undefined,
-        dndData.deathSaves as
-          | { successes: number; failures: number }
-          | undefined,
+        dndData.deathSaves as { successes: number; failures: number } | undefined,
         dndData.spellcastingSystem as 'slots' | 'points' | undefined,
         dndData.spellcastingAbility as AttributeKey | undefined,
         dndData.spellSaveDc as number | undefined,
         dndData.spellAttackBonus as number | undefined,
-        dndData.spellSlots as
-          | Record<string, { max: number; used: number }>
-          | undefined,
+        dndData.spellSlots as Record<string, { max: number; used: number }> | undefined,
         dndData.spellPoints as { max: number; current: number } | undefined,
         (dndData.spellsKnown as string[]) || [],
-        dndData.coins as
-          | { cp: number; sp: number; ep: number; gp: number; pp: number }
-          | undefined,
+        dndData.coins as { cp: number; sp: number; ep: number; gp: number; pp: number } | undefined,
         (dndData.hpTemp as number) || 0,
       );
     }
 
-    throw new Error(
-      `System ${row.system} not implemented in repository mapping`,
-    );
+    throw new Error(`System ${row.system} not implemented in repository mapping`);
   }
 }

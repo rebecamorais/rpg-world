@@ -21,10 +21,7 @@ export function getUserByUsername(username: string): InMemoryUser | undefined {
   return users.get(username);
 }
 
-export function getOrCreateUser(
-  username: string,
-  displayName?: string,
-): InMemoryUser {
+export function getOrCreateUser(username: string, displayName?: string): InMemoryUser {
   const existing = users.get(username);
   if (existing) {
     if (displayName !== undefined) {
@@ -53,10 +50,7 @@ export function addCharacter(character: DnD5eCharacter): DnD5eCharacter {
   character.level = Math.max(1, Math.floor(character.level));
   for (const key of Object.keys(character.attributes)) {
     const k = key as keyof typeof character.attributes;
-    character.attributes[k] = Math.max(
-      1,
-      Math.min(30, Math.floor(character.attributes[k])),
-    );
+    character.attributes[k] = Math.max(1, Math.min(30, Math.floor(character.attributes[k])));
   }
 
   characters.set(character.id, { ...character });
@@ -68,9 +62,7 @@ export function getCharacterById(id: string): DnD5eCharacter | undefined {
 }
 
 export function getCharactersByOwner(ownerUsername: string): DnD5eCharacter[] {
-  return Array.from(characters.values()).filter(
-    (c) => c.ownerUsername === ownerUsername,
-  );
+  return Array.from(characters.values()).filter((c) => c.ownerUsername === ownerUsername);
 }
 
 export function updateCharacter(
@@ -86,10 +78,7 @@ export function updateCharacter(
   updated.level = Math.max(1, Math.floor(updated.level));
   for (const key of Object.keys(updated.attributes)) {
     const k = key as keyof typeof updated.attributes;
-    updated.attributes[k] = Math.max(
-      1,
-      Math.min(30, Math.floor(updated.attributes[k])),
-    );
+    updated.attributes[k] = Math.max(1, Math.min(30, Math.floor(updated.attributes[k])));
   }
 
   characters.set(id, updated);

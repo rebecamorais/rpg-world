@@ -1,13 +1,16 @@
 {
-  "plugins": [
-    "@trivago/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss"
-  ],
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
   "importOrder": [
     "^(react/(.*)$)|^(react$)",
     "^(next/(.*)$)|^(next$)",
     "<THIRD_PARTY_MODULES>",
-    "^@/(.*)$",
+    "^@api$",
+    "^@client$",
+    "^@frontend/(.*)$",
+    "^@backend/(.*)$",
+    "^@shared/(.*)$",
+    "^@lib/(.*)$",
+    "^@database-types$",
     "^[./]"
   ],
   "importOrderSeparation": true,
@@ -16,7 +19,7 @@
   "singleQuote": true,
   "trailingComma": "all",
   "semi": true,
-  "printWidth": 80,
+  "printWidth": 100,
   "tabWidth": 2,
   "bracketSpacing": true,
   "arrowParens": "always",

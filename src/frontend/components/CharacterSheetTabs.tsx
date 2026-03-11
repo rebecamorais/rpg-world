@@ -2,22 +2,16 @@
 
 import * as React from 'react';
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@frontend/components/ui/tabs';
 import { BookOpen, Files, Shield, Sword } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 
 interface CharacterSheetTabsProps {
   statusContent: React.ReactNode;
 }
 
-export default function CharacterSheetTabs({
-  statusContent,
-}: CharacterSheetTabsProps) {
+export default function CharacterSheetTabs({ statusContent }: CharacterSheetTabsProps) {
   const t = useTranslations('characters.tabs');
   const tEmpty = useTranslations('characters.emptyStates');
 
@@ -54,37 +48,25 @@ export default function CharacterSheetTabs({
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent
-        value="status"
-        className="min-h-[70vh] w-full focus-visible:ring-0"
-      >
+      <TabsContent value="status" className="min-h-[70vh] w-full focus-visible:ring-0">
         {statusContent}
       </TabsContent>
 
-      <TabsContent
-        value="lore"
-        className="min-h-[70vh] w-full focus-visible:ring-0"
-      >
+      <TabsContent value="lore" className="min-h-[70vh] w-full focus-visible:ring-0">
         <div className="text-muted-foreground flex h-[70vh] w-full flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
           <Files className="mb-4 h-12 w-12 opacity-20" />
           <p>{tEmpty('lore')}</p>
         </div>
       </TabsContent>
 
-      <TabsContent
-        value="spells"
-        className="min-h-[70vh] w-full focus-visible:ring-0"
-      >
+      <TabsContent value="spells" className="min-h-[70vh] w-full focus-visible:ring-0">
         <div className="text-muted-foreground flex h-[70vh] w-full flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
           <BookOpen className="mb-4 h-12 w-12 opacity-20" />
           <p>{tEmpty('spells')}</p>
         </div>
       </TabsContent>
 
-      <TabsContent
-        value="inventory"
-        className="min-h-[70vh] w-full focus-visible:ring-0"
-      >
+      <TabsContent value="inventory" className="min-h-[70vh] w-full focus-visible:ring-0">
         <div className="text-muted-foreground flex h-[70vh] w-full flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
           <Sword className="mb-4 h-12 w-12 opacity-20" />
           <p>{tEmpty('inventory')}</p>

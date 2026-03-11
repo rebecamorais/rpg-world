@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 
-import { getApi } from '@api';
-import type { User } from '@shared/types/user';
 import 'server-only';
+
+import { getApi } from '@api';
+
+import type { User } from '@shared/types/user';
 
 type RouteContext = { params: Promise<Record<string, string>> };
 
@@ -21,10 +23,7 @@ type AuthenticatedHandler<B = void> = (
 async function runHandler<B>(
   req: Request,
   ctx: RouteContext,
-  handler: (
-    body: B extends void ? undefined : B,
-    ctx: RouteContext,
-  ) => Promise<unknown>,
+  handler: (body: B extends void ? undefined : B, ctx: RouteContext) => Promise<unknown>,
   successStatus: number,
 ) {
   try {
@@ -55,12 +54,8 @@ async function runHandler<B>(
  *     return someApi.getPublicData(id);
  *   });
  */
-export function withHandler<B = void>(
-  handler: BaseHandler<B>,
-  successStatus = 200,
-) {
-  return (req: Request, ctx: RouteContext) =>
-    runHandler<B>(req, ctx, handler, successStatus);
+export function withHandler<B = void>(handler: BaseHandler<B>, successStatus = 200) {
+  return (req: Request, ctx: RouteContext) => runHandler<B>(req, ctx, handler, successStatus);
 }
 
 /**
@@ -72,10 +67,7 @@ export function withHandler<B = void>(
  *     return someApi.create({ ...body, ownerId: user.id });
  *   }, 201);
  */
-export function withAuth<B = void>(
-  handler: AuthenticatedHandler<B>,
-  successStatus = 200,
-) {
+export function withAuth<B = void>(handler: AuthenticatedHandler<B>, successStatus = 200) {
   return async (req: Request, ctx: RouteContext) => {
     const { authApi } = await getApi();
     const user = await authApi.getSessionUser();
@@ -84,11 +76,6 @@ export function withAuth<B = void>(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    return runHandler<B>(
-      req,
-      ctx,
-      (body, c) => handler(user, body, c),
-      successStatus,
-    );
+    return runHandler<B>(req, ctx, (body, c) => handler(user, body, c), successStatus);
   };
 }

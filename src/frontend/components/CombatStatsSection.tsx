@@ -1,17 +1,16 @@
 'use client';
 
-import { Card } from '@frontend/components/ui/card';
-import { Input } from '@frontend/components/ui/input';
-import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 import { Footprints, Heart, HeartPulse, Shield, Swords } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { Card } from '@frontend/components/ui/card';
+import { Input } from '@frontend/components/ui/input';
+
+import type { DnD5eCharacter } from '@shared/systems/dnd5e';
+
 interface CombatStatsSectionProps {
   character: DnD5eCharacter;
-  onBasicInfoChange: (
-    field: keyof DnD5eCharacter,
-    value: string | number,
-  ) => void;
+  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
 }
 
 export default function CombatStatsSection({
@@ -29,9 +28,7 @@ export default function CombatStatsSection({
           <Input
             type="number"
             value={character.ac ?? 0}
-            onChange={(e) =>
-              onBasicInfoChange('ac', parseInt(e.target.value) || 0)
-            }
+            onChange={(e) => onBasicInfoChange('ac', parseInt(e.target.value) || 0)}
             className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
           />
           <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
@@ -48,18 +45,14 @@ export default function CombatStatsSection({
             <Input
               type="number"
               value={character.hpCurrent ?? 0}
-              onChange={(e) =>
-                onBasicInfoChange('hpCurrent', parseInt(e.target.value) || 0)
-              }
+              onChange={(e) => onBasicInfoChange('hpCurrent', parseInt(e.target.value) || 0)}
               className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-right text-3xl font-bold focus-visible:ring-2"
             />
             <span className="text-muted-foreground">/</span>
             <Input
               type="number"
               value={character.hpMax ?? 0}
-              onChange={(e) =>
-                onBasicInfoChange('hpMax', parseInt(e.target.value) || 0)
-              }
+              onChange={(e) => onBasicInfoChange('hpMax', parseInt(e.target.value) || 0)}
               className="focus-visible:ring-primary text-muted-foreground h-10 w-12 border-transparent bg-transparent p-0 text-left text-xl font-bold focus-visible:ring-2"
             />
           </div>
@@ -76,9 +69,7 @@ export default function CombatStatsSection({
           <Input
             type="number"
             value={character.hpTemp ?? 0}
-            onChange={(e) =>
-              onBasicInfoChange('hpTemp', parseInt(e.target.value) || 0)
-            }
+            onChange={(e) => onBasicInfoChange('hpTemp', parseInt(e.target.value) || 0)}
             className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
           />
           <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
@@ -95,14 +86,10 @@ export default function CombatStatsSection({
             <Input
               type="number"
               value={character.speed || 30}
-              onChange={(e) =>
-                onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
-              }
+              onChange={(e) => onBasicInfoChange('speed', parseFloat(e.target.value) || 0)}
               className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
             />
-            <span className="text-muted-foreground text-sm">
-              {t('speedUnit')}
-            </span>
+            <span className="text-muted-foreground text-sm">{t('speedUnit')}</span>
           </div>
           <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
             {t('speed')}
@@ -117,9 +104,7 @@ export default function CombatStatsSection({
           <Input
             type="number"
             value={character.initiative}
-            onChange={(e) =>
-              onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
-            }
+            onChange={(e) => onBasicInfoChange('initiative', parseInt(e.target.value) || 0)}
             className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-center text-3xl font-bold focus-visible:ring-2"
           />
           <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">

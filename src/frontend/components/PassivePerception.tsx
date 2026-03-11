@@ -1,15 +1,13 @@
 'use client';
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@frontend/components/ui/tooltip';
+import { Eye } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
+import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
+
 import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
 import rules from '@shared/systems/dnd5e/rules.json';
 import type { CharacterSkill } from '@shared/systems/dnd5e/types';
-import { Eye } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 
 interface Props {
   wisValue: number;
@@ -17,21 +15,12 @@ interface Props {
   perceptionSkillData?: CharacterSkill;
 }
 
-export default function PassivePerception({
-  wisValue,
-  level,
-  perceptionSkillData,
-}: Props) {
+export default function PassivePerception({ wisValue, level, perceptionSkillData }: Props) {
   const t = useTranslations('characters');
   const isProficient = perceptionSkillData?.isProficient ?? false;
   const expertise = perceptionSkillData?.expertise ?? false;
 
-  const passiveValue = calculatePassivePerception(
-    wisValue,
-    level,
-    isProficient,
-    expertise,
-  );
+  const passiveValue = calculatePassivePerception(wisValue, level, isProficient, expertise);
 
   return (
     <Tooltip>
@@ -43,16 +32,12 @@ export default function PassivePerception({
               {t('passivePerception')}
             </span>
           </div>
-          <span className="text-foreground font-mono text-xl font-bold">
-            {passiveValue}
-          </span>
+          <span className="text-foreground font-mono text-xl font-bold">{passiveValue}</span>
         </div>
       </TooltipTrigger>
       <TooltipContent className="max-w-xs">
         <div className="flex flex-col gap-1 text-sm">
-          <p className="text-muted-foreground">
-            {rules.formulas.passivePerception}
-          </p>
+          <p className="text-muted-foreground">{rules.formulas.passivePerception}</p>
         </div>
       </TooltipContent>
     </Tooltip>

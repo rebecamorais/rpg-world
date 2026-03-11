@@ -2,8 +2,9 @@ import { cache } from 'react';
 
 import { cookies } from 'next/headers';
 
-import { SupabaseFactory } from '@lib/supabase';
 import 'server-only';
+
+import { SupabaseFactory } from '@lib/supabase';
 
 import { Container } from './container';
 

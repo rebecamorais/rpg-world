@@ -1,5 +1,7 @@
 import { getApi } from '@api';
+
 import { Profile } from '@backend/contexts/users/domain/Profile';
+
 import { withAuth } from '@shared/http/route-handler';
 
 export const GET = withAuth(async (user) => {

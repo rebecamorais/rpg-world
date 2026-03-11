@@ -11,12 +11,8 @@ describe('HealthPoints (Value Object)', () => {
   });
 
   it('não deve permitir vida máxima menor que 1', () => {
-    expect(() => new HealthPoints(10, 0)).toThrowError(
-      'A vida máxima deve ser pelo menos 1',
-    );
-    expect(() => new HealthPoints(10, -5)).toThrowError(
-      'A vida máxima deve ser pelo menos 1',
-    );
+    expect(() => new HealthPoints(10, 0)).toThrowError('A vida máxima deve ser pelo menos 1');
+    expect(() => new HealthPoints(10, -5)).toThrowError('A vida máxima deve ser pelo menos 1');
   });
 
   it('deve limitar a vida atual à vida máxima na inicialização', () => {

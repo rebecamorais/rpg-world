@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
@@ -14,14 +16,10 @@ import {
 } from '@frontend/components/ui/dialog';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@frontend/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
+
 import { getModifier } from '@shared/systems/dnd5e/calculations';
 import rules from '@shared/systems/dnd5e/rules.json';
-import { useTranslations } from 'next-intl';
 
 const MIN_ATTR = 1;
 const MAX_ATTR = 30;
@@ -91,9 +89,7 @@ export default function AttributeCard({ label, value, onChange }: Props) {
             <TooltipContent>
               <div className="flex flex-col gap-1 text-sm">
                 <p className="font-semibold">{tAttr('modifierCalc')}</p>
-                <p className="text-muted-foreground">
-                  {rules.formulas.attributeModifier}
-                </p>
+                <p className="text-muted-foreground">{rules.formulas.attributeModifier}</p>
               </div>
             </TooltipContent>
           </Tooltip>
@@ -114,9 +110,7 @@ export default function AttributeCard({ label, value, onChange }: Props) {
               min={MIN_ATTR}
               max={MAX_ATTR}
               value={tempValue}
-              onChange={(e) =>
-                setTempValue(e.target.value === '' ? 0 : Number(e.target.value))
-              }
+              onChange={(e) => setTempValue(e.target.value === '' ? 0 : Number(e.target.value))}
               onKeyDown={handleKeyDown}
               autoFocus
             />

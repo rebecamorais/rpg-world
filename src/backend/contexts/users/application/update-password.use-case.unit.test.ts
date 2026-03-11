@@ -17,9 +17,7 @@ describe('UpdatePasswordUseCase', () => {
     const useCase = new UpdatePasswordUseCase(mockRepository);
     await useCase.execute('newPassword123');
 
-    expect(mockRepository.updatePassword).toHaveBeenCalledWith(
-      'newPassword123',
-    );
+    expect(mockRepository.updatePassword).toHaveBeenCalledWith('newPassword123');
   });
 
   it('deve lançar erro se a nova senha não for fornecida', async () => {
@@ -34,9 +32,7 @@ describe('UpdatePasswordUseCase', () => {
 
     const useCase = new UpdatePasswordUseCase(mockRepository);
 
-    await expect(useCase.execute('')).rejects.toThrow(
-      'Nova senha é obrigatória',
-    );
+    await expect(useCase.execute('')).rejects.toThrow('Nova senha é obrigatória');
     expect(mockRepository.updatePassword).not.toHaveBeenCalled();
   });
 });

@@ -2,8 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Button } from '@frontend/components/ui/button';
 import { useTranslations } from 'next-intl';
+
+import { Button } from '@frontend/components/ui/button';
 
 export default function HeroCTA() {
   const tLanding = useTranslations('landing');

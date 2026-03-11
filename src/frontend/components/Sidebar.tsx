@@ -2,9 +2,10 @@
 
 import { useParams } from 'next/navigation';
 
+import { useTranslations } from 'next-intl';
+
 import CharacterNavSection from '@frontend/components/CharacterNavSection';
 import { NavItem } from '@frontend/components/ui/nav-item';
-import { useTranslations } from 'next-intl';
 
 export default function Sidebar() {
   const params = useParams();
