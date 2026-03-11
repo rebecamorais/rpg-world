@@ -113,46 +113,48 @@ export default function CharacterSheetClient() {
         </p>
       )}
 
-      <div className="flex flex-col gap-6">
-        <CharacterHeader
-          name={character.name}
-          classNameStr={character.class}
-          level={character.level}
-          race={character.race}
-          pb={pb}
-          background={character.background}
-          alignment={character.alignment}
-          xp={character.xp}
-          avatarUrl={character.avatarUrl}
-          onBasicInfoChange={handleBasicInfoChange}
-        />
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[250px_1fr]">
+        {/* Left Sticky Sidebar */}
+        <div className="sticky top-6 flex flex-col gap-4">
+          <PassivePerception
+            wisValue={character.attributes.WIS ?? 10}
+            level={character.level}
+            perceptionSkillData={character.skills?.PERCEPTION}
+          />
 
-        <CharacterSheetTabs
-          statusContent={
-            <div className="flex flex-col gap-6">
-              <CombatStatsSection character={character} onBasicInfoChange={handleBasicInfoChange} />
+          <SavingThrowsSection
+            attributes={character.attributes}
+            level={character.level}
+            savingThrows={character.savingThrowProficiencies}
+            onSavingThrowChange={handleSavingThrowChange}
+          />
+          <AttributesSection
+            attributes={character.attributes}
+            onAttributeChange={handleAttributeChange}
+          />
+        </div>
 
-              {/* Main Grid: Attr | Saves+Skills | Magic */}
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-                <div className="md:col-span-3">
-                  <AttributesSection
-                    attributes={character.attributes}
-                    onAttributeChange={handleAttributeChange}
-                  />
-                </div>
+        {/* Right Main Content */}
+        <div className="flex min-w-0 flex-col gap-4">
+          <CharacterHeader
+            name={character.name}
+            classNameStr={character.class}
+            level={character.level}
+            race={character.race}
+            pb={pb}
+            background={character.background}
+            alignment={character.alignment}
+            xp={character.xp}
+            avatarUrl={character.avatarUrl}
+            onBasicInfoChange={handleBasicInfoChange}
+          />
 
-                <div className="flex flex-col gap-6 md:col-span-4">
-                  <PassivePerception
-                    wisValue={character.attributes.WIS ?? 10}
-                    level={character.level}
-                    perceptionSkillData={character.skills?.PERCEPTION}
-                  />
-                  <SavingThrowsSection
-                    attributes={character.attributes}
-                    level={character.level}
-                    savingThrows={character.savingThrowProficiencies}
-                    onSavingThrowChange={handleSavingThrowChange}
-                  />
+          <CombatStatsSection character={character} onBasicInfoChange={handleBasicInfoChange} />
+
+          <CharacterSheetTabs
+            statusContent={
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="flex flex-col gap-6">
                   <SkillsSection
                     attributes={character.attributes}
                     level={character.level}
@@ -160,8 +162,7 @@ export default function CharacterSheetClient() {
                     onSkillChange={handleSkillChange}
                   />
                 </div>
-
-                <div className="flex flex-col gap-6 md:col-span-5">
+                <div className="flex flex-col gap-6">
                   <MagicSystemCard
                     character={character}
                     onChangeSystem={handleSpellcastingSystemChange}
@@ -174,9 +175,9 @@ export default function CharacterSheetClient() {
                   />
                 </div>
               </div>
-            </div>
-          }
-        />
+            }
+          />
+        </div>
       </div>
 
       <SpellsDrawer
