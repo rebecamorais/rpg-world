@@ -126,8 +126,23 @@ As migrations são aplicadas automaticamente ao rodar `npm run infra up` ou:
 3. **Gerar Tipos TypeScript**:
 Sempre rode `npm run types:update` (ou `npm run infra up`) após qualquer alteração no schema para manter o `@database-types` sincronizado.
 
-### Boas Práticas de Banco
+## 10. Arquitetura Server-First & Uso de Client Components
 
-* **Idempotência**: Scripts de `seed` devem sempre limpar os dados antes de inserir (`DELETE FROM ...`) ou usar `ON CONFLICT DO NOTHING`.
-* **Versionamento**: Nunca altere uma migration que já foi "commitada" e compartilhada. Crie uma nova migration para corrigir a anterior.
-* **Schema Auth**: Alterações no schema `auth` são desencorajadas. Prefira estender dados na tabela `public.profiles`.
+O projeto adota uma mentalidade **Server-First**. O objetivo é manter o processamento e a lógica de dados no servidor, minimizando o *client-side bundle* para garantir performance, segurança e uma hidratação mais eficiente.
+
+### Regras de Ouro:
+
+* **Padrão de Renderização:** Todo componente é um **Server Component** por padrão. O uso de `'use client'` deve ser a exceção, aplicada apenas onde a interatividade do navegador é estritamente necessária.
+* **Isolamento de Interatividade:** A diretiva `'use client'` deve ser "empurrada" o máximo possível para as extremidades da árvore de componentes (*leaf components*). Nunca transforme uma página ou um layout inteiro em Client Component.
+* **Data Fetching:** Toda busca de dados deve ser realizada em Server Components (utilizando `async/await` diretamente no componente). É proibido o uso de `useEffect` ou `SWR/TanStack Query` para o carregamento de dados iniciais que o servidor pode resolver.
+* **Segurança e Integridade:** Lógicas que manipulam segredos, chaves privadas ou acesso direto ao banco de dados (via Supabase Admin, por exemplo) devem ser protegidas com `import 'server-only'`.
+
+### Critérios para uso de `'use client'`:
+
+| Cenário | Acção Correcta |
+| --- | --- |
+| **Interatividade React** | Uso de hooks de estado ou ciclo de vida (`useState`, `useReducer`, `useEffect`). |
+| **Event Listeners** | Uso de eventos de DOM como `onClick`, `onChange`, `onSubmit`. |
+| **Browser APIs** | Acesso a `window`, `document`, `localStorage`, `sessionStorage` ou Geolocalização. |
+| **Context Providers** | Envolver o `children` num Client Component dedicado, mantendo o restante da árvore como Server Components. |
+| **Formulários** | Manter a página como Server Component e isolar apenas o formulário (ex: usando `react-hook-form`) num componente cliente específico. |
