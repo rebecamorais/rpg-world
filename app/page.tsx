@@ -1,4 +1,4 @@
-import HeroCTA from '@/frontend/components/HeroCTA';
+import HeroCTA from '@frontend/components/HeroCTA';
 
 export default function Home() {
   return (

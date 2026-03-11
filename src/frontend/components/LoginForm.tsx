@@ -2,20 +2,14 @@
 
 import { useState } from 'react';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
-
-import { Button } from '@/frontend/components/ui/button';
+import { Button } from '@frontend/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/frontend/components/ui/card';
+} from '@frontend/components/ui/card';
 import {
   Form,
   FormControl,
@@ -23,9 +17,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/frontend/components/ui/form';
-import { Input } from '@/frontend/components/ui/input';
-import { useAuth } from '@/frontend/hooks/useAuth';
+} from '@frontend/components/ui/form';
+import { Input } from '@frontend/components/ui/input';
+import { useAuth } from '@frontend/hooks/useAuth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 interface LoginFormValues {
   email: string;

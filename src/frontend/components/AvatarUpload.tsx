@@ -2,9 +2,8 @@
 
 import { useRef, useState } from 'react';
 
+import { useProfile } from '@frontend/hooks/useProfile';
 import { useTranslations } from 'next-intl';
-
-import { useProfile } from '@/frontend/hooks/useProfile';
 
 interface AvatarUploadProps {
   currentUrl?: string;

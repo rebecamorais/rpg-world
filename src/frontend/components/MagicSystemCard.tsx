@@ -2,21 +2,20 @@
 
 import { useState } from 'react';
 
-import { DnD5eCharacter } from '@shared/systems/dnd5e/types';
-import { Droplet, Settings2, Wand2 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-
-import { Button } from '@/frontend/components/ui/button';
-import { Card } from '@/frontend/components/ui/card';
+import { Button } from '@frontend/components/ui/button';
+import { Card } from '@frontend/components/ui/card';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/frontend/components/ui/dialog';
-import { Input } from '@/frontend/components/ui/input';
-import { Label } from '@/frontend/components/ui/label';
+} from '@frontend/components/ui/dialog';
+import { Input } from '@frontend/components/ui/input';
+import { Label } from '@frontend/components/ui/label';
+import { DnD5eCharacter } from '@shared/systems/dnd5e/types';
+import { Droplet, Settings2, Wand2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface MagicSystemCardProps {
   character: DnD5eCharacter;

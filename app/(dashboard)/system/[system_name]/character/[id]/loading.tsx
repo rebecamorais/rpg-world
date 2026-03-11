@@ -1,4 +1,4 @@
-import { Skeleton } from '@/frontend/components/ui/skeleton';
+import { Skeleton } from '@frontend/components/ui/skeleton';
 
 export default function CharacterLoading() {
   return (

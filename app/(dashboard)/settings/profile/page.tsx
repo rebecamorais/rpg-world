@@ -1,6 +1,5 @@
+import ProfileForm from '@frontend/components/ProfileForm';
 import { useTranslations } from 'next-intl';
-
-import ProfileForm from '@/frontend/components/ProfileForm';
 
 export default function ProfilePage() {
   const t = useTranslations('dashboard');

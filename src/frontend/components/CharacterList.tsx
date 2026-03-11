@@ -2,10 +2,9 @@
 
 import Link from 'next/link';
 
+import { useCurrentUser } from '@frontend/context/UserContext';
+import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useTranslations } from 'next-intl';
-
-import { useCurrentUser } from '@/frontend/context/UserContext';
-import { useCharacters } from '@/frontend/hooks/useCharacters';
 
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();

@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
+import GlobalHeader from '@frontend/components/GlobalHeader';
+import Providers from '@frontend/components/Providers';
+import { Toaster } from '@frontend/components/ui/sonner';
 import { getLocale, getMessages, getTimeZone } from 'next-intl/server';
-
-import GlobalHeader from '@/frontend/components/GlobalHeader';
-import Providers from '@/frontend/components/Providers';
-import { Toaster } from '@/frontend/components/ui/sonner';
 
 import './globals.css';
 

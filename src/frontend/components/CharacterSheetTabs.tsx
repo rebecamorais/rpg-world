@@ -2,15 +2,14 @@
 
 import * as React from 'react';
 
-import { BookOpen, Files, Shield, Sword } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@/frontend/components/ui/tabs';
+} from '@frontend/components/ui/tabs';
+import { BookOpen, Files, Shield, Sword } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface CharacterSheetTabsProps {
   statusContent: React.ReactNode;

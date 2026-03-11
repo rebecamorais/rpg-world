@@ -1,9 +1,8 @@
 import { redirect } from 'next/navigation';
 
 import { getApi } from '@api';
-
-import Sidebar from '@/frontend/components/Sidebar';
-import { UserProvider } from '@/frontend/context/UserContext';
+import Sidebar from '@frontend/components/Sidebar';
+import { UserProvider } from '@frontend/context/UserContext';
 
 export default async function DashboardLayout({
   children,

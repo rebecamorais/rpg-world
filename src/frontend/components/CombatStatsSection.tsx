@@ -1,11 +1,10 @@
 'use client';
 
+import { Card } from '@frontend/components/ui/card';
+import { Input } from '@frontend/components/ui/input';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 import { Footprints, Heart, HeartPulse, Shield, Swords } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-
-import { Card } from '@/frontend/components/ui/card';
-import { Input } from '@/frontend/components/ui/input';
 
 interface CombatStatsSectionProps {
   character: DnD5eCharacter;

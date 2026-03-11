@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { cn } from '@/frontend/lib/utils';
+import { cn } from '@frontend/lib/utils';
 
 interface NavItemProps {
   href: string;

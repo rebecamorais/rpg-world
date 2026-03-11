@@ -2,21 +2,15 @@
 
 import { useEffect } from 'react';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useForm, useWatch } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
-
-import AvatarUpload from '@/frontend/components/AvatarUpload';
-import { Button } from '@/frontend/components/ui/button';
+import AvatarUpload from '@frontend/components/AvatarUpload';
+import { Button } from '@frontend/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/frontend/components/ui/card';
+} from '@frontend/components/ui/card';
 import {
   Form,
   FormControl,
@@ -24,10 +18,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/frontend/components/ui/form';
-import { Input } from '@/frontend/components/ui/input';
-import { Skeleton } from '@/frontend/components/ui/skeleton';
-import { useProfile } from '@/frontend/hooks/useProfile';
+} from '@frontend/components/ui/form';
+import { Input } from '@frontend/components/ui/input';
+import { Skeleton } from '@frontend/components/ui/skeleton';
+import { useProfile } from '@frontend/hooks/useProfile';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useForm, useWatch } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 export default function ProfileForm() {
   const t = useTranslations('profileForm');

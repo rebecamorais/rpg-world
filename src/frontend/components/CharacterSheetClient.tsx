@@ -3,23 +3,22 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
+import AttributesSection from '@frontend/components/AttributesSection';
+import CharacterActionBar from '@frontend/components/CharacterActionBar';
+import CharacterHeader from '@frontend/components/CharacterHeader';
+import CharacterSheetTabs from '@frontend/components/CharacterSheetTabs';
+import CombatStatsSection from '@frontend/components/CombatStatsSection';
+import KnownSpellsCard from '@frontend/components/KnownSpellsCard';
+import MagicSystemCard from '@frontend/components/MagicSystemCard';
+import PassivePerception from '@frontend/components/PassivePerception';
+import SavingThrowsSection from '@frontend/components/SavingThrowsSection';
+import SkillsSection from '@frontend/components/SkillsSection';
+import SpellsDrawer from '@frontend/components/SpellsDrawer';
+import { useCurrentUser } from '@frontend/context/UserContext';
+import { useCharacter } from '@frontend/hooks/useCharacter';
+import { useCharacterEditor } from '@frontend/hooks/useCharacterEditor';
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 import { useTranslations } from 'next-intl';
-
-import AttributesSection from '@/frontend/components/AttributesSection';
-import CharacterActionBar from '@/frontend/components/CharacterActionBar';
-import CharacterHeader from '@/frontend/components/CharacterHeader';
-import CharacterSheetTabs from '@/frontend/components/CharacterSheetTabs';
-import CombatStatsSection from '@/frontend/components/CombatStatsSection';
-import KnownSpellsCard from '@/frontend/components/KnownSpellsCard';
-import MagicSystemCard from '@/frontend/components/MagicSystemCard';
-import PassivePerception from '@/frontend/components/PassivePerception';
-import SavingThrowsSection from '@/frontend/components/SavingThrowsSection';
-import SkillsSection from '@/frontend/components/SkillsSection';
-import SpellsDrawer from '@/frontend/components/SpellsDrawer';
-import { useCurrentUser } from '@/frontend/context/UserContext';
-import { useCharacter } from '@/frontend/hooks/useCharacter';
-import { useCharacterEditor } from '@/frontend/hooks/useCharacterEditor';
 
 export default function CharacterSheetClient() {
   const params = useParams();

@@ -2,19 +2,14 @@
 
 import Link from 'next/link';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import { Button } from '@/frontend/components/ui/button';
+import { Button } from '@frontend/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/frontend/components/ui/card';
+} from '@frontend/components/ui/card';
 import {
   Form,
   FormControl,
@@ -22,17 +17,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/frontend/components/ui/form';
-import { Input } from '@/frontend/components/ui/input';
+} from '@frontend/components/ui/form';
+import { Input } from '@frontend/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/frontend/components/ui/select';
-import { useCurrentUser } from '@/frontend/context/UserContext';
-import { useCreateCharacter } from '@/frontend/hooks/useCreateCharacter';
+} from '@frontend/components/ui/select';
+import { useCurrentUser } from '@frontend/context/UserContext';
+import { useCreateCharacter } from '@frontend/hooks/useCreateCharacter';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 export default function NewCharacterForm() {
   const { currentUser } = useCurrentUser();

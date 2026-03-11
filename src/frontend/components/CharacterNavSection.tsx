@@ -1,7 +1,6 @@
 'use client';
+import { useCharacter } from '@frontend/hooks/useCharacter';
 import { useTranslations } from 'next-intl';
-
-import { useCharacter } from '@/frontend/hooks/useCharacter';
 
 export default function CharacterNavSection({
   characterId,

@@ -2,18 +2,17 @@
 
 import { useState } from 'react';
 
-import { BookOpen, Trash2 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-
-import { Button } from '@/frontend/components/ui/button';
+import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/frontend/components/ui/dialog';
-import { Input } from '@/frontend/components/ui/input';
+} from '@frontend/components/ui/dialog';
+import { Input } from '@frontend/components/ui/input';
+import { BookOpen, Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   isOpen: boolean;

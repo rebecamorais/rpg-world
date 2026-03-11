@@ -2,11 +2,7 @@
 
 import { useState } from 'react';
 
-import { getModifier } from '@shared/systems/dnd5e/calculations';
-import rules from '@shared/systems/dnd5e/rules.json';
-import { useTranslations } from 'next-intl';
-
-import { Button } from '@/frontend/components/ui/button';
+import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -15,14 +11,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/frontend/components/ui/dialog';
-import { Input } from '@/frontend/components/ui/input';
-import { Label } from '@/frontend/components/ui/label';
+} from '@frontend/components/ui/dialog';
+import { Input } from '@frontend/components/ui/input';
+import { Label } from '@frontend/components/ui/label';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/frontend/components/ui/tooltip';
+} from '@frontend/components/ui/tooltip';
+import { getModifier } from '@shared/systems/dnd5e/calculations';
+import rules from '@shared/systems/dnd5e/rules.json';
+import { useTranslations } from 'next-intl';
 
 const MIN_ATTR = 1;
 const MAX_ATTR = 30;

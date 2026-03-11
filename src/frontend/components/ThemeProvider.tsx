@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import { useProfile } from '@/frontend/hooks/useProfile';
+import { useProfile } from '@frontend/hooks/useProfile';
 
 const DEFAULT_PRIMARY_COLOR = '#663399';
 

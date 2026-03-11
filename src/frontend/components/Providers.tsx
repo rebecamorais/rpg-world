@@ -2,12 +2,11 @@
 
 import { type ReactNode, useEffect } from 'react';
 
+import QueryProvider from '@frontend/components/QueryProvider';
+import ThemeProvider from '@frontend/components/ThemeProvider';
+import { TooltipProvider } from '@frontend/components/ui/tooltip';
+import { UserProvider } from '@frontend/context/UserContext';
 import { NextIntlClientProvider } from 'next-intl';
-
-import QueryProvider from '@/frontend/components/QueryProvider';
-import ThemeProvider from '@/frontend/components/ThemeProvider';
-import { TooltipProvider } from '@/frontend/components/ui/tooltip';
-import { UserProvider } from '@/frontend/context/UserContext';
 
 interface ProvidersProps {
   children: ReactNode;

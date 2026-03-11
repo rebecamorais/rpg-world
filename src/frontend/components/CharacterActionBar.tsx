@@ -2,9 +2,7 @@
 
 import Link from 'next/link';
 
-import { useTranslations } from 'next-intl';
-
-import { Button } from '@/frontend/components/ui/button';
+import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -14,7 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/frontend/components/ui/dialog';
+} from '@frontend/components/ui/dialog';
+import { useTranslations } from 'next-intl';
 
 interface CharacterActionBarProps {
   characterName: string;
