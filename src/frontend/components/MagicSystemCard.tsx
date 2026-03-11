@@ -1,195 +1,196 @@
-'use client';
+import * as React from 'react';
 
-import { useState } from 'react';
-
-import { Droplet, Settings2, Wand2 } from 'lucide-react';
+import { Droplet, Pencil, Sparkles, Wand2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { Button } from '@frontend/components/ui/button';
 import { Card } from '@frontend/components/ui/card';
+import { GhostInput } from '@frontend/components/ui/ghost-input';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@frontend/components/ui/dialog';
-import { Input } from '@frontend/components/ui/input';
-import { Label } from '@frontend/components/ui/label';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@frontend/components/ui/select';
+import { cn } from '@frontend/lib/utils';
 
-import { DnD5eCharacter } from '@shared/systems/dnd5e/types';
+import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 
-interface MagicSystemCardProps {
+export type MagicSystem = 'slots' | 'points';
+
+export interface MagicSystemCardProps extends React.HTMLAttributes<HTMLDivElement> {
   character: DnD5eCharacter;
-  onChangeSystem: (system: 'slots' | 'points') => void;
-  onChangePoints: (field: 'current' | 'max', value: number) => void;
-  onChangeSlots: (level: string, max: number, used: number) => void;
+  onSystemChange: (system: MagicSystem) => void;
+  onPointsChange: (field: 'current' | 'max', value: number) => void;
+  onSlotsChange: (level: string, max: number, used: number) => void;
 }
 
-export default function MagicSystemCard({
-  character,
-  onChangeSystem,
-  onChangePoints,
-  onChangeSlots,
-}: MagicSystemCardProps) {
-  const t = useTranslations('magicSystem');
-  const [isConfigOpen, setIsConfigOpen] = useState(false);
-  const sys = character.spellcastingSystem || 'slots';
+export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardProps>(
+  ({ character, onSystemChange, onPointsChange, onSlotsChange, className, ...props }, ref) => {
+    const t = useTranslations('magicSystem');
+    const system = character.spellcastingSystem || 'none';
 
-  // Toggle do slot consumido/desconsumido:
-  const handleSlotToggle = (
-    levelStr: string,
-    currentUsed: number,
-    totalMax: number,
-    increase: boolean,
-  ) => {
-    let newUsed = increase ? currentUsed + 1 : currentUsed - 1;
-    if (newUsed < 0) newUsed = 0;
-    if (newUsed > totalMax) newUsed = totalMax;
-    onChangeSlots(levelStr, totalMax, newUsed);
-  };
+    const handleSlotToggle = (
+      levelStr: string,
+      currentUsed: number,
+      totalMax: number,
+      increase: boolean,
+    ) => {
+      let newUsed = increase ? currentUsed + 1 : currentUsed - 1;
+      if (newUsed < 0) newUsed = 0;
+      if (newUsed > totalMax) newUsed = totalMax;
+      onSlotsChange(levelStr, totalMax, newUsed);
+    };
 
-  return (
-    <Dialog open={isConfigOpen} onOpenChange={setIsConfigOpen}>
-      <Card className="border-border bg-card relative flex w-full flex-col items-center justify-center px-2 py-4">
-        <DialogTrigger asChild>
-          <button className="text-muted-foreground hover:text-foreground absolute top-2 right-2 transition-colors">
-            <Settings2 className="h-4 w-4" />
-          </button>
-        </DialogTrigger>
+    const systemSelector = (
+      <Select value={system} onValueChange={(val) => onSystemChange(val as MagicSystem)}>
+        <SelectTrigger className="h-5 w-fit border-none bg-transparent p-0 text-[10px] font-bold tracking-[0.2em] text-blue-500/80 uppercase shadow-none focus:ring-0">
+          <SelectValue placeholder="Magic" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="slots" className="text-xs">
+            {t('spellSlots') || 'Spell Slots'}
+          </SelectItem>
+          <SelectItem value="points" className="text-xs">
+            {t('spellPoints') || 'Spell Points'}
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    );
 
-        {sys === 'points' ? (
-          <div className="z-10 flex w-full flex-col items-center">
-            <Droplet className="mb-2 h-6 w-6 text-blue-500 drop-shadow-md" />
-            <div className="flex w-full items-baseline justify-center gap-1 px-2">
-              <Input
-                type="number"
-                value={character.spellPoints?.current ?? 0}
-                onChange={(e) => onChangePoints('current', parseInt(e.target.value) || 0)}
-                className="focus-visible:ring-primary text-foreground h-10 w-16 border-transparent bg-transparent p-0 text-right text-3xl font-bold focus-visible:ring-2"
-              />
-              <span className="text-muted-foreground">/</span>
-              <Input
-                type="number"
-                value={character.spellPoints?.max ?? 0}
-                onChange={(e) => onChangePoints('max', parseInt(e.target.value) || 0)}
-                className="focus-visible:ring-primary text-muted-foreground h-10 w-12 border-transparent bg-transparent p-0 text-left text-xl font-bold focus-visible:ring-2"
-              />
-            </div>
-            <span className="text-muted-foreground mt-1 text-[10px] font-bold uppercase">
-              {t('spellPoints')}
-            </span>
-          </div>
-        ) : (
-          <div className="z-10 flex w-full flex-col items-center px-4">
-            <Wand2 className="mb-2 h-6 w-6 text-indigo-400 drop-shadow-md" />
+    if (system === 'points') {
+      const max = character.spellPoints?.max || 1;
+      const current = character.spellPoints?.current || 0;
+      const percentage = Math.min(100, Math.max(0, (current / max) * 100));
 
-            <div className="mt-2 flex w-full flex-col gap-2">
-              {/* Itera sobre os slots se existirem, caso contrário mostra um placeholder elegante */}
-              {character.spellSlots && Object.keys(character.spellSlots).length > 0 ? (
-                // Ordernar chaves numéricas do 1 ao 9
-                Object.entries(character.spellSlots)
-                  .sort(([a], [b]) => parseInt(a) - parseInt(b))
-                  .map(([lvl, data]) => (
-                    <div key={lvl} className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground mr-2 font-bold">
-                        {t('level', { level: lvl })}
-                      </span>
-                      <div className="flex flex-wrap gap-1">
-                        {Array.from({ length: data.max }).map((_, i) => (
-                          <button
-                            key={i}
-                            onClick={() =>
-                              handleSlotToggle(lvl, data.used, data.max, i >= data.used)
-                            }
-                            className={`h-4 w-4 rounded-full border-2 transition-colors ${
-                              i < data.used
-                                ? 'border-primary cursor-pointer bg-transparent opacity-30' // Gasto (vazio)
-                                : 'border-primary bg-primary cursor-pointer' // Disponível (cheio)
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  ))
-              ) : (
-                <span className="text-muted-foreground mt-1 text-center text-xs">
-                  {t('noSlotsConfigured')}
-                </span>
-              )}
-            </div>
-
-            <span className="text-muted-foreground mt-3 text-[10px] font-bold uppercase">
-              {t('spellSlots')}
-            </span>
-          </div>
-        )}
-      </Card>
-
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{t('titleConfig')}</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-6 py-4">
-          <div className="flex flex-col gap-3">
-            <Label className="text-muted-foreground text-xs font-bold uppercase">
-              {t('systemUsed')}
-            </Label>
-            <div className="bg-muted flex w-full rounded-md p-1">
-              <button
-                onClick={() => onChangeSystem('slots')}
-                className={`flex-1 rounded-sm py-1.5 text-sm font-medium transition-all ${sys === 'slots' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground'}`}
-              >
-                {t('slotsOfficial')}
-              </button>
-              <button
-                onClick={() => onChangeSystem('points')}
-                className={`flex-1 rounded-sm py-1.5 text-sm font-medium transition-all ${sys === 'points' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground'}`}
-              >
-                {t('manaHomebrew')}
-              </button>
-            </div>
-          </div>
-
-          {sys === 'slots' && (
-            <div className="flex max-h-[40vh] flex-col gap-4 overflow-y-auto pr-2">
-              <Label className="text-muted-foreground text-xs font-bold uppercase">
-                {t('slotsCapacity')}
-              </Label>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((lvl) => {
-                const currentData = character.spellSlots?.[lvl.toString()] || {
-                  max: 0,
-                  used: 0,
-                };
-                return (
-                  <div key={lvl} className="flex items-center justify-between gap-4">
-                    <Label className="min-w-16">{t('circle', { level: lvl })}</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      max="4"
-                      value={currentData.max}
-                      onChange={(e) =>
-                        onChangeSlots(
-                          lvl.toString(),
-                          parseInt(e.target.value) || 0,
-                          Math.min(currentData.used, parseInt(e.target.value) || 0),
-                        )
-                      }
-                      className="w-20"
-                    />
-                  </div>
-                );
-              })}
-            </div>
+      return (
+        <Card
+          ref={ref}
+          className={cn(
+            'group border-border bg-card/50 hover:bg-card relative flex min-h-[160px] flex-col justify-between overflow-hidden p-3 shadow-sm transition-colors',
+            className,
           )}
-        </div>
-        <div className="flex justify-end">
-          <Button type="button" onClick={() => setIsConfigOpen(false)}>
-            {t('done')}
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
+          {...props}
+        >
+          <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
+            <Droplet className="h-3.5 w-3.5 text-blue-500" />
+            {systemSelector}
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <div className="flex items-baseline gap-1.5 font-bold">
+              <div className="group/value relative flex items-baseline">
+                <GhostInput
+                  type="number"
+                  value={current}
+                  onChange={(e) => onPointsChange('current', parseInt(e.target.value) || 0)}
+                  className="h-auto w-12 p-0 text-left text-2xl font-black text-white outline-none"
+                />
+                <Pencil className="absolute top-1 -right-4 h-3 w-3 opacity-0 transition-opacity group-hover/value:opacity-50" />
+              </div>
+
+              <div className="flex items-baseline gap-1 font-bold">
+                <span className="text-muted-foreground text-sm opacity-40">/</span>
+                <span className="text-muted-foreground text-sm opacity-40">{max}</span>
+              </div>
+            </div>
+
+            <div className="bg-secondary relative mt-1 h-1.5 w-full overflow-hidden rounded-full">
+              <div
+                className="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 ease-in-out"
+                style={{ width: `${percentage}%` }}
+              />
+            </div>
+          </div>
+        </Card>
+      );
+    }
+
+    if (system === 'slots') {
+      const slots = character.spellSlots || {};
+      const allLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const activeLevels = allLevels.filter((lvl) => (slots[lvl.toString()]?.max || 0) > 0);
+
+      const totalMax = activeLevels.reduce(
+        (acc, lvl) => acc + (slots[lvl.toString()]?.max || 0),
+        0,
+      );
+      const totalUsed = activeLevels.reduce(
+        (acc, lvl) => acc + (slots[lvl.toString()]?.used || 0),
+        0,
+      );
+      const totalAvailable = Math.max(0, totalMax - totalUsed);
+
+      const getOrdinal = (n: number) => {
+        if (n === 1) return '1º';
+        if (n === 2) return '2º';
+        if (n === 3) return '3º';
+        return `${n}º`;
+      };
+
+      return (
+        <Card
+          ref={ref}
+          className={cn(
+            'group border-border bg-card/50 hover:bg-card relative flex min-h-[160px] flex-col justify-between overflow-hidden p-3 shadow-sm transition-colors',
+            className,
+          )}
+          {...props}
+        >
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
+              <Wand2 className="h-3.5 w-3.5 text-blue-500" />
+              {systemSelector}
+            </div>
+
+            <div className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-blue-500 uppercase">
+              {totalAvailable} / {totalMax} Slots
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-5 gap-x-1 gap-y-3">
+            {allLevels.map((lvl) => {
+              const slotData = slots[lvl.toString()];
+              const isActive = (slotData?.max || 0) > 0;
+              const available = Math.max(0, (slotData?.max || 0) - (slotData?.used || 0));
+
+              return (
+                <div key={lvl} className={cn('flex flex-col gap-0.5', !isActive && 'opacity-10')}>
+                  <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-60">
+                    {lvl}º
+                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {isActive ? (
+                      Array.from({ length: slotData.max }).map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() =>
+                            handleSlotToggle(
+                              lvl.toString(),
+                              slotData.used,
+                              slotData.max,
+                              i < available,
+                            )
+                          }
+                          className={cn(
+                            'h-2 w-2 rounded-[1px] transition-all duration-300',
+                            i < available
+                              ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]'
+                              : 'border border-blue-500/40 bg-transparent',
+                          )}
+                        />
+                      ))
+                    ) : (
+                      <div className="h-2 w-2 rounded-[1px] border border-blue-500/10" />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      );
+    }
+  },
+);
+MagicSystemCard.displayName = 'MagicSystemCard';

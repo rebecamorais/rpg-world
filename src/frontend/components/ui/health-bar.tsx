@@ -17,15 +17,6 @@ export const HealthBar = React.forwardRef<HTMLDivElement, HealthBarProps>(
 
     return (
       <div ref={ref} className={cn('flex w-full flex-col gap-1.5', className)} {...props}>
-        {/* Labels com as métricas */}
-        <div className="flex justify-between text-[10px] font-bold tracking-wider uppercase">
-          <div className="flex gap-2">
-            <span className="text-red-500">HP {current}</span>
-            {temp > 0 && <span className="animate-pulse text-yellow-400">TEMP +{temp}</span>}
-          </div>
-          <span className="opacity-50">/ {max}</span>
-        </div>
-
         {/* Container Principal (O "Trilho") */}
         <div className="bg-secondary relative h-2 w-full overflow-hidden rounded-full">
           {/* 1. Barra de HP Normal */}

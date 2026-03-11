@@ -109,6 +109,7 @@
     "baseValue": "Base Value"
   },
   "combatStats": {
+    "status": "Combat Status",
     "armorClass": "AC",
     "hitPoints": "Hit Points",
     "tempHp": "Temp HP",
@@ -126,15 +127,14 @@
   "magicSystem": {
     "titleConfig": "Magic System Configuration",
     "systemUsed": "System Used",
-    "slotsOfficial": "Official Spell Slots",
-    "manaHomebrew": "Mana / Homebrew",
     "slotsCapacity": "Slots Capacity per Level",
     "circle": "Circle {level}",
     "noSlotsConfigured": "No Slots configured.",
     "done": "Done",
     "spellPoints": "Spell Points",
     "spellSlots": "Spell Slots",
-    "level": "Lv {level}"
+    "level": "Lv {level}",
+    "pointsCapacity": "Spell Points Capacity"
   },
   "dashboard": {
     "menu": "Menu",

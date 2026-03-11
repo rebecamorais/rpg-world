@@ -152,7 +152,7 @@ export function useCharacterEditor({ fetchedCharacter, queryError }: UseCharacte
     setHasUnsavedChanges(true);
   }, []);
 
-  const handleSpellcastingSystemChange = useCallback((system: 'slots' | 'points') => {
+  const handleSpellcastingSystemChange = useCallback((system: 'slots' | 'points' | 'none') => {
     setError('');
     setCharacter((prev) =>
       prev ? ({ ...prev, spellcastingSystem: system } as DnD5eCharacter) : null,

@@ -11,7 +11,6 @@ import CharacterHeader from '@frontend/components/CharacterHeader';
 import CharacterSheetTabs from '@frontend/components/CharacterSheetTabs';
 import CombatStatsSection from '@frontend/components/CombatStatsSection';
 import KnownSpellsCard from '@frontend/components/KnownSpellsCard';
-import MagicSystemCard from '@frontend/components/MagicSystemCard';
 import PassivePerception from '@frontend/components/PassivePerception';
 import SavingThrowsSection from '@frontend/components/SavingThrowsSection';
 import SkillsSection from '@frontend/components/SkillsSection';
@@ -149,7 +148,13 @@ export default function CharacterSheetClient() {
             onBasicInfoChange={handleBasicInfoChange}
           />
 
-          <CombatStatsSection character={character} onBasicInfoChange={handleBasicInfoChange} />
+          <CombatStatsSection
+            character={character}
+            onBasicInfoChange={handleBasicInfoChange}
+            onSpellcastingSystemChange={handleSpellcastingSystemChange}
+            onSpellPointsChange={handleSpellPointsChange}
+            onSpellSlotsChange={handleSpellSlotsChange}
+          />
 
           <CharacterSheetTabs
             statusContent={
@@ -163,12 +168,6 @@ export default function CharacterSheetClient() {
                   />
                 </div>
                 <div className="flex flex-col gap-6">
-                  <MagicSystemCard
-                    character={character}
-                    onChangeSystem={handleSpellcastingSystemChange}
-                    onChangePoints={handleSpellPointsChange}
-                    onChangeSlots={handleSpellSlotsChange}
-                  />
                   <KnownSpellsCard
                     spellsKnown={character.spellsKnown || []}
                     onForgetSpell={handleForgetSpell}

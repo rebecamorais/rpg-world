@@ -109,6 +109,7 @@
     "baseValue": "Valor Base"
   },
   "combatStats": {
+    "status": "Status de Combate",
     "armorClass": "CA",
     "hitPoints": "Pontos de Vida",
     "tempHp": "Vida Temp",
@@ -126,15 +127,14 @@
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",
     "systemUsed": "Sistema Usado",
-    "slotsOfficial": "Spell Slots Oficial",
-    "manaHomebrew": "Mana / Homebrew",
     "slotsCapacity": "Capacidade de Slots por Nível",
     "circle": "Círculo {level}",
     "noSlotsConfigured": "Sem Slots configurados.",
     "done": "Concluir",
     "spellPoints": "Spell Points",
     "spellSlots": "Spell Slots",
-    "level": "Nv {level}"
+    "level": "Nv {level}",
+    "pointsCapacity": "Capacidade de Spell Points"
   },
   "dashboard": {
     "menu": "Menu",
