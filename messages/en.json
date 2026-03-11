@@ -114,7 +114,7 @@
     "tempHp": "Temp HP",
     "speed": "Speed",
     "initiative": "Initiative",
-    "speedUnit": "ft"
+    "speedUnit": "m"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Spell name (e.g.: fireball)",
