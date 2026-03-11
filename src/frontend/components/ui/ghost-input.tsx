@@ -26,7 +26,12 @@ const GhostInput = React.forwardRef<HTMLInputElement, GhostInputProps>(
           {...props}
         />
         {showIcon && (
-          <Pencil className="text-muted-foreground pointer-events-none absolute right-0 h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
+          <Pencil
+            className={cn(
+              'text-muted-foreground pointer-events-none absolute h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100',
+              'right-2',
+            )}
+          />
         )}
       </div>
     );

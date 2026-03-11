@@ -109,7 +109,7 @@
     "baseValue": "Valor Base"
   },
   "combatStats": {
-    "armorClass": "Classe Armadura",
+    "armorClass": "CA",
     "hitPoints": "Pontos de Vida",
     "tempHp": "Vida Temp",
     "speed": "Deslocamento",

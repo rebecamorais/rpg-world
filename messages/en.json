@@ -109,7 +109,7 @@
     "baseValue": "Base Value"
   },
   "combatStats": {
-    "armorClass": "Armor Class",
+    "armorClass": "AC",
     "hitPoints": "Hit Points",
     "tempHp": "Temp HP",
     "speed": "Speed",

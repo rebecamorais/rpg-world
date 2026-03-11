@@ -54,21 +54,21 @@ export default function CharacterHeader({
   );
 
   return (
-    <Card className="border-border bg-card overflow-hidden">
-      <CardContent className="flex items-center gap-6 p-6">
+    <Card className="border-border bg-card overflow-hidden shadow-sm">
+      <CardContent className="flex items-center gap-4 p-4">
         {/* Avatar Section */}
-        <Avatar className="border-primary/20 h-24 w-24 shrink-0 border-2 shadow-xl">
+        <Avatar className="border-primary/20 h-16 w-16 shrink-0 border shadow-md">
           <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
-          <AvatarFallback className="bg-muted text-2xl font-bold">
+          <AvatarFallback className="bg-muted font-bold">
             {name?.substring(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
 
         {/* Info Snapshot */}
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
+        <div className="flex min-w-0 flex-1 flex-col justify-center">
           {/* Row 1: Name & PB */}
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex min-w-0 flex-1 items-center gap-2">
+          <div className="flex items-center gap-3">
+            <div className="flex max-w-sm min-w-0 items-center gap-2">
               {isEditingName ? (
                 <GhostInput
                   autoFocus
@@ -76,19 +76,18 @@ export default function CharacterHeader({
                   onChange={(e) => onBasicInfoChange('name', e.target.value)}
                   onBlur={() => setIsEditingName(false)}
                   onKeyDown={(e) => e.key === 'Enter' && setIsEditingName(false)}
-                  className="h-10 text-2xl font-bold tracking-tight"
-                  containerClassName="w-full max-w-md"
-                  showIcon={false}
+                  className="h-8 text-xl font-bold tracking-tight"
+                  containerClassName="w-full flex-1"
                 />
               ) : (
-                <div className="group flex items-center gap-2 overflow-hidden">
-                  <h1 className="text-foreground truncate text-2xl font-bold tracking-tight">
+                <div className="group flex items-center gap-1 overflow-hidden">
+                  <h1 className="text-foreground truncate text-xl font-bold tracking-tight">
                     {name}
                   </h1>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
+                    className="h-5 w-5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
                     onClick={() => setIsEditingName(true)}
                   >
                     <Pencil className="h-3 w-3" />
@@ -96,75 +95,73 @@ export default function CharacterHeader({
                 </div>
               )}
             </div>
-            <div className="bg-primary/10 text-primary border-primary/20 flex shrink-0 items-center rounded-full border px-3 py-1 text-[10px] font-black tracking-widest uppercase">
+            <div className="bg-secondary text-secondary-foreground flex shrink-0 items-center justify-center rounded-full px-2 py-0.5 text-xs font-semibold opacity-80">
               {t('proficiencyBonus')}: <span className="ml-1">+{pb}</span>
             </div>
           </div>
 
-          {/* Row 2: Stats (Class, Level, Race, etc.) */}
-          <div className="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-            <div className="flex items-center gap-1">
+          {/* Row 2: Secondary Info (Class, Race, BG, Align) */}
+          <div className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+            <div className="flex items-center">
               <GhostInput
                 value={classNameStr || ''}
                 onChange={(e) => onBasicInfoChange('class', e.target.value)}
-                className="text-foreground w-20 font-semibold"
+                className="text-foreground h-5 w-20 text-xs font-semibold"
                 placeholder={t('class')}
               />
-              <span className="shrink-0 text-xs opacity-70">{t('level')}</span>
+              <span className="mx-1 opacity-50">{t('level')}</span>
               <GhostInput
                 type="number"
                 min={1}
                 max={20}
                 value={level || 1}
                 onChange={(e) => onBasicInfoChange('level', parseInt(e.target.value) || 1)}
-                className="w-8"
-                showIcon={false}
+                className="text-foreground h-5 w-8 text-xs font-semibold"
               />
             </div>
-            <div className="flex items-center gap-1">
-              <span className="shrink-0 opacity-70">{t('race')}:</span>
+            <span className="mx-1 opacity-30">•</span>
+            <div className="flex items-center">
               <GhostInput
                 value={race || ''}
                 onChange={(e) => onBasicInfoChange('race', e.target.value)}
-                className="text-foreground w-24 font-medium"
+                className="h-5 w-20 text-xs font-medium"
+                placeholder={t('race')}
               />
             </div>
-            <div className="flex items-center gap-1">
-              <span className="shrink-0 opacity-70">{t('background')}:</span>
+            <span className="mx-1 opacity-30">•</span>
+            <div className="flex items-center">
               <GhostInput
                 value={background || ''}
                 onChange={(e) => onBasicInfoChange('background', e.target.value)}
-                className="text-foreground w-28 font-medium"
+                className="h-5 w-24 text-xs font-medium"
+                placeholder={t('background')}
               />
             </div>
-            <div className="flex items-center gap-1">
-              <span className="shrink-0 opacity-70">{t('alignment')}:</span>
+            <span className="mx-1 opacity-30">•</span>
+            <div className="flex items-center">
               <GhostInput
                 value={alignment || ''}
                 onChange={(e) => onBasicInfoChange('alignment', e.target.value)}
-                className="text-foreground w-28 font-medium"
+                className="h-5 w-24 text-xs font-medium"
+                placeholder={t('alignment')}
               />
             </div>
           </div>
 
-          {/* Row 3: XP Bar */}
-          <div className="mt-1 w-full max-w-sm">
-            <div className="text-muted-foreground mb-1 flex items-center justify-between text-[10px] font-bold tracking-wider uppercase">
-              <div className="flex items-center gap-1">
-                <span>{t('xp')}</span>
-                <GhostInput
-                  type="number"
-                  min={0}
-                  value={xp}
-                  onChange={(e) => onBasicInfoChange('xp', parseInt(e.target.value) || 0)}
-                  className="text-primary h-4 w-12 text-[10px]"
-                  containerClassName="ml-1"
-                  showIcon={false}
-                />
-              </div>
-              <span className="shrink-0">/ {nextLevelXp} XP</span>
+          {/* Row 3: XP Bar (Super compact) */}
+          <div className="mt-1 flex w-full max-w-xs items-center gap-2">
+            <span className="text-muted-foreground text-[9px] font-bold uppercase">{t('xp')}</span>
+            <Progress value={progress} className="h-1.5 flex-1 opacity-60" />
+            <div className="text-muted-foreground flex items-center text-[9px] font-medium">
+              <GhostInput
+                type="number"
+                min={0}
+                value={xp}
+                onChange={(e) => onBasicInfoChange('xp', parseInt(e.target.value) || 0)}
+                className="h-4 w-12 p-0 text-right text-[9px]"
+              />
+              <span className="ml-0.5">/ {nextLevelXp}</span>
             </div>
-            <Progress value={progress} className="h-1.5" />
           </div>
         </div>
       </CardContent>
