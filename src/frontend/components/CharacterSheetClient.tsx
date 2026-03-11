@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 import AttributesSection from '@/frontend/components/AttributesSection';
 import CharacterActionBar from '@/frontend/components/CharacterActionBar';
 import CharacterHeader from '@/frontend/components/CharacterHeader';
+import CharacterSheetTabs from '@/frontend/components/CharacterSheetTabs';
 import CombatStatsSection from '@/frontend/components/CombatStatsSection';
 import KnownSpellsCard from '@/frontend/components/KnownSpellsCard';
 import MagicSystemCard from '@/frontend/components/MagicSystemCard';
@@ -96,7 +97,7 @@ export default function CharacterSheetClient() {
   const pb = getProficiencyBonus(character.level);
 
   return (
-    <div className="mx-auto max-w-5xl p-4">
+    <div className="mx-auto w-full max-w-5xl p-4 md:min-w-[1024px]">
       <CharacterActionBar
         characterName={character.name}
         hasUnsavedChanges={hasUnsavedChanges}
@@ -122,53 +123,59 @@ export default function CharacterSheetClient() {
           onOpenSpells={() => setIsSpellsOpen(true)}
         />
 
-        <CombatStatsSection
-          character={character}
-          onBasicInfoChange={handleBasicInfoChange}
+        <CharacterSheetTabs
+          statusContent={
+            <div className="flex flex-col gap-6">
+              <CombatStatsSection
+                character={character}
+                onBasicInfoChange={handleBasicInfoChange}
+              />
+
+              {/* Main Grid: Attr | Saves+Skills | Magic */}
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+                <div className="md:col-span-3">
+                  <AttributesSection
+                    attributes={character.attributes}
+                    onAttributeChange={handleAttributeChange}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-6 md:col-span-4">
+                  <PassivePerception
+                    wisValue={character.attributes.WIS ?? 10}
+                    level={character.level}
+                    perceptionSkillData={character.skills?.PERCEPTION}
+                  />
+                  <SavingThrowsSection
+                    attributes={character.attributes}
+                    level={character.level}
+                    savingThrows={character.savingThrowProficiencies}
+                    onSavingThrowChange={handleSavingThrowChange}
+                  />
+                  <SkillsSection
+                    attributes={character.attributes}
+                    level={character.level}
+                    skills={character.skills ?? {}}
+                    onSkillChange={handleSkillChange}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-6 md:col-span-5">
+                  <MagicSystemCard
+                    character={character}
+                    onChangeSystem={handleSpellcastingSystemChange}
+                    onChangePoints={handleSpellPointsChange}
+                    onChangeSlots={handleSpellSlotsChange}
+                  />
+                  <KnownSpellsCard
+                    spellsKnown={character.spellsKnown || []}
+                    onForgetSpell={handleForgetSpell}
+                  />
+                </div>
+              </div>
+            </div>
+          }
         />
-
-        {/* Main Grid: Attr | Saves+Skills | Magic */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-          <div className="md:col-span-2">
-            <AttributesSection
-              attributes={character.attributes}
-              onAttributeChange={handleAttributeChange}
-            />
-          </div>
-
-          <div className="flex flex-col gap-6 md:col-span-4">
-            <PassivePerception
-              wisValue={character.attributes.WIS ?? 10}
-              level={character.level}
-              perceptionSkillData={character.skills?.PERCEPTION}
-            />
-            <SavingThrowsSection
-              attributes={character.attributes}
-              level={character.level}
-              savingThrows={character.savingThrowProficiencies}
-              onSavingThrowChange={handleSavingThrowChange}
-            />
-            <SkillsSection
-              attributes={character.attributes}
-              level={character.level}
-              skills={character.skills ?? {}}
-              onSkillChange={handleSkillChange}
-            />
-          </div>
-
-          <div className="flex flex-col gap-6 md:col-span-4">
-            <MagicSystemCard
-              character={character}
-              onChangeSystem={handleSpellcastingSystemChange}
-              onChangePoints={handleSpellPointsChange}
-              onChangeSlots={handleSpellSlotsChange}
-            />
-            <KnownSpellsCard
-              spellsKnown={character.spellsKnown || []}
-              onForgetSpell={handleForgetSpell}
-            />
-          </div>
-        </div>
       </div>
 
       <SpellsDrawer

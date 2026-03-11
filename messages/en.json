@@ -78,7 +78,18 @@
     "deleteDialogDescription": "Are you sure you want to delete the character {name}? This action cannot be undone and all data will be lost.",
     "confirmDelete": "Confirm Deletion",
     "namePlaceholder": "Character Name",
-    "editAttribute": "Edit {label}"
+    "editAttribute": "Edit {label}",
+    "tabs": {
+      "status": "Status",
+      "lore": "Lore",
+      "spells": "Spellbook",
+      "inventory": "Inventory"
+    },
+    "emptyStates": {
+      "lore": "Biography and physical characteristics will appear here soon.",
+      "spells": "Your spells and cantrips will be listed here.",
+      "inventory": "Equipment, potions, and currency will be managed here."
+    }
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",

@@ -78,7 +78,18 @@
     "deleteDialogDescription": "Tem certeza que deseja excluir o personagem {name}? Essa ação não poderá ser desfeita e todos os dados serão perdidos.",
     "confirmDelete": "Confirmar Exclusão",
     "namePlaceholder": "Nome do Personagem",
-    "editAttribute": "Editar {label}"
+    "editAttribute": "Editar {label}",
+    "tabs": {
+      "status": "Status",
+      "lore": "Lore",
+      "spells": "Grimório",
+      "inventory": "Inventário"
+    },
+    "emptyStates": {
+      "lore": "A biografia e características físicas aparecerão aqui em breve.",
+      "spells": "Suas magias e truques serão listados aqui.",
+      "inventory": "Equipamentos, poções e moedas serão gerenciados aqui."
+    }
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
