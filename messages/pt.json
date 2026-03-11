@@ -89,7 +89,8 @@
       "lore": "A biografia e características físicas aparecerão aqui em breve.",
       "spells": "Suas magias e truques serão listados aqui.",
       "inventory": "Equipamentos, poções e moedas serão gerenciados aqui."
-    }
+    },
+    "changePhoto": "Trocar Foto"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
@@ -97,6 +98,9 @@
     "class": "Classe",
     "level": "Nível",
     "race": "Raça",
+    "background": "Antecedente",
+    "alignment": "Alinhamento",
+    "xp": "Experiência",
     "spellbook": "Grimório de Magias"
   },
   "attributeCard": {

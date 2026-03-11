@@ -116,12 +116,15 @@ export default function CharacterSheetClient() {
       <div className="flex flex-col gap-6">
         <CharacterHeader
           name={character.name}
-          classNameStr={character.class || ''}
+          classNameStr={character.class}
           level={character.level}
-          race={character.race || ''}
+          race={character.race}
           pb={pb}
+          background={character.background}
+          alignment={character.alignment}
+          xp={character.xp}
+          avatarUrl={character.avatarUrl}
           onBasicInfoChange={handleBasicInfoChange}
-          onOpenSpells={() => setIsSpellsOpen(true)}
         />
 
         <CharacterSheetTabs

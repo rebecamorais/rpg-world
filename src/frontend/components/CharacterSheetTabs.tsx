@@ -2,9 +2,10 @@
 
 import * as React from 'react';
 
-import { BookOpen, Files, Shield, Sword } from 'lucide-react';
+import { BookOpen, Camera, Files, Shield, Sword } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { Button } from '@frontend/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 
 interface CharacterSheetTabsProps {
@@ -53,9 +54,13 @@ export default function CharacterSheetTabs({ statusContent }: CharacterSheetTabs
       </TabsContent>
 
       <TabsContent value="lore" className="min-h-[70vh] w-full focus-visible:ring-0">
-        <div className="text-muted-foreground flex h-[70vh] w-full flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+        <div className="text-muted-foreground border-border bg-card/30 flex h-[70vh] w-full flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
           <Files className="mb-4 h-12 w-12 opacity-20" />
-          <p>{tEmpty('lore')}</p>
+          <p className="mb-4">{tEmpty('lore')}</p>
+          <Button variant="outline" size="sm" className="gap-2">
+            <Camera className="h-4 w-4" />
+            {useTranslations('characters')('changePhoto')}
+          </Button>
         </div>
       </TabsContent>
 

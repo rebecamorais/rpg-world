@@ -89,7 +89,8 @@
       "lore": "Biography and physical characteristics will appear here soon.",
       "spells": "Your spells and cantrips will be listed here.",
       "inventory": "Equipment, potions, and currency will be managed here."
-    }
+    },
+    "changePhoto": "Change Photo"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
@@ -97,6 +98,9 @@
     "class": "Class",
     "level": "Level",
     "race": "Race",
+    "background": "Background",
+    "alignment": "Alignment",
+    "xp": "Experience",
     "spellbook": "Spellbook"
   },
   "attributeCard": {

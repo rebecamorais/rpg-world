@@ -7,6 +7,7 @@ export const dnd5eCharacterSchema = z.object({
   name: z.string().min(1, 'O nome do personagem é obrigatório.'),
   ownerUsername: z.string().min(1, 'Dono inválido.'),
   system: z.literal('DnD_5e'),
+  avatarUrl: z.string().url().optional(),
   race: z.string().min(1, 'Forneça a raça do personagem.'),
   class: z.string().min(1, 'Forneça a classe do personagem.'),
   subclass: z.string().optional(),

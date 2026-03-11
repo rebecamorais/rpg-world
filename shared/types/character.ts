@@ -6,6 +6,7 @@ export interface CharacterBase {
   system: GameSystem;
   name: string;
   level: number;
+  avatarUrl?: string;
 }
 
 export interface CharacterSummary {
