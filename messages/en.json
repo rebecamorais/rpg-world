@@ -112,10 +112,13 @@
     "status": "Combat Status",
     "armorClass": "AC",
     "hitPoints": "Hit Points",
+    "hitPointsShort": "HP",
     "tempHp": "Temp HP",
     "speed": "Speed",
     "initiative": "Initiative",
-    "speedUnit": "m"
+    "speedUnit": "m",
+    "hitDice": "Hit Dice",
+    "hitDiceShort": "HD"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Spell name (e.g.: fireball)",

@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Dices,
   Footprints,
@@ -95,6 +97,267 @@ const StatBadge = ({ icon, children }: StatBadgeProps) => (
   </div>
 );
 
+interface CombatHeaderProps {
+  character: DnD5eCharacter;
+  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
+  onSpellcastingSystemChange: (system: MagicSystem) => void;
+  onSpellPointsChange: (field: 'current' | 'max', value: number) => void;
+  onSpellSlotsChange: (level: string, max: number, used: number) => void;
+}
+
+const CombatHeader = ({
+  character,
+  onBasicInfoChange,
+  onSpellcastingSystemChange,
+  onSpellPointsChange,
+  onSpellSlotsChange,
+}: CombatHeaderProps) => {
+  const t = useTranslations('combatStats');
+  const tm = useTranslations('magicSystem');
+  const tcommon = useTranslations('common');
+
+  return (
+    <div className="mb-4 flex items-center justify-between">
+      <h3 className="text-muted-foreground text-[10px] font-bold tracking-[0.2em] uppercase">
+        {t('status') || 'Combat Status'}
+      </h3>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="border-border/30 hover:bg-secondary/50 hover:border-border/60 hover:text-primary h-7 w-7 rounded-md border bg-transparent transition-all"
+          >
+            <Settings2 className="text-muted-foreground/60 h-3.5 w-3.5 transition-colors group-hover:text-white" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="border-zinc-800 bg-zinc-950 p-0 sm:max-w-[700px]">
+          <DialogHeader className="border-b border-zinc-800 p-6 pb-4">
+            <div className="flex items-center gap-2">
+              <Settings2 className="h-4 w-4 text-zinc-400" />
+              <DialogTitle className="text-zinc-100">
+                {tm('titleConfig') || 'Combat Configuration'}
+              </DialogTitle>
+            </div>
+          </DialogHeader>
+
+          <div className="grid grid-cols-1 divide-zinc-800 md:grid-cols-2 md:divide-x">
+            {/* Left Column: HP & Survival */}
+            <div className="flex flex-col gap-6 p-6">
+              <div className="flex items-center gap-2 pb-2">
+                <Heart className="h-4 w-4 text-red-500" />
+                <h4 className="text-[10px] font-black tracking-widest text-zinc-400 uppercase">
+                  {t('hitPoints') || 'Hit Points'}
+                </h4>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="hpMax" className="text-[10px] font-bold text-zinc-500 uppercase">
+                    {t('hitPoints')} Max
+                  </Label>
+                  <Input
+                    id="hpMax"
+                    type="number"
+                    value={character.hpMax}
+                    onChange={(e) => onBasicInfoChange('hpMax', parseInt(e.target.value) || 0)}
+                    className="h-9 border-zinc-800 bg-zinc-900 transition-colors focus:border-zinc-700"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Magic System */}
+            <div className="flex flex-col gap-6 p-6">
+              <div className="flex items-center gap-2 pb-2">
+                <Sparkles className="h-4 w-4 text-blue-500" />
+                <h4 className="text-[10px] font-black tracking-widest text-zinc-400 uppercase">
+                  {tm('systemUsed') || 'Magic System'}
+                </h4>
+              </div>
+
+              <Tabs
+                value={character.spellcastingSystem || 'none'}
+                onValueChange={(val) => onSpellcastingSystemChange(val as MagicSystem)}
+                className="w-full"
+              >
+                <TabsList className="grid w-full grid-cols-2 border border-zinc-800 bg-zinc-900 p-1">
+                  <TabsTrigger
+                    value="slots"
+                    className="h-7 text-[10px] font-bold uppercase data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100"
+                  >
+                    {tm('spellSlots')}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="points"
+                    className="h-7 text-[10px] font-bold uppercase data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100"
+                  >
+                    {tm('spellPoints')}
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="slots" className="mt-4 space-y-1">
+                  <Label className="mb-2 block text-[10px] font-bold text-zinc-500 uppercase">
+                    {tm('slotsCapacity')}
+                  </Label>
+                  <div className="custom-scrollbar max-h-[220px] overflow-y-auto pr-2">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((lvl) => (
+                      <NumberStepper
+                        key={lvl}
+                        label={tm('circle', { level: lvl }) || `${lvl}º Círculo`}
+                        value={character.spellSlots?.[lvl.toString()]?.max || 0}
+                        onChange={(val) =>
+                          onSpellSlotsChange(
+                            lvl.toString(),
+                            val,
+                            character.spellSlots?.[lvl.toString()]?.used || 0,
+                          )
+                        }
+                      />
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="points" className="mt-4 space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-bold text-zinc-500 uppercase">
+                      {tm('pointsCapacity')}
+                    </Label>
+                    <Input
+                      type="number"
+                      value={character.spellPoints?.max || 0}
+                      onChange={(e) => onSpellPointsChange('max', parseInt(e.target.value) || 0)}
+                      className="h-9 border-zinc-800 bg-zinc-900 transition-colors focus:border-zinc-700"
+                    />
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
+
+          <DialogFooter className="border-t border-zinc-800 bg-zinc-900/50 p-6 md:flex-row">
+            <div className="flex w-full items-center justify-between">
+              <div className="flex gap-2">
+                <DialogClose asChild>
+                  <Button
+                    variant="ghost"
+                    className="h-9 px-4 text-xs font-bold text-zinc-400 uppercase hover:bg-zinc-800 hover:text-zinc-100"
+                  >
+                    {tcommon('cancel') || 'Cancel'}
+                  </Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button className="h-9 bg-zinc-100 px-6 text-xs font-bold text-zinc-950 uppercase shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:bg-zinc-200">
+                    {tcommon('save') || 'Save'}
+                  </Button>
+                </DialogClose>
+              </div>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+interface ResourceGridProps {
+  character: DnD5eCharacter;
+  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
+  onSpellcastingSystemChange: (system: MagicSystem) => void;
+  onSpellPointsChange: (field: 'current' | 'max', value: number) => void;
+  onSpellSlotsChange: (level: string, max: number, used: number) => void;
+}
+
+const ResourceGrid = ({
+  character,
+  onBasicInfoChange,
+  onSpellcastingSystemChange,
+  onSpellPointsChange,
+  onSpellSlotsChange,
+}: ResourceGridProps) => (
+  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <HealthPointsCard
+      currentHp={character.hpCurrent ?? 0}
+      maxHp={character.hpMax || 1}
+      tempHp={character.hpTemp ?? 0}
+      onHpChange={(field, value) => onBasicInfoChange(field, value)}
+    />
+
+    <MagicSystemCard
+      character={character}
+      onSystemChange={onSpellcastingSystemChange}
+      onPointsChange={onSpellPointsChange}
+      onSlotsChange={onSpellSlotsChange}
+    />
+  </div>
+);
+
+interface BadgeRowProps {
+  character: DnD5eCharacter;
+  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
+}
+
+const BadgeRow = ({ character, onBasicInfoChange }: BadgeRowProps) => {
+  const t = useTranslations('combatStats');
+
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-3">
+      {/* Armor Class */}
+      <StatBadge icon={<Shield className="text-primary h-3.5 w-3.5" />}>
+        <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+          {t('armorClass')}
+        </span>
+        <GhostInput
+          type="number"
+          value={character.ac ?? 0}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onBasicInfoChange('ac', parseInt(e.target.value) || 0)
+          }
+          className="h-auto w-6 p-0 text-left text-sm font-bold"
+        />
+      </StatBadge>
+
+      {/* Initiative */}
+      <StatBadge icon={<Swords className="h-3.5 w-3.5 text-orange-500" />}>
+        <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+          {t('initiative')}
+        </span>
+        <GhostInput
+          type="number"
+          value={character.initiative}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
+          }
+          className="h-auto w-6 p-0 text-left text-sm font-bold"
+        />
+      </StatBadge>
+
+      {/* Speed */}
+      <StatBadge icon={<Footprints className="h-3.5 w-3.5 text-emerald-500" />}>
+        <GhostInput
+          type="number"
+          value={character.speed || 30}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
+          }
+          className="h-auto w-6 p-0 text-left text-sm font-bold"
+        />
+        <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+          {t('speedUnit')}
+        </span>
+      </StatBadge>
+
+      {/* Hit Dice */}
+      <StatBadge icon={<Dices className="h-3.5 w-3.5 text-sky-400" />}>
+        <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+          {t('hitDiceShort')}
+        </span>
+        <span className="text-sm font-bold">{character.hitDice?.total || '1d8'}</span>
+      </StatBadge>
+    </div>
+  );
+};
+
 export default function CombatStatsSection({
   character,
   onBasicInfoChange,
@@ -102,229 +365,25 @@ export default function CombatStatsSection({
   onSpellPointsChange,
   onSpellSlotsChange,
 }: CombatStatsSectionProps) {
-  const t = useTranslations('combatStats');
-  const tm = useTranslations('magicSystem');
-  const tcommon = useTranslations('common');
-
   return (
     <div className="flex flex-col">
-      {/* Header with Central Edit */}
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-muted-foreground text-[10px] font-bold tracking-[0.2em] uppercase">
-          {t('status') || 'Combat Status'}
-        </h3>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="border-border/30 hover:bg-secondary/50 hover:border-border/60 hover:text-primary h-7 w-7 rounded-md border bg-transparent transition-all"
-            >
-              <Settings2 className="text-muted-foreground/60 h-3.5 w-3.5 transition-colors group-hover:text-white" />
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="border-zinc-800 bg-zinc-950 p-0 sm:max-w-[700px]">
-            <DialogHeader className="border-b border-zinc-800 p-6 pb-4">
-              <div className="flex items-center gap-2">
-                <Settings2 className="h-4 w-4 text-zinc-400" />
-                <DialogTitle className="text-zinc-100">
-                  {tm('titleConfig') || 'Combat Configuration'}
-                </DialogTitle>
-              </div>
-            </DialogHeader>
+      <CombatHeader
+        character={character}
+        onBasicInfoChange={onBasicInfoChange}
+        onSpellcastingSystemChange={onSpellcastingSystemChange}
+        onSpellPointsChange={onSpellPointsChange}
+        onSpellSlotsChange={onSpellSlotsChange}
+      />
 
-            <div className="grid grid-cols-1 divide-zinc-800 md:grid-cols-2 md:divide-x">
-              {/* Left Column: HP & Survival */}
-              <div className="flex flex-col gap-6 p-6">
-                <div className="flex items-center gap-2 pb-2">
-                  <Heart className="h-4 w-4 text-red-500" />
-                  <h4 className="text-[10px] font-black tracking-widest text-zinc-400 uppercase">
-                    {t('hitPoints') || 'Hit Points'}
-                  </h4>
-                </div>
+      <ResourceGrid
+        character={character}
+        onBasicInfoChange={onBasicInfoChange}
+        onSpellcastingSystemChange={onSpellcastingSystemChange}
+        onSpellPointsChange={onSpellPointsChange}
+        onSpellSlotsChange={onSpellSlotsChange}
+      />
 
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="hpMax"
-                      className="text-[10px] font-bold text-zinc-500 uppercase"
-                    >
-                      {t('hitPoints')} Max
-                    </Label>
-                    <Input
-                      id="hpMax"
-                      type="number"
-                      value={character.hpMax}
-                      onChange={(e) => onBasicInfoChange('hpMax', parseInt(e.target.value) || 0)}
-                      className="h-9 border-zinc-800 bg-zinc-900 transition-colors focus:border-zinc-700"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Magic System */}
-              <div className="flex flex-col gap-6 p-6">
-                <div className="flex items-center gap-2 pb-2">
-                  <Sparkles className="h-4 w-4 text-blue-500" />
-                  <h4 className="text-[10px] font-black tracking-widest text-zinc-400 uppercase">
-                    {tm('systemUsed') || 'Magic System'}
-                  </h4>
-                </div>
-
-                <Tabs
-                  value={character.spellcastingSystem || 'none'}
-                  onValueChange={(val) => onSpellcastingSystemChange(val as MagicSystem)}
-                  className="w-full"
-                >
-                  <TabsList className="grid w-full grid-cols-2 border border-zinc-800 bg-zinc-900 p-1">
-                    <TabsTrigger
-                      value="slots"
-                      className="h-7 text-[10px] font-bold uppercase data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100"
-                    >
-                      {tm('spellSlots')}
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="points"
-                      className="h-7 text-[10px] font-bold uppercase data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100"
-                    >
-                      {tm('spellPoints')}
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="slots" className="mt-4 space-y-1">
-                    <Label className="mb-2 block text-[10px] font-bold text-zinc-500 uppercase">
-                      {tm('slotsCapacity')}
-                    </Label>
-                    <div className="custom-scrollbar max-h-[220px] overflow-y-auto pr-2">
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((lvl) => (
-                        <NumberStepper
-                          key={lvl}
-                          label={tm('circle', { level: lvl }) || `${lvl}º Círculo`}
-                          value={character.spellSlots?.[lvl.toString()]?.max || 0}
-                          onChange={(val) =>
-                            onSpellSlotsChange(
-                              lvl.toString(),
-                              val,
-                              character.spellSlots?.[lvl.toString()]?.used || 0,
-                            )
-                          }
-                        />
-                      ))}
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="points" className="mt-4 space-y-4">
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-bold text-zinc-500 uppercase">
-                        {tm('pointsCapacity')}
-                      </Label>
-                      <Input
-                        type="number"
-                        value={character.spellPoints?.max || 0}
-                        onChange={(e) => onSpellPointsChange('max', parseInt(e.target.value) || 0)}
-                        className="h-9 border-zinc-800 bg-zinc-900 transition-colors focus:border-zinc-700"
-                      />
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </div>
-            </div>
-
-            <DialogFooter className="border-t border-zinc-800 bg-zinc-900/50 p-6 md:flex-row">
-              <div className="flex w-full items-center justify-between">
-                <div className="flex gap-2">
-                  <DialogClose asChild>
-                    <Button
-                      variant="ghost"
-                      className="h-9 px-4 text-xs font-bold text-zinc-400 uppercase hover:bg-zinc-800 hover:text-zinc-100"
-                    >
-                      {tcommon('cancel') || 'Cancel'}
-                    </Button>
-                  </DialogClose>
-                  <DialogClose asChild>
-                    <Button className="h-9 bg-zinc-100 px-6 text-xs font-bold text-zinc-950 uppercase shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:bg-zinc-200">
-                      {tcommon('save') || 'Save'}
-                    </Button>
-                  </DialogClose>
-                </div>
-              </div>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      {/* Main Resources: Health & Spells */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <HealthPointsCard
-          currentHp={character.hpCurrent ?? 0}
-          maxHp={character.hpMax || 1}
-          tempHp={character.hpTemp ?? 0}
-          onHpChange={(field, value) => onBasicInfoChange(field, value)}
-        />
-
-        <MagicSystemCard
-          character={character}
-          onSystemChange={onSpellcastingSystemChange}
-          onPointsChange={onSpellPointsChange}
-          onSlotsChange={onSpellSlotsChange}
-        />
-      </div>
-
-      {/* Footer Badges */}
-      <div className="mt-4 flex flex-wrap items-center gap-3">
-        {/* Armor Class */}
-        <StatBadge icon={<Shield className="text-primary h-3.5 w-3.5" />}>
-          <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
-            AC
-          </span>
-          <GhostInput
-            type="number"
-            value={character.ac ?? 0}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onBasicInfoChange('ac', parseInt(e.target.value) || 0)
-            }
-            className="h-auto w-6 p-0 text-left text-sm font-bold"
-          />
-        </StatBadge>
-
-        {/* Initiative */}
-        <StatBadge icon={<Swords className="h-3.5 w-3.5 text-orange-500" />}>
-          <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
-            INIT
-          </span>
-          <GhostInput
-            type="number"
-            value={character.initiative}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
-            }
-            className="h-auto w-6 p-0 text-left text-sm font-bold"
-          />
-        </StatBadge>
-
-        {/* Speed */}
-        <StatBadge icon={<Footprints className="h-3.5 w-3.5 text-emerald-500" />}>
-          <GhostInput
-            type="number"
-            value={character.speed || 30}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
-            }
-            className="h-auto w-6 p-0 text-left text-sm font-bold"
-          />
-          <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
-            m
-          </span>
-        </StatBadge>
-
-        {/* Hit Dice */}
-        <StatBadge icon={<Dices className="h-3.5 w-3.5 text-sky-400" />}>
-          <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
-            HD
-          </span>
-          <span className="text-sm font-bold">{character.hitDice?.total || '1d8'}</span>
-        </StatBadge>
-      </div>
+      <BadgeRow character={character} onBasicInfoChange={onBasicInfoChange} />
     </div>
   );
 }

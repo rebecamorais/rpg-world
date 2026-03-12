@@ -1,6 +1,8 @@
+'use client';
+
 import * as React from 'react';
 
-import { Heart, Pencil, Skull, Star } from 'lucide-react';
+import { Heart, Skull } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Card } from '@frontend/components/ui/card';
@@ -15,12 +17,17 @@ export interface HealthPointsCardProps extends React.HTMLAttributes<HTMLDivEleme
   onHpChange: (field: 'hpCurrent' | 'hpMax' | 'hpTemp', value: number) => void;
 }
 
-const HealthHeader = () => (
-  <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
-    <Heart className="h-3.5 w-3.5 text-red-500" />
-    <span className="text-[10px] font-bold tracking-[0.2em] text-red-500/80 uppercase">HP</span>
-  </div>
-);
+const HealthHeader = () => {
+  const t = useTranslations('combatStats');
+  return (
+    <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
+      <Heart className="h-3.5 w-3.5 text-red-500" />
+      <span className="text-[10px] font-bold tracking-[0.2em] text-red-500/80 uppercase">
+        {t('hitPointsShort')}
+      </span>
+    </div>
+  );
+};
 
 interface HealthValuesProps {
   currentHp: number;

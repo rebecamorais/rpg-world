@@ -112,10 +112,13 @@
     "status": "Status de Combate",
     "armorClass": "CA",
     "hitPoints": "Pontos de Vida",
+    "hitPointsShort": "PV",
     "tempHp": "Vida Temp",
     "speed": "Deslocamento",
     "initiative": "Iniciativa",
-    "speedUnit": "m"
+    "speedUnit": "m",
+    "hitDice": "Dados de Vida",
+    "hitDiceShort": "DV"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Nome da magia (ex: fireball)",
