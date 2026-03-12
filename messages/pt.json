@@ -126,7 +126,13 @@
     "initiative": "Iniciativa",
     "speedUnit": "m",
     "hitDice": "Dados de Vida",
-    "hitDiceShort": "DV"
+    "hitDiceShort": "DV",
+    "diceOptions": {
+      "d6": "1d6",
+      "d8": "1d8",
+      "d10": "1d10",
+      "d12": "1d12"
+    }
   },
   "spellsDrawer": {
     "searchPlaceholder": "Nome da magia (ex: fireball)",

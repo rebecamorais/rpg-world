@@ -28,6 +28,13 @@ import {
 import { GhostInput } from '@frontend/components/ui/ghost-input';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@frontend/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 import { cn } from '@frontend/lib/utils';
 
@@ -83,6 +90,7 @@ interface CombatStatsSectionProps {
   onSpellcastingSystemChange: (system: MagicSystem) => void;
   onSpellPointsChange: (field: 'current' | 'max', value: number) => void;
   onSpellSlotsChange: (level: string, max: number, used: number) => void;
+  onHitDiceChange: (total: string) => void;
 }
 
 interface StatBadgeProps {
@@ -266,6 +274,7 @@ interface ResourceGridProps {
   onSpellcastingSystemChange: (system: MagicSystem) => void;
   onSpellPointsChange: (field: 'current' | 'max', value: number) => void;
   onSpellSlotsChange: (level: string, max: number, used: number) => void;
+  onHitDiceChange: (total: string) => void;
 }
 
 const ResourceGrid = ({
@@ -274,6 +283,7 @@ const ResourceGrid = ({
   onSpellcastingSystemChange,
   onSpellPointsChange,
   onSpellSlotsChange,
+  onHitDiceChange,
 }: ResourceGridProps) => (
   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
     <HealthPointsCard
@@ -295,9 +305,10 @@ const ResourceGrid = ({
 interface BadgeRowProps {
   character: DnD5eCharacter;
   onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
+  onHitDiceChange: (total: string) => void;
 }
 
-const BadgeRow = ({ character, onBasicInfoChange }: BadgeRowProps) => {
+const BadgeRow = ({ character, onBasicInfoChange, onHitDiceChange }: BadgeRowProps) => {
   const t = useTranslations('combatStats');
 
   return (
@@ -352,7 +363,21 @@ const BadgeRow = ({ character, onBasicInfoChange }: BadgeRowProps) => {
         <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase opacity-50">
           {t('hitDiceShort')}
         </span>
-        <span className="text-sm font-bold">{character.hitDice?.total || '1d8'}</span>
+        <Select
+          value={character.hitDice?.total || '1d8'}
+          onValueChange={(val) => onHitDiceChange(val)}
+        >
+          <SelectTrigger className="h-auto border-none bg-transparent p-0 text-sm font-bold shadow-none focus:ring-0 [&>span]:line-clamp-none">
+            <SelectValue placeholder="1d8" />
+          </SelectTrigger>
+          <SelectContent className="min-w-[70px]">
+            {['d6', 'd8', 'd10', 'd12'].map((key) => (
+              <SelectItem key={key} value={`1${key}`} className="text-xs font-bold">
+                {t(`diceOptions.${key}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </StatBadge>
     </div>
   );
@@ -364,6 +389,7 @@ export default function CombatStatsSection({
   onSpellcastingSystemChange,
   onSpellPointsChange,
   onSpellSlotsChange,
+  onHitDiceChange,
 }: CombatStatsSectionProps) {
   return (
     <div className="flex flex-col">
@@ -381,9 +407,14 @@ export default function CombatStatsSection({
         onSpellcastingSystemChange={onSpellcastingSystemChange}
         onSpellPointsChange={onSpellPointsChange}
         onSpellSlotsChange={onSpellSlotsChange}
+        onHitDiceChange={onHitDiceChange}
       />
 
-      <BadgeRow character={character} onBasicInfoChange={onBasicInfoChange} />
+      <BadgeRow
+        character={character}
+        onBasicInfoChange={onBasicInfoChange}
+        onHitDiceChange={onHitDiceChange}
+      />
     </div>
   );
 }

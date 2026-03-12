@@ -53,6 +53,7 @@ export default function CharacterSheetClient() {
     handleSpellcastingSystemChange,
     handleLearnSpell,
     handleForgetSpell,
+    handleHitDiceChange,
   } = useCharacterEditor({ fetchedCharacter, queryError });
 
   const handleDelete = () => {
@@ -154,6 +155,7 @@ export default function CharacterSheetClient() {
             onSpellcastingSystemChange={handleSpellcastingSystemChange}
             onSpellPointsChange={handleSpellPointsChange}
             onSpellSlotsChange={handleSpellSlotsChange}
+            onHitDiceChange={handleHitDiceChange}
           />
 
           <CharacterSheetTabs
