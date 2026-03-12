@@ -16,6 +16,10 @@
   /* The default primary color. Can be overridden in JS */
   --primary: #663399;
   --primary-foreground: #ffffff;
+  --popover: #ffffff;
+  --popover-foreground: #18181b;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
   --sidebar: #09090b;
 }
 
@@ -34,6 +38,10 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-sidebar: var(--sidebar);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -51,6 +59,10 @@
     --border: #27272a;
     --input: #27272a;
     --ring: var(--primary);
+    --popover: #1a1a1a;
+    --popover-foreground: #fafafa;
+    --accent: #27272a;
+    --accent-foreground: #fafafa;
     /* --primary: O usuário continua com sua escolha mesmo no modo escuro */
   }
 }
