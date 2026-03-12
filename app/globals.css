@@ -2,6 +2,34 @@
 @config '../tailwind.config.ts';
 
 :root {
+  /* DARK MODE BY DEFAULT */
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #1a1a1a;
+  --card-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: var(--primary);
+  --popover: #1a1a1a;
+  --popover-foreground: #fafafa;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
+
+  /* The default primary color. Can be overridden in JS */
+  --primary: #663399;
+  --primary-foreground: #ffffff;
+  --sidebar: #09090b;
+}
+
+/* 
+  FUTURE LIGHT MODE: 
+  Para ativar, basta adicionar a classe 'light' na tag <html> ou <body>
+*/
+.light {
   --background: #ffffff;
   --foreground: #18181b;
   --card: #ffffff;
@@ -12,15 +40,10 @@
   --secondary-foreground: #18181b;
   --border: #e4e4e7;
   --input: #e4e4e7;
-  --ring: var(--primary);
-  /* The default primary color. Can be overridden in JS */
-  --primary: #663399;
-  --primary-foreground: #ffffff;
   --popover: #ffffff;
   --popover-foreground: #18181b;
   --accent: #f4f4f5;
   --accent-foreground: #18181b;
-  --sidebar: #09090b;
 }
 
 @theme inline {
@@ -44,27 +67,6 @@
   --color-accent-foreground: var(--accent-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #09090b;
-    --foreground: #fafafa;
-    --card: #1a1a1a;
-    --card-foreground: #fafafa;
-    --muted: #27272a;
-    --muted-foreground: #a1a1aa;
-    --secondary: #27272a;
-    --secondary-foreground: #fafafa;
-    --border: #27272a;
-    --input: #27272a;
-    --ring: var(--primary);
-    --popover: #1a1a1a;
-    --popover-foreground: #fafafa;
-    --accent: #27272a;
-    --accent-foreground: #fafafa;
-    /* --primary: O usuário continua com sua escolha mesmo no modo escuro */
-  }
 }
 
 body {
