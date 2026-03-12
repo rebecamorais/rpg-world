@@ -95,13 +95,22 @@ interface CombatStatsSectionProps {
 
 interface StatBadgeProps {
   icon: React.ReactNode;
+  label?: string;
   children: React.ReactNode;
+  reverse?: boolean;
 }
 
-const StatBadge = ({ icon, children }: StatBadgeProps) => (
-  <div className="bg-secondary/30 border-border/50 hover:bg-secondary/50 flex items-center gap-4 rounded-full border px-3 py-1 transition-colors">
+const StatBadge = ({ icon, label, children, reverse }: StatBadgeProps) => (
+  <div className="border-border/50 bg-secondary/30 hover:bg-secondary/50 flex items-center gap-4 rounded-full border px-3 py-1 transition-colors">
     {icon}
-    <div className="flex items-baseline gap-2">{children}</div>
+    <div className={cn('flex items-baseline gap-2', reverse && 'flex-row-reverse')}>
+      {label && (
+        <span className="text-muted-foreground text-xs font-bold tracking-wider uppercase opacity-50">
+          {label}
+        </span>
+      )}
+      {children}
+    </div>
   </div>
 );
 
@@ -314,55 +323,47 @@ const BadgeRow = ({ character, onBasicInfoChange, onHitDiceChange }: BadgeRowPro
   return (
     <div className="mt-4 flex flex-wrap items-center gap-3">
       {/* Armor Class */}
-      <StatBadge icon={<Shield className="text-primary h-3.5 w-3.5" />}>
-        <span className="text-muted-foreground pr-2 text-sm font-bold tracking-wider uppercase opacity-50">
-          {t('armorClass')}
-        </span>
+      <StatBadge icon={<Shield className="text-primary h-3.5 w-3.5" />} label={t('armorClass')}>
         <GhostInput
           type="number"
           value={character.ac ?? 0}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             onBasicInfoChange('ac', parseInt(e.target.value) || 0)
           }
-          className="h-auto w-6 p-0 text-left text-sm font-bold"
+          className="h-auto w-12 p-0 text-left text-sm font-bold"
         />
       </StatBadge>
 
       {/* Initiative */}
-      <StatBadge icon={<Swords className="h-3.5 w-3.5 text-orange-500" />}>
-        <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase opacity-50">
-          {t('initiative')}
-        </span>
+      <StatBadge icon={<Swords className="h-3.5 w-3.5 text-orange-500" />} label={t('initiative')}>
         <GhostInput
           type="number"
           value={character.initiative}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
           }
-          className="h-auto w-6 p-0 text-left text-sm font-bold"
+          className="h-auto w-12 p-0 text-left text-sm font-bold"
         />
       </StatBadge>
 
       {/* Speed */}
-      <StatBadge icon={<Footprints className="h-3.5 w-3.5 text-emerald-500" />}>
+      <StatBadge
+        icon={<Footprints className="h-3.5 w-3.5 text-emerald-500" />}
+        label={t('speedUnit')}
+        reverse
+      >
         <GhostInput
           type="number"
           value={character.speed || 30}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
           }
-          className="h-auto w-6 p-0 text-left text-sm font-bold"
+          className="h-auto w-12 p-0 text-left text-sm font-bold"
         />
-        <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase opacity-50">
-          {t('speedUnit')}
-        </span>
       </StatBadge>
 
       {/* Hit Dice */}
-      <StatBadge icon={<Dices className="h-3.5 w-3.5 text-sky-400" />}>
-        <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase opacity-50">
-          {t('hitDiceShort')}
-        </span>
+      <StatBadge icon={<Dices className="h-3.5 w-3.5 text-sky-400" />} label={t('hitDiceShort')}>
         <Select
           value={character.hitDice?.total || '1d8'}
           onValueChange={(val) => onHitDiceChange(val)}
