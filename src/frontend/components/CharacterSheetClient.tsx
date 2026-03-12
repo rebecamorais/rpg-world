@@ -158,16 +158,14 @@ export default function CharacterSheetClient() {
 
           <CharacterSheetTabs
             statusContent={
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div className="flex flex-col gap-6">
-                  <SkillsSection
-                    attributes={character.attributes}
-                    level={character.level}
-                    skills={character.skills ?? {}}
-                    onSkillChange={handleSkillChange}
-                  />
-                </div>
-                <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-6">
+                <SkillsSection
+                  attributes={character.attributes}
+                  level={character.level}
+                  skills={character.skills ?? {}}
+                  onSkillChange={handleSkillChange}
+                />
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <KnownSpellsCard
                     spellsKnown={character.spellsKnown || []}
                     onForgetSpell={handleForgetSpell}

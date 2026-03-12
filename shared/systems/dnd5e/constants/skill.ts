@@ -20,25 +20,25 @@ export type SkillKey =
   | 'STEALTH'
   | 'SURVIVAL';
 
-export const SKILLS_CATALOG: Record<SkillKey, { label: string; attribute: AttributeKey }> = {
-  ACROBATICS: { label: 'Acrobacia', attribute: 'DEX' },
-  ANIMAL_HANDLING: { label: 'Adestrar Animais', attribute: 'WIS' },
-  ARCANA: { label: 'Arcanismo', attribute: 'INT' },
-  ATHLETICS: { label: 'Atletismo', attribute: 'STR' },
-  DECEPTION: { label: 'Enganação', attribute: 'CHA' },
-  HISTORY: { label: 'História', attribute: 'INT' },
-  INSIGHT: { label: 'Intuição', attribute: 'WIS' },
-  INTIMIDATION: { label: 'Intimidação', attribute: 'CHA' },
-  INVESTIGATION: { label: 'Investigação', attribute: 'INT' },
-  MEDICINE: { label: 'Medicina', attribute: 'WIS' },
-  NATURE: { label: 'Natureza', attribute: 'INT' },
-  PERCEPTION: { label: 'Percepção', attribute: 'WIS' },
-  PERFORMANCE: { label: 'Atuação', attribute: 'CHA' },
-  PERSUASION: { label: 'Persuasão', attribute: 'CHA' },
-  RELIGION: { label: 'Religião', attribute: 'INT' },
-  SLEIGHT_OF_HAND: { label: 'Prestidigitação', attribute: 'DEX' },
-  STEALTH: { label: 'Furtividade', attribute: 'DEX' },
-  SURVIVAL: { label: 'Sobrevivência', attribute: 'WIS' },
+export const SKILLS_CATALOG: Record<SkillKey, { attribute: AttributeKey }> = {
+  ACROBATICS: { attribute: 'DEX' },
+  ANIMAL_HANDLING: { attribute: 'WIS' },
+  ARCANA: { attribute: 'INT' },
+  ATHLETICS: { attribute: 'STR' },
+  DECEPTION: { attribute: 'CHA' },
+  HISTORY: { attribute: 'INT' },
+  INSIGHT: { attribute: 'WIS' },
+  INTIMIDATION: { attribute: 'CHA' },
+  INVESTIGATION: { attribute: 'INT' },
+  MEDICINE: { attribute: 'WIS' },
+  NATURE: { attribute: 'INT' },
+  PERCEPTION: { attribute: 'WIS' },
+  PERFORMANCE: { attribute: 'CHA' },
+  PERSUASION: { attribute: 'CHA' },
+  RELIGION: { attribute: 'INT' },
+  SLEIGHT_OF_HAND: { attribute: 'DEX' },
+  STEALTH: { attribute: 'DEX' },
+  SURVIVAL: { attribute: 'WIS' },
 };
 
 export const SKILL_KEYS = Object.keys(SKILLS_CATALOG) as SkillKey[];
