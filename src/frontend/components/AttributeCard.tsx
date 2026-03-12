@@ -63,10 +63,10 @@ export default function AttributeCard({ label, value, onChange }: Props) {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="group border-border bg-card hover:border-primary relative flex w-24 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 p-3 shadow-sm transition-colors"
+          className="group border-border bg-card hover:border-primary relative flex w-24 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 p-4 shadow-sm transition-colors"
         >
           <div className="bg-primary/50 group-hover:bg-primary absolute top-0 h-1 w-full transition-colors" />
-          <span className="text-muted-foreground mb-1 text-[10px] font-bold tracking-wider uppercase">
+          <span className="text-muted-foreground mb-1 text-xs font-bold tracking-wider uppercase">
             {label}
           </span>
 

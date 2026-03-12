@@ -44,14 +44,14 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
 
     const systemSelector = (
       <Select value={system} onValueChange={(val) => onSystemChange(val as MagicSystem)}>
-        <SelectTrigger className="h-5 w-fit border-none bg-transparent p-0 text-[10px] font-bold tracking-[0.2em] text-blue-500/80 uppercase shadow-none focus:ring-0">
+        <SelectTrigger className="h-5 w-fit border-none bg-transparent p-0 text-sm font-bold tracking-[0.2em] text-blue-500/80 uppercase shadow-none focus:ring-0">
           <SelectValue placeholder="Magic" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="slots" className="text-xs">
+          <SelectItem value="slots" className="text-sm">
             {t('spellSlots') || 'Spell Slots'}
           </SelectItem>
-          <SelectItem value="points" className="text-xs">
+          <SelectItem value="points" className="text-sm">
             {t('spellPoints') || 'Spell Points'}
           </SelectItem>
         </SelectContent>
@@ -143,7 +143,7 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
               {systemSelector}
             </div>
 
-            <div className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-blue-500 uppercase">
+            <div className="rounded-full bg-blue-500/10 px-2 py-0.5 text-sm font-bold tracking-wider text-blue-500 uppercase">
               {totalAvailable} / {totalMax} Slots
             </div>
           </div>
@@ -156,7 +156,7 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
 
               return (
                 <div key={lvl} className={cn('flex flex-col gap-0.5', !isActive && 'opacity-10')}>
-                  <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-60">
+                  <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase opacity-60">
                     {lvl}º
                   </span>
                   <div className="flex flex-wrap gap-1">

@@ -62,9 +62,9 @@ export default function AvatarUpload({
         {/* Upload overlay */}
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
           {isUploadingAvatar ? (
-            <span className="text-xs font-medium text-white">{t('loading')}</span>
+            <span className="text-sm font-medium text-white">{t('loading')}</span>
           ) : (
-            <span className="text-xs font-medium text-white">{t('button')}</span>
+            <span className="text-sm font-medium text-white">{t('button')}</span>
           )}
         </div>
       </button>

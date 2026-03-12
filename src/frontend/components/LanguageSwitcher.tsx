@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import {
   Select,
@@ -21,14 +21,16 @@ export default function LanguageSwitcher() {
     router.refresh();
   };
 
+  const t = useTranslations('common');
+
   return (
     <Select value={locale} onValueChange={handleValueChange}>
       <SelectTrigger className="bg-background h-9 w-[130px] text-sm">
-        <SelectValue placeholder="Language" />
+        <SelectValue placeholder={t('loading')} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="en">English</SelectItem>
-        <SelectItem value="pt">Português</SelectItem>
+        <SelectItem value="en">{t('en')}</SelectItem>
+        <SelectItem value="pt">{t('pt')}</SelectItem>
       </SelectContent>
     </Select>
   );

@@ -131,7 +131,7 @@ export default function NewCharacterForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="DnD_5e">D&D 5ª Edição</SelectItem>
+                        <SelectItem value="DnD_5e">{t('systems.dnd5e')}</SelectItem>
                         {/* Future systems will be added here */}
                       </SelectContent>
                     </Select>

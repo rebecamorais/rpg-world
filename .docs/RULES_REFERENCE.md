@@ -146,3 +146,19 @@ O projeto adota uma mentalidade **Server-First**. O objetivo é manter o process
 | **Browser APIs** | Acesso a `window`, `document`, `localStorage`, `sessionStorage` ou Geolocalização. |
 | **Context Providers** | Envolver o `children` num Client Component dedicado, mantendo o restante da árvore como Server Components. |
 | **Formulários** | Manter a página como Server Component e isolar apenas o formulário (ex: usando `react-hook-form`) num componente cliente específico. |
+
+## 11. Tipografia & Design System (Tailwind Standard)
+
+Para garantir consistência visual e manutenibilidade, o projeto segue estritamente a escala tipográfica padrão do Tailwind CSS. Evite o uso de valores arbitrários (ex: `text-[10px]`) exceto em casos de extrema necessidade técnica.
+
+### Escala Padrão Recomendada:
+
+| Classe | Tamanho (px) | Line Height | Uso Comum |
+| :--- | :--- | :--- | :--- |
+| **`text-xs`** | 12px | 16px | Labels secundários, mini-badges, notas de rodapé. |
+| **`text-sm`** | 14px | 20px | **Padrão do Projeto.** Textos de interface, botões, descrições. |
+| **`text-base`**| 16px | 24px | Corpo de texto longo, parágrafos de lore. |
+| **`text-lg`** | 18px | 28px | Subtítulos ou destaques de UI. |
+
+*   **Acessibilidade**: O tamanho `text-xs` (12px) é o limite mínimo sugerido para garantir a legibilidade.
+*   **Estilo Premium**: Para labels pequenos, prefira combinar `text-sm` ou `text-xs` com `font-bold`, `tracking-wider` e `uppercase` em vez de reduzir ainda mais a fonte.

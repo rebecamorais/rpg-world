@@ -104,7 +104,7 @@ export default function CharacterHeader({
               <div className="flex shrink-0 items-center gap-2">
                 <Label
                   htmlFor="char-level"
-                  className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                  className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
                 >
                   {t('level')}
                 </Label>
@@ -120,7 +120,7 @@ export default function CharacterHeader({
               </div>
 
               <div className="flex flex-1 items-center gap-2">
-                <Label className="text-muted-foreground text-[10px] font-bold tracking-wider whitespace-nowrap uppercase">
+                <Label className="text-muted-foreground text-xs font-bold tracking-wider whitespace-nowrap uppercase">
                   {t('proficiencyBonus')}
                 </Label>
                 <div className="border-border bg-muted/30 flex h-8 min-w-[32px] items-center justify-center rounded-md border px-2 font-mono text-sm font-bold">
@@ -134,18 +134,18 @@ export default function CharacterHeader({
               <div className="flex items-center justify-between">
                 <Label
                   htmlFor="char-xp"
-                  className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                  className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
                 >
                   {t('xp')}
                 </Label>
-                <div className="flex items-center gap-1 text-[10px] font-medium">
+                <div className="flex items-center gap-1 text-xs font-medium">
                   <Input
                     id="char-xp"
                     type="number"
                     min={0}
                     value={xp}
                     onChange={(e) => onBasicInfoChange('xp', parseInt(e.target.value) || 0)}
-                    className="h-5 w-16 border-none bg-transparent p-0 text-right font-mono text-[10px] focus-visible:ring-0"
+                    className="h-5 w-16 border-none bg-transparent p-0 text-right font-mono text-xs focus-visible:ring-0"
                   />
                   <span className="text-muted-foreground">/ {nextLevelXp}</span>
                 </div>
@@ -159,7 +159,7 @@ export default function CharacterHeader({
             <div className="flex items-center gap-3">
               <Label
                 htmlFor="char-race"
-                className="text-muted-foreground w-20 shrink-0 text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground w-20 shrink-0 text-xs font-bold tracking-wider uppercase"
               >
                 {t('race')}
               </Label>
@@ -175,7 +175,7 @@ export default function CharacterHeader({
             <div className="flex items-center gap-3">
               <Label
                 htmlFor="char-class"
-                className="text-muted-foreground w-20 shrink-0 text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground w-20 shrink-0 text-xs font-bold tracking-wider uppercase"
               >
                 {t('class')}
               </Label>
@@ -191,7 +191,7 @@ export default function CharacterHeader({
             <div className="flex items-center gap-3">
               <Label
                 htmlFor="char-background"
-                className="text-muted-foreground w-20 shrink-0 text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground w-20 shrink-0 text-xs font-bold tracking-wider uppercase"
               >
                 {t('background')}
               </Label>
@@ -207,7 +207,7 @@ export default function CharacterHeader({
             <div className="flex items-center gap-3">
               <Label
                 htmlFor="char-alignment"
-                className="text-muted-foreground w-20 shrink-0 text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground w-20 shrink-0 text-xs font-bold tracking-wider uppercase"
               >
                 {t('alignment')}
               </Label>

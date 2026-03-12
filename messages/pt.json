@@ -10,7 +10,11 @@
     "logout": "Sair",
     "confirm": "Confirmar",
     "saveChanges": "Salvar Alterações",
-    "unsavedChanges": "Alterações não salvas"
+    "unsavedChanges": "Alterações não salvas",
+    "close": "Fechar",
+    "title": "RPG World",
+    "en": "Inglês",
+    "pt": "Português"
   },
   "login": {
     "title": "Entrar no RPG World",
@@ -54,7 +58,10 @@
     "submitting": "Criando...",
     "requireLogin": "Faça login para criar personagem.",
     "success": "Personagem criado com sucesso!",
-    "error": "Erro ao criar personagem."
+    "error": "Erro ao criar personagem.",
+    "systems": {
+      "dnd5e": "D&D 5ª Edição"
+    }
   },
   "characters": {
     "loading": "Carregando personagens...",

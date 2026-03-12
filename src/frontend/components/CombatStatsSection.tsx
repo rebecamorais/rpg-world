@@ -46,7 +46,7 @@ function NumberStepper({ value, onChange, min = 0, max = 99, label }: NumberStep
     <div className="flex items-center justify-between gap-4 py-1">
       <span
         className={cn(
-          'text-[10px] font-bold uppercase transition-opacity',
+          'text-sm font-bold uppercase transition-opacity',
           value === 0 ? 'opacity-40' : 'opacity-80',
         )}
       >
@@ -62,7 +62,7 @@ function NumberStepper({ value, onChange, min = 0, max = 99, label }: NumberStep
         >
           <Minus className="h-3 w-3" />
         </Button>
-        <span className="w-6 text-center text-xs font-bold">{value}</span>
+        <span className="w-6 text-center text-sm font-bold">{value}</span>
         <Button
           variant="ghost"
           size="icon"
@@ -91,9 +91,9 @@ interface StatBadgeProps {
 }
 
 const StatBadge = ({ icon, children }: StatBadgeProps) => (
-  <div className="bg-secondary/30 border-border/50 hover:bg-secondary/50 flex items-center gap-2 rounded-full border px-3 py-1 transition-colors">
+  <div className="bg-secondary/30 border-border/50 hover:bg-secondary/50 flex items-center gap-4 rounded-full border px-3 py-1 transition-colors">
     {icon}
-    <div className="flex items-baseline gap-1">{children}</div>
+    <div className="flex items-baseline gap-2">{children}</div>
   </div>
 );
 
@@ -118,7 +118,7 @@ const CombatHeader = ({
 
   return (
     <div className="mb-4 flex items-center justify-between">
-      <h3 className="text-muted-foreground text-[10px] font-bold tracking-[0.2em] uppercase">
+      <h3 className="text-muted-foreground text-sm font-bold tracking-[0.2em] uppercase">
         {t('status') || 'Combat Status'}
       </h3>
       <Dialog>
@@ -146,14 +146,14 @@ const CombatHeader = ({
             <div className="flex flex-col gap-6 p-6">
               <div className="flex items-center gap-2 pb-2">
                 <Heart className="h-4 w-4 text-red-500" />
-                <h4 className="text-[10px] font-black tracking-widest text-zinc-400 uppercase">
+                <h4 className="text-sm font-black tracking-widest text-zinc-400 uppercase">
                   {t('hitPoints') || 'Hit Points'}
                 </h4>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="hpMax" className="text-[10px] font-bold text-zinc-500 uppercase">
+                  <Label htmlFor="hpMax" className="text-sm font-bold text-zinc-500 uppercase">
                     {t('hitPoints')} Max
                   </Label>
                   <Input
@@ -171,7 +171,7 @@ const CombatHeader = ({
             <div className="flex flex-col gap-6 p-6">
               <div className="flex items-center gap-2 pb-2">
                 <Sparkles className="h-4 w-4 text-blue-500" />
-                <h4 className="text-[10px] font-black tracking-widest text-zinc-400 uppercase">
+                <h4 className="text-sm font-black tracking-widest text-zinc-400 uppercase">
                   {tm('systemUsed') || 'Magic System'}
                 </h4>
               </div>
@@ -184,20 +184,20 @@ const CombatHeader = ({
                 <TabsList className="grid w-full grid-cols-2 border border-zinc-800 bg-zinc-900 p-1">
                   <TabsTrigger
                     value="slots"
-                    className="h-7 text-[10px] font-bold uppercase data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100"
+                    className="h-7 text-sm font-bold uppercase data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100"
                   >
                     {tm('spellSlots')}
                   </TabsTrigger>
                   <TabsTrigger
                     value="points"
-                    className="h-7 text-[10px] font-bold uppercase data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100"
+                    className="h-7 text-sm font-bold uppercase data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100"
                   >
                     {tm('spellPoints')}
                   </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="slots" className="mt-4 space-y-1">
-                  <Label className="mb-2 block text-[10px] font-bold text-zinc-500 uppercase">
+                  <Label className="mb-2 block text-sm font-bold text-zinc-500 uppercase">
                     {tm('slotsCapacity')}
                   </Label>
                   <div className="custom-scrollbar max-h-[220px] overflow-y-auto pr-2">
@@ -220,7 +220,7 @@ const CombatHeader = ({
 
                 <TabsContent value="points" className="mt-4 space-y-4">
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold text-zinc-500 uppercase">
+                    <Label className="text-sm font-bold text-zinc-500 uppercase">
                       {tm('pointsCapacity')}
                     </Label>
                     <Input
@@ -241,13 +241,13 @@ const CombatHeader = ({
                 <DialogClose asChild>
                   <Button
                     variant="ghost"
-                    className="h-9 px-4 text-xs font-bold text-zinc-400 uppercase hover:bg-zinc-800 hover:text-zinc-100"
+                    className="h-9 px-4 text-sm font-bold text-zinc-400 uppercase hover:bg-zinc-800 hover:text-zinc-100"
                   >
                     {tcommon('cancel') || 'Cancel'}
                   </Button>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button className="h-9 bg-zinc-100 px-6 text-xs font-bold text-zinc-950 uppercase shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:bg-zinc-200">
+                  <Button className="h-9 bg-zinc-100 px-6 text-sm font-bold text-zinc-950 uppercase shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:bg-zinc-200">
                     {tcommon('save') || 'Save'}
                   </Button>
                 </DialogClose>
@@ -304,7 +304,7 @@ const BadgeRow = ({ character, onBasicInfoChange }: BadgeRowProps) => {
     <div className="mt-4 flex flex-wrap items-center gap-3">
       {/* Armor Class */}
       <StatBadge icon={<Shield className="text-primary h-3.5 w-3.5" />}>
-        <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+        <span className="text-muted-foreground pr-2 text-sm font-bold tracking-wider uppercase opacity-50">
           {t('armorClass')}
         </span>
         <GhostInput
@@ -319,7 +319,7 @@ const BadgeRow = ({ character, onBasicInfoChange }: BadgeRowProps) => {
 
       {/* Initiative */}
       <StatBadge icon={<Swords className="h-3.5 w-3.5 text-orange-500" />}>
-        <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+        <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase opacity-50">
           {t('initiative')}
         </span>
         <GhostInput
@@ -342,14 +342,14 @@ const BadgeRow = ({ character, onBasicInfoChange }: BadgeRowProps) => {
           }
           className="h-auto w-6 p-0 text-left text-sm font-bold"
         />
-        <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+        <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase opacity-50">
           {t('speedUnit')}
         </span>
       </StatBadge>
 
       {/* Hit Dice */}
       <StatBadge icon={<Dices className="h-3.5 w-3.5 text-sky-400" />}>
-        <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+        <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase opacity-50">
           {t('hitDiceShort')}
         </span>
         <span className="text-sm font-bold">{character.hitDice?.total || '1d8'}</span>

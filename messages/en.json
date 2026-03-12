@@ -10,7 +10,11 @@
     "logout": "Log out",
     "confirm": "Confirm",
     "saveChanges": "Save Changes",
-    "unsavedChanges": "Unsaved changes"
+    "unsavedChanges": "Unsaved changes",
+    "close": "Close",
+    "title": "RPG World",
+    "en": "English",
+    "pt": "Portuguese"
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -54,7 +58,10 @@
     "submitting": "Creating...",
     "requireLogin": "Please sign in to create a character.",
     "success": "Character successfully created!",
-    "error": "Error creating character."
+    "error": "Error creating character.",
+    "systems": {
+      "dnd5e": "D&D 5th Edition"
+    }
   },
   "characters": {
     "loading": "Loading characters...",

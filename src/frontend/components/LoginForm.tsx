@@ -99,7 +99,7 @@ export default function LoginForm() {
         <div className="flex rounded-lg bg-white/5 p-1">
           <button
             onClick={() => setAuthMode('magic')}
-            className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-all ${
+            className={`flex-1 rounded-md py-1.5 text-sm font-medium transition-all ${
               authMode === 'magic'
                 ? 'bg-blue-600 text-white shadow-lg'
                 : 'text-gray-400 hover:text-white'
@@ -109,7 +109,7 @@ export default function LoginForm() {
           </button>
           <button
             onClick={() => setAuthMode('password')}
-            className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-all ${
+            className={`flex-1 rounded-md py-1.5 text-sm font-medium transition-all ${
               authMode === 'password'
                 ? 'bg-blue-600 text-white shadow-lg'
                 : 'text-gray-400 hover:text-white'
@@ -165,7 +165,7 @@ export default function LoginForm() {
 
             {authMode === 'magic' && (
               <div className="rounded-md border border-yellow-500/20 bg-yellow-500/10 p-2.5">
-                <p className="text-center text-xs text-yellow-500/80">
+                <p className="text-center text-sm text-yellow-500/80">
                   {t('magicLinkDisabledWarning')}
                 </p>
               </div>
@@ -197,7 +197,7 @@ export default function LoginForm() {
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t border-white/10" />
           </div>
-          <div className="relative flex justify-center text-xs uppercase">
+          <div className="relative flex justify-center text-sm uppercase">
             <span className="bg-black/60 px-2 text-gray-500">{t('dividerText')}</span>
           </div>
         </div>

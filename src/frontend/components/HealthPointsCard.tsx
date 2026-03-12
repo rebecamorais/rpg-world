@@ -22,7 +22,7 @@ const HealthHeader = () => {
   return (
     <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
       <Heart className="h-3.5 w-3.5 text-red-500" />
-      <span className="text-[10px] font-bold tracking-[0.2em] text-red-500/80 uppercase">
+      <span className="text-sm font-bold tracking-[0.2em] text-red-500/80 uppercase">
         {t('hitPointsShort')}
       </span>
     </div>

@@ -41,7 +41,7 @@ export default function CharacterActionBar({
           {tCommon('back')}
         </Link>
         {hasUnsavedChanges && (
-          <span className="rounded bg-amber-500/20 px-2 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
+          <span className="rounded bg-amber-500/20 px-2 py-1 text-sm font-semibold text-amber-600 dark:text-amber-400">
             {tCommon('unsavedChanges')}
           </span>
         )}
