@@ -19,6 +19,7 @@
   "login": {
     "title": "Sign in to RPG World",
     "subtitle": "Choose how you prefer to access your account.",
+    "manualRegistrationNotice": "Hey there, Rebs here! 👋 If you want to log in, let me know. For now, I'm creating users manually, so send me a hello on Discord or WhatsApp.",
     "magicLinkTab": "Magic Link",
     "passwordTab": "Email and Password",
     "emailLabel": "Email",
