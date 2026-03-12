@@ -15,12 +15,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <UserProvider user={user}>
-      <div className="bg-sidebar flex flex-1 text-zinc-100">
+      <div className="bg-sidebar flex h-[calc(100vh-57px)] overflow-hidden text-zinc-100">
         {/* Sidebar */}
         <Sidebar />
 
         {/* Main Content Area */}
-        <main className="flex w-full flex-1 flex-col items-center">{children}</main>
+        <main className="flex-1 overflow-y-auto">
+          <div className="flex w-full flex-col items-center">{children}</div>
+        </main>
       </div>
     </UserProvider>
   );

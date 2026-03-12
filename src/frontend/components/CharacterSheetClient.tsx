@@ -113,8 +113,8 @@ export default function CharacterSheetClient() {
       )}
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[250px_1fr]">
-        {/* Left Sticky Sidebar */}
-        <div className="sticky top-6 flex flex-col gap-4">
+        {/* Left Sidebar */}
+        <div className="flex flex-col gap-4">
           <PassivePerception
             wisValue={character.attributes.WIS ?? 10}
             level={character.level}
