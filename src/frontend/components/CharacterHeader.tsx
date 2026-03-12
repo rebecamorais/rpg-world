@@ -8,10 +8,13 @@ import { useTranslations } from 'next-intl';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
-import { GhostInput } from '@frontend/components/ui/ghost-input';
+import { Input } from '@frontend/components/ui/input';
+import { Label } from '@frontend/components/ui/label';
 import { Progress } from '@frontend/components/ui/progress';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
+
+import { GhostInput } from './ui/ghost-input';
 
 interface Props {
   name: string;
@@ -55,39 +58,39 @@ export default function CharacterHeader({
 
   return (
     <Card className="border-border bg-card overflow-hidden shadow-sm">
-      <CardContent className="flex items-center gap-4 p-4">
+      <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start">
         {/* Avatar Section */}
-        <Avatar className="border-primary/20 h-16 w-16 shrink-0 border shadow-md">
+        <Avatar className="border-primary/20 h-20 w-20 shrink-0 border shadow-md">
           <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
-          <AvatarFallback className="bg-muted font-bold">
+          <AvatarFallback className="bg-muted text-xl font-bold">
             {name?.substring(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
 
-        {/* Info Snapshot */}
-        <div className="flex min-w-0 flex-1 flex-col justify-center">
-          {/* Row 1: Name & PB */}
-          <div className="flex items-center gap-3">
-            <div className="flex max-w-sm min-w-0 items-center gap-2">
+        <div className="grid flex-1 grid-cols-1 gap-8 lg:grid-cols-2">
+          {/* Left Column: Core Stats */}
+          <div className="flex flex-col gap-4">
+            {/* Name Section */}
+            <div className="flex flex-col gap-1.5">
               {isEditingName ? (
                 <GhostInput
+                  id="char-name"
                   autoFocus
                   value={name || ''}
                   onChange={(e) => onBasicInfoChange('name', e.target.value)}
                   onBlur={() => setIsEditingName(false)}
                   onKeyDown={(e) => e.key === 'Enter' && setIsEditingName(false)}
-                  className="h-8 text-xl font-bold tracking-tight"
-                  containerClassName="w-full flex-1"
+                  className="h-10 text-lg font-bold"
                 />
               ) : (
-                <div className="group flex items-center gap-1 overflow-hidden">
-                  <h1 className="text-foreground truncate text-xl font-bold tracking-tight">
+                <div className="group flex items-center gap-2">
+                  <h1 className="text-foreground flex h-10 items-center text-2xl leading-none font-black tracking-tight">
                     {name}
                   </h1>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-5 w-5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+                    className="h-6 w-6 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
                     onClick={() => setIsEditingName(true)}
                   >
                     <Pencil className="h-3 w-3" />
@@ -95,72 +98,126 @@ export default function CharacterHeader({
                 </div>
               )}
             </div>
-            <div className="bg-secondary text-secondary-foreground flex shrink-0 items-center justify-center rounded-full px-2 py-0.5 text-xs font-semibold opacity-80">
-              {t('proficiencyBonus')}: <span className="ml-1">+{pb}</span>
+
+            {/* Level & PB Row */}
+            <div className="flex items-center gap-6">
+              <div className="flex shrink-0 items-center gap-2">
+                <Label
+                  htmlFor="char-level"
+                  className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                >
+                  {t('level')}
+                </Label>
+                <Input
+                  id="char-level"
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={level || 1}
+                  onChange={(e) => onBasicInfoChange('level', parseInt(e.target.value) || 1)}
+                  className="h-8 w-12 text-center font-bold"
+                />
+              </div>
+
+              <div className="flex flex-1 items-center gap-2">
+                <Label className="text-muted-foreground text-[10px] font-bold tracking-wider whitespace-nowrap uppercase">
+                  {t('proficiencyBonus')}
+                </Label>
+                <div className="border-border bg-muted/30 flex h-8 min-w-[32px] items-center justify-center rounded-md border px-2 font-mono text-sm font-bold">
+                  +{pb}
+                </div>
+              </div>
+            </div>
+
+            {/* XP Section */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <Label
+                  htmlFor="char-xp"
+                  className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                >
+                  {t('xp')}
+                </Label>
+                <div className="flex items-center gap-1 text-[10px] font-medium">
+                  <Input
+                    id="char-xp"
+                    type="number"
+                    min={0}
+                    value={xp}
+                    onChange={(e) => onBasicInfoChange('xp', parseInt(e.target.value) || 0)}
+                    className="h-5 w-16 border-none bg-transparent p-0 text-right font-mono text-[10px] focus-visible:ring-0"
+                  />
+                  <span className="text-muted-foreground">/ {nextLevelXp}</span>
+                </div>
+              </div>
+              <Progress value={progress} className="h-2" />
             </div>
           </div>
 
-          {/* Row 2: Secondary Info (Class, Race, BG, Align) */}
-          <div className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
-            <div className="flex items-center">
-              <GhostInput
-                value={classNameStr || ''}
-                onChange={(e) => onBasicInfoChange('class', e.target.value)}
-                className="text-foreground h-5 w-20 text-xs font-semibold"
-                placeholder={t('class')}
-              />
-              <span className="mx-1 opacity-50">{t('level')}</span>
-              <GhostInput
-                type="number"
-                min={1}
-                max={20}
-                value={level || 1}
-                onChange={(e) => onBasicInfoChange('level', parseInt(e.target.value) || 1)}
-                className="text-foreground h-5 w-8 text-xs font-semibold"
-              />
-            </div>
-            <span className="mx-1 opacity-30">•</span>
-            <div className="flex items-center">
-              <GhostInput
+          {/* Right Column: Details List */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-3">
+              <Label
+                htmlFor="char-race"
+                className="text-muted-foreground w-20 shrink-0 text-[10px] font-bold tracking-wider uppercase"
+              >
+                {t('race')}
+              </Label>
+              <Input
+                id="char-race"
                 value={race || ''}
                 onChange={(e) => onBasicInfoChange('race', e.target.value)}
-                className="h-5 w-20 text-xs font-medium"
                 placeholder={t('race')}
+                className="h-8 flex-1"
               />
             </div>
-            <span className="mx-1 opacity-30">•</span>
-            <div className="flex items-center">
-              <GhostInput
+
+            <div className="flex items-center gap-3">
+              <Label
+                htmlFor="char-class"
+                className="text-muted-foreground w-20 shrink-0 text-[10px] font-bold tracking-wider uppercase"
+              >
+                {t('class')}
+              </Label>
+              <Input
+                id="char-class"
+                value={classNameStr || ''}
+                onChange={(e) => onBasicInfoChange('class', e.target.value)}
+                placeholder={t('class')}
+                className="h-8 flex-1 font-semibold"
+              />
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Label
+                htmlFor="char-background"
+                className="text-muted-foreground w-20 shrink-0 text-[10px] font-bold tracking-wider uppercase"
+              >
+                {t('background')}
+              </Label>
+              <Input
+                id="char-background"
                 value={background || ''}
                 onChange={(e) => onBasicInfoChange('background', e.target.value)}
-                className="h-5 w-24 text-xs font-medium"
                 placeholder={t('background')}
+                className="h-8 flex-1"
               />
             </div>
-            <span className="mx-1 opacity-30">•</span>
-            <div className="flex items-center">
-              <GhostInput
+
+            <div className="flex items-center gap-3">
+              <Label
+                htmlFor="char-alignment"
+                className="text-muted-foreground w-20 shrink-0 text-[10px] font-bold tracking-wider uppercase"
+              >
+                {t('alignment')}
+              </Label>
+              <Input
+                id="char-alignment"
                 value={alignment || ''}
                 onChange={(e) => onBasicInfoChange('alignment', e.target.value)}
-                className="h-5 w-24 text-xs font-medium"
                 placeholder={t('alignment')}
+                className="h-8 flex-1"
               />
-            </div>
-          </div>
-
-          {/* Row 3: XP Bar (Super compact) */}
-          <div className="mt-1 flex w-full max-w-xs items-center gap-2">
-            <span className="text-muted-foreground text-[9px] font-bold uppercase">{t('xp')}</span>
-            <Progress value={progress} className="h-1.5 flex-1 opacity-60" />
-            <div className="text-muted-foreground flex items-center text-[9px] font-medium">
-              <GhostInput
-                type="number"
-                min={0}
-                value={xp}
-                onChange={(e) => onBasicInfoChange('xp', parseInt(e.target.value) || 0)}
-                className="h-4 w-12 p-0 text-right text-[9px]"
-              />
-              <span className="ml-0.5">/ {nextLevelXp}</span>
             </div>
           </div>
         </div>

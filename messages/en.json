@@ -94,7 +94,7 @@
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
-    "proficiencyBonus": "Proficiency Bonus",
+    "proficiencyBonus": "Bonus",
     "class": "Class",
     "level": "Level",
     "race": "Race",
