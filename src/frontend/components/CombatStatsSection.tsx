@@ -101,15 +101,17 @@ interface StatBadgeProps {
 }
 
 const StatBadge = ({ icon, label, children, reverse }: StatBadgeProps) => (
-  <div className="border-border/50 bg-secondary/30 hover:bg-secondary/50 flex items-center gap-4 rounded-full border px-3 py-1 transition-colors">
-    {icon}
+  <div className="group/badge border-border/40 hover:border-primary/30 flex items-center gap-4 rounded-full border bg-zinc-950/40 px-3 py-1 backdrop-blur-md transition-all duration-300 hover:bg-zinc-900/60 hover:shadow-[0_0_15px_rgba(var(--primary),0.05)]">
+    <div className="text-muted-foreground/50 group-hover/badge:text-primary transition-colors duration-300">
+      {icon}
+    </div>
     <div className={cn('flex items-baseline gap-2', reverse && 'flex-row-reverse')}>
       {label && (
-        <span className="text-muted-foreground text-xs font-bold tracking-wider uppercase opacity-50">
+        <span className="text-muted-foreground/50 text-xs font-bold tracking-wider whitespace-nowrap uppercase transition-opacity group-hover/badge:opacity-100">
           {label}
         </span>
       )}
-      {children}
+      <div className="transition-colors duration-300 group-hover/badge:text-white">{children}</div>
     </div>
   </div>
 );

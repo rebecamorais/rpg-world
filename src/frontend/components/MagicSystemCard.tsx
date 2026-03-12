@@ -77,29 +77,30 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
             {systemSelector}
           </div>
 
-          <div className="flex flex-col gap-1">
-            <div className="flex items-baseline gap-1.5 font-bold">
+          <div className="flex flex-1 flex-col items-center justify-center gap-1 py-1">
+            <div className="flex items-baseline justify-center gap-1.5 font-bold">
               <div className="group/value relative flex items-baseline">
                 <GhostInput
                   type="number"
                   value={current}
                   onChange={(e) => onPointsChange('current', parseInt(e.target.value) || 0)}
-                  className="h-auto w-12 p-0 text-left text-2xl font-black text-white outline-none"
+                  className="h-auto w-16 p-0 text-center text-3xl font-black text-white outline-none"
                 />
-                <Pencil className="absolute top-1 -right-4 h-3 w-3 opacity-0 transition-opacity group-hover/value:opacity-50" />
               </div>
 
               <div className="flex items-baseline gap-1 font-bold">
-                <span className="text-muted-foreground text-sm opacity-40">/</span>
-                <span className="text-muted-foreground text-sm opacity-40">{max}</span>
+                <span className="text-muted-foreground text-sm opacity-30">/</span>
+                <span className="text-muted-foreground text-sm opacity-30">{max}</span>
               </div>
             </div>
 
-            <div className="bg-secondary relative mt-1 h-1.5 w-full overflow-hidden rounded-full">
+            <div className="relative mt-2 h-2 w-full overflow-hidden rounded-full border border-white/5 bg-zinc-900/50">
               <div
-                className="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 ease-in-out"
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-600 to-blue-400 shadow-[0_0_10px_rgba(37,99,235,0.3)] transition-all duration-500 ease-in-out"
                 style={{ width: `${percentage}%` }}
-              />
+              >
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1),transparent)]" />
+              </div>
             </div>
           </div>
         </Card>

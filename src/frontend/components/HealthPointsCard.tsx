@@ -37,8 +37,8 @@ interface HealthValuesProps {
 }
 
 const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProps) => (
-  <div className="flex flex-1 flex-col justify-center gap-1">
-    <div className="flex items-baseline gap-1.5">
+  <div className="flex flex-1 flex-col items-center justify-center gap-1 py-1">
+    <div className="flex items-baseline justify-center gap-1.5">
       <div className="group/value relative flex items-baseline">
         <GhostInput
           type="number"
@@ -46,30 +46,32 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             onHpChange('hpCurrent', parseInt(e.target.value) || 0)
           }
-          className="h-auto w-16 p-0 text-left text-2xl font-black text-white outline-none"
+          className="h-auto w-16 p-0 text-center text-3xl font-black text-white outline-none"
         />
       </div>
 
       <div className="flex items-baseline gap-1 font-bold">
-        <span className="text-muted-foreground text-sm opacity-40">/</span>
-        <span className="text-muted-foreground text-sm opacity-40">{maxHp}</span>
+        <span className="text-muted-foreground text-sm opacity-30">/</span>
+        <span className="text-muted-foreground text-sm opacity-30">{maxHp}</span>
       </div>
 
-      <div className="group/temp relative ml-2 flex items-baseline text-yellow-500">
-        <span className="text-sm font-black opacity-50">(+</span>
-        <GhostInput
-          type="number"
-          value={tempHp}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            onHpChange('hpTemp', parseInt(e.target.value) || 0)
-          }
-          className="h-auto w-10 p-0 text-left text-sm font-black text-yellow-500 outline-none"
-        />
-        <span className="text-sm font-black opacity-50">)</span>
-      </div>
+      {tempHp > 0 && (
+        <div className="ml-1 flex items-baseline text-yellow-500">
+          <span className="text-xs font-black opacity-50">(+</span>
+          <GhostInput
+            type="number"
+            value={tempHp}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onHpChange('hpTemp', parseInt(e.target.value) || 0)
+            }
+            className="h-auto w-10 p-0 text-left text-xs font-black text-yellow-500 outline-none"
+          />
+          <span className="text-xs font-black opacity-50">)</span>
+        </div>
+      )}
     </div>
 
-    <HealthBar current={currentHp ?? 0} max={maxHp || 1} temp={tempHp ?? 0} className="mt-1" />
+    <HealthBar current={currentHp ?? 0} max={maxHp || 1} temp={tempHp ?? 0} className="mt-2" />
   </div>
 );
 
@@ -94,26 +96,29 @@ const DeathSaves = () => {
   };
 
   return (
-    <div className="border-border/40 mt-2 flex items-center justify-center border-t pt-2 opacity-60 transition-opacity group-hover:opacity-100">
-      <div className="flex items-center gap-4">
+    <div className="border-border/10 mt-2 flex items-center justify-center border-t pt-3 opacity-60 transition-opacity group-hover:opacity-100">
+      <div className="flex items-center gap-6">
         {/* Successes (Green) */}
-        <div className="flex gap-1.5">
+        <div className="flex gap-2">
           {[2, 1, 0].map((i) => (
             <button
               key={`succ-${i}`}
               onClick={() => toggleSuccess(i)}
               className={cn(
-                'h-3 w-3 rounded-full border transition-all',
+                'h-3.5 w-3.5 rounded-full border-2 transition-all duration-300',
                 successes > i
-                  ? 'border-emerald-500 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
-                  : 'border-emerald-500/40',
+                  ? 'border-emerald-500 bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]'
+                  : 'border-emerald-500/20 hover:border-emerald-500/40',
               )}
             />
           ))}
         </div>
 
         <Skull
-          className="h-4 w-4 cursor-pointer text-white/80 transition-colors hover:text-white"
+          className={cn(
+            'h-5 w-5 cursor-pointer text-zinc-600 transition-all duration-300 hover:scale-110 hover:text-white',
+            (successes > 0 || failures > 0) && 'text-zinc-400',
+          )}
           onClick={() => {
             setSuccesses(0);
             setFailures(0);
@@ -121,16 +126,16 @@ const DeathSaves = () => {
         />
 
         {/* Failures (Red) */}
-        <div className="flex gap-1.5">
+        <div className="flex gap-2">
           {[0, 1, 2].map((i) => (
             <button
               key={`fail-${i}`}
               onClick={() => toggleFailure(i)}
               className={cn(
-                'h-3 w-3 rounded-full border transition-all',
+                'h-3.5 w-3.5 rounded-full border-2 transition-all duration-300',
                 failures > i
-                  ? 'border-red-500 bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'
-                  : 'border-red-500/40',
+                  ? 'border-red-500 bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.5)]'
+                  : 'border-red-500/20 hover:border-red-500/40',
               )}
             />
           ))}
@@ -146,7 +151,7 @@ export const HealthPointsCard = React.forwardRef<HTMLDivElement, HealthPointsCar
       <Card
         ref={ref}
         className={cn(
-          'group border-border bg-card/50 hover:bg-card relative flex min-h-[160px] flex-col justify-between overflow-hidden p-3 shadow-sm transition-colors',
+          'group border-border hover:border-border/60 relative flex min-h-[160px] flex-col justify-between overflow-hidden bg-zinc-950/20 p-3 shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-zinc-900/40',
           className,
         )}
         {...props}

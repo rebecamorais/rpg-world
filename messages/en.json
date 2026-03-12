@@ -245,7 +245,10 @@
       "INT": "INT",
       "WIS": "WIS",
       "CHA": "CHA"
-    }
+    },
+    "bulkEditTitle": "Base Attribute Values",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "savingThrows": {
     "title": "Saving Throws"
