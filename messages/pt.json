@@ -220,7 +220,15 @@
     "WIS": "Sabedoria",
     "CHA": "Carisma",
     "proficientIn": "Proficiente em {label}",
-    "noProficiencyIn": "Sem proficiência em {label}"
+    "noProficiencyIn": "Sem proficiência em {label}",
+    "abbreviations": {
+      "STR": "FOR",
+      "DEX": "DES",
+      "CON": "CON",
+      "INT": "INT",
+      "WIS": "SAB",
+      "CHA": "CAR"
+    }
   },
   "savingThrows": {
     "title": "Salvaguardas"

@@ -19,6 +19,7 @@ interface Props {
 
 export default function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
   const t = useTranslations('skills');
+  const tAttr = useTranslations('attributes');
 
   // Prepare and sort skills alphabetically by their translated labels
   const sortedSkills = [...SKILL_KEYS]
@@ -96,7 +97,7 @@ export default function SkillsSection({ attributes, level, skills, onSkillChange
             {label}
           </span>
           <span className="text-muted-foreground w-8 shrink-0 self-center text-center font-mono text-[10px]">
-            ({cat.attribute.slice(0, 3)})
+            ({tAttr(`abbreviations.${cat.attribute}`)})
           </span>
           <span
             className={cn(

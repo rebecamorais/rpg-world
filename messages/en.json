@@ -220,7 +220,15 @@
     "WIS": "Wisdom",
     "CHA": "Charisma",
     "proficientIn": "Proficient in {label}",
-    "noProficiencyIn": "No proficiency in {label}"
+    "noProficiencyIn": "No proficiency in {label}",
+    "abbreviations": {
+      "STR": "STR",
+      "DEX": "DEX",
+      "CON": "CON",
+      "INT": "INT",
+      "WIS": "WIS",
+      "CHA": "CHA"
+    }
   },
   "savingThrows": {
     "title": "Saving Throws"
