@@ -1,4 +1,14 @@
-import { Footprints, Heart, Minus, Plus, Settings2, Shield, Sparkles, Swords } from 'lucide-react';
+import {
+  Dices,
+  Footprints,
+  Heart,
+  Minus,
+  Plus,
+  Settings2,
+  Shield,
+  Sparkles,
+  Swords,
+} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { HealthPointsCard } from '@frontend/components/HealthPointsCard';
@@ -72,6 +82,18 @@ interface CombatStatsSectionProps {
   onSpellPointsChange: (field: 'current' | 'max', value: number) => void;
   onSpellSlotsChange: (level: string, max: number, used: number) => void;
 }
+
+interface StatBadgeProps {
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}
+
+const StatBadge = ({ icon, children }: StatBadgeProps) => (
+  <div className="bg-secondary/30 border-border/50 hover:bg-secondary/50 flex items-center gap-2 rounded-full border px-3 py-1 transition-colors">
+    {icon}
+    <div className="flex items-baseline gap-1">{children}</div>
+  </div>
+);
 
 export default function CombatStatsSection({
   character,
@@ -251,58 +273,57 @@ export default function CombatStatsSection({
       {/* Footer Badges */}
       <div className="mt-4 flex flex-wrap items-center gap-3">
         {/* Armor Class */}
-        <div className="bg-secondary/30 border-border/50 hover:bg-secondary/50 flex items-center gap-2 rounded-full border px-3 py-1 transition-colors">
-          <Shield className="text-primary h-3.5 w-3.5" />
-          <div className="flex items-baseline gap-1">
-            <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
-              AC
-            </span>
-            <GhostInput
-              type="number"
-              value={character.ac ?? 0}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onBasicInfoChange('ac', parseInt(e.target.value) || 0)
-              }
-              className="h-auto w-6 p-0 text-left text-sm font-bold"
-            />
-          </div>
-        </div>
+        <StatBadge icon={<Shield className="text-primary h-3.5 w-3.5" />}>
+          <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+            AC
+          </span>
+          <GhostInput
+            type="number"
+            value={character.ac ?? 0}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onBasicInfoChange('ac', parseInt(e.target.value) || 0)
+            }
+            className="h-auto w-6 p-0 text-left text-sm font-bold"
+          />
+        </StatBadge>
 
         {/* Initiative */}
-        <div className="bg-secondary/30 border-border/50 hover:bg-secondary/50 flex items-center gap-2 rounded-full border px-3 py-1 transition-colors">
-          <Swords className="h-3.5 w-3.5 text-orange-500" />
-          <div className="flex items-baseline gap-1">
-            <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
-              INIT
-            </span>
-            <GhostInput
-              type="number"
-              value={character.initiative}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
-              }
-              className="h-auto w-6 p-0 text-left text-sm font-bold"
-            />
-          </div>
-        </div>
+        <StatBadge icon={<Swords className="h-3.5 w-3.5 text-orange-500" />}>
+          <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+            INIT
+          </span>
+          <GhostInput
+            type="number"
+            value={character.initiative}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
+            }
+            className="h-auto w-6 p-0 text-left text-sm font-bold"
+          />
+        </StatBadge>
 
         {/* Speed */}
-        <div className="bg-secondary/30 border-border/50 hover:bg-secondary/50 flex items-center gap-2 rounded-full border px-3 py-1 transition-colors">
-          <Footprints className="h-3.5 w-3.5 text-emerald-500" />
-          <div className="flex items-baseline gap-1">
-            <GhostInput
-              type="number"
-              value={character.speed || 30}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
-              }
-              className="h-auto w-6 p-0 text-left text-sm font-bold"
-            />
-            <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
-              m
-            </span>
-          </div>
-        </div>
+        <StatBadge icon={<Footprints className="h-3.5 w-3.5 text-emerald-500" />}>
+          <GhostInput
+            type="number"
+            value={character.speed || 30}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
+            }
+            className="h-auto w-6 p-0 text-left text-sm font-bold"
+          />
+          <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+            m
+          </span>
+        </StatBadge>
+
+        {/* Hit Dice */}
+        <StatBadge icon={<Dices className="h-3.5 w-3.5 text-sky-400" />}>
+          <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase opacity-50">
+            HD
+          </span>
+          <span className="text-sm font-bold">{character.hitDice?.total || '1d8'}</span>
+        </StatBadge>
       </div>
     </div>
   );
