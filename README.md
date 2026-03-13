@@ -59,9 +59,9 @@ Este comando irá subir os containers do Supabase (Dev e Test), configurar os sy
 Ao finalizar, o terminal exibirá as chaves geradas para o ambiente de **Dev**. Copie os valores para o `.env.local`:
 
 ```
-API URL        →  SUPABASE_URL            (já configurado como localhost:54321)
-Anon key       →  NEXT_PUBLIC_SUPABASE_ANON_KEY
-Service role   →  SUPABASE_SERVICE_ROLE_KEY
+API URL        →  NEXT_PUBLIC_SUPABASE_URL
+Anon key       →  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+Service role   →  SUPABASE_SECRET_KEY
 ```
 
 > **Dica:** O ambiente de testes roda na porta **54421** de forma isolada.

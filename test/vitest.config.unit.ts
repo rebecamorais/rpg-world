@@ -13,7 +13,7 @@ export default defineConfig({
     globals: true,
     env: {
       NEXT_PUBLIC_SUPABASE_URL: 'http://mock-url.com',
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: 'mock-key',
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'mock-key',
     },
   },
 });
