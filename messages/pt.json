@@ -1,5 +1,8 @@
 {
   "common": {
+    "errors": {
+      "requiredFields": "Preencha todos os campos obrigatórios."
+    },
     "save": "Salvar",
     "saving": "Salvando...",
     "cancel": "Cancelar",
@@ -37,7 +40,35 @@
     "loginFailed": "Falha ao realizar login.",
     "invalidEmailError": "E-mail inválido.",
     "passwordRequiredError": "Senha é obrigatória.",
-    "submit": "Entrar"
+    "submit": "Entrar",
+    "noAccount": "Não tem uma conta?",
+    "register": "Cadastre-se"
+  },
+  "register": {
+    "title": "Criar Conta",
+    "subtitle": "Junte-se ao RPG World e comece sua jornada.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "passwordLabel": "Senha",
+    "passwordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Confirmar Senha",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Cadastrar",
+    "processing": "Criando conta...",
+    "successTitle": "Conta criada!",
+    "successDescription": "Verifique seu e-mail para confirmar seu cadastro.",
+    "alreadyHaveAccount": "Já tem uma conta?",
+    "login": "Entrar",
+    "errors": {
+      "passwordsDoNotMatch": "As senhas não coincidem.",
+      "turnstileRequired": "Por favor, complete a verificação de segurança."
+    }
+  },
+  "auth": {
+    "errors": {
+      "invalidSecurityToken": "Token de segurança inválido ou expirado.",
+      "signUpFailed": "Falha ao criar conta. Tente novamente mais tarde."
+    }
   },
   "landing": {
     "heroTitle": "O seu companheiro definitivo de RPG.",

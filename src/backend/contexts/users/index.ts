@@ -6,6 +6,7 @@ import { GetSessionUserUseCase } from './application/get-session-user.use-case';
 import { SignInWithMagicLinkUseCase } from './application/sign-in-with-magic-link.use-case';
 import { SignInWithPasswordUseCase } from './application/sign-in-with-password.use-case';
 import { SignOutUseCase } from './application/sign-out.use-case';
+import { SignUpUseCase } from './application/sign-up.use-case';
 import { UpdatePasswordUseCase } from './application/update-password.use-case';
 import { GetProfileUseCase, UpdateProfileUseCase } from './application/update-profile.use-case';
 import { UploadAvatarUseCase } from './application/upload-avatar.use-case';
@@ -22,6 +23,7 @@ export interface UserContext {
   getSession: GetSessionUserUseCase;
   signInWithMagicLink: SignInWithMagicLinkUseCase;
   signInWithPassword: SignInWithPasswordUseCase;
+  signUp: SignUpUseCase;
   updatePassword: UpdatePasswordUseCase;
   callbackExchange: CallbackExchangeUseCase;
   signOut: SignOutUseCase;
@@ -41,6 +43,7 @@ export const createUserContext = (config: UserContextConfig): UserContext => {
     getSession: new GetSessionUserUseCase(authRepository),
     signInWithMagicLink: new SignInWithMagicLinkUseCase(authRepository),
     signInWithPassword: new SignInWithPasswordUseCase(authRepository),
+    signUp: new SignUpUseCase(authRepository),
     updatePassword: new UpdatePasswordUseCase(authRepository),
     callbackExchange: new CallbackExchangeUseCase(authRepository),
     signOut: new SignOutUseCase(authRepository),

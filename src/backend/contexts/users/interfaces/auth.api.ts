@@ -15,6 +15,11 @@ export const makeAuthApi = (userContext: UserContext) => ({
     return { success: true, ...result };
   },
 
+  signUp: async (email: string, password: string) => {
+    await userContext.signUp.execute(email, password);
+    return { success: true };
+  },
+
   updatePassword: async (newPassword: string) => {
     await userContext.updatePassword.execute(newPassword);
     return { success: true };

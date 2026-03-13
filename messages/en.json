@@ -1,5 +1,8 @@
 {
   "common": {
+    "errors": {
+      "requiredFields": "Please fill in all required fields."
+    },
     "save": "Save",
     "saving": "Saving...",
     "cancel": "Cancel",
@@ -37,7 +40,35 @@
     "loginFailed": "Failed to login.",
     "invalidEmailError": "Invalid email.",
     "passwordRequiredError": "Password is required.",
-    "submit": "Sign In"
+    "submit": "Sign In",
+    "noAccount": "Don't have an account?",
+    "register": "Sign up"
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Join RPG World and start your journey.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Register",
+    "processing": "Creating account...",
+    "successTitle": "Account created!",
+    "successDescription": "Check your email to confirm your registration.",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Sign In",
+    "errors": {
+      "passwordsDoNotMatch": "Passwords do not match.",
+      "turnstileRequired": "Please complete the security verification."
+    }
+  },
+  "auth": {
+    "errors": {
+      "invalidSecurityToken": "Invalid or expired security token.",
+      "signUpFailed": "Failed to create account. Please try again later."
+    }
   },
   "landing": {
     "heroTitle": "Your ultimate RPG companion.",
