@@ -14,7 +14,8 @@
     "close": "Close",
     "title": "RPG World",
     "en": "English",
-    "pt": "Portuguese"
+    "pt": "Portuguese",
+    "footerMessage": "This software is free. View the code on <link>GitHub</link>"
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -252,5 +253,96 @@
   },
   "savingThrows": {
     "title": "Saving Throws"
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "lastUpdated": "Last updated: March 12, 2026",
+    "sections": {
+      "acceptance": {
+        "title": "1. Acceptance of Terms",
+        "content": "By accessing RPG World, you agree to comply with these terms. This software is provided by Rebs Tech Studio \"as is\", without warranties of any kind."
+      },
+      "conduct": {
+        "title": "2. User Conduct",
+        "content": "RPG World is a space for creativity and fun. It is strictly prohibited:",
+        "items": [
+          "Publishing content that promotes hate, racism, or any form of discrimination.",
+          "Harassing other players or masters.",
+          "Using the system for spam or illegal activities."
+        ]
+      },
+      "content": {
+        "title": "3. User Content",
+        "content": "You retain ownership of all stories and characters created. However, by using our platform, you grant us a worldwide, royalty-free license to store and display this content solely for game operation."
+      },
+      "donations": {
+        "title": "4. Donations and \"Buy me a coffee\"",
+        "content": "Financial contributions are voluntary donations to support development. They do not constitute the purchase of services, do not grant ownership rights over the software, and are non-refundable."
+      },
+      "liability": {
+        "title": "5. Limitation of Liability",
+        "content": "We are not responsible for data loss, connection errors, or service interruptions. As the code is open source (GPLv3), you have the right to host your own instance if you wish for full control over your data."
+      },
+      "age": {
+        "title": "6. Minimum Age and Child Protection",
+        "content": "RPG World is intended for users who are at least 13 years old. We do not intentionally collect data from children under 13. If we become aware that a minor under 13 has provided us with personal data, we will take steps to delete such information and close the account."
+      },
+      "updates": {
+        "title": "7. Changes to the Terms",
+        "content": "We reserve the right to update these terms at any time. We will notify users about significant changes through system notices or by email. Continued use of the platform after changes constitutes acceptance of the new terms."
+      },
+      "law": {
+        "title": "8. Governing Law and Jurisdiction",
+        "content": "These terms are governed by the laws of the Federative Republic of Brazil. Any dispute will be resolved in the jurisdiction of the city of São José dos Campos, SP, with express waiver of any other."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: March 12, 2026",
+    "sections": {
+      "data": {
+        "title": "1. Data Collected",
+        "content": "We collect only what is essential for your experience:",
+        "items": [
+          "Authentication: Email and name provided via Supabase/Google Auth.",
+          "Profile: Username, avatar, and interface preferences.",
+          "Game: Character data, roll history, and session notes."
+        ]
+      },
+      "usage": {
+        "title": "2. Data Usage",
+        "content": "Your data is used exclusively to:",
+        "items": [
+          "Keep your session active.",
+          "Sync your characters across devices.",
+          "Display your profile to other players at your table (when authorized)."
+        ]
+      },
+      "sharing": {
+        "title": "3. Sharing",
+        "content": "We do not sell your data to third parties. Data processing is done securely through Supabase and Rebs Tech Studio infrastructure services."
+      },
+      "rights": {
+        "title": "4. Your Rights",
+        "content": "In accordance with LGPD/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data by sending an email to contato@rebs.com.br. We will process your request within 5 business days."
+      },
+      "cookies": {
+        "title": "5. Cookies",
+        "content": "We use strictly necessary cookies to maintain your authentication and theme preferences (dark/light)."
+      },
+      "transfer": {
+        "title": "6. International Data Transfer",
+        "content": "To operate the system, we use third-party infrastructure (such as Supabase). As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. By using RPG World, you consent to this international transfer, conducted under strict security and encryption standards."
+      },
+      "retention": {
+        "title": "7. Data Retention and Deletion",
+        "content": "Your data remains stored in our database as long as your account is active. If your account remains inactive for more than 24 months, we reserve the right to perform automatic deletion for security and resource saving."
+      },
+      "contact": {
+        "title": "8. Contact and Data Controller",
+        "content": "For any questions regarding your privacy or to exercise your deletion rights (LGPD), please contact us via email: contato@rebs.com.br."
+      }
+    }
   }
 }

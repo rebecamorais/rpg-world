@@ -1,5 +1,7 @@
 # RPG World 🎲
 
+Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio). Licenciado sob a GNU GPLv3.
+
 Um aplicativo web para criação e gestão de fichas de personagens de RPG de mesa, focado inicialmente no sistema **Dungeons & Dragons 5ª Edição**. Projetado para ser rápido, acessível e expansível.
 
 🔗 **Acesse o projeto online:** [rpgworldapp.com](https://rpgworldapp.com/)
@@ -27,7 +29,7 @@ O projeto está atualmente focado em fechar sua base funcional com as seguintes 
 
 ### Pré-requisitos
 
-- [Node.js](https://nodejs.org/) 20+
+- [Node.js](https://nodejs.org/) 24+
 - [Docker](https://www.docker.com/) (necessário para o banco de dados local)
 
 ### 1. Instale as dependências
@@ -109,3 +111,9 @@ Para detalhes técnicos mais profundos, consulte nossos guias:
 ---
 
 Desenvolvido com 💜 por Rebeca.
+
+## 📄 Licença
+
+Este projeto está licenciado sob a **GNU GPLv3**. Consulte o arquivo [LICENSE](LICENSE) para obter mais detalhes.
+
+Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio).

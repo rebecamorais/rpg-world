@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio). Licenciado sob a GNU GPLv3.
+ */
 import HeroCTA from '@frontend/components/HeroCTA';
 
 export default function Home() {

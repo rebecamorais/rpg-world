@@ -1,6 +1,8 @@
 {
   "name": "rpg-world",
   "version": "0.1.0",
+  "author": "Rebeca Morais Cruz (Rebs Tech Studio)",
+  "license": "GPL-3.0-or-later",
   "type": "module",
   "engines": {
     "node": "24.x"
