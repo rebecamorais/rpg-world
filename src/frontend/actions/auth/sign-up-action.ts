@@ -1,8 +1,9 @@
 'use server';
 
+import { redirect } from 'next/navigation';
+
 import { getApi } from '@/backend';
 import { TurnstileService } from '@/backend/shared/infrastructure/services/turnstile-service';
-import { redirect } from 'next/navigation';
 
 export interface ActionResponse {
   success: boolean;
@@ -27,15 +28,15 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
   try {
     const api = await getApi();
     await api.authApi.signUp(email, password);
-    
+
     // Success - Redirecionar para página de verificação ou dashboard
     // No Supabase, se o e-mail confirmation estiver ON, o usuário precisa confirmar.
     // Redirecionamos para uma página informativa.
-  } catch (error: any) {
-    console.error('Sign-up action error:', error);
-    return { 
-      success: false, 
-      error: error.message || 'Auth.errors.signUpFailed' 
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Auth.errors.signUpFailed';
+    return {
+      success: false,
+      error: message,
     };
   }
 
