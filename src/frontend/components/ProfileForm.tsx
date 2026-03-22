@@ -32,8 +32,6 @@ import { useProfile } from '@frontend/hooks/useProfile';
 
 export default function ProfileForm() {
   const t = useTranslations('profileForm');
-  const tAvatar = useTranslations('avatarUpload');
-  const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
 
   const profileSchema = z.object({

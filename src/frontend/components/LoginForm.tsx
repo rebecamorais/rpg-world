@@ -38,7 +38,6 @@ interface LoginFormValues {
 export default function LoginForm() {
   const { sendMagicLink, signInWithPassword } = useAuth();
   const t = useTranslations('login');
-  const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
   const [emailSent, setEmailSent] = useState(false);
   const [authMode, setAuthMode] = useState<'magic' | 'password'>('password');

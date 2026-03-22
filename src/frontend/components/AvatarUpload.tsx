@@ -2,6 +2,8 @@
 
 import { useRef, useState } from 'react';
 
+import Image from 'next/image';
+
 import { useTranslations } from 'next-intl';
 
 import { useProfile } from '@frontend/hooks/useProfile';
@@ -54,7 +56,13 @@ export default function AvatarUpload({
         className="group relative h-24 w-24 overflow-hidden rounded-full border-2 border-white/10 bg-white/5 transition-all hover:border-blue-500/50 disabled:opacity-60"
       >
         {displayUrl ? (
-          <img src={displayUrl} alt={t('currentAlt')} className="h-full w-full object-cover" />
+          <Image
+            src={displayUrl}
+            alt={t('currentAlt')}
+            width={96}
+            height={96}
+            className="h-full w-full object-cover"
+          />
         ) : (
           <span className="flex h-full w-full items-center justify-center text-4xl">🧙</span>
         )}

@@ -1,7 +1,5 @@
 'use server';
 
-import { redirect } from 'next/navigation';
-
 import { getApi } from '@/backend';
 import { TurnstileService } from '@/backend/shared/infrastructure/services/turnstile-service';
 
