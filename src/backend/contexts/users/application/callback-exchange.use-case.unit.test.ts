@@ -5,14 +5,9 @@ import { CallbackExchangeUseCase } from './callback-exchange.use-case';
 
 describe('CallbackExchangeUseCase', () => {
   it('deve chamar o repositório com o código correto', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
-      signInWithOtp: vi.fn(),
-      signInWithPassword: vi.fn(),
+    const mockRepository = {
       exchangeCodeForSession: vi.fn().mockResolvedValue(undefined),
-      updatePassword: vi.fn(),
-      signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new CallbackExchangeUseCase(mockRepository);
     await useCase.execute('valid-auth-code');
@@ -21,14 +16,9 @@ describe('CallbackExchangeUseCase', () => {
   });
 
   it('deve lançar erro se o código não for preenchido', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
-      signInWithOtp: vi.fn(),
-      signInWithPassword: vi.fn(),
+    const mockRepository = {
       exchangeCodeForSession: vi.fn(),
-      updatePassword: vi.fn(),
-      signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new CallbackExchangeUseCase(mockRepository);
 

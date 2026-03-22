@@ -61,7 +61,9 @@
     "login": "Entrar",
     "errors": {
       "passwordsDoNotMatch": "As senhas não coincidem.",
-      "turnstileRequired": "Por favor, complete a verificação de segurança."
+      "turnstileRequired": "Por favor, complete a verificação de segurança.",
+      "invalidEmail": "E-mail inválido.",
+      "passwordMinLength": "A senha deve ter pelo menos 8 caracteres."
     }
   },
   "auth": {

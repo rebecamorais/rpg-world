@@ -5,27 +5,18 @@ import { SignUpUseCase } from './sign-up.use-case';
 
 describe('SignUpUseCase', () => {
   it('should call repository with correct credentials', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
-      signInWithOtp: vi.fn(),
-      signInWithPassword: vi.fn(),
+    const mockRepository = {
       signUp: vi.fn().mockResolvedValue(undefined),
-      exchangeCodeForSession: vi.fn(),
-      updatePassword: vi.fn(),
-      signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new SignUpUseCase(mockRepository);
     await useCase.execute('test@example.com', 'Password123!');
 
-    expect(mockRepository.signUp).toHaveBeenCalledWith(
-      'test@example.com',
-      'Password123!',
-    );
+    expect(mockRepository.signUp).toHaveBeenCalledWith('test@example.com', 'Password123!');
   });
 
   it('should throw error if email or password are not provided', async () => {
-    const mockRepository: AuthRepository = {
+    const mockRepository = {
       getSessionUser: vi.fn(),
       signInWithOtp: vi.fn(),
       signInWithPassword: vi.fn(),
@@ -33,7 +24,7 @@ describe('SignUpUseCase', () => {
       exchangeCodeForSession: vi.fn(),
       updatePassword: vi.fn(),
       signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new SignUpUseCase(mockRepository);
 
@@ -47,7 +38,7 @@ describe('SignUpUseCase', () => {
   });
 
   it('should throw error if default reset password is used', async () => {
-    const mockRepository: AuthRepository = {
+    const mockRepository = {
       getSessionUser: vi.fn(),
       signInWithOtp: vi.fn(),
       signInWithPassword: vi.fn(),
@@ -55,7 +46,7 @@ describe('SignUpUseCase', () => {
       exchangeCodeForSession: vi.fn(),
       updatePassword: vi.fn(),
       signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new SignUpUseCase(mockRepository);
 

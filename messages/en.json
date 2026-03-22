@@ -61,7 +61,9 @@
     "login": "Sign In",
     "errors": {
       "passwordsDoNotMatch": "Passwords do not match.",
-      "turnstileRequired": "Please complete the security verification."
+      "turnstileRequired": "Please complete the security verification.",
+      "invalidEmail": "Invalid email.",
+      "passwordMinLength": "Password must be at least 8 characters."
     }
   },
   "auth": {

@@ -1,11 +1,16 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import Link from 'next/link';
+
+import { signUpAction } from '@/frontend/actions/auth/sign-up-action';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -23,14 +28,12 @@ import {
   FormMessage,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
-import { signUpAction } from '@/frontend/actions/auth/sign-up-action';
-import Link from 'next/link';
 
 declare global {
   interface Window {
     onloadTurnstileCallback: () => void;
     turnstile: {
-      render: (container: string | HTMLElement, options: any) => string;
+      render: (container: string | HTMLElement, options: Record<string, unknown>) => string;
       reset: (widgetId: string) => void;
       getResponse: (widgetId: string) => string;
     };
@@ -45,14 +48,16 @@ export default function SignUpForm() {
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
 
-  const signUpSchema = z.object({
-    email: z.string().email({ message: tCommon('errors.invalidEmail') }),
-    password: z.string().min(8, { message: tCommon('errors.passwordMinLength') }),
-    confirmPassword: z.string(),
-  }).refine((data) => data.password === data.confirmPassword, {
-    message: t('errors.passwordsDoNotMatch'),
-    path: ['confirmPassword'],
-  });
+  const signUpSchema = z
+    .object({
+      email: z.string().email({ message: t('errors.invalidEmail') }),
+      password: z.string().min(8, { message: t('errors.passwordMinLength') }),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('errors.passwordsDoNotMatch'),
+      path: ['confirmPassword'],
+    });
 
   type SignUpValues = z.infer<typeof signUpSchema>;
 
@@ -109,7 +114,7 @@ export default function SignUpForm() {
         if (widgetIdRef.current) window.turnstile.reset(widgetIdRef.current);
         setTurnstileToken(null);
       }
-    } catch (err: any) {
+    } catch {
       toast.error(tCommon('errors.unknown'));
     }
   };
@@ -119,9 +124,7 @@ export default function SignUpForm() {
       <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 backdrop-blur-md">
         <CardHeader>
           <CardTitle className="text-white">{t('successTitle')}</CardTitle>
-          <CardDescription className="text-gray-400">
-            {t('successDescription')}
-          </CardDescription>
+          <CardDescription className="text-gray-400">{t('successDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
@@ -142,7 +145,12 @@ export default function SignUpForm() {
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <form
+            onSubmit={(e) => {
+              void form.handleSubmit(onSubmit)(e);
+            }}
+            className="flex flex-col gap-4"
+          >
             <FormField
               control={form.control}
               name="email"

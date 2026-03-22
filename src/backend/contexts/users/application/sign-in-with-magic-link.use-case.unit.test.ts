@@ -5,14 +5,9 @@ import { SignInWithMagicLinkUseCase } from './sign-in-with-magic-link.use-case';
 
 describe('SignInWithMagicLinkUseCase', () => {
   it('deve chamar o repositório com o email e redirectTo corretos', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
+    const mockRepository = {
       signInWithOtp: vi.fn().mockResolvedValue(undefined),
-      signInWithPassword: vi.fn(),
-      exchangeCodeForSession: vi.fn(),
-      updatePassword: vi.fn(),
-      signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new SignInWithMagicLinkUseCase(mockRepository);
     await useCase.execute('test@example.com', 'http://localhost/callback');
@@ -24,14 +19,9 @@ describe('SignInWithMagicLinkUseCase', () => {
   });
 
   it('deve lançar erro se o email não for fornecido', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
+    const mockRepository = {
       signInWithOtp: vi.fn(),
-      signInWithPassword: vi.fn(),
-      exchangeCodeForSession: vi.fn(),
-      updatePassword: vi.fn(),
-      signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new SignInWithMagicLinkUseCase(mockRepository);
 

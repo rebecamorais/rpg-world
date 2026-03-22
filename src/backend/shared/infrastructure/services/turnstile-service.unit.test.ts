@@ -1,6 +1,8 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { TurnstileService } from './turnstile-service';
 
+vi.mock('server-only', () => ({}));
 describe('TurnstileService', () => {
   beforeEach(() => {
     vi.stubEnv('TURNSTILE_SECRET_KEY', 'mock-secret');
@@ -20,7 +22,7 @@ describe('TurnstileService', () => {
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       expect.objectContaining({
         method: 'POST',
-      })
+      }),
     );
   });
 

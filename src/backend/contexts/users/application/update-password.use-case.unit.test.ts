@@ -5,14 +5,9 @@ import { UpdatePasswordUseCase } from './update-password.use-case';
 
 describe('UpdatePasswordUseCase', () => {
   it('deve chamar o repositório para atualizar a senha', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
-      signInWithOtp: vi.fn(),
-      signInWithPassword: vi.fn(),
-      exchangeCodeForSession: vi.fn(),
+    const mockRepository = {
       updatePassword: vi.fn().mockResolvedValue(undefined),
-      signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new UpdatePasswordUseCase(mockRepository);
     await useCase.execute('newPassword123');
@@ -21,14 +16,9 @@ describe('UpdatePasswordUseCase', () => {
   });
 
   it('deve lançar erro se a nova senha não for fornecida', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
-      signInWithOtp: vi.fn(),
-      signInWithPassword: vi.fn(),
-      exchangeCodeForSession: vi.fn(),
+    const mockRepository = {
       updatePassword: vi.fn(),
-      signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new UpdatePasswordUseCase(mockRepository);
 

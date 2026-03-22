@@ -5,14 +5,9 @@ import { SignInWithPasswordUseCase } from './sign-in-with-password.use-case';
 
 describe('SignInWithPasswordUseCase', () => {
   it('deve chamar o repositório com as credenciais corretas', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
-      signInWithOtp: vi.fn(),
+    const mockRepository = {
       signInWithPassword: vi.fn().mockResolvedValue(undefined),
-      exchangeCodeForSession: vi.fn(),
-      updatePassword: vi.fn(),
-      signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new SignInWithPasswordUseCase(mockRepository);
     await useCase.execute('test@example.com', 'password123');
@@ -24,14 +19,9 @@ describe('SignInWithPasswordUseCase', () => {
   });
 
   it('deve retornar passwordChangeRequired verdadeiro se a senha for a padrão', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
-      signInWithOtp: vi.fn(),
+    const mockRepository = {
       signInWithPassword: vi.fn().mockResolvedValue(undefined),
-      exchangeCodeForSession: vi.fn(),
-      updatePassword: vi.fn(),
-      signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new SignInWithPasswordUseCase(mockRepository);
     const result = await useCase.execute('test@example.com', '123MudaASenha@');
@@ -40,14 +30,9 @@ describe('SignInWithPasswordUseCase', () => {
   });
 
   it('deve retornar passwordChangeRequired falso se a senha não for a padrão', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
-      signInWithOtp: vi.fn(),
+    const mockRepository = {
       signInWithPassword: vi.fn().mockResolvedValue(undefined),
-      exchangeCodeForSession: vi.fn(),
-      updatePassword: vi.fn(),
-      signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new SignInWithPasswordUseCase(mockRepository);
     const result = await useCase.execute('test@example.com', 'outraSenha');
@@ -56,14 +41,14 @@ describe('SignInWithPasswordUseCase', () => {
   });
 
   it('deve lançar erro se o email ou senha não forem fornecidos', async () => {
-    const mockRepository: AuthRepository = {
+    const mockRepository = {
       getSessionUser: vi.fn(),
       signInWithOtp: vi.fn(),
       signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
       updatePassword: vi.fn(),
       signOut: vi.fn(),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new SignInWithPasswordUseCase(mockRepository);
 
