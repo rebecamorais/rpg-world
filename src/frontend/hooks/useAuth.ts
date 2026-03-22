@@ -23,8 +23,13 @@ export function useAuth() {
   };
 
   const signOut = async (): Promise<void> => {
-    await rpgWorldApi.post<void>('/api/auth/signout');
-    window.location.href = '/login';
+    try {
+      await rpgWorldApi.post<void>('/api/auth/signout');
+    } catch (err) {
+      console.error('Sign out error:', err);
+    } finally {
+      window.location.href = '/login';
+    }
   };
 
   return { sendMagicLink, signInWithPassword, updatePassword, signOut };
