@@ -7,5 +7,6 @@ export interface AuthRepository {
   signUp(email: string, password: string): Promise<void>;
   exchangeCodeForSession(code: string): Promise<void>;
   updatePassword(newPassword: string): Promise<void>;
+  existsByEmail(email: string): Promise<boolean>;
   signOut(): Promise<void>;
 }

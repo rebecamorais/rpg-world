@@ -35,7 +35,7 @@ export interface UserContext {
 export type { User };
 
 export const createUserContext = (config: UserContextConfig): UserContext => {
-  const authRepository = new SupabaseAuthRepository(config.authClient);
+  const authRepository = new SupabaseAuthRepository(config.authClient, config.dbClient);
   const profileRepository = new SupabaseProfileRepository(config.dbClient);
   const storageRepository = new SupabaseStorageRepository(config.dbClient);
 

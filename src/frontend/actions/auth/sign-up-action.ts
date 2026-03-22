@@ -28,17 +28,12 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
   try {
     const api = await getApi();
     await api.authApi.signUp(email, password);
-
-    // Success - Redirecionar para página de verificação ou dashboard
-    // No Supabase, se o e-mail confirmation estiver ON, o usuário precisa confirmar.
-    // Redirecionamos para uma página informativa.
+    return { success: true };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Auth.errors.signUpFailed';
+    const message = error instanceof Error ? error.message : 'auth_error_signup_failed';
     return {
       success: false,
       error: message,
     };
   }
-
-  return redirect('/login?message=verification-sent');
 }

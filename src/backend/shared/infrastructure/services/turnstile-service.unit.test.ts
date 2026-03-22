@@ -30,7 +30,7 @@ describe('TurnstileService', () => {
     const result = await TurnstileService.verify('');
 
     expect(result.success).toBe(false);
-    expect(result.error).toBe('Security token is missing');
+    expect(result.error).toBe('security_token_missing');
   });
 
   it('should return error when Cloudflare returns failure', async () => {
@@ -42,7 +42,7 @@ describe('TurnstileService', () => {
     const result = await TurnstileService.verify('invalid-token');
 
     expect(result.success).toBe(false);
-    expect(result.error).toContain('Security verification failed');
+    expect(result.error).toContain('security_verification_failed');
     expect(result.error).toContain('invalid-input-response');
   });
 
@@ -53,6 +53,6 @@ describe('TurnstileService', () => {
     const result = await TurnstileService.verify('token');
 
     expect(result.success).toBe(false);
-    expect(result.error).toBe('Network error during security verification');
+    expect(result.error).toBe('network_error_security_verification');
   });
 });

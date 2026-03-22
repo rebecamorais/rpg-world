@@ -132,9 +132,11 @@ export default function SignUpForm() {
     try {
       const result = await signUpAction(formData);
       if (result.success) {
+        toast.success(t('successTitle'));
         setIsSuccess(true);
       } else {
-        toast.error(result.error || tCommon('errors.unknown'));
+        // Try to translate the error code, fallback to common error
+        toast.error(t(`errors.${result.error}`) || tCommon('errors.unknown'));
         // Reset turnstile on error
         if (widgetIdRef.current) window.turnstile.reset(widgetIdRef.current);
         setTurnstileToken(null);

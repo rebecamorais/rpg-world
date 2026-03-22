@@ -21,9 +21,9 @@ const mockCookieStore = {
 } as unknown as ReadonlyRequestCookies;
 
 describe('Auth Flow (Integration)', () => {
-  const admin = SupabaseFactory.createAdmin();
-  const userClient = SupabaseFactory.createClient(mockCookieStore);
-  const repo = new SupabaseAuthRepository(userClient);
+  const dbClient = SupabaseFactory.createAdmin();
+  const authClient = SupabaseFactory.createClient(mockCookieStore);
+  const repo = new SupabaseAuthRepository(authClient, dbClient);
   const signInUseCase = new SignInWithPasswordUseCase(repo);
   const updatePasswordUseCase = new UpdatePasswordUseCase(repo);
 
@@ -37,7 +37,7 @@ describe('Auth Flow (Integration)', () => {
     const uniqueEmail = `test-change-pass-${Math.random().toString(36).substring(7)}@example.com`;
     const defaultPassword = '123MudaASenha@';
 
-    const { error } = await admin.auth.admin.createUser({
+    const { error } = await dbClient.auth.admin.createUser({
       email: uniqueEmail,
       password: defaultPassword,
       email_confirm: true,
@@ -55,7 +55,7 @@ describe('Auth Flow (Integration)', () => {
     const oldPassword = 'OldPassword123!';
     const newPassword = 'NewPassword456!';
 
-    const { error: createError } = await admin.auth.admin.createUser({
+    const { error: createError } = await dbClient.auth.admin.createUser({
       email: uniqueEmail,
       password: oldPassword,
       email_confirm: true,
@@ -66,7 +66,7 @@ describe('Auth Flow (Integration)', () => {
     await new Promise((r) => setTimeout(r, 200));
 
     // Sign in para popular o cookieJar com a sessão
-    const { error: signInError } = await userClient.auth.signInWithPassword({
+    const { error: signInError } = await authClient.auth.signInWithPassword({
       email: uniqueEmail,
       password: oldPassword,
     });
