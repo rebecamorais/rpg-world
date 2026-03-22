@@ -2,8 +2,6 @@ import path from 'path';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
-// 1. Importe o plugin
-
 import { setupTestEnvironment } from './setup-env';
 
 setupTestEnvironment();

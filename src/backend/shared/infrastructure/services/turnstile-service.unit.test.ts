@@ -47,6 +47,7 @@ describe('TurnstileService', () => {
   });
 
   it('should handle network errors gracefully', async () => {
+    vi.spyOn(console, 'error').mockImplementationOnce(() => {});
     global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
 
     const result = await TurnstileService.verify('token');

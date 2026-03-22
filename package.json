@@ -15,7 +15,7 @@
     "start": "next start",
     "db:ui": "open http://localhost:54323 && open http://localhost:54324",
     "clean": "npm run infra clean",
-    "test": "npm run test:unit && npm run infra up && npm run test:integration",
+    "test": "npm run test:unit && npm run test:integration",
     "test:unit": "vitest run --config ./test/vitest.config.unit.ts",
     "test:integration": "vitest run --config ./test/vitest.config.integration.ts",
     "test:ui": "vitest --ui",
