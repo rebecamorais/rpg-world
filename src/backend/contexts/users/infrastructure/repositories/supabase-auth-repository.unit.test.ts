@@ -7,20 +7,30 @@ vi.mock('server-only', () => ({}));
 
 describe('SupabaseAuthRepository', () => {
   let mockAuthClient: InstanceType<typeof SupabaseClient>;
+  let mockDbClient: InstanceType<typeof SupabaseClient>;
   let repository: SupabaseAuthRepository;
 
   beforeEach(() => {
-    // Setting up a deeply mocked SupabaseClient
+    // Setting up deeply mocked SupabaseClients
     mockAuthClient = {
       auth: {
         getUser: vi.fn(),
         signInWithOtp: vi.fn(),
+        signInWithPassword: vi.fn(),
         exchangeCodeForSession: vi.fn(),
         signOut: vi.fn(),
       },
     } as unknown as InstanceType<typeof SupabaseClient>;
 
-    repository = new SupabaseAuthRepository(mockAuthClient);
+    mockDbClient = {
+      auth: {
+        admin: {
+          listUsers: vi.fn(),
+        },
+      },
+    } as unknown as InstanceType<typeof SupabaseClient>;
+
+    repository = new SupabaseAuthRepository(mockAuthClient, mockDbClient);
   });
 
   const mockAuthError = (message: string): AuthError => new AuthError(message, 400, 'mock_error');
@@ -122,6 +132,51 @@ describe('SupabaseAuthRepository', () => {
       });
 
       await expect(repository.signOut()).rejects.toThrow('Failed to sign out: Server disconnect');
+    });
+  });
+
+  describe('existsByEmail', () => {
+    it('deve retornar true se o usuário existir', async () => {
+      vi.mocked(mockDbClient.auth.admin.listUsers).mockResolvedValueOnce({
+        data: {
+          users: [{ email: 'test@example.com' }] as User[],
+          aud: 'authenticated',
+          nextPage: 0,
+          lastPage: 0,
+          total: 1,
+        },
+        error: null,
+      });
+
+      const result = await repository.existsByEmail('test@example.com');
+      expect(result).toBe(true);
+    });
+
+    it('deve retornar false se o usuário não existir', async () => {
+      vi.mocked(mockDbClient.auth.admin.listUsers).mockResolvedValueOnce({
+        data: {
+          users: [] as User[],
+          aud: 'authenticated',
+          nextPage: 0,
+          lastPage: 0,
+          total: 0,
+        },
+        error: null,
+      });
+
+      const result = await repository.existsByEmail('notfound@example.com');
+      expect(result).toBe(false);
+    });
+
+    it('deve lançar erro caso falhe a busca', async () => {
+      vi.mocked(mockDbClient.auth.admin.listUsers).mockResolvedValueOnce({
+        data: { users: [] as [] },
+        error: mockAuthError('Database unreachable'),
+      });
+
+      await expect(repository.existsByEmail('test@example.com')).rejects.toThrow(
+        'Failed to check if user exists: Database unreachable',
+      );
     });
   });
 });

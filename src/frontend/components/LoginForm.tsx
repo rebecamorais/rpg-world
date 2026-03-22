@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import Link from 'next/link';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
@@ -217,6 +219,13 @@ export default function LoginForm() {
           <GoogleIcon />
           {t('googleLogin')}
         </Button>
+
+        <div className="mt-2 text-center text-sm text-gray-400">
+          {t('noAccount')}{' '}
+          <Link href="/register" className="text-blue-400 hover:underline">
+            {t('register')}
+          </Link>
+        </div>
       </CardContent>
     </Card>
   );

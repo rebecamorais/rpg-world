@@ -53,10 +53,10 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       hpTemp,
       attributes,
       system,
-      id,
-      name,
-      ownerUsername,
-      level,
+      id: _id,
+      name: _name,
+      ownerUsername: _ownerUsername,
+      level: _level,
       ...rest
     } = json;
 

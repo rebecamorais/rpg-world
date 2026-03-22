@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Droplet, Pencil, Sparkles, Wand2 } from 'lucide-react';
+import { Droplet, Wand2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Card } from '@frontend/components/ui/card';
@@ -121,13 +121,6 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
         0,
       );
       const totalAvailable = Math.max(0, totalMax - totalUsed);
-
-      const getOrdinal = (n: number) => {
-        if (n === 1) return '1º';
-        if (n === 2) return '2º';
-        if (n === 3) return '3º';
-        return `${n}º`;
-      };
 
       return (
         <Card

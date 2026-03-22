@@ -1,6 +1,17 @@
 import chalk from 'chalk';
 import { execSync } from 'child_process';
+import { existsSync } from 'fs';
+import path from 'path';
 import sade from 'sade';
+
+const loadEnv = (file: string) => {
+  const fullPath = path.resolve(process.cwd(), file);
+  if (existsSync(fullPath)) {
+    if (typeof process.loadEnvFile === 'function') {
+      process.loadEnvFile(fullPath);
+    }
+  }
+};
 
 const WORKDIRS = {
   dev: 'database/db-dev',
@@ -26,7 +37,12 @@ const actions = {
   up: () => {
     actions.sync(); // Garante o sync SEMPRE antes de subir
     console.log(chalk.green('🚀 Subindo infraestrutura...'));
+
+    // Carrega variáveis pro Supabase CLI não reclamar
+    loadEnv('.env.development');
     run(`npx supabase start --workdir ${WORKDIRS.dev}`, 'Start Dev');
+
+    loadEnv('.env.test');
     run(`npx supabase start --workdir ${WORKDIRS.test}`, 'Start Test');
     run(
       'npx supabase gen types typescript --local --workdir database/db-dev > lib/types/database.ts',

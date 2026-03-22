@@ -16,9 +16,9 @@ import { Container } from './container';
 export const getContainer = cache(async () => {
   const cookieStore = await cookies();
 
-  const adminClient = SupabaseFactory.createAdmin();
+  const dbClient = SupabaseFactory.createAdmin();
 
   const authClient = SupabaseFactory.createClient(cookieStore);
 
-  return new Container(authClient, adminClient);
+  return new Container(authClient, dbClient);
 });

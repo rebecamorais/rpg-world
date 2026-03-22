@@ -5,7 +5,10 @@ import { AuthRepository } from '../../domain/AuthRepository';
 import { User } from '../../domain/User';
 
 export class SupabaseAuthRepository implements AuthRepository {
-  constructor(private readonly authClient: SupabaseClient) {}
+  constructor(
+    private readonly authClient: SupabaseClient,
+    private readonly dbClient: SupabaseClient,
+  ) {}
 
   async getSessionUser(): Promise<User | null> {
     const {
@@ -45,6 +48,30 @@ export class SupabaseAuthRepository implements AuthRepository {
     if (error) {
       throw new Error(`Failed to sign in with password: ${error.message}`);
     }
+  }
+
+  async signUp(email: string, password: string): Promise<void> {
+    const { error } = await this.authClient.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      throw new Error(`Failed to sign up: ${error.message}`);
+    }
+  }
+
+  async existsByEmail(email: string): Promise<boolean> {
+    const {
+      data: { users },
+      error,
+    } = await this.dbClient.auth.admin.listUsers();
+
+    if (error) {
+      throw new Error(`Failed to check if user exists: ${error.message}`);
+    }
+
+    return users.some((user) => user.email === email);
   }
 
   async exchangeCodeForSession(code: string): Promise<void> {

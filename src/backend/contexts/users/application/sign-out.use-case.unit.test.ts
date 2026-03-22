@@ -5,14 +5,9 @@ import { SignOutUseCase } from './sign-out.use-case';
 
 describe('SignOutUseCase', () => {
   it('deve acionar o método signOut no repositório', async () => {
-    const mockRepository: AuthRepository = {
-      getSessionUser: vi.fn(),
-      signInWithOtp: vi.fn(),
-      signInWithPassword: vi.fn(),
-      exchangeCodeForSession: vi.fn(),
-      updatePassword: vi.fn(),
+    const mockRepository = {
       signOut: vi.fn().mockResolvedValue(undefined),
-    };
+    } as unknown as AuthRepository;
 
     const useCase = new SignOutUseCase(mockRepository);
     await useCase.execute();
