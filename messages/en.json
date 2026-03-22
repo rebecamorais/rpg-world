@@ -1,7 +1,8 @@
 {
   "common": {
     "errors": {
-      "requiredFields": "Please fill in all required fields."
+      "requiredFields": "Please fill in all required fields.",
+      "unknown": "An unknown error occurred. Please try again."
     },
     "save": "Save",
     "saving": "Saving...",

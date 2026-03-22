@@ -1,7 +1,8 @@
 {
   "common": {
     "errors": {
-      "requiredFields": "Preencha todos os campos obrigatórios."
+      "requiredFields": "Preencha todos os campos obrigatórios.",
+      "unknown": "Ocorreu um erro desconhecido. Tente novamente."
     },
     "save": "Salvar",
     "saving": "Salvando...",

@@ -9,24 +9,32 @@ export interface TurnstileVerificationResponse {
 
 export class TurnstileService {
   static async verify(token: string): Promise<{ success: boolean; error?: string }> {
-    const secretKey = process.env.TURNSTILE_SECRET_KEY;
+    const secretKey = process.env.TURNSTILE_SECRET_KEY?.trim();
     if (!secretKey) {
-      console.error('TURNSTILE_SECRET_KEY is not defined');
-      return { success: false, error: 'Internal configuration error' };
+      return { success: false, error: 'internal_configuration_error' };
     }
 
     if (!token) {
-      return { success: false, error: 'Security token is missing' };
+      return { success: false, error: 'security_token_missing' };
     }
 
     try {
-      const formData = new FormData();
-      formData.append('secret', secretKey);
-      formData.append('response', token);
+      // Special handling for Turnstile "Always Pass" keys in Development/Test
+      const isTestSecret = secretKey === '1x00000000000000000000000000000000';
+      if (isTestSecret && process.env.NODE_ENV !== 'production') {
+        return { success: true };
+      }
+
+      const params = new URLSearchParams();
+      params.append('secret', secretKey);
+      params.append('response', token);
 
       const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-        body: formData,
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params.toString(),
       });
 
       const outcome: TurnstileVerificationResponse = await result.json();
@@ -35,13 +43,14 @@ export class TurnstileService {
         return { success: true };
       }
 
+      const errorCodes = outcome['error-codes']?.join(', ') || 'Unknown error';
+
       return {
         success: false,
-        error: `Security verification failed: ${outcome['error-codes']?.join(', ') || 'Unknown error'}`,
+        error: `security_verification_failed: ${errorCodes}`,
       };
     } catch (error) {
-      console.error('Turnstile verification error:', error);
-      return { success: false, error: 'Network error during security verification' };
+      return { success: false, error: 'network_error_security_verification' };
     }
   }
 }
