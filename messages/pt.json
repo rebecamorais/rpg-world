@@ -2,7 +2,34 @@
   "common": {
     "errors": {
       "requiredFields": "Preencha todos os campos obrigatórios.",
-      "unknown": "Ocorreu um erro desconhecido. Tente novamente."
+      "unknown": "Ocorreu um erro desconhecido. Tente novamente.",
+      "auth_error_signup_duplicate_email": "Este e-mail já está em uso.",
+      "auth_error_signup_required_fields": "Preencha todos os campos obrigatórios.",
+      "auth_error_signup_invalid_password": "Esta senha não pode ser utilizada para cadastro inicial.",
+      "auth_error_signin_required_fields": "E-mail e senha são obrigatórios.",
+      "auth_error_signin_magic_link_email_required": "E-mail é obrigatório para o link mágico.",
+      "auth_error_update_password_required": "Nova senha é obrigatória.",
+      "profile_error_update_id_required": "ID do perfil é obrigatório para atualização.",
+      "profile_error_get_id_required": "ID do usuário é obrigatório.",
+      "storage_error_upload_avatar_userid_required": "ID do usuário é obrigatório para upload.",
+      "storage_error_upload_avatar_size_limit": "O arquivo excede o limite de 5MB.",
+      "storage_error_upload_avatar_invalid_type": "Tipo de arquivo inválido. Use JPEG, PNG ou WEBP.",
+      "character_error_create_name_required": "Nome do personagem é obrigatório.",
+      "character_error_update_not_found": "Personagem não encontrado.",
+      "character_error_update_unauthorized": "Não autorizado a modificar este personagem.",
+      "character_error_update_system_not_supported": "Suporte apenas para D&D 5e no momento.",
+      "character_error_delete_not_found": "Personagem não encontrado.",
+      "character_error_delete_unauthorized": "Não autorizado a excluir este personagem.",
+      "character_error_get_not_found": "Personagem não encontrado.",
+      "character_error_get_by_owner_required": "Username do proprietário é obrigatório.",
+      "domain_error_attribute_below_one": "Atributo não pode ser menor que 1.",
+      "domain_error_hp_max_below_one": "A vida máxima deve ser pelo menos 1.",
+      "domain_error_hp_damage_negative": "Dano não pode ser negativo.",
+      "domain_error_hp_healing_negative": "Cura não pode ser negativa.",
+      "security_token_missing": "Por favor, complete a verificação de segurança.",
+      "security_verification_failed": "Falha na verificação de segurança. Tente novamente.",
+      "internal_configuration_error": "Erro de configuração interna. Contate o suporte.",
+      "network_error_security_verification": "Erro de rede na verificação de segurança."
     },
     "save": "Salvar",
     "saving": "Salvando...",
@@ -64,14 +91,7 @@
       "passwordsDoNotMatch": "As senhas não coincidem.",
       "turnstileRequired": "Por favor, complete a verificação de segurança.",
       "invalidEmail": "E-mail inválido.",
-      "passwordMinLength": "A senha deve ter pelo menos 8 caracteres.",
-      "auth_error_signup_duplicate_email": "Este e-mail já está em uso.",
-      "auth_error_signup_required_fields": "Preencha todos os campos obrigatórios.",
-      "auth_error_signup_invalid_password": "Esta senha não pode ser utilizada para cadastro inicial.",
-      "security_token_missing": "Por favor, complete a verificação de segurança.",
-      "security_verification_failed": "Falha na verificação de segurança. Tente novamente.",
-      "internal_configuration_error": "Erro de configuração interna. Contate o suporte.",
-      "network_error_security_verification": "Erro de rede na verificação de segurança."
+      "passwordMinLength": "A senha deve ter pelo menos 8 caracteres."
     }
   },
   "auth": {

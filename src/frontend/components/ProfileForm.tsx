@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 
+import { useErrorMessage } from '@/frontend/hooks/useErrorMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm, useWatch } from 'react-hook-form';
@@ -33,6 +34,7 @@ export default function ProfileForm() {
   const t = useTranslations('profileForm');
   const tAvatar = useTranslations('avatarUpload');
   const tCommon = useTranslations('common');
+  const { getMessage } = useErrorMessage();
 
   const profileSchema = z.object({
     username: z
@@ -90,7 +92,7 @@ export default function ProfileForm() {
 
   const handleAvatarUploadError = (err: unknown) => {
     const errorCode = err instanceof Error ? err.message : 'unknown';
-    const localizedMsg = errorCode;
+    const localizedMsg = getMessage(errorCode);
     toast.error(localizedMsg);
   };
 
@@ -105,7 +107,7 @@ export default function ProfileForm() {
       toast.success(t('saveSuccess'));
     } catch (err: unknown) {
       const errorCode = err instanceof Error ? err.message : 'unknown';
-      const localizedMsg = errorCode;
+      const localizedMsg = getMessage(errorCode);
       toast.error(localizedMsg);
     }
   };

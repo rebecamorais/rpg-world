@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 import { signUpAction } from '@/frontend/actions/auth/sign-up-action';
+import { useErrorMessage } from '@/frontend/hooks/useErrorMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
@@ -44,6 +45,7 @@ declare global {
 export default function SignUpForm() {
   const t = useTranslations('register');
   const tCommon = useTranslations('common');
+  const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const turnstileRef = useRef<HTMLDivElement>(null);
@@ -136,7 +138,7 @@ export default function SignUpForm() {
         setIsSuccess(true);
       } else {
         const errorCode = result.error;
-        const localizedMsg = errorCode || tCommon('errors.unknown');
+        const localizedMsg = getMessage(errorCode);
 
         toast.error(localizedMsg);
         // Reset turnstile on error

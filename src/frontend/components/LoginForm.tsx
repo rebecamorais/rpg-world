@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
+import { useErrorMessage } from '@/frontend/hooks/useErrorMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
@@ -38,6 +39,7 @@ export default function LoginForm() {
   const { sendMagicLink, signInWithPassword } = useAuth();
   const t = useTranslations('login');
   const tCommon = useTranslations('common');
+  const { getMessage } = useErrorMessage();
   const [emailSent, setEmailSent] = useState(false);
   const [authMode, setAuthMode] = useState<'magic' | 'password'>('password');
 
@@ -65,7 +67,7 @@ export default function LoginForm() {
       }
     } catch (err: unknown) {
       const errorCode = err instanceof Error ? err.message : 'unknown';
-      const localizedMsg = errorCode;
+      const localizedMsg = getMessage(errorCode);
 
       toast.error(localizedMsg);
       form.setError('root', { message: localizedMsg });

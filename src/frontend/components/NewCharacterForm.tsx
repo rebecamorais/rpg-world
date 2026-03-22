@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import { useErrorMessage } from '@/frontend/hooks/useErrorMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
@@ -38,6 +39,7 @@ export default function NewCharacterForm() {
   const { currentUser } = useCurrentUser();
   const t = useTranslations('characterCreation');
   const tCommon = useTranslations('common');
+  const { getMessage } = useErrorMessage();
   const createMutation = useCreateCharacter(t('success'), t('error'));
 
   const newCharacterSchema = z.object({
@@ -73,7 +75,7 @@ export default function NewCharacterForm() {
       {
         onError: (err: Error) => {
           const errorCode = err.message;
-          const localizedMsg = errorCode;
+          const localizedMsg = getMessage(errorCode);
           form.setError('root', { message: localizedMsg });
         },
       },

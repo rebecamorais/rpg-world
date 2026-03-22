@@ -2,7 +2,34 @@
   "common": {
     "errors": {
       "requiredFields": "Please fill in all required fields.",
-      "unknown": "An unknown error occurred. Please try again."
+      "unknown": "An unknown error occurred. Please try again.",
+      "auth_error_signup_duplicate_email": "This email is already in use.",
+      "auth_error_signup_required_fields": "Please fill in all required fields.",
+      "auth_error_signup_invalid_password": "This password cannot be used for initial registration.",
+      "auth_error_signin_required_fields": "Email and password are required.",
+      "auth_error_signin_magic_link_email_required": "Email is required for magic link.",
+      "auth_error_update_password_required": "New password is required.",
+      "profile_error_update_id_required": "Profile ID is required for update.",
+      "profile_error_get_id_required": "User ID is required.",
+      "storage_error_upload_avatar_userid_required": "User ID is required for upload.",
+      "storage_error_upload_avatar_size_limit": "File size exceeds 5MB limit.",
+      "storage_error_upload_avatar_invalid_type": "Invalid file type. Allowed: JPEG, PNG, WEBP.",
+      "character_error_create_name_required": "Character name is required.",
+      "character_error_update_not_found": "Character not found.",
+      "character_error_update_unauthorized": "Unauthorized to modify this character.",
+      "character_error_update_system_not_supported": "Only D&D 5e is supported at the moment.",
+      "character_error_delete_not_found": "Character not found.",
+      "character_error_delete_unauthorized": "Unauthorized to delete this character.",
+      "character_error_get_not_found": "Character not found.",
+      "character_error_get_by_owner_required": "Owner username is required.",
+      "domain_error_attribute_below_one": "Attribute cannot be less than 1.",
+      "domain_error_hp_max_below_one": "Max HP must be at least 1.",
+      "domain_error_hp_damage_negative": "Damage cannot be negative.",
+      "domain_error_hp_healing_negative": "Healing cannot be negative.",
+      "security_token_missing": "Please complete the security verification.",
+      "security_verification_failed": "Security verification failed. Please try again.",
+      "internal_configuration_error": "Internal configuration error. Contact support.",
+      "network_error_security_verification": "Network error during security verification."
     },
     "save": "Save",
     "saving": "Saving...",
@@ -64,14 +91,7 @@
       "passwordsDoNotMatch": "Passwords do not match.",
       "turnstileRequired": "Please complete the security verification.",
       "invalidEmail": "Invalid email.",
-      "passwordMinLength": "Password must be at least 8 characters.",
-      "auth_error_signup_duplicate_email": "This email is already in use.",
-      "auth_error_signup_required_fields": "Please fill in all required fields.",
-      "auth_error_signup_invalid_password": "This password cannot be used for initial registration.",
-      "security_token_missing": "Please complete the security verification.",
-      "security_verification_failed": "Security verification failed. Please try again.",
-      "internal_configuration_error": "Internal configuration error. Contact support.",
-      "network_error_security_verification": "Network error during security verification."
+      "passwordMinLength": "Password must be at least 8 characters."
     }
   },
   "auth": {

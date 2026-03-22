@@ -1,5 +1,6 @@
 import { useRouter } from 'next/navigation';
 
+import { useErrorMessage } from '@/frontend/hooks/useErrorMessage';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -14,6 +15,7 @@ interface CreateCharacterVariables {
 
 export function useCreateCharacter(tSuccess: string, tError: string) {
   const queryClient = useQueryClient();
+  const { getMessage } = useErrorMessage();
   const router = useRouter();
 
   return useMutation({
@@ -32,7 +34,7 @@ export function useCreateCharacter(tSuccess: string, tError: string) {
     },
     onError: (error: Error) => {
       const errorCode = error.message;
-      toast.error(`${tError}: ${errorCode}`);
+      toast.error(`${tError}: ${getMessage(errorCode)}`);
     },
   });
 }
