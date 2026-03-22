@@ -285,7 +285,6 @@ interface ResourceGridProps {
   onSpellcastingSystemChange: (system: MagicSystem) => void;
   onSpellPointsChange: (field: 'current' | 'max', value: number) => void;
   onSpellSlotsChange: (level: string, max: number, used: number) => void;
-  onHitDiceChange: (total: string) => void;
 }
 
 const ResourceGrid = ({
@@ -294,7 +293,6 @@ const ResourceGrid = ({
   onSpellcastingSystemChange,
   onSpellPointsChange,
   onSpellSlotsChange,
-  onHitDiceChange,
 }: ResourceGridProps) => (
   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
     <HealthPointsCard
@@ -410,7 +408,6 @@ export default function CombatStatsSection({
         onSpellcastingSystemChange={onSpellcastingSystemChange}
         onSpellPointsChange={onSpellPointsChange}
         onSpellSlotsChange={onSpellSlotsChange}
-        onHitDiceChange={onHitDiceChange}
       />
 
       <BadgeRow
