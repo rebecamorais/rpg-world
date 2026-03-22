@@ -3,7 +3,6 @@ import { CharacterContext, CharacterUpdates, CreateCharacterInput } from '../ind
 export const makeCharactersApi = (characterContext: CharacterContext) => ({
   getById: async (id: string) => {
     const character = await characterContext.getById(id);
-    if (!character) throw new Error('Não encontrado.');
     return character.toJSON();
   },
 

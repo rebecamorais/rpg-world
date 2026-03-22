@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { AuthRepository } from '../domain/AuthRepository';
+import { UserErrorCodes } from '../domain/UserError';
 import { SignUpUseCase } from './sign-up.use-case';
 
 describe('SignUpUseCase', () => {
@@ -26,10 +27,10 @@ describe('SignUpUseCase', () => {
     const useCase = new SignUpUseCase(mockRepository);
 
     await expect(useCase.execute('', 'Password123!')).rejects.toThrow(
-      'auth_error_signup_required_fields',
+      UserErrorCodes.SIGNUP_REQUIRED_FIELDS,
     );
     await expect(useCase.execute('test@example.com', '')).rejects.toThrow(
-      'auth_error_signup_required_fields',
+      UserErrorCodes.SIGNUP_REQUIRED_FIELDS,
     );
     expect(mockRepository.signUp).not.toHaveBeenCalled();
   });
@@ -43,7 +44,7 @@ describe('SignUpUseCase', () => {
     const useCase = new SignUpUseCase(mockRepository);
 
     await expect(useCase.execute('test@example.com', '123MudarASenha@')).rejects.toThrow(
-      'auth_error_signup_invalid_password',
+      UserErrorCodes.SIGNUP_INVALID_PASSWORD,
     );
   });
 
@@ -56,7 +57,7 @@ describe('SignUpUseCase', () => {
     const useCase = new SignUpUseCase(mockRepository);
 
     await expect(useCase.execute('existing@example.com', 'Password123!')).rejects.toThrow(
-      'auth_error_signup_duplicate_email',
+      UserErrorCodes.SIGNUP_DUPLICATE_EMAIL,
     );
     expect(mockRepository.signUp).not.toHaveBeenCalled();
   });

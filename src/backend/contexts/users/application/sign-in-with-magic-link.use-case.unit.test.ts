@@ -25,7 +25,9 @@ describe('SignInWithMagicLinkUseCase', () => {
 
     const useCase = new SignInWithMagicLinkUseCase(mockRepository);
 
-    await expect(useCase.execute('', 'http://test')).rejects.toThrow('Email is required');
+    await expect(useCase.execute('', 'http://test')).rejects.toThrow(
+      'auth_error_signin_magic_link_email_required',
+    );
     expect(mockRepository.signInWithOtp).not.toHaveBeenCalled();
   });
 });

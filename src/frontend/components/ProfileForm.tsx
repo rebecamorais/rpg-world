@@ -32,6 +32,7 @@ import { useProfile } from '@frontend/hooks/useProfile';
 export default function ProfileForm() {
   const t = useTranslations('profileForm');
   const tAvatar = useTranslations('avatarUpload');
+  const tCommon = useTranslations('common');
 
   const profileSchema = z.object({
     username: z
@@ -88,8 +89,9 @@ export default function ProfileForm() {
   };
 
   const handleAvatarUploadError = (err: unknown) => {
-    const msg = err instanceof Error ? err.message : tAvatar('error');
-    toast.error(msg);
+    const errorCode = err instanceof Error ? err.message : 'unknown';
+    const localizedMsg = errorCode;
+    toast.error(localizedMsg);
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -102,8 +104,9 @@ export default function ProfileForm() {
       });
       toast.success(t('saveSuccess'));
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : t('saveError');
-      toast.error(msg);
+      const errorCode = err instanceof Error ? err.message : 'unknown';
+      const localizedMsg = errorCode;
+      toast.error(localizedMsg);
     }
   };
 

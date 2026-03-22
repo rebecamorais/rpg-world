@@ -1,4 +1,5 @@
 import { AuthRepository } from '../domain/AuthRepository';
+import { UserError, UserErrorCodes } from '../domain/UserError';
 
 export interface SignInWithPasswordResult {
   passwordChangeRequired: boolean;
@@ -9,7 +10,7 @@ export class SignInWithPasswordUseCase {
 
   async execute(email: string, password: string): Promise<SignInWithPasswordResult> {
     if (!email || !password) {
-      throw new Error('Email e senha são obrigatórios');
+      throw new UserError(UserErrorCodes.SIGNIN_REQUIRED_FIELDS);
     }
 
     await this.authRepository.signInWithPassword(email, password);

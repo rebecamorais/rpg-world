@@ -11,8 +11,8 @@ describe('HealthPoints (Value Object)', () => {
   });
 
   it('não deve permitir vida máxima menor que 1', () => {
-    expect(() => new HealthPoints(10, 0)).toThrowError('A vida máxima deve ser pelo menos 1');
-    expect(() => new HealthPoints(10, -5)).toThrowError('A vida máxima deve ser pelo menos 1');
+    expect(() => new HealthPoints(10, 0)).toThrowError('domain_error_hp_max_below_one');
+    expect(() => new HealthPoints(10, -5)).toThrowError('domain_error_hp_max_below_one');
   });
 
   it('deve limitar a vida atual à vida máxima na inicialização', () => {
@@ -40,7 +40,7 @@ describe('HealthPoints (Value Object)', () => {
 
   it('deve lançar erro se cura ou dano forem negativos', () => {
     const hp = new HealthPoints(10, 10);
-    expect(() => hp.takeDamage(-5)).toThrowError('Dano não pode ser negativo');
-    expect(() => hp.heal(-5)).toThrowError('Cura não pode ser negativa');
+    expect(() => hp.takeDamage(-5)).toThrowError('domain_error_hp_damage_negative');
+    expect(() => hp.heal(-5)).toThrowError('domain_error_hp_healing_negative');
   });
 });

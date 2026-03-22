@@ -22,7 +22,7 @@ describe('CallbackExchangeUseCase', () => {
 
     const useCase = new CallbackExchangeUseCase(mockRepository);
 
-    await expect(useCase.execute('')).rejects.toThrow('Code is required');
+    await expect(useCase.execute('')).rejects.toThrow('auth_error_code_required');
     expect(mockRepository.exchangeCodeForSession).not.toHaveBeenCalled();
   });
 });

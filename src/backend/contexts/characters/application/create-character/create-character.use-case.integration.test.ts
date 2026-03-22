@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
+import { CharacterErrorCodes } from '../../domain/CharacterError';
 import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-character.repository';
 import { CreateCharacterUseCase } from './create-character.use-case';
 
@@ -42,6 +43,6 @@ describe('CreateCharacterUseCase (Integration)', () => {
         race: 'R',
         level: 1,
       }),
-    ).rejects.toThrowError('Nome do personagem é obrigatório');
+    ).rejects.toThrowError(CharacterErrorCodes.CREATE_NAME_REQUIRED);
   });
 });

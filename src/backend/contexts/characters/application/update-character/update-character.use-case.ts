@@ -1,3 +1,4 @@
+import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import {
   AttributeKey,
   CharacterSkill,
@@ -53,15 +54,15 @@ export class UpdateCharacterUseCase {
     const character = await this.repository.findById(id);
 
     if (!character) {
-      throw new Error('Personagem não encontrado.');
+      throw new CharacterError(CharacterErrorCodes.UPDATE_NOT_FOUND);
     }
 
     if (character.ownerUsername !== ownerUsername) {
-      throw new Error('Não autorizado a modificar este personagem.');
+      throw new CharacterError(CharacterErrorCodes.UPDATE_UNAUTHORIZED);
     }
 
     if (!(character instanceof DnD5eCharacter)) {
-      throw new Error('Suporte apenas para D&D 5e no momento.');
+      throw new CharacterError(CharacterErrorCodes.UPDATE_SYSTEM_NOT_SUPPORTED);
     }
 
     const u = updates;

@@ -49,6 +49,6 @@ describe('UpdateCharacterUseCase (Integration)', () => {
         ownerUsername: 'hacker-user',
         updates: { name: 'Hacked' },
       }),
-    ).rejects.toThrowError('Não autorizado a modificar este personagem.');
+    ).rejects.toThrowError('character_error_update_unauthorized');
   });
 });

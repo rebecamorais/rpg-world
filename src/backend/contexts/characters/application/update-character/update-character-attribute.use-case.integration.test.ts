@@ -45,6 +45,6 @@ describe('UpdateCharacterAttributeUseCase (Integration)', () => {
         attribute: 'STR',
         value: 30,
       }),
-    ).rejects.toThrowError('Não autorizado a modificar este personagem.');
+    ).rejects.toThrowError('character_error_update_unauthorized');
   });
 });

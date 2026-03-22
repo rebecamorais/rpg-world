@@ -1,21 +1,22 @@
 import { AuthRepository } from '../domain/AuthRepository';
+import { UserError, UserErrorCodes } from '../domain/UserError';
 
 export class SignUpUseCase {
   constructor(private readonly authRepository: AuthRepository) {}
 
   async execute(email: string, password: string): Promise<void> {
     if (!email || !password) {
-      throw new Error('auth_error_signup_required_fields');
+      throw new UserError(UserErrorCodes.SIGNUP_REQUIRED_FIELDS);
     }
 
     // A senha de primeiro acesso NÃO pode ser a senha padrão de reset/migração
     if (password === '123MudarASenha@') {
-      throw new Error('auth_error_signup_invalid_password');
+      throw new UserError(UserErrorCodes.SIGNUP_INVALID_PASSWORD);
     }
 
     const exists = await this.authRepository.existsByEmail(email);
     if (exists) {
-      throw new Error('auth_error_signup_duplicate_email');
+      throw new UserError(UserErrorCodes.SIGNUP_DUPLICATE_EMAIL);
     }
 
     await this.authRepository.signUp(email, password);

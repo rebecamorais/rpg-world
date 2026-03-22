@@ -4,7 +4,7 @@ import { Character } from './entity/Character';
 import { DnD5eCharacter } from './entity/DnD5eCharacter';
 
 export interface CharacterContext {
-  getById(id: string): Promise<Character | null>;
+  getById(id: string): Promise<Character>;
   getByOwner(ownerUsername: string): Promise<Character[]>;
   create(data: CreateCharacterInput): Promise<DnD5eCharacter>;
   update({

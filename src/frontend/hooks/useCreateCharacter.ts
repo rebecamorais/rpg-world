@@ -1,6 +1,7 @@
 import { useRouter } from 'next/navigation';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
@@ -30,7 +31,8 @@ export function useCreateCharacter(tSuccess: string, tError: string) {
       router.push(`/system/${variables.system}/character/${data.id}`);
     },
     onError: (error: Error) => {
-      toast.error(`${tError}: ${error.message}`);
+      const errorCode = error.message;
+      toast.error(`${tError}: ${errorCode}`);
     },
   });
 }

@@ -135,8 +135,10 @@ export default function SignUpForm() {
         toast.success(t('successTitle'));
         setIsSuccess(true);
       } else {
-        // Try to translate the error code, fallback to common error
-        toast.error(t(`errors.${result.error}`) || tCommon('errors.unknown'));
+        const errorCode = result.error;
+        const localizedMsg = errorCode || tCommon('errors.unknown');
+
+        toast.error(localizedMsg);
         // Reset turnstile on error
         if (widgetIdRef.current) window.turnstile.reset(widgetIdRef.current);
         setTurnstileToken(null);

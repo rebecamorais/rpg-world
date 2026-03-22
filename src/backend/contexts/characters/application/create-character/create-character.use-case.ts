@@ -1,3 +1,4 @@
+import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';
 import { CharacterRepo } from '../../domain/repository';
 import { Attributes } from '../../domain/value-object/Attributes';
@@ -18,7 +19,7 @@ export class CreateCharacterUseCase {
 
   async execute(input: CreateCharacterInput): Promise<DnD5eCharacter> {
     if (!input.name || input.name.trim() === '') {
-      throw new Error('Nome do personagem é obrigatório');
+      throw new CharacterError(CharacterErrorCodes.CREATE_NAME_REQUIRED);
     }
 
     // Simplificação provisória: Assumindo que o jogo é D&D 5e

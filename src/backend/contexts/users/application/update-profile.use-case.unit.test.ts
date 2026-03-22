@@ -32,7 +32,7 @@ describe('UpdateProfileUseCase', () => {
     const useCase = new UpdateProfileUseCase(repository);
     const profile = {} as Profile;
 
-    await expect(useCase.execute(profile)).rejects.toThrow('Profile ID is required');
+    await expect(useCase.execute(profile)).rejects.toThrow('profile_error_update_id_required');
     expect(repository.update).not.toHaveBeenCalled();
   });
 });
@@ -64,6 +64,6 @@ describe('GetProfileUseCase', () => {
     const repository = mockProfileRepository();
     const useCase = new GetProfileUseCase(repository);
 
-    await expect(useCase.execute('')).rejects.toThrow('User ID is required');
+    await expect(useCase.execute('')).rejects.toThrow('profile_error_get_id_required');
   });
 });

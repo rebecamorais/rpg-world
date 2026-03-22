@@ -35,7 +35,7 @@ describe('DeleteCharacterUseCase (Integration)', () => {
 
   it('não deve deletar se o usuário não for o dono', async () => {
     await expect(useCase.execute('char-1', 'wrong-owner')).rejects.toThrowError(
-      'Não autorizado a excluir este personagem.',
+      'character_error_delete_unauthorized',
     );
 
     // Ensure it's still there
@@ -45,7 +45,7 @@ describe('DeleteCharacterUseCase (Integration)', () => {
 
   it('deve lançar erro se tentar deletar um id que não existe', async () => {
     await expect(useCase.execute('not-exist', 'owner-1')).rejects.toThrowError(
-      'Personagem não encontrado.',
+      'character_error_delete_not_found',
     );
   });
 });

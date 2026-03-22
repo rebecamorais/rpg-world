@@ -1,3 +1,4 @@
+import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import { CharacterRepo } from '../../domain/repository';
 
 export class DeleteCharacterUseCase {
@@ -7,11 +8,11 @@ export class DeleteCharacterUseCase {
     const character = await this.repository.findById(id);
 
     if (!character) {
-      throw new Error('Personagem não encontrado.');
+      throw new CharacterError(CharacterErrorCodes.DELETE_NOT_FOUND);
     }
 
     if (character.ownerUsername !== ownerUsername) {
-      throw new Error('Não autorizado a excluir este personagem.');
+      throw new CharacterError(CharacterErrorCodes.DELETE_UNAUTHORIZED);
     }
 
     return this.repository.delete(id);

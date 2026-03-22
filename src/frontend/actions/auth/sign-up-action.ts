@@ -16,13 +16,13 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
   const turnstileToken = formData.get('turnstile-token') as string;
 
   if (!email || !password) {
-    return { success: false, error: 'Common.errors.requiredFields' }; // Use i18n keys
+    return { success: false, error: 'auth_error_signup_required_fields' };
   }
 
   // 1. Verify Turnstile Token
   const turnstile = await TurnstileService.verify(turnstileToken);
   if (!turnstile.success) {
-    return { success: false, error: turnstile.error || 'Auth.errors.invalidSecurityToken' };
+    return { success: false, error: turnstile.error || 'security_verification_failed' };
   }
 
   try {

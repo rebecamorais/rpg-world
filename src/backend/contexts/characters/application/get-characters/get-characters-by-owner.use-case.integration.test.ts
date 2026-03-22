@@ -58,6 +58,6 @@ describe('GetCharactersByOwnerUseCase (Integration)', () => {
   });
 
   it('deve lançar erro se não for fornecido um username', async () => {
-    await expect(useCase.execute('')).rejects.toThrowError('Owner username is required');
+    await expect(useCase.execute('')).rejects.toThrowError('character_error_get_by_owner_required');
   });
 });

@@ -42,8 +42,7 @@ describe('TurnstileService', () => {
     const result = await TurnstileService.verify('invalid-token');
 
     expect(result.success).toBe(false);
-    expect(result.error).toContain('security_verification_failed');
-    expect(result.error).toContain('invalid-input-response');
+    expect(result.error).toBe('security_verification_failed');
   });
 
   it('should handle network errors gracefully', async () => {

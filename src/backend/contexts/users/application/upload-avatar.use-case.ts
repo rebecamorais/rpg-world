@@ -1,5 +1,7 @@
 import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 
+import { UserError, UserErrorCodes } from '../domain/UserError';
+
 export const AVATAR_BUCKET = 'avatars';
 export const MAX_AVATAR_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 export const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -9,15 +11,15 @@ export class UploadAvatarUseCase {
 
   async execute(userId: string, file: Blob): Promise<string> {
     if (!userId) {
-      throw new Error('User ID is required');
+      throw new UserError(UserErrorCodes.AVATAR_UPLOAD_USERID_REQUIRED);
     }
 
     if (file.size > MAX_AVATAR_SIZE_BYTES) {
-      throw new Error('File size exceeds the 5 MB limit');
+      throw new UserError(UserErrorCodes.AVATAR_UPLOAD_SIZE_LIMIT);
     }
 
     if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
-      throw new Error('Invalid file type. Allowed: JPEG, PNG, WEBP');
+      throw new UserError(UserErrorCodes.AVATAR_UPLOAD_INVALID_TYPE);
     }
 
     const extension = file.type.split('/')[1];

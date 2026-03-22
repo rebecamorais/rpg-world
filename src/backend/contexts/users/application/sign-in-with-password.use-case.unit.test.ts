@@ -53,10 +53,10 @@ describe('SignInWithPasswordUseCase', () => {
     const useCase = new SignInWithPasswordUseCase(mockRepository);
 
     await expect(useCase.execute('', 'password123')).rejects.toThrow(
-      'Email e senha são obrigatórios',
+      'auth_error_signin_required_fields',
     );
     await expect(useCase.execute('test@example.com', '')).rejects.toThrow(
-      'Email e senha são obrigatórios',
+      'auth_error_signin_required_fields',
     );
     expect(mockRepository.signInWithPassword).not.toHaveBeenCalled();
   });

@@ -1,3 +1,5 @@
+import { CharacterError, CharacterErrorCodes } from '../CharacterError';
+
 export class Attributes {
   private values: Map<string, number>;
 
@@ -10,7 +12,7 @@ export class Attributes {
   }
 
   set(key: string, value: number): void {
-    if (value < 1) throw new Error('Atributo não pode ser menor que 1');
+    if (value < 1) throw new CharacterError(CharacterErrorCodes.DOMAIN_ATTRIBUTE_BELOW_ONE);
     this.values.set(key, value);
   }
 

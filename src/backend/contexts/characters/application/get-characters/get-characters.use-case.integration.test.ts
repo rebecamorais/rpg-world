@@ -48,6 +48,8 @@ describe('GetCharacterUseCase (Integration)', () => {
   });
 
   it('deve lançar erro se o personagem não for encontrado', async () => {
-    await expect(useCase.execute('invalid-id')).rejects.toThrowError('Personagem não encontrado.');
+    await expect(useCase.execute('invalid-id')).rejects.toThrowError(
+      'character_error_get_not_found',
+    );
   });
 });

@@ -72,7 +72,9 @@ export default function NewCharacterForm() {
       },
       {
         onError: (err: Error) => {
-          form.setError('root', { message: err.message });
+          const errorCode = err.message;
+          const localizedMsg = errorCode;
+          form.setError('root', { message: localizedMsg });
         },
       },
     );

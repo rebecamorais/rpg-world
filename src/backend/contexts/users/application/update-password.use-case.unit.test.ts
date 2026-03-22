@@ -22,7 +22,7 @@ describe('UpdatePasswordUseCase', () => {
 
     const useCase = new UpdatePasswordUseCase(mockRepository);
 
-    await expect(useCase.execute('')).rejects.toThrow('Nova senha é obrigatória');
+    await expect(useCase.execute('')).rejects.toThrow('auth_error_update_password_required');
     expect(mockRepository.updatePassword).not.toHaveBeenCalled();
   });
 });

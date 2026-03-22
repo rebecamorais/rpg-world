@@ -37,6 +37,7 @@ interface LoginFormValues {
 export default function LoginForm() {
   const { sendMagicLink, signInWithPassword } = useAuth();
   const t = useTranslations('login');
+  const tCommon = useTranslations('common');
   const [emailSent, setEmailSent] = useState(false);
   const [authMode, setAuthMode] = useState<'magic' | 'password'>('password');
 
@@ -63,9 +64,11 @@ export default function LoginForm() {
         await signInWithPassword(data.email, data.password);
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : t('loginFailed');
-      toast.error(msg);
-      form.setError('root', { message: msg });
+      const errorCode = err instanceof Error ? err.message : 'unknown';
+      const localizedMsg = errorCode;
+
+      toast.error(localizedMsg);
+      form.setError('root', { message: localizedMsg });
     }
   };
 

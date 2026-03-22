@@ -47,7 +47,7 @@ export class TurnstileService {
 
       return {
         success: false,
-        error: `security_verification_failed: ${errorCodes}`,
+        error: 'security_verification_failed',
       };
     } catch (error) {
       return { success: false, error: 'network_error_security_verification' };

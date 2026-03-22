@@ -36,7 +36,9 @@ describe('UploadAvatarUseCase', () => {
     const useCase = new UploadAvatarUseCase(repository);
     const file = makeBlob('image/webp', 1024);
 
-    await expect(useCase.execute('', file)).rejects.toThrow('User ID is required');
+    await expect(useCase.execute('', file)).rejects.toThrow(
+      'storage_error_upload_avatar_userid_required',
+    );
     expect(repository.upload).not.toHaveBeenCalled();
   });
 
@@ -46,7 +48,7 @@ describe('UploadAvatarUseCase', () => {
     const bigFile = makeBlob('image/webp', MAX_AVATAR_SIZE_BYTES + 1);
 
     await expect(useCase.execute('user-1', bigFile)).rejects.toThrow(
-      'File size exceeds the 5 MB limit',
+      'storage_error_upload_avatar_size_limit',
     );
     expect(repository.upload).not.toHaveBeenCalled();
   });
@@ -56,7 +58,9 @@ describe('UploadAvatarUseCase', () => {
     const useCase = new UploadAvatarUseCase(repository);
     const invalidFile = makeBlob('image/gif', 1024);
 
-    await expect(useCase.execute('user-1', invalidFile)).rejects.toThrow('Invalid file type');
+    await expect(useCase.execute('user-1', invalidFile)).rejects.toThrow(
+      'storage_error_upload_avatar_invalid_type',
+    );
     expect(repository.upload).not.toHaveBeenCalled();
   });
 
