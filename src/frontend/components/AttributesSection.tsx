@@ -52,7 +52,7 @@ export default function AttributesSection({ attributes, onAttributeChange }: Pro
   const renderAttribute = (key: AttributeKey) => (
     <AttributeCard
       key={key}
-      label={t(key)}
+      label={t(`abbreviations.${key}`)}
       value={attributes[key] ?? 10}
       onChange={(value) => onAttributeChange(key, value)}
     />
