@@ -3,9 +3,8 @@
  */
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import Link from 'next/link';
 
-import { getLocale, getMessages, getTimeZone, getTranslations } from 'next-intl/server';
+import { getLocale, getMessages, getTimeZone } from 'next-intl/server';
 
 import GlobalHeader from '@frontend/components/GlobalHeader';
 import Providers from '@frontend/components/Providers';
@@ -36,7 +35,6 @@ export default async function RootLayout({
   const locale = await getLocale();
   const messages = await getMessages();
   const timeZone = await getTimeZone();
-  const t = await getTranslations();
 
   return (
     <html lang={locale}>

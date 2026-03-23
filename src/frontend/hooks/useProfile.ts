@@ -1,3 +1,5 @@
+import { useMemo, useState } from 'react';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { APIError, rpgWorldApi } from '@client';
@@ -6,6 +8,7 @@ import { Profile } from '@backend/contexts/users/domain/Profile';
 
 export function useProfile() {
   const queryClient = useQueryClient();
+  const [avatarTimestamp, setAvatarTimestamp] = useState<number>(() => Date.now());
 
   const query = useQuery<Profile, APIError>({
     queryKey: ['profile'],
@@ -18,6 +21,17 @@ export function useProfile() {
     },
     staleTime: 1000 * 60 * 5, // 5 minutes (anonymous state is stable)
   });
+
+  const profile = useMemo(() => {
+    if (!query.data) return undefined;
+
+    return {
+      ...query.data,
+      avatarUrl: query.data.avatarUrl
+        ? `${query.data.avatarUrl}${query.data.avatarUrl.includes('?') ? '&' : '?'}t=${avatarTimestamp}`
+        : undefined,
+    };
+  }, [query.data, avatarTimestamp]);
 
   const mutation = useMutation<void, Error, Partial<Profile>>({
     mutationFn: (data) => rpgWorldApi.patch<void, Partial<Profile>>('/api/profile', data),
@@ -44,12 +58,13 @@ export function useProfile() {
       return res.json() as Promise<{ url: string }>;
     },
     onSuccess: () => {
+      setAvatarTimestamp(Date.now());
       queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 
   return {
-    profile: query.data,
+    profile,
     isLoading: query.isLoading,
     isError: query.isError,
     updateProfile: mutation.mutateAsync,

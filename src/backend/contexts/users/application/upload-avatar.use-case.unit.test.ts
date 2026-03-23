@@ -19,7 +19,7 @@ const makeBlob = (type: string, sizeBytes: number): Blob => {
 describe('UploadAvatarUseCase', () => {
   it('deve fazer upload e retornar a URL pública', async () => {
     const repository = mockStorageRepository();
-    const publicUrl = 'https://cdn.example.com/avatars/user-1/avatar.webp';
+    const publicUrl = 'https://cdn.example.com/avatars/user-1/avatar';
     (repository.upload as ReturnType<typeof vi.fn>).mockResolvedValue(publicUrl);
 
     const useCase = new UploadAvatarUseCase(repository);
@@ -28,7 +28,7 @@ describe('UploadAvatarUseCase', () => {
     const result = await useCase.execute('user-1', file);
 
     expect(result).toBe(publicUrl);
-    expect(repository.upload).toHaveBeenCalledWith('avatars', 'user-1/avatar.webp', file);
+    expect(repository.upload).toHaveBeenCalledWith('avatars', 'user-1/avatar', file);
   });
 
   it('deve lançar erro quando userId não for fornecido', async () => {

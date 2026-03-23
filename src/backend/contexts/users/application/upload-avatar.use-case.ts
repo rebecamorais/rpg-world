@@ -22,8 +22,7 @@ export class UploadAvatarUseCase {
       throw new UserError(UserErrorCodes.AVATAR_UPLOAD_INVALID_TYPE);
     }
 
-    const extension = file.type.split('/')[1];
-    const path = `${userId}/avatar.${extension}`;
+    const path = `${userId}/avatar`;
 
     const publicUrl = await this.storageRepository.upload(AVATAR_BUCKET, path, file);
 

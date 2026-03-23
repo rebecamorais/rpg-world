@@ -82,9 +82,10 @@ export default function ProfileForm() {
     }
   }, [profile, form]);
 
-  // Called by AvatarUpload when the upload completes — update the form field
+  // Called by AvatarUpload when the upload completes — update the form field with a cache buster
   const handleAvatarUploadSuccess = (url: string) => {
-    form.setValue('avatarUrl', url);
+    const timestampedUrl = `${url}${url.includes('?') ? '&' : '?'}t=${Date.now()}`;
+    form.setValue('avatarUrl', timestampedUrl);
     toast.success(t('saveSuccess'));
   };
 

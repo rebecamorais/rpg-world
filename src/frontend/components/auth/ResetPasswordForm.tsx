@@ -118,7 +118,7 @@ export default function ResetPasswordForm() {
         setIsSuccess(true);
         toast.success(t('successTitle'));
       }
-    } catch (err: unknown) {
+    } catch (_err: unknown) {
       toast.error('Erro inesperado');
     }
   };

@@ -37,6 +37,8 @@ export default function AvatarUpload({
     try {
       const { url } = await uploadAvatar(file);
       onUploadSuccess(url);
+      setPreview(null);
+      URL.revokeObjectURL(objectUrl);
     } catch (err: unknown) {
       // Revert preview on error
       setPreview(null);

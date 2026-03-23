@@ -4,7 +4,6 @@ import { Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import LanguageSwitcher from '@frontend/components/LanguageSwitcher';
-import UserMenu from '@frontend/components/UserMenu';
 
 export default async function GlobalHeader() {
   const tHome = await getTranslations('home');
