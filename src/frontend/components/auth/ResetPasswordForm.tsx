@@ -22,27 +22,62 @@ import {
 } from '@/frontend/components/ui/form';
 import { Input } from '@/frontend/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createBrowserClient } from '@supabase/ssr';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+
+import { getSupabaseBrowserClient } from '@lib/supabase-browser';
 
 export default function ResetPasswordForm() {
   const t = useTranslations('resetPassword');
   const [isSuccess, setIsSuccess] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-  );
+  const supabase = getSupabaseBrowserClient();
 
   useEffect(() => {
-    // getSession() will automatically handle the hash in the URL and set the session
-    supabase.auth.getSession().finally(() => {
+    const handleSession = async () => {
+      const url = new URL(window.location.href);
+      const code = url.searchParams.get('code');
+
+      if (code) {
+        await supabase.auth.exchangeCodeForSession(code);
+      } else {
+        const {
+          data: { session: initialSession },
+        } = await supabase.auth.getSession();
+
+        if (!initialSession && window.location.hash.includes('access_token')) {
+          const hash = window.location.hash.substring(1);
+          const params = new URLSearchParams(hash);
+          const accessToken = params.get('access_token');
+          const refreshToken = params.get('refresh_token');
+
+          if (accessToken && refreshToken) {
+            await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            });
+          }
+        }
+      }
+
       setIsInitializing(false);
+    };
+
+    handleSession();
+
+    // Also listen for changes (sometimes it takes a moment to process the hash)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setIsInitializing(false);
+      }
     });
+
+    return () => subscription.unsubscribe();
   }, [supabase.auth]);
 
   const schema = z
@@ -64,6 +99,15 @@ export default function ResetPasswordForm() {
 
   const onSubmit = async (data: Values) => {
     try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        toast.error('Sessão de redefinição não encontrada. Tente o link do e-mail novamente.');
+        return;
+      }
+
       const { error } = await supabase.auth.updateUser({
         password: data.password,
       });
@@ -74,7 +118,7 @@ export default function ResetPasswordForm() {
         setIsSuccess(true);
         toast.success(t('successTitle'));
       }
-    } catch {
+    } catch (err: unknown) {
       toast.error('Erro inesperado');
     }
   };

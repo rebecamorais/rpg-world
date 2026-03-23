@@ -5,32 +5,64 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/frontend/components/ui/card';
-import { createBrowserClient } from '@supabase/ssr';
+
+import { getSupabaseBrowserClient } from '@lib/supabase-browser';
 
 export default function AuthConfirmPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-    );
+    const supabase = getSupabaseBrowserClient();
 
-    // handles the hash fragment and establishes the session
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error) {
-        setError(error.message);
+    const handleSession = async () => {
+      const url = new URL(window.location.href);
+      const code = url.searchParams.get('code');
+
+      if (code) {
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+        if (exchangeError) {
+          setError(exchangeError.message);
+          setTimeout(() => router.push('/login'), 3000);
+          return;
+        }
+      }
+
+      // Then get the session (works for both code exchange result and hash fragment)
+      let {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      // Fallback for hash fragments if getSession() fails to pick it up automatically
+      if (!session && !sessionError && window.location.hash.includes('access_token')) {
+        const hash = window.location.hash.substring(1);
+        const params = new URLSearchParams(hash);
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+
+        if (accessToken && refreshToken) {
+          const { data: setSessionData, error: setSessionError } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          session = setSessionData.session;
+          sessionError = setSessionError;
+        }
+      }
+
+      if (sessionError) {
+        setError(sessionError.message);
         setTimeout(() => router.push('/login'), 3000);
       } else if (session) {
-        // Successful confirmation
         router.push('/characters');
       } else {
-        // No session found after processing
         setError('Falha na confirmação ou link expirado.');
         setTimeout(() => router.push('/login'), 3000);
       }
-    });
+    };
+
+    handleSession();
   }, [router]);
 
   return (
