@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import Footer from '@frontend/components/Footer';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -61,79 +62,82 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="bg-background relative flex min-h-screen items-center justify-center p-4">
-      <div className="absolute top-4 left-4">
-        <Link
-          href="/login"
-          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-        >
-          {commonT('back')}
-        </Link>
+    <div className="flex flex-1 flex-col">
+      <div className="bg-background relative flex flex-1 items-center justify-center p-4">
+        <div className="absolute top-4 left-4">
+          <Link
+            href="/login"
+            className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+          >
+            {commonT('back')}
+          </Link>
+        </div>
+
+        <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
+          <CardHeader>
+            <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
+              {t('title')}
+            </CardTitle>
+            <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-300">{t('newPasswordLabel')}</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder={t('newPasswordPlaceholder')}
+                          className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-300">{t('confirmPasswordLabel')}</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder={t('confirmPasswordPlaceholder')}
+                          className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {form.formState.errors.root && (
+                  <p className="text-sm text-red-400">{form.formState.errors.root.message}</p>
+                )}
+
+                <Button
+                  type="submit"
+                  disabled={form.formState.isSubmitting}
+                  className="mt-2 w-full bg-blue-600 font-semibold transition-all hover:bg-blue-700"
+                >
+                  {form.formState.isSubmitting ? t('processing') : t('submit')}
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
       </div>
-
-      <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
-        <CardHeader>
-          <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
-            {t('title')}
-          </CardTitle>
-          <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-300">{t('newPasswordLabel')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={t('newPasswordPlaceholder')}
-                        className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-300">{t('confirmPasswordLabel')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={t('confirmPasswordPlaceholder')}
-                        className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {form.formState.errors.root && (
-                <p className="text-sm text-red-400">{form.formState.errors.root.message}</p>
-              )}
-
-              <Button
-                type="submit"
-                disabled={form.formState.isSubmitting}
-                className="mt-2 w-full bg-blue-600 font-semibold transition-all hover:bg-blue-700"
-              >
-                {form.formState.isSubmitting ? t('processing') : t('submit')}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+      <Footer />
     </div>
   );
 }

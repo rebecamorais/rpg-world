@@ -1,23 +1,27 @@
 import Link from 'next/link';
 
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
+import Footer from '@frontend/components/Footer';
 import LoginForm from '@frontend/components/LoginForm';
 
-export default function LoginPage() {
-  const t = useTranslations('common');
+export default async function LoginPage() {
+  const t = await getTranslations('common');
 
   return (
-    <div className="bg-background relative flex min-h-screen items-center justify-center p-4">
-      <div className="absolute top-4 left-4">
-        <Link
-          href="/"
-          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-        >
-          {t('back')}
-        </Link>
+    <div className="flex flex-1 flex-col">
+      <div className="bg-background relative flex flex-1 items-center justify-center p-4">
+        <div className="absolute top-4 left-4">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+          >
+            {t('back')}
+          </Link>
+        </div>
+        <LoginForm />
       </div>
-      <LoginForm />
+      <Footer />
     </div>
   );
 }

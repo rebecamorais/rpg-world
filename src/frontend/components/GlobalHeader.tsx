@@ -21,7 +21,6 @@ export default async function GlobalHeader() {
 
       <div className="flex items-center gap-4">
         <LanguageSwitcher />
-        <UserMenu />
       </div>
     </header>
   );

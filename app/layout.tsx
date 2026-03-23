@@ -46,33 +46,6 @@ export default async function RootLayout({
         <Providers locale={locale} messages={messages} timeZone={timeZone}>
           <GlobalHeader />
           <div className="flex flex-1 flex-col">{children}</div>
-          <footer className="text-muted-foreground border-t py-6 text-center text-sm">
-            <div className="container mx-auto px-4">
-              <p>
-                {t.rich('common.footerMessage', {
-                  link: (chunks) => (
-                    <a
-                      href="https://github.com/rebecamorais/rpg-world"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-medium underline underline-offset-4"
-                    >
-                      {chunks}
-                    </a>
-                  ),
-                })}
-              </p>
-              <p className="mt-2">
-                <Link href="/terms" className="hover:underline">
-                  {t('terms.title')}
-                </Link>
-                {' • '}
-                <Link href="/privacy" className="hover:underline">
-                  {t('privacy.title')}
-                </Link>
-              </p>
-            </div>
-          </footer>
         </Providers>
         <Toaster />
       </body>

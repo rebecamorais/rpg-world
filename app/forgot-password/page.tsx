@@ -1,22 +1,27 @@
 import Link from 'next/link';
 
-import ForgotPasswordForm from '@/frontend/components/auth/ForgotPasswordForm';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-export default function ForgotPasswordPage() {
-  const t = useTranslations('common');
+import Footer from '@frontend/components/Footer';
+import ForgotPasswordForm from '@frontend/components/auth/ForgotPasswordForm';
+
+export default async function ForgotPasswordPage() {
+  const t = await getTranslations('common');
 
   return (
-    <div className="bg-background relative flex min-h-screen items-center justify-center p-4">
-      <div className="absolute top-4 left-4">
-        <Link
-          href="/login"
-          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-        >
-          {t('back')}
-        </Link>
+    <div className="flex flex-1 flex-col">
+      <div className="bg-background relative flex flex-1 items-center justify-center p-4">
+        <div className="absolute top-4 left-4">
+          <Link
+            href="/login"
+            className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+          >
+            {t('back')}
+          </Link>
+        </div>
+        <ForgotPasswordForm />
       </div>
-      <ForgotPasswordForm />
+      <Footer />
     </div>
   );
 }
