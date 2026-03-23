@@ -20,6 +20,11 @@ export const makeAuthApi = (userContext: UserContext) => ({
     return { success: true };
   },
 
+  requestPasswordReset: async (email: string, redirectTo: string) => {
+    await userContext.requestPasswordReset.execute(email, redirectTo);
+    return { success: true };
+  },
+
   updatePassword: async (newPassword: string) => {
     await userContext.updatePassword.execute(newPassword);
     return { success: true };

@@ -1,8 +1,12 @@
+import { EmailService } from '../../../shared/domain/EmailService';
 import { AuthRepository } from '../domain/AuthRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
 
 export class SignUpUseCase {
-  constructor(private readonly authRepository: AuthRepository) {}
+  constructor(
+    private readonly authRepository: AuthRepository,
+    private readonly emailService: EmailService,
+  ) {}
 
   async execute(email: string, password: string): Promise<void> {
     if (!email || !password) {
@@ -19,6 +23,15 @@ export class SignUpUseCase {
       throw new UserError(UserErrorCodes.SIGNUP_DUPLICATE_EMAIL);
     }
 
-    await this.authRepository.signUp(email, password);
+    // Gerar link de confirmação e criar usuário (admin.generateLink com type: signup faz ambos)
+    const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`;
+    const confirmationLink = await this.authRepository.generateSignUpLink(
+      email,
+      password,
+      redirectTo,
+    );
+
+    // Enviar e-mail via EmailService (Resend)
+    await this.emailService.sendConfirmationEmail(email, confirmationLink);
   }
 }

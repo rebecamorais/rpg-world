@@ -44,12 +44,13 @@ export class TurnstileService {
       }
 
       const errorCodes = outcome['error-codes']?.join(', ') || 'Unknown error';
+      console.error('[Turnstile] Verification failed:', errorCodes);
 
       return {
         success: false,
         error: 'security_verification_failed',
       };
-    } catch (error) {
+    } catch (_error) {
       return { success: false, error: 'network_error_security_verification' };
     }
   }

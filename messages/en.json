@@ -68,6 +68,7 @@
     "loginFailed": "Failed to login.",
     "invalidEmailError": "Invalid email.",
     "passwordRequiredError": "Password is required.",
+    "forgotPassword": "Forgot password?",
     "submit": "Sign In",
     "noAccount": "Don't have an account?",
     "register": "Sign up"
@@ -405,5 +406,29 @@
         "content": "For any questions regarding your privacy or to exercise your deletion rights (LGPD), please contact us via email: contato@rebs.com.br."
       }
     }
+  },
+  "forgotPassword": {
+    "title": "Recover Password",
+    "subtitle": "Enter your email to receive a recovery link.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "submit": "Send recovery email",
+    "processing": "Sending...",
+    "successTitle": "Email sent! 📬",
+    "successDescription": "If this email is registered, you will receive a recovery link shortly.",
+    "backToLogin": "Back to Login"
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "subtitle": "Choose a strong new password for your account.",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Update Password",
+    "processing": "Updating...",
+    "successTitle": "Password changed! 🎉",
+    "successDescription": "Your password has been successfully reset. You can now log in.",
+    "login": "Log In"
   }
 }

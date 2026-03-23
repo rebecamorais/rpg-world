@@ -68,6 +68,7 @@
     "loginFailed": "Falha ao realizar login.",
     "invalidEmailError": "E-mail inválido.",
     "passwordRequiredError": "Senha é obrigatória.",
+    "forgotPassword": "Esqueceu a senha?",
     "submit": "Entrar",
     "noAccount": "Não tem uma conta?",
     "register": "Cadastre-se"
@@ -405,5 +406,29 @@
         "content": "Para qualquer dúvida sobre sua privacidade ou para exercer seus direitos de exclusão (LGPD), entre em contato pelo e-mail: contato@rebs.com.br."
       }
     }
+  },
+  "forgotPassword": {
+    "title": "Recuperar Senha",
+    "subtitle": "Informe seu e-mail para receber um link de recuperação.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "submit": "Enviar e-mail de recuperação",
+    "processing": "Enviando...",
+    "successTitle": "E-mail enviado! 📬",
+    "successDescription": "Se esse e-mail estiver cadastrado, você receberá um link de recuperação em instantes.",
+    "backToLogin": "Voltar para o Login"
+  },
+  "resetPassword": {
+    "title": "Redefinir Senha",
+    "subtitle": "Escolha uma nova senha forte para sua conta.",
+    "newPasswordLabel": "Nova Senha",
+    "newPasswordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Confirmar Nova Senha",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Atualizar Senha",
+    "processing": "Atualizando...",
+    "successTitle": "Senha alterada! 🎉",
+    "successDescription": "Sua senha foi redefinida com sucesso. Você já pode fazer login.",
+    "login": "Fazer Login"
   }
 }

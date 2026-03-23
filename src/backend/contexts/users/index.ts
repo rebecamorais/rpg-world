@@ -1,8 +1,10 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import { EmailService } from '../../shared/domain/EmailService';
 import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import { CallbackExchangeUseCase } from './application/callback-exchange.use-case';
 import { GetSessionUserUseCase } from './application/get-session-user.use-case';
+import { RequestPasswordResetUseCase } from './application/request-password-reset.use-case';
 import { SignInWithMagicLinkUseCase } from './application/sign-in-with-magic-link.use-case';
 import { SignInWithPasswordUseCase } from './application/sign-in-with-password.use-case';
 import { SignOutUseCase } from './application/sign-out.use-case';
@@ -16,7 +18,8 @@ import { SupabaseProfileRepository } from './infrastructure/repositories/supabas
 
 export interface UserContextConfig {
   authClient: SupabaseClient;
-  dbClient: SupabaseClient;
+  dbClient: SupabaseClient; // This is the admin client based on container.ts
+  emailService: EmailService;
 }
 
 export interface UserContext {
@@ -24,6 +27,7 @@ export interface UserContext {
   signInWithMagicLink: SignInWithMagicLinkUseCase;
   signInWithPassword: SignInWithPasswordUseCase;
   signUp: SignUpUseCase;
+  requestPasswordReset: RequestPasswordResetUseCase;
   updatePassword: UpdatePasswordUseCase;
   callbackExchange: CallbackExchangeUseCase;
   signOut: SignOutUseCase;
@@ -43,7 +47,8 @@ export const createUserContext = (config: UserContextConfig): UserContext => {
     getSession: new GetSessionUserUseCase(authRepository),
     signInWithMagicLink: new SignInWithMagicLinkUseCase(authRepository),
     signInWithPassword: new SignInWithPasswordUseCase(authRepository),
-    signUp: new SignUpUseCase(authRepository),
+    signUp: new SignUpUseCase(authRepository, config.emailService),
+    requestPasswordReset: new RequestPasswordResetUseCase(authRepository, config.emailService),
     updatePassword: new UpdatePasswordUseCase(authRepository),
     callbackExchange: new CallbackExchangeUseCase(authRepository),
     signOut: new SignOutUseCase(authRepository),

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 
@@ -48,8 +48,8 @@ export default function SignUpForm() {
   const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [widgetId, setWidgetId] = useState<string | null>(null);
   const turnstileRef = useRef<HTMLDivElement>(null);
-  const widgetIdRef = useRef<string | null>(null);
 
   const signUpSchema = z
     .object({
@@ -72,17 +72,19 @@ export default function SignUpForm() {
   useEffect(() => {
     console.log('Turnstile useEffect mounted');
     let isMounted = true;
+    let currentWidgetId: string | null = null;
 
     const renderTurnstile = () => {
       if (!isMounted) return;
-      if (turnstileRef.current && window.turnstile && !widgetIdRef.current) {
+      if (turnstileRef.current && window.turnstile && !currentWidgetId) {
         try {
-          widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+          currentWidgetId = window.turnstile.render(turnstileRef.current, {
             sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '',
             callback: (token: string) => setTurnstileToken(token),
             'expired-callback': () => setTurnstileToken(null),
             'error-callback': () => setTurnstileToken(null),
           });
+          setWidgetId(currentWidgetId);
         } catch (e) {
           console.warn('Turnstile render error (likely already rendered):', e);
         }
@@ -109,10 +111,9 @@ export default function SignUpForm() {
 
     return () => {
       isMounted = false;
-      if (widgetIdRef.current && window.turnstile) {
+      if (currentWidgetId && window.turnstile) {
         try {
-          window.turnstile.remove(widgetIdRef.current);
-          widgetIdRef.current = null;
+          window.turnstile.remove(currentWidgetId);
         } catch (e) {
           console.error('Error removing Turnstile widget:', e);
         }
@@ -120,35 +121,40 @@ export default function SignUpForm() {
     };
   }, []);
 
-  const onSubmit = async (data: SignUpValues) => {
-    if (!turnstileToken) {
-      toast.error(t('errors.turnstileRequired'));
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('email', data.email);
-    formData.append('password', data.password);
-    formData.append('turnstile-token', turnstileToken);
-
-    try {
-      const result = await signUpAction(formData);
-      if (result.success) {
-        toast.success(t('successTitle'));
-        setIsSuccess(true);
-      } else {
-        const errorCode = result.error;
-        const localizedMsg = getMessage(errorCode);
-
-        toast.error(localizedMsg);
-        // Reset turnstile on error
-        if (widgetIdRef.current) window.turnstile.reset(widgetIdRef.current);
-        setTurnstileToken(null);
+  const onSubmit = useCallback(
+    async (data: SignUpValues) => {
+      if (!turnstileToken) {
+        toast.error(t('errors.turnstileRequired'));
+        return;
       }
-    } catch {
-      toast.error(tCommon('errors.unknown'));
-    }
-  };
+
+      const formData = new FormData();
+      formData.append('email', data.email);
+      formData.append('password', data.password);
+      formData.append('turnstile-token', turnstileToken);
+
+      try {
+        const result = await signUpAction(formData);
+        if (result.success) {
+          toast.success(t('successTitle'));
+          setIsSuccess(true);
+        } else {
+          const errorCode = result.error;
+          const localizedMsg = getMessage(errorCode);
+
+          toast.error(localizedMsg);
+          // Reset turnstile on error
+          if (widgetId && window.turnstile) {
+            window.turnstile.reset(widgetId);
+          }
+          setTurnstileToken(null);
+        }
+      } catch {
+        toast.error(tCommon('errors.unknown'));
+      }
+    },
+    [turnstileToken, t, widgetId, getMessage, tCommon],
+  );
 
   if (isSuccess) {
     return (
@@ -176,12 +182,7 @@ export default function SignUpForm() {
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <Form {...form}>
-          <form
-            onSubmit={(e) => {
-              void form.handleSubmit(onSubmit)(e);
-            }}
-            className="flex flex-col gap-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <FormField
               control={form.control}
               name="email"

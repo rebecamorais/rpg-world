@@ -25,6 +25,7 @@ export class Contexts {
       this._user = createUserContext({
         authClient: this.container.get('authClient'),
         dbClient: this.container.get('dbClient'),
+        emailService: this.container.get('emailService'),
       });
     }
     return this._user;

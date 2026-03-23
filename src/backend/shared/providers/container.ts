@@ -1,14 +1,14 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
-import { CharacterRepo } from '@backend/contexts/characters/domain/repository/character.repo';
-
+import { EmailService } from '../domain/EmailService';
+import { createEmailService } from '../infrastructure/email/email-service-factory';
 import { Contexts } from './contexts';
 
 export interface ContainerRegistry {
-  characterRepo: CharacterRepo;
   dbClient: SupabaseClient;
   authClient: SupabaseClient;
+  emailService: EmailService;
 }
 
 export class Container {
@@ -18,6 +18,7 @@ export class Container {
   constructor(authClient: SupabaseClient, dbClient: SupabaseClient) {
     this.register('dbClient', dbClient);
     this.register('authClient', authClient);
+    this.register('emailService', createEmailService(authClient, dbClient));
 
     this._contexts = new Contexts(this);
   }

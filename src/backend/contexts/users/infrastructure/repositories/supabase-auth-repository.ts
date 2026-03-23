@@ -10,6 +10,35 @@ export class SupabaseAuthRepository implements AuthRepository {
     private readonly dbClient: SupabaseClient,
   ) {}
 
+  async generateSignUpLink(email: string, password: string, redirectTo: string): Promise<string> {
+    const { data, error } = await this.dbClient.auth.admin.generateLink({
+      type: 'signup',
+      email,
+      password,
+      options: { redirectTo },
+    });
+
+    if (error || !data.properties?.action_link) {
+      throw new Error(`Failed to generate signup link: ${error?.message || 'No link returned'}`);
+    }
+
+    return data.properties.action_link;
+  }
+
+  async generateRecoveryLink(email: string, redirectTo: string): Promise<string> {
+    const { data, error } = await this.dbClient.auth.admin.generateLink({
+      type: 'recovery',
+      email,
+      options: { redirectTo },
+    });
+
+    if (error || !data.properties?.action_link) {
+      throw new Error(`Failed to generate recovery link: ${error?.message || 'No link returned'}`);
+    }
+
+    return data.properties.action_link;
+  }
+
   async getSessionUser(): Promise<User | null> {
     const {
       data: { user },
@@ -89,6 +118,16 @@ export class SupabaseAuthRepository implements AuthRepository {
 
     if (error) {
       throw new Error(`Failed to update password: ${error.message}`);
+    }
+  }
+
+  async resetPasswordForEmail(email: string, redirectTo: string): Promise<void> {
+    const { error } = await this.authClient.auth.resetPasswordForEmail(email, {
+      redirectTo,
+    });
+
+    if (error) {
+      throw new Error(`Failed to send reset password email: ${error.message}`);
     }
   }
 
