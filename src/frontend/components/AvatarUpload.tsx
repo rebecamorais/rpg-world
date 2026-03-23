@@ -62,6 +62,7 @@ export default function AvatarUpload({
             width={96}
             height={96}
             className="h-full w-full object-cover"
+            unoptimized={displayUrl.includes('localhost') || displayUrl.includes('127.0.0.1')}
           />
         ) : (
           <span className="flex h-full w-full items-center justify-center text-4xl">🧙</span>
