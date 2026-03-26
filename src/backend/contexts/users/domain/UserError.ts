@@ -1,4 +1,4 @@
-import { AppError } from '@/backend/shared/domain/AppError';
+import { AppError } from '@backend/shared/domain/AppError';
 
 export const UserErrorCodes = {
   SIGNUP_REQUIRED_FIELDS: 'auth_error_signup_required_fields',

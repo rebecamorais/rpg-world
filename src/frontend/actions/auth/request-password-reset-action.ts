@@ -1,6 +1,6 @@
 'use server';
 
-import { getApi } from '@/backend';
+import { getApi } from '@api';
 
 export async function requestPasswordResetAction(email: string) {
   if (!email) {

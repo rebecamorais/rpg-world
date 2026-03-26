@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 
-import { useErrorMessage } from '@/frontend/hooks/useErrorMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm, useWatch } from 'react-hook-form';
@@ -28,6 +27,7 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { Skeleton } from '@frontend/components/ui/skeleton';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
 
 export default function ProfileForm() {

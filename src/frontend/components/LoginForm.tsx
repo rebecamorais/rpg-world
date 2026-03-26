@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { useErrorMessage } from '@/frontend/hooks/useErrorMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
@@ -29,6 +28,7 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useAuth } from '@frontend/hooks/useAuth';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 interface LoginFormValues {
   email: string;

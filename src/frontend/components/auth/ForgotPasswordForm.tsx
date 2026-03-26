@@ -4,15 +4,21 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { requestPasswordResetAction } from '@/frontend/actions/auth/request-password-reset-action';
-import { Button } from '@/frontend/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
+import { requestPasswordResetAction } from '@frontend/actions/auth/request-password-reset-action';
+import { Button } from '@frontend/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/frontend/components/ui/card';
+} from '@frontend/components/ui/card';
 import {
   Form,
   FormControl,
@@ -20,13 +26,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/frontend/components/ui/form';
-import { Input } from '@/frontend/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+} from '@frontend/components/ui/form';
+import { Input } from '@frontend/components/ui/input';
 
 export default function ForgotPasswordForm() {
   const t = useTranslations('forgotPassword');

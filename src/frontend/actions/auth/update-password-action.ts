@@ -1,6 +1,6 @@
 'use server';
 
-import { getApi } from '@/backend';
+import { getApi } from '@api';
 
 export async function updatePasswordAction(password: string) {
   if (!password) {

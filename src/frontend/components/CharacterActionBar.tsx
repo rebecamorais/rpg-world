@@ -22,6 +22,7 @@ interface CharacterActionBarProps {
   isSaving: boolean;
   onSave: () => void;
   onDelete: () => void;
+  showSave?: boolean;
 }
 
 export default function CharacterActionBar({
@@ -30,6 +31,7 @@ export default function CharacterActionBar({
   isSaving,
   onSave,
   onDelete,
+  showSave = true,
 }: CharacterActionBarProps) {
   const tCommon = useTranslations('common');
   const t = useTranslations('characters');
@@ -47,14 +49,16 @@ export default function CharacterActionBar({
         )}
       </div>
       <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={onSave}
-          disabled={!hasUnsavedChanges || isSaving}
-          className="bg-primary rounded px-4 py-2 text-sm font-medium text-white transition-opacity disabled:opacity-50"
-        >
-          {isSaving ? tCommon('saving') : tCommon('saveChanges')}
-        </button>
+        {showSave && (
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={!hasUnsavedChanges || isSaving}
+            className="bg-primary rounded px-4 py-2 text-sm font-medium text-white transition-opacity disabled:opacity-50"
+          >
+            {isSaving ? tCommon('saving') : tCommon('saveChanges')}
+          </button>
+        )}
         <Dialog>
           <DialogTrigger asChild>
             <button

@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { NavItem } from '@frontend/components/ui/nav-item';
 import { useCharacter } from '@frontend/hooks/useCharacter';
+import { CharacterTab } from '@frontend/types/character-sheet';
 
 export default function CharacterNavSection({ characterId }: { characterId: string }) {
   const { character } = useCharacter(characterId);
@@ -22,10 +23,15 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
   const basePath = `/system/${character.system}/character/${characterId}`;
 
   const navItems = [
-    { id: 'status', label: t('status'), icon: Shield, href: basePath },
-    { id: 'lore', label: t('lore'), icon: Files, href: `${basePath}/lore` },
-    { id: 'spells', label: t('spells'), icon: BookOpen, href: `${basePath}/spells` },
-    { id: 'inventory', label: t('inventory'), icon: Sword, href: `${basePath}/inventory` },
+    { id: CharacterTab.STATUS, label: t('status'), icon: Shield, href: basePath },
+    { id: CharacterTab.LORE, label: t('lore'), icon: Files, href: `${basePath}/lore` },
+    { id: CharacterTab.SPELLS, label: t('spells'), icon: BookOpen, href: `${basePath}/spells` },
+    {
+      id: CharacterTab.INVENTORY,
+      label: t('inventory'),
+      icon: Sword,
+      href: `${basePath}/inventory`,
+    },
   ];
 
   return (
@@ -48,7 +54,9 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
       <div className="flex flex-col gap-1">
         {navItems.map((item) => {
           const isActive =
-            item.id === 'status' ? pathname === item.href : pathname?.startsWith(item.href);
+            item.id === CharacterTab.STATUS
+              ? pathname === item.href
+              : pathname?.startsWith(item.href);
 
           return (
             <NavItem

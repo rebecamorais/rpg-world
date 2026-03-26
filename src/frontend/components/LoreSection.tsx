@@ -3,8 +3,10 @@
 import { BookOpen, Fingerprint, Heart, History, LucideIcon, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import CharacterActionBar from '@frontend/components/CharacterActionBar';
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 import { Label } from '@frontend/components/ui/label';
+import { useCharacterContext } from '@frontend/context/CharacterContext';
 import { cn } from '@frontend/lib/utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
@@ -98,144 +100,165 @@ const TextAreaField = ({
 
 export default function LoreSection({ data, onBasicInfoChange }: Props) {
   const t = useTranslations('characters.loreFields');
+  const { updateLore, isSaving, hasUnsavedChanges, setHasUnsavedChanges, deleteCharacter } =
+    useCharacterContext();
+
+  const handleSave = async () => {
+    // CharacterContext's updateLore handles specific lore persistence
+    await updateLore(data as unknown as Record<string, unknown>);
+    setHasUnsavedChanges(false);
+  };
+
+  const handleDelete = () => {
+    if (data.id) deleteCharacter(data as DnD5eCharacter);
+  };
 
   return (
-    <div className="grid grid-cols-1 gap-6 pb-20 md:grid-cols-12">
-      {/* Top Row: Appearance and Personality */}
-      <div className="md:col-span-4">
-        {/* Appearance Grid */}
-        <Card className="border-none bg-transparent shadow-none">
-          <CardHeader className="flex flex-row items-center gap-2 px-0 py-2">
-            <User className="text-primary h-4 w-4" />
-            <CardTitle className="text-xs tracking-widest uppercase">{t('appearance')}</CardTitle>
-          </CardHeader>
-          <CardContent className="grid grid-cols-2 gap-3 p-0 pt-2">
-            <AppearanceField
-              label={t('age')}
-              field="age"
-              value={data.age}
-              onBasicInfoChange={onBasicInfoChange}
-            />
-            <AppearanceField
-              label={t('height')}
-              field="height"
-              value={data.height}
-              onBasicInfoChange={onBasicInfoChange}
-            />
-            <AppearanceField
-              label={t('weight')}
-              field="weight"
-              value={data.weight}
-              onBasicInfoChange={onBasicInfoChange}
-            />
-            <AppearanceField
-              label={t('eyes')}
-              field="eyes"
-              value={data.eyes}
-              onBasicInfoChange={onBasicInfoChange}
-            />
-            <AppearanceField
-              label={t('skin')}
-              field="skin"
-              value={data.skin}
-              onBasicInfoChange={onBasicInfoChange}
-            />
-            <AppearanceField
-              label={t('hair')}
-              field="hair"
-              value={data.hair}
-              onBasicInfoChange={onBasicInfoChange}
-            />
-          </CardContent>
-        </Card>
-      </div>
+    <div className="flex flex-col gap-6">
+      <CharacterActionBar
+        characterName={data.name || ''}
+        hasUnsavedChanges={hasUnsavedChanges}
+        isSaving={isSaving}
+        onSave={handleSave}
+        onDelete={handleDelete}
+      />
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+        {/* Top Row: Appearance and Personality */}
+        <div className="md:col-span-4">
+          {/* Appearance Grid */}
+          <Card className="border-none bg-transparent shadow-none">
+            <CardHeader className="flex flex-row items-center gap-2 px-0 py-2">
+              <User className="text-primary h-4 w-4" />
+              <CardTitle className="text-xs tracking-widest uppercase">{t('appearance')}</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 gap-3 p-0 pt-2">
+              <AppearanceField
+                label={t('age')}
+                field="age"
+                value={data.age}
+                onBasicInfoChange={onBasicInfoChange}
+              />
+              <AppearanceField
+                label={t('height')}
+                field="height"
+                value={data.height}
+                onBasicInfoChange={onBasicInfoChange}
+              />
+              <AppearanceField
+                label={t('weight')}
+                field="weight"
+                value={data.weight}
+                onBasicInfoChange={onBasicInfoChange}
+              />
+              <AppearanceField
+                label={t('eyes')}
+                field="eyes"
+                value={data.eyes}
+                onBasicInfoChange={onBasicInfoChange}
+              />
+              <AppearanceField
+                label={t('skin')}
+                field="skin"
+                value={data.skin}
+                onBasicInfoChange={onBasicInfoChange}
+              />
+              <AppearanceField
+                label={t('hair')}
+                field="hair"
+                value={data.hair}
+                onBasicInfoChange={onBasicInfoChange}
+              />
+            </CardContent>
+          </Card>
+        </div>
 
-      <div className="md:col-span-8">
-        {/* Personality Sections */}
-        <div className="flex flex-col gap-4">
+        <div className="md:col-span-8">
+          {/* Personality Sections */}
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-2 py-2">
+              <Heart className="text-primary h-4 w-4" />
+              <h3 className="text-xs font-bold tracking-widest uppercase">{t('personality')}</h3>
+            </div>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <TextAreaField
+                label={t('personalityTraits')}
+                field="personalityTraits"
+                value={data.personalityTraits}
+                icon={Fingerprint}
+                onBasicInfoChange={onBasicInfoChange}
+                placeholder={t('personalityTraits') + '...'}
+              />
+              <TextAreaField
+                label={t('ideals')}
+                field="ideals"
+                value={data.ideals}
+                icon={Heart}
+                onBasicInfoChange={onBasicInfoChange}
+                placeholder={t('ideals') + '...'}
+              />
+              <TextAreaField
+                label={t('bonds')}
+                field="bonds"
+                value={data.bonds}
+                icon={Heart}
+                onBasicInfoChange={onBasicInfoChange}
+                placeholder={t('bonds') + '...'}
+              />
+              <TextAreaField
+                label={t('flaws')}
+                field="flaws"
+                value={data.flaws}
+                icon={Heart}
+                onBasicInfoChange={onBasicInfoChange}
+                placeholder={t('flaws') + '...'}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Row: Narrative and Details - Full Width */}
+        <div className="flex flex-col gap-6 md:col-span-12">
           <div className="flex items-center gap-2 py-2">
-            <Heart className="text-primary h-4 w-4" />
-            <h3 className="text-xs font-bold tracking-widest uppercase">{t('personality')}</h3>
+            <History className="text-primary h-4 w-4" />
+            <h3 className="text-xs font-bold tracking-widest uppercase">{t('narrative')}</h3>
           </div>
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <TextAreaField
-              label={t('personalityTraits')}
-              field="personalityTraits"
-              value={data.personalityTraits}
-              icon={Fingerprint}
-              onBasicInfoChange={onBasicInfoChange}
-              placeholder={t('personalityTraits') + '...'}
-            />
-            <TextAreaField
-              label={t('ideals')}
-              field="ideals"
-              value={data.ideals}
-              icon={Heart}
-              onBasicInfoChange={onBasicInfoChange}
-              placeholder={t('ideals') + '...'}
-            />
-            <TextAreaField
-              label={t('bonds')}
-              field="bonds"
-              value={data.bonds}
-              icon={Heart}
-              onBasicInfoChange={onBasicInfoChange}
-              placeholder={t('bonds') + '...'}
-            />
-            <TextAreaField
-              label={t('flaws')}
-              field="flaws"
-              value={data.flaws}
-              icon={Heart}
-              onBasicInfoChange={onBasicInfoChange}
-              placeholder={t('flaws') + '...'}
-            />
-          </div>
+
+          <TextAreaField
+            label={t('backstory')}
+            field="backstory"
+            value={data.backstory}
+            icon={BookOpen}
+            onBasicInfoChange={onBasicInfoChange}
+            placeholder={t('backstory') + '...'}
+          />
+
+          <TextAreaField
+            label={t('alliesAndEnemies')}
+            field="alliesAndEnemies"
+            value={data.alliesAndEnemies}
+            icon={User}
+            onBasicInfoChange={onBasicInfoChange}
+            placeholder={t('alliesAndEnemies') + '...'}
+          />
+
+          <TextAreaField
+            label={t('organizations')}
+            field="organizations"
+            value={data.organizations}
+            icon={User}
+            onBasicInfoChange={onBasicInfoChange}
+            placeholder={t('organizations') + '...'}
+          />
+
+          <TextAreaField
+            label={t('treasure')}
+            field="treasure"
+            value={data.treasure}
+            icon={BookOpen}
+            onBasicInfoChange={onBasicInfoChange}
+            placeholder={t('treasure') + '...'}
+          />
         </div>
-      </div>
-
-      {/* Bottom Row: Narrative and Details - Full Width */}
-      <div className="flex flex-col gap-6 md:col-span-12">
-        <div className="flex items-center gap-2 py-2">
-          <History className="text-primary h-4 w-4" />
-          <h3 className="text-xs font-bold tracking-widest uppercase">{t('narrative')}</h3>
-        </div>
-
-        <TextAreaField
-          label={t('backstory')}
-          field="backstory"
-          value={data.backstory}
-          icon={BookOpen}
-          onBasicInfoChange={onBasicInfoChange}
-          placeholder={t('backstory') + '...'}
-        />
-
-        <TextAreaField
-          label={t('alliesAndEnemies')}
-          field="alliesAndEnemies"
-          value={data.alliesAndEnemies}
-          icon={User}
-          onBasicInfoChange={onBasicInfoChange}
-          placeholder={t('alliesAndEnemies') + '...'}
-        />
-
-        <TextAreaField
-          label={t('organizations')}
-          field="organizations"
-          value={data.organizations}
-          icon={User}
-          onBasicInfoChange={onBasicInfoChange}
-          placeholder={t('organizations') + '...'}
-        />
-
-        <TextAreaField
-          label={t('treasure')}
-          field="treasure"
-          value={data.treasure}
-          icon={BookOpen}
-          onBasicInfoChange={onBasicInfoChange}
-          placeholder={t('treasure') + '...'}
-        />
       </div>
     </div>
   );

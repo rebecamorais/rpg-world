@@ -3,15 +3,16 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-import { Button } from '@/frontend/components/ui/button';
+import { useTranslations } from 'next-intl';
+
+import { Button } from '@frontend/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/frontend/components/ui/card';
-import { useTranslations } from 'next-intl';
+} from '@frontend/components/ui/card';
 
 export default function AuthErrorPage() {
   const searchParams = useSearchParams();

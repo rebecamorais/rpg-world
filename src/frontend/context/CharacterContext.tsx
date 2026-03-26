@@ -1,20 +1,22 @@
 'use client';
 
-import { ReactNode, createContext, useContext } from 'react';
+import { ReactNode, createContext, useContext, useMemo } from 'react';
 
 import { useParams } from 'next/navigation';
 
-import type { UseMutateFunction } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import { useCharacter } from '@frontend/hooks/useCharacter';
 import { useCharacterEditor } from '@frontend/hooks/useCharacterEditor';
+import { useCharacterLore } from '@frontend/hooks/useCharacterLore';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 type CharacterContextType = ReturnType<typeof useCharacterEditor> & {
   isSaving: boolean;
-  deleteCharacter: UseMutateFunction<void, Error, DnD5eCharacter, unknown>;
-  updateCharacter: UseMutateFunction<void, Error, DnD5eCharacter, unknown>;
+  deleteCharacter: (character: DnD5eCharacter) => void;
+  updateCharacter: (character: DnD5eCharacter, options?: { onSuccess?: () => void }) => void;
+  updateLore: (data: Record<string, unknown>) => Promise<void>;
   isLoading: boolean;
   queryError: Error | null;
 };
@@ -27,24 +29,51 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
 
   const {
     character: fetchedCharacter,
-    isLoading,
-    error: queryError,
+    isLoading: isCharLoading,
+    error: charError,
     deleteCharacter,
-    updateCharacter,
-    isSaving,
+    updateCharacter: updateStatus,
+    isSaving: isCharSaving,
   } = useCharacter(id);
 
-  const editor = useCharacterEditor({ fetchedCharacter, queryError });
+  const {
+    lore: fetchedLore,
+    isLoading: isLoreLoading,
+    updateLore,
+    isSaving: isLoreSaving,
+  } = useCharacterLore(id);
+
+  // Merge lore into character for the editor
+  const mergedCharacter = useMemo(() => {
+    if (!fetchedCharacter || !fetchedLore) return fetchedCharacter;
+    return { ...fetchedCharacter, ...fetchedLore } as DnD5eCharacter;
+  }, [fetchedCharacter, fetchedLore]);
+
+  const editor = useCharacterEditor({
+    fetchedCharacter: mergedCharacter,
+    queryError: charError as Error | null,
+  });
+
+  const handleUpdate = async (character: DnD5eCharacter, options?: { onSuccess?: () => void }) => {
+    try {
+      await updateStatus(character);
+      toast.success('Alterações salvas com sucesso!');
+      options?.onSuccess?.();
+    } catch (_e) {
+      // Errors are handled inside the hooks via toast
+    }
+  };
 
   return (
     <CharacterContext.Provider
       value={{
         ...editor,
-        isSaving,
+        isSaving: isCharSaving || isLoreSaving,
         deleteCharacter,
-        updateCharacter,
-        isLoading,
-        queryError,
+        updateCharacter: handleUpdate,
+        updateLore: updateLore as (data: Record<string, unknown>) => Promise<void>,
+        isLoading: isCharLoading || isLoreLoading,
+        queryError: charError as Error | null,
       }}
     >
       {children}

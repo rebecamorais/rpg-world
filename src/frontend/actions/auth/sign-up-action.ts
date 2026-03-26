@@ -1,7 +1,8 @@
 'use server';
 
-import { getApi } from '@/backend';
-import { TurnstileService } from '@/backend/shared/infrastructure/services/turnstile-service';
+import { getApi } from '@api';
+
+import { TurnstileService } from '@backend/shared/infrastructure/services/turnstile-service';
 
 export interface ActionResponse {
   success: boolean;

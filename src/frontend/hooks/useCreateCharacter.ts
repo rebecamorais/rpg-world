@@ -1,10 +1,11 @@
 import { useRouter } from 'next/navigation';
 
-import { useErrorMessage } from '@/frontend/hooks/useErrorMessage';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
+
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 interface CreateCharacterVariables {
   name: string;

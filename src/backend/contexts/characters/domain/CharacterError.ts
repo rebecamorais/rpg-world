@@ -1,4 +1,4 @@
-import { AppError } from '@/backend/shared/domain/AppError';
+import { AppError } from '@backend/shared/domain/AppError';
 
 export const CharacterErrorCodes = {
   CREATE_NAME_REQUIRED: 'character_error_create_name_required',

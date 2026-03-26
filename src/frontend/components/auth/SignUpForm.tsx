@@ -4,14 +4,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 
-import { signUpAction } from '@/frontend/actions/auth/sign-up-action';
-import { useErrorMessage } from '@/frontend/hooks/useErrorMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { signUpAction } from '@frontend/actions/auth/sign-up-action';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -29,6 +28,7 @@ import {
   FormMessage,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 declare global {
   interface Window {

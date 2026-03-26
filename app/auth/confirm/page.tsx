@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/frontend/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 
 import { getSupabaseBrowserClient } from '@lib/supabase-browser';
 

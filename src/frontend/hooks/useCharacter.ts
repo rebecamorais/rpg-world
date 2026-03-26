@@ -42,7 +42,7 @@ export function useCharacter(id: string) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['character', id] });
-      toast.success('Personagem salvo com sucesso!');
+      // Removed success toast from here to coordinate in the context
     },
     onError: (err: Error) => {
       toast.error(err.message);
@@ -54,7 +54,7 @@ export function useCharacter(id: string) {
     isLoading: query.isLoading,
     error: query.error,
     deleteCharacter: deleteMutation.mutate,
-    updateCharacter: updateMutation.mutate,
+    updateCharacter: updateMutation.mutateAsync, // Use mutateAsync
     isSaving: updateMutation.isPending || deleteMutation.isPending,
   };
 }
