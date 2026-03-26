@@ -22,7 +22,7 @@ Coração da lógica de negócio e integração com serviços.
     - `characters/`: Domínio, Casos de Uso e Repositórios de personagens.
     - `users/`: Gerenciamento de usuários e autenticação.
 - **`shared/`**: Infraestrutura compartilhada do backend (HTTP wrappers, DI Container).
-- **`index.ts`**: Exporta `getApi()`, ponto de entrada único para o Frontend.
+- **`index.ts`**: Exporta `getApi()`, ponto de entrada único para o Frontend. Use `import { getApi } from '@api';`
 
 ### 2. `src/frontend/`
 Camada de apresentação e estado do cliente.

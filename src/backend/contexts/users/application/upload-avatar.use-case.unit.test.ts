@@ -10,6 +10,7 @@ import {
 
 const mockStorageRepository = (): StorageRepository => ({
   upload: vi.fn(),
+  download: vi.fn(),
 });
 
 const makeBlob = (type: string, sizeBytes: number): Blob => {

@@ -5,6 +5,15 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'images.rpgworldapp.com' }],
+        destination: '/api/images/:path*',
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
@@ -23,6 +32,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '*.supabase.co',
         pathname: '/storage/v1/object/public/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.rpgworldapp.com',
       },
     ],
   },
