@@ -1,5 +1,7 @@
-import CharacterSheetClient from '@frontend/components/CharacterSheetClient';
+'use client';
 
-export default function CharacterDetailPage() {
-  return <CharacterSheetClient />;
+import StatusView from '@frontend/components/StatusView';
+
+export default function CharacterStatusPage() {
+  return <StatusView />;
 }

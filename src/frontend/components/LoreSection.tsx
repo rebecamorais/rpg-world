@@ -101,8 +101,8 @@ export default function LoreSection({ data, onBasicInfoChange }: Props) {
 
   return (
     <div className="grid grid-cols-1 gap-6 pb-20 md:grid-cols-12">
-      {/* Coluna Esquerda: Aparência e Características */}
-      <div className="flex flex-col gap-6 md:col-span-4">
+      {/* Top Row: Appearance and Personality */}
+      <div className="md:col-span-4">
         {/* Appearance Grid */}
         <Card className="border-none bg-transparent shadow-none">
           <CardHeader className="flex flex-row items-center gap-2 px-0 py-2">
@@ -148,50 +148,54 @@ export default function LoreSection({ data, onBasicInfoChange }: Props) {
             />
           </CardContent>
         </Card>
+      </div>
 
+      <div className="md:col-span-8">
         {/* Personality Sections */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 py-2">
             <Heart className="text-primary h-4 w-4" />
             <h3 className="text-xs font-bold tracking-widest uppercase">{t('personality')}</h3>
           </div>
-          <TextAreaField
-            label={t('personalityTraits')}
-            field="personalityTraits"
-            value={data.personalityTraits}
-            icon={Fingerprint}
-            onBasicInfoChange={onBasicInfoChange}
-            placeholder={t('personalityTraits') + '...'}
-          />
-          <TextAreaField
-            label={t('ideals')}
-            field="ideals"
-            value={data.ideals}
-            icon={Heart}
-            onBasicInfoChange={onBasicInfoChange}
-            placeholder={t('ideals') + '...'}
-          />
-          <TextAreaField
-            label={t('bonds')}
-            field="bonds"
-            value={data.bonds}
-            icon={Heart}
-            onBasicInfoChange={onBasicInfoChange}
-            placeholder={t('bonds') + '...'}
-          />
-          <TextAreaField
-            label={t('flaws')}
-            field="flaws"
-            value={data.flaws}
-            icon={Heart}
-            onBasicInfoChange={onBasicInfoChange}
-            placeholder={t('flaws') + '...'}
-          />
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <TextAreaField
+              label={t('personalityTraits')}
+              field="personalityTraits"
+              value={data.personalityTraits}
+              icon={Fingerprint}
+              onBasicInfoChange={onBasicInfoChange}
+              placeholder={t('personalityTraits') + '...'}
+            />
+            <TextAreaField
+              label={t('ideals')}
+              field="ideals"
+              value={data.ideals}
+              icon={Heart}
+              onBasicInfoChange={onBasicInfoChange}
+              placeholder={t('ideals') + '...'}
+            />
+            <TextAreaField
+              label={t('bonds')}
+              field="bonds"
+              value={data.bonds}
+              icon={Heart}
+              onBasicInfoChange={onBasicInfoChange}
+              placeholder={t('bonds') + '...'}
+            />
+            <TextAreaField
+              label={t('flaws')}
+              field="flaws"
+              value={data.flaws}
+              icon={Heart}
+              onBasicInfoChange={onBasicInfoChange}
+              placeholder={t('flaws') + '...'}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Coluna Direita: Narrativa e Detalhes */}
-      <div className="flex flex-col gap-6 md:col-span-8">
+      {/* Bottom Row: Narrative and Details - Full Width */}
+      <div className="flex flex-col gap-6 md:col-span-12">
         <div className="flex items-center gap-2 py-2">
           <History className="text-primary h-4 w-4" />
           <h3 className="text-xs font-bold tracking-widest uppercase">{t('narrative')}</h3>
@@ -206,24 +210,23 @@ export default function LoreSection({ data, onBasicInfoChange }: Props) {
           placeholder={t('backstory') + '...'}
         />
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <TextAreaField
-            label={t('alliesAndEnemies')}
-            field="alliesAndEnemies"
-            value={data.alliesAndEnemies}
-            icon={User}
-            onBasicInfoChange={onBasicInfoChange}
-            placeholder={t('alliesAndEnemies') + '...'}
-          />
-          <TextAreaField
-            label={t('organizations')}
-            field="organizations"
-            value={data.organizations}
-            icon={User}
-            onBasicInfoChange={onBasicInfoChange}
-            placeholder={t('organizations') + '...'}
-          />
-        </div>
+        <TextAreaField
+          label={t('alliesAndEnemies')}
+          field="alliesAndEnemies"
+          value={data.alliesAndEnemies}
+          icon={User}
+          onBasicInfoChange={onBasicInfoChange}
+          placeholder={t('alliesAndEnemies') + '...'}
+        />
+
+        <TextAreaField
+          label={t('organizations')}
+          field="organizations"
+          value={data.organizations}
+          icon={User}
+          onBasicInfoChange={onBasicInfoChange}
+          placeholder={t('organizations') + '...'}
+        />
 
         <TextAreaField
           label={t('treasure')}

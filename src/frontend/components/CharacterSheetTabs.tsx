@@ -2,10 +2,9 @@
 
 import * as React from 'react';
 
-import { BookOpen, Camera, Files, Shield, Sword } from 'lucide-react';
+import { BookOpen, Files, Shield, Sword } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { Button } from '@frontend/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';

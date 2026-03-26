@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import { BookOpen, Files, Shield, Sword } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -11,20 +11,21 @@ import { useCharacter } from '@frontend/hooks/useCharacter';
 
 export default function CharacterNavSection({ characterId }: { characterId: string }) {
   const { character } = useCharacter(characterId);
-  const searchParams = useSearchParams();
-  const activeTab = searchParams?.get('tab') || 'status';
+  const pathname = usePathname();
   const t = useTranslations('characters.tabs');
 
   const characterName = character?.name;
   const avatarUrl = character?.avatarUrl;
 
-  if (!characterName) return null;
+  if (!characterName || !character?.system) return null;
+
+  const basePath = `/system/${character.system}/character/${characterId}`;
 
   const navItems = [
-    { id: 'status', label: t('status'), icon: Shield },
-    { id: 'lore', label: t('lore'), icon: Files },
-    { id: 'spells', label: t('spells'), icon: BookOpen },
-    { id: 'inventory', label: t('inventory'), icon: Sword },
+    { id: 'status', label: t('status'), icon: Shield, href: basePath },
+    { id: 'lore', label: t('lore'), icon: Files, href: `${basePath}/lore` },
+    { id: 'spells', label: t('spells'), icon: BookOpen, href: `${basePath}/spells` },
+    { id: 'inventory', label: t('inventory'), icon: Sword, href: `${basePath}/inventory` },
   ];
 
   return (
@@ -45,16 +46,21 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
       </div>
 
       <div className="flex flex-col gap-1">
-        {navItems.map((item) => (
-          <NavItem
-            key={item.id}
-            href={`/characters/${characterId}?tab=${item.id}`}
-            label={item.label}
-            icon={item.icon}
-            isActive={activeTab === item.id}
-            isSubItem
-          />
-        ))}
+        {navItems.map((item) => {
+          const isActive =
+            item.id === 'status' ? pathname === item.href : pathname?.startsWith(item.href);
+
+          return (
+            <NavItem
+              key={item.id}
+              href={item.href}
+              label={item.label}
+              icon={item.icon}
+              isActive={isActive}
+              isSubItem
+            />
+          );
+        })}
       </div>
     </section>
   );
