@@ -6,10 +6,11 @@ import Image from 'next/image';
 
 import { useTranslations } from 'next-intl';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { UploadTarget, useFileUploader } from '@frontend/context/FileUploaderContext';
 import { cn } from '@frontend/lib/utils';
 
-interface AvatarUploadProps {
+interface ImageUploadProps {
   currentUrl?: string;
   onUploadSuccess: (url: string) => void;
   onUploadError?: (err: unknown) => void;
@@ -20,7 +21,11 @@ interface AvatarUploadProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export default function AvatarUpload({
+/**
+ * Generic ImageUpload component that handles file picking and uploading
+ * to a specific target (profile, character, etc.) via FileUploaderContext.
+ */
+export default function ImageUpload({
   currentUrl,
   onUploadSuccess,
   onUploadError,
@@ -29,7 +34,7 @@ export default function AvatarUpload({
   target,
   targetId,
   size = 'md',
-}: AvatarUploadProps) {
+}: ImageUploadProps) {
   const t = useTranslations('avatarUpload');
   const { upload: contextUpload, isUploading: isUploadingContext } = useFileUploader();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -55,7 +60,7 @@ export default function AvatarUpload({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Local preview
+    // Local preview (blob URL)
     const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
 
@@ -64,15 +69,13 @@ export default function AvatarUpload({
         ? uploadFn(file)
         : target
           ? contextUpload({ file, target, id: targetId })
-          : Promise.reject(new Error('No upload action provided to AvatarUpload'));
+          : Promise.reject(new Error('No upload action provided to ImageUpload'));
 
       const { url } = await uploadAction;
-      const timestampedUrl = `${url}${url.includes('?') ? '&' : '?'}t=${Date.now()}`;
-      onUploadSuccess(timestampedUrl);
+      onUploadSuccess(url);
       setPreview(null);
       URL.revokeObjectURL(objectUrl);
     } catch (err: unknown) {
-      // Revert preview on error
       setPreview(null);
       URL.revokeObjectURL(objectUrl);
       onUploadError?.(err);
@@ -81,39 +84,35 @@ export default function AvatarUpload({
 
   return (
     <div className="flex flex-col items-center gap-3">
-      {/* Avatar display */}
+      {/* Image display / Trigger */}
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={isUploading}
         aria-label={t('button')}
         className={cn(
-          'group relative overflow-hidden rounded-full border-2 border-white/10 bg-white/5 transition-all hover:border-blue-500/50 disabled:opacity-60',
-          sizeClasses[size],
+          'group relative transition-transform hover:scale-105 active:scale-95 disabled:opacity-60',
         )}
       >
-        {displayUrl ? (
-          <Image
-            src={displayUrl}
-            alt={t('currentAlt')}
-            width={pixelSize[size]}
-            height={pixelSize[size]}
-            className="h-full w-full object-cover"
-            unoptimized={displayUrl.includes('localhost') || displayUrl.includes('127.0.0.1')}
-          />
-        ) : (
-          <span
-            className={cn(
-              'flex h-full w-full items-center justify-center',
-              size === 'sm' ? 'text-2xl' : size === 'md' ? 'text-4xl' : 'text-6xl',
-            )}
-          >
-            🧙
-          </span>
-        )}
+        <Avatar
+          className={cn(
+            'border-2 border-white/10 bg-white/5 shadow-md transition-colors group-hover:border-blue-500/50',
+            sizeClasses[size],
+          )}
+        >
+          {displayUrl ? (
+            <AvatarImage
+              src={displayUrl}
+              alt={t('currentAlt')}
+              className="object-cover"
+              autoTimestamp={!preview} // Don't timestamp blob previews
+            />
+          ) : null}
+          <AvatarFallback className="bg-muted text-2xl font-bold">🧙</AvatarFallback>
+        </Avatar>
 
         {/* Upload overlay */}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
           {isUploading ? (
             <span className="text-xs font-medium text-white">{t('loading')}</span>
           ) : (
@@ -129,7 +128,7 @@ export default function AvatarUpload({
         accept="image/jpeg,image/png,image/webp"
         className="hidden"
         onChange={handleFileChange}
-        id="avatar-file-input"
+        id="image-file-input"
       />
     </div>
   );

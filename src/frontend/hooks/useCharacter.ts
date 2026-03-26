@@ -20,6 +20,8 @@ export function useCharacter(id: string) {
     enabled: !!id,
   });
 
+  const character = query.data;
+
   const deleteMutation = useMutation({
     mutationFn: async (character: DnD5eCharacter) => {
       await rpgWorldApi.delete(`/api/characters/${character.id}`);
@@ -50,7 +52,7 @@ export function useCharacter(id: string) {
   });
 
   return {
-    character: query.data,
+    character,
     isLoading: query.isLoading,
     error: query.error,
     deleteCharacter: deleteMutation.mutate,

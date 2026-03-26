@@ -31,9 +31,10 @@ export class UploadCharacterAvatarUseCase {
     }
 
     // 3. Upload to storage
-    const bucket = 'characters';
+    const bucket = 'avatars'; // Use existing avatars bucket
     const extension = file.type.split('/')[1];
-    const path = `avatars/${characterId}.${extension}`;
+    // Ensure the path starts with userId to comply with RLS policies
+    const path = `${userId}/characters/${characterId}.${extension}`;
 
     const publicUrl = await this.storageRepository.upload(bucket, path, file);
 

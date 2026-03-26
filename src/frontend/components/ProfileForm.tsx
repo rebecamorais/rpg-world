@@ -1,14 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import AvatarUpload from '@frontend/components/AvatarUpload';
+import ImageUpload from '@frontend/components/ImageUpload';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -52,9 +53,8 @@ export default function ProfileForm() {
   });
 
   type ProfileFormValues = z.infer<typeof profileSchema>;
-
-  const { profile, isLoading, updateProfile, isUpdating, uploadAvatar, isUploadingAvatar } =
-    useProfile();
+  const queryClient = useQueryClient();
+  const { profile, isLoading, updateProfile, isUpdating } = useProfile();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -85,8 +85,8 @@ export default function ProfileForm() {
 
   // Called by AvatarUpload when the upload completes — update the form field with a cache buster
   const handleAvatarUploadSuccess = (url: string) => {
-    const timestampedUrl = `${url}${url.includes('?') ? '&' : '?'}t=${Date.now()}`;
-    form.setValue('avatarUrl', timestampedUrl);
+    form.setValue('avatarUrl', url);
+    queryClient.invalidateQueries({ queryKey: ['profile'] });
     toast.success(t('saveSuccess'));
   };
 
@@ -142,12 +142,11 @@ export default function ProfileForm() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
             {/* Avatar upload — at the top, centered */}
             <div className="flex justify-center">
-              <AvatarUpload
-                currentUrl={avatarUrl}
+              <ImageUpload
+                currentUrl={form.watch('avatarUrl')}
+                target="profile"
                 onUploadSuccess={handleAvatarUploadSuccess}
-                onUploadError={handleAvatarUploadError}
-                uploadFn={uploadAvatar}
-                isUploading={isUploadingAvatar}
+                size="lg"
               />
             </div>
 

@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import QueryProvider from '@frontend/components/QueryProvider';
 import ThemeProvider from '@frontend/components/ThemeProvider';
 import { TooltipProvider } from '@frontend/components/ui/tooltip';
+import { FileUploaderProvider } from '@frontend/context/FileUploaderContext';
 import { UserProvider } from '@frontend/context/UserContext';
 
 interface ProvidersProps {
@@ -28,8 +29,10 @@ export default function Providers({ children, locale, messages, timeZone }: Prov
     <QueryProvider>
       <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
         <UserProvider user={null}>
-          <ThemeProvider />
-          <TooltipProvider>{children}</TooltipProvider>
+          <FileUploaderProvider>
+            <ThemeProvider />
+            <TooltipProvider>{children}</TooltipProvider>
+          </FileUploaderProvider>
         </UserProvider>
       </NextIntlClientProvider>
     </QueryProvider>

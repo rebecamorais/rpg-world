@@ -6,7 +6,7 @@ import { Palette, Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
-import AvatarUpload from '@frontend/components/AvatarUpload';
+import ImageUpload from '@frontend/components/ImageUpload';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
@@ -71,7 +71,6 @@ export default function CharacterHeader({
   const t = useTranslations('characterHeader');
   const [isEditingName, setIsEditingName] = useState(false);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
-  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
   // Simple XP progress calculation
   const xpThresholds = [
@@ -84,36 +83,6 @@ export default function CharacterHeader({
     100,
     Math.max(0, ((xp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100),
   );
-
-  const handleAvatarUpload = async (file: File) => {
-    setIsUploadingAvatar(true);
-    try {
-      const formData = new FormData();
-      formData.append('avatar', file);
-
-      const res = await fetch(`/api/characters/${id}/avatar`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Upload failed');
-      }
-
-      const { url } = await res.json();
-      const timestampedUrl = `${url}${url.includes('?') ? '&' : '?'}t=${Date.now()}`;
-      onBasicInfoChange('avatarUrl', timestampedUrl);
-      toast.success(t('avatarUpdateSuccess') || 'Avatar atualizado!');
-      return { url: timestampedUrl };
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Unknown error';
-      toast.error(msg);
-      throw err;
-    } finally {
-      setIsUploadingAvatar(false);
-    }
-  };
 
   return (
     <Card className="border-border bg-card overflow-hidden shadow-sm">
@@ -142,11 +111,11 @@ export default function CharacterHeader({
             <div className="flex flex-col gap-6 py-4">
               <div className="flex flex-col items-center gap-4">
                 <Label className="text-sm font-medium">Avatar</Label>
-                <AvatarUpload
+                <ImageUpload
                   currentUrl={avatarUrl}
-                  uploadFn={handleAvatarUpload}
-                  isUploading={isUploadingAvatar}
-                  onUploadSuccess={(url) => onBasicInfoChange('avatarUrl', url)}
+                  target="character"
+                  targetId={id}
+                  onUploadSuccess={(url: string) => onBasicInfoChange('avatarUrl', url)}
                   size="lg"
                 />
               </div>

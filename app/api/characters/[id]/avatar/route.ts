@@ -21,10 +21,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return NextResponse.json({ error: 'Invalid form data' }, { status: 400 });
   }
 
-  const file = formData.get('avatar');
+  const file = formData.get('file');
 
   if (!file || !(file instanceof File)) {
-    return NextResponse.json({ error: 'Missing "avatar" file field' }, { status: 400 });
+    return NextResponse.json({ error: 'Missing "file" field' }, { status: 400 });
   }
 
   // 3. Process upload via characters API
