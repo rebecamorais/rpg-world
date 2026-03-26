@@ -2,8 +2,6 @@
 
 import { useRef, useState } from 'react';
 
-import Image from 'next/image';
-
 import { useTranslations } from 'next-intl';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
@@ -46,12 +44,6 @@ export default function ImageUpload({
     sm: 'h-16 w-16',
     md: 'h-24 w-24',
     lg: 'h-32 w-32',
-  };
-
-  const pixelSize = {
-    sm: 64,
-    md: 96,
-    lg: 128,
   };
 
   const displayUrl = preview ?? currentUrl;

@@ -1,17 +1,11 @@
-import { useMemo } from 'react';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { APIError, rpgWorldApi } from '@client';
-
-import { useFileUploader } from '@frontend/context/FileUploaderContext';
 
 import { Profile } from '@backend/contexts/users/domain/Profile';
 
 export function useProfile() {
   const queryClient = useQueryClient();
-  const { lastUploadTimestamp } = useFileUploader();
-
   const query = useQuery<Profile, APIError>({
     queryKey: ['profile'],
     queryFn: () => rpgWorldApi.get<Profile>('/api/profile'),

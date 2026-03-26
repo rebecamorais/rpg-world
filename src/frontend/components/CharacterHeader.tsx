@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import { Palette, Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 
 import ImageUpload from '@frontend/components/ImageUpload';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
@@ -92,8 +92,7 @@ export default function ProfileForm() {
 
   const handleAvatarUploadError = (err: unknown) => {
     const errorCode = err instanceof Error ? err.message : 'unknown';
-    const localizedMsg = getMessage(errorCode);
-    toast.error(localizedMsg);
+    toast.error(getMessage(errorCode));
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -143,9 +142,10 @@ export default function ProfileForm() {
             {/* Avatar upload — at the top, centered */}
             <div className="flex justify-center">
               <ImageUpload
-                currentUrl={form.watch('avatarUrl')}
+                currentUrl={avatarUrl}
                 target="profile"
                 onUploadSuccess={handleAvatarUploadSuccess}
+                onUploadError={handleAvatarUploadError}
                 size="lg"
               />
             </div>
