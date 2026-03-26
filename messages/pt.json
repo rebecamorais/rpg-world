@@ -161,7 +161,26 @@
       "spells": "Suas magias e truques serão listados aqui.",
       "inventory": "Equipamentos, poções e moedas serão gerenciados aqui."
     },
-    "changePhoto": "Trocar Foto"
+    "changePhoto": "Trocar Foto",
+    "loreFields": {
+      "appearance": "Aparência",
+      "personality": "Personalidade",
+      "narrative": "Narrativa",
+      "age": "Idade",
+      "height": "Altura",
+      "weight": "Peso",
+      "eyes": "Olhos",
+      "skin": "Pele",
+      "hair": "Cabelo",
+      "backstory": "História",
+      "personalityTraits": "Traços de Personalidade",
+      "ideals": "Ideais",
+      "bonds": "Vínculos",
+      "flaws": "Defeitos",
+      "alliesAndEnemies": "Aliados e Inimigos",
+      "organizations": "Organizações",
+      "treasure": "Tesouro"
+    }
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",

@@ -1,16 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 
 import AttributesSection from '@frontend/components/AttributesSection';
 import CharacterActionBar from '@frontend/components/CharacterActionBar';
 import CharacterHeader from '@frontend/components/CharacterHeader';
-import CharacterSheetTabs from '@frontend/components/CharacterSheetTabs';
 import CombatStatsSection from '@frontend/components/CombatStatsSection';
 import KnownSpellsCard from '@frontend/components/KnownSpellsCard';
+import LoreSection from '@frontend/components/LoreSection';
 import PassivePerception from '@frontend/components/PassivePerception';
 import SavingThrowsSection from '@frontend/components/SavingThrowsSection';
 import SkillsSection from '@frontend/components/SkillsSection';
@@ -55,6 +55,9 @@ export default function CharacterSheetClient() {
     handleForgetSpell,
     handleHitDiceChange,
   } = useCharacterEditor({ fetchedCharacter, queryError });
+
+  const searchParams = useSearchParams();
+  const activeTab = searchParams?.get('tab') || 'status';
 
   const handleDelete = () => {
     if (character) deleteCharacter(character);
@@ -113,72 +116,103 @@ export default function CharacterSheetClient() {
         </p>
       )}
 
-      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[250px_1fr]">
-        {/* Left Sidebar */}
-        <div className="flex flex-col gap-4">
-          <PassivePerception
-            wisValue={character.attributes.WIS ?? 10}
-            level={character.level}
-            perceptionSkillData={character.skills?.PERCEPTION}
-          />
+      <div className="flex flex-col gap-6">
+        {/* Right Main Content - Now Full Width */}
+        <CharacterHeader
+          name={character.name}
+          classNameStr={character.class}
+          level={character.level}
+          race={character.race}
+          pb={pb}
+          background={character.background}
+          alignment={character.alignment}
+          xp={character.xp}
+          avatarUrl={character.avatarUrl}
+          onBasicInfoChange={handleBasicInfoChange}
+        />
 
-          <SavingThrowsSection
-            attributes={character.attributes}
-            level={character.level}
-            savingThrows={character.savingThrowProficiencies}
-            onSavingThrowChange={handleSavingThrowChange}
-          />
-          <AttributesSection
-            attributes={character.attributes}
-            onAttributeChange={handleAttributeChange}
-          />
-        </div>
+        {activeTab === 'status' && (
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
+            {/* Left Column in Status View: Passive, Saving Throws, Attributes */}
+            <div className="flex flex-col gap-6">
+              <PassivePerception
+                wisValue={character.attributes.WIS ?? 10}
+                level={character.level}
+                perceptionSkillData={character.skills?.PERCEPTION}
+              />
 
-        {/* Right Main Content */}
-        <div className="flex min-w-0 flex-col gap-4">
-          <CharacterHeader
-            name={character.name}
-            classNameStr={character.class}
-            level={character.level}
-            race={character.race}
-            pb={pb}
-            background={character.background}
-            alignment={character.alignment}
-            xp={character.xp}
-            avatarUrl={character.avatarUrl}
-            onBasicInfoChange={handleBasicInfoChange}
-          />
+              <SavingThrowsSection
+                attributes={character.attributes}
+                level={character.level}
+                savingThrows={character.savingThrowProficiencies}
+                onSavingThrowChange={handleSavingThrowChange}
+              />
+              <AttributesSection
+                attributes={character.attributes}
+                onAttributeChange={handleAttributeChange}
+              />
+            </div>
 
-          <CombatStatsSection
-            character={character}
-            onBasicInfoChange={handleBasicInfoChange}
-            onSpellcastingSystemChange={handleSpellcastingSystemChange}
-            onSpellPointsChange={handleSpellPointsChange}
-            onSpellSlotsChange={handleSpellSlotsChange}
-            onHitDiceChange={handleHitDiceChange}
-          />
-
-          <CharacterSheetTabs
-            statusContent={
-              <div className="flex flex-col gap-6">
-                <SkillsSection
-                  attributes={character.attributes}
-                  level={character.level}
-                  skills={character.skills ?? {}}
-                  onSkillChange={handleSkillChange}
+            {/* Right Column in Status View: Combat Stats, Skills, Spells */}
+            <div className="flex flex-col gap-6">
+              <CombatStatsSection
+                character={character}
+                onBasicInfoChange={handleBasicInfoChange}
+                onSpellcastingSystemChange={handleSpellcastingSystemChange}
+                onSpellPointsChange={handleSpellPointsChange}
+                onSpellSlotsChange={handleSpellSlotsChange}
+                onHitDiceChange={handleHitDiceChange}
+              />
+              <SkillsSection
+                attributes={character.attributes}
+                level={character.level}
+                skills={character.skills ?? {}}
+                onSkillChange={handleSkillChange}
+              />
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <KnownSpellsCard
+                  spellsKnown={character.spellsKnown || []}
+                  onForgetSpell={handleForgetSpell}
                 />
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <KnownSpellsCard
-                    spellsKnown={character.spellsKnown || []}
-                    onForgetSpell={handleForgetSpell}
-                  />
-                </div>
               </div>
-            }
-          />
-        </div>
-      </div>
+            </div>
+          </div>
+        )}
 
+        {activeTab === 'lore' && (
+          <LoreSection data={character} onBasicInfoChange={handleBasicInfoChange} />
+        )}
+
+        {activeTab === 'spells' && (
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold">{t('tabs.spells')}</h2>
+              <button
+                onClick={() => setIsSpellsOpen(true)}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-bold shadow-sm transition-all"
+              >
+                {t('common.add')}
+              </button>
+            </div>
+            <div className="grid grid-cols-1 gap-6">
+              <KnownSpellsCard
+                spellsKnown={character.spellsKnown || []}
+                onForgetSpell={handleForgetSpell}
+              />
+            </div>
+            {(!character.spellsKnown || character.spellsKnown.length === 0) && (
+              <div className="text-muted-foreground bg-muted/20 flex h-[40vh] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+                <p>{t('emptyStates.spells')}</p>
+              </div>
+            )}
+          </div>
+        )}
+        {activeTab === 'inventory' && (
+          <div className="text-muted-foreground bg-muted/20 flex h-[50vh] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+            <p>{t('emptyStates.inventory')}</p>
+          </div>
+        )}
+      </div>
       <SpellsDrawer
         isOpen={isSpellsOpen}
         onClose={() => setIsSpellsOpen(false)}

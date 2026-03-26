@@ -161,7 +161,26 @@
       "spells": "Your spells and cantrips will be listed here.",
       "inventory": "Equipment, potions, and currency will be managed here."
     },
-    "changePhoto": "Change Photo"
+    "changePhoto": "Change Photo",
+    "loreFields": {
+      "appearance": "Appearance",
+      "personality": "Personality",
+      "narrative": "Narrative",
+      "age": "Age",
+      "height": "Height",
+      "weight": "Weight",
+      "eyes": "Eyes",
+      "skin": "Skin",
+      "hair": "Hair",
+      "backstory": "Backstory",
+      "personalityTraits": "Personality Traits",
+      "ideals": "Ideals",
+      "bonds": "Bonds",
+      "flaws": "Flaws",
+      "alliesAndEnemies": "Allies & Enemies",
+      "organizations": "Organizations",
+      "treasure": "Treasure"
+    }
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",

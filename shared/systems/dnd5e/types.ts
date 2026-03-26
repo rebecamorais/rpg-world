@@ -42,6 +42,15 @@ export interface DnD5eCharacterData {
   spellsKnown?: string[];
 
   coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
+
+  // D&D 5e Specific Lore
+  personalityTraits?: string;
+  ideals?: string;
+  bonds?: string;
+  flaws?: string;
+  alliesAndEnemies?: string;
+  organizations?: string;
+  treasure?: string;
 }
 
 export type DnD5eCharacter = CharacterBase & {

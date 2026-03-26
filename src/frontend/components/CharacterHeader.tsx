@@ -59,7 +59,6 @@ export default function CharacterHeader({
   return (
     <Card className="border-border bg-card overflow-hidden shadow-sm">
       <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start">
-        {/* Avatar Section */}
         <Avatar className="border-primary/20 h-20 w-20 shrink-0 border shadow-md">
           <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
           <AvatarFallback className="bg-muted text-xl font-bold">
@@ -163,12 +162,13 @@ export default function CharacterHeader({
               >
                 {t('race')}
               </Label>
-              <Input
+              <GhostInput
                 id="char-race"
                 value={race || ''}
                 onChange={(e) => onBasicInfoChange('race', e.target.value)}
                 placeholder={t('race')}
                 className="h-8 flex-1"
+                showIcon={true}
               />
             </div>
 
@@ -179,12 +179,13 @@ export default function CharacterHeader({
               >
                 {t('class')}
               </Label>
-              <Input
+              <GhostInput
                 id="char-class"
                 value={classNameStr || ''}
                 onChange={(e) => onBasicInfoChange('class', e.target.value)}
                 placeholder={t('class')}
                 className="h-8 flex-1 font-semibold"
+                showIcon={true}
               />
             </div>
 
@@ -195,12 +196,13 @@ export default function CharacterHeader({
               >
                 {t('background')}
               </Label>
-              <Input
+              <GhostInput
                 id="char-background"
                 value={background || ''}
                 onChange={(e) => onBasicInfoChange('background', e.target.value)}
                 placeholder={t('background')}
                 className="h-8 flex-1"
+                showIcon={true}
               />
             </div>
 
@@ -211,12 +213,13 @@ export default function CharacterHeader({
               >
                 {t('alignment')}
               </Label>
-              <Input
+              <GhostInput
                 id="char-alignment"
                 value={alignment || ''}
                 onChange={(e) => onBasicInfoChange('alignment', e.target.value)}
                 placeholder={t('alignment')}
                 className="h-8 flex-1"
+                showIcon={true}
               />
             </div>
           </div>

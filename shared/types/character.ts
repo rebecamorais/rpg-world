@@ -7,6 +7,15 @@ export interface CharacterBase {
   name: string;
   level: number;
   avatarUrl?: string;
+
+  // Lore & Identity (Common to all systems)
+  age?: string;
+  height?: string;
+  weight?: string;
+  eyes?: string;
+  skin?: string;
+  hair?: string;
+  backstory?: string;
 }
 
 export interface CharacterSummary {
