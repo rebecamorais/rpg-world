@@ -1,3 +1,5 @@
+import { Lore } from '@backend/contexts/lore';
+
 import { Attributes } from '../value-object/Attributes';
 import { HealthPoints } from '../value-object/HealthPoints';
 import { Character } from './Character';
@@ -57,15 +59,6 @@ export class DnD5eCharacter extends Character {
 
   public coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
 
-  // D&D 5e Specific Lore
-  public personalityTraits?: string;
-  public ideals?: string;
-  public bonds?: string;
-  public flaws?: string;
-  public alliesAndEnemies?: string;
-  public organizations?: string;
-  public treasure?: string;
-
   constructor(
     id: string,
     name: string,
@@ -96,39 +89,9 @@ export class DnD5eCharacter extends Character {
     spellsKnown: string[] = [],
     coins?: { cp: number; sp: number; ep: number; gp: number; pp: number },
     hpTemp: number = 0,
-    lore?: {
-      age?: string;
-      height?: string;
-      weight?: string;
-      eyes?: string;
-      skin?: string;
-      hair?: string;
-      personalityTraits?: string;
-      ideals?: string;
-      bonds?: string;
-      flaws?: string;
-      backstory?: string;
-      alliesAndEnemies?: string;
-      organizations?: string;
-      treasure?: string;
-    },
+    lore: Lore = Lore.empty(),
   ) {
-    super(
-      id,
-      name,
-      'DnD_5e',
-      ownerUsername,
-      attributes,
-      hp,
-      level,
-      lore?.age,
-      lore?.height,
-      lore?.weight,
-      lore?.eyes,
-      lore?.skin,
-      lore?.hair,
-      lore?.backstory,
-    );
+    super(id, name, 'DnD_5e', ownerUsername, attributes, hp, level, lore);
     this.class = classStr;
     this.race = race;
     this.ac = ac;
@@ -152,17 +115,6 @@ export class DnD5eCharacter extends Character {
     this.spellPoints = spellPoints;
     this.spellsKnown = spellsKnown;
     this.coins = coins;
-
-    // D&D 5e Specific Lore initialization
-    if (lore) {
-      this.personalityTraits = lore.personalityTraits;
-      this.ideals = lore.ideals;
-      this.bonds = lore.bonds;
-      this.flaws = lore.flaws;
-      this.alliesAndEnemies = lore.alliesAndEnemies;
-      this.organizations = lore.organizations;
-      this.treasure = lore.treasure;
-    }
   }
 
   private normalizeSavingThrows(
@@ -245,20 +197,7 @@ export class DnD5eCharacter extends Character {
       deathSaves: this.deathSaves,
 
       // Lore & Identity
-      age: this.age,
-      height: this.height,
-      weight: this.weight,
-      eyes: this.eyes,
-      skin: this.skin,
-      hair: this.hair,
-      backstory: this.backstory,
-      personalityTraits: this.personalityTraits,
-      ideals: this.ideals,
-      bonds: this.bonds,
-      flaws: this.flaws,
-      alliesAndEnemies: this.alliesAndEnemies,
-      organizations: this.organizations,
-      treasure: this.treasure,
+      ...this.lore.toJSON(),
 
       spellcastingSystem: this.spellcastingSystem,
       spellcastingAbility: this.spellcastingAbility,

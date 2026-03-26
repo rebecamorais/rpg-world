@@ -1,4 +1,5 @@
 import { createCharacterContext } from '@backend/contexts/characters';
+import { createLoreContext } from '@backend/contexts/lore';
 import { createUserContext } from '@backend/contexts/users';
 
 import type { ContainerRegistry } from './container';
@@ -6,6 +7,7 @@ import type { ContainerRegistry } from './container';
 export class Contexts {
   private _character: ReturnType<typeof createCharacterContext> | null = null;
   private _user: ReturnType<typeof createUserContext> | null = null;
+  private _lore: ReturnType<typeof createLoreContext> | null = null;
 
   constructor(
     private container: {
@@ -29,5 +31,14 @@ export class Contexts {
       });
     }
     return this._user;
+  }
+
+  get lore() {
+    if (!this._lore) {
+      this._lore = createLoreContext({
+        dbClient: this.container.get('dbClient'),
+      });
+    }
+    return this._lore;
   }
 }

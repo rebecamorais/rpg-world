@@ -1,6 +1,8 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
+import { Lore } from '@backend/contexts/lore';
+
 import { Database, Json } from '@database-types';
 
 import { Character } from '../../domain/entity/Character';
@@ -14,7 +16,9 @@ import { CharacterRepo } from '../../domain/repository/character.repo';
 import { Attributes } from '../../domain/value-object/Attributes';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
 
-type DbCharacterRow = Database['public']['Tables']['characters']['Row'];
+type DbCharacterRow = Database['public']['Tables']['characters']['Row'] & {
+  character_lore?: unknown;
+};
 type DbCharacterInsert = Database['public']['Tables']['characters']['Insert'];
 
 export class SupabaseCharacterRepository implements CharacterRepo {
@@ -23,26 +27,26 @@ export class SupabaseCharacterRepository implements CharacterRepo {
   async findById(id: string): Promise<Character | null> {
     const { data, error } = await this.client
       .from('characters')
-      .select('*')
+      .select('*, character_lore(*)')
       .eq('id', id)
       .is('deleted_at', null)
       .single();
 
     if (error || !data) return null;
 
-    return this.mapToDomain(data);
+    return this.mapToDomain(data as unknown as DbCharacterRow);
   }
 
   async findByOwner(ownerUsername: string): Promise<Character[]> {
     const { data, error } = await this.client
       .from('characters')
-      .select('*')
+      .select('*, character_lore(*)')
       .eq('owner_id', ownerUsername)
       .is('deleted_at', null);
 
     if (error || !data) return [];
 
-    return data.map((row) => this.mapToDomain(row));
+    return data.map((row) => this.mapToDomain(row as unknown as DbCharacterRow));
   }
 
   async save(character: Character): Promise<void> {
@@ -57,6 +61,21 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       name: _name,
       ownerUsername: _ownerUsername,
       level: _level,
+      // Lore fields
+      age,
+      height,
+      weight,
+      eyes,
+      skin,
+      hair,
+      backstory,
+      personalityTraits,
+      ideals,
+      bonds,
+      flaws,
+      alliesAndEnemies,
+      organizations,
+      treasure,
       ...rest
     } = json;
 
@@ -73,10 +92,35 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       updated_at: new Date().toISOString(),
     };
 
-    const { error } = await this.client.from('characters').upsert(dbRow);
+    const { error: charError } = await this.client.from('characters').upsert(dbRow);
 
-    if (error) {
-      throw new Error(`Failed to save character: ${error.message}`);
+    if (charError) {
+      throw new Error(`Failed to save character: ${charError.message}`);
+    }
+
+    // Save Lore in separate table
+    const loreRow = {
+      character_id: character.id,
+      age: age as string,
+      height: height as string,
+      weight: weight as string,
+      eyes: eyes as string,
+      skin: skin as string,
+      hair: hair as string,
+      backstory: backstory as string,
+      personality_traits: personalityTraits as string,
+      ideals: ideals as string,
+      bonds: bonds as string,
+      flaws: flaws as string,
+      allies_and_enemies: alliesAndEnemies as string,
+      organizations: organizations as string,
+      treasure: treasure as string,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error: loreError } = await this.client.from('character_lore').upsert(loreRow);
+    if (loreError) {
+      throw new Error(`Failed to save character lore: ${loreError.message}`);
     }
   }
 
@@ -92,6 +136,12 @@ export class SupabaseCharacterRepository implements CharacterRepo {
   private mapToDomain(row: DbCharacterRow): Character {
     const hp = new HealthPoints(row.hp_current, row.hp_max);
     const attributes = new Attributes(row.attributes as Record<string, number>);
+
+    // Handle lore from joined data
+    const loreData = (
+      Array.isArray(row.character_lore) ? row.character_lore[0] : row.character_lore
+    ) as Record<string, unknown> | null;
+    const lore = loreData ? Lore.fromJSON(loreData) : Lore.empty();
 
     if (row.system === 'dnd_5e') {
       const dndData = (row.system_data as Record<string, unknown>) || {};
@@ -125,6 +175,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         (dndData.spellsKnown as string[]) || [],
         dndData.coins as { cp: number; sp: number; ep: number; gp: number; pp: number } | undefined,
         (dndData.hpTemp as number) || 0,
+        lore,
       );
     }
 

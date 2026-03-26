@@ -1,3 +1,5 @@
+import { Lore } from '@backend/contexts/lore';
+
 import { Attributes } from '../value-object/Attributes';
 import { HealthPoints } from '../value-object/HealthPoints';
 
@@ -9,13 +11,7 @@ export abstract class Character {
   public attributes: Attributes;
   public hp: HealthPoints;
   public level: number;
-  public age?: string;
-  public height?: string;
-  public weight?: string;
-  public eyes?: string;
-  public skin?: string;
-  public hair?: string;
-  public backstory?: string;
+  public lore: Lore;
 
   constructor(
     id: string,
@@ -25,13 +21,7 @@ export abstract class Character {
     attributes: Attributes,
     hp: HealthPoints,
     level: number = 1,
-    age?: string,
-    height?: string,
-    weight?: string,
-    eyes?: string,
-    skin?: string,
-    hair?: string,
-    backstory?: string,
+    lore: Lore = Lore.empty(),
   ) {
     this.id = id;
     this.name = name;
@@ -40,13 +30,7 @@ export abstract class Character {
     this.attributes = attributes;
     this.hp = hp;
     this.level = Math.max(1, level);
-    this.age = age;
-    this.height = height;
-    this.weight = weight;
-    this.eyes = eyes;
-    this.skin = skin;
-    this.hair = hair;
-    this.backstory = backstory;
+    this.lore = lore;
   }
 
   // Business rules all characters must implement

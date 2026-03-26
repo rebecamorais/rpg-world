@@ -28,6 +28,74 @@ export type Database = {
   };
   public: {
     Tables: {
+      character_lore: {
+        Row: {
+          age: string | null;
+          allies_and_enemies: string | null;
+          backstory: string | null;
+          bonds: string | null;
+          character_id: string;
+          created_at: string;
+          eyes: string | null;
+          flaws: string | null;
+          hair: string | null;
+          height: string | null;
+          ideals: string | null;
+          organizations: string | null;
+          personality_traits: string | null;
+          skin: string | null;
+          treasure: string | null;
+          updated_at: string;
+          weight: string | null;
+        };
+        Insert: {
+          age?: string | null;
+          allies_and_enemies?: string | null;
+          backstory?: string | null;
+          bonds?: string | null;
+          character_id: string;
+          created_at?: string;
+          eyes?: string | null;
+          flaws?: string | null;
+          hair?: string | null;
+          height?: string | null;
+          ideals?: string | null;
+          organizations?: string | null;
+          personality_traits?: string | null;
+          skin?: string | null;
+          treasure?: string | null;
+          updated_at?: string;
+          weight?: string | null;
+        };
+        Update: {
+          age?: string | null;
+          allies_and_enemies?: string | null;
+          backstory?: string | null;
+          bonds?: string | null;
+          character_id?: string;
+          created_at?: string;
+          eyes?: string | null;
+          flaws?: string | null;
+          hair?: string | null;
+          height?: string | null;
+          ideals?: string | null;
+          organizations?: string | null;
+          personality_traits?: string | null;
+          skin?: string | null;
+          treasure?: string | null;
+          updated_at?: string;
+          weight?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'character_lore_character_id_fkey';
+            columns: ['character_id'];
+            isOneToOne: true;
+            referencedRelation: 'characters';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       characters: {
         Row: {
           attributes: Json;
