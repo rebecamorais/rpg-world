@@ -7,22 +7,40 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 import { useProfile } from '@frontend/hooks/useProfile';
+import { cn } from '@frontend/lib/utils';
 
 interface AvatarUploadProps {
   currentUrl?: string;
   onUploadSuccess: (url: string) => void;
   onUploadError?: (err: unknown) => void;
+  uploadFn: (file: File) => Promise<{ url: string }>;
+  isUploading?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export default function AvatarUpload({
   currentUrl,
   onUploadSuccess,
   onUploadError,
+  uploadFn,
+  isUploading = false,
+  size = 'md',
 }: AvatarUploadProps) {
   const t = useTranslations('avatarUpload');
-  const { uploadAvatar, isUploadingAvatar } = useProfile();
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
+
+  const sizeClasses = {
+    sm: 'h-16 w-16',
+    md: 'h-24 w-24',
+    lg: 'h-32 w-32',
+  };
+
+  const pixelSize = {
+    sm: 64,
+    md: 96,
+    lg: 128,
+  };
 
   const displayUrl = preview ?? currentUrl;
 
@@ -35,7 +53,7 @@ export default function AvatarUpload({
     setPreview(objectUrl);
 
     try {
-      const { url } = await uploadAvatar(file);
+      const { url } = await uploadFn(file);
       onUploadSuccess(url);
       setPreview(null);
       URL.revokeObjectURL(objectUrl);
@@ -53,29 +71,39 @@ export default function AvatarUpload({
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
-        disabled={isUploadingAvatar}
+        disabled={isUploading}
         aria-label={t('button')}
-        className="group relative h-24 w-24 overflow-hidden rounded-full border-2 border-white/10 bg-white/5 transition-all hover:border-blue-500/50 disabled:opacity-60"
+        className={cn(
+          'group relative overflow-hidden rounded-full border-2 border-white/10 bg-white/5 transition-all hover:border-blue-500/50 disabled:opacity-60',
+          sizeClasses[size],
+        )}
       >
         {displayUrl ? (
           <Image
             src={displayUrl}
             alt={t('currentAlt')}
-            width={96}
-            height={96}
+            width={pixelSize[size]}
+            height={pixelSize[size]}
             className="h-full w-full object-cover"
             unoptimized={displayUrl.includes('localhost') || displayUrl.includes('127.0.0.1')}
           />
         ) : (
-          <span className="flex h-full w-full items-center justify-center text-4xl">🧙</span>
+          <span
+            className={cn(
+              'flex h-full w-full items-center justify-center',
+              size === 'sm' ? 'text-2xl' : size === 'md' ? 'text-4xl' : 'text-6xl',
+            )}
+          >
+            🧙
+          </span>
         )}
 
         {/* Upload overlay */}
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
-          {isUploadingAvatar ? (
-            <span className="text-sm font-medium text-white">{t('loading')}</span>
+          {isUploading ? (
+            <span className="text-xs font-medium text-white">{t('loading')}</span>
           ) : (
-            <span className="text-sm font-medium text-white">{t('button')}</span>
+            <span className="text-xs font-medium text-white">{t('button')}</span>
           )}
         </div>
       </button>

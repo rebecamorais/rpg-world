@@ -63,6 +63,7 @@ export default function StatusView() {
       )}
 
       <CharacterHeader
+        id={character.id}
         name={character.name}
         classNameStr={character.class}
         level={character.level}
@@ -72,6 +73,7 @@ export default function StatusView() {
         alignment={character.alignment}
         xp={character.xp}
         avatarUrl={character.avatarUrl}
+        accentColor={character.accentColor}
         onBasicInfoChange={handleBasicInfoChange}
       />
 

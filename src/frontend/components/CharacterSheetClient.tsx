@@ -133,6 +133,7 @@ export default function CharacterSheetClient() {
         {activeTab === CharacterTab.STATUS && (
           <>
             <CharacterHeader
+              id={character.id}
               name={character.name}
               classNameStr={character.class}
               level={character.level}
@@ -142,6 +143,7 @@ export default function CharacterSheetClient() {
               alignment={character.alignment}
               xp={character.xp}
               avatarUrl={character.avatarUrl}
+              accentColor={character.accentColor}
               onBasicInfoChange={handleBasicInfoChange}
             />
 

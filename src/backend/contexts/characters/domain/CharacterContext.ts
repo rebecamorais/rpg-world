@@ -17,4 +17,5 @@ export interface CharacterContext {
     updates: CharacterUpdates;
   }): Promise<DnD5eCharacter>;
   delete(id: string, ownerUsername: string): Promise<boolean>;
+  uploadAvatar(id: string, userId: string, file: Blob): Promise<string>;
 }

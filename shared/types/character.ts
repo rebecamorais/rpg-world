@@ -16,6 +16,7 @@ export interface CharacterBase {
   skin?: string;
   hair?: string;
   backstory?: string;
+  accentColor?: string;
 }
 
 export interface CharacterSummary {

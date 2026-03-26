@@ -53,7 +53,8 @@ export default function ProfileForm() {
 
   type ProfileFormValues = z.infer<typeof profileSchema>;
 
-  const { profile, isLoading, updateProfile, isUpdating } = useProfile();
+  const { profile, isLoading, updateProfile, isUpdating, uploadAvatar, isUploadingAvatar } =
+    useProfile();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -145,6 +146,8 @@ export default function ProfileForm() {
                 currentUrl={avatarUrl}
                 onUploadSuccess={handleAvatarUploadSuccess}
                 onUploadError={handleAvatarUploadError}
+                uploadFn={uploadAvatar}
+                isUploading={isUploadingAvatar}
               />
             </div>
 

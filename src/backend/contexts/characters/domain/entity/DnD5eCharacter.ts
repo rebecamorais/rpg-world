@@ -90,8 +90,9 @@ export class DnD5eCharacter extends Character {
     coins?: { cp: number; sp: number; ep: number; gp: number; pp: number },
     hpTemp: number = 0,
     lore: Lore = Lore.empty(),
+    accentColor?: string,
   ) {
-    super(id, name, 'DnD_5e', ownerUsername, attributes, hp, level, lore);
+    super(id, name, 'DnD_5e', ownerUsername, attributes, hp, level, lore, accentColor);
     this.class = classStr;
     this.race = race;
     this.ac = ac;
@@ -176,6 +177,7 @@ export class DnD5eCharacter extends Character {
       system: this.system,
       ownerUsername: this.ownerUsername,
       level: this.level,
+      accentColor: this.accentColor,
       attributes: this.attributes.getAll(),
       hpCurrent: this.hp.current,
       hpMax: this.hp.max,

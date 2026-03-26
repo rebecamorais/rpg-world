@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import { GetCharacterUseCase } from './application';
 import {
   CreateCharacterInput,
@@ -11,6 +12,7 @@ import {
   CharacterUpdates,
   UpdateCharacterUseCase,
 } from './application/update-character/update-character.use-case';
+import { UploadCharacterAvatarUseCase } from './application/use-cases/UploadCharacterAvatarUseCase';
 import { CharacterContext } from './domain/CharacterContext';
 import { SupabaseCharacterRepository } from './infrastructure/repositories/supabase-character.repository';
 
@@ -30,5 +32,10 @@ export const createCharacterContext = (dbClient: SupabaseClient): CharacterConte
     create: createCharacterUseCase.execute.bind(createCharacterUseCase),
     update: updateCharacterUseCase.execute.bind(updateCharacterUseCase),
     delete: deleteCharacterUseCase.execute.bind(deleteCharacterUseCase),
+    uploadAvatar: async (id: string, userId: string, file: Blob) => {
+      const storageRepository = new SupabaseStorageRepository(dbClient);
+      const useCase = new UploadCharacterAvatarUseCase(storageRepository, repository);
+      return useCase.execute(id, userId, file);
+    },
   };
 };

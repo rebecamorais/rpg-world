@@ -37,4 +37,7 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
     await characterContext.delete(id, ownerUsername);
     return { deleted: true };
   },
+  uploadAvatar: async (id: string, userId: string, file: Blob) => {
+    return characterContext.uploadAvatar(id, userId, file);
+  },
 });

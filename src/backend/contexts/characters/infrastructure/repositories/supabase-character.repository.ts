@@ -76,6 +76,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       alliesAndEnemies,
       organizations,
       treasure,
+      accentColor,
       ...rest
     } = json;
 
@@ -88,7 +89,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       hp_current: hpCurrent as number,
       hp_max: hpMax as number,
       attributes: attributes as Json,
-      system_data: { ...rest, hpTemp: hpTemp ?? 0 } as unknown as Json,
+      system_data: { ...rest, hpTemp: hpTemp ?? 0, accentColor } as unknown as Json,
       updated_at: new Date().toISOString(),
     };
 
@@ -176,6 +177,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         dndData.coins as { cp: number; sp: number; ep: number; gp: number; pp: number } | undefined,
         (dndData.hpTemp as number) || 0,
         lore,
+        dndData.accentColor as string | undefined,
       );
     }
 
