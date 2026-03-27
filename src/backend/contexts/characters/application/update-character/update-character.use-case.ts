@@ -1,3 +1,5 @@
+import { applyUpdates } from '@backend/shared/infrastructure/helpers/update-fields';
+
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import {
   AttributeKey,
@@ -11,6 +13,7 @@ import { HealthPoints } from '../../domain/value-object/HealthPoints';
 export interface CharacterUpdates {
   name?: string;
   avatarUrl?: string;
+  accentColor?: string;
   class?: string;
   race?: string;
   level?: number;
@@ -23,7 +26,6 @@ export interface CharacterUpdates {
   attributes?: Record<AttributeKey, number>;
   skills?: Partial<Record<SkillKey, CharacterSkill>>;
   savingThrowProficiencies?: Record<AttributeKey, boolean>;
-  spellsKnown?: string[];
   passivePerception?: number;
   subclass?: string;
   background?: string;
@@ -66,61 +68,44 @@ export class UpdateCharacterUseCase {
       throw new CharacterError(CharacterErrorCodes.UPDATE_SYSTEM_NOT_SUPPORTED);
     }
 
-    const u = updates;
+    const {
+      level,
+      hpCurrent,
+      hpMax,
+      attributes,
+      skills,
+      savingThrowProficiencies,
+      ...simpleUpdates
+    } = updates;
 
-    if (u.name !== undefined) character.name = u.name;
-    if (u.avatarUrl !== undefined) character.avatarUrl = u.avatarUrl;
-    if (u.class !== undefined) character.class = u.class;
-    if (u.race !== undefined) character.race = u.race;
-    if (u.level !== undefined) character.level = Math.max(1, u.level);
-    if (u.ac !== undefined) character.ac = u.ac;
-    if (u.speed !== undefined) character.speed = u.speed;
-    if (u.initiative !== undefined) character.initiative = u.initiative;
-    if (u.passivePerception !== undefined) character.passivePerception = u.passivePerception;
-    if (u.hpTemp !== undefined) character.hpTemp = u.hpTemp;
+    // Aplica atualizações diretas para campos simples
+    applyUpdates(character, simpleUpdates);
 
-    if (u.hpCurrent !== undefined || u.hpMax !== undefined) {
-      const currentHp = u.hpCurrent !== undefined ? u.hpCurrent : character.hp.current;
-      const maxHp = u.hpMax !== undefined ? u.hpMax : character.hp.max;
+    // Lógica customizada para campos com regras de negócio
+    if (level !== undefined) character.level = Math.max(1, level);
+
+    if (hpCurrent !== undefined || hpMax !== undefined) {
+      const currentHp = hpCurrent !== undefined ? hpCurrent : character.hp.current;
+      const maxHp = hpMax !== undefined ? hpMax : character.hp.max;
       character.hp = new HealthPoints(currentHp, maxHp);
     }
 
-    if (u.attributes) {
-      for (const [key, value] of Object.entries(u.attributes)) {
+    if (attributes) {
+      for (const [key, value] of Object.entries(attributes)) {
         character.attributes.set(key as AttributeKey, value as number);
       }
     }
 
-    if (u.skills) {
-      character.skills = { ...character.skills, ...u.skills };
+    if (skills) {
+      character.skills = { ...character.skills, ...skills };
     }
 
-    if (u.savingThrowProficiencies !== undefined) {
-      character.savingThrowProficiencies = u.savingThrowProficiencies as Record<
+    if (savingThrowProficiencies !== undefined) {
+      character.savingThrowProficiencies = savingThrowProficiencies as Record<
         AttributeKey,
         boolean
       >;
     }
-
-    if (u.spellsKnown !== undefined) {
-      character.spellsKnown = u.spellsKnown;
-    }
-
-    // Novas propriedades
-    if (u.subclass !== undefined) character.subclass = u.subclass;
-    if (u.background !== undefined) character.background = u.background;
-    if (u.alignment !== undefined) character.alignment = u.alignment;
-    if (u.xp !== undefined) character.xp = u.xp;
-    if (u.hitDice !== undefined) character.hitDice = u.hitDice;
-    if (u.deathSaves !== undefined) character.deathSaves = u.deathSaves;
-    if (u.spellcastingSystem !== undefined) character.spellcastingSystem = u.spellcastingSystem;
-    if (u.spellcastingAbility !== undefined)
-      character.spellcastingAbility = u.spellcastingAbility as AttributeKey;
-    if (u.spellSaveDc !== undefined) character.spellSaveDc = u.spellSaveDc;
-    if (u.spellAttackBonus !== undefined) character.spellAttackBonus = u.spellAttackBonus;
-    if (u.spellSlots !== undefined) character.spellSlots = u.spellSlots;
-    if (u.spellPoints !== undefined) character.spellPoints = u.spellPoints;
-    if (u.coins !== undefined) character.coins = u.coins;
 
     await this.repository.save(character);
 

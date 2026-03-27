@@ -148,6 +148,7 @@ export default function CharacterSheetClient() {
               alignment={character.alignment}
               xp={character.xp}
               avatarUrl={character.avatarUrl}
+              accentColor={character.accentColor}
               onBasicInfoChange={handleBasicInfoChange}
             />
 

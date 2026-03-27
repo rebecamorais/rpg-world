@@ -32,14 +32,14 @@ describe('UpdateCharacterUseCase (Integration)', () => {
       updates: {
         name: 'Test Updated',
         hpCurrent: 5,
-        spellsKnown: ['fireball'],
+        accentColor: '#ff4444',
       },
     });
 
     const updated = (await repo.findById('char-1')) as DnD5eCharacter;
     expect(updated.name).toBe('Test Updated');
     expect(updated.hp.status.current).toBe(5);
-    expect(updated.spellsKnown).toContain('fireball');
+    expect(updated.accentColor).toBe('#ff4444');
   });
 
   it('não deve permitir alteração se não for o dono', async () => {

@@ -62,7 +62,9 @@ export default function CharacterList() {
               href={`/system/${c.system}/character/${c.id}`}
               className="hover:bg-muted -mx-2 block rounded px-2 py-3"
             >
-              <span className="text-foreground font-medium">{c.name}</span>
+              <span className="text-foreground font-medium" style={{ color: c.accentColor }}>
+                {c.name}
+              </span>
               <span className="text-muted-foreground ml-2 text-sm">
                 {t('level', { level: c.level })}
                 {c.class ? ` · ${c.class}` : ''}

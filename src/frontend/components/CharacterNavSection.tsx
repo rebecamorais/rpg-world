@@ -35,9 +35,15 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
   ];
 
   return (
-    <section className="animate-in fade-in slide-in-from-left-2 flex flex-col gap-4 duration-300">
+    <section
+      className="animate-in fade-in slide-in-from-left-2 flex flex-col gap-4 duration-300"
+      style={{ '--character-color': character.accentColor } as React.CSSProperties}
+    >
       <div className="flex flex-col gap-2 px-3">
-        <p className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
+        <p
+          className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase"
+          style={{ color: character.accentColor || undefined }}
+        >
           {characterName}
         </p>
         <div className="flex items-center gap-3">

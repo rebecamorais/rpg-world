@@ -25,4 +25,5 @@ export interface CharacterSummary {
   level: number;
   class?: string;
   system: GameSystem;
+  accentColor?: string;
 }

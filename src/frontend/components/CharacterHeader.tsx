@@ -37,6 +37,7 @@ interface Props {
   alignment?: string;
   xp?: number;
   avatarUrl?: string;
+  accentColor?: string;
   onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
 }
 
@@ -64,6 +65,7 @@ function CharacterHeader({
   alignment,
   xp = 0,
   avatarUrl,
+  accentColor,
   onBasicInfoChange,
 }: Props) {
   const t = useTranslations('characterHeader');
@@ -130,12 +132,8 @@ function CharacterHeader({
                 <Label className="text-sm font-medium">Cor de Destaque</Label>
                 <div className="grid grid-cols-5 gap-3">
                   {PREDEFINED_COLORS.map((color) => {
-                    const currentColor =
-                      getComputedStyle(document.documentElement)
-                        .getPropertyValue('--character-color')
-                        .trim() || '';
                     const isSelected =
-                      color.value === currentColor || (!color.value && !currentColor);
+                      color.value === accentColor || (!color.value && !accentColor);
 
                     return (
                       <button
