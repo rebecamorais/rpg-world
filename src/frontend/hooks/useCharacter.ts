@@ -42,9 +42,10 @@ export function useCharacter(id: string) {
         updates: character,
       });
     },
-    onSuccess: () => {
+    onSuccess: (_data, character) => {
+      // Optimistically update the cache with the data we just saved
+      queryClient.setQueryData(['character', id], character);
       queryClient.invalidateQueries({ queryKey: ['character', id] });
-      // Removed success toast from here to coordinate in the context
     },
     onError: (err: Error) => {
       toast.error(err.message);

@@ -36,7 +36,9 @@ export function useCharacterLore(characterId: string) {
     mutationFn: async (updates: LoreData) => {
       await rpgWorldApi.put(`/api/characters/${characterId}/lore`, updates);
     },
-    onSuccess: () => {
+    onSuccess: (_data, updates) => {
+      // Optimistically update the cache with the data we just saved
+      queryClient.setQueryData(['character-lore', characterId], updates);
       queryClient.invalidateQueries({ queryKey: ['character-lore', characterId] });
     },
     onError: (err: Error) => {

@@ -91,7 +91,7 @@ export default function CharacterSheetClient() {
     );
   }
 
-  if (isLoading) {
+  if (isLoading && !character) {
     return (
       <div className="flex flex-1 items-center justify-center p-4">
         <p className="text-muted-foreground">{tCommon('loading')}</p>
