@@ -12,6 +12,7 @@ import { Card, CardContent } from '@frontend/components/ui/card';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -106,6 +107,9 @@ export default function CharacterHeader({
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Personalizar Personagem</DialogTitle>
+              <DialogDescription className="sr-only">
+                {t('customizeDescription') || 'Altere o avatar e a cor de destaque do personagem'}
+              </DialogDescription>
             </DialogHeader>
             <div className="flex flex-col gap-6 py-4">
               <div className="flex flex-col items-center gap-4">

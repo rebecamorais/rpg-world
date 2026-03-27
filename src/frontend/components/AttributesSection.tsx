@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/u
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -74,6 +75,9 @@ export default function AttributesSection({ attributes, onAttributeChange }: Pro
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>{t('bulkEditTitle') || 'Editar Atributos'}</DialogTitle>
+              <DialogDescription className="sr-only">
+                {t('bulkEditDescription') || 'Alterar valores de todos os atributos'}
+              </DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4 py-4">
               {ATTRIBUTE_KEYS.map((key) => (

@@ -12,6 +12,7 @@ export abstract class Character {
   public hp: HealthPoints;
   public level: number;
   public lore: Lore;
+  public avatarUrl?: string;
 
   constructor(
     id: string,
@@ -23,6 +24,7 @@ export abstract class Character {
     level: number = 1,
     lore: Lore = Lore.empty(),
     public accentColor?: string,
+    avatarUrl?: string,
   ) {
     this.id = id;
     this.name = name;
@@ -33,6 +35,7 @@ export abstract class Character {
     this.level = Math.max(1, level);
     this.lore = lore;
     this.accentColor = accentColor;
+    this.avatarUrl = avatarUrl;
   }
 
   // Business rules all characters must implement

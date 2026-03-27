@@ -10,6 +10,7 @@ import { HealthPoints } from '../../domain/value-object/HealthPoints';
 
 export interface CharacterUpdates {
   name?: string;
+  avatarUrl?: string;
   class?: string;
   race?: string;
   level?: number;
@@ -68,6 +69,7 @@ export class UpdateCharacterUseCase {
     const u = updates;
 
     if (u.name !== undefined) character.name = u.name;
+    if (u.avatarUrl !== undefined) character.avatarUrl = u.avatarUrl;
     if (u.class !== undefined) character.class = u.class;
     if (u.race !== undefined) character.race = u.race;
     if (u.level !== undefined) character.level = Math.max(1, u.level);

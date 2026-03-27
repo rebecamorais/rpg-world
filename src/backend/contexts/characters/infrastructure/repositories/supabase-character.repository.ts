@@ -16,10 +16,14 @@ import { CharacterRepo } from '../../domain/repository/character.repo';
 import { Attributes } from '../../domain/value-object/Attributes';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
 
+// NOTE: avatar_url extensions can be removed after running `npm run types:update`
 type DbCharacterRow = Database['public']['Tables']['characters']['Row'] & {
   character_lore?: unknown;
+  avatar_url?: string | null;
 };
-type DbCharacterInsert = Database['public']['Tables']['characters']['Insert'];
+type DbCharacterInsert = Database['public']['Tables']['characters']['Insert'] & {
+  avatar_url?: string | null;
+};
 
 export class SupabaseCharacterRepository implements CharacterRepo {
   constructor(private readonly client: SupabaseClient<Database>) {}
@@ -77,6 +81,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       organizations,
       treasure,
       accentColor,
+      avatarUrl: _avatarUrl,
       ...rest
     } = json;
 
@@ -89,6 +94,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       hp_current: hpCurrent as number,
       hp_max: hpMax as number,
       attributes: attributes as Json,
+      avatar_url: character.avatarUrl ?? null,
       system_data: { ...rest, hpTemp: hpTemp ?? 0, accentColor } as unknown as Json,
       updated_at: new Date().toISOString(),
     };
@@ -178,6 +184,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         (dndData.hpTemp as number) || 0,
         lore,
         dndData.accentColor as string | undefined,
+        row.avatar_url ?? undefined,
       );
     }
 

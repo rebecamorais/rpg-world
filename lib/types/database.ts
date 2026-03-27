@@ -99,6 +99,7 @@ export type Database = {
       characters: {
         Row: {
           attributes: Json;
+          avatar_url: string | null;
           created_at: string;
           deleted_at: string | null;
           hp_current: number;
@@ -113,6 +114,7 @@ export type Database = {
         };
         Insert: {
           attributes?: Json;
+          avatar_url?: string | null;
           created_at?: string;
           deleted_at?: string | null;
           hp_current?: number;
@@ -127,6 +129,7 @@ export type Database = {
         };
         Update: {
           attributes?: Json;
+          avatar_url?: string | null;
           created_at?: string;
           deleted_at?: string | null;
           hp_current?: number;

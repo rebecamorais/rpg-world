@@ -91,8 +91,9 @@ export class DnD5eCharacter extends Character {
     hpTemp: number = 0,
     lore: Lore = Lore.empty(),
     accentColor?: string,
+    avatarUrl?: string,
   ) {
-    super(id, name, 'DnD_5e', ownerUsername, attributes, hp, level, lore, accentColor);
+    super(id, name, 'DnD_5e', ownerUsername, attributes, hp, level, lore, accentColor, avatarUrl);
     this.class = classStr;
     this.race = race;
     this.ac = ac;
@@ -177,6 +178,7 @@ export class DnD5eCharacter extends Character {
       system: this.system,
       ownerUsername: this.ownerUsername,
       level: this.level,
+      avatarUrl: this.avatarUrl,
       accentColor: this.accentColor,
       attributes: this.attributes.getAll(),
       hpCurrent: this.hp.current,

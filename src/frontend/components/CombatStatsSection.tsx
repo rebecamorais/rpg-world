@@ -20,6 +20,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -157,6 +158,9 @@ const CombatHeader = ({
               <DialogTitle className="text-zinc-100">
                 {tm('titleConfig') || 'Combat Configuration'}
               </DialogTitle>
+              <DialogDescription className="sr-only">
+                {tm('configDescription') || 'Configurar pontos de vida e sistema de magia'}
+              </DialogDescription>
             </div>
           </DialogHeader>
 
