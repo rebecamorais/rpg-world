@@ -20,27 +20,15 @@ export function useCharacterEditor({ fetchedCharacter, queryError }: UseCharacte
 
   // Sync fetched data to local state buffer for optimistic UI edits
   useEffect(() => {
-    let active = true;
-    Promise.resolve().then(() => {
-      if (active && fetchedCharacter && !hasUnsavedChanges) {
-        setCharacter(fetchedCharacter);
-      }
-    });
-    return () => {
-      active = false;
-    };
+    if (fetchedCharacter && !hasUnsavedChanges) {
+      Promise.resolve().then(() => setCharacter(fetchedCharacter));
+    }
   }, [fetchedCharacter, hasUnsavedChanges]);
 
   useEffect(() => {
-    let active = true;
-    Promise.resolve().then(() => {
-      if (active && queryError) {
-        setError(queryError.message);
-      }
-    });
-    return () => {
-      active = false;
-    };
+    if (queryError) {
+      Promise.resolve().then(() => setError(queryError.message));
+    }
   }, [queryError]);
 
   const markDirty = useCallback(() => {

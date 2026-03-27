@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import {
   Dices,
   Footprints,
@@ -388,7 +390,7 @@ const BadgeRow = ({ character, onBasicInfoChange, onHitDiceChange }: BadgeRowPro
   );
 };
 
-export default function CombatStatsSection({
+function CombatStatsSection({
   character,
   onBasicInfoChange,
   onSpellcastingSystemChange,
@@ -422,3 +424,5 @@ export default function CombatStatsSection({
     </div>
   );
 }
+
+export default React.memo(CombatStatsSection);

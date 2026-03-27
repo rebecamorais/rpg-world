@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useTranslations } from 'next-intl';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
@@ -17,7 +19,7 @@ interface Props {
   onSkillChange: (key: SkillKey, skillData: CharacterSkill) => void;
 }
 
-export default function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
+function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
   const t = useTranslations('skills');
   const tAttr = useTranslations('attributes');
 
@@ -127,3 +129,5 @@ export default function SkillsSection({ attributes, level, skills, onSkillChange
     </Card>
   );
 }
+
+export default React.memo(SkillsSection);

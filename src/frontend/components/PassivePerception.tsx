@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { Eye } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -15,7 +17,7 @@ interface Props {
   perceptionSkillData?: CharacterSkill;
 }
 
-export default function PassivePerception({ wisValue, level, perceptionSkillData }: Props) {
+function PassivePerception({ wisValue, level, perceptionSkillData }: Props) {
   const t = useTranslations('characters');
   const isProficient = perceptionSkillData?.isProficient ?? false;
   const expertise = perceptionSkillData?.expertise ?? false;
@@ -43,3 +45,5 @@ export default function PassivePerception({ wisValue, level, perceptionSkillData
     </Tooltip>
   );
 }
+
+export default React.memo(PassivePerception);

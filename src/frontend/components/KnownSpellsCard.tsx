@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { BookOpen, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -10,7 +12,7 @@ interface KnownSpellsCardProps {
   onForgetSpell: (spellIndex: string) => void;
 }
 
-export default function KnownSpellsCard({ spellsKnown, onForgetSpell }: KnownSpellsCardProps) {
+function KnownSpellsCard({ spellsKnown, onForgetSpell }: KnownSpellsCardProps) {
   const t = useTranslations('characters');
 
   if (!spellsKnown || spellsKnown.length === 0) return null;
@@ -45,3 +47,5 @@ export default function KnownSpellsCard({ spellsKnown, onForgetSpell }: KnownSpe
     </Card>
   );
 }
+
+export default React.memo(KnownSpellsCard);

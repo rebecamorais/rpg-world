@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useTranslations } from 'next-intl';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
@@ -18,12 +20,7 @@ interface Props {
   onSavingThrowChange: (key: AttributeKey, isProficient: boolean) => void;
 }
 
-export default function SavingThrowsSection({
-  attributes,
-  level,
-  savingThrows,
-  onSavingThrowChange,
-}: Props) {
+function SavingThrowsSection({ attributes, level, savingThrows, onSavingThrowChange }: Props) {
   const t = useTranslations('attributes');
   const tSection = useTranslations('savingThrows');
 
@@ -99,3 +96,5 @@ export default function SavingThrowsSection({
     </Card>
   );
 }
+
+export default React.memo(SavingThrowsSection);

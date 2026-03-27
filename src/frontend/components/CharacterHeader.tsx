@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Palette, Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -53,7 +53,7 @@ const PREDEFINED_COLORS = [
   { name: 'Slate', value: '#64748b' }, // neutral
 ];
 
-export default function CharacterHeader({
+function CharacterHeader({
   id,
   name,
   classNameStr,
@@ -351,3 +351,5 @@ export default function CharacterHeader({
     </Card>
   );
 }
+
+export default React.memo(CharacterHeader);

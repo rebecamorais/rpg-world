@@ -29,7 +29,7 @@ interface Props {
   onAttributeChange: (key: AttributeKey, value: number) => void;
 }
 
-export default function AttributesSection({ attributes, onAttributeChange }: Props) {
+function AttributesSection({ attributes, onAttributeChange }: Props) {
   const t = useTranslations('attributes');
   const [isOpen, setIsOpen] = React.useState(false);
   const [tempValues, setTempValues] = React.useState<Record<AttributeKey, number>>(attributes);
@@ -116,3 +116,5 @@ export default function AttributesSection({ attributes, onAttributeChange }: Pro
     </Card>
   );
 }
+
+export default React.memo(AttributesSection);
