@@ -63,9 +63,9 @@ export default function AttributeCard({ label, value, onChange }: Props) {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="group border-border bg-card hover:border-primary relative flex w-24 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 p-4 shadow-sm transition-colors"
+          className="group border-border bg-card relative flex w-24 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 p-4 shadow-sm transition-colors hover:border-[var(--character-color)]"
         >
-          <div className="bg-primary/50 group-hover:bg-primary absolute top-0 h-1 w-full transition-colors" />
+          <div className="absolute top-0 h-1 w-full bg-[var(--character-color)] opacity-50 transition-colors group-hover:opacity-100" />
           <span className="text-muted-foreground mb-1 text-xs font-bold tracking-wider uppercase">
             {label}
           </span>
@@ -109,7 +109,7 @@ export default function AttributeCard({ label, value, onChange }: Props) {
               type="number"
               min={MIN_ATTR}
               max={MAX_ATTR}
-              value={tempValue}
+              value={tempValue ?? 10}
               onChange={(e) => setTempValue(e.target.value === '' ? 0 : Number(e.target.value))}
               onKeyDown={handleKeyDown}
               autoFocus

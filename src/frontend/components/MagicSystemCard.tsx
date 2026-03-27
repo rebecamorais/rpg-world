@@ -44,10 +44,7 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
 
     const systemSelector = (
       <Select value={system} onValueChange={(val) => onSystemChange(val as MagicSystem)}>
-        <SelectTrigger
-          className="h-5 w-fit border-none bg-transparent p-0 text-sm font-bold tracking-[0.2em] uppercase shadow-none focus:ring-0"
-          style={{ color: 'color-mix(in srgb, var(--character-color) 80%, transparent)' }}
-        >
+        <SelectTrigger className="h-5 w-fit border-none bg-transparent p-0 text-sm font-bold tracking-[0.2em] text-zinc-400 uppercase shadow-none focus:ring-0">
           <SelectValue placeholder="Magic" />
         </SelectTrigger>
         <SelectContent>
@@ -76,7 +73,7 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
           {...props}
         >
           <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
-            <Droplet className="h-3.5 w-3.5" style={{ color: 'var(--character-color)' }} />
+            <Droplet className="h-3.5 w-3.5 text-blue-500" />
             {systemSelector}
           </div>
 
@@ -102,8 +99,8 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
                 className="absolute top-0 left-0 h-full transition-all duration-500 ease-in-out"
                 style={{
                   width: `${percentage}%`,
-                  background: `linear-gradient(to right, color-mix(in srgb, var(--character-color) 80%, black), var(--character-color))`,
-                  boxShadow: '0 0 10px color-mix(in srgb, var(--character-color) 30%, transparent)',
+                  background: `linear-gradient(to right, #1e3a8a, #3b82f6)`,
+                  boxShadow: '0 0 10px rgba(59, 130, 246, 0.3)',
                 }}
               >
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1),transparent)]" />
@@ -140,15 +137,15 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
         >
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
-              <Wand2 className="h-3.5 w-3.5" style={{ color: 'var(--character-color)' }} />
+              <Wand2 className="h-3.5 w-3.5 text-blue-400" />
               {systemSelector}
             </div>
 
             <div
               className="rounded-full px-2 py-0.5 text-sm font-bold tracking-wider uppercase"
               style={{
-                color: 'var(--character-color)',
-                backgroundColor: 'color-mix(in srgb, var(--character-color) 10%, transparent)',
+                color: '#60a5fa',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
               }}
             >
               {totalAvailable} / {totalMax} Slots
@@ -186,13 +183,11 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
                           style={
                             i < available
                               ? {
-                                  backgroundColor: 'var(--character-color)',
-                                  boxShadow:
-                                    '0 0 8px color-mix(in srgb, var(--character-color) 60%, transparent)',
+                                  backgroundColor: '#3b82f6',
+                                  boxShadow: '0 0 8px rgba(59, 130, 246, 0.6)',
                                 }
                               : {
-                                  border:
-                                    '1px solid color-mix(in srgb, var(--character-color) 40%, transparent)',
+                                  border: '1px solid rgba(59, 130, 246, 0.4)',
                                 }
                           }
                         />
@@ -201,8 +196,7 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
                       <div
                         className="h-2 w-2 rounded-[1px]"
                         style={{
-                          border:
-                            '1px solid color-mix(in srgb, var(--character-color) 10%, transparent)',
+                          border: '1px solid rgba(59, 130, 246, 0.1)',
                         }}
                       />
                     )}

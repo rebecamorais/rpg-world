@@ -56,7 +56,7 @@ function SavingThrowsSection({ attributes, level, savingThrows, onSavingThrowCha
                 className={cn(
                   'h-3 w-3 flex-shrink-0 rounded-full border transition-all',
                   isProficient
-                    ? 'border-primary bg-primary'
+                    ? 'border-[var(--character-color)] bg-[var(--character-color)]'
                     : 'border-muted-foreground group-hover:border-foreground bg-transparent',
                 )}
               />

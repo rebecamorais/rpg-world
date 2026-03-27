@@ -183,6 +183,7 @@ function CharacterHeader({
                   onBlur={() => setIsEditingName(false)}
                   onKeyDown={(e) => e.key === 'Enter' && setIsEditingName(false)}
                   className="h-10 text-lg font-bold"
+                  useThemeColor={true}
                 />
               ) : (
                 <div className="group flex items-center gap-2">

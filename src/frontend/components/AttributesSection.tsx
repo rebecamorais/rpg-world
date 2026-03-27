@@ -88,7 +88,7 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
                   <Input
                     id={key}
                     type="number"
-                    value={tempValues[key]}
+                    value={tempValues[key] ?? 10}
                     onChange={(e) =>
                       setTempValues((prev) => ({
                         ...prev,

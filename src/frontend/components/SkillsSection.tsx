@@ -83,7 +83,7 @@ function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
           className={cn(
             'flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full border transition-all',
             skillData.isProficient
-              ? 'border-primary bg-primary'
+              ? 'border-[var(--character-color)] bg-[var(--character-color)]'
               : 'border-muted-foreground group-hover:border-foreground bg-transparent',
           )}
         >
