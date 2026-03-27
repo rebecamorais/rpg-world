@@ -95,11 +95,6 @@ export default function LoginForm() {
 
   return (
     <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
-      <div className="border-b border-white/5 bg-blue-500/10 p-3 italic">
-        <p className="text-center text-xs leading-relaxed text-blue-300">
-          {t('manualRegistrationNotice')}
-        </p>
-      </div>
       <CardHeader>
         <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
           {t('title')}
