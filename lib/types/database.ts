@@ -110,6 +110,7 @@ export type Database = {
           owner_id: string;
           system: Database['public']['Enums']['rpg_system'];
           system_data: Json;
+          theme_color: string | null;
           updated_at: string;
         };
         Insert: {
@@ -125,6 +126,7 @@ export type Database = {
           owner_id: string;
           system?: Database['public']['Enums']['rpg_system'];
           system_data?: Json;
+          theme_color?: string | null;
           updated_at?: string;
         };
         Update: {
@@ -140,6 +142,7 @@ export type Database = {
           owner_id?: string;
           system?: Database['public']['Enums']['rpg_system'];
           system_data?: Json;
+          theme_color?: string | null;
           updated_at?: string;
         };
         Relationships: [

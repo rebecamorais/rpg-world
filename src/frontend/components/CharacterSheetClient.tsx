@@ -113,7 +113,12 @@ export default function CharacterSheetClient() {
   const pb = getProficiencyBonus(character.level);
 
   return (
-    <div className="mx-auto w-full max-w-5xl p-4 md:min-w-[1024px]">
+    <div
+      className="mx-auto w-full max-w-5xl p-4 md:min-w-[1024px]"
+      style={
+        { '--character-color': character.accentColor || 'var(--primary)' } as React.CSSProperties
+      }
+    >
       <CharacterActionBar
         characterName={character.name}
         hasUnsavedChanges={hasUnsavedChanges}
@@ -143,7 +148,6 @@ export default function CharacterSheetClient() {
               alignment={character.alignment}
               xp={character.xp}
               avatarUrl={character.avatarUrl}
-              accentColor={character.accentColor}
               onBasicInfoChange={handleBasicInfoChange}
             />
 

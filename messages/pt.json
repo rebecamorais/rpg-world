@@ -191,7 +191,8 @@
     "background": "Antecedente",
     "alignment": "Alinhamento",
     "xp": "Experiência",
-    "spellbook": "Grimório de Magias"
+    "spellbook": "Grimório de Magias",
+    "customizeDescription": "Altere o avatar e a cor de destaque do personagem"
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",
@@ -225,6 +226,7 @@
   },
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",
+    "configDescription": "Configure o sistema mágico utilizado por este personagem",
     "systemUsed": "Sistema Usado",
     "slotsCapacity": "Capacidade de Slots por Nível",
     "circle": "Círculo {level}",
@@ -329,6 +331,7 @@
       "CHA": "CAR"
     },
     "bulkEditTitle": "Valores Base de Atributos",
+    "bulkEditDescription": "Ajuste os valores base de todos os atributos de uma vez",
     "save": "Salvar",
     "cancel": "Cancelar"
   },

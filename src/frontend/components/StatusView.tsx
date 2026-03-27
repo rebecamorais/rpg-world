@@ -47,7 +47,12 @@ export default function StatusView() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div
+      className="flex flex-col gap-6"
+      style={
+        { '--character-color': character.accentColor || 'var(--primary)' } as React.CSSProperties
+      }
+    >
       <CharacterActionBar
         characterName={character.name}
         hasUnsavedChanges={hasUnsavedChanges}
@@ -73,7 +78,6 @@ export default function StatusView() {
         alignment={character.alignment}
         xp={character.xp}
         avatarUrl={character.avatarUrl}
-        accentColor={character.accentColor}
         onBasicInfoChange={handleBasicInfoChange}
       />
 

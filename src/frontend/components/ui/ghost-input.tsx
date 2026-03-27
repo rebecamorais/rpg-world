@@ -10,16 +10,15 @@ import { cn } from '@frontend/lib/utils';
 interface GhostInputProps extends React.ComponentProps<typeof Input> {
   showIcon?: boolean;
   containerClassName?: string;
-  accentColor?: string;
 }
 
 const GhostInput = React.forwardRef<HTMLInputElement, GhostInputProps>(
-  ({ className, containerClassName, showIcon = true, accentColor, style, ...props }, ref) => {
+  ({ className, containerClassName, showIcon = true, style, ...props }, ref) => {
     return (
       <div className={cn('group relative flex items-center', containerClassName)}>
         <Input
           ref={ref}
-          style={{ color: accentColor, ...style }}
+          style={{ color: 'var(--character-color)', ...style }}
           className={cn(
             'focus-visible:ring-primary/50 h-7 border-none bg-transparent p-0 shadow-none transition-all focus-visible:px-2 focus-visible:ring-2 disabled:cursor-default',
             className,

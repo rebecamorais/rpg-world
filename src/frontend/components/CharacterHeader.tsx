@@ -37,7 +37,6 @@ interface Props {
   alignment?: string;
   xp?: number;
   avatarUrl?: string;
-  accentColor?: string;
   onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
 }
 
@@ -65,7 +64,6 @@ export default function CharacterHeader({
   alignment,
   xp = 0,
   avatarUrl,
-  accentColor,
   onBasicInfoChange,
 }: Props) {
   const t = useTranslations('characterHeader');
@@ -91,8 +89,13 @@ export default function CharacterHeader({
           <DialogTrigger asChild>
             <button className="group relative transition-transform hover:scale-105 active:scale-95">
               <Avatar
-                className="h-20 w-20 shrink-0 border-2 shadow-md transition-colors"
-                style={{ borderColor: accentColor || 'var(--primary)' }}
+                className="h-20 w-20 shrink-0 shadow-md transition-all"
+                style={{
+                  borderWidth: '2px',
+                  borderStyle: 'solid',
+                  borderColor: 'color-mix(in srgb, var(--character-color) 70%, transparent)',
+                  boxShadow: '0 0 15px color-mix(in srgb, var(--character-color) 30%, transparent)',
+                }}
               >
                 <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
                 <AvatarFallback className="bg-muted text-xl font-bold">
@@ -100,7 +103,7 @@ export default function CharacterHeader({
                 </AvatarFallback>
               </Avatar>
               <div className="bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity group-hover:opacity-100">
-                <Palette className="h-6 w-6" style={{ color: accentColor }} />
+                <Palette className="h-6 w-6" style={{ color: 'var(--character-color)' }} />
               </div>
             </button>
           </DialogTrigger>
@@ -126,31 +129,40 @@ export default function CharacterHeader({
               <div className="flex flex-col gap-3">
                 <Label className="text-sm font-medium">Cor de Destaque</Label>
                 <div className="grid grid-cols-5 gap-3">
-                  {PREDEFINED_COLORS.map((color) => (
-                    <button
-                      key={color.name}
-                      onClick={() => {
-                        onBasicInfoChange('accentColor' as keyof DnD5eCharacter, color.value);
-                      }}
-                      className={cn(
-                        'group relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all hover:scale-110',
-                        accentColor === color.value
-                          ? 'border-primary ring-primary/20 ring-2'
-                          : 'border-transparent',
-                      )}
-                      title={color.name}
-                    >
-                      <div
-                        className="h-7 w-7 rounded-full shadow-sm"
-                        style={{ backgroundColor: color.value || 'var(--primary)' }}
-                      />
-                      {accentColor === color.value && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="h-1.5 w-1.5 rounded-full bg-white shadow-sm" />
-                        </div>
-                      )}
-                    </button>
-                  ))}
+                  {PREDEFINED_COLORS.map((color) => {
+                    const currentColor =
+                      getComputedStyle(document.documentElement)
+                        .getPropertyValue('--character-color')
+                        .trim() || '';
+                    const isSelected =
+                      color.value === currentColor || (!color.value && !currentColor);
+
+                    return (
+                      <button
+                        key={color.name}
+                        onClick={() => {
+                          onBasicInfoChange('accentColor' as keyof DnD5eCharacter, color.value);
+                        }}
+                        className={cn(
+                          'group relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all hover:scale-110',
+                          isSelected
+                            ? 'border-primary ring-primary/20 ring-2'
+                            : 'border-transparent',
+                        )}
+                        title={color.name}
+                      >
+                        <div
+                          className="h-7 w-7 rounded-full shadow-sm"
+                          style={{ backgroundColor: color.value || 'var(--primary)' }}
+                        />
+                        {isSelected && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="h-1.5 w-1.5 rounded-full bg-white shadow-sm" />
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -167,7 +179,6 @@ export default function CharacterHeader({
                   id="char-name"
                   autoFocus
                   value={name || ''}
-                  accentColor={accentColor}
                   onChange={(e) => onBasicInfoChange('name', e.target.value)}
                   onBlur={() => setIsEditingName(false)}
                   onKeyDown={(e) => e.key === 'Enter' && setIsEditingName(false)}
@@ -177,7 +188,7 @@ export default function CharacterHeader({
                 <div className="group flex items-center gap-2">
                   <h1
                     className="text-foreground flex h-10 items-center text-2xl leading-none font-black tracking-tight transition-colors"
-                    style={{ color: accentColor }}
+                    style={{ color: 'var(--character-color)' }}
                   >
                     {name}
                   </h1>
@@ -210,7 +221,7 @@ export default function CharacterHeader({
                   value={level || 1}
                   onChange={(e) => onBasicInfoChange('level', parseInt(e.target.value) || 1)}
                   className="h-8 w-12 text-center font-bold"
-                  style={{ color: accentColor }}
+                  style={{ color: 'var(--character-color)' }}
                 />
               </div>
 
@@ -220,7 +231,7 @@ export default function CharacterHeader({
                 </Label>
                 <div
                   className="border-border bg-muted/30 flex h-8 min-w-[32px] items-center justify-center rounded-md border px-2 font-mono text-sm font-bold transition-colors"
-                  style={{ color: accentColor }}
+                  style={{ color: 'var(--character-color)' }}
                 >
                   +{pb}
                 </div>
@@ -244,7 +255,7 @@ export default function CharacterHeader({
                     value={xp}
                     onChange={(e) => onBasicInfoChange('xp', parseInt(e.target.value) || 0)}
                     className="h-5 w-16 border-none bg-transparent p-0 text-right font-mono text-xs focus-visible:ring-0"
-                    style={{ color: accentColor }}
+                    style={{ color: 'var(--character-color)' }}
                   />
                   <span className="text-muted-foreground">/ {nextLevelXp}</span>
                 </div>
@@ -252,7 +263,7 @@ export default function CharacterHeader({
               <Progress
                 value={progress}
                 className="h-2"
-                style={{ '--progress-foreground': accentColor } as React.CSSProperties}
+                style={{ '--progress-foreground': 'var(--character-color)' } as React.CSSProperties}
               />
             </div>
           </div>
@@ -270,7 +281,6 @@ export default function CharacterHeader({
                 <GhostInput
                   id="char-race"
                   value={race || ''}
-                  accentColor={accentColor}
                   onChange={(e) => onBasicInfoChange('race', e.target.value)}
                   placeholder={t('race')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
@@ -290,7 +300,6 @@ export default function CharacterHeader({
                 <GhostInput
                   id="char-class"
                   value={classNameStr || ''}
-                  accentColor={accentColor}
                   onChange={(e) => onBasicInfoChange('class', e.target.value)}
                   placeholder={t('class')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 transition-all focus:ring-0"
@@ -310,7 +319,6 @@ export default function CharacterHeader({
                 <GhostInput
                   id="char-background"
                   value={background || ''}
-                  accentColor={accentColor}
                   onChange={(e) => onBasicInfoChange('background', e.target.value)}
                   placeholder={t('background')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
@@ -330,7 +338,6 @@ export default function CharacterHeader({
                 <GhostInput
                   id="char-alignment"
                   value={alignment || ''}
-                  accentColor={accentColor}
                   onChange={(e) => onBasicInfoChange('alignment', e.target.value)}
                   placeholder={t('alignment')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"

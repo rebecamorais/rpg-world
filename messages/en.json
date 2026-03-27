@@ -191,7 +191,8 @@
     "background": "Background",
     "alignment": "Alignment",
     "xp": "Experience",
-    "spellbook": "Spellbook"
+    "spellbook": "Spellbook",
+    "customizeDescription": "Change the avatar and accent color of the character"
   },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",
@@ -225,6 +226,7 @@
   },
   "magicSystem": {
     "titleConfig": "Magic System Configuration",
+    "configDescription": "Configure the magic system used by this character",
     "systemUsed": "System Used",
     "slotsCapacity": "Slots Capacity per Level",
     "circle": "Circle {level}",
@@ -329,6 +331,7 @@
       "CHA": "CHA"
     },
     "bulkEditTitle": "Base Attribute Values",
+    "bulkEditDescription": "Adjust the base values of all attributes at once",
     "save": "Save",
     "cancel": "Cancel"
   },
