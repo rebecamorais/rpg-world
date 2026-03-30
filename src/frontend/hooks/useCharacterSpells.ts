@@ -58,10 +58,10 @@ export function useCharacterSpells(characterId: string | undefined) {
     spells,
     isLoading,
     error,
-    learnSpell: (spellId: string) => mutation.mutate({ spellId, action: 'learn' }),
-    forgetSpell: (spellId: string) => mutation.mutate({ spellId, action: 'forget' }),
+    learnSpell: (spellId: string) => mutation.mutateAsync({ spellId, action: 'learn' }),
+    forgetSpell: (spellId: string) => mutation.mutateAsync({ spellId, action: 'forget' }),
     togglePrepared: (spellId: string, isPrepared: boolean) =>
-      mutation.mutate({ spellId, action: isPrepared ? 'prepare' : 'unprepare' }),
+      mutation.mutateAsync({ spellId, action: isPrepared ? 'prepare' : 'unprepare' }),
     isUpdating: mutation.isPending,
   };
 }

@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from '@frontend/components/ui/dialog';
 import { Input } from '@frontend/components/ui/input';
+import { Spinner } from '@frontend/components/ui/spinner';
 import { useSpells } from '@frontend/hooks/useSpells';
 
 interface Props {
@@ -39,6 +40,26 @@ export default function SpellsDrawer({
   const tSpellsData = useTranslations('spellsData');
 
   const { data: systemSpells = [], isLoading } = useSpells();
+
+  const [loadingSpells, setLoadingSpells] = useState<Record<string, boolean>>({});
+
+  const handleLearn = async (spellId: string) => {
+    setLoadingSpells((prev) => ({ ...prev, [spellId]: true }));
+    try {
+      await onLearnSpell(spellId);
+    } finally {
+      setLoadingSpells((prev) => ({ ...prev, [spellId]: false }));
+    }
+  };
+
+  const handleForget = async (spellId: string) => {
+    setLoadingSpells((prev) => ({ ...prev, [spellId]: true }));
+    try {
+      await onForgetSpell(spellId);
+    } finally {
+      setLoadingSpells((prev) => ({ ...prev, [spellId]: false }));
+    }
+  };
 
   const learnedSet = useMemo(() => new Set(learnedSpells), [learnedSpells]);
 
@@ -87,7 +108,9 @@ export default function SpellsDrawer({
 
         <div className="flex-1 overflow-y-auto pr-2">
           {isLoading ? (
-            <p className="text-muted-foreground mt-8 text-center text-sm">{tCommon('loading')}</p>
+            <div className="flex items-center justify-center p-8">
+              <Spinner size="md" className="text-muted-foreground" />
+            </div>
           ) : filteredSpells.length === 0 ? (
             <p className="text-muted-foreground mt-8 text-center text-sm">{t('noSpellsFound')}</p>
           ) : (
@@ -122,21 +145,37 @@ export default function SpellsDrawer({
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => onForgetSpell(spell.id)}
+                          disabled={loadingSpells[spell.id]}
+                          onClick={() => handleForget(spell.id)}
                           className="h-8 gap-1 px-2 text-red-500 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/20"
                         >
-                          <Trash2 className="h-4 w-4" />
-                          <span className="hidden sm:inline">{tCharacters('forgetSpell')}</span>
+                          {loadingSpells[spell.id] ? (
+                            <Spinner size="sm" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                          <span className="hidden sm:inline">
+                            {loadingSpells[spell.id]
+                              ? tCommon('loading')
+                              : tCharacters('forgetSpell')}
+                          </span>
                         </Button>
                       ) : (
                         <Button
                           variant="default"
                           size="sm"
-                          onClick={() => onLearnSpell(spell.id)}
+                          disabled={loadingSpells[spell.id]}
+                          onClick={() => handleLearn(spell.id)}
                           className="bg-primary hover:bg-primary/90 h-8 gap-1 px-2"
                         >
-                          <Plus className="h-4 w-4" />
-                          <span className="hidden sm:inline">{t('learn')}</span>
+                          {loadingSpells[spell.id] ? (
+                            <Spinner size="sm" />
+                          ) : (
+                            <Plus className="h-4 w-4" />
+                          )}
+                          <span className="hidden sm:inline">
+                            {loadingSpells[spell.id] ? tCommon('loading') : t('learn')}
+                          </span>
                         </Button>
                       )}
                     </div>

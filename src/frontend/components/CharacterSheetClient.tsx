@@ -9,12 +9,12 @@ import AttributesSection from '@frontend/components/AttributesSection';
 import CharacterActionBar from '@frontend/components/CharacterActionBar';
 import CharacterHeader from '@frontend/components/CharacterHeader';
 import CombatStatsSection from '@frontend/components/CombatStatsSection';
-import KnownSpellsCard from '@frontend/components/KnownSpellsCard';
 import LoreSection from '@frontend/components/LoreSection';
 import PassivePerception from '@frontend/components/PassivePerception';
 import SavingThrowsSection from '@frontend/components/SavingThrowsSection';
 import SkillsSection from '@frontend/components/SkillsSection';
 import SpellsDrawer from '@frontend/components/SpellsDrawer';
+import SpellsSection from '@frontend/components/SpellsSection';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCharacter } from '@frontend/hooks/useCharacter';
@@ -195,13 +195,6 @@ export default function CharacterSheetClient() {
                   skills={character.skills ?? {}}
                   onSkillChange={handleSkillChange}
                 />
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <KnownSpellsCard
-                    characterSpells={characterSpells}
-                    onForgetSpell={handleForgetSpell}
-                    onTogglePrepared={handleTogglePrepared}
-                  />
-                </div>
               </div>
             </div>
           </>
@@ -212,24 +205,12 @@ export default function CharacterSheetClient() {
         )}
 
         {activeTab === CharacterTab.SPELLS && (
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold">{t('tabs.spells')}</h2>
-              <button
-                onClick={() => setIsSpellsOpen(true)}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-bold shadow-sm transition-all"
-              >
-                {t('common.add')}
-              </button>
-            </div>
-            <div className="grid grid-cols-1 gap-6">
-              <KnownSpellsCard
-                characterSpells={characterSpells}
-                onForgetSpell={handleForgetSpell}
-                onTogglePrepared={handleTogglePrepared}
-              />
-            </div>
-          </div>
+          <SpellsSection
+            characterSpells={characterSpells}
+            onForgetSpell={handleForgetSpell}
+            onTogglePrepared={handleTogglePrepared}
+            onAddSpellClick={() => setIsSpellsOpen(true)}
+          />
         )}
 
         {activeTab === CharacterTab.INVENTORY && (
