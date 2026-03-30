@@ -74,6 +74,8 @@ npm run dev
 
 Acesse [http://localhost:3000](http://localhost:3000) no navegador.
 
+Você pode usar o usuário `player@email.com` e senha `player123` para fazer login localmente.
+
 ### URLs do ambiente local
 
 | Serviço              | URL                    |

@@ -27,16 +27,16 @@ export class CreateCharacterUseCase {
     const attributes = new Attributes(); // Valores base 10
     const hp = new HealthPoints(10, 10); // Valor chumbado pra criar, poderia calcular baseado no level
 
-    const character = new DnD5eCharacter(
-      input.id || crypto.randomUUID(),
-      input.name.trim(),
-      input.ownerUsername,
+    const character = new DnD5eCharacter({
+      id: input.id || crypto.randomUUID(),
+      name: input.name.trim(),
+      ownerUsername: input.ownerUsername,
       attributes,
       hp,
-      input.level || 1,
-      input.class || '',
-      input.race || '',
-    );
+      level: input.level || 1,
+      classStr: input.class || '',
+      race: input.race || '',
+    });
 
     await this.repository.save(character);
 

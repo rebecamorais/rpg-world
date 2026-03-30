@@ -163,31 +163,6 @@ export function useCharacterEditor({ fetchedCharacter, queryError }: UseCharacte
     setHasUnsavedChanges(true);
   }, []);
 
-  const handleLearnSpell = useCallback((spellIndex: string) => {
-    setCharacter((prev) => {
-      if (!prev) return null;
-      const current = prev.spellsKnown || [];
-      if (current.includes(spellIndex)) return prev;
-      return {
-        ...prev,
-        spellsKnown: [...current, spellIndex],
-      } as DnD5eCharacter;
-    });
-    setHasUnsavedChanges(true);
-  }, []);
-
-  const handleForgetSpell = useCallback((spellIndex: string) => {
-    setCharacter((prev) => {
-      if (!prev) return null;
-      const current = prev.spellsKnown || [];
-      return {
-        ...prev,
-        spellsKnown: current.filter((s) => s !== spellIndex),
-      } as DnD5eCharacter;
-    });
-    setHasUnsavedChanges(true);
-  }, []);
-
   return {
     character,
     error,
@@ -203,8 +178,6 @@ export function useCharacterEditor({ fetchedCharacter, queryError }: UseCharacte
     handleSpellPointsChange,
     handleSpellSlotsChange,
     handleSpellcastingSystemChange,
-    handleLearnSpell,
-    handleForgetSpell,
     handleHitDiceChange,
   };
 }

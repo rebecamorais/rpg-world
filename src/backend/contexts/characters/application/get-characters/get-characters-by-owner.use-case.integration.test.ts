@@ -16,30 +16,30 @@ describe('GetCharactersByOwnerUseCase (Integration)', () => {
   });
 
   it('deve retornar a lista de personagens de um usuário específico', async () => {
-    const char1 = new DnD5eCharacter(
-      'char-1',
-      'Aragorn',
-      'user1',
-      new Attributes(),
-      new HealthPoints(10, 10),
-      1,
-    );
-    const char2 = new DnD5eCharacter(
-      'char-2',
-      'Legolas',
-      'user1',
-      new Attributes(),
-      new HealthPoints(10, 10),
-      1,
-    );
-    const char3 = new DnD5eCharacter(
-      'char-3',
-      'Gimli',
-      'user2',
-      new Attributes(),
-      new HealthPoints(10, 10),
-      1,
-    );
+    const char1 = new DnD5eCharacter({
+      id: 'char-1',
+      name: 'Aragorn',
+      ownerUsername: 'user1',
+      attributes: new Attributes(),
+      hp: new HealthPoints(10, 10),
+      level: 1,
+    });
+    const char2 = new DnD5eCharacter({
+      id: 'char-2',
+      name: 'Legolas',
+      ownerUsername: 'user1',
+      attributes: new Attributes(),
+      hp: new HealthPoints(10, 10),
+      level: 1,
+    });
+    const char3 = new DnD5eCharacter({
+      id: 'char-3',
+      name: 'Gimli',
+      ownerUsername: 'user2',
+      attributes: new Attributes(),
+      hp: new HealthPoints(10, 10),
+      level: 1,
+    });
 
     await repo.save(char1);
     await repo.save(char2);

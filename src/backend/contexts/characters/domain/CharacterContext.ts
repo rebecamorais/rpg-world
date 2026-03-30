@@ -1,7 +1,17 @@
-import { CreateCharacterInput } from '../application/create-character/create-character.use-case';
-import { CharacterUpdates } from '../application/update-character/update-character.use-case';
 import { Character } from './entity/Character';
 import { DnD5eCharacter } from './entity/DnD5eCharacter';
+
+export type CreateCharacterInput = {
+  id?: string;
+  name: string;
+  ownerUsername: string;
+  system?: string;
+  class?: string;
+  race?: string;
+  level?: number;
+};
+
+export type CharacterUpdates = Record<string, unknown>;
 
 export interface CharacterContext {
   getById(id: string): Promise<Character>;
@@ -18,4 +28,17 @@ export interface CharacterContext {
   }): Promise<DnD5eCharacter>;
   delete(id: string, ownerUsername: string): Promise<boolean>;
   uploadAvatar(id: string, userId: string, file: Blob): Promise<string>;
+
+  // Spells
+  getSpells(
+    id: string,
+    locale?: string,
+  ): Promise<
+    Array<{ spellId: string; name: string; level: number; school: string; isPrepared: boolean }>
+  >;
+  toggleSpell(
+    id: string,
+    spellId: string,
+    action: 'learn' | 'forget' | 'prepare' | 'unprepare',
+  ): Promise<void>;
 }

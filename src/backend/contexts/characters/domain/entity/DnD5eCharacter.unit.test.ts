@@ -11,21 +11,21 @@ describe('DnD5eCharacter (Domain Entity)', () => {
     skills = {},
     saves = {},
   ) => {
-    return new DnD5eCharacter(
-      'id-123',
-      'Thor',
-      'user1',
-      new Attributes(attrs),
-      new HealthPoints(10, 10),
+    return new DnD5eCharacter({
+      id: 'id-123',
+      name: 'Thor',
+      ownerUsername: 'user1',
+      attributes: new Attributes(attrs),
+      hp: new HealthPoints(10, 10),
       level,
-      'Fighter',
-      'Human',
-      10,
-      30,
-      0,
+      classStr: 'Fighter',
+      race: 'Human',
+      ac: 10,
+      speed: 30,
+      initiative: 0,
       skills,
-      saves,
-    );
+      savingThrowProficiencies: saves,
+    });
   };
 
   it('deve calcular o modificador corretamente', () => {
@@ -73,7 +73,6 @@ describe('DnD5eCharacter (Domain Entity)', () => {
 
   it('deve exportar corretamente via toJSON (Data Transfer Object)', () => {
     const char = buildCharacter({ STR: 18 }, 1, {}, {});
-    char.spellsKnown = ['fireball', 'shield'];
 
     const json = char.toJSON();
 
@@ -83,8 +82,5 @@ describe('DnD5eCharacter (Domain Entity)', () => {
 
     // Atributos foram convertidos para object standard?
     expect((json.attributes as unknown as { STR: number }).STR).toBe(18);
-
-    // Array de spells veio puro?
-    expect(json.spellsKnown).toEqual(['fireball', 'shield']);
   });
 });

@@ -43,6 +43,7 @@
     "saveChanges": "Salvar Alterações",
     "unsavedChanges": "Alterações não salvas",
     "close": "Fechar",
+    "add": "Adicionar",
     "title": "RPG World",
     "en": "Inglês",
     "pt": "Português",
@@ -141,8 +142,12 @@
     "saveError": "Falha ao salvar no servidor.",
     "unsavedChanges": "Você tem alterações não salvas.",
     "passivePerception": "Percepção Passiva",
-    "preparedSpells": "Magias Preparadas",
+    "preparedSpells": "Magias Conhecidas",
     "forgetSpell": "Esquecer magia",
+    "prepareSpell": "Preparar magia",
+    "unprepareSpell": "Despreparar magia",
+    "cantrip": "Truque",
+    "levelDetail": "Nível {level}",
     "loadError": "Erro ao carregar personagens: {message}",
     "deleteDialogTitle": "Excluir personagem?",
     "deleteDialogDescription": "Tem certeza que deseja excluir o personagem {name}? Essa ação não poderá ser desfeita e todos os dados serão perdidos.",
@@ -219,9 +224,11 @@
   "spellsDrawer": {
     "searchPlaceholder": "Nome da magia (ex: fireball)",
     "learn": "Aprender",
-    "title": "Grimório de Magias",
+    "title": "Lista de Magias",
     "description": "Gerencie as magias conhecidas pelo seu personagem.",
-    "emptyState": "Nenhuma magia aprendida ainda."
+    "emptyState": "Nenhuma magia aprendida ainda.",
+    "allLevels": "Todos os níveis",
+    "noSpellsFound": "Nenhuma magia encontrada."
   },
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",
@@ -451,5 +458,43 @@
     "successTitle": "Senha alterada! 🎉",
     "successDescription": "Sua senha foi redefinida com sucesso. Você já pode fazer login.",
     "login": "Fazer Login"
+  },
+  "spellsData": {
+    "schools": {
+      "abjuration": "Abjuração",
+      "conjuration": "Conjuração",
+      "divination": "Adivinhação",
+      "enchantment": "Encantamento",
+      "evocation": "Evocação",
+      "illusion": "Ilusão",
+      "necromancy": "Necromancia",
+      "transmutation": "Transmutação"
+    },
+    "castingTimes": {
+      "action": "{value, plural, one {# Ação} other {# Ações}}",
+      "bonus_action": "{value, plural, one {# Ação Bônus} other {# Ações Bônus}}",
+      "reaction": "{value, plural, one {# Reação} other {# Reações}}",
+      "minute": "{value, plural, one {# Minuto} other {# Minutos}}",
+      "hour": "{value, plural, one {# Hora} other {# Horas}}",
+      "day": "{value, plural, one {# Dia} other {# Dias}}"
+    },
+
+    "ranges": {
+      "self": "Pessoal",
+      "touch": "Toque",
+      "sight": "Visão",
+      "unlimited": "Ilimitado",
+      "feet": "{meters}m ({feet} ft.)",
+      "mile": "{km} km ({miles} {miles, plural, one {milha} other {milhas}})",
+      "special": "Especial"
+    },
+    "durations": {
+      "instantaneous": "Instantânea",
+      "minute": "{value} {value, plural, one {minuto} other {minutos}}",
+      "hour": "{value} {value, plural, one {hora} other {horas}}",
+      "day": "{value} {value, plural, one {dia} other {dias}}",
+      "round": "{value} {value, plural, one {rodada} other {rodadas}}",
+      "special": "Especial"
+    }
   }
 }

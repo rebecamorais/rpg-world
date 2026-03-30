@@ -1,4 +1,4 @@
-'use client';
+import { useMemo } from 'react';
 
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
@@ -19,6 +19,7 @@ import { useCharacterContext } from '@frontend/context/CharacterContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCharacter } from '@frontend/hooks/useCharacter';
 import { useCharacterEditor } from '@frontend/hooks/useCharacterEditor';
+import { useCharacterSpells } from '@frontend/hooks/useCharacterSpells';
 import { CharacterTab } from '@frontend/types/character-sheet';
 
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
@@ -41,6 +42,13 @@ export default function CharacterSheetClient() {
   } = useCharacter(id);
 
   const {
+    spells: characterSpells,
+    learnSpell: handleLearnSpell,
+    forgetSpell: handleForgetSpell,
+    togglePrepared: handleTogglePrepared,
+  } = useCharacterSpells(id);
+
+  const {
     character,
     error,
     hasUnsavedChanges,
@@ -54,10 +62,10 @@ export default function CharacterSheetClient() {
     handleSpellPointsChange,
     handleSpellSlotsChange,
     handleSpellcastingSystemChange,
-    handleLearnSpell,
-    handleForgetSpell,
     handleHitDiceChange,
   } = useCharacterEditor({ fetchedCharacter: fetchedCharacter as DnD5eCharacter, queryError });
+
+  const spellsKnown = useMemo(() => characterSpells.map((s) => s.spellId), [characterSpells]);
 
   const searchParams = useSearchParams();
   const activeTab = (searchParams?.get('tab') as CharacterTab) || CharacterTab.STATUS;
@@ -189,8 +197,9 @@ export default function CharacterSheetClient() {
                 />
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <KnownSpellsCard
-                    spellsKnown={character.spellsKnown || []}
+                    characterSpells={characterSpells}
                     onForgetSpell={handleForgetSpell}
+                    onTogglePrepared={handleTogglePrepared}
                   />
                 </div>
               </div>
@@ -215,8 +224,9 @@ export default function CharacterSheetClient() {
             </div>
             <div className="grid grid-cols-1 gap-6">
               <KnownSpellsCard
-                spellsKnown={character.spellsKnown || []}
+                characterSpells={characterSpells}
                 onForgetSpell={handleForgetSpell}
+                onTogglePrepared={handleTogglePrepared}
               />
             </div>
           </div>
@@ -232,7 +242,7 @@ export default function CharacterSheetClient() {
       <SpellsDrawer
         isOpen={isSpellsOpen}
         onClose={() => setIsSpellsOpen(false)}
-        learnedSpells={character?.spellsKnown || []}
+        learnedSpells={spellsKnown}
         onLearnSpell={handleLearnSpell}
         onForgetSpell={handleForgetSpell}
       />

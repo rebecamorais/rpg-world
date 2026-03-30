@@ -103,40 +103,42 @@ export class SupabaseCharacterRepository implements CharacterRepo {
 
     if (row.system === 'dnd_5e') {
       const dndData = (row.system_data as Record<string, unknown>) || {};
-      return new DnD5eCharacter(
-        row.id,
-        row.name,
-        row.owner_id,
+      return new DnD5eCharacter({
+        id: row.id,
+        name: row.name,
+        ownerUsername: row.owner_id,
         attributes,
         hp,
-        row.level,
-        (dndData.class as string) || '',
-        (dndData.race as string) || '',
-        (dndData.ac as number) || 10,
-        (dndData.speed as number) || 30,
-        (dndData.initiative as number) || 0,
-        (dndData.skills as Partial<Record<SkillKey, CharacterSkill>>) || {},
-        (dndData.savingThrowProficiencies as Partial<Record<AttributeKey, boolean>>) || {},
-        (dndData.passivePerception as number) || 10,
-        dndData.subclass as string | undefined,
-        dndData.background as string | undefined,
-        dndData.alignment as string | undefined,
-        dndData.xp as number | undefined,
-        dndData.hitDice as { total: string; current: number } | undefined,
-        dndData.deathSaves as { successes: number; failures: number } | undefined,
-        dndData.spellcastingSystem as 'slots' | 'points' | undefined,
-        dndData.spellcastingAbility as AttributeKey | undefined,
-        dndData.spellSaveDc as number | undefined,
-        dndData.spellAttackBonus as number | undefined,
-        dndData.spellSlots as Record<string, { max: number; used: number }> | undefined,
-        dndData.spellPoints as { max: number; current: number } | undefined,
-        (dndData.spellsKnown as string[]) || [],
-        dndData.coins as { cp: number; sp: number; ep: number; gp: number; pp: number } | undefined,
-        (dndData.hpTemp as number) || 0,
+        level: row.level,
+        classStr: (dndData.class as string) || '',
+        race: (dndData.race as string) || '',
+        ac: (dndData.ac as number) || 10,
+        speed: (dndData.speed as number) || 30,
+        initiative: (dndData.initiative as number) || 0,
+        skills: (dndData.skills as Partial<Record<SkillKey, CharacterSkill>>) || {},
+        savingThrowProficiencies:
+          (dndData.savingThrowProficiencies as Partial<Record<AttributeKey, boolean>>) || {},
+        passivePerception: (dndData.passivePerception as number) || 10,
+        subclass: dndData.subclass as string | undefined,
+        background: dndData.background as string | undefined,
+        alignment: dndData.alignment as string | undefined,
+        xp: dndData.xp as number | undefined,
+        hitDice: dndData.hitDice as { total: string; current: number } | undefined,
+        deathSaves: dndData.deathSaves as { successes: number; failures: number } | undefined,
+        spellcastingSystem: dndData.spellcastingSystem as 'slots' | 'points' | undefined,
+        spellcastingAbility: dndData.spellcastingAbility as AttributeKey | undefined,
+        spellSaveDc: dndData.spellSaveDc as number | undefined,
+        spellAttackBonus: dndData.spellAttackBonus as number | undefined,
+        spellSlots: dndData.spellSlots as Record<string, { max: number; used: number }> | undefined,
+        spellPoints: dndData.spellPoints as { max: number; current: number } | undefined,
+        coins: dndData.coins as
+          | { cp: number; sp: number; ep: number; gp: number; pp: number }
+          | undefined,
+        hpTemp: (dndData.hpTemp as number) || 0,
         lore,
-        (row.theme_color as string) ?? undefined,
-        row.avatar_url ?? undefined,
-      );
+        accentColor: (row.theme_color as string) ?? undefined,
+        avatarUrl: row.avatar_url ?? undefined,
+      });
     }
 
     throw new Error(`System ${row.system} not implemented in repository mapping`);

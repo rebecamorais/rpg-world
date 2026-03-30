@@ -4,6 +4,30 @@ import { Attributes } from '../value-object/Attributes';
 import { HealthPoints } from '../value-object/HealthPoints';
 import { Character } from './Character';
 
+export interface Spell {
+  id: string;
+  externalIndex?: string;
+  level: number;
+  school: string;
+  castingTime: string;
+  castingValue?: number | null;
+
+  // Structured Mechanics
+  rangeValue?: number | null;
+  rangeUnit?: string | null;
+  durationValue?: number | null;
+  durationUnit?: string | null;
+
+  concentration: boolean;
+  ritual: boolean;
+  components: string[];
+  classes: string[];
+  name: string;
+  description: string;
+  higherLevel?: string | null;
+  material?: string | null;
+}
+
 export type AttributeKey = 'STR' | 'DEX' | 'CON' | 'INT' | 'WIS' | 'CHA';
 export type SkillKey =
   | 'Acrobatics'
@@ -28,6 +52,40 @@ export type SkillKey =
 export interface CharacterSkill {
   isProficient: boolean;
   expertise?: boolean;
+}
+
+export interface DnD5eCharacterOptions {
+  id: string;
+  name: string;
+  ownerUsername: string;
+  attributes: Attributes;
+  hp: HealthPoints;
+  level: number;
+  classStr?: string;
+  race?: string;
+  ac?: number;
+  speed?: number;
+  initiative?: number;
+  skills?: Partial<Record<SkillKey, CharacterSkill>>;
+  savingThrowProficiencies?: Partial<Record<AttributeKey, boolean>>;
+  passivePerception?: number;
+  subclass?: string;
+  background?: string;
+  alignment?: string;
+  xp?: number;
+  hitDice?: { total: string; current: number };
+  deathSaves?: { successes: number; failures: number };
+  spellcastingSystem?: 'slots' | 'points';
+  spellcastingAbility?: AttributeKey;
+  spellSaveDc?: number;
+  spellAttackBonus?: number;
+  spellSlots?: Record<string, { max: number; used: number }>;
+  spellPoints?: { max: number; current: number };
+  coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
+  hpTemp?: number;
+  lore?: Lore;
+  accentColor?: string;
+  avatarUrl?: string;
 }
 
 export class DnD5eCharacter extends Character {
@@ -55,68 +113,46 @@ export class DnD5eCharacter extends Character {
   public spellAttackBonus?: number;
   public spellSlots?: Record<string, { max: number; used: number }>;
   public spellPoints?: { max: number; current: number };
-  public spellsKnown?: string[];
 
   public coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
 
-  constructor(
-    id: string,
-    name: string,
-    ownerUsername: string,
-    attributes: Attributes,
-    hp: HealthPoints,
-    level: number,
-    classStr: string = '',
-    race: string = '',
-    ac: number = 10,
-    speed: number = 30,
-    initiative: number = 0,
-    skills: Partial<Record<SkillKey, CharacterSkill>> = {},
-    savingThrowProficiencies: Partial<Record<AttributeKey, boolean>> = {},
-    passivePerception: number = 10,
-    subclass?: string,
-    background?: string,
-    alignment?: string,
-    xp?: number,
-    hitDice?: { total: string; current: number },
-    deathSaves?: { successes: number; failures: number },
-    spellcastingSystem?: 'slots' | 'points',
-    spellcastingAbility?: AttributeKey,
-    spellSaveDc?: number,
-    spellAttackBonus?: number,
-    spellSlots?: Record<string, { max: number; used: number }>,
-    spellPoints?: { max: number; current: number },
-    spellsKnown: string[] = [],
-    coins?: { cp: number; sp: number; ep: number; gp: number; pp: number },
-    hpTemp: number = 0,
-    lore: Lore = Lore.empty(),
-    accentColor?: string,
-    avatarUrl?: string,
-  ) {
-    super(id, name, 'DnD_5e', ownerUsername, attributes, hp, level, lore, accentColor, avatarUrl);
-    this.class = classStr;
-    this.race = race;
-    this.ac = ac;
-    this.speed = speed;
-    this.initiative = initiative;
-    this.hpTemp = hpTemp;
-    this.skills = skills;
-    this.savingThrowProficiencies = this.normalizeSavingThrows(savingThrowProficiencies);
-    this.passivePerception = passivePerception;
-    this.subclass = subclass;
-    this.background = background;
-    this.alignment = alignment;
-    this.xp = xp;
-    this.hitDice = hitDice;
-    this.deathSaves = deathSaves;
-    this.spellcastingSystem = spellcastingSystem;
-    this.spellcastingAbility = spellcastingAbility;
-    this.spellSaveDc = spellSaveDc;
-    this.spellAttackBonus = spellAttackBonus;
-    this.spellSlots = spellSlots;
-    this.spellPoints = spellPoints;
-    this.spellsKnown = spellsKnown;
-    this.coins = coins;
+  constructor(options: DnD5eCharacterOptions) {
+    super(
+      options.id,
+      options.name,
+      'DnD_5e',
+      options.ownerUsername,
+      options.attributes,
+      options.hp,
+      options.level,
+      options.lore ?? Lore.empty(),
+      options.accentColor,
+      options.avatarUrl,
+    );
+    this.class = options.classStr ?? '';
+    this.race = options.race ?? '';
+    this.ac = options.ac ?? 10;
+    this.speed = options.speed ?? 30;
+    this.initiative = options.initiative ?? 0;
+    this.hpTemp = options.hpTemp ?? 0;
+    this.skills = options.skills ?? {};
+    this.savingThrowProficiencies = this.normalizeSavingThrows(
+      options.savingThrowProficiencies ?? {},
+    );
+    this.passivePerception = options.passivePerception ?? 10;
+    this.subclass = options.subclass;
+    this.background = options.background;
+    this.alignment = options.alignment;
+    this.xp = options.xp;
+    this.hitDice = options.hitDice;
+    this.deathSaves = options.deathSaves;
+    this.spellcastingSystem = options.spellcastingSystem;
+    this.spellcastingAbility = options.spellcastingAbility;
+    this.spellSaveDc = options.spellSaveDc;
+    this.spellAttackBonus = options.spellAttackBonus;
+    this.spellSlots = options.spellSlots;
+    this.spellPoints = options.spellPoints;
+    this.coins = options.coins;
   }
 
   private normalizeSavingThrows(
@@ -209,7 +245,6 @@ export class DnD5eCharacter extends Character {
       spellAttackBonus: this.spellAttackBonus,
       spellSlots: this.spellSlots,
       spellPoints: this.spellPoints,
-      spellsKnown: this.spellsKnown,
 
       coins: this.coins,
     };

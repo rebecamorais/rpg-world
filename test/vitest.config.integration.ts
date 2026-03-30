@@ -1,5 +1,4 @@
 import path from 'path';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
 import { setupTestEnvironment } from './setup-env';
@@ -7,7 +6,10 @@ import { setupTestEnvironment } from './setup-env';
 setupTestEnvironment();
 
 export default defineConfig({
-  plugins: [tsconfigPaths()],
+  resolve: {
+    tsconfigPaths: true,
+  },
+  plugins: [],
   test: {
     root: path.resolve(__dirname, '../'),
     include: ['src/**/*.integration.test.ts'],

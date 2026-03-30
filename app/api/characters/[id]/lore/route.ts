@@ -2,7 +2,7 @@ import { getApi } from '@api';
 
 import { withAuth } from '@shared/http/route-handler';
 
-export const GET = withAuth(async (user, _body, ctx) => {
+export const GET = withAuth(async (req, user, _body, ctx) => {
   const { id } = await ctx.params;
   const { loreApi, charactersApi } = await getApi();
 
@@ -16,7 +16,7 @@ export const GET = withAuth(async (user, _body, ctx) => {
   return lore || {};
 });
 
-export const PUT = withAuth<Record<string, unknown>>(async (user, body, ctx) => {
+export const PUT = withAuth<Record<string, unknown>>(async (req, user, body, ctx) => {
   const { id } = await ctx.params;
   const { loreApi, charactersApi } = await getApi();
 

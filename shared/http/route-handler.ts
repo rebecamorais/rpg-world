@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import 'server-only';
 
@@ -9,11 +9,13 @@ import type { User } from '@shared/types/user';
 type RouteContext = { params: Promise<Record<string, string>> };
 
 type BaseHandler<B = void> = (
+  req: NextRequest,
   body: B extends void ? undefined : B,
   ctx: RouteContext,
 ) => Promise<unknown>;
 
 type AuthenticatedHandler<B = void> = (
+  req: NextRequest,
   user: User,
   body: B extends void ? undefined : B,
   ctx: RouteContext,
@@ -21,16 +23,20 @@ type AuthenticatedHandler<B = void> = (
 
 // Shared internal handler runner
 async function runHandler<B>(
-  req: Request,
+  req: NextRequest,
   ctx: RouteContext,
-  handler: (body: B extends void ? undefined : B, ctx: RouteContext) => Promise<unknown>,
+  handler: (
+    req: NextRequest,
+    body: B extends void ? undefined : B,
+    ctx: RouteContext,
+  ) => Promise<unknown>,
   successStatus: number,
 ) {
   try {
     const hasBody = ['POST', 'PUT', 'PATCH'].includes(req.method);
     const body = hasBody ? ((await req.json()) as B) : undefined;
 
-    const result = await handler(body as B extends void ? undefined : B, ctx);
+    const result = await handler(req, body as B extends void ? undefined : B, ctx);
 
     if (result === null || result === undefined) {
       return new Response(null, { status: 204 });
@@ -47,28 +53,17 @@ async function runHandler<B>(
 /**
  * Base handler wrapper: no auth required.
  * Handles req.json(), NextResponse, try/catch, and status codes.
- *
- * Usage:
- *   export const GET = withHandler(async (_body, ctx) => {
- *     const { id } = await ctx.params;
- *     return someApi.getPublicData(id);
- *   });
  */
 export function withHandler<B = void>(handler: BaseHandler<B>, successStatus = 200) {
-  return (req: Request, ctx: RouteContext) => runHandler<B>(req, ctx, handler, successStatus);
+  return (req: NextRequest, ctx: RouteContext) => runHandler<B>(req, ctx, handler, successStatus);
 }
 
 /**
  * Authenticated handler wrapper: validates session → auto 401.
  * Builds on withHandler, also injects `user` resolved from session.
- *
- * Usage:
- *   export const POST = withAuth<CreateBody>(async (user, body) => {
- *     return someApi.create({ ...body, ownerId: user.id });
- *   }, 201);
  */
 export function withAuth<B = void>(handler: AuthenticatedHandler<B>, successStatus = 200) {
-  return async (req: Request, ctx: RouteContext) => {
+  return async (req: NextRequest, ctx: RouteContext) => {
     const { authApi } = await getApi();
     const user = await authApi.getSessionUser();
 
@@ -76,6 +71,6 @@ export function withAuth<B = void>(handler: AuthenticatedHandler<B>, successStat
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    return runHandler<B>(req, ctx, (body, c) => handler(user, body, c), successStatus);
+    return runHandler<B>(req, ctx, (req, body, c) => handler(req, user, body, c), successStatus);
   };
 }

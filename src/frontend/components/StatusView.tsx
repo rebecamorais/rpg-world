@@ -29,7 +29,9 @@ export default function StatusView() {
     handleSpellSlotsChange,
     handleSpellcastingSystemChange,
     handleForgetSpell,
+    handleTogglePrepared,
     handleHitDiceChange,
+    characterSpells,
   } = useCharacterContext();
 
   if (!character) return null;
@@ -121,8 +123,9 @@ export default function StatusView() {
           />
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <KnownSpellsCard
-              spellsKnown={character.spellsKnown || []}
+              characterSpells={characterSpells}
               onForgetSpell={handleForgetSpell}
+              onTogglePrepared={handleTogglePrepared}
             />
           </div>
         </div>

@@ -96,6 +96,42 @@ export type Database = {
           },
         ];
       };
+      character_spells: {
+        Row: {
+          character_id: string;
+          created_at: string | null;
+          is_prepared: boolean | null;
+          spell_id: string;
+        };
+        Insert: {
+          character_id: string;
+          created_at?: string | null;
+          is_prepared?: boolean | null;
+          spell_id: string;
+        };
+        Update: {
+          character_id?: string;
+          created_at?: string | null;
+          is_prepared?: boolean | null;
+          spell_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'character_spells_character_id_fkey';
+            columns: ['character_id'];
+            isOneToOne: false;
+            referencedRelation: 'characters';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'character_spells_spell_id_fkey';
+            columns: ['spell_id'];
+            isOneToOne: false;
+            referencedRelation: 'spells';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       characters: {
         Row: {
           attributes: Json;
@@ -182,6 +218,104 @@ export type Database = {
           primary_color?: string | null;
           updated_at?: string;
           username?: string | null;
+        };
+        Relationships: [];
+      };
+      spell_translations: {
+        Row: {
+          description: string;
+          higher_level: string | null;
+          id: string;
+          is_verified: boolean | null;
+          locale: string;
+          material: string | null;
+          name: string;
+          spell_id: string | null;
+        };
+        Insert: {
+          description: string;
+          higher_level?: string | null;
+          id?: string;
+          is_verified?: boolean | null;
+          locale: string;
+          material?: string | null;
+          name: string;
+          spell_id?: string | null;
+        };
+        Update: {
+          description?: string;
+          higher_level?: string | null;
+          id?: string;
+          is_verified?: boolean | null;
+          locale?: string;
+          material?: string | null;
+          name?: string;
+          spell_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'spell_translations_spell_id_fkey';
+            columns: ['spell_id'];
+            isOneToOne: false;
+            referencedRelation: 'spells';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      spells: {
+        Row: {
+          casting_time: string | null;
+          casting_value: number | null;
+          classes: string[] | null;
+          components: string[] | null;
+          concentration: boolean | null;
+          created_at: string | null;
+          duration_unit: string | null;
+          duration_value: number | null;
+          external_index: string | null;
+          id: string;
+          level: number;
+          range_unit: string | null;
+          range_value: number | null;
+          ritual: boolean | null;
+          school: string | null;
+          system: Database['public']['Enums']['rpg_system'];
+        };
+        Insert: {
+          casting_time?: string | null;
+          casting_value?: number | null;
+          classes?: string[] | null;
+          components?: string[] | null;
+          concentration?: boolean | null;
+          created_at?: string | null;
+          duration_unit?: string | null;
+          duration_value?: number | null;
+          external_index?: string | null;
+          id?: string;
+          level: number;
+          range_unit?: string | null;
+          range_value?: number | null;
+          ritual?: boolean | null;
+          school?: string | null;
+          system?: Database['public']['Enums']['rpg_system'];
+        };
+        Update: {
+          casting_time?: string | null;
+          casting_value?: number | null;
+          classes?: string[] | null;
+          components?: string[] | null;
+          concentration?: boolean | null;
+          created_at?: string | null;
+          duration_unit?: string | null;
+          duration_value?: number | null;
+          external_index?: string | null;
+          id?: string;
+          level?: number;
+          range_unit?: string | null;
+          range_value?: number | null;
+          ritual?: boolean | null;
+          school?: string | null;
+          system?: Database['public']['Enums']['rpg_system'];
         };
         Relationships: [];
       };

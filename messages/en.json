@@ -43,6 +43,7 @@
     "saveChanges": "Save Changes",
     "unsavedChanges": "Unsaved changes",
     "close": "Close",
+    "add": "Add",
     "title": "RPG World",
     "en": "English",
     "pt": "Portuguese",
@@ -141,8 +142,12 @@
     "saveError": "Failed to save on the server.",
     "unsavedChanges": "You have unsaved changes.",
     "passivePerception": "Passive Perception",
-    "preparedSpells": "Prepared Spells",
+    "preparedSpells": "Known Spells",
     "forgetSpell": "Forget spell",
+    "prepareSpell": "Prepare spell",
+    "unprepareSpell": "Unprepare spell",
+    "cantrip": "Cantrip",
+    "levelDetail": "Level {level}",
     "loadError": "Error loading characters: {message}",
     "deleteDialogTitle": "Delete character?",
     "deleteDialogDescription": "Are you sure you want to delete the character {name}? This action cannot be undone and all data will be lost.",
@@ -219,9 +224,11 @@
   "spellsDrawer": {
     "searchPlaceholder": "Spell name (e.g.: fireball)",
     "learn": "Learn",
-    "title": "Spellbook",
+    "title": "Spell list",
     "description": "Manage your character's known spells.",
-    "emptyState": "No spells learned yet."
+    "emptyState": "No spells learned yet.",
+    "allLevels": "All levels",
+    "noSpellsFound": "No spells found."
   },
   "magicSystem": {
     "titleConfig": "Magic System Configuration",
@@ -451,5 +458,43 @@
     "successTitle": "Password changed! 🎉",
     "successDescription": "Your password has been successfully reset. You can now log in.",
     "login": "Log In"
+  },
+  "spellsData": {
+    "schools": {
+      "abjuration": "Abjuration",
+      "conjuration": "Conjuration",
+      "divination": "Divination",
+      "enchantment": "Enchantment",
+      "evocation": "Evocation",
+      "illusion": "Illusion",
+      "necromancy": "Necromancy",
+      "transmutation": "Transmutation"
+    },
+    "castingTimes": {
+      "action": "{value} Action",
+      "bonus_action": "{value} Bonus Action",
+      "reaction": "{value} Reaction",
+      "minute": "{value} {value, plural, one {Minute} other {Minutes}}",
+      "hour": "{value} {value, plural, one {Hour} other {Hours}}",
+      "day": "{value} {value, plural, one {Day} other {Days}}"
+    },
+
+    "ranges": {
+      "self": "Self",
+      "touch": "Touch",
+      "sight": "Sight",
+      "unlimited": "Unlimited",
+      "feet": "{feet} ft.",
+      "mile": "{miles} {miles, plural, one {mile} other {miles}}",
+      "special": "Special"
+    },
+    "durations": {
+      "instantaneous": "Instantaneous",
+      "minute": "{value} {value, plural, one {minute} other {minutes}}",
+      "hour": "{value} {value, plural, one {hour} other {hours}}",
+      "day": "{value} {value, plural, one {day} other {days}}",
+      "round": "{value} {value, plural, one {round} other {rounds}}",
+      "special": "Special"
+    }
   }
 }

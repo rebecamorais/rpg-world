@@ -40,4 +40,14 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
   uploadAvatar: async (id: string, userId: string, file: Blob) => {
     return characterContext.uploadAvatar(id, userId, file);
   },
+  getSpells: async (id: string, locale?: string) => {
+    return characterContext.getSpells(id, locale);
+  },
+  toggleSpell: async (
+    id: string,
+    spellId: string,
+    action: 'learn' | 'forget' | 'prepare' | 'unprepare',
+  ) => {
+    return characterContext.toggleSpell(id, spellId, action);
+  },
 });

@@ -6,7 +6,7 @@ type UpdateBody = {
   updates: Record<string, unknown>;
 };
 
-export const GET = withAuth(async (user, _body, ctx) => {
+export const GET = withAuth(async (req, user, _body, ctx) => {
   const { id } = await ctx.params;
   const { charactersApi } = await getApi();
   const character = await charactersApi.getById(id);
@@ -18,7 +18,7 @@ export const GET = withAuth(async (user, _body, ctx) => {
   return character;
 });
 
-export const PUT = withAuth<UpdateBody>(async (user, body, ctx) => {
+export const PUT = withAuth<UpdateBody>(async (req, user, body, ctx) => {
   const { id } = await ctx.params;
   const { charactersApi } = await getApi();
   const character = await charactersApi.update({
@@ -29,7 +29,7 @@ export const PUT = withAuth<UpdateBody>(async (user, body, ctx) => {
   return { id: character.id };
 });
 
-export const DELETE = withAuth(async (user, _body, ctx) => {
+export const DELETE = withAuth(async (req, user, _body, ctx) => {
   const { id } = await ctx.params;
   const { charactersApi } = await getApi();
   await charactersApi.delete(id, user.id);

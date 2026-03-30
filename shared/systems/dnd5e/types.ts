@@ -9,6 +9,42 @@ export interface CharacterSkill {
   expertise?: boolean;
 }
 
+export interface SpellTranslation {
+  name: string;
+  description: string;
+  higherLevel?: string;
+}
+
+export interface Spell {
+  id: string;
+  externalIndex?: string;
+  level: number;
+  school: string;
+  castingTime: string;
+
+  // Structured Mechanics
+  rangeValue?: number | null;
+  rangeUnit?: string | null;
+  durationValue?: number | null;
+  durationUnit?: string | null;
+
+  // Raw/Slug data
+  range: string;
+  duration: string;
+
+  concentration: boolean;
+  ritual: boolean;
+  components: string[];
+
+  // Localized data
+  name: string;
+  description: string;
+  higherLevel?: string;
+
+  // Metadata
+  systemData?: Record<string, unknown>;
+}
+
 export interface DnD5eCharacterData {
   race: string;
   class: string;
@@ -39,7 +75,6 @@ export interface DnD5eCharacterData {
   spellAttackBonus?: number;
   spellSlots?: Record<string, { max: number; used: number }>;
   spellPoints?: { max: number; current: number };
-  spellsKnown?: string[];
 
   coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
 

@@ -14,14 +14,14 @@ describe('DeleteCharacterUseCase (Integration)', () => {
     repo = new InMemoryCharacterRepository();
     useCase = new DeleteCharacterUseCase(repo);
 
-    const char = new DnD5eCharacter(
-      'char-1',
-      'Test',
-      'owner-1',
-      new Attributes(),
-      new HealthPoints(10, 10),
-      1,
-    );
+    const char = new DnD5eCharacter({
+      id: 'char-1',
+      name: 'Test',
+      ownerUsername: 'owner-1',
+      attributes: new Attributes(),
+      hp: new HealthPoints(10, 10),
+      level: 1,
+    });
     await repo.save(char);
   });
 

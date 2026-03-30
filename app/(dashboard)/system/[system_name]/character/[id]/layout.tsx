@@ -19,6 +19,7 @@ function CharacterLayoutContent({ children }: { children: ReactNode }) {
     setIsSpellsOpen,
     handleLearnSpell,
     handleForgetSpell,
+    spellsKnown,
   } = useCharacterContext();
 
   const t = useTranslations('characters');
@@ -58,7 +59,7 @@ function CharacterLayoutContent({ children }: { children: ReactNode }) {
       <SpellsDrawer
         isOpen={isSpellsOpen}
         onClose={() => setIsSpellsOpen(false)}
-        learnedSpells={character?.spellsKnown || []}
+        learnedSpells={spellsKnown}
         onLearnSpell={handleLearnSpell}
         onForgetSpell={handleForgetSpell}
       />
