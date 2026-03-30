@@ -1,13 +1,13 @@
 'use client';
 
-import AttributesSection from '@frontend/components/AttributesSection';
-import CharacterActionBar from '@frontend/components/CharacterActionBar';
-import CharacterHeader from '@frontend/components/CharacterHeader';
-import CombatStatsSection from '@frontend/components/CombatStatsSection';
-import KnownSpellsCard from '@frontend/components/KnownSpellsCard';
-import PassivePerception from '@frontend/components/PassivePerception';
-import SavingThrowsSection from '@frontend/components/SavingThrowsSection';
-import SkillsSection from '@frontend/components/SkillsSection';
+import CharacterActionBar from '@frontend/components/character/CharacterActionBar';
+import CharacterHeader from '@frontend/components/character/CharacterHeader';
+import KnownSpellsCard from '@frontend/components/character/spells/KnownSpellsCard';
+import AttributesSection from '@frontend/components/character/stats/AttributesSection';
+import CombatStatsSection from '@frontend/components/character/stats/CombatStatsSection';
+import PassivePerception from '@frontend/components/character/stats/PassivePerception';
+import SavingThrowsSection from '@frontend/components/character/stats/SavingThrowsSection';
+import SkillsSection from '@frontend/components/character/stats/SkillsSection';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';

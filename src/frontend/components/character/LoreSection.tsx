@@ -3,7 +3,7 @@
 import { BookOpen, Fingerprint, Heart, History, LucideIcon, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import CharacterActionBar from '@frontend/components/CharacterActionBar';
+import CharacterActionBar from '@frontend/components/character/CharacterActionBar';
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 import { Label } from '@frontend/components/ui/label';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
@@ -11,8 +11,8 @@ import { cn } from '@frontend/lib/utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
-import { GhostInput } from './ui/ghost-input';
-import { Textarea } from './ui/textarea';
+import { GhostInput } from '../ui/ghost-input';
+import { Textarea } from '../ui/textarea';
 
 interface LoreData extends Partial<DnD5eCharacter> {
   age?: string;

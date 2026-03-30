@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio). Licenciado sob a GNU GPLv3.
  */
-import Footer from '@frontend/components/Footer';
-import HeroCTA from '@frontend/components/HeroCTA';
+import Footer from '@frontend/components/layout/Footer';
+import HeroCTA from '@frontend/components/layout/HeroCTA';
 
 export default function Home() {
   return (

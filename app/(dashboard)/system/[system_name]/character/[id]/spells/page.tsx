@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { BookMarked, BookOpen, Sparkles, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import CharacterActionBar from '@frontend/components/CharacterActionBar';
+import CharacterActionBar from '@frontend/components/character/CharacterActionBar';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
 export default function CharacterSpellsPage() {

@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { useTranslations } from 'next-intl';
 
-import SpellsDrawer from '@frontend/components/SpellsDrawer';
+import SpellsDrawer from '@frontend/components/character/spells/SpellsDrawer';
 import { CharacterProvider, useCharacterContext } from '@frontend/context/CharacterContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
 

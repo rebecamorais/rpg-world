@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 
-import KnownSpellsCard from '@frontend/components/KnownSpellsCard';
+import KnownSpellsCard from '@frontend/components/character/spells/KnownSpellsCard';
 import { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
 
 interface SpellsSectionProps {

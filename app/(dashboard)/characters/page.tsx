@@ -1,4 +1,4 @@
-import CharacterList from '@frontend/components/CharacterList';
+import CharacterList from '@frontend/components/character/CharacterList';
 
 export default function CharactersPage() {
   return (

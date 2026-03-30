@@ -5,16 +5,16 @@ import { useParams, useSearchParams } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 
-import AttributesSection from '@frontend/components/AttributesSection';
-import CharacterActionBar from '@frontend/components/CharacterActionBar';
-import CharacterHeader from '@frontend/components/CharacterHeader';
-import CombatStatsSection from '@frontend/components/CombatStatsSection';
-import LoreSection from '@frontend/components/LoreSection';
-import PassivePerception from '@frontend/components/PassivePerception';
-import SavingThrowsSection from '@frontend/components/SavingThrowsSection';
-import SkillsSection from '@frontend/components/SkillsSection';
-import SpellsDrawer from '@frontend/components/SpellsDrawer';
-import SpellsSection from '@frontend/components/SpellsSection';
+import CharacterActionBar from '@frontend/components/character/CharacterActionBar';
+import CharacterHeader from '@frontend/components/character/CharacterHeader';
+import LoreSection from '@frontend/components/character/LoreSection';
+import SpellsDrawer from '@frontend/components/character/spells/SpellsDrawer';
+import SpellsSection from '@frontend/components/character/spells/SpellsSection';
+import AttributesSection from '@frontend/components/character/stats/AttributesSection';
+import CombatStatsSection from '@frontend/components/character/stats/CombatStatsSection';
+import PassivePerception from '@frontend/components/character/stats/PassivePerception';
+import SavingThrowsSection from '@frontend/components/character/stats/SavingThrowsSection';
+import SkillsSection from '@frontend/components/character/stats/SkillsSection';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCharacter } from '@frontend/hooks/useCharacter';

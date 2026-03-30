@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 import { getTranslations } from 'next-intl/server';
 
-import Footer from '@frontend/components/Footer';
 import ForgotPasswordForm from '@frontend/components/auth/ForgotPasswordForm';
+import Footer from '@frontend/components/layout/Footer';
 
 export default async function ForgotPasswordPage() {
   const t = await getTranslations('common');

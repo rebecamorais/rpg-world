@@ -4,8 +4,8 @@ import { type ReactNode, useEffect } from 'react';
 
 import { NextIntlClientProvider } from 'next-intl';
 
-import QueryProvider from '@frontend/components/QueryProvider';
-import ThemeProvider from '@frontend/components/ThemeProvider';
+import QueryProvider from '@frontend/components/providers/QueryProvider';
+import ThemeProvider from '@frontend/components/providers/ThemeProvider';
 import { TooltipProvider } from '@frontend/components/ui/tooltip';
 import { FileUploaderProvider } from '@frontend/context/FileUploaderContext';
 import { UserProvider } from '@frontend/context/UserContext';

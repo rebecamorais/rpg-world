@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { getApi } from '@api';
 
-import Sidebar from '@frontend/components/Sidebar';
+import Sidebar from '@frontend/components/layout/Sidebar';
 import { UserProvider } from '@frontend/context/UserContext';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {

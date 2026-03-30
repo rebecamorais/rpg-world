@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Palette, Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import ImageUpload from '@frontend/components/ImageUpload';
+import ImageUpload from '@frontend/components/shared/ImageUpload';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
@@ -24,7 +24,7 @@ import { cn } from '@frontend/lib/utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
-import { GhostInput } from './ui/ghost-input';
+import { GhostInput } from '../ui/ghost-input';
 
 interface Props {
   id: string;

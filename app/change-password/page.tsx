@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import Footer from '@frontend/components/Footer';
+import Footer from '@frontend/components/layout/Footer';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,

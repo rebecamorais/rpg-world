@@ -15,8 +15,8 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { HealthPointsCard } from '@frontend/components/HealthPointsCard';
-import { MagicSystem, MagicSystemCard } from '@frontend/components/MagicSystemCard';
+import { MagicSystem, MagicSystemCard } from '@frontend/components/character/MagicSystemCard';
+import { HealthPointsCard } from '@frontend/components/character/stats/HealthPointsCard';
 import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,

@@ -9,7 +9,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import ImageUpload from '@frontend/components/ImageUpload';
+import ImageUpload from '@frontend/components/shared/ImageUpload';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,

@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 
-import CharacterActionBar from '@frontend/components/CharacterActionBar';
+import CharacterActionBar from '@frontend/components/character/CharacterActionBar';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
 export default function CharacterInventoryPage() {

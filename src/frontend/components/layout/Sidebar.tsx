@@ -5,8 +5,8 @@ import { useParams } from 'next/navigation';
 import { LogOut } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import CharacterNavSection from '@frontend/components/CharacterNavSection';
-import Footer from '@frontend/components/Footer';
+import CharacterNavSection from '@frontend/components/character/CharacterNavSection';
+import Footer from '@frontend/components/layout/Footer';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { NavItem } from '@frontend/components/ui/nav-item';
 import { useAuth } from '@frontend/hooks/useAuth';
