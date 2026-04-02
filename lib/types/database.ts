@@ -274,7 +274,9 @@ export type Database = {
           duration_value: number | null;
           external_index: string | null;
           id: string;
+          is_scaling: boolean | null;
           level: number;
+          material_cost: number | null;
           range_unit: string | null;
           range_value: number | null;
           ritual: boolean | null;
@@ -292,7 +294,9 @@ export type Database = {
           duration_value?: number | null;
           external_index?: string | null;
           id?: string;
+          is_scaling?: boolean | null;
           level: number;
+          material_cost?: number | null;
           range_unit?: string | null;
           range_value?: number | null;
           ritual?: boolean | null;
@@ -310,7 +314,9 @@ export type Database = {
           duration_value?: number | null;
           external_index?: string | null;
           id?: string;
+          is_scaling?: boolean | null;
           level?: number;
+          material_cost?: number | null;
           range_unit?: string | null;
           range_value?: number | null;
           ritual?: boolean | null;

@@ -5,6 +5,20 @@ export interface CharacterSpellRelation {
   school: string;
   isPrepared: boolean;
   createdAt?: string;
+  components?: string[];
+  concentration?: boolean;
+  ritual?: boolean;
+  materialCost?: number;
+  isScaling?: boolean;
+  description?: string;
+  higherLevel?: string | null;
+  material?: string | null;
+  castingTime?: string | null;
+  castingValue?: number | null;
+  durationUnit?: string | null;
+  durationValue?: number | null;
+  rangeUnit?: string | null;
+  rangeValue?: number | null;
 }
 
 export interface CharacterSpellRepo {

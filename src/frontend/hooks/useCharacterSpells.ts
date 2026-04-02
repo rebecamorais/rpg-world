@@ -10,6 +10,19 @@ export type CharacterSpell = {
   level: number;
   school: string;
   isPrepared: boolean;
+  components?: string[];
+  concentration?: boolean;
+  ritual?: boolean;
+  materialCost?: number;
+  isScaling?: boolean;
+  description?: string;
+  higherLevel?: string | null;
+  material?: string | null;
+  castingTime?: string | null;
+  durationUnit?: string | null;
+  durationValue?: number | null;
+  rangeUnit?: string | null;
+  rangeValue?: number | null;
 };
 
 export function useCharacterSpells(characterId: string | undefined) {

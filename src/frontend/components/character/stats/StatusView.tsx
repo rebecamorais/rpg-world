@@ -2,7 +2,6 @@
 
 import CharacterActionBar from '@frontend/components/character/CharacterActionBar';
 import CharacterHeader from '@frontend/components/character/CharacterHeader';
-import KnownSpellsCard from '@frontend/components/character/spells/KnownSpellsCard';
 import AttributesSection from '@frontend/components/character/stats/AttributesSection';
 import CombatStatsSection from '@frontend/components/character/stats/CombatStatsSection';
 import PassivePerception from '@frontend/components/character/stats/PassivePerception';
@@ -121,13 +120,6 @@ export default function StatusView() {
             skills={character.skills ?? {}}
             onSkillChange={handleSkillChange}
           />
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <KnownSpellsCard
-              characterSpells={characterSpells}
-              onForgetSpell={handleForgetSpell}
-              onTogglePrepared={handleTogglePrepared}
-            />
-          </div>
         </div>
       </div>
     </div>

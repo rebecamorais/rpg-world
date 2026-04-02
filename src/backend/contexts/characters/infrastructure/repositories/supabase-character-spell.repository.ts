@@ -24,8 +24,22 @@ export class SupabaseCharacterSpellRepository implements CharacterSpellRepo {
         spells (
           level,
           school,
+          concentration,
+          ritual,
+          components,
+          material_cost,
+          is_scaling,
+          casting_time,
+          casting_value,
+          duration_unit,
+          duration_value,
+          range_unit,
+          range_value,
           spell_translations (
-            name
+            name,
+            description,
+            higher_level,
+            material
           )
         )
       `,
@@ -46,6 +60,20 @@ export class SupabaseCharacterSpellRepository implements CharacterSpellRepo {
       name: row.spells?.spell_translations?.[0]?.name || row.spell_id,
       level: row.spells?.level || 0,
       school: row.spells?.school || '',
+      components: row.spells?.components || [],
+      concentration: row.spells?.concentration ?? false,
+      ritual: row.spells?.ritual ?? false,
+      materialCost: row.spells?.material_cost ?? 0,
+      isScaling: row.spells?.is_scaling ?? false,
+      description: row.spells?.spell_translations?.[0]?.description || '',
+      higherLevel: row.spells?.spell_translations?.[0]?.higher_level || null,
+      material: row.spells?.spell_translations?.[0]?.material || null,
+      castingTime: row.spells?.casting_time || null,
+      castingValue: row.spells?.casting_value || null,
+      durationUnit: row.spells?.duration_unit || null,
+      durationValue: row.spells?.duration_value || null,
+      rangeUnit: row.spells?.range_unit || null,
+      rangeValue: row.spells?.range_value || null,
     }));
   }
 

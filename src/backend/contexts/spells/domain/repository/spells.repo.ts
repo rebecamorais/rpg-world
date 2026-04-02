@@ -11,6 +11,13 @@ export interface SpellDto {
   rangeValue?: number | null;
   castingTime?: string | null;
   castingValue?: number | null;
+  concentration?: boolean;
+  ritual?: boolean;
+  materialCost?: number;
+  isScaling?: boolean;
+  description?: string;
+  higherLevel?: string | null;
+  material?: string | null;
 }
 
 export interface SpellsRepo {

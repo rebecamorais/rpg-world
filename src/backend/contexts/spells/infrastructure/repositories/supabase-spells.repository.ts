@@ -23,6 +23,11 @@ export class SupabaseSpellsRepository implements SpellsRepo {
         range_value,
         casting_time,
         casting_value,
+        concentration,
+        ritual,
+        components,
+        material_cost,
+        is_scaling,
         spell_translations (
           name
         )
@@ -49,6 +54,10 @@ export class SupabaseSpellsRepository implements SpellsRepo {
       rangeValue: row.range_value,
       castingTime: row.casting_time,
       castingValue: row.casting_value,
+      concentration: row.concentration,
+      ritual: row.ritual,
+      materialCost: row.material_cost,
+      isScaling: row.is_scaling,
     }));
   }
 }

@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 
-import KnownSpellsCard from '@frontend/components/character/spells/KnownSpellsCard';
+import { Spellbook } from '@frontend/components/character/spells/Spellbook';
 import { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
 
 interface SpellsSectionProps {
@@ -24,13 +24,13 @@ export default function SpellsSection({
         <h2 className="text-xl font-bold">{t('tabs.spells')}</h2>
         <button
           onClick={onAddSpellClick}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-bold shadow-sm transition-all"
+          className="bg-primary hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-bold text-white shadow-sm transition-all"
         >
           {t('common.add')}
         </button>
       </div>
       <div className="grid grid-cols-1 gap-6">
-        <KnownSpellsCard
+        <Spellbook
           characterSpells={characterSpells}
           onForgetSpell={onForgetSpell}
           onTogglePrepared={onTogglePrepared}
