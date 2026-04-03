@@ -2,17 +2,26 @@
 
 import { useParams } from 'next/navigation';
 
-import { LogOut } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import CharacterNavSection from '@frontend/components/character/CharacterNavSection';
 import Footer from '@frontend/components/layout/Footer';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
+import { Button } from '@frontend/components/ui/button';
 import { NavItem } from '@frontend/components/ui/nav-item';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@frontend/components/ui/sheet';
 import { useAuth } from '@frontend/hooks/useAuth';
 import { useProfile } from '@frontend/hooks/useProfile';
 
-export default function Sidebar() {
+function SidebarContent() {
   const params = useParams();
   const characterId = params?.id as string;
   const tDash = useTranslations('dashboard');
@@ -24,7 +33,7 @@ export default function Sidebar() {
   const avatarUrl = profile?.avatarUrl;
 
   return (
-    <aside className="bg-sidebar border-border hidden h-full w-64 flex-col border-r px-6 pt-6 pb-2 sm:flex">
+    <>
       <div className="scrollbar-none flex flex-1 flex-col gap-8 overflow-y-auto pr-2">
         <div className="flex items-center gap-3 px-2">
           <Avatar className="ring-primary/20 h-8 w-8 rounded-lg border border-white/10 ring-2 transition-all hover:scale-105 active:scale-95">
@@ -67,6 +76,41 @@ export default function Sidebar() {
         </button>
         <Footer isMinified />
       </div>
-    </aside>
+    </>
+  );
+}
+
+export default function Sidebar() {
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="bg-sidebar border-border hidden h-full w-64 flex-col border-r px-6 pt-6 pb-2 sm:flex">
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile Drawer Trigger - floating bottom right for easy access */}
+      <div className="fixed right-6 bottom-6 z-50 sm:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              size="icon"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 w-14 rounded-full shadow-lg"
+            >
+              <Menu className="h-6 w-6" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent
+            side="left"
+            className="bg-sidebar border-border flex w-64 flex-col px-6 pt-6 pb-2 text-zinc-100 sm:hidden"
+          >
+            <SheetHeader className="sr-only">
+              <SheetTitle>Menu</SheetTitle>
+              <SheetDescription>Navegação principal e atalhos.</SheetDescription>
+            </SheetHeader>
+            <SidebarContent />
+          </SheetContent>
+        </Sheet>
+      </div>
+    </>
   );
 }

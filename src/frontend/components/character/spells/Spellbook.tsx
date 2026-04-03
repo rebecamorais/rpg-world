@@ -18,6 +18,13 @@ import { useTranslations } from 'next-intl';
 
 import { Badge } from '@frontend/components/ui/badge';
 import { Card, CardContent } from '@frontend/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@frontend/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 import {
   Tooltip,
@@ -72,12 +79,12 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
           orientation="vertical"
           className="flex h-full w-full flex-col md:flex-row"
         >
-          {/* Index Sidebar */}
-          <TabsList className="bg-muted/10 flex h-auto w-full flex-row items-center justify-start gap-1 rounded-none border-b px-2 py-2 md:h-full md:w-64 md:flex-col md:border-r md:border-b-0 md:px-0 md:py-6">
+          {/* Index Sidebar (Desktop) */}
+          <TabsList className="bg-muted/10 hidden h-auto w-full flex-row items-center justify-start gap-1 rounded-none border-t border-b px-2 py-2 md:flex md:h-full md:w-64 md:flex-col md:border-t-0 md:border-r md:border-b-0 md:px-0 md:py-6">
             <div className="text-muted-foreground/60 mb-4 hidden px-4 text-[10px] font-black tracking-[0.2em] uppercase md:block">
               {t('spellbookIndex')}
             </div>
-            <div className="scrollbar-none flex flex-1 flex-row gap-1 md:w-full md:flex-col md:overflow-y-auto md:px-2">
+            <div className="scrollbar-none flex flex-1 flex-col gap-1 md:w-full md:overflow-y-auto md:px-2">
               {levels.map((level) => (
                 <TabsTrigger
                   key={level}
@@ -92,6 +99,25 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
               ))}
             </div>
           </TabsList>
+
+          {/* Mobile Select (Replaces TabsList on sm screens) */}
+          <div className="border-border/50 bg-muted/10 flex items-center justify-between gap-4 border-b p-4 md:hidden">
+            <span className="text-muted-foreground text-xs font-black tracking-widest whitespace-nowrap uppercase">
+              {t('spellbookIndex')}
+            </span>
+            <Select value={activeLevel} onValueChange={setActiveLevel}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Selecione o nível" />
+              </SelectTrigger>
+              <SelectContent>
+                {levels.map((level) => (
+                  <SelectItem key={level} value={level.toString()}>
+                    {level === 0 ? t('cantrips') : t('levelName', { level })}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
           {/* Spell Content Area */}
           <div className="relative flex-1 overflow-hidden">
@@ -177,7 +203,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                             <div className="flex items-center gap-4">
                               {/* Component Icons */}
                               <TooltipProvider>
-                                <div className="hidden items-center gap-1.5 sm:flex">
+                                <div className="flex items-center gap-1.5">
                                   {spell.components?.includes('V') && (
                                     <Tooltip>
                                       <TooltipTrigger asChild>
@@ -359,11 +385,11 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                                 )}
                               </div>
 
-                              {/* Action buttons (only in expanded view or header?) */}
-                              <div className="mt-6 flex justify-end gap-3">
+                              {/* Action buttons (Responsive layout) */}
+                              <div className="mt-6 flex flex-col justify-end gap-3 sm:flex-row">
                                 <button
                                   onClick={() => onForgetSpell?.(spell.spellId)}
-                                  className="rounded-md px-3 py-1.5 text-xs font-medium text-red-500 transition-colors hover:bg-red-500/10 hover:text-red-600"
+                                  className="w-full rounded-md px-3 py-3 text-sm font-medium text-red-500 transition-colors hover:bg-red-500/10 hover:text-red-600 sm:w-auto sm:py-1.5 sm:text-xs"
                                 >
                                   {t('forgetSpell')}
                                 </button>
@@ -372,7 +398,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                                     onTogglePrepared?.(spell.spellId, !spell.isPrepared)
                                   }
                                   className={cn(
-                                    'rounded-md px-4 py-1.5 text-xs font-bold shadow-sm transition-all',
+                                    'w-full rounded-md px-4 py-3 text-sm font-bold shadow-sm transition-all sm:w-auto sm:py-1.5 sm:text-xs',
                                     spell.isPrepared
                                       ? 'bg-muted text-foreground hover:bg-muted/80'
                                       : 'bg-primary hover:bg-primary/90 text-white',
