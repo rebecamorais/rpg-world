@@ -1,7 +1,7 @@
 DO $$
 DECLARE
-  player_id UUID := gen_random_uuid();
-  char_id   UUID := gen_random_uuid();
+  player_id UUID := 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+  char_id   UUID := 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
 BEGIN
   -- =========================================================
   -- Idempotência: limpa dados existentes para este email
@@ -174,6 +174,34 @@ BEGIN
 
   INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
   SELECT char_id, id, false FROM public.spells WHERE external_index = 'blink'
+  ON CONFLICT DO NOTHING;
+  -- Testes de Danos Adicionais (Lightning, Cold, Poison, Radiant, Psychic, Thunder)
+  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
+  SELECT char_id, id, true FROM public.spells WHERE external_index = 'shocking-grasp'
+  ON CONFLICT DO NOTHING;
+
+  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
+  SELECT char_id, id, true FROM public.spells WHERE external_index = 'ray-of-frost'
+  ON CONFLICT DO NOTHING;
+
+  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
+  SELECT char_id, id, true FROM public.spells WHERE external_index = 'poison-spray'
+  ON CONFLICT DO NOTHING;
+
+  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
+  SELECT char_id, id, true FROM public.spells WHERE external_index = 'vicious-mockery'
+  ON CONFLICT DO NOTHING;
+
+  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
+  SELECT char_id, id, true FROM public.spells WHERE external_index = 'thunderwave'
+  ON CONFLICT DO NOTHING;
+
+  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
+  SELECT char_id, id, true FROM public.spells WHERE external_index = 'guiding-bolt'
+  ON CONFLICT DO NOTHING;
+
+  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
+  SELECT char_id, id, true FROM public.spells WHERE external_index = 'shatter'
   ON CONFLICT DO NOTHING;
 
 END $$;

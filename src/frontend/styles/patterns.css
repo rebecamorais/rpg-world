@@ -1,0 +1,136 @@
+.vfx-dots {
+  background-image: radial-gradient(currentColor 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 95%);
+}
+
+.vfx-grid {
+  background-image:
+    linear-gradient(to right, currentColor 1px, transparent 1px),
+    linear-gradient(to bottom, currentColor 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+}
+
+.vfx-zigzag {
+  background:
+    linear-gradient(135deg, currentColor 25%, transparent 25%) -10px 0,
+    linear-gradient(225deg, currentColor 25%, transparent 25%) -10px 0,
+    linear-gradient(315deg, currentColor 25%, transparent 25%),
+    linear-gradient(45deg, currentColor 25%, transparent 25%);
+  background-size: 20px 20px;
+  opacity: 0.15;
+  mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+}
+
+.vfx-bubbles {
+  background-image:
+    radial-gradient(circle, currentColor 2px, transparent 0),
+    radial-gradient(circle, currentColor 3px, transparent 0),
+    radial-gradient(circle, currentColor 1px, transparent 0);
+  background-size:
+    40px 40px,
+    60px 60px,
+    30px 30px;
+  background-position:
+    0 0,
+    20px 20px,
+    10px 5px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
+}
+
+.vfx-mist {
+  background: linear-gradient(transparent 20%, currentColor 80%);
+  filter: blur(12px);
+  opacity: 0.2;
+  mask-image: linear-gradient(to top, black, transparent);
+}
+
+.vfx-waves {
+  background: radial-gradient(
+    circle at 50% 150%,
+    transparent 40%,
+    currentColor 41%,
+    currentColor 45%,
+    transparent 46%
+  );
+  background-size: 60px 40px;
+  mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
+}
+
+.vfx-beams {
+  background: conic-gradient(
+    from 180deg at 50% 0%,
+    transparent 44%,
+    currentColor 45%,
+    currentColor 55%,
+    transparent 56%
+  );
+  mask-image: radial-gradient(circle at 50% 0%, black 20%, transparent 90%);
+}
+
+.vfx-decay {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 12px,
+    currentColor 13px,
+    currentColor 14px
+  );
+  transform: skewX(-20deg);
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 85%);
+}
+
+.vfx-stars {
+  background-image:
+    radial-gradient(circle, white 1px, transparent 0),
+    radial-gradient(circle, white 0.5px, transparent 0);
+  background-size:
+    40px 40px,
+    70px 70px;
+  background-position:
+    0 0,
+    30px 45px;
+  opacity: 0.3;
+  mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+}
+
+.vfx-concentric {
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent,
+    transparent 12px,
+    currentColor 13px,
+    currentColor 15px
+  );
+  mask-image: radial-gradient(circle at center, black 10%, transparent 85%);
+}
+
+.vfx-lines-diag {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 15px,
+    currentColor 16px,
+    currentColor 17px
+  );
+  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+}
+
+.vfx-dots-tight {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 8px 8px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 95%);
+}
+
+.vfx-cracks {
+  background:
+    conic-gradient(from 0deg at 50% 50%, transparent 0deg, currentColor 0.5deg, transparent 1deg) 0
+      0,
+    conic-gradient(from 120deg at 50% 50%, transparent 0deg, currentColor 0.5deg, transparent 1deg)
+      0 0,
+    conic-gradient(from 240deg at 50% 50%, transparent 0deg, currentColor 0.5deg, transparent 1deg)
+      0 0;
+  background-size: 200% 200%;
+  mask-image: radial-gradient(circle at center, black 10%, transparent 80%);
+}

@@ -264,12 +264,14 @@ export type Database = {
       };
       spells: {
         Row: {
+          bg_style_id: string | null;
           casting_time: string | null;
           casting_value: number | null;
           classes: string[] | null;
           components: string[] | null;
           concentration: boolean | null;
           created_at: string | null;
+          damage_type: string | null;
           duration_unit: string | null;
           duration_value: number | null;
           external_index: string | null;
@@ -284,12 +286,14 @@ export type Database = {
           system: Database['public']['Enums']['rpg_system'];
         };
         Insert: {
+          bg_style_id?: string | null;
           casting_time?: string | null;
           casting_value?: number | null;
           classes?: string[] | null;
           components?: string[] | null;
           concentration?: boolean | null;
           created_at?: string | null;
+          damage_type?: string | null;
           duration_unit?: string | null;
           duration_value?: number | null;
           external_index?: string | null;
@@ -304,12 +308,14 @@ export type Database = {
           system?: Database['public']['Enums']['rpg_system'];
         };
         Update: {
+          bg_style_id?: string | null;
           casting_time?: string | null;
           casting_value?: number | null;
           classes?: string[] | null;
           components?: string[] | null;
           concentration?: boolean | null;
           created_at?: string | null;
+          damage_type?: string | null;
           duration_unit?: string | null;
           duration_value?: number | null;
           external_index?: string | null;

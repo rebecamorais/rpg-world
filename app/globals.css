@@ -1,49 +1,29 @@
 @import 'tailwindcss';
-@config '../tailwind.config.ts';
+@import '../src/frontend/styles/patterns.css';
+@import '../src/frontend/styles/typography.css';
 
 :root {
   /* DARK MODE BY DEFAULT */
   --background: #0c0c0e;
   --foreground: #fafafa;
-  --card: #1a1a1a;
+  --card: #141416;
   --card-foreground: #fafafa;
-  --muted: #27272a;
-  --muted-foreground: #d1d1d6;
-  --secondary: #27272a;
+  --muted: #1c1c1f;
+  --muted-foreground: #a1a1aa;
+  --secondary: #1c1c1f;
   --secondary-foreground: #fafafa;
   --border: #27272a;
   --input: #27272a;
   --ring: var(--primary);
-  --popover: #1a1a1a;
+  --popover: #141416;
   --popover-foreground: #fafafa;
-  --accent: #27272a;
+  --accent: #1c1c1f;
   --accent-foreground: #fafafa;
 
-  /* The default primary color. Can be overridden in JS */
-  --primary: #663399;
+  /* The default primary color */
+  --primary: #8b5cf6;
   --primary-foreground: #ffffff;
   --sidebar: #09090b;
-}
-
-/* 
-  FUTURE LIGHT MODE: 
-  Para ativar, basta adicionar a classe 'light' na tag <html> ou <body>
-*/
-.light {
-  --background: #ffffff;
-  --foreground: #18181b;
-  --card: #ffffff;
-  --card-foreground: #18181b;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #18181b;
-  --border: #e4e4e7;
-  --input: #e4e4e7;
-  --popover: #ffffff;
-  --popover-foreground: #18181b;
-  --accent: #f4f4f5;
-  --accent-foreground: #18181b;
 }
 
 @theme inline {
@@ -61,42 +41,32 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-sidebar: var(--sidebar);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --font-sans: var(--font-inter), 'Geist Sans', ui-sans-serif, system-ui;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  font-size: 17px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  letter-spacing: -0.02em;
-  font-weight: 700;
-  color: var(--foreground);
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-foreground font-bold tracking-tight;
+  }
 }
 
 @layer utilities {
-  .appearance-none-all::-webkit-inner-spin-button,
-  .appearance-none-all::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  .glass {
+    @apply border border-white/10 bg-white/5 backdrop-blur-xl;
   }
-  .appearance-none-all {
-    -moz-appearance: textfield;
+
+  .glass-premium {
+    @apply border border-white/10 bg-black/40 shadow-2xl backdrop-blur-2xl;
   }
 }

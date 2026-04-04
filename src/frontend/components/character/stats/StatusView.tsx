@@ -27,10 +27,7 @@ export default function StatusView() {
     handleSpellPointsChange,
     handleSpellSlotsChange,
     handleSpellcastingSystemChange,
-    handleForgetSpell,
-    handleTogglePrepared,
     handleHitDiceChange,
-    characterSpells,
   } = useCharacterContext();
 
   if (!character) return null;

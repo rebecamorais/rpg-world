@@ -28,6 +28,8 @@ export class SupabaseSpellsRepository implements SpellsRepo {
         components,
         material_cost,
         is_scaling,
+        damage_type,
+        bg_style_id,
         spell_translations (
           name
         )
@@ -58,6 +60,8 @@ export class SupabaseSpellsRepository implements SpellsRepo {
       ritual: row.ritual,
       materialCost: row.material_cost,
       isScaling: row.is_scaling,
+      damageType: row.damage_type,
+      bgStyleId: row.bg_style_id,
     }));
   }
 }

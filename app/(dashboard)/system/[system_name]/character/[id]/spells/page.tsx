@@ -1,7 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import { Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -23,7 +21,6 @@ export default function CharacterSpellsPage() {
     characterSpells,
   } = useCharacterContext();
   const t = useTranslations('characters');
-  const tData = useTranslations('spellsData');
   const tCommon = useTranslations('common');
 
   const preparedCount = characterSpells.filter((s) => s.isPrepared).length;

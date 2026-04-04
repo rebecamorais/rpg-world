@@ -18,6 +18,8 @@ export interface SpellDto {
   description?: string;
   higherLevel?: string | null;
   material?: string | null;
+  damageType?: 'fire' | 'lightning' | 'acid' | 'cold' | 'necrotic' | 'radiant' | 'force' | string;
+  bgStyleId?: string | null;
 }
 
 export interface SpellsRepo {

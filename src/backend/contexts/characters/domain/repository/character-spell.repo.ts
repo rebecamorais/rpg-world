@@ -19,6 +19,8 @@ export interface CharacterSpellRelation {
   durationValue?: number | null;
   rangeUnit?: string | null;
   rangeValue?: number | null;
+  damageType?: string | null;
+  bgStyleId?: string | null;
 }
 
 export interface CharacterSpellRepo {

@@ -43,6 +43,8 @@ export interface Spell {
 
   // Metadata
   systemData?: Record<string, unknown>;
+
+  damageType?: 'fire' | 'lightning' | 'acid' | 'cold' | 'necrotic' | 'radiant' | 'force' | string;
 }
 
 export interface DnD5eCharacterData {

@@ -19,10 +19,13 @@ export type CharacterSpell = {
   higherLevel?: string | null;
   material?: string | null;
   castingTime?: string | null;
+  castingValue?: number | null;
   durationUnit?: string | null;
   durationValue?: number | null;
   rangeUnit?: string | null;
   rangeValue?: number | null;
+  damageType?: string | null;
+  bgStyleId?: string | null;
 };
 
 export function useCharacterSpells(characterId: string | undefined) {
