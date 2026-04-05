@@ -579,6 +579,16 @@
       "pixCopy": "Pix key copied!",
       "thanks": "Thank you so much for your care and support! <heart />"
     },
-    "copyright": "© {year} DevStudio. All rights reserved."
+    "copyright": "© {year} Rebs Tech Studio. All rights reserved."
+  },
+  "loadingMessages": {
+    "weapons": "Equipping weapons...",
+    "ritual": "Preparing ritual...",
+    "gods": "Consulting the gods...",
+    "armor": "Polishing armor...",
+    "spirits": "Summoning spirits...",
+    "blades": "Sharpening blades...",
+    "scrolls": "Reading ancient scrolls...",
+    "battlefield": "Preparing the battlefield..."
   }
 }

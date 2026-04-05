@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { SpellCard } from '@frontend/components/character/spells/SpellCard';
+import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
@@ -16,7 +17,6 @@ import {
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
-import { Spinner } from '@frontend/components/ui/spinner';
 import { DAMAGE_THEMES } from '@frontend/constants/damage-themes';
 import { useSpells } from '@frontend/hooks/useSpells';
 import { CharacterClass, SpellSchool } from '@frontend/types/spells';
@@ -202,12 +202,7 @@ export default function SpellsDrawer({
 
         <div className="custom-scrollbar flex-1 overflow-y-auto px-6 py-6">
           {isLoading ? (
-            <div className="flex h-64 flex-col items-center justify-center gap-4">
-              <Spinner size="lg" className="text-primary" />
-              <p className="animate-pulse text-sm font-medium text-gray-400">
-                {t('loadingSpells')}
-              </p>
-            </div>
+            <LoadingState thematic />
           ) : spells.length === 0 ? (
             <div className="flex h-64 flex-col items-center justify-center gap-4 text-center">
               <div className="rounded-full bg-white/5 p-4">

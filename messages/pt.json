@@ -579,6 +579,16 @@
       "pixCopy": "Chave Pix copiada!",
       "thanks": "Muito obrigada pelo seu carinho e apoio! <heart />"
     },
-    "copyright": "© {year} DevStudio. Todos os direitos reservados."
+    "copyright": "© {year} Rebs Tech Studio. Todos os direitos reservados."
+  },
+  "loadingMessages": {
+    "weapons": "Equipando armas...",
+    "ritual": "Preparando ritual...",
+    "gods": "Consultando os deuses...",
+    "armor": "Polindo armaduras...",
+    "spirits": "Invocando espíritos...",
+    "blades": "Afiando lâminas...",
+    "scrolls": "Lendo pergaminhos antigos...",
+    "battlefield": "Preparando o campo de batalha..."
   }
 }

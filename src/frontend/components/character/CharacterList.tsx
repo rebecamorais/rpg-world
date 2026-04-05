@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { useTranslations } from 'next-intl';
 
+import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 
@@ -23,11 +24,7 @@ export default function CharacterList() {
   }
 
   if (isLoading) {
-    return (
-      <div className="text-muted-foreground p-6 text-center">
-        <p>{t('loading')}</p>
-      </div>
-    );
+    return <LoadingState thematic />;
   }
 
   if (characters.length === 0) {
