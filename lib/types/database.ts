@@ -283,6 +283,7 @@ export type Database = {
           range_value: number | null;
           ritual: boolean | null;
           school: string | null;
+          spell_category: string | null;
           system: Database['public']['Enums']['rpg_system'];
         };
         Insert: {
@@ -305,6 +306,7 @@ export type Database = {
           range_value?: number | null;
           ritual?: boolean | null;
           school?: string | null;
+          spell_category?: string | null;
           system?: Database['public']['Enums']['rpg_system'];
         };
         Update: {
@@ -327,6 +329,7 @@ export type Database = {
           range_value?: number | null;
           ritual?: boolean | null;
           school?: string | null;
+          spell_category?: string | null;
           system?: Database['public']['Enums']['rpg_system'];
         };
         Relationships: [];

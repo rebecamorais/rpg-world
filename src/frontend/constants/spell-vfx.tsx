@@ -42,4 +42,35 @@ export const SPELL_BACKGROUNDS: Record<string, (color: string) => React.ReactNod
       />
     </div>
   ),
+  'dots-space': (color: string) => (
+    <div className="absolute top-0 -z-10 h-full w-full bg-[#030712] bg-[radial-gradient(#ffffff15_1px,transparent_1px)] bg-[size:24px_24px]">
+      <div
+        className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--vfx-color)_0%,transparent_70%)] opacity-20"
+        style={{ '--vfx-color': color } as React.CSSProperties}
+      />
+    </div>
+  ),
+  'force-shockwave': (color: string) => (
+    <div
+      className="absolute inset-0 -z-10 h-full w-full overflow-hidden bg-slate-950"
+      style={{ '--vfx-color': color } as React.CSSProperties}
+    >
+      {/* Heavy Shockwaves with staggered delays */}
+      <div className="animate-shockwave absolute top-1/2 left-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border-[var(--vfx-color)] opacity-40" />
+      <div
+        className="animate-shockwave absolute top-1/2 left-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border-[var(--vfx-color)] opacity-30"
+        style={{ animationDelay: '500ms' }}
+      />
+      <div
+        className="animate-shockwave absolute top-1/2 left-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border-[var(--vfx-color)] opacity-20"
+        style={{ animationDelay: '1000ms' }}
+      />
+
+      {/* Center Glow */}
+      <div
+        className="absolute top-1/2 left-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-[40px]"
+        style={{ backgroundColor: color }}
+      />
+    </div>
+  ),
 };

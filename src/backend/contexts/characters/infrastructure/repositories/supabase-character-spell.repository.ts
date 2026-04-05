@@ -54,11 +54,10 @@ export class SupabaseCharacterSpellRepository implements CharacterSpellRepo {
       return [];
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (data as any[]).map((row) => ({
-      spellId: row.spell_id,
+    return data.map((row) => ({
+      id: row.spell_id,
       isPrepared: row.is_prepared ?? false,
-      createdAt: row.created_at,
+      createdAt: row.created_at || undefined,
       name: row.spells?.spell_translations?.[0]?.name || row.spell_id,
       level: row.spells?.level || 0,
       school: row.spells?.school || '',
@@ -81,10 +80,10 @@ export class SupabaseCharacterSpellRepository implements CharacterSpellRepo {
     }));
   }
 
-  async learn(characterId: string, spellId: string): Promise<void> {
+  async learn(characterId: string, id: string): Promise<void> {
     const { error } = await (this.client.from('character_spells').insert({
       character_id: characterId,
-      spell_id: spellId,
+      spell_id: id,
     }) as PromiseLike<{ error: { message: string; code?: string } | null }>);
 
     if (error && error.code !== '23505') {
@@ -93,24 +92,24 @@ export class SupabaseCharacterSpellRepository implements CharacterSpellRepo {
     }
   }
 
-  async forget(characterId: string, spellId: string): Promise<void> {
+  async forget(characterId: string, id: string): Promise<void> {
     const { error } = await this.client
       .from('character_spells')
       .delete()
       .eq('character_id', characterId)
-      .eq('spell_id', spellId);
+      .eq('spell_id', id);
 
     if (error) {
       throw new Error(`Failed to forget spell: ${error.message}`);
     }
   }
 
-  async togglePrepared(characterId: string, spellId: string, isPrepared: boolean): Promise<void> {
+  async togglePrepared(characterId: string, id: string, isPrepared: boolean): Promise<void> {
     const { error } = await (this.client
       .from('character_spells')
       .update({ is_prepared: isPrepared } as { [key: string]: boolean })
       .eq('character_id', characterId)
-      .eq('spell_id', spellId) as PromiseLike<{ error: { message: string } | null }>);
+      .eq('spell_id', id) as PromiseLike<{ error: { message: string } | null }>);
 
     if (error) {
       throw new Error(`Failed to toggle spell preparation: ${error.message}`);

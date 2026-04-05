@@ -26,9 +26,9 @@ type CharacterContextType = ReturnType<typeof useCharacterEditor> & {
   characterSpells: CharacterSpell[];
   spellsKnown: string[];
   isSpellsLoading: boolean;
-  handleLearnSpell: (spellId: string) => void;
-  handleForgetSpell: (spellId: string) => void;
-  handleTogglePrepared: (spellId: string, isPrepared: boolean) => void;
+  handleLearnSpell: (id: string) => void;
+  handleForgetSpell: (id: string) => void;
+  handleTogglePrepared: (id: string, isPrepared: boolean) => void;
 };
 
 const CharacterContext = createContext<CharacterContextType | null>(null);
@@ -82,7 +82,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const spellsKnown = useMemo(() => spells.map((s) => s.spellId), [spells]);
+  const spellsKnown = useMemo(() => spells.map((s) => s.id), [spells]);
 
   return (
     <CharacterContext.Provider

@@ -65,7 +65,7 @@ export default function CharacterSheetClient() {
     handleHitDiceChange,
   } = useCharacterEditor({ fetchedCharacter: fetchedCharacter as DnD5eCharacter, queryError });
 
-  const spellsKnown = useMemo(() => characterSpells.map((s) => s.spellId), [characterSpells]);
+  const spellsKnown = useMemo(() => characterSpells.map((s) => s.id), [characterSpells]);
 
   const searchParams = useSearchParams();
   const activeTab = (searchParams?.get('tab') as CharacterTab) || CharacterTab.STATUS;

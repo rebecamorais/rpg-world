@@ -34,7 +34,7 @@ export interface CharacterContext {
     id: string,
     locale?: string,
   ): Promise<
-    Array<{ spellId: string; name: string; level: number; school: string; isPrepared: boolean }>
+    Array<{ id: string; name: string; level: number; school: string; isPrepared: boolean }>
   >;
   toggleSpell(
     id: string,

@@ -142,6 +142,9 @@
     "saveError": "Failed to save on the server.",
     "unsavedChanges": "You have unsaved changes.",
     "passivePerception": "Passive Perception",
+    "search": "Search",
+    "learn": "Learn",
+    "allDamage": "All Damage",
     "preparedSpells": "Known Spells",
     "forgetSpell": "Forget spell",
     "prepareSpell": "Prepare spell",
@@ -245,7 +248,12 @@
     "description": "Manage your character's known spells.",
     "emptyState": "No spells learned yet.",
     "allLevels": "All levels",
-    "noSpellsFound": "No spells found."
+    "allSchools": "All schools",
+    "allClasses": "All classes",
+    "noSpellsFound": "No spells found.",
+    "loadingSpells": "Channeling spells...",
+    "clearFilters": "Clear all filters",
+    "pagination": "Showing {count} of {total} spells"
   },
   "magicSystem": {
     "titleConfig": "Magic System Configuration",
@@ -527,6 +535,20 @@
       "day": "{value} {value, plural, one {day} other {days}}",
       "round": "{value} {value, plural, one {round} other {rounds}}",
       "special": "Special"
+    },
+    "classes": {
+      "barbarian": "Barbarian",
+      "bard": "Bard",
+      "cleric": "Cleric",
+      "druid": "Druid",
+      "fighter": "Fighter",
+      "monk": "Monk",
+      "paladin": "Paladin",
+      "ranger": "Ranger",
+      "rogue": "Rogue",
+      "sorcerer": "Sorcerer",
+      "warlock": "Warlock",
+      "wizard": "Wizard"
     }
   }
 }

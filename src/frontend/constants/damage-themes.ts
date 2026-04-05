@@ -6,6 +6,7 @@ export interface DamageTheme {
   vfx: string;
   glow: string;
   hex: string;
+  distortion?: string;
   parallax?: number;
 }
 
@@ -82,22 +83,23 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
   },
   necrotic: {
     icon: 'Ghost',
-    color: 'text-purple-900',
-    border: 'border-purple-900/20',
-    bg: 'bg-purple-900/5',
+    color: 'text-purple-500',
+    border: 'border-purple-500/20',
+    bg: 'bg-purple-500/5',
     vfx: 'vfx-decay',
-    glow: 'shadow-purple-900/10',
-    hex: '#581c87',
+    glow: 'shadow-purple-500/10',
+    hex: '#a855f7',
     parallax: 3,
   },
   force: {
-    icon: 'Orbit',
-    color: 'text-indigo-500',
-    border: 'border-indigo-500/20',
-    bg: 'bg-indigo-500/5',
-    vfx: 'vfx-stars',
-    glow: 'shadow-indigo-500/10',
-    hex: '#6366f1',
+    icon: 'Waves',
+    color: 'text-white',
+    border: 'border-white/20',
+    bg: 'bg-white/5',
+    vfx: 'force-shockwave',
+    glow: 'shadow-white/20',
+    hex: '#ffffff',
+    distortion: 'force-distortion-heavy opacity-0 group-hover:opacity-100',
     parallax: 0,
   },
   thunder: {
@@ -108,6 +110,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     vfx: 'vfx-concentric',
     glow: 'shadow-slate-400/10',
     hex: '#94a3b8',
+    distortion: 'vfx-sonic-distortion',
     parallax: -1,
   },
   slashing: {
@@ -140,4 +143,48 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     hex: '#78716c',
     parallax: -1,
   },
+};
+
+export const CATEGORY_THEMES: Record<string, DamageTheme> = {
+  buff: {
+    icon: 'ShieldPlus',
+    color: 'text-emerald-400',
+    border: 'border-emerald-400/20',
+    bg: 'bg-emerald-400/5',
+    vfx: 'vfx-grid',
+    glow: 'shadow-emerald-400/10',
+    hex: '#34d399',
+    parallax: 0,
+  },
+  utility: {
+    icon: 'Sparkles',
+    color: 'text-amber-400',
+    border: 'border-amber-400/20',
+    bg: 'bg-amber-400/5',
+    vfx: 'vfx-dots',
+    glow: 'shadow-amber-400/10',
+    hex: '#fbbf24',
+    parallax: 0,
+  },
+  control: {
+    icon: 'VenetianMask',
+    color: 'text-yellow-500',
+    border: 'border-yellow-500/20',
+    bg: 'bg-yellow-500/5',
+    vfx: 'vfx-ethereal',
+    glow: 'shadow-yellow-500/10',
+    hex: '#eab308',
+    parallax: 0,
+  },
+};
+
+export const DEFAULT_THEME: DamageTheme = {
+  icon: 'BookOpen',
+  color: 'text-slate-400',
+  border: 'border-slate-400/20',
+  bg: 'bg-slate-400/5',
+  vfx: 'vfx-dots',
+  glow: 'shadow-slate-400/10',
+  hex: '#94a3b8',
+  parallax: 0,
 };

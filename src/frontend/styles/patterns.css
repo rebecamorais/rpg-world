@@ -134,3 +134,43 @@
   background-size: 200% 200%;
   mask-image: radial-gradient(circle at center, black 10%, transparent 80%);
 }
+
+.vfx-ethereal {
+  background:
+    radial-gradient(circle at 20% 30%, currentColor 1.5px, transparent 1.5px),
+    radial-gradient(circle at 80% 70%, currentColor 1.5px, transparent 1.5px),
+    linear-gradient(currentColor 1px, transparent 1px) 0 0 / 40px 40px;
+  opacity: 0.15;
+  filter: blur(0.5px);
+  mask-image: radial-gradient(circle at center, black 25%, transparent 90%);
+}
+
+/* Force Distortion VFX */
+.force-distortion-heavy {
+  filter: url(#heavy-distortion);
+}
+
+@keyframes shockwave {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+    border-width: 8px;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+.animate-shockwave {
+  animation: shockwave 1.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+/* Thunder Sonic Distortion */
+.vfx-sonic-distortion {
+  filter: url(#sonic-distortion);
+}

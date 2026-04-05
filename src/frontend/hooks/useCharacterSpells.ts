@@ -4,29 +4,9 @@ import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
 
-export type CharacterSpell = {
-  spellId: string;
-  name: string;
-  level: number;
-  school: string;
-  isPrepared: boolean;
-  components?: string[];
-  concentration?: boolean;
-  ritual?: boolean;
-  materialCost?: number;
-  isScaling?: boolean;
-  description?: string;
-  higherLevel?: string | null;
-  material?: string | null;
-  castingTime?: string | null;
-  castingValue?: number | null;
-  durationUnit?: string | null;
-  durationValue?: number | null;
-  rangeUnit?: string | null;
-  rangeValue?: number | null;
-  damageType?: string | null;
-  bgStyleId?: string | null;
-};
+import { Spell } from '@frontend/types/spells';
+
+export type CharacterSpell = Spell;
 
 export function useCharacterSpells(characterId: string | undefined) {
   const queryToKey = ['character-spells', characterId];
@@ -48,13 +28,13 @@ export function useCharacterSpells(characterId: string | undefined) {
 
   const mutation = useMutation({
     mutationFn: async ({
-      spellId,
+      id,
       action,
     }: {
-      spellId: string;
+      id: string;
       action: 'learn' | 'forget' | 'prepare' | 'unprepare';
     }) => {
-      return rpgWorldApi.post(`/api/characters/${characterId}/spells`, { spellId, action });
+      return rpgWorldApi.post(`/api/characters/${characterId}/spells`, { id, action });
     },
     onSuccess: (_, variables) => {
       // Optimistic or simple refetch
@@ -74,10 +54,10 @@ export function useCharacterSpells(characterId: string | undefined) {
     spells,
     isLoading,
     error,
-    learnSpell: (spellId: string) => mutation.mutateAsync({ spellId, action: 'learn' }),
-    forgetSpell: (spellId: string) => mutation.mutateAsync({ spellId, action: 'forget' }),
-    togglePrepared: (spellId: string, isPrepared: boolean) =>
-      mutation.mutateAsync({ spellId, action: isPrepared ? 'prepare' : 'unprepare' }),
+    learnSpell: (id: string) => mutation.mutateAsync({ id, action: 'learn' }),
+    forgetSpell: (id: string) => mutation.mutateAsync({ id, action: 'forget' }),
+    togglePrepared: (id: string, isPrepared: boolean) =>
+      mutation.mutateAsync({ id, action: isPrepared ? 'prepare' : 'unprepare' }),
     isUpdating: mutation.isPending,
   };
 }

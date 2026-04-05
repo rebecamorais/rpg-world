@@ -3,28 +3,46 @@ import { useLocale } from 'next-intl';
 
 import { rpgWorldApi } from '@client';
 
-export type SpellDto = {
-  id: string;
-  name: string;
-  level: number;
-  school: string;
-  classes: string[];
-  components: string[];
-  durationUnit?: string | null;
-  durationValue?: number | null;
-  rangeUnit?: string | null;
-  rangeValue?: number | null;
-  castingTime?: string | null;
-  castingValue?: number | null;
+import { CharacterClass, Spell, SpellSchool } from '@frontend/types/spells';
+
+export type SpellDto = Spell;
+
+export type PaginatedSpells = {
+  data: SpellDto[];
+  total: number;
 };
 
-export function useSpells() {
+export type UseSpellsFilters = {
+  page?: number;
+  limit?: number;
+  search?: string;
+  level?: number | null;
+  school?: SpellSchool | string | null;
+  class?: CharacterClass | string | null;
+  damageType?: string | null;
+};
+
+export function useSpells(filters: UseSpellsFilters = {}) {
   const locale = useLocale();
 
-  return useQuery<SpellDto[]>({
-    queryKey: ['system-spells', locale],
+  return useQuery<PaginatedSpells>({
+    queryKey: ['system-spells', locale, filters],
     queryFn: async () => {
-      return rpgWorldApi.get(`/api/spells?locale=${locale}`);
+      const params = new URLSearchParams({
+        locale,
+        page: (filters.page || 0).toString(),
+        limit: (filters.limit || 12).toString(),
+      });
+
+      if (filters.search) params.append('search', filters.search);
+      if (filters.level !== undefined && filters.level !== null) {
+        params.append('level', filters.level.toString());
+      }
+      if (filters.school) params.append('school', filters.school);
+      if (filters.class) params.append('class', filters.class);
+      if (filters.damageType) params.append('damageType', filters.damageType);
+
+      return rpgWorldApi.get(`/api/spells?${params.toString()}`);
     },
   });
 }

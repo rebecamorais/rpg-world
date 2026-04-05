@@ -5,18 +5,20 @@ import React from 'react';
 import * as Lucide from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { DAMAGE_THEMES } from '@frontend/constants/damage-themes';
-import type { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
+import { CATEGORY_THEMES, DAMAGE_THEMES, DEFAULT_THEME } from '@frontend/constants/damage-themes';
+import type { Spell } from '@frontend/types/spells';
 
 import { SpellBackground } from './SpellBackground';
 import { SpellChip } from './SpellChip';
 
 interface SpellCardProps {
-  spell: CharacterSpell & { id: string };
+  spell: Spell;
   isExpanded?: boolean;
   onClick?: () => void;
-  onForgetSpell?: (spellId: string) => void;
-  onTogglePrepared?: (spellId: string, isPrepared: boolean) => void;
+  onForgetSpell?: (id: string) => void;
+  onTogglePrepared?: (id: string, isPrepared: boolean) => void;
+  onLearnSpell?: (id: string) => void;
+  isLearned?: boolean;
 }
 
 export function SpellCard({
@@ -25,10 +27,18 @@ export function SpellCard({
   onClick,
   onForgetSpell,
   onTogglePrepared,
+  onLearnSpell,
+  isLearned,
 }: SpellCardProps) {
-  // Fallback to force if damageType is missing or unknown
-  const damageKey = spell.damageType?.toLowerCase() || 'force';
-  const theme = DAMAGE_THEMES[damageKey] || DAMAGE_THEMES.force;
+  // 1. Resolve Theme (Priority: Damage > Category > Default)
+  const damageKey = spell.damageType?.toLowerCase();
+  const categoryKey = spell.spellCategory?.toLowerCase();
+
+  const theme =
+    (damageKey && DAMAGE_THEMES[damageKey]) ||
+    (categoryKey && CATEGORY_THEMES[categoryKey]) ||
+    DEFAULT_THEME;
+
   const tData = useTranslations('spellsData');
   const tCharacters = useTranslations('characters');
 
@@ -181,41 +191,74 @@ export function SpellCard({
         {/* Action Buttons (Only visible when expanded) */}
         {isExpanded && (
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-white/5 pt-4">
-            {/* If cantrip, no need to prepare. Otherwise show toggle. */}
-            {spell.level > 0 ? (
+            {onLearnSpell ? (
+              /* Selection Mode: Learn/Forget from catalog */
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onTogglePrepared?.(spell.id, !spell.isPrepared);
+                  if (isLearned) {
+                    onForgetSpell?.(spell.id);
+                  } else {
+                    onLearnSpell?.(spell.id);
+                  }
                 }}
-                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition-all ${
-                  spell.isPrepared
-                    ? 'border border-amber-500/30 bg-amber-500/10 text-amber-500 hover:border-amber-500/60 hover:bg-amber-500/20'
-                    : 'border border-amber-500 bg-amber-500 text-amber-950 shadow-md hover:bg-amber-400 hover:shadow-amber-500/20'
+                className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition-all ${
+                  isLearned
+                    ? 'border border-red-500/30 bg-red-500/10 text-red-400 hover:border-red-500/60 hover:bg-red-500/20'
+                    : 'border border-[var(--theme-primary)] bg-[var(--theme-primary)] text-slate-950 shadow-md hover:opacity-90'
                 }`}
               >
-                <Lucide.Bookmark
-                  size={16}
-                  className={
-                    spell.isPrepared ? 'fill-amber-500/50 text-amber-500' : 'text-amber-950'
-                  }
-                />
-                {spell.isPrepared ? tCharacters('unprepareSpell') : tCharacters('prepareSpell')}
+                {isLearned ? (
+                  <>
+                    <Lucide.Trash2 size={16} />
+                    {tCharacters('forgetSpell')}
+                  </>
+                ) : (
+                  <>
+                    <Lucide.Plus size={16} />
+                    {tCharacters('learn')}
+                  </>
+                )}
               </button>
             ) : (
-              <div />
-            )}
+              /* Managed Mode: Prepare/Forget from known spells */
+              <>
+                {spell.level > 0 ? (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onTogglePrepared?.(spell.id, !spell.isPrepared);
+                    }}
+                    className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition-all ${
+                      spell.isPrepared
+                        ? 'border border-amber-500/30 bg-amber-500/10 text-amber-500 hover:border-amber-500/60 hover:bg-amber-500/20'
+                        : 'border border-amber-500 bg-amber-500 text-amber-950 shadow-md hover:bg-amber-400 hover:shadow-amber-500/20'
+                    }`}
+                  >
+                    <Lucide.Bookmark
+                      size={16}
+                      className={
+                        spell.isPrepared ? 'fill-amber-500/50 text-amber-500' : 'text-amber-950'
+                      }
+                    />
+                    {spell.isPrepared ? tCharacters('unprepareSpell') : tCharacters('prepareSpell')}
+                  </button>
+                ) : (
+                  <div />
+                )}
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onForgetSpell?.(spell.id);
-              }}
-              className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-red-400/80 transition-all hover:bg-red-500/10 hover:text-red-400"
-            >
-              <Lucide.Trash2 size={16} />
-              {tCharacters('forgetSpell')}
-            </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onForgetSpell?.(spell.id);
+                  }}
+                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-red-400/80 transition-all hover:bg-red-500/10 hover:text-red-400"
+                >
+                  <Lucide.Trash2 size={16} />
+                  {tCharacters('forgetSpell')}
+                </button>
+              </>
+            )}
           </div>
         )}
       </div>

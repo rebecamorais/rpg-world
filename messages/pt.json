@@ -142,6 +142,9 @@
     "saveError": "Falha ao salvar no servidor.",
     "unsavedChanges": "Você tem alterações não salvas.",
     "passivePerception": "Percepção Passiva",
+    "search": "Buscar",
+    "learn": "Aprender",
+    "allDamage": "Todos os Danos",
     "preparedSpells": "Magias Conhecidas",
     "forgetSpell": "Esquecer magia",
     "prepareSpell": "Preparar magia",
@@ -245,7 +248,12 @@
     "description": "Gerencie as magias conhecidas pelo seu personagem.",
     "emptyState": "Nenhuma magia aprendida ainda.",
     "allLevels": "Todos os níveis",
-    "noSpellsFound": "Nenhuma magia encontrada."
+    "allSchools": "Todas as escolas",
+    "allClasses": "Todas as classes",
+    "noSpellsFound": "Nenhuma magia encontrada.",
+    "loadingSpells": "Canalizando magias...",
+    "clearFilters": "Limpar todos os filtros",
+    "pagination": "Mostrando {count} de {total} magias"
   },
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",
@@ -527,6 +535,20 @@
       "day": "{value} {value, plural, one {dia} other {dias}}",
       "round": "{value} {value, plural, one {rodada} other {rodadas}}",
       "special": "Especial"
+    },
+    "classes": {
+      "barbarian": "Bárbaro",
+      "bard": "Bardo",
+      "cleric": "Clérigo",
+      "druid": "Druida",
+      "fighter": "Guerreiro",
+      "monk": "Monge",
+      "paladin": "Paladino",
+      "ranger": "Patrulheiro",
+      "rogue": "Ladino",
+      "sorcerer": "Feiticeiro",
+      "warlock": "Bruxo",
+      "wizard": "Mago"
     }
   }
 }

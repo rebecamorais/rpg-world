@@ -21,7 +21,7 @@ export const GET = withAuth(async (req, user, _body, ctx) => {
 });
 
 export const POST = withAuth<{
-  spellId: string;
+  id: string;
   action: 'learn' | 'forget' | 'prepare' | 'unprepare';
 }>(async (req, user, body, ctx) => {
   const { id } = await ctx.params;
@@ -33,6 +33,6 @@ export const POST = withAuth<{
     throw Object.assign(new Error('Unauthorized'), { status: 403 });
   }
 
-  await charactersApi.toggleSpell(id, body.spellId, body.action);
+  await charactersApi.toggleSpell(id, body.id, body.action);
   return { success: true };
 });

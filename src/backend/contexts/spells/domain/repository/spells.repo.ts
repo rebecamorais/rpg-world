@@ -19,9 +19,26 @@ export interface SpellDto {
   higherLevel?: string | null;
   material?: string | null;
   damageType?: 'fire' | 'lightning' | 'acid' | 'cold' | 'necrotic' | 'radiant' | 'force' | string;
+  spellCategory?: string;
   bgStyleId?: string | null;
 }
 
+export interface FindSpellsParams {
+  locale?: string;
+  page?: number;
+  limit?: number;
+  search?: string;
+  level?: number;
+  school?: string;
+  class?: string;
+  damageType?: string;
+}
+
+export interface PaginatedSpells {
+  data: SpellDto[];
+  total: number;
+}
+
 export interface SpellsRepo {
-  findAll(locale?: string): Promise<SpellDto[]>;
+  findAll(params?: FindSpellsParams): Promise<PaginatedSpells>;
 }

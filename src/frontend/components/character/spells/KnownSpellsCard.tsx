@@ -10,8 +10,8 @@ import type { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
 
 interface KnownSpellsCardProps {
   characterSpells: CharacterSpell[];
-  onForgetSpell: (spellId: string) => void;
-  onTogglePrepared: (spellId: string, isPrepared: boolean) => void;
+  onForgetSpell: (id: string) => void;
+  onTogglePrepared: (id: string, isPrepared: boolean) => void;
 }
 
 function KnownSpellsCard({
@@ -54,7 +54,7 @@ function KnownSpellsCard({
         <ul className="space-y-2">
           {sortedSpells.map((spell) => (
             <li
-              key={spell.spellId}
+              key={spell.id}
               className={`flex items-center justify-between rounded-lg border p-3 transition-all ${
                 spell.isPrepared
                   ? 'border-primary/30 bg-primary/5 shadow-sm'
@@ -84,7 +84,7 @@ function KnownSpellsCard({
               <div className="flex items-center gap-1">
                 {/* Toggle preparation */}
                 <button
-                  onClick={() => onTogglePrepared(spell.spellId, !spell.isPrepared)}
+                  onClick={() => onTogglePrepared(spell.id, !spell.isPrepared)}
                   className={`rounded-md p-1.5 transition-all ${
                     spell.isPrepared
                       ? 'bg-primary/15 text-primary hover:bg-primary/25'
@@ -101,7 +101,7 @@ function KnownSpellsCard({
 
                 {/* Forget spell */}
                 <button
-                  onClick={() => onForgetSpell(spell.spellId)}
+                  onClick={() => onForgetSpell(spell.id)}
                   className="text-muted-foreground rounded-md p-1.5 transition-colors hover:bg-red-500/10 hover:text-red-500"
                   title={t('forgetSpell')}
                 >

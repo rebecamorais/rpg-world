@@ -21,8 +21,8 @@ import { SpellCard } from './SpellCard';
 
 interface SpellbookProps {
   characterSpells: CharacterSpell[];
-  onForgetSpell?: (spellId: string) => void;
-  onTogglePrepared?: (spellId: string, isPrepared: boolean) => void;
+  onForgetSpell?: (id: string) => void;
+  onTogglePrepared?: (id: string, isPrepared: boolean) => void;
 }
 
 export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: SpellbookProps) {
@@ -49,8 +49,8 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
 
   if (!characterSpells || characterSpells.length === 0) return null;
 
-  const toggleExpand = (spellId: string) => {
-    setExpandedSpellId(expandedSpellId === spellId ? null : spellId);
+  const toggleExpand = (id: string) => {
+    setExpandedSpellId(expandedSpellId === id ? null : id);
   };
 
   return (
@@ -135,15 +135,10 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                       })
                       .map((spell) => (
                         <SpellCard
-                          key={spell.spellId}
-                          spell={
-                            {
-                              ...spell,
-                              id: spell.spellId,
-                            } as CharacterSpell & { id: string }
-                          }
-                          isExpanded={expandedSpellId === spell.spellId}
-                          onClick={() => toggleExpand(spell.spellId)}
+                          key={spell.id}
+                          spell={spell}
+                          isExpanded={expandedSpellId === spell.id}
+                          onClick={() => toggleExpand(spell.id)}
                           onForgetSpell={onForgetSpell}
                           onTogglePrepared={onTogglePrepared}
                         />

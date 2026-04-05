@@ -3,6 +3,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@database-types';
 
 import { GetAllSpellsUseCase } from './application/get-all-spells.use-case';
+import { FindSpellsParams } from './domain/repository/spells.repo';
 import { SpellsRepo } from './domain/repository/spells.repo';
 import { SupabaseSpellsRepository } from './infrastructure/repositories/supabase-spells.repository';
 
@@ -13,8 +14,8 @@ export class SpellsContext {
     this.getAllSpellsUseCase = new GetAllSpellsUseCase(repository);
   }
 
-  async getAllSpells(locale?: string) {
-    return this.getAllSpellsUseCase.execute(locale);
+  async getAllSpells(params?: FindSpellsParams) {
+    return this.getAllSpellsUseCase.execute(params);
   }
 }
 

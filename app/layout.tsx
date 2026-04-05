@@ -9,6 +9,7 @@ import { getLocale, getMessages, getTimeZone } from 'next-intl/server';
 import GlobalHeader from '@frontend/components/layout/GlobalHeader';
 import Providers from '@frontend/components/providers/Providers';
 import { Toaster } from '@frontend/components/ui/sonner';
+import SVGFilters from '@frontend/components/vfx/SVGFilters';
 
 import './globals.css';
 
@@ -51,6 +52,7 @@ export default async function RootLayout({
           <div className="flex flex-1 flex-col">{children}</div>
         </Providers>
         <Toaster />
+        <SVGFilters />
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 export interface CharacterSpellRelation {
-  spellId: string;
+  id: string;
   name: string;
   level: number;
   school: string;
@@ -25,7 +25,7 @@ export interface CharacterSpellRelation {
 
 export interface CharacterSpellRepo {
   findByCharacterId(characterId: string, locale?: string): Promise<CharacterSpellRelation[]>;
-  learn(characterId: string, spellId: string): Promise<void>;
-  forget(characterId: string, spellId: string): Promise<void>;
-  togglePrepared(characterId: string, spellId: string, isPrepared: boolean): Promise<void>;
+  learn(characterId: string, id: string): Promise<void>;
+  forget(characterId: string, id: string): Promise<void>;
+  togglePrepared(characterId: string, id: string, isPrepared: boolean): Promise<void>;
 }
