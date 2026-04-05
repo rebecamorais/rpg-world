@@ -1,24 +1,17 @@
-import { CATEGORY_THEMES, DAMAGE_THEMES, DEFAULT_THEME } from '@frontend/constants/damage-themes';
 import { SPELL_BACKGROUNDS } from '@frontend/constants/spell-vfx';
-import type { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
+import { useSpellDisplay } from '@frontend/hooks/useSpellDisplay';
+import type { Spell } from '@frontend/types/spells';
 
 interface SpellBackgroundProps {
-  spell: CharacterSpell;
+  spell: Spell;
 }
 
 export function SpellBackground({ spell }: SpellBackgroundProps) {
-  // 1. Resolve Theme (Priority: Damage > Category > Default)
-  const damageKey = spell.damageType?.toLowerCase();
-  const categoryKey = spell.spellCategory?.toLowerCase();
-
-  const theme =
-    (damageKey && DAMAGE_THEMES[damageKey]) ||
-    (categoryKey && CATEGORY_THEMES[categoryKey]) ||
-    DEFAULT_THEME;
-
+  const { theme } = useSpellDisplay(spell);
   const themeColor = theme.hex;
 
   // 2. Resolve Background Style (Override with theme VFX for Force damage)
+  const damageKey = spell.damageType?.toLowerCase();
   const vfxKey = damageKey === 'force' ? theme.vfx : spell.bgStyleId || theme.vfx;
   const renderBg = SPELL_BACKGROUNDS[vfxKey] || SPELL_BACKGROUNDS['dots-space'];
 

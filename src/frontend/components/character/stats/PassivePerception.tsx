@@ -2,9 +2,9 @@
 
 import React from 'react';
 
-import { Eye } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { AppIcon } from '@frontend/components/ui/icon';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 
 import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
@@ -29,7 +29,12 @@ function PassivePerception({ wisValue, level, perceptionSkillData }: Props) {
       <TooltipTrigger asChild>
         <div className="border-border bg-card hover:border-primary/50 flex cursor-help items-center justify-between rounded-lg border p-4 shadow-sm transition-colors">
           <div className="flex items-center gap-3">
-            <Eye className="h-6 w-6 drop-shadow-sm" style={{ color: 'var(--character-color)' }} />
+            <AppIcon
+              name="Eye"
+              size={24}
+              className="drop-shadow-sm"
+              style={{ color: 'var(--character-color)' }}
+            />
             <span className="text-foreground flex items-center gap-2 text-sm font-bold">
               {t('passivePerception')}
             </span>

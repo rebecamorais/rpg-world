@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 
-import { Pencil } from 'lucide-react';
-
+import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { cn } from '@frontend/lib/utils';
 
@@ -31,9 +30,11 @@ const GhostInput = React.forwardRef<HTMLInputElement, GhostInputProps>(
           {...props}
         />
         {showIcon && (
-          <Pencil
+          <AppIcon
+            name="Pencil"
+            size={12}
             className={cn(
-              'text-muted-foreground pointer-events-none absolute right-0 h-3 w-3 opacity-0 transition-opacity group-focus-within:hidden group-hover:opacity-100',
+              'text-muted-foreground pointer-events-none absolute right-0 opacity-0 transition-opacity group-focus-within:hidden group-hover:opacity-100',
             )}
           />
         )}

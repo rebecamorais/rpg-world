@@ -36,8 +36,10 @@ export function SpellChip({
   };
 
   const content = (
-    <div className={cn(baseStyles, variants[variant], className)}>
-      {icon && <span className="opacity-70">{icon}</span>}
+    <div
+      className={cn(baseStyles, variants[variant], !children && 'aspect-square p-1.5', className)}
+    >
+      {icon && <span className={cn('opacity-70', !!children && 'mr-0')}>{icon}</span>}
       {children}
     </div>
   );

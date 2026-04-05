@@ -2,12 +2,12 @@
 
 import * as React from 'react';
 
-import { Heart, Skull } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Card } from '@frontend/components/ui/card';
 import { GhostInput } from '@frontend/components/ui/ghost-input';
 import { HealthBar } from '@frontend/components/ui/health-bar';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
 
 export interface HealthPointsCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,7 +21,7 @@ const HealthHeader = () => {
   const t = useTranslations('combatStats');
   return (
     <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
-      <Heart className="h-3.5 w-3.5 text-red-500" />
+      <AppIcon name="Heart" size={14} className="text-red-500" />
       <span className="text-sm font-bold tracking-[0.2em] text-red-500/80 uppercase">
         {t('hitPointsShort')}
       </span>
@@ -114,9 +114,11 @@ const DeathSaves = () => {
           ))}
         </div>
 
-        <Skull
+        <AppIcon
+          name="Skull"
+          size={20}
           className={cn(
-            'h-5 w-5 cursor-pointer text-zinc-600 transition-all duration-300 hover:scale-110 hover:text-white',
+            'cursor-pointer text-zinc-600 transition-all duration-300 hover:scale-110 hover:text-white',
             (successes > 0 || failures > 0) && 'text-zinc-400',
           )}
           onClick={() => {

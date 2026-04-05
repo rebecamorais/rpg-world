@@ -7,10 +7,10 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { Check, Clipboard, Coffee, ExternalLink, QrCode } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
+import { AppIcon } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
 
 const PIX_KEY = process.env.NEXT_PUBLIC_PIX_KEY || 'b22d409a-46a2-48dc-b2e2-eb3a66e9fb92';
@@ -176,11 +176,15 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
               >
                 <div className="flex items-center gap-3">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF5E5B]/10 text-[#FF5E5B]">
-                    <Coffee className="h-4 w-4" />
+                    <AppIcon name="Coffee" size={16} />
                   </div>
                   <span className="text-sm font-semibold text-white">{t('support.kofi')}</span>
                 </div>
-                <ExternalLink className="h-3 w-3 text-zinc-600 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-zinc-400" />
+                <AppIcon
+                  name="ExternalLink"
+                  size={12}
+                  className="text-zinc-600 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-zinc-400"
+                />
               </a>
 
               <div className="flex flex-col gap-2 rounded-lg border border-white/5 bg-white/[0.02] p-3">
@@ -201,7 +205,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
 
               <div className="flex flex-col gap-2 rounded-lg border border-white/5 bg-white/[0.02] p-3">
                 <div className="flex items-center gap-3 text-sm font-semibold text-white">
-                  <QrCode className="text-primary h-4 w-4" />
+                  <AppIcon name="QrCode" size={16} className="text-primary" />
                   <span>{t('support.pixTitle')}</span>
                 </div>
                 <div className="flex items-center gap-2 overflow-hidden">
@@ -212,11 +216,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
                     onClick={handleCopyPix}
                     className="bg-primary hover:bg-primary/80 flex h-7 w-7 items-center justify-center rounded text-white transition-colors"
                   >
-                    {hasCopied ? (
-                      <Check className="h-3.5 w-3.5" />
-                    ) : (
-                      <Clipboard className="h-3.5 w-3.5" />
-                    )}
+                    <AppIcon name={hasCopied ? 'Check' : 'Clipboard'} size={14} />
                   </button>
                 </div>
               </div>

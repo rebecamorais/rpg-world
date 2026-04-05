@@ -2,12 +2,12 @@
 
 import { useParams } from 'next/navigation';
 
-import { LogOut, Menu } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import CharacterNavSection from '@frontend/components/character/CharacterNavSection';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { NavItem } from '@frontend/components/ui/nav-item';
 import {
   Sheet,
@@ -70,7 +70,11 @@ function SidebarContent() {
           onClick={() => signOut()}
           className="group mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-500 transition-all hover:bg-red-500/10 hover:text-red-400"
         >
-          <LogOut className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+          <AppIcon
+            name="LogOut"
+            size={16}
+            className="transition-transform group-hover:-translate-x-1"
+          />
           <span>{tCommon('logout')}</span>
         </button>
       </div>
@@ -94,7 +98,7 @@ export default function Sidebar() {
               size="icon"
               className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 w-14 rounded-full shadow-lg"
             >
-              <Menu className="h-6 w-6" />
+              <AppIcon name="Menu" size={24} />
             </Button>
           </SheetTrigger>
           <SheetContent

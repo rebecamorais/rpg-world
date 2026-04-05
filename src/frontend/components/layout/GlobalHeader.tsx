@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
-import { Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import LanguageSwitcher from '@frontend/components/LanguageSwitcher';
+import { AppIcon } from '@frontend/components/ui/icon';
 
 export default async function GlobalHeader() {
   const tHome = await getTranslations('home');
@@ -14,7 +14,7 @@ export default async function GlobalHeader() {
         href="/"
         className="flex items-center gap-2 text-lg font-semibold transition-opacity hover:opacity-80"
       >
-        <Sparkles className="text-primary h-5 w-5" />
+        <AppIcon name="Sparkles" size={20} className="text-primary" />
         {tHome('title')}
       </Link>
 

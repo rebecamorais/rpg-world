@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 
-import { Book } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Badge } from '@frontend/components/ui/badge';
 import { Card } from '@frontend/components/ui/card';
+import { AppIcon } from '@frontend/components/ui/icon';
 import {
   Select,
   SelectContent,
@@ -74,7 +74,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                   value={level.toString()}
                   className="hover:bg-muted/50 data-[state=active]:border-primary/20 data-[state=active]:bg-primary/10 data-[state=active]:text-primary flex items-center gap-3 rounded-lg border border-transparent px-4 py-2.5 text-left transition-all"
                 >
-                  <Book size={14} className="opacity-70" />
+                  <AppIcon name="Book" size={14} className="opacity-70" />
                   <span className="font-bold tracking-tight whitespace-nowrap">
                     {level === 0 ? t('cantrips') : t('levelName', { level })}
                   </span>

@@ -36,6 +36,7 @@ export class SupabaseCharacterSpellRepository implements CharacterSpellRepo {
           range_unit,
           range_value,
           damage_type,
+          spell_category,
           bg_style_id,
           spell_translations (
             name,
@@ -76,6 +77,7 @@ export class SupabaseCharacterSpellRepository implements CharacterSpellRepo {
       rangeUnit: row.spells?.range_unit || null,
       rangeValue: row.spells?.range_value || null,
       damageType: row.spells?.damage_type || null,
+      spellCategory: row.spells?.spell_category || undefined,
       bgStyleId: row.spells?.bg_style_id || 'void-dots',
     }));
   }
