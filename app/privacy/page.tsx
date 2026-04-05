@@ -2,8 +2,6 @@ import Link from 'next/link';
 
 import { getTranslations } from 'next-intl/server';
 
-import Footer from '@frontend/components/layout/Footer';
-
 export default async function PrivacyPage() {
   const t = await getTranslations('privacy');
   const commonT = await getTranslations('common');
@@ -83,7 +81,6 @@ export default async function PrivacyPage() {
           </section>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

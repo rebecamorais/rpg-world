@@ -550,5 +550,35 @@
       "warlock": "Bruxo",
       "wizard": "Mago"
     }
+  },
+  "footer": {
+    "explore": {
+      "title": "Explorar",
+      "home": "Início",
+      "characters": "Personagens",
+      "settings": "Configurações"
+    },
+    "socials": {
+      "title": "Social",
+      "github": "GitHub",
+      "community": "Comunidade"
+    },
+    "legal": {
+      "title": "Legal",
+      "terms": "Termos de Uso",
+      "privacy": "Política de Privacidade",
+      "cookies": "Política de Cookies"
+    },
+    "support": {
+      "title": "Apoio",
+      "kofi": "Ko-fi",
+      "kofiAction": "Apoiar",
+      "githubSponsors": "GitHub Sponsors",
+      "githubAction": "Sponsors",
+      "pixTitle": "Fazer um Pix",
+      "pixCopy": "Chave Pix copiada!",
+      "thanks": "Muito obrigada pelo seu carinho e apoio! <heart />"
+    },
+    "copyright": "© {year} DevStudio. Todos os direitos reservados."
   }
 }

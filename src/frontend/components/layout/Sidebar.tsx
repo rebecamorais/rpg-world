@@ -6,7 +6,6 @@ import { LogOut, Menu } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import CharacterNavSection from '@frontend/components/character/CharacterNavSection';
-import Footer from '@frontend/components/layout/Footer';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
 import { NavItem } from '@frontend/components/ui/nav-item';
@@ -74,7 +73,6 @@ function SidebarContent() {
           <LogOut className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
           <span>{tCommon('logout')}</span>
         </button>
-        <Footer isMinified />
       </div>
     </>
   );

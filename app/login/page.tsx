@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 import LoginForm from '@frontend/components/auth/LoginForm';
-import Footer from '@frontend/components/layout/Footer';
 
 export default async function LoginPage() {
   const t = await getTranslations('common');
@@ -21,7 +20,6 @@ export default async function LoginPage() {
         </div>
         <LoginForm />
       </div>
-      <Footer />
     </div>
   );
 }

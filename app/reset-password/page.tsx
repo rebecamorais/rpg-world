@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 import ResetPasswordForm from '@frontend/components/auth/ResetPasswordForm';
-import Footer from '@frontend/components/layout/Footer';
 
 export default async function ResetPasswordPage() {
   const t = await getTranslations('common');
@@ -21,7 +20,6 @@ export default async function ResetPasswordPage() {
         </div>
         <ResetPasswordForm />
       </div>
-      <Footer />
     </div>
   );
 }

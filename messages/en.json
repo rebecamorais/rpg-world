@@ -550,5 +550,35 @@
       "warlock": "Warlock",
       "wizard": "Wizard"
     }
+  },
+  "footer": {
+    "explore": {
+      "title": "Explore",
+      "home": "Home",
+      "characters": "Characters",
+      "settings": "Settings"
+    },
+    "socials": {
+      "title": "Social",
+      "github": "GitHub",
+      "community": "Community"
+    },
+    "legal": {
+      "title": "Legal",
+      "terms": "Terms of Use",
+      "privacy": "Privacy Policy",
+      "cookies": "Cookie Policy"
+    },
+    "support": {
+      "title": "Support",
+      "kofi": "Ko-fi",
+      "kofiAction": "Support",
+      "githubSponsors": "GitHub Sponsors",
+      "githubAction": "Sponsors",
+      "pixTitle": "Make a Pix",
+      "pixCopy": "Pix key copied!",
+      "thanks": "Thank you so much for your care and support! <heart />"
+    },
+    "copyright": "© {year} DevStudio. All rights reserved."
   }
 }

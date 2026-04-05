@@ -2,8 +2,6 @@ import Link from 'next/link';
 
 import { getTranslations } from 'next-intl/server';
 
-import Footer from '@frontend/components/layout/Footer';
-
 export default async function TermsPage() {
   const t = await getTranslations('terms');
   const commonT = await getTranslations('common');
@@ -78,7 +76,6 @@ export default async function TermsPage() {
           </section>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

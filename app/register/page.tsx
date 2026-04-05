@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 import SignUpForm from '@frontend/components/auth/SignUpForm';
-import Footer from '@frontend/components/layout/Footer';
 
 export default async function RegisterPage() {
   const t = await getTranslations('common');
@@ -21,7 +20,6 @@ export default async function RegisterPage() {
         </div>
         <SignUpForm />
       </div>
-      <Footer />
     </div>
   );
 }
