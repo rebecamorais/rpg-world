@@ -180,7 +180,7 @@ export const CATEGORY_THEMES: Record<string, DamageTheme> = {
     parallax: 0,
   },
   control: {
-    icon: 'psychic-waves',
+    icon: 'despair',
     color: 'text-yellow-500',
     border: 'border-yellow-500/20',
     bg: 'bg-yellow-500/5',

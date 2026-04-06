@@ -32,11 +32,11 @@ export function useSpellDisplay(spell: Spell) {
   const damageIcon = damageKey && DAMAGE_TYPE_ICONS[damageKey as keyof typeof DAMAGE_TYPE_ICONS];
   const categoryIcon = categoryKey && CATEGORY_THEMES[categoryKey]?.icon;
 
-  const mainIcon = damageIcon || categoryIcon || MECHANIC_ICONS.default;
-
   // 3. Resolve Registry School Icon (Secondary now)
   const resolvedSchoolKey = schoolKey as keyof typeof SPELL_SCHOOL_ICONS;
   const schoolIcon = SPELL_SCHOOL_ICONS[resolvedSchoolKey] || MECHANIC_ICONS.default;
+
+  const mainIcon = damageIcon || categoryIcon || schoolIcon || MECHANIC_ICONS.default;
 
   return {
     theme,

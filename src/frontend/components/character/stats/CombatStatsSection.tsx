@@ -219,7 +219,7 @@ const CombatHeader = ({
                   <Label className="mb-2 block text-sm font-bold text-zinc-500 uppercase">
                     {tm('slotsCapacity')}
                   </Label>
-                  <div className="custom-scrollbar max-h-[220px] overflow-y-auto pr-2">
+                  <div className="flex flex-col gap-1 pr-2">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((lvl) => (
                       <NumberStepper
                         key={lvl}

@@ -54,8 +54,16 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
   };
 
   return (
-    <Card className="border-border/50 bg-background/40 overflow-hidden shadow-2xl backdrop-blur-xl">
-      <div className="flex h-[700px] flex-col overflow-hidden md:flex-row">
+    <Card
+      className="border-border/50 bg-background/40 shadow-2xl backdrop-blur-xl transition-all duration-500"
+      style={
+        {
+          boxShadow:
+            '0 0 50px -12px color-mix(in srgb, var(--character-color, var(--primary)) 15%, transparent)',
+        } as React.CSSProperties
+      }
+    >
+      <div className="relative flex flex-col md:flex-row">
         <Tabs
           value={activeLevel}
           onValueChange={setActiveLevel}
@@ -63,21 +71,52 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
           className="flex h-full w-full flex-col md:flex-row"
         >
           {/* Index Sidebar (Desktop) */}
-          <TabsList className="bg-muted/10 hidden h-auto w-full flex-row items-center justify-start gap-1 rounded-none border-t border-b px-2 py-2 md:flex md:h-full md:w-64 md:flex-col md:border-t-0 md:border-r md:border-b-0 md:px-0 md:py-6">
-            <div className="text-muted-foreground/60 mb-4 hidden px-4 text-[10px] font-black tracking-[0.2em] uppercase md:block">
-              {t('spellbookIndex')}
+          <TabsList className="bg-muted/10 relative hidden h-auto w-full flex-row items-center justify-start gap-1 rounded-none border-t border-b px-2 py-2 md:sticky md:top-24 md:flex md:h-fit md:w-56 md:flex-col md:items-start md:border-t-0 md:border-b-0 md:px-0 md:py-6">
+            {/* Vertical Divider */}
+            <div className="via-border/50 absolute top-0 right-0 bottom-0 hidden w-px bg-gradient-to-b from-transparent to-transparent md:block" />
+            <div
+              className="absolute top-1/4 right-0 bottom-1/4 hidden w-[2px] bg-gradient-to-b from-transparent via-[var(--character-color)] to-transparent opacity-20 blur-[1px] md:block"
+              style={
+                {
+                  '--character-color': 'var(--character-color, var(--primary))',
+                } as React.CSSProperties
+              }
+            />
+            <div className="mb-4 hidden w-full px-6 md:block">
+              <div className="text-muted-foreground/40 flex items-center gap-2 text-[10px] font-black tracking-[0.25em] uppercase">
+                <span className="bg-muted-foreground/20 h-px flex-1" />
+                {t('spellbookIndex')}
+                <span className="bg-muted-foreground/20 h-px flex-1" />
+              </div>
             </div>
-            <div className="scrollbar-none flex flex-1 flex-col gap-1 md:w-full md:overflow-y-auto md:px-2">
+            <div className="flex flex-1 flex-col gap-1.5 md:w-full md:px-3">
               {levels.map((level) => (
                 <TabsTrigger
                   key={level}
                   value={level.toString()}
-                  className="hover:bg-muted/50 data-[state=active]:border-primary/20 data-[state=active]:bg-primary/10 data-[state=active]:text-primary flex items-center gap-3 rounded-lg border border-transparent px-4 py-2.5 text-left transition-all"
+                  className="group hover:bg-muted/30 data-[state=active]:bg-primary/5 data-[state=active]:text-primary relative flex w-full items-center justify-start gap-3 rounded-lg border border-transparent px-4 py-3 text-left transition-all duration-300 hover:translate-x-1"
+                  style={
+                    {
+                      '--active-indicator': 'var(--character-color, var(--primary))',
+                    } as React.CSSProperties
+                  }
                 >
-                  <AppIcon name="Book" size={14} className="opacity-70" />
+                  {/* Active Indicator Bar */}
+                  <div className="absolute top-2 bottom-2 left-1 w-1.5 origin-center scale-y-0 rounded-full bg-[var(--active-indicator)] opacity-0 shadow-[0_0_12px_var(--active-indicator)] transition-all duration-300 group-data-[state=active]:scale-y-100 group-data-[state=active]:opacity-100" />
+
+                  <AppIcon
+                    name="Book"
+                    size={16}
+                    className="opacity-40 transition-opacity group-hover:opacity-80 group-data-[state=active]:opacity-100"
+                  />
                   <span className="font-bold tracking-tight whitespace-nowrap">
                     {level === 0 ? t('cantrips') : t('levelName', { level })}
                   </span>
+
+                  {/* Spell Count Badge */}
+                  <div className="bg-muted-foreground/10 text-muted-foreground/50 ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 font-mono text-[9px] font-black transition-colors group-data-[state=active]:bg-white/10 group-data-[state=active]:text-white">
+                    {spellsByLevel[level].length}
+                  </div>
                 </TabsTrigger>
               ))}
             </div>
@@ -103,8 +142,8 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
           </div>
 
           {/* Spell Content Area */}
-          <div className="relative flex-1 overflow-hidden">
-            <div className="[scrollbar-color:theme(colors.primary.DEFAULT/20)_transparent] [&::-webkit-scrollbar-thumb]:bg-primary/20 h-full overflow-y-auto px-6 py-8 [scrollbar-width:thin] md:px-10 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
+          <div className="relative flex-1">
+            <div className="px-6 py-8 md:px-10">
               {levels.map((level) => (
                 <TabsContent
                   key={level}
