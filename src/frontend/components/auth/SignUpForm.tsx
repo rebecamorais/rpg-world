@@ -193,7 +193,7 @@ export default function SignUpForm() {
                     <Input
                       type="email"
                       placeholder={t('emailPlaceholder')}
-                      className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                      className="focus:border-primary/50 border-white/10 bg-white/5 text-white"
                       {...field}
                     />
                   </FormControl>
@@ -212,7 +212,7 @@ export default function SignUpForm() {
                     <Input
                       type="password"
                       placeholder={t('passwordPlaceholder')}
-                      className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                      className="focus:border-primary/50 border-white/10 bg-white/5 text-white"
                       {...field}
                     />
                   </FormControl>
@@ -231,7 +231,7 @@ export default function SignUpForm() {
                     <Input
                       type="password"
                       placeholder={t('confirmPasswordPlaceholder')}
-                      className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                      className="focus:border-primary/50 border-white/10 bg-white/5 text-white"
                       {...field}
                     />
                   </FormControl>
@@ -245,16 +245,16 @@ export default function SignUpForm() {
             <Button
               type="submit"
               disabled={form.formState.isSubmitting || !turnstileToken}
-              className="mt-2 w-full bg-blue-600 font-semibold transition-all hover:bg-blue-700 disabled:opacity-50"
+              className="mt-2 w-full font-semibold"
             >
               {form.formState.isSubmitting ? t('processing') : t('submit')}
             </Button>
           </form>
         </Form>
 
-        <div className="mt-2 text-center text-sm text-gray-400">
+        <div className="mt-4 border-t border-white/5 pt-6 text-center text-sm text-gray-400">
           {t('alreadyHaveAccount')}{' '}
-          <Link href="/login" className="text-blue-400 hover:underline">
+          <Link href="/login" className="text-primary font-semibold hover:underline">
             {t('login')}
           </Link>
         </div>

@@ -71,6 +71,7 @@
     "forgotPassword": "Forgot password?",
     "submit": "Sign In",
     "noAccount": "Don't have an account?",
+    "noAccountSubtitle": "Join the community and start managing your characters.",
     "register": "Sign up"
   },
   "register": {

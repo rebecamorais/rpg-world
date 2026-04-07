@@ -32,7 +32,7 @@ export default function AuthErrorPage() {
           <p className="rounded-md border border-red-500/20 bg-red-500/10 p-3 text-center text-sm text-gray-300">
             {message}
           </p>
-          <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
+          <Button asChild className="w-full">
             <Link href="/login">{t('back')}</Link>
           </Button>
         </CardContent>

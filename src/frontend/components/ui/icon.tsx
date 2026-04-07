@@ -43,6 +43,7 @@ import {
   Swords,
   Trash2,
   User,
+  UserPlus,
   Wand2,
   X,
 } from 'lucide-react';
@@ -94,6 +95,7 @@ const SYSTEM_ICONS = {
   Swords,
   Trash2,
   User,
+  UserPlus,
   Wand2,
   X,
 } as const;
