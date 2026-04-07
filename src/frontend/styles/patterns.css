@@ -146,7 +146,7 @@
 }
 
 /* Force Distortion VFX */
-.force-distortion-heavy {
+.vfx-force-distortion-heavy {
   filter: url(#heavy-distortion);
 }
 
@@ -170,7 +170,27 @@
   animation: shockwave 1.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
+@keyframes rumble {
+  0% {
+    transform: translate(0, 0) scale(1) translateZ(0);
+  }
+  5% {
+    transform: translate(1px, -1px) scale(1.02) translateZ(0);
+  }
+  10% {
+    transform: translate(-1px, 1px) scale(1.02) translateZ(0);
+  }
+  15% {
+    transform: translate(0, 0) scale(1.01) translateZ(0);
+  }
+  100% {
+    transform: translate(0, 0) scale(1) translateZ(0);
+  }
+}
+
 /* Thunder Sonic Distortion */
 .vfx-sonic-distortion {
   filter: url(#sonic-distortion);
+  will-change: filter, transform;
+  animation: rumble 0.8s infinite;
 }
