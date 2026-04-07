@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from 'react';
 
-import { BookOpen, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { SpellCard } from '@frontend/components/character/spells/SpellCard';
+import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
@@ -14,9 +14,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@frontend/components/ui/dialog';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
-import { Spinner } from '@frontend/components/ui/spinner';
 import { DAMAGE_THEMES } from '@frontend/constants/damage-themes';
 import { useSpells } from '@frontend/hooks/useSpells';
 import { CharacterClass, SpellSchool } from '@frontend/types/spells';
@@ -107,7 +107,7 @@ export default function SpellsDrawer({
           <div className="flex items-center justify-between">
             <DialogTitle className="flex items-center gap-3 text-2xl font-bold tracking-tight italic">
               <div className="bg-primary/20 text-primary flex h-10 w-10 items-center justify-center rounded-xl shadow-lg ring-1 ring-white/10">
-                <BookOpen size={24} />
+                <AppIcon name="BookOpen" size={24} />
               </div>
               {t('title')}
             </DialogTitle>
@@ -117,9 +117,10 @@ export default function SpellsDrawer({
           {/* Search and Filters Bar */}
           <div className="mt-6 flex flex-col gap-4">
             <div className="relative w-full">
-              <Search
-                className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500"
+              <AppIcon
+                name="Search"
                 size={18}
+                className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500"
               />
               <Input
                 placeholder={t('searchPlaceholder')}
@@ -201,16 +202,11 @@ export default function SpellsDrawer({
 
         <div className="custom-scrollbar flex-1 overflow-y-auto px-6 py-6">
           {isLoading ? (
-            <div className="flex h-64 flex-col items-center justify-center gap-4">
-              <Spinner size="lg" className="text-primary" />
-              <p className="animate-pulse text-sm font-medium text-gray-400">
-                {t('loadingSpells')}
-              </p>
-            </div>
+            <LoadingState thematic />
           ) : spells.length === 0 ? (
             <div className="flex h-64 flex-col items-center justify-center gap-4 text-center">
               <div className="rounded-full bg-white/5 p-4">
-                <Search size={32} className="text-gray-600" />
+                <AppIcon name="Search" size={32} className="text-gray-600" />
               </div>
               <p className="text-gray-400">{t('noSpellsFound')}</p>
               <Button
@@ -260,7 +256,7 @@ export default function SpellsDrawer({
                 onClick={() => setPage((p) => p - 1)}
                 className="h-8 w-8 border-white/10 bg-white/5 p-0 text-white hover:bg-white/10 disabled:opacity-20"
               >
-                <ChevronLeft size={16} />
+                <AppIcon name="ChevronLeft" size={16} />
               </Button>
 
               <div className="flex items-center gap-1">
@@ -299,7 +295,7 @@ export default function SpellsDrawer({
                 onClick={() => setPage((p) => p + 1)}
                 className="h-8 w-8 border-white/10 bg-white/5 p-0 text-white hover:bg-white/10 disabled:opacity-20"
               >
-                <ChevronRight size={16} />
+                <AppIcon name="ChevronRight" size={16} />
               </Button>
             </div>
           </footer>

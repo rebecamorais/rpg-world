@@ -71,6 +71,7 @@
     "forgotPassword": "Esqueceu a senha?",
     "submit": "Entrar",
     "noAccount": "Não tem uma conta?",
+    "noAccountSubtitle": "Junte-se à comunidade e comece a gerenciar seus personagens.",
     "register": "Cadastre-se"
   },
   "register": {
@@ -129,9 +130,11 @@
   },
   "characters": {
     "loading": "Carregando personagens...",
-    "emptyState": "Nenhum personagem ainda.",
+    "emptyState": "Nenhum personagem ainda",
+    "createFirstDescription": "Comece sua jornada criando seu primeiro personagem de RPG.",
     "createFirst": "Criar primeiro personagem",
     "title": "Personagens",
+    "createNew": "Criar novo Personagem",
     "newButton": "+ Novo",
     "level": "Nível {level}",
     "requireLogin": "Faça login para ver seus personagens.",
@@ -172,6 +175,8 @@
     "deleteDialogTitle": "Excluir personagem?",
     "deleteDialogDescription": "Tem certeza que deseja excluir o personagem {name}? Essa ação não poderá ser desfeita e todos os dados serão perdidos.",
     "confirmDelete": "Confirmar Exclusão",
+    "deleteConfirmInstruction": "Para confirmar, digite o nome do personagem: <bold>{name}</bold>",
+    "deleteConfirmPlaceholder": "Digite o nome exato aqui",
     "namePlaceholder": "Nome do Personagem",
     "editAttribute": "Editar {label}",
     "tabs": {
@@ -579,6 +584,16 @@
       "pixCopy": "Chave Pix copiada!",
       "thanks": "Muito obrigada pelo seu carinho e apoio! <heart />"
     },
-    "copyright": "© {year} DevStudio. Todos os direitos reservados."
+    "copyright": "© {year} Rebs Tech Studio. Todos os direitos reservados."
+  },
+  "loadingMessages": {
+    "weapons": "Equipando armas...",
+    "ritual": "Preparando ritual...",
+    "gods": "Consultando os deuses...",
+    "armor": "Polindo armaduras...",
+    "spirits": "Invocando espíritos...",
+    "blades": "Afiando lâminas...",
+    "scrolls": "Lendo pergaminhos antigos...",
+    "battlefield": "Preparando o campo de batalha..."
   }
 }

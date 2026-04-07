@@ -20,6 +20,7 @@ export interface CharacterSpellRelation {
   rangeUnit?: string | null;
   rangeValue?: number | null;
   damageType?: string | null;
+  spellCategory?: string;
   bgStyleId?: string | null;
 }
 

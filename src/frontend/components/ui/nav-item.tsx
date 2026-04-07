@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
-import { LucideIcon } from 'lucide-react';
-
+import { AppIcon } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
 
 interface NavItemProps {
@@ -9,10 +8,10 @@ interface NavItemProps {
   label: string;
   isActive?: boolean;
   isSubItem?: boolean;
-  icon?: LucideIcon;
+  icon?: string;
 }
 
-export function NavItem({ href, label, isActive, isSubItem, icon: Icon }: NavItemProps) {
+export function NavItem({ href, label, isActive, isSubItem, icon }: NavItemProps) {
   return (
     <Link
       href={href}
@@ -26,7 +25,7 @@ export function NavItem({ href, label, isActive, isSubItem, icon: Icon }: NavIte
           'ml-4 rounded-none border-l border-zinc-800 py-1 hover:border-[var(--character-color,var(--primary))]',
       )}
     >
-      {Icon && <Icon className="h-4 w-4 shrink-0" />}
+      {icon && <AppIcon name={icon} size={16} className="shrink-0" />}
       {label}
     </Link>
   );

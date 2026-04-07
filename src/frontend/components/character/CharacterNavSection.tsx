@@ -2,7 +2,6 @@
 
 import { usePathname } from 'next/navigation';
 
-import { BookOpen, Files, Shield, Sword } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
@@ -23,13 +22,13 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
   const basePath = `/system/${character.system}/character/${characterId}`;
 
   const navItems = [
-    { id: CharacterTab.STATUS, label: t('status'), icon: Shield, href: basePath },
-    { id: CharacterTab.LORE, label: t('lore'), icon: Files, href: `${basePath}/lore` },
-    { id: CharacterTab.SPELLS, label: t('spells'), icon: BookOpen, href: `${basePath}/spells` },
+    { id: CharacterTab.STATUS, label: t('status'), icon: 'Shield', href: basePath },
+    { id: CharacterTab.LORE, label: t('lore'), icon: 'Files', href: `${basePath}/lore` },
+    { id: CharacterTab.SPELLS, label: t('spells'), icon: 'BookOpen', href: `${basePath}/spells` },
     {
       id: CharacterTab.INVENTORY,
       label: t('inventory'),
-      icon: Sword,
+      icon: 'Sword',
       href: `${basePath}/inventory`,
     },
   ];
@@ -41,7 +40,7 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
     >
       <div className="flex flex-col gap-2 px-3">
         <p
-          className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase"
+          className="text-muted-foreground text-xs font-bold tracking-widest uppercase"
           style={{ color: character.accentColor || undefined }}
         >
           {characterName}

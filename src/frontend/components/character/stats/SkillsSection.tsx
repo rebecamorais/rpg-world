@@ -98,7 +98,7 @@ function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
           >
             {label}
           </span>
-          <span className="text-muted-foreground w-8 shrink-0 self-center text-center font-mono text-[10px]">
+          <span className="text-muted-foreground w-8 shrink-0 self-center text-center font-mono text-xs">
             ({tAttr(`abbreviations.${cat.attribute}`)})
           </span>
           <span

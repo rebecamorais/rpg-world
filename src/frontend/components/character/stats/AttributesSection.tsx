@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-import { Settings2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
@@ -16,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@frontend/components/ui/dialog';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 
@@ -69,7 +69,7 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8 opacity-60 hover:opacity-100">
-              <Settings2 className="h-4.4 w-4.4" />
+              <AppIcon name="Settings2" size={16} />
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">

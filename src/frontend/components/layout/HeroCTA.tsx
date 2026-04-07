@@ -12,7 +12,7 @@ export default function HeroCTA() {
 
   return (
     <>
-      <h2 className="mb-6 max-w-2xl text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+      <h2 className="mb-6 max-w-2xl text-4xl font-extrabold tracking-tight">
         {tLanding('heroTitle')}
       </h2>
       <p className="text-muted-foreground mb-10 max-w-xl text-lg sm:text-xl">

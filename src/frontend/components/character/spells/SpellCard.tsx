@@ -2,10 +2,12 @@
 
 import React from 'react';
 
-import * as Lucide from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { CATEGORY_THEMES, DAMAGE_THEMES, DEFAULT_THEME } from '@frontend/constants/damage-themes';
+import { AppIcon } from '@frontend/components/ui/icon';
+import { MECHANIC_ICONS } from '@frontend/constants/damage-themes';
+import { useSpellDisplay } from '@frontend/hooks/useSpellDisplay';
+import { cn } from '@frontend/lib/utils';
 import type { Spell } from '@frontend/types/spells';
 
 import { SpellBackground } from './SpellBackground';
@@ -23,24 +25,15 @@ interface SpellCardProps {
 
 export function SpellCard({
   spell,
-  isExpanded,
+  isExpanded = false,
   onClick,
   onForgetSpell,
   onTogglePrepared,
   onLearnSpell,
   isLearned,
 }: SpellCardProps) {
-  // 1. Resolve Theme (Priority: Damage > Category > Default)
-  const damageKey = spell.damageType?.toLowerCase();
-  const categoryKey = spell.spellCategory?.toLowerCase();
-
-  const theme =
-    (damageKey && DAMAGE_THEMES[damageKey]) ||
-    (categoryKey && CATEGORY_THEMES[categoryKey]) ||
-    DEFAULT_THEME;
-
-  const tData = useTranslations('spellsData');
   const tCharacters = useTranslations('characters');
+  const { theme, mainIcon, schoolIcon, damageKey, tData } = useSpellDisplay(spell);
 
   const translatedDamageType = spell.damageType
     ? tData(`damageTypes.${damageKey}` as Parameters<typeof tData>[0])
@@ -50,10 +43,6 @@ export function SpellCard({
     tData.has(`schools.${spell.school.toLowerCase()}` as Parameters<typeof tData>[0])
       ? tData(`schools.${spell.school.toLowerCase()}` as Parameters<typeof tData>[0])
       : spell.school;
-
-  // Resolve Icon
-  const IconComponent =
-    (Lucide as unknown as Record<string, React.ElementType>)[theme.icon] || Lucide.Sparkles;
 
   return (
     <div
@@ -81,34 +70,45 @@ export function SpellCard({
 
       {/* Parallax Background Icon */}
       <div className="pointer-events-none absolute -right-8 -bottom-8 z-0 opacity-5 transition-all duration-700 ease-in-out group-hover:scale-125 group-hover:rotate-12 group-hover:opacity-15">
-        <IconComponent size={160} strokeWidth={0.5} />
+        <AppIcon variant="game" name={mainIcon} size={160} strokeWidth={0.5} />
       </div>
 
       <div className="relative z-10 flex h-full flex-col">
         <header className="mb-5 flex items-center gap-4">
           <div
-            className={`rounded-xl p-3 shadow-sm ring-1 ring-white/10 transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-lg ${theme.bg} ${theme.color} `}
+            className={cn(
+              'rounded-xl p-3 shadow-sm ring-1 ring-white/10 transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-lg',
+              theme.bg,
+              theme.color,
+            )}
           >
-            <IconComponent size={24} strokeWidth={2.5} />
+            <AppIcon variant="game" name={mainIcon} size={28} strokeWidth={2.5} />
           </div>
-          <div className="flex flex-col">
-            <h3 className="font-display text-xl leading-tight font-bold text-white transition-colors group-hover:text-[var(--theme-primary)]">
-              {spell.name}
-            </h3>
-            <div className="mt-0.5 flex items-center gap-2">
-              <span
-                className={`text-[10px] font-black tracking-widest uppercase ${theme.color} opacity-80`}
-              >
-                {spell.level === 0
-                  ? tCharacters('cantrip')
-                  : tCharacters('levelDetail', { level: spell.level })}{' '}
-                • {translatedDamageType}
+
+          <div className="flex-1 overflow-hidden">
+            <div className="flex items-center gap-2">
+              <h3 className="truncate font-serif text-xl font-bold tracking-tight text-white/90">
+                {spell.name}
+              </h3>
+              {spell.ritual && (
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400 ring-1 ring-indigo-500/20 ring-inset">
+                  <AppIcon variant="game" name={MECHANIC_ICONS.ritual} size={14} />
+                </div>
+              )}
+            </div>
+            <div className="mt-1 flex items-center gap-2 text-xs font-black tracking-widest uppercase opacity-80">
+              <span className={cn('flex items-center gap-1', theme.color)}>
+                <AppIcon variant="game" name={schoolIcon} size={14} className="opacity-70" />
+                {translatedSchool}
               </span>
-              {spell.isPrepared && spell.level > 0 && (
-                <span className="flex items-center gap-1 rounded bg-amber-500/20 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-amber-400 uppercase">
-                  <Lucide.Bookmark size={10} className="fill-amber-400" />{' '}
-                  {tCharacters('preparedBadge')}
-                </span>
+              {translatedDamageType && (
+                <>
+                  <span className="opacity-40">•</span>
+                  <span className={cn('flex items-center gap-1', theme.color)}>
+                    <AppIcon variant="game" name={mainIcon} size={12} strokeWidth={3} />
+                    <span>{translatedDamageType}</span>
+                  </span>
+                </>
               )}
             </div>
           </div>
@@ -137,56 +137,106 @@ export function SpellCard({
         </div>
 
         <footer className="mt-auto flex flex-wrap gap-2">
+          {/* Filter Chips (Always visible) */}
           <SpellChip>{translatedSchool}</SpellChip>
-
-          {/* New info chips */}
-          {(spell.castingTime || spell.castingValue) && (
-            <SpellChip icon={<Lucide.Clock size={12} />} tooltip={tCharacters('castingTime')}>
-              {spell.castingTime &&
-              tData.has(`castingTimes.${spell.castingTime}` as Parameters<typeof tData>[0])
-                ? tData(`castingTimes.${spell.castingTime}` as Parameters<typeof tData>[0], {
-                    value: spell.castingValue || 1,
-                  })
-                : [spell.castingValue, spell.castingTime].filter(Boolean).join(' ')}
-            </SpellChip>
-          )}
-
-          {(spell.rangeUnit || spell.rangeValue !== undefined) && (
-            <SpellChip icon={<Lucide.Crosshair size={12} />} tooltip={tCharacters('range')}>
-              {spell.rangeUnit &&
-              tData.has(`ranges.${spell.rangeUnit}` as Parameters<typeof tData>[0])
-                ? tData(`ranges.${spell.rangeUnit}` as Parameters<typeof tData>[0], {
-                    feet: spell.rangeValue || 0,
-                    meters: Math.round(((spell.rangeValue || 0) / 5) * 1.5 * 10) / 10,
-                    miles: spell.rangeValue || 0,
-                    km: Math.round((spell.rangeValue || 0) * 1.6 * 10) / 10,
-                  })
-                : [spell.rangeValue, spell.rangeUnit].filter(Boolean).join(' ')}
-            </SpellChip>
-          )}
-
-          {(spell.durationUnit || spell.durationValue !== undefined) && (
-            <SpellChip icon={<Lucide.Hourglass size={12} />} tooltip={tCharacters('duration')}>
-              {spell.durationUnit &&
-              tData.has(`durations.${spell.durationUnit}` as Parameters<typeof tData>[0])
-                ? tData(`durations.${spell.durationUnit}` as Parameters<typeof tData>[0], {
-                    value: spell.durationValue || 1,
-                  })
-                : [spell.durationValue, spell.durationUnit].filter(Boolean).join(' ')}
-            </SpellChip>
-          )}
-
-          {spell.components && spell.components.length > 0 && (
-            <SpellChip icon={<Lucide.Package size={12} />} tooltip={tCharacters('components')}>
-              {spell.components.join(', ')}
-            </SpellChip>
-          )}
-
-          {spell.concentration && (
-            <SpellChip variant="concentration">{tCharacters('concentration')}</SpellChip>
-          )}
-          {spell.ritual && <SpellChip variant="ritual">{tCharacters('ritual')}</SpellChip>}
         </footer>
+
+        {/* Expanded Info and Actions */}
+        {isExpanded && (
+          <div className="mt-6 flex flex-col gap-6 border-t border-white/5 pt-6">
+            {/* Secondary Info Chips (Only visible when expanded) */}
+            <div className="flex flex-wrap gap-2">
+              {(spell.castingTime || spell.castingValue) && (
+                <SpellChip
+                  icon={<AppIcon name="Clock" size={14} />}
+                  tooltip={tCharacters('castingTime')}
+                >
+                  {spell.castingTime &&
+                  tData.has(`castingTimes.${spell.castingTime}` as Parameters<typeof tData>[0])
+                    ? tData(`castingTimes.${spell.castingTime}` as Parameters<typeof tData>[0], {
+                        value: spell.castingValue || 1,
+                      })
+                    : [spell.castingValue, spell.castingTime].filter(Boolean).join(' ')}
+                </SpellChip>
+              )}
+
+              {(spell.rangeUnit || spell.rangeValue !== undefined) && (
+                <SpellChip
+                  icon={<AppIcon name="Crosshair" size={14} />}
+                  tooltip={tCharacters('range')}
+                >
+                  {spell.rangeUnit &&
+                  tData.has(`ranges.${spell.rangeUnit}` as Parameters<typeof tData>[0])
+                    ? tData(`ranges.${spell.rangeUnit}` as Parameters<typeof tData>[0], {
+                        feet: spell.rangeValue || 0,
+                        meters: Math.round(((spell.rangeValue || 0) / 5) * 1.5 * 10) / 10,
+                        miles: spell.rangeValue || 0,
+                        km: Math.round((spell.rangeValue || 0) * 1.6 * 10) / 10,
+                      })
+                    : [spell.rangeValue, spell.rangeUnit].filter(Boolean).join(' ')}
+                </SpellChip>
+              )}
+
+              {(spell.durationUnit || spell.durationValue !== undefined) && (
+                <SpellChip
+                  icon={<AppIcon name="Hourglass" size={14} />}
+                  tooltip={tCharacters('duration')}
+                >
+                  {spell.durationUnit &&
+                  tData.has(`durations.${spell.durationUnit}` as Parameters<typeof tData>[0])
+                    ? tData(`durations.${spell.durationUnit}` as Parameters<typeof tData>[0], {
+                        value: spell.durationValue || 1,
+                      })
+                    : [spell.durationValue, spell.durationUnit].filter(Boolean).join(' ')}
+                </SpellChip>
+              )}
+
+              {spell.components && spell.components.length > 0 && (
+                <SpellChip
+                  icon={
+                    <div className="flex items-center gap-1.5 opacity-80 grayscale transition-all group-hover:opacity-100 group-hover:grayscale-0">
+                      {spell.components.map((comp) => {
+                        const iconName =
+                          comp === 'V'
+                            ? MECHANIC_ICONS.verbal
+                            : comp === 'S'
+                              ? MECHANIC_ICONS.somatic
+                              : comp === 'M'
+                                ? MECHANIC_ICONS.material
+                                : null;
+                        return iconName ? (
+                          <AppIcon key={comp} variant="game" name={iconName} size={14} />
+                        ) : null;
+                      })}
+                    </div>
+                  }
+                  tooltip={tCharacters('components')}
+                >
+                  {/* Text hidden in favor of icons */}
+                </SpellChip>
+              )}
+
+              {spell.concentration && (
+                <SpellChip
+                  variant="concentration"
+                  tooltip={tCharacters('concentration')}
+                  icon={<AppIcon variant="game" name={MECHANIC_ICONS.concentration} size={14} />}
+                >
+                  {tCharacters('concentration')}
+                </SpellChip>
+              )}
+              {spell.ritual && (
+                <SpellChip
+                  variant="ritual"
+                  tooltip={tCharacters('ritual')}
+                  icon={<AppIcon variant="game" name={MECHANIC_ICONS.ritual} size={14} />}
+                >
+                  {tCharacters('ritual')}
+                </SpellChip>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Action Buttons (Only visible when expanded) */}
         {isExpanded && (
@@ -210,12 +260,12 @@ export function SpellCard({
               >
                 {isLearned ? (
                   <>
-                    <Lucide.Trash2 size={16} />
+                    <AppIcon name="Trash2" size={18} />
                     {tCharacters('forgetSpell')}
                   </>
                 ) : (
                   <>
-                    <Lucide.Plus size={16} />
+                    <AppIcon name="Plus" size={18} />
                     {tCharacters('learn')}
                   </>
                 )}
@@ -235,8 +285,9 @@ export function SpellCard({
                         : 'border border-amber-500 bg-amber-500 text-amber-950 shadow-md hover:bg-amber-400 hover:shadow-amber-500/20'
                     }`}
                   >
-                    <Lucide.Bookmark
-                      size={16}
+                    <AppIcon
+                      name="Bookmark"
+                      size={18}
                       className={
                         spell.isPrepared ? 'fill-amber-500/50 text-amber-500' : 'text-amber-950'
                       }
@@ -254,7 +305,7 @@ export function SpellCard({
                   }}
                   className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-red-400/80 transition-all hover:bg-red-500/10 hover:text-red-400"
                 >
-                  <Lucide.Trash2 size={16} />
+                  <AppIcon name="Trash2" size={18} />
                   {tCharacters('forgetSpell')}
                 </button>
               </>

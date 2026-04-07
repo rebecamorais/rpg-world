@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import { type VariantProps, cva } from 'class-variance-authority';
-import { X } from 'lucide-react';
 
+import { AppIcon } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
 
 const Sheet = SheetPrimitive.Root;
@@ -61,7 +61,7 @@ const SheetContent = React.forwardRef<
     <SheetOverlay />
     <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
       <SheetPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:pointer-events-none">
-        <X className="h-4 w-4" />
+        <AppIcon name="X" size={16} />
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
       {children}

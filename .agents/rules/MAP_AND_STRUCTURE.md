@@ -17,24 +17,30 @@ Este documento serve como um guia de navegação para desenvolvedores e agentes 
 A `src/` está dividida em três pilares principais seguindo a Clean Architecture:
 
 ### 1. `src/backend/`
+
 Coração da lógica de negócio e integração com serviços.
-- **`contexts/`**: Divisão por contextos delimitados (Bounded Contexts).
-    - `characters/`: Domínio, Casos de Uso e Repositórios de personagens.
-    - `users/`: Gerenciamento de usuários e autenticação.
-- **`shared/`**: Infraestrutura compartilhada do backend (HTTP wrappers, DI Container).
-- **`index.ts`**: Exporta `getApi()`, ponto de entrada único para o Frontend. Use `import { getApi } from '@api';`
+
+- **`src/backend/contexts/`**: Divisão por contextos delimitados (Bounded Contexts).
+  - `src/backend/contexts/characters/`: Domínio, Casos de Uso e Repositórios de personagens.
+  - `src/backend/contexts/users/`: Gerenciamento de usuários e autenticação.
+- **`src/backend/shared/`**: Infraestrutura compartilhada do backend (HTTP wrappers, DI Container).
+- **`src/backend/index.ts`**: Exporta `getApi()`, ponto de entrada único para o Frontend. Use `import { getApi } from '@api';`
 
 ### 2. `src/frontend/`
+
 Camada de apresentação e estado do cliente.
-- **`components/`**: Componentes React (incluindo a pasta `ui/` do Shadcn).
-- **`context/`**: Provedores de contexto React (ex: `UserContext`).
-- **`hooks/`**: Custom hooks para lógica de UI e data fetching (React Query).
-- **`lib/`**: Clientes de API e utilitários exclusivos do frontend.
+
+- **`src/frontend/components/`**: Componentes React (incluindo a pasta `ui/` do Shadcn).
+- **`src/frontend/context/`**: Provedores de contexto React (ex: `UserContext`).
+- **`src/frontend/hooks/`**: Custom hooks para lógica de UI e data fetching (React Query).
+- **`src/frontend/lib/`**: Clientes de API e utilitários exclusivos do frontend.
 
 ### 3. `src/shared/` (Raiz de `src/`)
+
 Código compartilhado entre Frontend e Backend.
-- **`systems/`**: Regras específicas de sistemas de RPG (ex: `dnd5e/` com schemas Zod e cálculos).
-- **`types/`**: Definições de tipos TypeScript globais.
+
+- **`src/shared/systems/`**: Regras específicas de sistemas de RPG (ex: `dnd5e/` com schemas Zod e cálculos).
+- **`src/shared/types/`**: Definições de tipos TypeScript globais.
 
 ## 🔄 Fluxo de Comunicação
 

@@ -24,7 +24,7 @@ export function SpellChip({
   className,
 }: SpellChipProps) {
   const baseStyles =
-    'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[10px] font-medium tracking-wider uppercase transition-colors';
+    'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium tracking-wider uppercase transition-colors';
 
   const variants = {
     default:
@@ -36,8 +36,10 @@ export function SpellChip({
   };
 
   const content = (
-    <div className={cn(baseStyles, variants[variant], className)}>
-      {icon && <span className="opacity-70">{icon}</span>}
+    <div
+      className={cn(baseStyles, variants[variant], !children && 'aspect-square p-1.5', className)}
+    >
+      {icon && <span className={cn('opacity-70', !!children && 'mr-0')}>{icon}</span>}
       {children}
     </div>
   );

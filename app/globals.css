@@ -20,10 +20,15 @@
   --accent: #1c1c1f;
   --accent-foreground: #fafafa;
 
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
   /* The default primary color */
   --primary: #8b5cf6;
   --primary-foreground: #ffffff;
   --sidebar: #09090b;
+
+  --header-height: 80px;
 }
 
 @theme inline {
@@ -40,6 +45,8 @@
   --color-ring: var(--ring);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-sidebar: var(--sidebar);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono);

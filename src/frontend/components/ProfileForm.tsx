@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import ImageUpload from '@frontend/components/shared/ImageUpload';
+import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -27,7 +28,6 @@ import {
   FormMessage,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
-import { Skeleton } from '@frontend/components/ui/skeleton';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
 
@@ -113,17 +113,8 @@ export default function ProfileForm() {
 
   if (isLoading) {
     return (
-      <Card className="mx-auto w-full max-w-lg border-white/10 bg-black/60 backdrop-blur-md">
-        <CardHeader>
-          <Skeleton className="h-7 w-48 bg-white/10" />
-          <Skeleton className="h-4 w-72 bg-white/10" />
-        </CardHeader>
-        <CardContent className="flex flex-col items-center gap-4">
-          <Skeleton className="h-24 w-24 rounded-full bg-white/10" />
-          <Skeleton className="h-10 w-full bg-white/10" />
-          <Skeleton className="h-10 w-full bg-white/10" />
-          <Skeleton className="h-10 w-full bg-white/10" />
-        </CardContent>
+      <Card className="mx-auto w-full max-w-lg border-white/10 bg-black/60 py-12 backdrop-blur-md">
+        <LoadingState thematic />
       </Card>
     );
   }

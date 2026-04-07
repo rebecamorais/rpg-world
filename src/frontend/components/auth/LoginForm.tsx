@@ -26,6 +26,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@frontend/components/ui/form';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { useAuth } from '@frontend/hooks/useAuth';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
@@ -96,7 +97,7 @@ export default function LoginForm() {
   return (
     <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
       <CardHeader>
-        <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
+        <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-xl font-bold text-transparent">
           {t('title')}
         </CardTitle>
         <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
@@ -107,7 +108,7 @@ export default function LoginForm() {
             onClick={() => setAuthMode('magic')}
             className={`flex-1 rounded-md py-1.5 text-sm font-medium transition-all ${
               authMode === 'magic'
-                ? 'bg-blue-600 text-white shadow-lg'
+                ? 'bg-primary text-white shadow-lg'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -117,7 +118,7 @@ export default function LoginForm() {
             onClick={() => setAuthMode('password')}
             className={`flex-1 rounded-md py-1.5 text-sm font-medium transition-all ${
               authMode === 'password'
-                ? 'bg-blue-600 text-white shadow-lg'
+                ? 'bg-primary text-white shadow-lg'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -138,7 +139,7 @@ export default function LoginForm() {
                       type="email"
                       placeholder={t('emailPlaceholder')}
                       autoComplete="email"
-                      className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                      className="focus:border-primary/50 border-white/10 bg-white/5 text-white"
                       {...field}
                     />
                   </FormControl>
@@ -157,7 +158,7 @@ export default function LoginForm() {
                       <FormLabel className="text-gray-300">{t('passwordLabel')}</FormLabel>
                       <Link
                         href="/forgot-password"
-                        className="text-xs text-blue-400 hover:underline"
+                        className="text-primary text-xs hover:underline"
                       >
                         {t('forgotPassword')}
                       </Link>
@@ -167,7 +168,7 @@ export default function LoginForm() {
                         type="password"
                         placeholder={t('passwordPlaceholder')}
                         autoComplete="current-password"
-                        className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                        className="focus:border-primary/50 border-white/10 bg-white/5 text-white"
                         {...field}
                       />
                     </FormControl>
@@ -194,8 +195,8 @@ export default function LoginForm() {
               disabled={authMode === 'magic' || form.formState.isSubmitting}
               className={`mt-2 w-full font-semibold transition-all ${
                 authMode === 'magic'
-                  ? 'cursor-not-allowed bg-blue-600/30 opacity-50'
-                  : 'bg-blue-600 hover:bg-blue-700'
+                  ? 'bg-primary/30 cursor-not-allowed opacity-50'
+                  : 'bg-primary hover:bg-primary/90'
               }`}
             >
               {form.formState.isSubmitting
@@ -227,11 +228,21 @@ export default function LoginForm() {
           {t('googleLogin')}
         </Button>
 
-        <div className="mt-2 text-center text-sm text-gray-400">
-          {t('noAccount')}{' '}
-          <Link href="/register" className="text-blue-400 hover:underline">
-            {t('register')}
-          </Link>
+        <div className="mt-4 flex flex-col gap-4 border-t border-white/5 pt-6 text-center">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-white">{t('noAccount')}</p>
+            <p className="text-xs text-gray-400">{t('noAccountSubtitle')}</p>
+          </div>
+          <Button
+            variant="outline"
+            asChild
+            className="bg-primary/5 hover:bg-primary/10 w-full shadow-sm"
+          >
+            <Link href="/register" className="flex items-center gap-2">
+              <AppIcon name="UserPlus" size={16} className="text-primary" />
+              {t('register')}
+            </Link>
+          </Button>
         </div>
       </CardContent>
     </Card>

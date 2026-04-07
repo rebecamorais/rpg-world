@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { Droplet, Wand2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Card } from '@frontend/components/ui/card';
 import { GhostInput } from '@frontend/components/ui/ghost-input';
+import { AppIcon } from '@frontend/components/ui/icon';
 import {
   Select,
   SelectContent,
@@ -73,7 +73,7 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
           {...props}
         >
           <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
-            <Droplet className="h-3.5 w-3.5 text-blue-500" />
+            <AppIcon name="Droplet" size={14} className="text-blue-500" />
             {systemSelector}
           </div>
 
@@ -137,7 +137,7 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
         >
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
-              <Wand2 className="h-3.5 w-3.5 text-blue-400" />
+              <AppIcon name="Wand2" size={14} className="text-blue-400" />
               {systemSelector}
             </div>
 

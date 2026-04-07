@@ -71,6 +71,7 @@
     "forgotPassword": "Forgot password?",
     "submit": "Sign In",
     "noAccount": "Don't have an account?",
+    "noAccountSubtitle": "Join the community and start managing your characters.",
     "register": "Sign up"
   },
   "register": {
@@ -129,9 +130,11 @@
   },
   "characters": {
     "loading": "Loading characters...",
-    "emptyState": "No characters yet.",
+    "emptyState": "No characters yet",
+    "createFirstDescription": "Start your journey by creating your first RPG character.",
     "createFirst": "Create first character",
     "title": "Characters",
+    "createNew": "Create New Character",
     "newButton": "+ New",
     "level": "Level {level}",
     "requireLogin": "Please log in to see your characters.",
@@ -172,6 +175,8 @@
     "deleteDialogTitle": "Delete character?",
     "deleteDialogDescription": "Are you sure you want to delete the character {name}? This action cannot be undone and all data will be lost.",
     "confirmDelete": "Confirm Deletion",
+    "deleteConfirmInstruction": "To confirm, type the character's name: <bold>{name}</bold>",
+    "deleteConfirmPlaceholder": "Type the exact name here",
     "namePlaceholder": "Character Name",
     "editAttribute": "Edit {label}",
     "tabs": {
@@ -579,6 +584,16 @@
       "pixCopy": "Pix key copied!",
       "thanks": "Thank you so much for your care and support! <heart />"
     },
-    "copyright": "© {year} DevStudio. All rights reserved."
+    "copyright": "© {year} Rebs Tech Studio. All rights reserved."
+  },
+  "loadingMessages": {
+    "weapons": "Equipping weapons...",
+    "ritual": "Preparing ritual...",
+    "gods": "Consulting the gods...",
+    "armor": "Polishing armor...",
+    "spirits": "Summoning spirits...",
+    "blades": "Sharpening blades...",
+    "scrolls": "Reading ancient scrolls...",
+    "battlefield": "Preparing the battlefield..."
   }
 }

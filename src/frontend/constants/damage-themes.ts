@@ -1,3 +1,14 @@
+import { DAMAGE_TYPE_ICONS, SPELL_SCHOOL_ICONS, SPELL_UI_ICONS } from './spells';
+
+export const MECHANIC_ICONS = {
+  ritual: SPELL_UI_ICONS.Ritual,
+  concentration: SPELL_UI_ICONS.Concentration,
+  verbal: SPELL_UI_ICONS.Verbal,
+  somatic: SPELL_UI_ICONS.Somatic,
+  material: SPELL_UI_ICONS.Material,
+  default: 'tied-scroll',
+} as const;
+
 export interface DamageTheme {
   icon: string;
   color: string;
@@ -11,8 +22,9 @@ export interface DamageTheme {
 }
 
 export const DAMAGE_THEMES: Record<string, DamageTheme> = {
+  // Elemental / Damage Types
   fire: {
-    icon: 'Flame',
+    icon: DAMAGE_TYPE_ICONS.fire,
     color: 'text-orange-500',
     border: 'border-orange-500/20',
     bg: 'bg-orange-500/5',
@@ -22,7 +34,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: -4,
   },
   cold: {
-    icon: 'Snowflake',
+    icon: DAMAGE_TYPE_ICONS.cold,
     color: 'text-sky-300',
     border: 'border-sky-300/20',
     bg: 'bg-sky-300/5',
@@ -32,7 +44,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: 4,
   },
   lightning: {
-    icon: 'Zap',
+    icon: DAMAGE_TYPE_ICONS.lightning,
     color: 'text-yellow-400',
     border: 'border-yellow-400/20',
     bg: 'bg-yellow-400/5',
@@ -42,7 +54,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: -2,
   },
   acid: {
-    icon: 'Droplet',
+    icon: DAMAGE_TYPE_ICONS.acid,
     color: 'text-lime-500',
     border: 'border-lime-500/20',
     bg: 'bg-lime-500/5',
@@ -52,7 +64,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: 2,
   },
   poison: {
-    icon: 'Skull',
+    icon: DAMAGE_TYPE_ICONS.poison,
     color: 'text-emerald-600',
     border: 'border-emerald-600/20',
     bg: 'bg-emerald-600/5',
@@ -62,7 +74,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: -3,
   },
   psychic: {
-    icon: 'Brain',
+    icon: DAMAGE_TYPE_ICONS.psychic,
     color: 'text-pink-500',
     border: 'border-pink-500/20',
     bg: 'bg-pink-500/5',
@@ -72,7 +84,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: 5,
   },
   radiant: {
-    icon: 'Sun',
+    icon: DAMAGE_TYPE_ICONS.radiant,
     color: 'text-amber-200',
     border: 'border-amber-200/20',
     bg: 'bg-amber-200/5',
@@ -82,7 +94,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: -5,
   },
   necrotic: {
-    icon: 'Ghost',
+    icon: DAMAGE_TYPE_ICONS.necrotic,
     color: 'text-purple-500',
     border: 'border-purple-500/20',
     bg: 'bg-purple-500/5',
@@ -92,7 +104,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: 3,
   },
   force: {
-    icon: 'Waves',
+    icon: DAMAGE_TYPE_ICONS.force,
     color: 'text-white',
     border: 'border-white/20',
     bg: 'bg-white/5',
@@ -103,7 +115,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: 0,
   },
   thunder: {
-    icon: 'AudioLines',
+    icon: DAMAGE_TYPE_ICONS.thunder,
     color: 'text-slate-400',
     border: 'border-slate-400/20',
     bg: 'bg-slate-400/5',
@@ -114,7 +126,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: -1,
   },
   slashing: {
-    icon: 'Sword',
+    icon: DAMAGE_TYPE_ICONS.slashing,
     color: 'text-rose-700',
     border: 'border-rose-700/20',
     bg: 'bg-rose-700/5',
@@ -124,7 +136,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: -2,
   },
   piercing: {
-    icon: 'Target',
+    icon: DAMAGE_TYPE_ICONS.piercing,
     color: 'text-red-800',
     border: 'border-red-800/20',
     bg: 'bg-red-800/5',
@@ -134,7 +146,7 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     parallax: 1,
   },
   bludgeoning: {
-    icon: 'Hammer',
+    icon: DAMAGE_TYPE_ICONS.bludgeoning,
     color: 'text-stone-500',
     border: 'border-stone-500/20',
     bg: 'bg-stone-500/5',
@@ -146,8 +158,9 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
 };
 
 export const CATEGORY_THEMES: Record<string, DamageTheme> = {
+  // Functional / Category
   buff: {
-    icon: 'ShieldPlus',
+    icon: 'armor-upgrade',
     color: 'text-emerald-400',
     border: 'border-emerald-400/20',
     bg: 'bg-emerald-400/5',
@@ -157,7 +170,7 @@ export const CATEGORY_THEMES: Record<string, DamageTheme> = {
     parallax: 0,
   },
   utility: {
-    icon: 'Sparkles',
+    icon: 'convergence-target',
     color: 'text-amber-400',
     border: 'border-amber-400/20',
     bg: 'bg-amber-400/5',
@@ -167,7 +180,7 @@ export const CATEGORY_THEMES: Record<string, DamageTheme> = {
     parallax: 0,
   },
   control: {
-    icon: 'VenetianMask',
+    icon: 'despair',
     color: 'text-yellow-500',
     border: 'border-yellow-500/20',
     bg: 'bg-yellow-500/5',
@@ -178,8 +191,92 @@ export const CATEGORY_THEMES: Record<string, DamageTheme> = {
   },
 };
 
+export const SCHOOL_THEMES: Record<string, DamageTheme> = {
+  // Traditional / Schools
+  abjuration: {
+    icon: SPELL_SCHOOL_ICONS.abjuration,
+    color: 'text-blue-400',
+    border: 'border-blue-400/20',
+    bg: 'bg-blue-400/5',
+    vfx: 'vfx-grid',
+    glow: 'shadow-blue-400/10',
+    hex: '#60a5fa',
+    parallax: 0,
+  },
+  conjuration: {
+    icon: SPELL_SCHOOL_ICONS.conjuration,
+    color: 'text-yellow-400',
+    border: 'border-yellow-400/20',
+    bg: 'bg-yellow-400/5',
+    vfx: 'vfx-dots-tight',
+    glow: 'shadow-yellow-400/10',
+    hex: '#facc15',
+    parallax: 0,
+  },
+  divination: {
+    icon: SPELL_SCHOOL_ICONS.divination,
+    color: 'text-emerald-400',
+    border: 'border-emerald-400/20',
+    bg: 'bg-emerald-400/5',
+    vfx: 'vfx-waves',
+    glow: 'shadow-emerald-400/10',
+    hex: '#34d399',
+    parallax: 0,
+  },
+  enchantment: {
+    icon: SPELL_SCHOOL_ICONS.enchantment,
+    color: 'text-pink-400',
+    border: 'border-pink-400/20',
+    bg: 'bg-pink-400/5',
+    vfx: 'vfx-ethereal',
+    glow: 'shadow-pink-400/10',
+    hex: '#f472b6',
+    parallax: 0,
+  },
+  evocation: {
+    icon: SPELL_SCHOOL_ICONS.evocation,
+    color: 'text-orange-500',
+    border: 'border-orange-500/20',
+    bg: 'bg-orange-500/5',
+    vfx: 'vfx-dots',
+    glow: 'shadow-orange-500/10',
+    hex: '#f97316',
+    parallax: 0,
+  },
+  illusion: {
+    icon: SPELL_SCHOOL_ICONS.illusion,
+    color: 'text-purple-400',
+    border: 'border-purple-400/20',
+    bg: 'bg-purple-400/5',
+    vfx: 'vfx-mist',
+    glow: 'shadow-purple-400/10',
+    hex: '#a78bfa',
+    parallax: 0,
+  },
+  necromancy: {
+    icon: SPELL_SCHOOL_ICONS.necromancy,
+    color: 'text-purple-600',
+    border: 'border-purple-600/20',
+    bg: 'bg-purple-600/5',
+    vfx: 'vfx-decay',
+    glow: 'shadow-purple-600/10',
+    hex: '#9333ea',
+    parallax: 0,
+  },
+  transmutation: {
+    icon: SPELL_SCHOOL_ICONS.transmutation,
+    color: 'text-amber-600',
+    border: 'border-amber-600/20',
+    bg: 'bg-amber-600/5',
+    vfx: 'vfx-cracks',
+    glow: 'shadow-amber-600/10',
+    hex: '#d97706',
+    parallax: 0,
+  },
+};
+
 export const DEFAULT_THEME: DamageTheme = {
-  icon: 'BookOpen',
+  icon: 'tied-scroll',
   color: 'text-slate-400',
   border: 'border-slate-400/20',
   bg: 'bg-slate-400/5',

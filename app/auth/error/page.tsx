@@ -20,7 +20,7 @@ export default function AuthErrorPage() {
   const t = useTranslations('common');
 
   return (
-    <div className="bg-background flex min-h-screen items-center justify-center p-4">
+    <div className="bg-background flex flex-1 items-center justify-center p-4">
       <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
         <CardHeader>
           <CardTitle className="text-red-400">Erro de Autenticação</CardTitle>
@@ -32,7 +32,7 @@ export default function AuthErrorPage() {
           <p className="rounded-md border border-red-500/20 bg-red-500/10 p-3 text-center text-sm text-gray-300">
             {message}
           </p>
-          <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
+          <Button asChild className="w-full">
             <Link href="/login">{t('back')}</Link>
           </Button>
         </CardContent>

@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@iconify/react": "^6.0.2",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.8",
@@ -55,6 +56,8 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@iconify-json/game-icons": "^1.2.3",
+    "@iconify/tailwind4": "^1.2.3",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",

@@ -15,6 +15,7 @@ import CombatStatsSection from '@frontend/components/character/stats/CombatStats
 import PassivePerception from '@frontend/components/character/stats/PassivePerception';
 import SavingThrowsSection from '@frontend/components/character/stats/SavingThrowsSection';
 import SkillsSection from '@frontend/components/character/stats/SkillsSection';
+import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCharacter } from '@frontend/hooks/useCharacter';
@@ -36,7 +37,6 @@ export default function CharacterSheetClient() {
     character: fetchedCharacter,
     isLoading,
     error: queryError,
-    deleteCharacter,
     updateCharacter,
     isSaving,
   } = useCharacter(id);
@@ -70,10 +70,6 @@ export default function CharacterSheetClient() {
   const searchParams = useSearchParams();
   const activeTab = (searchParams?.get('tab') as CharacterTab) || CharacterTab.STATUS;
 
-  const handleDelete = () => {
-    if (character) deleteCharacter(character);
-  };
-
   const { updateLore } = useCharacterContext();
 
   const handleSave = () => {
@@ -102,7 +98,7 @@ export default function CharacterSheetClient() {
   if (isLoading && !character) {
     return (
       <div className="flex flex-1 items-center justify-center p-4">
-        <p className="text-muted-foreground">{tCommon('loading')}</p>
+        <LoadingState thematic />
       </div>
     );
   }
@@ -132,7 +128,6 @@ export default function CharacterSheetClient() {
         hasUnsavedChanges={hasUnsavedChanges}
         isSaving={isSaving}
         onSave={handleSave}
-        onDelete={handleDelete}
         showSave={[CharacterTab.STATUS, CharacterTab.LORE].includes(activeTab)}
       />
 

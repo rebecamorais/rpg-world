@@ -2,10 +2,10 @@
 
 import React from 'react';
 
-import { BookMarked, BookOpen, Sparkles, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Card, CardContent } from '@frontend/components/ui/card';
+import { AppIcon } from '@frontend/components/ui/icon';
 import type { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
 
 interface KnownSpellsCardProps {
@@ -39,11 +39,11 @@ function KnownSpellsCard({
         {/* Header with counter */}
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-foreground flex items-center gap-2 text-sm font-bold tracking-wider uppercase">
-            <BookOpen size={16} className="text-primary" />
+            <AppIcon name="BookOpen" size={16} className="text-primary" />
             {t('preparedSpells')}
           </h3>
           <div className="bg-primary/10 text-primary flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold">
-            <Sparkles size={12} />
+            <AppIcon name="Sparkles" size={12} />
             <span>
               {preparedCount}/{totalCount}
             </span>
@@ -71,10 +71,10 @@ function KnownSpellsCard({
                   {spell.name}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground text-[10px] font-medium uppercase">
+                  <span className="text-muted-foreground text-xs font-medium uppercase">
                     {spell.level === 0 ? t('cantrip') : t('levelDetail', { level: spell.level })}
                   </span>
-                  <span className="bg-muted/50 text-muted-foreground rounded-full px-1.5 py-0.5 text-[10px] lowercase">
+                  <span className="bg-muted/50 text-muted-foreground rounded-full px-1.5 py-0.5 text-xs lowercase">
                     {tData(`schools.${spell.school.toLowerCase()}`)}
                   </span>
                 </div>
@@ -92,11 +92,7 @@ function KnownSpellsCard({
                   }`}
                   title={spell.isPrepared ? t('unprepareSpell') : t('prepareSpell')}
                 >
-                  {spell.isPrepared ? (
-                    <BookMarked className="h-4 w-4" />
-                  ) : (
-                    <BookOpen className="h-4 w-4" />
-                  )}
+                  <AppIcon name={spell.isPrepared ? 'BookMarked' : 'BookOpen'} size={16} />
                 </button>
 
                 {/* Forget spell */}
@@ -105,7 +101,7 @@ function KnownSpellsCard({
                   className="text-muted-foreground rounded-md p-1.5 transition-colors hover:bg-red-500/10 hover:text-red-500"
                   title={t('forgetSpell')}
                 >
-                  <X className="h-4 w-4" />
+                  <AppIcon name="X" size={16} />
                 </button>
               </div>
             </li>

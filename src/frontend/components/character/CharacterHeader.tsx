@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 
-import { Palette, Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import ImageUpload from '@frontend/components/shared/ImageUpload';
@@ -17,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@frontend/components/ui/dialog';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { Progress } from '@frontend/components/ui/progress';
@@ -105,7 +105,7 @@ function CharacterHeader({
                 </AvatarFallback>
               </Avatar>
               <div className="bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity group-hover:opacity-100">
-                <Palette className="h-6 w-6" style={{ color: 'var(--character-color)' }} />
+                <AppIcon name="Palette" size={24} style={{ color: 'var(--character-color)' }} />
               </div>
             </button>
           </DialogTrigger>
@@ -197,7 +197,7 @@ function CharacterHeader({
                     className="h-6 w-6 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
                     onClick={() => setIsEditingName(true)}
                   >
-                    <Pencil className="h-3 w-3" />
+                    <AppIcon name="Pencil" size={12} />
                   </Button>
                 </div>
               )}
@@ -272,7 +272,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-race"
-                className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
               >
                 {t('race')}
               </Label>
@@ -291,7 +291,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-class"
-                className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
               >
                 {t('class')}
               </Label>
@@ -310,7 +310,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-background"
-                className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
               >
                 {t('background')}
               </Label>
@@ -329,7 +329,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-alignment"
-                className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
               >
                 {t('alignment')}
               </Label>

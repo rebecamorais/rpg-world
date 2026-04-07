@@ -6,14 +6,8 @@ import CharacterActionBar from '@frontend/components/character/CharacterActionBa
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
 export default function CharacterInventoryPage() {
-  const {
-    character,
-    isSaving,
-    hasUnsavedChanges,
-    setHasUnsavedChanges,
-    updateCharacter,
-    deleteCharacter,
-  } = useCharacterContext();
+  const { character, isSaving, hasUnsavedChanges, setHasUnsavedChanges, updateCharacter } =
+    useCharacterContext();
   const t = useTranslations('characters');
 
   if (!character) return null;
@@ -24,10 +18,6 @@ export default function CharacterInventoryPage() {
     });
   };
 
-  const handleDelete = () => {
-    deleteCharacter(character);
-  };
-
   return (
     <div className="flex flex-col gap-6">
       <CharacterActionBar
@@ -35,7 +25,6 @@ export default function CharacterInventoryPage() {
         hasUnsavedChanges={hasUnsavedChanges}
         isSaving={isSaving}
         onSave={handleSave}
-        onDelete={handleDelete}
       />
       <div className="text-muted-foreground bg-muted/20 flex h-[50vh] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
         <p>{t('emptyStates.inventory')}</p>

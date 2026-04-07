@@ -66,7 +66,7 @@ export default function AuthConfirmPage() {
   }, [router]);
 
   return (
-    <div className="bg-background flex min-h-screen items-center justify-center p-4">
+    <div className="bg-background flex flex-1 items-center justify-center p-4">
       <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 font-medium text-white shadow-2xl backdrop-blur-md">
         <CardHeader>
           <CardTitle className="text-center">

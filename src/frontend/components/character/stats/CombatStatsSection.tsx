@@ -2,17 +2,6 @@
 
 import React from 'react';
 
-import {
-  Dices,
-  Footprints,
-  Heart,
-  Minus,
-  Plus,
-  Settings2,
-  Shield,
-  Sparkles,
-  Swords,
-} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { MagicSystem, MagicSystemCard } from '@frontend/components/character/MagicSystemCard';
@@ -29,6 +18,7 @@ import {
   DialogTrigger,
 } from '@frontend/components/ui/dialog';
 import { GhostInput } from '@frontend/components/ui/ghost-input';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import {
@@ -70,7 +60,7 @@ function NumberStepper({ value, onChange, min = 0, max = 99, label }: NumberStep
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
         >
-          <Minus className="h-3 w-3" />
+          <AppIcon name="Minus" size={12} />
         </Button>
         <span className="w-6 text-center text-sm font-bold">{value}</span>
         <Button
@@ -80,7 +70,7 @@ function NumberStepper({ value, onChange, min = 0, max = 99, label }: NumberStep
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
         >
-          <Plus className="h-3 w-3" />
+          <AppIcon name="Plus" size={12} />
         </Button>
       </div>
     </div>
@@ -140,7 +130,7 @@ const CombatHeader = ({
 
   return (
     <div className="mb-4 flex items-center justify-between">
-      <h3 className="text-muted-foreground text-sm font-bold tracking-[0.2em] uppercase">
+      <h3 className="text-muted-foreground text-xs font-bold tracking-[0.2em] uppercase">
         {t('status') || 'Combat Status'}
       </h3>
       <Dialog>
@@ -150,14 +140,18 @@ const CombatHeader = ({
             size="icon"
             className="border-border/30 hover:bg-secondary/50 hover:border-border/60 hover:text-primary h-7 w-7 rounded-md border bg-transparent transition-all"
           >
-            <Settings2 className="text-muted-foreground/60 h-3.5 w-3.5 transition-colors group-hover:text-white" />
+            <AppIcon
+              name="Settings2"
+              size={14}
+              className="text-muted-foreground/60 transition-colors group-hover:text-white"
+            />
           </Button>
         </DialogTrigger>
         <DialogContent className="border-zinc-800 bg-zinc-950 p-0 sm:max-w-[700px]">
           <DialogHeader className="border-b border-zinc-800 p-6 pb-4">
             <div className="flex items-center gap-2">
-              <Settings2 className="h-4 w-4 text-zinc-400" />
-              <DialogTitle className="text-zinc-100">
+              <AppIcon name="Settings2" size={16} className="text-zinc-400" />
+              <DialogTitle className="text-xl font-bold text-zinc-100">
                 {tm('titleConfig') || 'Combat Configuration'}
               </DialogTitle>
               <DialogDescription className="sr-only">
@@ -170,8 +164,8 @@ const CombatHeader = ({
             {/* Left Column: HP & Survival */}
             <div className="flex flex-col gap-6 p-6">
               <div className="flex items-center gap-2 pb-2">
-                <Heart className="h-4 w-4 text-red-500" />
-                <h4 className="text-sm font-black tracking-widest text-zinc-400 uppercase">
+                <AppIcon name="Heart" size={16} className="text-red-500" />
+                <h4 className="text-xs font-black tracking-widest text-zinc-400 uppercase">
                   {t('hitPoints') || 'Hit Points'}
                 </h4>
               </div>
@@ -195,8 +189,8 @@ const CombatHeader = ({
             {/* Right Column: Magic System */}
             <div className="flex flex-col gap-6 p-6">
               <div className="flex items-center gap-2 pb-2">
-                <Sparkles className="h-4 w-4 text-blue-500" />
-                <h4 className="text-sm font-black tracking-widest text-zinc-400 uppercase">
+                <AppIcon name="Sparkles" size={16} className="text-blue-500" />
+                <h4 className="text-xs font-black tracking-widest text-zinc-400 uppercase">
                   {tm('systemUsed') || 'Magic System'}
                 </h4>
               </div>
@@ -225,7 +219,7 @@ const CombatHeader = ({
                   <Label className="mb-2 block text-sm font-bold text-zinc-500 uppercase">
                     {tm('slotsCapacity')}
                   </Label>
-                  <div className="custom-scrollbar max-h-[220px] overflow-y-auto pr-2">
+                  <div className="flex flex-col gap-1 pr-2">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((lvl) => (
                       <NumberStepper
                         key={lvl}
@@ -329,7 +323,10 @@ const BadgeRow = ({ character, onBasicInfoChange, onHitDiceChange }: BadgeRowPro
   return (
     <div className="mt-4 flex flex-wrap items-center gap-3">
       {/* Armor Class */}
-      <StatBadge icon={<Shield className="text-primary h-3.5 w-3.5" />} label={t('armorClass')}>
+      <StatBadge
+        icon={<AppIcon name="Shield" size={14} className="text-primary" />}
+        label={t('armorClass')}
+      >
         <GhostInput
           type="number"
           value={character.ac ?? 0}
@@ -341,7 +338,10 @@ const BadgeRow = ({ character, onBasicInfoChange, onHitDiceChange }: BadgeRowPro
       </StatBadge>
 
       {/* Initiative */}
-      <StatBadge icon={<Swords className="h-3.5 w-3.5 text-orange-500" />} label={t('initiative')}>
+      <StatBadge
+        icon={<AppIcon name="Swords" size={14} className="text-orange-500" />}
+        label={t('initiative')}
+      >
         <GhostInput
           type="number"
           value={character.initiative}
@@ -354,7 +354,7 @@ const BadgeRow = ({ character, onBasicInfoChange, onHitDiceChange }: BadgeRowPro
 
       {/* Speed */}
       <StatBadge
-        icon={<Footprints className="h-3.5 w-3.5 text-emerald-500" />}
+        icon={<AppIcon name="Footprints" size={14} className="text-emerald-500" />}
         label={t('speedUnit')}
         reverse
       >
@@ -369,7 +369,10 @@ const BadgeRow = ({ character, onBasicInfoChange, onHitDiceChange }: BadgeRowPro
       </StatBadge>
 
       {/* Hit Dice */}
-      <StatBadge icon={<Dices className="h-3.5 w-3.5 text-sky-400" />} label={t('hitDiceShort')}>
+      <StatBadge
+        icon={<AppIcon name="Dices" size={14} className="text-sky-400" />}
+        label={t('hitDiceShort')}
+      >
         <Select
           value={character.hitDice?.total || '1d8'}
           onValueChange={(val) => onHitDiceChange(val)}

@@ -19,7 +19,6 @@ export default function StatusView() {
     hasUnsavedChanges,
     setHasUnsavedChanges,
     updateCharacter,
-    deleteCharacter,
     handleAttributeChange,
     handleSkillChange,
     handleSavingThrowChange,
@@ -40,10 +39,6 @@ export default function StatusView() {
     });
   };
 
-  const handleDelete = () => {
-    deleteCharacter(character);
-  };
-
   return (
     <div
       className="flex flex-col gap-6"
@@ -56,7 +51,6 @@ export default function StatusView() {
         hasUnsavedChanges={hasUnsavedChanges}
         isSaving={isSaving}
         onSave={handleSave}
-        onDelete={handleDelete}
       />
 
       {error && (
