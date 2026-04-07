@@ -68,7 +68,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
   return (
     <footer
       className={cn(
-        'mt-auto border-t border-white/5 bg-[#08080a] pt-10 pb-6 transition-all',
+        'mt-auto border-t border-white/5 bg-[#08080a] pt-16 pb-10 transition-all',
         className,
       )}
     >

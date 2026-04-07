@@ -20,7 +20,7 @@ export default function AuthErrorPage() {
   const t = useTranslations('common');
 
   return (
-    <div className="bg-background flex min-h-screen items-center justify-center p-4">
+    <div className="bg-background flex flex-1 items-center justify-center p-4">
       <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
         <CardHeader>
           <CardTitle className="text-red-400">Erro de Autenticação</CardTitle>

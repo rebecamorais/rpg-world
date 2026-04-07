@@ -24,6 +24,8 @@
   --primary: #8b5cf6;
   --primary-foreground: #ffffff;
   --sidebar: #09090b;
+
+  --header-height: 80px;
 }
 
 @theme inline {
