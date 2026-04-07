@@ -130,9 +130,11 @@
   },
   "characters": {
     "loading": "Loading characters...",
-    "emptyState": "No characters yet.",
+    "emptyState": "No characters yet",
+    "createFirstDescription": "Start your journey by creating your first RPG character.",
     "createFirst": "Create first character",
     "title": "Characters",
+    "createNew": "Create New Character",
     "newButton": "+ New",
     "level": "Level {level}",
     "requireLogin": "Please log in to see your characters.",

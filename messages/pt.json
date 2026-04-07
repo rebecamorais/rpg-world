@@ -130,9 +130,11 @@
   },
   "characters": {
     "loading": "Carregando personagens...",
-    "emptyState": "Nenhum personagem ainda.",
+    "emptyState": "Nenhum personagem ainda",
+    "createFirstDescription": "Comece sua jornada criando seu primeiro personagem de RPG.",
     "createFirst": "Criar primeiro personagem",
     "title": "Personagens",
+    "createNew": "Criar novo Personagem",
     "newButton": "+ Novo",
     "level": "Nível {level}",
     "requireLogin": "Faça login para ver seus personagens.",

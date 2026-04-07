@@ -5,8 +5,15 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { LoadingState } from '@frontend/components/shared/LoadingState';
+import { Badge } from '@frontend/components/ui/badge';
+import { Button } from '@frontend/components/ui/button';
+import { Card, CardContent } from '@frontend/components/ui/card';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCharacters } from '@frontend/hooks/useCharacters';
+import { cn } from '@frontend/lib/utils';
+
+import type { CharacterSummary } from '@shared/types/character';
 
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();
@@ -29,47 +36,124 @@ export default function CharacterList() {
 
   if (characters.length === 0) {
     return (
-      <div className="border-border text-muted-foreground rounded-lg border p-6 text-center">
-        <p>{t('emptyState')}</p>
-        <Link
-          href="/characters/new"
-          className="text-foreground mt-3 inline-block text-sm font-medium hover:underline"
+      <div className="border-muted bg-card/30 flex min-h-[400px] flex-col items-center justify-center rounded-2xl border-2 border-dashed p-12 text-center backdrop-blur-sm">
+        <div className="relative mb-6">
+          <div className="bg-primary/20 absolute -inset-1 animate-pulse rounded-full blur-xl" />
+          <div className="bg-muted relative flex h-24 w-24 items-center justify-center rounded-full shadow-inner">
+            <AppIcon name="UserPlus" size={48} className="text-muted-foreground" />
+          </div>
+        </div>
+        <h3 className="text-foreground mb-3 text-2xl font-bold tracking-tight">
+          {t('emptyState')}
+        </h3>
+        <p className="text-muted-foreground mx-auto mb-10 max-w-md text-base leading-relaxed">
+          {t('createFirstDescription') ||
+            'Comece sua jornada épica hoje. Crie seu primeiro personagem e prepare-se para a aventura.'}
+        </p>
+        <Button
+          asChild
+          size="lg"
+          className="shadow-primary/20 h-12 rounded-full px-10 text-base font-bold shadow-lg transition-all hover:scale-105 active:scale-95"
         >
-          {t('createFirst')}
-        </Link>
+          <Link href="/characters/new">
+            <AppIcon name="Plus" size={20} className="mr-2" />
+            {t('createFirst')}
+          </Link>
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <h2 className="text-foreground text-lg font-semibold">{t('title')}</h2>
+    <div className="space-y-8">
+      <div className="flex items-end justify-between border-b pb-4">
+        <div className="space-y-1">
+          <h2 className="text-foreground text-4xl font-black tracking-tighter">{t('title')}</h2>
+          <p className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+            <span className="flex h-2 w-2 animate-pulse rounded-full bg-green-500" />
+            {characters.length === 1
+              ? '1 personagem pronto para aventura'
+              : `${characters.length} personagens prontos para aventura`}
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+        {/* Create Character Action Card */}
         <Link
           href="/characters/new"
-          className="text-muted-foreground hover:text-foreground text-sm font-medium"
+          className="group border-muted bg-card/50 hover:border-primary/50 hover:bg-primary/5 hover:shadow-primary/10 relative flex h-full min-h-[160px] flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-500 hover:shadow-2xl"
         >
-          {t('newButton')}
+          <div className="from-primary/10 absolute inset-0 bg-gradient-to-br via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+          <div className="bg-muted group-hover:bg-primary group-hover:shadow-primary/30 relative mb-4 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-90 group-hover:shadow-lg">
+            <AppIcon
+              name="Plus"
+              size={28}
+              className="text-muted-foreground group-hover:text-primary-foreground transition-colors duration-500"
+            />
+          </div>
+          <span className="text-muted-foreground group-hover:text-primary relative text-lg leading-tight font-bold tracking-tight transition-colors duration-500">
+            {t('createNew')}
+          </span>
         </Link>
-      </div>
-      <ul className="divide-border divide-y">
-        {characters.map((c) => (
-          <li key={c.id}>
-            <Link
-              href={`/system/${c.system}/character/${c.id}`}
-              className="hover:bg-muted -mx-2 block rounded px-2 py-3"
-            >
-              <span className="text-foreground font-medium" style={{ color: c.accentColor }}>
-                {c.name}
-              </span>
-              <span className="text-muted-foreground ml-2 text-sm">
-                {t('level', { level: c.level })}
-                {c.class ? ` · ${c.class}` : ''}
-              </span>
-            </Link>
-          </li>
+
+        {/* Existing Character Cards */}
+        {characters.map((character) => (
+          <CharacterCard key={character.id} character={character} />
         ))}
-      </ul>
+      </div>
     </div>
+  );
+}
+
+function CharacterCard({ character }: { character: CharacterSummary }) {
+  return (
+    <Link href={`/system/${character.system}/character/${character.id}`} className="group h-full">
+      <Card
+        className={cn(
+          'relative h-full overflow-hidden border-2 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg',
+          'hover:border-primary/30 bg-card/50 border-transparent backdrop-blur-sm',
+        )}
+      >
+        {/* Accent Color Indicator */}
+        <div
+          className="absolute top-0 left-0 h-1 w-full opacity-60 transition-opacity group-hover:opacity-100"
+          style={{ backgroundColor: character.accentColor || 'hsl(var(--primary))' }}
+        />
+
+        <CardContent className="flex h-full flex-col p-5">
+          <div className="mb-4 flex items-start justify-between gap-4">
+            <div className="flex-1 space-y-1">
+              <h3
+                className="text-foreground group-hover:text-primary line-clamp-1 text-xl font-bold transition-colors"
+                style={{ color: character.accentColor }}
+              >
+                {character.name}
+              </h3>
+              <p className="text-muted-foreground line-clamp-1 text-sm font-medium">
+                {character.class || 'Aventureiro'}
+              </p>
+            </div>
+            <Badge
+              variant="secondary"
+              className="px-2 py-0.5 text-xs font-bold tracking-wider uppercase"
+            >
+              Nv {character.level}
+            </Badge>
+          </div>
+
+          <div className="mt-auto flex items-center justify-between pt-2">
+            <div className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium">
+              <AppIcon name="Swords" size={14} />
+              <span>{character.system.replace('_', ' ')}</span>
+            </div>
+            <div className="bg-muted/50 text-muted-foreground flex h-8 w-8 items-center justify-center rounded-full border opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+              <AppIcon name="ChevronRight" size={18} />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
   );
 }
