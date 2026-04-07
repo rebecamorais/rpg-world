@@ -175,6 +175,8 @@
     "deleteDialogTitle": "Excluir personagem?",
     "deleteDialogDescription": "Tem certeza que deseja excluir o personagem {name}? Essa ação não poderá ser desfeita e todos os dados serão perdidos.",
     "confirmDelete": "Confirmar Exclusão",
+    "deleteConfirmInstruction": "Para confirmar, digite o nome do personagem: <bold>{name}</bold>",
+    "deleteConfirmPlaceholder": "Digite o nome exato aqui",
     "namePlaceholder": "Nome do Personagem",
     "editAttribute": "Editar {label}",
     "tabs": {

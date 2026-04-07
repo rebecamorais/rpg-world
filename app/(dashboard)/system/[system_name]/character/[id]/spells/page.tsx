@@ -17,7 +17,6 @@ export default function CharacterSpellsPage() {
     hasUnsavedChanges,
     setHasUnsavedChanges,
     updateCharacter,
-    deleteCharacter,
     characterSpells,
   } = useCharacterContext();
   const t = useTranslations('characters');
@@ -33,10 +32,6 @@ export default function CharacterSpellsPage() {
     });
   };
 
-  const handleDelete = () => {
-    deleteCharacter(character);
-  };
-
   return (
     <div className="flex flex-col gap-6">
       <CharacterActionBar
@@ -44,7 +39,6 @@ export default function CharacterSpellsPage() {
         hasUnsavedChanges={hasUnsavedChanges}
         isSaving={isSaving}
         onSave={handleSave}
-        onDelete={handleDelete}
       />
 
       {/* Header */}

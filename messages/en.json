@@ -175,6 +175,8 @@
     "deleteDialogTitle": "Delete character?",
     "deleteDialogDescription": "Are you sure you want to delete the character {name}? This action cannot be undone and all data will be lost.",
     "confirmDelete": "Confirm Deletion",
+    "deleteConfirmInstruction": "To confirm, type the character's name: <bold>{name}</bold>",
+    "deleteConfirmPlaceholder": "Type the exact name here",
     "namePlaceholder": "Character Name",
     "editAttribute": "Edit {label}",
     "tabs": {

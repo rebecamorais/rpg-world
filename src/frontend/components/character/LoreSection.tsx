@@ -100,17 +100,12 @@ const TextAreaField = ({
 
 export default function LoreSection({ data, onBasicInfoChange }: Props) {
   const t = useTranslations('characters.loreFields');
-  const { updateLore, isSaving, hasUnsavedChanges, setHasUnsavedChanges, deleteCharacter } =
-    useCharacterContext();
+  const { updateLore, isSaving, hasUnsavedChanges, setHasUnsavedChanges } = useCharacterContext();
 
   const handleSave = async () => {
     // CharacterContext's updateLore handles specific lore persistence
     await updateLore(data as unknown as Record<string, unknown>);
     setHasUnsavedChanges(false);
-  };
-
-  const handleDelete = () => {
-    if (data.id) deleteCharacter(data as DnD5eCharacter);
   };
 
   return (
@@ -120,7 +115,6 @@ export default function LoreSection({ data, onBasicInfoChange }: Props) {
         hasUnsavedChanges={hasUnsavedChanges}
         isSaving={isSaving}
         onSave={handleSave}
-        onDelete={handleDelete}
       />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
         {/* Top Row: Appearance and Personality */}

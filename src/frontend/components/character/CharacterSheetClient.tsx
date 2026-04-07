@@ -37,7 +37,6 @@ export default function CharacterSheetClient() {
     character: fetchedCharacter,
     isLoading,
     error: queryError,
-    deleteCharacter,
     updateCharacter,
     isSaving,
   } = useCharacter(id);
@@ -70,10 +69,6 @@ export default function CharacterSheetClient() {
 
   const searchParams = useSearchParams();
   const activeTab = (searchParams?.get('tab') as CharacterTab) || CharacterTab.STATUS;
-
-  const handleDelete = () => {
-    if (character) deleteCharacter(character);
-  };
 
   const { updateLore } = useCharacterContext();
 
@@ -133,7 +128,6 @@ export default function CharacterSheetClient() {
         hasUnsavedChanges={hasUnsavedChanges}
         isSaving={isSaving}
         onSave={handleSave}
-        onDelete={handleDelete}
         showSave={[CharacterTab.STATUS, CharacterTab.LORE].includes(activeTab)}
       />
 
