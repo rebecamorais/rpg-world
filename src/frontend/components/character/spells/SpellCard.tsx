@@ -96,7 +96,7 @@ export function SpellCard({
                 </div>
               )}
             </div>
-            <div className="mt-1 flex items-center gap-2 text-[10px] font-black tracking-widest uppercase opacity-80">
+            <div className="mt-1 flex items-center gap-2 text-xs font-black tracking-widest uppercase opacity-80">
               <span className={cn('flex items-center gap-1', theme.color)}>
                 <AppIcon variant="game" name={schoolIcon} size={14} className="opacity-70" />
                 {translatedSchool}

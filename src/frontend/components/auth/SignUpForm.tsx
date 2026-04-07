@@ -175,7 +175,7 @@ export default function SignUpForm() {
   return (
     <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
       <CardHeader>
-        <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
+        <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-xl font-bold text-transparent">
           {t('title')}
         </CardTitle>
         <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>

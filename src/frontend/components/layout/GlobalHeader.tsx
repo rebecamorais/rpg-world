@@ -18,12 +18,9 @@ export default async function GlobalHeader() {
 
   return (
     <header className="border-border bg-card flex h-[var(--header-height)] shrink-0 items-center justify-between border-b px-8 py-3">
-      <Link
-        href="/"
-        className="flex items-center gap-2 text-lg font-semibold transition-opacity hover:opacity-80"
-      >
-        <AppIcon name="dice-fire" variant="game" size={24} className="text-primary" />
-        {tHome('title')}
+      <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
+        <AppIcon name="dice-fire" variant="game" size={40} className="text-primary shrink-0" />
+        <span className="text-2xl font-bold tracking-tight">{tHome('title')}</span>
       </Link>
 
       <div className="flex items-center gap-4">

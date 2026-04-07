@@ -45,7 +45,7 @@ interface AppearanceFieldProps {
 
 const AppearanceField = ({ label, field, value, onBasicInfoChange }: AppearanceFieldProps) => (
   <div className="flex flex-col gap-1">
-    <Label className="text-muted-foreground text-[10px] tracking-wider uppercase">{label}</Label>
+    <Label className="text-muted-foreground text-xs tracking-wider uppercase">{label}</Label>
     <div className="group relative">
       <GhostInput
         value={value || ''}
@@ -79,7 +79,7 @@ const TextAreaField = ({
     <CardHeader className="bg-muted/30 flex flex-row items-center justify-between px-4 py-2">
       <div className="flex items-center gap-2">
         <AppIcon name={icon} size={14} className="text-primary" />
-        <CardTitle className="text-[10px] tracking-widest uppercase opacity-70">{label}</CardTitle>
+        <CardTitle className="text-xs tracking-widest uppercase opacity-70">{label}</CardTitle>
       </div>
     </CardHeader>
     <CardContent className="p-0">

@@ -130,7 +130,7 @@ const CombatHeader = ({
 
   return (
     <div className="mb-4 flex items-center justify-between">
-      <h3 className="text-muted-foreground text-sm font-bold tracking-[0.2em] uppercase">
+      <h3 className="text-muted-foreground text-xs font-bold tracking-[0.2em] uppercase">
         {t('status') || 'Combat Status'}
       </h3>
       <Dialog>
@@ -151,7 +151,7 @@ const CombatHeader = ({
           <DialogHeader className="border-b border-zinc-800 p-6 pb-4">
             <div className="flex items-center gap-2">
               <AppIcon name="Settings2" size={16} className="text-zinc-400" />
-              <DialogTitle className="text-zinc-100">
+              <DialogTitle className="text-xl font-bold text-zinc-100">
                 {tm('titleConfig') || 'Combat Configuration'}
               </DialogTitle>
               <DialogDescription className="sr-only">
@@ -165,7 +165,7 @@ const CombatHeader = ({
             <div className="flex flex-col gap-6 p-6">
               <div className="flex items-center gap-2 pb-2">
                 <AppIcon name="Heart" size={16} className="text-red-500" />
-                <h4 className="text-sm font-black tracking-widest text-zinc-400 uppercase">
+                <h4 className="text-xs font-black tracking-widest text-zinc-400 uppercase">
                   {t('hitPoints') || 'Hit Points'}
                 </h4>
               </div>
@@ -190,7 +190,7 @@ const CombatHeader = ({
             <div className="flex flex-col gap-6 p-6">
               <div className="flex items-center gap-2 pb-2">
                 <AppIcon name="Sparkles" size={16} className="text-blue-500" />
-                <h4 className="text-sm font-black tracking-widest text-zinc-400 uppercase">
+                <h4 className="text-xs font-black tracking-widest text-zinc-400 uppercase">
                   {tm('systemUsed') || 'Magic System'}
                 </h4>
               </div>

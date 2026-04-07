@@ -22,7 +22,7 @@ const HealthHeader = () => {
   return (
     <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
       <AppIcon name="Heart" size={14} className="text-red-500" />
-      <span className="text-sm font-bold tracking-[0.2em] text-red-500/80 uppercase">
+      <span className="text-xs font-bold tracking-[0.2em] text-red-500/80 uppercase">
         {t('hitPointsShort')}
       </span>
     </div>
@@ -46,7 +46,7 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             onHpChange('hpCurrent', parseInt(e.target.value) || 0)
           }
-          className="h-auto w-16 p-0 text-center text-3xl font-black text-white outline-none"
+          className="h-auto w-16 p-0 text-center text-4xl font-black text-white outline-none"
         />
       </div>
 

@@ -51,8 +51,8 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
     return (
       <footer className={cn('bg-black/20 px-6 py-4 backdrop-blur-xl', className)}>
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-[12px] text-zinc-500">{t('copyright', { year: currentYear })}</p>
-          <div className="flex gap-4 text-[12px] text-zinc-400">
+          <p className="text-xs text-zinc-500">{t('copyright', { year: currentYear })}</p>
+          <div className="flex gap-4 text-xs text-zinc-400">
             <Link href="/terms" className="transition-colors hover:text-white">
               {t('legal.terms')}
             </Link>
@@ -79,10 +79,10 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
             <div className="flex items-center gap-2">
               <span className="text-lg font-bold tracking-tight text-white">Rebs Tech Studio</span>
             </div>
-            <p className="max-w-[200px] text-[13px] leading-relaxed text-zinc-500">
+            <p className="max-w-[200px] text-sm leading-relaxed text-zinc-500">
               {tLanding('heroSubtitle')}
             </p>
-            <div className="mt-1 text-[11px] font-medium text-zinc-600">
+            <div className="mt-1 text-xs font-medium text-zinc-600">
               {t('copyright', { year: currentYear })}
             </div>
           </div>
@@ -209,7 +209,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
                   <span>{t('support.pixTitle')}</span>
                 </div>
                 <div className="flex items-center gap-2 overflow-hidden">
-                  <code className="flex-1 truncate rounded bg-black/40 px-2 py-1 font-mono text-[10px] text-zinc-400">
+                  <code className="flex-1 truncate rounded bg-black/40 px-2 py-1 font-mono text-xs text-zinc-400">
                     {PIX_KEY}
                   </code>
                   <button

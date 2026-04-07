@@ -272,7 +272,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-race"
-                className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
               >
                 {t('race')}
               </Label>
@@ -291,7 +291,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-class"
-                className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
               >
                 {t('class')}
               </Label>
@@ -310,7 +310,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-background"
-                className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
               >
                 {t('background')}
               </Label>
@@ -329,7 +329,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-alignment"
-                className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
               >
                 {t('alignment')}
               </Label>

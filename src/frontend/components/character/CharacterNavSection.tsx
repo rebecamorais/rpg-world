@@ -40,7 +40,7 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
     >
       <div className="flex flex-col gap-2 px-3">
         <p
-          className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase"
+          className="text-muted-foreground text-xs font-bold tracking-widest uppercase"
           style={{ color: character.accentColor || undefined }}
         >
           {characterName}

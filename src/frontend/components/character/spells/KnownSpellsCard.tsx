@@ -71,10 +71,10 @@ function KnownSpellsCard({
                   {spell.name}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground text-[10px] font-medium uppercase">
+                  <span className="text-muted-foreground text-xs font-medium uppercase">
                     {spell.level === 0 ? t('cantrip') : t('levelDetail', { level: spell.level })}
                   </span>
-                  <span className="bg-muted/50 text-muted-foreground rounded-full px-1.5 py-0.5 text-[10px] lowercase">
+                  <span className="bg-muted/50 text-muted-foreground rounded-full px-1.5 py-0.5 text-xs lowercase">
                     {tData(`schools.${spell.school.toLowerCase()}`)}
                   </span>
                 </div>

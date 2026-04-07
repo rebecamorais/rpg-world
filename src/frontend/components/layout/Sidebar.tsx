@@ -41,7 +41,7 @@ function SidebarContent() {
             ) : (
               <div className="bg-primary/20 h-full w-full" />
             )}
-            <AvatarFallback className="bg-primary/10 text-primary text-[10px] font-bold">
+            <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
               {username.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>

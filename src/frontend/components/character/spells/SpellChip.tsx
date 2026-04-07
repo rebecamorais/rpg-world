@@ -24,7 +24,7 @@ export function SpellChip({
   className,
 }: SpellChipProps) {
   const baseStyles =
-    'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[10px] font-medium tracking-wider uppercase transition-colors';
+    'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium tracking-wider uppercase transition-colors';
 
   const variants = {
     default:

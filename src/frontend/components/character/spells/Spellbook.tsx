@@ -83,7 +83,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
               }
             />
             <div className="mb-4 hidden w-full px-6 md:block">
-              <div className="text-muted-foreground/40 flex items-center gap-2 text-[10px] font-black tracking-[0.25em] uppercase">
+              <div className="text-muted-foreground/40 flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase">
                 <span className="bg-muted-foreground/20 h-px flex-1" />
                 {t('spellbookIndex')}
                 <span className="bg-muted-foreground/20 h-px flex-1" />
@@ -114,7 +114,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                   </span>
 
                   {/* Spell Count Badge */}
-                  <div className="bg-muted-foreground/10 text-muted-foreground/50 ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 font-mono text-[9px] font-black transition-colors group-data-[state=active]:bg-white/10 group-data-[state=active]:text-white">
+                  <div className="bg-muted-foreground/10 text-muted-foreground/50 ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 font-mono text-xs font-black transition-colors group-data-[state=active]:bg-white/10 group-data-[state=active]:text-white">
                     {spellsByLevel[level].length}
                   </div>
                 </TabsTrigger>
@@ -159,7 +159,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                     </div>
                     <Badge
                       variant="outline"
-                      className="border-primary/20 bg-primary/5 text-primary w-fit px-3 py-1 font-mono text-[10px] tracking-widest uppercase"
+                      className="border-primary/20 bg-primary/5 text-primary w-fit px-3 py-1 font-mono text-xs tracking-widest uppercase"
                     >
                       {spellsByLevel[level].length} {t('spellsFound')}
                     </Badge>
