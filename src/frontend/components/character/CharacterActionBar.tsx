@@ -1,50 +1,33 @@
 'use client';
 
-import Link from 'next/link';
-
 import { useTranslations } from 'next-intl';
 
 interface CharacterActionBarProps {
-  characterName: string;
   hasUnsavedChanges: boolean;
   isSaving: boolean;
   onSave: () => void;
-  showSave?: boolean;
 }
 
 export default function CharacterActionBar({
-  characterName: _,
   hasUnsavedChanges,
   isSaving,
   onSave,
-  showSave = true,
 }: CharacterActionBarProps) {
   const tCommon = useTranslations('common');
 
   return (
-    <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-      <div className="flex items-center gap-4">
-        <Link href="/characters" className="text-muted-foreground hover:text-foreground text-sm">
-          {tCommon('back')}
-        </Link>
-        {hasUnsavedChanges && (
-          <span className="rounded bg-amber-500/20 px-2 py-1 text-sm font-semibold text-amber-600 dark:text-amber-400">
-            {tCommon('unsavedChanges')}
-          </span>
-        )}
-      </div>
-      <div className="flex items-center gap-3">
-        {showSave && (
-          <button
-            type="button"
-            onClick={onSave}
-            disabled={!hasUnsavedChanges || isSaving}
-            className="bg-primary rounded px-4 py-2 text-sm font-medium text-white transition-opacity disabled:opacity-50"
-          >
-            {isSaving ? tCommon('saving') : tCommon('saveChanges')}
-          </button>
-        )}
-      </div>
+    <div className="bg-background/80 sticky top-0 z-20 -mx-4 mb-4 flex items-center justify-between gap-4 border-b border-white/5 px-4 py-2 backdrop-blur-md">
+      <span className="text-character-flare text-xs font-semibold tracking-wider uppercase transition-opacity duration-300">
+        {tCommon('unsavedChanges')}
+      </span>
+      <button
+        type="button"
+        onClick={onSave}
+        disabled={!hasUnsavedChanges || isSaving}
+        className="bg-character rounded px-4 py-1.5 text-xs font-bold tracking-wider text-white uppercase shadow-sm transition-all disabled:opacity-30"
+      >
+        {isSaving ? tCommon('saving') : tCommon('saveChanges')}
+      </button>
     </div>
   );
 }

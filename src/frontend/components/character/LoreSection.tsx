@@ -2,11 +2,9 @@
 
 import { useTranslations } from 'next-intl';
 
-import CharacterActionBar from '@frontend/components/character/CharacterActionBar';
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Label } from '@frontend/components/ui/label';
-import { useCharacterContext } from '@frontend/context/CharacterContext';
 import { cn } from '@frontend/lib/utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
@@ -51,7 +49,7 @@ const AppearanceField = ({ label, field, value, onBasicInfoChange }: AppearanceF
         value={value || ''}
         placeholder="—"
         onChange={(e) => onBasicInfoChange(field, e.target.value)}
-        className="bg-muted/20 group-hover:bg-muted/40 focus:border-primary/30 focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
+        className="bg-muted/20 group-hover:bg-muted/40 focus:border-primary-muted focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
         showIcon={true}
       />
     </div>
@@ -75,10 +73,10 @@ const TextAreaField = ({
   onBasicInfoChange,
   placeholder,
 }: TextAreaFieldProps) => (
-  <Card className="border-border bg-card/50 group ring-border hover:ring-primary/30 active:ring-primary/50 relative overflow-hidden border-none shadow-none ring-1 transition-all">
+  <Card className="bg-card/50 group border-character-surface hover:border-character-muted hover:bg-character-surface/20 relative overflow-hidden border shadow-none transition-all hover:shadow-[0_0_15px_var(--character-muted)]">
     <CardHeader className="bg-muted/30 flex flex-row items-center justify-between px-4 py-2">
       <div className="flex items-center gap-2">
-        <AppIcon name={icon} size={14} className="text-primary" />
+        <AppIcon name={icon} size={14} className="text-character-flare" />
         <CardTitle className="text-xs tracking-widest uppercase opacity-70">{label}</CardTitle>
       </div>
     </CardHeader>
@@ -100,29 +98,16 @@ const TextAreaField = ({
 
 export default function LoreSection({ data, onBasicInfoChange }: Props) {
   const t = useTranslations('characters.loreFields');
-  const { updateLore, isSaving, hasUnsavedChanges, setHasUnsavedChanges } = useCharacterContext();
-
-  const handleSave = async () => {
-    // CharacterContext's updateLore handles specific lore persistence
-    await updateLore(data as unknown as Record<string, unknown>);
-    setHasUnsavedChanges(false);
-  };
 
   return (
     <div className="flex flex-col gap-6">
-      <CharacterActionBar
-        characterName={data.name || ''}
-        hasUnsavedChanges={hasUnsavedChanges}
-        isSaving={isSaving}
-        onSave={handleSave}
-      />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
         {/* Top Row: Appearance and Personality */}
         <div className="md:col-span-4">
           {/* Appearance Grid */}
           <Card className="border-none bg-transparent shadow-none">
             <CardHeader className="flex flex-row items-center gap-2 px-0 py-2">
-              <AppIcon name="User" size={16} className="text-primary" />
+              <AppIcon name="User" size={16} className="text-character-flare" />
               <CardTitle className="text-xs tracking-widest uppercase">{t('appearance')}</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-3 p-0 pt-2">
@@ -170,7 +155,7 @@ export default function LoreSection({ data, onBasicInfoChange }: Props) {
           {/* Personality Sections */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2 py-2">
-              <AppIcon name="Heart" size={16} className="text-primary" />
+              <AppIcon name="Heart" size={16} className="text-character-flare" />
               <h3 className="text-xs font-bold tracking-widest uppercase">{t('personality')}</h3>
             </div>
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -213,7 +198,7 @@ export default function LoreSection({ data, onBasicInfoChange }: Props) {
         {/* Bottom Row: Narrative and Details - Full Width */}
         <div className="flex flex-col gap-6 md:col-span-12">
           <div className="flex items-center gap-2 py-2">
-            <AppIcon name="History" size={16} className="text-primary" />
+            <AppIcon name="History" size={16} className="text-character-flare" />
             <h3 className="text-xs font-bold tracking-widest uppercase">{t('narrative')}</h3>
           </div>
 

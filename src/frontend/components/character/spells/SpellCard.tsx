@@ -47,10 +47,17 @@ export function SpellCard({
   return (
     <div
       onClick={onClick}
-      className={`group relative cursor-pointer overflow-hidden rounded-2xl border p-6 transition-all duration-500 ease-out ${theme.border} bg-card/40 backdrop-blur-md hover:-translate-y-2 hover:border-[var(--theme-primary)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)] hover:backdrop-blur-xl active:scale-[0.98]`}
+      className={cn(
+        'group relative cursor-pointer overflow-hidden rounded-2xl border p-6 transition-all duration-500 ease-out',
+        'bg-card/40 backdrop-blur-md hover:-translate-y-2 hover:border-[var(--card-glow)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)] hover:backdrop-blur-xl active:scale-[0.98]',
+        isExpanded
+          ? 'border-[var(--card-glow)] shadow-[var(--card-glow)]/10 shadow-lg'
+          : theme.border,
+      )}
       style={
         {
           '--theme-primary': `var(--color-${theme.color.split('-')[1]}-500)`,
+          '--card-glow': 'var(--character-primary)',
         } as React.CSSProperties
       }
     >
@@ -58,7 +65,7 @@ export function SpellCard({
       <div
         className={`pointer-events-none absolute inset-0 z-0 opacity-0 blur-3xl transition-opacity duration-1000 group-hover:opacity-100`}
         style={{
-          background: `radial-gradient(circle at center, ${theme.glow.replace('shadow-', '').replace('/10', '')}, transparent 70%)`,
+          background: `radial-gradient(circle at center, var(--character-muted), transparent 70%)`,
         }}
       />
 
@@ -91,7 +98,7 @@ export function SpellCard({
                 {spell.name}
               </h3>
               {spell.ritual && (
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400 ring-1 ring-indigo-500/20 ring-inset">
+                <div className="bg-character-surface text-character-muted border-character-surface flex h-5 w-5 items-center justify-center rounded-full border ring-inset">
                   <AppIcon variant="game" name={MECHANIC_ICONS.ritual} size={14} />
                 </div>
               )}
@@ -215,7 +222,6 @@ export function SpellCard({
                   {/* Text hidden in favor of icons */}
                 </SpellChip>
               )}
-
               {spell.concentration && (
                 <SpellChip
                   variant="concentration"
@@ -255,7 +261,7 @@ export function SpellCard({
                 className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition-all ${
                   isLearned
                     ? 'border border-red-500/30 bg-red-500/10 text-red-400 hover:border-red-500/60 hover:bg-red-500/20'
-                    : 'border border-[var(--theme-primary)] bg-[var(--theme-primary)] text-slate-950 shadow-md hover:opacity-90'
+                    : 'bg-character text-slate-950 shadow-md hover:opacity-90'
                 }`}
               >
                 {isLearned ? (

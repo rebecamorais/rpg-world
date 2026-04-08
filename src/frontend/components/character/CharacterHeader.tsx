@@ -43,15 +43,15 @@ interface Props {
 
 const PREDEFINED_COLORS = [
   { name: 'Default', value: '' },
-  { name: 'Red', value: '#ef4444' }, // strength/fighter
-  { name: 'Blue', value: '#3b82f6' }, // magic/wizard
-  { name: 'Green', value: '#22c55e' }, // nature/druid
-  { name: 'Purple', value: '#a855f7' }, // mystic/warlock
-  { name: 'Yellow', value: '#eab308' }, // holy/cleric
-  { name: 'Orange', value: '#f97316' }, // fire/sorcerer
-  { name: 'Cyan', value: '#06b6d4' }, // ice/monk
-  { name: 'Pink', value: '#ec4899' }, // bard
-  { name: 'Slate', value: '#64748b' }, // neutral
+  { name: 'Red', value: '#ef4444' },
+  { name: 'Blue', value: '#3b82f6' },
+  { name: 'Green', value: '#22c55e' },
+  { name: 'Purple', value: '#a855f7' },
+  { name: 'Yellow', value: '#eab308' },
+  { name: 'Orange', value: '#f97316' },
+  { name: 'Cyan', value: '#06b6d4' },
+  { name: 'Pink', value: '#ec4899' },
+  { name: 'Slate', value: '#64748b' },
 ];
 
 function CharacterHeader({
@@ -90,26 +90,21 @@ function CharacterHeader({
         <Dialog open={isColorPickerOpen} onOpenChange={setIsColorPickerOpen}>
           <DialogTrigger asChild>
             <button className="group relative transition-transform hover:scale-105 active:scale-95">
-              <Avatar
-                className="h-20 w-20 shrink-0 shadow-md transition-all"
-                style={{
-                  borderWidth: '2px',
-                  borderStyle: 'solid',
-                  borderColor: 'color-mix(in srgb, var(--character-color) 70%, transparent)',
-                  boxShadow: '0 0 15px color-mix(in srgb, var(--character-color) 30%, transparent)',
-                }}
-              >
+              <Avatar className="border-character-muted shadow-character-muted h-20 w-20 shrink-0 border-2 shadow-md transition-all">
                 <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
                 <AvatarFallback className="bg-muted text-xl font-bold">
                   {name?.substring(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity group-hover:opacity-100">
-                <AppIcon name="Palette" size={24} style={{ color: 'var(--character-color)' }} />
+                <AppIcon name="Palette" size={24} className="text-character" />
               </div>
             </button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent
+            className="character-context border-white/10 bg-slate-950/95 text-white backdrop-blur-xl sm:max-w-md"
+            style={{ '--character-color': accentColor } as React.CSSProperties}
+          >
             <DialogHeader>
               <DialogTitle>Personalizar Personagem</DialogTitle>
               <DialogDescription className="sr-only">
@@ -144,7 +139,7 @@ function CharacterHeader({
                         className={cn(
                           'group relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all hover:scale-110',
                           isSelected
-                            ? 'border-primary ring-primary/20 ring-2'
+                            ? 'border-character ring-character/20 ring-2'
                             : 'border-transparent',
                         )}
                         title={color.name}
@@ -185,10 +180,7 @@ function CharacterHeader({
                 />
               ) : (
                 <div className="group flex items-center gap-2">
-                  <h1
-                    className="text-foreground flex h-10 items-center text-2xl leading-none font-black tracking-tight transition-colors"
-                    style={{ color: 'var(--character-color)' }}
-                  >
+                  <h1 className="text-character flex h-10 items-center text-2xl leading-none font-black tracking-tight transition-colors">
                     {name}
                   </h1>
                   <Button
@@ -208,7 +200,7 @@ function CharacterHeader({
               <div className="flex shrink-0 items-center gap-2">
                 <Label
                   htmlFor="char-level"
-                  className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
+                  className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
                 >
                   {t('level')}
                 </Label>
@@ -219,19 +211,15 @@ function CharacterHeader({
                   max={20}
                   value={level || 1}
                   onChange={(e) => onBasicInfoChange('level', parseInt(e.target.value) || 1)}
-                  className="h-8 w-12 text-center font-bold"
-                  style={{ color: 'var(--character-color)' }}
+                  className="text-character-flare h-8 w-12 text-center font-bold"
                 />
               </div>
 
               <div className="flex flex-1 items-center gap-2">
-                <Label className="text-muted-foreground text-xs font-bold tracking-wider whitespace-nowrap uppercase">
+                <Label className="text-muted-foreground text-xs font-bold tracking-widest whitespace-nowrap uppercase opacity-70">
                   {t('proficiencyBonus')}
                 </Label>
-                <div
-                  className="border-border bg-muted/30 flex h-8 min-w-[32px] items-center justify-center rounded-md border px-2 font-mono text-sm font-bold transition-colors"
-                  style={{ color: 'var(--character-color)' }}
-                >
+                <div className="border-border bg-muted/30 text-character flex h-8 min-w-[32px] items-center justify-center rounded-md border px-2 font-mono text-sm font-bold transition-colors">
                   +{pb}
                 </div>
               </div>
@@ -242,7 +230,7 @@ function CharacterHeader({
               <div className="flex items-center justify-between">
                 <Label
                   htmlFor="char-xp"
-                  className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
+                  className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
                 >
                   {t('xp')}
                 </Label>
@@ -253,8 +241,7 @@ function CharacterHeader({
                     min={0}
                     value={xp}
                     onChange={(e) => onBasicInfoChange('xp', parseInt(e.target.value) || 0)}
-                    className="h-5 w-16 border-none bg-transparent p-0 text-right font-mono text-xs focus-visible:ring-0"
-                    style={{ color: 'var(--character-color)' }}
+                    className="text-character-flare h-5 w-16 border-none bg-transparent p-0 text-right font-mono text-xs focus-visible:ring-0"
                   />
                   <span className="text-muted-foreground">/ {nextLevelXp}</span>
                 </div>
@@ -262,7 +249,9 @@ function CharacterHeader({
               <Progress
                 value={progress}
                 className="h-2"
-                style={{ '--progress-foreground': 'var(--character-color)' } as React.CSSProperties}
+                style={
+                  { '--progress-foreground': 'var(--character-primary)' } as React.CSSProperties
+                }
               />
             </div>
           </div>
@@ -272,7 +261,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-race"
-                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
               >
                 {t('race')}
               </Label>
@@ -291,7 +280,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-class"
-                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
               >
                 {t('class')}
               </Label>
@@ -310,7 +299,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-background"
-                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
               >
                 {t('background')}
               </Label>
@@ -329,7 +318,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-alignment"
-                className="text-muted-foreground text-xs font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
               >
                 {t('alignment')}
               </Label>

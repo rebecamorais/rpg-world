@@ -30,6 +30,20 @@ import {
 import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
+import { cn } from '@frontend/lib/utils';
+
+const PREDEFINED_COLORS = [
+  { name: 'Default', value: '' },
+  { name: 'Red', value: 'var(--red)' },
+  { name: 'Blue', value: 'var(--blue)' },
+  { name: 'Green', value: 'var(--green)' },
+  { name: 'Purple', value: '#a855f7' },
+  { name: 'Yellow', value: 'var(--yellow)' },
+  { name: 'Orange', value: '#f97316' },
+  { name: 'Cyan', value: '#06b6d4' },
+  { name: 'Pink', value: '#ec4899' },
+  { name: 'Slate', value: '#64748b' },
+];
 
 export default function ProfileForm() {
   const t = useTranslations('profileForm');
@@ -71,7 +85,6 @@ export default function ProfileForm() {
     name: 'avatarUrl',
   });
 
-  // Populate form when profile data loads
   useEffect(() => {
     if (profile) {
       form.reset({
@@ -186,21 +199,36 @@ export default function ProfileForm() {
                 <FormItem>
                   <FormLabel className="text-gray-300">{t('primaryColorLabel')}</FormLabel>
                   <FormControl>
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="color"
-                        value={field.value ?? '#663399'}
-                        onChange={(e) => {
-                          field.onChange(e.target.value);
-                          // Live preview — update the CSS variable immediately
-                          document.documentElement.style.setProperty('--primary', e.target.value);
-                        }}
-                        className="h-9 w-12 cursor-pointer rounded-md border border-white/10 bg-transparent p-0.5"
-                        id="primary-color-picker"
-                      />
-                      <span className="font-mono text-sm text-gray-400">
-                        {field.value ?? '#663399'}
-                      </span>
+                    <div className="grid grid-cols-5 gap-3 pt-2">
+                      {PREDEFINED_COLORS.map((color) => {
+                        const isSelected =
+                          color.value === field.value || (!color.value && !field.value);
+
+                        return (
+                          <button
+                            key={color.name}
+                            type="button"
+                            onClick={() => field.onChange(color.value)}
+                            className={cn(
+                              'group relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all hover:scale-110',
+                              isSelected
+                                ? 'border-blue-500 ring-2 ring-blue-500/20'
+                                : 'border-transparent',
+                            )}
+                            title={color.name}
+                          >
+                            <div
+                              className="h-7 w-7 rounded-full shadow-sm"
+                              style={{ backgroundColor: color.value || '#663399' }}
+                            />
+                            {isSelected && (
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="h-1.5 w-1.5 rounded-full bg-white shadow-sm" />
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
                   </FormControl>
                   <FormMessage />

@@ -2,6 +2,8 @@
 
 import { Icon as Iconify } from '@iconify/react';
 import {
+  Activity,
+  Backpack,
   Book,
   BookMarked,
   BookOpen,
@@ -34,6 +36,7 @@ import {
   Pencil,
   Plus,
   QrCode,
+  Scroll,
   Search,
   Settings2,
   Shield,
@@ -46,6 +49,7 @@ import {
   UserPlus,
   Wand2,
   X,
+  Zap,
 } from 'lucide-react';
 
 import { cn } from '@frontend/lib/utils';
@@ -98,6 +102,10 @@ const SYSTEM_ICONS = {
   UserPlus,
   Wand2,
   X,
+  Zap,
+  Activity,
+  Scroll,
+  Backpack,
 } as const;
 
 export type IconName = keyof typeof SYSTEM_ICONS | string;

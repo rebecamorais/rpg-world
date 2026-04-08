@@ -29,13 +29,8 @@ function PassivePerception({ wisValue, level, perceptionSkillData }: Props) {
       <TooltipTrigger asChild>
         <div className="border-border bg-card hover:border-primary/50 flex cursor-help items-center justify-between rounded-lg border p-4 shadow-sm transition-colors">
           <div className="flex items-center gap-3">
-            <AppIcon
-              name="Eye"
-              size={24}
-              className="drop-shadow-sm"
-              style={{ color: 'var(--character-color)' }}
-            />
-            <span className="text-foreground flex items-center gap-2 text-sm font-bold">
+            <AppIcon name="Eye" size={16} className="text-character drop-shadow-sm" />
+            <span className="text-xs font-bold tracking-widest uppercase opacity-70">
               {t('passivePerception')}
             </span>
           </div>

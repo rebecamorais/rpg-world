@@ -5,6 +5,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
 
 import type { AttributeKey } from '@shared/systems/dnd5e';
@@ -83,7 +84,7 @@ function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
           className={cn(
             'flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full border transition-all',
             skillData.isProficient
-              ? 'border-[var(--character-color)] bg-[var(--character-color)]'
+              ? 'border-character bg-character'
               : 'border-muted-foreground group-hover:border-foreground bg-transparent',
           )}
         >
@@ -117,10 +118,13 @@ function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
 
   return (
     <Card className="border-border bg-card w-full">
-      <CardHeader className="border-border bg-muted/50 border-b px-4 py-3">
-        <CardTitle className="text-muted-foreground text-sm tracking-wider uppercase">
-          {t('title')}
-        </CardTitle>
+      <CardHeader className="bg-muted/30 border-border border-b px-4 py-2">
+        <div className="flex items-center gap-2">
+          <AppIcon name="Scroll" size={14} className="text-character-flare" />
+          <CardTitle className="text-xs font-bold tracking-widest uppercase opacity-70">
+            {t('title')}
+          </CardTitle>
+        </div>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-x-8 p-4 sm:grid-cols-2">
         <div className="flex flex-col gap-y-2">{firstCol.map(renderSkill)}</div>

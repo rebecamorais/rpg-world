@@ -1,6 +1,7 @@
 'use client';
 
-import CharacterActionBar from '@frontend/components/character/CharacterActionBar';
+import React from 'react';
+
 import CharacterHeader from '@frontend/components/character/CharacterHeader';
 import AttributesSection from '@frontend/components/character/stats/AttributesSection';
 import CombatStatsSection from '@frontend/components/character/stats/CombatStatsSection';
@@ -11,18 +12,19 @@ import { useCharacterContext } from '@frontend/context/CharacterContext';
 
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
+/**
+ * StatusView — the Status tab for the route-based character sheet.
+ * Reads all data from CharacterContext (provided by layout.tsx).
+ * Used by: app/.../character/[id]/page.tsx
+ */
 export default function StatusView() {
   const {
     character,
     error,
-    isSaving,
-    hasUnsavedChanges,
-    setHasUnsavedChanges,
-    updateCharacter,
+    handleBasicInfoChange,
     handleAttributeChange,
     handleSkillChange,
     handleSavingThrowChange,
-    handleBasicInfoChange,
     handleSpellPointsChange,
     handleSpellSlotsChange,
     handleSpellcastingSystemChange,
@@ -33,26 +35,8 @@ export default function StatusView() {
 
   const pb = getProficiencyBonus(character.level);
 
-  const handleSave = () => {
-    updateCharacter(character, {
-      onSuccess: () => setHasUnsavedChanges(false),
-    });
-  };
-
   return (
-    <div
-      className="flex flex-col gap-6"
-      style={
-        { '--character-color': character.accentColor || 'var(--primary)' } as React.CSSProperties
-      }
-    >
-      <CharacterActionBar
-        characterName={character.name}
-        hasUnsavedChanges={hasUnsavedChanges}
-        isSaving={isSaving}
-        onSave={handleSave}
-      />
-
+    <div className="flex flex-col gap-6">
       {error && (
         <p className="mb-4 rounded bg-red-50 p-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
           {error}
@@ -75,14 +59,12 @@ export default function StatusView() {
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
-        {/* Left Column in Status View: Passive, Saving Throws, Attributes */}
         <div className="flex flex-col gap-6">
           <PassivePerception
             wisValue={character.attributes.WIS ?? 10}
             level={character.level}
             perceptionSkillData={character.skills?.PERCEPTION}
           />
-
           <SavingThrowsSection
             attributes={character.attributes}
             level={character.level}
@@ -95,7 +77,6 @@ export default function StatusView() {
           />
         </div>
 
-        {/* Right Column in Status View: Combat Stats, Skills, Spells */}
         <div className="flex flex-col gap-6">
           <CombatStatsSection
             character={character}

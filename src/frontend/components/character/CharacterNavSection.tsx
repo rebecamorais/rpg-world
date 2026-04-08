@@ -35,20 +35,17 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
 
   return (
     <section
-      className="animate-in fade-in slide-in-from-left-2 flex flex-col gap-4 duration-300"
+      className="character-context animate-in fade-in slide-in-from-left-2 flex flex-col gap-4 duration-300"
       style={{ '--character-color': character.accentColor } as React.CSSProperties}
     >
       <div className="flex flex-col gap-2 px-3">
-        <p
-          className="text-muted-foreground text-xs font-bold tracking-widest uppercase"
-          style={{ color: character.accentColor || undefined }}
-        >
+        <p className="text-character-flare text-xs font-bold tracking-widest uppercase">
           {characterName}
         </p>
         <div className="flex items-center gap-3">
           <Avatar className="ring-primary/20 h-10 w-10 rounded-lg border border-white/10 ring-2 transition-all">
             <AvatarImage src={avatarUrl} alt={characterName} className="object-cover" />
-            <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
+            <AvatarFallback className="bg-character-surface text-character-flare text-xs font-bold">
               {characterName.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>

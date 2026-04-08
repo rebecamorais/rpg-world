@@ -5,6 +5,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { cn } from '@frontend/lib/utils';
 
@@ -26,10 +27,13 @@ function SavingThrowsSection({ attributes, level, savingThrows, onSavingThrowCha
 
   return (
     <Card className="border-border bg-card">
-      <CardHeader className="border-border bg-muted/50 border-b px-4 py-3">
-        <CardTitle className="text-muted-foreground text-sm tracking-wider uppercase">
-          {tSection('title')}
-        </CardTitle>
+      <CardHeader className="bg-muted/30 border-border border-b px-4 py-2">
+        <div className="flex items-center gap-2">
+          <AppIcon name="Activity" size={14} className="text-character-flare" />
+          <CardTitle className="text-xs font-bold tracking-widest uppercase opacity-70">
+            {tSection('title')}
+          </CardTitle>
+        </div>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-2 p-4">
         {ATTRIBUTE_KEYS.map((key) => {
@@ -56,7 +60,7 @@ function SavingThrowsSection({ attributes, level, savingThrows, onSavingThrowCha
                 className={cn(
                   'h-3 w-3 flex-shrink-0 rounded-full border transition-all',
                   isProficient
-                    ? 'border-[var(--character-color)] bg-[var(--character-color)]'
+                    ? 'border-character bg-character'
                     : 'border-muted-foreground group-hover:border-foreground bg-transparent',
                 )}
               />

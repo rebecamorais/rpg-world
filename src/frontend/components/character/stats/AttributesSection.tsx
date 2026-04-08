@@ -61,10 +61,13 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
 
   return (
     <Card className="border-border bg-card h-full">
-      <CardHeader className="border-border bg-muted/50 flex flex-row items-center justify-between border-b px-4 py-3">
-        <CardTitle className="text-muted-foreground text-sm tracking-wider uppercase">
-          {t('title')}
-        </CardTitle>
+      <CardHeader className="bg-muted/30 border-border flex flex-row items-center justify-between border-b px-4 py-2">
+        <div className="flex items-center gap-2">
+          <AppIcon name="Shield" size={14} className="text-character-flare" />
+          <CardTitle className="text-xs font-bold tracking-widest uppercase opacity-70">
+            {t('title')}
+          </CardTitle>
+        </div>
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>

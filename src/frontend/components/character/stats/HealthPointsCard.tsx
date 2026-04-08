@@ -21,8 +21,8 @@ const HealthHeader = () => {
   const t = useTranslations('combatStats');
   return (
     <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
-      <AppIcon name="Heart" size={14} className="text-red-500" />
-      <span className="text-xs font-bold tracking-[0.2em] text-red-500/80 uppercase">
+      <AppIcon name="Heart" size={14} className="text-red" />
+      <span className="text-red-flare text-xs font-bold tracking-widest uppercase">
         {t('hitPointsShort')}
       </span>
     </div>
@@ -56,7 +56,7 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
       </div>
 
       {tempHp > 0 && (
-        <div className="ml-1 flex items-baseline text-yellow-500">
+        <div className="text-yellow ml-1 flex items-baseline">
           <span className="text-xs font-black opacity-50">(+</span>
           <GhostInput
             type="number"
@@ -64,7 +64,7 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               onHpChange('hpTemp', parseInt(e.target.value) || 0)
             }
-            className="h-auto w-10 p-0 text-left text-xs font-black text-yellow-500 outline-none"
+            className="text-yellow h-auto w-10 p-0 text-left text-xs font-black outline-none"
           />
           <span className="text-xs font-black opacity-50">)</span>
         </div>
@@ -107,8 +107,8 @@ const DeathSaves = () => {
               className={cn(
                 'h-3.5 w-3.5 rounded-full border-2 transition-all duration-300',
                 successes > i
-                  ? 'border-emerald-500 bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]'
-                  : 'border-emerald-500/20 hover:border-emerald-500/40',
+                  ? 'border-green bg-green shadow-[0_0_12px_var(--color-green-muted)]'
+                  : 'border-green-surface hover:border-green-muted',
               )}
             />
           ))}
@@ -136,8 +136,8 @@ const DeathSaves = () => {
               className={cn(
                 'h-3.5 w-3.5 rounded-full border-2 transition-all duration-300',
                 failures > i
-                  ? 'border-red-500 bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.5)]'
-                  : 'border-red-500/20 hover:border-red-500/40',
+                  ? 'border-red bg-red shadow-[0_0_12px_var(--color-red-muted)]'
+                  : 'border-red-surface hover:border-red-muted',
               )}
             />
           ))}

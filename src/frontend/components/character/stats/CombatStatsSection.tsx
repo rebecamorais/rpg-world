@@ -94,13 +94,13 @@ interface StatBadgeProps {
 }
 
 const StatBadge = ({ icon, label, children, reverse }: StatBadgeProps) => (
-  <div className="group/badge border-border/40 hover:border-primary/30 flex items-center gap-4 rounded-full border bg-zinc-950/40 px-3 py-1 backdrop-blur-md transition-all duration-300 hover:bg-zinc-900/60 hover:shadow-[0_0_15px_rgba(var(--primary),0.05)]">
-    <div className="text-muted-foreground/50 group-hover/badge:text-primary transition-colors duration-300">
+  <div className="group/badge hover:border-character-muted/80 hover:bg-character-surface/10 hover:shadow-character-muted/30 flex items-center gap-4 rounded-full border border-zinc-800 bg-zinc-950/40 px-3 py-1 backdrop-blur-md transition-all duration-300 hover:shadow-[0_0_15px_var(--character-muted)]">
+    <div className="text-character-flare transition-all duration-300 group-hover/badge:brightness-125">
       {icon}
     </div>
     <div className={cn('flex items-baseline gap-2', reverse && 'flex-row-reverse')}>
       {label && (
-        <span className="text-muted-foreground/50 text-xs font-bold tracking-wider whitespace-nowrap uppercase transition-opacity group-hover/badge:opacity-100">
+        <span className="text-muted-foreground/50 text-xs font-bold tracking-widest whitespace-nowrap uppercase transition-opacity group-hover/badge:opacity-100">
           {label}
         </span>
       )}
@@ -129,16 +129,19 @@ const CombatHeader = ({
   const tcommon = useTranslations('common');
 
   return (
-    <div className="mb-4 flex items-center justify-between">
-      <h3 className="text-muted-foreground text-xs font-bold tracking-[0.2em] uppercase">
-        {t('status') || 'Combat Status'}
-      </h3>
+    <div className="mb-4 flex items-center justify-between border-b border-white/5 pb-2">
+      <div className="flex items-center gap-2">
+        <AppIcon name="Zap" size={14} className="text-character-flare" />
+        <h3 className="text-xs font-bold tracking-widest uppercase opacity-70">
+          {t('status') || 'Combat Status'}
+        </h3>
+      </div>
       <Dialog>
         <DialogTrigger asChild>
           <Button
             variant="ghost"
             size="icon"
-            className="border-border/30 hover:bg-secondary/50 hover:border-border/60 hover:text-primary h-7 w-7 rounded-md border bg-transparent transition-all"
+            className="border-character-muted hover:bg-character-surface hover:text-character-flare h-7 w-7 rounded-md border bg-transparent transition-all"
           >
             <AppIcon
               name="Settings2"
@@ -147,7 +150,10 @@ const CombatHeader = ({
             />
           </Button>
         </DialogTrigger>
-        <DialogContent className="border-zinc-800 bg-zinc-950 p-0 sm:max-w-[700px]">
+        <DialogContent
+          className="character-context border-zinc-800 bg-zinc-950 p-0 shadow-2xl sm:max-w-[700px]"
+          style={{ '--character-color': character.accentColor } as React.CSSProperties}
+        >
           <DialogHeader className="border-b border-zinc-800 p-6 pb-4">
             <div className="flex items-center gap-2">
               <AppIcon name="Settings2" size={16} className="text-zinc-400" />
@@ -324,7 +330,7 @@ const BadgeRow = ({ character, onBasicInfoChange, onHitDiceChange }: BadgeRowPro
     <div className="mt-4 flex flex-wrap items-center gap-3">
       {/* Armor Class */}
       <StatBadge
-        icon={<AppIcon name="Shield" size={14} className="text-primary" />}
+        icon={<AppIcon name="Shield" size={14} className="text-character-flare" />}
         label={t('armorClass')}
       >
         <GhostInput

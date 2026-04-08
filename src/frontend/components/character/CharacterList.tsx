@@ -155,7 +155,10 @@ export default function CharacterList() {
         open={!!characterToDelete}
         onOpenChange={(open) => !open && setCharacterToDelete(null)}
       >
-        <DialogContent>
+        <DialogContent
+          className="character-context border-red-500/20 bg-slate-950/95 text-white backdrop-blur-xl"
+          style={{ '--character-color': 'var(--red)' } as React.CSSProperties}
+        >
           <DialogHeader>
             <DialogTitle>{t('deleteDialogTitle')}</DialogTitle>
             <DialogDescription className="space-y-4">
@@ -241,7 +244,7 @@ function CharacterCard({
                 </h3>
                 <Badge
                   variant="secondary"
-                  className="bg-muted shrink-0 px-2 py-0.5 text-[10px] font-black tracking-widest uppercase opacity-80"
+                  className="bg-muted shrink-0 px-2 py-0.5 text-xs font-black tracking-widest uppercase opacity-80"
                   style={{
                     borderLeft: character.accentColor
                       ? `2px solid ${character.accentColor}`

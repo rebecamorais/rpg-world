@@ -18,6 +18,7 @@ import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
 import { DAMAGE_THEMES } from '@frontend/constants/damage-themes';
+import { useCharacterContext } from '@frontend/context/CharacterContext';
 import { useSpells } from '@frontend/hooks/useSpells';
 import { CharacterClass, SpellSchool } from '@frontend/types/spells';
 
@@ -41,6 +42,9 @@ export default function SpellsDrawer({
   const t = useTranslations('spellsDrawer');
   const tCharacters = useTranslations('characters');
   const tSpellsData = useTranslations('spellsData');
+
+  const { character } = useCharacterContext();
+  const accentColor = character?.accentColor;
 
   // Filter State
   const [searchInput, setSearchInput] = useState('');
@@ -102,11 +106,21 @@ export default function SpellsDrawer({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="flex h-[90vh] max-w-4xl flex-col border-white/10 bg-slate-950/95 p-0 text-white backdrop-blur-xl">
+      <DialogContent
+        className="character-context flex h-[90vh] max-w-4xl flex-col border-white/10 bg-slate-950/95 p-0 text-white backdrop-blur-xl"
+        style={{ '--character-color': accentColor } as React.CSSProperties}
+      >
+        {/* Thematic Glow */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0 opacity-10 blur-3xl transition-opacity duration-1000"
+          style={{
+            background: `radial-gradient(circle at 0% 0%, var(--character-primary), transparent 50%)`,
+          }}
+        />
         <DialogHeader className="border-b border-white/5 p-6">
           <div className="flex items-center justify-between">
             <DialogTitle className="flex items-center gap-3 text-2xl font-bold tracking-tight italic">
-              <div className="bg-primary/20 text-primary flex h-10 w-10 items-center justify-center rounded-xl shadow-lg ring-1 ring-white/10">
+              <div className="bg-character-surface text-character flex h-10 w-10 items-center justify-center rounded-xl shadow-lg ring-1 ring-white/10">
                 <AppIcon name="BookOpen" size={24} />
               </div>
               {t('title')}
@@ -127,13 +141,13 @@ export default function SpellsDrawer({
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="focus:ring-primary/50 border-white/10 bg-white/5 pl-10 text-white placeholder:text-gray-500"
+                className="focus:ring-character/50 border-white/10 bg-white/5 pl-10 text-white placeholder:text-gray-500"
               />
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={handleSearchTrigger}
-                className="hover:bg-primary/20 hover:text-primary absolute top-1/2 right-1 -translate-y-1/2 text-gray-400"
+                className="hover:bg-character-muted hover:text-character-primary absolute top-1/2 right-1 -translate-y-1/2 text-gray-400 transition-all"
               >
                 {tCharacters('search')}
               </Button>
@@ -219,7 +233,7 @@ export default function SpellsDrawer({
                   setClassFilter(null);
                   setDamageFilter(null);
                 }}
-                className="text-primary"
+                className="text-character"
               >
                 {t('clearFilters')}
               </Button>
@@ -270,17 +284,29 @@ export default function SpellsDrawer({
                     pageNum = i;
                   }
 
+                  const isActive = page === pageNum;
+
                   return (
                     <Button
                       key={pageNum}
-                      variant={page === pageNum ? 'default' : 'outline'}
+                      variant="outline"
                       size="sm"
                       onClick={() => setPage(pageNum)}
-                      className={`h-8 w-8 p-0 text-xs ${
-                        page === pageNum
-                          ? 'bg-primary font-bold text-white'
-                          : 'border-white/10 bg-white/5 text-gray-400 hover:text-white'
-                      }`}
+                      className="h-8 w-8 p-0 text-xs transition-all"
+                      style={
+                        isActive
+                          ? ({
+                              backgroundColor: 'var(--character-primary)',
+                              borderColor: 'var(--character-primary)',
+                              fontWeight: 'bold',
+                              color: 'white',
+                            } as React.CSSProperties)
+                          : {
+                              borderColor: 'rgba(255,255,255,0.1)',
+                              backgroundColor: 'rgba(255,255,255,0.05)',
+                              color: 'rgba(255,255,255,0.4)',
+                            }
+                      }
                     >
                       {pageNum + 1}
                     </Button>

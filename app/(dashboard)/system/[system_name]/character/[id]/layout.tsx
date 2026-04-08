@@ -1,17 +1,21 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 
 import SpellsDrawer from '@frontend/components/character/spells/SpellsDrawer';
+import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { CharacterProvider, useCharacterContext } from '@frontend/context/CharacterContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
+import { hexToHsl } from '@frontend/lib/color-utils';
 
 function CharacterLayoutContent({ children }: { children: ReactNode }) {
   const { currentUser } = useCurrentUser();
+
   const {
     character,
     isLoading,
@@ -25,20 +29,21 @@ function CharacterLayoutContent({ children }: { children: ReactNode }) {
   const t = useTranslations('characters');
   const tCommon = useTranslations('common');
 
+  const themeHsl = useMemo(() => {
+    const hex = character?.accentColor || '#663399';
+    try {
+      return hexToHsl(hex);
+    } catch {
+      return { h: 270, s: 50, l: 40 };
+    }
+  }, [character?.accentColor]);
+
   if (!currentUser) {
-    return (
-      <div className="flex flex-1 items-center justify-center p-4">
-        <p className="text-muted-foreground">{t('requireLogin')}</p>
-      </div>
-    );
+    redirect('/login');
   }
 
   if (isLoading) {
-    return (
-      <div className="flex flex-1 items-center justify-center p-4">
-        <p className="text-muted-foreground">{tCommon('loading')}</p>
-      </div>
-    );
+    return <LoadingState thematic />;
   }
 
   if (!character || character.ownerUsername !== currentUser.id) {
@@ -53,7 +58,17 @@ function CharacterLayoutContent({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl p-4 md:min-w-[1024px]">
+    <div
+      className="character-context mx-auto w-full max-w-5xl p-4 md:min-w-[1024px]"
+      style={
+        {
+          '--character-color': character.accentColor || 'var(--primary)',
+          '--p-hue': themeHsl.h,
+          '--p-sat': `${themeHsl.s}%`,
+          '--p-light': `${themeHsl.l}%`,
+        } as React.CSSProperties
+      }
+    >
       {children}
 
       <SpellsDrawer

@@ -58,8 +58,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
       className="border-border/50 bg-background/40 shadow-2xl backdrop-blur-xl transition-all duration-500"
       style={
         {
-          boxShadow:
-            '0 0 50px -12px color-mix(in srgb, var(--character-color, var(--primary)) 15%, transparent)',
+          boxShadow: '0 0 50px -12px var(--character-muted)',
         } as React.CSSProperties
       }
     >
@@ -75,12 +74,11 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
             {/* Vertical Divider */}
             <div className="via-border/50 absolute top-0 right-0 bottom-0 hidden w-px bg-gradient-to-b from-transparent to-transparent md:block" />
             <div
-              className="absolute top-1/4 right-0 bottom-1/4 hidden w-[2px] bg-gradient-to-b from-transparent via-[var(--character-color)] to-transparent opacity-20 blur-[1px] md:block"
-              style={
-                {
-                  '--character-color': 'var(--character-color, var(--primary))',
-                } as React.CSSProperties
-              }
+              className="absolute top-1/4 right-0 bottom-1/4 hidden w-[2px] bg-gradient-to-b from-transparent to-transparent opacity-40 blur-[1.5px] md:block"
+              style={{
+                backgroundImage:
+                  'linear-gradient(to bottom, transparent, var(--character-muted), transparent)',
+              }}
             />
             <div className="mb-4 hidden w-full px-6 md:block">
               <div className="text-muted-foreground/40 flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase">
@@ -94,15 +92,9 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                 <TabsTrigger
                   key={level}
                   value={level.toString()}
-                  className="group hover:bg-muted/30 data-[state=active]:bg-primary/5 data-[state=active]:text-primary relative flex w-full items-center justify-start gap-3 rounded-lg border border-transparent px-4 py-3 text-left transition-all duration-300 hover:translate-x-1"
-                  style={
-                    {
-                      '--active-indicator': 'var(--character-color, var(--primary))',
-                    } as React.CSSProperties
-                  }
+                  className="group hover:bg-muted/30 data-[state=active]:bg-character-surface data-[state=active]:text-character-flare relative flex w-full items-center justify-start gap-3 rounded-lg border border-transparent px-4 py-3 text-left transition-all duration-300 hover:translate-x-1"
                 >
-                  {/* Active Indicator Bar */}
-                  <div className="absolute top-2 bottom-2 left-1 w-1.5 origin-center scale-y-0 rounded-full bg-[var(--active-indicator)] opacity-0 shadow-[0_0_12px_var(--active-indicator)] transition-all duration-300 group-data-[state=active]:scale-y-100 group-data-[state=active]:opacity-100" />
+                  <div className="bg-character-flare absolute top-2 bottom-2 left-1 w-1.5 origin-center scale-y-0 rounded-full opacity-0 shadow-[0_0_12px_var(--character-flare)] transition-all duration-300 group-data-[state=active]:scale-y-100 group-data-[state=active]:opacity-100" />
 
                   <AppIcon
                     name="Book"
@@ -114,7 +106,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                   </span>
 
                   {/* Spell Count Badge */}
-                  <div className="bg-muted-foreground/10 text-muted-foreground/50 ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 font-mono text-xs font-black transition-colors group-data-[state=active]:bg-white/10 group-data-[state=active]:text-white">
+                  <div className="bg-muted-foreground/10 text-muted-foreground/50 group-data-[state=active]:bg-character-muted group-data-[state=active]:text-character-flare ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 font-mono text-xs font-black transition-colors">
                     {spellsByLevel[level].length}
                   </div>
                 </TabsTrigger>
@@ -155,11 +147,11 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                       <h2 className="font-serif text-3xl font-black tracking-tight text-white md:text-4xl">
                         {level === 0 ? t('cantrips') : t('levelSpells', { level })}
                       </h2>
-                      <div className="bg-primary/40 h-1 w-12 rounded-full" />
+                      <div className="bg-character-flare h-1 w-12 rounded-full opacity-60" />
                     </div>
                     <Badge
                       variant="outline"
-                      className="border-primary/20 bg-primary/5 text-primary w-fit px-3 py-1 font-mono text-xs tracking-widest uppercase"
+                      className="border-character-muted bg-character-surface text-character-flare w-fit px-3 py-1 font-mono text-xs tracking-widest uppercase"
                     >
                       {spellsByLevel[level].length} {t('spellsFound')}
                     </Badge>

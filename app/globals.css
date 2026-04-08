@@ -4,31 +4,73 @@
 
 :root {
   /* DARK MODE BY DEFAULT */
-  --background: #0c0c0e;
+  --background: #09090b; /* Jet Black Base */
   --foreground: #fafafa;
-  --card: #141416;
+  --card: #121214;
   --card-foreground: #fafafa;
-  --muted: #1c1c1f;
+  --muted: #18181b;
   --muted-foreground: #a1a1aa;
-  --secondary: #1c1c1f;
+  --secondary: #18181b;
   --secondary-foreground: #fafafa;
   --border: #27272a;
   --input: #27272a;
   --ring: var(--primary);
   --popover: #141416;
   --popover-foreground: #fafafa;
-  --accent: #1c1c1f;
+  --accent: #1e1b4b; /* Ultra-dark purple for secondary active */
   --accent-foreground: #fafafa;
+
+  --primary-foreground: #ffffff;
 
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
 
-  /* The default primary color */
-  --primary: #8b5cf6;
-  --primary-foreground: #ffffff;
   --sidebar: #09090b;
-
   --header-height: 80px;
+
+  /* BASE DEFAULTS */
+  --p-hue: 270;
+  --p-sat: 50%;
+  --p-light: 40%;
+  --character-color: var(--primary);
+}
+
+/* 
+ * DYNAMIC VARIABLE ORCHESTRATION 
+ * These variables are defined on both :root and .character-context to allow for
+ * inheritance-based re-calculation when base variables (--p-hue, --character-color) are overridden.
+ */
+:root,
+.character-context {
+  --primary: hsl(var(--p-hue), var(--p-sat), var(--p-light));
+  --primary-flare: hsl(var(--p-hue), var(--p-sat), calc(var(--p-light) + 20%));
+  --primary-surface: hsla(var(--p-hue), var(--p-sat), var(--p-light), 0.1);
+  --primary-muted: hsla(var(--p-hue), var(--p-sat), var(--p-light), 0.3);
+  --primary-glow: hsla(var(--p-hue), var(--p-sat), var(--p-light), 0.5);
+
+  /* CHARACTER PROXY VARIABLES */
+  --character-primary: var(--character-color);
+  --character-flare: color-mix(in srgb, var(--character-primary), white 20%);
+  --character-surface: color-mix(in srgb, var(--character-primary), transparent 90%);
+  --character-muted: color-mix(in srgb, var(--character-primary), transparent 70%);
+  --character-glow: color-mix(in srgb, var(--character-primary), transparent 50%);
+
+  /* SYSTEM PALETTE TOKENS */
+  --red: #ef4444;
+  --red-surface: color-mix(in srgb, var(--red), transparent 90%);
+  --red-muted: color-mix(in srgb, var(--red), transparent 70%);
+
+  --blue: #3b82f6;
+  --blue-surface: color-mix(in srgb, var(--blue), transparent 90%);
+  --blue-muted: color-mix(in srgb, var(--blue), transparent 70%);
+
+  --green: #22c55e;
+  --green-surface: color-mix(in srgb, var(--green), transparent 90%);
+  --green-muted: color-mix(in srgb, var(--green), transparent 70%);
+
+  --yellow: #eab308;
+  --yellow-surface: color-mix(in srgb, var(--yellow), transparent 90%);
+  --yellow-muted: color-mix(in srgb, var(--yellow), transparent 70%);
 }
 
 @theme inline {
@@ -43,11 +85,46 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* Primary & Variants */
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-destructive: var(--destructive);
+  --color-primary-flare: var(--primary-flare);
+  --color-primary-surface: var(--primary-surface);
+  --color-primary-muted: var(--primary-muted);
+  --color-primary-glow: var(--primary-glow);
+
   --color-destructive-foreground: var(--destructive-foreground);
   --color-sidebar: var(--sidebar);
+
+  /* Character Dynamic Colors */
+  --color-character: var(--character-primary);
+  --color-character-flare: var(--character-flare);
+  --color-character-surface: var(--character-surface);
+  --color-character-muted: var(--character-muted);
+  --color-character-glow: var(--character-glow);
+
+  /* System Colors */
+  --color-red: var(--red);
+  --color-red-surface: var(--red-surface);
+  --color-red-muted: var(--red-muted);
+
+  --color-blue: var(--blue);
+  --color-blue-surface: var(--blue-surface);
+  --color-blue-muted: var(--blue-muted);
+
+  --color-green: var(--green);
+  --color-green-surface: var(--green-surface);
+  --color-green-muted: var(--green-muted);
+
+  --color-yellow: var(--yellow);
+  --color-yellow-surface: var(--yellow-surface);
+  --color-yellow-muted: var(--yellow-muted);
+
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono);
 }
@@ -75,5 +152,14 @@
 
   .glass-premium {
     @apply border border-white/10 bg-black/40 shadow-2xl backdrop-blur-2xl;
+  }
+
+  .glass-rebecca {
+    @apply border-primary/20 bg-primary/5 shadow-[0_0_20px_var(--primary-glow)] backdrop-blur-xl;
+  }
+
+  /* Lit Corner Effect for Buttons */
+  .btn-lit {
+    @apply border-t border-t-white/20 shadow-lg transition-all active:translate-y-px;
   }
 }

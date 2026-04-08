@@ -2,30 +2,27 @@
 
 import { useTranslations } from 'next-intl';
 
-import CharacterActionBar from '@frontend/components/character/CharacterActionBar';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
 export default function CharacterInventoryPage() {
-  const { character, isSaving, hasUnsavedChanges, setHasUnsavedChanges, updateCharacter } =
-    useCharacterContext();
+  const { character } = useCharacterContext();
   const t = useTranslations('characters');
 
   if (!character) return null;
 
-  const handleSave = () => {
-    updateCharacter(character, {
-      onSuccess: () => setHasUnsavedChanges(false),
-    });
-  };
-
   return (
     <div className="flex flex-col gap-6">
-      <CharacterActionBar
-        characterName={character.name}
-        hasUnsavedChanges={hasUnsavedChanges}
-        isSaving={isSaving}
-        onSave={handleSave}
-      />
+      <div className="flex items-center gap-2 border-b border-white/5 pb-2">
+        <AppIcon
+          name="Backpack"
+          size={14}
+          style={{ color: 'var(--character-color, var(--primary-flare))' }}
+        />
+        <h2 className="text-xs font-bold tracking-widest uppercase opacity-70">
+          {t('tabs.inventory')}
+        </h2>
+      </div>
       <div className="text-muted-foreground bg-muted/20 flex h-[50vh] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
         <p>{t('emptyStates.inventory')}</p>
       </div>

@@ -44,7 +44,7 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
 
     const systemSelector = (
       <Select value={system} onValueChange={(val) => onSystemChange(val as MagicSystem)}>
-        <SelectTrigger className="h-5 w-fit border-none bg-transparent p-0 text-sm font-bold tracking-[0.2em] text-zinc-400 uppercase shadow-none focus:ring-0">
+        <SelectTrigger className="h-5 w-fit border-none bg-transparent p-0 text-xs font-bold tracking-widest text-zinc-400 uppercase shadow-none focus:ring-0">
           <SelectValue placeholder="Magic" />
         </SelectTrigger>
         <SelectContent>
@@ -99,8 +99,8 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
                 className="absolute top-0 left-0 h-full transition-all duration-500 ease-in-out"
                 style={{
                   width: `${percentage}%`,
-                  background: `linear-gradient(to right, #1e3a8a, #3b82f6)`,
-                  boxShadow: '0 0 10px rgba(59, 130, 246, 0.3)',
+                  background: `linear-gradient(to right, var(--character-muted), var(--character-flare))`,
+                  boxShadow: '0 0 10px var(--character-glow)',
                 }}
               >
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1),transparent)]" />
@@ -140,14 +140,7 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
               <AppIcon name="Wand2" size={14} className="text-blue-400" />
               {systemSelector}
             </div>
-
-            <div
-              className="rounded-full px-2 py-0.5 text-sm font-bold tracking-wider uppercase"
-              style={{
-                color: '#60a5fa',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              }}
-            >
+            <div className="bg-character-surface text-character-flare rounded-full px-2 py-0.5 text-xs font-bold tracking-widest uppercase">
               {totalAvailable} / {totalMax} Slots
             </div>
           </div>
@@ -160,7 +153,7 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
 
               return (
                 <div key={lvl} className={cn('flex flex-col gap-0.5', !isActive && 'opacity-10')}>
-                  <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase opacity-60">
+                  <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70">
                     {lvl}º
                   </span>
                   <div className="flex flex-wrap gap-1">
@@ -183,11 +176,11 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
                           style={
                             i < available
                               ? {
-                                  backgroundColor: '#3b82f6',
-                                  boxShadow: '0 0 8px rgba(59, 130, 246, 0.6)',
+                                  backgroundColor: 'var(--character-flare)',
+                                  boxShadow: '0 0 8px var(--character-glow)',
                                 }
                               : {
-                                  border: '1px solid rgba(59, 130, 246, 0.4)',
+                                  border: '1px solid var(--character-muted)',
                                 }
                           }
                         />

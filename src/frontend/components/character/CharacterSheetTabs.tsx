@@ -30,28 +30,28 @@ export default function CharacterSheetTabs({
       <TabsList className="mb-4 flex w-full justify-start overflow-x-auto bg-transparent p-0">
         <TabsTrigger
           value="status"
-          className="hover:text-primary data-[state=active]:border-primary flex items-center gap-2 rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+          className="hover:text-character-flare data-[state=active]:border-character-flare data-[state=active]:text-character-flare flex items-center gap-2 rounded-none border-b-2 border-transparent px-4 py-2 transition-colors data-[state=active]:bg-transparent data-[state=active]:shadow-none"
         >
           <AppIcon name="Shield" size={16} />
           {t('status')}
         </TabsTrigger>
         <TabsTrigger
           value="lore"
-          className="hover:text-primary data-[state=active]:border-primary flex items-center gap-2 rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+          className="hover:text-character-flare data-[state=active]:border-character-flare data-[state=active]:text-character-flare flex items-center gap-2 rounded-none border-b-2 border-transparent px-4 py-2 transition-colors data-[state=active]:bg-transparent data-[state=active]:shadow-none"
         >
           <AppIcon name="Files" size={16} />
           {t('lore')}
         </TabsTrigger>
         <TabsTrigger
           value="spells"
-          className="hover:text-primary data-[state=active]:border-primary flex items-center gap-2 rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+          className="hover:text-character-flare data-[state=active]:border-character-flare data-[state=active]:text-character-flare flex items-center gap-2 rounded-none border-b-2 border-transparent px-4 py-2 transition-colors data-[state=active]:bg-transparent data-[state=active]:shadow-none"
         >
           <AppIcon name="BookOpen" size={16} />
           {t('spells')}
         </TabsTrigger>
         <TabsTrigger
           value="inventory"
-          className="hover:text-primary data-[state=active]:border-primary flex items-center gap-2 rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+          className="hover:text-character-flare data-[state=active]:border-character-flare data-[state=active]:text-character-flare flex items-center gap-2 rounded-none border-b-2 border-transparent px-4 py-2 transition-colors data-[state=active]:bg-transparent data-[state=active]:shadow-none"
         >
           <AppIcon name="Sword" size={16} />
           {t('inventory')}
