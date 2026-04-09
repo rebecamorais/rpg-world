@@ -38,9 +38,13 @@ export async function middleware(request: NextRequest) {
     },
   );
 
-  // IMPORTANT: Do not add any logic between createServerClient and supabase.auth.getUser().
-  // A simple mistake could make it very hard to debug issues with users being randomly logged out.
-  await supabaseAuth.auth.getUser();
+  // Optimization: Only refresh session if cookies are present.
+  // This avoids a network round-trip to Supabase for anonymous users.
+  const hasSession = request.cookies.getAll().some((c) => c.name.startsWith('sb-'));
+
+  if (hasSession) {
+    await supabaseAuth.auth.getUser();
+  }
 
   return supabaseResponse;
 }

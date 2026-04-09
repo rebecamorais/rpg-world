@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, createContext, useContext, useMemo } from 'react';
+import { ReactNode, createContext, useCallback, useContext, useMemo } from 'react';
 
 import { useParams } from 'next/navigation';
 
@@ -72,41 +72,59 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     queryError: charError as Error | null,
   });
 
-  const handleUpdate = async (character: DnD5eCharacter, options?: { onSuccess?: () => void }) => {
-    try {
-      await updateStatus(character);
-      toast.success('Alterações salvas com sucesso!');
-      options?.onSuccess?.();
-    } catch (_e) {
-      // Errors are handled inside the hooks via toast
-    }
-  };
+  const handleUpdate = useCallback(
+    async (character: DnD5eCharacter, options?: { onSuccess?: () => void }) => {
+      try {
+        await updateStatus(character);
+        toast.success('Alterações salvas com sucesso!');
+        options?.onSuccess?.();
+      } catch (_e) {
+        // Errors are handled inside the hooks via toast
+      }
+    },
+    [updateStatus],
+  );
 
   const spellsKnown = useMemo(() => spells.map((s) => s.id), [spells]);
 
-  return (
-    <CharacterContext.Provider
-      value={{
-        ...editor,
-        isSaving: isCharSaving || isLoreSaving,
-        deleteCharacter,
-        updateCharacter: handleUpdate,
-        updateLore: updateLore as (data: Record<string, unknown>) => Promise<void>,
-        isLoading: isCharLoading || isLoreLoading,
-        queryError: charError as Error | null,
+  const contextValue = useMemo(
+    () => ({
+      ...editor,
+      isSaving: isCharSaving || isLoreSaving,
+      deleteCharacter,
+      updateCharacter: handleUpdate,
+      updateLore: updateLore as (data: Record<string, unknown>) => Promise<void>,
+      isLoading: isCharLoading || isLoreLoading,
+      queryError: charError as Error | null,
 
-        // Spell management
-        characterSpells: spells,
-        spellsKnown,
-        isSpellsLoading,
-        handleLearnSpell: learnSpell,
-        handleForgetSpell: forgetSpell,
-        handleTogglePrepared: togglePrepared,
-      }}
-    >
-      {children}
-    </CharacterContext.Provider>
+      // Spell management
+      characterSpells: spells,
+      spellsKnown,
+      isSpellsLoading,
+      handleLearnSpell: learnSpell,
+      handleForgetSpell: forgetSpell,
+      handleTogglePrepared: togglePrepared,
+    }),
+    [
+      editor,
+      isCharSaving,
+      isLoreSaving,
+      deleteCharacter,
+      handleUpdate,
+      updateLore,
+      isCharLoading,
+      isLoreLoading,
+      charError,
+      spells,
+      spellsKnown,
+      isSpellsLoading,
+      learnSpell,
+      forgetSpell,
+      togglePrepared,
+    ],
   );
+
+  return <CharacterContext.Provider value={contextValue}>{children}</CharacterContext.Provider>;
 }
 
 export function useCharacterContext() {
