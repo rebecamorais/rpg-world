@@ -9,6 +9,18 @@ export const MECHANIC_ICONS = {
   default: 'tied-scroll',
 } as const;
 
+export const COMPONENT_METADATA = {
+  V: { icon: MECHANIC_ICONS.verbal, color: 'bg-blue-500/10 text-blue-400 border-blue-400/20' },
+  S: {
+    icon: MECHANIC_ICONS.somatic,
+    color: 'bg-emerald-500/10 text-emerald-400 border-emerald-400/20',
+  },
+  M: {
+    icon: MECHANIC_ICONS.material,
+    color: 'bg-amber-500/10 text-amber-500/80 border-amber-500/20',
+  },
+} as const;
+
 export interface DamageTheme {
   icon: string;
   color: string;

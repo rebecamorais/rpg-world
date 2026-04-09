@@ -5,7 +5,13 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 
 import { AppIcon } from '@frontend/components/ui/icon';
-import { MECHANIC_ICONS } from '@frontend/constants/damage-themes';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@frontend/components/ui/tooltip';
+import { COMPONENT_METADATA, MECHANIC_ICONS } from '@frontend/constants/damage-themes';
 import { useSpellDisplay } from '@frontend/hooks/useSpellDisplay';
 import { cn } from '@frontend/lib/utils';
 import type { Spell } from '@frontend/types/spells';
@@ -56,8 +62,9 @@ export function SpellCard({
       )}
       style={
         {
-          '--theme-primary': `var(--color-${theme.color.split('-')[1]}-500)`,
-          '--card-glow': 'var(--character-primary)',
+          '--theme-primary': theme.hex,
+          '--card-glow': theme.hex,
+          '--card-muted': `color-mix(in srgb, ${theme.hex}, transparent 70%)`,
         } as React.CSSProperties
       }
     >
@@ -65,7 +72,7 @@ export function SpellCard({
       <div
         className={`pointer-events-none absolute inset-0 z-0 opacity-0 blur-3xl transition-opacity duration-1000 group-hover:opacity-100`}
         style={{
-          background: `radial-gradient(circle at center, var(--character-muted), transparent 70%)`,
+          background: `radial-gradient(circle at center, var(--card-muted), transparent 70%)`,
         }}
       />
 
@@ -102,6 +109,30 @@ export function SpellCard({
                   <AppIcon variant="game" name={MECHANIC_ICONS.ritual} size={14} />
                 </div>
               )}
+              {spell.components?.map((comp) => {
+                const metadata = COMPONENT_METADATA[comp as keyof typeof COMPONENT_METADATA];
+                if (!metadata) return null;
+
+                return (
+                  <TooltipProvider key={comp} delayDuration={200}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div
+                          className={cn(
+                            'flex h-5 w-5 cursor-help items-center justify-center rounded-full border transition-all hover:scale-110 active:scale-95',
+                            metadata.color,
+                          )}
+                        >
+                          <AppIcon variant="game" name={metadata.icon} size={13} />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent className="border-white/10 bg-black/90 text-xs font-medium text-white">
+                        {tData(`components.${comp}`)}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                );
+              })}
             </div>
             <div className="mt-1 flex items-center gap-2 text-xs font-black tracking-widest uppercase opacity-80">
               <span className={cn('flex items-center gap-1', theme.color)}>
@@ -143,33 +174,31 @@ export function SpellCard({
           </div>
         </div>
 
-        <footer className="mt-auto flex flex-wrap gap-2">
+        <footer className="mt-auto flex flex-wrap gap-1">
           {/* Filter Chips (Always visible) */}
-          <SpellChip>{translatedSchool}</SpellChip>
+          {(spell.castingTime || spell.castingValue) && (
+            <SpellChip
+              icon={<AppIcon name="Clock" size={10} />}
+              tooltip={tCharacters('castingTime')}
+            >
+              {spell.castingTime &&
+              tData.has(`castingTimes.${spell.castingTime}` as Parameters<typeof tData>[0])
+                ? tData(`castingTimes.${spell.castingTime}` as Parameters<typeof tData>[0], {
+                    value: spell.castingValue || 1,
+                  })
+                : [spell.castingValue, spell.castingTime].filter(Boolean).join(' ')}
+            </SpellChip>
+          )}
         </footer>
 
         {/* Expanded Info and Actions */}
         {isExpanded && (
           <div className="mt-6 flex flex-col gap-6 border-t border-white/5 pt-6">
             {/* Secondary Info Chips (Only visible when expanded) */}
-            <div className="flex flex-wrap gap-2">
-              {(spell.castingTime || spell.castingValue) && (
-                <SpellChip
-                  icon={<AppIcon name="Clock" size={14} />}
-                  tooltip={tCharacters('castingTime')}
-                >
-                  {spell.castingTime &&
-                  tData.has(`castingTimes.${spell.castingTime}` as Parameters<typeof tData>[0])
-                    ? tData(`castingTimes.${spell.castingTime}` as Parameters<typeof tData>[0], {
-                        value: spell.castingValue || 1,
-                      })
-                    : [spell.castingValue, spell.castingTime].filter(Boolean).join(' ')}
-                </SpellChip>
-              )}
-
+            <div className="flex flex-wrap gap-1">
               {(spell.rangeUnit || spell.rangeValue !== undefined) && (
                 <SpellChip
-                  icon={<AppIcon name="Crosshair" size={14} />}
+                  icon={<AppIcon name="Crosshair" size={10} />}
                   tooltip={tCharacters('range')}
                 >
                   {spell.rangeUnit &&
@@ -186,7 +215,7 @@ export function SpellCard({
 
               {(spell.durationUnit || spell.durationValue !== undefined) && (
                 <SpellChip
-                  icon={<AppIcon name="Hourglass" size={14} />}
+                  icon={<AppIcon name="Hourglass" size={10} />}
                   tooltip={tCharacters('duration')}
                 >
                   {spell.durationUnit &&
@@ -197,36 +226,11 @@ export function SpellCard({
                     : [spell.durationValue, spell.durationUnit].filter(Boolean).join(' ')}
                 </SpellChip>
               )}
-
-              {spell.components && spell.components.length > 0 && (
-                <SpellChip
-                  icon={
-                    <div className="flex items-center gap-1.5 opacity-80 grayscale transition-all group-hover:opacity-100 group-hover:grayscale-0">
-                      {spell.components.map((comp) => {
-                        const iconName =
-                          comp === 'V'
-                            ? MECHANIC_ICONS.verbal
-                            : comp === 'S'
-                              ? MECHANIC_ICONS.somatic
-                              : comp === 'M'
-                                ? MECHANIC_ICONS.material
-                                : null;
-                        return iconName ? (
-                          <AppIcon key={comp} variant="game" name={iconName} size={14} />
-                        ) : null;
-                      })}
-                    </div>
-                  }
-                  tooltip={tCharacters('components')}
-                >
-                  {/* Text hidden in favor of icons */}
-                </SpellChip>
-              )}
               {spell.concentration && (
                 <SpellChip
                   variant="concentration"
                   tooltip={tCharacters('concentration')}
-                  icon={<AppIcon variant="game" name={MECHANIC_ICONS.concentration} size={14} />}
+                  icon={<AppIcon variant="game" name={MECHANIC_ICONS.concentration} size={10} />}
                 >
                   {tCharacters('concentration')}
                 </SpellChip>
@@ -235,7 +239,7 @@ export function SpellCard({
                 <SpellChip
                   variant="ritual"
                   tooltip={tCharacters('ritual')}
-                  icon={<AppIcon variant="game" name={MECHANIC_ICONS.ritual} size={14} />}
+                  icon={<AppIcon variant="game" name={MECHANIC_ICONS.ritual} size={10} />}
                 >
                   {tCharacters('ritual')}
                 </SpellChip>

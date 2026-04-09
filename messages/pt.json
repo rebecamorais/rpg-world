@@ -523,6 +523,11 @@
       "hour": "{value, plural, one {# Hora} other {# Horas}}",
       "day": "{value, plural, one {# Dia} other {# Dias}}"
     },
+    "components": {
+      "V": "Verbal",
+      "S": "Somática",
+      "M": "Material"
+    },
 
     "ranges": {
       "self": "Pessoal",

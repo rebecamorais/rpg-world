@@ -24,20 +24,20 @@ export function SpellChip({
   className,
 }: SpellChipProps) {
   const baseStyles =
-    'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium tracking-wider uppercase transition-colors';
+    'inline-flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium uppercase transition-colors';
 
   const variants = {
     default:
       'border border-white/10 bg-white/10 text-gray-300 group-hover:bg-white/20 group-hover:text-white',
     accent:
-      'border border-[var(--theme-primary)]/20 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)]/80 font-bold',
-    concentration: 'border border-amber-500/20 bg-amber-500/10 text-amber-500/80 font-bold',
-    ritual: 'border border-sky-500/20 bg-sky-500/10 text-sky-500/80 font-bold',
+      'border border-[var(--theme-primary)]/20 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)]/80',
+    concentration: 'border border-amber-500/20 bg-amber-500/10 text-amber-500/80',
+    ritual: 'border border-sky-500/20 bg-sky-500/10 text-sky-500/80',
   };
 
   const content = (
     <div
-      className={cn(baseStyles, variants[variant], !children && 'aspect-square p-1.5', className)}
+      className={cn(baseStyles, variants[variant], !children && 'aspect-square p-0.5', className)}
     >
       {icon && <span className={cn('opacity-70', !!children && 'mr-0')}>{icon}</span>}
       {children}
