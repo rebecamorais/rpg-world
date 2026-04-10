@@ -1,7 +1,10 @@
 'use client';
 
-import CharacterActionBar from '@frontend/components/character/CharacterActionBar';
+import { useTranslations } from 'next-intl';
+
 import LoreSection from '@frontend/components/character/LoreSection';
+import { PageHeader } from '@frontend/components/shared/PageHeader';
+import { Button } from '@frontend/components/ui/button';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
 export default function CharacterLorePage() {
@@ -14,6 +17,9 @@ export default function CharacterLorePage() {
     setHasUnsavedChanges,
   } = useCharacterContext();
 
+  const t = useTranslations('characters.tabs');
+  const tCommon = useTranslations('common');
+
   if (!character) return null;
 
   const handleSave = async () => {
@@ -21,13 +27,21 @@ export default function CharacterLorePage() {
     setHasUnsavedChanges(false);
   };
 
+  const actions = (
+    <Button
+      variant="character"
+      size="sm"
+      onClick={handleSave}
+      disabled={!hasUnsavedChanges || isSaving}
+      className="h-8 px-4 text-xs font-bold tracking-wider uppercase"
+    >
+      {isSaving ? tCommon('saving') : tCommon('saveChanges')}
+    </Button>
+  );
+
   return (
     <>
-      <CharacterActionBar
-        hasUnsavedChanges={hasUnsavedChanges}
-        isSaving={isSaving}
-        onSave={handleSave}
-      />
+      <PageHeader icon="Files" title={t('lore')} actions={actions} />
       <LoreSection data={character} onBasicInfoChange={handleBasicInfoChange} />
     </>
   );

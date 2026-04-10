@@ -209,7 +209,12 @@
       "alliesAndEnemies": "Allies & Enemies",
       "organizations": "Organizations",
       "treasure": "Treasure"
-    }
+    },
+    "spells": {
+      "preparedLabels": "{count} prepared",
+      "addBtn": "Add Spell"
+    },
+    "addItem": "Add Item"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",

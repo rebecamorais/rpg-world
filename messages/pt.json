@@ -209,7 +209,12 @@
       "alliesAndEnemies": "Aliados e Inimigos",
       "organizations": "Organizações",
       "treasure": "Tesouro"
-    }
+    },
+    "spells": {
+      "preparedLabels": "{count} preparadas",
+      "addBtn": "Adicionar Magia"
+    },
+    "addItem": "Adicionar Item"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",

@@ -1,31 +1,39 @@
 'use client';
 
+import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { AppIcon } from '@frontend/components/ui/icon';
+import { PageHeader } from '@frontend/components/shared/PageHeader';
+import { Button } from '@frontend/components/ui/button';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
 export default function CharacterInventoryPage() {
   const { character } = useCharacterContext();
-  const t = useTranslations('characters');
+  const t = useTranslations('characters.tabs');
+  const tChar = useTranslations('characters');
 
   if (!character) return null;
 
+  const actions = (
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => {}} // TODO: Implement Add Item logic when available
+      className="h-8 border-white/10 px-3 text-xs font-bold tracking-wider uppercase transition-all hover:bg-white/5"
+    >
+      <Plus className="mr-2 size-3" />
+      {tChar('addItem')}
+    </Button>
+  );
+
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-2 border-b border-white/5 pb-2">
-        <AppIcon
-          name="Backpack"
-          size={14}
-          style={{ color: 'var(--character-color, var(--primary-flare))' }}
-        />
-        <h2 className="text-xs font-bold tracking-widest uppercase opacity-70">
-          {t('tabs.inventory')}
-        </h2>
+    <>
+      <PageHeader icon="Backpack" title={t('inventory')} actions={actions} />
+      <div className="flex flex-col gap-6">
+        <div className="text-muted-foreground bg-muted/20 flex h-[50vh] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+          <p>{tChar('emptyStates.inventory')}</p>
+        </div>
       </div>
-      <div className="text-muted-foreground bg-muted/20 flex h-[50vh] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-        <p>{t('emptyStates.inventory')}</p>
-      </div>
-    </div>
+    </>
   );
 }
