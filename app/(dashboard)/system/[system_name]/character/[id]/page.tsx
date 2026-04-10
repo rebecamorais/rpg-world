@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import StatusView from '@frontend/components/character/StatusView';
-import { PageHeader } from '@frontend/components/shared/PageHeader';
+import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { Button } from '@frontend/components/ui/button';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
@@ -34,9 +34,8 @@ export default function CharacterStatusPage() {
   );
 
   return (
-    <>
-      <PageHeader icon="Shield" title={t('status')} actions={actions} />
+    <PageContainer icon="Shield" title={t('status')} actions={actions}>
       <StatusView />
-    </>
+    </PageContainer>
   );
 }

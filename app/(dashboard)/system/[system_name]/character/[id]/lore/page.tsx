@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import LoreSection from '@frontend/components/character/LoreSection';
-import { PageHeader } from '@frontend/components/shared/PageHeader';
+import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { Button } from '@frontend/components/ui/button';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
@@ -16,7 +16,6 @@ export default function CharacterLorePage() {
     hasUnsavedChanges,
     setHasUnsavedChanges,
   } = useCharacterContext();
-
   const t = useTranslations('characters.tabs');
   const tCommon = useTranslations('common');
 
@@ -40,9 +39,8 @@ export default function CharacterLorePage() {
   );
 
   return (
-    <>
-      <PageHeader icon="Files" title={t('lore')} actions={actions} />
+    <PageContainer icon="Files" title={t('lore')} actions={actions}>
       <LoreSection data={character} onBasicInfoChange={handleBasicInfoChange} />
-    </>
+    </PageContainer>
   );
 }

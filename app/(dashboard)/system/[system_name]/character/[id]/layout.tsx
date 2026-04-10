@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useMemo } from 'react';
+import { ReactNode } from 'react';
 
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -11,7 +11,6 @@ import SpellsDrawer from '@frontend/components/character/spells/SpellsDrawer';
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { CharacterProvider, useCharacterContext } from '@frontend/context/CharacterContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
-import { hexToHsl } from '@frontend/lib/color-utils';
 
 function CharacterLayoutContent({ children }: { children: ReactNode }) {
   const { currentUser } = useCurrentUser();
@@ -24,19 +23,11 @@ function CharacterLayoutContent({ children }: { children: ReactNode }) {
     handleLearnSpell,
     handleForgetSpell,
     spellsKnown,
+    themeHsl,
   } = useCharacterContext();
 
   const t = useTranslations('characters');
   const tCommon = useTranslations('common');
-
-  const themeHsl = useMemo(() => {
-    const hex = character?.accentColor || '#663399';
-    try {
-      return hexToHsl(hex);
-    } catch {
-      return { h: 270, s: 50, l: 40 };
-    }
-  }, [character?.accentColor]);
 
   if (!currentUser) {
     redirect('/login');
@@ -59,7 +50,7 @@ function CharacterLayoutContent({ children }: { children: ReactNode }) {
 
   return (
     <div
-      className="character-context mx-auto w-full max-w-5xl p-4 md:min-w-[1024px]"
+      className="character-context mx-auto w-full max-w-5xl p-4 transition-colors duration-500 md:min-w-[1024px]"
       style={
         {
           '--character-color': character.accentColor || 'var(--primary)',
@@ -69,6 +60,7 @@ function CharacterLayoutContent({ children }: { children: ReactNode }) {
         } as React.CSSProperties
       }
     >
+      {/* Page content handles its own PageContainer */}
       {children}
 
       <SpellsDrawer

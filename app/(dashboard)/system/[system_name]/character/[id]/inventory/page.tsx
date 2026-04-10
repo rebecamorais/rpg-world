@@ -3,7 +3,7 @@
 import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { PageHeader } from '@frontend/components/shared/PageHeader';
+import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { Button } from '@frontend/components/ui/button';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
@@ -27,13 +27,12 @@ export default function CharacterInventoryPage() {
   );
 
   return (
-    <>
-      <PageHeader icon="Backpack" title={t('inventory')} actions={actions} />
+    <PageContainer icon="Backpack" title={t('inventory')} actions={actions}>
       <div className="flex flex-col gap-6">
         <div className="text-muted-foreground bg-muted/20 flex h-[50vh] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
           <p>{tChar('emptyStates.inventory')}</p>
         </div>
       </div>
-    </>
+    </PageContainer>
   );
 }

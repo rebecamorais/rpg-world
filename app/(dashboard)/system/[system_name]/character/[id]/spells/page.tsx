@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import SpellsSection from '@frontend/components/character/spells/SpellsSection';
-import { PageHeader } from '@frontend/components/shared/PageHeader';
+import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { Button } from '@frontend/components/ui/button';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
@@ -38,8 +38,7 @@ export default function CharacterSpellsPage() {
   );
 
   return (
-    <>
-      <PageHeader icon="BookOpen" title={t('spells')} actions={actions} />
+    <PageContainer icon="BookOpen" title={t('spells')} actions={actions}>
       <div className="flex flex-col gap-6">
         <SpellsSection
           characterSpells={characterSpells}
@@ -47,6 +46,6 @@ export default function CharacterSpellsPage() {
           onTogglePrepared={handleTogglePrepared}
         />
       </div>
-    </>
+    </PageContainer>
   );
 }
