@@ -55,10 +55,8 @@ export function SpellCard({
       onClick={onClick}
       className={cn(
         'group relative cursor-pointer overflow-hidden rounded-2xl border p-6 transition-all duration-500 ease-out',
-        'bg-card/40 backdrop-blur-md hover:-translate-y-2 hover:border-[var(--card-glow)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)] hover:backdrop-blur-xl active:scale-[0.98]',
-        isExpanded
-          ? 'border-[var(--card-glow)] shadow-[var(--card-glow)]/10 shadow-lg'
-          : theme.border,
+        'bg-card/40 backdrop-blur-md hover:-translate-y-1 hover:border-[var(--card-glow)] hover:backdrop-blur-xl active:scale-[0.98]',
+        isExpanded ? 'bg-card/60 border-[var(--card-glow)] shadow-lg' : theme.border,
       )}
       style={
         {
