@@ -32,7 +32,7 @@ const GhostInput = React.forwardRef<HTMLInputElement, GhostInputProps>(
         {showIcon && (
           <AppIcon
             name="Pencil"
-            size={12}
+            size={14}
             className={cn(
               'text-muted-foreground pointer-events-none absolute right-0 opacity-0 transition-opacity group-focus-within:hidden group-hover:opacity-100',
             )}

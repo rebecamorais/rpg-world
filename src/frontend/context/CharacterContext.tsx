@@ -150,6 +150,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       learnSpell,
       forgetSpell,
       togglePrepared,
+      isLoreRoute,
+      isSpellsRoute,
     ],
   );
 

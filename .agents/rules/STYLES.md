@@ -44,3 +44,22 @@ Para suportar interfaces personalizadas baseadas no `accentColor` do personagem 
 - **Proibido color-mix Ad-hoc**: Não utilize `color-mix` diretamente nos arquivos `.tsx`. Se precisar de uma nova variante, adicione-a ao `globals.css`.
 - **Preferência Semântica**: Use `text-character-flare` em vez de `text-character` para elementos informativos (ícones, títulos pequenos) para aumentar o contraste.
 - **Shadows e Borders**: Utilize as classes utilitárias de borda (`border-character-muted`) e sombra customizada aproveitando o mapeamento do tema.
+
+## 13. Padronização de Cores do Sistema (Paleta Global)
+
+Para evitar a proliferação de tons arbitrários, utilizamos uma paleta fixa para estados e categorias de dados, mapeada com variantes de transparência no `globals.css`.
+
+### Tokens Principais:
+
+| Cor          | Token Base | Variantes Disponíveis                      | Uso Comum                    |
+| ------------ | ---------- | ------------------------------------------ | ---------------------------- |
+| **Vermelho** | `red`      | `red`, `red-surface`, `red-muted`          | Perigo, Erro, HP Crítico.    |
+| **Azul**     | `blue`     | `blue`, `blue-surface`, `blue-muted`       | Info, Magia, Mana.           |
+| **Verde**    | `green`    | `green`, `green-surface`, `green-muted`    | Sucesso, HP, Natureza.       |
+| **Amarelo**  | `yellow`   | `yellow`, `yellow-surface`, `yellow-muted` | Alerta, Inspiração, Sagrado. |
+
+### Critérios de Uso:
+
+- **Consistência**: Sempre prefira `bg-red-surface` ou `text-green-flare` em vez de valores hexadecimais arbitrários ou classes de cores do Tailwind com opacidades inline (ex: `bg-red-500/10`).
+- **Acessibilidade**: Utilize a variante `flare` (base) para textos e ícones sobre fundos escuros para garantir visibilidade.
+- **Semântica**: Embora os tokens tenham nomes de cores, tente associá-los à semântica do componente (ex: vermelho para erros, verde para confirmações).

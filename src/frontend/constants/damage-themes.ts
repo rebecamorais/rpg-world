@@ -6,18 +6,20 @@ export const MECHANIC_ICONS = {
   verbal: SPELL_UI_ICONS.Verbal,
   somatic: SPELL_UI_ICONS.Somatic,
   material: SPELL_UI_ICONS.Material,
+  castingTime: SPELL_UI_ICONS.CastingTime,
+  duration: SPELL_UI_ICONS.Duration,
   default: 'tied-scroll',
 } as const;
 
 export const COMPONENT_METADATA = {
-  V: { icon: MECHANIC_ICONS.verbal, color: 'bg-blue-500/10 text-blue-400 border-blue-400/20' },
+  V: { icon: MECHANIC_ICONS.verbal, color: 'text-blue-400' },
   S: {
     icon: MECHANIC_ICONS.somatic,
-    color: 'bg-emerald-500/10 text-emerald-400 border-emerald-400/20',
+    color: 'text-emerald-400',
   },
   M: {
     icon: MECHANIC_ICONS.material,
-    color: 'bg-amber-500/10 text-amber-500/80 border-amber-500/20',
+    color: 'text-amber-500/80',
   },
 } as const;
 

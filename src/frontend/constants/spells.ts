@@ -39,9 +39,11 @@ export const DAMAGE_TYPE_ICONS = {
 export const SPELL_UI_ICONS = {
   Ritual: 'pentagram-rose',
   Concentration: 'psychic-waves',
-  Verbal: 'sonic-shout',
+  Verbal: 'talk',
   Somatic: 'palm',
   Material: 'swap-bag',
+  CastingTime: 'stopwatch',
+  Duration: 'empty-hourglass',
 } as const;
 
 // Types for better TypeScript DX
