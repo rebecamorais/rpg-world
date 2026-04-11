@@ -8,7 +8,10 @@ import { Spell } from '@frontend/types/spells';
 
 export type CharacterSpell = Spell;
 
-export function useCharacterSpells(characterId: string | undefined) {
+export function useCharacterSpells(
+  characterId: string | undefined,
+  options: { enabled?: boolean } = { enabled: true },
+) {
   const queryToKey = ['character-spells', characterId];
   const queryClient = useQueryClient();
   const locale = useLocale();
@@ -23,7 +26,7 @@ export function useCharacterSpells(characterId: string | undefined) {
       if (!characterId) return [];
       return rpgWorldApi.get(`/api/characters/${characterId}/spells?locale=${locale}`);
     },
-    enabled: !!characterId,
+    enabled: options.enabled && !!characterId,
   });
 
   const mutation = useMutation({

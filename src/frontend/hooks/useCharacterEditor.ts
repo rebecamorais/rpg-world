@@ -10,13 +10,26 @@ import type { CharacterSkill } from '@shared/systems/dnd5e/types';
 interface UseCharacterEditorOptions {
   fetchedCharacter: DnD5eCharacter | undefined;
   queryError: Error | null;
+  // External state control for lazy loading
+  isSpellsOpen?: boolean;
+  setIsSpellsOpen?: (isOpen: boolean) => void;
 }
 
-export function useCharacterEditor({ fetchedCharacter, queryError }: UseCharacterEditorOptions) {
+export function useCharacterEditor({
+  fetchedCharacter,
+  queryError,
+  isSpellsOpen: externalIsSpellsOpen,
+  setIsSpellsOpen: externalSetIsSpellsOpen,
+}: UseCharacterEditorOptions) {
   const [character, setCharacter] = useState<DnD5eCharacter | null>(null);
   const [error, setError] = useState('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [isSpellsOpen, setIsSpellsOpen] = useState(false);
+
+  // Local state as fallback
+  const [localIsSpellsOpen, localSetIsSpellsOpen] = useState(false);
+
+  const isSpellsOpen = externalIsSpellsOpen ?? localIsSpellsOpen;
+  const setIsSpellsOpen = externalSetIsSpellsOpen ?? localSetIsSpellsOpen;
 
   // Sync fetched data to local state buffer for optimistic UI edits
   useEffect(() => {

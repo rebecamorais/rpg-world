@@ -1,8 +1,8 @@
 'use client';
 
-import { ReactNode, createContext, useCallback, useContext, useMemo } from 'react';
+import { ReactNode, createContext, useCallback, useContext, useMemo, useState } from 'react';
 
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 import { toast } from 'sonner';
 
@@ -37,7 +37,16 @@ const CharacterContext = createContext<CharacterContextType | null>(null);
 
 export function CharacterProvider({ children }: { children: ReactNode }) {
   const params = useParams();
+  const pathname = usePathname();
   const id = params?.id as string;
+
+  // Track if spells drawer is open to trigger loading even on non-spell routes
+  // This state is shared with useCharacterEditor
+  const [isSpellsOpen, setIsSpellsOpen] = useState(false);
+
+  // Lazy loading triggers
+  const isLoreRoute = pathname?.endsWith('/lore');
+  const isSpellsRoute = pathname?.endsWith('/spells');
 
   const {
     character: fetchedCharacter,
@@ -54,14 +63,18 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     learnSpell,
     forgetSpell,
     togglePrepared,
-  } = useCharacterSpells(id);
+  } = useCharacterSpells(id, {
+    enabled: !!id && (isSpellsRoute || isSpellsOpen),
+  });
 
   const {
     lore: fetchedLore,
     isLoading: isLoreLoading,
     updateLore,
     isSaving: isLoreSaving,
-  } = useCharacterLore(id);
+  } = useCharacterLore(id, {
+    enabled: !!id && isLoreRoute,
+  });
 
   // Merge lore into character for the editor
   const mergedCharacter = useMemo(() => {
@@ -72,6 +85,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const editor = useCharacterEditor({
     fetchedCharacter: mergedCharacter,
     queryError: charError as Error | null,
+    isSpellsOpen,
+    setIsSpellsOpen,
   });
 
   const handleUpdate = useCallback(
@@ -105,7 +120,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       deleteCharacter,
       updateCharacter: handleUpdate,
       updateLore: updateLore as (data: Record<string, unknown>) => Promise<void>,
-      isLoading: isCharLoading || isLoreLoading,
+      isLoading:
+        isCharLoading || (isLoreRoute && isLoreLoading) || (isSpellsRoute && isSpellsLoading),
       queryError: charError as Error | null,
       themeHsl,
 

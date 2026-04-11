@@ -109,7 +109,7 @@ export class SupabaseCharacterSpellRepository implements CharacterSpellRepo {
   async togglePrepared(characterId: string, id: string, isPrepared: boolean): Promise<void> {
     const { error } = await (this.client
       .from('character_spells')
-      .update({ is_prepared: isPrepared } as { [key: string]: boolean })
+      .update({ is_prepared: isPrepared })
       .eq('character_id', characterId)
       .eq('spell_id', id) as PromiseLike<{ error: { message: string } | null }>);
 

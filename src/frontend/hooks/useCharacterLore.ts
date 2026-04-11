@@ -20,7 +20,10 @@ export interface LoreData {
   treasure?: string;
 }
 
-export function useCharacterLore(characterId: string) {
+export function useCharacterLore(
+  characterId: string,
+  options: { enabled?: boolean } = { enabled: true },
+) {
   const queryClient = useQueryClient();
 
   const query = useQuery({
@@ -29,7 +32,7 @@ export function useCharacterLore(characterId: string) {
       const data = await rpgWorldApi.get<LoreData>(`/api/characters/${characterId}/lore`);
       return data;
     },
-    enabled: !!characterId,
+    enabled: options.enabled && !!characterId,
   });
 
   const updateMutation = useMutation({
