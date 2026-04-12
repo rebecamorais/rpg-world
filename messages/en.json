@@ -141,6 +141,9 @@
     "notFoundOrNoPermission": "Character not found or you don't have permission.",
     "deleteSuccess": "Character deleted successfully.",
     "deleteError": "Error deleting character.",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "school": "School",
     "saveSuccess": "Character saved successfully!",
     "saveError": "Failed to save on the server.",
     "unsavedChanges": "You have unsaved changes.",
@@ -527,6 +530,11 @@
       "minute": "{value} {value, plural, one {Minute} other {Minutes}}",
       "hour": "{value} {value, plural, one {Hour} other {Hours}}",
       "day": "{value} {value, plural, one {Day} other {Days}}"
+    },
+    "castingTimesBrief": {
+      "action": "Action",
+      "bonus_action": "Bonus",
+      "reaction": "Reaction"
     },
     "components": {
       "V": "Verbal",

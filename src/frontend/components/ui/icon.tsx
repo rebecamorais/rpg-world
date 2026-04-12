@@ -108,11 +108,21 @@ const SYSTEM_ICONS = {
   Backpack,
 } as const;
 
+const ICON_SIZE_PRESETS = {
+  xs: 16,
+  sm: 18,
+  lg: 24,
+  xl: 32,
+} as const;
+
+export type IconSize = keyof typeof ICON_SIZE_PRESETS | number;
+
 export type IconName = keyof typeof SYSTEM_ICONS | string;
 
-interface IconProps extends LucideProps {
+interface IconProps extends Omit<LucideProps, 'size'> {
   name: IconName;
   variant?: 'system' | 'game';
+  size?: IconSize;
 }
 
 /**
@@ -124,10 +134,14 @@ export function AppIcon({
   name,
   variant = 'system',
   className,
-  size,
-  strokeWidth,
+  size = 'sm',
+  strokeWidth = 2.5, // Standardized stroke width
   ...props
 }: IconProps) {
+  // Resolve size from preset or number
+  const resolvedSize =
+    typeof size === 'string' ? ICON_SIZE_PRESETS[size as keyof typeof ICON_SIZE_PRESETS] : size;
+
   if (variant === 'game') {
     // Only pass compatible props to Iconify
     const { absoluteStrokeWidth: _, ...iconifyProps } = props as Record<string, unknown>;
@@ -136,8 +150,8 @@ export function AppIcon({
       <Iconify
         icon={`game-icons:${name}`}
         className={cn('inline-block', className)}
-        width={size}
-        height={size}
+        width={resolvedSize}
+        height={resolvedSize}
         {...iconifyProps}
       />
     );
@@ -156,5 +170,12 @@ export function AppIcon({
     return null;
   }
 
-  return <LucideIcon className={cn(className)} size={size} strokeWidth={strokeWidth} {...props} />;
+  return (
+    <LucideIcon
+      className={cn(className)}
+      size={resolvedSize}
+      strokeWidth={strokeWidth}
+      {...props}
+    />
+  );
 }

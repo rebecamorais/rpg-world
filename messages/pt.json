@@ -141,6 +141,9 @@
     "notFoundOrNoPermission": "Personagem não encontrado ou você não tem permissão.",
     "deleteSuccess": "Personagem excluído com sucesso.",
     "deleteError": "Erro ao deletar personagem.",
+    "expand": "Expandir",
+    "collapse": "Recolher",
+    "school": "Escola",
     "saveSuccess": "Personagem salvo com sucesso!",
     "saveError": "Falha ao salvar no servidor.",
     "unsavedChanges": "Você tem alterações não salvas.",
@@ -527,6 +530,11 @@
       "minute": "{value, plural, one {# Minuto} other {# Minutos}}",
       "hour": "{value, plural, one {# Hora} other {# Horas}}",
       "day": "{value, plural, one {# Dia} other {# Dias}}"
+    },
+    "castingTimesBrief": {
+      "action": "Ação",
+      "bonus_action": "Bônus",
+      "reaction": "Reação"
     },
     "components": {
       "V": "Verbal",

@@ -1,6 +1,7 @@
 import { SPELL_BACKGROUNDS } from '@frontend/constants/spell-vfx';
-import { useSpellDisplay } from '@frontend/hooks/useSpellDisplay';
 import type { Spell } from '@frontend/types/spells';
+
+import { useSpellDisplay } from './hooks/useSpellDisplay';
 
 interface SpellBackgroundProps {
   spell: Spell;

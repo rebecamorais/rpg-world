@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -16,7 +16,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 import type { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
 
-import { SpellCard } from './SpellCard';
+import { SpellCard } from './spell-card/SpellCard';
 
 interface SpellbookProps {
   characterSpells: CharacterSpell[];
@@ -28,9 +28,11 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
   const t = useTranslations('characters');
   const [expandedSpellId, setExpandedSpellId] = useState<string | null>(null);
 
-  // Group spells by level
-  const spellsByLevel =
-    characterSpells?.reduce(
+  // Group and sort spells by level
+  const spellsByLevel = useMemo(() => {
+    if (!characterSpells) return {};
+
+    const grouped = characterSpells.reduce(
       (acc, spell) => {
         const level = spell.level;
         if (!acc[level]) acc[level] = [];
@@ -38,19 +40,35 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
         return acc;
       },
       {} as Record<number, CharacterSpell[]>,
-    ) || {};
+    );
 
-  const levels = Object.keys(spellsByLevel)
-    .map(Number)
-    .sort((a, b) => a - b);
+    // Pre-sort each level to avoid sorting in render
+    Object.values(grouped).forEach((list) => {
+      list.sort((a, b) => {
+        if (a.isPrepared && !b.isPrepared) return -1;
+        if (!a.isPrepared && b.isPrepared) return 1;
+        return a.name.localeCompare(b.name);
+      });
+    });
+
+    return grouped;
+  }, [characterSpells]);
+
+  const levels = useMemo(
+    () =>
+      Object.keys(spellsByLevel)
+        .map(Number)
+        .sort((a, b) => a - b),
+    [spellsByLevel],
+  );
 
   const [activeLevel, setActiveLevel] = useState<string>(levels[0]?.toString() || '0');
 
-  if (!characterSpells || characterSpells.length === 0) return null;
+  const toggleExpand = useCallback((id: string) => {
+    setExpandedSpellId((prev) => (prev === id ? null : id));
+  }, []);
 
-  const toggleExpand = (id: string) => {
-    setExpandedSpellId(expandedSpellId === id ? null : id);
-  };
+  if (!characterSpells || characterSpells.length === 0) return null;
 
   return (
     <div className="relative flex flex-col md:flex-row">
@@ -148,22 +166,16 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 pb-12">
-                  {spellsByLevel[level]
-                    .sort((a, b) => {
-                      if (a.isPrepared && !b.isPrepared) return -1;
-                      if (!a.isPrepared && b.isPrepared) return 1;
-                      return a.name.localeCompare(b.name);
-                    })
-                    .map((spell) => (
-                      <SpellCard
-                        key={spell.id}
-                        spell={spell}
-                        isExpanded={expandedSpellId === spell.id}
-                        onClick={() => toggleExpand(spell.id)}
-                        onForgetSpell={onForgetSpell}
-                        onTogglePrepared={onTogglePrepared}
-                      />
-                    ))}
+                  {spellsByLevel[level].map((spell) => (
+                    <SpellCard
+                      key={spell.id}
+                      spell={spell}
+                      isExpanded={expandedSpellId === spell.id}
+                      onClick={() => toggleExpand(spell.id)}
+                      onForgetSpell={onForgetSpell}
+                      onTogglePrepared={onTogglePrepared}
+                    />
+                  ))}
                 </div>
               </TabsContent>
             ))}

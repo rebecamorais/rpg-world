@@ -1,10 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { SpellCard } from '@frontend/components/character/spells/SpellCard';
+import { SpellCard } from '@frontend/components/character/spells/spell-card/SpellCard';
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Button } from '@frontend/components/ui/button';
 import {
@@ -56,6 +56,10 @@ export default function SpellsDrawer({
   const [page, setPage] = useState(0);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
+  const toggleExpand = useCallback((id: string) => {
+    setExpandedId((prev) => (prev === id ? null : id));
+  }, []);
+
   // Data Fetching
   const { data: paginatedSpells, isLoading } = useSpells({
     page,
@@ -73,36 +77,45 @@ export default function SpellsDrawer({
 
   const learnedSet = useMemo(() => new Set(learnedSpells), [learnedSpells]);
 
-  const handleSearchTrigger = () => {
+  const handleSearchTrigger = useCallback(() => {
     setActiveSearch(searchInput);
     setPage(0); // Reset to first page on search
-  };
+  }, [searchInput]);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearchTrigger();
-    }
-  };
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleSearchTrigger();
+      }
+    },
+    [handleSearchTrigger],
+  );
 
   const damageTypes = Object.keys(DAMAGE_THEMES).filter(
     (key) => !['slashing', 'piercing', 'bludgeoning'].includes(key),
   );
 
-  const schoolOptions = [
-    { value: 'all', label: t('allSchools') },
-    ...Object.values(SpellSchool).map((s) => ({
-      value: s,
-      label: tSpellsData(`schools.${s}`),
-    })),
-  ];
+  const schoolOptions = useMemo(
+    () => [
+      { value: 'all', label: t('allSchools') },
+      ...Object.values(SpellSchool).map((s) => ({
+        value: s,
+        label: tSpellsData(`schools.${s}`),
+      })),
+    ],
+    [t, tSpellsData],
+  );
 
-  const classesOptions = [
-    { value: 'all', label: t('allClasses') },
-    ...Object.values(CharacterClass).map((c) => ({
-      value: c,
-      label: tSpellsData(`classes.${c}` as Parameters<typeof tSpellsData>[0]),
-    })),
-  ];
+  const classesOptions = useMemo(
+    () => [
+      { value: 'all', label: t('allClasses') },
+      ...Object.values(CharacterClass).map((c) => ({
+        value: c,
+        label: tSpellsData(`classes.${c}` as Parameters<typeof tSpellsData>[0]),
+      })),
+    ],
+    [t, tSpellsData],
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -245,7 +258,7 @@ export default function SpellsDrawer({
                   key={spell.id}
                   spell={spell}
                   isExpanded={expandedId === spell.id}
-                  onClick={() => setExpandedId(expandedId === spell.id ? null : spell.id)}
+                  onClick={() => toggleExpand(spell.id)}
                   onLearnSpell={onLearnSpell}
                   onForgetSpell={onForgetSpell}
                   isLearned={learnedSet.has(spell.id)}
