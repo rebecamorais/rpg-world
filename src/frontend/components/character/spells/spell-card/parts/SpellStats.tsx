@@ -20,8 +20,10 @@ export const SpellStats = React.memo(
   ({ isExpanded, theme, schoolIcon, mainIcon, displayValues }: SpellStatsProps) => (
     <div
       className={cn(
-        'flex items-center font-black tracking-widest uppercase transition-all duration-300',
-        isExpanded ? 'mt-4 gap-3 text-xs' : 'mt-0 gap-2 text-xs',
+        'flex flex-wrap items-center font-black transition-all duration-300',
+        isExpanded
+          ? 'mt-4 gap-x-3 gap-y-1.5 text-[10px] tracking-wider md:text-xs md:tracking-widest'
+          : 'mt-0 gap-2 text-xs tracking-widest',
         'text-white/70',
       )}
     >

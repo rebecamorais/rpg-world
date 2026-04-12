@@ -83,11 +83,11 @@ export const SpellHeader = React.memo(
 
           <div
             className={cn(
-              'mt-1 flex items-center justify-between gap-4 text-xs font-black tracking-widest text-white/40 uppercase transition-all duration-300',
+              'mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[10px] font-black tracking-wider text-white/40 uppercase transition-all duration-300 md:gap-x-4 md:text-xs md:tracking-widest',
               theme.color,
             )}
           >
-            <div className="flex min-w-0 items-center gap-2">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
               {isExpanded && (
                 <div className="flex items-center gap-1 text-white/60">
                   <span>{displayValues.school}</span>
