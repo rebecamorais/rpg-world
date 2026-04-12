@@ -47,7 +47,7 @@ export const SpellSlots = React.forwardRef<HTMLDivElement, Props>(
       >
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
-            <AppIcon name="Wand2" size={14} className="text-blue-400" />
+            <AppIcon name="crystal-ball" variant="game" size="lg" className="text-blue-400" />
             {systemSelector}
           </div>
           <div className="bg-character-surface text-blue-flare rounded-full px-2 py-0.5 text-xs font-bold tracking-widest uppercase">

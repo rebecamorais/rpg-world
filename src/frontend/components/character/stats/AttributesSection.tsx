@@ -50,12 +50,22 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
   const firstCol = ATTRIBUTE_KEYS.slice(0, half);
   const secondCol = ATTRIBUTE_KEYS.slice(half);
 
+  const attributeIcons: Record<AttributeKey, string> = {
+    STR: 'biceps',
+    DEX: 'lightning-bow',
+    CON: 'heart-plus',
+    INT: 'brain',
+    WIS: 'meditation',
+    CHA: 'drama-masks',
+  };
+
   const renderAttribute = (key: AttributeKey) => (
     <AttributeCard
       key={key}
       label={t(`abbreviations.${key}`)}
       value={attributes[key] ?? 10}
       onChange={(value) => onAttributeChange(key, value)}
+      icon={attributeIcons[key]}
     />
   );
 

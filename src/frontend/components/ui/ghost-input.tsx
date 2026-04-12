@@ -23,7 +23,7 @@ const GhostInput = React.forwardRef<HTMLInputElement, GhostInputProps>(
           ref={ref}
           style={{ color: useThemeColor ? 'var(--character-color)' : undefined, ...style }}
           className={cn(
-            'focus-visible:ring-primary/50 h-7 border-none bg-transparent p-0 shadow-none transition-all focus-visible:px-2 focus-visible:ring-2 disabled:cursor-default',
+            'focus-visible:ring-primary/50 no-spinner h-7 border-none bg-transparent p-0 shadow-none transition-all focus-visible:px-2 focus-visible:ring-2 disabled:cursor-default',
             className,
             showIcon && 'pr-5',
           )}

@@ -170,4 +170,17 @@
   .btn-lit {
     @apply border-t border-t-white/20 shadow-lg transition-all active:translate-y-px;
   }
+
+  /* Hide number input spinners */
+  .no-spinner {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }

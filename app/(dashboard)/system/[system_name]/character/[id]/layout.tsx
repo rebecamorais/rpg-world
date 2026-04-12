@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 
-import SpellsDrawer from '@frontend/components/character/spells/SpellsDrawer';
+import SpellSearchDialog from '@frontend/components/character/spells/SpellSearchDialog';
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { CharacterProvider, useCharacterContext } from '@frontend/context/CharacterContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
@@ -63,7 +63,7 @@ function CharacterLayoutContent({ children }: { children: ReactNode }) {
       {/* Page content handles its own PageContainer */}
       {children}
 
-      <SpellsDrawer
+      <SpellSearchDialog
         isOpen={isSpellsOpen}
         onClose={() => setIsSpellsOpen(false)}
         learnedSpells={spellsKnown}

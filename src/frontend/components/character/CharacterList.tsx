@@ -14,26 +14,18 @@ import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Badge } from '@frontend/components/ui/badge';
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@frontend/components/ui/dialog';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Input } from '@frontend/components/ui/input';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { cn } from '@frontend/lib/utils';
 
 import type { CharacterSummary } from '@shared/types/character';
 
+import { DeleteCharacterDialog } from './DeleteCharacterDialog';
+
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();
   const t = useTranslations('characters');
-  const tCommon = useTranslations('common');
   const queryClient = useQueryClient();
   const { characters, isLoading, error } = useCharacters();
 
@@ -150,55 +142,17 @@ export default function CharacterList() {
         ))}
       </div>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={!!characterToDelete}
-        onOpenChange={(open) => !open && setCharacterToDelete(null)}
-      >
-        <DialogContent
-          className="character-context border-red-500/20 bg-slate-950/95 text-white backdrop-blur-xl"
-          style={{ '--character-color': 'var(--red)' } as React.CSSProperties}
-        >
-          <DialogHeader>
-            <DialogTitle>{t('deleteDialogTitle')}</DialogTitle>
-            <DialogDescription className="space-y-4">
-              <span className="block">
-                {t('deleteDialogDescription', { name: characterToDelete?.name || '' })}
-              </span>
-              <div className="rounded-md border border-amber-500/20 bg-amber-500/10 p-3 text-sm text-amber-600 dark:text-amber-400">
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: t.markup('deleteConfirmInstruction', {
-                      name: characterToDelete?.name || '',
-                      bold: (chunks) => `<strong>${chunks}</strong>`,
-                    }),
-                  }}
-                />
-              </div>
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <Input
-              value={confirmName}
-              onChange={(e) => setConfirmName(e.target.value)}
-              placeholder={t('deleteConfirmPlaceholder')}
-              className="bg-muted focus-visible:ring-primary/30"
-            />
-          </div>
-          <DialogFooter className="gap-2">
-            <Button variant="secondary" onClick={() => setCharacterToDelete(null)}>
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              destroy
-              onClick={handleDelete}
-              disabled={confirmName !== characterToDelete?.name || deleteMutation.isPending}
-            >
-              {deleteMutation.isPending ? tCommon('loading') : tCommon('delete')}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DeleteCharacterDialog
+        character={characterToDelete}
+        confirmName={confirmName}
+        onConfirmNameChange={setConfirmName}
+        onConfirm={handleDelete}
+        onCancel={() => {
+          setCharacterToDelete(null);
+          setConfirmName('');
+        }}
+        isPending={deleteMutation.isPending}
+      />
     </div>
   );
 }

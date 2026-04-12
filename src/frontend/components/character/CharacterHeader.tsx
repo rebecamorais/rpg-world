@@ -4,27 +4,18 @@ import React, { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import ImageUpload from '@frontend/components/shared/ImageUpload';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@frontend/components/ui/dialog';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { Progress } from '@frontend/components/ui/progress';
-import { cn } from '@frontend/lib/utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import { GhostInput } from '../ui/ghost-input';
+import { CharacterCustomizationDialog } from './CharacterCustomizationDialog';
 
 interface Props {
   id: string;
@@ -40,19 +31,6 @@ interface Props {
   accentColor?: string;
   onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
 }
-
-const PREDEFINED_COLORS = [
-  { name: 'Default', value: '' },
-  { name: 'Red', value: '#ef4444' },
-  { name: 'Blue', value: '#3b82f6' },
-  { name: 'Green', value: '#22c55e' },
-  { name: 'Purple', value: '#a855f7' },
-  { name: 'Yellow', value: '#eab308' },
-  { name: 'Orange', value: '#f97316' },
-  { name: 'Cyan', value: '#06b6d4' },
-  { name: 'Pink', value: '#ec4899' },
-  { name: 'Slate', value: '#64748b' },
-];
 
 function CharacterHeader({
   id,
@@ -87,80 +65,29 @@ function CharacterHeader({
   return (
     <Card className="border-border bg-card overflow-hidden shadow-sm">
       <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start">
-        <Dialog open={isColorPickerOpen} onOpenChange={setIsColorPickerOpen}>
-          <DialogTrigger asChild>
-            <button className="group relative transition-transform hover:scale-105 active:scale-95">
-              <Avatar className="border-character-muted shadow-character-muted h-20 w-20 shrink-0 border-2 shadow-md transition-all">
-                <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
-                <AvatarFallback className="bg-muted text-xl font-bold">
-                  {name?.substring(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity group-hover:opacity-100">
-                <AppIcon name="Palette" size={24} className="text-character" />
-              </div>
-            </button>
-          </DialogTrigger>
-          <DialogContent
-            className="character-context border-white/10 bg-slate-950/95 text-white backdrop-blur-xl sm:max-w-md"
-            style={{ '--character-color': accentColor } as React.CSSProperties}
-          >
-            <DialogHeader>
-              <DialogTitle>Personalizar Personagem</DialogTitle>
-              <DialogDescription className="sr-only">
-                {t('customizeDescription') || 'Altere o avatar e a cor de destaque do personagem'}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="flex flex-col gap-6 py-4">
-              <div className="flex flex-col items-center gap-4">
-                <Label className="text-sm font-medium">Avatar</Label>
-                <ImageUpload
-                  currentUrl={avatarUrl}
-                  target="character"
-                  targetId={id}
-                  onUploadSuccess={(url: string) => onBasicInfoChange('avatarUrl', url)}
-                  size="lg"
-                />
-              </div>
+        <button
+          onClick={() => setIsColorPickerOpen(true)}
+          className="group relative transition-transform hover:scale-105 active:scale-95"
+        >
+          <Avatar className="border-character-muted shadow-character-muted h-20 w-20 shrink-0 border-2 shadow-md transition-all">
+            <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
+            <AvatarFallback className="bg-muted text-xl font-bold">
+              {name?.substring(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity group-hover:opacity-100">
+            <AppIcon name="Palette" size={24} className="text-character" />
+          </div>
+        </button>
 
-              <div className="flex flex-col gap-3">
-                <Label className="text-sm font-medium">Cor de Destaque</Label>
-                <div className="grid grid-cols-5 gap-3">
-                  {PREDEFINED_COLORS.map((color) => {
-                    const isSelected =
-                      color.value === accentColor || (!color.value && !accentColor);
-
-                    return (
-                      <button
-                        key={color.name}
-                        onClick={() => {
-                          onBasicInfoChange('accentColor' as keyof DnD5eCharacter, color.value);
-                        }}
-                        className={cn(
-                          'group relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all hover:scale-110',
-                          isSelected
-                            ? 'border-character ring-character/20 ring-2'
-                            : 'border-transparent',
-                        )}
-                        title={color.name}
-                      >
-                        <div
-                          className="h-7 w-7 rounded-full shadow-sm"
-                          style={{ backgroundColor: color.value || 'var(--primary)' }}
-                        />
-                        {isSelected && (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="h-1.5 w-1.5 rounded-full bg-white shadow-sm" />
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <CharacterCustomizationDialog
+          id={id}
+          avatarUrl={avatarUrl}
+          accentColor={accentColor}
+          onBasicInfoChange={onBasicInfoChange}
+          open={isColorPickerOpen}
+          onOpenChange={setIsColorPickerOpen}
+        />
 
         <div className="grid flex-1 grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Left Column: Core Stats */}

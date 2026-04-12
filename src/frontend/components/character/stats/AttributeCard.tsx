@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@frontend/components/ui/dialog';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
@@ -29,9 +30,10 @@ interface Props {
   label: string;
   value: number;
   onChange: (value: number) => void;
+  icon?: string;
 }
 
-export default function AttributeCard({ label, value, onChange }: Props) {
+export default function AttributeCard({ label, value, onChange, icon }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [tempValue, setTempValue] = useState(value);
   const tAttr = useTranslations('attributeCard');
@@ -67,6 +69,13 @@ export default function AttributeCard({ label, value, onChange }: Props) {
           className="group border-border bg-card hover:border-character relative flex w-24 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 p-4 shadow-sm transition-colors"
         >
           <div className="bg-character absolute top-0 h-1 w-full opacity-50 transition-colors group-hover:opacity-100" />
+
+          {icon && (
+            <div className="text-character-flare mb-1 opacity-60 transition-transform duration-300 group-hover:scale-110 group-hover:opacity-100">
+              <AppIcon name={icon} variant="game" size={24} />
+            </div>
+          )}
+
           <span className="text-muted-foreground mb-1 text-xs font-bold tracking-wider uppercase">
             {label}
           </span>

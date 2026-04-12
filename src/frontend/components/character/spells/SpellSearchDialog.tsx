@@ -32,7 +32,7 @@ interface Props {
 
 const PAGE_SIZE = 12;
 
-export default function SpellsDrawer({
+export default function SpellSearchDialog({
   isOpen,
   onClose,
   learnedSpells,

@@ -29,7 +29,12 @@ function SavingThrowsSection({ attributes, level, savingThrows, onSavingThrowCha
     <Card className="border-border bg-card">
       <CardHeader className="bg-muted/30 border-border border-b px-4 py-2">
         <div className="flex items-center gap-2">
-          <AppIcon name="Activity" size={14} className="text-character-flare" />
+          <AppIcon
+            name="shield-reflect"
+            variant="game"
+            size="lg"
+            className="text-character-flare"
+          />
           <CardTitle className="text-xs font-bold tracking-widest uppercase opacity-70">
             {tSection('title')}
           </CardTitle>
