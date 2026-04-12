@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
-import { cn } from '@frontend/lib/utils';
+import { cn, getStatColorClass } from '@frontend/lib/utils';
 
 import { calculateSavingThrow } from '@shared/systems/dnd5e/calculations';
 import { ATTRIBUTE_KEYS } from '@shared/systems/dnd5e/constants';
@@ -78,7 +78,7 @@ function SavingThrowsSection({ attributes, level, savingThrows, onSavingThrowCha
                     <span
                       className={cn(
                         'mx-2 cursor-help font-mono font-bold underline decoration-dotted underline-offset-4',
-                        isProficient ? 'text-foreground' : 'text-muted-foreground',
+                        getStatColorClass(finalValue),
                       )}
                     >
                       {sign}

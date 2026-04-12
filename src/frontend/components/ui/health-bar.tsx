@@ -25,7 +25,7 @@ export const HealthBar = React.forwardRef<HTMLDivElement, HealthBarProps>(
             style={{
               width: `${Math.min(hpPercentage, 100)}%`,
               zIndex: 10,
-              background: `linear-gradient(to right, var(--red-muted), var(--red))`,
+              background: `linear-gradient(to right, var(--red-flare), var(--red))`,
             }}
           >
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1),transparent)]" />

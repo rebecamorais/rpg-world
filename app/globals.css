@@ -57,18 +57,22 @@
 
   /* SYSTEM PALETTE TOKENS */
   --red: #ef4444;
+  --red-flare: color-mix(in srgb, var(--red), white 20%);
   --red-surface: color-mix(in srgb, var(--red), transparent 90%);
   --red-muted: color-mix(in srgb, var(--red), transparent 70%);
 
   --blue: #3b82f6;
+  --blue-flare: color-mix(in srgb, var(--blue), white 20%);
   --blue-surface: color-mix(in srgb, var(--blue), transparent 90%);
   --blue-muted: color-mix(in srgb, var(--blue), transparent 70%);
 
   --green: #22c55e;
+  --green-flare: color-mix(in srgb, var(--green), white 20%);
   --green-surface: color-mix(in srgb, var(--green), transparent 90%);
   --green-muted: color-mix(in srgb, var(--green), transparent 70%);
 
   --yellow: #eab308;
+  --yellow-flare: color-mix(in srgb, var(--yellow), white 20%);
   --yellow-surface: color-mix(in srgb, var(--yellow), transparent 90%);
   --yellow-muted: color-mix(in srgb, var(--yellow), transparent 70%);
 }
@@ -110,18 +114,22 @@
 
   /* System Colors */
   --color-red: var(--red);
+  --color-red-flare: var(--red-flare);
   --color-red-surface: var(--red-surface);
   --color-red-muted: var(--red-muted);
 
   --color-blue: var(--blue);
+  --color-blue-flare: var(--blue-flare);
   --color-blue-surface: var(--blue-surface);
   --color-blue-muted: var(--blue-muted);
 
   --color-green: var(--green);
+  --color-green-flare: var(--green-flare);
   --color-green-surface: var(--green-surface);
   --color-green-muted: var(--green-muted);
 
   --color-yellow: var(--yellow);
+  --color-yellow-flare: var(--yellow-flare);
   --color-yellow-surface: var(--yellow-surface);
   --color-yellow-muted: var(--yellow-muted);
 

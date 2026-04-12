@@ -17,6 +17,7 @@ import {
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
+import { cn, getStatColorClass } from '@frontend/lib/utils';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
 import rules from '@shared/systems/dnd5e/rules.json';
@@ -74,7 +75,9 @@ export default function AttributeCard({ label, value, onChange }: Props) {
             <TooltipTrigger asChild>
               <div className="flex flex-col items-center">
                 {/* Modificador principal */}
-                <span className="text-foreground mb-2 font-mono text-3xl font-bold">
+                <span
+                  className={cn('mb-2 font-mono text-3xl font-bold', getStatColorClass(modifier))}
+                >
                   {modifier >= 0 ? `+${modifier}` : modifier}
                 </span>
 

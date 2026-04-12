@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { cn } from '@frontend/lib/utils';
+import { cn, getStatColorClass } from '@frontend/lib/utils';
 
 import type { AttributeKey } from '@shared/systems/dnd5e';
 import { calculateSkillValue } from '@shared/systems/dnd5e/calculations';
@@ -105,7 +105,7 @@ function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
           <span
             className={cn(
               'mx-2 w-6 shrink-0 text-right font-mono font-bold',
-              skillData.isProficient ? 'text-foreground' : 'text-muted-foreground',
+              getStatColorClass(finalValue),
             )}
           >
             {sign}
