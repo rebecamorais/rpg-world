@@ -151,6 +151,27 @@
   h6 {
     @apply text-foreground font-bold tracking-tight;
   }
+
+  /* Ensure all clickable elements show the hand cursor */
+  button,
+  a,
+  input[type='button'],
+  input[type='submit'],
+  input[type='reset'],
+  input[type='checkbox'],
+  input[type='radio'],
+  [role='button'],
+  label,
+  select {
+    cursor: pointer;
+  }
+
+  /* Exceptions for disabled states */
+  button:disabled,
+  input:disabled,
+  [aria-disabled='true'] {
+    cursor: not-allowed;
+  }
 }
 
 @layer utilities {
