@@ -83,7 +83,7 @@ Para manter a modularidade e facilitar a manutenção, utilizamos aliases config
 | ----------------- | ----------------------------- | ----------------------------------------------------- |
 | `@/*`             | `src/*`                       | Acesso genérico à pasta source.                       |
 | `@tests/*`        | `tests/*`                     | Suítes de teste e mocks globais.                      |
-| `@api`            | `src/backend/index`           | Entrypoint principal da camada de API.                |
+| `@api`            | `src/backend/index`           | Entrypoint principal da camada de API. { getApi }     |
 | `@client`         | `src/frontend/lib/api-client` | Instância configurada do Supabase/Fetch client.       |
 | `@lib/*`          | `lib/*`                       | Utilitários agnósticos, tipos de banco e helpers.     |
 | `@shared/*`       | `shared/*`                    | Constantes e tipos compartilhados entre Front e Back. |

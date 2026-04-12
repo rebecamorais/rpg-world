@@ -2,6 +2,7 @@ import { makeCharactersApi } from '@backend/contexts/characters/interfaces/chara
 import { makeAuthApi } from '@backend/contexts/users/interfaces/auth.api';
 import { makeProfileApi } from '@backend/contexts/users/interfaces/profile.api';
 
+import { makeFeedbackApi } from './contexts/feedback/interfaces/feedback.api';
 import { makeLoreApi } from './contexts/lore/interfaces/lore.api';
 import { makeSpellsApi } from './contexts/spells/interfaces/spells.api';
 import { getContainer } from './shared/providers/get-container';
@@ -14,5 +15,6 @@ export const getApi = async () => {
     authApi: makeAuthApi(container.contexts.user),
     profileApi: makeProfileApi(container.contexts.user),
     spellsApi: makeSpellsApi(container.contexts.spells),
+    feedbackApi: makeFeedbackApi(container.contexts.feedback),
   };
 };

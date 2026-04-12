@@ -47,6 +47,8 @@
     "title": "RPG World",
     "en": "English",
     "pt": "Portuguese",
+    "contact": "Contact",
+    "contactTooltip": "Send your feedback",
     "footerMessage": "This software is free. View the code on <link>GitHub</link>"
   },
   "login": {
@@ -613,5 +615,24 @@
     "blades": "Sharpening blades...",
     "scrolls": "Reading ancient scrolls...",
     "battlefield": "Preparing the battlefield..."
+  },
+  "feedback": {
+    "title": "Talk to the Game Master",
+    "subtitle": "Have feedback, questions, or found a bug? We'd love to hear from you.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "typeLabel": "Message Type",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Which mimic bit you? Describe your issue or idea...",
+    "submit": "Cast Message",
+    "submitting": "Channeling...",
+    "success": "Message sent successfully! The Game Master received your call.",
+    "error": "Failed to send message. Try again after a short rest.",
+    "types": {
+      "bug": "Bug Report",
+      "feature": "Feature Request",
+      "feedback": "General Feedback",
+      "account": "Account / Access"
+    }
   }
 }

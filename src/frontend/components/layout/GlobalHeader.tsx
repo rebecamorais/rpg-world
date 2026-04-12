@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { getApi } from '@api';
 
 import LanguageSwitcher from '@frontend/components/LanguageSwitcher';
+import { HeaderSupportLink } from '@frontend/components/layout/HeaderSupportLink';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 
@@ -37,6 +38,7 @@ export default async function GlobalHeader() {
             </Button>
           </div>
         )}
+        <HeaderSupportLink />
         <LanguageSwitcher />
       </div>
     </header>

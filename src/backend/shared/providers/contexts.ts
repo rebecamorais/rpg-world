@@ -1,4 +1,5 @@
 import { createCharacterContext } from '@backend/contexts/characters';
+import { createFeedbackContext } from '@backend/contexts/feedback';
 import { createLoreContext } from '@backend/contexts/lore';
 import { createSpellsContext } from '@backend/contexts/spells';
 import { createUserContext } from '@backend/contexts/users';
@@ -10,6 +11,7 @@ export class Contexts {
   private _user: ReturnType<typeof createUserContext> | null = null;
   private _lore: ReturnType<typeof createLoreContext> | null = null;
   private _spells: ReturnType<typeof createSpellsContext> | null = null;
+  private _feedback: ReturnType<typeof createFeedbackContext> | null = null;
 
   constructor(
     private container: {
@@ -49,5 +51,12 @@ export class Contexts {
       this._spells = createSpellsContext(this.container.get('dbClient'));
     }
     return this._spells;
+  }
+
+  get feedback() {
+    if (!this._feedback) {
+      this._feedback = createFeedbackContext(this.container.get('dbClient'));
+    }
+    return this._feedback;
   }
 }

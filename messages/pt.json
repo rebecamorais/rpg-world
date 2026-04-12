@@ -47,6 +47,8 @@
     "title": "RPG World",
     "en": "Inglês",
     "pt": "Português",
+    "contact": "Contato",
+    "contactTooltip": "Envie seu feedback",
     "footerMessage": "Este software é livre. Veja o código no <link>GitHub</link>"
   },
   "login": {
@@ -613,5 +615,24 @@
     "blades": "Afiando lâminas...",
     "scrolls": "Lendo pergaminhos antigos...",
     "battlefield": "Preparando o campo de batalha..."
+  },
+  "feedback": {
+    "title": "Falar com o Mestre",
+    "subtitle": "Tem um feedback, dúvida ou encontrou um bug? Adoraríamos ouvir você.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "typeLabel": "Tipo de Mensagem",
+    "messageLabel": "Mensagem",
+    "messagePlaceholder": "Qual mímico te mordeu? Descreva o problema ou ideia...",
+    "submit": "Enviar Mensagem",
+    "submitting": "Canalizando...",
+    "success": "Mensagem enviada com sucesso! O Mestre recebeu seu chamado.",
+    "error": "Falha ao enviar mensagem. Tente novamente após um descanso curto.",
+    "types": {
+      "bug": "Relatório de Bug",
+      "feature": "Sugestão de Funcionalidade",
+      "feedback": "Feedback Geral",
+      "account": "Conta / Acesso"
+    }
   }
 }
