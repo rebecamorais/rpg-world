@@ -31,6 +31,8 @@ type CharacterContextType = ReturnType<typeof useCharacterEditor> & {
   handleLearnSpell: (id: string) => void;
   handleForgetSpell: (id: string) => void;
   handleTogglePrepared: (id: string, isPrepared: boolean) => void;
+  // Death saves management
+  handleDeathSavesChange: (successes: number, failures: number) => void;
 };
 
 const CharacterContext = createContext<CharacterContextType | null>(null);
@@ -132,6 +134,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       handleLearnSpell: learnSpell,
       handleForgetSpell: forgetSpell,
       handleTogglePrepared: togglePrepared,
+      handleDeathSavesChange: editor.handleDeathSavesChange,
     }),
     [
       editor,

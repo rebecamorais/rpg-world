@@ -17,54 +17,10 @@ import {
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
+import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
-import { cn } from '@frontend/lib/utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';
-
-interface NumberStepperProps {
-  value: number;
-  onChange: (value: number) => void;
-  min?: number;
-  max?: number;
-  label?: string;
-}
-
-function NumberStepper({ value, onChange, min = 0, max = 99, label }: NumberStepperProps) {
-  return (
-    <div className="flex items-center justify-between gap-4 py-1">
-      <span
-        className={cn(
-          'text-sm font-bold uppercase transition-opacity',
-          value === 0 ? 'opacity-40' : 'opacity-80',
-        )}
-      >
-        {label}
-      </span>
-      <div className="flex items-center gap-1 rounded-md border border-zinc-800 bg-zinc-900 p-0.5">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-6 w-6 rounded-sm p-0 transition-colors hover:bg-zinc-800"
-          onClick={() => onChange(Math.max(min, value - 1))}
-          disabled={value <= min}
-        >
-          <AppIcon name="Minus" size={12} />
-        </Button>
-        <span className="w-6 text-center text-sm font-bold">{value}</span>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-6 w-6 rounded-sm p-0 transition-colors hover:bg-zinc-800"
-          onClick={() => onChange(Math.min(max, value + 1))}
-          disabled={value >= max}
-        >
-          <AppIcon name="Plus" size={12} />
-        </Button>
-      </div>
-    </div>
-  );
-}
 
 interface CombatStatsDialogProps {
   character: DnD5eCharacter;
@@ -125,6 +81,13 @@ export const CombatStatsDialog = ({
                 className="h-9 border-zinc-800 bg-zinc-900 transition-colors focus:border-zinc-700"
               />
             </div>
+
+            <NumberStepper
+              label={t('tempHp') || 'Temp HP'}
+              value={character.hpTemp || 0}
+              onChange={(val) => onBasicInfoChange('hpTemp', val)}
+              max={2000}
+            />
           </div>
         </div>
 

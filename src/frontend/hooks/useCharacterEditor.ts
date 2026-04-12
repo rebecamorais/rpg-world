@@ -176,6 +176,18 @@ export function useCharacterEditor({
     setHasUnsavedChanges(true);
   }, []);
 
+  const handleDeathSavesChange = useCallback((successes: number, failures: number) => {
+    setError('');
+    setCharacter((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        deathSaves: { successes, failures },
+      } as DnD5eCharacter;
+    });
+    setHasUnsavedChanges(true);
+  }, []);
+
   return {
     character,
     error,
@@ -192,5 +204,6 @@ export function useCharacterEditor({
     handleSpellSlotsChange,
     handleSpellcastingSystemChange,
     handleHitDiceChange,
+    handleDeathSavesChange,
   };
 }

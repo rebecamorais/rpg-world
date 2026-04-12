@@ -9,6 +9,7 @@ import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Label } from '@frontend/components/ui/label';
+import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Progress } from '@frontend/components/ui/progress';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
@@ -130,14 +131,13 @@ function CharacterHeader({
                 >
                   {t('level')}
                 </Label>
-                <GhostInput
-                  id="char-level"
-                  type="number"
+                <NumberStepper
                   min={1}
                   max={20}
                   value={level || 1}
-                  onChange={(e) => onBasicInfoChange('level', parseInt(e.target.value) || 1)}
-                  className="text-character-flare h-8 w-12 text-center font-bold"
+                  onChange={(val) => onBasicInfoChange('level', val)}
+                  size="sm"
+                  containerClassName="py-0 gap-2"
                 />
               </div>
 

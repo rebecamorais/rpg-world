@@ -75,78 +75,6 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
   </div>
 );
 
-const DeathSaves = () => {
-  const [successes, setSuccesses] = React.useState(0);
-  const [failures, setFailures] = React.useState(0);
-
-  const toggleSuccess = (index: number) => {
-    if (successes === index + 1) {
-      setSuccesses(index);
-    } else {
-      setSuccesses(index + 1);
-    }
-  };
-
-  const toggleFailure = (index: number) => {
-    if (failures === index + 1) {
-      setFailures(index);
-    } else {
-      setFailures(index + 1);
-    }
-  };
-
-  return (
-    <div className="border-border/10 mt-2 flex items-center justify-center border-t pt-3 opacity-60 transition-opacity group-hover:opacity-100">
-      <div className="flex items-center gap-6">
-        {/* Successes (Green) */}
-        <div className="flex gap-2">
-          {[2, 1, 0].map((i) => (
-            <button
-              key={`succ-${i}`}
-              onClick={() => toggleSuccess(i)}
-              className={cn(
-                'h-3.5 w-3.5 rounded-full border-2 transition-all duration-300',
-                successes > i
-                  ? 'border-green bg-green shadow-[0_0_12px_var(--color-green-muted)]'
-                  : 'border-green-surface hover:border-green-muted',
-              )}
-            />
-          ))}
-        </div>
-
-        <AppIcon
-          name="Skull"
-          size={20}
-          className={cn(
-            'cursor-pointer text-zinc-600 transition-all duration-300 hover:scale-110 hover:text-white',
-            (successes > 0 || failures > 0) && 'text-zinc-400',
-          )}
-          onClick={() => {
-            setSuccesses(0);
-            setFailures(0);
-          }}
-        />
-
-        {/* Failures (Red) */}
-        <div className="flex gap-2">
-          {[0, 1, 2].map((i) => (
-            <button
-              key={`fail-${i}`}
-              onClick={() => toggleFailure(i)}
-              className={cn(
-                'h-3.5 w-3.5 rounded-full border-2 transition-all duration-300',
-                failures > i
-                  ? 'border-red bg-red shadow-[0_0_12px_var(--color-red-muted)]'
-                  : 'border-red-surface hover:border-red-muted',
-              )}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export const HealthPointsCard = React.forwardRef<HTMLDivElement, HealthPointsCardProps>(
   ({ currentHp, maxHp, tempHp, onHpChange, className, ...props }, ref) => {
     return (
@@ -160,7 +88,6 @@ export const HealthPointsCard = React.forwardRef<HTMLDivElement, HealthPointsCar
       >
         <HealthHeader />
         <HealthValues currentHp={currentHp} maxHp={maxHp} tempHp={tempHp} onHpChange={onHpChange} />
-        <DeathSaves />
       </Card>
     );
   },

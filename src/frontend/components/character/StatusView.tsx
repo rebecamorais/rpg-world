@@ -29,6 +29,7 @@ export default function StatusView() {
     handleSpellSlotsChange,
     handleSpellcastingSystemChange,
     handleHitDiceChange,
+    handleDeathSavesChange,
   } = useCharacterContext();
 
   if (!character) return null;
@@ -69,7 +70,9 @@ export default function StatusView() {
             attributes={character.attributes}
             level={character.level}
             savingThrows={character.savingThrowProficiencies}
+            deathSaves={character.deathSaves}
             onSavingThrowChange={handleSavingThrowChange}
+            onDeathSavesChange={handleDeathSavesChange}
           />
           <AttributesSection
             attributes={character.attributes}
