@@ -33,7 +33,7 @@ function SidebarContent() {
 
   return (
     <>
-      <div className="scrollbar-none flex flex-1 flex-col gap-8 overflow-y-auto pr-2">
+      <div className="flex flex-1 flex-col gap-8 pr-2">
         <div className="flex items-center gap-3 px-2">
           <Avatar className="ring-primary/20 h-8 w-8 rounded-lg border border-white/10 ring-2 transition-all hover:scale-105 active:scale-95">
             {avatarUrl ? (
@@ -86,7 +86,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="bg-sidebar border-border hidden h-full w-64 flex-col border-r px-6 pt-6 pb-2 sm:flex">
+      <aside className="bg-sidebar border-border hidden w-64 flex-col border-r px-6 pt-6 pb-2 sm:flex">
         <SidebarContent />
       </aside>
 
