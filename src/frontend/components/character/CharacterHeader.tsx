@@ -8,7 +8,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/ava
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { Progress } from '@frontend/components/ui/progress';
 
@@ -131,7 +130,7 @@ function CharacterHeader({
                 >
                   {t('level')}
                 </Label>
-                <Input
+                <GhostInput
                   id="char-level"
                   type="number"
                   min={1}
@@ -146,7 +145,7 @@ function CharacterHeader({
                 <Label className="text-muted-foreground text-xs font-bold tracking-widest whitespace-nowrap uppercase opacity-70">
                   {t('proficiencyBonus')}
                 </Label>
-                <div className="border-border bg-muted/30 text-character flex h-8 min-w-[32px] items-center justify-center rounded-md border px-2 font-mono text-sm font-bold transition-colors">
+                <div className="bg-muted/30 text-character flex h-8 min-w-[32px] items-center justify-center rounded-md border border-none px-2 font-mono text-sm font-bold transition-colors">
                   +{pb}
                 </div>
               </div>
@@ -162,7 +161,7 @@ function CharacterHeader({
                   {t('xp')}
                 </Label>
                 <div className="flex items-center gap-1 text-xs font-medium">
-                  <Input
+                  <GhostInput
                     id="char-xp"
                     type="number"
                     min={0}
@@ -199,7 +198,6 @@ function CharacterHeader({
                   onChange={(e) => onBasicInfoChange('race', e.target.value)}
                   placeholder={t('race')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
-                  showIcon={true}
                 />
               </div>
             </div>
@@ -218,7 +216,6 @@ function CharacterHeader({
                   onChange={(e) => onBasicInfoChange('class', e.target.value)}
                   placeholder={t('class')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 transition-all focus:ring-0"
-                  showIcon={true}
                 />
               </div>
             </div>
@@ -237,7 +234,6 @@ function CharacterHeader({
                   onChange={(e) => onBasicInfoChange('background', e.target.value)}
                   placeholder={t('background')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
-                  showIcon={true}
                 />
               </div>
             </div>
@@ -256,7 +252,6 @@ function CharacterHeader({
                   onChange={(e) => onBasicInfoChange('alignment', e.target.value)}
                   placeholder={t('alignment')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
-                  showIcon={true}
                 />
               </div>
             </div>

@@ -18,7 +18,7 @@ const GhostInput = React.forwardRef<HTMLInputElement, GhostInputProps>(
     ref,
   ) => {
     return (
-      <div className={cn('group relative flex items-center', containerClassName)}>
+      <div className={cn('group relative m-0 flex items-center', containerClassName)}>
         <Input
           ref={ref}
           style={{ color: useThemeColor ? 'var(--character-color)' : undefined, ...style }}

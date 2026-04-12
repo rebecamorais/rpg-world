@@ -53,98 +53,90 @@ const CombatHeader = ({
   const t = useTranslations('combatStats');
 
   return (
-    <CardHeader className="bg-muted/30 flex flex-row items-center justify-between border-b border-zinc-800/50 px-4 py-2">
-      <div className="flex flex-wrap items-center gap-4">
-        {/* Armor Class */}
-        <StatBadge
-          icon={
-            <AppIcon
-              name="shoulder-armor"
-              variant="game"
-              size="lg"
-              className="text-character-flare"
-            />
+    <CardHeader className="bg-muted/30 flex flex-row items-center justify-between gap-4 border-b border-zinc-800/50 px-4 py-2">
+      {/* Armor Class */}
+      <StatBadge
+        icon={
+          <AppIcon
+            name="shoulder-armor"
+            variant="game"
+            size="lg"
+            className="text-character-flare"
+          />
+        }
+        label={t('armorClass')}
+      >
+        <GhostInput
+          type="number"
+          value={character.ac ?? 0}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onBasicInfoChange('ac', parseInt(e.target.value) || 0)
           }
-          label={t('armorClass')}
-        >
-          <GhostInput
-            type="number"
-            value={character.ac ?? 0}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onBasicInfoChange('ac', parseInt(e.target.value) || 0)
-            }
-            className="h-auto w-10 p-0 text-left text-sm font-bold"
-          />
-        </StatBadge>
+          className="h-auto w-10 p-0 text-left text-sm font-bold"
+        />
+      </StatBadge>
 
-        {/* Initiative */}
-        <StatBadge
-          icon={<AppIcon name="stopwatch" variant="game" size="lg" className="text-orange-500" />}
-          label={t('initiative')}
-        >
-          <GhostInput
-            type="number"
-            value={character.initiative}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
-            }
-            className="h-auto w-10 p-0 text-left text-sm font-bold"
-          />
-        </StatBadge>
-
-        {/* Speed */}
-        <StatBadge
-          icon={
-            <AppIcon name="boot-prints" variant="game" size="lg" className="text-emerald-500" />
+      {/* Initiative */}
+      <StatBadge
+        icon={<AppIcon name="stopwatch" variant="game" size="lg" className="text-orange-500" />}
+        label={t('initiative')}
+      >
+        <GhostInput
+          type="number"
+          value={character.initiative}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
           }
-          label={t('speedUnit')}
-          reverse
-        >
-          <GhostInput
-            type="number"
-            value={character.speed || 30}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
-            }
-            className="h-auto w-10 p-0 text-left text-sm font-bold"
-          />
-        </StatBadge>
+          className="h-auto w-10 p-0 text-left text-sm font-bold"
+        />
+      </StatBadge>
 
-        {/* Hit Dice */}
-        <StatBadge
-          icon={<AppIcon name="dice-target" variant="game" size="lg" className="text-sky-400" />}
-          label={t('hitDiceShort')}
+      {/* Speed */}
+      <StatBadge
+        icon={<AppIcon name="boot-prints" variant="game" size="lg" className="text-emerald-500" />}
+        label={t('speedUnit')}
+        reverse
+      >
+        <GhostInput
+          type="number"
+          value={character.speed || 30}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
+          }
+          className="h-auto w-10 p-0 text-left text-sm font-bold"
+        />
+      </StatBadge>
+
+      {/* Hit Dice */}
+      <StatBadge
+        icon={<AppIcon name="dice-target" variant="game" size="lg" className="text-sky-400" />}
+        label={t('hitDiceShort')}
+      >
+        <Select
+          value={character.hitDice?.total || '1d8'}
+          onValueChange={(val) => onHitDiceChange(val)}
         >
-          <Select
-            value={character.hitDice?.total || '1d8'}
-            onValueChange={(val) => onHitDiceChange(val)}
-          >
-            <SelectTrigger className="h-auto border-none bg-transparent p-0 text-sm font-bold shadow-none focus:ring-0 [&>span]:line-clamp-none">
-              <SelectValue placeholder="1d8" />
-            </SelectTrigger>
-            <SelectContent className="min-w-[70px]">
-              {['d6', 'd8', 'd10', 'd12'].map((key) => (
-                <SelectItem key={key} value={`1${key}`} className="text-xs font-bold">
-                  {t(`diceOptions.${key}`)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </StatBadge>
-      </div>
+          <SelectTrigger className="h-auto border-none bg-transparent p-0 text-sm font-bold shadow-none focus:ring-0 [&>span]:line-clamp-none">
+            <SelectValue placeholder="1d8" />
+          </SelectTrigger>
+          <SelectContent className="min-w-[70px]">
+            {['d6', 'd8', 'd10', 'd12'].map((key) => (
+              <SelectItem key={key} value={`1${key}`} className="text-xs font-bold">
+                {t(`diceOptions.${key}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </StatBadge>
 
       <Dialog>
         <DialogTrigger asChild>
           <Button
             variant="ghost"
             size="icon"
-            className="border-character-muted hover:bg-character-surface hover:text-character-flare h-7 w-7 rounded-md border bg-transparent transition-all"
+            className="hover:border-character-muted/80 hover:bg-character-surface/10 hover:shadow-character-muted/30 h-10 w-10 rounded-full border border-zinc-800/50 bg-zinc-950/40 opacity-70 backdrop-blur-md transition-all duration-300 hover:opacity-100 hover:shadow-[0_0_15px_var(--character-muted)]"
           >
-            <AppIcon
-              name="Settings2"
-              size={14}
-              className="text-muted-foreground/60 transition-colors group-hover:text-white"
-            />
+            <AppIcon name="Settings2" size="sm" className="text-character-flare" />
           </Button>
         </DialogTrigger>
         <CombatStatsDialog

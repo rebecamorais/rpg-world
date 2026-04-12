@@ -92,7 +92,7 @@ export const CombatStatsDialog = ({
     >
       <DialogHeader className="border-b border-zinc-800 p-6 pb-4">
         <div className="flex items-center gap-2">
-          <AppIcon name="Settings2" size={16} className="text-zinc-400" />
+          <AppIcon name="Settings2" size="sm" className="text-zinc-400" />
           <DialogTitle className="text-xl font-bold text-zinc-100">
             {tm('titleConfig') || 'Combat Configuration'}
           </DialogTitle>
@@ -106,7 +106,7 @@ export const CombatStatsDialog = ({
         {/* Left Column: HP & Survival */}
         <div className="flex flex-col gap-6 p-6">
           <div className="flex items-center gap-2 pb-2">
-            <AppIcon name="Heart" size={16} className="text-red-500" />
+            <AppIcon name="Heart" size="sm" className="text-red-500" />
             <h4 className="text-xs font-black tracking-widest text-zinc-400 uppercase">
               {t('hitPoints') || 'Hit Points'}
             </h4>
@@ -131,7 +131,7 @@ export const CombatStatsDialog = ({
         {/* Right Column: Magic System */}
         <div className="flex flex-col gap-6 p-6">
           <div className="flex items-center gap-2 pb-2">
-            <AppIcon name="Sparkles" size={16} className="text-blue-500" />
+            <AppIcon name="Sparkles" size="sm" className="text-blue-500" />
             <h4 className="text-xs font-black tracking-widest text-zinc-400 uppercase">
               {tm('systemUsed') || 'Magic System'}
             </h4>

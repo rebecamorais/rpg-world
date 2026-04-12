@@ -82,7 +82,7 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8 opacity-60 hover:opacity-100">
-              <AppIcon name="Settings2" size={16} />
+              <AppIcon name="Settings2" size="sm" />
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
