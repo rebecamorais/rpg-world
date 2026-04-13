@@ -176,6 +176,7 @@
     "castingTime": "Tempo de Conjuramento",
     "range": "Alcance",
     "duration": "Duração",
+    "characterCount": "{count, plural, one {1 personagem pronto para aventura} other {# personagens prontos para aventura}}",
     "loadError": "Erro ao carregar personagens: {message}",
     "deleteDialogTitle": "Excluir personagem?",
     "deleteDialogDescription": "Tem certeza que deseja excluir o personagem {name}? Essa ação não poderá ser desfeita e todos os dados serão perdidos.",

@@ -105,9 +105,7 @@ export default function CharacterList() {
           <h2 className="text-foreground text-4xl font-black tracking-tighter">{t('title')}</h2>
           <p className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
             <span className="flex h-2 w-2 animate-pulse rounded-full bg-green-500" />
-            {characters.length === 1
-              ? '1 personagem pronto para aventura'
-              : `${characters.length} personagens prontos para aventura`}
+            {t('characterCount', { count: characters.length })}
           </p>
         </div>
       </div>

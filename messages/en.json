@@ -176,6 +176,7 @@
     "castingTime": "Casting Time",
     "range": "Range",
     "duration": "Duration",
+    "characterCount": "{count, plural, one {1 character ready for adventure} other {# characters ready for adventure}}",
     "loadError": "Error loading characters: {message}",
     "deleteDialogTitle": "Delete character?",
     "deleteDialogDescription": "Are you sure you want to delete the character {name}? This action cannot be undone and all data will be lost.",
