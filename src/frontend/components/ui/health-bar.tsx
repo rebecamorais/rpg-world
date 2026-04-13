@@ -17,31 +17,43 @@ export const HealthBar = React.forwardRef<HTMLDivElement, HealthBarProps>(
 
     return (
       <div ref={ref} className={cn('flex w-full flex-col gap-1.5', className)} {...props}>
-        {/* Container Principal (O "Trilho") */}
-        <div className="relative h-2.5 w-full overflow-hidden rounded-full border border-white/5 bg-zinc-900/50">
-          {/* 1. Barra de HP Normal */}
+        {/* Main Track (The Rail) */}
+        <div className="relative h-3 w-full overflow-hidden rounded-full border border-white/5 bg-zinc-950/80 shadow-inner">
+          {/* 1. Normal HP Bar */}
           <div
-            className="bg-red shadow-red-muted absolute top-0 left-0 h-full transition-all duration-500 ease-in-out"
+            className="absolute top-0 left-0 h-full transition-all duration-700 ease-in-out"
             style={{
               width: `${Math.min(hpPercentage, 100)}%`,
               zIndex: 10,
-              background: `linear-gradient(to right, var(--red-flare), var(--red))`,
+              background: `linear-gradient(to bottom, var(--red-flare), var(--red))`,
+              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), 0 0 12px var(--red-muted)',
             }}
           >
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1),transparent)]" />
+            {/* Shimmer/Highlights */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent" />
           </div>
 
-          {/* 2. Barra de Temp HP */}
+          {/* 2. Temp HP Bar */}
           {temp > 0 && (
             <div
-              className="shadow-yellow-muted absolute top-0 h-full transition-all duration-500 ease-in-out"
+              className="absolute top-0 h-full transition-all duration-700 ease-in-out"
               style={{
                 width: `${tempHpPercentage}%`,
                 zIndex: 20,
-                background: `linear-gradient(to right, var(--yellow-muted), var(--yellow))`,
+                background: `linear-gradient(to bottom, var(--yellow-muted), var(--yellow))`,
+                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 0 15px var(--yellow)',
               }}
             >
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.2),transparent)]" />
+              {/* Pattern/Texture for Temp HP to distinguish it */}
+              <div
+                className="absolute inset-0 opacity-20"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(45deg, rgba(255,255,255,0.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.3) 75%, transparent 75%, transparent)',
+                  backgroundSize: '8px 8px',
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent" />
             </div>
           )}
         </div>
@@ -49,4 +61,5 @@ export const HealthBar = React.forwardRef<HTMLDivElement, HealthBarProps>(
     );
   },
 );
+
 HealthBar.displayName = 'HealthBar';

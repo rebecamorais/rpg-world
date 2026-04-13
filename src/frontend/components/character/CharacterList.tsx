@@ -1,96 +1,79 @@
 'use client';
 
-import { useState } from 'react';
-
 import Link from 'next/link';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
-
-import { rpgWorldApi } from '@client';
 
 import { LoadingState } from '@frontend/components/shared/LoadingState';
-import { Badge } from '@frontend/components/ui/badge';
 import { Button } from '@frontend/components/ui/button';
-import { Card, CardContent } from '@frontend/components/ui/card';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { useCharactersContext } from '@frontend/context/CharactersContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
-import { useCharacters } from '@frontend/hooks/useCharacters';
-import { cn } from '@frontend/lib/utils';
 
-import type { CharacterSummary } from '@shared/types/character';
-
+import { CharacterCard } from './CharacterCard';
 import { DeleteCharacterDialog } from './DeleteCharacterDialog';
 
+/**
+ * Main dashboard component showing the list of adventure characters.
+ * Integrates with CharactersContext for shared state and operations.
+ */
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();
   const t = useTranslations('characters');
-  const queryClient = useQueryClient();
-  const { characters, isLoading, error } = useCharacters();
-
-  // Deletion logic
-  const [characterToDelete, setCharacterToDelete] = useState<CharacterSummary | null>(null);
-  const [confirmName, setConfirmName] = useState('');
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await rpgWorldApi.delete(`/api/characters/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['characters'] });
-      toast.success(t('deleteSuccess'));
-      setCharacterToDelete(null);
-      setConfirmName('');
-    },
-    onError: (err: Error) => {
-      toast.error(err.message || t('deleteError'));
-    },
-  });
-
-  const handleDelete = () => {
-    if (characterToDelete) {
-      deleteMutation.mutate(characterToDelete.id);
-    }
-  };
+  const {
+    characters,
+    isLoading,
+    error,
+    characterToDelete,
+    setCharacterToDelete,
+    confirmName,
+    setConfirmName,
+    handleDelete,
+    isDeleting,
+  } = useCharactersContext();
 
   if (!currentUser) return null;
 
   if (error) {
     return (
-      <div className="text-destructive p-6 text-center">
-        <p>{t('loadError', { message: error.message })}</p>
+      <div className="border-destructive/20 bg-destructive/5 rounded-2xl border p-8 text-center">
+        <AppIcon name="AlertTriangle" size={40} className="mx-auto mb-4 opacity-50" />
+        <p className="mb-2 text-lg font-bold">Ocorreu um erro</p>
+        <p className="text-sm opacity-80">{error.message}</p>
       </div>
     );
   }
 
   if (isLoading) {
-    return <LoadingState thematic />;
+    return (
+      <div className="flex min-h-[400px] items-center justify-center py-20">
+        <LoadingState thematic />
+      </div>
+    );
   }
 
   if (characters.length === 0) {
     return (
-      <div className="border-muted bg-card/30 flex min-h-[400px] flex-col items-center justify-center rounded-2xl border-2 border-dashed p-12 text-center backdrop-blur-sm">
-        <div className="relative mb-6">
-          <div className="bg-primary/20 absolute -inset-1 animate-pulse rounded-full blur-xl" />
-          <div className="bg-muted relative flex h-24 w-24 items-center justify-center rounded-full shadow-inner">
-            <AppIcon name="UserPlus" size={48} className="text-muted-foreground" />
+      <div className="border-muted/30 bg-card/20 flex min-h-[450px] flex-col items-center justify-center rounded-3xl border-2 border-dashed p-8 text-center backdrop-blur-md sm:p-12">
+        <div className="relative mb-8">
+          <div className="bg-primary/30 absolute -inset-4 animate-pulse rounded-full blur-2xl" />
+          <div className="bg-muted relative flex h-28 w-28 items-center justify-center rounded-full shadow-2xl">
+            <AppIcon name="UserPlus" size={56} className="text-muted-foreground opacity-40" />
           </div>
         </div>
-        <h3 className="text-foreground mb-3 text-2xl font-bold tracking-tight">
+        <h3 className="text-foreground mb-4 text-3xl font-black tracking-tighter">
           {t('emptyState')}
         </h3>
-        <p className="text-muted-foreground mx-auto mb-10 max-w-md text-base leading-relaxed">
-          {t('createFirstDescription') ||
-            'Comece sua jornada épica hoje. Crie seu primeiro personagem e prepare-se para a aventura.'}
+        <p className="text-muted-foreground mx-auto mb-10 max-w-sm text-base leading-relaxed font-medium opacity-70">
+          {t('createFirstDescription')}
         </p>
         <Button
           asChild
           size="lg"
-          className="shadow-primary/20 h-12 rounded-full px-10 text-base font-bold shadow-lg transition-all hover:scale-105 active:scale-95"
+          className="shadow-primary/20 h-14 rounded-full px-12 text-lg font-black shadow-2xl transition-all hover:scale-105 active:scale-95"
         >
           <Link href="/characters/new">
-            <AppIcon name="Plus" size={20} className="mr-2" />
+            <AppIcon name="Plus" size={24} className="mr-3" />
             {t('createFirst')}
           </Link>
         </Button>
@@ -99,44 +82,62 @@ export default function CharacterList() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-end justify-between border-b pb-4">
-        <div className="space-y-1">
-          <h2 className="text-foreground text-4xl font-black tracking-tighter">{t('title')}</h2>
-          <p className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
-            <span className="flex h-2 w-2 animate-pulse rounded-full bg-green-500" />
-            {t('characterCount', { count: characters.length })}
-          </p>
+    <div className="space-y-10">
+      {/* Header Section */}
+      <div className="border-muted/20 flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-2">
+          <h2 className="text-foreground text-4xl font-black tracking-tighter sm:text-5xl">
+            {t('title')}
+          </h2>
+          <div className="flex items-center gap-3">
+            <div className="flex h-5 items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 px-2.5 py-0.5">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+              <span className="text-[10px] font-black tracking-widest text-green-500/90 uppercase">
+                Online
+              </span>
+            </div>
+            <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-60">
+              {t('characterCount', { count: characters.length })}
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
-        {/* Create Character Action Card */}
+      <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-2">
+        {/* Create Character Action Card - Premium Design */}
         <Link
           href="/characters/new"
-          className="group border-muted bg-card/50 hover:border-primary/50 hover:bg-primary/5 hover:shadow-primary/10 relative flex h-full min-h-[160px] flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-500 hover:shadow-2xl"
+          className="group border-muted/30 bg-card/30 hover:border-primary/50 hover:bg-primary/5 relative flex h-full min-h-[180px] flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-500 hover:shadow-2xl sm:min-h-[220px]"
         >
-          <div className="from-primary/10 absolute inset-0 bg-gradient-to-br via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          {/* Animated Background Gradients */}
+          <div className="from-primary/10 absolute inset-0 bg-gradient-to-br via-transparent to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+          <div className="to-primary/5 absolute inset-0 bg-gradient-to-tl from-transparent via-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
 
-          <div className="bg-muted group-hover:bg-primary group-hover:shadow-primary/30 relative mb-4 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-90 group-hover:shadow-lg">
+          {/* Icon Container */}
+          <div className="bg-muted border-muted/10 group-hover:bg-primary group-hover:shadow-primary/40 relative mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border transition-all duration-700 group-hover:scale-110 group-hover:-rotate-12 group-hover:rounded-[2rem] group-hover:shadow-2xl">
             <AppIcon
               name="Plus"
-              size={28}
-              className="text-muted-foreground group-hover:text-primary-foreground transition-colors duration-500"
+              size={32}
+              className="text-muted-foreground group-hover:text-primary-foreground transition-all duration-500 group-hover:rotate-12"
             />
           </div>
-          <span className="text-muted-foreground group-hover:text-primary relative text-lg leading-tight font-bold tracking-tight transition-colors duration-500">
-            {t('createNew')}
-          </span>
+
+          <div className="relative text-center">
+            <span className="text-muted-foreground group-hover:text-primary text-xl font-black tracking-tighter transition-colors duration-500 sm:text-2xl">
+              {t('createNew')}
+            </span>
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-0 transition-all duration-500 group-hover:translate-y-1 group-hover:opacity-40">
+              Start your legend
+            </p>
+          </div>
+
+          {/* Decorative Corner */}
+          <div className="bg-primary/20 absolute -right-4 -bottom-4 h-12 w-12 rotate-45 opacity-0 transition-all duration-500 group-hover:opacity-100" />
         </Link>
 
         {/* Existing Character Cards */}
         {characters.map((character) => (
-          <CharacterCard
-            key={character.id}
-            character={character}
-            onDelete={() => setCharacterToDelete(character)}
-          />
+          <CharacterCard key={character.id} character={character} />
         ))}
       </div>
 
@@ -149,120 +150,8 @@ export default function CharacterList() {
           setCharacterToDelete(null);
           setConfirmName('');
         }}
-        isPending={deleteMutation.isPending}
+        isPending={isDeleting}
       />
-    </div>
-  );
-}
-
-function CharacterCard({
-  character,
-  onDelete,
-}: {
-  character: CharacterSummary;
-  onDelete: () => void;
-}) {
-  const tCommon = useTranslations('common');
-
-  return (
-    <div className="group relative h-full">
-      <Link href={`/system/${character.system}/character/${character.id}`} className="block h-full">
-        <Card
-          className={cn(
-            'relative h-full overflow-hidden border-2 transition-all duration-500 hover:translate-y-[-4px] hover:shadow-2xl',
-            'bg-card/50 backdrop-blur-md',
-          )}
-          style={{
-            borderColor: character.accentColor ? `${character.accentColor}33` : 'transparent',
-            boxShadow: character.accentColor
-              ? `0 10px 30px -15px ${character.accentColor}44`
-              : 'none',
-          }}
-        >
-          {/* Accent Color Indicator (Top Bar) */}
-          <div
-            className="absolute top-0 left-0 h-1.5 w-full opacity-70 transition-opacity group-hover:opacity-100"
-            style={{ backgroundColor: character.accentColor || 'hsl(var(--primary))' }}
-          />
-
-          <CardContent className="flex h-full flex-col p-6">
-            <div className="mb-4 flex flex-col items-start gap-1.5">
-              <div className="flex max-w-full items-center gap-2">
-                <h3
-                  className="text-foreground truncate text-2xl font-black transition-colors"
-                  style={{ color: character.accentColor }}
-                >
-                  {character.name}
-                </h3>
-                <Badge
-                  variant="secondary"
-                  className="bg-muted shrink-0 px-2 py-0.5 text-xs font-black tracking-widest uppercase opacity-80"
-                  style={{
-                    borderLeft: character.accentColor
-                      ? `2px solid ${character.accentColor}`
-                      : 'none',
-                  }}
-                >
-                  Nv {character.level}
-                </Badge>
-              </div>
-              <p className="text-muted-foreground line-clamp-1 text-sm font-semibold tracking-wide uppercase opacity-70">
-                {character.class || 'Aventureiro'}
-              </p>
-            </div>
-
-            <div className="border-muted/30 mt-auto flex items-center justify-between border-t pt-4">
-              <div className="text-muted-foreground flex items-center gap-2 text-xs font-bold tracking-widest uppercase opacity-60 transition-opacity group-hover:opacity-100">
-                <AppIcon
-                  name="Swords"
-                  size={16}
-                  style={{ color: character.accentColor || 'var(--primary)' }}
-                />
-                <span>{character.system.replace('_', ' ')}</span>
-              </div>
-              <div
-                className="flex h-9 w-9 items-center justify-center rounded-xl border opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100"
-                style={{
-                  backgroundColor: character.accentColor
-                    ? `${character.accentColor}1A`
-                    : 'var(--primary-10)',
-                  borderColor: character.accentColor
-                    ? `${character.accentColor}33`
-                    : 'var(--primary-20)',
-                  color: character.accentColor || 'var(--primary)',
-                }}
-              >
-                <AppIcon name="ChevronRight" size={20} />
-              </div>
-            </div>
-          </CardContent>
-
-          {/* Hover Glow Effect */}
-          <div
-            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-10"
-            style={{
-              background: `radial-gradient(circle at top right, ${character.accentColor || 'var(--primary)'}, transparent 70%)`,
-            }}
-          />
-        </Card>
-      </Link>
-
-      {/* Delete Action Overlay - Top Right */}
-      <div className="absolute top-4 right-4 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <Button
-          destroy
-          size="icon"
-          title={tCommon('delete')}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onDelete();
-          }}
-          className="h-9 w-9 rounded-xl shadow-lg transition-transform hover:scale-110 active:scale-95"
-        >
-          <AppIcon name="Trash2" size={18} />
-        </Button>
-      </div>
     </div>
   );
 }

@@ -53,9 +53,9 @@ const CombatHeader = ({
   const t = useTranslations('combatStats');
 
   return (
-    <CardHeader className="bg-muted/30 border-b border-zinc-800/50 px-3 py-3 md:px-4 md:py-2">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4">
-        <div className="grid grid-cols-2 items-center gap-2 md:flex md:flex-row md:gap-4">
+    <CardHeader className="border-b border-zinc-800/50 bg-zinc-950/20 px-4 py-4 backdrop-blur-md transition-colors hover:bg-zinc-950/30 md:px-6 md:py-3">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-6">
+        <div className="grid grid-cols-2 items-center gap-3 md:flex md:flex-row md:gap-6">
           {/* Armor Class */}
           <StatBadge
             icon={
@@ -63,7 +63,7 @@ const CombatHeader = ({
                 name="shoulder-armor"
                 variant="game"
                 size="lg"
-                className="text-character-flare"
+                className="text-character-flare animate-pulse"
               />
             }
             label={t('armorClass')}
@@ -74,7 +74,7 @@ const CombatHeader = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onBasicInfoChange('ac', parseInt(e.target.value) || 0)
               }
-              className="h-auto w-10 p-0 text-left text-sm font-bold"
+              className="h-auto w-10 p-0 text-left text-sm font-black transition-colors focus:text-white sm:text-base"
             />
           </StatBadge>
 
@@ -89,7 +89,7 @@ const CombatHeader = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
               }
-              className="h-auto w-10 p-0 text-left text-sm font-bold"
+              className="h-auto w-10 p-0 text-left text-sm font-black transition-colors focus:text-white sm:text-base"
             />
           </StatBadge>
 
@@ -107,7 +107,7 @@ const CombatHeader = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
               }
-              className="h-auto w-10 p-0 text-left text-sm font-bold"
+              className="h-auto w-10 p-0 text-left text-sm font-black transition-colors focus:text-white sm:text-base"
             />
           </StatBadge>
 
@@ -120,12 +120,16 @@ const CombatHeader = ({
               value={character.hitDice?.total || '1d8'}
               onValueChange={(val) => onHitDiceChange(val)}
             >
-              <SelectTrigger className="h-auto border-none bg-transparent p-0 text-sm font-bold shadow-none focus:ring-0 [&>span]:line-clamp-none">
+              <SelectTrigger className="h-auto border-none bg-transparent p-0 text-sm font-black shadow-none ring-offset-0 focus:ring-0 sm:text-base [&>span]:line-clamp-none">
                 <SelectValue placeholder="1d8" />
               </SelectTrigger>
-              <SelectContent className="min-w-[70px]">
+              <SelectContent className="min-w-[80px] border-zinc-800 bg-zinc-950/95 backdrop-blur-xl">
                 {['d6', 'd8', 'd10', 'd12'].map((key) => (
-                  <SelectItem key={key} value={`1${key}`} className="text-xs font-bold">
+                  <SelectItem
+                    key={key}
+                    value={`1${key}`}
+                    className="text-xs font-black tracking-widest text-white/70 uppercase hover:text-white"
+                  >
                     {t(`diceOptions.${key}`)}
                   </SelectItem>
                 ))}
@@ -140,7 +144,7 @@ const CombatHeader = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:border-character-muted/80 hover:bg-character-surface/10 hover:shadow-character-muted/30 h-10 w-10 rounded-full border border-zinc-800/50 bg-zinc-950/40 opacity-70 backdrop-blur-md transition-all duration-300 hover:opacity-100 hover:shadow-[0_0_15px_var(--character-muted)]"
+                className="hover:border-character-muted/80 hover:bg-character-surface/10 hover:shadow-character-muted/30 h-10 w-10 overflow-hidden rounded-xl border border-zinc-800/50 bg-zinc-950/60 opacity-60 backdrop-blur-xl transition-all duration-500 hover:opacity-100 hover:shadow-2xl"
               >
                 <AppIcon name="Settings2" size="sm" className="text-character-flare" />
               </Button>
@@ -174,8 +178,8 @@ const ResourceGrid = ({
   onSpellPointsChange,
   onSpellSlotsChange,
 }: ResourceGridProps) => (
-  <CardContent className="p-3 md:p-4">
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+  <CardContent className="p-4 sm:p-6">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <HealthPointsCard
         currentHp={character.hpCurrent ?? 0}
         maxHp={character.hpMax || 1}
@@ -202,7 +206,7 @@ function CombatStatsSection({
   onHitDiceChange,
 }: CombatStatsSectionProps) {
   return (
-    <Card className="border-border bg-card">
+    <Card className="overflow-hidden border-zinc-800/40 bg-zinc-950/20 shadow-2xl backdrop-blur-md">
       <CombatHeader
         character={character}
         onBasicInfoChange={onBasicInfoChange}
