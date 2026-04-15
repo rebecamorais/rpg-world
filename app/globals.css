@@ -102,6 +102,7 @@
   --color-primary-muted: var(--primary-muted);
   --color-primary-glow: var(--primary-glow);
 
+  --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-sidebar: var(--sidebar);
 

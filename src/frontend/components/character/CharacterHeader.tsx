@@ -196,7 +196,7 @@ function CharacterHeader({
                   id="char-race"
                   value={race || ''}
                   onChange={(e) => onBasicInfoChange('race', e.target.value)}
-                  placeholder={t('race')}
+                  placeholder={t('racePlaceholder')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
                 />
               </div>
@@ -214,7 +214,7 @@ function CharacterHeader({
                   id="char-class"
                   value={classNameStr || ''}
                   onChange={(e) => onBasicInfoChange('class', e.target.value)}
-                  placeholder={t('class')}
+                  placeholder={t('classPlaceholder')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 transition-all focus:ring-0"
                 />
               </div>
@@ -232,7 +232,7 @@ function CharacterHeader({
                   id="char-background"
                   value={background || ''}
                   onChange={(e) => onBasicInfoChange('background', e.target.value)}
-                  placeholder={t('background')}
+                  placeholder={t('backgroundPlaceholder')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
                 />
               </div>
@@ -250,7 +250,7 @@ function CharacterHeader({
                   id="char-alignment"
                   value={alignment || ''}
                   onChange={(e) => onBasicInfoChange('alignment', e.target.value)}
-                  placeholder={t('alignment')}
+                  placeholder={t('alignmentPlaceholder')}
                   className="bg-muted/10 group-hover:bg-muted/30 focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
                 />
               </div>

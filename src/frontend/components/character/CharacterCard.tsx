@@ -100,7 +100,19 @@ export function CharacterCard({ character }: CharacterCardProps) {
                   color: accentColor,
                 }}
               >
-                <AppIcon name="ChevronRight" size={18} />
+                <Button
+                  destroy
+                  size="icon"
+                  title={tCommon('delete')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setCharacterToDelete(character);
+                  }}
+                  className="h-8 w-8 rounded-full shadow-xl transition-transform active:scale-95 sm:h-9 sm:w-9 sm:rounded-xl"
+                >
+                  <AppIcon name="Trash2" size={16} />
+                </Button>
               </div>
             </div>
           </CardContent>
@@ -114,23 +126,6 @@ export function CharacterCard({ character }: CharacterCardProps) {
           />
         </Card>
       </Link>
-
-      {/* Delete Action - Floating Button for better mobile accessibility */}
-      <div className="absolute -top-2 -right-2 z-10 opacity-0 transition-all duration-300 group-hover:translate-y-2 group-hover:opacity-100 hover:scale-110 sm:top-4 sm:right-4 sm:group-hover:translate-y-0">
-        <Button
-          destroy
-          size="icon"
-          title={tCommon('delete')}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setCharacterToDelete(character);
-          }}
-          className="h-8 w-8 rounded-full shadow-xl transition-transform active:scale-95 sm:h-9 sm:w-9 sm:rounded-xl"
-        >
-          <AppIcon name="Trash2" size={16} />
-        </Button>
-      </div>
     </div>
   );
 }
