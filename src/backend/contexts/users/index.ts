@@ -50,7 +50,8 @@ export const createUserContext = (config: UserContextConfig): UserContext => {
     signUp: new SignUpUseCase(authRepository, config.emailService),
     requestPasswordReset: new RequestPasswordResetUseCase(authRepository, config.emailService),
     updatePassword: new UpdatePasswordUseCase(authRepository),
-    callbackExchange: new CallbackExchangeUseCase(authRepository),
+    callbackExchange: new CallbackExchangeUseCase(authRepository, profileRepository),
+
     signOut: new SignOutUseCase(authRepository),
     getProfile: new GetProfileUseCase(profileRepository),
     updateProfile: new UpdateProfileUseCase(profileRepository),
