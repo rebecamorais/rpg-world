@@ -21,7 +21,7 @@ export async function GET(req: Request) {
 
   if (!code) {
     return NextResponse.redirect(
-      new URL(`/auth/error?message=No+code+provided`, requestUrl.origin),
+      new URL(`/auth/error?message=no_code_provided`, requestUrl.origin),
     );
   }
 

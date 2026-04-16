@@ -16,21 +16,29 @@ import {
 
 export default function AuthErrorPage() {
   const searchParams = useSearchParams();
-  const message = searchParams.get('message') || 'Ocorreu um erro inesperado na autenticação.';
+  const errorCode = searchParams.get('message');
   const t = useTranslations('common');
+
+  const errorMessage = errorCode ? t(`errors.${errorCode}`) : t('errors.unknown');
 
   return (
     <div className="bg-background flex flex-1 items-center justify-center p-4">
       <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="text-red-400">Erro de Autenticação</CardTitle>
+          <CardTitle className="text-red-400">
+            {errorCode === 'no_code_provided'
+              ? t('errors.expired_link_title')
+              : t('errors.auth_error_title')}
+          </CardTitle>
           <CardDescription className="text-gray-400">
-            Não foi possível completar a operação.
+            {errorCode === 'no_code_provided'
+              ? t('errors.expired_link_description')
+              : t('errors.auth_error_description')}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 py-6">
           <p className="rounded-md border border-red-500/20 bg-red-500/10 p-3 text-center text-sm text-gray-300">
-            {message}
+            {errorMessage}
           </p>
           <Button asChild className="w-full">
             <Link href="/login">{t('back')}</Link>
