@@ -53,8 +53,8 @@
     "title": "RPG World",
     "en": "Inglês",
     "pt": "Português",
-    "contact": "Contato",
-    "contactTooltip": "Envie seu feedback",
+    "contact": "Bug",
+    "contactTooltip": "Reportar um Bug",
     "footerMessage": "Este software é livre. Veja o código no <link>GitHub</link>"
   },
   "login": {
