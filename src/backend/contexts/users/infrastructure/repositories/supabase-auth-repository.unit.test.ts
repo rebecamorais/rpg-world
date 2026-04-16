@@ -49,7 +49,7 @@ describe('SupabaseAuthRepository', () => {
     it('deve retornar null se houver erro ao buscar o usuário', async () => {
       vi.mocked(mockAuthClient.auth.getUser).mockResolvedValueOnce({
         data: { user: null },
-        error: mockAuthError('Auth error'),
+        error: mockAuthError('auth_error'),
       });
 
       const result = await repository.getSessionUser();

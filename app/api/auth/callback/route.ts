@@ -13,7 +13,7 @@ export async function GET(req: Request) {
   if (error || error_description) {
     return NextResponse.redirect(
       new URL(
-        `/auth/error?message=${encodeURIComponent(error_description || error || 'Auth error')}`,
+        `/auth/error?message=${encodeURIComponent(error_description || error || 'auth_error')}`,
         requestUrl.origin,
       ),
     );
