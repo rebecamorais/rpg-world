@@ -29,8 +29,14 @@
       "security_token_missing": "Please complete the security verification.",
       "security_verification_failed": "Security verification failed. Please try again.",
       "internal_configuration_error": "Internal configuration error. Contact support.",
-      "network_error_security_verification": "Network error during security verification."
+      "network_error_security_verification": "Network error during security verification.",
+      "no_code_provided": "Auth code was not provided by the provider.",
+      "expired_link_title": "Link Expired",
+      "expired_link_description": "The access link has expired or has already been used.",
+      "auth_error_title": "Authentication Error",
+      "auth_error_description": "We could not complete the operation at this time."
     },
+
     "save": "Save",
     "saving": "Saving...",
     "cancel": "Cancel",

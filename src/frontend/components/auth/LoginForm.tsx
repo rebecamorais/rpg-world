@@ -220,8 +220,7 @@ export default function LoginForm() {
         <Button
           type="button"
           variant="outline"
-          className="w-full cursor-not-allowed border-white/10 bg-white/5 text-gray-300 opacity-50 hover:bg-white/10 hover:text-white"
-          disabled
+          className="w-full border-white/10 bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white"
           onClick={handleGoogleSignIn}
         >
           <GoogleIcon />

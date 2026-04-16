@@ -4,10 +4,11 @@ import { Profile } from '../domain/Profile';
 import { ProfileRepository } from '../domain/ProfileRepository';
 import { GetProfileUseCase, UpdateProfileUseCase } from './update-profile.use-case';
 
-const mockProfileRepository = (): ProfileRepository => ({
-  getById: vi.fn(),
-  update: vi.fn(),
-});
+const mockProfileRepository = () =>
+  ({
+    getById: vi.fn(),
+    update: vi.fn(),
+  }) as unknown as ProfileRepository;
 
 describe('UpdateProfileUseCase', () => {
   it('deve chamar update no repositório com o perfil correto', async () => {

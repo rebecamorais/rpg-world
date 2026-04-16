@@ -24,6 +24,20 @@ export class SupabaseProfileRepository implements ProfileRepository {
     };
   }
 
+  async create(profile: Profile): Promise<void> {
+    const { error } = await this.dbClient.from('profile').insert({
+      id: profile.id,
+      username: profile.username,
+      full_name: profile.fullName,
+      avatar_url: profile.avatarUrl,
+      primary_color: profile.primaryColor,
+    });
+
+    if (error) {
+      throw new Error(`Failed to create profile: ${error.message}`);
+    }
+  }
+
   async update(profile: Profile): Promise<void> {
     const { error } = await this.dbClient
       .from('profile')

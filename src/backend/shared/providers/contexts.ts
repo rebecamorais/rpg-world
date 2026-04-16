@@ -2,13 +2,14 @@ import { createCharacterContext } from '@backend/contexts/characters';
 import { createFeedbackContext } from '@backend/contexts/feedback';
 import { createLoreContext } from '@backend/contexts/lore';
 import { createSpellsContext } from '@backend/contexts/spells';
-import { createUserContext } from '@backend/contexts/users';
+import { createAuthContext, createUserProfileContext } from '@backend/contexts/users';
 
 import type { ContainerRegistry } from './container';
 
 export class Contexts {
   private _character: ReturnType<typeof createCharacterContext> | null = null;
-  private _user: ReturnType<typeof createUserContext> | null = null;
+  private _auth: ReturnType<typeof createAuthContext> | null = null;
+  private _userProfile: ReturnType<typeof createUserProfileContext> | null = null;
   private _lore: ReturnType<typeof createLoreContext> | null = null;
   private _spells: ReturnType<typeof createSpellsContext> | null = null;
   private _feedback: ReturnType<typeof createFeedbackContext> | null = null;
@@ -26,15 +27,26 @@ export class Contexts {
     return this._character;
   }
 
-  get user() {
-    if (!this._user) {
-      this._user = createUserContext({
+  get auth() {
+    if (!this._auth) {
+      this._auth = createAuthContext({
         authClient: this.container.get('authClient'),
         dbClient: this.container.get('dbClient'),
         emailService: this.container.get('emailService'),
       });
     }
-    return this._user;
+    return this._auth;
+  }
+
+  get userProfile() {
+    if (!this._userProfile) {
+      this._userProfile = createUserProfileContext({
+        authClient: this.container.get('authClient'),
+        dbClient: this.container.get('dbClient'),
+        emailService: this.container.get('emailService'),
+      });
+    }
+    return this._userProfile;
   }
 
   get lore() {
