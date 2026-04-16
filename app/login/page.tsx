@@ -1,10 +1,20 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 import { getTranslations } from 'next-intl/server';
+
+import { getApi } from '@api';
 
 import LoginForm from '@frontend/components/auth/LoginForm';
 
 export default async function LoginPage() {
+  const { authApi } = await getApi();
+  const user = await authApi.getSessionUser();
+
+  if (user) {
+    redirect('/characters');
+  }
+
   const t = await getTranslations('common');
 
   return (

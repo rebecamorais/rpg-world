@@ -6,6 +6,7 @@ import { getApi } from '@api';
 
 import LanguageSwitcher from '@frontend/components/LanguageSwitcher';
 import { HeaderSupportLink } from '@frontend/components/layout/HeaderSupportLink';
+import UserMenu from '@frontend/components/layout/UserMenu';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 
@@ -13,6 +14,7 @@ export default async function GlobalHeader() {
   const tHome = await getTranslations('home');
   const tLogin = await getTranslations('login');
   const tRegister = await getTranslations('register');
+  const tCommon = await getTranslations('common');
 
   const { authApi } = await getApi();
   const user = await authApi.getSessionUser();
@@ -25,7 +27,7 @@ export default async function GlobalHeader() {
       </Link>
 
       <div className="flex items-center gap-4">
-        {!user && (
+        {!user ? (
           <div className="hidden items-center gap-2 sm:flex">
             <Button variant="ghost" asChild size="sm" className="text-gray-400 hover:text-white">
               <Link href="/login">{tLogin('submit')}</Link>
@@ -36,6 +38,18 @@ export default async function GlobalHeader() {
                 {tRegister('submit')}
               </Link>
             </Button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              asChild
+              size="sm"
+              className="hidden text-zinc-400 hover:text-white sm:flex"
+            >
+              <Link href="/characters">{tCommon('back')}</Link>
+            </Button>
+            <UserMenu />
           </div>
         )}
         <HeaderSupportLink />
