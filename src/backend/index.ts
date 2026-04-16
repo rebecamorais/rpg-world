@@ -12,8 +12,9 @@ export const getApi = async () => {
   return {
     charactersApi: makeCharactersApi(container.contexts.character),
     loreApi: makeLoreApi(container.contexts.lore),
-    authApi: makeAuthApi(container.contexts.user),
-    profileApi: makeProfileApi(container.contexts.user),
+    authApi: makeAuthApi(container.contexts.auth),
+    profileApi: makeProfileApi(container.contexts.userProfile),
+
     spellsApi: makeSpellsApi(container.contexts.spells),
     feedbackApi: makeFeedbackApi(container.contexts.feedback),
   };

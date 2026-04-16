@@ -22,7 +22,7 @@ export interface UserContextConfig {
   emailService: EmailService;
 }
 
-export interface UserContext {
+export interface AuthContext {
   getSession: GetSessionUserUseCase;
   signInWithMagicLink: SignInWithMagicLinkUseCase;
   signInWithPassword: SignInWithPasswordUseCase;
@@ -31,6 +31,9 @@ export interface UserContext {
   updatePassword: UpdatePasswordUseCase;
   callbackExchange: CallbackExchangeUseCase;
   signOut: SignOutUseCase;
+}
+
+export interface UserProfileContext {
   getProfile: GetProfileUseCase;
   updateProfile: UpdateProfileUseCase;
   uploadAvatar: UploadAvatarUseCase;
@@ -38,10 +41,9 @@ export interface UserContext {
 
 export type { User };
 
-export const createUserContext = (config: UserContextConfig): UserContext => {
+export const createAuthContext = (config: UserContextConfig): AuthContext => {
   const authRepository = new SupabaseAuthRepository(config.authClient, config.dbClient);
   const profileRepository = new SupabaseProfileRepository(config.dbClient);
-  const storageRepository = new SupabaseStorageRepository(config.dbClient);
 
   return {
     getSession: new GetSessionUserUseCase(authRepository),
@@ -51,8 +53,15 @@ export const createUserContext = (config: UserContextConfig): UserContext => {
     requestPasswordReset: new RequestPasswordResetUseCase(authRepository, config.emailService),
     updatePassword: new UpdatePasswordUseCase(authRepository),
     callbackExchange: new CallbackExchangeUseCase(authRepository, profileRepository),
-
     signOut: new SignOutUseCase(authRepository),
+  };
+};
+
+export const createUserProfileContext = (config: UserContextConfig): UserProfileContext => {
+  const profileRepository = new SupabaseProfileRepository(config.dbClient);
+  const storageRepository = new SupabaseStorageRepository(config.dbClient);
+
+  return {
     getProfile: new GetProfileUseCase(profileRepository),
     updateProfile: new UpdateProfileUseCase(profileRepository),
     uploadAvatar: new UploadAvatarUseCase(storageRepository),
