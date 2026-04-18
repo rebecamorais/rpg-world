@@ -1,0 +1,31 @@
+# RPG World
+
+> A premium Dungeons & Dragons 5e character management platform focused on performance, modern design, and clean architecture.
+
+## 📝 Overview
+**RPG World** is a modern web application for tabletop RPG players. It provides a streamlined interface to create, manage, and evolve D&D 5e characters, ensuring all rules and calculations are strictly followed while maintaining a beautiful, glassmorphism-inspired aesthetic.
+
+## 🛠️ Tech Stack
+- **Framework**: Next.js 16 (React 19)
+- **Language**: TypeScript (Strict typing)
+- **Styling**: Tailwind CSS v4 with a dynamic color proxy system.
+- **Backend & Auth**: Supabase (PostgreSQL, SSR Auth, Storage).
+- **Internationalization**: Full support for English and Portuguese (pt-BR) via `next-intl`.
+
+## 🏗️ Technical Architecture
+- **Clean Architecture**: Strict isolation between layers. Frontend communicates exclusively via the API layer.
+- **Server-First Mindset**: Prioritizes Server Components and server-side Data Fetching for enhanced security and performance.
+- **Design System**: Built on Tailwind v4 tokens, using semantic colors like `character-flare` and `character-surface`.
+
+## ✨ Core Features
+- Full character sheet management in a Single Page interface.
+- Automatic calculations for Modifiers, Proficiency Bonus, and Passive Perception.
+- Integrated Spellbook with automatic translation support.
+- User account-based persistence.
+
+## 🔗 Useful Links
+- [Official Website](https://rpgworldapp.com)
+- [Contribution Guide](https://github.com/rebecamorais/rpg-world/blob/main/CONTRIBUTING.md)
+- [Terms of Service](https://rpgworldapp.com/terms)
+- [Privacy Policy](https://rpgworldapp.com/privacy)
+- [Support](https://rpgworldapp.com/support)
