@@ -1,5 +1,5 @@
 ---
-name: skill-creator
+name: create-skill
 description: Create or organize Agent Skills in `.agent/skills/`. Use when the user wants new functionality, automation, or specialized reviewers (RPG or general).
 ---
 
