@@ -94,6 +94,7 @@ Para detalhes técnicos mais profundos, consulte nossos guias:
 
 - [🗺️ Mapa e Estrutura do Projeto](.docs/MAP_AND_STRUCTURE.md) - Guia de navegação por diretórios e arquitetura.
 - [🏆 Regras de Ouro & Princípios](.docs/RULES_REFERENCE.md) - Padrões de código, banco de dados e testes.
+- [🤝 Guia de Contribuição](CONTRIBUTING.md) - Como configurar o ambiente e padrões de desenvolvimento.
 
 ## 🛠️ Scripts Disponíveis
 
