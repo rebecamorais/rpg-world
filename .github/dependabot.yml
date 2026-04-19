@@ -1,47 +1,47 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "saturday"
-      time: "09:00"
-      timezone: "America/Sao_Paulo"
+      interval: 'weekly'
+      day: 'saturday'
+      time: '09:00'
+      timezone: 'America/Sao_Paulo'
     open-pull-requests-limit: 10
     reviewers:
-      - "rebecamorais"
+      - 'rebecamorais'
     assignees:
-      - "rebecamorais"
+      - 'rebecamorais'
     commit-message:
-      prefix: "chore(deps):"
+      prefix: 'chore(deps):'
     labels:
-      - "dependencies"
-      - "javascript"
+      - 'dependencies'
+      - 'javascript'
     groups:
       radix-ui:
         patterns:
-          - "@radix-ui/*"
+          - '@radix-ui/*'
       tailwind:
         patterns:
-          - "tailwindcss*"
-          - "@tailwindcss/*"
-          - "tailwind-merge"
-          - "postcss*"
+          - 'tailwindcss*'
+          - '@tailwindcss/*'
+          - 'tailwind-merge'
+          - 'postcss*'
       react-next:
         patterns:
-          - "react*"
-          - "next*"
+          - 'react*'
+          - 'next*'
       testing:
         patterns:
-          - "vitest*"
-          - "@vitest/*"
+          - 'vitest*'
+          - '@vitest/*'
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "saturday"
-      time: "09:00"
-      timezone: "America/Sao_Paulo"
+      interval: 'weekly'
+      day: 'saturday'
+      time: '09:00'
+      timezone: 'America/Sao_Paulo'
     commit-message:
-      prefix: "chore(deps):"
+      prefix: 'chore(deps):'
