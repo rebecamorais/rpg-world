@@ -36,6 +36,7 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.rpgworldapp.com',
+        pathname: '/**',
       },
     ],
   },
