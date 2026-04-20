@@ -34,11 +34,6 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [tempValues, setTempValues] = React.useState<Record<AttributeKey, number>>(attributes);
 
-  // Sync temp values when attributes change
-  React.useEffect(() => {
-    setTempValues(attributes);
-  }, [attributes]);
-
   const handleSave = () => {
     Object.entries(tempValues).forEach(([key, value]) => {
       onAttributeChange(key as AttributeKey, value);
@@ -79,7 +74,15 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
           </CardTitle>
         </div>
 
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog
+          open={isOpen}
+          onOpenChange={(open) => {
+            if (open) {
+              setTempValues(attributes);
+            }
+            setIsOpen(open);
+          }}
+        >
           <DialogTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8 opacity-60 hover:opacity-100">
               <AppIcon name="Settings2" size="sm" />
