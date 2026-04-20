@@ -37,17 +37,14 @@ jobs:
 
       # 1. Rodar Testes Unitários Primeiro (Fail Fast)
       - name: Run Unit Tests
-        run: npm run test
+        run: npm run test:unit
 
       # 2. Preparar Infraestrutura de Integração
       - name: Initialize Database Structure (Symlinks)
-        run: npm run setup
+        run: npm run infra sync
 
       - name: Start Supabase Test Environment
-        run: npm run db:test:start
-
-      - name: Run Migrations & Seed
-        run: npm run db:test:reset
+        run: npx supabase start --workdir database/db-test
 
       # 3. Rodar Testes de Integração
       - name: Run Integration Tests
