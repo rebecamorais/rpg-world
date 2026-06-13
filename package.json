@@ -52,7 +52,7 @@
     "react-hook-form": "^7.71.2",
     "resend": "^6.9.4",
     "sonner": "^2.0.7",
-    "tailwind-merge": "^3.5.0",
+    "tailwind-merge": "^3.6.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -60,7 +60,7 @@
     "@iconify/tailwind4": "^1.2.3",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4",
-    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/typography": "^0.5.20",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/node": "^20",
     "@types/nodemailer": "^7.0.11",
