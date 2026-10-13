@@ -20,16 +20,28 @@ const makeBlob = (type: string, sizeBytes: number): Blob => {
 describe('UploadAvatarUseCase', () => {
   it('deve fazer upload e retornar a URL pública', async () => {
     const repository = mockStorageRepository();
-    const publicUrl = 'https://cdn.example.com/avatars/user-1/avatar';
+    const publicUrl = 'https://cdn.example.com/avatars/user-1/avatar-v1.webp';
     (repository.upload as ReturnType<typeof vi.fn>).mockResolvedValue(publicUrl);
 
-    const useCase = new UploadAvatarUseCase(repository);
+    const useCase = new UploadAvatarUseCase(repository, () => 'v1');
     const file = makeBlob('image/webp', 1024);
 
     const result = await useCase.execute('user-1', file);
 
     expect(result).toBe(publicUrl);
-    expect(repository.upload).toHaveBeenCalledWith('avatars', 'user-1/avatar', file);
+    expect(repository.upload).toHaveBeenCalledWith('avatars', 'user-1/avatar-v1.webp', file);
+  });
+
+  it('grava cada upload num caminho novo, para o cache imutável do proxy nunca servir a imagem antiga', async () => {
+    const repository = mockStorageRepository();
+    const versions = ['v1', 'v2'];
+    const useCase = new UploadAvatarUseCase(repository, () => versions.shift()!);
+
+    await useCase.execute('user-1', makeBlob('image/png', 1024));
+    await useCase.execute('user-1', makeBlob('image/png', 1024));
+
+    const paths = (repository.upload as ReturnType<typeof vi.fn>).mock.calls.map((c) => c[1]);
+    expect(paths).toEqual(['user-1/avatar-v1.png', 'user-1/avatar-v2.png']);
   });
 
   it('deve lançar erro quando userId não for fornecido', async () => {

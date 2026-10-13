@@ -93,12 +93,7 @@ export default function ImageUpload({
           )}
         >
           {displayUrl ? (
-            <AvatarImage
-              src={displayUrl}
-              alt={t('currentAlt')}
-              className="object-cover"
-              autoTimestamp={!preview} // Don't timestamp blob previews
-            />
+            <AvatarImage src={displayUrl} alt={t('currentAlt')} className="object-cover" />
           ) : null}
           <AvatarFallback className="bg-muted text-2xl font-bold">🧙</AvatarFallback>
         </Avatar>

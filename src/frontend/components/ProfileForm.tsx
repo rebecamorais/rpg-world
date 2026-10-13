@@ -96,7 +96,7 @@ export default function ProfileForm() {
     }
   }, [profile, form]);
 
-  // Called by AvatarUpload when the upload completes — update the form field with a cache buster
+  // Called by AvatarUpload when the upload completes — the URL is versioned, so it is used as is
   const handleAvatarUploadSuccess = (url: string) => {
     form.setValue('avatarUrl', url);
     queryClient.invalidateQueries({ queryKey: ['profile'] });

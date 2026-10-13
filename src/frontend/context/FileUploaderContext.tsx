@@ -16,7 +16,6 @@ interface FileUploaderContextType {
   upload: (params: UploadParams) => Promise<{ url: string }>;
   isUploading: boolean;
   error: string | null;
-  lastUploadTimestamp: number;
 }
 
 const FileUploaderContext = createContext<FileUploaderContextType | undefined>(undefined);
@@ -41,7 +40,6 @@ const getEndpoint = (target: UploadTarget, id?: string): string => {
 export function FileUploaderProvider({ children }: { children: ReactNode }) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [lastUploadTimestamp, setLastUploadTimestamp] = useState<number>(() => Date.now());
 
   const upload = async ({ file, target, id }: UploadParams): Promise<{ url: string }> => {
     setIsUploading(true);
@@ -64,7 +62,6 @@ export function FileUploaderProvider({ children }: { children: ReactNode }) {
       }
 
       const data = await res.json();
-      setLastUploadTimestamp(Date.now());
       return data as { url: string };
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown upload error';
@@ -77,7 +74,7 @@ export function FileUploaderProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <FileUploaderContext.Provider value={{ upload, isUploading, error, lastUploadTimestamp }}>
+    <FileUploaderContext.Provider value={{ upload, isUploading, error }}>
       {children}
     </FileUploaderContext.Provider>
   );

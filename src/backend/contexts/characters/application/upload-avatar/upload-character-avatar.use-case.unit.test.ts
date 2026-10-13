@@ -23,10 +23,10 @@ describe('UploadCharacterAvatarUseCase', () => {
     storage = {
       upload: vi
         .fn()
-        .mockResolvedValue('https://images.test/avatars/owner-1/characters/char-1.png'),
+        .mockResolvedValue('https://images.test/avatars/owner-1/characters/char-1-v1.png'),
       download: vi.fn(),
     };
-    useCase = new UploadCharacterAvatarUseCase(storage, characterRepo);
+    useCase = new UploadCharacterAvatarUseCase(storage, characterRepo, () => 'v1');
     await characterRepo.save(
       new DnD5eCharacter({
         id: 'char-1',
@@ -44,10 +44,21 @@ describe('UploadCharacterAvatarUseCase', () => {
 
     expect(storage.upload).toHaveBeenCalledWith(
       'avatars',
-      'owner-1/characters/char-1.png',
+      'owner-1/characters/char-1-v1.png',
       expect.any(Blob),
     );
-    expect(url).toContain('char-1.png');
+    expect(url).toContain('char-1-v1.png');
+  });
+
+  it('grava cada upload num caminho novo, para o cache imutável do proxy nunca servir a imagem antiga', async () => {
+    const versions = ['v1', 'v2'];
+    useCase = new UploadCharacterAvatarUseCase(storage, characterRepo, () => versions.shift()!);
+
+    await useCase.execute('char-1', 'owner-1', image());
+    await useCase.execute('char-1', 'owner-1', image());
+
+    const paths = vi.mocked(storage.upload).mock.calls.map((c) => c[1]);
+    expect(paths).toEqual(['owner-1/characters/char-1-v1.png', 'owner-1/characters/char-1-v2.png']);
   });
 
   it('proíbe upload no personagem de outro usuário', async () => {

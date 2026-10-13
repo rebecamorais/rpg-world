@@ -1,4 +1,5 @@
 import { StorageRepository } from '@backend/shared/domain/StorageRepository';
+import { AssetVersionGenerator, newAssetVersion } from '@backend/shared/domain/asset-version';
 
 import { UserError, UserErrorCodes } from '../domain/UserError';
 
@@ -7,7 +8,10 @@ export const MAX_AVATAR_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 export const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export class UploadAvatarUseCase {
-  constructor(private readonly storageRepository: StorageRepository) {}
+  constructor(
+    private readonly storageRepository: StorageRepository,
+    private readonly newVersion: AssetVersionGenerator = newAssetVersion,
+  ) {}
 
   async execute(userId: string, file: Blob): Promise<string> {
     if (!userId) {
@@ -22,10 +26,11 @@ export class UploadAvatarUseCase {
       throw new UserError(UserErrorCodes.AVATAR_UPLOAD_INVALID_TYPE);
     }
 
-    const path = `${userId}/avatar`;
+    // Versioned path: the proxy caches images as immutable, so each upload needs a new URL.
+    // The previous file is kept because the new URL is only saved when the profile form is.
+    const extension = file.type.split('/')[1];
+    const path = `${userId}/avatar-${this.newVersion()}.${extension}`;
 
-    const publicUrl = await this.storageRepository.upload(AVATAR_BUCKET, path, file);
-
-    return publicUrl;
+    return this.storageRepository.upload(AVATAR_BUCKET, path, file);
   }
 }
