@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
 
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { Spell } from '@frontend/types/spells';
 
 export type CharacterSpell = Spell;
@@ -15,6 +16,8 @@ export function useCharacterSpells(
   const queryToKey = ['character-spells', characterId];
   const queryClient = useQueryClient();
   const locale = useLocale();
+  const t = useTranslations('spellsDrawer.toasts');
+  const { getErrorMessage } = useErrorMessage();
 
   const {
     data: spells = [],
@@ -43,13 +46,13 @@ export function useCharacterSpells(
       // Optimistic or simple refetch
       queryClient.invalidateQueries({ queryKey: queryToKey });
 
-      if (variables.action === 'learn') toast.success('Magia aprendida!');
-      if (variables.action === 'forget') toast.success('Magia esquecida.');
-      if (variables.action === 'prepare') toast.success('Magia preparada.');
-      if (variables.action === 'unprepare') toast.success('Magia não preparada.');
+      if (variables.action === 'learn') toast.success(t('learned'));
+      if (variables.action === 'forget') toast.success(t('forgotten'));
+      if (variables.action === 'prepare') toast.success(t('prepared'));
+      if (variables.action === 'unprepare') toast.success(t('unprepared'));
     },
     onError: (error: Error) => {
-      toast.error(`Falha ao atualizar magia: ${error.message}`);
+      toast.error(getErrorMessage(error));
     },
   });
 

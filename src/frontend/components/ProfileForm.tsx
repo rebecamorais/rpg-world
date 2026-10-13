@@ -96,16 +96,11 @@ export default function ProfileForm() {
     }
   }, [profile, form]);
 
-  // Called by AvatarUpload when the upload completes — update the form field with a cache buster
+  // Called by AvatarUpload when the upload completes — the URL is versioned, so it is used as is
   const handleAvatarUploadSuccess = (url: string) => {
     form.setValue('avatarUrl', url);
     queryClient.invalidateQueries({ queryKey: ['profile'] });
     toast.success(t('saveSuccess'));
-  };
-
-  const handleAvatarUploadError = (err: unknown) => {
-    const errorCode = err instanceof Error ? err.message : 'unknown';
-    toast.error(getMessage(errorCode));
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -149,7 +144,6 @@ export default function ProfileForm() {
                 currentUrl={avatarUrl}
                 target="profile"
                 onUploadSuccess={handleAvatarUploadSuccess}
-                onUploadError={handleAvatarUploadError}
                 size="lg"
               />
             </div>

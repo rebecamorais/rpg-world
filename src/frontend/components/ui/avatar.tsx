@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 
-import { useFileUploader } from '@frontend/context/FileUploaderContext';
 import { cn } from '@frontend/lib/utils';
 
 const Avatar = React.forwardRef<
@@ -19,33 +18,18 @@ const Avatar = React.forwardRef<
 ));
 Avatar.displayName = AvatarPrimitive.Root.displayName;
 
-interface AvatarImageProps extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image> {
-  autoTimestamp?: boolean;
-}
-
+// Uploaded images get a new versioned URL on every upload, so the src is used as is and the
+// browser can keep the proxy's long-lived cache.
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Image>,
-  AvatarImageProps
->(({ className, src, autoTimestamp = true, ...props }, ref) => {
-  const { lastUploadTimestamp } = useFileUploader();
-
-  const timestampedSrc = React.useMemo(() => {
-    if (!src || !autoTimestamp || typeof src !== 'string') return src;
-    // Don't append if it's a data URL or already has a similar timestamp (optional)
-    if (src.startsWith('data:')) return src;
-
-    return `${src}${src.includes('?') ? '&' : '?'}t=${lastUploadTimestamp}`;
-  }, [src, autoTimestamp, lastUploadTimestamp]);
-
-  return (
-    <AvatarPrimitive.Image
-      ref={ref}
-      className={cn('aspect-square h-full w-full', className)}
-      src={timestampedSrc}
-      {...props}
-    />
-  );
-});
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
+>(({ className, ...props }, ref) => (
+  <AvatarPrimitive.Image
+    ref={ref}
+    className={cn('aspect-square h-full w-full', className)}
+    {...props}
+  />
+));
 AvatarImage.displayName = AvatarPrimitive.Image.displayName;
 
 const AvatarFallback = React.forwardRef<

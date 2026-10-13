@@ -1,22 +1,26 @@
+import { useCallback } from 'react';
+
 import { useTranslations } from 'next-intl';
 
+import { errorCodeOf, translateErrorCode } from '@frontend/lib/error-message';
+
+/**
+ * Translates error codes returned by the backend (keys of `common.errors`).
+ * Unknown codes and unexpected errors show the generic `common.errors.unknown` message.
+ */
 export function useErrorMessage() {
   const t = useTranslations('common');
 
-  const getMessage = (errorCode: string | null | undefined): string => {
-    if (!errorCode) return t('errors.unknown');
+  const getMessage = useCallback(
+    (errorCode: string | null | undefined): string => translateErrorCode(t, errorCode),
+    [t],
+  );
 
-    // Remove any context prefix if needed (though our keys match exactly)
-    // The keys in pt.json are like "auth_error_signup_duplicate_email"
-    // and our error codes are exactly the same.
+  /** Message for an error thrown by the API client or a mutation. */
+  const getErrorMessage = useCallback(
+    (err: unknown): string => getMessage(errorCodeOf(err)),
+    [getMessage],
+  );
 
-    if (t.has(`errors.${errorCode}`)) {
-      return t(`errors.${errorCode}`);
-    }
-
-    // Default fallback to the code itself if translation is missing
-    return errorCode;
-  };
-
-  return { getMessage };
+  return { getMessage, getErrorMessage };
 }

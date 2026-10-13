@@ -86,7 +86,7 @@ describe('auth schemas', () => {
 
 describe('submitFeedbackSchema', () => {
   it('aceita só tipos conhecidos', () => {
-    const base = { email: 'a@b.co', message: 'Mensagem longa o bastante' };
+    const base = { email: 'a@b.co', turnstileToken: 'tok', message: 'Mensagem longa o bastante' };
     expect(submitFeedbackSchema.parse({ ...base, type: 'bug' }).type).toBe(FeedbackType.BUG);
     expect(submitFeedbackSchema.safeParse({ ...base, type: 'spam' }).success).toBe(false);
   });

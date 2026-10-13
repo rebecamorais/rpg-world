@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { requestPasswordResetAction } from '@frontend/actions/auth/request-password-reset-action';
+import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -34,6 +35,12 @@ export default function ForgotPasswordForm() {
   const t = useTranslations('forgotPassword');
   const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
+  const {
+    token: turnstileToken,
+    setToken: setTurnstileToken,
+    resetKey: turnstileKey,
+    reset: resetTurnstile,
+  } = useTurnstile();
 
   const schema = z.object({
     email: z.string().email({ message: t('emailLabel') }), // Simplificado para usar a label como erro se falhar zod
@@ -47,15 +54,22 @@ export default function ForgotPasswordForm() {
   });
 
   const onSubmit = async (data: Values) => {
+    if (!turnstileToken) {
+      toast.error(getMessage('security_token_missing'));
+      return;
+    }
+
     try {
-      const result = await requestPasswordResetAction(data.email);
+      const result = await requestPasswordResetAction(data.email, turnstileToken);
       if (result.success) {
         setIsSuccess(true);
       } else {
         toast.error(getMessage(result.error));
+        resetTurnstile();
       }
     } catch {
-      toast.error('Erro inesperado');
+      toast.error(getMessage(null));
+      resetTurnstile();
     }
   };
 
@@ -104,9 +118,11 @@ export default function ForgotPasswordForm() {
                 </FormItem>
               )}
             />
+            <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
+
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting || !turnstileToken}
               className="mt-2 w-full bg-blue-600 font-semibold transition-all hover:bg-blue-700"
             >
               {form.formState.isSubmitting ? t('processing') : t('submit')}

@@ -2,9 +2,23 @@ import type { NextConfig } from 'next';
 
 import createNextIntlPlugin from 'next-intl/plugin';
 
+import { securityHeaders } from './shared/http/security-headers';
+
 const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
 const nextConfig: NextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders({
+          supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+          isDev: process.env.NODE_ENV === 'development',
+          vercelEnv: process.env.VERCEL_ENV,
+        }),
+      },
+    ];
+  },
   async rewrites() {
     return [
       {

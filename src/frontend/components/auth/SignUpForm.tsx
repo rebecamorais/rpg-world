@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import Link from 'next/link';
 
@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { signUpAction } from '@frontend/actions/auth/sign-up-action';
+import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -30,26 +31,17 @@ import {
 import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
-declare global {
-  interface Window {
-    onloadTurnstileCallback: () => void;
-    turnstile: {
-      render: (container: string | HTMLElement, options: Record<string, unknown>) => string;
-      reset: (widgetId: string) => void;
-      remove: (widgetId: string) => void;
-      getResponse: (widgetId: string) => string;
-    };
-  }
-}
-
 export default function SignUpForm() {
   const t = useTranslations('register');
   const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const [widgetId, setWidgetId] = useState<string | null>(null);
-  const turnstileRef = useRef<HTMLDivElement>(null);
+  const {
+    token: turnstileToken,
+    setToken: setTurnstileToken,
+    resetKey: turnstileKey,
+    reset: resetTurnstile,
+  } = useTurnstile();
 
   const signUpSchema = z
     .object({
@@ -68,58 +60,6 @@ export default function SignUpForm() {
     resolver: zodResolver(signUpSchema),
     defaultValues: { email: '', password: '', confirmPassword: '' },
   });
-
-  useEffect(() => {
-    console.log('Turnstile useEffect mounted');
-    let isMounted = true;
-    let currentWidgetId: string | null = null;
-
-    const renderTurnstile = () => {
-      if (!isMounted) return;
-      if (turnstileRef.current && window.turnstile && !currentWidgetId) {
-        try {
-          currentWidgetId = window.turnstile.render(turnstileRef.current, {
-            sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '',
-            callback: (token: string) => setTurnstileToken(token),
-            'expired-callback': () => setTurnstileToken(null),
-            'error-callback': () => setTurnstileToken(null),
-          });
-          setWidgetId(currentWidgetId);
-        } catch (e) {
-          console.warn('Turnstile render error (likely already rendered):', e);
-        }
-      }
-    };
-
-    // Checa se o script já foi adicionado por outra instância ou navegação
-    const SCRIPT_ID = 'cloudflare-turnstile-script';
-    let script = document.getElementById(SCRIPT_ID) as HTMLScriptElement | null;
-
-    if (window.turnstile) {
-      renderTurnstile();
-    } else if (script) {
-      script.addEventListener('load', renderTurnstile);
-    } else {
-      script = document.createElement('script');
-      script.id = SCRIPT_ID;
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-      script.async = true;
-      script.defer = true;
-      script.onload = renderTurnstile;
-      document.head.appendChild(script);
-    }
-
-    return () => {
-      isMounted = false;
-      if (currentWidgetId && window.turnstile) {
-        try {
-          window.turnstile.remove(currentWidgetId);
-        } catch (e) {
-          console.error('Error removing Turnstile widget:', e);
-        }
-      }
-    };
-  }, []);
 
   const onSubmit = useCallback(
     async (data: SignUpValues) => {
@@ -143,17 +83,13 @@ export default function SignUpForm() {
           const localizedMsg = getMessage(errorCode);
 
           toast.error(localizedMsg);
-          // Reset turnstile on error
-          if (widgetId && window.turnstile) {
-            window.turnstile.reset(widgetId);
-          }
-          setTurnstileToken(null);
+          resetTurnstile();
         }
       } catch {
         toast.error(tCommon('errors.unknown'));
       }
     },
-    [turnstileToken, t, widgetId, getMessage, tCommon],
+    [turnstileToken, t, resetTurnstile, getMessage, tCommon],
   );
 
   if (isSuccess) {
@@ -240,7 +176,7 @@ export default function SignUpForm() {
               )}
             />
 
-            <div ref={turnstileRef} className="my-2 flex justify-center" />
+            <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
 
             <Button
               type="submit"

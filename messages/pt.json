@@ -48,9 +48,9 @@
       "expired_link_title": "Link Expirado",
       "expired_link_description": "O link de acesso expirou ou já foi utilizado.",
       "auth_error_title": "Erro de Autenticação",
-      "auth_error_description": "Não foi possível completar a operação no momento."
+      "auth_error_description": "Não foi possível completar a operação no momento.",
+      "security_widget_unavailable": "Não foi possível carregar a verificação de segurança. Desative bloqueadores de conteúdo para este site ou recarregue a página."
     },
-
     "save": "Salvar",
     "saving": "Salvando...",
     "cancel": "Cancelar",
@@ -122,6 +122,12 @@
     "errors": {
       "invalidSecurityToken": "Token de segurança inválido ou expirado.",
       "signUpFailed": "Falha ao criar conta. Tente novamente mais tarde."
+    },
+    "confirm": {
+      "title": "Confirmando...",
+      "errorTitle": "Erro na Autenticação",
+      "waiting": "Aguarde um momento enquanto validamos seu acesso.",
+      "redirecting": "Redirecionando para login..."
     }
   },
   "landing": {
@@ -293,7 +299,13 @@
     "noSpellsFound": "Nenhuma magia encontrada.",
     "loadingSpells": "Canalizando magias...",
     "clearFilters": "Limpar todos os filtros",
-    "pagination": "Mostrando {count} de {total} magias"
+    "pagination": "Mostrando {count} de {total} magias",
+    "toasts": {
+      "learned": "Magia aprendida!",
+      "forgotten": "Magia esquecida.",
+      "prepared": "Magia preparada.",
+      "unprepared": "Magia não preparada."
+    }
   },
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",
@@ -522,7 +534,8 @@
     "processing": "Atualizando...",
     "successTitle": "Senha alterada! 🎉",
     "successDescription": "Sua senha foi redefinida com sucesso. Você já pode fazer login.",
-    "login": "Fazer Login"
+    "login": "Fazer Login",
+    "sessionNotFound": "Sessão de redefinição não encontrada. Tente o link do e-mail novamente."
   },
   "spellsData": {
     "schools": {
@@ -568,7 +581,6 @@
       "S": "Somática",
       "M": "Material"
     },
-
     "ranges": {
       "self": "Pessoal",
       "touch": "Toque",

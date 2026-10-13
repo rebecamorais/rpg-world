@@ -1,15 +1,20 @@
 import { useRouter } from 'next/navigation';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
+
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 
 export function useCharacter(id: string) {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const t = useTranslations('characters');
+  const { getErrorMessage } = useErrorMessage();
 
   const query = useQuery({
     queryKey: ['character', id],
@@ -28,11 +33,11 @@ export function useCharacter(id: string) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['character'] });
-      toast.success('Personagem excluído com sucesso.');
+      toast.success(t('deleteSuccess'));
       router.push('/characters');
     },
     onError: (err: Error) => {
-      toast.error(err.message);
+      toast.error(getErrorMessage(err));
     },
   });
 
@@ -48,7 +53,7 @@ export function useCharacter(id: string) {
       queryClient.invalidateQueries({ queryKey: ['character', id] });
     },
     onError: (err: Error) => {
-      toast.error(err.message);
+      toast.error(getErrorMessage(err));
     },
   });
 

@@ -13,6 +13,8 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { submitFeedbackAction } from '@frontend/actions/feedback/submit-feedback-action';
+import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -38,12 +40,20 @@ import {
   SelectValue,
 } from '@frontend/components/ui/select';
 import { Textarea } from '@frontend/components/ui/textarea';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
-import { submitFeedbackAction } from '../../../../app/support/actions';
+import { UNEXPECTED_ERROR } from '@shared/http/error-response';
 
 export default function ContactForm({ initialEmail = '' }: { initialEmail?: string }) {
   const t = useTranslations('feedback');
+  const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
+  const {
+    token: turnstileToken,
+    setToken: setTurnstileToken,
+    resetKey: turnstileKey,
+    reset: resetTurnstile,
+  } = useTurnstile();
 
   const feedbackSchema = z.object({
     email: z.string().email(),
@@ -63,19 +73,28 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
   });
 
   const onSubmit = async (data: FeedbackFormValues) => {
+    if (!turnstileToken) {
+      toast.error(getMessage('security_token_missing'));
+      return;
+    }
+
     try {
-      const result = await submitFeedbackAction(data);
+      const result = await submitFeedbackAction({ ...data, turnstileToken });
       if (result.success) {
         toast.success(t('success'));
         setIsSuccess(true);
         form.reset();
       } else {
-        toast.error(t('error'));
+        // Security and validation codes tell the user what to fix; anything else keeps the
+        // themed generic message
+        toast.error(result.error === UNEXPECTED_ERROR ? t('error') : getMessage(result.error));
       }
     } catch (error) {
       console.error('Feedback submission error:', error);
       toast.error(t('error'));
     }
+    // Tokens are single-use, so a new submission needs a fresh challenge either way
+    resetTurnstile();
   };
 
   if (isSuccess) {
@@ -177,9 +196,11 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
               )}
             />
 
+            <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
+
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting || !turnstileToken}
               className="bg-primary hover:bg-primary-flare focus:ring-primary/20 w-full font-bold text-white transition-all focus:ring-2 active:scale-[0.98]"
             >
               {form.formState.isSubmitting ? (

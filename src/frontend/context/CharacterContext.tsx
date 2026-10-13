@@ -4,6 +4,7 @@ import { ReactNode, createContext, useCallback, useContext, useMemo, useState } 
 
 import { useParams, usePathname } from 'next/navigation';
 
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { useCharacter } from '@frontend/hooks/useCharacter';
@@ -41,6 +42,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const params = useParams();
   const pathname = usePathname();
   const id = params?.id as string;
+  const tCharacters = useTranslations('characters');
 
   // Track if spells drawer is open to trigger loading even on non-spell routes
   // This state is shared with useCharacterEditor
@@ -95,13 +97,13 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     async (character: DnD5eCharacter, options?: { onSuccess?: () => void }) => {
       try {
         await updateStatus(character);
-        toast.success('Alterações salvas com sucesso!');
+        toast.success(tCharacters('saveSuccess'));
         options?.onSuccess?.();
       } catch (_e) {
         // Errors are handled inside the hooks via toast
       }
     },
-    [updateStatus],
+    [updateStatus, tCharacters],
   );
 
   const themeHsl = useMemo(() => {
