@@ -8,6 +8,12 @@
 
 const TURNSTILE_ORIGIN = 'https://challenges.cloudflare.com';
 const GITHUB_SPONSORS_ORIGIN = 'https://github.com';
+// @iconify/react loads the game icons (AppIcon variant="game") at runtime from these hosts
+const ICONIFY_API_ORIGINS = [
+  'https://api.iconify.design',
+  'https://api.simplesvg.com',
+  'https://api.unisvg.com',
+];
 
 // Sources the Vercel toolbar (comments, feedback) loads on preview deployments
 const VERCEL_TOOLBAR = {
@@ -53,7 +59,7 @@ export function buildContentSecurityPolicy({
     // run on another localhost port over plain http
     'img-src': ["'self'", 'blob:', 'data:', 'https:', ...(isDev ? ['http:'] : [])],
     'font-src': ["'self'"],
-    'connect-src': ["'self'", ...supabaseOrigins(supabaseUrl)],
+    'connect-src': ["'self'", ...supabaseOrigins(supabaseUrl), ...ICONIFY_API_ORIGINS],
     'frame-src': [TURNSTILE_ORIGIN, GITHUB_SPONSORS_ORIGIN],
     'object-src': ["'none'"],
     'base-uri': ["'self'"],

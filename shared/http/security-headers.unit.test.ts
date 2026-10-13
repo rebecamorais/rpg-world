@@ -18,6 +18,17 @@ describe('buildContentSecurityPolicy', () => {
     expect(directive(csp, 'connect-src')).toContain('wss://abc.supabase.co');
   });
 
+  it('lets @iconify/react fetch game icons from the Iconify API and its fallbacks', () => {
+    const connect = directive(buildContentSecurityPolicy(prod), 'connect-src');
+    for (const host of [
+      'https://api.iconify.design',
+      'https://api.simplesvg.com',
+      'https://api.unisvg.com',
+    ]) {
+      expect(connect).toContain(host);
+    }
+  });
+
   it('allows the Turnstile script and iframe', () => {
     const csp = buildContentSecurityPolicy(prod);
     expect(directive(csp, 'script-src')).toContain('https://challenges.cloudflare.com');
@@ -61,7 +72,7 @@ describe('buildContentSecurityPolicy', () => {
 
   it('works without a Supabase URL', () => {
     const csp = buildContentSecurityPolicy({ ...prod, supabaseUrl: undefined });
-    expect(directive(csp, 'connect-src')).toBe("connect-src 'self'");
+    expect(directive(csp, 'connect-src')).not.toContain('supabase');
   });
 });
 

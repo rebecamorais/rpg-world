@@ -132,7 +132,8 @@ interface IconProps extends Omit<LucideProps, 'size'> {
 /**
  * AppIcon: A unified registry for application icons.
  * - 'system': Uses Lucide React icons for UI and platform elements.
- * - 'game': Uses Game Icons via Iconify (@iconify-json/game-icons) for immersive RPG elements.
+ * - 'game': Uses Game Icons via Iconify for immersive RPG elements, fetched at runtime from the
+ *   Iconify API (allowed in the CSP, see shared/http/security-headers.ts).
  */
 export function AppIcon({
   name,
