@@ -35,6 +35,20 @@ updates:
         patterns:
           - 'vitest*'
           - '@vitest/*'
+      # Demais atualizações minor/patch num PR só, para não acumular PRs
+      minor-and-patch:
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
+    ignore:
+      # Mantido na linha 24.x para acompanhar engines.node
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+      # Os plugins do eslint-config-next ainda não suportam ESLint 10
+      - dependency-name: 'eslint'
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: 'github-actions'
     directory: '/'
@@ -45,3 +59,7 @@ updates:
       timezone: 'America/Sao_Paulo'
     commit-message:
       prefix: 'chore(deps):'
+    groups:
+      github-actions:
+        patterns:
+          - '*'
