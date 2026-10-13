@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { EmailService } from '../../../shared/domain/EmailService';
 import { AuthRepository } from '../domain/AuthRepository';
 import { UserErrorCodes } from '../domain/UserError';
+import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
 import { SignUpUseCase } from './sign-up.use-case';
 
 describe('SignUpUseCase', () => {
@@ -67,9 +68,9 @@ describe('SignUpUseCase', () => {
 
     const useCase = new SignUpUseCase(mockRepository, mockEmailService);
 
-    await expect(useCase.execute('test@example.com', '123MudarASenha@')).rejects.toThrow(
-      UserErrorCodes.SIGNUP_INVALID_PASSWORD,
-    );
+    await expect(
+      useCase.execute('test@example.com', DEFAULT_FIRST_ACCESS_PASSWORD),
+    ).rejects.toThrow(UserErrorCodes.SIGNUP_INVALID_PASSWORD);
   });
 
   it('should throw error if email already exists', async () => {
