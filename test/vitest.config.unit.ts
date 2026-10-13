@@ -11,6 +11,7 @@ export default defineConfig({
     include: ['src/**/*.unit.test.ts', 'shared/**/*.unit.test.ts'],
     environment: 'node',
     globals: true,
+    setupFiles: [path.resolve(__dirname, './setup-unit.ts')],
     coverage: {
       provider: 'v8',
       include: ['app/**', 'src/**', 'shared/**', 'lib/**', 'proxy.ts'],
