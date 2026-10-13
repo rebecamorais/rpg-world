@@ -31,6 +31,18 @@ export const SupabaseFactory = {
     });
   },
 
+  // Cliente anônimo sem sessão: só enxerga o que o RLS libera para o público
+  createAnon: () => {
+    if (!supabaseUrl || !anonKey) throw new Error('Missing Anon Config');
+
+    return createClient<Database>(supabaseUrl, anonKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    });
+  },
+
   // Cliente para o Browser/Server Components (Auth/Cookies)
   createClient: (cookieStore: ReadonlyRequestCookies) => {
     if (!supabaseUrl || !anonKey) throw new Error('Missing Anon Config');
