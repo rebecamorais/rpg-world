@@ -4,6 +4,8 @@ import 'server-only';
 import { AuthRepository } from '../../domain/AuthRepository';
 import { User } from '../../domain/User';
 
+const LIST_USERS_PAGE_SIZE = 1000;
+
 export class SupabaseAuthRepository implements AuthRepository {
   constructor(
     private readonly authClient: SupabaseClient,
@@ -93,16 +95,28 @@ export class SupabaseAuthRepository implements AuthRepository {
   }
 
   async existsByEmail(email: string): Promise<boolean> {
-    const {
-      data: { users },
-      error,
-    } = await this.dbClient.auth.admin.listUsers();
+    // listUsers is paginated, so a single call only sees the first page of users.
+    const target = email.toLowerCase();
+    let page: number | null = 1;
 
-    if (error) {
-      throw new Error(`Failed to check if user exists: ${error.message}`);
+    while (page) {
+      const { data, error } = await this.dbClient.auth.admin.listUsers({
+        page,
+        perPage: LIST_USERS_PAGE_SIZE,
+      });
+
+      if (error) {
+        throw new Error(`Failed to check if user exists: ${error.message}`);
+      }
+
+      if (data.users.some((user) => user.email?.toLowerCase() === target)) {
+        return true;
+      }
+
+      page = data.nextPage || null;
     }
 
-    return users.some((user) => user.email === email);
+    return false;
   }
 
   async exchangeCodeForSession(code: string): Promise<void> {

@@ -168,6 +168,45 @@ describe('SupabaseAuthRepository', () => {
       expect(result).toBe(false);
     });
 
+    it('deve procurar nas páginas seguintes', async () => {
+      const page = (users: Partial<User>[], nextPage: number | null) => ({
+        data: {
+          users: users as User[],
+          aud: 'authenticated',
+          nextPage,
+          lastPage: 2,
+          total: 2,
+        },
+        error: null,
+      });
+      vi.mocked(mockDbClient.auth.admin.listUsers)
+        .mockResolvedValueOnce(page([{ email: 'other@example.com' }], 2))
+        .mockResolvedValueOnce(page([{ email: 'test@example.com' }], null));
+
+      const result = await repository.existsByEmail('test@example.com');
+
+      expect(result).toBe(true);
+      expect(mockDbClient.auth.admin.listUsers).toHaveBeenCalledTimes(2);
+      expect(mockDbClient.auth.admin.listUsers).toHaveBeenLastCalledWith(
+        expect.objectContaining({ page: 2 }),
+      );
+    });
+
+    it('deve comparar o e-mail sem diferenciar maiúsculas', async () => {
+      vi.mocked(mockDbClient.auth.admin.listUsers).mockResolvedValueOnce({
+        data: {
+          users: [{ email: 'test@example.com' }] as User[],
+          aud: 'authenticated',
+          nextPage: null,
+          lastPage: 1,
+          total: 1,
+        },
+        error: null,
+      });
+
+      expect(await repository.existsByEmail('Test@Example.com')).toBe(true);
+    });
+
     it('deve lançar erro caso falhe a busca', async () => {
       vi.mocked(mockDbClient.auth.admin.listUsers).mockResolvedValueOnce({
         data: { users: [] as [] },
