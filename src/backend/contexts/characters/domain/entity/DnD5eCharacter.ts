@@ -1,4 +1,7 @@
-import { Lore } from '@backend/contexts/lore';
+import { Lore } from '@backend/contexts/lore/domain/Lore';
+
+import type { SkillKey } from '@shared/systems/dnd5e/constants/skill';
+import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 import { Attributes } from '../value-object/Attributes';
 import { HealthPoints } from '../value-object/HealthPoints';
@@ -28,26 +31,9 @@ export interface Spell {
   material?: string | null;
 }
 
-export type AttributeKey = 'STR' | 'DEX' | 'CON' | 'INT' | 'WIS' | 'CHA';
-export type SkillKey =
-  | 'Acrobatics'
-  | 'Animal Handling'
-  | 'Arcana'
-  | 'Athletics'
-  | 'Deception'
-  | 'History'
-  | 'Insight'
-  | 'Intimidation'
-  | 'Investigation'
-  | 'Medicine'
-  | 'Nature'
-  | 'Perception'
-  | 'Performance'
-  | 'Persuasion'
-  | 'Religion'
-  | 'Sleight of Hand'
-  | 'Stealth'
-  | 'Survival';
+// Same keys the sheet stores and the shared rules use (e.g. 'ACROBATICS'), so the domain
+// can't drift from the persisted data.
+export type { AttributeKey, SkillKey };
 
 export interface CharacterSkill {
   isProficient: boolean;

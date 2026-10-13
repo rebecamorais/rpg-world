@@ -28,9 +28,11 @@ import {
   FormMessage,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 export default function ForgotPasswordForm() {
   const t = useTranslations('forgotPassword');
+  const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
 
   const schema = z.object({
@@ -50,7 +52,7 @@ export default function ForgotPasswordForm() {
       if (result.success) {
         setIsSuccess(true);
       } else {
-        toast.error(result.error || 'Erro ao solicitar recuperação');
+        toast.error(getMessage(result.error));
       }
     } catch {
       toast.error('Erro inesperado');

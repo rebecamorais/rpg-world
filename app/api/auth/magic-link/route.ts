@@ -1,27 +1,15 @@
-import { NextResponse } from 'next/server';
-
 import { getApi } from '@api';
 
-export async function POST(req: Request) {
-  try {
-    const { email } = await req.json();
+import { magicLinkSchema } from '@backend/contexts/users/interfaces/users.schemas';
 
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
-    }
+import { withHandler } from '@shared/http/route-handler';
 
-    // Use absolute URL for the callback
-    const requestUrl = new URL(req.url);
-    const redirectTo = `${requestUrl.origin}/api/auth/callback`;
-
+export const POST = withHandler(
+  async ({ req, body }) => {
+    const redirectTo = `${req.nextUrl.origin}/api/auth/callback`;
     const { authApi } = await getApi();
-    await authApi.signInWithMagicLink(email, redirectTo);
-
-    return NextResponse.json({ message: 'Magic link sent successfully' }, { status: 200 });
-  } catch (err: unknown) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Unknown error' },
-      { status: 500 },
-    );
-  }
-}
+    await authApi.signInWithMagicLink(body.email, redirectTo);
+    return { message: 'Magic link sent successfully' };
+  },
+  { body: magicLinkSchema },
+);

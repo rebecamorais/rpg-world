@@ -9,7 +9,7 @@ export class SignUpUseCase {
     private readonly emailService: EmailService,
   ) {}
 
-  async execute(email: string, password: string): Promise<void> {
+  async execute(email: string, password: string, redirectTo: string): Promise<void> {
     if (!email || !password) {
       throw new UserError(UserErrorCodes.SIGNUP_REQUIRED_FIELDS);
     }
@@ -25,7 +25,6 @@ export class SignUpUseCase {
     }
 
     // Gerar link de confirmação e criar usuário (admin.generateLink com type: signup faz ambos)
-    const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`;
     const confirmationLink = await this.authRepository.generateSignUpLink(
       email,
       password,

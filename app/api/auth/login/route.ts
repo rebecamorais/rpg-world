@@ -1,23 +1,13 @@
-import { NextResponse } from 'next/server';
-
 import { getApi } from '@api';
 
-export async function POST(req: Request) {
-  try {
-    const { email, password } = await req.json();
+import { signInWithPasswordSchema } from '@backend/contexts/users/interfaces/users.schemas';
 
-    if (!email || !password) {
-      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
-    }
+import { withHandler } from '@shared/http/route-handler';
 
+export const POST = withHandler(
+  async ({ body }) => {
     const { authApi } = await getApi();
-    const result = await authApi.signInWithPassword(email, password);
-
-    return NextResponse.json(result, { status: 200 });
-  } catch (err: unknown) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Unknown error' },
-      { status: 400 },
-    );
-  }
-}
+    return authApi.signInWithPassword(body.email, body.password);
+  },
+  { body: signInWithPasswordSchema },
+);

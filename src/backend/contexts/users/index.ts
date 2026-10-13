@@ -3,6 +3,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { EmailService } from '../../shared/domain/EmailService';
 import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import { CallbackExchangeUseCase } from './application/callback-exchange.use-case';
+import { GetProfileUseCase } from './application/get-profile.use-case';
 import { GetSessionUserUseCase } from './application/get-session-user.use-case';
 import { RequestPasswordResetUseCase } from './application/request-password-reset.use-case';
 import { SignInWithMagicLinkUseCase } from './application/sign-in-with-magic-link.use-case';
@@ -10,7 +11,7 @@ import { SignInWithPasswordUseCase } from './application/sign-in-with-password.u
 import { SignOutUseCase } from './application/sign-out.use-case';
 import { SignUpUseCase } from './application/sign-up.use-case';
 import { UpdatePasswordUseCase } from './application/update-password.use-case';
-import { GetProfileUseCase, UpdateProfileUseCase } from './application/update-profile.use-case';
+import { UpdateProfileUseCase } from './application/update-profile.use-case';
 import { UploadAvatarUseCase } from './application/upload-avatar.use-case';
 import { User } from './domain/User';
 import { SupabaseAuthRepository } from './infrastructure/repositories/supabase-auth-repository';

@@ -1,4 +1,5 @@
-import { StorageRepository } from '../../../../shared/domain/StorageRepository';
+import { StorageRepository } from '@backend/shared/domain/StorageRepository';
+
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import { CharacterRepo } from '../../domain/repository/character.repo';
 import { findOwnedCharacter } from '../find-owned-character';

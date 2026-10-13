@@ -62,3 +62,50 @@ describe('UpdateCharacterUseCase', () => {
     expect(result.lore).not.toBe('x');
   });
 });
+
+describe('UpdateCharacterUseCase — campos e dono', () => {
+  let repo: InMemoryCharacterRepository;
+  let useCase: UpdateCharacterUseCase;
+
+  beforeEach(async () => {
+    repo = new InMemoryCharacterRepository();
+    useCase = new UpdateCharacterUseCase(repo);
+
+    const char = new DnD5eCharacter({
+      id: 'char-1',
+      name: 'Test',
+      ownerUsername: 'owner-1',
+      attributes: new Attributes({ STR: 10 }),
+      hp: new HealthPoints(10, 10),
+      level: 1,
+    });
+    await repo.save(char);
+  });
+
+  it('deve atualizar múltiplos campos de uma só vez', async () => {
+    await useCase.execute({
+      id: 'char-1',
+      ownerUsername: 'owner-1',
+      updates: {
+        name: 'Test Updated',
+        hpCurrent: 5,
+        accentColor: '#ff4444',
+      },
+    });
+
+    const updated = (await repo.findById('char-1')) as DnD5eCharacter;
+    expect(updated.name).toBe('Test Updated');
+    expect(updated.hp.status.current).toBe(5);
+    expect(updated.accentColor).toBe('#ff4444');
+  });
+
+  it('não deve permitir alteração se não for o dono', async () => {
+    await expect(
+      useCase.execute({
+        id: 'char-1',
+        ownerUsername: 'hacker-user',
+        updates: { name: 'Hacked' },
+      }),
+    ).rejects.toThrowError('character_error_update_unauthorized');
+  });
+});

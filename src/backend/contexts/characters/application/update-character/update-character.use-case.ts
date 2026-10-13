@@ -1,4 +1,4 @@
-import { applyUpdates } from '@backend/shared/infrastructure/helpers/update-fields';
+import { applyUpdates } from '@backend/shared/application/apply-updates';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import {
@@ -24,9 +24,9 @@ export interface CharacterUpdates {
   hpCurrent?: number;
   hpMax?: number;
   hpTemp?: number;
-  attributes?: Record<AttributeKey, number>;
+  attributes?: Partial<Record<AttributeKey, number>>;
   skills?: Partial<Record<SkillKey, CharacterSkill>>;
-  savingThrowProficiencies?: Record<AttributeKey, boolean>;
+  savingThrowProficiencies?: Partial<Record<AttributeKey, boolean>>;
   passivePerception?: number;
   subclass?: string;
   background?: string;

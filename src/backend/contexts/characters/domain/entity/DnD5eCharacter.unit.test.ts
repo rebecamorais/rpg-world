@@ -44,23 +44,23 @@ describe('DnD5eCharacter (Domain Entity)', () => {
 
   it('deve calcular perícia sem proficiência', () => {
     const char = buildCharacter({ STR: 16 }); // mod: +3
-    expect(char.calculateSkillValue('Athletics', 'STR')).toBe(3);
+    expect(char.calculateSkillValue('ATHLETICS', 'STR')).toBe(3);
   });
 
   it('deve calcular perícia com proficiência normal', () => {
     const char = buildCharacter({ STR: 16 }, 1, {
-      Athletics: { isProficient: true },
+      ATHLETICS: { isProficient: true },
     });
     // mod(+3) + prof(+2)
-    expect(char.calculateSkillValue('Athletics', 'STR')).toBe(5);
+    expect(char.calculateSkillValue('ATHLETICS', 'STR')).toBe(5);
   });
 
   it('deve calcular perícia com expertise', () => {
     const char = buildCharacter({ STR: 16 }, 5, {
-      Athletics: { isProficient: true, expertise: true },
+      ATHLETICS: { isProficient: true, expertise: true },
     });
     // mod(+3) + prof(3 * 2 = 6)
-    expect(char.calculateSkillValue('Athletics', 'STR')).toBe(9);
+    expect(char.calculateSkillValue('ATHLETICS', 'STR')).toBe(9);
   });
 
   it('deve calcular salvaguarda corretamente', () => {

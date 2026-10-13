@@ -7,7 +7,7 @@ import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';
 import { Attributes } from '../../domain/value-object/Attributes';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
 import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-character.repository';
-import { UploadCharacterAvatarUseCase } from './UploadCharacterAvatarUseCase';
+import { UploadCharacterAvatarUseCase } from './upload-character-avatar.use-case';
 
 vi.mock('server-only', () => ({}));
 

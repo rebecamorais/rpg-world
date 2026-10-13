@@ -1,4 +1,4 @@
-import { Lore } from '@backend/contexts/lore';
+import { Lore } from '@backend/contexts/lore/domain/Lore';
 
 import { Attributes } from '../value-object/Attributes';
 import { HealthPoints } from '../value-object/HealthPoints';

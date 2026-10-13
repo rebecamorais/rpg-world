@@ -6,7 +6,7 @@ import { HealthPoints } from '../../domain/value-object/HealthPoints';
 import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-character.repository';
 import { GetCharactersByOwnerUseCase } from './get-characters-by-owner.use-case';
 
-describe('GetCharactersByOwnerUseCase (Integration)', () => {
+describe('GetCharactersByOwnerUseCase ', () => {
   let repo: InMemoryCharacterRepository;
   let useCase: GetCharactersByOwnerUseCase;
 

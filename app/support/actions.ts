@@ -6,24 +6,20 @@
 
 import { getApi } from '@api';
 
-import { FeedbackType } from '@backend/contexts/feedback/domain/Feedback';
+import { submitFeedbackSchema } from '@backend/contexts/feedback/interfaces/feedback.schemas';
+
+import { parseInput } from '@shared/http/validation';
 
 export async function submitFeedbackAction(formData: {
   email: string;
   type: string;
   message: string;
 }) {
+  const feedback = parseInput(submitFeedbackSchema, formData);
   const api = await getApi();
 
   // Try to get the current user session
   const user = await api.authApi.getSessionUser();
 
-  const result = await api.feedbackApi.submitFeedback({
-    email: formData.email,
-    type: formData.type as FeedbackType,
-    message: formData.message,
-    userId: user?.id,
-  });
-
-  return result;
+  return api.feedbackApi.submitFeedback({ ...feedback, userId: user?.id });
 }
