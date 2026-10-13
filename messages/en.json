@@ -50,7 +50,6 @@
       "auth_error_title": "Authentication Error",
       "auth_error_description": "We could not complete the operation at this time."
     },
-
     "save": "Save",
     "saving": "Saving...",
     "cancel": "Cancel",
@@ -122,6 +121,12 @@
     "errors": {
       "invalidSecurityToken": "Invalid or expired security token.",
       "signUpFailed": "Failed to create account. Please try again later."
+    },
+    "confirm": {
+      "title": "Confirming...",
+      "errorTitle": "Authentication Error",
+      "waiting": "Please wait while we validate your access.",
+      "redirecting": "Redirecting to login..."
     }
   },
   "landing": {
@@ -293,7 +298,13 @@
     "noSpellsFound": "No spells found.",
     "loadingSpells": "Channeling spells...",
     "clearFilters": "Clear all filters",
-    "pagination": "Showing {count} of {total} spells"
+    "pagination": "Showing {count} of {total} spells",
+    "toasts": {
+      "learned": "Spell learned!",
+      "forgotten": "Spell forgotten.",
+      "prepared": "Spell prepared.",
+      "unprepared": "Spell unprepared."
+    }
   },
   "magicSystem": {
     "titleConfig": "Magic System Configuration",
@@ -522,7 +533,8 @@
     "processing": "Updating...",
     "successTitle": "Password changed! 🎉",
     "successDescription": "Your password has been successfully reset. You can now log in.",
-    "login": "Log In"
+    "login": "Log In",
+    "sessionNotFound": "Reset session not found. Try the link from the e-mail again."
   },
   "spellsData": {
     "schools": {
@@ -568,7 +580,6 @@
       "S": "Somatic",
       "M": "Material"
     },
-
     "ranges": {
       "self": "Self",
       "touch": "Touch",

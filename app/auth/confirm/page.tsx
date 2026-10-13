@@ -4,13 +4,17 @@ import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { useTranslations } from 'next-intl';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 
 import { getSupabaseBrowserClient } from '@lib/supabase-browser';
 
 export default function AuthConfirmPage() {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const t = useTranslations('auth.confirm');
+  const tCommon = useTranslations('common');
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     const supabase = getSupabaseBrowserClient();
@@ -22,7 +26,8 @@ export default function AuthConfirmPage() {
       if (code) {
         const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
         if (exchangeError) {
-          setError(exchangeError.message);
+          console.error('Auth code exchange failed:', exchangeError);
+          setFailed(true);
           setTimeout(() => router.push('/login'), 3000);
           return;
         }
@@ -52,12 +57,13 @@ export default function AuthConfirmPage() {
       }
 
       if (sessionError) {
-        setError(sessionError.message);
+        console.error('Auth session failed:', sessionError);
+        setFailed(true);
         setTimeout(() => router.push('/login'), 3000);
       } else if (session) {
         router.push('/characters');
       } else {
-        setError('Falha na confirmação ou link expirado.');
+        setFailed(true);
         setTimeout(() => router.push('/login'), 3000);
       }
     };
@@ -69,20 +75,16 @@ export default function AuthConfirmPage() {
     <div className="bg-background flex flex-1 items-center justify-center p-4">
       <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 font-medium text-white shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="text-center">
-            {error ? 'Erro na Autenticação' : 'Confirmando...'}
-          </CardTitle>
+          <CardTitle className="text-center">{failed ? t('errorTitle') : t('title')}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-4 py-6">
-          {!error ? (
+          {!failed ? (
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
           ) : (
-            <p className="text-center text-red-400">{error}</p>
+            <p className="text-center text-red-400">{tCommon('errors.expired_link_description')}</p>
           )}
           <p className="text-center text-sm text-gray-400">
-            {error
-              ? 'Redirecionando para login...'
-              : 'Aguarde um momento enquanto validamos seu acesso.'}
+            {failed ? t('redirecting') : t('waiting')}
           </p>
         </CardContent>
       </Card>

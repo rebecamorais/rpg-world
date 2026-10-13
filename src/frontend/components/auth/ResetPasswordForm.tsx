@@ -27,11 +27,20 @@ import {
   FormMessage,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import { getSupabaseBrowserClient } from '@lib/supabase-browser';
 
+// Supabase Auth error codes → our i18n error codes (same mapping as the backend auth repository)
+const PASSWORD_ERROR_CODES: Record<string, string> = {
+  weak_password: 'auth_error_update_password_weak',
+  same_password: 'auth_error_update_password_same',
+  over_request_rate_limit: 'auth_error_rate_limited',
+};
+
 export default function ResetPasswordForm() {
   const t = useTranslations('resetPassword');
+  const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
 
@@ -105,7 +114,7 @@ export default function ResetPasswordForm() {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        toast.error('Sessão de redefinição não encontrada. Tente o link do e-mail novamente.');
+        toast.error(t('sessionNotFound'));
         return;
       }
 
@@ -114,13 +123,13 @@ export default function ResetPasswordForm() {
       });
 
       if (error) {
-        toast.error(error.message || 'Erro ao redefinir senha');
+        toast.error(getMessage(PASSWORD_ERROR_CODES[error.code ?? '']));
       } else {
         setIsSuccess(true);
         toast.success(t('successTitle'));
       }
     } catch (_err: unknown) {
-      toast.error('Erro inesperado');
+      toast.error(getMessage(null));
     }
   };
 

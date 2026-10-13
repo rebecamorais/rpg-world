@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { rpgWorldApi } from '@client';
 
 import { useCharacters } from '@frontend/hooks/useCharacters';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import type { CharacterSummary } from '@shared/types/character';
 
@@ -34,6 +35,7 @@ export function CharactersProvider({ children }: { children: ReactNode }) {
   const [confirmName, setConfirmName] = useState('');
   const queryClient = useQueryClient();
   const t = useTranslations('characters');
+  const { getErrorMessage } = useErrorMessage();
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -46,7 +48,7 @@ export function CharactersProvider({ children }: { children: ReactNode }) {
       setConfirmName('');
     },
     onError: (err: Error) => {
-      toast.error(err.message || t('deleteError'));
+      toast.error(`${t('deleteError')} ${getErrorMessage(err)}`);
     },
   });
 

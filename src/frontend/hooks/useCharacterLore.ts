@@ -3,6 +3,8 @@ import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
 
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+
 export interface LoreData {
   age?: string;
   height?: string;
@@ -25,6 +27,7 @@ export function useCharacterLore(
   options: { enabled?: boolean } = { enabled: true },
 ) {
   const queryClient = useQueryClient();
+  const { getErrorMessage } = useErrorMessage();
 
   const query = useQuery({
     queryKey: ['character-lore', characterId],
@@ -45,7 +48,7 @@ export function useCharacterLore(
       queryClient.invalidateQueries({ queryKey: ['character-lore', characterId] });
     },
     onError: (err: Error) => {
-      toast.error(err.message);
+      toast.error(getErrorMessage(err));
     },
   });
 
