@@ -72,10 +72,10 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       level: character.level,
       hp_current: hpCurrent as number,
       hp_max: hpMax as number,
-      attributes: attributes as Json,
+      attributes: attributes as NonNullable<Json>,
       avatar_url: character.avatarUrl ?? null,
       theme_color: character.accentColor ?? '#6d28d9',
-      system_data: { ...rest, hpTemp: hpTemp ?? 0 } as unknown as Json,
+      system_data: { ...rest, hpTemp: hpTemp ?? 0 } as unknown as NonNullable<Json>,
       updated_at: new Date().toISOString(),
     };
 
@@ -132,8 +132,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         spellSlots: dndData.spellSlots as Record<string, { max: number; used: number }> | undefined,
         spellPoints: dndData.spellPoints as { max: number; current: number } | undefined,
         coins: dndData.coins as
-          | { cp: number; sp: number; ep: number; gp: number; pp: number }
-          | undefined,
+          { cp: number; sp: number; ep: number; gp: number; pp: number } | undefined,
         hpTemp: (dndData.hpTemp as number) || 0,
         lore,
         accentColor: (row.theme_color as string) ?? undefined,

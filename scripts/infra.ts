@@ -45,9 +45,10 @@ const actions = {
     loadEnv('.env.test');
     run(`npx supabase start --workdir ${WORKDIRS.test}`, 'Start Test');
     run(
-      'npx supabase gen types typescript --local --workdir database/db-dev > lib/types/database.ts',
+      'npx supabase gen types typescript --local --schema public --workdir database/db-dev > lib/types/database.ts',
       'Update Types',
     );
+    run('npx prettier --write lib/types/database.ts', 'Format Types');
     console.log(chalk.green.bold('✅ Infra pronta!'));
   },
 
