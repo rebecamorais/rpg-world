@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { AuthRepository } from '../domain/AuthRepository';
+import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
 import { SignInWithPasswordUseCase } from './sign-in-with-password.use-case';
 
 describe('SignInWithPasswordUseCase', () => {
@@ -24,7 +25,7 @@ describe('SignInWithPasswordUseCase', () => {
     } as unknown as AuthRepository;
 
     const useCase = new SignInWithPasswordUseCase(mockRepository);
-    const result = await useCase.execute('test@example.com', '123MudaASenha@');
+    const result = await useCase.execute('test@example.com', DEFAULT_FIRST_ACCESS_PASSWORD);
 
     expect(result.passwordChangeRequired).toBe(true);
   });

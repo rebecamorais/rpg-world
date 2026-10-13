@@ -1,5 +1,6 @@
 import { AuthRepository } from '../domain/AuthRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
 
 export interface SignInWithPasswordResult {
   passwordChangeRequired: boolean;
@@ -16,7 +17,7 @@ export class SignInWithPasswordUseCase {
     await this.authRepository.signInWithPassword(email, password);
 
     return {
-      passwordChangeRequired: password === '123MudaASenha@',
+      passwordChangeRequired: password === DEFAULT_FIRST_ACCESS_PASSWORD,
     };
   }
 }

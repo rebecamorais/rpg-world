@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { getApi } from '@api';
 
+import { errorResponse } from '@shared/http/route-handler';
+
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
@@ -34,12 +36,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
     return NextResponse.json({ url: publicUrl }, { status: 200 });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Upload failed';
-    const status = message.includes('Unauthorized')
-      ? 403
-      : message.includes('large') || message.includes('type')
-        ? 422
-        : 400;
-    return NextResponse.json({ error: message }, { status });
+    return errorResponse(err);
   }
 }

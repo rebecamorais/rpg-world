@@ -1,8 +1,8 @@
 import { CharacterContext, CharacterUpdates, CreateCharacterInput } from '../index';
 
 export const makeCharactersApi = (characterContext: CharacterContext) => ({
-  getById: async (id: string) => {
-    const character = await characterContext.getById(id);
+  getById: async (id: string, requesterId: string) => {
+    const character = await characterContext.getById(id, requesterId);
     return character.toJSON();
   },
 
@@ -40,14 +40,15 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
   uploadAvatar: async (id: string, userId: string, file: Blob) => {
     return characterContext.uploadAvatar(id, userId, file);
   },
-  getSpells: async (id: string, locale?: string) => {
-    return characterContext.getSpells(id, locale);
+  getSpells: async (id: string, requesterId: string, locale?: string) => {
+    return characterContext.getSpells(id, requesterId, locale);
   },
   toggleSpell: async (
     id: string,
+    requesterId: string,
     spellId: string,
     action: 'learn' | 'forget' | 'prepare' | 'unprepare',
   ) => {
-    return characterContext.toggleSpell(id, spellId, action);
+    return characterContext.toggleSpell(id, requesterId, spellId, action);
   },
 });

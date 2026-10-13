@@ -9,6 +9,7 @@ import {
 } from '../../domain/entity/DnD5eCharacter';
 import { CharacterRepo } from '../../domain/repository';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
+import { findOwnedCharacter } from '../find-owned-character';
 
 export interface CharacterUpdates {
   name?: string;
@@ -42,6 +43,41 @@ export interface CharacterUpdates {
   coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
 }
 
+// Campos copiados diretamente. Qualquer chave fora desta lista (id, ownerUsername, system...)
+// é ignorada para impedir mass-assignment vindo do cliente.
+const SIMPLE_FIELDS = [
+  'name',
+  'avatarUrl',
+  'accentColor',
+  'class',
+  'race',
+  'ac',
+  'speed',
+  'initiative',
+  'hpTemp',
+  'passivePerception',
+  'subclass',
+  'background',
+  'alignment',
+  'xp',
+  'hitDice',
+  'deathSaves',
+  'spellcastingSystem',
+  'spellcastingAbility',
+  'spellSaveDc',
+  'spellAttackBonus',
+  'spellSlots',
+  'spellPoints',
+  'coins',
+] as const satisfies readonly (keyof CharacterUpdates & keyof DnD5eCharacter)[];
+
+type SimpleField = (typeof SIMPLE_FIELDS)[number];
+
+const pickSimpleUpdates = (updates: CharacterUpdates): Partial<Pick<DnD5eCharacter, SimpleField>> =>
+  Object.fromEntries(
+    SIMPLE_FIELDS.filter((key) => Object.hasOwn(updates, key)).map((key) => [key, updates[key]]),
+  );
+
 export class UpdateCharacterUseCase {
   constructor(private repository: CharacterRepo) {}
 
@@ -54,32 +90,19 @@ export class UpdateCharacterUseCase {
     ownerUsername: string;
     updates: CharacterUpdates;
   }): Promise<DnD5eCharacter> {
-    const character = await this.repository.findById(id);
-
-    if (!character) {
-      throw new CharacterError(CharacterErrorCodes.UPDATE_NOT_FOUND);
-    }
-
-    if (character.ownerUsername !== ownerUsername) {
-      throw new CharacterError(CharacterErrorCodes.UPDATE_UNAUTHORIZED);
-    }
+    const character = await findOwnedCharacter(this.repository, id, ownerUsername, 'write', {
+      notFound: CharacterErrorCodes.UPDATE_NOT_FOUND,
+      forbidden: CharacterErrorCodes.UPDATE_UNAUTHORIZED,
+    });
 
     if (!(character instanceof DnD5eCharacter)) {
       throw new CharacterError(CharacterErrorCodes.UPDATE_SYSTEM_NOT_SUPPORTED);
     }
 
-    const {
-      level,
-      hpCurrent,
-      hpMax,
-      attributes,
-      skills,
-      savingThrowProficiencies,
-      ...simpleUpdates
-    } = updates;
+    const { level, hpCurrent, hpMax, attributes, skills, savingThrowProficiencies } = updates;
 
     // Aplica atualizações diretas para campos simples
-    applyUpdates(character, simpleUpdates);
+    applyUpdates(character, pickSimpleUpdates(updates));
 
     // Lógica customizada para campos com regras de negócio
     if (level !== undefined) character.level = Math.max(1, level);

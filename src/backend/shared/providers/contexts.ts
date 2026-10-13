@@ -53,6 +53,7 @@ export class Contexts {
     if (!this._lore) {
       this._lore = createLoreContext({
         dbClient: this.container.get('dbClient'),
+        characterOwnership: this.character,
       });
     }
     return this._lore;

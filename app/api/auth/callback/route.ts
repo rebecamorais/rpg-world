@@ -2,10 +2,16 @@ import { NextResponse } from 'next/server';
 
 import { getApi } from '@api';
 
+import { safeRedirectPath } from '@backend/shared/infrastructure/helpers/safe-redirect-path';
+
 export async function GET(req: Request) {
   const requestUrl = new URL(req.url);
   const code = requestUrl.searchParams.get('code');
-  const next = requestUrl.searchParams.get('next') ?? '/characters';
+  const next = safeRedirectPath(
+    requestUrl.searchParams.get('next'),
+    requestUrl.origin,
+    '/characters',
+  );
 
   const error = requestUrl.searchParams.get('error');
   const error_description = requestUrl.searchParams.get('error_description');

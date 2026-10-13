@@ -1,6 +1,7 @@
 import { EmailService } from '../../../shared/domain/EmailService';
 import { AuthRepository } from '../domain/AuthRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
 
 export class SignUpUseCase {
   constructor(
@@ -14,7 +15,7 @@ export class SignUpUseCase {
     }
 
     // A senha de primeiro acesso NÃO pode ser a senha padrão de reset/migração
-    if (password === '123MudarASenha@') {
+    if (password === DEFAULT_FIRST_ACCESS_PASSWORD) {
       throw new UserError(UserErrorCodes.SIGNUP_INVALID_PASSWORD);
     }
 
