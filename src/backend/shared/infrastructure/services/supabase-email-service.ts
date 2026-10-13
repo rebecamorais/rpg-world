@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { render } from '@react-email/render';
+import { render } from 'react-email';
 import nodemailer, { type Transporter } from 'nodemailer';
 import 'server-only';
 
