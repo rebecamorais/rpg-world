@@ -13,7 +13,7 @@ import { GetCharacterUseCase } from './application/get-characters/get-characters
 import { GetCharacterSpellsUseCase } from './application/spells/get-character-spells.use-case';
 import { ToggleCharacterSpellUseCase } from './application/spells/toggle-character-spell.use-case';
 import { UpdateCharacterUseCase } from './application/update-character/update-character.use-case';
-import { UploadCharacterAvatarUseCase } from './application/use-cases/UploadCharacterAvatarUseCase';
+import { UploadCharacterAvatarUseCase } from './application/upload-avatar/upload-character-avatar.use-case';
 import { SupabaseCharacterSpellRepository } from './infrastructure/repositories/supabase-character-spell.repository';
 import { SupabaseCharacterRepository } from './infrastructure/repositories/supabase-character.repository';
 

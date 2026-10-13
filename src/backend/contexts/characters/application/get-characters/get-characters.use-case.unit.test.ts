@@ -16,7 +16,7 @@ class MockCharacter extends Character {
   }
 }
 
-describe('GetCharacterUseCase (Integration)', () => {
+describe('GetCharacterUseCase ', () => {
   let repo: InMemoryCharacterRepository;
   let useCase: GetCharacterUseCase;
 

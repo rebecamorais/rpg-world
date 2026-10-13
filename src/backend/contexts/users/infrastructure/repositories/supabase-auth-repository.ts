@@ -111,17 +111,6 @@ export class SupabaseAuthRepository implements AuthRepository {
     }
   }
 
-  async signUp(email: string, password: string): Promise<void> {
-    const { error } = await this.authClient.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) {
-      throw authFailure(error, 'Failed to sign up');
-    }
-  }
-
   async existsByEmail(email: string): Promise<boolean> {
     // listUsers is paginated, so a single call only sees the first page of users.
     const target = email.toLowerCase();
@@ -162,16 +151,6 @@ export class SupabaseAuthRepository implements AuthRepository {
 
     if (error) {
       throw authFailure(error, 'Failed to update password');
-    }
-  }
-
-  async resetPasswordForEmail(email: string, redirectTo: string): Promise<void> {
-    const { error } = await this.authClient.auth.resetPasswordForEmail(email, {
-      redirectTo,
-    });
-
-    if (error) {
-      throw authFailure(error, 'Failed to send reset password email');
     }
   }
 

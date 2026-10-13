@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Profile } from '../domain/Profile';
 import { ProfileRepository } from '../domain/ProfileRepository';
-import { GetProfileUseCase, UpdateProfileUseCase } from './update-profile.use-case';
+import { GetProfileUseCase } from './get-profile.use-case';
+import { UpdateProfileUseCase } from './update-profile.use-case';
 
 const mockProfileRepository = () =>
   ({

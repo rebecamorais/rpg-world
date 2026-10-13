@@ -79,7 +79,6 @@ describe('SignUpUseCase', () => {
     const mockRepository = {
       existsByEmail: vi.fn().mockResolvedValue(true),
       generateSignUpLink: vi.fn(),
-      signUp: vi.fn(),
     } as unknown as AuthRepository;
 
     const mockEmailService = {
@@ -92,6 +91,7 @@ describe('SignUpUseCase', () => {
     await expect(useCase.execute('existing@example.com', 'Password123!', REDIRECT)).rejects.toThrow(
       UserErrorCodes.SIGNUP_DUPLICATE_EMAIL,
     );
-    expect(mockRepository.signUp).not.toHaveBeenCalled();
+    expect(mockRepository.generateSignUpLink).not.toHaveBeenCalled();
+    expect(mockEmailService.sendConfirmationEmail).not.toHaveBeenCalled();
   });
 });

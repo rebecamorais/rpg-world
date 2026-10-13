@@ -6,7 +6,7 @@ import { HealthPoints } from '../../domain/value-object/HealthPoints';
 import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-character.repository';
 import { DeleteCharacterUseCase } from './delete-character.use-case';
 
-describe('DeleteCharacterUseCase (Integration)', () => {
+describe('DeleteCharacterUseCase ', () => {
   let repo: InMemoryCharacterRepository;
   let useCase: DeleteCharacterUseCase;
 

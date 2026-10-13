@@ -4,7 +4,7 @@ import { CharacterErrorCodes } from '../../domain/CharacterError';
 import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-character.repository';
 import { CreateCharacterUseCase } from './create-character.use-case';
 
-describe('CreateCharacterUseCase (Integration)', () => {
+describe('CreateCharacterUseCase ', () => {
   let repo: InMemoryCharacterRepository;
   let useCase: CreateCharacterUseCase;
 
