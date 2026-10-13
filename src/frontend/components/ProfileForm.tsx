@@ -103,11 +103,6 @@ export default function ProfileForm() {
     toast.success(t('saveSuccess'));
   };
 
-  const handleAvatarUploadError = (err: unknown) => {
-    const errorCode = err instanceof Error ? err.message : 'unknown';
-    toast.error(getMessage(errorCode));
-  };
-
   const onSubmit = async (data: ProfileFormValues) => {
     try {
       await updateProfile({
@@ -149,7 +144,6 @@ export default function ProfileForm() {
                 currentUrl={avatarUrl}
                 target="profile"
                 onUploadSuccess={handleAvatarUploadSuccess}
-                onUploadError={handleAvatarUploadError}
                 size="lg"
               />
             </div>

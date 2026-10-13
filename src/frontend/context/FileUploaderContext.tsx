@@ -4,6 +4,8 @@ import { ReactNode, createContext, useContext, useState } from 'react';
 
 import { toast } from 'sonner';
 
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+
 export type UploadTarget = 'profile' | 'character' | 'item';
 
 export interface UploadParams {
@@ -40,6 +42,7 @@ const getEndpoint = (target: UploadTarget, id?: string): string => {
 export function FileUploaderProvider({ children }: { children: ReactNode }) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { getErrorMessage } = useErrorMessage();
 
   const upload = async ({ file, target, id }: UploadParams): Promise<{ url: string }> => {
     setIsUploading(true);
@@ -64,7 +67,7 @@ export function FileUploaderProvider({ children }: { children: ReactNode }) {
       const data = await res.json();
       return data as { url: string };
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Unknown upload error';
+      const msg = getErrorMessage(err);
       setError(msg);
       toast.error(msg);
       throw err;
