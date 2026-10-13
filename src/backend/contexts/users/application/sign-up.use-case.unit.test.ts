@@ -6,6 +6,8 @@ import { UserErrorCodes } from '../domain/UserError';
 import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
 import { SignUpUseCase } from './sign-up.use-case';
 
+const REDIRECT = 'https://app.test/auth/confirm';
+
 describe('SignUpUseCase', () => {
   it('should call repository with correct credentials and send email', async () => {
     const mockRepository = {
@@ -19,13 +21,13 @@ describe('SignUpUseCase', () => {
     } as unknown as EmailService;
 
     const useCase = new SignUpUseCase(mockRepository, mockEmailService);
-    await useCase.execute('test@example.com', 'Password123!');
+    await useCase.execute('test@example.com', 'Password123!', 'https://app.test/auth/confirm');
 
     expect(mockRepository.existsByEmail).toHaveBeenCalledWith('test@example.com');
     expect(mockRepository.generateSignUpLink).toHaveBeenCalledWith(
       'test@example.com',
       'Password123!',
-      expect.any(String),
+      'https://app.test/auth/confirm',
     );
     expect(mockEmailService.sendConfirmationEmail).toHaveBeenCalledWith(
       'test@example.com',
@@ -46,10 +48,10 @@ describe('SignUpUseCase', () => {
 
     const useCase = new SignUpUseCase(mockRepository, mockEmailService);
 
-    await expect(useCase.execute('', 'Password123!')).rejects.toThrow(
+    await expect(useCase.execute('', 'Password123!', REDIRECT)).rejects.toThrow(
       UserErrorCodes.SIGNUP_REQUIRED_FIELDS,
     );
-    await expect(useCase.execute('test@example.com', '')).rejects.toThrow(
+    await expect(useCase.execute('test@example.com', '', REDIRECT)).rejects.toThrow(
       UserErrorCodes.SIGNUP_REQUIRED_FIELDS,
     );
     expect(mockRepository.generateSignUpLink).not.toHaveBeenCalled();
@@ -69,7 +71,7 @@ describe('SignUpUseCase', () => {
     const useCase = new SignUpUseCase(mockRepository, mockEmailService);
 
     await expect(
-      useCase.execute('test@example.com', DEFAULT_FIRST_ACCESS_PASSWORD),
+      useCase.execute('test@example.com', DEFAULT_FIRST_ACCESS_PASSWORD, REDIRECT),
     ).rejects.toThrow(UserErrorCodes.SIGNUP_INVALID_PASSWORD);
   });
 
@@ -87,7 +89,7 @@ describe('SignUpUseCase', () => {
 
     const useCase = new SignUpUseCase(mockRepository, mockEmailService);
 
-    await expect(useCase.execute('existing@example.com', 'Password123!')).rejects.toThrow(
+    await expect(useCase.execute('existing@example.com', 'Password123!', REDIRECT)).rejects.toThrow(
       UserErrorCodes.SIGNUP_DUPLICATE_EMAIL,
     );
     expect(mockRepository.signUp).not.toHaveBeenCalled();

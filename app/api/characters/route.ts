@@ -1,22 +1,18 @@
 import { getApi } from '@api';
 
+import { createCharacterSchema } from '@backend/contexts/characters/interfaces/characters.schemas';
+
 import { withAuth } from '@shared/http/route-handler';
 
-type CreateBody = {
-  name: string;
-  system: string;
-};
-
-export const GET = withAuth(async (req, user) => {
+export const GET = withAuth(async ({ user }) => {
   const { charactersApi } = await getApi();
   return charactersApi.getByOwner(user.id);
 });
 
-export const POST = withAuth<CreateBody>(async (req, user, body) => {
-  const { charactersApi } = await getApi();
-  const character = await charactersApi.create({
-    ...body,
-    ownerUsername: user.id,
-  });
-  return { id: character.id };
-}, 201);
+export const POST = withAuth(
+  async ({ user, body }) => {
+    const { charactersApi } = await getApi();
+    return charactersApi.create({ ...body, ownerUsername: user.id });
+  },
+  { body: createCharacterSchema, status: 201 },
+);

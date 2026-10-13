@@ -3,6 +3,7 @@
     "errors": {
       "requiredFields": "Please fill in all required fields.",
       "unknown": "An unknown error occurred. Please try again.",
+      "common_error_invalid_request": "Invalid data. Check the fields and try again.",
       "auth_error_signup_duplicate_email": "This email is already in use.",
       "auth_error_signup_required_fields": "Please fill in all required fields.",
       "auth_error_signup_invalid_password": "This password cannot be used for initial registration.",

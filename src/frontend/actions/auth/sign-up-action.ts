@@ -2,7 +2,10 @@
 
 import { getApi } from '@api';
 
+import { signUpSchema } from '@backend/contexts/users/interfaces/users.schemas';
 import { TurnstileService } from '@backend/shared/infrastructure/services/turnstile-service';
+
+import { INVALID_REQUEST } from '@shared/http/validation';
 
 export interface ActionResponse {
   success: boolean;
@@ -10,13 +13,17 @@ export interface ActionResponse {
 }
 
 export async function signUpAction(formData: FormData): Promise<ActionResponse> {
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-  const turnstileToken = formData.get('turnstile-token') as string;
+  const input = signUpSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+    turnstileToken: formData.get('turnstile-token') ?? '',
+  });
 
-  if (!email || !password) {
-    return { success: false, error: 'auth_error_signup_required_fields' };
+  if (!input.success) {
+    return { success: false, error: INVALID_REQUEST };
   }
+
+  const { email, password, turnstileToken } = input.data;
 
   // 1. Verify Turnstile Token
   const turnstile = await TurnstileService.verify(turnstileToken);
@@ -26,7 +33,7 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
 
   try {
     const api = await getApi();
-    await api.authApi.signUp(email, password);
+    await api.authApi.signUp(email, password, `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`);
     return { success: true };
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'auth_error_signup_failed';

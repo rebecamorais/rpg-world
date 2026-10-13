@@ -1,30 +1,12 @@
 import { getApi } from '@api';
 
+import { findSpellsQuerySchema } from '@backend/contexts/spells/interfaces/spells.schemas';
+
 import { withAuth } from '@shared/http/route-handler';
+import { parseInput } from '@shared/http/validation';
 
-export const GET = withAuth(async (req) => {
+export const GET = withAuth(async ({ req }) => {
+  const query = parseInput(findSpellsQuerySchema, Object.fromEntries(req.nextUrl.searchParams));
   const { spellsApi } = await getApi();
-
-  const url = new URL(req.url);
-  const locale = url.searchParams.get('locale') || 'en';
-  const page = parseInt(url.searchParams.get('page') || '0', 10);
-  const limit = parseInt(url.searchParams.get('limit') || '12', 10);
-  const search = url.searchParams.get('search') || undefined;
-  const level = url.searchParams.has('level')
-    ? parseInt(url.searchParams.get('level')!, 10)
-    : undefined;
-  const school = url.searchParams.get('school') || undefined;
-  const classParam = url.searchParams.get('class') || undefined;
-  const damageType = url.searchParams.get('damageType') || undefined;
-
-  return spellsApi.getAllSpells({
-    locale,
-    page,
-    limit,
-    search,
-    level,
-    school,
-    class: classParam,
-    damageType,
-  });
+  return spellsApi.getAllSpells(query);
 });

@@ -15,8 +15,8 @@ export const makeAuthApi = (authContext: AuthContext) => ({
     return { success: true, ...result };
   },
 
-  signUp: async (email: string, password: string) => {
-    await authContext.signUp.execute(email, password);
+  signUp: async (email: string, password: string, redirectTo: string) => {
+    await authContext.signUp.execute(email, password, redirectTo);
     return { success: true };
   },
 

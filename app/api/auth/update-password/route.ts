@@ -1,23 +1,13 @@
-import { NextResponse } from 'next/server';
-
 import { getApi } from '@api';
 
-export async function POST(req: Request) {
-  try {
-    const { newPassword } = await req.json();
+import { updatePasswordSchema } from '@backend/contexts/users/interfaces/users.schemas';
 
-    if (!newPassword) {
-      return NextResponse.json({ error: 'New password is required' }, { status: 400 });
-    }
+import { withAuth } from '@shared/http/route-handler';
 
+export const POST = withAuth(
+  async ({ body }) => {
     const { authApi } = await getApi();
-    await authApi.updatePassword(newPassword);
-
-    return NextResponse.json({ success: true }, { status: 200 });
-  } catch (err: unknown) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Unknown error' },
-      { status: 400 },
-    );
-  }
-}
+    return authApi.updatePassword(body.newPassword);
+  },
+  { body: updatePasswordSchema },
+);

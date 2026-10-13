@@ -3,6 +3,7 @@
     "errors": {
       "requiredFields": "Preencha todos os campos obrigatórios.",
       "unknown": "Ocorreu um erro desconhecido. Tente novamente.",
+      "common_error_invalid_request": "Dados inválidos. Verifique os campos e tente novamente.",
       "auth_error_signup_duplicate_email": "Este e-mail já está em uso.",
       "auth_error_signup_required_fields": "Preencha todos os campos obrigatórios.",
       "auth_error_signup_invalid_password": "Esta senha não pode ser utilizada para cadastro inicial.",

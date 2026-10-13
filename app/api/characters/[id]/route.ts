@@ -1,31 +1,31 @@
 import { getApi } from '@api';
 
+import { updateCharacterSchema } from '@backend/contexts/characters/interfaces/characters.schemas';
+
 import { withAuth } from '@shared/http/route-handler';
+import { uuidParamsSchema } from '@shared/http/validation';
 
-type UpdateBody = {
-  updates: Record<string, unknown>;
-};
+export const GET = withAuth(
+  async ({ user, params }) => {
+    const { charactersApi } = await getApi();
+    return charactersApi.getById(params.id, user.id);
+  },
+  { params: uuidParamsSchema },
+);
 
-export const GET = withAuth(async (req, user, _body, ctx) => {
-  const { id } = await ctx.params;
-  const { charactersApi } = await getApi();
-  return charactersApi.getById(id, user.id);
-});
+export const PUT = withAuth(
+  async ({ user, body, params }) => {
+    const { charactersApi } = await getApi();
+    return charactersApi.update({ id: params.id, ownerUsername: user.id, updates: body.updates });
+  },
+  { params: uuidParamsSchema, body: updateCharacterSchema },
+);
 
-export const PUT = withAuth<UpdateBody>(async (req, user, body, ctx) => {
-  const { id } = await ctx.params;
-  const { charactersApi } = await getApi();
-  const character = await charactersApi.update({
-    id,
-    ownerUsername: user.id,
-    updates: body.updates,
-  });
-  return { id: character.id };
-});
-
-export const DELETE = withAuth(async (req, user, _body, ctx) => {
-  const { id } = await ctx.params;
-  const { charactersApi } = await getApi();
-  await charactersApi.delete(id, user.id);
-  return null; // → 204 No Content
-});
+export const DELETE = withAuth(
+  async ({ user, params }) => {
+    const { charactersApi } = await getApi();
+    await charactersApi.delete(params.id, user.id);
+    return null; // → 204 No Content
+  },
+  { params: uuidParamsSchema },
+);

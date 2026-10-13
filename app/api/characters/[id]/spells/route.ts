@@ -1,24 +1,27 @@
 import { getApi } from '@api';
 
+import {
+  localeQuerySchema,
+  toggleSpellSchema,
+} from '@backend/contexts/characters/interfaces/characters.schemas';
+
 import { withAuth } from '@shared/http/route-handler';
+import { parseInput, uuidParamsSchema } from '@shared/http/validation';
 
-export const GET = withAuth(async (req, user, _body, ctx) => {
-  const { id } = await ctx.params;
-  const { charactersApi } = await getApi();
+export const GET = withAuth(
+  async ({ req, user, params }) => {
+    const { locale } = parseInput(localeQuerySchema, Object.fromEntries(req.nextUrl.searchParams));
+    const { charactersApi } = await getApi();
+    return charactersApi.getSpells(params.id, user.id, locale);
+  },
+  { params: uuidParamsSchema },
+);
 
-  // Get locale from query parameter (set by frontend)
-  const url = new URL(req.url);
-  const locale = url.searchParams.get('locale') || 'en';
-
-  return charactersApi.getSpells(id, user.id, locale);
-});
-
-export const POST = withAuth<{
-  id: string;
-  action: 'learn' | 'forget' | 'prepare' | 'unprepare';
-}>(async (req, user, body, ctx) => {
-  const { id } = await ctx.params;
-  const { charactersApi } = await getApi();
-  await charactersApi.toggleSpell(id, user.id, body.id, body.action);
-  return { success: true };
-});
+export const POST = withAuth(
+  async ({ user, body, params }) => {
+    const { charactersApi } = await getApi();
+    await charactersApi.toggleSpell(params.id, user.id, body.id, body.action);
+    return { success: true };
+  },
+  { params: uuidParamsSchema, body: toggleSpellSchema },
+);
