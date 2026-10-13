@@ -5,12 +5,11 @@ import { getContainer } from '@backend/shared/providers/get-container';
 export async function GET(req: Request) {
   const requestUrl = new URL(req.url);
 
-  // Use the container to get the authenticating client
-  // Here we bypass getApi() because we just need to get the URL from Supabase SDK directly
+  // Bypasses getApi() because we only need the OAuth URL from the Supabase SDK
   const container = await getContainer();
-  const authClient = container.get('authClient');
+  const userClient = container.get('userClient');
 
-  const { data, error } = await authClient.auth.signInWithOAuth({
+  const { data, error } = await userClient.auth.signInWithOAuth({
     provider: 'google',
     options: {
       redirectTo: `${requestUrl.origin}/api/auth/callback`,

@@ -1,14 +1,10 @@
-import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
 import { EmailService } from '../../domain/EmailService';
 import { ResendEmailService } from '../services/resend-email-service';
 import { SupabaseEmailService } from '../services/supabase-email-service';
 
-export const createEmailService = (
-  _authClient: SupabaseClient,
-  _dbClient: SupabaseClient,
-): EmailService => {
+export const createEmailService = (): EmailService => {
   const resendApiKey = process.env.RESEND_API_KEY;
   const emailFrom = process.env.EMAIL_FROM || 'RPG World <no-reply@rpgworld.com>';
 
