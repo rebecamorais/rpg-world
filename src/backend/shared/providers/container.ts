@@ -6,8 +6,10 @@ import { createEmailService } from '../infrastructure/email/email-service-factor
 import { Contexts } from './contexts';
 
 export interface ContainerRegistry {
-  dbClient: SupabaseClient;
-  authClient: SupabaseClient;
+  // Acts as the signed-in user (cookie session): data access goes through RLS.
+  userClient: SupabaseClient;
+  // Service role, bypasses RLS: only for operations no user may perform (auth admin, feedback).
+  adminClient: SupabaseClient;
   emailService: EmailService;
 }
 
@@ -15,10 +17,10 @@ export class Container {
   private dependencies: Map<keyof ContainerRegistry, unknown> = new Map();
   private _contexts: Contexts;
 
-  constructor(authClient: SupabaseClient, dbClient: SupabaseClient) {
-    this.register('dbClient', dbClient);
-    this.register('authClient', authClient);
-    this.register('emailService', createEmailService(authClient, dbClient));
+  constructor(userClient: SupabaseClient, adminClient: SupabaseClient) {
+    this.register('userClient', userClient);
+    this.register('adminClient', adminClient);
+    this.register('emailService', createEmailService());
 
     this._contexts = new Contexts(this);
   }

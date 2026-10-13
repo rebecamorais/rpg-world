@@ -16,10 +16,15 @@ import { User } from './domain/User';
 import { SupabaseAuthRepository } from './infrastructure/repositories/supabase-auth-repository';
 import { SupabaseProfileRepository } from './infrastructure/repositories/supabase-profile-repository';
 
-export interface UserContextConfig {
-  authClient: SupabaseClient;
-  dbClient: SupabaseClient; // This is the admin client based on container.ts
+export interface AuthContextConfig {
+  userClient: SupabaseClient;
+  // Service role, required by auth admin APIs (generateLink, listUsers)
+  adminClient: SupabaseClient;
   emailService: EmailService;
+}
+
+export interface UserProfileContextConfig {
+  userClient: SupabaseClient;
 }
 
 export interface AuthContext {
@@ -41,9 +46,9 @@ export interface UserProfileContext {
 
 export type { User };
 
-export const createAuthContext = (config: UserContextConfig): AuthContext => {
-  const authRepository = new SupabaseAuthRepository(config.authClient, config.dbClient);
-  const profileRepository = new SupabaseProfileRepository(config.dbClient);
+export const createAuthContext = (config: AuthContextConfig): AuthContext => {
+  const authRepository = new SupabaseAuthRepository(config.userClient, config.adminClient);
+  const profileRepository = new SupabaseProfileRepository(config.userClient);
 
   return {
     getSession: new GetSessionUserUseCase(authRepository),
@@ -57,9 +62,9 @@ export const createAuthContext = (config: UserContextConfig): AuthContext => {
   };
 };
 
-export const createUserProfileContext = (config: UserContextConfig): UserProfileContext => {
-  const profileRepository = new SupabaseProfileRepository(config.dbClient);
-  const storageRepository = new SupabaseStorageRepository(config.dbClient);
+export const createUserProfileContext = (config: UserProfileContextConfig): UserProfileContext => {
+  const profileRepository = new SupabaseProfileRepository(config.userClient);
+  const storageRepository = new SupabaseStorageRepository(config.userClient);
 
   return {
     getProfile: new GetProfileUseCase(profileRepository),

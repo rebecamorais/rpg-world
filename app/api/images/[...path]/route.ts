@@ -16,7 +16,8 @@ import { SupabaseFactory } from '@lib/supabase';
 
 const CACHE_MAX_AGE = 31_536_000; // 1 year in seconds
 
-// The proxy downloads with the service role, so only buckets meant to be public may be served.
+// Only buckets meant to be public may be served. The anonymous client enforces the same at the
+// storage RLS level, so a missing entry here can't expose a private bucket.
 const PUBLIC_BUCKETS = new Set(['avatars']);
 
 export async function GET(
@@ -40,8 +41,8 @@ export async function GET(
   }
 
   try {
-    const adminClient = SupabaseFactory.createAdmin();
-    const { data, error } = await adminClient.storage.from(bucket).download(filePath);
+    const anonClient = SupabaseFactory.createAnon();
+    const { data, error } = await anonClient.storage.from(bucket).download(filePath);
 
     if (error || !data) {
       return NextResponse.json({ error: 'Asset not found' }, { status: 404 });

@@ -22,7 +22,7 @@ export class Contexts {
 
   get character() {
     if (!this._character) {
-      this._character = createCharacterContext(this.container.get('dbClient'));
+      this._character = createCharacterContext(this.container.get('userClient'));
     }
     return this._character;
   }
@@ -30,8 +30,8 @@ export class Contexts {
   get auth() {
     if (!this._auth) {
       this._auth = createAuthContext({
-        authClient: this.container.get('authClient'),
-        dbClient: this.container.get('dbClient'),
+        userClient: this.container.get('userClient'),
+        adminClient: this.container.get('adminClient'),
         emailService: this.container.get('emailService'),
       });
     }
@@ -41,9 +41,7 @@ export class Contexts {
   get userProfile() {
     if (!this._userProfile) {
       this._userProfile = createUserProfileContext({
-        authClient: this.container.get('authClient'),
-        dbClient: this.container.get('dbClient'),
-        emailService: this.container.get('emailService'),
+        userClient: this.container.get('userClient'),
       });
     }
     return this._userProfile;
@@ -52,7 +50,7 @@ export class Contexts {
   get lore() {
     if (!this._lore) {
       this._lore = createLoreContext({
-        dbClient: this.container.get('dbClient'),
+        dbClient: this.container.get('userClient'),
         characterOwnership: this.character,
       });
     }
@@ -61,14 +59,15 @@ export class Contexts {
 
   get spells() {
     if (!this._spells) {
-      this._spells = createSpellsContext(this.container.get('dbClient'));
+      this._spells = createSpellsContext(this.container.get('userClient'));
     }
     return this._spells;
   }
 
   get feedback() {
     if (!this._feedback) {
-      this._feedback = createFeedbackContext(this.container.get('dbClient'));
+      // Feedback can be sent anonymously and the table has no RLS policies, so it uses the service role.
+      this._feedback = createFeedbackContext(this.container.get('adminClient'));
     }
     return this._feedback;
   }

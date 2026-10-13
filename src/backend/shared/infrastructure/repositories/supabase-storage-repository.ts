@@ -5,10 +5,10 @@ import { StorageRepository } from '../../domain/StorageRepository';
 import { formatAssetUrl } from '../helpers/format-asset-url';
 
 export class SupabaseStorageRepository implements StorageRepository {
-  constructor(private readonly adminClient: SupabaseClient) {}
+  constructor(private readonly client: SupabaseClient) {}
 
   async upload(bucket: string, path: string, file: Blob): Promise<string> {
-    const { error } = await this.adminClient.storage.from(bucket).upload(path, file, {
+    const { error } = await this.client.storage.from(bucket).upload(path, file, {
       upsert: true,
       contentType: file.type,
     });
@@ -23,7 +23,7 @@ export class SupabaseStorageRepository implements StorageRepository {
   }
 
   async download(bucket: string, path: string): Promise<{ data: Blob; contentType: string }> {
-    const { data, error } = await this.adminClient.storage.from(bucket).download(path);
+    const { data, error } = await this.client.storage.from(bucket).download(path);
 
     if (error || !data) {
       throw new Error(`Storage download failed: ${error?.message ?? 'File not found'}`);
