@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 import { httpUrlOrEmpty, optional, optionalQuery } from '@shared/http/validation';
-import { ATTRIBUTE_KEYS, SKILL_KEYS } from '@shared/systems/dnd5e/constants';
+import { ATTRIBUTE_KEYS, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
+import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 // Shape and sanity limits only. Game rules (name required, max HP >= 1...) stay in the domain,
 // which reports them with translated error codes.
@@ -10,8 +11,8 @@ const SMALLINT = { min: -32_768, max: 32_767 };
 const text = (max = 100) => z.string().max(max);
 const int = (min: number, max: number) => z.number().int().min(min).max(max);
 
-const attributeKey = z.enum(ATTRIBUTE_KEYS as [string, ...string[]]);
-const skillKey = z.enum(SKILL_KEYS as [string, ...string[]]);
+const attributeKey = z.enum(ATTRIBUTE_KEYS as [AttributeKey, ...AttributeKey[]]);
+const skillKey = z.enum(SKILL_KEYS as [SkillKey, ...SkillKey[]]);
 
 export const createCharacterSchema = z.object({
   name: text(),

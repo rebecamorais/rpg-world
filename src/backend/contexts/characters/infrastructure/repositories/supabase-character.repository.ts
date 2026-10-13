@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
-import { Lore } from '@backend/contexts/lore';
+import { Lore } from '@backend/contexts/lore/domain/Lore';
 
 import { Database, Json } from '@database-types';
 

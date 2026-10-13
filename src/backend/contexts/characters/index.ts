@@ -1,6 +1,11 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
+import {
+  CharacterContext,
+  CharacterUpdates,
+  CreateCharacterInput,
+} from './application/CharacterContext';
 import { CreateCharacterUseCase } from './application/create-character/create-character.use-case';
 import { DeleteCharacterUseCase } from './application/delete-character/delete-character.use-case';
 import { GetCharactersByOwnerUseCase } from './application/get-characters/get-characters-by-owner.use-case';
@@ -9,11 +14,6 @@ import { GetCharacterSpellsUseCase } from './application/spells/get-character-sp
 import { ToggleCharacterSpellUseCase } from './application/spells/toggle-character-spell.use-case';
 import { UpdateCharacterUseCase } from './application/update-character/update-character.use-case';
 import { UploadCharacterAvatarUseCase } from './application/use-cases/UploadCharacterAvatarUseCase';
-import {
-  CharacterContext,
-  CharacterUpdates,
-  CreateCharacterInput,
-} from './domain/CharacterContext';
 import { SupabaseCharacterSpellRepository } from './infrastructure/repositories/supabase-character-spell.repository';
 import { SupabaseCharacterRepository } from './infrastructure/repositories/supabase-character.repository';
 
