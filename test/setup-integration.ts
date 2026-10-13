@@ -3,14 +3,16 @@ import { beforeEach } from 'vitest';
 import { SupabaseFactory } from '@lib/supabase';
 
 type AdminWithTruncate = {
-  rpc(fn: 'truncate_all_tables'): Promise<{ error: { message: string } | null }>;
+  schema(name: 'test_helpers'): {
+    rpc(fn: 'truncate_all_tables'): Promise<{ error: { message: string } | null }>;
+  };
 };
 
 beforeEach(async () => {
-  // Types sao criados a partir do ambiente de teste, que nao possui o truncate_all_table por issoo tipo local
-  const { error } = await (SupabaseFactory.createAdmin() as unknown as AdminWithTruncate).rpc(
-    'truncate_all_tables',
-  );
+  // truncate_all_tables vive no schema test_helpers (só existe no banco de teste), fora dos tipos gerados
+  const { error } = await (SupabaseFactory.createAdmin() as unknown as AdminWithTruncate)
+    .schema('test_helpers')
+    .rpc('truncate_all_tables');
   if (error) {
     throw new Error(`Falha ao truncar tabelas: ${error?.message}`);
   }
