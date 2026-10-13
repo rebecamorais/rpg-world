@@ -87,12 +87,15 @@ export class SupabaseCharacterRepository implements CharacterRepo {
   }
 
   async delete(id: string): Promise<boolean> {
-    const { error } = await this.client
+    // RLS turns a forbidden update into a no-op rather than an error, so count affected rows.
+    const { data, error } = await this.client
       .from('characters')
       .update({ deleted_at: new Date().toISOString() })
-      .eq('id', id);
+      .eq('id', id)
+      .is('deleted_at', null)
+      .select('id');
 
-    return !error;
+    return !error && data.length > 0;
   }
 
   private mapToDomain(row: DbCharacterRow): Character {
