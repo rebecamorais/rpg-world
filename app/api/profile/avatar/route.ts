@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 
 import { getApi } from '@api';
 
+import { errorResponse } from '@shared/http/route-handler';
+
 export async function POST(req: Request) {
   // Validate session via the auth API
   const { authApi } = await getApi();
@@ -31,8 +33,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ url: avatarUrl }, { status: 200 });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Upload failed';
-    const status = message.includes('size') || message.includes('type') ? 422 : 400;
-    return NextResponse.json({ error: message }, { status });
+    return errorResponse(err);
   }
 }

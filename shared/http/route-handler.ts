@@ -6,6 +6,8 @@ import { getApi } from '@api';
 
 import type { User } from '@shared/types/user';
 
+import { errorToHttp } from './error-response';
+
 type RouteContext = { params: Promise<Record<string, string>> };
 
 type BaseHandler<B = void> = (
@@ -44,10 +46,14 @@ async function runHandler<B>(
 
     return NextResponse.json(result, { status: successStatus });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    const status = (err as { status?: number }).status ?? 400;
-    return NextResponse.json({ error: message }, { status });
+    return errorResponse(err);
   }
+}
+
+/** JSON error response for routes that can't use withHandler/withAuth (e.g. multipart uploads). */
+export function errorResponse(err: unknown) {
+  const { status, body } = errorToHttp(err);
+  return NextResponse.json(body, { status });
 }
 
 /**
