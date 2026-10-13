@@ -82,7 +82,7 @@ Para manter a modularidade e facilitar a manutenção, utilizamos aliases config
 | Alias             | Destino                       | Uso Principal                                         |
 | ----------------- | ----------------------------- | ----------------------------------------------------- |
 | `@/*`             | `src/*`                       | Acesso genérico à pasta source.                       |
-| `@tests/*`        | `tests/*`                     | Suítes de teste e mocks globais.                      |
+| `@tests/*`        | `test/*`                      | Suítes de teste e mocks globais.                      |
 | `@api`            | `src/backend/index`           | Entrypoint principal da camada de API. { getApi }     |
 | `@client`         | `src/frontend/lib/api-client` | Instância configurada do Supabase/Fetch client.       |
 | `@lib/*`          | `lib/*`                       | Utilitários agnósticos, tipos de banco e helpers.     |

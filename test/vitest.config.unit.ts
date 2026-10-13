@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [],
   test: {
     root: path.resolve(__dirname, '../'),
-    include: ['src/**/*.unit.test.ts', 'shared/**/*.unit.test.ts'],
+    include: ['{app,src,shared}/**/*.unit.test.{ts,tsx}'],
     environment: 'node',
     globals: true,
     setupFiles: [path.resolve(__dirname, './setup-unit.ts')],
