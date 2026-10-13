@@ -5,6 +5,7 @@ import { getApi } from '@api';
 import { signUpSchema } from '@backend/contexts/users/interfaces/users.schemas';
 import { TurnstileService } from '@backend/shared/infrastructure/services/turnstile-service';
 
+import { errorCode } from '@shared/http/error-response';
 import { INVALID_REQUEST } from '@shared/http/validation';
 
 export interface ActionResponse {
@@ -36,10 +37,6 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
     await api.authApi.signUp(email, password, `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`);
     return { success: true };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'auth_error_signup_failed';
-    return {
-      success: false,
-      error: message,
-    };
+    return { success: false, error: errorCode(error) };
   }
 }

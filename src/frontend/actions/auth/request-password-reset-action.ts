@@ -4,6 +4,7 @@ import { getApi } from '@api';
 
 import { passwordResetRequestSchema } from '@backend/contexts/users/interfaces/users.schemas';
 
+import { errorCode } from '@shared/http/error-response';
 import { INVALID_REQUEST } from '@shared/http/validation';
 
 export async function requestPasswordResetAction(email: string) {
@@ -18,7 +19,6 @@ export async function requestPasswordResetAction(email: string) {
     await api.authApi.requestPasswordReset(input.data.email, redirectTo);
     return { success: true };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Falha ao solicitar recuperação';
-    return { success: false, error: message };
+    return { success: false, error: errorCode(error) };
   }
 }

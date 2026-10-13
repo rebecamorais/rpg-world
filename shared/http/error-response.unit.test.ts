@@ -1,10 +1,12 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { AppError } from '@backend/shared/domain/AppError';
 
-import { errorToHttp } from './error-response';
+import { UNEXPECTED_ERROR, errorCode, errorToHttp } from './error-response';
 
 describe('errorToHttp', () => {
+  afterEach(() => vi.restoreAllMocks());
+
   it.each([
     ['validation', 400],
     ['not_found', 404],
@@ -16,16 +18,25 @@ describe('errorToHttp', () => {
     });
   });
 
-  it('respeita status explícito em erros legados', () => {
-    const error = Object.assign(new Error('Not found'), { status: 404 });
-    expect(errorToHttp(error)).toEqual({ status: 404, body: { error: 'Not found' } });
+  it('responde 500 genérico para erros inesperados, sem vazar a mensagem', () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const error = new Error('Failed to save character: duplicate key value violates "pk"');
+
+    expect(errorToHttp(error)).toEqual({ status: 500, body: { error: UNEXPECTED_ERROR } });
+    expect(log).toHaveBeenCalledWith(expect.any(String), error);
   });
 
-  it('usa 400 para erros genéricos', () => {
-    expect(errorToHttp(new Error('boom'))).toEqual({ status: 400, body: { error: 'boom' } });
+  it('trata valores que não são Error como inesperados', () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(errorToHttp('x')).toEqual({ status: 500, body: { error: UNEXPECTED_ERROR } });
   });
+});
 
-  it('trata valores que não são Error', () => {
-    expect(errorToHttp('x')).toEqual({ status: 400, body: { error: 'Unknown error' } });
+describe('errorCode', () => {
+  it('expõe o código de AppError e esconde erros inesperados', () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(errorCode(new AppError('auth_error_x'))).toBe('auth_error_x');
+    expect(errorCode(new Error('db exploded'))).toBe(UNEXPECTED_ERROR);
+    vi.restoreAllMocks();
   });
 });

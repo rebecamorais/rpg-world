@@ -13,9 +13,10 @@ export class SupabaseLoreRepository implements LoreRepository {
       .from('character_lore')
       .select('*')
       .eq('character_id', characterId)
-      .single();
+      .maybeSingle();
 
-    if (error || !data) return null;
+    if (error) throw new Error(`Failed to find lore: ${error.message}`);
+    if (!data) return null;
 
     return Lore.fromJSON(data);
   }
@@ -49,6 +50,10 @@ export class SupabaseLoreRepository implements LoreRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await this.client.from('character_lore').delete().eq('character_id', id);
+    const { error } = await this.client.from('character_lore').delete().eq('character_id', id);
+
+    if (error) {
+      throw new Error(`Failed to delete lore: ${error.message}`);
+    }
   }
 }

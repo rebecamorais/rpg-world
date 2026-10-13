@@ -4,6 +4,7 @@ import { getApi } from '@api';
 
 import { updatePasswordSchema } from '@backend/contexts/users/interfaces/users.schemas';
 
+import { errorCode } from '@shared/http/error-response';
 import { INVALID_REQUEST } from '@shared/http/validation';
 
 export async function updatePasswordAction(password: string) {
@@ -17,7 +18,6 @@ export async function updatePasswordAction(password: string) {
     await api.authApi.updatePassword(input.data.newPassword);
     return { success: true };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Falha ao atualizar senha';
-    return { success: false, error: message };
+    return { success: false, error: errorCode(error) };
   }
 }

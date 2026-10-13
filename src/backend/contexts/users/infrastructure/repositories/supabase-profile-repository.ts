@@ -8,9 +8,17 @@ export class SupabaseProfileRepository implements ProfileRepository {
   constructor(private readonly dbClient: SupabaseClient) {}
 
   async getById(id: string): Promise<Profile | null> {
-    const { data, error } = await this.dbClient.from('profile').select('*').eq('id', id).single();
+    const { data, error } = await this.dbClient
+      .from('profile')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
 
-    if (error || !data) {
+    if (error) {
+      throw new Error(`Failed to find profile: ${error.message}`);
+    }
+
+    if (!data) {
       return null;
     }
 

@@ -51,8 +51,7 @@ export class SupabaseCharacterSpellRepository implements CharacterSpellRepo {
       .eq('spells.spell_translations.locale', locale);
 
     if (error) {
-      console.error('Error fetching character spells:', error);
-      return [];
+      throw new Error(`Failed to fetch character spells: ${error.message}`);
     }
 
     return data.map((row) => ({

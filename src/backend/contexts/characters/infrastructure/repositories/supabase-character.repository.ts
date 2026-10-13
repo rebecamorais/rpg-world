@@ -28,9 +28,10 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       .select('*')
       .eq('id', id)
       .is('deleted_at', null)
-      .single();
+      .maybeSingle();
 
-    if (error || !data) return null;
+    if (error) throw new Error(`Failed to find character: ${error.message}`);
+    if (!data) return null;
 
     return this.mapToDomain(data as unknown as DbCharacterRow);
   }
@@ -42,7 +43,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       .eq('owner_id', ownerUsername)
       .is('deleted_at', null);
 
-    if (error || !data) return [];
+    if (error) throw new Error(`Failed to list characters: ${error.message}`);
 
     return data.map((row) => this.mapToDomain(row as unknown as DbCharacterRow));
   }
@@ -95,7 +96,8 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       .is('deleted_at', null)
       .select('id');
 
-    return !error && data.length > 0;
+    if (error) throw new Error(`Failed to delete character: ${error.message}`);
+    return data.length > 0;
   }
 
   private mapToDomain(row: DbCharacterRow): Character {

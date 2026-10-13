@@ -73,8 +73,7 @@ export class SupabaseSpellsRepository implements SpellsRepo {
       .range(from, to);
 
     if (error) {
-      console.error('Error fetching filtered spells:', error);
-      return { data: [], total: 0 };
+      throw new Error(`Failed to fetch spells: ${error.message}`);
     }
 
     const mappedData = data.map((row) => ({

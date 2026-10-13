@@ -1,6 +1,7 @@
 import { AuthError, Session, SupabaseClient, User } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { UserError, UserErrorCodes } from '../../domain/UserError';
 import { SupabaseAuthRepository } from './supabase-auth-repository';
 
 vi.mock('server-only', () => ({}));
@@ -19,6 +20,7 @@ describe('SupabaseAuthRepository', () => {
         signInWithPassword: vi.fn(),
         exchangeCodeForSession: vi.fn(),
         signOut: vi.fn(),
+        updateUser: vi.fn(),
       },
     } as unknown as InstanceType<typeof SupabaseClient>;
 
@@ -26,6 +28,7 @@ describe('SupabaseAuthRepository', () => {
       auth: {
         admin: {
           listUsers: vi.fn(),
+          generateLink: vi.fn(),
         },
       },
     } as unknown as InstanceType<typeof SupabaseClient>;
@@ -33,7 +36,8 @@ describe('SupabaseAuthRepository', () => {
     repository = new SupabaseAuthRepository(mockAuthClient, mockDbClient);
   });
 
-  const mockAuthError = (message: string): AuthError => new AuthError(message, 400, 'mock_error');
+  const mockAuthError = (message: string, code = 'mock_error'): AuthError =>
+    new AuthError(message, 400, code);
 
   describe('getSessionUser', () => {
     it('deve retornar o usuário mapeado quando sucesso', async () => {
@@ -216,6 +220,49 @@ describe('SupabaseAuthRepository', () => {
       await expect(repository.existsByEmail('test@example.com')).rejects.toThrow(
         'Failed to check if user exists: Database unreachable',
       );
+    });
+  });
+
+  describe('mapeamento de erros esperados do Supabase Auth', () => {
+    const failWith = (code: string) => ({ data: {}, error: mockAuthError(code, code) }) as never;
+
+    it.each([
+      ['invalid_credentials', UserErrorCodes.SIGNIN_INVALID_CREDENTIALS],
+      ['email_not_confirmed', UserErrorCodes.SIGNIN_EMAIL_NOT_CONFIRMED],
+      ['over_request_rate_limit', UserErrorCodes.AUTH_RATE_LIMITED],
+    ])('signInWithPassword: %s vira %s', async (code, expected) => {
+      vi.mocked(mockAuthClient.auth.signInWithPassword).mockResolvedValueOnce(failWith(code));
+
+      const error = await repository.signInWithPassword('a@b.co', 'x').catch((e) => e);
+
+      expect(error).toBeInstanceOf(UserError);
+      expect(error.code).toBe(expected);
+    });
+
+    it.each([
+      ['weak_password', UserErrorCodes.UPDATE_PASSWORD_WEAK],
+      ['same_password', UserErrorCodes.UPDATE_PASSWORD_SAME],
+    ])('updatePassword: %s vira %s', async (code, expected) => {
+      vi.mocked(mockAuthClient.auth.updateUser).mockResolvedValueOnce(failWith(code));
+      await expect(repository.updatePassword('123456')).rejects.toThrow(expected);
+    });
+
+    it('generateRecoveryLink: user_not_found vira AUTH_USER_NOT_FOUND', async () => {
+      vi.mocked(mockDbClient.auth.admin.generateLink).mockResolvedValueOnce(
+        failWith('user_not_found'),
+      );
+      await expect(repository.generateRecoveryLink('x@y.co', '/r')).rejects.toThrow(
+        UserErrorCodes.AUTH_USER_NOT_FOUND,
+      );
+    });
+
+    it('erros desconhecidos continuam sendo Error comum (viram 500)', async () => {
+      vi.mocked(mockAuthClient.auth.signInWithPassword).mockResolvedValueOnce(
+        failWith('unexpected_failure'),
+      );
+      const error = await repository.signInWithPassword('a@b.co', 'x').catch((e) => e);
+      expect(error).not.toBeInstanceOf(UserError);
+      expect(error.message).toContain('Failed to sign in with password');
     });
   });
 });

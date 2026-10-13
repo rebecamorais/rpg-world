@@ -1,10 +1,30 @@
-import { SupabaseClient } from '@supabase/supabase-js';
+import { AuthError, SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
 import { AuthRepository } from '../../domain/AuthRepository';
 import { User } from '../../domain/User';
+import { UserError, UserErrorCode, UserErrorCodes } from '../../domain/UserError';
 
 const LIST_USERS_PAGE_SIZE = 1000;
+
+// Supabase Auth failures that are expected outcomes (wrong password, weak password...) become
+// UserErrors the UI can translate. Anything else stays a plain Error and surfaces as a 500.
+const EXPECTED_AUTH_ERRORS: Record<string, UserErrorCode> = {
+  invalid_credentials: UserErrorCodes.SIGNIN_INVALID_CREDENTIALS,
+  email_not_confirmed: UserErrorCodes.SIGNIN_EMAIL_NOT_CONFIRMED,
+  weak_password: UserErrorCodes.UPDATE_PASSWORD_WEAK,
+  same_password: UserErrorCodes.UPDATE_PASSWORD_SAME,
+  email_exists: UserErrorCodes.SIGNUP_DUPLICATE_EMAIL,
+  user_already_exists: UserErrorCodes.SIGNUP_DUPLICATE_EMAIL,
+  user_not_found: UserErrorCodes.AUTH_USER_NOT_FOUND,
+  over_request_rate_limit: UserErrorCodes.AUTH_RATE_LIMITED,
+  over_email_send_rate_limit: UserErrorCodes.AUTH_RATE_LIMITED,
+};
+
+function authFailure(error: AuthError, context: string): Error {
+  const code = error.code ? EXPECTED_AUTH_ERRORS[error.code] : undefined;
+  return code ? new UserError(code) : new Error(`${context}: ${error.message}`);
+}
 
 export class SupabaseAuthRepository implements AuthRepository {
   constructor(
@@ -20,8 +40,12 @@ export class SupabaseAuthRepository implements AuthRepository {
       options: { redirectTo },
     });
 
-    if (error || !data.properties?.action_link) {
-      throw new Error(`Failed to generate signup link: ${error?.message || 'No link returned'}`);
+    if (error) {
+      throw authFailure(error, 'Failed to generate signup link');
+    }
+
+    if (!data.properties?.action_link) {
+      throw new Error('Failed to generate signup link: No link returned');
     }
 
     return data.properties.action_link;
@@ -34,8 +58,12 @@ export class SupabaseAuthRepository implements AuthRepository {
       options: { redirectTo },
     });
 
-    if (error || !data.properties?.action_link) {
-      throw new Error(`Failed to generate recovery link: ${error?.message || 'No link returned'}`);
+    if (error) {
+      throw authFailure(error, 'Failed to generate recovery link');
+    }
+
+    if (!data.properties?.action_link) {
+      throw new Error('Failed to generate recovery link: No link returned');
     }
 
     return data.properties.action_link;
@@ -68,7 +96,7 @@ export class SupabaseAuthRepository implements AuthRepository {
     });
 
     if (error) {
-      throw new Error(`Failed to sign in with OTP: ${error.message}`);
+      throw authFailure(error, 'Failed to sign in with OTP');
     }
   }
 
@@ -79,7 +107,7 @@ export class SupabaseAuthRepository implements AuthRepository {
     });
 
     if (error) {
-      throw new Error(`Failed to sign in with password: ${error.message}`);
+      throw authFailure(error, 'Failed to sign in with password');
     }
   }
 
@@ -90,7 +118,7 @@ export class SupabaseAuthRepository implements AuthRepository {
     });
 
     if (error) {
-      throw new Error(`Failed to sign up: ${error.message}`);
+      throw authFailure(error, 'Failed to sign up');
     }
   }
 
@@ -106,7 +134,7 @@ export class SupabaseAuthRepository implements AuthRepository {
       });
 
       if (error) {
-        throw new Error(`Failed to check if user exists: ${error.message}`);
+        throw authFailure(error, 'Failed to check if user exists');
       }
 
       if (data.users.some((user) => user.email?.toLowerCase() === target)) {
@@ -123,7 +151,7 @@ export class SupabaseAuthRepository implements AuthRepository {
     const { error } = await this.authClient.auth.exchangeCodeForSession(code);
 
     if (error) {
-      throw new Error(`Failed to exchange code for session: ${error.message}`);
+      throw authFailure(error, 'Failed to exchange code for session');
     }
   }
 
@@ -133,7 +161,7 @@ export class SupabaseAuthRepository implements AuthRepository {
     });
 
     if (error) {
-      throw new Error(`Failed to update password: ${error.message}`);
+      throw authFailure(error, 'Failed to update password');
     }
   }
 
@@ -143,7 +171,7 @@ export class SupabaseAuthRepository implements AuthRepository {
     });
 
     if (error) {
-      throw new Error(`Failed to send reset password email: ${error.message}`);
+      throw authFailure(error, 'Failed to send reset password email');
     }
   }
 
@@ -151,7 +179,7 @@ export class SupabaseAuthRepository implements AuthRepository {
     const { error } = await this.authClient.auth.signOut();
 
     if (error) {
-      throw new Error(`Failed to sign out: ${error.message}`);
+      throw authFailure(error, 'Failed to sign out');
     }
   }
 }
