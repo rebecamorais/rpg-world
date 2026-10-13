@@ -48,6 +48,7 @@ const actions = {
       'npx supabase gen types typescript --local --workdir database/db-dev > lib/types/database.ts',
       'Update Types',
     );
+    run('npx prettier --write lib/types/database.ts', 'Format Types');
     console.log(chalk.green.bold('✅ Infra pronta!'));
   },
 

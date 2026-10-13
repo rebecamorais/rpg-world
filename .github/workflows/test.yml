@@ -46,6 +46,13 @@ jobs:
       - name: Start Supabase Test Environment
         run: npx supabase start --workdir database/db-test
 
+      # Garante que lib/types/database.ts está em sincronia com as migrations
+      - name: Check Database Types Are Up To Date
+        run: |
+          npx supabase gen types typescript --local --workdir database/db-test > lib/types/database.ts
+          npx prettier --write lib/types/database.ts
+          git diff --exit-code lib/types/database.ts || (echo "::error::lib/types/database.ts está desatualizado. Rode 'npm run infra up' e commite o arquivo." && exit 1)
+
       # 3. Rodar Testes de Integração
       - name: Run Integration Tests
         run: npm run test:integration
