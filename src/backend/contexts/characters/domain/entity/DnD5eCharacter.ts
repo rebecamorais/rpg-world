@@ -1,5 +1,11 @@
 import { Lore } from '@backend/contexts/lore/domain/Lore';
 
+import {
+  calculateSavingThrow,
+  calculateSkillValue,
+  getModifier,
+  getProficiencyBonus,
+} from '@shared/systems/dnd5e/calculations';
 import type { SkillKey } from '@shared/systems/dnd5e/constants/skill';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
@@ -155,30 +161,31 @@ export class DnD5eCharacter extends Character {
     return { ...defaultSaves, ...saves };
   }
 
-  // Domain Rules for D&D 5e
+  // D&D 5e rules live in @shared/systems/dnd5e/calculations (also used by the sheet)
   getModifier(attributeKey: AttributeKey): number {
-    const val = this.attributes.get(attributeKey);
-    return Math.floor((val - 10) / 2);
+    return getModifier(this.attributes.get(attributeKey));
   }
 
   get proficiencyBonus(): number {
-    return 2 + Math.floor((this.level - 1) / 4);
+    return getProficiencyBonus(this.level);
   }
 
   calculateSkillValue(skillKey: SkillKey, relatedAttribute: AttributeKey): number {
-    const mod = this.getModifier(relatedAttribute);
     const skill = this.skills[skillKey];
-    if (!skill?.isProficient) return mod;
-
-    const bonus = skill.expertise ? this.proficiencyBonus * 2 : this.proficiencyBonus;
-    return mod + bonus;
+    return calculateSkillValue(
+      this.attributes.get(relatedAttribute),
+      this.level,
+      skill?.isProficient ?? false,
+      skill?.expertise ?? false,
+    );
   }
 
   calculateSavingThrow(attributeKey: AttributeKey): number {
-    const mod = this.getModifier(attributeKey);
-    const isProficient = this.savingThrowProficiencies[attributeKey];
-    const pb = isProficient ? this.proficiencyBonus : 0;
-    return mod + pb;
+    return calculateSavingThrow(
+      this.attributes.get(attributeKey),
+      this.level,
+      this.savingThrowProficiencies[attributeKey],
+    );
   }
 
   getCombatStats(): Record<string, unknown> {
