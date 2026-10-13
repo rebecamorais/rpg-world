@@ -8,7 +8,8 @@ const directive = (csp: string, name: string) =>
     .map((part) => part.trim())
     .find((part) => part.startsWith(`${name} `)) ?? '';
 
-const prod = { supabaseUrl: 'https://abc.supabase.co', isDev: false };
+const prod = { supabaseUrl: 'https://abc.supabase.co', isDev: false, vercelEnv: 'production' };
+const localBuild = { supabaseUrl: 'http://127.0.0.1:54321', isDev: false, vercelEnv: undefined };
 
 describe('buildContentSecurityPolicy', () => {
   it('lets the browser talk to Supabase over HTTP and WebSocket', () => {
@@ -37,15 +38,29 @@ describe('buildContentSecurityPolicy', () => {
     );
   });
 
-  it('upgrades insecure requests only in production', () => {
+  it('upgrades insecure requests only on Vercel deployments, which are always https', () => {
     expect(buildContentSecurityPolicy(prod)).toContain('upgrade-insecure-requests');
-    expect(buildContentSecurityPolicy({ ...prod, isDev: true })).not.toContain(
+    expect(buildContentSecurityPolicy({ ...prod, vercelEnv: 'preview' })).toContain(
       'upgrade-insecure-requests',
     );
+    // `next build && next start` on a machine talking to the local http Supabase
+    expect(buildContentSecurityPolicy(localBuild)).not.toContain('upgrade-insecure-requests');
+  });
+
+  it('allows the Vercel toolbar only on preview deployments', () => {
+    const preview = buildContentSecurityPolicy({ ...prod, vercelEnv: 'preview' });
+    expect(directive(preview, 'script-src')).toContain('https://vercel.live');
+    expect(directive(preview, 'frame-src')).toContain('https://vercel.live');
+    expect(directive(preview, 'connect-src')).toContain('https://vercel.live');
+    expect(directive(preview, 'connect-src')).toContain('wss://ws-us3.pusher.com');
+    expect(directive(preview, 'font-src')).toContain('https://assets.vercel.com');
+
+    expect(buildContentSecurityPolicy(prod)).not.toContain('vercel.live');
+    expect(buildContentSecurityPolicy(localBuild)).not.toContain('vercel.live');
   });
 
   it('works without a Supabase URL', () => {
-    const csp = buildContentSecurityPolicy({ supabaseUrl: undefined, isDev: false });
+    const csp = buildContentSecurityPolicy({ ...prod, supabaseUrl: undefined });
     expect(directive(csp, 'connect-src')).toBe("connect-src 'self'");
   });
 });

@@ -9,10 +9,22 @@
 const TURNSTILE_ORIGIN = 'https://challenges.cloudflare.com';
 const GITHUB_SPONSORS_ORIGIN = 'https://github.com';
 
+// Sources the Vercel toolbar (comments, feedback) loads on preview deployments
+const VERCEL_TOOLBAR = {
+  'script-src': ['https://vercel.live'],
+  'style-src': ['https://vercel.live'],
+  'img-src': ['https://vercel.live', 'https://vercel.com'],
+  'font-src': ['https://vercel.live', 'https://assets.vercel.com'],
+  'connect-src': ['https://vercel.live', 'wss://ws-us3.pusher.com'],
+  'frame-src': ['https://vercel.live'],
+};
+
 export interface SecurityHeadersOptions {
   /** `NEXT_PUBLIC_SUPABASE_URL`: the browser client calls Auth/Storage/Realtime there. */
   supabaseUrl: string | undefined;
   isDev: boolean;
+  /** `VERCEL_ENV`: set on Vercel deployments (always https), undefined elsewhere. */
+  vercelEnv: string | undefined;
 }
 
 function supabaseOrigins(supabaseUrl: string | undefined): string[] {
@@ -22,7 +34,11 @@ function supabaseOrigins(supabaseUrl: string | undefined): string[] {
   return [url.origin, `${wsProtocol}//${url.host}`];
 }
 
-export function buildContentSecurityPolicy({ supabaseUrl, isDev }: SecurityHeadersOptions) {
+export function buildContentSecurityPolicy({
+  supabaseUrl,
+  isDev,
+  vercelEnv,
+}: SecurityHeadersOptions) {
   const directives: Record<string, string[]> = {
     'default-src': ["'self'"],
     // 'unsafe-eval' is only needed by React's dev tooling
@@ -45,8 +61,16 @@ export function buildContentSecurityPolicy({ supabaseUrl, isDev }: SecurityHeade
     'frame-ancestors': ["'none'"],
   };
 
+  if (vercelEnv === 'preview') {
+    for (const [name, sources] of Object.entries(VERCEL_TOOLBAR)) {
+      directives[name].push(...sources);
+    }
+  }
+
   const policy = Object.entries(directives).map(([name, values]) => `${name} ${values.join(' ')}`);
-  if (!isDev) policy.push('upgrade-insecure-requests');
+  // Only where the site is known to be served over https: a local `next start` talks to the
+  // local Supabase over plain http
+  if (vercelEnv) policy.push('upgrade-insecure-requests');
 
   return policy.join('; ');
 }
