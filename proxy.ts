@@ -3,14 +3,14 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { type CookieOptions, createServerClient } from '@supabase/ssr';
 
 /**
- * This middleware exists solely to refresh expired Supabase sessions.
+ * This proxy exists solely to refresh expired Supabase sessions.
  * Route protection is handled at the layout level via app/(dashboard)/layout.tsx.
  *
  * Technical reason: Server Components cannot write cookies (read-only during render).
  * The Supabase client here is the only place that can write the refreshed JWT back
  * to the browser via HTTP response headers.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request: { headers: request.headers },
   });

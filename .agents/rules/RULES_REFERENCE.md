@@ -23,7 +23,7 @@ trigger: always_on
 - **Criação de Conta**: Novos usuários são criados **manualmente** via Dashboard do Supabase (medida temporária).
 - **Senha de Primeiro Acesso**: Senha padrão obrigatória: `123MudaASenha@`.
 - **Política de Troca**: O sistema deve interceptar usuários com a senha padrão ou onde `last_password_change == null`, forçando o redirecionamento para `/settings/change-password`.
-- **Auth Server-Side**: Autenticação 100% via Supabase SSR (Proxy Pattern). O `middleware.ts` gerencia apenas o refresh do token JWT.
+- **Auth Server-Side**: Autenticação 100% via Supabase SSR (Proxy Pattern). O `proxy.ts` (antigo `middleware.ts`) gerencia apenas o refresh do token JWT.
 
 ## 4. Arquitetura (Clean Architecture & SOLID)
 
