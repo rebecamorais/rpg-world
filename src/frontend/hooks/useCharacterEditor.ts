@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { withAttribute, withSkill } from '@frontend/lib/character-sheet-updates';
 
 import type { AttributeKey, DnD5eCharacter } from '@shared/systems/dnd5e';
@@ -25,6 +26,7 @@ export function useCharacterEditor({
   const [character, setCharacter] = useState<DnD5eCharacter | null>(null);
   const [error, setError] = useState('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const { getErrorMessage } = useErrorMessage();
 
   // Local state as fallback
   const [localIsSpellsOpen, localSetIsSpellsOpen] = useState(false);
@@ -41,9 +43,9 @@ export function useCharacterEditor({
 
   useEffect(() => {
     if (queryError) {
-      Promise.resolve().then(() => setError(queryError.message));
+      Promise.resolve().then(() => setError(getErrorMessage(queryError)));
     }
-  }, [queryError]);
+  }, [queryError, getErrorMessage]);
 
   const markDirty = useCallback(() => {
     setError('');

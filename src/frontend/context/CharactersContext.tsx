@@ -48,7 +48,7 @@ export function CharactersProvider({ children }: { children: ReactNode }) {
       setConfirmName('');
     },
     onError: (err: Error) => {
-      toast.error(`${t('deleteError')} ${getErrorMessage(err)}`);
+      toast.error(getErrorMessage(err));
     },
   });
 

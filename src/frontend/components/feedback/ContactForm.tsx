@@ -42,6 +42,8 @@ import {
 import { Textarea } from '@frontend/components/ui/textarea';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
+import { UNEXPECTED_ERROR } from '@shared/http/error-response';
+
 export default function ContactForm({ initialEmail = '' }: { initialEmail?: string }) {
   const t = useTranslations('feedback');
   const { getMessage } = useErrorMessage();
@@ -83,7 +85,9 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
         setIsSuccess(true);
         form.reset();
       } else {
-        toast.error(t('error'));
+        // Security and validation codes tell the user what to fix; anything else keeps the
+        // themed generic message
+        toast.error(result.error === UNEXPECTED_ERROR ? t('error') : getMessage(result.error));
       }
     } catch (error) {
       console.error('Feedback submission error:', error);
