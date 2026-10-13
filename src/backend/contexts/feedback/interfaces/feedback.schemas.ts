@@ -6,4 +6,5 @@ export const submitFeedbackSchema = z.object({
   email: z.email().max(320),
   type: z.enum(FeedbackType),
   message: z.string().min(10).max(5_000),
+  turnstileToken: z.string().max(4096),
 });

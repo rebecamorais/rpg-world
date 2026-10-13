@@ -3,14 +3,27 @@
 import { getApi } from '@api';
 
 import { passwordResetRequestSchema } from '@backend/contexts/users/interfaces/users.schemas';
+import { TurnstileService } from '@backend/shared/infrastructure/services/turnstile-service';
 
 import { errorCode } from '@shared/http/error-response';
 import { INVALID_REQUEST } from '@shared/http/validation';
 
-export async function requestPasswordResetAction(email: string) {
-  const input = passwordResetRequestSchema.safeParse({ email });
+import type { ActionResponse } from './sign-up-action';
+
+export async function requestPasswordResetAction(
+  email: string,
+  turnstileToken: string,
+): Promise<ActionResponse> {
+  const input = passwordResetRequestSchema.safeParse({ email, turnstileToken });
   if (!input.success) {
     return { success: false, error: INVALID_REQUEST };
+  }
+
+  // The reset link is generated with the admin API, which bypasses Supabase's e-mail rate
+  // limits, so the request must prove it comes from a human before any e-mail is sent.
+  const turnstile = await TurnstileService.verify(input.data.turnstileToken);
+  if (!turnstile.success) {
+    return { success: false, error: turnstile.error || 'security_verification_failed' };
   }
 
   try {

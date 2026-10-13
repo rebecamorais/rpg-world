@@ -4,6 +4,7 @@ import { httpUrlOrEmpty, optional } from '@shared/http/validation';
 
 const email = z.email().max(320);
 const password = (min: number) => z.string().min(min).max(200);
+const turnstileToken = z.string().max(4096);
 
 export const signInWithPasswordSchema = z.object({ email, password: z.string().min(1).max(200) });
 
@@ -14,10 +15,10 @@ export const updatePasswordSchema = z.object({ newPassword: password(6) });
 export const signUpSchema = z.object({
   email,
   password: password(8),
-  turnstileToken: z.string().max(4096),
+  turnstileToken,
 });
 
-export const passwordResetRequestSchema = z.object({ email });
+export const passwordResetRequestSchema = z.object({ email, turnstileToken });
 
 export const updateProfileSchema = z.object({
   // DB constraint: username has at least 3 characters
