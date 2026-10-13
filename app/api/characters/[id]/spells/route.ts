@@ -6,18 +6,11 @@ export const GET = withAuth(async (req, user, _body, ctx) => {
   const { id } = await ctx.params;
   const { charactersApi } = await getApi();
 
-  // Verify ownership first
-  const character = await charactersApi.getById(id);
-  if (!character || character.ownerUsername !== user.id) {
-    throw Object.assign(new Error('Not found'), { status: 404 });
-  }
-
   // Get locale from query parameter (set by frontend)
   const url = new URL(req.url);
   const locale = url.searchParams.get('locale') || 'en';
 
-  const spells = await charactersApi.getSpells(id, locale);
-  return spells;
+  return charactersApi.getSpells(id, user.id, locale);
 });
 
 export const POST = withAuth<{
@@ -26,13 +19,6 @@ export const POST = withAuth<{
 }>(async (req, user, body, ctx) => {
   const { id } = await ctx.params;
   const { charactersApi } = await getApi();
-
-  // Verify ownership
-  const character = await charactersApi.getById(id);
-  if (!character || character.ownerUsername !== user.id) {
-    throw Object.assign(new Error('Unauthorized'), { status: 403 });
-  }
-
-  await charactersApi.toggleSpell(id, body.id, body.action);
+  await charactersApi.toggleSpell(id, user.id, body.id, body.action);
   return { success: true };
 });

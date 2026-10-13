@@ -29,8 +29,8 @@ export const createCharacterContext = (dbClient: SupabaseClient): CharacterConte
   const updateCharacterUseCase = new UpdateCharacterUseCase(repository);
   const deleteCharacterUseCase = new DeleteCharacterUseCase(repository);
 
-  const getCharacterSpellsUseCase = new GetCharacterSpellsUseCase(spellRepository);
-  const toggleCharacterSpellUseCase = new ToggleCharacterSpellUseCase(spellRepository);
+  const getCharacterSpellsUseCase = new GetCharacterSpellsUseCase(repository, spellRepository);
+  const toggleCharacterSpellUseCase = new ToggleCharacterSpellUseCase(repository, spellRepository);
 
   return {
     getById: getCharacterUseCase.execute.bind(getCharacterUseCase),
@@ -38,6 +38,10 @@ export const createCharacterContext = (dbClient: SupabaseClient): CharacterConte
     create: createCharacterUseCase.execute.bind(createCharacterUseCase),
     update: updateCharacterUseCase.execute.bind(updateCharacterUseCase),
     delete: deleteCharacterUseCase.execute.bind(deleteCharacterUseCase),
+    isOwner: async (id: string, userId: string) => {
+      const character = await repository.findById(id);
+      return character?.isOwnedBy(userId) ?? false;
+    },
     getSpells: getCharacterSpellsUseCase.execute.bind(getCharacterSpellsUseCase),
     toggleSpell: toggleCharacterSpellUseCase.execute.bind(toggleCharacterSpellUseCase),
     uploadAvatar: async (id: string, userId: string, file: Blob) => {

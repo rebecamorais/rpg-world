@@ -14,7 +14,7 @@ export type CreateCharacterInput = {
 export type CharacterUpdates = Record<string, unknown>;
 
 export interface CharacterContext {
-  getById(id: string): Promise<Character>;
+  getById(id: string, requesterId: string): Promise<Character>;
   getByOwner(ownerUsername: string): Promise<Character[]>;
   create(data: CreateCharacterInput): Promise<DnD5eCharacter>;
   update({
@@ -29,15 +29,19 @@ export interface CharacterContext {
   delete(id: string, ownerUsername: string): Promise<boolean>;
   uploadAvatar(id: string, userId: string, file: Blob): Promise<string>;
 
+  isOwner(id: string, userId: string): Promise<boolean>;
+
   // Spells
   getSpells(
     id: string,
+    requesterId: string,
     locale?: string,
   ): Promise<
     Array<{ id: string; name: string; level: number; school: string; isPrepared: boolean }>
   >;
   toggleSpell(
     id: string,
+    requesterId: string,
     spellId: string,
     action: 'learn' | 'forget' | 'prepare' | 'unprepare',
   ): Promise<void>;

@@ -9,6 +9,7 @@ import {
 } from '../../domain/entity/DnD5eCharacter';
 import { CharacterRepo } from '../../domain/repository';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
+import { findOwnedCharacter } from '../find-owned-character';
 
 export interface CharacterUpdates {
   name?: string;
@@ -89,15 +90,10 @@ export class UpdateCharacterUseCase {
     ownerUsername: string;
     updates: CharacterUpdates;
   }): Promise<DnD5eCharacter> {
-    const character = await this.repository.findById(id);
-
-    if (!character) {
-      throw new CharacterError(CharacterErrorCodes.UPDATE_NOT_FOUND);
-    }
-
-    if (character.ownerUsername !== ownerUsername) {
-      throw new CharacterError(CharacterErrorCodes.UPDATE_UNAUTHORIZED);
-    }
+    const character = await findOwnedCharacter(this.repository, id, ownerUsername, 'write', {
+      notFound: CharacterErrorCodes.UPDATE_NOT_FOUND,
+      forbidden: CharacterErrorCodes.UPDATE_UNAUTHORIZED,
+    });
 
     if (!(character instanceof DnD5eCharacter)) {
       throw new CharacterError(CharacterErrorCodes.UPDATE_SYSTEM_NOT_SUPPORTED);

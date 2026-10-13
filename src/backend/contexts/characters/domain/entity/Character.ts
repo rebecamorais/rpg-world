@@ -38,6 +38,10 @@ export abstract class Character {
     this.avatarUrl = avatarUrl;
   }
 
+  isOwnedBy(userId: string): boolean {
+    return Boolean(userId) && this.ownerUsername === userId;
+  }
+
   // Business rules all characters must implement
   abstract getCombatStats(): Record<string, unknown>;
   abstract toJSON(): Record<string, unknown>;

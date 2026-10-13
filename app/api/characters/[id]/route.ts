@@ -9,13 +9,7 @@ type UpdateBody = {
 export const GET = withAuth(async (req, user, _body, ctx) => {
   const { id } = await ctx.params;
   const { charactersApi } = await getApi();
-  const character = await charactersApi.getById(id);
-
-  if (!character || character.ownerUsername !== user.id) {
-    throw Object.assign(new Error('Not found'), { status: 404 });
-  }
-
-  return character;
+  return charactersApi.getById(id, user.id);
 });
 
 export const PUT = withAuth<UpdateBody>(async (req, user, body, ctx) => {

@@ -1,26 +1,39 @@
+import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
+import { CharacterRepo } from '../../domain/repository';
 import { CharacterSpellRepo } from '../../domain/repository/character-spell.repo';
+import { findOwnedCharacter } from '../find-owned-character';
 
 export type ToggleSpellAction = 'learn' | 'forget' | 'prepare' | 'unprepare';
 
 export class ToggleCharacterSpellUseCase {
-  constructor(private readonly repository: CharacterSpellRepo) {}
+  constructor(
+    private readonly characterRepository: CharacterRepo,
+    private readonly spellRepository: CharacterSpellRepo,
+  ) {}
 
-  async execute(characterId: string, id: string, action: ToggleSpellAction): Promise<void> {
+  async execute(
+    characterId: string,
+    requesterId: string,
+    spellId: string,
+    action: ToggleSpellAction,
+  ): Promise<void> {
+    await findOwnedCharacter(this.characterRepository, characterId, requesterId, 'write');
+
     switch (action) {
       case 'learn':
-        await this.repository.learn(characterId, id);
+        await this.spellRepository.learn(characterId, spellId);
         break;
       case 'forget':
-        await this.repository.forget(characterId, id);
+        await this.spellRepository.forget(characterId, spellId);
         break;
       case 'prepare':
-        await this.repository.togglePrepared(characterId, id, true);
+        await this.spellRepository.togglePrepared(characterId, spellId, true);
         break;
       case 'unprepare':
-        await this.repository.togglePrepared(characterId, id, false);
+        await this.spellRepository.togglePrepared(characterId, spellId, false);
         break;
       default:
-        throw new Error(`Action ${action} not implemented`);
+        throw new CharacterError(CharacterErrorCodes.SPELL_ACTION_INVALID);
     }
   }
 }

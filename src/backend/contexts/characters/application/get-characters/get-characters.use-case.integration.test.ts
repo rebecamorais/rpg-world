@@ -39,7 +39,7 @@ describe('GetCharacterUseCase (Integration)', () => {
     await repo.save(mockChar);
 
     // Act
-    const result = await useCase.execute('char-123');
+    const result = await useCase.execute('char-123', 'user1');
 
     // Assert
     expect(result).toBeDefined();
@@ -48,7 +48,7 @@ describe('GetCharacterUseCase (Integration)', () => {
   });
 
   it('deve lançar erro se o personagem não for encontrado', async () => {
-    await expect(useCase.execute('invalid-id')).rejects.toThrowError(
+    await expect(useCase.execute('invalid-id', 'user1')).rejects.toThrowError(
       'character_error_get_not_found',
     );
   });
