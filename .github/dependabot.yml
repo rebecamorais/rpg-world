@@ -49,6 +49,9 @@ updates:
       # Os plugins do eslint-config-next ainda não suportam ESLint 10
       - dependency-name: 'eslint'
         update-types: ['version-update:semver-major']
+      # typescript-eslint ainda não suporta TypeScript 7
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: 'github-actions'
     directory: '/'
