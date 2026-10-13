@@ -16,6 +16,9 @@ import { SupabaseFactory } from '@lib/supabase';
 
 const CACHE_MAX_AGE = 31_536_000; // 1 year in seconds
 
+// The proxy downloads with the service role, so only buckets meant to be public may be served.
+const PUBLIC_BUCKETS = new Set(['avatars']);
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ path: string[] }> },
@@ -31,6 +34,10 @@ export async function GET(
 
   const [bucket, ...fileParts] = path;
   const filePath = fileParts.join('/');
+
+  if (!PUBLIC_BUCKETS.has(bucket)) {
+    return NextResponse.json({ error: 'Asset not found' }, { status: 404 });
+  }
 
   try {
     const adminClient = SupabaseFactory.createAdmin();
