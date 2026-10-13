@@ -48,7 +48,8 @@
       "expired_link_title": "Link Expired",
       "expired_link_description": "The access link has expired or has already been used.",
       "auth_error_title": "Authentication Error",
-      "auth_error_description": "We could not complete the operation at this time."
+      "auth_error_description": "We could not complete the operation at this time.",
+      "security_widget_unavailable": "Could not load the security check. Disable content blockers for this site or reload the page."
     },
     "save": "Save",
     "saving": "Saving...",

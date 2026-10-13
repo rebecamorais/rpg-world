@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+
 declare global {
   interface Window {
     turnstile?: {
@@ -41,6 +43,8 @@ export function TurnstileWidget({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const onTokenChangeRef = useRef(onTokenChange);
+  const [unavailable, setUnavailable] = useState(false);
+  const { getMessage } = useErrorMessage();
 
   useEffect(() => {
     onTokenChangeRef.current = onTokenChange;
@@ -60,8 +64,17 @@ export function TurnstileWidget({
           'error-callback': () => onTokenChangeRef.current(null),
         });
       } catch (e) {
-        console.warn('Turnstile render error (likely already rendered):', e);
+        console.warn('Turnstile render error:', e);
+        setUnavailable(true);
       }
+    };
+
+    // Blocked by a content blocker, offline, or refused by the CSP: without this the submit
+    // button would stay disabled with no explanation
+    const handleScriptError = () => {
+      // Drop the failed tag so the next mount (e.g. after reset) tries to load it again
+      document.getElementById(SCRIPT_ID)?.remove();
+      if (isMounted) setUnavailable(true);
     };
 
     // The script may already have been added by another form or a previous navigation
@@ -71,6 +84,7 @@ export function TurnstileWidget({
       renderWidget();
     } else if (script) {
       script.addEventListener('load', renderWidget);
+      script.addEventListener('error', handleScriptError);
     } else {
       script = document.createElement('script');
       script.id = SCRIPT_ID;
@@ -78,12 +92,14 @@ export function TurnstileWidget({
       script.async = true;
       script.defer = true;
       script.addEventListener('load', renderWidget);
+      script.addEventListener('error', handleScriptError);
       document.head.appendChild(script);
     }
 
     return () => {
       isMounted = false;
       script?.removeEventListener('load', renderWidget);
+      script?.removeEventListener('error', handleScriptError);
       if (widgetId && window.turnstile) {
         try {
           window.turnstile.remove(widgetId);
@@ -94,5 +110,14 @@ export function TurnstileWidget({
     };
   }, []);
 
-  return <div ref={containerRef} className="my-2 flex justify-center" />;
+  return (
+    <div className="my-2 flex flex-col items-center gap-2">
+      <div ref={containerRef} />
+      {unavailable && (
+        <p role="alert" className="text-center text-sm text-red-400">
+          {getMessage('security_widget_unavailable')}
+        </p>
+      )}
+    </div>
+  );
 }
