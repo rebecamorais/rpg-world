@@ -3,15 +3,12 @@
 import { getApi } from '@api';
 
 import { signUpSchema } from '@backend/contexts/users/interfaces/users.schemas';
-import { TurnstileService } from '@backend/shared/infrastructure/services/turnstile-service';
+import { verifyHuman } from '@backend/shared/infrastructure/services/verify-human';
 
 import { errorCode } from '@shared/http/error-response';
 import { INVALID_REQUEST } from '@shared/http/validation';
 
-export interface ActionResponse {
-  success: boolean;
-  error?: string;
-}
+import type { ActionResponse } from '../action-response';
 
 export async function signUpAction(formData: FormData): Promise<ActionResponse> {
   const input = signUpSchema.safeParse({
@@ -26,10 +23,9 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
 
   const { email, password, turnstileToken } = input.data;
 
-  // 1. Verify Turnstile Token
-  const turnstile = await TurnstileService.verify(turnstileToken);
-  if (!turnstile.success) {
-    return { success: false, error: turnstile.error || 'security_verification_failed' };
+  const securityError = await verifyHuman(turnstileToken);
+  if (securityError) {
+    return { success: false, error: securityError };
   }
 
   try {

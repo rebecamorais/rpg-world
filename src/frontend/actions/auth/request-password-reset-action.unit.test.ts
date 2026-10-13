@@ -6,6 +6,8 @@ import { requestPasswordResetAction } from './request-password-reset-action';
 
 const requestPasswordReset = vi.fn();
 
+vi.mock('server-only', () => ({}));
+
 vi.mock('@api', () => ({
   getApi: async () => ({ authApi: { requestPasswordReset } }),
 }));

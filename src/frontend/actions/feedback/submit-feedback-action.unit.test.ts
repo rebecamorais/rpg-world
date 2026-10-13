@@ -7,6 +7,8 @@ import { submitFeedbackAction } from './submit-feedback-action';
 const submitFeedback = vi.fn();
 const getSessionUser = vi.fn();
 
+vi.mock('server-only', () => ({}));
+
 vi.mock('@api', () => ({
   getApi: async () => ({
     authApi: { getSessionUser },

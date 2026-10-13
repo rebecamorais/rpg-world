@@ -7,12 +7,12 @@
 import { getApi } from '@api';
 
 import { submitFeedbackSchema } from '@backend/contexts/feedback/interfaces/feedback.schemas';
-import { TurnstileService } from '@backend/shared/infrastructure/services/turnstile-service';
+import { verifyHuman } from '@backend/shared/infrastructure/services/verify-human';
 
 import { errorCode } from '@shared/http/error-response';
 import { INVALID_REQUEST } from '@shared/http/validation';
 
-import type { ActionResponse } from '../auth/sign-up-action';
+import type { ActionResponse } from '../action-response';
 
 export async function submitFeedbackAction(formData: {
   email: string;
@@ -28,9 +28,9 @@ export async function submitFeedbackAction(formData: {
   const { turnstileToken, ...feedback } = input.data;
 
   // Anonymous submissions are allowed and saved with the service role, so require Turnstile.
-  const turnstile = await TurnstileService.verify(turnstileToken);
-  if (!turnstile.success) {
-    return { success: false, error: turnstile.error || 'security_verification_failed' };
+  const securityError = await verifyHuman(turnstileToken);
+  if (securityError) {
+    return { success: false, error: securityError };
   }
 
   try {
