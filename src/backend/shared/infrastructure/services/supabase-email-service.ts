@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { render } from '@react-email/render';
-import nodemailer from 'nodemailer';
+import nodemailer, { type Transporter } from 'nodemailer';
 import 'server-only';
 
 import { EmailService } from '../../domain/EmailService';
@@ -15,7 +15,7 @@ import { PasswordResetTemplate } from '../email/templates/PasswordReset';
  * and logs the important links to the console for easy developer access.
  */
 export class SupabaseEmailService implements EmailService {
-  private readonly transporter: nodemailer.Transporter;
+  private readonly transporter: Transporter;
 
   constructor(private readonly fromEmail: string) {
     this.transporter = nodemailer.createTransport({
