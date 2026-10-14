@@ -39,6 +39,16 @@ describe('RLS com client do usuário (Integration)', () => {
   });
 
   describe('characters', () => {
+    it('lista do mais novo para o mais antigo, mesmo depois de salvar o mais antigo', async () => {
+      const repo = new SupabaseCharacterRepository(owner.client);
+      const newerId = crypto.randomUUID();
+      await repo.save(makeCharacter(newerId, owner.userId, 'Newer'));
+      await repo.save(makeCharacter(characterId, owner.userId, 'Original, edited'));
+
+      const names = (await repo.findByOwner(owner.userId)).map((c) => c.name);
+      expect(names).toEqual(['Newer', 'Original, edited']);
+    });
+
     it('o dono lê o próprio personagem', async () => {
       const character = await new SupabaseCharacterRepository(owner.client).findById(characterId);
       expect(character?.name).toBe('Original');
