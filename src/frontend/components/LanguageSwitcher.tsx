@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import { useLocale, useTranslations } from 'next-intl';
 
+import { AppIcon } from '@frontend/components/ui/icon';
 import {
   Select,
   SelectContent,
@@ -25,8 +26,16 @@ export default function LanguageSwitcher() {
 
   return (
     <Select value={locale} onValueChange={handleValueChange}>
-      <SelectTrigger aria-label={t('language')} className="bg-background h-9 w-[130px] text-sm">
-        <SelectValue placeholder={t('loading')} />
+      <SelectTrigger
+        aria-label={t('language')}
+        className="text-muted-foreground hover:text-foreground hover:bg-muted h-9 w-auto gap-1.5 border-transparent bg-transparent px-2.5 py-0 font-medium shadow-none backdrop-blur-none"
+      >
+        <AppIcon name="Languages" size={16} aria-hidden="true" />
+        {/* Language code on phones, full name from sm up */}
+        <SelectValue placeholder={t('loading')}>
+          <span className="uppercase sm:hidden">{locale}</span>
+          <span className="hidden sm:inline">{t(locale as 'en' | 'pt')}</span>
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="en">{t('en')}</SelectItem>

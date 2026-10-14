@@ -31,6 +31,8 @@ export interface CharacterActions {
   /** Changes the draft: `update({ ac: 15 })` or a patch from `lib/character-sheet-updates`. */
   update: (patch: DraftPatch<DnD5eCharacter>) => void;
   save: () => Promise<void>;
+  /** Drops the unsaved edits. */
+  discard: () => void;
 }
 
 export interface CharacterMeta {
@@ -74,7 +76,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const { getErrorMessage } = useErrorMessage();
 
   const { character: fetched, isLoading, error, updateCharacter, isSaving } = useCharacter(id);
-  const { draft, isDirty, update, commit } = useDraft(fetched);
+  const { draft, isDirty, update, commit, discard } = useDraft(fetched);
 
   const save = useCallback(async () => {
     try {
@@ -86,7 +88,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   }, [commit, updateCharacter, t]);
 
   const state = useMemo(() => ({ character: draft, isDirty }), [draft, isDirty]);
-  const actions = useMemo(() => ({ update, save }), [update, save]);
+  const actions = useMemo(() => ({ update, save, discard }), [update, save, discard]);
   const meta = useMemo(
     () => ({ id, isLoading, isSaving, error: error ? getErrorMessage(error) : null }),
     [id, isLoading, isSaving, error, getErrorMessage],

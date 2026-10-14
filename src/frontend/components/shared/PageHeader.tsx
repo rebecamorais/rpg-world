@@ -4,32 +4,45 @@ import { AppIcon, IconName } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
 
 interface PageHeaderProps {
-  icon: IconName;
-  title: string;
+  title: ReactNode;
+  description?: ReactNode;
+  /** Small line above the title: where you are (a sheet tab) or a way back. */
+  eyebrow?: ReactNode;
+  icon?: IconName;
   actions?: ReactNode;
-  className?: string;
+  titleClassName?: string;
 }
 
 /**
- * Header of a character sheet tab. It is the only sticky element of the page: fixed height,
- * so the content below doesn't jump when the actions load.
+ * The top of every dashboard page, in the same place and with the same type: the page's only
+ * h1, an optional eyebrow and description, and actions on the right.
+ * Below it, sections use h2 (SectionCard.Title) and their parts h3.
  */
-export function PageHeader({ icon, title, actions, className }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  description,
+  eyebrow,
+  icon,
+  actions,
+  titleClassName,
+}: PageHeaderProps) {
   return (
-    <header
-      className={cn(
-        'bg-background/80 border-border sticky top-0 z-30 -mx-4 flex h-14 items-center justify-between gap-3 border-b px-4 backdrop-blur-md md:h-16 md:px-6',
-        className,
-      )}
-    >
-      <div className="flex min-w-0 items-center gap-3">
-        <div className="border-border bg-muted flex h-10 w-10 flex-none items-center justify-center rounded-lg border">
-          <AppIcon name={icon} size={16} className="text-character-flare" aria-hidden="true" />
-        </div>
-        <h1 className="text-label text-foreground truncate md:text-sm">{title}</h1>
+    <header className="border-border flex flex-wrap items-end justify-between gap-x-6 gap-y-4 border-b pb-6">
+      <div className="flex min-w-0 flex-col gap-2">
+        {(eyebrow || icon) && (
+          <div className="text-label text-muted-foreground flex items-center gap-2">
+            {icon && (
+              <AppIcon name={icon} size={14} className="text-character-flare" aria-hidden="true" />
+            )}
+            {eyebrow}
+          </div>
+        )}
+        <h1 className={cn('text-display text-foreground break-words', titleClassName)}>{title}</h1>
+        {description && (
+          <p className="text-body text-muted-foreground max-w-prose">{description}</p>
+        )}
       </div>
-
-      <div className="flex items-center gap-2 md:gap-3">{actions}</div>
+      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
     </header>
   );
 }

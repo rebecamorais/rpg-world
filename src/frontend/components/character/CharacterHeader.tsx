@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
-import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { FieldLabel, InlineField } from '@frontend/components/ui/field';
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -32,7 +31,6 @@ export default function CharacterHeader() {
   const { update } = useCharacterActions();
   const pb = getProficiencyBonus(level);
   const t = useTranslations('characterHeader');
-  const [isEditingName, setIsEditingName] = useState(false);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
   // Simple XP progress calculation
@@ -75,35 +73,15 @@ export default function CharacterHeader() {
         <div className="grid flex-1 grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Left Column: Core Stats */}
           <div className="flex flex-col gap-4">
-            {/* Name Section */}
-            <div className="flex flex-col gap-1.5">
-              {isEditingName ? (
-                <GhostInput
-                  id="char-name"
-                  autoFocus
-                  value={name || ''}
-                  onChange={(e) => update({ name: e.target.value })}
-                  onBlur={() => setIsEditingName(false)}
-                  onKeyDown={(e) => e.key === 'Enter' && setIsEditingName(false)}
-                  className="text-title md:text-title text-character-flare h-10"
-                />
-              ) : (
-                <div className="group flex items-center gap-2">
-                  <h2 className="text-title text-character-flare flex min-h-10 items-center">
-                    {name}
-                  </h2>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={t('editName')}
-                    className="h-6 w-6 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
-                    onClick={() => setIsEditingName(true)}
-                  >
-                    <AppIcon name="Pencil" size={12} />
-                  </Button>
-                </div>
-              )}
-            </div>
+            {/* The name is the page's h1 (SheetPage); here it is edited like the other fields */}
+            <InlineField
+              id="char-name"
+              label={t('name')}
+              value={name || ''}
+              onChange={(e) => update({ name: e.target.value })}
+              placeholder={t('namePlaceholder')}
+              className="text-heading"
+            />
 
             {/* Level & PB Row */}
             <div className="flex items-center gap-6">

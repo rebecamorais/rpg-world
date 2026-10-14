@@ -1,28 +1,22 @@
-import { ReactNode } from 'react';
-
-import { IconName } from '@frontend/components/ui/icon';
+import { ComponentProps, ReactNode } from 'react';
 
 import { PageHeader } from './PageHeader';
 
-interface PageContainerProps {
-  icon: IconName;
-  title: string;
-  actions?: ReactNode;
+interface PageContainerProps extends ComponentProps<typeof PageHeader> {
   children: ReactNode;
+  /** Hides the actions while the page data loads, so they don't appear and vanish. */
   loading?: boolean;
 }
 
 /**
- * Standardized container for character sheet pages.
- * Ensures the PageHeader is always present and content below doesn't 'jump' when actions load.
+ * A dashboard page: PageHeader on top and the content below, with the same spacing on every
+ * page. The outer frame (width, side and top padding) comes from the dashboard layout.
  */
-export function PageContainer({ icon, title, actions, children, loading }: PageContainerProps) {
+export function PageContainer({ children, loading, actions, ...header }: PageContainerProps) {
   return (
-    <div className="flex h-full w-full flex-col gap-3">
-      <PageHeader icon={icon} title={title} actions={!loading ? actions : null} />
-
-      {/* Content Area */}
-      <div className="animate-in fade-in min-h-0 w-full flex-1 duration-500">{children}</div>
+    <div className="flex w-full flex-col gap-8">
+      <PageHeader {...header} actions={loading ? null : actions} />
+      <div className="min-w-0">{children}</div>
     </div>
   );
 }

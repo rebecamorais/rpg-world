@@ -75,31 +75,31 @@ Vem antes das telas porque mexe nos mesmos arquivos; refatorar depois seria faze
 
 **Mudanças visíveis:** home e lista ganharam `<h1>` em Cinzel (a lista mostra o título também vazia ou carregando); o botão "Adicionar item" do inventário, que não fazia nada, fica desabilitado.
 
-## Fase 4: telas e fluxos (UX)
+## Fase 4: telas e fluxos (UX) ✅
 
 **Shell (header, menu, footer)**
 
-- [ ] Header mobile: logo sem quebrar linha, seletor de idioma compacto (ou dentro do menu).
-- [ ] Menu mobile: trocar o botão flutuante (que cobre conteúdo) por um botão no header; adicionar skip link.
-- [ ] Footer: compacto no mobile, links de acordo com o login, fallback para o iframe do GitHub Sponsors.
+- [x] Header mobile: logo sem quebrar linha, seletor de idioma compacto (ou dentro do menu).
+- [x] Menu mobile: trocar o botão flutuante (que cobre conteúdo) por um botão no header; adicionar skip link.
+- [x] Footer: compacto no mobile, links de acordo com o login; o iframe do GitHub Sponsors virou um link (some com bloqueadores).
 
 **Home e auth**
 
-- [ ] Home com ~~`<h1>`~~ (feito na fase 3) e uma prévia da ficha.
-- [ ] Auth: ~~remover o gradiente azul→roxo dos 5 títulos, usar Cinzel + tokens~~ (feito na fase 2); erros inline no campo.
+- [x] Home com ~~`<h1>`~~ (feito na fase 3) e uma prévia da ficha.
+- [x] Auth: ~~remover o gradiente azul→roxo dos 5 títulos, usar Cinzel + tokens~~ (feito na fase 2); erros inline no campo.
 
 **Lista de personagens**
 
-- [ ] Card: corrigir a cor padrão (`hsl(var(--primary))` inválido) e o `` `${accentColor}1A` `` que só funciona com hex.
-- [ ] Tirar o botão de dentro do link: um menu "…" com Excluir, visível também no toque.
-- [ ] Estado vazio com CTA, skeletons no carregamento.
+- [x] Card: corrigir a cor padrão (`hsl(var(--primary))` inválido) e o `` `${accentColor}1A` `` que só funciona com hex (resolvido na fase 1 pelo `characterTheme`).
+- [x] Tirar o botão de dentro do link: um menu "…" com Excluir, visível também no toque.
+- [x] Estado vazio com CTA, skeletons no carregamento.
 
 **Ficha**
 
-- [ ] Hierarquia: nome em Cinzel; PV, CA e salvaguardas contra morte em destaque; no mobile, combate primeiro.
-- [ ] Modelo de salvar: indicador "alterações não salvas", barra de salvar fixa, aviso ao sair da página com rascunho, atalho Ctrl/Cmd+S.
-- [ ] Edição visível sem hover (o lápis do nome), campos numéricos com `inputmode` e steppers.
-- [ ] Movimento: tirar o `animate-pulse` do ícone de CA, `rumble` e VFX pesados só com movimento permitido.
+- [x] Hierarquia: nome em Cinzel; PV, CA e salvaguardas contra morte em destaque (testes contra a morte num card ao lado do PV); no mobile, combate primeiro.
+- [x] Modelo de salvar: indicador "alterações não salvas", barra de salvar fixa (celular; no desktop o cabeçalho já é fixo), aviso ao sair da página com rascunho (fechar a aba e links internos para fora da ficha; trocar de aba da ficha mantém o rascunho), atalho Ctrl/Cmd+S, Descartar.
+- [x] Edição visível sem hover (o lápis do nome sempre; o dos campos, no toque), campos numéricos com `inputmode` e −/+ no PV.
+- [x] Movimento: tirar o `animate-pulse` do ícone de CA (saiu na fase 2 com o `StatBlock`) e do selo "online"; `rumble`, shockwave, distorções e shimmer só com movimento permitido.
 
 ## Checklist de cada PR
 

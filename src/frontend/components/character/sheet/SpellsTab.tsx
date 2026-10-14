@@ -8,10 +8,11 @@ import { useTranslations } from 'next-intl';
 import SpellSearchDialog from '@frontend/components/character/spells/SpellSearchDialog';
 import SpellsSection from '@frontend/components/character/spells/SpellsSection';
 import { LoadingState } from '@frontend/components/shared/LoadingState';
-import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { Button } from '@frontend/components/ui/button';
 import { useCharacterMeta } from '@frontend/context/CharacterContext';
 import { useCharacterSpells } from '@frontend/hooks/useCharacterSpells';
+
+import { SheetPage } from './SheetPage';
 
 /** The Spellbook tab: loads the character's spells only here and owns the search dialog. */
 export function SpellsTab() {
@@ -40,7 +41,7 @@ export function SpellsTab() {
   );
 
   return (
-    <PageContainer icon="BookOpen" title={t('tabs.spells')} actions={actions}>
+    <SheetPage icon="BookOpen" tab={t('tabs.spells')} actions={actions}>
       {isLoading ? (
         <LoadingState thematic />
       ) : (
@@ -58,6 +59,6 @@ export function SpellsTab() {
         onLearnSpell={learnSpell}
         onForgetSpell={forgetSpell}
       />
-    </PageContainer>
+    </SheetPage>
   );
 }

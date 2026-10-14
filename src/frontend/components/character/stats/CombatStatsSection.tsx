@@ -23,6 +23,7 @@ import { useCharacterActions, useLoadedCharacter } from '@frontend/context/Chara
 import { setHitDice, setSpellPoints, setSpellSlots } from '@frontend/lib/character-sheet-updates';
 
 import { CombatStatsDialog } from './CombatStatsDialog';
+import { DeathSavesCard } from './DeathSavesCard';
 
 const STAT_INPUT = 'h-6 w-12 p-0 font-mono text-base font-bold focus-visible:px-1 md:text-base';
 
@@ -64,6 +65,7 @@ const CombatHeader = () => {
               type="number"
               aria-label={t('speed')}
               value={character.speed || 30}
+              inputMode="decimal"
               onChange={(e) => update({ speed: parseFloat(e.target.value) || 0 })}
               showIcon={false}
               className={STAT_INPUT}
@@ -118,13 +120,16 @@ const ResourceGrid = () => {
 
   return (
     <CardContent className="p-4 sm:p-6">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <HealthPointsCard
-          currentHp={character.hpCurrent ?? 0}
-          maxHp={character.hpMax || 1}
-          tempHp={character.hpTemp ?? 0}
-          onHpChange={(field, value) => update({ [field]: value })}
-        />
+      <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <HealthPointsCard
+            currentHp={character.hpCurrent ?? 0}
+            maxHp={character.hpMax || 1}
+            tempHp={character.hpTemp ?? 0}
+            onHpChange={(field, value) => update({ [field]: value })}
+          />
+          <DeathSavesCard />
+        </div>
 
         <MagicSystemCard
           character={character}

@@ -34,7 +34,8 @@ test.describe('ciclo do personagem', () => {
     await createCharacter(page, 'Doomed Hero');
     await page.goto('/characters');
 
-    await page.getByRole('button', { name: 'Delete' }).click();
+    await page.getByRole('button', { name: /^Actions for / }).click();
+    await page.getByRole('menuitem', { name: 'Delete' }).click();
     const dialog = page.getByRole('dialog', { name: 'Delete character?' });
     const confirm = dialog.getByRole('button', { name: 'Delete' });
 
@@ -50,7 +51,8 @@ test.describe('ciclo do personagem', () => {
     const id = await createCharacter(page, name);
 
     await page.goto('/characters');
-    await page.getByRole('button', { name: 'Delete' }).click();
+    await page.getByRole('button', { name: /^Actions for / }).click();
+    await page.getByRole('menuitem', { name: 'Delete' }).click();
     await expect(page.getByRole('dialog', { name: 'Delete character?' })).toContainText(name);
 
     await page.goto(characterUrl(id));

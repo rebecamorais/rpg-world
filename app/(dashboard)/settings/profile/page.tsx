@@ -1,17 +1,14 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 import ProfileForm from '@frontend/components/ProfileForm';
+import { PageContainer } from '@frontend/components/shared/PageContainer';
 
-export default function ProfilePage() {
-  const t = useTranslations('dashboard');
+export default async function ProfilePage() {
+  const t = await getTranslations('dashboard');
 
   return (
-    <div className="mx-auto w-full max-w-3xl flex-1 p-6 md:p-10">
-      <div className="mb-8">
-        <h1 className="text-foreground text-2xl font-bold">{t('settingsTitle')}</h1>
-        <p className="text-muted-foreground mt-1 text-sm">{t('settingsSubtitle')}</p>
-      </div>
+    <PageContainer title={t('settingsTitle')} description={t('settingsSubtitle')}>
       <ProfileForm />
-    </div>
+    </PageContainer>
   );
 }

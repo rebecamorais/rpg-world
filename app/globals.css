@@ -16,6 +16,8 @@
   --muted: #18181b;
   /* Secondary text: 7.8:1 on background. Don't fade it further with opacity. */
   --muted-foreground: #a1a1aa;
+  /* Placeholder: dimmer than secondary text, so an empty field never reads as filled in */
+  --placeholder: #71717a;
   --secondary: #18181b;
   --secondary-foreground: #fafafa;
   --accent: #1e1b4b;
@@ -116,6 +118,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-placeholder: var(--placeholder);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-accent: var(--accent);

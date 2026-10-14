@@ -1,12 +1,17 @@
+import { getTranslations } from 'next-intl/server';
+
 import CharacterList from '@frontend/components/character/CharacterList';
+import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { CharactersProvider } from '@frontend/context/CharactersContext';
 
-export default function CharactersPage() {
+export default async function CharactersPage() {
+  const t = await getTranslations('characters');
+
   return (
-    <div className="mx-auto w-full max-w-3xl flex-1 p-4">
+    <PageContainer title={t('title')} description={t('subtitle')}>
       <CharactersProvider>
         <CharacterList />
       </CharactersProvider>
-    </div>
+    </PageContainer>
   );
 }

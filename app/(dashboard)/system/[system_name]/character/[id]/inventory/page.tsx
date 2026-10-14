@@ -1,7 +1,7 @@
 import { Plus } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { PageContainer } from '@frontend/components/shared/PageContainer';
+import { SheetPage } from '@frontend/components/character/sheet/SheetPage';
 import { Button } from '@frontend/components/ui/button';
 import { EmptyState } from '@frontend/components/ui/empty-state';
 
@@ -17,8 +17,8 @@ export default async function CharacterInventoryPage() {
   );
 
   return (
-    <PageContainer icon="Backpack" title={t('tabs.inventory')} actions={actions}>
+    <SheetPage icon="Backpack" tab={t('tabs.inventory')} actions={actions}>
       <EmptyState icon="Backpack" title={t('emptyStates.inventory')} className="h-[50vh]" />
-    </PageContainer>
+    </SheetPage>
   );
 }

@@ -80,40 +80,36 @@ function SidebarContent() {
   );
 }
 
+/** Desktop navigation; on phones the same content opens from the header (MobileMenu). */
 export default function Sidebar() {
+  return (
+    <aside className="bg-sidebar border-border hidden w-64 flex-col border-r px-6 pt-6 pb-2 sm:flex">
+      <SidebarContent />
+    </aside>
+  );
+}
+
+/** Header button that opens the navigation in a drawer, on phones only. */
+export function MobileMenu() {
   const tDash = useTranslations('dashboard');
 
   return (
-    <>
-      {/* Desktop Sidebar */}
-      <aside className="bg-sidebar border-border hidden w-64 flex-col border-r px-6 pt-6 pb-2 sm:flex">
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" aria-label={tDash('openMenu')} className="sm:hidden">
+          <AppIcon name="Menu" size={20} />
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        side="left"
+        className="bg-sidebar border-border text-foreground flex w-72 flex-col px-6 pt-6 pb-2 sm:hidden"
+      >
+        <SheetHeader className="sr-only">
+          <SheetTitle>{tDash('menu')}</SheetTitle>
+          <SheetDescription>{tDash('menuDescription')}</SheetDescription>
+        </SheetHeader>
         <SidebarContent />
-      </aside>
-
-      {/* Mobile Drawer Trigger - floating bottom right for easy access */}
-      <div className="fixed right-6 bottom-6 z-50 sm:hidden">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              size="icon"
-              aria-label={tDash('menu')}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 w-14 rounded-full shadow-lg"
-            >
-              <AppIcon name="Menu" size={24} />
-            </Button>
-          </SheetTrigger>
-          <SheetContent
-            side="left"
-            className="bg-sidebar border-border text-foreground flex w-64 flex-col px-6 pt-6 pb-2 sm:hidden"
-          >
-            <SheetHeader className="sr-only">
-              <SheetTitle>{tDash('menu')}</SheetTitle>
-              <SheetDescription>{tDash('menuDescription')}</SheetDescription>
-            </SheetHeader>
-            <SidebarContent />
-          </SheetContent>
-        </Sheet>
-      </div>
-    </>
+      </SheetContent>
+    </Sheet>
   );
 }

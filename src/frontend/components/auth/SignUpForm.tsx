@@ -27,9 +27,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormRootError,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { setServerError } from '@frontend/lib/form-errors';
 import { newPasswordFields, passwordsMustMatch } from '@frontend/lib/password-schema';
 
 export default function SignUpForm() {
@@ -61,7 +63,7 @@ export default function SignUpForm() {
   const onSubmit = useCallback(
     async (data: SignUpValues) => {
       if (!turnstileToken) {
-        toast.error(t('errors.turnstileRequired'));
+        form.setError('root', { message: t('errors.turnstileRequired') });
         return;
       }
 
@@ -76,14 +78,16 @@ export default function SignUpForm() {
           toast.success(t('successTitle'));
           setIsSuccess(true);
         } else {
-          const errorCode = result.error;
-          const localizedMsg = getMessage(errorCode);
-
-          toast.error(localizedMsg);
+          setServerError(
+            form.setError,
+            ['email', 'password'],
+            result.error,
+            getMessage(result.error),
+          );
           resetTurnstile();
         }
       } catch {
-        toast.error(tCommon('errors.unknown'));
+        form.setError('root', { message: tCommon('errors.unknown') });
       }
     },
     [turnstileToken, t, resetTurnstile, getMessage, tCommon],
@@ -175,6 +179,7 @@ export default function SignUpForm() {
 
             <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
 
+            <FormRootError />
             <Button
               type="submit"
               disabled={!turnstileToken}

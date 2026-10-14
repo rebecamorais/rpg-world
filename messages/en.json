@@ -77,7 +77,14 @@
     "passwordsDoNotMatch": "Passwords do not match.",
     "language": "Language",
     "decrease": "Decrease",
-    "increase": "Increase"
+    "increase": "Increase",
+    "skipToContent": "Skip to content",
+    "unsavedChanges": "Unsaved changes",
+    "allSaved": "All changes saved",
+    "discard": "Discard",
+    "discardConfirm": "Discard your unsaved changes?",
+    "leaveConfirm": "You have unsaved changes. Leave anyway?",
+    "saveShortcut": "Ctrl+S to save"
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -134,7 +141,10 @@
   "landing": {
     "heroTitle": "Your ultimate RPG companion.",
     "heroSubtitle": "Manage your character sheets, track attributes, spells and combat effortlessly.",
-    "ctaStart": "Start Playing"
+    "ctaStart": "Start Playing",
+    "previewLabel": "Example character sheet",
+    "previewName": "Ada the Wise",
+    "previewClass": "High elf wizard · Level 5"
   },
   "home": {
     "title": "RPG World"
@@ -190,7 +200,6 @@
     "castingTime": "Casting Time",
     "range": "Range",
     "duration": "Duration",
-    "characterCount": "{count, plural, one {1 character ready for adventure} other {# characters ready for adventure}}",
     "deleteDialogTitle": "Delete character?",
     "deleteDialogDescription": "Are you sure you want to delete the character {name}? This action cannot be undone and all data will be lost.",
     "deleteConfirmInstruction": "To confirm, type the character's name: <bold>{name}</bold>",
@@ -233,11 +242,13 @@
     },
     "addItem": "Add Item",
     "loadErrorTitle": "Something went wrong",
-    "online": "Online",
     "createNewTagline": "Start your legend",
     "levelShort": "Lv {level}",
     "defaultClass": "Adventurer",
-    "selectLevel": "Select level"
+    "selectLevel": "Select level",
+    "cardActions": "Actions for {name}",
+    "loadingList": "Loading characters",
+    "subtitle": "Your sheets, ready for the next session."
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
@@ -256,8 +267,8 @@
     "customizeTitle": "Customize Character",
     "avatarLabel": "Avatar",
     "accentColorLabel": "Accent Color",
-    "editName": "Edit name",
-    "xpProgress": "Progress to next level"
+    "xpProgress": "Progress to next level",
+    "name": "Name"
   },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",
@@ -281,7 +292,9 @@
       "d10": "1d10",
       "d12": "1d12"
     },
-    "edit": "Edit combat stats"
+    "edit": "Edit combat stats",
+    "loseHp": "Lose 1 HP",
+    "gainHp": "Heal 1 HP"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Spell name (e.g.: fireball)",
@@ -323,7 +336,8 @@
     "spells": "Spells",
     "settingsTitle": "Settings",
     "settingsSubtitle": "Manage your adventurer profile information.",
-    "menuDescription": "Main navigation and shortcuts."
+    "menuDescription": "Main navigation and shortcuts.",
+    "openMenu": "Open menu"
   },
   "changePassword": {
     "title": "Change Your Password",
@@ -429,7 +443,10 @@
     "title": "Saving Throws",
     "deathSaveSuccess": "Death save success {count}",
     "deathSaveFailure": "Death save failure {count}",
-    "resetDeathSaves": "Reset death saves"
+    "resetDeathSaves": "Reset death saves",
+    "deathSaves": "Death saves",
+    "successes": "Successes",
+    "failures": "Failures"
   },
   "terms": {
     "title": "Terms of Use",
@@ -628,7 +645,9 @@
       "title": "Explore",
       "home": "Home",
       "characters": "Characters",
-      "settings": "Settings"
+      "settings": "Settings",
+      "login": "Sign in",
+      "register": "Sign up"
     },
     "socials": {
       "title": "Social",
@@ -645,7 +664,8 @@
       "githubSponsors": "GitHub Sponsors",
       "pixTitle": "Make a Pix",
       "pixCopy": "Pix key copied!",
-      "pixCopyLabel": "Copy Pix key"
+      "pixCopyLabel": "Copy Pix key",
+      "githubSponsorsCta": "Sponsor on GitHub"
     },
     "copyright": "© {year} Rebs Tech Studio. All rights reserved."
   },

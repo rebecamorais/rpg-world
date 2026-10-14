@@ -77,7 +77,14 @@
     "passwordsDoNotMatch": "As senhas não coincidem.",
     "language": "Idioma",
     "decrease": "Diminuir",
-    "increase": "Aumentar"
+    "increase": "Aumentar",
+    "skipToContent": "Pular para o conteúdo",
+    "unsavedChanges": "Alterações não salvas",
+    "allSaved": "Tudo salvo",
+    "discard": "Descartar",
+    "discardConfirm": "Descartar as alterações não salvas?",
+    "leaveConfirm": "Você tem alterações não salvas. Sair mesmo assim?",
+    "saveShortcut": "Ctrl+S para salvar"
   },
   "login": {
     "title": "Entrar no RPG World",
@@ -134,7 +141,10 @@
   "landing": {
     "heroTitle": "O seu companheiro definitivo de RPG.",
     "heroSubtitle": "Gerencie todas as suas fichas, acompanhe atributos, magias e combates sem esforço.",
-    "ctaStart": "Começar a Jogar"
+    "ctaStart": "Começar a Jogar",
+    "previewLabel": "Exemplo de ficha de personagem",
+    "previewName": "Ada, a Sábia",
+    "previewClass": "Maga elfa · Nível 5"
   },
   "home": {
     "title": "RPG World"
@@ -190,7 +200,6 @@
     "castingTime": "Tempo de Conjuramento",
     "range": "Alcance",
     "duration": "Duração",
-    "characterCount": "{count, plural, one {1 personagem pronto para aventura} other {# personagens prontos para aventura}}",
     "deleteDialogTitle": "Excluir personagem?",
     "deleteDialogDescription": "Tem certeza que deseja excluir o personagem {name}? Essa ação não poderá ser desfeita e todos os dados serão perdidos.",
     "deleteConfirmInstruction": "Para confirmar, digite o nome do personagem: <bold>{name}</bold>",
@@ -233,11 +242,13 @@
     },
     "addItem": "Adicionar Item",
     "loadErrorTitle": "Ocorreu um erro",
-    "online": "Online",
     "createNewTagline": "Comece sua lenda",
     "levelShort": "Nv {level}",
     "defaultClass": "Aventureiro",
-    "selectLevel": "Selecione o nível"
+    "selectLevel": "Selecione o nível",
+    "cardActions": "Ações de {name}",
+    "loadingList": "Carregando personagens",
+    "subtitle": "Suas fichas, prontas para a próxima sessão."
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
@@ -256,8 +267,8 @@
     "customizeTitle": "Personalizar Personagem",
     "avatarLabel": "Avatar",
     "accentColorLabel": "Cor de Destaque",
-    "editName": "Editar nome",
-    "xpProgress": "Progresso para o próximo nível"
+    "xpProgress": "Progresso para o próximo nível",
+    "name": "Nome"
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",
@@ -281,7 +292,9 @@
       "d10": "1d10",
       "d12": "1d12"
     },
-    "edit": "Editar status de combate"
+    "edit": "Editar status de combate",
+    "loseHp": "Perder 1 PV",
+    "gainHp": "Recuperar 1 PV"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Nome da magia (ex: fireball)",
@@ -323,7 +336,8 @@
     "spells": "Magias",
     "settingsTitle": "Configurações",
     "settingsSubtitle": "Gerencie as informações do seu perfil de aventureiro.",
-    "menuDescription": "Navegação principal e atalhos."
+    "menuDescription": "Navegação principal e atalhos.",
+    "openMenu": "Abrir menu"
   },
   "changePassword": {
     "title": "Altere sua Senha",
@@ -429,7 +443,10 @@
     "title": "Salvaguardas",
     "deathSaveSuccess": "Sucesso no teste contra a morte {count}",
     "deathSaveFailure": "Falha no teste contra a morte {count}",
-    "resetDeathSaves": "Zerar testes contra a morte"
+    "resetDeathSaves": "Zerar testes contra a morte",
+    "deathSaves": "Testes contra a morte",
+    "successes": "Sucessos",
+    "failures": "Falhas"
   },
   "terms": {
     "title": "Termos de Uso",
@@ -628,7 +645,9 @@
       "title": "Explorar",
       "home": "Início",
       "characters": "Personagens",
-      "settings": "Configurações"
+      "settings": "Configurações",
+      "login": "Entrar",
+      "register": "Criar conta"
     },
     "socials": {
       "title": "Social",
@@ -645,7 +664,8 @@
       "githubSponsors": "GitHub Sponsors",
       "pixTitle": "Fazer um Pix",
       "pixCopy": "Chave Pix copiada!",
-      "pixCopyLabel": "Copiar chave Pix"
+      "pixCopyLabel": "Copiar chave Pix",
+      "githubSponsorsCta": "Apoiar no GitHub"
     },
     "copyright": "© {year} Rebs Tech Studio. Todos os direitos reservados."
   },

@@ -139,8 +139,28 @@ function FormMessage({ className, children, ...props }: React.ComponentProps<'p'
   );
 }
 
+/** Form-level error (`errors.root`), announced to screen readers. */
+function FormRootError({ className }: { className?: string }) {
+  const { formState } = useFormContext();
+  const message = formState.errors.root?.message;
+  if (!message) return null;
+
+  return (
+    <p
+      role="alert"
+      className={cn(
+        'border-danger-muted bg-danger-surface text-danger-flare rounded-md border px-3 py-2 text-sm',
+        className,
+      )}
+    >
+      {String(message)}
+    </p>
+  );
+}
+
 export {
   Form,
+  FormRootError,
   FormControl,
   FormDescription,
   FormField,

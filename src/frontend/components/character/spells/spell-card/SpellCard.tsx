@@ -115,7 +115,7 @@ const SpellVFX = React.memo(({ mainIcon, spell }: { mainIcon: string; spell: Spe
   <div aria-hidden="true">
     <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,var(--spell-muted),transparent_70%)] opacity-0 blur-3xl transition-opacity duration-1000 group-hover:opacity-100" />
     <SpellBackground spell={spell} />
-    <div className="group-hover:animate-shimmer via-foreground/5 pointer-events-none absolute inset-0 z-0 -translate-x-full bg-gradient-to-r from-transparent to-transparent" />
+    <div className="motion-safe:group-hover:animate-shimmer via-foreground/5 pointer-events-none absolute inset-0 z-0 -translate-x-full bg-gradient-to-r from-transparent to-transparent" />
     <div className="pointer-events-none absolute -right-8 -bottom-8 z-0 opacity-5 transition-all duration-700 ease-in-out group-hover:scale-125 group-hover:rotate-12 group-hover:opacity-15">
       <AppIcon variant="game" name={mainIcon} size={160} strokeWidth={1} />
     </div>
