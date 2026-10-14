@@ -59,7 +59,7 @@ export default function StatusView() {
         onBasicInfoChange={handleBasicInfoChange}
       />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <div className="flex flex-col gap-6">
           <PassivePerception
             wisValue={character.attributes.WIS ?? 10}

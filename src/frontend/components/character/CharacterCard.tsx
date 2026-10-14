@@ -9,6 +9,7 @@ import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharactersContext } from '@frontend/context/CharactersContext';
+import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
 import type { CharacterSummary } from '@shared/types/character';
@@ -26,81 +27,50 @@ export function CharacterCard({ character }: CharacterCardProps) {
   const tCommon = useTranslations('common');
   const { setCharacterToDelete } = useCharactersContext();
 
-  const accentColor = character.accentColor || 'hsl(var(--primary))';
+  const theme = characterTheme(character.accentColor);
 
   return (
-    <div className="group relative h-full">
+    <div className={cn(theme.className, 'group relative h-full')} style={theme.style}>
       <Link href={`/system/${character.system}/character/${character.id}`} className="block h-full">
         <Card
           className={cn(
-            'border-muted/20 relative h-full overflow-hidden border transition-all duration-500 hover:translate-y-[-4px] hover:shadow-2xl sm:border-2',
+            'border-character-muted relative h-full overflow-hidden border shadow-[0_20px_40px_-20px_var(--character-muted)] transition-all duration-500 hover:translate-y-[-4px] hover:shadow-2xl sm:border-2',
             'bg-card/40 backdrop-blur-xl',
             'hover:border-transparent',
           )}
-          style={{
-            borderColor: character.accentColor ? `${character.accentColor}33` : undefined,
-            boxShadow: character.accentColor
-              ? `0 20px 40px -20px ${character.accentColor}33`
-              : 'none',
-          }}
         >
           {/* Accent Color Indicator (Top Bar) - Thicker on hover */}
-          <div
-            className="absolute top-0 left-0 h-1.5 w-full opacity-80 transition-all duration-500 group-hover:h-2 group-hover:opacity-100"
-            style={{ backgroundColor: accentColor }}
-          />
+          <div className="bg-character absolute top-0 left-0 h-1.5 w-full opacity-80 transition-all duration-500 group-hover:h-2 group-hover:opacity-100" />
 
           {/* Background Decorative Element */}
-          <div
-            className="absolute -top-8 -right-8 h-32 w-32 rounded-full opacity-10 blur-3xl transition-opacity group-hover:opacity-20"
-            style={{ backgroundColor: accentColor }}
-          />
+          <div className="bg-character absolute -top-8 -right-8 h-32 w-32 rounded-full opacity-10 blur-3xl transition-opacity group-hover:opacity-20" />
 
           <CardContent className="flex h-full flex-col p-5 sm:p-6">
             <div className="mb-5 flex flex-col items-start gap-2">
               <div className="flex w-full items-center justify-between gap-2 overflow-hidden">
-                <h3
-                  className="truncate text-xl font-black tracking-tight transition-colors sm:text-2xl"
-                  style={{ color: character.accentColor || 'inherit' }}
-                >
+                <h3 className="font-display text-character-flare truncate text-xl font-bold sm:text-2xl">
                   {character.name}
                 </h3>
                 <Badge
                   variant="secondary"
-                  className="bg-muted/80 shrink-0 px-2.5 py-1 text-[10px] font-black tracking-widest uppercase"
-                  style={{
-                    borderLeft: character.accentColor
-                      ? `3px solid ${character.accentColor}`
-                      : 'none',
-                  }}
+                  className="bg-muted/80 border-l-character shrink-0 border-l-[3px] px-2.5 py-1 text-[10px] font-black tracking-widest uppercase"
                 >
                   {t('levelShort', { level: character.level })}
                 </Badge>
               </div>
-              <p className="text-muted-foreground line-clamp-1 text-xs font-bold tracking-widest uppercase opacity-60">
+              <p className="text-muted-foreground line-clamp-1 text-xs font-bold tracking-widest uppercase">
                 {character.class || t('defaultClass')}
               </p>
             </div>
 
             <div className="border-muted/20 mt-auto flex items-center justify-between border-t pt-4">
-              <div className="text-muted-foreground flex items-center gap-2 text-[10px] font-black tracking-widest uppercase opacity-50 transition-all group-hover:opacity-100">
-                <AppIcon
-                  name="Swords"
-                  size={14}
-                  style={{ color: character.accentColor || 'var(--primary)' }}
-                />
+              <div className="text-muted-foreground flex items-center gap-2 text-[10px] font-black tracking-widest uppercase">
+                <AppIcon name="Swords" size={14} className="text-character-flare" />
                 <span>{character.system.replace('_', ' ')}</span>
               </div>
 
               {/* Delete: always visible on touch screens; on desktop it shows on hover or keyboard focus */}
-              <div
-                className="flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100 focus-within:opacity-100 sm:opacity-0"
-                style={{
-                  backgroundColor: `${accentColor}1A`,
-                  borderColor: `${accentColor}33`,
-                  color: accentColor,
-                }}
-              >
+              <div className="bg-character-surface border-character-muted text-character-flare flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100 focus-within:opacity-100 sm:opacity-0">
                 <Button
                   destroy
                   size="icon"
@@ -119,12 +89,7 @@ export function CharacterCard({ character }: CharacterCardProps) {
           </CardContent>
 
           {/* Hover Glow Effect */}
-          <div
-            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-5"
-            style={{
-              background: `radial-gradient(circle at center, ${accentColor}, transparent 70%)`,
-            }}
-          />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,var(--character-primary),transparent_70%)] opacity-0 transition-opacity duration-500 group-hover:opacity-5" />
         </Card>
       </Link>
     </div>

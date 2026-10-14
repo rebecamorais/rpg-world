@@ -18,6 +18,11 @@ async function settle(page: Page) {
 
 async function snap(page: Page, name: string, mask: ReturnType<Page['locator']>[] = []) {
   await settle(page);
+  // No screen may scroll sideways: it hides content and breaks fixed controls on phones
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow, `${name} scrolls horizontally`).toBe(0);
   await expect(page).toHaveScreenshot(`${name}.png`, { fullPage: true, mask });
 }
 

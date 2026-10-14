@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from '@frontend/components/ui/dialog';
 import { Label } from '@frontend/components/ui/label';
+import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
@@ -53,7 +54,7 @@ export function CharacterCustomizationDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="character-context border-white/10 bg-slate-950/95 text-white backdrop-blur-xl sm:max-w-md"
-        style={{ '--character-color': accentColor } as React.CSSProperties}
+        style={characterTheme(accentColor).style}
       >
         <DialogHeader>
           <DialogTitle>{t('customizeTitle')}</DialogTitle>

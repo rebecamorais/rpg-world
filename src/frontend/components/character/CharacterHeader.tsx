@@ -76,7 +76,7 @@ function CharacterHeader({
             </AvatarFallback>
           </Avatar>
           <div className="bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity group-hover:opacity-100">
-            <AppIcon name="Palette" size={24} className="text-character" />
+            <AppIcon name="Palette" size={24} className="text-character-flare" />
           </div>
         </button>
 
@@ -107,7 +107,7 @@ function CharacterHeader({
                 />
               ) : (
                 <div className="group flex items-center gap-2">
-                  <h1 className="text-character flex h-10 items-center text-2xl leading-none font-black tracking-tight transition-colors">
+                  <h1 className="text-character-flare flex h-10 items-center text-2xl leading-none font-black tracking-tight transition-colors">
                     {name}
                   </h1>
                   <Button
@@ -128,7 +128,7 @@ function CharacterHeader({
               <div className="flex shrink-0 items-center gap-2">
                 <Label
                   htmlFor="char-level"
-                  className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
+                  className="text-muted-foreground text-xs font-bold tracking-widest uppercase"
                 >
                   {t('level')}
                 </Label>
@@ -144,10 +144,10 @@ function CharacterHeader({
               </div>
 
               <div className="flex flex-1 items-center gap-2">
-                <Label className="text-muted-foreground text-xs font-bold tracking-widest whitespace-nowrap uppercase opacity-70">
+                <Label className="text-muted-foreground text-xs font-bold tracking-widest whitespace-nowrap uppercase">
                   {t('proficiencyBonus')}
                 </Label>
-                <div className="bg-muted/30 text-character flex h-8 min-w-[32px] items-center justify-center rounded-md border border-none px-2 font-mono text-sm font-bold transition-colors">
+                <div className="bg-muted/30 text-character-flare flex h-8 min-w-[32px] items-center justify-center rounded-md border border-none px-2 font-mono text-sm font-bold transition-colors">
                   +{pb}
                 </div>
               </div>
@@ -158,7 +158,7 @@ function CharacterHeader({
               <div className="flex items-center justify-between">
                 <Label
                   htmlFor="char-xp"
-                  className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
+                  className="text-muted-foreground text-xs font-bold tracking-widest uppercase"
                 >
                   {t('xp')}
                 </Label>
@@ -190,7 +190,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-race"
-                className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
+                className="text-muted-foreground text-xs font-bold tracking-widest uppercase"
               >
                 {t('race')}
               </Label>
@@ -208,7 +208,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-class"
-                className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
+                className="text-muted-foreground text-xs font-bold tracking-widest uppercase"
               >
                 {t('class')}
               </Label>
@@ -226,7 +226,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-background"
-                className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
+                className="text-muted-foreground text-xs font-bold tracking-widest uppercase"
               >
                 {t('background')}
               </Label>
@@ -244,7 +244,7 @@ function CharacterHeader({
             <div className="flex flex-col gap-1">
               <Label
                 htmlFor="char-alignment"
-                className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70"
+                className="text-muted-foreground text-xs font-bold tracking-widest uppercase"
               >
                 {t('alignment')}
               </Label>

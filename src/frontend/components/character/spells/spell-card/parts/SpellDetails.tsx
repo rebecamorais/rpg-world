@@ -25,7 +25,7 @@ export const SpellDetails = React.memo(({ spell, isExpanded }: SpellDetailsProps
       aria-hidden={!isExpanded}
     >
       <div className="overflow-hidden">
-        <section className="font-body pt-2 text-sm leading-relaxed text-slate-300 transition-colors group-hover:text-gray-100">
+        <section className="pt-2 text-sm leading-relaxed text-slate-300 transition-colors group-hover:text-gray-100">
           <div className="space-y-4">
             <p className="whitespace-pre-wrap">{spell.description}</p>
             {spell.higherLevel && (

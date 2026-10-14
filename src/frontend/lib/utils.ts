@@ -11,6 +11,6 @@ export function cn(...inputs: ClassValue[]) {
  */
 export function getStatColorClass(value: number): string {
   if (value > 0) return 'text-character-flare';
-  if (value < 0) return 'text-red-flare';
+  if (value < 0) return 'text-danger-flare';
   return 'text-foreground';
 }

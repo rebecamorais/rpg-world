@@ -38,9 +38,25 @@ test.describe('acessibilidade (axe)', () => {
       await page.goto(path);
       await page.getByRole('main').first().waitFor();
       await page.waitForTimeout(500); // client data (character, profile) settles
-      // Contrast inside the app is pending a design decision: the default character accent
-      // (#6d28d9) and the opacity-60/70 secondary text are too dark on the dark background
-      expect.soft(await violations(page, ['color-contrast']), path).toEqual([]);
+      expect.soft(await violations(page), path).toEqual([]);
     }
   });
+
+  // The player picks any color; text in that color is lightened until it reads on the dark theme
+  for (const accentColor of ['#fde047', '#1e1b4b', '#7f1d1d']) {
+    test(`cor de destaque ${accentColor} continua legível`, async ({ page, user: _ }) => {
+      const id = await createCharacter(page, 'Colorful Hero');
+      const res = await page.request.put(`/api/characters/${id}`, {
+        data: { updates: { accentColor } },
+      });
+      expect(res.ok()).toBe(true);
+
+      for (const path of ['/characters', characterUrl(id)]) {
+        await page.goto(path);
+        await page.getByRole('main').first().waitFor();
+        await page.waitForTimeout(500);
+        expect.soft(await violations(page), path).toEqual([]);
+      }
+    });
+  }
 });

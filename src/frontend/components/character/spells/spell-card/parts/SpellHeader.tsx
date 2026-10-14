@@ -83,7 +83,7 @@ export const SpellHeader = React.memo(
 
           <div
             className={cn(
-              'mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[10px] font-black tracking-wider text-white/40 uppercase transition-all duration-300 md:gap-x-4 md:text-xs md:tracking-widest',
+              'text-muted-foreground mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[10px] font-black tracking-wider uppercase transition-all duration-300 md:gap-x-4 md:text-xs md:tracking-widest',
               theme.color,
             )}
           >

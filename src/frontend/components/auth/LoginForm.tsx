@@ -108,7 +108,7 @@ export default function LoginForm() {
             onClick={() => setAuthMode('magic')}
             className={`flex-1 rounded-md py-1.5 text-sm font-medium transition-all ${
               authMode === 'magic'
-                ? 'bg-primary text-white shadow-lg'
+                ? 'bg-primary text-primary-on shadow-lg'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -118,7 +118,7 @@ export default function LoginForm() {
             onClick={() => setAuthMode('password')}
             className={`flex-1 rounded-md py-1.5 text-sm font-medium transition-all ${
               authMode === 'password'
-                ? 'bg-primary text-white shadow-lg'
+                ? 'bg-primary text-primary-on shadow-lg'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -238,7 +238,7 @@ export default function LoginForm() {
             className="bg-primary/5 hover:bg-primary/10 w-full shadow-sm"
           >
             <Link href="/register" className="flex items-center gap-2">
-              <AppIcon name="UserPlus" size={16} className="text-primary" />
+              <AppIcon name="UserPlus" size={16} className="text-primary-flare" />
               {t('register')}
             </Link>
           </Button>

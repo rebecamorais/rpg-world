@@ -95,8 +95,8 @@ const TextAreaField = ({
           onBasicInfoChange(field, e.target.value)
         }
         className={cn(
-          'text-muted-foreground min-h-[120px] w-full resize-none border-none bg-transparent px-4 py-3 text-sm leading-relaxed shadow-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0',
-          !value && 'italic opacity-50',
+          'text-foreground min-h-[120px] w-full resize-none border-none bg-transparent px-4 py-3 text-sm leading-relaxed shadow-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0',
+          !value && 'italic',
         )}
       />
     </CardContent>

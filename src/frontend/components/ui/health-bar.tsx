@@ -25,8 +25,8 @@ export const HealthBar = React.forwardRef<HTMLDivElement, HealthBarProps>(
             style={{
               width: `${Math.min(hpPercentage, 100)}%`,
               zIndex: 10,
-              background: `linear-gradient(to bottom, var(--red-flare), var(--red))`,
-              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), 0 0 12px var(--red-muted)',
+              background: `linear-gradient(to bottom, var(--danger-flare), var(--danger))`,
+              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), 0 0 12px var(--danger-muted)',
             }}
           >
             {/* Shimmer/Highlights */}
@@ -40,8 +40,8 @@ export const HealthBar = React.forwardRef<HTMLDivElement, HealthBarProps>(
               style={{
                 width: `${tempHpPercentage}%`,
                 zIndex: 20,
-                background: `linear-gradient(to bottom, var(--yellow-muted), var(--yellow))`,
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 0 15px var(--yellow)',
+                background: `linear-gradient(to bottom, var(--warning-muted), var(--warning))`,
+                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 0 15px var(--warning)',
               }}
             >
               {/* Pattern/Texture for Temp HP to distinguish it */}

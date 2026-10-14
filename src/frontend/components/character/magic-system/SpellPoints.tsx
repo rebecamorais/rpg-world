@@ -30,7 +30,7 @@ export const SpellPoints = React.forwardRef<HTMLDivElement, Props>(
         )}
         {...props}
       >
-        <div className="flex items-center gap-1.5 opacity-70 transition-opacity group-hover:opacity-100">
+        <div className="flex items-center gap-1.5">
           <AppIcon name="Droplet" size={14} className="text-blue-500" />
           {systemSelector}
         </div>
@@ -48,8 +48,8 @@ export const SpellPoints = React.forwardRef<HTMLDivElement, Props>(
             </div>
 
             <div className="flex items-baseline gap-1 font-bold">
-              <span className="text-muted-foreground text-sm opacity-30">/</span>
-              <span className="text-muted-foreground text-sm opacity-30">{max}</span>
+              <span className="text-muted-foreground text-sm">/</span>
+              <span className="text-muted-foreground text-sm">{max}</span>
             </div>
           </div>
 
@@ -58,8 +58,8 @@ export const SpellPoints = React.forwardRef<HTMLDivElement, Props>(
               className="absolute top-0 left-0 h-full transition-all duration-500 ease-in-out"
               style={{
                 width: `${percentage}%`,
-                background: `linear-gradient(to right, var(--blue-muted), var(--blue-flare))`,
-                boxShadow: '0 0 10px var(--blue-glow)',
+                background: `linear-gradient(to right, var(--info-muted), var(--info-flare))`,
+                boxShadow: '0 0 10px var(--info-muted)',
               }}
             >
               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1),transparent)]" />

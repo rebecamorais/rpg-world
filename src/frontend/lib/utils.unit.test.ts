@@ -11,7 +11,7 @@ describe('cn', () => {
 describe('getStatColorClass', () => {
   it('destaca bônus, penalidades e neutro com cores diferentes', () => {
     expect(getStatColorClass(2)).toBe('text-character-flare');
-    expect(getStatColorClass(-1)).toBe('text-red-flare');
+    expect(getStatColorClass(-1)).toBe('text-danger-flare');
     expect(getStatColorClass(0)).toBe('text-foreground');
   });
 });

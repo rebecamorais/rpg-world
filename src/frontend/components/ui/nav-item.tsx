@@ -17,8 +17,8 @@ export function NavItem({ href, label, isActive, isSubItem, icon }: NavItemProps
       href={href}
       className={cn(
         'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
-        'hover:bg-character-surface hover:text-character',
-        isActive ? 'bg-character-surface text-character font-bold' : 'text-zinc-400',
+        'hover:bg-character-surface hover:text-character-flare',
+        isActive ? 'bg-character-surface text-character-flare font-bold' : 'text-zinc-400',
         isSubItem && 'hover:border-character ml-4 rounded-none border-l border-zinc-800 py-1',
       )}
     >

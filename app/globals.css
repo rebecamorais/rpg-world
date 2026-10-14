@@ -1,80 +1,96 @@
 @import 'tailwindcss';
 @import '../src/frontend/styles/patterns.css';
-@import '../src/frontend/styles/typography.css';
 
+/*
+ * DESIGN TOKENS (dark only)
+ * Names follow shadcn/ui, so generated components keep working. Components use these tokens,
+ * never the raw Tailwind palette (zinc-800, orange-500...).
+ */
 :root {
-  /* DARK MODE BY DEFAULT */
-  --background: #09090b; /* Jet Black Base */
+  --background: #09090b;
   --foreground: #fafafa;
   --card: #121214;
   --card-foreground: #fafafa;
+  --popover: #141416;
+  --popover-foreground: #fafafa;
   --muted: #18181b;
+  /* Secondary text: 7.8:1 on background. Don't fade it further with opacity. */
   --muted-foreground: #a1a1aa;
   --secondary: #18181b;
   --secondary-foreground: #fafafa;
+  --accent: #1e1b4b;
+  --accent-foreground: #fafafa;
   --border: #27272a;
   --input: #27272a;
-  --ring: var(--primary);
-  --popover: #141416;
-  --popover-foreground: #fafafa;
-  --accent: #1e1b4b; /* Ultra-dark purple for secondary active */
-  --accent-foreground: #fafafa;
+  --sidebar: #09090b;
 
-  --primary-foreground: #ffffff;
-
-  --destructive: #ef4444;
+  /* Status */
+  --danger: #ef4444;
+  --success: #22c55e;
+  --info: #3b82f6;
+  --warning: #eab308;
+  --destructive: var(--danger);
   --destructive-foreground: #ffffff;
 
-  --sidebar: #09090b;
-  --header-height: 80px;
-
-  /* BASE DEFAULTS */
-  --p-hue: 270;
-  --p-sat: 50%;
-  --p-light: 40%;
+  /* Brand. Inside a character sheet, --character-color replaces it (see .character-context). */
+  --brand: #663399;
+  --primary: var(--brand);
   --character-color: var(--primary);
+
+  --header-height: 80px;
 }
 
-/* 
- * DYNAMIC VARIABLE ORCHESTRATION 
- * These variables are defined on both :root and .character-context to allow for
- * inheritance-based re-calculation when base variables (--p-hue, --character-color) are overridden.
+/*
+ * DERIVED COLORS
+ * Declared on both selectors so they are recomputed where --primary / --character-color change.
+ * -flare: text and icon variant, lightened until it passes WCAG AA on the dark surfaces.
+ * -on: text on top of a solid fill (white or black, whichever contrasts).
  */
 :root,
 .character-context {
-  --primary: hsl(var(--p-hue), var(--p-sat), var(--p-light));
-  --primary-flare: hsl(var(--p-hue), var(--p-sat), calc(var(--p-light) + 20%));
-  --primary-surface: hsla(var(--p-hue), var(--p-sat), var(--p-light), 0.1);
-  --primary-muted: hsla(var(--p-hue), var(--p-sat), var(--p-light), 0.3);
-  --primary-glow: hsla(var(--p-hue), var(--p-sat), var(--p-light), 0.5);
+  --primary-flare: color-mix(in oklch, var(--primary), white 45%);
+  --primary-on: #ffffff;
+  --primary-surface: color-mix(in srgb, var(--primary), transparent 90%);
+  --primary-muted: color-mix(in srgb, var(--primary), transparent 70%);
+  --primary-glow: color-mix(in srgb, var(--primary), transparent 50%);
+  --primary-foreground: var(--primary-on);
+  --ring: var(--primary-flare);
 
-  /* CHARACTER PROXY VARIABLES */
   --character-primary: var(--character-color);
-  --character-flare: color-mix(in srgb, var(--character-primary), white 20%);
+  --character-flare: color-mix(in oklch, var(--character-primary), white 45%);
+  --character-on: #ffffff;
   --character-surface: color-mix(in srgb, var(--character-primary), transparent 90%);
   --character-muted: color-mix(in srgb, var(--character-primary), transparent 70%);
   --character-glow: color-mix(in srgb, var(--character-primary), transparent 50%);
 
-  /* SYSTEM PALETTE TOKENS */
-  --red: #ef4444;
-  --red-flare: color-mix(in srgb, var(--red), white 20%);
-  --red-surface: color-mix(in srgb, var(--red), transparent 90%);
-  --red-muted: color-mix(in srgb, var(--red), transparent 70%);
+  --danger-flare: color-mix(in srgb, var(--danger), white 20%);
+  --danger-surface: color-mix(in srgb, var(--danger), transparent 90%);
+  --danger-muted: color-mix(in srgb, var(--danger), transparent 70%);
+  --success-flare: color-mix(in srgb, var(--success), white 20%);
+  --success-surface: color-mix(in srgb, var(--success), transparent 90%);
+  --success-muted: color-mix(in srgb, var(--success), transparent 70%);
+  --info-flare: color-mix(in srgb, var(--info), white 20%);
+  --info-surface: color-mix(in srgb, var(--info), transparent 90%);
+  --info-muted: color-mix(in srgb, var(--info), transparent 70%);
+  --warning-flare: color-mix(in srgb, var(--warning), white 20%);
+  --warning-surface: color-mix(in srgb, var(--warning), transparent 90%);
+  --warning-muted: color-mix(in srgb, var(--warning), transparent 70%);
+}
 
-  --blue: #3b82f6;
-  --blue-flare: color-mix(in srgb, var(--blue), white 20%);
-  --blue-surface: color-mix(in srgb, var(--blue), transparent 90%);
-  --blue-muted: color-mix(in srgb, var(--blue), transparent 70%);
+/* Exact versions where relative colors are supported: lift lightness only as much as needed. */
+@supports (color: oklch(from red l c h)) {
+  :root,
+  .character-context {
+    --primary-flare: oklch(from var(--primary) max(l, 0.74) min(c, 0.2) h);
+    --primary-on: oklch(from var(--primary) clamp(0, (0.68 - l) * 1000, 1) 0 0);
+    --character-flare: oklch(from var(--character-primary) max(l, 0.74) min(c, 0.2) h);
+    --character-on: oklch(from var(--character-primary) clamp(0, (0.68 - l) * 1000, 1) 0 0);
+  }
+}
 
-  --green: #22c55e;
-  --green-flare: color-mix(in srgb, var(--green), white 20%);
-  --green-surface: color-mix(in srgb, var(--green), transparent 90%);
-  --green-muted: color-mix(in srgb, var(--green), transparent 70%);
-
-  --yellow: #eab308;
-  --yellow-flare: color-mix(in srgb, var(--yellow), white 20%);
-  --yellow-surface: color-mix(in srgb, var(--yellow), transparent 90%);
-  --yellow-muted: color-mix(in srgb, var(--yellow), transparent 70%);
+/* The player's color drives every primary-* utility inside the sheet. */
+.character-context {
+  --primary: var(--character-color);
 }
 
 @theme inline {
@@ -82,66 +98,74 @@
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
-  /* Primary & Variants */
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-flare: var(--primary-flare);
+  --color-primary-on: var(--primary-on);
   --color-primary-surface: var(--primary-surface);
   --color-primary-muted: var(--primary-muted);
   --color-primary-glow: var(--primary-glow);
 
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-sidebar: var(--sidebar);
-
-  /* Character Dynamic Colors */
   --color-character: var(--character-primary);
   --color-character-flare: var(--character-flare);
+  --color-character-on: var(--character-on);
   --color-character-surface: var(--character-surface);
   --color-character-muted: var(--character-muted);
   --color-character-glow: var(--character-glow);
 
-  /* System Colors */
-  --color-red: var(--red);
-  --color-red-flare: var(--red-flare);
-  --color-red-surface: var(--red-surface);
-  --color-red-muted: var(--red-muted);
+  --color-danger: var(--danger);
+  --color-danger-flare: var(--danger-flare);
+  --color-danger-surface: var(--danger-surface);
+  --color-danger-muted: var(--danger-muted);
+  --color-success: var(--success);
+  --color-success-flare: var(--success-flare);
+  --color-success-surface: var(--success-surface);
+  --color-success-muted: var(--success-muted);
+  --color-info: var(--info);
+  --color-info-flare: var(--info-flare);
+  --color-info-surface: var(--info-surface);
+  --color-info-muted: var(--info-muted);
+  --color-warning: var(--warning);
+  --color-warning-flare: var(--warning-flare);
+  --color-warning-surface: var(--warning-surface);
+  --color-warning-muted: var(--warning-muted);
+}
 
-  --color-blue: var(--blue);
-  --color-blue-flare: var(--blue-flare);
-  --color-blue-surface: var(--blue-surface);
-  --color-blue-muted: var(--blue-muted);
+/* Typography: Cinzel for display (names, page titles), Inter for everything else. */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cinzel), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
 
-  --color-green: var(--green);
-  --color-green-flare: var(--green-flare);
-  --color-green-surface: var(--green-surface);
-  --color-green-muted: var(--green-muted);
+@theme {
+  --animate-shimmer: shimmer 1.5s ease-in-out infinite;
 
-  --color-yellow: var(--yellow);
-  --color-yellow-flare: var(--yellow-flare);
-  --color-yellow-surface: var(--yellow-surface);
-  --color-yellow-muted: var(--yellow-muted);
-
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui;
-  --font-mono: var(--font-geist-mono);
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: var(--font-sans);
+    @apply bg-background text-foreground font-sans antialiased;
   }
 
   h1,
@@ -151,6 +175,12 @@
   h5,
   h6 {
     @apply text-foreground font-bold tracking-tight;
+  }
+
+  /* Page and section titles carry the fantasy voice; smaller headings stay in Inter */
+  h1,
+  h2 {
+    @apply font-display tracking-normal;
   }
 
   /* Ensure all clickable elements show the hand cursor */
@@ -167,30 +197,27 @@
     cursor: pointer;
   }
 
-  /* Exceptions for disabled states */
   button:disabled,
   input:disabled,
   [aria-disabled='true'] {
     cursor: not-allowed;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 @layer utilities {
-  .glass {
-    @apply border border-white/10 bg-white/5 backdrop-blur-xl;
-  }
-
   .glass-premium {
     @apply border border-white/10 bg-black/40 shadow-2xl backdrop-blur-2xl;
-  }
-
-  .glass-rebecca {
-    @apply border-primary/20 bg-primary/5 shadow-[0_0_20px_var(--primary-glow)] backdrop-blur-xl;
-  }
-
-  /* Lit Corner Effect for Buttons */
-  .btn-lit {
-    @apply border-t border-t-white/20 shadow-lg transition-all active:translate-y-px;
   }
 
   /* Hide number input spinners */

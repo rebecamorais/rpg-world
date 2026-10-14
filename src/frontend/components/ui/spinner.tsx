@@ -12,7 +12,7 @@ const spinnerVariants = cva('inline-block', {
       lg: 'h-12 w-12',
     },
     variant: {
-      primary: 'text-primary',
+      primary: 'text-primary-flare',
       secondary: 'text-secondary',
       current: 'text-current',
     },
