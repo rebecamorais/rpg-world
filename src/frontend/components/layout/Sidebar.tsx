@@ -35,7 +35,7 @@ function SidebarContent() {
     <>
       <div className="flex flex-1 flex-col gap-8 pr-2">
         <div className="flex items-center gap-3 px-2">
-          <Avatar className="ring-primary/20 h-8 w-8 rounded-lg border border-white/10 ring-2 transition-all hover:scale-105 active:scale-95">
+          <Avatar className="ring-primary/20 border-border h-8 w-8 rounded-lg border ring-2 transition-all hover:scale-105 active:scale-95">
             {avatarUrl ? (
               <AvatarImage src={avatarUrl} alt={username} className="object-cover" />
             ) : (
@@ -46,7 +46,7 @@ function SidebarContent() {
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col overflow-hidden">
-            <span className="truncate text-sm font-bold tracking-tight text-white/90">
+            <span className="text-foreground truncate text-sm font-bold tracking-tight">
               {username}
             </span>
           </div>
@@ -54,9 +54,7 @@ function SidebarContent() {
 
         <nav className="flex flex-col gap-6">
           <section>
-            <p className="mb-2 px-3 text-xs font-bold tracking-widest text-zinc-400 uppercase">
-              {tDash('menu')}
-            </p>
+            <p className="text-label text-muted-foreground mb-2 px-3">{tDash('menu')}</p>
             <NavItem href="/settings/profile" label={tDash('myProfile')} />
             <NavItem href="/characters" label={tDash('myCharacters')} />
           </section>
@@ -68,7 +66,7 @@ function SidebarContent() {
       <div className="mt-auto pt-6">
         <button
           onClick={() => signOut()}
-          className="group mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 transition-all hover:bg-red-500/10 hover:text-red-400"
+          className="group text-muted-foreground hover:bg-danger-surface hover:text-danger-flare mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all"
         >
           <AppIcon
             name="LogOut"
@@ -106,7 +104,7 @@ export default function Sidebar() {
           </SheetTrigger>
           <SheetContent
             side="left"
-            className="bg-sidebar border-border flex w-64 flex-col px-6 pt-6 pb-2 text-zinc-100 sm:hidden"
+            className="bg-sidebar border-border text-foreground flex w-64 flex-col px-6 pt-6 pb-2 sm:hidden"
           >
             <SheetHeader className="sr-only">
               <SheetTitle>{tDash('menu')}</SheetTitle>

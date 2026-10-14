@@ -99,16 +99,16 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
 
   if (isSuccess) {
     return (
-      <Card className="mx-auto w-full max-w-2xl border-white/10 bg-zinc-950/50 shadow-2xl backdrop-blur-sm">
+      <Card className="bg-card/80 mx-auto w-full max-w-2xl shadow-2xl backdrop-blur-sm">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
           <div className="bg-primary-surface text-primary-flare mb-4 flex h-16 w-16 items-center justify-center rounded-full shadow-[0_0_15px_var(--primary-surface)]">
             <MessageSquare className="h-8 w-8" />
           </div>
-          <CardTitle className="mb-2 text-2xl font-bold text-zinc-100">{t('success')}</CardTitle>
+          <CardTitle className="mb-2">{t('success')}</CardTitle>
           <Button
             variant="ghost"
             onClick={() => setIsSuccess(false)}
-            className="mt-4 text-zinc-400 hover:text-white"
+            className="text-muted-foreground hover:text-foreground mt-4"
           >
             {t('submit')}
           </Button>
@@ -118,17 +118,15 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
   }
 
   return (
-    <Card className="mx-auto w-full max-w-2xl border-zinc-800 bg-zinc-950 shadow-2xl">
+    <Card className="bg-card mx-auto w-full max-w-2xl shadow-2xl">
       <CardHeader className="space-y-1">
         <div className="flex items-center gap-2">
           <div className="bg-primary-surface text-primary-flare rounded-md p-2">
             <MessageSquare className="h-5 w-5" />
           </div>
-          <CardTitle className="text-2xl font-bold tracking-tight text-zinc-100">
-            {t('title')}
-          </CardTitle>
+          <CardTitle>{t('title')}</CardTitle>
         </div>
-        <CardDescription className="text-zinc-400">{t('subtitle')}</CardDescription>
+        <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -139,11 +137,11 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-300">{t('emailLabel')}</FormLabel>
+                    <FormLabel className="text-foreground">{t('emailLabel')}</FormLabel>
                     <FormControl>
                       <Input
                         placeholder={t('emailPlaceholder')}
-                        className="focus:border-primary-glow focus:ring-primary/20 border-zinc-800 bg-zinc-900 text-zinc-100 placeholder:text-zinc-600"
+                        className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground placeholder:text-muted-foreground"
                         {...field}
                       />
                     </FormControl>
@@ -157,14 +155,14 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-300">{t('typeLabel')}</FormLabel>
+                    <FormLabel className="text-foreground">{t('typeLabel')}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="focus:border-primary-glow focus:ring-primary/20 border-zinc-800 bg-zinc-900 text-zinc-100">
+                        <SelectTrigger className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground">
                           <SelectValue placeholder={t('typeLabel')} />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="border-zinc-800 bg-zinc-900 text-zinc-100">
+                      <SelectContent className="border-border bg-muted text-foreground">
                         <SelectItem value="bug">{t('types.bug')}</SelectItem>
                         <SelectItem value="feature">{t('types.feature')}</SelectItem>
                         <SelectItem value="feedback">{t('types.feedback')}</SelectItem>
@@ -182,12 +180,12 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-zinc-300">{t('messageLabel')}</FormLabel>
+                  <FormLabel className="text-foreground">{t('messageLabel')}</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder={t('messagePlaceholder')}
                       rows={5}
-                      className="focus:border-primary-glow focus:ring-primary/20 resize-none border-zinc-800 bg-zinc-900 text-zinc-100 placeholder:text-zinc-600"
+                      className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground placeholder:text-muted-foreground resize-none"
                       {...field}
                     />
                   </FormControl>
@@ -200,17 +198,15 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
 
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting || !turnstileToken}
-              className="bg-primary hover:bg-primary/90 focus:ring-primary/20 text-primary-on w-full font-bold transition-all focus:ring-2 active:scale-[0.98]"
+              disabled={!turnstileToken}
+              loading={form.formState.isSubmitting}
+              className="w-full font-bold"
             >
               {form.formState.isSubmitting ? (
-                <>
-                  <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  {t('submitting')}
-                </>
+                t('submitting')
               ) : (
                 <>
-                  <Send className="mr-2 h-4 w-4" />
+                  <Send aria-hidden="true" />
                   {t('submit')}
                 </>
               )}

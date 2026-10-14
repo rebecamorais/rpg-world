@@ -312,7 +312,8 @@
     "spellSlots": "Espaços de Magia",
     "level": "Nv {level}",
     "pointsCapacity": "Capacidade de Spell Points",
-    "systemPlaceholder": "Magia"
+    "systemPlaceholder": "Magia",
+    "slot": "Espaço {slot} do {level}º círculo"
   },
   "dashboard": {
     "menu": "Menu",

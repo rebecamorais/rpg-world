@@ -66,7 +66,7 @@ export default function AttributeCard({ label, value, onChange, icon }: Props) {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="group border-border bg-card hover:border-character relative flex w-24 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 p-4 shadow-sm transition-colors"
+          className="group border-border bg-card hover:border-character focus-ring relative flex w-24 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 p-4 shadow-sm transition-colors"
         >
           <div className="bg-character absolute top-0 h-1 w-full opacity-50 transition-colors group-hover:opacity-100" />
 
@@ -76,9 +76,7 @@ export default function AttributeCard({ label, value, onChange, icon }: Props) {
             </div>
           )}
 
-          <span className="text-muted-foreground mb-1 text-xs font-bold tracking-wider uppercase">
-            {label}
-          </span>
+          <span className="text-label text-muted-foreground mb-1">{label}</span>
 
           <Tooltip>
             <TooltipTrigger asChild>

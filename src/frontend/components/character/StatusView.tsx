@@ -2,12 +2,15 @@
 
 import React from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import CharacterHeader from '@frontend/components/character/CharacterHeader';
 import AttributesSection from '@frontend/components/character/stats/AttributesSection';
 import CombatStatsSection from '@frontend/components/character/stats/CombatStatsSection';
 import PassivePerception from '@frontend/components/character/stats/PassivePerception';
 import SavingThrowsSection from '@frontend/components/character/stats/SavingThrowsSection';
 import SkillsSection from '@frontend/components/character/stats/SkillsSection';
+import { ErrorState } from '@frontend/components/ui/empty-state';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
@@ -31,6 +34,7 @@ export default function StatusView() {
     handleHitDiceChange,
     handleDeathSavesChange,
   } = useCharacterContext();
+  const t = useTranslations('characters');
 
   if (!character) return null;
 
@@ -38,11 +42,7 @@ export default function StatusView() {
 
   return (
     <div className="flex flex-col gap-6">
-      {error && (
-        <p className="mb-4 rounded bg-red-50 p-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
-          {error}
-        </p>
-      )}
+      {error && <ErrorState title={t('loadErrorTitle')} description={error} />}
 
       <CharacterHeader
         id={character.id}

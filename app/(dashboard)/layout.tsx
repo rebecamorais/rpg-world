@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <UserProvider user={user}>
-      <div className="bg-sidebar flex min-h-[calc(100vh-var(--header-height))] text-zinc-100">
+      <div className="bg-sidebar text-foreground flex min-h-[calc(100vh-var(--header-height))]">
         {/* Sidebar */}
         <Sidebar />
 

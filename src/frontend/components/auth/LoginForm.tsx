@@ -80,13 +80,13 @@ export default function LoginForm() {
 
   if (emailSent) {
     return (
-      <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 backdrop-blur-md">
+      <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="text-white">{t('verifyEmailTitle')}</CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardTitle>{t('verifyEmailTitle')}</CardTitle>
+          <CardDescription className="text-muted-foreground">
             {t.rich('verifyEmailDescription', {
               email: form.getValues('email'),
-              bold: (chunks) => <strong className="text-white">{chunks}</strong>,
+              bold: (chunks) => <strong className="text-foreground">{chunks}</strong>,
             })}
           </CardDescription>
         </CardHeader>
@@ -95,21 +95,19 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
+    <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
       <CardHeader>
-        <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-xl font-bold text-transparent">
-          {t('title')}
-        </CardTitle>
-        <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <div className="flex rounded-lg bg-white/5 p-1">
+        <div className="bg-muted flex rounded-lg p-1">
           <button
             onClick={() => setAuthMode('magic')}
             className={`flex-1 rounded-md py-1.5 text-sm font-medium transition-all ${
               authMode === 'magic'
                 ? 'bg-primary text-primary-on shadow-lg'
-                : 'text-gray-400 hover:text-white'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             {t('magicLinkTab')}
@@ -119,7 +117,7 @@ export default function LoginForm() {
             className={`flex-1 rounded-md py-1.5 text-sm font-medium transition-all ${
               authMode === 'password'
                 ? 'bg-primary text-primary-on shadow-lg'
-                : 'text-gray-400 hover:text-white'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             {t('passwordTab')}
@@ -133,13 +131,13 @@ export default function LoginForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">{t('emailLabel')}</FormLabel>
+                  <FormLabel>{t('emailLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder={t('emailPlaceholder')}
                       autoComplete="email"
-                      className="focus:border-primary/50 border-white/10 bg-white/5 text-white"
+                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>
@@ -155,7 +153,7 @@ export default function LoginForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex items-center justify-between">
-                      <FormLabel className="text-gray-300">{t('passwordLabel')}</FormLabel>
+                      <FormLabel>{t('passwordLabel')}</FormLabel>
                       <Link
                         href="/forgot-password"
                         className="text-primary-flare text-xs hover:underline"
@@ -168,7 +166,7 @@ export default function LoginForm() {
                         type="password"
                         placeholder={t('passwordPlaceholder')}
                         autoComplete="current-password"
-                        className="focus:border-primary/50 border-white/10 bg-white/5 text-white"
+                        className="bg-muted/50"
                         {...field}
                       />
                     </FormControl>
@@ -179,25 +177,22 @@ export default function LoginForm() {
             )}
 
             {authMode === 'magic' && (
-              <div className="rounded-md border border-yellow-500/20 bg-yellow-500/10 p-2.5">
-                <p className="text-center text-sm text-yellow-500/80">
+              <div className="border-warning-muted bg-warning-surface rounded-md border p-2.5">
+                <p className="text-warning-flare text-center text-sm">
                   {t('magicLinkDisabledWarning')}
                 </p>
               </div>
             )}
 
             {form.formState.errors.root && (
-              <p className="text-sm text-red-400">{form.formState.errors.root.message}</p>
+              <p className="text-danger-flare text-sm">{form.formState.errors.root.message}</p>
             )}
 
             <Button
               type="submit"
-              disabled={authMode === 'magic' || form.formState.isSubmitting}
-              className={`mt-2 w-full font-semibold transition-all ${
-                authMode === 'magic'
-                  ? 'bg-primary/30 cursor-not-allowed opacity-50'
-                  : 'bg-primary hover:bg-primary/90'
-              }`}
+              disabled={authMode === 'magic'}
+              loading={form.formState.isSubmitting}
+              className="mt-2 w-full font-semibold"
             >
               {form.formState.isSubmitting
                 ? t('processing')
@@ -210,27 +205,27 @@ export default function LoginForm() {
 
         <div className="relative my-2">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-white/10" />
+            <span className="border-border w-full border-t" />
           </div>
           <div className="relative flex justify-center text-sm uppercase">
-            <span className="bg-black/60 px-2 text-gray-400">{t('dividerText')}</span>
+            <span className="bg-card text-muted-foreground px-2">{t('dividerText')}</span>
           </div>
         </div>
 
         <Button
           type="button"
           variant="outline"
-          className="w-full border-white/10 bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white"
+          className="bg-muted hover:bg-background w-full"
           onClick={handleGoogleSignIn}
         >
           <GoogleIcon />
           {t('googleLogin')}
         </Button>
 
-        <div className="mt-4 flex flex-col gap-4 border-t border-white/5 pt-6 text-center">
+        <div className="border-border mt-4 flex flex-col gap-4 border-t pt-6 text-center">
           <div className="space-y-1">
-            <p className="text-sm font-medium text-white">{t('noAccount')}</p>
-            <p className="text-xs text-gray-400">{t('noAccountSubtitle')}</p>
+            <p className="text-foreground text-sm font-medium">{t('noAccount')}</p>
+            <p className="text-muted-foreground text-xs">{t('noAccountSubtitle')}</p>
           </div>
           <Button
             variant="outline"

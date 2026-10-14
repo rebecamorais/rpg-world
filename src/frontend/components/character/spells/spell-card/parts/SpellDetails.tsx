@@ -25,12 +25,12 @@ export const SpellDetails = React.memo(({ spell, isExpanded }: SpellDetailsProps
       aria-hidden={!isExpanded}
     >
       <div className="overflow-hidden">
-        <section className="pt-2 text-sm leading-relaxed text-slate-300 transition-colors group-hover:text-gray-100">
+        <section className="text-foreground/90 group-hover:text-foreground pt-2 text-sm leading-relaxed transition-colors">
           <div className="space-y-4">
             <p className="whitespace-pre-wrap">{spell.description}</p>
             {spell.higherLevel && (
-              <div className="mt-4 rounded-lg border border-white/10 bg-white/5 p-4 text-xs shadow-inner">
-                <strong className="text-white">{tCharacters('atHigherLevels')}:</strong>{' '}
+              <div className="border-border bg-muted mt-4 rounded-lg border p-4 text-xs shadow-inner">
+                <strong className="text-foreground">{tCharacters('atHigherLevels')}:</strong>{' '}
                 {spell.higherLevel}
               </div>
             )}

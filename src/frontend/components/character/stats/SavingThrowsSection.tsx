@@ -4,8 +4,8 @@ import React from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { SectionCard } from '@frontend/components/ui/section-card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
@@ -32,7 +32,7 @@ const DeathSaves = ({ deathSaves, onDeathSavesChange }: DeathSavesProps) => {
   const t = useTranslations('savingThrows');
 
   return (
-    <div className="flex items-center justify-center bg-zinc-500/5 py-4">
+    <div className="bg-muted/20 border-border flex items-center justify-center border-b py-4">
       <div className="flex items-center gap-6">
         <div className="flex gap-2">
           {[2, 1, 0].map((i) => (
@@ -59,6 +59,7 @@ const DeathSaves = ({ deathSaves, onDeathSavesChange }: DeathSavesProps) => {
 
         <button
           type="button"
+          className="focus-ring touch-target rounded-full"
           aria-label={t('resetDeathSaves')}
           onClick={() => onDeathSavesChange?.(0, 0)}
         >
@@ -67,9 +68,9 @@ const DeathSaves = ({ deathSaves, onDeathSavesChange }: DeathSavesProps) => {
             size="sm"
             variant="game"
             className={cn(
-              'cursor-pointer text-zinc-500 transition-all duration-300 hover:scale-110 hover:text-white',
+              'text-muted-foreground hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110',
               ((deathSaves?.successes || 0) > 0 || (deathSaves?.failures || 0) > 0) &&
-                'text-zinc-400',
+                'text-foreground',
             )}
           />
         </button>
@@ -113,22 +114,14 @@ function SavingThrowsSection({
   const tSection = useTranslations('savingThrows');
 
   return (
-    <Card className="border-border bg-card">
-      <CardHeader className="bg-muted/30 border-border border-b px-4 py-2">
-        <div className="flex items-center gap-2">
-          <AppIcon
-            name="shield-reflect"
-            variant="game"
-            size="lg"
-            className="text-character-flare"
-          />
-          <CardTitle className="text-xs font-bold tracking-widest uppercase opacity-70">
-            {tSection('title')}
-          </CardTitle>
-        </div>
-      </CardHeader>
+    <SectionCard>
+      <SectionCard.Header>
+        <SectionCard.Title icon="shield-reflect" iconVariant="game">
+          {tSection('title')}
+        </SectionCard.Title>
+      </SectionCard.Header>
       <DeathSaves deathSaves={deathSaves} onDeathSavesChange={onDeathSavesChange} />
-      <CardContent className="grid grid-cols-1 gap-2 p-4">
+      <SectionCard.Body className="grid grid-cols-1 gap-2">
         {ATTRIBUTE_KEYS.map((key) => {
           const attrVal = attributes[key] ?? 10;
           const isProficient = savingThrows[key] ?? false;
@@ -187,8 +180,8 @@ function SavingThrowsSection({
             </div>
           );
         })}
-      </CardContent>
-    </Card>
+      </SectionCard.Body>
+    </SectionCard>
   );
 }
 

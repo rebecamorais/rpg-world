@@ -53,18 +53,18 @@ export function CharacterCard({ character }: CharacterCardProps) {
                 </h3>
                 <Badge
                   variant="secondary"
-                  className="bg-muted/80 border-l-character shrink-0 border-l-[3px] px-2.5 py-1 text-[10px] font-black tracking-widest uppercase"
+                  className="text-label bg-muted/80 border-l-character shrink-0 border-l-[3px] px-2.5 py-1"
                 >
                   {t('levelShort', { level: character.level })}
                 </Badge>
               </div>
-              <p className="text-muted-foreground line-clamp-1 text-xs font-bold tracking-widest uppercase">
+              <p className="text-label text-muted-foreground line-clamp-1">
                 {character.class || t('defaultClass')}
               </p>
             </div>
 
             <div className="border-muted/20 mt-auto flex items-center justify-between border-t pt-4">
-              <div className="text-muted-foreground flex items-center gap-2 text-[10px] font-black tracking-widest uppercase">
+              <div className="text-label text-muted-foreground flex items-center gap-2">
                 <AppIcon name="Swords" size={14} className="text-character-flare" />
                 <span>{character.system.replace('_', ' ')}</span>
               </div>
@@ -72,9 +72,10 @@ export function CharacterCard({ character }: CharacterCardProps) {
               {/* Delete: always visible on touch screens; on desktop it shows on hover or keyboard focus */}
               <div className="bg-character-surface border-character-muted text-character-flare flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100 focus-within:opacity-100 sm:opacity-0">
                 <Button
-                  destroy
+                  variant="destructive"
                   size="icon"
                   title={tCommon('delete')}
+                  aria-label={tCommon('delete')}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();

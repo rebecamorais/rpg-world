@@ -49,14 +49,14 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
 
   if (isMinified) {
     return (
-      <footer className={cn('bg-black/20 px-6 py-4 backdrop-blur-xl', className)}>
+      <footer className={cn('bg-background/40 px-6 py-4 backdrop-blur-xl', className)}>
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-xs text-zinc-400">{t('copyright', { year: currentYear })}</p>
-          <div className="flex gap-4 text-xs text-zinc-400">
-            <Link href="/terms" className="transition-colors hover:text-white">
+          <p className="text-muted-foreground text-xs">{t('copyright', { year: currentYear })}</p>
+          <div className="text-muted-foreground flex gap-4 text-xs">
+            <Link href="/terms" className="hover:text-foreground transition-colors">
               {t('legal.terms')}
             </Link>
-            <Link href="/privacy" className="transition-colors hover:text-white">
+            <Link href="/privacy" className="hover:text-foreground transition-colors">
               {t('legal.privacy')}
             </Link>
           </div>
@@ -66,42 +66,40 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
   }
 
   return (
-    <footer
-      className={cn(
-        'mt-auto border-t border-white/5 bg-[#08080a] pt-16 pb-10 transition-all',
-        className,
-      )}
-    >
+    <footer className={cn('border-border bg-sidebar mt-auto border-t pt-16 pb-10', className)}>
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {/* Brand Column */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-lg font-bold tracking-tight text-white">Rebs Tech Studio</span>
+              <span className="text-foreground text-lg font-bold tracking-tight">
+                Rebs Tech Studio
+              </span>
             </div>
-            <p className="max-w-[200px] text-sm leading-relaxed text-zinc-400">
+            <p className="text-muted-foreground max-w-[200px] text-sm leading-relaxed">
               {tLanding('heroSubtitle')}
             </p>
-            <div className="mt-1 text-xs font-medium text-zinc-400">
+            <div className="text-muted-foreground mt-1 text-xs font-medium">
               {t('copyright', { year: currentYear })}
             </div>
           </div>
 
           {/* Explore Column */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-xs font-bold tracking-widest text-zinc-400 uppercase">
-              {t('explore.title')}
-            </h3>
+            <h3 className="text-label text-muted-foreground">{t('explore.title')}</h3>
             <ul className="flex flex-col gap-2">
               <li>
-                <Link href="/" className="text-sm text-zinc-400 transition-colors hover:text-white">
+                <Link
+                  href="/"
+                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                >
                   {t('explore.home')}
                 </Link>
               </li>
               <li>
                 <Link
                   href="/characters"
-                  className="text-sm text-zinc-400 transition-colors hover:text-white"
+                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >
                   {t('explore.characters')}
                 </Link>
@@ -109,7 +107,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
               <li>
                 <Link
                   href="/settings"
-                  className="text-sm text-zinc-400 transition-colors hover:text-white"
+                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >
                   {t('explore.settings')}
                 </Link>
@@ -120,16 +118,14 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
           {/* Social & Legal Column */}
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-              <h3 className="text-xs font-bold tracking-widest text-zinc-400 uppercase">
-                {t('socials.title')}
-              </h3>
+              <h3 className="text-label text-muted-foreground">{t('socials.title')}</h3>
               <ul className="flex flex-col gap-2">
                 <li>
                   <a
                     href={GITHUB_REPO}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-white"
+                    className="text-muted-foreground hover:text-foreground flex items-center gap-2 text-sm transition-colors"
                   >
                     <GithubIcon className="h-4 w-4" />
                     {t('socials.github')}
@@ -138,14 +134,12 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
               </ul>
             </div>
             <div className="flex flex-col gap-4">
-              <h3 className="text-xs font-bold tracking-widest text-zinc-400 uppercase">
-                {t('legal.title')}
-              </h3>
+              <h3 className="text-label text-muted-foreground">{t('legal.title')}</h3>
               <ul className="flex flex-col gap-2">
                 <li>
                   <Link
                     href="/terms"
-                    className="text-sm text-zinc-400 transition-colors hover:text-white"
+                    className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                   >
                     {t('legal.terms')}
                   </Link>
@@ -153,7 +147,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
                 <li>
                   <Link
                     href="/privacy"
-                    className="text-sm text-zinc-400 transition-colors hover:text-white"
+                    className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                   >
                     {t('legal.privacy')}
                   </Link>
@@ -164,31 +158,29 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
 
           {/* Support Column */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-xs font-bold tracking-widest text-zinc-400 uppercase">
-              {t('support.title')}
-            </h3>
+            <h3 className="text-label text-muted-foreground">{t('support.title')}</h3>
             <div className="flex flex-col gap-3">
               <a
                 href="https://ko-fi.com/rebecamorais"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group glass-premium flex items-center justify-between rounded-lg p-3 transition-all hover:border-white/20 hover:bg-white/5"
+                className="group border-border bg-card/40 hover:border-muted-foreground/40 hover:bg-muted focus-ring flex items-center justify-between rounded-lg border p-3 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF5E5B]/10 text-[#FF5E5B]">
+                  <div className="bg-kofi/10 text-kofi flex h-8 w-8 items-center justify-center rounded-full">
                     <AppIcon name="Coffee" size={16} />
                   </div>
-                  <span className="text-sm font-semibold text-white">{t('support.kofi')}</span>
+                  <span className="text-foreground text-sm font-semibold">{t('support.kofi')}</span>
                 </div>
                 <AppIcon
                   name="ExternalLink"
                   size={12}
-                  className="text-zinc-400 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-zinc-400"
+                  className="text-muted-foreground group-hover:text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 />
               </a>
 
-              <div className="flex flex-col gap-2 rounded-lg border border-white/5 bg-white/[0.02] p-3">
-                <div className="flex items-center gap-3 text-sm font-semibold text-white">
+              <div className="border-border bg-muted/40 flex flex-col gap-2 rounded-lg border p-3">
+                <div className="text-foreground flex items-center gap-3 text-sm font-semibold">
                   <GithubIcon className="h-4 w-4" />
                   <span>{t('support.githubSponsors')}</span>
                 </div>
@@ -198,18 +190,18 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
                     title="Sponsor rebecamorais"
                     height="32"
                     width="114"
-                    style={{ border: 0, borderRadius: '6px' }}
+                    className="rounded-md border-0"
                   />
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 rounded-lg border border-white/5 bg-white/[0.02] p-3">
-                <div className="flex items-center gap-3 text-sm font-semibold text-white">
+              <div className="border-border bg-muted/40 flex flex-col gap-2 rounded-lg border p-3">
+                <div className="text-foreground flex items-center gap-3 text-sm font-semibold">
                   <AppIcon name="QrCode" size={16} className="text-primary-flare" />
                   <span>{t('support.pixTitle')}</span>
                 </div>
                 <div className="flex items-center gap-2 overflow-hidden">
-                  <code className="flex-1 truncate rounded bg-black/40 px-2 py-1 font-mono text-xs text-zinc-400">
+                  <code className="bg-background text-muted-foreground flex-1 truncate rounded px-2 py-1 font-mono text-xs">
                     {PIX_KEY}
                   </code>
                   <button

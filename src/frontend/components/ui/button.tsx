@@ -3,20 +3,21 @@ import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
 
+import { Spinner } from '@frontend/components/ui/spinner';
 import { cn } from '@frontend/lib/utils';
 
 const buttonVariants = cva(
-  'focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'focus-ring touch-target inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors disabled:pointer-events-none disabled:opacity-50 aria-busy:cursor-wait [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow',
+        default: 'bg-primary text-primary-on hover:bg-primary/90 shadow',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm',
         outline:
-          'border-input bg-background hover:bg-accent hover:text-accent-foreground border shadow-sm',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm',
+          'border-border bg-background hover:bg-muted hover:text-foreground border shadow-sm',
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-muted border shadow-sm',
         character: 'bg-character hover:bg-character/90 text-character-on shadow',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        ghost: 'hover:bg-muted hover:text-foreground',
         link: 'text-primary-flare underline-offset-4 hover:underline',
       },
       size: {
@@ -34,24 +35,43 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
+  extends React.ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  destroy?: boolean;
+  /** Shows a spinner, blocks clicks and announces the busy state. Ignored with `asChild`. */
+  loading?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, destroy, ...props }, ref) => {
-    const Comp = asChild ? Slot : 'button';
-    const finalVariant = destroy ? 'destructive' : variant;
+function Button({
+  className,
+  variant,
+  size,
+  asChild = false,
+  loading = false,
+  disabled,
+  children,
+  ...props
+}: ButtonProps) {
+  const classes = cn(buttonVariants({ variant, size, className }));
+
+  if (asChild) {
     return (
-      <Comp
-        className={cn(buttonVariants({ variant: finalVariant, size, className }))}
-        ref={ref}
-        {...props}
-      />
+      <Slot className={classes} {...props}>
+        {children}
+      </Slot>
     );
-  },
-);
-Button.displayName = 'Button';
+  }
+
+  return (
+    <button
+      className={classes}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      {...props}
+    >
+      {loading && <Spinner aria-hidden="true" />}
+      {children}
+    </button>
+  );
+}
 
 export { Button, buttonVariants };

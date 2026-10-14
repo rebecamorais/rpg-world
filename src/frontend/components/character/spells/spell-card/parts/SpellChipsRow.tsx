@@ -15,7 +15,7 @@ interface SpellChipsRowProps {
 }
 
 export const SpellChipsRow = React.memo(({ spell, displayValues }: SpellChipsRowProps) => (
-  <div className="pointer-events-auto flex flex-wrap gap-1 border-t border-white/5 pt-6">
+  <div className="border-border pointer-events-auto flex flex-wrap gap-1 border-t pt-6">
     {(spell.castingTime || spell.castingValue) && (
       <SpellChip
         icon={

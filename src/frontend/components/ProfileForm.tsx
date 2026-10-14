@@ -126,19 +126,17 @@ export default function ProfileForm() {
 
   if (isLoading) {
     return (
-      <Card className="mx-auto w-full max-w-lg border-white/10 bg-black/60 py-12 backdrop-blur-md">
+      <Card className="bg-card/80 mx-auto w-full max-w-lg py-12 backdrop-blur-md">
         <LoadingState thematic />
       </Card>
     );
   }
 
   return (
-    <Card className="mx-auto w-full max-w-lg border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
+    <Card className="bg-card/80 mx-auto w-full max-w-lg shadow-2xl backdrop-blur-md">
       <CardHeader>
-        <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
-          {t('title')}
-        </CardTitle>
-        <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -158,12 +156,12 @@ export default function ProfileForm() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">{t('usernameLabel')}</FormLabel>
+                  <FormLabel>{t('usernameLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder={t('usernamePlaceholder')}
                       autoComplete="username"
-                      className="border-white/10 bg-white/5 text-white placeholder:text-gray-600 focus:border-blue-500/50"
+                      className="border-border bg-muted text-foreground placeholder:text-muted-foreground focus:border-primary-flare"
                       {...field}
                     />
                   </FormControl>
@@ -177,12 +175,12 @@ export default function ProfileForm() {
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">{t('fullNameLabel')}</FormLabel>
+                  <FormLabel>{t('fullNameLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder={t('fullNamePlaceholder')}
                       autoComplete="name"
-                      className="border-white/10 bg-white/5 text-white placeholder:text-gray-600 focus:border-blue-500/50"
+                      className="border-border bg-muted text-foreground placeholder:text-muted-foreground focus:border-primary-flare"
                       {...field}
                     />
                   </FormControl>
@@ -196,7 +194,7 @@ export default function ProfileForm() {
               name="primaryColor"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">{t('primaryColorLabel')}</FormLabel>
+                  <FormLabel>{t('primaryColorLabel')}</FormLabel>
                   <FormControl>
                     <div className="grid grid-cols-5 gap-3 pt-2">
                       {PREDEFINED_COLORS.map((color) => {
@@ -211,7 +209,7 @@ export default function ProfileForm() {
                             className={cn(
                               'group relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all hover:scale-110',
                               isSelected
-                                ? 'border-blue-500 ring-2 ring-blue-500/20'
+                                ? 'border-primary-flare ring-primary-flare/20 ring-2'
                                 : 'border-transparent',
                             )}
                             title={t(`colors.${color.name}`)}
@@ -220,11 +218,11 @@ export default function ProfileForm() {
                           >
                             <div
                               className="h-7 w-7 rounded-full shadow-sm"
-                              style={{ backgroundColor: color.value || '#663399' }}
+                              style={{ backgroundColor: color.value || 'var(--brand)' }}
                             />
                             {isSelected && (
                               <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="h-1.5 w-1.5 rounded-full bg-white shadow-sm" />
+                                <div className="bg-foreground h-1.5 w-1.5 rounded-full shadow-sm" />
                               </div>
                             )}
                           </button>
@@ -238,13 +236,13 @@ export default function ProfileForm() {
             />
 
             {form.formState.errors.root && (
-              <p className="text-sm text-red-400">{form.formState.errors.root.message}</p>
+              <p className="text-danger-flare text-sm">{form.formState.errors.root.message}</p>
             )}
 
             <Button
               type="submit"
-              disabled={isUpdating || form.formState.isSubmitting}
-              className="mt-2 w-full bg-blue-600 font-semibold transition-all hover:bg-blue-700 disabled:opacity-50"
+              loading={isUpdating || form.formState.isSubmitting}
+              className="mt-2 w-full font-semibold disabled:opacity-50"
             >
               {isUpdating ? t('saving') : t('save')}
             </Button>

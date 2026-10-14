@@ -15,7 +15,12 @@ export function HeaderSupportLink() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="ghost" size="icon" asChild className="text-zinc-400 hover:text-white">
+        <Button
+          variant="ghost"
+          size="icon"
+          asChild
+          className="text-muted-foreground hover:text-foreground"
+        >
           <Link href="/support">
             <AppIcon name="Bug" size="sm" />
             <span className="sr-only">{t('contact')}</span>

@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Button } from '@frontend/components/ui/button';
+import { EmptyState, ErrorState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharactersContext } from '@frontend/context/CharactersContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
@@ -37,13 +38,7 @@ export default function CharacterList() {
   if (!currentUser) return null;
 
   if (error) {
-    return (
-      <div className="border-destructive/20 bg-destructive/5 rounded-2xl border p-8 text-center">
-        <AppIcon name="AlertTriangle" size={40} className="mx-auto mb-4 opacity-50" />
-        <p className="mb-2 text-lg font-bold">{t('loadErrorTitle')}</p>
-        <p className="text-sm opacity-80">{getErrorMessage(error)}</p>
-      </div>
-    );
+    return <ErrorState title={t('loadErrorTitle')} description={getErrorMessage(error)} />;
   }
 
   if (isLoading) {
@@ -56,30 +51,20 @@ export default function CharacterList() {
 
   if (characters.length === 0) {
     return (
-      <div className="border-muted/30 bg-card/20 flex min-h-[450px] flex-col items-center justify-center rounded-3xl border-2 border-dashed p-8 text-center backdrop-blur-md sm:p-12">
-        <div className="relative mb-8">
-          <div className="bg-primary/30 absolute -inset-4 animate-pulse rounded-full blur-2xl" />
-          <div className="bg-muted relative flex h-28 w-28 items-center justify-center rounded-full shadow-2xl">
-            <AppIcon name="UserPlus" size={56} className="text-muted-foreground" />
-          </div>
-        </div>
-        <h3 className="text-foreground mb-4 text-3xl font-black tracking-tighter">
-          {t('emptyState')}
-        </h3>
-        <p className="text-muted-foreground mx-auto mb-10 max-w-sm text-base leading-relaxed font-medium">
-          {t('createFirstDescription')}
-        </p>
-        <Button
-          asChild
-          size="lg"
-          className="shadow-primary/20 h-auto min-h-14 max-w-full rounded-full px-8 py-3 text-lg font-black whitespace-normal shadow-2xl transition-all hover:scale-105 active:scale-95 sm:px-12"
-        >
-          <Link href="/characters/new">
-            <AppIcon name="Plus" size={24} className="mr-3" />
-            {t('createFirst')}
-          </Link>
-        </Button>
-      </div>
+      <EmptyState
+        icon="UserPlus"
+        title={t('emptyState')}
+        description={t('createFirstDescription')}
+        className="min-h-[450px]"
+        action={
+          <Button asChild size="lg">
+            <Link href="/characters/new">
+              <AppIcon name="Plus" size={20} aria-hidden="true" />
+              {t('createFirst')}
+            </Link>
+          </Button>
+        }
+      />
     );
   }
 
@@ -92,13 +77,11 @@ export default function CharacterList() {
             {t('title')}
           </h2>
           <div className="flex items-center gap-3">
-            <div className="flex h-5 items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 px-2.5 py-0.5">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
-              <span className="text-[10px] font-black tracking-widest text-green-500/90 uppercase">
-                {t('online')}
-              </span>
+            <div className="border-success-muted bg-success-surface flex h-5 items-center gap-1.5 rounded-full border px-2.5 py-0.5">
+              <span className="bg-success h-1.5 w-1.5 animate-pulse rounded-full shadow-[0_0_8px_var(--success-muted)]" />
+              <span className="text-label text-success-flare">{t('online')}</span>
             </div>
-            <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
+            <p className="text-label text-muted-foreground">
               {t('characterCount', { count: characters.length })}
             </p>
           </div>
@@ -128,7 +111,7 @@ export default function CharacterList() {
             <span className="text-muted-foreground group-hover:text-primary-flare text-xl font-black tracking-tighter transition-colors duration-500 sm:text-2xl">
               {t('createNew')}
             </span>
-            <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-0 transition-all duration-500 group-hover:translate-y-1 group-hover:opacity-40">
+            <p className="text-label opacity-0 transition-all duration-500 group-hover:translate-y-1 group-hover:opacity-40">
               {t('createNewTagline')}
             </p>
           </div>

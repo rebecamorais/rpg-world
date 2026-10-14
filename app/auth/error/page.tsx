@@ -28,19 +28,19 @@ export default function AuthErrorPage() {
 
   return (
     <div className="bg-background flex flex-1 items-center justify-center p-4">
-      <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
+      <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="text-red-400">
+          <CardTitle className="text-danger-flare">
             {isExpiredLink ? t('errors.expired_link_title') : t('errors.auth_error_title')}
           </CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardDescription className="text-muted-foreground">
             {isExpiredLink
               ? t('errors.expired_link_description')
               : t('errors.auth_error_description')}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 py-6">
-          <p className="rounded-md border border-red-500/20 bg-red-500/10 p-3 text-center text-sm text-gray-300">
+          <p className="border-danger-muted bg-danger-surface text-foreground rounded-md border p-3 text-center text-sm">
             {errorMessage}
           </p>
           <Button asChild className="w-full">

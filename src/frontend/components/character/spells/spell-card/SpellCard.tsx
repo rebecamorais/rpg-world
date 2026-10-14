@@ -37,9 +37,7 @@ export function SpellCard({
   const cardStyles = useMemo(
     () =>
       ({
-        '--theme-primary': theme.hex,
-        '--card-glow': theme.hex,
-        '--card-muted': `color-mix(in srgb, ${theme.hex}, transparent 70%)`,
+        '--spell-color': theme.hex,
         contentVisibility: 'auto',
       }) as React.CSSProperties,
     [theme.hex],
@@ -48,12 +46,11 @@ export function SpellCard({
   return (
     <article
       className={cn(
-        'group relative overflow-hidden rounded-2xl border p-5 transition-all duration-500 ease-out outline-none',
-        'bg-card/40 backdrop-blur-md hover:border-[var(--card-glow)] hover:backdrop-blur-xl',
+        'spell-context group relative overflow-hidden rounded-2xl border p-5 transition-all duration-500 ease-out outline-none',
+        'bg-card/40 hover:border-spell backdrop-blur-md hover:backdrop-blur-xl',
         isExpanded
-          ? 'bg-card/60 border-[var(--card-glow)] shadow-lg'
-          : 'hover:bg-card/50 hover:-translate-y-1',
-        !isExpanded && theme.border,
+          ? 'bg-card/60 border-spell shadow-lg'
+          : 'border-spell-muted hover:bg-card/50 hover:-translate-y-1',
       )}
       style={cardStyles}
       aria-labelledby={`spell-name-${spell.id}`}
@@ -64,7 +61,7 @@ export function SpellCard({
         aria-expanded={isExpanded}
         aria-controls={`spell-details-${spell.id}`}
         onClick={onClick}
-        className="absolute inset-0 z-0 h-full w-full bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-[var(--card-glow)] focus-visible:ring-offset-2"
+        className="focus-visible:outline-spell-flare absolute inset-0 z-0 h-full w-full rounded-2xl bg-transparent outline-none focus-visible:outline-2 focus-visible:-outline-offset-2"
       >
         <span className="sr-only">
           {isExpanded ? displayValues.collapseLabel : displayValues.expandLabel} {spell.name}
@@ -77,7 +74,6 @@ export function SpellCard({
         <SpellHeader
           spell={spell}
           isExpanded={isExpanded}
-          theme={theme}
           mainIcon={mainIcon}
           displayValues={displayValues}
         />
@@ -117,14 +113,9 @@ export function SpellCard({
 
 const SpellVFX = React.memo(({ mainIcon, spell }: { mainIcon: string; spell: Spell }) => (
   <div aria-hidden="true">
-    <div
-      className="pointer-events-none absolute inset-0 z-0 opacity-0 blur-3xl transition-opacity duration-1000 group-hover:opacity-100"
-      style={{
-        background: `radial-gradient(circle at center, var(--card-muted), transparent 70%)`,
-      }}
-    />
+    <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,var(--spell-muted),transparent_70%)] opacity-0 blur-3xl transition-opacity duration-1000 group-hover:opacity-100" />
     <SpellBackground spell={spell} />
-    <div className="group-hover:animate-shimmer pointer-events-none absolute inset-0 z-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+    <div className="group-hover:animate-shimmer via-foreground/5 pointer-events-none absolute inset-0 z-0 -translate-x-full bg-gradient-to-r from-transparent to-transparent" />
     <div className="pointer-events-none absolute -right-8 -bottom-8 z-0 opacity-5 transition-all duration-700 ease-in-out group-hover:scale-125 group-hover:rotate-12 group-hover:opacity-15">
       <AppIcon variant="game" name={mainIcon} size={160} strokeWidth={1} />
     </div>

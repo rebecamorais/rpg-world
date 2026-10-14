@@ -75,13 +75,15 @@ export default function ForgotPasswordForm() {
 
   if (isSuccess) {
     return (
-      <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
+      <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="text-white">{t('successTitle')}</CardTitle>
-          <CardDescription className="text-gray-400">{t('successDescription')}</CardDescription>
+          <CardTitle>{t('successTitle')}</CardTitle>
+          <CardDescription className="text-muted-foreground">
+            {t('successDescription')}
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
+          <Button asChild className="w-full">
             <Link href="/login">{t('backToLogin')}</Link>
           </Button>
         </CardContent>
@@ -90,12 +92,10 @@ export default function ForgotPasswordForm() {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
+    <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
       <CardHeader>
-        <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
-          {t('title')}
-        </CardTitle>
-        <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -105,12 +105,12 @@ export default function ForgotPasswordForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">{t('emailLabel')}</FormLabel>
+                  <FormLabel>{t('emailLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder={t('emailPlaceholder')}
-                      className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>
@@ -122,13 +122,14 @@ export default function ForgotPasswordForm() {
 
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting || !turnstileToken}
-              className="mt-2 w-full bg-blue-600 font-semibold transition-all hover:bg-blue-700"
+              disabled={!turnstileToken}
+              loading={form.formState.isSubmitting}
+              className="mt-2 w-full font-semibold"
             >
               {form.formState.isSubmitting ? t('processing') : t('submit')}
             </Button>
-            <div className="mt-2 text-center text-sm text-gray-400">
-              <Link href="/login" className="text-blue-400 hover:underline">
+            <div className="text-muted-foreground mt-2 text-center text-sm">
+              <Link href="/login" className="text-primary-flare hover:underline">
                 {t('backToLogin')}
               </Link>
             </div>

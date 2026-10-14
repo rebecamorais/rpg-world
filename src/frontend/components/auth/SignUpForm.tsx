@@ -91,13 +91,15 @@ export default function SignUpForm() {
 
   if (isSuccess) {
     return (
-      <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 backdrop-blur-md">
+      <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="text-white">{t('successTitle')}</CardTitle>
-          <CardDescription className="text-gray-400">{t('successDescription')}</CardDescription>
+          <CardTitle>{t('successTitle')}</CardTitle>
+          <CardDescription className="text-muted-foreground">
+            {t('successDescription')}
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
+          <Button asChild className="w-full">
             <Link href="/login">{t('login')}</Link>
           </Button>
         </CardContent>
@@ -106,12 +108,10 @@ export default function SignUpForm() {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
+    <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
       <CardHeader>
-        <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-xl font-bold text-transparent">
-          {t('title')}
-        </CardTitle>
-        <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <Form {...form}>
@@ -121,12 +121,12 @@ export default function SignUpForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">{t('emailLabel')}</FormLabel>
+                  <FormLabel>{t('emailLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder={t('emailPlaceholder')}
-                      className="focus:border-primary/50 border-white/10 bg-white/5 text-white"
+                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>
@@ -140,12 +140,12 @@ export default function SignUpForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">{t('passwordLabel')}</FormLabel>
+                  <FormLabel>{t('passwordLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder={t('passwordPlaceholder')}
-                      className="focus:border-primary/50 border-white/10 bg-white/5 text-white"
+                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>
@@ -159,12 +159,12 @@ export default function SignUpForm() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">{t('confirmPasswordLabel')}</FormLabel>
+                  <FormLabel>{t('confirmPasswordLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder={t('confirmPasswordPlaceholder')}
-                      className="focus:border-primary/50 border-white/10 bg-white/5 text-white"
+                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>
@@ -177,7 +177,8 @@ export default function SignUpForm() {
 
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting || !turnstileToken}
+              disabled={!turnstileToken}
+              loading={form.formState.isSubmitting}
               className="mt-2 w-full font-semibold"
             >
               {form.formState.isSubmitting ? t('processing') : t('submit')}
@@ -185,7 +186,7 @@ export default function SignUpForm() {
           </form>
         </Form>
 
-        <div className="mt-4 border-t border-white/5 pt-6 text-center text-sm text-gray-400">
+        <div className="border-border text-muted-foreground mt-4 border-t pt-6 text-center text-sm">
           {t('alreadyHaveAccount')}{' '}
           <Link href="/login" className="text-primary-flare font-semibold hover:underline">
             {t('login')}

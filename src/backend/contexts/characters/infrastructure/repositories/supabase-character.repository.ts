@@ -41,7 +41,9 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       .from('characters')
       .select('*')
       .eq('owner_id', ownerUsername)
-      .is('deleted_at', null);
+      .is('deleted_at', null)
+      // Newest first. Without an order the list reshuffled after every save.
+      .order('created_at', { ascending: false });
 
     if (error) throw new Error(`Failed to list characters: ${error.message}`);
 

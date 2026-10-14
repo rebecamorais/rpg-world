@@ -114,7 +114,7 @@ export function TurnstileWidget({
     <div className="my-2 flex flex-col items-center gap-2">
       <div ref={containerRef} />
       {unavailable && (
-        <p role="alert" className="text-center text-sm text-red-400">
+        <p role="alert" className="text-danger-flare text-center text-sm">
           {getMessage('security_widget_unavailable')}
         </p>
       )}

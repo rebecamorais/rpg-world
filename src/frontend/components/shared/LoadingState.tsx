@@ -40,7 +40,7 @@ export function LoadingState({
     <div
       className={cn(
         'flex flex-col items-center justify-center gap-4 py-12',
-        fullScreen && 'fixed inset-0 z-50 bg-black/60 backdrop-blur-sm',
+        fullScreen && 'bg-overlay fixed inset-0 z-50 backdrop-blur-sm',
         className,
       )}
     >
@@ -50,7 +50,7 @@ export function LoadingState({
       </div>
 
       {displayText && (
-        <p className="animate-pulse text-sm font-semibold tracking-wider text-gray-400 italic">
+        <p role="status" className="text-body text-muted-foreground italic">
           {displayText}
         </p>
       )}

@@ -42,8 +42,8 @@ export function NumberStepper({
       {label && (
         <span
           className={cn(
-            'text-sm font-bold uppercase transition-opacity',
-            value === 0 ? 'opacity-40' : 'opacity-80',
+            'text-label transition-colors',
+            value === 0 ? 'text-muted-foreground' : 'text-foreground',
           )}
         >
           {label}
@@ -51,17 +51,14 @@ export function NumberStepper({
       )}
       <div
         className={cn(
-          'flex items-center gap-1 rounded-md border border-zinc-800 bg-zinc-900 p-0.5 focus-within:ring-1 focus-within:ring-zinc-700',
+          'border-border bg-muted focus-within:outline-ring flex items-center gap-1 rounded-md border p-0.5 focus-within:outline-2',
           className,
         )}
       >
         <Button
           variant="ghost"
           size="icon"
-          className={cn(
-            'h-6 w-6 rounded-sm p-0 transition-colors hover:bg-zinc-800',
-            isSm && 'h-5 w-5',
-          )}
+          className={cn('hover:bg-background h-6 w-6 rounded-sm p-0', isSm && 'h-5 w-5')}
           aria-label={withLabel(t('decrease'))}
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
@@ -78,17 +75,14 @@ export function NumberStepper({
             onChange(Math.min(max, Math.max(min, val)));
           }}
           className={cn(
-            'no-spinner h-6 w-10 border-none bg-transparent p-0 text-center text-sm font-bold shadow-none focus-visible:ring-0',
+            'no-spinner h-6 w-10 border-none bg-transparent p-0 text-center font-mono text-sm font-bold tabular-nums shadow-none focus-visible:outline-none',
             isSm && 'h-5 w-8 text-xs',
           )}
         />
         <Button
           variant="ghost"
           size="icon"
-          className={cn(
-            'h-6 w-6 rounded-sm p-0 transition-colors hover:bg-zinc-800',
-            isSm && 'h-5 w-5',
-          )}
+          className={cn('hover:bg-background h-6 w-6 rounded-sm p-0', isSm && 'h-5 w-5')}
           aria-label={withLabel(t('increase'))}
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}

@@ -26,8 +26,9 @@ export default function CharacterStatusPage() {
       variant="character"
       size="sm"
       onClick={handleSave}
-      disabled={!hasUnsavedChanges || isSaving}
-      className="h-8 px-4 text-xs font-bold tracking-wider uppercase"
+      disabled={!hasUnsavedChanges}
+      loading={isSaving}
+      className="text-label h-8 px-4"
     >
       {isSaving ? tCommon('saving') : tCommon('saveChanges')}
     </Button>

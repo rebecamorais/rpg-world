@@ -40,17 +40,15 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
       style={characterTheme(character.accentColor).style}
     >
       <div className="flex flex-col gap-2 px-3">
-        <p className="text-character-flare text-xs font-bold tracking-widest uppercase">
-          {characterName}
-        </p>
+        <p className="text-label text-character-flare">{characterName}</p>
         <div className="flex items-center gap-3">
-          <Avatar className="ring-primary/20 h-10 w-10 rounded-lg border border-white/10 ring-2 transition-all">
+          <Avatar className="ring-primary/20 border-border h-10 w-10 rounded-lg border ring-2 transition-all">
             <AvatarImage src={avatarUrl} alt={characterName} className="object-cover" />
             <AvatarFallback className="bg-character-surface text-character-flare text-xs font-bold">
               {characterName.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <span className="truncate text-sm font-bold text-white/90">{characterName}</span>
+          <span className="text-foreground truncate text-sm font-bold">{characterName}</span>
         </div>
       </div>
 

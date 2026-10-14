@@ -4,7 +4,7 @@ import React from 'react';
 
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
-import { DamageTheme, MECHANIC_ICONS } from '@frontend/constants/damage-themes';
+import { MECHANIC_ICONS } from '@frontend/constants/damage-themes';
 import { cn } from '@frontend/lib/utils';
 import { Spell } from '@frontend/types/spells';
 
@@ -13,22 +13,19 @@ import { SpellComponentDisplay, SpellDisplayValues } from '../hooks/useSpellDisp
 interface SpellHeaderProps {
   spell: Spell;
   isExpanded: boolean;
-  theme: DamageTheme;
   mainIcon: string;
   displayValues: SpellDisplayValues;
 }
 
 export const SpellHeader = React.memo(
-  ({ spell, isExpanded, theme, mainIcon, displayValues }: SpellHeaderProps) => (
+  ({ spell, isExpanded, mainIcon, displayValues }: SpellHeaderProps) => (
     <header
       className={cn('flex flex-col transition-all duration-300', isExpanded ? 'mb-5' : 'mb-0')}
     >
       <div className="flex items-center gap-4">
         <div
           className={cn(
-            'rounded-xl p-3 shadow-sm ring-1 ring-white/10 transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-lg',
-            theme.bg,
-            theme.color,
+            'bg-spell-surface text-spell-flare ring-border rounded-xl p-3 shadow-sm ring-1 transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-lg',
           )}
           aria-hidden="true"
         >
@@ -40,7 +37,7 @@ export const SpellHeader = React.memo(
             <div className="flex min-w-0 items-center gap-2">
               <h3
                 id={`spell-name-${spell.id}`}
-                className={cn('truncate font-serif text-xl tracking-tight text-white/90')}
+                className={cn('text-foreground truncate font-serif text-xl tracking-tight')}
               >
                 {spell.name}
               </h3>
@@ -50,7 +47,7 @@ export const SpellHeader = React.memo(
                     variant="game"
                     name={MECHANIC_ICONS.ritual}
                     size="xs"
-                    className="shrink-0 text-purple-500"
+                    className="text-info-flare shrink-0"
                     aria-hidden="true"
                   />
                   <span className="sr-only">{displayValues.ritualLabel}</span>
@@ -62,7 +59,7 @@ export const SpellHeader = React.memo(
               {displayValues.components.map((comp: SpellComponentDisplay) => (
                 <Tooltip key={comp.letter}>
                   <TooltipTrigger asChild>
-                    <button className="flex items-center justify-center transition-all hover:scale-110 focus:ring-1 focus:ring-[var(--card-glow)] focus:outline-none active:scale-95">
+                    <button className="focus-ring touch-target flex items-center justify-center rounded-sm transition-all hover:scale-110 active:scale-95">
                       <span className="sr-only">{comp.label}</span>
                       <AppIcon
                         variant="game"
@@ -73,9 +70,7 @@ export const SpellHeader = React.memo(
                       />
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent className="border-white/10 bg-black/90 text-xs font-medium text-white">
-                    {comp.label}
-                  </TooltipContent>
+                  <TooltipContent className="text-xs font-medium">{comp.label}</TooltipContent>
                 </Tooltip>
               ))}
             </div>
@@ -83,13 +78,13 @@ export const SpellHeader = React.memo(
 
           <div
             className={cn(
-              'text-muted-foreground mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[10px] font-black tracking-wider uppercase transition-all duration-300 md:gap-x-4 md:text-xs md:tracking-widest',
-              theme.color,
+              'text-label text-muted-foreground mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 transition-all duration-300 md:gap-x-4',
+              'text-spell-flare',
             )}
           >
             <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
               {isExpanded && (
-                <div className="flex items-center gap-1 text-white/60">
+                <div className="text-muted-foreground flex items-center gap-1">
                   <span>{displayValues.school}</span>
                   <span className="opacity-40" aria-hidden="true">
                     •

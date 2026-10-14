@@ -10,7 +10,7 @@ import { HealthBar } from '@frontend/components/ui/health-bar';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
 
-export interface HealthPointsCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface HealthPointsCardProps extends React.ComponentProps<'div'> {
   currentHp: number;
   maxHp: number;
   tempHp: number;
@@ -20,11 +20,9 @@ export interface HealthPointsCardProps extends React.HTMLAttributes<HTMLDivEleme
 const HealthHeader = () => {
   const t = useTranslations('combatStats');
   return (
-    <div className="flex items-center gap-2 opacity-80 transition-opacity group-hover:opacity-100">
-      <AppIcon name="Heart" size={16} className="text-danger-flare animate-pulse" />
-      <span className="text-danger-flare text-[10px] font-black tracking-[0.2em] uppercase">
-        {t('hitPointsShort')}
-      </span>
+    <div className="flex items-center gap-2">
+      <AppIcon name="Heart" size={16} className="text-danger-flare" aria-hidden="true" />
+      <span className="text-label text-danger-flare">{t('hitPointsShort')}</span>
     </div>
   );
 };
@@ -49,17 +47,20 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               onHpChange('hpCurrent', parseInt(e.target.value) || 0)
             }
-            className="h-auto w-20 p-0 text-right text-5xl font-black text-white drop-shadow-2xl outline-none"
+            showIcon={false}
+            className="text-foreground h-auto w-24 p-0 text-right font-mono text-5xl font-bold tabular-nums md:text-5xl"
           />
           <div className="flex items-baseline gap-1 self-end px-1 pb-1.5 font-bold">
-            <span className="text-lg text-white/20">/</span>
-            <span className="text-muted-foreground text-lg">{maxHp}</span>
+            <span className="text-muted-foreground text-lg" aria-hidden="true">
+              /
+            </span>
+            <span className="text-muted-foreground font-mono text-lg tabular-nums">{maxHp}</span>
           </div>
         </div>
 
         {tempHp > 0 && (
-          <div className="text-warning ml-2 flex items-baseline self-end pb-2 font-black transition-all duration-300">
-            <span className="text-xs opacity-40">(+</span>
+          <div className="text-warning-flare ml-2 flex items-baseline self-end pb-2 font-bold">
+            <span className="text-xs">(+</span>
             <GhostInput
               type="number"
               aria-label={t('tempHp')}
@@ -67,9 +68,10 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onHpChange('hpTemp', parseInt(e.target.value) || 0)
               }
-              className="text-warning h-auto w-8 p-0 text-center text-xs font-black outline-none"
+              showIcon={false}
+              className="text-warning-flare h-auto w-8 p-0 text-center font-mono text-xs font-bold md:text-xs"
             />
-            <span className="text-xs opacity-40">)</span>
+            <span className="text-xs">)</span>
           </div>
         )}
       </div>
@@ -84,25 +86,27 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
   );
 };
 
-export const HealthPointsCard = React.forwardRef<HTMLDivElement, HealthPointsCardProps>(
-  ({ currentHp, maxHp, tempHp, onHpChange, className, ...props }, ref) => {
-    return (
-      <Card
-        ref={ref}
-        className={cn(
-          'group hover:border-danger/30 relative flex min-h-[160px] flex-col justify-between overflow-hidden border-zinc-800/40 bg-zinc-950/40 p-4 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:bg-zinc-900/60',
-          className,
-        )}
-        {...props}
-      >
-        {/* Background glow matching HP state */}
-        <div className="bg-danger/5 absolute -right-10 -bottom-10 h-32 w-32 rounded-full blur-3xl transition-opacity group-hover:opacity-20" />
+export function HealthPointsCard({
+  currentHp,
+  maxHp,
+  tempHp,
+  onHpChange,
+  className,
+  ...props
+}: HealthPointsCardProps) {
+  return (
+    <Card
+      className={cn(
+        'group hover:border-danger-muted bg-background/60 relative flex min-h-[160px] flex-col justify-between overflow-hidden p-4 shadow-sm transition-colors',
+        className,
+      )}
+      {...props}
+    >
+      {/* Background glow matching HP state */}
+      <div className="bg-danger-surface absolute -right-10 -bottom-10 h-32 w-32 rounded-full blur-3xl" />
 
-        <HealthHeader />
-        <HealthValues currentHp={currentHp} maxHp={maxHp} tempHp={tempHp} onHpChange={onHpChange} />
-      </Card>
-    );
-  },
-);
-
-HealthPointsCard.displayName = 'HealthPointsCard';
+      <HealthHeader />
+      <HealthValues currentHp={currentHp} maxHp={maxHp} tempHp={tempHp} onHpChange={onHpChange} />
+    </Card>
+  );
+}

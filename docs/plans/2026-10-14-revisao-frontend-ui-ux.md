@@ -33,12 +33,12 @@ O que está quebrado hoje: o app inteiro renderiza com fonte do sistema (Geist e
 
 - [x] Migrar o que importa do `tailwind.config.ts` para `@theme` em `app/globals.css` e apagar o config.
 - [x] Fontes: carregar Cinzel (display) e Inter (corpo) via `next/font`; manter Geist Mono só se for usada em números, senão usar `tabular-nums` da Inter. Remover a Geist Sans.
-- [ ] → fase 2. Escala tipográfica com nomes de papel: `display`, `title`, `heading`, `body`, `label`, `caption`. Cinzel só em `display`/`title` (nomes, títulos de seção), nunca em texto corrido nem em labels pequenos.
+- [x] (fase 2) Escala tipográfica com nomes de papel: `display`, `title`, `heading`, `body`, `label`, `caption`. Cinzel só em `display`/`title` (nomes, títulos de seção), nunca em texto corrido nem em labels pequenos.
 - [x] Tokens semânticos. **Mudança:** mantidos os nomes do shadcn (`background`, `card`, `muted`, `muted-foreground`…) em vez de `surface-1/2/3`, para o `shadcn add` continuar funcionando.
   - [x] status: `danger`, `success`, `info`, `warning` (substituem `red/green/blue/yellow`);
   - [x] `-flare` virou a variante de texto que sempre passa AA; `-on` é o texto sobre preenchimento (branco ou preto);
   - [x] `prefers-reduced-motion` global;
-  - [ ] → fase 2: trocar a paleta crua (`bg-zinc-950/20`…) pelos tokens e criar tokens de raio/movimento se a troca mostrar necessidade.
+  - [x] (fase 2) trocar a paleta crua (`bg-zinc-950/20`…) pelos tokens. Raio e movimento não precisaram de token novo.
 - [x] Cor do herói: um único sistema (`--character-color`). Remover o `--p-hue/--p-sat/--p-light` e o `hexToHsl` do `CharacterContext`. Gerar `--character-fg` (variante clareada em OKLCH para texto e ícones) e `--character-surface`.
 - [x] Remover o que está morto: `glass-rebecca` e utilitários sem uso, o `ThemeProvider` vazio (ele também gera um 401 em `/api/profile` nas páginas públicas).
 - [x] Ligar `color-contrast` no `e2e/a11y.spec.ts`, com casos de cor de destaque extrema (amarelo-claro, azul-marinho, vinho).
@@ -47,17 +47,20 @@ O que está quebrado hoje: o app inteiro renderiza com fonte do sistema (Geist e
 
 **Pronto quando:** fontes certas no browser, axe com contraste ligado e passando, nenhum token antigo sobrando.
 
-## Fase 2: componentes base (`components/ui` e padrões)
+## Fase 2: componentes base (`components/ui` e padrões) ✅
 
-- [ ] React 19: tirar o `forwardRef` dos 19 componentes; `Button` sem a prop `destroy` e com estado `loading`.
-- [ ] Padrões novos, para acabar com as classes repetidas:
+- [x] React 19: tirar o `forwardRef` dos 19 componentes (e dos 4 cards da ficha); `Button` sem a prop `destroy` e com estado `loading`.
+- [x] Padrões novos, para acabar com as classes repetidas:
   - `FieldLabel` e `InlineField` (label + `GhostInput`, hoje repetido 4 vezes no `CharacterHeader`);
   - `SectionCard` composto (`SectionCard.Header/Title/Actions/Body`);
-  - `StatBlock` (CA, iniciativa, deslocamento, dado de vida);
+  - `StatBlock` (CA, iniciativa, deslocamento, dado de vida), no lugar do `StatBadge`;
   - `EmptyState` e `ErrorState` (no lugar do `bg-red-50` solto no `StatusView`);
   - `PageHeader` com um único sticky.
-- [ ] Padronizar foco, desabilitado, hover e área de toque em todos os primitivos.
-- [ ] Zerar a paleta crua dentro de `components/ui`.
+- [x] Escala tipográfica (`text-display/title/heading/body/label/caption` em `globals.css`), registrada no `cn()`: um papel substitui tamanho, peso, família e tracking vindos antes.
+- [x] Padronizar foco, desabilitado, hover e área de toque em todos os primitivos (`focus-ring` e `touch-target`, 44px em tela de toque).
+- [x] Zerar a paleta crua no app inteiro, não só em `components/ui`. Feitiços ganharam a família `--spell-color` (mesma lógica AA da cor do herói). Um teste (`design-tokens.unit.test.ts`) barra paleta crua e cor fixa em classe.
+
+**Ficou para a fase 4:** o lápis de editar e a lixeira do card ainda dependem de hover; o card da lista e o botão flutuante do menu no celular.
 
 ## Fase 3: arquitetura da ficha
 
@@ -81,7 +84,7 @@ Vem antes das telas porque mexe nos mesmos arquivos; refatorar depois seria faze
 **Home e auth**
 
 - [ ] Home com `<h1>` e uma prévia da ficha.
-- [ ] Auth: remover o gradiente azul→roxo dos 5 títulos, usar Cinzel + tokens; erros inline no campo.
+- [ ] Auth: ~~remover o gradiente azul→roxo dos 5 títulos, usar Cinzel + tokens~~ (feito na fase 2); erros inline no campo.
 
 **Lista de personagens**
 
