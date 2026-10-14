@@ -60,7 +60,7 @@ export default function NewCharacterForm() {
   if (!currentUser) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
-        <p className="text-zinc-500">{t('requireLogin')}</p>
+        <p className="text-muted-foreground">{t('requireLogin')}</p>
       </div>
     );
   }
@@ -85,10 +85,7 @@ export default function NewCharacterForm() {
   return (
     <div className="mx-auto max-w-lg p-4">
       <div className="mb-4">
-        <Link
-          href="/characters"
-          className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
-        >
+        <Link href="/characters" className="text-muted-foreground hover:text-foreground text-sm">
           {tCommon('back')}
         </Link>
       </div>
@@ -145,13 +142,13 @@ export default function NewCharacterForm() {
               />
 
               {form.formState.errors.root && (
-                <p className="text-sm text-red-600 dark:text-red-400">
+                <p className="text-danger-flare dark:text-danger-flare text-sm">
                   {form.formState.errors.root.message}
                 </p>
               )}
 
               <div className="flex gap-2">
-                <Button type="submit" disabled={createMutation.isPending}>
+                <Button type="submit" loading={createMutation.isPending}>
                   {createMutation.isPending ? t('submitting') : t('submit')}
                 </Button>
                 <Button variant="outline" asChild>

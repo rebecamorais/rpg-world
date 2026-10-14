@@ -66,12 +66,10 @@ export default function ChangePasswordPage() {
         </Link>
       </div>
 
-      <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
+      <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
-            {t('title')}
-          </CardTitle>
-          <CardDescription className="text-gray-400">{t('subtitle')}</CardDescription>
+          <CardTitle>{t('title')}</CardTitle>
+          <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -81,12 +79,12 @@ export default function ChangePasswordPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-300">{t('newPasswordLabel')}</FormLabel>
+                    <FormLabel>{t('newPasswordLabel')}</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
                         placeholder={t('newPasswordPlaceholder')}
-                        className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                        className="bg-muted/50"
                         {...field}
                       />
                     </FormControl>
@@ -100,12 +98,12 @@ export default function ChangePasswordPage() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-300">{t('confirmPasswordLabel')}</FormLabel>
+                    <FormLabel>{t('confirmPasswordLabel')}</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
                         placeholder={t('confirmPasswordPlaceholder')}
-                        className="border-white/10 bg-white/5 text-white focus:border-blue-500/50"
+                        className="bg-muted/50"
                         {...field}
                       />
                     </FormControl>
@@ -115,13 +113,13 @@ export default function ChangePasswordPage() {
               />
 
               {form.formState.errors.root && (
-                <p className="text-sm text-red-400">{form.formState.errors.root.message}</p>
+                <p className="text-danger-flare text-sm">{form.formState.errors.root.message}</p>
               )}
 
               <Button
                 type="submit"
-                disabled={form.formState.isSubmitting}
-                className="mt-2 w-full bg-blue-600 font-semibold transition-all hover:bg-blue-700"
+                loading={form.formState.isSubmitting}
+                className="mt-2 w-full font-semibold"
               >
                 {form.formState.isSubmitting ? t('processing') : t('submit')}
               </Button>

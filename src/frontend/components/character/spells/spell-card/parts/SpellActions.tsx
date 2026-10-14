@@ -26,7 +26,7 @@ export const SpellActions = React.memo(
     isLearned,
     displayValues,
   }: SpellActionsProps) => (
-    <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-white/5 pt-4">
+    <div className="border-border mt-6 flex flex-wrap items-center justify-between gap-4 border-t pt-4">
       {onLearnSpell ? (
         <button
           onClick={(e) => {
@@ -40,8 +40,8 @@ export const SpellActions = React.memo(
           className={cn(
             'flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition-all',
             isLearned
-              ? 'border border-red-500/30 bg-red-500/10 text-red-400 hover:border-red-500/60 hover:bg-red-500/20'
-              : 'bg-character text-slate-950 shadow-md hover:opacity-90',
+              ? 'border-danger-muted bg-danger-surface text-danger-flare hover:border-danger hover:bg-danger-muted border'
+              : 'bg-character text-character-on hover:bg-character/90 shadow-md',
           )}
         >
           <AppIcon name={isLearned ? 'Trash2' : 'Plus'} size={18} />
@@ -58,14 +58,16 @@ export const SpellActions = React.memo(
               className={cn(
                 'flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition-all',
                 spell.isPrepared
-                  ? 'border border-amber-500/30 bg-amber-500/10 text-amber-500 hover:border-amber-500/60 hover:bg-amber-500/20'
-                  : 'border border-amber-500 bg-amber-500 text-amber-950 shadow-md hover:bg-amber-400 hover:shadow-amber-500/20',
+                  ? 'border-warning-muted bg-warning-surface text-warning-flare hover:border-warning hover:bg-warning-muted border'
+                  : 'border-warning bg-warning text-background hover:bg-warning/90 border shadow-md',
               )}
             >
               <AppIcon
                 name="Bookmark"
                 size={18}
-                className={spell.isPrepared ? 'fill-amber-500/50 text-amber-500' : 'text-amber-950'}
+                className={
+                  spell.isPrepared ? 'fill-warning-muted text-warning-flare' : 'text-background'
+                }
               />
               {spell.isPrepared ? displayValues.unprepareLabel : displayValues.prepareLabel}
             </button>
@@ -78,7 +80,7 @@ export const SpellActions = React.memo(
               e.stopPropagation();
               onForgetSpell?.(spell.id);
             }}
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-red-100/60 transition-all hover:bg-red-500/10 hover:text-red-400"
+            className="text-muted-foreground hover:bg-danger-surface hover:text-danger-flare flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all"
           >
             <AppIcon name="Trash2" size={18} aria-hidden="true" />
             {displayValues.forgetLabel}

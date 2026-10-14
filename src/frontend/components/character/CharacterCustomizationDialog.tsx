@@ -53,7 +53,7 @@ export function CharacterCustomizationDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="character-context border-white/10 bg-slate-950/95 text-white backdrop-blur-xl sm:max-w-md"
+        className="character-context bg-background/95 backdrop-blur-xl sm:max-w-md"
         style={characterTheme(accentColor).style}
       >
         <DialogHeader>
@@ -98,7 +98,7 @@ export function CharacterCustomizationDialog({
                     />
                     {isSelected && (
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="h-1.5 w-1.5 rounded-full bg-white shadow-sm" />
+                        <div className="bg-foreground h-1.5 w-1.5 rounded-full shadow-sm" />
                       </div>
                     )}
                   </button>

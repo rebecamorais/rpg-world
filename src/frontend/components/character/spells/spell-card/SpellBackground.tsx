@@ -9,7 +9,6 @@ interface SpellBackgroundProps {
 
 export function SpellBackground({ spell }: SpellBackgroundProps) {
   const { theme } = useSpellDisplay(spell);
-  const themeColor = theme.hex;
 
   // 2. Resolve Background Style (Override with theme VFX for Force damage)
   const damageKey = spell.damageType?.toLowerCase();
@@ -22,7 +21,7 @@ export function SpellBackground({ spell }: SpellBackgroundProps) {
         theme.distortion || 'opacity-100'
       }`}
     >
-      {renderBg(themeColor)}
+      {renderBg()}
     </div>
   );
 }

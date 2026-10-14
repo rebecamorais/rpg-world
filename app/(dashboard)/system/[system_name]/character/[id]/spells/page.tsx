@@ -20,8 +20,8 @@ export default function CharacterSpellsPage() {
 
   const actions = (
     <div className="flex items-center gap-3 md:gap-6">
-      <div className="hidden items-baseline gap-1.5 opacity-60 sm:flex">
-        <span className="text-xs font-bold tracking-widest uppercase">
+      <div className="hidden items-baseline gap-1.5 sm:flex">
+        <span className="text-label text-muted-foreground">
           {tSpells('preparedLabels', { count: preparedCount })}
         </span>
       </div>
@@ -29,9 +29,9 @@ export default function CharacterSpellsPage() {
         variant="outline"
         size="sm"
         onClick={() => setIsSpellsOpen(true)}
-        className="h-8 border-white/10 px-3 text-xs font-bold tracking-wider uppercase transition-all hover:bg-white/5"
+        className="text-label h-8 px-3"
       >
-        <Plus className="mr-2 size-3" />
+        <Plus aria-hidden="true" />
         {tSpells('addBtn')}
       </Button>
     </div>

@@ -99,7 +99,7 @@ export function useSpellDisplay(spell: Spell) {
         letter: comp,
         label: tData(`components.${comp}` as Parameters<typeof tData>[0]),
         icon: meta?.icon || 'help-circle',
-        color: meta?.color || 'text-gray-400',
+        color: meta?.color || 'text-muted-foreground',
       };
     });
 

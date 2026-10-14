@@ -90,7 +90,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
             }}
           />
           <div className="mb-4 hidden w-full px-6 md:block">
-            <div className="text-muted-foreground flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase">
+            <div className="text-label text-muted-foreground flex items-center gap-2">
               <span className="bg-muted-foreground/20 h-px flex-1" />
               {t('spellbookIndex')}
               <span className="bg-muted-foreground/20 h-px flex-1" />
@@ -125,7 +125,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
 
         {/* Mobile Select (Replaces TabsList on sm screens) */}
         <div className="border-border/50 bg-muted/10 flex items-center justify-between gap-4 border-b p-4 md:hidden">
-          <span className="text-muted-foreground text-xs font-black tracking-widest whitespace-nowrap uppercase">
+          <span className="text-label text-muted-foreground whitespace-nowrap">
             {t('spellbookIndex')}
           </span>
           <Select value={activeLevel} onValueChange={setActiveLevel}>
@@ -152,7 +152,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
               >
                 <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex flex-col gap-1">
-                    <h2 className="font-serif text-3xl font-black tracking-tight text-white md:text-4xl">
+                    <h2 className="text-display text-foreground">
                       {level === 0 ? t('cantrips') : t('levelSpells', { level })}
                     </h2>
                     <div className="bg-character-flare h-1 w-12 rounded-full opacity-60" />

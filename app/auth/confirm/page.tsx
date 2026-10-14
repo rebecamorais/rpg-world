@@ -73,17 +73,19 @@ export default function AuthConfirmPage() {
 
   return (
     <div className="bg-background flex flex-1 items-center justify-center p-4">
-      <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 font-medium text-white shadow-2xl backdrop-blur-md">
+      <Card className="bg-card/80 mx-auto w-full max-w-sm font-medium shadow-2xl backdrop-blur-md">
         <CardHeader>
           <CardTitle className="text-center">{failed ? t('errorTitle') : t('title')}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-4 py-6">
           {!failed ? (
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+            <div className="border-primary-flare h-10 w-10 animate-spin rounded-full border-4 border-t-transparent" />
           ) : (
-            <p className="text-center text-red-400">{tCommon('errors.expired_link_description')}</p>
+            <p className="text-danger-flare text-center">
+              {tCommon('errors.expired_link_description')}
+            </p>
           )}
-          <p className="text-center text-sm text-gray-400">
+          <p className="text-muted-foreground text-center text-sm">
             {failed ? t('redirecting') : t('waiting')}
           </p>
         </CardContent>

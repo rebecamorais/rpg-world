@@ -39,7 +39,12 @@ export default async function GlobalHeader() {
       <div className="flex items-center gap-4">
         {!user ? (
           <div className="hidden items-center gap-2 sm:flex">
-            <Button variant="ghost" asChild size="sm" className="text-gray-400 hover:text-white">
+            <Button
+              variant="ghost"
+              asChild
+              size="sm"
+              className="text-muted-foreground hover:text-foreground"
+            >
               <Link href="/login">{tLogin('submit')}</Link>
             </Button>
             <Button asChild size="sm">
@@ -55,7 +60,7 @@ export default async function GlobalHeader() {
               variant="ghost"
               asChild
               size="sm"
-              className="hidden text-zinc-400 hover:text-white sm:flex"
+              className="text-muted-foreground hover:text-foreground hidden sm:flex"
             >
               <Link href="/characters">{tCommon('back')}</Link>
             </Button>

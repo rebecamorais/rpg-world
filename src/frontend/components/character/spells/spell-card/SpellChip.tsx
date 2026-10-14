@@ -27,12 +27,10 @@ export function SpellChip({
     'inline-flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium uppercase transition-colors';
 
   const variants = {
-    default:
-      'border border-white/10 bg-white/10 text-gray-300 group-hover:bg-white/20 group-hover:text-white',
-    accent:
-      'border border-[var(--theme-primary)]/20 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)]/80',
-    concentration: 'border border-amber-500/20 bg-amber-500/10 text-amber-500/80',
-    ritual: 'border border-sky-500/20 bg-sky-500/10 text-sky-500/80',
+    default: 'border-border bg-muted text-muted-foreground group-hover:text-foreground border',
+    accent: 'border-spell-muted bg-spell-surface text-spell-flare border',
+    concentration: 'border-warning-muted bg-warning-surface text-warning-flare border',
+    ritual: 'border-info-muted bg-info-surface text-info-flare border',
   };
 
   const content = (
@@ -49,9 +47,7 @@ export function SpellChip({
       <TooltipProvider delayDuration={200}>
         <Tooltip>
           <TooltipTrigger asChild>{content}</TooltipTrigger>
-          <TooltipContent className="border-white/10 bg-black/90 text-xs font-medium text-white">
-            {tooltip}
-          </TooltipContent>
+          <TooltipContent className="text-xs font-medium">{tooltip}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     );

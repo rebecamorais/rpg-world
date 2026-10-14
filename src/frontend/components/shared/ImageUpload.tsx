@@ -90,7 +90,7 @@ export default function ImageUpload({
       >
         <Avatar
           className={cn(
-            'border-2 border-white/10 bg-white/5 shadow-md transition-colors group-hover:border-blue-500/50',
+            'border-border bg-muted group-hover:border-primary-flare border-2 shadow-md transition-colors',
             sizeClasses[size],
           )}
         >
@@ -101,11 +101,11 @@ export default function ImageUpload({
         </Avatar>
 
         {/* Upload overlay */}
-        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="bg-overlay absolute inset-0 flex items-center justify-center rounded-full opacity-0 transition-opacity group-hover:opacity-100">
           {isUploading ? (
-            <span className="text-xs font-medium text-white">{t('loading')}</span>
+            <span className="text-foreground text-xs font-medium">{t('loading')}</span>
           ) : (
-            <span className="text-xs font-medium text-white">{t('button')}</span>
+            <span className="text-foreground text-xs font-medium">{t('button')}</span>
           )}
         </div>
       </button>

@@ -14,6 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@frontend/components/ui/dialog';
+import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
@@ -21,6 +22,7 @@ import { DAMAGE_THEMES } from '@frontend/constants/damage-themes';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 import { useSpells } from '@frontend/hooks/useSpells';
 import { characterTheme } from '@frontend/lib/color-utils';
+import { cn } from '@frontend/lib/utils';
 import { CharacterClass, SpellSchool } from '@frontend/types/spells';
 
 interface Props {
@@ -121,7 +123,7 @@ export default function SpellSearchDialog({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
-        className="character-context flex h-[90vh] max-w-4xl flex-col border-white/10 bg-slate-950/95 p-0 text-white backdrop-blur-xl"
+        className="character-context bg-background/95 flex h-[90vh] max-w-4xl flex-col p-0 backdrop-blur-xl"
         style={characterTheme(accentColor).style}
       >
         {/* Thematic Glow */}
@@ -131,10 +133,10 @@ export default function SpellSearchDialog({
             background: `radial-gradient(circle at 0% 0%, var(--character-primary), transparent 50%)`,
           }}
         />
-        <DialogHeader className="border-b border-white/5 p-6">
+        <DialogHeader className="border-border border-b p-6">
           <div className="flex items-center justify-between">
-            <DialogTitle className="flex items-center gap-3 text-2xl font-bold tracking-tight italic">
-              <div className="bg-character-surface text-character-flare flex h-10 w-10 items-center justify-center rounded-xl shadow-lg ring-1 ring-white/10">
+            <DialogTitle className="flex items-center gap-3">
+              <div className="bg-character-surface text-character-flare ring-border flex h-10 w-10 items-center justify-center rounded-xl shadow-lg ring-1">
                 <AppIcon name="BookOpen" size={24} />
               </div>
               {t('title')}
@@ -148,20 +150,20 @@ export default function SpellSearchDialog({
               <AppIcon
                 name="Search"
                 size={18}
-                className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500"
+                className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2"
               />
               <Input
                 placeholder={t('searchPlaceholder')}
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="focus:ring-character/50 border-white/10 bg-white/5 pl-10 text-white placeholder:text-gray-500"
+                className="focus:ring-character/50 border-border bg-muted text-foreground placeholder:text-muted-foreground pl-10"
               />
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={handleSearchTrigger}
-                className="hover:bg-character-muted hover:text-character-primary absolute top-1/2 right-1 -translate-y-1/2 text-gray-400 transition-all"
+                className="hover:bg-character-muted hover:text-character-primary text-muted-foreground absolute top-1/2 right-1 -translate-y-1/2 transition-all"
               >
                 {tCharacters('search')}
               </Button>
@@ -174,7 +176,7 @@ export default function SpellSearchDialog({
                   setLevelFilter(val === 'all' ? null : Number(val));
                   setPage(0);
                 }}
-                className="h-10 w-[120px] border-white/10 bg-white/5 text-gray-300"
+                className="border-border bg-muted text-foreground h-10 w-[120px]"
                 placeholder={t('allLevels')}
                 options={[
                   { value: 'all', label: t('allLevels') },
@@ -192,7 +194,7 @@ export default function SpellSearchDialog({
                   setSchoolFilter(val === 'all' ? null : (val as SpellSchool));
                   setPage(0);
                 }}
-                className="h-10 w-[150px] border-white/10 bg-white/5 text-gray-300"
+                className="border-border bg-muted text-foreground h-10 w-[150px]"
                 placeholder={t('allSchools')}
                 options={schoolOptions}
               />
@@ -203,7 +205,7 @@ export default function SpellSearchDialog({
                   setClassFilter(val === 'all' ? null : (val as CharacterClass));
                   setPage(0);
                 }}
-                className="h-10 w-[140px] border-white/10 bg-white/5 text-gray-300"
+                className="border-border bg-muted text-foreground h-10 w-[140px]"
                 placeholder={t('allClasses')}
                 options={classesOptions}
               />
@@ -214,7 +216,7 @@ export default function SpellSearchDialog({
                   setDamageFilter(val === 'all' ? null : val);
                   setPage(0);
                 }}
-                className="h-10 w-[150px] border-white/10 bg-white/5 text-gray-300"
+                className="border-border bg-muted text-foreground h-10 w-[150px]"
                 placeholder={tCharacters('allDamage')}
                 options={[
                   { value: 'all', label: tCharacters('allDamage') },
@@ -232,26 +234,27 @@ export default function SpellSearchDialog({
           {isLoading ? (
             <LoadingState thematic />
           ) : spells.length === 0 ? (
-            <div className="flex h-64 flex-col items-center justify-center gap-4 text-center">
-              <div className="rounded-full bg-white/5 p-4">
-                <AppIcon name="Search" size={32} className="text-gray-600" />
-              </div>
-              <p className="text-gray-400">{t('noSpellsFound')}</p>
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSearchInput('');
-                  setActiveSearch('');
-                  setLevelFilter(null);
-                  setSchoolFilter(null);
-                  setClassFilter(null);
-                  setDamageFilter(null);
-                }}
-                className="text-character-flare"
-              >
-                {t('clearFilters')}
-              </Button>
-            </div>
+            <EmptyState
+              icon="Search"
+              title={t('noSpellsFound')}
+              className="h-64 border-none bg-transparent"
+              action={
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSearchInput('');
+                    setActiveSearch('');
+                    setLevelFilter(null);
+                    setSchoolFilter(null);
+                    setClassFilter(null);
+                    setDamageFilter(null);
+                  }}
+                  className="text-character-flare"
+                >
+                  {t('clearFilters')}
+                </Button>
+              }
+            />
           ) : (
             <div className="grid grid-cols-1 gap-6 pb-20">
               {spells.map((spell) => (
@@ -271,8 +274,8 @@ export default function SpellSearchDialog({
 
         {/* Improved Pagination Footer */}
         {totalPages > 1 && (
-          <footer className="flex items-center justify-between border-t border-white/5 bg-slate-900/50 p-4 backdrop-blur-md">
-            <p className="text-xs font-medium text-gray-500">
+          <footer className="border-border bg-muted/50 flex items-center justify-between border-t p-4 backdrop-blur-md">
+            <p className="text-muted-foreground text-xs font-medium">
               {t('pagination', { count: spells.length, total: totalItems })}
             </p>
 
@@ -282,7 +285,7 @@ export default function SpellSearchDialog({
                 size="sm"
                 disabled={page === 0}
                 onClick={() => setPage((p) => p - 1)}
-                className="h-8 w-8 border-white/10 bg-white/5 p-0 text-white hover:bg-white/10 disabled:opacity-20"
+                className="border-border bg-muted text-foreground hover:bg-background h-8 w-8 p-0 disabled:opacity-40"
               >
                 <AppIcon name="ChevronLeft" size={16} />
               </Button>
@@ -306,21 +309,13 @@ export default function SpellSearchDialog({
                       variant="outline"
                       size="sm"
                       onClick={() => setPage(pageNum)}
-                      className="h-8 w-8 p-0 text-xs transition-all"
-                      style={
+                      aria-current={isActive ? 'page' : undefined}
+                      className={cn(
+                        'h-8 w-8 p-0 font-mono text-xs',
                         isActive
-                          ? ({
-                              backgroundColor: 'var(--character-primary)',
-                              borderColor: 'var(--character-primary)',
-                              fontWeight: 'bold',
-                              color: 'white',
-                            } as React.CSSProperties)
-                          : {
-                              borderColor: 'rgba(255,255,255,0.1)',
-                              backgroundColor: 'rgba(255,255,255,0.05)',
-                              color: 'rgba(255,255,255,0.4)',
-                            }
-                      }
+                          ? 'border-character bg-character text-character-on hover:bg-character/90 hover:text-character-on font-bold'
+                          : 'border-border bg-muted text-muted-foreground',
+                      )}
                     >
                       {pageNum + 1}
                     </Button>
@@ -333,7 +328,7 @@ export default function SpellSearchDialog({
                 size="sm"
                 disabled={page >= totalPages - 1}
                 onClick={() => setPage((p) => p + 1)}
-                className="h-8 w-8 border-white/10 bg-white/5 p-0 text-white hover:bg-white/10 disabled:opacity-20"
+                className="border-border bg-muted text-foreground hover:bg-background h-8 w-8 p-0 disabled:opacity-40"
               >
                 <AppIcon name="ChevronRight" size={16} />
               </Button>
