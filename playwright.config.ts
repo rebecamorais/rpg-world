@@ -18,7 +18,11 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, testIgnore: /\.mobile\.spec\.ts$/ },
+    // Phone layout: navigation drawer, mobile-only controls (*.mobile.spec.ts)
+    { name: 'mobile', use: { ...devices['Pixel 7'] }, testMatch: /\.mobile\.spec\.ts$/ },
+  ],
   webServer: {
     // Production build: the same bundle, CSP and proxy that run in production
     command: `npm run build && npm run start -- -p ${E2E_PORT}`,

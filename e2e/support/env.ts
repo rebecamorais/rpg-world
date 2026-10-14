@@ -11,6 +11,8 @@ export interface SupabaseTestEnv {
   url: string;
   publishableKey: string;
   secretKey: string;
+  /** Mailpit (Inbucket) web API, where the app's e-mails land */
+  mailUrl: string;
 }
 
 let cached: SupabaseTestEnv | undefined;
@@ -28,6 +30,7 @@ export function supabaseTestEnv(): SupabaseTestEnv {
       url: status.API_URL,
       publishableKey: status.ANON_KEY,
       secretKey: status.SERVICE_ROLE_KEY,
+      mailUrl: status.MAILPIT_URL ?? status.INBUCKET_URL,
     };
   }
   return cached;
@@ -44,7 +47,10 @@ export function appEnv(): Record<string, string> {
     SUPABASE_SECRET_KEY: supabase.secretKey,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: TURNSTILE_TEST_SITE_KEY,
     TURNSTILE_SECRET_KEY: TURNSTILE_TEST_SECRET_KEY,
-    // Never send real e-mails from a test run
+    // Never send real e-mails from a test run: they go to the test stack's Inbucket instead
     RESEND_API_KEY: '',
+    LOCAL_SMTP_PORT: '54425',
+    // Avatars are served by this build, not by the production image host
+    ASSET_BASE_URL: `${BASE_URL}/api/images`,
   };
 }

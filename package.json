@@ -58,6 +58,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@iconify-json/game-icons": "^1.2.4",
     "@iconify/tailwind4": "^1.2.3",
     "@iconify/utils": "^3.1.7",
