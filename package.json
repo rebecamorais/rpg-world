@@ -20,6 +20,7 @@
     "test:unit": "vitest run --config ./test/vitest.config.unit.ts",
     "test:integration": "vitest run --config ./test/vitest.config.integration.ts",
     "test:e2e": "playwright test",
+    "test:visual": "VISUAL=1 playwright test",
     "knip": "knip",
     "test:mutation": "stryker run",
     "test:coverage": "vitest run --config ./test/vitest.config.unit.ts --coverage",
