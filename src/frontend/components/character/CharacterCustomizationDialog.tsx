@@ -17,7 +17,7 @@ import { cn } from '@frontend/lib/utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
-export const PREDEFINED_COLORS = [
+const PREDEFINED_COLORS = [
   { name: 'Default', value: '' },
   { name: 'Red', value: '#ef4444' },
   { name: 'Blue', value: '#3b82f6' },

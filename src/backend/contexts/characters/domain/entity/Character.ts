@@ -42,7 +42,5 @@ export abstract class Character {
     return Boolean(userId) && this.ownerUsername === userId;
   }
 
-  // Business rules all characters must implement
-  abstract getCombatStats(): Record<string, unknown>;
   abstract toJSON(): Record<string, unknown>;
 }

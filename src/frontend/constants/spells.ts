@@ -45,8 +45,3 @@ export const SPELL_UI_ICONS = {
   CastingTime: 'stopwatch',
   Duration: 'empty-hourglass',
 } as const;
-
-// Types for better TypeScript DX
-export type SpellSchool = keyof typeof SPELL_SCHOOL_ICONS;
-export type DamageType = keyof typeof DAMAGE_TYPE_ICONS;
-export type SpellUIIcon = keyof typeof SPELL_UI_ICONS;

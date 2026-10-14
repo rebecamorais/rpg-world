@@ -1,4 +1,4 @@
-export interface SpellDto {
+interface SpellDto {
   id: string;
   name: string;
   level: number;

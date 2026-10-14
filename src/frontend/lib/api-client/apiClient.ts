@@ -1,4 +1,4 @@
-export type AnyObject = Record<string, unknown>;
+type AnyObject = Record<string, unknown>;
 
 export type RequestOptions<B = unknown> = Omit<RequestInit, 'body'> & {
   body?: B;

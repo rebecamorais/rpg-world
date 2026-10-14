@@ -5,7 +5,7 @@ import { rpgWorldApi } from '@client';
 
 import { CharacterClass, Spell, SpellSchool } from '@frontend/types/spells';
 
-export type SpellDto = Spell;
+type SpellDto = Spell;
 
 export type PaginatedSpells = {
   data: SpellDto[];

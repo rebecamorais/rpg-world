@@ -7,10 +7,6 @@ import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-char
 import { GetCharacterUseCase } from './get-characters.use-case';
 
 class MockCharacter extends Character {
-  getCombatStats() {
-    return {};
-  }
-
   toJSON() {
     return { id: this.id, name: this.name };
   }
