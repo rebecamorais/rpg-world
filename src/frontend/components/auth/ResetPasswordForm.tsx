@@ -142,7 +142,7 @@ export default function ResetPasswordForm() {
     return (
       <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle>{t('successTitle')}</CardTitle>
+          <CardTitle as="h1">{t('successTitle')}</CardTitle>
           <CardDescription className="text-muted-foreground">
             {t('successDescription')}
           </CardDescription>
@@ -159,7 +159,7 @@ export default function ResetPasswordForm() {
   return (
     <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
       <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
+        <CardTitle as="h1">{t('title')}</CardTitle>
         <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>

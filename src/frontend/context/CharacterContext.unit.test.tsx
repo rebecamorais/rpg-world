@@ -5,16 +5,20 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
 
+import { setAttribute } from '@frontend/lib/character-sheet-updates';
+
 import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
-import { CharacterProvider, useCharacterContext } from './CharacterContext';
-
-let pathname = '/system/DnD_5e/character/char-1';
+import {
+  CharacterProvider,
+  useCharacterActions,
+  useCharacterMeta,
+  useCharacterState,
+} from './CharacterContext';
 
 vi.mock('next/navigation', () => ({
   useParams: () => ({ id: 'char-1' }),
-  usePathname: () => pathname,
   useRouter: () => ({ push: vi.fn() }),
 }));
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
@@ -29,108 +33,109 @@ const character = {
   id: 'char-1',
   accentColor: '#ff0000',
 } as DnD5eCharacter;
-const lore = { backstory: 'Son of Odin' };
-const spells = [{ id: 'fireball', name: 'Fireball', level: 3, school: 'evocation' }];
-
-function respond(url: string) {
-  if (url === '/api/characters/char-1') return Promise.resolve(character);
-  if (url === '/api/characters/char-1/lore') return Promise.resolve(lore);
-  if (url.startsWith('/api/characters/char-1/spells')) return Promise.resolve(spells);
-  return Promise.reject(new Error(`unexpected GET ${url}`));
-}
 
 function renderContext() {
-  return renderHookWithProviders(() => useCharacterContext(), { wrapper: CharacterProvider });
+  return renderHookWithProviders(
+    () => ({
+      state: useCharacterState(),
+      actions: useCharacterActions(),
+      meta: useCharacterMeta(),
+    }),
+    { wrapper: CharacterProvider },
+  );
 }
 
-function requestedUrls() {
-  return api.get.mock.calls.map(([url]) => url);
+async function renderLoaded() {
+  const rendered = renderContext();
+  await waitFor(() => expect(rendered.result.current.state.character).not.toBeNull());
+  return rendered;
 }
 
 describe('CharacterContext', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    pathname = '/system/DnD_5e/character/char-1';
-    api.get.mockImplementation(respond as typeof api.get);
-    api.put.mockResolvedValue({ id: 'char-1' });
-    api.post.mockResolvedValue({ success: true });
+    // A tiny server: GET returns whatever the last PUT saved
+    let stored = character;
+    api.get.mockImplementation(async () => stored);
+    api.put.mockImplementation(async (_url, body) => {
+      stored = (body as { updates: DnD5eCharacter }).updates;
+      return { id: 'char-1' };
+    });
   });
 
-  it('carrega o personagem da rota', async () => {
-    const { result } = renderContext();
+  it('carrega só o personagem da rota (lore e magias ficam nas próprias abas)', async () => {
+    const { result } = await renderLoaded();
 
-    await waitFor(() => expect(result.current.character?.name).toBe('Thor'));
-    expect(result.current.isLoading).toBe(false);
+    expect(result.current.state.character?.name).toBe('Thor');
+    expect(result.current.meta).toMatchObject({ id: 'char-1', isLoading: false, error: null });
+    expect(api.get.mock.calls.map(([url]) => url)).toEqual(['/api/characters/char-1']);
   });
 
-  it('não busca lore nem magias fora das abas que as usam', async () => {
-    const { result } = renderContext();
+  it('edita o rascunho e marca alterações não salvas', async () => {
+    const { result } = await renderLoaded();
 
-    await waitFor(() => expect(result.current.character).not.toBeNull());
-    expect(requestedUrls()).toEqual(['/api/characters/char-1']);
+    act(() => {
+      result.current.actions.update({ name: 'Thor Odinson' });
+      result.current.actions.update(setAttribute('STR', 18));
+    });
+
+    expect(result.current.state.character).toMatchObject({
+      name: 'Thor Odinson',
+      attributes: { STR: 18 },
+    });
+    expect(result.current.state.isDirty).toBe(true);
   });
 
-  it('na aba de lore, busca a lore e junta ao personagem', async () => {
-    pathname = '/system/DnD_5e/character/char-1/lore';
-    const { result } = renderContext();
+  it('as ações não mudam de identidade enquanto o rascunho muda', async () => {
+    const { result } = await renderLoaded();
+    const before = result.current.actions;
 
-    await waitFor(() => expect(result.current.character?.backstory).toBe('Son of Odin'));
-    expect(result.current.character?.name).toBe('Thor');
+    act(() => result.current.actions.update({ ac: 18 }));
+
+    expect(result.current.actions).toBe(before);
   });
 
-  it('busca as magias quando a gaveta de magias abre', async () => {
-    const { result } = renderContext();
-    await waitFor(() => expect(result.current.character).not.toBeNull());
+  it('salva o rascunho, avisa o usuário e limpa as alterações', async () => {
+    const { result } = await renderLoaded();
+    act(() => result.current.actions.update({ name: 'Thor Odinson' }));
 
-    act(() => result.current.setIsSpellsOpen(true));
-
-    await waitFor(() => expect(result.current.spellsKnown).toEqual(['fireball']));
-    expect(requestedUrls()).toContain('/api/characters/char-1/spells?locale=en');
-  });
-
-  it('salva o personagem, avisa o usuário e chama onSuccess', async () => {
-    const onSuccess = vi.fn();
-    const { result } = renderContext();
-    await waitFor(() => expect(result.current.character).not.toBeNull());
-
-    await act(() => result.current.updateCharacter(result.current.character!, { onSuccess }));
+    await act(() => result.current.actions.save());
 
     expect(api.put).toHaveBeenCalledWith('/api/characters/char-1', {
-      updates: expect.objectContaining({ name: 'Thor' }),
+      updates: expect.objectContaining({ name: 'Thor Odinson' }),
     });
     expect(toast.success).toHaveBeenCalledWith(messages.characters.saveSuccess);
-    expect(onSuccess).toHaveBeenCalled();
+    expect(result.current.state.isDirty).toBe(false);
+    expect(result.current.state.character?.name).toBe('Thor Odinson');
   });
 
-  it('mostra o erro traduzido e não chama onSuccess quando salvar falha', async () => {
+  it('quando salvar falha, mostra o erro traduzido e mantém as alterações', async () => {
     api.put.mockRejectedValue(new Error('character_error_forbidden'));
-    const onSuccess = vi.fn();
-    const { result } = renderContext();
-    await waitFor(() => expect(result.current.character).not.toBeNull());
+    const { result } = await renderLoaded();
+    act(() => result.current.actions.update({ name: 'Unsaved' }));
 
-    await act(() => result.current.updateCharacter(result.current.character!, { onSuccess }));
+    await act(() => result.current.actions.save());
 
     expect(toast.error).toHaveBeenCalledWith(messages.common.errors.character_error_forbidden);
-    expect(onSuccess).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(result.current.state.isDirty).toBe(true);
   });
 
-  it('prepara magias pelo endpoint do personagem', async () => {
+  it('traduz o erro de carregamento', async () => {
+    api.get.mockRejectedValue(new Error('character_error_not_found'));
     const { result } = renderContext();
-    await waitFor(() => expect(result.current.character).not.toBeNull());
 
-    await act(() => result.current.handleTogglePrepared('fireball', true));
-
-    expect(api.post).toHaveBeenCalledWith('/api/characters/char-1/spells', {
-      id: 'fireball',
-      action: 'prepare',
-    });
+    await waitFor(() =>
+      expect(result.current.meta.error).toBe(messages.common.errors.character_error_not_found),
+    );
+    expect(result.current.state.character).toBeNull();
   });
 
   it('exige o CharacterProvider', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    expect(() => renderHook(() => useCharacterContext())).toThrow(
-      'useCharacterContext must be used within a CharacterProvider',
+    expect(() => renderHook(() => useCharacterState())).toThrow(
+      'Character hooks must be used within a CharacterProvider',
     );
   });
 });

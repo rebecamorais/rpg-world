@@ -1,41 +1,14 @@
-'use client';
-
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 import StatusView from '@frontend/components/character/StatusView';
+import { SaveCharacterButton } from '@frontend/components/character/sheet/SaveButton';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
-import { Button } from '@frontend/components/ui/button';
-import { useCharacterContext } from '@frontend/context/CharacterContext';
 
-export default function CharacterStatusPage() {
-  const { character, hasUnsavedChanges, isSaving, setHasUnsavedChanges, updateCharacter } =
-    useCharacterContext();
-  const t = useTranslations('characters.tabs');
-  const tCommon = useTranslations('common');
-
-  if (!character) return null;
-
-  const handleSave = () => {
-    updateCharacter(character, {
-      onSuccess: () => setHasUnsavedChanges(false),
-    });
-  };
-
-  const actions = (
-    <Button
-      variant="character"
-      size="sm"
-      onClick={handleSave}
-      disabled={!hasUnsavedChanges}
-      loading={isSaving}
-      className="text-label h-8 px-4"
-    >
-      {isSaving ? tCommon('saving') : tCommon('saveChanges')}
-    </Button>
-  );
+export default async function CharacterStatusPage() {
+  const t = await getTranslations('characters.tabs');
 
   return (
-    <PageContainer icon="Shield" title={t('status')} actions={actions}>
+    <PageContainer icon="Shield" title={t('status')} actions={<SaveCharacterButton />}>
       <StatusView />
     </PageContainer>
   );

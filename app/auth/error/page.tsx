@@ -30,7 +30,7 @@ export default function AuthErrorPage() {
     <div className="bg-background flex flex-1 items-center justify-center p-4">
       <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="text-danger-flare">
+          <CardTitle as="h1" className="text-danger-flare">
             {isExpiredLink ? t('errors.expired_link_title') : t('errors.auth_error_title')}
           </CardTitle>
           <CardDescription className="text-muted-foreground">

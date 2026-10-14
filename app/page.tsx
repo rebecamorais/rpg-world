@@ -11,9 +11,9 @@ export default async function Home() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <main className="flex flex-1 flex-col items-center justify-center p-8 text-center transition-all duration-700 md:p-16">
+      <div className="flex flex-1 flex-col items-center justify-center p-8 text-center transition-all duration-700 md:p-16">
         <HeroCTA isAuthenticated={!!user} />
-      </main>
+      </div>
     </div>
   );
 }

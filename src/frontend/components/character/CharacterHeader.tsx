@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -11,41 +11,26 @@ import { FieldLabel, InlineField } from '@frontend/components/ui/field';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Progress } from '@frontend/components/ui/progress';
+import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 
-import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
+import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
 import { GhostInput } from '../ui/ghost-input';
 import { CharacterCustomizationDialog } from './CharacterCustomizationDialog';
 
-interface Props {
-  id: string;
-  name: string;
-  classNameStr: string;
-  level: number;
-  race: string;
-  pb: number;
-  background?: string;
-  alignment?: string;
-  xp?: number;
-  avatarUrl?: string;
-  accentColor?: string;
-  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
-}
-
-function CharacterHeader({
-  id,
-  name,
-  classNameStr,
-  level,
-  race,
-  pb,
-  background,
-  alignment,
-  xp = 0,
-  avatarUrl,
-  accentColor,
-  onBasicInfoChange,
-}: Props) {
+export default function CharacterHeader() {
+  const {
+    name,
+    class: classNameStr,
+    level,
+    race,
+    background,
+    alignment,
+    xp = 0,
+    avatarUrl,
+  } = useLoadedCharacter();
+  const { update } = useCharacterActions();
+  const pb = getProficiencyBonus(level);
   const t = useTranslations('characterHeader');
   const [isEditingName, setIsEditingName] = useState(false);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
@@ -83,10 +68,6 @@ function CharacterHeader({
         </button>
 
         <CharacterCustomizationDialog
-          id={id}
-          avatarUrl={avatarUrl}
-          accentColor={accentColor}
-          onBasicInfoChange={onBasicInfoChange}
           open={isColorPickerOpen}
           onOpenChange={setIsColorPickerOpen}
         />
@@ -101,16 +82,16 @@ function CharacterHeader({
                   id="char-name"
                   autoFocus
                   value={name || ''}
-                  onChange={(e) => onBasicInfoChange('name', e.target.value)}
+                  onChange={(e) => update({ name: e.target.value })}
                   onBlur={() => setIsEditingName(false)}
                   onKeyDown={(e) => e.key === 'Enter' && setIsEditingName(false)}
                   className="text-title md:text-title text-character-flare h-10"
                 />
               ) : (
                 <div className="group flex items-center gap-2">
-                  <h1 className="text-title text-character-flare flex min-h-10 items-center">
+                  <h2 className="text-title text-character-flare flex min-h-10 items-center">
                     {name}
-                  </h1>
+                  </h2>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -133,7 +114,7 @@ function CharacterHeader({
                   min={1}
                   max={20}
                   value={level || 1}
-                  onChange={(val) => onBasicInfoChange('level', val)}
+                  onChange={(val) => update({ level: val })}
                   size="sm"
                   containerClassName="py-0 gap-2"
                 />
@@ -159,7 +140,7 @@ function CharacterHeader({
                     type="number"
                     min={0}
                     value={xp}
-                    onChange={(e) => onBasicInfoChange('xp', parseInt(e.target.value) || 0)}
+                    onChange={(e) => update({ xp: parseInt(e.target.value) || 0 })}
                     className="text-character-flare h-5 w-16 text-right font-mono text-xs md:text-xs"
                   />
                   <span className="text-muted-foreground">/ {nextLevelXp}</span>
@@ -180,28 +161,28 @@ function CharacterHeader({
               id="char-race"
               label={t('race')}
               value={race || ''}
-              onChange={(e) => onBasicInfoChange('race', e.target.value)}
+              onChange={(e) => update({ race: e.target.value })}
               placeholder={t('racePlaceholder')}
             />
             <InlineField
               id="char-class"
               label={t('class')}
               value={classNameStr || ''}
-              onChange={(e) => onBasicInfoChange('class', e.target.value)}
+              onChange={(e) => update({ class: e.target.value })}
               placeholder={t('classPlaceholder')}
             />
             <InlineField
               id="char-background"
               label={t('background')}
               value={background || ''}
-              onChange={(e) => onBasicInfoChange('background', e.target.value)}
+              onChange={(e) => update({ background: e.target.value })}
               placeholder={t('backgroundPlaceholder')}
             />
             <InlineField
               id="char-alignment"
               label={t('alignment')}
               value={alignment || ''}
-              onChange={(e) => onBasicInfoChange('alignment', e.target.value)}
+              onChange={(e) => update({ alignment: e.target.value })}
               placeholder={t('alignmentPlaceholder')}
             />
           </div>
@@ -210,5 +191,3 @@ function CharacterHeader({
     </Card>
   );
 }
-
-export default React.memo(CharacterHeader);

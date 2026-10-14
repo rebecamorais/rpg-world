@@ -1,5 +1,3 @@
-'use client';
-
 import { ReactNode } from 'react';
 
 import { IconName } from '@frontend/components/ui/icon';
@@ -24,7 +22,7 @@ export function PageContainer({ icon, title, actions, children, loading }: PageC
       <PageHeader icon={icon} title={title} actions={!loading ? actions : null} />
 
       {/* Content Area */}
-      <main className="animate-in fade-in min-h-0 w-full flex-1 duration-500">{children}</main>
+      <div className="animate-in fade-in min-h-0 w-full flex-1 duration-500">{children}</div>
     </div>
   );
 }

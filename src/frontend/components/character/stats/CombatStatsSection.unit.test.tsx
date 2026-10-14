@@ -1,7 +1,7 @@
 import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders } from '@tests/helpers/render';
-import { describe, expect, it, vi } from 'vitest';
+import { renderWithCharacter } from '@tests/helpers/character';
+import { describe, expect, it } from 'vitest';
 
 import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
@@ -17,17 +17,7 @@ const character = {
 } as DnD5eCharacter;
 
 function renderCombat(overrides: Partial<DnD5eCharacter> = {}) {
-  const handlers = {
-    onBasicInfoChange: vi.fn(),
-    onSpellcastingSystemChange: vi.fn(),
-    onSpellPointsChange: vi.fn(),
-    onSpellSlotsChange: vi.fn(),
-    onHitDiceChange: vi.fn(),
-  };
-  renderWithProviders(
-    <CombatStatsSection character={{ ...character, ...overrides }} {...handlers} />,
-  );
-  return handlers;
+  return renderWithCharacter(<CombatStatsSection />, { ...character, ...overrides });
 }
 
 describe('CombatStatsSection', () => {
@@ -46,39 +36,42 @@ describe('CombatStatsSection', () => {
     ['Speed', 'speed', '7.5', 7.5],
     ['Hit Points', 'hpCurrent', '4', 4],
   ])('edita %s', (label, field, typed, expected) => {
-    const { onBasicInfoChange } = renderCombat();
+    const { draft, isDirty } = renderCombat();
 
     fireEvent.change(screen.getByLabelText(label), { target: { value: typed } });
 
-    expect(onBasicInfoChange).toHaveBeenCalledWith(field, expected);
+    expect(draft()[field as keyof DnD5eCharacter]).toBe(expected);
+    expect(isDirty()).toBe(true);
   });
 
   it('troca o dado de vida', async () => {
-    const { onHitDiceChange } = renderCombat();
+    const { draft } = renderCombat();
 
     await userEvent.click(screen.getByRole('combobox', { name: 'Hit Dice' }));
     await userEvent.click(screen.getByRole('option', { name: '1d12' }));
 
-    expect(onHitDiceChange).toHaveBeenCalledWith('1d12');
+    expect(draft().hitDice).toEqual({ total: '1d12', current: 1 });
   });
 
   it('mostra os pontos de magia e repassa a edição', () => {
-    const { onSpellPointsChange } = renderCombat();
+    const { draft } = renderCombat();
 
     const points = screen.getByLabelText('Spell Points');
     expect(points).toHaveValue(3);
     fireEvent.change(points, { target: { value: '5' } });
 
-    expect(onSpellPointsChange).toHaveBeenCalledWith('current', 5);
+    expect(draft().spellPoints).toEqual({ current: 5, max: 6 });
+    expect(points).toHaveValue(5);
   });
 
   it('troca o sistema de magia para espaços', async () => {
-    const { onSpellcastingSystemChange } = renderCombat();
+    const { draft } = renderCombat();
 
     await userEvent.click(screen.getByRole('combobox', { name: 'System Used' }));
     await userEvent.click(screen.getByRole('option', { name: 'Spell Slots' }));
 
-    expect(onSpellcastingSystemChange).toHaveBeenCalledWith('slots');
+    expect(draft().spellcastingSystem).toBe('slots');
+    expect(screen.queryByLabelText('Spell Points')).not.toBeInTheDocument();
   });
 
   it('com espaços de magia, não mostra o campo de pontos', () => {

@@ -13,10 +13,9 @@ import {
   DialogTitle,
 } from '@frontend/components/ui/dialog';
 import { Label } from '@frontend/components/ui/label';
+import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
-
-import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 const PREDEFINED_COLORS = [
   { name: 'Default', value: '' },
@@ -32,23 +31,17 @@ const PREDEFINED_COLORS = [
 ];
 
 interface CharacterCustomizationDialogProps {
-  id: string;
-  avatarUrl?: string;
-  accentColor?: string;
-  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
 export function CharacterCustomizationDialog({
-  id,
-  avatarUrl,
-  accentColor,
-  onBasicInfoChange,
   open,
   onOpenChange,
 }: CharacterCustomizationDialogProps) {
   const t = useTranslations('characterHeader');
+  const { id, avatarUrl, accentColor } = useLoadedCharacter();
+  const { update } = useCharacterActions();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -67,7 +60,7 @@ export function CharacterCustomizationDialog({
               currentUrl={avatarUrl}
               target="character"
               targetId={id}
-              onUploadSuccess={(url: string) => onBasicInfoChange('avatarUrl', url)}
+              onUploadSuccess={(url: string) => update({ avatarUrl: url })}
               size="lg"
             />
           </div>
@@ -82,7 +75,7 @@ export function CharacterCustomizationDialog({
                   <button
                     key={color.name}
                     onClick={() => {
-                      onBasicInfoChange('accentColor' as keyof DnD5eCharacter, color.value);
+                      update({ accentColor: color.value });
                     }}
                     className={cn(
                       'group relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all hover:scale-110',

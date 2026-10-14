@@ -15,8 +15,15 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return <div className={cn('flex flex-col space-y-1.5 p-6', className)} {...props} />;
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div className={cn('text-title', className)} {...props} />;
+type HeadingTag = 'div' | 'h1' | 'h2' | 'h3';
+
+/** Renders a div by default; pass `as` to make it the page or section heading. */
+function CardTitle({
+  as: Tag = 'div',
+  className,
+  ...props
+}: React.ComponentProps<'div'> & { as?: HeadingTag }) {
+  return <Tag className={cn('text-title', className)} {...props} />;
 }
 
 function CardDescription({ className, ...props }: React.ComponentProps<'div'>) {

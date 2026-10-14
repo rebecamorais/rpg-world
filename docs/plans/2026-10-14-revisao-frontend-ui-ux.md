@@ -62,16 +62,18 @@ O que está quebrado hoje: o app inteiro renderiza com fonte do sistema (Geist e
 
 **Ficou para a fase 4:** o lápis de editar e a lixeira do card ainda dependem de hover; o card da lista e o botão flutuante do menu no celular.
 
-## Fase 3: arquitetura da ficha
+## Fase 3: arquitetura da ficha ✅
 
 Vem antes das telas porque mexe nos mesmos arquivos; refatorar depois seria fazer duas vezes.
 
-- [ ] Dividir o `CharacterContext` em `state / actions / meta`, com `actions` estável. Os componentes leem do contexto em vez de receber 6 a 12 props repassadas (`StatusView` → `CombatStatsSection` → `CombatHeader` → `CombatStatsDialog`).
-- [ ] `useCharacterEditor`: trocar os 9 handlers quase iguais por um `useReducer` (`update(patch)`), e derivar o rascunho em vez de sincronizar com `useEffect` + `Promise.resolve()`.
-- [ ] Estado do diálogo de magias local ao layout, fora do editor. Lore e magias carregados na própria rota, não por `pathname.endsWith(...)`.
-- [ ] Menos `'use client'`: `PageContainer`, `PageHeader` e páginas sem interatividade viram Server Components.
-- [ ] Um `UserProvider` só (o do root, com `user={null}`, sai).
-- [ ] Landmarks: um `<main>` por página, um `<h1>` por página.
+- [x] Dividir o `CharacterContext` em `state / actions / meta`, com `actions` estável. As seções da ficha leem do contexto em vez de receber 6 a 12 props repassadas (`StatusView` → `CombatStatsSection` → `CombatHeader` → `CombatStatsDialog`). Componentes-folha (`HealthPointsCard`, `MagicSystemCard`, `AttributeCard`, `StatBlock`) continuam recebendo props.
+- [x] `useCharacterEditor` → `useDraft` genérico: `useReducer` com `update(patch)`, rascunho derivado (servidor + edições), `commit` que mantém o que foi digitado durante o salvamento. Os 9 handlers viraram patches em `lib/character-sheet-updates.ts`.
+- [x] Estado do diálogo de magias fora do editor (ficou na aba de magias, o único lugar que o abre). Lore e magias carregados na própria rota (`LoreTab`, `SpellsTab`), não por `pathname.endsWith(...)`. A lore tem rascunho próprio e salva só a lore.
+- [x] Menos `'use client'`: `PageContainer`, `PageHeader`, o layout e as 4 páginas da ficha viram Server Components; a interatividade fica em ilhas (`CharacterSheetShell`, `SaveCharacterButton`, `LoreTab`, `SpellsTab`).
+- [x] Um `UserProvider` só (o do root, com `user={null}`, sai).
+- [x] Landmarks: um `<main>` por página (no layout raiz), um `<h1>` por página. O `a11y.spec.ts` verifica os dois em todas as telas testadas.
+
+**Mudanças visíveis:** home e lista ganharam `<h1>` em Cinzel (a lista mostra o título também vazia ou carregando); o botão "Adicionar item" do inventário, que não fazia nada, fica desabilitado.
 
 ## Fase 4: telas e fluxos (UX)
 
@@ -83,7 +85,7 @@ Vem antes das telas porque mexe nos mesmos arquivos; refatorar depois seria faze
 
 **Home e auth**
 
-- [ ] Home com `<h1>` e uma prévia da ficha.
+- [ ] Home com ~~`<h1>`~~ (feito na fase 3) e uma prévia da ficha.
 - [ ] Auth: ~~remover o gradiente azul→roxo dos 5 títulos, usar Cinzel + tokens~~ (feito na fase 2); erros inline no campo.
 
 **Lista de personagens**

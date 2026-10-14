@@ -1,23 +1,18 @@
 'use client';
 
-import React from 'react';
-
 import { useTranslations } from 'next-intl';
 
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
+import { useLoadedCharacter } from '@frontend/context/CharacterContext';
 
 import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
 import rules from '@shared/systems/dnd5e/rules.json';
-import type { CharacterSkill } from '@shared/systems/dnd5e/types';
 
-interface Props {
-  wisValue: number;
-  level: number;
-  perceptionSkillData?: CharacterSkill;
-}
-
-function PassivePerception({ wisValue, level, perceptionSkillData }: Props) {
+export default function PassivePerception() {
+  const { attributes, level, skills } = useLoadedCharacter();
+  const wisValue = attributes.WIS ?? 10;
+  const perceptionSkillData = skills?.PERCEPTION;
   const t = useTranslations('characters');
   const isProficient = perceptionSkillData?.isProficient ?? false;
   const expertise = perceptionSkillData?.expertise ?? false;
@@ -48,5 +43,3 @@ function PassivePerception({ wisValue, level, perceptionSkillData }: Props) {
     </Tooltip>
   );
 }
-
-export default React.memo(PassivePerception);

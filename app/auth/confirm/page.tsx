@@ -75,7 +75,9 @@ export default function AuthConfirmPage() {
     <div className="bg-background flex flex-1 items-center justify-center p-4">
       <Card className="bg-card/80 mx-auto w-full max-w-sm font-medium shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="text-center">{failed ? t('errorTitle') : t('title')}</CardTitle>
+          <CardTitle as="h1" className="text-center">
+            {failed ? t('errorTitle') : t('title')}
+          </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-4 py-6">
           {!failed ? (

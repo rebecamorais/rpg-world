@@ -1,159 +1,117 @@
 'use client';
 
-import { ReactNode, createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { type ReactNode, createContext, useCallback, useContext, useMemo } from 'react';
 
-import { useParams, usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { useCharacter } from '@frontend/hooks/useCharacter';
-import { useCharacterEditor } from '@frontend/hooks/useCharacterEditor';
-import { useCharacterLore } from '@frontend/hooks/useCharacterLore';
-import { useCharacterSpells } from '@frontend/hooks/useCharacterSpells';
-import type { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
+import { type DraftPatch, useDraft } from '@frontend/hooks/useDraft';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
-type CharacterContextType = ReturnType<typeof useCharacterEditor> & {
-  isSaving: boolean;
-  deleteCharacter: (character: DnD5eCharacter) => void;
-  updateCharacter: (character: DnD5eCharacter, options?: { onSuccess?: () => void }) => void;
-  updateLore: (data: Record<string, unknown>) => Promise<void>;
-  isLoading: boolean;
-  queryError: Error | null;
+/*
+ * The character sheet's state, split in three so a component re-renders only for what it reads:
+ * - state: the draft being edited (changes on every keystroke);
+ * - actions: stable functions to change and save it (never change, safe in memo deps);
+ * - meta: loading, saving and error flags.
+ * Lore and spells are not here: each tab loads its own (see LoreTab, SpellsTab).
+ */
 
-  // Spell management
-  characterSpells: CharacterSpell[];
-  spellsKnown: string[];
-  isSpellsLoading: boolean;
-  handleLearnSpell: (id: string) => void;
-  handleForgetSpell: (id: string) => void;
-  handleTogglePrepared: (id: string, isPrepared: boolean) => void;
-  // Death saves management
-  handleDeathSavesChange: (successes: number, failures: number) => void;
-};
-
-const CharacterContext = createContext<CharacterContextType | null>(null);
-
-export function CharacterProvider({ children }: { children: ReactNode }) {
-  const params = useParams();
-  const pathname = usePathname();
-  const id = params?.id as string;
-  const tCharacters = useTranslations('characters');
-
-  // Track if spells drawer is open to trigger loading even on non-spell routes
-  // This state is shared with useCharacterEditor
-  const [isSpellsOpen, setIsSpellsOpen] = useState(false);
-
-  // Lazy loading triggers
-  const isLoreRoute = pathname?.endsWith('/lore');
-  const isSpellsRoute = pathname?.endsWith('/spells');
-
-  const {
-    character: fetchedCharacter,
-    isLoading: isCharLoading,
-    error: charError,
-    deleteCharacter,
-    updateCharacter: updateStatus,
-    isSaving: isCharSaving,
-  } = useCharacter(id);
-
-  const {
-    spells,
-    isLoading: isSpellsLoading,
-    learnSpell,
-    forgetSpell,
-    togglePrepared,
-  } = useCharacterSpells(id, {
-    enabled: !!id && (isSpellsRoute || isSpellsOpen),
-  });
-
-  const {
-    lore: fetchedLore,
-    isLoading: isLoreLoading,
-    updateLore,
-    isSaving: isLoreSaving,
-  } = useCharacterLore(id, {
-    enabled: !!id && isLoreRoute,
-  });
-
-  // Merge lore into character for the editor
-  const mergedCharacter = useMemo(() => {
-    if (!fetchedCharacter || !fetchedLore) return fetchedCharacter;
-    return { ...fetchedCharacter, ...fetchedLore } as DnD5eCharacter;
-  }, [fetchedCharacter, fetchedLore]);
-
-  const editor = useCharacterEditor({
-    fetchedCharacter: mergedCharacter,
-    queryError: charError as Error | null,
-    isSpellsOpen,
-    setIsSpellsOpen,
-  });
-
-  const handleUpdate = useCallback(
-    async (character: DnD5eCharacter, options?: { onSuccess?: () => void }) => {
-      try {
-        await updateStatus(character);
-        toast.success(tCharacters('saveSuccess'));
-        options?.onSuccess?.();
-      } catch (_e) {
-        // Errors are handled inside the hooks via toast
-      }
-    },
-    [updateStatus, tCharacters],
-  );
-
-  const spellsKnown = useMemo(() => spells.map((s) => s.id), [spells]);
-
-  const contextValue = useMemo(
-    () => ({
-      ...editor,
-      isSaving: isCharSaving || isLoreSaving,
-      deleteCharacter,
-      updateCharacter: handleUpdate,
-      updateLore: updateLore as (data: Record<string, unknown>) => Promise<void>,
-      isLoading:
-        isCharLoading || (isLoreRoute && isLoreLoading) || (isSpellsRoute && isSpellsLoading),
-      queryError: charError as Error | null,
-
-      // Spell management
-      characterSpells: spells,
-      spellsKnown,
-      isSpellsLoading,
-      handleLearnSpell: learnSpell,
-      handleForgetSpell: forgetSpell,
-      handleTogglePrepared: togglePrepared,
-      handleDeathSavesChange: editor.handleDeathSavesChange,
-    }),
-    [
-      editor,
-      isCharSaving,
-      isLoreSaving,
-      deleteCharacter,
-      handleUpdate,
-      updateLore,
-      isCharLoading,
-      isLoreLoading,
-      charError,
-      spells,
-      spellsKnown,
-      isSpellsLoading,
-      learnSpell,
-      forgetSpell,
-      togglePrepared,
-      isLoreRoute,
-      isSpellsRoute,
-    ],
-  );
-
-  return <CharacterContext.Provider value={contextValue}>{children}</CharacterContext.Provider>;
+export interface CharacterState {
+  character: DnD5eCharacter | null;
+  /** Edits not saved yet. */
+  isDirty: boolean;
 }
 
-export function useCharacterContext() {
-  const context = useContext(CharacterContext);
-  if (!context) {
-    throw new Error('useCharacterContext must be used within a CharacterProvider');
-  }
-  return context;
+export interface CharacterActions {
+  /** Changes the draft: `update({ ac: 15 })` or a patch from `lib/character-sheet-updates`. */
+  update: (patch: DraftPatch<DnD5eCharacter>) => void;
+  save: () => Promise<void>;
+}
+
+export interface CharacterMeta {
+  id: string;
+  isLoading: boolean;
+  isSaving: boolean;
+  /** Translated load error, if any. */
+  error: string | null;
+}
+
+const StateContext = createContext<CharacterState | null>(null);
+const ActionsContext = createContext<CharacterActions | null>(null);
+const MetaContext = createContext<CharacterMeta | null>(null);
+
+/** Provides already-built values. The app uses CharacterProvider; tests can use this directly. */
+export function CharacterContextProvider({
+  state,
+  actions,
+  meta,
+  children,
+}: {
+  state: CharacterState;
+  actions: CharacterActions;
+  meta: CharacterMeta;
+  children: ReactNode;
+}) {
+  return (
+    <MetaContext.Provider value={meta}>
+      <ActionsContext.Provider value={actions}>
+        <StateContext.Provider value={state}>{children}</StateContext.Provider>
+      </ActionsContext.Provider>
+    </MetaContext.Provider>
+  );
+}
+
+/** Loads the character of the current route and keeps the sheet's draft. */
+export function CharacterProvider({ children }: { children: ReactNode }) {
+  const params = useParams();
+  const id = params?.id as string;
+  const t = useTranslations('characters');
+  const { getErrorMessage } = useErrorMessage();
+
+  const { character: fetched, isLoading, error, updateCharacter, isSaving } = useCharacter(id);
+  const { draft, isDirty, update, commit } = useDraft(fetched);
+
+  const save = useCallback(async () => {
+    try {
+      await commit(updateCharacter);
+      toast.success(t('saveSuccess'));
+    } catch {
+      // useCharacter already shows the error
+    }
+  }, [commit, updateCharacter, t]);
+
+  const state = useMemo(() => ({ character: draft, isDirty }), [draft, isDirty]);
+  const actions = useMemo(() => ({ update, save }), [update, save]);
+  const meta = useMemo(
+    () => ({ id, isLoading, isSaving, error: error ? getErrorMessage(error) : null }),
+    [id, isLoading, isSaving, error, getErrorMessage],
+  );
+
+  return (
+    <CharacterContextProvider state={state} actions={actions} meta={meta}>
+      {children}
+    </CharacterContextProvider>
+  );
+}
+
+function useRequired<T>(context: React.Context<T | null>): T {
+  const value = useContext(context);
+  if (!value) throw new Error('Character hooks must be used within a CharacterProvider');
+  return value;
+}
+
+export const useCharacterState = () => useRequired(StateContext);
+export const useCharacterActions = () => useRequired(ActionsContext);
+export const useCharacterMeta = () => useRequired(MetaContext);
+
+/** The loaded character. Only for components rendered after the layout's loading guard. */
+export function useLoadedCharacter(): DnD5eCharacter {
+  const { character } = useCharacterState();
+  if (!character) throw new Error('The character has not loaded yet');
+  return character;
 }

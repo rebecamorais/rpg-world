@@ -82,7 +82,7 @@ export default function LoginForm() {
     return (
       <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
         <CardHeader>
-          <CardTitle>{t('verifyEmailTitle')}</CardTitle>
+          <CardTitle as="h1">{t('verifyEmailTitle')}</CardTitle>
           <CardDescription className="text-muted-foreground">
             {t.rich('verifyEmailDescription', {
               email: form.getValues('email'),
@@ -97,7 +97,7 @@ export default function LoginForm() {
   return (
     <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
       <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
+        <CardTitle as="h1">{t('title')}</CardTitle>
         <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">

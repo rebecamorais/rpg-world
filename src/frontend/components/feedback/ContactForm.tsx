@@ -104,7 +104,9 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
           <div className="bg-primary-surface text-primary-flare mb-4 flex h-16 w-16 items-center justify-center rounded-full shadow-[0_0_15px_var(--primary-surface)]">
             <MessageSquare className="h-8 w-8" />
           </div>
-          <CardTitle className="mb-2">{t('success')}</CardTitle>
+          <CardTitle as="h1" className="mb-2">
+            {t('success')}
+          </CardTitle>
           <Button
             variant="ghost"
             onClick={() => setIsSuccess(false)}
@@ -124,7 +126,7 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
           <div className="bg-primary-surface text-primary-flare rounded-md p-2">
             <MessageSquare className="h-5 w-5" />
           </div>
-          <CardTitle>{t('title')}</CardTitle>
+          <CardTitle as="h1">{t('title')}</CardTitle>
         </div>
         <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>

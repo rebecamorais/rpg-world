@@ -32,11 +32,14 @@ function SectionCardHeader({ className, ...props }: React.ComponentProps<'div'>)
 }
 
 interface SectionCardTitleProps extends React.ComponentProps<'h2'> {
+  /** Heading level; h2 by default (a section under the page's h1). */
+  as?: 'h2' | 'h3';
   icon?: IconName;
   iconVariant?: React.ComponentProps<typeof AppIcon>['variant'];
 }
 
 function SectionCardTitle({
+  as: Tag = 'h2',
   icon,
   iconVariant,
   className,
@@ -44,7 +47,7 @@ function SectionCardTitle({
   ...props
 }: SectionCardTitleProps) {
   return (
-    <h2
+    <Tag
       className={cn('text-label text-muted-foreground flex items-center gap-2', className)}
       {...props}
     >
@@ -58,7 +61,7 @@ function SectionCardTitle({
         />
       )}
       {children}
-    </h2>
+    </Tag>
   );
 }
 

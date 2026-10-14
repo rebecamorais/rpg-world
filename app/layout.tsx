@@ -51,9 +51,13 @@ export default async function RootLayout({
       >
         <Providers locale={locale} messages={messages} timeZone={timeZone}>
           <GlobalHeader />
-          <div className="flex min-h-[calc(100vh-var(--header-height)+20px)] flex-1 flex-col">
+          {/* The page's only main landmark; pages and layouts below use plain divs */}
+          <main
+            id="main-content"
+            className="flex min-h-[calc(100vh-var(--header-height)+20px)] flex-1 flex-col"
+          >
             {children}
-          </div>
+          </main>
           <Footer />
         </Providers>
         <Toaster />

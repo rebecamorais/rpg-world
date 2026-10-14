@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 import { useTranslations } from 'next-intl';
 
 import CharacterHeader from '@frontend/components/character/CharacterHeader';
@@ -11,90 +9,32 @@ import PassivePerception from '@frontend/components/character/stats/PassivePerce
 import SavingThrowsSection from '@frontend/components/character/stats/SavingThrowsSection';
 import SkillsSection from '@frontend/components/character/stats/SkillsSection';
 import { ErrorState } from '@frontend/components/ui/empty-state';
-import { useCharacterContext } from '@frontend/context/CharacterContext';
-
-import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
+import { useCharacterMeta } from '@frontend/context/CharacterContext';
 
 /**
- * StatusView — the Status tab for the route-based character sheet.
- * Reads all data from CharacterContext (provided by layout.tsx).
- * Used by: app/.../character/[id]/page.tsx
+ * The Status tab of the character sheet. Each section reads the character from
+ * CharacterContext (provided by the sheet layout), so nothing is passed down from here.
  */
 export default function StatusView() {
-  const {
-    character,
-    error,
-    handleBasicInfoChange,
-    handleAttributeChange,
-    handleSkillChange,
-    handleSavingThrowChange,
-    handleSpellPointsChange,
-    handleSpellSlotsChange,
-    handleSpellcastingSystemChange,
-    handleHitDiceChange,
-    handleDeathSavesChange,
-  } = useCharacterContext();
+  const { error } = useCharacterMeta();
   const t = useTranslations('characters');
-
-  if (!character) return null;
-
-  const pb = getProficiencyBonus(character.level);
 
   return (
     <div className="flex flex-col gap-6">
       {error && <ErrorState title={t('loadErrorTitle')} description={error} />}
 
-      <CharacterHeader
-        id={character.id}
-        name={character.name}
-        classNameStr={character.class}
-        level={character.level}
-        race={character.race}
-        pb={pb}
-        background={character.background}
-        alignment={character.alignment}
-        xp={character.xp}
-        avatarUrl={character.avatarUrl}
-        accentColor={character.accentColor}
-        onBasicInfoChange={handleBasicInfoChange}
-      />
+      <CharacterHeader />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <div className="flex flex-col gap-6">
-          <PassivePerception
-            wisValue={character.attributes.WIS ?? 10}
-            level={character.level}
-            perceptionSkillData={character.skills?.PERCEPTION}
-          />
-          <SavingThrowsSection
-            attributes={character.attributes}
-            level={character.level}
-            savingThrows={character.savingThrowProficiencies}
-            deathSaves={character.deathSaves}
-            onSavingThrowChange={handleSavingThrowChange}
-            onDeathSavesChange={handleDeathSavesChange}
-          />
-          <AttributesSection
-            attributes={character.attributes}
-            onAttributeChange={handleAttributeChange}
-          />
+          <PassivePerception />
+          <SavingThrowsSection />
+          <AttributesSection />
         </div>
 
         <div className="flex flex-col gap-6">
-          <CombatStatsSection
-            character={character}
-            onBasicInfoChange={handleBasicInfoChange}
-            onSpellcastingSystemChange={handleSpellcastingSystemChange}
-            onSpellPointsChange={handleSpellPointsChange}
-            onSpellSlotsChange={handleSpellSlotsChange}
-            onHitDiceChange={handleHitDiceChange}
-          />
-          <SkillsSection
-            attributes={character.attributes}
-            level={character.level}
-            skills={character.skills ?? {}}
-            onSkillChange={handleSkillChange}
-          />
+          <CombatStatsSection />
+          <SkillsSection />
         </div>
       </div>
     </div>
