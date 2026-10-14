@@ -25,15 +25,17 @@ export default function StatusView() {
 
       <CharacterHeader />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-        <div className="flex flex-col gap-6">
+      {/* Phones: combat first, it is what changes during play. Desktop: two columns. */}
+      <div className="grid grid-cols-1 gap-6 [grid-template-areas:'combat'_'side'_'skills'] lg:grid-cols-[280px_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:[grid-template-areas:'side_combat'_'side_skills']">
+        <div className="[grid-area:combat]">
+          <CombatStatsSection />
+        </div>
+        <div className="flex flex-col gap-6 [grid-area:side]">
           <PassivePerception />
           <SavingThrowsSection />
           <AttributesSection />
         </div>
-
-        <div className="flex flex-col gap-6">
-          <CombatStatsSection />
+        <div className="[grid-area:skills]">
           <SkillsSection />
         </div>
       </div>

@@ -4,6 +4,7 @@ import * as React from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { Button } from '@frontend/components/ui/button';
 import { Card } from '@frontend/components/ui/card';
 import { GhostInput } from '@frontend/components/ui/ghost-input';
 import { HealthBar } from '@frontend/components/ui/health-bar';
@@ -38,7 +39,17 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
   const t = useTranslations('combatStats');
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-2 py-4">
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center gap-2">
+        <Button
+          variant="outline"
+          size="icon"
+          aria-label={t('loseHp')}
+          onClick={() => onHpChange('hpCurrent', Math.max(0, currentHp - 1))}
+          disabled={currentHp <= 0}
+          className="h-9 w-9 rounded-full"
+        >
+          <AppIcon name="Minus" size={16} />
+        </Button>
         <div className="flex items-baseline gap-1">
           <GhostInput
             type="number"
@@ -57,6 +68,16 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
             <span className="text-muted-foreground font-mono text-lg tabular-nums">{maxHp}</span>
           </div>
         </div>
+        <Button
+          variant="outline"
+          size="icon"
+          aria-label={t('gainHp')}
+          onClick={() => onHpChange('hpCurrent', Math.min(maxHp, currentHp + 1))}
+          disabled={currentHp >= maxHp}
+          className="h-9 w-9 rounded-full"
+        >
+          <AppIcon name="Plus" size={16} />
+        </Button>
 
         {tempHp > 0 && (
           <div className="text-warning-flare ml-2 flex items-baseline self-end pb-2 font-bold">

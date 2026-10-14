@@ -30,7 +30,7 @@ function GhostInput({ className, containerClassName, showIcon = true, ...props }
         <AppIcon
           name="Pencil"
           size={14}
-          className="text-muted-foreground pointer-events-none absolute right-0 opacity-0 transition-opacity group-focus-within:hidden group-hover:opacity-100"
+          className="text-muted-foreground pointer-events-none absolute right-0 opacity-0 transition-opacity group-focus-within:hidden group-hover:opacity-100 pointer-coarse:opacity-100"
         />
       )}
     </div>

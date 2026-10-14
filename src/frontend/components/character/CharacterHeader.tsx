@@ -96,10 +96,10 @@ export default function CharacterHeader() {
                     variant="ghost"
                     size="icon"
                     aria-label={t('editName')}
-                    className="h-6 w-6 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+                    className="text-muted-foreground hover:text-foreground h-8 w-8 shrink-0"
                     onClick={() => setIsEditingName(true)}
                   >
-                    <AppIcon name="Pencil" size={12} />
+                    <AppIcon name="Pencil" size={14} />
                   </Button>
                 </div>
               )}

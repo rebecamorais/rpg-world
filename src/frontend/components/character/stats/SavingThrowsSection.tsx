@@ -2,11 +2,10 @@
 
 import { useTranslations } from 'next-intl';
 
-import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
-import { setDeathSaves, setSavingThrow } from '@frontend/lib/character-sheet-updates';
+import { setSavingThrow } from '@frontend/lib/character-sheet-updates';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
 import { calculateSavingThrow } from '@shared/systems/dnd5e/calculations';
@@ -14,97 +13,11 @@ import { ATTRIBUTE_KEYS } from '@shared/systems/dnd5e/constants';
 import rules from '@shared/systems/dnd5e/rules.json';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
-interface DeathSavesProps {
-  deathSaves?: { successes: number; failures: number };
-  onDeathSavesChange?: (successes: number, failures: number) => void;
-}
-
-const DeathSaves = ({ deathSaves, onDeathSavesChange }: DeathSavesProps) => {
-  const t = useTranslations('savingThrows');
-
-  return (
-    <div className="bg-muted/20 border-border flex items-center justify-center border-b py-4">
-      <div className="flex items-center gap-6">
-        <div className="flex gap-2">
-          {[2, 1, 0].map((i) => (
-            <button
-              key={`succ-${i}`}
-              type="button"
-              aria-label={t('deathSaveSuccess', { count: i + 1 })}
-              aria-pressed={(deathSaves?.successes || 0) > i}
-              onClick={() =>
-                onDeathSavesChange?.(
-                  deathSaves?.successes === i + 1 ? i : i + 1,
-                  deathSaves?.failures || 0,
-                )
-              }
-              className={cn(
-                'h-3.5 w-3.5 rounded-full border-2 transition-all duration-300',
-                (deathSaves?.successes || 0) > i
-                  ? 'border-success bg-success shadow-[0_0_12px_var(--color-success-muted)]'
-                  : 'border-success-surface hover:border-success-muted',
-              )}
-            />
-          ))}
-        </div>
-
-        <button
-          type="button"
-          className="focus-ring touch-target rounded-full"
-          aria-label={t('resetDeathSaves')}
-          onClick={() => onDeathSavesChange?.(0, 0)}
-        >
-          <AppIcon
-            name="death-skull"
-            size="sm"
-            variant="game"
-            className={cn(
-              'text-muted-foreground hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110',
-              ((deathSaves?.successes || 0) > 0 || (deathSaves?.failures || 0) > 0) &&
-                'text-foreground',
-            )}
-          />
-        </button>
-
-        <div className="flex gap-2">
-          {[0, 1, 2].map((i) => (
-            <button
-              key={`fail-${i}`}
-              type="button"
-              aria-label={t('deathSaveFailure', { count: i + 1 })}
-              aria-pressed={(deathSaves?.failures || 0) > i}
-              onClick={() =>
-                onDeathSavesChange?.(
-                  deathSaves?.successes || 0,
-                  deathSaves?.failures === i + 1 ? i : i + 1,
-                )
-              }
-              className={cn(
-                'h-3.5 w-3.5 rounded-full border-2 transition-all duration-300',
-                (deathSaves?.failures || 0) > i
-                  ? 'border-danger bg-danger shadow-[0_0_12px_var(--color-danger-muted)]'
-                  : 'border-danger-surface hover:border-danger-muted',
-              )}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export default function SavingThrowsSection() {
-  const {
-    attributes,
-    level,
-    savingThrowProficiencies: savingThrows,
-    deathSaves,
-  } = useLoadedCharacter();
+  const { attributes, level, savingThrowProficiencies: savingThrows } = useLoadedCharacter();
   const { update } = useCharacterActions();
   const onSavingThrowChange = (key: AttributeKey, isProficient: boolean) =>
     update(setSavingThrow(key, isProficient));
-  const onDeathSavesChange = (successes: number, failures: number) =>
-    update(setDeathSaves(successes, failures));
   const t = useTranslations('attributes');
   const tSection = useTranslations('savingThrows');
 
@@ -115,7 +28,6 @@ export default function SavingThrowsSection() {
           {tSection('title')}
         </SectionCard.Title>
       </SectionCard.Header>
-      <DeathSaves deathSaves={deathSaves} onDeathSavesChange={onDeathSavesChange} />
       <SectionCard.Body className="grid grid-cols-1 gap-2">
         {ATTRIBUTE_KEYS.map((key) => {
           const attrVal = attributes[key] ?? 10;
