@@ -112,6 +112,7 @@ Para detalhes técnicos mais profundos, consulte nossos guias:
 | `npm run test:coverage` | Cobertura dos testes unitários (relatório em `coverage/`)       |
 | `npm run test:mutation` | Mutation testing com Stryker (relatório em `reports/mutation/`) |
 | `npm run lint`          | Verifica erros de linting                                       |
+| `npm run knip`          | Procura arquivos, exports e dependências sem uso                |
 | `npm run format`        | Formata o código usando Prettier                                |
 
 ---

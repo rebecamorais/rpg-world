@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "src/i18n.ts",
+    "scripts/*.ts",
+    "test/setup-*.ts",
+    "test/global-setup-*.ts",
+    "test/vitest.config.mutation.ts"
+  ],
+  "ignore": ["lib/types/database.ts"],
+  "ignoreDependencies": ["@stryker-mutator/api", "@stryker-mutator/command-runner"],
+  "ignoreIssues": {
+    "src/frontend/components/ui/**": ["exports", "types"]
+  }
+}

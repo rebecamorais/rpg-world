@@ -35,6 +35,10 @@ jobs:
       - name: Run Lint
         run: npm run lint
 
+      # Unused files, exports and dependencies (config in knip.json)
+      - name: Check Dead Code
+        run: npm run knip
+
       # 1. Rodar Testes Unitários Primeiro (Fail Fast)
       # Same unit tests, plus the coverage floor from test/vitest.config.unit.ts
       - name: Run Unit Tests (with coverage floor)
