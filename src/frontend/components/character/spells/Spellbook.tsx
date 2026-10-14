@@ -129,7 +129,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
             {t('spellbookIndex')}
           </span>
           <Select value={activeLevel} onValueChange={setActiveLevel}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger aria-label={t('spellbookIndex')} className="w-full">
               <SelectValue placeholder={t('selectLevel')} />
             </SelectTrigger>
             <SelectContent>

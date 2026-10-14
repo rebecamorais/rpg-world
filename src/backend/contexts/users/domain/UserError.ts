@@ -18,6 +18,7 @@ export const UserErrorCodes = {
   UPDATE_PASSWORD_SAME: 'auth_error_update_password_same',
   PROFILE_UPDATE_ID_REQUIRED: 'profile_error_update_id_required',
   PROFILE_GET_ID_REQUIRED: 'profile_error_get_id_required',
+  PROFILE_USERNAME_TAKEN: 'profile_error_username_taken',
   AVATAR_UPLOAD_USERID_REQUIRED: 'storage_error_upload_avatar_userid_required',
   AVATAR_UPLOAD_SIZE_LIMIT: 'storage_error_upload_avatar_size_limit',
   AVATAR_UPLOAD_INVALID_TYPE: 'storage_error_upload_avatar_invalid_type',

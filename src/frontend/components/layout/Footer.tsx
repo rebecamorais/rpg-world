@@ -18,7 +18,7 @@ const GITHUB_REPO = 'https://github.com/rebecamorais/rpg-world';
 
 const GithubIcon = ({ className }: { className?: string }) => (
   <svg
-    role="img"
+    aria-hidden="true"
     viewBox="0 0 24 24"
     fill="currentColor"
     className={className}
@@ -51,7 +51,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
     return (
       <footer className={cn('bg-black/20 px-6 py-4 backdrop-blur-xl', className)}>
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-xs text-zinc-500">{t('copyright', { year: currentYear })}</p>
+          <p className="text-xs text-zinc-400">{t('copyright', { year: currentYear })}</p>
           <div className="flex gap-4 text-xs text-zinc-400">
             <Link href="/terms" className="transition-colors hover:text-white">
               {t('legal.terms')}
@@ -79,10 +79,10 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
             <div className="flex items-center gap-2">
               <span className="text-lg font-bold tracking-tight text-white">Rebs Tech Studio</span>
             </div>
-            <p className="max-w-[200px] text-sm leading-relaxed text-zinc-500">
+            <p className="max-w-[200px] text-sm leading-relaxed text-zinc-400">
               {tLanding('heroSubtitle')}
             </p>
-            <div className="mt-1 text-xs font-medium text-zinc-600">
+            <div className="mt-1 text-xs font-medium text-zinc-400">
               {t('copyright', { year: currentYear })}
             </div>
           </div>
@@ -94,14 +94,14 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
             </h3>
             <ul className="flex flex-col gap-2">
               <li>
-                <Link href="/" className="text-sm text-zinc-500 transition-colors hover:text-white">
+                <Link href="/" className="text-sm text-zinc-400 transition-colors hover:text-white">
                   {t('explore.home')}
                 </Link>
               </li>
               <li>
                 <Link
                   href="/characters"
-                  className="text-sm text-zinc-500 transition-colors hover:text-white"
+                  className="text-sm text-zinc-400 transition-colors hover:text-white"
                 >
                   {t('explore.characters')}
                 </Link>
@@ -109,7 +109,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
               <li>
                 <Link
                   href="/settings"
-                  className="text-sm text-zinc-500 transition-colors hover:text-white"
+                  className="text-sm text-zinc-400 transition-colors hover:text-white"
                 >
                   {t('explore.settings')}
                 </Link>
@@ -129,7 +129,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
                     href={GITHUB_REPO}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-white"
+                    className="flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-white"
                   >
                     <GithubIcon className="h-4 w-4" />
                     {t('socials.github')}
@@ -145,7 +145,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
                 <li>
                   <Link
                     href="/terms"
-                    className="text-sm text-zinc-500 transition-colors hover:text-white"
+                    className="text-sm text-zinc-400 transition-colors hover:text-white"
                   >
                     {t('legal.terms')}
                   </Link>
@@ -153,7 +153,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
                 <li>
                   <Link
                     href="/privacy"
-                    className="text-sm text-zinc-500 transition-colors hover:text-white"
+                    className="text-sm text-zinc-400 transition-colors hover:text-white"
                   >
                     {t('legal.privacy')}
                   </Link>
@@ -183,7 +183,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
                 <AppIcon
                   name="ExternalLink"
                   size={12}
-                  className="text-zinc-600 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-zinc-400"
+                  className="text-zinc-400 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-zinc-400"
                 />
               </a>
 
@@ -214,6 +214,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
                   </code>
                   <button
                     onClick={handleCopyPix}
+                    aria-label={t('support.pixCopyLabel')}
                     className="bg-primary hover:bg-primary/80 flex h-7 w-7 items-center justify-center rounded text-white transition-colors"
                   >
                     <AppIcon name={hasCopied ? 'Check' : 'Clipboard'} size={14} />

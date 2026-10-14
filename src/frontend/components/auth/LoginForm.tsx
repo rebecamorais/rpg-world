@@ -158,7 +158,7 @@ export default function LoginForm() {
                       <FormLabel className="text-gray-300">{t('passwordLabel')}</FormLabel>
                       <Link
                         href="/forgot-password"
-                        className="text-primary text-xs hover:underline"
+                        className="text-primary-flare text-xs hover:underline"
                       >
                         {t('forgotPassword')}
                       </Link>
@@ -213,7 +213,7 @@ export default function LoginForm() {
             <span className="w-full border-t border-white/10" />
           </div>
           <div className="relative flex justify-center text-sm uppercase">
-            <span className="bg-black/60 px-2 text-gray-500">{t('dividerText')}</span>
+            <span className="bg-black/60 px-2 text-gray-400">{t('dividerText')}</span>
           </div>
         </div>
 

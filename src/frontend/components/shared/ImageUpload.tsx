@@ -50,6 +50,8 @@ export default function ImageUpload({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    // Clear the input so picking the same file again (e.g. retrying a failed upload) fires change
+    e.target.value = '';
     if (!file) return;
 
     // Local preview (blob URL)

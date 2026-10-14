@@ -36,8 +36,9 @@ jobs:
         run: npm run lint
 
       # 1. Rodar Testes Unitários Primeiro (Fail Fast)
-      - name: Run Unit Tests
-        run: npm run test:unit
+      # Same unit tests, plus the coverage floor from test/vitest.config.unit.ts
+      - name: Run Unit Tests (with coverage floor)
+        run: npm run test:coverage
 
       # 2. Preparar Infraestrutura de Integração
       - name: Initialize Database Structure (Symlinks)

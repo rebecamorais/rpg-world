@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { Card } from '@frontend/components/ui/card';
 import { GhostInput } from '@frontend/components/ui/ghost-input';
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -16,6 +18,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 export const SpellPoints = React.forwardRef<HTMLDivElement, Props>(
   ({ current, max, onPointsChange, systemSelector, className, ...props }, ref) => {
+    const t = useTranslations('magicSystem');
     const percentage = Math.min(100, Math.max(0, (current / max) * 100));
 
     return (
@@ -37,6 +40,7 @@ export const SpellPoints = React.forwardRef<HTMLDivElement, Props>(
             <div className="group/value relative flex items-baseline">
               <GhostInput
                 type="number"
+                aria-label={t('spellPoints')}
                 value={current}
                 onChange={(e) => onPointsChange('current', parseInt(e.target.value) || 0)}
                 className="h-auto w-16 p-0 text-center text-3xl font-black text-white outline-none"

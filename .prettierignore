@@ -8,3 +8,5 @@ coverage
 package-lock.json.next-e2e
 test-results
 playwright-report
+reports
+.stryker-tmp

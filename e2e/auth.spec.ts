@@ -1,4 +1,4 @@
-import { expect, test } from './support/fixtures';
+import { expect, hydrated, test } from './support/fixtures';
 import { PASSWORD, createUser } from './support/supabase';
 
 test.describe('autenticação', () => {
@@ -13,7 +13,7 @@ test.describe('autenticação', () => {
     const user = await createUser('login');
     await page.goto('/login');
 
-    await page.getByLabel('Email').fill(user.email);
+    await (await hydrated(page.getByLabel('Email'))).fill(user.email);
     await page.getByLabel('Password').fill(PASSWORD);
     await page.getByRole('button', { name: 'Sign In' }).click();
 
@@ -25,7 +25,7 @@ test.describe('autenticação', () => {
     const user = await createUser('wrong-password');
     await page.goto('/login');
 
-    await page.getByLabel('Email').fill(user.email);
+    await (await hydrated(page.getByLabel('Email'))).fill(user.email);
     await page.getByLabel('Password').fill('not-the-password');
     await page.getByRole('button', { name: 'Sign In' }).click();
 

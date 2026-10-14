@@ -37,4 +37,32 @@ describe('RequestPasswordResetUseCase', () => {
     ).resolves.toBeUndefined();
     expect(email.sendPasswordResetEmail).not.toHaveBeenCalled();
   });
+
+  it.each([
+    ['outro erro de domínio', new UserError(UserErrorCodes.AUTH_RATE_LIMITED)],
+    ['falha de infraestrutura', new Error('Supabase is down')],
+  ])('repassa %s em vez de fingir que deu certo', async (_label, failure) => {
+    const repo = { generateRecoveryLink: vi.fn().mockRejectedValue(failure) };
+    const email = makeEmailService();
+
+    await expect(
+      new RequestPasswordResetUseCase(repo as unknown as AuthRepository, email).execute(
+        'a@b.co',
+        '/reset',
+      ),
+    ).rejects.toBe(failure);
+    expect(email.sendPasswordResetEmail).not.toHaveBeenCalled();
+  });
+
+  it('exige o e-mail', async () => {
+    const repo = { generateRecoveryLink: vi.fn() };
+
+    await expect(
+      new RequestPasswordResetUseCase(
+        repo as unknown as AuthRepository,
+        makeEmailService(),
+      ).execute('', '/reset'),
+    ).rejects.toThrow();
+    expect(repo.generateRecoveryLink).not.toHaveBeenCalled();
+  });
 });

@@ -92,9 +92,9 @@ export function CharacterCard({ character }: CharacterCardProps) {
                 <span>{character.system.replace('_', ' ')}</span>
               </div>
 
-              {/* Desktop-only indicator that card is clickable */}
+              {/* Delete: always visible on touch screens; on desktop it shows on hover or keyboard focus */}
               <div
-                className="hidden h-8 w-8 items-center justify-center rounded-lg border opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100 sm:flex"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100 focus-within:opacity-100 sm:opacity-0"
                 style={{
                   backgroundColor: `${accentColor}1A`,
                   borderColor: `${accentColor}33`,

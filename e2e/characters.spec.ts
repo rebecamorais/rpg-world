@@ -1,11 +1,11 @@
-import { characterUrl, createCharacter, expect, test } from './support/fixtures';
+import { characterUrl, createCharacter, expect, hydrated, test } from './support/fixtures';
 
 test.describe('ciclo do personagem', () => {
   test('cria, edita, salva e continua igual depois de recarregar', async ({ page, user: _ }) => {
     await page.goto('/characters');
     await page.getByRole('link', { name: 'Create first character' }).click();
 
-    await page.getByLabel('Name *').fill('Thorin');
+    await (await hydrated(page.getByLabel('Name *'))).fill('Thorin');
     await page.getByRole('button', { name: 'Create' }).click();
 
     await expect(page).toHaveURL(/\/system\/DnD_5e\/character\/[0-9a-f-]{36}$/);

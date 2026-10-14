@@ -22,6 +22,7 @@
       "auth_error_update_password_required": "New password is required.",
       "profile_error_update_id_required": "Profile ID is required for update.",
       "profile_error_get_id_required": "User ID is required.",
+      "profile_error_username_taken": "This username is already taken.",
       "storage_error_upload_avatar_userid_required": "User ID is required for upload.",
       "storage_error_upload_avatar_size_limit": "File size exceeds 5MB limit.",
       "storage_error_upload_avatar_invalid_type": "Invalid file type. Allowed: JPEG, PNG, WEBP.",
@@ -76,7 +77,10 @@
     "contactTooltip": "Report a bug",
     "footerMessage": "This software is free. View the code on <link>GitHub</link>",
     "passwordMinLength": "Password must be at least {min} characters.",
-    "passwordsDoNotMatch": "Passwords do not match."
+    "passwordsDoNotMatch": "Passwords do not match.",
+    "language": "Language",
+    "decrease": "Decrease",
+    "increase": "Increase"
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -276,7 +280,9 @@
     "customizeDescription": "Change the avatar and accent color of the character",
     "customizeTitle": "Customize Character",
     "avatarLabel": "Avatar",
-    "accentColorLabel": "Accent Color"
+    "accentColorLabel": "Accent Color",
+    "editName": "Edit name",
+    "xpProgress": "Progress to next level"
   },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",
@@ -299,7 +305,8 @@
       "d8": "1d8",
       "d10": "1d10",
       "d12": "1d12"
-    }
+    },
+    "edit": "Edit combat stats"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Spell name (e.g.: fireball)",
@@ -374,7 +381,20 @@
       "usernameMax": "Username must be at most 30 characters.",
       "usernamePattern": "Only lowercase letters, numbers, and underscores are allowed.",
       "fullNameMax": "Name must be at most 100 characters.",
-      "avatarUrlInvalid": "Invalid URL."
+      "avatarUrlInvalid": "Invalid URL.",
+      "primaryColorInvalid": "Pick one of the colors."
+    },
+    "colors": {
+      "default": "Default",
+      "red": "Red",
+      "blue": "Blue",
+      "green": "Green",
+      "purple": "Purple",
+      "yellow": "Yellow",
+      "orange": "Orange",
+      "cyan": "Cyan",
+      "pink": "Pink",
+      "slate": "Slate"
     }
   },
   "avatarUpload": {
@@ -395,7 +415,7 @@
     "INTIMIDATION": "Intimidation",
     "INVESTIGATION": "Investigation",
     "MEDICINE": "Medicine",
-    "NATURE": "Natureza",
+    "NATURE": "Nature",
     "PERCEPTION": "Perception",
     "PERFORMANCE": "Performance",
     "PERSUASION": "Persuasion",
@@ -434,7 +454,10 @@
     "cancel": "Cancel"
   },
   "savingThrows": {
-    "title": "Saving Throws"
+    "title": "Saving Throws",
+    "deathSaveSuccess": "Death save success {count}",
+    "deathSaveFailure": "Death save failure {count}",
+    "resetDeathSaves": "Reset death saves"
   },
   "terms": {
     "title": "Terms of Use",
@@ -654,7 +677,8 @@
       "githubAction": "Sponsors",
       "pixTitle": "Make a Pix",
       "pixCopy": "Pix key copied!",
-      "thanks": "Thank you so much for your care and support! <heart />"
+      "thanks": "Thank you so much for your care and support! <heart />",
+      "pixCopyLabel": "Copy Pix key"
     },
     "copyright": "© {year} Rebs Tech Studio. All rights reserved."
   },

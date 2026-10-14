@@ -7,6 +7,7 @@ describe('formatAssetUrl', () => {
 
   beforeEach(() => {
     process.env = { ...originalEnv };
+    delete process.env.ASSET_BASE_URL;
   });
 
   afterEach(() => {
@@ -71,6 +72,17 @@ describe('formatAssetUrl', () => {
     it('should use the custom host with /api/images/ prefix', () => {
       expect(formatAssetUrl('avatars/user-123/avatar')).toBe(
         'http://localhost:3001/api/images/avatars/user-123/avatar',
+      );
+    });
+  });
+
+  describe('ASSET_BASE_URL', () => {
+    it('takes precedence over the environment default, ignoring trailing slashes', () => {
+      vi.stubEnv('NODE_ENV', 'production');
+      process.env.ASSET_BASE_URL = 'http://localhost:3100/api/images/';
+
+      expect(formatAssetUrl('/avatars/user-123/avatar')).toBe(
+        'http://localhost:3100/api/images/avatars/user-123/avatar',
       );
     });
   });

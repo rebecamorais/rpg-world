@@ -187,7 +187,7 @@ export default function SignUpForm() {
 
         <div className="mt-4 border-t border-white/5 pt-6 text-center text-sm text-gray-400">
           {t('alreadyHaveAccount')}{' '}
-          <Link href="/login" className="text-primary font-semibold hover:underline">
+          <Link href="/login" className="text-primary-flare font-semibold hover:underline">
             {t('login')}
           </Link>
         </div>

@@ -84,7 +84,12 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
           }}
         >
           <DialogTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8 opacity-60 hover:opacity-100">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={t('bulkEditTitle')}
+              className="h-8 w-8 opacity-60 hover:opacity-100"
+            >
               <AppIcon name="Settings2" size="sm" />
             </Button>
           </DialogTrigger>

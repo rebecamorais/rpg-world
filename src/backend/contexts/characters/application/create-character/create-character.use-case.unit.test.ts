@@ -45,4 +45,20 @@ describe('CreateCharacterUseCase ', () => {
       }),
     ).rejects.toThrowError(CharacterErrorCodes.CREATE_NAME_REQUIRED);
   });
+
+  it('tira espaços do nome e usa nível 1, sem classe e sem raça por padrão', async () => {
+    const character = await useCase.execute({
+      id: 'char-defaults',
+      name: '  Legolas  ',
+      ownerUsername: 'user1',
+      system: 'DnD_5e',
+    });
+
+    expect(character.toJSON()).toMatchObject({
+      name: 'Legolas',
+      level: 1,
+      class: '',
+      race: '',
+    });
+  });
 });

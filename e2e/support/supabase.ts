@@ -15,11 +15,13 @@ export function adminClient() {
   return createClient(url, secretKey, { auth: { persistSession: false } });
 }
 
-export async function createUser(label: string): Promise<TestUser> {
-  const email = `${label}-${crypto.randomUUID()}@e2e.test`;
+export const uniqueEmail = (label: string) => `${label}-${crypto.randomUUID()}@e2e.test`;
+
+export async function createUser(label: string, password = PASSWORD): Promise<TestUser> {
+  const email = uniqueEmail(label);
   const { data, error } = await adminClient().auth.admin.createUser({
     email,
-    password: PASSWORD,
+    password,
     email_confirm: true,
   });
   if (error || !data.user) throw error ?? new Error('createUser returned no user');
