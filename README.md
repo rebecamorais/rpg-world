@@ -98,18 +98,20 @@ Para detalhes técnicos mais profundos, consulte nossos guias:
 
 ## 🛠️ Scripts Disponíveis
 
-| Comando              | Descrição                                                    |
-| -------------------- | ------------------------------------------------------------ |
-| `npm run dev`        | Inicia o servidor de desenvolvimento                         |
-| `npm run infra up`   | Sobe Docker, sincroniza pastas e gera tipos                  |
-| `npm run infra down` | Para todos os containers da infraestrutura                   |
-| `npm run clean`      | Reset total: apaga volumes, recria o banco e limpa o docker  |
-| `npm run db:ui`      | Abre o Supabase Studio e o Inbucket no navegador             |
-| `npm run test`       | Executa a pipeline completa (Unitários + Infra + Integração) |
-| `npm run test:unit`  | Executa apenas os testes unitários                           |
-| `npm run test:ui`    | Abre a interface visual do Vitest                            |
-| `npm run lint`       | Verifica erros de linting                                    |
-| `npm run format`     | Formata o código usando Prettier                             |
+| Comando                 | Descrição                                                    |
+| ----------------------- | ------------------------------------------------------------ |
+| `npm run dev`           | Inicia o servidor de desenvolvimento                         |
+| `npm run infra up`      | Sobe Docker, sincroniza pastas e gera tipos                  |
+| `npm run infra down`    | Para todos os containers da infraestrutura                   |
+| `npm run clean`         | Reset total: apaga volumes, recria o banco e limpa o docker  |
+| `npm run db:ui`         | Abre o Supabase Studio e o Inbucket no navegador             |
+| `npm run test`          | Executa a pipeline completa (Unitários + Infra + Integração) |
+| `npm run test:unit`     | Executa apenas os testes unitários                           |
+| `npm run test:ui`       | Abre a interface visual do Vitest                            |
+| `npm run test:e2e`      | Testes ponta a ponta com Playwright (build de produção)      |
+| `npm run test:coverage` | Cobertura dos testes unitários (relatório em `coverage/`)    |
+| `npm run lint`          | Verifica erros de linting                                    |
+| `npm run format`        | Formata o código usando Prettier                             |
 
 ---
 

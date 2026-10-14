@@ -5,4 +5,4 @@
 export type AssetVersionGenerator = () => string;
 
 export const newAssetVersion: AssetVersionGenerator = () =>
-  `${Date.now().toString(36)}${crypto.randomUUID().slice(0, 4)}`;
+  `${Date.now().toString(36)}${crypto.randomUUID().slice(0, 8)}`;

@@ -36,48 +36,53 @@ interface HealthValuesProps {
   onHpChange: (field: 'hpCurrent' | 'hpMax' | 'hpTemp', value: number) => void;
 }
 
-const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProps) => (
-  <div className="flex flex-1 flex-col items-center justify-center gap-2 py-4">
-    <div className="flex items-center justify-center">
-      <div className="flex items-baseline gap-1">
-        <GhostInput
-          type="number"
-          value={currentHp}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            onHpChange('hpCurrent', parseInt(e.target.value) || 0)
-          }
-          className="h-auto w-20 p-0 text-right text-5xl font-black text-white drop-shadow-2xl outline-none"
-        />
-        <div className="flex items-baseline gap-1 self-end px-1 pb-1.5 font-bold">
-          <span className="text-lg text-white/20">/</span>
-          <span className="text-lg text-white/40">{maxHp}</span>
-        </div>
-      </div>
-
-      {tempHp > 0 && (
-        <div className="text-yellow ml-2 flex items-baseline self-end pb-2 font-black transition-all duration-300">
-          <span className="text-xs opacity-40">(+</span>
+const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProps) => {
+  const t = useTranslations('combatStats');
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-2 py-4">
+      <div className="flex items-center justify-center">
+        <div className="flex items-baseline gap-1">
           <GhostInput
             type="number"
-            value={tempHp}
+            aria-label={t('hitPoints')}
+            value={currentHp}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onHpChange('hpTemp', parseInt(e.target.value) || 0)
+              onHpChange('hpCurrent', parseInt(e.target.value) || 0)
             }
-            className="text-yellow h-auto w-8 p-0 text-center text-xs font-black outline-none"
+            className="h-auto w-20 p-0 text-right text-5xl font-black text-white drop-shadow-2xl outline-none"
           />
-          <span className="text-xs opacity-40">)</span>
+          <div className="flex items-baseline gap-1 self-end px-1 pb-1.5 font-bold">
+            <span className="text-lg text-white/20">/</span>
+            <span className="text-lg text-white/40">{maxHp}</span>
+          </div>
         </div>
-      )}
-    </div>
 
-    <HealthBar
-      current={currentHp ?? 0}
-      max={maxHp || 1}
-      temp={tempHp ?? 0}
-      className="mt-4 w-full px-2"
-    />
-  </div>
-);
+        {tempHp > 0 && (
+          <div className="text-yellow ml-2 flex items-baseline self-end pb-2 font-black transition-all duration-300">
+            <span className="text-xs opacity-40">(+</span>
+            <GhostInput
+              type="number"
+              aria-label={t('tempHp')}
+              value={tempHp}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onHpChange('hpTemp', parseInt(e.target.value) || 0)
+              }
+              className="text-yellow h-auto w-8 p-0 text-center text-xs font-black outline-none"
+            />
+            <span className="text-xs opacity-40">)</span>
+          </div>
+        )}
+      </div>
+
+      <HealthBar
+        current={currentHp ?? 0}
+        max={maxHp || 1}
+        temp={tempHp ?? 0}
+        className="mt-4 w-full px-2"
+      />
+    </div>
+  );
+};
 
 export const HealthPointsCard = React.forwardRef<HTMLDivElement, HealthPointsCardProps>(
   ({ currentHp, maxHp, tempHp, onHpChange, className, ...props }, ref) => {

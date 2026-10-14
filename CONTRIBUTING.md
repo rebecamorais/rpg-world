@@ -87,6 +87,8 @@ Utilizamos **Conventional Commits** para manter um histórico legível:
 ## 🧪 5. Estratégia de Testes
 
 - **Colocation**: Testes unitários (`.unit.test.ts`) e de integração (`.integration.test.ts`) devem residir na mesma pasta do arquivo alvo dentro de `src/`.
+- **Frontend**: Testes de hooks, contexts e componentes usam a extensão `.unit.test.tsx` e rodam em jsdom com Testing Library (`test/helpers/render.tsx` monta os providers do app). Teste comportamento visível, sem snapshots.
+- **Ponta a ponta**: Fluxos completos ficam em `e2e/` (Playwright). `npm run test:e2e` gera um build de produção na porta 3100 e usa o Supabase de teste, que é limpo no início de cada execução. Não rode junto com os testes de integração, porque os dois usam o mesmo banco. Cada teste cria o próprio usuário, e qualquer erro no console do navegador (CSP, hidratação) faz o teste falhar.
 - **Pipeline**: Antes de submeter um PR, garanta que `npm run test` passe localmente.
 
 ---
