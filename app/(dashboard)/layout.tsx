@@ -19,10 +19,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
         {/* Sidebar */}
         <Sidebar />
 
-        {/* Main Content Area */}
-        <main className="min-w-0 flex-1">
+        {/* Content area (the main landmark is in the root layout) */}
+        <div className="min-w-0 flex-1">
           <div className="flex w-full flex-col items-center">{children}</div>
-        </main>
+        </div>
       </div>
     </UserProvider>
   );

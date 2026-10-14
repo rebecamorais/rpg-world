@@ -37,34 +37,48 @@ export default function CharacterList() {
 
   if (!currentUser) return null;
 
+  // The page title is there in every state (loading, error, empty), as the page's h1
+  const title = <h1 className="text-display text-foreground">{t('title')}</h1>;
+
   if (error) {
-    return <ErrorState title={t('loadErrorTitle')} description={getErrorMessage(error)} />;
+    return (
+      <div className="space-y-6">
+        {title}
+        <ErrorState title={t('loadErrorTitle')} description={getErrorMessage(error)} />
+      </div>
+    );
   }
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center py-20">
-        <LoadingState thematic />
+      <div className="space-y-6">
+        {title}
+        <div className="flex min-h-[400px] items-center justify-center py-20">
+          <LoadingState thematic />
+        </div>
       </div>
     );
   }
 
   if (characters.length === 0) {
     return (
-      <EmptyState
-        icon="UserPlus"
-        title={t('emptyState')}
-        description={t('createFirstDescription')}
-        className="min-h-[450px]"
-        action={
-          <Button asChild size="lg">
-            <Link href="/characters/new">
-              <AppIcon name="Plus" size={20} aria-hidden="true" />
-              {t('createFirst')}
-            </Link>
-          </Button>
-        }
-      />
+      <div className="space-y-6">
+        {title}
+        <EmptyState
+          icon="UserPlus"
+          title={t('emptyState')}
+          description={t('createFirstDescription')}
+          className="min-h-[450px]"
+          action={
+            <Button asChild size="lg">
+              <Link href="/characters/new">
+                <AppIcon name="Plus" size={20} aria-hidden="true" />
+                {t('createFirst')}
+              </Link>
+            </Button>
+          }
+        />
+      </div>
     );
   }
 
@@ -73,9 +87,7 @@ export default function CharacterList() {
       {/* Header Section */}
       <div className="border-muted/20 flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-2">
-          <h2 className="text-foreground text-4xl font-black tracking-tighter sm:text-5xl">
-            {t('title')}
-          </h2>
+          {title}
           <div className="flex items-center gap-3">
             <div className="border-success-muted bg-success-surface flex h-5 items-center gap-1.5 rounded-full border px-2.5 py-0.5">
               <span className="bg-success h-1.5 w-1.5 animate-pulse rounded-full shadow-[0_0_8px_var(--success-muted)]" />

@@ -7,7 +7,7 @@ export default async function TermsPage() {
   const commonT = await getTranslations('common');
 
   return (
-    <main className="container mx-auto max-w-4xl flex-1 px-4 py-20">
+    <div className="container mx-auto max-w-4xl flex-1 px-4 py-20">
       <div className="mb-8">
         <Link
           href="/"
@@ -70,6 +70,6 @@ export default async function TermsPage() {
           <p className="text-muted-foreground leading-relaxed">{t('sections.law.content')}</p>
         </section>
       </div>
-    </main>
+    </div>
   );
 }

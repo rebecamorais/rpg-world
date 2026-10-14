@@ -17,12 +17,22 @@ async function violations(page: import('@playwright/test').Page, disabledRules: 
     }));
 }
 
+/** Every page has one main landmark and one h1, so screen readers can jump straight to it. */
+async function landmarks(page: import('@playwright/test').Page) {
+  return {
+    main: await page.locator('main, [role="main"]').count(),
+    h1: await page.locator('h1').count(),
+  };
+}
+
 test.describe('acessibilidade (axe)', () => {
-  for (const path of ['/login', '/register', '/forgot-password']) {
+  for (const path of ['/', '/login', '/register', '/forgot-password']) {
     test(`página pública ${path}`, async ({ page }) => {
       await page.goto(path);
-      await page.locator('form').waitFor();
+      await page.getByRole('main').waitFor();
+      await page.waitForTimeout(300);
       expect(await violations(page)).toEqual([]);
+      expect(await landmarks(page)).toEqual({ main: 1, h1: 1 });
     });
   }
 
@@ -39,6 +49,7 @@ test.describe('acessibilidade (axe)', () => {
       await page.getByRole('main').first().waitFor();
       await page.waitForTimeout(500); // client data (character, profile) settles
       expect.soft(await violations(page), path).toEqual([]);
+      expect.soft(await landmarks(page), path).toEqual({ main: 1, h1: 1 });
     }
   });
 

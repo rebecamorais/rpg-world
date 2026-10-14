@@ -135,7 +135,7 @@ export default function ProfileForm() {
   return (
     <Card className="bg-card/80 mx-auto w-full max-w-lg shadow-2xl backdrop-blur-md">
       <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
+        <CardTitle as="h2">{t('title')}</CardTitle>
         <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>

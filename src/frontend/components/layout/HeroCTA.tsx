@@ -24,9 +24,7 @@ export default function HeroCTA({ isAuthenticated }: HeroCTAProps) {
 
   return (
     <>
-      <h2 className="mb-6 max-w-2xl text-4xl font-extrabold tracking-tight">
-        {tLanding('heroTitle')}
-      </h2>
+      <h1 className="text-display mb-6 max-w-2xl">{tLanding('heroTitle')}</h1>
       <p className="text-muted-foreground mb-10 max-w-xl text-lg sm:text-xl">
         {tLanding('heroSubtitle')}
       </p>

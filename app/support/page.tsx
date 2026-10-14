@@ -17,10 +17,10 @@ export default async function SupportPage() {
   const user = await api.authApi.getSessionUser();
 
   return (
-    <main className="flex min-h-[calc(100vh-var(--header-height)-200px)] flex-1 flex-col items-center justify-center px-4 py-8">
+    <div className="flex min-h-[calc(100vh-var(--header-height)-200px)] flex-1 flex-col items-center justify-center px-4 py-8">
       <div className="w-full max-w-2xl">
         <ContactForm initialEmail={user?.email || ''} />
       </div>
-    </main>
+    </div>
   );
 }
