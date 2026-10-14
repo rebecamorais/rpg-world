@@ -67,15 +67,12 @@
     "logout": "Log out",
     "confirm": "Confirm",
     "saveChanges": "Save Changes",
-    "unsavedChanges": "Unsaved changes",
     "close": "Close",
-    "add": "Add",
     "title": "RPG World",
     "en": "English",
     "pt": "Portuguese",
     "contact": "Bug",
     "contactTooltip": "Report a bug",
-    "footerMessage": "This software is free. View the code on <link>GitHub</link>",
     "passwordMinLength": "Password must be at least {min} characters.",
     "passwordsDoNotMatch": "Passwords do not match.",
     "language": "Language",
@@ -98,7 +95,6 @@
     "processing": "Processing...",
     "verifyEmailTitle": "Check your email 📬",
     "verifyEmailDescription": "We sent a magic link to <bold>{email}</bold>. Click the link to sign in.",
-    "loginFailed": "Failed to login.",
     "invalidEmailError": "Invalid email.",
     "passwordRequiredError": "Password is required.",
     "forgotPassword": "Forgot password?",
@@ -128,10 +124,6 @@
     }
   },
   "auth": {
-    "errors": {
-      "invalidSecurityToken": "Invalid or expired security token.",
-      "signUpFailed": "Failed to create account. Please try again later."
-    },
     "confirm": {
       "title": "Confirming...",
       "errorTitle": "Authentication Error",
@@ -142,11 +134,9 @@
   "landing": {
     "heroTitle": "Your ultimate RPG companion.",
     "heroSubtitle": "Manage your character sheets, track attributes, spells and combat effortlessly.",
-    "ctaStart": "Start Playing",
-    "ctaDashboard": "Go to Dashboard"
+    "ctaStart": "Start Playing"
   },
   "home": {
-    "greeting": "Hello, {name}.",
     "title": "RPG World"
   },
   "characterCreation": {
@@ -172,27 +162,21 @@
     "createFirst": "Create first character",
     "title": "Characters",
     "createNew": "Create New Character",
-    "newButton": "+ New",
     "level": "Level {level}",
     "requireLogin": "Please log in to see your characters.",
     "notFoundOrNoPermission": "Character not found or you don't have permission.",
     "deleteSuccess": "Character deleted successfully.",
-    "deleteError": "Error deleting character.",
     "expand": "Expand",
     "collapse": "Collapse",
     "school": "School",
     "saveSuccess": "Character saved successfully!",
-    "saveError": "Failed to save on the server.",
-    "unsavedChanges": "You have unsaved changes.",
     "passivePerception": "Passive Perception",
     "search": "Search",
     "learn": "Learn",
     "allDamage": "All Damage",
-    "preparedSpells": "Known Spells",
     "forgetSpell": "Forget spell",
     "prepareSpell": "Prepare spell",
     "unprepareSpell": "Unprepare spell",
-    "preparedBadge": "Prepared",
     "levelDetail": "Level {level}",
     "spellbookIndex": "Index",
     "cantrip": "Cantrip",
@@ -202,20 +186,13 @@
     "spellsFound": "spells found",
     "concentration": "Concentration",
     "ritual": "Ritual",
-    "upcasting": "Scaling",
     "atHigherLevels": "At Higher Levels",
-    "slotLevel": "Slot",
-    "estimatedEffect": "Estimated Effect",
-    "scalingBonus": "Effect +",
-    "components": "Components",
     "castingTime": "Casting Time",
     "range": "Range",
     "duration": "Duration",
     "characterCount": "{count, plural, one {1 character ready for adventure} other {# characters ready for adventure}}",
-    "loadError": "Error loading characters: {message}",
     "deleteDialogTitle": "Delete character?",
     "deleteDialogDescription": "Are you sure you want to delete the character {name}? This action cannot be undone and all data will be lost.",
-    "confirmDelete": "Confirm Deletion",
     "deleteConfirmInstruction": "To confirm, type the character's name: <bold>{name}</bold>",
     "deleteConfirmPlaceholder": "Type the exact name here",
     "namePlaceholder": "Character Name",
@@ -231,7 +208,6 @@
       "spells": "Your spells and cantrips will be listed here.",
       "inventory": "Equipment, potions, and currency will be managed here."
     },
-    "changePhoto": "Change Photo",
     "loreFields": {
       "appearance": "Appearance",
       "personality": "Personality",
@@ -276,7 +252,6 @@
     "alignment": "Alignment",
     "alignmentPlaceholder": "Define Alignment...",
     "xp": "Experience",
-    "spellbook": "Spellbook",
     "customizeDescription": "Change the avatar and accent color of the character",
     "customizeTitle": "Customize Character",
     "avatarLabel": "Avatar",
@@ -318,7 +293,6 @@
     "allSchools": "All schools",
     "allClasses": "All classes",
     "noSpellsFound": "No spells found.",
-    "loadingSpells": "Channeling spells...",
     "clearFilters": "Clear all filters",
     "pagination": "Showing {count} of {total} spells",
     "toasts": {
@@ -334,8 +308,6 @@
     "systemUsed": "System Used",
     "slotsCapacity": "Slots Capacity per Level",
     "circle": "Circle {level}",
-    "noSlotsConfigured": "No Slots configured.",
-    "done": "Done",
     "spellPoints": "Spell Points",
     "spellSlots": "Spell Slots",
     "level": "Lv {level}",
@@ -375,7 +347,6 @@
     "save": "Save Profile",
     "saving": "Saving...",
     "saveSuccess": "Profile updated successfully!",
-    "saveError": "Error updating profile.",
     "validation": {
       "usernameMin": "Username must be at least 3 characters.",
       "usernameMax": "Username must be at most 30 characters.",
@@ -660,24 +631,19 @@
     },
     "socials": {
       "title": "Social",
-      "github": "GitHub",
-      "community": "Community"
+      "github": "GitHub"
     },
     "legal": {
       "title": "Legal",
       "terms": "Terms of Use",
-      "privacy": "Privacy Policy",
-      "cookies": "Cookie Policy"
+      "privacy": "Privacy Policy"
     },
     "support": {
       "title": "Support",
       "kofi": "Ko-fi",
-      "kofiAction": "Support",
       "githubSponsors": "GitHub Sponsors",
-      "githubAction": "Sponsors",
       "pixTitle": "Make a Pix",
       "pixCopy": "Pix key copied!",
-      "thanks": "Thank you so much for your care and support! <heart />",
       "pixCopyLabel": "Copy Pix key"
     },
     "copyright": "© {year} Rebs Tech Studio. All rights reserved."

@@ -1,4 +1,4 @@
-export type GameSystem = 'DnD_5e';
+type GameSystem = 'DnD_5e';
 
 export interface CharacterBase {
   id: string;

@@ -92,6 +92,7 @@ Utilizamos **Conventional Commits** para manter um histórico legível:
 - **E-mails no E2E**: O stack de teste tem o Inbucket (Mailpit) ligado, com SMTP na porta 54425 e interface em http://localhost:54424. Os testes de cadastro e de recuperação de senha leem os e-mails por lá.
 - **Cobertura**: `npm run test:coverage` roda os unitários com um piso de cobertura, definido em `test/vitest.config.unit.ts`. O CI falha se a cobertura cair abaixo dele; suba o piso quando a cobertura crescer.
 - **Mutation testing**: `npm run test:mutation` (Stryker) altera o domínio, os use cases e as regras de D&D de propósito e verifica se algum teste falha. Um mutante que sobrevive aponta uma asserção que falta. Leva cerca de 3 minutos e roda sob demanda, fora do CI. O relatório fica em `reports/mutation/index.html`.
+- **Código morto**: `npm run knip` acusa arquivos, exports e dependências sem uso (config em `knip.json`) e roda no CI. Exports dos componentes shadcn em `ui/` são ignorados de propósito.
 - **Pipeline**: Antes de submeter um PR, garanta que `npm run test` passe localmente.
 
 ---

@@ -1,41 +1,11 @@
 import { Lore } from '@backend/contexts/lore/domain/Lore';
 
-import {
-  calculateSavingThrow,
-  calculateSkillValue,
-  getModifier,
-  getProficiencyBonus,
-} from '@shared/systems/dnd5e/calculations';
 import type { SkillKey } from '@shared/systems/dnd5e/constants/skill';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 import { Attributes } from '../value-object/Attributes';
 import { HealthPoints } from '../value-object/HealthPoints';
 import { Character } from './Character';
-
-export interface Spell {
-  id: string;
-  externalIndex?: string;
-  level: number;
-  school: string;
-  castingTime: string;
-  castingValue?: number | null;
-
-  // Structured Mechanics
-  rangeValue?: number | null;
-  rangeUnit?: string | null;
-  durationValue?: number | null;
-  durationUnit?: string | null;
-
-  concentration: boolean;
-  ritual: boolean;
-  components: string[];
-  classes: string[];
-  name: string;
-  description: string;
-  higherLevel?: string | null;
-  material?: string | null;
-}
 
 // Same keys the sheet stores and the shared rules use (e.g. 'ACROBATICS'), so the domain
 // can't drift from the persisted data.
@@ -159,45 +129,6 @@ export class DnD5eCharacter extends Character {
       CHA: false,
     };
     return { ...defaultSaves, ...saves };
-  }
-
-  // D&D 5e rules live in @shared/systems/dnd5e/calculations (also used by the sheet)
-  getModifier(attributeKey: AttributeKey): number {
-    return getModifier(this.attributes.get(attributeKey));
-  }
-
-  get proficiencyBonus(): number {
-    return getProficiencyBonus(this.level);
-  }
-
-  calculateSkillValue(skillKey: SkillKey, relatedAttribute: AttributeKey): number {
-    const skill = this.skills[skillKey];
-    return calculateSkillValue(
-      this.attributes.get(relatedAttribute),
-      this.level,
-      skill?.isProficient ?? false,
-      skill?.expertise ?? false,
-    );
-  }
-
-  calculateSavingThrow(attributeKey: AttributeKey): number {
-    return calculateSavingThrow(
-      this.attributes.get(attributeKey),
-      this.level,
-      this.savingThrowProficiencies[attributeKey],
-    );
-  }
-
-  getCombatStats(): Record<string, unknown> {
-    return {
-      ac: this.ac,
-      hpCurrent: this.hp.current,
-      hpMax: this.hp.max,
-      hpTemp: this.hpTemp,
-      speed: this.speed,
-      initiative: this.initiative + this.getModifier('DEX'), // Initiative normally is just DEX mod, plus possible bonuses
-      proficiencyBonus: this.proficiencyBonus,
-    };
   }
 
   toJSON(): Record<string, unknown> {

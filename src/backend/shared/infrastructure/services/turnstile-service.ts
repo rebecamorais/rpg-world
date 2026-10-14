@@ -1,6 +1,6 @@
 import 'server-only';
 
-export interface TurnstileVerificationResponse {
+interface TurnstileVerificationResponse {
   success: boolean;
   'error-codes'?: string[];
   challenge_ts?: string;

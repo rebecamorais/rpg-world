@@ -3,7 +3,7 @@ import { AssetVersionGenerator, newAssetVersion } from '@backend/shared/domain/a
 
 import { UserError, UserErrorCodes } from '../domain/UserError';
 
-export const AVATAR_BUCKET = 'avatars';
+const AVATAR_BUCKET = 'avatars';
 export const MAX_AVATAR_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 export const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 

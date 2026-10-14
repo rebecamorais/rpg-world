@@ -13,7 +13,6 @@ import { SignUpUseCase } from './application/sign-up.use-case';
 import { UpdatePasswordUseCase } from './application/update-password.use-case';
 import { UpdateProfileUseCase } from './application/update-profile.use-case';
 import { UploadAvatarUseCase } from './application/upload-avatar.use-case';
-import { User } from './domain/User';
 import { SupabaseAuthRepository } from './infrastructure/repositories/supabase-auth-repository';
 import { SupabaseProfileRepository } from './infrastructure/repositories/supabase-profile-repository';
 
@@ -44,8 +43,6 @@ export interface UserProfileContext {
   updateProfile: UpdateProfileUseCase;
   uploadAvatar: UploadAvatarUseCase;
 }
-
-export type { User };
 
 export const createAuthContext = (config: AuthContextConfig): AuthContext => {
   const authRepository = new SupabaseAuthRepository(config.userClient, config.adminClient);

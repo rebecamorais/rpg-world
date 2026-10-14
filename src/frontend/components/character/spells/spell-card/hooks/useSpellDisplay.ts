@@ -21,7 +21,6 @@ export interface SpellComponentDisplay {
 }
 
 export interface SpellDisplayValues {
-  name: string;
   school: string;
   damage: string | null;
   castingTime: string;
@@ -40,7 +39,6 @@ export interface SpellDisplayValues {
   castingTimePrefix: string;
   rangePrefix: string;
   durationPrefix: string;
-  schoolPrefix: string;
   components: SpellComponentDisplay[];
 }
 
@@ -68,7 +66,7 @@ export function useSpellDisplay(spell: Spell) {
     const damageIcon = damageKey && DAMAGE_TYPE_ICONS[damageKey as keyof typeof DAMAGE_TYPE_ICONS];
     const categoryIcon = categoryKey && CATEGORY_THEMES[categoryKey]?.icon;
 
-    // 3. Resolve Registry School Icon (Secondary now)
+    // 3. Registry school icon, the fallback for the main icon
     const resolvedSchoolKey = schoolKey as keyof typeof SPELL_SCHOOL_ICONS;
     const schoolIcon = SPELL_SCHOOL_ICONS[resolvedSchoolKey] || MECHANIC_ICONS.default;
 
@@ -106,7 +104,6 @@ export function useSpellDisplay(spell: Spell) {
     });
 
     const displayValues: SpellDisplayValues = {
-      name: spell.name,
       school: translatedSchool,
       damage: translatedDamageType,
       castingTime: castingTimeLabel,
@@ -139,14 +136,12 @@ export function useSpellDisplay(spell: Spell) {
       castingTimePrefix: tCharacters('castingTime'),
       rangePrefix: tCharacters('range'),
       durationPrefix: tCharacters('duration'),
-      schoolPrefix: tCharacters('school'),
       components,
     };
 
     return {
       theme,
       mainIcon,
-      schoolIcon,
       displayValues,
     };
   }, [spell, tData, tCharacters]);

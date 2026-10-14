@@ -67,15 +67,12 @@
     "logout": "Sair",
     "confirm": "Confirmar",
     "saveChanges": "Salvar Alterações",
-    "unsavedChanges": "Alterações não salvas",
     "close": "Fechar",
-    "add": "Adicionar",
     "title": "RPG World",
     "en": "Inglês",
     "pt": "Português",
     "contact": "Bug",
     "contactTooltip": "Reportar um Bug",
-    "footerMessage": "Este software é livre. Veja o código no <link>GitHub</link>",
     "passwordMinLength": "A senha precisa ter pelo menos {min} caracteres.",
     "passwordsDoNotMatch": "As senhas não coincidem.",
     "language": "Idioma",
@@ -98,7 +95,6 @@
     "processing": "Processando...",
     "verifyEmailTitle": "Verifique seu e-mail 📬",
     "verifyEmailDescription": "Enviamos um link mágico para <bold>{email}</bold>. Clique no link para entrar.",
-    "loginFailed": "Falha ao realizar login.",
     "invalidEmailError": "E-mail inválido.",
     "passwordRequiredError": "Senha é obrigatória.",
     "forgotPassword": "Esqueceu a senha?",
@@ -128,10 +124,6 @@
     }
   },
   "auth": {
-    "errors": {
-      "invalidSecurityToken": "Token de segurança inválido ou expirado.",
-      "signUpFailed": "Falha ao criar conta. Tente novamente mais tarde."
-    },
     "confirm": {
       "title": "Confirmando...",
       "errorTitle": "Erro na Autenticação",
@@ -142,11 +134,9 @@
   "landing": {
     "heroTitle": "O seu companheiro definitivo de RPG.",
     "heroSubtitle": "Gerencie todas as suas fichas, acompanhe atributos, magias e combates sem esforço.",
-    "ctaStart": "Começar a Jogar",
-    "ctaDashboard": "Acessar o Painel"
+    "ctaStart": "Começar a Jogar"
   },
   "home": {
-    "greeting": "Olá, {name}.",
     "title": "RPG World"
   },
   "characterCreation": {
@@ -172,27 +162,21 @@
     "createFirst": "Criar primeiro personagem",
     "title": "Personagens",
     "createNew": "Criar novo Personagem",
-    "newButton": "+ Novo",
     "level": "Nível {level}",
     "requireLogin": "Faça login para ver seus personagens.",
     "notFoundOrNoPermission": "Personagem não encontrado ou você não tem permissão.",
     "deleteSuccess": "Personagem excluído com sucesso.",
-    "deleteError": "Erro ao deletar personagem.",
     "expand": "Expandir",
     "collapse": "Recolher",
     "school": "Escola",
     "saveSuccess": "Personagem salvo com sucesso!",
-    "saveError": "Falha ao salvar no servidor.",
-    "unsavedChanges": "Você tem alterações não salvas.",
     "passivePerception": "Percepção Passiva",
     "search": "Buscar",
     "learn": "Aprender",
     "allDamage": "Todos os Danos",
-    "preparedSpells": "Magias Conhecidas",
     "forgetSpell": "Esquecer magia",
     "prepareSpell": "Preparar magia",
     "unprepareSpell": "Despreparar magia",
-    "preparedBadge": "Preparada",
     "levelDetail": "Nível {level}",
     "spellbookIndex": "Índice",
     "cantrip": "Truque",
@@ -202,20 +186,13 @@
     "spellsFound": "magias encontradas",
     "concentration": "Concentração",
     "ritual": "Ritual",
-    "upcasting": "Escalável",
     "atHigherLevels": "Em Níveis Superiores",
-    "slotLevel": "Slot",
-    "estimatedEffect": "Efeito Estimado",
-    "scalingBonus": "Efeito +",
-    "components": "Componentes",
     "castingTime": "Tempo de Conjuramento",
     "range": "Alcance",
     "duration": "Duração",
     "characterCount": "{count, plural, one {1 personagem pronto para aventura} other {# personagens prontos para aventura}}",
-    "loadError": "Erro ao carregar personagens: {message}",
     "deleteDialogTitle": "Excluir personagem?",
     "deleteDialogDescription": "Tem certeza que deseja excluir o personagem {name}? Essa ação não poderá ser desfeita e todos os dados serão perdidos.",
-    "confirmDelete": "Confirmar Exclusão",
     "deleteConfirmInstruction": "Para confirmar, digite o nome do personagem: <bold>{name}</bold>",
     "deleteConfirmPlaceholder": "Digite o nome exato aqui",
     "namePlaceholder": "Nome do Personagem",
@@ -231,7 +208,6 @@
       "spells": "Suas magias e truques serão listados aqui.",
       "inventory": "Equipamentos, poções e moedas serão gerenciados aqui."
     },
-    "changePhoto": "Trocar Foto",
     "loreFields": {
       "appearance": "Aparência",
       "personality": "Personalidade",
@@ -276,7 +252,6 @@
     "alignment": "Alinhamento",
     "alignmentPlaceholder": "Definir Alinhamento...",
     "xp": "Experiência",
-    "spellbook": "Grimório de Magias",
     "customizeDescription": "Altere o avatar e a cor de destaque do personagem",
     "customizeTitle": "Personalizar Personagem",
     "avatarLabel": "Avatar",
@@ -318,7 +293,6 @@
     "allSchools": "Todas as escolas",
     "allClasses": "Todas as classes",
     "noSpellsFound": "Nenhuma magia encontrada.",
-    "loadingSpells": "Canalizando magias...",
     "clearFilters": "Limpar todos os filtros",
     "pagination": "Mostrando {count} de {total} magias",
     "toasts": {
@@ -334,8 +308,6 @@
     "systemUsed": "Sistema Usado",
     "slotsCapacity": "Capacidade de Slots por Nível",
     "circle": "Círculo {level}",
-    "noSlotsConfigured": "Sem Slots configurados.",
-    "done": "Concluir",
     "spellPoints": "Pontos de Magia",
     "spellSlots": "Espaços de Magia",
     "level": "Nv {level}",
@@ -375,7 +347,6 @@
     "save": "Salvar Perfil",
     "saving": "Salvando...",
     "saveSuccess": "Perfil atualizado com sucesso!",
-    "saveError": "Erro ao atualizar perfil.",
     "validation": {
       "usernameMin": "Username deve ter ao menos 3 caracteres.",
       "usernameMax": "Username deve ter no máximo 30 caracteres.",
@@ -660,24 +631,19 @@
     },
     "socials": {
       "title": "Social",
-      "github": "GitHub",
-      "community": "Comunidade"
+      "github": "GitHub"
     },
     "legal": {
       "title": "Legal",
       "terms": "Termos de Uso",
-      "privacy": "Política de Privacidade",
-      "cookies": "Política de Cookies"
+      "privacy": "Política de Privacidade"
     },
     "support": {
       "title": "Apoio",
       "kofi": "Ko-fi",
-      "kofiAction": "Apoiar",
       "githubSponsors": "GitHub Sponsors",
-      "githubAction": "Sponsors",
       "pixTitle": "Fazer um Pix",
       "pixCopy": "Chave Pix copiada!",
-      "thanks": "Muito obrigada pelo seu carinho e apoio! <heart />",
       "pixCopyLabel": "Copiar chave Pix"
     },
     "copyright": "© {year} Rebs Tech Studio. Todos os direitos reservados."

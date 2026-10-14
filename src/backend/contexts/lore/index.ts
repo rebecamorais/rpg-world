@@ -6,11 +6,10 @@ import { UpdateLoreUseCase } from './application/update-lore/update-lore.use-cas
 import { CharacterOwnership } from './domain/CharacterOwnership';
 import { Lore } from './domain/Lore';
 import { LoreContext } from './domain/LoreContext';
-import { LoreRepository } from './domain/repository/lore.repo';
 import { SupabaseLoreRepository } from './infrastructure/repositories/supabase-lore.repository';
 
 export { Lore };
-export type { CharacterOwnership, LoreRepository, LoreContext };
+export type { CharacterOwnership, LoreContext };
 
 export function createLoreContext(config: {
   dbClient: SupabaseClient;
