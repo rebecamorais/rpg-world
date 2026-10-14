@@ -61,11 +61,21 @@ describe('ResetPasswordForm', () => {
     expect(auth.updateUser).toHaveBeenCalledWith({ password: 'new-password' });
   });
 
-  it('não envia quando as senhas não conferem', async () => {
+  it('explica o erro quando as senhas não conferem, sem enviar', async () => {
     renderWithProviders(<ResetPasswordForm />);
 
     await submit('new-password', 'different');
 
+    expect(await screen.findByText(messages.common.passwordsDoNotMatch)).toBeInTheDocument();
+    expect(auth.updateUser).not.toHaveBeenCalled();
+  });
+
+  it('explica o tamanho mínimo da senha, sem enviar', async () => {
+    renderWithProviders(<ResetPasswordForm />);
+
+    await submit('short');
+
+    expect(await screen.findByText('Password must be at least 8 characters.')).toBeInTheDocument();
     expect(auth.updateUser).not.toHaveBeenCalled();
   });
 

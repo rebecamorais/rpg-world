@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { render } from 'react-email';
 import nodemailer, { type Transporter } from 'nodemailer';
+import { render } from 'react-email';
 import 'server-only';
 
 import { EmailService } from '../../domain/EmailService';

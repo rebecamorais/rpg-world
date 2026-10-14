@@ -23,8 +23,8 @@ describe('updatePasswordAction', () => {
     expect(updatePassword).toHaveBeenCalledWith('new-secret');
   });
 
-  it('rejects a password shorter than 6 characters', async () => {
-    const result = await updatePasswordAction('12345');
+  it('rejects a password shorter than 8 characters, like sign-up', async () => {
+    const result = await updatePasswordAction('1234567');
 
     expect(result).toEqual({ success: false, error: 'common_error_invalid_request' });
     expect(updatePassword).not.toHaveBeenCalled();

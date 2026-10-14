@@ -74,7 +74,9 @@
     "pt": "Portuguese",
     "contact": "Bug",
     "contactTooltip": "Report a bug",
-    "footerMessage": "This software is free. View the code on <link>GitHub</link>"
+    "footerMessage": "This software is free. View the code on <link>GitHub</link>",
+    "passwordMinLength": "Password must be at least {min} characters.",
+    "passwordsDoNotMatch": "Passwords do not match."
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -117,10 +119,8 @@
     "alreadyHaveAccount": "Already have an account?",
     "login": "Sign In",
     "errors": {
-      "passwordsDoNotMatch": "Passwords do not match.",
       "turnstileRequired": "Please complete the security verification.",
-      "invalidEmail": "Invalid email.",
-      "passwordMinLength": "Password must be at least 8 characters."
+      "invalidEmail": "Invalid email."
     }
   },
   "auth": {
@@ -251,7 +251,13 @@
       "preparedLabels": "{count} prepared",
       "addBtn": "Add Spell"
     },
-    "addItem": "Add Item"
+    "addItem": "Add Item",
+    "loadErrorTitle": "Something went wrong",
+    "online": "Online",
+    "createNewTagline": "Start your legend",
+    "levelShort": "Lv {level}",
+    "defaultClass": "Adventurer",
+    "selectLevel": "Select level"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
@@ -267,7 +273,10 @@
     "alignmentPlaceholder": "Define Alignment...",
     "xp": "Experience",
     "spellbook": "Spellbook",
-    "customizeDescription": "Change the avatar and accent color of the character"
+    "customizeDescription": "Change the avatar and accent color of the character",
+    "customizeTitle": "Customize Character",
+    "avatarLabel": "Avatar",
+    "accentColorLabel": "Accent Color"
   },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",
@@ -323,7 +332,8 @@
     "spellPoints": "Spell Points",
     "spellSlots": "Spell Slots",
     "level": "Lv {level}",
-    "pointsCapacity": "Spell Points Capacity"
+    "pointsCapacity": "Spell Points Capacity",
+    "systemPlaceholder": "Magic"
   },
   "dashboard": {
     "menu": "Menu",
@@ -332,7 +342,8 @@
     "attributes": "Attributes",
     "spells": "Spells",
     "settingsTitle": "Settings",
-    "settingsSubtitle": "Manage your adventurer profile information."
+    "settingsSubtitle": "Manage your adventurer profile information.",
+    "menuDescription": "Main navigation and shortcuts."
   },
   "changePassword": {
     "title": "Change Your Password",
@@ -344,8 +355,7 @@
     "submit": "Update Password",
     "processing": "Updating...",
     "success": "Password updated successfully!",
-    "error": "Failed to update password.",
-    "passwordsDoNotMatch": "Passwords do not match."
+    "error": "Failed to update password."
   },
   "profileForm": {
     "title": "Edit Profile",

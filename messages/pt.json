@@ -74,7 +74,9 @@
     "pt": "Português",
     "contact": "Bug",
     "contactTooltip": "Reportar um Bug",
-    "footerMessage": "Este software é livre. Veja o código no <link>GitHub</link>"
+    "footerMessage": "Este software é livre. Veja o código no <link>GitHub</link>",
+    "passwordMinLength": "A senha precisa ter pelo menos {min} caracteres.",
+    "passwordsDoNotMatch": "As senhas não coincidem."
   },
   "login": {
     "title": "Entrar no RPG World",
@@ -117,10 +119,8 @@
     "alreadyHaveAccount": "Já tem uma conta?",
     "login": "Entrar",
     "errors": {
-      "passwordsDoNotMatch": "As senhas não coincidem.",
       "turnstileRequired": "Por favor, complete a verificação de segurança.",
-      "invalidEmail": "E-mail inválido.",
-      "passwordMinLength": "A senha deve ter pelo menos 8 caracteres."
+      "invalidEmail": "E-mail inválido."
     }
   },
   "auth": {
@@ -251,7 +251,13 @@
       "preparedLabels": "{count} preparadas",
       "addBtn": "Adicionar Magia"
     },
-    "addItem": "Adicionar Item"
+    "addItem": "Adicionar Item",
+    "loadErrorTitle": "Ocorreu um erro",
+    "online": "Online",
+    "createNewTagline": "Comece sua lenda",
+    "levelShort": "Nv {level}",
+    "defaultClass": "Aventureiro",
+    "selectLevel": "Selecione o nível"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
@@ -267,7 +273,10 @@
     "alignmentPlaceholder": "Definir Alinhamento...",
     "xp": "Experiência",
     "spellbook": "Grimório de Magias",
-    "customizeDescription": "Altere o avatar e a cor de destaque do personagem"
+    "customizeDescription": "Altere o avatar e a cor de destaque do personagem",
+    "customizeTitle": "Personalizar Personagem",
+    "avatarLabel": "Avatar",
+    "accentColorLabel": "Cor de Destaque"
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",
@@ -323,7 +332,8 @@
     "spellPoints": "Spell Points",
     "spellSlots": "Spell Slots",
     "level": "Nv {level}",
-    "pointsCapacity": "Capacidade de Spell Points"
+    "pointsCapacity": "Capacidade de Spell Points",
+    "systemPlaceholder": "Magia"
   },
   "dashboard": {
     "menu": "Menu",
@@ -332,7 +342,8 @@
     "attributes": "Atributos",
     "spells": "Magias",
     "settingsTitle": "Configurações",
-    "settingsSubtitle": "Gerencie as informações do seu perfil de aventureiro."
+    "settingsSubtitle": "Gerencie as informações do seu perfil de aventureiro.",
+    "menuDescription": "Navegação principal e atalhos."
   },
   "changePassword": {
     "title": "Altere sua Senha",
@@ -344,8 +355,7 @@
     "submit": "Atualizar Senha",
     "processing": "Atualizando...",
     "success": "Senha atualizada com sucesso!",
-    "error": "Falha ao atualizar senha.",
-    "passwordsDoNotMatch": "As senhas não coincidem."
+    "error": "Falha ao atualizar senha."
   },
   "profileForm": {
     "title": "Editar Perfil",

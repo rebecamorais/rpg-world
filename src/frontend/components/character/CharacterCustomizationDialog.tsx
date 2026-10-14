@@ -56,12 +56,12 @@ export function CharacterCustomizationDialog({
         style={{ '--character-color': accentColor } as React.CSSProperties}
       >
         <DialogHeader>
-          <DialogTitle>Personalizar Personagem</DialogTitle>
+          <DialogTitle>{t('customizeTitle')}</DialogTitle>
           <DialogDescription className="sr-only">{t('customizeDescription')}</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-6 py-4">
           <div className="flex flex-col items-center gap-4">
-            <Label className="text-sm font-medium">Avatar</Label>
+            <Label className="text-sm font-medium">{t('avatarLabel')}</Label>
             <ImageUpload
               currentUrl={avatarUrl}
               target="character"
@@ -72,7 +72,7 @@ export function CharacterCustomizationDialog({
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label className="text-sm font-medium">Cor de Destaque</Label>
+            <Label className="text-sm font-medium">{t('accentColorLabel')}</Label>
             <div className="grid grid-cols-5 gap-3">
               {PREDEFINED_COLORS.map((color) => {
                 const isSelected = color.value === accentColor || (!color.value && !accentColor);

@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import { Button } from '@frontend/components/ui/button';
 import {
@@ -28,6 +28,7 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { newPasswordSchema } from '@frontend/lib/password-schema';
 
 import { getSupabaseBrowserClient } from '@lib/supabase-browser';
 
@@ -40,6 +41,7 @@ const PASSWORD_ERROR_CODES: Record<string, string> = {
 
 export default function ResetPasswordForm() {
   const t = useTranslations('resetPassword');
+  const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
@@ -90,15 +92,7 @@ export default function ResetPasswordForm() {
     return () => subscription.unsubscribe();
   }, [supabase.auth]);
 
-  const schema = z
-    .object({
-      password: z.string().min(8, { message: t('newPasswordLabel') }),
-      confirmPassword: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: t('newPasswordLabel'),
-      path: ['confirmPassword'],
-    });
+  const schema = newPasswordSchema(tCommon);
 
   type Values = z.infer<typeof schema>;
 

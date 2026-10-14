@@ -76,8 +76,8 @@ describe('SignUpForm', () => {
 
     await fillAndSubmit({ password: 'short', confirm: 'other' });
 
-    expect(await screen.findByText(t.errors.passwordMinLength)).toBeInTheDocument();
-    expect(screen.getByText(t.errors.passwordsDoNotMatch)).toBeInTheDocument();
+    expect(await screen.findByText('Password must be at least 8 characters.')).toBeInTheDocument();
+    expect(screen.getByText(messages.common.passwordsDoNotMatch)).toBeInTheDocument();
     expect(signUp).not.toHaveBeenCalled();
   });
 

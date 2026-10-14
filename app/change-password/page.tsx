@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import { Button } from '@frontend/components/ui/button';
 import {
@@ -26,21 +26,16 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useAuth } from '@frontend/hooks/useAuth';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { newPasswordSchema } from '@frontend/lib/password-schema';
 
 export default function ChangePasswordPage() {
   const t = useTranslations('changePassword');
   const commonT = useTranslations('common');
   const { updatePassword } = useAuth();
+  const { getErrorMessage } = useErrorMessage();
 
-  const changePasswordSchema = z
-    .object({
-      password: z.string().min(6, { message: 'Mínimo 6 caracteres' }),
-      confirmPassword: z.string().min(6, { message: 'Mínimo 6 caracteres' }),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: t('passwordsDoNotMatch'),
-      path: ['confirmPassword'],
-    });
+  const changePasswordSchema = newPasswordSchema(commonT);
 
   type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
 
@@ -54,7 +49,7 @@ export default function ChangePasswordPage() {
       await updatePassword(data.password);
       toast.success(t('success'));
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : t('error');
+      const msg = getErrorMessage(err);
       toast.error(msg);
       form.setError('root', { message: msg });
     }

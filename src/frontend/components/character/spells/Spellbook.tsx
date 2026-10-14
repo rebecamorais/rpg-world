@@ -130,7 +130,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
           </span>
           <Select value={activeLevel} onValueChange={setActiveLevel}>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Selecione o nível" />
+              <SelectValue placeholder={t('selectLevel')} />
             </SelectTrigger>
             <SelectContent>
               {levels.map((level) => (

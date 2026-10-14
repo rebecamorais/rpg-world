@@ -77,7 +77,8 @@ describe('auth schemas', () => {
     expect(signInWithPasswordSchema.safeParse({ email: 'nope', password: 'x' }).success).toBe(
       false,
     );
-    expect(updatePasswordSchema.safeParse({ newPassword: '12345' }).success).toBe(false);
+    expect(updatePasswordSchema.safeParse({ newPassword: '1234567' }).success).toBe(false);
+    expect(updatePasswordSchema.safeParse({ newPassword: '12345678' }).success).toBe(true);
     expect(
       signUpSchema.safeParse({ email: 'a@b.co', password: '1234567', turnstileToken: 't' }).success,
     ).toBe(false);

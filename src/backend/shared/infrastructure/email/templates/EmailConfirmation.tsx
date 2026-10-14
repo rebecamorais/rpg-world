@@ -1,16 +1,6 @@
 import * as React from 'react';
 
-import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Preview,
-  Section,
-  Text,
-} from 'react-email';
+import { Body, Button, Container, Head, Heading, Html, Preview, Section, Text } from 'react-email';
 
 interface EmailConfirmationTemplateProps {
   confirmationLink: string;

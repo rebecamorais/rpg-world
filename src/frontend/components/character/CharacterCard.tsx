@@ -22,6 +22,7 @@ interface CharacterCardProps {
  * Features glassmorphism, dynamic accent colors, and optimized mobile layout.
  */
 export function CharacterCard({ character }: CharacterCardProps) {
+  const t = useTranslations('characters');
   const tCommon = useTranslations('common');
   const { setCharacterToDelete } = useCharactersContext();
 
@@ -73,11 +74,11 @@ export function CharacterCard({ character }: CharacterCardProps) {
                       : 'none',
                   }}
                 >
-                  Nv {character.level}
+                  {t('levelShort', { level: character.level })}
                 </Badge>
               </div>
               <p className="text-muted-foreground line-clamp-1 text-xs font-bold tracking-widest uppercase opacity-60">
-                {character.class || 'Aventureiro'}
+                {character.class || t('defaultClass')}
               </p>
             </div>
 
