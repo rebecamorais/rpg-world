@@ -2,12 +2,16 @@
 
 import * as React from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { cn } from '@frontend/lib/utils';
 
 export interface NumberStepperProps {
+  /** Id of the number input, for an external `<Label htmlFor>`. */
+  id?: string;
   value: number;
   onChange: (value: number) => void;
   min?: number;
@@ -19,6 +23,7 @@ export interface NumberStepperProps {
 }
 
 export function NumberStepper({
+  id,
   value,
   onChange,
   min = 0,
@@ -29,6 +34,8 @@ export function NumberStepper({
   size = 'md',
 }: NumberStepperProps) {
   const isSm = size === 'sm';
+  const t = useTranslations('common');
+  const withLabel = (action: string) => (label ? `${action}: ${label}` : action);
 
   return (
     <div className={cn('flex items-center justify-between gap-4 py-1', containerClassName)}>
@@ -55,13 +62,16 @@ export function NumberStepper({
             'h-6 w-6 rounded-sm p-0 transition-colors hover:bg-zinc-800',
             isSm && 'h-5 w-5',
           )}
+          aria-label={withLabel(t('decrease'))}
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
         >
           <AppIcon name="Minus" size={isSm ? 10 : 12} />
         </Button>
         <Input
+          id={id}
           type="number"
+          aria-label={label}
           value={value}
           onChange={(e) => {
             const val = parseInt(e.target.value) || 0;
@@ -79,6 +89,7 @@ export function NumberStepper({
             'h-6 w-6 rounded-sm p-0 transition-colors hover:bg-zinc-800',
             isSm && 'h-5 w-5',
           )}
+          aria-label={withLabel(t('increase'))}
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
         >

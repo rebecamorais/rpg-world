@@ -41,7 +41,7 @@ function SidebarContent() {
             ) : (
               <div className="bg-primary/20 h-full w-full" />
             )}
-            <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
+            <AvatarFallback className="bg-primary/10 text-primary-flare text-xs font-bold">
               {username.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -54,7 +54,7 @@ function SidebarContent() {
 
         <nav className="flex flex-col gap-6">
           <section>
-            <p className="mb-2 px-3 text-xs font-bold tracking-widest text-zinc-500 uppercase">
+            <p className="mb-2 px-3 text-xs font-bold tracking-widest text-zinc-400 uppercase">
               {tDash('menu')}
             </p>
             <NavItem href="/settings/profile" label={tDash('myProfile')} />
@@ -68,7 +68,7 @@ function SidebarContent() {
       <div className="mt-auto pt-6">
         <button
           onClick={() => signOut()}
-          className="group mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-500 transition-all hover:bg-red-500/10 hover:text-red-400"
+          className="group mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 transition-all hover:bg-red-500/10 hover:text-red-400"
         >
           <AppIcon
             name="LogOut"

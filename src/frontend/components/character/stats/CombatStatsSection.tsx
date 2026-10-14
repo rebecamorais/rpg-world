@@ -70,6 +70,7 @@ const CombatHeader = ({
           >
             <GhostInput
               type="number"
+              aria-label={t('armorClass')}
               value={character.ac ?? 0}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onBasicInfoChange('ac', parseInt(e.target.value) || 0)
@@ -85,6 +86,7 @@ const CombatHeader = ({
           >
             <GhostInput
               type="number"
+              aria-label={t('initiative')}
               value={character.initiative}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
@@ -103,6 +105,7 @@ const CombatHeader = ({
           >
             <GhostInput
               type="number"
+              aria-label={t('speed')}
               value={character.speed || 30}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
@@ -120,7 +123,10 @@ const CombatHeader = ({
               value={character.hitDice?.total || '1d8'}
               onValueChange={(val) => onHitDiceChange(val)}
             >
-              <SelectTrigger className="h-auto border-none bg-transparent p-0 text-sm font-black shadow-none ring-offset-0 focus:ring-0 sm:text-base [&>span]:line-clamp-none">
+              <SelectTrigger
+                aria-label={t('hitDice')}
+                className="h-auto border-none bg-transparent p-0 text-sm font-black shadow-none ring-offset-0 focus:ring-0 sm:text-base [&>span]:line-clamp-none"
+              >
                 <SelectValue placeholder="1d8" />
               </SelectTrigger>
               <SelectContent className="min-w-[80px] border-zinc-800 bg-zinc-950/95 backdrop-blur-xl">
@@ -144,6 +150,7 @@ const CombatHeader = ({
               <Button
                 variant="ghost"
                 size="icon"
+                aria-label={t('edit')}
                 className="hover:border-character-muted/80 hover:bg-character-surface/10 hover:shadow-character-muted/30 h-10 w-10 overflow-hidden rounded-xl border border-zinc-800/50 bg-zinc-950/60 opacity-60 backdrop-blur-xl transition-all duration-500 hover:opacity-100 hover:shadow-2xl"
               >
                 <AppIcon name="Settings2" size="sm" className="text-character-flare" />

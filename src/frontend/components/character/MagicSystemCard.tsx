@@ -31,7 +31,10 @@ export const MagicSystemCard = React.forwardRef<HTMLDivElement, MagicSystemCardP
 
     const systemSelector = (
       <Select value={system} onValueChange={(val) => onSystemChange(val as MagicSystem)}>
-        <SelectTrigger className="h-5 w-fit border-none bg-transparent p-0 text-xs font-bold tracking-widest text-zinc-400 uppercase shadow-none focus:ring-0">
+        <SelectTrigger
+          aria-label={t('systemUsed')}
+          className="h-5 w-fit border-none bg-transparent p-0 text-xs font-bold tracking-widest text-zinc-400 uppercase shadow-none focus:ring-0"
+        >
           <SelectValue placeholder={t('systemPlaceholder')} />
         </SelectTrigger>
         <SelectContent>

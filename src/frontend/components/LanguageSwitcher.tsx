@@ -25,7 +25,7 @@ export default function LanguageSwitcher() {
 
   return (
     <Select value={locale} onValueChange={handleValueChange}>
-      <SelectTrigger className="bg-background h-9 w-[130px] text-sm">
+      <SelectTrigger aria-label={t('language')} className="bg-background h-9 w-[130px] text-sm">
         <SelectValue placeholder={t('loading')} />
       </SelectTrigger>
       <SelectContent>

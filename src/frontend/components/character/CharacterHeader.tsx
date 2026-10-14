@@ -113,7 +113,8 @@ function CharacterHeader({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+                    aria-label={t('editName')}
+                    className="h-6 w-6 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                     onClick={() => setIsEditingName(true)}
                   >
                     <AppIcon name="Pencil" size={12} />
@@ -132,6 +133,7 @@ function CharacterHeader({
                   {t('level')}
                 </Label>
                 <NumberStepper
+                  id="char-level"
                   min={1}
                   max={20}
                   value={level || 1}
@@ -173,6 +175,7 @@ function CharacterHeader({
                 </div>
               </div>
               <Progress
+                aria-label={t('xpProgress')}
                 value={progress}
                 className="h-2"
                 style={

@@ -29,6 +29,8 @@ interface DeathSavesProps {
 }
 
 const DeathSaves = ({ deathSaves, onDeathSavesChange }: DeathSavesProps) => {
+  const t = useTranslations('savingThrows');
+
   return (
     <div className="flex items-center justify-center bg-zinc-500/5 py-4">
       <div className="flex items-center gap-6">
@@ -36,6 +38,9 @@ const DeathSaves = ({ deathSaves, onDeathSavesChange }: DeathSavesProps) => {
           {[2, 1, 0].map((i) => (
             <button
               key={`succ-${i}`}
+              type="button"
+              aria-label={t('deathSaveSuccess', { count: i + 1 })}
+              aria-pressed={(deathSaves?.successes || 0) > i}
               onClick={() =>
                 onDeathSavesChange?.(
                   deathSaves?.successes === i + 1 ? i : i + 1,
@@ -52,22 +57,30 @@ const DeathSaves = ({ deathSaves, onDeathSavesChange }: DeathSavesProps) => {
           ))}
         </div>
 
-        <AppIcon
-          name="death-skull"
-          size="sm"
-          variant="game"
-          className={cn(
-            'cursor-pointer text-zinc-500 transition-all duration-300 hover:scale-110 hover:text-white',
-            ((deathSaves?.successes || 0) > 0 || (deathSaves?.failures || 0) > 0) &&
-              'text-zinc-400',
-          )}
+        <button
+          type="button"
+          aria-label={t('resetDeathSaves')}
           onClick={() => onDeathSavesChange?.(0, 0)}
-        />
+        >
+          <AppIcon
+            name="death-skull"
+            size="sm"
+            variant="game"
+            className={cn(
+              'cursor-pointer text-zinc-500 transition-all duration-300 hover:scale-110 hover:text-white',
+              ((deathSaves?.successes || 0) > 0 || (deathSaves?.failures || 0) > 0) &&
+                'text-zinc-400',
+            )}
+          />
+        </button>
 
         <div className="flex gap-2">
           {[0, 1, 2].map((i) => (
             <button
               key={`fail-${i}`}
+              type="button"
+              aria-label={t('deathSaveFailure', { count: i + 1 })}
+              aria-pressed={(deathSaves?.failures || 0) > i}
               onClick={() =>
                 onDeathSavesChange?.(
                   deathSaves?.successes || 0,
