@@ -89,6 +89,9 @@ Utilizamos **Conventional Commits** para manter um histórico legível:
 - **Colocation**: Testes unitários (`.unit.test.ts`) e de integração (`.integration.test.ts`) devem residir na mesma pasta do arquivo alvo dentro de `src/`.
 - **Frontend**: Testes de hooks, contexts e componentes usam a extensão `.unit.test.tsx` e rodam em jsdom com Testing Library (`test/helpers/render.tsx` monta os providers do app). Teste comportamento visível, sem snapshots.
 - **Ponta a ponta**: Fluxos completos ficam em `e2e/` (Playwright). `npm run test:e2e` gera um build de produção na porta 3100 e usa o Supabase de teste, que é limpo no início de cada execução. Não rode junto com os testes de integração, porque os dois usam o mesmo banco. Cada teste cria o próprio usuário, e qualquer erro no console do navegador (CSP, hidratação) faz o teste falhar.
+- **E-mails no E2E**: O stack de teste tem o Inbucket (Mailpit) ligado, com SMTP na porta 54425 e interface em http://localhost:54424. Os testes de cadastro e de recuperação de senha leem os e-mails por lá.
+- **Cobertura**: `npm run test:coverage` roda os unitários com um piso de cobertura, definido em `test/vitest.config.unit.ts`. O CI falha se a cobertura cair abaixo dele; suba o piso quando a cobertura crescer.
+- **Mutation testing**: `npm run test:mutation` (Stryker) altera o domínio, os use cases e as regras de D&D de propósito e verifica se algum teste falha. Um mutante que sobrevive aponta uma asserção que falta. Leva cerca de 3 minutos e roda sob demanda, fora do CI. O relatório fica em `reports/mutation/index.html`.
 - **Pipeline**: Antes de submeter um PR, garanta que `npm run test` passe localmente.
 
 ---
