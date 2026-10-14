@@ -19,25 +19,13 @@ import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
+import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { setSpellPoints, setSpellSlots } from '@frontend/lib/character-sheet-updates';
 import { characterTheme } from '@frontend/lib/color-utils';
 
-import type { DnD5eCharacter } from '@shared/systems/dnd5e';
-
-interface CombatStatsDialogProps {
-  character: DnD5eCharacter;
-  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
-  onSpellcastingSystemChange: (system: MagicSystem) => void;
-  onSpellPointsChange: (field: 'current' | 'max', value: number) => void;
-  onSpellSlotsChange: (level: string, max: number, used: number) => void;
-}
-
-export const CombatStatsDialog = ({
-  character,
-  onBasicInfoChange,
-  onSpellcastingSystemChange,
-  onSpellPointsChange,
-  onSpellSlotsChange,
-}: CombatStatsDialogProps) => {
+export const CombatStatsDialog = () => {
+  const character = useLoadedCharacter();
+  const { update } = useCharacterActions();
   const t = useTranslations('combatStats');
   const tm = useTranslations('magicSystem');
   const tcommon = useTranslations('common');
@@ -74,7 +62,7 @@ export const CombatStatsDialog = ({
                 id="hpMax"
                 type="number"
                 value={character.hpMax}
-                onChange={(e) => onBasicInfoChange('hpMax', parseInt(e.target.value) || 0)}
+                onChange={(e) => update({ hpMax: parseInt(e.target.value) || 0 })}
                 className="border-border bg-muted focus:border-border h-9 transition-colors"
               />
             </div>
@@ -82,7 +70,7 @@ export const CombatStatsDialog = ({
             <NumberStepper
               label={t('tempHp') || 'Temp HP'}
               value={character.hpTemp || 0}
-              onChange={(val) => onBasicInfoChange('hpTemp', val)}
+              onChange={(val) => update({ hpTemp: val })}
               max={2000}
             />
           </div>
@@ -99,7 +87,7 @@ export const CombatStatsDialog = ({
 
           <Tabs
             value={character.spellcastingSystem || 'none'}
-            onValueChange={(val) => onSpellcastingSystemChange(val as MagicSystem)}
+            onValueChange={(val) => update({ spellcastingSystem: val as MagicSystem })}
             className="w-full"
           >
             <TabsList className="border-border bg-muted grid w-full grid-cols-2 border p-1">
@@ -128,10 +116,12 @@ export const CombatStatsDialog = ({
                     label={tm('circle', { level: lvl }) || `${lvl}º Círculo`}
                     value={character.spellSlots?.[lvl.toString()]?.max || 0}
                     onChange={(val) =>
-                      onSpellSlotsChange(
-                        lvl.toString(),
-                        val,
-                        character.spellSlots?.[lvl.toString()]?.used || 0,
+                      update(
+                        setSpellSlots(
+                          lvl.toString(),
+                          val,
+                          character.spellSlots?.[lvl.toString()]?.used || 0,
+                        ),
                       )
                     }
                   />
@@ -147,7 +137,7 @@ export const CombatStatsDialog = ({
                 <Input
                   type="number"
                   value={character.spellPoints?.max || 0}
-                  onChange={(e) => onSpellPointsChange('max', parseInt(e.target.value) || 0)}
+                  onChange={(e) => update(setSpellPoints('max', parseInt(e.target.value) || 0))}
                   className="border-border bg-muted focus:border-border h-9 transition-colors"
                 />
               </div>

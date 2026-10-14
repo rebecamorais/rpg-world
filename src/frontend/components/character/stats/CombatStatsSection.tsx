@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { MagicSystem, MagicSystemCard } from '@frontend/components/character/MagicSystemCard';
+import { MagicSystemCard } from '@frontend/components/character/MagicSystemCard';
 import { HealthPointsCard } from '@frontend/components/character/stats/HealthPointsCard';
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent, CardHeader } from '@frontend/components/ui/card';
@@ -19,40 +19,19 @@ import {
   SelectValue,
 } from '@frontend/components/ui/select';
 import { StatBlock } from '@frontend/components/ui/stat-block';
-
-import type { DnD5eCharacter } from '@shared/systems/dnd5e';
+import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { setHitDice, setSpellPoints, setSpellSlots } from '@frontend/lib/character-sheet-updates';
 
 import { CombatStatsDialog } from './CombatStatsDialog';
 
-interface CombatStatsSectionProps {
-  character: DnD5eCharacter;
-  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
-  onSpellcastingSystemChange: (system: MagicSystem) => void;
-  onSpellPointsChange: (field: 'current' | 'max', value: number) => void;
-  onSpellSlotsChange: (level: string, max: number, used: number) => void;
-  onHitDiceChange: (total: string) => void;
-}
-
-interface CombatHeaderProps {
-  character: DnD5eCharacter;
-  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
-  onSpellcastingSystemChange: (system: MagicSystem) => void;
-  onSpellPointsChange: (field: 'current' | 'max', value: number) => void;
-  onSpellSlotsChange: (level: string, max: number, used: number) => void;
-  onHitDiceChange: (total: string) => void;
-}
-
 const STAT_INPUT = 'h-6 w-12 p-0 font-mono text-base font-bold focus-visible:px-1 md:text-base';
 
-const CombatHeader = ({
-  character,
-  onBasicInfoChange,
-  onSpellcastingSystemChange,
-  onSpellPointsChange,
-  onSpellSlotsChange,
-  onHitDiceChange,
-}: CombatHeaderProps) => {
+const toInt = (e: React.ChangeEvent<HTMLInputElement>) => parseInt(e.target.value) || 0;
+
+const CombatHeader = () => {
   const t = useTranslations('combatStats');
+  const character = useLoadedCharacter();
+  const { update } = useCharacterActions();
 
   return (
     <CardHeader className="border-border bg-muted/30 border-b px-4 py-4 md:px-6 md:py-3">
@@ -63,9 +42,7 @@ const CombatHeader = ({
               type="number"
               aria-label={t('armorClass')}
               value={character.ac ?? 0}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onBasicInfoChange('ac', parseInt(e.target.value) || 0)
-              }
+              onChange={(e) => update({ ac: toInt(e) })}
               showIcon={false}
               className={STAT_INPUT}
             />
@@ -76,9 +53,7 @@ const CombatHeader = ({
               type="number"
               aria-label={t('initiative')}
               value={character.initiative}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
-              }
+              onChange={(e) => update({ initiative: toInt(e) })}
               showIcon={false}
               className={STAT_INPUT}
             />
@@ -89,9 +64,7 @@ const CombatHeader = ({
               type="number"
               aria-label={t('speed')}
               value={character.speed || 30}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
-              }
+              onChange={(e) => update({ speed: parseFloat(e.target.value) || 0 })}
               showIcon={false}
               className={STAT_INPUT}
             />
@@ -100,7 +73,7 @@ const CombatHeader = ({
           <StatBlock icon="dice-target" label={t('hitDiceShort')}>
             <Select
               value={character.hitDice?.total || '1d8'}
-              onValueChange={(val) => onHitDiceChange(val)}
+              onValueChange={(val) => update(setHitDice(val))}
             >
               <SelectTrigger
                 aria-label={t('hitDice')}
@@ -131,13 +104,7 @@ const CombatHeader = ({
                 <AppIcon name="Settings2" size="sm" className="text-character-flare" />
               </Button>
             </DialogTrigger>
-            <CombatStatsDialog
-              character={character}
-              onBasicInfoChange={onBasicInfoChange}
-              onSpellcastingSystemChange={onSpellcastingSystemChange}
-              onSpellPointsChange={onSpellPointsChange}
-              onSpellSlotsChange={onSpellSlotsChange}
-            />
+            <CombatStatsDialog />
           </Dialog>
         </div>
       </div>
@@ -145,67 +112,36 @@ const CombatHeader = ({
   );
 };
 
-interface ResourceGridProps {
-  character: DnD5eCharacter;
-  onBasicInfoChange: (field: keyof DnD5eCharacter, value: string | number) => void;
-  onSpellcastingSystemChange: (system: MagicSystem) => void;
-  onSpellPointsChange: (field: 'current' | 'max', value: number) => void;
-  onSpellSlotsChange: (level: string, max: number, used: number) => void;
-}
+const ResourceGrid = () => {
+  const character = useLoadedCharacter();
+  const { update } = useCharacterActions();
 
-const ResourceGrid = ({
-  character,
-  onBasicInfoChange,
-  onSpellcastingSystemChange,
-  onSpellPointsChange,
-  onSpellSlotsChange,
-}: ResourceGridProps) => (
-  <CardContent className="p-4 sm:p-6">
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-      <HealthPointsCard
-        currentHp={character.hpCurrent ?? 0}
-        maxHp={character.hpMax || 1}
-        tempHp={character.hpTemp ?? 0}
-        onHpChange={(field: keyof DnD5eCharacter, value: number) => onBasicInfoChange(field, value)}
-      />
+  return (
+    <CardContent className="p-4 sm:p-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <HealthPointsCard
+          currentHp={character.hpCurrent ?? 0}
+          maxHp={character.hpMax || 1}
+          tempHp={character.hpTemp ?? 0}
+          onHpChange={(field, value) => update({ [field]: value })}
+        />
 
-      <MagicSystemCard
-        character={character}
-        onSystemChange={onSpellcastingSystemChange}
-        onPointsChange={onSpellPointsChange}
-        onSlotsChange={onSpellSlotsChange}
-      />
-    </div>
-  </CardContent>
-);
+        <MagicSystemCard
+          character={character}
+          onSystemChange={(system) => update({ spellcastingSystem: system })}
+          onPointsChange={(field, value) => update(setSpellPoints(field, value))}
+          onSlotsChange={(level, max, used) => update(setSpellSlots(level, max, used))}
+        />
+      </div>
+    </CardContent>
+  );
+};
 
-function CombatStatsSection({
-  character,
-  onBasicInfoChange,
-  onSpellcastingSystemChange,
-  onSpellPointsChange,
-  onSpellSlotsChange,
-  onHitDiceChange,
-}: CombatStatsSectionProps) {
+export default function CombatStatsSection() {
   return (
     <Card className="overflow-hidden shadow-sm">
-      <CombatHeader
-        character={character}
-        onBasicInfoChange={onBasicInfoChange}
-        onSpellcastingSystemChange={onSpellcastingSystemChange}
-        onSpellPointsChange={onSpellPointsChange}
-        onSpellSlotsChange={onSpellSlotsChange}
-        onHitDiceChange={onHitDiceChange}
-      />
-      <ResourceGrid
-        character={character}
-        onBasicInfoChange={onBasicInfoChange}
-        onSpellcastingSystemChange={onSpellcastingSystemChange}
-        onSpellPointsChange={onSpellPointsChange}
-        onSpellSlotsChange={onSpellSlotsChange}
-      />
+      <CombatHeader />
+      <ResourceGrid />
     </Card>
   );
 }
-
-export default React.memo(CombatStatsSection);

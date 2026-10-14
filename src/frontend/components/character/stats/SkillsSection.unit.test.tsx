@@ -1,42 +1,41 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders } from '@tests/helpers/render';
-import { describe, expect, it, vi } from 'vitest';
+import { renderWithCharacter } from '@tests/helpers/character';
+import { describe, expect, it } from 'vitest';
 
 import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
-import type { CharacterSkill } from '@shared/systems/dnd5e/types';
+import type { CharacterSkill, DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import SkillsSection from './SkillsSection';
 
-const attributes = { ...createDnD5eCharacter('o', 'x').attributes, DEX: 14 };
+const base = createDnD5eCharacter('o', 'x');
 
 function renderSkills(acrobatics?: CharacterSkill) {
-  const onSkillChange = vi.fn();
-  renderWithProviders(
-    <SkillsSection
-      attributes={attributes}
-      level={5}
-      skills={acrobatics ? { ACROBATICS: acrobatics } : {}}
-      onSkillChange={onSkillChange}
-    />,
-  );
-  const row = screen.getByText('Acrobatics').parentElement!;
-  return { onSkillChange, row };
+  const character = {
+    ...base,
+    id: 'c1',
+    level: 5,
+    attributes: { ...base.attributes, DEX: 14 },
+    skills: acrobatics ? { ACROBATICS: acrobatics } : {},
+  } as DnD5eCharacter;
+  const result = renderWithCharacter(<SkillsSection />, character);
+  const row = () => screen.getByText('Acrobatics').parentElement!;
+  return { ...result, row };
 }
 
 describe('SkillsSection', () => {
   it('soma o modificador do atributo da perícia (DES 14 → +2)', () => {
     const { row } = renderSkills();
 
-    expect(row).toHaveTextContent('(DEX)+2');
+    expect(row()).toHaveTextContent('(DEX)+2');
   });
 
   it('soma a proficiência (nível 5 → +3)', () => {
-    expect(renderSkills({ isProficient: true }).row).toHaveTextContent('+5');
+    expect(renderSkills({ isProficient: true }).row()).toHaveTextContent('+5');
   });
 
   it('a especialização dobra o bônus de proficiência', () => {
-    expect(renderSkills({ isProficient: true, expertise: true }).row).toHaveTextContent('+8');
+    expect(renderSkills({ isProficient: true, expertise: true }).row()).toHaveTextContent('+8');
   });
 
   it.each([
@@ -48,11 +47,12 @@ describe('SkillsSection', () => {
       { isProficient: false, expertise: false },
     ],
   ])('alterna nenhuma → proficiente → especialista → nenhuma', async (skill, name, next) => {
-    const { onSkillChange } = renderSkills(skill);
+    const { draft, isDirty } = renderSkills(skill);
 
     await userEvent.click(screen.getByRole('button', { name }));
 
-    expect(onSkillChange).toHaveBeenCalledWith('ACROBATICS', next);
+    expect(draft().skills.ACROBATICS).toEqual(next);
+    expect(isDirty()).toBe(true);
   });
 
   it('lista todas as 18 perícias em ordem alfabética', () => {

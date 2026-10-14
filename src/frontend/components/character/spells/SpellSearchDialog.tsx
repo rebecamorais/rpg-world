@@ -19,7 +19,7 @@ import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
 import { DAMAGE_THEMES } from '@frontend/constants/damage-themes';
-import { useCharacterContext } from '@frontend/context/CharacterContext';
+import { useCharacterState } from '@frontend/context/CharacterContext';
 import { useSpells } from '@frontend/hooks/useSpells';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
@@ -46,7 +46,7 @@ export default function SpellSearchDialog({
   const tCharacters = useTranslations('characters');
   const tSpellsData = useTranslations('spellsData');
 
-  const { character } = useCharacterContext();
+  const { character } = useCharacterState();
   const accentColor = character?.accentColor;
 
   // Filter State

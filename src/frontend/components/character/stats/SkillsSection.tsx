@@ -1,25 +1,20 @@
 'use client';
 
-import React from 'react';
-
 import { useTranslations } from 'next-intl';
 
 import { SectionCard } from '@frontend/components/ui/section-card';
+import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { setSkill } from '@frontend/lib/character-sheet-updates';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
-import type { AttributeKey } from '@shared/systems/dnd5e';
 import { calculateSkillValue } from '@shared/systems/dnd5e/calculations';
 import { SKILLS_CATALOG, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import type { CharacterSkill } from '@shared/systems/dnd5e/types';
 
-interface Props {
-  attributes: Record<AttributeKey, number>;
-  level: number;
-  skills: Partial<Record<SkillKey, CharacterSkill>>;
-  onSkillChange: (key: SkillKey, skillData: CharacterSkill) => void;
-}
-
-function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
+export default function SkillsSection() {
+  const { attributes, level, skills = {} } = useLoadedCharacter();
+  const { update } = useCharacterActions();
+  const onSkillChange = (key: SkillKey, skill: CharacterSkill) => update(setSkill(key, skill));
   const t = useTranslations('skills');
   const tAttr = useTranslations('attributes');
 
@@ -127,5 +122,3 @@ function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
     </SectionCard>
   );
 }
-
-export default React.memo(SkillsSection);

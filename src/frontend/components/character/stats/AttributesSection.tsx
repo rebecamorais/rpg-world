@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -18,26 +18,23 @@ import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { SectionCard } from '@frontend/components/ui/section-card';
+import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { setAttribute, setAttributes } from '@frontend/lib/character-sheet-updates';
 
 import type { AttributeKey } from '@shared/systems/dnd5e';
 import { ATTRIBUTE_KEYS } from '@shared/systems/dnd5e/constants';
 
 import AttributeCard from './AttributeCard';
 
-interface Props {
-  attributes: Record<AttributeKey, number>;
-  onAttributeChange: (key: AttributeKey, value: number) => void;
-}
-
-function AttributesSection({ attributes, onAttributeChange }: Props) {
+export default function AttributesSection() {
+  const { attributes } = useLoadedCharacter();
+  const { update } = useCharacterActions();
   const t = useTranslations('attributes');
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [tempValues, setTempValues] = React.useState<Record<AttributeKey, number>>(attributes);
+  const [isOpen, setIsOpen] = useState(false);
+  const [tempValues, setTempValues] = useState<Record<AttributeKey, number>>(attributes);
 
   const handleSave = () => {
-    Object.entries(tempValues).forEach(([key, value]) => {
-      onAttributeChange(key as AttributeKey, value);
-    });
+    update(setAttributes(tempValues));
     setIsOpen(false);
   };
 
@@ -59,7 +56,7 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
       key={key}
       label={t(`abbreviations.${key}`)}
       value={attributes[key] ?? 10}
-      onChange={(value) => onAttributeChange(key, value)}
+      onChange={(value) => update(setAttribute(key, value))}
       icon={attributeIcons[key]}
     />
   );
@@ -134,5 +131,3 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
     </SectionCard>
   );
 }
-
-export default React.memo(AttributesSection);

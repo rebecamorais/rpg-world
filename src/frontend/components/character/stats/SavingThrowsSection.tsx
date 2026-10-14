@@ -1,27 +1,18 @@
 'use client';
 
-import React from 'react';
-
 import { useTranslations } from 'next-intl';
 
 import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
+import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { setDeathSaves, setSavingThrow } from '@frontend/lib/character-sheet-updates';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
 import { calculateSavingThrow } from '@shared/systems/dnd5e/calculations';
 import { ATTRIBUTE_KEYS } from '@shared/systems/dnd5e/constants';
 import rules from '@shared/systems/dnd5e/rules.json';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
-
-interface Props {
-  attributes: Record<AttributeKey, number>;
-  level: number;
-  savingThrows: Record<AttributeKey, boolean>;
-  deathSaves?: { successes: number; failures: number };
-  onSavingThrowChange: (key: AttributeKey, isProficient: boolean) => void;
-  onDeathSavesChange?: (successes: number, failures: number) => void;
-}
 
 interface DeathSavesProps {
   deathSaves?: { successes: number; failures: number };
@@ -102,14 +93,18 @@ const DeathSaves = ({ deathSaves, onDeathSavesChange }: DeathSavesProps) => {
   );
 };
 
-function SavingThrowsSection({
-  attributes,
-  level,
-  savingThrows,
-  deathSaves,
-  onSavingThrowChange,
-  onDeathSavesChange,
-}: Props) {
+export default function SavingThrowsSection() {
+  const {
+    attributes,
+    level,
+    savingThrowProficiencies: savingThrows,
+    deathSaves,
+  } = useLoadedCharacter();
+  const { update } = useCharacterActions();
+  const onSavingThrowChange = (key: AttributeKey, isProficient: boolean) =>
+    update(setSavingThrow(key, isProficient));
+  const onDeathSavesChange = (successes: number, failures: number) =>
+    update(setDeathSaves(successes, failures));
   const t = useTranslations('attributes');
   const tSection = useTranslations('savingThrows');
 
@@ -184,5 +179,3 @@ function SavingThrowsSection({
     </SectionCard>
   );
 }
-
-export default React.memo(SavingThrowsSection);
