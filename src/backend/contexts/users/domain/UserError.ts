@@ -5,6 +5,8 @@ export const UserErrorCodes = {
   SIGNUP_INVALID_PASSWORD: 'auth_error_signup_invalid_password',
   SIGNUP_DUPLICATE_EMAIL: 'auth_error_signup_duplicate_email',
   AUTH_CODE_REQUIRED: 'auth_error_code_required',
+  AUTH_LINK_EXPIRED: 'auth_error_link_expired',
+  AUTH_PROVIDER_ERROR: 'auth_error_provider',
   AUTH_RATE_LIMITED: 'auth_error_rate_limited',
   AUTH_USER_NOT_FOUND: 'auth_error_user_not_found',
   SIGNIN_REQUIRED_FIELDS: 'auth_error_signin_required_fields',
