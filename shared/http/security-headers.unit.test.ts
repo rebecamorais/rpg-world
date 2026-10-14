@@ -18,15 +18,9 @@ describe('buildContentSecurityPolicy', () => {
     expect(directive(csp, 'connect-src')).toContain('wss://abc.supabase.co');
   });
 
-  it('lets @iconify/react fetch game icons from the Iconify API and its fallbacks', () => {
+  it('only connects to the app itself and Supabase (game icons are bundled)', () => {
     const connect = directive(buildContentSecurityPolicy(prod), 'connect-src');
-    for (const host of [
-      'https://api.iconify.design',
-      'https://api.simplesvg.com',
-      'https://api.unisvg.com',
-    ]) {
-      expect(connect).toContain(host);
-    }
+    expect(connect).toBe("connect-src 'self' https://abc.supabase.co wss://abc.supabase.co");
   });
 
   it('allows the Turnstile script and iframe', () => {

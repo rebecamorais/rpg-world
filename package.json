@@ -10,6 +10,7 @@
   "private": true,
   "scripts": {
     "infra": "npx tsx scripts/infra.ts",
+    "icons": "npx tsx scripts/generate-game-icons.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -59,6 +60,7 @@
   "devDependencies": {
     "@iconify-json/game-icons": "^1.2.4",
     "@iconify/tailwind4": "^1.2.3",
+    "@iconify/utils": "^3.1.7",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/dom": "^10.4.2",

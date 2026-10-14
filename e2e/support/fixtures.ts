@@ -1,5 +1,6 @@
 import { type Page, test as base, expect } from '@playwright/test';
 
+import { BASE_URL, supabaseTestEnv } from './env';
 import { PASSWORD, type TestUser, createUser } from './supabase';
 
 /** Signs in through the real login endpoint; the session cookies land in the page's context. */
@@ -24,6 +25,8 @@ interface Fixtures {
   user: TestUser;
   /** Console errors and uncaught exceptions; any of them fails the test (CSP, hydration...). */
   consoleErrors: string[];
+  /** Requests to hosts other than the app and Supabase; any of them fails the test (privacy). */
+  thirdPartyRequests: string[];
 }
 
 export const test = base.extend<Fixtures>({
@@ -41,6 +44,28 @@ export const test = base.extend<Fixtures>({
       await use(errors);
 
       expect(errors, 'errors in the browser console').toEqual([]);
+    },
+    { auto: true },
+  ],
+
+  thirdPartyRequests: [
+    async ({ page }, use) => {
+      const allowed = new Set([
+        new URL(BASE_URL).origin,
+        new URL(supabaseTestEnv().url).origin,
+        // GitHub Sponsors button: an iframe the site embeds on purpose (see frame-src in the CSP)
+        'https://github.com',
+        'https://github.githubassets.com',
+      ]);
+      const requests: string[] = [];
+      page.on('request', (request) => {
+        const url = new URL(request.url());
+        if (url.protocol.startsWith('http') && !allowed.has(url.origin)) requests.push(url.href);
+      });
+
+      await use(requests);
+
+      expect(requests, 'requests to third-party hosts').toEqual([]);
     },
     { auto: true },
   ],

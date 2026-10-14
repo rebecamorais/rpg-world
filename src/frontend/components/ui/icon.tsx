@@ -54,6 +54,7 @@ import {
   Zap,
 } from 'lucide-react';
 
+import GAME_ICONS from '@frontend/constants/game-icons.generated.json';
 import { cn } from '@frontend/lib/utils';
 
 /**
@@ -132,8 +133,8 @@ interface IconProps extends Omit<LucideProps, 'size'> {
 /**
  * AppIcon: A unified registry for application icons.
  * - 'system': Uses Lucide React icons for UI and platform elements.
- * - 'game': Uses Game Icons via Iconify for immersive RPG elements, fetched at runtime from the
- *   Iconify API (allowed in the CSP, see shared/http/security-headers.ts).
+ * - 'game': Uses Game Icons via Iconify for immersive RPG elements. Their SVG data is bundled
+ *   (`npm run icons` regenerates `game-icons.generated.json`), so nothing is fetched at runtime.
  */
 export function AppIcon({
   name,
@@ -148,12 +149,20 @@ export function AppIcon({
     typeof size === 'string' ? ICON_SIZE_PRESETS[size as keyof typeof ICON_SIZE_PRESETS] : size;
 
   if (variant === 'game') {
+    const icon = GAME_ICONS[name as keyof typeof GAME_ICONS];
+    if (!icon) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`[AppIcon] Game icon "${name}" is not bundled. Run \`npm run icons\`.`);
+      }
+      return null;
+    }
+
     // Only pass compatible props to Iconify
     const { absoluteStrokeWidth: _, ...iconifyProps } = props as Record<string, unknown>;
 
     return (
       <Iconify
-        icon={`game-icons:${name}`}
+        icon={icon}
         className={cn('inline-block', className)}
         width={resolvedSize}
         height={resolvedSize}
