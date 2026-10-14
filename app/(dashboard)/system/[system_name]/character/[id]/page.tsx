@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
 import StatusView from '@frontend/components/character/StatusView';
-import { SaveCharacterButton } from '@frontend/components/character/sheet/SaveButton';
+import { SaveCharacterButton } from '@frontend/components/character/sheet/SaveControls';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
 
 export default async function CharacterStatusPage() {

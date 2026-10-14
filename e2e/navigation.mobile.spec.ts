@@ -1,4 +1,4 @@
-import { characterUrl, createCharacter, expect, test } from './support/fixtures';
+import { characterUrl, createCharacter, expect, hydrated, test } from './support/fixtures';
 import { SPELLS } from './support/global-setup';
 
 test.describe('celular', () => {
@@ -44,4 +44,17 @@ test.describe('celular', () => {
 
     await expect(page.getByText('No characters yet')).toBeVisible();
   });
+});
+
+test('no celular, salva pela barra fixa que aparece com alterações', async ({ page, user: _ }) => {
+  const id = await createCharacter(page, 'Thumb Hero');
+  await page.goto(characterUrl(id));
+
+  await (await hydrated(page.getByRole('button', { name: 'Lose 1 HP' }))).click();
+
+  const bar = page.locator('body > div').filter({ hasText: 'Unsaved changes' }).last();
+  await bar.getByRole('button', { name: 'Save', exact: true }).click();
+
+  await expect(page.getByText('Character saved successfully!')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Save', exact: true })).toBeHidden();
 });

@@ -78,7 +78,13 @@
     "language": "Idioma",
     "decrease": "Diminuir",
     "increase": "Aumentar",
-    "skipToContent": "Pular para o conteúdo"
+    "skipToContent": "Pular para o conteúdo",
+    "unsavedChanges": "Alterações não salvas",
+    "allSaved": "Tudo salvo",
+    "discard": "Descartar",
+    "discardConfirm": "Descartar as alterações não salvas?",
+    "leaveConfirm": "Você tem alterações não salvas. Sair mesmo assim?",
+    "saveShortcut": "Ctrl+S para salvar"
   },
   "login": {
     "title": "Entrar no RPG World",
@@ -287,7 +293,9 @@
       "d10": "1d10",
       "d12": "1d12"
     },
-    "edit": "Editar status de combate"
+    "edit": "Editar status de combate",
+    "loseHp": "Perder 1 PV",
+    "gainHp": "Recuperar 1 PV"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Nome da magia (ex: fireball)",
@@ -436,7 +444,10 @@
     "title": "Salvaguardas",
     "deathSaveSuccess": "Sucesso no teste contra a morte {count}",
     "deathSaveFailure": "Falha no teste contra a morte {count}",
-    "resetDeathSaves": "Zerar testes contra a morte"
+    "resetDeathSaves": "Zerar testes contra a morte",
+    "deathSaves": "Testes contra a morte",
+    "successes": "Sucessos",
+    "failures": "Falhas"
   },
   "terms": {
     "title": "Termos de Uso",

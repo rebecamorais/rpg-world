@@ -78,7 +78,13 @@
     "language": "Language",
     "decrease": "Decrease",
     "increase": "Increase",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "unsavedChanges": "Unsaved changes",
+    "allSaved": "All changes saved",
+    "discard": "Discard",
+    "discardConfirm": "Discard your unsaved changes?",
+    "leaveConfirm": "You have unsaved changes. Leave anyway?",
+    "saveShortcut": "Ctrl+S to save"
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -287,7 +293,9 @@
       "d10": "1d10",
       "d12": "1d12"
     },
-    "edit": "Edit combat stats"
+    "edit": "Edit combat stats",
+    "loseHp": "Lose 1 HP",
+    "gainHp": "Heal 1 HP"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Spell name (e.g.: fireball)",
@@ -436,7 +444,10 @@
     "title": "Saving Throws",
     "deathSaveSuccess": "Death save success {count}",
     "deathSaveFailure": "Death save failure {count}",
-    "resetDeathSaves": "Reset death saves"
+    "resetDeathSaves": "Reset death saves",
+    "deathSaves": "Death saves",
+    "successes": "Successes",
+    "failures": "Failures"
   },
   "terms": {
     "title": "Terms of Use",

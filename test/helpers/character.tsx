@@ -21,13 +21,13 @@ export function renderWithCharacter(ui: ReactElement, character: DnD5eCharacter)
   };
 
   function Harness({ children }: { children: ReactNode }) {
-    const { draft, isDirty, update } = useDraft(character);
+    const { draft, isDirty, update, discard } = useDraft(character);
     latest.draft = draft;
     latest.isDirty = isDirty;
     return (
       <CharacterContextProvider
         state={{ character: draft, isDirty }}
-        actions={{ update, save }}
+        actions={{ update, save, discard }}
         meta={{ id: character.id, isLoading: false, isSaving: false, error: null }}
       >
         {children}
