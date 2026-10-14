@@ -50,8 +50,8 @@ const DeathSaves = ({ deathSaves, onDeathSavesChange }: DeathSavesProps) => {
               className={cn(
                 'h-3.5 w-3.5 rounded-full border-2 transition-all duration-300',
                 (deathSaves?.successes || 0) > i
-                  ? 'border-green bg-green shadow-[0_0_12px_var(--color-green-muted)]'
-                  : 'border-green-surface hover:border-green-muted',
+                  ? 'border-success bg-success shadow-[0_0_12px_var(--color-success-muted)]'
+                  : 'border-success-surface hover:border-success-muted',
               )}
             />
           ))}
@@ -90,8 +90,8 @@ const DeathSaves = ({ deathSaves, onDeathSavesChange }: DeathSavesProps) => {
               className={cn(
                 'h-3.5 w-3.5 rounded-full border-2 transition-all duration-300',
                 (deathSaves?.failures || 0) > i
-                  ? 'border-red bg-red shadow-[0_0_12px_var(--color-red-muted)]'
-                  : 'border-red-surface hover:border-red-muted',
+                  ? 'border-danger bg-danger shadow-[0_0_12px_var(--color-danger-muted)]'
+                  : 'border-danger-surface hover:border-danger-muted',
               )}
             />
           ))}

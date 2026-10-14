@@ -2,7 +2,7 @@
  * Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio). Licenciado sob a GNU GPLv3.
  */
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Inter } from 'next/font/google';
+import { Cinzel, Geist_Mono, Inter } from 'next/font/google';
 
 import { getLocale, getMessages, getTimeZone } from 'next-intl/server';
 
@@ -19,9 +19,10 @@ const inter = Inter({
   subsets: ['latin'],
 });
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const cinzel = Cinzel({
+  variable: '--font-cinzel',
   subsets: ['latin'],
+  weight: ['600', '700'],
 });
 
 const geistMono = Geist_Mono({
@@ -46,7 +47,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} bg-background text-foreground flex min-h-screen flex-col antialiased`}
+        className={`${inter.variable} ${cinzel.variable} ${geistMono.variable} bg-background text-foreground flex min-h-screen flex-col antialiased`}
       >
         <Providers locale={locale} messages={messages} timeZone={timeZone}>
           <GlobalHeader />

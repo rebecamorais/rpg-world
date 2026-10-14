@@ -56,23 +56,11 @@ describe('CharacterContext', () => {
     api.post.mockResolvedValue({ success: true });
   });
 
-  it('carrega o personagem da rota e deriva o tema da cor de destaque', async () => {
+  it('carrega o personagem da rota', async () => {
     const { result } = renderContext();
 
     await waitFor(() => expect(result.current.character?.name).toBe('Thor'));
     expect(result.current.isLoading).toBe(false);
-    expect(result.current.themeHsl).toEqual({ h: 0, s: 100, l: 50 });
-  });
-
-  it('usa o tema padrão quando a cor salva é inválida', async () => {
-    api.get.mockImplementation(((url: string) =>
-      url === '/api/characters/char-1'
-        ? Promise.resolve({ ...character, accentColor: 'not-a-color' })
-        : respond(url)) as typeof api.get);
-    const { result } = renderContext();
-
-    await waitFor(() => expect(result.current.character).not.toBeNull());
-    expect(result.current.themeHsl).toEqual({ h: 270, s: 50, l: 40 });
   });
 
   it('não busca lore nem magias fora das abas que as usam', async () => {

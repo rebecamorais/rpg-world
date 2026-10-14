@@ -1,24 +1,30 @@
 import { describe, expect, it } from 'vitest';
 
-import { hexToHsl } from './color-utils';
+import { characterTheme, safeAccentColor } from './color-utils';
 
-describe('hexToHsl', () => {
-  it.each([
-    ['#ff0000', { h: 0, s: 100, l: 50 }],
-    ['#00ff00', { h: 120, s: 100, l: 50 }],
-    ['#0000ff', { h: 240, s: 100, l: 50 }],
-    ['#663399', { h: 270, s: 50, l: 40 }],
-    ['#ffffff', { h: 0, s: 0, l: 100 }],
-    ['#000000', { h: 0, s: 0, l: 0 }],
-  ])('converte %s', (hex, hsl) => {
-    expect(hexToHsl(hex)).toEqual(hsl);
+describe('safeAccentColor', () => {
+  it.each(['#ff0000', '#F00', '#6d28d9'])('aceita %s', (color) => {
+    expect(safeAccentColor(color)).toBe(color);
   });
 
-  it('aceita a forma curta e sem #, sem diferenciar maiúsculas', () => {
-    expect(hexToHsl('F00')).toEqual(hexToHsl('#ff0000'));
+  it.each(['#12345', 'red', '#gggggg', 'ff0000', '', null, undefined, 'var(--x); color: red'])(
+    'rejeita %j',
+    (color) => {
+      expect(safeAccentColor(color)).toBeUndefined();
+    },
+  );
+});
+
+describe('characterTheme', () => {
+  it('aplica a cor do personagem no contexto de tema', () => {
+    expect(characterTheme('#ff0000')).toEqual({
+      className: 'character-context',
+      style: { '--character-color': '#ff0000' },
+    });
   });
 
-  it.each(['#12345', 'red', '#gggggg', ''])('rejeita %j', (hex) => {
-    expect(() => hexToHsl(hex)).toThrow('Invalid hex color');
+  it('usa a cor da marca quando a cor salva é inválida ou não existe', () => {
+    expect(characterTheme('not-a-color').style).toEqual({ '--character-color': 'var(--brand)' });
+    expect(characterTheme(undefined).style).toEqual({ '--character-color': 'var(--brand)' });
   });
 });

@@ -11,6 +11,8 @@ import SpellSearchDialog from '@frontend/components/character/spells/SpellSearch
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { CharacterProvider, useCharacterContext } from '@frontend/context/CharacterContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
+import { characterTheme } from '@frontend/lib/color-utils';
+import { cn } from '@frontend/lib/utils';
 
 function CharacterLayoutContent({ children }: { children: ReactNode }) {
   const { currentUser } = useCurrentUser();
@@ -23,7 +25,6 @@ function CharacterLayoutContent({ children }: { children: ReactNode }) {
     handleLearnSpell,
     handleForgetSpell,
     spellsKnown,
-    themeHsl,
   } = useCharacterContext();
 
   const t = useTranslations('characters');
@@ -48,18 +49,10 @@ function CharacterLayoutContent({ children }: { children: ReactNode }) {
     );
   }
 
+  const theme = characterTheme(character.accentColor);
+
   return (
-    <div
-      className="character-context mx-auto w-full max-w-5xl p-4 transition-colors duration-500 md:min-w-[1024px]"
-      style={
-        {
-          '--character-color': character.accentColor || 'var(--primary)',
-          '--p-hue': themeHsl.h,
-          '--p-sat': `${themeHsl.s}%`,
-          '--p-light': `${themeHsl.l}%`,
-        } as React.CSSProperties
-      }
-    >
+    <div className={cn(theme.className, 'mx-auto w-full max-w-5xl p-4')} style={theme.style}>
       {/* Page content handles its own PageContainer */}
       {children}
 

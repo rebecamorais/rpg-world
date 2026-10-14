@@ -20,7 +20,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <Sidebar />
 
         {/* Main Content Area */}
-        <main className="flex-1">
+        <main className="min-w-0 flex-1">
           <div className="flex w-full flex-col items-center">{children}</div>
         </main>
       </div>

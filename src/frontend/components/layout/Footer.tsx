@@ -205,7 +205,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
 
               <div className="flex flex-col gap-2 rounded-lg border border-white/5 bg-white/[0.02] p-3">
                 <div className="flex items-center gap-3 text-sm font-semibold text-white">
-                  <AppIcon name="QrCode" size={16} className="text-primary" />
+                  <AppIcon name="QrCode" size={16} className="text-primary-flare" />
                   <span>{t('support.pixTitle')}</span>
                 </div>
                 <div className="flex items-center gap-2 overflow-hidden">
@@ -215,7 +215,7 @@ export default function Footer({ className, isMinified = false }: FooterProps) {
                   <button
                     onClick={handleCopyPix}
                     aria-label={t('support.pixCopyLabel')}
-                    className="bg-primary hover:bg-primary/80 flex h-7 w-7 items-center justify-center rounded text-white transition-colors"
+                    className="bg-primary hover:bg-primary/80 text-primary-on flex h-7 w-7 items-center justify-center rounded transition-colors"
                   >
                     <AppIcon name={hasCopied ? 'Check' : 'Clipboard'} size={14} />
                   </button>

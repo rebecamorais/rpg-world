@@ -12,7 +12,6 @@ import { useCharacterEditor } from '@frontend/hooks/useCharacterEditor';
 import { useCharacterLore } from '@frontend/hooks/useCharacterLore';
 import { useCharacterSpells } from '@frontend/hooks/useCharacterSpells';
 import type { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
-import { hexToHsl } from '@frontend/lib/color-utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
@@ -23,7 +22,6 @@ type CharacterContextType = ReturnType<typeof useCharacterEditor> & {
   updateLore: (data: Record<string, unknown>) => Promise<void>;
   isLoading: boolean;
   queryError: Error | null;
-  themeHsl: { h: number; s: number; l: number };
 
   // Spell management
   characterSpells: CharacterSpell[];
@@ -106,15 +104,6 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     [updateStatus, tCharacters],
   );
 
-  const themeHsl = useMemo(() => {
-    const hex = mergedCharacter?.accentColor || '#663399';
-    try {
-      return hexToHsl(hex);
-    } catch {
-      return { h: 270, s: 50, l: 40 };
-    }
-  }, [mergedCharacter?.accentColor]);
-
   const spellsKnown = useMemo(() => spells.map((s) => s.id), [spells]);
 
   const contextValue = useMemo(
@@ -127,7 +116,6 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       isLoading:
         isCharLoading || (isLoreRoute && isLoreLoading) || (isSpellsRoute && isSpellsLoading),
       queryError: charError as Error | null,
-      themeHsl,
 
       // Spell management
       characterSpells: spells,
@@ -148,7 +136,6 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       isCharLoading,
       isLoreLoading,
       charError,
-      themeHsl,
       spells,
       spellsKnown,
       isSpellsLoading,

@@ -60,19 +60,19 @@ export default function CharacterList() {
         <div className="relative mb-8">
           <div className="bg-primary/30 absolute -inset-4 animate-pulse rounded-full blur-2xl" />
           <div className="bg-muted relative flex h-28 w-28 items-center justify-center rounded-full shadow-2xl">
-            <AppIcon name="UserPlus" size={56} className="text-muted-foreground opacity-40" />
+            <AppIcon name="UserPlus" size={56} className="text-muted-foreground" />
           </div>
         </div>
         <h3 className="text-foreground mb-4 text-3xl font-black tracking-tighter">
           {t('emptyState')}
         </h3>
-        <p className="text-muted-foreground mx-auto mb-10 max-w-sm text-base leading-relaxed font-medium opacity-70">
+        <p className="text-muted-foreground mx-auto mb-10 max-w-sm text-base leading-relaxed font-medium">
           {t('createFirstDescription')}
         </p>
         <Button
           asChild
           size="lg"
-          className="shadow-primary/20 h-14 rounded-full px-12 text-lg font-black shadow-2xl transition-all hover:scale-105 active:scale-95"
+          className="shadow-primary/20 h-auto min-h-14 max-w-full rounded-full px-8 py-3 text-lg font-black whitespace-normal shadow-2xl transition-all hover:scale-105 active:scale-95 sm:px-12"
         >
           <Link href="/characters/new">
             <AppIcon name="Plus" size={24} className="mr-3" />
@@ -98,7 +98,7 @@ export default function CharacterList() {
                 {t('online')}
               </span>
             </div>
-            <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-60">
+            <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
               {t('characterCount', { count: characters.length })}
             </p>
           </div>
@@ -125,7 +125,7 @@ export default function CharacterList() {
           </div>
 
           <div className="relative text-center">
-            <span className="text-muted-foreground group-hover:text-primary text-xl font-black tracking-tighter transition-colors duration-500 sm:text-2xl">
+            <span className="text-muted-foreground group-hover:text-primary-flare text-xl font-black tracking-tighter transition-colors duration-500 sm:text-2xl">
               {t('createNew')}
             </span>
             <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-0 transition-all duration-500 group-hover:translate-y-1 group-hover:opacity-40">

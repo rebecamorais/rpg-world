@@ -201,7 +201,7 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
             <Button
               type="submit"
               disabled={form.formState.isSubmitting || !turnstileToken}
-              className="bg-primary hover:bg-primary-flare focus:ring-primary/20 w-full font-bold text-white transition-all focus:ring-2 active:scale-[0.98]"
+              className="bg-primary hover:bg-primary/90 focus:ring-primary/20 text-primary-on w-full font-bold transition-all focus:ring-2 active:scale-[0.98]"
             >
               {form.formState.isSubmitting ? (
                 <>

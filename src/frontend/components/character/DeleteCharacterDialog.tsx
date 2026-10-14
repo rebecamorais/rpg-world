@@ -41,7 +41,7 @@ export function DeleteCharacterDialog({
     <Dialog open={!!character} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent
         className="character-context border-red-500/20 bg-slate-950/95 text-white backdrop-blur-xl"
-        style={{ '--character-color': 'var(--red)' } as React.CSSProperties}
+        style={{ '--character-color': 'var(--danger)' } as React.CSSProperties}
       >
         <DialogHeader>
           <DialogTitle>{t('deleteDialogTitle')}</DialogTitle>

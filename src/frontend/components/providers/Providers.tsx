@@ -5,7 +5,6 @@ import { type ReactNode, useEffect } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 
 import QueryProvider from '@frontend/components/providers/QueryProvider';
-import ThemeProvider from '@frontend/components/providers/ThemeProvider';
 import { TooltipProvider } from '@frontend/components/ui/tooltip';
 import { FileUploaderProvider } from '@frontend/context/FileUploaderContext';
 import { UserProvider } from '@frontend/context/UserContext';
@@ -30,7 +29,6 @@ export default function Providers({ children, locale, messages, timeZone }: Prov
       <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
         <UserProvider user={null}>
           <FileUploaderProvider>
-            <ThemeProvider />
             <TooltipProvider>{children}</TooltipProvider>
           </FileUploaderProvider>
         </UserProvider>

@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { NavItem } from '@frontend/components/ui/nav-item';
 import { useCharacter } from '@frontend/hooks/useCharacter';
+import { characterTheme } from '@frontend/lib/color-utils';
 import { CharacterTab } from '@frontend/types/character-sheet';
 
 export default function CharacterNavSection({ characterId }: { characterId: string }) {
@@ -36,7 +37,7 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
   return (
     <section
       className="character-context animate-in fade-in slide-in-from-left-2 flex flex-col gap-4 duration-300"
-      style={{ '--character-color': character.accentColor } as React.CSSProperties}
+      style={characterTheme(character.accentColor).style}
     >
       <div className="flex flex-col gap-2 px-3">
         <p className="text-character-flare text-xs font-bold tracking-widest uppercase">

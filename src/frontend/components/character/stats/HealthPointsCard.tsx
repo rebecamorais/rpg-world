@@ -21,8 +21,8 @@ const HealthHeader = () => {
   const t = useTranslations('combatStats');
   return (
     <div className="flex items-center gap-2 opacity-80 transition-opacity group-hover:opacity-100">
-      <AppIcon name="Heart" size={16} className="text-red-flare animate-pulse" />
-      <span className="text-red-flare text-[10px] font-black tracking-[0.2em] uppercase">
+      <AppIcon name="Heart" size={16} className="text-danger-flare animate-pulse" />
+      <span className="text-danger-flare text-[10px] font-black tracking-[0.2em] uppercase">
         {t('hitPointsShort')}
       </span>
     </div>
@@ -53,12 +53,12 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
           />
           <div className="flex items-baseline gap-1 self-end px-1 pb-1.5 font-bold">
             <span className="text-lg text-white/20">/</span>
-            <span className="text-lg text-white/40">{maxHp}</span>
+            <span className="text-muted-foreground text-lg">{maxHp}</span>
           </div>
         </div>
 
         {tempHp > 0 && (
-          <div className="text-yellow ml-2 flex items-baseline self-end pb-2 font-black transition-all duration-300">
+          <div className="text-warning ml-2 flex items-baseline self-end pb-2 font-black transition-all duration-300">
             <span className="text-xs opacity-40">(+</span>
             <GhostInput
               type="number"
@@ -67,7 +67,7 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onHpChange('hpTemp', parseInt(e.target.value) || 0)
               }
-              className="text-yellow h-auto w-8 p-0 text-center text-xs font-black outline-none"
+              className="text-warning h-auto w-8 p-0 text-center text-xs font-black outline-none"
             />
             <span className="text-xs opacity-40">)</span>
           </div>
@@ -90,13 +90,13 @@ export const HealthPointsCard = React.forwardRef<HTMLDivElement, HealthPointsCar
       <Card
         ref={ref}
         className={cn(
-          'group hover:border-red/30 relative flex min-h-[160px] flex-col justify-between overflow-hidden border-zinc-800/40 bg-zinc-950/40 p-4 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:bg-zinc-900/60',
+          'group hover:border-danger/30 relative flex min-h-[160px] flex-col justify-between overflow-hidden border-zinc-800/40 bg-zinc-950/40 p-4 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:bg-zinc-900/60',
           className,
         )}
         {...props}
       >
         {/* Background glow matching HP state */}
-        <div className="bg-red/5 absolute -right-10 -bottom-10 h-32 w-32 rounded-full blur-3xl transition-opacity group-hover:opacity-20" />
+        <div className="bg-danger/5 absolute -right-10 -bottom-10 h-32 w-32 rounded-full blur-3xl transition-opacity group-hover:opacity-20" />
 
         <HealthHeader />
         <HealthValues currentHp={currentHp} maxHp={maxHp} tempHp={tempHp} onHpChange={onHpChange} />

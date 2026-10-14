@@ -19,6 +19,7 @@ import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
+import { characterTheme } from '@frontend/lib/color-utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 
@@ -44,7 +45,7 @@ export const CombatStatsDialog = ({
   return (
     <DialogContent
       className="character-context border-zinc-800 bg-zinc-950 p-0 shadow-2xl sm:max-w-[700px]"
-      style={{ '--character-color': character.accentColor } as React.CSSProperties}
+      style={characterTheme(character.accentColor).style}
     >
       <DialogHeader className="border-b border-zinc-800 p-6 pb-4">
         <div className="flex items-center gap-2">

@@ -45,7 +45,7 @@ export function LoadingState({
       )}
     >
       <div className="relative">
-        <Spinner size="lg" className="text-primary" />
+        <Spinner size="lg" className="text-primary-flare" />
         <div className="bg-primary/20 absolute inset-0 blur-xl filter" />
       </div>
 

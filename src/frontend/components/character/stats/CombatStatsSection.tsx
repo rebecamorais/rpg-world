@@ -55,7 +55,7 @@ const CombatHeader = ({
   return (
     <CardHeader className="border-b border-zinc-800/50 bg-zinc-950/20 px-4 py-4 backdrop-blur-md transition-colors hover:bg-zinc-950/30 md:px-6 md:py-3">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-6">
-        <div className="grid grid-cols-2 items-center gap-3 md:flex md:flex-row md:gap-6">
+        <div className="grid grid-cols-2 items-center gap-3 md:flex md:flex-row md:flex-wrap md:gap-x-6 md:gap-y-3">
           {/* Armor Class */}
           <StatBadge
             icon={

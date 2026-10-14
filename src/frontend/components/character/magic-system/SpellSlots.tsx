@@ -50,7 +50,7 @@ export const SpellSlots = React.forwardRef<HTMLDivElement, Props>(
             <AppIcon name="crystal-ball" variant="game" size="lg" className="text-blue-400" />
             {systemSelector}
           </div>
-          <div className="bg-character-surface text-blue-flare rounded-full px-2 py-0.5 text-xs font-bold tracking-widest uppercase">
+          <div className="bg-character-surface text-info-flare rounded-full px-2 py-0.5 text-xs font-bold tracking-widest uppercase">
             {totalAvailable} / {totalMax}
           </div>
         </div>
@@ -63,7 +63,7 @@ export const SpellSlots = React.forwardRef<HTMLDivElement, Props>(
 
             return (
               <div key={lvl} className={cn('flex flex-col gap-0.5', !isActive && 'opacity-10')}>
-                <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-70">
+                <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
                   {lvl}º
                 </span>
                 <div className="flex flex-wrap gap-1">
@@ -86,11 +86,11 @@ export const SpellSlots = React.forwardRef<HTMLDivElement, Props>(
                         style={
                           i < available
                             ? {
-                                backgroundColor: 'var(--blue-flare)',
-                                boxShadow: '0 0 8px var(--blue-glow)',
+                                backgroundColor: 'var(--info-flare)',
+                                boxShadow: '0 0 8px var(--info-muted)',
                               }
                             : {
-                                border: '1px solid var(--blue-muted)',
+                                border: '1px solid var(--info-muted)',
                               }
                         }
                       />

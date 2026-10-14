@@ -90,7 +90,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
             }}
           />
           <div className="mb-4 hidden w-full px-6 md:block">
-            <div className="text-muted-foreground/40 flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase">
+            <div className="text-muted-foreground flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase">
               <span className="bg-muted-foreground/20 h-px flex-1" />
               {t('spellbookIndex')}
               <span className="bg-muted-foreground/20 h-px flex-1" />
@@ -115,7 +115,7 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                 </span>
 
                 {/* Spell Count Badge */}
-                <div className="bg-muted-foreground/10 text-muted-foreground/50 group-data-[state=active]:bg-character-muted group-data-[state=active]:text-character-flare ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 font-mono text-xs font-black transition-colors">
+                <div className="bg-muted-foreground/10 text-muted-foreground group-data-[state=active]:bg-character-muted group-data-[state=active]:text-character-flare ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 font-mono text-xs font-black transition-colors">
                   {spellsByLevel[level].length}
                 </div>
               </TabsTrigger>

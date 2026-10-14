@@ -20,6 +20,7 @@ import { SelectField } from '@frontend/components/ui/select-field';
 import { DAMAGE_THEMES } from '@frontend/constants/damage-themes';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 import { useSpells } from '@frontend/hooks/useSpells';
+import { characterTheme } from '@frontend/lib/color-utils';
 import { CharacterClass, SpellSchool } from '@frontend/types/spells';
 
 interface Props {
@@ -121,7 +122,7 @@ export default function SpellSearchDialog({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         className="character-context flex h-[90vh] max-w-4xl flex-col border-white/10 bg-slate-950/95 p-0 text-white backdrop-blur-xl"
-        style={{ '--character-color': accentColor } as React.CSSProperties}
+        style={characterTheme(accentColor).style}
       >
         {/* Thematic Glow */}
         <div
@@ -133,7 +134,7 @@ export default function SpellSearchDialog({
         <DialogHeader className="border-b border-white/5 p-6">
           <div className="flex items-center justify-between">
             <DialogTitle className="flex items-center gap-3 text-2xl font-bold tracking-tight italic">
-              <div className="bg-character-surface text-character flex h-10 w-10 items-center justify-center rounded-xl shadow-lg ring-1 ring-white/10">
+              <div className="bg-character-surface text-character-flare flex h-10 w-10 items-center justify-center rounded-xl shadow-lg ring-1 ring-white/10">
                 <AppIcon name="BookOpen" size={24} />
               </div>
               {t('title')}
@@ -246,7 +247,7 @@ export default function SpellSearchDialog({
                   setClassFilter(null);
                   setDamageFilter(null);
                 }}
-                className="text-character"
+                className="text-character-flare"
               >
                 {t('clearFilters')}
               </Button>

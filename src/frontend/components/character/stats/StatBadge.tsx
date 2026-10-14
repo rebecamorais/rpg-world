@@ -21,7 +21,7 @@ export const StatBadge = ({ icon, label, children, reverse }: StatBadgeProps) =>
         {children}
       </div>
       {label && (
-        <span className="text-secondary-foreground/30 group-hover/badge:text-secondary-foreground/60 text-[9px] font-black tracking-[0.2em] whitespace-nowrap uppercase transition-all duration-500 group-hover/badge:translate-x-0.5 group-hover/badge:opacity-100">
+        <span className="text-muted-foreground group-hover/badge:text-secondary-foreground text-[9px] font-black tracking-[0.2em] whitespace-nowrap uppercase transition-all duration-500 group-hover/badge:translate-x-0.5 group-hover/badge:opacity-100">
           {label}
         </span>
       )}
