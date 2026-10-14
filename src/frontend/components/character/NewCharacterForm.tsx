@@ -8,13 +8,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button } from '@frontend/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@frontend/components/ui/card';
+import { Card, CardContent } from '@frontend/components/ui/card';
 import {
   Form,
   FormControl,
@@ -83,18 +77,9 @@ export default function NewCharacterForm() {
   };
 
   return (
-    <div className="mx-auto max-w-lg p-4">
-      <div className="mb-4">
-        <Link href="/characters" className="text-muted-foreground hover:text-foreground text-sm">
-          {tCommon('back')}
-        </Link>
-      </div>
+    <div className="max-w-2xl">
       <Card>
-        <CardHeader>
-          <CardTitle as="h1">{t('title')}</CardTitle>
-          <CardDescription>{t('description')}</CardDescription>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField

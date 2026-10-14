@@ -12,13 +12,7 @@ import { z } from 'zod';
 import ImageUpload from '@frontend/components/shared/ImageUpload';
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Button } from '@frontend/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@frontend/components/ui/card';
+import { Card } from '@frontend/components/ui/card';
 import {
   Form,
   FormControl,
@@ -29,6 +23,7 @@ import {
   FormRootError,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
+import { SectionCard } from '@frontend/components/ui/section-card';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
 import { cn } from '@frontend/lib/utils';
@@ -127,19 +122,18 @@ export default function ProfileForm() {
 
   if (isLoading) {
     return (
-      <Card className="bg-card/80 mx-auto w-full max-w-lg py-12 backdrop-blur-md">
+      <Card className="max-w-2xl py-12">
         <LoadingState thematic />
       </Card>
     );
   }
 
   return (
-    <Card className="bg-card/80 mx-auto w-full max-w-lg shadow-2xl backdrop-blur-md">
-      <CardHeader>
-        <CardTitle as="h2">{t('title')}</CardTitle>
-        <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <SectionCard className="max-w-2xl">
+      <SectionCard.Header>
+        <SectionCard.Title icon="User">{t('title')}</SectionCard.Title>
+      </SectionCard.Header>
+      <SectionCard.Body className="p-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
             {/* Avatar upload — at the top, centered */}
@@ -246,7 +240,7 @@ export default function ProfileForm() {
             </Button>
           </form>
         </Form>
-      </CardContent>
-    </Card>
+      </SectionCard.Body>
+    </SectionCard>
   );
 }

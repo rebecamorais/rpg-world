@@ -21,7 +21,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
         {/* Content area (the main landmark is in the root layout) */}
         <div className="min-w-0 flex-1">
-          <div className="flex w-full flex-col items-center">{children}</div>
+          {/* Same width, side and top spacing on every dashboard page */}
+          <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 md:py-10">{children}</div>
         </div>
       </div>
     </UserProvider>

@@ -200,7 +200,6 @@
     "castingTime": "Tempo de Conjuramento",
     "range": "Alcance",
     "duration": "Duração",
-    "characterCount": "{count, plural, one {1 personagem pronto para aventura} other {# personagens prontos para aventura}}",
     "deleteDialogTitle": "Excluir personagem?",
     "deleteDialogDescription": "Tem certeza que deseja excluir o personagem {name}? Essa ação não poderá ser desfeita e todos os dados serão perdidos.",
     "deleteConfirmInstruction": "Para confirmar, digite o nome do personagem: <bold>{name}</bold>",
@@ -243,13 +242,13 @@
     },
     "addItem": "Adicionar Item",
     "loadErrorTitle": "Ocorreu um erro",
-    "online": "Online",
     "createNewTagline": "Comece sua lenda",
     "levelShort": "Nv {level}",
     "defaultClass": "Aventureiro",
     "selectLevel": "Selecione o nível",
     "cardActions": "Ações de {name}",
-    "loadingList": "Carregando personagens"
+    "loadingList": "Carregando personagens",
+    "subtitle": "Suas fichas, prontas para a próxima sessão."
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
@@ -268,8 +267,8 @@
     "customizeTitle": "Personalizar Personagem",
     "avatarLabel": "Avatar",
     "accentColorLabel": "Cor de Destaque",
-    "editName": "Editar nome",
-    "xpProgress": "Progresso para o próximo nível"
+    "xpProgress": "Progresso para o próximo nível",
+    "name": "Nome"
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",

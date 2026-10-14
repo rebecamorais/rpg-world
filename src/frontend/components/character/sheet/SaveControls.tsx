@@ -21,7 +21,7 @@ interface SaveControlsProps {
 /**
  * Save controls of a sheet tab:
  * - in the page header, the save state ("Unsaved changes") and the save button;
- * - on phones, while there are edits, a bar fixed at the bottom with Discard and Save;
+ * - while there are edits, a bar fixed at the bottom with Discard and Save (the header scrolls away);
  * - Ctrl/Cmd+S saves.
  */
 export function SaveControls({ isDirty, isSaving, onSave, onDiscard }: SaveControlsProps) {
@@ -63,7 +63,7 @@ export function SaveControls({ isDirty, isSaving, onSave, onDiscard }: SaveContr
       {isDirty &&
         typeof document !== 'undefined' &&
         createPortal(
-          <div className="border-border bg-popover/95 fixed inset-x-4 bottom-4 z-40 flex items-center justify-between gap-3 rounded-xl border p-3 shadow-2xl backdrop-blur-md sm:hidden">
+          <div className="border-border bg-popover/95 fixed inset-x-4 bottom-4 z-40 flex items-center justify-between gap-4 rounded-xl border p-3 shadow-2xl backdrop-blur-md sm:right-6 sm:left-auto sm:pl-4">
             <span className="text-label text-warning-flare flex items-center gap-1.5">
               <span className="bg-warning h-2 w-2 rounded-full" aria-hidden="true" />
               {t('unsavedChanges')}

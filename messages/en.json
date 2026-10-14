@@ -200,7 +200,6 @@
     "castingTime": "Casting Time",
     "range": "Range",
     "duration": "Duration",
-    "characterCount": "{count, plural, one {1 character ready for adventure} other {# characters ready for adventure}}",
     "deleteDialogTitle": "Delete character?",
     "deleteDialogDescription": "Are you sure you want to delete the character {name}? This action cannot be undone and all data will be lost.",
     "deleteConfirmInstruction": "To confirm, type the character's name: <bold>{name}</bold>",
@@ -243,13 +242,13 @@
     },
     "addItem": "Add Item",
     "loadErrorTitle": "Something went wrong",
-    "online": "Online",
     "createNewTagline": "Start your legend",
     "levelShort": "Lv {level}",
     "defaultClass": "Adventurer",
     "selectLevel": "Select level",
     "cardActions": "Actions for {name}",
-    "loadingList": "Loading characters"
+    "loadingList": "Loading characters",
+    "subtitle": "Your sheets, ready for the next session."
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
@@ -268,8 +267,8 @@
     "customizeTitle": "Customize Character",
     "avatarLabel": "Avatar",
     "accentColorLabel": "Accent Color",
-    "editName": "Edit name",
-    "xpProgress": "Progress to next level"
+    "xpProgress": "Progress to next level",
+    "name": "Name"
   },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",

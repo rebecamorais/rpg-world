@@ -40,7 +40,7 @@ export function CharacterSheetShell({ children }: { children: ReactNode }) {
       <EmptyState
         icon="Shield"
         title={t('notFoundOrNoPermission')}
-        className="m-4 w-full max-w-lg"
+        className="w-full max-w-lg"
         action={
           <Link href="/characters" className="text-primary-flare text-sm underline">
             {tCommon('back')}
@@ -54,7 +54,8 @@ export function CharacterSheetShell({ children }: { children: ReactNode }) {
 
   return (
     <div
-      className={cn(theme.className, 'mx-auto w-full max-w-5xl p-4 pb-24 sm:pb-4')}
+      // Room for the fixed save bar; width and padding come from the dashboard layout
+      className={cn(theme.className, 'w-full pb-20')}
       style={theme.style}
     >
       {children}

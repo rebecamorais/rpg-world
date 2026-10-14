@@ -36,13 +36,9 @@ export default function CharacterList() {
 
   if (!currentUser) return null;
 
-  // The page title is there in every state (loading, error, empty), as the page's h1
-  const title = <h1 className="text-display text-foreground">{t('title')}</h1>;
-
   if (error) {
     return (
       <div className="space-y-6">
-        {title}
         <ErrorState title={t('loadErrorTitle')} description={getErrorMessage(error)} />
       </div>
     );
@@ -51,7 +47,6 @@ export default function CharacterList() {
   if (isLoading) {
     return (
       <div className="space-y-6" aria-busy="true">
-        {title}
         <span role="status" className="sr-only">
           {t('loadingList')}
         </span>
@@ -67,7 +62,6 @@ export default function CharacterList() {
   if (characters.length === 0) {
     return (
       <div className="space-y-6">
-        {title}
         <EmptyState
           icon="UserPlus"
           title={t('emptyState')}
@@ -87,23 +81,7 @@ export default function CharacterList() {
   }
 
   return (
-    <div className="space-y-10">
-      {/* Header Section */}
-      <div className="border-muted/20 flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-2">
-          {title}
-          <div className="flex items-center gap-3">
-            <div className="border-success-muted bg-success-surface flex h-5 items-center gap-1.5 rounded-full border px-2.5 py-0.5">
-              <span className="bg-success h-1.5 w-1.5 rounded-full shadow-[0_0_8px_var(--success-muted)]" />
-              <span className="text-label text-success-flare">{t('online')}</span>
-            </div>
-            <p className="text-label text-muted-foreground">
-              {t('characterCount', { count: characters.length })}
-            </p>
-          </div>
-        </div>
-      </div>
-
+    <div className="space-y-6">
       <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-2">
         {/* Create Character Action Card - Premium Design */}
         <Link
