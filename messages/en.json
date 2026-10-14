@@ -312,7 +312,8 @@
     "spellSlots": "Spell Slots",
     "level": "Lv {level}",
     "pointsCapacity": "Spell Points Capacity",
-    "systemPlaceholder": "Magic"
+    "systemPlaceholder": "Magic",
+    "slot": "Level {level} slot {slot}"
   },
   "dashboard": {
     "menu": "Menu",

@@ -3,13 +3,13 @@
 import { useTranslations } from 'next-intl';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
+import { InlineField } from '@frontend/components/ui/field';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Label } from '@frontend/components/ui/label';
+import { SectionCard } from '@frontend/components/ui/section-card';
 import { cn } from '@frontend/lib/utils';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
-import { GhostInput } from '../ui/ghost-input';
 import { Textarea } from '../ui/textarea';
 
 interface LoreData extends Partial<DnD5eCharacter> {
@@ -42,24 +42,13 @@ interface AppearanceFieldProps {
 }
 
 const AppearanceField = ({ label, field, value, onBasicInfoChange }: AppearanceFieldProps) => (
-  <div className="flex flex-col gap-1">
-    <Label
-      htmlFor={`lore-${field}`}
-      className="text-muted-foreground text-xs tracking-wider uppercase"
-    >
-      {label}
-    </Label>
-    <div className="group relative">
-      <GhostInput
-        id={`lore-${field}`}
-        value={value || ''}
-        placeholder="—"
-        onChange={(e) => onBasicInfoChange(field, e.target.value)}
-        className="bg-muted/20 group-hover:bg-muted/40 focus:border-primary-muted focus:bg-background h-10 border-b border-transparent px-3 font-medium transition-all focus:ring-0"
-        showIcon={true}
-      />
-    </div>
-  </div>
+  <InlineField
+    id={`lore-${field}`}
+    label={label}
+    value={value || ''}
+    placeholder="—"
+    onChange={(e) => onBasicInfoChange(field, e.target.value)}
+  />
 );
 
 interface TextAreaFieldProps {
@@ -79,28 +68,23 @@ const TextAreaField = ({
   onBasicInfoChange,
   placeholder,
 }: TextAreaFieldProps) => (
-  <Card className="bg-card/50 group border-character-surface hover:border-character-muted hover:bg-character-surface/20 relative overflow-hidden border shadow-none transition-all hover:shadow-[0_0_15px_var(--character-muted)]">
-    <CardHeader className="bg-muted/30 flex flex-row items-center justify-between px-4 py-2">
-      <div className="flex items-center gap-2">
-        <AppIcon name={icon} size={14} className="text-character-flare" />
-        <CardTitle className="text-xs tracking-widest uppercase opacity-70">{label}</CardTitle>
-      </div>
-    </CardHeader>
-    <CardContent className="p-0">
-      <Textarea
-        aria-label={label}
-        value={value || ''}
-        placeholder={placeholder}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-          onBasicInfoChange(field, e.target.value)
-        }
-        className={cn(
-          'text-foreground min-h-[120px] w-full resize-none border-none bg-transparent px-4 py-3 text-sm leading-relaxed shadow-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0',
-          !value && 'italic',
-        )}
-      />
-    </CardContent>
-  </Card>
+  <SectionCard className="bg-card/50 hover:border-character-muted shadow-none transition-colors">
+    <SectionCard.Header>
+      <SectionCard.Title icon={icon}>{label}</SectionCard.Title>
+    </SectionCard.Header>
+    <Textarea
+      aria-label={label}
+      value={value || ''}
+      placeholder={placeholder}
+      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+        onBasicInfoChange(field, e.target.value)
+      }
+      className={cn(
+        'text-foreground min-h-[120px] w-full resize-none rounded-none border-none bg-transparent px-4 py-3 text-sm leading-relaxed shadow-none focus-visible:-outline-offset-2',
+        !value && 'italic',
+      )}
+    />
+  </SectionCard>
 );
 
 export default function LoreSection({ data, onBasicInfoChange }: Props) {
@@ -115,7 +99,7 @@ export default function LoreSection({ data, onBasicInfoChange }: Props) {
           <Card className="border-none bg-transparent shadow-none">
             <CardHeader className="flex flex-row items-center gap-2 px-0 py-2">
               <AppIcon name="User" size={16} className="text-character-flare" />
-              <CardTitle className="text-xs tracking-widest uppercase">{t('appearance')}</CardTitle>
+              <CardTitle className="text-label text-muted-foreground">{t('appearance')}</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-3 p-0 pt-2">
               <AppearanceField
@@ -163,7 +147,7 @@ export default function LoreSection({ data, onBasicInfoChange }: Props) {
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2 py-2">
               <AppIcon name="Heart" size={16} className="text-character-flare" />
-              <h3 className="text-xs font-bold tracking-widest uppercase">{t('personality')}</h3>
+              <h3 className="text-label">{t('personality')}</h3>
             </div>
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <TextAreaField
@@ -206,7 +190,7 @@ export default function LoreSection({ data, onBasicInfoChange }: Props) {
         <div className="flex flex-col gap-6 md:col-span-12">
           <div className="flex items-center gap-2 py-2">
             <AppIcon name="History" size={16} className="text-character-flare" />
-            <h3 className="text-xs font-bold tracking-widest uppercase">{t('narrative')}</h3>
+            <h3 className="text-label">{t('narrative')}</h3>
           </div>
 
           <TextAreaField

@@ -5,7 +5,6 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -18,6 +17,7 @@ import {
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
+import { SectionCard } from '@frontend/components/ui/section-card';
 
 import type { AttributeKey } from '@shared/systems/dnd5e';
 import { ATTRIBUTE_KEYS } from '@shared/systems/dnd5e/constants';
@@ -65,76 +65,73 @@ function AttributesSection({ attributes, onAttributeChange }: Props) {
   );
 
   return (
-    <Card className="border-border bg-card h-full">
-      <CardHeader className="bg-muted/30 border-border flex flex-row items-center justify-between border-b px-4 py-2">
-        <div className="flex items-center gap-2">
-          <AppIcon name="Shield" size={14} className="text-character-flare" />
-          <CardTitle className="text-xs font-bold tracking-widest uppercase opacity-70">
-            {t('title')}
-          </CardTitle>
-        </div>
+    <SectionCard>
+      <SectionCard.Header>
+        <SectionCard.Title icon="Shield">{t('title')}</SectionCard.Title>
 
-        <Dialog
-          open={isOpen}
-          onOpenChange={(open) => {
-            if (open) {
-              setTempValues(attributes);
-            }
-            setIsOpen(open);
-          }}
-        >
-          <DialogTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={t('bulkEditTitle')}
-              className="h-8 w-8 opacity-60 hover:opacity-100"
-            >
-              <AppIcon name="Settings2" size="sm" />
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>{t('bulkEditTitle') || 'Editar Atributos'}</DialogTitle>
-              <DialogDescription className="sr-only">
-                {t('bulkEditDescription') || 'Alterar valores de todos os atributos'}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid grid-cols-2 gap-4 py-4">
-              {ATTRIBUTE_KEYS.map((key) => (
-                <div key={key} className="flex flex-col gap-2">
-                  <Label htmlFor={key} className="font-bold tracking-wider uppercase">
-                    {t(key)}
-                  </Label>
-                  <Input
-                    id={key}
-                    type="number"
-                    value={tempValues[key] ?? 10}
-                    onChange={(e) =>
-                      setTempValues((prev) => ({
-                        ...prev,
-                        [key]: parseInt(e.target.value) || 0,
-                      }))
-                    }
-                    className="h-10 text-lg font-bold"
-                  />
-                </div>
-              ))}
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsOpen(false)}>
-                {t('cancel') || 'Cancelar'}
+        <SectionCard.Actions>
+          <Dialog
+            open={isOpen}
+            onOpenChange={(open) => {
+              if (open) {
+                setTempValues(attributes);
+              }
+              setIsOpen(open);
+            }}
+          >
+            <DialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={t('bulkEditTitle')}
+                className="text-muted-foreground hover:text-foreground h-8 w-8"
+              >
+                <AppIcon name="Settings2" size="sm" />
               </Button>
-              <Button onClick={handleSave}>{t('save') || 'Salvar'}</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </CardHeader>
-      <CardContent className="grid grid-cols-2 gap-4 p-4">
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>{t('bulkEditTitle')}</DialogTitle>
+                <DialogDescription className="sr-only">
+                  {t('bulkEditDescription')}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid grid-cols-2 gap-4 py-4">
+                {ATTRIBUTE_KEYS.map((key) => (
+                  <div key={key} className="flex flex-col gap-2">
+                    <Label htmlFor={key} className="text-label">
+                      {t(key)}
+                    </Label>
+                    <Input
+                      id={key}
+                      type="number"
+                      value={tempValues[key] ?? 10}
+                      onChange={(e) =>
+                        setTempValues((prev) => ({
+                          ...prev,
+                          [key]: parseInt(e.target.value) || 0,
+                        }))
+                      }
+                      className="h-10 font-mono text-lg font-bold"
+                    />
+                  </div>
+                ))}
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsOpen(false)}>
+                  {t('cancel')}
+                </Button>
+                <Button onClick={handleSave}>{t('save')}</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </SectionCard.Actions>
+      </SectionCard.Header>
+      <SectionCard.Body className="grid grid-cols-2 gap-4">
         <div className="flex flex-col items-center gap-4">{firstCol.map(renderAttribute)}</div>
         <div className="flex flex-col items-center gap-4">{secondCol.map(renderAttribute)}</div>
-      </CardContent>
-    </Card>
+      </SectionCard.Body>
+    </SectionCard>
   );
 }
 

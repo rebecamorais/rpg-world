@@ -18,11 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@frontend/components/ui/select';
+import { StatBlock } from '@frontend/components/ui/stat-block';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 
 import { CombatStatsDialog } from './CombatStatsDialog';
-import { StatBadge } from './StatBadge';
 
 interface CombatStatsSectionProps {
   character: DnD5eCharacter;
@@ -42,6 +42,8 @@ interface CombatHeaderProps {
   onHitDiceChange: (total: string) => void;
 }
 
+const STAT_INPUT = 'h-6 w-12 p-0 font-mono text-base font-bold focus-visible:px-1 md:text-base';
+
 const CombatHeader = ({
   character,
   onBasicInfoChange,
@@ -53,21 +55,10 @@ const CombatHeader = ({
   const t = useTranslations('combatStats');
 
   return (
-    <CardHeader className="border-b border-zinc-800/50 bg-zinc-950/20 px-4 py-4 backdrop-blur-md transition-colors hover:bg-zinc-950/30 md:px-6 md:py-3">
+    <CardHeader className="border-border bg-muted/30 border-b px-4 py-4 md:px-6 md:py-3">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-6">
-        <div className="grid grid-cols-2 items-center gap-3 md:flex md:flex-row md:flex-wrap md:gap-x-6 md:gap-y-3">
-          {/* Armor Class */}
-          <StatBadge
-            icon={
-              <AppIcon
-                name="shoulder-armor"
-                variant="game"
-                size="lg"
-                className="text-character-flare animate-pulse"
-              />
-            }
-            label={t('armorClass')}
-          >
+        <div className="grid grid-cols-2 gap-3 md:flex md:flex-row md:flex-wrap md:gap-3">
+          <StatBlock icon="shoulder-armor" label={t('armorClass')}>
             <GhostInput
               type="number"
               aria-label={t('armorClass')}
@@ -75,15 +66,12 @@ const CombatHeader = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onBasicInfoChange('ac', parseInt(e.target.value) || 0)
               }
-              className="h-auto w-10 p-0 text-left text-sm font-black transition-colors focus:text-white sm:text-base"
+              showIcon={false}
+              className={STAT_INPUT}
             />
-          </StatBadge>
+          </StatBlock>
 
-          {/* Initiative */}
-          <StatBadge
-            icon={<AppIcon name="stopwatch" variant="game" size="lg" className="text-orange-500" />}
-            label={t('initiative')}
-          >
+          <StatBlock icon="stopwatch" label={t('initiative')}>
             <GhostInput
               type="number"
               aria-label={t('initiative')}
@@ -91,18 +79,12 @@ const CombatHeader = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onBasicInfoChange('initiative', parseInt(e.target.value) || 0)
               }
-              className="h-auto w-10 p-0 text-left text-sm font-black transition-colors focus:text-white sm:text-base"
+              showIcon={false}
+              className={STAT_INPUT}
             />
-          </StatBadge>
+          </StatBlock>
 
-          {/* Speed */}
-          <StatBadge
-            icon={
-              <AppIcon name="boot-prints" variant="game" size="lg" className="text-emerald-500" />
-            }
-            label={t('speedUnit')}
-            reverse
-          >
+          <StatBlock icon="boot-prints" label={t('speed')} unit={t('speedUnit')}>
             <GhostInput
               type="number"
               aria-label={t('speed')}
@@ -110,38 +92,31 @@ const CombatHeader = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onBasicInfoChange('speed', parseFloat(e.target.value) || 0)
               }
-              className="h-auto w-10 p-0 text-left text-sm font-black transition-colors focus:text-white sm:text-base"
+              showIcon={false}
+              className={STAT_INPUT}
             />
-          </StatBadge>
+          </StatBlock>
 
-          {/* Hit Dice */}
-          <StatBadge
-            icon={<AppIcon name="dice-target" variant="game" size="lg" className="text-sky-400" />}
-            label={t('hitDiceShort')}
-          >
+          <StatBlock icon="dice-target" label={t('hitDiceShort')}>
             <Select
               value={character.hitDice?.total || '1d8'}
               onValueChange={(val) => onHitDiceChange(val)}
             >
               <SelectTrigger
                 aria-label={t('hitDice')}
-                className="h-auto border-none bg-transparent p-0 text-sm font-black shadow-none ring-offset-0 focus:ring-0 sm:text-base [&>span]:line-clamp-none"
+                className="h-6 gap-1 border-none bg-transparent p-0 font-mono text-base font-bold shadow-none backdrop-blur-none hover:bg-transparent [&>span]:line-clamp-none"
               >
                 <SelectValue placeholder="1d8" />
               </SelectTrigger>
-              <SelectContent className="min-w-[80px] border-zinc-800 bg-zinc-950/95 backdrop-blur-xl">
+              <SelectContent className="min-w-[80px]">
                 {['d6', 'd8', 'd10', 'd12'].map((key) => (
-                  <SelectItem
-                    key={key}
-                    value={`1${key}`}
-                    className="text-xs font-black tracking-widest text-white/70 uppercase hover:text-white"
-                  >
+                  <SelectItem key={key} value={`1${key}`} className="font-mono">
                     {t(`diceOptions.${key}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-          </StatBadge>
+          </StatBlock>
         </div>
 
         <div className="flex justify-end md:shrink-0">
@@ -151,7 +126,7 @@ const CombatHeader = ({
                 variant="ghost"
                 size="icon"
                 aria-label={t('edit')}
-                className="hover:border-character-muted/80 hover:bg-character-surface/10 hover:shadow-character-muted/30 h-10 w-10 overflow-hidden rounded-xl border border-zinc-800/50 bg-zinc-950/60 opacity-60 backdrop-blur-xl transition-all duration-500 hover:opacity-100 hover:shadow-2xl"
+                className="border-border bg-background/60 hover:border-character-muted hover:bg-character-surface h-10 w-10 rounded-xl border"
               >
                 <AppIcon name="Settings2" size="sm" className="text-character-flare" />
               </Button>
@@ -213,7 +188,7 @@ function CombatStatsSection({
   onHitDiceChange,
 }: CombatStatsSectionProps) {
   return (
-    <Card className="overflow-hidden border-zinc-800/40 bg-zinc-950/20 shadow-2xl backdrop-blur-md">
+    <Card className="overflow-hidden shadow-sm">
       <CombatHeader
         character={character}
         onBasicInfoChange={onBasicInfoChange}

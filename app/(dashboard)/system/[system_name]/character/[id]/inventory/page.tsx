@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 
 import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { Button } from '@frontend/components/ui/button';
+import { EmptyState } from '@frontend/components/ui/empty-state';
 import { useCharacterContext } from '@frontend/context/CharacterContext';
 
 export default function CharacterInventoryPage() {
@@ -19,20 +20,16 @@ export default function CharacterInventoryPage() {
       variant="outline"
       size="sm"
       onClick={() => {}} // TODO: Implement Add Item logic when available
-      className="h-8 border-white/10 px-3 text-xs font-bold tracking-wider uppercase transition-all hover:bg-white/5"
+      className="text-label h-8 px-3"
     >
-      <Plus className="mr-2 size-3" />
+      <Plus aria-hidden="true" />
       {tChar('addItem')}
     </Button>
   );
 
   return (
     <PageContainer icon="Backpack" title={t('inventory')} actions={actions}>
-      <div className="flex flex-col gap-6">
-        <div className="text-muted-foreground bg-muted/20 flex h-[50vh] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-          <p>{tChar('emptyStates.inventory')}</p>
-        </div>
-      </div>
+      <EmptyState icon="Backpack" title={tChar('emptyStates.inventory')} className="h-[50vh]" />
     </PageContainer>
   );
 }

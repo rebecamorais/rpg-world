@@ -4,8 +4,7 @@ import React from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
-import { AppIcon } from '@frontend/components/ui/icon';
+import { SectionCard } from '@frontend/components/ui/section-card';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
 import type { AttributeKey } from '@shared/systems/dnd5e';
@@ -117,20 +116,15 @@ function SkillsSection({ attributes, level, skills, onSkillChange }: Props) {
   };
 
   return (
-    <Card className="border-border bg-card w-full">
-      <CardHeader className="bg-muted/30 border-border border-b px-4 py-2">
-        <div className="flex items-center gap-2">
-          <AppIcon name="Scroll" size={14} className="text-character-flare" />
-          <CardTitle className="text-xs font-bold tracking-widest uppercase opacity-70">
-            {t('title')}
-          </CardTitle>
-        </div>
-      </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-x-8 p-4 sm:grid-cols-2">
+    <SectionCard className="w-full">
+      <SectionCard.Header>
+        <SectionCard.Title icon="Scroll">{t('title')}</SectionCard.Title>
+      </SectionCard.Header>
+      <SectionCard.Body className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
         <div className="flex flex-col gap-y-2">{firstCol.map(renderSkill)}</div>
         <div className="flex flex-col gap-y-2">{secondCol.map(renderSkill)}</div>
-      </CardContent>
-    </Card>
+      </SectionCard.Body>
+    </SectionCard>
   );
 }
 

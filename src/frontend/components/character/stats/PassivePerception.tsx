@@ -27,14 +27,17 @@ function PassivePerception({ wisValue, level, perceptionSkillData }: Props) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className="border-border bg-card hover:border-primary/50 flex cursor-help items-center justify-between rounded-lg border p-4 shadow-sm transition-colors">
+        <div
+          tabIndex={0}
+          className="border-border bg-card hover:border-character-muted focus-ring flex cursor-help items-center justify-between rounded-xl border p-4 shadow-sm transition-colors"
+        >
           <div className="flex items-center gap-3">
-            <AppIcon name="Eye" size={16} className="text-character-flare drop-shadow-sm" />
-            <span className="text-xs font-bold tracking-widest uppercase opacity-70">
-              {t('passivePerception')}
-            </span>
+            <AppIcon name="Eye" size={16} className="text-character-flare" aria-hidden="true" />
+            <span className="text-label text-muted-foreground">{t('passivePerception')}</span>
           </div>
-          <span className="text-foreground font-mono text-xl font-bold">{passiveValue}</span>
+          <span className="text-foreground font-mono text-xl font-bold tabular-nums">
+            {passiveValue}
+          </span>
         </div>
       </TooltipTrigger>
       <TooltipContent className="max-w-xs">
