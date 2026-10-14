@@ -7,7 +7,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import QueryProvider from '@frontend/components/providers/QueryProvider';
 import { TooltipProvider } from '@frontend/components/ui/tooltip';
 import { FileUploaderProvider } from '@frontend/context/FileUploaderContext';
-import { UserProvider } from '@frontend/context/UserContext';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -27,11 +26,9 @@ export default function Providers({ children, locale, messages, timeZone }: Prov
   return (
     <QueryProvider>
       <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
-        <UserProvider user={null}>
-          <FileUploaderProvider>
-            <TooltipProvider>{children}</TooltipProvider>
-          </FileUploaderProvider>
-        </UserProvider>
+        <FileUploaderProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </FileUploaderProvider>
       </NextIntlClientProvider>
     </QueryProvider>
   );

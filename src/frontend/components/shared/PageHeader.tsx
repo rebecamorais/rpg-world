@@ -1,5 +1,3 @@
-'use client';
-
 import { ReactNode } from 'react';
 
 import { AppIcon, IconName } from '@frontend/components/ui/icon';
