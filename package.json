@@ -18,6 +18,7 @@
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "vitest run --config ./test/vitest.config.unit.ts",
     "test:integration": "vitest run --config ./test/vitest.config.integration.ts",
+    "test:e2e": "playwright test",
     "test:coverage": "vitest run --config ./test/vitest.config.unit.ts --coverage",
     "test:ui": "vitest --ui",
     "lint": "eslint",
@@ -58,6 +59,7 @@
   "devDependencies": {
     "@iconify-json/game-icons": "^1.2.4",
     "@iconify/tailwind4": "^1.2.3",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",

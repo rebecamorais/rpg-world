@@ -16,6 +16,7 @@
 
 # next.js
 /.next/
+/.next-e2e/
 /out/
 
 # production
@@ -52,3 +53,8 @@ next-env.d.ts
 **/supabase/migrations
 **/supabase/seeds
 **/supabase/snippets
+
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/

@@ -5,4 +5,6 @@ node_modules
 build
 dist
 coverage
-package-lock.json
+package-lock.json.next-e2e
+test-results
+playwright-report
