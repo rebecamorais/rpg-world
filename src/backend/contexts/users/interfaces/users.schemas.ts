@@ -1,20 +1,24 @@
 import { z } from 'zod';
 
+import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from '@shared/auth/password-policy';
 import { httpUrlOrEmpty, optional } from '@shared/http/validation';
 
 const email = z.email().max(320);
-const password = (min: number) => z.string().min(min).max(200);
+const newPassword = z.string().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH);
 const turnstileToken = z.string().max(4096);
 
-export const signInWithPasswordSchema = z.object({ email, password: z.string().min(1).max(200) });
+export const signInWithPasswordSchema = z.object({
+  email,
+  password: z.string().min(1).max(MAX_PASSWORD_LENGTH),
+});
 
 export const magicLinkSchema = z.object({ email });
 
-export const updatePasswordSchema = z.object({ newPassword: password(6) });
+export const updatePasswordSchema = z.object({ newPassword: newPassword });
 
 export const signUpSchema = z.object({
   email,
-  password: password(8),
+  password: newPassword,
   turnstileToken,
 });
 

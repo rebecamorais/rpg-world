@@ -30,6 +30,7 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { newPasswordFields, passwordsMustMatch } from '@frontend/lib/password-schema';
 
 export default function SignUpForm() {
   const t = useTranslations('register');
@@ -46,13 +47,9 @@ export default function SignUpForm() {
   const signUpSchema = z
     .object({
       email: z.string().email({ message: t('errors.invalidEmail') }),
-      password: z.string().min(8, { message: t('errors.passwordMinLength') }),
-      confirmPassword: z.string(),
+      ...newPasswordFields(tCommon),
     })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: t('errors.passwordsDoNotMatch'),
-      path: ['confirmPassword'],
-    });
+    .refine(...passwordsMustMatch(tCommon));
 
   type SignUpValues = z.infer<typeof signUpSchema>;
 
