@@ -77,7 +77,8 @@
     "passwordsDoNotMatch": "As senhas não coincidem.",
     "language": "Idioma",
     "decrease": "Diminuir",
-    "increase": "Aumentar"
+    "increase": "Aumentar",
+    "skipToContent": "Pular para o conteúdo"
   },
   "login": {
     "title": "Entrar no RPG World",
@@ -134,7 +135,10 @@
   "landing": {
     "heroTitle": "O seu companheiro definitivo de RPG.",
     "heroSubtitle": "Gerencie todas as suas fichas, acompanhe atributos, magias e combates sem esforço.",
-    "ctaStart": "Começar a Jogar"
+    "ctaStart": "Começar a Jogar",
+    "previewLabel": "Exemplo de ficha de personagem",
+    "previewName": "Arani, a Ousada",
+    "previewClass": "Maga elfa · Nível 5"
   },
   "home": {
     "title": "RPG World"
@@ -323,7 +327,8 @@
     "spells": "Magias",
     "settingsTitle": "Configurações",
     "settingsSubtitle": "Gerencie as informações do seu perfil de aventureiro.",
-    "menuDescription": "Navegação principal e atalhos."
+    "menuDescription": "Navegação principal e atalhos.",
+    "openMenu": "Abrir menu"
   },
   "changePassword": {
     "title": "Altere sua Senha",
@@ -628,7 +633,9 @@
       "title": "Explorar",
       "home": "Início",
       "characters": "Personagens",
-      "settings": "Configurações"
+      "settings": "Configurações",
+      "login": "Entrar",
+      "register": "Criar conta"
     },
     "socials": {
       "title": "Social",
@@ -645,7 +652,8 @@
       "githubSponsors": "GitHub Sponsors",
       "pixTitle": "Fazer um Pix",
       "pixCopy": "Chave Pix copiada!",
-      "pixCopyLabel": "Copiar chave Pix"
+      "pixCopyLabel": "Copiar chave Pix",
+      "githubSponsorsCta": "Apoiar no GitHub"
     },
     "copyright": "© {year} Rebs Tech Studio. Todos os direitos reservados."
   },

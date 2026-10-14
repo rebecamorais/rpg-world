@@ -4,10 +4,10 @@ import { SPELLS } from './support/global-setup';
 test.describe('celular', () => {
   test('navega pelo menu em gaveta', async ({ page, user: _ }) => {
     await page.goto('/characters');
-    // The sidebar is replaced by a floating button on small screens
+    // On small screens the sidebar opens from a button in the header
     await expect(page.getByRole('complementary')).toBeHidden();
 
-    await page.getByRole('button', { name: 'Menu' }).click();
+    await page.getByRole('banner').getByRole('button', { name: 'Open menu' }).click();
     const drawer = page.getByRole('dialog', { name: 'Menu' });
     await drawer.getByRole('link', { name: 'My Profile' }).click();
 

@@ -77,7 +77,8 @@
     "passwordsDoNotMatch": "Passwords do not match.",
     "language": "Language",
     "decrease": "Decrease",
-    "increase": "Increase"
+    "increase": "Increase",
+    "skipToContent": "Skip to content"
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -134,7 +135,10 @@
   "landing": {
     "heroTitle": "Your ultimate RPG companion.",
     "heroSubtitle": "Manage your character sheets, track attributes, spells and combat effortlessly.",
-    "ctaStart": "Start Playing"
+    "ctaStart": "Start Playing",
+    "previewLabel": "Example character sheet",
+    "previewName": "Arani the Bold",
+    "previewClass": "High elf wizard · Level 5"
   },
   "home": {
     "title": "RPG World"
@@ -323,7 +327,8 @@
     "spells": "Spells",
     "settingsTitle": "Settings",
     "settingsSubtitle": "Manage your adventurer profile information.",
-    "menuDescription": "Main navigation and shortcuts."
+    "menuDescription": "Main navigation and shortcuts.",
+    "openMenu": "Open menu"
   },
   "changePassword": {
     "title": "Change Your Password",
@@ -628,7 +633,9 @@
       "title": "Explore",
       "home": "Home",
       "characters": "Characters",
-      "settings": "Settings"
+      "settings": "Settings",
+      "login": "Sign in",
+      "register": "Sign up"
     },
     "socials": {
       "title": "Social",
@@ -645,7 +652,8 @@
       "githubSponsors": "GitHub Sponsors",
       "pixTitle": "Make a Pix",
       "pixCopy": "Pix key copied!",
-      "pixCopyLabel": "Copy Pix key"
+      "pixCopyLabel": "Copy Pix key",
+      "githubSponsorsCta": "Sponsor on GitHub"
     },
     "copyright": "© {year} Rebs Tech Studio. All rights reserved."
   },
