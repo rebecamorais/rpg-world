@@ -94,7 +94,7 @@ export default function CharacterList() {
           {title}
           <div className="flex items-center gap-3">
             <div className="border-success-muted bg-success-surface flex h-5 items-center gap-1.5 rounded-full border px-2.5 py-0.5">
-              <span className="bg-success h-1.5 w-1.5 animate-pulse rounded-full shadow-[0_0_8px_var(--success-muted)]" />
+              <span className="bg-success h-1.5 w-1.5 rounded-full shadow-[0_0_8px_var(--success-muted)]" />
               <span className="text-label text-success-flare">{t('online')}</span>
             </div>
             <p className="text-label text-muted-foreground">
