@@ -1,6 +1,8 @@
 import { api, resetApi } from '@tests/helpers/mock-api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { UserError, UserErrorCodes } from '@backend/contexts/users/domain/UserError';
+
 import { GET } from './route';
 
 vi.mock('@api', () => import('@tests/helpers/mock-api'));
@@ -35,11 +37,19 @@ describe('GET /api/auth/callback', () => {
     expect(location).toBe(`${ORIGIN}/characters`);
   });
 
-  it('manda para a página de erro quando o provedor devolve erro', async () => {
+  it('manda o código de erro genérico do provedor, sem repassar a descrição dele', async () => {
     const { location } = await callback('error=access_denied&error_description=User+denied');
 
-    expect(location).toBe(`${ORIGIN}/auth/error?message=User%20denied`);
+    expect(location).toBe(`${ORIGIN}/auth/error?message=auth_error_provider`);
     expect(api.authApi.callbackExchange).not.toHaveBeenCalled();
+  });
+
+  it('reconhece link de e-mail expirado vindo do provedor', async () => {
+    const { location } = await callback(
+      'error=access_denied&error_code=otp_expired&error_description=Email+link+is+invalid',
+    );
+
+    expect(location).toBe(`${ORIGIN}/auth/error?message=auth_error_link_expired`);
   });
 
   it('manda para a página de erro quando falta o código', async () => {
@@ -48,11 +58,20 @@ describe('GET /api/auth/callback', () => {
     expect(location).toBe(`${ORIGIN}/auth/error?message=no_code_provided`);
   });
 
-  it('manda para a página de erro quando a troca do código falha', async () => {
-    api.authApi.callbackExchange.mockRejectedValue(new Error('link_expired'));
+  it('repassa o código de erro esperado quando a troca do código falha', async () => {
+    api.authApi.callbackExchange.mockRejectedValue(new UserError(UserErrorCodes.AUTH_LINK_EXPIRED));
 
     const { location } = await callback('code=abc');
 
-    expect(location).toBe(`${ORIGIN}/auth/error?message=link_expired`);
+    expect(location).toBe(`${ORIGIN}/auth/error?message=auth_error_link_expired`);
+  });
+
+  it('não coloca a mensagem de um erro inesperado na URL', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    api.authApi.callbackExchange.mockRejectedValue(new Error('connect ECONNREFUSED 10.0.0.5'));
+
+    const { location } = await callback('code=abc');
+
+    expect(location).toBe(`${ORIGIN}/auth/error?message=common_error_unexpected`);
   });
 });

@@ -13,25 +13,28 @@ import {
   CardHeader,
   CardTitle,
 } from '@frontend/components/ui/card';
+import { translateErrorCode } from '@frontend/lib/error-message';
+
+// Codes that mean "the link no longer works": the page suggests requesting a new one
+const EXPIRED_LINK_CODES = new Set(['no_code_provided', 'auth_error_link_expired']);
 
 export default function AuthErrorPage() {
   const searchParams = useSearchParams();
   const errorCode = searchParams.get('message');
   const t = useTranslations('common');
 
-  const errorMessage = errorCode ? t(`errors.${errorCode}`) : t('errors.unknown');
+  const errorMessage = translateErrorCode(t, errorCode);
+  const isExpiredLink = EXPIRED_LINK_CODES.has(errorCode ?? '');
 
   return (
     <div className="bg-background flex flex-1 items-center justify-center p-4">
       <Card className="mx-auto w-full max-w-sm border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
         <CardHeader>
           <CardTitle className="text-red-400">
-            {errorCode === 'no_code_provided'
-              ? t('errors.expired_link_title')
-              : t('errors.auth_error_title')}
+            {isExpiredLink ? t('errors.expired_link_title') : t('errors.auth_error_title')}
           </CardTitle>
           <CardDescription className="text-gray-400">
-            {errorCode === 'no_code_provided'
+            {isExpiredLink
               ? t('errors.expired_link_description')
               : t('errors.auth_error_description')}
           </CardDescription>

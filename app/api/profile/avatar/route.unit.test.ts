@@ -55,7 +55,9 @@ describe('POST /api/profile/avatar', () => {
   });
 
   it('traduz erros de domínio do upload', async () => {
-    api.profileApi.uploadAvatar.mockRejectedValue(new AppError('storage_error_upload_avatar_size_limit'));
+    api.profileApi.uploadAvatar.mockRejectedValue(
+      new AppError('storage_error_upload_avatar_size_limit'),
+    );
 
     const res = await POST(formRequest(url, withFile()));
 

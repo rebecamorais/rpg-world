@@ -19,6 +19,10 @@ const EXPECTED_AUTH_ERRORS: Record<string, UserErrorCode> = {
   user_not_found: UserErrorCodes.AUTH_USER_NOT_FOUND,
   over_request_rate_limit: UserErrorCodes.AUTH_RATE_LIMITED,
   over_email_send_rate_limit: UserErrorCodes.AUTH_RATE_LIMITED,
+  // E-mail link opened after it expired, or a second time
+  otp_expired: UserErrorCodes.AUTH_LINK_EXPIRED,
+  flow_state_expired: UserErrorCodes.AUTH_LINK_EXPIRED,
+  flow_state_not_found: UserErrorCodes.AUTH_LINK_EXPIRED,
 };
 
 function authFailure(error: AuthError, context: string): Error {
