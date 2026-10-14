@@ -11,5 +11,9 @@
   "ignoreDependencies": ["@stryker-mutator/api", "@stryker-mutator/command-runner"],
   "ignoreIssues": {
     "src/frontend/components/ui/**": ["exports", "types"]
+  },
+  "playwright": {
+    "config": [],
+    "entry": ["playwright.config.ts", "e2e/**/*.spec.ts", "e2e/support/global-setup.ts"]
   }
 }
