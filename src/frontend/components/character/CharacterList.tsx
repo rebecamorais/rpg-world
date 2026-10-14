@@ -9,6 +9,7 @@ import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharactersContext } from '@frontend/context/CharactersContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import { CharacterCard } from './CharacterCard';
 import { DeleteCharacterDialog } from './DeleteCharacterDialog';
@@ -20,6 +21,7 @@ import { DeleteCharacterDialog } from './DeleteCharacterDialog';
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();
   const t = useTranslations('characters');
+  const { getErrorMessage } = useErrorMessage();
   const {
     characters,
     isLoading,
@@ -38,8 +40,8 @@ export default function CharacterList() {
     return (
       <div className="border-destructive/20 bg-destructive/5 rounded-2xl border p-8 text-center">
         <AppIcon name="AlertTriangle" size={40} className="mx-auto mb-4 opacity-50" />
-        <p className="mb-2 text-lg font-bold">Ocorreu um erro</p>
-        <p className="text-sm opacity-80">{error.message}</p>
+        <p className="mb-2 text-lg font-bold">{t('loadErrorTitle')}</p>
+        <p className="text-sm opacity-80">{getErrorMessage(error)}</p>
       </div>
     );
   }
@@ -93,7 +95,7 @@ export default function CharacterList() {
             <div className="flex h-5 items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 px-2.5 py-0.5">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
               <span className="text-[10px] font-black tracking-widest text-green-500/90 uppercase">
-                Online
+                {t('online')}
               </span>
             </div>
             <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-60">
@@ -127,7 +129,7 @@ export default function CharacterList() {
               {t('createNew')}
             </span>
             <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-0 transition-all duration-500 group-hover:translate-y-1 group-hover:opacity-40">
-              Start your legend
+              {t('createNewTagline')}
             </p>
           </div>
 

@@ -83,6 +83,8 @@ function SidebarContent() {
 }
 
 export default function Sidebar() {
+  const tDash = useTranslations('dashboard');
+
   return (
     <>
       {/* Desktop Sidebar */}
@@ -96,6 +98,7 @@ export default function Sidebar() {
           <SheetTrigger asChild>
             <Button
               size="icon"
+              aria-label={tDash('menu')}
               className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 w-14 rounded-full shadow-lg"
             >
               <AppIcon name="Menu" size={24} />
@@ -106,8 +109,8 @@ export default function Sidebar() {
             className="bg-sidebar border-border flex w-64 flex-col px-6 pt-6 pb-2 text-zinc-100 sm:hidden"
           >
             <SheetHeader className="sr-only">
-              <SheetTitle>Menu</SheetTitle>
-              <SheetDescription>Navegação principal e atalhos.</SheetDescription>
+              <SheetTitle>{tDash('menu')}</SheetTitle>
+              <SheetDescription>{tDash('menuDescription')}</SheetDescription>
             </SheetHeader>
             <SidebarContent />
           </SheetContent>
