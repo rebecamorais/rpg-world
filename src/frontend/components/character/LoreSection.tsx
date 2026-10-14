@@ -43,9 +43,15 @@ interface AppearanceFieldProps {
 
 const AppearanceField = ({ label, field, value, onBasicInfoChange }: AppearanceFieldProps) => (
   <div className="flex flex-col gap-1">
-    <Label className="text-muted-foreground text-xs tracking-wider uppercase">{label}</Label>
+    <Label
+      htmlFor={`lore-${field}`}
+      className="text-muted-foreground text-xs tracking-wider uppercase"
+    >
+      {label}
+    </Label>
     <div className="group relative">
       <GhostInput
+        id={`lore-${field}`}
         value={value || ''}
         placeholder="—"
         onChange={(e) => onBasicInfoChange(field, e.target.value)}
@@ -82,6 +88,7 @@ const TextAreaField = ({
     </CardHeader>
     <CardContent className="p-0">
       <Textarea
+        aria-label={label}
         value={value || ''}
         placeholder={placeholder}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
