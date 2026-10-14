@@ -39,17 +39,14 @@ export function DeleteCharacterDialog({
 
   return (
     <Dialog open={!!character} onOpenChange={(open) => !open && onCancel()}>
-      <DialogContent
-        className="character-context border-red-500/20 bg-slate-950/95 text-white backdrop-blur-xl"
-        style={{ '--character-color': 'var(--danger)' } as React.CSSProperties}
-      >
+      <DialogContent className="border-danger-muted">
         <DialogHeader>
           <DialogTitle>{t('deleteDialogTitle')}</DialogTitle>
           <DialogDescription className="space-y-4">
             <span className="block">
               {t('deleteDialogDescription', { name: character?.name || '' })}
             </span>
-            <div className="rounded-md border border-amber-500/20 bg-amber-500/10 p-3 text-sm text-amber-600 dark:text-amber-400">
+            <div className="border-warning-muted bg-warning-surface text-warning-flare rounded-md border p-3 text-sm">
               <p
                 dangerouslySetInnerHTML={{
                   __html: t.markup('deleteConfirmInstruction', {
@@ -66,19 +63,20 @@ export function DeleteCharacterDialog({
             value={confirmName}
             onChange={(e) => onConfirmNameChange(e.target.value)}
             placeholder={t('deleteConfirmPlaceholder')}
-            className="bg-muted focus-visible:ring-primary/30"
+            className="bg-muted"
           />
         </div>
-        <DialogFooter className="gap-2">
+        <DialogFooter>
           <Button variant="secondary" onClick={onCancel}>
             {tCommon('cancel')}
           </Button>
           <Button
-            destroy
+            variant="destructive"
             onClick={onConfirm}
-            disabled={confirmName !== character?.name || isPending}
+            disabled={confirmName !== character?.name}
+            loading={isPending}
           >
-            {isPending ? tCommon('loading') : tCommon('delete')}
+            {tCommon('delete')}
           </Button>
         </DialogFooter>
       </DialogContent>
