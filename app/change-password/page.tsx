@@ -23,10 +23,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormRootError,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useAuth } from '@frontend/hooks/useAuth';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { setServerError } from '@frontend/lib/form-errors';
 import { newPasswordSchema } from '@frontend/lib/password-schema';
 
 export default function ChangePasswordPage() {
@@ -49,9 +51,8 @@ export default function ChangePasswordPage() {
       await updatePassword(data.password);
       toast.success(t('success'));
     } catch (err: unknown) {
-      const msg = getErrorMessage(err);
-      toast.error(msg);
-      form.setError('root', { message: msg });
+      const code = err instanceof Error ? err.message : null;
+      setServerError(form.setError, ['password'], code, getErrorMessage(err));
     }
   };
 
@@ -112,10 +113,7 @@ export default function ChangePasswordPage() {
                 )}
               />
 
-              {form.formState.errors.root && (
-                <p className="text-danger-flare text-sm">{form.formState.errors.root.message}</p>
-              )}
-
+              <FormRootError />
               <Button
                 type="submit"
                 loading={form.formState.isSubmitting}

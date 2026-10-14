@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button } from '@frontend/components/ui/button';
@@ -25,11 +24,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormRootError,
 } from '@frontend/components/ui/form';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { useAuth } from '@frontend/hooks/useAuth';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { setServerError } from '@frontend/lib/form-errors';
 
 interface LoginFormValues {
   email: string;
@@ -67,10 +68,7 @@ export default function LoginForm() {
       }
     } catch (err: unknown) {
       const errorCode = err instanceof Error ? err.message : 'unknown';
-      const localizedMsg = getMessage(errorCode);
-
-      toast.error(localizedMsg);
-      form.setError('root', { message: localizedMsg });
+      setServerError(form.setError, ['email', 'password'], errorCode, getMessage(errorCode));
     }
   };
 
@@ -184,10 +182,7 @@ export default function LoginForm() {
               </div>
             )}
 
-            {form.formState.errors.root && (
-              <p className="text-danger-flare text-sm">{form.formState.errors.root.message}</p>
-            )}
-
+            <FormRootError />
             <Button
               type="submit"
               disabled={authMode === 'magic'}

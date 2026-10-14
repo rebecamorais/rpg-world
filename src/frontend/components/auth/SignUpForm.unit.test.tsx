@@ -1,7 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { signUpAction } from '@frontend/actions/auth/sign-up-action';
@@ -87,11 +86,11 @@ describe('SignUpForm', () => {
 
     await fillAndSubmit();
 
-    await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith(
-        messages.common.errors.auth_error_signup_duplicate_email,
-      ),
-    );
+    // Shown under the e-mail field
+    expect(
+      await screen.findByText(messages.common.errors.auth_error_signup_duplicate_email),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText(t.emailLabel)).toHaveAttribute('aria-invalid', 'true');
     // The token is single-use: the widget is remounted with a new challenge
     await waitFor(() => expect(turnstile.render).toHaveBeenCalledTimes(2));
     expect(screen.queryByText(t.successDescription)).not.toBeInTheDocument();

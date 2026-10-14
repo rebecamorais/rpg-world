@@ -26,6 +26,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormRootError,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
@@ -235,10 +236,7 @@ export default function ProfileForm() {
               )}
             />
 
-            {form.formState.errors.root && (
-              <p className="text-danger-flare text-sm">{form.formState.errors.root.message}</p>
-            )}
-
+            <FormRootError />
             <Button
               type="submit"
               loading={isUpdating || form.formState.isSubmitting}

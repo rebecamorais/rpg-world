@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import LoginForm from './LoginForm';
@@ -65,7 +64,7 @@ describe('LoginForm', () => {
 
     const message = messages.common.errors.auth_error_signin_invalid_credentials;
     expect(await screen.findByText(message)).toBeInTheDocument();
-    expect(toast.error).toHaveBeenCalledWith(message);
+    expect(screen.getByLabelText(t.passwordLabel)).toHaveAttribute('aria-invalid', 'true');
   });
 
   it('não mostra mensagens de erro desconhecidas, só a genérica', async () => {

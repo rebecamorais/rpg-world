@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ResetPasswordForm from './ResetPasswordForm';
@@ -86,7 +85,7 @@ describe('ResetPasswordForm', () => {
 
     await submit();
 
-    expect(toast.error).toHaveBeenCalledWith(t.sessionNotFound);
+    expect(await screen.findByRole('alert')).toHaveTextContent(t.sessionNotFound);
     expect(auth.updateUser).not.toHaveBeenCalled();
   });
 
@@ -96,9 +95,13 @@ describe('ResetPasswordForm', () => {
 
     await submit();
 
-    expect(toast.error).toHaveBeenCalledWith(
-      messages.common.errors.auth_error_update_password_weak,
-    );
+    // Shown under the new password field, which gets focus
+    const field = screen.getByLabelText(t.newPasswordLabel);
+    expect(
+      await screen.findByText(messages.common.errors.auth_error_update_password_weak),
+    ).toBeInTheDocument();
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+    expect(field).toHaveFocus();
     expect(screen.queryByText(t.successDescription)).not.toBeInTheDocument();
   });
 });

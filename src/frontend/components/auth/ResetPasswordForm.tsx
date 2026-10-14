@@ -25,9 +25,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormRootError,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { setServerError } from '@frontend/lib/form-errors';
 import { newPasswordSchema } from '@frontend/lib/password-schema';
 
 import { getSupabaseBrowserClient } from '@lib/supabase-browser';
@@ -108,7 +110,7 @@ export default function ResetPasswordForm() {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        toast.error(t('sessionNotFound'));
+        form.setError('root', { message: t('sessionNotFound') });
         return;
       }
 
@@ -117,13 +119,14 @@ export default function ResetPasswordForm() {
       });
 
       if (error) {
-        toast.error(getMessage(PASSWORD_ERROR_CODES[error.code ?? '']));
+        const code = PASSWORD_ERROR_CODES[error.code ?? ''];
+        setServerError(form.setError, ['password'], code, getMessage(code));
       } else {
         setIsSuccess(true);
         toast.success(t('successTitle'));
       }
-    } catch (_err: unknown) {
-      toast.error(getMessage(null));
+    } catch {
+      form.setError('root', { message: getMessage(null) });
     }
   };
 
@@ -201,6 +204,7 @@ export default function ResetPasswordForm() {
                 </FormItem>
               )}
             />
+            <FormRootError />
             <Button
               type="submit"
               loading={form.formState.isSubmitting}

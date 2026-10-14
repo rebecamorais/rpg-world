@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { requestPasswordResetAction } from '@frontend/actions/auth/request-password-reset-action';
@@ -27,9 +26,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormRootError,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { setServerError } from '@frontend/lib/form-errors';
 
 export default function ForgotPasswordForm() {
   const t = useTranslations('forgotPassword');
@@ -55,7 +56,7 @@ export default function ForgotPasswordForm() {
 
   const onSubmit = async (data: Values) => {
     if (!turnstileToken) {
-      toast.error(getMessage('security_token_missing'));
+      form.setError('root', { message: getMessage('security_token_missing') });
       return;
     }
 
@@ -64,11 +65,11 @@ export default function ForgotPasswordForm() {
       if (result.success) {
         setIsSuccess(true);
       } else {
-        toast.error(getMessage(result.error));
+        setServerError(form.setError, ['email'], result.error, getMessage(result.error));
         resetTurnstile();
       }
     } catch {
-      toast.error(getMessage(null));
+      form.setError('root', { message: getMessage(null) });
       resetTurnstile();
     }
   };
@@ -120,6 +121,7 @@ export default function ForgotPasswordForm() {
             />
             <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
 
+            <FormRootError />
             <Button
               type="submit"
               disabled={!turnstileToken}
