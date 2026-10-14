@@ -336,8 +336,8 @@
     "circle": "Círculo {level}",
     "noSlotsConfigured": "Sem Slots configurados.",
     "done": "Concluir",
-    "spellPoints": "Spell Points",
-    "spellSlots": "Spell Slots",
+    "spellPoints": "Pontos de Magia",
+    "spellSlots": "Espaços de Magia",
     "level": "Nv {level}",
     "pointsCapacity": "Capacidade de Spell Points",
     "systemPlaceholder": "Magia"
@@ -367,7 +367,7 @@
   "profileForm": {
     "title": "Editar Perfil",
     "subtitle": "Personalize as informações do seu perfil de aventureiro.",
-    "usernameLabel": "Username",
+    "usernameLabel": "Nome de usuário",
     "usernamePlaceholder": "ex: elfo_negro_42",
     "fullNameLabel": "Nome",
     "fullNamePlaceholder": "ex: Rebeca",
