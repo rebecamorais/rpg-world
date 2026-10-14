@@ -4,7 +4,6 @@ import Link from 'next/link';
 
 import { useTranslations } from 'next-intl';
 
-import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Button } from '@frontend/components/ui/button';
 import { EmptyState, ErrorState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -12,7 +11,7 @@ import { useCharactersContext } from '@frontend/context/CharactersContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
-import { CharacterCard } from './CharacterCard';
+import { CharacterCard, CharacterCardSkeleton } from './CharacterCard';
 import { DeleteCharacterDialog } from './DeleteCharacterDialog';
 
 /**
@@ -51,10 +50,15 @@ export default function CharacterList() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6" aria-busy="true">
         {title}
-        <div className="flex min-h-[400px] items-center justify-center py-20">
-          <LoadingState thematic />
+        <span role="status" className="sr-only">
+          {t('loadingList')}
+        </span>
+        <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2">
+          {[0, 1, 2, 3].map((i) => (
+            <CharacterCardSkeleton key={i} />
+          ))}
         </div>
       </div>
     );

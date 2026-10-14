@@ -36,7 +36,8 @@ test.describe('celular', () => {
     await createCharacter(page, 'Tiny Hero');
     await page.goto('/characters');
 
-    await page.getByRole('button', { name: 'Delete' }).click();
+    await page.getByRole('button', { name: /^Actions for / }).click();
+    await page.getByRole('menuitem', { name: 'Delete' }).click();
     const dialog = page.getByRole('dialog', { name: 'Delete character?' });
     await dialog.getByPlaceholder('Type the exact name here').fill('Tiny Hero');
     await dialog.getByRole('button', { name: 'Delete' }).click();

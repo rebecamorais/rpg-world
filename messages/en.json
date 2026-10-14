@@ -241,7 +241,9 @@
     "createNewTagline": "Start your legend",
     "levelShort": "Lv {level}",
     "defaultClass": "Adventurer",
-    "selectLevel": "Select level"
+    "selectLevel": "Select level",
+    "cardActions": "Actions for {name}",
+    "loadingList": "Loading characters"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
