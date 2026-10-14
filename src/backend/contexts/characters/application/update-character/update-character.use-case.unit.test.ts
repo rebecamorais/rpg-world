@@ -99,6 +99,78 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
     expect(updated.accentColor).toBe('#ff4444');
   });
 
+  async function update(updates: CharacterUpdates) {
+    await useCase.execute({ id: 'char-1', ownerUsername: 'owner-1', updates });
+    return (await repo.findById('char-1')) as DnD5eCharacter;
+  }
+
+  it('aplica nível, com mínimo 1', async () => {
+    expect((await update({ level: 7 })).level).toBe(7);
+    expect((await update({ level: 0 })).level).toBe(1);
+  });
+
+  it('mantém o nível quando ele não vem na atualização', async () => {
+    await update({ level: 4 });
+    expect((await update({ name: 'Other' })).level).toBe(4);
+  });
+
+  it('atualiza só o PV máximo, preservando o atual', async () => {
+    await update({ hpCurrent: 6 });
+
+    const { hp } = await update({ hpMax: 20 });
+
+    expect(hp.status).toMatchObject({ current: 6, max: 20 });
+  });
+
+  it('mantém os PV quando eles não vêm na atualização', async () => {
+    await update({ hpCurrent: 4, hpMax: 12 });
+
+    const { hp } = await update({ name: 'Other' });
+
+    expect(hp.status).toMatchObject({ current: 4, max: 12 });
+  });
+
+  it('atualiza só os atributos enviados', async () => {
+    const { attributes } = await update({ attributes: { STR: 16, WIS: 8 } });
+
+    expect(attributes.get('STR')).toBe(16);
+    expect(attributes.get('WIS')).toBe(8);
+    expect(attributes.get('DEX')).toBe(10);
+  });
+
+  it('junta perícias novas às existentes', async () => {
+    await update({ skills: { ATHLETICS: { isProficient: true } } });
+
+    const { skills } = await update({
+      skills: { STEALTH: { isProficient: true, expertise: true } },
+    });
+
+    expect(skills).toEqual({
+      ATHLETICS: { isProficient: true },
+      STEALTH: { isProficient: true, expertise: true },
+    });
+  });
+
+  it('substitui as proficiências em salvaguardas', async () => {
+    const saves = { STR: true, DEX: false, CON: true, INT: false, WIS: false, CHA: false };
+
+    expect((await update({ savingThrowProficiencies: saves })).savingThrowProficiencies).toEqual(
+      saves,
+    );
+  });
+
+  it('aplica campos simples (classe, dados de vida, moedas)', async () => {
+    const updated = await update({
+      class: 'Wizard',
+      hitDice: { total: '3d6', current: 2 },
+      coins: { cp: 1, sp: 2, ep: 0, gp: 30, pp: 0 },
+    });
+
+    expect(updated.class).toBe('Wizard');
+    expect(updated.hitDice).toEqual({ total: '3d6', current: 2 });
+    expect(updated.coins).toMatchObject({ gp: 30 });
+  });
+
   it('não deve permitir alteração se não for o dono', async () => {
     await expect(
       useCase.execute({
