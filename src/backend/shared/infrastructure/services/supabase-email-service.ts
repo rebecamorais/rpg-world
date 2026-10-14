@@ -11,7 +11,7 @@ import { PasswordResetTemplate } from '../email/templates/PasswordReset';
 /**
  * Unified Local Email Service for Development.
  *
- * This service sends actual custom React Email templates to Inbucket (SMTP localhost:1025)
+ * This service sends actual custom React Email templates to the local Inbucket over SMTP
  * and logs the important links to the console for easy developer access.
  */
 export class SupabaseEmailService implements EmailService {
@@ -20,7 +20,8 @@ export class SupabaseEmailService implements EmailService {
   constructor(private readonly fromEmail: string) {
     this.transporter = nodemailer.createTransport({
       host: '127.0.0.1',
-      port: 54325,
+      // Inbucket SMTP of the local stack: 54325 for dev, 54425 for the test stack (e2e)
+      port: Number(process.env.LOCAL_SMTP_PORT) || 54325,
       secure: false, // Inbucket local não usa TLS
     });
   }
@@ -39,9 +40,9 @@ export class SupabaseEmailService implements EmailService {
         subject: 'Confirme seu e-mail - RPG World',
         html,
       });
-      console.log('Status: Email sent to local Inbucket (54325).');
+      console.log('Status: Email sent to local Inbucket.');
     } catch (error) {
-      console.warn('Warning: Could not connect to Inbucket at 127.0.0.1:54325.');
+      console.warn('Warning: Could not connect to the local Inbucket SMTP server.');
       console.warn('Make sure Inbucket is running if you want to test the email UI.');
       console.warn(`Error: ${(error as Error).message}`);
     }
@@ -62,9 +63,9 @@ export class SupabaseEmailService implements EmailService {
         subject: 'Redefinição de senha - RPG World',
         html,
       });
-      console.log('Status: Email sent to local Inbucket (54325).');
+      console.log('Status: Email sent to local Inbucket.');
     } catch (error) {
-      console.warn('Warning: Could not connect to Inbucket at 127.0.0.1:54325.');
+      console.warn('Warning: Could not connect to the local Inbucket SMTP server.');
       console.warn('Make sure Inbucket is running if you want to test the email UI.');
       console.warn(`Error: ${(error as Error).message}`);
     }
