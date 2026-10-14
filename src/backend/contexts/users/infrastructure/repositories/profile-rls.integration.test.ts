@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { SupabaseFactory } from '@lib/supabase';
 
 import { createSignedInClient } from '../../../../../../test/helpers/signed-in-client';
+import { UserError, UserErrorCodes } from '../../domain/UserError';
 import { SupabaseProfileRepository } from './supabase-profile-repository';
 
 describe('profile com client do usuário (Integration)', () => {
@@ -21,6 +22,20 @@ describe('profile com client do usuário (Integration)', () => {
     await repo.update({ id: user.userId, fullName: 'Own Name' });
 
     expect((await repo.getById(user.userId))?.fullName).toBe('Own Name');
+  });
+
+  it('username já usado por outra pessoa vira erro traduzível, não 500', async () => {
+    await new SupabaseProfileRepository(other.client).update({
+      id: other.userId,
+      username: 'taken_name',
+    });
+
+    const error = await new SupabaseProfileRepository(user.client)
+      .update({ id: user.userId, username: 'taken_name' })
+      .catch((e) => e);
+
+    expect(error).toBeInstanceOf(UserError);
+    expect(error.code).toBe(UserErrorCodes.PROFILE_USERNAME_TAKEN);
   });
 
   it('o usuário não lê nem altera o perfil de outro', async () => {

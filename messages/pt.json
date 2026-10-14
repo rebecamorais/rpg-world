@@ -22,6 +22,7 @@
       "auth_error_update_password_required": "Nova senha é obrigatória.",
       "profile_error_update_id_required": "ID do perfil é obrigatório para atualização.",
       "profile_error_get_id_required": "ID do usuário é obrigatório.",
+      "profile_error_username_taken": "Este nome de usuário já está em uso.",
       "storage_error_upload_avatar_userid_required": "ID do usuário é obrigatório para upload.",
       "storage_error_upload_avatar_size_limit": "O arquivo excede o limite de 5MB.",
       "storage_error_upload_avatar_invalid_type": "Tipo de arquivo inválido. Use JPEG, PNG ou WEBP.",
@@ -76,7 +77,10 @@
     "contactTooltip": "Reportar um Bug",
     "footerMessage": "Este software é livre. Veja o código no <link>GitHub</link>",
     "passwordMinLength": "A senha precisa ter pelo menos {min} caracteres.",
-    "passwordsDoNotMatch": "As senhas não coincidem."
+    "passwordsDoNotMatch": "As senhas não coincidem.",
+    "language": "Idioma",
+    "decrease": "Diminuir",
+    "increase": "Aumentar"
   },
   "login": {
     "title": "Entrar no RPG World",
@@ -276,7 +280,9 @@
     "customizeDescription": "Altere o avatar e a cor de destaque do personagem",
     "customizeTitle": "Personalizar Personagem",
     "avatarLabel": "Avatar",
-    "accentColorLabel": "Cor de Destaque"
+    "accentColorLabel": "Cor de Destaque",
+    "editName": "Editar nome",
+    "xpProgress": "Progresso para o próximo nível"
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",
@@ -299,7 +305,8 @@
       "d8": "1d8",
       "d10": "1d10",
       "d12": "1d12"
-    }
+    },
+    "edit": "Editar status de combate"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Nome da magia (ex: fireball)",
@@ -374,7 +381,20 @@
       "usernameMax": "Username deve ter no máximo 30 caracteres.",
       "usernamePattern": "Apenas letras minúsculas, números e underscores são permitidos.",
       "fullNameMax": "Nome deve ter no máximo 100 caracteres.",
-      "avatarUrlInvalid": "URL inválida."
+      "avatarUrlInvalid": "URL inválida.",
+      "primaryColorInvalid": "Escolha uma das cores."
+    },
+    "colors": {
+      "default": "Padrão",
+      "red": "Vermelho",
+      "blue": "Azul",
+      "green": "Verde",
+      "purple": "Roxo",
+      "yellow": "Amarelo",
+      "orange": "Laranja",
+      "cyan": "Ciano",
+      "pink": "Rosa",
+      "slate": "Ardósia"
     }
   },
   "avatarUpload": {
@@ -434,7 +454,10 @@
     "cancel": "Cancelar"
   },
   "savingThrows": {
-    "title": "Salvaguardas"
+    "title": "Salvaguardas",
+    "deathSaveSuccess": "Sucesso no teste contra a morte {count}",
+    "deathSaveFailure": "Falha no teste contra a morte {count}",
+    "resetDeathSaves": "Zerar testes contra a morte"
   },
   "terms": {
     "title": "Termos de Uso",
@@ -654,7 +677,8 @@
       "githubAction": "Sponsors",
       "pixTitle": "Fazer um Pix",
       "pixCopy": "Chave Pix copiada!",
-      "thanks": "Muito obrigada pelo seu carinho e apoio! <heart />"
+      "thanks": "Muito obrigada pelo seu carinho e apoio! <heart />",
+      "pixCopyLabel": "Copiar chave Pix"
     },
     "copyright": "© {year} Rebs Tech Studio. Todos os direitos reservados."
   },

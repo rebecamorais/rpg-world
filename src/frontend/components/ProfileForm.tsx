@@ -32,18 +32,19 @@ import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
 import { cn } from '@frontend/lib/utils';
 
+// Hex values: the profile schema (and the API) only accept #rrggbb
 const PREDEFINED_COLORS = [
-  { name: 'Default', value: '' },
-  { name: 'Red', value: 'var(--red)' },
-  { name: 'Blue', value: 'var(--blue)' },
-  { name: 'Green', value: 'var(--green)' },
-  { name: 'Purple', value: '#a855f7' },
-  { name: 'Yellow', value: 'var(--yellow)' },
-  { name: 'Orange', value: '#f97316' },
-  { name: 'Cyan', value: '#06b6d4' },
-  { name: 'Pink', value: '#ec4899' },
-  { name: 'Slate', value: '#64748b' },
-];
+  { name: 'default', value: '' },
+  { name: 'red', value: '#ef4444' },
+  { name: 'blue', value: '#3b82f6' },
+  { name: 'green', value: '#22c55e' },
+  { name: 'purple', value: '#a855f7' },
+  { name: 'yellow', value: '#eab308' },
+  { name: 'orange', value: '#f97316' },
+  { name: 'cyan', value: '#06b6d4' },
+  { name: 'pink', value: '#ec4899' },
+  { name: 'slate', value: '#64748b' },
+] as const;
 
 export default function ProfileForm() {
   const t = useTranslations('profileForm');
@@ -61,7 +62,7 @@ export default function ProfileForm() {
     avatarUrl: z.string().url(t('validation.avatarUrlInvalid')).optional().or(z.literal('')),
     primaryColor: z
       .string()
-      .regex(/^#[0-9a-fA-F]{6}$/, 'Invalid hex color')
+      .regex(/^#[0-9a-fA-F]{6}$/, t('validation.primaryColorInvalid'))
       .optional()
       .or(z.literal('')),
   });
@@ -87,12 +88,16 @@ export default function ProfileForm() {
 
   useEffect(() => {
     if (profile) {
-      form.reset({
-        username: profile.username ?? '',
-        fullName: profile.fullName ?? '',
-        avatarUrl: profile.avatarUrl ?? '',
-        primaryColor: profile.primaryColor ?? '#663399',
-      });
+      // A refetch (e.g. after an avatar upload) must not wipe fields the user is editing
+      form.reset(
+        {
+          username: profile.username ?? '',
+          fullName: profile.fullName ?? '',
+          avatarUrl: profile.avatarUrl ?? '',
+          primaryColor: profile.primaryColor ?? '#663399',
+        },
+        { keepDirtyValues: true },
+      );
     }
   }, [profile, form]);
 
@@ -209,7 +214,9 @@ export default function ProfileForm() {
                                 ? 'border-blue-500 ring-2 ring-blue-500/20'
                                 : 'border-transparent',
                             )}
-                            title={color.name}
+                            title={t(`colors.${color.name}`)}
+                            aria-label={t(`colors.${color.name}`)}
+                            aria-pressed={isSelected}
                           >
                             <div
                               className="h-7 w-7 rounded-full shadow-sm"

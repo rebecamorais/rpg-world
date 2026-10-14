@@ -3,6 +3,10 @@ import 'server-only';
 
 import { Profile } from '../../domain/Profile';
 import { ProfileRepository } from '../../domain/ProfileRepository';
+import { UserError, UserErrorCodes } from '../../domain/UserError';
+
+// Postgres unique_violation; on update it can only come from profile.username
+const UNIQUE_VIOLATION = '23505';
 
 export class SupabaseProfileRepository implements ProfileRepository {
   constructor(private readonly dbClient: SupabaseClient) {}
@@ -57,6 +61,9 @@ export class SupabaseProfileRepository implements ProfileRepository {
       })
       .eq('id', profile.id);
 
+    if (error?.code === UNIQUE_VIOLATION) {
+      throw new UserError(UserErrorCodes.PROFILE_USERNAME_TAKEN);
+    }
     if (error) {
       throw new Error(`Failed to update profile: ${error.message}`);
     }
