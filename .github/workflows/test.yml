@@ -56,3 +56,43 @@ jobs:
       # 3. Rodar Testes de Integração
       - name: Run Integration Tests
         run: npm run test:integration
+
+  # Ponta a ponta com Playwright: build de produção + Supabase de teste.
+  # Informativo por enquanto: não está entre os checks obrigatórios do ruleset.
+  e2e:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Playwright Browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Initialize Database Structure (Symlinks)
+        run: npm run infra sync
+
+      - name: Start Supabase Test Environment
+        run: npx supabase start --workdir database/db-test
+
+      - name: Run E2E Tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright Report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
