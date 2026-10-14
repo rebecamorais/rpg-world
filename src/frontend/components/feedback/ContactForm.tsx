@@ -143,7 +143,7 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
                     <FormControl>
                       <Input
                         placeholder={t('emailPlaceholder')}
-                        className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground placeholder:text-muted-foreground"
+                        className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground"
                         {...field}
                       />
                     </FormControl>
@@ -187,7 +187,7 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
                     <Textarea
                       placeholder={t('messagePlaceholder')}
                       rows={5}
-                      className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground placeholder:text-muted-foreground resize-none"
+                      className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground resize-none"
                       {...field}
                     />
                   </FormControl>

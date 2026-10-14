@@ -40,9 +40,9 @@ export default async function GlobalHeader() {
         </Link>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-4">
+      <div className="flex items-center gap-1 sm:gap-2">
         {!user ? (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Button
               variant="ghost"
               asChild
@@ -59,7 +59,7 @@ export default async function GlobalHeader() {
             </Button>
           </div>
         ) : (
-          <div className="hidden items-center gap-4 sm:flex">
+          <div className="hidden items-center gap-1 sm:flex">
             <Button
               variant="ghost"
               asChild
@@ -71,8 +71,11 @@ export default async function GlobalHeader() {
             <UserMenu />
           </div>
         )}
-        <HeaderSupportLink />
-        <LanguageSwitcher />
+        <span className="bg-border mx-1 hidden h-5 w-px sm:block" aria-hidden="true" />
+        <div className="flex items-center gap-1">
+          <HeaderSupportLink />
+          <LanguageSwitcher />
+        </div>
       </div>
     </header>
   );

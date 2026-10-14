@@ -157,7 +157,7 @@ export default function SpellSearchDialog({
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="focus:ring-character/50 border-border bg-muted text-foreground placeholder:text-muted-foreground pl-10"
+                className="focus:ring-character/50 border-border bg-muted text-foreground pl-10"
               />
               <Button
                 size="sm"

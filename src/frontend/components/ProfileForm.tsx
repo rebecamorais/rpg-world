@@ -162,7 +162,7 @@ export default function ProfileForm() {
                     <Input
                       placeholder={t('usernamePlaceholder')}
                       autoComplete="username"
-                      className="border-border bg-muted text-foreground placeholder:text-muted-foreground focus:border-primary-flare"
+                      className="border-border bg-muted text-foreground focus:border-primary-flare"
                       {...field}
                     />
                   </FormControl>
@@ -181,7 +181,7 @@ export default function ProfileForm() {
                     <Input
                       placeholder={t('fullNamePlaceholder')}
                       autoComplete="name"
-                      className="border-border bg-muted text-foreground placeholder:text-muted-foreground focus:border-primary-flare"
+                      className="border-border bg-muted text-foreground focus:border-primary-flare"
                       {...field}
                     />
                   </FormControl>
