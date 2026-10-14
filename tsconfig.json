@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@tests/*": ["./tests/*"],
+      "@tests/*": ["./test/*"],
       "@api": ["./src/backend/index"],
       "@client": ["./src/frontend/lib/api-client"],
       "@lib/*": ["./lib/*"],
