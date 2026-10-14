@@ -1,18 +1,9 @@
-import { NextResponse } from 'next/server';
-
 import { getApi } from '@api';
 
-export async function POST() {
-  try {
-    const { authApi } = await getApi();
-    await authApi.signOut();
+import { withHandler } from '@shared/http/route-handler';
 
-    return NextResponse.json({ success: true }, { status: 200 });
-  } catch (err: unknown) {
-    console.error('Logout error:', err);
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Unknown error' },
-      { status: 500 },
-    );
-  }
-}
+export const POST = withHandler(async () => {
+  const { authApi } = await getApi();
+  await authApi.signOut();
+  return { success: true };
+});

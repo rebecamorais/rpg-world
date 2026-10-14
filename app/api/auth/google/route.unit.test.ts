@@ -28,11 +28,15 @@ describe('GET /api/auth/google', () => {
     });
   });
 
-  it('manda para a página de erro quando o Supabase falha', async () => {
-    signInWithOAuth.mockResolvedValue({ data: { url: null }, error: { message: 'disabled' } });
+  it('manda para a página de erro com um código, sem a mensagem do Supabase', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    signInWithOAuth.mockResolvedValue({
+      data: { url: null },
+      error: { message: 'Unsupported provider: provider is not enabled' },
+    });
 
     const res = await GET(new Request(`${ORIGIN}/api/auth/google`));
 
-    expect(res.headers.get('location')).toBe(`${ORIGIN}/auth/error?message=disabled`);
+    expect(res.headers.get('location')).toBe(`${ORIGIN}/auth/error?message=auth_error_provider`);
   });
 });

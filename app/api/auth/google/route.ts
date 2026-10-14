@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { UserErrorCodes } from '@backend/contexts/users/domain/UserError';
 import { getContainer } from '@backend/shared/providers/get-container';
 
 export async function GET(req: Request) {
@@ -17,11 +18,9 @@ export async function GET(req: Request) {
   });
 
   if (error || !data.url) {
+    console.error('Failed to initialize Google OAuth:', error);
     return NextResponse.redirect(
-      new URL(
-        `/auth/error?message=${encodeURIComponent(error?.message || 'Failed to initialize Google OAuth')}`,
-        requestUrl.origin,
-      ),
+      new URL(`/auth/error?message=${UserErrorCodes.AUTH_PROVIDER_ERROR}`, requestUrl.origin),
     );
   }
 

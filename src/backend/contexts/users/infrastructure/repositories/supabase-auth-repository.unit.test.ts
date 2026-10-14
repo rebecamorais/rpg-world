@@ -256,6 +256,16 @@ describe('SupabaseAuthRepository', () => {
       );
     });
 
+    it.each(['otp_expired', 'flow_state_expired', 'flow_state_not_found'])(
+      'exchangeCodeForSession: %s vira AUTH_LINK_EXPIRED',
+      async (code) => {
+        vi.mocked(mockAuthClient.auth.exchangeCodeForSession).mockResolvedValueOnce(failWith(code));
+        await expect(repository.exchangeCodeForSession('code')).rejects.toThrow(
+          UserErrorCodes.AUTH_LINK_EXPIRED,
+        );
+      },
+    );
+
     it('erros desconhecidos continuam sendo Error comum (viram 500)', async () => {
       vi.mocked(mockAuthClient.auth.signInWithPassword).mockResolvedValueOnce(
         failWith('unexpected_failure'),
