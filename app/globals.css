@@ -23,6 +23,8 @@
   --border: #27272a;
   --input: #27272a;
   --sidebar: #09090b;
+  /* Backdrop behind dialogs, sheets and full-screen loaders */
+  --overlay: rgb(0 0 0 / 0.8);
 
   /* Status */
   --danger: #ef4444;
@@ -36,6 +38,10 @@
   --brand: #663399;
   --primary: var(--brand);
   --character-color: var(--primary);
+  /* Third-party brand, only on its own link */
+  --kofi: #ff5e5b;
+  /* Each spell card sets its own (damage type, category or school). */
+  --spell-color: var(--muted-foreground);
 
   --header-height: 80px;
 }
@@ -47,7 +53,8 @@
  * -on: text on top of a solid fill (white or black, whichever contrasts).
  */
 :root,
-.character-context {
+.character-context,
+.spell-context {
   --primary-flare: color-mix(in oklch, var(--primary), white 45%);
   --primary-on: #ffffff;
   --primary-surface: color-mix(in srgb, var(--primary), transparent 90%);
@@ -62,6 +69,11 @@
   --character-surface: color-mix(in srgb, var(--character-primary), transparent 90%);
   --character-muted: color-mix(in srgb, var(--character-primary), transparent 70%);
   --character-glow: color-mix(in srgb, var(--character-primary), transparent 50%);
+
+  --spell-flare: color-mix(in oklch, var(--spell-color), white 45%);
+  --spell-surface: color-mix(in srgb, var(--spell-color), transparent 90%);
+  --spell-muted: color-mix(in srgb, var(--spell-color), transparent 70%);
+  --spell-glow: color-mix(in srgb, var(--spell-color), transparent 50%);
 
   --danger-flare: color-mix(in srgb, var(--danger), white 20%);
   --danger-surface: color-mix(in srgb, var(--danger), transparent 90%);
@@ -80,11 +92,13 @@
 /* Exact versions where relative colors are supported: lift lightness only as much as needed. */
 @supports (color: oklch(from red l c h)) {
   :root,
-  .character-context {
+  .character-context,
+  .spell-context {
     --primary-flare: oklch(from var(--primary) max(l, 0.74) min(c, 0.2) h);
     --primary-on: oklch(from var(--primary) clamp(0, (0.68 - l) * 1000, 1) 0 0);
     --character-flare: oklch(from var(--character-primary) max(l, 0.74) min(c, 0.2) h);
     --character-on: oklch(from var(--character-primary) clamp(0, (0.68 - l) * 1000, 1) 0 0);
+    --spell-flare: oklch(from var(--spell-color) max(l, 0.74) min(c, 0.2) h);
   }
 }
 
@@ -110,6 +124,8 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-sidebar: var(--sidebar);
+  --color-overlay: var(--overlay);
+  --color-kofi: var(--kofi);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
 
@@ -127,6 +143,12 @@
   --color-character-surface: var(--character-surface);
   --color-character-muted: var(--character-muted);
   --color-character-glow: var(--character-glow);
+
+  --color-spell: var(--spell-color);
+  --color-spell-flare: var(--spell-flare);
+  --color-spell-surface: var(--spell-surface);
+  --color-spell-muted: var(--spell-muted);
+  --color-spell-glow: var(--spell-glow);
 
   --color-danger: var(--danger);
   --color-danger-flare: var(--danger-flare);
@@ -153,6 +175,86 @@
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
+/*
+ * TYPE SCALE, by role. Each role sets family, size, weight and line height together, so a
+ * component picks a role (text-title) instead of combining text-xs font-bold tracking-widest...
+ * Cinzel only in display and title (names, page and section titles), never in running text.
+ * The role names are registered in tailwind-merge (lib/utils.ts) as font sizes.
+ */
+@utility text-display {
+  font-family: --theme(--font-display);
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+@utility text-title {
+  font-family: --theme(--font-display);
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+@utility text-heading {
+  font-family: --theme(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+@utility text-body {
+  font-family: --theme(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Small uppercase label: section names, stat names, field labels on the sheet */
+@utility text-label {
+  font-family: --theme(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@utility text-caption {
+  font-family: --theme(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Interaction states shared by every primitive in components/ui */
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* On touch screens, grows the hit area to at least 44x44px without changing the layout */
+@utility touch-target {
+  position: relative;
+
+  @media (pointer: coarse) {
+    &::after {
+      content: '';
+      position: absolute;
+      inset: min(0px, calc((100% - 44px) / 2));
+    }
+  }
+}
+
+/* Diagonal stripes in the current text color (temporary HP) */
+@utility bg-stripes {
+  background-image: repeating-linear-gradient(45deg, currentColor 0 2px, transparent 2px 6px);
+}
+
 @theme {
   --animate-shimmer: shimmer 1.5s ease-in-out infinite;
 
@@ -164,6 +266,15 @@
 }
 
 @layer base {
+  /* Tailwind v4 borders default to currentColor; a bare `border` uses the token instead */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border);
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
@@ -216,10 +327,6 @@
 }
 
 @layer utilities {
-  .glass-premium {
-    @apply border border-white/10 bg-black/40 shadow-2xl backdrop-blur-2xl;
-  }
-
   /* Hide number input spinners */
   .no-spinner {
     appearance: textfield;
