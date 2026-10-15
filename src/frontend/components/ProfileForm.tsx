@@ -122,22 +122,25 @@ export default function ProfileForm() {
 
   if (isLoading) {
     return (
-      <Card className="max-w-2xl py-12">
+      <Card className="py-12">
         <LoadingState thematic />
       </Card>
     );
   }
 
   return (
-    <SectionCard className="max-w-2xl">
-      <SectionCard.Header>
+    <SectionCard>
+      <SectionCard.Header className="sm:px-6">
         <SectionCard.Title icon="User">{t('title')}</SectionCard.Title>
       </SectionCard.Header>
-      <SectionCard.Body className="p-6">
+      <SectionCard.Body className="sm:p-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
-            {/* Avatar upload — at the top, centered */}
-            <div className="flex justify-center">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8"
+          >
+            {/* Avatar upload — on top on phones, beside the fields from md up */}
+            <div className="flex justify-center md:shrink-0">
               <ImageUpload
                 currentUrl={avatarUrl}
                 target="profile"
@@ -146,98 +149,100 @@ export default function ProfileForm() {
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('usernameLabel')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t('usernamePlaceholder')}
-                      autoComplete="username"
-                      className="border-border bg-muted text-foreground focus:border-primary-flare"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex min-w-0 flex-1 flex-col gap-5">
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('usernameLabel')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={t('usernamePlaceholder')}
+                        autoComplete="username"
+                        className="border-border bg-muted text-foreground focus:border-primary-flare"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="fullName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('fullNameLabel')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t('fullNamePlaceholder')}
-                      autoComplete="name"
-                      className="border-border bg-muted text-foreground focus:border-primary-flare"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('fullNameLabel')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={t('fullNamePlaceholder')}
+                        autoComplete="name"
+                        className="border-border bg-muted text-foreground focus:border-primary-flare"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="primaryColor"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('primaryColorLabel')}</FormLabel>
-                  <FormControl>
-                    <div className="grid grid-cols-5 gap-3 pt-2">
-                      {PREDEFINED_COLORS.map((color) => {
-                        const isSelected =
-                          color.value === field.value || (!color.value && !field.value);
+              <FormField
+                control={form.control}
+                name="primaryColor"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('primaryColorLabel')}</FormLabel>
+                    <FormControl>
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {PREDEFINED_COLORS.map((color) => {
+                          const isSelected =
+                            color.value === field.value || (!color.value && !field.value);
 
-                        return (
-                          <button
-                            key={color.name}
-                            type="button"
-                            onClick={() => field.onChange(color.value)}
-                            className={cn(
-                              'group relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all hover:scale-110',
-                              isSelected
-                                ? 'border-primary-flare ring-primary-flare/20 ring-2'
-                                : 'border-transparent',
-                            )}
-                            title={t(`colors.${color.name}`)}
-                            aria-label={t(`colors.${color.name}`)}
-                            aria-pressed={isSelected}
-                          >
-                            <div
-                              className="h-7 w-7 rounded-full shadow-sm"
-                              style={{ backgroundColor: color.value || 'var(--brand)' }}
-                            />
-                            {isSelected && (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="bg-foreground h-1.5 w-1.5 rounded-full shadow-sm" />
-                              </div>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                          return (
+                            <button
+                              key={color.name}
+                              type="button"
+                              onClick={() => field.onChange(color.value)}
+                              className={cn(
+                                'group relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all hover:scale-110',
+                                isSelected
+                                  ? 'border-primary-flare ring-primary-flare/20 ring-2'
+                                  : 'border-transparent',
+                              )}
+                              title={t(`colors.${color.name}`)}
+                              aria-label={t(`colors.${color.name}`)}
+                              aria-pressed={isSelected}
+                            >
+                              <div
+                                className="h-7 w-7 rounded-full shadow-sm"
+                                style={{ backgroundColor: color.value || 'var(--brand)' }}
+                              />
+                              {isSelected && (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <div className="bg-foreground h-1.5 w-1.5 rounded-full shadow-sm" />
+                                </div>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormRootError />
-            <Button
-              type="submit"
-              loading={isUpdating || form.formState.isSubmitting}
-              className="mt-2 w-full font-semibold disabled:opacity-50"
-            >
-              {isUpdating ? t('saving') : t('save')}
-            </Button>
+              <FormRootError />
+              <Button
+                type="submit"
+                loading={isUpdating || form.formState.isSubmitting}
+                className="mt-1 w-full font-semibold disabled:opacity-50 sm:w-auto sm:self-end"
+              >
+                {isUpdating ? t('saving') : t('save')}
+              </Button>
+            </div>
           </form>
         </Form>
       </SectionCard.Body>
