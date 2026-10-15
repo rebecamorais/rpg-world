@@ -240,7 +240,6 @@
     "loadErrorTitle": "Something went wrong",
     "levelShort": "Lv {level}",
     "defaultClass": "Adventurer",
-    "selectLevel": "Select level",
     "cardActions": "Actions for {name}",
     "loadingList": "Loading characters",
     "subtitle": "Your sheets, ready for the next session.",
