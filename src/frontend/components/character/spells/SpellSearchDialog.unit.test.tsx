@@ -24,13 +24,20 @@ function spells(count: number, offset = 0): Spell[] {
     name: `Spell ${offset + i}`,
     level: 1,
     school: 'evocation',
+    castingTime: 'action',
   }));
 }
 
-/** Query params of the last spell search. */
+/** Query params of every spell search so far, prefetches of the next page included. */
+function queries() {
+  return api.get.mock.calls.map(([url]) =>
+    Object.fromEntries(new URLSearchParams((url as string).split('?')[1])),
+  );
+}
+
+/** Query params of the last search the user asked for (not a prefetch of the next page). */
 function lastQuery() {
-  const url = api.get.mock.calls.at(-1)![0] as string;
-  return Object.fromEntries(new URLSearchParams(url.split('?')[1]));
+  return queries().findLast((q) => q.page === '0')!;
 }
 
 function renderDialog(characterClass = '') {
@@ -96,7 +103,7 @@ describe('SpellSearchDialog', () => {
     expect(await screen.findByText('13–24 of 30 spells')).toBeInTheDocument();
 
     await user.type(screen.getByRole('searchbox', { name: t.searchLabel }), 'x');
-    await waitFor(() => expect(lastQuery()).toMatchObject({ search: 'x', page: '0' }));
+    await waitFor(() => expect(lastQuery()).toMatchObject({ search: 'x' }));
   });
 
   it('no celular, os filtros abrem por um botão que conta os ativos', async () => {
@@ -111,5 +118,13 @@ describe('SpellSearchDialog', () => {
     await user.click(toggle);
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
     expect(panel).not.toHaveClass('max-sm:hidden');
+  });
+
+  it('pré-carrega a próxima página, mas não depois da última', async () => {
+    renderDialog();
+
+    await waitFor(() => expect(queries()).toContainEqual(expect.objectContaining({ page: '1' })));
+    // 30 spells, 12 per page: pages 0, 1 and 2; page 0 only prefetches page 1
+    expect(queries().map((q) => q.page)).toEqual(['0', '1']);
   });
 });
