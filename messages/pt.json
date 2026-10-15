@@ -528,7 +528,7 @@
         "title": "1. Dados Coletados",
         "content": "Coletamos apenas o essencial para a sua experiência:",
         "items": [
-          "Autenticação: E-mail e nome fornecidos via Supabase/Google Auth.",
+          "Autenticação: E-mail e nome fornecidos via <supabase>Supabase</supabase>/<google>Google</google> Auth.",
           "Perfil: Nome de usuário, avatar e preferências de interface.",
           "Jogo: Dados dos personagens, histórico de rolagens e notas de sessão."
         ]
@@ -544,11 +544,11 @@
       },
       "sharing": {
         "title": "3. Compartilhamento",
-        "content": "Nós não vendemos seus dados para terceiros. O processamento de dados é feito de forma segura através do Supabase e serviços de infraestrutura da Rebs Tech Studio."
+        "content": "Nós não vendemos seus dados para terceiros. O processamento de dados é feito de forma segura através do <supabase>Supabase</supabase> e serviços de infraestrutura da Rebs Tech Studio."
       },
       "rights": {
         "title": "4. Seus Direitos",
-        "content": "De acordo com a LGPD, você tem o direito de acessar, corrigir ou excluir seus dados. Enquanto a funcionalidade de exclusão automática está em desenvolvimento, você pode solicitar a exclusão total da sua conta e de todos os dados associados enviando um e-mail para contato@rebs.com.br. Processaremos sua solicitação em até 5 dias úteis."
+        "content": "De acordo com a <lgpd>LGPD</lgpd>, você tem o direito de acessar, corrigir ou excluir seus dados. Enquanto a funcionalidade de exclusão automática está em desenvolvimento, você pode solicitar a exclusão total da sua conta e de todos os dados associados enviando um e-mail para <email>contato@rebs.com.br</email>. Processaremos sua solicitação em até 5 dias úteis."
       },
       "cookies": {
         "title": "5. Cookies",
@@ -556,7 +556,7 @@
       },
       "transfer": {
         "title": "6. Transferência Internacional de Dados",
-        "content": "Para o funcionamento do sistema, utilizamos infraestrutura de terceiros (como o Supabase). Como resultado, seus dados podem ser processados e armazenados em servidores localizados fora do Brasil, especificamente nos Estados Unidos. Ao utilizar o RPG World, você consente com essa transferência internacional, realizada sob rígidos padrões de segurança e criptografia."
+        "content": "Para o funcionamento do sistema, utilizamos infraestrutura de terceiros (como o <supabase>Supabase</supabase>). Como resultado, seus dados podem ser processados e armazenados em servidores localizados fora do Brasil, especificamente nos Estados Unidos. Ao utilizar o RPG World, você consente com essa transferência internacional, realizada sob rígidos padrões de segurança e criptografia."
       },
       "retention": {
         "title": "7. Retenção e Exclusão de Dados",
@@ -564,7 +564,7 @@
       },
       "contact": {
         "title": "8. Contato e Encarregado de Dados",
-        "content": "Para qualquer dúvida sobre sua privacidade ou para exercer seus direitos de exclusão (LGPD), entre em contato pelo e-mail: contato@rebs.com.br."
+        "content": "Para qualquer dúvida sobre sua privacidade ou para exercer seus direitos de exclusão (<lgpd>LGPD</lgpd>), entre em contato pelo e-mail: <email>contato@rebs.com.br</email>."
       }
     }
   },

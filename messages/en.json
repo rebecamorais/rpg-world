@@ -528,7 +528,7 @@
         "title": "1. Data Collected",
         "content": "We collect only what is essential for your experience:",
         "items": [
-          "Authentication: Email and name provided via Supabase/Google Auth.",
+          "Authentication: Email and name provided via <supabase>Supabase</supabase>/<google>Google</google> Auth.",
           "Profile: Username, avatar, and interface preferences.",
           "Game: Character data, roll history, and session notes."
         ]
@@ -544,11 +544,11 @@
       },
       "sharing": {
         "title": "3. Sharing",
-        "content": "We do not sell your data to third parties. Data processing is done securely through Supabase and Rebs Tech Studio infrastructure services."
+        "content": "We do not sell your data to third parties. Data processing is done securely through <supabase>Supabase</supabase> and Rebs Tech Studio infrastructure services."
       },
       "rights": {
         "title": "4. Your Rights",
-        "content": "In accordance with LGPD/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data by sending an email to contato@rebs.com.br. We will process your request within 5 business days."
+        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data by sending an email to <email>contato@rebs.com.br</email>. We will process your request within 5 business days."
       },
       "cookies": {
         "title": "5. Cookies",
@@ -556,7 +556,7 @@
       },
       "transfer": {
         "title": "6. International Data Transfer",
-        "content": "To operate the system, we use third-party infrastructure (such as Supabase). As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. By using RPG World, you consent to this international transfer, conducted under strict security and encryption standards."
+        "content": "To operate the system, we use third-party infrastructure (such as <supabase>Supabase</supabase>). As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. By using RPG World, you consent to this international transfer, conducted under strict security and encryption standards."
       },
       "retention": {
         "title": "7. Data Retention and Deletion",
@@ -564,7 +564,7 @@
       },
       "contact": {
         "title": "8. Contact and Data Controller",
-        "content": "For any questions regarding your privacy or to exercise your deletion rights (LGPD), please contact us via email: contato@rebs.com.br."
+        "content": "For any questions regarding your privacy or to exercise your deletion rights (<lgpd>LGPD</lgpd>), please contact us via email: <email>contato@rebs.com.br</email>."
       }
     }
   },

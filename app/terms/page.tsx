@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
-
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { getTranslations } from 'next-intl/server';
+
+import { richLinks } from '@frontend/components/shared/rich-links';
 
 // Links inside the game content credits, one per tag in the messages
 const CREDIT_HREFS = {
@@ -15,23 +15,7 @@ const CREDIT_HREFS = {
   notice: 'https://github.com/rebecamorais/rpg-world/blob/main/NOTICE.md',
 };
 
-const CREDIT_LINKS = Object.fromEntries(
-  Object.entries(CREDIT_HREFS).map(([tag, href]) => [
-    tag,
-    function CreditLink(chunks: ReactNode) {
-      return (
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary-flare hover:text-foreground underline underline-offset-4"
-        >
-          {chunks}
-        </a>
-      );
-    },
-  ]),
-);
+const CREDIT_LINKS = richLinks(CREDIT_HREFS);
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('terms');
