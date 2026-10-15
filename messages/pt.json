@@ -84,7 +84,14 @@
     "discard": "Descartar",
     "discardConfirm": "Descartar as alterações não salvas?",
     "leaveConfirm": "Você tem alterações não salvas. Sair mesmo assim?",
-    "saveShortcut": "Ctrl+S para salvar"
+    "saveShortcut": "Ctrl+S para salvar",
+    "numberField": {
+      "notANumber": "Digite um número",
+      "integer": "Só números inteiros",
+      "range": "Entre {min} e {max}",
+      "min": "No mínimo {min}",
+      "max": "No máximo {max}"
+    }
   },
   "login": {
     "title": "Entrar no RPG World",

@@ -5,8 +5,8 @@ import * as React from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Card } from '@frontend/components/ui/card';
-import { GhostInput } from '@frontend/components/ui/ghost-input';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { NumberInput } from '@frontend/components/ui/number-input';
 import { cn } from '@frontend/lib/utils';
 
 interface Props extends React.ComponentProps<'div'> {
@@ -43,11 +43,13 @@ export function SpellPoints({
       <div className="flex flex-1 flex-col items-center justify-center gap-1 py-1">
         <div className="flex items-baseline justify-center gap-1.5 font-bold">
           <div className="group/value relative flex items-baseline">
-            <GhostInput
-              type="number"
+            <NumberInput
+              ghost
               aria-label={t('spellPoints')}
               value={current}
-              onChange={(e) => onPointsChange('current', parseInt(e.target.value) || 0)}
+              min={0}
+              max={10_000}
+              onValueChange={(next) => onPointsChange('current', next)}
               showIcon={false}
               className="text-foreground h-auto w-16 p-0 text-center font-mono text-3xl font-bold tabular-nums md:text-3xl"
             />

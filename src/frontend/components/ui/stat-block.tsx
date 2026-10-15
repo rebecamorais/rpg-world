@@ -19,6 +19,8 @@ function StatBlock({ icon, label, unit, children, className, ...props }: StatBlo
     <div
       className={cn(
         'border-border bg-background/60 hover:border-character-muted flex items-center gap-3 rounded-xl border px-3 py-2 transition-colors',
+        // A NumberInput inside with an invalid value marks the whole block
+        'has-[[aria-invalid=true]]:border-danger-muted',
         className,
       )}
       {...props}
