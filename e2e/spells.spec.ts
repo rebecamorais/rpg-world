@@ -7,9 +7,8 @@ test('aprende, prepara e esquece uma magia', async ({ page, user: _ }) => {
   // Learn Fireball from the catalog
   await page.getByRole('button', { name: 'Add Spell' }).click();
   const catalog = page.getByRole('dialog', { name: 'Spell list' });
-  const search = catalog.getByRole('textbox', { name: 'Search spells' });
+  const search = catalog.getByRole('searchbox', { name: 'Search spells' });
   await search.fill('fire');
-  await search.press('Enter');
   const fireballInCatalog = catalog.getByRole('article', { name: /Fireball/ });
   await expect(catalog.getByRole('article')).toHaveCount(1);
   await fireballInCatalog.getByRole('button', { name: 'Learn spell' }).click();
