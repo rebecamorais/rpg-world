@@ -12,6 +12,7 @@ import { SpellActions } from './parts/SpellActions';
 import { SpellChipsRow } from './parts/SpellChipsRow';
 import { SpellDetails } from './parts/SpellDetails';
 import { SpellHeader } from './parts/SpellHeader';
+import { LearnSpellAction } from './parts/SpellQuickAction';
 
 interface SpellCardProps {
   spell: Spell;
@@ -33,6 +34,16 @@ export function SpellCard({
   isLearned,
 }: SpellCardProps) {
   const { theme, mainIcon, displayValues } = useSpellDisplay(spell);
+
+  const quickAction = onLearnSpell ? (
+    <LearnSpellAction
+      isLearned={!!isLearned}
+      learnLabel={displayValues.learnLabel}
+      forgetLabel={displayValues.forgetLabel}
+      onLearn={() => onLearnSpell(spell.id)}
+      onForget={() => onForgetSpell?.(spell.id)}
+    />
+  ) : null;
 
   const cardStyles = useMemo(
     () =>
@@ -76,6 +87,8 @@ export function SpellCard({
           isExpanded={isExpanded}
           mainIcon={mainIcon}
           displayValues={displayValues}
+          isLearned={isLearned}
+          action={quickAction}
         />
 
         {/* Expandable Content with Grid Transition */}
@@ -93,16 +106,16 @@ export function SpellCard({
                 <SpellChipsRow spell={spell} displayValues={displayValues} />
               </div>
 
-              <div className="pointer-events-auto">
-                <SpellActions
-                  spell={spell}
-                  onForgetSpell={onForgetSpell}
-                  onTogglePrepared={onTogglePrepared}
-                  onLearnSpell={onLearnSpell}
-                  isLearned={isLearned}
-                  displayValues={displayValues}
-                />
-              </div>
+              {!onLearnSpell && (
+                <div className="pointer-events-auto">
+                  <SpellActions
+                    spell={spell}
+                    onForgetSpell={onForgetSpell}
+                    onTogglePrepared={onTogglePrepared}
+                    displayValues={displayValues}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -15,10 +15,14 @@ interface SpellHeaderProps {
   isExpanded: boolean;
   mainIcon: string;
   displayValues: SpellDisplayValues;
+  /** Shows the "learned" badge (spell search). */
+  isLearned?: boolean;
+  /** Quick action at the end of the header, visible even when the card is collapsed. */
+  action?: React.ReactNode;
 }
 
 export const SpellHeader = React.memo(
-  ({ spell, isExpanded, mainIcon, displayValues }: SpellHeaderProps) => (
+  ({ spell, isExpanded, mainIcon, displayValues, isLearned, action }: SpellHeaderProps) => (
     <header
       className={cn('flex flex-col transition-all duration-300', isExpanded ? 'mb-5' : 'mb-0')}
     >
@@ -83,6 +87,16 @@ export const SpellHeader = React.memo(
             )}
           >
             <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+              {isLearned && (
+                <div className="text-success-flare flex items-center gap-1">
+                  <AppIcon name="Check" size="xs" aria-hidden="true" />
+                  <span>{displayValues.learnedBadgeLabel}</span>
+                  <span className="text-muted-foreground opacity-40" aria-hidden="true">
+                    •
+                  </span>
+                </div>
+              )}
+
               {isExpanded && (
                 <div className="text-muted-foreground flex items-center gap-1">
                   <span>{displayValues.school}</span>
@@ -148,6 +162,8 @@ export const SpellHeader = React.memo(
             )}
           </div>
         </div>
+
+        {action && <div className="pointer-events-auto shrink-0">{action}</div>}
       </div>
     </header>
   ),

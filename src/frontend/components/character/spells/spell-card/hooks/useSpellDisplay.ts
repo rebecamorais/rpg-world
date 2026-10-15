@@ -31,6 +31,7 @@ export interface SpellDisplayValues {
   concentrationLabel: string;
   forgetLabel: string;
   learnLabel: string;
+  learnedBadgeLabel: string;
   prepareLabel: string;
   unprepareLabel: string;
   expandLabel: string;
@@ -127,7 +128,8 @@ export function useSpellDisplay(spell: Spell) {
       ritualLabel: tCharacters('ritual'),
       concentrationLabel: tCharacters('concentration'),
       forgetLabel: tCharacters('forgetSpell'),
-      learnLabel: tCharacters('learn'),
+      learnLabel: tCharacters('learnSpell'),
+      learnedBadgeLabel: tCharacters('learnedBadge'),
       prepareLabel: tCharacters('prepareSpell'),
       unprepareLabel: tCharacters('unprepareSpell'),
       expandLabel: tCharacters('expand'),

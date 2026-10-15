@@ -181,7 +181,6 @@
     "saveSuccess": "Character saved successfully!",
     "passivePerception": "Passive Perception",
     "search": "Search",
-    "learn": "Learn",
     "allDamage": "All Damage",
     "forgetSpell": "Forget spell",
     "prepareSpell": "Prepare spell",
@@ -246,7 +245,9 @@
     "selectLevel": "Select level",
     "cardActions": "Actions for {name}",
     "loadingList": "Loading characters",
-    "subtitle": "Your sheets, ready for the next session."
+    "subtitle": "Your sheets, ready for the next session.",
+    "learnSpell": "Learn spell",
+    "learnedBadge": "Learned"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",

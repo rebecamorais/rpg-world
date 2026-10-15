@@ -181,7 +181,6 @@
     "saveSuccess": "Personagem salvo com sucesso!",
     "passivePerception": "Percepção Passiva",
     "search": "Buscar",
-    "learn": "Aprender",
     "allDamage": "Todos os Danos",
     "forgetSpell": "Esquecer magia",
     "prepareSpell": "Preparar magia",
@@ -246,7 +245,9 @@
     "selectLevel": "Selecione o nível",
     "cardActions": "Ações de {name}",
     "loadingList": "Carregando personagens",
-    "subtitle": "Suas fichas, prontas para a próxima sessão."
+    "subtitle": "Suas fichas, prontas para a próxima sessão.",
+    "learnSpell": "Aprender magia",
+    "learnedBadge": "Aprendida"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
