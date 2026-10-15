@@ -725,5 +725,9 @@
       "feedback": "Feedback Geral",
       "account": "Conta / Acesso"
     }
+  },
+  "seo": {
+    "title": "RPG World: fichas de D&D 5e grátis",
+    "description": "App gratuito e de código aberto para criar e gerenciar fichas de personagem de D&D 5e, com cálculos automáticos e grimório do SRD, em português e inglês."
   }
 }

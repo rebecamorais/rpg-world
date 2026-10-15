@@ -725,5 +725,9 @@
       "feedback": "General Feedback",
       "account": "Account / Access"
     }
+  },
+  "seo": {
+    "title": "RPG World: free D&D 5e character sheets",
+    "description": "Free, open-source app to create and manage D&D 5e character sheets, with automatic calculations and an SRD spellbook, in English and Brazilian Portuguese."
   }
 }

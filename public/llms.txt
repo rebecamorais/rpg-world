@@ -1,31 +1,55 @@
 # RPG World
 
-> A premium Dungeons & Dragons 5e character management platform focused on performance, modern design, and clean architecture.
+> RPG World (https://rpgworldapp.com) is a free, open-source web app for creating and managing
+> tabletop RPG character sheets, starting with Dungeons & Dragons 5th Edition (SRD 5.1). It is
+> available in English and Brazilian Portuguese, works on desktop and phone, and is licensed under
+> the GNU GPLv3. In Portuguese: um app gratuito e de código aberto para fichas de personagem de RPG
+> de mesa, começando por D&D 5e, em português do Brasil e inglês.
 
-## 📝 Overview
-**RPG World** is a modern web application for tabletop RPG players. It provides a streamlined interface to create, manage, and evolve D&D 5e characters, ensuring all rules and calculations are strictly followed while maintaining a beautiful, glassmorphism-inspired aesthetic.
+RPG World is for players who want a digital character sheet that does the math for them, and who
+want to play in Portuguese without depending on English-only tools. It is an independent project
+by Rebeca Morais (Rebs Tech Studio), not affiliated with or endorsed by Wizards of the Coast.
 
-## 🛠️ Tech Stack
-- **Framework**: Next.js 16 (React 19)
-- **Language**: TypeScript (Strict typing)
-- **Styling**: Tailwind CSS v4 with a dynamic color proxy system.
-- **Backend & Auth**: Supabase (PostgreSQL, SSR Auth, Storage).
-- **Internationalization**: Full support for English and Portuguese (pt-BR) via `next-intl`.
+## What you can do today
 
-## 🏗️ Technical Architecture
-- **Clean Architecture**: Strict isolation between layers. Frontend communicates exclusively via the API layer.
-- **Server-First Mindset**: Prioritizes Server Components and server-side Data Fetching for enhanced security and performance.
-- **Design System**: Built on Tailwind v4 tokens, using semantic colors like `character-flare` and `character-surface`.
+- Create D&D 5e characters and keep them in your account, available on any device.
+- Fill a single-page character sheet: ability scores, saving throws, skills (with proficiency and
+  expertise), armor class, initiative, speed, hit dice, hit points, temporary hit points and death
+  saves.
+- Let the sheet calculate modifiers, proficiency bonus and passive perception automatically.
+- Track magic with spell slots or spell points.
+- Build a spellbook from the 319 spells of the SRD 5.1, with search and filters by level, school,
+  class and damage type, in English and Brazilian Portuguese; mark spells as prepared.
+- Write the character's story: appearance, personality traits, ideals, bonds, flaws and backstory.
+- Personalize each character with an avatar and an accent color.
 
-## ✨ Core Features
-- Full character sheet management in a Single Page interface.
-- Automatic calculations for Modifiers, Proficiency Bonus, and Passive Perception.
-- Integrated Spellbook with automatic translation support.
-- User account-based persistence.
+## Planned (not available yet)
 
-## 🔗 Useful Links
-- [Official Website](https://rpgworldapp.com)
-- [Contribution Guide](https://github.com/rebecamorais/rpg-world/blob/main/CONTRIBUTING.md)
-- [Terms of Service](https://rpgworldapp.com/terms)
+- Parties and campaigns with Dungeon Master and player roles, session notes and scheduling.
+- Inventory and items.
+- More game systems (D&D 2024 rules and others) and more languages.
+- Homebrew content of any type (spells, items, classes, backgrounds), shareable with a party or
+  the community under CC-BY-4.0.
+
+## Facts
+
+- Price: free. Sign up with email or Google.
+- Languages: English, Português (Brasil).
+- Systems: Dungeons & Dragons 5th Edition (SRD 5.1).
+- Source code: https://github.com/rebecamorais/rpg-world (GNU GPLv3). Anyone can self-host.
+- Game content: System Reference Document 5.1 by Wizards of the Coast LLC, under CC-BY-4.0.
+  Portuguese spell translations by the Foundry VTT Brasil community (MIT). Full credits in the
+  repository's NOTICE.md.
+
+## Pages
+
+- [Home](https://rpgworldapp.com): what RPG World is, with a sample character sheet.
+- [Create an account](https://rpgworldapp.com/register)
+- [Support the project](https://rpgworldapp.com/support)
+- [Terms of Use](https://rpgworldapp.com/terms): includes game content credits.
 - [Privacy Policy](https://rpgworldapp.com/privacy)
-- [Support](https://rpgworldapp.com/support)
+
+## Optional
+
+- [Contribution guide](https://github.com/rebecamorais/rpg-world/blob/main/CONTRIBUTING.md)
+- [Third-party content and credits](https://github.com/rebecamorais/rpg-world/blob/main/NOTICE.md)
