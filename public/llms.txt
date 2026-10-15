@@ -44,6 +44,7 @@ by Rebeca Morais (Rebs Tech Studio), not affiliated with or endorsed by Wizards 
 ## Pages
 
 - [Home](https://rpgworldapp.com): what RPG World is, with a sample character sheet.
+- [Features](https://rpgworldapp.com/features): everything available today and what is planned.
 - [Create an account](https://rpgworldapp.com/register)
 - [Support the project](https://rpgworldapp.com/support)
 - [Terms of Use](https://rpgworldapp.com/terms): includes game content credits.

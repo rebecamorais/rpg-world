@@ -675,7 +675,8 @@
       "characters": "Personagens",
       "settings": "Configurações",
       "login": "Entrar",
-      "register": "Criar conta"
+      "register": "Criar conta",
+      "features": "Funcionalidades"
     },
     "socials": {
       "title": "Social",
@@ -729,5 +730,77 @@
   "seo": {
     "title": "RPG World: fichas de D&D 5e grátis",
     "description": "App gratuito e de código aberto para criar e gerenciar fichas de personagem de D&D 5e, com cálculos automáticos e grimório do SRD, em português e inglês."
+  },
+  "features": {
+    "seeAll": "Ver todas as funcionalidades",
+    "highlightsTitle": "Feito para quem joga",
+    "highlightsSubtitle": "A ficha faz as contas, o grimório tem as magias do SRD e tudo funciona em português.",
+    "metaTitle": "Funcionalidades",
+    "metaDescription": "Tudo o que o RPG World já faz: ficha de D&D 5e com cálculos automáticos, grimório do SRD com busca, história do personagem e mais, em português e inglês.",
+    "eyebrow": "Funcionalidades",
+    "title": "Tudo o que você pode fazer no RPG World",
+    "subtitle": "Gratuito, de código aberto e sem precisar de conta para conhecer. Crie a sua quando quiser montar o primeiro personagem.",
+    "availableTitle": "Disponível hoje",
+    "plannedTitle": "Em breve",
+    "plannedSubtitle": "No que estamos trabalhando. Ainda não está disponível.",
+    "items": {
+      "sheet": {
+        "title": "Ficha completa em uma página",
+        "description": "Atributos, testes de resistência, perícias com proficiência e especialização, CA, iniciativa, deslocamento e dado de vida, tudo à vista."
+      },
+      "calculations": {
+        "title": "A ficha faz as contas",
+        "description": "Modificadores, bônus de proficiência e percepção passiva são calculados automaticamente quando você muda um valor."
+      },
+      "combat": {
+        "title": "Vida e combate",
+        "description": "Pontos de vida, vida temporária e salvaguardas contra a morte, fáceis de ajustar no meio da sessão."
+      },
+      "magic": {
+        "title": "Magia do seu jeito",
+        "description": "Use espaços de magia por círculo ou pontos de magia, como a sua mesa preferir."
+      },
+      "spellbook": {
+        "title": "Grimório com as magias do SRD",
+        "description": "Busque entre as 319 magias do SRD 5.1, filtre por nível, escola, classe e tipo de dano, e marque as preparadas."
+      },
+      "lore": {
+        "title": "A história do personagem",
+        "description": "Aparência, traços de personalidade, ideais, vínculos, defeitos e a história completa, junto da ficha."
+      },
+      "customization": {
+        "title": "A cara do seu personagem",
+        "description": "Avatar e uma cor de destaque para cada personagem, aplicada em toda a ficha."
+      },
+      "languages": {
+        "title": "Em português e inglês",
+        "description": "A interface e as magias nos dois idiomas. Troque quando quiser."
+      }
+    },
+    "planned": {
+      "parties": {
+        "title": "Parties e campanhas",
+        "description": "Mestre e jogadores na mesma mesa, com convites e notas de sessão."
+      },
+      "inventory": {
+        "title": "Inventário e itens",
+        "description": "Equipamento, itens mágicos e moedas na ficha."
+      },
+      "systems": {
+        "title": "Mais sistemas e idiomas",
+        "description": "As regras de D&D 2024, outros sistemas de RPG e traduções feitas pela comunidade."
+      },
+      "homebrew": {
+        "title": "Homebrew",
+        "description": "Crie magias, itens, classes e antecedentes e compartilhe com a sua party ou com a comunidade."
+      }
+    },
+    "openTitle": "Gratuito e de código aberto",
+    "openDescription": "O código é aberto (GPLv3) e qualquer pessoa pode contribuir ou hospedar a própria instância. As regras vêm do SRD 5.1, sob CC-BY-4.0.",
+    "openSource": "Ver o código no GitHub",
+    "credits": "Créditos do conteúdo",
+    "ctaTitle": "Pronto para criar o seu personagem?",
+    "ctaStart": "Criar conta grátis",
+    "ctaCharacters": "Ir para meus personagens"
   }
 }

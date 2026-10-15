@@ -675,7 +675,8 @@
       "characters": "Characters",
       "settings": "Settings",
       "login": "Sign in",
-      "register": "Sign up"
+      "register": "Sign up",
+      "features": "Features"
     },
     "socials": {
       "title": "Social",
@@ -729,5 +730,77 @@
   "seo": {
     "title": "RPG World: free D&D 5e character sheets",
     "description": "Free, open-source app to create and manage D&D 5e character sheets, with automatic calculations and an SRD spellbook, in English and Brazilian Portuguese."
+  },
+  "features": {
+    "seeAll": "See all features",
+    "highlightsTitle": "Made for players",
+    "highlightsSubtitle": "The sheet does the math, the spellbook has the SRD spells and everything works in English and Portuguese.",
+    "metaTitle": "Features",
+    "metaDescription": "Everything RPG World does today: a D&D 5e character sheet with automatic calculations, a searchable SRD spellbook, character lore and more, in English and Portuguese.",
+    "eyebrow": "Features",
+    "title": "Everything you can do in RPG World",
+    "subtitle": "Free, open source and no account needed to look around. Create one when you want to build your first character.",
+    "availableTitle": "Available today",
+    "plannedTitle": "Coming soon",
+    "plannedSubtitle": "What we are working on. Not available yet.",
+    "items": {
+      "sheet": {
+        "title": "A full sheet on one page",
+        "description": "Ability scores, saving throws, skills with proficiency and expertise, AC, initiative, speed and hit dice, all in view."
+      },
+      "calculations": {
+        "title": "The sheet does the math",
+        "description": "Modifiers, proficiency bonus and passive perception update automatically when you change a value."
+      },
+      "combat": {
+        "title": "Hit points and combat",
+        "description": "Hit points, temporary hit points and death saves, easy to adjust in the middle of a session."
+      },
+      "magic": {
+        "title": "Magic your way",
+        "description": "Use spell slots by level or spell points, whichever your table prefers."
+      },
+      "spellbook": {
+        "title": "A spellbook with the SRD spells",
+        "description": "Search the 319 spells of the SRD 5.1, filter by level, school, class and damage type, and mark the prepared ones."
+      },
+      "lore": {
+        "title": "Your character's story",
+        "description": "Appearance, personality traits, ideals, bonds, flaws and the full backstory, next to the sheet."
+      },
+      "customization": {
+        "title": "Make it yours",
+        "description": "An avatar and an accent color for each character, applied across the whole sheet."
+      },
+      "languages": {
+        "title": "In English and Portuguese",
+        "description": "The interface and the spells in both languages. Switch any time."
+      }
+    },
+    "planned": {
+      "parties": {
+        "title": "Parties and campaigns",
+        "description": "Dungeon Master and players at the same table, with invites and session notes."
+      },
+      "inventory": {
+        "title": "Inventory and items",
+        "description": "Equipment, magic items and coins on the sheet."
+      },
+      "systems": {
+        "title": "More systems and languages",
+        "description": "The D&D 2024 rules, other RPG systems and community translations."
+      },
+      "homebrew": {
+        "title": "Homebrew",
+        "description": "Create spells, items, classes and backgrounds and share them with your party or the community."
+      }
+    },
+    "openTitle": "Free and open source",
+    "openDescription": "The code is open (GPLv3) and anyone can contribute or host their own instance. The rules come from the SRD 5.1, under CC-BY-4.0.",
+    "openSource": "See the code on GitHub",
+    "credits": "Content credits",
+    "ctaTitle": "Ready to create your character?",
+    "ctaStart": "Create a free account",
+    "ctaCharacters": "Go to my characters"
   }
 }

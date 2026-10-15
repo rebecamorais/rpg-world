@@ -61,9 +61,11 @@ export default function FooterContent({ isAuthenticated }: { isAuthenticated: bo
     ? [
         { href: '/characters', label: t('explore.characters') },
         { href: '/settings/profile', label: t('explore.settings') },
+        { href: '/features', label: t('explore.features') },
       ]
     : [
         { href: '/', label: t('explore.home') },
+        { href: '/features', label: t('explore.features') },
         { href: '/login', label: t('explore.login') },
         { href: '/register', label: t('explore.register') },
       ];
