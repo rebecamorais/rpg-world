@@ -1,6 +1,42 @@
+import { ReactNode } from 'react';
+
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { getTranslations } from 'next-intl/server';
+
+// Links inside the game content credits, one per tag in the messages
+const CREDIT_HREFS = {
+  srd: 'https://dnd.wizards.com/resources/systems-reference-document',
+  ccby: 'https://creativecommons.org/licenses/by/4.0/legalcode',
+  api: 'https://www.dnd5eapi.co',
+  database: 'https://github.com/5e-bits/5e-database',
+  foundry: 'https://gitlab.com/fvtt-brasil/dnd5e',
+  notice: 'https://github.com/rebecamorais/rpg-world/blob/main/NOTICE.md',
+};
+
+const CREDIT_LINKS = Object.fromEntries(
+  Object.entries(CREDIT_HREFS).map(([tag, href]) => [
+    tag,
+    function CreditLink(chunks: ReactNode) {
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary-flare hover:text-foreground underline underline-offset-4"
+        >
+          {chunks}
+        </a>
+      );
+    },
+  ]),
+);
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('terms');
+  return { title: t('title') };
+}
 
 export default async function TermsPage() {
   const t = await getTranslations('terms');
@@ -76,8 +112,8 @@ export default async function TermsPage() {
             {t('sections.gameContent.content')}
           </p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed break-words">
-            {['0', '1', '2', '3'].map((key) => (
-              <li key={key}>{t(`sections.gameContent.items.${key}`)}</li>
+            {['0', '1', '2', '3', '4'].map((key) => (
+              <li key={key}>{t.rich(`sections.gameContent.items.${key}`, CREDIT_LINKS)}</li>
             ))}
           </ul>
         </section>
