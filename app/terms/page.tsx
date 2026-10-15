@@ -69,6 +69,18 @@ export default async function TermsPage() {
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.law.title')}</h2>
           <p className="text-muted-foreground leading-relaxed">{t('sections.law.content')}</p>
         </section>
+
+        <section>
+          <h2 className="mb-4 text-2xl font-semibold">{t('sections.gameContent.title')}</h2>
+          <p className="text-muted-foreground mb-4 leading-relaxed">
+            {t('sections.gameContent.content')}
+          </p>
+          <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed break-words">
+            {['0', '1', '2'].map((key) => (
+              <li key={key}>{t(`sections.gameContent.items.${key}`)}</li>
+            ))}
+          </ul>
+        </section>
       </div>
     </div>
   );

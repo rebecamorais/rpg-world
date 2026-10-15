@@ -123,4 +123,6 @@ Desenvolvido com 💜 por Rebeca.
 
 Este projeto está licenciado sob a **GNU GPLv3**. Consulte o arquivo [LICENSE](LICENSE) para obter mais detalhes.
 
+O conteúdo de regras vem de fontes abertas com licenças próprias: o SRD 5.1 da Wizards of the Coast (CC-BY-4.0) e as traduções em português da comunidade [Foundry VTT Brasil](https://gitlab.com/fvtt-brasil/dnd5e) (MIT). Créditos completos em [NOTICE.md](NOTICE.md).
+
 Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio).
