@@ -3,6 +3,7 @@
 import { getApi } from '@api';
 
 import { signUpSchema } from '@backend/contexts/users/interfaces/users.schemas';
+import { siteUrl } from '@backend/shared/infrastructure/helpers/site-url';
 import { verifyHuman } from '@backend/shared/infrastructure/services/verify-human';
 
 import { errorCode } from '@shared/http/error-response';
@@ -30,7 +31,7 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
 
   try {
     const api = await getApi();
-    await api.authApi.signUp(email, password, `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`);
+    await api.authApi.signUp(email, password, `${siteUrl()}/auth/confirm`);
     return { success: true };
   } catch (error: unknown) {
     return { success: false, error: errorCode(error) };

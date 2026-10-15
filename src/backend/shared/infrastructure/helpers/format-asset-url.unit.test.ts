@@ -76,6 +76,18 @@ describe('formatAssetUrl', () => {
     });
   });
 
+  describe('preview deployment', () => {
+    it('serves assets through the image proxy of its own branch URL', () => {
+      vi.stubEnv('NODE_ENV', 'production');
+      vi.stubEnv('VERCEL_ENV', 'preview');
+      vi.stubEnv('VERCEL_BRANCH_URL', 'rpg-world-git-feat-x-team.vercel.app');
+
+      expect(formatAssetUrl('avatars/user-123/avatar')).toBe(
+        'https://rpg-world-git-feat-x-team.vercel.app/api/images/avatars/user-123/avatar',
+      );
+    });
+  });
+
   describe('ASSET_BASE_URL', () => {
     it('takes precedence over the environment default, ignoring trailing slashes', () => {
       vi.stubEnv('NODE_ENV', 'production');
