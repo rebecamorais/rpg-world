@@ -123,7 +123,7 @@ export default function SpellSearchDialog({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
-        className="character-context bg-background/95 flex h-[90vh] max-w-4xl flex-col p-0 backdrop-blur-xl"
+        className="character-context bg-background flex h-[90vh] max-w-4xl flex-col p-0"
         style={characterTheme(accentColor).style}
       >
         {/* Thematic Glow */}
@@ -274,7 +274,7 @@ export default function SpellSearchDialog({
 
         {/* Improved Pagination Footer */}
         {totalPages > 1 && (
-          <footer className="border-border bg-muted/50 flex items-center justify-between border-t p-4 backdrop-blur-md">
+          <footer className="border-border bg-muted/50 flex items-center justify-between border-t p-4">
             <p className="text-muted-foreground text-xs font-medium">
               {t('pagination', { count: spells.length, total: totalItems })}
             </p>
