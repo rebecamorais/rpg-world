@@ -149,9 +149,10 @@ export default function SpellSearchDialog({
       >
         {/* Thematic Glow */}
         <div
-          className="pointer-events-none absolute inset-0 z-0 opacity-10 blur-3xl transition-opacity duration-1000"
+          className="pointer-events-none absolute inset-0 z-0 opacity-10"
           style={{
-            background: `radial-gradient(circle at 0% 0%, var(--character-primary), transparent 50%)`,
+            // A wide, soft gradient: same look as the old blur-3xl, without a filter layer
+            background: `radial-gradient(circle at 0% 0%, var(--character-primary), transparent 60%)`,
           }}
         />
         <DialogHeader className="border-border border-b p-6">

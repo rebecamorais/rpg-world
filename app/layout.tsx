@@ -10,7 +10,6 @@ import Footer from '@frontend/components/layout/Footer';
 import GlobalHeader from '@frontend/components/layout/GlobalHeader';
 import Providers from '@frontend/components/providers/Providers';
 import { Toaster } from '@frontend/components/ui/sonner';
-import SVGFilters from '@frontend/components/vfx/SVGFilters';
 
 import './globals.css';
 
@@ -69,7 +68,6 @@ export default async function RootLayout({
           <Footer />
         </Providers>
         <Toaster />
-        <SVGFilters />
       </body>
     </html>
   );

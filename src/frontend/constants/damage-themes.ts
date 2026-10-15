@@ -26,7 +26,6 @@ export interface DamageTheme {
   icon: string;
   vfx: string;
   hex: string;
-  distortion?: string;
   parallax?: number;
 }
 
@@ -84,14 +83,12 @@ export const DAMAGE_THEMES: Record<string, DamageTheme> = {
     icon: DAMAGE_TYPE_ICONS.force,
     vfx: 'force-shockwave',
     hex: '#f4f4f5',
-    distortion: 'vfx-force-distortion-heavy opacity-0 group-hover:opacity-100',
     parallax: 0,
   },
   thunder: {
     icon: DAMAGE_TYPE_ICONS.thunder,
     vfx: 'vfx-concentric',
     hex: '#22d3ee',
-    distortion: 'vfx-sonic-distortion',
     parallax: -1,
   },
   slashing: {
