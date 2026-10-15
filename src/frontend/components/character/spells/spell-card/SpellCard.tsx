@@ -105,7 +105,8 @@ export function SpellCard({
             isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
           )}
         >
-          <div className="overflow-hidden">
+          {/* inert while collapsed: hidden content can't take focus or be read. */}
+          <div className="overflow-hidden" inert={!isExpanded}>
             <div className="flex flex-col gap-4">
               <SpellDetails spell={spell} isExpanded={isExpanded} />
 

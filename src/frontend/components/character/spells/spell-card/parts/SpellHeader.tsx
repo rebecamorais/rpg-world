@@ -63,7 +63,8 @@ export const SpellHeader = React.memo(
               {displayValues.components.map((comp: SpellComponentDisplay) => (
                 <Tooltip key={comp.letter}>
                   <TooltipTrigger asChild>
-                    <button className="focus-ring touch-target flex items-center justify-center rounded-sm transition-all hover:scale-110 active:scale-95">
+                    {/* Not focusable: the label is already in the text for screen readers. */}
+                    <span className="flex size-6 items-center justify-center">
                       <span className="sr-only">{comp.label}</span>
                       <AppIcon
                         variant="game"
@@ -72,7 +73,7 @@ export const SpellHeader = React.memo(
                         className={cn('shrink-0', comp.color)}
                         aria-hidden="true"
                       />
-                    </button>
+                    </span>
                   </TooltipTrigger>
                   <TooltipContent className="text-xs font-medium">{comp.label}</TooltipContent>
                 </Tooltip>

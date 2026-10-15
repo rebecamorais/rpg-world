@@ -312,7 +312,8 @@
       "forgotten": "Magia esquecida.",
       "prepared": "Magia preparada.",
       "unprepared": "Magia não preparada."
-    }
+    },
+    "searchLabel": "Buscar magias"
   },
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",

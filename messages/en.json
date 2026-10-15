@@ -312,7 +312,8 @@
       "forgotten": "Spell forgotten.",
       "prepared": "Spell prepared.",
       "unprepared": "Spell unprepared."
-    }
+    },
+    "searchLabel": "Search spells"
   },
   "magicSystem": {
     "titleConfig": "Magic System Configuration",

@@ -76,7 +76,7 @@ describe('Spellbook', () => {
     expect(renderedSpellNames()).toEqual(['Fly', 'Counterspell', 'Fireball']);
   });
 
-  it('prepara, desprepara e esquece magias', async () => {
+  it('prepara e desprepara no card recolhido; esquece só com ele aberto', async () => {
     const user = userEvent.setup();
     const onTogglePrepared = vi.fn();
     const onForgetSpell = vi.fn();
@@ -91,6 +91,11 @@ describe('Spellbook', () => {
 
     await user.click(within(card('Fireball')).getByRole('button', { name: t.prepareSpell }));
     await user.click(within(card('Fly')).getByRole('button', { name: t.unprepareSpell }));
+    // jsdom ignores `inert` in role queries, so check the attribute on the hidden content.
+    expect(
+      within(card('Counterspell')).getByRole('button', { name: t.forgetSpell }).closest('[inert]'),
+    ).not.toBeNull();
+    await user.click(within(card('Counterspell')).getByRole('button', { name: /Expand/ }));
     await user.click(within(card('Counterspell')).getByRole('button', { name: t.forgetSpell }));
 
     expect(onTogglePrepared).toHaveBeenNthCalledWith(1, 'fireball', true);

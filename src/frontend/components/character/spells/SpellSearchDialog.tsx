@@ -153,6 +153,7 @@ export default function SpellSearchDialog({
                 className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2"
               />
               <Input
+                aria-label={t('searchLabel')}
                 placeholder={t('searchPlaceholder')}
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
@@ -229,6 +230,10 @@ export default function SpellSearchDialog({
             </div>
           </div>
         </DialogHeader>
+
+        <p role="status" className="sr-only">
+          {isLoading ? '' : tCharacters('spellCount', { count: totalItems })}
+        </p>
 
         <div className="custom-scrollbar flex-1 overflow-y-auto px-6 py-6">
           {isLoading ? (
