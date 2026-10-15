@@ -9,8 +9,8 @@ import { HealthPointsCard } from '@frontend/components/character/stats/HealthPoi
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent, CardHeader } from '@frontend/components/ui/card';
 import { Dialog, DialogTrigger } from '@frontend/components/ui/dialog';
-import { GhostInput } from '@frontend/components/ui/ghost-input';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { NumberInput } from '@frontend/components/ui/number-input';
 import {
   Select,
   SelectContent,
@@ -27,8 +27,6 @@ import { DeathSavesCard } from './DeathSavesCard';
 
 const STAT_INPUT = 'h-6 w-12 p-0 font-mono text-base font-bold focus-visible:px-1 md:text-base';
 
-const toInt = (e: React.ChangeEvent<HTMLInputElement>) => parseInt(e.target.value) || 0;
-
 const CombatHeader = () => {
   const t = useTranslations('combatStats');
   const character = useLoadedCharacter();
@@ -39,34 +37,40 @@ const CombatHeader = () => {
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-6">
         <div className="grid grid-cols-2 gap-3 md:flex md:flex-row md:flex-wrap md:gap-3">
           <StatBlock icon="shoulder-armor" label={t('armorClass')}>
-            <GhostInput
-              type="number"
+            <NumberInput
+              ghost
               aria-label={t('armorClass')}
               value={character.ac ?? 0}
-              onChange={(e) => update({ ac: toInt(e) })}
+              min={0}
+              max={1_000}
+              onValueChange={(ac) => update({ ac })}
               showIcon={false}
               className={STAT_INPUT}
             />
           </StatBlock>
 
           <StatBlock icon="stopwatch" label={t('initiative')}>
-            <GhostInput
-              type="number"
+            <NumberInput
+              ghost
               aria-label={t('initiative')}
               value={character.initiative}
-              onChange={(e) => update({ initiative: toInt(e) })}
+              min={-1_000}
+              max={1_000}
+              onValueChange={(initiative) => update({ initiative })}
               showIcon={false}
               className={STAT_INPUT}
             />
           </StatBlock>
 
           <StatBlock icon="boot-prints" label={t('speed')} unit={t('speedUnit')}>
-            <GhostInput
-              type="number"
+            <NumberInput
+              ghost
+              decimal
               aria-label={t('speed')}
-              value={character.speed || 30}
-              inputMode="decimal"
-              onChange={(e) => update({ speed: parseFloat(e.target.value) || 0 })}
+              value={character.speed ?? 30}
+              min={0}
+              max={10_000}
+              onValueChange={(speed) => update({ speed })}
               showIcon={false}
               className={STAT_INPUT}
             />

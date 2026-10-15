@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
+import { FieldValidityProvider } from '@frontend/context/FieldValidityContext';
 import { useCharacter } from '@frontend/hooks/useCharacter';
 import { type DraftPatch, useDraft } from '@frontend/hooks/useDraft';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
@@ -62,7 +63,10 @@ export function CharacterContextProvider({
   return (
     <MetaContext.Provider value={meta}>
       <ActionsContext.Provider value={actions}>
-        <StateContext.Provider value={state}>{children}</StateContext.Provider>
+        <StateContext.Provider value={state}>
+          {/* The sheet's number fields report here; saving waits while one is invalid */}
+          <FieldValidityProvider>{children}</FieldValidityProvider>
+        </StateContext.Provider>
       </ActionsContext.Provider>
     </MetaContext.Provider>
   );

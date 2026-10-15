@@ -15,16 +15,14 @@ import {
   DialogTrigger,
 } from '@frontend/components/ui/dialog';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
+import { NumberInput } from '@frontend/components/ui/number-input';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
+import { MAX_ATTRIBUTE, MIN_ATTRIBUTE } from '@shared/systems/dnd5e/constants';
 import rules from '@shared/systems/dnd5e/rules.json';
-
-const MIN_ATTR = 1;
-const MAX_ATTR = 30;
 
 interface Props {
   label: string;
@@ -36,24 +34,26 @@ interface Props {
 export default function AttributeCard({ label, value, onChange, icon }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [tempValue, setTempValue] = useState(value);
+  const [isValid, setIsValid] = useState(true);
   const tAttr = useTranslations('attributeCard');
   const t = useTranslations('characters');
   const tCommon = useTranslations('common');
 
-  const clamped = Math.min(MAX_ATTR, Math.max(MIN_ATTR, value));
+  const clamped = Math.min(MAX_ATTRIBUTE, Math.max(MIN_ATTRIBUTE, value));
   const modifier = getModifier(clamped);
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
     if (open) {
       setTempValue(clamped);
+      setIsValid(true);
     }
   };
 
+  // The field only reports numbers in range; while its text isn't one, saving waits
   const handleSave = () => {
-    const raw = tempValue === null || isNaN(tempValue) ? MIN_ATTR : tempValue;
-    const next = Math.min(MAX_ATTR, Math.max(MIN_ATTR, Math.floor(raw)));
-    onChange(next);
+    if (!isValid) return;
+    onChange(tempValue);
     setIsOpen(false);
   };
 
@@ -114,20 +114,22 @@ export default function AttributeCard({ label, value, onChange, icon }: Props) {
         <div className="flex flex-col gap-4 py-4">
           <div className="flex flex-col gap-2">
             <Label htmlFor={`attr-${label}`}>{tAttr('baseValue')}</Label>
-            <Input
+            <NumberInput
               id={`attr-${label}`}
-              type="number"
-              min={MIN_ATTR}
-              max={MAX_ATTR}
-              value={tempValue ?? 10}
-              onChange={(e) => setTempValue(e.target.value === '' ? 0 : Number(e.target.value))}
+              min={MIN_ATTRIBUTE}
+              max={MAX_ATTRIBUTE}
+              value={tempValue}
+              onValueChange={setTempValue}
+              onValidityChange={setIsValid}
               onKeyDown={handleKeyDown}
               autoFocus
             />
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handleSave}>{tCommon('save')}</Button>
+          <Button onClick={handleSave} disabled={!isValid}>
+            {tCommon('save')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

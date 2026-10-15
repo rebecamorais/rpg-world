@@ -84,7 +84,15 @@
     "discard": "Discard",
     "discardConfirm": "Discard your unsaved changes?",
     "leaveConfirm": "You have unsaved changes. Leave anyway?",
-    "saveShortcut": "Ctrl+S to save"
+    "saveShortcut": "Ctrl+S to save",
+    "numberField": {
+      "notANumber": "Enter a number",
+      "integer": "Whole numbers only",
+      "range": "Between {min} and {max}",
+      "min": "At least {min}",
+      "max": "At most {max}"
+    },
+    "fixFieldsToSave": "Fix the fields in red to save"
   },
   "login": {
     "title": "Sign in to RPG World",

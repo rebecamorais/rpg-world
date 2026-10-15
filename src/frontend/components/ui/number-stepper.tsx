@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Input } from '@frontend/components/ui/input';
+import { NumberInput } from '@frontend/components/ui/number-input';
 import { cn } from '@frontend/lib/utils';
 
 export interface NumberStepperProps {
@@ -65,15 +65,13 @@ export function NumberStepper({
         >
           <AppIcon name="Minus" size={isSm ? 10 : 12} />
         </Button>
-        <Input
+        <NumberInput
           id={id}
-          type="number"
           aria-label={label}
           value={value}
-          onChange={(e) => {
-            const val = parseInt(e.target.value) || 0;
-            onChange(Math.min(max, Math.max(min, val)));
-          }}
+          min={min}
+          max={max}
+          onValueChange={onChange}
           className={cn(
             'no-spinner h-6 w-10 border-none bg-transparent p-0 text-center font-mono text-sm font-bold tabular-nums shadow-none focus-visible:outline-none',
             isSm && 'h-5 w-8 text-xs',

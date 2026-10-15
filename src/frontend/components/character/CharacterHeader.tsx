@@ -8,13 +8,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/ava
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { FieldLabel, InlineField } from '@frontend/components/ui/field';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { NumberInput } from '@frontend/components/ui/number-input';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Progress } from '@frontend/components/ui/progress';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
-import { GhostInput } from '../ui/ghost-input';
 import { CharacterCustomizationDialog } from './CharacterCustomizationDialog';
 
 export default function CharacterHeader() {
@@ -113,12 +113,13 @@ export default function CharacterHeader() {
               <div className="flex items-center justify-between">
                 <FieldLabel htmlFor="char-xp">{t('xp')}</FieldLabel>
                 <div className="flex items-center gap-1 text-xs font-medium">
-                  <GhostInput
+                  <NumberInput
+                    ghost
                     id="char-xp"
-                    type="number"
                     min={0}
+                    max={10_000_000}
                     value={xp}
-                    onChange={(e) => update({ xp: parseInt(e.target.value) || 0 })}
+                    onValueChange={(next) => update({ xp: next })}
                     className="text-character-flare h-5 w-16 text-right font-mono text-xs md:text-xs"
                   />
                   <span className="text-muted-foreground">/ {nextLevelXp}</span>

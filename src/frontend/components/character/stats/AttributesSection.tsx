@@ -15,14 +15,14 @@ import {
   DialogTrigger,
 } from '@frontend/components/ui/dialog';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
+import { NumberInput } from '@frontend/components/ui/number-input';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { setAttribute, setAttributes } from '@frontend/lib/character-sheet-updates';
 
 import type { AttributeKey } from '@shared/systems/dnd5e';
-import { ATTRIBUTE_KEYS } from '@shared/systems/dnd5e/constants';
+import { ATTRIBUTE_KEYS, MAX_ATTRIBUTE, MIN_ATTRIBUTE } from '@shared/systems/dnd5e/constants';
 
 import AttributeCard from './AttributeCard';
 
@@ -32,11 +32,22 @@ export default function AttributesSection() {
   const t = useTranslations('attributes');
   const [isOpen, setIsOpen] = useState(false);
   const [tempValues, setTempValues] = useState<Record<AttributeKey, number>>(attributes);
+  // Fields whose text isn't a valid score yet; saving waits for them
+  const [invalid, setInvalid] = useState<Set<AttributeKey>>(new Set());
 
   const handleSave = () => {
+    if (invalid.size > 0) return;
     update(setAttributes(tempValues));
     setIsOpen(false);
   };
+
+  const setValidity = (key: AttributeKey, valid: boolean) =>
+    setInvalid((prev) => {
+      const next = new Set(prev);
+      if (valid) next.delete(key);
+      else next.add(key);
+      return next;
+    });
 
   const half = Math.ceil(ATTRIBUTE_KEYS.length / 2);
   const firstCol = ATTRIBUTE_KEYS.slice(0, half);
@@ -72,6 +83,7 @@ export default function AttributesSection() {
             onOpenChange={(open) => {
               if (open) {
                 setTempValues(attributes);
+                setInvalid(new Set());
               }
               setIsOpen(open);
             }}
@@ -99,16 +111,15 @@ export default function AttributesSection() {
                     <Label htmlFor={key} className="text-label">
                       {t(key)}
                     </Label>
-                    <Input
+                    <NumberInput
                       id={key}
-                      type="number"
+                      min={MIN_ATTRIBUTE}
+                      max={MAX_ATTRIBUTE}
                       value={tempValues[key] ?? 10}
-                      onChange={(e) =>
-                        setTempValues((prev) => ({
-                          ...prev,
-                          [key]: parseInt(e.target.value) || 0,
-                        }))
+                      onValueChange={(value) =>
+                        setTempValues((prev) => ({ ...prev, [key]: value }))
                       }
+                      onValidityChange={(valid) => setValidity(key, valid)}
                       className="h-10 font-mono text-lg font-bold"
                     />
                   </div>
@@ -118,7 +129,9 @@ export default function AttributesSection() {
                 <Button variant="outline" onClick={() => setIsOpen(false)}>
                   {t('cancel')}
                 </Button>
-                <Button onClick={handleSave}>{t('save')}</Button>
+                <Button onClick={handleSave} disabled={invalid.size > 0}>
+                  {t('save')}
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
