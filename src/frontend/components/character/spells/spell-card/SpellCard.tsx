@@ -92,7 +92,7 @@ export const SpellCard = React.memo(function SpellCard({
         </span>
       </button>
 
-      {isExpanded && <SpellVFX mainIcon={mainIcon} spell={spell} vfx={theme.vfx} />}
+      {isExpanded && <SpellVFX mainIcon={mainIcon} spell={spell} />}
 
       <div className="pointer-events-none relative z-10 flex h-full flex-col">
         <SpellHeader
@@ -140,17 +140,15 @@ export const SpellCard = React.memo(function SpellCard({
  * Thematic background, only on the open card and faded out before the description, so the
  * rules text sits on a plain surface.
  */
-const SpellVFX = React.memo(
-  ({ mainIcon, spell, vfx }: { mainIcon: string; spell: Spell; vfx: string }) => (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,black,transparent_45%)] opacity-50"
-    >
-      <SpellBackground spell={spell} themeVfx={vfx} />
-      <div className="absolute -top-6 -right-6 opacity-10">
-        <AppIcon variant="game" name={mainIcon} size={128} strokeWidth={1} />
-      </div>
+const SpellVFX = React.memo(({ mainIcon, spell }: { mainIcon: string; spell: Spell }) => (
+  <div
+    aria-hidden="true"
+    className="pointer-events-none absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,black,transparent_45%)] opacity-50"
+  >
+    <SpellBackground spell={spell} />
+    <div className="absolute -top-6 -right-6 opacity-10">
+      <AppIcon variant="game" name={mainIcon} size={128} strokeWidth={1} />
     </div>
-  ),
-);
+  </div>
+));
 SpellVFX.displayName = 'SpellVFX';
