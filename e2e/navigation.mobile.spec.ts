@@ -34,6 +34,24 @@ test.describe('celular', () => {
     await expect(index).toBeInViewport();
   });
 
+  test('filtra magias pelo painel de filtros do modal', async ({ page, user: _ }) => {
+    const id = await createCharacter(page, 'Pocket Wizard');
+    await page.goto(characterUrl(id, '/spells'));
+    await page.getByRole('button', { name: 'Add Spell' }).first().click();
+    const catalog = page.getByRole('dialog', { name: 'Spell list' });
+
+    // Only the search is on screen until the filters are opened
+    const level = catalog.getByRole('combobox', { name: 'Level' });
+    await expect(level).toBeHidden();
+    await catalog.getByRole('button', { name: 'Filters', exact: true }).click();
+    await level.click();
+    await page.getByRole('option', { name: 'Level 3' }).click();
+
+    await expect(catalog.getByRole('button', { name: 'Filters (1)', exact: true })).toBeVisible();
+    await expect(catalog.getByRole('article')).toHaveCount(1);
+    await expect(catalog.getByRole('article', { name: /Fireball/ })).toBeVisible();
+  });
+
   test('exclui um personagem pela lista', async ({ page, user: _ }) => {
     await createCharacter(page, 'Tiny Hero');
     await page.goto('/characters');
