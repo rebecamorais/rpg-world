@@ -5,7 +5,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { SpellCard } from '@frontend/components/character/spells/spell-card/SpellCard';
-import { LoadingState } from '@frontend/components/shared/LoadingState';
+import { SpellCardSkeleton } from '@frontend/components/character/spells/spell-card/SpellCardSkeleton';
 import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
@@ -280,19 +280,23 @@ export default function SpellSearchDialog({
         </DialogHeader>
 
         <p role="status" className="sr-only">
-          {isLoading ? '' : tCharacters('spellCount', { count: totalItems })}
+          {isLoading ? t('loading') : tCharacters('spellCount', { count: totalItems })}
         </p>
 
         <div
           ref={listRef}
-          aria-busy={isPlaceholderData}
+          aria-busy={isLoading || isPlaceholderData}
           className={cn(
             'custom-scrollbar flex-1 overflow-y-auto p-4 transition-opacity sm:p-6',
             isPlaceholderData && 'opacity-60',
           )}
         >
           {isLoading ? (
-            <LoadingState thematic />
+            <div className="grid grid-cols-1 gap-6 pb-20">
+              {Array.from({ length: 6 }, (_, i) => (
+                <SpellCardSkeleton key={i} />
+              ))}
+            </div>
           ) : spells.length === 0 ? (
             <EmptyState
               icon="Search"

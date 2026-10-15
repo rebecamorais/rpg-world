@@ -127,4 +127,17 @@ describe('SpellSearchDialog', () => {
     // 30 spells, 12 per page: pages 0, 1 and 2; page 0 only prefetches page 1
     expect(queries().map((q) => q.page)).toEqual(['0', '1']);
   });
+
+  it('no primeiro carregamento, mostra esqueletos e anuncia que está carregando', async () => {
+    let respond: (value: unknown) => void = () => {};
+    api.get.mockImplementationOnce(() => new Promise((resolve) => (respond = resolve)));
+    renderDialog();
+
+    expect(screen.getByRole('status')).toHaveTextContent(t.loading);
+    expect(screen.queryByRole('article')).not.toBeInTheDocument();
+
+    respond({ data: spells(12), total: 12 });
+    expect(await screen.findAllByRole('article')).toHaveLength(12);
+    expect(screen.getByRole('status')).toHaveTextContent('12 spells');
+  });
 });
