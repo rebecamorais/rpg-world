@@ -132,6 +132,14 @@ test.describe('telas logadas', () => {
     await expect(page.getByText(SPELLS.light.name).first()).toBeVisible();
     await snap(page, 'sheet-spells');
 
+    await page.getByRole('button', { name: /Expand Fireball/ }).click();
+    await snap(page, 'sheet-spells-open');
+    // On the header: the open card's chips cover the middle of the toggle
+    await page
+      .getByRole('button', { name: /Collapse Fireball/ })
+      .click({ position: { x: 40, y: 24 } });
+    await expect(page.getByRole('button', { name: /Expand Fireball/ })).toBeVisible();
+
     await page.getByRole('button', { name: 'Add Spell' }).click();
     const catalog = page.getByRole('dialog', { name: 'Spell list' });
     await expect(catalog.getByRole('article')).toHaveCount(Object.keys(SPELLS).length);
