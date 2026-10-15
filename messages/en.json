@@ -171,7 +171,6 @@
     "createFirstDescription": "Start your journey by creating your first RPG character.",
     "createFirst": "Create first character",
     "title": "Characters",
-    "createNew": "Create New Character",
     "level": "Level {level}",
     "requireLogin": "Please log in to see your characters.",
     "notFoundOrNoPermission": "Character not found or you don't have permission.",
@@ -242,7 +241,6 @@
     },
     "addItem": "Add Item",
     "loadErrorTitle": "Something went wrong",
-    "createNewTagline": "Start your legend",
     "levelShort": "Lv {level}",
     "defaultClass": "Adventurer",
     "selectLevel": "Select level",
@@ -330,6 +328,7 @@
   },
   "dashboard": {
     "menu": "Menu",
+    "newCharacter": "New character",
     "myCharacters": "My Characters",
     "myProfile": "My Profile",
     "attributes": "Attributes",

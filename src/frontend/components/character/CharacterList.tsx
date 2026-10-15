@@ -82,39 +82,7 @@ export default function CharacterList() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-2">
-        {/* Create Character Action Card - Premium Design */}
-        <Link
-          href="/characters/new"
-          className="group border-muted/30 bg-card/30 hover:border-primary/50 hover:bg-primary/5 relative flex h-full min-h-[180px] flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-500 hover:shadow-2xl sm:min-h-[220px]"
-        >
-          {/* Animated Background Gradients */}
-          <div className="from-primary/10 absolute inset-0 bg-gradient-to-br via-transparent to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-          <div className="to-primary/5 absolute inset-0 bg-gradient-to-tl from-transparent via-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-
-          {/* Icon Container */}
-          <div className="bg-muted border-muted/10 group-hover:bg-primary group-hover:shadow-primary/40 relative mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border transition-all duration-700 group-hover:scale-110 group-hover:-rotate-12 group-hover:rounded-[2rem] group-hover:shadow-2xl">
-            <AppIcon
-              name="Plus"
-              size={32}
-              className="text-muted-foreground group-hover:text-primary-foreground transition-all duration-500 group-hover:rotate-12"
-            />
-          </div>
-
-          <div className="relative text-center">
-            <span className="text-muted-foreground group-hover:text-primary-flare text-xl font-black tracking-tighter transition-colors duration-500 sm:text-2xl">
-              {t('createNew')}
-            </span>
-            <p className="text-label opacity-0 transition-all duration-500 group-hover:translate-y-1 group-hover:opacity-40">
-              {t('createNewTagline')}
-            </p>
-          </div>
-
-          {/* Decorative Corner */}
-          <div className="bg-primary/20 absolute -right-4 -bottom-4 h-12 w-12 rotate-45 opacity-0 transition-all duration-500 group-hover:opacity-100" />
-        </Link>
-
-        {/* Existing Character Cards */}
+      <div className="grid auto-rows-fr grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2">
         {characters.map((character) => (
           <CharacterCard key={character.id} character={character} />
         ))}

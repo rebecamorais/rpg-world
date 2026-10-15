@@ -171,7 +171,6 @@
     "createFirstDescription": "Comece sua jornada criando seu primeiro personagem de RPG.",
     "createFirst": "Criar primeiro personagem",
     "title": "Personagens",
-    "createNew": "Criar novo Personagem",
     "level": "Nível {level}",
     "requireLogin": "Faça login para ver seus personagens.",
     "notFoundOrNoPermission": "Personagem não encontrado ou você não tem permissão.",
@@ -242,7 +241,6 @@
     },
     "addItem": "Adicionar Item",
     "loadErrorTitle": "Ocorreu um erro",
-    "createNewTagline": "Comece sua lenda",
     "levelShort": "Nv {level}",
     "defaultClass": "Aventureiro",
     "selectLevel": "Selecione o nível",
@@ -330,6 +328,7 @@
   },
   "dashboard": {
     "menu": "Menu",
+    "newCharacter": "Novo personagem",
     "myCharacters": "Meus Personagens",
     "myProfile": "Meu Perfil",
     "attributes": "Atributos",
