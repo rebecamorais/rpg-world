@@ -90,10 +90,10 @@ BEGIN
 
       -- Skills (proficientes: Arcana, História, Investigação, Medicina)
       'skills', jsonb_build_object(
-        'arcana',      jsonb_build_object('isProficient', true),
-        'history',     jsonb_build_object('isProficient', true),
-        'investigation', jsonb_build_object('isProficient', true),
-        'medicine',    jsonb_build_object('isProficient', true)
+        'ARCANA',        jsonb_build_object('isProficient', true),
+        'HISTORY',       jsonb_build_object('isProficient', true),
+        'INVESTIGATION', jsonb_build_object('isProficient', true),
+        'MEDICINE',      jsonb_build_object('isProficient', true)
       ),
 
       -- Conjuração
