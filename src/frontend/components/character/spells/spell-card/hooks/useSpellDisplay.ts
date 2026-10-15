@@ -22,6 +22,8 @@ export interface SpellComponentDisplay {
 
 export interface SpellDisplayValues {
   school: string;
+  /** "Cantrip" or "Level 3". */
+  level: string;
   damage: string | null;
   castingTime: string;
   compactCastingTime: string;
@@ -106,6 +108,10 @@ export function useSpellDisplay(spell: Spell) {
 
     const displayValues: SpellDisplayValues = {
       school: translatedSchool,
+      level:
+        spell.level === 0
+          ? tCharacters('cantrip')
+          : tCharacters('levelName', { level: spell.level }),
       damage: translatedDamageType,
       castingTime: castingTimeLabel,
       compactCastingTime,

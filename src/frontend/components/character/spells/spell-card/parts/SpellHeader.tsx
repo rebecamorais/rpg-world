@@ -17,12 +17,22 @@ interface SpellHeaderProps {
   displayValues: SpellDisplayValues;
   /** Shows the "learned" badge (spell search). */
   isLearned?: boolean;
+  /** Shows the level; off where the cards are already grouped by level (spellbook). */
+  showLevel?: boolean;
   /** Quick action at the end of the header, visible even when the card is collapsed. */
   action?: React.ReactNode;
 }
 
 export const SpellHeader = React.memo(
-  ({ spell, isExpanded, mainIcon, displayValues, isLearned, action }: SpellHeaderProps) => (
+  ({
+    spell,
+    isExpanded,
+    mainIcon,
+    displayValues,
+    isLearned,
+    showLevel,
+    action,
+  }: SpellHeaderProps) => (
     <header
       className={cn('flex flex-col transition-all duration-300', isExpanded ? 'mb-5' : 'mb-0')}
     >
@@ -93,6 +103,15 @@ export const SpellHeader = React.memo(
                   <AppIcon name="Check" size="xs" aria-hidden="true" />
                   {/* On phones the check button already shows it; keep the text for screen readers */}
                   <span className="max-sm:sr-only">{displayValues.learnedBadgeLabel}</span>
+                  <span className="text-muted-foreground opacity-40" aria-hidden="true">
+                    •
+                  </span>
+                </div>
+              )}
+
+              {showLevel && (
+                <div className="text-foreground flex items-center gap-1">
+                  <span>{displayValues.level}</span>
                   <span className="text-muted-foreground opacity-40" aria-hidden="true">
                     •
                   </span>

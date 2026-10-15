@@ -53,4 +53,12 @@ describe('SpellCard na busca de magias', () => {
 
     expect(screen.getAllByRole('button', { name: t.learnSpell })).toHaveLength(1);
   });
+
+  it('mostra o nível quando pedido (a busca mistura níveis)', () => {
+    const { rerender } = renderWithProviders(<SpellCard spell={FIREBALL} />);
+    expect(screen.queryByText('Level 3')).not.toBeInTheDocument();
+
+    rerender(<SpellCard spell={FIREBALL} showLevel />);
+    expect(screen.getByText('Level 3')).toBeInTheDocument();
+  });
 });

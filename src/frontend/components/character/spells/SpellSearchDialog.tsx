@@ -271,6 +271,7 @@ export default function SpellSearchDialog({
                   onLearnSpell={onLearnSpell}
                   onForgetSpell={onForgetSpell}
                   isLearned={learnedSet.has(spell.id)}
+                  showLevel
                 />
               ))}
             </div>

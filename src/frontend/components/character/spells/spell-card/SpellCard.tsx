@@ -22,6 +22,7 @@ interface SpellCardProps {
   onTogglePrepared?: (id: string, isPrepared: boolean) => void;
   onLearnSpell?: (id: string) => void;
   isLearned?: boolean;
+  showLevel?: boolean;
 }
 
 export function SpellCard({
@@ -32,6 +33,7 @@ export function SpellCard({
   onTogglePrepared,
   onLearnSpell,
   isLearned,
+  showLevel,
 }: SpellCardProps) {
   const { theme, mainIcon, displayValues } = useSpellDisplay(spell);
 
@@ -95,6 +97,7 @@ export function SpellCard({
           mainIcon={mainIcon}
           displayValues={displayValues}
           isLearned={isLearned}
+          showLevel={showLevel}
           action={quickAction}
         />
 
