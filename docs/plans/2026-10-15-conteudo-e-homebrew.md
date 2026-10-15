@@ -82,8 +82,9 @@ O mesmo formato de referência para oficial e homebrew, em qualquer lugar da fic
   ficha (sempre apontando para o original, ver "Uma versão só").
 - **Homebrew público bom pode virar conteúdo da comunidade:** exportar para o formato de arquivo e
   abrir PR, no mesmo fluxo das traduções.
-- Publicar como `public` pede aceitar uma licença para o conteúdo (proposta: CC-BY-4.0, com
-  crédito ao autor), o que precisa entrar nos Termos de Uso.
+- **Licença (decidido): CC-BY-4.0.** Publicar como `public` pede aceitar que o conteúdo fica sob
+  CC-BY-4.0, com crédito ao autor (o mesmo regime do SRD). Isso precisa entrar nos Termos de Uso
+  junto com a funcionalidade.
 - Conteúdo público precisa de denúncia/moderação mínima.
 
 ## 5. Limites e custo
@@ -112,10 +113,6 @@ Para simplificar, **todo homebrew tem uma única versão, a do autor**:
   ninguém de surpresa, a interface mostra "atualizado em …" no conteúdo homebrew.
 - Se um dia fizer falta, versões ou cópias podem entrar depois sem mudar o formato da referência
   (`homebrew:<uuid>`).
-
-## Perguntas em aberto
-
-- Licença padrão do conteúdo público: CC-BY-4.0?
 
 ## Ordem sugerida
 
