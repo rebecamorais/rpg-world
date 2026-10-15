@@ -44,7 +44,7 @@ trocar quem está nele; o resto do app não muda.
 - **`usage_tiers`**: `id` (`free`, `unlimited`, no futuro `premium`) e uma coluna por limite;
   `NULL` = sem limite. Leitura liberada, escrita só para admin.
   - `max_characters`, `max_parties_owned`, `max_party_memberships`, `max_party_members`,
-    `max_storage_bytes`, `max_notes_per_party`, `max_note_chars`, `max_homebrew_spells`.
+    `max_storage_bytes`, `max_notes_per_party`, `max_note_chars`, `max_homebrew_entries` (homebrew de qualquer tipo; ver `2026-10-15-conteudo-e-homebrew.md`).
 - **`user_entitlements`**: `user_id`, `tier_id`, `overrides` (jsonb, exceções por pessoa),
   `source` (`default` | `manual` | no futuro `stripe`), `valid_until`. Sem política de escrita para
   `authenticated`; só service role/admin. Sem linha = nível padrão da instância.
@@ -53,17 +53,17 @@ trocar quem está nele; o resto do app não muda.
 
 ### Valores iniciais (a calibrar)
 
-| Limite                      | `free` |
-| --------------------------- | ------ |
-| Personagens                 | 10     |
-| Parties criadas             | 4      |
-| Parties em que participa    | 10     |
-| Membros por party           | 8      |
-| Espaço de imagens por conta | 25 MB  |
-| Tamanho por imagem          | 2 MB   |
-| Notas por party             | 200    |
-| Caracteres por nota         | 20 mil |
-| Magias homebrew             | 50     |
+| Limite                            | `free` |
+| --------------------------------- | ------ |
+| Personagens                       | 10     |
+| Parties criadas                   | 4      |
+| Parties em que participa          | 10     |
+| Membros por party                 | 8      |
+| Espaço de imagens por conta       | 25 MB  |
+| Tamanho por imagem                | 2 MB   |
+| Notas por party                   | 200    |
+| Caracteres por nota               | 20 mil |
+| Entradas homebrew (qualquer tipo) | 50     |
 
 Ajustar depois de medir o uso real (tamanho médio de `system_data`, imagens por conta).
 

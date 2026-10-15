@@ -11,6 +11,8 @@ plano é **usar e contribuir com as traduções que a comunidade do Foundry VTT 
 
 ## O que já existe
 
+- **O texto em inglês e os dados das magias da seed vieram da 5e SRD API** (`5e-bits/5e-database`,
+  MIT; conteúdo do SRD 5.1). O `external_index` (`acid-arrow`) é o `index` dela.
 - **O texto em pt da nossa seed veio do módulo Foundry VTT Brasil / dnd5e**
   ([gitlab.com/fvtt-brasil/dnd5e](https://gitlab.com/fvtt-brasil/dnd5e)). A Bola de Fogo, por
   exemplo, tem o mesmo texto nos dois, e os dois têm as 319 magias do SRD 5.1.
@@ -94,9 +96,13 @@ Feito no PR de créditos (junto com este plano):
 
 Depois, com o registro de fontes, essa seção passa a ser gerada a partir dele.
 
+## Onde o conteúdo fica
+
+O importador gera arquivos versionados no repositório, não seed SQL; o banco fica só com o que os
+usuários criam (homebrew). Detalhado em `2026-10-15-conteudo-e-homebrew.md`.
+
 ## Perguntas em aberto
 
-- De onde veio o texto em inglês da seed (5e SRD API? outro)? Registrar a fonte.
 - Os originais entre colchetes do pt-BR ("[20-foot-radius sphere]"): mostrar ou esconder?
 - Babele indexa pelo nome em inglês: o que fazer quando o nome muda entre SRD 5.1 e 5.2?
 
