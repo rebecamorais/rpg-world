@@ -1,27 +1,16 @@
 import { SPELL_BACKGROUNDS } from '@frontend/constants/spell-vfx';
 import type { Spell } from '@frontend/types/spells';
 
-import { useSpellDisplay } from './hooks/useSpellDisplay';
-
 interface SpellBackgroundProps {
   spell: Spell;
+  /** The theme's background, already resolved by the card (force damage always uses it). */
+  themeVfx: string;
 }
 
-export function SpellBackground({ spell }: SpellBackgroundProps) {
-  const { theme } = useSpellDisplay(spell);
-
-  // 2. Resolve Background Style (Override with theme VFX for Force damage)
-  const damageKey = spell.damageType?.toLowerCase();
-  const vfxKey = damageKey === 'force' ? theme.vfx : spell.bgStyleId || theme.vfx;
+export function SpellBackground({ spell, themeVfx }: SpellBackgroundProps) {
+  const isForce = spell.damageType?.toLowerCase() === 'force';
+  const vfxKey = isForce ? themeVfx : spell.bgStyleId || themeVfx;
   const renderBg = SPELL_BACKGROUNDS[vfxKey] || SPELL_BACKGROUNDS['dots-space'];
 
-  return (
-    <div
-      className={`absolute inset-0 -z-10 transition-opacity duration-500 ${
-        theme.distortion || 'opacity-100'
-      }`}
-    >
-      {renderBg()}
-    </div>
-  );
+  return <div className="absolute inset-0">{renderBg()}</div>;
 }

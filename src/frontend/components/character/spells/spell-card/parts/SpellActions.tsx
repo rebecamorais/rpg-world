@@ -16,7 +16,7 @@ interface SpellActionsProps {
 /** Spellbook actions that only make sense with the spell open. Preparing lives on the header. */
 export const SpellActions = React.memo(
   ({ spell, onForgetSpell, displayValues }: SpellActionsProps) => (
-    <div className="border-border mt-6 flex items-center justify-end border-t pt-4">
+    <div className="border-border flex items-center justify-end border-t pt-2">
       <button
         onClick={(e) => {
           e.stopPropagation();
