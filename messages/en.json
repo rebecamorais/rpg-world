@@ -313,7 +313,8 @@
       "unprepared": "Spell unprepared."
     },
     "searchLabel": "Search spells",
-    "clearActiveFilters": "Clear filters ({count})"
+    "clearActiveFilters": "Clear filters ({count})",
+    "emptyStateHint": "Search your class's spells and add them to the spellbook."
   },
   "magicSystem": {
     "titleConfig": "Magic System Configuration",

@@ -42,10 +42,14 @@ function card(name: string) {
 }
 
 describe('Spellbook', () => {
-  it('não renderiza nada sem magias', () => {
-    const { container } = renderWithProviders(<Spellbook characterSpells={[]} />);
+  it('sem magias, convida a adicionar a primeira', async () => {
+    const user = userEvent.setup();
+    const onAddSpell = vi.fn();
+    renderWithProviders(<Spellbook characterSpells={[]} onAddSpell={onAddSpell} />);
 
-    expect(container).toBeEmptyDOMElement();
+    expect(screen.getByText(messages.spellsDrawer.emptyState)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: t.spells.addBtn }));
+    expect(onAddSpell).toHaveBeenCalled();
   });
 
   it('agrupa por nível, em ordem, com a contagem de cada um', () => {

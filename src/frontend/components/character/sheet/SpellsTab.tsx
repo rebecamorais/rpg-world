@@ -49,6 +49,7 @@ export function SpellsTab() {
           characterSpells={spells}
           onForgetSpell={forgetSpell}
           onTogglePrepared={togglePrepared}
+          onAddSpell={() => setIsSearchOpen(true)}
         />
       )}
 

@@ -5,6 +5,8 @@ import { useCallback, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Badge } from '@frontend/components/ui/badge';
+import { Button } from '@frontend/components/ui/button';
+import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import {
   Select,
@@ -22,10 +24,18 @@ interface SpellbookProps {
   characterSpells: CharacterSpell[];
   onForgetSpell?: (id: string) => void;
   onTogglePrepared?: (id: string, isPrepared: boolean) => void;
+  /** Opens the spell search; offered when the spellbook is empty. */
+  onAddSpell?: () => void;
 }
 
-export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: SpellbookProps) {
+export function Spellbook({
+  characterSpells,
+  onForgetSpell,
+  onTogglePrepared,
+  onAddSpell,
+}: SpellbookProps) {
   const t = useTranslations('characters');
+  const tDrawer = useTranslations('spellsDrawer');
   const [expandedSpellId, setExpandedSpellId] = useState<string | null>(null);
 
   // Group and sort spells by level
@@ -68,7 +78,23 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
     setExpandedSpellId((prev) => (prev === id ? null : id));
   }, []);
 
-  if (!characterSpells || characterSpells.length === 0) return null;
+  if (!characterSpells || characterSpells.length === 0) {
+    return (
+      <EmptyState
+        icon="BookOpen"
+        title={tDrawer('emptyState')}
+        description={tDrawer('emptyStateHint')}
+        action={
+          onAddSpell && (
+            <Button onClick={onAddSpell}>
+              <AppIcon name="Plus" size={16} aria-hidden="true" />
+              {t('spells.addBtn')}
+            </Button>
+          )
+        }
+      />
+    );
+  }
 
   return (
     <div className="relative flex flex-col md:flex-row">

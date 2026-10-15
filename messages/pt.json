@@ -313,7 +313,8 @@
       "unprepared": "Magia não preparada."
     },
     "searchLabel": "Buscar magias",
-    "clearActiveFilters": "Limpar filtros ({count})"
+    "clearActiveFilters": "Limpar filtros ({count})",
+    "emptyStateHint": "Procure as magias da sua classe e adicione ao grimório."
   },
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",
