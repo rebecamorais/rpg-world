@@ -128,6 +128,12 @@ test.describe('telas logadas', () => {
     await expect(page.getByText(SPELLS.light.name).first()).toBeVisible();
     await snap(page, 'sheet-spells');
 
+    await page.getByRole('button', { name: 'Add Spell' }).click();
+    const catalog = page.getByRole('dialog', { name: 'Spell list' });
+    await expect(catalog.getByRole('article')).toHaveCount(Object.keys(SPELLS).length);
+    await snap(page, 'spells-search');
+    await page.keyboard.press('Escape');
+
     await page.goto('/settings/profile');
     await page.getByRole('main').first().waitFor();
     await snap(page, 'profile', [page.getByText(user.email)]);
