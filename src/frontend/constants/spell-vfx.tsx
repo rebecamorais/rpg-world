@@ -11,7 +11,7 @@ export const SPELL_BACKGROUNDS: Record<string, () => React.ReactNode> = {
 
   'grid-mesh': () => (
     <div className="bg-background absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:14px_24px]">
-      <div className="bg-spell absolute top-0 right-0 left-0 -z-10 m-auto h-[310px] w-[310px] rounded-full opacity-20 blur-[100px]" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_0%,var(--spell-color),transparent_60%)] opacity-20" />
     </div>
   ),
 
@@ -24,7 +24,7 @@ export const SPELL_BACKGROUNDS: Record<string, () => React.ReactNode> = {
   'classic-aura': () => (
     <div className="bg-background absolute inset-0 -z-10 h-full w-full">
       <div className="from-spell-surface absolute inset-0 -z-10 h-full w-full bg-gradient-to-br to-transparent opacity-30" />
-      <div className="bg-spell absolute -top-[50px] -left-[50px] -z-10 h-[250px] w-[250px] rounded-full opacity-10 blur-[80px]" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_0%_0%,var(--spell-color),transparent_50%)] opacity-10" />
     </div>
   ),
 
@@ -36,13 +36,10 @@ export const SPELL_BACKGROUNDS: Record<string, () => React.ReactNode> = {
 
   'force-shockwave': () => (
     <div className="bg-background absolute inset-0 -z-10 h-full w-full overflow-hidden">
-      {/* Heavy Shockwaves with staggered delays */}
-      <div className="animate-shockwave border-spell absolute top-1/2 left-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-40" />
-      <div className="animate-shockwave border-spell absolute top-1/2 left-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 [animation-delay:500ms]" />
-      <div className="animate-shockwave border-spell absolute top-1/2 left-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 [animation-delay:1000ms]" />
-
-      {/* Center Glow */}
-      <div className="bg-spell absolute top-1/2 left-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-[40px]" />
+      {/* Static rings: the background only shows on the open card, behind the rules text */}
+      <div className="border-spell absolute top-0 right-0 h-40 w-40 translate-x-1/3 -translate-y-1/3 rounded-full border opacity-40" />
+      <div className="border-spell absolute top-0 right-0 h-64 w-64 translate-x-1/3 -translate-y-1/3 rounded-full border opacity-20" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,var(--spell-color),transparent_40%)] opacity-20" />
     </div>
   ),
 };

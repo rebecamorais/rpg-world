@@ -22,6 +22,8 @@ export interface SpellComponentDisplay {
 
 export interface SpellDisplayValues {
   school: string;
+  /** "Cantrip" or "Level 3". */
+  level: string;
   damage: string | null;
   castingTime: string;
   compactCastingTime: string;
@@ -31,6 +33,7 @@ export interface SpellDisplayValues {
   concentrationLabel: string;
   forgetLabel: string;
   learnLabel: string;
+  learnedBadgeLabel: string;
   prepareLabel: string;
   unprepareLabel: string;
   expandLabel: string;
@@ -55,10 +58,10 @@ export function useSpellDisplay(spell: Spell) {
     const categoryKey = spell.spellCategory?.toLowerCase();
     const schoolKey = spell.school?.toLowerCase();
 
-    // 1. Resolve Theme Priority: Damage > Category > School > Default
+    // 1. Color: Damage > School > Default. Not the category: two thirds of the spells without
+    // damage are "utility", which made almost every card the same gold.
     const theme =
       (damageKey && DAMAGE_THEMES[damageKey]) ||
-      (categoryKey && CATEGORY_THEMES[categoryKey]) ||
       (schoolKey && SCHOOL_THEMES[schoolKey]) ||
       DEFAULT_THEME;
 
@@ -105,6 +108,10 @@ export function useSpellDisplay(spell: Spell) {
 
     const displayValues: SpellDisplayValues = {
       school: translatedSchool,
+      level:
+        spell.level === 0
+          ? tCharacters('cantrip')
+          : tCharacters('levelName', { level: spell.level }),
       damage: translatedDamageType,
       castingTime: castingTimeLabel,
       compactCastingTime,
@@ -127,7 +134,8 @@ export function useSpellDisplay(spell: Spell) {
       ritualLabel: tCharacters('ritual'),
       concentrationLabel: tCharacters('concentration'),
       forgetLabel: tCharacters('forgetSpell'),
-      learnLabel: tCharacters('learn'),
+      learnLabel: tCharacters('learnSpell'),
+      learnedBadgeLabel: tCharacters('learnedBadge'),
       prepareLabel: tCharacters('prepareSpell'),
       unprepareLabel: tCharacters('unprepareSpell'),
       expandLabel: tCharacters('expand'),

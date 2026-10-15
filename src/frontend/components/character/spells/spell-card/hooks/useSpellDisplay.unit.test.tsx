@@ -18,13 +18,17 @@ function display(spell: Partial<Spell>) {
 }
 
 describe('useSpellDisplay', () => {
-  it('escolhe o tema pelo dano, depois categoria, depois escola', () => {
-    const category = Object.keys(CATEGORY_THEMES)[0];
-
-    expect(display({ damageType: 'Fire', spellCategory: category }).theme).toBe(DAMAGE_THEMES.fire);
-    expect(display({ spellCategory: category }).theme).toBe(CATEGORY_THEMES[category]);
+  it('escolhe a cor pelo dano, depois pela escola; a categoria não muda a cor', () => {
+    expect(display({ damageType: 'Fire', spellCategory: 'utility' }).theme).toBe(
+      DAMAGE_THEMES.fire,
+    );
+    expect(display({ spellCategory: 'utility' }).theme).toBe(SCHOOL_THEMES.evocation);
     expect(display({}).theme).toBe(SCHOOL_THEMES.evocation);
     expect(display({ school: 'unknown-school' }).theme).toBe(DEFAULT_THEME);
+  });
+
+  it('a categoria ainda escolhe o ícone quando não há dano', () => {
+    expect(display({ spellCategory: 'utility' }).mainIcon).toBe(CATEGORY_THEMES.utility.icon);
   });
 
   it('traduz escola, dano e componentes', () => {

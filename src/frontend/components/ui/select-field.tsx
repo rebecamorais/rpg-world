@@ -16,6 +16,8 @@ interface SelectFieldProps {
   placeholder?: string;
   className?: string;
   contentClassName?: string;
+  /** Names the field when there is no visible label. */
+  'aria-label'?: string;
 }
 
 export function SelectField({
@@ -25,10 +27,11 @@ export function SelectField({
   placeholder,
   className,
   contentClassName,
+  'aria-label': ariaLabel,
 }: SelectFieldProps) {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className={className}>
+      <SelectTrigger className={className} aria-label={ariaLabel}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className={contentClassName}>

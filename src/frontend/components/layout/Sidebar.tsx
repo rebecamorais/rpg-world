@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
@@ -57,6 +58,12 @@ function SidebarContent() {
             <p className="text-label text-muted-foreground mb-2 px-3">{tDash('menu')}</p>
             <NavItem href="/settings/profile" label={tDash('myProfile')} />
             <NavItem href="/characters" label={tDash('myCharacters')} />
+            <Button asChild size="sm" className="mt-3 w-full">
+              <Link href="/characters/new">
+                <AppIcon name="Plus" size={16} aria-hidden="true" />
+                {tDash('newCharacter')}
+              </Link>
+            </Button>
           </section>
 
           {characterId && <CharacterNavSection characterId={characterId} />}

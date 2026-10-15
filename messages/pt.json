@@ -171,7 +171,6 @@
     "createFirstDescription": "Comece sua jornada criando seu primeiro personagem de RPG.",
     "createFirst": "Criar primeiro personagem",
     "title": "Personagens",
-    "createNew": "Criar novo Personagem",
     "level": "Nível {level}",
     "requireLogin": "Faça login para ver seus personagens.",
     "notFoundOrNoPermission": "Personagem não encontrado ou você não tem permissão.",
@@ -181,8 +180,6 @@
     "school": "Escola",
     "saveSuccess": "Personagem salvo com sucesso!",
     "passivePerception": "Percepção Passiva",
-    "search": "Buscar",
-    "learn": "Aprender",
     "allDamage": "Todos os Danos",
     "forgetSpell": "Esquecer magia",
     "prepareSpell": "Preparar magia",
@@ -193,7 +190,6 @@
     "cantrips": "Truques",
     "levelName": "{level}º Nível",
     "levelSpells": "Magias de {level}º Nível",
-    "spellsFound": "magias encontradas",
     "concentration": "Concentração",
     "ritual": "Ritual",
     "atHigherLevels": "Em Níveis Superiores",
@@ -242,13 +238,14 @@
     },
     "addItem": "Adicionar Item",
     "loadErrorTitle": "Ocorreu um erro",
-    "createNewTagline": "Comece sua lenda",
     "levelShort": "Nv {level}",
     "defaultClass": "Aventureiro",
-    "selectLevel": "Selecione o nível",
     "cardActions": "Ações de {name}",
     "loadingList": "Carregando personagens",
-    "subtitle": "Suas fichas, prontas para a próxima sessão."
+    "subtitle": "Suas fichas, prontas para a próxima sessão.",
+    "learnSpell": "Aprender magia",
+    "learnedBadge": "Aprendida",
+    "spellCount": "{count, plural, one {# magia} other {# magias}}"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
@@ -307,12 +304,23 @@
     "allClasses": "Todas as classes",
     "noSpellsFound": "Nenhuma magia encontrada.",
     "clearFilters": "Limpar todos os filtros",
-    "pagination": "Mostrando {count} de {total} magias",
+    "pagination": "{from}–{to} de {total} magias",
     "toasts": {
       "learned": "Magia aprendida!",
       "forgotten": "Magia esquecida.",
       "prepared": "Magia preparada.",
-      "unprepared": "Magia não preparada."
+      "unprepared": "Magia não preparada.",
+      "undo": "Desfazer"
+    },
+    "searchLabel": "Buscar magias",
+    "clearActiveFilters": "Limpar filtros ({count})",
+    "emptyStateHint": "Procure as magias da sua classe e adicione ao grimório.",
+    "filtersToggle": "{count, plural, =0 {Filtros} other {Filtros (#)}}",
+    "filterLabels": {
+      "level": "Nível",
+      "school": "Escola",
+      "class": "Classe",
+      "damage": "Tipo de dano"
     }
   },
   "magicSystem": {
@@ -330,6 +338,7 @@
   },
   "dashboard": {
     "menu": "Menu",
+    "newCharacter": "Novo personagem",
     "myCharacters": "Meus Personagens",
     "myProfile": "Meu Perfil",
     "attributes": "Atributos",

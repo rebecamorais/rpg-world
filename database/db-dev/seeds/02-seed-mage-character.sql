@@ -1,7 +1,7 @@
 DO $$
 DECLARE
-  player_id UUID := 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
-  char_id   UUID := 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
+  player_id UUID := 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+  char_id   UUID := 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 BEGIN
   -- =========================================================
   -- Idempotência: limpa dados existentes para este email

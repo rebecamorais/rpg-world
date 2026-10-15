@@ -25,7 +25,7 @@ export function SpellsTab() {
 
   const actions = (
     <div className="flex items-center gap-3 md:gap-6">
-      <span className="text-label text-muted-foreground hidden sm:inline">
+      <span className="text-label text-muted-foreground">
         {t('spells.preparedLabels', { count: preparedCount })}
       </span>
       <Button
@@ -49,6 +49,7 @@ export function SpellsTab() {
           characterSpells={spells}
           onForgetSpell={forgetSpell}
           onTogglePrepared={togglePrepared}
+          onAddSpell={() => setIsSearchOpen(true)}
         />
       )}
 

@@ -73,6 +73,10 @@ async function heroCharacter(page: Page): Promise<string> {
     });
     expect(learn.ok()).toBe(true);
   }
+  const prepare = await page.request.post(`/api/characters/${id}/spells`, {
+    data: { id: SPELLS.shield.id, action: 'prepare' },
+  });
+  expect(prepare.ok()).toBe(true);
   return id;
 }
 
@@ -127,6 +131,20 @@ test.describe('telas logadas', () => {
     await page.goto(characterUrl(id, '/spells'));
     await expect(page.getByText(SPELLS.light.name).first()).toBeVisible();
     await snap(page, 'sheet-spells');
+
+    await page.getByRole('button', { name: /Expand Fireball/ }).click();
+    await snap(page, 'sheet-spells-open');
+    // On the header: the open card's chips cover the middle of the toggle
+    await page
+      .getByRole('button', { name: /Collapse Fireball/ })
+      .click({ position: { x: 40, y: 24 } });
+    await expect(page.getByRole('button', { name: /Expand Fireball/ })).toBeVisible();
+
+    await page.getByRole('button', { name: 'Add Spell' }).click();
+    const catalog = page.getByRole('dialog', { name: 'Spell list' });
+    await expect(catalog.getByRole('article')).toHaveCount(Object.keys(SPELLS).length);
+    await snap(page, 'spells-search');
+    await page.keyboard.press('Escape');
 
     await page.goto('/settings/profile');
     await page.getByRole('main').first().waitFor();

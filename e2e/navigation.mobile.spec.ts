@@ -14,7 +14,7 @@ test.describe('celular', () => {
     await expect(page).toHaveURL(/\/settings\/profile$/);
   });
 
-  test('escolhe o nível do grimório pelo seletor', async ({ page, user: _ }) => {
+  test('pula para um nível do grimório pelo índice', async ({ page, user: _ }) => {
     const id = await createCharacter(page, 'Pocket Wizard');
     for (const spell of [SPELLS.light, SPELLS.fireball]) {
       const res = await page.request.post(`/api/characters/${id}/spells`, {
@@ -25,11 +25,31 @@ test.describe('celular', () => {
     await page.goto(characterUrl(id, '/spells'));
     await expect(page.getByRole('heading', { name: 'Cantrips' })).toBeVisible();
 
-    await page.getByRole('combobox', { name: 'Index' }).click();
+    const index = page.getByRole('navigation', { name: 'Index' });
+    await index.getByRole('link', { name: /Level 3/ }).click();
+
+    await expect(page.getByRole('heading', { name: 'Level 3 Spells' })).toBeInViewport();
+    await expect(page.getByRole('article', { name: /Fireball/ })).toBeInViewport();
+    // The index stays on screen (sticky) to jump back
+    await expect(index).toBeInViewport();
+  });
+
+  test('filtra magias pelo painel de filtros do modal', async ({ page, user: _ }) => {
+    const id = await createCharacter(page, 'Pocket Wizard');
+    await page.goto(characterUrl(id, '/spells'));
+    await page.getByRole('button', { name: 'Add Spell' }).first().click();
+    const catalog = page.getByRole('dialog', { name: 'Spell list' });
+
+    // Only the search is on screen until the filters are opened
+    const level = catalog.getByRole('combobox', { name: 'Level' });
+    await expect(level).toBeHidden();
+    await catalog.getByRole('button', { name: 'Filters', exact: true }).click();
+    await level.click();
     await page.getByRole('option', { name: 'Level 3' }).click();
 
-    await expect(page.getByRole('heading', { name: 'Level 3 Spells' })).toBeVisible();
-    await expect(page.getByRole('article', { name: /Fireball/ })).toBeVisible();
+    await expect(catalog.getByRole('button', { name: 'Filters (1)', exact: true })).toBeVisible();
+    await expect(catalog.getByRole('article')).toHaveCount(1);
+    await expect(catalog.getByRole('article', { name: /Fireball/ })).toBeVisible();
   });
 
   test('exclui um personagem pela lista', async ({ page, user: _ }) => {

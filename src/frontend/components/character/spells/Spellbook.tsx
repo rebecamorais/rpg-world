@@ -1,20 +1,14 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { Badge } from '@frontend/components/ui/badge';
+import { Button } from '@frontend/components/ui/button';
+import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@frontend/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 import type { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
+import { cn } from '@frontend/lib/utils';
 
 import { SpellCard } from './spell-card/SpellCard';
 
@@ -22,10 +16,46 @@ interface SpellbookProps {
   characterSpells: CharacterSpell[];
   onForgetSpell?: (id: string) => void;
   onTogglePrepared?: (id: string, isPrepared: boolean) => void;
+  /** Opens the spell search; offered when the spellbook is empty. */
+  onAddSpell?: () => void;
 }
 
-export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: SpellbookProps) {
+const sectionId = (level: number) => `spell-level-${level}`;
+
+/** The level whose section is at the top of the viewport, for the index highlight. */
+function useLevelInView(levels: number[]) {
+  const [inView, setInView] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const top = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (top) setInView(Number((top.target as HTMLElement).dataset.level));
+      },
+      // A section counts once it reaches the upper third of the screen
+      { rootMargin: '0px 0px -66% 0px' },
+    );
+    for (const level of levels) {
+      const section = document.getElementById(sectionId(level));
+      if (section) observer.observe(section);
+    }
+    return () => observer.disconnect();
+  }, [levels]);
+
+  return inView ?? levels[0];
+}
+
+export function Spellbook({
+  characterSpells,
+  onForgetSpell,
+  onTogglePrepared,
+  onAddSpell,
+}: SpellbookProps) {
   const t = useTranslations('characters');
+  const tDrawer = useTranslations('spellsDrawer');
   const [expandedSpellId, setExpandedSpellId] = useState<string | null>(null);
 
   // Group and sort spells by level
@@ -62,126 +92,102 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
     [spellsByLevel],
   );
 
-  const [activeLevel, setActiveLevel] = useState<string>(levels[0]?.toString() || '0');
+  const levelInView = useLevelInView(levels);
 
   const toggleExpand = useCallback((id: string) => {
     setExpandedSpellId((prev) => (prev === id ? null : id));
   }, []);
 
-  if (!characterSpells || characterSpells.length === 0) return null;
+  if (!characterSpells || characterSpells.length === 0) {
+    return (
+      <EmptyState
+        icon="BookOpen"
+        title={tDrawer('emptyState')}
+        description={tDrawer('emptyStateHint')}
+        action={
+          onAddSpell && (
+            <Button onClick={onAddSpell}>
+              <AppIcon name="Plus" size={16} aria-hidden="true" />
+              {t('spells.addBtn')}
+            </Button>
+          )
+        }
+      />
+    );
+  }
+
+  const levelTitle = (level: number) => (level === 0 ? t('cantrips') : t('levelSpells', { level }));
 
   return (
-    <div className="relative flex flex-col md:flex-row">
-      <Tabs
-        value={activeLevel}
-        onValueChange={setActiveLevel}
-        orientation="vertical"
-        className="bg-card/60 border-border/50 flex h-full w-full flex-col overflow-hidden rounded-xl border backdrop-blur-xl md:flex-row"
+    <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
+      {/* Index: shortcuts to each level. A sticky chip row on phones, a sidebar on desktop */}
+      <nav
+        aria-label={t('spellbookIndex')}
+        className="bg-sidebar sticky top-0 z-20 -mx-4 px-4 py-2 sm:-mx-6 sm:px-6 md:top-6 md:mx-0 md:w-48 md:shrink-0 md:bg-transparent md:p-0"
       >
-        {/* Index Sidebar (Desktop) */}
-        <TabsList className="bg-muted/10 relative hidden h-auto w-full flex-row items-center justify-start gap-1 rounded-none border-t border-b px-2 py-2 md:sticky md:top-24 md:flex md:h-fit md:w-56 md:flex-col md:items-start md:border-t-0 md:border-b-0 md:px-0 md:py-6">
-          {/* Vertical Divider */}
-          <div className="via-border/50 absolute top-0 right-0 bottom-0 hidden w-px bg-gradient-to-b from-transparent to-transparent md:block" />
-          <div
-            className="absolute top-1/4 right-0 bottom-1/4 hidden w-[2px] bg-gradient-to-b from-transparent to-transparent opacity-40 blur-[1.5px] md:block"
-            style={{
-              backgroundImage:
-                'linear-gradient(to bottom, transparent, var(--character-muted), transparent)',
-            }}
-          />
-          <div className="mb-4 hidden w-full px-6 md:block">
-            <div className="text-label text-muted-foreground flex items-center gap-2">
-              <span className="bg-muted-foreground/20 h-px flex-1" />
-              {t('spellbookIndex')}
-              <span className="bg-muted-foreground/20 h-px flex-1" />
-            </div>
-          </div>
-          <div className="flex flex-1 flex-col gap-1.5 md:w-full md:px-3">
-            {levels.map((level) => (
-              <TabsTrigger
-                key={level}
-                value={level.toString()}
-                className="group hover:bg-muted/30 data-[state=active]:bg-character-surface data-[state=active]:text-character-flare relative flex w-full items-center justify-start gap-3 rounded-lg border border-transparent px-4 py-3 text-left transition-all duration-300 hover:translate-x-1"
-              >
-                <div className="bg-character-flare absolute top-2 bottom-2 left-1 w-1.5 origin-center scale-y-0 rounded-full opacity-0 shadow-[0_0_12px_var(--character-flare)] transition-all duration-300 group-data-[state=active]:scale-y-100 group-data-[state=active]:opacity-100" />
+        <p className="text-label text-muted-foreground mb-3 hidden md:block">
+          {t('spellbookIndex')}
+        </p>
+        <ul className="flex gap-2 overflow-x-auto md:flex-col md:gap-1 md:overflow-visible">
+          {levels.map((level) => {
+            const isCurrent = level === levelInView;
+            return (
+              <li key={level} className="shrink-0">
+                <a
+                  href={`#${sectionId(level)}`}
+                  aria-current={isCurrent ? 'location' : undefined}
+                  className={cn(
+                    'focus-ring flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors md:border-transparent md:py-2',
+                    isCurrent
+                      ? 'border-character-muted bg-character-surface text-character-flare'
+                      : 'border-border text-muted-foreground hover:bg-muted/30 hover:text-foreground',
+                  )}
+                >
+                  {level === 0 ? t('cantrips') : t('levelName', { level })}
+                  <span className="bg-muted-foreground/10 ml-auto min-w-5 rounded-full px-1.5 text-center font-mono text-xs">
+                    {spellsByLevel[level].length}
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
 
-                <AppIcon
-                  name="Book"
-                  size={16}
-                  className="opacity-40 transition-opacity group-hover:opacity-80 group-data-[state=active]:opacity-100"
+      {/* Every level in one list, so the whole spellbook is one scroll away */}
+      <div className="flex min-w-0 flex-1 flex-col gap-8">
+        {levels.map((level) => (
+          <section
+            key={level}
+            id={sectionId(level)}
+            data-level={level}
+            aria-labelledby={`${sectionId(level)}-title`}
+            className="scroll-mt-16 md:scroll-mt-6"
+          >
+            <header className="bg-sidebar border-border mb-4 flex items-center justify-between gap-4 border-b py-3 md:sticky md:top-0 md:z-10">
+              <h2 id={`${sectionId(level)}-title`} className="text-title text-foreground">
+                {levelTitle(level)}
+              </h2>
+              <span className="text-label text-muted-foreground">
+                {t('spellCount', { count: spellsByLevel[level].length })}
+              </span>
+            </header>
+
+            <div className="grid grid-cols-1 gap-4">
+              {spellsByLevel[level].map((spell) => (
+                <SpellCard
+                  key={spell.id}
+                  spell={spell}
+                  isExpanded={expandedSpellId === spell.id}
+                  onClick={() => toggleExpand(spell.id)}
+                  onForgetSpell={onForgetSpell}
+                  onTogglePrepared={onTogglePrepared}
                 />
-                <span className="font-bold tracking-tight whitespace-nowrap">
-                  {level === 0 ? t('cantrips') : t('levelName', { level })}
-                </span>
-
-                {/* Spell Count Badge */}
-                <div className="bg-muted-foreground/10 text-muted-foreground group-data-[state=active]:bg-character-muted group-data-[state=active]:text-character-flare ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 font-mono text-xs font-black transition-colors">
-                  {spellsByLevel[level].length}
-                </div>
-              </TabsTrigger>
-            ))}
-          </div>
-        </TabsList>
-
-        {/* Mobile Select (Replaces TabsList on sm screens) */}
-        <div className="border-border/50 bg-muted/10 flex items-center justify-between gap-4 border-b p-4 md:hidden">
-          <span className="text-label text-muted-foreground whitespace-nowrap">
-            {t('spellbookIndex')}
-          </span>
-          <Select value={activeLevel} onValueChange={setActiveLevel}>
-            <SelectTrigger aria-label={t('spellbookIndex')} className="w-full">
-              <SelectValue placeholder={t('selectLevel')} />
-            </SelectTrigger>
-            <SelectContent>
-              {levels.map((level) => (
-                <SelectItem key={level} value={level.toString()}>
-                  {level === 0 ? t('cantrips') : t('levelName', { level })}
-                </SelectItem>
               ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="relative flex-1">
-          <div className="p-6 md:p-8">
-            {levels.map((level) => (
-              <TabsContent
-                key={level}
-                value={level.toString()}
-                className="m-0 border-none p-0 focus-visible:ring-0"
-              >
-                <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex flex-col gap-1">
-                    <h2 className="text-display text-foreground">
-                      {level === 0 ? t('cantrips') : t('levelSpells', { level })}
-                    </h2>
-                    <div className="bg-character-flare h-1 w-12 rounded-full opacity-60" />
-                  </div>
-                  <Badge
-                    variant="outline"
-                    className="border-character-muted bg-character-surface text-character-flare w-fit px-3 py-1 font-mono text-xs tracking-widest uppercase"
-                  >
-                    {spellsByLevel[level].length} {t('spellsFound')}
-                  </Badge>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4 pb-12">
-                  {spellsByLevel[level].map((spell) => (
-                    <SpellCard
-                      key={spell.id}
-                      spell={spell}
-                      isExpanded={expandedSpellId === spell.id}
-                      onClick={() => toggleExpand(spell.id)}
-                      onForgetSpell={onForgetSpell}
-                      onTogglePrepared={onTogglePrepared}
-                    />
-                  ))}
-                </div>
-              </TabsContent>
-            ))}
-          </div>
-        </div>
-      </Tabs>
+            </div>
+          </section>
+        ))}
+      </div>
     </div>
   );
 }

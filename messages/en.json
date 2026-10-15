@@ -171,7 +171,6 @@
     "createFirstDescription": "Start your journey by creating your first RPG character.",
     "createFirst": "Create first character",
     "title": "Characters",
-    "createNew": "Create New Character",
     "level": "Level {level}",
     "requireLogin": "Please log in to see your characters.",
     "notFoundOrNoPermission": "Character not found or you don't have permission.",
@@ -181,8 +180,6 @@
     "school": "School",
     "saveSuccess": "Character saved successfully!",
     "passivePerception": "Passive Perception",
-    "search": "Search",
-    "learn": "Learn",
     "allDamage": "All Damage",
     "forgetSpell": "Forget spell",
     "prepareSpell": "Prepare spell",
@@ -193,7 +190,6 @@
     "cantrips": "Cantrips",
     "levelName": "Level {level}",
     "levelSpells": "Level {level} Spells",
-    "spellsFound": "spells found",
     "concentration": "Concentration",
     "ritual": "Ritual",
     "atHigherLevels": "At Higher Levels",
@@ -242,13 +238,14 @@
     },
     "addItem": "Add Item",
     "loadErrorTitle": "Something went wrong",
-    "createNewTagline": "Start your legend",
     "levelShort": "Lv {level}",
     "defaultClass": "Adventurer",
-    "selectLevel": "Select level",
     "cardActions": "Actions for {name}",
     "loadingList": "Loading characters",
-    "subtitle": "Your sheets, ready for the next session."
+    "subtitle": "Your sheets, ready for the next session.",
+    "learnSpell": "Learn spell",
+    "learnedBadge": "Learned",
+    "spellCount": "{count, plural, one {# spell} other {# spells}}"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
@@ -307,12 +304,23 @@
     "allClasses": "All classes",
     "noSpellsFound": "No spells found.",
     "clearFilters": "Clear all filters",
-    "pagination": "Showing {count} of {total} spells",
+    "pagination": "{from}–{to} of {total} spells",
     "toasts": {
       "learned": "Spell learned!",
       "forgotten": "Spell forgotten.",
       "prepared": "Spell prepared.",
-      "unprepared": "Spell unprepared."
+      "unprepared": "Spell unprepared.",
+      "undo": "Undo"
+    },
+    "searchLabel": "Search spells",
+    "clearActiveFilters": "Clear filters ({count})",
+    "emptyStateHint": "Search your class's spells and add them to the spellbook.",
+    "filtersToggle": "{count, plural, =0 {Filters} other {Filters (#)}}",
+    "filterLabels": {
+      "level": "Level",
+      "school": "School",
+      "class": "Class",
+      "damage": "Damage type"
     }
   },
   "magicSystem": {
@@ -330,6 +338,7 @@
   },
   "dashboard": {
     "menu": "Menu",
+    "newCharacter": "New character",
     "myCharacters": "My Characters",
     "myProfile": "My Profile",
     "attributes": "Attributes",
