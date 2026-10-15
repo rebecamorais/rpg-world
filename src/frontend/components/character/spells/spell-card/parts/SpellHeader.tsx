@@ -91,7 +91,8 @@ export const SpellHeader = React.memo(
               {isLearned && (
                 <div className="text-success-flare flex items-center gap-1">
                   <AppIcon name="Check" size="xs" aria-hidden="true" />
-                  <span>{displayValues.learnedBadgeLabel}</span>
+                  {/* On phones the check button already shows it; keep the text for screen readers */}
+                  <span className="max-sm:sr-only">{displayValues.learnedBadgeLabel}</span>
                   <span className="text-muted-foreground opacity-40" aria-hidden="true">
                     •
                   </span>
