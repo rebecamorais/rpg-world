@@ -321,7 +321,8 @@
       "school": "Escola",
       "class": "Classe",
       "damage": "Tipo de dano"
-    }
+    },
+    "loading": "Carregando magias"
   },
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",

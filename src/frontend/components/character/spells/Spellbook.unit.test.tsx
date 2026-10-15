@@ -6,6 +6,13 @@ import { describe, expect, it, vi } from 'vitest';
 import type { Spell } from '@frontend/types/spells';
 
 import { Spellbook } from './Spellbook';
+import { useSpellDisplay } from './spell-card/hooks/useSpellDisplay';
+
+// Counts card renders: every SpellCard render calls useSpellDisplay once
+vi.mock('./spell-card/hooks/useSpellDisplay', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./spell-card/hooks/useSpellDisplay')>();
+  return { ...actual, useSpellDisplay: vi.fn(actual.useSpellDisplay) };
+});
 
 const t = messages.characters;
 
@@ -128,5 +135,20 @@ describe('Spellbook', () => {
 
     await user.click(within(card('Mage Hand')).getByRole('button', { name: /Expand Mage Hand/ }));
     expect(expandLight).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('abrir um card só re-renderiza os cards que mudaram', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Spellbook characterSpells={SPELLS} />);
+    const renders = vi.mocked(useSpellDisplay);
+
+    renders.mockClear();
+    await user.click(within(card('Light')).getByRole('button', { name: /Expand Light/ }));
+    expect(renders).toHaveBeenCalledTimes(1);
+
+    // Opening another closes Light: those two re-render, the other three don't
+    renders.mockClear();
+    await user.click(within(card('Fly')).getByRole('button', { name: /Expand Fly/ }));
+    expect(renders).toHaveBeenCalledTimes(2);
   });
 });

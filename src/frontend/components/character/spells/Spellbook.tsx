@@ -179,7 +179,7 @@ export function Spellbook({
                   key={spell.id}
                   spell={spell}
                   isExpanded={expandedSpellId === spell.id}
-                  onClick={() => toggleExpand(spell.id)}
+                  onToggle={toggleExpand}
                   onForgetSpell={onForgetSpell}
                   onTogglePrepared={onTogglePrepared}
                 />

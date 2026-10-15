@@ -17,7 +17,8 @@ import { LearnSpellAction, PrepareSpellAction } from './parts/SpellQuickAction';
 interface SpellCardProps {
   spell: Spell;
   isExpanded?: boolean;
-  onClick?: () => void;
+  /** Called with the spell's id; a stable function lets the card skip re-rendering. */
+  onToggle?: (id: string) => void;
   onForgetSpell?: (id: string) => void;
   onTogglePrepared?: (id: string, isPrepared: boolean) => void;
   onLearnSpell?: (id: string) => void;
@@ -25,10 +26,10 @@ interface SpellCardProps {
   showLevel?: boolean;
 }
 
-export function SpellCard({
+export const SpellCard = React.memo(function SpellCard({
   spell,
   isExpanded = false,
-  onClick,
+  onToggle,
   onForgetSpell,
   onTogglePrepared,
   onLearnSpell,
@@ -83,7 +84,7 @@ export function SpellCard({
         type="button"
         aria-expanded={isExpanded}
         aria-controls={`spell-details-${spell.id}`}
-        onClick={onClick}
+        onClick={() => onToggle?.(spell.id)}
         className="focus-visible:outline-spell-flare absolute inset-0 z-0 h-full w-full rounded-xl bg-transparent outline-none focus-visible:outline-2 focus-visible:-outline-offset-2"
       >
         <span className="sr-only">
@@ -91,7 +92,7 @@ export function SpellCard({
         </span>
       </button>
 
-      {isExpanded && <SpellVFX mainIcon={mainIcon} spell={spell} vfx={theme.vfx} />}
+      {isExpanded && <SpellVFX mainIcon={mainIcon} spell={spell} />}
 
       <div className="pointer-events-none relative z-10 flex h-full flex-col">
         <SpellHeader
@@ -133,23 +134,21 @@ export function SpellCard({
       </div>
     </article>
   );
-}
+});
 
 /**
  * Thematic background, only on the open card and faded out before the description, so the
  * rules text sits on a plain surface.
  */
-const SpellVFX = React.memo(
-  ({ mainIcon, spell, vfx }: { mainIcon: string; spell: Spell; vfx: string }) => (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,black,transparent_45%)] opacity-50"
-    >
-      <SpellBackground spell={spell} themeVfx={vfx} />
-      <div className="absolute -top-6 -right-6 opacity-10">
-        <AppIcon variant="game" name={mainIcon} size={128} strokeWidth={1} />
-      </div>
+const SpellVFX = React.memo(({ mainIcon, spell }: { mainIcon: string; spell: Spell }) => (
+  <div
+    aria-hidden="true"
+    className="pointer-events-none absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,black,transparent_45%)] opacity-50"
+  >
+    <SpellBackground spell={spell} />
+    <div className="absolute -top-6 -right-6 opacity-10">
+      <AppIcon variant="game" name={mainIcon} size={128} strokeWidth={1} />
     </div>
-  ),
-);
+  </div>
+));
 SpellVFX.displayName = 'SpellVFX';

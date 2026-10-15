@@ -321,7 +321,8 @@
       "school": "School",
       "class": "Class",
       "damage": "Damage type"
-    }
+    },
+    "loading": "Loading spells"
   },
   "magicSystem": {
     "titleConfig": "Magic System Configuration",

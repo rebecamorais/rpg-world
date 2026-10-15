@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 
 import SpellSearchDialog from '@frontend/components/character/spells/SpellSearchDialog';
 import SpellsSection from '@frontend/components/character/spells/SpellsSection';
-import { LoadingState } from '@frontend/components/shared/LoadingState';
+import { SpellCardSkeleton } from '@frontend/components/character/spells/spell-card/SpellCardSkeleton';
 import { Button } from '@frontend/components/ui/button';
 import { useCharacterMeta } from '@frontend/context/CharacterContext';
 import { useCharacterSpells } from '@frontend/hooks/useCharacterSpells';
@@ -18,6 +18,7 @@ import { SheetPage } from './SheetPage';
 export function SpellsTab() {
   const { id } = useCharacterMeta();
   const t = useTranslations('characters');
+  const tDrawer = useTranslations('spellsDrawer');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { spells, isLoading, learnSpell, forgetSpell, togglePrepared } = useCharacterSpells(id);
 
@@ -43,7 +44,14 @@ export function SpellsTab() {
   return (
     <SheetPage icon="BookOpen" tab={t('tabs.spells')} actions={actions}>
       {isLoading ? (
-        <LoadingState thematic />
+        <div className="grid grid-cols-1 gap-4" aria-busy="true">
+          <span role="status" className="sr-only">
+            {tDrawer('loading')}
+          </span>
+          {Array.from({ length: 4 }, (_, i) => (
+            <SpellCardSkeleton key={i} />
+          ))}
+        </div>
       ) : (
         <SpellsSection
           characterSpells={spells}
