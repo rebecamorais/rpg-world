@@ -314,7 +314,14 @@
     },
     "searchLabel": "Buscar magias",
     "clearActiveFilters": "Limpar filtros ({count})",
-    "emptyStateHint": "Procure as magias da sua classe e adicione ao grimório."
+    "emptyStateHint": "Procure as magias da sua classe e adicione ao grimório.",
+    "filtersToggle": "{count, plural, =0 {Filtros} other {Filtros (#)}}",
+    "filterLabels": {
+      "level": "Nível",
+      "school": "Escola",
+      "class": "Classe",
+      "damage": "Tipo de dano"
+    }
   },
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",

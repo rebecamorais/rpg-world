@@ -98,4 +98,18 @@ describe('SpellSearchDialog', () => {
     await user.type(screen.getByRole('searchbox', { name: t.searchLabel }), 'x');
     await waitFor(() => expect(lastQuery()).toMatchObject({ search: 'x', page: '0' }));
   });
+
+  it('no celular, os filtros abrem por um botão que conta os ativos', async () => {
+    const user = userEvent.setup();
+    renderDialog('Wizard');
+
+    const toggle = screen.getByRole('button', { name: 'Filters (1)' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    const panel = document.getElementById(toggle.getAttribute('aria-controls')!)!;
+    expect(panel).toHaveClass('max-sm:hidden');
+
+    await user.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(panel).not.toHaveClass('max-sm:hidden');
+  });
 });

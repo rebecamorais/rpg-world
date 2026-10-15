@@ -314,7 +314,14 @@
     },
     "searchLabel": "Search spells",
     "clearActiveFilters": "Clear filters ({count})",
-    "emptyStateHint": "Search your class's spells and add them to the spellbook."
+    "emptyStateHint": "Search your class's spells and add them to the spellbook.",
+    "filtersToggle": "{count, plural, =0 {Filters} other {Filters (#)}}",
+    "filterLabels": {
+      "level": "Level",
+      "school": "School",
+      "class": "Class",
+      "damage": "Damage type"
+    }
   },
   "magicSystem": {
     "titleConfig": "Magic System Configuration",

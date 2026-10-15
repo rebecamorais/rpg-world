@@ -37,6 +37,7 @@ interface Props {
 
 const PAGE_SIZE = 12;
 const SEARCH_DEBOUNCE_MS = 300;
+const FILTERS_ID = 'spell-search-filters';
 
 interface Filters {
   level: number | null;
@@ -84,6 +85,7 @@ export default function SpellSearchDialog({
     if (listRef.current) listRef.current.scrollTop = 0;
   };
 
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const toggleExpand = useCallback((id: string) => {
@@ -155,7 +157,7 @@ export default function SpellSearchDialog({
             background: `radial-gradient(circle at 0% 0%, var(--character-primary), transparent 60%)`,
           }}
         />
-        <DialogHeader className="border-border border-b p-6">
+        <DialogHeader className="border-border border-b p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <DialogTitle className="flex items-center gap-3">
               <div className="bg-character-surface text-character-flare ring-border flex h-10 w-10 items-center justify-center rounded-xl shadow-lg ring-1">
@@ -167,29 +169,53 @@ export default function SpellSearchDialog({
           </div>
 
           {/* Search and Filters Bar */}
-          <div className="mt-6 flex flex-col gap-4">
-            <div className="relative w-full">
-              <AppIcon
-                name="Search"
-                size={18}
-                aria-hidden="true"
-                className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2"
-              />
-              <Input
-                aria-label={t('searchLabel')}
-                placeholder={t('searchPlaceholder')}
-                type="search"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="focus:ring-character/50 border-border bg-muted text-foreground pl-10"
-              />
+          <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:gap-4">
+            <div className="flex gap-2">
+              <div className="relative min-w-0 flex-1">
+                <AppIcon
+                  name="Search"
+                  size={18}
+                  aria-hidden="true"
+                  className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2"
+                />
+                <Input
+                  aria-label={t('searchLabel')}
+                  placeholder={t('searchPlaceholder')}
+                  type="search"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  className="focus:ring-character/50 border-border bg-muted text-foreground pl-10"
+                />
+              </div>
+
+              {/* Phones: the filters fold behind this button, so the list keeps the screen */}
+              <Button
+                variant="outline"
+                aria-expanded={filtersOpen}
+                aria-controls={FILTERS_ID}
+                onClick={() => setFiltersOpen((open) => !open)}
+                className={cn(
+                  'h-10 shrink-0 sm:hidden',
+                  activeFilterCount > 0 && 'border-character-muted text-character-flare',
+                )}
+              >
+                <AppIcon name="Settings2" size={16} aria-hidden="true" />
+                {t('filtersToggle', { count: activeFilterCount })}
+              </Button>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div
+              id={FILTERS_ID}
+              className={cn(
+                'grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center',
+                !filtersOpen && 'max-sm:hidden',
+              )}
+            >
               <SelectField
+                aria-label={t('filterLabels.level')}
                 value={filters.level === null ? 'all' : filters.level.toString()}
                 onValueChange={(val) => setFilter('level', val === 'all' ? null : Number(val))}
-                className="border-border bg-muted text-foreground h-10 w-[120px]"
+                className="border-border bg-muted text-foreground h-10 w-full sm:w-[120px]"
                 placeholder={t('allLevels')}
                 options={[
                   { value: 'all', label: t('allLevels') },
@@ -202,29 +228,32 @@ export default function SpellSearchDialog({
               />
 
               <SelectField
+                aria-label={t('filterLabels.school')}
                 value={filters.school ?? 'all'}
                 onValueChange={(val) =>
                   setFilter('school', val === 'all' ? null : (val as SpellSchool))
                 }
-                className="border-border bg-muted text-foreground h-10 w-[150px]"
+                className="border-border bg-muted text-foreground h-10 w-full sm:w-[150px]"
                 placeholder={t('allSchools')}
                 options={schoolOptions}
               />
 
               <SelectField
+                aria-label={t('filterLabels.class')}
                 value={filters.class ?? 'all'}
                 onValueChange={(val) =>
                   setFilter('class', val === 'all' ? null : (val as CharacterClass))
                 }
-                className="border-border bg-muted text-foreground h-10 w-[140px]"
+                className="border-border bg-muted text-foreground h-10 w-full sm:w-[140px]"
                 placeholder={t('allClasses')}
                 options={classesOptions}
               />
 
               <SelectField
+                aria-label={t('filterLabels.damage')}
                 value={filters.damage ?? 'all'}
                 onValueChange={(val) => setFilter('damage', val === 'all' ? null : val)}
-                className="border-border bg-muted text-foreground h-10 w-[150px]"
+                className="border-border bg-muted text-foreground h-10 w-full sm:w-[150px]"
                 placeholder={tCharacters('allDamage')}
                 options={[
                   { value: 'all', label: tCharacters('allDamage') },
@@ -240,7 +269,7 @@ export default function SpellSearchDialog({
                   variant="ghost"
                   size="sm"
                   onClick={() => setFilters(NO_FILTERS)}
-                  className="text-character-flare hover:bg-character-surface hover:text-character-flare"
+                  className="text-character-flare hover:bg-character-surface hover:text-character-flare col-span-2 justify-self-start"
                 >
                   <AppIcon name="X" size={16} aria-hidden="true" />
                   {t('clearActiveFilters', { count: activeFilterCount })}
@@ -258,7 +287,7 @@ export default function SpellSearchDialog({
           ref={listRef}
           aria-busy={isPlaceholderData}
           className={cn(
-            'custom-scrollbar flex-1 overflow-y-auto px-6 py-6 transition-opacity',
+            'custom-scrollbar flex-1 overflow-y-auto p-4 transition-opacity sm:p-6',
             isPlaceholderData && 'opacity-60',
           )}
         >
