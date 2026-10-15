@@ -9,7 +9,7 @@ import { CharacterClass, Spell, SpellSchool } from '@frontend/types/spells';
 
 type SpellDto = Spell;
 
-export type PaginatedSpells = {
+type PaginatedSpells = {
   data: SpellDto[];
   total: number;
 };
