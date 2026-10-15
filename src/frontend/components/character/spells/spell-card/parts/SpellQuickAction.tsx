@@ -91,3 +91,35 @@ export function LearnSpellAction({
     </QuickActionButton>
   );
 }
+
+/** Prepared marker on the collapsed card: the most common action while playing a prepared caster. */
+export function PrepareSpellAction({
+  isPrepared,
+  prepareLabel,
+  unprepareLabel,
+  onToggle,
+}: {
+  isPrepared: boolean;
+  prepareLabel: string;
+  unprepareLabel: string;
+  onToggle: () => void;
+}) {
+  return (
+    <QuickActionButton
+      label={isPrepared ? unprepareLabel : prepareLabel}
+      onClick={onToggle}
+      className={
+        isPrepared
+          ? 'border-warning-muted bg-warning-surface text-warning-flare hover:border-warning'
+          : 'border-border text-muted-foreground hover:border-warning-muted hover:text-warning-flare'
+      }
+    >
+      <AppIcon
+        name="Bookmark"
+        size={18}
+        aria-hidden="true"
+        className={cn(isPrepared && 'fill-current')}
+      />
+    </QuickActionButton>
+  );
+}

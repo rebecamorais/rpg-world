@@ -12,7 +12,7 @@ import { SpellActions } from './parts/SpellActions';
 import { SpellChipsRow } from './parts/SpellChipsRow';
 import { SpellDetails } from './parts/SpellDetails';
 import { SpellHeader } from './parts/SpellHeader';
-import { LearnSpellAction } from './parts/SpellQuickAction';
+import { LearnSpellAction, PrepareSpellAction } from './parts/SpellQuickAction';
 
 interface SpellCardProps {
   spell: Spell;
@@ -42,6 +42,13 @@ export function SpellCard({
       forgetLabel={displayValues.forgetLabel}
       onLearn={() => onLearnSpell(spell.id)}
       onForget={() => onForgetSpell?.(spell.id)}
+    />
+  ) : onTogglePrepared && spell.level > 0 ? (
+    <PrepareSpellAction
+      isPrepared={!!spell.isPrepared}
+      prepareLabel={displayValues.prepareLabel}
+      unprepareLabel={displayValues.unprepareLabel}
+      onToggle={() => onTogglePrepared(spell.id, !spell.isPrepared)}
     />
   ) : null;
 
@@ -111,7 +118,6 @@ export function SpellCard({
                   <SpellActions
                     spell={spell}
                     onForgetSpell={onForgetSpell}
-                    onTogglePrepared={onTogglePrepared}
                     displayValues={displayValues}
                   />
                 </div>
