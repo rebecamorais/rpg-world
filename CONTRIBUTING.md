@@ -104,6 +104,13 @@ Utilizamos **Conventional Commits** para manter um histórico legível:
 3. Adicione testes para sua lógica.
 4. Certifique-se de que o lint e testes passam.
 5. Abra o PR com uma descrição clara do que foi feito.
+6. Espere o comentário **🔎 Preview pronto** no PR. Teste no link o caminho feliz, os erros e o celular, e, se der, anexe uma gravação de tela.
+
+### Previews
+
+- Cada PR ganha um deploy de preview na Vercel. O link fixo da branch é comentado no PR e atualizado a cada push (`preview-comment.yml`).
+- O preview usa um projeto Supabase de **staging**, separado da produção. As migrations do PR são aplicadas lá automaticamente (`preview-migrations.yml`).
+- Quando o PR é fechado ou mergeado, os previews da branch são apagados da Vercel e do GitHub (`preview-cleanup.yml`).
 
 ---
 
