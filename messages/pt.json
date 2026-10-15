@@ -804,6 +804,39 @@
     "credits": "Créditos do conteúdo",
     "ctaTitle": "Pronto para criar o seu personagem?",
     "ctaStart": "Criar conta grátis",
-    "ctaCharacters": "Ir para meus personagens"
+    "ctaCharacters": "Ir para meus personagens",
+    "showcase": {
+      "title": "Veja por dentro",
+      "subtitle": "Telas reais do RPG World com uma personagem de exemplo.",
+      "previous": "Tela anterior",
+      "next": "Próxima tela",
+      "position": "{current} de {total}",
+      "slides": {
+        "sheet": {
+          "tab": "Ficha",
+          "title": "A ficha inteira em uma página",
+          "description": "Atributos, salvaguardas, perícias, vida e espaços de magia, com as contas feitas para você.",
+          "alt": "Ficha de uma personagem maga de nível 5, com atributos, salvaguardas, pontos de vida e espaços de magia"
+        },
+        "spellbook": {
+          "tab": "Grimório",
+          "title": "O grimório organizado por nível",
+          "description": "Truques e magias por círculo, com as preparadas marcadas e um índice para pular de nível.",
+          "alt": "Grimório com truques e magias de 1º nível, algumas marcadas como preparadas"
+        },
+        "search": {
+          "tab": "Busca de magias",
+          "title": "Ache qualquer magia do SRD",
+          "description": "Busque enquanto digita e filtre por nível, escola, classe e tipo de dano. Aprenda com um clique.",
+          "alt": "Busca de magias por \"fogo\" mostrando Raio de Fogo, Bola de Fogo e outras, com as aprendidas marcadas"
+        },
+        "lore": {
+          "title": "A história da personagem",
+          "tab": "História",
+          "description": "Aparência, personalidade, ideais, vínculos, defeitos e a história completa, junto da ficha.",
+          "alt": "Página de história com aparência, traços de personalidade, ideais, vínculos, defeitos e a história da personagem"
+        }
+      }
+    }
   }
 }

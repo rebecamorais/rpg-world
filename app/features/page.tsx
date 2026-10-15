@@ -10,6 +10,7 @@ import {
   FeatureGrid,
   PLANNED_FEATURES,
 } from '@frontend/components/landing/FeatureGrid';
+import { FeatureShowcase } from '@frontend/components/landing/FeatureShowcase';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 
@@ -44,6 +45,16 @@ export default async function FeaturesPage() {
         <h1 className="text-display">{t('title')}</h1>
         <p className="text-muted-foreground text-lg">{t('subtitle')}</p>
       </header>
+
+      <section aria-labelledby="showcase-title" className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <h2 id="showcase-title" className="text-title">
+            {t('showcase.title')}
+          </h2>
+          <p className="text-muted-foreground">{t('showcase.subtitle')}</p>
+        </div>
+        <FeatureShowcase />
+      </section>
 
       <section aria-labelledby="available-title" className="flex flex-col gap-6">
         <h2 id="available-title" className="text-title">

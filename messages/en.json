@@ -804,6 +804,39 @@
     "credits": "Content credits",
     "ctaTitle": "Ready to create your character?",
     "ctaStart": "Create a free account",
-    "ctaCharacters": "Go to my characters"
+    "ctaCharacters": "Go to my characters",
+    "showcase": {
+      "title": "Take a look inside",
+      "subtitle": "Real RPG World screens with an example character.",
+      "previous": "Previous screen",
+      "next": "Next screen",
+      "position": "{current} of {total}",
+      "slides": {
+        "sheet": {
+          "tab": "Sheet",
+          "title": "The whole sheet on one page",
+          "description": "Ability scores, saving throws, skills, hit points and spell slots, with the math done for you.",
+          "alt": "Character sheet of a level 5 wizard with ability scores, saving throws, hit points and spell slots"
+        },
+        "spellbook": {
+          "tab": "Spellbook",
+          "title": "A spellbook organized by level",
+          "description": "Cantrips and spells by level, with the prepared ones marked and an index to jump between levels.",
+          "alt": "Spellbook with cantrips and level 1 spells, some marked as prepared"
+        },
+        "search": {
+          "tab": "Spell search",
+          "title": "Find any SRD spell",
+          "description": "Search as you type and filter by level, school, class and damage type. Learn a spell in one click.",
+          "alt": "Spell search for \"fire\" showing Fire Bolt, Fireball and others, with the learned ones checked"
+        },
+        "lore": {
+          "tab": "Story",
+          "title": "Your character's story",
+          "description": "Appearance, personality, ideals, bonds, flaws and the full backstory, next to the sheet.",
+          "alt": "Story page with appearance, personality traits, ideals, bonds, flaws and the character's backstory"
+        }
+      }
+    }
   }
 }
