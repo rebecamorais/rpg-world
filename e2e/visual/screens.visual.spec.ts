@@ -73,6 +73,10 @@ async function heroCharacter(page: Page): Promise<string> {
     });
     expect(learn.ok()).toBe(true);
   }
+  const prepare = await page.request.post(`/api/characters/${id}/spells`, {
+    data: { id: SPELLS.shield.id, action: 'prepare' },
+  });
+  expect(prepare.ok()).toBe(true);
   return id;
 }
 
