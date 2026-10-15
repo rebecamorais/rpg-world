@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useLocale } from 'next-intl';
 
 import { rpgWorldApi } from '@client';
@@ -44,5 +44,7 @@ export function useSpells(filters: UseSpellsFilters = {}) {
 
       return rpgWorldApi.get(`/api/spells?${params.toString()}`);
     },
+    // Paging and filtering keep the current list on screen until the next one arrives
+    placeholderData: keepPreviousData,
   });
 }

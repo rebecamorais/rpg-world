@@ -180,7 +180,6 @@
     "school": "School",
     "saveSuccess": "Character saved successfully!",
     "passivePerception": "Passive Perception",
-    "search": "Search",
     "allDamage": "All Damage",
     "forgetSpell": "Forget spell",
     "prepareSpell": "Prepare spell",
@@ -306,14 +305,15 @@
     "allClasses": "All classes",
     "noSpellsFound": "No spells found.",
     "clearFilters": "Clear all filters",
-    "pagination": "Showing {count} of {total} spells",
+    "pagination": "{from}–{to} of {total} spells",
     "toasts": {
       "learned": "Spell learned!",
       "forgotten": "Spell forgotten.",
       "prepared": "Spell prepared.",
       "unprepared": "Spell unprepared."
     },
-    "searchLabel": "Search spells"
+    "searchLabel": "Search spells",
+    "clearActiveFilters": "Clear filters ({count})"
   },
   "magicSystem": {
     "titleConfig": "Magic System Configuration",

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -20,7 +20,9 @@ import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
 import { DAMAGE_THEMES } from '@frontend/constants/damage-themes';
 import { useCharacterState } from '@frontend/context/CharacterContext';
+import { useDebouncedValue } from '@frontend/hooks/useDebouncedValue';
 import { useSpells } from '@frontend/hooks/useSpells';
+import { matchCharacterClass } from '@frontend/lib/character-class';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 import { CharacterClass, SpellSchool } from '@frontend/types/spells';
@@ -34,6 +36,16 @@ interface Props {
 }
 
 const PAGE_SIZE = 12;
+const SEARCH_DEBOUNCE_MS = 300;
+
+interface Filters {
+  level: number | null;
+  school: SpellSchool | null;
+  class: CharacterClass | null;
+  damage: string | null;
+}
+
+const NO_FILTERS: Filters = { level: null, school: null, class: null, damage: null };
 
 export default function SpellSearchDialog({
   isOpen,
@@ -49,29 +61,52 @@ export default function SpellSearchDialog({
   const { character } = useCharacterState();
   const accentColor = character?.accentColor;
 
-  // Filter State
   const [searchInput, setSearchInput] = useState('');
-  const [activeSearch, setActiveSearch] = useState('');
-  const [levelFilter, setLevelFilter] = useState<number | null>(null);
-  const [schoolFilter, setSchoolFilter] = useState<SpellSchool | null>(null);
-  const [classFilter, setClassFilter] = useState<CharacterClass | null>(null);
-  const [damageFilter, setDamageFilter] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
+  const search = useDebouncedValue(searchInput.trim(), SEARCH_DEBOUNCE_MS);
+  // Starts on the character's class when it names one of the system's
+  const [filters, setFilters] = useState<Filters>(() => ({
+    ...NO_FILTERS,
+    class: matchCharacterClass(character?.class, (c) =>
+      tSpellsData(`classes.${c}` as Parameters<typeof tSpellsData>[0]),
+    ),
+  }));
+  const setFilter = <K extends keyof Filters>(key: K, value: Filters[K]) =>
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  const activeFilterCount = Object.values(filters).filter((v) => v !== null).length;
+
+  // The page belongs to one search: a new search or filter starts back on the first page
+  const queryKey = JSON.stringify([search, filters]);
+  const [paging, setPaging] = useState({ key: queryKey, page: 0 });
+  const page = paging.key === queryKey ? paging.page : 0;
+  const listRef = useRef<HTMLDivElement>(null);
+  const goToPage = (next: number) => {
+    setPaging({ key: queryKey, page: next });
+    if (listRef.current) listRef.current.scrollTop = 0;
+  };
+
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const toggleExpand = useCallback((id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
   }, []);
 
-  // Data Fetching
-  const { data: paginatedSpells, isLoading } = useSpells({
+  const clearAll = () => {
+    setSearchInput('');
+    setFilters(NO_FILTERS);
+  };
+
+  const {
+    data: paginatedSpells,
+    isLoading,
+    isPlaceholderData,
+  } = useSpells({
     page,
     limit: PAGE_SIZE,
-    search: activeSearch,
-    level: levelFilter,
-    school: schoolFilter,
-    class: classFilter,
-    damageType: damageFilter,
+    search,
+    level: filters.level,
+    school: filters.school,
+    class: filters.class,
+    damageType: filters.damage,
   });
 
   const spells = paginatedSpells?.data || [];
@@ -79,20 +114,6 @@ export default function SpellSearchDialog({
   const totalPages = Math.ceil(totalItems / PAGE_SIZE);
 
   const learnedSet = useMemo(() => new Set(learnedSpells), [learnedSpells]);
-
-  const handleSearchTrigger = useCallback(() => {
-    setActiveSearch(searchInput);
-    setPage(0); // Reset to first page on search
-  }, [searchInput]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        handleSearchTrigger();
-      }
-    },
-    [handleSearchTrigger],
-  );
 
   const damageTypes = Object.keys(DAMAGE_THEMES).filter(
     (key) => !['slashing', 'piercing', 'bludgeoning'].includes(key),
@@ -150,33 +171,23 @@ export default function SpellSearchDialog({
               <AppIcon
                 name="Search"
                 size={18}
+                aria-hidden="true"
                 className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2"
               />
               <Input
                 aria-label={t('searchLabel')}
                 placeholder={t('searchPlaceholder')}
+                type="search"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={handleKeyDown}
                 className="focus:ring-character/50 border-border bg-muted text-foreground pl-10"
               />
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={handleSearchTrigger}
-                className="hover:bg-character-muted hover:text-character-primary text-muted-foreground absolute top-1/2 right-1 -translate-y-1/2 transition-all"
-              >
-                {tCharacters('search')}
-              </Button>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
               <SelectField
-                value={levelFilter === null ? 'all' : levelFilter.toString()}
-                onValueChange={(val) => {
-                  setLevelFilter(val === 'all' ? null : Number(val));
-                  setPage(0);
-                }}
+                value={filters.level === null ? 'all' : filters.level.toString()}
+                onValueChange={(val) => setFilter('level', val === 'all' ? null : Number(val))}
                 className="border-border bg-muted text-foreground h-10 w-[120px]"
                 placeholder={t('allLevels')}
                 options={[
@@ -190,33 +201,28 @@ export default function SpellSearchDialog({
               />
 
               <SelectField
-                value={schoolFilter ?? 'all'}
-                onValueChange={(val) => {
-                  setSchoolFilter(val === 'all' ? null : (val as SpellSchool));
-                  setPage(0);
-                }}
+                value={filters.school ?? 'all'}
+                onValueChange={(val) =>
+                  setFilter('school', val === 'all' ? null : (val as SpellSchool))
+                }
                 className="border-border bg-muted text-foreground h-10 w-[150px]"
                 placeholder={t('allSchools')}
                 options={schoolOptions}
               />
 
               <SelectField
-                value={classFilter ?? 'all'}
-                onValueChange={(val) => {
-                  setClassFilter(val === 'all' ? null : (val as CharacterClass));
-                  setPage(0);
-                }}
+                value={filters.class ?? 'all'}
+                onValueChange={(val) =>
+                  setFilter('class', val === 'all' ? null : (val as CharacterClass))
+                }
                 className="border-border bg-muted text-foreground h-10 w-[140px]"
                 placeholder={t('allClasses')}
                 options={classesOptions}
               />
 
               <SelectField
-                value={damageFilter ?? 'all'}
-                onValueChange={(val) => {
-                  setDamageFilter(val === 'all' ? null : val);
-                  setPage(0);
-                }}
+                value={filters.damage ?? 'all'}
+                onValueChange={(val) => setFilter('damage', val === 'all' ? null : val)}
                 className="border-border bg-muted text-foreground h-10 w-[150px]"
                 placeholder={tCharacters('allDamage')}
                 options={[
@@ -227,6 +233,18 @@ export default function SpellSearchDialog({
                   })),
                 ]}
               />
+
+              {activeFilterCount > 0 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setFilters(NO_FILTERS)}
+                  className="text-character-flare hover:bg-character-surface hover:text-character-flare"
+                >
+                  <AppIcon name="X" size={16} aria-hidden="true" />
+                  {t('clearActiveFilters', { count: activeFilterCount })}
+                </Button>
+              )}
             </div>
           </div>
         </DialogHeader>
@@ -235,7 +253,14 @@ export default function SpellSearchDialog({
           {isLoading ? '' : tCharacters('spellCount', { count: totalItems })}
         </p>
 
-        <div className="custom-scrollbar flex-1 overflow-y-auto px-6 py-6">
+        <div
+          ref={listRef}
+          aria-busy={isPlaceholderData}
+          className={cn(
+            'custom-scrollbar flex-1 overflow-y-auto px-6 py-6 transition-opacity',
+            isPlaceholderData && 'opacity-60',
+          )}
+        >
           {isLoading ? (
             <LoadingState thematic />
           ) : spells.length === 0 ? (
@@ -244,18 +269,7 @@ export default function SpellSearchDialog({
               title={t('noSpellsFound')}
               className="h-64 border-none bg-transparent"
               action={
-                <Button
-                  variant="link"
-                  onClick={() => {
-                    setSearchInput('');
-                    setActiveSearch('');
-                    setLevelFilter(null);
-                    setSchoolFilter(null);
-                    setClassFilter(null);
-                    setDamageFilter(null);
-                  }}
-                  className="text-character-flare"
-                >
+                <Button variant="link" onClick={clearAll} className="text-character-flare">
                   {t('clearFilters')}
                 </Button>
               }
@@ -282,7 +296,11 @@ export default function SpellSearchDialog({
         {totalPages > 1 && (
           <footer className="border-border bg-muted/50 flex items-center justify-between border-t p-4">
             <p className="text-muted-foreground text-xs font-medium">
-              {t('pagination', { count: spells.length, total: totalItems })}
+              {t('pagination', {
+                from: page * PAGE_SIZE + 1,
+                to: page * PAGE_SIZE + spells.length,
+                total: totalItems,
+              })}
             </p>
 
             <div className="flex items-center gap-2">
@@ -290,7 +308,7 @@ export default function SpellSearchDialog({
                 variant="outline"
                 size="sm"
                 disabled={page === 0}
-                onClick={() => setPage((p) => p - 1)}
+                onClick={() => goToPage(page - 1)}
                 className="border-border bg-muted text-foreground hover:bg-background h-8 w-8 p-0 disabled:opacity-40"
               >
                 <AppIcon name="ChevronLeft" size={16} />
@@ -314,7 +332,7 @@ export default function SpellSearchDialog({
                       key={pageNum}
                       variant="outline"
                       size="sm"
-                      onClick={() => setPage(pageNum)}
+                      onClick={() => goToPage(pageNum)}
                       aria-current={isActive ? 'page' : undefined}
                       className={cn(
                         'h-8 w-8 p-0 font-mono text-xs',
@@ -333,7 +351,7 @@ export default function SpellSearchDialog({
                 variant="outline"
                 size="sm"
                 disabled={page >= totalPages - 1}
-                onClick={() => setPage((p) => p + 1)}
+                onClick={() => goToPage(page + 1)}
                 className="border-border bg-muted text-foreground hover:bg-background h-8 w-8 p-0 disabled:opacity-40"
               >
                 <AppIcon name="ChevronRight" size={16} />

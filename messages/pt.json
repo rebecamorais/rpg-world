@@ -180,7 +180,6 @@
     "school": "Escola",
     "saveSuccess": "Personagem salvo com sucesso!",
     "passivePerception": "Percepção Passiva",
-    "search": "Buscar",
     "allDamage": "Todos os Danos",
     "forgetSpell": "Esquecer magia",
     "prepareSpell": "Preparar magia",
@@ -306,14 +305,15 @@
     "allClasses": "Todas as classes",
     "noSpellsFound": "Nenhuma magia encontrada.",
     "clearFilters": "Limpar todos os filtros",
-    "pagination": "Mostrando {count} de {total} magias",
+    "pagination": "{from}–{to} de {total} magias",
     "toasts": {
       "learned": "Magia aprendida!",
       "forgotten": "Magia esquecida.",
       "prepared": "Magia preparada.",
       "unprepared": "Magia não preparada."
     },
-    "searchLabel": "Buscar magias"
+    "searchLabel": "Buscar magias",
+    "clearActiveFilters": "Limpar filtros ({count})"
   },
   "magicSystem": {
     "titleConfig": "Configuração do Sistema Mágico",
