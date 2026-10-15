@@ -512,6 +512,7 @@
         "content": "As regras e magias exibidas no RPG World vêm de fontes abertas, usadas de acordo com as suas licenças:",
         "items": [
           "Este trabalho inclui material do System Reference Document 5.1 (\"SRD 5.1\") da Wizards of the Coast LLC, disponível em https://dnd.wizards.com/resources/systems-reference-document. O SRD 5.1 é licenciado sob a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/legalcode).",
+          "Os dados estruturados das magias em inglês foram obtidos da 5e SRD API (https://www.dnd5eapi.co), do projeto 5e-bits/5e-database, sob a licença MIT.",
           "As traduções em português das magias vêm do módulo de tradução do D&D 5e para o Foundry VTT, da comunidade Foundry VTT Brasil (Cauã Pessoa e colaboradores), sob a licença MIT: https://gitlab.com/fvtt-brasil/dnd5e.",
           "O RPG World não é afiliado, endossado nem patrocinado pela Wizards of the Coast. Dungeons & Dragons e D&D são marcas da Wizards of the Coast LLC."
         ]

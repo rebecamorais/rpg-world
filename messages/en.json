@@ -512,6 +512,7 @@
         "content": "The rules and spells shown in RPG World come from open sources, used under their licenses:",
         "items": [
           "This work includes material taken from the System Reference Document 5.1 (\"SRD 5.1\") by Wizards of the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode.",
+          "The structured English spell data was obtained from the 5e SRD API (https://www.dnd5eapi.co), from the 5e-bits/5e-database project, under the MIT license.",
           "The Brazilian Portuguese spell translations come from the D&D 5e translation module for Foundry VTT by the Foundry VTT Brasil community (Cauã Pessoa and contributors), under the MIT license: https://gitlab.com/fvtt-brasil/dnd5e.",
           "RPG World is not affiliated with, endorsed, or sponsored by Wizards of the Coast. Dungeons & Dragons and D&D are trademarks of Wizards of the Coast LLC."
         ]

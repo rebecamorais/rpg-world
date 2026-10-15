@@ -76,7 +76,7 @@ export default async function TermsPage() {
             {t('sections.gameContent.content')}
           </p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed break-words">
-            {['0', '1', '2'].map((key) => (
+            {['0', '1', '2', '3'].map((key) => (
               <li key={key}>{t(`sections.gameContent.items.${key}`)}</li>
             ))}
           </ul>

@@ -15,6 +15,36 @@ Usado em: textos em inglês das magias (`spell_translations`, `locale = 'en'`).
 O RPG World não é afiliado, endossado nem patrocinado pela Wizards of the Coast. Dungeons & Dragons
 e D&D são marcas da Wizards of the Coast LLC.
 
+## 5e SRD API
+
+Os dados das magias em inglês (identificadores como `acid-arrow`, nível, escola, componentes e os
+textos do SRD 5.1) foram obtidos da 5e SRD API (<https://www.dnd5eapi.co>), cujos dados vêm do
+repositório <https://github.com/5e-bits/5e-database>, distribuído sob a licença MIT:
+
+```text
+MIT License
+
+Copyright (c) [2018-2020] [Adrian Padua, Christopher Ward]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
 ## Tradução em português do Brasil: Foundry VTT Brasil
 
 As traduções em português das magias do SRD 5.1 (`spell_translations`, `locale = 'pt'`) vêm do
