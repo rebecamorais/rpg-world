@@ -66,9 +66,9 @@ Mudanças nas tabelas de magia que valem também para os próximos tipos de cont
 - **Mapeamento:** escolas (`V` → `evocation`), tempo de conjuração, alcance, duração, classes
   (no 5etools as classes de magia ficam num arquivo separado, `sources.json`/`gendata`) para as
   colunas que já existem.
-- **Tradução pt:** primeira passada automática (LLM, com glossário fixo de termos de D&D em
-  português: "teste de resistência", "vantagem", "círculo", nomes oficiais das magias na edição
-  brasileira quando existirem), gravada como não verificada. O glossário fica versionado no repo.
+- **Traduções:** vêm primeiro das traduções comunitárias do Foundry (formato Babele), em vários
+  idiomas; ver `2026-10-15-traducoes-comunitarias.md`. Tradução automática (LLM, com glossário
+  versionado no repo) só para o que não existir em nenhuma fonte, gravada como não verificada.
 - **Atualização:** rodar de novo o script com uma versão nova do 5etools só altera o `en` e os
   dados mecânicos; traduções `pt` revisadas não são sobrescritas (marcar quando o `en` mudou
   depois da revisão, para revisar de novo).
