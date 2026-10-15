@@ -1,6 +1,25 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { getTranslations } from 'next-intl/server';
+
+import { richLinks } from '@frontend/components/shared/rich-links';
+
+// Links inside the privacy texts, one per tag in the messages
+const PRIVACY_LINKS = richLinks({
+  email: 'mailto:contato@rebs.com.br',
+  lgpd: 'https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm',
+  supabase: 'https://supabase.com/privacy',
+  google: 'https://policies.google.com/privacy',
+  vercel: 'https://vercel.com/legal/privacy-policy',
+  resend: 'https://resend.com/legal/privacy-policy',
+  cloudflare: 'https://www.cloudflare.com/privacypolicy/',
+});
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('privacy');
+  return { title: t('title') };
+}
 
 export default async function PrivacyPage() {
   const t = await getTranslations('privacy');
@@ -25,8 +44,8 @@ export default async function PrivacyPage() {
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.data.title')}</h2>
           <p className="text-muted-foreground mb-4 leading-relaxed">{t('sections.data.content')}</p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed">
-            {['0', '1', '2'].map((key) => (
-              <li key={key}>{t(`sections.data.items.${key}`)}</li>
+            {['0', '1', '2', '3'].map((key) => (
+              <li key={key}>{t.rich(`sections.data.items.${key}`, PRIVACY_LINKS)}</li>
             ))}
           </ul>
         </section>
@@ -38,29 +57,37 @@ export default async function PrivacyPage() {
           </p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed">
             {['0', '1', '2'].map((key) => (
-              <li key={key}>{t(`sections.usage.items.${key}`)}</li>
+              <li key={key}>{t.rich(`sections.usage.items.${key}`, PRIVACY_LINKS)}</li>
             ))}
           </ul>
         </section>
 
         <section>
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.sharing.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.sharing.content')}</p>
+          <p className="text-muted-foreground leading-relaxed">
+            {t.rich('sections.sharing.content', PRIVACY_LINKS)}
+          </p>
         </section>
 
         <section>
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.rights.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.rights.content')}</p>
+          <p className="text-muted-foreground leading-relaxed">
+            {t.rich('sections.rights.content', PRIVACY_LINKS)}
+          </p>
         </section>
 
         <section>
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.cookies.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.cookies.content')}</p>
+          <p className="text-muted-foreground leading-relaxed">
+            {t.rich('sections.cookies.content', PRIVACY_LINKS)}
+          </p>
         </section>
 
         <section>
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.transfer.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.transfer.content')}</p>
+          <p className="text-muted-foreground leading-relaxed">
+            {t.rich('sections.transfer.content', PRIVACY_LINKS)}
+          </p>
         </section>
 
         <section>
@@ -70,7 +97,9 @@ export default async function PrivacyPage() {
 
         <section>
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.contact.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.contact.content')}</p>
+          <p className="text-muted-foreground leading-relaxed">
+            {t.rich('sections.contact.content', PRIVACY_LINKS)}
+          </p>
         </section>
       </div>
     </div>

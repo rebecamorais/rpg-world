@@ -29,10 +29,32 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: 'RPG World',
-  description: 'Gestão de fichas de personagens para RPG',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('seo');
+  const locale = await getLocale();
+
+  return {
+    metadataBase: new URL('https://rpgworldapp.com'),
+    title: { default: t('title'), template: '%s · RPG World' },
+    description: t('description'),
+    applicationName: 'RPG World',
+    openGraph: {
+      type: 'website',
+      siteName: 'RPG World',
+      title: t('title'),
+      description: t('description'),
+      url: '/',
+      locale: locale === 'pt' ? 'pt_BR' : 'en_US',
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: t('ogImageAlt') }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('title'),
+      description: t('description'),
+      images: ['/og-image.jpg'],
+    },
+  };
+}
 
 export default async function RootLayout({
   children,

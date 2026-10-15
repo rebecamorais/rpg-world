@@ -83,6 +83,7 @@ async function heroCharacter(page: Page): Promise<string> {
 test.describe('telas públicas', () => {
   for (const [name, path] of [
     ['home', '/'],
+    ['features', '/features'],
     ['login', '/login'],
     ['register', '/register'],
   ] as const) {

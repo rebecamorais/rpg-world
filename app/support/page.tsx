@@ -8,7 +8,7 @@ import { getApi } from '@api';
 import ContactForm from '@frontend/components/feedback/ContactForm';
 
 export const metadata: Metadata = {
-  title: 'Support | RPG World',
+  title: 'Support',
   description: 'Talk to the Game Master. Send your feedback, bugs or suggestions.',
 };
 

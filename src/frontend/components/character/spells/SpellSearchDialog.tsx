@@ -215,7 +215,7 @@ export default function SpellSearchDialog({
                 aria-label={t('filterLabels.level')}
                 value={filters.level === null ? 'all' : filters.level.toString()}
                 onValueChange={(val) => setFilter('level', val === 'all' ? null : Number(val))}
-                className="border-border bg-muted text-foreground h-10 w-full sm:w-[120px]"
+                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[120px]"
                 placeholder={t('allLevels')}
                 options={[
                   { value: 'all', label: t('allLevels') },
@@ -233,7 +233,7 @@ export default function SpellSearchDialog({
                 onValueChange={(val) =>
                   setFilter('school', val === 'all' ? null : (val as SpellSchool))
                 }
-                className="border-border bg-muted text-foreground h-10 w-full sm:w-[150px]"
+                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
                 placeholder={t('allSchools')}
                 options={schoolOptions}
               />
@@ -244,7 +244,7 @@ export default function SpellSearchDialog({
                 onValueChange={(val) =>
                   setFilter('class', val === 'all' ? null : (val as CharacterClass))
                 }
-                className="border-border bg-muted text-foreground h-10 w-full sm:w-[140px]"
+                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[140px]"
                 placeholder={t('allClasses')}
                 options={classesOptions}
               />
@@ -253,7 +253,7 @@ export default function SpellSearchDialog({
                 aria-label={t('filterLabels.damage')}
                 value={filters.damage ?? 'all'}
                 onValueChange={(val) => setFilter('damage', val === 'all' ? null : val)}
-                className="border-border bg-muted text-foreground h-10 w-full sm:w-[150px]"
+                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
                 placeholder={tCharacters('allDamage')}
                 options={[
                   { value: 'all', label: tCharacters('allDamage') },

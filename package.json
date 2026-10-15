@@ -11,6 +11,7 @@
   "scripts": {
     "infra": "npx tsx scripts/infra.ts",
     "icons": "npx tsx scripts/generate-game-icons.ts",
+    "showcase": "npx tsx scripts/capture-showcase.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -91,6 +92,7 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "sade": "^1.8.1",
     "server-only": "^0.0.1",
+    "sharp": "^0.35.5",
     "supabase": "2.120.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
