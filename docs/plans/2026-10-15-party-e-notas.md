@@ -89,6 +89,24 @@ Sugestão: começar pelo 1 e já desenhar o 2 com o 3 em mente (coluna `visibili
 - Seguir o padrão dos testes de integração de RLS que já existem em
   `supabase-character.repository` (`rls.integration.test.ts`).
 
+## Política de Privacidade
+
+A política atual (atualizada em 15/10/2026) diz que **personagens e perfil são vistos só pelo
+dono**. Com parties isso deixa de ser verdade, então a política precisa mudar **no mesmo PR** que
+liberar o resumo dos personagens para a party, antes de ir para produção:
+
+- **2. Uso dos Dados:** voltar a ter o item "mostrar seu perfil (nome de usuário e avatar) e o
+  resumo dos seus personagens aos membros das parties em que você está", listando exatamente os
+  campos públicos decididos acima.
+- **1. Dados Coletados:** incluir parties (nome, membros e papéis), convites e notas de sessão
+  (quando existirem).
+- **3. Compartilhamento:** trocar "vistos apenas por você" por "vistos por você e pelos membros das
+  suas parties, só o resumo"; se o Mestre puder ver a ficha completa, dizer isso.
+- **7. Retenção:** o que acontece com notas e com o vínculo dos personagens quando alguém sai da
+  party ou a party é apagada.
+- Atualizar a data da política (pt e en) e avisar os usuários se a mudança for significativa,
+  como os Termos (seção 7) prometem.
+
 ## Perguntas em aberto
 
 - "Background" é o antecedente, a história, ou os dois?
@@ -101,7 +119,8 @@ Sugestão: começar pelo 1 e já desenhar o 2 com o 3 em mente (coluna `visibili
 
 1. Tabelas `parties`, `party_members`, `party_characters` com RLS e testes de integração.
 2. Criar party e entrar por link de convite.
-3. Função de resumo e página da party com os cards só leitura.
+3. Função de resumo e página da party com os cards só leitura, **com a Política de Privacidade
+   atualizada no mesmo PR** (ver acima).
 4. Link de notas externo na party.
 5. Notas por sessão com visibilidade.
 6. Sessões, calendário e Discord (outro plano).
