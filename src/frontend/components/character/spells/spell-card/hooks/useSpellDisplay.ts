@@ -58,10 +58,10 @@ export function useSpellDisplay(spell: Spell) {
     const categoryKey = spell.spellCategory?.toLowerCase();
     const schoolKey = spell.school?.toLowerCase();
 
-    // 1. Resolve Theme Priority: Damage > Category > School > Default
+    // 1. Color: Damage > School > Default. Not the category: two thirds of the spells without
+    // damage are "utility", which made almost every card the same gold.
     const theme =
       (damageKey && DAMAGE_THEMES[damageKey]) ||
-      (categoryKey && CATEGORY_THEMES[categoryKey]) ||
       (schoolKey && SCHOOL_THEMES[schoolKey]) ||
       DEFAULT_THEME;
 
