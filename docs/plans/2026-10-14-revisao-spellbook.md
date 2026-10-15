@@ -5,6 +5,9 @@
 estados: lista, card expandido, troca de página, busca sem resultado. Mais leitura do código de
 `Spellbook`, `SpellSearchDialog` e `spell-card/*`.
 
+**Status (2026-10-15):** blocos 1 a 5 entregues no PR #60; o seed do Alatar também. Ficou para
+depois só o limite de preparadas ("3/7" do S3), que depende de uma regra de preparo por classe.
+
 A pergunta que guiou a revisão: **o que o jogador faz aqui?** Fora da mesa, monta o grimório
 (procura e aprende magias da sua classe). Durante a sessão, consulta rápido o que uma magia faz e
 quais estão preparadas. As duas telas hoje servem bem para _ler uma magia_, e mal para essas

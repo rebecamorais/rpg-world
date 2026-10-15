@@ -3,6 +3,8 @@
 **Data:** 2026-10-14
 **Escopo:** `SpellSearchDialog` e `SpellCard` (o Spellbook também ganha, porque usa o mesmo card).
 **Sintoma:** o modal trava um pouco ao abrir, rolar a lista, passar o mouse e expandir um card.
+**Status (2026-10-15):** concluído. Fases 1–4 no PR #60 (junto da revisão do Spellbook), fase 5 e
+medição final na branch `perf/spells-fase-5`. Ver "Medição depois" abaixo.
 
 ## Medição de base (2026-10-14)
 
@@ -81,7 +83,7 @@ Para repetir com mais detalhe:
    filtro. Ativar "Rendering → Paint flashing / Layer borders" para ver quem repinta.
 3. Guardar os números neste arquivo para comparar no fim.
 
-### Fase 1: tirar os `backdrop-filter` (maior ganho, menor risco)
+### Fase 1: tirar os `backdrop-filter` (maior ganho, menor risco): feita
 
 - **Prioridade:** `DialogContent` do modal com fundo opaco (`bg-background`), sem
   `backdrop-blur-xl`. Sozinha, essa linha resolve a rolagem (29 → 60 fps). Vale procurar o mesmo
@@ -90,27 +92,27 @@ Para repetir com mais detalhe:
   cor sólida equivalente. Hover passa a mudar só borda/fundo.
 - Trocar `transition-all` do `<article>` por `transition-[transform,border-color,background-color,box-shadow]`.
 
-### Fase 2: gradiente em vez de `blur()`
+### Fase 2: gradiente em vez de `blur()`: feita
 
 - Brilho do modal e brilho do card: `radial-gradient(...)` sem `filter`, com a mesma cor e alcance.
 - `spell-vfx.tsx`: substituir as bolhas `blur-[Npx]` por gradientes radiais. Conferir lado a lado
   com os baselines visuais.
 
-### Fase 3: animações sob controle
+### Fase 3: animações sob controle: feita (o fundo temático só aparece no card aberto, e o shockwave ficou estático)
 
 - `force-shockwave`: animar só no hover/foco do card (`group-hover:animate-shockwave`) e sempre
   dentro de `motion-safe:`; parado, mostra um anel estático.
 - Ícone decorativo: `transition-[transform,opacity]` e `will-change` só no hover.
 - Shimmer: já é `motion-safe` e só no hover, manter.
 
-### Fase 4: expandir sem animar layout em cascata
+### Fase 4: expandir sem animar layout em cascata: feita
 
 - Uma transição de altura só (tirar a do `SpellDetails` ou a do `SpellCard`), com
   `transition-[grid-template-rows,opacity]` em vez de `transition-all`.
 - `containIntrinsicSize: 'auto 120px'` (altura média do card recolhido) junto do
   `contentVisibility: 'auto'`.
 
-### Fase 5: dados e re-render
+### Fase 5: dados e re-render: feita (o skeleton também entrou no carregamento do Spellbook)
 
 - `useSpells`: `placeholderData: keepPreviousData` (a lista antiga fica, com opacidade reduzida,
   enquanto a nova carrega) e `staleTime` longo (magias não mudam durante a sessão).
@@ -119,11 +121,26 @@ Para repetir com mais detalhe:
 - `SpellCard` recebe `onToggle(id)` estável em vez de uma closure por card e vira `React.memo`;
   `SpellBackground` recebe o `theme` já calculado em vez de chamar `useSpellDisplay` de novo.
 
-### Fase 6: medir depois
+### Fase 6: medir depois: feita, ver "Medição depois"
 
 - Repetir exatamente o roteiro da Fase 0 e registrar os números aqui.
 - `npm run test:unit`, `npm run test:visual` (atualizar baselines do modal e do Spellbook se a
   aparência mudar de propósito) e um teste manual com `prefers-reduced-motion`.
+
+## Medição depois (2026-10-15)
+
+Mesmo cenário da base: Chromium via Playwright, 1600×1000, `next dev`, Alatar (player de exemplo),
+primeira página do modal sem filtros. Três rodadas por cenário; FPS por `requestAnimationFrame`.
+
+| Cenário                   | Parado | Rolando | Expandir/recolher |
+| ------------------------- | -----: | ------: | ----------------: |
+| Base (2026-10-14)         |  29–58 |   28–35 |                26 |
+| Depois                    |  60–61 |      60 |                60 |
+| Depois, CPU 4x mais lenta |  60–61 |      60 |             51–52 |
+
+A base não tem a medição com CPU 4x; a linha fica como referência para próximas mudanças. Rolar
+deixou de perder frames e expandir chega a 60 sem throttling. Virtualizar a lista segue sem
+necessidade.
 
 ## Fora do escopo
 
