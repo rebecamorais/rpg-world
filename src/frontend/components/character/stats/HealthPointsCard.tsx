@@ -6,9 +6,9 @@ import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
 import { Card } from '@frontend/components/ui/card';
-import { GhostInput } from '@frontend/components/ui/ghost-input';
 import { HealthBar } from '@frontend/components/ui/health-bar';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { NumberInput } from '@frontend/components/ui/number-input';
 import { cn } from '@frontend/lib/utils';
 
 export interface HealthPointsCardProps extends React.ComponentProps<'div'> {
@@ -17,6 +17,9 @@ export interface HealthPointsCardProps extends React.ComponentProps<'div'> {
   tempHp: number;
   onHpChange: (field: 'hpCurrent' | 'hpMax' | 'hpTemp', value: number) => void;
 }
+
+/** hp_* columns are smallint. */
+const SMALLINT_MAX = 32_767;
 
 const HealthHeader = () => {
   const t = useTranslations('combatStats');
@@ -51,13 +54,13 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
           <AppIcon name="Minus" size={16} />
         </Button>
         <div className="flex items-baseline gap-1">
-          <GhostInput
-            type="number"
+          <NumberInput
+            ghost
             aria-label={t('hitPoints')}
             value={currentHp}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onHpChange('hpCurrent', parseInt(e.target.value) || 0)
-            }
+            min={0}
+            max={SMALLINT_MAX}
+            onValueChange={(next) => onHpChange('hpCurrent', next)}
             showIcon={false}
             className="text-foreground h-auto w-24 p-0 text-right font-mono text-5xl font-bold tabular-nums md:text-5xl"
           />
@@ -82,13 +85,13 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
         {tempHp > 0 && (
           <div className="text-warning-flare ml-2 flex items-baseline self-end pb-2 font-bold">
             <span className="text-xs">(+</span>
-            <GhostInput
-              type="number"
+            <NumberInput
+              ghost
               aria-label={t('tempHp')}
               value={tempHp}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onHpChange('hpTemp', parseInt(e.target.value) || 0)
-              }
+              min={0}
+              max={SMALLINT_MAX}
+              onValueChange={(next) => onHpChange('hpTemp', next)}
               showIcon={false}
               className="text-warning-flare h-auto w-8 p-0 text-center font-mono text-xs font-bold md:text-xs"
             />

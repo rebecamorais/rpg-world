@@ -9,6 +9,7 @@ import {
   useCharacterMeta,
   useCharacterState,
 } from '@frontend/context/CharacterContext';
+import { useHasFieldErrors } from '@frontend/context/FieldValidityContext';
 import { useSaveShortcut } from '@frontend/hooks/useUnsavedChanges';
 
 interface SaveControlsProps {
@@ -16,6 +17,8 @@ interface SaveControlsProps {
   isSaving: boolean;
   onSave: () => void;
   onDiscard: () => void;
+  /** A field holds an invalid value: saving waits until it's fixed. */
+  hasErrors?: boolean;
 }
 
 /**
@@ -23,10 +26,18 @@ interface SaveControlsProps {
  * - in the page header, the save state ("Unsaved changes") and the save button;
  * - while there are edits, a bar fixed at the bottom with Discard and Save (the header scrolls away);
  * - Ctrl/Cmd+S saves.
+ * With an invalid field, saving is held and the bar says why.
  */
-export function SaveControls({ isDirty, isSaving, onSave, onDiscard }: SaveControlsProps) {
+export function SaveControls({
+  isDirty,
+  isSaving,
+  onSave,
+  onDiscard,
+  hasErrors = false,
+}: SaveControlsProps) {
   const t = useTranslations('common');
-  useSaveShortcut(isDirty && !isSaving ? onSave : null);
+  const canSave = isDirty && !isSaving && !hasErrors;
+  useSaveShortcut(canSave ? onSave : null);
 
   const discard = () => {
     if (window.confirm(t('discardConfirm'))) onDiscard();
@@ -52,7 +63,7 @@ export function SaveControls({ isDirty, isSaving, onSave, onDiscard }: SaveContr
           variant="character"
           size="sm"
           onClick={onSave}
-          disabled={!isDirty}
+          disabled={!isDirty || hasErrors}
           loading={isSaving}
           className="text-label h-8 px-4"
         >
@@ -64,15 +75,28 @@ export function SaveControls({ isDirty, isSaving, onSave, onDiscard }: SaveContr
         typeof document !== 'undefined' &&
         createPortal(
           <div className="border-border bg-popover/95 fixed inset-x-4 bottom-4 z-40 flex items-center justify-between gap-4 rounded-xl border p-3 shadow-2xl backdrop-blur-md sm:right-6 sm:left-auto sm:pl-4">
-            <span className="text-label text-warning-flare flex items-center gap-1.5">
-              <span className="bg-warning h-2 w-2 rounded-full" aria-hidden="true" />
-              {t('unsavedChanges')}
-            </span>
+            {hasErrors ? (
+              <span role="alert" className="text-label text-danger-flare flex items-center gap-1.5">
+                <span className="bg-danger h-2 w-2 rounded-full" aria-hidden="true" />
+                {t('fixFieldsToSave')}
+              </span>
+            ) : (
+              <span className="text-label text-warning-flare flex items-center gap-1.5">
+                <span className="bg-warning h-2 w-2 rounded-full" aria-hidden="true" />
+                {t('unsavedChanges')}
+              </span>
+            )}
             <div className="flex gap-2">
               <Button variant="ghost" size="sm" onClick={discard} disabled={isSaving}>
                 {t('discard')}
               </Button>
-              <Button variant="character" size="sm" onClick={onSave} loading={isSaving}>
+              <Button
+                variant="character"
+                size="sm"
+                onClick={onSave}
+                loading={isSaving}
+                disabled={hasErrors}
+              >
                 {t('save')}
               </Button>
             </div>
@@ -88,6 +112,15 @@ export function SaveCharacterButton() {
   const { isDirty } = useCharacterState();
   const { isSaving } = useCharacterMeta();
   const { save, discard } = useCharacterActions();
+  const hasErrors = useHasFieldErrors();
 
-  return <SaveControls isDirty={isDirty} isSaving={isSaving} onSave={save} onDiscard={discard} />;
+  return (
+    <SaveControls
+      isDirty={isDirty}
+      isSaving={isSaving}
+      onSave={save}
+      onDiscard={discard}
+      hasErrors={hasErrors}
+    />
+  );
 }

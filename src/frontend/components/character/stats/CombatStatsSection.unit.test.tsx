@@ -24,10 +24,10 @@ describe('CombatStatsSection', () => {
   it('mostra CA, iniciativa, deslocamento e PV atuais', () => {
     renderCombat();
 
-    expect(screen.getByLabelText('AC')).toHaveValue(14);
-    expect(screen.getByLabelText('Initiative')).toHaveValue(2);
-    expect(screen.getByLabelText('Speed')).toHaveValue(30);
-    expect(screen.getByLabelText('Hit Points')).toHaveValue(9);
+    expect(screen.getByLabelText('AC')).toHaveValue('14');
+    expect(screen.getByLabelText('Initiative')).toHaveValue('2');
+    expect(screen.getByLabelText('Speed')).toHaveValue('30');
+    expect(screen.getByLabelText('Hit Points')).toHaveValue('9');
   });
 
   it.each([
@@ -44,6 +44,24 @@ describe('CombatStatsSection', () => {
     expect(isDirty()).toBe(true);
   });
 
+  it('apagar o deslocamento deixa o campo vazio, com o erro só ao sair', async () => {
+    const user = userEvent.setup();
+    const { draft } = renderCombat({ speed: 9 });
+    const speed = screen.getByLabelText('Speed');
+
+    await user.clear(speed);
+    expect(speed).toHaveValue('');
+    expect(screen.queryByText('Enter a number')).not.toBeInTheDocument();
+
+    await user.tab();
+    expect(screen.getByText('Enter a number')).toBeInTheDocument();
+    expect(draft().speed).toBe(9);
+
+    await user.type(speed, '7,5');
+    expect(draft().speed).toBe(7.5);
+    expect(screen.queryByText('Enter a number')).not.toBeInTheDocument();
+  });
+
   it('troca o dado de vida', async () => {
     const { draft } = renderCombat();
 
@@ -57,11 +75,11 @@ describe('CombatStatsSection', () => {
     const { draft } = renderCombat();
 
     const points = screen.getByLabelText('Spell Points');
-    expect(points).toHaveValue(3);
+    expect(points).toHaveValue('3');
     fireEvent.change(points, { target: { value: '5' } });
 
     expect(draft().spellPoints).toEqual({ current: 5, max: 6 });
-    expect(points).toHaveValue(5);
+    expect(points).toHaveValue('5');
   });
 
   it('troca o sistema de magia para espaços', async () => {

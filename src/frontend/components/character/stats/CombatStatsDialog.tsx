@@ -15,8 +15,8 @@ import {
   DialogTitle,
 } from '@frontend/components/ui/dialog';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
+import { NumberInput } from '@frontend/components/ui/number-input';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
@@ -58,11 +58,12 @@ export const CombatStatsDialog = () => {
               <Label htmlFor="hpMax" className="text-muted-foreground text-sm font-bold uppercase">
                 {t('hitPoints')} Max
               </Label>
-              <Input
+              <NumberInput
                 id="hpMax"
-                type="number"
                 value={character.hpMax}
-                onChange={(e) => update({ hpMax: parseInt(e.target.value) || 0 })}
+                min={1}
+                max={32_767}
+                onValueChange={(hpMax) => update({ hpMax })}
                 className="border-border bg-muted focus:border-border h-9 transition-colors"
               />
             </div>
@@ -134,10 +135,12 @@ export const CombatStatsDialog = () => {
                 <Label className="text-muted-foreground text-sm font-bold uppercase">
                   {tm('pointsCapacity')}
                 </Label>
-                <Input
-                  type="number"
-                  value={character.spellPoints?.max || 0}
-                  onChange={(e) => update(setSpellPoints('max', parseInt(e.target.value) || 0))}
+                <NumberInput
+                  aria-label={tm('pointsCapacity')}
+                  value={character.spellPoints?.max ?? 0}
+                  min={0}
+                  max={10_000}
+                  onValueChange={(max) => update(setSpellPoints('max', max))}
                   className="border-border bg-muted focus:border-border h-9 transition-colors"
                 />
               </div>
