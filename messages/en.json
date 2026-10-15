@@ -310,7 +310,8 @@
       "learned": "Spell learned!",
       "forgotten": "Spell forgotten.",
       "prepared": "Spell prepared.",
-      "unprepared": "Spell unprepared."
+      "unprepared": "Spell unprepared.",
+      "undo": "Undo"
     },
     "searchLabel": "Search spells",
     "clearActiveFilters": "Clear filters ({count})",

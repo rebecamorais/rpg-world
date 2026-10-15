@@ -310,7 +310,8 @@
       "learned": "Magia aprendida!",
       "forgotten": "Magia esquecida.",
       "prepared": "Magia preparada.",
-      "unprepared": "Magia não preparada."
+      "unprepared": "Magia não preparada.",
+      "undo": "Desfazer"
     },
     "searchLabel": "Buscar magias",
     "clearActiveFilters": "Limpar filtros ({count})",
