@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { GhostInput } from '@frontend/components/ui/ghost-input';
 import { Input } from '@frontend/components/ui/input';
+import { useReportFieldValidity } from '@frontend/context/FieldValidityContext';
 import { cn } from '@frontend/lib/utils';
 
 type NumberError = 'notANumber' | 'integer' | 'range' | 'min' | 'max';
@@ -83,6 +84,8 @@ function NumberInput({
   const text = editing ? edit.text : String(value);
   const result = parse(text, { min, max, decimal });
   const error = editing && showError ? result.error : undefined;
+  // The form's save waits while the text isn't valid, even before the error shows
+  useReportFieldValidity(editing && result.error !== undefined);
 
   const Field = ghost ? GhostInput : Input;
   const ghostProps = ghost ? { showIcon } : {};
@@ -111,7 +114,12 @@ function NumberInput({
           }
           onBlur?.(e);
         }}
-        className={cn(error && 'text-danger-flare', className)}
+        className={cn(
+          className,
+          // After `className`, so it wins over the field's own border (GhostInput has none)
+          error && 'text-danger-flare border-danger rounded-md border border-solid',
+          error && ghost && 'px-1',
+        )}
         {...ghostProps}
         {...props}
       />

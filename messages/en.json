@@ -91,7 +91,8 @@
       "range": "Between {min} and {max}",
       "min": "At least {min}",
       "max": "At most {max}"
-    }
+    },
+    "fixFieldsToSave": "Fix the fields in red to save"
   },
   "login": {
     "title": "Sign in to RPG World",
