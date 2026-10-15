@@ -24,6 +24,8 @@ const STRUCTURED_DATA = {
   '@type': 'WebApplication',
   name: 'RPG World',
   url: 'https://rpgworldapp.com',
+  logo: 'https://rpgworldapp.com/logo/rpg-world.png',
+  image: 'https://rpgworldapp.com/og-image.jpg',
   applicationCategory: 'GameApplication',
   operatingSystem: 'Web',
   description:

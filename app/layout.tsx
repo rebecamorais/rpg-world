@@ -45,9 +45,14 @@ export async function generateMetadata(): Promise<Metadata> {
       description: t('description'),
       url: '/',
       locale: locale === 'pt' ? 'pt_BR' : 'en_US',
-      images: ['/logo/dice-fire.png'],
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: t('ogImageAlt') }],
     },
-    twitter: { card: 'summary', title: t('title'), description: t('description') },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('title'),
+      description: t('description'),
+      images: ['/og-image.jpg'],
+    },
   };
 }
 

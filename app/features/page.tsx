@@ -21,7 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t('metaTitle'),
     description: t('metaDescription'),
     alternates: { canonical: '/features' },
-    openGraph: { title: t('metaTitle'), description: t('metaDescription'), url: '/features' },
+    // openGraph replaces the layout's whole object, so the image has to be repeated here
+    openGraph: {
+      title: t('metaTitle'),
+      description: t('metaDescription'),
+      url: '/features',
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
+    },
   };
 }
 
