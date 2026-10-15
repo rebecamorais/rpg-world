@@ -1,0 +1,81 @@
+name: Preview Comment
+
+# A Vercel avisa o GitHub quando um deploy termina (repository_dispatch).
+# Este workflow sempre roda a versão da main e nunca faz checkout do código do PR.
+# Ver https://vercel.com/docs/git/vercel-for-github#repository-dispatch-events
+on:
+  repository_dispatch:
+    types:
+      - 'vercel.deployment.success'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  comment:
+    if: github.event.client_payload.environment == 'preview'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Comment Preview Link on the PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.event.client_payload.git.sha }}
+          SHORT_SHA: ${{ github.event.client_payload.git.shortSha }}
+          BRANCH: ${{ github.event.client_payload.git.ref }}
+          DEPLOY_URL: ${{ github.event.client_payload.url }}
+          ALIASES: ${{ toJSON(github.event.client_payload.alias) }}
+        run: |
+          set -euo pipefail
+
+          PR=$(gh api "repos/$REPO/commits/$SHA/pulls" --jq '[.[] | select(.state == "open")][0].number // empty')
+          if [ -z "$PR" ]; then
+            PR=$(gh pr list --repo "$REPO" --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          fi
+          if [ -z "$PR" ]; then
+            echo "Nenhum PR aberto para $BRANCH ($SHA). Nada a comentar."
+            exit 0
+          fi
+
+          # O alias da branch (…-git-<branch>-…) continua o mesmo a cada push; o do commit muda
+          BRANCH_URL=$(echo "$ALIASES" | jq -r '[.[]? | select(contains("-git-"))][0] // empty')
+          with_https() { echo "https://${1#https://}"; }
+          LINK=$(with_https "${BRANCH_URL:-$DEPLOY_URL}")
+          COMMIT_LINK=$(with_https "$DEPLOY_URL")
+
+          MARKER='<!-- preview-comment -->'
+          cat > body.md <<EOF
+          $MARKER
+          ## 🔎 Preview pronto
+
+          **Link:** $LINK
+          <sub>Último commit: \`$SHORT_SHA\` · [deploy deste commit]($COMMIT_LINK)</sub>
+
+          O preview usa o banco de **staging**: pode criar conta, personagem e magia à vontade, nada disso vai para produção.
+          Ele é apagado automaticamente quando o PR for fechado ou mergeado.
+
+          ### Antes de pedir review, teste no preview
+          - [ ] **Caminho feliz**: o fluxo principal do PR funciona do começo ao fim
+          - [ ] **Erros**: campo vazio, valor inválido, ação sem permissão, internet caindo no meio. A mensagem aparece e é clara?
+          - [ ] **Casos de borda**: lista vazia, texto muito longo, muitos itens, clique duplo no botão
+          - [ ] **Celular**: abre no celular (ou no modo responsivo do navegador) e continua usável
+          - [ ] **Idioma**: troca de idioma e confere se nenhum texto ficou sem tradução
+          - [ ] **Console**: sem erros vermelhos no console do navegador (F12)
+
+          ### 🎥 Grave a tela, se der
+          Um vídeo curto do caminho feliz e de um erro ajuda muito no review. É só arrastar o arquivo (\`.mp4\`, \`.mov\` ou \`.gif\`) para um comentário do PR.
+          Sugestões: o gravador do Windows (\`Win + Alt + R\` ou a Ferramenta de Captura), \`Cmd + Shift + 5\` no Mac, ou o gravador de tela do celular.
+          EOF
+
+          COMMENT_ID=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+            --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$MARKER\"))) | .id" | head -n1)
+
+          if [ -n "$COMMENT_ID" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$COMMENT_ID" -F body=@body.md > /dev/null
+            echo "Comentário $COMMENT_ID atualizado no PR #$PR"
+          else
+            gh api -X POST "repos/$REPO/issues/$PR/comments" -F body=@body.md > /dev/null
+            echo "Comentário criado no PR #$PR"
+          fi
