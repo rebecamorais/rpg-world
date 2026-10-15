@@ -78,7 +78,8 @@ O mesmo formato de referência para oficial e homebrew, em qualquer lugar da fic
 ## 4. Compartilhar e o caminho de volta
 
 - `party`: a mesa inteira usa o mesmo homebrew (ex.: o item mágico que o mestre criou).
-- `public`: aparece numa busca da comunidade, com autor, e pode ser copiado para a própria conta.
+- `public`: aparece numa busca da comunidade, com autor, e qualquer pessoa pode usar na própria
+  ficha (sempre apontando para o original, ver "Uma versão só").
 - **Homebrew público bom pode virar conteúdo da comunidade:** exportar para o formato de arquivo e
   abrir PR, no mesmo fluxo das traduções.
 - Publicar como `public` pede aceitar uma licença para o conteúdo (proposta: CC-BY-4.0, com
@@ -99,12 +100,21 @@ conteúdo. Começar com sistemas definidos em arquivos (como o plano de Feiticei
 Sistemas criados por usuários no banco só quando houver um formato de definição de sistema
 estável.
 
+## Uma versão só (decidido)
+
+Para simplificar, **todo homebrew tem uma única versão, a do autor**:
+
+- Quem usa um homebrew aponta sempre para o original. **Não existe cópia independente** nem
+  "versão que eu adotei".
+- Quando o autor edita, a mudança aparece para todo mundo que usa, na hora.
+- Quando o autor arquiva, quem já usa continua vendo a última versão; só some da busca.
+- Consequências aceitas: uma edição do autor pode mudar a ficha de outras pessoas. Para não pegar
+  ninguém de surpresa, a interface mostra "atualizado em …" no conteúdo homebrew.
+- Se um dia fizer falta, versões ou cópias podem entrar depois sem mudar o formato da referência
+  (`homebrew:<uuid>`).
+
 ## Perguntas em aberto
 
-- Quando o autor edita um homebrew que outros usam, todos veem a mudança, ou cada um fica com a
-  versão que adotou (cópia ou versões)?
-- Quem copia um homebrew público fica ligado ao original (recebe atualizações) ou com uma cópia
-  independente?
 - Licença padrão do conteúdo público: CC-BY-4.0?
 
 ## Ordem sugerida
