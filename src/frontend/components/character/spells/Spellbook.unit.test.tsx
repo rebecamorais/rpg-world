@@ -52,32 +52,37 @@ describe('Spellbook', () => {
     expect(onAddSpell).toHaveBeenCalled();
   });
 
-  it('agrupa por nível, em ordem, com a contagem de cada um', () => {
+  it('mostra todos os níveis numa lista só, em ordem, com atalhos no índice', () => {
     renderWithProviders(<Spellbook characterSpells={SPELLS} />);
 
-    const tabs = screen.getAllByRole('tab');
-    expect(tabs.map((tab) => tab.textContent)).toEqual(['Cantrips2', 'Level 33']);
-    expect(screen.getByRole('heading', { name: t.cantrips })).toBeInTheDocument();
-    expect(renderedSpellNames()).toEqual(['Light', 'Mage Hand']);
+    const index = screen.getByRole('navigation', { name: t.spellbookIndex });
+    const links = within(index).getAllByRole('link');
+    expect(links.map((link) => link.textContent)).toEqual(['Cantrips2', 'Level 33']);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '#spell-level-0',
+      '#spell-level-3',
+    ]);
+    expect(links[0]).toHaveAttribute('aria-current', 'location');
+
+    expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
+      t.cantrips,
+      'Level 3 Spells',
+    ]);
   });
 
-  it('conta as magias do nível no singular e no plural', async () => {
-    const user = userEvent.setup();
+  it('em cada nível, as preparadas primeiro e o resto em ordem alfabética', () => {
+    renderWithProviders(<Spellbook characterSpells={SPELLS} />);
+
+    expect(renderedSpellNames()).toEqual(['Light', 'Mage Hand', 'Fly', 'Counterspell', 'Fireball']);
+  });
+
+  it('conta as magias do nível no singular e no plural', () => {
     renderWithProviders(<Spellbook characterSpells={[...SPELLS, spell('wish', 'Wish', 9)]} />);
 
-    expect(screen.getByText('2 spells')).toBeInTheDocument();
-    await user.click(screen.getByRole('tab', { name: /Level 9/ }));
-    expect(screen.getByText('1 spell')).toBeInTheDocument();
-  });
-
-  it('mostra as preparadas primeiro e o resto em ordem alfabética', async () => {
-    const user = userEvent.setup();
-    renderWithProviders(<Spellbook characterSpells={SPELLS} />);
-
-    await user.click(screen.getByRole('tab', { name: /Level 3/ }));
-
-    expect(screen.getByRole('heading', { name: 'Level 3 Spells' })).toBeInTheDocument();
-    expect(renderedSpellNames()).toEqual(['Fly', 'Counterspell', 'Fireball']);
+    const level9 = screen.getByRole('region', { name: 'Level 9 Spells' });
+    expect(within(level9).getByText('1 spell')).toBeInTheDocument();
+    const level3 = screen.getByRole('region', { name: 'Level 3 Spells' });
+    expect(within(level3).getByText('3 spells')).toBeInTheDocument();
   });
 
   it('prepara e desprepara no card recolhido; esquece só com ele aberto', async () => {
@@ -91,8 +96,6 @@ describe('Spellbook', () => {
         onForgetSpell={onForgetSpell}
       />,
     );
-    await user.click(screen.getByRole('tab', { name: /Level 3/ }));
-
     await user.click(within(card('Fireball')).getByRole('button', { name: t.prepareSpell }));
     await user.click(within(card('Fly')).getByRole('button', { name: t.unprepareSpell }));
     // jsdom ignores `inert` in role queries, so check the attribute on the hidden content.
