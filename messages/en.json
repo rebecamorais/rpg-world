@@ -302,7 +302,7 @@
     "gainHp": "Heal 1 HP"
   },
   "spellsDrawer": {
-    "searchPlaceholder": "Spell name (e.g.: fireball)",
+    "searchPlaceholder": "Search spells",
     "learn": "Learn",
     "title": "Spell list",
     "description": "Manage your character's known spells.",

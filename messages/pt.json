@@ -302,7 +302,7 @@
     "gainHp": "Recuperar 1 PV"
   },
   "spellsDrawer": {
-    "searchPlaceholder": "Nome da magia (ex: fireball)",
+    "searchPlaceholder": "Buscar magia",
     "learn": "Aprender",
     "title": "Lista de Magias",
     "description": "Gerencie as magias conhecidas pelo seu personagem.",
