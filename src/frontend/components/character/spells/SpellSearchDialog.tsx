@@ -315,7 +315,7 @@ export default function SpellSearchDialog({
                   key={spell.id}
                   spell={spell}
                   isExpanded={expandedId === spell.id}
-                  onClick={() => toggleExpand(spell.id)}
+                  onToggle={toggleExpand}
                   onLearnSpell={onLearnSpell}
                   onForgetSpell={onForgetSpell}
                   isLearned={learnedSet.has(spell.id)}

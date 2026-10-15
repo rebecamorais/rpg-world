@@ -17,7 +17,8 @@ import { LearnSpellAction, PrepareSpellAction } from './parts/SpellQuickAction';
 interface SpellCardProps {
   spell: Spell;
   isExpanded?: boolean;
-  onClick?: () => void;
+  /** Called with the spell's id; a stable function lets the card skip re-rendering. */
+  onToggle?: (id: string) => void;
   onForgetSpell?: (id: string) => void;
   onTogglePrepared?: (id: string, isPrepared: boolean) => void;
   onLearnSpell?: (id: string) => void;
@@ -25,10 +26,10 @@ interface SpellCardProps {
   showLevel?: boolean;
 }
 
-export function SpellCard({
+export const SpellCard = React.memo(function SpellCard({
   spell,
   isExpanded = false,
-  onClick,
+  onToggle,
   onForgetSpell,
   onTogglePrepared,
   onLearnSpell,
@@ -83,7 +84,7 @@ export function SpellCard({
         type="button"
         aria-expanded={isExpanded}
         aria-controls={`spell-details-${spell.id}`}
-        onClick={onClick}
+        onClick={() => onToggle?.(spell.id)}
         className="focus-visible:outline-spell-flare absolute inset-0 z-0 h-full w-full rounded-xl bg-transparent outline-none focus-visible:outline-2 focus-visible:-outline-offset-2"
       >
         <span className="sr-only">
@@ -133,7 +134,7 @@ export function SpellCard({
       </div>
     </article>
   );
-}
+});
 
 /**
  * Thematic background, only on the open card and faded out before the description, so the

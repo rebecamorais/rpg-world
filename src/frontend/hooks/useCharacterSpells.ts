@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -51,30 +53,46 @@ export function useCharacterSpells(
     },
   });
 
-  /** Forgetting is one click away, so it can be undone from the toast (prepared state included). */
-  const forgetSpell = async (id: string) => {
-    const wasPrepared = spells.find((s) => s.id === id)?.isPrepared ?? false;
-    await mutation.mutateAsync({ id, action: 'forget' });
+  // Stable callbacks: the spell cards are memoized and receive them as props
+  const { mutateAsync } = mutation;
 
-    toast.success(t('forgotten'), {
-      action: {
-        label: t('undo'),
-        onClick: async () => {
-          await mutation.mutateAsync({ id, action: 'learn', silent: true });
-          if (wasPrepared) await mutation.mutateAsync({ id, action: 'prepare', silent: true });
+  const learnSpell = useCallback(
+    (id: string) => mutateAsync({ id, action: 'learn' }),
+    [mutateAsync],
+  );
+
+  const togglePrepared = useCallback(
+    (id: string, isPrepared: boolean) =>
+      mutateAsync({ id, action: isPrepared ? 'prepare' : 'unprepare' }),
+    [mutateAsync],
+  );
+
+  /** Forgetting is one click away, so it can be undone from the toast (prepared state included). */
+  const forgetSpell = useCallback(
+    async (id: string) => {
+      const wasPrepared = spells.find((s) => s.id === id)?.isPrepared ?? false;
+      await mutateAsync({ id, action: 'forget' });
+
+      toast.success(t('forgotten'), {
+        action: {
+          label: t('undo'),
+          onClick: async () => {
+            await mutateAsync({ id, action: 'learn', silent: true });
+            if (wasPrepared) await mutateAsync({ id, action: 'prepare', silent: true });
+          },
         },
-      },
-    });
-  };
+      });
+    },
+    [spells, mutateAsync, t],
+  );
 
   return {
     spells,
     isLoading,
     error,
-    learnSpell: (id: string) => mutation.mutateAsync({ id, action: 'learn' }),
+    learnSpell,
     forgetSpell,
-    togglePrepared: (id: string, isPrepared: boolean) =>
-      mutation.mutateAsync({ id, action: isPrepared ? 'prepare' : 'unprepare' }),
+    togglePrepared,
     isUpdating: mutation.isPending,
   };
 }
