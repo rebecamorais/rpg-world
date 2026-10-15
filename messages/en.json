@@ -522,29 +522,30 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: March 12, 2026",
+    "lastUpdated": "Last updated: October 15, 2026",
     "sections": {
       "data": {
         "title": "1. Data Collected",
         "content": "We collect only what is essential for your experience:",
         "items": [
-          "Authentication: Email and name provided via <supabase>Supabase</supabase>/<google>Google</google> Auth.",
-          "Profile: Username, avatar, and interface preferences.",
-          "Game: Character data, roll history, and session notes."
+          "Account: email and password (stored encrypted by <supabase>Supabase</supabase>) or, if you sign in with <google>Google</google>, the email and name of your Google account.",
+          "Profile: username, avatar and preferred color.",
+          "Characters: sheets, backstory, learned spells and the images you upload.",
+          "Support: email, type and message, when you use the contact form."
         ]
       },
       "usage": {
         "title": "2. Data Usage",
         "content": "Your data is used exclusively to:",
         "items": [
-          "Keep your session active.",
-          "Sync your characters across devices.",
-          "Display your profile to other players at your table (when authorized)."
+          "Keeping you signed in and protecting your account.",
+          "Saving your characters and syncing them across devices.",
+          "Sending account emails (sign-up confirmation and password reset) and replying to your support messages."
         ]
       },
       "sharing": {
         "title": "3. Sharing",
-        "content": "We do not sell your data to third parties. Data processing is done securely through <supabase>Supabase</supabase> and Rebs Tech Studio infrastructure services."
+        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, password reset and the contact form) and <google>Google</google> (only if you sign in with Google). Today your characters and your profile are visible only to you; avatar images are stored at a public address that is not listed anywhere."
       },
       "rights": {
         "title": "4. Your Rights",
@@ -552,11 +553,11 @@
       },
       "cookies": {
         "title": "5. Cookies",
-        "content": "We use strictly necessary cookies to maintain your authentication and theme preferences (dark/light)."
+        "content": "We only use necessary cookies: the ones for your sign-in session, the language you chose and your time zone. We do not use advertising or tracking cookies."
       },
       "transfer": {
         "title": "6. International Data Transfer",
-        "content": "To operate the system, we use third-party infrastructure (such as <supabase>Supabase</supabase>). As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. By using RPG World, you consent to this international transfer, conducted under strict security and encryption standards."
+        "content": "To operate the system, we use third-party infrastructure (such as <supabase>Supabase</supabase>, Vercel and Resend). As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. By using RPG World, you consent to this international transfer, conducted under strict security and encryption standards."
       },
       "retention": {
         "title": "7. Data Retention and Deletion",

@@ -11,6 +11,9 @@ const PRIVACY_LINKS = richLinks({
   lgpd: 'https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm',
   supabase: 'https://supabase.com/privacy',
   google: 'https://policies.google.com/privacy',
+  vercel: 'https://vercel.com/legal/privacy-policy',
+  resend: 'https://resend.com/legal/privacy-policy',
+  cloudflare: 'https://www.cloudflare.com/privacypolicy/',
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -41,7 +44,7 @@ export default async function PrivacyPage() {
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.data.title')}</h2>
           <p className="text-muted-foreground mb-4 leading-relaxed">{t('sections.data.content')}</p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed">
-            {['0', '1', '2'].map((key) => (
+            {['0', '1', '2', '3'].map((key) => (
               <li key={key}>{t.rich(`sections.data.items.${key}`, PRIVACY_LINKS)}</li>
             ))}
           </ul>
@@ -75,7 +78,9 @@ export default async function PrivacyPage() {
 
         <section>
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.cookies.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.cookies.content')}</p>
+          <p className="text-muted-foreground leading-relaxed">
+            {t.rich('sections.cookies.content', PRIVACY_LINKS)}
+          </p>
         </section>
 
         <section>
