@@ -57,6 +57,15 @@ describe('Spellbook', () => {
     expect(renderedSpellNames()).toEqual(['Light', 'Mage Hand']);
   });
 
+  it('conta as magias do nível no singular e no plural', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Spellbook characterSpells={[...SPELLS, spell('wish', 'Wish', 9)]} />);
+
+    expect(screen.getByText('2 spells')).toBeInTheDocument();
+    await user.click(screen.getByRole('tab', { name: /Level 9/ }));
+    expect(screen.getByText('1 spell')).toBeInTheDocument();
+  });
+
   it('mostra as preparadas primeiro e o resto em ordem alfabética', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Spellbook characterSpells={SPELLS} />);

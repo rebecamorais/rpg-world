@@ -191,7 +191,6 @@
     "cantrips": "Truques",
     "levelName": "{level}º Nível",
     "levelSpells": "Magias de {level}º Nível",
-    "spellsFound": "magias encontradas",
     "concentration": "Concentração",
     "ritual": "Ritual",
     "atHigherLevels": "Em Níveis Superiores",
@@ -247,7 +246,8 @@
     "loadingList": "Carregando personagens",
     "subtitle": "Suas fichas, prontas para a próxima sessão.",
     "learnSpell": "Aprender magia",
-    "learnedBadge": "Aprendida"
+    "learnedBadge": "Aprendida",
+    "spellCount": "{count, plural, one {# magia} other {# magias}}"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",

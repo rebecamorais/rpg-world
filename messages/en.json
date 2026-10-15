@@ -191,7 +191,6 @@
     "cantrips": "Cantrips",
     "levelName": "Level {level}",
     "levelSpells": "Level {level} Spells",
-    "spellsFound": "spells found",
     "concentration": "Concentration",
     "ritual": "Ritual",
     "atHigherLevels": "At Higher Levels",
@@ -247,7 +246,8 @@
     "loadingList": "Loading characters",
     "subtitle": "Your sheets, ready for the next session.",
     "learnSpell": "Learn spell",
-    "learnedBadge": "Learned"
+    "learnedBadge": "Learned",
+    "spellCount": "{count, plural, one {# spell} other {# spells}}"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",

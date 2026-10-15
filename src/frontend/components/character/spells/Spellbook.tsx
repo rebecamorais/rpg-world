@@ -150,18 +150,18 @@ export function Spellbook({ characterSpells, onForgetSpell, onTogglePrepared }: 
                 value={level.toString()}
                 className="m-0 border-none p-0 focus-visible:ring-0"
               >
-                <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex flex-col gap-1">
-                    <h2 className="text-display text-foreground">
+                    <h2 className="text-title text-foreground">
                       {level === 0 ? t('cantrips') : t('levelSpells', { level })}
                     </h2>
                     <div className="bg-character-flare h-1 w-12 rounded-full opacity-60" />
                   </div>
                   <Badge
                     variant="outline"
-                    className="border-character-muted bg-character-surface text-character-flare w-fit px-3 py-1 font-mono text-xs tracking-widest uppercase"
+                    className="border-character-muted bg-character-surface text-character-flare w-fit px-3 py-1 text-xs"
                   >
-                    {spellsByLevel[level].length} {t('spellsFound')}
+                    {t('spellCount', { count: spellsByLevel[level].length })}
                   </Badge>
                 </div>
 
