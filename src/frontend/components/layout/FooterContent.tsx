@@ -135,7 +135,7 @@ export default function FooterContent({ isAuthenticated }: { isAuthenticated: bo
               rel="noopener noreferrer"
               className={`${linkClass} inline-flex items-center gap-2`}
             >
-              <DiscordIcon className="h-4 w-4" />
+              <DiscordIcon className="text-discord h-4 w-4" />
               {t('socials.discord')}
             </a>
           </li>
