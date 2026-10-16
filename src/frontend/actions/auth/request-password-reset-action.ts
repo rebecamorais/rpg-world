@@ -3,6 +3,7 @@
 import { getApi } from '@api';
 
 import { passwordResetRequestSchema } from '@backend/contexts/users/interfaces/users.schemas';
+import { siteUrl } from '@backend/shared/infrastructure/helpers/site-url';
 import { verifyHuman } from '@backend/shared/infrastructure/services/verify-human';
 
 import { errorCode } from '@shared/http/error-response';
@@ -28,7 +29,7 @@ export async function requestPasswordResetAction(
 
   try {
     const api = await getApi();
-    const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`;
+    const redirectTo = `${siteUrl()}/reset-password`;
     await api.authApi.requestPasswordReset(input.data.email, redirectTo);
     return { success: true };
   } catch (error: unknown) {

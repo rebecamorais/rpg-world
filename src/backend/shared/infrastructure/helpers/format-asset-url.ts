@@ -6,6 +6,7 @@
  * routing through images.rpgworldapp.com in production and falling back
  * to localhost in development.
  */
+import { siteUrl } from './site-url';
 
 function assetBaseUrl(): string {
   // Explicit override, e.g. a production build served locally (the e2e suite)
@@ -15,6 +16,9 @@ function assetBaseUrl(): string {
     const devHost = process.env.NEXT_PUBLIC_DEV_IMAGES_HOST || 'localhost:3000';
     return `http://${devHost}/api/images`;
   }
+
+  // images.rpgworldapp.com serves production storage; a preview proxies the staging bucket itself
+  if (process.env.VERCEL_ENV === 'preview') return `${siteUrl()}/api/images`;
 
   return 'https://images.rpgworldapp.com';
 }
