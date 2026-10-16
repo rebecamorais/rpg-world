@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { requestPasswordResetAction } from '@frontend/actions/auth/request-password-reset-action';
+import { PreviewLinkNotice } from '@frontend/components/auth/PreviewLinkNotice';
 import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
 import { Button } from '@frontend/components/ui/button';
 import {
@@ -36,6 +37,7 @@ export default function ForgotPasswordForm() {
   const t = useTranslations('forgotPassword');
   const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [previewLink, setPreviewLink] = useState<string | null>(null);
   const {
     token: turnstileToken,
     setToken: setTurnstileToken,
@@ -63,6 +65,7 @@ export default function ForgotPasswordForm() {
     try {
       const result = await requestPasswordResetAction(data.email, turnstileToken);
       if (result.success) {
+        setPreviewLink(result.previewLink ?? null);
         setIsSuccess(true);
       } else {
         setServerError(form.setError, ['email'], result.error, getMessage(result.error));
@@ -83,7 +86,8 @@ export default function ForgotPasswordForm() {
             {t('successDescription')}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-4">
+          {previewLink && <PreviewLinkNotice link={previewLink} />}
           <Button asChild className="w-full">
             <Link href="/login">{t('backToLogin')}</Link>
           </Button>

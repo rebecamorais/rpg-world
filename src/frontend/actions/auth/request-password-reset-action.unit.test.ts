@@ -21,7 +21,7 @@ const verify = vi.mocked(TurnstileService.verify);
 describe('requestPasswordResetAction', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    requestPasswordReset.mockResolvedValue(undefined);
+    requestPasswordReset.mockResolvedValue({ success: true });
   });
 
   it('rejects the request and sends no e-mail when the Turnstile token is invalid', async () => {

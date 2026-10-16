@@ -63,6 +63,25 @@ describe('SignUpForm', () => {
     });
   });
 
+  it('mostra o link do e-mail na tela quando o preview não envia e-mails', async () => {
+    signUp.mockResolvedValue({ success: true, previewLink: 'https://staging.test/verify' });
+    renderWithProviders(<SignUpForm />);
+
+    await fillAndSubmit();
+
+    const link = await screen.findByRole('link', { name: messages.auth.previewLink.open });
+    expect(link).toHaveAttribute('href', 'https://staging.test/verify');
+  });
+
+  it('não mostra o aviso de preview quando o e-mail foi enviado', async () => {
+    renderWithProviders(<SignUpForm />);
+
+    await fillAndSubmit();
+
+    expect(await screen.findByText(t.successDescription)).toBeInTheDocument();
+    expect(screen.queryByRole('note')).not.toBeInTheDocument();
+  });
+
   it('mantém o envio bloqueado enquanto o Turnstile não é resolvido', () => {
     delete window.turnstile;
     renderWithProviders(<SignUpForm />);

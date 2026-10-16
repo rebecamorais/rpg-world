@@ -4,7 +4,7 @@ import nodemailer, { type Transporter } from 'nodemailer';
 import { render } from 'react-email';
 import 'server-only';
 
-import { EmailService } from '../../domain/EmailService';
+import { EmailDelivery, EmailService } from '../../domain/EmailService';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';
 import { PasswordResetTemplate } from '../email/templates/PasswordReset';
 
@@ -26,7 +26,7 @@ export class SupabaseEmailService implements EmailService {
     });
   }
 
-  async sendConfirmationEmail(email: string, confirmationLink: string): Promise<void> {
+  async sendConfirmationEmail(email: string, confirmationLink: string): Promise<EmailDelivery> {
     const html = await render(React.createElement(EmailConfirmationTemplate, { confirmationLink }));
 
     console.log('\n--- DEVELOPMENT EMAIL (CONSOLE) ---');
@@ -47,9 +47,10 @@ export class SupabaseEmailService implements EmailService {
       console.warn(`Error: ${(error as Error).message}`);
     }
     console.log('-------------------------------------\n');
+    return {};
   }
 
-  async sendPasswordResetEmail(email: string, resetLink: string): Promise<void> {
+  async sendPasswordResetEmail(email: string, resetLink: string): Promise<EmailDelivery> {
     const html = await render(React.createElement(PasswordResetTemplate, { resetLink }));
 
     console.log('\n--- DEVELOPMENT EMAIL (CONSOLE) ---');
@@ -70,5 +71,6 @@ export class SupabaseEmailService implements EmailService {
       console.warn(`Error: ${(error as Error).message}`);
     }
     console.log('-------------------------------------\n');
+    return {};
   }
 }

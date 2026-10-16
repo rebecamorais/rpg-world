@@ -144,6 +144,11 @@
       "errorTitle": "Erro na Autenticação",
       "waiting": "Aguarde um momento enquanto validamos seu acesso.",
       "redirecting": "Redirecionando para login..."
+    },
+    "previewLink": {
+      "title": "Ambiente de teste",
+      "description": "Este preview não envia e-mails. Use o link abaixo no lugar do que chegaria na sua caixa de entrada.",
+      "open": "Abrir link do e-mail"
     }
   },
   "landing": {

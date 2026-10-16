@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { signUpAction } from '@frontend/actions/auth/sign-up-action';
+import { PreviewLinkNotice } from '@frontend/components/auth/PreviewLinkNotice';
 import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
 import { Button } from '@frontend/components/ui/button';
 import {
@@ -39,6 +40,7 @@ export default function SignUpForm() {
   const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [previewLink, setPreviewLink] = useState<string | null>(null);
   const {
     token: turnstileToken,
     setToken: setTurnstileToken,
@@ -76,6 +78,7 @@ export default function SignUpForm() {
         const result = await signUpAction(formData);
         if (result.success) {
           toast.success(t('successTitle'));
+          setPreviewLink(result.previewLink ?? null);
           setIsSuccess(true);
         } else {
           setServerError(
@@ -102,7 +105,8 @@ export default function SignUpForm() {
             {t('successDescription')}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-4">
+          {previewLink && <PreviewLinkNotice link={previewLink} />}
           <Button asChild className="w-full">
             <Link href="/login">{t('login')}</Link>
           </Button>

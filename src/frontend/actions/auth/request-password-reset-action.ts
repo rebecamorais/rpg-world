@@ -9,12 +9,12 @@ import { verifyHuman } from '@backend/shared/infrastructure/services/verify-huma
 import { errorCode } from '@shared/http/error-response';
 import { INVALID_REQUEST } from '@shared/http/validation';
 
-import type { ActionResponse } from '../action-response';
+import type { EmailActionResponse } from '../action-response';
 
 export async function requestPasswordResetAction(
   email: string,
   turnstileToken: string,
-): Promise<ActionResponse> {
+): Promise<EmailActionResponse> {
   const input = passwordResetRequestSchema.safeParse({ email, turnstileToken });
   if (!input.success) {
     return { success: false, error: INVALID_REQUEST };
@@ -30,8 +30,8 @@ export async function requestPasswordResetAction(
   try {
     const api = await getApi();
     const redirectTo = `${siteUrl()}/reset-password`;
-    await api.authApi.requestPasswordReset(input.data.email, redirectTo);
-    return { success: true };
+    const { previewLink } = await api.authApi.requestPasswordReset(input.data.email, redirectTo);
+    return { success: true, previewLink };
   } catch (error: unknown) {
     return { success: false, error: errorCode(error) };
   }

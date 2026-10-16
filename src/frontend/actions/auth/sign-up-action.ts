@@ -9,9 +9,9 @@ import { verifyHuman } from '@backend/shared/infrastructure/services/verify-huma
 import { errorCode } from '@shared/http/error-response';
 import { INVALID_REQUEST } from '@shared/http/validation';
 
-import type { ActionResponse } from '../action-response';
+import type { EmailActionResponse } from '../action-response';
 
-export async function signUpAction(formData: FormData): Promise<ActionResponse> {
+export async function signUpAction(formData: FormData): Promise<EmailActionResponse> {
   const input = signUpSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -31,8 +31,8 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
 
   try {
     const api = await getApi();
-    await api.authApi.signUp(email, password, `${siteUrl()}/auth/confirm`);
-    return { success: true };
+    const { previewLink } = await api.authApi.signUp(email, password, `${siteUrl()}/auth/confirm`);
+    return { success: true, previewLink };
   } catch (error: unknown) {
     return { success: false, error: errorCode(error) };
   }
