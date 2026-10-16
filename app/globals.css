@@ -39,8 +39,9 @@
   --brand: #663399;
   --primary: var(--brand);
   --character-color: var(--primary);
-  /* Third-party brand, only on its own link */
+  /* Third-party brands, only on their own links */
   --kofi: #ff5e5b;
+  --discord: #5865f2;
   /* Each spell card sets its own (damage type, category or school). */
   --spell-color: var(--muted-foreground);
 
@@ -128,6 +129,7 @@
   --color-sidebar: var(--sidebar);
   --color-overlay: var(--overlay);
   --color-kofi: var(--kofi);
+  --color-discord: var(--discord);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
 

@@ -32,6 +32,23 @@ describe('SubmitFeedbackUseCase', () => {
     expect(save).toHaveBeenCalledWith(FEEDBACK);
   });
 
+  it('avisa o notificador com o feedback gravado', async () => {
+    const notify = vi.fn().mockResolvedValue(undefined);
+    const withNotifier = new SubmitFeedbackUseCase({ save } as FeedbackRepository, { notify });
+
+    const saved = await withNotifier.execute(FEEDBACK);
+
+    expect(notify).toHaveBeenCalledWith(saved);
+  });
+
+  it('não falha o envio quando o notificador falha', async () => {
+    const notify = vi.fn().mockRejectedValue(new Error('Discord fora do ar'));
+    const withNotifier = new SubmitFeedbackUseCase({ save } as FeedbackRepository, { notify });
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await expect(withNotifier.execute(FEEDBACK)).resolves.toMatchObject({ id: 'f1' });
+  });
+
   it.each([
     ['e-mail inválido', { email: 'not-an-email' }, FeedbackErrorCodes.INVALID_EMAIL],
     ['mensagem curta', { message: 'too short' }, FeedbackErrorCodes.MESSAGE_TOO_SHORT],
