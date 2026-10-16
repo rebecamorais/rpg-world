@@ -1,4 +1,4 @@
-import { EmailService } from '../../../shared/domain/EmailService';
+import { EmailDelivery, EmailService } from '../../../shared/domain/EmailService';
 import { AuthRepository } from '../domain/AuthRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
 import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
@@ -9,7 +9,7 @@ export class SignUpUseCase {
     private readonly emailService: EmailService,
   ) {}
 
-  async execute(email: string, password: string, redirectTo: string): Promise<void> {
+  async execute(email: string, password: string, redirectTo: string): Promise<EmailDelivery> {
     if (!email || !password) {
       throw new UserError(UserErrorCodes.SIGNUP_REQUIRED_FIELDS);
     }
@@ -32,6 +32,6 @@ export class SignUpUseCase {
     );
 
     // Enviar e-mail via EmailService (Resend)
-    await this.emailService.sendConfirmationEmail(email, confirmationLink);
+    return this.emailService.sendConfirmationEmail(email, confirmationLink);
   }
 }

@@ -48,6 +48,15 @@ describe('signUpAction', () => {
     );
   });
 
+  it('passes the e-mail link along when the deployment sends no e-mail (preview)', async () => {
+    verify.mockResolvedValue({ success: true });
+    signUp.mockResolvedValue({ success: true, previewLink: 'https://staging.test/verify' });
+
+    const result = await signUpAction(form(VALID));
+
+    expect(result).toEqual({ success: true, previewLink: 'https://staging.test/verify' });
+  });
+
   it('rejects a short password before checking Turnstile', async () => {
     const result = await signUpAction(form({ ...VALID, password: 'short' }));
 

@@ -16,13 +16,13 @@ export const makeAuthApi = (authContext: AuthContext) => ({
   },
 
   signUp: async (email: string, password: string, redirectTo: string) => {
-    await authContext.signUp.execute(email, password, redirectTo);
-    return { success: true };
+    const delivery = await authContext.signUp.execute(email, password, redirectTo);
+    return { success: true, ...delivery };
   },
 
   requestPasswordReset: async (email: string, redirectTo: string) => {
-    await authContext.requestPasswordReset.execute(email, redirectTo);
-    return { success: true };
+    const delivery = await authContext.requestPasswordReset.execute(email, redirectTo);
+    return { success: true, ...delivery };
   },
 
   updatePassword: async (newPassword: string) => {

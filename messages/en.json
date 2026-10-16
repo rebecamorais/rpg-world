@@ -144,6 +144,11 @@
       "errorTitle": "Authentication Error",
       "waiting": "Please wait while we validate your access.",
       "redirecting": "Redirecting to login..."
+    },
+    "previewLink": {
+      "title": "Test environment",
+      "description": "This preview sends no e-mails. Use the link below instead of the one that would reach your inbox.",
+      "open": "Open e-mail link"
     }
   },
   "landing": {

@@ -35,6 +35,24 @@ describe('SignUpUseCase', () => {
     );
   });
 
+  it('returns what the e-mail service reports, e.g. the link on a preview deployment', async () => {
+    const mockRepository = {
+      existsByEmail: vi.fn().mockResolvedValue(false),
+      generateSignUpLink: vi.fn().mockResolvedValue('http://mock-link'),
+    } as unknown as AuthRepository;
+
+    const mockEmailService = {
+      sendConfirmationEmail: vi.fn().mockResolvedValue({ previewLink: 'http://mock-link' }),
+      sendPasswordResetEmail: vi.fn(),
+    } as unknown as EmailService;
+
+    const useCase = new SignUpUseCase(mockRepository, mockEmailService);
+
+    await expect(useCase.execute('test@example.com', 'Password123!', REDIRECT)).resolves.toEqual({
+      previewLink: 'http://mock-link',
+    });
+  });
+
   it('should throw error if email or password are not provided', async () => {
     const mockRepository = {
       existsByEmail: vi.fn(),

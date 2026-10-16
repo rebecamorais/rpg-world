@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Resend } from 'resend';
 import 'server-only';
 
-import { EmailService } from '../../domain/EmailService';
+import { EmailDelivery, EmailService } from '../../domain/EmailService';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';
 import { PasswordResetTemplate } from '../email/templates/PasswordReset';
 
@@ -17,7 +17,7 @@ export class ResendEmailService implements EmailService {
     this.resend = new Resend(apiKey);
   }
 
-  async sendConfirmationEmail(email: string, confirmationLink: string): Promise<void> {
+  async sendConfirmationEmail(email: string, confirmationLink: string): Promise<EmailDelivery> {
     const { error } = await this.resend.emails.send({
       from: this.fromEmail,
       to: [email],
@@ -28,9 +28,10 @@ export class ResendEmailService implements EmailService {
     if (error) {
       throw new Error(`Failed to send confirmation email: ${error.message}`);
     }
+    return {};
   }
 
-  async sendPasswordResetEmail(email: string, resetLink: string): Promise<void> {
+  async sendPasswordResetEmail(email: string, resetLink: string): Promise<EmailDelivery> {
     const { error } = await this.resend.emails.send({
       from: this.fromEmail,
       to: [email],
@@ -41,5 +42,6 @@ export class ResendEmailService implements EmailService {
     if (error) {
       throw new Error(`Failed to send password reset email: ${error.message}`);
     }
+    return {};
   }
 }
