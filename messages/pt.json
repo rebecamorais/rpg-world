@@ -71,7 +71,6 @@
     "title": "RPG World",
     "en": "Inglês",
     "pt": "Português",
-    "contact": "Bug",
     "contactTooltip": "Reportar um Bug",
     "passwordMinLength": "A senha precisa ter pelo menos {min} caracteres.",
     "passwordsDoNotMatch": "As senhas não coincidem.",
@@ -721,6 +720,7 @@
     "messagePlaceholder": "Qual mímico te mordeu? Descreva o problema ou ideia...",
     "submit": "Enviar Mensagem",
     "submitting": "Canalizando...",
+    "sendAnother": "Enviar outra mensagem",
     "success": "Mensagem enviada com sucesso! O Mestre recebeu seu chamado.",
     "error": "Falha ao enviar mensagem. Tente novamente após um descanso curto.",
     "types": {

@@ -71,7 +71,6 @@
     "title": "RPG World",
     "en": "English",
     "pt": "Portuguese",
-    "contact": "Bug",
     "contactTooltip": "Report a bug",
     "passwordMinLength": "Password must be at least {min} characters.",
     "passwordsDoNotMatch": "Passwords do not match.",
@@ -721,6 +720,7 @@
     "messagePlaceholder": "Which mimic bit you? Describe your issue or idea...",
     "submit": "Cast Message",
     "submitting": "Channeling...",
+    "sendAnother": "Send another message",
     "success": "Message sent successfully! The Game Master received your call.",
     "error": "Failed to send message. Try again after a short rest.",
     "types": {

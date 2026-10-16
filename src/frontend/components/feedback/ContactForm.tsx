@@ -44,13 +44,18 @@ import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import { UNEXPECTED_ERROR } from '@shared/http/error-response';
 
-/** Feedback form. `embedded` drops the card and its heading, for a dialog that brings its own. */
+/**
+ * Feedback form. `embedded` drops the card and its heading, for a dialog that brings its own;
+ * `onSent` replaces the success screen, so the dialog can close instead.
+ */
 export default function ContactForm({
   initialEmail = '',
   embedded = false,
+  onSent,
 }: {
   initialEmail?: string;
   embedded?: boolean;
+  onSent?: () => void;
 }) {
   const t = useTranslations('feedback');
   const { getMessage } = useErrorMessage();
@@ -89,8 +94,9 @@ export default function ContactForm({
       const result = await submitFeedbackAction({ ...data, turnstileToken });
       if (result.success) {
         toast.success(t('success'));
-        setIsSuccess(true);
         form.reset();
+        if (onSent) onSent();
+        else setIsSuccess(true);
       } else {
         // Security and validation codes tell the user what to fix; anything else keeps the
         // themed generic message
@@ -118,7 +124,7 @@ export default function ContactForm({
           onClick={() => setIsSuccess(false)}
           className="text-muted-foreground hover:text-foreground mt-4"
         >
-          {t('submit')}
+          {t('sendAnother')}
         </Button>
       </div>
     );

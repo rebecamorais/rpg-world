@@ -76,7 +76,7 @@ export function FeatureShowcase() {
             ))}
           </TabsList>
           <div className="flex items-center gap-2">
-            <span className="text-caption text-muted-foreground tabular-nums" aria-hidden="true">
+            <span className="text-caption text-muted-foreground tabular-nums" aria-live="polite">
               {t('position', { current: index + 1, total: SLIDES.length })}
             </span>
             <Button
