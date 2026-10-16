@@ -3,14 +3,16 @@
  */
 import { Metadata } from 'next';
 
+import { getTranslations } from 'next-intl/server';
+
 import { getApi } from '@api';
 
 import ContactForm from '@frontend/components/feedback/ContactForm';
 
-export const metadata: Metadata = {
-  title: 'Support',
-  description: 'Talk to the Game Master. Send your feedback, bugs or suggestions.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('feedback');
+  return { title: t('title'), description: t('subtitle') };
+}
 
 export default async function SupportPage() {
   const api = await getApi();
