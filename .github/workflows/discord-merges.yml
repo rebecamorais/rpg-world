@@ -1,0 +1,75 @@
+name: Discord Merges
+
+# Avisa no canal do Discord a cada PR mergeado na main.
+# pull_request_target para o secret existir também em PRs de fork; o workflow
+# nunca faz checkout do código do PR, só lê os metadados do evento.
+# Título e corpo do PR entram via env e jq, nunca interpolados no script.
+on:
+  pull_request_target:
+    types:
+      - closed
+    branches:
+      - main
+
+permissions: {}
+
+jobs:
+  notify:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Post to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          TITLE: ${{ github.event.pull_request.title }}
+          BODY: ${{ github.event.pull_request.body }}
+          URL: ${{ github.event.pull_request.html_url }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          AUTHOR_URL: ${{ github.event.pull_request.user.html_url }}
+          AVATAR: ${{ github.event.pull_request.user.avatar_url }}
+          COMMITS: ${{ github.event.pull_request.commits }}
+          ADDITIONS: ${{ github.event.pull_request.additions }}
+          DELETIONS: ${{ github.event.pull_request.deletions }}
+          MERGED_AT: ${{ github.event.pull_request.merged_at }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "Secret DISCORD_WEBHOOK_URL não configurado. Nada a postar."
+            exit 0
+          fi
+
+          # Resumo: corpo sem comentários HTML nem checklists, cortado em 400 caracteres
+          SUMMARY=$(printf '%s' "${BODY:-}" \
+            | perl -0pe 's/<!--.*?-->//gs; s/^\s*- \[[ xX]\].*\n?//mg; s/\n{3,}/\n\n/g; s/^\s+|\s+$//g')
+          if [ "${#SUMMARY}" -gt 400 ]; then
+            SUMMARY="${SUMMARY:0:400}…"
+          fi
+
+          jq -n \
+            --arg title "#$NUMBER $TITLE" \
+            --arg url "$URL" \
+            --arg summary "$SUMMARY" \
+            --arg author "$AUTHOR" \
+            --arg author_url "$AUTHOR_URL" \
+            --arg avatar "$AVATAR" \
+            --arg stats "$COMMITS commit(s) · +$ADDITIONS −$DELETIONS" \
+            --arg merged_at "$MERGED_AT" \
+            '{
+              allowed_mentions: { parse: [] },
+              embeds: [{
+                title: ($title | .[0:256]),
+                url: $url,
+                description: (if $summary == "" then null else $summary end),
+                color: 5763719,
+                author: { name: $author, url: $author_url, icon_url: $avatar },
+                footer: { text: ("🚀 Mergeado na main · " + $stats) },
+                timestamp: $merged_at
+              }]
+            }' > payload.json
+
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            --data @payload.json "$DISCORD_WEBHOOK_URL"
+          echo "PR #$NUMBER postado no Discord"
