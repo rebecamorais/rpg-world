@@ -4,14 +4,12 @@
 
 ## Como testar
 
-<!-- Passo a passo para quem for revisar reproduzir no preview. -->
+<!-- Passo a passo para quem for revisar reproduzir localmente. -->
 
 1.
 2.
 
-## Testado no preview
-
-Assim que o deploy terminar, um comentário com o link do preview aparece neste PR.
+## Testado
 
 - [ ] Caminho feliz funciona do começo ao fim
 - [ ] Erros (campo vazio, valor inválido, sem permissão) mostram uma mensagem clara
