@@ -522,7 +522,7 @@
   },
   "privacy": {
     "title": "Política de Privacidade",
-    "lastUpdated": "Última atualização: 15 de outubro de 2026",
+    "lastUpdated": "Última atualização: 16 de outubro de 2026",
     "sections": {
       "data": {
         "title": "1. Dados Coletados",
@@ -545,7 +545,7 @@
       },
       "sharing": {
         "title": "3. Compartilhamento",
-        "content": "Nós não vendemos seus dados para terceiros. Para operar o RPG World usamos estes serviços: <supabase>Supabase</supabase> (banco de dados, login e armazenamento de imagens), <vercel>Vercel</vercel> (hospedagem), <resend>Resend</resend> (envio de e-mails), <cloudflare>Cloudflare Turnstile</cloudflare> (proteção contra robôs no cadastro, na recuperação de senha e no formulário de contato) e <google>Google</google> (só se você entrar com o Google). Hoje seus personagens e seu perfil são vistos apenas por você; as imagens de avatar ficam em um endereço público que não é listado em lugar nenhum."
+        "content": "Nós não vendemos seus dados para terceiros. Para operar o RPG World usamos estes serviços: <supabase>Supabase</supabase> (banco de dados, login e armazenamento de imagens), <vercel>Vercel</vercel> (hospedagem), <resend>Resend</resend> (envio de e-mails), <cloudflare>Cloudflare Turnstile</cloudflare> (proteção contra robôs no cadastro, na recuperação de senha e no formulário de contato), <discord>Discord</discord> (onde a equipe de suporte recebe as mensagens enviadas pelo formulário de contato: e-mail, tipo, mensagem e, se você estiver logado, o identificador da sua conta) e <google>Google</google> (só se você entrar com o Google). Hoje seus personagens e seu perfil são vistos apenas por você; as imagens de avatar ficam em um endereço público que não é listado em lugar nenhum."
       },
       "rights": {
         "title": "4. Seus Direitos",
@@ -557,7 +557,7 @@
       },
       "transfer": {
         "title": "6. Transferência Internacional de Dados",
-        "content": "Para o funcionamento do sistema, utilizamos infraestrutura de terceiros (como <supabase>Supabase</supabase>, Vercel e Resend). Como resultado, seus dados podem ser processados e armazenados em servidores localizados fora do Brasil, especificamente nos Estados Unidos. Ao utilizar o RPG World, você consente com essa transferência internacional, realizada sob rígidos padrões de segurança e criptografia."
+        "content": "Para o funcionamento do sistema, utilizamos infraestrutura de terceiros (como <supabase>Supabase</supabase>, <vercel>Vercel</vercel>, <resend>Resend</resend> e <discord>Discord</discord>). Como resultado, seus dados podem ser processados e armazenados em servidores localizados fora do Brasil, especificamente nos Estados Unidos. Ao utilizar o RPG World, você consente com essa transferência internacional, realizada sob rígidos padrões de segurança e criptografia."
       },
       "retention": {
         "title": "7. Retenção e Exclusão de Dados",

@@ -14,6 +14,7 @@ const PRIVACY_LINKS = richLinks({
   vercel: 'https://vercel.com/legal/privacy-policy',
   resend: 'https://resend.com/legal/privacy-policy',
   cloudflare: 'https://www.cloudflare.com/privacypolicy/',
+  discord: 'https://discord.com/privacy',
 });
 
 export async function generateMetadata(): Promise<Metadata> {
