@@ -44,7 +44,14 @@ import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import { UNEXPECTED_ERROR } from '@shared/http/error-response';
 
-export default function ContactForm({ initialEmail = '' }: { initialEmail?: string }) {
+/** Feedback form. `embedded` drops the card and its heading, for a dialog that brings its own. */
+export default function ContactForm({
+  initialEmail = '',
+  embedded = false,
+}: {
+  initialEmail?: string;
+  embedded?: boolean;
+}) {
   const t = useTranslations('feedback');
   const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
@@ -98,26 +105,121 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
   };
 
   if (isSuccess) {
+    const successContent = (
+      <div className="flex flex-col items-center justify-center text-center">
+        <div className="bg-primary-surface text-primary-flare mb-4 flex h-16 w-16 items-center justify-center rounded-full shadow-[0_0_15px_var(--primary-surface)]">
+          <MessageSquare className="h-8 w-8" />
+        </div>
+        <CardTitle as={embedded ? 'h3' : 'h1'} className="mb-2">
+          {t('success')}
+        </CardTitle>
+        <Button
+          variant="ghost"
+          onClick={() => setIsSuccess(false)}
+          className="text-muted-foreground hover:text-foreground mt-4"
+        >
+          {t('submit')}
+        </Button>
+      </div>
+    );
+
+    if (embedded) return <div className="py-6">{successContent}</div>;
+
     return (
       <Card className="bg-card/80 mx-auto w-full max-w-2xl shadow-2xl backdrop-blur-sm">
-        <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-          <div className="bg-primary-surface text-primary-flare mb-4 flex h-16 w-16 items-center justify-center rounded-full shadow-[0_0_15px_var(--primary-surface)]">
-            <MessageSquare className="h-8 w-8" />
-          </div>
-          <CardTitle as="h1" className="mb-2">
-            {t('success')}
-          </CardTitle>
-          <Button
-            variant="ghost"
-            onClick={() => setIsSuccess(false)}
-            className="text-muted-foreground hover:text-foreground mt-4"
-          >
-            {t('submit')}
-          </Button>
-        </CardContent>
+        <CardContent className="py-12">{successContent}</CardContent>
       </Card>
     );
   }
+
+  const formContent = (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-foreground">{t('emailLabel')}</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder={t('emailPlaceholder')}
+                    className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-foreground">{t('typeLabel')}</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground">
+                      <SelectValue placeholder={t('typeLabel')} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="border-border bg-muted text-foreground">
+                    <SelectItem value="bug">{t('types.bug')}</SelectItem>
+                    <SelectItem value="feature">{t('types.feature')}</SelectItem>
+                    <SelectItem value="feedback">{t('types.feedback')}</SelectItem>
+                    <SelectItem value="account">{t('types.account')}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <FormField
+          control={form.control}
+          name="message"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-foreground">{t('messageLabel')}</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder={t('messagePlaceholder')}
+                  rows={5}
+                  className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
+
+        <Button
+          type="submit"
+          disabled={!turnstileToken}
+          loading={form.formState.isSubmitting}
+          className="w-full font-bold"
+        >
+          {form.formState.isSubmitting ? (
+            t('submitting')
+          ) : (
+            <>
+              <Send aria-hidden="true" />
+              {t('submit')}
+            </>
+          )}
+        </Button>
+      </form>
+    </Form>
+  );
+
+  if (embedded) return formContent;
 
   return (
     <Card className="bg-card mx-auto w-full max-w-2xl shadow-2xl">
@@ -130,92 +232,7 @@ export default function ContactForm({ initialEmail = '' }: { initialEmail?: stri
         </div>
         <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-foreground">{t('emailLabel')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t('emailPlaceholder')}
-                        className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-foreground">{t('typeLabel')}</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground">
-                          <SelectValue placeholder={t('typeLabel')} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="border-border bg-muted text-foreground">
-                        <SelectItem value="bug">{t('types.bug')}</SelectItem>
-                        <SelectItem value="feature">{t('types.feature')}</SelectItem>
-                        <SelectItem value="feedback">{t('types.feedback')}</SelectItem>
-                        <SelectItem value="account">{t('types.account')}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground">{t('messageLabel')}</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder={t('messagePlaceholder')}
-                      rows={5}
-                      className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
-
-            <Button
-              type="submit"
-              disabled={!turnstileToken}
-              loading={form.formState.isSubmitting}
-              className="w-full font-bold"
-            >
-              {form.formState.isSubmitting ? (
-                t('submitting')
-              ) : (
-                <>
-                  <Send aria-hidden="true" />
-                  {t('submit')}
-                </>
-              )}
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
+      <CardContent>{formContent}</CardContent>
     </Card>
   );
 }
