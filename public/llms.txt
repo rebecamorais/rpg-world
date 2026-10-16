@@ -37,6 +37,7 @@ by Rebeca Morais (Rebs Tech Studio), not affiliated with or endorsed by Wizards 
 - Languages: English, Português (Brasil).
 - Systems: Dungeons & Dragons 5th Edition (SRD 5.1).
 - Source code: https://github.com/rebecamorais/rpg-world (GNU GPLv3). Anyone can self-host.
+- Community: Discord server at https://discord.gg/7u6guShqhQ
 - Game content: System Reference Document 5.1 by Wizards of the Coast LLC, under CC-BY-4.0.
   Portuguese spell translations by the Foundry VTT Brasil community (MIT). Full credits in the
   repository's NOTICE.md.

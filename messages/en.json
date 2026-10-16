@@ -682,7 +682,8 @@
     },
     "socials": {
       "title": "Social",
-      "github": "GitHub"
+      "github": "GitHub",
+      "discord": "Discord"
     },
     "legal": {
       "title": "Legal",
