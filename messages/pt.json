@@ -550,7 +550,7 @@
       },
       "rights": {
         "title": "4. Seus Direitos",
-        "content": "De acordo com a <lgpd>LGPD</lgpd>, você tem o direito de acessar, corrigir ou excluir seus dados. Enquanto a funcionalidade de exclusão automática está em desenvolvimento, você pode solicitar a exclusão total da sua conta e de todos os dados associados enviando um e-mail para <email>contato@rebs.com.br</email>. Processaremos sua solicitação em até 5 dias úteis."
+        "content": "De acordo com a <lgpd>LGPD</lgpd>, você tem o direito de acessar, corrigir ou excluir seus dados. Enquanto a funcionalidade de exclusão automática está em desenvolvimento, você pode solicitar a exclusão total da sua conta e de todos os dados associados pelo nosso <server>servidor no Discord</server>, informando o e-mail da conta. Processaremos sua solicitação em até 5 dias úteis."
       },
       "cookies": {
         "title": "5. Cookies",
@@ -566,7 +566,7 @@
       },
       "contact": {
         "title": "8. Contato e Encarregado de Dados",
-        "content": "Para qualquer dúvida sobre sua privacidade ou para exercer seus direitos de exclusão (<lgpd>LGPD</lgpd>), entre em contato pelo e-mail: <email>contato@rebs.com.br</email>."
+        "content": "Para qualquer dúvida sobre sua privacidade ou para exercer seus direitos (<lgpd>LGPD</lgpd>), fale com a equipe pelo nosso <server>servidor no Discord</server>. Para assuntos da sua conta, prefira uma mensagem direta à equipe em vez dos canais públicos."
       }
     }
   },

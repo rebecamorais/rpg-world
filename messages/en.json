@@ -550,7 +550,7 @@
       },
       "rights": {
         "title": "4. Your Rights",
-        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data by sending an email to <email>contato@rebs.com.br</email>. We will process your request within 5 business days."
+        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data through our <server>Discord server</server>, telling us your account's email. We will process your request within 5 business days."
       },
       "cookies": {
         "title": "5. Cookies",
@@ -566,7 +566,7 @@
       },
       "contact": {
         "title": "8. Contact and Data Controller",
-        "content": "For any questions regarding your privacy or to exercise your deletion rights (<lgpd>LGPD</lgpd>), please contact us via email: <email>contato@rebs.com.br</email>."
+        "content": "For any questions regarding your privacy or to exercise your rights (<lgpd>LGPD</lgpd>), talk to the team on our <server>Discord server</server>. For matters about your account, prefer a direct message to the team over the public channels."
       }
     }
   },

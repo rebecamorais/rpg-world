@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { GITHUB_REPO } from '@frontend/constants/site';
+import { DISCORD_INVITE, GITHUB_REPO } from '@frontend/constants/site';
 
 const PIX_KEY = process.env.NEXT_PUBLIC_PIX_KEY || 'b22d409a-46a2-48dc-b2e2-eb3a66e9fb92';
 
@@ -29,7 +29,6 @@ const GithubIcon = ({ className }: { className?: string }) => (
 );
 
 const GITHUB_SPONSORS = 'https://github.com/sponsors/rebecamorais';
-const DISCORD_INVITE = 'https://discord.gg/7u6guShqhQ';
 
 const DiscordIcon = ({ className }: { className?: string }) => (
   <svg

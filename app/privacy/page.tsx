@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 import { richLinks } from '@frontend/components/shared/rich-links';
+import { DISCORD_INVITE } from '@frontend/constants/site';
 
 // Links inside the privacy texts, one per tag in the messages
 const PRIVACY_LINKS = richLinks({
-  email: 'mailto:contato@rebs.com.br',
+  server: DISCORD_INVITE,
   lgpd: 'https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm',
   supabase: 'https://supabase.com/privacy',
   google: 'https://policies.google.com/privacy',
