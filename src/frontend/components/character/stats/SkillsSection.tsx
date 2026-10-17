@@ -63,7 +63,7 @@ export default function SkillsSection() {
     return (
       <div
         key={key}
-        className="group hover:bg-muted flex items-center gap-3 rounded p-1 transition-colors"
+        className="group hover:bg-muted flex items-center rounded p-1 transition-colors"
       >
         {/* The whole name toggles, not just the 14px dot, so it is easy to hit on a phone */}
         <button
