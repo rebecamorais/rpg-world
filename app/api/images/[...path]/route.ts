@@ -20,6 +20,11 @@ const CACHE_MAX_AGE = 31_536_000; // 1 year in seconds
 // storage RLS level, so a missing entry here can't expose a private bucket.
 const PUBLIC_BUCKETS = new Set(['avatars']);
 
+// The image types the upload use cases accept. The stored Content-Type is chosen by whoever
+// uploaded the file, so anything else (e.g. an SVG or HTML file sent straight to Storage) is
+// served as a download instead of being rendered on this origin.
+const INLINE_CONTENT_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ path: string[] }> },
@@ -49,11 +54,14 @@ export async function GET(
     }
 
     const arrayBuffer = await data.arrayBuffer();
+    const mimeType = data.type.split(';')[0].trim().toLowerCase();
+    const inline = INLINE_CONTENT_TYPES.has(mimeType);
 
     return new NextResponse(arrayBuffer, {
       status: 200,
       headers: {
-        'Content-Type': data.type || 'application/octet-stream',
+        'Content-Type': inline ? mimeType : 'application/octet-stream',
+        ...(inline ? {} : { 'Content-Disposition': 'attachment' }),
         'Cache-Control': `public, max-age=${CACHE_MAX_AGE}, immutable`,
         'X-Robots-Tag': 'noindex',
       },

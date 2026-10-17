@@ -36,7 +36,24 @@ describe('GET /api/images/[...path]', () => {
     expect(await res.text()).toBe('png');
     expect(from).toHaveBeenCalledWith('avatars');
     expect(download).toHaveBeenCalledWith('user-1/avatar');
+    expect(res.headers.get('content-disposition')).toBeNull();
   });
+
+  it.each(['image/svg+xml', 'text/html', ''])(
+    'serve arquivo do tipo "%s" como download, sem renderizar na origem do app',
+    async (type) => {
+      download.mockResolvedValue({
+        data: new Blob(['<svg><script>alert(1)</script></svg>'], { type }),
+        error: null,
+      });
+
+      const res = await get(['avatars', 'user-1', 'x.svg']);
+
+      expect(res.status).toBe(200);
+      expect(res.headers.get('content-type')).toBe('application/octet-stream');
+      expect(res.headers.get('content-disposition')).toBe('attachment');
+    },
+  );
 
   it('responde 400 quando falta o caminho do arquivo', async () => {
     const res = await get(['avatars']);

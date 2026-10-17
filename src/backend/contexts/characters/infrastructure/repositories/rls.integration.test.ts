@@ -132,5 +132,17 @@ describe('RLS com client do usuário (Integration)', () => {
         ),
       ).rejects.toThrow();
     });
+
+    it('o bucket recusa tipos fora da lista, mesmo na pasta do próprio usuário', async () => {
+      const svg = new Blob(['<svg><script>1</script></svg>'], { type: 'image/svg+xml' });
+      const storage = new SupabaseStorageRepository(owner.client);
+      await expect(storage.upload('avatars', `${owner.userId}/x.svg`, svg)).rejects.toThrow();
+    });
+
+    it('o bucket recusa arquivos acima de 5 MB', async () => {
+      const big = new Blob([new Uint8Array(5 * 1024 * 1024 + 1)], { type: 'image/png' });
+      const storage = new SupabaseStorageRepository(owner.client);
+      await expect(storage.upload('avatars', `${owner.userId}/big.png`, big)).rejects.toThrow();
+    });
   });
 });
