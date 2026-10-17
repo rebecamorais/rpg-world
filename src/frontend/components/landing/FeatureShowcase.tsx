@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import Image from 'next/image';
+import { getImageProps } from 'next/image';
 
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -18,6 +18,40 @@ type Slide = (typeof SLIDES)[number];
 function screenshot(locale: string, slide: Slide, device: 'desktop' | 'mobile') {
   const src = `/showcase/${locale === 'pt' ? 'pt' : 'en'}/${slide}-${device}.webp`;
   return { src, ...SHOWCASE_SIZES[src as keyof typeof SHOWCASE_SIZES] };
+}
+
+/**
+ * One <picture> per slide, so the browser downloads only the screen that fits the viewport:
+ * mobile below `sm`, desktop from `sm` up. The first slide is fetched eagerly, it is the
+ * largest thing above the fold.
+ */
+function ShowcaseImage({ slide, locale, alt }: { slide: Slide; locale: string; alt: string }) {
+  const first = slide === SLIDES[0];
+  const desktop = screenshot(locale, slide, 'desktop');
+  const {
+    props: { srcSet: desktopSrcSet },
+  } = getImageProps({ ...desktop, alt, sizes: '(min-width: 1024px) 760px, 100vw' });
+  const {
+    props: { srcSet: mobileSrcSet, ...img },
+  } = getImageProps({
+    ...screenshot(locale, slide, 'mobile'),
+    alt,
+    sizes: '100vw',
+    loading: first ? 'eager' : 'lazy',
+    fetchPriority: first ? 'high' : 'auto',
+  });
+
+  return (
+    <picture>
+      <source
+        media="(min-width: 640px)"
+        srcSet={desktopSrcSet}
+        width={desktop.width}
+        height={desktop.height}
+      />
+      <img {...img} srcSet={mobileSrcSet} alt={alt} className="h-auto w-full" />
+    </picture>
+  );
 }
 
 /** Real screens of the app as slides: tabs to pick one, arrows to step through them. */
@@ -42,7 +76,7 @@ export function FeatureShowcase() {
             ))}
           </TabsList>
           <div className="flex items-center gap-2">
-            <span className="text-caption text-muted-foreground tabular-nums" aria-hidden="true">
+            <span className="text-caption text-muted-foreground tabular-nums" aria-live="polite">
               {t('position', { current: index + 1, total: SLIDES.length })}
             </span>
             <Button
@@ -59,43 +93,21 @@ export function FeatureShowcase() {
           </div>
         </div>
 
-        {SLIDES.map((slide) => {
-          const desktop = screenshot(locale, slide, 'desktop');
-          const mobile = screenshot(locale, slide, 'mobile');
-          return (
-            <TabsContent
-              key={slide}
-              value={slide}
-              className="motion-safe:animate-fade-in mt-0 grid gap-6 lg:grid-cols-[1fr_2fr] lg:items-center"
-            >
-              <div className="flex flex-col gap-2">
-                <h3 className="text-title">{t(`slides.${slide}.title`)}</h3>
-                <p className="text-muted-foreground">{t(`slides.${slide}.description`)}</p>
-              </div>
-              <figure className="border-border bg-card overflow-hidden rounded-xl border shadow-2xl">
-                {/* Mobile screens on small viewports, desktop screens from sm up */}
-                <Image
-                  src={mobile.src}
-                  width={mobile.width}
-                  height={mobile.height}
-                  alt={t(`slides.${slide}.alt`)}
-                  sizes="100vw"
-                  className="h-auto w-full sm:hidden"
-                  priority={slide === SLIDES[0]}
-                />
-                <Image
-                  src={desktop.src}
-                  width={desktop.width}
-                  height={desktop.height}
-                  alt={t(`slides.${slide}.alt`)}
-                  sizes="(min-width: 1024px) 760px, 100vw"
-                  className="hidden h-auto w-full sm:block"
-                  priority={slide === SLIDES[0]}
-                />
-              </figure>
-            </TabsContent>
-          );
-        })}
+        {SLIDES.map((slide) => (
+          <TabsContent
+            key={slide}
+            value={slide}
+            className="motion-safe:animate-fade-in mt-0 grid gap-6 lg:grid-cols-[1fr_2fr] lg:items-center"
+          >
+            <div className="flex flex-col gap-2">
+              <h3 className="text-title">{t(`slides.${slide}.title`)}</h3>
+              <p className="text-muted-foreground">{t(`slides.${slide}.description`)}</p>
+            </div>
+            <figure className="border-border bg-card overflow-hidden rounded-xl border shadow-2xl">
+              <ShowcaseImage slide={slide} locale={locale} alt={t(`slides.${slide}.alt`)} />
+            </figure>
+          </TabsContent>
+        ))}
       </div>
     </Tabs>
   );

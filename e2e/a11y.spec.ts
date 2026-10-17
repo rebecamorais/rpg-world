@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 
-import { characterUrl, createCharacter, expect, test } from './support/fixtures';
+import { characterUrl, createCharacter, expect, hydrated, test } from './support/fixtures';
 
 /** Serious and critical WCAG A/AA violations: id, impact and the offending elements. */
 async function violations(page: import('@playwright/test').Page, disabledRules: string[] = []) {
@@ -35,6 +35,22 @@ test.describe('acessibilidade (axe)', () => {
       expect(await landmarks(page)).toEqual({ main: 1, h1: 1 });
     });
   }
+
+  test('modal de bug report do cabeçalho', async ({ page }) => {
+    await page.goto('/');
+    const trigger = await hydrated(
+      page.getByRole('banner').getByRole('button', { name: 'Report a bug' }),
+    );
+    await trigger.click();
+    const dialog = page.getByRole('dialog', { name: 'Talk to the Game Master' });
+    await dialog.getByLabel('Message', { exact: true }).waitFor();
+    await page.waitForTimeout(300);
+    expect(await violations(page)).toEqual([]);
+
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+  });
 
   test('páginas logadas: lista, ficha, lore, magias e perfil', async ({ page, user: _ }) => {
     const id = await createCharacter(page, 'Accessible Hero');

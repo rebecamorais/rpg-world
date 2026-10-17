@@ -38,18 +38,18 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: t('title'), template: '%s · RPG World' },
     description: t('description'),
     applicationName: 'RPG World',
+    // No title or url here: pages that don't set their own openGraph inherit this object as
+    // is, and a fixed one would label every shared link as the home page. Crawlers fall back
+    // to the page's <title> and to the URL being shared.
     openGraph: {
       type: 'website',
       siteName: 'RPG World',
-      title: t('title'),
       description: t('description'),
-      url: '/',
       locale: locale === 'pt' ? 'pt_BR' : 'en_US',
       images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: t('ogImageAlt') }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: t('title'),
       description: t('description'),
       images: ['/og-image.jpg'],
     },
