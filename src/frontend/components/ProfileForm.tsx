@@ -23,23 +23,10 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { SectionCard } from '@frontend/components/ui/section-card';
+import { ACCENT_COLORS } from '@frontend/constants/accent-colors';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
 import { cn } from '@frontend/lib/utils';
-
-// Hex values: the profile schema (and the API) only accept #rrggbb
-const PREDEFINED_COLORS = [
-  { name: 'default', value: '' },
-  { name: 'red', value: '#ef4444' },
-  { name: 'blue', value: '#3b82f6' },
-  { name: 'green', value: '#22c55e' },
-  { name: 'purple', value: '#a855f7' },
-  { name: 'yellow', value: '#eab308' },
-  { name: 'orange', value: '#f97316' },
-  { name: 'cyan', value: '#06b6d4' },
-  { name: 'pink', value: '#ec4899' },
-  { name: 'slate', value: '#64748b' },
-] as const;
 
 export default function ProfileForm() {
   const t = useTranslations('profileForm');
@@ -202,7 +189,7 @@ export default function ProfileForm() {
                     <FormLabel>{t('primaryColorLabel')}</FormLabel>
                     <FormControl>
                       <div className="flex flex-wrap gap-2 pt-1">
-                        {PREDEFINED_COLORS.map((color) => {
+                        {ACCENT_COLORS.map((color) => {
                           const isSelected =
                             color.value === field.value || (!color.value && !field.value);
 

@@ -80,7 +80,7 @@ export function SpellSlots({ slots, onSlotsChange, systemSelector, className, ..
                         handleSlotToggle(lvl.toString(), slotData.used, slotData.max, i < available)
                       }
                       className={cn(
-                        'focus-ring h-2 w-2 rounded-[1px] transition-all duration-300',
+                        'focus-ring touch-target h-2 w-2 rounded-[1px] transition-all duration-300',
                         i < available
                           ? 'bg-info-flare shadow-[0_0_8px_var(--info-muted)]'
                           : 'border-info-muted border bg-transparent',

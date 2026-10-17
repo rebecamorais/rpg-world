@@ -19,7 +19,8 @@ function renderSkills(acrobatics?: CharacterSkill) {
     skills: acrobatics ? { ACROBATICS: acrobatics } : {},
   } as DnD5eCharacter;
   const result = renderWithCharacter(<SkillsSection />, character);
-  const row = () => screen.getByText('Acrobatics').parentElement!;
+  // The row: the toggle (name and attribute) and the value next to it
+  const row = () => screen.getByText('Acrobatics').closest('div')!;
   return { ...result, row };
 }
 
