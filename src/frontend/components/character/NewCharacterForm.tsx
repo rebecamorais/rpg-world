@@ -16,6 +16,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormRootError,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import {
@@ -34,10 +35,10 @@ export default function NewCharacterForm() {
   const t = useTranslations('characterCreation');
   const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
-  const createMutation = useCreateCharacter(t('success'), t('error'));
+  const createMutation = useCreateCharacter(t('success'));
 
   const newCharacterSchema = z.object({
-    name: z.string().min(1, t('nameLabel').replace(' *', '')),
+    name: z.string().trim().min(1, t('nameRequired')).max(100),
     system: z.string().min(1, t('systemPlaceholder')),
   });
 
@@ -64,7 +65,6 @@ export default function NewCharacterForm() {
       {
         name: data.name.trim(),
         system: data.system,
-        ownerUsername: currentUser.id,
       },
       {
         onError: (err: Error) => {
@@ -90,6 +90,7 @@ export default function NewCharacterForm() {
                     <FormLabel>{t('nameLabel')}</FormLabel>
                     <FormControl>
                       <Input
+                        maxLength={100}
                         disabled={createMutation.isPending}
                         placeholder={t('namePlaceholder')}
                         {...field}
@@ -126,11 +127,7 @@ export default function NewCharacterForm() {
                 )}
               />
 
-              {form.formState.errors.root && (
-                <p className="text-danger-flare dark:text-danger-flare text-sm">
-                  {form.formState.errors.root.message}
-                </p>
-              )}
+              <FormRootError />
 
               <div className="flex gap-2">
                 <Button type="submit" loading={createMutation.isPending}>

@@ -161,13 +161,13 @@
     "description": "Defina o nome e escolha o sistema de regras.",
     "nameLabel": "Nome *",
     "namePlaceholder": "Nome do personagem",
+    "nameRequired": "Dê um nome ao personagem.",
     "systemLabel": "Sistema RPG",
     "systemPlaceholder": "Selecione o Sistema",
     "submit": "Criar",
     "submitting": "Criando...",
     "requireLogin": "Faça login para criar personagem.",
     "success": "Personagem criado com sucesso!",
-    "error": "Erro ao criar personagem.",
     "systems": {
       "dnd5e": "D&D 5ª Edição"
     }

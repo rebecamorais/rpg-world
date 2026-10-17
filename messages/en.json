@@ -161,13 +161,13 @@
     "description": "Define the name and choose the ruleset system.",
     "nameLabel": "Name *",
     "namePlaceholder": "Character name",
+    "nameRequired": "Give your character a name.",
     "systemLabel": "RPG System",
     "systemPlaceholder": "Select the System",
     "submit": "Create",
     "submitting": "Creating...",
     "requireLogin": "Please sign in to create a character.",
     "success": "Character successfully created!",
-    "error": "Error creating character.",
     "systems": {
       "dnd5e": "D&D 5th Edition"
     }

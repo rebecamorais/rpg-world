@@ -5,36 +5,24 @@ import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
 
-import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
-
 interface CreateCharacterVariables {
   name: string;
   system: string;
-  ownerUsername: string;
 }
 
-export function useCreateCharacter(tSuccess: string, tError: string) {
+/** Creates a character and opens its sheet. Errors are left to the form, which shows them inline. */
+export function useCreateCharacter(tSuccess: string) {
   const queryClient = useQueryClient();
-  const { getMessage } = useErrorMessage();
   const router = useRouter();
 
   return useMutation({
-    mutationFn: async (variables: CreateCharacterVariables) => {
-      try {
-        const data = await rpgWorldApi.post<{ id: string }>('/api/characters', variables);
-        return data;
-      } catch (error: unknown) {
-        throw error;
-      }
-    },
+    // The owner is the session's user, set by the API
+    mutationFn: (variables: CreateCharacterVariables) =>
+      rpgWorldApi.post<{ id: string }>('/api/characters', variables),
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['characters'] });
       toast.success(tSuccess);
       router.push(`/system/${variables.system}/character/${data.id}`);
-    },
-    onError: (error: Error) => {
-      const errorCode = error.message;
-      toast.error(`${tError}: ${getMessage(errorCode)}`);
     },
   });
 }
