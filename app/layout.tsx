@@ -10,6 +10,7 @@ import Footer from '@frontend/components/layout/Footer';
 import GlobalHeader from '@frontend/components/layout/GlobalHeader';
 import Providers from '@frontend/components/providers/Providers';
 import { Toaster } from '@frontend/components/ui/sonner';
+import { SITE_URL } from '@frontend/constants/site';
 
 import './globals.css';
 
@@ -34,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
 
   return {
-    metadataBase: new URL('https://rpgworldapp.com'),
+    metadataBase: new URL(SITE_URL),
     title: { default: t('title'), template: '%s · RPG World' },
     description: t('description'),
     applicationName: 'RPG World',

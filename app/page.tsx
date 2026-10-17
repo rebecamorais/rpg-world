@@ -12,6 +12,7 @@ import HeroCTA from '@frontend/components/layout/HeroCTA';
 import { SheetPreview } from '@frontend/components/layout/SheetPreview';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { GITHUB_REPO, SITE_URL } from '@frontend/constants/site';
 
 // The four features the home page shows before "see all"
 const HIGHLIGHTS = AVAILABLE_FEATURES.filter(({ key }) =>
@@ -23,9 +24,9 @@ const STRUCTURED_DATA = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: 'RPG World',
-  url: 'https://rpgworldapp.com',
-  logo: 'https://rpgworldapp.com/logo/rpg-world.png',
-  image: 'https://rpgworldapp.com/og-image.jpg',
+  url: SITE_URL,
+  logo: `${SITE_URL}/logo/rpg-world.png`,
+  image: `${SITE_URL}/og-image.jpg`,
   applicationCategory: 'GameApplication',
   operatingSystem: 'Web',
   description:
@@ -34,7 +35,7 @@ const STRUCTURED_DATA = {
   isAccessibleForFree: true,
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   license: 'https://www.gnu.org/licenses/gpl-3.0.html',
-  codeRepository: 'https://github.com/rebecamorais/rpg-world',
+  codeRepository: GITHUB_REPO,
   author: { '@type': 'Person', name: 'Rebeca Morais' },
 };
 

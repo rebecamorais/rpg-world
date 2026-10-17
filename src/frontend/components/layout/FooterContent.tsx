@@ -12,9 +12,9 @@ import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { GITHUB_REPO } from '@frontend/constants/site';
 
 const PIX_KEY = process.env.NEXT_PUBLIC_PIX_KEY || 'b22d409a-46a2-48dc-b2e2-eb3a66e9fb92';
-const GITHUB_REPO = 'https://github.com/rebecamorais/rpg-world';
 
 const GithubIcon = ({ className }: { className?: string }) => (
   <svg
