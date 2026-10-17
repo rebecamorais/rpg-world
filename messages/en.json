@@ -521,7 +521,7 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: October 16, 2026",
+    "lastUpdated": "Last updated: October 17, 2026",
     "sections": {
       "data": {
         "title": "1. Data Collected",
@@ -530,14 +530,15 @@
           "Account: email and password (the password is stored encrypted by <supabase>Supabase</supabase>) or, if you sign in with <google>Google</google>, the email and name of your Google account.",
           "Profile: username, avatar and preferred color.",
           "Characters: sheets, backstory, learned spells and the images you upload.",
-          "Support: email, type and message, when you use the contact form."
+          "Support: email, type and message, when you use the contact form.",
+          "Technical data: when you visit the site, <vercel>Vercel</vercel> and <supabase>Supabase</supabase> log the IP address, browser and requested pages, for security and error diagnosis. On protected forms, <cloudflare>Cloudflare Turnstile</cloudflare> checks the IP and browser signals to tell people from bots. We do not use analytics tools."
         ]
       },
       "usage": {
         "title": "2. Data Usage",
         "content": "Your data is used exclusively to:",
         "items": [
-          "Keep you signed in and protecting your account.",
+          "Keep you signed in and protect your account.",
           "Save your characters and sync them across devices.",
           "Send account emails (sign-up confirmation and password reset) and reply to your support messages."
         ]

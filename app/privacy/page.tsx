@@ -45,7 +45,7 @@ export default async function PrivacyPage() {
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.data.title')}</h2>
           <p className="text-muted-foreground mb-4 leading-relaxed">{t('sections.data.content')}</p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed">
-            {['0', '1', '2', '3'].map((key) => (
+            {['0', '1', '2', '3', '4'].map((key) => (
               <li key={key}>{t.rich(`sections.data.items.${key}`, PRIVACY_LINKS)}</li>
             ))}
           </ul>
