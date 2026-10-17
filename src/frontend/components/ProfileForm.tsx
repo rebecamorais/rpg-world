@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -64,7 +63,6 @@ export default function ProfileForm() {
   });
 
   type ProfileFormValues = z.infer<typeof profileSchema>;
-  const queryClient = useQueryClient();
   const { profile, isLoading, updateProfile, isUpdating } = useProfile();
 
   const form = useForm<ProfileFormValues>({
@@ -97,11 +95,19 @@ export default function ProfileForm() {
     }
   }, [profile, form]);
 
-  // Called by AvatarUpload when the upload completes — the URL is versioned, so it is used as is
-  const handleAvatarUploadSuccess = (url: string) => {
+  // The upload only stores the file: its URL (versioned, so used as is) is saved right away,
+  // like the success toast says, instead of waiting for the form's Save button
+  const handleAvatarUploadSuccess = async (url: string) => {
+    const previous = form.getValues('avatarUrl');
+    // Shown at once (the upload's preview is already gone), undone if saving fails
     form.setValue('avatarUrl', url);
-    queryClient.invalidateQueries({ queryKey: ['profile'] });
-    toast.success(t('saveSuccess'));
+    try {
+      await updateProfile({ avatarUrl: url });
+      toast.success(t('saveSuccess'));
+    } catch (err: unknown) {
+      form.setValue('avatarUrl', previous);
+      toast.error(getMessage(err instanceof Error ? err.message : 'unknown'));
+    }
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
