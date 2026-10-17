@@ -53,7 +53,10 @@ test.describe('ciclo do personagem', () => {
     await page.goto('/characters');
     await page.getByRole('button', { name: /^Actions for / }).click();
     await page.getByRole('menuitem', { name: 'Delete' }).click();
-    await expect(page.getByRole('dialog', { name: 'Delete character?' })).toContainText(name);
+    const dialog = page.getByRole('dialog', { name: 'Delete character?' });
+    await expect(dialog).toContainText(name);
+    // The CSP would block the onerror anyway: the tag itself must never be created
+    await expect(dialog.locator('img')).toHaveCount(0);
 
     await page.goto(characterUrl(id));
     await expect(page.getByText(name).first()).toBeVisible();

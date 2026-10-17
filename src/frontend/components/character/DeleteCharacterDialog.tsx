@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
@@ -42,24 +40,22 @@ export function DeleteCharacterDialog({
       <DialogContent className="border-danger-muted">
         <DialogHeader>
           <DialogTitle>{t('deleteDialogTitle')}</DialogTitle>
-          <DialogDescription className="space-y-4">
-            <span className="block">
-              {t('deleteDialogDescription', { name: character?.name || '' })}
-            </span>
-            <div className="border-warning-muted bg-warning-surface text-warning-flare rounded-md border p-3 text-sm">
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: t.markup('deleteConfirmInstruction', {
-                    name: character?.name || '',
-                    bold: (chunks: React.ReactNode) => `<strong>${chunks}</strong>`,
-                  }),
-                }}
-              />
-            </div>
+          <DialogDescription>
+            {t('deleteDialogDescription', { name: character?.name || '' })}
           </DialogDescription>
         </DialogHeader>
-        <div className="py-4">
+        {/* Outside the description: a <p> can't hold this block */}
+        <p className="border-warning-muted bg-warning-surface text-warning-flare rounded-md border p-3 text-sm">
+          {/* t.rich builds React elements, so the name is always text, never HTML */}
+          {t.rich('deleteConfirmInstruction', {
+            name: character?.name || '',
+            bold: (chunks) => <strong>{chunks}</strong>,
+          })}
+        </p>
+        <div className="py-2">
           <Input
+            aria-label={t('deleteConfirmPlaceholder')}
+            autoComplete="off"
             value={confirmName}
             onChange={(e) => onConfirmNameChange(e.target.value)}
             placeholder={t('deleteConfirmPlaceholder')}
