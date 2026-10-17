@@ -283,6 +283,7 @@
     "status": "Status de Combate",
     "armorClass": "CA",
     "hitPoints": "Pontos de Vida",
+    "hitPointsMax": "PV máximos",
     "hitPointsShort": "PV",
     "tempHp": "Vida Temp",
     "speed": "Deslocamento",

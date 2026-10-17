@@ -283,6 +283,7 @@
     "status": "Combat Status",
     "armorClass": "AC",
     "hitPoints": "Hit Points",
+    "hitPointsMax": "Max Hit Points",
     "hitPointsShort": "HP",
     "tempHp": "Temp HP",
     "speed": "Speed",
