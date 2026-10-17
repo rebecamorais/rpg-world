@@ -1,8 +1,15 @@
+import type { Metadata } from 'next';
+
 import { getTranslations } from 'next-intl/server';
 
 import CharacterList from '@frontend/components/character/CharacterList';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { CharactersProvider } from '@frontend/context/CharactersContext';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('characters');
+  return { title: t('title') };
+}
 
 export default async function CharactersPage() {
   const t = await getTranslations('characters');
