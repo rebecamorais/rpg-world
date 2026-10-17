@@ -3,6 +3,7 @@ import { characterUrl, createCharacter, expect, hydrated, test } from './support
 test.describe('ciclo do personagem', () => {
   test('cria, edita, salva e continua igual depois de recarregar', async ({ page, user: _ }) => {
     await page.goto('/characters');
+    await expect(page).toHaveTitle('Characters · RPG World');
     await page.getByRole('link', { name: 'Create first character' }).click();
 
     await (await hydrated(page.getByLabel('Name *'))).fill('Thorin');
@@ -10,6 +11,8 @@ test.describe('ciclo do personagem', () => {
 
     await expect(page).toHaveURL(/\/system\/DnD_5e\/character\/[0-9a-f-]{36}$/);
     await expect(page.getByText('Thorin').first()).toBeVisible();
+    // Each tab says which sheet it is
+    await expect(page).toHaveTitle('Status · Thorin · RPG World');
 
     // Strength 10 → 16 (modifier +3) through the attribute dialog
     await page.getByRole('button', { name: /^STR/ }).click();
@@ -28,6 +31,9 @@ test.describe('ciclo do personagem', () => {
     await page.reload();
     await expect(page.getByRole('button', { name: /^STR/ })).toContainText('16');
     await expect(page.getByLabel('Hit Points', { exact: true })).toHaveValue('7');
+
+    await page.goto(`${page.url()}/lore`);
+    await expect(page).toHaveTitle('Lore · Thorin · RPG World');
   });
 
   test('exclui o personagem só depois de digitar o nome', async ({ page, user: _ }) => {
@@ -53,7 +59,10 @@ test.describe('ciclo do personagem', () => {
     await page.goto('/characters');
     await page.getByRole('button', { name: /^Actions for / }).click();
     await page.getByRole('menuitem', { name: 'Delete' }).click();
-    await expect(page.getByRole('dialog', { name: 'Delete character?' })).toContainText(name);
+    const dialog = page.getByRole('dialog', { name: 'Delete character?' });
+    await expect(dialog).toContainText(name);
+    // The CSP would block the onerror anyway: the tag itself must never be created
+    await expect(dialog.locator('img')).toHaveCount(0);
 
     await page.goto(characterUrl(id));
     await expect(page.getByText(name).first()).toBeVisible();

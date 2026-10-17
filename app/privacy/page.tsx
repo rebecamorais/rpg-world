@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 import { richLinks } from '@frontend/components/shared/rich-links';
+import { DISCORD_INVITE } from '@frontend/constants/site';
 
 // Links inside the privacy texts, one per tag in the messages
 const PRIVACY_LINKS = richLinks({
-  email: 'mailto:contato@rebs.com.br',
+  server: DISCORD_INVITE,
   lgpd: 'https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm',
   supabase: 'https://supabase.com/privacy',
   google: 'https://policies.google.com/privacy',
@@ -45,7 +46,7 @@ export default async function PrivacyPage() {
           <h2 className="mb-4 text-2xl font-semibold">{t('sections.data.title')}</h2>
           <p className="text-muted-foreground mb-4 leading-relaxed">{t('sections.data.content')}</p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed">
-            {['0', '1', '2', '3'].map((key) => (
+            {['0', '1', '2', '3', '4'].map((key) => (
               <li key={key}>{t.rich(`sections.data.items.${key}`, PRIVACY_LINKS)}</li>
             ))}
           </ul>

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -31,6 +31,7 @@ const CombatHeader = () => {
   const t = useTranslations('combatStats');
   const character = useLoadedCharacter();
   const { update } = useCharacterActions();
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
 
   return (
     <CardHeader className="border-border bg-muted/30 border-b px-4 py-4 md:px-6 md:py-3">
@@ -99,7 +100,7 @@ const CombatHeader = () => {
         </div>
 
         <div className="flex justify-end md:shrink-0">
-          <Dialog>
+          <Dialog open={isConfigOpen} onOpenChange={setIsConfigOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="ghost"
@@ -110,7 +111,7 @@ const CombatHeader = () => {
                 <AppIcon name="Settings2" size="sm" className="text-character-flare" />
               </Button>
             </DialogTrigger>
-            <CombatStatsDialog />
+            <CombatStatsDialog onSaved={() => setIsConfigOpen(false)} />
           </Dialog>
         </div>
       </div>

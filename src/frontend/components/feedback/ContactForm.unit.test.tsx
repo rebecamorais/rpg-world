@@ -50,38 +50,26 @@ describe('ContactForm', () => {
     delete window.turnstile;
   });
 
-  it('envia a mensagem com o e-mail inicial e o token, e mostra a tela de sucesso', async () => {
-    renderWithProviders(<ContactForm initialEmail="hero@example.com" />);
+  it('envia a mensagem com o e-mail inicial e o token, avisa e chama onSent', async () => {
+    const onSent = vi.fn();
+    renderWithProviders(<ContactForm initialEmail="hero@example.com" onSent={onSent} />);
 
-    const user = await fillAndSubmit();
+    await fillAndSubmit();
 
-    expect(await screen.findByRole('heading', { level: 1, name: t.success })).toBeInTheDocument();
+    await waitFor(() => expect(onSent).toHaveBeenCalledOnce());
     expect(submitFeedback).toHaveBeenCalledWith({
       email: 'hero@example.com',
       type: 'feedback',
       message: 'A mimic ate my spellbook.',
       turnstileToken: 'token-1',
     });
-
-    await user.click(screen.getByRole('button', { name: t.sendAnother }));
-    expect(screen.getByLabelText(t.messageLabel)).toHaveValue('');
-  });
-
-  it('no modo embutido chama onSent em vez de mostrar a tela de sucesso', async () => {
-    const onSent = vi.fn();
-    renderWithProviders(<ContactForm initialEmail="hero@example.com" embedded onSent={onSent} />);
-
-    await fillAndSubmit();
-
-    await waitFor(() => expect(onSent).toHaveBeenCalledOnce());
     expect(toast.success).toHaveBeenCalledWith(t.success);
-    expect(screen.queryByRole('heading', { name: t.success })).not.toBeInTheDocument();
   });
 
   it('mantém o formulário e pede um novo desafio quando o envio falha', async () => {
     submitFeedback.mockResolvedValue({ success: false, error: UNEXPECTED_ERROR });
     const onSent = vi.fn();
-    renderWithProviders(<ContactForm initialEmail="hero@example.com" embedded onSent={onSent} />);
+    renderWithProviders(<ContactForm initialEmail="hero@example.com" onSent={onSent} />);
 
     await fillAndSubmit();
 

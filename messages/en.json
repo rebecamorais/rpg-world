@@ -161,13 +161,13 @@
     "description": "Define the name and choose the ruleset system.",
     "nameLabel": "Name *",
     "namePlaceholder": "Character name",
+    "nameRequired": "Give your character a name.",
     "systemLabel": "RPG System",
     "systemPlaceholder": "Select the System",
     "submit": "Create",
     "submitting": "Creating...",
     "requireLogin": "Please sign in to create a character.",
     "success": "Character successfully created!",
-    "error": "Error creating character.",
     "systems": {
       "dnd5e": "D&D 5th Edition"
     }
@@ -283,6 +283,7 @@
     "status": "Combat Status",
     "armorClass": "AC",
     "hitPoints": "Hit Points",
+    "hitPointsMax": "Max Hit Points",
     "hitPointsShort": "HP",
     "tempHp": "Temp HP",
     "speed": "Speed",
@@ -521,7 +522,7 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: October 16, 2026",
+    "lastUpdated": "Last updated: October 17, 2026",
     "sections": {
       "data": {
         "title": "1. Data Collected",
@@ -530,14 +531,15 @@
           "Account: email and password (the password is stored encrypted by <supabase>Supabase</supabase>) or, if you sign in with <google>Google</google>, the email and name of your Google account.",
           "Profile: username, avatar and preferred color.",
           "Characters: sheets, backstory, learned spells and the images you upload.",
-          "Support: email, type and message, when you use the contact form."
+          "Support: email, type and message, when you use the contact form.",
+          "Technical data: when you visit the site, <vercel>Vercel</vercel> and <supabase>Supabase</supabase> log the IP address, browser and requested pages, for security and error diagnosis. On protected forms, <cloudflare>Cloudflare Turnstile</cloudflare> checks the IP and browser signals to tell people from bots. We do not use analytics tools."
         ]
       },
       "usage": {
         "title": "2. Data Usage",
         "content": "Your data is used exclusively to:",
         "items": [
-          "Keep you signed in and protecting your account.",
+          "Keep you signed in and protect your account.",
           "Save your characters and sync them across devices.",
           "Send account emails (sign-up confirmation and password reset) and reply to your support messages."
         ]
@@ -548,7 +550,7 @@
       },
       "rights": {
         "title": "4. Your Rights",
-        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data by sending an email to <email>contato@rebs.com.br</email>. We will process your request within 5 business days."
+        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data through our <server>Discord server</server>, telling us your account's email. We will process your request within 5 business days."
       },
       "cookies": {
         "title": "5. Cookies",
@@ -564,7 +566,7 @@
       },
       "contact": {
         "title": "8. Contact and Data Controller",
-        "content": "For any questions regarding your privacy or to exercise your deletion rights (<lgpd>LGPD</lgpd>), please contact us via email: <email>contato@rebs.com.br</email>."
+        "content": "For any questions regarding your privacy or to exercise your rights (<lgpd>LGPD</lgpd>), talk to the team on our <server>Discord server</server>. For matters about your account, prefer a direct message to the team over the public channels."
       }
     }
   },

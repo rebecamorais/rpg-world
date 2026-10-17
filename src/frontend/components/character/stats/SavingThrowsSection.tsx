@@ -36,26 +36,31 @@ export default function SavingThrowsSection() {
 
           const finalValue = calculateSavingThrow(attrVal, level, isProficient);
           const sign = finalValue >= 0 ? '+' : '';
+          const stateLabel = isProficient
+            ? t('proficientIn', { label })
+            : t('noProficiencyIn', { label });
 
           return (
             <div
               key={key}
               className="group hover:bg-muted flex items-center gap-3 rounded p-1 transition-colors"
             >
+              {/* The whole name toggles, not just the 12px dot, so it is easy to hit on a phone */}
               <button
                 type="button"
-                aria-label={
-                  isProficient ? t('proficientIn', { label }) : t('noProficiencyIn', { label })
-                }
+                aria-label={stateLabel}
                 onClick={() => onSavingThrowChange(key, !isProficient)}
-                className={cn(
-                  'h-3 w-3 flex-shrink-0 rounded-full border-2 transition-all',
-                  isProficient
-                    ? 'border-character bg-character'
-                    : 'border-muted-foreground group-hover:border-foreground bg-transparent',
-                )}
-              />
-              <div className="flex flex-1 items-center justify-between text-sm">
+                className="focus-ring flex flex-1 items-center gap-3 rounded-sm text-left text-sm"
+              >
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    'h-3 w-3 flex-shrink-0 rounded-full border-2 transition-all',
+                    isProficient
+                      ? 'border-character bg-character'
+                      : 'border-muted-foreground group-hover:border-foreground bg-transparent',
+                  )}
+                />
                 <span
                   className={cn(
                     'font-medium transition-colors',
@@ -64,6 +69,8 @@ export default function SavingThrowsSection() {
                 >
                   {label}
                 </span>
+              </button>
+              <div className="text-sm">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <span
@@ -78,7 +85,7 @@ export default function SavingThrowsSection() {
                   </TooltipTrigger>
                   <TooltipContent>
                     <div className="flex flex-col gap-1 text-sm">
-                      <p className="font-semibold">{t('proficientIn', { label })}</p>
+                      <p className="font-semibold">{stateLabel}</p>
                       <p className="text-muted-foreground">{rules.formulas.savingThrow}</p>
                     </div>
                   </TooltipContent>

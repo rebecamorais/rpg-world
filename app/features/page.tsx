@@ -13,8 +13,7 @@ import {
 import { FeatureShowcase } from '@frontend/components/landing/FeatureShowcase';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
-
-const GITHUB_REPO = 'https://github.com/rebecamorais/rpg-world';
+import { GITHUB_REPO } from '@frontend/constants/site';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('features');

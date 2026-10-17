@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next';
 
+import { SITE_URL } from '@frontend/constants/site';
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
@@ -13,6 +15,6 @@ export default function robots(): MetadataRoute.Robots {
         '/auth/callback',
       ],
     },
-    sitemap: 'https://rpgworldapp.com/sitemap.xml',
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

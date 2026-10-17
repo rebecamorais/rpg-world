@@ -63,8 +63,9 @@ export default function SkillsSection() {
     return (
       <div
         key={key}
-        className="group hover:bg-muted flex items-center gap-3 rounded p-1 transition-colors"
+        className="group hover:bg-muted flex items-center rounded p-1 transition-colors"
       >
+        {/* The whole name toggles, not just the 14px dot, so it is easy to hit on a phone */}
         <button
           type="button"
           aria-label={
@@ -75,16 +76,19 @@ export default function SkillsSection() {
                 : t('noProficiencyIn', { label })
           }
           onClick={toggleProficiency}
-          className={cn(
-            'flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all',
-            skillData.isProficient
-              ? 'border-character bg-character'
-              : 'border-muted-foreground group-hover:border-foreground bg-transparent',
-          )}
+          className="focus-ring flex min-w-0 flex-1 items-center gap-3 rounded-sm text-left text-sm"
         >
-          {skillData.expertise && <div className="bg-background h-1 w-1 rounded-full" />}
-        </button>
-        <div className="flex flex-1 text-sm">
+          <span
+            aria-hidden="true"
+            className={cn(
+              'flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all',
+              skillData.isProficient
+                ? 'border-character bg-character'
+                : 'border-muted-foreground group-hover:border-foreground bg-transparent',
+            )}
+          >
+            {skillData.expertise && <span className="bg-background h-1 w-1 rounded-full" />}
+          </span>
           <span
             className={cn(
               'flex-1 truncate font-medium transition-colors',
@@ -96,6 +100,8 @@ export default function SkillsSection() {
           <span className="text-muted-foreground w-8 shrink-0 self-center text-center font-mono text-xs">
             ({tAttr(`abbreviations.${cat.attribute}`)})
           </span>
+        </button>
+        <div className="flex text-sm">
           <span
             className={cn(
               'mx-2 w-6 shrink-0 text-right font-mono font-bold',

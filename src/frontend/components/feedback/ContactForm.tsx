@@ -4,10 +4,8 @@
 
 'use client';
 
-import { useState } from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-import { MessageSquare, Send } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -16,13 +14,6 @@ import { z } from 'zod';
 import { submitFeedbackAction } from '@frontend/actions/feedback/submit-feedback-action';
 import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
 import { Button } from '@frontend/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@frontend/components/ui/card';
 import {
   Form,
   FormControl,
@@ -45,21 +36,19 @@ import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { UNEXPECTED_ERROR } from '@shared/http/error-response';
 
 /**
- * Feedback form. `embedded` drops the card and its heading, for a dialog that brings its own;
- * `onSent` replaces the success screen, so the dialog can close instead.
+ * Feedback fields and submission, without a frame: the support page wraps it in a card
+ * (`ContactCard`) and the header's dialog brings its own heading. `onSent` runs after the
+ * success toast, so each one decides what comes next.
  */
 export default function ContactForm({
   initialEmail = '',
-  embedded = false,
   onSent,
 }: {
   initialEmail?: string;
-  embedded?: boolean;
   onSent?: () => void;
 }) {
   const t = useTranslations('feedback');
   const { getMessage } = useErrorMessage();
-  const [isSuccess, setIsSuccess] = useState(false);
   const {
     token: turnstileToken,
     setToken: setTurnstileToken,
@@ -95,8 +84,7 @@ export default function ContactForm({
       if (result.success) {
         toast.success(t('success'));
         form.reset();
-        if (onSent) onSent();
-        else setIsSuccess(true);
+        onSent?.();
       } else {
         // Security and validation codes tell the user what to fix; anything else keeps the
         // themed generic message
@@ -110,35 +98,7 @@ export default function ContactForm({
     resetTurnstile();
   };
 
-  if (isSuccess) {
-    const successContent = (
-      <div className="flex flex-col items-center justify-center text-center">
-        <div className="bg-primary-surface text-primary-flare mb-4 flex h-16 w-16 items-center justify-center rounded-full shadow-[0_0_15px_var(--primary-surface)]">
-          <MessageSquare className="h-8 w-8" />
-        </div>
-        <CardTitle as={embedded ? 'h3' : 'h1'} className="mb-2">
-          {t('success')}
-        </CardTitle>
-        <Button
-          variant="ghost"
-          onClick={() => setIsSuccess(false)}
-          className="text-muted-foreground hover:text-foreground mt-4"
-        >
-          {t('sendAnother')}
-        </Button>
-      </div>
-    );
-
-    if (embedded) return <div className="py-6">{successContent}</div>;
-
-    return (
-      <Card className="bg-card/80 mx-auto w-full max-w-2xl shadow-2xl backdrop-blur-sm">
-        <CardContent className="py-12">{successContent}</CardContent>
-      </Card>
-    );
-  }
-
-  const formContent = (
+  return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -223,22 +183,5 @@ export default function ContactForm({
         </Button>
       </form>
     </Form>
-  );
-
-  if (embedded) return formContent;
-
-  return (
-    <Card className="bg-card mx-auto w-full max-w-2xl shadow-2xl">
-      <CardHeader className="space-y-1">
-        <div className="flex items-center gap-2">
-          <div className="bg-primary-surface text-primary-flare rounded-md p-2">
-            <MessageSquare className="h-5 w-5" />
-          </div>
-          <CardTitle as="h1">{t('title')}</CardTitle>
-        </div>
-        <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
-      </CardHeader>
-      <CardContent>{formContent}</CardContent>
-    </Card>
   );
 }

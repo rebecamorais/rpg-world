@@ -11,6 +11,8 @@ import { cn } from '@frontend/lib/utils';
 
 import { Textarea } from '../ui/textarea';
 
+// maxLength values match the API's lore schema, so a save never fails on length
+
 interface Props {
   data: LoreData;
   onChange: (field: keyof LoreData, value: string) => void;
@@ -28,6 +30,7 @@ const AppearanceField = ({ label, field, value, onChange }: AppearanceFieldProps
     id={`lore-${field}`}
     label={label}
     value={value || ''}
+    maxLength={200}
     placeholder="—"
     onChange={(e) => onChange(field, e.target.value)}
   />
@@ -58,6 +61,7 @@ const TextAreaField = ({
     </SectionCard.Header>
     <Textarea
       aria-label={label}
+      maxLength={20_000}
       value={value || ''}
       placeholder={placeholder}
       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(field, e.target.value)}
