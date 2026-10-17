@@ -17,6 +17,7 @@ updates:
     labels:
       - 'dependencies'
       - 'javascript'
+      - 'typescript'
     groups:
       radix-ui:
         patterns:
