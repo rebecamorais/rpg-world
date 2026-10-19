@@ -38,7 +38,20 @@ type AuthenticatedHandler<B extends Schema, P extends Schema> = (
   input: HandlerInput<B, P> & { user: User },
 ) => Promise<unknown>;
 
+/**
+ * Only `application/json` bodies are read. A cross-site form can post text/plain, urlencoded or
+ * multipart without a CORS preflight, and req.json() would parse any of them (login CSRF).
+ */
+function isJsonContentType(req: NextRequest): boolean {
+  const mediaType = req.headers.get('content-type')?.split(';')[0].trim().toLowerCase();
+  return mediaType === 'application/json';
+}
+
 async function readJson(req: NextRequest): Promise<unknown> {
+  if (!isJsonContentType(req)) {
+    throw new InvalidRequestError([{ path: '', message: 'Content-Type must be application/json' }]);
+  }
+
   try {
     return await req.json();
   } catch {
