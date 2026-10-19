@@ -73,6 +73,7 @@
     "pt": "Portuguese",
     "contactTooltip": "Report a bug",
     "passwordMinLength": "Password must be at least {min} characters.",
+    "passwordTooLong": "Password is too long. Use up to 72 characters (fewer with accents or emoji).",
     "passwordsDoNotMatch": "Passwords do not match.",
     "language": "Language",
     "decrease": "Decrease",

@@ -11,7 +11,10 @@ const LIST_USERS_PAGE_SIZE = 1000;
 // UserErrors the UI can translate. Anything else stays a plain Error and surfaces as a 500.
 const EXPECTED_AUTH_ERRORS: Record<string, UserErrorCode> = {
   invalid_credentials: UserErrorCodes.SIGNIN_INVALID_CREDENTIALS,
-  email_not_confirmed: UserErrorCodes.SIGNIN_EMAIL_NOT_CONFIRMED,
+  // Same answer as a wrong password: sign-up creates the user with the password it was given only
+  // for new e-mails, so "not confirmed" right after a sign-up would reveal that the e-mail had no
+  // account before (the sign-up form itself answers the same way for both).
+  email_not_confirmed: UserErrorCodes.SIGNIN_INVALID_CREDENTIALS,
   weak_password: UserErrorCodes.UPDATE_PASSWORD_WEAK,
   same_password: UserErrorCodes.UPDATE_PASSWORD_SAME,
   email_exists: UserErrorCodes.SIGNUP_DUPLICATE_EMAIL,
