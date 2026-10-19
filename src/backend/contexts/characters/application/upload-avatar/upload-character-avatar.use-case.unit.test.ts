@@ -25,6 +25,7 @@ describe('UploadCharacterAvatarUseCase', () => {
         .fn()
         .mockResolvedValue('https://images.test/avatars/owner-1/characters/char-1-v1.png'),
       download: vi.fn(),
+      remove: vi.fn(),
     };
     useCase = new UploadCharacterAvatarUseCase(storage, characterRepo, () => 'v1');
     await characterRepo.save(

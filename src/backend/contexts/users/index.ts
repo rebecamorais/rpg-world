@@ -69,7 +69,7 @@ export const createUserProfileContext = (config: UserProfileContextConfig): User
 
   return {
     getProfile: new GetProfileUseCase(profileRepository),
-    updateProfile: new UpdateProfileUseCase(profileRepository),
+    updateProfile: new UpdateProfileUseCase(profileRepository, storageRepository),
     uploadAvatar: new UploadAvatarUseCase(storageRepository),
   };
 };

@@ -1,4 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 
 import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';
 import { Attributes } from '../../domain/value-object/Attributes';
@@ -179,5 +181,52 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
         updates: { name: 'Hacked' },
       }),
     ).rejects.toThrowError('character_error_update_unauthorized');
+  });
+
+  describe('avatar substituído', () => {
+    const url = (character: string, version: string) =>
+      `https://images.rpgworldapp.com/avatars/owner/characters/${character}-${version}.png`;
+
+    async function setup(previousAvatarUrl?: string) {
+      const repo = new InMemoryCharacterRepository();
+      const character = makeCharacter('char-a', 'owner');
+      character.avatarUrl = previousAvatarUrl;
+      await repo.save(character);
+      const storage = { remove: vi.fn().mockResolvedValue(undefined) };
+      const useCase = new UpdateCharacterUseCase(repo, storage as unknown as StorageRepository);
+      return { storage, useCase };
+    }
+
+    it('apaga o arquivo anterior depois de salvar o novo avatar', async () => {
+      const { storage, useCase } = await setup(url('char-a', 'v1'));
+
+      await useCase.execute({
+        id: 'char-a',
+        ownerUsername: 'owner',
+        updates: { avatarUrl: url('char-a', 'v2') },
+      });
+
+      expect(storage.remove).toHaveBeenCalledWith('avatars', 'owner/characters/char-a-v1.png');
+    });
+
+    it('não mexe no storage quando o avatar não faz parte da atualização', async () => {
+      const { storage, useCase } = await setup(url('char-a', 'v1'));
+
+      await useCase.execute({ id: 'char-a', ownerUsername: 'owner', updates: { name: 'Novo' } });
+
+      expect(storage.remove).not.toHaveBeenCalled();
+    });
+
+    it('não apaga o avatar de outro personagem apontado pela URL antiga', async () => {
+      const { storage, useCase } = await setup(url('char-b', 'v1'));
+
+      await useCase.execute({
+        id: 'char-a',
+        ownerUsername: 'owner',
+        updates: { avatarUrl: url('char-a', 'v2') },
+      });
+
+      expect(storage.remove).not.toHaveBeenCalled();
+    });
   });
 });

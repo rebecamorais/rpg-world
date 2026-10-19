@@ -15,4 +15,7 @@ export interface StorageRepository {
    * @returns An object with `data` (Blob) and `contentType`.
    */
   download(bucket: string, path: string): Promise<{ data: Blob; contentType: string }>;
+
+  /** Deletes the file at the given path (no error if it is already gone). */
+  remove(bucket: string, path: string): Promise<void>;
 }
