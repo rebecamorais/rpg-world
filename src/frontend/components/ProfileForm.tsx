@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -24,23 +23,10 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { SectionCard } from '@frontend/components/ui/section-card';
+import { ACCENT_COLORS } from '@frontend/constants/accent-colors';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
 import { cn } from '@frontend/lib/utils';
-
-// Hex values: the profile schema (and the API) only accept #rrggbb
-const PREDEFINED_COLORS = [
-  { name: 'default', value: '' },
-  { name: 'red', value: '#ef4444' },
-  { name: 'blue', value: '#3b82f6' },
-  { name: 'green', value: '#22c55e' },
-  { name: 'purple', value: '#a855f7' },
-  { name: 'yellow', value: '#eab308' },
-  { name: 'orange', value: '#f97316' },
-  { name: 'cyan', value: '#06b6d4' },
-  { name: 'pink', value: '#ec4899' },
-  { name: 'slate', value: '#64748b' },
-] as const;
 
 export default function ProfileForm() {
   const t = useTranslations('profileForm');
@@ -64,7 +50,6 @@ export default function ProfileForm() {
   });
 
   type ProfileFormValues = z.infer<typeof profileSchema>;
-  const queryClient = useQueryClient();
   const { profile, isLoading, updateProfile, isUpdating } = useProfile();
 
   const form = useForm<ProfileFormValues>({
@@ -97,11 +82,19 @@ export default function ProfileForm() {
     }
   }, [profile, form]);
 
-  // Called by AvatarUpload when the upload completes — the URL is versioned, so it is used as is
-  const handleAvatarUploadSuccess = (url: string) => {
+  // The upload only stores the file: its URL (versioned, so used as is) is saved right away,
+  // like the success toast says, instead of waiting for the form's Save button
+  const handleAvatarUploadSuccess = async (url: string) => {
+    const previous = form.getValues('avatarUrl');
+    // Shown at once (the upload's preview is already gone), undone if saving fails
     form.setValue('avatarUrl', url);
-    queryClient.invalidateQueries({ queryKey: ['profile'] });
-    toast.success(t('saveSuccess'));
+    try {
+      await updateProfile({ avatarUrl: url });
+      toast.success(t('saveSuccess'));
+    } catch (err: unknown) {
+      form.setValue('avatarUrl', previous);
+      toast.error(getMessage(err instanceof Error ? err.message : 'unknown'));
+    }
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -196,7 +189,7 @@ export default function ProfileForm() {
                     <FormLabel>{t('primaryColorLabel')}</FormLabel>
                     <FormControl>
                       <div className="flex flex-wrap gap-2 pt-1">
-                        {PREDEFINED_COLORS.map((color) => {
+                        {ACCENT_COLORS.map((color) => {
                           const isSelected =
                             color.value === field.value || (!color.value && !field.value);
 

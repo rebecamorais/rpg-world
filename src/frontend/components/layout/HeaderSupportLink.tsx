@@ -75,7 +75,7 @@ export function HeaderSupportLink({ email = '' }: { email?: string }) {
           <DialogDescription>{tFeedback('subtitle')}</DialogDescription>
         </DialogHeader>
         {/* The success toast is enough here: close instead of showing a second screen */}
-        <ContactForm initialEmail={email} embedded onSent={() => setOpen(false)} />
+        <ContactForm initialEmail={email} onSent={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

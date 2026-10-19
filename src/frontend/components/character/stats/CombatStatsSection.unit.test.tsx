@@ -97,4 +97,45 @@ describe('CombatStatsSection', () => {
 
     expect(screen.queryByLabelText('Spell Points')).not.toBeInTheDocument();
   });
+
+  describe('configuração de combate', () => {
+    async function openConfig() {
+      const user = userEvent.setup();
+      await user.click(screen.getByRole('button', { name: 'Edit combat stats' }));
+      return { user, dialog: await screen.findByRole('dialog') };
+    }
+
+    it('salvar leva as mudanças para a ficha', async () => {
+      const { draft, isDirty } = renderCombat();
+      const { user } = await openConfig();
+
+      fireEvent.change(screen.getByLabelText('Max Hit Points'), { target: { value: '20' } });
+      await user.click(screen.getByRole('button', { name: 'Save' }));
+
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(draft().hpMax).toBe(20);
+      expect(isDirty()).toBe(true);
+    });
+
+    it('cancelar descarta o que foi editado no diálogo', async () => {
+      const { draft, isDirty } = renderCombat();
+      const { user } = await openConfig();
+
+      fireEvent.change(screen.getByLabelText('Max Hit Points'), { target: { value: '20' } });
+      await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(draft().hpMax).toBe(12);
+      expect(isDirty()).toBe(false);
+    });
+
+    it('salvar sem mudar nada não deixa a ficha com alterações pendentes', async () => {
+      const { isDirty } = renderCombat({ spellcastingSystem: undefined });
+      const { user } = await openConfig();
+
+      await user.click(screen.getByRole('button', { name: 'Save' }));
+
+      expect(isDirty()).toBe(false);
+    });
+  });
 });

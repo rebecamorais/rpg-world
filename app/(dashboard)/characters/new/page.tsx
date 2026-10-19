@@ -1,9 +1,15 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { getTranslations } from 'next-intl/server';
 
 import NewCharacterForm from '@frontend/components/character/NewCharacterForm';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('characterCreation');
+  return { title: t('title') };
+}
 
 export default async function NewCharacterPage() {
   const t = await getTranslations('characterCreation');

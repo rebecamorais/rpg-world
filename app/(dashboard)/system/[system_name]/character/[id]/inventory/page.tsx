@@ -1,9 +1,16 @@
+import type { Metadata } from 'next';
+
 import { Plus } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { SheetPage } from '@frontend/components/character/sheet/SheetPage';
 import { Button } from '@frontend/components/ui/button';
 import { EmptyState } from '@frontend/components/ui/empty-state';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('characters.tabs');
+  return { title: t('inventory') };
+}
 
 export default async function CharacterInventoryPage() {
   const t = await getTranslations('characters');

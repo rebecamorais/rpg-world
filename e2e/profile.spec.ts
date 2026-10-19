@@ -63,4 +63,8 @@ test('troca o avatar, servido pelo proxy com uma URL nova a cada envio', async (
   const second = await upload(first);
 
   expect(second).not.toBe(first);
+
+  // Saved with the upload, without pressing Save
+  await page.reload();
+  await expect(avatar).toHaveAttribute('src', second!);
 });

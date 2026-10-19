@@ -56,7 +56,6 @@ describe('NewCharacterForm', () => {
     expect(post).toHaveBeenCalledWith('/api/characters', {
       name: 'Thor',
       system: 'DnD_5e',
-      ownerUsername: 'user-1',
     });
     expect(toast.success).toHaveBeenCalledWith(t.success);
   });
@@ -66,7 +65,7 @@ describe('NewCharacterForm', () => {
 
     await createCharacter('');
 
-    expect(await screen.findByText('Name')).toBeInTheDocument();
+    expect(await screen.findByText(t.nameRequired)).toBeInTheDocument();
     expect(post).not.toHaveBeenCalled();
   });
 
@@ -77,8 +76,9 @@ describe('NewCharacterForm', () => {
     await createCharacter('Thor');
 
     const message = messages.common.errors.character_error_create_name_required;
-    expect(await screen.findByText(message)).toBeInTheDocument();
-    expect(toast.error).toHaveBeenCalledWith(`${t.error}: ${message}`);
+    // Inline only: a toast too would say the same thing twice
+    expect(await screen.findByRole('alert')).toHaveTextContent(message);
+    expect(toast.error).not.toHaveBeenCalled();
     expect(push).not.toHaveBeenCalled();
   });
 });

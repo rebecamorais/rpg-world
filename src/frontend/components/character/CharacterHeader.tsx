@@ -17,6 +17,9 @@ import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
 import { CharacterCustomizationDialog } from './CharacterCustomizationDialog';
 
+/** Same limit as the API's character schema, so a save never fails on length. */
+const TEXT_MAX = 100;
+
 export default function CharacterHeader() {
   const {
     name,
@@ -76,6 +79,7 @@ export default function CharacterHeader() {
             {/* The name is the page's h1 (SheetPage); here it is edited like the other fields */}
             <InlineField
               id="char-name"
+              maxLength={TEXT_MAX}
               label={t('name')}
               value={name || ''}
               onChange={(e) => update({ name: e.target.value })}
@@ -138,6 +142,7 @@ export default function CharacterHeader() {
           <div className="grid grid-cols-2 gap-x-6 gap-y-4">
             <InlineField
               id="char-race"
+              maxLength={TEXT_MAX}
               label={t('race')}
               value={race || ''}
               onChange={(e) => update({ race: e.target.value })}
@@ -145,6 +150,7 @@ export default function CharacterHeader() {
             />
             <InlineField
               id="char-class"
+              maxLength={TEXT_MAX}
               label={t('class')}
               value={classNameStr || ''}
               onChange={(e) => update({ class: e.target.value })}
@@ -152,6 +158,7 @@ export default function CharacterHeader() {
             />
             <InlineField
               id="char-background"
+              maxLength={TEXT_MAX}
               label={t('background')}
               value={background || ''}
               onChange={(e) => update({ background: e.target.value })}
@@ -159,6 +166,7 @@ export default function CharacterHeader() {
             />
             <InlineField
               id="char-alignment"
+              maxLength={TEXT_MAX}
               label={t('alignment')}
               value={alignment || ''}
               onChange={(e) => update({ alignment: e.target.value })}
