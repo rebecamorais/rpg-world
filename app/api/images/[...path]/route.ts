@@ -25,6 +25,15 @@ const PUBLIC_BUCKETS = new Set(['avatars']);
 // served as a download instead of being rendered on this origin.
 const INLINE_CONTENT_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
+// Stored paths are made of user/character ids and versioned file names (e.g.
+// `<uuid>/characters/<uuid>-<version>.png`). Next decodes each segment, so `..%2F` or `%3F` would
+// otherwise turn into `../` or `?` and point the storage request somewhere else on the host.
+const SAFE_SEGMENT = /^[\w-][\w.-]*$/;
+
+function isSafeSegment(segment: string) {
+  return SAFE_SEGMENT.test(segment) && !segment.includes('..');
+}
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ path: string[] }> },
@@ -41,7 +50,7 @@ export async function GET(
   const [bucket, ...fileParts] = path;
   const filePath = fileParts.join('/');
 
-  if (!PUBLIC_BUCKETS.has(bucket)) {
+  if (!PUBLIC_BUCKETS.has(bucket) || !fileParts.every(isSafeSegment)) {
     return NextResponse.json({ error: 'Asset not found' }, { status: 404 });
   }
 
