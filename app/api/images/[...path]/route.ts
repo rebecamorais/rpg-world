@@ -16,8 +16,8 @@ import { SupabaseFactory } from '@lib/supabase';
 
 const CACHE_MAX_AGE = 31_536_000; // 1 year in seconds
 
-// Only buckets meant to be public may be served. The anonymous client enforces the same at the
-// storage RLS level, so a missing entry here can't expose a private bucket.
+// Only buckets meant to be public may be served. The public object endpoint enforces the same (it
+// only serves buckets marked public), so a missing entry here can't expose a private bucket.
 const PUBLIC_BUCKETS = new Set(['avatars']);
 
 // The image types the upload use cases accept. The stored Content-Type is chosen by whoever
@@ -46,15 +46,20 @@ export async function GET(
   }
 
   try {
+    // Read through the public object endpoint, which serves public buckets without the storage RLS.
+    // The bucket deliberately has no public SELECT policy: that policy also authorizes listing, and
+    // would let anyone enumerate every file (and with it every user and character id).
     const anonClient = SupabaseFactory.createAnon();
-    const { data, error } = await anonClient.storage.from(bucket).download(filePath);
+    const { publicUrl } = anonClient.storage.from(bucket).getPublicUrl(filePath).data;
+    const response = await fetch(publicUrl);
 
-    if (error || !data) {
+    if (!response.ok) {
       return NextResponse.json({ error: 'Asset not found' }, { status: 404 });
     }
 
-    const arrayBuffer = await data.arrayBuffer();
-    const mimeType = data.type.split(';')[0].trim().toLowerCase();
+    const arrayBuffer = await response.arrayBuffer();
+    const contentType = response.headers.get('content-type') ?? '';
+    const mimeType = contentType.split(';')[0].trim().toLowerCase();
     const inline = INLINE_CONTENT_TYPES.has(mimeType);
 
     return new NextResponse(arrayBuffer, {
