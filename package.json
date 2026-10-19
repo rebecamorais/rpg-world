@@ -56,7 +56,7 @@
     "react-dom": "^19.3.0",
     "react-email": "^6.11.1",
     "react-hook-form": "^7.90.0",
-    "resend": "^6.32.1",
+    "resend": "^6.33.0",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.7.0",
     "zod": "^4.6.7"
@@ -93,7 +93,7 @@
     "sade": "^1.8.1",
     "server-only": "^0.0.1",
     "sharp": "^0.35.5",
-    "supabase": "2.120.0",
+    "supabase": "2.121.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "~6.0.3",
