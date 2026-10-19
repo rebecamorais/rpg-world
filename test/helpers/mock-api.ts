@@ -48,6 +48,7 @@ export function jsonRequest(url: string, method = 'GET', body?: unknown) {
   return new NextRequest(new URL(url, 'http://localhost'), {
     method,
     body: body === undefined ? undefined : JSON.stringify(body),
+    headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
   });
 }
 

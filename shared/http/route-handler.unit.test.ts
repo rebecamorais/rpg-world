@@ -19,10 +19,12 @@ const USER = { id: 'user-1', email: 'hero@example.com' };
 const CHARACTER_ID = '6f1c2a4e-8b3d-4c5e-9f7a-1b2c3d4e5f60';
 const bodySchema = z.object({ name: z.string().min(1) });
 
-function request(body?: string) {
+function request(body?: BodyInit, contentType: string | null = 'application/json') {
   return new NextRequest('http://localhost/api/test', {
     method: body === undefined ? 'GET' : 'POST',
     body,
+    headers:
+      body === undefined || contentType === null ? undefined : { 'Content-Type': contentType },
   });
 }
 
@@ -84,6 +86,48 @@ describe('withHandler', () => {
       issues: [{ path: '', message: 'Body must be valid JSON' }],
     });
     expect(handler).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    'text/plain',
+    'text/plain;charset=UTF-8',
+    'application/x-www-form-urlencoded',
+    'multipart/form-data; boundary=x',
+  ])('responde 400 sem chamar o handler quando o Content-Type é %s', async (contentType) => {
+    // a cross-site form can post these without a preflight, with a body that is valid JSON
+    const handler = vi.fn();
+    const route = withHandler(handler, { body: bodySchema });
+    const res = await route(request(JSON.stringify({ name: 'Hero' }), contentType), context());
+
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({
+      error: INVALID_REQUEST,
+      issues: [{ path: '', message: 'Content-Type must be application/json' }],
+    });
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it('responde 400 quando o body chega sem Content-Type', async () => {
+    const handler = vi.fn();
+    const route = withHandler(handler, { body: bodySchema });
+    // bytes get no default Content-Type (a string body would get text/plain)
+    const body = new TextEncoder().encode(JSON.stringify({ name: 'Hero' }));
+    const res = await route(request(body, null), context());
+
+    expect(res.status).toBe(400);
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it('aceita application/json com parâmetros e em qualquer caixa', async () => {
+    const handler = vi.fn(async () => ({}));
+    const route = withHandler(handler, { body: bodySchema });
+    const res = await route(
+      request(JSON.stringify({ name: 'Hero' }), 'Application/JSON; charset=utf-8'),
+      context(),
+    );
+
+    expect(res.status).toBe(200);
+    expect(handler).toHaveBeenCalledWith(expect.objectContaining({ body: { name: 'Hero' } }));
   });
 
   it('responde 400 com os campos inválidos quando o body não segue o schema', async () => {

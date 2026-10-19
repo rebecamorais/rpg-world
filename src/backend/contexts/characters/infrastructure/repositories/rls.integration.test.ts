@@ -4,6 +4,8 @@ import { Lore } from '@backend/contexts/lore';
 import { SupabaseLoreRepository } from '@backend/contexts/lore/infrastructure/repositories/supabase-lore.repository';
 import { SupabaseStorageRepository } from '@backend/shared/infrastructure/repositories/supabase-storage-repository';
 
+import { SupabaseFactory } from '@lib/supabase';
+
 import { createSignedInClient } from '../../../../../../test/helpers/signed-in-client';
 import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';
 import { Attributes } from '../../domain/value-object/Attributes';
@@ -131,6 +133,61 @@ describe('RLS com client do usuário (Integration)', () => {
           image(),
         ),
       ).rejects.toThrow();
+    });
+
+    it('o bucket recusa tipos fora da lista, mesmo na pasta do próprio usuário', async () => {
+      const svg = new Blob(['<svg><script>1</script></svg>'], { type: 'image/svg+xml' });
+      const storage = new SupabaseStorageRepository(owner.client);
+      await expect(storage.upload('avatars', `${owner.userId}/x.svg`, svg)).rejects.toThrow();
+    });
+
+    it('o usuário substitui o próprio arquivo (upsert)', async () => {
+      const storage = new SupabaseStorageRepository(owner.client);
+      const path = `${owner.userId}/avatar`;
+      await storage.upload('avatars', path, image());
+
+      await expect(storage.upload('avatars', path, image())).resolves.toContain(owner.userId);
+    });
+
+    it('a chave pública e o intruso não listam o bucket nem a pasta de outro', async () => {
+      await new SupabaseStorageRepository(owner.client).upload(
+        'avatars',
+        `${owner.userId}/characters/${characterId}-v1.png`,
+        image(),
+      );
+      const ownerStorage = owner.client.storage.from('avatars');
+      const anon = SupabaseFactory.createAnon().storage.from('avatars');
+      const intruderStorage = intruder.client.storage.from('avatars');
+
+      // The owner still sees their own folder, so the empty listings below are not a broken list.
+      const { data: own } = await ownerStorage.list(`${owner.userId}/characters`);
+      expect(own?.map((file) => file.name)).toContain(`${characterId}-v1.png`);
+
+      const listings = await Promise.all([
+        anon.list(''),
+        anon.list(owner.userId),
+        anon.list(`${owner.userId}/characters`),
+        intruderStorage.list(owner.userId),
+        intruderStorage.list(`${owner.userId}/characters`),
+      ]);
+      expect(listings.map(({ data }) => data ?? [])).toEqual([[], [], [], [], []]);
+    });
+
+    it('o arquivo continua servido pelo endpoint público, sem sessão', async () => {
+      const path = `${owner.userId}/avatar`;
+      await new SupabaseStorageRepository(owner.client).upload('avatars', path, image());
+
+      const avatars = SupabaseFactory.createAnon().storage.from('avatars');
+      const response = await fetch(avatars.getPublicUrl(path).data.publicUrl);
+
+      expect(response.status).toBe(200);
+      expect(response.headers.get('content-type')).toContain('image/png');
+    });
+
+    it('o bucket recusa arquivos acima de 5 MB', async () => {
+      const big = new Blob([new Uint8Array(5 * 1024 * 1024 + 1)], { type: 'image/png' });
+      const storage = new SupabaseStorageRepository(owner.client);
+      await expect(storage.upload('avatars', `${owner.userId}/big.png`, big)).rejects.toThrow();
     });
   });
 });
