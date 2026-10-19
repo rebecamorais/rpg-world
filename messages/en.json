@@ -40,7 +40,7 @@
       "domain_error_hp_healing_negative": "Healing cannot be negative.",
       "character_error_not_found": "Character not found.",
       "character_error_forbidden": "Unauthorized to modify this character.",
-      "character_error_avatar_file_too_large": "The file exceeds the 2MB limit.",
+      "character_error_avatar_file_too_large": "The file exceeds the 5 MB limit.",
       "character_error_avatar_invalid_type": "Invalid file type. Use JPEG, PNG or WEBP.",
       "character_error_spell_action_invalid": "Invalid spell action.",
       "lore_error_character_not_found": "Character not found.",

@@ -74,10 +74,16 @@ describe('UploadCharacterAvatarUseCase', () => {
     );
   });
 
-  it('rejeita arquivo maior que 2MB', async () => {
+  it('rejeita arquivo maior que 5 MB, o limite do bucket', async () => {
     await expect(
-      useCase.execute('char-1', 'owner-1', image('image/png', 2 * 1024 * 1024 + 1)),
+      useCase.execute('char-1', 'owner-1', image('image/png', 5 * 1024 * 1024 + 1)),
     ).rejects.toThrow(CharacterErrorCodes.AVATAR_FILE_TOO_LARGE);
+  });
+
+  it('aceita arquivo de até 5 MB', async () => {
+    await expect(
+      useCase.execute('char-1', 'owner-1', image('image/png', 5 * 1024 * 1024)),
+    ).resolves.toBeDefined();
   });
 
   it('rejeita tipo de arquivo não suportado', async () => {

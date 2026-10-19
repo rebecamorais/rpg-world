@@ -40,7 +40,7 @@
       "domain_error_hp_healing_negative": "Cura não pode ser negativa.",
       "character_error_not_found": "Personagem não encontrado.",
       "character_error_forbidden": "Não autorizado a modificar este personagem.",
-      "character_error_avatar_file_too_large": "O arquivo excede o limite de 2MB.",
+      "character_error_avatar_file_too_large": "O arquivo excede o limite de 5 MB.",
       "character_error_avatar_invalid_type": "Tipo de arquivo inválido. Use JPEG, PNG ou WEBP.",
       "character_error_spell_action_invalid": "Ação de magia inválida.",
       "lore_error_character_not_found": "Personagem não encontrado.",
