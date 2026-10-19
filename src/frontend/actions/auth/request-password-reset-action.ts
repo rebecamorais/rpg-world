@@ -29,8 +29,8 @@ export async function requestPasswordResetAction(
 
   try {
     const api = await getApi();
-    const redirectTo = `${siteUrl()}/reset-password`;
-    await api.authApi.requestPasswordReset(input.data.email, redirectTo);
+    const confirmUrl = `${siteUrl()}/api/auth/confirm`;
+    await api.authApi.requestPasswordReset(input.data.email, confirmUrl);
     return { success: true };
   } catch (error: unknown) {
     return { success: false, error: errorCode(error) };

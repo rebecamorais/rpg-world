@@ -9,7 +9,17 @@ import { SupabaseAuthRepository } from './supabase-auth-repository';
 
 const admin = SupabaseFactory.createAdmin();
 const PASSWORD = 'AuthRepoPass123!';
-const REDIRECT = 'http://localhost:3000/auth/confirm';
+const REDIRECT = 'http://localhost:3000/api/auth/confirm';
+
+/** The `token_hash` and `type` our confirm route receives from an e-mailed link. */
+function tokenOf(link: string) {
+  const url = new URL(link);
+  return {
+    target: `${url.origin}${url.pathname}`,
+    tokenHash: url.searchParams.get('token_hash'),
+    type: url.searchParams.get('type'),
+  };
+}
 
 function memoryCookieStore() {
   const jar = new Map<string, string>();
@@ -124,13 +134,41 @@ describe('SupabaseAuthRepository (integração)', () => {
   });
 
   describe('links por e-mail', () => {
-    it('gera o link de confirmação de cadastro com o redirect pedido', async () => {
+    it('gera o link de confirmação para a nossa rota, com o token e sem sessão na URL', async () => {
       const email = `signup-${crypto.randomUUID()}@auth.test`;
 
       const link = await newRepository().generateSignUpLink(email, PASSWORD, REDIRECT);
 
-      expect(new URL(link).searchParams.get('redirect_to')).toBe(REDIRECT);
+      const { target, tokenHash, type } = tokenOf(link);
+      expect(target).toBe(REDIRECT);
+      expect(type).toBe('signup');
+      expect(tokenHash).toBeTruthy();
+      expect(link).not.toContain('access_token');
       await expect(newRepository().existsByEmail(email)).resolves.toBe(true);
+    });
+
+    it('confirma o cadastro pelo token do link e inicia a sessão', async () => {
+      const email = `signup-verify-${crypto.randomUUID()}@auth.test`;
+      const { tokenHash } = tokenOf(
+        await newRepository().generateSignUpLink(email, PASSWORD, REDIRECT),
+      );
+      const repo = newRepository();
+
+      await repo.verifyEmailLink(tokenHash!, 'signup');
+
+      await expect(repo.getSessionUser()).resolves.toMatchObject({ email });
+    });
+
+    it('recusa o mesmo link uma segunda vez', async () => {
+      const email = `signup-reuse-${crypto.randomUUID()}@auth.test`;
+      const { tokenHash } = tokenOf(
+        await newRepository().generateSignUpLink(email, PASSWORD, REDIRECT),
+      );
+      await newRepository().verifyEmailLink(tokenHash!, 'signup');
+
+      const error = await errorOf(newRepository().verifyEmailLink(tokenHash!, 'signup'));
+
+      expect((error as UserError).code).toBe(UserErrorCodes.AUTH_LINK_EXPIRED);
     });
 
     it('recusa cadastro com e-mail já usado', async () => {
@@ -146,7 +184,13 @@ describe('SupabaseAuthRepository (integração)', () => {
 
       const link = await newRepository().generateRecoveryLink(email, REDIRECT);
 
-      expect(new URL(link).searchParams.get('type')).toBe('recovery');
+      const { target, tokenHash, type } = tokenOf(link);
+      expect(target).toBe(REDIRECT);
+      expect(type).toBe('recovery');
+
+      const repo = newRepository();
+      await repo.verifyEmailLink(tokenHash!, 'recovery');
+      await expect(repo.getSessionUser()).resolves.toMatchObject({ email });
     });
 
     it('traduz recuperação de e-mail desconhecido para usuário não encontrado', async () => {

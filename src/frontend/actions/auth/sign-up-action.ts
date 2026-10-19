@@ -31,7 +31,7 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
 
   try {
     const api = await getApi();
-    await api.authApi.signUp(email, password, `${siteUrl()}/auth/confirm`);
+    await api.authApi.signUp(email, password, `${siteUrl()}/api/auth/confirm`);
     return { success: true };
   } catch (error: unknown) {
     return { success: false, error: errorCode(error) };

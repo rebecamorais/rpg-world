@@ -42,13 +42,12 @@ describe('ResetPasswordForm', () => {
     expect(auth.exchangeCodeForSession).toHaveBeenCalledWith('recovery-code');
   });
 
-  it('restaura a sessão a partir dos tokens no hash da URL', async () => {
-    auth.getSession.mockResolvedValueOnce({ data: { session: null } });
+  it('ignora tokens de sessão no hash da URL (login CSRF)', async () => {
     window.history.replaceState(null, '', '/reset-password#access_token=at&refresh_token=rt');
     renderWithProviders(<ResetPasswordForm />);
 
     await screen.findByLabelText(t.newPasswordLabel);
-    expect(auth.setSession).toHaveBeenCalledWith({ access_token: 'at', refresh_token: 'rt' });
+    expect(auth.setSession).not.toHaveBeenCalled();
   });
 
   it('atualiza a senha e mostra a confirmação', async () => {

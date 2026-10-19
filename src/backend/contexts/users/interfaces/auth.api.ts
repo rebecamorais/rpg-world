@@ -1,3 +1,4 @@
+import { EmailLinkType } from '../domain/AuthRepository';
 import { AuthContext } from '../index';
 
 export const makeAuthApi = (authContext: AuthContext) => ({
@@ -32,6 +33,11 @@ export const makeAuthApi = (authContext: AuthContext) => ({
 
   callbackExchange: async (code: string) => {
     await authContext.callbackExchange.execute(code);
+    return { success: true };
+  },
+
+  verifyEmailLink: async (tokenHash: string, type: EmailLinkType) => {
+    await authContext.verifyEmailLink.execute(tokenHash, type);
     return { success: true };
   },
 

@@ -1,7 +1,7 @@
 import { AuthError, SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
-import { AuthRepository } from '../../domain/AuthRepository';
+import { AuthRepository, EmailLinkType } from '../../domain/AuthRepository';
 import { User } from '../../domain/User';
 import { UserError, UserErrorCode, UserErrorCodes } from '../../domain/UserError';
 
@@ -30,47 +30,61 @@ function authFailure(error: AuthError, context: string): Error {
   return code ? new UserError(code) : new Error(`${context}: ${error.message}`);
 }
 
+/**
+ * Link to our own confirm route, carrying the hashed token instead of Supabase's action link.
+ * The action link answers with the session tokens in the URL hash, and accepting tokens from the
+ * hash lets any page log a visitor into whatever account those tokens belong to (login CSRF).
+ * The confirm route verifies the token on the server, so only a one-time e-mailed token works.
+ */
+function confirmLink(confirmUrl: string, tokenHash: string | undefined, type: EmailLinkType) {
+  if (!tokenHash) {
+    throw new Error(`Failed to generate ${type} link: No token returned`);
+  }
+  const url = new URL(confirmUrl);
+  url.searchParams.set('token_hash', tokenHash);
+  url.searchParams.set('type', type);
+  return url.toString();
+}
+
 export class SupabaseAuthRepository implements AuthRepository {
   constructor(
     private readonly authClient: SupabaseClient,
     private readonly dbClient: SupabaseClient,
   ) {}
 
-  async generateSignUpLink(email: string, password: string, redirectTo: string): Promise<string> {
+  async generateSignUpLink(email: string, password: string, confirmUrl: string): Promise<string> {
     const { data, error } = await this.dbClient.auth.admin.generateLink({
       type: 'signup',
       email,
       password,
-      options: { redirectTo },
     });
 
     if (error) {
       throw authFailure(error, 'Failed to generate signup link');
     }
 
-    if (!data.properties?.action_link) {
-      throw new Error('Failed to generate signup link: No link returned');
-    }
-
-    return data.properties.action_link;
+    return confirmLink(confirmUrl, data.properties?.hashed_token, 'signup');
   }
 
-  async generateRecoveryLink(email: string, redirectTo: string): Promise<string> {
+  async generateRecoveryLink(email: string, confirmUrl: string): Promise<string> {
     const { data, error } = await this.dbClient.auth.admin.generateLink({
       type: 'recovery',
       email,
-      options: { redirectTo },
     });
 
     if (error) {
       throw authFailure(error, 'Failed to generate recovery link');
     }
 
-    if (!data.properties?.action_link) {
-      throw new Error('Failed to generate recovery link: No link returned');
-    }
+    return confirmLink(confirmUrl, data.properties?.hashed_token, 'recovery');
+  }
 
-    return data.properties.action_link;
+  async verifyEmailLink(tokenHash: string, type: EmailLinkType): Promise<void> {
+    const { error } = await this.authClient.auth.verifyOtp({ token_hash: tokenHash, type });
+
+    if (error) {
+      throw authFailure(error, 'Failed to verify e-mail link');
+    }
   }
 
   async getSessionUser(): Promise<User | null> {

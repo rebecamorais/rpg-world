@@ -55,26 +55,11 @@ export default function ResetPasswordForm() {
       const url = new URL(window.location.href);
       const code = url.searchParams.get('code');
 
+      // The recovery e-mail goes through /api/auth/confirm, which starts the session on the server.
+      // Session tokens in the URL hash are deliberately not accepted: any page could put its own
+      // there and log the visitor into that account.
       if (code) {
         await supabase.auth.exchangeCodeForSession(code);
-      } else {
-        const {
-          data: { session: initialSession },
-        } = await supabase.auth.getSession();
-
-        if (!initialSession && window.location.hash.includes('access_token')) {
-          const hash = window.location.hash.substring(1);
-          const params = new URLSearchParams(hash);
-          const accessToken = params.get('access_token');
-          const refreshToken = params.get('refresh_token');
-
-          if (accessToken && refreshToken) {
-            await supabase.auth.setSession({
-              access_token: accessToken,
-              refresh_token: refreshToken,
-            });
-          }
-        }
       }
 
       setIsInitializing(false);
@@ -82,7 +67,7 @@ export default function ResetPasswordForm() {
 
     handleSession();
 
-    // Also listen for changes (sometimes it takes a moment to process the hash)
+    // Also listen for changes (the session can arrive a moment after the page loads)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {

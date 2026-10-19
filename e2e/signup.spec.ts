@@ -16,7 +16,7 @@ test('cadastro: conta criada, e-mail confirmado e acesso liberado', async ({ pag
 
   await expect(page.getByText('Account created!').first()).toBeVisible();
 
-  const confirmation = linkIn(await waitForEmail(email), '/auth/v1/verify');
+  const confirmation = linkIn(await waitForEmail(email), '/api/auth/confirm');
   await page.goto(confirmation);
 
   await expect(page).toHaveURL(/\/characters$/);
