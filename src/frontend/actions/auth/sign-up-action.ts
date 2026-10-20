@@ -3,6 +3,10 @@
 import { getApi } from '@api';
 
 import { signUpSchema } from '@backend/contexts/users/interfaces/users.schemas';
+import {
+  AUTH_EMAIL_MIN_DURATION_MS,
+  withMinimumDuration,
+} from '@backend/shared/application/minimum-duration';
 import { siteUrl } from '@backend/shared/infrastructure/helpers/site-url';
 import { verifyHuman } from '@backend/shared/infrastructure/services/verify-human';
 
@@ -31,7 +35,9 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
 
   try {
     const api = await getApi();
-    await api.authApi.signUp(email, password, `${siteUrl()}/api/auth/confirm`);
+    await withMinimumDuration(AUTH_EMAIL_MIN_DURATION_MS, () =>
+      api.authApi.signUp(email, password, `${siteUrl()}/api/auth/confirm`),
+    );
     return { success: true };
   } catch (error: unknown) {
     return { success: false, error: errorCode(error) };

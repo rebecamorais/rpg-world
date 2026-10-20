@@ -6,6 +6,11 @@ import { requestMagicLinkAction } from './request-magic-link-action';
 
 const signInWithMagicLink = vi.fn();
 
+vi.mock('@backend/shared/application/minimum-duration', () => ({
+  AUTH_EMAIL_MIN_DURATION_MS: 1500,
+  withMinimumDuration: (_ms: number, work: () => Promise<unknown>) => work(),
+}));
+
 vi.mock('server-only', () => ({}));
 
 vi.mock('@api', () => ({
