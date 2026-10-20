@@ -26,7 +26,7 @@ export class UploadAvatarUseCase {
       throw new UserError(UserErrorCodes.AVATAR_UPLOAD_INVALID_TYPE);
     }
 
-    // Versioned path: the proxy caches images as immutable, so each upload needs a new URL.
+    // Versioned path: the proxy lets images be cached, so each upload needs a new URL.
     // The previous file is kept because the new URL is only saved when the profile form is.
     const extension = file.type.split('/')[1];
     const path = `${userId}/avatar-${this.newVersion()}.${extension}`;

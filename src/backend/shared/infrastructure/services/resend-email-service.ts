@@ -6,6 +6,7 @@ import 'server-only';
 import { EmailService } from '../../domain/EmailService';
 import { AccountExistsTemplate } from '../email/templates/AccountExists';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';
+import { MagicLinkTemplate } from '../email/templates/MagicLink';
 import { PasswordResetTemplate } from '../email/templates/PasswordReset';
 
 export class ResendEmailService implements EmailService {
@@ -41,6 +42,19 @@ export class ResendEmailService implements EmailService {
 
     if (error) {
       throw new Error(`Failed to send password reset email: ${error.message}`);
+    }
+  }
+
+  async sendMagicLinkEmail(email: string, signInLink: string): Promise<void> {
+    const { error } = await this.resend.emails.send({
+      from: this.fromEmail,
+      to: [email],
+      subject: 'Seu link de acesso - RPG World',
+      react: React.createElement(MagicLinkTemplate, { signInLink }),
+    });
+
+    if (error) {
+      throw new Error(`Failed to send magic link email: ${error.message}`);
     }
   }
 

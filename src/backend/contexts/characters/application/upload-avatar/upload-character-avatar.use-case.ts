@@ -34,7 +34,7 @@ export class UploadCharacterAvatarUseCase {
 
     const extension = file.type.split('/')[1];
     // The path starts with userId to comply with the bucket's RLS policies. It is versioned
-    // because the proxy caches images as immutable, so each upload needs a new URL; the previous
+    // because the proxy lets images be cached, so each upload needs a new URL; the previous
     // file is kept because the new URL is only saved with the next character update.
     const path = `${userId}/characters/${characterId}-${this.newVersion()}.${extension}`;
 

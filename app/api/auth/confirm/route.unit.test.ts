@@ -32,6 +32,13 @@ describe('GET /api/auth/confirm', () => {
     expect(api.authApi.verifyEmailLink).toHaveBeenCalledWith('abc', 'recovery');
   });
 
+  it('entra com o link mágico e leva para os personagens', async () => {
+    const { location } = await confirm('token_hash=abc&type=magiclink');
+
+    expect(location).toBe(`${ORIGIN}/characters`);
+    expect(api.authApi.verifyEmailLink).toHaveBeenCalledWith('abc', 'magiclink');
+  });
+
   it('ignora um destino vindo na URL', async () => {
     const { location } = await confirm(
       `token_hash=abc&type=signup&next=${encodeURIComponent('https://evil.com')}`,
@@ -40,7 +47,7 @@ describe('GET /api/auth/confirm', () => {
     expect(location).toBe(`${ORIGIN}/characters`);
   });
 
-  it.each(['', 'type=signup', 'token_hash=abc', 'token_hash=abc&type=magiclink'])(
+  it.each(['', 'type=signup', 'token_hash=abc', 'token_hash=abc&type=invite'])(
     'manda para a página de erro sem verificar nada quando a URL é "%s"',
     async (query) => {
       const { location } = await confirm(query);

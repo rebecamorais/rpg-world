@@ -52,7 +52,7 @@ export const createAuthContext = (config: AuthContextConfig): AuthContext => {
 
   return {
     getSession: new GetSessionUserUseCase(authRepository),
-    signInWithMagicLink: new SignInWithMagicLinkUseCase(authRepository),
+    signInWithMagicLink: new SignInWithMagicLinkUseCase(authRepository, config.emailService),
     signInWithPassword: new SignInWithPasswordUseCase(authRepository),
     signUp: new SignUpUseCase(authRepository, config.emailService),
     requestPasswordReset: new RequestPasswordResetUseCase(authRepository, config.emailService),

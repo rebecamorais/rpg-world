@@ -11,6 +11,7 @@ import { errorCode } from '@shared/http/error-response';
 const DESTINATIONS: Record<EmailLinkType, string> = {
   signup: '/characters',
   recovery: '/reset-password',
+  magiclink: '/characters',
 };
 
 function isEmailLinkType(type: string | null): type is EmailLinkType {

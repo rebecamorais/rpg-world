@@ -16,7 +16,6 @@ describe('SupabaseAuthRepository', () => {
     mockAuthClient = {
       auth: {
         getUser: vi.fn(),
-        signInWithOtp: vi.fn(),
         signInWithPassword: vi.fn(),
         exchangeCodeForSession: vi.fn(),
         signOut: vi.fn(),
@@ -68,32 +67,6 @@ describe('SupabaseAuthRepository', () => {
 
       const result = await repository.getSessionUser();
       expect(result).toBeNull();
-    });
-  });
-
-  describe('signInWithOtp', () => {
-    it('deve repassar credenciais corretamente pro client', async () => {
-      vi.mocked(mockAuthClient.auth.signInWithOtp).mockResolvedValueOnce({
-        data: { user: null, session: null },
-        error: null,
-      });
-
-      await repository.signInWithOtp('test@example.com', 'redirect/path');
-      expect(mockAuthClient.auth.signInWithOtp).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        options: { emailRedirectTo: 'redirect/path' },
-      });
-    });
-
-    it('deve lançar erro caso falhe', async () => {
-      vi.mocked(mockAuthClient.auth.signInWithOtp).mockResolvedValueOnce({
-        data: { user: null, session: null },
-        error: mockAuthError('Rate limit exceeded'),
-      });
-
-      await expect(repository.signInWithOtp('t@example.com', '/path')).rejects.toThrow(
-        'Failed to sign in with OTP: Rate limit exceeded',
-      );
     });
   });
 

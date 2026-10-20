@@ -20,7 +20,7 @@ export const signInWithPasswordSchema = z.object({
   password: z.string().min(1).max(MAX_PASSWORD_LENGTH),
 });
 
-export const magicLinkSchema = z.object({ email });
+export const magicLinkSchema = z.object({ email, turnstileToken });
 
 export const updatePasswordSchema = z.object({ newPassword: newPassword });
 

@@ -103,13 +103,13 @@
     "emailPlaceholder": "your@email.com",
     "passwordLabel": "Password",
     "passwordPlaceholder": "••••••••",
-    "magicLinkDisabledWarning": "⚠️ Magic Link is temporarily disabled for email server maintenance.",
-    "magicLinkDisabledButton": "Magic Link Disabled",
+    "magicLinkHint": "We will email you a link to sign in without a password.",
+    "magicLinkSubmit": "Send magic link",
     "dividerText": "or",
     "googleLogin": "Continue with Google",
     "processing": "Processing...",
     "verifyEmailTitle": "Check your email 📬",
-    "verifyEmailDescription": "We sent a magic link to <bold>{email}</bold>. Click the link to sign in.",
+    "verifyEmailDescription": "If <bold>{email}</bold> has an account, a magic link is on its way. Click it to sign in.",
     "invalidEmailError": "Invalid email.",
     "passwordRequiredError": "Password is required.",
     "forgotPassword": "Forgot password?",
@@ -523,7 +523,7 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: October 17, 2026",
+    "lastUpdated": "Last updated: October 20, 2026",
     "sections": {
       "data": {
         "title": "1. Data Collected",
@@ -533,7 +533,7 @@
           "Profile: username, avatar and preferred color.",
           "Characters: sheets, backstory, learned spells and the images you upload.",
           "Support: email, type and message, when you use the contact form.",
-          "Technical data: when you visit the site, <vercel>Vercel</vercel> and <supabase>Supabase</supabase> log the IP address, browser and requested pages, for security and error diagnosis. On protected forms, <cloudflare>Cloudflare Turnstile</cloudflare> checks the IP and browser signals to tell people from bots. We do not use analytics tools."
+          "Technical data: when you visit the site, <vercel>Vercel</vercel> and <supabase>Supabase</supabase> log the IP address, browser and requested pages, for security and error diagnosis. On protected forms, <cloudflare>Cloudflare Turnstile</cloudflare> checks the IP and browser signals to tell people from bots. To count visits we use <cloudflare>Cloudflare Web Analytics</cloudflare>, which uses no cookies and does not identify you: it only records aggregate numbers, such as page views and load times."
         ]
       },
       "usage": {
@@ -547,7 +547,7 @@
       },
       "sharing": {
         "title": "3. Sharing",
-        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, password reset and the contact form), <discord>Discord</discord> (where the support team receives the messages sent through the contact form: email, type, message and, if you are signed in, your account id) and <google>Google</google> (only if you sign in with Google). Today your characters and your profile are visible only to you; avatar images are stored at a public address that is not listed anywhere."
+        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, the magic link, password reset and the contact form; and anonymous visit counts, with Cloudflare Web Analytics), <discord>Discord</discord> (where the support team receives the messages sent through the contact form: email, type, message and, if you are signed in, your account id) and <google>Google</google> (only if you sign in with Google). Today your characters and your profile are visible only to you; avatar images are stored at a public address that is not listed anywhere."
       },
       "rights": {
         "title": "4. Your Rights",

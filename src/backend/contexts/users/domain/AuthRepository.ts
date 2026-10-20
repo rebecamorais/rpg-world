@@ -1,12 +1,13 @@
 import { User } from './User';
 
 /** E-mail links the app sends itself (via the admin API), verified by its confirm route. */
-export type EmailLinkType = 'signup' | 'recovery';
+export type EmailLinkType = 'signup' | 'recovery' | 'magiclink';
 
 export interface AuthRepository {
   getSessionUser(): Promise<User | null>;
-  signInWithOtp(email: string, redirectTo: string): Promise<void>;
   signInWithPassword(email: string, password: string): Promise<void>;
+  /** Returns the sign-in link to `confirmUrl` for an existing user. */
+  generateMagicLink(email: string, confirmUrl: string): Promise<string>;
   /** Creates the user and returns the confirmation link to `confirmUrl`. */
   generateSignUpLink(email: string, password: string, confirmUrl: string): Promise<string>;
   /** Returns the password recovery link to `confirmUrl`. */

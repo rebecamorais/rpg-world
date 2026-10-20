@@ -14,7 +14,9 @@ import 'server-only';
 
 import { SupabaseFactory } from '@lib/supabase';
 
-const CACHE_MAX_AGE = 31_536_000; // 1 year in seconds
+// One day, in the browser and on the CDN. Upload URLs are versioned, so a new image never waits
+// for this; it only bounds how long a replaced (and deleted) avatar can still be served.
+const CACHE_MAX_AGE = 86_400;
 
 // Only buckets meant to be public may be served. The public object endpoint enforces the same (it
 // only serves buckets marked public), so a missing entry here can't expose a private bucket.
@@ -76,7 +78,7 @@ export async function GET(
       headers: {
         'Content-Type': inline ? mimeType : 'application/octet-stream',
         ...(inline ? {} : { 'Content-Disposition': 'attachment' }),
-        'Cache-Control': `public, max-age=${CACHE_MAX_AGE}, immutable`,
+        'Cache-Control': `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}`,
         'X-Robots-Tag': 'noindex',
       },
     });

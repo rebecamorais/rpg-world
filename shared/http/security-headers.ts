@@ -8,6 +8,10 @@
 
 const TURNSTILE_ORIGIN = 'https://challenges.cloudflare.com';
 const GITHUB_SPONSORS_ORIGIN = 'https://github.com';
+// Cloudflare Web Analytics (cookieless visit counts): Cloudflare injects the beacon script, which
+// reports back to cloudflareinsights.com
+const CLOUDFLARE_INSIGHTS_SCRIPT = 'https://static.cloudflareinsights.com';
+const CLOUDFLARE_INSIGHTS_REPORT = 'https://cloudflareinsights.com';
 
 // Sources the Vercel toolbar (comments, feedback) loads on preview deployments
 const VERCEL_TOOLBAR = {
@@ -46,6 +50,7 @@ export function buildContentSecurityPolicy({
       "'self'",
       "'unsafe-inline'",
       TURNSTILE_ORIGIN,
+      CLOUDFLARE_INSIGHTS_SCRIPT,
       ...(isDev ? ["'unsafe-eval'"] : []),
     ],
     'style-src': ["'self'", "'unsafe-inline'"],
@@ -53,7 +58,7 @@ export function buildContentSecurityPolicy({
     // run on another localhost port over plain http
     'img-src': ["'self'", 'blob:', 'data:', 'https:', ...(isDev ? ['http:'] : [])],
     'font-src': ["'self'"],
-    'connect-src': ["'self'", ...supabaseOrigins(supabaseUrl)],
+    'connect-src': ["'self'", ...supabaseOrigins(supabaseUrl), CLOUDFLARE_INSIGHTS_REPORT],
     'frame-src': [TURNSTILE_ORIGIN, GITHUB_SPONSORS_ORIGIN],
     'object-src': ["'none'"],
     'base-uri': ["'self'"],

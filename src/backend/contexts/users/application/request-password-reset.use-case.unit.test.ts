@@ -9,6 +9,7 @@ const makeEmailService = () =>
   ({
     sendConfirmationEmail: vi.fn(),
     sendPasswordResetEmail: vi.fn(),
+    sendMagicLinkEmail: vi.fn(),
     sendAccountExistsEmail: vi.fn(),
   }) satisfies EmailService;
 
