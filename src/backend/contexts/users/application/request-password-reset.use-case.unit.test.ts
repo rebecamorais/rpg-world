@@ -6,7 +6,11 @@ import { UserError, UserErrorCodes } from '../domain/UserError';
 import { RequestPasswordResetUseCase } from './request-password-reset.use-case';
 
 const makeEmailService = () =>
-  ({ sendConfirmationEmail: vi.fn(), sendPasswordResetEmail: vi.fn() }) satisfies EmailService;
+  ({
+    sendConfirmationEmail: vi.fn(),
+    sendPasswordResetEmail: vi.fn(),
+    sendAccountExistsEmail: vi.fn(),
+  }) satisfies EmailService;
 
 describe('RequestPasswordResetUseCase', () => {
   it('envia o link de recuperação', async () => {

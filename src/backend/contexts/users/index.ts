@@ -13,6 +13,7 @@ import { SignUpUseCase } from './application/sign-up.use-case';
 import { UpdatePasswordUseCase } from './application/update-password.use-case';
 import { UpdateProfileUseCase } from './application/update-profile.use-case';
 import { UploadAvatarUseCase } from './application/upload-avatar.use-case';
+import { VerifyEmailLinkUseCase } from './application/verify-email-link.use-case';
 import { SupabaseAuthRepository } from './infrastructure/repositories/supabase-auth-repository';
 import { SupabaseProfileRepository } from './infrastructure/repositories/supabase-profile-repository';
 
@@ -35,6 +36,7 @@ export interface AuthContext {
   requestPasswordReset: RequestPasswordResetUseCase;
   updatePassword: UpdatePasswordUseCase;
   callbackExchange: CallbackExchangeUseCase;
+  verifyEmailLink: VerifyEmailLinkUseCase;
   signOut: SignOutUseCase;
 }
 
@@ -56,6 +58,7 @@ export const createAuthContext = (config: AuthContextConfig): AuthContext => {
     requestPasswordReset: new RequestPasswordResetUseCase(authRepository, config.emailService),
     updatePassword: new UpdatePasswordUseCase(authRepository),
     callbackExchange: new CallbackExchangeUseCase(authRepository, profileRepository),
+    verifyEmailLink: new VerifyEmailLinkUseCase(authRepository),
     signOut: new SignOutUseCase(authRepository),
   };
 };
@@ -66,7 +69,7 @@ export const createUserProfileContext = (config: UserProfileContextConfig): User
 
   return {
     getProfile: new GetProfileUseCase(profileRepository),
-    updateProfile: new UpdateProfileUseCase(profileRepository),
+    updateProfile: new UpdateProfileUseCase(profileRepository, storageRepository),
     uploadAvatar: new UploadAvatarUseCase(storageRepository),
   };
 };

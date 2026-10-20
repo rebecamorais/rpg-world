@@ -15,6 +15,7 @@ export const api = {
     signInWithMagicLink: vi.fn(),
     updatePassword: vi.fn(),
     callbackExchange: vi.fn(),
+    verifyEmailLink: vi.fn(),
     signOut: vi.fn(),
   },
   charactersApi: {

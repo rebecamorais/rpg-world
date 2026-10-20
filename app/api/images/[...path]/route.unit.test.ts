@@ -74,6 +74,35 @@ describe('GET /api/images/[...path]', () => {
     expect(from).not.toHaveBeenCalled();
   });
 
+  // Next hands the route each segment already decoded: `..%2F..%2Frest` arrives as `../../rest`
+  it.each([
+    [['avatars', '..', 'rest', 'v1', 'profile']],
+    [['avatars', '../../../../rest/v1/profile']],
+    [['avatars', 'user-1', 'avatar?download=1']],
+    [['avatars', 'user-1', 'avatar#x']],
+    [['avatars', 'user-1', '.hidden']],
+    [['avatars', 'user-1', 'a..b']],
+    [['avatars', 'user-1', 'a\\b']],
+  ])('responde 404 para caminhos fora do formato dos avatares (%j)', async (path) => {
+    const res = await get(path);
+
+    expect(res.status).toBe(404);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('aceita os caminhos que os uploads geram', async () => {
+    fetchMock.mockImplementation(
+      async () => new Response(new Blob(['png'], { type: 'image/png' })),
+    );
+    const user = '6f1c2a4e-8b3d-4c5e-9f7a-1b2c3d4e5f60';
+
+    const profile = await get(['avatars', user, 'avatar-mf3k2a9b1c2d3e4.webp']);
+    const character = await get(['avatars', user, 'characters', `${user}-mf3k2a9b1c2d3e4.png`]);
+
+    expect(profile.status).toBe(200);
+    expect(character.status).toBe(200);
+  });
+
   it('responde 404 quando o arquivo não existe', async () => {
     fetchMock.mockResolvedValue(
       Response.json({ statusCode: '404', error: 'not_found' }, { status: 400 }),

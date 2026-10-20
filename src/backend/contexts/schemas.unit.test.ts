@@ -83,6 +83,19 @@ describe('auth schemas', () => {
       signUpSchema.safeParse({ email: 'a@b.co', password: '1234567', turnstileToken: 't' }).success,
     ).toBe(false);
   });
+
+  // Supabase refuses passwords over 72 bytes, and only for new e-mails: checking it here keeps the
+  // sign-up answer the same for registered and new ones
+  it.each([
+    ['72 bytes ASCII', 'a'.repeat(72), true],
+    ['73 bytes ASCII', 'a'.repeat(73), false],
+    ['36 "é" (72 bytes)', 'é'.repeat(36), true],
+    ['37 "é" (74 bytes)', 'é'.repeat(37), false],
+  ])('limitam a senha nova a 72 bytes: %s', (_label, password, ok) => {
+    const input = { email: 'a@b.co', password, turnstileToken: 't' };
+    expect(signUpSchema.safeParse(input).success).toBe(ok);
+    expect(updatePasswordSchema.safeParse({ newPassword: password }).success).toBe(ok);
+  });
 });
 
 describe('submitFeedbackSchema', () => {

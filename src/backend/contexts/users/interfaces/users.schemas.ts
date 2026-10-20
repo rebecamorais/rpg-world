@@ -1,10 +1,18 @@
 import { z } from 'zod';
 
-import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from '@shared/auth/password-policy';
+import {
+  MAX_PASSWORD_LENGTH,
+  MIN_PASSWORD_LENGTH,
+  fitsPasswordBytes,
+} from '@shared/auth/password-policy';
 import { httpUrlOrEmpty, optional } from '@shared/http/validation';
 
 const email = z.email().max(320);
-const newPassword = z.string().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH);
+const newPassword = z
+  .string()
+  .min(MIN_PASSWORD_LENGTH)
+  .max(MAX_PASSWORD_LENGTH)
+  .refine(fitsPasswordBytes, 'Password is too long');
 const turnstileToken = z.string().max(4096);
 
 export const signInWithPasswordSchema = z.object({

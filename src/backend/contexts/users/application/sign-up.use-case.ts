@@ -9,7 +9,7 @@ export class SignUpUseCase {
     private readonly emailService: EmailService,
   ) {}
 
-  async execute(email: string, password: string, redirectTo: string): Promise<void> {
+  async execute(email: string, password: string, confirmUrl: string): Promise<void> {
     if (!email || !password) {
       throw new UserError(UserErrorCodes.SIGNUP_REQUIRED_FIELDS);
     }
@@ -19,19 +19,32 @@ export class SignUpUseCase {
       throw new UserError(UserErrorCodes.SIGNUP_INVALID_PASSWORD);
     }
 
-    const exists = await this.authRepository.existsByEmail(email);
-    if (exists) {
-      throw new UserError(UserErrorCodes.SIGNUP_DUPLICATE_EMAIL);
+    // An e-mail that already has an account gets the same answer as a new one, and its owner gets
+    // a notice instead, so the form can't be used to find out who is registered (like the
+    // password reset). The account itself is left untouched.
+    if (await this.authRepository.existsByEmail(email)) {
+      await this.notifyAccountExists(email, confirmUrl);
+      return;
     }
 
-    // Gerar link de confirmação e criar usuário (admin.generateLink com type: signup faz ambos)
-    const confirmationLink = await this.authRepository.generateSignUpLink(
-      email,
-      password,
-      redirectTo,
-    );
+    let confirmationLink: string;
+    try {
+      // admin.generateLink com type: signup cria o usuário e gera o link de confirmação
+      confirmationLink = await this.authRepository.generateSignUpLink(email, password, confirmUrl);
+    } catch (error) {
+      // Registered between the check and the call: same answer
+      if (error instanceof UserError && error.code === UserErrorCodes.SIGNUP_DUPLICATE_EMAIL) {
+        await this.notifyAccountExists(email, confirmUrl);
+        return;
+      }
+      throw error;
+    }
 
-    // Enviar e-mail via EmailService (Resend)
     await this.emailService.sendConfirmationEmail(email, confirmationLink);
+  }
+
+  private async notifyAccountExists(email: string, confirmUrl: string) {
+    const forgotPasswordLink = `${new URL(confirmUrl).origin}/forgot-password`;
+    await this.emailService.sendAccountExistsEmail(email, forgotPasswordLink);
   }
 }

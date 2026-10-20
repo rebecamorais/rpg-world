@@ -5,6 +5,7 @@ import { render } from 'react-email';
 import 'server-only';
 
 import { EmailService } from '../../domain/EmailService';
+import { AccountExistsTemplate } from '../email/templates/AccountExists';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';
 import { PasswordResetTemplate } from '../email/templates/PasswordReset';
 
@@ -61,6 +62,29 @@ export class SupabaseEmailService implements EmailService {
         from: this.fromEmail,
         to: email,
         subject: 'Redefinição de senha - RPG World',
+        html,
+      });
+      console.log('Status: Email sent to local Inbucket.');
+    } catch (error) {
+      console.warn('Warning: Could not connect to the local Inbucket SMTP server.');
+      console.warn('Make sure Inbucket is running if you want to test the email UI.');
+      console.warn(`Error: ${(error as Error).message}`);
+    }
+    console.log('-------------------------------------\n');
+  }
+
+  async sendAccountExistsEmail(email: string, forgotPasswordLink: string): Promise<void> {
+    const html = await render(React.createElement(AccountExistsTemplate, { forgotPasswordLink }));
+
+    console.log('\n--- DEVELOPMENT EMAIL (CONSOLE) ---');
+    console.log(`To: ${email}`);
+    console.log('Account already exists notice');
+
+    try {
+      await this.transporter.sendMail({
+        from: this.fromEmail,
+        to: email,
+        subject: 'Você já tem uma conta - RPG World',
         html,
       });
       console.log('Status: Email sent to local Inbucket.');

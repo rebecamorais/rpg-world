@@ -1,6 +1,6 @@
 import { expect, hydrated, test } from './support/fixtures';
 import { linkIn, waitForEmail } from './support/mailbox';
-import { PASSWORD, uniqueEmail } from './support/supabase';
+import { PASSWORD, createUser, uniqueEmail } from './support/supabase';
 
 test('cadastro: conta criada, e-mail confirmado e acesso liberado', async ({ page }) => {
   const email = uniqueEmail('signup');
@@ -16,26 +16,28 @@ test('cadastro: conta criada, e-mail confirmado e acesso liberado', async ({ pag
 
   await expect(page.getByText('Account created!').first()).toBeVisible();
 
-  const confirmation = linkIn(await waitForEmail(email), '/auth/v1/verify');
+  const confirmation = linkIn(await waitForEmail(email), '/api/auth/confirm');
   await page.goto(confirmation);
 
   await expect(page).toHaveURL(/\/characters$/);
   await expect(page.getByText('No characters yet')).toBeVisible();
 });
 
-test('cadastro recusa e-mail já usado, com a mensagem traduzida', async ({ page }) => {
-  const email = uniqueEmail('signup-twice');
-  for (const attempt of [1, 2]) {
-    await page.goto('/register');
-    await (await hydrated(page.getByLabel('Email'))).fill(email);
-    await page.getByLabel('Password', { exact: true }).fill(PASSWORD);
-    await page.getByLabel('Confirm Password').fill(PASSWORD);
-    const submit = page.getByRole('button', { name: 'Register' });
-    await expect(submit).toBeEnabled({ timeout: 15_000 });
-    await submit.click();
+test('cadastro com e-mail já usado responde igual e avisa o dono por e-mail', async ({ page }) => {
+  // The form must not reveal who is registered: same screen as a new e-mail
+  const user = await createUser('signup-existing');
+  await page.goto('/register');
+  await (await hydrated(page.getByLabel('Email'))).fill(user.email);
+  await page.getByLabel('Password', { exact: true }).fill(PASSWORD);
+  await page.getByLabel('Confirm Password').fill(PASSWORD);
+  const submit = page.getByRole('button', { name: 'Register' });
+  await expect(submit).toBeEnabled({ timeout: 15_000 });
+  await submit.click();
 
-    if (attempt === 1) await expect(page.getByText('Account created!').first()).toBeVisible();
-  }
+  await expect(page.getByText('Account created!').first()).toBeVisible();
+  await expect(page.getByText('This email is already in use.')).toHaveCount(0);
 
-  await expect(page.getByText('This email is already in use.')).toBeVisible();
+  const notice = await waitForEmail(user.email);
+  expect(notice).toContain('Você já tem uma conta');
+  expect(linkIn(notice, '/forgot-password')).toMatch(/\/forgot-password$/);
 });

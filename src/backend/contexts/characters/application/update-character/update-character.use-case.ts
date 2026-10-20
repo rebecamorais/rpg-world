@@ -1,4 +1,5 @@
 import { applyUpdates } from '@backend/shared/application/apply-updates';
+import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import {
@@ -10,6 +11,7 @@ import {
 import { CharacterRepo } from '../../domain/repository';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
 import { findOwnedCharacter } from '../find-owned-character';
+import { removeCharacterAvatar } from '../upload-avatar/character-avatar-file';
 
 export interface CharacterUpdates {
   name?: string;
@@ -79,7 +81,10 @@ const pickSimpleUpdates = (updates: CharacterUpdates): Partial<Pick<DnD5eCharact
   );
 
 export class UpdateCharacterUseCase {
-  constructor(private repository: CharacterRepo) {}
+  constructor(
+    private repository: CharacterRepo,
+    private readonly storageRepository?: StorageRepository,
+  ) {}
 
   async execute({
     id,
@@ -100,6 +105,7 @@ export class UpdateCharacterUseCase {
     }
 
     const { level, hpCurrent, hpMax, attributes, skills, savingThrowProficiencies } = updates;
+    const previousAvatarUrl = character.avatarUrl;
 
     // Aplica atualizações diretas para campos simples
     applyUpdates(character, pickSimpleUpdates(updates));
@@ -131,6 +137,10 @@ export class UpdateCharacterUseCase {
     }
 
     await this.repository.save(character);
+
+    if (this.storageRepository && updates.avatarUrl !== undefined) {
+      await removeCharacterAvatar(this.storageRepository, character, previousAvatarUrl);
+    }
 
     return character;
   }

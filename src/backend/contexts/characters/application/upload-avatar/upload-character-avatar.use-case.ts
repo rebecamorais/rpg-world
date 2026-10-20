@@ -6,7 +6,8 @@ import { CharacterRepo } from '../../domain/repository/character.repo';
 import { findOwnedCharacter } from '../find-owned-character';
 
 const AVATAR_BUCKET = 'avatars';
-const MAX_AVATAR_SIZE_BYTES = 2 * 1024 * 1024; // 2 MB
+// Same as the profile avatar and the avatars bucket limit (the bucket is the real ceiling)
+const MAX_AVATAR_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 /**

@@ -85,14 +85,16 @@ export default function ProfileForm() {
   // The upload only stores the file: its URL (versioned, so used as is) is saved right away,
   // like the success toast says, instead of waiting for the form's Save button
   const handleAvatarUploadSuccess = async (url: string) => {
-    const previous = form.getValues('avatarUrl');
-    // Shown at once (the upload's preview is already gone), undone if saving fails
-    form.setValue('avatarUrl', url);
+    // Shown at once (the upload's preview is already gone). Dirty while saving, so a refetch still
+    // answering for the previous upload can't put the old URL back (the backend deletes the file
+    // an avatar replaces); once saved it becomes the field's value, or is undone if saving fails.
+    form.setValue('avatarUrl', url, { shouldDirty: true });
     try {
       await updateProfile({ avatarUrl: url });
+      form.resetField('avatarUrl', { defaultValue: url });
       toast.success(t('saveSuccess'));
     } catch (err: unknown) {
-      form.setValue('avatarUrl', previous);
+      form.resetField('avatarUrl');
       toast.error(getMessage(err instanceof Error ? err.message : 'unknown'));
     }
   };

@@ -1,4 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 
 import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';
 import { Attributes } from '../../domain/value-object/Attributes';
@@ -41,6 +43,26 @@ describe('DeleteCharacterUseCase ', () => {
     // Ensure it's still there
     const found = await repo.findById('char-1');
     expect(found).not.toBeNull();
+  });
+
+  it('apaga o avatar junto com o personagem', async () => {
+    const storage = { remove: vi.fn().mockResolvedValue(undefined) };
+    const withStorage = new DeleteCharacterUseCase(repo, storage as unknown as StorageRepository);
+    const char = await repo.findById('char-1');
+    char!.avatarUrl = 'https://images.rpgworldapp.com/avatars/owner-1/characters/char-1-v1.png';
+    await repo.save(char!);
+
+    await withStorage.execute('char-1', 'owner-1');
+
+    expect(storage.remove).toHaveBeenCalledWith('avatars', 'owner-1/characters/char-1-v1.png');
+  });
+
+  it('não apaga avatar quem não é o dono', async () => {
+    const storage = { remove: vi.fn() };
+    const withStorage = new DeleteCharacterUseCase(repo, storage as unknown as StorageRepository);
+
+    await expect(withStorage.execute('char-1', 'wrong-owner')).rejects.toThrow();
+    expect(storage.remove).not.toHaveBeenCalled();
   });
 
   it('deve lançar erro se tentar deletar um id que não existe', async () => {

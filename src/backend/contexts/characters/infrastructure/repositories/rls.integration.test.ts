@@ -184,6 +184,21 @@ describe('RLS com client do usuário (Integration)', () => {
       expect(response.headers.get('content-type')).toContain('image/png');
     });
 
+    it('o dono apaga o próprio arquivo; o intruso não apaga o dos outros', async () => {
+      const path = `${owner.userId}/avatar-to-remove.png`;
+      const avatars = SupabaseFactory.createAnon().storage.from('avatars');
+      const publicStatus = async () =>
+        (await fetch(avatars.getPublicUrl(path).data.publicUrl)).status;
+      await new SupabaseStorageRepository(owner.client).upload('avatars', path, image());
+
+      // Storage answers without error even when RLS hides the file: check it is still served
+      await new SupabaseStorageRepository(intruder.client).remove('avatars', path);
+      expect(await publicStatus()).toBe(200);
+
+      await new SupabaseStorageRepository(owner.client).remove('avatars', path);
+      expect(await publicStatus()).not.toBe(200);
+    });
+
     it('o bucket recusa arquivos acima de 5 MB', async () => {
       const big = new Blob([new Uint8Array(5 * 1024 * 1024 + 1)], { type: 'image/png' });
       const storage = new SupabaseStorageRepository(owner.client);

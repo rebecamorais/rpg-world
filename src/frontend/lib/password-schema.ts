@@ -1,10 +1,14 @@
 import { z } from 'zod';
 
-import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from '@shared/auth/password-policy';
+import {
+  MAX_PASSWORD_LENGTH,
+  MIN_PASSWORD_LENGTH,
+  fitsPasswordBytes,
+} from '@shared/auth/password-policy';
 
 /** next-intl translator scoped to `common`. */
 type CommonTranslator = (
-  key: 'passwordMinLength' | 'passwordsDoNotMatch',
+  key: 'passwordMinLength' | 'passwordTooLong' | 'passwordsDoNotMatch',
   values?: { min: number },
 ) => string;
 
@@ -14,7 +18,8 @@ export function newPasswordFields(t: CommonTranslator) {
     password: z
       .string()
       .min(MIN_PASSWORD_LENGTH, { message: t('passwordMinLength', { min: MIN_PASSWORD_LENGTH }) })
-      .max(MAX_PASSWORD_LENGTH),
+      .max(MAX_PASSWORD_LENGTH, { message: t('passwordTooLong') })
+      .refine(fitsPasswordBytes, { message: t('passwordTooLong') }),
     confirmPassword: z.string(),
   };
 }

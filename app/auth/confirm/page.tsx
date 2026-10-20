@@ -33,28 +33,12 @@ export default function AuthConfirmPage() {
         }
       }
 
-      // Then get the session (works for both code exchange result and hash fragment)
-      let {
+      // Session tokens in the URL hash are deliberately not accepted: any page could put its own
+      // there and log the visitor into that account. E-mail links go through /api/auth/confirm.
+      const {
         data: { session },
         error: sessionError,
       } = await supabase.auth.getSession();
-
-      // Fallback for hash fragments if getSession() fails to pick it up automatically
-      if (!session && !sessionError && window.location.hash.includes('access_token')) {
-        const hash = window.location.hash.substring(1);
-        const params = new URLSearchParams(hash);
-        const accessToken = params.get('access_token');
-        const refreshToken = params.get('refresh_token');
-
-        if (accessToken && refreshToken) {
-          const { data: setSessionData, error: setSessionError } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-          });
-          session = setSessionData.session;
-          sessionError = setSessionError;
-        }
-      }
 
       if (sessionError) {
         console.error('Auth session failed:', sessionError);

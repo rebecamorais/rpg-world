@@ -228,7 +228,8 @@ describe('SupabaseAuthRepository', () => {
 
     it.each([
       ['invalid_credentials', UserErrorCodes.SIGNIN_INVALID_CREDENTIALS],
-      ['email_not_confirmed', UserErrorCodes.SIGNIN_EMAIL_NOT_CONFIRMED],
+      // same answer as a wrong password, so it can't confirm that a sign-up created the account
+      ['email_not_confirmed', UserErrorCodes.SIGNIN_INVALID_CREDENTIALS],
       ['over_request_rate_limit', UserErrorCodes.AUTH_RATE_LIMITED],
     ])('signInWithPassword: %s vira %s', async (code, expected) => {
       vi.mocked(mockAuthClient.auth.signInWithPassword).mockResolvedValueOnce(failWith(code));

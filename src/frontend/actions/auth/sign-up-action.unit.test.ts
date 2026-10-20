@@ -44,7 +44,7 @@ describe('signUpAction', () => {
     expect(signUp).toHaveBeenCalledWith(
       'user@example.com',
       'longpassword',
-      'https://rpg.test/auth/confirm',
+      'https://rpg.test/api/auth/confirm',
     );
   });
 
