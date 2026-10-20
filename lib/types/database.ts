@@ -359,7 +359,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      orphan_avatar_objects: { Args: { min_age?: string }; Returns: string[] };
     };
     Enums: {
       rpg_system: 'dnd_5e' | 'ezd6' | 'pathfinder_2e';
