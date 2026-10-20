@@ -7,6 +7,11 @@ import { signUpAction } from './sign-up-action';
 
 const signUp = vi.fn();
 
+vi.mock('@backend/shared/application/minimum-duration', () => ({
+  AUTH_EMAIL_MIN_DURATION_MS: 1500,
+  withMinimumDuration: (_ms: number, work: () => Promise<unknown>) => work(),
+}));
+
 vi.mock('@api', () => ({
   getApi: async () => ({ authApi: { signUp } }),
 }));

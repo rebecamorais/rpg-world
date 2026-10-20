@@ -3,6 +3,10 @@
 import { getApi } from '@api';
 
 import { passwordResetRequestSchema } from '@backend/contexts/users/interfaces/users.schemas';
+import {
+  AUTH_EMAIL_MIN_DURATION_MS,
+  withMinimumDuration,
+} from '@backend/shared/application/minimum-duration';
 import { siteUrl } from '@backend/shared/infrastructure/helpers/site-url';
 import { verifyHuman } from '@backend/shared/infrastructure/services/verify-human';
 
@@ -30,7 +34,9 @@ export async function requestPasswordResetAction(
   try {
     const api = await getApi();
     const confirmUrl = `${siteUrl()}/api/auth/confirm`;
-    await api.authApi.requestPasswordReset(input.data.email, confirmUrl);
+    await withMinimumDuration(AUTH_EMAIL_MIN_DURATION_MS, () =>
+      api.authApi.requestPasswordReset(input.data.email, confirmUrl),
+    );
     return { success: true };
   } catch (error: unknown) {
     return { success: false, error: errorCode(error) };

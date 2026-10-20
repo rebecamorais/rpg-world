@@ -32,8 +32,9 @@ export class SupabaseStorageRepository implements StorageRepository {
     return { data, contentType: data.type || 'application/octet-stream' };
   }
 
-  async remove(bucket: string, path: string): Promise<void> {
-    const { error } = await this.client.storage.from(bucket).remove([path]);
+  async remove(bucket: string, path: string | string[]): Promise<void> {
+    const paths = Array.isArray(path) ? path : [path];
+    const { error } = await this.client.storage.from(bucket).remove(paths);
 
     if (error) {
       throw new Error(`Storage remove failed: ${error.message}`);
