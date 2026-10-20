@@ -18,15 +18,23 @@ describe('buildContentSecurityPolicy', () => {
     expect(directive(csp, 'connect-src')).toContain('wss://abc.supabase.co');
   });
 
-  it('only connects to the app itself and Supabase (game icons are bundled)', () => {
+  it('only connects to the app itself, Supabase and the analytics beacon (game icons are bundled)', () => {
     const connect = directive(buildContentSecurityPolicy(prod), 'connect-src');
-    expect(connect).toBe("connect-src 'self' https://abc.supabase.co wss://abc.supabase.co");
+    expect(connect).toBe(
+      "connect-src 'self' https://abc.supabase.co wss://abc.supabase.co https://cloudflareinsights.com",
+    );
   });
 
   it('allows the Turnstile script and iframe', () => {
     const csp = buildContentSecurityPolicy(prod);
     expect(directive(csp, 'script-src')).toContain('https://challenges.cloudflare.com');
     expect(directive(csp, 'frame-src')).toContain('https://challenges.cloudflare.com');
+  });
+
+  it('allows the Cloudflare Web Analytics beacon Cloudflare injects', () => {
+    const csp = buildContentSecurityPolicy(prod);
+    expect(directive(csp, 'script-src')).toContain('https://static.cloudflareinsights.com');
+    expect(directive(csp, 'connect-src')).toContain('https://cloudflareinsights.com');
   });
 
   it('forbids framing, plugins and foreign form targets', () => {

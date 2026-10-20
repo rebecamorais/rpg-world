@@ -523,7 +523,7 @@
   },
   "privacy": {
     "title": "Política de Privacidade",
-    "lastUpdated": "Última atualização: 17 de outubro de 2026",
+    "lastUpdated": "Última atualização: 20 de outubro de 2026",
     "sections": {
       "data": {
         "title": "1. Dados Coletados",
@@ -533,7 +533,7 @@
           "Perfil: nome de usuário, avatar e cor preferida.",
           "Personagens: fichas, história, magias aprendidas e as imagens que você envia.",
           "Suporte: e-mail, tipo e mensagem, quando você usa o formulário de contato.",
-          "Dados técnicos: ao acessar o site, a <vercel>Vercel</vercel> e o <supabase>Supabase</supabase> registram em logs o endereço IP, o navegador e as páginas pedidas, para segurança e diagnóstico de erros. Nos formulários protegidos, o <cloudflare>Cloudflare Turnstile</cloudflare> analisa o IP e sinais do navegador para distinguir pessoas de robôs. Não usamos ferramentas de analytics."
+          "Dados técnicos: ao acessar o site, a <vercel>Vercel</vercel> e o <supabase>Supabase</supabase> registram em logs o endereço IP, o navegador e as páginas pedidas, para segurança e diagnóstico de erros. Nos formulários protegidos, o <cloudflare>Cloudflare Turnstile</cloudflare> analisa o IP e sinais do navegador para distinguir pessoas de robôs. Para contar visitas usamos o <cloudflare>Cloudflare Web Analytics</cloudflare>, que não usa cookies nem identifica você: ele só registra números agregados, como páginas vistas e tempo de carregamento."
         ]
       },
       "usage": {
@@ -547,7 +547,7 @@
       },
       "sharing": {
         "title": "3. Compartilhamento",
-        "content": "Nós não vendemos seus dados para terceiros. Para operar o RPG World usamos estes serviços: <supabase>Supabase</supabase> (banco de dados, login e armazenamento de imagens), <vercel>Vercel</vercel> (hospedagem), <resend>Resend</resend> (envio de e-mails), <cloudflare>Cloudflare Turnstile</cloudflare> (proteção contra robôs no cadastro, na recuperação de senha e no formulário de contato), <discord>Discord</discord> (onde a equipe de suporte recebe as mensagens enviadas pelo formulário de contato: e-mail, tipo, mensagem e, se você estiver logado, o identificador da sua conta) e <google>Google</google> (só se você entrar com o Google). Hoje seus personagens e seu perfil são vistos apenas por você; as imagens de avatar ficam em um endereço público que não é listado em lugar nenhum."
+        "content": "Nós não vendemos seus dados para terceiros. Para operar o RPG World usamos estes serviços: <supabase>Supabase</supabase> (banco de dados, login e armazenamento de imagens), <vercel>Vercel</vercel> (hospedagem), <resend>Resend</resend> (envio de e-mails), <cloudflare>Cloudflare Turnstile</cloudflare> (proteção contra robôs no cadastro, no link mágico, na recuperação de senha e no formulário de contato; e contagem anônima de visitas, com o Cloudflare Web Analytics), <discord>Discord</discord> (onde a equipe de suporte recebe as mensagens enviadas pelo formulário de contato: e-mail, tipo, mensagem e, se você estiver logado, o identificador da sua conta) e <google>Google</google> (só se você entrar com o Google). Hoje seus personagens e seu perfil são vistos apenas por você; as imagens de avatar ficam em um endereço público que não é listado em lugar nenhum."
       },
       "rights": {
         "title": "4. Seus Direitos",
