@@ -38,7 +38,8 @@ describe('GET /api/images/[...path]', () => {
 
     expect(res.status).toBe(200);
     expect(res.headers.get('content-type')).toBe('image/png');
-    expect(res.headers.get('cache-control')).toBe('public, max-age=31536000, immutable');
+    // One day: a replaced avatar (deleted from the bucket) stops being served soon after
+    expect(res.headers.get('cache-control')).toBe('public, max-age=86400, s-maxage=86400');
     expect(await res.text()).toBe('png');
     expect(from).toHaveBeenCalledWith('avatars');
     // Public object endpoint, not the RLS-checked one: the bucket has no public SELECT policy.
