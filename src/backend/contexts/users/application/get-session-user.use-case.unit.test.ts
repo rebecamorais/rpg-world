@@ -20,7 +20,6 @@ describe('GetSessionUserUseCase', () => {
   it('deve retornar null se não houver sessão', async () => {
     const mockRepository = {
       getSessionUser: vi.fn().mockResolvedValue(null),
-      signInWithOtp: vi.fn(),
       signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
       updatePassword: vi.fn(),

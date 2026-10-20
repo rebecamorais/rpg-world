@@ -6,8 +6,8 @@ export const makeAuthApi = (authContext: AuthContext) => ({
     return authContext.getSession.execute();
   },
 
-  signInWithMagicLink: async (email: string, redirectTo: string) => {
-    await authContext.signInWithMagicLink.execute(email, redirectTo);
+  signInWithMagicLink: async (email: string, confirmUrl: string) => {
+    await authContext.signInWithMagicLink.execute(email, confirmUrl);
     return { success: true };
   },
 

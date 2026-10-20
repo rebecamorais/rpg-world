@@ -108,17 +108,19 @@ export class SupabaseAuthRepository implements AuthRepository {
     };
   }
 
-  async signInWithOtp(email: string, redirectTo: string): Promise<void> {
-    const { error } = await this.authClient.auth.signInWithOtp({
+  async generateMagicLink(email: string, confirmUrl: string): Promise<string> {
+    // Note: for an unknown e-mail, Supabase creates the user and returns a signup link instead,
+    // so callers must check the account exists first
+    const { data, error } = await this.dbClient.auth.admin.generateLink({
+      type: 'magiclink',
       email,
-      options: {
-        emailRedirectTo: redirectTo,
-      },
     });
 
     if (error) {
-      throw authFailure(error, 'Failed to sign in with OTP');
+      throw authFailure(error, 'Failed to generate magic link');
     }
+
+    return confirmLink(confirmUrl, data.properties?.hashed_token, 'magiclink');
   }
 
   async signInWithPassword(email: string, password: string): Promise<void> {

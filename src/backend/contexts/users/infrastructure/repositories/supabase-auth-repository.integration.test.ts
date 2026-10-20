@@ -193,6 +193,20 @@ describe('SupabaseAuthRepository (integração)', () => {
       await expect(repo.getSessionUser()).resolves.toMatchObject({ email });
     });
 
+    it('gera o link mágico para a nossa rota e o token inicia a sessão', async () => {
+      const { email } = await createUser('magic');
+
+      const { target, tokenHash, type } = tokenOf(
+        await newRepository().generateMagicLink(email, REDIRECT),
+      );
+      expect(target).toBe(REDIRECT);
+      expect(type).toBe('magiclink');
+
+      const repo = newRepository();
+      await repo.verifyEmailLink(tokenHash!, 'magiclink');
+      await expect(repo.getSessionUser()).resolves.toMatchObject({ email });
+    });
+
     it('traduz recuperação de e-mail desconhecido para usuário não encontrado', async () => {
       const error = await errorOf(
         newRepository().generateRecoveryLink(`ghost-${crypto.randomUUID()}@auth.test`, REDIRECT),

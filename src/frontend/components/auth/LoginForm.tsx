@@ -9,6 +9,8 @@ import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { requestMagicLinkAction } from '@frontend/actions/auth/request-magic-link-action';
+import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -38,11 +40,17 @@ interface LoginFormValues {
 }
 
 export default function LoginForm() {
-  const { sendMagicLink, signInWithPassword } = useAuth();
+  const { signInWithPassword } = useAuth();
   const t = useTranslations('login');
   const { getMessage } = useErrorMessage();
   const [emailSent, setEmailSent] = useState(false);
   const [authMode, setAuthMode] = useState<'magic' | 'password'>('password');
+  const {
+    token: turnstileToken,
+    setToken: setTurnstileToken,
+    resetKey: turnstileKey,
+    reset: resetTurnstile,
+  } = useTurnstile();
 
   const loginSchema = z.object({
     email: z.string().email({ message: t('invalidEmailError') }),
@@ -54,11 +62,25 @@ export default function LoginForm() {
     defaultValues: { email: '', password: '' },
   });
 
+  const sendMagicLink = async (email: string) => {
+    if (!turnstileToken) {
+      form.setError('root', { message: getMessage('security_token_missing') });
+      return;
+    }
+
+    const result = await requestMagicLinkAction(email, turnstileToken);
+    if (result.success) {
+      setEmailSent(true);
+    } else {
+      setServerError(form.setError, ['email'], result.error, getMessage(result.error));
+      resetTurnstile();
+    }
+  };
+
   const onSubmit = async (data: LoginFormValues) => {
     try {
       if (authMode === 'magic') {
         await sendMagicLink(data.email);
-        setEmailSent(true);
       } else {
         if (!data.password) {
           form.setError('password', { message: t('passwordRequiredError') });
@@ -175,24 +197,24 @@ export default function LoginForm() {
             )}
 
             {authMode === 'magic' && (
-              <div className="border-warning-muted bg-warning-surface rounded-md border p-2.5">
-                <p className="text-warning-flare text-center text-sm">
-                  {t('magicLinkDisabledWarning')}
-                </p>
-              </div>
+              <>
+                <p className="text-muted-foreground text-center text-sm">{t('magicLinkHint')}</p>
+                {/* The link is sent by us through the admin API, so a human check comes first */}
+                <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
+              </>
             )}
 
             <FormRootError />
             <Button
               type="submit"
-              disabled={authMode === 'magic'}
+              disabled={authMode === 'magic' && !turnstileToken}
               loading={form.formState.isSubmitting}
               className="mt-2 w-full font-semibold"
             >
               {form.formState.isSubmitting
                 ? t('processing')
                 : authMode === 'magic'
-                  ? t('magicLinkDisabledButton')
+                  ? t('magicLinkSubmit')
                   : t('submit')}
             </Button>
           </form>

@@ -1,4 +1,5 @@
 import { expect, hydrated, test } from './support/fixtures';
+import { linkIn, waitForEmail } from './support/mailbox';
 import { PASSWORD, createUser } from './support/supabase';
 
 test.describe('autenticação', () => {
@@ -16,6 +17,24 @@ test.describe('autenticação', () => {
     await (await hydrated(page.getByLabel('Email'))).fill(user.email);
     await page.getByLabel('Password').fill(PASSWORD);
     await page.getByRole('button', { name: 'Sign In' }).click();
+
+    await expect(page).toHaveURL(/\/characters$/);
+    await expect(page.getByText('No characters yet')).toBeVisible();
+  });
+
+  test('link mágico: pedido no login, link por e-mail e acesso liberado', async ({ page }) => {
+    const user = await createUser('magic-link');
+    await page.goto('/login');
+
+    await (await hydrated(page.getByRole('button', { name: 'Magic Link' }))).click();
+    await page.getByLabel('Email').fill(user.email);
+    // Cloudflare's test site key solves the challenge on its own and enables the button
+    const submit = page.getByRole('button', { name: 'Send magic link' });
+    await expect(submit).toBeEnabled({ timeout: 15_000 });
+    await submit.click();
+    await expect(page.getByText('Check your email 📬')).toBeVisible();
+
+    await page.goto(linkIn(await waitForEmail(user.email), '/api/auth/confirm'));
 
     await expect(page).toHaveURL(/\/characters$/);
     await expect(page.getByText('No characters yet')).toBeVisible();

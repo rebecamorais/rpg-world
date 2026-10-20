@@ -1,16 +1,34 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { requestMagicLinkAction } from '@frontend/actions/auth/request-magic-link-action';
 
 import LoginForm from './LoginForm';
 
 const signInWithPassword = vi.fn();
-const sendMagicLink = vi.fn();
 
 vi.mock('@frontend/hooks/useAuth', () => ({
-  useAuth: () => ({ signInWithPassword, sendMagicLink }),
+  useAuth: () => ({ signInWithPassword }),
 }));
+
+vi.mock('@frontend/actions/auth/request-magic-link-action', () => ({
+  requestMagicLinkAction: vi.fn(),
+}));
+
+const requestMagicLink = vi.mocked(requestMagicLinkAction);
+
+/** Fake Cloudflare Turnstile that solves the challenge as soon as it renders. */
+const turnstile = {
+  render: vi.fn((_container: string | HTMLElement, options: Record<string, unknown>) => {
+    (options.callback as (token: string) => void)('turnstile-token');
+    return 'widget-id';
+  }),
+  reset: vi.fn(),
+  remove: vi.fn(),
+  getResponse: vi.fn(),
+};
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
 
@@ -77,14 +95,52 @@ describe('LoginForm', () => {
     expect(screen.queryByText(/relation/)).not.toBeInTheDocument();
   });
 
-  it('desabilita o envio no modo magic link e avisa que está fora do ar', async () => {
-    const user = userEvent.setup();
-    renderWithProviders(<LoginForm />);
+  describe('magic link', () => {
+    beforeEach(() => {
+      window.turnstile = turnstile;
+      requestMagicLink.mockResolvedValue({ success: true });
+    });
 
-    await user.click(screen.getByRole('button', { name: t.magicLinkTab }));
+    afterEach(() => {
+      delete window.turnstile;
+    });
 
-    expect(screen.getByText(t.magicLinkDisabledWarning)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: t.magicLinkDisabledButton })).toBeDisabled();
-    expect(screen.queryByLabelText(t.passwordLabel)).not.toBeInTheDocument();
+    async function sendMagicLink(email = 'hero@example.com') {
+      const user = userEvent.setup();
+      renderWithProviders(<LoginForm />);
+      await user.click(screen.getByRole('button', { name: t.magicLinkTab }));
+      await user.type(screen.getByLabelText(t.emailLabel), email);
+      await user.click(screen.getByRole('button', { name: t.magicLinkSubmit }));
+    }
+
+    it('manda o e-mail com o token do Turnstile e mostra o aviso para olhar a caixa', async () => {
+      await sendMagicLink();
+
+      expect(await screen.findByText(t.verifyEmailTitle)).toBeInTheDocument();
+      expect(requestMagicLink).toHaveBeenCalledWith('hero@example.com', 'turnstile-token');
+      expect(screen.queryByLabelText(t.passwordLabel)).not.toBeInTheDocument();
+    });
+
+    it('mostra o erro e pede um novo desafio quando o envio é recusado', async () => {
+      requestMagicLink.mockResolvedValue({ success: false, error: 'auth_error_rate_limited' });
+
+      await sendMagicLink();
+
+      expect(
+        await screen.findByText(messages.common.errors.auth_error_rate_limited),
+      ).toBeInTheDocument();
+      expect(screen.queryByText(t.verifyEmailTitle)).not.toBeInTheDocument();
+    });
+
+    it('não envia sem o Turnstile resolvido', async () => {
+      delete window.turnstile;
+      const user = userEvent.setup();
+      renderWithProviders(<LoginForm />);
+
+      await user.click(screen.getByRole('button', { name: t.magicLinkTab }));
+
+      expect(screen.getByRole('button', { name: t.magicLinkSubmit })).toBeDisabled();
+      expect(requestMagicLink).not.toHaveBeenCalled();
+    });
   });
 });

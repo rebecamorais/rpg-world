@@ -44,7 +44,6 @@ describe('SignInWithPasswordUseCase', () => {
   it('deve lançar erro se o email ou senha não forem fornecidos', async () => {
     const mockRepository = {
       getSessionUser: vi.fn(),
-      signInWithOtp: vi.fn(),
       signInWithPassword: vi.fn(),
       exchangeCodeForSession: vi.fn(),
       updatePassword: vi.fn(),

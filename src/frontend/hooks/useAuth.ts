@@ -1,10 +1,6 @@
 import { rpgWorldApi } from '@client';
 
 export function useAuth() {
-  const sendMagicLink = async (email: string): Promise<void> => {
-    await rpgWorldApi.post<void>('/api/auth/magic-link', { email });
-  };
-
   const signInWithPassword = async (email: string, password: string): Promise<void> => {
     const response = await rpgWorldApi.post<{
       passwordChangeRequired: boolean;
@@ -32,5 +28,5 @@ export function useAuth() {
     }
   };
 
-  return { sendMagicLink, signInWithPassword, updatePassword, signOut };
+  return { signInWithPassword, updatePassword, signOut };
 }
