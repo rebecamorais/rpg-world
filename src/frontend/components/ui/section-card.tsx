@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Card } from '@frontend/components/ui/card';
+import { Hint } from '@frontend/components/ui/hint';
 import { AppIcon, type IconName } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
 
@@ -36,12 +37,27 @@ interface SectionCardTitleProps extends React.ComponentProps<'h2'> {
   as?: 'h2' | 'h3';
   icon?: IconName;
   iconVariant?: React.ComponentProps<typeof AppIcon>['variant'];
+  /** What the section is about; the icon opens it (on hover or tap). Needs a text title. */
+  hint?: string;
+}
+
+function titleIcon(icon: IconName, variant: SectionCardTitleProps['iconVariant']) {
+  return (
+    <AppIcon
+      name={icon}
+      variant={variant}
+      size={variant === 'game' ? 'lg' : 14}
+      className="text-character-flare shrink-0"
+      aria-hidden="true"
+    />
+  );
 }
 
 function SectionCardTitle({
   as: Tag = 'h2',
   icon,
   iconVariant,
+  hint,
   className,
   children,
   ...props
@@ -51,15 +67,14 @@ function SectionCardTitle({
       className={cn('text-label text-muted-foreground flex items-center gap-2', className)}
       {...props}
     >
-      {icon && (
-        <AppIcon
-          name={icon}
-          variant={iconVariant}
-          size={iconVariant === 'game' ? 'lg' : 14}
-          className="text-character-flare shrink-0"
-          aria-hidden="true"
-        />
-      )}
+      {icon &&
+        (hint && typeof children === 'string' ? (
+          <Hint label={children} hint={hint}>
+            {titleIcon(icon, iconVariant)}
+          </Hint>
+        ) : (
+          titleIcon(icon, iconVariant)
+        ))}
       {children}
     </Tag>
   );

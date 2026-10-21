@@ -19,12 +19,22 @@ function renderSkills(acrobatics?: CharacterSkill) {
     skills: acrobatics ? { ACROBATICS: acrobatics } : {},
   } as DnD5eCharacter;
   const result = renderWithCharacter(<SkillsSection />, character);
-  // The row: the toggle (name and attribute) and the value next to it
+  // The row: the toggle (name), the attribute hint and the value
   const row = () => screen.getByText('Acrobatics').closest('div')!;
   return { ...result, row };
 }
 
 describe('SkillsSection', () => {
+  it('o atributo da perícia explica o que ela cobre, ao tocar', async () => {
+    renderSkills();
+
+    await userEvent.click(screen.getByRole('button', { name: 'What is Acrobatics?' }));
+
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip).toHaveTextContent('Keep your balance');
+    expect(tooltip).toHaveTextContent('Uses Dexterity.');
+  });
+
   it('soma o modificador do atributo da perícia (DES 14 → +2)', () => {
     const { row } = renderSkills();
 

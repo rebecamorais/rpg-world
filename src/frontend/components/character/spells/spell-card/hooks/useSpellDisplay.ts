@@ -16,6 +16,8 @@ import type { Spell } from '@frontend/types/spells';
 export interface SpellComponentDisplay {
   letter: string;
   label: string;
+  /** What the component asks of the caster. */
+  hint?: string;
   icon: string;
   color: string;
 }
@@ -101,6 +103,9 @@ export function useSpellDisplay(spell: Spell) {
       return {
         letter: comp,
         label: tData(`components.${comp}` as Parameters<typeof tData>[0]),
+        hint: tData.has(`componentHints.${comp}` as Parameters<typeof tData>[0])
+          ? tData(`componentHints.${comp}` as Parameters<typeof tData>[0])
+          : undefined,
         icon: meta?.icon || 'help-circle',
         color: meta?.color || 'text-muted-foreground',
       };

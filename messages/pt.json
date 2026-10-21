@@ -450,7 +450,28 @@
     "none": "Nenhuma",
     "proficientIn": "Proficiente em {label}",
     "expertiseIn": "Especialista em {label}",
-    "noProficiencyIn": "Sem proficiência em {label}"
+    "noProficiencyIn": "Sem proficiência em {label}",
+    "usesAttribute": "Usa {attribute}.",
+    "descriptions": {
+      "ACROBATICS": "Manter o equilíbrio, fazer acrobacias e escapar de apertos com agilidade.",
+      "ANIMAL_HANDLING": "Acalmar, conduzir e entender animais.",
+      "ARCANA": "Conhecimento sobre magias, itens mágicos, símbolos e planos.",
+      "ATHLETICS": "Escalar, saltar, nadar e agarrar.",
+      "DECEPTION": "Mentir e esconder a verdade de forma convincente.",
+      "HISTORY": "Lembrar eventos, reinos, guerras e lendas.",
+      "INSIGHT": "Perceber intenções e saber se alguém está mentindo.",
+      "INTIMIDATION": "Influenciar pelo medo e por ameaças.",
+      "INVESTIGATION": "Procurar pistas e tirar conclusões delas.",
+      "MEDICINE": "Estabilizar feridos e diagnosticar doenças.",
+      "NATURE": "Conhecimento sobre terreno, plantas, animais e clima.",
+      "PERCEPTION": "Notar o que está ao redor: ver, ouvir, sentir.",
+      "PERFORMANCE": "Entreter com música, dança, atuação ou histórias.",
+      "PERSUASION": "Convencer com tato, boa-fé e argumentos.",
+      "RELIGION": "Conhecimento sobre deuses, ritos e ordens religiosas.",
+      "SLEIGHT_OF_HAND": "Truques de mão, bater carteiras e esconder objetos.",
+      "STEALTH": "Esconder-se e mover-se sem ser notado.",
+      "SURVIVAL": "Rastrear, caçar, se orientar e evitar perigos naturais."
+    }
   },
   "attributes": {
     "title": "Atributos",
@@ -482,7 +503,9 @@
     "resetDeathSaves": "Zerar testes contra a morte",
     "deathSaves": "Testes contra a morte",
     "successes": "Sucessos",
-    "failures": "Falhas"
+    "failures": "Falhas",
+    "hint": "Rolagem para resistir a magias, venenos e outros perigos: d20 + modificador do atributo + proficiência, se marcada.",
+    "deathSavesHint": "Com 0 PV, role um d20 a cada turno: 10 ou mais é sucesso. 3 sucessos estabilizam; 3 falhas, morte. Um 1 conta como duas falhas; um 20 te levanta com 1 PV."
   },
   "terms": {
     "title": "Termos de Uso",
@@ -687,6 +710,11 @@
       "sorcerer": "Feiticeiro",
       "warlock": "Bruxo",
       "wizard": "Mago"
+    },
+    "componentHints": {
+      "V": "Palavras ditas em voz alta: não dá para conjurar amordaçado ou em silêncio mágico.",
+      "S": "Gestos com as mãos: precisa de pelo menos uma mão livre.",
+      "M": "Um objeto ou ingrediente específico, ou um foco de conjuração no lugar dele."
     }
   },
   "footer": {

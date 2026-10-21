@@ -102,7 +102,10 @@ export const SpellHeader = React.memo(
                     />
                   </span>
                 </TooltipTrigger>
-                <TooltipContent className="text-xs font-medium">{comp.label}</TooltipContent>
+                <TooltipContent className="max-w-xs">
+                  <p className="text-foreground font-semibold">{comp.label}</p>
+                  {comp.hint && <p className="text-muted-foreground">{comp.hint}</p>}
+                </TooltipContent>
               </Tooltip>
             ))}
           </div>

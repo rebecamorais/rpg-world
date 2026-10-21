@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 
+import { Hint } from '@frontend/components/ui/hint';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { setSkill } from '@frontend/lib/character-sheet-updates';
@@ -97,10 +98,14 @@ export default function SkillsSection() {
           >
             {label}
           </span>
-          <span className="text-muted-foreground w-8 shrink-0 self-center text-center font-mono text-xs">
-            ({tAttr(`abbreviations.${cat.attribute}`)})
-          </span>
         </button>
+        <Hint
+          label={label}
+          hint={`${t(`descriptions.${key}`)} ${t('usesAttribute', { attribute: tAttr(cat.attribute) })}`}
+          className="text-muted-foreground hover:text-foreground w-10 shrink-0 text-center font-mono text-xs"
+        >
+          ({tAttr(`abbreviations.${cat.attribute}`)})
+        </Hint>
         <div className="flex text-sm">
           <span
             className={cn(

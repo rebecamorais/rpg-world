@@ -24,7 +24,7 @@ export default function SavingThrowsSection() {
   return (
     <SectionCard>
       <SectionCard.Header>
-        <SectionCard.Title icon="shield-reflect" iconVariant="game">
+        <SectionCard.Title icon="shield-reflect" iconVariant="game" hint={tSection('hint')}>
           {tSection('title')}
         </SectionCard.Title>
       </SectionCard.Header>

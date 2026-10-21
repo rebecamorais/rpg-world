@@ -1,11 +1,7 @@
-'use client';
-
 import * as React from 'react';
 
-import { useTranslations } from 'next-intl';
-
+import { Hint } from '@frontend/components/ui/hint';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { cn } from '@frontend/lib/utils';
 
 interface StatBlockProps extends Omit<React.ComponentProps<'div'>, 'children'> {
@@ -38,35 +34,6 @@ function StatIcon({ icon, iconVariant = 'game' }: IconProps) {
   );
 }
 
-function StatHint({ icon, iconVariant, label, hint }: IconProps & { label: string; hint: string }) {
-  const t = useTranslations('common');
-  const [open, setOpen] = React.useState(false);
-
-  return (
-    <Tooltip open={open} onOpenChange={setOpen}>
-      <TooltipTrigger asChild>
-        <button
-          type="button"
-          aria-label={t('whatIs', { label })}
-          // Radix closes a tooltip when its trigger is pressed or clicked; here a tap is how it opens
-          onPointerDown={(e) => e.preventDefault()}
-          onClick={(e) => {
-            e.preventDefault();
-            setOpen(true);
-          }}
-          className="focus-ring touch-target cursor-help rounded-md"
-        >
-          <StatIcon icon={icon} iconVariant={iconVariant} />
-        </button>
-      </TooltipTrigger>
-      <TooltipContent className="max-w-xs">
-        <p className="text-foreground font-semibold">{label}</p>
-        <p className="text-muted-foreground">{hint}</p>
-      </TooltipContent>
-    </Tooltip>
-  );
-}
-
 /** A single combat number on the sheet: armor class, initiative, speed, hit dice. */
 function StatBlock({
   icon,
@@ -87,7 +54,9 @@ function StatBlock({
       {...props}
     >
       {hint ? (
-        <StatHint icon={icon} iconVariant={iconVariant} label={label} hint={hint} />
+        <Hint label={label} hint={hint}>
+          <StatIcon icon={icon} iconVariant={iconVariant} />
+        </Hint>
       ) : (
         <StatIcon icon={icon} iconVariant={iconVariant} />
       )}

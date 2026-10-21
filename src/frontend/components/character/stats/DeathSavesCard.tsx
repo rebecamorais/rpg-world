@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { Card } from '@frontend/components/ui/card';
+import { Hint } from '@frontend/components/ui/hint';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { setDeathSaves } from '@frontend/lib/character-sheet-updates';
@@ -25,7 +26,9 @@ export function DeathSavesCard() {
     <Card className="bg-background/60 flex flex-col gap-3 p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <h3 className="text-label text-muted-foreground flex items-center gap-2">
-          <AppIcon name="death-skull" variant="game" size="sm" aria-hidden="true" />
+          <Hint label={t('deathSaves')} hint={t('deathSavesHint')}>
+            <AppIcon name="death-skull" variant="game" size="sm" aria-hidden="true" />
+          </Hint>
           {t('deathSaves')}
         </h3>
         <button
