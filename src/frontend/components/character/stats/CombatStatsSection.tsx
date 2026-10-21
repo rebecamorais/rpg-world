@@ -25,7 +25,6 @@ import { setHitDice, setSpellPoints, setSpellSlots } from '@frontend/lib/charact
 import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
 
 import { CombatConfigSection, CombatStatsDialog } from './CombatStatsDialog';
-import { DeathSavesCard } from './DeathSavesCard';
 
 // Sized to its content, so a unit (speed's "m") sits right after the number
 const STAT_INPUT =
@@ -165,17 +164,14 @@ const ResourceGrid = () => {
 
   return (
     <CardContent className="p-4 sm:p-6">
-      <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
-        <div className="flex flex-col gap-4">
-          <HealthPointsCard
-            currentHp={character.hpCurrent ?? 0}
-            maxHp={character.hpMax || 1}
-            tempHp={character.hpTemp ?? 0}
-            onHpChange={(field, value) => update({ [field]: value })}
-            action={<CardConfigButton section="hp" label={t('configureHp')} />}
-          />
-          <DeathSavesCard />
-        </div>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <HealthPointsCard
+          currentHp={character.hpCurrent ?? 0}
+          maxHp={character.hpMax || 1}
+          tempHp={character.hpTemp ?? 0}
+          onHpChange={(field, value) => update({ [field]: value })}
+          action={<CardConfigButton section="hp" label={t('configureHp')} />}
+        />
 
         <MagicSystemCard
           character={character}
