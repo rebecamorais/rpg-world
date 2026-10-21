@@ -33,6 +33,7 @@ const normalize = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '')
 export class FileSpellCatalog implements SpellsRepo {
   private readonly entries: Entry[];
   private readonly byKey: Map<string, Entry>;
+  private readonly locales: Set<string>;
 
   constructor(sources: SpellSource[]) {
     this.entries = sources.flatMap(({ source, spells, texts }) =>
@@ -45,10 +46,16 @@ export class FileSpellCatalog implements SpellsRepo {
       })),
     );
     this.byKey = new Map(this.entries.map((entry) => [entry.key, entry]));
+    this.locales = new Set(sources.flatMap(({ texts }) => Object.keys(texts)));
+  }
+
+  /** A locale the files have; anything else (`pt_BR`, `__proto__`…) reads as English. */
+  private resolveLocale(locale: string | undefined): string {
+    return locale && this.locales.has(locale) ? locale : FALLBACK_LOCALE;
   }
 
   async findAll(params: FindSpellsParams = {}): Promise<PaginatedSpells> {
-    const locale = params.locale || FALLBACK_LOCALE;
+    const locale = this.resolveLocale(params.locale);
     const page = params.page || 0;
     const limit = params.limit || 12;
     const search = params.search ? normalize(params.search) : undefined;
@@ -81,7 +88,8 @@ export class FileSpellCatalog implements SpellsRepo {
     };
   }
 
-  async findByKeys(keys: string[], locale = FALLBACK_LOCALE): Promise<SpellDto[]> {
+  async findByKeys(keys: string[], requestedLocale?: string): Promise<SpellDto[]> {
+    const locale = this.resolveLocale(requestedLocale);
     return keys.flatMap((key) => {
       const entry = this.byKey.get(key);
       return entry ? [toDto(entry, this.textOf(entry, locale))] : [];

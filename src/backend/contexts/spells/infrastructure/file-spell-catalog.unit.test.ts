@@ -98,6 +98,16 @@ describe('FileSpellCatalog', () => {
     expect(shield.description).toBe('Shield description.');
   });
 
+  it.each(['pt_BR', '__proto__', 'toString'])(
+    'idioma desconhecido (%s) usa o inglês em vez de quebrar',
+    async (locale) => {
+      expect(await names({ locale })).toEqual(['Light', 'Shield', 'Fireball', 'Lightning Bolt']);
+      expect((await catalog.findByKeys(['dnd5e:srd-5.1:spell:light'], locale))[0].name).toBe(
+        'Light',
+      );
+    },
+  );
+
   it('devolve a chave completa como id', async () => {
     const [light] = (await catalog.findAll({ locale: 'en', level: 0 })).data;
     expect(light.id).toBe('dnd5e:srd-5.1:spell:light');
