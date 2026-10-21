@@ -1,6 +1,10 @@
 # Configuração de vida e sistema de magia
 
 **Data:** 2026-10-15
+**Status (2026-10-21):** C1, C2 e C3 feitos: engrenagem pequena em cada card (vida e magia), cada uma
+abre só a sua parte, e o cabeçalho de combate ficou só com os números (agora com a Percepção
+Passiva). Faltam C4 (sistema trocado só na configuração), C5 (aplicar ao vivo) e o resto de C6.
+
 **Quando:** depois de terminar a revisão do Spellbook (`2026-10-14-revisao-spellbook.md`).
 **Como:** leitura de `CombatStatsSection`, `CombatStatsDialog`, `HealthPointsCard`,
 `MagicSystemCard` e `magic-system/*`. Falta conferir no `next dev` (desktop e celular) antes de
