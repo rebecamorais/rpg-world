@@ -22,7 +22,9 @@ import { StatBlock } from '@frontend/components/ui/stat-block';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { setHitDice, setSpellPoints, setSpellSlots } from '@frontend/lib/character-sheet-updates';
 
-import { CombatStatsDialog } from './CombatStatsDialog';
+import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
+
+import { CombatConfigSection, CombatStatsDialog } from './CombatStatsDialog';
 import { DeathSavesCard } from './DeathSavesCard';
 
 // Sized to its content, so a unit (speed's "m") sits right after the number
@@ -39,105 +41,124 @@ function hitDie(total: string | undefined) {
 const CombatHeader = () => {
   const t = useTranslations('combatStats');
   const character = useLoadedCharacter();
+  const tCharacters = useTranslations('characters');
   const { update } = useCharacterActions();
-  const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const passivePerception = calculatePassivePerception(
+    character.attributes.WIS ?? 10,
+    character.level,
+    character.skills?.PERCEPTION?.isProficient ?? false,
+    character.skills?.PERCEPTION?.expertise ?? false,
+  );
 
   return (
     <CardHeader className="border-border bg-muted/30 border-b px-4 py-4 md:px-6 md:py-3">
-      <div className="flex items-start gap-3">
-        <div className="grid flex-1 grid-cols-2 gap-3 md:grid-cols-4">
-          <StatBlock icon="shoulder-armor" label={t('armorClass')} hint={t('hints.armorClass')}>
-            <NumberInput
-              ghost
-              aria-label={t('armorClass')}
-              value={character.ac ?? 0}
-              min={0}
-              max={1_000}
-              onValueChange={(ac) => update({ ac })}
-              showIcon={false}
-              className={STAT_INPUT}
-            />
-          </StatBlock>
+      <div className="grid grid-cols-3 gap-3 md:grid-cols-5">
+        <StatBlock icon="shoulder-armor" label={t('armorClass')} hint={t('hints.armorClass')}>
+          <NumberInput
+            ghost
+            aria-label={t('armorClass')}
+            value={character.ac ?? 0}
+            min={0}
+            max={1_000}
+            onValueChange={(ac) => update({ ac })}
+            showIcon={false}
+            className={STAT_INPUT}
+          />
+        </StatBlock>
 
-          <StatBlock icon="stopwatch" label={t('initiative')} hint={t('hints.initiative')}>
-            <NumberInput
-              ghost
-              aria-label={t('initiative')}
-              value={character.initiative}
-              min={-1_000}
-              max={1_000}
-              onValueChange={(initiative) => update({ initiative })}
-              showIcon={false}
-              className={STAT_INPUT}
-            />
-          </StatBlock>
+        <StatBlock icon="stopwatch" label={t('initiative')} hint={t('hints.initiative')}>
+          <NumberInput
+            ghost
+            aria-label={t('initiative')}
+            value={character.initiative}
+            min={-1_000}
+            max={1_000}
+            onValueChange={(initiative) => update({ initiative })}
+            showIcon={false}
+            className={STAT_INPUT}
+          />
+        </StatBlock>
 
-          <StatBlock
-            icon="boot-prints"
-            label={t('speed')}
-            hint={t('hints.speed')}
-            unit={t('speedUnit')}
+        <StatBlock
+          icon="boot-prints"
+          label={t('speed')}
+          hint={t('hints.speed')}
+          unit={t('speedUnit')}
+        >
+          <NumberInput
+            ghost
+            decimal
+            aria-label={t('speed')}
+            value={character.speed ?? 30}
+            min={0}
+            max={10_000}
+            onValueChange={(speed) => update({ speed })}
+            showIcon={false}
+            className={STAT_INPUT}
+          />
+        </StatBlock>
+
+        <StatBlock icon="dice-target" label={t('hitDice')} hint={t('hints.hitDice')}>
+          <Select
+            value={`1${hitDie(character.hitDice?.total)}`}
+            onValueChange={(val) => update(setHitDice(val))}
           >
-            <NumberInput
-              ghost
-              decimal
-              aria-label={t('speed')}
-              value={character.speed ?? 30}
-              min={0}
-              max={10_000}
-              onValueChange={(speed) => update({ speed })}
-              showIcon={false}
-              className={STAT_INPUT}
-            />
-          </StatBlock>
-
-          <StatBlock icon="dice-target" label={t('hitDice')} hint={t('hints.hitDice')}>
-            <Select
-              value={`1${hitDie(character.hitDice?.total)}`}
-              onValueChange={(val) => update(setHitDice(val))}
+            <SelectTrigger
+              aria-label={t('hitDice')}
+              className="h-7 gap-1 border-none bg-transparent p-0 font-mono text-xl font-bold shadow-none backdrop-blur-none hover:bg-transparent [&>span]:line-clamp-none"
             >
-              <SelectTrigger
-                aria-label={t('hitDice')}
-                className="h-7 gap-1 border-none bg-transparent p-0 font-mono text-xl font-bold shadow-none backdrop-blur-none hover:bg-transparent [&>span]:line-clamp-none"
-              >
-                {/* One die per level: a level 5 wizard has 5d6 */}
-                <SelectValue>
-                  {character.level}
-                  {hitDie(character.hitDice?.total)}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent className="min-w-[80px]">
-                {HIT_DIE_OPTIONS.map((key) => (
-                  <SelectItem key={key} value={`1${key}`} className="font-mono">
-                    {t(`diceOptions.${key}`)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </StatBlock>
-        </div>
-
-        <div className="shrink-0">
-          <Dialog open={isConfigOpen} onOpenChange={setIsConfigOpen}>
-            <DialogTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={t('edit')}
-                className="border-border bg-background/60 hover:border-character-muted hover:bg-character-surface h-10 w-10 rounded-xl border"
-              >
-                <AppIcon name="Settings2" size="sm" className="text-character-flare" />
-              </Button>
-            </DialogTrigger>
-            <CombatStatsDialog onSaved={() => setIsConfigOpen(false)} />
-          </Dialog>
-        </div>
+              {/* One die per level: a level 5 wizard has 5d6 */}
+              <SelectValue>
+                {character.level}
+                {hitDie(character.hitDice?.total)}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent className="min-w-[80px]">
+              {HIT_DIE_OPTIONS.map((key) => (
+                <SelectItem key={key} value={`1${key}`} className="font-mono">
+                  {t(`diceOptions.${key}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </StatBlock>
+        <StatBlock
+          icon="surrounded-eye"
+          label={tCharacters('passivePerception')}
+          hint={t('hints.passivePerception')}
+        >
+          <span className="sr-only">{tCharacters('passivePerception')}: </span>
+          {passivePerception}
+        </StatBlock>
       </div>
     </CardHeader>
   );
 };
 
+/** Small gear in a card's corner that opens that card's settings. */
+const CardConfigButton = ({ section, label }: { section: CombatConfigSection; label: string }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={label}
+          className="text-muted-foreground hover:text-character-flare touch-target relative z-10 h-7 w-7"
+        >
+          <AppIcon name="Settings2" size={14} />
+        </Button>
+      </DialogTrigger>
+      <CombatStatsDialog section={section} onSaved={() => setOpen(false)} />
+    </Dialog>
+  );
+};
+
 const ResourceGrid = () => {
+  const t = useTranslations('combatStats');
+  const tm = useTranslations('magicSystem');
   const character = useLoadedCharacter();
   const { update } = useCharacterActions();
 
@@ -150,6 +171,7 @@ const ResourceGrid = () => {
             maxHp={character.hpMax || 1}
             tempHp={character.hpTemp ?? 0}
             onHpChange={(field, value) => update({ [field]: value })}
+            action={<CardConfigButton section="hp" label={t('configureHp')} />}
           />
           <DeathSavesCard />
         </div>
@@ -159,6 +181,7 @@ const ResourceGrid = () => {
           onSystemChange={(system) => update({ spellcastingSystem: system })}
           onPointsChange={(field, value) => update(setSpellPoints(field, value))}
           onSlotsChange={(level, max, used) => update(setSpellSlots(level, max, used))}
+          action={<CardConfigButton section="magic" label={tm('configure')} />}
         />
       </div>
     </CardContent>

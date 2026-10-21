@@ -29,19 +29,25 @@ type CombatConfig = Pick<
   'hpMax' | 'hpTemp' | 'spellcastingSystem' | 'spellSlots' | 'spellPoints'
 >;
 
-const CONFIG_FIELDS = [
-  'hpMax',
-  'hpTemp',
-  'spellcastingSystem',
-  'spellSlots',
-  'spellPoints',
-] as const satisfies readonly (keyof CombatConfig)[];
+export type CombatConfigSection = 'hp' | 'magic';
+
+const CONFIG_FIELDS = {
+  hp: ['hpMax', 'hpTemp'],
+  magic: ['spellcastingSystem', 'spellSlots', 'spellPoints'],
+} as const satisfies Record<CombatConfigSection, readonly (keyof CombatConfig)[]>;
 
 /**
  * Edits a copy of the combat settings: Save puts the changed ones in the sheet's draft, Cancel
  * (or Esc) leaves the sheet as it was. Radix mounts the content on open, so the copy is fresh.
  */
-export const CombatStatsDialog = ({ onSaved }: { onSaved: () => void }) => {
+export const CombatStatsDialog = ({
+  section,
+  onSaved,
+}: {
+  /** Hit points or the magic system: each card opens its own part. */
+  section: CombatConfigSection;
+  onSaved: () => void;
+}) => {
   const character = useLoadedCharacter();
   const { update } = useCharacterActions();
   const t = useTranslations('combatStats');
@@ -73,9 +79,9 @@ export const CombatStatsDialog = ({ onSaved }: { onSaved: () => void }) => {
   const save = () => {
     // Only what changed, so opening and saving without edits leaves the sheet clean
     const changed: Partial<DnD5eCharacter> = Object.fromEntries(
-      CONFIG_FIELDS.filter(
-        (field) => JSON.stringify(config[field]) !== JSON.stringify(initial[field]),
-      ).map((field) => [field, config[field]]),
+      CONFIG_FIELDS[section]
+        .filter((field) => JSON.stringify(config[field]) !== JSON.stringify(initial[field]))
+        .map((field) => [field, config[field]]),
     );
     if (Object.keys(changed).length > 0) update(changed);
     onSaved();
@@ -83,19 +89,20 @@ export const CombatStatsDialog = ({ onSaved }: { onSaved: () => void }) => {
 
   return (
     <DialogContent
-      className="character-context border-border bg-background p-0 shadow-2xl sm:max-w-[700px]"
+      className="character-context border-border bg-background p-0 shadow-2xl sm:max-w-[420px]"
       style={characterTheme(character.accentColor).style}
     >
       <DialogHeader className="border-border border-b p-6 pb-4">
         <div className="flex items-center gap-2">
           <AppIcon name="Settings2" size="sm" className="text-muted-foreground" />
-          <DialogTitle>{tm('titleConfig')}</DialogTitle>
-          <DialogDescription className="sr-only">{tm('configDescription')}</DialogDescription>
+          <DialogTitle>{section === 'hp' ? t('configureHp') : tm('titleConfig')}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {section === 'hp' ? t('configureHpDescription') : tm('configDescription')}
+          </DialogDescription>
         </div>
       </DialogHeader>
 
-      <div className="divide-border grid grid-cols-1 md:grid-cols-2 md:divide-x">
-        {/* Left Column: HP & Survival */}
+      {section === 'hp' && (
         <div className="flex flex-col gap-6 p-6">
           <div className="flex items-center gap-2 pb-2">
             <AppIcon name="Heart" size="sm" className="text-danger-flare" />
@@ -126,8 +133,9 @@ export const CombatStatsDialog = ({ onSaved }: { onSaved: () => void }) => {
             />
           </div>
         </div>
+      )}
 
-        {/* Right Column: Magic System */}
+      {section === 'magic' && (
         <div className="flex flex-col gap-6 p-6">
           <div className="flex items-center gap-2 pb-2">
             <AppIcon name="Sparkles" size="sm" className="text-info-flare" />
@@ -200,7 +208,7 @@ export const CombatStatsDialog = ({ onSaved }: { onSaved: () => void }) => {
             </TabsContent>
           </Tabs>
         </div>
-      </div>
+      )}
 
       <DialogFooter className="border-border bg-muted/50 border-t p-6 md:flex-row">
         <div className="flex w-full items-center justify-between">

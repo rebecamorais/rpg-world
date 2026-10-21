@@ -16,17 +16,22 @@ export interface HealthPointsCardProps extends React.ComponentProps<'div'> {
   maxHp: number;
   tempHp: number;
   onHpChange: (field: 'hpCurrent' | 'hpMax' | 'hpTemp', value: number) => void;
+  /** Shown in the top-right corner, e.g. the settings button. */
+  action?: React.ReactNode;
 }
 
 /** hp_* columns are smallint. */
 const SMALLINT_MAX = 32_767;
 
-const HealthHeader = () => {
+const HealthHeader = ({ action }: { action?: React.ReactNode }) => {
   const t = useTranslations('combatStats');
   return (
-    <div className="flex items-center gap-2">
-      <AppIcon name="Heart" size={16} className="text-danger-flare" aria-hidden="true" />
-      <span className="text-label text-danger-flare">{t('hitPointsShort')}</span>
+    <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center gap-2">
+        <AppIcon name="Heart" size={16} className="text-danger-flare" aria-hidden="true" />
+        <span className="text-label text-danger-flare">{t('hitPointsShort')}</span>
+      </div>
+      {action}
     </div>
   );
 };
@@ -115,6 +120,7 @@ export function HealthPointsCard({
   maxHp,
   tempHp,
   onHpChange,
+  action,
   className,
   ...props
 }: HealthPointsCardProps) {
@@ -129,7 +135,7 @@ export function HealthPointsCard({
       {/* Background glow matching HP state */}
       <div className="bg-danger-surface absolute -right-10 -bottom-10 h-32 w-32 rounded-full blur-3xl" />
 
-      <HealthHeader />
+      <HealthHeader action={action} />
       <HealthValues currentHp={currentHp} maxHp={maxHp} tempHp={tempHp} onHpChange={onHpChange} />
     </Card>
   );

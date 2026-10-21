@@ -299,15 +299,17 @@
       "d10": "1d10",
       "d12": "1d12"
     },
-    "edit": "Edit combat stats",
     "loseHp": "Lose 1 HP",
     "gainHp": "Heal 1 HP",
     "hints": {
       "armorClass": "The number an attack roll has to reach to hit you.",
       "initiative": "Added to the d20 at the start of combat to set the turn order. Usually your Dexterity modifier.",
       "speed": "How far you can move on your turn.",
-      "hitDice": "One die per level. On a short rest, roll and spend them to recover HP."
-    }
+      "hitDice": "One die per level. On a short rest, roll and spend them to recover HP.",
+      "passivePerception": "10 + your Perception bonus. What you notice without looking."
+    },
+    "configureHp": "Configure hit points",
+    "configureHpDescription": "This character's maximum and temporary hit points"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Search spells",
@@ -341,7 +343,7 @@
     "loading": "Loading spells"
   },
   "magicSystem": {
-    "titleConfig": "Magic System Configuration",
+    "titleConfig": "Configure magic",
     "configDescription": "Configure the magic system used by this character",
     "systemUsed": "System Used",
     "slotsCapacity": "Slots Capacity per Level",
@@ -351,7 +353,8 @@
     "level": "Lv {level}",
     "pointsCapacity": "Spell Points Capacity",
     "systemPlaceholder": "Magic",
-    "slot": "Level {level} slot {slot}"
+    "slot": "Level {level} slot {slot}",
+    "configure": "Configure magic system"
   },
   "dashboard": {
     "menu": "Menu",

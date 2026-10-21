@@ -22,6 +22,8 @@ export interface MagicSystemCardProps extends React.ComponentProps<'div'> {
   onSystemChange: (system: MagicSystem) => void;
   onPointsChange: (field: 'current' | 'max', value: number) => void;
   onSlotsChange: (level: string, max: number, used: number) => void;
+  /** Shown in the top-right corner, e.g. the settings button. */
+  action?: React.ReactNode;
 }
 
 export function MagicSystemCard({
@@ -29,6 +31,7 @@ export function MagicSystemCard({
   onSystemChange,
   onPointsChange,
   onSlotsChange,
+  action,
   className,
   ...props
 }: MagicSystemCardProps) {
@@ -61,6 +64,7 @@ export function MagicSystemCard({
         max={character.spellPoints?.max || 1}
         onPointsChange={onPointsChange}
         systemSelector={systemSelector}
+        action={action}
         className={className}
         {...props}
       />
@@ -72,6 +76,7 @@ export function MagicSystemCard({
       slots={character.spellSlots || {}}
       onSlotsChange={onSlotsChange}
       systemSelector={systemSelector}
+      action={action}
       className={className}
       {...props}
     />

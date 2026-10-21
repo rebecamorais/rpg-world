@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 import CharacterHeader from '@frontend/components/character/CharacterHeader';
 import AttributesSection from '@frontend/components/character/stats/AttributesSection';
 import CombatStatsSection from '@frontend/components/character/stats/CombatStatsSection';
-import PassivePerception from '@frontend/components/character/stats/PassivePerception';
 import SavingThrowsSection from '@frontend/components/character/stats/SavingThrowsSection';
 import SkillsSection from '@frontend/components/character/stats/SkillsSection';
 import { ErrorState } from '@frontend/components/ui/empty-state';
@@ -31,7 +30,6 @@ export default function StatusView() {
           <CombatStatsSection />
         </div>
         <div className="flex flex-col gap-6 [grid-area:side]">
-          <PassivePerception />
           <SavingThrowsSection />
           <AttributesSection />
         </div>

@@ -299,15 +299,17 @@
       "d10": "1d10",
       "d12": "1d12"
     },
-    "edit": "Editar status de combate",
     "loseHp": "Perder 1 PV",
     "gainHp": "Recuperar 1 PV",
     "hints": {
       "armorClass": "O número que um ataque precisa alcançar para te acertar.",
       "initiative": "Somada ao d20 no início do combate para definir a ordem dos turnos. Normalmente é o modificador de Destreza.",
       "speed": "Quanto você pode se mover no seu turno.",
-      "hitDice": "Um dado por nível. No descanso curto, role e gaste dados para recuperar PV."
-    }
+      "hitDice": "Um dado por nível. No descanso curto, role e gaste dados para recuperar PV.",
+      "passivePerception": "10 + seu bônus de Percepção. É o que você nota sem procurar."
+    },
+    "configureHp": "Configurar vida",
+    "configureHpDescription": "Vida máxima e vida temporária deste personagem"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Buscar magia",
@@ -341,7 +343,7 @@
     "loading": "Carregando magias"
   },
   "magicSystem": {
-    "titleConfig": "Configuração do Sistema Mágico",
+    "titleConfig": "Configurar magia",
     "configDescription": "Configure o sistema mágico utilizado por este personagem",
     "systemUsed": "Sistema Usado",
     "slotsCapacity": "Capacidade de Slots por Nível",
@@ -351,7 +353,8 @@
     "level": "Nv {level}",
     "pointsCapacity": "Capacidade de Spell Points",
     "systemPlaceholder": "Magia",
-    "slot": "Espaço {slot} do {level}º círculo"
+    "slot": "Espaço {slot} do {level}º círculo",
+    "configure": "Configurar sistema de magia"
   },
   "dashboard": {
     "menu": "Menu",

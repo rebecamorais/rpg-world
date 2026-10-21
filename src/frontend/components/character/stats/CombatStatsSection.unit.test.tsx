@@ -62,6 +62,13 @@ describe('CombatStatsSection', () => {
     expect(screen.queryByText('Enter a number')).not.toBeInTheDocument();
   });
 
+  it('mostra a percepção passiva junto dos outros números', () => {
+    renderCombat();
+
+    // 10 + WIS modifier (10 → +0), no proficiency
+    expect(screen.getByText('Passive Perception:').parentElement).toHaveTextContent('10');
+  });
+
   it('troca o dado de vida', async () => {
     const { draft } = renderCombat();
 
@@ -96,12 +103,13 @@ describe('CombatStatsSection', () => {
     renderCombat({ spellcastingSystem: 'slots', spellSlots: { '1': { max: 2, used: 1 } } });
 
     expect(screen.queryByLabelText('Spell Points')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Configure magic system' })).toBeInTheDocument();
   });
 
   describe('configuração de combate', () => {
-    async function openConfig() {
+    async function openConfig(name = 'Configure hit points') {
       const user = userEvent.setup();
-      await user.click(screen.getByRole('button', { name: 'Edit combat stats' }));
+      await user.click(screen.getByRole('button', { name }));
       return { user, dialog: await screen.findByRole('dialog') };
     }
 
@@ -129,9 +137,22 @@ describe('CombatStatsSection', () => {
       expect(isDirty()).toBe(false);
     });
 
+    it('a engrenagem da vida abre só a vida, e a da magia só a magia', async () => {
+      renderCombat();
+
+      const { user, dialog } = await openConfig();
+      expect(dialog).toHaveTextContent('Max Hit Points');
+      expect(dialog).not.toHaveTextContent('Spell Slots');
+      await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
+      const magic = (await openConfig('Configure magic system')).dialog;
+      expect(magic).toHaveTextContent('Spell Slots');
+      expect(magic).not.toHaveTextContent('Max Hit Points');
+    });
+
     it('salvar sem mudar nada não deixa a ficha com alterações pendentes', async () => {
       const { isDirty } = renderCombat({ spellcastingSystem: undefined });
-      const { user } = await openConfig();
+      const { user } = await openConfig('Configure magic system');
 
       await user.click(screen.getByRole('button', { name: 'Save' }));
 
