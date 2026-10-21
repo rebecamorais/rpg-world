@@ -21,3 +21,18 @@ test.describe('no celular', () => {
     await expect(page.getByRole('tooltip')).toContainText('One die per level');
   });
 });
+
+test('a engrenagem do card de magia troca o sistema na hora', async ({ page, user: _ }) => {
+  const id = await createCharacter(page, 'Arcane Hero');
+  await page.goto(characterUrl(id));
+
+  await (await hydrated(page.getByRole('button', { name: 'Configure magic system' }))).click();
+  const dialog = page.getByRole('dialog');
+  await dialog.getByRole('tab', { name: 'Spell Slots' }).click();
+  await expect(dialog).toBeVisible(); // switching the system swaps the card, not the dialog
+  await dialog.getByRole('button', { name: 'Done' }).click();
+
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(page.getByText('Spell Slots', { exact: true })).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
+});

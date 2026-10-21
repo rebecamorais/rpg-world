@@ -3,7 +3,8 @@
 **Data:** 2026-10-15
 **Status (2026-10-21):** C1, C2 e C3 feitos: engrenagem pequena em cada card (vida e magia), cada uma
 abre só a sua parte, e o cabeçalho de combate ficou só com os números (agora com a Percepção
-Passiva). Faltam C4 (sistema trocado só na configuração), C5 (aplicar ao vivo) e o resto de C6.
+Passiva). C4 e C5 também: o card mostra o sistema como rótulo fixo e o diálogo aplica na hora,
+com só "Concluir". O diálogo fica fora dos cards, porque trocar o sistema troca o card.
 
 **Quando:** depois de terminar a revisão do Spellbook (`2026-10-14-revisao-spellbook.md`).
 **Como:** leitura de `CombatStatsSection`, `CombatStatsDialog`, `HealthPointsCard`,

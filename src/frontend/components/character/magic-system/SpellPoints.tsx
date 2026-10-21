@@ -13,7 +13,7 @@ interface Props extends React.ComponentProps<'div'> {
   current: number;
   max: number;
   onPointsChange: (field: 'current' | 'max', value: number) => void;
-  systemSelector: React.ReactNode;
+  systemLabel: React.ReactNode;
   action?: React.ReactNode;
 }
 
@@ -21,7 +21,7 @@ export function SpellPoints({
   current,
   max,
   onPointsChange,
-  systemSelector,
+  systemLabel,
   action,
   className,
   ...props
@@ -40,7 +40,7 @@ export function SpellPoints({
       <div className="flex items-center justify-between gap-1.5">
         <div className="flex items-center gap-1.5">
           <AppIcon name="Droplet" size={14} className="text-info-flare" aria-hidden="true" />
-          {systemSelector}
+          {systemLabel}
         </div>
         {action}
       </div>

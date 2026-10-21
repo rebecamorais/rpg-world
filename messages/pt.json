@@ -94,7 +94,8 @@
       "max": "No máximo {max}"
     },
     "fixFieldsToSave": "Corrija os campos em vermelho para salvar",
-    "whatIs": "O que é {label}?"
+    "whatIs": "O que é {label}?",
+    "done": "Concluir"
   },
   "login": {
     "title": "Entrar no RPG World",

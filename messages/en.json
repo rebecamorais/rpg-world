@@ -94,7 +94,8 @@
       "max": "At most {max}"
     },
     "fixFieldsToSave": "Fix the fields in red to save",
-    "whatIs": "What is {label}?"
+    "whatIs": "What is {label}?",
+    "done": "Done"
   },
   "login": {
     "title": "Sign in to RPG World",

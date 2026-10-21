@@ -11,14 +11,14 @@ import { cn } from '@frontend/lib/utils';
 interface Props extends React.ComponentProps<'div'> {
   slots: Record<string, { max: number; used: number }>;
   onSlotsChange: (level: string, max: number, used: number) => void;
-  systemSelector: React.ReactNode;
+  systemLabel: React.ReactNode;
   action?: React.ReactNode;
 }
 
 export function SpellSlots({
   slots,
   onSlotsChange,
-  systemSelector,
+  systemLabel,
   action,
   className,
   ...props
@@ -60,7 +60,7 @@ export function SpellSlots({
             className="text-info-flare"
             aria-hidden="true"
           />
-          {systemSelector}
+          {systemLabel}
         </div>
         <div className="flex items-center gap-1">
           <div className="bg-info-surface text-info-flare rounded-full px-2 py-0.5 font-mono text-xs font-bold tabular-nums">

@@ -8,7 +8,7 @@ import { MagicSystemCard } from '@frontend/components/character/MagicSystemCard'
 import { HealthPointsCard } from '@frontend/components/character/stats/HealthPointsCard';
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent, CardHeader } from '@frontend/components/ui/card';
-import { Dialog, DialogTrigger } from '@frontend/components/ui/dialog';
+import { Dialog } from '@frontend/components/ui/dialog';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import {
@@ -136,31 +136,25 @@ const CombatHeader = () => {
 };
 
 /** Small gear in a card's corner that opens that card's settings. */
-const CardConfigButton = ({ section, label }: { section: CombatConfigSection; label: string }) => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={label}
-          className="text-muted-foreground hover:text-character-flare touch-target relative z-10 h-7 w-7"
-        >
-          <AppIcon name="Settings2" size={14} />
-        </Button>
-      </DialogTrigger>
-      <CombatStatsDialog section={section} onSaved={() => setOpen(false)} />
-    </Dialog>
-  );
-};
+const CardConfigButton = ({ label, onClick }: { label: string; onClick: () => void }) => (
+  <Button
+    variant="ghost"
+    size="icon"
+    aria-label={label}
+    onClick={onClick}
+    className="text-muted-foreground hover:text-character-flare touch-target relative z-10 h-7 w-7"
+  >
+    <AppIcon name="Settings2" size={14} />
+  </Button>
+);
 
 const ResourceGrid = () => {
   const t = useTranslations('combatStats');
   const tm = useTranslations('magicSystem');
   const character = useLoadedCharacter();
   const { update } = useCharacterActions();
+  // Kept out of the cards: switching the magic system swaps the card, which would close it
+  const [config, setConfig] = useState<CombatConfigSection | null>(null);
 
   return (
     <CardContent className="p-4 sm:p-6">
@@ -170,17 +164,20 @@ const ResourceGrid = () => {
           maxHp={character.hpMax || 1}
           tempHp={character.hpTemp ?? 0}
           onHpChange={(field, value) => update({ [field]: value })}
-          action={<CardConfigButton section="hp" label={t('configureHp')} />}
+          action={<CardConfigButton label={t('configureHp')} onClick={() => setConfig('hp')} />}
         />
 
         <MagicSystemCard
           character={character}
-          onSystemChange={(system) => update({ spellcastingSystem: system })}
           onPointsChange={(field, value) => update(setSpellPoints(field, value))}
           onSlotsChange={(level, max, used) => update(setSpellSlots(level, max, used))}
-          action={<CardConfigButton section="magic" label={tm('configure')} />}
+          action={<CardConfigButton label={tm('configure')} onClick={() => setConfig('magic')} />}
         />
       </div>
+
+      <Dialog open={config !== null} onOpenChange={(open) => !open && setConfig(null)}>
+        {config && <CombatStatsDialog section={config} />}
+      </Dialog>
     </CardContent>
   );
 };

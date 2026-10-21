@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 import { useTranslations } from 'next-intl';
 
 import { MagicSystem } from '@frontend/components/character/MagicSystemCard';
@@ -22,31 +20,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/u
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { characterTheme } from '@frontend/lib/color-utils';
 
-import type { DnD5eCharacter } from '@shared/systems/dnd5e';
-
-type CombatConfig = Pick<
-  DnD5eCharacter,
-  'hpMax' | 'hpTemp' | 'spellcastingSystem' | 'spellSlots' | 'spellPoints'
->;
-
 export type CombatConfigSection = 'hp' | 'magic';
 
-const CONFIG_FIELDS = {
-  hp: ['hpMax', 'hpTemp'],
-  magic: ['spellcastingSystem', 'spellSlots', 'spellPoints'],
-} as const satisfies Record<CombatConfigSection, readonly (keyof CombatConfig)[]>;
-
 /**
- * Edits a copy of the combat settings: Save puts the changed ones in the sheet's draft, Cancel
- * (or Esc) leaves the sheet as it was. Radix mounts the content on open, so the copy is fresh.
+ * Settings of one sheet card. Changes go to the sheet's draft right away, like any other edit on
+ * the sheet; the sheet's save bar is what saves them.
  */
 export const CombatStatsDialog = ({
   section,
-  onSaved,
 }: {
   /** Hit points or the magic system: each card opens its own part. */
   section: CombatConfigSection;
-  onSaved: () => void;
 }) => {
   const character = useLoadedCharacter();
   const { update } = useCharacterActions();
@@ -54,38 +38,8 @@ export const CombatStatsDialog = ({
   const tm = useTranslations('magicSystem');
   const tcommon = useTranslations('common');
 
-  // What the dialog opened with, to tell what changed on Save
-  const [initial] = useState<CombatConfig>(() => ({
-    hpMax: character.hpMax,
-    hpTemp: character.hpTemp,
-    // Same default as the card on the sheet (MagicSystemCard)
-    spellcastingSystem: character.spellcastingSystem || 'points',
-    spellSlots: character.spellSlots,
-    spellPoints: character.spellPoints,
-  }));
-  const [config, setConfig] = useState(initial);
-  // Fields whose text isn't a valid number yet; saving waits for them
-  const [invalid, setInvalid] = useState<ReadonlySet<string>>(() => new Set());
-
-  const set = (patch: Partial<CombatConfig>) => setConfig((prev) => ({ ...prev, ...patch }));
-  const setValidity = (field: string) => (valid: boolean) =>
-    setInvalid((prev) => {
-      const next = new Set(prev);
-      if (valid) next.delete(field);
-      else next.add(field);
-      return next;
-    });
-
-  const save = () => {
-    // Only what changed, so opening and saving without edits leaves the sheet clean
-    const changed: Partial<DnD5eCharacter> = Object.fromEntries(
-      CONFIG_FIELDS[section]
-        .filter((field) => JSON.stringify(config[field]) !== JSON.stringify(initial[field]))
-        .map((field) => [field, config[field]]),
-    );
-    if (Object.keys(changed).length > 0) update(changed);
-    onSaved();
-  };
+  // Same default as the card on the sheet (MagicSystemCard)
+  const system = character.spellcastingSystem || 'points';
 
   return (
     <DialogContent
@@ -116,19 +70,18 @@ export const CombatStatsDialog = ({
               </Label>
               <NumberInput
                 id="hpMax"
-                value={config.hpMax}
+                value={character.hpMax}
                 min={1}
                 max={32_767}
-                onValueChange={(hpMax) => set({ hpMax })}
-                onValidityChange={setValidity('hpMax')}
+                onValueChange={(hpMax) => update({ hpMax })}
                 className="border-border bg-muted focus:border-border h-9 transition-colors"
               />
             </div>
 
             <NumberStepper
               label={t('tempHp')}
-              value={config.hpTemp || 0}
-              onChange={(hpTemp) => set({ hpTemp })}
+              value={character.hpTemp || 0}
+              onChange={(hpTemp) => update({ hpTemp })}
               max={2000}
             />
           </div>
@@ -143,8 +96,8 @@ export const CombatStatsDialog = ({
           </div>
 
           <Tabs
-            value={config.spellcastingSystem}
-            onValueChange={(val) => set({ spellcastingSystem: val as MagicSystem })}
+            value={system}
+            onValueChange={(val) => update({ spellcastingSystem: val as MagicSystem })}
             className="w-full"
           >
             <TabsList className="border-border bg-muted grid w-full grid-cols-2 border p-1">
@@ -173,12 +126,12 @@ export const CombatStatsDialog = ({
                     <NumberStepper
                       key={lvl}
                       label={tm('circle', { level: lvl })}
-                      value={config.spellSlots?.[level]?.max || 0}
+                      value={character.spellSlots?.[level]?.max || 0}
                       onChange={(max) =>
-                        set({
+                        update({
                           spellSlots: {
-                            ...config.spellSlots,
-                            [level]: { max, used: config.spellSlots?.[level]?.used || 0 },
+                            ...character.spellSlots,
+                            [level]: { max, used: character.spellSlots?.[level]?.used || 0 },
                           },
                         })
                       }
@@ -195,13 +148,12 @@ export const CombatStatsDialog = ({
                 </Label>
                 <NumberInput
                   aria-label={tm('pointsCapacity')}
-                  value={config.spellPoints?.max ?? 0}
+                  value={character.spellPoints?.max ?? 0}
                   min={0}
                   max={10_000}
                   onValueChange={(max) =>
-                    set({ spellPoints: { current: config.spellPoints?.current ?? 0, max } })
+                    update({ spellPoints: { current: character.spellPoints?.current ?? 0, max } })
                   }
-                  onValidityChange={setValidity('pointsMax')}
                   className="border-border bg-muted focus:border-border h-9 transition-colors"
                 />
               </div>
@@ -210,27 +162,12 @@ export const CombatStatsDialog = ({
         </div>
       )}
 
-      <DialogFooter className="border-border bg-muted/50 border-t p-6 md:flex-row">
-        <div className="flex w-full items-center justify-between">
-          <div className="flex gap-2">
-            <DialogClose asChild>
-              <Button
-                variant="ghost"
-                className="text-muted-foreground hover:bg-muted hover:text-foreground h-9 px-4 text-sm font-bold uppercase"
-              >
-                {tcommon('cancel')}
-              </Button>
-            </DialogClose>
-            <Button
-              variant="character"
-              onClick={save}
-              disabled={invalid.size > 0}
-              className="h-9 px-6 text-sm font-bold uppercase"
-            >
-              {tcommon('save')}
-            </Button>
-          </div>
-        </div>
+      <DialogFooter className="border-border bg-muted/50 border-t p-6">
+        <DialogClose asChild>
+          <Button variant="character" className="h-9 px-6 text-sm font-bold uppercase">
+            {tcommon('done')}
+          </Button>
+        </DialogClose>
       </DialogFooter>
     </DialogContent>
   );
