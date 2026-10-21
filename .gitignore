@@ -62,3 +62,6 @@ next-env.d.ts
 # stryker
 /reports/
 /.stryker-tmp/
+
+# Playwright MCP screenshots and snapshots
+/.playwright-mcp/

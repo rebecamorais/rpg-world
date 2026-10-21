@@ -3,7 +3,9 @@
 import { useTranslations } from 'next-intl';
 
 import { Card } from '@frontend/components/ui/card';
+import { Hint } from '@frontend/components/ui/hint';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { setDeathSaves } from '@frontend/lib/character-sheet-updates';
 import { cn } from '@frontend/lib/utils';
@@ -25,17 +27,25 @@ export function DeathSavesCard() {
     <Card className="bg-background/60 flex flex-col gap-3 p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <h3 className="text-label text-muted-foreground flex items-center gap-2">
-          <AppIcon name="death-skull" variant="game" size="sm" aria-hidden="true" />
+          <Hint label={t('deathSaves')} hint={t('deathSavesHint')}>
+            <AppIcon name="death-skull" variant="game" size="sm" aria-hidden="true" />
+          </Hint>
           {t('deathSaves')}
         </h3>
-        <button
-          type="button"
-          onClick={() => update(setDeathSaves(0, 0))}
-          disabled={successes === 0 && failures === 0}
-          className="text-caption text-muted-foreground hover:text-foreground focus-ring touch-target rounded-sm disabled:opacity-50"
-        >
-          {t('resetDeathSaves')}
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              aria-label={t('resetDeathSaves')}
+              onClick={() => update(setDeathSaves(0, 0))}
+              disabled={successes === 0 && failures === 0}
+              className="text-muted-foreground hover:text-foreground focus-ring touch-target rounded-sm disabled:opacity-40"
+            >
+              <AppIcon name="RotateCcw" size={14} aria-hidden="true" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>{t('resetDeathSaves')}</TooltipContent>
+        </Tooltip>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

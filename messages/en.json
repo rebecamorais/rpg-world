@@ -93,7 +93,9 @@
       "min": "At least {min}",
       "max": "At most {max}"
     },
-    "fixFieldsToSave": "Fix the fields in red to save"
+    "fixFieldsToSave": "Fix the fields in red to save",
+    "whatIs": "What is {label}?",
+    "done": "Done"
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -292,16 +294,23 @@
     "initiative": "Initiative",
     "speedUnit": "m",
     "hitDice": "Hit Dice",
-    "hitDiceShort": "HD",
     "diceOptions": {
       "d6": "1d6",
       "d8": "1d8",
       "d10": "1d10",
       "d12": "1d12"
     },
-    "edit": "Edit combat stats",
     "loseHp": "Lose 1 HP",
-    "gainHp": "Heal 1 HP"
+    "gainHp": "Heal 1 HP",
+    "hints": {
+      "armorClass": "The number an attack roll has to reach to hit you.",
+      "initiative": "Added to the d20 at the start of combat to set the turn order. Usually your Dexterity modifier.",
+      "speed": "How far you can move on your turn.",
+      "hitDice": "One die per level. On a short rest, roll and spend them to recover HP.",
+      "passivePerception": "10 + your Perception bonus. What you notice without looking."
+    },
+    "configureHp": "Configure hit points",
+    "configureHpDescription": "This character's maximum and temporary hit points"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Search spells",
@@ -335,7 +344,7 @@
     "loading": "Loading spells"
   },
   "magicSystem": {
-    "titleConfig": "Magic System Configuration",
+    "titleConfig": "Configure magic",
     "configDescription": "Configure the magic system used by this character",
     "systemUsed": "System Used",
     "slotsCapacity": "Slots Capacity per Level",
@@ -345,7 +354,8 @@
     "level": "Lv {level}",
     "pointsCapacity": "Spell Points Capacity",
     "systemPlaceholder": "Magic",
-    "slot": "Level {level} slot {slot}"
+    "slot": "Level {level} slot {slot}",
+    "configure": "Configure magic system"
   },
   "dashboard": {
     "menu": "Menu",
@@ -440,7 +450,28 @@
     "none": "None",
     "proficientIn": "Proficient in {label}",
     "expertiseIn": "Expertise in {label}",
-    "noProficiencyIn": "No proficiency in {label}"
+    "noProficiencyIn": "No proficiency in {label}",
+    "usesAttribute": "Uses {attribute}.",
+    "descriptions": {
+      "ACROBATICS": "Keep your balance, perform stunts and slip out of tight spots.",
+      "ANIMAL_HANDLING": "Calm, handle and read animals.",
+      "ARCANA": "Knowledge of spells, magic items, symbols and the planes.",
+      "ATHLETICS": "Climb, jump, swim and grapple.",
+      "DECEPTION": "Lie and hide the truth convincingly.",
+      "HISTORY": "Recall events, kingdoms, wars and legends.",
+      "INSIGHT": "Read intentions and tell when someone is lying.",
+      "INTIMIDATION": "Influence through fear and threats.",
+      "INVESTIGATION": "Search for clues and draw conclusions from them.",
+      "MEDICINE": "Stabilize the dying and diagnose illness.",
+      "NATURE": "Knowledge of terrain, plants, animals and weather.",
+      "PERCEPTION": "Notice your surroundings: spot, hear, sense.",
+      "PERFORMANCE": "Entertain with music, dance, acting or stories.",
+      "PERSUASION": "Convince with tact, good faith and argument.",
+      "RELIGION": "Knowledge of gods, rites and religious orders.",
+      "SLEIGHT_OF_HAND": "Sleight of hand, pickpocketing and hiding objects.",
+      "STEALTH": "Hide and move without being noticed.",
+      "SURVIVAL": "Track, hunt, find your way and avoid natural hazards."
+    }
   },
   "attributes": {
     "title": "Attributes",
@@ -472,7 +503,9 @@
     "resetDeathSaves": "Reset death saves",
     "deathSaves": "Death saves",
     "successes": "Successes",
-    "failures": "Failures"
+    "failures": "Failures",
+    "hint": "Roll to resist spells, poisons and other dangers: d20 + ability modifier + proficiency, if marked.",
+    "deathSavesHint": "At 0 HP, roll a d20 each turn: 10 or higher is a success. 3 successes stabilize you; 3 failures, you die. A 1 counts as two failures; a 20 brings you back with 1 HP."
   },
   "terms": {
     "title": "Terms of Use",
@@ -677,6 +710,11 @@
       "sorcerer": "Sorcerer",
       "warlock": "Warlock",
       "wizard": "Wizard"
+    },
+    "componentHints": {
+      "V": "Words spoken aloud: you can't cast it gagged or in magical silence.",
+      "S": "Hand gestures: you need at least one free hand.",
+      "M": "A specific object or ingredient, or a spellcasting focus in its place."
     }
   },
   "footer": {

@@ -62,6 +62,13 @@ describe('CombatStatsSection', () => {
     expect(screen.queryByText('Enter a number')).not.toBeInTheDocument();
   });
 
+  it('mostra a percepção passiva junto dos outros números', () => {
+    renderCombat();
+
+    // 10 + WIS modifier (10 → +0), no proficiency
+    expect(screen.getByText('Passive Perception:').parentElement).toHaveTextContent('10');
+  });
+
   it('troca o dado de vida', async () => {
     const { draft } = renderCombat();
 
@@ -82,11 +89,14 @@ describe('CombatStatsSection', () => {
     expect(points).toHaveValue('5');
   });
 
-  it('troca o sistema de magia para espaços', async () => {
+  it('troca o sistema de magia só pela engrenagem, e o card acompanha', async () => {
+    const user = userEvent.setup();
     const { draft } = renderCombat();
+    expect(screen.queryByRole('combobox', { name: 'System Used' })).not.toBeInTheDocument();
 
-    await userEvent.click(screen.getByRole('combobox', { name: 'System Used' }));
-    await userEvent.click(screen.getByRole('option', { name: 'Spell Slots' }));
+    await user.click(screen.getByRole('button', { name: 'Configure magic system' }));
+    await user.click(screen.getByRole('tab', { name: 'Spell Slots' }));
+    await user.click(screen.getByRole('button', { name: 'Done' }));
 
     expect(draft().spellcastingSystem).toBe('slots');
     expect(screen.queryByLabelText('Spell Points')).not.toBeInTheDocument();
@@ -96,44 +106,47 @@ describe('CombatStatsSection', () => {
     renderCombat({ spellcastingSystem: 'slots', spellSlots: { '1': { max: 2, used: 1 } } });
 
     expect(screen.queryByLabelText('Spell Points')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Configure magic system' })).toBeInTheDocument();
   });
 
   describe('configuração de combate', () => {
-    async function openConfig() {
+    async function openConfig(name = 'Configure hit points') {
       const user = userEvent.setup();
-      await user.click(screen.getByRole('button', { name: 'Edit combat stats' }));
+      await user.click(screen.getByRole('button', { name }));
       return { user, dialog: await screen.findByRole('dialog') };
     }
 
-    it('salvar leva as mudanças para a ficha', async () => {
+    it('a mudança vai para a ficha na hora, e Concluir só fecha', async () => {
       const { draft, isDirty } = renderCombat();
       const { user } = await openConfig();
 
       fireEvent.change(screen.getByLabelText('Max Hit Points'), { target: { value: '20' } });
-      await user.click(screen.getByRole('button', { name: 'Save' }));
-
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       expect(draft().hpMax).toBe(20);
       expect(isDirty()).toBe(true);
-    });
 
-    it('cancelar descarta o que foi editado no diálogo', async () => {
-      const { draft, isDirty } = renderCombat();
-      const { user } = await openConfig();
-
-      fireEvent.change(screen.getByLabelText('Max Hit Points'), { target: { value: '20' } });
-      await user.click(screen.getByRole('button', { name: 'Cancel' }));
-
+      await user.click(screen.getByRole('button', { name: 'Done' }));
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-      expect(draft().hpMax).toBe(12);
-      expect(isDirty()).toBe(false);
+      expect(draft().hpMax).toBe(20);
     });
 
-    it('salvar sem mudar nada não deixa a ficha com alterações pendentes', async () => {
-      const { isDirty } = renderCombat({ spellcastingSystem: undefined });
-      const { user } = await openConfig();
+    it('a engrenagem da vida abre só a vida, e a da magia só a magia', async () => {
+      renderCombat();
 
-      await user.click(screen.getByRole('button', { name: 'Save' }));
+      const { user, dialog } = await openConfig();
+      expect(dialog).toHaveTextContent('Max Hit Points');
+      expect(dialog).not.toHaveTextContent('Spell Slots');
+      await user.click(screen.getByRole('button', { name: 'Done' }));
+
+      const magic = (await openConfig('Configure magic system')).dialog;
+      expect(magic).toHaveTextContent('Spell Slots');
+      expect(magic).not.toHaveTextContent('Max Hit Points');
+    });
+
+    it('abrir e concluir sem mudar nada não deixa a ficha com alterações pendentes', async () => {
+      const { isDirty } = renderCombat({ spellcastingSystem: undefined });
+      const { user } = await openConfig('Configure magic system');
+
+      await user.click(screen.getByRole('button', { name: 'Done' }));
 
       expect(isDirty()).toBe(false);
     });

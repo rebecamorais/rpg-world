@@ -11,10 +11,18 @@ import { cn } from '@frontend/lib/utils';
 interface Props extends React.ComponentProps<'div'> {
   slots: Record<string, { max: number; used: number }>;
   onSlotsChange: (level: string, max: number, used: number) => void;
-  systemSelector: React.ReactNode;
+  systemLabel: React.ReactNode;
+  action?: React.ReactNode;
 }
 
-export function SpellSlots({ slots, onSlotsChange, systemSelector, className, ...props }: Props) {
+export function SpellSlots({
+  slots,
+  onSlotsChange,
+  systemLabel,
+  action,
+  className,
+  ...props
+}: Props) {
   const t = useTranslations('magicSystem');
   const allLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const activeLevels = allLevels.filter((lvl) => (slots[lvl.toString()]?.max || 0) > 0);
@@ -52,10 +60,13 @@ export function SpellSlots({ slots, onSlotsChange, systemSelector, className, ..
             className="text-info-flare"
             aria-hidden="true"
           />
-          {systemSelector}
+          {systemLabel}
         </div>
-        <div className="bg-info-surface text-info-flare rounded-full px-2 py-0.5 font-mono text-xs font-bold tabular-nums">
-          {totalAvailable} / {totalMax}
+        <div className="flex items-center gap-1">
+          <div className="bg-info-surface text-info-flare rounded-full px-2 py-0.5 font-mono text-xs font-bold tabular-nums">
+            {totalAvailable} / {totalMax}
+          </div>
+          {action}
         </div>
       </div>
 
