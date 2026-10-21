@@ -125,83 +125,83 @@ BEGIN
   -- =========================================================
 
   -- Truques (nível 0)
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'prestidigitation'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:prestidigitation', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'mage-hand'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:mage-hand', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'acid-splash'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:acid-splash', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'chill-touch'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:chill-touch', true)
   ON CONFLICT DO NOTHING;
 
   -- 1º círculo
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'magic-missile'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:magic-missile', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'shield'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:shield', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'mage-armor'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:mage-armor', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'burning-hands'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:burning-hands', true)
   ON CONFLICT DO NOTHING;
 
   -- 2º círculo
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'blur'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:blur', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, false FROM public.spells WHERE external_index = 'blindness-deafness'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:blindness-deafness', false)
   ON CONFLICT DO NOTHING;
 
   -- 3º círculo
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'fireball'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:fireball', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, false FROM public.spells WHERE external_index = 'blink'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:blink', false)
   ON CONFLICT DO NOTHING;
   -- Testes de Danos Adicionais (Lightning, Cold, Poison, Radiant, Psychic, Thunder)
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'shocking-grasp'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:shocking-grasp', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'ray-of-frost'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:ray-of-frost', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'poison-spray'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:poison-spray', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'vicious-mockery'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:vicious-mockery', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'thunderwave'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:thunderwave', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'guiding-bolt'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:guiding-bolt', true)
   ON CONFLICT DO NOTHING;
 
-  INSERT INTO public.character_spells (character_id, spell_id, is_prepared)
-  SELECT char_id, id, true FROM public.spells WHERE external_index = 'shatter'
+  INSERT INTO public.character_spells (character_id, spell_ref, is_prepared)
+  VALUES (char_id, 'dnd5e:srd-5.1:spell:shatter', true)
   ON CONFLICT DO NOTHING;
 
 END $$;

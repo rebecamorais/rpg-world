@@ -77,20 +77,20 @@ export type Database = {
           character_id: string;
           created_at: string | null;
           is_prepared: boolean | null;
-          spell_id: string;
+          spell_ref: string;
         };
         ComputedFields: never;
         Insert: {
           character_id: string;
           created_at?: string | null;
           is_prepared?: boolean | null;
-          spell_id: string;
+          spell_ref: string;
         };
         Update: {
           character_id?: string;
           created_at?: string | null;
           is_prepared?: boolean | null;
-          spell_id?: string;
+          spell_ref?: string;
         };
         Relationships: [
           {
@@ -98,13 +98,6 @@ export type Database = {
             columns: ['character_id'];
             isOneToOne: false;
             referencedRelation: 'characters';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'character_spells_spell_id_fkey';
-            columns: ['spell_id'];
-            isOneToOne: false;
-            referencedRelation: 'spells';
             referencedColumns: ['id'];
           },
         ];

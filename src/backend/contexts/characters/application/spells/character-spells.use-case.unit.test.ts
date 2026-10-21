@@ -9,6 +9,23 @@ import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-char
 import { GetCharacterSpellsUseCase } from './get-character-spells.use-case';
 import { ToggleCharacterSpellUseCase, ToggleSpellAction } from './toggle-character-spell.use-case';
 
+const FIREBALL = 'dnd5e:srd-5.1:spell:fireball';
+
+const makeCatalog = () => ({
+  findByKeys: vi.fn(async (keys: string[]) =>
+    keys
+      .filter((key) => key === FIREBALL)
+      .map((id) => ({
+        id,
+        name: 'Fireball',
+        level: 3,
+        school: 'evocation',
+        classes: [],
+        components: [],
+      })),
+  ),
+});
+
 const makeSpellRepo = () =>
   ({
     findByCharacterId: vi.fn().mockResolvedValue([]),
@@ -20,10 +37,12 @@ const makeSpellRepo = () =>
 describe('character spells use cases', () => {
   let characterRepo: InMemoryCharacterRepository;
   let spellRepo: ReturnType<typeof makeSpellRepo>;
+  let catalog: ReturnType<typeof makeCatalog>;
 
   beforeEach(async () => {
     characterRepo = new InMemoryCharacterRepository();
     spellRepo = makeSpellRepo();
+    catalog = makeCatalog();
     await characterRepo.save(
       new DnD5eCharacter({
         id: 'char-1',
@@ -37,14 +56,35 @@ describe('character spells use cases', () => {
   });
 
   describe('GetCharacterSpellsUseCase', () => {
-    it('lista as magias do personagem do dono', async () => {
-      const useCase = new GetCharacterSpellsUseCase(characterRepo, spellRepo);
-      await useCase.execute('char-1', 'owner-1', 'pt');
-      expect(spellRepo.findByCharacterId).toHaveBeenCalledWith('char-1', 'pt');
+    it('lista as magias do personagem do dono, resolvidas pelo catálogo', async () => {
+      spellRepo.findByCharacterId.mockResolvedValue([
+        { ref: FIREBALL, isPrepared: true, createdAt: '2026-10-21' },
+      ]);
+      const useCase = new GetCharacterSpellsUseCase(characterRepo, spellRepo, catalog);
+
+      const spells = await useCase.execute('char-1', 'owner-1', 'pt');
+
+      expect(spellRepo.findByCharacterId).toHaveBeenCalledWith('char-1');
+      expect(catalog.findByKeys).toHaveBeenCalledWith([FIREBALL], 'pt');
+      expect(spells).toEqual([
+        expect.objectContaining({ id: FIREBALL, name: 'Fireball', isPrepared: true }),
+      ]);
+    });
+
+    it('omite magia que não existe mais no catálogo', async () => {
+      spellRepo.findByCharacterId.mockResolvedValue([
+        { ref: 'dnd5e:srd-5.1:spell:gone', isPrepared: false },
+        { ref: FIREBALL, isPrepared: false },
+      ]);
+      const useCase = new GetCharacterSpellsUseCase(characterRepo, spellRepo, catalog);
+
+      const spells = await useCase.execute('char-1', 'owner-1');
+
+      expect(spells.map((s) => s.id)).toEqual([FIREBALL]);
     });
 
     it('responde not found para outro usuário sem consultar as magias', async () => {
-      const useCase = new GetCharacterSpellsUseCase(characterRepo, spellRepo);
+      const useCase = new GetCharacterSpellsUseCase(characterRepo, spellRepo, catalog);
       await expect(useCase.execute('char-1', 'intruder')).rejects.toThrow(
         CharacterErrorCodes.ACCESS_NOT_FOUND,
       );
@@ -54,28 +94,36 @@ describe('character spells use cases', () => {
 
   describe('ToggleCharacterSpellUseCase', () => {
     it.each([
-      ['learn', 'learn', ['char-1', 'fireball']],
-      ['forget', 'forget', ['char-1', 'fireball']],
-      ['prepare', 'togglePrepared', ['char-1', 'fireball', true]],
-      ['unprepare', 'togglePrepared', ['char-1', 'fireball', false]],
+      ['learn', 'learn', ['char-1', FIREBALL]],
+      ['forget', 'forget', ['char-1', FIREBALL]],
+      ['prepare', 'togglePrepared', ['char-1', FIREBALL, true]],
+      ['unprepare', 'togglePrepared', ['char-1', FIREBALL, false]],
     ] as const)('executa %s para o dono', async (action, method, args) => {
-      const useCase = new ToggleCharacterSpellUseCase(characterRepo, spellRepo);
-      await useCase.execute('char-1', 'owner-1', 'fireball', action);
+      const useCase = new ToggleCharacterSpellUseCase(characterRepo, spellRepo, catalog);
+      await useCase.execute('char-1', 'owner-1', FIREBALL, action);
       expect(spellRepo[method]).toHaveBeenCalledWith(...args);
     });
 
     it('proíbe outro usuário de alterar as magias', async () => {
-      const useCase = new ToggleCharacterSpellUseCase(characterRepo, spellRepo);
-      await expect(useCase.execute('char-1', 'intruder', 'fireball', 'learn')).rejects.toThrow(
+      const useCase = new ToggleCharacterSpellUseCase(characterRepo, spellRepo, catalog);
+      await expect(useCase.execute('char-1', 'intruder', FIREBALL, 'learn')).rejects.toThrow(
         CharacterErrorCodes.ACCESS_FORBIDDEN,
       );
       expect(spellRepo.learn).not.toHaveBeenCalled();
     });
 
-    it('rejeita ação desconhecida', async () => {
-      const useCase = new ToggleCharacterSpellUseCase(characterRepo, spellRepo);
+    it('não aprende magia que não existe no catálogo', async () => {
+      const useCase = new ToggleCharacterSpellUseCase(characterRepo, spellRepo, catalog);
       await expect(
-        useCase.execute('char-1', 'owner-1', 'fireball', 'drop' as ToggleSpellAction),
+        useCase.execute('char-1', 'owner-1', 'dnd5e:srd-5.1:spell:nope', 'learn'),
+      ).rejects.toThrow(CharacterErrorCodes.SPELL_NOT_FOUND);
+      expect(spellRepo.learn).not.toHaveBeenCalled();
+    });
+
+    it('rejeita ação desconhecida', async () => {
+      const useCase = new ToggleCharacterSpellUseCase(characterRepo, spellRepo, catalog);
+      await expect(
+        useCase.execute('char-1', 'owner-1', FIREBALL, 'drop' as ToggleSpellAction),
       ).rejects.toThrow(CharacterErrorCodes.SPELL_ACTION_INVALID);
     });
   });

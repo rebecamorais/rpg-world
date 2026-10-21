@@ -6,7 +6,7 @@ import { GET, POST } from './route';
 vi.mock('@api', () => import('@tests/helpers/mock-api'));
 
 const ID = '6f1c2a4e-8b3d-4c5e-9f7a-1b2c3d4e5f60';
-const SPELL_ID = '0b9e8d7c-6f5a-4b3c-8d2e-1f0a9b8c7d6e';
+const SPELL_ID = 'dnd5e:srd-5.1:spell:fireball';
 const url = `/api/characters/${ID}/spells`;
 
 describe('/api/characters/[id]/spells', () => {

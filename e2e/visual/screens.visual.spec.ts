@@ -143,7 +143,8 @@ test.describe('telas logadas', () => {
 
     await page.getByRole('button', { name: 'Add Spell' }).click();
     const catalog = page.getByRole('dialog', { name: 'Spell list' });
-    await expect(catalog.getByRole('article')).toHaveCount(Object.keys(SPELLS).length);
+    // The first page of the official catalog
+    await expect(catalog.getByRole('article')).toHaveCount(12);
     await snap(page, 'spells-search');
     await page.keyboard.press('Escape');
 

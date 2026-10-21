@@ -39,6 +39,9 @@ test.describe('celular', () => {
     await page.goto(characterUrl(id, '/spells'));
     await page.getByRole('button', { name: 'Add Spell' }).first().click();
     const catalog = page.getByRole('dialog', { name: 'Spell list' });
+    // Fireball (level 3) and Delayed Blast Fireball (level 7): the filter keeps one
+    await catalog.getByRole('searchbox', { name: 'Search spells' }).fill('fireball');
+    await expect(catalog.getByRole('article')).toHaveCount(2);
 
     // Only the search is on screen until the filters are opened
     const level = catalog.getByRole('combobox', { name: 'Level' });
@@ -49,7 +52,7 @@ test.describe('celular', () => {
 
     await expect(catalog.getByRole('button', { name: 'Filters (1)', exact: true })).toBeVisible();
     await expect(catalog.getByRole('article')).toHaveCount(1);
-    await expect(catalog.getByRole('article', { name: /Fireball/ })).toBeVisible();
+    await expect(catalog.getByRole('article', { name: /^Fireball/ })).toBeVisible();
   });
 
   test('exclui um personagem pela lista', async ({ page, user: _ }) => {

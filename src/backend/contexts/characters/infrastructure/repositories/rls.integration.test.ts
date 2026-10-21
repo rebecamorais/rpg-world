@@ -105,10 +105,30 @@ describe('RLS com client do usuário (Integration)', () => {
   });
 
   describe('character_spells', () => {
+    const fireball = 'dnd5e:srd-5.1:spell:fireball';
+
     it('o intruso não aprende magias no personagem de outro', async () => {
-      const spellId = crypto.randomUUID();
       await expect(
-        new SupabaseCharacterSpellRepository(intruder.client).learn(characterId, spellId),
+        new SupabaseCharacterSpellRepository(intruder.client).learn(characterId, fireball),
+      ).rejects.toThrow();
+    });
+
+    it('o dono aprende, prepara e esquece pela chave da magia', async () => {
+      const repo = new SupabaseCharacterSpellRepository(owner.client);
+
+      await repo.learn(characterId, fireball);
+      await repo.togglePrepared(characterId, fireball, true);
+      expect(await repo.findByCharacterId(characterId)).toEqual([
+        expect.objectContaining({ ref: fireball, isPrepared: true }),
+      ]);
+
+      await repo.forget(characterId, fireball);
+      expect(await repo.findByCharacterId(characterId)).toEqual([]);
+    });
+
+    it('o banco recusa referência fora do formato de chave', async () => {
+      await expect(
+        new SupabaseCharacterSpellRepository(owner.client).learn(characterId, 'fireball'),
       ).rejects.toThrow();
     });
   });

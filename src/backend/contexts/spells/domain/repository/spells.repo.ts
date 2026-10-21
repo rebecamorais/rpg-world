@@ -1,4 +1,5 @@
-interface SpellDto {
+export interface SpellDto {
+  /** Stable content key, e.g. `dnd5e:srd-5.1:spell:fireball`. */
   id: string;
   name: string;
   level: number;
@@ -41,4 +42,6 @@ export interface PaginatedSpells {
 
 export interface SpellsRepo {
   findAll(params?: FindSpellsParams): Promise<PaginatedSpells>;
+  /** The spells with these keys, in the same order; unknown keys are left out. */
+  findByKeys(keys: string[], locale?: string): Promise<SpellDto[]>;
 }
