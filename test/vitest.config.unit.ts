@@ -25,7 +25,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'node',
-          include: ['{app,src,shared}/**/*.unit.test.ts', '*.unit.test.ts'],
+          include: ['{app,src,shared,content}/**/*.unit.test.ts', '*.unit.test.ts'],
           environment: 'node',
           setupFiles: [path.resolve(__dirname, './setup-unit.ts')],
         },
