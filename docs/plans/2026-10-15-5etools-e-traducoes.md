@@ -1,7 +1,16 @@
 # Conteúdo do 5etools com tradução pt-BR e inglês
 
 **Data:** 2026-10-15
-**Status:** ideia, nada decidido. Planejar antes de codar.
+**Status (2026-10-21):** decidido e em andamento.
+
+- **Licença:** só SRD (5.1 e 5.2), como já era.
+- **Edições:** o mesmo feitiço em 2014 e 2024 são duas entradas, com textos e traduções próprios
+  (chaves `dnd5e:srd-5.1:spell:fireball` e `dnd5e:srd-5.2:spell:fireball`), e aparecem como dois
+  cartões. A edição é uma etiqueta (também para homebrew), não parte da identidade.
+- **Lista:** mostra as duas edições com filtro, que começa na edição do personagem; dá para
+  aprender magia de qualquer edição.
+- **Esquema:** em vez de `source` na tabela `spells`, o conteúdo oficial vai para arquivo (plano de
+  conteúdo e homebrew). Primeiro passo: `2026-10-21-magias-em-arquivo.md`.
 
 O objetivo é trazer mais conteúdo de D&D (magias, condições, itens, talvez monstros) do formato do
 5etools, sempre com **inglês como base e português do Brasil** lado a lado. A tabela de magias já
