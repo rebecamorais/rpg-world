@@ -54,6 +54,7 @@
     "nodemailer": "^10.1.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "react-easy-crop": "^6.2.4",
     "react-email": "^6.11.1",
     "react-hook-form": "^7.90.0",
     "resend": "^6.33.0",

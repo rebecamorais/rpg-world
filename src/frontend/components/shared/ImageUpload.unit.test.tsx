@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { toast } from 'sonner';
@@ -9,6 +9,10 @@ import { FileUploaderProvider } from '@frontend/context/FileUploaderContext';
 import ImageUpload from './ImageUpload';
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+// jsdom has no canvas: the crop itself is covered in crop-image.unit.test.ts
+vi.mock('@frontend/lib/crop-image', () => ({
+  cropImage: vi.fn(async () => new File(['small'], 'image.webp', { type: 'image/webp' })),
+}));
 
 const fetchMock = vi.fn();
 const png = () => new File(['img'], 'avatar.png', { type: 'image/png' });
@@ -34,6 +38,11 @@ function renderUpload(props: Partial<React.ComponentProps<typeof ImageUpload>> =
   return { onUploadSuccess, onUploadError, input };
 }
 
+async function pickAndSave(input: HTMLInputElement, file: File) {
+  await userEvent.upload(input, file);
+  await userEvent.click(await screen.findByRole('button', { name: messages.avatarUpload.save }));
+}
+
 describe('ImageUpload', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -48,18 +57,37 @@ describe('ImageUpload', () => {
   it('envia o arquivo para o endpoint do perfil e devolve a URL', async () => {
     const { input, onUploadSuccess } = renderUpload();
 
-    await userEvent.upload(input, png());
+    await pickAndSave(input, png());
 
     await waitFor(() => expect(onUploadSuccess).toHaveBeenCalledWith('https://img.test/a.png'));
     const [url, init] = fetchMock.mock.calls[0];
     expect(url).toBe('/api/profile/avatar');
-    expect((init.body as FormData).get('file')).toBeInstanceOf(File);
+    expect(((init.body as FormData).get('file') as File).type).toBe('image/webp');
+  });
+
+  it('não envia nada quando o recorte é cancelado', async () => {
+    const { input } = renderUpload();
+
+    await userEvent.upload(input, png());
+    await userEvent.click(await screen.findByRole('button', { name: messages.common.cancel }));
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('abre a imagem atual em tela cheia', async () => {
+    renderUpload({ currentUrl: 'https://img.test/old.png' });
+
+    await userEvent.click(screen.getByRole('button', { name: messages.avatarUpload.view }));
+
+    expect(await screen.findByRole('dialog')).toContainElement(
+      screen.getAllByAltText(messages.avatarUpload.currentAlt).at(-1)!,
+    );
   });
 
   it('usa o endpoint do personagem quando o alvo é um personagem', async () => {
     const { input } = renderUpload({ target: 'character', targetId: 'c1' });
 
-    await userEvent.upload(input, png());
+    await pickAndSave(input, png());
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     expect(fetchMock.mock.calls[0][0]).toBe('/api/characters/c1/avatar');
@@ -69,9 +97,9 @@ describe('ImageUpload', () => {
     const { input, onUploadSuccess } = renderUpload();
     const file = png();
 
-    await userEvent.upload(input, file);
+    await pickAndSave(input, file);
     await waitFor(() => expect(onUploadSuccess).toHaveBeenCalledTimes(1));
-    await userEvent.upload(input, file);
+    await pickAndSave(input, file);
 
     await waitFor(() => expect(onUploadSuccess).toHaveBeenCalledTimes(2));
   });
@@ -82,7 +110,7 @@ describe('ImageUpload', () => {
       currentUrl: 'https://img.test/old.png',
     });
 
-    await userEvent.upload(input, png());
+    await pickAndSave(input, png());
 
     await waitFor(() => expect(onUploadError).toHaveBeenCalled());
     expect(toast.error).toHaveBeenCalledWith(

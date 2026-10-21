@@ -55,7 +55,8 @@
       "expired_link_description": "The access link has expired or has already been used.",
       "auth_error_title": "Authentication Error",
       "auth_error_description": "We could not complete the operation at this time.",
-      "security_widget_unavailable": "Could not load the security check. Disable content blockers for this site or reload the page."
+      "security_widget_unavailable": "Could not load the security check. Disable content blockers for this site or reload the page.",
+      "image_error_decode": "Couldn't read this image. Try another file (JPEG, PNG or WebP)."
     },
     "save": "Save",
     "saving": "Saving...",
@@ -406,7 +407,13 @@
     "button": "Change Avatar",
     "loading": "Uploading...",
     "currentAlt": "Current avatar",
-    "error": "Error uploading image."
+    "error": "Error uploading image.",
+    "cropTitle": "Adjust image",
+    "cropDescription": "Drag to position and use zoom to frame it.",
+    "zoom": "Zoom",
+    "save": "Save",
+    "view": "View image",
+    "viewTitle": "Full-screen image"
   },
   "skills": {
     "title": "Skills",
