@@ -1,11 +1,9 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-
-import { Database } from '@database-types';
-
 import { GetAllSpellsUseCase } from './application/get-all-spells.use-case';
 import { FindSpellsParams } from './domain/repository/spells.repo';
 import { SpellsRepo } from './domain/repository/spells.repo';
-import { SupabaseSpellsRepository } from './infrastructure/repositories/supabase-spells.repository';
+import { getSpellCatalog } from './infrastructure/srd-spells';
+
+export { getSpellCatalog };
 
 export class SpellsContext {
   private getAllSpellsUseCase: GetAllSpellsUseCase;
@@ -19,7 +17,6 @@ export class SpellsContext {
   }
 }
 
-export function createSpellsContext(dbClient: SupabaseClient<Database>) {
-  const repository = new SupabaseSpellsRepository(dbClient);
-  return new SpellsContext(repository);
+export function createSpellsContext() {
+  return new SpellsContext(getSpellCatalog());
 }

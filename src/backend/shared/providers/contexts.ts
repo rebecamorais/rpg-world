@@ -59,7 +59,7 @@ export class Contexts {
 
   get spells() {
     if (!this._spells) {
-      this._spells = createSpellsContext(this.container.get('userClient'));
+      this._spells = createSpellsContext();
     }
     return this._spells;
   }
