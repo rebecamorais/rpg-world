@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Card } from '@frontend/components/ui/card';
 import { Hint } from '@frontend/components/ui/hint';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { setDeathSaves } from '@frontend/lib/character-sheet-updates';
 import { cn } from '@frontend/lib/utils';
@@ -31,14 +32,20 @@ export function DeathSavesCard() {
           </Hint>
           {t('deathSaves')}
         </h3>
-        <button
-          type="button"
-          onClick={() => update(setDeathSaves(0, 0))}
-          disabled={successes === 0 && failures === 0}
-          className="text-caption text-muted-foreground hover:text-foreground focus-ring touch-target rounded-sm disabled:opacity-50"
-        >
-          {t('resetDeathSaves')}
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              aria-label={t('resetDeathSaves')}
+              onClick={() => update(setDeathSaves(0, 0))}
+              disabled={successes === 0 && failures === 0}
+              className="text-muted-foreground hover:text-foreground focus-ring touch-target rounded-sm disabled:opacity-40"
+            >
+              <AppIcon name="RotateCcw" size={14} aria-hidden="true" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>{t('resetDeathSaves')}</TooltipContent>
+        </Tooltip>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
