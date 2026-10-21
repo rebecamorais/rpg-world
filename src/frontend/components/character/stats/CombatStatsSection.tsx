@@ -123,7 +123,8 @@ const CombatHeader = () => {
           </Select>
         </StatBlock>
         <StatBlock
-          icon="surrounded-eye"
+          icon="Eye"
+          iconVariant="system"
           label={tCharacters('passivePerception')}
           hint={t('hints.passivePerception')}
         >

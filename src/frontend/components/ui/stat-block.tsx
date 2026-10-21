@@ -9,8 +9,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui
 import { cn } from '@frontend/lib/utils';
 
 interface StatBlockProps extends Omit<React.ComponentProps<'div'>, 'children'> {
-  /** Game icon name (game-icons.net). */
+  /** Game icon name (game-icons.net), or a system icon with `iconVariant="system"`. */
   icon: string;
+  iconVariant?: 'system' | 'game';
   label: string;
   /**
    * What the number means. When set, only the icon and the value are shown: the label and this
@@ -23,11 +24,13 @@ interface StatBlockProps extends Omit<React.ComponentProps<'div'>, 'children'> {
   children: React.ReactNode;
 }
 
-function StatIcon({ icon }: { icon: string }) {
+type IconProps = { icon: string; iconVariant?: 'system' | 'game' };
+
+function StatIcon({ icon, iconVariant = 'game' }: IconProps) {
   return (
     <AppIcon
       name={icon}
-      variant="game"
+      variant={iconVariant}
       size="lg"
       className="text-character-flare shrink-0"
       aria-hidden="true"
@@ -35,7 +38,7 @@ function StatIcon({ icon }: { icon: string }) {
   );
 }
 
-function StatHint({ icon, label, hint }: { icon: string; label: string; hint: string }) {
+function StatHint({ icon, iconVariant, label, hint }: IconProps & { label: string; hint: string }) {
   const t = useTranslations('common');
   const [open, setOpen] = React.useState(false);
 
@@ -53,7 +56,7 @@ function StatHint({ icon, label, hint }: { icon: string; label: string; hint: st
           }}
           className="focus-ring touch-target cursor-help rounded-md"
         >
-          <StatIcon icon={icon} />
+          <StatIcon icon={icon} iconVariant={iconVariant} />
         </button>
       </TooltipTrigger>
       <TooltipContent className="max-w-xs">
@@ -65,7 +68,16 @@ function StatHint({ icon, label, hint }: { icon: string; label: string; hint: st
 }
 
 /** A single combat number on the sheet: armor class, initiative, speed, hit dice. */
-function StatBlock({ icon, label, hint, unit, children, className, ...props }: StatBlockProps) {
+function StatBlock({
+  icon,
+  iconVariant,
+  label,
+  hint,
+  unit,
+  children,
+  className,
+  ...props
+}: StatBlockProps) {
   return (
     <div
       className={cn(
@@ -74,7 +86,11 @@ function StatBlock({ icon, label, hint, unit, children, className, ...props }: S
       )}
       {...props}
     >
-      {hint ? <StatHint icon={icon} label={label} hint={hint} /> : <StatIcon icon={icon} />}
+      {hint ? (
+        <StatHint icon={icon} iconVariant={iconVariant} label={label} hint={hint} />
+      ) : (
+        <StatIcon icon={icon} iconVariant={iconVariant} />
+      )}
       <div className="flex min-w-0 flex-col gap-0.5">
         {!hint && <span className="text-label text-muted-foreground truncate">{label}</span>}
         <div className="text-foreground flex items-baseline gap-0.5 font-mono text-xl font-bold tabular-nums">
