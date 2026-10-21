@@ -56,7 +56,8 @@
       "auth_error_title": "Authentication Error",
       "auth_error_description": "We could not complete the operation at this time.",
       "security_widget_unavailable": "Could not load the security check. Disable content blockers for this site or reload the page.",
-      "image_error_decode": "Couldn't read this image. Try another file (JPEG, PNG or WebP)."
+      "image_error_decode": "Couldn't read this image. Try another file (JPEG, PNG or WebP).",
+      "character_error_spell_not_found": "This spell was not found."
     },
     "save": "Save",
     "saving": "Saving...",

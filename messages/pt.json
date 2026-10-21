@@ -56,7 +56,8 @@
       "auth_error_title": "Erro de Autenticação",
       "auth_error_description": "Não foi possível completar a operação no momento.",
       "security_widget_unavailable": "Não foi possível carregar a verificação de segurança. Desative bloqueadores de conteúdo para este site ou recarregue a página.",
-      "image_error_decode": "Não foi possível ler essa imagem. Tente outro arquivo (JPEG, PNG ou WebP)."
+      "image_error_decode": "Não foi possível ler essa imagem. Tente outro arquivo (JPEG, PNG ou WebP).",
+      "character_error_spell_not_found": "Magia não encontrada."
     },
     "save": "Salvar",
     "saving": "Salvando...",

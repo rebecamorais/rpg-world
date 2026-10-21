@@ -98,10 +98,13 @@ describe('createCharacterSchema', () => {
 });
 
 describe('toggleSpellSchema', () => {
-  it('exige id UUID e ação conhecida', () => {
-    const id = crypto.randomUUID();
+  it('exige a chave da magia e ação conhecida', () => {
+    const id = 'dnd5e:srd-5.1:spell:fireball';
     expect(toggleSpellSchema.parse({ id, action: 'learn' })).toEqual({ id, action: 'learn' });
     expect(toggleSpellSchema.safeParse({ id: 'fireball', action: 'learn' }).success).toBe(false);
+    expect(toggleSpellSchema.safeParse({ id: crypto.randomUUID(), action: 'learn' }).success).toBe(
+      false,
+    );
     expect(toggleSpellSchema.safeParse({ id, action: 'drop' }).success).toBe(false);
   });
 });

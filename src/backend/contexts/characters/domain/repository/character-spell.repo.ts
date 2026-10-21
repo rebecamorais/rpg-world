@@ -24,9 +24,24 @@ export interface CharacterSpellRelation {
   bgStyleId?: string | null;
 }
 
+/** A spell in a character's spellbook: the content key it points to, e.g. `dnd5e:srd-5.1:spell:fireball`. */
+export interface CharacterSpellLink {
+  ref: string;
+  isPrepared: boolean;
+  createdAt?: string;
+}
+
 export interface CharacterSpellRepo {
-  findByCharacterId(characterId: string, locale?: string): Promise<CharacterSpellRelation[]>;
-  learn(characterId: string, id: string): Promise<void>;
-  forget(characterId: string, id: string): Promise<void>;
-  togglePrepared(characterId: string, id: string, isPrepared: boolean): Promise<void>;
+  findByCharacterId(characterId: string): Promise<CharacterSpellLink[]>;
+  learn(characterId: string, ref: string): Promise<void>;
+  forget(characterId: string, ref: string): Promise<void>;
+  togglePrepared(characterId: string, ref: string, isPrepared: boolean): Promise<void>;
+}
+
+/** Where the spells themselves come from (the content catalog). */
+export interface SpellLookup {
+  findByKeys(
+    keys: string[],
+    locale?: string,
+  ): Promise<Omit<CharacterSpellRelation, 'isPrepared' | 'createdAt'>[]>;
 }

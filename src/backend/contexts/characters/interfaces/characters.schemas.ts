@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { spellKeySchema } from '@shared/content/content-key';
 import { httpUrlOrEmpty, optional, optionalQuery } from '@shared/http/validation';
 import { ATTRIBUTE_KEYS, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
@@ -77,7 +78,7 @@ export const characterUpdatesSchema = z.object({
 export const updateCharacterSchema = z.object({ updates: characterUpdatesSchema });
 
 export const toggleSpellSchema = z.object({
-  id: z.uuid(),
+  id: spellKeySchema,
   action: z.enum(['learn', 'forget', 'prepare', 'unprepare']),
 });
 

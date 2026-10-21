@@ -1,6 +1,6 @@
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import { CharacterRepo } from '../../domain/repository';
-import { CharacterSpellRepo } from '../../domain/repository/character-spell.repo';
+import { CharacterSpellRepo, SpellLookup } from '../../domain/repository/character-spell.repo';
 import { findOwnedCharacter } from '../find-owned-character';
 
 export type ToggleSpellAction = 'learn' | 'forget' | 'prepare' | 'unprepare';
@@ -9,6 +9,7 @@ export class ToggleCharacterSpellUseCase {
   constructor(
     private readonly characterRepository: CharacterRepo,
     private readonly spellRepository: CharacterSpellRepo,
+    private readonly spells: SpellLookup,
   ) {}
 
   async execute(
@@ -21,6 +22,10 @@ export class ToggleCharacterSpellUseCase {
 
     switch (action) {
       case 'learn':
+        // The database no longer checks the spell exists (it is a content key, not a foreign key)
+        if ((await this.spells.findByKeys([spellId])).length === 0) {
+          throw new CharacterError(CharacterErrorCodes.SPELL_NOT_FOUND);
+        }
         await this.spellRepository.learn(characterId, spellId);
         break;
       case 'forget':

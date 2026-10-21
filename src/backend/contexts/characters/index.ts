@@ -1,5 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import { getSpellCatalog } from '@backend/contexts/spells';
+
 import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import {
   CharacterContext,
@@ -30,8 +32,17 @@ export const createCharacterContext = (dbClient: SupabaseClient): CharacterConte
   const updateCharacterUseCase = new UpdateCharacterUseCase(repository, storageRepository);
   const deleteCharacterUseCase = new DeleteCharacterUseCase(repository, storageRepository);
 
-  const getCharacterSpellsUseCase = new GetCharacterSpellsUseCase(repository, spellRepository);
-  const toggleCharacterSpellUseCase = new ToggleCharacterSpellUseCase(repository, spellRepository);
+  const spellCatalog = getSpellCatalog();
+  const getCharacterSpellsUseCase = new GetCharacterSpellsUseCase(
+    repository,
+    spellRepository,
+    spellCatalog,
+  );
+  const toggleCharacterSpellUseCase = new ToggleCharacterSpellUseCase(
+    repository,
+    spellRepository,
+    spellCatalog,
+  );
 
   return {
     getById: getCharacterUseCase.execute.bind(getCharacterUseCase),
