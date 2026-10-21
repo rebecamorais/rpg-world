@@ -3,9 +3,15 @@
 import { useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
+import { ImageCropDialog } from '@frontend/components/shared/ImageCropDialog';
+import { ImageViewerDialog } from '@frontend/components/shared/ImageViewerDialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
+import { Button } from '@frontend/components/ui/button';
 import { UploadTarget, useFileUploader } from '@frontend/context/FileUploaderContext';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { CropArea, cropImage } from '@frontend/lib/crop-image';
 import { cn } from '@frontend/lib/utils';
 
 interface ImageUploadProps {
@@ -20,8 +26,10 @@ interface ImageUploadProps {
 }
 
 /**
- * Generic ImageUpload component that handles file picking and uploading
+ * Generic ImageUpload component that handles file picking, cropping and uploading
  * to a specific target (profile, character, etc.) via FileUploaderContext.
+ * The cropped image is resized and compressed in the browser, so large files (e.g. AI art)
+ * still fit the server's limit.
  */
 export default function ImageUpload({
   currentUrl,
@@ -37,6 +45,9 @@ export default function ImageUpload({
   const { upload: contextUpload, isUploading: isUploadingContext } = useFileUploader();
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [pending, setPending] = useState<{ file: File; source: string } | null>(null);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const { getErrorMessage } = useErrorMessage();
 
   const isUploading = isUploadingProp ?? isUploadingContext;
 
@@ -48,11 +59,31 @@ export default function ImageUpload({
 
   const displayUrl = preview ?? currentUrl;
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     // Clear the input so picking the same file again (e.g. retrying a failed upload) fires change
     e.target.value = '';
-    if (!file) return;
+    if (file) setPending({ file, source: URL.createObjectURL(file) });
+  };
+
+  const clearPending = () => {
+    if (pending) URL.revokeObjectURL(pending.source);
+    setPending(null);
+  };
+
+  const handleCropConfirm = async (area: CropArea | null) => {
+    if (!pending) return;
+    const original = pending.file;
+    clearPending();
+
+    let file: File;
+    try {
+      file = await cropImage(original, area);
+    } catch (err: unknown) {
+      toast.error(getErrorMessage(err));
+      onUploadError?.(err);
+      return;
+    }
 
     // Local preview (blob URL)
     const objectUrl = URL.createObjectURL(file);
@@ -118,6 +149,24 @@ export default function ImageUpload({
         className="hidden"
         onChange={handleFileChange}
         id="image-file-input"
+      />
+
+      {currentUrl ? (
+        <Button type="button" variant="ghost" size="sm" onClick={() => setIsViewerOpen(true)}>
+          {t('view')}
+        </Button>
+      ) : null}
+
+      <ImageCropDialog
+        source={pending?.source ?? null}
+        onCancel={clearPending}
+        onConfirm={handleCropConfirm}
+      />
+      <ImageViewerDialog
+        src={currentUrl}
+        alt={t('currentAlt')}
+        open={isViewerOpen}
+        onOpenChange={setIsViewerOpen}
       />
     </div>
   );

@@ -55,7 +55,8 @@
       "expired_link_description": "O link de acesso expirou ou já foi utilizado.",
       "auth_error_title": "Erro de Autenticação",
       "auth_error_description": "Não foi possível completar a operação no momento.",
-      "security_widget_unavailable": "Não foi possível carregar a verificação de segurança. Desative bloqueadores de conteúdo para este site ou recarregue a página."
+      "security_widget_unavailable": "Não foi possível carregar a verificação de segurança. Desative bloqueadores de conteúdo para este site ou recarregue a página.",
+      "image_error_decode": "Não foi possível ler essa imagem. Tente outro arquivo (JPEG, PNG ou WebP)."
     },
     "save": "Salvar",
     "saving": "Salvando...",
@@ -406,7 +407,13 @@
     "button": "Alterar Avatar",
     "loading": "Enviando...",
     "currentAlt": "Avatar atual",
-    "error": "Erro ao carregar imagem."
+    "error": "Erro ao carregar imagem.",
+    "cropTitle": "Ajustar imagem",
+    "cropDescription": "Arraste para posicionar e use o zoom para enquadrar.",
+    "zoom": "Zoom",
+    "save": "Salvar",
+    "view": "Ver imagem",
+    "viewTitle": "Imagem em tela cheia"
   },
   "skills": {
     "title": "Perícias",

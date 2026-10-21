@@ -15,6 +15,7 @@ import { useCharacterActions, useLoadedCharacter } from '@frontend/context/Chara
 
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
+import { ImageViewerDialog } from '../shared/ImageViewerDialog';
 import { CharacterCustomizationDialog } from './CharacterCustomizationDialog';
 
 /** Same limit as the API's character schema, so a save never fails on length. */
@@ -34,7 +35,9 @@ export default function CharacterHeader() {
   const { update } = useCharacterActions();
   const pb = getProficiencyBonus(level);
   const t = useTranslations('characterHeader');
+  const tImage = useTranslations('avatarUpload');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   // Simple XP progress calculation
   const xpThresholds = [
@@ -51,22 +54,41 @@ export default function CharacterHeader() {
   return (
     <Card className="overflow-hidden shadow-sm">
       <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start">
-        <button
-          type="button"
-          onClick={() => setIsColorPickerOpen(true)}
-          aria-label={t('customizeTitle')}
-          className="group focus-ring relative self-start rounded-full transition-transform hover:scale-105 active:scale-95"
-        >
-          <Avatar className="border-character-muted shadow-character-muted h-20 w-20 shrink-0 border-2 shadow-md transition-all">
-            <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
-            <AvatarFallback className="bg-muted text-xl font-bold">
-              {name?.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity group-hover:opacity-100">
-            <AppIcon name="Palette" size={24} className="text-character-flare" />
-          </div>
-        </button>
+        <div className="relative self-start">
+          <button
+            type="button"
+            onClick={() => setIsColorPickerOpen(true)}
+            aria-label={t('customizeTitle')}
+            className="group focus-ring relative self-start rounded-full transition-transform hover:scale-105 active:scale-95"
+          >
+            <Avatar className="border-character-muted shadow-character-muted h-20 w-20 shrink-0 border-2 shadow-md transition-all">
+              <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
+              <AvatarFallback className="bg-muted text-xl font-bold">
+                {name?.substring(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity group-hover:opacity-100">
+              <AppIcon name="Palette" size={24} className="text-character-flare" />
+            </div>
+          </button>
+          {avatarUrl ? (
+            <button
+              type="button"
+              onClick={() => setIsViewerOpen(true)}
+              aria-label={tImage('view')}
+              className="focus-ring bg-background border-border hover:text-character-flare absolute -right-1 -bottom-1 flex h-7 w-7 items-center justify-center rounded-full border shadow-sm transition-colors"
+            >
+              <AppIcon name="Maximize2" size={14} />
+            </button>
+          ) : null}
+        </div>
+
+        <ImageViewerDialog
+          src={avatarUrl}
+          alt={name}
+          open={isViewerOpen}
+          onOpenChange={setIsViewerOpen}
+        />
 
         <CharacterCustomizationDialog
           open={isColorPickerOpen}
