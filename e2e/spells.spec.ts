@@ -9,9 +9,10 @@ test('aprende, prepara e esquece uma magia', async ({ page, user: _ }) => {
   await page.getByRole('button', { name: 'Add Spell' }).first().click();
   const catalog = page.getByRole('dialog', { name: 'Spell list' });
   const search = catalog.getByRole('searchbox', { name: 'Search spells' });
-  await search.fill('fire');
-  const fireballInCatalog = catalog.getByRole('article', { name: /Fireball/ });
-  await expect(catalog.getByRole('article')).toHaveCount(1);
+  await search.fill('fireball');
+  // "Delayed Blast Fireball" matches too
+  const fireballInCatalog = catalog.getByRole('article', { name: /^Fireball/ });
+  await expect(catalog.getByRole('article')).toHaveCount(2);
   await fireballInCatalog.getByRole('button', { name: 'Learn spell' }).click();
   await expect(page.getByText('Spell learned!')).toBeVisible();
   await expect(fireballInCatalog.getByText('Learned')).toBeVisible();
