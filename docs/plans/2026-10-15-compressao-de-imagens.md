@@ -1,7 +1,12 @@
 # Compressão das imagens enviadas
 
 **Data:** 2026-10-15
-**Status:** planejamento, nada implementado. Detalha o item de imagens do plano
+**Status (2026-10-21):** compressão no navegador entregue, junto com recorte/zoom antes de salvar
+e visualização em tela cheia. Decisões na implementação: recorte quadrado com `react-easy-crop`,
+1024 px no maior lado (para a tela cheia não ficar borrada), alvo de 800 KB, WebP com JPEG de
+reserva, sem Web Worker por enquanto. Pendentes: itens 4 e 5 da ordem abaixo.
+
+**Status anterior:** planejamento, nada implementado. Detalha o item de imagens do plano
 `2026-10-15-limites-de-uso.md`.
 
 Objetivo: **toda imagem enviada é comprimida antes de subir e fica sempre abaixo de 2 MB**, sem o
