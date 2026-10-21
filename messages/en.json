@@ -93,7 +93,8 @@
       "min": "At least {min}",
       "max": "At most {max}"
     },
-    "fixFieldsToSave": "Fix the fields in red to save"
+    "fixFieldsToSave": "Fix the fields in red to save",
+    "whatIs": "What is {label}?"
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -292,7 +293,6 @@
     "initiative": "Initiative",
     "speedUnit": "m",
     "hitDice": "Hit Dice",
-    "hitDiceShort": "HD",
     "diceOptions": {
       "d6": "1d6",
       "d8": "1d8",
@@ -301,7 +301,13 @@
     },
     "edit": "Edit combat stats",
     "loseHp": "Lose 1 HP",
-    "gainHp": "Heal 1 HP"
+    "gainHp": "Heal 1 HP",
+    "hints": {
+      "armorClass": "The number an attack roll has to reach to hit you.",
+      "initiative": "Added to the d20 at the start of combat to set the turn order. Usually your Dexterity modifier.",
+      "speed": "How far you can move on your turn.",
+      "hitDice": "One die per level. On a short rest, roll and spend them to recover HP."
+    }
   },
   "spellsDrawer": {
     "searchPlaceholder": "Search spells",

@@ -93,7 +93,8 @@
       "min": "No mínimo {min}",
       "max": "No máximo {max}"
     },
-    "fixFieldsToSave": "Corrija os campos em vermelho para salvar"
+    "fixFieldsToSave": "Corrija os campos em vermelho para salvar",
+    "whatIs": "O que é {label}?"
   },
   "login": {
     "title": "Entrar no RPG World",
@@ -292,7 +293,6 @@
     "initiative": "Iniciativa",
     "speedUnit": "m",
     "hitDice": "Dados de Vida",
-    "hitDiceShort": "DV",
     "diceOptions": {
       "d6": "1d6",
       "d8": "1d8",
@@ -301,7 +301,13 @@
     },
     "edit": "Editar status de combate",
     "loseHp": "Perder 1 PV",
-    "gainHp": "Recuperar 1 PV"
+    "gainHp": "Recuperar 1 PV",
+    "hints": {
+      "armorClass": "O número que um ataque precisa alcançar para te acertar.",
+      "initiative": "Somada ao d20 no início do combate para definir a ordem dos turnos. Normalmente é o modificador de Destreza.",
+      "speed": "Quanto você pode se mover no seu turno.",
+      "hitDice": "Um dado por nível. No descanso curto, role e gaste dados para recuperar PV."
+    }
   },
   "spellsDrawer": {
     "searchPlaceholder": "Buscar magia",
