@@ -1,7 +1,13 @@
 # Traduções comunitárias: vários idiomas e vários sistemas
 
 **Data:** 2026-10-15
-**Status:** planejamento. Complementa `2026-10-15-5etools-e-traducoes.md` (de onde vêm os dados
+**Status (2026-10-22):** decidido usar o **Crowdin** (projeto público `rpgworld`, id 940585,
+pedido de licença open source enviado). `crowdin.yml` envia `messages/en.json` e
+`content/dnd5e/*/i18n/en/*.json`; a Action `crowdin.yml` abre um PR diário com as traduções.
+Sem tradução automática. As traduções do Foundry continuam como fonte do que já existe (SRD 5.1
+em pt). Se o Crowdin não der certo, Weblate e Tolgee leem os mesmos arquivos.
+
+**Status anterior:** planejamento. Complementa `2026-10-15-5etools-e-traducoes.md` (de onde vêm os dados
 mecânicos) e vale para os sistemas novos (`2026-10-15-dnd-2024-novo-sistema.md`,
 `2026-10-15-feiticeiros-e-maldicoes.md`).
 

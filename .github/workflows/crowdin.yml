@@ -1,0 +1,52 @@
+name: Crowdin
+
+# Sends the English texts to Crowdin when they change on main, and opens (or updates) a pull
+# request with the translations every day. Translations are reviewed and merged like any PR.
+on:
+  push:
+    branches: [main]
+    paths:
+      - messages/en.json
+      - 'content/**/i18n/en/**'
+      - crowdin.yml
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      upload_translations:
+        description: 'Also upload the translations already in the repository (first setup)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: crowdin
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Pinned to a commit: this step gets a token that can push and open pull requests
+      - uses: crowdin/github-action@9c23991700c0ec5256fd41089b9d9d7d540e424e # v3.3.0
+        with:
+          upload_sources: true
+          upload_translations: ${{ inputs.upload_translations || false }}
+          # The Portuguese already in the repository was reviewed: it starts approved
+          auto_approve_imported: ${{ inputs.upload_translations || false }}
+          download_translations: true
+          localization_branch_name: l10n/crowdin
+          create_pull_request: true
+          pull_request_title: 'i18n: traduções do Crowdin'
+          pull_request_body: 'Traduções novas ou revisadas no [Crowdin](https://crowdin.com/project/rpgworld).'
+          pull_request_base_branch_name: main
+          commit_message: 'i18n: traduções do Crowdin'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ vars.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

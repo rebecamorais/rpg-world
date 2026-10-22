@@ -1,7 +1,7 @@
 # Conteúdo de terceiros e créditos
 
 O código do RPG World é licenciado sob a GNU GPLv3 (ver [LICENSE](LICENSE)). O conteúdo de regras
-incluído no banco de dados vem das fontes abaixo, cada uma com a sua licença.
+(`content/`) vem das fontes abaixo, cada uma com a sua licença.
 
 ## System Reference Document 5.1
 
@@ -10,7 +10,7 @@ of the Coast LLC and available at <https://dnd.wizards.com/resources/systems-ref
 The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available
 at <https://creativecommons.org/licenses/by/4.0/legalcode>.
 
-Usado em: textos em inglês das magias (`spell_translations`, `locale = 'en'`).
+Usado em: textos em inglês das magias (`content/dnd5e/srd-5.1/i18n/en/spells.json`).
 
 O RPG World não é afiliado, endossado nem patrocinado pela Wizards of the Coast. Dungeons & Dragons
 e D&D são marcas da Wizards of the Coast LLC.
@@ -47,7 +47,7 @@ SOFTWARE.
 
 ## Tradução em português do Brasil: Foundry VTT Brasil
 
-As traduções em português das magias do SRD 5.1 (`spell_translations`, `locale = 'pt'`) vêm do
+As traduções em português das magias do SRD 5.1 (`content/dnd5e/srd-5.1/i18n/pt/spells.json`) vêm do
 módulo de tradução do sistema D&D 5e para o Foundry VTT, mantido pela comunidade Foundry VTT
 Brasil: <https://gitlab.com/fvtt-brasil/dnd5e>. Agradecemos a Cauã Pessoa e a todas as pessoas que
 contribuíram com essa tradução.
