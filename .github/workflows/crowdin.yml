@@ -1,7 +1,7 @@
 name: Crowdin
 
 # Sends the English texts to Crowdin when they change on main, and opens (or updates) a pull
-# request with the translations every day. Translations are reviewed and merged like any PR.
+# request with the approved translations every day. They are reviewed and merged like any PR.
 on:
   push:
     branches: [main]
@@ -40,6 +40,8 @@ jobs:
           # The Portuguese already in the repository was reviewed: it starts approved
           auto_approve_imported: ${{ inputs.upload_translations || false }}
           download_translations: true
+          # Only what a proofreader approved reaches the app; the rest stays in English
+          export_only_approved: true
           localization_branch_name: l10n/crowdin
           create_pull_request: true
           pull_request_title: 'i18n: traduções do Crowdin'
