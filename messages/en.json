@@ -687,7 +687,7 @@
       "sight": "Sight",
       "unlimited": "Unlimited",
       "feet": "{feet} ft.",
-      "mile": "{miles} {miles, plural, one {mile} other {miles}}",
+      "mile": "{miles} {miles, plural, one {mile} other {miles}} ({km} km)",
       "special": "Special"
     },
     "durations": {
