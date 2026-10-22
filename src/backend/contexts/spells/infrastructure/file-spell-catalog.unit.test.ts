@@ -186,4 +186,10 @@ describe('FileSpellCatalog com duas edições', () => {
     expect(total).toBe(1);
     expect(found[0]).toMatchObject({ name: 'Fireball', edition: '2024', untranslated: true });
   });
+
+  // In Portuguese the 2014 spell is "Bola de Fogo" and the 2024 one still "Fireball"
+  it('a busca também acha pelo nome em inglês, então as duas edições aparecem', async () => {
+    const { data: found } = await twoEditions.findAll({ locale: 'pt', search: 'fireball' });
+    expect(found.map((s) => s.name)).toEqual(['Bola de Fogo', 'Fireball']);
+  });
 });

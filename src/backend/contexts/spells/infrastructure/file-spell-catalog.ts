@@ -79,9 +79,17 @@ export class FileSpellCatalog implements SpellsRepo {
 
     const matches = this.entries
       .map((entry) => ({ entry, text: this.textOf(entry, locale) }))
-      .filter(({ entry: { data, edition }, text }) => {
+      .filter(({ entry, text }) => {
+        const { data, edition } = entry;
         if (params.edition && edition !== params.edition) return false;
-        if (search && !normalize(text.name).includes(search)) return false;
+        // The English name finds it too: an untranslated edition is named in English
+        if (
+          search &&
+          !normalize(text.name).includes(search) &&
+          !normalize(entry.text.name).includes(search)
+        ) {
+          return false;
+        }
         if (params.level !== undefined && params.level !== null && data.level !== params.level) {
           return false;
         }
