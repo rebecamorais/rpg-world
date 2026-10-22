@@ -11,8 +11,8 @@ Um aplicativo web para criação e gestão de fichas de personagens de RPG de me
 - **Framework:** Next.js 16 (React 19)
 - **Linguagem:** TypeScript
 - **Estilização:** Tailwind CSS
-- **APIs Externas:** [D&D 5e API](https://www.dnd5eapi.co/) (Magias e recursos adicionais)
-- **Banco de Dados/Auth:** Supabase (Planejado / Em andamento), versão inicial com persistência em JSON estrito.
+- **Conteúdo de regras:** arquivos versionados em `content/` (magias do SRD 5.1 e do SRD 5.2), traduzidos pela comunidade no [Crowdin](https://crowdin.com/project/rpgworld)
+- **Banco de Dados/Auth:** Supabase (Postgres, Auth e Storage).
 
 ## ✨ Funcionalidades Principais (Fase 1 Em Desenvolvimento)
 
@@ -23,7 +23,7 @@ O projeto está atualmente focado em fechar sua base funcional com as seguintes 
 3. **Múltiplos Sistemas (Arquitetura):** Código modular para permitir adicionar mais sistemas além do D&D 5e facilmente no futuro.
 4. **Ficha Completa em uma Single Page:** Todos os atributos, perícias, salvaguardas, PV, CA e Iniciativa numa tela compacta com suporte para foto de perfil do personagem.
 5. **Automação das Regras (D&D 5e):** Cálculo automático e estrito de Modificadores, Bônus de Proficiência e Percepção Passiva a partir de Atributos Base.
-6. **Grimório / Magias Integradas:** Um Drawer para consultar, aprender e gerenciar listas de Magias utilizando a API `dnd5eapi.co`, construído de forma que traduza perfeitamente via Google Tradutor (Inglês -> PT-BR).
+6. **Grimório / Magias Integradas:** consultar, aprender e preparar as 658 magias do SRD 5.1 (2014) e do SRD 5.2 (2024), com filtro por edição, em inglês e português. As de 2024 vêm do 5etools (`npm run content:spells`).
 
 ## 🛠️ Como rodar o projeto localmente
 
@@ -133,6 +133,6 @@ Desenvolvido com 💜 por Rebeca.
 
 Este projeto está licenciado sob a **GNU GPLv3**. Consulte o arquivo [LICENSE](LICENSE) para obter mais detalhes.
 
-O conteúdo de regras vem de fontes abertas com licenças próprias: o SRD 5.1 da Wizards of the Coast (CC-BY-4.0), os dados da [5e SRD API](https://github.com/5e-bits/5e-database) (MIT) e as traduções em português da comunidade [Foundry VTT Brasil](https://gitlab.com/fvtt-brasil/dnd5e) (MIT). Créditos completos em [NOTICE.md](NOTICE.md).
+O conteúdo de regras vem de fontes abertas com licenças próprias: o SRD 5.1 e o SRD 5.2 da Wizards of the Coast (CC-BY-4.0), os dados da [5e SRD API](https://github.com/5e-bits/5e-database) (MIT), as magias de 2024 extraídas do [5etools](https://github.com/5etools-mirror-3/5etools-src) e as traduções em português da comunidade [Foundry VTT Brasil](https://gitlab.com/fvtt-brasil/dnd5e) (MIT). Créditos completos em [NOTICE.md](NOTICE.md).
 
 Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio).

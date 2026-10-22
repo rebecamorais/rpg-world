@@ -8,9 +8,11 @@ import { richLinks } from '@frontend/components/shared/rich-links';
 // Links inside the game content credits, one per tag in the messages
 const CREDIT_HREFS = {
   srd: 'https://dnd.wizards.com/resources/systems-reference-document',
+  srd52: 'https://www.dndbeyond.com/srd',
   ccby: 'https://creativecommons.org/licenses/by/4.0/legalcode',
   api: 'https://www.dnd5eapi.co',
   database: 'https://github.com/5e-bits/5e-database',
+  fivetools: 'https://github.com/5etools-mirror-3/5etools-src',
   foundry: 'https://gitlab.com/fvtt-brasil/dnd5e',
   notice: 'https://github.com/rebecamorais/rpg-world/blob/main/NOTICE.md',
 };
