@@ -1,0 +1,27 @@
+name: Sugestão
+description: Uma ideia de funcionalidade ou melhoria.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Qual problema isso resolve
+      description: O que você tenta fazer na mesa ou na ficha e hoje não consegue (ou é difícil).
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Como você imagina
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Sistema
+      placeholder: D&D 5e (2014), D&D 2024, Feiticeiros & Maldições...
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas
+      description: Outras soluções ou o que você usa hoje no lugar.

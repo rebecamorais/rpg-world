@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Vulnerabilidade de segurança
+    url: https://github.com/rebecamorais/rpg-world/security/advisories/new
+    about: Reporte em particular, nunca em issue pública.
+  - name: Traduções
+    url: https://crowdin.com/project/rpgworld
+    about: Sugestões e correções de tradução são feitas no Crowdin.
