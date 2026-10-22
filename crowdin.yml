@@ -1,0 +1,16 @@
+# Community translations: https://crowdin.com/project/rpgworld
+# English is the source; Crowdin sends translations back through .github/workflows/crowdin.yml.
+project_id_env: CROWDIN_PROJECT_ID
+api_token_env: CROWDIN_PERSONAL_TOKEN
+base_path: .
+preserve_hierarchy: true
+
+files:
+  # App interface. Untranslated keys come back in English: next-intl fails on a missing key.
+  - source: /messages/en.json
+    translation: /messages/%two_letters_code%.json
+  # Rules content (spells…), one folder per book: content/dnd5e/srd-5.1/i18n/en/spells.json.
+  # Untranslated fields are left out; the app shows them in English (FileSpellCatalog).
+  - source: /content/dnd5e/**/i18n/en/*.json
+    translation: /content/dnd5e/**/i18n/%two_letters_code%/%original_file_name%
+    skip_untranslated_strings: true

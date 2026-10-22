@@ -31,5 +31,12 @@ export const spellTextSchema = z.object({
   material: z.string().nullable(),
 });
 
+/**
+ * Texts of a spell in a translated language. Translators work field by field, so any field may
+ * still be missing; it falls back to the English one.
+ */
+export const spellTranslationSchema = spellTextSchema.partial();
+
 export type SpellData = z.infer<typeof spellDataSchema>;
 export type SpellText = z.infer<typeof spellTextSchema>;
+export type SpellTranslation = z.infer<typeof spellTranslationSchema>;
