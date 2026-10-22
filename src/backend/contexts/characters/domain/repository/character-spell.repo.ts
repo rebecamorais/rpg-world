@@ -1,5 +1,10 @@
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 export interface CharacterSpellRelation {
   id: string;
+  edition: Edition;
+  /** The description isn't in the requested language yet and shows in English. */
+  untranslated: boolean;
   name: string;
   level: number;
   school: string;

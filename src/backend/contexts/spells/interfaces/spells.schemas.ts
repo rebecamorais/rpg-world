@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { optionalQuery } from '@shared/http/validation';
+import { EDITIONS } from '@shared/systems/dnd5e/content/editions';
 
 const queryText = optionalQuery(z.string().max(100));
 
@@ -13,4 +14,5 @@ export const findSpellsQuerySchema = z.object({
   school: queryText,
   class: queryText,
   damageType: queryText,
+  edition: optionalQuery(z.enum(EDITIONS)),
 });

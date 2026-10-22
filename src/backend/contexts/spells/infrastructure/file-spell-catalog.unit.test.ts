@@ -29,6 +29,7 @@ const text = (name: string): SpellText => ({ name, description: `${name} descrip
 
 const source: SpellSource = {
   source: 'srd-5.1',
+  edition: '2014',
   spells: [
     data('fireball', 3, { damageType: 'fire', classes: ['wizard', 'sorcerer'] }),
     data('lightning-bolt', 3, { damageType: 'lightning' }),
@@ -142,5 +143,47 @@ describe('FileSpellCatalog', () => {
       'pt',
     );
     expect(found.map((s) => s.name)).toEqual(['Luz', 'Bola de Fogo']);
+  });
+
+  it('marca a edição de cada magia', async () => {
+    const [light] = await catalog.findByKeys(['dnd5e:srd-5.1:spell:light'], 'en');
+    expect(light.edition).toBe('2014');
+  });
+
+  it.each([
+    ['pt', 'dnd5e:srd-5.1:spell:shield', true],
+    ['pt', 'dnd5e:srd-5.1:spell:light', true],
+    ['pt', 'dnd5e:srd-5.1:spell:fireball', false],
+    ['en', 'dnd5e:srd-5.1:spell:shield', false],
+  ])('em %s, %s tem untranslated = %s', async (locale, key, untranslated) => {
+    const [spell] = await catalog.findByKeys([key], locale);
+    expect(spell.untranslated).toBe(untranslated);
+  });
+});
+
+describe('FileSpellCatalog com duas edições', () => {
+  const twoEditions = new FileSpellCatalog([
+    source,
+    {
+      source: 'srd-5.2',
+      edition: '2024',
+      spells: [data('fireball', 3, { rangeValue: 150 })],
+      texts: { fireball: text('Fireball') },
+      translations: { pt: {} },
+    },
+  ]);
+
+  it('a mesma magia nas duas edições aparece duas vezes, cada uma com a sua', async () => {
+    const { data: found } = await twoEditions.findAll({ locale: 'en', search: 'fireball' });
+    expect(found.map((s) => [s.id, s.edition])).toEqual([
+      ['dnd5e:srd-5.1:spell:fireball', '2014'],
+      ['dnd5e:srd-5.2:spell:fireball', '2024'],
+    ]);
+  });
+
+  it('filtra por edição', async () => {
+    const { data: found, total } = await twoEditions.findAll({ locale: 'pt', edition: '2024' });
+    expect(total).toBe(1);
+    expect(found[0]).toMatchObject({ name: 'Fireball', edition: '2024', untranslated: true });
   });
 });
