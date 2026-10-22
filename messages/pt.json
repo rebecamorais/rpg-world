@@ -667,9 +667,9 @@
       "action": "{value, plural, one {# Ação} other {# Ações}}",
       "bonus_action": "{value, plural, one {# Ação Bônus} other {# Ações Bônus}}",
       "reaction": "{value, plural, one {# Reação} other {# Reações}}",
-      "minute": "{value, plural, one {# Minuto} other {# Minutos}}",
-      "hour": "{value, plural, one {# Hora} other {# Horas}}",
-      "day": "{value, plural, one {# Dia} other {# Dias}}"
+      "minute": "{value} {value, plural, one {Minute} other {Minutes}}",
+      "hour": "{value} {value, plural, one {Hour} other {Hours}}",
+      "day": "{value} {value, plural, one {Day} other {Days}}"
     },
     "castingTimesBrief": {
       "action": "Ação",
@@ -687,7 +687,7 @@
       "sight": "Visão",
       "unlimited": "Ilimitado",
       "feet": "{meters}m ({feet} ft.)",
-      "mile": "{km} km ({miles} {miles, plural, one {milha} other {milhas}})",
+      "mile": "{miles} {miles, plural, one {mile} other {miles}}",
       "special": "Especial"
     },
     "durations": {
@@ -881,8 +881,8 @@
           "alt": "Busca de magias por \"fogo\" mostrando Raio de Fogo, Bola de Fogo e outras, com as aprendidas marcadas"
         },
         "lore": {
-          "title": "A história da personagem",
           "tab": "História",
+          "title": "A história da personagem",
           "description": "Aparência, personalidade, ideais, vínculos, defeitos e a história completa, junto da ficha.",
           "alt": "Página de história com aparência, traços de personalidade, ideais, vínculos, defeitos e a história da personagem"
         }
