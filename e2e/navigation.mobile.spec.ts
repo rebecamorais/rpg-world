@@ -46,11 +46,12 @@ test.describe('celular', () => {
     // Only the search is on screen until the filters are opened
     const level = catalog.getByRole('combobox', { name: 'Level' });
     await expect(level).toBeHidden();
-    await catalog.getByRole('button', { name: 'Filters', exact: true }).click();
+    // The edition filter starts on (2024, for an empty spellbook)
+    await catalog.getByRole('button', { name: 'Filters (1)', exact: true }).click();
     await level.click();
     await page.getByRole('option', { name: 'Level 3' }).click();
 
-    await expect(catalog.getByRole('button', { name: 'Filters (1)', exact: true })).toBeVisible();
+    await expect(catalog.getByRole('button', { name: 'Filters (2)', exact: true })).toBeVisible();
     await expect(catalog.getByRole('article')).toHaveCount(1);
     await expect(catalog.getByRole('article', { name: /^Fireball/ })).toBeVisible();
   });
