@@ -41,14 +41,18 @@ const source: SpellSource = {
     data('light', 0, { classes: ['cleric'] }),
   ],
   texts: {
-    en: {
-      fireball: text('Fireball'),
-      'lightning-bolt': text('Lightning Bolt'),
-      shield: text('Shield'),
-      light: text('Light'),
+    fireball: text('Fireball'),
+    'lightning-bolt': text('Lightning Bolt'),
+    shield: text('Shield'),
+    light: text('Light'),
+  },
+  translations: {
+    // Shield has no Portuguese text; Light only has its name so far
+    pt: {
+      fireball: text('Bola de Fogo'),
+      'lightning-bolt': text('Relâmpago'),
+      light: { name: 'Luz' },
     },
-    // Shield has no Portuguese text
-    pt: { fireball: text('Bola de Fogo'), 'lightning-bolt': text('Relâmpago'), light: text('Luz') },
   },
 };
 
@@ -107,6 +111,12 @@ describe('FileSpellCatalog', () => {
       );
     },
   );
+
+  it('tradução parcial completa os campos que faltam com o inglês', async () => {
+    const [light] = (await catalog.findAll({ locale: 'pt', level: 0 })).data;
+    expect(light.name).toBe('Luz');
+    expect(light.description).toBe('Light description.');
+  });
 
   it('devolve a chave completa como id', async () => {
     const [light] = (await catalog.findAll({ locale: 'en', level: 0 })).data;

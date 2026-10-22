@@ -1,5 +1,9 @@
 import { spellKey } from '@shared/content/content-key';
-import type { SpellData, SpellText } from '@shared/systems/dnd5e/content/spell.schema';
+import type {
+  SpellData,
+  SpellText,
+  SpellTranslation,
+} from '@shared/systems/dnd5e/content/spell.schema';
 
 import type {
   FindSpellsParams,
@@ -8,17 +12,22 @@ import type {
   SpellsRepo,
 } from '../domain/repository/spells.repo';
 
-/** The spells of one book: rules data plus texts by locale (`texts[locale][id]`). */
+/**
+ * The spells of one book: rules data, the English texts and the translations by locale
+ * (`translations[locale][id]`, possibly partial).
+ */
 export interface SpellSource {
   source: string;
   spells: SpellData[];
-  texts: Record<string, Record<string, SpellText>>;
+  texts: Record<string, SpellText>;
+  translations: Record<string, Record<string, SpellTranslation>>;
 }
 
 interface Entry {
   key: string;
   data: SpellData;
-  texts: Record<string, SpellText | undefined>;
+  text: SpellText;
+  translations: Record<string, SpellTranslation | undefined>;
 }
 
 const FALLBACK_LOCALE = 'en';
@@ -36,17 +45,21 @@ export class FileSpellCatalog implements SpellsRepo {
   private readonly locales: Set<string>;
 
   constructor(sources: SpellSource[]) {
-    this.entries = sources.flatMap(({ source, spells, texts }) =>
+    this.entries = sources.flatMap(({ source, spells, texts, translations }) =>
       spells.map((data) => ({
         key: spellKey(source, data.id),
         data,
-        texts: Object.fromEntries(
-          Object.entries(texts).map(([locale, byId]) => [locale, byId[data.id]]),
+        text: texts[data.id],
+        translations: Object.fromEntries(
+          Object.entries(translations).map(([locale, byId]) => [locale, byId[data.id]]),
         ),
       })),
     );
     this.byKey = new Map(this.entries.map((entry) => [entry.key, entry]));
-    this.locales = new Set(sources.flatMap(({ texts }) => Object.keys(texts)));
+    this.locales = new Set([
+      FALLBACK_LOCALE,
+      ...sources.flatMap(({ translations }) => Object.keys(translations)),
+    ]);
   }
 
   /** A locale the files have; anything else (`pt_BR`, `__proto__`…) reads as English. */
@@ -96,9 +109,12 @@ export class FileSpellCatalog implements SpellsRepo {
     });
   }
 
-  /** Text in `locale`, or in English while the spell has no translation yet. */
+  /** Text in `locale`; each field not translated yet stays in English. */
   private textOf(entry: Entry, locale: string): SpellText {
-    return entry.texts[locale] ?? entry.texts[FALLBACK_LOCALE]!;
+    const translation = locale === FALLBACK_LOCALE ? undefined : entry.translations[locale];
+    if (!translation) return entry.text;
+    const translated = Object.entries(translation).filter(([, value]) => value !== undefined);
+    return { ...entry.text, ...Object.fromEntries(translated) };
   }
 }
 

@@ -3,14 +3,20 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
-import { spellDataSchema, spellTextSchema } from '@shared/systems/dnd5e/content/spell.schema';
+import {
+  spellDataSchema,
+  spellTextSchema,
+  spellTranslationSchema,
+} from '@shared/systems/dnd5e/content/spell.schema';
 
 const SRD_51 = path.join(import.meta.dirname, 'srd-5.1');
 const read = (file: string): unknown => JSON.parse(readFileSync(path.join(SRD_51, file), 'utf8'));
 
 const spells = z.array(spellDataSchema).parse(read('spells.json'));
 const texts = (locale: string) =>
-  z.record(z.string(), spellTextSchema).parse(read(`i18n/${locale}/spells.json`));
+  z
+    .record(z.string(), locale === 'en' ? spellTextSchema : spellTranslationSchema)
+    .parse(read(`i18n/${locale}/spells.json`));
 
 describe('magias do SRD 5.1', () => {
   it('toda magia passa no schema e os ids são únicos', () => {
