@@ -1,5 +1,14 @@
 # Magias por edição (SRD 5.2 pelo 5etools) — plano de implementação (PR B)
 
+**Status:** entregue no #97 (2026-10-22). Ficou para depois:
+
+- Truques de 2024: o "Cantrip Upgrade" aparece sob o rótulo "Em níveis superiores"; trocar o
+  rótulo quando a magia é truque.
+- Plant Growth: só o primeiro tempo de conjuração (1 ação), sem o de 8 horas; o formato guarda um
+  tempo só.
+- Reações e ações bônus sem a condição de uso (Counterspell, Feather Fall…); o formato não tem
+  campo para isso.
+
 > **Para quem executa:** use superpowers:subagent-driven-development (recomendado) ou
 > superpowers:executing-plans, tarefa por tarefa. Passos com checkbox (`- [ ]`).
 
