@@ -148,6 +148,13 @@ export const SpellHeader = React.memo(
               </Detail>
             )}
 
+            {displayValues.edition && (
+              <Detail>
+                <span className="sr-only">{displayValues.editionPrefix}: </span>
+                {displayValues.edition}
+              </Detail>
+            )}
+
             {displayValues.damage && (
               <Detail
                 className="text-spell-flare"

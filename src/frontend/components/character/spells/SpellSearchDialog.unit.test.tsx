@@ -40,7 +40,7 @@ function lastQuery() {
   return queries().findLast((q) => q.page === '0')!;
 }
 
-function renderDialog(characterClass = '') {
+function renderDialog(characterClass = '', learnedSpells: string[] = []) {
   const character = {
     ...createDnD5eCharacter('owner', 'Elminster', { class: characterClass }),
     id: 'c1',
@@ -49,7 +49,7 @@ function renderDialog(characterClass = '') {
     <SpellSearchDialog
       isOpen
       onClose={vi.fn()}
-      learnedSpells={[]}
+      learnedSpells={learnedSpells}
       onLearnSpell={vi.fn()}
       onForgetSpell={vi.fn()}
     />,
@@ -72,9 +72,29 @@ describe('SpellSearchDialog', () => {
 
     await waitFor(() => expect(lastQuery().class).toBe('wizard'));
 
-    await user.click(screen.getByRole('button', { name: 'Clear filters (1)' }));
+    await user.click(screen.getByRole('button', { name: 'Clear filters (2)' }));
     await waitFor(() => expect(lastQuery().class).toBeUndefined());
+    expect(lastQuery().edition).toBeUndefined();
     expect(screen.queryByRole('button', { name: /Clear filters/ })).not.toBeInTheDocument();
+  });
+
+  it('grimório vazio começa na edição de 2024', async () => {
+    renderDialog();
+
+    await waitFor(() => expect(lastQuery().edition).toBe('2024'));
+    expect(screen.getByRole('combobox', { name: t.filterLabels.edition })).toHaveTextContent(
+      t.editions['2024'],
+    );
+  });
+
+  it('começa na edição da maioria das magias do grimório', async () => {
+    renderDialog('', [
+      'dnd5e:srd-5.1:spell:fireball',
+      'dnd5e:srd-5.1:spell:shield',
+      'dnd5e:srd-5.2:spell:light',
+    ]);
+
+    await waitFor(() => expect(lastQuery().edition).toBe('2014'));
   });
 
   it('sem classe do sistema, mostra todas', async () => {
@@ -110,7 +130,7 @@ describe('SpellSearchDialog', () => {
     const user = userEvent.setup();
     renderDialog('Wizard');
 
-    const toggle = screen.getByRole('button', { name: 'Filters (1)' });
+    const toggle = screen.getByRole('button', { name: 'Filters (2)' });
     expect(toggle).toHaveAttribute('aria-expanded', 'false');
     const panel = document.getElementById(toggle.getAttribute('aria-controls')!)!;
     expect(panel).toHaveClass('max-sm:hidden');

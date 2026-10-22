@@ -257,7 +257,10 @@
     "subtitle": "Suas fichas, prontas para a próxima sessão.",
     "learnSpell": "Aprender magia",
     "learnedBadge": "Aprendida",
-    "spellCount": "{count, plural, one {# magia} other {# magias}}"
+    "spellCount": "{count, plural, one {# magia} other {# magias}}",
+    "untranslatedBadge": "Em inglês",
+    "untranslatedHint": "Ainda sem tradução. Você pode ajudar no Crowdin.",
+    "edition": "Edição"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
@@ -340,9 +343,15 @@
       "level": "Nível",
       "school": "Escola",
       "class": "Classe",
-      "damage": "Tipo de dano"
+      "damage": "Tipo de dano",
+      "edition": "Edição"
     },
-    "loading": "Carregando magias"
+    "loading": "Carregando magias",
+    "allEditions": "Todas as edições",
+    "editions": {
+      "2014": "2014",
+      "2024": "2024"
+    }
   },
   "magicSystem": {
     "titleConfig": "Configurar magia",

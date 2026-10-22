@@ -1,3 +1,5 @@
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 export enum SpellSchool {
   ABJURATION = 'abjuration',
   CONJURATION = 'conjuration',
@@ -26,6 +28,9 @@ export enum CharacterClass {
 
 export interface Spell {
   id: string;
+  edition?: Edition;
+  /** The description isn't in the app's language yet and shows in English. */
+  untranslated?: boolean;
   name: string;
   level: number;
   school: SpellSchool | string;

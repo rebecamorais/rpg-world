@@ -257,7 +257,10 @@
     "subtitle": "Your sheets, ready for the next session.",
     "learnSpell": "Learn spell",
     "learnedBadge": "Learned",
-    "spellCount": "{count, plural, one {# spell} other {# spells}}"
+    "spellCount": "{count, plural, one {# spell} other {# spells}}",
+    "untranslatedBadge": "In English",
+    "untranslatedHint": "Not translated yet. You can help on Crowdin.",
+    "edition": "Edition"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
@@ -340,9 +343,15 @@
       "level": "Level",
       "school": "School",
       "class": "Class",
-      "damage": "Damage type"
+      "damage": "Damage type",
+      "edition": "Edition"
     },
-    "loading": "Loading spells"
+    "loading": "Loading spells",
+    "allEditions": "All editions",
+    "editions": {
+      "2014": "2014",
+      "2024": "2024"
+    }
   },
   "magicSystem": {
     "titleConfig": "Configure magic",
