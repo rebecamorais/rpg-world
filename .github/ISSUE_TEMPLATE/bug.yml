@@ -1,0 +1,38 @@
+name: Bug
+description: Algo não funciona como deveria.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: O que aconteceu
+      description: E o que você esperava que acontecesse.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Como reproduzir
+      placeholder: |
+        1. Abrir a ficha...
+        2. Clicar em...
+        3. Ver o erro
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Onde
+      description: Navegador, sistema e se foi no celular ou no desktop.
+      placeholder: Chrome 130 no Android
+  - type: checkboxes
+    id: a11y
+    attributes:
+      label: Acessibilidade
+      options:
+        - label: É uma barreira de acessibilidade (leitor de tela, teclado, contraste, zoom)
+  - type: textarea
+    id: extra
+    attributes:
+      label: Prints ou vídeo
+      description: Arraste os arquivos aqui. Ajuda muito.
