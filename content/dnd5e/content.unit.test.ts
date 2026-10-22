@@ -36,9 +36,10 @@ describe('magias do SRD 5.1', () => {
     }
   });
 
+  // Crowdin exports untranslated texts as "", so a missing description is "" or no entry at all
   it('em português faltam só as 4 conhecidas', () => {
     const pt = texts('pt');
-    expect(spells.filter((s) => !pt[s.id]).map((s) => s.id)).toEqual([
+    expect(spells.filter((s) => !pt[s.id]?.description).map((s) => s.id)).toEqual([
       'commune-with-nature',
       'meld-into-stone',
       'pass-without-trace',
