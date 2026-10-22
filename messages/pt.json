@@ -881,8 +881,8 @@
           "alt": "Busca de magias por \"fogo\" mostrando Raio de Fogo, Bola de Fogo e outras, com as aprendidas marcadas"
         },
         "lore": {
-          "title": "A história da personagem",
           "tab": "História",
+          "title": "A história da personagem",
           "description": "Aparência, personalidade, ideais, vínculos, defeitos e a história completa, junto da ficha.",
           "alt": "Página de história com aparência, traços de personalidade, ideais, vínculos, defeitos e a história da personagem"
         }
