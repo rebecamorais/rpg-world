@@ -52,7 +52,8 @@ espaços públicos.
 ## Como denunciar
 
 Casos de comportamento abusivo, de assédio ou inaceitável podem ser relatados em particular à
-mantenedora, [@rebecamorais](https://github.com/rebecamorais). Todas as denúncias serão analisadas
+mantenedora por mensagem direta no [Discord do RPG World](https://discord.gg/7u6guShqhQ), o canal oficial de comunicação
+do projeto. Todas as denúncias serão analisadas
 e investigadas de forma rápida e justa, e a privacidade e a segurança de quem denunciou serão
 respeitadas.
 

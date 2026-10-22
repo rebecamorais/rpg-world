@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Dúvidas e conversa
+    url: https://discord.gg/7u6guShqhQ
+    about: O Discord é o canal oficial do RPG World para suporte, dúvidas e ideias.
   - name: Vulnerabilidade de segurança
     url: https://github.com/rebecamorais/rpg-world/security/advisories/new
     about: Reporte em particular, nunca em issue pública.

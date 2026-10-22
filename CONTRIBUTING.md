@@ -2,6 +2,9 @@
 
 Bem-vindo ao projeto **RPG World**! Este documento detalha os padrões, processos e regras de ouro necessários para contribuir com excelência para a nossa base de código.
 
+Dúvidas, ideias e conversa sobre o projeto ficam no [Discord](https://discord.gg/7u6guShqhQ), o canal oficial. Ao participar,
+você concorda com o [Código de Conduta](CODE_OF_CONDUCT.md).
+
 ---
 
 ## 🛠️ 1. Configuração do Ambiente

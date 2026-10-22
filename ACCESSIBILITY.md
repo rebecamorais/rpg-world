@@ -33,4 +33,4 @@ Seguir as [WCAG 2.1](https://www.w3.org/TR/WCAG21/) nível **AA**.
 Se algo impede ou atrapalha você de usar o app, abra uma issue com o
 [formulário de bug](https://github.com/rebecamorais/rpg-world/issues/new?template=bug.yml) e marque
 que é um problema de acessibilidade. Conte qual página, o que você tentou fazer e qual tecnologia
-assistiva usa (se usar). Problemas de acessibilidade são tratados como bugs.
+assistiva usa (se usar). Se preferir, conte no [Discord](https://discord.gg/7u6guShqhQ). Problemas de acessibilidade são tratados como bugs.

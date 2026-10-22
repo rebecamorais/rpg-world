@@ -115,6 +115,16 @@ Para detalhes técnicos mais profundos, consulte nossos guias:
 | `npm run knip`          | Procura arquivos, exports e dependências sem uso                |
 | `npm run format`        | Formata o código usando Prettier                                |
 
+## 💬 Comunidade
+
+O canal oficial do projeto é o [Discord do RPG World](https://discord.gg/7u6guShqhQ): suporte, dúvidas, ideias e conversa
+sobre as próximas features. Bugs e sugestões também podem virar
+[issue](https://github.com/rebecamorais/rpg-world/issues/new/choose); vulnerabilidades seguem a
+[política de segurança](SECURITY.md).
+
+Antes de participar, leia o [Código de Conduta](CODE_OF_CONDUCT.md). Para contribuir com código,
+veja o [Guia de Contribuição](CONTRIBUTING.md).
+
 ---
 
 Desenvolvido com 💜 por Rebeca.
