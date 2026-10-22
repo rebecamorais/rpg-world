@@ -36,15 +36,17 @@ describe('schemas de magia', () => {
     expect(spellDataSchema.safeParse({ ...fireball, ...patch }).success).toBe(false);
   });
 
-  it('texto precisa de nome e descrição', () => {
+  it('texto sem "em níveis superiores" nem material omite os campos', () => {
+    expect(spellTextSchema.safeParse({ name: 'Light', description: 'Glow.' }).success).toBe(true);
     expect(
-      spellTextSchema.safeParse({
-        name: 'Fireball',
-        description: 'Boom.',
-        higherLevel: null,
-        material: null,
-      }).success,
-    ).toBe(true);
+      spellTextSchema.safeParse({ name: 'Light', description: 'Glow.', material: null }).success,
+    ).toBe(false);
+  });
+
+  it('texto precisa de nome e descrição', () => {
+    expect(spellTextSchema.safeParse({ name: 'Fireball', description: 'Boom.' }).success).toBe(
+      true,
+    );
     expect(spellTextSchema.safeParse({ name: '', description: 'x' }).success).toBe(false);
   });
 });

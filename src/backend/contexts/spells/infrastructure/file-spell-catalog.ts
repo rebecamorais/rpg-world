@@ -113,7 +113,7 @@ export class FileSpellCatalog implements SpellsRepo {
   private textOf(entry: Entry, locale: string): SpellText {
     const translation = locale === FALLBACK_LOCALE ? undefined : entry.translations[locale];
     if (!translation) return entry.text;
-    const translated = Object.entries(translation).filter(([, value]) => value !== undefined);
+    const translated = Object.entries(translation).filter(([, value]) => value);
     return { ...entry.text, ...Object.fromEntries(translated) };
   }
 }
@@ -123,8 +123,8 @@ function toDto({ key, data }: Entry, text: SpellText): SpellDto {
     id: key,
     name: text.name,
     description: text.description,
-    higherLevel: text.higherLevel,
-    material: text.material,
+    higherLevel: text.higherLevel ?? null,
+    material: text.material ?? null,
     level: data.level,
     school: data.school,
     classes: data.classes,

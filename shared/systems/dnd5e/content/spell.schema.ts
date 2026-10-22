@@ -23,19 +23,29 @@ export const spellDataSchema = z.object({
   bgStyleId: z.string().nullable(),
 });
 
-/** Texts of a spell in one language. */
+/**
+ * English texts of a spell. Fields a spell doesn't have are left out (not null): translation tools
+ * turn null into "" and back.
+ */
 export const spellTextSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
-  higherLevel: z.string().nullable(),
-  material: z.string().nullable(),
+  higherLevel: z.string().min(1).optional(),
+  material: z.string().min(1).optional(),
 });
 
 /**
- * Texts of a spell in a translated language. Translators work field by field, so any field may
- * still be missing; it falls back to the English one.
+ * Texts of a spell in a translated language. Translators work field by field: a field may be
+ * missing or "" (how Crowdin exports what is not translated yet), and then the English one shows.
  */
-export const spellTranslationSchema = spellTextSchema.partial();
+export const spellTranslationSchema = z
+  .object({
+    name: z.string(),
+    description: z.string(),
+    higherLevel: z.string(),
+    material: z.string(),
+  })
+  .partial();
 
 export type SpellData = z.infer<typeof spellDataSchema>;
 export type SpellText = z.infer<typeof spellTextSchema>;

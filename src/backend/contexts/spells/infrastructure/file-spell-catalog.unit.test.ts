@@ -25,12 +25,7 @@ const data = (id: string, level: number, patch: Partial<SpellData> = {}): SpellD
   bgStyleId: null,
   ...patch,
 });
-const text = (name: string): SpellText => ({
-  name,
-  description: `${name} description.`,
-  higherLevel: null,
-  material: null,
-});
+const text = (name: string): SpellText => ({ name, description: `${name} description.` });
 
 const source: SpellSource = {
   source: 'srd-5.1',
@@ -41,16 +36,17 @@ const source: SpellSource = {
     data('light', 0, { classes: ['cleric'] }),
   ],
   texts: {
-    fireball: text('Fireball'),
+    fireball: { ...text('Fireball'), higherLevel: 'More damage.', material: 'Bat guano.' },
     'lightning-bolt': text('Lightning Bolt'),
     shield: text('Shield'),
     light: text('Light'),
   },
   translations: {
-    // Shield has no Portuguese text; Light only has its name so far
+    // Shield has no Portuguese text; Light only has its name so far. Crowdin sends what is not
+    // translated yet as "" (Lightning Bolt's description, Fireball's material).
     pt: {
-      fireball: text('Bola de Fogo'),
-      'lightning-bolt': text('Relâmpago'),
+      fireball: { ...text('Bola de Fogo'), higherLevel: 'Mais dano.', material: '' },
+      'lightning-bolt': { name: 'Relâmpago', description: '' },
       light: { name: 'Luz' },
     },
   },
@@ -116,6 +112,22 @@ describe('FileSpellCatalog', () => {
     const [light] = (await catalog.findAll({ locale: 'pt', level: 0 })).data;
     expect(light.name).toBe('Luz');
     expect(light.description).toBe('Light description.');
+  });
+
+  it('texto vazio vindo do Crowdin conta como não traduzido', async () => {
+    const [bolt] = await catalog.findByKeys(['dnd5e:srd-5.1:spell:lightning-bolt'], 'pt');
+    expect(bolt.name).toBe('Relâmpago');
+    expect(bolt.description).toBe('Lightning Bolt description.');
+
+    const [fireball] = await catalog.findByKeys(['dnd5e:srd-5.1:spell:fireball'], 'pt');
+    expect(fireball.higherLevel).toBe('Mais dano.');
+    expect(fireball.material).toBe('Bat guano.');
+  });
+
+  it('campo opcional ausente vira null', async () => {
+    const [shield] = await catalog.findByKeys(['dnd5e:srd-5.1:spell:shield'], 'en');
+    expect(shield.higherLevel).toBeNull();
+    expect(shield.material).toBeNull();
   });
 
   it('devolve a chave completa como id', async () => {
