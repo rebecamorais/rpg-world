@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { messages } from '@tests/helpers/render';
@@ -95,6 +95,37 @@ describe('SpellSearchDialog', () => {
     ]);
 
     await waitFor(() => expect(lastQuery().edition).toBe('2014'));
+  });
+
+  // The same spell in two editions is two cards; learning one doesn't mark the other
+  it('a magia aprendida numa edição não aparece aprendida na outra', async () => {
+    api.get.mockImplementation(async () => ({
+      data: [
+        {
+          id: 'dnd5e:srd-5.1:spell:fireball',
+          edition: '2014',
+          name: 'Fireball',
+          level: 3,
+          school: 'evocation',
+          castingTime: 'action',
+        },
+        {
+          id: 'dnd5e:srd-5.2:spell:fireball',
+          edition: '2024',
+          name: 'Fireball',
+          level: 3,
+          school: 'evocation',
+          castingTime: 'action',
+        },
+      ],
+      total: 2,
+    }));
+    renderDialog('', ['dnd5e:srd-5.1:spell:fireball']);
+
+    const cards = await screen.findAllByRole('article', { name: /Fireball/ });
+    expect(cards).toHaveLength(2);
+    expect(within(cards[0]).getByText(messages.characters.learnedBadge)).toBeInTheDocument();
+    expect(within(cards[1]).queryByText(messages.characters.learnedBadge)).not.toBeInTheDocument();
   });
 
   it('sem classe do sistema, mostra todas', async () => {
