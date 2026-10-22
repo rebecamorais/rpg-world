@@ -1,6 +1,11 @@
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 export interface SpellDto {
   /** Stable content key, e.g. `dnd5e:srd-5.1:spell:fireball`. */
   id: string;
+  edition: Edition;
+  /** The description isn't in the requested language yet and shows in English. */
+  untranslated: boolean;
   name: string;
   level: number;
   school: string;
@@ -33,6 +38,7 @@ export interface FindSpellsParams {
   school?: string;
   class?: string;
   damageType?: string;
+  edition?: Edition;
 }
 
 export interface PaginatedSpells {

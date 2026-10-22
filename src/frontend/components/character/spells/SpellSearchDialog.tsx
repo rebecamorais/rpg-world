@@ -24,8 +24,11 @@ import { useDebouncedValue } from '@frontend/hooks/useDebouncedValue';
 import { useSpells } from '@frontend/hooks/useSpells';
 import { matchCharacterClass } from '@frontend/lib/character-class';
 import { characterTheme } from '@frontend/lib/color-utils';
+import { inferEdition } from '@frontend/lib/spell-edition';
 import { cn } from '@frontend/lib/utils';
 import { CharacterClass, SpellSchool } from '@frontend/types/spells';
+
+import { EDITIONS, type Edition } from '@shared/systems/dnd5e/content/editions';
 
 interface Props {
   isOpen: boolean;
@@ -44,9 +47,16 @@ interface Filters {
   school: SpellSchool | null;
   class: CharacterClass | null;
   damage: string | null;
+  edition: Edition | null;
 }
 
-const NO_FILTERS: Filters = { level: null, school: null, class: null, damage: null };
+const NO_FILTERS: Filters = {
+  level: null,
+  school: null,
+  class: null,
+  damage: null,
+  edition: null,
+};
 
 export default function SpellSearchDialog({
   isOpen,
@@ -64,9 +74,11 @@ export default function SpellSearchDialog({
 
   const [searchInput, setSearchInput] = useState('');
   const search = useDebouncedValue(searchInput.trim(), SEARCH_DEBOUNCE_MS);
-  // Starts on the character's class when it names one of the system's
+  // Starts on the character's class when it names one of the system's, and on the edition most
+  // of their spells are from
   const [filters, setFilters] = useState<Filters>(() => ({
     ...NO_FILTERS,
+    edition: inferEdition(learnedSpells),
     class: matchCharacterClass(character?.class, (c) =>
       tSpellsData(`classes.${c}` as Parameters<typeof tSpellsData>[0]),
     ),
@@ -109,6 +121,7 @@ export default function SpellSearchDialog({
     school: filters.school,
     class: filters.class,
     damageType: filters.damage,
+    edition: filters.edition,
   });
 
   const spells = paginatedSpells?.data || [];
@@ -211,6 +224,23 @@ export default function SpellSearchDialog({
                 !filtersOpen && 'max-sm:hidden',
               )}
             >
+              <SelectField
+                aria-label={t('filterLabels.edition')}
+                value={filters.edition ?? 'all'}
+                onValueChange={(val) =>
+                  setFilter('edition', val === 'all' ? null : (val as Edition))
+                }
+                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
+                placeholder={t('allEditions')}
+                options={[
+                  { value: 'all', label: t('allEditions') },
+                  ...EDITIONS.map((edition) => ({
+                    value: edition,
+                    label: t(`editions.${edition}`),
+                  })),
+                ]}
+              />
+
               <SelectField
                 aria-label={t('filterLabels.level')}
                 value={filters.level === null ? 'all' : filters.level.toString()}

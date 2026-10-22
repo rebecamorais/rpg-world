@@ -7,6 +7,8 @@ import { rpgWorldApi } from '@client';
 
 import { CharacterClass, Spell, SpellSchool } from '@frontend/types/spells';
 
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 type SpellDto = Spell;
 
 type PaginatedSpells = {
@@ -22,6 +24,7 @@ export type UseSpellsFilters = {
   school?: SpellSchool | string | null;
   class?: CharacterClass | string | null;
   damageType?: string | null;
+  edition?: Edition | null;
 };
 
 const DEFAULT_LIMIT = 12;
@@ -43,6 +46,7 @@ function spellsQuery(locale: string, filters: UseSpellsFilters) {
       if (filters.school) params.append('school', filters.school);
       if (filters.class) params.append('class', filters.class);
       if (filters.damageType) params.append('damageType', filters.damageType);
+      if (filters.edition) params.append('edition', filters.edition);
 
       return rpgWorldApi.get(`/api/spells?${params.toString()}`);
     },

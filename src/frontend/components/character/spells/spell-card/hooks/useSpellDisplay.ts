@@ -27,6 +27,8 @@ export interface SpellDisplayValues {
   /** "Cantrip" or "Level 3". */
   level: string;
   damage: string | null;
+  /** Rules edition ("2014", "2024"); the year reads the same in every language. */
+  edition: string | null;
   castingTime: string;
   compactCastingTime: string;
   range: string;
@@ -44,6 +46,7 @@ export interface SpellDisplayValues {
   castingTimePrefix: string;
   rangePrefix: string;
   durationPrefix: string;
+  editionPrefix: string;
   components: SpellComponentDisplay[];
 }
 
@@ -149,6 +152,8 @@ export function useSpellDisplay(spell: Spell) {
       castingTimePrefix: tCharacters('castingTime'),
       rangePrefix: tCharacters('range'),
       durationPrefix: tCharacters('duration'),
+      editionPrefix: tCharacters('edition'),
+      edition: spell.edition ?? null,
       components,
     };
 

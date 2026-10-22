@@ -62,3 +62,26 @@ describe('SpellCard na busca de magias', () => {
     expect(screen.getByText('Level 3')).toBeInTheDocument();
   });
 });
+
+describe('SpellCard: edição e idioma', () => {
+  it('mostra a edição da magia', () => {
+    renderWithProviders(<SpellCard spell={{ ...FIREBALL, edition: '2024' }} />);
+    expect(screen.getByText(`${t.edition}:`, { exact: false }).parentElement).toHaveTextContent(
+      '2024',
+    );
+  });
+
+  it('avisa quando a descrição está em inglês', () => {
+    renderWithProviders(
+      <SpellCard spell={{ ...FIREBALL, description: 'Boom.', untranslated: true }} isExpanded />,
+    );
+    expect(screen.getByText(t.untranslatedBadge)).toBeInTheDocument();
+  });
+
+  it('sem aviso quando a descrição está no idioma', () => {
+    renderWithProviders(
+      <SpellCard spell={{ ...FIREBALL, description: 'Boom.', untranslated: false }} isExpanded />,
+    );
+    expect(screen.queryByText(t.untranslatedBadge)).not.toBeInTheDocument();
+  });
+});

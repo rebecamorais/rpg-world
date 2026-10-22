@@ -29,7 +29,8 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "prepare": "husky",
-    "postinstall": "npx tsx ./scripts/post-install-cleanup.ts"
+    "postinstall": "npx tsx ./scripts/post-install-cleanup.ts",
+    "content:spells": "npx tsx scripts/content/import-5etools-spells.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

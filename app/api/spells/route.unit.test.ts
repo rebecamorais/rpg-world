@@ -26,7 +26,25 @@ describe('GET /api/spells', () => {
       school: undefined,
       class: undefined,
       damageType: undefined,
+      edition: undefined,
     });
+  });
+
+  it('aceita a edição', async () => {
+    api.spellsApi.getAllSpells.mockResolvedValue({ data: [], total: 0 });
+
+    await GET(jsonRequest('/api/spells?edition=2024'), routeContext());
+
+    expect(api.spellsApi.getAllSpells).toHaveBeenCalledWith(
+      expect.objectContaining({ edition: '2024' }),
+    );
+  });
+
+  it('responde 400 com edição desconhecida', async () => {
+    const res = await GET(jsonRequest('/api/spells?edition=1999'), routeContext());
+
+    expect(res.status).toBe(400);
+    expect(api.spellsApi.getAllSpells).not.toHaveBeenCalled();
   });
 
   it('aplica os valores padrão sem query', async () => {

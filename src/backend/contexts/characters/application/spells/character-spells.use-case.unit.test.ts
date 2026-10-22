@@ -17,6 +17,8 @@ const makeCatalog = () => ({
       .filter((key) => key === FIREBALL)
       .map((id) => ({
         id,
+        edition: '2014' as const,
+        untranslated: false,
         name: 'Fireball',
         level: 3,
         school: 'evocation',

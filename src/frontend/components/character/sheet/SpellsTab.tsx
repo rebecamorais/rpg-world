@@ -61,13 +61,16 @@ export function SpellsTab() {
         />
       )}
 
-      <SpellSearchDialog
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-        learnedSpells={spells.map((s) => s.id)}
-        onLearnSpell={learnSpell}
-        onForgetSpell={forgetSpell}
-      />
+      {/* Mounted once the spellbook is in: the list starts on the edition of its spells */}
+      {!isLoading && (
+        <SpellSearchDialog
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+          learnedSpells={spells.map((s) => s.id)}
+          onLearnSpell={learnSpell}
+          onForgetSpell={forgetSpell}
+        />
+      )}
     </SheetPage>
   );
 }

@@ -1,4 +1,5 @@
 import { spellKey } from '@shared/content/content-key';
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import type {
   SpellData,
   SpellText,
@@ -18,6 +19,7 @@ import type {
  */
 export interface SpellSource {
   source: string;
+  edition: Edition;
   spells: SpellData[];
   texts: Record<string, SpellText>;
   translations: Record<string, Record<string, SpellTranslation>>;
@@ -25,6 +27,7 @@ export interface SpellSource {
 
 interface Entry {
   key: string;
+  edition: Edition;
   data: SpellData;
   text: SpellText;
   translations: Record<string, SpellTranslation | undefined>;
@@ -45,9 +48,10 @@ export class FileSpellCatalog implements SpellsRepo {
   private readonly locales: Set<string>;
 
   constructor(sources: SpellSource[]) {
-    this.entries = sources.flatMap(({ source, spells, texts, translations }) =>
+    this.entries = sources.flatMap(({ source, edition, spells, texts, translations }) =>
       spells.map((data) => ({
         key: spellKey(source, data.id),
+        edition,
         data,
         text: texts[data.id],
         translations: Object.fromEntries(
@@ -75,8 +79,17 @@ export class FileSpellCatalog implements SpellsRepo {
 
     const matches = this.entries
       .map((entry) => ({ entry, text: this.textOf(entry, locale) }))
-      .filter(({ entry: { data }, text }) => {
-        if (search && !normalize(text.name).includes(search)) return false;
+      .filter(({ entry, text }) => {
+        const { data, edition } = entry;
+        if (params.edition && edition !== params.edition) return false;
+        // The English name finds it too: an untranslated edition is named in English
+        if (
+          search &&
+          !normalize(text.name).includes(search) &&
+          !normalize(entry.text.name).includes(search)
+        ) {
+          return false;
+        }
         if (params.level !== undefined && params.level !== null && data.level !== params.level) {
           return false;
         }
@@ -96,7 +109,7 @@ export class FileSpellCatalog implements SpellsRepo {
     return {
       data: matches
         .slice(page * limit, (page + 1) * limit)
-        .map(({ entry, text }) => toDto(entry, text)),
+        .map(({ entry, text }) => toDto(entry, text, locale)),
       total: matches.length,
     };
   }
@@ -105,7 +118,7 @@ export class FileSpellCatalog implements SpellsRepo {
     const locale = this.resolveLocale(requestedLocale);
     return keys.flatMap((key) => {
       const entry = this.byKey.get(key);
-      return entry ? [toDto(entry, this.textOf(entry, locale))] : [];
+      return entry ? [toDto(entry, this.textOf(entry, locale), locale)] : [];
     });
   }
 
@@ -118,9 +131,12 @@ export class FileSpellCatalog implements SpellsRepo {
   }
 }
 
-function toDto({ key, data }: Entry, text: SpellText): SpellDto {
+function toDto(entry: Entry, text: SpellText, locale: string): SpellDto {
+  const { key, edition, data } = entry;
   return {
     id: key,
+    edition,
+    untranslated: locale !== FALLBACK_LOCALE && !entry.translations[locale]?.description,
     name: text.name,
     description: text.description,
     higherLevel: text.higherLevel ?? null,
