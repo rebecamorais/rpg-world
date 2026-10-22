@@ -162,4 +162,40 @@ describe('conversão das magias do 5etools', () => {
       ]),
     ).toBe('Choose one:\n• Audible Alarm. A handbell.\n• Plain item.\nHold. The target is held.');
   });
+
+  it.each([
+    ['A {@filter Tiny|bestiary|size=T} beast', 'A Tiny beast'],
+    ['either a {@filter Beast|bestiary|type=beast} or not', 'either a Beast or not'],
+    ['the rules on {@book mounted combat|XPHB|1|Mounted Combat}.', 'the rules on mounted combat.'],
+    ['make a {@dc 15} Intelligence saving throw', 'make a DC 15 Intelligence saving throw'],
+  ])('marcação %s', (text, expected) => {
+    expect(stripTags(text)).toBe(expected);
+  });
+
+  it('tabela com título mostra o título antes', () => {
+    expect(
+      renderEntries([
+        {
+          type: 'table',
+          caption: 'Wind',
+          colLabels: ['Stage', 'Condition'],
+          rows: [['1', 'Calm']],
+        },
+      ]),
+    ).toBe('Wind\nStage | Condition\n1 | Calm');
+  });
+
+  it('tipo de dano: a classificação do 5.1 vale, inclusive sem dano', () => {
+    const previous = toSpellData({ ...fireball, damageInflict: undefined }, []);
+    expect(
+      toSpellData({ ...fireball, damageInflict: ['fire'] }, [], previous).damageType,
+    ).toBeNull();
+    expect(
+      toSpellData({ ...fireball, damageInflict: ['cold'] }, [], { ...previous, damageType: 'fire' })
+        .damageType,
+    ).toBe('cold');
+    expect(toSpellData({ ...fireball, damageInflict: ['acid', 'fire'] }, []).damageType).toBe(
+      'acid',
+    );
+  });
 });

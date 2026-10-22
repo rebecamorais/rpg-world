@@ -95,7 +95,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "bludgeoning",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -1115,7 +1115,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "slashing",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -1135,7 +1135,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "radiant",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -1155,7 +1155,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "lightning",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -1175,7 +1175,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "psychic",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -1195,7 +1195,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "acid",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -1215,7 +1215,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "force",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -1235,7 +1235,7 @@
     "ritual": true,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "psychic",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -1255,7 +1255,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "necrotic",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -1315,7 +1315,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "bludgeoning",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -1695,7 +1695,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "force",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -2175,7 +2175,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "force",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -2915,7 +2915,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 200,
-    "damageType": "acid",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -3415,7 +3415,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "force",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -4175,7 +4175,7 @@
     "ritual": true,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "force",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -4715,7 +4715,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "psychic",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -5535,7 +5535,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "force",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -5975,7 +5975,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "acid",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -6075,7 +6075,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 1000,
-    "damageType": "necrotic",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -6135,7 +6135,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "force",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -6375,7 +6375,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "radiant",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -6655,7 +6655,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "fire",
+    "damageType": null,
     "spellCategory": "control",
     "bgStyleId": "ethereal-glow"
   },
@@ -6715,7 +6715,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "bludgeoning",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },
@@ -6735,7 +6735,7 @@
     "ritual": false,
     "isScaling": false,
     "materialCost": 0,
-    "damageType": "necrotic",
+    "damageType": null,
     "spellCategory": "utility",
     "bgStyleId": "dots-space"
   },

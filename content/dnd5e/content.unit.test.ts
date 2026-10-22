@@ -49,6 +49,23 @@ describe.each([
       .map(([id]) => id);
     expect(withMarkup).toEqual([]);
   });
+
+  // Markup that loses its braces but not its meaning: a filter (type=beast), a DC without "DC"
+  it('nenhum texto em inglês tem resto de marcação sem chaves', () => {
+    const en = textsOf(source, 'en');
+    const leaked = Object.entries(en)
+      .filter(([, text]) =>
+        Object.values(text).some(
+          (value) =>
+            /\b[a-z]+=\S/.test(value ?? '') ||
+            /\b(a|an) \d+ (Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma)\b/.test(
+              value ?? '',
+            ),
+        ),
+      )
+      .map(([id]) => id);
+    expect(leaked).toEqual([]);
+  });
 });
 
 // Crowdin exports untranslated texts as "", so a missing description is "" or no entry at all

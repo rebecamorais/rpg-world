@@ -89,10 +89,13 @@ export function toSpellData(
   const [time] = spell.time;
   const { m } = spell.components;
   const damage = spell.damageInflict ?? [];
-  const damageType =
-    previous?.damageType && damage.includes(previous.damageType)
-      ? previous.damageType
-      : (damage[0] ?? null);
+  // 5etools lists every damage a spell mentions, in alphabetical order (Web: the burning webs →
+  // fire). Ours is the spell's main damage, curated for 5.1: a 5.1 spell without one stays without
+  const damageType = !previous
+    ? (damage[0] ?? null)
+    : previous.damageType && !damage.includes(previous.damageType)
+      ? (damage[0] ?? null)
+      : previous.damageType;
 
   return {
     id: toSpellId(spell),
@@ -129,6 +132,9 @@ export function stripTags(text: string): string {
     current = current.replace(/\{@(\w+)\s*([^{}]*)\}/g, (_, tag: string, body: string) => {
       const parts = body.split('|');
       if (tag === 'chance') return `${parts[0]}%`;
+      if (tag === 'dc') return `DC ${parts[0]}`;
+      // The third part of these is a filter or a chapter, not display text
+      if (tag === 'filter' || tag === 'book' || tag === 'adventure') return parts[0];
       if (tag === 'scaledamage' || tag === 'scaledice') return parts[2] ?? parts[0];
       return parts[2] || parts[0];
     });
@@ -144,7 +150,11 @@ function renderEntry(entry: Entry): string[] {
       return (entry.items as Entry[]).map((item) => `• ${renderEntry(item).join(' ')}`);
     case 'table': {
       const rows = [entry.colLabels as string[] | undefined, ...(entry.rows as string[][])];
-      return rows.filter((row) => row !== undefined).map((row) => row.map(stripTags).join(' | '));
+      const lines = rows
+        .filter((row) => row !== undefined)
+        .map((row) => row.map(stripTags).join(' | '));
+      // Spells name their tables ("consult the Prismatic Rays table")
+      return entry.caption ? [stripTags(entry.caption as string), ...lines] : lines;
     }
     default: {
       // `entries`, `item`…: a titled block, the title in front of its first paragraph
