@@ -12,6 +12,17 @@ at <https://creativecommons.org/licenses/by/4.0/legalcode>.
 
 Usado em: textos em inglês das magias (`content/dnd5e/srd-5.1/i18n/en/spells.json`).
 
+## System Reference Document 5.2
+
+This work includes material from the System Reference Document 5.2 ("SRD 5.2") by Wizards of
+the Coast LLC, available at <https://www.dndbeyond.com/srd>. The SRD 5.2 is licensed under the
+Creative Commons Attribution 4.0 International License, available at
+<https://creativecommons.org/licenses/by/4.0/legalcode>.
+
+Usado em: magias de 2024 (`content/dnd5e/srd-5.2/`). Os dados foram extraídos do 5etools
+(<https://github.com/5etools-mirror-3/5etools-src>, versão fixada em
+`scripts/content/import-5etools-spells.ts`), só das entradas que ele marca como SRD 5.2.
+
 O RPG World não é afiliado, endossado nem patrocinado pela Wizards of the Coast. Dungeons & Dragons
 e D&D são marcas da Wizards of the Coast LLC.
 
