@@ -116,12 +116,12 @@ Mapeamentos (`toSpellData`):
 | `duration[0]` `instant` / `permanent` / `special`                | `instantaneous` / `special` / `special`                                                          |
 | `components.m` texto ou `{ text, cost }`                         | `M`; `materialCost = cost / 100` (cobre → PO), senão 0                                           |
 | `meta.ritual`                                                    | `ritual`                                                                                         |
-| `damageInflict`                                                  | o do 5.1 se estiver na lista, senão o primeiro; sem → `null`                                     |
+| `damageInflict`                                                  | id do 5.1: o do 5.1 (inclusive `null`), salvo se não estiver na lista; id novo: o primeiro       |
 | `isScaling`                                                      | `false` (como no 5.1)                                                                            |
 
 Texto (`renderEntries`, `stripTags`): parágrafos separados por `\n`; `{ type: 'entries', name }`
 vira `Nome. texto`; `list` vira linhas `• item`; `table` vira o cabeçalho e as linhas com `|`.
-Marcações `{@tag a|b|c}`: `scaledamage`/`scaledice` → terceira parte; `chance` → `a%`;
+Marcações `{@tag a|b|c}`: `scaledamage`/`scaledice` → terceira parte; `chance` → `a%`; `dc` → `DC a`; `filter`, `book` e `adventure` → `a` (a terceira parte é filtro ou capítulo);
 as demais → terceira parte se houver, senão a primeira (`{@variantrule Sphere [Area of
 Effect]|XPHB|Sphere}` → `Sphere`, `{@damage 8d6}` → `8d6`). `higherLevel` = `entriesHigherLevel`
 renderizado sem o título "Using a Higher-Level Spell Slot"; `material` = texto do `m`, com
