@@ -562,8 +562,8 @@
         "title": "9. Conteúdo de Jogo e Créditos",
         "content": "As regras e magias exibidas no RPG World vêm de fontes abertas, usadas de acordo com as suas licenças:",
         "items": [
-          "Este trabalho inclui material do <srd>System Reference Document 5.1</srd> (\"SRD 5.1\") da Wizards of the Coast LLC. O SRD 5.1 é licenciado sob a <ccby>Creative Commons Attribution 4.0 International License</ccby>.",
-          "Os dados estruturados das magias em inglês foram obtidos da <api>5e SRD API</api>, do projeto <database>5e-bits/5e-database</database>, sob a licença MIT.",
+          "Este trabalho inclui material do <srd>System Reference Document 5.1</srd> (\"SRD 5.1\") e do <srd52>System Reference Document 5.2</srd52> (\"SRD 5.2\") da Wizards of the Coast LLC. Os dois são licenciados sob a <ccby>Creative Commons Attribution 4.0 International License</ccby>.",
+          "Os dados estruturados das magias de 2014 foram obtidos da <api>5e SRD API</api>, do projeto <database>5e-bits/5e-database</database>, sob a licença MIT. As magias de 2024 foram extraídas do <fivetools>5etools</fivetools>, só das entradas que fazem parte do SRD 5.2.",
           "As traduções em português das magias vêm do <foundry>módulo de tradução do D&D 5e para o Foundry VTT</foundry>, da comunidade Foundry VTT Brasil (Cauã Pessoa e colaboradores), sob a licença MIT.",
           "O RPG World não é afiliado, endossado nem patrocinado pela Wizards of the Coast. Dungeons & Dragons e D&D são marcas da Wizards of the Coast LLC.",
           "Os créditos completos e os textos das licenças estão no arquivo <notice>NOTICE.md</notice> do repositório."
@@ -824,7 +824,7 @@
       },
       "spellbook": {
         "title": "Grimório com as magias do SRD",
-        "description": "Busque entre as 319 magias do SRD 5.1, filtre por nível, escola, classe e tipo de dano, e marque as preparadas."
+        "description": "Busque entre as 658 magias do SRD 5.1 (2014) e do SRD 5.2 (2024), filtre por edição, nível, escola, classe e tipo de dano, e marque as preparadas."
       },
       "lore": {
         "title": "A história do personagem",
@@ -858,7 +858,7 @@
       }
     },
     "openTitle": "Gratuito e de código aberto",
-    "openDescription": "O código é aberto (GPLv3) e qualquer pessoa pode contribuir ou hospedar a própria instância. As regras vêm do SRD 5.1, sob CC-BY-4.0.",
+    "openDescription": "O código é aberto (GPLv3) e qualquer pessoa pode contribuir ou hospedar a própria instância. As regras vêm do SRD 5.1 e do SRD 5.2, sob CC-BY-4.0.",
     "openSource": "Ver o código no GitHub",
     "credits": "Créditos do conteúdo",
     "ctaTitle": "Pronto para criar o seu personagem?",

@@ -562,8 +562,8 @@
         "title": "9. Game Content and Credits",
         "content": "The rules and spells shown in RPG World come from open sources, used under their licenses:",
         "items": [
-          "This work includes material taken from the <srd>System Reference Document 5.1</srd> (\"SRD 5.1\") by Wizards of the Coast LLC. The SRD 5.1 is licensed under the <ccby>Creative Commons Attribution 4.0 International License</ccby>.",
-          "The structured English spell data was obtained from the <api>5e SRD API</api>, from the <database>5e-bits/5e-database</database> project, under the MIT license.",
+          "This work includes material from the <srd>System Reference Document 5.1</srd> (\"SRD 5.1\") and the <srd52>System Reference Document 5.2</srd52> (\"SRD 5.2\") by Wizards of the Coast LLC. Both are licensed under the <ccby>Creative Commons Attribution 4.0 International License</ccby>.",
+          "The structured data of the 2014 spells was obtained from the <api>5e SRD API</api>, from the <database>5e-bits/5e-database</database> project, under the MIT license. The 2024 spells were extracted from <fivetools>5etools</fivetools>, only the entries that are part of the SRD 5.2.",
           "The Brazilian Portuguese spell translations come from the <foundry>D&D 5e translation module for Foundry VTT</foundry> by the Foundry VTT Brasil community (Cauã Pessoa and contributors), under the MIT license.",
           "RPG World is not affiliated with, endorsed, or sponsored by Wizards of the Coast. Dungeons & Dragons and D&D are trademarks of Wizards of the Coast LLC.",
           "Full credits and license texts are in the repository's <notice>NOTICE.md</notice> file."
@@ -824,7 +824,7 @@
       },
       "spellbook": {
         "title": "A spellbook with the SRD spells",
-        "description": "Search the 319 spells of the SRD 5.1, filter by level, school, class and damage type, and mark the prepared ones."
+        "description": "Search the 658 spells of the SRD 5.1 (2014) and SRD 5.2 (2024), filter by edition, level, school, class and damage type, and mark the prepared ones."
       },
       "lore": {
         "title": "Your character's story",
@@ -858,7 +858,7 @@
       }
     },
     "openTitle": "Free and open source",
-    "openDescription": "The code is open (GPLv3) and anyone can contribute or host their own instance. The rules come from the SRD 5.1, under CC-BY-4.0.",
+    "openDescription": "The code is open (GPLv3) and anyone can contribute or host their own instance. The rules come from the SRD 5.1 and SRD 5.2, under CC-BY-4.0.",
     "openSource": "See the code on GitHub",
     "credits": "Content credits",
     "ctaTitle": "Ready to create your character?",

@@ -1,7 +1,7 @@
 # RPG World
 
 > RPG World (https://rpgworldapp.com) is a free, open-source web app for creating and managing
-> tabletop RPG character sheets, starting with Dungeons & Dragons 5th Edition (SRD 5.1). It is
+> tabletop RPG character sheets, starting with Dungeons & Dragons 5th Edition (SRD 5.1 and 5.2). It is
 > available in English and Brazilian Portuguese, works on desktop and phone, and is licensed under
 > the GNU GPLv3. In Portuguese: um app gratuito e de código aberto para fichas de personagem de RPG
 > de mesa, começando por D&D 5e, em português do Brasil e inglês.
@@ -18,8 +18,10 @@ by Rebeca Morais (Rebs Tech Studio), not affiliated with or endorsed by Wizards 
   saves.
 - Let the sheet calculate modifiers, proficiency bonus and passive perception automatically.
 - Track magic with spell slots or spell points.
-- Build a spellbook from the 319 spells of the SRD 5.1, with search and filters by level, school,
-  class and damage type, in English and Brazilian Portuguese; mark spells as prepared.
+- Build a spellbook from the 658 spells of the SRD 5.1 (2014 rules) and SRD 5.2 (2024 rules),
+  with search and filters by edition, level, school, class and damage type, in English and
+  Brazilian Portuguese (the 2024 spells are in English until the community translates them); mark
+  spells as prepared.
 - Write the character's story: appearance, personality traits, ideals, bonds, flaws and backstory.
 - Personalize each character with an avatar and an accent color.
 
@@ -35,7 +37,7 @@ by Rebeca Morais (Rebs Tech Studio), not affiliated with or endorsed by Wizards 
 
 - Price: free. Sign up with email or Google.
 - Languages: English, Português (Brasil).
-- Systems: Dungeons & Dragons 5th Edition (SRD 5.1).
+- Systems: Dungeons & Dragons 5th Edition (SRD 5.1 and SRD 5.2 spells).
 - Source code: https://github.com/rebecamorais/rpg-world (GNU GPLv3). Anyone can self-host.
 - Community: Discord server at https://discord.gg/7u6guShqhQ
 - Game content: System Reference Document 5.1 by Wizards of the Coast LLC, under CC-BY-4.0.
