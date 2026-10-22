@@ -20,7 +20,8 @@ referências pelo catálogo.
 `docs/plans/2026-10-15-5etools-e-traducoes.md` (fallback de idioma). Decisões da conversa de
 2026-10-21 estão em "Decisões" abaixo.
 
-**Fica para o PR B** (`2026-10-21-magias-por-edicao.md`, a escrever): importador do 5etools,
+**Fica para o PR B** (`2026-10-21-magias-por-edicao.md`, feito; o selo de "tradução automática"
+virou "Em inglês" e a seed antiga ficou, porque já foi aplicada em produção): importador do 5etools,
 magias do SRD 5.2 (2024), etiqueta de edição, filtro e selo na lista, selo de "tradução
 automática", e a migração que apaga `spells` / `spell_translations` e a seed antiga.
 

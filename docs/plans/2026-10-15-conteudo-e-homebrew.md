@@ -1,9 +1,10 @@
 # Conteúdo oficial em arquivos, homebrew no banco
 
 **Data:** 2026-10-15
-**Status (2026-10-21):** passos 1 a 3 da ordem em andamento só para magias
-(`2026-10-21-magias-em-arquivo.md`): arquivos em `content/dnd5e/srd-5.1`, `FileSpellCatalog` e
-`character_spells.spell_ref`. A tabela `spells` sai no PR seguinte.
+**Status (2026-10-22):** passos 1 a 3 da ordem feitos para magias: arquivos em
+`content/dnd5e/srd-5.1` e `srd-5.2`, `FileSpellCatalog`, `character_spells.spell_ref` (#81) e as
+tabelas `spells` / `spell_translations` apagadas (`2026-10-21-magias-por-edicao.md`). Próximo:
+homebrew (passo 4).
 
 **Status anterior:** planejamento, nada implementado. Liga os planos `2026-10-15-traducoes-comunitarias.md`
 (de onde vem o conteúdo), `2026-10-15-limites-de-uso.md` (custo do banco) e
