@@ -14,6 +14,21 @@ const DEFAULT_CODES: OwnershipErrorCodes = {
   forbidden: CharacterErrorCodes.ACCESS_FORBIDDEN,
 };
 
+function checkOwner(
+  ownerId: string | null | undefined,
+  requesterId: string,
+  access: CharacterAccess,
+  codes: OwnershipErrorCodes,
+): void {
+  if (!ownerId) {
+    throw new CharacterError(codes.notFound);
+  }
+
+  if (!requesterId || ownerId !== requesterId) {
+    throw new CharacterError(access === 'read' ? codes.notFound : codes.forbidden);
+  }
+}
+
 /**
  * Loads a character and enforces that `requesterId` owns it. Every use case that touches a
  * character's data goes through here, so the ownership rule lives in one place.
@@ -27,14 +42,20 @@ export async function findOwnedCharacter(
   codes: OwnershipErrorCodes = DEFAULT_CODES,
 ): Promise<Character> {
   const character = await repository.findById(id);
+  checkOwner(character?.ownerUsername, requesterId, access, codes);
+  return character!;
+}
 
-  if (!character) {
-    throw new CharacterError(codes.notFound);
-  }
-
-  if (!character.isOwnedBy(requesterId)) {
-    throw new CharacterError(access === 'read' ? codes.notFound : codes.forbidden);
-  }
-
-  return character;
+/**
+ * Same rule as findOwnedCharacter, for use cases that only need the check: reads just the owner,
+ * not the whole character.
+ */
+export async function assertOwnsCharacter(
+  repository: CharacterRepo,
+  id: string,
+  requesterId: string,
+  access: CharacterAccess,
+  codes: OwnershipErrorCodes = DEFAULT_CODES,
+): Promise<void> {
+  checkOwner(await repository.findOwnerId(id), requesterId, access, codes);
 }

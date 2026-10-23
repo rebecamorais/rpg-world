@@ -50,10 +50,8 @@ export const createCharacterContext = (dbClient: SupabaseClient): CharacterConte
     create: createCharacterUseCase.execute.bind(createCharacterUseCase),
     update: updateCharacterUseCase.execute.bind(updateCharacterUseCase),
     delete: deleteCharacterUseCase.execute.bind(deleteCharacterUseCase),
-    isOwner: async (id: string, userId: string) => {
-      const character = await repository.findById(id);
-      return character?.isOwnedBy(userId) ?? false;
-    },
+    isOwner: async (id: string, userId: string) =>
+      Boolean(userId) && (await repository.findOwnerId(id)) === userId,
     getSpells: getCharacterSpellsUseCase.execute.bind(getCharacterSpellsUseCase),
     toggleSpell: toggleCharacterSpellUseCase.execute.bind(toggleCharacterSpellUseCase),
     uploadAvatar: async (id: string, userId: string, file: Blob) => {

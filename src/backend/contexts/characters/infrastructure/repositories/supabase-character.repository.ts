@@ -36,6 +36,18 @@ export class SupabaseCharacterRepository implements CharacterRepo {
     return this.mapToDomain(data as unknown as DbCharacterRow);
   }
 
+  async findOwnerId(id: string): Promise<string | null> {
+    const { data, error } = await this.client
+      .from('characters')
+      .select('owner_id')
+      .eq('id', id)
+      .is('deleted_at', null)
+      .maybeSingle();
+
+    if (error) throw new Error(`Failed to find character owner: ${error.message}`);
+    return data?.owner_id ?? null;
+  }
+
   async findByOwner(ownerUsername: string): Promise<Character[]> {
     const { data, error } = await this.client
       .from('characters')
