@@ -13,20 +13,22 @@ comunidade**, sem tradução automática.
   Idiomas no projeto: português, espanhol e sueco.
 - **Fontes em inglês** (`crowdin.yml`): `messages/en.json` (interface) e
   `content/dnd5e/*/i18n/en/*.json` (magias do SRD 5.1 e 5.2, um arquivo por livro).
-- **Action `crowdin.yml`:** envia o inglês quando ele muda na `main` e, todo dia, abre ou atualiza
-  o PR "i18n: traduções do Crowdin" com o que foi **aprovado** (`export_only_approved`). O PR é
-  revisado e entra como qualquer outro.
+- **Action `crowdin.yml`, só manual** (Actions → Crowdin → Run workflow), rodada quando há algo
+  para trazer do Crowdin: envia o inglês, envia as traduções editadas no repositório e abre ou
+  atualiza o PR "i18n: traduções do Crowdin" com o que foi **aprovado** (`export_only_approved`).
+  O PR é revisado e entra como qualquer outro. Enquanto ela não roda, texto novo em inglês não
+  aparece no Crowdin para traduzir.
   - Um PR aberto pela Action não roda os testes (o `GITHUB_TOKEN` não dispara outros
     workflows): rodar `npm run test:unit` no branch `l10n/crowdin` antes do merge.
 - **O que falta traduzir aparece em inglês:** na interface, a chave vem em inglês (o next-intl
   quebra com chave faltando); nas magias, o campo vem vazio ou some e o `FileSpellCatalog` usa o
   inglês daquele campo, com o selo "Em inglês" quando é a descrição.
-- **Tradução editada no repositório** (por exemplo, o português de uma funcionalidade nova): quando
-  chega na `main`, a Action envia as traduções do repositório para o Crowdin já aprovadas; sem
-  isso, o próximo PR do Crowdin as voltaria para o inglês. Ela sobrescreve no Crowdin o que estiver
-  diferente, então, se o PR do Crowdin estiver aberto com mudanças nos mesmos textos, fazer o merge
-  dele antes. O merge do próprio PR do Crowdin não reenvia nada. Para enviar à mão, rodar a Action
-  com `upload_translations = true`.
+- **Tradução editada no repositório** (por exemplo, o português de uma funcionalidade nova): a
+  Action envia as traduções do repositório já aprovadas (`upload_translations`, ligado por padrão);
+  sem isso, o PR do Crowdin as voltaria para o inglês. O envio sobrescreve no Crowdin o que estiver
+  diferente: quando outras pessoas estiverem traduzindo lá, desligar a opção na execução ou fazer
+  o merge do PR do Crowdin antes de editar os mesmos textos no repositório. Com tradução
+  acontecendo de fato, vale voltar a rodar sozinha (no push para a `main` e todo dia).
 - **Origem do que já existe:** as magias do SRD 5.1 em português vieram do módulo
   [Foundry VTT Brasil / dnd5e](https://gitlab.com/fvtt-brasil/dnd5e) (MIT, sobre o SRD 5.1 em
   CC-BY-4.0); os créditos estão no `NOTICE.md` e nos Termos. Não existe tradução do SRD 5.2 em
