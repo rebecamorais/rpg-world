@@ -21,10 +21,12 @@ comunidade**, sem tradução automática.
 - **O que falta traduzir aparece em inglês:** na interface, a chave vem em inglês (o next-intl
   quebra com chave faltando); nas magias, o campo vem vazio ou some e o `FileSpellCatalog` usa o
   inglês daquele campo, com o selo "Em inglês" quando é a descrição.
-- **Português editado no repositório** (por exemplo, num PR de funcionalidade) volta para o
-  inglês no próximo PR do Crowdin, porque o Crowdin ainda não tem aquela tradução. Depois do merge,
-  rodar a Action com `upload_translations = true`: ela envia o português do repositório para o
-  Crowdin já aprovado. Isso sobrescreve no Crowdin o que estiver diferente do repositório.
+- **Tradução editada no repositório** (por exemplo, o português de uma funcionalidade nova): quando
+  chega na `main`, a Action envia as traduções do repositório para o Crowdin já aprovadas; sem
+  isso, o próximo PR do Crowdin as voltaria para o inglês. Ela sobrescreve no Crowdin o que estiver
+  diferente, então, se o PR do Crowdin estiver aberto com mudanças nos mesmos textos, fazer o merge
+  dele antes. O merge do próprio PR do Crowdin não reenvia nada. Para enviar à mão, rodar a Action
+  com `upload_translations = true`.
 - **Origem do que já existe:** as magias do SRD 5.1 em português vieram do módulo
   [Foundry VTT Brasil / dnd5e](https://gitlab.com/fvtt-brasil/dnd5e) (MIT, sobre o SRD 5.1 em
   CC-BY-4.0); os créditos estão no `NOTICE.md` e nos Termos. Não existe tradução do SRD 5.2 em

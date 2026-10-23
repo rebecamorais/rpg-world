@@ -2,12 +2,17 @@ name: Crowdin
 
 # Sends the English texts to Crowdin when they change on main, and opens (or updates) a pull
 # request with the approved translations every day. They are reviewed and merged like any PR.
+#
+# A translation edited in the repository (e.g. the Portuguese of a new feature) goes to Crowdin,
+# approved, when it reaches main; otherwise the next pull request would put it back in English.
+# It overwrites what is different on Crowdin, so merge the Crowdin pull request first when it has
+# changes to the same texts.
 on:
   push:
     branches: [main]
     paths:
-      - messages/en.json
-      - 'content/**/i18n/en/**'
+      - 'messages/*.json'
+      - 'content/**/i18n/**'
       - crowdin.yml
   schedule:
     - cron: '0 9 * * *'
@@ -31,14 +36,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # Translations changed on main by anything but Crowdin's own pull request
+      - name: Translations edited in the repository
+        id: edited
+        if: >-
+          github.event_name == 'push' &&
+          !startsWith(github.event.head_commit.message, 'i18n: traduções do Crowdin')
+        run: |
+          changed=$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" \
+            | grep -E '^messages/[a-z]{2}\.json$|^content/.+/i18n/[a-z]{2}/' | grep -v -E '^messages/en\.json$|/i18n/en/' || true)
+          echo "$changed"
+          echo "upload=$([ -n "$changed" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
 
       # Pinned to a commit: this step gets a token that can push and open pull requests
       - uses: crowdin/github-action@9c23991700c0ec5256fd41089b9d9d7d540e424e # v3.3.0
         with:
           upload_sources: true
-          upload_translations: ${{ inputs.upload_translations || false }}
-          # The Portuguese already in the repository was reviewed: it starts approved
-          auto_approve_imported: ${{ inputs.upload_translations || false }}
+          upload_translations: ${{ inputs.upload_translations || steps.edited.outputs.upload == 'true' }}
+          # Translations in the repository were reviewed in their pull request: they start approved.
+          # Crowdin skips the ones equal to the English (untranslated keys come back in English)
+          auto_approve_imported: ${{ inputs.upload_translations || steps.edited.outputs.upload == 'true' }}
           download_translations: true
           # Only what a proofreader approved reaches the app; the rest stays in English
           export_only_approved: true
