@@ -1,0 +1,901 @@
+{
+  "common": {
+    "errors": {
+      "requiredFields": "Please fill in all required fields.",
+      "unknown": "An unknown error occurred. Please try again.",
+      "common_error_invalid_request": "Invalid data. Check the fields and try again.",
+      "common_error_unexpected": "Something went wrong on our side. Please try again shortly.",
+      "auth_error_signin_invalid_credentials": "Incorrect email or password.",
+      "auth_error_signin_email_not_confirmed": "Confirm your email before signing in.",
+      "auth_error_rate_limited": "Too many attempts. Wait a moment and try again.",
+      "auth_error_user_not_found": "User not found.",
+      "auth_error_code_required": "The sign-in link is incomplete. Please request a new one.",
+      "auth_error_link_expired": "This link has expired or was already used. Please request a new one.",
+      "auth_error_provider": "Sign-in was cancelled or refused by the provider.",
+      "auth_error_update_password_weak": "Weak password. Choose a stronger one.",
+      "auth_error_update_password_same": "The new password must be different from the current one.",
+      "auth_error_signup_duplicate_email": "This email is already in use.",
+      "auth_error_signup_required_fields": "Please fill in all required fields.",
+      "auth_error_signup_invalid_password": "This password cannot be used for initial registration.",
+      "auth_error_signin_required_fields": "Email and password are required.",
+      "auth_error_signin_magic_link_email_required": "Email is required for magic link.",
+      "auth_error_update_password_required": "New password is required.",
+      "profile_error_update_id_required": "Profile ID is required for update.",
+      "profile_error_get_id_required": "User ID is required.",
+      "profile_error_username_taken": "This username is already taken.",
+      "storage_error_upload_avatar_userid_required": "User ID is required for upload.",
+      "storage_error_upload_avatar_size_limit": "File size exceeds 5MB limit.",
+      "storage_error_upload_avatar_invalid_type": "Invalid file type. Allowed: JPEG, PNG, WEBP.",
+      "character_error_create_name_required": "Character name is required.",
+      "character_error_update_not_found": "Character not found.",
+      "character_error_update_unauthorized": "Unauthorized to modify this character.",
+      "character_error_update_system_not_supported": "Only D&D 5e is supported at the moment.",
+      "character_error_delete_not_found": "Character not found.",
+      "character_error_delete_unauthorized": "Unauthorized to delete this character.",
+      "character_error_get_not_found": "Character not found.",
+      "character_error_get_by_owner_required": "Owner username is required.",
+      "domain_error_attribute_below_one": "Attribute cannot be less than 1.",
+      "domain_error_hp_max_below_one": "Max HP must be at least 1.",
+      "domain_error_hp_damage_negative": "Damage cannot be negative.",
+      "domain_error_hp_healing_negative": "Healing cannot be negative.",
+      "character_error_not_found": "Character not found.",
+      "character_error_forbidden": "Unauthorized to modify this character.",
+      "character_error_avatar_file_too_large": "The file exceeds the 5 MB limit.",
+      "character_error_avatar_invalid_type": "Invalid file type. Use JPEG, PNG or WEBP.",
+      "character_error_spell_action_invalid": "Invalid spell action.",
+      "lore_error_character_not_found": "Character not found.",
+      "feedback_error_invalid_email": "Please enter a valid e-mail.",
+      "feedback_error_message_too_short": "The message must be at least 10 characters long.",
+      "security_token_missing": "Please complete the security verification.",
+      "security_verification_failed": "Security verification failed. Please try again.",
+      "internal_configuration_error": "Internal configuration error. Contact support.",
+      "network_error_security_verification": "Network error during security verification.",
+      "no_code_provided": "Auth code was not provided by the provider.",
+      "expired_link_title": "Link Expired",
+      "expired_link_description": "The access link has expired or has already been used.",
+      "auth_error_title": "Authentication Error",
+      "auth_error_description": "We could not complete the operation at this time.",
+      "security_widget_unavailable": "Could not load the security check. Disable content blockers for this site or reload the page.",
+      "image_error_decode": "Couldn't read this image. Try another file (JPEG, PNG or WebP).",
+      "character_error_spell_not_found": "This spell was not found."
+    },
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "back": "← Back",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loading": "Loading...",
+    "logout": "Log out",
+    "confirm": "Confirm",
+    "saveChanges": "Save Changes",
+    "close": "Close",
+    "title": "RPG World",
+    "en": "English",
+    "pt": "Portuguese",
+    "contactTooltip": "Report a bug",
+    "passwordMinLength": "Password must be at least {min} characters.",
+    "passwordTooLong": "Password is too long. Use up to 72 characters (fewer with accents or emoji).",
+    "passwordsDoNotMatch": "Passwords do not match.",
+    "language": "Language",
+    "decrease": "Decrease",
+    "increase": "Increase",
+    "skipToContent": "Skip to content",
+    "unsavedChanges": "Unsaved changes",
+    "allSaved": "All changes saved",
+    "discard": "Discard",
+    "discardConfirm": "Discard your unsaved changes?",
+    "leaveConfirm": "You have unsaved changes. Leave anyway?",
+    "saveShortcut": "Ctrl+S to save",
+    "numberField": {
+      "notANumber": "Enter a number",
+      "integer": "Whole numbers only",
+      "range": "Between {min} and {max}",
+      "min": "At least {min}",
+      "max": "At most {max}"
+    },
+    "fixFieldsToSave": "Fix the fields in red to save",
+    "whatIs": "What is {label}?",
+    "done": "Done"
+  },
+  "login": {
+    "title": "Sign in to RPG World",
+    "subtitle": "Choose how you prefer to access your account.",
+    "magicLinkTab": "Magic Link",
+    "passwordTab": "Email and Password",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "magicLinkHint": "We will email you a link to sign in without a password.",
+    "magicLinkSubmit": "Send magic link",
+    "dividerText": "or",
+    "googleLogin": "Continue with Google",
+    "processing": "Processing...",
+    "verifyEmailTitle": "Check your email 📬",
+    "verifyEmailDescription": "If <bold>{email}</bold> has an account, a magic link is on its way. Click it to sign in.",
+    "invalidEmailError": "Invalid email.",
+    "passwordRequiredError": "Password is required.",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign In",
+    "noAccount": "Don't have an account?",
+    "noAccountSubtitle": "Join the community and start managing your characters.",
+    "register": "Sign up"
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Join RPG World and start your journey.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Register",
+    "processing": "Creating account...",
+    "successTitle": "Account created!",
+    "successDescription": "Check your email to confirm your registration.",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Sign In",
+    "errors": {
+      "turnstileRequired": "Please complete the security verification.",
+      "invalidEmail": "Invalid email."
+    }
+  },
+  "auth": {
+    "confirm": {
+      "title": "Confirming...",
+      "errorTitle": "Authentication Error",
+      "waiting": "Please wait while we validate your access.",
+      "redirecting": "Redirecting to login..."
+    }
+  },
+  "landing": {
+    "heroTitle": "Your ultimate RPG companion.",
+    "heroSubtitle": "Manage your character sheets, track attributes, spells and combat effortlessly.",
+    "ctaStart": "Start Playing",
+    "previewLabel": "Example character sheet",
+    "previewName": "Ada the Wise",
+    "previewClass": "High elf wizard · Level 5"
+  },
+  "home": {
+    "title": "RPG World"
+  },
+  "characterCreation": {
+    "title": "New character",
+    "description": "Define the name and choose the ruleset system.",
+    "nameLabel": "Name *",
+    "namePlaceholder": "Character name",
+    "nameRequired": "Give your character a name.",
+    "systemLabel": "RPG System",
+    "systemPlaceholder": "Select the System",
+    "submit": "Create",
+    "submitting": "Creating...",
+    "requireLogin": "Please sign in to create a character.",
+    "success": "Character successfully created!",
+    "systems": {
+      "dnd5e": "D&D 5th Edition"
+    }
+  },
+  "characters": {
+    "loading": "Loading characters...",
+    "emptyState": "No characters yet",
+    "createFirstDescription": "Start your journey by creating your first RPG character.",
+    "createFirst": "Create first character",
+    "title": "Characters",
+    "level": "Level {level}",
+    "requireLogin": "Please log in to see your characters.",
+    "notFoundOrNoPermission": "Character not found or you don't have permission.",
+    "deleteSuccess": "Character deleted successfully.",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "school": "School",
+    "saveSuccess": "Character saved successfully!",
+    "passivePerception": "Passive Perception",
+    "allDamage": "All Damage",
+    "forgetSpell": "Forget spell",
+    "prepareSpell": "Prepare spell",
+    "unprepareSpell": "Unprepare spell",
+    "levelDetail": "Level {level}",
+    "spellbookIndex": "Index",
+    "cantrip": "Cantrip",
+    "cantrips": "Cantrips",
+    "levelName": "Level {level}",
+    "levelSpells": "Level {level} Spells",
+    "concentration": "Concentration",
+    "ritual": "Ritual",
+    "atHigherLevels": "At Higher Levels",
+    "castingTime": "Casting Time",
+    "range": "Range",
+    "duration": "Duration",
+    "deleteDialogTitle": "Delete character?",
+    "deleteDialogDescription": "Are you sure you want to delete the character {name}? This action cannot be undone and all data will be lost.",
+    "deleteConfirmInstruction": "To confirm, type the character's name: <bold>{name}</bold>",
+    "deleteConfirmPlaceholder": "Type the exact name here",
+    "namePlaceholder": "Character Name",
+    "editAttribute": "Edit {label}",
+    "tabs": {
+      "status": "Status",
+      "lore": "Lore",
+      "spells": "Spellbook",
+      "inventory": "Inventory"
+    },
+    "emptyStates": {
+      "lore": "Biography and physical characteristics will appear here soon.",
+      "spells": "Your spells and cantrips will be listed here.",
+      "inventory": "Equipment, potions, and currency will be managed here."
+    },
+    "loreFields": {
+      "appearance": "Appearance",
+      "personality": "Personality",
+      "narrative": "Narrative",
+      "age": "Age",
+      "height": "Height",
+      "weight": "Weight",
+      "eyes": "Eyes",
+      "skin": "Skin",
+      "hair": "Hair",
+      "backstory": "Backstory",
+      "personalityTraits": "Personality Traits",
+      "ideals": "Ideals",
+      "bonds": "Bonds",
+      "flaws": "Flaws",
+      "alliesAndEnemies": "Allies & Enemies",
+      "organizations": "Organizations",
+      "treasure": "Treasure"
+    },
+    "spells": {
+      "preparedLabels": "{count} prepared",
+      "addBtn": "Add Spell"
+    },
+    "addItem": "Add Item",
+    "loadErrorTitle": "Something went wrong",
+    "levelShort": "Lv {level}",
+    "defaultClass": "Adventurer",
+    "cardActions": "Actions for {name}",
+    "loadingList": "Loading characters",
+    "subtitle": "Your sheets, ready for the next session.",
+    "learnSpell": "Learn spell",
+    "learnedBadge": "Learned",
+    "spellCount": "{count, plural, one {# spell} other {# spells}}",
+    "untranslatedBadge": "In English",
+    "untranslatedHint": "Not translated yet. You can help on Crowdin.",
+    "edition": "Edition"
+  },
+  "characterHeader": {
+    "namePlaceholder": "Character Name",
+    "proficiencyBonus": "Bonus",
+    "class": "Class",
+    "classPlaceholder": "Define Class...",
+    "level": "Level",
+    "race": "Race",
+    "racePlaceholder": "Define Race...",
+    "background": "Background",
+    "backgroundPlaceholder": "Define Background...",
+    "alignment": "Alignment",
+    "alignmentPlaceholder": "Define Alignment...",
+    "xp": "Experience",
+    "customizeDescription": "Change the avatar and accent color of the character",
+    "customizeTitle": "Customize Character",
+    "avatarLabel": "Avatar",
+    "accentColorLabel": "Accent Color",
+    "xpProgress": "Progress to next level",
+    "name": "Name"
+  },
+  "attributeCard": {
+    "modifierCalc": "Modifier Calculation",
+    "adjustValue": "Adjust the base value of this attribute (1 to 30).",
+    "baseValue": "Base Value"
+  },
+  "combatStats": {
+    "status": "Combat Status",
+    "armorClass": "AC",
+    "hitPoints": "Hit Points",
+    "hitPointsMax": "Max Hit Points",
+    "hitPointsShort": "HP",
+    "tempHp": "Temp HP",
+    "speed": "Speed",
+    "initiative": "Initiative",
+    "speedUnit": "m",
+    "hitDice": "Hit Dice",
+    "diceOptions": {
+      "d6": "1d6",
+      "d8": "1d8",
+      "d10": "1d10",
+      "d12": "1d12"
+    },
+    "loseHp": "Lose 1 HP",
+    "gainHp": "Heal 1 HP",
+    "hints": {
+      "armorClass": "The number an attack roll has to reach to hit you.",
+      "initiative": "Added to the d20 at the start of combat to set the turn order. Usually your Dexterity modifier.",
+      "speed": "How far you can move on your turn.",
+      "hitDice": "One die per level. On a short rest, roll and spend them to recover HP.",
+      "passivePerception": "10 + your Perception bonus. What you notice without looking."
+    },
+    "configureHp": "Configure hit points",
+    "configureHpDescription": "This character's maximum and temporary hit points"
+  },
+  "spellsDrawer": {
+    "searchPlaceholder": "Search spells",
+    "learn": "Learn",
+    "title": "Spell list",
+    "description": "Manage your character's known spells.",
+    "emptyState": "No spells learned yet.",
+    "allLevels": "All levels",
+    "allSchools": "All schools",
+    "allClasses": "All classes",
+    "noSpellsFound": "No spells found.",
+    "clearFilters": "Clear all filters",
+    "pagination": "{from}–{to} of {total} spells",
+    "toasts": {
+      "learned": "Spell learned!",
+      "forgotten": "Spell forgotten.",
+      "prepared": "Spell prepared.",
+      "unprepared": "Spell unprepared.",
+      "undo": "Undo"
+    },
+    "searchLabel": "Search spells",
+    "clearActiveFilters": "Clear filters ({count})",
+    "emptyStateHint": "Search your class's spells and add them to the spellbook.",
+    "filtersToggle": "{count, plural, =0 {Filters} other {Filters (#)}}",
+    "filterLabels": {
+      "level": "Level",
+      "school": "School",
+      "class": "Class",
+      "damage": "Damage type",
+      "edition": "Edition"
+    },
+    "loading": "Loading spells",
+    "allEditions": "All editions",
+    "editions": {
+      "2014": "2014",
+      "2024": "2024"
+    }
+  },
+  "magicSystem": {
+    "titleConfig": "Configure magic",
+    "configDescription": "Configure the magic system used by this character",
+    "systemUsed": "System Used",
+    "slotsCapacity": "Slots Capacity per Level",
+    "circle": "Circle {level}",
+    "spellPoints": "Spell Points",
+    "spellSlots": "Spell Slots",
+    "level": "Lv {level}",
+    "pointsCapacity": "Spell Points Capacity",
+    "systemPlaceholder": "Magic",
+    "slot": "Level {level} slot {slot}",
+    "configure": "Configure magic system"
+  },
+  "dashboard": {
+    "menu": "Menu",
+    "newCharacter": "New character",
+    "myCharacters": "My Characters",
+    "myProfile": "My Profile",
+    "attributes": "Attributes",
+    "spells": "Spells",
+    "settingsTitle": "Settings",
+    "settingsSubtitle": "Manage your adventurer profile information.",
+    "menuDescription": "Main navigation and shortcuts.",
+    "openMenu": "Open menu"
+  },
+  "changePassword": {
+    "title": "Change Your Password",
+    "subtitle": "You are using a temporary password. For your security, please choose a new one.",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Update Password",
+    "processing": "Updating...",
+    "success": "Password updated successfully!",
+    "error": "Failed to update password."
+  },
+  "profileForm": {
+    "title": "Edit Profile",
+    "subtitle": "Customize your adventurer profile information.",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "e.g.: dark_elf_42",
+    "fullNameLabel": "Name",
+    "fullNamePlaceholder": "e.g.: Rebeca",
+    "primaryColorLabel": "Theme Color",
+    "save": "Save Profile",
+    "saving": "Saving...",
+    "saveSuccess": "Profile updated successfully!",
+    "validation": {
+      "usernameMin": "Username must be at least 3 characters.",
+      "usernameMax": "Username must be at most 30 characters.",
+      "usernamePattern": "Only lowercase letters, numbers, and underscores are allowed.",
+      "fullNameMax": "Name must be at most 100 characters.",
+      "avatarUrlInvalid": "Invalid URL.",
+      "primaryColorInvalid": "Pick one of the colors."
+    },
+    "colors": {
+      "default": "Default",
+      "red": "Red",
+      "blue": "Blue",
+      "green": "Green",
+      "purple": "Purple",
+      "yellow": "Yellow",
+      "orange": "Orange",
+      "cyan": "Cyan",
+      "pink": "Pink",
+      "slate": "Slate"
+    }
+  },
+  "avatarUpload": {
+    "button": "Change Avatar",
+    "loading": "Uploading...",
+    "currentAlt": "Current avatar",
+    "error": "Error uploading image.",
+    "cropTitle": "Adjust image",
+    "cropDescription": "Drag to position and use zoom to frame it.",
+    "zoom": "Zoom",
+    "save": "Save",
+    "view": "View image",
+    "viewTitle": "Full-screen image"
+  },
+  "skills": {
+    "title": "Skills",
+    "ACROBATICS": "Acrobatics",
+    "ANIMAL_HANDLING": "Animal Handling",
+    "ARCANA": "Arcana",
+    "ATHLETICS": "Athletics",
+    "DECEPTION": "Deception",
+    "HISTORY": "History",
+    "INSIGHT": "Insight",
+    "INTIMIDATION": "Intimidation",
+    "INVESTIGATION": "Investigation",
+    "MEDICINE": "Medicine",
+    "NATURE": "Nature",
+    "PERCEPTION": "Perception",
+    "PERFORMANCE": "Performance",
+    "PERSUASION": "Persuasion",
+    "RELIGION": "Religion",
+    "SLEIGHT_OF_HAND": "Sleight of Hand",
+    "STEALTH": "Stealth",
+    "SURVIVAL": "Survival",
+    "proficient": "Proficient",
+    "expertise": "Expertise",
+    "none": "None",
+    "proficientIn": "Proficient in {label}",
+    "expertiseIn": "Expertise in {label}",
+    "noProficiencyIn": "No proficiency in {label}",
+    "usesAttribute": "Uses {attribute}.",
+    "descriptions": {
+      "ACROBATICS": "Keep your balance, perform stunts and slip out of tight spots.",
+      "ANIMAL_HANDLING": "Calm, handle and read animals.",
+      "ARCANA": "Knowledge of spells, magic items, symbols and the planes.",
+      "ATHLETICS": "Climb, jump, swim and grapple.",
+      "DECEPTION": "Lie and hide the truth convincingly.",
+      "HISTORY": "Recall events, kingdoms, wars and legends.",
+      "INSIGHT": "Read intentions and tell when someone is lying.",
+      "INTIMIDATION": "Influence through fear and threats.",
+      "INVESTIGATION": "Search for clues and draw conclusions from them.",
+      "MEDICINE": "Stabilize the dying and diagnose illness.",
+      "NATURE": "Knowledge of terrain, plants, animals and weather.",
+      "PERCEPTION": "Notice your surroundings: spot, hear, sense.",
+      "PERFORMANCE": "Entertain with music, dance, acting or stories.",
+      "PERSUASION": "Convince with tact, good faith and argument.",
+      "RELIGION": "Knowledge of gods, rites and religious orders.",
+      "SLEIGHT_OF_HAND": "Sleight of hand, pickpocketing and hiding objects.",
+      "STEALTH": "Hide and move without being noticed.",
+      "SURVIVAL": "Track, hunt, find your way and avoid natural hazards."
+    }
+  },
+  "attributes": {
+    "title": "Attributes",
+    "STR": "Strength",
+    "DEX": "Dexterity",
+    "CON": "Constitution",
+    "INT": "Intelligence",
+    "WIS": "Wisdom",
+    "CHA": "Charisma",
+    "proficientIn": "Proficient in {label}",
+    "noProficiencyIn": "No proficiency in {label}",
+    "abbreviations": {
+      "STR": "STR",
+      "DEX": "DEX",
+      "CON": "CON",
+      "INT": "INT",
+      "WIS": "WIS",
+      "CHA": "CHA"
+    },
+    "bulkEditTitle": "Base Attribute Values",
+    "bulkEditDescription": "Adjust the base values of all attributes at once",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "savingThrows": {
+    "title": "Saving Throws",
+    "deathSaveSuccess": "Death save success {count}",
+    "deathSaveFailure": "Death save failure {count}",
+    "resetDeathSaves": "Reset death saves",
+    "deathSaves": "Death saves",
+    "successes": "Successes",
+    "failures": "Failures",
+    "hint": "Roll to resist spells, poisons and other dangers: d20 + ability modifier + proficiency, if marked.",
+    "deathSavesHint": "At 0 HP, roll a d20 each turn: 10 or higher is a success. 3 successes stabilize you; 3 failures, you die. A 1 counts as two failures; a 20 brings you back with 1 HP."
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "lastUpdated": "Last updated: October 15, 2026",
+    "sections": {
+      "acceptance": {
+        "title": "1. Acceptance of Terms",
+        "content": "By accessing RPG World, you agree to comply with these terms. This software is provided by Rebs Tech Studio \"as is\", without warranties of any kind."
+      },
+      "conduct": {
+        "title": "2. User Conduct",
+        "content": "RPG World is a space for creativity and fun. It is strictly prohibited:",
+        "items": [
+          "Publishing content that promotes hate, racism, or any form of discrimination.",
+          "Harassing other players or masters.",
+          "Using the system for spam or illegal activities."
+        ]
+      },
+      "content": {
+        "title": "3. User Content",
+        "content": "You retain ownership of all stories and characters created. However, by using our platform, you grant us a worldwide, royalty-free license to store and display this content solely for game operation."
+      },
+      "donations": {
+        "title": "4. Donations and \"Buy me a coffee\"",
+        "content": "Financial contributions are voluntary donations to support development. They do not constitute the purchase of services, do not grant ownership rights over the software, and are non-refundable."
+      },
+      "liability": {
+        "title": "5. Limitation of Liability",
+        "content": "We are not responsible for data loss, connection errors, or service interruptions. As the code is open source (GPLv3), you have the right to host your own instance if you wish for full control over your data."
+      },
+      "age": {
+        "title": "6. Minimum Age and Child Protection",
+        "content": "RPG World is intended for users who are at least 13 years old. We do not intentionally collect data from children under 13. If we become aware that a minor under 13 has provided us with personal data, we will take steps to delete such information and close the account."
+      },
+      "updates": {
+        "title": "7. Changes to the Terms",
+        "content": "We reserve the right to update these terms at any time. We will notify users about significant changes through system notices or by email. Continued use of the platform after changes constitutes acceptance of the new terms."
+      },
+      "law": {
+        "title": "8. Governing Law and Jurisdiction",
+        "content": "These terms are governed by the laws of the Federative Republic of Brazil. Any dispute will be resolved in the jurisdiction of the city of São José dos Campos, SP, with express waiver of any other."
+      },
+      "gameContent": {
+        "title": "9. Game Content and Credits",
+        "content": "The rules and spells shown in RPG World come from open sources, used under their licenses:",
+        "items": [
+          "This work includes material from the <srd>System Reference Document 5.1</srd> (\"SRD 5.1\") and the <srd52>System Reference Document 5.2</srd52> (\"SRD 5.2\") by Wizards of the Coast LLC. Both are licensed under the <ccby>Creative Commons Attribution 4.0 International License</ccby>.",
+          "The structured data of the 2014 spells was obtained from the <api>5e SRD API</api>, from the <database>5e-bits/5e-database</database> project, under the MIT license. The 2024 spells were extracted from <fivetools>5etools</fivetools>, only the entries that are part of the SRD 5.2.",
+          "The Brazilian Portuguese spell translations come from the <foundry>D&D 5e translation module for Foundry VTT</foundry> by the Foundry VTT Brasil community (Cauã Pessoa and contributors), under the MIT license.",
+          "RPG World is not affiliated with, endorsed, or sponsored by Wizards of the Coast. Dungeons & Dragons and D&D are trademarks of Wizards of the Coast LLC.",
+          "Full credits and license texts are in the repository's <notice>NOTICE.md</notice> file."
+        ]
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: October 20, 2026",
+    "sections": {
+      "data": {
+        "title": "1. Data Collected",
+        "content": "We collect only what is essential for your experience:",
+        "items": [
+          "Account: email and password (the password is stored encrypted by <supabase>Supabase</supabase>) or, if you sign in with <google>Google</google>, the email and name of your Google account.",
+          "Profile: username, avatar and preferred color.",
+          "Characters: sheets, backstory, learned spells and the images you upload.",
+          "Support: email, type and message, when you use the contact form.",
+          "Technical data: when you visit the site, <vercel>Vercel</vercel> and <supabase>Supabase</supabase> log the IP address, browser and requested pages, for security and error diagnosis. On protected forms, <cloudflare>Cloudflare Turnstile</cloudflare> checks the IP and browser signals to tell people from bots. To count visits we use <cloudflare>Cloudflare Web Analytics</cloudflare>, which uses no cookies and does not identify you: it only records aggregate numbers, such as page views and load times."
+        ]
+      },
+      "usage": {
+        "title": "2. Data Usage",
+        "content": "Your data is used exclusively to:",
+        "items": [
+          "Keep you signed in and protect your account.",
+          "Save your characters and sync them across devices.",
+          "Send account emails (sign-up confirmation and password reset) and reply to your support messages."
+        ]
+      },
+      "sharing": {
+        "title": "3. Sharing",
+        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, the magic link, password reset and the contact form; and anonymous visit counts, with Cloudflare Web Analytics), <discord>Discord</discord> (where the support team receives the messages sent through the contact form: email, type, message and, if you are signed in, your account id) and <google>Google</google> (only if you sign in with Google). Today your characters and your profile are visible only to you; avatar images are stored at a public address that is not listed anywhere."
+      },
+      "rights": {
+        "title": "4. Your Rights",
+        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data through our <server>Discord server</server>, telling us your account's email. We will process your request within 5 business days."
+      },
+      "cookies": {
+        "title": "5. Cookies",
+        "content": "We only use necessary cookies: the ones for your sign-in session, the language you chose and your time zone. We do not use advertising or tracking cookies."
+      },
+      "transfer": {
+        "title": "6. International Data Transfer",
+        "content": "To operate the system, we use third-party infrastructure (such as <supabase>Supabase</supabase>, <vercel>Vercel</vercel>, <resend>Resend</resend> and <discord>Discord</discord>). As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. By using RPG World, you consent to this international transfer, conducted under strict security and encryption standards."
+      },
+      "retention": {
+        "title": "7. Data Retention and Deletion",
+        "content": "Your data remains stored in our database as long as your account is active. If your account remains inactive for more than 24 months, we reserve the right to perform automatic deletion for security and resource saving."
+      },
+      "contact": {
+        "title": "8. Contact and Data Controller",
+        "content": "For any questions regarding your privacy or to exercise your rights (<lgpd>LGPD</lgpd>), talk to the team on our <server>Discord server</server>. For matters about your account, prefer a direct message to the team over the public channels."
+      }
+    }
+  },
+  "forgotPassword": {
+    "title": "Recover Password",
+    "subtitle": "Enter your email to receive a recovery link.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "submit": "Send recovery email",
+    "processing": "Sending...",
+    "successTitle": "Email sent! 📬",
+    "successDescription": "If this email is registered, you will receive a recovery link shortly.",
+    "backToLogin": "Back to Login"
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "subtitle": "Choose a strong new password for your account.",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Update Password",
+    "processing": "Updating...",
+    "successTitle": "Password changed! 🎉",
+    "successDescription": "Your password has been successfully reset. You can now log in.",
+    "login": "Log In",
+    "sessionNotFound": "Reset session not found. Try the link from the e-mail again."
+  },
+  "spellsData": {
+    "schools": {
+      "abjuration": "Abjuration",
+      "conjuration": "Conjuration",
+      "divination": "Divination",
+      "enchantment": "Enchantment",
+      "evocation": "Evocation",
+      "illusion": "Illusion",
+      "necromancy": "Necromancy",
+      "transmutation": "Transmutation"
+    },
+    "damageTypes": {
+      "acid": "Acid",
+      "bludgeoning": "Bludgeoning",
+      "cold": "Cold",
+      "fire": "Fire",
+      "force": "Force",
+      "lightning": "Lightning",
+      "necrotic": "Necrotic",
+      "piercing": "Piercing",
+      "poison": "Poison",
+      "psychic": "Psychic",
+      "radiant": "Radiant",
+      "slashing": "Slashing",
+      "thunder": "Thunder"
+    },
+    "castingTimes": {
+      "action": "{value} Action",
+      "bonus_action": "{value} Bonus Action",
+      "reaction": "{value} Reaction",
+      "minute": "{value} {value, plural, one {Minute} other {Minutes}}",
+      "hour": "{value} {value, plural, one {Hour} other {Hours}}",
+      "day": "{value} {value, plural, one {Day} other {Days}}"
+    },
+    "castingTimesBrief": {
+      "action": "Action",
+      "bonus_action": "Bonus",
+      "reaction": "Reaction"
+    },
+    "components": {
+      "V": "Verbal",
+      "S": "Somatic",
+      "M": "Material"
+    },
+    "ranges": {
+      "self": "Self",
+      "touch": "Touch",
+      "sight": "Sight",
+      "unlimited": "Unlimited",
+      "feet": "{feet} ft.",
+      "mile": "{miles} {miles, plural, one {mile} other {miles}} ({km} km)",
+      "special": "Special"
+    },
+    "durations": {
+      "instantaneous": "Instantaneous",
+      "minute": "{value} {value, plural, one {minute} other {minutes}}",
+      "hour": "{value} {value, plural, one {hour} other {hours}}",
+      "day": "{value} {value, plural, one {day} other {days}}",
+      "round": "{value} {value, plural, one {round} other {rounds}}",
+      "special": "Special"
+    },
+    "classes": {
+      "barbarian": "Barbarian",
+      "bard": "Bard",
+      "cleric": "Cleric",
+      "druid": "Druid",
+      "fighter": "Fighter",
+      "monk": "Monk",
+      "paladin": "Paladin",
+      "ranger": "Ranger",
+      "rogue": "Rogue",
+      "sorcerer": "Sorcerer",
+      "warlock": "Warlock",
+      "wizard": "Wizard"
+    },
+    "componentHints": {
+      "V": "Words spoken aloud: you can't cast it gagged or in magical silence.",
+      "S": "Hand gestures: you need at least one free hand.",
+      "M": "A specific object or ingredient, or a spellcasting focus in its place."
+    }
+  },
+  "footer": {
+    "explore": {
+      "title": "Explore",
+      "home": "Home",
+      "characters": "Characters",
+      "settings": "Settings",
+      "login": "Sign in",
+      "register": "Sign up",
+      "features": "Features"
+    },
+    "socials": {
+      "title": "Social",
+      "github": "GitHub",
+      "discord": "Discord"
+    },
+    "legal": {
+      "title": "Legal",
+      "terms": "Terms of Use",
+      "privacy": "Privacy Policy"
+    },
+    "support": {
+      "title": "Support",
+      "kofi": "Ko-fi",
+      "githubSponsors": "GitHub Sponsors",
+      "pixTitle": "Make a Pix",
+      "pixCopy": "Pix key copied!",
+      "pixCopyLabel": "Copy Pix key",
+      "githubSponsorsCta": "Sponsor on GitHub"
+    },
+    "copyright": "© {year} Rebs Tech Studio. All rights reserved."
+  },
+  "loadingMessages": {
+    "weapons": "Equipping weapons...",
+    "ritual": "Preparing ritual...",
+    "gods": "Consulting the gods...",
+    "armor": "Polishing armor...",
+    "spirits": "Summoning spirits...",
+    "blades": "Sharpening blades...",
+    "scrolls": "Reading ancient scrolls...",
+    "battlefield": "Preparing the battlefield..."
+  },
+  "feedback": {
+    "title": "Talk to the Game Master",
+    "subtitle": "Have feedback, questions, or found a bug? We'd love to hear from you.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "typeLabel": "Message Type",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Which mimic bit you? Describe your issue or idea...",
+    "submit": "Cast Message",
+    "submitting": "Channeling...",
+    "sendAnother": "Send another message",
+    "success": "Message sent successfully! The Game Master received your call.",
+    "error": "Failed to send message. Try again after a short rest.",
+    "types": {
+      "bug": "Bug Report",
+      "feature": "Feature Request",
+      "feedback": "General Feedback",
+      "account": "Account / Access"
+    }
+  },
+  "seo": {
+    "title": "RPG World: free D&D 5e character sheets",
+    "description": "Free, open-source app to create and manage D&D 5e character sheets, with automatic calculations and an SRD spellbook, in English and Brazilian Portuguese.",
+    "ogImageAlt": "RPG World logo next to a D&D 5e character sheet and a glowing purple d20"
+  },
+  "features": {
+    "seeAll": "See all features",
+    "highlightsTitle": "Made for players",
+    "highlightsSubtitle": "The sheet does the math, the spellbook has the SRD spells and everything works in English and Portuguese.",
+    "metaTitle": "Features",
+    "metaDescription": "Everything RPG World does today: a D&D 5e character sheet with automatic calculations, a searchable SRD spellbook, character lore and more, in English and Portuguese.",
+    "eyebrow": "Features",
+    "title": "Everything you can do in RPG World",
+    "subtitle": "Free, open source and no account needed to look around. Create one when you want to build your first character.",
+    "availableTitle": "Available today",
+    "plannedTitle": "Coming soon",
+    "plannedSubtitle": "What we are working on. Not available yet.",
+    "items": {
+      "sheet": {
+        "title": "A full sheet on one page",
+        "description": "Ability scores, saving throws, skills with proficiency and expertise, AC, initiative, speed and hit dice, all in view."
+      },
+      "calculations": {
+        "title": "The sheet does the math",
+        "description": "Modifiers, proficiency bonus and passive perception update automatically when you change a value."
+      },
+      "combat": {
+        "title": "Hit points and combat",
+        "description": "Hit points, temporary hit points and death saves, easy to adjust in the middle of a session."
+      },
+      "magic": {
+        "title": "Magic your way",
+        "description": "Use spell slots by level or spell points, whichever your table prefers."
+      },
+      "spellbook": {
+        "title": "A spellbook with the SRD spells",
+        "description": "Search the 658 spells of the SRD 5.1 (2014) and SRD 5.2 (2024), filter by edition, level, school, class and damage type, and mark the prepared ones."
+      },
+      "lore": {
+        "title": "Your character's story",
+        "description": "Appearance, personality traits, ideals, bonds, flaws and the full backstory, next to the sheet."
+      },
+      "customization": {
+        "title": "Make it yours",
+        "description": "An avatar and an accent color for each character, applied across the whole sheet."
+      },
+      "languages": {
+        "title": "In English and Portuguese",
+        "description": "The interface and the spells in both languages. Switch any time."
+      }
+    },
+    "planned": {
+      "parties": {
+        "title": "Parties and campaigns",
+        "description": "Dungeon Master and players at the same table, with invites and session notes."
+      },
+      "inventory": {
+        "title": "Inventory and items",
+        "description": "Equipment, magic items and coins on the sheet."
+      },
+      "systems": {
+        "title": "More systems and languages",
+        "description": "The D&D 2024 rules, other RPG systems and community translations."
+      },
+      "homebrew": {
+        "title": "Homebrew",
+        "description": "Create spells, items, classes and backgrounds and share them with your party or the community."
+      }
+    },
+    "openTitle": "Free and open source",
+    "openDescription": "The code is open (GPLv3) and anyone can contribute or host their own instance. The rules come from the SRD 5.1 and SRD 5.2, under CC-BY-4.0.",
+    "openSource": "See the code on GitHub",
+    "credits": "Content credits",
+    "ctaTitle": "Ready to create your character?",
+    "ctaStart": "Create a free account",
+    "ctaCharacters": "Go to my characters",
+    "showcase": {
+      "title": "Take a look inside",
+      "subtitle": "Real RPG World screens with an example character.",
+      "previous": "Previous screen",
+      "next": "Next screen",
+      "position": "{current} of {total}",
+      "slides": {
+        "sheet": {
+          "tab": "Sheet",
+          "title": "The whole sheet on one page",
+          "description": "Ability scores, saving throws, skills, hit points and spell slots, with the math done for you.",
+          "alt": "Character sheet of a level 5 wizard with ability scores, saving throws, hit points and spell slots"
+        },
+        "spellbook": {
+          "tab": "Spellbook",
+          "title": "A spellbook organized by level",
+          "description": "Cantrips and spells by level, with the prepared ones marked and an index to jump between levels.",
+          "alt": "Spellbook with cantrips and level 1 spells, some marked as prepared"
+        },
+        "search": {
+          "tab": "Spell search",
+          "title": "Find any SRD spell",
+          "description": "Search as you type and filter by level, school, class and damage type. Learn a spell in one click.",
+          "alt": "Spell search for \"fire\" showing Fire Bolt, Fireball and others, with the learned ones checked"
+        },
+        "lore": {
+          "tab": "Story",
+          "title": "Your character's story",
+          "description": "Appearance, personality, ideals, bonds, flaws and the full backstory, next to the sheet.",
+          "alt": "Story page with appearance, personality traits, ideals, bonds, flaws and the character's backstory"
+        }
+      }
+    }
+  }
+}

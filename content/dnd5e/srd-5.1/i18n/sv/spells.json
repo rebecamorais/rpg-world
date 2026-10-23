@@ -1,0 +1,1553 @@
+{
+  "acid-arrow": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "acid-splash": {
+    "name": "",
+    "description": ""
+  },
+  "aid": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "alarm": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "alter-self": {
+    "name": "",
+    "description": ""
+  },
+  "animal-friendship": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "animal-messenger": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "animal-shapes": {
+    "name": "",
+    "description": ""
+  },
+  "animate-dead": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "animate-objects": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "antilife-shell": {
+    "name": "",
+    "description": ""
+  },
+  "antimagic-field": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "antipathy-sympathy": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "arcane-eye": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "arcane-hand": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "arcane-lock": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "arcane-sword": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "arcanists-magic-aura": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "astral-projection": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "augury": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "awaken": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "bane": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "banishment": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "barkskin": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "beacon-of-hope": {
+    "name": "",
+    "description": ""
+  },
+  "bestow-curse": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "black-tentacles": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "blade-barrier": {
+    "name": "",
+    "description": ""
+  },
+  "bless": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "blight": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "blindness-deafness": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "blink": {
+    "name": "",
+    "description": ""
+  },
+  "blur": {
+    "name": "",
+    "description": ""
+  },
+  "branding-smite": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "burning-hands": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "call-lightning": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "calm-emotions": {
+    "name": "",
+    "description": ""
+  },
+  "chain-lightning": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "charm-person": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "chill-touch": {
+    "name": "",
+    "description": ""
+  },
+  "circle-of-death": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "clairvoyance": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "clone": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "cloudkill": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "color-spray": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "command": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "commune": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "commune-with-nature": {
+    "name": "",
+    "description": ""
+  },
+  "comprehend-languages": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "compulsion": {
+    "name": "",
+    "description": ""
+  },
+  "cone-of-cold": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "confusion": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "conjure-animals": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "conjure-celestial": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "conjure-elemental": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "conjure-fey": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "conjure-minor-elementals": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "conjure-woodland-beings": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "contact-other-plane": {
+    "name": "",
+    "description": ""
+  },
+  "contagion": {
+    "name": "",
+    "description": ""
+  },
+  "contingency": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "continual-flame": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "control-water": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "control-weather": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "counterspell": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "create-food-and-water": {
+    "name": "",
+    "description": ""
+  },
+  "create-or-destroy-water": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "create-undead": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "creation": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "cure-wounds": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "dancing-lights": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "darkness": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "darkvision": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "daylight": {
+    "name": "",
+    "description": ""
+  },
+  "death-ward": {
+    "name": "",
+    "description": ""
+  },
+  "delayed-blast-fireball": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "demiplane": {
+    "name": "",
+    "description": ""
+  },
+  "detect-evil-and-good": {
+    "name": "",
+    "description": ""
+  },
+  "detect-magic": {
+    "name": "",
+    "description": ""
+  },
+  "detect-poison-and-disease": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "detect-thoughts": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "dimension-door": {
+    "name": "",
+    "description": ""
+  },
+  "disguise-self": {
+    "name": "",
+    "description": ""
+  },
+  "disintegrate": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "dispel-evil-and-good": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "dispel-magic": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "divination": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "divine-favor": {
+    "name": "",
+    "description": ""
+  },
+  "divine-word": {
+    "name": "",
+    "description": ""
+  },
+  "dominate-beast": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "dominate-monster": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "dominate-person": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "dream": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "druidcraft": {
+    "name": "",
+    "description": ""
+  },
+  "earthquake": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "eldritch-blast": {
+    "name": "",
+    "description": ""
+  },
+  "enhance-ability": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "enlarge-reduce": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "entangle": {
+    "name": "",
+    "description": ""
+  },
+  "enthrall": {
+    "name": "",
+    "description": ""
+  },
+  "etherealness": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "expeditious-retreat": {
+    "name": "",
+    "description": ""
+  },
+  "eyebite": {
+    "name": "",
+    "description": ""
+  },
+  "fabricate": {
+    "name": "",
+    "description": ""
+  },
+  "faerie-fire": {
+    "name": "",
+    "description": ""
+  },
+  "faithful-hound": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "false-life": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "fear": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "feather-fall": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "feeblemind": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "find-familiar": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "find-steed": {
+    "name": "",
+    "description": ""
+  },
+  "find-the-path": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "find-traps": {
+    "name": "",
+    "description": ""
+  },
+  "finger-of-death": {
+    "name": "",
+    "description": ""
+  },
+  "fire-bolt": {
+    "name": "",
+    "description": ""
+  },
+  "fire-shield": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "fire-storm": {
+    "name": "",
+    "description": ""
+  },
+  "fireball": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "flame-blade": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "flame-strike": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "flaming-sphere": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "flesh-to-stone": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "floating-disk": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "fly": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "fog-cloud": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "forbiddance": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "forcecage": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "foresight": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "freedom-of-movement": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "freezing-sphere": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "gaseous-form": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "gate": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "geas": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "gentle-repose": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "giant-insect": {
+    "name": "",
+    "description": ""
+  },
+  "glibness": {
+    "name": "",
+    "description": ""
+  },
+  "globe-of-invulnerability": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "glyph-of-warding": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "goodberry": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "grease": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "greater-invisibility": {
+    "name": "",
+    "description": ""
+  },
+  "greater-restoration": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "guardian-of-faith": {
+    "name": "",
+    "description": ""
+  },
+  "guards-and-wards": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "guidance": {
+    "name": "",
+    "description": ""
+  },
+  "guiding-bolt": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "gust-of-wind": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "hallow": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "hallucinatory-terrain": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "harm": {
+    "name": "",
+    "description": ""
+  },
+  "haste": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "heal": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "healing-word": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "heat-metal": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "hellish-rebuke": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "heroes-feast": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "heroism": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "hideous-laughter": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "hold-monster": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "hold-person": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "holy-aura": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "hunters-mark": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "hypnotic-pattern": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "ice-storm": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "identify": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "illusory-script": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "imprisonment": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "incendiary-cloud": {
+    "name": "",
+    "description": ""
+  },
+  "inflict-wounds": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "insect-plague": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "instant-summons": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "invisibility": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "irresistible-dance": {
+    "name": "",
+    "description": ""
+  },
+  "jump": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "knock": {
+    "name": "",
+    "description": ""
+  },
+  "legend-lore": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "lesser-restoration": {
+    "name": "",
+    "description": ""
+  },
+  "levitate": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "light": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "lightning-bolt": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "locate-animals-or-plants": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "locate-creature": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "locate-object": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "longstrider": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "mage-armor": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "mage-hand": {
+    "name": "",
+    "description": ""
+  },
+  "magic-circle": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "magic-jar": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "magic-missile": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "magic-mouth": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "magic-weapon": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "magnificent-mansion": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "major-image": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "mass-cure-wounds": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "mass-heal": {
+    "name": "",
+    "description": ""
+  },
+  "mass-healing-word": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "mass-suggestion": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "maze": {
+    "name": "",
+    "description": ""
+  },
+  "meld-into-stone": {
+    "name": "",
+    "description": ""
+  },
+  "mending": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "message": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "meteor-swarm": {
+    "name": "",
+    "description": ""
+  },
+  "mind-blank": {
+    "name": "",
+    "description": ""
+  },
+  "minor-illusion": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "mirage-arcane": {
+    "name": "",
+    "description": ""
+  },
+  "mirror-image": {
+    "name": "",
+    "description": ""
+  },
+  "mislead": {
+    "name": "",
+    "description": ""
+  },
+  "misty-step": {
+    "name": "",
+    "description": ""
+  },
+  "modify-memory": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "moonbeam": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "move-earth": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "nondetection": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "pass-without-trace": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "passwall": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "phantasmal-killer": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "phantom-steed": {
+    "name": "",
+    "description": ""
+  },
+  "planar-ally": {
+    "name": "",
+    "description": ""
+  },
+  "planar-binding": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "plane-shift": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "plant-growth": {
+    "name": "",
+    "description": ""
+  },
+  "poison-spray": {
+    "name": "",
+    "description": ""
+  },
+  "polymorph": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "power-word-kill": {
+    "name": "",
+    "description": ""
+  },
+  "power-word-stun": {
+    "name": "",
+    "description": ""
+  },
+  "prayer-of-healing": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "prestidigitation": {
+    "name": "",
+    "description": ""
+  },
+  "prismatic-spray": {
+    "name": "",
+    "description": ""
+  },
+  "prismatic-wall": {
+    "name": "",
+    "description": ""
+  },
+  "private-sanctum": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "produce-flame": {
+    "name": "",
+    "description": ""
+  },
+  "programmed-illusion": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "project-image": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "protection-from-energy": {
+    "name": "",
+    "description": ""
+  },
+  "protection-from-evil-and-good": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "protection-from-poison": {
+    "name": "",
+    "description": ""
+  },
+  "purify-food-and-drink": {
+    "name": "",
+    "description": ""
+  },
+  "raise-dead": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "ray-of-enfeeblement": {
+    "name": "",
+    "description": ""
+  },
+  "ray-of-frost": {
+    "name": "",
+    "description": ""
+  },
+  "regenerate": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "reincarnate": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "remove-curse": {
+    "name": "",
+    "description": ""
+  },
+  "resilient-sphere": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "resistance": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "resurrection": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "reverse-gravity": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "revivify": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "rope-trick": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "sacred-flame": {
+    "name": "",
+    "description": ""
+  },
+  "sanctuary": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "scorching-ray": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "scrying": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "secret-chest": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "see-invisibility": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "seeming": {
+    "name": "",
+    "description": ""
+  },
+  "sending": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "sequester": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "shapechange": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "shatter": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "shield": {
+    "name": "",
+    "description": ""
+  },
+  "shield-of-faith": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "shillelagh": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "shocking-grasp": {
+    "name": "",
+    "description": ""
+  },
+  "silence": {
+    "name": "",
+    "description": ""
+  },
+  "silent-image": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "simulacrum": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "sleep": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "sleet-storm": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "slow": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "spare-the-dying": {
+    "name": "",
+    "description": ""
+  },
+  "speak-with-animals": {
+    "name": "",
+    "description": ""
+  },
+  "speak-with-dead": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "speak-with-plants": {
+    "name": "",
+    "description": ""
+  },
+  "spider-climb": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "spike-growth": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "spirit-guardians": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "spiritual-weapon": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "stinking-cloud": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "stone-shape": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "stoneskin": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "storm-of-vengeance": {
+    "name": "",
+    "description": ""
+  },
+  "suggestion": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "sunbeam": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "sunburst": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "symbol": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "telekinesis": {
+    "name": "",
+    "description": ""
+  },
+  "telepathic-bond": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "teleport": {
+    "name": "",
+    "description": ""
+  },
+  "teleportation-circle": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "thaumaturgy": {
+    "name": "",
+    "description": ""
+  },
+  "thunderwave": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "time-stop": {
+    "name": "",
+    "description": ""
+  },
+  "tiny-hut": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "tongues": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "transport-via-plants": {
+    "name": "",
+    "description": ""
+  },
+  "tree-stride": {
+    "name": "",
+    "description": ""
+  },
+  "true-polymorph": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "true-resurrection": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "true-seeing": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "true-strike": {
+    "name": "",
+    "description": ""
+  },
+  "unseen-servant": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "vampiric-touch": {
+    "name": "",
+    "description": "",
+    "higherLevel": ""
+  },
+  "vicious-mockery": {
+    "name": "",
+    "description": ""
+  },
+  "wall-of-fire": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "wall-of-force": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "wall-of-ice": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "wall-of-stone": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "wall-of-thorns": {
+    "name": "",
+    "description": "",
+    "higherLevel": "",
+    "material": ""
+  },
+  "warding-bond": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "water-breathing": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "water-walk": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "web": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "weird": {
+    "name": "",
+    "description": ""
+  },
+  "wind-walk": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "wind-wall": {
+    "name": "",
+    "description": "",
+    "material": ""
+  },
+  "wish": {
+    "name": "",
+    "description": ""
+  },
+  "word-of-recall": {
+    "name": "",
+    "description": ""
+  },
+  "zone-of-truth": {
+    "name": "",
+    "description": ""
+  }
+}
