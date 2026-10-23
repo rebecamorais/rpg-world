@@ -47,9 +47,19 @@ jobs:
           set -euo pipefail
           curl -fsS -H "Authorization: Bearer $CROWDIN_PERSONAL_TOKEN" \
             "https://api.crowdin.com/api/v2/projects/$CROWDIN_PROJECT_ID/languages/progress?limit=500" \
-            | jq -r '.data[].data
+            > "$RUNNER_TEMP/progress.json"
+          {
+            echo "### Crowdin"
+            echo "| Idioma | Traduzido | Aprovado |"
+            echo "|---|---|---|"
+            jq -r '.data[].data | "| `\(.languageId)` | \(.translationProgress)% | \(.approvalProgress)% |"' \
+              "$RUNNER_TEMP/progress.json"
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+          jq -r '.data[].data
                 | select(.phrases.translated > .phrases.approved)
                 | "\(.languageId)\t\(.phrases.translated - .phrases.approved)"' \
+            "$RUNNER_TEMP/progress.json" \
             | while IFS=$'\t' read -r lang pending; do
                 echo "::warning title=Crowdin::$lang: $pending string(s) traduzida(s) esperando aprovação no Crowdin"
                 echo "- 📝 \`$lang\`: $pending string(s) esperando aprovação no Crowdin" >> "$GITHUB_STEP_SUMMARY"
@@ -102,4 +112,6 @@ jobs:
               echo "- 🌍 $total string(s) aprovada(s) no Crowdin fora do repositório (rode o workflow **Crowdin**):"
               printf '%s\n' "${lines[@]}"
             } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- ✅ Tudo que foi aprovado no Crowdin já está no repositório" >> "$GITHUB_STEP_SUMMARY"
           fi
