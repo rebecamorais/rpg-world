@@ -55,22 +55,24 @@ export default function CharacterHeader() {
     <Card className="overflow-hidden shadow-sm">
       <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start">
         <div className="relative self-start">
-          <button
-            type="button"
-            onClick={() => setIsColorPickerOpen(true)}
-            aria-label={t('customizeTitle')}
-            className="group focus-ring relative self-start rounded-full transition-transform hover:scale-105 active:scale-95"
-          >
+          {/* The button sits over the avatar instead of wrapping it: the initials would be its
+              visible text and not match the aria-label (WCAG 2.5.3) */}
+          <div className="relative rounded-full transition-transform has-[button:active]:scale-95 has-[button:hover]:scale-105">
             <Avatar className="border-character-muted shadow-character-muted h-20 w-20 shrink-0 border-2 shadow-md transition-all">
               <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
               <AvatarFallback className="bg-muted text-xl font-bold">
                 {name?.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <div className="bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity group-hover:opacity-100">
+            <button
+              type="button"
+              onClick={() => setIsColorPickerOpen(true)}
+              aria-label={t('customizeTitle')}
+              className="focus-ring bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity hover:opacity-100 focus-visible:opacity-100"
+            >
               <AppIcon name="Palette" size={24} className="text-character-flare" />
-            </div>
-          </button>
+            </button>
+          </div>
           {avatarUrl ? (
             <button
               type="button"
