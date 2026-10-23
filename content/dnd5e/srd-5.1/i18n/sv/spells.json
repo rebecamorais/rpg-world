@@ -323,7 +323,8 @@
   "counterspell": {
     "name": "",
     "description": "",
-    "higherLevel": ""
+    "higherLevel": "",
+    "trigger": ""
   },
   "create-food-and-water": {
     "name": "",
@@ -532,7 +533,8 @@
   "feather-fall": {
     "name": "",
     "description": "",
-    "material": ""
+    "material": "",
+    "trigger": ""
   },
   "feeblemind": {
     "name": "",
@@ -765,7 +767,8 @@
   "hellish-rebuke": {
     "name": "",
     "description": "",
-    "higherLevel": ""
+    "higherLevel": "",
+    "trigger": ""
   },
   "heroes-feast": {
     "name": "",
@@ -1271,7 +1274,8 @@
   },
   "shield": {
     "name": "",
-    "description": ""
+    "description": "",
+    "trigger": ""
   },
   "shield-of-faith": {
     "name": "",

@@ -337,7 +337,8 @@
   },
   "counterspell": {
     "name": "",
-    "description": ""
+    "description": "",
+    "trigger": ""
   },
   "create-food-and-water": {
     "name": "",
@@ -458,7 +459,8 @@
   "divine-smite": {
     "name": "",
     "description": "",
-    "higherLevel": ""
+    "higherLevel": "",
+    "trigger": ""
   },
   "divine-word": {
     "name": "",
@@ -522,7 +524,8 @@
   "ensnaring-strike": {
     "name": "",
     "description": "",
-    "higherLevel": ""
+    "higherLevel": "",
+    "trigger": ""
   },
   "entangle": {
     "name": "",
@@ -572,7 +575,8 @@
   "feather-fall": {
     "name": "",
     "description": "",
-    "material": ""
+    "material": "",
+    "trigger": ""
   },
   "find-familiar": {
     "name": "",
@@ -805,7 +809,8 @@
   "hellish-rebuke": {
     "name": "",
     "description": "",
-    "higherLevel": ""
+    "higherLevel": "",
+    "trigger": ""
   },
   "heroes-feast": {
     "name": "",
@@ -1313,7 +1318,8 @@
   "searing-smite": {
     "name": "",
     "description": "",
-    "higherLevel": ""
+    "higherLevel": "",
+    "trigger": ""
   },
   "secret-chest": {
     "name": "",
@@ -1352,7 +1358,8 @@
   },
   "shield": {
     "name": "",
-    "description": ""
+    "description": "",
+    "trigger": ""
   },
   "shield-of-faith": {
     "name": "",
@@ -1368,7 +1375,8 @@
   "shining-smite": {
     "name": "",
     "description": "",
-    "higherLevel": ""
+    "higherLevel": "",
+    "trigger": ""
   },
   "shocking-grasp": {
     "name": "",
