@@ -2,7 +2,7 @@
 
 **Status:** entregue no #97 (2026-10-22). O que tinha ficado para depois (rótulo "Melhoria do
 Truque", os dois tempos de conjuração do Plant Growth e a condição de uso das reações e ações
-bônus, também nas magias de 2014) entrou no PR de acabamento das magias.
+bônus, também nas magias de 2014) entrou no #101.
 
 > **Para quem executa:** use superpowers:subagent-driven-development (recomendado) ou
 > superpowers:executing-plans, tarefa por tarefa. Passos com checkbox (`- [ ]`).

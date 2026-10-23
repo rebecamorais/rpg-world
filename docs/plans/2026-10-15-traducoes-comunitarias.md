@@ -1,7 +1,7 @@
 # Traduções comunitárias: vários idiomas e vários sistemas
 
 **Data:** 2026-10-15 (reescrito em 2026-10-23)
-**Status:** entregue a base (Crowdin funcionando para a interface e para as magias). Este plano
+**Status:** entregue no #101 a base (Crowdin funcionando para a interface e para as magias). Este plano
 agora lista o que já existe, como liberar um idioma novo e o que ficou para depois.
 
 O objetivo continua o mesmo: conteúdo de regras e interface **em vários idiomas, feito em
