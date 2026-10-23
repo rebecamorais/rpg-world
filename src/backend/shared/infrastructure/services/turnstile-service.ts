@@ -1,5 +1,7 @@
 import 'server-only';
 
+const VERIFY_TIMEOUT_MS = 5000;
+
 interface TurnstileVerificationResponse {
   success: boolean;
   'error-codes'?: string[];
@@ -35,6 +37,8 @@ export class TurnstileService {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: params.toString(),
+        // A hung Cloudflare would otherwise hold every form open until the function times out
+        signal: AbortSignal.timeout(VERIFY_TIMEOUT_MS),
       });
 
       const outcome: TurnstileVerificationResponse = await result.json();

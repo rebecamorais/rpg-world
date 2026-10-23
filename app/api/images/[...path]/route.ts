@@ -68,12 +68,12 @@ export async function GET(
       return NextResponse.json({ error: 'Asset not found' }, { status: 404 });
     }
 
-    const arrayBuffer = await response.arrayBuffer();
     const contentType = response.headers.get('content-type') ?? '';
     const mimeType = contentType.split(';')[0].trim().toLowerCase();
     const inline = INLINE_CONTENT_TYPES.has(mimeType);
 
-    return new NextResponse(arrayBuffer, {
+    // Streamed through: the function doesn't hold the whole file before answering
+    return new NextResponse(response.body, {
       status: 200,
       headers: {
         'Content-Type': inline ? mimeType : 'application/octet-stream',

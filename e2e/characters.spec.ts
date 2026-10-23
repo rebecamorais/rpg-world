@@ -69,4 +69,25 @@ test.describe('ciclo do personagem', () => {
 
     expect(await page.evaluate(() => (window as { __xss?: boolean }).__xss)).toBeUndefined();
   });
+
+  test('a lista, a sidebar e a ficha chegam com a página, sem buscar de novo pela API', async ({
+    page,
+    user: _,
+  }) => {
+    const id = await createCharacter(page, 'Preloaded Hero');
+    const apiCalls: string[] = [];
+    page.on('request', (request) => {
+      const { pathname } = new URL(request.url());
+      if (request.method() === 'GET' && pathname.startsWith('/api/')) apiCalls.push(pathname);
+    });
+
+    await page.goto('/characters');
+    await hydrated(page.getByRole('link', { name: /Preloaded Hero/ }).first());
+    await page.goto(characterUrl(id));
+    await hydrated(page.getByRole('button', { name: /^STR/ }));
+
+    expect(apiCalls).not.toContain('/api/characters');
+    expect(apiCalls).not.toContain('/api/profile');
+    expect(apiCalls).not.toContain(`/api/characters/${id}`);
+  });
 });

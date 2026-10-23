@@ -1,6 +1,4 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { useTranslations } from 'next-intl';
 
@@ -10,17 +8,9 @@ interface HeroCTAProps {
   isAuthenticated: boolean;
 }
 
+/** A plain link (server-rendered, prefetched), not a client button that pushes the route. */
 export default function HeroCTA({ isAuthenticated }: HeroCTAProps) {
   const tLanding = useTranslations('landing');
-  const router = useRouter();
-
-  const handleCTA = () => {
-    if (isAuthenticated) {
-      router.push('/characters');
-    } else {
-      router.push('/login');
-    }
-  };
 
   return (
     <>
@@ -28,8 +18,8 @@ export default function HeroCTA({ isAuthenticated }: HeroCTAProps) {
       <p className="text-muted-foreground mb-10 max-w-xl text-lg sm:text-xl">
         {tLanding('heroSubtitle')}
       </p>
-      <Button size="lg" onClick={handleCTA} className="px-8 py-6 text-lg font-semibold">
-        {tLanding('ctaStart')}
+      <Button asChild size="lg" className="px-8 py-6 text-lg font-semibold">
+        <Link href={isAuthenticated ? '/characters' : '/login'}>{tLanding('ctaStart')}</Link>
       </Button>
     </>
   );

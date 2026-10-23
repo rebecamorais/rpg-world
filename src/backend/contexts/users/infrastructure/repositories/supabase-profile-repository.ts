@@ -37,13 +37,18 @@ export class SupabaseProfileRepository implements ProfileRepository {
   }
 
   async create(profile: Profile): Promise<void> {
-    const { error } = await this.dbClient.from('profile').insert({
-      id: profile.id,
-      username: profile.username,
-      full_name: profile.fullName,
-      avatar_url: profile.avatarUrl,
-      primary_color: profile.primaryColor,
-    });
+    // ON CONFLICT DO NOTHING: created in the meantime (two tabs finishing the first login at
+    // once) means it exists, as asked
+    const { error } = await this.dbClient.from('profile').upsert(
+      {
+        id: profile.id,
+        username: profile.username,
+        full_name: profile.fullName,
+        avatar_url: profile.avatarUrl,
+        primary_color: profile.primaryColor,
+      },
+      { onConflict: 'id', ignoreDuplicates: true },
+    );
 
     if (error) {
       throw new Error(`Failed to create profile: ${error.message}`);

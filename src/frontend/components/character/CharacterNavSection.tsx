@@ -11,7 +11,8 @@ import { characterTheme } from '@frontend/lib/color-utils';
 import { CharacterTab } from '@frontend/types/character-sheet';
 
 export default function CharacterNavSection({ characterId }: { characterId: string }) {
-  const { character } = useCharacter(characterId);
+  // The sheet loads the character (with the server's copy); fetching here too would race it
+  const { character } = useCharacter(characterId, { fetch: false });
   const pathname = usePathname();
   const t = useTranslations('characters.tabs');
 

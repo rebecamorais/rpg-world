@@ -4,13 +4,17 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
-export const GAME_ICONS_FILE = 'src/frontend/constants/game-icons.generated.json';
+/** The sprite, imported by AppIcon: Next serves it under /_next/static with a hashed, immutable URL. */
+export const GAME_ICON_SPRITE_FILE = 'src/frontend/constants/game-icons.svg';
+/** The names in the sprite, so AppIcon draws nothing for one that isn't there. */
+export const GAME_ICON_NAMES_FILE = 'src/frontend/constants/game-icon-names.generated.ts';
 
 const require = createRequire(import.meta.url);
 
 const SOURCE_DIRS = ['src', 'app'];
 const SOURCE_FILE = /\.(ts|tsx)$/;
-const TEST_FILE = /\.test\.(ts|tsx)$/;
+// Tests, and generated files (the sprite's own list of names would keep every icon forever)
+const SKIPPED_FILE = /\.(test|generated)\.(ts|tsx)$/;
 const STRING_LITERAL = /['"`]([a-z0-9]+(?:-[a-z0-9]+)*)['"`]/g;
 
 export interface GameIconData {
@@ -29,7 +33,7 @@ function sourceFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((entry) => {
     const full = path.join(dir, entry);
     if (statSync(full).isDirectory()) return sourceFiles(full);
-    return SOURCE_FILE.test(entry) && !TEST_FILE.test(entry) ? [full] : [];
+    return SOURCE_FILE.test(entry) && !SKIPPED_FILE.test(entry) ? [full] : [];
   });
 }
 
@@ -60,4 +64,14 @@ export function buildGameIcons(root = process.cwd()): Record<string, GameIconDat
       ];
     }),
   );
+}
+
+/** One `<symbol>` per icon, referenced as `<use href="<sprite url>#<name>">`. */
+export function buildGameIconSprite(icons: Record<string, GameIconData>): string {
+  const symbols = Object.entries(icons).map(
+    ([name, { body, width, height }]) =>
+      `<symbol id="${name}" viewBox="0 0 ${width} ${height}">${body}</symbol>`,
+  );
+  // The root's size only satisfies the bundler's image import; each <symbol> has its own viewBox
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">${symbols.join('')}</svg>\n`;
 }

@@ -17,7 +17,7 @@ describe('useCharacter', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('usa a personagem que veio do servidor, sem buscá-la de novo', () => {
-    const { result } = renderHookWithProviders(() => useCharacter('c1', ARANI));
+    const { result } = renderHookWithProviders(() => useCharacter('c1', { initial: ARANI }));
 
     expect(result.current.character).toEqual(ARANI);
     expect(result.current.isLoading).toBe(false);
@@ -31,5 +31,12 @@ describe('useCharacter', () => {
 
     await waitFor(() => expect(result.current.character).toEqual(ARANI));
     expect(api.get).toHaveBeenCalledWith('/api/characters/c1');
+  });
+
+  it('com fetch: false só lê o que outro carregou, sem buscar', () => {
+    const { result } = renderHookWithProviders(() => useCharacter('c1', { fetch: false }));
+
+    expect(result.current.character).toBeUndefined();
+    expect(api.get).not.toHaveBeenCalled();
   });
 });
