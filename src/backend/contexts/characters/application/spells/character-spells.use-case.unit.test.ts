@@ -108,6 +108,20 @@ describe('character spells use cases', () => {
       expect(spellRepo[method]).toHaveBeenCalledWith(...args);
     });
 
+    it('aprender devolve a magia no idioma pedido, ainda não preparada', async () => {
+      const useCase = new ToggleCharacterSpellUseCase(characterRepo, spellRepo, catalog);
+
+      const spell = await useCase.execute('char-1', 'owner-1', FIREBALL, 'learn', 'pt');
+
+      expect(catalog.findByKeys).toHaveBeenCalledWith([FIREBALL], 'pt');
+      expect(spell).toMatchObject({ id: FIREBALL, name: 'Fireball', isPrepared: false });
+    });
+
+    it('as outras ações não devolvem magia', async () => {
+      const useCase = new ToggleCharacterSpellUseCase(characterRepo, spellRepo, catalog);
+      await expect(useCase.execute('char-1', 'owner-1', FIREBALL, 'prepare')).resolves.toBeNull();
+    });
+
     it('proíbe outro usuário de alterar as magias', async () => {
       const useCase = new ToggleCharacterSpellUseCase(characterRepo, spellRepo, catalog);
       await expect(useCase.execute('char-1', 'intruder', FIREBALL, 'learn')).rejects.toThrow(

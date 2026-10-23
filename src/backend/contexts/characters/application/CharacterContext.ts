@@ -28,5 +28,6 @@ export interface CharacterContext {
     requesterId: string,
     spellId: string,
     action: ToggleSpellAction,
-  ): Promise<void>;
+    locale?: string,
+  ): Promise<CharacterSpellRelation | null>;
 }

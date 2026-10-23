@@ -17,11 +17,13 @@ export const GET = withAuth(
   { params: uuidParamsSchema },
 );
 
+/** Learning answers with the learned spell (`?locale=` as in GET); the other actions with null. */
 export const POST = withAuth(
-  async ({ user, body, params }) => {
+  async ({ req, user, body, params }) => {
+    const { locale } = parseInput(localeQuerySchema, Object.fromEntries(req.nextUrl.searchParams));
     const { charactersApi } = await getApi();
-    await charactersApi.toggleSpell(params.id, user.id, body.id, body.action);
-    return { success: true };
+    const spell = await charactersApi.toggleSpell(params.id, user.id, body.id, body.action, locale);
+    return { spell };
   },
   { params: uuidParamsSchema, body: toggleSpellSchema },
 );
