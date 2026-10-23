@@ -67,23 +67,3 @@ updates:
       github-actions:
         patterns:
           - '*'
-
-  # Actions (inclusive as fixadas por SHA, que ele atualiza junto com o comentário da versão)
-  - package-ecosystem: 'github-actions'
-    directory: '/'
-    schedule:
-      interval: 'weekly'
-      day: 'saturday'
-      time: '09:00'
-      timezone: 'America/Sao_Paulo'
-    assignees:
-      - 'rebecamorais'
-    commit-message:
-      prefix: 'ci:'
-    labels:
-      - 'dependencies'
-      - 'github-actions'
-    groups:
-      actions:
-        patterns:
-          - '*'
