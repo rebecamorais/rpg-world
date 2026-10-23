@@ -10,9 +10,15 @@ on:
 permissions:
   contents: read
 
+# Two merges in a row push migrations one after the other, never at the same time
+concurrency:
+  group: deploy-migrations
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout code

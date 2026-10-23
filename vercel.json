@@ -1,4 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "crons": [{ "path": "/api/cron/cleanup-avatars", "schedule": "0 6 * * *" }]
+  "regions": ["gru1"],
+  "crons": [
+    {
+      "path": "/api/cron/cleanup-avatars",
+      "schedule": "0 6 * * *"
+    }
+  ]
 }
