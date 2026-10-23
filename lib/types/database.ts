@@ -237,6 +237,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      auth_user_exists: { Args: { p_email: string }; Returns: boolean };
       orphan_avatar_objects: { Args: { min_age?: string }; Returns: string[] };
     };
     Enums: {

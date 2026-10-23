@@ -5,8 +5,6 @@ import { AuthRepository, EmailLinkType } from '../../domain/AuthRepository';
 import { User } from '../../domain/User';
 import { UserError, UserErrorCode, UserErrorCodes } from '../../domain/UserError';
 
-const LIST_USERS_PAGE_SIZE = 1000;
-
 // Supabase Auth failures that are expected outcomes (wrong password, weak password...) become
 // UserErrors the UI can translate. Anything else stays a plain Error and surfaces as a 500.
 const EXPECTED_AUTH_ERRORS: Record<string, UserErrorCode> = {
@@ -152,29 +150,18 @@ export class SupabaseAuthRepository implements AuthRepository {
     }
   }
 
+  /**
+   * One lookup on the e-mail index (public.auth_user_exists, service role only). Listing every
+   * user grew with the user base, and could outlast the e-mail forms' minimum answer time.
+   */
   async existsByEmail(email: string): Promise<boolean> {
-    // listUsers is paginated, so a single call only sees the first page of users.
-    const target = email.toLowerCase();
-    let page: number | null = 1;
+    const { data, error } = await this.dbClient.rpc('auth_user_exists', { p_email: email });
 
-    while (page) {
-      const { data, error } = await this.dbClient.auth.admin.listUsers({
-        page,
-        perPage: LIST_USERS_PAGE_SIZE,
-      });
-
-      if (error) {
-        throw authFailure(error, 'Failed to check if user exists');
-      }
-
-      if (data.users.some((user) => user.email?.toLowerCase() === target)) {
-        return true;
-      }
-
-      page = data.nextPage || null;
+    if (error) {
+      throw new Error(`Failed to check if user exists: ${error.message}`);
     }
 
-    return false;
+    return data === true;
   }
 
   async exchangeCodeForSession(code: string): Promise<void> {

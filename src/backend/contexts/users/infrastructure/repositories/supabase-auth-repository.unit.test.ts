@@ -24,9 +24,9 @@ describe('SupabaseAuthRepository', () => {
     } as unknown as InstanceType<typeof SupabaseClient>;
 
     mockDbClient = {
+      rpc: vi.fn(),
       auth: {
         admin: {
-          listUsers: vi.fn(),
           generateLink: vi.fn(),
         },
       },
@@ -150,82 +150,28 @@ describe('SupabaseAuthRepository', () => {
   });
 
   describe('existsByEmail', () => {
-    it('deve retornar true se o usuário existir', async () => {
-      vi.mocked(mockDbClient.auth.admin.listUsers).mockResolvedValueOnce({
-        data: {
-          users: [{ email: 'test@example.com' }] as User[],
-          aud: 'authenticated',
-          nextPage: 0,
-          lastPage: 0,
-          total: 1,
-        },
-        error: null,
-      });
+    const rpcResult = (data: boolean | null, error: { message: string } | null = null) =>
+      ({ data, error }) as never;
 
-      const result = await repository.existsByEmail('test@example.com');
-      expect(result).toBe(true);
+    it('consulta o índice de e-mail pela função do banco', async () => {
+      vi.mocked(mockDbClient.rpc).mockResolvedValueOnce(rpcResult(true));
+
+      expect(await repository.existsByEmail('test@example.com')).toBe(true);
+      expect(mockDbClient.rpc).toHaveBeenCalledWith('auth_user_exists', {
+        p_email: 'test@example.com',
+      });
     });
 
     it('deve retornar false se o usuário não existir', async () => {
-      vi.mocked(mockDbClient.auth.admin.listUsers).mockResolvedValueOnce({
-        data: {
-          users: [] as User[],
-          aud: 'authenticated',
-          nextPage: 0,
-          lastPage: 0,
-          total: 0,
-        },
-        error: null,
-      });
+      vi.mocked(mockDbClient.rpc).mockResolvedValueOnce(rpcResult(false));
 
-      const result = await repository.existsByEmail('notfound@example.com');
-      expect(result).toBe(false);
-    });
-
-    it('deve procurar nas páginas seguintes', async () => {
-      const page = (users: Partial<User>[], nextPage: number | null) => ({
-        data: {
-          users: users as User[],
-          aud: 'authenticated',
-          nextPage,
-          lastPage: 2,
-          total: 2,
-        },
-        error: null,
-      });
-      vi.mocked(mockDbClient.auth.admin.listUsers)
-        .mockResolvedValueOnce(page([{ email: 'other@example.com' }], 2))
-        .mockResolvedValueOnce(page([{ email: 'test@example.com' }], null));
-
-      const result = await repository.existsByEmail('test@example.com');
-
-      expect(result).toBe(true);
-      expect(mockDbClient.auth.admin.listUsers).toHaveBeenCalledTimes(2);
-      expect(mockDbClient.auth.admin.listUsers).toHaveBeenLastCalledWith(
-        expect.objectContaining({ page: 2 }),
-      );
-    });
-
-    it('deve comparar o e-mail sem diferenciar maiúsculas', async () => {
-      vi.mocked(mockDbClient.auth.admin.listUsers).mockResolvedValueOnce({
-        data: {
-          users: [{ email: 'test@example.com' }] as User[],
-          aud: 'authenticated',
-          nextPage: null,
-          lastPage: 1,
-          total: 1,
-        },
-        error: null,
-      });
-
-      expect(await repository.existsByEmail('Test@Example.com')).toBe(true);
+      expect(await repository.existsByEmail('notfound@example.com')).toBe(false);
     });
 
     it('deve lançar erro caso falhe a busca', async () => {
-      vi.mocked(mockDbClient.auth.admin.listUsers).mockResolvedValueOnce({
-        data: { users: [] as [] },
-        error: mockAuthError('Database unreachable'),
-      });
+      vi.mocked(mockDbClient.rpc).mockResolvedValueOnce(
+        rpcResult(null, { message: 'Database unreachable' }),
+      );
 
       await expect(repository.existsByEmail('test@example.com')).rejects.toThrow(
         'Failed to check if user exists: Database unreachable',
