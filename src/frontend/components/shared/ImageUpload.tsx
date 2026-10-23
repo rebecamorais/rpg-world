@@ -2,10 +2,11 @@
 
 import { useRef, useState } from 'react';
 
+import dynamic from 'next/dynamic';
+
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
-import { ImageCropDialog } from '@frontend/components/shared/ImageCropDialog';
 import { ImageViewerDialog } from '@frontend/components/shared/ImageViewerDialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
@@ -13,6 +14,12 @@ import { UploadTarget, useFileUploader } from '@frontend/context/FileUploaderCon
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { CropArea, cropImage } from '@frontend/lib/crop-image';
 import { cn } from '@frontend/lib/utils';
+
+// react-easy-crop is only needed once an image is picked: kept out of the page's first load
+const ImageCropDialog = dynamic(
+  () => import('@frontend/components/shared/ImageCropDialog').then((m) => m.ImageCropDialog),
+  { ssr: false },
+);
 
 interface ImageUploadProps {
   currentUrl?: string;
