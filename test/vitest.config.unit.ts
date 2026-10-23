@@ -1,7 +1,7 @@
 import path from 'path';
 import { defineConfig } from 'vitest/config';
 
-const root = path.resolve(__dirname, '../');
+const root = path.resolve(import.meta.dirname, '../');
 
 export default defineConfig({
   resolve: {
@@ -27,7 +27,7 @@ export default defineConfig({
           name: 'node',
           include: ['{app,src,shared,content,scripts}/**/*.unit.test.ts', '*.unit.test.ts'],
           environment: 'node',
-          setupFiles: [path.resolve(__dirname, './setup-unit.ts')],
+          setupFiles: [path.resolve(import.meta.dirname, './setup-unit.ts')],
         },
       },
       {
@@ -36,7 +36,7 @@ export default defineConfig({
           name: 'dom',
           include: ['{app,src}/**/*.unit.test.tsx'],
           environment: 'jsdom',
-          setupFiles: [path.resolve(__dirname, './setup-dom.ts')],
+          setupFiles: [path.resolve(import.meta.dirname, './setup-dom.ts')],
         },
       },
     ],

@@ -7,14 +7,14 @@ export default defineConfig({
   },
   plugins: [],
   test: {
-    root: path.resolve(__dirname, '../'),
+    root: path.resolve(import.meta.dirname, '../'),
     include: ['src/**/*.integration.test.ts'],
     globals: true,
     testTimeout: 30000,
-    globalSetup: [path.resolve(__dirname, './global-setup-integration.ts')],
+    globalSetup: [path.resolve(import.meta.dirname, './global-setup-integration.ts')],
     setupFiles: [
-      path.resolve(__dirname, './setup-vitest.ts'),
-      path.resolve(__dirname, './setup-integration.ts'),
+      path.resolve(import.meta.dirname, './setup-vitest.ts'),
+      path.resolve(import.meta.dirname, './setup-integration.ts'),
     ],
     pool: 'threads',
     fileParallelism: false,
