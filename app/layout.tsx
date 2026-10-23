@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { Cinzel, Geist_Mono, Inter } from 'next/font/google';
 import Script from 'next/script';
 
+import { Analytics } from '@vercel/analytics/next';
 import { getLocale, getMessages, getTimeZone, getTranslations } from 'next-intl/server';
 
 import Footer from '@frontend/components/layout/Footer';
@@ -16,7 +17,8 @@ import { SITE_URL } from '@frontend/constants/site';
 import './globals.css';
 
 // Cloudflare Web Analytics (cookieless visit counts). The token is public: it only identifies the
-// site. Production only, so local runs, previews and the e2e suite don't count as visits.
+// site. Production only, so local runs, previews and the e2e suite don't count as visits. Same for
+// Vercel Web Analytics, whose script is served same-origin from /_vercel/insights (covered by the CSP).
 const CLOUDFLARE_BEACON_TOKEN = '356fc3bfc2dd43c4b8f065945a42eb32';
 const isProduction = process.env.VERCEL_ENV === 'production';
 
@@ -98,11 +100,14 @@ export default async function RootLayout({
         </Providers>
         <Toaster />
         {isProduction ? (
-          <Script
-            src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon={JSON.stringify({ token: CLOUDFLARE_BEACON_TOKEN })}
-            strategy="afterInteractive"
-          />
+          <>
+            <Script
+              src="https://static.cloudflareinsights.com/beacon.min.js"
+              data-cf-beacon={JSON.stringify({ token: CLOUDFLARE_BEACON_TOKEN })}
+              strategy="afterInteractive"
+            />
+            <Analytics />
+          </>
         ) : null}
       </body>
     </html>
