@@ -94,7 +94,7 @@ export function CharacterProvider({
     error,
     updateCharacter,
     isSaving,
-  } = useCharacter(id, initialCharacter);
+  } = useCharacter(id, { initial: initialCharacter });
   const { draft, isDirty, update, commit, discard } = useDraft(fetched);
 
   const save = useCallback(async () => {

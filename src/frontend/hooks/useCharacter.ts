@@ -7,8 +7,14 @@ import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 
-/** `initial` comes from the server render and counts as just fetched. */
-export function useCharacter(id: string, initial?: DnD5eCharacter) {
+/**
+ * `initial` comes from the server render and counts as just fetched. `fetch: false` only reads
+ * what another caller loads (the sheet loads it; the sidebar just shows it).
+ */
+export function useCharacter(
+  id: string,
+  { initial, fetch = true }: { initial?: DnD5eCharacter; fetch?: boolean } = {},
+) {
   const queryClient = useQueryClient();
   const { getErrorMessage } = useErrorMessage();
 
@@ -18,7 +24,7 @@ export function useCharacter(id: string, initial?: DnD5eCharacter) {
       const data = await rpgWorldApi.get<DnD5eCharacter>(`/api/characters/${id}`);
       return data;
     },
-    enabled: !!id,
+    enabled: fetch && !!id,
     initialData: initial,
     // Same as the app default, stated here: the server's character must not refetch on mount
     staleTime: 60 * 1000,
