@@ -34,7 +34,39 @@ async function renderSpells(isPrepared: boolean) {
 describe('useCharacterSpells', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    api.post.mockResolvedValue({});
+    api.post.mockResolvedValue({ spell: null });
+  });
+
+  it('aprender põe na lista a magia que o servidor devolveu, sem buscar a lista de novo', async () => {
+    const { result } = await renderSpells(false);
+    const shield = {
+      id: 'shield',
+      name: 'Escudo',
+      level: 1,
+      school: 'abjuration',
+      isPrepared: false,
+    };
+    api.post.mockResolvedValueOnce({ spell: shield });
+
+    await result.current.learnSpell('shield');
+
+    await waitFor(() => expect(result.current.spells.map((s) => s.id)).toEqual(['fly', 'shield']));
+    expect(api.post).toHaveBeenCalledWith('/api/characters/c1/spells?locale=en', {
+      id: 'shield',
+      action: 'learn',
+    });
+    expect(api.get).toHaveBeenCalledTimes(1);
+  });
+
+  it('preparar e esquecer atualizam a lista sem buscá-la de novo', async () => {
+    const { result } = await renderSpells(false);
+
+    await result.current.togglePrepared('fly', true);
+    await waitFor(() => expect(result.current.spells[0].isPrepared).toBe(true));
+
+    await result.current.forgetSpell('fly');
+    await waitFor(() => expect(result.current.spells).toEqual([]));
+    expect(api.get).toHaveBeenCalledTimes(1);
   });
 
   it('esquecer oferece desfazer, que aprende e prepara de novo', async () => {

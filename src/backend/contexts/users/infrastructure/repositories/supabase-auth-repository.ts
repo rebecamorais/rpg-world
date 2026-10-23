@@ -90,21 +90,25 @@ export class SupabaseAuthRepository implements AuthRepository {
     }
   }
 
+  /**
+   * Verifies the session's JWT locally against the project's public key (cached JWKS), instead of
+   * asking the Auth server on every request like getUser() did. With a legacy HS256 secret,
+   * getClaims() still falls back to the Auth server. A revoked session stays valid until its JWT
+   * expires.
+   */
   async getSessionUser(): Promise<User | null> {
-    const {
-      data: { user },
-      error,
-    } = await this.authClient.auth.getUser();
+    const { data, error } = await this.authClient.auth.getClaims();
 
-    if (error || !user) {
+    if (error || !data) {
       return null;
     }
 
+    const { claims } = data;
     return {
-      id: user.id,
-      email: user.email,
-      fullName: user.user_metadata?.full_name,
-      avatarUrl: user.user_metadata?.avatar_url,
+      id: claims.sub,
+      email: claims.email,
+      fullName: claims.user_metadata?.full_name,
+      avatarUrl: claims.user_metadata?.avatar_url,
     };
   }
 

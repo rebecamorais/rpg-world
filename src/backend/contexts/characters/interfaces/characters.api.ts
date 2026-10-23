@@ -48,7 +48,8 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
     requesterId: string,
     spellId: string,
     action: 'learn' | 'forget' | 'prepare' | 'unprepare',
+    locale?: string,
   ) => {
-    return characterContext.toggleSpell(id, requesterId, spellId, action);
+    return characterContext.toggleSpell(id, requesterId, spellId, action, locale);
   },
 });

@@ -43,7 +43,9 @@ export async function proxy(request: NextRequest) {
   const hasSession = request.cookies.getAll().some((c) => c.name.startsWith('sb-'));
 
   if (hasSession) {
-    await supabaseAuth.auth.getUser();
+    // Refreshes an expired token and verifies it locally (cached JWKS): no Auth round trip
+    // while the token is valid. getUser() asked the Auth server on every request.
+    await supabaseAuth.auth.getClaims();
   }
 
   return supabaseResponse;

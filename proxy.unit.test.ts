@@ -9,13 +9,13 @@ type CookieAdapter = {
   setAll: (cookies: { name: string; value: string; options: object }[]) => void;
 };
 
-const getUser = vi.fn();
+const getClaims = vi.fn();
 let cookieAdapter: CookieAdapter;
 
 vi.mock('@supabase/ssr', () => ({
   createServerClient: (_url: string, _key: string, options: { cookies: CookieAdapter }) => {
     cookieAdapter = options.cookies;
-    return { auth: { getUser } };
+    return { auth: { getClaims } };
   },
 }));
 
@@ -26,25 +26,25 @@ function request(cookies: Record<string, string> = {}) {
 }
 
 describe('proxy', () => {
-  beforeEach(() => getUser.mockReset().mockResolvedValue({ data: { user: null } }));
+  beforeEach(() => getClaims.mockReset().mockResolvedValue({ data: null, error: null }));
 
   it('não consulta o Supabase para visitantes sem cookie de sessão', async () => {
     const res = await proxy(request({ NEXT_LOCALE: 'pt' }));
 
-    expect(getUser).not.toHaveBeenCalled();
+    expect(getClaims).not.toHaveBeenCalled();
     expect(res.headers.get('x-middleware-next')).toBe('1');
   });
 
   it('renova a sessão quando há cookie do Supabase', async () => {
     await proxy(request({ 'sb-127-auth-token': 'token' }));
 
-    expect(getUser).toHaveBeenCalledOnce();
+    expect(getClaims).toHaveBeenCalledOnce();
   });
 
   it('devolve ao navegador os cookies renovados pelo Supabase', async () => {
-    getUser.mockImplementation(async () => {
+    getClaims.mockImplementation(async () => {
       cookieAdapter.setAll([{ name: 'sb-127-auth-token', value: 'fresh', options: { path: '/' } }]);
-      return { data: { user: { id: 'u1' } } };
+      return { data: { claims: { sub: 'u1' } }, error: null };
     });
 
     const res = await proxy(request({ 'sb-127-auth-token': 'stale' }));

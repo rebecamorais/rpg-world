@@ -1,4 +1,4 @@
-import { AuthError, Session, SupabaseClient, User } from '@supabase/supabase-js';
+import { AuthError, JwtPayload, Session, SupabaseClient, User } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { UserError, UserErrorCodes } from '../../domain/UserError';
@@ -15,7 +15,7 @@ describe('SupabaseAuthRepository', () => {
     // Setting up deeply mocked SupabaseClients
     mockAuthClient = {
       auth: {
-        getUser: vi.fn(),
+        getClaims: vi.fn(),
         signInWithPassword: vi.fn(),
         exchangeCodeForSession: vi.fn(),
         signOut: vi.fn(),
@@ -39,29 +39,42 @@ describe('SupabaseAuthRepository', () => {
     new AuthError(message, 400, code);
 
   describe('getSessionUser', () => {
-    it('deve retornar o usuário mapeado quando sucesso', async () => {
-      vi.mocked(mockAuthClient.auth.getUser).mockResolvedValueOnce({
-        data: { user: { id: 'user-123', email: 'test@example.com' } as User },
-        error: null,
-      });
+    const claimsResult = (claims: Partial<JwtPayload>) =>
+      ({ data: { claims, header: {}, signature: new Uint8Array() }, error: null }) as Awaited<
+        ReturnType<SupabaseClient['auth']['getClaims']>
+      >;
+
+    it('deve retornar o usuário mapeado das claims do JWT', async () => {
+      vi.mocked(mockAuthClient.auth.getClaims).mockResolvedValueOnce(
+        claimsResult({
+          sub: 'user-123',
+          email: 'test@example.com',
+          user_metadata: { full_name: 'Test', avatar_url: 'https://x/a.png' },
+        }),
+      );
 
       const result = await repository.getSessionUser();
-      expect(result).toEqual({ id: 'user-123', email: 'test@example.com' });
+      expect(result).toEqual({
+        id: 'user-123',
+        email: 'test@example.com',
+        fullName: 'Test',
+        avatarUrl: 'https://x/a.png',
+      });
     });
 
-    it('deve retornar null se houver erro ao buscar o usuário', async () => {
-      vi.mocked(mockAuthClient.auth.getUser).mockResolvedValueOnce({
-        data: { user: null },
-        error: mockAuthError('auth_error'),
+    it('deve retornar null se o JWT não for válido', async () => {
+      vi.mocked(mockAuthClient.auth.getClaims).mockResolvedValueOnce({
+        data: null,
+        error: mockAuthError('invalid_jwt'),
       });
 
       const result = await repository.getSessionUser();
       expect(result).toBeNull();
     });
 
-    it('deve retornar null se não houver erro, mas usuário for nulo', async () => {
-      vi.mocked(mockAuthClient.auth.getUser).mockResolvedValueOnce({
-        data: { user: null as unknown as User },
+    it('deve retornar null se não houver sessão', async () => {
+      vi.mocked(mockAuthClient.auth.getClaims).mockResolvedValueOnce({
+        data: null,
         error: null,
       });
 

@@ -13,6 +13,24 @@ export type CharacterSpell = Spell;
 
 type SpellAction = 'learn' | 'forget' | 'prepare' | 'unprepare';
 
+/** The spellbook after an action the server confirmed; learning brings the learned spell. */
+function applyAction(
+  spells: CharacterSpell[],
+  id: string,
+  action: SpellAction,
+  learned: CharacterSpell | null,
+): CharacterSpell[] {
+  switch (action) {
+    case 'learn':
+      return learned && !spells.some((s) => s.id === id) ? [...spells, learned] : spells;
+    case 'forget':
+      return spells.filter((s) => s.id !== id);
+    case 'prepare':
+    case 'unprepare':
+      return spells.map((s) => (s.id === id ? { ...s, isPrepared: action === 'prepare' } : s));
+  }
+}
+
 export function useCharacterSpells(
   characterId: string | undefined,
   options: { enabled?: boolean } = { enabled: true },
@@ -37,11 +55,29 @@ export function useCharacterSpells(
   });
 
   const mutation = useMutation({
-    mutationFn: async ({ id, action }: { id: string; action: SpellAction; silent?: boolean }) => {
-      return rpgWorldApi.post(`/api/characters/${characterId}/spells`, { id, action });
+    mutationFn: async ({
+      id,
+      action,
+    }: {
+      id: string;
+      action: SpellAction;
+      silent?: boolean;
+    }): Promise<{ spell: CharacterSpell | null }> => {
+      return rpgWorldApi.post(`/api/characters/${characterId}/spells?locale=${locale}`, {
+        id,
+        action,
+      });
     },
-    onSuccess: (_, { action, silent }) => {
-      queryClient.invalidateQueries({ queryKey: queryToKey });
+    onSuccess: ({ spell }, { id, action, silent }) => {
+      // The answer is enough to update the spellbook: no second request for the whole list
+      queryClient.setQueryData<CharacterSpell[]>([...queryToKey, locale], (current = []) =>
+        applyAction(current, id, action, spell),
+      );
+      // Other languages' copies are stale now; they refetch when shown
+      queryClient.invalidateQueries({
+        queryKey: queryToKey,
+        predicate: (query) => query.queryKey[2] !== locale,
+      });
       if (silent) return;
 
       if (action === 'learn') toast.success(t('learned'));

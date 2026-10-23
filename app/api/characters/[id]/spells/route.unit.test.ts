@@ -30,18 +30,40 @@ describe('/api/characters/[id]/spells', () => {
   });
 
   it('POST aplica a ação na magia em nome do usuário da sessão', async () => {
+    api.charactersApi.toggleSpell.mockResolvedValue(null);
+
     const res = await POST(
       jsonRequest(url, 'POST', { id: SPELL_ID, action: 'prepare' }),
       routeContext({ id: ID }),
     );
 
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ success: true });
+    expect(await res.json()).toEqual({ spell: null });
     expect(api.charactersApi.toggleSpell).toHaveBeenCalledWith(
       ID,
       SESSION_USER.id,
       SPELL_ID,
       'prepare',
+      'en',
+    );
+  });
+
+  it('POST de aprender devolve a magia no idioma pedido', async () => {
+    const spell = { id: SPELL_ID, name: 'Bola de Fogo', isPrepared: false };
+    api.charactersApi.toggleSpell.mockResolvedValue(spell);
+
+    const res = await POST(
+      jsonRequest(`${url}?locale=pt`, 'POST', { id: SPELL_ID, action: 'learn' }),
+      routeContext({ id: ID }),
+    );
+
+    expect(await res.json()).toEqual({ spell });
+    expect(api.charactersApi.toggleSpell).toHaveBeenCalledWith(
+      ID,
+      SESSION_USER.id,
+      SPELL_ID,
+      'learn',
+      'pt',
     );
   });
 
