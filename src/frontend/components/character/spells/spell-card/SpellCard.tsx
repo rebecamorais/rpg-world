@@ -115,7 +115,7 @@ export const SpellCard = React.memo(function SpellCard({
           {/* inert while collapsed: hidden content can't take focus or be read. */}
           <div className="overflow-hidden" inert={!isExpanded}>
             <div className="flex flex-col gap-4 pt-4">
-              <SpellDetails spell={spell} />
+              <SpellDetails spell={spell} castingTime={displayValues.castingTime} />
 
               <SpellChipsRow spell={spell} displayValues={displayValues} />
 

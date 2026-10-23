@@ -260,7 +260,8 @@
     "spellCount": "{count, plural, one {# magia} other {# magias}}",
     "untranslatedBadge": "Em inglês",
     "untranslatedHint": "Ainda sem tradução. Você pode ajudar no Crowdin.",
-    "edition": "Edição"
+    "edition": "Edição",
+    "cantripUpgrade": "Melhoria do Truque"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",

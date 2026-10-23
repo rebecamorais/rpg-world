@@ -260,7 +260,8 @@
     "spellCount": "{count, plural, one {# spell} other {# spells}}",
     "untranslatedBadge": "In English",
     "untranslatedHint": "Not translated yet. You can help on Crowdin.",
-    "edition": "Edition"
+    "edition": "Edition",
+    "cantripUpgrade": "Cantrip Upgrade"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",

@@ -85,3 +85,43 @@ describe('SpellCard: edição e idioma', () => {
     expect(screen.queryByText(t.untranslatedBadge)).not.toBeInTheDocument();
   });
 });
+
+describe('SpellCard: tempo de conjuração e melhorias', () => {
+  it('reação mostra quando é usada', () => {
+    renderWithProviders(
+      <SpellCard
+        spell={{
+          ...FIREBALL,
+          castingTime: 'reaction',
+          description: 'Interrupt.',
+          trigger: 'which you take when you see a creature casting a spell',
+        }}
+        isExpanded
+      />,
+    );
+    expect(
+      screen.getByText('which you take when you see a creature casting a spell', { exact: false }),
+    ).toHaveTextContent('1 Reaction, which you take when you see a creature casting a spell');
+  });
+
+  it('mostra todos os tempos de conjuração', () => {
+    renderWithProviders(
+      <SpellCard
+        spell={{ ...FIREBALL, extraCastingTimes: [{ castingTime: 'hour', castingValue: 8 }] }}
+        isExpanded
+      />,
+    );
+    expect(screen.getByText('1 Action or 8 Hours')).toBeInTheDocument();
+  });
+
+  it('no truque, a melhoria tem o nome de melhoria do truque', () => {
+    renderWithProviders(
+      <SpellCard
+        spell={{ ...FIREBALL, level: 0, description: 'Zap.', higherLevel: 'More damage.' }}
+        isExpanded
+      />,
+    );
+    expect(screen.getByText(`${t.cantripUpgrade}:`)).toBeInTheDocument();
+    expect(screen.queryByText(`${t.atHigherLevels}:`)).not.toBeInTheDocument();
+  });
+});
