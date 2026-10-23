@@ -72,14 +72,29 @@ export function CharacterContextProvider({
   );
 }
 
-/** Loads the character of the current route and keeps the sheet's draft. */
-export function CharacterProvider({ children }: { children: ReactNode }) {
+/**
+ * Loads the character of the current route and keeps the sheet's draft. `initialCharacter` is
+ * the one the server already loaded, so the sheet opens without fetching it again.
+ */
+export function CharacterProvider({
+  initialCharacter,
+  children,
+}: {
+  initialCharacter?: DnD5eCharacter;
+  children: ReactNode;
+}) {
   const params = useParams();
   const id = params?.id as string;
   const t = useTranslations('characters');
   const { getErrorMessage } = useErrorMessage();
 
-  const { character: fetched, isLoading, error, updateCharacter, isSaving } = useCharacter(id);
+  const {
+    character: fetched,
+    isLoading,
+    error,
+    updateCharacter,
+    isSaving,
+  } = useCharacter(id, initialCharacter);
   const { draft, isDirty, update, commit, discard } = useDraft(fetched);
 
   const save = useCallback(async () => {

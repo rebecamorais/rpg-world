@@ -7,7 +7,8 @@ import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 
-export function useCharacter(id: string) {
+/** `initial` comes from the server render and counts as just fetched. */
+export function useCharacter(id: string, initial?: DnD5eCharacter) {
   const queryClient = useQueryClient();
   const { getErrorMessage } = useErrorMessage();
 
@@ -18,6 +19,9 @@ export function useCharacter(id: string) {
       return data;
     },
     enabled: !!id,
+    initialData: initial,
+    // Same as the app default, stated here: the server's character must not refetch on mount
+    staleTime: 60 * 1000,
   });
 
   const character = query.data;
