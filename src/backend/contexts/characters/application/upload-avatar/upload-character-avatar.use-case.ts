@@ -1,14 +1,14 @@
 import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 import { AssetVersionGenerator, newAssetVersion } from '@backend/shared/domain/asset-version';
+import {
+  ALLOWED_AVATAR_TYPES,
+  AVATAR_BUCKET,
+  MAX_AVATAR_SIZE_BYTES,
+} from '@backend/shared/domain/avatar';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import { CharacterRepo } from '../../domain/repository/character.repo';
 import { findOwnedCharacter } from '../find-owned-character';
-
-const AVATAR_BUCKET = 'avatars';
-// Same as the profile avatar and the avatars bucket limit (the bucket is the real ceiling)
-const MAX_AVATAR_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
-const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 /**
  * Uploads the image and returns its URL. It does not update the character record: like the
