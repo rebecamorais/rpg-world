@@ -50,6 +50,13 @@ function confirmLink(confirmUrl: string, tokenHash: string | undefined, type: Em
 }
 
 export class SupabaseAuthRepository implements AuthRepository {
+  /**
+   * The session user, read once per instance. The container (and this repository) is created
+   * once per request, so the header, footer, layouts and metadata of a page share one check.
+   * Anything that changes the session clears it.
+   */
+  private sessionUser: Promise<User | null> | undefined;
+
   constructor(
     private readonly authClient: SupabaseClient,
     private readonly dbClient: SupabaseClient,
@@ -83,6 +90,7 @@ export class SupabaseAuthRepository implements AuthRepository {
   }
 
   async verifyEmailLink(tokenHash: string, type: EmailLinkType): Promise<void> {
+    this.sessionUser = undefined;
     const { error } = await this.authClient.auth.verifyOtp({ token_hash: tokenHash, type });
 
     if (error) {
@@ -96,7 +104,12 @@ export class SupabaseAuthRepository implements AuthRepository {
    * getClaims() still falls back to the Auth server. A revoked session stays valid until its JWT
    * expires.
    */
-  async getSessionUser(): Promise<User | null> {
+  getSessionUser(): Promise<User | null> {
+    this.sessionUser ??= this.readSessionUser();
+    return this.sessionUser;
+  }
+
+  private async readSessionUser(): Promise<User | null> {
     const { data, error } = await this.authClient.auth.getClaims();
 
     if (error || !data) {
@@ -128,6 +141,7 @@ export class SupabaseAuthRepository implements AuthRepository {
   }
 
   async signInWithPassword(email: string, password: string): Promise<void> {
+    this.sessionUser = undefined;
     const { error } = await this.authClient.auth.signInWithPassword({
       email,
       password,
@@ -164,6 +178,7 @@ export class SupabaseAuthRepository implements AuthRepository {
   }
 
   async exchangeCodeForSession(code: string): Promise<void> {
+    this.sessionUser = undefined;
     const { error } = await this.authClient.auth.exchangeCodeForSession(code);
 
     if (error) {
@@ -172,6 +187,7 @@ export class SupabaseAuthRepository implements AuthRepository {
   }
 
   async updatePassword(newPassword: string): Promise<void> {
+    this.sessionUser = undefined;
     const { error } = await this.authClient.auth.updateUser({
       password: newPassword,
     });
@@ -182,6 +198,7 @@ export class SupabaseAuthRepository implements AuthRepository {
   }
 
   async signOut(): Promise<void> {
+    this.sessionUser = undefined;
     const { error } = await this.authClient.auth.signOut();
 
     if (error) {

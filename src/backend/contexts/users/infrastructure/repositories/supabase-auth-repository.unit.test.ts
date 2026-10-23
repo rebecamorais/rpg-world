@@ -62,6 +62,30 @@ describe('SupabaseAuthRepository', () => {
       });
     });
 
+    it('confere a sessão uma vez só, mesmo chamado várias vezes no mesmo pedido', async () => {
+      vi.mocked(mockAuthClient.auth.getClaims).mockResolvedValue(claimsResult({ sub: 'user-123' }));
+
+      const [first, second] = await Promise.all([
+        repository.getSessionUser(),
+        repository.getSessionUser(),
+      ]);
+      await repository.getSessionUser();
+
+      expect(first).toEqual(second);
+      expect(mockAuthClient.auth.getClaims).toHaveBeenCalledTimes(1);
+    });
+
+    it('confere de novo depois de sair da conta', async () => {
+      vi.mocked(mockAuthClient.auth.getClaims).mockResolvedValue(claimsResult({ sub: 'user-123' }));
+      vi.mocked(mockAuthClient.auth.signOut).mockResolvedValue({ error: null });
+
+      await repository.getSessionUser();
+      await repository.signOut();
+      await repository.getSessionUser();
+
+      expect(mockAuthClient.auth.getClaims).toHaveBeenCalledTimes(2);
+    });
+
     it('deve retornar null se o JWT não for válido', async () => {
       vi.mocked(mockAuthClient.auth.getClaims).mockResolvedValueOnce({
         data: null,
