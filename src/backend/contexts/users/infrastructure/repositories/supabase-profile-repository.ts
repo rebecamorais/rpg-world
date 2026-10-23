@@ -45,6 +45,8 @@ export class SupabaseProfileRepository implements ProfileRepository {
       primary_color: profile.primaryColor,
     });
 
+    // Created in the meantime (two tabs finishing the first login at once): it exists, as asked
+    if (error?.code === UNIQUE_VIOLATION && error.message.includes('profile_pkey')) return;
     if (error) {
       throw new Error(`Failed to create profile: ${error.message}`);
     }

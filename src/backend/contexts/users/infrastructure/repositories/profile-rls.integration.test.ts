@@ -58,4 +58,11 @@ describe('profile com client do usuário (Integration)', () => {
 
     expect((await repo.getById(user.userId))?.fullName).toBe('Recreated');
   });
+
+  it('criar um perfil que já existe (primeiro login em duas abas) não é erro', async () => {
+    const repo = new SupabaseProfileRepository(user.client);
+
+    await expect(repo.create({ id: user.userId, fullName: 'Second tab' })).resolves.toBeUndefined();
+    expect((await repo.getById(user.userId))?.fullName).not.toBe('Second tab');
+  });
 });

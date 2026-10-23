@@ -54,4 +54,13 @@ describe('TurnstileService', () => {
     expect(result.success).toBe(false);
     expect(result.error).toBe('network_error_security_verification');
   });
+
+  it('desiste depois de 5 s em vez de prender o formulário', async () => {
+    global.fetch = vi.fn().mockResolvedValue({ json: async () => ({ success: true }) });
+
+    await TurnstileService.verify('token');
+
+    const { signal } = vi.mocked(global.fetch).mock.calls[0][1] as RequestInit;
+    expect(signal).toBeInstanceOf(AbortSignal);
+  });
 });
