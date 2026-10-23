@@ -12,13 +12,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@frontend/components/ui/select';
+import { useTranslationInvite } from '@frontend/hooks/useTranslationInvite';
 
-export default function LanguageSwitcher() {
+/** `signedIn`: whoever switches language is invited to help translate. */
+export default function LanguageSwitcher({ signedIn = false }: { signedIn?: boolean }) {
   const locale = useLocale();
   const router = useRouter();
+  const inviteToTranslate = useTranslationInvite(signedIn);
 
   const handleValueChange = (newLocale: string) => {
     document.cookie = `NEXT_LOCALE=${newLocale};path=/;max-age=31536000`;
+    inviteToTranslate();
     router.refresh();
   };
 

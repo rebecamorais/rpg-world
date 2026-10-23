@@ -74,7 +74,7 @@ export default async function GlobalHeader() {
         <span className="bg-border mx-1 hidden h-5 w-px sm:block" aria-hidden="true" />
         <div className="flex items-center gap-1">
           <HeaderSupportLink email={user?.email ?? undefined} />
-          <LanguageSwitcher />
+          <LanguageSwitcher signedIn={!!user} />
         </div>
       </div>
     </header>

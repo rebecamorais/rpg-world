@@ -898,5 +898,10 @@
         }
       }
     }
+  },
+  "translationInvite": {
+    "title": "Ajude a traduzir o RPG World",
+    "description": "As traduções são feitas pela comunidade no Crowdin. Qualquer pessoa pode sugerir ou revisar textos e magias, em português ou em outro idioma.",
+    "action": "Traduzir no Crowdin"
   }
 }

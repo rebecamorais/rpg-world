@@ -898,5 +898,10 @@
         }
       }
     }
+  },
+  "translationInvite": {
+    "title": "Help translate RPG World",
+    "description": "The translations are made by the community on Crowdin. Anyone can suggest or review texts and spells, in Portuguese or another language.",
+    "action": "Translate on Crowdin"
   }
 }
