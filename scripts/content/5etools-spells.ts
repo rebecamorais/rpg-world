@@ -12,9 +12,11 @@ export interface FiveToolsSpell {
   source: string;
   /** `true`, or the spell's name in the SRD when the book's differs ("Melf's Acid Arrow"). */
   srd52?: boolean | string;
+  /** The same for the SRD 5.1, on the 2014 book's spells (spells-phb.json). */
+  srd?: boolean | string;
   level: number;
   school: string;
-  time: { number: number; unit: string }[];
+  time: { number: number; unit: string; condition?: string }[];
   range: { type: string; distance?: { type: string; amount?: number } };
   components: { v?: boolean; s?: boolean; m?: string | { text: string; cost?: number } };
   duration: {
@@ -48,12 +50,35 @@ const DURATIONS: Record<string, string> = {
   special: 'special',
 };
 
+/** The spell's name in the SRD, which can differ from the book's. */
+const srdName = (spell: FiveToolsSpell) =>
+  typeof spell.srd52 === 'string'
+    ? spell.srd52
+    : !spell.srd52 && typeof spell.srd === 'string'
+      ? spell.srd
+      : spell.name;
+
 export const toSpellId = (spell: FiveToolsSpell) =>
-  (typeof spell.srd52 === 'string' ? spell.srd52 : spell.name)
+  srdName(spell)
     .toLowerCase()
     .replace(/'/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
+
+function extraCastingTimesOf(extraTimes: FiveToolsSpell['time']) {
+  if (!extraTimes.length) return {};
+  return {
+    extraCastingTimes: extraTimes.map((extra) => ({
+      castingTime: CASTING_TIMES[extra.unit] ?? extra.unit,
+      castingValue: extra.number,
+    })),
+  };
+}
+
+function triggerOf(spell: FiveToolsSpell) {
+  const condition = spell.time[0].condition;
+  return condition ? { trigger: stripTags(condition) } : {};
+}
 
 /** Range: a distance, a named one (touch, self…), or an area around the caster, which is "self". */
 function toRange({ type, distance }: FiveToolsSpell['range']) {
@@ -86,7 +111,7 @@ export function toSpellData(
   classes: string[],
   previous?: SpellData,
 ): SpellData {
-  const [time] = spell.time;
+  const [time, ...extraTimes] = spell.time;
   const { m } = spell.components;
   const damage = spell.damageInflict ?? [];
   // 5etools lists every damage a spell mentions, in alphabetical order (Web: the burning webs →
@@ -109,6 +134,7 @@ export function toSpellData(
     ],
     castingTime: CASTING_TIMES[time.unit] ?? time.unit,
     castingValue: time.number,
+    ...extraCastingTimesOf(extraTimes),
     ...toRange(spell.range),
     ...toDuration(spell.duration),
     concentration: spell.duration.some((d) => d.concentration),
@@ -182,9 +208,20 @@ export function toSpellText(spell: FiveToolsSpell): SpellText {
     .join('\n');
 
   return {
-    name: typeof spell.srd52 === 'string' ? spell.srd52 : spell.name,
+    name: srdName(spell),
     description: renderEntries(spell.entries),
     ...(higherLevel ? { higherLevel } : {}),
     ...(material ? { material: sentence(stripTags(material)) } : {}),
+    ...triggerOf(spell),
   };
+}
+
+/**
+ * What the 2014 spells (SRD 5.1, converted from another source before 5etools) still lack: the
+ * other casting times and the reaction's or bonus action's trigger.
+ */
+export function extrasOf(
+  spell: FiveToolsSpell,
+): Pick<SpellData, 'extraCastingTimes'> & Pick<SpellText, 'trigger'> {
+  return { ...extraCastingTimesOf(spell.time.slice(1)), ...triggerOf(spell) };
 }

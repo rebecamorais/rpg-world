@@ -50,6 +50,17 @@ describe.each([
     expect(withMarkup).toEqual([]);
   });
 
+  it('toda reação diz quando é usada', () => {
+    const en = textsOf(source, 'en');
+    expect(spells.filter((s) => s.castingTime === 'reaction' && !en[s.id].trigger)).toEqual([]);
+  });
+
+  it('Plant Growth tem os dois tempos de conjuração', () => {
+    expect(spells.find((s) => s.id === 'plant-growth')?.extraCastingTimes).toEqual([
+      { castingTime: 'hour', castingValue: 8 },
+    ]);
+  });
+
   // Markup that loses its braces but not its meaning: a filter (type=beast), a DC without "DC"
   it('nenhum texto em inglês tem resto de marcação sem chaves', () => {
     const en = textsOf(source, 'en');

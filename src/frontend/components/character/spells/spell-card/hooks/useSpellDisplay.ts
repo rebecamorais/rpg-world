@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import {
   CATEGORY_THEMES,
@@ -57,6 +57,7 @@ export interface SpellDisplayValues {
 export function useSpellDisplay(spell: Spell) {
   const tData = useTranslations('spellsData');
   const tCharacters = useTranslations('characters');
+  const locale = useLocale();
 
   return useMemo(() => {
     const damageKey = spell.damageType?.toLowerCase();
@@ -88,12 +89,16 @@ export function useSpellDisplay(spell: Spell) {
       ? tData(`schools.${schoolKey}` as Parameters<typeof tData>[0])
       : spell.school;
 
-    const castingTimeLabel = tData(
-      `castingTimes.${spell.castingTime}` as Parameters<typeof tData>[0],
-      {
-        value: spell.castingValue || 1,
-      },
-    );
+    const castingTimeOf = (castingTime: string | null | undefined, value?: number | null) =>
+      tData(`castingTimes.${castingTime}` as Parameters<typeof tData>[0], { value: value || 1 });
+    const castingTimeLabel = castingTimeOf(spell.castingTime, spell.castingValue);
+    // "1 Action or 8 Hours": the other ways to cast it, joined as the language does
+    const allCastingTimes = new Intl.ListFormat(locale, { type: 'disjunction' }).format([
+      castingTimeLabel,
+      ...(spell.extraCastingTimes ?? []).map((extra) =>
+        castingTimeOf(extra.castingTime, extra.castingValue),
+      ),
+    ]);
 
     const compactCastingTime =
       spell.castingTime &&
@@ -121,7 +126,7 @@ export function useSpellDisplay(spell: Spell) {
           ? tCharacters('cantrip')
           : tCharacters('levelName', { level: spell.level }),
       damage: translatedDamageType,
-      castingTime: castingTimeLabel,
+      castingTime: allCastingTimes,
       compactCastingTime,
       range:
         spell.rangeUnit && tData.has(`ranges.${spell.rangeUnit}` as Parameters<typeof tData>[0])
@@ -162,5 +167,5 @@ export function useSpellDisplay(spell: Spell) {
       mainIcon,
       displayValues,
     };
-  }, [spell, tData, tCharacters]);
+  }, [spell, tData, tCharacters, locale]);
 }

@@ -20,6 +20,8 @@ export interface CharacterSpellRelation {
   material?: string | null;
   castingTime?: string | null;
   castingValue?: number | null;
+  extraCastingTimes: { castingTime: string; castingValue: number }[];
+  trigger: string | null;
   durationUnit?: string | null;
   durationValue?: number | null;
   rangeUnit?: string | null;

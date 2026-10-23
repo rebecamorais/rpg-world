@@ -192,4 +192,31 @@ describe('FileSpellCatalog com duas edições', () => {
     const { data: found } = await twoEditions.findAll({ locale: 'pt', search: 'fireball' });
     expect(found.map((s) => s.name)).toEqual(['Bola de Fogo', 'Fireball']);
   });
+
+  it('traz a condição de uso e os outros tempos de conjuração', async () => {
+    const catalog = new FileSpellCatalog([
+      {
+        ...source,
+        spells: [
+          data('counterspell', 3, { castingTime: 'reaction' }),
+          data('plant-growth', 3, {
+            extraCastingTimes: [{ castingTime: 'hour', castingValue: 8 }],
+          }),
+        ],
+        texts: {
+          counterspell: { ...text('Counterspell'), trigger: 'which you take when…' },
+          'plant-growth': text('Plant Growth'),
+        },
+        translations: { pt: { counterspell: { trigger: 'que você usa quando…' } } },
+      },
+    ]);
+    const [counterspell, plantGrowth] = await catalog.findByKeys(
+      ['dnd5e:srd-5.1:spell:counterspell', 'dnd5e:srd-5.1:spell:plant-growth'],
+      'pt',
+    );
+    expect(counterspell.trigger).toBe('que você usa quando…');
+    expect(counterspell.extraCastingTimes).toEqual([]);
+    expect(plantGrowth.trigger).toBeNull();
+    expect(plantGrowth.extraCastingTimes).toEqual([{ castingTime: 'hour', castingValue: 8 }]);
+  });
 });

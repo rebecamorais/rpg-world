@@ -323,7 +323,8 @@
   "counterspell": {
     "name": "Counterspell",
     "description": "You attempt to interrupt a creature in the process of casting a spell. If the creature is casting a spell of 3rd level or lower, its spell fails and has no effect. If it is casting a spell of 4th level or higher, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a success, the creature's spell fails and has no effect.",
-    "higherLevel": "When you cast this spell using a spell slot of 4th level or higher, the interrupted spell has no effect if its level is less than or equal to the level of the spell slot you used."
+    "higherLevel": "When you cast this spell using a spell slot of 4th level or higher, the interrupted spell has no effect if its level is less than or equal to the level of the spell slot you used.",
+    "trigger": "which you take when you see a creature within 60 feet of you casting a spell"
   },
   "create-food-and-water": {
     "name": "Create Food and Water",
@@ -532,7 +533,8 @@
   "feather-fall": {
     "name": "Feather Fall",
     "description": "Choose up to five falling creatures within range. A falling creature's rate of descent slows to 60 feet per round until the spell ends. If the creature lands before the spell ends, it takes no falling damage and can land on its feet, and the spell ends for that creature.",
-    "material": "A small feather or a piece of down."
+    "material": "A small feather or a piece of down.",
+    "trigger": "which you take when you or a creature within 60 feet of you falls"
   },
   "feeblemind": {
     "name": "Feeblemind",
@@ -765,7 +767,8 @@
   "hellish-rebuke": {
     "name": "Hellish Rebuke",
     "description": "You point your finger, and the creature that damaged you is momentarily surrounded by hellish flames. The creature must make a dexterity saving throw. It takes 2d10 fire damage on a failed save, or half as much damage on a successful one.",
-    "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d10 for each slot level above 1st."
+    "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d10 for each slot level above 1st.",
+    "trigger": "which you take in response to being damaged by a creature within 60 feet of you that you can see"
   },
   "heroes-feast": {
     "name": "Heroes' Feast",
@@ -1271,7 +1274,8 @@
   },
   "shield": {
     "name": "Shield",
-    "description": "An invisible barrier of magical force appears and protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from magic missile."
+    "description": "An invisible barrier of magical force appears and protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from magic missile.",
+    "trigger": "which you take when you are hit by an attack or targeted by the magic missile spell"
   },
   "shield-of-faith": {
     "name": "Shield of Faith",

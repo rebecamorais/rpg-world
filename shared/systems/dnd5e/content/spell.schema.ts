@@ -10,6 +10,11 @@ export const spellDataSchema = z.object({
   components: z.array(z.enum(['V', 'S', 'M'])),
   castingTime: z.string().nullable(),
   castingValue: z.number().int().nullable(),
+  /** Other ways to cast it (Plant Growth: 1 action, or 8 hours). Left out when there are none. */
+  extraCastingTimes: z
+    .array(z.object({ castingTime: z.string(), castingValue: z.number().int() }))
+    .min(1)
+    .optional(),
   rangeUnit: z.string().nullable(),
   rangeValue: z.number().int().nullable(),
   durationUnit: z.string().nullable(),
@@ -32,6 +37,8 @@ export const spellTextSchema = z.object({
   description: z.string().min(1),
   higherLevel: z.string().min(1).optional(),
   material: z.string().min(1).optional(),
+  /** When a reaction or bonus action is taken: "which you take when you see a creature…". */
+  trigger: z.string().min(1).optional(),
 });
 
 /**
@@ -44,6 +51,7 @@ export const spellTranslationSchema = z
     description: z.string(),
     higherLevel: z.string(),
     material: z.string(),
+    trigger: z.string(),
   })
   .partial();
 

@@ -45,6 +45,10 @@ export interface Spell {
   isScaling?: boolean;
   castingTime?: string | null;
   castingValue?: number | null;
+  /** Other ways to cast it (Plant Growth: 1 action, or 8 hours). */
+  extraCastingTimes?: { castingTime: string; castingValue: number }[];
+  /** When a reaction or bonus action is taken ("which you take when…"). */
+  trigger?: string | null;
   durationUnit?: string | null;
   durationValue?: number | null;
   rangeUnit?: string | null;

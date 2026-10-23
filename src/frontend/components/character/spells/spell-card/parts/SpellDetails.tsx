@@ -7,8 +7,14 @@ import { useTranslations } from 'next-intl';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Spell } from '@frontend/types/spells';
 
+interface SpellDetailsProps {
+  spell: Spell;
+  /** "1 Reaction": what the trigger, when the spell has one, completes. */
+  castingTime: string;
+}
+
 /** Rules text of the open card. The card animates the opening; this only lays out the text. */
-export const SpellDetails = React.memo(({ spell }: { spell: Spell }) => {
+export const SpellDetails = React.memo(({ spell, castingTime }: SpellDetailsProps) => {
   const tCharacters = useTranslations('characters');
 
   return (
@@ -25,10 +31,18 @@ export const SpellDetails = React.memo(({ spell }: { spell: Spell }) => {
             <span>{tCharacters('untranslatedHint')}</span>
           </p>
         )}
+        {spell.trigger && (
+          <p>
+            <strong className="text-foreground">{castingTime}</strong>, {spell.trigger}
+          </p>
+        )}
         <p className="whitespace-pre-wrap">{spell.description}</p>
         {spell.higherLevel && (
           <div className="border-border bg-muted rounded-lg border p-4 text-xs">
-            <strong className="text-foreground">{tCharacters('atHigherLevels')}:</strong>{' '}
+            {/* A cantrip gets stronger with the character's level, not with the spell slot */}
+            <strong className="text-foreground">
+              {tCharacters(spell.level === 0 ? 'cantripUpgrade' : 'atHigherLevels')}:
+            </strong>{' '}
             {spell.higherLevel}
           </div>
         )}

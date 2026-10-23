@@ -9,3 +9,6 @@ export const GITHUB_REPO = 'https://github.com/rebecamorais/rpg-world';
 
 /** Invite to the community server, which is also the support and privacy contact. */
 export const DISCORD_INVITE = 'https://discord.gg/7u6guShqhQ';
+
+/** Community translations of the interface and the rules content. */
+export const CROWDIN_PROJECT = 'https://crowdin.com/project/rpgworld';

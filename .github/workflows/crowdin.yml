@@ -1,22 +1,20 @@
 name: Crowdin
 
-# Sends the English texts to Crowdin when they change on main, and opens (or updates) a pull
-# request with the approved translations every day. They are reviewed and merged like any PR.
+# Run by hand (Actions → Crowdin → Run workflow) when there is something to bring from Crowdin.
+# It sends the English texts, sends the translations edited in the repository (approved, so the
+# pull request doesn't put them back in English) and opens or updates a pull request with the
+# approved translations, reviewed and merged like any PR.
+#
+# Sending the repository's translations overwrites what is different on Crowdin. Once other people
+# translate there, turn it off in the run (or merge the Crowdin pull request before editing the
+# same texts in the repository).
 on:
-  push:
-    branches: [main]
-    paths:
-      - messages/en.json
-      - 'content/**/i18n/en/**'
-      - crowdin.yml
-  schedule:
-    - cron: '0 9 * * *'
   workflow_dispatch:
     inputs:
       upload_translations:
-        description: 'Also upload the translations already in the repository (first setup)'
+        description: 'Also send the translations edited in the repository (overwrites Crowdin)'
         type: boolean
-        default: false
+        default: true
 
 permissions:
   contents: write
@@ -36,9 +34,10 @@ jobs:
       - uses: crowdin/github-action@9c23991700c0ec5256fd41089b9d9d7d540e424e # v3.3.0
         with:
           upload_sources: true
-          upload_translations: ${{ inputs.upload_translations || false }}
-          # The Portuguese already in the repository was reviewed: it starts approved
-          auto_approve_imported: ${{ inputs.upload_translations || false }}
+          upload_translations: ${{ inputs.upload_translations }}
+          # Translations in the repository were reviewed in their pull request: they start approved.
+          # Crowdin skips the ones equal to the English (untranslated keys come back in English)
+          auto_approve_imported: ${{ inputs.upload_translations }}
           download_translations: true
           # Only what a proofreader approved reaches the app; the rest stays in English
           export_only_approved: true
