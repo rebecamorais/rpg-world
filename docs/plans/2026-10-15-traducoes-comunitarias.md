@@ -1,122 +1,81 @@
 # Traduções comunitárias: vários idiomas e vários sistemas
 
-**Data:** 2026-10-15
-**Status (2026-10-22):** decidido usar o **Crowdin** (projeto público `rpgworld`, id 940585,
-pedido de licença open source enviado). `crowdin.yml` envia `messages/en.json` e
-`content/dnd5e/*/i18n/en/*.json`; a Action `crowdin.yml` abre um PR diário com as traduções.
-Sem tradução automática. As traduções do Foundry continuam como fonte do que já existe (SRD 5.1
-em pt). Se o Crowdin não der certo, Weblate e Tolgee leem os mesmos arquivos.
+**Data:** 2026-10-15 (reescrito em 2026-10-23)
+**Status:** entregue a base (Crowdin funcionando para a interface e para as magias). Este plano
+agora lista o que já existe, como liberar um idioma novo e o que ficou para depois.
 
-**Status anterior:** planejamento. Complementa `2026-10-15-5etools-e-traducoes.md` (de onde vêm os dados
-mecânicos) e vale para os sistemas novos (`2026-10-15-dnd-2024-novo-sistema.md`,
-`2026-10-15-feiticeiros-e-maldicoes.md`).
+O objetivo continua o mesmo: conteúdo de regras e interface **em vários idiomas, feito em
+comunidade**, sem tradução automática.
 
-O objetivo é oferecer o conteúdo de regras **em vários idiomas, não só pt-BR e inglês, e para
-vários sistemas**, feito em comunidade. Em vez de criar uma comunidade de tradução do zero, o
-plano é **usar e contribuir com as traduções que a comunidade do Foundry VTT já mantém**.
+## Como funciona hoje
 
-## O que já existe
+- **Crowdin**, projeto público [`rpgworld`](https://crowdin.com/project/rpgworld) (id 940585).
+  Idiomas no projeto: português, espanhol e sueco.
+- **Fontes em inglês** (`crowdin.yml`): `messages/en.json` (interface) e
+  `content/dnd5e/*/i18n/en/*.json` (magias do SRD 5.1 e 5.2, um arquivo por livro).
+- **Action `crowdin.yml`:** envia o inglês quando ele muda na `main` e, todo dia, abre ou atualiza
+  o PR "i18n: traduções do Crowdin" com o que foi **aprovado** (`export_only_approved`). O PR é
+  revisado e entra como qualquer outro.
+  - Um PR aberto pela Action não roda os testes (o `GITHUB_TOKEN` não dispara outros
+    workflows): rodar `npm run test:unit` no branch `l10n/crowdin` antes do merge.
+- **O que falta traduzir aparece em inglês:** na interface, a chave vem em inglês (o next-intl
+  quebra com chave faltando); nas magias, o campo vem vazio ou some e o `FileSpellCatalog` usa o
+  inglês daquele campo, com o selo "Em inglês" quando é a descrição.
+- **Português editado no repositório** (por exemplo, num PR de funcionalidade) volta para o
+  inglês no próximo PR do Crowdin, porque o Crowdin ainda não tem aquela tradução. Depois do merge,
+  rodar a Action com `upload_translations = true`: ela envia o português do repositório para o
+  Crowdin já aprovado. Isso sobrescreve no Crowdin o que estiver diferente do repositório.
+- **Origem do que já existe:** as magias do SRD 5.1 em português vieram do módulo
+  [Foundry VTT Brasil / dnd5e](https://gitlab.com/fvtt-brasil/dnd5e) (MIT, sobre o SRD 5.1 em
+  CC-BY-4.0); os créditos estão no `NOTICE.md` e nos Termos. Não existe tradução do SRD 5.2 em
+  português em nenhuma fonte: as 339 magias de 2024 são traduzidas do zero no Crowdin.
 
-- **O texto em inglês e os dados das magias da seed vieram da 5e SRD API** (`5e-bits/5e-database`,
-  MIT; conteúdo do SRD 5.1). O `external_index` (`acid-arrow`) é o `index` dela.
-- **O texto em pt da nossa seed veio do módulo Foundry VTT Brasil / dnd5e**
-  ([gitlab.com/fvtt-brasil/dnd5e](https://gitlab.com/fvtt-brasil/dnd5e)). A Bola de Fogo, por
-  exemplo, tem o mesmo texto nos dois, e os dois têm as 319 magias do SRD 5.1.
-  - Licença do módulo: MIT (Copyright (c) 2020 Cauã Pessoa). O conteúdo é tradução do SRD 5.1
-    (CC-BY-4.0). **Os dois pedem crédito**, e até agora o projeto não dava (corrigido no PR de créditos:
-    `NOTICE.md` e Termos; ver "Créditos").
-  - Formato Babele: um JSON por compêndio (`dnd5e.spells.json`, `dnd5e.classes.json`,
-    `dnd5e.monsters.json`…), com `entries` indexadas pelo nome em inglês e `name`/`description`
-    traduzidos. A descrição vem em HTML.
-  - Tradução feita no Crowdin da comunidade Foundry (`fvtt.crowdin.com`).
-  - Parado desde junho de 2023 e só com o SRD 5.1. **Não existe pt-BR do SRD 5.2 (2024)** no
-    Foundry ainda.
-- **Babele é o padrão de tradução de compêndio do Foundry**, para todos os sistemas e idiomas.
-  Exemplos: alemão (`foundryvtt-dnd5e-lang-de`, e um parcial do 2024), espanhol do SRD 2024
-  (`translate-dnd5e-sdr2-es`), italiano (`dnd5e-it-translation`). Outros sistemas (Pathfinder 2e
-  etc.) seguem o mesmo esquema.
+## Liberar um idioma novo no app
 
-## Proposta
+Os arquivos de um idioma (`messages/es.json`, `content/dnd5e/*/i18n/es/`) chegam pelo PR do
+Crowdin antes de o app oferecer o idioma; enquanto ele não é liberado, ficam no repositório sem
+efeito.
 
-### 1. Importar de várias fontes por adaptadores
+**Quando liberar:** a interface (`messages/<idioma>.json`) aprovada por inteiro. As magias podem
+estar incompletas: o que faltar aparece em inglês com o selo.
 
-O script de importação (em `scripts/`, gerando migração de seed como hoje) passa a ter um
-adaptador por formato, todos convertendo para um formato intermediário nosso:
+**O que mudar** (um PR por idioma):
 
-- **Babele / Foundry**: textos traduzidos de qualquer idioma e sistema que tenha módulo.
-  - Mapear a chave (nome em inglês) para o nosso `external_index`.
-  - Converter o HTML e as marcações do Foundry (`@UUID[...]{texto}`, `[[/r 8d6]]`,
-    `&Reference[...]`) para o nosso formato (Markdown + marcações de dado/link).
-  - Tratar os originais entre colchetes que o pt-BR usa ("6 metros [20-foot-radius sphere]"):
-    manter, esconder ou mostrar como dica, a decidir.
-- **5etools**: dados mecânicos e texto em inglês (ver o outro plano).
-- **Nosso próprio formato**: para o que não existir em nenhuma fonte.
+1. `src/i18n.ts`: o código em `locales`.
+2. `src/frontend/components/LanguageSwitcher.tsx`: a opção no seletor, e o nome do idioma em
+   `messages/*.json` (a chave que o seletor usa, hoje `en` e `pt`).
+3. `src/backend/contexts/spells/infrastructure/srd-spells.ts`: carregar
+   `i18n/<idioma>/spells.json` de cada livro (hoje só `pt` está fixo). No primeiro idioma novo,
+   vale trocar a lista fixa por uma leitura dos idiomas liberados em `src/i18n.ts`.
+4. `app/layout.tsx`: o `locale` do Open Graph (`pt_BR`, `en_US`…).
+5. `src/frontend/components/landing/FeatureShowcase.tsx`: as capturas da landing existem só em
+   `pt` e `en`; o idioma novo usa as de `en` até ter as suas (`npm run showcase`).
+6. `public/llms.txt` e a página de funcionalidades, que listam os idiomas.
+7. Conferir no `next dev`: ficha, lista de magias (busca com acento do idioma), Termos.
 
-Uma fonte nova (idioma ou sistema) passa a ser configuração do importador, não código novo.
+## Ficou para depois
 
-### 2. Registro de fontes e licenças
+- **Registro de fontes e licenças** (`content-sources.json`): cada fonte com URL, versão, licença,
+  idiomas e o texto de atribuição; o importador recusaria fonte sem licença e o `NOTICE.md` e os
+  Termos seriam gerados dele. Hoje as fontes são poucas (SRD 5.1 e 5.2, 5e SRD API, 5etools,
+  Foundry VTT Brasil) e o `NOTICE.md` à mão dá conta; vale fazer quando entrar o primeiro sistema novo
+  (Feiticeiros & Maldições) ou a primeira fonte de tradução externa.
+- **Adaptador Babele (Foundry)** para importar traduções de outros idiomas que já existem nos
+  módulos do Foundry (alemão, espanhol do SRD 2024, italiano). Só se algum idioma for liberado e
+  o módulo dele tiver licença compatível; senão, o Crowdin basta.
+- **Contribuir de volta:** levar ao Foundry VTT Brasil as correções que fizermos no português e,
+  quando o SRD 5.2 estiver traduzido no Crowdin, oferecer a tradução a eles. Falar com os
+  mantenedores antes.
+- **Glossário no Crowdin** (termos de regra: "saving throw" → "salvaguarda", "spell slot" →
+  "espaço de magia"…), começando pelo que o português do SRD 5.1 já usa.
 
-Um arquivo versionado (ex.: `content-sources.json`) com cada fonte: nome, URL, versão/commit,
-licença, autores, idiomas, sistemas e o texto de atribuição exigido.
+## Decisões que mudaram desde o plano original
 
-- O importador **recusa fonte sem licença registrada**.
-- O mesmo registro gera a página de créditos do site e o `NOTICE.md`.
-- Licenças esperadas: SRD 5.1 e 5.2 da WotC (CC-BY-4.0), módulos Foundry (normalmente MIT, conferir
-  um por um), Pathfinder 2e (ORC). **Conteúdo proprietário** (ex.: Tormenta20, livros fora do
-  SRD) não entra sem autorização.
-
-### 3. Idiomas sem limite fixo
-
-- `spell_translations.locale` já é texto livre, mas hoje guarda `pt` e `en`. Passar a usar
-  códigos BCP 47 (`pt-BR`, `en`, `es`, `de`…). Migração simples de `pt` → `pt-BR`.
-- **Fallback:** idioma pedido → idioma base (`pt-BR` → `pt`) → `en`. Mostrar aviso discreto quando
-  o texto vier de outro idioma.
-- `is_verified` e a origem da tradução (`source_id`) por linha, para saber de onde veio e se foi
-  revisada.
-- A interface do app (`messages/*.json`) segue o mesmo caminho: novos idiomas em `next-intl`
-  quando houver tradução.
-
-### 4. Contribuir de volta em vez de copiar
-
-- Correções que fizermos nas traduções vão para o Crowdin/repo de origem, não ficam só no nosso
-  banco. Assim Foundry e rpg-world melhoram juntos.
-- **Colaboração concreta:** ajudar a manter o módulo pt-BR do dnd5e e puxar a tradução do
-  **SRD 5.2 em pt-BR** no Crowdin do Foundry. Serve aos dois projetos e é o que falta hoje.
-- Contato antes: falar com os mantenedores (Foundry VTT Brasil, Discord do Foundry) sobre a
-  intenção de usar e contribuir.
-
-### 5. O que fica nosso
-
-- Glossário por idioma e por sistema (reaproveitando o do Foundry quando existir).
-- Tradução automática só como rascunho, gravada com `is_verified = false`, e só para o que não
-  existir em nenhuma fonte comunitária.
-
-## Créditos
-
-Feito no PR de créditos (junto com este plano):
-
-- `NOTICE.md` na raiz com a atribuição do SRD 5.1 (CC-BY-4.0), o aviso de não afiliação com a
-  WotC e o crédito e a licença MIT da tradução Foundry VTT Brasil.
-- Seção "Conteúdo de jogo e créditos" nos Termos de Uso (pt e en).
-- Link no README.
-
-Depois, com o registro de fontes, essa seção passa a ser gerada a partir dele.
-
-## Onde o conteúdo fica
-
-O importador gera arquivos versionados no repositório, não seed SQL; o banco fica só com o que os
-usuários criam (homebrew). Detalhado em `2026-10-15-conteudo-e-homebrew.md`.
-
-## Perguntas em aberto
-
-- Os originais entre colchetes do pt-BR ("[20-foot-radius sphere]"): mostrar ou esconder?
-- Babele indexa pelo nome em inglês: o que fazer quando o nome muda entre SRD 5.1 e 5.2?
-
-## Ordem sugerida
-
-1. Créditos (PR de créditos).
-2. `locale` em BCP 47 + fallback de idioma.
-3. Registro de fontes e licenças.
-4. Adaptador Babele, reimportando o pt-BR atual e conferindo que nada muda sem querer.
-5. Conversar com a comunidade Foundry pt-BR e combinar a tradução do SRD 5.2.
-6. Outros idiomas do dnd5e (es, de, it) e outros sistemas, conforme as fontes.
+- **Crowdin** no lugar de montar uma comunidade própria; Weblate e Tolgee leem os mesmos arquivos,
+  se um dia for preciso trocar.
+- **Códigos de idioma de duas letras** (`pt`, `es`), como o Crowdin exporta, em vez de BCP 47
+  (`pt-BR`). Se um dia houver duas variantes do mesmo idioma, mudar o padrão no `crowdin.yml`.
+- **Sem tradução automática**, nem como rascunho.
+- **Conteúdo em arquivo, não no banco** (`2026-10-15-conteudo-e-homebrew.md`): `locale`,
+  `is_verified` e `source_id` por linha deixaram de fazer sentido; o que está aprovado no Crowdin é
+  o que vale.
