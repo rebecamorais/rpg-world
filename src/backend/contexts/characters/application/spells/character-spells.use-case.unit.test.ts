@@ -19,6 +19,8 @@ const makeCatalog = () => ({
         id,
         edition: '2014' as const,
         untranslated: false,
+        extraCastingTimes: [],
+        trigger: null,
         name: 'Fireball',
         level: 3,
         school: 'evocation',

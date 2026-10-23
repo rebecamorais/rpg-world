@@ -4627,6 +4627,7 @@
     "components": ["V", "S"],
     "castingTime": "action",
     "castingValue": 1,
+    "extraCastingTimes": [{ "castingTime": "hour", "castingValue": 8 }],
     "rangeUnit": "feet",
     "rangeValue": 150,
     "durationUnit": "instantaneous",

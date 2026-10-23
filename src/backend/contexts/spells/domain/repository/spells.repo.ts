@@ -17,6 +17,10 @@ export interface SpellDto {
   rangeValue?: number | null;
   castingTime?: string | null;
   castingValue?: number | null;
+  /** Other ways to cast it (Plant Growth: 1 action, or 8 hours). */
+  extraCastingTimes: { castingTime: string; castingValue: number }[];
+  /** When a reaction or bonus action is taken ("which you take when…"). */
+  trigger: string | null;
   concentration?: boolean;
   ritual?: boolean;
   materialCost?: number;

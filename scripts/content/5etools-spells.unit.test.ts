@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   type FiveToolsSpell,
+  extrasOf,
   renderEntries,
   stripTags,
   toSpellData,
@@ -197,5 +198,65 @@ describe('conversão das magias do 5etools', () => {
     expect(toSpellData({ ...fireball, damageInflict: ['acid', 'fire'] }, []).damageType).toBe(
       'acid',
     );
+  });
+
+  it('o id de uma magia do livro de 2014 vem do nome no SRD 5.1', () => {
+    const { srd52: _, ...phb } = fireball;
+    expect(toSpellId({ ...phb, name: "Bigby's Hand", srd: 'Arcane Hand' })).toBe('arcane-hand');
+    expect(toSpellId({ ...phb, srd: true })).toBe('fireball');
+  });
+
+  it('reação e ação bônus guardam a condição de uso', () => {
+    const counterspell: FiveToolsSpell = {
+      ...fireball,
+      name: 'Counterspell',
+      time: [
+        {
+          number: 1,
+          unit: 'reaction',
+          condition:
+            'which you take when you see a creature within 60 feet of yourself casting a spell',
+        },
+      ],
+    };
+    expect(toSpellText(counterspell).trigger).toBe(
+      'which you take when you see a creature within 60 feet of yourself casting a spell',
+    );
+    expect(toSpellText(fireball)).not.toHaveProperty('trigger');
+  });
+
+  it('os outros tempos de conjuração ficam em extraCastingTimes', () => {
+    const plantGrowth: FiveToolsSpell = {
+      ...fireball,
+      time: [
+        { number: 1, unit: 'action' },
+        { number: 8, unit: 'hour' },
+      ],
+    };
+    expect(toSpellData(plantGrowth, [])).toMatchObject({
+      castingTime: 'action',
+      castingValue: 1,
+      extraCastingTimes: [{ castingTime: 'hour', castingValue: 8 }],
+    });
+    expect(toSpellData(fireball, [])).not.toHaveProperty('extraCastingTimes');
+  });
+
+  it('extrasOf traz só os campos novos, para completar as magias de 2014', () => {
+    expect(
+      extrasOf({
+        ...fireball,
+        time: [
+          { number: 1, unit: 'action' },
+          { number: 8, unit: 'hour' },
+        ],
+      }),
+    ).toEqual({ extraCastingTimes: [{ castingTime: 'hour', castingValue: 8 }] });
+    expect(
+      extrasOf({
+        ...fireball,
+        time: [{ number: 1, unit: 'reaction', condition: 'which you take' }],
+      }),
+    ).toEqual({ trigger: 'which you take' });
+    expect(extrasOf(fireball)).toEqual({});
   });
 });

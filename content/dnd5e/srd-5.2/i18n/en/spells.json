@@ -337,7 +337,8 @@
   },
   "counterspell": {
     "name": "Counterspell",
-    "description": "You attempt to interrupt a creature in the process of casting a spell. The creature makes a Constitution saving throw. On a failed save, the spell dissipates with no effect, and the action, Bonus Action, or Reaction used to cast it is wasted. If that spell was cast with a spell slot, the slot isn't expended."
+    "description": "You attempt to interrupt a creature in the process of casting a spell. The creature makes a Constitution saving throw. On a failed save, the spell dissipates with no effect, and the action, Bonus Action, or Reaction used to cast it is wasted. If that spell was cast with a spell slot, the slot isn't expended.",
+    "trigger": "which you take when you see a creature within 60 feet of yourself casting a spell with Verbal, Somatic, or Material components"
   },
   "create-food-and-water": {
     "name": "Create Food and Water",
@@ -458,7 +459,8 @@
   "divine-smite": {
     "name": "Divine Smite",
     "description": "The target takes an extra 2d8 Radiant damage from the attack. The damage increases by 1d8 if the target is a Fiend or an Undead.",
-    "higherLevel": "The damage increases by 1d8 for each spell slot level above 1."
+    "higherLevel": "The damage increases by 1d8 for each spell slot level above 1.",
+    "trigger": "which you take immediately after hitting a target with a Melee weapon or an Unarmed Strike"
   },
   "divine-word": {
     "name": "Divine Word",
@@ -522,7 +524,8 @@
   "ensnaring-strike": {
     "name": "Ensnaring Strike",
     "description": "As you hit the target, grasping vines appear on it, and it makes a Strength saving throw. A Large or larger creature has Advantage on this save. On a failed save, the target has the Restrained condition until the spell ends. On a successful save, the vines shrivel away, and the spell ends.\nWhile Restrained, the target takes 1d6 Piercing damage at the start of each of its turns. The target or a creature within reach of it can take an action to make a Strength (Athletics) check against your spell save DC. On a success, the spell ends.",
-    "higherLevel": "The damage increases by 1d6 for each spell slot level above 1."
+    "higherLevel": "The damage increases by 1d6 for each spell slot level above 1.",
+    "trigger": "which you take immediately after hitting a creature with a weapon"
   },
   "entangle": {
     "name": "Entangle",
@@ -572,7 +575,8 @@
   "feather-fall": {
     "name": "Feather Fall",
     "description": "Choose up to five falling creatures within range. A falling creature's rate of descent slows to 60 feet per round until the spell ends. If a creature lands before the spell ends, the creature takes no damage from the fall, and the spell ends for that creature.",
-    "material": "A small feather or piece of down."
+    "material": "A small feather or piece of down.",
+    "trigger": "which you take when you or a creature you can see within 60 feet of you falls"
   },
   "find-familiar": {
     "name": "Find Familiar",
@@ -805,7 +809,8 @@
   "hellish-rebuke": {
     "name": "Hellish Rebuke",
     "description": "The creature that damaged you is momentarily surrounded by green flames. It makes a Dexterity saving throw, taking 2d10 Fire damage on a failed save or half as much damage on a successful one.",
-    "higherLevel": "The damage increases by 1d10 for each spell slot level above 1."
+    "higherLevel": "The damage increases by 1d10 for each spell slot level above 1.",
+    "trigger": "which you take in response to taking damage from a creature that you can see within 60 feet of yourself"
   },
   "heroes-feast": {
     "name": "Heroes' Feast",
@@ -1313,7 +1318,8 @@
   "searing-smite": {
     "name": "Searing Smite",
     "description": "As you hit the target, it takes an extra 1d6 Fire damage from the attack. At the start of each of its turns until the spell ends, the target takes 1d6 Fire damage and then makes a Constitution saving throw. On a failed save, the spell continues. On a successful save, the spell ends.",
-    "higherLevel": "All the damage increases by 1d6 for each spell slot level above 1."
+    "higherLevel": "All the damage increases by 1d6 for each spell slot level above 1.",
+    "trigger": "which you take immediately after hitting a target with a Melee weapon or an Unarmed Strike"
   },
   "secret-chest": {
     "name": "Secret Chest",
@@ -1352,7 +1358,8 @@
   },
   "shield": {
     "name": "Shield",
-    "description": "An imperceptible barrier of magical force protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from Magic Missile."
+    "description": "An imperceptible barrier of magical force protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from Magic Missile.",
+    "trigger": "which you take when you are hit by an attack roll or targeted by the Magic Missile spell"
   },
   "shield-of-faith": {
     "name": "Shield of Faith",
@@ -1368,7 +1375,8 @@
   "shining-smite": {
     "name": "Shining Smite",
     "description": "The target hit by the strike takes an extra 2d6 Radiant damage from the attack. Until the spell ends, the target sheds Bright Light in a 5-foot radius, attack rolls against it have Advantage, and it can't benefit from the Invisible condition.",
-    "higherLevel": "The damage increases by 1d6 for each spell slot level above 2."
+    "higherLevel": "The damage increases by 1d6 for each spell slot level above 2.",
+    "trigger": "which you take immediately after hitting a creature with a Melee weapon or an Unarmed Strike"
   },
   "shocking-grasp": {
     "name": "Shocking Grasp",

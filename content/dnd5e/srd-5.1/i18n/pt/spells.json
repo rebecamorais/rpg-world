@@ -323,7 +323,8 @@
   "counterspell": {
     "name": "Contramagia",
     "description": "Você tenta interromper uma criatura no processo de conjurar uma magia. Se ela estiver conjurando uma magia de 3º círculo ou inferior, a magia falha e não tem efeito. Se ela estiver conjurando uma magia de 4º círculo ou superior, faça um teste de atributo usando o seu atributo de conjuração. A CD é igual a 10 + o círculo da magia conjurada pela criatura. Em caso de sucesso, a magia da criatura falha e não surte efeito.",
-    "higherLevel": "Ao conjurar esta magia usando um espaço de magia de 4º círculo ou superior, a magia interrompida não tem efeito se o círculo dela for menor ou igual ao círculo do espaço de magia que você usou."
+    "higherLevel": "Ao conjurar esta magia usando um espaço de magia de 4º círculo ou superior, a magia interrompida não tem efeito se o círculo dela for menor ou igual ao círculo do espaço de magia que você usou.",
+    "trigger": "que você usa quando vê uma criatura a até 18 metros [60 ft.] de você conjurando uma magia"
   },
   "create-food-and-water": {
     "name": "Criar Comida e Água",
@@ -532,7 +533,8 @@
   "feather-fall": {
     "name": "Queda Suave",
     "description": "Escolha até cinco criaturas no alcance da magia e que estejam caindo. A velocidade de queda de uma criatura é reduzida para 18 metros [60 ft.] por rodada enquanto a magia durar. Se a criatura pousar antes do fim da magia, não sofrerá dano por queda, podendo aterrissar em pé, e a magia se encerra para ela.",
-    "material": ""
+    "material": "",
+    "trigger": "que você usa quando você ou uma criatura a até 18 metros [60 ft.] de você cai"
   },
   "feeblemind": {
     "name": "Enfraquecer Intelecto",
@@ -765,7 +767,8 @@
   "hellish-rebuke": {
     "name": "Repreensão Diabólica",
     "description": "Você aponta o seu dedo e a criatura que lhe causou dano é momentaneamente cercada por chamas infernais. Ela deve fazer uma salvaguarda de Destreza. Se falhar, sofre 2d10 pontos de dano ígneo, ou metade do dano em caso de sucesso.",
-    "higherLevel": "Ao conjurar esta magia usando um espaço de magia de 2º círculo ou superior, o dano aumenta em 1d10 para cada círculo do espaço acima do 1º."
+    "higherLevel": "Ao conjurar esta magia usando um espaço de magia de 2º círculo ou superior, o dano aumenta em 1d10 para cada círculo do espaço acima do 1º.",
+    "trigger": "que você usa em resposta a sofrer dano de uma criatura que você possa ver a até 18 metros [60 ft.] de você"
   },
   "heroes-feast": {
     "name": "Banquete de Heróis",
@@ -1271,7 +1274,8 @@
   },
   "shield": {
     "name": "Égide",
-    "description": "Uma barreira de força mágica invisível surge e protege você. Até o início de seu próximo turno, você terá +5 na CA, incluindo contra o ataque que disparou a reação, e você não sofre dano de Mísseis Mágicos."
+    "description": "Uma barreira de força mágica invisível surge e protege você. Até o início de seu próximo turno, você terá +5 na CA, incluindo contra o ataque que disparou a reação, e você não sofre dano de Mísseis Mágicos.",
+    "trigger": "que você usa quando é atingido por um ataque ou se torna alvo de Mísseis Mágicos"
   },
   "shield-of-faith": {
     "name": "Escudo da Fé",
