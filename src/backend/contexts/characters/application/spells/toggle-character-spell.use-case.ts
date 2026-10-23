@@ -5,7 +5,7 @@ import {
   CharacterSpellRepo,
   SpellLookup,
 } from '../../domain/repository/character-spell.repo';
-import { findOwnedCharacter } from '../find-owned-character';
+import { assertOwnsCharacter } from '../find-owned-character';
 
 export type ToggleSpellAction = 'learn' | 'forget' | 'prepare' | 'unprepare';
 
@@ -27,7 +27,7 @@ export class ToggleCharacterSpellUseCase {
     action: ToggleSpellAction,
     locale?: string,
   ): Promise<CharacterSpellRelation | null> {
-    await findOwnedCharacter(this.characterRepository, characterId, requesterId, 'write');
+    await assertOwnsCharacter(this.characterRepository, characterId, requesterId, 'write');
 
     switch (action) {
       case 'learn': {

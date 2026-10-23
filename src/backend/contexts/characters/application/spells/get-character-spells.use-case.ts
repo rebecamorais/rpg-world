@@ -4,7 +4,7 @@ import {
   CharacterSpellRepo,
   SpellLookup,
 } from '../../domain/repository/character-spell.repo';
-import { findOwnedCharacter } from '../find-owned-character';
+import { assertOwnsCharacter } from '../find-owned-character';
 
 export class GetCharacterSpellsUseCase {
   constructor(
@@ -19,7 +19,7 @@ export class GetCharacterSpellsUseCase {
     requesterId: string,
     locale?: string,
   ): Promise<CharacterSpellRelation[]> {
-    await findOwnedCharacter(this.characterRepository, characterId, requesterId, 'read');
+    await assertOwnsCharacter(this.characterRepository, characterId, requesterId, 'read');
     const links = await this.spellRepository.findByCharacterId(characterId);
     const spells = await this.spells.findByKeys(
       links.map((link) => link.ref),

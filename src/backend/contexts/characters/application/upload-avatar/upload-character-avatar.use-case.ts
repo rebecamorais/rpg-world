@@ -8,7 +8,7 @@ import {
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import { CharacterRepo } from '../../domain/repository/character.repo';
-import { findOwnedCharacter } from '../find-owned-character';
+import { assertOwnsCharacter } from '../find-owned-character';
 
 /**
  * Uploads the image and returns its URL. It does not update the character record: like the
@@ -22,7 +22,7 @@ export class UploadCharacterAvatarUseCase {
   ) {}
 
   async execute(characterId: string, userId: string, file: Blob): Promise<string> {
-    await findOwnedCharacter(this.characterRepository, characterId, userId, 'write');
+    await assertOwnsCharacter(this.characterRepository, characterId, userId, 'write');
 
     if (file.size > MAX_AVATAR_SIZE_BYTES) {
       throw new CharacterError(CharacterErrorCodes.AVATAR_FILE_TOO_LARGE);

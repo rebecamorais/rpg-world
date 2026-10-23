@@ -54,11 +54,15 @@ describe('RLS com client do usuário (Integration)', () => {
     it('o dono lê o próprio personagem', async () => {
       const character = await new SupabaseCharacterRepository(owner.client).findById(characterId);
       expect(character?.name).toBe('Original');
+      expect(await new SupabaseCharacterRepository(owner.client).findOwnerId(characterId)).toBe(
+        owner.userId,
+      );
     });
 
     it('o intruso não enxerga o personagem', async () => {
       const repo = new SupabaseCharacterRepository(intruder.client);
       expect(await repo.findById(characterId)).toBeNull();
+      expect(await repo.findOwnerId(characterId)).toBeNull();
       expect(await repo.findByOwner(owner.userId)).toEqual([]);
     });
 
@@ -88,6 +92,7 @@ describe('RLS com client do usuário (Integration)', () => {
       const repo = new SupabaseCharacterRepository(owner.client);
       expect(await repo.delete(characterId)).toBe(true);
       expect(await repo.findById(characterId)).toBeNull();
+      expect(await repo.findOwnerId(characterId)).toBeNull();
     });
   });
 
