@@ -1,11 +1,10 @@
 import { isFileIn, removeReplacedAsset } from '@backend/shared/application/remove-replaced-asset';
 import { StorageRepository } from '@backend/shared/domain/StorageRepository';
+import { AVATAR_BUCKET } from '@backend/shared/domain/avatar';
 
 import { Profile } from '../domain/Profile';
 import { ProfileRepository } from '../domain/ProfileRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
-
-const AVATAR_BUCKET = 'avatars';
 
 export class UpdateProfileUseCase {
   constructor(

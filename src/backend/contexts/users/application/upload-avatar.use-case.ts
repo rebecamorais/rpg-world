@@ -1,11 +1,12 @@
 import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 import { AssetVersionGenerator, newAssetVersion } from '@backend/shared/domain/asset-version';
+import {
+  ALLOWED_AVATAR_TYPES,
+  AVATAR_BUCKET,
+  MAX_AVATAR_SIZE_BYTES,
+} from '@backend/shared/domain/avatar';
 
 import { UserError, UserErrorCodes } from '../domain/UserError';
-
-const AVATAR_BUCKET = 'avatars';
-export const MAX_AVATAR_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
-export const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export class UploadAvatarUseCase {
   constructor(

@@ -59,6 +59,15 @@ test.describe('salvar a ficha', () => {
   });
 });
 
+test('o avatar abre a personalização do personagem', async ({ page, user: _ }) => {
+  const id = await createCharacter(page, 'Stylish Hero');
+  await page.goto(characterUrl(id));
+
+  await (await hydrated(page.getByRole('button', { name: 'Customize Character' }))).click();
+
+  await expect(page.getByRole('dialog', { name: 'Customize Character' })).toBeVisible();
+});
+
 test('o skip link leva direto ao conteúdo', async ({ page }) => {
   await page.goto('/login');
   await page.keyboard.press('Tab');

@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const ROOT = path.resolve(__dirname, '../..');
+const ROOT = path.resolve(import.meta.dirname, '../..');
 const DIRS = ['src/frontend/components', 'app'];
 // shadcn primitives take their text from the caller
 const IGNORED_DIRS = ['src/frontend/components/ui'];
