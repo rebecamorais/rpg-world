@@ -7,9 +7,15 @@ on:
 permissions:
   contents: read
 
+# A new push to the same PR cancels the run still going for the previous one
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     env:
       NEXT_PUBLIC_SUPABASE_URL: http://localhost:54421
@@ -30,7 +36,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Type Check
         run: npx tsc --noEmit
@@ -69,6 +75,7 @@ jobs:
   # Informativo por enquanto: não está entre os checks obrigatórios do ruleset.
   e2e:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
 
     steps:
       - name: Checkout Code
@@ -81,7 +88,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       # The browser is cached per Playwright version; only the system libraries are installed on a
       # hit. Downloading Chromium on every run sometimes hung for 10+ minutes.
