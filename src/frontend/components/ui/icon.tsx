@@ -1,6 +1,3 @@
-'use client';
-
-import { Icon as Iconify } from '@iconify/react';
 import {
   Activity,
   Backpack,
@@ -59,7 +56,7 @@ import {
   Zap,
 } from 'lucide-react';
 
-import GAME_ICONS from '@frontend/constants/game-icons.generated.json';
+import { GAME_ICON_NAMES, GAME_ICON_SPRITE } from '@frontend/constants/game-icon-sprite.generated';
 import { cn } from '@frontend/lib/utils';
 
 /**
@@ -143,8 +140,10 @@ interface IconProps extends Omit<LucideProps, 'size'> {
 /**
  * AppIcon: A unified registry for application icons.
  * - 'system': Uses Lucide React icons for UI and platform elements.
- * - 'game': Uses Game Icons via Iconify for immersive RPG elements. Their SVG data is bundled
- *   (`npm run icons` regenerates `game-icons.generated.json`), so nothing is fetched at runtime.
+ * - 'game': Game Icons for immersive RPG elements, drawn from one static SVG sprite
+ *   (`npm run icons` regenerates it). Their paths stay out of the JS bundle, and the browser
+ *   caches the sprite for good (its name carries a hash of its content).
+ * No hooks: renders on the server too.
  */
 export function AppIcon({
   name,
@@ -159,25 +158,26 @@ export function AppIcon({
     typeof size === 'string' ? ICON_SIZE_PRESETS[size as keyof typeof ICON_SIZE_PRESETS] : size;
 
   if (variant === 'game') {
-    const icon = GAME_ICONS[name as keyof typeof GAME_ICONS];
-    if (!icon) {
+    if (!GAME_ICON_NAMES.has(name)) {
       if (process.env.NODE_ENV === 'development') {
-        console.warn(`[AppIcon] Game icon "${name}" is not bundled. Run \`npm run icons\`.`);
+        console.warn(`[AppIcon] Game icon "${name}" is not in the sprite. Run \`npm run icons\`.`);
       }
       return null;
     }
 
-    // Only pass compatible props to Iconify
-    const { absoluteStrokeWidth: _, ...iconifyProps } = props as Record<string, unknown>;
+    // Lucide-only props have no meaning on the sprite
+    const { absoluteStrokeWidth: _, ...svgProps } = props;
 
     return (
-      <Iconify
-        icon={icon}
-        className={cn('inline-block', className)}
+      <svg
+        aria-hidden="true"
         width={resolvedSize}
         height={resolvedSize}
-        {...iconifyProps}
-      />
+        className={cn('inline-block', className)}
+        {...svgProps}
+      >
+        <use href={`${GAME_ICON_SPRITE}#${name}`} />
+      </svg>
     );
   }
 

@@ -1,18 +1,20 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { GAME_ICON_SPRITE } from '@frontend/constants/game-icon-sprite.generated';
+
 import { AppIcon } from './icon';
 
 describe('AppIcon', () => {
-  it('desenha game icons a partir dos dados empacotados, sem rede', () => {
+  it('desenha game icons a partir do sprite estático, sem JS do ícone nem rede', () => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch');
 
     const { container } = render(<AppIcon variant="game" name="crystal-ball" size={24} />);
 
     const svg = container.querySelector('svg');
-    expect(svg).not.toBeNull();
     expect(svg).toHaveAttribute('width', '24');
-    expect(svg!.innerHTML).not.toBe('');
+    expect(svg).toHaveAttribute('aria-hidden', 'true');
+    expect(svg!.querySelector('use')).toHaveAttribute('href', `${GAME_ICON_SPRITE}#crystal-ball`);
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 

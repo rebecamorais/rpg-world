@@ -1,16 +1,21 @@
 import type { IconifyJSON } from '@iconify/types';
 import { getIconData } from '@iconify/utils';
+import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
-export const GAME_ICONS_FILE = 'src/frontend/constants/game-icons.generated.json';
+/** Folder of the sprite, served as is: `/icons/game-<hash>.svg`. */
+export const GAME_ICON_SPRITE_DIR = 'public/icons';
+/** Where the app reads the sprite's current URL from. */
+export const GAME_ICON_SPRITE_URL_FILE = 'src/frontend/constants/game-icon-sprite.generated.ts';
 
 const require = createRequire(import.meta.url);
 
 const SOURCE_DIRS = ['src', 'app'];
 const SOURCE_FILE = /\.(ts|tsx)$/;
-const TEST_FILE = /\.test\.(ts|tsx)$/;
+// Tests, and generated files (the sprite's own list of names would keep every icon forever)
+const SKIPPED_FILE = /\.(test|generated)\.(ts|tsx)$/;
 const STRING_LITERAL = /['"`]([a-z0-9]+(?:-[a-z0-9]+)*)['"`]/g;
 
 export interface GameIconData {
@@ -29,7 +34,7 @@ function sourceFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((entry) => {
     const full = path.join(dir, entry);
     if (statSync(full).isDirectory()) return sourceFiles(full);
-    return SOURCE_FILE.test(entry) && !TEST_FILE.test(entry) ? [full] : [];
+    return SOURCE_FILE.test(entry) && !SKIPPED_FILE.test(entry) ? [full] : [];
   });
 }
 
@@ -60,4 +65,18 @@ export function buildGameIcons(root = process.cwd()): Record<string, GameIconDat
       ];
     }),
   );
+}
+
+/** One `<symbol>` per icon, referenced as `<use href="/icons/game-<hash>.svg#<name>">`. */
+export function buildGameIconSprite(icons: Record<string, GameIconData>): string {
+  const symbols = Object.entries(icons).map(
+    ([name, { body, width, height }]) =>
+      `<symbol id="${name}" viewBox="0 0 ${width} ${height}">${body}</symbol>`,
+  );
+  return `<svg xmlns="http://www.w3.org/2000/svg">${symbols.join('')}</svg>\n`;
+}
+
+/** The sprite's file name changes with its content, so browsers can cache it for good. */
+export function gameIconSpriteName(sprite: string): string {
+  return `game-${createHash('sha256').update(sprite).digest('hex').slice(0, 10)}.svg`;
 }
