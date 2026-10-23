@@ -79,4 +79,21 @@ describe('Auth Flow (Integration)', () => {
     expect(result).toBeDefined();
     expect(result.passwordChangeRequired).toBe(false);
   });
+
+  it('existsByEmail acha a conta pelo e-mail, sem diferenciar maiúsculas', async () => {
+    const email = `exists-${Math.random().toString(36).substring(7)}@example.com`;
+    const { error } = await dbClient.auth.admin.createUser({ email, password: 'Senha!12345' });
+    if (error) throw error;
+
+    expect(await repo.existsByEmail(email.toUpperCase())).toBe(true);
+    expect(await repo.existsByEmail(`  ${email} `)).toBe(true);
+    expect(await repo.existsByEmail(`nobody-${email}`)).toBe(false);
+  });
+
+  it('a chave pública e o usuário logado não chamam auth_user_exists', async () => {
+    const { error } = await SupabaseFactory.createAnon().rpc('auth_user_exists', {
+      p_email: 'someone@example.com',
+    });
+    expect(error?.code).toBe('42501');
+  });
 });
