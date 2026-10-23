@@ -3,6 +3,7 @@
  */
 import type { Metadata } from 'next';
 import { Cinzel, Geist_Mono, Inter } from 'next/font/google';
+import Script from 'next/script';
 
 import { getLocale, getMessages, getTimeZone, getTranslations } from 'next-intl/server';
 
@@ -13,6 +14,11 @@ import { Toaster } from '@frontend/components/ui/sonner';
 import { SITE_URL } from '@frontend/constants/site';
 
 import './globals.css';
+
+// Cloudflare Web Analytics (cookieless visit counts). The token is public: it only identifies the
+// site. Production only, so local runs, previews and the e2e suite don't count as visits.
+const CLOUDFLARE_BEACON_TOKEN = '356fc3bfc2dd43c4b8f065945a42eb32';
+const isProduction = process.env.VERCEL_ENV === 'production';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -91,6 +97,13 @@ export default async function RootLayout({
           <Footer />
         </Providers>
         <Toaster />
+        {isProduction ? (
+          <Script
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={JSON.stringify({ token: CLOUDFLARE_BEACON_TOKEN })}
+            strategy="afterInteractive"
+          />
+        ) : null}
       </body>
     </html>
   );

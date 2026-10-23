@@ -31,7 +31,7 @@ describe('buildContentSecurityPolicy', () => {
     expect(directive(csp, 'frame-src')).toContain('https://challenges.cloudflare.com');
   });
 
-  it('allows the Cloudflare Web Analytics beacon Cloudflare injects', () => {
+  it('allows the Cloudflare Web Analytics beacon the root layout loads', () => {
     const csp = buildContentSecurityPolicy(prod);
     expect(directive(csp, 'script-src')).toContain('https://static.cloudflareinsights.com');
     expect(directive(csp, 'connect-src')).toContain('https://cloudflareinsights.com');

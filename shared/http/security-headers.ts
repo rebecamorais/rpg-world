@@ -8,7 +8,7 @@
 
 const TURNSTILE_ORIGIN = 'https://challenges.cloudflare.com';
 const GITHUB_SPONSORS_ORIGIN = 'https://github.com';
-// Cloudflare Web Analytics (cookieless visit counts): Cloudflare injects the beacon script, which
+// Cloudflare Web Analytics (cookieless visit counts): the root layout loads the beacon script, which
 // reports back to cloudflareinsights.com
 const CLOUDFLARE_INSIGHTS_SCRIPT = 'https://static.cloudflareinsights.com';
 const CLOUDFLARE_INSIGHTS_REPORT = 'https://cloudflareinsights.com';
