@@ -1,14 +1,13 @@
 import type { IconifyJSON } from '@iconify/types';
 import { getIconData } from '@iconify/utils';
-import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
-/** Folder of the sprite, served as is: `/icons/game-<hash>.svg`. */
-export const GAME_ICON_SPRITE_DIR = 'public/icons';
-/** Where the app reads the sprite's current URL from. */
-export const GAME_ICON_SPRITE_URL_FILE = 'src/frontend/constants/game-icon-sprite.generated.ts';
+/** The sprite, imported by AppIcon: Next serves it under /_next/static with a hashed, immutable URL. */
+export const GAME_ICON_SPRITE_FILE = 'src/frontend/constants/game-icons.svg';
+/** The names in the sprite, so AppIcon draws nothing for one that isn't there. */
+export const GAME_ICON_NAMES_FILE = 'src/frontend/constants/game-icon-names.generated.ts';
 
 const require = createRequire(import.meta.url);
 
@@ -67,16 +66,12 @@ export function buildGameIcons(root = process.cwd()): Record<string, GameIconDat
   );
 }
 
-/** One `<symbol>` per icon, referenced as `<use href="/icons/game-<hash>.svg#<name>">`. */
+/** One `<symbol>` per icon, referenced as `<use href="<sprite url>#<name>">`. */
 export function buildGameIconSprite(icons: Record<string, GameIconData>): string {
   const symbols = Object.entries(icons).map(
     ([name, { body, width, height }]) =>
       `<symbol id="${name}" viewBox="0 0 ${width} ${height}">${body}</symbol>`,
   );
-  return `<svg xmlns="http://www.w3.org/2000/svg">${symbols.join('')}</svg>\n`;
-}
-
-/** The sprite's file name changes with its content, so browsers can cache it for good. */
-export function gameIconSpriteName(sprite: string): string {
-  return `game-${createHash('sha256').update(sprite).digest('hex').slice(0, 10)}.svg`;
+  // The root's size only satisfies the bundler's image import; each <symbol> has its own viewBox
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">${symbols.join('')}</svg>\n`;
 }

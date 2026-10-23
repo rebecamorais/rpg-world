@@ -56,7 +56,8 @@ import {
   Zap,
 } from 'lucide-react';
 
-import { GAME_ICON_NAMES, GAME_ICON_SPRITE } from '@frontend/constants/game-icon-sprite.generated';
+import { GAME_ICON_NAMES } from '@frontend/constants/game-icon-names.generated';
+import gameIconSprite from '@frontend/constants/game-icons.svg';
 import { cn } from '@frontend/lib/utils';
 
 /**
@@ -140,9 +141,9 @@ interface IconProps extends Omit<LucideProps, 'size'> {
 /**
  * AppIcon: A unified registry for application icons.
  * - 'system': Uses Lucide React icons for UI and platform elements.
- * - 'game': Game Icons for immersive RPG elements, drawn from one static SVG sprite
- *   (`npm run icons` regenerates it). Their paths stay out of the JS bundle, and the browser
- *   caches the sprite for good (its name carries a hash of its content).
+ * - 'game': Game Icons for immersive RPG elements, drawn from one SVG sprite (`npm run icons`
+ *   regenerates it). Their paths stay out of the JS bundle; Next serves the sprite with a hashed,
+ *   immutable URL, so the browser keeps it.
  * No hooks: renders on the server too.
  */
 export function AppIcon({
@@ -176,7 +177,7 @@ export function AppIcon({
         className={cn('inline-block', className)}
         {...svgProps}
       >
-        <use href={`${GAME_ICON_SPRITE}#${name}`} />
+        <use href={`${gameIconSprite.src}#${name}`} />
       </svg>
     );
   }

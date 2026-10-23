@@ -5,6 +5,7 @@ import { getApi } from '@api';
 import Sidebar from '@frontend/components/layout/Sidebar';
 import { SeededQuery } from '@frontend/components/providers/SeededQuery';
 import { UserProvider } from '@frontend/context/UserContext';
+import { PROFILE_QUERY_KEY } from '@frontend/lib/query-keys';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { authApi, profileApi } = await getApi();
@@ -20,7 +21,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const profile = await profileApi.getProfile(user.id).catch(() => null);
 
   return (
-    <SeededQuery queryKey={['profile']} data={profile}>
+    <SeededQuery queryKey={PROFILE_QUERY_KEY} data={profile}>
       <UserProvider user={user}>
         <div className="bg-sidebar text-foreground flex min-h-[calc(100vh-var(--header-height))]">
           {/* Sidebar */}

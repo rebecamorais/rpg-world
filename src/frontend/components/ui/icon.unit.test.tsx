@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { GAME_ICON_SPRITE } from '@frontend/constants/game-icon-sprite.generated';
+import gameIconSprite from '@frontend/constants/game-icons.svg';
 
 import { AppIcon } from './icon';
 
@@ -14,7 +14,7 @@ describe('AppIcon', () => {
     const svg = container.querySelector('svg');
     expect(svg).toHaveAttribute('width', '24');
     expect(svg).toHaveAttribute('aria-hidden', 'true');
-    expect(svg!.querySelector('use')).toHaveAttribute('href', `${GAME_ICON_SPRITE}#crystal-ball`);
+    expect(svg!.querySelector('use')).toHaveAttribute('href', `${gameIconSprite.src}#crystal-ball`);
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 

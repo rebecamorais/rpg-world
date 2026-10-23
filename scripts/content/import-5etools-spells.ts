@@ -9,9 +9,8 @@
  * (i18n/<locale>/) come from Crowdin and are never touched, apart from creating an empty file for
  * Portuguese the first time.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { format, resolveConfig } from 'prettier';
 import { z } from 'zod';
 
 import {
@@ -21,6 +20,7 @@ import {
   spellTextSchema,
 } from '@shared/systems/dnd5e/content/spell.schema';
 
+import { writeFormatted } from '../write-formatted';
 import {
   type FiveToolsSpell,
   extrasOf,
@@ -43,12 +43,7 @@ async function fetchJson<T>(file: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-// Formatted as the pre-commit hook would, so running the import again leaves no diff
-async function write(file: string, data: unknown) {
-  const options = await resolveConfig(file);
-  mkdirSync(path.dirname(file), { recursive: true });
-  writeFileSync(file, await format(JSON.stringify(data), { ...options, filepath: file }));
-}
+const write = (file: string, data: unknown) => writeFormatted(file, JSON.stringify(data));
 
 const readJson = (file: string): unknown => JSON.parse(readFileSync(path.join(ROOT, file), 'utf8'));
 
