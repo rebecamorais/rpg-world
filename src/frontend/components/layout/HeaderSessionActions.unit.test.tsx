@@ -3,6 +3,7 @@ import { renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it, vi } from 'vitest';
 
 import { useSession } from '@frontend/hooks/useSession';
+import { SESSION_QUERY_KEY } from '@frontend/lib/query-keys';
 
 import { HeaderSessionActions } from './HeaderSessionActions';
 
@@ -42,5 +43,14 @@ describe('HeaderSessionActions', () => {
 
     expect(screen.queryByRole('link', { name: 'Sign In' })).toBeNull();
     expect(screen.getByRole('link', { name: /Back/ })).toHaveAttribute('href', '/characters');
+  });
+
+  it('com a sessão do servidor, guarda-a para as páginas públicas não perguntarem de novo', () => {
+    const user = { id: 'u1', email: 'a@b.c' };
+    session.mockReturnValue({ user, status: 'signed-in' });
+
+    const { queryClient } = renderWithProviders(<HeaderSessionActions serverUser={user} />);
+
+    expect(queryClient.getQueryData(SESSION_QUERY_KEY)).toEqual(user);
   });
 });

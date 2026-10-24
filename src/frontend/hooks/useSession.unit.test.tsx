@@ -1,4 +1,7 @@
-import { waitFor } from '@testing-library/react';
+import type { ReactNode } from 'react';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react';
 import { renderHookWithProviders } from '@tests/helpers/render';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -58,5 +61,20 @@ describe('useSession', () => {
 
     expect(result.current).toEqual({ user: { id: 'u1' }, status: 'signed-in' });
     expect(api.get).not.toHaveBeenCalled();
+  });
+
+  it('com cookie sb- e erro 500 responde signed-out sem ficar esperando retries', async () => {
+    setCookie('sb-ref-auth-token=x');
+    api.get.mockRejectedValue(new APIError('boom', 500));
+    // Like the app's client: queries retry by default
+    const client = new QueryClient();
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    );
+
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    await waitFor(() => expect(result.current.status).toBe('signed-out'), { timeout: 500 });
+    expect(api.get).toHaveBeenCalledTimes(1);
   });
 });

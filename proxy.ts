@@ -49,10 +49,13 @@ export async function proxy(request: NextRequest) {
   // the token is valid
   const { data } = await supabaseAuth.auth.getClaims();
 
-  const response =
-    data?.claims && SIGNED_OUT_ONLY.has(request.nextUrl.pathname)
-      ? NextResponse.redirect(new URL('/characters', request.url))
-      : handleI18n(request);
+  let response = handleI18n(request);
+  if (data?.claims && SIGNED_OUT_ONLY.has(request.nextUrl.pathname)) {
+    const redirect = NextResponse.redirect(new URL('/characters', request.url));
+    // Keeps the language cookie next-intl may have just corrected
+    response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+    response = redirect;
+  }
 
   for (const { name, value, options } of refreshed) response.cookies.set(name, value, options);
   return response;

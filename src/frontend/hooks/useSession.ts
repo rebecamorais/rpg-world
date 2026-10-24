@@ -36,6 +36,10 @@ export function useSession(known?: User | null): { user: User | null; status: Se
     },
     enabled: cookie && known === undefined,
     staleTime: 5 * 60 * 1000,
+    // A failed check shows the signed-out buttons at once instead of a placeholder through the
+    // retries; signing in from there still works
+    retry: false,
+    networkMode: 'always',
   });
 
   if (known !== undefined) return { user: known, status: known ? 'signed-in' : 'signed-out' };

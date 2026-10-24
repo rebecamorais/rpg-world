@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 import Link from 'next/link';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 
 import LanguageSwitcher from '@frontend/components/LanguageSwitcher';
@@ -13,6 +14,7 @@ import UserMenu from '@frontend/components/layout/UserMenu';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useSession } from '@frontend/hooks/useSession';
+import { SESSION_QUERY_KEY } from '@frontend/lib/query-keys';
 
 import type { User } from '@shared/types/user';
 
@@ -35,10 +37,19 @@ export function HeaderSessionActions({ serverUser }: KnownSession) {
   const tCommon = useTranslations('common');
   const { user, status } = useSession(serverUser);
 
-  // The inline script in the root layout hid the signed-out buttons until this is known
+  const queryClient = useQueryClient();
+
+  // The inline script in the root layout hid the signed-out buttons until this is known. On the
+  // hydration commit status is still the server's 'signed-out', so this runs once early; the
+  // cookie check re-renders to 'loading' (placeholder) in the same tick, before anything paints.
   useEffect(() => {
     if (status !== 'loading') delete document.documentElement.dataset.session;
   }, [status]);
+
+  // Signed-in pages hand their session to the public ones the visitor goes to next
+  useEffect(() => {
+    if (serverUser !== undefined) queryClient.setQueryData(SESSION_QUERY_KEY, serverUser);
+  }, [queryClient, serverUser]);
 
   return (
     <div className="flex items-center gap-1 sm:gap-2">

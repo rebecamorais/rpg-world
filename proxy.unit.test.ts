@@ -137,6 +137,20 @@ describe('proxy', () => {
       },
     );
 
+    it('o redirect leva também o cookie de idioma que o next-intl corrigiu', async () => {
+      signedIn();
+
+      const res = await proxy(
+        request(
+          { 'sb-127-auth-token': 'token', NEXT_LOCALE: 'de' },
+          { path: '/login', acceptLanguage: 'pt-BR' },
+        ),
+      );
+
+      expect(new URL(res.headers.get('location')!).pathname).toBe('/characters');
+      expect(res.cookies.get('NEXT_LOCALE')?.value).toBe('pt');
+    });
+
     it('sem sessão válida, /login abre normalmente', async () => {
       const res = await proxy(request({ 'sb-127-auth-token': 'expired' }, { path: '/login' }));
 
