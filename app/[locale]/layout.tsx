@@ -88,7 +88,17 @@ export default async function RootLayout({
   const t = await getTranslations('common');
 
   return (
-    <html lang={locale}>
+    // The inline script below may set data-session before React hydrates
+    <html lang={locale} suppressHydrationWarning>
+      <head>
+        {/* Prebuilt pages render signed out for everyone. With a session cookie, hide the
+            signed-out buttons until the header confirms the session (no flash of "Sign in"). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if(/(?:^|;\\s*)sb-/.test(document.cookie))document.documentElement.dataset.session='pending'`,
+          }}
+        />
+      </head>
       <body
         className={`${inter.variable} ${cinzel.variable} ${geistMono.variable} bg-background text-foreground flex min-h-screen flex-col antialiased`}
       >

@@ -7,7 +7,7 @@ import { PageFrame } from '@frontend/components/layout/PageFrame';
 /** Signed-in and per-request pages: the header knows the session from the server. */
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
-    <PageFrame header={<GlobalHeader />} footer={<Footer />}>
+    <PageFrame header={<GlobalHeader session="server" />} footer={<Footer session="server" />}>
       {children}
     </PageFrame>
   );

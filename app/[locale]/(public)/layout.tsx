@@ -7,7 +7,7 @@ import { PageFrame } from '@frontend/components/layout/PageFrame';
 /** Public pages: prebuilt per language, so nothing here may read the request. */
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
-    <PageFrame header={<GlobalHeader />} footer={<Footer />}>
+    <PageFrame header={<GlobalHeader session="client" />} footer={<Footer session="client" />}>
       {children}
     </PageFrame>
   );
