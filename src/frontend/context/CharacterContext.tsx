@@ -11,6 +11,7 @@ import { FieldValidityProvider } from '@frontend/context/FieldValidityContext';
 import { useCharacter } from '@frontend/hooks/useCharacter';
 import { type DraftPatch, useDraft } from '@frontend/hooks/useDraft';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { characterChanges } from '@frontend/lib/character-changes';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
@@ -99,7 +100,9 @@ export function CharacterProvider({
 
   const save = useCallback(async () => {
     try {
-      await commit(updateCharacter);
+      await commit((character, edits, base) =>
+        updateCharacter({ character, changes: characterChanges(base, edits) }),
+      );
       toast.success(t('saveSuccess'));
     } catch {
       // useCharacter already shows the error
