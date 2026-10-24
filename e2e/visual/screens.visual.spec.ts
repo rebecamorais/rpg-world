@@ -12,6 +12,10 @@ import { SPELLS } from '../support/global-setup';
 
 async function settle(page: Page) {
   await page.evaluate(() => document.fonts.ready);
+  // Turnstile draws a third-party widget (in a shadow root) that may or may not have loaded by
+  // now. Its slot keeps the same reserved height either way, so making it transparent makes the
+  // screen the same in both cases.
+  await page.addStyleTag({ content: '[data-turnstile] { opacity: 0 !important; }' });
   // Client data (profile, character) and image decoding settle
   await page.waitForTimeout(800);
 }
@@ -90,8 +94,7 @@ test.describe('telas públicas', () => {
     test(name, async ({ page }) => {
       await page.goto(path);
       await page.getByRole('heading').first().waitFor();
-      // Turnstile renders a third-party widget whose state we don't control
-      await snap(page, name, [page.locator('iframe[src*="challenges.cloudflare.com"]')]);
+      await snap(page, name);
     });
   }
 });
