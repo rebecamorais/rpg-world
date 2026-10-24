@@ -12,6 +12,7 @@ import Footer from '@frontend/components/layout/Footer';
 import GlobalHeader from '@frontend/components/layout/GlobalHeader';
 import Providers from '@frontend/components/providers/Providers';
 import { Toaster } from '@frontend/components/ui/sonner';
+import { clientMessages } from '@frontend/constants/client-messages';
 import { SITE_URL } from '@frontend/constants/site';
 
 import './globals.css';
@@ -71,7 +72,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
-  const messages = await getMessages();
+  // Only what client components read goes to the browser on every page
+  const messages = clientMessages(await getMessages());
   const timeZone = await getTimeZone();
   const t = await getTranslations('common');
 
