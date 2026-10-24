@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import { z } from 'zod/mini';
 
 import { signUpAction } from '@frontend/actions/auth/sign-up-action';
 import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
@@ -48,10 +48,10 @@ export default function SignUpForm() {
 
   const signUpSchema = z
     .object({
-      email: z.string().email({ message: t('errors.invalidEmail') }),
+      email: z.email(t('errors.invalidEmail')),
       ...newPasswordFields(tCommon),
     })
-    .refine(...passwordsMustMatch(tCommon));
+    .check(passwordsMustMatch(tCommon));
 
   type SignUpValues = z.infer<typeof signUpSchema>;
 

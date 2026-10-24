@@ -1,4 +1,5 @@
-import { z } from 'zod';
+// zod/mini: the forms ship to the browser, and the full zod is ~30 KB gzip more
+import { z } from 'zod/mini';
 
 import {
   MAX_PASSWORD_LENGTH,
@@ -17,23 +18,26 @@ export function newPasswordFields(t: CommonTranslator) {
   return {
     password: z
       .string()
-      .min(MIN_PASSWORD_LENGTH, { message: t('passwordMinLength', { min: MIN_PASSWORD_LENGTH }) })
-      .max(MAX_PASSWORD_LENGTH, { message: t('passwordTooLong') })
-      .refine(fitsPasswordBytes, { message: t('passwordTooLong') }),
+      .check(
+        z.minLength(MIN_PASSWORD_LENGTH, t('passwordMinLength', { min: MIN_PASSWORD_LENGTH })),
+        z.maxLength(MAX_PASSWORD_LENGTH, t('passwordTooLong')),
+        z.refine(fitsPasswordBytes, t('passwordTooLong')),
+      ),
     confirmPassword: z.string(),
   };
 }
 
-/** Arguments for `.refine(...)`: the confirmation must repeat the password. */
-export function passwordsMustMatch(
-  t: CommonTranslator,
-): [(data: { password: string; confirmPassword: string }) => boolean, z.core.$ZodCustomParams] {
-  return [
+/** Check for `.check(...)`: the confirmation must repeat the password. */
+export function passwordsMustMatch(t: CommonTranslator) {
+  return z.refine<{ password: string; confirmPassword: string }>(
     (data) => data.password === data.confirmPassword,
-    { message: t('passwordsDoNotMatch'), path: ['confirmPassword'] },
-  ];
+    {
+      error: t('passwordsDoNotMatch'),
+      path: ['confirmPassword'],
+    },
+  );
 }
 
 export function newPasswordSchema(t: CommonTranslator) {
-  return z.object(newPasswordFields(t)).refine(...passwordsMustMatch(t));
+  return z.object(newPasswordFields(t)).check(passwordsMustMatch(t));
 }

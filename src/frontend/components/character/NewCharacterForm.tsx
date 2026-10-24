@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { z } from 'zod/mini';
 
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
@@ -38,8 +38,8 @@ export default function NewCharacterForm() {
   const createMutation = useCreateCharacter(t('success'));
 
   const newCharacterSchema = z.object({
-    name: z.string().trim().min(1, t('nameRequired')).max(100),
-    system: z.string().min(1, t('systemPlaceholder')),
+    name: z.string().check(z.trim(), z.minLength(1, t('nameRequired')), z.maxLength(100)),
+    system: z.string().check(z.minLength(1, t('systemPlaceholder'))),
   });
 
   type NewCharacterFormValues = z.infer<typeof newCharacterSchema>;

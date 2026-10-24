@@ -9,7 +9,7 @@ import { Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import { z } from 'zod/mini';
 
 import { submitFeedbackAction } from '@frontend/actions/feedback/submit-feedback-action';
 import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
@@ -57,9 +57,9 @@ export default function ContactForm({
   } = useTurnstile();
 
   const feedbackSchema = z.object({
-    email: z.string().email(),
-    type: z.string().min(1),
-    message: z.string().min(10),
+    email: z.email(),
+    type: z.string().check(z.minLength(1)),
+    message: z.string().check(z.minLength(10)),
   });
 
   type FeedbackFormValues = z.infer<typeof feedbackSchema>;

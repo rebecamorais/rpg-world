@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { spellKey } from '@shared/content/content-key';
+
 import { DnD5eCharacter } from '../domain/entity/DnD5eCharacter';
 import { Attributes } from '../domain/value-object/Attributes';
 import { HealthPoints } from '../domain/value-object/HealthPoints';
@@ -7,6 +9,7 @@ import {
   characterUpdatesSchema,
   createCharacterSchema,
   localeQuerySchema,
+  spellKeySchema,
   toggleSpellSchema,
 } from './characters.schemas';
 
@@ -114,5 +117,21 @@ describe('localeQuerySchema', () => {
     expect(localeQuerySchema.parse({})).toEqual({ locale: 'en' });
     expect(localeQuerySchema.parse({ locale: '' })).toEqual({ locale: 'en' });
     expect(localeQuerySchema.parse({ locale: 'pt' })).toEqual({ locale: 'pt' });
+  });
+});
+
+describe('spellKeySchema', () => {
+  it.each([
+    'fireball',
+    'dnd5e:srd-5.1:item:rope',
+    'dnd5e:srd 5.1:spell:x',
+    'e2e00000-0000-4000-8000-000000000001',
+  ])('recusa %s', (key) => {
+    expect(spellKeySchema.safeParse(key).success).toBe(false);
+  });
+
+  it('aceita uma chave de magia e recusa uma longa demais', () => {
+    expect(spellKeySchema.safeParse(spellKey('srd-5.1', 'fireball')).success).toBe(true);
+    expect(spellKeySchema.safeParse(spellKey('srd-5.1', 'a'.repeat(200))).success).toBe(false);
   });
 });

@@ -113,7 +113,7 @@ export function TurnstileWidget({
   return (
     <div className="my-2 flex flex-col items-center gap-2">
       {/* Reserves the widget's height (65px) so the form doesn't jump when it loads */}
-      <div ref={containerRef} className="min-h-[65px]" />
+      <div ref={containerRef} data-turnstile className="min-h-[65px]" />
       {unavailable && (
         <p role="alert" className="text-danger-flare text-center text-sm">
           {getMessage('security_widget_unavailable')}

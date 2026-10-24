@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import { z } from 'zod/mini';
 
 import ImageUpload from '@frontend/components/shared/ImageUpload';
 import { LoadingState } from '@frontend/components/shared/LoadingState';
@@ -28,25 +28,29 @@ import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
 import { cn } from '@frontend/lib/utils';
 
+/** Optional, and an empty field counts as not filled in. */
+const orEmpty = <T extends z.ZodMiniType>(schema: T) =>
+  z.union([z.optional(schema), z.literal('')]);
+
 export default function ProfileForm() {
   const t = useTranslations('profileForm');
   const { getMessage } = useErrorMessage();
 
   const profileSchema = z.object({
-    username: z
-      .string()
-      .min(3, t('validation.usernameMin'))
-      .max(30, t('validation.usernameMax'))
-      .regex(/^[a-z0-9_]+$/, t('validation.usernamePattern'))
-      .optional()
-      .or(z.literal('')),
-    fullName: z.string().max(100, t('validation.fullNameMax')).optional().or(z.literal('')),
-    avatarUrl: z.string().url(t('validation.avatarUrlInvalid')).optional().or(z.literal('')),
-    primaryColor: z
-      .string()
-      .regex(/^#[0-9a-fA-F]{6}$/, t('validation.primaryColorInvalid'))
-      .optional()
-      .or(z.literal('')),
+    username: orEmpty(
+      z
+        .string()
+        .check(
+          z.minLength(3, t('validation.usernameMin')),
+          z.maxLength(30, t('validation.usernameMax')),
+          z.regex(/^[a-z0-9_]+$/, t('validation.usernamePattern')),
+        ),
+    ),
+    fullName: orEmpty(z.string().check(z.maxLength(100, t('validation.fullNameMax')))),
+    avatarUrl: orEmpty(z.url(t('validation.avatarUrlInvalid'))),
+    primaryColor: orEmpty(
+      z.string().check(z.regex(/^#[0-9a-fA-F]{6}$/, t('validation.primaryColorInvalid'))),
+    ),
   });
 
   type ProfileFormValues = z.infer<typeof profileSchema>;
