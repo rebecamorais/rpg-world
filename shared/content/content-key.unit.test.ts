@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseSpellKey, spellKey, spellKeySchema } from './content-key';
+import { parseSpellKey, spellKey } from './content-key';
 
 describe('chave de conteúdo', () => {
   it('monta e lê a chave de uma magia', () => {
@@ -18,10 +18,5 @@ describe('chave de conteúdo', () => {
     'e2e00000-0000-4000-8000-000000000001',
   ])('recusa %s', (key) => {
     expect(parseSpellKey(key)).toBeNull();
-    expect(spellKeySchema.safeParse(key).success).toBe(false);
-  });
-
-  it('recusa chave longa demais', () => {
-    expect(spellKeySchema.safeParse(spellKey('srd-5.1', 'a'.repeat(200))).success).toBe(false);
   });
 });

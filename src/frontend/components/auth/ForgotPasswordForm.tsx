@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { z } from 'zod/mini';
 
 import { requestPasswordResetAction } from '@frontend/actions/auth/request-password-reset-action';
 import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
@@ -44,7 +44,7 @@ export default function ForgotPasswordForm() {
   } = useTurnstile();
 
   const schema = z.object({
-    email: z.string().email({ message: t('emailLabel') }), // Simplificado para usar a label como erro se falhar zod
+    email: z.email(t('emailLabel')), // Simplificado para usar a label como erro se falhar zod
   });
 
   type Values = z.infer<typeof schema>;

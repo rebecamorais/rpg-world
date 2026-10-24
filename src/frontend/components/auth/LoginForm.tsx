@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { z } from 'zod/mini';
 
 import { requestMagicLinkAction } from '@frontend/actions/auth/request-magic-link-action';
 import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
@@ -53,8 +53,8 @@ export default function LoginForm() {
   } = useTurnstile();
 
   const loginSchema = z.object({
-    email: z.string().email({ message: t('invalidEmailError') }),
-    password: z.string().optional(),
+    email: z.email(t('invalidEmailError')),
+    password: z.optional(z.string()),
   });
 
   const form = useForm<LoginFormValues>({
