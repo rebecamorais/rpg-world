@@ -374,7 +374,14 @@ sem o aviso guardado`.
 
 ## Resultados da medição
 
-| URL         | antes (fria) | antes (quente) | depois (fria) | depois (quente) |
-| ----------- | ------------ | -------------- | ------------- | --------------- |
-| `/`         |              |                |               |                 |
-| `/features` |              |                |               |                 |
+Medido com `curl -w '%{time_starttransfer}'` em `https://www.rpgworldapp.com`, de São Paulo, sem
+cookie, 5 vezes. "Fria" é a primeira chamada da série.
+
+| URL         | antes (fria) | antes (quente, mediana) | depois (fria) | depois (quente, mediana) |
+| ----------- | ------------ | ----------------------- | ------------- | ------------------------ |
+| `/`         | 1,81 s       | 0,15 s                  |               |                          |
+| `/features` | 0,26 s       | 0,13 s                  |               |                          |
+
+Achado à parte: `https://rpgworldapp.com` (sem `www`) responde 308 para o `www` antes de qualquer
+coisa, mais uma ida e volta (~40–100 ms) para quem compartilha o link sem `www`. Fica fora deste
+projeto.
