@@ -15,29 +15,32 @@ vi.mock('sonner', () => ({ toast: vi.fn() }));
 
 const messages = { en, pt };
 
-/** Renders the hook in `locale`; `rerender` with another locale is what router.refresh does. */
-function setup(signedIn: boolean) {
-  let locale: 'en' | 'pt' = 'en';
+/** Mounts the hook in `locale`, as a page load does. */
+function mount(signedIn: boolean, locale: 'en' | 'pt') {
   const wrapper = ({ children }: { children: ReactNode }) => (
     <NextIntlClientProvider locale={locale} messages={messages[locale]} timeZone="UTC">
       {children}
     </NextIntlClientProvider>
   );
-  const hook = renderHook(() => useTranslationInvite(signedIn), { wrapper });
-  const switchTo = (next: 'en' | 'pt') => {
-    act(() => hook.result.current());
-    locale = next;
-    hook.rerender();
-  };
-  return { switchTo };
+  return renderHook(() => useTranslationInvite(signedIn), { wrapper });
+}
+
+/** Picks a language: the switcher then reloads, so the page mounts again in it. */
+function switchTo(signedIn: boolean, from: 'en' | 'pt', to: 'en' | 'pt') {
+  const before = mount(signedIn, from);
+  act(() => before.result.current());
+  before.unmount();
+  return mount(signedIn, to);
 }
 
 describe('useTranslationInvite', () => {
-  beforeEach(() => vi.mocked(toast).mockClear());
+  beforeEach(() => {
+    vi.mocked(toast).mockClear();
+    sessionStorage.clear();
+  });
 
-  it('logado, ao trocar de idioma convida para traduzir, já no idioma novo', () => {
-    const { switchTo } = setup(true);
-    switchTo('pt');
+  it('logado, ao trocar de idioma convida para traduzir depois do reload, já no idioma novo', () => {
+    switchTo(true, 'en', 'pt');
 
     expect(toast).toHaveBeenCalledTimes(1);
     const [title, options] = vi.mocked(toast).mock.calls[0];
@@ -50,8 +53,7 @@ describe('useTranslationInvite', () => {
 
   it('o botão abre o projeto no Crowdin', () => {
     const open = vi.spyOn(window, 'open').mockReturnValue(null);
-    const { switchTo } = setup(true);
-    switchTo('pt');
+    switchTo(true, 'en', 'pt');
 
     const [, options] = vi.mocked(toast).mock.calls[0];
     const action = (options as unknown as { action: { onClick: () => void } }).action;
@@ -59,16 +61,27 @@ describe('useTranslationInvite', () => {
     expect(open).toHaveBeenCalledWith(CROWDIN_PROJECT, '_blank', 'noopener,noreferrer');
   });
 
-  it('convida a cada troca', () => {
-    const { switchTo } = setup(true);
-    switchTo('pt');
-    switchTo('en');
+  it('convida a cada troca, e só uma vez por troca', () => {
+    switchTo(true, 'en', 'pt').unmount();
+    mount(true, 'pt').unmount();
+    switchTo(true, 'pt', 'en');
     expect(toast).toHaveBeenCalledTimes(2);
   });
 
   it('sem login, não convida', () => {
-    const { switchTo } = setup(false);
-    switchTo('pt');
+    switchTo(false, 'en', 'pt');
     expect(toast).not.toHaveBeenCalled();
+  });
+
+  it('não mostra nada numa visita comum, sem troca pedida', () => {
+    mount(true, 'pt');
+    expect(toast).not.toHaveBeenCalled();
+  });
+
+  it('com o storage bloqueado, trocar não quebra', () => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementationOnce(() => {
+      throw new DOMException('blocked', 'SecurityError');
+    });
+    expect(() => switchTo(true, 'en', 'pt')).not.toThrow();
   });
 });
