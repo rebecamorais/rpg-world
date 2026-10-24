@@ -3,19 +3,20 @@
  */
 import type { Metadata } from 'next';
 import { Cinzel, Geist_Mono, Inter } from 'next/font/google';
+import { notFound } from 'next/navigation';
 import Script from 'next/script';
 
+import { routing } from '@/i18n/routing';
 import { Analytics } from '@vercel/analytics/next';
-import { getLocale, getMessages, getTimeZone, getTranslations } from 'next-intl/server';
+import { hasLocale } from 'next-intl';
+import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 
-import Footer from '@frontend/components/layout/Footer';
-import GlobalHeader from '@frontend/components/layout/GlobalHeader';
 import Providers from '@frontend/components/providers/Providers';
 import { Toaster } from '@frontend/components/ui/sonner';
 import { clientMessages } from '@frontend/constants/client-messages';
 import { SITE_URL } from '@frontend/constants/site';
 
-import './globals.css';
+import '../globals.css';
 
 // Cloudflare Web Analytics (cookieless visit counts). The token is public: it only identifies the
 // site. Production only, so local runs, previews and the e2e suite don't count as visits. Same for
@@ -39,9 +40,16 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('seo');
-  const locale = await getLocale();
+type LocaleParams = { params: Promise<{ locale: string }> };
+
+/** Every page exists once per language; the proxy picks which one a visitor gets. */
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'seo' });
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -68,13 +76,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const locale = await getLocale();
+  params,
+}: Readonly<LocaleParams & { children: React.ReactNode }>) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+  // Lets the pages below render statically, without reading the locale from the request
+  setRequestLocale(locale);
+
   // Only what client components read goes to the browser on every page
   const messages = clientMessages(await getMessages());
-  const timeZone = await getTimeZone();
   const t = await getTranslations('common');
 
   return (
@@ -88,17 +98,9 @@ export default async function RootLayout({
         >
           {t('skipToContent')}
         </a>
-        <Providers locale={locale} messages={messages} timeZone={timeZone}>
-          <GlobalHeader />
-          {/* The page's only main landmark; pages and layouts below use plain divs */}
-          <main
-            id="main-content"
-            tabIndex={-1}
-            className="flex min-h-[calc(100vh-var(--header-height)+20px)] flex-1 flex-col outline-none"
-          >
-            {children}
-          </main>
-          <Footer />
+        {/* Header, main and footer come from the (public) and (app) layouts */}
+        <Providers locale={locale} messages={messages}>
+          {children}
         </Providers>
         <Toaster />
         {isProduction ? (

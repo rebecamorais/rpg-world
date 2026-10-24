@@ -19,20 +19,121 @@ vi.mock('@supabase/ssr', () => ({
   },
 }));
 
-function request(cookies: Record<string, string> = {}) {
-  const req = new NextRequest('http://localhost/characters');
+function request(
+  cookies: Record<string, string> = {},
+  { path = '/characters', acceptLanguage }: { path?: string; acceptLanguage?: string } = {},
+) {
+  const req = new NextRequest(`http://localhost${path}`, {
+    headers: acceptLanguage ? { 'accept-language': acceptLanguage } : {},
+  });
   for (const [name, value] of Object.entries(cookies)) req.cookies.set(name, value);
   return req;
 }
+
+const rewrittenTo = (res: Response) => {
+  const target = res.headers.get('x-middleware-rewrite');
+  return target ? new URL(target).pathname : null;
+};
+
+const signedIn = () =>
+  getClaims.mockResolvedValue({ data: { claims: { sub: 'u1' } }, error: null });
 
 describe('proxy', () => {
   beforeEach(() => getClaims.mockReset().mockResolvedValue({ data: null, error: null }));
 
   it('não consulta o Supabase para visitantes sem cookie de sessão', async () => {
-    const res = await proxy(request({ NEXT_LOCALE: 'pt' }));
+    await proxy(request({ NEXT_LOCALE: 'pt' }));
 
     expect(getClaims).not.toHaveBeenCalled();
-    expect(res.headers.get('x-middleware-next')).toBe('1');
+  });
+
+  describe('idioma', () => {
+    it('reescreve / para /pt com Accept-Language pt-BR e sem cookie', async () => {
+      const res = await proxy(
+        request({}, { path: '/', acceptLanguage: 'pt-BR,pt;q=0.9,en;q=0.8' }),
+      );
+
+      expect(rewrittenTo(res)).toBe('/pt');
+    });
+
+    it('fr-FR cai em /en', async () => {
+      const res = await proxy(request({}, { path: '/features', acceptLanguage: 'fr-FR,fr;q=0.9' }));
+
+      expect(rewrittenTo(res)).toBe('/en/features');
+    });
+
+    it('NEXT_LOCALE=en vence Accept-Language pt-BR', async () => {
+      const res = await proxy(
+        request({ NEXT_LOCALE: 'en' }, { path: '/', acceptLanguage: 'pt-BR' }),
+      );
+
+      expect(rewrittenTo(res)).toBe('/en');
+    });
+
+    it('NEXT_LOCALE=de é ignorado e vale o navegador', async () => {
+      const res = await proxy(
+        request({ NEXT_LOCALE: 'de' }, { path: '/', acceptLanguage: 'pt-BR' }),
+      );
+
+      expect(rewrittenTo(res)).toBe('/pt');
+    });
+
+    it('redireciona /pt/features para /features', async () => {
+      const res = await proxy(request({}, { path: '/pt/features' }));
+
+      expect([307, 308]).toContain(res.status);
+      expect(new URL(res.headers.get('location')!).pathname).toBe('/features');
+    });
+
+    it('corrige um NEXT_LOCALE inválido e guarda por um ano', async () => {
+      const res = await proxy(
+        request({ NEXT_LOCALE: 'de' }, { path: '/', acceptLanguage: 'pt-BR' }),
+      );
+      const cookie = res.headers.get('set-cookie') ?? '';
+
+      expect(cookie).toMatch(/NEXT_LOCALE=pt/);
+      expect(cookie).toMatch(/Max-Age=31536000/i);
+    });
+
+    it('não grava cookie quando o idioma veio do próprio navegador', async () => {
+      const res = await proxy(request({}, { path: '/', acceptLanguage: 'pt-BR' }));
+
+      expect(res.headers.get('set-cookie') ?? '').not.toMatch(/NEXT_LOCALE/);
+    });
+  });
+
+  describe('quem já está logado', () => {
+    it.each(['/login', '/register'])(
+      'com sessão válida, %s redireciona para /characters',
+      async (path) => {
+        signedIn();
+
+        const res = await proxy(request({ 'sb-127-auth-token': 'token' }, { path }));
+
+        expect([307, 308]).toContain(res.status);
+        expect(new URL(res.headers.get('location')!).pathname).toBe('/characters');
+      },
+    );
+
+    it('sem sessão válida, /login abre normalmente', async () => {
+      const res = await proxy(request({ 'sb-127-auth-token': 'expired' }, { path: '/login' }));
+
+      expect(res.headers.get('location')).toBeNull();
+      expect(rewrittenTo(res)).toBe('/en/login');
+    });
+
+    it('o redirect leva os cookies de sessão renovados', async () => {
+      getClaims.mockImplementation(async () => {
+        cookieAdapter.setAll([
+          { name: 'sb-127-auth-token', value: 'fresh', options: { path: '/' } },
+        ]);
+        return { data: { claims: { sub: 'u1' } }, error: null };
+      });
+
+      const res = await proxy(request({ 'sb-127-auth-token': 'stale' }, { path: '/login' }));
+
+      expect(res.cookies.get('sb-127-auth-token')?.value).toBe('fresh');
+    });
   });
 
   it('renova a sessão quando há cookie do Supabase', async () => {
@@ -67,5 +168,7 @@ describe('proxy', () => {
     expect(matcher.test('/_next/static/chunk.js')).toBe(false);
     expect(matcher.test('/api/images/avatars/u1/a.png')).toBe(false);
     expect(matcher.test('/logo.svg')).toBe(false);
+    expect(matcher.test('/api/characters')).toBe(false);
+    expect(matcher.test('/_vercel/insights/script.js')).toBe(false);
   });
 });

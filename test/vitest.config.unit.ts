@@ -11,6 +11,8 @@ export default defineConfig({
   test: {
     root,
     globals: true,
+    // next-intl's ESM imports `next/server` without an extension, which only a bundler resolves
+    server: { deps: { inline: ['next-intl'] } },
     coverage: {
       provider: 'v8',
       include: ['app/**', 'src/**', 'shared/**', 'lib/**', 'proxy.ts'],

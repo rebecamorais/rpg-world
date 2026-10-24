@@ -4,7 +4,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 import { securityHeaders } from './shared/http/security-headers';
 
-const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
   // The e2e suite builds into its own folder so it can run next to `next dev`
