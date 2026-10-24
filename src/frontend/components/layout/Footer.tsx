@@ -12,5 +12,5 @@ export default async function Footer({ session }: { session: 'server' | 'client'
   const { authApi } = await getApi();
   const user = await authApi.getSessionUser();
 
-  return <FooterContent isAuthenticated={!!user} />;
+  return <FooterContent serverUser={user} />;
 }

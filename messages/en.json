@@ -903,5 +903,10 @@
     "title": "Help translate RPG World",
     "description": "The translations are made by the community on Crowdin. Anyone can suggest or review texts and spells, in Portuguese or another language.",
     "action": "Translate on Crowdin"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for doesn't exist or has moved.",
+    "home": "Go to the home page"
   }
 }

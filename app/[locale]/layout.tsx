@@ -2,7 +2,6 @@
  * Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio). Licenciado sob a GNU GPLv3.
  */
 import type { Metadata } from 'next';
-import { Cinzel, Geist_Mono, Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 
@@ -15,6 +14,7 @@ import Providers from '@frontend/components/providers/Providers';
 import { Toaster } from '@frontend/components/ui/sonner';
 import { clientMessages } from '@frontend/constants/client-messages';
 import { SITE_URL } from '@frontend/constants/site';
+import { fontVariables } from '@frontend/lib/fonts';
 
 import '../globals.css';
 
@@ -23,22 +23,6 @@ import '../globals.css';
 // Vercel Web Analytics, whose script is served same-origin from /_vercel/insights (covered by the CSP).
 const CLOUDFLARE_BEACON_TOKEN = '356fc3bfc2dd43c4b8f065945a42eb32';
 const isProduction = process.env.VERCEL_ENV === 'production';
-
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-});
-
-const cinzel = Cinzel({
-  variable: '--font-cinzel',
-  subsets: ['latin'],
-  weight: ['600', '700'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 /** Every page exists once per language; the proxy picks which one a visitor gets. */
 export function generateStaticParams() {
@@ -98,7 +82,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${cinzel.variable} ${geistMono.variable} bg-background text-foreground flex min-h-screen flex-col antialiased`}
+        className={`${fontVariables} bg-background text-foreground flex min-h-screen flex-col antialiased`}
       >
         <a
           href="#main-content"

@@ -15,6 +15,8 @@ import { AppIcon } from '@frontend/components/ui/icon';
 import { DISCORD_INVITE, GITHUB_REPO } from '@frontend/constants/site';
 import { useSession } from '@frontend/hooks/useSession';
 
+import type { User } from '@shared/types/user';
+
 const PIX_KEY = process.env.NEXT_PUBLIC_PIX_KEY || 'b22d409a-46a2-48dc-b2e2-eb3a66e9fb92';
 
 const GithubIcon = ({ className }: { className?: string }) => (
@@ -58,14 +60,10 @@ function FooterColumn({ title, children }: { title: string; children: React.Reac
 }
 
 /** Site footer. Links follow the session; on phones it packs into two columns. */
-/** `isAuthenticated` from the server, or, left out, from the session in the browser (prebuilt pages). */
-export default function FooterContent({
-  isAuthenticated: fromServer,
-}: {
-  isAuthenticated?: boolean;
-}) {
-  const { status } = useSession();
-  const isAuthenticated = fromServer ?? status === 'signed-in';
+/** `serverUser`: the session the server read; left out on prebuilt pages, where the browser finds it. */
+export default function FooterContent({ serverUser }: { serverUser?: User | null }) {
+  const { status } = useSession(serverUser);
+  const isAuthenticated = status === 'signed-in';
   const t = useTranslations('footer');
   const tLanding = useTranslations('landing');
   const [hasCopied, setHasCopied] = useState(false);

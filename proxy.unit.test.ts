@@ -102,6 +102,28 @@ describe('proxy', () => {
     });
   });
 
+  it('o host de imagens não passa pelo roteamento de idioma (avatares antigos sem extensão)', async () => {
+    const req = new NextRequest('http://images.rpgworldapp.com/avatars/u1/avatar', {
+      headers: { host: 'images.rpgworldapp.com', 'accept-language': 'pt-BR' },
+    });
+
+    const res = await proxy(req);
+
+    expect(rewrittenTo(res)).toBeNull();
+    expect(res.headers.get('x-middleware-next')).toBe('1');
+  });
+
+  it('os cookies renovados chegam aos Server Components do mesmo pedido', async () => {
+    getClaims.mockImplementation(async () => {
+      cookieAdapter.setAll([{ name: 'sb-127-auth-token', value: 'fresh', options: { path: '/' } }]);
+      return { data: { claims: { sub: 'u1' } }, error: null };
+    });
+
+    const res = await proxy(request({ 'sb-127-auth-token': 'stale' }));
+
+    expect(res.headers.get('x-middleware-request-cookie')).toContain('sb-127-auth-token=fresh');
+  });
+
   describe('quem já está logado', () => {
     it.each(['/login', '/register'])(
       'com sessão válida, %s redireciona para /characters',

@@ -54,3 +54,14 @@ test('/pt/features redireciona para /features', async ({ page }) => {
 
   await expect(page).toHaveURL(/\/features$/);
 });
+
+test('uma página que não existe responde 404 com o layout do site', async ({ page }) => {
+  const response = await page.goto('/esta-pagina-nao-existe');
+
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Página não encontrada' })).toBeVisible();
+  await expect(
+    page.getByRole('banner').getByRole('link', { name: 'Go to the home page' }),
+  ).toBeVisible();
+});

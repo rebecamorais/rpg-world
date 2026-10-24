@@ -9,21 +9,25 @@ const handleI18n = createMiddleware(routing);
 
 // Signed in, these pages only send you on: straight to the characters
 const SIGNED_OUT_ONLY = new Set(['/login', '/register']);
+const IMAGES_HOST = 'images.rpgworldapp.com';
 
 /**
  * Runs before every page:
- * 1. Picks the language (NEXT_LOCALE cookie, else Accept-Language) and rewrites the page to
- *    /<locale>/... internally, so the public pages can be prebuilt per language with clean URLs.
- * 2. Refreshes an expired Supabase session. Server Components cannot write cookies, so this is the
+ * 1. Refreshes an expired Supabase session. Server Components cannot write cookies, so this is the
  *    only place the refreshed JWT reaches the browser. Route protection stays in the layouts.
+ * 2. Picks the language (NEXT_LOCALE cookie, else Accept-Language) and rewrites the page to
+ *    /<locale>/... internally, so the public pages can be prebuilt per language with clean URLs.
  */
 export async function proxy(request: NextRequest) {
-  let response = handleI18n(request);
+  // Avatars served on their own host (next.config.ts rewrites it to /api/images): never localized
+  if (request.headers.get('host') === IMAGES_HOST) return NextResponse.next();
 
   // Optimization: only refresh the session if there is one; no round trip for anonymous visitors
   const hasSession = request.cookies.getAll().some((c) => c.name.startsWith('sb-'));
-  if (!hasSession) return response;
+  if (!hasSession) return handleI18n(request);
 
+  // Refreshed first, written into the request too: the language rewrite copies the request
+  // headers, so the Server Components of this same request read the new session
   const refreshed: { name: string; value: string; options: CookieOptions }[] = [];
   const supabaseAuth = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -34,6 +38,7 @@ export async function proxy(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           refreshed.push(...cookiesToSet);
         },
       },
@@ -44,9 +49,10 @@ export async function proxy(request: NextRequest) {
   // the token is valid
   const { data } = await supabaseAuth.auth.getClaims();
 
-  if (data?.claims && SIGNED_OUT_ONLY.has(request.nextUrl.pathname)) {
-    response = NextResponse.redirect(new URL('/characters', request.url));
-  }
+  const response =
+    data?.claims && SIGNED_OUT_ONLY.has(request.nextUrl.pathname)
+      ? NextResponse.redirect(new URL('/characters', request.url))
+      : handleI18n(request);
 
   for (const { name, value, options } of refreshed) response.cookies.set(name, value, options);
   return response;
