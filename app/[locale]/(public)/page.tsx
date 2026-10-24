@@ -3,9 +3,8 @@
  */
 import Link from 'next/link';
 
-import { getTranslations } from 'next-intl/server';
-
-import { getApi } from '@api';
+import type { LocaleParams } from '@/i18n/routing';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { AVAILABLE_FEATURES, FeatureGrid } from '@frontend/components/landing/FeatureGrid';
 import HeroCTA from '@frontend/components/layout/HeroCTA';
@@ -39,9 +38,8 @@ const STRUCTURED_DATA = {
   author: { '@type': 'Person', name: 'Rebeca Morais' },
 };
 
-export default async function Home() {
-  const { authApi } = await getApi();
-  const user = await authApi.getSessionUser();
+export default async function Home({ params }: LocaleParams) {
+  setRequestLocale((await params).locale);
   const t = await getTranslations('features');
 
   return (
@@ -54,7 +52,7 @@ export default async function Home() {
         }}
       />
       <div className="flex flex-1 flex-col items-center justify-center p-8 text-center transition-all duration-700 md:p-16">
-        <HeroCTA isAuthenticated={!!user} />
+        <HeroCTA />
         <SheetPreview />
       </div>
 

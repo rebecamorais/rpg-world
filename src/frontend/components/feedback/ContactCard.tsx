@@ -18,10 +18,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@frontend/components/ui/card';
+import { useSession } from '@frontend/hooks/useSession';
 
-/** The support page's contact card, with a success screen once the message is sent. */
+/**
+ * The support page's contact card, with a success screen once the message is sent. The e-mail
+ * comes filled in for whoever is signed in (the page is prebuilt, so it arrives from the session).
+ */
 export default function ContactCard({ initialEmail = '' }: { initialEmail?: string }) {
   const t = useTranslations('feedback');
+  const { user } = useSession();
+  const email = initialEmail || user?.email || '';
   const [isSuccess, setIsSuccess] = useState(false);
 
   if (isSuccess) {
@@ -58,7 +64,8 @@ export default function ContactCard({ initialEmail = '' }: { initialEmail?: stri
         <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
-        <ContactForm initialEmail={initialEmail} onSent={() => setIsSuccess(true)} />
+        {/* Remounted when the session's e-mail arrives: the form only reads it when it mounts */}
+        <ContactForm key={email} initialEmail={email} onSent={() => setIsSuccess(true)} />
       </CardContent>
     </Card>
   );

@@ -4,6 +4,7 @@ import { messages, renderWithProviders } from '@tests/helpers/render';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { submitFeedbackAction } from '@frontend/actions/feedback/submit-feedback-action';
+import { useSession } from '@frontend/hooks/useSession';
 
 import ContactCard from './ContactCard';
 
@@ -11,6 +12,7 @@ vi.mock('@frontend/actions/feedback/submit-feedback-action', () => ({
   submitFeedbackAction: vi.fn(),
 }));
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+vi.mock('@frontend/hooks/useSession', () => ({ useSession: vi.fn() }));
 
 const t = messages.feedback;
 const submitFeedback = vi.mocked(submitFeedbackAction);
@@ -41,6 +43,7 @@ describe('ContactCard', () => {
     challenges = 0;
     window.turnstile = turnstile;
     submitFeedback.mockResolvedValue({ success: true });
+    vi.mocked(useSession).mockReturnValue({ user: null, status: 'signed-out' });
   });
 
   afterEach(() => {
@@ -57,6 +60,18 @@ describe('ContactCard', () => {
     await user.click(screen.getByRole('button', { name: t.sendAnother }));
     expect(screen.getByRole('heading', { level: 1, name: t.title })).toBeInTheDocument();
     expect(screen.getByLabelText(t.messageLabel)).toHaveValue('');
+    expect(screen.getByLabelText(t.emailLabel)).toHaveValue('hero@example.com');
+  });
+
+  it('sem e-mail do servidor, preenche com o da sessão quando ela chega', () => {
+    const session = vi.mocked(useSession);
+    session.mockReturnValue({ user: null, status: 'loading' });
+    const { rerender } = renderWithProviders(<ContactCard />);
+    expect(screen.getByLabelText(t.emailLabel)).toHaveValue('');
+
+    session.mockReturnValue({ user: { id: 'u1', email: 'hero@example.com' }, status: 'signed-in' });
+    rerender(<ContactCard />);
+
     expect(screen.getByLabelText(t.emailLabel)).toHaveValue('hero@example.com');
   });
 });

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { getTranslations } from 'next-intl/server';
+import type { LocaleParams } from '@/i18n/routing';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { richLinks } from '@frontend/components/shared/rich-links';
 
@@ -19,12 +20,14 @@ const CREDIT_HREFS = {
 
 const CREDIT_LINKS = richLinks(CREDIT_HREFS);
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('terms');
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'terms' });
   return { title: t('title') };
 }
 
-export default async function TermsPage() {
+export default async function TermsPage({ params }: LocaleParams) {
+  setRequestLocale((await params).locale);
   const t = await getTranslations('terms');
   const commonT = await getTranslations('common');
 

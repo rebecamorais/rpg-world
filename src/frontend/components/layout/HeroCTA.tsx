@@ -4,12 +4,11 @@ import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
 
-interface HeroCTAProps {
-  isAuthenticated: boolean;
-}
-
-/** A plain link (server-rendered, prefetched), not a client button that pushes the route. */
-export default function HeroCTA({ isAuthenticated }: HeroCTAProps) {
+/**
+ * A plain link (server-rendered, prefetched). Always to the characters: the home is prebuilt, and
+ * the dashboard sends whoever isn't signed in to the login.
+ */
+export default function HeroCTA() {
   const tLanding = useTranslations('landing');
 
   return (
@@ -19,7 +18,7 @@ export default function HeroCTA({ isAuthenticated }: HeroCTAProps) {
         {tLanding('heroSubtitle')}
       </p>
       <Button asChild size="lg" className="px-8 py-6 text-lg font-semibold">
-        <Link href={isAuthenticated ? '/characters' : '/login'}>{tLanding('ctaStart')}</Link>
+        <Link href="/characters">{tLanding('ctaStart')}</Link>
       </Button>
     </>
   );

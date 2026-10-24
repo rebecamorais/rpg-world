@@ -1,11 +1,13 @@
 import Link from 'next/link';
 
-import { getTranslations } from 'next-intl/server';
+import type { LocaleParams } from '@/i18n/routing';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import LoginForm from '@frontend/components/auth/LoginForm';
 
 /** Whoever is already signed in never sees this page: the proxy sends them to /characters. */
-export default async function LoginPage() {
+export default async function LoginPage({ params }: LocaleParams) {
+  setRequestLocale((await params).locale);
   const t = await getTranslations('common');
 
   return (

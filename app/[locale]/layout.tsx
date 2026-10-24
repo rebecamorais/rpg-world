@@ -6,7 +6,7 @@ import { Cinzel, Geist_Mono, Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 
-import { routing } from '@/i18n/routing';
+import { type LocaleParams, routing } from '@/i18n/routing';
 import { Analytics } from '@vercel/analytics/next';
 import { hasLocale } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
@@ -39,8 +39,6 @@ const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
 });
-
-type LocaleParams = { params: Promise<{ locale: string }> };
 
 /** Every page exists once per language; the proxy picks which one a visitor gets. */
 export function generateStaticParams() {

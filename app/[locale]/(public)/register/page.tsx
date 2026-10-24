@@ -1,10 +1,12 @@
 import Link from 'next/link';
 
-import { getTranslations } from 'next-intl/server';
+import type { LocaleParams } from '@/i18n/routing';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import SignUpForm from '@frontend/components/auth/SignUpForm';
 
-export default async function RegisterPage() {
+export default async function RegisterPage({ params }: LocaleParams) {
+  setRequestLocale((await params).locale);
   const t = await getTranslations('common');
 
   return (

@@ -14,3 +14,6 @@ export const routing = defineRouting({
 });
 
 export type Locale = (typeof routing.locales)[number];
+
+/** Props of the pages and layouts under app/[locale]. */
+export type LocaleParams = { params: Promise<{ locale: string }> };

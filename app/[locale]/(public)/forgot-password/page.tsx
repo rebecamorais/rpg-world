@@ -1,10 +1,12 @@
 import Link from 'next/link';
 
-import { getTranslations } from 'next-intl/server';
+import type { LocaleParams } from '@/i18n/routing';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import ForgotPasswordForm from '@frontend/components/auth/ForgotPasswordForm';
 
-export default async function ForgotPasswordPage() {
+export default async function ForgotPasswordPage({ params }: LocaleParams) {
+  setRequestLocale((await params).locale);
   const t = await getTranslations('common');
 
   return (
