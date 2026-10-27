@@ -4,3 +4,4 @@
  */
 export const PROFILE_QUERY_KEY = ['profile'] as const;
 export const CHARACTERS_QUERY_KEY = ['characters'] as const;
+export const SESSION_QUERY_KEY = ['session'] as const;

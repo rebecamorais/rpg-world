@@ -8,8 +8,12 @@ const insideSheet = (pathname: string) => pathname.startsWith('/sheet');
 function Links({ isDirty }: { isDirty: boolean }) {
   useLeaveGuard(isDirty, insideSheet, 'Leave?');
   return (
+    // Plain anchors on purpose: the guard intercepts clicks on <a>, which is what <Link> renders.
+    // The lint rule reads app/[locale] as matching any path, so it flags these as internal pages.
     <>
+      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
       <a href="/sheet/lore">Lore</a>
+      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
       <a href="/characters">List</a>
     </>
   );

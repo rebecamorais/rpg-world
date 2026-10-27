@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { getTranslations } from 'next-intl/server';
+import type { LocaleParams } from '@/i18n/routing';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { richLinks } from '@frontend/components/shared/rich-links';
 import { DISCORD_INVITE } from '@frontend/constants/site';
@@ -18,12 +19,14 @@ const PRIVACY_LINKS = richLinks({
   discord: 'https://discord.com/privacy',
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('privacy');
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'privacy' });
   return { title: t('title') };
 }
 
-export default async function PrivacyPage() {
+export default async function PrivacyPage({ params }: LocaleParams) {
+  setRequestLocale((await params).locale);
   const t = await getTranslations('privacy');
   const commonT = await getTranslations('common');
 

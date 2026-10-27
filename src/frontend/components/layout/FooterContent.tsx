@@ -13,6 +13,9 @@ import { toast } from 'sonner';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { DISCORD_INVITE, GITHUB_REPO } from '@frontend/constants/site';
+import { useSession } from '@frontend/hooks/useSession';
+
+import type { User } from '@shared/types/user';
 
 const PIX_KEY = process.env.NEXT_PUBLIC_PIX_KEY || 'b22d409a-46a2-48dc-b2e2-eb3a66e9fb92';
 
@@ -57,7 +60,10 @@ function FooterColumn({ title, children }: { title: string; children: React.Reac
 }
 
 /** Site footer. Links follow the session; on phones it packs into two columns. */
-export default function FooterContent({ isAuthenticated }: { isAuthenticated: boolean }) {
+/** `serverUser`: the session the server read; left out on prebuilt pages, where the browser finds it. */
+export default function FooterContent({ serverUser }: { serverUser?: User | null }) {
+  const { status } = useSession(serverUser);
+  const isAuthenticated = status === 'signed-in';
   const t = useTranslations('footer');
   const tLanding = useTranslations('landing');
   const [hasCopied, setHasCopied] = useState(false);

@@ -1,20 +1,13 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 
-import { getTranslations } from 'next-intl/server';
-
-import { getApi } from '@api';
+import type { LocaleParams } from '@/i18n/routing';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import LoginForm from '@frontend/components/auth/LoginForm';
 
-export default async function LoginPage() {
-  const { authApi } = await getApi();
-  const user = await authApi.getSessionUser();
-
-  if (user) {
-    redirect('/characters');
-  }
-
+/** Whoever is already signed in never sees this page: the proxy sends them to /characters. */
+export default async function LoginPage({ params }: LocaleParams) {
+  setRequestLocale((await params).locale);
   const t = await getTranslations('common');
 
   return (

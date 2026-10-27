@@ -1,24 +1,34 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { CROWDIN_PROJECT } from '@frontend/constants/site';
 
 const INVITE_DURATION_MS = 10_000;
+// Survives the reload that switching language does (see LanguageSwitcher)
+const PENDING_KEY = 'rpg-world:translation-invite';
+
+/** Storage can be blocked (private mode, site data off): the invite just doesn't show then. */
+function takePending(): boolean {
+  try {
+    const pending = sessionStorage.getItem(PENDING_KEY) === '1';
+    sessionStorage.removeItem(PENDING_KEY);
+    return pending;
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Invites whoever switches language to help translate. Returns what to call when they pick a
- * language; the invite shows once the page is in it, so it reads in the language they chose.
+ * language; the page then reloads in it, and the invite shows there, in the language they chose.
  */
 export function useTranslationInvite(enabled: boolean) {
-  const locale = useLocale();
   const t = useTranslations('translationInvite');
-  const switched = useRef(false);
 
   useEffect(() => {
-    if (!switched.current) return;
-    switched.current = false;
+    if (!takePending()) return;
     toast(t('title'), {
       description: t('description'),
       duration: INVITE_DURATION_MS,
@@ -27,9 +37,14 @@ export function useTranslationInvite(enabled: boolean) {
         onClick: () => window.open(CROWDIN_PROJECT, '_blank', 'noopener,noreferrer'),
       },
     });
-  }, [locale, t]);
+  }, [t]);
 
   return () => {
-    if (enabled) switched.current = true;
+    if (!enabled) return;
+    try {
+      sessionStorage.setItem(PENDING_KEY, '1');
+    } catch {
+      // No invite this time
+    }
   };
 }

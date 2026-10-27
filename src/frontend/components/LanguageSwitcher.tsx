@@ -1,7 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import { useLocale, useTranslations } from 'next-intl';
 
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -17,13 +15,14 @@ import { useTranslationInvite } from '@frontend/hooks/useTranslationInvite';
 /** `signedIn`: whoever switches language is invited to help translate. */
 export default function LanguageSwitcher({ signedIn = false }: { signedIn?: boolean }) {
   const locale = useLocale();
-  const router = useRouter();
   const inviteToTranslate = useTranslationInvite(signedIn);
 
   const handleValueChange = (newLocale: string) => {
     document.cookie = `NEXT_LOCALE=${newLocale};path=/;max-age=31536000`;
     inviteToTranslate();
-    router.refresh();
+    // A full load, not router.refresh(): pages the router already prefetched (prebuilt, in the
+    // old language) would otherwise still open in it
+    window.location.reload();
   };
 
   const t = useTranslations('common');

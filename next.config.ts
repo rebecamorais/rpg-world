@@ -4,9 +4,14 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 import { securityHeaders } from './shared/http/security-headers';
 
-const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // The root layout is app/[locale]: a plain not-found would render without it (see
+    // app/global-not-found.tsx)
+    globalNotFound: true,
+  },
   // The e2e suite builds into its own folder so it can run next to `next dev`
   distDir: process.env.NEXT_DIST_DIR || '.next',
   async headers() {

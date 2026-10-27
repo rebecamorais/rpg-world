@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useEffect } from 'react';
+import type { ReactNode } from 'react';
 
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -12,20 +12,16 @@ interface ProvidersProps {
   children: ReactNode;
   locale: string;
   messages: Record<string, unknown>;
-  timeZone: string;
 }
 
-export default function Providers({ children, locale, messages, timeZone }: ProvidersProps) {
-  useEffect(() => {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (tz) {
-      document.cookie = `NEXT_TIMEZONE=${tz};path=/;max-age=31536000`;
-    }
-  }, []);
+// Fixed, like the server's request config: the pages are prebuilt, so the visitor's time zone
+// can't be known there. Nothing formats dates through next-intl today.
+const TIME_ZONE = 'UTC';
 
+export default function Providers({ children, locale, messages }: ProvidersProps) {
   return (
     <QueryProvider>
-      <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
+      <NextIntlClientProvider locale={locale} messages={messages} timeZone={TIME_ZONE}>
         <FileUploaderProvider>
           <TooltipProvider>{children}</TooltipProvider>
         </FileUploaderProvider>

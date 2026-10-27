@@ -1,7 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [
-    "src/i18n.ts",
     "scripts/*.ts",
     "test/setup-*.ts",
     "test/global-setup-*.ts",

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { getTranslations } from 'next-intl/server';
+import type { LocaleParams } from '@/i18n/routing';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { getApi } from '@api';
-
+import { FeaturesCta } from '@frontend/components/features/FeaturesCta';
 import {
   AVAILABLE_FEATURES,
   FeatureGrid,
@@ -15,8 +15,9 @@ import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { GITHUB_REPO } from '@frontend/constants/site';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('features');
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'features' });
   return {
     title: t('metaTitle'),
     description: t('metaDescription'),
@@ -32,10 +33,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /** Public page: what the app does, so visitors can see it before creating an account. */
-export default async function FeaturesPage() {
+export default async function FeaturesPage({ params }: LocaleParams) {
+  setRequestLocale((await params).locale);
   const t = await getTranslations('features');
-  const { authApi } = await getApi();
-  const user = await authApi.getSessionUser();
 
   return (
     <div className="container mx-auto flex max-w-6xl flex-1 flex-col gap-16 px-4 py-16 sm:px-8 sm:py-20">
@@ -97,13 +97,7 @@ export default async function FeaturesPage() {
         <h2 id="cta-title" className="text-title">
           {t('ctaTitle')}
         </h2>
-        <Button asChild size="lg" className="px-8">
-          {user ? (
-            <Link href="/characters">{t('ctaCharacters')}</Link>
-          ) : (
-            <Link href="/register">{t('ctaStart')}</Link>
-          )}
-        </Button>
+        <FeaturesCta />
       </section>
     </div>
   );

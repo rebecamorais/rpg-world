@@ -352,3 +352,9 @@
     margin: 0;
   }
 }
+
+/* Prebuilt pages: while a session cookie is being checked, the signed-out buttons stay hidden
+   (the inline script in the root layout sets data-session; HeaderSessionActions clears it). */
+html[data-session='pending'] [data-signed-out] {
+  visibility: hidden;
+}
