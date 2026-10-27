@@ -31,7 +31,8 @@ test('as 8 páginas públicas são pré-renderizadas nos 2 idiomas', () => {
 });
 
 test.describe('primeira visita', () => {
-  test.use({ extraHTTPHeaders: { 'Accept-Language': 'pt-BR,pt;q=0.9' } });
+  // A browser in Portuguese (it sends Accept-Language: pt-BR)
+  test.use({ locale: 'pt-BR' });
 
   test('com o navegador em português, a home abre em português', async ({ page }) => {
     await page.goto('/');
