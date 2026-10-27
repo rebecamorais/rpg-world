@@ -33,12 +33,18 @@ export function useCharacter(
   const character = query.data;
 
   const updateMutation = useMutation({
-    mutationFn: async (character: DnD5eCharacter) => {
-      await rpgWorldApi.put(`/api/characters/${character.id}`, {
-        updates: character,
-      });
+    // Only `changes` go: the server applies them on top of what it has, so a save never undoes
+    // what another device saved meanwhile. `character` (the whole draft) fills the cache.
+    mutationFn: async ({
+      character,
+      changes,
+    }: {
+      character: DnD5eCharacter;
+      changes: Partial<DnD5eCharacter>;
+    }) => {
+      await rpgWorldApi.put(`/api/characters/${character.id}`, { updates: changes });
     },
-    onSuccess: (_data, character) => {
+    onSuccess: (_data, { character }) => {
       // Optimistically update the cache with the data we just saved
       queryClient.setQueryData(['character', id], character);
       queryClient.invalidateQueries({ queryKey: ['character', id] });
