@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { renderHookWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -38,5 +38,19 @@ describe('useCharacter', () => {
 
     expect(result.current.character).toBeUndefined();
     expect(api.get).not.toHaveBeenCalled();
+  });
+
+  it('salvar envia só as mudanças, não a personagem inteira', async () => {
+    api.put.mockResolvedValue({ id: 'c1' });
+    const { result } = renderHookWithProviders(() => useCharacter('c1', { initial: ARANI }));
+
+    await act(() =>
+      result.current.updateCharacter({
+        character: { ...ARANI, hpCurrent: 7 },
+        changes: { hpCurrent: 7 },
+      }),
+    );
+
+    expect(api.put).toHaveBeenCalledWith('/api/characters/c1', { updates: { hpCurrent: 7 } });
   });
 });

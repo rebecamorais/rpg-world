@@ -30,7 +30,7 @@ export function LoreTab() {
 
   const save = useCallback(async () => {
     try {
-      await commit(updateLore);
+      await commit((draft) => updateLore(draft));
       toast.success(t('saveSuccess'));
     } catch {
       // useCharacterLore already shows the error

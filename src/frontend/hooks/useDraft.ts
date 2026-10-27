@@ -51,16 +51,20 @@ export function useDraft<T extends object>(server: T | undefined) {
   }, []);
 
   /**
-   * Saves the draft with `persist` and, once it resolves, drops the edits that were saved. The
-   * caller's mutation should put the saved data in the query cache, which becomes the draft.
+   * Saves with `persist` (the whole draft, and just the edits on top of `base`) and, once it
+   * resolves, drops the edits that were saved. The caller's mutation should put the saved data in
+   * the query cache, which becomes the draft.
    */
-  const commit = useCallback(async (persist: (draft: T) => Promise<unknown>) => {
-    const base = serverRef.current;
-    const saved = editsRef.current;
-    if (!base) return;
-    await persist({ ...base, ...saved } as T);
-    dispatch({ type: 'commit', saved });
-  }, []);
+  const commit = useCallback(
+    async (persist: (draft: T, edits: Partial<T>, base: T) => Promise<unknown>) => {
+      const base = serverRef.current;
+      const saved = editsRef.current;
+      if (!base) return;
+      await persist({ ...base, ...saved } as T, saved ?? {}, base);
+      dispatch({ type: 'commit', saved });
+    },
+    [],
+  );
 
   const discard = useCallback(() => dispatch({ type: 'discard' }), []);
 

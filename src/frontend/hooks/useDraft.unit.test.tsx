@@ -68,6 +68,20 @@ describe('useDraft', () => {
     expect(result.current.draft?.name).toBe('Saved');
   });
 
+  it('commit entrega ao persist, além do rascunho, só as edições', async () => {
+    const { result } = renderDraft(server);
+    act(() => result.current.update({ name: 'Edited' }));
+    let changes: Partial<Hero> | undefined;
+
+    await act(() =>
+      result.current.commit(async (_draft, edits) => {
+        changes = edits;
+      }),
+    );
+
+    expect(changes).toEqual({ name: 'Edited' });
+  });
+
   it('mantém o que foi digitado enquanto o salvamento estava em andamento', async () => {
     const { result } = renderDraft(server);
     act(() => result.current.update({ name: 'First' }));
