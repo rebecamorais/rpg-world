@@ -20,6 +20,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
   // only runs on a full page load. If it fails, the sidebar fetches it as before.
   const profile = await profileApi.getProfile(user.id).catch(() => null);
 
+  // A generated username is a placeholder nobody sees: the person picks one before using the app
+  if (profile && !profile.usernameChosen) {
+    redirect('/choose-username');
+  }
+
   return (
     <SeededQuery queryKey={PROFILE_QUERY_KEY} data={profile}>
       <UserProvider user={user}>

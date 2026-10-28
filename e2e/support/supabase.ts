@@ -17,13 +17,29 @@ export function adminClient() {
 
 export const uniqueEmail = (label: string) => `${label}-${crypto.randomUUID()}@e2e.test`;
 
-export async function createUser(label: string, password = PASSWORD): Promise<TestUser> {
+/**
+ * A confirmed user. By default their username counts as chosen, like any account past onboarding;
+ * `usernameChosen: false` keeps the generated placeholder, so the app asks for one first.
+ */
+export async function createUser(
+  label: string,
+  password = PASSWORD,
+  { usernameChosen = true }: { usernameChosen?: boolean } = {},
+): Promise<TestUser> {
   const email = uniqueEmail(label);
-  const { data, error } = await adminClient().auth.admin.createUser({
+  const admin = adminClient();
+  const { data, error } = await admin.auth.admin.createUser({
     email,
     password,
     email_confirm: true,
   });
   if (error || !data.user) throw error ?? new Error('createUser returned no user');
+  if (usernameChosen) {
+    const { error: profileError } = await admin
+      .from('profile')
+      .update({ username_chosen: true })
+      .eq('id', data.user.id);
+    if (profileError) throw profileError;
+  }
   return { id: data.user.id, email };
 }

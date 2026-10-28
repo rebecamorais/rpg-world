@@ -908,5 +908,13 @@
     "title": "Page not found",
     "description": "The page you are looking for doesn't exist or has moved.",
     "home": "Go to the home page"
+  },
+  "chooseUsername": {
+    "title": "Choose your username",
+    "description": "It's how your game master finds you to invite you to a table. You can change it later in your profile.",
+    "label": "Username",
+    "placeholder": "e.g.: aria_the_bold",
+    "submit": "Continue",
+    "saving": "Saving..."
   }
 }
