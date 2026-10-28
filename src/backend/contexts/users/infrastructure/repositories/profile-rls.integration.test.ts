@@ -97,4 +97,24 @@ describe('profile com client do usuário (Integration)', () => {
     expect(error).toBeInstanceOf(UserError);
     expect(error.code).toBe(UserErrorCodes.PROFILE_USERNAME_TAKEN);
   });
+
+  it('salvar o username marca como escolhido', async () => {
+    const repo = new SupabaseProfileRepository(user.client);
+    expect((await repo.getById(user.userId))?.usernameChosen).toBe(false);
+
+    await repo.update({
+      id: user.userId,
+      username: `aventureira_${crypto.randomUUID().slice(0, 6)}`,
+    });
+
+    expect((await repo.getById(user.userId))?.usernameChosen).toBe(true);
+  });
+
+  it('salvar só o nome completo não muda a marca', async () => {
+    const repo = new SupabaseProfileRepository(user.client);
+
+    await repo.update({ id: user.userId, fullName: 'Só o nome' });
+
+    expect((await repo.getById(user.userId))?.usernameChosen).toBe(false);
+  });
 });
