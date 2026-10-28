@@ -209,7 +209,8 @@ export type Database = {
           id: string;
           primary_color: string | null;
           updated_at: string;
-          username: string | null;
+          username: string;
+          username_chosen: boolean;
         };
         ComputedFields: never;
         Insert: {
@@ -219,7 +220,8 @@ export type Database = {
           id: string;
           primary_color?: string | null;
           updated_at?: string;
-          username?: string | null;
+          username?: string;
+          username_chosen?: boolean;
         };
         Update: {
           avatar_url?: string | null;
@@ -228,7 +230,8 @@ export type Database = {
           id?: string;
           primary_color?: string | null;
           updated_at?: string;
-          username?: string | null;
+          username?: string;
+          username_chosen?: boolean;
         };
         Relationships: [];
       };

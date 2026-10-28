@@ -65,4 +65,36 @@ describe('profile com client do usuário (Integration)', () => {
     await expect(repo.create({ id: user.userId, fullName: 'Second tab' })).resolves.toBeUndefined();
     expect((await repo.getById(user.userId))?.fullName).not.toBe('Second tab');
   });
+
+  it('cadastro novo ganha um username gerado, ainda não escolhido', async () => {
+    const admin = SupabaseFactory.createAdmin();
+    const { data, error } = await admin.auth.admin.createUser({
+      email: `fulano.de.tal-${crypto.randomUUID()}@example.com`,
+      password: 'RlsTestPass123!',
+      email_confirm: true,
+    });
+    if (error || !data.user) throw error;
+
+    const { data: profile } = await admin
+      .from('profile')
+      .select('username, username_chosen')
+      .eq('id', data.user.id)
+      .single();
+
+    expect(profile?.username).toMatch(/^[a-z]+_[a-z]+_\d{4}$/);
+    expect(profile?.username).not.toContain('fulano');
+    expect(profile?.username_chosen).toBe(false);
+  });
+
+  it('dois usernames que só diferem por maiúsculas não convivem', async () => {
+    const name = `bia_${crypto.randomUUID().slice(0, 6)}`;
+    await new SupabaseProfileRepository(other.client).update({ id: other.userId, username: name });
+
+    const error = await new SupabaseProfileRepository(user.client)
+      .update({ id: user.userId, username: name.toUpperCase() })
+      .catch((e) => e);
+
+    expect(error).toBeInstanceOf(UserError);
+    expect(error.code).toBe(UserErrorCodes.PROFILE_USERNAME_TAKEN);
+  });
 });
