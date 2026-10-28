@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { getApi } from '@api';
@@ -6,6 +7,8 @@ import Sidebar from '@frontend/components/layout/Sidebar';
 import { SeededQuery } from '@frontend/components/providers/SeededQuery';
 import { UserProvider } from '@frontend/context/UserContext';
 import { PROFILE_QUERY_KEY } from '@frontend/lib/query-keys';
+
+import { PATHNAME_HEADER } from '@shared/http/pathname-header';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { authApi, profileApi } = await getApi();
@@ -22,7 +25,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   // A generated username is a placeholder nobody sees: the person picks one before using the app
   if (profile && !profile.usernameChosen) {
-    redirect('/choose-username');
+    // Back to the page that was asked for (a sheet, an invite) once the username is picked
+    const asked = (await headers()).get(PATHNAME_HEADER);
+    redirect(
+      asked && asked !== '/characters'
+        ? `/choose-username?next=${encodeURIComponent(asked)}`
+        : '/choose-username',
+    );
   }
 
   return (

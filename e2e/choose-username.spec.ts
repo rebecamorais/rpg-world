@@ -25,6 +25,11 @@ test.describe('escolher o username', () => {
 
     await page.goto(characterUrl(id));
 
-    await expect(page).toHaveURL(/\/choose-username$/);
+    await expect(page).toHaveURL((url) => url.pathname === '/choose-username');
+    await (await hydrated(page.getByLabel('Username'))).fill(`sheet_${Date.now() % 100000}`);
+    await page.getByRole('button', { name: 'Continue' }).click();
+
+    // Back to the sheet that was asked for
+    await expect(page).toHaveURL((url) => url.pathname === characterUrl(id));
   });
 });

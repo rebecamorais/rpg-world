@@ -71,4 +71,18 @@ describe('ChooseUsernameForm', () => {
     await waitFor(() => expect(assign).toHaveBeenCalledWith('/characters'));
     expect(patch).toHaveBeenCalledWith('/api/profile', { username: 'aria_bold' });
   });
+
+  it('depois de salvar, segue para onde a pessoa ia (?next=)', async () => {
+    vi.stubGlobal('location', {
+      ...window.location,
+      assign,
+      search: '?next=%2Fparties%2Fjoin%2Fabc',
+      origin: 'http://localhost',
+    });
+    renderWithProviders(<ChooseUsernameForm />);
+
+    await choose('aria_bold');
+
+    await waitFor(() => expect(assign).toHaveBeenCalledWith('/parties/join/abc'));
+  });
 });

@@ -10,9 +10,11 @@ import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
 
+import { safeRedirectPath } from '@backend/shared/infrastructure/helpers/safe-redirect-path';
+
 /**
  * Asks for a username before the app is used. Starts empty: the generated placeholder is never
- * shown. Saving marks it as chosen; then the dashboard opens.
+ * shown. Saving marks it as chosen; then the page the person was going to (`?next=`) opens.
  */
 export default function ChooseUsernameForm() {
   const t = useTranslations('chooseUsername');
@@ -38,7 +40,9 @@ export default function ChooseUsernameForm() {
   const onSubmit = async ({ username }: z.infer<typeof schema>) => {
     try {
       await updateProfile({ username });
-      window.location.assign('/characters');
+      // Where the person was going when the dashboard asked for a username (same-site only)
+      const next = new URLSearchParams(window.location.search).get('next');
+      window.location.assign(safeRedirectPath(next, window.location.origin, '/characters'));
     } catch (error) {
       form.setError('username', {
         message: getMessage(error instanceof Error ? error.message : 'unknown'),

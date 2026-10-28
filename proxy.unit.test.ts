@@ -141,6 +141,16 @@ describe('proxy', () => {
       );
     });
 
+    it('um rw_next com % inválido não derruba a página', async () => {
+      signedIn();
+
+      const res = await proxy(
+        request({ 'sb-127-auth-token': 'token', rw_next: '/x%zz' }, { path: '/characters' }),
+      );
+
+      expect(new URL(res.headers.get('location')!).pathname).toBe('/x%zz');
+    });
+
     it('rw_next para fora do site é ignorado', async () => {
       signedIn();
 
@@ -156,6 +166,12 @@ describe('proxy', () => {
 
       expect(res.headers.get('location')).toBeNull();
     });
+  });
+
+  it('passa o caminho pedido aos Server Components (x-pathname)', async () => {
+    const res = await proxy(request({}, { path: '/system/DnD_5e/character/abc' }));
+
+    expect(res.headers.get('x-middleware-request-x-pathname')).toBe('/system/DnD_5e/character/abc');
   });
 
   describe('quem já está logado', () => {
