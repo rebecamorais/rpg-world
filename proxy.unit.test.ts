@@ -124,6 +124,40 @@ describe('proxy', () => {
     expect(res.headers.get('x-middleware-request-cookie')).toContain('sb-127-auth-token=fresh');
   });
 
+  describe('volta ao link depois de entrar (rw_next)', () => {
+    it('com sessão, /characters com rw_next redireciona para lá e apaga o cookie', async () => {
+      signedIn();
+
+      const res = await proxy(
+        request(
+          { 'sb-127-auth-token': 'token', rw_next: '/settings/profile' },
+          { path: '/characters' },
+        ),
+      );
+
+      expect(new URL(res.headers.get('location')!).pathname).toBe('/settings/profile');
+      expect(res.headers.get('set-cookie')).toMatch(
+        /rw_next=;.*(Max-Age=0|Expires=Thu, 01 Jan 1970)/i,
+      );
+    });
+
+    it('rw_next para fora do site é ignorado', async () => {
+      signedIn();
+
+      const res = await proxy(
+        request({ 'sb-127-auth-token': 'token', rw_next: '//evil.com' }, { path: '/characters' }),
+      );
+
+      expect(res.headers.get('location')).toBeNull();
+    });
+
+    it('sem sessão, rw_next não redireciona', async () => {
+      const res = await proxy(request({ rw_next: '/settings/profile' }, { path: '/characters' }));
+
+      expect(res.headers.get('location')).toBeNull();
+    });
+  });
+
   describe('quem já está logado', () => {
     it.each(['/login', '/register'])(
       'com sessão válida, %s redireciona para /characters',
