@@ -82,7 +82,9 @@ true`, senão todo e2e logado cai em `/choose-username`. (Tarefa 3)
   3. Marca como escolhido quem tem username e **não** segue o padrão gerado pelo e-mail:
      `username IS NOT NULL AND username <> lower(split_part(email,'@',1) || substring(id::text,1,5))`
      (join com `auth.users`).
-  4. Quem não foi marcado (nulo ou gerado pelo e-mail) recebe `random_username()`.
+  4. Só quem está **sem** username (nulo) recebe `random_username()`. Os gerados pelo e-mail ficam
+     como estão, com `username_chosen = false` (decisão da Rebeca): não aparecem para ninguém e a
+     pessoa escolhe o seu no próximo acesso.
   5. `SET DEFAULT public.random_username()`, `SET NOT NULL`, índice único em `lower(username)`.
   6. `CREATE OR REPLACE FUNCTION public.handle_new_user()` sem a coluna `username` no insert
      (mantém `SECURITY DEFINER` e `search_path = ''` da migração `20261020130000`).

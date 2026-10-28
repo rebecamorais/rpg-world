@@ -137,9 +137,10 @@ mestre para o Role Play; o combate vem na fase 2, e anotações compartilhadas s
 
 - O perfil ganha uma marca de "username escolhido" (ex.: `username_chosen boolean`). O trigger de
   cadastro gera o nome aleatório com a marca falsa; salvar o username no perfil liga a marca.
-- Contas atuais: uma migração troca os usernames que seguem o padrão gerado a partir do e-mail
-  (`lower(prefixo do e-mail + 5 caracteres do id)`) por um nome aleatório e deixa a marca falsa;
-  usernames diferentes desse padrão são tratados como escolhidos.
+- Contas atuais: usernames que seguem o padrão gerado a partir do e-mail
+  (`lower(prefixo do e-mail + 5 caracteres do id)`) **ficam como estão**, com a marca falsa (não
+  aparecem para ninguém; a pessoa escolhe no próximo acesso); usernames diferentes desse padrão
+  são tratados como escolhidos; só os nulos ganham um nome aleatório.
 - A busca por username no convite e o que os colegas veem só consideram usernames escolhidos.
 
 ### Decisões do Claude na revisão
