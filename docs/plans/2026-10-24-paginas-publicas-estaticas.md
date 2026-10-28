@@ -375,12 +375,17 @@ sem o aviso guardado`.
 ## Resultados da medição
 
 Medido com `curl -w '%{time_starttransfer}'` em `https://www.rpgworldapp.com`, de São Paulo, sem
-cookie, 5 vezes. "Fria" é a primeira chamada da série.
+cookie, 5 vezes. "Fria" é a primeira chamada da série. Depois: 2026-10-28, com o #118 em produção
+(`x-vercel-cache: HIT`, `x-nextjs-prerender: 1`).
 
 | URL         | antes (fria) | antes (quente, mediana) | depois (fria) | depois (quente, mediana) |
 | ----------- | ------------ | ----------------------- | ------------- | ------------------------ |
-| `/`         | 1,81 s       | 0,15 s                  |               |                          |
-| `/features` | 0,26 s       | 0,13 s                  |               |                          |
+| `/`         | 1,81 s       | 0,15 s                  | 0,36 s        | 0,11 s                   |
+| `/features` | 0,26 s       | 0,13 s                  | 0,17 s        | 0,17 s                   |
+
+Leitura: o ganho está na visita fria, que era o problema (1,81 s → 0,36 s na home): a página não é
+mais renderizada por uma função fria. Quente, a diferença fica no ruído da rede, porque o proxy
+continua rodando em todo pedido (com cold start próprio, como previsto no design).
 
 Achado à parte: `https://rpgworldapp.com` (sem `www`) responde 308 para o `www` antes de qualquer
 coisa, mais uma ida e volta (~40–100 ms) para quem compartilha o link sem `www`. Fica fora deste
