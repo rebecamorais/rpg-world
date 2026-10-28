@@ -111,6 +111,7 @@ export type Database = {
           hp_current: number;
           hp_max: number;
           id: string;
+          kind: string;
           level: number;
           name: string;
           owner_id: string;
@@ -128,6 +129,7 @@ export type Database = {
           hp_current?: number;
           hp_max?: number;
           id?: string;
+          kind?: string;
           level?: number;
           name: string;
           owner_id: string;
@@ -144,6 +146,7 @@ export type Database = {
           hp_current?: number;
           hp_max?: number;
           id?: string;
+          kind?: string;
           level?: number;
           name?: string;
           owner_id?: string;

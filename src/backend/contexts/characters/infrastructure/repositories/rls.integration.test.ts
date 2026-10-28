@@ -51,6 +51,20 @@ describe('RLS com client do usuário (Integration)', () => {
       expect(names).toEqual(['Newer', 'Original, edited']);
     });
 
+    it('a lista do dono não traz fichas de inimigo', async () => {
+      const npcId = crypto.randomUUID();
+      const { error } = await SupabaseFactory.createAdmin()
+        .from('characters')
+        .insert({ id: npcId, owner_id: owner.userId, name: 'Goblin', kind: 'npc' });
+      if (error) throw error;
+
+      const names = (
+        await new SupabaseCharacterRepository(owner.client).findByOwner(owner.userId)
+      ).map((c) => c.name);
+
+      expect(names).toEqual(['Original']);
+    });
+
     it('o dono lê o próprio personagem', async () => {
       const character = await new SupabaseCharacterRepository(owner.client).findById(characterId);
       expect(character?.name).toBe('Original');

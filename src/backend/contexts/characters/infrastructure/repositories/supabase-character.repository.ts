@@ -53,6 +53,8 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       .from('characters')
       .select('*')
       .eq('owner_id', ownerUsername)
+      // Only playable characters: the GM's enemy sheets (npc) aren't "my characters"
+      .eq('kind', 'pc')
       .is('deleted_at', null)
       // Newest first. Without an order the list reshuffled after every save.
       .order('created_at', { ascending: false });
