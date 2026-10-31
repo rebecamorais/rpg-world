@@ -13,3 +13,5 @@ export const inviteCodeParamsSchema = z.object({ code: z.string().regex(/^[a-f0-
 
 // Usernames picked before the a-z0-9_ rule may have other characters: the database finds them
 export const inviteUsernameSchema = z.object({ username: z.string().min(1).max(60) });
+
+export const myCharactersSchema = z.object({ characterIds: z.array(z.uuid()).max(20) });

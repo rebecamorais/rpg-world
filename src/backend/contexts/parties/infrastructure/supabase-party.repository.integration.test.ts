@@ -1,6 +1,13 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { chooseUsername, inviteCode } from '../../../../../test/helpers/parties';
+import { SupabaseFactory } from '@lib/supabase';
+
+import {
+  addMember,
+  chooseUsername,
+  createCharacter,
+  inviteCode,
+} from '../../../../../test/helpers/parties';
 import { createSignedInClient } from '../../../../../test/helpers/signed-in-client';
 import { PartyErrorCodes } from '../domain/PartyError';
 import { SupabasePartyRepository } from './supabase-party.repository';
@@ -141,5 +148,81 @@ describe('SupabasePartyRepository — convites e membros (Integration)', () => {
 
     expect(await gmRepo.deleteMember(partyId, player.userId)).toBe(true);
     expect(await gmRepo.deleteMember(partyId, player.userId)).toBe(false);
+  });
+});
+
+describe('SupabasePartyRepository — página da mesa (Integration)', () => {
+  let gm: Session;
+  let player: Session;
+  let partyId: string;
+
+  beforeEach(async () => {
+    gm = await createSignedInClient('gm');
+    player = await createSignedInClient('player');
+    partyId = await new SupabasePartyRepository(gm.client).create(gm.userId, 'Mesa');
+    await addMember(partyId, player.userId, 'active');
+  });
+
+  it('o mestre recebe as fichas do Role Play: atributos, perícias e lore', async () => {
+    const characterId = await createCharacter(player.userId, {
+      attributes: { WIS: 16 },
+      level: 1,
+      system_data: { skills: { PERCEPTION: { isProficient: true } }, passivePerception: 10 },
+    });
+    await new SupabasePartyRepository(player.client).addCharacters(partyId, [characterId]);
+    await SupabaseFactory.createAdmin()
+      .from('character_lore')
+      .insert({ character_id: characterId, ideals: 'Saber' });
+
+    const sheets = await new SupabasePartyRepository(gm.client).rolePlaySheets([characterId]);
+
+    expect(sheets).toEqual([
+      {
+        id: characterId,
+        sheet: {
+          attributes: { WIS: 16 },
+          level: 1,
+          skills: { PERCEPTION: { isProficient: true } },
+        },
+        lore: expect.objectContaining({ ideals: 'Saber' }),
+      },
+    ]);
+  });
+
+  it('levar um npc responde CHARACTER_NOT_ALLOWED', async () => {
+    const npc = await createCharacter(player.userId, { kind: 'npc' });
+
+    const error = await new SupabasePartyRepository(player.client)
+      .addCharacters(partyId, [npc])
+      .catch((e) => e);
+
+    expect(error.code).toBe(PartyErrorCodes.CHARACTER_NOT_ALLOWED);
+  });
+
+  it('roster, pessoas e mesa vêm pelo repositório; tirar o personagem tira do roster', async () => {
+    const characterId = await createCharacter(player.userId, { name: 'Arani' });
+    const playerRepo = new SupabasePartyRepository(player.client);
+    await playerRepo.addCharacters(partyId, [characterId]);
+
+    expect(await playerRepo.findParty(partyId)).toEqual({
+      id: partyId,
+      name: 'Mesa',
+      system: 'dnd_5e',
+      gmId: gm.userId,
+    });
+    expect((await playerRepo.people(partyId)).map((p) => p.status).sort()).toEqual([
+      'active',
+      'gm',
+    ]);
+    expect(await playerRepo.roster(partyId)).toEqual([
+      expect.objectContaining({ characterId, ownerId: player.userId, name: 'Arani' }),
+    ]);
+    expect(await playerRepo.inviteCode(partyId)).toBeNull();
+    expect(await new SupabasePartyRepository(gm.client).inviteCode(partyId)).toMatch(
+      /^[a-f0-9]{32}$/,
+    );
+
+    await playerRepo.removeCharacters(partyId, [characterId]);
+    expect(await playerRepo.roster(partyId)).toEqual([]);
   });
 });

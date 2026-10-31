@@ -24,4 +24,9 @@ export const makePartiesApi = (partyContext: PartyContext) => ({
   acceptMember: (partyId: string, memberId: string) => partyContext.acceptMember(partyId, memberId),
 
   removeMember: (partyId: string, memberId: string) => partyContext.removeMember(partyId, memberId),
+
+  get: (partyId: string, userId: string) => partyContext.get(partyId, userId),
+
+  setMyCharacters: (partyId: string, userId: string, characterIds: string[]) =>
+    partyContext.setMyCharacters(partyId, userId, characterIds),
 });

@@ -2,16 +2,19 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PartySummary } from '../domain/Party';
 import { PartyErrorCodes } from '../domain/PartyError';
+import { PartyPerson, RosterCharacter } from '../domain/PartyView';
 import { PartyRepo } from '../domain/repository/party.repo';
 import { AcceptMemberUseCase } from './accept-member.use-case';
 import { CreatePartyUseCase } from './create-party.use-case';
 import { DeletePartyUseCase } from './delete-party.use-case';
 import { GetInviteUseCase } from './get-invite.use-case';
+import { GetPartyUseCase } from './get-party.use-case';
 import { InviteByUsernameUseCase } from './invite-by-username.use-case';
 import { ListMyPartiesUseCase } from './list-my-parties.use-case';
 import { RemoveMemberUseCase } from './remove-member.use-case';
 import { RenamePartyUseCase } from './rename-party.use-case';
 import { RotateInviteCodeUseCase } from './rotate-invite-code.use-case';
+import { SetMyCharactersUseCase } from './set-my-characters.use-case';
 
 const makePartyRepo = () =>
   ({
@@ -25,6 +28,15 @@ const makePartyRepo = () =>
     invite: vi.fn<PartyRepo['invite']>().mockResolvedValue('invited'),
     activateMember: vi.fn<PartyRepo['activateMember']>().mockResolvedValue(true),
     deleteMember: vi.fn<PartyRepo['deleteMember']>().mockResolvedValue(true),
+    findParty: vi
+      .fn<PartyRepo['findParty']>()
+      .mockResolvedValue({ id: 'p', name: 'Mesa', system: 'dnd_5e', gmId: 'gm-1' }),
+    people: vi.fn<PartyRepo['people']>().mockResolvedValue([]),
+    roster: vi.fn<PartyRepo['roster']>().mockResolvedValue([]),
+    inviteCode: vi.fn<PartyRepo['inviteCode']>().mockResolvedValue('c'.repeat(32)),
+    rolePlaySheets: vi.fn<PartyRepo['rolePlaySheets']>().mockResolvedValue([]),
+    addCharacters: vi.fn<PartyRepo['addCharacters']>().mockResolvedValue(undefined),
+    removeCharacters: vi.fn<PartyRepo['removeCharacters']>().mockResolvedValue(undefined),
   }) satisfies PartyRepo;
 
 const summary = (overrides: Partial<PartySummary>): PartySummary => ({
@@ -36,6 +48,24 @@ const summary = (overrides: Partial<PartySummary>): PartySummary => ({
   gmUsername: 'mestra',
   pendingRequests: 0,
   ...overrides,
+});
+
+const person = (userId: string, status: PartyPerson['status']): PartyPerson => ({
+  userId,
+  username: userId,
+  avatarUrl: null,
+  status,
+});
+
+const rosterCharacter = (characterId: string, ownerId: string): RosterCharacter => ({
+  characterId,
+  ownerId,
+  name: characterId,
+  avatarUrl: null,
+  race: 'Elfa',
+  class: 'Maga',
+  level: 1,
+  accentColor: null,
 });
 
 const codeOf = (promise: Promise<unknown>) => promise.catch((e) => e.code);
@@ -167,6 +197,90 @@ describe('casos de uso das mesas', () => {
       expect(await codeOf(new RemoveMemberUseCase(repo).execute('p', 'u'))).toBe(
         PartyErrorCodes.NOT_FOUND,
       );
+    });
+  });
+
+  describe('GetPartyUseCase', () => {
+    it('quem é só invited responde not found', async () => {
+      repo.people.mockResolvedValue([person('gm-1', 'gm')]);
+
+      expect(await codeOf(new GetPartyUseCase(repo).execute('p', 'player-1'))).toBe(
+        PartyErrorCodes.NOT_FOUND,
+      );
+    });
+
+    it('mesa inexistente responde not found', async () => {
+      repo.findParty.mockResolvedValue(null);
+
+      expect(await codeOf(new GetPartyUseCase(repo).execute('p', 'gm-1'))).toBe(
+        PartyErrorCodes.NOT_FOUND,
+      );
+    });
+
+    it('o jogador recebe roster e os próprios personagens, sem a parte do mestre', async () => {
+      repo.people.mockResolvedValue([person('gm-1', 'gm'), person('player-1', 'active')]);
+      repo.roster.mockResolvedValue([
+        rosterCharacter('mine', 'player-1'),
+        rosterCharacter('theirs', 'player-2'),
+      ]);
+
+      const view = await new GetPartyUseCase(repo).execute('p', 'player-1');
+
+      expect(view.role).toBe('player');
+      expect(view.gm).toBeNull();
+      expect(view.myCharacterIds).toEqual(['mine']);
+      expect(view.roster).toHaveLength(2);
+      expect(repo.inviteCode).not.toHaveBeenCalled();
+      expect(repo.rolePlaySheets).not.toHaveBeenCalled();
+    });
+
+    it('o mestre recebe o código e os cards do Role Play, com o username do jogador', async () => {
+      repo.people.mockResolvedValue([person('gm-1', 'gm'), person('player-1', 'active')]);
+      repo.roster.mockResolvedValue([rosterCharacter('c1', 'player-1')]);
+      repo.rolePlaySheets.mockResolvedValue([
+        {
+          id: 'c1',
+          sheet: { attributes: { WIS: 14 }, level: 1, skills: {} },
+          lore: { ideals: 'Saber' },
+        },
+      ]);
+
+      const view = await new GetPartyUseCase(repo).execute('p', 'gm-1');
+
+      expect(view.role).toBe('gm');
+      expect(view.gm?.inviteCode).toBe('c'.repeat(32));
+      expect(view.gm?.rolePlay).toEqual([
+        expect.objectContaining({
+          characterId: 'c1',
+          ownerUsername: 'player-1',
+          ideals: 'Saber',
+          passivePerception: 12,
+        }),
+      ]);
+      expect(repo.rolePlaySheets).toHaveBeenCalledWith(['c1']);
+    });
+  });
+
+  describe('SetMyCharactersUseCase', () => {
+    it('troca A por B: tira A e leva B', async () => {
+      repo.roster.mockResolvedValue([
+        rosterCharacter('a', 'player-1'),
+        rosterCharacter('other', 'player-2'),
+      ]);
+
+      await new SetMyCharactersUseCase(repo).execute('p', 'player-1', ['b', 'b']);
+
+      expect(repo.removeCharacters).toHaveBeenCalledWith('p', ['a']);
+      expect(repo.addCharacters).toHaveBeenCalledWith('p', ['b']);
+    });
+
+    it('sem mudança não escreve nada', async () => {
+      repo.roster.mockResolvedValue([rosterCharacter('a', 'player-1')]);
+
+      await new SetMyCharactersUseCase(repo).execute('p', 'player-1', ['a']);
+
+      expect(repo.removeCharacters).not.toHaveBeenCalled();
+      expect(repo.addCharacters).not.toHaveBeenCalled();
     });
   });
 });

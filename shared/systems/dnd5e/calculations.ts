@@ -42,3 +42,12 @@ export function calculatePassivePerception(
 ): number {
   return 10 + calculateSkillValue(wisValue, level, isPerceptionProficient, hasPerceptionExpertise);
 }
+
+export function calculatePassiveInsight(
+  wisValue: number,
+  level: number,
+  isInsightProficient: boolean,
+  hasInsightExpertise: boolean = false,
+): number {
+  return 10 + calculateSkillValue(wisValue, level, isInsightProficient, hasInsightExpertise);
+}

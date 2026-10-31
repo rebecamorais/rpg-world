@@ -5,12 +5,14 @@ import { AcceptMemberUseCase } from './application/accept-member.use-case';
 import { CreatePartyUseCase } from './application/create-party.use-case';
 import { DeletePartyUseCase } from './application/delete-party.use-case';
 import { GetInviteUseCase } from './application/get-invite.use-case';
+import { GetPartyUseCase } from './application/get-party.use-case';
 import { InviteByUsernameUseCase } from './application/invite-by-username.use-case';
 import { ListMyPartiesUseCase } from './application/list-my-parties.use-case';
 import { RemoveMemberUseCase } from './application/remove-member.use-case';
 import { RenamePartyUseCase } from './application/rename-party.use-case';
 import { RequestJoinUseCase } from './application/request-join.use-case';
 import { RotateInviteCodeUseCase } from './application/rotate-invite-code.use-case';
+import { SetMyCharactersUseCase } from './application/set-my-characters.use-case';
 import { SupabasePartyRepository } from './infrastructure/supabase-party.repository';
 
 export type { PartyContext };
@@ -28,6 +30,8 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
   const inviteByUsername = new InviteByUsernameUseCase(repository);
   const acceptMember = new AcceptMemberUseCase(repository);
   const removeMember = new RemoveMemberUseCase(repository);
+  const getParty = new GetPartyUseCase(repository);
+  const setMyCharacters = new SetMyCharactersUseCase(repository);
 
   return {
     listMine: listMyParties.execute.bind(listMyParties),
@@ -40,5 +44,7 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
     inviteByUsername: inviteByUsername.execute.bind(inviteByUsername),
     acceptMember: acceptMember.execute.bind(acceptMember),
     removeMember: removeMember.execute.bind(removeMember),
+    get: getParty.execute.bind(getParty),
+    setMyCharacters: setMyCharacters.execute.bind(setMyCharacters),
   };
 };

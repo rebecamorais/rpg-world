@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  calculatePassiveInsight,
   calculatePassivePerception,
   calculateSavingThrow,
   calculateSkillValue,
@@ -57,6 +58,14 @@ describe('D&D 5e calculations', () => {
     it('adds the proficiency bonus only when proficient', () => {
       expect(calculateSavingThrow(14, 1, true)).toBe(4);
       expect(calculateSavingThrow(14, 1, false)).toBe(2);
+    });
+  });
+
+  describe('calculatePassiveInsight', () => {
+    it('is 10 + Insight', () => {
+      expect(calculatePassiveInsight(10, 1, false)).toBe(10);
+      expect(calculatePassiveInsight(14, 5, true)).toBe(15);
+      expect(calculatePassiveInsight(14, 5, true, true)).toBe(18);
     });
   });
 
