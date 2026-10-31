@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { rpgWorldApi } from '@client';
 
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 
@@ -17,11 +18,12 @@ export function useCharacter(
 ) {
   const queryClient = useQueryClient();
   const { getErrorMessage } = useErrorMessage();
+  const { apiPath } = useSheetSource(id);
 
   const query = useQuery({
     queryKey: ['character', id],
     queryFn: async () => {
-      const data = await rpgWorldApi.get<DnD5eCharacter>(`/api/characters/${id}`);
+      const data = await rpgWorldApi.get<DnD5eCharacter>(apiPath);
       return data;
     },
     enabled: fetch && !!id,
