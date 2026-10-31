@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
@@ -15,6 +16,7 @@ import { Card, CardContent } from '@frontend/components/ui/card';
 import { EmptyState } from '@frontend/components/ui/empty-state';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { PARTIES_QUERY_KEY } from '@frontend/lib/query-keys';
 
 import type { InvitePreview, MemberStatus } from '@backend/contexts/parties/domain/Party';
 
@@ -23,6 +25,7 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
   const t = useTranslations('parties.join');
   const tParties = useTranslations('parties');
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { currentUser } = useCurrentUser();
   const { getErrorMessage } = useErrorMessage();
   const [status, setStatus] = useState(invite?.myStatus ?? null);
@@ -48,6 +51,8 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
     setIsSending(true);
     try {
       const next = await request();
+      // The party list (sidebar, /parties) shows the new invite or request status
+      await queryClient.invalidateQueries({ queryKey: PARTIES_QUERY_KEY });
       if (next === 'active') router.push(`/parties/${invite.partyId}`);
       else setStatus(next);
     } catch (err) {
