@@ -372,7 +372,52 @@ export type Database = {
     };
     Functions: {
       auth_user_exists: { Args: { p_email: string }; Returns: boolean };
+      get_party_invite: {
+        Args: { p_code: string };
+        Returns: {
+          gm_username: string;
+          my_status: string;
+          name: string;
+          party_id: string;
+        }[];
+      };
+      invite_to_party: { Args: { p_party_id: string; p_username: string }; Returns: string };
+      my_parties: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          gm_username: string;
+          name: string;
+          party_id: string;
+          pending_requests: number;
+          role: string;
+          status: string;
+          system: string;
+        }[];
+      };
       orphan_avatar_objects: { Args: { min_age?: string }; Returns: string[] };
+      party_people: {
+        Args: { p_party_id: string };
+        Returns: {
+          avatar_url: string;
+          status: string;
+          user_id: string;
+          username: string;
+        }[];
+      };
+      party_roster: {
+        Args: { p_party_id: string };
+        Returns: {
+          avatar_url: string;
+          character_id: string;
+          class: string;
+          level: number;
+          name: string;
+          owner_id: string;
+          race: string;
+          theme_color: string;
+        }[];
+      };
+      request_party_join: { Args: { p_code: string }; Returns: string };
     };
     Enums: {
       rpg_system: 'dnd_5e' | 'ezd6' | 'pathfinder_2e';

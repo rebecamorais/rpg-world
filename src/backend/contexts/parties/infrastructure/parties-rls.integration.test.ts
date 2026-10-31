@@ -2,48 +2,17 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { SupabaseFactory } from '@lib/supabase';
 
+import {
+  addMember,
+  createCharacter,
+  createParty,
+  memberStatus,
+} from '../../../../../test/helpers/parties';
 import { createSignedInClient } from '../../../../../test/helpers/signed-in-client';
 
 type Session = Awaited<ReturnType<typeof createSignedInClient>>;
 
 const admin = () => SupabaseFactory.createAdmin();
-
-async function createParty(gm: Session, name = 'Mesa de Quinta') {
-  const { data, error } = await gm.client
-    .from('parties')
-    .insert({ name, gm_id: gm.userId })
-    .select('id')
-    .single();
-  if (error) throw error;
-  return data.id as string;
-}
-
-/** States the app can't build yet (only through the functions of the next migration). */
-async function addMember(partyId: string, userId: string, status: string) {
-  const { error } = await admin()
-    .from('party_members')
-    .insert({ party_id: partyId, user_id: userId, status });
-  if (error) throw error;
-}
-
-async function createCharacter(ownerId: string, fields: Record<string, unknown> = {}) {
-  const id = crypto.randomUUID();
-  const { error } = await admin()
-    .from('characters')
-    .insert({ id, owner_id: ownerId, name: 'Arani', ...fields });
-  if (error) throw error;
-  return id;
-}
-
-async function memberStatus(partyId: string, userId: string) {
-  const { data } = await admin()
-    .from('party_members')
-    .select('status')
-    .eq('party_id', partyId)
-    .eq('user_id', userId)
-    .maybeSingle();
-  return data?.status ?? null;
-}
 
 describe('RLS das mesas (Integration)', () => {
   let gm: Session;
