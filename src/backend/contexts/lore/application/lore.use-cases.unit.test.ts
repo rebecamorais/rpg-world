@@ -6,6 +6,7 @@ import { LoreErrorCodes } from '../domain/LoreError';
 import { LoreRepository } from '../domain/repository/lore.repo';
 import { DeleteLoreUseCase } from './delete-lore/delete-lore.use-case';
 import { GetLoreUseCase } from './get-lore/get-lore.use-case';
+import { GetPartyLoreUseCase } from './get-lore/get-party-lore.use-case';
 import { UpdateLoreUseCase } from './update-lore/update-lore.use-case';
 
 const makeRepository = () =>
@@ -71,6 +72,33 @@ describe('lore use cases', () => {
         new DeleteLoreUseCase(repository, ownership).execute('missing', 'owner-1'),
       ).rejects.toThrow(LoreErrorCodes.CHARACTER_NOT_FOUND);
       expect(repository.delete).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('GetPartyLoreUseCase', () => {
+    const access = {
+      isGmOfCharacter: vi.fn(
+        async (partyId: string, characterId: string, userId: string) =>
+          partyId === 'party-1' && characterId === 'char-1' && userId === 'gm-1',
+      ),
+    };
+
+    it('o mestre da mesa lê a lore', async () => {
+      const lore = await new GetPartyLoreUseCase(repository, access).execute(
+        'party-1',
+        'char-1',
+        'gm-1',
+      );
+      expect(lore?.age).toBe('30');
+    });
+
+    it('sem acesso responde not found sem consultar a lore', async () => {
+      const error = await new GetPartyLoreUseCase(repository, access)
+        .execute('party-1', 'char-1', 'player-2')
+        .catch((e) => e);
+
+      expect(error.code).toBe(LoreErrorCodes.CHARACTER_NOT_FOUND);
+      expect(repository.findByCharacterId).not.toHaveBeenCalled();
     });
   });
 });

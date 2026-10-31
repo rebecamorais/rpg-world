@@ -10,6 +10,7 @@ import { DeletePartyUseCase } from './delete-party.use-case';
 import { GetInviteUseCase } from './get-invite.use-case';
 import { GetPartyUseCase } from './get-party.use-case';
 import { InviteByUsernameUseCase } from './invite-by-username.use-case';
+import { IsGmOfCharacterUseCase } from './is-gm-of-character.use-case';
 import { ListMyPartiesUseCase } from './list-my-parties.use-case';
 import { RemoveMemberUseCase } from './remove-member.use-case';
 import { RenamePartyUseCase } from './rename-party.use-case';
@@ -281,6 +282,30 @@ describe('casos de uso das mesas', () => {
 
       expect(repo.removeCharacters).not.toHaveBeenCalled();
       expect(repo.addCharacters).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('IsGmOfCharacterUseCase', () => {
+    beforeEach(() => {
+      repo.roster.mockResolvedValue([rosterCharacter('c1', 'player-1')]);
+    });
+
+    it('o mestre de um personagem da mesa tem acesso', async () => {
+      expect(await new IsGmOfCharacterUseCase(repo).execute('p', 'c1', 'gm-1')).toBe(true);
+    });
+
+    it('um jogador da mesa não tem', async () => {
+      expect(await new IsGmOfCharacterUseCase(repo).execute('p', 'c1', 'player-1')).toBe(false);
+      expect(repo.roster).not.toHaveBeenCalled();
+    });
+
+    it('um personagem fora da mesa não é lido', async () => {
+      expect(await new IsGmOfCharacterUseCase(repo).execute('p', 'c2', 'gm-1')).toBe(false);
+    });
+
+    it('mesa que a pessoa não vê não dá acesso', async () => {
+      repo.findParty.mockResolvedValue(null);
+      expect(await new IsGmOfCharacterUseCase(repo).execute('p', 'c1', 'gm-1')).toBe(false);
     });
   });
 });

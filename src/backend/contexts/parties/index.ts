@@ -7,6 +7,7 @@ import { DeletePartyUseCase } from './application/delete-party.use-case';
 import { GetInviteUseCase } from './application/get-invite.use-case';
 import { GetPartyUseCase } from './application/get-party.use-case';
 import { InviteByUsernameUseCase } from './application/invite-by-username.use-case';
+import { IsGmOfCharacterUseCase } from './application/is-gm-of-character.use-case';
 import { ListMyPartiesUseCase } from './application/list-my-parties.use-case';
 import { RemoveMemberUseCase } from './application/remove-member.use-case';
 import { RenamePartyUseCase } from './application/rename-party.use-case';
@@ -32,6 +33,7 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
   const removeMember = new RemoveMemberUseCase(repository);
   const getParty = new GetPartyUseCase(repository);
   const setMyCharacters = new SetMyCharactersUseCase(repository);
+  const isGmOfCharacter = new IsGmOfCharacterUseCase(repository);
 
   return {
     listMine: listMyParties.execute.bind(listMyParties),
@@ -46,5 +48,6 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
     removeMember: removeMember.execute.bind(removeMember),
     get: getParty.execute.bind(getParty),
     setMyCharacters: setMyCharacters.execute.bind(setMyCharacters),
+    isGmOfCharacter: isGmOfCharacter.execute.bind(isGmOfCharacter),
   };
 };

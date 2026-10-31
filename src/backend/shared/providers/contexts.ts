@@ -24,7 +24,9 @@ export class Contexts {
 
   get character() {
     if (!this._character) {
-      this._character = createCharacterContext(this.container.get('userClient'));
+      this._character = createCharacterContext(this.container.get('userClient'), {
+        partyGmAccess: this.party,
+      });
     }
     return this._character;
   }
@@ -54,6 +56,7 @@ export class Contexts {
       this._lore = createLoreContext({
         dbClient: this.container.get('userClient'),
         characterOwnership: this.character,
+        partyGmAccess: this.party,
       });
     }
     return this._lore;

@@ -30,4 +30,13 @@ export interface CharacterContext {
     action: ToggleSpellAction,
     locale?: string,
   ): Promise<CharacterSpellRelation | null>;
+
+  // Read only, for the GM of a party the character was brought to
+  getForPartyGm(partyId: string, id: string, gmId: string): Promise<Character>;
+  getSpellsForPartyGm(
+    partyId: string,
+    id: string,
+    gmId: string,
+    locale?: string,
+  ): Promise<CharacterSpellRelation[]>;
 }

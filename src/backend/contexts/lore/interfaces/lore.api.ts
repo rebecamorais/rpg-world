@@ -12,6 +12,11 @@ export const makeLoreApi = (loreContext: LoreContext) => ({
     return { characterId };
   },
 
+  getForPartyGm: async (partyId: string, characterId: string, gmId: string) => {
+    const lore = await loreContext.getForPartyGm(partyId, characterId, gmId);
+    return lore ? lore.toJSON() : null;
+  },
+
   delete: async (characterId: string, requesterId: string) => {
     await loreContext.delete(characterId, requesterId);
     return { deleted: true };

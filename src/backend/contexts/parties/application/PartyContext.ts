@@ -1,3 +1,5 @@
+import { PartyGmAccess } from '@backend/shared/domain/PartyGmAccess';
+
 import { InvitePreview, MemberStatus, MyParties } from '../domain/Party';
 import { PartyView } from '../domain/PartyView';
 
@@ -5,7 +7,7 @@ import { PartyView } from '../domain/PartyView';
  * Operations the parties context exposes to the interface layer. They act as the signed-in user:
  * who may change what is decided by the database (RLS and the party functions).
  */
-export interface PartyContext {
+export interface PartyContext extends PartyGmAccess {
   listMine(): Promise<MyParties>;
   create(gmId: string, name: string): Promise<{ id: string }>;
   rename(partyId: string, name: string): Promise<void>;

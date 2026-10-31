@@ -52,4 +52,11 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
   ) => {
     return characterContext.toggleSpell(id, requesterId, spellId, action, locale);
   },
+
+  getForPartyGm: async (partyId: string, id: string, gmId: string) => {
+    const character = await characterContext.getForPartyGm(partyId, id, gmId);
+    return character.toJSON();
+  },
+  getSpellsForPartyGm: (partyId: string, id: string, gmId: string, locale?: string) =>
+    characterContext.getSpellsForPartyGm(partyId, id, gmId, locale),
 });
