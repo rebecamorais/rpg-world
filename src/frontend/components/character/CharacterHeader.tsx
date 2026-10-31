@@ -11,7 +11,12 @@ import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Progress } from '@frontend/components/ui/progress';
-import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import {
+  useCharacterActions,
+  useCharacterMeta,
+  useLoadedCharacter,
+} from '@frontend/context/CharacterContext';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
 
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
@@ -33,6 +38,9 @@ export default function CharacterHeader() {
     avatarUrl,
   } = useLoadedCharacter();
   const { update } = useCharacterActions();
+  const { id } = useCharacterMeta();
+  // Read only (the GM): no customizing; the fields are off through SheetFieldset
+  const { readOnly } = useSheetSource(id);
   const pb = getProficiencyBonus(level);
   const t = useTranslations('characterHeader');
   const tImage = useTranslations('avatarUpload');
@@ -68,14 +76,16 @@ export default function CharacterHeader() {
                 {name?.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <button
-              type="button"
-              onClick={() => setIsColorPickerOpen(true)}
-              aria-label={t('customizeTitle')}
-              className="focus-ring bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity hover:opacity-100 focus-visible:opacity-100"
-            >
-              <AppIcon name="Palette" size={24} className="text-character-flare" />
-            </button>
+            {!readOnly && (
+              <button
+                type="button"
+                onClick={() => setIsColorPickerOpen(true)}
+                aria-label={t('customizeTitle')}
+                className="focus-ring bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity hover:opacity-100 focus-visible:opacity-100"
+              >
+                <AppIcon name="Palette" size={24} className="text-character-flare" />
+              </button>
+            )}
           </div>
           {avatarUrl ? (
             <button
@@ -96,10 +106,12 @@ export default function CharacterHeader() {
           onOpenChange={setIsViewerOpen}
         />
 
-        <CharacterCustomizationDialog
-          open={isColorPickerOpen}
-          onOpenChange={setIsColorPickerOpen}
-        />
+        {!readOnly && (
+          <CharacterCustomizationDialog
+            open={isColorPickerOpen}
+            onOpenChange={setIsColorPickerOpen}
+          />
+        )}
 
         <div className="grid flex-1 grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Left Column: Core Stats */}

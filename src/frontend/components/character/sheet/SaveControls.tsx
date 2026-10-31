@@ -10,6 +10,7 @@ import {
   useCharacterState,
 } from '@frontend/context/CharacterContext';
 import { useHasFieldErrors } from '@frontend/context/FieldValidityContext';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { useSaveShortcut } from '@frontend/hooks/useUnsavedChanges';
 
 interface SaveControlsProps {
@@ -107,12 +108,15 @@ export function SaveControls({
   );
 }
 
-/** Save controls of the Status tab, wired to the character draft. */
+/** Save controls of the Status tab, wired to the character draft. None on a read-only sheet. */
 export function SaveCharacterButton() {
   const { isDirty } = useCharacterState();
-  const { isSaving } = useCharacterMeta();
+  const { id, isSaving } = useCharacterMeta();
   const { save, discard } = useCharacterActions();
   const hasErrors = useHasFieldErrors();
+  const { readOnly } = useSheetSource(id);
+
+  if (readOnly) return null;
 
   return (
     <SaveControls
