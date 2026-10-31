@@ -908,5 +908,13 @@
     "title": "Página não encontrada",
     "description": "A página que você procura não existe ou mudou de lugar.",
     "home": "Ir para o início"
+  },
+  "chooseUsername": {
+    "title": "Escolha seu nome de usuário",
+    "description": "É por ele que o mestre te encontra para convidar para uma mesa. Dá para trocar depois no perfil.",
+    "label": "Nome de usuário",
+    "placeholder": "ex.: aria_a_valente",
+    "submit": "Continuar",
+    "saving": "Salvando..."
   }
 }

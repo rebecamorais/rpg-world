@@ -111,6 +111,7 @@ export type Database = {
           hp_current: number;
           hp_max: number;
           id: string;
+          kind: string;
           level: number;
           name: string;
           owner_id: string;
@@ -128,6 +129,7 @@ export type Database = {
           hp_current?: number;
           hp_max?: number;
           id?: string;
+          kind?: string;
           level?: number;
           name: string;
           owner_id: string;
@@ -144,6 +146,7 @@ export type Database = {
           hp_current?: number;
           hp_max?: number;
           id?: string;
+          kind?: string;
           level?: number;
           name?: string;
           owner_id?: string;
@@ -209,7 +212,8 @@ export type Database = {
           id: string;
           primary_color: string | null;
           updated_at: string;
-          username: string | null;
+          username: string;
+          username_chosen: boolean;
         };
         ComputedFields: never;
         Insert: {
@@ -219,7 +223,8 @@ export type Database = {
           id: string;
           primary_color?: string | null;
           updated_at?: string;
-          username?: string | null;
+          username?: string;
+          username_chosen?: boolean;
         };
         Update: {
           avatar_url?: string | null;
@@ -228,7 +233,8 @@ export type Database = {
           id?: string;
           primary_color?: string | null;
           updated_at?: string;
-          username?: string | null;
+          username?: string;
+          username_chosen?: boolean;
         };
         Relationships: [];
       };

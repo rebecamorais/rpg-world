@@ -3,6 +3,9 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { type CookieOptions, createServerClient } from '@supabase/ssr';
 import createMiddleware from 'next-intl/middleware';
 
+import { PATHNAME_HEADER } from './shared/http/pathname-header';
+import { safeRedirectPath } from './src/backend/shared/infrastructure/helpers/safe-redirect-path';
+import { NEXT_COOKIE } from './src/frontend/lib/post-login-next';
 import { routing } from './src/i18n/routing';
 
 const handleI18n = createMiddleware(routing);
@@ -21,6 +24,10 @@ const IMAGES_HOST = 'images.rpgworldapp.com';
 export async function proxy(request: NextRequest) {
   // Avatars served on their own host (next.config.ts rewrites it to /api/images): never localized
   if (request.headers.get('host') === IMAGES_HOST) return NextResponse.next();
+
+  // The path asked for, for Server Components (layouts don't get it): the dashboard sends someone
+  // who hasn't picked a username to /choose-username and back here afterwards
+  request.headers.set(PATHNAME_HEADER, `${request.nextUrl.pathname}${request.nextUrl.search}`);
 
   // Optimization: only refresh the session if there is one; no round trip for anonymous visitors
   const hasSession = request.cookies.getAll().some((c) => c.name.startsWith('sb-'));
@@ -50,8 +57,11 @@ export async function proxy(request: NextRequest) {
   const { data } = await supabaseAuth.auth.getClaims();
 
   let response = handleI18n(request);
-  if (data?.claims && SIGNED_OUT_ONLY.has(request.nextUrl.pathname)) {
-    const redirect = NextResponse.redirect(new URL('/characters', request.url));
+  const target = data?.claims ? signedInRedirect(request) : null;
+  if (target) {
+    const redirect = NextResponse.redirect(new URL(target, request.url));
+    // The remembered link is used once
+    if (target !== '/characters') redirect.cookies.delete(NEXT_COOKIE);
     // Keeps the language cookie next-intl may have just corrected
     response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
     response = redirect;
@@ -59,6 +69,22 @@ export async function proxy(request: NextRequest) {
 
   for (const { name, value, options } of refreshed) response.cookies.set(name, value, options);
   return response;
+}
+
+/**
+ * Where a signed-in request goes instead: away from the sign-in pages, and from /characters (where
+ * every sign-in flow lands) to the link the person opened before signing in, if one was kept.
+ */
+function signedInRedirect(request: NextRequest): string | null {
+  const { pathname } = request.nextUrl;
+  if (SIGNED_OUT_ONLY.has(pathname)) return '/characters';
+  if (pathname !== '/characters') return null;
+
+  // Next already decodes cookie values
+  const remembered = request.cookies.get(NEXT_COOKIE)?.value;
+  if (!remembered) return null;
+  const path = safeRedirectPath(remembered, request.nextUrl.origin, '');
+  return path && path !== '/characters' ? path : null;
 }
 
 export const config = {

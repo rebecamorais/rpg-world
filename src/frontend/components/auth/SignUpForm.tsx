@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import Link from 'next/link';
 
@@ -33,8 +33,11 @@ import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { setServerError } from '@frontend/lib/form-errors';
 import { newPasswordFields, passwordsMustMatch } from '@frontend/lib/password-schema';
+import { rememberNext } from '@frontend/lib/post-login-next';
 
 export default function SignUpForm() {
+  // Kept through the e-mail confirmation: the person lands back on the link they opened
+  useEffect(rememberNext, []);
   const t = useTranslations('register');
   const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();

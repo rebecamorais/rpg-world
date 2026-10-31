@@ -22,6 +22,18 @@ test.describe('autenticação', () => {
     await expect(page.getByText('No characters yet')).toBeVisible();
   });
 
+  test('quem abre o login com next volta para lá depois de entrar', async ({ page }) => {
+    const user = await createUser('login-next');
+    await page.goto('/login?next=/settings/profile');
+
+    await (await hydrated(page.getByLabel('Email'))).fill(user.email);
+    await page.getByLabel('Password').fill(PASSWORD);
+    await page.getByRole('button', { name: 'Sign In' }).click();
+
+    // The pathname, not the URL: /login?next=/settings/profile also ends with it
+    await expect(page).toHaveURL((url) => url.pathname === '/settings/profile');
+  });
+
   test('link mágico: pedido no login, link por e-mail e acesso liberado', async ({ page }) => {
     const user = await createUser('magic-link');
     await page.goto('/login');

@@ -43,6 +43,7 @@ export const GAME_ICON_NAMES: ReadonlySet<string> = new Set([
   'meditation',
   'orange',
   'palm',
+  'pc',
   'pentagram-rose',
   'poison-gas',
   'portal',

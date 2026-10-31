@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 
@@ -33,6 +33,7 @@ import { Input } from '@frontend/components/ui/input';
 import { useAuth } from '@frontend/hooks/useAuth';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { setServerError } from '@frontend/lib/form-errors';
+import { rememberNext } from '@frontend/lib/post-login-next';
 
 interface LoginFormValues {
   email: string;
@@ -40,6 +41,8 @@ interface LoginFormValues {
 }
 
 export default function LoginForm() {
+  // A link opened while signed out (e.g. a table invite) is where the person goes after signing in
+  useEffect(rememberNext, []);
   const { signInWithPassword } = useAuth();
   const t = useTranslations('login');
   const { getMessage } = useErrorMessage();
