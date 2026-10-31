@@ -204,6 +204,134 @@ export type Database = {
           },
         ];
       };
+      parties: {
+        Row: {
+          created_at: string;
+          gm_id: string;
+          id: string;
+          name: string;
+          system: Database['public']['Enums']['rpg_system'];
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          gm_id: string;
+          id?: string;
+          name: string;
+          system?: Database['public']['Enums']['rpg_system'];
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          gm_id?: string;
+          id?: string;
+          name?: string;
+          system?: Database['public']['Enums']['rpg_system'];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'parties_gm_id_fkey';
+            columns: ['gm_id'];
+            isOneToOne: false;
+            referencedRelation: 'profile';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      party_characters: {
+        Row: {
+          character_id: string;
+          party_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          character_id: string;
+          party_id: string;
+        };
+        Update: {
+          character_id?: string;
+          party_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'party_characters_character_id_fkey';
+            columns: ['character_id'];
+            isOneToOne: false;
+            referencedRelation: 'characters';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'party_characters_party_id_fkey';
+            columns: ['party_id'];
+            isOneToOne: false;
+            referencedRelation: 'parties';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      party_invites: {
+        Row: {
+          code: string;
+          party_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          code?: string;
+          party_id: string;
+        };
+        Update: {
+          code?: string;
+          party_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'party_invites_party_id_fkey';
+            columns: ['party_id'];
+            isOneToOne: true;
+            referencedRelation: 'parties';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      party_members: {
+        Row: {
+          created_at: string;
+          party_id: string;
+          status: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          party_id: string;
+          status: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          party_id?: string;
+          status?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'party_members_party_id_fkey';
+            columns: ['party_id'];
+            isOneToOne: false;
+            referencedRelation: 'parties';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'party_members_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profile';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       profile: {
         Row: {
           avatar_url: string | null;
