@@ -29,6 +29,15 @@ export interface MyParties {
   requests: PartySummary[];
 }
 
+/** What the invite link shows to whoever opened it. */
+export interface InvitePreview {
+  partyId: string;
+  name: string;
+  gmUsername: string | null;
+  /** The opener's link to the party: none yet, a pending request or invite, member or GM. */
+  myStatus: MemberStatus | 'gm' | null;
+}
+
 export function partyName(name: string): string {
   const trimmed = name.trim();
   if (!trimmed || trimmed.length > MAX_NAME_LENGTH) {

@@ -6,3 +6,10 @@ import { z } from 'zod';
 export const partyParamsSchema = z.object({ partyId: z.uuid() });
 
 export const partyNameSchema = z.object({ name: z.string().max(100) });
+
+export const memberParamsSchema = z.object({ partyId: z.uuid(), userId: z.uuid() });
+
+export const inviteCodeParamsSchema = z.object({ code: z.string().regex(/^[a-f0-9]{32}$/) });
+
+// Usernames picked before the a-z0-9_ rule may have other characters: the database finds them
+export const inviteUsernameSchema = z.object({ username: z.string().min(1).max(60) });

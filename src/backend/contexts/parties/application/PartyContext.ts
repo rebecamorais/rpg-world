@@ -1,4 +1,4 @@
-import { MyParties } from '../domain/Party';
+import { InvitePreview, MemberStatus, MyParties } from '../domain/Party';
 
 /**
  * Operations the parties context exposes to the interface layer. They act as the signed-in user:
@@ -10,4 +10,9 @@ export interface PartyContext {
   rename(partyId: string, name: string): Promise<void>;
   delete(partyId: string): Promise<void>;
   rotateInviteCode(partyId: string): Promise<string>;
+  getInvite(code: string): Promise<InvitePreview>;
+  requestJoin(code: string): Promise<MemberStatus>;
+  inviteByUsername(partyId: string, username: string): Promise<MemberStatus>;
+  acceptMember(partyId: string, memberId: string): Promise<void>;
+  removeMember(partyId: string, memberId: string): Promise<void>;
 }

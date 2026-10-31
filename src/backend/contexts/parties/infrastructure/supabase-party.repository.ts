@@ -3,7 +3,7 @@ import 'server-only';
 
 import { Database } from '@database-types';
 
-import { MemberStatus, PartySummary } from '../domain/Party';
+import { InvitePreview, MemberStatus, PartySummary } from '../domain/Party';
 import { PartyError, PartyErrorCode, PartyErrorCodes } from '../domain/PartyError';
 import { PartyRepo } from '../domain/repository/party.repo';
 
@@ -74,6 +74,58 @@ export class SupabasePartyRepository implements PartyRepo {
       .eq('party_id', id)
       .select('party_id');
     if (error) fail('change invite code', error);
+    return data.length > 0;
+  }
+
+  async getInvite(code: string): Promise<InvitePreview | null> {
+    const { data, error } = await this.client.rpc('get_party_invite', { p_code: code });
+    if (error) fail('read invite', error);
+
+    const row = data[0];
+    if (!row) return null;
+    return {
+      partyId: row.party_id,
+      name: row.name,
+      gmUsername: row.gm_username,
+      myStatus: row.my_status as InvitePreview['myStatus'],
+    };
+  }
+
+  async requestJoin(code: string): Promise<MemberStatus> {
+    const { data, error } = await this.client.rpc('request_party_join', { p_code: code });
+    if (error) fail('request to join', error);
+    return data as MemberStatus;
+  }
+
+  async invite(partyId: string, username: string): Promise<MemberStatus> {
+    const { data, error } = await this.client.rpc('invite_to_party', {
+      p_party_id: partyId,
+      p_username: username,
+    });
+    if (error) fail('invite to party', error);
+    return data as MemberStatus;
+  }
+
+  async activateMember(partyId: string, userId: string): Promise<boolean> {
+    const { data, error } = await this.client
+      .from('party_members')
+      .update({ status: 'active' })
+      .eq('party_id', partyId)
+      .eq('user_id', userId)
+      .neq('status', 'active')
+      .select('user_id');
+    if (error) fail('accept member', error);
+    return data.length > 0;
+  }
+
+  async deleteMember(partyId: string, userId: string): Promise<boolean> {
+    const { data, error } = await this.client
+      .from('party_members')
+      .delete()
+      .eq('party_id', partyId)
+      .eq('user_id', userId)
+      .select('user_id');
+    if (error) fail('remove member', error);
     return data.length > 0;
   }
 }
