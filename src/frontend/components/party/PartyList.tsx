@@ -9,6 +9,7 @@ import { Button } from '@frontend/components/ui/button';
 import { Card } from '@frontend/components/ui/card';
 import { ErrorState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { useCurrentUser } from '@frontend/context/UserContext';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useParties } from '@frontend/hooks/useParties';
 
@@ -60,6 +61,8 @@ export default function PartyList() {
   const t = useTranslations('parties');
   const { getErrorMessage } = useErrorMessage();
   const { parties, isLoading, error, respond, isResponding } = useParties();
+  const { currentUser } = useCurrentUser();
+  const userId = currentUser?.id ?? '';
 
   if (error) return <ErrorState title={t('loadErrorTitle')} description={getErrorMessage(error)} />;
   if (isLoading || !parties) return <LoadingState thematic />;
@@ -75,14 +78,14 @@ export default function PartyList() {
                   size="sm"
                   variant="ghost"
                   disabled={isResponding}
-                  onClick={() => respond({ partyId: party.id, accept: false })}
+                  onClick={() => respond({ partyId: party.id, userId, accept: false })}
                 >
                   {t('decline')}
                 </Button>
                 <Button
                   size="sm"
                   disabled={isResponding}
-                  onClick={() => respond({ partyId: party.id, accept: true })}
+                  onClick={() => respond({ partyId: party.id, userId, accept: true })}
                 >
                   <AppIcon name="Check" size={16} aria-hidden="true" />
                   {t('accept')}
@@ -118,7 +121,7 @@ export default function PartyList() {
                 size="sm"
                 variant="ghost"
                 disabled={isResponding}
-                onClick={() => respond({ partyId: party.id, accept: false })}
+                onClick={() => respond({ partyId: party.id, userId, accept: false })}
               >
                 {t('withdraw')}
               </Button>
