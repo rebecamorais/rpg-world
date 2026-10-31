@@ -9,9 +9,8 @@
 -- - party_characters: os personagens que cada membro ativo levou. Sair da mesa apaga essas
 --   linhas, nunca o personagem.
 
--- Funções novas do schema private nascem sem EXECUTE para PUBLIC (o padrão do Postgres daria)
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA private
-  REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
+-- Funções novas nascem com EXECUTE para PUBLIC (padrão do Postgres; ALTER DEFAULT PRIVILEGES por
+-- schema não tira um padrão global). Por isso cada função abaixo faz o próprio REVOKE.
 
 -- 1. Tabelas
 CREATE TABLE public.parties (
