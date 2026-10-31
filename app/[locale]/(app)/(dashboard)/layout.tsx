@@ -14,8 +14,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const { authApi, profileApi, partiesApi } = await getApi();
   const user = await authApi.getSessionUser();
 
+  // The page that was asked for (a sheet, an invite), to come back to after login or onboarding
+  const asked = (await headers()).get(PATHNAME_HEADER);
+  const back = asked && asked !== '/characters' ? `?next=${encodeURIComponent(asked)}` : '';
+
   if (!user) {
-    redirect('/login');
+    redirect(`/login${back}`);
   }
 
   // The sidebar shows the username and avatar from the first paint, instead of a placeholder
@@ -28,13 +32,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   // A generated username is a placeholder nobody sees: the person picks one before using the app
   if (profile && !profile.usernameChosen) {
-    // Back to the page that was asked for (a sheet, an invite) once the username is picked
-    const asked = (await headers()).get(PATHNAME_HEADER);
-    redirect(
-      asked && asked !== '/characters'
-        ? `/choose-username?next=${encodeURIComponent(asked)}`
-        : '/choose-username',
-    );
+    redirect(`/choose-username${back}`);
   }
 
   return (
