@@ -15,3 +15,5 @@ export const inviteCodeParamsSchema = z.object({ code: z.string().regex(/^[a-f0-
 export const inviteUsernameSchema = z.object({ username: z.string().min(1).max(60) });
 
 export const myCharactersSchema = z.object({ characterIds: z.array(z.uuid()).max(20) });
+
+export const partyCharacterParamsSchema = z.object({ partyId: z.uuid(), id: z.uuid() });
