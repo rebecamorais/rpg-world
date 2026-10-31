@@ -1,0 +1,13 @@
+import { MyParties } from '../domain/Party';
+
+/**
+ * Operations the parties context exposes to the interface layer. They act as the signed-in user:
+ * who may change what is decided by the database (RLS and the party functions).
+ */
+export interface PartyContext {
+  listMine(): Promise<MyParties>;
+  create(gmId: string, name: string): Promise<{ id: string }>;
+  rename(partyId: string, name: string): Promise<void>;
+  delete(partyId: string): Promise<void>;
+  rotateInviteCode(partyId: string): Promise<string>;
+}
