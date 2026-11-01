@@ -58,6 +58,15 @@ describe('PartySettings', () => {
     expect(screen.queryByLabelText(t.manage.inviteLabel)).not.toBeInTheDocument();
   });
 
+  it('o campo de edição tem rótulo e a dica como descrição', () => {
+    hook.party = party('gm');
+    renderWithProviders(<PartySettings partyId="party-1" />);
+
+    expect(screen.getByLabelText(t.manage.editionLabel)).toHaveAccessibleDescription(
+      t.manage.editionHint,
+    );
+  });
+
   it('trocar a edição da mesa salva só a edição', async () => {
     hook.party = party('gm');
     renderWithProviders(<PartySettings partyId="party-1" />);

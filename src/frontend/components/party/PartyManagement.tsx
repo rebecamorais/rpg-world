@@ -31,7 +31,13 @@ const useOrigin = () =>
 /** The GM's controls: invite, the link, players, name and deleting the party. */
 export function PartyManagement({ party, onDeleted }: { party: PartyView; onDeleted: () => void }) {
   const t = useTranslations('parties.manage');
-  const ids = { invite: useId(), link: useId(), name: useId() };
+  const ids = {
+    invite: useId(),
+    link: useId(),
+    name: useId(),
+    edition: useId(),
+    editionHint: useId(),
+  };
   const origin = useOrigin();
   const { invite, rotateCode, removeMember, rename, setEdition, remove } = useParty(party.id);
   const [username, setUsername] = useState('');
@@ -166,10 +172,13 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
         </form>
 
         <div className="flex flex-col gap-2">
-          <span className="text-sm leading-none font-medium">{t('editionLabel')}</span>
-          <p className="text-label text-muted-foreground">{t('editionHint')}</p>
+          <Label htmlFor={ids.edition}>{t('editionLabel')}</Label>
+          <p id={ids.editionHint} className="text-label text-muted-foreground">
+            {t('editionHint')}
+          </p>
           <SelectField
-            aria-label={t('editionLabel')}
+            id={ids.edition}
+            aria-describedby={ids.editionHint}
             value={party.edition}
             onValueChange={(edition) =>
               setEdition.mutate(edition as Edition, {

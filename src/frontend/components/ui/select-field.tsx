@@ -16,8 +16,11 @@ interface SelectFieldProps {
   placeholder?: string;
   className?: string;
   contentClassName?: string;
+  /** Lets a visible `<label htmlFor>` name the field. */
+  id?: string;
   /** Names the field when there is no visible label. */
   'aria-label'?: string;
+  'aria-describedby'?: string;
 }
 
 export function SelectField({
@@ -27,11 +30,18 @@ export function SelectField({
   placeholder,
   className,
   contentClassName,
+  id,
   'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedBy,
 }: SelectFieldProps) {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className={className} aria-label={ariaLabel}>
+      <SelectTrigger
+        id={id}
+        className={className}
+        aria-label={ariaLabel}
+        aria-describedby={ariaDescribedBy}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className={contentClassName}>
