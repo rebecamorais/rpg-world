@@ -1,8 +1,8 @@
 # Mesas — fase 2: modo Combate (iniciativa em tempo real)
 
 **Data:** 2026-10-28
-**Status:** design para revisão. Depende da fase 1
-([`2026-10-28-mesas-fase-1-role-play.md`](2026-10-28-mesas-fase-1-role-play.md)) estar no ar.
+**Status:** entregue (#126). Plano de implementação: `2026-10-31-mesas-fase-2-plano.md`. Fase 1:
+[`2026-10-28-mesas-fase-1-role-play.md`](2026-10-28-mesas-fase-1-role-play.md).
 
 ## Por quê
 
