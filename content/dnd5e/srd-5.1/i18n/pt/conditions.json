@@ -1,17 +1,62 @@
 {
-  "blinded": { "name": "Cego" },
-  "charmed": { "name": "Enfeitiçado" },
-  "deafened": { "name": "Surdo" },
-  "exhaustion": { "name": "Exaustão" },
-  "frightened": { "name": "Amedrontado" },
-  "grappled": { "name": "Agarrado" },
-  "incapacitated": { "name": "Incapacitado" },
-  "invisible": { "name": "Invisível" },
-  "paralyzed": { "name": "Paralisado" },
-  "petrified": { "name": "Petrificado" },
-  "poisoned": { "name": "Envenenado" },
-  "prone": { "name": "Caído" },
-  "restrained": { "name": "Contido" },
-  "stunned": { "name": "Atordoado" },
-  "unconscious": { "name": "Inconsciente" }
+  "blinded": {
+    "name": "Cego",
+    "description": ""
+  },
+  "charmed": {
+    "name": "Enfeitiçado",
+    "description": ""
+  },
+  "deafened": {
+    "name": "Surdo",
+    "description": ""
+  },
+  "exhaustion": {
+    "name": "Exaustão",
+    "description": ""
+  },
+  "frightened": {
+    "name": "Amedrontado",
+    "description": ""
+  },
+  "grappled": {
+    "name": "Agarrado",
+    "description": ""
+  },
+  "incapacitated": {
+    "name": "Incapacitado",
+    "description": ""
+  },
+  "invisible": {
+    "name": "Invisível",
+    "description": ""
+  },
+  "paralyzed": {
+    "name": "Paralisado",
+    "description": ""
+  },
+  "petrified": {
+    "name": "Petrificado",
+    "description": ""
+  },
+  "poisoned": {
+    "name": "Envenenado",
+    "description": ""
+  },
+  "prone": {
+    "name": "Caído",
+    "description": ""
+  },
+  "restrained": {
+    "name": "Contido",
+    "description": ""
+  },
+  "stunned": {
+    "name": "Atordoado",
+    "description": ""
+  },
+  "unconscious": {
+    "name": "Inconsciente",
+    "description": ""
+  }
 }
