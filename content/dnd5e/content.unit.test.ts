@@ -56,17 +56,6 @@ describe.each([
     }
   });
 
-  // What the importer can't convert would show up as raw 5etools markup that tags don't cover
-  it('nenhum texto em inglês tem marcação do 5etools sem fechar', () => {
-    const en = textsOf(source, 'en');
-    const withMarkup = Object.entries(en)
-      .filter(([, text]) =>
-        Object.values(text).some((value) => /\{@|[{}]/.test(stripTags(value ?? ''))),
-      )
-      .map(([id]) => id);
-    expect(withMarkup).toEqual([]);
-  });
-
   it('toda reação diz quando é usada', () => {
     const en = textsOf(source, 'en');
     expect(spells.filter((s) => s.castingTime === 'reaction' && !en[s.id].trigger)).toEqual([]);
@@ -170,15 +159,55 @@ describe.each(SOURCES)('tags nas traduções do %s', (source) => {
   });
 });
 
-// Foundry VTT links (`@UUID[...]{text}`, `@Compendium[...]{text}`) would show as raw markup
+const KINDS = ['spells', 'conditions'] as const;
+const textsOfKind = (source: string, locale: string, kind: (typeof KINDS)[number]) =>
+  (kind === 'spells' ? textsOf(source, locale) : conditionTextsOf(source, locale)) as Record<
+    string,
+    Record<string, string | undefined>
+  >;
+
+/** Every content file of the book, in every locale: `[locale, kind]`. */
+const contentFilesOf = (source: string) =>
+  readdirSync(path.join(import.meta.dirname, source, 'i18n')).flatMap((locale) =>
+    KINDS.filter((kind) =>
+      existsSync(path.join(import.meta.dirname, source, 'i18n', locale, `${kind}.json`)),
+    ).map((kind) => [locale, kind] as const),
+  );
+
+describe.each(SOURCES)('marcação nos textos do %s', (source) => {
+  // What the importer can't convert would show up as raw 5etools markup that tags don't cover
+  it.each(contentFilesOf(source))('%s/%s: nenhum texto tem marcação sem fechar', (locale, kind) => {
+    const withMarkup = Object.entries(textsOfKind(source, locale, kind))
+      .filter(([, text]) =>
+        Object.values(text).some((value) => /\{@|[{}]/.test(stripTags(value ?? ''))),
+      )
+      .map(([id]) => id);
+    expect(withMarkup).toEqual([]);
+  });
+
+  // Without a display part the translated text would show the English condition name
+  it.each(contentFilesOf(source).filter(([locale]) => locale !== 'en'))(
+    '%s/%s: toda tag condition traduzida tem a palavra de exibição',
+    (locale, kind) => {
+      const bare = Object.entries(textsOfKind(source, locale, kind)).flatMap(([id, text]) =>
+        Object.entries(text).flatMap(([field, value]) =>
+          [...(value ?? '').matchAll(/\{@condition ([^{}]*)\}/g)]
+            .filter(([, body]) => !body.split('|')[2]?.trim())
+            .map(([tag]) => `${id}/${field}: ${tag}`),
+        ),
+      );
+      expect(bare).toEqual([]);
+    },
+  );
+});
+
+// Foundry VTT links (`@UUID[...]{text}`, `@Compendium[...]{text}`, ...) would show as raw markup
 describe.each(SOURCES)('textos do %s', (source) => {
   it('nenhum link do Foundry sobra nos textos', () => {
     const dir = path.join(import.meta.dirname, source, 'i18n');
     const found = readdirSync(dir).flatMap((locale) =>
       readdirSync(path.join(dir, locale))
-        .filter((file) =>
-          readFileSync(path.join(dir, locale, file), 'utf8').match(/@(UUID|Compendium)\[/),
-        )
+        .filter((file) => readFileSync(path.join(dir, locale, file), 'utf8').match(/@[A-Za-z]+\[/))
         .map((file) => `${locale}/${file}`),
     );
     expect(found).toEqual([]);
