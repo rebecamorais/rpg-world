@@ -170,6 +170,21 @@ describe.each(SOURCES)('tags nas traduções do %s', (source) => {
   });
 });
 
+// Foundry VTT links (`@UUID[...]{text}`, `@Compendium[...]{text}`) would show as raw markup
+describe.each(SOURCES)('textos do %s', (source) => {
+  it('nenhum link do Foundry sobra nos textos', () => {
+    const dir = path.join(import.meta.dirname, source, 'i18n');
+    const found = readdirSync(dir).flatMap((locale) =>
+      readdirSync(path.join(dir, locale))
+        .filter((file) =>
+          readFileSync(path.join(dir, locale, file), 'utf8').match(/@(UUID|Compendium)\[/),
+        )
+        .map((file) => `${locale}/${file}`),
+    );
+    expect(found).toEqual([]);
+  });
+});
+
 // Crowdin exports untranslated texts as "", so a missing description is "" or no entry at all
 it('em português, no SRD 5.1, faltam só as 4 conhecidas', () => {
   const pt = textsOf('srd-5.1', 'pt');

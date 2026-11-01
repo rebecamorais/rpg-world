@@ -133,7 +133,7 @@
   },
   "black-tentacles": {
     "name": "Tentáculos Negros",
-    "description": "Tentáculos negros se contorcem, preenchendo uma área de 6 metros quadrados [20-foot square] de solo à sua vista, no alcance da magia. Enquanto a magia durar, os tentáculos transformam o solo da área em terreno difícil.\nQuando uma criatura entra pela primeira vez ou quando inicia o próprio turno na área afetada, ela deve fazer uma salvaguarda de Destreza. Se falhar, sofre 3d6 pontos de dano contundente, ficando @UUID[Compendium.dnd5e.rules.w7eitkpD7QQTB6j0.JournalEntryPage.cSVcyZyNe2iG1fIc]{{@condition restrained||contida}} pelos tentáculos até que a magia encerre. Uma criatura que inicie o próprio turno na área e esteja @UUID[Compendium.dnd5e.rules.w7eitkpD7QQTB6j0.JournalEntryPage.cSVcyZyNe2iG1fIc]{{@condition restrained||contida}} pelos tentáculos, sofre 3d6 pontos de dano contundente.\nUma criatura @UUID[Compendium.dnd5e.rules.w7eitkpD7QQTB6j0.JournalEntryPage.cSVcyZyNe2iG1fIc]{{@condition restrained||contida}} pelos tentáculos pode usar a própria ação para fazer um teste de Força ou Destreza (à escolha dela) contra a CD para evitar sua magia. Em caso de sucesso, ela se liberta.",
+    "description": "Tentáculos negros se contorcem, preenchendo uma área de 6 metros quadrados [20-foot square] de solo à sua vista, no alcance da magia. Enquanto a magia durar, os tentáculos transformam o solo da área em terreno difícil.\nQuando uma criatura entra pela primeira vez ou quando inicia o próprio turno na área afetada, ela deve fazer uma salvaguarda de Destreza. Se falhar, sofre 3d6 pontos de dano contundente, ficando {@condition restrained||contida} pelos tentáculos até que a magia encerre. Uma criatura que inicie o próprio turno na área e esteja {@condition restrained||contida} pelos tentáculos, sofre 3d6 pontos de dano contundente.\nUma criatura {@condition restrained||contida} pelos tentáculos pode usar a própria ação para fazer um teste de Força ou Destreza (à escolha dela) contra a CD para evitar sua magia. Em caso de sucesso, ela se liberta.",
     "material": ""
   },
   "blade-barrier": {
@@ -256,7 +256,7 @@
   },
   "confusion": {
     "name": "Confusão",
-    "description": "Esta magia assalta e distorce a mente das criaturas, implantando delírios e provocando ações descontroladas. Cada criatura em uma esfera de 3 metros de raio [10-foot-radius sphere], centrada em um ponto à sua escolha e dentro do alcance da magia, deve ser bem-sucedida em uma salvaguarda de Sabedoria, ou é afetada por esta magia.\nUm alvo afetado não pode executar reações e precisa rolar na tabela de @Compendium[dnd5e.tables.LHEts1oDaDwcehuj]{Confusão} no início de cada um de seus próprios turnos.",
+    "description": "Esta magia assalta e distorce a mente das criaturas, implantando delírios e provocando ações descontroladas. Cada criatura em uma esfera de 3 metros de raio [10-foot-radius sphere], centrada em um ponto à sua escolha e dentro do alcance da magia, deve ser bem-sucedida em uma salvaguarda de Sabedoria, ou é afetada por esta magia.\nUm alvo afetado não pode executar reações e precisa rolar na tabela de Confusão no início de cada um de seus próprios turnos.",
     "higherLevel": "Ao conjurar esta magia usando um espaço de magia de 5º círculo ou superior, o raio da esfera aumenta em 1,5 metro [5 ft.] para cada círculo do espaço acima do 4º.",
     "material": ""
   },
@@ -1181,7 +1181,7 @@
   },
   "reincarnate": {
     "name": "Reencarnar",
-    "description": "Você toca um humanoide morto ou um pedaço de um humanoide morto. Contanto que a criatura não esteja morta há mais de 10 dias, a magia forma um novo corpo adulto para ela e convoca sua alma a entrar no corpo. Se a alma da criatura não estiver livre ou disposta para tal, a magia falha.A magia molda um novo corpo para a criatura habitar, o que pode causar uma mudança de raça da criatura. O DM joga na tabela @Compendium[dnd5e.tables.eXu1QFMsFtTtoJBZ]{Reencarnar} para determinar que forma a criatura assume quando restaurada à vida, ou o DM escolhe uma forma.\nA criatura reencarnada recorda sua vida e experiências anteriores. Ela mantém as capacidades que tinha em sua forma original, exceto pela mudança de sua raça original para a nova e dos seus traços raciais, obviamente.",
+    "description": "Você toca um humanoide morto ou um pedaço de um humanoide morto. Contanto que a criatura não esteja morta há mais de 10 dias, a magia forma um novo corpo adulto para ela e convoca sua alma a entrar no corpo. Se a alma da criatura não estiver livre ou disposta para tal, a magia falha.A magia molda um novo corpo para a criatura habitar, o que pode causar uma mudança de raça da criatura. O DM joga na tabela Reencarnar para determinar que forma a criatura assume quando restaurada à vida, ou o DM escolhe uma forma.\nA criatura reencarnada recorda sua vida e experiências anteriores. Ela mantém as capacidades que tinha em sua forma original, exceto pela mudança de sua raça original para a nova e dos seus traços raciais, obviamente.",
     "material": ""
   },
   "remove-curse": {
