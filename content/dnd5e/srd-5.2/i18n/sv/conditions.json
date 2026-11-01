@@ -1,0 +1,62 @@
+{
+  "blinded": {
+    "name": "",
+    "description": ""
+  },
+  "charmed": {
+    "name": "",
+    "description": ""
+  },
+  "deafened": {
+    "name": "",
+    "description": ""
+  },
+  "exhaustion": {
+    "name": "",
+    "description": ""
+  },
+  "frightened": {
+    "name": "",
+    "description": ""
+  },
+  "grappled": {
+    "name": "",
+    "description": ""
+  },
+  "incapacitated": {
+    "name": "",
+    "description": ""
+  },
+  "invisible": {
+    "name": "",
+    "description": ""
+  },
+  "paralyzed": {
+    "name": "",
+    "description": ""
+  },
+  "petrified": {
+    "name": "",
+    "description": ""
+  },
+  "poisoned": {
+    "name": "",
+    "description": ""
+  },
+  "prone": {
+    "name": "",
+    "description": ""
+  },
+  "restrained": {
+    "name": "",
+    "description": ""
+  },
+  "stunned": {
+    "name": "",
+    "description": ""
+  },
+  "unconscious": {
+    "name": "",
+    "description": ""
+  }
+}
