@@ -17,8 +17,11 @@ export function useEncounter(partyId: string) {
 
   const query = useQuery({
     queryKey: encounterQueryKey(partyId),
-    // 204 (no combat) comes back empty
-    queryFn: async () => (await rpgWorldApi.get<EncounterView | null>(base)) ?? null,
+    // Without a combat the API answers 204, which the client turns into {}
+    queryFn: async () => {
+      const view = await rpgWorldApi.get<EncounterView | Record<string, never>>(base);
+      return 'role' in view ? view : null;
+    },
     enabled: !!partyId,
     retry: false,
   });
@@ -38,6 +41,32 @@ export function useEncounter(partyId: string) {
   const updateParticipant = useMutation({
     mutationFn: ({ participantId, ...patch }: ParticipantPatch & { participantId: string }) =>
       rpgWorldApi.patch(`${base}/participants/${participantId}`, patch),
+    // Shown at once: "Sort by initiative" clicked right after typing the last one must see it
+    onMutate: async ({ participantId, ...patch }) => {
+      await queryClient.cancelQueries({ queryKey: encounterQueryKey(partyId) });
+      queryClient.setQueryData<EncounterView | null>(encounterQueryKey(partyId), (view) =>
+        view?.role === 'gm'
+          ? {
+              ...view,
+              rows: view.rows.map((row) =>
+                row.participantId === participantId
+                  ? {
+                      ...row,
+                      name: patch.label ?? row.name,
+                      initiative:
+                        patch.initiative === undefined ? row.initiative : patch.initiative,
+                      hp: {
+                        ...row.hp,
+                        current: patch.hpCurrent ?? row.hp.current,
+                        temp: patch.hpTemp ?? row.hp.temp,
+                      },
+                    }
+                  : row,
+              ),
+            }
+          : view,
+      );
+    },
     ...options,
   });
   const removeParticipant = useMutation({
