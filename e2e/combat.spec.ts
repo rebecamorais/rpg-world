@@ -108,7 +108,9 @@ test.describe('combate', () => {
     await expect(current(page)).toContainText('Goblin 1');
     await page.getByRole('button', { name: 'End turn' }).click();
 
-    await expect(player.page.getByText('Your turn')).toBeVisible();
+    await expect(player.page.getByText('Your turn', { exact: true })).toBeVisible();
+    // The toast reaches whoever scrolled down to the sheet
+    await expect(player.page.getByText('Your turn!')).toBeVisible();
     await (await hydrated(player.page.getByRole('button', { name: 'End my turn' }))).click();
 
     await expect(current(page)).toContainText('Goblin 2');
