@@ -56,8 +56,9 @@ mostra o nome no idioma de quem lê e, quando sabe o que fazer com aquele tipo, 
   (`{@damage}`, `{@dice}`, `{@spell}`, `{@b}`…). O importador para de chamar `stripTags` na hora de
   gravar.
 - **A tag aponta para o registro, não para a palavra.** O corpo é o id da entrada (`frightened`).
-  A interface mostra a exibição, se houver; senão, o nome da entrada no idioma de quem lê; senão, o
-  corpo.
+  A interface mostra a exibição, se houver; senão, o corpo, como o 5etools (no inglês o corpo já é a
+  palavra do texto). Nas traduções, a palavra em português vai na exibição; o popover mostra o nome
+  da condição no idioma de quem lê.
 - **A referência se resolve dentro do mesmo livro** da entrada que contém o texto: uma magia SRD 5.2
   aponta para a condição SRD 5.2. A parte da fonte (`XPHB`, `PHB`) não é usada por enquanto.
 - **Tag sem tela própria** (qualquer tipo que não seja `condition`, nesta entrega) aparece como
