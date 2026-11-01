@@ -29,4 +29,5 @@ export interface CharacterSummary {
   class?: string;
   system: GameSystem;
   accentColor?: string;
+  avatarUrl?: string;
 }

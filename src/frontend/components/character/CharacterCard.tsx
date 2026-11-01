@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { useTranslations } from 'next-intl';
 
+import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { Badge } from '@frontend/components/ui/badge';
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
@@ -58,26 +59,33 @@ export function CharacterCard({ character }: CharacterCardProps) {
         <div className="bg-character pointer-events-none absolute -top-8 -right-8 h-32 w-32 rounded-full opacity-10 blur-3xl transition-opacity group-hover:opacity-20" />
 
         <CardContent className="flex h-full flex-col p-5 sm:p-6">
-          <div className="mb-5 flex flex-col items-start gap-2">
-            <div className="flex w-full items-center justify-between gap-2 overflow-hidden">
-              <h2 className="text-title text-character-flare truncate">
-                <Link href={href} className="outline-none after:absolute after:inset-0">
-                  {character.name}
-                </Link>
-              </h2>
-              <Badge
-                variant="secondary"
-                className="text-label bg-muted/80 border-l-character shrink-0 border-l-[3px] px-2.5 py-1"
-              >
-                {t('levelShort', { level: character.level })}
-              </Badge>
+          <div className="mb-5 flex items-center gap-4">
+            <CharacterPortrait
+              avatarUrl={character.avatarUrl}
+              characterClass={character.class}
+              className="border-character-muted h-16 w-16 shrink-0 rounded-xl border-2 shadow-[0_0_20px_-6px_var(--character-glow)]"
+            />
+            <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
+              <div className="flex w-full items-center justify-between gap-2 overflow-hidden">
+                <h2 className="text-title text-character-flare truncate">
+                  <Link href={href} className="outline-none after:absolute after:inset-0">
+                    {character.name}
+                  </Link>
+                </h2>
+                <Badge
+                  variant="secondary"
+                  className="text-label bg-muted/80 border-l-character shrink-0 border-l-[3px] px-2.5 py-1"
+                >
+                  {t('levelShort', { level: character.level })}
+                </Badge>
+              </div>
+              {/* An NPC without a class is just a sheet; "Adventurer" fits only player characters */}
+              {(character.class || kind !== 'npc') && (
+                <p className="text-label text-muted-foreground line-clamp-1">
+                  {character.class || t('defaultClass')}
+                </p>
+              )}
             </div>
-            {/* An NPC without a class is just a sheet; "Adventurer" fits only player characters */}
-            {(character.class || kind !== 'npc') && (
-              <p className="text-label text-muted-foreground line-clamp-1">
-                {character.class || t('defaultClass')}
-              </p>
-            )}
           </div>
 
           <div className="border-border mt-auto flex items-center justify-between border-t pt-4">

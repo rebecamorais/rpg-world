@@ -19,6 +19,9 @@ describe('matchCharacterClass', () => {
     ['CLERIGO', CharacterClass.CLERIC],
     ['Clérigo 5', CharacterClass.CLERIC],
     ['Paladino/Bruxo', CharacterClass.PALADIN],
+    ['Maga', CharacterClass.WIZARD],
+    ['Clériga 3', CharacterClass.CLERIC],
+    ['Bruxa', CharacterClass.WARLOCK],
   ])('%s → %s', (text, expected) => {
     expect(matchCharacterClass(text, labelOf)).toBe(expected);
   });

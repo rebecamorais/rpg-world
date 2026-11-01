@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
+import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { FieldLabel, InlineField } from '@frontend/components/ui/field';
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -67,15 +67,11 @@ export default function CharacterHeader() {
               visible text and not match the aria-label (WCAG 2.5.3). The avatar is hidden from
               screen readers: the h1 already names the character */}
           <div className="relative rounded-full transition-transform has-[button:active]:scale-95 has-[button:hover]:scale-105">
-            <Avatar
-              aria-hidden="true"
+            <CharacterPortrait
+              avatarUrl={avatarUrl}
+              characterClass={classNameStr}
               className="border-character-muted shadow-character-muted h-20 w-20 shrink-0 border-2 shadow-md transition-all"
-            >
-              <AvatarImage src={avatarUrl} alt="" className="object-cover" />
-              <AvatarFallback className="bg-muted text-xl font-bold">
-                {name?.substring(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            />
             {!readOnly && (
               <button
                 type="button"

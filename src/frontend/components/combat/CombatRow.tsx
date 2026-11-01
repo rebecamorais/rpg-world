@@ -4,8 +4,8 @@ import { type CSSProperties, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { CharacterIdentity } from '@frontend/components/party/RolePlayCard';
-import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
 import { HealthBar } from '@frontend/components/ui/health-bar';
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -62,21 +62,14 @@ function NumberCell({
 
 const ATTRIBUTES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'] as const;
 
-/** The character's picture down the card's left side; the initials when there's none. */
+/** The character's picture down the card's left side; their class's emblem when there's none. */
 function Portrait({ row }: { row: GmRow }) {
   return (
-    <Avatar className="bg-character-surface h-auto w-14 self-stretch rounded-none sm:w-28">
-      {row.avatarUrl && (
-        <AvatarImage src={row.avatarUrl} alt="" className="aspect-auto object-cover object-top" />
-      )}
-      {/* The name is right next to it */}
-      <AvatarFallback
-        aria-hidden="true"
-        className="bg-character-surface text-character-flare font-display rounded-none text-2xl font-bold"
-      >
-        {row.name.substring(0, 2).toUpperCase()}
-      </AvatarFallback>
-    </Avatar>
+    <CharacterPortrait
+      avatarUrl={row.avatarUrl}
+      characterClass={row.class}
+      className="h-auto w-14 self-stretch rounded-none sm:w-28"
+    />
   );
 }
 
