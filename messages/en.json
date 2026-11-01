@@ -959,7 +959,9 @@
     "nav": {
       "parties": "Parties",
       "gm": "GM",
-      "player": "Player"
+      "player": "Player",
+      "overview": "Party",
+      "settings": "Settings"
     },
     "join": {
       "title": "Party invite",
@@ -1039,7 +1041,11 @@
       "back": "Back to the party",
       "readOnly": "Read only"
     },
-    "enemiesLink": "Enemy sheets"
+    "enemiesLink": "Enemy sheets",
+    "settings": {
+      "eyebrow": "Party settings",
+      "open": "Settings"
+    }
   },
   "enemies": {
     "title": "Enemy sheets",

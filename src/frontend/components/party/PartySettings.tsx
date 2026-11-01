@@ -1,0 +1,28 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+
+import { useTranslations } from 'next-intl';
+
+import { LoadingState } from '@frontend/components/shared/LoadingState';
+import { PageContainer } from '@frontend/components/shared/PageContainer';
+import { useParty } from '@frontend/hooks/useParty';
+
+import { PartyManagement } from './PartyManagement';
+import { PartyNotFound } from './PartyPage';
+
+/** The GM's party settings, apart from the table: invite, link, players, name and delete. */
+export function PartySettings({ partyId }: { partyId: string }) {
+  const t = useTranslations('parties.settings');
+  const router = useRouter();
+  const { party, isLoading } = useParty(partyId);
+
+  if (isLoading) return <LoadingState thematic />;
+  if (party?.role !== 'gm') return <PartyNotFound />;
+
+  return (
+    <PageContainer title={party.name} eyebrow={t('eyebrow')}>
+      <PartyManagement party={party} onDeleted={() => router.push('/parties')} />
+    </PageContainer>
+  );
+}

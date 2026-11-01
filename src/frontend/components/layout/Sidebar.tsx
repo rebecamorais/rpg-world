@@ -26,20 +26,35 @@ import type { PartySummary } from '@backend/contexts/parties/domain/Party';
 
 function PartyLinks({ title, parties }: { title: string; parties: PartySummary[] }) {
   const pathname = usePathname();
+  const t = useTranslations('parties.nav');
 
   return (
     <div className="mt-2 flex flex-col">
       <p className="text-label text-muted-foreground px-3 py-1">{title}</p>
       {parties.map((party) => {
         const href = `/parties/${party.id}`;
+        const isOpen = pathname === href || pathname?.startsWith(`${href}/`);
         return (
-          <NavItem
-            key={party.id}
-            href={href}
-            label={party.name}
-            isActive={pathname?.startsWith(href)}
-            isSubItem
-          />
+          <div key={party.id} className="flex flex-col">
+            <NavItem href={href} label={party.name} isActive={isOpen} isSubItem />
+            {/* The GM's open party: the party itself and its settings, like a sheet's tabs */}
+            {isOpen && party.role === 'gm' && (
+              <div className="ml-4 flex flex-col">
+                <NavItem
+                  href={href}
+                  label={t('overview')}
+                  isActive={!pathname.startsWith(`${href}/settings`)}
+                  isSubItem
+                />
+                <NavItem
+                  href={`${href}/settings`}
+                  label={t('settings')}
+                  isActive={pathname.startsWith(`${href}/settings`)}
+                  isSubItem
+                />
+              </div>
+            )}
+          </div>
         );
       })}
     </div>

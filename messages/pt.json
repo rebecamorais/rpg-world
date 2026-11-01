@@ -959,7 +959,9 @@
     "nav": {
       "parties": "Mesas",
       "gm": "Mestre",
-      "player": "Jogador"
+      "player": "Jogador",
+      "overview": "Mesa",
+      "settings": "Configurações"
     },
     "join": {
       "title": "Convite para mesa",
@@ -1039,7 +1041,11 @@
       "back": "Voltar para a mesa",
       "readOnly": "Só leitura"
     },
-    "enemiesLink": "Fichas de inimigo"
+    "enemiesLink": "Fichas de inimigo",
+    "settings": {
+      "eyebrow": "Configurações da mesa",
+      "open": "Configurações"
+    }
   },
   "enemies": {
     "title": "Fichas de inimigo",
