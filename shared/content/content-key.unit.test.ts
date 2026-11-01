@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseSpellKey, spellKey } from './content-key';
+import { conditionKey, parseContentKey, parseSpellKey, spellKey } from './content-key';
 
 describe('chave de conteúdo', () => {
   it('monta e lê a chave de uma magia', () => {
@@ -9,6 +9,16 @@ describe('chave de conteúdo', () => {
       source: 'srd-5.2',
       id: 'fireball',
     });
+  });
+
+  it('chave de condição e leitura genérica', () => {
+    expect(conditionKey('srd-5.2', 'prone')).toBe('dnd5e:srd-5.2:condition:prone');
+    expect(parseContentKey('dnd5e:srd-5.1:spell:fireball')).toEqual({
+      source: 'srd-5.1',
+      type: 'spell',
+      id: 'fireball',
+    });
+    expect(parseContentKey('lixo')).toBeNull();
   });
 
   it.each([

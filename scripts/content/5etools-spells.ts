@@ -1,3 +1,4 @@
+import { stripTags } from '@shared/content/tags';
 import type { SpellData, SpellText } from '@shared/systems/dnd5e/content/spell.schema';
 
 /*
@@ -146,26 +147,6 @@ export function toSpellData(
     spellCategory: previous?.spellCategory ?? 'utility',
     bgStyleId: previous?.bgStyleId ?? (damageType ? 'grid-mesh' : 'dots-space'),
   };
-}
-
-/** `{@tag text|source|display}` → what 5etools shows: the display text, or else the text. */
-export function stripTags(text: string): string {
-  let previous: string;
-  let current = text;
-  // Tags can nest ({@b {@dice 1d6}}): strip the innermost first, until none is left
-  do {
-    previous = current;
-    current = current.replace(/\{@(\w+)\s*([^{}]*)\}/g, (_, tag: string, body: string) => {
-      const parts = body.split('|');
-      if (tag === 'chance') return `${parts[0]}%`;
-      if (tag === 'dc') return `DC ${parts[0]}`;
-      // The third part of these is a filter or a chapter, not display text
-      if (tag === 'filter' || tag === 'book' || tag === 'adventure') return parts[0];
-      if (tag === 'scaledamage' || tag === 'scaledice') return parts[2] ?? parts[0];
-      return parts[2] || parts[0];
-    });
-  } while (current !== previous);
-  return current;
 }
 
 function renderEntry(entry: Entry): string[] {

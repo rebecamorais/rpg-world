@@ -4,7 +4,6 @@ import {
   type FiveToolsSpell,
   extrasOf,
   renderEntries,
-  stripTags,
   toSpellData,
   toSpellId,
   toSpellText,
@@ -137,9 +136,6 @@ describe('conversão das magias do 5etools', () => {
   });
 
   it('marcações, listas e tabelas', () => {
-    expect(stripTags('{@chance 50} of the time, {@b bold} and {@spell fireball|XPHB}')).toBe(
-      '50% of the time, bold and fireball',
-    );
     expect(
       renderEntries([
         {
@@ -162,15 +158,6 @@ describe('conversão das magias do 5etools', () => {
         { type: 'entries', name: 'Hold', entries: ['The target is held.'] },
       ]),
     ).toBe('Choose one:\n• Audible Alarm. A handbell.\n• Plain item.\nHold. The target is held.');
-  });
-
-  it.each([
-    ['A {@filter Tiny|bestiary|size=T} beast', 'A Tiny beast'],
-    ['either a {@filter Beast|bestiary|type=beast} or not', 'either a Beast or not'],
-    ['the rules on {@book mounted combat|XPHB|1|Mounted Combat}.', 'the rules on mounted combat.'],
-    ['make a {@dc 15} Intelligence saving throw', 'make a DC 15 Intelligence saving throw'],
-  ])('marcação %s', (text, expected) => {
-    expect(stripTags(text)).toBe(expected);
   });
 
   it('tabela com título mostra o título antes', () => {
