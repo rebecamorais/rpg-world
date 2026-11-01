@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { GmCombatPanel } from '@frontend/components/combat/GmCombatPanel';
+import { PlayerCombatPanel } from '@frontend/components/combat/PlayerCombatPanel';
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { Button } from '@frontend/components/ui/button';
@@ -93,7 +94,7 @@ function GmView({ party, live }: { party: PartyView; live: boolean }) {
   );
 }
 
-function PlayerView({ party, live: _live }: { party: PartyView; live: boolean }) {
+function PlayerView({ party, live }: { party: PartyView; live: boolean }) {
   const t = useTranslations('parties');
   const router = useRouter();
   const { currentUser } = useCurrentUser();
@@ -121,6 +122,8 @@ function PlayerView({ party, live: _live }: { party: PartyView; live: boolean })
 
   return (
     <div className="flex flex-col gap-8">
+      <PlayerCombatPanel partyId={party.id} live={live} />
+
       <section aria-labelledby="party-characters" className="flex flex-col gap-4">
         <h2 id="party-characters" className="text-heading">
           {t('page.characters')}
