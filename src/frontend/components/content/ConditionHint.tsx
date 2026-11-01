@@ -15,6 +15,8 @@ interface ConditionHintProps {
   conditionKey: string;
   /** What the button shows; the condition's name when omitted. */
   label?: string;
+  /** What the button is called for a screen reader, before ", condition"; the name when omitted. */
+  accessibleName?: string;
   /** Replaces the inline-link look (the badge brings its own). */
   className?: string;
   children?: React.ReactNode;
@@ -25,7 +27,13 @@ interface ConditionHintProps {
  * a long list, and its button name is fixed ("What is …?"). The popover opens on tap, click or
  * Enter, and closes on Esc or on an outside tap.
  */
-export function ConditionHint({ conditionKey, label, className, children }: ConditionHintProps) {
+export function ConditionHint({
+  conditionKey,
+  label,
+  accessibleName,
+  className,
+  children,
+}: ConditionHintProps) {
   const t = useTranslations('conditions');
   const { byKey, list } = useConditions();
   // Which book is showing; null follows the key the text points to
@@ -43,7 +51,7 @@ export function ConditionHint({ conditionKey, label, className, children }: Cond
       <PopoverTrigger asChild>
         <button
           type="button"
-          aria-label={t('ariaLabel', { name: condition.name })}
+          aria-label={t('ariaLabel', { name: accessibleName ?? condition.name })}
           className={cn(
             'focus-ring touch-target text-primary decoration-primary/60 cursor-pointer rounded-sm underline decoration-dotted underline-offset-4',
             className,

@@ -1059,7 +1059,12 @@
       "deleteParty": "Delete party",
       "deleteConfirm": "Delete this party? No character is deleted.",
       "deleted": "Party deleted",
-      "unnamed": "player without a username"
+      "unnamed": "player without a username",
+      "editionLabel": "Rules edition",
+      "editionHint": "The edition shown first when picking conditions.",
+      "edition2014": "2014 rules",
+      "edition2024": "2024 rules",
+      "editionSaved": "Rules edition saved"
     },
     "mine": {
       "title": "My characters at the table",
@@ -1136,7 +1141,8 @@
     "detailsOf": "Details of {name}",
     "ally": "Ally",
     "addAlly": "Add ally",
-    "side": "Side"
+    "side": "Side",
+    "conditionsOf": "Conditions of {name}"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",
@@ -1175,6 +1181,8 @@
     "title": "Conditions",
     "filter": "Condition",
     "any": "Any condition",
-    "edition": "Edition"
+    "edition": "Edition",
+    "pickerDescription": "Turn on the conditions affecting this creature.",
+    "exhaustionLevel": "Exhaustion level"
   }
 }

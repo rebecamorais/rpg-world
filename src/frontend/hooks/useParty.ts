@@ -9,6 +9,8 @@ import { PARTIES_QUERY_KEY, partyQueryKey } from '@frontend/lib/query-keys';
 import type { MemberStatus } from '@backend/contexts/parties/domain/Party';
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 /** A party page and everything done on it; each change reloads the page and the party list. */
 export function useParty(partyId: string) {
   const queryClient = useQueryClient();
@@ -32,6 +34,10 @@ export function useParty(partyId: string) {
 
   const rename = useMutation({
     mutationFn: (name: string) => rpgWorldApi.patch(base, { name }),
+    ...options,
+  });
+  const setEdition = useMutation({
+    mutationFn: (edition: Edition) => rpgWorldApi.patch(base, { edition }),
     ...options,
   });
   const remove = useMutation({ mutationFn: () => rpgWorldApi.delete(base), ...options });
@@ -67,6 +73,7 @@ export function useParty(partyId: string) {
     isLoading: query.isLoading,
     error: query.error,
     rename,
+    setEdition,
     remove,
     rotateCode,
     invite,

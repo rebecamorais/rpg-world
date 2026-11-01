@@ -8,7 +8,7 @@ import { useEncounter } from './useEncounter';
 
 vi.mock('@client', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@client')>()),
-  rpgWorldApi: { get: vi.fn(), patch: vi.fn() },
+  rpgWorldApi: { get: vi.fn(), patch: vi.fn(), put: vi.fn() },
 }));
 
 describe('useEncounter', () => {
@@ -47,5 +47,27 @@ describe('useEncounter', () => {
     await waitFor(() =>
       expect(result.current.encounter).toMatchObject({ rows: [{ initiative: 15 }] }),
     );
+  });
+
+  it('setConditions manda a lista inteira e já a mostra na linha e na vez', async () => {
+    const conditions = [{ key: 'dnd5e:srd-5.2:condition:prone', level: null }];
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({
+      role: 'gm',
+      round: 0,
+      rows: [{ participantId: 'a', conditions: [] }],
+    });
+    vi.mocked(rpgWorldApi.put).mockReturnValue(new Promise(() => {}));
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+    await waitFor(() => expect(result.current.encounter).not.toBeNull());
+
+    result.current.setConditions.mutate({ participantId: 'a', conditions });
+
+    await waitFor(() =>
+      expect(rpgWorldApi.put).toHaveBeenCalledWith(
+        '/api/parties/party-1/encounter/participants/a/conditions',
+        { conditions },
+      ),
+    );
+    await waitFor(() => expect(result.current.encounter).toMatchObject({ rows: [{ conditions }] }));
   });
 });

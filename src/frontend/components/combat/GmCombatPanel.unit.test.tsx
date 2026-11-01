@@ -21,9 +21,13 @@ const hook = {
   removeParticipant: mutation(),
   setOrder: mutation(),
   endTurn: mutation(),
+  setConditions: mutation(),
 };
 
 vi.mock('@frontend/hooks/useEncounter', () => ({ useEncounter: () => hook }));
+vi.mock('@frontend/hooks/useConditions', () => ({
+  useConditions: () => ({ list: [], byKey: new Map(), isLoading: false }),
+}));
 vi.mock('@frontend/hooks/useCharacters', () => ({
   useCharacters: () => ({ characters: [{ id: 'goblin', name: 'Goblin' }] }),
 }));
@@ -31,6 +35,7 @@ vi.mock('@frontend/hooks/useCharacters', () => ({
 const t = messages.combat;
 const party = {
   id: 'party-1',
+  edition: '2024',
   roster: [
     { characterId: 'hero', name: 'Arani' },
     { characterId: 'friend', name: 'Brom' },

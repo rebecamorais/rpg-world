@@ -1,4 +1,5 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -16,6 +17,7 @@ const hook = {
   rotateCode: mutation(),
   removeMember: mutation(),
   rename: mutation(),
+  setEdition: mutation(),
   remove: mutation(),
 };
 vi.mock('@frontend/hooks/useParty', () => ({ useParty: () => hook }));
@@ -29,6 +31,7 @@ const party = (role: PartyView['role']) =>
     people: [],
     roster: [],
     myCharacterIds: [],
+    edition: '2024',
     gm: role === 'gm' ? { inviteCode: 'a'.repeat(32), rolePlay: [] } : null,
   }) as unknown as PartyView;
 
@@ -53,5 +56,15 @@ describe('PartySettings', () => {
 
     expect(screen.getByText(t.page.notFoundTitle)).toBeVisible();
     expect(screen.queryByLabelText(t.manage.inviteLabel)).not.toBeInTheDocument();
+  });
+
+  it('trocar a edição da mesa salva só a edição', async () => {
+    hook.party = party('gm');
+    renderWithProviders(<PartySettings partyId="party-1" />);
+
+    await userEvent.click(screen.getByRole('combobox', { name: t.manage.editionLabel }));
+    await userEvent.click(screen.getByRole('option', { name: t.manage.edition2014 }));
+
+    expect(hook.setEdition.mutate).toHaveBeenCalledWith('2014', expect.anything());
   });
 });

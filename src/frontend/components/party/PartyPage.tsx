@@ -120,7 +120,7 @@ function PlayerView({ party, live }: { party: PartyView; live: boolean }) {
 
   return (
     <div className="flex flex-col gap-8">
-      <PlayerCombatPanel partyId={party.id} live={live} />
+      <PlayerCombatPanel partyId={party.id} edition={party.edition} live={live} />
 
       <section aria-labelledby="party-characters" className="flex flex-col gap-4">
         <h2 id="party-characters" className="text-heading">

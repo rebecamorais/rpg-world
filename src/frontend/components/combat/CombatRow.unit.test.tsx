@@ -6,10 +6,29 @@ import { describe, expect, it, vi } from 'vitest';
 import { CombatRow } from './CombatRow';
 import { gmRow } from './fixtures';
 
+const CONDITIONS = [
+  {
+    key: 'dnd5e:srd-5.2:condition:prone',
+    id: 'prone',
+    edition: '2024',
+    name: 'Caído',
+    description: 'Caído.',
+    maxLevel: null,
+  },
+];
+vi.mock('@frontend/hooks/useConditions', () => ({
+  useConditions: () => ({
+    list: CONDITIONS,
+    byKey: new Map(CONDITIONS.map((x) => [x.key, x])),
+    isLoading: false,
+  }),
+}));
+
 const t = messages.combat;
 const fill = (text: string, values: Record<string, string | number>) =>
   Object.entries(values).reduce((s, [k, v]) => s.replace(`{${k}}`, String(v)), text);
 
+const onConditions = vi.fn();
 const rowElement = (row = gmRow(), waiting = false) => (
   <ul>
     <CombatRow
@@ -21,6 +40,8 @@ const rowElement = (row = gmRow(), waiting = false) => (
       onChange={vi.fn()}
       onMove={vi.fn()}
       onRemove={vi.fn()}
+      edition="2024"
+      onConditionsChange={onConditions}
     />
   </ul>
 );
@@ -197,5 +218,31 @@ describe('CombatRow', () => {
   it('a vez atual fica marcada com aria-current', () => {
     renderRow(gmRow({ isCurrent: true }));
     expect(screen.getByRole('listitem')).toHaveAttribute('aria-current', 'true');
+  });
+
+  it('mostra os selos das condições e o botão abre o seletor', async () => {
+    renderRow(gmRow({ conditions: [{ key: 'dnd5e:srd-5.2:condition:prone', level: null }] }));
+    expect(screen.getByRole('button', { name: 'Caído, condition' })).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: fill(t.conditionsOf, { name: 'Arani' }) }),
+    );
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByRole('switch', { name: 'Caído' })).toBeChecked();
+  });
+
+  it('clicar dentro do seletor não abre o card', async () => {
+    renderRow();
+    await userEvent.click(
+      screen.getByRole('button', { name: fill(t.conditionsOf, { name: 'Arani' }) }),
+    );
+    await userEvent.click(screen.getByRole('switch', { name: 'Caído' }));
+    expect(onConditions).toHaveBeenCalledWith([
+      { key: 'dnd5e:srd-5.2:condition:prone', level: null },
+    ]);
+    // The modal hides the card from the accessibility tree while it is open
+    expect(
+      screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Arani' }), hidden: true }),
+    ).toHaveAttribute('aria-expanded', 'false');
   });
 });

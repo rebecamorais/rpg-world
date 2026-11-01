@@ -1059,7 +1059,12 @@
       "deleteParty": "Apagar mesa",
       "deleteConfirm": "Apagar esta mesa? Nenhum personagem é apagado.",
       "deleted": "Mesa apagada",
-      "unnamed": "jogador sem nome de usuário"
+      "unnamed": "jogador sem nome de usuário",
+      "editionLabel": "Edição das regras",
+      "editionHint": "A edição mostrada primeiro ao escolher condições.",
+      "edition2014": "Regras de 2014",
+      "edition2024": "Regras de 2024",
+      "editionSaved": "Edição das regras salva"
     },
     "mine": {
       "title": "Meus personagens na mesa",
@@ -1136,7 +1141,8 @@
     "detailsOf": "Detalhes de {name}",
     "ally": "Aliado",
     "addAlly": "Adicionar aliado",
-    "side": "Lado"
+    "side": "Lado",
+    "conditionsOf": "Condições de {name}"
   },
   "characterRaces": {
     "dragonborn": "Draconato",
@@ -1175,6 +1181,8 @@
     "title": "Condições",
     "filter": "Condição",
     "any": "Qualquer condição",
-    "edition": "Edição"
+    "edition": "Edição",
+    "pickerDescription": "Ligue as condições que afetam esta criatura.",
+    "exhaustionLevel": "Nível de exaustão"
   }
 }

@@ -77,9 +77,20 @@ describe('ConditionHint', () => {
 describe('ConditionBadge', () => {
   it('mostra o nível', () => {
     renderWithProviders(<ConditionBadge conditionKey={EX_2024} level={3} defaultEdition="2024" />);
-    expect(screen.getByRole('button', { name: 'Exaustão, condition' })).toHaveTextContent(
+    expect(screen.getByRole('button', { name: 'Exaustão 3, condition' })).toHaveTextContent(
       'Exaustão 3',
     );
+  });
+
+  it('o nome acessível inclui o nível e a edição visíveis', () => {
+    renderWithProviders(
+      <>
+        <ConditionBadge conditionKey={EX_2024} level={3} defaultEdition="2024" />
+        <ConditionBadge conditionKey="dnd5e:srd-5.1:condition:prone" defaultEdition="2024" />
+      </>,
+    );
+    expect(screen.getByRole('button', { name: 'Exaustão 3, condition' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Caído · 2014, condition' })).toBeInTheDocument();
   });
 
   it('mostra a edição quando difere da padrão', () => {

@@ -36,7 +36,18 @@ export function ConditionBadge({ conditionKey, level, defaultEdition }: Conditio
   return (
     <ConditionHint
       conditionKey={conditionKey}
-      className={cn(badgeVariants({ variant: 'outline' }), 'text-foreground no-underline')}
+      accessibleName={[
+        condition.name + (level ? ` ${level}` : ''),
+        showEdition ? condition.edition : null,
+      ]
+        .filter(Boolean)
+        .join(' · ')}
+      // On touch the badge is at least 32px tall and 44px wide, so its touch area grows by 6px at most; rows of
+      // badges keep a 12px gap, which leaves the areas apart
+      className={cn(
+        badgeVariants({ variant: 'outline' }),
+        'text-foreground justify-center no-underline pointer-coarse:min-h-8 pointer-coarse:min-w-11',
+      )}
     >
       {condition.name}
       {level ? ` ${level}` : ''}
