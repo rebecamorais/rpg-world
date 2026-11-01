@@ -235,6 +235,15 @@ describe('AddParticipantUseCase', () => {
     expect(labels(more)).toEqual(['Goblin 4', 'Goblin 5']);
   });
 
+  it('a ficha npc entra como aliada quando o mestre pede, com o mesmo rótulo do inimigo', async () => {
+    const repo = withGoblins(0);
+    await new AddParticipantUseCase(repo).execute('party-1', 'goblin', 2, 'ally');
+    expect(repo.addParticipants).toHaveBeenCalledWith('party-1', [
+      { characterId: 'goblin', side: 'ally', label: 'Goblin 1' },
+      { characterId: 'goblin', side: 'ally', label: 'Goblin 2' },
+    ]);
+  });
+
   it('personagem fora da mesa que não é ficha npc do mestre é recusado', async () => {
     const repo = makeRepo();
 

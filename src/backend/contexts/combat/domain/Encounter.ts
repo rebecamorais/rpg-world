@@ -1,4 +1,6 @@
-export type Side = 'player' | 'enemy';
+export type Side = 'player' | 'ally' | 'enemy';
+/** An npc sheet of the GM joins on either side. */
+export type NpcSide = Exclude<Side, 'player'>;
 
 /** What a player sees of each participant: no initiative, HP or AC, of anyone. */
 export interface TurnEntry {
@@ -22,7 +24,7 @@ export interface GmRow {
   side: Side;
   name: string;
   initiative: number | null;
-  /** Players: from their sheet. Enemies: the participant's own, with the sheet's max. */
+  /** Players: from their sheet. NPCs (enemies and allies): the participant's own, with the sheet's max. */
   hp: { current: number; max: number; temp: number };
   /** Only for a player at 0 HP. */
   deathSaves: { successes: number; failures: number } | null;

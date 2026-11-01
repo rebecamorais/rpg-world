@@ -66,6 +66,20 @@ describe('CombatRow', () => {
     expect(screen.getByLabelText(fill(t.tempHpOf, { name: 'Goblin 1' }))).toHaveValue(1);
   });
 
+  it('o NPC aliado tem PV editável como o inimigo e aparece marcado como aliado', () => {
+    renderRow(
+      gmRow({
+        participantId: 'p-a',
+        side: 'ally',
+        name: 'Guarda',
+        hp: { current: 9, max: 11, temp: 0 },
+      }),
+    );
+    expect(screen.getByLabelText(fill(t.hpOf, { name: 'Guarda' }))).toHaveValue(9);
+    expect(screen.getByText(t.ally)).toBeInTheDocument();
+    expect(screen.queryByText(t.enemy)).not.toBeInTheDocument();
+  });
+
   it('o PV temporário tem rótulo visível e a iniciativa vazia mostra um traço', async () => {
     renderRow(
       gmRow({

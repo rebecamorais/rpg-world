@@ -87,6 +87,34 @@ describe('RLS do combate (Integration)', () => {
     ]);
   });
 
+  it('NPC aliado: uma ficha npc do mestre do lado dos jogadores, com rótulo e PV próprios', async () => {
+    const guardId = await createNpc(gm.userId, 'Guarda', 11);
+    const guard = await addParticipant(gm, partyId, guardId, 'ally', 'Guarda');
+
+    expect(await participants()).toEqual([
+      expect.objectContaining({
+        id: guard,
+        side: 'ally',
+        label: 'Guarda',
+        hp_current: 11,
+        hp_temp: 0,
+      }),
+    ]);
+
+    // Como o inimigo: precisa de rótulo e só vale para npc do próprio mestre
+    const gmPc = await createCharacter(gm.userId, { name: 'DMPC' });
+    for (const attempt of [
+      { character_id: guardId, side: 'ally', label: null },
+      { character_id: gmPc, side: 'ally', label: 'DMPC' },
+      { character_id: heroId, side: 'ally', label: 'Arani' },
+    ]) {
+      const { error } = await gm.client
+        .from('encounter_participants')
+        .insert({ party_id: partyId, ...attempt });
+      expect(error, JSON.stringify(attempt)).not.toBeNull();
+    }
+  });
+
   it('recusa: personagem de outra mesa, npc de outra pessoa, pc do mestre como inimigo, inimigo sem rótulo, PV em jogador', async () => {
     const otherGm = await createSignedInClient('other-gm');
     const otherParty = await createParty(otherGm);

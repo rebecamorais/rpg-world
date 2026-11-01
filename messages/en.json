@@ -1130,7 +1130,10 @@
     "yours": "yours",
     "tempHp": "temp",
     "yourTurnToast": "Your turn!",
-    "detailsOf": "Details of {name}"
+    "detailsOf": "Details of {name}",
+    "ally": "Ally",
+    "addAlly": "Add ally",
+    "side": "Side"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

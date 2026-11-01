@@ -1130,7 +1130,10 @@
     "yours": "seu",
     "tempHp": "temp",
     "yourTurnToast": "Sua vez!",
-    "detailsOf": "Detalhes de {name}"
+    "detailsOf": "Detalhes de {name}",
+    "ally": "Aliado",
+    "addAlly": "Adicionar aliado",
+    "side": "Lado"
   },
   "characterRaces": {
     "dragonborn": "Draconato",

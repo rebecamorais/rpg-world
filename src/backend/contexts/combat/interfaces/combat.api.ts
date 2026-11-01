@@ -1,3 +1,4 @@
+import { NpcSide } from '../domain/Encounter';
 import { ParticipantPatch } from '../domain/repository/combat.repo';
 import { CombatContext } from '../index';
 
@@ -6,8 +7,8 @@ export const makeCombatApi = (combatContext: CombatContext) => ({
 
   create: (partyId: string) => combatContext.create(partyId),
 
-  addParticipant: (partyId: string, characterId: string, count: number) =>
-    combatContext.addParticipant(partyId, characterId, count),
+  addParticipant: (partyId: string, characterId: string, count: number, side?: NpcSide) =>
+    combatContext.addParticipant(partyId, characterId, count, side),
 
   updateParticipant: (partyId: string, participantId: string, patch: ParticipantPatch) =>
     combatContext.updateParticipant(partyId, participantId, patch),

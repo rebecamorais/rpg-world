@@ -128,6 +128,22 @@ describe('GmCombatPanel', () => {
     expect(screen.queryByRole('button', { name: t.addPartyCharacters })).not.toBeInTheDocument();
   });
 
+  it('o NPC entra como inimigo por padrão; o mestre pode trocar para aliado', async () => {
+    const user = userEvent.setup();
+    hook.encounter = running(0);
+    renderWithProviders(<GmCombatPanel party={party} live />);
+
+    const enemy = screen.getByRole('button', { name: t.enemy });
+    const ally = screen.getByRole('button', { name: t.ally });
+    expect(enemy).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: t.addEnemy })).toBeInTheDocument();
+
+    await user.click(ally);
+    expect(ally).toHaveAttribute('aria-pressed', 'true');
+    expect(enemy).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('button', { name: t.addAlly })).toBeInTheDocument();
+  });
+
   it('o link para os NPCs leva à aba de NPCs', () => {
     hook.encounter = running(0);
     renderWithProviders(<GmCombatPanel party={party} live />);

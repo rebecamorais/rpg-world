@@ -34,7 +34,7 @@ export function useEncounter(partyId: string) {
   const finish = useMutation({ mutationFn: () => rpgWorldApi.delete(base), ...options });
   const start = useMutation({ mutationFn: () => rpgWorldApi.post(`${base}/start`), ...options });
   const addParticipant = useMutation({
-    mutationFn: (input: { characterId: string; count?: number }) =>
+    mutationFn: (input: { characterId: string; count?: number; side?: 'ally' | 'enemy' }) =>
       rpgWorldApi.post(`${base}/participants`, input),
     ...options,
   });

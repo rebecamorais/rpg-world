@@ -6,10 +6,12 @@ import { MAX_ENEMIES_PER_ADD } from '../domain/Encounter';
 
 export const participantParamsSchema = z.object({ partyId: z.uuid(), participantId: z.uuid() });
 
-/** A character brought to the party, or `count` enemies from one of the GM's npc sheets. */
+/** A character brought to the party, or `count` enemies or allies from one of the GM's npc sheets. */
 export const participantSchema = z.object({
   characterId: z.uuid(),
   count: z.number().int().min(1).max(MAX_ENEMIES_PER_ADD).default(1),
+  // Only for an npc sheet; a party character is always a player
+  side: z.enum(['ally', 'enemy']).default('enemy'),
 });
 
 export const participantPatchSchema = z
