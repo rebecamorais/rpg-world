@@ -16,6 +16,7 @@ const DATABASE_ERRORS: Record<string, PartyErrorCode> = {
   party_invite_not_found: PartyErrorCodes.INVITE_NOT_FOUND,
   party_user_not_found: PartyErrorCodes.USER_NOT_FOUND,
   party_gm_cannot_join: PartyErrorCodes.GM_CANNOT_JOIN,
+  party_already_member: PartyErrorCodes.ALREADY_MEMBER,
 };
 
 // RLS refusing an insert, or a character id that doesn't exist
@@ -219,11 +220,11 @@ export class SupabasePartyRepository implements PartyRepo {
   }
 
   async addCharacters(partyId: string, characterIds: string[]): Promise<void> {
-    const { error } = await this.client
-      .from('party_characters')
-      .insert(
-        characterIds.map((characterId) => ({ party_id: partyId, character_id: characterId })),
-      );
+    // Two saves at once (two tabs, a double click) bring the same character: the second is a no-op
+    const { error } = await this.client.from('party_characters').upsert(
+      characterIds.map((characterId) => ({ party_id: partyId, character_id: characterId })),
+      { onConflict: 'party_id,character_id', ignoreDuplicates: true },
+    );
     if (error && INSERT_REFUSED.has(error.code)) {
       throw new PartyError(PartyErrorCodes.CHARACTER_NOT_ALLOWED);
     }

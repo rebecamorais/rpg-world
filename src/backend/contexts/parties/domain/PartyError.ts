@@ -7,6 +7,7 @@ export const PartyErrorCodes = {
   INVITE_NOT_FOUND: 'party_error_invite_not_found',
   USER_NOT_FOUND: 'party_error_user_not_found',
   GM_CANNOT_JOIN: 'party_error_gm_cannot_join',
+  ALREADY_MEMBER: 'party_error_already_member',
   CHARACTER_NOT_ALLOWED: 'party_error_character_not_allowed',
 } as const;
 
