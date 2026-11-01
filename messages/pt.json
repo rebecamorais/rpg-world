@@ -1166,5 +1166,14 @@
     "lawful-evil": "Leal e Mau",
     "neutral-evil": "Neutro e Mau",
     "chaotic-evil": "Caótico e Mau"
+  },
+  "conditions": {
+    "ariaLabel": "{name}, condição",
+    "otherEdition": "Ver versão {edition}",
+    "level": "Nível {level}",
+    "title": "Condições",
+    "filter": "Condição",
+    "any": "Qualquer condição",
+    "edition": "Edição"
   }
 }

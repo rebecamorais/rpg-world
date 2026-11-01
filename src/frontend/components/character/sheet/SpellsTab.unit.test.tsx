@@ -12,6 +12,10 @@ import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 import { SpellsTab } from './SpellsTab';
 
 vi.mock('@client', () => ({ rpgWorldApi: { get: vi.fn(), post: vi.fn() } }));
+// The condition catalog is its own request; these tests only look at the spell ones
+vi.mock('@frontend/hooks/useConditions', () => ({
+  useConditions: () => ({ list: [], byKey: new Map(), isLoading: false }),
+}));
 
 const api = vi.mocked(rpgWorldApi);
 

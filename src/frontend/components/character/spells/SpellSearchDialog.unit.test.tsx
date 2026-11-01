@@ -14,6 +14,10 @@ import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 import SpellSearchDialog from './SpellSearchDialog';
 
 vi.mock('@client', () => ({ rpgWorldApi: { get: vi.fn() } }));
+// The condition catalog is its own request; these tests only count the spell ones
+vi.mock('@frontend/hooks/useConditions', () => ({
+  useConditions: () => ({ list: [], byKey: new Map(), isLoading: false }),
+}));
 
 const api = vi.mocked(rpgWorldApi);
 const t = messages.spellsDrawer;

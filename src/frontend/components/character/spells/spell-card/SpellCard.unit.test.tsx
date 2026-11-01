@@ -7,6 +7,24 @@ import type { Spell } from '@frontend/types/spells';
 
 import { SpellCard } from './SpellCard';
 
+vi.mock('@frontend/hooks/useConditions', () => {
+  const frightened = {
+    key: 'dnd5e:srd-5.2:condition:frightened',
+    id: 'frightened',
+    edition: '2024',
+    name: 'Frightened',
+    description: 'Scared.',
+    maxLevel: null,
+  };
+  return {
+    useConditions: () => ({
+      list: [frightened],
+      byKey: new Map([[frightened.key, frightened]]),
+      isLoading: false,
+    }),
+  };
+});
+
 const t = messages.characters;
 
 const FIREBALL: Spell = {
@@ -123,5 +141,23 @@ describe('SpellCard: tempo de conjuração e melhorias', () => {
     );
     expect(screen.getByText(`${t.cantripUpgrade}:`)).toBeInTheDocument();
     expect(screen.queryByText(`${t.atHigherLevels}:`)).not.toBeInTheDocument();
+  });
+});
+
+describe('SpellCard: condições', () => {
+  it('mostra o selo de cada condição da magia', () => {
+    renderWithProviders(
+      <SpellCard
+        spell={{
+          ...FIREBALL,
+          id: 'dnd5e:srd-5.2:spell:fear',
+          description: 'Fica {@condition frightened}.',
+          conditions: ['dnd5e:srd-5.2:condition:frightened'],
+        }}
+        isExpanded
+      />,
+    );
+    // The badge and the tag in the text
+    expect(screen.getAllByRole('button', { name: 'Frightened, condition' })).toHaveLength(2);
   });
 });
