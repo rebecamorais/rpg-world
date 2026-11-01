@@ -13,24 +13,34 @@ export class GetCharacterSpellsUseCase {
     private readonly spells: SpellLookup,
   ) {}
 
-  /** The character's spells; one no longer in the catalog is left out. */
+  /** The owner's view of the spellbook. */
   async execute(
     characterId: string,
     requesterId: string,
     locale?: string,
   ): Promise<CharacterSpellRelation[]> {
     await assertOwnsCharacter(this.characterRepository, characterId, requesterId, 'read');
-    const links = await this.spellRepository.findByCharacterId(characterId);
-    const spells = await this.spells.findByKeys(
-      links.map((link) => link.ref),
-      locale,
-    );
-    const byKey = new Map(links.map((link) => [link.ref, link]));
-
-    return spells.map((spell) => ({
-      ...spell,
-      isPrepared: byKey.get(spell.id)!.isPrepared,
-      createdAt: byKey.get(spell.id)!.createdAt,
-    }));
+    return listCharacterSpells(this.spellRepository, this.spells, characterId, locale);
   }
+}
+
+/** The character's spells from the catalog; one no longer in the catalog is left out. */
+export async function listCharacterSpells(
+  spellRepository: CharacterSpellRepo,
+  spells: SpellLookup,
+  characterId: string,
+  locale?: string,
+): Promise<CharacterSpellRelation[]> {
+  const links = await spellRepository.findByCharacterId(characterId);
+  const found = await spells.findByKeys(
+    links.map((link) => link.ref),
+    locale,
+  );
+  const byKey = new Map(links.map((link) => [link.ref, link]));
+
+  return found.map((spell) => ({
+    ...spell,
+    isPrepared: byKey.get(spell.id)!.isPrepared,
+    createdAt: byKey.get(spell.id)!.createdAt,
+  }));
 }

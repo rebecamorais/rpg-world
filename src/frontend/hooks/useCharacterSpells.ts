@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { rpgWorldApi } from '@client';
 
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { Spell } from '@frontend/types/spells';
 
 export type CharacterSpell = Spell;
@@ -40,6 +41,7 @@ export function useCharacterSpells(
   const locale = useLocale();
   const t = useTranslations('spellsDrawer.toasts');
   const { getErrorMessage } = useErrorMessage();
+  const { apiPath } = useSheetSource(characterId ?? '');
 
   const {
     data: spells = [],
@@ -49,7 +51,7 @@ export function useCharacterSpells(
     queryKey: [...queryToKey, locale],
     queryFn: async () => {
       if (!characterId) return [];
-      return rpgWorldApi.get(`/api/characters/${characterId}/spells?locale=${locale}`);
+      return rpgWorldApi.get(`${apiPath}/spells?locale=${locale}`);
     },
     enabled: options.enabled && !!characterId,
   });

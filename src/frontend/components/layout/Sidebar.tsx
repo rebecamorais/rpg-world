@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 
@@ -19,15 +19,59 @@ import {
   SheetTrigger,
 } from '@frontend/components/ui/sheet';
 import { useAuth } from '@frontend/hooks/useAuth';
+import { useParties } from '@frontend/hooks/useParties';
 import { useProfile } from '@frontend/hooks/useProfile';
 
-function SidebarContent() {
+import type { PartySummary } from '@backend/contexts/parties/domain/Party';
+
+function PartyLinks({ title, parties }: { title: string; parties: PartySummary[] }) {
+  const pathname = usePathname();
+  const t = useTranslations('parties.nav');
+
+  return (
+    <div className="mt-2 flex flex-col">
+      <p className="text-label text-muted-foreground px-3 py-1">{title}</p>
+      {parties.map((party) => {
+        const href = `/parties/${party.id}`;
+        const isOpen = pathname === href || pathname?.startsWith(`${href}/`);
+        return (
+          <div key={party.id} className="flex flex-col">
+            <NavItem href={href} label={party.name} isActive={isOpen} isSubItem />
+            {/* The GM's open party: the party itself and its settings, like a sheet's tabs */}
+            {isOpen && party.role === 'gm' && (
+              <div className="ml-4 flex flex-col">
+                <NavItem
+                  href={href}
+                  label={t('overview')}
+                  isActive={!pathname.startsWith(`${href}/settings`)}
+                  isSubItem
+                />
+                <NavItem
+                  href={`${href}/settings`}
+                  label={t('settings')}
+                  isActive={pathname.startsWith(`${href}/settings`)}
+                  isSubItem
+                />
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/** `withLogout`: the phone drawer; on the desktop the header's user menu has "Sign out". */
+function SidebarContent({ withLogout = false }: { withLogout?: boolean }) {
   const params = useParams();
+  const pathname = usePathname();
   const characterId = params?.id as string;
   const tDash = useTranslations('dashboard');
   const tCommon = useTranslations('common');
+  const tParties = useTranslations('parties');
   const { profile } = useProfile();
   const { signOut } = useAuth();
+  const { parties } = useParties();
 
   const username = profile?.username || tCommon('title');
   const avatarUrl = profile?.avatarUrl;
@@ -37,11 +81,7 @@ function SidebarContent() {
       <div className="flex flex-1 flex-col gap-8 pr-2">
         <div className="flex items-center gap-3 px-2">
           <Avatar className="ring-primary/20 border-border h-8 w-8 rounded-lg border ring-2 transition-all hover:scale-105 active:scale-95">
-            {avatarUrl ? (
-              <AvatarImage src={avatarUrl} alt={username} className="object-cover" />
-            ) : (
-              <div className="bg-primary/20 h-full w-full" />
-            )}
+            {avatarUrl && <AvatarImage src={avatarUrl} alt={username} className="object-cover" />}
             <AvatarFallback className="bg-primary/10 text-primary-flare text-xs font-bold">
               {username.substring(0, 2).toUpperCase()}
             </AvatarFallback>
@@ -56,8 +96,31 @@ function SidebarContent() {
         <nav className="flex flex-col gap-6">
           <section>
             <p className="text-label text-muted-foreground mb-2 px-3">{tDash('menu')}</p>
-            <NavItem href="/settings/profile" label={tDash('myProfile')} />
-            <NavItem href="/characters" label={tDash('myCharacters')} />
+            <NavItem
+              href="/settings/profile"
+              label={tDash('myProfile')}
+              icon="User"
+              isActive={pathname?.startsWith('/settings')}
+            />
+            <NavItem
+              href="/characters"
+              label={tDash('myCharacters')}
+              icon="Scroll"
+              isActive={pathname?.startsWith('/characters')}
+            />
+            {/* An open party lights its own link below instead */}
+            <NavItem
+              href="/parties"
+              label={tParties('nav.parties')}
+              icon="Dices"
+              isActive={pathname === '/parties'}
+            />
+            {parties?.asGm.length ? (
+              <PartyLinks title={tParties('nav.gm')} parties={parties.asGm} />
+            ) : null}
+            {parties?.asPlayer.length ? (
+              <PartyLinks title={tParties('nav.player')} parties={parties.asPlayer} />
+            ) : null}
             <Button asChild size="sm" className="mt-3 w-full">
               <Link href="/characters/new">
                 <AppIcon name="Plus" size={16} aria-hidden="true" />
@@ -70,19 +133,21 @@ function SidebarContent() {
         </nav>
       </div>
 
-      <div className="mt-auto pt-6">
-        <button
-          onClick={() => signOut()}
-          className="group text-muted-foreground hover:bg-danger-surface hover:text-danger-flare mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all"
-        >
-          <AppIcon
-            name="LogOut"
-            size={16}
-            className="transition-transform group-hover:-translate-x-1"
-          />
-          <span>{tCommon('logout')}</span>
-        </button>
-      </div>
+      {withLogout && (
+        <div className="mt-auto pt-6">
+          <button
+            onClick={() => signOut()}
+            className="group text-muted-foreground hover:bg-danger-surface hover:text-danger-flare mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all"
+          >
+            <AppIcon
+              name="LogOut"
+              size={16}
+              className="transition-transform group-hover:-translate-x-1"
+            />
+            <span>{tCommon('logout')}</span>
+          </button>
+        </div>
+      )}
     </>
   );
 }
@@ -115,7 +180,7 @@ export function MobileMenu() {
           <SheetTitle>{tDash('menu')}</SheetTitle>
           <SheetDescription>{tDash('menuDescription')}</SheetDescription>
         </SheetHeader>
-        <SidebarContent />
+        <SidebarContent withLogout />
       </SheetContent>
     </Sheet>
   );

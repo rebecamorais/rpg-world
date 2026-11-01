@@ -5,7 +5,11 @@ import { cn } from '@frontend/lib/utils';
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      className={cn('bg-card text-card-foreground rounded-xl border shadow', className)}
+      className={cn(
+        // A faint light from the top edge, so cards don't read as flat grey boxes
+        'bg-card text-card-foreground from-foreground/[0.035] rounded-xl border bg-linear-to-b to-transparent to-40% shadow',
+        className,
+      )}
       {...props}
     />
   );

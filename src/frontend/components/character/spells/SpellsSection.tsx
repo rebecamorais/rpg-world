@@ -3,9 +3,10 @@ import { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
 
 interface SpellsSectionProps {
   characterSpells: CharacterSpell[];
-  onForgetSpell: (spellId: string) => void | Promise<unknown>;
-  onTogglePrepared: (spellId: string, isPrepared: boolean) => void | Promise<unknown>;
-  onAddSpell: () => void;
+  // Left out on a read-only spellbook
+  onForgetSpell?: (spellId: string) => void | Promise<unknown>;
+  onTogglePrepared?: (spellId: string, isPrepared: boolean) => void | Promise<unknown>;
+  onAddSpell?: () => void;
 }
 
 export default function SpellsSection({

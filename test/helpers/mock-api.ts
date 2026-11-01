@@ -27,10 +27,22 @@ export const api = {
     uploadAvatar: vi.fn(),
     getSpells: vi.fn(),
     toggleSpell: vi.fn(),
+    duplicate: vi.fn(),
   },
   loreApi: { getByCharacterId: vi.fn(), update: vi.fn() },
   profileApi: { getProfile: vi.fn(), updateProfile: vi.fn(), uploadAvatar: vi.fn() },
   spellsApi: { getAllSpells: vi.fn() },
+  combatApi: {
+    get: vi.fn(),
+    create: vi.fn(),
+    addParticipant: vi.fn(),
+    updateParticipant: vi.fn(),
+    removeParticipant: vi.fn(),
+    setOrder: vi.fn(),
+    start: vi.fn(),
+    endTurn: vi.fn(),
+    finish: vi.fn(),
+  },
 };
 
 export const getApi = async () => api;

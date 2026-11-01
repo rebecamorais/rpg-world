@@ -61,4 +61,12 @@ describe('CreateCharacterUseCase ', () => {
       race: '',
     });
   });
+
+  it('cria ficha de inimigo com kind npc; sem kind é pc', async () => {
+    await useCase.execute({ id: 'npc-1', name: 'Goblin', ownerUsername: 'gm', kind: 'npc' });
+    await useCase.execute({ id: 'pc-1', name: 'Arani', ownerUsername: 'gm' });
+
+    expect((await repo.findById('npc-1'))!.kind).toBe('npc');
+    expect((await repo.findById('pc-1'))!.kind).toBe('pc');
+  });
 });

@@ -60,6 +60,23 @@ describe('NewCharacterForm', () => {
     expect(toast.success).toHaveBeenCalledWith(t.success);
   });
 
+  it('NPC: cria com kind npc e o cancelar volta para a aba de NPCs', async () => {
+    renderWithProviders(<NewCharacterForm kind="npc" />);
+
+    expect(screen.getByRole('link', { name: messages.common.cancel })).toHaveAttribute(
+      'href',
+      '/characters/npcs',
+    );
+    await createCharacter('Goblin');
+
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/DnD_5e/character/char-1'));
+    expect(post).toHaveBeenCalledWith('/api/characters', {
+      name: 'Goblin',
+      system: 'DnD_5e',
+      kind: 'npc',
+    });
+  });
+
   it('exige o nome', async () => {
     renderWithProviders(<NewCharacterForm />);
 

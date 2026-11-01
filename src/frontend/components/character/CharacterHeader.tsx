@@ -4,14 +4,30 @@ import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
+import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
+import { ChoiceSelect } from '@frontend/components/character/ChoiceSelect';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { FieldLabel, InlineField } from '@frontend/components/ui/field';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Progress } from '@frontend/components/ui/progress';
-import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import {
+  BACKGROUND_ICONS,
+  CLASS_ICONS,
+  CharacterAlignment,
+  CharacterBackground,
+  CharacterRace,
+  RACE_ICONS,
+} from '@frontend/constants/character-choices';
+import {
+  useCharacterActions,
+  useCharacterMeta,
+  useLoadedCharacter,
+} from '@frontend/context/CharacterContext';
+import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
+import { CharacterClass } from '@frontend/types/spells';
 
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
@@ -33,8 +49,12 @@ export default function CharacterHeader() {
     avatarUrl,
   } = useLoadedCharacter();
   const { update } = useCharacterActions();
+  const { id } = useCharacterMeta();
+  // Read only (the GM): no customizing; the fields are off through SheetFieldset
+  const { readOnly } = useSheetSource(id);
   const pb = getProficiencyBonus(level);
   const t = useTranslations('characterHeader');
+  const choices = useCharacterChoices();
   const tImage = useTranslations('avatarUpload');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -59,23 +79,21 @@ export default function CharacterHeader() {
               visible text and not match the aria-label (WCAG 2.5.3). The avatar is hidden from
               screen readers: the h1 already names the character */}
           <div className="relative rounded-full transition-transform has-[button:active]:scale-95 has-[button:hover]:scale-105">
-            <Avatar
-              aria-hidden="true"
+            <CharacterPortrait
+              avatarUrl={avatarUrl}
+              characterClass={classNameStr}
               className="border-character-muted shadow-character-muted h-20 w-20 shrink-0 border-2 shadow-md transition-all"
-            >
-              <AvatarImage src={avatarUrl} alt="" className="object-cover" />
-              <AvatarFallback className="bg-muted text-xl font-bold">
-                {name?.substring(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <button
-              type="button"
-              onClick={() => setIsColorPickerOpen(true)}
-              aria-label={t('customizeTitle')}
-              className="focus-ring bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity hover:opacity-100 focus-visible:opacity-100"
-            >
-              <AppIcon name="Palette" size={24} className="text-character-flare" />
-            </button>
+            />
+            {!readOnly && (
+              <button
+                type="button"
+                onClick={() => setIsColorPickerOpen(true)}
+                aria-label={t('customizeTitle')}
+                className="focus-ring bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity hover:opacity-100 focus-visible:opacity-100"
+              >
+                <AppIcon name="Palette" size={24} className="text-character-flare" />
+              </button>
+            )}
           </div>
           {avatarUrl ? (
             <button
@@ -96,10 +114,12 @@ export default function CharacterHeader() {
           onOpenChange={setIsViewerOpen}
         />
 
-        <CharacterCustomizationDialog
-          open={isColorPickerOpen}
-          onOpenChange={setIsColorPickerOpen}
-        />
+        {!readOnly && (
+          <CharacterCustomizationDialog
+            open={isColorPickerOpen}
+            onOpenChange={setIsColorPickerOpen}
+          />
+        )}
 
         <div className="grid flex-1 grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Left Column: Core Stats */}
@@ -168,37 +188,68 @@ export default function CharacterHeader() {
 
           {/* Right Column: Information Grid */}
           <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-            <InlineField
+            <ChoiceSelect
               id="char-race"
               maxLength={TEXT_MAX}
               label={t('race')}
               value={race || ''}
-              onChange={(e) => update({ race: e.target.value })}
+              matched={choices.raceOf(race)}
+              options={Object.values(CharacterRace).map((value) => ({
+                value,
+                label: choices.raceLabelOf(value),
+                icon: RACE_ICONS[value],
+              }))}
+              onChange={(value) => update({ race: value })}
               placeholder={t('racePlaceholder')}
+              otherLabel={t('otherOption')}
+              otherPlaceholder={t('raceOtherPlaceholder')}
             />
-            <InlineField
+            <ChoiceSelect
               id="char-class"
               maxLength={TEXT_MAX}
               label={t('class')}
               value={classNameStr || ''}
-              onChange={(e) => update({ class: e.target.value })}
+              matched={choices.classOf(classNameStr)}
+              options={Object.values(CharacterClass).map((value) => ({
+                value,
+                label: choices.classLabelOf(value),
+                icon: CLASS_ICONS[value],
+              }))}
+              onChange={(value) => update({ class: value })}
               placeholder={t('classPlaceholder')}
+              otherLabel={t('otherOption')}
+              otherPlaceholder={t('classOtherPlaceholder')}
             />
-            <InlineField
+            <ChoiceSelect
               id="char-background"
               maxLength={TEXT_MAX}
               label={t('background')}
               value={background || ''}
-              onChange={(e) => update({ background: e.target.value })}
+              matched={choices.backgroundOf(background)}
+              options={Object.values(CharacterBackground).map((value) => ({
+                value,
+                label: choices.backgroundLabelOf(value),
+                icon: BACKGROUND_ICONS[value],
+              }))}
+              onChange={(value) => update({ background: value })}
               placeholder={t('backgroundPlaceholder')}
+              otherLabel={t('otherOption')}
+              otherPlaceholder={t('backgroundOtherPlaceholder')}
             />
-            <InlineField
+            <ChoiceSelect
               id="char-alignment"
               maxLength={TEXT_MAX}
               label={t('alignment')}
               value={alignment || ''}
-              onChange={(e) => update({ alignment: e.target.value })}
+              matched={choices.alignmentOf(alignment)}
+              options={Object.values(CharacterAlignment).map((value) => ({
+                value,
+                label: choices.alignmentLabelOf(value),
+              }))}
+              onChange={(value) => update({ alignment: value })}
               placeholder={t('alignmentPlaceholder')}
+              otherLabel={t('otherOption')}
+              otherPlaceholder={t('alignmentOtherPlaceholder')}
             />
           </div>
         </div>

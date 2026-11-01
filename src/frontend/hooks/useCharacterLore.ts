@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { rpgWorldApi } from '@client';
 
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
 
 export interface LoreData {
   age?: string;
@@ -28,11 +29,12 @@ export function useCharacterLore(
 ) {
   const queryClient = useQueryClient();
   const { getErrorMessage } = useErrorMessage();
+  const { apiPath } = useSheetSource(characterId);
 
   const query = useQuery({
     queryKey: ['character-lore', characterId],
     queryFn: async () => {
-      const data = await rpgWorldApi.get<LoreData>(`/api/characters/${characterId}/lore`);
+      const data = await rpgWorldApi.get<LoreData>(`${apiPath}/lore`);
       return data;
     },
     enabled: options.enabled && !!characterId,

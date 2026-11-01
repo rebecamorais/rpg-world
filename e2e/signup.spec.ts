@@ -19,6 +19,11 @@ test('cadastro: conta criada, e-mail confirmado e acesso liberado', async ({ pag
   const confirmation = linkIn(await waitForEmail(email), '/api/auth/confirm');
   await page.goto(confirmation);
 
+  // A new account picks its username before anything else
+  await expect(page).toHaveURL(/\/choose-username$/);
+  await (await hydrated(page.getByLabel('Username'))).fill(`signup_${Date.now() % 100000}`);
+  await page.getByRole('button', { name: 'Continue' }).click();
+
   await expect(page).toHaveURL(/\/characters$/);
   await expect(page.getByText('No characters yet')).toBeVisible();
 });

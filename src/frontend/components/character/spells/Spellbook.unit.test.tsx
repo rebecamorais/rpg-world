@@ -151,4 +151,49 @@ describe('Spellbook', () => {
     await user.click(within(card('Fly')).getByRole('button', { name: /Expand Fly/ }));
     expect(renders).toHaveBeenCalledTimes(2);
   });
+
+  describe('busca e filtros', () => {
+    const f = t.spellbookFilters;
+
+    it('busca pelo nome e as contagens do índice seguem o filtro', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Spellbook characterSpells={SPELLS} />);
+
+      await user.type(screen.getByRole('searchbox', { name: f.searchLabel }), 'fire');
+
+      expect(renderedSpellNames()).toEqual(['Fireball']);
+      const index = screen.getByRole('navigation', { name: t.spellbookIndex });
+      expect(
+        within(index)
+          .getAllByRole('link')
+          .map((link) => link.textContent),
+      ).toEqual(['Level 31']);
+      expect(screen.getByRole('status')).toHaveTextContent('1 of 5 spells');
+    });
+
+    it('só as preparadas', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Spellbook characterSpells={SPELLS} />);
+
+      const prepared = screen.getByRole('button', { name: f.prepared });
+      await user.click(prepared);
+
+      expect(prepared).toHaveAttribute('aria-pressed', 'true');
+      expect(renderedSpellNames()).toEqual(['Fly']);
+    });
+
+    it('quando nada bate, mostra um estado vazio que limpa os filtros', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Spellbook characterSpells={SPELLS} />);
+
+      await user.type(screen.getByRole('searchbox', { name: f.searchLabel }), 'wish');
+      expect(screen.getByText(f.noMatchTitle)).toBeInTheDocument();
+      expect(screen.queryByRole('article')).not.toBeInTheDocument();
+
+      // The bar has one too; the empty state's comes last
+      await user.click(screen.getAllByRole('button', { name: f.clear }).at(-1)!);
+      expect(renderedSpellNames()).toHaveLength(SPELLS.length);
+      expect(screen.getByRole('searchbox', { name: f.searchLabel })).toHaveValue('');
+    });
+  });
 });

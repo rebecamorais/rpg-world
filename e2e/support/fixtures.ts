@@ -1,4 +1,4 @@
-import { type Locator, type Page, test as base, expect } from '@playwright/test';
+import { type Browser, type Locator, type Page, test as base, expect } from '@playwright/test';
 
 import { BASE_URL, supabaseTestEnv } from './env';
 import { PASSWORD, type TestUser, createUser } from './supabase';
@@ -32,6 +32,59 @@ export async function hydrated(locator: Locator): Promise<Locator> {
     .toBe(true);
   return locator;
 }
+
+/** A party created through the API by the user signed in on `page`, with its invite code. */
+export async function createParty(page: Page, name: string): Promise<{ id: string; code: string }> {
+  const res = await page.request.post('/api/parties', { data: { name } });
+  expect(res.status()).toBe(201);
+  const { id } = await res.json();
+  const party = await (await page.request.get(`/api/parties/${id}`)).json();
+  return { id, code: party.gm.inviteCode };
+}
+
+/** Another person, signed in on their own browser context (separate cookies). */
+export async function person(browser: Browser, label: string) {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const user = await createUser(label);
+  await signIn(page, user);
+  return { context, page, user };
+}
+
+/** Through the API: asks with the link and the GM approves. */
+export async function joinParty(
+  gm: Page,
+  player: Page,
+  playerId: string,
+  partyId: string,
+  code: string,
+) {
+  expect((await player.request.post(`/api/parties/join/${code}`)).ok()).toBe(true);
+  expect((await gm.request.patch(`/api/parties/${partyId}/members/${playerId}`)).status()).toBe(
+    204,
+  );
+}
+
+export async function bring(player: Page, partyId: string, characterIds: string[]) {
+  const res = await player.request.put(`/api/parties/${partyId}/my-characters`, {
+    data: { characterIds },
+  });
+  expect(res.status()).toBe(204);
+}
+
+/** One of the user's enemy sheets (an npc character) with the given max HP. */
+export async function createEnemySheet(page: Page, name: string, hpMax: number): Promise<string> {
+  const res = await page.request.post('/api/characters', { data: { name, kind: 'npc' } });
+  expect(res.status()).toBe(201);
+  const { id } = await res.json();
+  const update = await page.request.put(`/api/characters/${id}`, {
+    data: { updates: { hpMax, hpCurrent: hpMax } },
+  });
+  expect(update.ok()).toBe(true);
+  return id;
+}
+
+export const partyUrl = (id: string, path = '') => `/parties/${id}${path}`;
 
 export const characterUrl = (id: string, tab = '') => `/system/DnD_5e/character/${id}${tab}`;
 

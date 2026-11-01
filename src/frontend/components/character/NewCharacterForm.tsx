@@ -30,7 +30,8 @@ import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCreateCharacter } from '@frontend/hooks/useCreateCharacter';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
-export default function NewCharacterForm() {
+/** Creates a playable character, or one of the GM's enemy sheets with `kind="npc"`. */
+export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' }) {
   const { currentUser } = useCurrentUser();
   const t = useTranslations('characterCreation');
   const tCommon = useTranslations('common');
@@ -65,6 +66,7 @@ export default function NewCharacterForm() {
       {
         name: data.name.trim(),
         system: data.system,
+        ...(kind === 'npc' && { kind }),
       },
       {
         onError: (err: Error) => {
@@ -134,7 +136,9 @@ export default function NewCharacterForm() {
                   {createMutation.isPending ? t('submitting') : t('submit')}
                 </Button>
                 <Button variant="outline" asChild>
-                  <Link href="/characters">{tCommon('cancel')}</Link>
+                  <Link href={kind === 'npc' ? '/characters/npcs' : '/characters'}>
+                    {tCommon('cancel')}
+                  </Link>
                 </Button>
               </div>
             </form>

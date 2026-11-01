@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { getApi } from '@api';
 
+import { CharacterKindTabs } from '@frontend/components/character/CharacterKindTabs';
 import CharacterList from '@frontend/components/character/CharacterList';
 import { SeededQuery } from '@frontend/components/providers/SeededQuery';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
@@ -27,6 +28,7 @@ export default async function CharactersPage() {
 
   return (
     <PageContainer title={t('title')} description={t('subtitle')}>
+      <CharacterKindTabs current="pc" />
       <SeededQuery queryKey={CHARACTERS_QUERY_KEY} data={characters}>
         <CharactersProvider>
           <CharacterList />

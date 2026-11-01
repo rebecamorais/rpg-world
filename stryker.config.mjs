@@ -2,7 +2,7 @@
 // conditions, removes calls...) and checks that some test fails. Coverage only shows that a
 // line ran; a surviving mutant shows an assertion that is missing. Slow, so it runs on demand.
 /** @type {import('@stryker-mutator/api/core').PartialStrykerOptions} */
-export default {
+const config = {
   // The vitest runner doesn't activate mutants under Vitest 5 (every mutant "survives"), so each
   // mutant reruns the Node unit tests through the command runner: slower, but correct
   testRunner: 'command',
@@ -34,3 +34,5 @@ export default {
   concurrency: 4,
   thresholds: { high: 80, low: 60, break: null },
 };
+
+export default config;

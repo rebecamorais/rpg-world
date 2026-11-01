@@ -119,7 +119,7 @@ export const SpellCard = React.memo(function SpellCard({
 
               <SpellChipsRow spell={spell} displayValues={displayValues} />
 
-              {!onLearnSpell && (
+              {!onLearnSpell && onForgetSpell && (
                 <div className="pointer-events-auto">
                   <SpellActions
                     spell={spell}

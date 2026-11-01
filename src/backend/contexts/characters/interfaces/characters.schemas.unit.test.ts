@@ -7,6 +7,7 @@ import { Attributes } from '../domain/value-object/Attributes';
 import { HealthPoints } from '../domain/value-object/HealthPoints';
 import {
   characterUpdatesSchema,
+  charactersQuerySchema,
   createCharacterSchema,
   localeQuerySchema,
   spellKeySchema,
@@ -133,5 +134,22 @@ describe('spellKeySchema', () => {
   it('aceita uma chave de magia e recusa uma longa demais', () => {
     expect(spellKeySchema.safeParse(spellKey('srd-5.1', 'fireball')).success).toBe(true);
     expect(spellKeySchema.safeParse(spellKey('srd-5.1', 'a'.repeat(200))).success).toBe(false);
+  });
+});
+
+describe('fichas de inimigo (kind)', () => {
+  it('createCharacterSchema aceita kind npc e recusa outro valor', () => {
+    expect(createCharacterSchema.parse({ name: 'Goblin', kind: 'npc' }).kind).toBe('npc');
+    expect(createCharacterSchema.safeParse({ name: 'Goblin', kind: 'boss' }).success).toBe(false);
+  });
+
+  it('o update não muda kind', () => {
+    expect(characterUpdatesSchema.parse({ name: 'X', kind: 'npc' })).not.toHaveProperty('kind');
+  });
+
+  it('a lista é de pc sem ?kind e de npc com ?kind=npc', () => {
+    expect(charactersQuerySchema.parse({}).kind).toBe('pc');
+    expect(charactersQuerySchema.parse({ kind: 'npc' }).kind).toBe('npc');
+    expect(charactersQuerySchema.safeParse({ kind: 'x' }).success).toBe(false);
   });
 });

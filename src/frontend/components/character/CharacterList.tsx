@@ -21,8 +21,10 @@ import { DeleteCharacterDialog } from './DeleteCharacterDialog';
 export default function CharacterList() {
   const { currentUser } = useCurrentUser();
   const t = useTranslations('characters');
+  const tEnemies = useTranslations('enemies');
   const { getErrorMessage } = useErrorMessage();
   const {
+    kind,
     characters,
     isLoading,
     error,
@@ -64,14 +66,16 @@ export default function CharacterList() {
       <div className="space-y-6">
         <EmptyState
           icon="UserPlus"
-          title={t('emptyState')}
-          description={t('createFirstDescription')}
+          title={kind === 'npc' ? tEnemies('emptyState') : t('emptyState')}
+          description={
+            kind === 'npc' ? tEnemies('createFirstDescription') : t('createFirstDescription')
+          }
           className="min-h-[450px]"
           action={
             <Button asChild size="lg">
-              <Link href="/characters/new">
+              <Link href={kind === 'npc' ? '/characters/new?kind=npc' : '/characters/new'}>
                 <AppIcon name="Plus" size={20} aria-hidden="true" />
-                {t('createFirst')}
+                {kind === 'npc' ? tEnemies('createFirst') : t('createFirst')}
               </Link>
             </Button>
           }

@@ -29,6 +29,7 @@ export class SupabaseProfileRepository implements ProfileRepository {
     return {
       id: data.id,
       username: data.username ?? undefined,
+      usernameChosen: data.username_chosen ?? false,
       fullName: data.full_name ?? undefined,
       avatarUrl: data.avatar_url ?? undefined,
       primaryColor: data.primary_color ?? undefined,
@@ -60,6 +61,8 @@ export class SupabaseProfileRepository implements ProfileRepository {
       .from('profile')
       .update({
         username: profile.username,
+        // Saving a username means the person picked it (undefined keeps the current mark)
+        username_chosen: profile.username !== undefined ? true : undefined,
         full_name: profile.fullName,
         avatar_url: profile.avatarUrl,
         primary_color: profile.primaryColor,

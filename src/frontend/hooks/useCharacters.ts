@@ -2,15 +2,18 @@ import { useQuery } from '@tanstack/react-query';
 
 import { rpgWorldApi } from '@client';
 
-import { CHARACTERS_QUERY_KEY } from '@frontend/lib/query-keys';
+import { charactersQueryKey } from '@frontend/lib/query-keys';
 
-import type { CharacterSummary } from '@shared/types/character';
+import type { CharacterKind, CharacterSummary } from '@shared/types/character';
 
-export function useCharacters() {
+/** The user's playable characters, or their enemy sheets with `kind = 'npc'`. */
+export function useCharacters(kind: CharacterKind = 'pc') {
   const query = useQuery({
-    queryKey: CHARACTERS_QUERY_KEY,
+    queryKey: charactersQueryKey(kind),
     queryFn: async () => {
-      const data = await rpgWorldApi.get<CharacterSummary[]>('/api/characters');
+      const data = await rpgWorldApi.get<CharacterSummary[]>(
+        kind === 'pc' ? '/api/characters' : `/api/characters?kind=${kind}`,
+      );
       if (!Array.isArray(data)) throw new Error('Invalid data format');
       return data;
     },
