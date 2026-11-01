@@ -1,1 +1,17 @@
-{}
+{
+  "blinded": { "name": "Cego" },
+  "charmed": { "name": "Enfeitiçado" },
+  "deafened": { "name": "Surdo" },
+  "exhaustion": { "name": "Exaustão" },
+  "frightened": { "name": "Amedrontado" },
+  "grappled": { "name": "Agarrado" },
+  "incapacitated": { "name": "Incapacitado" },
+  "invisible": { "name": "Invisível" },
+  "paralyzed": { "name": "Paralisado" },
+  "petrified": { "name": "Petrificado" },
+  "poisoned": { "name": "Envenenado" },
+  "prone": { "name": "Caído" },
+  "restrained": { "name": "Contido" },
+  "stunned": { "name": "Atordoado" },
+  "unconscious": { "name": "Inconsciente" }
+}

@@ -15,25 +15,24 @@ import SpellSearchDialog from './SpellSearchDialog';
 
 vi.mock('@client', () => ({ rpgWorldApi: { get: vi.fn() } }));
 // The condition catalog is its own request; these tests only count the spell ones
+const catalog = vi.hoisted(() => ({
+  list: [] as Array<{
+    key: string;
+    id: string;
+    edition: string;
+    name: string;
+    untranslated?: boolean;
+  }>,
+}));
+const frightened = (edition: '2014' | '2024', name: string, untranslated = false) => ({
+  key: `dnd5e:srd-${edition === '2014' ? '5.1' : '5.2'}:condition:frightened`,
+  id: 'frightened',
+  edition,
+  name,
+  untranslated,
+});
 vi.mock('@frontend/hooks/useConditions', () => ({
-  useConditions: () => ({
-    list: [
-      {
-        key: 'dnd5e:srd-5.1:condition:frightened',
-        id: 'frightened',
-        edition: '2014',
-        name: 'Frightened',
-      },
-      {
-        key: 'dnd5e:srd-5.2:condition:frightened',
-        id: 'frightened',
-        edition: '2024',
-        name: 'Frightened',
-      },
-    ],
-    byKey: new Map(),
-    isLoading: false,
-  }),
+  useConditions: () => ({ list: catalog.list, byKey: new Map(), isLoading: false }),
 }));
 
 const api = vi.mocked(rpgWorldApi);
@@ -81,6 +80,7 @@ function renderDialog(characterClass = '', learnedSpells: string[] = []) {
 describe('SpellSearchDialog', () => {
   beforeEach(() => {
     api.get.mockReset();
+    catalog.list = [frightened('2014', 'Frightened'), frightened('2024', 'Frightened')];
     api.get.mockImplementation(async (url: string) => {
       const page = Number(new URLSearchParams(url.split('?')[1]).get('page'));
       return { data: spells(12, page * 12), total: 30 };
@@ -97,6 +97,17 @@ describe('SpellSearchDialog', () => {
     await user.click(screen.getByRole('option', { name: 'Frightened' }));
 
     await waitFor(() => expect(lastQuery().condition).toBe('frightened'));
+  });
+
+  it('lista a condição pelo nome traduzido, mesmo que seja o da edição de 2014', async () => {
+    catalog.list = [frightened('2014', 'Amedrontado'), frightened('2024', 'Frightened', true)];
+    const user = userEvent.setup();
+    renderDialog();
+    await waitFor(() => expect(lastQuery()).toBeDefined());
+
+    await user.click(screen.getByRole('combobox', { name: messages.conditions.filter }));
+    expect(screen.getByRole('option', { name: 'Amedrontado' })).toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'Frightened' })).not.toBeInTheDocument();
   });
 
   it('começa filtrando pela classe do personagem, e dá para limpar', async () => {

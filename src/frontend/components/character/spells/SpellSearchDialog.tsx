@@ -162,10 +162,17 @@ export default function SpellSearchDialog({
     [t, tSpellsData],
   );
 
-  // The catalog has each condition once per edition; the filter matches both, so list it once
+  // The catalog has each condition once per edition; the filter matches both, so list it once.
+  // Prefer a translated entry, then the 2024 one
   const conditionOptions = useMemo(() => {
-    const byId = new Map<string, string>();
-    for (const c of conditions) if (!byId.has(c.id) || c.edition === '2024') byId.set(c.id, c.name);
+    const rank = (c: (typeof conditions)[number]) =>
+      (c.untranslated ? 2 : 0) + (c.edition === '2024' ? 0 : 1);
+    const best = new Map<string, (typeof conditions)[number]>();
+    for (const c of conditions) {
+      const current = best.get(c.id);
+      if (!current || rank(c) < rank(current)) best.set(c.id, c);
+    }
+    const byId = new Map([...best].map(([id, c]) => [id, c.name]));
     return [
       { value: 'all', label: tConditions('any') },
       ...[...byId]
