@@ -1,4 +1,5 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -9,20 +10,22 @@ const t = messages.combat;
 const fill = (text: string, values: Record<string, string | number>) =>
   Object.entries(values).reduce((s, [k, v]) => s.replace(`{${k}}`, String(v)), text);
 
-const renderRow = (row = gmRow()) =>
-  renderWithProviders(
-    <ul>
-      <CombatRow
-        partyId="party-1"
-        row={row}
-        isFirst={false}
-        isLast={false}
-        onChange={vi.fn()}
-        onMove={vi.fn()}
-        onRemove={vi.fn()}
-      />
-    </ul>,
-  );
+const rowElement = (row = gmRow()) => (
+  <ul>
+    <CombatRow
+      partyId="party-1"
+      row={row}
+      isFirst={false}
+      isLast={false}
+      onChange={vi.fn()}
+      onMove={vi.fn()}
+      onRemove={vi.fn()}
+    />
+  </ul>
+);
+const renderRow = (row = gmRow()) => renderWithProviders(rowElement(row));
+const details = (name = 'Arani') =>
+  screen.getByRole('button', { name: fill(t.detailsOf, { name }) });
 
 describe('CombatRow', () => {
   it.each([
@@ -42,7 +45,7 @@ describe('CombatRow', () => {
     expect(screen.getByRole('listitem')).toHaveClass('animate-turn-glow');
   });
 
-  it('o jogador não tem campo de PV; o inimigo tem PV e temporário editáveis', () => {
+  it('o jogador não tem campo de PV; o inimigo tem PV e temporário editáveis', async () => {
     renderRow();
     expect(screen.queryByLabelText(fill(t.hpOf, { name: 'Arani' }))).not.toBeInTheDocument();
     expect(screen.getByText('12/20')).toBeInTheDocument();
@@ -56,10 +59,11 @@ describe('CombatRow', () => {
       }),
     );
     expect(screen.getByLabelText(fill(t.hpOf, { name: 'Goblin 1' }))).toHaveValue(5);
+    await userEvent.click(details('Goblin 1'));
     expect(screen.getByLabelText(fill(t.tempHpOf, { name: 'Goblin 1' }))).toHaveValue(1);
   });
 
-  it('o PV temporário tem rótulo visível e a iniciativa vazia mostra um traço', () => {
+  it('o PV temporário tem rótulo visível e a iniciativa vazia mostra um traço', async () => {
     renderRow(
       gmRow({
         participantId: 'p-g',
@@ -70,6 +74,7 @@ describe('CombatRow', () => {
       }),
     );
 
+    await userEvent.click(details('Goblin 1'));
     expect(screen.getByText(t.tempHp)).toBeVisible();
     expect(screen.getByLabelText(fill(t.initiativeOf, { name: 'Goblin 1' }))).toHaveAttribute(
       'placeholder',
@@ -99,6 +104,42 @@ describe('CombatRow', () => {
       'href',
       '/system/DnD_5e/character/goblin',
     );
+  });
+
+  it('fechado mostra só iniciativa, nome e PV; abre pelo botão ou por um clique no card', async () => {
+    renderRow();
+    expect(details()).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.getByText(t.ac)).not.toBeVisible();
+
+    await userEvent.click(details());
+    expect(details()).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText(t.ac)).toBeVisible();
+
+    await userEvent.click(screen.getByText('12/20'));
+    expect(details()).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('clicar no nome ou num campo não abre o card', async () => {
+    renderRow();
+    await userEvent.click(screen.getByLabelText(fill(t.initiativeOf, { name: 'Arani' })));
+    expect(details()).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('abre na vez do personagem e volta a fechar quando a vez passa', async () => {
+    const { rerender } = renderRow(gmRow({ isCurrent: true }));
+    expect(details()).toHaveAttribute('aria-expanded', 'true');
+
+    // The GM's choice is dropped once the turn moves on
+    await userEvent.click(details());
+    rerender(rowElement(gmRow({ isCurrent: false })));
+    expect(details()).toHaveAttribute('aria-expanded', 'false');
+    rerender(rowElement(gmRow({ isCurrent: true })));
+    expect(details()).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('não mostra magia', () => {
+    renderRow();
+    expect(screen.queryByText(/4\/4|3\/4/)).not.toBeInTheDocument();
   });
 
   it('a vez atual fica marcada com aria-current', () => {

@@ -1090,9 +1090,6 @@
     "tempHpOf": "{name}'s temporary HP",
     "ac": "AC",
     "passivePerception": "Passive perception",
-    "spells": "Magic",
-    "slot": "{level}: {available}/{max}",
-    "spellPoints": "{current}/{max} points",
     "moveUp": "Move {name} up",
     "moveDown": "Move {name} down",
     "remove": "Remove {name} from the combat",
@@ -1107,6 +1104,7 @@
     "order": "Combat order",
     "yours": "yours",
     "tempHp": "temp",
-    "yourTurnToast": "Your turn!"
+    "yourTurnToast": "Your turn!",
+    "detailsOf": "Details of {name}"
   }
 }

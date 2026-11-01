@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import Link from 'next/link';
 
 import { useTranslations } from 'next-intl';
@@ -80,9 +82,10 @@ function HpBar({ current, max }: { current: number; max: number }) {
 }
 
 /**
- * A participant in the GM's initiative tracker: initiative, name (opens the sheet), HP, AC,
- * passive perception and magic. Only enemies' HP is edited here; a player's comes from their
- * sheet, and their death saves show at 0.
+ * A participant in the GM's initiative tracker: initiative, name (opens the sheet) and HP. AC,
+ * passive perception and an enemy's temp HP show when the card is opened, by a click or because
+ * it's their turn. Only enemies' HP is edited here; a player's comes from their sheet, and their
+ * death saves show at 0.
  */
 export function CombatRow({
   partyId,
@@ -103,16 +106,30 @@ export function CombatRow({
 }) {
   const t = useTranslations('combat');
   const isEnemy = row.side === 'enemy';
-  const hasMagic = row.spellSlots.length > 0 || row.spellPoints !== null;
   const sheetHref = isEnemy
     ? `/system/DnD_5e/character/${row.characterId}`
     : `/parties/${partyId}/characters/${row.characterId}`;
 
+  // The GM's choice holds until the turn comes or goes; then the card follows the turn again
+  const [opened, setOpened] = useState<boolean | null>(null);
+  const [turnSeen, setTurnSeen] = useState(row.isCurrent);
+  if (turnSeen !== row.isCurrent) {
+    setTurnSeen(row.isCurrent);
+    setOpened(null);
+  }
+  const expanded = opened ?? row.isCurrent;
+  const toggle = () => setOpened(!expanded);
+  const detailsId = `combat-details-${row.participantId}`;
+
   return (
     <li
       aria-current={row.isCurrent ? 'true' : undefined}
+      // A click anywhere but on a field, link or button opens it; the chevron is the keyboard way
+      onClick={(event) => {
+        if (!(event.target as HTMLElement).closest('a, button, input')) toggle();
+      }}
       className={cn(
-        'bg-card/60 border-border flex flex-wrap items-center gap-x-4 gap-y-3 rounded-md border p-3',
+        'bg-card/60 border-border flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-3 rounded-md border p-3',
         row.isCurrent && 'border-primary bg-primary/10 animate-turn-glow',
       )}
     >
@@ -134,12 +151,12 @@ export function CombatRow({
           {row.name}
         </Link>
         <span className="text-label text-muted-foreground">
-          {row.isCurrent ? t('currentTurn') : isEnemy ? t('enemy') : ' '}
+          {row.isCurrent ? t('currentTurn') : isEnemy ? t('enemy') : ' '}
         </span>
       </div>
 
-      {/* As wide as an enemy's fields, so a full bar is just as long on every row */}
-      <div className="flex min-w-52 flex-col gap-1">
+      {/* Fixed width, so a full bar is just as long on every row */}
+      <div className="flex w-32 flex-col gap-1">
         <span className="text-label text-muted-foreground">{t('hp')}</span>
         {isEnemy ? (
           <div className="flex items-center gap-1">
@@ -151,17 +168,6 @@ export function CombatRow({
               onCommit={(hpCurrent) => onChange({ hpCurrent: hpCurrent ?? 0 })}
             />
             <span className="text-muted-foreground font-mono text-sm">/{row.hp.max}</span>
-            {/* The field is named for screen readers; the word is for the eye */}
-            <span aria-hidden="true" className="text-caption text-muted-foreground ml-1">
-              {t('tempHp')}
-            </span>
-            <NumberCell
-              label={t('tempHpOf', { name: row.name })}
-              value={row.hp.temp}
-              min={0}
-              max={9999}
-              onCommit={(hpTemp) => onChange({ hpTemp: hpTemp ?? 0 })}
-            />
           </div>
         ) : (
           <span className="font-mono tabular-nums">
@@ -170,39 +176,7 @@ export function CombatRow({
           </span>
         )}
         <HpBar current={row.hp.current} max={row.hp.max} />
-        {row.deathSaves && (
-          <span className="text-caption text-danger-flare">{t('deathSaves', row.deathSaves)}</span>
-        )}
       </div>
-
-      <dl className="flex gap-4">
-        <div className="flex flex-col">
-          <dt className="text-label text-muted-foreground">{t('ac')}</dt>
-          <dd className="font-mono tabular-nums">{row.ac}</dd>
-        </div>
-        <div className="flex flex-col">
-          <dt className="text-label text-muted-foreground">{t('passivePerception')}</dt>
-          <dd className="font-mono tabular-nums">{row.passivePerception}</dd>
-        </div>
-        {hasMagic && (
-          <div className="flex flex-col">
-            <dt className="text-label text-muted-foreground">{t('spells')}</dt>
-            <dd className="font-mono text-sm tabular-nums">
-              {row.spellPoints
-                ? t('spellPoints', row.spellPoints)
-                : row.spellSlots
-                    .map((slot) =>
-                      t('slot', {
-                        level: slot.level,
-                        available: Math.max(0, slot.max - slot.used),
-                        max: slot.max,
-                      }),
-                    )
-                    .join(' · ')}
-            </dd>
-          </div>
-        )}
-      </dl>
 
       {/* On touch screens the gap keeps each button's 44px touch area apart */}
       <div className="ml-auto flex items-center gap-1 pointer-coarse:gap-2">
@@ -233,7 +207,62 @@ export function CombatRow({
         >
           <AppIcon name="X" size={16} aria-hidden="true" />
         </Button>
+        {/* Keeps the details chevron apart from the move-down one */}
+        <span aria-hidden="true" className="bg-border mx-1 h-5 w-px" />
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={t('detailsOf', { name: row.name })}
+          aria-expanded={expanded}
+          aria-controls={detailsId}
+          onClick={toggle}
+        >
+          <AppIcon
+            name="ChevronRight"
+            size={16}
+            aria-hidden="true"
+            className={cn('transition-transform duration-200', expanded && 'rotate-90')}
+          />
+        </Button>
       </div>
+
+      {row.deathSaves && (
+        <p className="text-caption text-danger-flare basis-full">
+          {t('deathSaves', row.deathSaves)}
+        </p>
+      )}
+
+      <dl
+        id={detailsId}
+        hidden={!expanded}
+        className="animate-fade-in border-border flex basis-full flex-wrap gap-x-6 gap-y-2 border-t pt-3"
+      >
+        <div className="flex flex-col">
+          <dt className="text-label text-muted-foreground">{t('ac')}</dt>
+          <dd className="font-mono tabular-nums">{row.ac}</dd>
+        </div>
+        <div className="flex flex-col">
+          <dt className="text-label text-muted-foreground">{t('passivePerception')}</dt>
+          <dd className="font-mono tabular-nums">{row.passivePerception}</dd>
+        </div>
+        {isEnemy && (
+          <div className="flex flex-col">
+            {/* The field is named for screen readers; the word is for the eye */}
+            <dt aria-hidden="true" className="text-label text-muted-foreground">
+              {t('tempHp')}
+            </dt>
+            <dd>
+              <NumberCell
+                label={t('tempHpOf', { name: row.name })}
+                value={row.hp.temp}
+                min={0}
+                max={9999}
+                onCommit={(hpTemp) => onChange({ hpTemp: hpTemp ?? 0 })}
+              />
+            </dd>
+          </div>
+        )}
+      </dl>
     </li>
   );
 }
