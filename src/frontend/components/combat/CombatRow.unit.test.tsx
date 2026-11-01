@@ -10,20 +10,21 @@ const t = messages.combat;
 const fill = (text: string, values: Record<string, string | number>) =>
   Object.entries(values).reduce((s, [k, v]) => s.replace(`{${k}}`, String(v)), text);
 
-const rowElement = (row = gmRow()) => (
+const rowElement = (row = gmRow(), waiting = false) => (
   <ul>
     <CombatRow
       partyId="party-1"
       row={row}
       isFirst={false}
       isLast={false}
+      waiting={waiting}
       onChange={vi.fn()}
       onMove={vi.fn()}
       onRemove={vi.fn()}
     />
   </ul>
 );
-const renderRow = (row = gmRow()) => renderWithProviders(rowElement(row));
+const renderRow = (row = gmRow(), waiting = false) => renderWithProviders(rowElement(row, waiting));
 const details = (name = 'Arani') =>
   screen.getByRole('button', { name: fill(t.detailsOf, { name }) });
 
@@ -157,6 +158,25 @@ describe('CombatRow', () => {
   it('não mostra magia', () => {
     renderRow();
     expect(screen.queryByText(/4\/4|3\/4/)).not.toBeInTheDocument();
+  });
+
+  it('esperando a vez, o card fica esmaecido até ser aberto', async () => {
+    renderRow(gmRow(), true);
+    expect(screen.getByRole('listitem')).toHaveClass('grayscale-[.7]');
+
+    await userEvent.click(details());
+    expect(screen.getByRole('listitem')).not.toHaveClass('grayscale-[.7]');
+  });
+
+  it('fora do combate em andamento, o card não esmaece', () => {
+    renderRow(gmRow(), false);
+    expect(screen.getByRole('listitem')).not.toHaveClass('grayscale-[.7]');
+  });
+
+  it('o retrato mostra as iniciais sem foto, e o nome não as repete', () => {
+    renderRow();
+    expect(screen.getByText('AR')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getAllByText('AR')).toHaveLength(1);
   });
 
   it('a vez atual fica marcada com aria-current', () => {

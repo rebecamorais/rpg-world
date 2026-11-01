@@ -68,6 +68,23 @@ describe('GmCombatPanel', () => {
     expect(hook.create.mutate).toHaveBeenCalled();
   });
 
+  it('com o combate andando, só quem não está na vez esmaece; preparando, ninguém', () => {
+    hook.encounter = running(0);
+    const { unmount } = renderWithProviders(<GmCombatPanel party={party} live />);
+    for (const card of screen.getAllByRole('listitem')) {
+      expect(card).not.toHaveClass('grayscale-[.7]');
+    }
+    unmount();
+
+    hook.encounter = running(1);
+    hook.encounter.rows[1].isCurrent = true;
+    renderWithProviders(<GmCombatPanel party={party} live />);
+    const [arani, goblin, brom] = screen.getAllByRole('listitem');
+    expect(arani).toHaveClass('grayscale-[.7]');
+    expect(goblin).not.toHaveClass('grayscale-[.7]');
+    expect(brom).toHaveClass('grayscale-[.7]');
+  });
+
   it('a ordenação salva a ordem do sortByInitiative', async () => {
     hook.encounter = running(0);
     renderWithProviders(<GmCombatPanel party={party} live />);
