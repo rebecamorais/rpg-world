@@ -269,7 +269,10 @@
     "untranslatedBadge": "In English",
     "untranslatedHint": "Not translated yet. You can help on Crowdin.",
     "edition": "Edition",
-    "cantripUpgrade": "Cantrip Upgrade"
+    "cantripUpgrade": "Cantrip Upgrade",
+    "duplicate": "Duplicate",
+    "copyName": "{name} (copy)",
+    "duplicateSuccess": "Sheet duplicated."
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
@@ -1029,6 +1032,17 @@
     "sheet": {
       "back": "Back to the party",
       "readOnly": "Read only"
-    }
+    },
+    "enemiesLink": "Enemy sheets"
+  },
+  "enemies": {
+    "title": "Enemy sheets",
+    "subtitle": "The sheets you use as enemies in your parties' combats.",
+    "emptyState": "No enemy sheets yet",
+    "createFirstDescription": "Create a sheet to use as an enemy in combat. Several enemies can share one sheet.",
+    "createFirst": "Create enemy sheet",
+    "new": "New sheet",
+    "newTitle": "New enemy sheet",
+    "newDescription": "Pick the name and the system. You fill in the numbers on the sheet."
   }
 }

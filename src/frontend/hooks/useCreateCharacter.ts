@@ -8,6 +8,7 @@ import { rpgWorldApi } from '@client';
 interface CreateCharacterVariables {
   name: string;
   system: string;
+  kind?: 'npc';
 }
 
 /** Creates a character and opens its sheet. Errors are left to the form, which shows them inline. */

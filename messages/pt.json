@@ -269,7 +269,10 @@
     "untranslatedBadge": "Em inglês",
     "untranslatedHint": "Ainda sem tradução. Você pode ajudar no Crowdin.",
     "edition": "Edição",
-    "cantripUpgrade": "Melhoria do Truque"
+    "cantripUpgrade": "Melhoria do Truque",
+    "duplicate": "Duplicar",
+    "copyName": "{name} (cópia)",
+    "duplicateSuccess": "Ficha duplicada."
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
@@ -1029,6 +1032,17 @@
     "sheet": {
       "back": "Voltar para a mesa",
       "readOnly": "Só leitura"
-    }
+    },
+    "enemiesLink": "Fichas de inimigo"
+  },
+  "enemies": {
+    "title": "Fichas de inimigo",
+    "subtitle": "As fichas que você usa como inimigos nos combates das suas mesas.",
+    "emptyState": "Nenhuma ficha de inimigo ainda",
+    "createFirstDescription": "Crie uma ficha para usar como inimigo no combate. Vários inimigos podem usar a mesma ficha.",
+    "createFirst": "Criar ficha de inimigo",
+    "new": "Nova ficha",
+    "newTitle": "Nova ficha de inimigo",
+    "newDescription": "Defina o nome e o sistema. Os números você preenche na ficha."
   }
 }
