@@ -78,7 +78,8 @@ export function HeaderSessionActions({ serverUser }: KnownSession) {
             variant="ghost"
             asChild
             size="sm"
-            className="text-muted-foreground hover:text-foreground"
+            // Where the dashboard's sidebar is, it already has the way back
+            className="text-muted-foreground hover:text-foreground [body:has([data-dashboard])_&]:hidden"
           >
             <Link href="/characters">{tCommon('back')}</Link>
           </Button>

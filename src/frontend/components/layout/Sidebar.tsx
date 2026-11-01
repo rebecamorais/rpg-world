@@ -61,7 +61,8 @@ function PartyLinks({ title, parties }: { title: string; parties: PartySummary[]
   );
 }
 
-function SidebarContent() {
+/** `withLogout`: the phone drawer; on the desktop the header's user menu has "Sign out". */
+function SidebarContent({ withLogout = false }: { withLogout?: boolean }) {
   const params = useParams();
   const characterId = params?.id as string;
   const tDash = useTranslations('dashboard');
@@ -119,19 +120,21 @@ function SidebarContent() {
         </nav>
       </div>
 
-      <div className="mt-auto pt-6">
-        <button
-          onClick={() => signOut()}
-          className="group text-muted-foreground hover:bg-danger-surface hover:text-danger-flare mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all"
-        >
-          <AppIcon
-            name="LogOut"
-            size={16}
-            className="transition-transform group-hover:-translate-x-1"
-          />
-          <span>{tCommon('logout')}</span>
-        </button>
-      </div>
+      {withLogout && (
+        <div className="mt-auto pt-6">
+          <button
+            onClick={() => signOut()}
+            className="group text-muted-foreground hover:bg-danger-surface hover:text-danger-flare mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all"
+          >
+            <AppIcon
+              name="LogOut"
+              size={16}
+              className="transition-transform group-hover:-translate-x-1"
+            />
+            <span>{tCommon('logout')}</span>
+          </button>
+        </div>
+      )}
     </>
   );
 }
@@ -164,7 +167,7 @@ export function MobileMenu() {
           <SheetTitle>{tDash('menu')}</SheetTitle>
           <SheetDescription>{tDash('menuDescription')}</SheetDescription>
         </SheetHeader>
-        <SidebarContent />
+        <SidebarContent withLogout />
       </SheetContent>
     </Sheet>
   );

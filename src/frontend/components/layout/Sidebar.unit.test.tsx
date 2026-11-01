@@ -52,6 +52,13 @@ describe('Sidebar', () => {
     expect(settings).toHaveAttribute('aria-current', 'page');
   });
 
+  it('no desktop o "Sair" fica só no topo da página', () => {
+    renderWithProviders(<Sidebar />);
+    expect(
+      sidebar().queryByRole('button', { name: messages.common.logout }),
+    ).not.toBeInTheDocument();
+  });
+
   it('fora da mesa, ou numa mesa como jogador, não há submenu', () => {
     renderWithProviders(<Sidebar />);
     expect(sidebar().queryByRole('link', { name: t.settings })).not.toBeInTheDocument();

@@ -39,7 +39,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <SeededQuery queryKey={PROFILE_QUERY_KEY} data={profile}>
       <SeededQuery queryKey={PARTIES_QUERY_KEY} data={parties}>
         <UserProvider user={user}>
-          <div className="bg-sidebar text-foreground flex min-h-[calc(100vh-var(--header-height))]">
+          <div
+            data-dashboard
+            className="bg-sidebar text-foreground flex min-h-[calc(100vh-var(--header-height))]"
+          >
             {/* Sidebar */}
             <Sidebar />
 
