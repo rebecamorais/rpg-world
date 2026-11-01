@@ -136,7 +136,7 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
                   {createMutation.isPending ? t('submitting') : t('submit')}
                 </Button>
                 <Button variant="outline" asChild>
-                  <Link href={kind === 'npc' ? '/enemies' : '/characters'}>
+                  <Link href={kind === 'npc' ? '/characters/npcs' : '/characters'}>
                     {tCommon('cancel')}
                   </Link>
                 </Button>

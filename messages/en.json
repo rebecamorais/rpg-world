@@ -278,7 +278,12 @@
     "cantripUpgrade": "Cantrip Upgrade",
     "duplicate": "Duplicate",
     "copyName": "{name} (copy)",
-    "duplicateSuccess": "Sheet duplicated."
+    "duplicateSuccess": "Sheet duplicated.",
+    "kinds": {
+      "label": "Characters or NPCs",
+      "pc": "My characters",
+      "npc": "My NPCs"
+    }
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
@@ -1041,20 +1046,18 @@
       "back": "Back to the party",
       "readOnly": "Read only"
     },
-    "enemiesLink": "Enemy sheets",
     "settings": {
       "eyebrow": "Party settings",
       "open": "Settings"
     }
   },
   "enemies": {
-    "title": "Enemy sheets",
-    "subtitle": "The sheets you use as enemies in your parties' combats.",
-    "emptyState": "No enemy sheets yet",
+    "subtitle": "Sheets for everyone who isn't a player: enemies in your parties' combats, and anyone else in the story.",
+    "emptyState": "No NPCs yet",
     "createFirstDescription": "Create a sheet to use as an enemy in combat. Several enemies can share one sheet.",
-    "createFirst": "Create enemy sheet",
-    "new": "New sheet",
-    "newTitle": "New enemy sheet",
+    "createFirst": "Create NPC",
+    "new": "New NPC",
+    "newTitle": "New NPC",
     "newDescription": "Pick the name and the system. You fill in the numbers on the sheet."
   },
   "combat": {
@@ -1068,12 +1071,12 @@
     "empty": "Nobody in the combat yet. Add the party's characters and the enemies.",
     "addPartyCharacters": "Add the party's characters",
     "addEnemy": "Add enemy",
-    "enemySheet": "Enemy sheet",
-    "chooseEnemySheet": "Choose a sheet",
+    "enemySheet": "NPC",
+    "chooseEnemySheet": "Choose an NPC",
     "count": "How many",
     "add": "Add",
-    "noEnemySheets": "You have no enemy sheets yet.",
-    "manageEnemySheets": "Enemy sheets",
+    "noEnemySheets": "You have no NPCs yet.",
+    "manageEnemySheets": "My NPCs",
     "sortByInitiative": "Sort by initiative",
     "start": "Start",
     "endTurn": "End turn",

@@ -14,8 +14,9 @@ const push = vi.fn();
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+const context = vi.hoisted(() => ({ kind: 'pc' as 'pc' | 'npc' }));
 vi.mock('@frontend/context/CharactersContext', () => ({
-  useCharactersContext: () => ({ setCharacterToDelete: vi.fn() }),
+  useCharactersContext: () => ({ kind: context.kind, setCharacterToDelete: vi.fn() }),
 }));
 vi.mock('@client', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@client')>()),
@@ -30,6 +31,17 @@ describe('CharacterCard', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     post.mockResolvedValue({ id: 'copy-1' });
+    context.kind = 'pc';
+  });
+
+  it('sem classe, o personagem é "Aventureiro" e o NPC não mostra classe nenhuma', () => {
+    const { unmount } = renderWithProviders(<CharacterCard character={goblin} />);
+    expect(screen.getByText(t.defaultClass)).toBeVisible();
+    unmount();
+
+    context.kind = 'npc';
+    renderWithProviders(<CharacterCard character={goblin} />);
+    expect(screen.queryByText(t.defaultClass)).not.toBeInTheDocument();
   });
 
   it('Duplicar cria a cópia com o nome "(cópia)" e abre a ficha nova', async () => {

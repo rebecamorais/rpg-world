@@ -60,12 +60,12 @@ describe('NewCharacterForm', () => {
     expect(toast.success).toHaveBeenCalledWith(t.success);
   });
 
-  it('ficha de inimigo: cria com kind npc e o cancelar volta para as fichas de inimigo', async () => {
+  it('NPC: cria com kind npc e o cancelar volta para a aba de NPCs', async () => {
     renderWithProviders(<NewCharacterForm kind="npc" />);
 
     expect(screen.getByRole('link', { name: messages.common.cancel })).toHaveAttribute(
       'href',
-      '/enemies',
+      '/characters/npcs',
     );
     await createCharacter('Goblin');
 

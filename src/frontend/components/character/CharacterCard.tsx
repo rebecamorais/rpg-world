@@ -32,7 +32,7 @@ interface CharacterCardProps {
 export function CharacterCard({ character }: CharacterCardProps) {
   const t = useTranslations('characters');
   const tCommon = useTranslations('common');
-  const { setCharacterToDelete } = useCharactersContext();
+  const { kind, setCharacterToDelete } = useCharactersContext();
   const duplicate = useDuplicateCharacter();
 
   const theme = characterTheme(character.accentColor);
@@ -72,9 +72,12 @@ export function CharacterCard({ character }: CharacterCardProps) {
                 {t('levelShort', { level: character.level })}
               </Badge>
             </div>
-            <p className="text-label text-muted-foreground line-clamp-1">
-              {character.class || t('defaultClass')}
-            </p>
+            {/* An NPC without a class is just a sheet; "Adventurer" fits only player characters */}
+            {(character.class || kind !== 'npc') && (
+              <p className="text-label text-muted-foreground line-clamp-1">
+                {character.class || t('defaultClass')}
+              </p>
+            )}
           </div>
 
           <div className="border-border mt-auto flex items-center justify-between border-t pt-4">
