@@ -25,7 +25,7 @@ import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 import { CombatConnection } from './CombatConnection';
 import { CombatRow } from './CombatRow';
 
-/** Picks one of the GM's enemy sheets and how many enemies come from it. */
+/** Picks one of the GM's NPC sheets and how many enemies come from it. */
 function AddEnemy({
   onAdd,
   isBusy,
@@ -42,7 +42,7 @@ function AddEnemy({
     return (
       <p className="text-muted-foreground text-sm">
         {t('noEnemySheets')}{' '}
-        <Link href="/enemies" className="text-primary-flare underline">
+        <Link href="/characters/npcs" className="text-primary-flare underline">
           {t('manageEnemySheets')}
         </Link>
       </p>
@@ -89,9 +89,9 @@ function AddEnemy({
       <Button type="submit" variant="outline" disabled={!sheetId} loading={isBusy}>
         {t('addEnemy')}
       </Button>
-      <Link href="/enemies" className="text-primary-flare self-center text-sm underline">
-        {t('manageEnemySheets')}
-      </Link>
+      <Button asChild variant="ghost">
+        <Link href="/characters/npcs">{t('manageEnemySheets')}</Link>
+      </Button>
     </form>
   );
 }
@@ -192,15 +192,16 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
       )}
 
       <div className="flex flex-wrap items-end gap-4">
-        <Button
-          variant="outline"
-          disabled={missing.length === 0}
-          onClick={() =>
-            missing.forEach((c) => combat.addParticipant.mutate({ characterId: c.characterId }))
-          }
-        >
-          {t('addPartyCharacters')}
-        </Button>
+        {missing.length > 0 && (
+          <Button
+            variant="outline"
+            onClick={() =>
+              missing.forEach((c) => combat.addParticipant.mutate({ characterId: c.characterId }))
+            }
+          >
+            {t('addPartyCharacters')}
+          </Button>
+        )}
         {rows.length > 1 && (
           <Button variant="outline" onClick={() => combat.setOrder.mutate(sortByInitiative(rows))}>
             {t('sortByInitiative')}

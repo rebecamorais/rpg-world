@@ -102,6 +102,25 @@ describe('GmCombatPanel', () => {
     expect(hook.addParticipant.mutate).toHaveBeenCalledWith({ characterId: 'newbie' });
   });
 
+  it('com todos da mesa no combate, "Adicionar personagens da mesa" some', () => {
+    hook.encounter = running(0);
+    renderWithProviders(
+      <GmCombatPanel party={{ ...party, roster: party.roster.slice(0, 2) }} live />,
+    );
+
+    expect(screen.queryByRole('button', { name: t.addPartyCharacters })).not.toBeInTheDocument();
+  });
+
+  it('o link para os NPCs leva à aba de NPCs', () => {
+    hook.encounter = running(0);
+    renderWithProviders(<GmCombatPanel party={party} live />);
+
+    expect(screen.getByRole('link', { name: t.manageEnemySheets })).toHaveAttribute(
+      'href',
+      '/characters/npcs',
+    );
+  });
+
   it('encerrar o combate pede confirmação', async () => {
     hook.encounter = running(1);
     const confirm = vi

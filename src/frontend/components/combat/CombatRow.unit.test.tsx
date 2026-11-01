@@ -42,6 +42,24 @@ describe('CombatRow', () => {
     expect(screen.getByLabelText(fill(t.tempHpOf, { name: 'Goblin 1' }))).toHaveValue(1);
   });
 
+  it('o PV temporário tem rótulo visível e a iniciativa vazia mostra um traço', () => {
+    renderRow(
+      gmRow({
+        participantId: 'p-g',
+        side: 'enemy',
+        name: 'Goblin 1',
+        initiative: null,
+        hp: { current: 5, max: 7, temp: 0 },
+      }),
+    );
+
+    expect(screen.getByText(t.tempHp)).toBeVisible();
+    expect(screen.getByLabelText(fill(t.initiativeOf, { name: 'Goblin 1' }))).toHaveAttribute(
+      'placeholder',
+      '—',
+    );
+  });
+
   it('com PV 0 o jogador mostra os testes contra a morte', () => {
     renderRow(
       gmRow({ hp: { current: 0, max: 20, temp: 0 }, deathSaves: { successes: 2, failures: 1 } }),

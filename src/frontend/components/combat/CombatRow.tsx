@@ -19,6 +19,7 @@ function NumberCell({
   min,
   max,
   nullable = false,
+  placeholder,
   onCommit,
 }: {
   label: string;
@@ -26,6 +27,7 @@ function NumberCell({
   min: number;
   max: number;
   nullable?: boolean;
+  placeholder?: string;
   onCommit: (value: number | null) => void;
 }) {
   return (
@@ -38,13 +40,15 @@ function NumberCell({
       min={min}
       max={max}
       defaultValue={value ?? ''}
+      placeholder={placeholder}
       onBlur={(event) => {
         const text = event.currentTarget.value.trim();
         const next = text === '' ? null : Math.round(Number(text));
         if (next === value || (next === null && !nullable) || Number.isNaN(next)) return;
         onCommit(next === null ? null : Math.min(max, Math.max(min, next)));
       }}
-      className="h-9 w-16 px-2 text-center font-mono tabular-nums"
+      // 44px tall where it's tapped, like the buttons' touch area
+      className="h-9 w-16 px-2 text-center font-mono tabular-nums pointer-coarse:h-11"
     />
   );
 }
@@ -92,6 +96,7 @@ export function CombatRow({
         min={-10}
         max={99}
         nullable
+        placeholder="—"
         onCommit={(initiative) => onChange({ initiative })}
       />
 
@@ -119,6 +124,10 @@ export function CombatRow({
               onCommit={(hpCurrent) => onChange({ hpCurrent: hpCurrent ?? 0 })}
             />
             <span className="text-muted-foreground font-mono text-sm">/{row.hp.max}</span>
+            {/* The field is named for screen readers; the word is for the eye */}
+            <span aria-hidden="true" className="text-caption text-muted-foreground ml-1">
+              {t('tempHp')}
+            </span>
             <NumberCell
               label={t('tempHpOf', { name: row.name })}
               value={row.hp.temp}
@@ -167,7 +176,8 @@ export function CombatRow({
         )}
       </dl>
 
-      <div className="ml-auto flex items-center gap-1">
+      {/* On touch screens the gap keeps each button's 44px touch area apart */}
+      <div className="ml-auto flex items-center gap-1 pointer-coarse:gap-2">
         <Button
           variant="ghost"
           size="icon"

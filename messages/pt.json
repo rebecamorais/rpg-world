@@ -1104,6 +1104,8 @@
     "endMyTurn": "Encerrar meu turno",
     "playerPreparing": "O mestre está preparando o combate.",
     "order": "Ordem do combate",
-    "yours": "seu"
+    "yours": "seu",
+    "tempHp": "temp",
+    "yourTurnToast": "Sua vez!"
   }
 }

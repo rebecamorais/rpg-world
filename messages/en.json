@@ -1104,6 +1104,8 @@
     "endMyTurn": "End my turn",
     "playerPreparing": "The GM is preparing the combat.",
     "order": "Combat order",
-    "yours": "yours"
+    "yours": "yours",
+    "tempHp": "temp",
+    "yourTurnToast": "Your turn!"
   }
 }
