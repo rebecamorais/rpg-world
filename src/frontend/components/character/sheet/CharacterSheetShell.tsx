@@ -84,9 +84,14 @@ export function CharacterSheetShell({ children }: { children: ReactNode }) {
   return (
     <div
       // Room for the fixed save bar; width and padding come from the dashboard layout
-      className={cn(theme.className, 'w-full pb-20')}
+      className={cn(theme.className, 'relative isolate w-full pb-20')}
       style={theme.style}
     >
+      {/* The character's color lights the top of their sheet */}
+      <div
+        aria-hidden="true"
+        className="bg-character pointer-events-none absolute top-0 left-[10%] -z-10 h-64 w-2/3 -translate-y-1/3 rounded-full opacity-15 blur-3xl"
+      />
       {readOnly && partyId && <ReadOnlyBar partyId={partyId} />}
       {children}
     </div>
