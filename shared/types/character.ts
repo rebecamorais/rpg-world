@@ -19,6 +19,9 @@ export interface CharacterBase {
   accentColor?: string;
 }
 
+/** A playable character (pc) or one of the GM's enemy sheets (npc). */
+export type CharacterKind = 'pc' | 'npc';
+
 export interface CharacterSummary {
   id: string;
   name: string;

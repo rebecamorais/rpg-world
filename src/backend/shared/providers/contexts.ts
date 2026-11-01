@@ -1,4 +1,5 @@
 import { createCharacterContext } from '@backend/contexts/characters';
+import { createCombatContext } from '@backend/contexts/combat';
 import { createFeedbackContext } from '@backend/contexts/feedback';
 import { createLoreContext } from '@backend/contexts/lore';
 import { createPartyContext } from '@backend/contexts/parties';
@@ -15,6 +16,7 @@ export class Contexts {
   private _spells: ReturnType<typeof createSpellsContext> | null = null;
   private _feedback: ReturnType<typeof createFeedbackContext> | null = null;
   private _party: ReturnType<typeof createPartyContext> | null = null;
+  private _combat: ReturnType<typeof createCombatContext> | null = null;
 
   constructor(
     private container: {
@@ -74,6 +76,13 @@ export class Contexts {
       this._party = createPartyContext(this.container.get('userClient'));
     }
     return this._party;
+  }
+
+  get combat() {
+    if (!this._combat) {
+      this._combat = createCombatContext(this.container.get('userClient'));
+    }
+    return this._combat;
   }
 
   get feedback() {

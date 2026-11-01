@@ -1,19 +1,24 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
+import { GmCombatPanel } from '@frontend/components/combat/GmCombatPanel';
+import { PlayerCombatPanel } from '@frontend/components/combat/PlayerCombatPanel';
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { Button } from '@frontend/components/ui/button';
 import { EmptyState } from '@frontend/components/ui/empty-state';
 import { SectionCard } from '@frontend/components/ui/section-card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCharacters } from '@frontend/hooks/useCharacters';
+import { useEncounter } from '@frontend/hooks/useEncounter';
 import { useParty } from '@frontend/hooks/useParty';
+import { usePartyChannel } from '@frontend/hooks/usePartyChannel';
 
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
@@ -23,10 +28,28 @@ import { PartyRequests } from './PartyRequests';
 import { PartyRoster } from './PartyRoster';
 import { RolePlayCard } from './RolePlayCard';
 
-function GmView({ party }: { party: PartyView }) {
+type GmMode = 'roleplay' | 'combat';
+
+/** Role Play or Combat, kept in `?mode=`; without one, Combat while a combat is going on. */
+function useGmMode(partyId: string) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { encounter, isLoading } = useEncounter(partyId);
+  const asked = searchParams.get('mode');
+  const mode: GmMode =
+    asked === 'combat' || asked === 'roleplay' ? asked : encounter ? 'combat' : 'roleplay';
+
+  const setMode = (next: string) => router.replace(`${pathname}?mode=${next}`, { scroll: false });
+  return { mode, setMode, isLoading };
+}
+
+function GmView({ party, live }: { party: PartyView; live: boolean }) {
   const t = useTranslations('parties.page');
+  const tCombat = useTranslations('combat');
   const router = useRouter();
   const { acceptMember, removeMember } = useParty(party.id);
+  const { mode, setMode, isLoading } = useGmMode(party.id);
   const cards = party.gm?.rolePlay ?? [];
 
   return (
@@ -38,29 +61,40 @@ function GmView({ party }: { party: PartyView }) {
         isBusy={acceptMember.isPending || removeMember.isPending}
       />
 
-      <section aria-labelledby="role-play" className="flex flex-col gap-4">
-        <h2 id="role-play" className="text-heading">
-          {t('rolePlay')}
-        </h2>
-        {cards.length === 0 ? (
-          <p className="text-muted-foreground">{t('noCharactersGm')}</p>
-        ) : (
-          <ul className="grid grid-cols-1 gap-5 md:grid-cols-2">
-            {cards.map((card) => (
-              <li key={card.characterId}>
-                <RolePlayCard partyId={party.id} card={card} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {!isLoading && (
+        <Tabs value={mode} onValueChange={setMode} className="flex flex-col gap-4">
+          <TabsList className="self-start">
+            <TabsTrigger value="roleplay">{tCombat('modeRolePlay')}</TabsTrigger>
+            <TabsTrigger value="combat">{tCombat('modeCombat')}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="roleplay" className="flex flex-col gap-4">
+            <h2 className="sr-only">{t('rolePlay')}</h2>
+            {cards.length === 0 ? (
+              <p className="text-muted-foreground">{t('noCharactersGm')}</p>
+            ) : (
+              <ul className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                {cards.map((card) => (
+                  <li key={card.characterId}>
+                    <RolePlayCard partyId={party.id} card={card} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </TabsContent>
+
+          <TabsContent value="combat">
+            <GmCombatPanel party={party} live={live} />
+          </TabsContent>
+        </Tabs>
+      )}
 
       <PartyManagement party={party} onDeleted={() => router.push('/parties')} />
     </div>
   );
 }
 
-function PlayerView({ party }: { party: PartyView }) {
+function PlayerView({ party, live }: { party: PartyView; live: boolean }) {
   const t = useTranslations('parties');
   const router = useRouter();
   const { currentUser } = useCurrentUser();
@@ -88,6 +122,8 @@ function PlayerView({ party }: { party: PartyView }) {
 
   return (
     <div className="flex flex-col gap-8">
+      <PlayerCombatPanel partyId={party.id} live={live} />
+
       <section aria-labelledby="party-characters" className="flex flex-col gap-4">
         <h2 id="party-characters" className="text-heading">
           {t('page.characters')}
@@ -128,6 +164,7 @@ function PlayerView({ party }: { party: PartyView }) {
 export function PartyPage({ partyId }: { partyId: string }) {
   const t = useTranslations('parties.page');
   const { party, isLoading } = useParty(partyId);
+  const { live } = usePartyChannel(partyId);
 
   if (isLoading) return <LoadingState thematic />;
 
@@ -152,7 +189,11 @@ export function PartyPage({ partyId }: { partyId: string }) {
       title={party.name}
       eyebrow={party.role === 'gm' ? t('gmEyebrow') : t('playerEyebrow')}
     >
-      {party.role === 'gm' ? <GmView party={party} /> : <PlayerView party={party} />}
+      {party.role === 'gm' ? (
+        <GmView party={party} live={live} />
+      ) : (
+        <PlayerView party={party} live={live} />
+      )}
     </PageContainer>
   );
 }

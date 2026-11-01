@@ -11,6 +11,7 @@ import {
 } from './application/CharacterContext';
 import { CreateCharacterUseCase } from './application/create-character/create-character.use-case';
 import { DeleteCharacterUseCase } from './application/delete-character/delete-character.use-case';
+import { DuplicateCharacterUseCase } from './application/duplicate-character/duplicate-character.use-case';
 import { GetCharactersByOwnerUseCase } from './application/get-characters/get-characters-by-owner.use-case';
 import { GetCharacterUseCase } from './application/get-characters/get-characters.use-case';
 import { GetPartyCharacterSpellsUseCase } from './application/party-gm/get-party-character-spells.use-case';
@@ -37,6 +38,7 @@ export const createCharacterContext = (
   const createCharacterUseCase = new CreateCharacterUseCase(repository);
   const updateCharacterUseCase = new UpdateCharacterUseCase(repository, storageRepository);
   const deleteCharacterUseCase = new DeleteCharacterUseCase(repository, storageRepository);
+  const duplicateCharacterUseCase = new DuplicateCharacterUseCase(repository);
 
   const spellCatalog = getSpellCatalog();
   const getCharacterSpellsUseCase = new GetCharacterSpellsUseCase(
@@ -63,6 +65,7 @@ export const createCharacterContext = (
     create: createCharacterUseCase.execute.bind(createCharacterUseCase),
     update: updateCharacterUseCase.execute.bind(updateCharacterUseCase),
     delete: deleteCharacterUseCase.execute.bind(deleteCharacterUseCase),
+    duplicate: duplicateCharacterUseCase.execute.bind(duplicateCharacterUseCase),
     isOwner: async (id: string, userId: string) =>
       Boolean(userId) && (await repository.findOwnerId(id)) === userId,
     getSpells: getCharacterSpellsUseCase.execute.bind(getCharacterSpellsUseCase),

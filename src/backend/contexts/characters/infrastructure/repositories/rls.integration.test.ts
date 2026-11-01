@@ -65,6 +65,24 @@ describe('RLS com client do usuário (Integration)', () => {
       expect(names).toEqual(['Original']);
     });
 
+    it('a lista de inimigos traz só as fichas npc, e salvar uma npc continua npc', async () => {
+      const repo = new SupabaseCharacterRepository(owner.client);
+      const npcId = crypto.randomUUID();
+      const npc = makeCharacter(npcId, owner.userId, 'Goblin');
+      npc.kind = 'npc';
+      await repo.save(npc);
+
+      const goblin = (await repo.findById(npcId))!;
+      expect(goblin.kind).toBe('npc');
+      goblin.name = 'Goblin chefe';
+      await repo.save(goblin);
+
+      expect((await repo.findByOwner(owner.userId, 'npc')).map((c) => c.name)).toEqual([
+        'Goblin chefe',
+      ]);
+      expect((await repo.findByOwner(owner.userId)).map((c) => c.name)).toEqual(['Original']);
+    });
+
     it('o dono lê o próprio personagem', async () => {
       const character = await new SupabaseCharacterRepository(owner.client).findById(characterId);
       expect(character?.name).toBe('Original');

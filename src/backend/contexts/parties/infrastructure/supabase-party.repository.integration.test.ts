@@ -199,6 +199,29 @@ describe('SupabasePartyRepository — página da mesa (Integration)', () => {
     expect(error.code).toBe(PartyErrorCodes.CHARACTER_NOT_ALLOWED);
   });
 
+  it('dois addCharacters iguais em paralelo terminam sem erro, com o personagem uma vez', async () => {
+    const characterId = await createCharacter(player.userId);
+    const repo = new SupabasePartyRepository(player.client);
+
+    await Promise.all([
+      repo.addCharacters(partyId, [characterId]),
+      repo.addCharacters(partyId, [characterId]),
+    ]);
+
+    expect((await repo.roster(partyId)).map((c) => c.characterId)).toEqual([characterId]);
+  });
+
+  it('convidar quem já é membro ativo responde ALREADY_MEMBER', async () => {
+    const username = `bia_${crypto.randomUUID().slice(0, 8)}`;
+    await chooseUsername(player.userId, username);
+
+    const error = await new SupabasePartyRepository(gm.client)
+      .invite(partyId, username)
+      .catch((e) => e);
+
+    expect(error.code).toBe(PartyErrorCodes.ALREADY_MEMBER);
+  });
+
   it('roster, pessoas e mesa vêm pelo repositório; tirar o personagem tira do roster', async () => {
     const characterId = await createCharacter(player.userId, { name: 'Arani' });
     const playerRepo = new SupabasePartyRepository(player.client);

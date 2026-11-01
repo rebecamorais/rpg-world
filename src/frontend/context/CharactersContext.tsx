@@ -11,9 +11,10 @@ import { rpgWorldApi } from '@client';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
-import type { CharacterSummary } from '@shared/types/character';
+import type { CharacterKind, CharacterSummary } from '@shared/types/character';
 
 interface CharactersContextType {
+  kind: CharacterKind;
   characters: CharacterSummary[];
   isLoading: boolean;
   error: Error | null;
@@ -29,8 +30,14 @@ interface CharactersContextType {
 
 const CharactersContext = createContext<CharactersContextType | null>(null);
 
-export function CharactersProvider({ children }: { children: ReactNode }) {
-  const { characters, isLoading, error } = useCharacters();
+export function CharactersProvider({
+  children,
+  kind = 'pc',
+}: {
+  children: ReactNode;
+  kind?: CharacterKind;
+}) {
+  const { characters, isLoading, error } = useCharacters(kind);
   const [characterToDelete, setCharacterToDelete] = useState<CharacterSummary | null>(null);
   const [confirmName, setConfirmName] = useState('');
   const queryClient = useQueryClient();
@@ -60,6 +67,7 @@ export function CharactersProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(
     () => ({
+      kind,
       characters,
       isLoading,
       error: error as Error | null,
@@ -71,6 +79,7 @@ export function CharactersProvider({ children }: { children: ReactNode }) {
       isDeleting: deleteMutation.isPending,
     }),
     [
+      kind,
       characters,
       isLoading,
       error,

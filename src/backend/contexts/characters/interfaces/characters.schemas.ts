@@ -23,7 +23,15 @@ export const createCharacterSchema = z.object({
   class: optional(text()),
   race: optional(text()),
   level: optional(int(1, 20)),
+  kind: optional(z.enum(['pc', 'npc'])),
 });
+
+/** GET /api/characters: playable characters, or the GM's enemy sheets with ?kind=npc. */
+export const charactersQuerySchema = z.object({
+  kind: optionalQuery(z.enum(['pc', 'npc'])).transform((kind) => kind ?? 'pc'),
+});
+
+export const duplicateCharacterSchema = z.object({ name: text().min(1) });
 
 export const characterUpdatesSchema = z.object({
   name: optional(text()),

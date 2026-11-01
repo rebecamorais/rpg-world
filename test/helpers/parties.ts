@@ -71,3 +71,39 @@ export async function chooseUsername(userId: string, username: string) {
     .eq('id', userId);
   if (error) throw error;
 }
+
+/** The GM's enemy sheet: a character with kind npc. */
+export function createNpc(ownerId: string, name = 'Goblin', hpMax = 7) {
+  return createCharacter(ownerId, { name, kind: 'npc', hp_max: hpMax, hp_current: hpMax });
+}
+
+/** The party's combat, prepared by the GM through their own client (RLS applies). */
+export async function createEncounter(gm: Session, partyId: string) {
+  const { error } = await gm.client.from('encounters').insert({ party_id: partyId });
+  if (error) throw error;
+}
+
+/** A participant added by the GM through their own client; returns its id. */
+export async function addParticipant(
+  gm: Session,
+  partyId: string,
+  characterId: string,
+  side: 'player' | 'enemy',
+  label: string | null = side === 'enemy' ? 'Goblin' : null,
+) {
+  const { data, error } = await gm.client
+    .from('encounter_participants')
+    .insert({ party_id: partyId, character_id: characterId, side, label })
+    .select('id')
+    .single();
+  if (error) throw error;
+  return data.id;
+}
+
+/** A player's character brought to the party (the member must be active). */
+export async function bring(player: Session, partyId: string, characterId: string) {
+  const { error } = await player.client
+    .from('party_characters')
+    .insert({ party_id: partyId, character_id: characterId });
+  if (error) throw error;
+}

@@ -5,7 +5,8 @@ import { Lore } from '@backend/contexts/lore/domain/Lore';
 
 import { Database, Json } from '@database-types';
 
-import { Character } from '../../domain/entity/Character';
+import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
+import { Character, CharacterKind } from '../../domain/entity/Character';
 import {
   AttributeKey,
   CharacterSkill,
@@ -48,13 +49,13 @@ export class SupabaseCharacterRepository implements CharacterRepo {
     return data?.owner_id ?? null;
   }
 
-  async findByOwner(ownerUsername: string): Promise<Character[]> {
+  async findByOwner(ownerUsername: string, kind: CharacterKind = 'pc'): Promise<Character[]> {
     const { data, error } = await this.client
       .from('characters')
       .select('*')
       .eq('owner_id', ownerUsername)
-      // Only playable characters: the GM's enemy sheets (npc) aren't "my characters"
-      .eq('kind', 'pc')
+      // Playable characters and the GM's enemy sheets (npc) are listed apart
+      .eq('kind', kind)
       .is('deleted_at', null)
       // Newest first. Without an order the list reshuffled after every save.
       .order('created_at', { ascending: false });
@@ -78,6 +79,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       level: _level,
       accentColor: _accentColor,
       avatarUrl: _avatarUrl,
+      kind: _kind,
       ...rest
     } = json;
 
@@ -92,6 +94,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       attributes: attributes as NonNullable<Json>,
       avatar_url: character.avatarUrl ?? null,
       theme_color: character.accentColor ?? '#6d28d9',
+      kind: character.kind,
       system_data: { ...rest, hpTemp: hpTemp ?? 0 } as unknown as NonNullable<Json>,
       updated_at: new Date().toISOString(),
     };
@@ -114,6 +117,18 @@ export class SupabaseCharacterRepository implements CharacterRepo {
 
     if (error) throw new Error(`Failed to delete character: ${error.message}`);
     return data.length > 0;
+  }
+
+  async duplicate(id: string, name: string): Promise<string> {
+    const { data, error } = await this.client.rpc('duplicate_character', {
+      p_character_id: id,
+      p_name: name,
+    });
+    if (error?.message === 'character_not_found') {
+      throw new CharacterError(CharacterErrorCodes.ACCESS_NOT_FOUND);
+    }
+    if (error) throw new Error(`Failed to duplicate character: ${error.message}`);
+    return data;
   }
 
   private mapToDomain(row: DbCharacterRow): Character {
@@ -158,6 +173,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         lore,
         accentColor: (row.theme_color as string) ?? undefined,
         avatarUrl: row.avatar_url ?? undefined,
+        kind: row.kind as CharacterKind,
       });
     }
 
