@@ -31,6 +31,8 @@ export interface SpellDto {
   damageType?: 'fire' | 'lightning' | 'acid' | 'cold' | 'necrotic' | 'radiant' | 'force' | string;
   spellCategory?: string;
   bgStyleId?: string | null;
+  /** Conditions the text mentions, as content keys of the spell's own book. */
+  conditions: string[];
 }
 
 export interface FindSpellsParams {
@@ -43,6 +45,8 @@ export interface FindSpellsParams {
   class?: string;
   damageType?: string;
   edition?: Edition;
+  /** Short condition id (`prone`): spells that mention it, in any book. */
+  condition?: string;
 }
 
 export interface PaginatedSpells {

@@ -56,5 +56,7 @@ export interface Spell {
   damageType?: string | null;
   spellCategory?: string;
   bgStyleId?: string | null;
+  /** Condition keys the spell text mentions. */
+  conditions?: string[];
   isPrepared?: boolean;
 }

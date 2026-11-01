@@ -32,6 +32,7 @@ export const api = {
   loreApi: { getByCharacterId: vi.fn(), update: vi.fn() },
   profileApi: { getProfile: vi.fn(), updateProfile: vi.fn(), uploadAvatar: vi.fn() },
   spellsApi: { getAllSpells: vi.fn() },
+  conditionsApi: { list: vi.fn() },
   combatApi: {
     get: vi.fn(),
     create: vi.fn(),

@@ -220,3 +220,37 @@ describe('FileSpellCatalog com duas edições', () => {
     expect(plantGrowth.extraCastingTimes).toEqual([{ castingTime: 'hour', castingValue: 8 }]);
   });
 });
+
+describe('FileSpellCatalog: conditions', () => {
+  const book: SpellSource = {
+    source: 'srd-5.2',
+    edition: '2024',
+    spells: [data('fear', 3), data('bless', 1)],
+    texts: {
+      fear: {
+        name: 'Fear',
+        description: 'Targets are {@condition frightened|XPHB}.',
+        higherLevel: 'Also {@condition prone} and {@condition frightened}.',
+      },
+      bless: text('Bless'),
+    },
+    translations: {},
+  };
+  const withConditions = new FileSpellCatalog([book]);
+
+  it('guarda as chaves das condições citadas no texto, no livro da magia', async () => {
+    const [fear] = await withConditions.findByKeys(['dnd5e:srd-5.2:spell:fear']);
+    expect(fear.conditions).toEqual([
+      'dnd5e:srd-5.2:condition:frightened',
+      'dnd5e:srd-5.2:condition:prone',
+    ]);
+    const [bless] = await withConditions.findByKeys(['dnd5e:srd-5.2:spell:bless']);
+    expect(bless.conditions).toEqual([]);
+  });
+
+  it('filtra pelo id curto da condição', async () => {
+    const found = await withConditions.findAll({ condition: 'frightened' });
+    expect(found.data.map((s) => s.name)).toEqual(['Fear']);
+    expect((await withConditions.findAll({ condition: 'blinded' })).total).toBe(0);
+  });
+});
