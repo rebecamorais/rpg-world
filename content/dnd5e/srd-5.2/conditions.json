@@ -1,0 +1,17 @@
+[
+  { "id": "blinded" },
+  { "id": "charmed" },
+  { "id": "deafened" },
+  { "id": "exhaustion", "maxLevel": 6 },
+  { "id": "frightened" },
+  { "id": "grappled" },
+  { "id": "incapacitated" },
+  { "id": "invisible" },
+  { "id": "paralyzed" },
+  { "id": "petrified" },
+  { "id": "poisoned" },
+  { "id": "prone" },
+  { "id": "restrained" },
+  { "id": "stunned" },
+  { "id": "unconscious" }
+]

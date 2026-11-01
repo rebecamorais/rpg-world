@@ -30,7 +30,8 @@
     "format": "prettier --write .",
     "prepare": "husky",
     "postinstall": "npx tsx ./scripts/post-install-cleanup.ts",
-    "content:spells": "npx tsx scripts/content/import-5etools-spells.ts"
+    "content:spells": "npx tsx scripts/content/import-5etools-spells.ts",
+    "content:conditions": "npx tsx scripts/content/import-5etools-conditions.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^6.0.2",

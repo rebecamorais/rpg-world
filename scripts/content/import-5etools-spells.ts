@@ -13,6 +13,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
 
+import { stripTags } from '@shared/content/tags';
 import {
   type SpellData,
   type SpellText,
@@ -21,6 +22,7 @@ import {
 } from '@shared/systems/dnd5e/content/spell.schema';
 
 import { writeFormatted } from '../write-formatted';
+import { VERSION, fetchJson } from './5etools-source';
 import {
   type FiveToolsSpell,
   extrasOf,
@@ -29,19 +31,10 @@ import {
   toSpellText,
 } from './5etools-spells';
 
-const VERSION = 'v2.38.0';
-const BASE = `https://raw.githubusercontent.com/5etools-mirror-3/5etools-src/${VERSION}/data`;
-
 const ROOT = path.join(import.meta.dirname, '../../content/dnd5e');
 const OUT = path.join(ROOT, 'srd-5.2');
 
 type ClassLookup = Record<string, Record<string, { class?: Record<string, Record<string, true>> }>>;
-
-async function fetchJson<T>(file: string): Promise<T> {
-  const response = await fetch(`${BASE}/${file}`);
-  if (!response.ok) throw new Error(`${file}: HTTP ${response.status}`);
-  return (await response.json()) as T;
-}
 
 const write = (file: string, data: unknown) => writeFormatted(file, JSON.stringify(data));
 
@@ -68,7 +61,8 @@ async function complete51(phb: FiveToolsSpell[], srd51: SpellData[]) {
   const completed = Object.fromEntries(
     Object.entries(texts).map(([id, { trigger: _, ...text }]): [string, SpellText] => {
       const { trigger } = extras.get(id) ?? {};
-      return [id, trigger ? { ...text, trigger } : text];
+      // 5.1 texts stay tag-free until its conditions are tagged in every language
+      return [id, trigger ? { ...text, trigger: stripTags(trigger) } : text];
     }),
   );
 

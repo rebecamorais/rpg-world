@@ -127,12 +127,30 @@ describe('conversão das magias do 5etools', () => {
   it('converte o texto sem deixar marcações', () => {
     const text = toSpellText(fireball);
     expect(text.name).toBe('Fireball');
-    expect(text.description).toContain('20-foot-radius Sphere centered');
-    expect(text.description).toContain('taking 8d6 Fire damage');
-    expect(text.description).toContain('start burning.');
-    expect(text.description).not.toContain('{@');
-    expect(text.higherLevel).toBe('The damage increases by 1d6 for each spell slot level above 3.');
+    // Tags stay in the stored text
+    expect(text.description).toContain(
+      '{@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered',
+    );
+    expect(text.description).toContain('taking {@damage 8d6} Fire damage');
+    expect(text.description).toContain('start {@hazard burning|XPHB}.');
+    expect(text.higherLevel).toBe(
+      'The damage increases by {@scaledamage 8d6|3-9|1d6} for each spell slot level above 3.',
+    );
     expect(text.material).toBe('A ball of bat guano and sulfur.');
+  });
+
+  it('guarda as tags e põe a maiúscula do material fora delas', () => {
+    const frightening: FiveToolsSpell = {
+      ...fireball,
+      entries: ['The target is {@condition frightened}.'],
+      components: { v: true, m: '{@item ruby|XPHB} dust' },
+    };
+    expect(toSpellText(frightening)).toMatchObject({
+      description: 'The target is {@condition frightened}.',
+      material: '{@item ruby|XPHB} dust.',
+    });
+    const ruby = { ...frightening, components: { m: 'a {@item ruby}' } };
+    expect(toSpellText(ruby).material).toBe('A {@item ruby}.');
   });
 
   it('marcações, listas e tabelas', () => {

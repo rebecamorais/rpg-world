@@ -1,0 +1,62 @@
+{
+  "blinded": {
+    "name": "Blinded",
+    "description": "While you have the Blinded condition, you experience the following effects.\nCan't See. You can't see and automatically fail any ability check that requires sight.\nAttacks Affected. {@action Attack|XPHB} rolls against you have {@variantrule Advantage|XPHB}, and your attack rolls have {@variantrule Disadvantage|XPHB}."
+  },
+  "charmed": {
+    "name": "Charmed",
+    "description": "While you have the Charmed condition, you experience the following effects.\nCan't Harm the Charmer. You can't attack the charmer or target the charmer with damaging abilities or {@variantrule Magical Effect|XPHB|magical effects}.\nSocial Advantage. The charmer has {@variantrule Advantage|XPHB} on any ability check to interact with you socially."
+  },
+  "deafened": {
+    "name": "Deafened",
+    "description": "While you have the Deafened condition, you experience the following effect.\nCan't Hear. You can't hear and automatically fail any ability check that requires hearing."
+  },
+  "exhaustion": {
+    "name": "Exhaustion",
+    "description": "While you have the Exhaustion condition, you experience the following effects.\nExhaustion Levels. This condition is cumulative. Each time you receive it, you gain 1 Exhaustion level. You die if your Exhaustion level is 6.\nD20 Tests Affected. When you make a D20 Test, the roll is reduced by 2 times your Exhaustion level.\nSpeed Reduced. Your {@variantrule Speed|XPHB} is reduced by a number of feet equal to 5 times your Exhaustion level.\nRemoving Exhaustion Levels. Finishing a {@variantrule Long Rest|XPHB} removes 1 of your Exhaustion levels. When your Exhaustion level reaches 0, the condition ends."
+  },
+  "frightened": {
+    "name": "Frightened",
+    "description": "While you have the Frightened condition, you experience the following effects.\nAbility Checks and Attacks Affected. You have {@variantrule Disadvantage|XPHB} on ability checks and attack rolls while the source of fear is within line of sight.\nCan't Approach. You can't willingly move closer to the source of fear."
+  },
+  "grappled": {
+    "name": "Grappled",
+    "description": "While you have the Grappled condition, you experience the following effects.\nSpeed 0. Your {@variantrule Speed|XPHB} is 0 and can't increase.\nAttacks Affected. You have {@variantrule Disadvantage|XPHB} on attack rolls against any target other than the grappler.\nMovable. The grappler can drag or carry you when it moves, but every foot of movement costs it 1 extra foot unless you are Tiny or two or more sizes smaller than it."
+  },
+  "incapacitated": {
+    "name": "Incapacitated",
+    "description": "While you have the Incapacitated condition, you experience the following effects.\nInactive. You can't take any {@variantrule Action|XPHB|action}, {@variantrule Bonus Action|XPHB}, or {@variantrule Reaction|XPHB}.\nNo Concentration. Your {@status Concentration|XPHB} is broken.\nSpeechless. You can't speak.\nSurprised. If you're Incapacitated when you roll {@variantrule Initiative|XPHB}, you have {@variantrule Disadvantage|XPHB} on the roll."
+  },
+  "invisible": {
+    "name": "Invisible",
+    "description": "While you have the Invisible condition, you experience the following effects.\nSurprise. If you're Invisible when you roll {@variantrule Initiative|XPHB}, you have {@variantrule Advantage|XPHB} on the roll.\nConcealed. You aren't affected by any effect that requires its target to be seen unless the effect's creator can somehow see you. Any equipment you are wearing or carrying is also concealed.\nAttacks Affected. {@action Attack|XPHB} rolls against you have {@variantrule Disadvantage|XPHB}, and your attack rolls have {@variantrule Advantage|XPHB}. If a creature can somehow see you, you don't gain this benefit against that creature."
+  },
+  "paralyzed": {
+    "name": "Paralyzed",
+    "description": "While you have the Paralyzed condition, you experience the following effects.\nIncapacitated. You have the {@condition Incapacitated|XPHB} condition.\nSpeed 0. Your {@variantrule Speed|XPHB} is 0 and can't increase.\nSaving Throws Affected. You automatically fail Strength and Dexterity {@variantrule Saving Throw|XPHB|saving throws}.\nAttacks Affected. {@action Attack|XPHB} rolls against you have {@variantrule Advantage|XPHB}.\nAutomatic Critical Hits. Any attack roll that hits you is a {@variantrule Critical Hit|XPHB} if the attacker is within 5 feet of you."
+  },
+  "petrified": {
+    "name": "Petrified",
+    "description": "While you have the Petrified condition, you experience the following effects.\nTurned to Inanimate Substance. You are transformed, along with any nonmagical objects you are wearing and carrying, into a solid inanimate substance (usually stone). Your weight increases by a factor of ten, and you cease aging.\nIncapacitated. You have the {@condition Incapacitated|XPHB} condition.\nSpeed 0. Your {@variantrule Speed|XPHB} is 0 and can't increase.\nAttacks Affected. {@action Attack|XPHB} rolls against you have {@variantrule Advantage|XPHB}.\nSaving Throws Affected. You automatically fail Strength and Dexterity {@variantrule Saving Throw|XPHB|saving throws}.\nResist Damage. You have {@variantrule Resistance|XPHB} to all damage.\nPoison Immunity. You have {@variantrule Immunity|XPHB} to the {@condition Poisoned|XPHB} condition."
+  },
+  "poisoned": {
+    "name": "Poisoned",
+    "description": "While you have the Poisoned condition, you experience the following effect.\nAbility Checks and Attacks Affected. You have {@variantrule Disadvantage|XPHB} on attack rolls and ability checks."
+  },
+  "prone": {
+    "name": "Prone",
+    "description": "While you have the Prone condition, you experience the following effects.\nRestricted Movement. Your only movement options are to {@variantrule Crawling|XPHB|crawl} or to spend an amount of movement equal to half your {@variantrule Speed|XPHB} (round down) to right yourself and thereby end the condition. If your {@variantrule Speed|XPHB} is 0, you can't right yourself.\nAttacks Affected. You have {@variantrule Disadvantage|XPHB} on attack rolls. An attack roll against you has {@variantrule Advantage|XPHB} if the attacker is within 5 feet of you. Otherwise, that attack roll has {@variantrule Disadvantage|XPHB}."
+  },
+  "restrained": {
+    "name": "Restrained",
+    "description": "While you have the Restrained condition, you experience the following effects.\nSpeed 0. Your {@variantrule Speed|XPHB} is 0 and can't increase.\nAttacks Affected. {@action Attack|XPHB} rolls against you have {@variantrule Advantage|XPHB}, and your attack rolls have {@variantrule Disadvantage|XPHB}.\nSaving Throws Affected. You have {@variantrule Disadvantage|XPHB} on Dexterity {@variantrule Saving Throw|XPHB|saving throws}."
+  },
+  "stunned": {
+    "name": "Stunned",
+    "description": "While you have the Stunned condition, you experience the following effects.\nIncapacitated. You have the {@condition Incapacitated|XPHB} condition.\nSaving Throws Affected. You automatically fail Strength and Dexterity {@variantrule Saving Throw|XPHB|saving throws}.\nAttacks Affected. {@action Attack|XPHB} rolls against you have {@variantrule Advantage|XPHB}."
+  },
+  "unconscious": {
+    "name": "Unconscious",
+    "description": "While you have the Unconscious condition, you experience the following effects.\nInert. You have the {@condition Incapacitated|XPHB} and {@condition Prone|XPHB} conditions, and you drop whatever you're holding. When this condition ends, you remain {@condition Prone|XPHB}.\nSpeed 0. Your {@variantrule Speed|XPHB} is 0 and can't increase.\nAttacks Affected. {@action Attack|XPHB} rolls against you have {@variantrule Advantage|XPHB}.\nSaving Throws Affected. You automatically fail Strength and Dexterity {@variantrule Saving Throw|XPHB|saving throws}.\nAutomatic Critical Hits. Any attack roll that hits you is a {@variantrule Critical Hit|XPHB} if the attacker is within 5 feet of you.\nUnaware. You're unaware of your surroundings."
+  }
+}
