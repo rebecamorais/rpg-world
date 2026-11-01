@@ -141,6 +141,16 @@ describe('Funções das mesas (Integration)', () => {
       expect(data).toBe('active');
     });
 
+    it('convidar quem já é membro ativo falha com party_already_member', async () => {
+      await addMember(partyId, player.userId, 'active');
+      const { error } = await gm.client.rpc('invite_to_party', {
+        p_party_id: partyId,
+        p_username: playerName,
+      });
+      expect(error?.message).toBe('party_already_member');
+      expect(await memberStatus(partyId, player.userId)).toBe('active');
+    });
+
     it('convite e depois pedido da mesma pessoa vira active', async () => {
       await gm.client.rpc('invite_to_party', { p_party_id: partyId, p_username: playerName });
       const { data } = await player.client.rpc('request_party_join', { p_code: code });

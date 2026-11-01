@@ -244,6 +244,25 @@ describe('RLS das mesas (Integration)', () => {
     });
   });
 
+  describe('troca do link', () => {
+    it('trocar o código descarta os pedidos pendentes, não os convites nem os ativos', async () => {
+      const invited = await createSignedInClient('invited');
+      await addMember(partyId, player.userId, 'requested');
+      await addMember(partyId, invited.userId, 'invited');
+      await addMember(partyId, stranger.userId, 'active');
+
+      const { error } = await gm.client
+        .from('party_invites')
+        .update({ code: crypto.randomUUID().replaceAll('-', '') })
+        .eq('party_id', partyId);
+      if (error) throw error;
+
+      expect(await memberStatus(partyId, player.userId)).toBeNull();
+      expect(await memberStatus(partyId, invited.userId)).toBe('invited');
+      expect(await memberStatus(partyId, stranger.userId)).toBe('active');
+    });
+  });
+
   describe('party_characters', () => {
     const take = (session: Session, characterId: string) =>
       session.client
@@ -339,6 +358,27 @@ describe('RLS das mesas (Integration)', () => {
         .eq('party_id', partyId);
       expect(asGm.data).toEqual([{ character_id: characterId }]);
       expect(asStranger.data).toEqual([]);
+    });
+
+    it('apagar (soft delete) o personagem tira ele da mesa; restaurar não traz de volta', async () => {
+      await addMember(partyId, player.userId, 'active');
+      const characterId = await createCharacter(player.userId);
+      const { error } = await player.client
+        .from('party_characters')
+        .insert({ party_id: partyId, character_id: characterId });
+      if (error) throw error;
+
+      await player.client
+        .from('characters')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', characterId);
+      await admin().from('characters').update({ deleted_at: null }).eq('id', characterId);
+
+      const { data } = await admin()
+        .from('party_characters')
+        .select('character_id')
+        .eq('character_id', characterId);
+      expect(data).toEqual([]);
     });
   });
 });

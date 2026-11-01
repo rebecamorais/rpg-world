@@ -64,6 +64,21 @@ describe('Leitura do mestre (Integration)', () => {
     expect(spells).toEqual([expect.objectContaining({ ref: fireball })]);
   });
 
+  it('o mestre lê vários personagens numa consulta sem filtro e só recebe os da mesa', async () => {
+    const own = await createCharacter(gm.userId, { name: 'Goblin', kind: 'npc' });
+    await createCharacter(player.userId, { name: 'Fora da mesa' });
+    await createCharacter(stranger.userId, { name: 'Alheio' });
+
+    const { data, error } = await gm.client.from('characters').select('id');
+    if (error) throw error;
+    expect(data.map((row) => row.id).sort()).toEqual([characterId, own].sort());
+
+    const lore = await gm.client.from('character_lore').select('character_id');
+    const spells = await gm.client.from('character_spells').select('character_id');
+    expect(lore.data).toEqual([{ character_id: characterId }]);
+    expect(spells.data).toEqual([{ character_id: characterId }]);
+  });
+
   it('o mestre não altera: ficha, lore e magias ficam como estavam', async () => {
     const characters = new SupabaseCharacterRepository(gm.client);
     const character = (await characters.findById(characterId))!;
