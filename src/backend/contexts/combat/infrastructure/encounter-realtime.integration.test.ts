@@ -9,7 +9,7 @@ import {
   createNpc,
   createParty,
 } from '../../../../../test/helpers/parties';
-import { listen, waitFor } from '../../../../../test/helpers/realtime';
+import { listen, listenAsMember, waitFor } from '../../../../../test/helpers/realtime';
 import { createSignedInClient } from '../../../../../test/helpers/signed-in-client';
 
 type Session = Awaited<ReturnType<typeof createSignedInClient>>;
@@ -48,15 +48,15 @@ describe('Combate em tempo real (Integration)', () => {
     sessions.push(asking);
     await addMember(partyId, asking.userId, 'requested');
 
-    expect((await listen(gm.client, partyId)).status).toBe('SUBSCRIBED');
-    expect((await listen(player.client, partyId)).status).toBe('SUBSCRIBED');
+    expect((await listenAsMember(gm.client, partyId)).status).toBe('SUBSCRIBED');
+    expect((await listenAsMember(player.client, partyId)).status).toBe('SUBSCRIBED');
     expect((await listen(stranger.client, partyId)).status).toBe('CHANNEL_ERROR');
     expect((await listen(asking.client, partyId)).status).toBe('CHANNEL_ERROR');
   });
 
   it('mudar a iniciativa avisa o tópico da mesa, e o payload não tem nada além de id', async () => {
-    const asGm = await listen(gm.client, partyId);
-    const asPlayer = await listen(player.client, partyId);
+    const asGm = await listenAsMember(gm.client, partyId);
+    const asPlayer = await listenAsMember(player.client, partyId);
 
     await gm.client.from('encounter_participants').update({ initiative: 12 }).eq('id', goblin);
 
@@ -68,7 +68,7 @@ describe('Combate em tempo real (Integration)', () => {
   });
 
   it('o jogador salvar a ficha avisa as mesas em que ela está no combate', async () => {
-    const asGm = await listen(gm.client, partyId);
+    const asGm = await listenAsMember(gm.client, partyId);
 
     await player.client.from('characters').update({ hp_current: 3 }).eq('id', heroId);
 
@@ -76,8 +76,8 @@ describe('Combate em tempo real (Integration)', () => {
   });
 
   it('um jogador enviando broadcast pelo cliente não chega ao mestre', async () => {
-    const asGm = await listen(gm.client, partyId);
-    const asPlayer = await listen(player.client, partyId);
+    const asGm = await listenAsMember(gm.client, partyId);
+    const asPlayer = await listenAsMember(player.client, partyId);
 
     await asPlayer.channel.send({ type: 'broadcast', event: 'encounter', payload: { hp: 99 } });
 
@@ -85,7 +85,7 @@ describe('Combate em tempo real (Integration)', () => {
   });
 
   it('quem sai da mesa não consegue assinar de novo', async () => {
-    const first = await listen(player.client, partyId);
+    const first = await listenAsMember(player.client, partyId);
     expect(first.status).toBe('SUBSCRIBED');
     await player.client.removeChannel(first.channel);
 

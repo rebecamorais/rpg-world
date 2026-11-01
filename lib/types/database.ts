@@ -168,6 +168,7 @@ export type Database = {
       encounter_participants: {
         Row: {
           character_id: string;
+          conditions: NonNullable<Json>;
           created_at: string;
           hp_current: number | null;
           hp_temp: number | null;
@@ -181,6 +182,7 @@ export type Database = {
         ComputedFields: never;
         Insert: {
           character_id: string;
+          conditions?: NonNullable<Json>;
           created_at?: string;
           hp_current?: number | null;
           hp_temp?: number | null;
@@ -193,6 +195,7 @@ export type Database = {
         };
         Update: {
           character_id?: string;
+          conditions?: NonNullable<Json>;
           created_at?: string;
           hp_current?: number | null;
           hp_temp?: number | null;
@@ -295,6 +298,7 @@ export type Database = {
       parties: {
         Row: {
           created_at: string;
+          edition: string;
           gm_id: string;
           id: string;
           name: string;
@@ -304,6 +308,7 @@ export type Database = {
         ComputedFields: never;
         Insert: {
           created_at?: string;
+          edition?: string;
           gm_id: string;
           id?: string;
           name: string;
@@ -312,6 +317,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
+          edition?: string;
           gm_id?: string;
           id?: string;
           name?: string;
@@ -464,6 +470,7 @@ export type Database = {
       encounter_turns: {
         Args: { p_party_id: string };
         Returns: {
+          conditions: Json;
           is_current: boolean;
           is_mine: boolean;
           name: string;
@@ -521,6 +528,10 @@ export type Database = {
       set_encounter_order: {
         Args: { p_participant_ids: string[]; p_party_id: string };
         Returns: undefined;
+      };
+      set_participant_conditions: {
+        Args: { p_conditions: Json; p_participant_id: string; p_party_id: string };
+        Returns: boolean;
       };
       start_encounter: { Args: { p_party_id: string }; Returns: undefined };
     };

@@ -207,6 +207,10 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
                 combat.updateParticipant.mutate({ participantId: row.participantId, ...patch })
               }
               onMove={(direction) => move(index, direction)}
+              edition={party.edition}
+              onConditionsChange={(conditions) =>
+                combat.setConditions.mutate({ participantId: row.participantId, conditions })
+              }
               onRemove={() => {
                 if (window.confirm(t('removeConfirm', { name: row.name }))) {
                   combat.removeParticipant.mutate(row.participantId);

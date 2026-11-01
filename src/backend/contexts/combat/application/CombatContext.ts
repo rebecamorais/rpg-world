@@ -1,4 +1,4 @@
-import { EncounterView, NpcSide } from '../domain/Encounter';
+import { ActiveCondition, EncounterView, NpcSide } from '../domain/Encounter';
 import { ParticipantPatch } from '../domain/repository/combat.repo';
 
 /**
@@ -20,4 +20,9 @@ export interface CombatContext {
   start(partyId: string): Promise<void>;
   endTurn(partyId: string, participantId: string): Promise<void>;
   finish(partyId: string): Promise<void>;
+  setConditions(
+    partyId: string,
+    participantId: string,
+    conditions: ActiveCondition[],
+  ): Promise<void>;
 }

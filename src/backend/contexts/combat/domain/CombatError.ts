@@ -7,6 +7,7 @@ export const CombatErrorCodes = {
   NOT_YOUR_TURN: 'combat_error_not_your_turn',
   FULL: 'combat_error_full',
   CHARACTER_NOT_ALLOWED: 'combat_error_character_not_allowed',
+  INVALID_CONDITION: 'combat_error_invalid_condition',
 } as const;
 
 export type CombatErrorCode = (typeof CombatErrorCodes)[keyof typeof CombatErrorCodes];

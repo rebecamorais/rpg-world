@@ -1,3 +1,5 @@
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 import { PartyContext } from '../index';
 
 export const makePartiesApi = (partyContext: PartyContext) => ({
@@ -6,6 +8,8 @@ export const makePartiesApi = (partyContext: PartyContext) => ({
   create: (gmId: string, name: string) => partyContext.create(gmId, name),
 
   rename: (partyId: string, name: string) => partyContext.rename(partyId, name),
+
+  setEdition: (partyId: string, edition: Edition) => partyContext.setEdition(partyId, edition),
 
   delete: (partyId: string) => partyContext.delete(partyId),
 

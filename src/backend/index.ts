@@ -3,6 +3,7 @@ import { makeAuthApi } from '@backend/contexts/users/interfaces/auth.api';
 import { makeProfileApi } from '@backend/contexts/users/interfaces/profile.api';
 
 import { makeCombatApi } from './contexts/combat/interfaces/combat.api';
+import { makeConditionsApi } from './contexts/conditions/interfaces/conditions.api';
 import { makeFeedbackApi } from './contexts/feedback/interfaces/feedback.api';
 import { makeLoreApi } from './contexts/lore/interfaces/lore.api';
 import { makePartiesApi } from './contexts/parties/interfaces/parties.api';
@@ -19,6 +20,7 @@ export const getApi = async () => {
     partiesApi: makePartiesApi(container.contexts.party),
     combatApi: makeCombatApi(container.contexts.combat),
 
+    conditionsApi: makeConditionsApi(container.contexts.conditions),
     spellsApi: makeSpellsApi(container.contexts.spells),
     feedbackApi: makeFeedbackApi(container.contexts.feedback),
   };

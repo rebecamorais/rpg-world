@@ -2,6 +2,7 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [
     "scripts/*.ts",
+    "scripts/content/tag-conditions-51.ts",
     "test/setup-*.ts",
     "test/global-setup-*.ts",
     "test/vitest.config.mutation.ts"

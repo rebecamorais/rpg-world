@@ -173,19 +173,40 @@ describe('Funções do combate (Integration)', () => {
   });
 
   describe('encounter_turns', () => {
-    it('devolve exatamente as colunas round, participant_id, name, is_current, is_mine', async () => {
+    it('devolve exatamente as colunas round, participant_id, name, is_current, is_mine, conditions', async () => {
       await start();
 
       const { data, error } = await player.client.rpc('encounter_turns', { p_party_id: partyId });
       if (error) throw error;
 
       expect(data.map((row) => Object.keys(row).sort())).toEqual(
-        Array(3).fill(['is_current', 'is_mine', 'name', 'participant_id', 'round']),
+        Array(3).fill(['conditions', 'is_current', 'is_mine', 'name', 'participant_id', 'round']),
       );
       expect(data).toEqual([
-        { round: 1, participant_id: hero, name: 'Arani', is_current: true, is_mine: true },
-        { round: 1, participant_id: friend, name: 'Brom', is_current: false, is_mine: false },
-        { round: 1, participant_id: goblin, name: 'Goblin 1', is_current: false, is_mine: false },
+        {
+          round: 1,
+          participant_id: hero,
+          name: 'Arani',
+          is_current: true,
+          is_mine: true,
+          conditions: [],
+        },
+        {
+          round: 1,
+          participant_id: friend,
+          name: 'Brom',
+          is_current: false,
+          is_mine: false,
+          conditions: [],
+        },
+        {
+          round: 1,
+          participant_id: goblin,
+          name: 'Goblin 1',
+          is_current: false,
+          is_mine: false,
+          conditions: [],
+        },
       ]);
     });
 
@@ -197,7 +218,14 @@ describe('Funções do combate (Integration)', () => {
 
       await createEncounter(gm, partyId);
       expect((await player.client.rpc('encounter_turns', { p_party_id: partyId })).data).toEqual([
-        { round: 0, participant_id: null, name: null, is_current: null, is_mine: null },
+        {
+          round: 0,
+          participant_id: null,
+          name: null,
+          is_current: null,
+          is_mine: null,
+          conditions: null,
+        },
       ]);
     });
 

@@ -1,5 +1,7 @@
 import type { Spell } from '@frontend/types/spells';
 
+import { parseContentKey } from '@shared/content/content-key';
+
 /** "longer" is anything cast in minutes, hours or days. */
 export const SPELLBOOK_CASTING_TIMES = ['action', 'bonus_action', 'reaction', 'longer'] as const;
 export type SpellbookCastingTime = (typeof SPELLBOOK_CASTING_TIMES)[number];
@@ -11,6 +13,8 @@ export interface SpellbookFilters {
   ritual: boolean;
   school: string | null;
   damage: string | null;
+  /** Short condition id, e.g. `frightened`: matches that condition in any edition. */
+  condition: string | null;
   castingTime: SpellbookCastingTime | null;
 }
 
@@ -21,6 +25,7 @@ export const NO_SPELLBOOK_FILTERS: SpellbookFilters = {
   ritual: false,
   school: null,
   damage: null,
+  condition: null,
   castingTime: null,
 };
 
@@ -36,6 +41,9 @@ function castingTimeMatches(spell: Spell, wanted: SpellbookCastingTime): boolean
     : times.includes(wanted);
 }
 
+/** The short id of a condition key, whatever its book. */
+export const conditionIdOf = (key: string) => parseContentKey(key)?.id;
+
 /** The learned spells that pass every filter that is on. Runs on the client: the list is whole. */
 export function filterSpellbook(spells: Spell[], filters: SpellbookFilters): Spell[] {
   const search = normalize(filters.search.trim());
@@ -47,6 +55,8 @@ export function filterSpellbook(spells: Spell[], filters: SpellbookFilters): Spe
       (!filters.ritual || spell.ritual) &&
       (!filters.school || spell.school === filters.school) &&
       (!filters.damage || spell.damageType === filters.damage) &&
+      (!filters.condition ||
+        spell.conditions?.some((key) => conditionIdOf(key) === filters.condition)) &&
       (!filters.castingTime || castingTimeMatches(spell, filters.castingTime)),
   );
 }

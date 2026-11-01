@@ -11,3 +11,14 @@ export function parseSpellKey(key: string): { source: string; id: string } | nul
   const match = SPELL_KEY.exec(key);
   return match ? { source: match[1], id: match[2] } : null;
 }
+
+const CONTENT_KEY = /^dnd5e:([a-z0-9.-]+):([a-z]+):([a-z0-9-]+)$/;
+
+const contentKey = (source: string, type: string, id: string) => `dnd5e:${source}:${type}:${id}`;
+
+export const conditionKey = (source: string, id: string) => contentKey(source, 'condition', id);
+
+export function parseContentKey(key: string): { source: string; type: string; id: string } | null {
+  const match = CONTENT_KEY.exec(key);
+  return match ? { source: match[1], type: match[2], id: match[3] } : null;
+}

@@ -112,14 +112,46 @@ describe('SupabaseCombatRepository (Integration)', () => {
     expect(await playerRepo.turns(partyId)).toEqual({
       round: 1,
       turns: [
-        { participantId: expect.any(String), name: 'Arani', isCurrent: true, isMine: true },
-        { participantId: expect.any(String), name: 'Goblin', isCurrent: false, isMine: false },
+        {
+          participantId: expect.any(String),
+          name: 'Arani',
+          isCurrent: true,
+          isMine: true,
+          conditions: [],
+        },
+        {
+          participantId: expect.any(String),
+          name: 'Goblin',
+          isCurrent: false,
+          isMine: false,
+          conditions: [],
+        },
       ],
     });
     expect(await playerRepo.findEncounter(partyId)).toBeNull();
 
     await repo.finish(partyId);
     expect(await playerRepo.turns(partyId)).toBeNull();
+  });
+
+  it('condições: setConditions grava, turns e findEncounter devolvem, e quem não pode recebe false', async () => {
+    await repo.create(partyId);
+    await repo.addParticipants(partyId, [{ characterId: heroId, side: 'player', label: null }]);
+    const playerRepo = new SupabaseCombatRepository(player.client);
+    const stranger = new SupabaseCombatRepository((await createSignedInClient('stranger')).client);
+    const [{ id }] = (await repo.findEncounter(partyId))!.participants;
+    expect((await repo.findEncounter(partyId))!.participants[0].conditions).toEqual([]);
+
+    const conditions = [
+      { key: 'dnd5e:srd-5.2:condition:prone', level: null },
+      { key: 'dnd5e:srd-5.2:condition:exhaustion', level: 2 },
+    ];
+    expect(await repo.setConditions(partyId, id, conditions)).toBe(true);
+    expect((await repo.findEncounter(partyId))!.participants[0].conditions).toEqual(conditions);
+    expect((await playerRepo.turns(partyId))!.turns[0].conditions).toEqual(conditions);
+
+    expect(await stranger.setConditions(partyId, id, [])).toBe(false);
+    expect(await repo.setConditions(partyId, crypto.randomUUID(), [])).toBe(false);
   });
 
   it('cada erro do banco vira o CombatError certo', async () => {

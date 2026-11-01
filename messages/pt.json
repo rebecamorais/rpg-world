@@ -71,6 +71,7 @@
       "combat_error_empty": "Adicione alguém ao combate antes de começar.",
       "combat_error_not_your_turn": "Não é a vez deste participante (a vez pode já ter passado).",
       "combat_error_full": "O combate tem no máximo 50 participantes.",
+      "combat_error_invalid_condition": "Essa condição não é válida.",
       "combat_error_character_not_allowed": "Este personagem não pode entrar neste combate."
     },
     "save": "Salvar",
@@ -1058,7 +1059,12 @@
       "deleteParty": "Apagar mesa",
       "deleteConfirm": "Apagar esta mesa? Nenhum personagem é apagado.",
       "deleted": "Mesa apagada",
-      "unnamed": "jogador sem nome de usuário"
+      "unnamed": "jogador sem nome de usuário",
+      "editionLabel": "Edição das regras",
+      "editionHint": "A edição mostrada primeiro ao escolher condições.",
+      "edition2014": "Regras de 2014",
+      "edition2024": "Regras de 2024",
+      "editionSaved": "Edição das regras salva"
     },
     "mine": {
       "title": "Meus personagens na mesa",
@@ -1135,7 +1141,8 @@
     "detailsOf": "Detalhes de {name}",
     "ally": "Aliado",
     "addAlly": "Adicionar aliado",
-    "side": "Lado"
+    "side": "Lado",
+    "conditionsOf": "Condições de {name}"
   },
   "characterRaces": {
     "dragonborn": "Draconato",
@@ -1166,5 +1173,17 @@
     "lawful-evil": "Leal e Mau",
     "neutral-evil": "Neutro e Mau",
     "chaotic-evil": "Caótico e Mau"
+  },
+  "conditions": {
+    "ariaLabel": "{name}, condição",
+    "ariaLabelShown": "{text} ({name}), condição",
+    "otherEdition": "Ver versão {edition}",
+    "level": "Nível {level}",
+    "title": "Condições",
+    "filter": "Condição",
+    "any": "Qualquer condição",
+    "edition": "Edição",
+    "pickerDescription": "Ligue as condições que afetam esta criatura.",
+    "exhaustionLevel": "Nível de exaustão"
   }
 }

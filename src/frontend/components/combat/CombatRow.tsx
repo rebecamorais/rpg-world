@@ -5,6 +5,7 @@ import { type CSSProperties, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
+import { ConditionBadge } from '@frontend/components/content/ConditionBadge';
 import { CharacterIdentity } from '@frontend/components/party/RolePlayCard';
 import { Button } from '@frontend/components/ui/button';
 import { HealthBar } from '@frontend/components/ui/health-bar';
@@ -14,10 +15,13 @@ import { StatBlock } from '@frontend/components/ui/stat-block';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
-import type { GmRow } from '@backend/contexts/combat/domain/Encounter';
+import type { ActiveCondition, GmRow } from '@backend/contexts/combat/domain/Encounter';
 import type { ParticipantPatch } from '@backend/contexts/combat/domain/repository/combat.repo';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
+import { ConditionsPicker } from './ConditionsPicker';
 
 /** A number field saved when it loses focus; empty means "none" where `nullable`. */
 function NumberCell({
@@ -89,6 +93,8 @@ export function CombatRow({
   onChange,
   onMove,
   onRemove,
+  edition,
+  onConditionsChange,
 }: {
   partyId: string;
   row: GmRow;
@@ -98,9 +104,13 @@ export function CombatRow({
   onChange: (patch: ParticipantPatch) => void;
   onMove: (direction: -1 | 1) => void;
   onRemove: () => void;
+  /** The party's edition: the picker opens on it, and badges of the other one say so. */
+  edition: Edition;
+  onConditionsChange: (conditions: ActiveCondition[]) => void;
 }) {
   const t = useTranslations('combat');
   const tStats = useTranslations('combatStats');
+  const tCond = useTranslations('conditions');
   const tAttr = useTranslations('attributes.abbreviations');
   // An npc (enemy or ally) has its own HP in the combat and opens the GM's own sheet
   const isNpc = row.side !== 'player';
@@ -126,6 +136,8 @@ export function CombatRow({
       aria-current={row.isCurrent ? 'true' : undefined}
       // A click anywhere but on a field, link or button opens it; the chevron is the keyboard way
       onClick={(event) => {
+        // The picker's dialog is a portal, but its clicks still bubble to the card
+        if (!event.currentTarget.contains(event.target as Node)) return;
         if (!(event.target as HTMLElement).closest('a, button, input')) toggle();
       }}
       // The turn's glow and border take the character's color too
@@ -218,6 +230,33 @@ export function CombatRow({
               />
             </Button>
           </div>
+        </div>
+
+        {/* On touch screens the gap keeps each badge's touch area apart */}
+        <div className="flex flex-wrap items-center gap-2 pointer-coarse:gap-3">
+          {row.conditions.map((condition) => (
+            <ConditionBadge
+              key={condition.key}
+              conditionKey={condition.key}
+              level={condition.level}
+              defaultEdition={edition}
+            />
+          ))}
+          <ConditionsPicker
+            value={row.conditions}
+            defaultEdition={edition}
+            onChange={onConditionsChange}
+          >
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label={t('conditionsOf', { name: row.name })}
+              className="touch-target"
+            >
+              <AppIcon name="Activity" size={16} aria-hidden="true" />
+              {tCond('title')}
+            </Button>
+          </ConditionsPicker>
         </div>
 
         <div className="flex flex-col gap-2">

@@ -71,6 +71,7 @@
       "combat_error_empty": "Add someone to the combat before starting.",
       "combat_error_not_your_turn": "It is not this participant's turn (it may have passed already).",
       "combat_error_full": "A combat has at most 50 participants.",
+      "combat_error_invalid_condition": "That condition is not valid.",
       "combat_error_character_not_allowed": "This character can't join this combat."
     },
     "save": "Save",
@@ -1058,7 +1059,12 @@
       "deleteParty": "Delete party",
       "deleteConfirm": "Delete this party? No character is deleted.",
       "deleted": "Party deleted",
-      "unnamed": "player without a username"
+      "unnamed": "player without a username",
+      "editionLabel": "Rules edition",
+      "editionHint": "The edition shown first when picking conditions.",
+      "edition2014": "2014 rules",
+      "edition2024": "2024 rules",
+      "editionSaved": "Rules edition saved"
     },
     "mine": {
       "title": "My characters at the table",
@@ -1135,7 +1141,8 @@
     "detailsOf": "Details of {name}",
     "ally": "Ally",
     "addAlly": "Add ally",
-    "side": "Side"
+    "side": "Side",
+    "conditionsOf": "Conditions of {name}"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",
@@ -1166,5 +1173,17 @@
     "lawful-evil": "Lawful Evil",
     "neutral-evil": "Neutral Evil",
     "chaotic-evil": "Chaotic Evil"
+  },
+  "conditions": {
+    "ariaLabel": "{name}, condition",
+    "ariaLabelShown": "{text} ({name}), condition",
+    "otherEdition": "See {edition} version",
+    "level": "Level {level}",
+    "title": "Conditions",
+    "filter": "Condition",
+    "any": "Any condition",
+    "edition": "Edition",
+    "pickerDescription": "Turn on the conditions affecting this creature.",
+    "exhaustionLevel": "Exhaustion level"
   }
 }

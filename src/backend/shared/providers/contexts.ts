@@ -1,5 +1,6 @@
 import { createCharacterContext } from '@backend/contexts/characters';
 import { createCombatContext } from '@backend/contexts/combat';
+import { createConditionsContext } from '@backend/contexts/conditions';
 import { createFeedbackContext } from '@backend/contexts/feedback';
 import { createLoreContext } from '@backend/contexts/lore';
 import { createPartyContext } from '@backend/contexts/parties';
@@ -13,6 +14,7 @@ export class Contexts {
   private _auth: ReturnType<typeof createAuthContext> | null = null;
   private _userProfile: ReturnType<typeof createUserProfileContext> | null = null;
   private _lore: ReturnType<typeof createLoreContext> | null = null;
+  private _conditions: ReturnType<typeof createConditionsContext> | null = null;
   private _spells: ReturnType<typeof createSpellsContext> | null = null;
   private _feedback: ReturnType<typeof createFeedbackContext> | null = null;
   private _party: ReturnType<typeof createPartyContext> | null = null;
@@ -64,6 +66,11 @@ export class Contexts {
     return this._lore;
   }
 
+  get conditions() {
+    this._conditions ??= createConditionsContext();
+    return this._conditions;
+  }
+
   get spells() {
     if (!this._spells) {
       this._spells = createSpellsContext();
@@ -80,7 +87,7 @@ export class Contexts {
 
   get combat() {
     if (!this._combat) {
-      this._combat = createCombatContext(this.container.get('userClient'));
+      this._combat = createCombatContext(this.container.get('userClient'), this.conditions.catalog);
     }
     return this._combat;
   }

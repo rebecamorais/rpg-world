@@ -1,10 +1,10 @@
 import { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
-import { Database } from '@database-types';
+import { Database, Json } from '@database-types';
 
 import { CombatError, CombatErrorCode, CombatErrorCodes } from '../domain/CombatError';
-import { Side } from '../domain/Encounter';
+import { ActiveCondition, Side } from '../domain/Encounter';
 import {
   CombatRepo,
   CombatSheet,
@@ -30,6 +30,12 @@ function fail(action: string, error: PostgrestError): never {
   const code = DATABASE_ERRORS[error.message];
   if (code) throw new CombatError(code);
   throw new Error(`Failed to ${action}: ${error.message}`);
+}
+
+// The jsonb column is validated by the database (key and level); default to none
+function toConditions(value: unknown): ActiveCondition[] {
+  if (!Array.isArray(value)) return [];
+  return value.map((item) => ({ key: String(item.key), level: item.level ?? null }));
 }
 
 type SheetData = {
@@ -64,7 +70,9 @@ export class SupabaseCombatRepository implements CombatRepo {
         .maybeSingle(),
       this.client
         .from('encounter_participants')
-        .select('id, character_id, side, label, initiative, position, hp_current, hp_temp')
+        .select(
+          'id, character_id, side, label, initiative, position, hp_current, hp_temp, conditions',
+        )
         .eq('party_id', partyId)
         .order('position')
         .order('created_at'),
@@ -85,6 +93,7 @@ export class SupabaseCombatRepository implements CombatRepo {
         position: row.position,
         hpCurrent: row.hp_current,
         hpTemp: row.hp_temp,
+        conditions: toConditions(row.conditions),
       })),
     };
   }
@@ -140,6 +149,7 @@ export class SupabaseCombatRepository implements CombatRepo {
           name: row.name,
           isCurrent: row.is_current,
           isMine: row.is_mine,
+          conditions: toConditions(row.conditions),
         })),
     };
   }
@@ -239,6 +249,16 @@ export class SupabaseCombatRepository implements CombatRepo {
       p_participant_id: participantId,
     });
     if (error) fail('end turn', error);
+  }
+
+  async setConditions(partyId: string, participantId: string, conditions: ActiveCondition[]) {
+    const { data, error } = await this.client.rpc('set_participant_conditions', {
+      p_party_id: partyId,
+      p_participant_id: participantId,
+      p_conditions: conditions as unknown as Json,
+    });
+    if (error) fail('change conditions', error);
+    return data;
   }
 
   async finish(partyId: string) {

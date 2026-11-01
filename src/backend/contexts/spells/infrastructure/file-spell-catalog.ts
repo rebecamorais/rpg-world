@@ -1,4 +1,5 @@
-import { spellKey } from '@shared/content/content-key';
+import { conditionKey, parseContentKey, spellKey } from '@shared/content/content-key';
+import { conditionIdsOf } from '@shared/content/tags';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import type {
   SpellData,
@@ -30,6 +31,7 @@ interface Entry {
   edition: Edition;
   data: SpellData;
   text: SpellText;
+  conditions: string[];
   translations: Record<string, SpellTranslation | undefined>;
 }
 
@@ -54,6 +56,9 @@ export class FileSpellCatalog implements SpellsRepo {
         edition,
         data,
         text: texts[data.id],
+        conditions: conditionIdsOf(texts[data.id].description, texts[data.id].higherLevel).map(
+          (id) => conditionKey(source, id),
+        ),
         translations: Object.fromEntries(
           Object.entries(translations).map(([locale, byId]) => [locale, byId[data.id]]),
         ),
@@ -96,6 +101,12 @@ export class FileSpellCatalog implements SpellsRepo {
         if (params.school && data.school !== params.school) return false;
         if (params.class && !data.classes.includes(params.class)) return false;
         if (params.damageType && data.damageType !== params.damageType) return false;
+        if (
+          params.condition &&
+          !entry.conditions.some((key) => parseContentKey(key)?.id === params.condition)
+        ) {
+          return false;
+        }
         return true;
       })
       // Level, then name, then key: a stable order, so pages never repeat or skip a spell
@@ -160,5 +171,6 @@ function toDto(entry: Entry, text: SpellText, locale: string): SpellDto {
     damageType: data.damageType ?? undefined,
     spellCategory: data.spellCategory ?? undefined,
     bgStyleId: data.bgStyleId ?? undefined,
+    conditions: entry.conditions,
   };
 }

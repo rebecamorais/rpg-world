@@ -6,7 +6,7 @@ import { rpgWorldApi } from '@client';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { encounterQueryKey } from '@frontend/lib/query-keys';
 
-import type { EncounterView } from '@backend/contexts/combat/domain/Encounter';
+import type { ActiveCondition, EncounterView } from '@backend/contexts/combat/domain/Encounter';
 import type { ParticipantPatch } from '@backend/contexts/combat/domain/repository/combat.repo';
 
 /** The party's combat (null without one) and everything done on it; each change reloads it. */
@@ -83,6 +83,40 @@ export function useEncounter(partyId: string) {
     ...options,
   });
 
+  const setConditions = useMutation({
+    mutationFn: ({
+      participantId,
+      conditions,
+    }: {
+      participantId: string;
+      conditions: ActiveCondition[];
+    }) => rpgWorldApi.put(`${base}/participants/${participantId}/conditions`, { conditions }),
+    // Shown at once: the picker sends the whole list, so a second toggle must build on the first
+    onMutate: async ({ participantId, conditions }) => {
+      await queryClient.cancelQueries({ queryKey: encounterQueryKey(partyId) });
+      queryClient.setQueryData<EncounterView | null>(encounterQueryKey(partyId), (view) => {
+        if (view?.role === 'gm') {
+          return {
+            ...view,
+            rows: view.rows.map((row) =>
+              row.participantId === participantId ? { ...row, conditions } : row,
+            ),
+          };
+        }
+        if (view?.role === 'player') {
+          return {
+            ...view,
+            turns: view.turns.map((turn) =>
+              turn.participantId === participantId ? { ...turn, conditions } : turn,
+            ),
+          };
+        }
+        return view;
+      });
+    },
+    ...options,
+  });
+
   return {
     encounter: query.data,
     isLoading: query.isLoading,
@@ -94,5 +128,6 @@ export function useEncounter(partyId: string) {
     removeParticipant,
     setOrder,
     endTurn,
+    setConditions,
   };
 }

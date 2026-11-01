@@ -5,7 +5,7 @@ import type { SpellData, SpellText } from '@shared/systems/dnd5e/content/spell.s
  * Only the fields the conversion reads are typed.
  */
 
-type Entry = string | { type: string; name?: string; [key: string]: unknown };
+export type Entry = string | { type: string; name?: string; [key: string]: unknown };
 
 export interface FiveToolsSpell {
   name: string;
@@ -77,7 +77,7 @@ function extraCastingTimesOf(extraTimes: FiveToolsSpell['time']) {
 
 function triggerOf(spell: FiveToolsSpell) {
   const condition = spell.time[0].condition;
-  return condition ? { trigger: stripTags(condition) } : {};
+  return condition ? { trigger: condition } : {};
 }
 
 /** Range: a distance, a named one (touch, self…), or an area around the caster, which is "self". */
@@ -148,54 +148,33 @@ export function toSpellData(
   };
 }
 
-/** `{@tag text|source|display}` → what 5etools shows: the display text, or else the text. */
-export function stripTags(text: string): string {
-  let previous: string;
-  let current = text;
-  // Tags can nest ({@b {@dice 1d6}}): strip the innermost first, until none is left
-  do {
-    previous = current;
-    current = current.replace(/\{@(\w+)\s*([^{}]*)\}/g, (_, tag: string, body: string) => {
-      const parts = body.split('|');
-      if (tag === 'chance') return `${parts[0]}%`;
-      if (tag === 'dc') return `DC ${parts[0]}`;
-      // The third part of these is a filter or a chapter, not display text
-      if (tag === 'filter' || tag === 'book' || tag === 'adventure') return parts[0];
-      if (tag === 'scaledamage' || tag === 'scaledice') return parts[2] ?? parts[0];
-      return parts[2] || parts[0];
-    });
-  } while (current !== previous);
-  return current;
-}
-
 function renderEntry(entry: Entry): string[] {
-  if (typeof entry === 'string') return [stripTags(entry)];
+  if (typeof entry === 'string') return [entry];
   const children = (entry.entries as Entry[] | undefined) ?? [];
   switch (entry.type) {
     case 'list':
       return (entry.items as Entry[]).map((item) => `• ${renderEntry(item).join(' ')}`);
     case 'table': {
       const rows = [entry.colLabels as string[] | undefined, ...(entry.rows as string[][])];
-      const lines = rows
-        .filter((row) => row !== undefined)
-        .map((row) => row.map(stripTags).join(' | '));
+      const lines = rows.filter((row) => row !== undefined).map((row) => row.join(' | '));
       // Spells name their tables ("consult the Prismatic Rays table")
-      return entry.caption ? [stripTags(entry.caption as string), ...lines] : lines;
+      return entry.caption ? [entry.caption as string, ...lines] : lines;
     }
     default: {
       // `entries`, `item`…: a titled block, the title in front of its first paragraph
       const lines = children.flatMap(renderEntry);
-      if (entry.name && lines.length) lines[0] = `${stripTags(entry.name)}. ${lines[0]}`;
+      if (entry.name && lines.length) lines[0] = `${entry.name}. ${lines[0]}`;
       return lines;
     }
   }
 }
 
-/** Plain text, one paragraph per line, as the SRD 5.1 texts are. */
+/** Text with its 5etools tags, one paragraph per line, as the SRD 5.1 texts are. */
 export const renderEntries = (entries: Entry[]) => entries.flatMap(renderEntry).join('\n');
 
+/** Capitalizes the first letter, unless a tag starts the text (its display text is not ours to change). */
 const sentence = (text: string) => {
-  const capitalized = text.charAt(0).toUpperCase() + text.slice(1);
+  const capitalized = text.startsWith('{') ? text : text.charAt(0).toUpperCase() + text.slice(1);
   return /[.!?]$/.test(capitalized) ? capitalized : `${capitalized}.`;
 };
 
@@ -211,7 +190,7 @@ export function toSpellText(spell: FiveToolsSpell): SpellText {
     name: srdName(spell),
     description: renderEntries(spell.entries),
     ...(higherLevel ? { higherLevel } : {}),
-    ...(material ? { material: sentence(stripTags(material)) } : {}),
+    ...(material ? { material: sentence(material) } : {}),
     ...triggerOf(spell),
   };
 }

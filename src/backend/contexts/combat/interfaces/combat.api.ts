@@ -1,4 +1,4 @@
-import { NpcSide } from '../domain/Encounter';
+import { ActiveCondition, NpcSide } from '../domain/Encounter';
 import { ParticipantPatch } from '../domain/repository/combat.repo';
 import { CombatContext } from '../index';
 
@@ -25,4 +25,7 @@ export const makeCombatApi = (combatContext: CombatContext) => ({
     combatContext.endTurn(partyId, participantId),
 
   finish: (partyId: string) => combatContext.finish(partyId),
+
+  setConditions: (partyId: string, participantId: string, conditions: ActiveCondition[]) =>
+    combatContext.setConditions(partyId, participantId, conditions),
 });

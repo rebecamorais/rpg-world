@@ -20,6 +20,7 @@ import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
 import { DAMAGE_THEMES } from '@frontend/constants/damage-themes';
 import { useCharacterState } from '@frontend/context/CharacterContext';
+import { useConditions } from '@frontend/hooks/useConditions';
 import { useDebouncedValue } from '@frontend/hooks/useDebouncedValue';
 import { useSpells } from '@frontend/hooks/useSpells';
 import { matchCharacterClass } from '@frontend/lib/character-choices';
@@ -48,6 +49,7 @@ interface Filters {
   class: CharacterClass | null;
   damage: string | null;
   edition: Edition | null;
+  condition: string | null;
 }
 
 const NO_FILTERS: Filters = {
@@ -56,6 +58,7 @@ const NO_FILTERS: Filters = {
   class: null,
   damage: null,
   edition: null,
+  condition: null,
 };
 
 export default function SpellSearchDialog({
@@ -68,6 +71,8 @@ export default function SpellSearchDialog({
   const t = useTranslations('spellsDrawer');
   const tCharacters = useTranslations('characters');
   const tSpellsData = useTranslations('spellsData');
+  const tConditions = useTranslations('conditions');
+  const { list: conditions } = useConditions();
 
   const { character } = useCharacterState();
   const accentColor = character?.accentColor;
@@ -122,6 +127,7 @@ export default function SpellSearchDialog({
     class: filters.class,
     damageType: filters.damage,
     edition: filters.edition,
+    condition: filters.condition,
   });
 
   const spells = paginatedSpells?.data || [];
@@ -155,6 +161,25 @@ export default function SpellSearchDialog({
     ],
     [t, tSpellsData],
   );
+
+  // The catalog has each condition once per edition; the filter matches both, so list it once.
+  // Prefer a translated entry, then the 2024 one
+  const conditionOptions = useMemo(() => {
+    const rank = (c: (typeof conditions)[number]) =>
+      (c.untranslated ? 2 : 0) + (c.edition === '2024' ? 0 : 1);
+    const best = new Map<string, (typeof conditions)[number]>();
+    for (const c of conditions) {
+      const current = best.get(c.id);
+      if (!current || rank(c) < rank(current)) best.set(c.id, c);
+    }
+    const byId = new Map([...best].map(([id, c]) => [id, c.name]));
+    return [
+      { value: 'all', label: tConditions('any') },
+      ...[...byId]
+        .map(([value, label]) => ({ value, label }))
+        .sort((a, b) => a.label.localeCompare(b.label)),
+    ];
+  }, [conditions, tConditions]);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -292,6 +317,15 @@ export default function SpellSearchDialog({
                     label: tSpellsData(`damageTypes.${type}`),
                   })),
                 ]}
+              />
+
+              <SelectField
+                aria-label={tConditions('filter')}
+                value={filters.condition ?? 'all'}
+                onValueChange={(val) => setFilter('condition', val === 'all' ? null : val)}
+                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
+                placeholder={tConditions('any')}
+                options={conditionOptions}
               />
 
               {activeFilterCount > 0 && (

@@ -8,11 +8,13 @@ import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
+import { useConditions } from '@frontend/hooks/useConditions';
 import {
   SPELLBOOK_CASTING_TIMES,
   type SpellbookCastingTime,
   type SpellbookFilters,
   activeSpellbookFilterCount,
+  conditionIdOf,
 } from '@frontend/lib/spellbook-filter';
 import { cn } from '@frontend/lib/utils';
 import type { Spell } from '@frontend/types/spells';
@@ -43,6 +45,8 @@ export function SpellbookFilterBar({
   const t = useTranslations('characters.spellbookFilters');
   const tSpellsDrawer = useTranslations('spellsDrawer');
   const tSpellsData = useTranslations('spellsData');
+  const tConditions = useTranslations('conditions');
+  const { byKey } = useConditions();
   const [open, setOpen] = useState(false);
 
   const set = <K extends keyof SpellbookFilters>(key: K, value: SpellbookFilters[K]) =>
@@ -52,6 +56,20 @@ export function SpellbookFilterBar({
 
   const schools = useMemo(() => presentValues(spells, (s) => s.school), [spells]);
   const damageTypes = useMemo(() => presentValues(spells, (s) => s.damageType), [spells]);
+
+  // One option per condition the spells cite, named in the edition of the first spell that does
+  const conditionOptions = useMemo(() => {
+    const byId = new Map<string, string>();
+    for (const spell of spells) {
+      for (const key of spell.conditions ?? []) {
+        const id = conditionIdOf(key);
+        if (id && !byId.has(id)) byId.set(id, byKey.get(key)?.name ?? id);
+      }
+    }
+    return [...byId]
+      .map(([value, label]) => ({ value, label }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [spells, byKey]);
 
   const toggles: { key: Toggle; label: string }[] = [
     { key: 'preparedOnly', label: t('prepared') },
@@ -147,6 +165,16 @@ export function SpellbookFilterBar({
                 label: tSpellsData(`damageTypes.${type}` as Parameters<typeof tSpellsData>[0]),
               })),
             ]}
+          />
+        )}
+
+        {conditionOptions.length > 0 && (
+          <SelectField
+            aria-label={tConditions('filter')}
+            value={filters.condition ?? 'all'}
+            onValueChange={(val) => set('condition', val === 'all' ? null : val)}
+            className={cn(SELECT_CLASS, 'sm:min-w-[150px]')}
+            options={[{ value: 'all', label: tConditions('any') }, ...conditionOptions]}
           />
         )}
 

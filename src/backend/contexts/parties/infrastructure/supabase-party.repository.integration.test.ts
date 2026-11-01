@@ -28,6 +28,8 @@ describe('SupabasePartyRepository (Integration)', () => {
 
     const id = await repo.create(gm.userId, 'Mesa');
     expect(await repo.rename(id, 'Mesa Nova')).toBe(true);
+    expect(await repo.setEdition(id, '2014')).toBe(true);
+    expect((await repo.findParty(id))?.edition).toBe('2014');
     const code = crypto.randomUUID().replaceAll('-', '');
     expect(await repo.setInviteCode(id, code)).toBe(true);
     expect(await inviteCode(id)).toBe(code);
@@ -52,6 +54,7 @@ describe('SupabasePartyRepository (Integration)', () => {
     const repo = new SupabasePartyRepository(stranger.client);
 
     expect(await repo.rename(id, 'X')).toBe(false);
+    expect(await repo.setEdition(id, '2014')).toBe(false);
     expect(await repo.setInviteCode(id, crypto.randomUUID().replaceAll('-', ''))).toBe(false);
     expect(await repo.delete(id)).toBe(false);
   });
@@ -232,6 +235,7 @@ describe('SupabasePartyRepository — página da mesa (Integration)', () => {
       name: 'Mesa',
       system: 'dnd_5e',
       gmId: gm.userId,
+      edition: '2024',
     });
     expect((await playerRepo.people(partyId)).map((p) => p.status).sort()).toEqual([
       'active',

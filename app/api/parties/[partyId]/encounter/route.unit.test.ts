@@ -2,6 +2,7 @@ import { SESSION_USER, api, jsonRequest, resetApi, routeContext } from '@tests/h
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PUT as setOrder } from './order/route';
+import { PUT as setConditions } from './participants/[participantId]/conditions/route';
 import {
   DELETE as removeParticipant,
   PATCH as updateParticipant,
@@ -72,6 +73,22 @@ describe('/api/parties/[partyId]/encounter', () => {
     );
     expect(removed.status).toBe(204);
     expect(api.combatApi.removeParticipant).toHaveBeenCalledWith(PARTY, PARTICIPANT);
+  });
+
+  it('condições: PUT troca a lista do participante; mais de 20 itens responde 400', async () => {
+    const url = `${base}/participants/${PARTICIPANT}/conditions`;
+    const conditions = [{ key: 'dnd5e:srd-5.2:condition:prone' }];
+    const ok = await setConditions(jsonRequest(url, 'PUT', { conditions }), row());
+    expect(ok.status).toBe(204);
+    expect(api.combatApi.setConditions).toHaveBeenCalledWith(PARTY, PARTICIPANT, [
+      { key: 'dnd5e:srd-5.2:condition:prone', level: null },
+    ]);
+
+    api.combatApi.setConditions.mockClear();
+    const many = Array.from({ length: 21 }, () => ({ key: 'dnd5e:srd-5.2:condition:prone' }));
+    const bad = await setConditions(jsonRequest(url, 'PUT', { conditions: many }), row());
+    expect(bad.status).toBe(400);
+    expect(api.combatApi.setConditions).not.toHaveBeenCalled();
   });
 
   it('ordem e turno', async () => {

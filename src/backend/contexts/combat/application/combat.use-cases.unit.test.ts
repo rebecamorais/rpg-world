@@ -1,11 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { getConditionCatalog } from '@backend/contexts/conditions';
+
 import { CombatErrorCodes } from '../domain/CombatError';
 import { toGmRow } from '../domain/gm-row';
 import { CombatRepo, CombatSheet, ParticipantRecord } from '../domain/repository/combat.repo';
 import { AddParticipantUseCase } from './add-participant.use-case';
 import { EncounterCommands } from './encounter-commands';
 import { GetEncounterUseCase } from './get-encounter.use-case';
+import { SetConditionsUseCase } from './set-conditions.use-case';
 import { UpdateParticipantUseCase } from './update-participant.use-case';
 
 const sheet = (overrides: Partial<CombatSheet> = {}): CombatSheet => ({
@@ -36,6 +39,7 @@ const participant = (overrides: Partial<ParticipantRecord> = {}): ParticipantRec
   position: 1,
   hpCurrent: null,
   hpTemp: null,
+  conditions: [],
   ...overrides,
 });
 
@@ -69,6 +73,7 @@ const makeRepo = () =>
     start: vi.fn<CombatRepo['start']>().mockResolvedValue(undefined),
     endTurn: vi.fn<CombatRepo['endTurn']>().mockResolvedValue(undefined),
     finish: vi.fn<CombatRepo['finish']>().mockResolvedValue(true),
+    setConditions: vi.fn<CombatRepo['setConditions']>().mockResolvedValue(true),
   }) satisfies CombatRepo;
 
 describe('toGmRow', () => {
@@ -99,6 +104,7 @@ describe('toGmRow', () => {
       passivePerception: 15,
       speed: 9,
       attributes: { WIS: 14 },
+      conditions: [],
       isCurrent: true,
     });
   });
@@ -128,12 +134,113 @@ describe('toGmRow', () => {
   });
 });
 
+describe('toGmRow conditions', () => {
+  it('as condições vêm do participante', () => {
+    const conditions = [{ key: 'dnd5e:srd-5.2:condition:prone', level: null }];
+    expect(toGmRow(participant({ conditions }), sheet(), null).conditions).toEqual(conditions);
+  });
+});
+
+describe('SetConditionsUseCase', () => {
+  const PRONE = 'dnd5e:srd-5.2:condition:prone';
+  const EXHAUSTION = 'dnd5e:srd-5.2:condition:exhaustion';
+  const run = (conditions: { key: string; level: number | null }[], repo = makeRepo()) => {
+    const result = new SetConditionsUseCase(repo, getConditionCatalog())
+      .execute('party-1', 'p-hero', conditions)
+      .then(() => null)
+      .catch((e) => e.code);
+    return { repo, result };
+  };
+
+  it('recusa chave que o catálogo não acha', async () => {
+    const { repo, result } = run([{ key: 'dnd5e:srd-5.2:condition:nope', level: null }]);
+    expect(await result).toBe(CombatErrorCodes.INVALID_CONDITION);
+    expect(repo.setConditions).not.toHaveBeenCalled();
+  });
+
+  describe('chave desconhecida que o participante já tinha', () => {
+    const GONE = 'dnd5e:srd-5.2:condition:gone';
+    const withStored = (keys: string[]) => {
+      const repo = makeRepo();
+      repo.findEncounter.mockResolvedValue({
+        round: 1,
+        currentParticipantId: null,
+        participants: [participant({ conditions: keys.map((key) => ({ key, level: null })) })],
+      });
+      return repo;
+    };
+
+    it('é descartada, sem travar o resto', async () => {
+      const repo = withStored([GONE]);
+      const { result } = run(
+        [
+          { key: GONE, level: null },
+          { key: PRONE, level: null },
+        ],
+        repo,
+      );
+      expect(await result).toBeNull();
+      expect(repo.setConditions).toHaveBeenCalledWith('party-1', 'p-hero', [
+        { key: PRONE, level: null },
+      ]);
+    });
+
+    it('uma chave desconhecida nova continua recusada', async () => {
+      const repo = withStored([GONE]);
+      const { result } = run([{ key: 'dnd5e:srd-5.2:condition:other', level: null }], repo);
+      expect(await result).toBe(CombatErrorCodes.INVALID_CONDITION);
+      expect(repo.setConditions).not.toHaveBeenCalled();
+    });
+  });
+
+  it('recusa nível em condição sem níveis', async () => {
+    expect(await run([{ key: PRONE, level: 2 }]).result).toBe(CombatErrorCodes.INVALID_CONDITION);
+  });
+
+  it('recusa nível fora de 1 até o máximo', async () => {
+    expect(await run([{ key: EXHAUSTION, level: 7 }]).result).toBe(
+      CombatErrorCodes.INVALID_CONDITION,
+    );
+    expect(await run([{ key: EXHAUSTION, level: 0 }]).result).toBe(
+      CombatErrorCodes.INVALID_CONDITION,
+    );
+  });
+
+  it('exaustão sem nível vira nível 1', async () => {
+    const { repo, result } = run([{ key: EXHAUSTION, level: null }]);
+    expect(await result).toBeNull();
+    expect(repo.setConditions).toHaveBeenCalledWith('party-1', 'p-hero', [
+      { key: EXHAUSTION, level: 1 },
+    ]);
+  });
+
+  it('condições repetidas viram uma só', async () => {
+    const { repo } = run([
+      { key: PRONE, level: null },
+      { key: PRONE, level: null },
+    ]);
+    await vi.waitFor(() =>
+      expect(repo.setConditions).toHaveBeenCalledWith('party-1', 'p-hero', [
+        { key: PRONE, level: null },
+      ]),
+    );
+  });
+
+  it('o repositório devolvendo false vira NOT_FOUND', async () => {
+    const repo = makeRepo();
+    repo.setConditions.mockResolvedValue(false);
+    expect(await run([], repo).result).toBe(CombatErrorCodes.NOT_FOUND);
+  });
+});
+
 describe('GetEncounterUseCase', () => {
   it('o jogador recebe só rodada e ordem: sem iniciativa, PV nem CA', async () => {
     const repo = makeRepo();
     repo.turns.mockResolvedValue({
       round: 2,
-      turns: [{ participantId: 'p-hero', name: 'Arani', isCurrent: true, isMine: true }],
+      turns: [
+        { participantId: 'p-hero', name: 'Arani', isCurrent: true, isMine: true, conditions: [] },
+      ],
     });
 
     const view = await new GetEncounterUseCase(repo).execute('party-1', 'player-1');
@@ -141,7 +248,9 @@ describe('GetEncounterUseCase', () => {
     expect(view).toEqual({
       role: 'player',
       round: 2,
-      turns: [{ participantId: 'p-hero', name: 'Arani', isCurrent: true, isMine: true }],
+      turns: [
+        { participantId: 'p-hero', name: 'Arani', isCurrent: true, isMine: true, conditions: [] },
+      ],
     });
     expect(repo.findEncounter).not.toHaveBeenCalled();
     expect(repo.sheets).not.toHaveBeenCalled();

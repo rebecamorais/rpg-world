@@ -25,6 +25,8 @@ export type UseSpellsFilters = {
   class?: CharacterClass | string | null;
   damageType?: string | null;
   edition?: Edition | null;
+  /** Short condition id, e.g. `frightened`. */
+  condition?: string | null;
 };
 
 const DEFAULT_LIMIT = 12;
@@ -47,6 +49,8 @@ function spellsQuery(locale: string, filters: UseSpellsFilters) {
       if (filters.class) params.append('class', filters.class);
       if (filters.damageType) params.append('damageType', filters.damageType);
       if (filters.edition) params.append('edition', filters.edition);
+
+      if (filters.condition) params.append('condition', filters.condition);
 
       return rpgWorldApi.get(`/api/spells?${params.toString()}`);
     },

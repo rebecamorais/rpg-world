@@ -14,5 +14,6 @@ export const findSpellsQuerySchema = z.object({
   school: queryText,
   class: queryText,
   damageType: queryText,
+  condition: queryText,
   edition: optionalQuery(z.enum(EDITIONS)),
 });

@@ -2,12 +2,19 @@ export type Side = 'player' | 'ally' | 'enemy';
 /** An npc sheet of the GM joins on either side. */
 export type NpcSide = Exclude<Side, 'player'>;
 
+/** A condition on a participant; `level` only for those with levels (exhaustion). */
+export interface ActiveCondition {
+  key: string;
+  level: number | null;
+}
+
 /** What a player sees of each participant: no initiative, HP or AC, of anyone. */
 export interface TurnEntry {
   participantId: string;
   name: string;
   isCurrent: boolean;
   isMine: boolean;
+  conditions: ActiveCondition[];
 }
 
 export interface PlayerEncounterView {
@@ -38,6 +45,7 @@ export interface GmRow {
   speed: number;
   /** Scores by key (STR, DEX...), as on the sheet. */
   attributes: Record<string, number>;
+  conditions: ActiveCondition[];
   isCurrent: boolean;
 }
 

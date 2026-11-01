@@ -1,4 +1,4 @@
-import { Side, TurnEntry } from '../Encounter';
+import { ActiveCondition, Side, TurnEntry } from '../Encounter';
 
 export interface ParticipantRecord {
   id: string;
@@ -11,6 +11,7 @@ export interface ParticipantRecord {
   /** Enemies only. */
   hpCurrent: number | null;
   hpTemp: number | null;
+  conditions: ActiveCondition[];
 }
 
 export interface EncounterRecord {
@@ -77,4 +78,10 @@ export interface CombatRepo {
   start(partyId: string): Promise<void>;
   endTurn(partyId: string, participantId: string): Promise<void>;
   finish(partyId: string): Promise<boolean>;
+  /** Replaces the participant's conditions; `false` when not found or the person isn't allowed. */
+  setConditions(
+    partyId: string,
+    participantId: string,
+    conditions: ActiveCondition[],
+  ): Promise<boolean>;
 }

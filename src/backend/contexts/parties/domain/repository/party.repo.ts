@@ -1,3 +1,5 @@
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 import { InvitePreview, MemberStatus, PartySummary } from '../Party';
 import { PartyPerson, RosterCharacter } from '../PartyView';
 import { RolePlayLore, RolePlaySheet } from '../role-play-card';
@@ -7,6 +9,7 @@ export interface PartyRecord {
   name: string;
   system: string;
   gmId: string;
+  edition: Edition;
 }
 
 /**
@@ -17,6 +20,7 @@ export interface PartyRepo {
   listMine(): Promise<PartySummary[]>;
   create(gmId: string, name: string): Promise<string>;
   rename(id: string, name: string): Promise<boolean>;
+  setEdition(id: string, edition: Edition): Promise<boolean>;
   delete(id: string): Promise<boolean>;
   setInviteCode(id: string, code: string): Promise<boolean>;
   getInvite(code: string): Promise<InvitePreview | null>;

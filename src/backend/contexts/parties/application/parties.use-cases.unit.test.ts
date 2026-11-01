@@ -16,12 +16,14 @@ import { RemoveMemberUseCase } from './remove-member.use-case';
 import { RenamePartyUseCase } from './rename-party.use-case';
 import { RotateInviteCodeUseCase } from './rotate-invite-code.use-case';
 import { SetMyCharactersUseCase } from './set-my-characters.use-case';
+import { SetPartyEditionUseCase } from './set-party-edition.use-case';
 
 const makePartyRepo = () =>
   ({
     listMine: vi.fn<PartyRepo['listMine']>().mockResolvedValue([]),
     create: vi.fn<PartyRepo['create']>().mockResolvedValue('party-1'),
     rename: vi.fn<PartyRepo['rename']>().mockResolvedValue(true),
+    setEdition: vi.fn<PartyRepo['setEdition']>().mockResolvedValue(true),
     delete: vi.fn<PartyRepo['delete']>().mockResolvedValue(true),
     setInviteCode: vi.fn<PartyRepo['setInviteCode']>().mockResolvedValue(true),
     getInvite: vi.fn<PartyRepo['getInvite']>().mockResolvedValue(null),
@@ -29,9 +31,13 @@ const makePartyRepo = () =>
     invite: vi.fn<PartyRepo['invite']>().mockResolvedValue('invited'),
     activateMember: vi.fn<PartyRepo['activateMember']>().mockResolvedValue(true),
     deleteMember: vi.fn<PartyRepo['deleteMember']>().mockResolvedValue(true),
-    findParty: vi
-      .fn<PartyRepo['findParty']>()
-      .mockResolvedValue({ id: 'p', name: 'Mesa', system: 'dnd_5e', gmId: 'gm-1' }),
+    findParty: vi.fn<PartyRepo['findParty']>().mockResolvedValue({
+      id: 'p',
+      name: 'Mesa',
+      system: 'dnd_5e',
+      gmId: 'gm-1',
+      edition: '2024',
+    }),
     people: vi.fn<PartyRepo['people']>().mockResolvedValue([]),
     roster: vi.fn<PartyRepo['roster']>().mockResolvedValue([]),
     inviteCode: vi.fn<PartyRepo['inviteCode']>().mockResolvedValue('c'.repeat(32)),
@@ -127,6 +133,14 @@ describe('casos de uso das mesas', () => {
 
       expect(error.code).toBe(PartyErrorCodes.NOT_FOUND);
       expect(error.kind).toBe('not_found');
+    });
+
+    it('trocar a edição de mesa alheia responde not found', async () => {
+      repo.setEdition.mockResolvedValue(false);
+
+      expect(await codeOf(new SetPartyEditionUseCase(repo).execute('p', '2014'))).toBe(
+        PartyErrorCodes.NOT_FOUND,
+      );
     });
 
     it('renomear valida o nome', async () => {

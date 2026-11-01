@@ -1,8 +1,8 @@
 import { getApi } from '@api';
 
 import {
-  partyNameSchema,
   partyParamsSchema,
+  partyPatchSchema,
 } from '@backend/contexts/parties/interfaces/parties.schemas';
 
 import { withAuth } from '@shared/http/route-handler';
@@ -18,10 +18,11 @@ export const GET = withAuth(
 export const PATCH = withAuth(
   async ({ body, params }) => {
     const { partiesApi } = await getApi();
-    await partiesApi.rename(params.partyId, body.name);
+    if (body.name !== undefined) await partiesApi.rename(params.partyId, body.name);
+    if (body.edition !== undefined) await partiesApi.setEdition(params.partyId, body.edition);
     return null;
   },
-  { params: partyParamsSchema, body: partyNameSchema },
+  { params: partyParamsSchema, body: partyPatchSchema },
 );
 
 export const DELETE = withAuth(

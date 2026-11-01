@@ -9,9 +9,12 @@ import { Button } from '@frontend/components/ui/button';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { SectionCard } from '@frontend/components/ui/section-card';
+import { SelectField } from '@frontend/components/ui/select-field';
 import { useParty } from '@frontend/hooks/useParty';
 
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
+
+import { EDITIONS, type Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { personName } from './PartyRequests';
 
@@ -28,9 +31,15 @@ const useOrigin = () =>
 /** The GM's controls: invite, the link, players, name and deleting the party. */
 export function PartyManagement({ party, onDeleted }: { party: PartyView; onDeleted: () => void }) {
   const t = useTranslations('parties.manage');
-  const ids = { invite: useId(), link: useId(), name: useId() };
+  const ids = {
+    invite: useId(),
+    link: useId(),
+    name: useId(),
+    edition: useId(),
+    editionHint: useId(),
+  };
   const origin = useOrigin();
-  const { invite, rotateCode, removeMember, rename, remove } = useParty(party.id);
+  const { invite, rotateCode, removeMember, rename, setEdition, remove } = useParty(party.id);
   const [username, setUsername] = useState('');
   const [name, setName] = useState(party.name);
 
@@ -161,6 +170,28 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
             </Button>
           </div>
         </form>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor={ids.edition}>{t('editionLabel')}</Label>
+          <p id={ids.editionHint} className="text-label text-muted-foreground">
+            {t('editionHint')}
+          </p>
+          <SelectField
+            id={ids.edition}
+            aria-describedby={ids.editionHint}
+            value={party.edition}
+            onValueChange={(edition) =>
+              setEdition.mutate(edition as Edition, {
+                onSuccess: () => toast.success(t('editionSaved')),
+              })
+            }
+            options={EDITIONS.map((edition) => ({
+              value: edition,
+              label: t(edition === '2014' ? 'edition2014' : 'edition2024'),
+            }))}
+            className="max-w-xs"
+          />
+        </div>
 
         <Button
           type="button"

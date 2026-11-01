@@ -1,11 +1,18 @@
 import { z } from 'zod';
 
+import { EDITIONS } from '@shared/systems/dnd5e/content/editions';
+
 // Shape and sanity limits only. Game rules (name length...) stay in the domain, which reports
 // them with translated error codes.
 
 export const partyParamsSchema = z.object({ partyId: z.uuid() });
 
 export const partyNameSchema = z.object({ name: z.string().max(100) });
+
+export const partyPatchSchema = z
+  .object({ name: z.string().max(100), edition: z.enum(EDITIONS) })
+  .partial()
+  .refine((o) => o.name !== undefined || o.edition !== undefined);
 
 export const memberParamsSchema = z.object({ partyId: z.uuid(), userId: z.uuid() });
 

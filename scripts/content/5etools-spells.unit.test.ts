@@ -4,7 +4,6 @@ import {
   type FiveToolsSpell,
   extrasOf,
   renderEntries,
-  stripTags,
   toSpellData,
   toSpellId,
   toSpellText,
@@ -128,18 +127,33 @@ describe('conversão das magias do 5etools', () => {
   it('converte o texto sem deixar marcações', () => {
     const text = toSpellText(fireball);
     expect(text.name).toBe('Fireball');
-    expect(text.description).toContain('20-foot-radius Sphere centered');
-    expect(text.description).toContain('taking 8d6 Fire damage');
-    expect(text.description).toContain('start burning.');
-    expect(text.description).not.toContain('{@');
-    expect(text.higherLevel).toBe('The damage increases by 1d6 for each spell slot level above 3.');
+    // Tags stay in the stored text
+    expect(text.description).toContain(
+      '{@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered',
+    );
+    expect(text.description).toContain('taking {@damage 8d6} Fire damage');
+    expect(text.description).toContain('start {@hazard burning|XPHB}.');
+    expect(text.higherLevel).toBe(
+      'The damage increases by {@scaledamage 8d6|3-9|1d6} for each spell slot level above 3.',
+    );
     expect(text.material).toBe('A ball of bat guano and sulfur.');
   });
 
+  it('guarda as tags e põe a maiúscula do material fora delas', () => {
+    const frightening: FiveToolsSpell = {
+      ...fireball,
+      entries: ['The target is {@condition frightened}.'],
+      components: { v: true, m: '{@item ruby|XPHB} dust' },
+    };
+    expect(toSpellText(frightening)).toMatchObject({
+      description: 'The target is {@condition frightened}.',
+      material: '{@item ruby|XPHB} dust.',
+    });
+    const ruby = { ...frightening, components: { m: 'a {@item ruby}' } };
+    expect(toSpellText(ruby).material).toBe('A {@item ruby}.');
+  });
+
   it('marcações, listas e tabelas', () => {
-    expect(stripTags('{@chance 50} of the time, {@b bold} and {@spell fireball|XPHB}')).toBe(
-      '50% of the time, bold and fireball',
-    );
     expect(
       renderEntries([
         {
@@ -162,15 +176,6 @@ describe('conversão das magias do 5etools', () => {
         { type: 'entries', name: 'Hold', entries: ['The target is held.'] },
       ]),
     ).toBe('Choose one:\n• Audible Alarm. A handbell.\n• Plain item.\nHold. The target is held.');
-  });
-
-  it.each([
-    ['A {@filter Tiny|bestiary|size=T} beast', 'A Tiny beast'],
-    ['either a {@filter Beast|bestiary|type=beast} or not', 'either a Beast or not'],
-    ['the rules on {@book mounted combat|XPHB|1|Mounted Combat}.', 'the rules on mounted combat.'],
-    ['make a {@dc 15} Intelligence saving throw', 'make a DC 15 Intelligence saving throw'],
-  ])('marcação %s', (text, expected) => {
-    expect(stripTags(text)).toBe(expected);
   });
 
   it('tabela com título mostra o título antes', () => {
