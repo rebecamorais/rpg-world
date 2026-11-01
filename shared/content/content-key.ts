@@ -14,8 +14,7 @@ export function parseSpellKey(key: string): { source: string; id: string } | nul
 
 const CONTENT_KEY = /^dnd5e:([a-z0-9.-]+):([a-z]+):([a-z0-9-]+)$/;
 
-export const contentKey = (source: string, type: string, id: string) =>
-  `dnd5e:${source}:${type}:${id}`;
+const contentKey = (source: string, type: string, id: string) => `dnd5e:${source}:${type}:${id}`;
 
 export const conditionKey = (source: string, id: string) => contentKey(source, 'condition', id);
 
