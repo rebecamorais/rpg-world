@@ -359,4 +359,4 @@ next-intl, Vitest, Playwright.
 - [ ] **Step 2: Conferir no app** (`next dev`, desktop 1440px e celular 390px, como mestre e como jogador), com screenshots antes e depois do cartão de magia e do combate.
 - [ ] **Step 3: Run** `npx tsc --noEmit`, `npm run lint`, `npx knip`, `npm run test:unit`, `npm run test:integration`, `npm run test:e2e` e `npm run test:visual`, tudo verde.
 - [ ] **Step 4:** `/code-review`. A migração mexe em RLS e em função `SECURITY DEFINER`, então rode também o scan de segurança.
-- [ ] **Step 5: PR** único, com descrição em pt e en, aviso de migração e "Parte de #105". Inclua o passo do Crowdin depois do merge: rodar a Action à mão com `upload_translations: true`. Marque o plano como entregue no último commit.
+- [ ] **Step 5: PR** único, com descrição em pt e en, aviso de migração e "Parte de #105". Inclua o passo do Crowdin depois do merge: rodar a Action à mão com `upload_translations: true`. Sugira também configurar `{@…}` como marcação não traduzível no projeto do Crowdin, se a interface dele permitir (não é arquivo do repo). Marque o plano como entregue no último commit.
