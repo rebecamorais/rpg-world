@@ -33,13 +33,13 @@ function fail(action: string, error: PostgrestError): never {
 }
 
 type SheetData = {
+  race?: string;
+  class?: string;
   ac?: number;
+  speed?: number;
   hpTemp?: number;
   skills?: CombatSheet['skills'];
   deathSaves?: CombatSheet['deathSaves'];
-  spellcastingSystem?: 'slots' | 'points';
-  spellSlots?: CombatSheet['spellSlots'];
-  spellPoints?: CombatSheet['spellPoints'];
 };
 
 export class SupabaseCombatRepository implements CombatRepo {
@@ -95,7 +95,9 @@ export class SupabaseCombatRepository implements CombatRepo {
     // The GM reads players' sheets through the party read policy, and their own npc sheets as owner
     const { data, error } = await this.client
       .from('characters')
-      .select('id, name, hp_current, hp_max, level, attributes, system_data')
+      .select(
+        'id, name, hp_current, hp_max, level, attributes, system_data, avatar_url, theme_color',
+      )
       .in('id', characterIds)
       .is('deleted_at', null);
     if (error) fail('read combat sheets', error);
@@ -108,14 +110,17 @@ export class SupabaseCombatRepository implements CombatRepo {
         hpCurrent: row.hp_current,
         hpMax: row.hp_max,
         hpTemp: sheet.hpTemp ?? 0,
+        avatarUrl: row.avatar_url,
+        accentColor: row.theme_color,
+        race: sheet.race ?? '',
+        class: sheet.class ?? '',
         ac: sheet.ac ?? 10,
+        // The sheet's own default
+        speed: sheet.speed || 30,
         level: row.level,
         attributes: (row.attributes as Record<string, number>) ?? {},
         skills: sheet.skills ?? {},
         deathSaves: sheet.deathSaves ?? null,
-        spellcastingSystem: sheet.spellcastingSystem ?? null,
-        spellSlots: sheet.spellSlots ?? {},
-        spellPoints: sheet.spellPoints ?? null,
       };
     });
   }

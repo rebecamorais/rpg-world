@@ -34,7 +34,7 @@ describe('SupabaseCombatRepository (Integration)', () => {
       hp_current: 12,
       level: 5,
       attributes: { WIS: 14 },
-      system_data: { ac: 15, hpTemp: 2, spellSlots: { '1': { max: 4, used: 1 } } },
+      system_data: { ac: 15, hpTemp: 2, race: 'Elfa', class: 'Maga', speed: 9 },
     });
     await bring(player, partyId, heroId);
     goblinId = await createNpc(gm.userId, 'Goblin', 7);
@@ -85,7 +85,12 @@ describe('SupabaseCombatRepository (Integration)', () => {
       hpTemp: 2,
       ac: 15,
       level: 5,
-      spellSlots: { '1': { max: 4, used: 1 } },
+      race: 'Elfa',
+      class: 'Maga',
+      speed: 9,
+      avatarUrl: null,
+      // The column's default
+      accentColor: '#663399',
     });
 
     expect(await repo.removeParticipant(partyId, g3)).toBe(true);

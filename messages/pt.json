@@ -1090,9 +1090,6 @@
     "tempHpOf": "PV temporário de {name}",
     "ac": "CA",
     "passivePerception": "Percepção passiva",
-    "spells": "Magia",
-    "slot": "{level}º {available}/{max}",
-    "spellPoints": "{current}/{max} pontos",
     "moveUp": "Subir {name}",
     "moveDown": "Descer {name}",
     "remove": "Tirar {name} do combate",
@@ -1107,6 +1104,7 @@
     "order": "Ordem do combate",
     "yours": "seu",
     "tempHp": "temp",
-    "yourTurnToast": "Sua vez!"
+    "yourTurnToast": "Sua vez!",
+    "detailsOf": "Detalhes de {name}"
   }
 }

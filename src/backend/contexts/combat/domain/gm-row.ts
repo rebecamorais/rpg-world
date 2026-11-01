@@ -17,7 +17,6 @@ export function toGmRow(
     ? { current: sheet.hpCurrent, max: sheet.hpMax, temp: sheet.hpTemp }
     : { current: participant.hpCurrent ?? 0, max: sheet.hpMax, temp: participant.hpTemp ?? 0 };
   const perception = sheet.skills.PERCEPTION ?? {};
-  const usesPoints = sheet.spellcastingSystem === 'points';
 
   return {
     participantId: participant.id,
@@ -28,6 +27,11 @@ export function toGmRow(
     hp,
     deathSaves:
       isPlayer && hp.current === 0 ? (sheet.deathSaves ?? { successes: 0, failures: 0 }) : null,
+    avatarUrl: sheet.avatarUrl,
+    accentColor: sheet.accentColor,
+    race: sheet.race,
+    class: sheet.class,
+    level: sheet.level,
     ac: sheet.ac,
     passivePerception: calculatePassivePerception(
       sheet.attributes.WIS ?? 10,
@@ -35,13 +39,8 @@ export function toGmRow(
       perception.isProficient ?? false,
       perception.expertise ?? false,
     ),
-    spellSlots: usesPoints
-      ? []
-      : Object.entries(sheet.spellSlots)
-          .map(([level, slot]) => ({ level: Number(level), max: slot.max, used: slot.used }))
-          .filter((slot) => slot.max > 0)
-          .sort((a, b) => a.level - b.level),
-    spellPoints: usesPoints ? sheet.spellPoints : null,
+    speed: sheet.speed,
+    attributes: sheet.attributes,
     isCurrent: participant.id === currentParticipantId,
   };
 }

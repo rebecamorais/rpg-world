@@ -32,7 +32,6 @@ type GmMode = 'roleplay' | 'combat';
 
 /** Role Play or Combat, kept in `?mode=`; without one, Combat while a combat is going on. */
 function useGmMode(partyId: string) {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { encounter, isLoading } = useEncounter(partyId);
@@ -40,7 +39,9 @@ function useGmMode(partyId: string) {
   const mode: GmMode =
     asked === 'combat' || asked === 'roleplay' ? asked : encounter ? 'combat' : 'roleplay';
 
-  const setMode = (next: string) => router.replace(`${pathname}?mode=${next}`, { scroll: false });
+  // The native history API updates searchParams right away, without asking the server again
+  const setMode = (next: string) =>
+    window.history.replaceState(null, '', `${pathname}?mode=${next}`);
   return { mode, setMode, isLoading };
 }
 
