@@ -42,6 +42,20 @@ describe('filterSpellbook', () => {
     }),
   ];
 
+  it('filtra por condição, de qualquer edição', () => {
+    const withConditions = [
+      spell('a', { conditions: ['dnd5e:srd-5.1:condition:frightened'] }),
+      spell('b', {
+        conditions: ['dnd5e:srd-5.2:condition:frightened', 'dnd5e:srd-5.2:condition:prone'],
+      }),
+      spell('c', { conditions: ['dnd5e:srd-5.2:condition:prone'] }),
+      spell('d'),
+    ];
+    const filters = { ...NO_SPELLBOOK_FILTERS, condition: 'frightened' };
+    expect(ids(filterSpellbook(withConditions, filters))).toEqual(['a', 'b']);
+    expect(activeSpellbookFilterCount(filters)).toBe(1);
+  });
+
   it('sem filtros, devolve todas', () => {
     expect(ids(filterSpellbook(SPELLS, NO_SPELLBOOK_FILTERS))).toEqual(ids(SPELLS));
   });

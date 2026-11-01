@@ -14,6 +14,27 @@ vi.mock('./spell-card/hooks/useSpellDisplay', async (importOriginal) => {
   return { ...actual, useSpellDisplay: vi.fn(actual.useSpellDisplay) };
 });
 
+vi.mock('@frontend/hooks/useConditions', () => {
+  const list = [
+    {
+      key: 'dnd5e:srd-5.1:condition:frightened',
+      id: 'frightened',
+      edition: '2014',
+      name: 'Frightened 14',
+    },
+    {
+      key: 'dnd5e:srd-5.2:condition:frightened',
+      id: 'frightened',
+      edition: '2024',
+      name: 'Frightened 24',
+    },
+    { key: 'dnd5e:srd-5.2:condition:prone', id: 'prone', edition: '2024', name: 'Prone' },
+  ];
+  return {
+    useConditions: () => ({ list, byKey: new Map(list.map((c) => [c.key, c])), isLoading: false }),
+  };
+});
+
 const t = messages.characters;
 
 function spell(id: string, name: string, level: number, isPrepared = false): Spell {
@@ -180,6 +201,25 @@ describe('Spellbook', () => {
 
       expect(prepared).toHaveAttribute('aria-pressed', 'true');
       expect(renderedSpellNames()).toEqual(['Fly']);
+    });
+
+    it('o select de condição só oferece as que as magias têm, e filtra', async () => {
+      const user = userEvent.setup();
+      const withCondition = [
+        {
+          ...spell('cause-fear', 'Cause Fear', 1),
+          conditions: ['dnd5e:srd-5.2:condition:frightened'],
+        },
+        spell('light', 'Light', 0),
+      ];
+      renderWithProviders(<Spellbook characterSpells={withCondition} />);
+
+      await user.click(screen.getByRole('combobox', { name: messages.conditions.filter }));
+      expect(screen.getByRole('option', { name: 'Frightened 24' })).toBeInTheDocument();
+      expect(screen.queryByRole('option', { name: 'Prone' })).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole('option', { name: 'Frightened 24' }));
+      expect(renderedSpellNames()).toEqual(['Cause Fear']);
     });
 
     it('quando nada bate, mostra um estado vazio que limpa os filtros', async () => {

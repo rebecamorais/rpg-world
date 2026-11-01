@@ -16,7 +16,24 @@ import SpellSearchDialog from './SpellSearchDialog';
 vi.mock('@client', () => ({ rpgWorldApi: { get: vi.fn() } }));
 // The condition catalog is its own request; these tests only count the spell ones
 vi.mock('@frontend/hooks/useConditions', () => ({
-  useConditions: () => ({ list: [], byKey: new Map(), isLoading: false }),
+  useConditions: () => ({
+    list: [
+      {
+        key: 'dnd5e:srd-5.1:condition:frightened',
+        id: 'frightened',
+        edition: '2014',
+        name: 'Frightened',
+      },
+      {
+        key: 'dnd5e:srd-5.2:condition:frightened',
+        id: 'frightened',
+        edition: '2024',
+        name: 'Frightened',
+      },
+    ],
+    byKey: new Map(),
+    isLoading: false,
+  }),
 }));
 
 const api = vi.mocked(rpgWorldApi);
@@ -68,6 +85,18 @@ describe('SpellSearchDialog', () => {
       const page = Number(new URLSearchParams(url.split('?')[1]).get('page'));
       return { data: spells(12, page * 12), total: 30 };
     });
+  });
+
+  it('manda a condição escolhida para a busca', async () => {
+    const user = userEvent.setup();
+    renderDialog();
+    await waitFor(() => expect(lastQuery()).toBeDefined());
+
+    await user.click(screen.getByRole('combobox', { name: messages.conditions.filter }));
+    // Both editions list it; the select shows it once
+    await user.click(screen.getByRole('option', { name: 'Frightened' }));
+
+    await waitFor(() => expect(lastQuery().condition).toBe('frightened'));
   });
 
   it('começa filtrando pela classe do personagem, e dá para limpar', async () => {
