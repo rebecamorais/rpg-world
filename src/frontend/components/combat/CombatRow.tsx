@@ -2,8 +2,6 @@
 
 import { type CSSProperties, useState } from 'react';
 
-import Link from 'next/link';
-
 import { useTranslations } from 'next-intl';
 
 import { CharacterIdentity } from '@frontend/components/party/RolePlayCard';
@@ -139,9 +137,9 @@ export function CombatRow({
         />
 
         {/* Never squeezed out by the buttons: on a phone they drop to the next line */}
-        <Link href={sheetHref} className="focus-ring min-w-0 flex-1 basis-40 rounded-lg">
-          <CharacterIdentity character={row} />
-        </Link>
+        <div className="min-w-0 flex-1 basis-40">
+          <CharacterIdentity character={row} href={sheetHref} />
+        </div>
 
         {/* On touch screens the gap keeps each button's 44px touch area apart */}
         <div className="ml-auto flex items-center gap-1 pointer-coarse:gap-2">

@@ -121,6 +121,21 @@ describe('CombatRow', () => {
     expect(details()).toHaveAttribute('aria-expanded', 'false');
   });
 
+  it('só o nome leva à ficha; o avatar e a linha de raça e classe abrem o card', async () => {
+    renderRow();
+    expect(screen.getByRole('link', { name: 'Arani' })).toHaveTextContent(/^Arani$/);
+
+    await userEvent.click(screen.getByText(/Elfa · Maga/));
+    expect(details()).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('o card usa a cor que o dono escolheu para o personagem', () => {
+    renderRow(gmRow({ accentColor: '#16a34a' }));
+    expect(screen.getByRole('listitem').style.getPropertyValue('--character-color')).toBe(
+      '#16a34a',
+    );
+  });
+
   it('clicar no nome ou num campo não abre o card', async () => {
     renderRow();
     await userEvent.click(screen.getByLabelText(fill(t.initiativeOf, { name: 'Arani' })));

@@ -14,11 +14,16 @@ import type {
   RosterCharacter,
 } from '@backend/contexts/parties/domain/PartyView';
 
-/** Avatar, name and "race · class · level" of a character at the table. */
+/**
+ * Avatar, name and "race · class · level" of a character at the table. With `href`, only the name
+ * is a link to the sheet.
+ */
 export function CharacterIdentity({
   character,
+  href,
 }: {
   character: Pick<RosterCharacter, 'name' | 'avatarUrl' | 'race' | 'class' | 'level'>;
+  href?: string;
 }) {
   const t = useTranslations('parties.page');
   const details = [character.race, character.class, t('level', { level: character.level })]
@@ -40,7 +45,16 @@ export function CharacterIdentity({
         </AvatarFallback>
       </Avatar>
       <div className="flex min-w-0 flex-col">
-        <span className="text-title text-character-flare truncate">{character.name}</span>
+        {href ? (
+          <Link
+            href={href}
+            className="text-title text-character-flare focus-ring truncate rounded-sm hover:underline"
+          >
+            {character.name}
+          </Link>
+        ) : (
+          <span className="text-title text-character-flare truncate">{character.name}</span>
+        )}
         <span className="text-label text-muted-foreground truncate">{details}</span>
       </div>
     </div>
