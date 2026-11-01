@@ -9,7 +9,12 @@ import {
   createNpc,
   createParty,
 } from '../../../../../test/helpers/parties';
-import { listen, listenAsMember, waitFor } from '../../../../../test/helpers/realtime';
+import {
+  listen,
+  listenAsMember,
+  untilNotified,
+  waitFor,
+} from '../../../../../test/helpers/realtime';
 import { createSignedInClient } from '../../../../../test/helpers/signed-in-client';
 
 type Session = Awaited<ReturnType<typeof createSignedInClient>>;
@@ -58,9 +63,15 @@ describe('Combate em tempo real (Integration)', () => {
     const asGm = await listenAsMember(gm.client, partyId);
     const asPlayer = await listenAsMember(player.client, partyId);
 
-    await gm.client.from('encounter_participants').update({ initiative: 12 }).eq('id', goblin);
+    const change = async () => {
+      const { error } = await gm.client
+        .from('encounter_participants')
+        .update({ initiative: 12 })
+        .eq('id', goblin);
+      if (error) throw error;
+    };
 
-    expect(await waitFor(asGm.messages, 1)).toBeGreaterThan(0);
+    expect(await untilNotified(asGm.messages, change)).toBeGreaterThan(0);
     expect(await waitFor(asPlayer.messages, 1)).toBeGreaterThan(0);
     for (const { payload } of [...asGm.messages, ...asPlayer.messages]) {
       expect(Object.keys(payload).filter((key) => key !== 'id')).toEqual([]);
@@ -70,9 +81,15 @@ describe('Combate em tempo real (Integration)', () => {
   it('o jogador salvar a ficha avisa as mesas em que ela está no combate', async () => {
     const asGm = await listenAsMember(gm.client, partyId);
 
-    await player.client.from('characters').update({ hp_current: 3 }).eq('id', heroId);
+    const change = async () => {
+      const { error } = await player.client
+        .from('characters')
+        .update({ hp_current: 3 })
+        .eq('id', heroId);
+      if (error) throw error;
+    };
 
-    expect(await waitFor(asGm.messages, 1)).toBeGreaterThan(0);
+    expect(await untilNotified(asGm.messages, change)).toBeGreaterThan(0);
   });
 
   it('um jogador enviando broadcast pelo cliente não chega ao mestre', async () => {

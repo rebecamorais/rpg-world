@@ -37,6 +37,20 @@ export async function listenAsMember(client: SupabaseClient, partyId: string, ms
   }
 }
 
+/**
+ * Makes `change` until `messages` gets a notice, or `ms` pass. A freshly started Realtime (the first
+ * test of a CI run to use it) may answer SUBSCRIBED before it reads the database's broadcasts, and
+ * the notices sent in between are lost: repeating the change waits for that, not just the socket.
+ */
+export async function untilNotified(messages: unknown[], change: () => Promise<void>, ms = 20000) {
+  const deadline = Date.now() + ms;
+  do {
+    await change();
+    if ((await waitFor(messages, 1, 2000)) > 0) break;
+  } while (Date.now() < deadline);
+  return messages.length;
+}
+
 /** Waits until `messages` has at least `count` entries, or `ms` pass. */
 export async function waitFor(messages: unknown[], count: number, ms = 5000) {
   const deadline = Date.now() + ms;

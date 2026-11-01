@@ -11,7 +11,7 @@ import {
   createNpc,
   createParty,
 } from '../../../../../test/helpers/parties';
-import { listenAsMember, waitFor } from '../../../../../test/helpers/realtime';
+import { listenAsMember, untilNotified, waitFor } from '../../../../../test/helpers/realtime';
 import { createSignedInClient } from '../../../../../test/helpers/signed-in-client';
 
 type Session = Awaited<ReturnType<typeof createSignedInClient>>;
@@ -220,9 +220,12 @@ describe('Condições no combate e edição da mesa (Integration)', () => {
       const asPlayer = await listenAsMember(player.client, partyId);
       expect([asGm.status, asPlayer.status]).toEqual(['SUBSCRIBED', 'SUBSCRIBED']);
 
-      await setConditions(player, hero, PRONE);
+      const change = async () => {
+        const { error } = await setConditions(player, hero, PRONE);
+        if (error) throw error;
+      };
 
-      expect(await waitFor(asGm.messages, 1)).toBeGreaterThan(0);
+      expect(await untilNotified(asGm.messages, change)).toBeGreaterThan(0);
       expect(await waitFor(asPlayer.messages, 1)).toBeGreaterThan(0);
     });
   });
