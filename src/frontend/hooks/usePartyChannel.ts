@@ -19,7 +19,13 @@ export function usePartyChannel(partyId: string) {
 
   useEffect(() => {
     const client = getSupabaseBrowserClient();
-    const refresh = () => queryClient.invalidateQueries({ queryKey: encounterQueryKey(partyId) });
+    const queryKey = encounterQueryKey(partyId);
+    // A fetch already in flight may have read the combat before this change: invalidating alone
+    // would reuse it (TanStack dedupes a first load), so it's cancelled and fetched again
+    const refresh = async () => {
+      await queryClient.cancelQueries({ queryKey });
+      await queryClient.invalidateQueries({ queryKey });
+    };
     let channel: RealtimeChannel | null = null;
     let cancelled = false;
 

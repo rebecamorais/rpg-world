@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { act, waitFor } from '@testing-library/react';
 import { renderHookWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -91,5 +92,21 @@ describe('usePartyChannel', () => {
     unmount();
 
     expect(fake.client.removeChannel).toHaveBeenCalledWith(fake.channel);
+  });
+
+  // The first load can still be in flight when the channel subscribes (or a change arrives):
+  // reusing that request would keep what it read before the change
+  it('um aviso durante a primeira busca busca de novo, em vez de aproveitar a busca antiga', async () => {
+    const queryFn = vi.fn(() => new Promise<string>(() => {}));
+    renderHookWithProviders(() => {
+      useQuery({ queryKey: encounterQueryKey('party-1'), queryFn });
+      return usePartyChannel('party-1');
+    });
+    await subscribed();
+    expect(queryFn).toHaveBeenCalledTimes(1);
+
+    await act(async () => fake.state.status!('SUBSCRIBED'));
+
+    await waitFor(() => expect(queryFn).toHaveBeenCalledTimes(2));
   });
 });
