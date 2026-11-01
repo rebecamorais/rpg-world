@@ -138,7 +138,8 @@ export function CombatRow({
         </span>
       </div>
 
-      <div className="flex flex-col gap-1">
+      {/* As wide as an enemy's fields, so a full bar is just as long on every row */}
+      <div className="flex min-w-52 flex-col gap-1">
         <span className="text-label text-muted-foreground">{t('hp')}</span>
         {isEnemy ? (
           <div className="flex items-center gap-1">

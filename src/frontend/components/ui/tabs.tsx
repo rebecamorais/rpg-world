@@ -27,6 +27,9 @@ function TabsList({
       if (!active) return list.removeAttribute('data-indicator');
       list.style.setProperty('--tab-left', `${active.offsetLeft}px`);
       list.style.setProperty('--tab-width', `${active.offsetWidth}px`);
+      // A list that wraps (the landing on a phone) puts the active tab on another row
+      list.style.setProperty('--tab-top', `${active.offsetTop}px`);
+      list.style.setProperty('--tab-height', `${active.offsetHeight}px`);
       list.setAttribute('data-indicator', '');
     };
     place();
@@ -52,7 +55,7 @@ function TabsList({
     >
       <span
         aria-hidden="true"
-        className="bg-background absolute inset-y-1 left-0 hidden w-(--tab-width) translate-x-(--tab-left) rounded-sm shadow-sm transition-[translate,width] duration-300 ease-out group-data-indicator/tabs:block"
+        className="bg-background absolute top-0 left-0 hidden h-(--tab-height) w-(--tab-width) translate-x-(--tab-left) translate-y-(--tab-top) rounded-sm shadow-sm transition-[translate,width,height] duration-300 ease-out group-data-indicator/tabs:block"
       />
       {children}
     </TabsPrimitive.List>
