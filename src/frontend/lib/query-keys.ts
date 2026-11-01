@@ -10,3 +10,4 @@ export const charactersQueryKey = (kind: 'pc' | 'npc' = 'pc') =>
 export const SESSION_QUERY_KEY = ['session'] as const;
 export const PARTIES_QUERY_KEY = ['parties'] as const;
 export const partyQueryKey = (partyId: string) => ['party', partyId] as const;
+export const encounterQueryKey = (partyId: string) => ['encounter', partyId] as const;
