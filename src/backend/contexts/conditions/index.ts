@@ -4,7 +4,7 @@ import { getConditionCatalog } from './infrastructure/srd-conditions';
 export { getConditionCatalog };
 
 export class ConditionsContext {
-  constructor(private readonly catalog: ConditionCatalog) {}
+  constructor(readonly catalog: ConditionCatalog) {}
 
   list(locale?: string) {
     return this.catalog.list(locale);

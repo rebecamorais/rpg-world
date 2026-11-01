@@ -25,6 +25,7 @@ export class GetPartyUseCase {
       id: party.id,
       name: party.name,
       system: party.system,
+      edition: party.edition,
       role: isGm ? 'gm' : 'player',
       people,
       roster,

@@ -22,8 +22,20 @@ const view = (current: 'mine' | 'theirs'): PlayerEncounterView => ({
   role: 'player',
   round: 3,
   turns: [
-    { participantId: 'a', name: 'Arani', isCurrent: current === 'mine', isMine: true },
-    { participantId: 'b', name: 'Goblin 1', isCurrent: current === 'theirs', isMine: false },
+    {
+      participantId: 'a',
+      name: 'Arani',
+      isCurrent: current === 'mine',
+      isMine: true,
+      conditions: [],
+    },
+    {
+      participantId: 'b',
+      name: 'Goblin 1',
+      isCurrent: current === 'theirs',
+      isMine: false,
+      conditions: [],
+    },
   ],
 });
 

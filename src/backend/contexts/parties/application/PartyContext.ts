@@ -1,5 +1,7 @@
 import { PartyGmAccess } from '@backend/shared/domain/PartyGmAccess';
 
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 import { InvitePreview, MemberStatus, MyParties } from '../domain/Party';
 import { PartyView } from '../domain/PartyView';
 
@@ -11,6 +13,7 @@ export interface PartyContext extends PartyGmAccess {
   listMine(): Promise<MyParties>;
   create(gmId: string, name: string): Promise<{ id: string }>;
   rename(partyId: string, name: string): Promise<void>;
+  setEdition(partyId: string, edition: Edition): Promise<void>;
   delete(partyId: string): Promise<void>;
   rotateInviteCode(partyId: string): Promise<string>;
   getInvite(code: string): Promise<InvitePreview>;

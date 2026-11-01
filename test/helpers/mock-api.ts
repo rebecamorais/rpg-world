@@ -43,7 +43,9 @@ export const api = {
     start: vi.fn(),
     endTurn: vi.fn(),
     finish: vi.fn(),
+    setConditions: vi.fn(),
   },
+  partiesApi: { rename: vi.fn(), setEdition: vi.fn() },
 };
 
 export const getApi = async () => api;

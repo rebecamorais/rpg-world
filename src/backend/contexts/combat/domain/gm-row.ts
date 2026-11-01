@@ -41,6 +41,7 @@ export function toGmRow(
     ),
     speed: sheet.speed,
     attributes: sheet.attributes,
+    conditions: participant.conditions,
     isCurrent: participant.id === currentParticipantId,
   };
 }

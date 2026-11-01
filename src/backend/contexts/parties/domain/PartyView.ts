@@ -1,3 +1,5 @@
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 import { MemberStatus, PartyRole } from './Party';
 
 export interface PartyPerson {
@@ -35,6 +37,7 @@ export interface PartyView {
   id: string;
   name: string;
   system: string;
+  edition: Edition;
   role: PartyRole;
   people: PartyPerson[];
   roster: RosterCharacter[];

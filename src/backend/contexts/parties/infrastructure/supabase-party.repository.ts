@@ -1,6 +1,8 @@
 import { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 import { Database } from '@database-types';
 
 import { InvitePreview, MemberStatus, PartySummary } from '../domain/Party';
@@ -64,6 +66,16 @@ export class SupabasePartyRepository implements PartyRepo {
       .eq('id', id)
       .select('id');
     if (error) fail('rename party', error);
+    return data.length > 0;
+  }
+
+  async setEdition(id: string, edition: Edition): Promise<boolean> {
+    const { data, error } = await this.client
+      .from('parties')
+      .update({ edition })
+      .eq('id', id)
+      .select('id');
+    if (error) fail('change party edition', error);
     return data.length > 0;
   }
 
@@ -138,11 +150,19 @@ export class SupabasePartyRepository implements PartyRepo {
   async findParty(id: string): Promise<PartyRecord | null> {
     const { data, error } = await this.client
       .from('parties')
-      .select('id, name, system, gm_id')
+      .select('id, name, system, gm_id, edition')
       .eq('id', id)
       .maybeSingle();
     if (error) fail('find party', error);
-    return data && { id: data.id, name: data.name, system: data.system, gmId: data.gm_id };
+    return (
+      data && {
+        id: data.id,
+        name: data.name,
+        system: data.system,
+        gmId: data.gm_id,
+        edition: data.edition as Edition,
+      }
+    );
   }
 
   async people(partyId: string): Promise<PartyPerson[]> {

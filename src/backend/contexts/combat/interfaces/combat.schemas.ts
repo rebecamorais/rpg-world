@@ -26,3 +26,9 @@ export const participantPatchSchema = z
 export const orderSchema = z.object({ participantIds: z.array(z.uuid()).min(1).max(50) });
 
 export const turnSchema = z.object({ participantId: z.uuid() });
+
+export const conditionsSchema = z.object({
+  conditions: z
+    .array(z.object({ key: z.string().max(80), level: z.number().int().nullable().default(null) }))
+    .max(20),
+});

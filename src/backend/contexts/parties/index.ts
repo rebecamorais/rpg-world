@@ -14,6 +14,7 @@ import { RenamePartyUseCase } from './application/rename-party.use-case';
 import { RequestJoinUseCase } from './application/request-join.use-case';
 import { RotateInviteCodeUseCase } from './application/rotate-invite-code.use-case';
 import { SetMyCharactersUseCase } from './application/set-my-characters.use-case';
+import { SetPartyEditionUseCase } from './application/set-party-edition.use-case';
 import { SupabasePartyRepository } from './infrastructure/supabase-party.repository';
 
 export type { PartyContext };
@@ -24,6 +25,7 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
   const listMyParties = new ListMyPartiesUseCase(repository);
   const createParty = new CreatePartyUseCase(repository);
   const renameParty = new RenamePartyUseCase(repository);
+  const setPartyEdition = new SetPartyEditionUseCase(repository);
   const deleteParty = new DeletePartyUseCase(repository);
   const rotateInviteCode = new RotateInviteCodeUseCase(repository);
   const getInvite = new GetInviteUseCase(repository);
@@ -39,6 +41,7 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
     listMine: listMyParties.execute.bind(listMyParties),
     create: createParty.execute.bind(createParty),
     rename: renameParty.execute.bind(renameParty),
+    setEdition: setPartyEdition.execute.bind(setPartyEdition),
     delete: deleteParty.execute.bind(deleteParty),
     rotateInviteCode: rotateInviteCode.execute.bind(rotateInviteCode),
     getInvite: getInvite.execute.bind(getInvite),

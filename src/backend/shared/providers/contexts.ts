@@ -87,7 +87,7 @@ export class Contexts {
 
   get combat() {
     if (!this._combat) {
-      this._combat = createCombatContext(this.container.get('userClient'));
+      this._combat = createCombatContext(this.container.get('userClient'), this.conditions.catalog);
     }
     return this._combat;
   }
