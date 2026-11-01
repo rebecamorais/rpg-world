@@ -460,6 +460,17 @@ export type Database = {
     };
     Functions: {
       auth_user_exists: { Args: { p_email: string }; Returns: boolean };
+      encounter_turns: {
+        Args: { p_party_id: string };
+        Returns: {
+          is_current: boolean;
+          is_mine: boolean;
+          name: string;
+          participant_id: string;
+          round: number;
+        }[];
+      };
+      end_turn: { Args: { p_participant_id: string; p_party_id: string }; Returns: undefined };
       get_party_invite: {
         Args: { p_code: string };
         Returns: {
@@ -506,6 +517,11 @@ export type Database = {
         }[];
       };
       request_party_join: { Args: { p_code: string }; Returns: string };
+      set_encounter_order: {
+        Args: { p_participant_ids: string[]; p_party_id: string };
+        Returns: undefined;
+      };
+      start_encounter: { Args: { p_party_id: string }; Returns: undefined };
     };
     Enums: {
       rpg_system: 'dnd_5e' | 'ezd6' | 'pathfinder_2e';
