@@ -283,6 +283,28 @@
       "label": "Personagens ou NPCs",
       "pc": "Meus personagens",
       "npc": "Meus NPCs"
+    },
+    "spellbookFilters": {
+      "searchLabel": "Buscar no grimório",
+      "searchPlaceholder": "Buscar pelo nome",
+      "filters": "Filtros do grimório",
+      "prepared": "Preparadas",
+      "concentration": "Concentração",
+      "ritual": "Ritual",
+      "allSchools": "Todas as escolas",
+      "allDamage": "Todos os danos",
+      "allCastingTimes": "Qualquer tempo de conjuração",
+      "castingTimes": {
+        "action": "Ação",
+        "bonus_action": "Ação bônus",
+        "reaction": "Reação",
+        "longer": "1 minuto ou mais"
+      },
+      "clear": "Limpar filtros",
+      "noMatchTitle": "Nenhuma magia encontrada",
+      "noMatchDescription": "Tente outro nome ou desligue um filtro.",
+      "showing": "{shown} de {total} magias",
+      "castingTime": "Tempo de conjuração"
     }
   },
   "characterHeader": {
