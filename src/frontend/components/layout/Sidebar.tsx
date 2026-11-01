@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 
@@ -19,15 +19,42 @@ import {
   SheetTrigger,
 } from '@frontend/components/ui/sheet';
 import { useAuth } from '@frontend/hooks/useAuth';
+import { useParties } from '@frontend/hooks/useParties';
 import { useProfile } from '@frontend/hooks/useProfile';
+
+import type { PartySummary } from '@backend/contexts/parties/domain/Party';
+
+function PartyLinks({ title, parties }: { title: string; parties: PartySummary[] }) {
+  const pathname = usePathname();
+
+  return (
+    <div className="mt-2 flex flex-col">
+      <p className="text-label text-muted-foreground px-3 py-1">{title}</p>
+      {parties.map((party) => {
+        const href = `/parties/${party.id}`;
+        return (
+          <NavItem
+            key={party.id}
+            href={href}
+            label={party.name}
+            isActive={pathname?.startsWith(href)}
+            isSubItem
+          />
+        );
+      })}
+    </div>
+  );
+}
 
 function SidebarContent() {
   const params = useParams();
   const characterId = params?.id as string;
   const tDash = useTranslations('dashboard');
   const tCommon = useTranslations('common');
+  const tParties = useTranslations('parties');
   const { profile } = useProfile();
   const { signOut } = useAuth();
+  const { parties } = useParties();
 
   const username = profile?.username || tCommon('title');
   const avatarUrl = profile?.avatarUrl;
@@ -58,6 +85,13 @@ function SidebarContent() {
             <p className="text-label text-muted-foreground mb-2 px-3">{tDash('menu')}</p>
             <NavItem href="/settings/profile" label={tDash('myProfile')} />
             <NavItem href="/characters" label={tDash('myCharacters')} />
+            <NavItem href="/parties" label={tParties('nav.parties')} />
+            {parties?.asGm.length ? (
+              <PartyLinks title={tParties('nav.gm')} parties={parties.asGm} />
+            ) : null}
+            {parties?.asPlayer.length ? (
+              <PartyLinks title={tParties('nav.player')} parties={parties.asPlayer} />
+            ) : null}
             <Button asChild size="sm" className="mt-3 w-full">
               <Link href="/characters/new">
                 <AppIcon name="Plus" size={16} aria-hidden="true" />

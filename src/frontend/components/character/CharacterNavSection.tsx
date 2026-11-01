@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { NavItem } from '@frontend/components/ui/nav-item';
 import { useCharacter } from '@frontend/hooks/useCharacter';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { CharacterTab } from '@frontend/types/character-sheet';
 
@@ -15,13 +16,14 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
   const { character } = useCharacter(characterId, { fetch: false });
   const pathname = usePathname();
   const t = useTranslations('characters.tabs');
+  const { pagesPath } = useSheetSource(characterId, character?.system);
 
   const characterName = character?.name;
   const avatarUrl = character?.avatarUrl;
 
   if (!characterName || !character?.system) return null;
 
-  const basePath = `/system/${character.system}/character/${characterId}`;
+  const basePath = pagesPath;
 
   const navItems = [
     { id: CharacterTab.STATUS, label: t('status'), icon: 'Shield', href: basePath },

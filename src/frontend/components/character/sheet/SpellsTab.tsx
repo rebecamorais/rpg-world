@@ -11,6 +11,7 @@ import { SpellCardSkeleton } from '@frontend/components/character/spells/spell-c
 import { Button } from '@frontend/components/ui/button';
 import { useCharacterMeta } from '@frontend/context/CharacterContext';
 import { useCharacterSpells } from '@frontend/hooks/useCharacterSpells';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
 
 import { SheetPage } from './SheetPage';
 
@@ -21,6 +22,8 @@ export function SpellsTab() {
   const tDrawer = useTranslations('spellsDrawer');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { spells, isLoading, learnSpell, forgetSpell, togglePrepared } = useCharacterSpells(id);
+  // Read only (the GM): the spellbook opens to read, nothing is learned, forgotten or prepared
+  const { readOnly } = useSheetSource(id);
 
   const preparedCount = spells.filter((s) => s.isPrepared).length;
 
@@ -29,15 +32,17 @@ export function SpellsTab() {
       <span className="text-label text-muted-foreground">
         {t('spells.preparedLabels', { count: preparedCount })}
       </span>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => setIsSearchOpen(true)}
-        className="text-label h-8 px-3"
-      >
-        <Plus aria-hidden="true" />
-        {t('spells.addBtn')}
-      </Button>
+      {!readOnly && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setIsSearchOpen(true)}
+          className="text-label h-8 px-3"
+        >
+          <Plus aria-hidden="true" />
+          {t('spells.addBtn')}
+        </Button>
+      )}
     </div>
   );
 
@@ -55,14 +60,14 @@ export function SpellsTab() {
       ) : (
         <SpellsSection
           characterSpells={spells}
-          onForgetSpell={forgetSpell}
-          onTogglePrepared={togglePrepared}
-          onAddSpell={() => setIsSearchOpen(true)}
+          onForgetSpell={readOnly ? undefined : forgetSpell}
+          onTogglePrepared={readOnly ? undefined : togglePrepared}
+          onAddSpell={readOnly ? undefined : () => setIsSearchOpen(true)}
         />
       )}
 
       {/* Mounted once the spellbook is in: the list starts on the edition of its spells */}
-      {!isLoading && (
+      {!isLoading && !readOnly && (
         <SpellSearchDialog
           isOpen={isSearchOpen}
           onClose={() => setIsSearchOpen(false)}

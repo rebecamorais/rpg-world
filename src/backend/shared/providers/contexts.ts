@@ -1,6 +1,7 @@
 import { createCharacterContext } from '@backend/contexts/characters';
 import { createFeedbackContext } from '@backend/contexts/feedback';
 import { createLoreContext } from '@backend/contexts/lore';
+import { createPartyContext } from '@backend/contexts/parties';
 import { createSpellsContext } from '@backend/contexts/spells';
 import { createAuthContext, createUserProfileContext } from '@backend/contexts/users';
 
@@ -13,6 +14,7 @@ export class Contexts {
   private _lore: ReturnType<typeof createLoreContext> | null = null;
   private _spells: ReturnType<typeof createSpellsContext> | null = null;
   private _feedback: ReturnType<typeof createFeedbackContext> | null = null;
+  private _party: ReturnType<typeof createPartyContext> | null = null;
 
   constructor(
     private container: {
@@ -22,7 +24,9 @@ export class Contexts {
 
   get character() {
     if (!this._character) {
-      this._character = createCharacterContext(this.container.get('userClient'));
+      this._character = createCharacterContext(this.container.get('userClient'), {
+        partyGmAccess: this.party,
+      });
     }
     return this._character;
   }
@@ -52,6 +56,7 @@ export class Contexts {
       this._lore = createLoreContext({
         dbClient: this.container.get('userClient'),
         characterOwnership: this.character,
+        partyGmAccess: this.party,
       });
     }
     return this._lore;
@@ -62,6 +67,13 @@ export class Contexts {
       this._spells = createSpellsContext();
     }
     return this._spells;
+  }
+
+  get party() {
+    if (!this._party) {
+      this._party = createPartyContext(this.container.get('userClient'));
+    }
+    return this._party;
   }
 
   get feedback() {

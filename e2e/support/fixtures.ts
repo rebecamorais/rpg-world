@@ -33,6 +33,17 @@ export async function hydrated(locator: Locator): Promise<Locator> {
   return locator;
 }
 
+/** A party created through the API by the user signed in on `page`, with its invite code. */
+export async function createParty(page: Page, name: string): Promise<{ id: string; code: string }> {
+  const res = await page.request.post('/api/parties', { data: { name } });
+  expect(res.status()).toBe(201);
+  const { id } = await res.json();
+  const party = await (await page.request.get(`/api/parties/${id}`)).json();
+  return { id, code: party.gm.inviteCode };
+}
+
+export const partyUrl = (id: string, path = '') => `/parties/${id}${path}`;
+
 export const characterUrl = (id: string, tab = '') => `/system/DnD_5e/character/${id}${tab}`;
 
 interface Fixtures {

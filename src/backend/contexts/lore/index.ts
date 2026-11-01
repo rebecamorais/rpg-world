@@ -1,7 +1,10 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import { PartyGmAccess } from '@backend/shared/domain/PartyGmAccess';
+
 import { DeleteLoreUseCase } from './application/delete-lore/delete-lore.use-case';
 import { GetLoreUseCase } from './application/get-lore/get-lore.use-case';
+import { GetPartyLoreUseCase } from './application/get-lore/get-party-lore.use-case';
 import { UpdateLoreUseCase } from './application/update-lore/update-lore.use-case';
 import { CharacterOwnership } from './domain/CharacterOwnership';
 import { Lore } from './domain/Lore';
@@ -14,6 +17,7 @@ export type { CharacterOwnership, LoreContext };
 export function createLoreContext(config: {
   dbClient: SupabaseClient;
   characterOwnership: CharacterOwnership;
+  partyGmAccess: PartyGmAccess;
 }): LoreContext {
   const repository = new SupabaseLoreRepository(config.dbClient);
 
@@ -22,6 +26,7 @@ export function createLoreContext(config: {
   const getLoreUseCase = new GetLoreUseCase(repository, characterOwnership);
   const updateLoreUseCase = new UpdateLoreUseCase(repository, characterOwnership);
   const deleteLoreUseCase = new DeleteLoreUseCase(repository, characterOwnership);
+  const getPartyLoreUseCase = new GetPartyLoreUseCase(repository, config.partyGmAccess);
 
   return {
     getByCharacterId: (characterId: string, requesterId: string) =>
@@ -30,5 +35,7 @@ export function createLoreContext(config: {
       updateLoreUseCase.execute(characterId, requesterId, lore),
     delete: (characterId: string, requesterId: string) =>
       deleteLoreUseCase.execute(characterId, requesterId),
+    getForPartyGm: (partyId: string, characterId: string, gmId: string) =>
+      getPartyLoreUseCase.execute(partyId, characterId, gmId),
   };
 }
