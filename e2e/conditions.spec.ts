@@ -19,8 +19,10 @@ const HOLD_PERSON_2024 = 'dnd5e:srd-5.2:spell:hold-person';
 const HOLD_PERSON_2014 = 'dnd5e:srd-5.1:spell:hold-person';
 
 /** Serious and critical WCAG A/AA violations on the page, or only inside `include`. */
-async function violations(page: Page, include?: string) {
-  const builder = new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']);
+async function violations(page: Page, include?: string, disabledRules: string[] = []) {
+  const builder = new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .disableRules(disabledRules);
   const results = await (include ? builder.include(include) : builder).analyze();
   return results.violations
     .filter((v) => v.impact === 'serious' || v.impact === 'critical')
@@ -126,7 +128,9 @@ test.describe('condições no combate', () => {
     await page.keyboard.press('Escape');
 
     await expect(goblin.getByRole('button', { name: 'Prone, condition' })).toBeVisible();
-    // The current row only: the dimmed rows of other turns are not part of this feature
+    // Every row, minus contrast: the dimmed rows of other turns already fail it by design
+    expect(await violations(page, '[aria-label="Combat order"]', ['color-contrast'])).toEqual([]);
+    // The current row, where the badges sit at full opacity, with every rule
     expect(await violations(page, '[aria-current="true"]')).toEqual([]);
     await expect(
       rowOf(player.page, 'Goblin 1').getByRole('button', { name: 'Prone, condition' }),
@@ -143,6 +147,8 @@ test.describe('condições no combate', () => {
     user: _,
   }) => {
     const { partyId, player } = await runningTable(page, browser, 'poison-player');
+    await page.goto(partyUrl(partyId));
+    await hydrated(page.getByRole('heading', { name: 'Round 1' }));
     await player.page.goto(partyUrl(partyId));
     const mine = rowOf(player.page, 'Arani');
     await (await hydrated(mine.getByRole('button', { name: 'Conditions of Arani' }))).click();
@@ -153,7 +159,6 @@ test.describe('condições no combate', () => {
     await expect(order(player.page).getByRole('button', { name: /^Conditions of/ })).toHaveCount(1);
 
     // The GM sees it without reloading
-    await page.goto(partyUrl(partyId));
     await expect(
       rowOf(page, 'Arani').getByRole('button', { name: 'Poisoned, condition' }),
     ).toBeVisible();
