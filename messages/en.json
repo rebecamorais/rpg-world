@@ -65,7 +65,13 @@
       "auth_error_description": "We could not complete the operation at this time.",
       "security_widget_unavailable": "Could not load the security check. Disable content blockers for this site or reload the page.",
       "image_error_decode": "Couldn't read this image. Try another file (JPEG, PNG or WebP).",
-      "character_error_spell_not_found": "This spell was not found."
+      "character_error_spell_not_found": "This spell was not found.",
+      "combat_error_not_found": "Combat not found.",
+      "combat_error_exists": "This party already has a combat.",
+      "combat_error_empty": "Add someone to the combat before starting.",
+      "combat_error_not_your_turn": "It is not this participant's turn (it may have passed already).",
+      "combat_error_full": "A combat has at most 50 participants.",
+      "combat_error_character_not_allowed": "This character can't join this combat."
     },
     "save": "Save",
     "saving": "Saving...",

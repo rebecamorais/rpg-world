@@ -65,7 +65,13 @@
       "auth_error_description": "Não foi possível completar a operação no momento.",
       "security_widget_unavailable": "Não foi possível carregar a verificação de segurança. Desative bloqueadores de conteúdo para este site ou recarregue a página.",
       "image_error_decode": "Não foi possível ler essa imagem. Tente outro arquivo (JPEG, PNG ou WebP).",
-      "character_error_spell_not_found": "Magia não encontrada."
+      "character_error_spell_not_found": "Magia não encontrada.",
+      "combat_error_not_found": "Combate não encontrado.",
+      "combat_error_exists": "Esta mesa já tem um combate.",
+      "combat_error_empty": "Adicione alguém ao combate antes de começar.",
+      "combat_error_not_your_turn": "Não é a vez deste participante (a vez pode já ter passado).",
+      "combat_error_full": "O combate tem no máximo 50 participantes.",
+      "combat_error_character_not_allowed": "Este personagem não pode entrar neste combate."
     },
     "save": "Salvar",
     "saving": "Salvando...",
