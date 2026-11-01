@@ -1,24 +1,15 @@
-import type { Browser, Page } from '@playwright/test';
-
 import {
+  bring,
   createCharacter,
   createParty,
   expect,
   hydrated,
+  joinParty,
   partyUrl,
-  signIn,
+  person,
   test,
 } from './support/fixtures';
 import { PASSWORD, type TestUser, adminClient, createUser } from './support/supabase';
-
-/** Another person, signed in on their own browser context (separate cookies). */
-async function person(browser: Browser, label: string) {
-  const context = await browser.newContext();
-  const page = await context.newPage();
-  const user = await createUser(label);
-  await signIn(page, user);
-  return { context, page, user };
-}
 
 async function usernameOf(user: TestUser) {
   const { data } = await adminClient()
@@ -27,21 +18,6 @@ async function usernameOf(user: TestUser) {
     .eq('id', user.id)
     .single();
   return data!.username as string;
-}
-
-/** Through the API: asks with the link and the GM approves. */
-async function joinParty(gm: Page, player: Page, playerId: string, partyId: string, code: string) {
-  expect((await player.request.post(`/api/parties/join/${code}`)).ok()).toBe(true);
-  expect((await gm.request.patch(`/api/parties/${partyId}/members/${playerId}`)).status()).toBe(
-    204,
-  );
-}
-
-async function bring(player: Page, partyId: string, characterIds: string[]) {
-  const res = await player.request.put(`/api/parties/${partyId}/my-characters`, {
-    data: { characterIds },
-  });
-  expect(res.status()).toBe(204);
 }
 
 test.describe('mesas', () => {
