@@ -75,6 +75,16 @@ describe('PartyList', () => {
     expect(within(asPlayer).getByRole('link', { name: /Mesa player/ })).toBeInTheDocument();
   });
 
+  it('criar mesa fica numa seção própria, depois das mesas', async () => {
+    renderList(mine({ asGm: [party('gm', { role: 'gm', status: 'gm' })] }));
+
+    const create = await screen.findByRole('region', { name: t.create.title });
+    expect(within(create).getByLabelText(t.create.label)).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('region', { name: t.asGm })).queryByLabelText(t.create.label),
+    ).not.toBeInTheDocument();
+  });
+
   it('aceitar um convite manda PATCH no próprio membro', async () => {
     vi.mocked(rpgWorldApi.patch).mockResolvedValue(undefined);
     renderList(mine({ invites: [party('invite', { status: 'invited' })] }));

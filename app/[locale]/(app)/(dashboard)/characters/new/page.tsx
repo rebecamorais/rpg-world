@@ -35,7 +35,7 @@ export default async function NewCharacterPage({ searchParams }: { searchParams:
       description={kind === 'npc' ? tEnemies('newDescription') : t('description')}
       eyebrow={
         <Link
-          href={kind === 'npc' ? '/enemies' : '/characters'}
+          href={kind === 'npc' ? '/characters/npcs' : '/characters'}
           className="hover:text-foreground focus-ring rounded-sm"
         >
           {tCommon('back')}

@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
+import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { PlayerEncounterView } from '@backend/contexts/combat/domain/Encounter';
@@ -13,6 +14,7 @@ const hook = {
 };
 
 vi.mock('@frontend/hooks/useEncounter', () => ({ useEncounter: () => hook }));
+vi.mock('sonner', () => ({ toast: { info: vi.fn() } }));
 
 const t = messages.combat;
 
@@ -29,6 +31,20 @@ describe('PlayerCombatPanel', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     hook.encounter = null;
+  });
+
+  it('avisa quando a vez dele chega, uma vez só', () => {
+    hook.encounter = view('theirs');
+    const { rerender } = renderWithProviders(<PlayerCombatPanel partyId="p" live />);
+    expect(toast.info).not.toHaveBeenCalled();
+
+    hook.encounter = view('mine');
+    rerender(<PlayerCombatPanel partyId="p" live />);
+    hook.encounter = { ...view('mine') };
+    rerender(<PlayerCombatPanel partyId="p" live />);
+
+    expect(toast.info).toHaveBeenCalledTimes(1);
+    expect(toast.info).toHaveBeenCalledWith(t.yourTurnToast);
   });
 
   it('sem combate não mostra nada', () => {

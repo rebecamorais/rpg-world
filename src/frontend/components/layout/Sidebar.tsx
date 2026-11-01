@@ -26,27 +26,43 @@ import type { PartySummary } from '@backend/contexts/parties/domain/Party';
 
 function PartyLinks({ title, parties }: { title: string; parties: PartySummary[] }) {
   const pathname = usePathname();
+  const t = useTranslations('parties.nav');
 
   return (
     <div className="mt-2 flex flex-col">
       <p className="text-label text-muted-foreground px-3 py-1">{title}</p>
       {parties.map((party) => {
         const href = `/parties/${party.id}`;
+        const isOpen = pathname === href || pathname?.startsWith(`${href}/`);
         return (
-          <NavItem
-            key={party.id}
-            href={href}
-            label={party.name}
-            isActive={pathname?.startsWith(href)}
-            isSubItem
-          />
+          <div key={party.id} className="flex flex-col">
+            <NavItem href={href} label={party.name} isActive={isOpen} isSubItem />
+            {/* The GM's open party: the party itself and its settings, like a sheet's tabs */}
+            {isOpen && party.role === 'gm' && (
+              <div className="ml-4 flex flex-col">
+                <NavItem
+                  href={href}
+                  label={t('overview')}
+                  isActive={!pathname.startsWith(`${href}/settings`)}
+                  isSubItem
+                />
+                <NavItem
+                  href={`${href}/settings`}
+                  label={t('settings')}
+                  isActive={pathname.startsWith(`${href}/settings`)}
+                  isSubItem
+                />
+              </div>
+            )}
+          </div>
         );
       })}
     </div>
   );
 }
 
-function SidebarContent() {
+/** `withLogout`: the phone drawer; on the desktop the header's user menu has "Sign out". */
+function SidebarContent({ withLogout = false }: { withLogout?: boolean }) {
   const params = useParams();
   const characterId = params?.id as string;
   const tDash = useTranslations('dashboard');
@@ -104,19 +120,21 @@ function SidebarContent() {
         </nav>
       </div>
 
-      <div className="mt-auto pt-6">
-        <button
-          onClick={() => signOut()}
-          className="group text-muted-foreground hover:bg-danger-surface hover:text-danger-flare mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all"
-        >
-          <AppIcon
-            name="LogOut"
-            size={16}
-            className="transition-transform group-hover:-translate-x-1"
-          />
-          <span>{tCommon('logout')}</span>
-        </button>
-      </div>
+      {withLogout && (
+        <div className="mt-auto pt-6">
+          <button
+            onClick={() => signOut()}
+            className="group text-muted-foreground hover:bg-danger-surface hover:text-danger-flare mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all"
+          >
+            <AppIcon
+              name="LogOut"
+              size={16}
+              className="transition-transform group-hover:-translate-x-1"
+            />
+            <span>{tCommon('logout')}</span>
+          </button>
+        </div>
+      )}
     </>
   );
 }
@@ -149,7 +167,7 @@ export function MobileMenu() {
           <SheetTitle>{tDash('menu')}</SheetTitle>
           <SheetDescription>{tDash('menuDescription')}</SheetDescription>
         </SheetHeader>
-        <SidebarContent />
+        <SidebarContent withLogout />
       </SheetContent>
     </Sheet>
   );

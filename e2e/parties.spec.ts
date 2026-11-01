@@ -24,6 +24,10 @@ test.describe('mesas', () => {
   test('jogador entra pelo link e o mestre aprova', async ({ page, browser, user: _ }) => {
     const { id: partyId } = await createParty(page, 'Mesa de Quinta');
     await page.goto(partyUrl(partyId));
+    await (
+      await hydrated(page.getByRole('complementary').getByRole('link', { name: 'Settings' }))
+    ).click();
+    await expect.poll(() => new URL(page.url()).pathname).toBe(`${partyUrl(partyId)}/settings`);
     // The origin is filled in once the page hydrates (the server doesn't know it)
     const linkField = await hydrated(page.getByLabel('Invite link'));
     await expect(linkField).toHaveValue(/^http.*\/parties\/join\/[a-f0-9]{32}$/);
@@ -35,7 +39,7 @@ test.describe('mesas', () => {
     await (await hydrated(player.page.getByRole('button', { name: 'Ask to join' }))).click();
     await expect(player.page.getByRole('status').filter({ hasText: 'Request sent' })).toBeVisible();
 
-    await page.reload();
+    await page.goto(partyUrl(partyId));
     await (await hydrated(page.getByRole('button', { name: 'Approve' }))).click();
     await expect(page.getByRole('button', { name: 'Approve' })).toHaveCount(0);
 
@@ -65,7 +69,7 @@ test.describe('mesas', () => {
     const { id: partyId } = await createParty(page, 'Mesa do Convite');
     const player = await person(browser, 'invited-player');
 
-    await page.goto(partyUrl(partyId));
+    await page.goto(`${partyUrl(partyId)}/settings`);
     await (
       await hydrated(page.getByLabel('Invite by username'))
     ).fill(`@${await usernameOf(player.user)}`);

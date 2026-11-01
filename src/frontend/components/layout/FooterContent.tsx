@@ -59,9 +59,20 @@ function FooterColumn({ title, children }: { title: string; children: React.Reac
   );
 }
 
-/** Site footer. Links follow the session; on phones it packs into two columns. */
-/** `serverUser`: the session the server read; left out on prebuilt pages, where the browser finds it. */
-export default function FooterContent({ serverUser }: { serverUser?: User | null }) {
+const KOFI = 'https://ko-fi.com/rebecamorais';
+
+/**
+ * Site footer. Links follow the session; on phones it packs into two columns. `compact` (inside
+ * the app): one line with the legal links and the ways to support, without the site's pitch.
+ * `serverUser`: the session the server read; left out on prebuilt pages, where the browser finds it.
+ */
+export default function FooterContent({
+  serverUser,
+  compact = false,
+}: {
+  serverUser?: User | null;
+  compact?: boolean;
+}) {
   const { status } = useSession(serverUser);
   const isAuthenticated = status === 'signed-in';
   const t = useTranslations('footer');
@@ -74,6 +85,46 @@ export default function FooterContent({ serverUser }: { serverUser?: User | null
     toast.success(t('support.pixCopy'));
     setTimeout(() => setHasCopied(false), 2000);
   };
+
+  if (compact) {
+    return (
+      <footer className="border-border bg-sidebar mt-auto border-t py-4">
+        <div className="container mx-auto flex flex-wrap items-center gap-x-5 gap-y-2 px-6">
+          <span className="text-muted-foreground text-xs">
+            {t('copyright', { year: new Date().getFullYear() })}
+          </span>
+          <Link href="/terms" className={linkClass}>
+            {t('legal.terms')}
+          </Link>
+          <Link href="/privacy" className={linkClass}>
+            {t('legal.privacy')}
+          </Link>
+          <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" className={linkClass}>
+            {t('socials.github')}
+          </a>
+          <a href={DISCORD_INVITE} target="_blank" rel="noopener noreferrer" className={linkClass}>
+            {t('socials.discord')}
+          </a>
+          <span className="text-label text-muted-foreground sm:ml-auto">{t('support.title')}</span>
+          <a href={KOFI} target="_blank" rel="noopener noreferrer" className={linkClass}>
+            {t('support.kofi')}
+          </a>
+          <a href={GITHUB_SPONSORS} target="_blank" rel="noopener noreferrer" className={linkClass}>
+            {t('support.githubSponsorsCta')}
+          </a>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleCopyPix}
+            className="text-muted-foreground h-7 px-2"
+          >
+            <AppIcon name={hasCopied ? 'Check' : 'QrCode'} size={14} aria-hidden="true" />
+            {t('support.pixCopyLabel')}
+          </Button>
+        </div>
+      </footer>
+    );
+  }
 
   const explore = isAuthenticated
     ? [
@@ -148,12 +199,7 @@ export default function FooterContent({ serverUser }: { serverUser?: User | null
 
         <div className="col-span-2 flex flex-col gap-3 lg:col-span-1">
           <h2 className="text-label text-muted-foreground">{t('support.title')}</h2>
-          <a
-            href="https://ko-fi.com/rebecamorais"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cardClass}
-          >
+          <a href={KOFI} target="_blank" rel="noopener noreferrer" className={cardClass}>
             <span className="flex items-center gap-3">
               <span className="bg-kofi/10 text-kofi flex h-8 w-8 items-center justify-center rounded-full">
                 <AppIcon name="Coffee" size={16} />

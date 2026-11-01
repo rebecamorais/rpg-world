@@ -12,6 +12,7 @@ import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { Button } from '@frontend/components/ui/button';
 import { EmptyState } from '@frontend/components/ui/empty-state';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 import { useCurrentUser } from '@frontend/context/UserContext';
@@ -23,7 +24,6 @@ import { usePartyChannel } from '@frontend/hooks/usePartyChannel';
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { MyPartyCharacters } from './MyPartyCharacters';
-import { PartyManagement } from './PartyManagement';
 import { PartyRequests } from './PartyRequests';
 import { PartyRoster } from './PartyRoster';
 import { RolePlayCard } from './RolePlayCard';
@@ -47,7 +47,6 @@ function useGmMode(partyId: string) {
 function GmView({ party, live }: { party: PartyView; live: boolean }) {
   const t = useTranslations('parties.page');
   const tCombat = useTranslations('combat');
-  const router = useRouter();
   const { acceptMember, removeMember } = useParty(party.id);
   const { mode, setMode, isLoading } = useGmMode(party.id);
   const cards = party.gm?.rolePlay ?? [];
@@ -88,8 +87,6 @@ function GmView({ party, live }: { party: PartyView; live: boolean }) {
           </TabsContent>
         </Tabs>
       )}
-
-      <PartyManagement party={party} onDeleted={() => router.push('/parties')} />
     </div>
   );
 }
@@ -160,34 +157,48 @@ function PlayerView({ party, live }: { party: PartyView; live: boolean }) {
   );
 }
 
-/** A party: the GM's Role Play view and controls, or what a player sees and brings. */
-export function PartyPage({ partyId }: { partyId: string }) {
+/** Not found, or not the person's party (the API answers the same for both). */
+export function PartyNotFound() {
   const t = useTranslations('parties.page');
+
+  return (
+    <EmptyState
+      icon="Shield"
+      title={t('notFoundTitle')}
+      description={t('notFoundDescription')}
+      className="w-full max-w-lg"
+      action={
+        <Link href="/parties" className="text-primary-flare text-sm underline">
+          {t('backToParties')}
+        </Link>
+      }
+    />
+  );
+}
+
+/** A party: the GM's Role Play and Combat modes, or what a player sees and brings. */
+export function PartyPage({ partyId }: { partyId: string }) {
+  const t = useTranslations('parties');
   const { party, isLoading } = useParty(partyId);
   const { live } = usePartyChannel(partyId);
 
   if (isLoading) return <LoadingState thematic />;
-
-  if (!party) {
-    return (
-      <EmptyState
-        icon="Shield"
-        title={t('notFoundTitle')}
-        description={t('notFoundDescription')}
-        className="w-full max-w-lg"
-        action={
-          <Link href="/parties" className="text-primary-flare text-sm underline">
-            {t('backToParties')}
-          </Link>
-        }
-      />
-    );
-  }
+  if (!party) return <PartyNotFound />;
 
   return (
     <PageContainer
       title={party.name}
-      eyebrow={party.role === 'gm' ? t('gmEyebrow') : t('playerEyebrow')}
+      eyebrow={party.role === 'gm' ? t('page.gmEyebrow') : t('page.playerEyebrow')}
+      actions={
+        party.role === 'gm' && (
+          <Button asChild variant="outline">
+            <Link href={`/parties/${party.id}/settings`}>
+              <AppIcon name="Settings2" size={18} aria-hidden="true" />
+              {t('settings.open')}
+            </Link>
+          </Button>
+        )
+      }
     >
       {party.role === 'gm' ? (
         <GmView party={party} live={live} />

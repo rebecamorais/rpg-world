@@ -61,7 +61,7 @@ test.describe('combate', () => {
 
     await page.getByRole('button', { name: "Add the party's characters" }).click();
     await expect(page.getByLabel("Arani's initiative")).toBeVisible();
-    await page.getByRole('combobox', { name: 'Enemy sheet' }).click();
+    await page.getByRole('combobox', { name: 'NPC' }).click();
     await page.getByRole('option', { name: 'Goblin' }).click();
     await page.getByLabel('How many').fill('2');
     await page.getByRole('button', { name: 'Add enemy' }).click();
@@ -108,7 +108,9 @@ test.describe('combate', () => {
     await expect(current(page)).toContainText('Goblin 1');
     await page.getByRole('button', { name: 'End turn' }).click();
 
-    await expect(player.page.getByText('Your turn')).toBeVisible();
+    await expect(player.page.getByText('Your turn', { exact: true })).toBeVisible();
+    // The toast reaches whoever scrolled down to the sheet
+    await expect(player.page.getByText('Your turn!')).toBeVisible();
     await (await hydrated(player.page.getByRole('button', { name: 'End my turn' }))).click();
 
     await expect(current(page)).toContainText('Goblin 2');
@@ -138,16 +140,22 @@ test.describe('combate', () => {
     await expect(hero).toContainText('Death saves: 1 successes, 2 failures');
   });
 
-  test('o mestre duplica uma ficha de inimigo', async ({ page, user: _ }) => {
+  test('o mestre duplica um NPC', async ({ page, user: _ }) => {
     await createEnemySheet(page, 'Goblin', 7);
+    // The old address still leads to the NPCs tab
     await page.goto('/enemies');
+    await expect.poll(() => new URL(page.url()).pathname).toBe('/characters/npcs');
+    await expect(page.getByRole('link', { name: 'My NPCs' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
 
     await (await hydrated(page.getByRole('button', { name: 'Actions for Goblin' }))).click();
     await page.getByRole('menuitem', { name: 'Duplicate' }).click();
 
-    await expect.poll(() => new URL(page.url()).pathname).not.toBe('/enemies');
+    await expect.poll(() => new URL(page.url()).pathname).not.toBe('/characters/npcs');
     expect(new URL(page.url()).pathname).toMatch(new RegExp(`^${characterUrl('')}`));
-    await page.goto('/enemies');
+    await page.goto('/characters/npcs');
     await expect(page.getByRole('link', { name: 'Goblin (copy)' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Goblin', exact: true })).toBeVisible();
   });

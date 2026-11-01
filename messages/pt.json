@@ -278,7 +278,12 @@
     "cantripUpgrade": "Melhoria do Truque",
     "duplicate": "Duplicar",
     "copyName": "{name} (cópia)",
-    "duplicateSuccess": "Ficha duplicada."
+    "duplicateSuccess": "Ficha duplicada.",
+    "kinds": {
+      "label": "Personagens ou NPCs",
+      "pc": "Meus personagens",
+      "npc": "Meus NPCs"
+    }
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
@@ -954,12 +959,15 @@
       "placeholder": "Mesa de quinta",
       "submit": "Criar mesa",
       "limit": "Você pode ser mestre de no máximo {max} mesas.",
-      "success": "Mesa criada"
+      "success": "Mesa criada",
+      "title": "Criar mesa"
     },
     "nav": {
       "parties": "Mesas",
       "gm": "Mestre",
-      "player": "Jogador"
+      "player": "Jogador",
+      "overview": "Mesa",
+      "settings": "Configurações"
     },
     "join": {
       "title": "Convite para mesa",
@@ -1039,16 +1047,18 @@
       "back": "Voltar para a mesa",
       "readOnly": "Só leitura"
     },
-    "enemiesLink": "Fichas de inimigo"
+    "settings": {
+      "eyebrow": "Configurações da mesa",
+      "open": "Configurações"
+    }
   },
   "enemies": {
-    "title": "Fichas de inimigo",
-    "subtitle": "As fichas que você usa como inimigos nos combates das suas mesas.",
-    "emptyState": "Nenhuma ficha de inimigo ainda",
+    "subtitle": "Fichas de quem não é jogador: inimigos nos combates das suas mesas, e quem mais aparecer na história.",
+    "emptyState": "Nenhum NPC ainda",
     "createFirstDescription": "Crie uma ficha para usar como inimigo no combate. Vários inimigos podem usar a mesma ficha.",
-    "createFirst": "Criar ficha de inimigo",
-    "new": "Nova ficha",
-    "newTitle": "Nova ficha de inimigo",
+    "createFirst": "Criar NPC",
+    "new": "Novo NPC",
+    "newTitle": "Novo NPC",
     "newDescription": "Defina o nome e o sistema. Os números você preenche na ficha."
   },
   "combat": {
@@ -1062,12 +1072,12 @@
     "empty": "Ninguém no combate ainda. Adicione os personagens da mesa e os inimigos.",
     "addPartyCharacters": "Adicionar personagens da mesa",
     "addEnemy": "Adicionar inimigo",
-    "enemySheet": "Ficha de inimigo",
-    "chooseEnemySheet": "Escolha uma ficha",
+    "enemySheet": "NPC",
+    "chooseEnemySheet": "Escolha um NPC",
     "count": "Quantidade",
     "add": "Adicionar",
-    "noEnemySheets": "Você ainda não tem fichas de inimigo.",
-    "manageEnemySheets": "Fichas de inimigo",
+    "noEnemySheets": "Você ainda não tem NPCs.",
+    "manageEnemySheets": "Meus NPCs",
     "sortByInitiative": "Ordenar por iniciativa",
     "start": "Começar",
     "endTurn": "Encerrar turno",
@@ -1095,6 +1105,8 @@
     "endMyTurn": "Encerrar meu turno",
     "playerPreparing": "O mestre está preparando o combate.",
     "order": "Ordem do combate",
-    "yours": "seu"
+    "yours": "seu",
+    "tempHp": "temp",
+    "yourTurnToast": "Sua vez!"
   }
 }

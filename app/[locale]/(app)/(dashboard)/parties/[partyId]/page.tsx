@@ -1,19 +1,10 @@
-import { cache } from 'react';
-
 import type { Metadata } from 'next';
-
-import { getApi } from '@api';
 
 import { PartyPage } from '@frontend/components/party/PartyPage';
 import { SeededQuery } from '@frontend/components/providers/SeededQuery';
 import { partyQueryKey } from '@frontend/lib/query-keys';
 
-/** Loaded once per request (title and page). Null when not found or not the person's. */
-const loadParty = cache(async (partyId: string) => {
-  const { authApi, partiesApi } = await getApi();
-  const user = await authApi.getSessionUser();
-  return user ? partiesApi.get(partyId, user.id).catch(() => null) : null;
-});
+import { loadParty } from './load-party';
 
 export async function generateMetadata({
   params,
