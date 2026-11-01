@@ -262,11 +262,19 @@
 @theme {
   --animate-shimmer: shimmer 1.5s ease-in-out infinite;
   --animate-fade-in: fade-in 0.35s ease-out;
+  --animate-turn-glow: turn-glow 2.4s ease-in-out infinite;
 
   @keyframes fade-in {
     from {
       opacity: 0;
       transform: translateY(4px);
+    }
+  }
+
+  /* Whose turn it is: a slow breath in the character's color */
+  @keyframes turn-glow {
+    50% {
+      box-shadow: 0 0 14px 1px var(--primary-glow);
     }
   }
 

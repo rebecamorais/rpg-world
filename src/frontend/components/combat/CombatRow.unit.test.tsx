@@ -25,6 +25,23 @@ const renderRow = (row = gmRow()) =>
   );
 
 describe('CombatRow', () => {
+  it.each([
+    [{ current: 20, max: 20 }, 'healthy', '100%'],
+    [{ current: 9, max: 20 }, 'wounded', '45%'],
+    [{ current: 3, max: 20 }, 'critical', '15%'],
+    [{ current: 0, max: 0 }, 'critical', '0%'],
+  ])('a barra de PV %o fica %s', (hp, tone, width) => {
+    const { container } = renderRow(gmRow({ hp: { ...hp, temp: 0 } }));
+    const bar = container.querySelector('[data-hp-bar]')!;
+    expect(bar).toHaveAttribute('data-tone', tone);
+    expect(bar.firstElementChild).toHaveStyle({ width });
+  });
+
+  it('a linha da vez atual brilha', () => {
+    renderRow(gmRow({ isCurrent: true }));
+    expect(screen.getByRole('listitem')).toHaveClass('animate-turn-glow');
+  });
+
   it('o jogador não tem campo de PV; o inimigo tem PV e temporário editáveis', () => {
     renderRow();
     expect(screen.queryByLabelText(fill(t.hpOf, { name: 'Arani' }))).not.toBeInTheDocument();

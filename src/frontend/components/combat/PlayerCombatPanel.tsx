@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useEncounter } from '@frontend/hooks/useEncounter';
 import { cn } from '@frontend/lib/utils';
@@ -27,7 +28,13 @@ export function PlayerCombatPanel({ partyId, live }: { partyId: string; live: bo
   // The page may be scrolled down to the sheet: a toast says the turn came, once per turn
   const announced = useRef(mine?.participantId);
   useEffect(() => {
-    if (mine && announced.current !== mine.participantId) toast.info(t('yourTurnToast'));
+    if (mine && announced.current !== mine.participantId) {
+      toast(t('yourTurnToast'), {
+        icon: <AppIcon name="Swords" size={16} className="text-primary-flare" aria-hidden="true" />,
+        // ! beats the Toaster's default border, which is more specific
+        className: '!border-primary !shadow-[0_0_18px_var(--primary-glow)] font-display',
+      });
+    }
     announced.current = mine?.participantId;
   }, [mine, t]);
 
@@ -55,7 +62,7 @@ export function PlayerCombatPanel({ partyId, live }: { partyId: string; live: bo
                   aria-current={turn.isCurrent ? 'true' : undefined}
                   className={cn(
                     'border-border flex items-center justify-between gap-2 rounded-md border px-3 py-2',
-                    turn.isCurrent && 'border-primary bg-primary/10',
+                    turn.isCurrent && 'border-primary bg-primary/10 animate-turn-glow',
                   )}
                 >
                   <span className={cn(turn.isMine && 'font-semibold')}>{turn.name}</span>

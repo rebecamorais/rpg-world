@@ -53,6 +53,32 @@ function NumberCell({
   );
 }
 
+/** Above half, under half, a quarter or less: the GM sees who's falling without reading numbers. */
+function HpBar({ current, max }: { current: number; max: number }) {
+  const percent = max > 0 ? Math.min(100, Math.max(0, (current / max) * 100)) : 0;
+  const tone = percent > 50 ? 'healthy' : percent > 25 ? 'wounded' : 'critical';
+
+  return (
+    <div
+      data-hp-bar
+      data-tone={tone}
+      // The numbers next to it already say this
+      aria-hidden="true"
+      className="bg-muted h-1 w-full overflow-hidden rounded-full"
+    >
+      <div
+        className={cn(
+          'h-full rounded-full transition-[width] duration-500 ease-out',
+          tone === 'healthy' && 'bg-success',
+          tone === 'wounded' && 'bg-warning',
+          tone === 'critical' && 'bg-danger',
+        )}
+        style={{ width: `${percent}%` }}
+      />
+    </div>
+  );
+}
+
 /**
  * A participant in the GM's initiative tracker: initiative, name (opens the sheet), HP, AC,
  * passive perception and magic. Only enemies' HP is edited here; a player's comes from their
@@ -87,7 +113,7 @@ export function CombatRow({
       aria-current={row.isCurrent ? 'true' : undefined}
       className={cn(
         'bg-card/60 border-border flex flex-wrap items-center gap-x-4 gap-y-3 rounded-md border p-3',
-        row.isCurrent && 'border-primary bg-primary/10',
+        row.isCurrent && 'border-primary bg-primary/10 animate-turn-glow',
       )}
     >
       <NumberCell
@@ -142,6 +168,7 @@ export function CombatRow({
             {row.hp.temp > 0 && <span className="text-info-flare"> +{row.hp.temp}</span>}
           </span>
         )}
+        <HpBar current={row.hp.current} max={row.hp.max} />
         {row.deathSaves && (
           <span className="text-caption text-danger-flare">{t('deathSaves', row.deathSaves)}</span>
         )}
