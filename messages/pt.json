@@ -306,7 +306,9 @@
     "name": "Nome",
     "otherOption": "Outro…",
     "classOtherPlaceholder": "Nome da classe",
-    "raceOtherPlaceholder": "Nome da raça"
+    "raceOtherPlaceholder": "Nome da raça",
+    "backgroundOtherPlaceholder": "Nome do antecedente",
+    "alignmentOtherPlaceholder": "Alinhamento"
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",
@@ -1122,5 +1124,22 @@
     "human": "Humano",
     "orc": "Orc",
     "tiefling": "Tiefling"
+  },
+  "characterBackgrounds": {
+    "acolyte": "Acólito",
+    "criminal": "Criminoso",
+    "sage": "Sábio",
+    "soldier": "Soldado"
+  },
+  "characterAlignments": {
+    "lawful-good": "Leal e Bom",
+    "neutral-good": "Neutro e Bom",
+    "chaotic-good": "Caótico e Bom",
+    "lawful-neutral": "Leal e Neutro",
+    "neutral": "Neutro",
+    "chaotic-neutral": "Caótico e Neutro",
+    "lawful-evil": "Leal e Mau",
+    "neutral-evil": "Neutro e Mau",
+    "chaotic-evil": "Caótico e Mau"
   }
 }

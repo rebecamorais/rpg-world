@@ -5,13 +5,13 @@ import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it, vi } from 'vitest';
 
-import { OriginSelect } from './OriginSelect';
+import { ChoiceSelect } from './ChoiceSelect';
 
 const OPTIONS = [
   { value: 'elf', label: 'Elf', icon: 'woman-elf-face' },
   { value: 'human', label: 'Human', icon: 'person' },
 ];
-// A stand-in for useCharacterOrigin().raceOf
+// A stand-in for useCharacterChoices().raceOf
 const matchOf = (text: string) =>
   OPTIONS.find((o) => o.value === text || o.label.toLowerCase() === text.toLowerCase())?.value ??
   null;
@@ -26,7 +26,7 @@ function Field({
 }) {
   const [value, setValue] = useState(initial);
   return (
-    <OriginSelect
+    <ChoiceSelect
       id="race"
       label="Race"
       value={value}
@@ -44,7 +44,7 @@ function Field({
   );
 }
 
-describe('OriginSelect', () => {
+describe('ChoiceSelect', () => {
   it('uma raça da lista é salva pelo id', async () => {
     const onChange = vi.fn();
     renderWithProviders(<Field onChange={onChange} />);

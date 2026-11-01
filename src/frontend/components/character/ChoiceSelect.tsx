@@ -17,19 +17,19 @@ import {
 // Can't clash with an id: ids have no underscores
 const OTHER = '__other__';
 
-export interface OriginOption {
+export interface ChoiceOption {
   value: string;
   label: string;
   /** Game icon name (game-icons.net). */
-  icon: string;
+  icon?: string;
 }
 
 /**
- * A class or race: one of the system's, picked from a list (saved as its id), or the player's
- * own, typed after "Other…". `matched` is the listed option the saved text stands for, if any
- * (an id, or free text from before the list, like "Mago").
+ * A sheet field picked from the system's list (saved as its id), or the player's own, typed after
+ * "Other…": class, race, background, alignment. `matched` is the listed option the saved text
+ * stands for, if any (an id, or free text from before the list, like "Mago").
  */
-export function OriginSelect({
+export function ChoiceSelect({
   id,
   label,
   value,
@@ -45,7 +45,7 @@ export function OriginSelect({
   label: string;
   value: string;
   matched: string | null;
-  options: OriginOption[];
+  options: ChoiceOption[];
   placeholder: string;
   otherLabel: string;
   otherPlaceholder: string;
@@ -93,12 +93,14 @@ export function OriginSelect({
           {options.map((option) => (
             <SelectItem key={option.value} value={option.value}>
               <span className="flex items-center gap-2">
-                <AppIcon
-                  name={option.icon}
-                  variant="game"
-                  size={16}
-                  className="text-character-flare shrink-0"
-                />
+                {option.icon && (
+                  <AppIcon
+                    name={option.icon}
+                    variant="game"
+                    size={16}
+                    className="text-character-flare shrink-0"
+                  />
+                )}
                 {option.label}
               </span>
             </SelectItem>

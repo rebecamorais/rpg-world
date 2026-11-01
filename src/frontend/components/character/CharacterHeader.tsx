@@ -5,20 +5,27 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
-import { OriginSelect } from '@frontend/components/character/OriginSelect';
+import { ChoiceSelect } from '@frontend/components/character/ChoiceSelect';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { FieldLabel, InlineField } from '@frontend/components/ui/field';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Progress } from '@frontend/components/ui/progress';
-import { CLASS_ICONS, CharacterRace, RACE_ICONS } from '@frontend/constants/character-origins';
+import {
+  BACKGROUND_ICONS,
+  CLASS_ICONS,
+  CharacterAlignment,
+  CharacterBackground,
+  CharacterRace,
+  RACE_ICONS,
+} from '@frontend/constants/character-choices';
 import {
   useCharacterActions,
   useCharacterMeta,
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
-import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
+import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { CharacterClass } from '@frontend/types/spells';
 
@@ -47,7 +54,7 @@ export default function CharacterHeader() {
   const { readOnly } = useSheetSource(id);
   const pb = getProficiencyBonus(level);
   const t = useTranslations('characterHeader');
-  const origin = useCharacterOrigin();
+  const choices = useCharacterChoices();
   const tImage = useTranslations('avatarUpload');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -181,15 +188,15 @@ export default function CharacterHeader() {
 
           {/* Right Column: Information Grid */}
           <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-            <OriginSelect
+            <ChoiceSelect
               id="char-race"
               maxLength={TEXT_MAX}
               label={t('race')}
               value={race || ''}
-              matched={origin.raceOf(race)}
+              matched={choices.raceOf(race)}
               options={Object.values(CharacterRace).map((value) => ({
                 value,
-                label: origin.raceLabelOf(value),
+                label: choices.raceLabelOf(value),
                 icon: RACE_ICONS[value],
               }))}
               onChange={(value) => update({ race: value })}
@@ -197,15 +204,15 @@ export default function CharacterHeader() {
               otherLabel={t('otherOption')}
               otherPlaceholder={t('raceOtherPlaceholder')}
             />
-            <OriginSelect
+            <ChoiceSelect
               id="char-class"
               maxLength={TEXT_MAX}
               label={t('class')}
               value={classNameStr || ''}
-              matched={origin.classOf(classNameStr)}
+              matched={choices.classOf(classNameStr)}
               options={Object.values(CharacterClass).map((value) => ({
                 value,
-                label: origin.classLabelOf(value),
+                label: choices.classLabelOf(value),
                 icon: CLASS_ICONS[value],
               }))}
               onChange={(value) => update({ class: value })}
@@ -213,21 +220,36 @@ export default function CharacterHeader() {
               otherLabel={t('otherOption')}
               otherPlaceholder={t('classOtherPlaceholder')}
             />
-            <InlineField
+            <ChoiceSelect
               id="char-background"
               maxLength={TEXT_MAX}
               label={t('background')}
               value={background || ''}
-              onChange={(e) => update({ background: e.target.value })}
+              matched={choices.backgroundOf(background)}
+              options={Object.values(CharacterBackground).map((value) => ({
+                value,
+                label: choices.backgroundLabelOf(value),
+                icon: BACKGROUND_ICONS[value],
+              }))}
+              onChange={(value) => update({ background: value })}
               placeholder={t('backgroundPlaceholder')}
+              otherLabel={t('otherOption')}
+              otherPlaceholder={t('backgroundOtherPlaceholder')}
             />
-            <InlineField
+            <ChoiceSelect
               id="char-alignment"
               maxLength={TEXT_MAX}
               label={t('alignment')}
               value={alignment || ''}
-              onChange={(e) => update({ alignment: e.target.value })}
+              matched={choices.alignmentOf(alignment)}
+              options={Object.values(CharacterAlignment).map((value) => ({
+                value,
+                label: choices.alignmentLabelOf(value),
+              }))}
+              onChange={(value) => update({ alignment: value })}
               placeholder={t('alignmentPlaceholder')}
+              otherLabel={t('otherOption')}
+              otherPlaceholder={t('alignmentOtherPlaceholder')}
             />
           </div>
         </div>

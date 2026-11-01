@@ -16,7 +16,7 @@ import {
 } from '@frontend/components/ui/dropdown-menu';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharactersContext } from '@frontend/context/CharactersContext';
-import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
+import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { useDuplicateCharacter } from '@frontend/hooks/useDuplicateCharacter';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
@@ -34,7 +34,7 @@ interface CharacterCardProps {
 export function CharacterCard({ character }: CharacterCardProps) {
   const t = useTranslations('characters');
   const tCommon = useTranslations('common');
-  const { classLabel } = useCharacterOrigin();
+  const { classLabel } = useCharacterChoices();
   const { kind, setCharacterToDelete } = useCharactersContext();
   const duplicate = useDuplicateCharacter();
 
