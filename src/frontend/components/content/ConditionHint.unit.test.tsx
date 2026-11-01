@@ -30,6 +30,7 @@ const CONDITIONS = [
     name: 'Caído',
     description: 'Caído 2014.',
     maxLevel: null,
+    untranslated: true,
   },
 ];
 
@@ -64,6 +65,31 @@ describe('ConditionHint', () => {
 
     expect(screen.getByText('Níveis 2014.')).toBeInTheDocument();
     expect(screen.queryByText(/Lista 2024/)).not.toBeInTheDocument();
+  });
+
+  it('o nome acessível contém a palavra visível quando difere do nome', () => {
+    renderWithProviders(
+      <ConditionHint conditionKey="dnd5e:srd-5.1:condition:prone" label="caída" />,
+    );
+    expect(screen.getByRole('button', { name: 'caída (Caído), condition' })).toHaveTextContent(
+      'caída',
+    );
+  });
+
+  it('o popover tem o nome da condição e marca o texto em inglês', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ConditionHint conditionKey="dnd5e:srd-5.1:condition:prone" />);
+    await user.click(screen.getByRole('button', { name: 'Caído, condition' }));
+
+    expect(screen.getByRole('dialog', { name: /Caído/ })).toBeInTheDocument();
+    expect(screen.getByText('Caído 2014.').closest('[lang]')).toHaveAttribute('lang', 'en');
+  });
+
+  it('não marca idioma quando a descrição está traduzida', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ConditionHint conditionKey={EX_2024} />);
+    await user.click(screen.getByRole('button', { name: 'Exaustão, condition' }));
+    expect(screen.getByText(/Lista 2024\./).closest('[lang]')).toBeNull();
   });
 
   it('não oferece troca quando só existe num livro', async () => {

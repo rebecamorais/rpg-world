@@ -1176,6 +1176,7 @@
   },
   "conditions": {
     "ariaLabel": "{name}, condição",
+    "ariaLabelShown": "{text} ({name}), condição",
     "otherEdition": "Ver versão {edition}",
     "level": "Nível {level}",
     "title": "Condições",

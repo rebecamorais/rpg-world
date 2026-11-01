@@ -38,6 +38,7 @@ export function ConditionHint({
   const { byKey, list } = useConditions();
   // Which book is showing; null follows the key the text points to
   const [shownKey, setShownKey] = React.useState<string | null>(null);
+  const titleId = React.useId();
 
   const condition = byKey.get(shownKey ?? conditionKey) ?? byKey.get(conditionKey);
   if (!condition) {
@@ -46,12 +47,20 @@ export function ConditionHint({
 
   const other = list.find((c) => c.id === condition.id && c.edition !== condition.edition);
 
+  // The name has to contain the visible word (WCAG 2.5.3), even when it isn't the condition's name
+  const name = accessibleName ?? condition.name;
+  const shown = children === undefined ? label : undefined;
+  const ariaLabel =
+    !accessibleName && shown && shown.toLowerCase() !== condition.name.toLowerCase()
+      ? t('ariaLabelShown', { text: shown, name })
+      : t('ariaLabel', { name });
+
   return (
     <Popover onOpenChange={(open) => !open && setShownKey(null)}>
       <PopoverTrigger asChild>
         <button
           type="button"
-          aria-label={t('ariaLabel', { name: accessibleName ?? condition.name })}
+          aria-label={ariaLabel}
           className={cn(
             'focus-ring touch-target text-primary-flare decoration-primary/60 pointer-events-auto cursor-pointer rounded-sm underline decoration-dotted underline-offset-4',
             className,
@@ -60,11 +69,15 @@ export function ConditionHint({
           {children ?? label ?? condition.name}
         </button>
       </PopoverTrigger>
-      <PopoverContent>
-        <p className="text-foreground font-semibold">
+      <PopoverContent aria-labelledby={titleId}>
+        <p id={titleId} className="text-foreground font-semibold">
           {condition.name} <span className="text-muted-foreground">· {condition.edition}</span>
         </p>
-        <div className="text-muted-foreground mt-1 whitespace-pre-wrap">
+        {/* An untranslated description is the English one */}
+        <div
+          lang={condition.untranslated ? 'en' : undefined}
+          className="text-muted-foreground mt-1 whitespace-pre-wrap"
+        >
           <RulesText
             text={condition.description}
             source={parseContentKey(condition.key)?.source ?? ''}
