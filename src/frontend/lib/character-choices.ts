@@ -1,4 +1,8 @@
-import { CharacterRace } from '@frontend/constants/character-origins';
+import {
+  CharacterAlignment,
+  CharacterBackground,
+  CharacterRace,
+} from '@frontend/constants/character-choices';
 import { CharacterClass } from '@frontend/types/spells';
 
 /** Lowercase, no accents, words separated by single spaces: "Meio-Elfo" → "meio elfo". */
@@ -22,6 +26,7 @@ function matchOption<T extends string>(
   options: readonly T[],
   labelOf: (option: T) => string,
   extra: Partial<Record<T, string[]>> = {},
+  { wholeOnly = false }: { wholeOnly?: boolean } = {},
 ): T | null {
   if (!text) return null;
 
@@ -33,6 +38,7 @@ function matchOption<T extends string>(
   }
 
   const whole = normalize(text);
+  if (wholeOnly) return names.get(whole) ?? null;
   return (
     names.get(whole) ??
     whole.split(' ').reduce<T | null>((found, word) => found ?? names.get(word) ?? null, null)
@@ -78,4 +84,44 @@ export function matchCharacterRace(
   labelOf: (race: CharacterRace) => string,
 ): CharacterRace | null {
   return matchOption(text, Object.values(CharacterRace), labelOf, FEMININE_RACES);
+}
+
+const FEMININE_BACKGROUNDS: Partial<Record<CharacterBackground, string[]>> = {
+  [CharacterBackground.ACOLYTE]: ['acolita'],
+  [CharacterBackground.CRIMINAL]: ['criminosa'],
+  [CharacterBackground.SAGE]: ['sabia'],
+};
+
+// Abbreviations (en, pt) and the forms without "e" ("Leal Bom")
+const ALIGNMENT_FORMS: Record<CharacterAlignment, string[]> = {
+  [CharacterAlignment.LAWFUL_GOOD]: ['lg', 'lb', 'leal bom'],
+  [CharacterAlignment.NEUTRAL_GOOD]: ['ng', 'nb', 'neutro bom'],
+  [CharacterAlignment.CHAOTIC_GOOD]: ['cg', 'cb', 'caotico bom'],
+  [CharacterAlignment.LAWFUL_NEUTRAL]: ['ln', 'leal neutro'],
+  [CharacterAlignment.NEUTRAL]: ['n', 'true neutral', 'neutro verdadeiro'],
+  [CharacterAlignment.CHAOTIC_NEUTRAL]: ['cn', 'caotico neutro'],
+  [CharacterAlignment.LAWFUL_EVIL]: ['le', 'lm', 'leal mau'],
+  [CharacterAlignment.NEUTRAL_EVIL]: ['ne', 'nm', 'neutro mau'],
+  [CharacterAlignment.CHAOTIC_EVIL]: ['ce', 'cm', 'caotico mau'],
+};
+
+/** The listed background in a character's background field ("sage", "Sábio"), or null. */
+export function matchCharacterBackground(
+  text: string | null | undefined,
+  labelOf: (background: CharacterBackground) => string,
+): CharacterBackground | null {
+  return matchOption(text, Object.values(CharacterBackground), labelOf, FEMININE_BACKGROUNDS);
+}
+
+/**
+ * The alignment in a character's alignment field ("neutral-good", "Neutro e Bom", "NG"), or null.
+ * Only the whole text counts: word by word, "Neutro e Mau" would be "Neutro".
+ */
+export function matchCharacterAlignment(
+  text: string | null | undefined,
+  labelOf: (alignment: CharacterAlignment) => string,
+): CharacterAlignment | null {
+  return matchOption(text, Object.values(CharacterAlignment), labelOf, ALIGNMENT_FORMS, {
+    wholeOnly: true,
+  });
 }
