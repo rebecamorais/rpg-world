@@ -165,6 +165,94 @@ export type Database = {
           },
         ];
       };
+      encounter_participants: {
+        Row: {
+          character_id: string;
+          created_at: string;
+          hp_current: number | null;
+          hp_temp: number | null;
+          id: string;
+          initiative: number | null;
+          label: string | null;
+          party_id: string;
+          position: number;
+          side: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          character_id: string;
+          created_at?: string;
+          hp_current?: number | null;
+          hp_temp?: number | null;
+          id?: string;
+          initiative?: number | null;
+          label?: string | null;
+          party_id: string;
+          position?: number;
+          side: string;
+        };
+        Update: {
+          character_id?: string;
+          created_at?: string;
+          hp_current?: number | null;
+          hp_temp?: number | null;
+          id?: string;
+          initiative?: number | null;
+          label?: string | null;
+          party_id?: string;
+          position?: number;
+          side?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'encounter_participants_character_id_fkey';
+            columns: ['character_id'];
+            isOneToOne: false;
+            referencedRelation: 'characters';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'encounter_participants_party_id_fkey';
+            columns: ['party_id'];
+            isOneToOne: false;
+            referencedRelation: 'encounters';
+            referencedColumns: ['party_id'];
+          },
+        ];
+      };
+      encounters: {
+        Row: {
+          created_at: string;
+          current_participant_id: string | null;
+          party_id: string;
+          round: number;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          current_participant_id?: string | null;
+          party_id: string;
+          round?: number;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          current_participant_id?: string | null;
+          party_id?: string;
+          round?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'encounters_party_id_fkey';
+            columns: ['party_id'];
+            isOneToOne: true;
+            referencedRelation: 'parties';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       feedback: {
         Row: {
           created_at: string;
