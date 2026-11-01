@@ -53,7 +53,7 @@ export function ConditionHint({
           type="button"
           aria-label={t('ariaLabel', { name: accessibleName ?? condition.name })}
           className={cn(
-            'focus-ring touch-target text-primary decoration-primary/60 cursor-pointer rounded-sm underline decoration-dotted underline-offset-4',
+            'focus-ring touch-target text-primary-flare decoration-primary/60 pointer-events-auto cursor-pointer rounded-sm underline decoration-dotted underline-offset-4',
             className,
           )}
         >
@@ -75,7 +75,7 @@ export function ConditionHint({
           <button
             type="button"
             onClick={() => setShownKey(other.key)}
-            className="focus-ring touch-target text-primary mt-2 rounded-sm text-xs font-medium underline underline-offset-4"
+            className="focus-ring touch-target text-primary-flare mt-2 rounded-sm text-xs font-medium underline underline-offset-4"
           >
             {t('otherEdition', { edition: other.edition })}
           </button>
