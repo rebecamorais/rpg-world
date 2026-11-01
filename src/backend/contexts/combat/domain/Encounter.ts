@@ -26,11 +26,16 @@ export interface GmRow {
   hp: { current: number; max: number; temp: number };
   /** Only for a player at 0 HP. */
   deathSaves: { successes: number; failures: number } | null;
+  avatarUrl: string | null;
+  accentColor: string | null;
+  race: string;
+  class: string;
+  level: number;
   ac: number;
   passivePerception: number;
-  /** The levels with slots, in order. */
-  spellSlots: { level: number; max: number; used: number }[];
-  spellPoints: { current: number; max: number } | null;
+  speed: number;
+  /** Scores by key (STR, DEX...), as on the sheet. */
+  attributes: Record<string, number>;
   isCurrent: boolean;
 }
 

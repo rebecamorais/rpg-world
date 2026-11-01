@@ -15,7 +15,11 @@ import type {
 } from '@backend/contexts/parties/domain/PartyView';
 
 /** Avatar, name and "race · class · level" of a character at the table. */
-export function CharacterIdentity({ character }: { character: RosterCharacter }) {
+export function CharacterIdentity({
+  character,
+}: {
+  character: Pick<RosterCharacter, 'name' | 'avatarUrl' | 'race' | 'class' | 'level'>;
+}) {
   const t = useTranslations('parties.page');
   const details = [character.race, character.class, t('level', { level: character.level })]
     .filter(Boolean)
@@ -27,7 +31,11 @@ export function CharacterIdentity({ character }: { character: RosterCharacter })
         {character.avatarUrl && (
           <AvatarImage src={character.avatarUrl} alt="" className="object-cover" />
         )}
-        <AvatarFallback className="bg-character-surface text-character-flare text-xs font-bold">
+        {/* The initials only stand in for the picture; the name follows */}
+        <AvatarFallback
+          aria-hidden="true"
+          className="bg-character-surface text-character-flare text-xs font-bold"
+        >
           {character.name.substring(0, 2).toUpperCase()}
         </AvatarFallback>
       </Avatar>

@@ -129,14 +129,14 @@ test.describe('combate', () => {
     await runningCombat(page, partyId, heroId, goblinId);
     await page.goto(partyUrl(partyId));
     const hero = order(page).getByRole('listitem').filter({ hasText: 'Arani' });
-    await expect(hero).toContainText('12/20');
+    await expect(hero).toContainText('12 / 20');
 
     const res = await player.page.request.put(`/api/characters/${heroId}`, {
       data: { updates: { hpCurrent: 0, deathSaves: { successes: 1, failures: 2 } } },
     });
     expect(res.ok()).toBe(true);
 
-    await expect(hero).toContainText('0/20');
+    await expect(hero).toContainText('0 / 20');
     await expect(hero).toContainText('Death saves: 1 successes, 2 failures');
   });
 

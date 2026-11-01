@@ -27,14 +27,16 @@ export interface CombatSheet {
   hpCurrent: number;
   hpMax: number;
   hpTemp: number;
+  avatarUrl: string | null;
+  accentColor: string | null;
+  race: string;
+  class: string;
   ac: number;
+  speed: number;
   level: number;
   attributes: Record<string, number>;
   skills: Record<string, { isProficient?: boolean; expertise?: boolean } | undefined>;
   deathSaves: { successes: number; failures: number } | null;
-  spellcastingSystem: 'slots' | 'points' | null;
-  spellSlots: Record<string, { max: number; used: number }>;
-  spellPoints: { current: number; max: number } | null;
 }
 
 export interface NewParticipant {

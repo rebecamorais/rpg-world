@@ -28,16 +28,18 @@ const details = (name = 'Arani') =>
   screen.getByRole('button', { name: fill(t.detailsOf, { name }) });
 
 describe('CombatRow', () => {
-  it.each([
-    [{ current: 20, max: 20 }, 'healthy', '100%'],
-    [{ current: 9, max: 20 }, 'wounded', '45%'],
-    [{ current: 3, max: 20 }, 'critical', '15%'],
-    [{ current: 0, max: 0 }, 'critical', '0%'],
-  ])('a barra de PV %o fica %s', (hp, tone, width) => {
-    const { container } = renderRow(gmRow({ hp: { ...hp, temp: 0 } }));
-    const bar = container.querySelector('[data-hp-bar]')!;
-    expect(bar).toHaveAttribute('data-tone', tone);
-    expect(bar.firstElementChild).toHaveStyle({ width });
+  it('fechado mostra quem é e o PV; aberto, CA, percepção, deslocamento e modificadores', async () => {
+    renderRow();
+    expect(screen.getByText(/Elfa · Maga/)).toBeInTheDocument();
+    expect(screen.getByText('12 / 20')).toBeInTheDocument();
+
+    await userEvent.click(details());
+    expect(screen.getByText(messages.combatStats.armorClass)).toBeVisible();
+    expect(screen.getByText(t.passivePerception)).toBeVisible();
+    expect(screen.getByText(messages.combatStats.speed)).toBeVisible();
+    // INT 18 → +4, STR 8 → -1
+    expect(screen.getByText('+4')).toBeVisible();
+    expect(screen.getByText('-1')).toBeVisible();
   });
 
   it('a linha da vez atual brilha', () => {
@@ -48,7 +50,7 @@ describe('CombatRow', () => {
   it('o jogador não tem campo de PV; o inimigo tem PV e temporário editáveis', async () => {
     renderRow();
     expect(screen.queryByLabelText(fill(t.hpOf, { name: 'Arani' }))).not.toBeInTheDocument();
-    expect(screen.getByText('12/20')).toBeInTheDocument();
+    expect(screen.getByText('12 / 20')).toBeInTheDocument();
 
     renderRow(
       gmRow({
@@ -92,7 +94,7 @@ describe('CombatRow', () => {
 
   it('o nome abre a ficha certa: a da mesa para jogador, a normal para inimigo', () => {
     renderRow();
-    expect(screen.getByRole('link', { name: 'Arani' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /^Arani/ })).toHaveAttribute(
       'href',
       '/parties/party-1/characters/hero',
     );
@@ -100,7 +102,7 @@ describe('CombatRow', () => {
     renderRow(
       gmRow({ participantId: 'p-g', characterId: 'goblin', side: 'enemy', name: 'Goblin' }),
     );
-    expect(screen.getByRole('link', { name: 'Goblin' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /^Goblin/ })).toHaveAttribute(
       'href',
       '/system/DnD_5e/character/goblin',
     );
@@ -109,13 +111,13 @@ describe('CombatRow', () => {
   it('fechado mostra só iniciativa, nome e PV; abre pelo botão ou por um clique no card', async () => {
     renderRow();
     expect(details()).toHaveAttribute('aria-expanded', 'false');
-    expect(screen.getByText(t.ac)).not.toBeVisible();
+    expect(screen.getByText(messages.combatStats.armorClass)).not.toBeVisible();
 
     await userEvent.click(details());
     expect(details()).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByText(t.ac)).toBeVisible();
+    expect(screen.getByText(messages.combatStats.armorClass)).toBeVisible();
 
-    await userEvent.click(screen.getByText('12/20'));
+    await userEvent.click(screen.getByText('12 / 20'));
     expect(details()).toHaveAttribute('aria-expanded', 'false');
   });
 

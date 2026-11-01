@@ -14,14 +14,16 @@ const sheet = (overrides: Partial<CombatSheet> = {}): CombatSheet => ({
   hpCurrent: 12,
   hpMax: 20,
   hpTemp: 3,
+  avatarUrl: null,
+  accentColor: '#1d4ed8',
+  race: 'Elfa',
+  class: 'Maga',
   ac: 15,
+  speed: 9,
   level: 5,
   attributes: { WIS: 14 },
   skills: { PERCEPTION: { isProficient: true } },
   deathSaves: { successes: 1, failures: 2 },
-  spellcastingSystem: 'slots',
-  spellSlots: { '2': { max: 2, used: 1 }, '1': { max: 4, used: 0 }, '3': { max: 0, used: 0 } },
-  spellPoints: null,
   ...overrides,
 });
 
@@ -45,7 +47,6 @@ const goblinSheet = sheet({
   attributes: {},
   skills: {},
   deathSaves: null,
-  spellSlots: {},
 });
 
 const makeRepo = () =>
@@ -79,7 +80,7 @@ describe('toGmRow', () => {
     expect(toGmRow(participant(), sheet(), null).deathSaves).toBeNull();
   });
 
-  it('o jogador usa o PV, a CA e a percepção da ficha; espaços só dos níveis ativos, em ordem', () => {
+  it('o jogador usa o PV, a CA, a percepção e a identidade da ficha', () => {
     expect(toGmRow(participant(), sheet(), 'p-hero')).toEqual({
       participantId: 'p-hero',
       characterId: 'hero',
@@ -88,14 +89,16 @@ describe('toGmRow', () => {
       initiative: 14,
       hp: { current: 12, max: 20, temp: 3 },
       deathSaves: null,
+      avatarUrl: null,
+      accentColor: '#1d4ed8',
+      race: 'Elfa',
+      class: 'Maga',
+      level: 5,
       ac: 15,
       // 10 + WIS 14 (+2) + proficiency at level 5 (+3)
       passivePerception: 15,
-      spellSlots: [
-        { level: 1, max: 4, used: 0 },
-        { level: 2, max: 2, used: 1 },
-      ],
-      spellPoints: null,
+      speed: 9,
+      attributes: { WIS: 14 },
       isCurrent: true,
     });
   });
@@ -122,16 +125,6 @@ describe('toGmRow', () => {
       passivePerception: 10,
       isCurrent: false,
     });
-  });
-
-  it('pontos de magia em vez de espaços quando a ficha usa pontos', () => {
-    const row = toGmRow(
-      participant(),
-      sheet({ spellcastingSystem: 'points', spellPoints: { current: 5, max: 9 } }),
-      null,
-    );
-    expect(row.spellSlots).toEqual([]);
-    expect(row.spellPoints).toEqual({ current: 5, max: 9 });
   });
 });
 
