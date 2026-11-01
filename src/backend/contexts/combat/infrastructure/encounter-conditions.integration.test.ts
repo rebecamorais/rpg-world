@@ -11,7 +11,7 @@ import {
   createNpc,
   createParty,
 } from '../../../../../test/helpers/parties';
-import { listen, waitFor } from '../../../../../test/helpers/realtime';
+import { listenAsMember, waitFor } from '../../../../../test/helpers/realtime';
 import { createSignedInClient } from '../../../../../test/helpers/signed-in-client';
 
 type Session = Awaited<ReturnType<typeof createSignedInClient>>;
@@ -216,8 +216,9 @@ describe('Condições no combate e edição da mesa (Integration)', () => {
 
     it('mudar as condições avisa o tópico da mesa', async () => {
       channels.push(gm, player);
-      const asGm = await listen(gm.client, partyId);
-      const asPlayer = await listen(player.client, partyId);
+      const asGm = await listenAsMember(gm.client, partyId);
+      const asPlayer = await listenAsMember(player.client, partyId);
+      expect([asGm.status, asPlayer.status]).toEqual(['SUBSCRIBED', 'SUBSCRIBED']);
 
       await setConditions(player, hero, PRONE);
 
