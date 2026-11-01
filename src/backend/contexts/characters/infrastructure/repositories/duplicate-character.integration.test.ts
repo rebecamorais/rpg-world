@@ -10,6 +10,8 @@ import {
   createParty,
 } from '../../../../../../test/helpers/parties';
 import { createSignedInClient } from '../../../../../../test/helpers/signed-in-client';
+import { CharacterErrorCodes } from '../../domain/CharacterError';
+import { SupabaseCharacterRepository } from './supabase-character.repository';
 
 type Session = Awaited<ReturnType<typeof createSignedInClient>>;
 
@@ -98,5 +100,19 @@ describe('duplicate_character (Integration)', () => {
 
     const { error } = await duplicate(owner);
     expect(error?.message).toBe('character_not_found');
+  });
+
+  it('pelo repositório: devolve o id da cópia; ficha alheia vira CharacterError ACCESS_NOT_FOUND', async () => {
+    const copyId = await new SupabaseCharacterRepository(owner.client).duplicate(
+      characterId,
+      'Arani 2',
+    );
+    expect(copyId).toMatch(/^[0-9a-f-]{36}$/);
+
+    const intruder = await createSignedInClient('intruder');
+    const error = await new SupabaseCharacterRepository(intruder.client)
+      .duplicate(characterId, 'Roubada')
+      .catch((e) => e);
+    expect(error.code).toBe(CharacterErrorCodes.ACCESS_NOT_FOUND);
   });
 });

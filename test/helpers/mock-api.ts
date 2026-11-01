@@ -27,6 +27,7 @@ export const api = {
     uploadAvatar: vi.fn(),
     getSpells: vi.fn(),
     toggleSpell: vi.fn(),
+    duplicate: vi.fn(),
   },
   loreApi: { getByCharacterId: vi.fn(), update: vi.fn() },
   profileApi: { getProfile: vi.fn(), updateProfile: vi.fn(), uploadAvatar: vi.fn() },

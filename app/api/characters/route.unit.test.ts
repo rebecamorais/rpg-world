@@ -15,7 +15,16 @@ describe('/api/characters', () => {
 
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual([{ id: 'c1' }]);
-    expect(api.charactersApi.getByOwner).toHaveBeenCalledWith(SESSION_USER.id);
+    expect(api.charactersApi.getByOwner).toHaveBeenCalledWith(SESSION_USER.id, 'pc');
+  });
+
+  it('GET ?kind=npc lista as fichas de inimigo', async () => {
+    api.charactersApi.getByOwner.mockResolvedValue([]);
+
+    const res = await GET(jsonRequest('/api/characters?kind=npc'), routeContext());
+
+    expect(res.status).toBe(200);
+    expect(api.charactersApi.getByOwner).toHaveBeenCalledWith(SESSION_USER.id, 'npc');
   });
 
   it('POST cria o personagem em nome do usuário da sessão e responde 201', async () => {

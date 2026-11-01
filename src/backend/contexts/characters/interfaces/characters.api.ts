@@ -1,3 +1,4 @@
+import type { CharacterKind } from '../domain/entity/Character';
 import { CharacterContext, CharacterUpdates, CreateCharacterInput } from '../index';
 
 export const makeCharactersApi = (characterContext: CharacterContext) => ({
@@ -6,8 +7,8 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
     return character.toJSON();
   },
 
-  getByOwner: async (ownerUsername: string) => {
-    const characters = await characterContext.getByOwner(ownerUsername);
+  getByOwner: async (ownerUsername: string, kind: CharacterKind = 'pc') => {
+    const characters = await characterContext.getByOwner(ownerUsername, kind);
     return characters.map((c) => c.toJSON());
   },
 
@@ -32,6 +33,8 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
     });
     return { id: character.id };
   },
+
+  duplicate: (id: string, name: string) => characterContext.duplicate(id, name),
 
   delete: async (id: string, ownerUsername: string) => {
     await characterContext.delete(id, ownerUsername);

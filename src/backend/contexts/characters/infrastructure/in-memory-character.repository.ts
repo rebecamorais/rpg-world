@@ -1,4 +1,4 @@
-import { Character } from '../domain/entity/Character';
+import { Character, CharacterKind } from '../domain/entity/Character';
 import { CharacterRepo } from '../domain/repository';
 
 export class InMemoryCharacterRepository implements CharacterRepo {
@@ -12,8 +12,10 @@ export class InMemoryCharacterRepository implements CharacterRepo {
     return this.characters.get(id)?.ownerUsername ?? null;
   }
 
-  async findByOwner(ownerUsername: string): Promise<Character[]> {
-    return Array.from(this.characters.values()).filter((c) => c.ownerUsername === ownerUsername);
+  async findByOwner(ownerUsername: string, kind: CharacterKind = 'pc'): Promise<Character[]> {
+    return Array.from(this.characters.values()).filter(
+      (c) => c.ownerUsername === ownerUsername && c.kind === kind,
+    );
   }
 
   async save(character: Character): Promise<void> {
@@ -22,5 +24,17 @@ export class InMemoryCharacterRepository implements CharacterRepo {
 
   async delete(id: string): Promise<boolean> {
     return this.characters.delete(id);
+  }
+
+  async duplicate(id: string, name: string): Promise<string> {
+    const original = this.characters.get(id);
+    if (!original) throw new Error(`Character ${id} not found`);
+    const copy = Object.assign(Object.create(Object.getPrototypeOf(original)), original, {
+      id: crypto.randomUUID(),
+      name,
+      avatarUrl: undefined,
+    }) as Character;
+    this.characters.set(copy.id, copy);
+    return copy.id;
   }
 }

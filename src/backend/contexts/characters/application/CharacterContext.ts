@@ -1,4 +1,4 @@
-import { Character } from '../domain/entity/Character';
+import { Character, CharacterKind } from '../domain/entity/Character';
 import { DnD5eCharacter } from '../domain/entity/DnD5eCharacter';
 import { CharacterSpellRelation } from '../domain/repository/character-spell.repo';
 import { CreateCharacterInput } from './create-character/create-character.use-case';
@@ -10,7 +10,7 @@ export type { CharacterUpdates, CreateCharacterInput };
 /** Operations the characters context exposes to the interface layer. */
 export interface CharacterContext {
   getById(id: string, requesterId: string): Promise<Character>;
-  getByOwner(ownerUsername: string): Promise<Character[]>;
+  getByOwner(ownerUsername: string, kind?: CharacterKind): Promise<Character[]>;
   create(data: CreateCharacterInput): Promise<DnD5eCharacter>;
   update(input: {
     id: string;
@@ -18,6 +18,7 @@ export interface CharacterContext {
     updates: CharacterUpdates;
   }): Promise<DnD5eCharacter>;
   delete(id: string, ownerUsername: string): Promise<boolean>;
+  duplicate(id: string, name: string): Promise<{ id: string }>;
   uploadAvatar(id: string, userId: string, file: Blob): Promise<string>;
   isOwner(id: string, userId: string): Promise<boolean>;
 

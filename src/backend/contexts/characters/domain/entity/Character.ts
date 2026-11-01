@@ -3,6 +3,9 @@ import { Lore } from '@backend/contexts/lore/domain/Lore';
 import { Attributes } from '../value-object/Attributes';
 import { HealthPoints } from '../value-object/HealthPoints';
 
+/** A playable character (pc) or one of the GM's enemy sheets (npc). */
+export type CharacterKind = 'pc' | 'npc';
+
 export abstract class Character {
   public readonly id: string;
   public name: string;
@@ -25,6 +28,7 @@ export abstract class Character {
     lore: Lore = Lore.empty(),
     public accentColor?: string,
     avatarUrl?: string,
+    public kind: CharacterKind = 'pc',
   ) {
     this.id = id;
     this.name = name;

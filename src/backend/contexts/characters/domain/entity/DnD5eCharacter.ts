@@ -5,7 +5,7 @@ import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 import { Attributes } from '../value-object/Attributes';
 import { HealthPoints } from '../value-object/HealthPoints';
-import { Character } from './Character';
+import { Character, CharacterKind } from './Character';
 
 // Same keys the sheet stores and the shared rules use (e.g. 'ACROBATICS'), so the domain
 // can't drift from the persisted data.
@@ -18,6 +18,7 @@ export interface CharacterSkill {
 
 export interface DnD5eCharacterOptions {
   id: string;
+  kind?: CharacterKind;
   name: string;
   ownerUsername: string;
   attributes: Attributes;
@@ -90,6 +91,7 @@ export class DnD5eCharacter extends Character {
       options.lore ?? Lore.empty(),
       options.accentColor,
       options.avatarUrl,
+      options.kind,
     );
     this.class = options.classStr ?? '';
     this.race = options.race ?? '';
@@ -137,6 +139,7 @@ export class DnD5eCharacter extends Character {
       name: this.name,
       system: this.system,
       ownerUsername: this.ownerUsername,
+      kind: this.kind,
       level: this.level,
       avatarUrl: this.avatarUrl,
       accentColor: this.accentColor,

@@ -1,4 +1,5 @@
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
+import { CharacterKind } from '../../domain/entity/Character';
 import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';
 import { CharacterRepo } from '../../domain/repository';
 import { Attributes } from '../../domain/value-object/Attributes';
@@ -12,6 +13,8 @@ export interface CreateCharacterInput {
   class?: string;
   race?: string;
   level?: number;
+  /** npc: one of the GM's enemy sheets. */
+  kind?: CharacterKind;
 }
 
 export class CreateCharacterUseCase {
@@ -36,6 +39,7 @@ export class CreateCharacterUseCase {
       level: input.level || 1,
       classStr: input.class || '',
       race: input.race || '',
+      kind: input.kind ?? 'pc',
     });
 
     await this.repository.save(character);
