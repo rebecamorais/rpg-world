@@ -460,6 +460,7 @@ export type Database = {
     };
     Functions: {
       auth_user_exists: { Args: { p_email: string }; Returns: boolean };
+      duplicate_character: { Args: { p_character_id: string; p_name: string }; Returns: string };
       encounter_turns: {
         Args: { p_party_id: string };
         Returns: {
