@@ -15,6 +15,7 @@ import {
 } from '@frontend/components/ui/dropdown-menu';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharactersContext } from '@frontend/context/CharactersContext';
+import { useDuplicateCharacter } from '@frontend/hooks/useDuplicateCharacter';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
@@ -32,6 +33,7 @@ export function CharacterCard({ character }: CharacterCardProps) {
   const t = useTranslations('characters');
   const tCommon = useTranslations('common');
   const { setCharacterToDelete } = useCharactersContext();
+  const duplicate = useDuplicateCharacter();
 
   const theme = characterTheme(character.accentColor);
 
@@ -94,6 +96,13 @@ export function CharacterCard({ character }: CharacterCardProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  disabled={duplicate.isPending}
+                  onSelect={() => duplicate.mutate(character)}
+                >
+                  <AppIcon name="Copy" size={16} />
+                  {t('duplicate')}
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   variant="destructive"
                   onSelect={() => setCharacterToDelete(character)}
