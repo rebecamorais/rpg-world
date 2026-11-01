@@ -120,6 +120,21 @@ describe('Funções do combate (Integration)', () => {
       expect(await encounter()).toEqual({ round: 1, current_participant_id: friend });
     });
 
+    it('a lista esvazia no meio do combate: quem entra depois fica com a vez e o turno volta a andar', async () => {
+      for (const id of [hero, friend, goblin]) {
+        await gm.client.from('encounter_participants').delete().eq('id', id);
+      }
+      expect(await encounter()).toEqual({ round: 1, current_participant_id: null });
+
+      const goblinId = await createNpc(gm.userId, 'Orc');
+      const orc = await addParticipant(gm, partyId, goblinId, 'enemy', 'Orc 1');
+      const orc2 = await addParticipant(gm, partyId, goblinId, 'enemy', 'Orc 2');
+      expect(await encounter()).toEqual({ round: 1, current_participant_id: orc });
+
+      expect((await endTurn(gm, orc)).error).toBeNull();
+      expect(await encounter()).toEqual({ round: 1, current_participant_id: orc2 });
+    });
+
     it('antes de começar ninguém encerra turno', async () => {
       await gm.client.from('encounters').delete().eq('party_id', partyId);
       await createEncounter(gm, partyId);
