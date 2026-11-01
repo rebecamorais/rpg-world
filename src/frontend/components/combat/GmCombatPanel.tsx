@@ -177,6 +177,7 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
               row={row}
               isFirst={index === 0}
               isLast={index === rows.length - 1}
+              waiting={round > 0 && !row.isCurrent}
               onChange={(patch) =>
                 combat.updateParticipant.mutate({ participantId: row.participantId, ...patch })
               }

@@ -21,9 +21,12 @@ import type {
 export function CharacterIdentity({
   character,
   href,
+  withAvatar = true,
 }: {
   character: Pick<RosterCharacter, 'name' | 'avatarUrl' | 'race' | 'class' | 'level'>;
   href?: string;
+  /** False where the picture is shown elsewhere (the combat card's portrait). */
+  withAvatar?: boolean;
 }) {
   const t = useTranslations('parties.page');
   const details = [character.race, character.class, t('level', { level: character.level })]
@@ -32,18 +35,20 @@ export function CharacterIdentity({
 
   return (
     <div className="flex min-w-0 items-center gap-3">
-      <Avatar className="border-border h-12 w-12 shrink-0 rounded-lg border">
-        {character.avatarUrl && (
-          <AvatarImage src={character.avatarUrl} alt="" className="object-cover" />
-        )}
-        {/* The initials only stand in for the picture; the name follows */}
-        <AvatarFallback
-          aria-hidden="true"
-          className="bg-character-surface text-character-flare text-xs font-bold"
-        >
-          {character.name.substring(0, 2).toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
+      {withAvatar && (
+        <Avatar className="border-border h-12 w-12 shrink-0 rounded-lg border">
+          {character.avatarUrl && (
+            <AvatarImage src={character.avatarUrl} alt="" className="object-cover" />
+          )}
+          {/* The initials only stand in for the picture; the name follows */}
+          <AvatarFallback
+            aria-hidden="true"
+            className="bg-character-surface text-character-flare text-xs font-bold"
+          >
+            {character.name.substring(0, 2).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+      )}
       <div className="flex min-w-0 flex-col">
         {href ? (
           <Link

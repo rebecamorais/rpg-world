@@ -5,6 +5,7 @@ import { type CSSProperties, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { CharacterIdentity } from '@frontend/components/party/RolePlayCard';
+import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
 import { HealthBar } from '@frontend/components/ui/health-bar';
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -61,17 +62,37 @@ function NumberCell({
 
 const ATTRIBUTES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'] as const;
 
+/** The character's picture down the card's left side; the initials when there's none. */
+function Portrait({ row }: { row: GmRow }) {
+  return (
+    <Avatar className="bg-character-surface h-auto w-14 self-stretch rounded-none sm:w-28">
+      {row.avatarUrl && (
+        <AvatarImage src={row.avatarUrl} alt="" className="aspect-auto object-cover object-top" />
+      )}
+      {/* The name is right next to it */}
+      <AvatarFallback
+        aria-hidden="true"
+        className="bg-character-surface text-character-flare font-display rounded-none text-2xl font-bold"
+      >
+        {row.name.substring(0, 2).toUpperCase()}
+      </AvatarFallback>
+    </Avatar>
+  );
+}
+
 /**
  * A participant in the GM's initiative tracker, drawn like the character card on the home page.
  * Closed: initiative, who it is (opens the sheet) and HP. Opened, by a click or because it's
  * their turn: AC, passive perception, speed, an enemy's temp HP and the attribute modifiers. Only
  * enemies' HP is edited here; a player's comes from their sheet, and their death saves show at 0.
+ * While someone else plays (`waiting`), the card fades back so the turn stands out.
  */
 export function CombatRow({
   partyId,
   row,
   isFirst,
   isLast,
+  waiting = false,
   onChange,
   onMove,
   onRemove,
@@ -80,6 +101,7 @@ export function CombatRow({
   row: GmRow;
   isFirst: boolean;
   isLast: boolean;
+  waiting?: boolean;
   onChange: (patch: ParticipantPatch) => void;
   onMove: (direction: -1 | 1) => void;
   onRemove: () => void;
@@ -116,161 +138,174 @@ export function CombatRow({
       style={{ ...theme.style, '--primary': 'var(--character-color)' } as CSSProperties}
       className={cn(
         theme.className,
-        'bg-card/60 border-character-muted relative flex cursor-pointer flex-col gap-4 overflow-hidden rounded-xl border p-4 pt-5',
+        'bg-card/60 border-character-muted relative flex cursor-pointer overflow-hidden rounded-xl border transition-[opacity,filter] duration-300',
         row.isCurrent && 'border-primary animate-turn-glow',
+        // Faded, not disabled: back in full on hover, focus or when opened
+        waiting &&
+          !expanded &&
+          'opacity-75 grayscale-[.7] focus-within:opacity-100 focus-within:grayscale-0 hover:opacity-100 hover:grayscale-0',
       )}
     >
       <div
         aria-hidden="true"
-        className="bg-character absolute top-0 left-0 h-1 w-full opacity-80"
+        className="bg-character absolute top-0 left-0 z-10 h-1 w-full opacity-80"
       />
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-        <NumberCell
-          label={t('initiativeOf', { name: row.name })}
-          value={row.initiative}
-          min={-10}
-          max={99}
-          nullable
-          placeholder="—"
-          onCommit={(initiative) => onChange({ initiative })}
-        />
+      <Portrait row={row} />
 
-        {/* Never squeezed out by the buttons: on a phone they drop to the next line */}
-        <div className="min-w-0 flex-1 basis-40">
-          <CharacterIdentity character={row} href={sheetHref} />
-        </div>
+      <div className="flex min-w-0 flex-1 flex-col gap-4 p-4 pt-5">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+          <NumberCell
+            label={t('initiativeOf', { name: row.name })}
+            value={row.initiative}
+            min={-10}
+            max={99}
+            nullable
+            placeholder="—"
+            onCommit={(initiative) => onChange({ initiative })}
+          />
 
-        {/* On touch screens the gap keeps each button's 44px touch area apart */}
-        <div className="ml-auto flex items-center gap-1 pointer-coarse:gap-2">
+          {/* Never squeezed out by the buttons: on a phone they drop to the next line */}
+          <div className="min-w-0 flex-1 basis-40">
+            <CharacterIdentity character={row} href={sheetHref} withAvatar={false} />
+          </div>
+
+          {/* Its own item, so on a phone the buttons can drop below it */}
           {status && (
-            <span className="text-label text-character-flare bg-character-surface mr-2 rounded-full px-2 py-0.5 whitespace-nowrap">
+            <span className="text-label text-character-flare bg-character-surface ml-auto rounded-full px-2 py-0.5 whitespace-nowrap">
               {status}
             </span>
           )}
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={t('moveUp', { name: row.name })}
-            disabled={isFirst}
-            onClick={() => onMove(-1)}
-          >
-            <AppIcon name="ChevronUp" size={16} aria-hidden="true" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={t('moveDown', { name: row.name })}
-            disabled={isLast}
-            onClick={() => onMove(1)}
-          >
-            <AppIcon name="ChevronDown" size={16} aria-hidden="true" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={t('remove', { name: row.name })}
-            onClick={onRemove}
-            className="text-danger-flare"
-          >
-            <AppIcon name="X" size={16} aria-hidden="true" />
-          </Button>
-          {/* Keeps the details chevron apart from the move-down one */}
-          <span aria-hidden="true" className="bg-border mx-1 h-5 w-px" />
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={t('detailsOf', { name: row.name })}
-            aria-expanded={expanded}
-            aria-controls={detailsId}
-            onClick={toggle}
-          >
-            <AppIcon
-              name="ChevronRight"
-              size={16}
-              aria-hidden="true"
-              className={cn('transition-transform duration-200', expanded && 'rotate-90')}
-            />
-          </Button>
-        </div>
-      </div>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-label text-danger-flare">{tStats('hitPointsShort')}</span>
-          {isEnemy ? (
-            <span className="flex items-center gap-1">
-              <NumberCell
-                label={t('hpOf', { name: row.name })}
-                value={row.hp.current}
-                min={0}
-                max={row.hp.max}
-                onCommit={(hpCurrent) => onChange({ hpCurrent: hpCurrent ?? 0 })}
+          {/* On touch screens the gap keeps each button's 44px touch area apart */}
+          <div className="ml-auto flex items-center gap-1 pointer-coarse:gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={t('moveUp', { name: row.name })}
+              disabled={isFirst}
+              onClick={() => onMove(-1)}
+            >
+              <AppIcon name="ChevronUp" size={16} aria-hidden="true" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={t('moveDown', { name: row.name })}
+              disabled={isLast}
+              onClick={() => onMove(1)}
+            >
+              <AppIcon name="ChevronDown" size={16} aria-hidden="true" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={t('remove', { name: row.name })}
+              onClick={onRemove}
+              className="text-danger-flare"
+            >
+              <AppIcon name="X" size={16} aria-hidden="true" />
+            </Button>
+            {/* Keeps the details chevron apart from the move-down one */}
+            <span aria-hidden="true" className="bg-border mx-1 h-5 w-px" />
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={t('detailsOf', { name: row.name })}
+              aria-expanded={expanded}
+              aria-controls={detailsId}
+              onClick={toggle}
+            >
+              <AppIcon
+                name="ChevronRight"
+                size={16}
+                aria-hidden="true"
+                className={cn('transition-transform duration-200', expanded && 'rotate-90')}
               />
-              <span className="text-muted-foreground font-mono text-sm font-bold">
-                / {row.hp.max}
+            </Button>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-label text-danger-flare">{tStats('hitPointsShort')}</span>
+            {isEnemy ? (
+              <span className="flex items-center gap-1">
+                <NumberCell
+                  label={t('hpOf', { name: row.name })}
+                  value={row.hp.current}
+                  min={0}
+                  max={row.hp.max}
+                  onCommit={(hpCurrent) => onChange({ hpCurrent: hpCurrent ?? 0 })}
+                />
+                <span className="text-muted-foreground font-mono text-sm font-bold">
+                  / {row.hp.max}
+                </span>
               </span>
-            </span>
-          ) : (
-            <span className="text-foreground font-mono text-sm font-bold tabular-nums">
-              {`${row.hp.current} / ${row.hp.max}`}
-              {row.hp.temp > 0 && <span className="text-warning"> +{row.hp.temp}</span>}
-            </span>
+            ) : (
+              <span className="text-foreground font-mono text-sm font-bold tabular-nums">
+                {`${row.hp.current} / ${row.hp.max}`}
+                {row.hp.temp > 0 && <span className="text-warning"> +{row.hp.temp}</span>}
+              </span>
+            )}
+          </div>
+          <HealthBar
+            current={row.hp.current}
+            max={row.hp.max}
+            temp={row.hp.temp}
+            aria-hidden="true"
+          />
+          {row.deathSaves && (
+            <p className="text-caption text-danger-flare">{t('deathSaves', row.deathSaves)}</p>
           )}
         </div>
-        <HealthBar
-          current={row.hp.current}
-          max={row.hp.max}
-          temp={row.hp.temp}
-          aria-hidden="true"
-        />
-        {row.deathSaves && (
-          <p className="text-caption text-danger-flare">{t('deathSaves', row.deathSaves)}</p>
-        )}
-      </div>
 
-      <div id={detailsId} hidden={!expanded} className="animate-fade-in flex flex-col gap-2">
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2">
-          <StatBlock icon="shoulder-armor" label={tStats('armorClass')}>
-            {row.ac}
-          </StatBlock>
-          <StatBlock icon="Eye" iconVariant="system" label={t('passivePerception')}>
-            {row.passivePerception}
-          </StatBlock>
-          <StatBlock icon="boot-prints" label={tStats('speed')} unit={tStats('speedUnit')}>
-            {row.speed}
-          </StatBlock>
-          {isEnemy && (
-            <StatBlock icon="Shield" iconVariant="system" label={t('tempHp')}>
-              <NumberCell
-                label={t('tempHpOf', { name: row.name })}
-                value={row.hp.temp}
-                min={0}
-                max={9999}
-                onCommit={(hpTemp) => onChange({ hpTemp: hpTemp ?? 0 })}
-              />
+        <div id={detailsId} hidden={!expanded} className="animate-fade-in flex flex-col gap-2">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(7rem,1fr))] gap-2">
+            <StatBlock icon="shoulder-armor" label={tStats('armorClass')}>
+              {row.ac}
             </StatBlock>
-          )}
-        </div>
+            <StatBlock icon="Eye" iconVariant="system" label={t('passivePerception')}>
+              {row.passivePerception}
+            </StatBlock>
+            <StatBlock icon="boot-prints" label={tStats('speed')} unit={tStats('speedUnit')}>
+              {row.speed}
+            </StatBlock>
+            {isEnemy && (
+              <StatBlock icon="Shield" iconVariant="system" label={t('tempHp')}>
+                <NumberCell
+                  label={t('tempHpOf', { name: row.name })}
+                  value={row.hp.temp}
+                  min={0}
+                  max={9999}
+                  onCommit={(hpTemp) => onChange({ hpTemp: hpTemp ?? 0 })}
+                />
+              </StatBlock>
+            )}
+          </div>
 
-        <dl className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-          {ATTRIBUTES.map((key) => {
-            const mod = getModifier(row.attributes[key] ?? 10);
-            return (
-              <div
-                key={key}
-                className="border-border bg-background/60 flex flex-col items-center rounded-lg border py-2"
-              >
-                <dt className="text-label text-muted-foreground">{tAttr(key)}</dt>
-                <dd
-                  className={cn('font-mono text-lg font-bold tabular-nums', getStatColorClass(mod))}
+          <dl className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+            {ATTRIBUTES.map((key) => {
+              const mod = getModifier(row.attributes[key] ?? 10);
+              return (
+                <div
+                  key={key}
+                  className="border-border bg-background/60 flex flex-col items-center rounded-lg border py-2"
                 >
-                  {mod >= 0 ? `+${mod}` : mod}
-                </dd>
-              </div>
-            );
-          })}
-        </dl>
+                  <dt className="text-label text-muted-foreground">{tAttr(key)}</dt>
+                  <dd
+                    className={cn(
+                      'font-mono text-lg font-bold tabular-nums',
+                      getStatColorClass(mod),
+                    )}
+                  >
+                    {mod >= 0 ? `+${mod}` : mod}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
+        </div>
       </div>
     </li>
   );
