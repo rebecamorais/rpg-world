@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { Card, CardContent } from '@frontend/components/ui/card';
-import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
+import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
@@ -30,10 +30,10 @@ export function CharacterIdentity({
   withAvatar?: boolean;
 }) {
   const t = useTranslations('parties.page');
-  const origin = useCharacterOrigin();
+  const choices = useCharacterChoices();
   const details = [
-    origin.raceLabel(character.race),
-    origin.classLabel(character.class),
+    choices.raceLabel(character.race),
+    choices.classLabel(character.class),
     t('level', { level: character.level }),
   ]
     .filter(Boolean)

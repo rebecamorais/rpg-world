@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { CLASS_ICONS, UNKNOWN_ORIGIN_ICON } from '@frontend/constants/character-origins';
-import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
+import { CLASS_ICONS, UNKNOWN_CLASS_ICON } from '@frontend/constants/character-choices';
+import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { cn } from '@frontend/lib/utils';
 
 /**
@@ -19,7 +19,7 @@ export function CharacterPortrait({
   characterClass?: string | null;
   className?: string;
 }) {
-  const cls = useCharacterOrigin().classOf(characterClass);
+  const cls = useCharacterChoices().classOf(characterClass);
 
   return (
     <Avatar aria-hidden="true" className={cn('bg-character-surface', className)}>
@@ -29,7 +29,7 @@ export function CharacterPortrait({
         className="rounded-[inherit] bg-[radial-gradient(circle_at_30%_25%,var(--character-muted),var(--character-surface)_75%)]"
       >
         <AppIcon
-          name={cls ? CLASS_ICONS[cls] : UNKNOWN_ORIGIN_ICON}
+          name={cls ? CLASS_ICONS[cls] : UNKNOWN_CLASS_ICON}
           variant="game"
           className="text-character-flare size-3/5 drop-shadow-[0_0_8px_var(--character-glow)]"
         />
