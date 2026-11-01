@@ -5,7 +5,7 @@ import { CombatSheet, ParticipantRecord } from './repository/combat.repo';
 
 /**
  * A participant's row for the GM. A player's HP is the one on their sheet (the GM doesn't change
- * it); an enemy's is the participant's own, so three goblins share one sheet.
+ * it); an npc's (enemy or ally) is the participant's own, so three goblins share one sheet.
  */
 export function toGmRow(
   participant: ParticipantRecord,

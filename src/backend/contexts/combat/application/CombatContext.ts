@@ -1,4 +1,4 @@
-import { EncounterView } from '../domain/Encounter';
+import { EncounterView, NpcSide } from '../domain/Encounter';
 import { ParticipantPatch } from '../domain/repository/combat.repo';
 
 /**
@@ -8,7 +8,12 @@ import { ParticipantPatch } from '../domain/repository/combat.repo';
 export interface CombatContext {
   get(partyId: string, userId: string): Promise<EncounterView | null>;
   create(partyId: string): Promise<void>;
-  addParticipant(partyId: string, characterId: string, count: number): Promise<void>;
+  addParticipant(
+    partyId: string,
+    characterId: string,
+    count: number,
+    side?: NpcSide,
+  ): Promise<void>;
   updateParticipant(partyId: string, participantId: string, patch: ParticipantPatch): Promise<void>;
   removeParticipant(partyId: string, participantId: string): Promise<void>;
   setOrder(partyId: string, participantIds: string[]): Promise<void>;

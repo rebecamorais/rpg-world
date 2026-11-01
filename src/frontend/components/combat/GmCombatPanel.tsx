@@ -18,25 +18,29 @@ import {
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useEncounter } from '@frontend/hooks/useEncounter';
 import { sortByInitiative } from '@frontend/lib/initiative-order';
+import { cn } from '@frontend/lib/utils';
 
-import { MAX_ENEMIES_PER_ADD } from '@backend/contexts/combat/domain/Encounter';
+import { MAX_ENEMIES_PER_ADD, type NpcSide } from '@backend/contexts/combat/domain/Encounter';
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { CombatConnection } from './CombatConnection';
 import { CombatRow } from './CombatRow';
 
-/** Picks one of the GM's NPC sheets and how many enemies come from it. */
-function AddEnemy({
+const NPC_SIDES: NpcSide[] = ['enemy', 'ally'];
+
+/** Picks one of the GM's NPC sheets, how many come from it and on which side they fight. */
+function AddNpc({
   onAdd,
   isBusy,
 }: {
-  onAdd: (characterId: string, count: number) => void;
+  onAdd: (characterId: string, count: number, side: NpcSide) => void;
   isBusy: boolean;
 }) {
   const t = useTranslations('combat');
   const { characters: sheets } = useCharacters('npc');
   const [sheetId, setSheetId] = useState('');
   const [count, setCount] = useState(1);
+  const [side, setSide] = useState<NpcSide>('enemy');
 
   if (sheets.length === 0) {
     return (
@@ -54,7 +58,7 @@ function AddEnemy({
       className="flex flex-wrap items-end gap-2"
       onSubmit={(event) => {
         event.preventDefault();
-        if (sheetId) onAdd(sheetId, count);
+        if (sheetId) onAdd(sheetId, count, side);
       }}
     >
       <label className="flex flex-col gap-1">
@@ -86,8 +90,29 @@ function AddEnemy({
           className="w-20"
         />
       </label>
+      <div className="flex flex-col gap-1">
+        <span className="text-label text-muted-foreground">{t('side')}</span>
+        <div role="group" aria-label={t('side')} className="flex">
+          {NPC_SIDES.map((option) => (
+            <Button
+              key={option}
+              type="button"
+              variant="outline"
+              aria-pressed={side === option}
+              onClick={() => setSide(option)}
+              className={cn(
+                'first:rounded-r-none last:rounded-l-none last:border-l-0',
+                side === option &&
+                  'border-character-muted bg-character-surface text-character-flare',
+              )}
+            >
+              {t(option)}
+            </Button>
+          ))}
+        </div>
+      </div>
       <Button type="submit" variant="outline" disabled={!sheetId} loading={isBusy}>
-        {t('addEnemy')}
+        {side === 'ally' ? t('addAlly') : t('addEnemy')}
       </Button>
       <Button asChild variant="ghost">
         <Link href="/characters/npcs">{t('manageEnemySheets')}</Link>
@@ -210,9 +235,11 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
         )}
       </div>
 
-      <AddEnemy
+      <AddNpc
         isBusy={combat.addParticipant.isPending}
-        onAdd={(characterId, count) => combat.addParticipant.mutate({ characterId, count })}
+        onAdd={(characterId, count, side) =>
+          combat.addParticipant.mutate({ characterId, count, side })
+        }
       />
     </div>
   );

@@ -102,8 +102,9 @@ export function CombatRow({
   const t = useTranslations('combat');
   const tStats = useTranslations('combatStats');
   const tAttr = useTranslations('attributes.abbreviations');
-  const isEnemy = row.side === 'enemy';
-  const sheetHref = isEnemy
+  // An npc (enemy or ally) has its own HP in the combat and opens the GM's own sheet
+  const isNpc = row.side !== 'player';
+  const sheetHref = isNpc
     ? `/system/DnD_5e/character/${row.characterId}`
     : `/parties/${partyId}/characters/${row.characterId}`;
   const theme = characterTheme(row.accentColor);
@@ -118,7 +119,7 @@ export function CombatRow({
   const expanded = opened ?? row.isCurrent;
   const toggle = () => setOpened(!expanded);
   const detailsId = `combat-details-${row.participantId}`;
-  const status = row.isCurrent ? t('currentTurn') : isEnemy ? t('enemy') : null;
+  const status = row.isCurrent ? t('currentTurn') : row.side === 'player' ? null : t(row.side);
 
   return (
     <li
@@ -222,7 +223,7 @@ export function CombatRow({
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">
             <span className="text-label text-danger-flare">{tStats('hitPointsShort')}</span>
-            {isEnemy ? (
+            {isNpc ? (
               <span className="flex items-center gap-1">
                 <NumberCell
                   label={t('hpOf', { name: row.name })}
@@ -264,7 +265,7 @@ export function CombatRow({
             <StatBlock icon="boot-prints" label={tStats('speed')} unit={tStats('speedUnit')}>
               {row.speed}
             </StatBlock>
-            {isEnemy && (
+            {isNpc && (
               <StatBlock icon="Shield" iconVariant="system" label={t('tempHp')}>
                 <NumberCell
                   label={t('tempHpOf', { name: row.name })}

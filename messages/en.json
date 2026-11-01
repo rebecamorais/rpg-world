@@ -283,6 +283,28 @@
       "label": "Characters or NPCs",
       "pc": "My characters",
       "npc": "My NPCs"
+    },
+    "spellbookFilters": {
+      "searchLabel": "Search the spellbook",
+      "searchPlaceholder": "Search by name",
+      "filters": "Spellbook filters",
+      "prepared": "Prepared",
+      "concentration": "Concentration",
+      "ritual": "Ritual",
+      "allSchools": "All schools",
+      "allDamage": "All damage",
+      "allCastingTimes": "Any casting time",
+      "castingTimes": {
+        "action": "Action",
+        "bonus_action": "Bonus action",
+        "reaction": "Reaction",
+        "longer": "1 minute or more"
+      },
+      "clear": "Clear filters",
+      "noMatchTitle": "No spell matches",
+      "noMatchDescription": "Try another name or turn off a filter.",
+      "showing": "{shown} of {total} spells",
+      "castingTime": "Casting time"
     }
   },
   "characterHeader": {
@@ -1110,7 +1132,10 @@
     "yours": "yours",
     "tempHp": "temp",
     "yourTurnToast": "Your turn!",
-    "detailsOf": "Details of {name}"
+    "detailsOf": "Details of {name}",
+    "ally": "Ally",
+    "addAlly": "Add ally",
+    "side": "Side"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

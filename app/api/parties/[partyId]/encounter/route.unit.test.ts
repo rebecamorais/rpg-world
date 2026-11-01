@@ -43,13 +43,19 @@ describe('/api/parties/[partyId]/encounter', () => {
     expect(api.combatApi.start).toHaveBeenCalledWith(PARTY);
   });
 
-  it('participantes: POST com quantidade padrão 1; PATCH e DELETE pela linha', async () => {
+  it('participantes: POST com quantidade 1 e lado inimigo por padrão; PATCH e DELETE pela linha', async () => {
     const added = await addParticipant(
       jsonRequest(`${base}/participants`, 'POST', { characterId: CHARACTER }),
       party(),
     );
     expect(added.status).toBe(201);
-    expect(api.combatApi.addParticipant).toHaveBeenCalledWith(PARTY, CHARACTER, 1);
+    expect(api.combatApi.addParticipant).toHaveBeenCalledWith(PARTY, CHARACTER, 1, 'enemy');
+
+    await addParticipant(
+      jsonRequest(`${base}/participants`, 'POST', { characterId: CHARACTER, side: 'ally' }),
+      party(),
+    );
+    expect(api.combatApi.addParticipant).toHaveBeenLastCalledWith(PARTY, CHARACTER, 1, 'ally');
 
     const patched = await updateParticipant(
       jsonRequest(`${base}/participants/${PARTICIPANT}`, 'PATCH', { initiative: 12 }),
@@ -88,6 +94,10 @@ describe('/api/parties/[partyId]/encounter', () => {
     const cases = [
       addParticipant(
         jsonRequest(`${base}/participants`, 'POST', { characterId: CHARACTER, count: 21 }),
+        party(),
+      ),
+      addParticipant(
+        jsonRequest(`${base}/participants`, 'POST', { characterId: CHARACTER, side: 'player' }),
         party(),
       ),
       updateParticipant(

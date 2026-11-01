@@ -93,7 +93,7 @@ export default function SignUpForm() {
         form.setError('root', { message: tCommon('errors.unknown') });
       }
     },
-    [turnstileToken, t, resetTurnstile, getMessage, tCommon],
+    [form, turnstileToken, t, resetTurnstile, getMessage, tCommon],
   );
 
   if (isSuccess) {

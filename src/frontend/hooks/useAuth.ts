@@ -1,5 +1,11 @@
 import { rpgWorldApi } from '@client';
 
+// A full page load, not router.push: the session cookie changed, so the server components and
+// the query cache of the previous user must not survive the navigation
+function reloadAt(path: string) {
+  window.location.href = path;
+}
+
 export function useAuth() {
   const signInWithPassword = async (email: string, password: string): Promise<void> => {
     const response = await rpgWorldApi.post<{
@@ -7,15 +13,15 @@ export function useAuth() {
     }>('/api/auth/login', { email, password });
 
     if (response.passwordChangeRequired) {
-      window.location.href = '/change-password';
+      reloadAt('/change-password');
     } else {
-      window.location.href = '/characters';
+      reloadAt('/characters');
     }
   };
 
   const updatePassword = async (newPassword: string): Promise<void> => {
     await rpgWorldApi.post<void>('/api/auth/update-password', { newPassword });
-    window.location.href = '/characters';
+    reloadAt('/characters');
   };
 
   const signOut = async (): Promise<void> => {
@@ -24,7 +30,7 @@ export function useAuth() {
     } catch (err) {
       console.error('Sign out error:', err);
     } finally {
-      window.location.href = '/login';
+      reloadAt('/login');
     }
   };
 
