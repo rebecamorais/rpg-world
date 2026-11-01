@@ -1,7 +1,7 @@
 # Condições e tags no texto
 
 **Data:** 2026-11-01
-**Status:** planejado.
+**Status:** entregue (PR a abrir).
 **Issue:** #105 (este plano cobre as condições; itens ficam para um segundo PR, que reaproveita
 o mesmo formato).
 **Planos relacionados:** `2026-10-15-5etools-e-traducoes.md` (passo 5), `2026-10-21-magias-em-arquivo.md`,
