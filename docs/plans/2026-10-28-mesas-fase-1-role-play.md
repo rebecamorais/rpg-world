@@ -1,8 +1,7 @@
 # Mesas — fase 1: criar mesas, convidar e o modo Role Play
 
 **Data:** 2026-10-28
-**Status:** design para revisão (e para a mesa da Rebeca opinar). O plano de implementação vem
-depois, neste mesmo arquivo.
+**Status:** entregue (#124, #125). Plano de implementação: `2026-10-31-mesas-fase-1-plano.md`.
 **Fase 2:** [`2026-10-28-mesas-fase-2-combate.md`](2026-10-28-mesas-fase-2-combate.md)
 
 ## Por quê
