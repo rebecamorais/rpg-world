@@ -158,6 +158,41 @@ describe('SetConditionsUseCase', () => {
     expect(repo.setConditions).not.toHaveBeenCalled();
   });
 
+  describe('chave desconhecida que o participante já tinha', () => {
+    const GONE = 'dnd5e:srd-5.2:condition:gone';
+    const withStored = (keys: string[]) => {
+      const repo = makeRepo();
+      repo.findEncounter.mockResolvedValue({
+        round: 1,
+        currentParticipantId: null,
+        participants: [participant({ conditions: keys.map((key) => ({ key, level: null })) })],
+      });
+      return repo;
+    };
+
+    it('é descartada, sem travar o resto', async () => {
+      const repo = withStored([GONE]);
+      const { result } = run(
+        [
+          { key: GONE, level: null },
+          { key: PRONE, level: null },
+        ],
+        repo,
+      );
+      expect(await result).toBeNull();
+      expect(repo.setConditions).toHaveBeenCalledWith('party-1', 'p-hero', [
+        { key: PRONE, level: null },
+      ]);
+    });
+
+    it('uma chave desconhecida nova continua recusada', async () => {
+      const repo = withStored([GONE]);
+      const { result } = run([{ key: 'dnd5e:srd-5.2:condition:other', level: null }], repo);
+      expect(await result).toBe(CombatErrorCodes.INVALID_CONDITION);
+      expect(repo.setConditions).not.toHaveBeenCalled();
+    });
+  });
+
   it('recusa nível em condição sem níveis', async () => {
     expect(await run([{ key: PRONE, level: 2 }]).result).toBe(CombatErrorCodes.INVALID_CONDITION);
   });
