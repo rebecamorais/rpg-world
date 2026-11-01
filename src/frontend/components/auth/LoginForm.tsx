@@ -98,6 +98,7 @@ export default function LoginForm() {
   };
 
   const handleGoogleSignIn = () => {
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- an API route that redirects to Google, not a page
     window.location.href = '/api/auth/google';
   };
 
