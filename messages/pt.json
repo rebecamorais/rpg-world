@@ -303,7 +303,10 @@
     "avatarLabel": "Avatar",
     "accentColorLabel": "Cor de Destaque",
     "xpProgress": "Progresso para o próximo nível",
-    "name": "Nome"
+    "name": "Nome",
+    "otherOption": "Outro…",
+    "classOtherPlaceholder": "Nome da classe",
+    "raceOtherPlaceholder": "Nome da raça"
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",
@@ -1106,5 +1109,18 @@
     "tempHp": "temp",
     "yourTurnToast": "Sua vez!",
     "detailsOf": "Detalhes de {name}"
+  },
+  "characterRaces": {
+    "dragonborn": "Draconato",
+    "dwarf": "Anão",
+    "elf": "Elfo",
+    "gnome": "Gnomo",
+    "goliath": "Golias",
+    "half-elf": "Meio-Elfo",
+    "half-orc": "Meio-Orc",
+    "halfling": "Halfling",
+    "human": "Humano",
+    "orc": "Orc",
+    "tiefling": "Tiefling"
   }
 }

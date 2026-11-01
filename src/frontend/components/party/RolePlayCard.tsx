@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { Card, CardContent } from '@frontend/components/ui/card';
+import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
@@ -29,7 +30,12 @@ export function CharacterIdentity({
   withAvatar?: boolean;
 }) {
   const t = useTranslations('parties.page');
-  const details = [character.race, character.class, t('level', { level: character.level })]
+  const origin = useCharacterOrigin();
+  const details = [
+    origin.raceLabel(character.race),
+    origin.classLabel(character.class),
+    t('level', { level: character.level }),
+  ]
     .filter(Boolean)
     .join(' · ');
 

@@ -5,18 +5,22 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
+import { OriginSelect } from '@frontend/components/character/OriginSelect';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { FieldLabel, InlineField } from '@frontend/components/ui/field';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Progress } from '@frontend/components/ui/progress';
+import { CLASS_ICONS, CharacterRace, RACE_ICONS } from '@frontend/constants/character-origins';
 import {
   useCharacterActions,
   useCharacterMeta,
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
+import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
+import { CharacterClass } from '@frontend/types/spells';
 
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
@@ -43,6 +47,7 @@ export default function CharacterHeader() {
   const { readOnly } = useSheetSource(id);
   const pb = getProficiencyBonus(level);
   const t = useTranslations('characterHeader');
+  const origin = useCharacterOrigin();
   const tImage = useTranslations('avatarUpload');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -176,21 +181,37 @@ export default function CharacterHeader() {
 
           {/* Right Column: Information Grid */}
           <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-            <InlineField
+            <OriginSelect
               id="char-race"
               maxLength={TEXT_MAX}
               label={t('race')}
               value={race || ''}
-              onChange={(e) => update({ race: e.target.value })}
+              matched={origin.raceOf(race)}
+              options={Object.values(CharacterRace).map((value) => ({
+                value,
+                label: origin.raceLabelOf(value),
+                icon: RACE_ICONS[value],
+              }))}
+              onChange={(value) => update({ race: value })}
               placeholder={t('racePlaceholder')}
+              otherLabel={t('otherOption')}
+              otherPlaceholder={t('raceOtherPlaceholder')}
             />
-            <InlineField
+            <OriginSelect
               id="char-class"
               maxLength={TEXT_MAX}
               label={t('class')}
               value={classNameStr || ''}
-              onChange={(e) => update({ class: e.target.value })}
+              matched={origin.classOf(classNameStr)}
+              options={Object.values(CharacterClass).map((value) => ({
+                value,
+                label: origin.classLabelOf(value),
+                icon: CLASS_ICONS[value],
+              }))}
+              onChange={(value) => update({ class: value })}
               placeholder={t('classPlaceholder')}
+              otherLabel={t('otherOption')}
+              otherPlaceholder={t('classOtherPlaceholder')}
             />
             <InlineField
               id="char-background"

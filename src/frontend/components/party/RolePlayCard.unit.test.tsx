@@ -28,6 +28,19 @@ const card = (overrides: Partial<Card> = {}): Card => ({
 });
 
 describe('RolePlayCard', () => {
+  it('raça e classe da lista aparecem no idioma de quem lê; as do jogador, como escritas', () => {
+    const { unmount } = renderWithProviders(
+      <RolePlayCard partyId="p1" card={card({ race: 'half-elf', class: 'wizard' })} />,
+    );
+    expect(screen.getByText('Half-Elf · Wizard · Level 3')).toBeInTheDocument();
+    unmount();
+
+    renderWithProviders(
+      <RolePlayCard partyId="p1" card={card({ race: 'Aasimar', class: 'Artífice' })} />,
+    );
+    expect(screen.getByText('Aasimar · Artífice · Level 3')).toBeInTheDocument();
+  });
+
   it('mostra as passivas e linka para a ficha da mesa', () => {
     renderWithProviders(<RolePlayCard partyId="p1" card={card()} />);
 

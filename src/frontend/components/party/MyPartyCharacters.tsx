@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
+import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
 
 import type { CharacterSummary } from '@shared/types/character';
 
@@ -24,6 +25,7 @@ export function MyPartyCharacters({
 }) {
   const t = useTranslations('parties.mine');
   const tPage = useTranslations('parties.page');
+  const { classLabel } = useCharacterOrigin();
   const [picked, setPicked] = useState(() => new Set(selected));
 
   if (characters.length === 0) return <p className="text-muted-foreground">{t('none')}</p>;
@@ -51,7 +53,7 @@ export function MyPartyCharacters({
               />
               <span className="font-medium">{character.name}</span>
               <span className="text-label text-muted-foreground">
-                {[character.class, tPage('level', { level: character.level })]
+                {[classLabel(character.class), tPage('level', { level: character.level })]
                   .filter(Boolean)
                   .join(' · ')}
               </span>

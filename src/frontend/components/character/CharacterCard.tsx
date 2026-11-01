@@ -16,6 +16,7 @@ import {
 } from '@frontend/components/ui/dropdown-menu';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharactersContext } from '@frontend/context/CharactersContext';
+import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
 import { useDuplicateCharacter } from '@frontend/hooks/useDuplicateCharacter';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
@@ -33,6 +34,7 @@ interface CharacterCardProps {
 export function CharacterCard({ character }: CharacterCardProps) {
   const t = useTranslations('characters');
   const tCommon = useTranslations('common');
+  const { classLabel } = useCharacterOrigin();
   const { kind, setCharacterToDelete } = useCharactersContext();
   const duplicate = useDuplicateCharacter();
 
@@ -82,7 +84,7 @@ export function CharacterCard({ character }: CharacterCardProps) {
               {/* An NPC without a class is just a sheet; "Adventurer" fits only player characters */}
               {(character.class || kind !== 'npc') && (
                 <p className="text-label text-muted-foreground line-clamp-1">
-                  {character.class || t('defaultClass')}
+                  {classLabel(character.class) || t('defaultClass')}
                 </p>
               )}
             </div>

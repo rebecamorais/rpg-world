@@ -303,7 +303,10 @@
     "avatarLabel": "Avatar",
     "accentColorLabel": "Accent Color",
     "xpProgress": "Progress to next level",
-    "name": "Name"
+    "name": "Name",
+    "otherOption": "Other…",
+    "classOtherPlaceholder": "Class name",
+    "raceOtherPlaceholder": "Race name"
   },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",
@@ -1106,5 +1109,18 @@
     "tempHp": "temp",
     "yourTurnToast": "Your turn!",
     "detailsOf": "Details of {name}"
+  },
+  "characterRaces": {
+    "dragonborn": "Dragonborn",
+    "dwarf": "Dwarf",
+    "elf": "Elf",
+    "gnome": "Gnome",
+    "goliath": "Goliath",
+    "half-elf": "Half-Elf",
+    "half-orc": "Half-Orc",
+    "halfling": "Halfling",
+    "human": "Human",
+    "orc": "Orc",
+    "tiefling": "Tiefling"
   }
 }

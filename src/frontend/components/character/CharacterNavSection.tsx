@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { NavItem } from '@frontend/components/ui/nav-item';
 import { useCharacter } from '@frontend/hooks/useCharacter';
+import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { CharacterTab } from '@frontend/types/character-sheet';
@@ -16,6 +17,7 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
   const { character } = useCharacter(characterId, { fetch: false });
   const pathname = usePathname();
   const t = useTranslations('characters.tabs');
+  const { classLabel } = useCharacterOrigin();
   const { pagesPath } = useSheetSource(characterId, character?.system);
 
   const characterName = character?.name;
@@ -53,7 +55,9 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
             {characterName}
           </span>
           {character.class && (
-            <span className="text-label text-muted-foreground truncate">{character.class}</span>
+            <span className="text-label text-muted-foreground truncate">
+              {classLabel(character.class)}
+            </span>
           )}
         </div>
       </div>

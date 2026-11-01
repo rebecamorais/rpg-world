@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
+import { CharacterRace } from '@frontend/constants/character-origins';
 import { CharacterClass } from '@frontend/types/spells';
 
-import { matchCharacterClass } from './character-class';
+import { matchCharacterClass, matchCharacterRace } from './character-origin';
 
 const PT: Partial<Record<CharacterClass, string>> = {
   [CharacterClass.WIZARD]: 'Mago',
@@ -32,4 +33,30 @@ describe('matchCharacterClass', () => {
       expect(matchCharacterClass(text, labelOf)).toBeNull();
     },
   );
+});
+
+const RACES_PT: Partial<Record<CharacterRace, string>> = {
+  [CharacterRace.ELF]: 'Elfo',
+  [CharacterRace.HALF_ELF]: 'Meio-Elfo',
+  [CharacterRace.DWARF]: 'Anão',
+  [CharacterRace.HUMAN]: 'Humano',
+};
+const raceLabelOf = (race: CharacterRace) => RACES_PT[race] ?? race;
+
+describe('matchCharacterRace', () => {
+  it.each([
+    ['elf', CharacterRace.ELF],
+    ['half-elf', CharacterRace.HALF_ELF],
+    ['Meio-Elfo', CharacterRace.HALF_ELF],
+    ['meio elfa', CharacterRace.HALF_ELF],
+    ['Elfa da floresta', CharacterRace.ELF],
+    ['ANÃ', CharacterRace.DWARF],
+    ['Humana', CharacterRace.HUMAN],
+  ])('%s → %s', (text, expected) => {
+    expect(matchCharacterRace(text, raceLabelOf)).toBe(expected);
+  });
+
+  it.each([['Aasimar'], [''], [null]])('%s não está na lista', (text) => {
+    expect(matchCharacterRace(text, raceLabelOf)).toBeNull();
+  });
 });
