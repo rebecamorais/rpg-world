@@ -64,6 +64,7 @@ function PartyLinks({ title, parties }: { title: string; parties: PartySummary[]
 /** `withLogout`: the phone drawer; on the desktop the header's user menu has "Sign out". */
 function SidebarContent({ withLogout = false }: { withLogout?: boolean }) {
   const params = useParams();
+  const pathname = usePathname();
   const characterId = params?.id as string;
   const tDash = useTranslations('dashboard');
   const tCommon = useTranslations('common');
@@ -80,11 +81,7 @@ function SidebarContent({ withLogout = false }: { withLogout?: boolean }) {
       <div className="flex flex-1 flex-col gap-8 pr-2">
         <div className="flex items-center gap-3 px-2">
           <Avatar className="ring-primary/20 border-border h-8 w-8 rounded-lg border ring-2 transition-all hover:scale-105 active:scale-95">
-            {avatarUrl ? (
-              <AvatarImage src={avatarUrl} alt={username} className="object-cover" />
-            ) : (
-              <div className="bg-primary/20 h-full w-full" />
-            )}
+            {avatarUrl && <AvatarImage src={avatarUrl} alt={username} className="object-cover" />}
             <AvatarFallback className="bg-primary/10 text-primary-flare text-xs font-bold">
               {username.substring(0, 2).toUpperCase()}
             </AvatarFallback>
@@ -99,9 +96,25 @@ function SidebarContent({ withLogout = false }: { withLogout?: boolean }) {
         <nav className="flex flex-col gap-6">
           <section>
             <p className="text-label text-muted-foreground mb-2 px-3">{tDash('menu')}</p>
-            <NavItem href="/settings/profile" label={tDash('myProfile')} />
-            <NavItem href="/characters" label={tDash('myCharacters')} />
-            <NavItem href="/parties" label={tParties('nav.parties')} />
+            <NavItem
+              href="/settings/profile"
+              label={tDash('myProfile')}
+              icon="User"
+              isActive={pathname?.startsWith('/settings')}
+            />
+            <NavItem
+              href="/characters"
+              label={tDash('myCharacters')}
+              icon="Scroll"
+              isActive={pathname?.startsWith('/characters')}
+            />
+            {/* An open party lights its own link below instead */}
+            <NavItem
+              href="/parties"
+              label={tParties('nav.parties')}
+              icon="Dices"
+              isActive={pathname === '/parties'}
+            />
             {parties?.asGm.length ? (
               <PartyLinks title={tParties('nav.gm')} parties={parties.asGm} />
             ) : null}
