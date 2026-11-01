@@ -4,8 +4,9 @@ import Link from 'next/link';
 
 import { useTranslations } from 'next-intl';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
+import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { Card, CardContent } from '@frontend/components/ui/card';
+import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
@@ -29,25 +30,23 @@ export function CharacterIdentity({
   withAvatar?: boolean;
 }) {
   const t = useTranslations('parties.page');
-  const details = [character.race, character.class, t('level', { level: character.level })]
+  const origin = useCharacterOrigin();
+  const details = [
+    origin.raceLabel(character.race),
+    origin.classLabel(character.class),
+    t('level', { level: character.level }),
+  ]
     .filter(Boolean)
     .join(' · ');
 
   return (
     <div className="flex min-w-0 items-center gap-3">
       {withAvatar && (
-        <Avatar className="border-border h-12 w-12 shrink-0 rounded-lg border">
-          {character.avatarUrl && (
-            <AvatarImage src={character.avatarUrl} alt="" className="object-cover" />
-          )}
-          {/* The initials only stand in for the picture; the name follows */}
-          <AvatarFallback
-            aria-hidden="true"
-            className="bg-character-surface text-character-flare text-xs font-bold"
-          >
-            {character.name.substring(0, 2).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+        <CharacterPortrait
+          avatarUrl={character.avatarUrl}
+          characterClass={character.class}
+          className="border-character-muted h-12 w-12 shrink-0 rounded-lg border"
+        />
       )}
       <div className="flex min-w-0 flex-col">
         {href ? (

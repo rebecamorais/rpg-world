@@ -173,10 +173,11 @@ describe('CombatRow', () => {
     expect(screen.getByRole('listitem')).not.toHaveClass('grayscale-[.7]');
   });
 
-  it('o retrato mostra as iniciais sem foto, e o nome não as repete', () => {
-    renderRow();
-    expect(screen.getByText('AR')).toHaveAttribute('aria-hidden', 'true');
-    expect(screen.getAllByText('AR')).toHaveLength(1);
+  it('sem foto, o retrato mostra o emblema da classe, escondido do leitor de tela', () => {
+    const { container } = renderRow();
+    // Maga → wizard
+    expect(container.querySelector('[data-class]')).toHaveAttribute('data-class', 'wizard');
+    expect(container.querySelector('[data-class]')!.closest('[aria-hidden="true"]')).not.toBeNull();
   });
 
   it('a vez atual fica marcada com aria-current', () => {

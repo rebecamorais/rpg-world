@@ -22,7 +22,7 @@ import { DAMAGE_THEMES } from '@frontend/constants/damage-themes';
 import { useCharacterState } from '@frontend/context/CharacterContext';
 import { useDebouncedValue } from '@frontend/hooks/useDebouncedValue';
 import { useSpells } from '@frontend/hooks/useSpells';
-import { matchCharacterClass } from '@frontend/lib/character-class';
+import { matchCharacterClass } from '@frontend/lib/character-origin';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { inferEdition } from '@frontend/lib/spell-edition';
 import { cn } from '@frontend/lib/utils';

@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 
+import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { Card } from '@frontend/components/ui/card';
 import { HealthBar } from '@frontend/components/ui/health-bar';
 import { StatBlock } from '@frontend/components/ui/stat-block';
@@ -25,9 +26,10 @@ export async function SheetPreview() {
     >
       <Card className="flex flex-col gap-5 p-5 shadow-2xl sm:p-6">
         <div className="flex items-center gap-4">
-          <div className="border-character-muted bg-muted text-foreground flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 font-bold">
-            {t('previewName').slice(0, 2).toUpperCase()}
-          </div>
+          <CharacterPortrait
+            characterClass="wizard"
+            className="border-character-muted h-14 w-14 rounded-xl border-2"
+          />
           <div className="min-w-0">
             <p className="text-title text-character-flare truncate">{t('previewName')}</p>
             <p className="text-caption text-muted-foreground">{t('previewClass')}</p>

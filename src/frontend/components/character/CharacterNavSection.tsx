@@ -4,9 +4,10 @@ import { usePathname } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
+import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { NavItem } from '@frontend/components/ui/nav-item';
 import { useCharacter } from '@frontend/hooks/useCharacter';
+import { useCharacterOrigin } from '@frontend/hooks/useCharacterOrigin';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { CharacterTab } from '@frontend/types/character-sheet';
@@ -16,6 +17,7 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
   const { character } = useCharacter(characterId, { fetch: false });
   const pathname = usePathname();
   const t = useTranslations('characters.tabs');
+  const { classLabel } = useCharacterOrigin();
   const { pagesPath } = useSheetSource(characterId, character?.system);
 
   const characterName = character?.name;
@@ -42,16 +44,21 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
       className="character-context animate-in fade-in slide-in-from-left-2 flex flex-col gap-4 duration-300"
       style={characterTheme(character.accentColor).style}
     >
-      <div className="flex flex-col gap-2 px-3">
-        <p className="text-label text-character-flare">{characterName}</p>
-        <div className="flex items-center gap-3">
-          <Avatar className="ring-primary/20 border-border h-10 w-10 rounded-lg border ring-2 transition-all">
-            <AvatarImage src={avatarUrl} alt={characterName} className="object-cover" />
-            <AvatarFallback className="bg-character-surface text-character-flare text-xs font-bold">
-              {characterName.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <span className="text-foreground truncate text-sm font-bold">{characterName}</span>
+      <div className="border-character-muted bg-character-surface flex items-center gap-3 rounded-xl border p-2">
+        <CharacterPortrait
+          avatarUrl={avatarUrl}
+          characterClass={character.class}
+          className="border-character-muted h-12 w-12 rounded-lg border"
+        />
+        <div className="flex min-w-0 flex-col">
+          <span className="text-character-flare font-display truncate text-sm font-bold">
+            {characterName}
+          </span>
+          {character.class && (
+            <span className="text-label text-muted-foreground truncate">
+              {classLabel(character.class)}
+            </span>
+          )}
         </div>
       </div>
 
