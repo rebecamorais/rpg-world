@@ -12,6 +12,7 @@ import { AppIcon } from '@frontend/components/ui/icon';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useParties } from '@frontend/hooks/useParties';
+import { cn } from '@frontend/lib/utils';
 
 import type { PartySummary } from '@backend/contexts/parties/domain/Party';
 
@@ -28,12 +29,22 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function PartyRow({ party, children }: { party: PartySummary; children?: React.ReactNode }) {
   const t = useTranslations('parties');
+  const canOpen = party.status === 'active' || party.status === 'gm';
 
   return (
-    <Card className="bg-card/60 flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+    <Card
+      className={cn(
+        'bg-card/60 relative flex flex-wrap items-center justify-between gap-3 px-4 py-3',
+        canOpen && 'hover:border-primary/60 transition-colors',
+      )}
+    >
       <div className="flex min-w-0 flex-col">
-        {party.status === 'active' || party.status === 'gm' ? (
-          <Link href={`/parties/${party.id}`} className="text-title focus-ring truncate rounded">
+        {canOpen ? (
+          // The whole card opens the party; the buttons of invites and requests stay above it
+          <Link
+            href={`/parties/${party.id}`}
+            className="text-title focus-ring truncate rounded after:absolute after:inset-0"
+          >
             {party.name}
           </Link>
         ) : (
@@ -52,6 +63,14 @@ function PartyRow({ party, children }: { party: PartySummary; children?: React.R
         </span>
       )}
       {children}
+      {canOpen && (
+        <AppIcon
+          name="ChevronRight"
+          size={18}
+          aria-hidden="true"
+          className="text-muted-foreground ml-auto"
+        />
+      )}
     </Card>
   );
 }
@@ -101,7 +120,6 @@ export default function PartyList() {
         {parties.asGm.map((party) => (
           <PartyRow key={party.id} party={party} />
         ))}
-        <CreatePartyForm gmCount={parties.asGm.length} />
       </Section>
 
       <Section title={t('asPlayer')}>
@@ -129,6 +147,10 @@ export default function PartyList() {
           ))}
         </Section>
       )}
+
+      <Section title={t('create.title')}>
+        <CreatePartyForm gmCount={parties.asGm.length} />
+      </Section>
     </div>
   );
 }

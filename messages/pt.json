@@ -959,7 +959,8 @@
       "placeholder": "Mesa de quinta",
       "submit": "Criar mesa",
       "limit": "Você pode ser mestre de no máximo {max} mesas.",
-      "success": "Mesa criada"
+      "success": "Mesa criada",
+      "title": "Criar mesa"
     },
     "nav": {
       "parties": "Mesas",

@@ -959,7 +959,8 @@
       "placeholder": "Thursday night table",
       "submit": "Create party",
       "limit": "You can be the GM of at most {max} parties.",
-      "success": "Party created"
+      "success": "Party created",
+      "title": "Create a party"
     },
     "nav": {
       "parties": "Parties",
