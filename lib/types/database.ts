@@ -3,6 +3,88 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      character_containers: {
+        Row: {
+          character_id: string;
+          coins: NonNullable<Json>;
+          created_at: string;
+          id: string;
+          kind: string;
+          name: string | null;
+          position: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          character_id: string;
+          coins?: NonNullable<Json>;
+          created_at?: string;
+          id?: string;
+          kind: string;
+          name?: string | null;
+          position?: number;
+        };
+        Update: {
+          character_id?: string;
+          coins?: NonNullable<Json>;
+          created_at?: string;
+          id?: string;
+          kind?: string;
+          name?: string | null;
+          position?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'character_containers_character_id_fkey';
+            columns: ['character_id'];
+            isOneToOne: false;
+            referencedRelation: 'characters';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      character_items: {
+        Row: {
+          character_id: string;
+          container_id: string;
+          created_at: string;
+          id: string;
+          item_ref: string;
+          quantity: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          character_id: string;
+          container_id: string;
+          created_at?: string;
+          id?: string;
+          item_ref: string;
+          quantity: number;
+        };
+        Update: {
+          character_id?: string;
+          container_id?: string;
+          created_at?: string;
+          id?: string;
+          item_ref?: string;
+          quantity?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'character_items_character_id_fkey';
+            columns: ['character_id'];
+            isOneToOne: false;
+            referencedRelation: 'characters';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'character_items_container_fkey';
+            columns: ['container_id', 'character_id'];
+            isOneToOne: false;
+            referencedRelation: 'character_containers';
+            referencedColumns: ['id', 'character_id'];
+          },
+        ];
+      };
       character_lore: {
         Row: {
           age: string | null;
