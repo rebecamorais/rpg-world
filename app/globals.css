@@ -47,7 +47,7 @@
   --coin-sp: #f6f7f5;
   --coin-ep: #83d9ed;
   --coin-gp: #fff0a1;
-  --coin-pp: #ffffff;
+  --coin-pp: #39d6ae;
   /* Each spell card sets its own (damage type, category or school). */
   --spell-color: var(--muted-foreground);
 
