@@ -126,7 +126,9 @@ describe('Inventário (Integration)', () => {
       }
     });
 
-    it('todo personagem do banco, inclusive os de antes da migração, tem uma algibeira (Ponto 1)', async () => {
+    // Invariante global, não a carga em si: a carga da migração só roda sobre os personagens que já
+    // existiam (conferida no banco de dev); aqui vale para todos os que estão no banco.
+    it('o banco tem exatamente uma algibeira por personagem', async () => {
       const characters = await admin()
         .from('characters')
         .select('id', { count: 'exact', head: true });
@@ -431,6 +433,22 @@ describe('Inventário (Integration)', () => {
   });
 
   describe('valores', () => {
+    it('a entrada não muda de item', async () => {
+      await player.client
+        .from('inventory_items')
+        .insert({ container_id: backpackId, item_ref: rope, quantity: 1 });
+      for (const client of [player.client, admin()]) {
+        const { error } = await client
+          .from('inventory_items')
+          .update({ item_ref: torch })
+          .eq('container_id', backpackId);
+        expect(error?.message).toContain('item_immutable');
+      }
+      expect(await itemsOf(characterId)).toEqual([
+        { container_id: backpackId, item_ref: rope, quantity: 1 },
+      ]);
+    });
+
     it('quantidade fora de 1 a 9999 e item_ref vazio ou longo falham', async () => {
       for (const row of [
         { item_ref: rope, quantity: 0 },

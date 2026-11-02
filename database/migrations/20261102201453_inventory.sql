@@ -248,12 +248,18 @@ BEGIN
     pg_catalog.hashtext(COALESCE(v_character, v_party)::text)
   );
 
-  -- Somar a uma entrada que já está no lugar (upsert) não cria entrada nova
-  IF TG_OP = 'INSERT' AND EXISTS (
-    SELECT 1 FROM public.inventory_items
+  -- Somar a uma entrada que já está no lugar (upsert) não cria entrada nova. A entrada fica travada
+  -- (FOR KEY SHARE) até o fim da transação: sem isso, uma mudança de lugar dentro do mesmo dono
+  -- (que não pega o lock do dono) podia tirá-la dali entre esta checagem e o ON CONFLICT, e o
+  -- upsert inseria uma 501ª. Se alguém já está mudando a entrada, esperamos e a checagem é refeita
+  -- na versão nova da linha; se ela saiu do lugar, conta como entrada nova.
+  IF TG_OP = 'INSERT' THEN
+    PERFORM 1 FROM public.inventory_items
     WHERE container_id = NEW.container_id AND item_ref = NEW.item_ref
-  ) THEN
-    RETURN NEW;
+    FOR KEY SHARE;
+    IF FOUND THEN
+      RETURN NEW;
+    END IF;
   END IF;
 
   IF v_character IS NOT NULL THEN
@@ -278,6 +284,27 @@ CREATE TRIGGER trg_inventory_items_limit
   BEFORE INSERT OR UPDATE OF container_id ON public.inventory_items
   FOR EACH ROW
   EXECUTE FUNCTION private.limit_inventory_items();
+
+-- A entrada não muda de item: mover troca container_id, a pilha muda quantity. Uma entrada que vira
+-- outro item não tem uso, quebraria o histórico (o id é "esta pilha deste item") e abriria outro
+-- jeito de esvaziar o par (container_id, item_ref) por baixo do atalho do upsert acima.
+CREATE FUNCTION private.keep_inventory_item_ref()
+RETURNS trigger
+LANGUAGE plpgsql
+SET search_path = ''
+AS $$
+BEGIN
+  IF NEW.item_ref IS DISTINCT FROM OLD.item_ref THEN
+    RAISE EXCEPTION USING MESSAGE = 'item_immutable', ERRCODE = 'P0001';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_inventory_items_keep_item_ref
+  BEFORE UPDATE OF item_ref ON public.inventory_items
+  FOR EACH ROW
+  EXECUTE FUNCTION private.keep_inventory_item_ref();
 
 -- 4. Algibeira e mochila para todo personagem
 
@@ -321,6 +348,7 @@ WHERE NOT EXISTS (
 REVOKE ALL ON FUNCTION private.keep_containers() FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION private.limit_containers() FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION private.limit_inventory_items() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION private.keep_inventory_item_ref() FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION private.create_default_containers() FROM PUBLIC, anon, authenticated;
 
 -- 5. RLS e grants (os mesmos de character_spells)
