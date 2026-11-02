@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
 
-import { Plus } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Backpack } from '@frontend/components/character/inventory/Backpack';
 import { CoinPouch } from '@frontend/components/character/inventory/CoinPouch';
 import { SheetFieldset } from '@frontend/components/character/sheet/SheetFieldset';
 import { SheetPage } from '@frontend/components/character/sheet/SheetPage';
-import { Button } from '@frontend/components/ui/button';
-import { EmptyState } from '@frontend/components/ui/empty-state';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('characters.tabs');
@@ -17,26 +15,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CharacterInventoryPage() {
   const t = await getTranslations('characters');
 
-  // Items are not implemented yet: the button stays visible but disabled
-  const addItem = (
-    <Button variant="outline" size="sm" disabled className="text-label h-8 px-3">
-      <Plus aria-hidden="true" />
-      {t('addItem')}
-    </Button>
-  );
-
   return (
     <SheetPage icon="Backpack" tab={t('tabs.inventory')}>
       <div className="flex flex-col gap-6">
         <SheetFieldset>
           <CoinPouch />
+          <Backpack />
         </SheetFieldset>
-        <EmptyState
-          icon="Backpack"
-          title={t('emptyStates.inventory')}
-          action={addItem}
-          className="h-[40vh]"
-        />
       </div>
     </SheetPage>
   );

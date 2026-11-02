@@ -1,4 +1,5 @@
 import { conditionKey, parseContentKey, spellKey } from '@shared/content/content-key';
+import { normalizeSearch as normalize } from '@shared/content/normalize-search';
 import { conditionIdsOf } from '@shared/content/tags';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import type {
@@ -36,9 +37,6 @@ interface Entry {
 }
 
 const FALLBACK_LOCALE = 'en';
-
-/** Case and accent insensitive: "relampago" finds "Relâmpago". */
-const normalize = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
 /**
  * Official spells, read from the content files and kept in memory. A few hundred entries per
