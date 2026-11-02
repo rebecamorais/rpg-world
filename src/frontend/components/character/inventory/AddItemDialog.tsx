@@ -84,6 +84,7 @@ function AddItemContent({ initialEdition, onPick }: Pick<Props, 'initialEdition'
     });
   }, [list, search, edition, category]);
 
+  const tooMany = matches.length > MAX_ROWS;
   const filtered = search.trim() !== '' || edition !== null || category !== null;
   const clear = () => {
     setSearch('');
@@ -175,6 +176,11 @@ function AddItemContent({ initialEdition, onPick }: Pick<Props, 'initialEdition'
               />
             ))}
           </ul>
+        )}
+        {tooMany && (
+          <p className="text-muted-foreground text-label px-3 py-2">
+            {tAdd('tooMany', { max: MAX_ROWS })}
+          </p>
         )}
       </div>
     </DialogContent>

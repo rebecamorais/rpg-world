@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { toast } from 'sonner';
@@ -191,6 +191,22 @@ describe('Backpack', () => {
     expect(screen.getByRole('button', { name: 'Add Item' })).toBeDisabled();
   });
 
+  it('mestre (somente leitura): ainda abre os detalhes, mas + − e remover ficam desativados', async () => {
+    params.value = { partyId: 'p1' };
+    renderBackpack(
+      [entry('e1', item({ id: 'x', name: 'Rope', description: 'Strong rope.', weight: 10 }), 2)],
+      true,
+    );
+
+    // fireEvent: user-event treats everything in a disabled fieldset as disabled, a browser does not
+    fireEvent.click(await screen.findByRole('button', { name: 'Details for Rope' }));
+
+    expect(screen.getByText('Strong rope.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'One less Rope' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'One more Rope' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Remove Rope' })).toBeDisabled();
+  });
+
   describe('AddItemDialog', () => {
     async function openDialog(items: ReturnType<typeof entry>[] = []) {
       const user = userEvent.setup();
@@ -214,6 +230,19 @@ describe('Backpack', () => {
       await user.type(search, 'hempen');
       expect(within(dialog).getByRole('button', { name: 'Add Corda de Cânhamo' })).toBeVisible();
       expect(within(dialog).queryByRole('button', { name: 'Add Torch' })).not.toBeInTheDocument();
+    });
+
+    it('avisa quando passa de 100 itens para refinar a busca', async () => {
+      const many = Array.from({ length: 101 }, (_, i) =>
+        item({ id: `bulk-${i}`, name: `Bulk ${i}` }),
+      );
+      CATALOG.push(...many);
+      try {
+        await openDialog();
+        expect(screen.getByText(/Showing the first 100/)).toBeInTheDocument();
+      } finally {
+        CATALOG.length -= many.length;
+      }
     });
 
     it('filtra por categoria', async () => {

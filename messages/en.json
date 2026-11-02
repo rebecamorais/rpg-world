@@ -361,18 +361,19 @@
       "quantity": "Quantity of {name}",
       "decrease": "One less {name}",
       "increase": "One more {name}",
-      "unknown": "Unknown item",
       "unknownHint": "This item is no longer in the catalog. You can remove it.",
       "stats": {
         "price": "Price",
         "weight": "Weight",
         "ac": "Armor Class",
-        "strength": "Strength",
+        "strength": "Minimum Strength",
         "stealth": "Stealth",
         "stealthDisadvantage": "Disadvantage",
         "damage": "Damage",
         "versatile": "Versatile",
-        "range": "Range"
+        "range": "Range",
+        "category": "Category",
+        "properties": "Properties"
       },
       "add": {
         "title": "Add item",
@@ -387,7 +388,8 @@
         "clear": "Clear filters",
         "count": "{count, plural, one {# item} other {# items}}",
         "pick": "Add {name}",
-        "loading": "Loading items"
+        "loading": "Loading items",
+        "tooMany": "Showing the first {max}. Narrow the search to see the rest."
       },
       "categories": {
         "weapon": "Weapons",
@@ -404,6 +406,18 @@
         "food": "Food and drink",
         "trade-good": "Trade goods",
         "other": "Other"
+      },
+      "properties": {
+        "2H": "Two-Handed",
+        "A": "Ammunition",
+        "F": "Finesse",
+        "H": "Heavy",
+        "L": "Light",
+        "LD": "Loading",
+        "R": "Reach",
+        "S": "Special",
+        "T": "Thrown",
+        "V": "Versatile"
       }
     }
   },

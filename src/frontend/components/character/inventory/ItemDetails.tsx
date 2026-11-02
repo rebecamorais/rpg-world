@@ -15,10 +15,14 @@ import { useItemFormat } from './useItemFormat';
 export function ItemDetails({ item }: { item: ItemDto }) {
   const t = useTranslations('characters.inventory.stats');
   const tCharacters = useTranslations('characters');
+  const tCategories = useTranslations('characters.inventory.categories');
+  const tProps = useTranslations('characters.inventory.properties');
+  const tDamage = useTranslations('spellsData.damageTypes');
   const fmt = useItemFormat();
   const source = parseContentKey(item.key)?.source ?? '';
 
   const stats: { label: string; value: string }[] = [];
+  stats.push({ label: t('category'), value: tCategories(item.category) });
   if (item.value !== null) stats.push({ label: t('price'), value: fmt.price(item.value) });
   if (item.weight !== null) stats.push({ label: t('weight'), value: fmt.weight(item.weight) });
   if (item.ac !== null) stats.push({ label: t('ac'), value: String(item.ac) });
@@ -27,10 +31,25 @@ export function ItemDetails({ item }: { item: ItemDto }) {
     stats.push({ label: t('stealth'), value: t('stealthDisadvantage') });
   }
   if (item.damage) {
-    stats.push({ label: t('damage'), value: `${item.damage.dice} ${item.damage.type}` });
+    const type = tDamage.has(item.damage.type as never)
+      ? tDamage(item.damage.type as never)
+      : item.damage.type;
+    stats.push({ label: t('damage'), value: `${item.damage.dice} ${type}` });
   }
-  if (item.versatile) stats.push({ label: t('versatile'), value: item.versatile });
-  if (item.range) stats.push({ label: t('range'), value: item.range });
+  // Versatile damage and range go with their property; without it they stand alone
+  const hasVersatile = item.properties.includes('V') && !!item.versatile;
+  const hasRange = !!item.range && item.properties.some((p) => p === 'T' || p === 'A');
+  if (item.properties.length > 0) {
+    const label = (code: string) => {
+      const name = tProps.has(code as never) ? tProps(code as never) : code;
+      if (code === 'V' && hasVersatile) return `${name} (${item.versatile})`;
+      if ((code === 'T' || code === 'A') && hasRange) return `${name} (${item.range})`;
+      return name;
+    };
+    stats.push({ label: t('properties'), value: item.properties.map(label).join(', ') });
+  }
+  if (item.versatile && !hasVersatile) stats.push({ label: t('versatile'), value: item.versatile });
+  if (item.range && !hasRange) stats.push({ label: t('range'), value: item.range });
 
   return (
     <div className="flex flex-col gap-3 text-sm">
