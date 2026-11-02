@@ -23,6 +23,8 @@ describe('Grants da Data API (Integration)', () => {
       'party_characters',
       'encounters',
       'encounter_participants',
+      'containers',
+      'inventory_items',
     ] as const) {
       const { error } = await anon.from(table).select('*').limit(1);
       expect(error?.code, table).toBe(PERMISSION_DENIED);

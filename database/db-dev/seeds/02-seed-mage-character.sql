@@ -117,7 +117,7 @@ BEGIN
   );
 
   -- Moedas na algibeira (criada pelo trigger do insert acima)
-  UPDATE public.character_containers
+  UPDATE public.containers
   SET coins = '{"cp":0,"sp":50,"ep":0,"gp":120,"pp":0}'::jsonb
   WHERE character_id = char_id AND kind = 'coin_pouch';
 
