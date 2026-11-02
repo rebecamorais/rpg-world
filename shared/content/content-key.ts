@@ -16,7 +16,15 @@ const CONTENT_KEY = /^dnd5e:([a-z0-9.-]+):([a-z]+):([a-z0-9-]+)$/;
 
 const contentKey = (source: string, type: string, id: string) => `dnd5e:${source}:${type}:${id}`;
 
+/** Kebab-case id of a content name: lowercase, runs of non `[a-z0-9]` become `-`, no edge dashes. */
+export const contentIdFromName = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
 export const conditionKey = (source: string, id: string) => contentKey(source, 'condition', id);
+export const itemKey = (source: string, id: string) => contentKey(source, 'item', id);
 
 export function parseContentKey(key: string): { source: string; type: string; id: string } | null {
   const match = CONTENT_KEY.exec(key);

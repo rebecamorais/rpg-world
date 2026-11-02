@@ -31,7 +31,8 @@
     "prepare": "husky",
     "postinstall": "npx tsx ./scripts/post-install-cleanup.ts",
     "content:spells": "npx tsx scripts/content/import-5etools-spells.ts",
-    "content:conditions": "npx tsx scripts/content/import-5etools-conditions.ts"
+    "content:conditions": "npx tsx scripts/content/import-5etools-conditions.ts",
+    "content:items": "npx tsx scripts/content/import-5etools-items.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^7.0.1",
