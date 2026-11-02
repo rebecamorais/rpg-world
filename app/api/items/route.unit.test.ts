@@ -16,7 +16,7 @@ describe('GET /api/items', () => {
     expect(res.status).toBe(401);
   });
 
-  it('lista as itens no idioma pedido', async () => {
+  it('lista os itens no idioma pedido', async () => {
     api.itemsApi.list.mockReturnValue([{ id: 'rope-hempen' }]);
 
     const res = await GET(jsonRequest('/api/items?locale=pt'), routeContext());
