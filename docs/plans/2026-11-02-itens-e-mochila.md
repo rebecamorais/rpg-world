@@ -20,8 +20,8 @@ português pelo Crowdin. O jogador escolhe da lista; ele não cria nem edita ite
 1. **Itens comuns do SRD em arquivo** (5.1 e 5.2): armas, armaduras, equipamento de aventura,
    ferramentas, kits, montarias e veículos, comida e serviços que forem item. Com o mesmo formato,
    esquema zod e catálogo em memória das condições.
-2. **Inventário em tabela**: algibeira, mochila e baú como lugares do personagem; a algibeira passa
-   a guardar as moedas ali.
+2. **Inventário em tabela**: algibeira, mochila e baú como lugares do personagem, e o baú da party
+   como lugar da mesa; a algibeira passa a guardar as moedas ali.
 3. **Mochila na aba Inventário**, logo abaixo da algibeira: todo personagem tem uma, que começa
    vazia. O jogador adiciona itens da lista, muda a quantidade e remove.
 4. **Tag `{@item …}`** nos textos de regra (magias, condições, os próprios itens) vira um botão com
@@ -40,6 +40,8 @@ português pelo Crowdin. O jogador escolhe da lista; ele não cria nem edita ite
 - Na tela: mais de uma mochila, criar baú, mover entre lugares, "equipado", sintonia (as tabelas
   já preveem, ver "Inventário no banco").
 - Comprar com o dinheiro da algibeira, trocas e mercado (plano futuro, decisão da Rebeca).
+- Criar o baú da party, a tela dele, mover itens entre lugares na tela, histórico de
+  movimentações, lojas e preços de NPC (vêm com o Mercado).
 - Carga e capacidade de carregar, efeito mecânico (CA da armadura na ficha, ataque da arma).
 - Compartilhar, importar e exportar itens.
 
@@ -82,39 +84,65 @@ português pelo Crowdin. O jogador escolhe da lista; ele não cria nem edita ite
 
 Decisão da Rebeca: inventário em tabela desde já, porque o personagem vai ter mais de uma mochila,
 baú, mover coisas entre eles, equipar e, mais à frente, trocar com outros jogadores. O catálogo de
-itens continua em arquivo; o banco guarda só o que é do personagem (como `character_spells`).
+itens continua em arquivo; o banco guarda só o que é dos usuários (como `character_spells`).
 
-- **`character_containers`**: os lugares onde o personagem guarda coisas.
-  - `id`, `character_id`, `kind` (`coin_pouch`, `backpack`, `chest`), `name` opcional ("Mochila do
-    cavalo"), `position` (ordem na tela), `coins` (`{ cp, sp, ep, gp, pp }`, inteiros ≥ 0).
-  - **Algibeira** (`coin_pouch`): exatamente uma por personagem, garantida no banco (índice único
-    parcial); não se apaga. É onde ficam as moedas.
-  - **Mochila** (`backpack`): todo personagem começa com uma, vazia. Pode haver mais de uma depois.
-  - **Baú** (`chest`): o tipo já existe, mas a tela desta parte não cria baú.
-  - As moedas ficam no lugar, não no personagem: hoje só a algibeira mostra moedas; quando o baú
-    chegar, "guardei 500 PO no baú" é o mesmo formato.
-- **`character_items`**: as entradas.
-  - `id`, `character_id`, `container_id`, `item_ref` (texto: `dnd5e:srd-5.2:item:rope`; depois
-    `homebrew:<uuid>`, na mesma coluna), `quantity` (inteiro de 1 a 9999), `created_at`.
+**Lugares com dono de dois tipos** (decisão da Rebeca, 2026-11-02, vinda do desenho do Mercado): o
+inventário da party vai ser um lugar como os outros, só que da mesa e não de um personagem. A mesma
+tela e as mesmas regras de mover servem para os dois. NPCs já são personagens (`kind = 'npc'`), então
+têm algibeira e mochila como qualquer um.
+
+- **`containers`**: os lugares onde se guardam coisas.
+  - `id`, `character_id` (opcional), `party_id` (opcional, FK para `parties`), `kind`, `name`
+    opcional ("Mochila do cavalo"), `position` (ordem na tela), `coins` (`{ cp, sp, ep, gp, pp }`,
+    inteiros de 0 a 1.000.000.000).
+  - **Dono único:** exatamente um de `character_id` e `party_id` (`num_nonnulls(...) = 1`). O dono
+    de um lugar não muda depois de criado.
+  - `kind` de personagem: `coin_pouch`, `backpack`, `chest`; de mesa: `party_chest`. O banco recusa
+    a combinação errada.
+  - **Algibeira** (`coin_pouch`): exatamente uma por personagem (índice único parcial); não se
+    apaga, a não ser junto com o personagem. É onde ficam as moedas do personagem.
+  - **Mochila** (`backpack`): todo personagem começa com uma, vazia.
+  - **Baú** (`chest`): o tipo existe, mas a tela desta parte não cria baú.
+  - **Baú da party** (`party_chest`): no máximo um por mesa (índice único parcial); não se apaga, a
+    não ser junto com a mesa. As moedas da party ficam no `coins` dele (não existe tabela de
+    moedas da party). Criar o baú da party e a tela dele vêm com o Mercado.
+- **`inventory_items`** (decisão do Claude: não `items`, porque `items` já é o catálogo no código,
+  em `/api/items` e no contexto `items`): as entradas.
+  - `id`, `container_id`, `item_ref` (texto: `dnd5e:srd-5.2:item:rope`; depois `homebrew:<uuid>`,
+    na mesma coluna; nunca vazio), `quantity` (inteiro de 1 a 9999), `created_at`.
+  - **Sem `character_id`** (decisão do Claude): o dono vem só do lugar. Uma fonte da verdade, e
+    mover um item da mochila para o baú da party é só trocar o `container_id`, sem um segundo campo
+    para manter coerente.
   - Cada entrada tem `id` próprio: é o que deixa mover parte de uma pilha ou equipar uma espada
     específica depois. `equipped` entra no plano de equipar, não agora.
   - Sem chave estrangeira para o catálogo (ele é arquivo). A rota da API confere `item_ref` contra o
     catálogo de itens comuns antes de gravar, como o grimório faz com magias.
   - Adicionar um item que já está no mesmo lugar soma a quantidade.
-- **Criar os lugares padrão:** algibeira e uma mochila para todo personagem novo, e por migração
-  para os que já existem.
+- **Criar os lugares padrão:** algibeira e uma mochila para todo personagem novo (pc e npc), e por
+  migração para os que já existem. Duplicar um personagem copia os lugares dele (moedas e itens).
 - **Moedas saem do `system_data`** sem cópia (decisão da Rebeca: em produção ninguém tem moedas
   ainda; a algibeira na ficha não chegou a ser publicada). O campo `coins` sai do esquema de
   atualização da ficha, da entidade e dos tipos. O seed de desenvolvimento passa a criar as moedas
   do Alatar (50 PP e 120 PO) na algibeira dele.
-- **RLS:** o dono lê e escreve; o mestre de uma mesa onde o personagem está lê (como a ficha
-  somente leitura); mais ninguém vê. Limites: até 20 lugares e 500 entradas por personagem.
+- **RLS:**
+  - lugares e itens de personagem: o dono lê e escreve; o mestre de uma mesa onde o personagem
+    está lê (como a ficha somente leitura); mais ninguém vê;
+  - baú da party e os itens dele: todo membro da mesa (mestre e jogadores) lê e escreve; quem não é
+    da mesa não vê;
+  - mover um item entre lugares exige poder escrever nos dois.
+- **Limites:** até 20 lugares e 500 entradas por dono (personagem ou mesa), contados também quando
+  um item muda de lugar.
+- **Histórico de movimentações** (vem com o Mercado, só de inserção: quem, quando, item ou moedas,
+  de onde para onde, quanto): nada aqui pode fechar essa porta. Por isso entradas e lugares têm `id`
+  estável, e nada apaga e recria linhas para mover.
 - **Salva na hora**, cada ação na sua rota (como aprender e esquecer magia), não pela barra de
   salvar: adicionar item, mudar quantidade, remover, e as moedas da algibeira (Pagar, Receber e a
   edição à mão). O cálculo do troco não muda; a tela mostra o resultado na hora (otimista) e volta
   atrás com aviso se o servidor recusar.
-- Testes de integração da migração (todo personagem existente ganha algibeira e mochila) e da RLS: dono mexe; mestre da mesa só lê; outro jogador da
-  mesa e quem não é da mesa não veem; a algibeira não se apaga nem duplica.
+- Testes de integração: todo personagem existente e novo ganha algibeira e mochila; dono mexe;
+  mestre da mesa só lê os lugares do personagem; outro jogador e quem não é da mesa não veem; a
+  algibeira não se apaga nem duplica; baú da party: membro (mestre e jogador) mexe, quem não é da
+  mesa não vê, não há dois na mesma mesa; regra do dono único e do `kind` por dono.
 
 ### Tela
 

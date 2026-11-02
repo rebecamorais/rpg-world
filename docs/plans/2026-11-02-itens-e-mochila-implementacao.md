@@ -9,7 +9,8 @@
 **Arquitetura:** o catálogo segue o das condições (importador → `content/dnd5e/<livro>/items.json`
 
 - `i18n/<locale>/items.json` → `FileItemCatalog` em memória → `GET /api/items`). O inventário fica
-  em `character_containers` e `character_items`, com RLS de dono e leitura do mestre, e é servido
+  em `containers` (de personagem ou de mesa) e `inventory_items`, com RLS de dono, leitura do
+  mestre e escrita dos membros no baú da party, e é servido
   pelo contexto de personagens (como o grimório), com rotas próprias. A tela usa React Query com
   atualização otimista.
 
@@ -148,56 +149,92 @@ findByKeys(keys: string[], locale?: string): ItemDto[] }`
 
 ### Tarefa 4: Tabelas, RLS e lugares padrão
 
+> **Revisada em 2026-11-02 (decisão da Rebeca):** os lugares têm dono de dois tipos (personagem ou
+> mesa), por causa do baú da party que vem com o Mercado. As tabelas se chamam `containers` e
+> `inventory_items`. A migração `20261102201453_character_inventory.sql` ainda não saiu do ambiente
+> local (a branch não foi enviada; o deploy de migrações só roda em push na `main`), então ela é
+> **editada**, não sobreposta por outra. Ver "Inventário no banco" no design.
+
 **Arquivos:**
 
-- Criar: `database/migrations/<ts>_character_inventory.sql`
-- Modificar: `database/db-dev/seeds/02-seed-mage-character.sql` (tirar `coins` do `system_data`;
-  depois do insert do Alatar, `UPDATE character_containers SET coins = '{"cp":0,"sp":50,"ep":0,"gp":120,"pp":0}'
+- Modificar: `database/migrations/20261102201453_character_inventory.sql` (pode ser renomeada para
+  `<mesmo timestamp>_inventory.sql`)
+- Modificar: `database/db-dev/seeds/02-seed-mage-character.sql` (sem `coins` no `system_data`;
+  depois do insert do Alatar, `UPDATE public.containers SET coins = '{"cp":0,"sp":50,"ep":0,"gp":120,"pp":0}'
 WHERE character_id = '<Alatar>' AND kind = 'coin_pouch'`)
 - Regenerar: `lib/types/database.ts`
-- Criar: `src/backend/contexts/characters/infrastructure/inventory-rls.integration.test.ts`
+- Modificar: `src/backend/contexts/characters/infrastructure/inventory-rls.integration.test.ts`
+  (pode ir para `src/backend/shared/infrastructure/inventory-rls.integration.test.ts` se o baú da
+  party deixar o lugar estranho)
 
 **O SQL decide:**
 
-- `character_containers(id uuid pk default gen_random_uuid(), character_id uuid not null
-references characters on delete cascade, kind text not null check (kind in
-('coin_pouch','backpack','chest')), name text check (char_length(name) <= 60), position int not
-null default 0, coins jsonb not null default '{"cp":0,"sp":0,"ep":0,"gp":0,"pp":0}' check (cada
-uma das cinco chaves é inteiro de 0 a 1000000000), created_at timestamptz default now())`;
-  índice único parcial `(character_id) where kind = 'coin_pouch'`.
-- `character_items(id uuid pk, character_id uuid not null references characters on delete cascade,
-container_id uuid not null references character_containers on delete cascade, item_ref text not
-null check (char_length(item_ref) <= 120), quantity int not null check (quantity between 1 and
-9999), created_at timestamptz default now())`; único `(container_id, item_ref)`;
-  check de que o lugar é do mesmo personagem (trigger, já que é outra tabela).
+- `containers(id uuid pk, character_id uuid null references characters on delete cascade, party_id
+uuid null references parties on delete cascade, kind text not null, name text check
+(char_length(name) <= 60), position int not null default 0, coins jsonb not null default
+'{"cp":0,"sp":0,"ep":0,"gp":0,"pp":0}' (as cinco chaves, inteiros de 0 a 1000000000, nada mais),
+created_at timestamptz default now())`
+  - `CHECK (num_nonnulls(character_id, party_id) = 1)`;
+  - `CHECK ((kind IN ('coin_pouch','backpack','chest') AND character_id IS NOT NULL) OR (kind =
+'party_chest' AND party_id IS NOT NULL))`;
+  - índice único parcial `(character_id) WHERE kind = 'coin_pouch'` e `(party_id) WHERE kind =
+'party_chest'`;
+  - o dono (`character_id`, `party_id`) não muda; `kind` não vira nem deixa de ser `coin_pouch` ou
+    `party_chest`; algibeira e baú da party não se apagam, a não ser em cascata do dono.
+- `inventory_items(id uuid pk, container_id uuid not null references containers on delete cascade,
+item_ref text not null check (char_length(item_ref) between 1 and 120), quantity int not null
+check (quantity between 1 and 9999), created_at timestamptz default now())`; único
+  `(container_id, item_ref)`. **Sem `character_id`**: o dono vem do lugar.
 - Trigger `after insert on characters`: cria `coin_pouch` (position 0) e `backpack` (position 1).
-- Trigger `before delete on character_containers`: recusa apagar `coin_pouch` (exceto em cascata
-  do personagem: conferir `characters` ainda existe).
-- Limites (trigger `before insert`): 20 lugares e 500 entradas por personagem.
+  Criar o trigger **antes** do backfill (sem janela entre os dois).
 - Backfill: algibeira e mochila para todo personagem existente sem elas.
-- RLS: dono `FOR ALL` (como `owner_can_manage_character_spell`); mestre `FOR SELECT USING
-(character_id IN (SELECT private.gm_readable_character_ids()))`. Grants iguais aos de
-  `character_spells` em `20261020130000_least_privilege_grants.sql`.
-- `duplicate_character`: depois das magias, copiar moedas da algibeira original para a da cópia,
-  copiar os demais lugares do original (exceto a mochila padrão, que já existe: casar a primeira
-  `backpack` com a primeira) mapeando ids, e copiar `character_items` com o `container_id`
-  mapeado.
+- Limites por dono (personagem ou mesa): 20 lugares e 500 entradas, com lock por dono; o de
+  entradas vale em `INSERT` e em `UPDATE OF container_id` quando o dono muda. O upsert que soma
+  numa entrada que já existe passa no limite, olhando só o lugar do próprio `NEW.container_id`.
+  Quem não pode escrever no lugar recebe o erro do RLS, nunca o do limite (sem vazar contagem nem
+  existência de linhas de outros).
+- RLS de `containers`:
+  - de personagem: dono `FOR ALL` (como `owner_can_manage_character_spell`); mestre `FOR SELECT
+USING (character_id IN (SELECT private.gm_readable_character_ids()))`;
+  - da mesa: membro ativo e mestre (`private.is_party_member`, `private.is_party_gm`, conferir o que
+    cada uma considera) `FOR ALL`.
+- RLS de `inventory_items`: ler quando o lugar é legível; inserir, mudar e apagar quando o lugar é
+  gravável (no `UPDATE`, o lugar antigo e o novo). Função `private` que diz se o usuário escreve
+  num lugar, para não repetir a regra. O mestre lendo a ficha **não** escreve nos itens dela.
+- Grants iguais aos de `character_spells` em `20261020130000_least_privilege_grants.sql`.
+- `duplicate_character`: copia as moedas e os itens do personagem para os lugares da cópia,
+  casando a algibeira com a algibeira e os demais lugares por ordem; quando o original não tem
+  mochila, o primeiro lugar dele assume a mochila padrão da cópia (`kind`, nome, posição), para a
+  cópia ficar igual e nunca passar do limite de 20.
 
-- [ ] **Passo 1: testes de integração** (`inventory-rls.integration.test.ts`, mesmo preparo do
-      `gm-reads-rls`):
-  - personagem novo tem exatamente uma `coin_pouch` e uma `backpack` (Ponto 1);
-  - dono põe item na mochila e muda moedas; mestre da mesa lê lugares e itens e não consegue
-    inserir, mudar nem apagar (Ponto 5); colega de mesa e estranho não leem nada;
-  - apagar a algibeira falha; inserir segunda algibeira falha; apagar o personagem apaga tudo;
-  - `quantity` 0 e 10000 falham; moedas negativas falham;
-  - item num lugar de outro personagem falha;
-  - `duplicate_character` copia moedas e itens para os lugares da cópia, e o original não muda
-    (Ponto 1).
-- [ ] **Passo 2:** rodar `npm run test:integration -- inventory-rls` → FALHA.
-- [ ] **Passo 3:** escrever a migração, aplicar no banco de teste e no de dev, regenerar tipos,
-      atualizar o seed.
-- [ ] **Passo 4:** rodar → PASSA; rodar também `gm-reads-rls` e os testes de duplicar.
-- [ ] **Passo 5: commit** `feat(inventory): tabelas de lugares e itens do personagem`.
+**Bancos locais:** as versões antigas (`20261102201453` e o rascunho `20261102202137`) já rodaram no
+banco de dev e no de teste. Teste: `npx supabase db reset --workdir database/db-test`. Dev (sem
+reset, ele tem dados locais): apagar só os objetos do inventário (tabelas `character_containers` e
+`character_items`, funções e triggers `private.*` que a migração criou), tirar as duas versões de
+`supabase_migrations.schema_migrations` e rodar `npx supabase migration up --workdir database/db-dev`.
+
+- [ ] **Passo 1: testes de integração**:
+  - personagem novo (pc e npc) e personagem antigo (backfill) têm exatamente uma `coin_pouch` e uma
+    `backpack` (Ponto 1);
+  - dono põe item na mochila e muda moedas; mestre da mesa lê lugares e itens do personagem e não
+    consegue inserir, mudar nem apagar (Ponto 5); colega de mesa e estranho não leem nada;
+  - algibeira: apagar falha; segunda falha; virar `backpack` falha; apagar o personagem apaga tudo;
+  - baú da party: mestre e jogador da mesa leem, põem item e mudam moedas; quem não é da mesa não
+    vê nem escreve; segundo baú na mesma mesa falha; apagar falha, apagar a mesa apaga;
+  - dono único: lugar sem dono ou com os dois falha; `party_chest` com `character_id` falha;
+    `backpack` com `party_id` falha; mudar o dono de um lugar falha;
+  - item: `quantity` 0 e 10000 falham; `item_ref` vazio falha; moedas negativas, fracionadas ou
+    com chave a mais falham;
+  - mover item da mochila do jogador para o baú da party da mesa dele funciona; para a mochila de
+    outro personagem, falha;
+  - limites: 21º lugar e 501ª entrada falham; o upsert que soma passa no limite; mover para um dono
+    no limite falha; quem não é dono recebe erro de RLS, não de limite;
+  - `duplicate_character` copia moedas e itens para os lugares da cópia sem mexer no original, e
+    copia um original sem mochila (algibeira + 19 baús) sem erro (Ponto 1).
+- [ ] **Passo 2:** reverter os bancos locais como acima e rodar o teste → FALHA.
+- [ ] **Passo 3:** editar a migração, aplicar no teste e no dev, regenerar tipos, atualizar o seed.
+- [ ] **Passo 4:** rodar → PASSA; rodar `npm run test:integration` inteiro.
+- [ ] **Passo 5: commit** `refactor(inventory): lugares com dono de personagem ou de mesa`.
 
 ### Tarefa 5: Inventário no contexto de personagens e rotas
 
@@ -224,6 +261,8 @@ items: { id, containerId, ref, quantity, item: ItemDto | null }[] }` (`item: nul
 { ref, containerId, quantity }, locale?) → InventoryItemDto`, `setItemQuantity(id, requesterId,
 itemId, quantity) → void`, `removeItem(id, requesterId, itemId) → void`, `setCoins(id,
 requesterId, containerId, coins) → void`, `getInventoryForPartyGm(partyId, id, gmId, locale?)`
+- Lê e grava `containers` (só os de `character_id` = o personagem) e `inventory_items` (pelo
+  lugar); o baú da party não aparece nestas rotas (vem com o Mercado).
 - `InventoryRepo`: `find(characterId)`, `addItem(characterId, containerId, ref, quantity)` (upsert
   que soma no banco, Ponto 3), `setQuantity(characterId, itemId, quantity)`, `remove(characterId,
 itemId)`, `setCoins(characterId, containerId, coins)`. As escritas devolvem `false` quando
