@@ -33,6 +33,7 @@ export const api = {
   profileApi: { getProfile: vi.fn(), updateProfile: vi.fn(), uploadAvatar: vi.fn() },
   spellsApi: { getAllSpells: vi.fn() },
   conditionsApi: { list: vi.fn() },
+  itemsApi: { list: vi.fn() },
   combatApi: {
     get: vi.fn(),
     create: vi.fn(),

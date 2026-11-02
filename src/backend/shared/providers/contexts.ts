@@ -2,6 +2,7 @@ import { createCharacterContext } from '@backend/contexts/characters';
 import { createCombatContext } from '@backend/contexts/combat';
 import { createConditionsContext } from '@backend/contexts/conditions';
 import { createFeedbackContext } from '@backend/contexts/feedback';
+import { createItemsContext } from '@backend/contexts/items';
 import { createLoreContext } from '@backend/contexts/lore';
 import { createPartyContext } from '@backend/contexts/parties';
 import { createSpellsContext } from '@backend/contexts/spells';
@@ -15,6 +16,7 @@ export class Contexts {
   private _userProfile: ReturnType<typeof createUserProfileContext> | null = null;
   private _lore: ReturnType<typeof createLoreContext> | null = null;
   private _conditions: ReturnType<typeof createConditionsContext> | null = null;
+  private _items: ReturnType<typeof createItemsContext> | null = null;
   private _spells: ReturnType<typeof createSpellsContext> | null = null;
   private _feedback: ReturnType<typeof createFeedbackContext> | null = null;
   private _party: ReturnType<typeof createPartyContext> | null = null;
@@ -69,6 +71,11 @@ export class Contexts {
   get conditions() {
     this._conditions ??= createConditionsContext();
     return this._conditions;
+  }
+
+  get items() {
+    this._items ??= createItemsContext();
+    return this._items;
   }
 
   get spells() {
