@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { SPELL_KEY } from '@shared/content/content-key';
+import { ITEM_KEY, SPELL_KEY } from '@shared/content/content-key';
 import { httpUrlOrEmpty, optional, optionalQuery } from '@shared/http/validation';
 import { ATTRIBUTE_KEYS, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
@@ -94,4 +94,29 @@ export const toggleSpellSchema = z.object({
 
 export const localeQuerySchema = z.object({
   locale: optionalQuery(text(10)).transform((locale) => locale ?? 'en'),
+});
+
+const itemParamsFields = { id: z.uuid(), itemId: z.uuid() };
+export const inventoryItemParamsSchema = z.object(itemParamsFields);
+
+const quantity = int(1, 9999);
+
+export const addInventoryItemSchema = z.object({
+  ref: z.string().max(200).regex(ITEM_KEY),
+  containerId: z.uuid(),
+  quantity,
+});
+
+export const setItemQuantitySchema = z.object({ quantity });
+
+/** Exactly the five coins, whole numbers from 0 to a billion. */
+export const setCoinsSchema = z.object({
+  containerId: z.uuid(),
+  coins: z.strictObject({
+    cp: int(0, 1_000_000_000),
+    sp: int(0, 1_000_000_000),
+    ep: int(0, 1_000_000_000),
+    gp: int(0, 1_000_000_000),
+    pp: int(0, 1_000_000_000),
+  }),
 });

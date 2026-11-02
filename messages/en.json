@@ -66,6 +66,8 @@
       "security_widget_unavailable": "Could not load the security check. Disable content blockers for this site or reload the page.",
       "image_error_decode": "Couldn't read this image. Try another file (JPEG, PNG or WebP).",
       "character_error_spell_not_found": "This spell was not found.",
+      "character_error_item_not_found": "This item was not found.",
+      "character_error_container_not_found": "This container was not found.",
       "combat_error_not_found": "Combat not found.",
       "combat_error_exists": "This party already has a combat.",
       "combat_error_empty": "Add someone to the combat before starting.",

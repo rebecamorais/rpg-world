@@ -547,6 +547,22 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      add_inventory_item: {
+        Args: { p_container_id: string; p_item_ref: string; p_quantity: number };
+        Returns: {
+          container_id: string;
+          created_at: string;
+          id: string;
+          item_ref: string;
+          quantity: number;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'inventory_items';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       auth_user_exists: { Args: { p_email: string }; Returns: boolean };
       duplicate_character: { Args: { p_character_id: string; p_name: string }; Returns: string };
       encounter_turns: {

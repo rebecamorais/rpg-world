@@ -1,3 +1,5 @@
+import type { Coins } from '@shared/systems/dnd5e/coins';
+
 import type { CharacterKind } from '../domain/entity/Character';
 import { CharacterContext, CharacterUpdates, CreateCharacterInput } from '../index';
 
@@ -56,10 +58,27 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
     return characterContext.toggleSpell(id, requesterId, spellId, action, locale);
   },
 
+  getInventory: (id: string, requesterId: string, locale?: string) =>
+    characterContext.getInventory(id, requesterId, locale),
+  addItem: (
+    id: string,
+    requesterId: string,
+    input: { ref: string; containerId: string; quantity: number },
+    locale?: string,
+  ) => characterContext.addItem(id, requesterId, input, locale),
+  setItemQuantity: (id: string, requesterId: string, itemId: string, quantity: number) =>
+    characterContext.setItemQuantity(id, requesterId, itemId, quantity),
+  removeItem: (id: string, requesterId: string, itemId: string) =>
+    characterContext.removeItem(id, requesterId, itemId),
+  setCoins: (id: string, requesterId: string, containerId: string, coins: Coins) =>
+    characterContext.setCoins(id, requesterId, containerId, coins),
+
   getForPartyGm: async (partyId: string, id: string, gmId: string) => {
     const character = await characterContext.getForPartyGm(partyId, id, gmId);
     return character.toJSON();
   },
+  getInventoryForPartyGm: (partyId: string, id: string, gmId: string, locale?: string) =>
+    characterContext.getInventoryForPartyGm(partyId, id, gmId, locale),
   getSpellsForPartyGm: (partyId: string, id: string, gmId: string, locale?: string) =>
     characterContext.getSpellsForPartyGm(partyId, id, gmId, locale),
 });

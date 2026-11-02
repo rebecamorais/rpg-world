@@ -66,6 +66,8 @@
       "security_widget_unavailable": "Não foi possível carregar a verificação de segurança. Desative bloqueadores de conteúdo para este site ou recarregue a página.",
       "image_error_decode": "Não foi possível ler essa imagem. Tente outro arquivo (JPEG, PNG ou WebP).",
       "character_error_spell_not_found": "Magia não encontrada.",
+      "character_error_item_not_found": "Item não encontrado.",
+      "character_error_container_not_found": "Lugar não encontrado.",
       "combat_error_not_found": "Combate não encontrado.",
       "combat_error_exists": "Esta mesa já tem um combate.",
       "combat_error_empty": "Adicione alguém ao combate antes de começar.",

@@ -296,6 +296,55 @@ describe('Inventário (Integration)', () => {
     });
   });
 
+  describe('add_inventory_item', () => {
+    it('adicionar duas vezes o mesmo item soma a quantidade numa entrada só (Ponto 3)', async () => {
+      const first = await player.client.rpc('add_inventory_item', {
+        p_container_id: backpackId,
+        p_item_ref: rope,
+        p_quantity: 1,
+      });
+      const second = await player.client.rpc('add_inventory_item', {
+        p_container_id: backpackId,
+        p_item_ref: rope,
+        p_quantity: 1,
+      });
+
+      expect(first.error).toBeNull();
+      expect(second.error).toBeNull();
+      expect(second.data?.id).toBe(first.data?.id);
+      expect(await itemsIn([backpackId])).toEqual([
+        { container_id: backpackId, item_ref: rope, quantity: 2 },
+      ]);
+    });
+
+    it('a soma para em 9999', async () => {
+      await player.client.rpc('add_inventory_item', {
+        p_container_id: backpackId,
+        p_item_ref: rope,
+        p_quantity: 9990,
+      });
+      const capped = await player.client.rpc('add_inventory_item', {
+        p_container_id: backpackId,
+        p_item_ref: rope,
+        p_quantity: 50,
+      });
+
+      expect(capped.error).toBeNull();
+      expect(capped.data?.quantity).toBe(9999);
+    });
+
+    it('quem não é o dono leva erro de RLS e nada muda', async () => {
+      const { error } = await stranger.client.rpc('add_inventory_item', {
+        p_container_id: backpackId,
+        p_item_ref: rope,
+        p_quantity: 1,
+      });
+
+      expect(error?.message).toContain(RLS);
+      expect(await itemsIn([backpackId])).toEqual([]);
+    });
+  });
+
   describe('baú da party', () => {
     let chestId: string;
 

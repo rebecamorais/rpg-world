@@ -5,6 +5,8 @@
 
 export const SPELL_KEY = /^dnd5e:([a-z0-9.-]+):spell:([a-z0-9-]+)$/;
 
+export const ITEM_KEY = /^dnd5e:([a-z0-9.-]+):item:([a-z0-9-]+)$/;
+
 export const spellKey = (source: string, id: string) => `dnd5e:${source}:spell:${id}`;
 
 export function parseSpellKey(key: string): { source: string; id: string } | null {

@@ -483,3 +483,29 @@ BEGIN
   RETURN v_id;
 END;
 $$;
+
+-- 7. Somar ao item que já está no lugar
+--
+-- Adicionar um item que já está no lugar soma a quantidade, no banco e de uma vez (sem ler e gravar
+-- no cliente: duas abas somam as duas). A soma para em 9999, o teto do CHECK. SECURITY INVOKER: o
+-- RLS e os limites valem como numa inserção normal.
+CREATE OR REPLACE FUNCTION public.add_inventory_item(
+  p_container_id uuid,
+  p_item_ref text,
+  p_quantity integer
+)
+RETURNS public.inventory_items
+LANGUAGE sql
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+  INSERT INTO public.inventory_items (container_id, item_ref, quantity)
+  VALUES (p_container_id, p_item_ref, p_quantity)
+  ON CONFLICT (container_id, item_ref) DO UPDATE
+    SET quantity = LEAST(public.inventory_items.quantity + EXCLUDED.quantity, 9999)
+  RETURNING *;
+$$;
+
+REVOKE ALL ON FUNCTION public.add_inventory_item(uuid, text, integer) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.add_inventory_item(uuid, text, integer)
+  TO authenticated, service_role;
