@@ -64,7 +64,21 @@ export function useInventory(characterId: string) {
         : current,
     );
 
+  // Once the last write in flight settles, resync with the server: a failed write rolls the cache
+  // back to a snapshot that may predate a newer optimistic value, and a refetch while another
+  // write is pending would overwrite that newer value.
+  const mutationKey = ['inventory-write', characterId, locale];
+  const settle = {
+    mutationKey,
+    onSettled: () => {
+      if (queryClient.isMutating({ mutationKey }) === 1) {
+        void queryClient.invalidateQueries({ queryKey: key });
+      }
+    },
+  };
+
   const add = useMutation({
+    ...settle,
     mutationFn: (v: { ref: string; containerId: string; quantity: number }) =>
       rpgWorldApi.post<InventoryItem>(`${apiPath}/inventory/items?locale=${locale}`, v),
     onSuccess: upsert,
@@ -72,6 +86,7 @@ export function useInventory(characterId: string) {
   });
 
   const quantity = useMutation({
+    ...settle,
     mutationFn: (v: { itemId: string; quantity: number }) =>
       rpgWorldApi.patch(`${apiPath}/inventory/items/${v.itemId}`, { quantity: v.quantity }),
     onMutate: (v) =>
@@ -83,6 +98,7 @@ export function useInventory(characterId: string) {
   });
 
   const remove = useMutation({
+    ...settle,
     mutationFn: (itemId: string) => rpgWorldApi.delete(`${apiPath}/inventory/items/${itemId}`),
     onMutate: (itemId) =>
       optimistic((c) => ({ ...c, items: c.items.filter((i) => i.id !== itemId) })),
@@ -90,6 +106,7 @@ export function useInventory(characterId: string) {
   });
 
   const coins = useMutation({
+    ...settle,
     mutationFn: (v: { containerId: string; coins: Coins }) =>
       rpgWorldApi.put(`${apiPath}/inventory/coins`, v),
     onMutate: (v) =>

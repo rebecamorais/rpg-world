@@ -188,6 +188,7 @@ export function CoinPouch() {
                 max={MAX_COINS}
                 onValueChange={(value) => setTyped((t) => ({ ...t, [coin]: value }))}
                 onBlur={() => commit(coin)}
+                onKeyDown={(e) => e.key === 'Enter' && commit(coin)}
                 containerClassName="w-full"
                 className="h-auto w-full p-0 text-center font-mono text-lg font-bold tabular-nums md:text-lg"
               />

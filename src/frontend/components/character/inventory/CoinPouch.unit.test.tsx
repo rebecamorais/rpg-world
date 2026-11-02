@@ -68,6 +68,7 @@ describe('CoinPouch', () => {
     const user = userEvent.setup();
     await renderPouch();
     const gold = screen.getByLabelText('Gold pieces');
+    api.get.mockResolvedValue(inventory({ ...PURSE, gp: 120 }));
 
     await user.clear(gold);
     await user.type(gold, '120');
@@ -94,6 +95,7 @@ describe('CoinPouch', () => {
     expect(screen.getByText('45 GP + 1 PP')).toBeInTheDocument();
     expect(screen.getByText('5 GP')).toBeInTheDocument();
 
+    api.get.mockResolvedValue(inventory({ cp: 12, sp: 3, ep: 0, gp: 5, pp: 1 }));
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
 
     expect(api.put).toHaveBeenCalledWith('/api/characters/c1/inventory/coins', {
@@ -131,6 +133,17 @@ describe('CoinPouch', () => {
       containerId: 'pouch1',
       coins: { cp: 12, sp: 3, ep: 0, gp: 55, pp: 2 },
     });
+  });
+
+  it('Enter no campo confirma como sair dele', async () => {
+    const user = userEvent.setup();
+    await renderPouch();
+    const gold = screen.getByLabelText('Gold pieces');
+
+    await user.clear(gold);
+    await user.type(gold, '70{Enter}');
+
+    await waitFor(() => expect(api.put).toHaveBeenCalledTimes(1));
   });
 
   it('servidor recusa: os números voltam ao que eram e avisa (Ponto 4)', async () => {

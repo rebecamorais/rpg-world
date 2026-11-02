@@ -87,6 +87,7 @@ describe('useInventory', () => {
     const torch = { ...rope, id: 'i2', ref: 'dnd5e:srd:item:torch', quantity: 1 };
     api.post.mockResolvedValue(torch);
     const { result } = await renderInventory();
+    api.get.mockResolvedValue({ ...inventory(), items: [rope, torch] });
 
     act(() => result.current.addItem('dnd5e:srd:item:torch'));
 
@@ -103,6 +104,7 @@ describe('useInventory', () => {
   it('addItem de item que já está soma: a resposta troca a linha, não duplica', async () => {
     api.post.mockResolvedValue({ ...rope, quantity: 3 });
     const { result } = await renderInventory();
+    api.get.mockResolvedValue({ ...inventory(), items: [{ ...rope, quantity: 3 }] });
 
     act(() => result.current.addItem(rope.ref));
 
@@ -128,6 +130,10 @@ describe('useInventory', () => {
   it('setCoins troca as moedas da algibeira na hora e manda o PUT', async () => {
     const { result } = await renderInventory();
     const coins = { ...ZERO, gp: 1 };
+    api.get.mockResolvedValue({
+      ...inventory(),
+      containers: [{ ...inventory().containers[0], coins }, inventory().containers[1]],
+    });
 
     act(() => result.current.setCoins(coins));
 
@@ -138,5 +144,36 @@ describe('useInventory', () => {
         coins,
       }),
     );
+  });
+
+  it('duas moedas seguidas, a primeira falha: o valor da segunda não some e no fim vale o do servidor', async () => {
+    const first = failLater();
+    const second = failLater();
+    api.put.mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise as never);
+    const { result } = await renderInventory();
+    const one = { ...ZERO, gp: 1 };
+    const two = { ...ZERO, gp: 2 };
+
+    act(() => result.current.setCoins(one));
+    await waitFor(() => expect(result.current.pouch?.coins).toEqual(one));
+    act(() => result.current.setCoins(two));
+    await waitFor(() => expect(result.current.pouch?.coins).toEqual(two));
+    const refetches = api.get.mock.calls.length;
+
+    act(() => first.fail());
+    await waitFor(() => expect(toast.error).toHaveBeenCalled());
+    // Still one write in flight: no refetch yet, and the newer value stands
+    expect(api.get.mock.calls.length).toBe(refetches);
+
+    api.get.mockResolvedValue({
+      ...inventory(),
+      containers: [
+        { ...inventory().containers[0], coins: { ...ZERO, gp: 9 } },
+        inventory().containers[1],
+      ],
+    });
+    act(() => second.fail());
+    await waitFor(() => expect(result.current.pouch?.coins.gp).toBe(9));
+    expect(api.get.mock.calls.length).toBeGreaterThan(refetches);
   });
 });
