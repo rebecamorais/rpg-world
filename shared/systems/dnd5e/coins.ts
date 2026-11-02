@@ -1,6 +1,4 @@
-import type { DnD5eCharacter } from './types';
-
-export type Coins = NonNullable<DnD5eCharacter['coins']>;
+export type Coins = { cp: number; sp: number; ep: number; gp: number; pp: number };
 export type Coin = keyof Coins;
 
 /** Smallest first. */

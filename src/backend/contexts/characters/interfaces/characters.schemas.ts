@@ -73,16 +73,6 @@ export const characterUpdatesSchema = z.object({
     z.record(z.string().regex(/^[1-9]$/), z.object({ max: int(0, 100), used: int(0, 100) })),
   ),
   spellPoints: optional(z.object({ max: int(0, 10_000), current: int(0, 10_000) })),
-
-  coins: optional(
-    z.object({
-      cp: int(0, 1_000_000_000),
-      sp: int(0, 1_000_000_000),
-      ep: int(0, 1_000_000_000),
-      gp: int(0, 1_000_000_000),
-      pp: int(0, 1_000_000_000),
-    }),
-  ),
 });
 
 export const updateCharacterSchema = z.object({ updates: characterUpdatesSchema });

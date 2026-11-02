@@ -17,7 +17,8 @@ import { Label } from '@frontend/components/ui/label';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { SelectField } from '@frontend/components/ui/select-field';
-import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { useInventory } from '@frontend/hooks/useInventory';
 import { characterTheme } from '@frontend/lib/color-utils';
 
 import {
@@ -45,24 +46,24 @@ function useFormatCoins() {
       .join(separator) || t('none');
 }
 
-/** Pays (with change) or receives an amount; the result goes to the sheet's draft. */
+/** Pays (with change) or receives an amount; the result is saved to the pouch right away. */
 function CoinDialog({ mode, onDone }: { mode: Mode; onDone: () => void }) {
   const t = useTranslations('characters.coins');
   const character = useLoadedCharacter();
-  const { update } = useCharacterActions();
+  const { pouch, setCoins } = useInventory(character.id);
   const format = useFormatCoins();
   const [amount, setAmount] = useState(1);
   const [coin, setCoin] = useState<Coin>('gp');
   const [valid, setValid] = useState(true);
 
-  const purse = character.coins ?? EMPTY_PURSE;
+  const purse = pouch?.coins ?? EMPTY_PURSE;
   const payment = mode === 'pay' ? pay(purse, amount, coin) : null;
   const after = payment ? (payment.ok ? payment.after : null) : receive(purse, amount, coin);
-  const canConfirm = valid && after !== null;
+  const canConfirm = valid && after !== null && !!pouch;
 
   const confirm = () => {
     if (!after) return;
-    update({ coins: after });
+    setCoins(after);
     onDone();
   };
 
@@ -144,15 +145,24 @@ function CoinDialog({ mode, onDone }: { mode: Mode; onDone: () => void }) {
 
 /**
  * The coin pouch every character carries: the five coins, editable by hand, and Pay / Receive.
- * Like every edit on the sheet, changes go to the draft and the save bar saves them.
+ * Saved on the spot (not through the sheet's save bar). A hand edit is sent when the field loses
+ * focus, so typing "120" is one request, not three.
  */
 export function CoinPouch() {
   const t = useTranslations('characters.coins');
   const character = useLoadedCharacter();
-  const { update } = useCharacterActions();
+  const { pouch, setCoins } = useInventory(character.id);
   const [mode, setMode] = useState<Mode | null>(null);
+  // What was typed in each field and not yet sent
+  const [typed, setTyped] = useState<Partial<Coins>>({});
 
-  const purse = character.coins ?? EMPTY_PURSE;
+  const purse = pouch?.coins ?? EMPTY_PURSE;
+
+  const commit = (coin: Coin) => {
+    const value = typed[coin];
+    setTyped(({ [coin]: _sent, ...rest }) => rest);
+    if (value !== undefined && value !== purse[coin]) setCoins({ ...purse, [coin]: value });
+  };
 
   return (
     <SectionCard>
@@ -173,12 +183,11 @@ export function CoinPouch() {
                 ghost
                 showIcon={false}
                 aria-label={t(`${coin}.name`)}
-                value={purse[coin]}
+                value={typed[coin] ?? purse[coin]}
                 min={0}
                 max={MAX_COINS}
-                onValueChange={(value) =>
-                  update((c) => ({ coins: { ...(c.coins ?? EMPTY_PURSE), [coin]: value } }))
-                }
+                onValueChange={(value) => setTyped((t) => ({ ...t, [coin]: value }))}
+                onBlur={() => commit(coin)}
                 containerClassName="w-full"
                 className="h-auto w-full p-0 text-center font-mono text-lg font-bold tabular-nums md:text-lg"
               />
@@ -193,10 +202,10 @@ export function CoinPouch() {
         </ul>
 
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => setMode('pay')}>
+          <Button variant="outline" size="sm" disabled={!pouch} onClick={() => setMode('pay')}>
             {t('pay')}
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setMode('receive')}>
+          <Button variant="outline" size="sm" disabled={!pouch} onClick={() => setMode('receive')}>
             {t('receive')}
           </Button>
         </div>

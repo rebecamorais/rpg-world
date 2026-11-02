@@ -42,7 +42,6 @@ export interface CharacterUpdates {
   spellAttackBonus?: number;
   spellSlots?: Record<string, { max: number; used: number }>;
   spellPoints?: { max: number; current: number };
-  coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
 }
 
 // Campos copiados diretamente. Qualquer chave fora desta lista (id, ownerUsername, system...)
@@ -70,7 +69,6 @@ const SIMPLE_FIELDS = [
   'spellAttackBonus',
   'spellSlots',
   'spellPoints',
-  'coins',
 ] as const satisfies readonly (keyof CharacterUpdates & keyof DnD5eCharacter)[];
 
 type SimpleField = (typeof SIMPLE_FIELDS)[number];

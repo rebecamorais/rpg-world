@@ -40,8 +40,6 @@ interface DnD5eCharacterData {
   spellSlots?: Record<string, { max: number; used: number }>;
   spellPoints?: { max: number; current: number };
 
-  coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
-
   // D&D 5e Specific Lore
   personalityTraits?: string;
   ideals?: string;

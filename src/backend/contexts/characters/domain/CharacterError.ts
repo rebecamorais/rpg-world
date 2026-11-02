@@ -17,6 +17,8 @@ export const CharacterErrorCodes = {
   SPELL_NOT_FOUND: 'character_error_spell_not_found',
   ITEM_NOT_FOUND: 'character_error_item_not_found',
   CONTAINER_NOT_FOUND: 'character_error_container_not_found',
+  ITEM_LIMIT: 'character_error_item_limit',
+  CONTAINER_LIMIT: 'character_error_container_limit',
   DOMAIN_ATTRIBUTE_BELOW_ONE: 'domain_error_attribute_below_one',
   DOMAIN_HP_MAX_BELOW_ONE: 'domain_error_hp_max_below_one',
   DOMAIN_HP_DAMAGE_NEGATIVE: 'domain_error_hp_damage_negative',

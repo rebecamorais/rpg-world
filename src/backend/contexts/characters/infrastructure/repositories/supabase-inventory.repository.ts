@@ -4,6 +4,7 @@ import type { Coins } from '@shared/systems/dnd5e/coins';
 
 import { Database } from '@database-types';
 
+import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import {
   InventoryContainer,
   InventoryEntry,
@@ -18,6 +19,16 @@ const toEntry = (row: ItemRow): InventoryEntry => ({
   ref: row.item_ref,
   quantity: row.quantity,
 });
+
+/** The database triggers raise these as P0001 with the rule's name as the message. */
+function limitError(error: { code?: string; message: string }): CharacterError | null {
+  if (error.code !== 'P0001') return null;
+  if (error.message === 'item_limit') return new CharacterError(CharacterErrorCodes.ITEM_LIMIT);
+  if (error.message === 'container_limit') {
+    return new CharacterError(CharacterErrorCodes.CONTAINER_LIMIT);
+  }
+  return null;
+}
 
 export class SupabaseInventoryRepository implements InventoryRepo {
   constructor(private readonly client: SupabaseClient<Database>) {}
@@ -56,7 +67,7 @@ export class SupabaseInventoryRepository implements InventoryRepo {
       p_item_ref: ref,
       p_quantity: quantity,
     });
-    if (error) throw new Error(`Failed to add item: ${error.message}`);
+    if (error) throw limitError(error) ?? new Error(`Failed to add item: ${error.message}`);
     return toEntry(data);
   }
 

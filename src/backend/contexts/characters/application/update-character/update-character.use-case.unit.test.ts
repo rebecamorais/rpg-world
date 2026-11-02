@@ -161,16 +161,14 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
     );
   });
 
-  it('aplica campos simples (classe, dados de vida, moedas)', async () => {
+  it('aplica campos simples (classe, dados de vida)', async () => {
     const updated = await update({
       class: 'Wizard',
       hitDice: { total: '3d6', current: 2 },
-      coins: { cp: 1, sp: 2, ep: 0, gp: 30, pp: 0 },
     });
 
     expect(updated.class).toBe('Wizard');
     expect(updated.hitDice).toEqual({ total: '3d6', current: 2 });
-    expect(updated.coins).toMatchObject({ gp: 30 });
   });
 
   it('não deve permitir alteração se não for o dono', async () => {

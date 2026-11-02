@@ -4,7 +4,6 @@ import { Plus } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { CoinPouch } from '@frontend/components/character/inventory/CoinPouch';
-import { SaveCharacterButton } from '@frontend/components/character/sheet/SaveControls';
 import { SheetFieldset } from '@frontend/components/character/sheet/SheetFieldset';
 import { SheetPage } from '@frontend/components/character/sheet/SheetPage';
 import { Button } from '@frontend/components/ui/button';
@@ -27,7 +26,7 @@ export default async function CharacterInventoryPage() {
   );
 
   return (
-    <SheetPage icon="Backpack" tab={t('tabs.inventory')} actions={<SaveCharacterButton />}>
+    <SheetPage icon="Backpack" tab={t('tabs.inventory')}>
       <div className="flex flex-col gap-6">
         <SheetFieldset>
           <CoinPouch />
