@@ -11,8 +11,8 @@ import { parseContentKey } from '@shared/content/content-key';
 
 import { useItemFormat } from './useItemFormat';
 
-/** The rules of an item: price, weight, armor and weapon numbers, and its description. */
-export function ItemDetails({ item }: { item: ItemDto }) {
+/** The rules of an item: price, weight, armor and weapon numbers, and its description. `nested` keeps tags in the description as plain text (inside a popover). */
+export function ItemDetails({ item, nested = false }: { item: ItemDto; nested?: boolean }) {
   const t = useTranslations('characters.inventory.stats');
   const tCharacters = useTranslations('characters');
   const tCategories = useTranslations('characters.inventory.categories');
@@ -75,7 +75,7 @@ export function ItemDetails({ item }: { item: ItemDto }) {
           lang={item.untranslated ? 'en' : undefined}
           className="text-foreground/90 leading-relaxed whitespace-pre-line"
         >
-          <RulesText text={item.description} source={source} />
+          <RulesText text={item.description} source={source} nested={nested} />
         </p>
       )}
     </div>

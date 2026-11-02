@@ -361,6 +361,8 @@
       "quantity": "Quantidade de {name}",
       "decrease": "Menos um {name}",
       "increase": "Mais um {name}",
+      "tagAriaLabel": "{name}, item",
+      "tagAriaLabelShown": "{text} ({name}), item",
       "unknownHint": "Este item não está mais no catálogo. Você pode removê-lo.",
       "stats": {
         "price": "Preço",

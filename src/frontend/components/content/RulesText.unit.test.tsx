@@ -1,4 +1,5 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -18,6 +19,53 @@ vi.mock('@frontend/hooks/useConditions', () => ({
   useConditions: () => ({
     list: CONDITIONS,
     byKey: new Map(CONDITIONS.map((c) => [c.key, c])),
+    isLoading: false,
+  }),
+}));
+
+const ITEMS = [
+  {
+    key: 'dnd5e:srd-5.2:item:rope-hempen',
+    id: 'rope-hempen',
+    edition: '2024',
+    category: 'gear',
+    name: 'Corda de cânhamo',
+    description: 'Cinquenta pés de corda.',
+    value: 100,
+    weight: 10,
+    strength: null,
+    stealthDisadvantage: false,
+    ac: null,
+    damage: null,
+    versatile: null,
+    properties: [],
+    range: null,
+    untranslated: false,
+  },
+  {
+    key: 'dnd5e:srd-5.2:item:tinderbox',
+    id: 'tinderbox',
+    edition: '2024',
+    category: 'gear',
+    name: 'Isqueiro',
+    description: 'Acende fogo.',
+    value: 50,
+    weight: 1,
+    strength: null,
+    stealthDisadvantage: false,
+    ac: null,
+    damage: null,
+    versatile: null,
+    properties: [],
+    range: null,
+    untranslated: false,
+  },
+];
+
+vi.mock('@frontend/hooks/useItems', () => ({
+  useItems: () => ({
+    list: ITEMS,
+    byKey: new Map(ITEMS.map((i) => [i.key, i])),
     isLoading: false,
   }),
 }));
@@ -58,5 +106,36 @@ describe('RulesText', () => {
       <RulesText text="{@condition prone" source="srd-5.2" />,
     );
     expect(container.textContent).toBe('{@condition prone');
+  });
+
+  it('item do livro vira botão com o texto de exibição e abre os detalhes', async () => {
+    const user = userEvent.setup();
+    const { container } = renderWithProviders(
+      <RulesText text="Use {@item Tinderbox|XPHB|isqueiro} agora." source="srd-5.2" />,
+    );
+    expect(container.textContent).toBe('Use isqueiro agora.');
+    await user.click(screen.getByRole('button', { name: 'Isqueiro, item' }));
+    expect(screen.getByText('Acende fogo.')).toBeInTheDocument();
+  });
+
+  it('item sem texto de exibição usa o nome da tag, resolvido por slug', () => {
+    renderWithProviders(<RulesText text="{@item Rope, Hempen|XPHB}" source="srd-5.2" />);
+    expect(screen.getByRole('button', { name: 'Corda de cânhamo, item' })).toBeInTheDocument();
+  });
+
+  it('item desconhecido ou de outro livro vira texto, sem botão', () => {
+    const { container } = renderWithProviders(
+      <RulesText text="{@item Vorpal Sword|DMG} e {@item Tinderbox|XPHB}" source="srd-5.1" />,
+    );
+    expect(container.textContent).toBe('Vorpal Sword e Tinderbox');
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('nested não gera botões de item', () => {
+    const { container } = renderWithProviders(
+      <RulesText text="{@item Tinderbox|XPHB|isqueiro}" source="srd-5.2" nested />,
+    );
+    expect(container.textContent).toBe('isqueiro');
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 });
