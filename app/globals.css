@@ -42,6 +42,12 @@
   /* Third-party brands, only on their own links */
   --kofi: #ff5e5b;
   --discord: #5865f2;
+  /* Coins: the light of each metal (public/coins/*.svg), for the coin's glow on hover */
+  --coin-cp: #f4b17b;
+  --coin-sp: #f6f7f5;
+  --coin-ep: #83d9ed;
+  --coin-gp: #fff0a1;
+  --coin-pp: #ffffff;
   /* Each spell card sets its own (damage type, category or school). */
   --spell-color: var(--muted-foreground);
 

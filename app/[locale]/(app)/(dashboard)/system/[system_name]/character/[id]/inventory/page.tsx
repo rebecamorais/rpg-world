@@ -3,6 +3,9 @@ import type { Metadata } from 'next';
 import { Plus } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { CoinPouch } from '@frontend/components/character/inventory/CoinPouch';
+import { SaveCharacterButton } from '@frontend/components/character/sheet/SaveControls';
+import { SheetFieldset } from '@frontend/components/character/sheet/SheetFieldset';
 import { SheetPage } from '@frontend/components/character/sheet/SheetPage';
 import { Button } from '@frontend/components/ui/button';
 import { EmptyState } from '@frontend/components/ui/empty-state';
@@ -16,7 +19,7 @@ export default async function CharacterInventoryPage() {
   const t = await getTranslations('characters');
 
   // Items are not implemented yet: the button stays visible but disabled
-  const actions = (
+  const addItem = (
     <Button variant="outline" size="sm" disabled className="text-label h-8 px-3">
       <Plus aria-hidden="true" />
       {t('addItem')}
@@ -24,8 +27,18 @@ export default async function CharacterInventoryPage() {
   );
 
   return (
-    <SheetPage icon="Backpack" tab={t('tabs.inventory')} actions={actions}>
-      <EmptyState icon="Backpack" title={t('emptyStates.inventory')} className="h-[50vh]" />
+    <SheetPage icon="Backpack" tab={t('tabs.inventory')} actions={<SaveCharacterButton />}>
+      <div className="flex flex-col gap-6">
+        <SheetFieldset>
+          <CoinPouch />
+        </SheetFieldset>
+        <EmptyState
+          icon="Backpack"
+          title={t('emptyStates.inventory')}
+          action={addItem}
+          className="h-[40vh]"
+        />
+      </div>
     </SheetPage>
   );
 }

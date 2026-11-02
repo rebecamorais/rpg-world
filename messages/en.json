@@ -238,7 +238,7 @@
     "emptyStates": {
       "lore": "Biography and physical characteristics will appear here soon.",
       "spells": "Your spells and cantrips will be listed here.",
-      "inventory": "Equipment, potions, and currency will be managed here."
+      "inventory": "Equipment and potions will be managed here."
     },
     "loreFields": {
       "appearance": "Appearance",
@@ -306,6 +306,42 @@
       "noMatchDescription": "Try another name or turn off a filter.",
       "showing": "{shown} of {total} spells",
       "castingTime": "Casting time"
+    },
+    "coins": {
+      "title": "Coin pouch",
+      "hint": "The character's money. Paying gives change on its own; receiving adds the coins as they came.",
+      "cp": {
+        "short": "CP",
+        "name": "Copper pieces"
+      },
+      "sp": {
+        "short": "SP",
+        "name": "Silver pieces"
+      },
+      "ep": {
+        "short": "EP",
+        "name": "Electrum pieces"
+      },
+      "gp": {
+        "short": "GP",
+        "name": "Gold pieces"
+      },
+      "pp": {
+        "short": "PP",
+        "name": "Platinum pieces"
+      },
+      "pay": "Pay",
+      "receive": "Receive",
+      "payDescription": "Pays with the price's coin; if that isn't enough, breaks a bigger coin and gives change.",
+      "receiveDescription": "Adds the amount to the pouch, in the coin it came in.",
+      "amount": "Amount",
+      "coin": "Coin",
+      "spent": "Paid",
+      "change": "Change",
+      "after": "Pouch after",
+      "none": "nothing",
+      "missing": "Not enough money: {amount} short.",
+      "confirm": "Confirm"
     }
   },
   "characterHeader": {

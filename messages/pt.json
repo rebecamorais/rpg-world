@@ -238,7 +238,7 @@
     "emptyStates": {
       "lore": "A biografia e características físicas aparecerão aqui em breve.",
       "spells": "Suas magias e truques serão listados aqui.",
-      "inventory": "Equipamentos, poções e moedas serão gerenciados aqui."
+      "inventory": "Equipamentos e poções serão gerenciados aqui."
     },
     "loreFields": {
       "appearance": "Aparência",
@@ -306,6 +306,42 @@
       "noMatchDescription": "Tente outro nome ou desligue um filtro.",
       "showing": "{shown} de {total} magias",
       "castingTime": "Tempo de conjuração"
+    },
+    "coins": {
+      "title": "Algibeira",
+      "hint": "O dinheiro do personagem. Pagar devolve o troco sozinho; receber soma na moeda que veio.",
+      "cp": {
+        "short": "PC",
+        "name": "Peças de cobre"
+      },
+      "sp": {
+        "short": "PP",
+        "name": "Peças de prata"
+      },
+      "ep": {
+        "short": "PE",
+        "name": "Peças de eletro"
+      },
+      "gp": {
+        "short": "PO",
+        "name": "Peças de ouro"
+      },
+      "pp": {
+        "short": "PL",
+        "name": "Peças de platina"
+      },
+      "pay": "Pagar",
+      "receive": "Receber",
+      "payDescription": "Paga com a moeda do preço; se não der, quebra uma moeda maior e devolve o troco.",
+      "receiveDescription": "Soma o valor na algibeira, na moeda que veio.",
+      "amount": "Valor",
+      "coin": "Moeda",
+      "spent": "Sai",
+      "change": "Volta de troco",
+      "after": "Algibeira depois",
+      "none": "nada",
+      "missing": "Dinheiro insuficiente: faltam {amount}.",
+      "confirm": "Confirmar"
     }
   },
   "characterHeader": {

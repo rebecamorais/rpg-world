@@ -1,0 +1,210 @@
+'use client';
+
+import { useState } from 'react';
+
+import { useTranslations } from 'next-intl';
+
+import { Button } from '@frontend/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@frontend/components/ui/dialog';
+import { Label } from '@frontend/components/ui/label';
+import { NumberInput } from '@frontend/components/ui/number-input';
+import { SectionCard } from '@frontend/components/ui/section-card';
+import { SelectField } from '@frontend/components/ui/select-field';
+import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { characterTheme } from '@frontend/lib/color-utils';
+
+import {
+  COINS,
+  type Coin,
+  type Coins,
+  EMPTY_PURSE,
+  fromCopper,
+  pay,
+  receive,
+} from '@shared/systems/dnd5e';
+
+import { CoinIcon } from './CoinIcon';
+
+const MAX_COINS = 1_000_000_000;
+
+type Mode = 'pay' | 'receive';
+
+/** "45 PO + 1 PL", skipping the coins at zero. */
+function useFormatCoins() {
+  const t = useTranslations('characters.coins');
+  return (coins: Coins, separator = ' + ') =>
+    COINS.filter((coin) => coins[coin] > 0)
+      .map((coin) => `${coins[coin]} ${t(`${coin}.short`)}`)
+      .join(separator) || t('none');
+}
+
+/** Pays (with change) or receives an amount; the result goes to the sheet's draft. */
+function CoinDialog({ mode, onDone }: { mode: Mode; onDone: () => void }) {
+  const t = useTranslations('characters.coins');
+  const character = useLoadedCharacter();
+  const { update } = useCharacterActions();
+  const format = useFormatCoins();
+  const [amount, setAmount] = useState(1);
+  const [coin, setCoin] = useState<Coin>('gp');
+  const [valid, setValid] = useState(true);
+
+  const purse = character.coins ?? EMPTY_PURSE;
+  const payment = mode === 'pay' ? pay(purse, amount, coin) : null;
+  const after = payment ? (payment.ok ? payment.after : null) : receive(purse, amount, coin);
+  const canConfirm = valid && after !== null;
+
+  const confirm = () => {
+    if (!after) return;
+    update({ coins: after });
+    onDone();
+  };
+
+  return (
+    <DialogContent
+      className="character-context sm:max-w-[420px]"
+      style={characterTheme(character.accentColor).style}
+    >
+      <DialogHeader>
+        <DialogTitle>{t(mode)}</DialogTitle>
+        <DialogDescription>{t(`${mode}Description`)}</DialogDescription>
+      </DialogHeader>
+
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (canConfirm) confirm();
+        }}
+      >
+        <div className="flex items-end gap-2">
+          <div className="flex-1 space-y-2">
+            <Label htmlFor="coin-amount">{t('amount')}</Label>
+            <NumberInput
+              id="coin-amount"
+              autoFocus
+              value={amount}
+              min={1}
+              max={MAX_COINS}
+              onValueChange={setAmount}
+              onValidityChange={setValid}
+            />
+          </div>
+          <SelectField
+            aria-label={t('coin')}
+            value={coin}
+            onValueChange={(value) => setCoin(value as Coin)}
+            options={COINS.map((c) => ({ value: c, label: t(`${c}.short`) }))}
+            className="w-24"
+          />
+        </div>
+
+        {payment && !payment.ok ? (
+          <p role="alert" className="text-danger-flare text-sm">
+            {t('missing', { amount: format(fromCopper(payment.missing)) })}
+          </p>
+        ) : (
+          <dl className="text-sm" aria-live="polite">
+            {payment?.ok && (
+              <>
+                <div className="border-border flex justify-between gap-4 border-b border-dashed py-1.5">
+                  <dt className="text-muted-foreground">{t('spent')}</dt>
+                  <dd>{format(payment.spent)}</dd>
+                </div>
+                <div className="border-border flex justify-between gap-4 border-b border-dashed py-1.5">
+                  <dt className="text-muted-foreground">{t('change')}</dt>
+                  <dd>{format(payment.change)}</dd>
+                </div>
+              </>
+            )}
+            {after && (
+              <div className="flex justify-between gap-4 py-1.5">
+                <dt className="text-muted-foreground">{t('after')}</dt>
+                <dd className="text-right">{format(after, ' · ')}</dd>
+              </div>
+            )}
+          </dl>
+        )}
+
+        <DialogFooter>
+          <Button type="submit" variant="character" disabled={!canConfirm}>
+            {t('confirm')}
+          </Button>
+        </DialogFooter>
+      </form>
+    </DialogContent>
+  );
+}
+
+/**
+ * The coin pouch every character carries: the five coins, editable by hand, and Pay / Receive.
+ * Like every edit on the sheet, changes go to the draft and the save bar saves them.
+ */
+export function CoinPouch() {
+  const t = useTranslations('characters.coins');
+  const character = useLoadedCharacter();
+  const { update } = useCharacterActions();
+  const [mode, setMode] = useState<Mode | null>(null);
+
+  const purse = character.coins ?? EMPTY_PURSE;
+
+  return (
+    <SectionCard>
+      <SectionCard.Header>
+        <SectionCard.Title icon="coins" iconVariant="game" hint={t('hint')}>
+          {t('title')}
+        </SectionCard.Title>
+      </SectionCard.Header>
+      <SectionCard.Body className="flex flex-col gap-4">
+        <ul className="grid grid-cols-5 gap-2">
+          {COINS.map((coin) => (
+            <li
+              key={coin}
+              className="group border-border bg-background/60 flex flex-col items-center gap-1 rounded-lg border px-1 py-2"
+            >
+              <CoinIcon coin={coin} />
+              <NumberInput
+                ghost
+                showIcon={false}
+                aria-label={t(`${coin}.name`)}
+                value={purse[coin]}
+                min={0}
+                max={MAX_COINS}
+                onValueChange={(value) =>
+                  update((c) => ({ coins: { ...(c.coins ?? EMPTY_PURSE), [coin]: value } }))
+                }
+                containerClassName="w-full"
+                className="h-auto w-full p-0 text-center font-mono text-lg font-bold tabular-nums md:text-lg"
+              />
+              <abbr
+                title={t(`${coin}.name`)}
+                className="text-label text-muted-foreground no-underline"
+              >
+                {t(`${coin}.short`)}
+              </abbr>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => setMode('pay')}>
+            {t('pay')}
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setMode('receive')}>
+            {t('receive')}
+          </Button>
+        </div>
+      </SectionCard.Body>
+
+      <Dialog open={mode !== null} onOpenChange={(open) => !open && setMode(null)}>
+        {mode && <CoinDialog key={mode} mode={mode} onDone={() => setMode(null)} />}
+      </Dialog>
+    </SectionCard>
+  );
+}
