@@ -1,62 +1,62 @@
 {
   "blinded": {
-    "name": "",
-    "description": ""
+    "name": "Cegado",
+    "description": "• Una criatura cegada no puede ver y falla automáticamente todas las pruebas de característica que requieran la vista.\n• Las tiradas de ataque contra la criatura tienen ventaja y las tiradas de ataque realizadas por la criatura tienen desventaja."
   },
   "charmed": {
-    "name": "",
-    "description": ""
+    "name": "Hechizado",
+    "description": "• Una criatura hechizada no puede atacar ni elegir como objetivo de efectos dañinos o mágicos a quien la hechizó.\n• Quien hechizó a la criatura tiene ventaja en las pruebas de característica para interaccionar socialmente con ella."
   },
   "deafened": {
-    "name": "",
-    "description": ""
+    "name": "Ensordecido",
+    "description": "• Una criatura ensordecida no puede oír y falla automáticamente cualquier prueba de característica que requiera el oído."
   },
   "exhaustion": {
-    "name": "",
-    "description": ""
+    "name": "Cansancio",
+    "description": "Algunas capacidades especiales y ciertos peligros ambientales, como la inanición o una larga exposición a los efectos de unas temperaturas particularmente frías o calientes, pueden producir un estado especial llamado “cansancio”. El cansancio se mide con seis niveles. Un efecto puede sumar uno o más niveles de cansancio a una criatura, según se especifique en la descripción de dicho efecto.\nNivel | Efecto\n1 | Desventaja en pruebas de característica\n2 | Velocidad reducida a la mitad\n3 | Desventaja en tiradas de ataque y de salvación\n4 | Puntos de golpe máximos reducidos a la mitad\n5 | Velocidad reducida a 0\n6 | Muerte\nSi una criatura que ya está cansada sufre un efecto que provoca cansancio, su nivel de cansancio actual aumentará en la cantidad especificada en la descripción de dicho efecto.\nUna criatura sufre el efecto de su nivel de cansancio actual, pero también el de los niveles inferiores. Por ejemplo, si sufre un nivel de cansancio 2, tendrá su velocidad reducida a la mitad y desventaja en las pruebas de característica.\nLos efectos que eliminan cansancio reducen el nivel de este en la cantidad que especifique su descripción y todos sus efectos desaparecen si el nivel de cansancio de una criatura desciende a menos de 1.\nSi se finaliza un descanso largo, el nivel de cansancio de una criatura se reduce en 1, siempre que haya podido comer y beber algo."
   },
   "frightened": {
-    "name": "",
-    "description": ""
+    "name": "Asustado",
+    "description": "• Una criatura asustada tiene desventaja en las pruebas de característica y tiradas de ataque mientras pueda ver a la fuente de su miedo.\n• La criatura no puede acercarse voluntariamente a la fuente de su miedo."
   },
   "grappled": {
-    "name": "",
-    "description": ""
+    "name": "Agarrado",
+    "description": "• La velocidad de una criatura agarrada pasa a ser 0 y no puede beneficiarse de ningún bonificador a su velocidad.\n• El estado termina si quien agarra queda {@condition incapacitated||incapacitado} (consulta dicho estado).\n• El estado termina también si algún efecto aleja a la criatura agarrada de quien la agarra o del efecto que causa el agarre, como cuando el conjuro {@spell thunderwave||ola atronadora} hace que una criatura salga despedida."
   },
   "incapacitated": {
-    "name": "",
-    "description": ""
+    "name": "Incapacitado",
+    "description": "• Una criatura incapacitada no puede llevar a cabo acciones ni reacciones."
   },
   "invisible": {
-    "name": "",
-    "description": ""
+    "name": "Invisible",
+    "description": "• Es imposible ver a una criatura invisible sin la ayuda de magia o sentidos especiales. Respecto a esconderse, la criatura está en una zona muy oscura, pero se puede detectar su ubicación si hace ruido o deja huellas.\n• Las tiradas de ataque contra la criatura tienen desventaja y las tiradas de ataque realizadas por la criatura tienen ventaja."
   },
   "paralyzed": {
-    "name": "",
-    "description": ""
+    "name": "Paralizado",
+    "description": "• Una criatura paralizada está {@condition incapacitated||incapacitada} (consulta dicho estado) y no puede moverse ni hablar.\n• La criatura falla automáticamente las tiradas de salvación de Fuerza y Destreza.\n• Las tiradas de ataque contra ella tienen ventaja.\n• Los ataques que impacten a la criatura serán críticos si el atacante está a 1,5 m o menos."
   },
   "petrified": {
-    "name": "",
-    "description": ""
+    "name": "Petrificado",
+    "description": "• Una criatura petrificada se transforma, junto con cualquier objeto no mágico que vista o lleve con ella, en una sustancia inanimada sólida (en general, piedra). Su peso se multiplica por diez y deja de envejecer.\n• Está {@condition incapacitated||incapacitada} (consulta dicho estado), no puede moverse ni hablar y no es consciente de su entorno.\n• Las tiradas de ataque contra ella tienen ventaja.\n• La criatura falla automáticamente las tiradas de salvación de Fuerza y Destreza.\n• Tiene resistencia contra todo el daño.\n• La criatura es inmune a venenos y enfermedades, pero si un veneno o enfermedad ya está en su sistema, queda en suspenso, no neutralizado."
   },
   "poisoned": {
-    "name": "",
-    "description": ""
+    "name": "Envenenado",
+    "description": "• Una criatura envenenada tiene desventaja en las tiradas de ataque y las pruebas de característica."
   },
   "prone": {
-    "name": "",
-    "description": ""
+    "name": "Derribado",
+    "description": "• Una criatura derribada solo podrá moverse arrastrándose, salvo que se levante para concluir este estado.\n• La criatura tiene desventaja en las tiradas de ataque.\n• Las tiradas de ataque contra la criatura tienen ventaja si el atacante está a 1,5 m o menos de ella. Si no es así, las tiradas de ataque tienen desventaja."
   },
   "restrained": {
-    "name": "",
-    "description": ""
+    "name": "Apresado",
+    "description": "• La velocidad de una criatura apresada pasa a ser 0 y no puede beneficiarse de ningún bonificador a su velocidad.\n• Las tiradas de ataque contra la criatura tienen ventaja y las tiradas de ataque realizadas por la criatura tienen desventaja.\n• La criatura tiene desventaja en las tiradas de salvación de Destreza."
   },
   "stunned": {
-    "name": "",
-    "description": ""
+    "name": "Aturdido",
+    "description": "• Una criatura aturdida está {@condition incapacitated||incapacitada} (consulta dicho estado), no puede moverse y solo puede hablar con voz entrecortada.\n• La criatura falla automáticamente las tiradas de salvación de Fuerza y Destreza.\n• Las tiradas de ataque contra ella tienen ventaja."
   },
   "unconscious": {
-    "name": "",
-    "description": ""
+    "name": "Inconsciente",
+    "description": "• Una criatura inconsciente está {@condition incapacitated||incapacitada} (consulta el estado), no puede moverse ni hablar y no es consciente de su entorno.\n• La criatura suelta cualquier cosa que esté sujetando y cae {@condition prone||derribada}.\n• La criatura falla automáticamente las tiradas de salvación de Fuerza y Destreza.\n• Las tiradas de ataque contra ella tienen ventaja.\n• Los ataques que impacten a la criatura serán críticos si el atacante está a 1,5 m o menos."
   }
 }
