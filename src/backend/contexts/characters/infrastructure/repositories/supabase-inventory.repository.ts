@@ -121,6 +121,8 @@ export class SupabaseInventoryRepository implements InventoryRepo {
       .select('id')
       .eq('id', containerId)
       .eq('character_id', characterId)
+      // The coin pouch holds coins, not items
+      .neq('kind', 'coin_pouch')
       .maybeSingle();
     if (error) throw new Error(`Failed to fetch container: ${error.message}`);
     return data !== null;
