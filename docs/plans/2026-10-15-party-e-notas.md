@@ -73,6 +73,43 @@ Do mais simples para o mais completo:
 
 Sugestão: começar pelo 1 e já desenhar o 2 com o 3 em mente (coluna `visibility` desde o início).
 
+### Diário da mesa no Google Docs (brainstorm de 2026-11-03)
+
+Decidido para o passo 1, que deixa de ser só um botão:
+
+- **O que é:** um caderno da mesa para anotar o que o Mestre conta (NPCs, lugares, fatos do mundo).
+  Não é ficha nem lore de personagem. Mestre e jogadores ativos leem e editam o mesmo documento.
+- **Por que Google Docs:** pela simplicidade. O Docs já tem edição simultânea, histórico e
+  formatação. O caderno próprio (passos 2 e 3) fica para o futuro.
+- **Como funciona:** o Mestre cola o link do Docs nas configurações da mesa
+  (`/parties/[id]/settings`) e é o único que troca ou remove. A página da mesa ganha uma área
+  "Diário" (nas visões do Mestre e do jogador) que abre o Docs num `iframe`. O app guarda só o
+  link: não cria o documento, não mexe no compartilhamento e não guarda texto. Aceita a URL
+  inteira e extrai o ID.
+- **Celular:** o diário não aparece embutido. Aparece um aviso de que ele só está disponível no
+  computador, junto do botão "Abrir no Google Docs".
+- **Botão "Abrir no Google Docs" sempre presente**, também no computador, como saída quando o
+  iframe não carrega.
+- **Explicação de compartilhamento** curta ao lado do campo do link, com dois modos:
+  - **Link aberto** ("Qualquer pessoa com o link → Editor"): é o mais fácil, e funciona sem login
+    (a pessoa aparece como anônima).
+  - **Só convidados** (e-mails específicos): é mais seguro, mas cada pessoa precisa estar logada
+    no Google, no mesmo navegador. Sem login, a tela de login do Google não abre dentro de iframe
+    ("recusou a conexão"). Navegadores que bloqueiam cookies de terceiros (Safari, Brave, Firefox
+    estrito) podem falhar mesmo com a pessoa logada. Nesses casos, use o botão.
+  - Sem link configurado, o jogador vê "o Mestre ainda não configurou o diário".
+- **Link sempre escondido:** o banco (RLS ou função da mesa) só entrega o link ao Mestre e aos
+  jogadores **ativos**. Ele não aparece para convidados, para quem pediu para entrar, na página de
+  convite nem em "minhas mesas". Precisa de teste de integração de RLS cobrindo cada um desses
+  casos.
+- **Brecha conhecida:** no modo "link aberto", quem saiu da mesa ou foi removido pode ter guardado
+  o link. O app para de mostrar, mas não consegue revogar. Ainda falta decidir se basta avisar o
+  Mestre ("crie outro documento ou restrinja o compartilhamento") ou se isso muda a abordagem.
+- **Antes de desenhar a fundo:** fazer um spike descartável com o iframe em três situações
+  (logado, deslogado e no Safari) para confirmar o comportamento do Google. Até agora isso é
+  suposição, não foi testado.
+- **Política de Privacidade:** o link do diário passa a ser um dado da mesa. Incluir na seção 1.
+
 ## Interface
 
 - Nova seção "Parties" no menu: lista das parties, criar, entrar por link.
