@@ -1128,9 +1128,8 @@
     },
     "nav": {
       "parties": "Parties",
-      "gm": "GM",
-      "player": "Player",
       "overview": "Party",
+      "journal": "Journal",
       "settings": "Settings"
     },
     "join": {

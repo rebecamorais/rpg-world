@@ -39,7 +39,7 @@ describe('Sidebar', () => {
     navigation.pathname = '/characters';
   });
 
-  it('a mesa aberta do mestre ganha o submenu Mesa / Configurações', () => {
+  it('a mesa aberta do mestre ganha o submenu Mesa / Diário / Configurações', () => {
     navigation.pathname = '/parties/gm1/settings';
     renderWithProviders(<Sidebar />);
 
@@ -47,9 +47,31 @@ describe('Sidebar', () => {
       'href',
       '/parties/gm1',
     );
+    expect(sidebar().getByRole('link', { name: t.journal })).toHaveAttribute(
+      'href',
+      '/parties/gm1/journal',
+    );
     const settings = sidebar().getByRole('link', { name: t.settings });
     expect(settings).toHaveAttribute('href', '/parties/gm1/settings');
     expect(settings).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('na mesa como jogador: Mesa e Diário, sem Configurações', () => {
+    navigation.pathname = '/parties/pl1/journal';
+    renderWithProviders(<Sidebar />);
+
+    expect(sidebar().getByRole('link', { name: t.journal })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    expect(sidebar().getByRole('link', { name: t.overview })).not.toHaveAttribute('aria-current');
+    expect(sidebar().queryByRole('link', { name: t.settings })).not.toBeInTheDocument();
+  });
+
+  it('todas as mesas ficam sob Mesas, sem separar Mestre e Jogador', () => {
+    renderWithProviders(<Sidebar />);
+    expect(sidebar().getByRole('link', { name: 'Mesa gm1' })).toBeInTheDocument();
+    expect(sidebar().getByRole('link', { name: 'Mesa pl1' })).toBeInTheDocument();
   });
 
   it('no desktop o "Sair" fica só no topo da página', () => {
@@ -59,12 +81,9 @@ describe('Sidebar', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('fora da mesa, ou numa mesa como jogador, não há submenu', () => {
+  it('fora da mesa não há submenu', () => {
     renderWithProviders(<Sidebar />);
+    expect(sidebar().queryByRole('link', { name: t.journal })).not.toBeInTheDocument();
     expect(sidebar().queryByRole('link', { name: t.settings })).not.toBeInTheDocument();
-
-    navigation.pathname = '/parties/pl1';
-    renderWithProviders(<Sidebar />);
-    expect(screen.queryByRole('link', { name: t.settings })).not.toBeInTheDocument();
   });
 });

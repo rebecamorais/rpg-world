@@ -218,7 +218,7 @@ test.describe('mesas', () => {
       route.fulfill({ status: 200, body: '' }),
     );
 
-    await player.page.goto(partyUrl(partyId));
+    await player.page.goto(`${partyUrl(partyId)}/journal`);
     await expect(player.page.getByText("The GM hasn't set up the journal yet")).toBeVisible();
 
     await page.goto(`${partyUrl(partyId)}/settings`);

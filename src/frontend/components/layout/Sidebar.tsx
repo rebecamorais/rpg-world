@@ -24,34 +24,40 @@ import { useProfile } from '@frontend/hooks/useProfile';
 
 import type { PartySummary } from '@backend/contexts/parties/domain/Party';
 
-function PartyLinks({ title, parties }: { title: string; parties: PartySummary[] }) {
+/** Each party under "Parties"; the open one shows its pages (the settings only for its GM). */
+function PartyLinks({ parties }: { parties: PartySummary[] }) {
   const pathname = usePathname();
   const t = useTranslations('parties.nav');
 
   return (
-    <div className="mt-2 flex flex-col">
-      <p className="text-label text-muted-foreground px-3 py-1">{title}</p>
+    <div className="flex flex-col">
       {parties.map((party) => {
         const href = `/parties/${party.id}`;
         const isOpen = pathname === href || pathname?.startsWith(`${href}/`);
+        const pages = [
+          { href: `${href}/journal`, label: t('journal') },
+          ...(party.role === 'gm' ? [{ href: `${href}/settings`, label: t('settings') }] : []),
+        ];
         return (
           <div key={party.id} className="flex flex-col">
             <NavItem href={href} label={party.name} isActive={isOpen} isSubItem />
-            {/* The GM's open party: the party itself and its settings, like a sheet's tabs */}
-            {isOpen && party.role === 'gm' && (
+            {isOpen && (
               <div className="ml-4 flex flex-col">
                 <NavItem
                   href={href}
                   label={t('overview')}
-                  isActive={!pathname.startsWith(`${href}/settings`)}
+                  isActive={!pages.some((page) => pathname.startsWith(page.href))}
                   isSubItem
                 />
-                <NavItem
-                  href={`${href}/settings`}
-                  label={t('settings')}
-                  isActive={pathname.startsWith(`${href}/settings`)}
-                  isSubItem
-                />
+                {pages.map((page) => (
+                  <NavItem
+                    key={page.href}
+                    href={page.href}
+                    label={page.label}
+                    isActive={pathname.startsWith(page.href)}
+                    isSubItem
+                  />
+                ))}
               </div>
             )}
           </div>
@@ -115,12 +121,7 @@ function SidebarContent({ withLogout = false }: { withLogout?: boolean }) {
               icon="Dices"
               isActive={pathname === '/parties'}
             />
-            {parties?.asGm.length ? (
-              <PartyLinks title={tParties('nav.gm')} parties={parties.asGm} />
-            ) : null}
-            {parties?.asPlayer.length ? (
-              <PartyLinks title={tParties('nav.player')} parties={parties.asPlayer} />
-            ) : null}
+            {parties && <PartyLinks parties={[...parties.asGm, ...parties.asPlayer]} />}
             <Button asChild size="sm" className="mt-3 w-full">
               <Link href="/characters/new">
                 <AppIcon name="Plus" size={16} aria-hidden="true" />

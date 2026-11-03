@@ -1128,9 +1128,8 @@
     },
     "nav": {
       "parties": "Mesas",
-      "gm": "Mestre",
-      "player": "Jogador",
       "overview": "Mesa",
+      "journal": "Diário",
       "settings": "Configurações"
     },
     "join": {
