@@ -314,7 +314,7 @@
     "name": "Gengibre"
   },
   "glaive": {
-    "name": ""
+    "name": "Glaive"
   },
   "glass-bottle": {
     "name": "Garrafa de Vidro",
@@ -572,7 +572,7 @@
     "description": ""
   },
   "piton": {
-    "name": ""
+    "name": "Piton"
   },
   "plate-armor": {
     "name": "Armadura de Placas",
@@ -779,7 +779,7 @@
     "description": ""
   },
   "totem": {
-    "name": ""
+    "name": "Totem"
   },
   "traveler-s-clothes": {
     "name": "Roupas de Viajante"
