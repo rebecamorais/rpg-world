@@ -105,6 +105,7 @@ Decidido para o passo 1, que deixa de ser só um botão:
 - **Brecha conhecida:** no modo "link aberto", quem saiu da mesa ou foi removido pode ter guardado
   o link. O app para de mostrar, mas não consegue revogar. Ainda falta decidir se basta avisar o
   Mestre ("crie outro documento ou restrinja o compartilhamento") ou se isso muda a abordagem.
+- **Spike (2026-11-03):** no Chromium sem login, os dois documentos de teste (ambos com link aberto) carregaram no iframe com a barra de edição; o Google não bloqueia o embed. O modo restrito e o Safari ainda não foram testados.
 - **Antes de desenhar a fundo:** fazer um spike descartável com o iframe em três situações
   (logado, deslogado e no Safari) para confirmar o comportamento do Google. Até agora isso é
   suposição, não foi testado.

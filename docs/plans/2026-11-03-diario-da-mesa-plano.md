@@ -43,11 +43,13 @@
 ### Task 1: Tabela `party_journals` com RLS
 
 **Files:**
+
 - Create: `database/migrations/20261103120000_party_journals.sql`
 - Modify: `lib/types/database.ts` (gerado)
 - Create: `src/backend/contexts/parties/infrastructure/party-journals-rls.integration.test.ts`
 
 **Interfaces:**
+
 - Produces: tabela `public.party_journals (party_id uuid PK → parties ON DELETE CASCADE, doc_id text NOT NULL CHECK (doc_id ~ '^[A-Za-z0-9_-]{20,100}$'), updated_at timestamptz NOT NULL DEFAULT now())`, com trigger `handle_updated_at`.
 - RLS: `SELECT` com `private.is_party_gm(party_id) OR private.is_party_member(party_id)`. `INSERT`, `UPDATE` e `DELETE` com `private.is_party_gm(party_id)`.
 - Grants: `REVOKE ALL ... FROM anon, authenticated, service_role`. Para `authenticated`: `SELECT, INSERT, DELETE` e `UPDATE (doc_id)`. Para `service_role`: tudo.
@@ -62,13 +64,14 @@
 - [ ] **Step 2:** rodar `npm run test:integration -- party-journals-rls`. Esperado: FAIL (a tabela não existe).
 - [ ] **Step 3:** escrever a migração.
 - [ ] **Step 4:** aplicar nos dois bancos e gerar os tipos:
-  `npx supabase migration up --local --workdir database/db-dev && npx supabase migration up --local --workdir database/db-test`, depois o comando "Update Types" de `scripts/infra.ts` e `npx prettier --write lib/types/database.ts`. Se `npx tsx scripts/setup-symlinks.ts` for necessário para o db-test enxergar a migração, rodar antes.
+      `npx supabase migration up --local --workdir database/db-dev && npx supabase migration up --local --workdir database/db-test`, depois o comando "Update Types" de `scripts/infra.ts` e `npx prettier --write lib/types/database.ts`. Se `npx tsx scripts/setup-symlinks.ts` for necessário para o db-test enxergar a migração, rodar antes.
 - [ ] **Step 5:** rodar `npm run test:integration -- party-journals-rls`. Esperado: PASS.
 - [ ] **Step 6:** commit `feat(db): tabela party_journals com RLS para o diário da mesa`.
 
 ### Task 2: Domínio (ID do Docs), repositório e caso de uso
 
 **Files:**
+
 - Create: `shared/google-docs.ts`, `shared/google-docs.unit.test.ts`
 - Create: `src/backend/contexts/parties/application/set-journal.use-case.ts`
 - Modify: `src/backend/contexts/parties/domain/PartyError.ts` (código `JOURNAL_URL_INVALID: 'party_error_journal_url_invalid'`)
@@ -76,6 +79,7 @@
 - Test: `application/parties.use-cases.unit.test.ts`, `infrastructure/supabase-party.repository.integration.test.ts`
 
 **Interfaces:**
+
 - Produces (`shared/google-docs.ts`):
   - `parseGoogleDocId(input: string): string | null`: aceita `docs.google.com/document/(u/N/)?d/{id}` com ou sem `https://`, qualquer sufixo (`/edit`, `/view`, `?usp=...`, `#...`), espaços nas pontas e o ID puro (`^[A-Za-z0-9_-]{20,100}$`). Qualquer outra coisa devolve `null`.
   - `googleDocUrl(docId: string): string` → `https://docs.google.com/document/d/${docId}/edit`.
@@ -102,12 +106,14 @@
 ### Task 3: API (`PATCH journalUrl`) e CSP
 
 **Files:**
+
 - Modify: `src/backend/contexts/parties/interfaces/parties.schemas.ts`, `interfaces/parties.api.ts`, `app/api/parties/[partyId]/route.ts`
 - Modify: `shared/http/security-headers.ts` (`GOOGLE_DOCS_ORIGIN = 'https://docs.google.com'` em `frame-src`)
 - Modify: `messages/en.json` e `messages/pt.json` (`errors.party_error_journal_url_invalid`)
 - Test: `app/api/parties/[partyId]/route.unit.test.ts`, `shared/http/security-headers.unit.test.ts`
 
 **Interfaces:**
+
 - Consumes: `PartyContext.setJournal` (Tarefa 2).
 - Produces: `partyPatchSchema` com `journalUrl: z.string().max(500).nullable()` como opcional (o `refine` passa a aceitar qualquer um dos três). `partiesApi.setJournal(partyId, userId, url)`. A rota chama `partiesApi.setJournal(params.partyId, user.id, body.journalUrl)` quando `journalUrl !== undefined`.
 
@@ -122,6 +128,7 @@
 ### Task 4: Configurações (o Mestre cola, troca e remove o link)
 
 **Files:**
+
 - Create: `src/frontend/components/party/JournalSettings.tsx`, `JournalSettings.unit.test.tsx`
 - Modify: `src/frontend/hooks/useParty.ts` (mutation `setJournal`)
 - Modify: `src/frontend/components/party/PartySettings.tsx` (renderiza `<JournalSettings party={party} />` depois de `PartyManagement`)
@@ -129,19 +136,22 @@
 - Modify: `messages/en.json`, `messages/pt.json` (`parties.journal.*`, `parties.manage.removeConfirmJournal`)
 
 **Interfaces:**
+
 - Consumes: `PartyView.journalDocId`, `googleDocUrl`, `parseGoogleDocId`.
 - Produces: `useParty(...).setJournal: UseMutation<(url: string | null)>` → `rpgWorldApi.patch(base, { journalUrl: url })`.
 
 Comportamento: `SectionCard` com ícone `BookOpen` e título "Diário da mesa".
+
 - Campo com label "Link do Google Docs", pré-preenchido com `googleDocUrl(journalDocId)` quando já existe link.
 - Botão "Salvar", desabilitado enquanto `parseGoogleDocId(valor)` for `null` ou o ID não mudar.
 - Botão "Remover", só quando existe link, com `window.confirm`.
 - Abaixo, a explicação em três linhas fixas. Texto pt:
   1. "No Google Docs, clique em **Compartilhar**."
-  2. "**Link aberto (mais fácil):** em Acesso geral, escolha *Qualquer pessoa com o link* → *Editor*. Funciona sem login."
-  3. "**Só convidados (mais seguro):** adicione o e-mail de cada jogador. Cada um precisa estar logado no Google neste navegador; se o diário não abrir aqui, use *Abrir no Google Docs*."
+  2. "**Link aberto (mais fácil):** em Acesso geral, escolha _Qualquer pessoa com o link_ → _Editor_. Funciona sem login."
+  3. "**Só convidados (mais seguro):** adicione o e-mail de cada jogador. Cada um precisa estar logado no Google neste navegador; se o diário não abrir aqui, use _Abrir no Google Docs_."
 
   Em en, o equivalente.
+
 - Ao remover um jogador com `party.journalDocId` preenchido, o confirm usa `removeConfirmJournal`. Texto pt: "Tirar {name} da mesa? Os personagens continuam com essa pessoa. Ela pode ter guardado o link do diário: para cortar o acesso, restrinja o compartilhamento no Google Docs."
 
 - [ ] **Step 1: testes que falham** (`JournalSettings.unit.test.tsx`, no padrão de `PartySettings.unit.test.tsx`):
@@ -158,16 +168,19 @@ Comportamento: `SectionCard` com ícone `BookOpen` e título "Diário da mesa".
 ### Task 5: O diário na página da mesa
 
 **Files:**
+
 - Create: `src/frontend/hooks/useMediaQuery.ts` (`useMediaQuery(query: string): boolean | null`, com `useSyncExternalStore` no estilo de `useOrigin` em `PartyManagement`; o snapshot do servidor é `null`)
 - Create: `src/frontend/components/party/PartyJournal.tsx`, `PartyJournal.unit.test.tsx`
 - Modify: `src/frontend/components/party/PartyPage.tsx` (`GmMode` ganha `'journal'`; `useGmMode` aceita `?mode=journal`; terceira `TabsTrigger`; `PlayerView` ganha uma `<section aria-labelledby="party-journal">` depois de `PlayerCombatPanel`)
 - Modify: `messages/en.json`, `messages/pt.json` (`combat.modeJournal` ou `parties.journal.tab`, `parties.journal.*`)
 
 **Interfaces:**
+
 - Consumes: `PartyView.journalDocId`, `PartyView.role`, `googleDocUrl`.
 - Produces: `PartyJournal({ docId, role, partyId }: { docId: string | null; role: PartyRole; partyId: string })`.
 
 Comportamento:
+
 - Sem `docId`: para o Mestre, `EmptyState` com o link "Configurar o diário" → `/parties/${partyId}/settings`. Para o jogador, "O Mestre ainda não configurou o diário".
 - Com `docId`: botão "Abrir no Google Docs" sempre visível (`<a target="_blank" rel="noopener noreferrer">`). Depois:
   - Se `useMediaQuery('(min-width: 1024px)')` for `true`: `<iframe src={googleDocUrl(docId)} title="Diário da mesa" allow="clipboard-read; clipboard-write" className="h-[75vh] w-full rounded-md border">`.
@@ -189,9 +202,11 @@ Comportamento:
 ### Task 6: Política de Privacidade
 
 **Files:**
+
 - Modify: `messages/en.json`, `messages/pt.json` (`privacy.lastUpdated`, `privacy.sections.data.items`, `privacy.sections.sharing.content`)
 
 Hoje a política não cita as mesas e diz que os personagens e o perfil são "visíveis só para você", o que já não é verdade desde #124–#126. Como o diário é um dado da mesa, a correção vai junto (decisão minha; ver o handoff).
+
 - `data.items`: novo item depois de "Characters". Texto pt: "Mesas: nome, edição de regras, quem é Mestre e jogador, convites, personagens levados e o link do diário (um documento do Google Docs que o Mestre escolhe; o conteúdo fica no Google, não no RPG World)."
 - `sharing.content`: trocar a última frase por "Seu perfil (nome de usuário e avatar) e um resumo dos personagens que você leva para uma mesa são vistos pelas pessoas dessa mesa; o Mestre também vê a ficha desses personagens. O link do diário é visto só pelo Mestre e pelos jogadores ativos. O resto continua visível só para você; as imagens de avatar ficam num endereço público que não é listado em lugar nenhum." Conferir os campos exatos em `RosterCharacter` e `RolePlayCard` antes de fechar o texto.
 - `lastUpdated`: "Última atualização: 3 de novembro de 2026" / "Last updated: November 3, 2026".
