@@ -22,5 +22,6 @@ export interface PartyContext extends PartyGmAccess {
   acceptMember(partyId: string, memberId: string): Promise<void>;
   removeMember(partyId: string, memberId: string): Promise<void>;
   get(partyId: string, userId: string): Promise<PartyView>;
+  setJournal(partyId: string, userId: string, url: string | null): Promise<void>;
   setMyCharacters(partyId: string, userId: string, characterIds: string[]): Promise<void>;
 }

@@ -9,6 +9,7 @@ export const PartyErrorCodes = {
   GM_CANNOT_JOIN: 'party_error_gm_cannot_join',
   ALREADY_MEMBER: 'party_error_already_member',
   CHARACTER_NOT_ALLOWED: 'party_error_character_not_allowed',
+  JOURNAL_URL_INVALID: 'party_error_journal_url_invalid',
 } as const;
 
 export type PartyErrorCode = (typeof PartyErrorCodes)[keyof typeof PartyErrorCodes];

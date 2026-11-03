@@ -52,6 +52,7 @@
       "party_error_gm_cannot_join": "You are the GM of this party.",
       "party_error_already_member": "This person is already in the party.",
       "party_error_character_not_allowed": "This character can’t be brought to the party.",
+      "party_error_journal_url_invalid": "Paste a Google Docs document link.",
       "feedback_error_invalid_email": "Please enter a valid e-mail.",
       "feedback_error_message_too_short": "The message must be at least 10 characters long.",
       "security_token_missing": "Please complete the security verification.",

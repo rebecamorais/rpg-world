@@ -31,6 +31,7 @@ const party = (role: PartyView['role']) =>
     people: [],
     roster: [],
     myCharacterIds: [],
+    journalDocId: null,
     edition: '2024',
     gm: role === 'gm' ? { inviteCode: 'a'.repeat(32), rolePlay: [] } : null,
   }) as unknown as PartyView;

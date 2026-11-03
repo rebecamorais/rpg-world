@@ -15,6 +15,7 @@ import { ListMyPartiesUseCase } from './list-my-parties.use-case';
 import { RemoveMemberUseCase } from './remove-member.use-case';
 import { RenamePartyUseCase } from './rename-party.use-case';
 import { RotateInviteCodeUseCase } from './rotate-invite-code.use-case';
+import { SetJournalUseCase } from './set-journal.use-case';
 import { SetMyCharactersUseCase } from './set-my-characters.use-case';
 import { SetPartyEditionUseCase } from './set-party-edition.use-case';
 
@@ -44,6 +45,8 @@ const makePartyRepo = () =>
     rolePlaySheets: vi.fn<PartyRepo['rolePlaySheets']>().mockResolvedValue([]),
     addCharacters: vi.fn<PartyRepo['addCharacters']>().mockResolvedValue(undefined),
     removeCharacters: vi.fn<PartyRepo['removeCharacters']>().mockResolvedValue(undefined),
+    journalDocId: vi.fn<PartyRepo['journalDocId']>().mockResolvedValue(null),
+    setJournal: vi.fn<PartyRepo['setJournal']>().mockResolvedValue(undefined),
   }) satisfies PartyRepo;
 
 const summary = (overrides: Partial<PartySummary>): PartySummary => ({
@@ -74,6 +77,8 @@ const rosterCharacter = (characterId: string, ownerId: string): RosterCharacter 
   level: 1,
   accentColor: null,
 });
+
+const DOC_ID = '1AbCdEfGhIjKlMnOpQrStUvWxYz_0123456789-ab';
 
 const codeOf = (promise: Promise<unknown>) => promise.catch((e) => e.code);
 
@@ -215,7 +220,56 @@ describe('casos de uso das mesas', () => {
     });
   });
 
+  describe('SetJournalUseCase', () => {
+    it('guarda o ID extraído de uma URL válida', async () => {
+      await new SetJournalUseCase(repo).execute(
+        'p',
+        'gm-1',
+        `https://docs.google.com/document/d/${DOC_ID}/edit`,
+      );
+
+      expect(repo.setJournal).toHaveBeenCalledWith('p', DOC_ID);
+    });
+
+    it('null remove o diário', async () => {
+      await new SetJournalUseCase(repo).execute('p', 'gm-1', null);
+
+      expect(repo.setJournal).toHaveBeenCalledWith('p', null);
+    });
+
+    it('recusa uma URL inválida sem gravar', async () => {
+      expect(
+        await codeOf(new SetJournalUseCase(repo).execute('p', 'gm-1', 'https://evil.com/x')),
+      ).toBe(PartyErrorCodes.JOURNAL_URL_INVALID);
+      expect(repo.setJournal).not.toHaveBeenCalled();
+    });
+
+    it('quem não é o mestre responde not found', async () => {
+      expect(await codeOf(new SetJournalUseCase(repo).execute('p', 'player-1', DOC_ID))).toBe(
+        PartyErrorCodes.NOT_FOUND,
+      );
+      expect(repo.setJournal).not.toHaveBeenCalled();
+    });
+
+    it('mesa inexistente responde not found', async () => {
+      repo.findParty.mockResolvedValue(null);
+
+      expect(await codeOf(new SetJournalUseCase(repo).execute('p', 'gm-1', DOC_ID))).toBe(
+        PartyErrorCodes.NOT_FOUND,
+      );
+    });
+  });
+
   describe('GetPartyUseCase', () => {
+    it.each(['gm-1', 'player-1'])('%s recebe o ID do diário', async (userId) => {
+      repo.people.mockResolvedValue([person('gm-1', 'gm'), person('player-1', 'active')]);
+      repo.journalDocId.mockResolvedValue(DOC_ID);
+
+      const view = await new GetPartyUseCase(repo).execute('p', userId);
+
+      expect(view.journalDocId).toBe(DOC_ID);
+    });
+
     it('quem é só invited responde not found', async () => {
       repo.people.mockResolvedValue([person('gm-1', 'gm')]);
 

@@ -43,6 +43,8 @@ export interface PartyView {
   roster: RosterCharacter[];
   /** The characters the person asking brought (players). */
   myCharacterIds: string[];
+  /** The linked Google Doc ID, for the GM and active players. */
+  journalDocId: string | null;
   /** Only for the GM. */
   gm: { inviteCode: string; rolePlay: RolePlayCard[] } | null;
 }
