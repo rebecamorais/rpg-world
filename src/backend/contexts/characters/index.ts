@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { getItemCatalog } from '@backend/contexts/items/infrastructure/srd-items';
+import { getItemCatalog } from '@backend/contexts/items';
 import { getSpellCatalog } from '@backend/contexts/spells';
 import { PartyGmAccess } from '@backend/shared/domain/PartyGmAccess';
 
