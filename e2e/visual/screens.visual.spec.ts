@@ -151,6 +151,22 @@ test.describe('telas logadas', () => {
     await snap(page, 'spells-search');
     await page.keyboard.press('Escape');
 
+    await page.goto(characterUrl(id, '/inventory'));
+    await page.getByRole('button', { name: 'Add item' }).click();
+    for (const name of ['Rope', 'Torch']) {
+      const catalog = page.getByRole('dialog', { name: 'Add item' });
+      await catalog.getByRole('searchbox', { name: 'Search items' }).fill(name);
+      await catalog.getByRole('button', { name: `Add ${name}`, exact: true }).click();
+      await expect(page.getByLabel(`Quantity of ${name}`)).toBeVisible();
+      if (name === 'Rope') await page.getByRole('button', { name: 'Add item' }).click();
+    }
+    await page.getByLabel('Gold pieces').fill('42');
+    await page.getByLabel('Silver pieces').fill('7');
+    await page.getByLabel('Silver pieces').blur();
+    await page.getByLabel('Gold pieces').blur();
+    await expect(page.getByLabel('Gold pieces')).toHaveValue('42');
+    await snap(page, 'sheet-inventory');
+
     await page.goto('/settings/profile');
     await page.getByRole('main').first().waitFor();
     await snap(page, 'profile', [page.getByText(user.email)]);
