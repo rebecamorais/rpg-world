@@ -1,0 +1,841 @@
+{
+  "abacus": {
+    "name": ""
+  },
+  "acid-vial": {
+    "name": "",
+    "description": ""
+  },
+  "alchemist-s-fire-flask": {
+    "name": "",
+    "description": ""
+  },
+  "alchemist-s-supplies": {
+    "name": ""
+  },
+  "ale-gallon": {
+    "name": ""
+  },
+  "ale-mug": {
+    "name": ""
+  },
+  "amulet": {
+    "name": ""
+  },
+  "antitoxin-vial": {
+    "name": "",
+    "description": ""
+  },
+  "arrow": {
+    "name": ""
+  },
+  "arrows-20": {
+    "name": ""
+  },
+  "backpack": {
+    "name": "",
+    "description": ""
+  },
+  "bagpipes": {
+    "name": ""
+  },
+  "ball-bearing": {
+    "name": "",
+    "description": ""
+  },
+  "ball-bearings-bag-of-1-000": {
+    "name": "",
+    "description": ""
+  },
+  "barrel": {
+    "name": "",
+    "description": ""
+  },
+  "basic-poison-vial": {
+    "name": "",
+    "description": ""
+  },
+  "basket": {
+    "name": "",
+    "description": ""
+  },
+  "battleaxe": {
+    "name": ""
+  },
+  "bedroll": {
+    "name": ""
+  },
+  "bell": {
+    "name": ""
+  },
+  "bit-and-bridle": {
+    "name": ""
+  },
+  "blanket": {
+    "name": ""
+  },
+  "block-and-tackle": {
+    "name": "",
+    "description": ""
+  },
+  "blowgun": {
+    "name": ""
+  },
+  "blowgun-needle": {
+    "name": ""
+  },
+  "blowgun-needles-50": {
+    "name": ""
+  },
+  "book": {
+    "name": "",
+    "description": ""
+  },
+  "breastplate": {
+    "name": "",
+    "description": ""
+  },
+  "brewer-s-supplies": {
+    "name": ""
+  },
+  "bucket": {
+    "name": "",
+    "description": ""
+  },
+  "bullseye-lantern": {
+    "name": "",
+    "description": ""
+  },
+  "burglar-s-pack": {
+    "name": "",
+    "description": ""
+  },
+  "calligrapher-s-supplies": {
+    "name": ""
+  },
+  "caltrop": {
+    "name": "",
+    "description": ""
+  },
+  "caltrops-bag-of-20": {
+    "name": "",
+    "description": ""
+  },
+  "camel": {
+    "name": ""
+  },
+  "candle": {
+    "name": "",
+    "description": ""
+  },
+  "canvas-1-sq-yd": {
+    "name": ""
+  },
+  "carpenter-s-tools": {
+    "name": ""
+  },
+  "carriage": {
+    "name": ""
+  },
+  "cart": {
+    "name": ""
+  },
+  "cartographer-s-tools": {
+    "name": ""
+  },
+  "chain-10-feet": {
+    "name": "",
+    "description": ""
+  },
+  "chain-mail": {
+    "name": "",
+    "description": ""
+  },
+  "chain-shirt": {
+    "name": "",
+    "description": ""
+  },
+  "chalk-1-piece": {
+    "name": ""
+  },
+  "chariot": {
+    "name": ""
+  },
+  "chest": {
+    "name": "",
+    "description": ""
+  },
+  "chicken": {
+    "name": ""
+  },
+  "chunk-of-meat": {
+    "name": ""
+  },
+  "cinnamon": {
+    "name": ""
+  },
+  "climber-s-kit": {
+    "name": "",
+    "description": ""
+  },
+  "cloves": {
+    "name": ""
+  },
+  "club": {
+    "name": ""
+  },
+  "cobbler-s-tools": {
+    "name": ""
+  },
+  "common-clothes": {
+    "name": ""
+  },
+  "common-wine-pitcher": {
+    "name": ""
+  },
+  "component-pouch": {
+    "name": "",
+    "description": ""
+  },
+  "cook-s-utensils": {
+    "name": ""
+  },
+  "copper": {
+    "name": ""
+  },
+  "costume-clothes": {
+    "name": ""
+  },
+  "cotton-cloth-1-sq-yd": {
+    "name": ""
+  },
+  "cow": {
+    "name": ""
+  },
+  "crossbow-bolt": {
+    "name": ""
+  },
+  "crossbow-bolt-case": {
+    "name": "",
+    "description": ""
+  },
+  "crossbow-bolts-20": {
+    "name": ""
+  },
+  "crowbar": {
+    "name": "",
+    "description": ""
+  },
+  "crystal": {
+    "name": ""
+  },
+  "dagger": {
+    "name": ""
+  },
+  "dart": {
+    "name": ""
+  },
+  "dice-set": {
+    "name": ""
+  },
+  "diplomat-s-pack": {
+    "name": "",
+    "description": ""
+  },
+  "disguise-kit": {
+    "name": "",
+    "description": ""
+  },
+  "donkey": {
+    "name": ""
+  },
+  "draft-horse": {
+    "name": ""
+  },
+  "drum": {
+    "name": ""
+  },
+  "dulcimer": {
+    "name": ""
+  },
+  "dungeoneer-s-pack": {
+    "name": "",
+    "description": ""
+  },
+  "elephant": {
+    "name": ""
+  },
+  "emblem": {
+    "name": ""
+  },
+  "entertainer-s-pack": {
+    "name": "",
+    "description": ""
+  },
+  "exotic-saddle": {
+    "name": "",
+    "description": ""
+  },
+  "explorer-s-pack": {
+    "name": "",
+    "description": ""
+  },
+  "feed-per-day": {
+    "name": ""
+  },
+  "fine-clothes": {
+    "name": ""
+  },
+  "fine-wine-bottle": {
+    "name": ""
+  },
+  "fishing-tackle": {
+    "name": "",
+    "description": ""
+  },
+  "flail": {
+    "name": ""
+  },
+  "flask": {
+    "name": "",
+    "description": ""
+  },
+  "flour": {
+    "name": ""
+  },
+  "flute": {
+    "name": ""
+  },
+  "forgery-kit": {
+    "name": "",
+    "description": ""
+  },
+  "ginger": {
+    "name": ""
+  },
+  "glaive": {
+    "name": ""
+  },
+  "glass-bottle": {
+    "name": "",
+    "description": ""
+  },
+  "glassblower-s-tools": {
+    "name": ""
+  },
+  "goat": {
+    "name": ""
+  },
+  "gold": {
+    "name": ""
+  },
+  "grappling-hook": {
+    "name": ""
+  },
+  "greataxe": {
+    "name": ""
+  },
+  "greatclub": {
+    "name": ""
+  },
+  "greatsword": {
+    "name": ""
+  },
+  "halberd": {
+    "name": ""
+  },
+  "half-plate-armor": {
+    "name": "",
+    "description": ""
+  },
+  "hammer": {
+    "name": ""
+  },
+  "hand-crossbow": {
+    "name": ""
+  },
+  "handaxe": {
+    "name": ""
+  },
+  "healer-s-kit": {
+    "name": "",
+    "description": ""
+  },
+  "heavy-crossbow": {
+    "name": ""
+  },
+  "hempen-rope-50-feet": {
+    "name": "",
+    "description": ""
+  },
+  "herbalism-kit": {
+    "name": "",
+    "description": ""
+  },
+  "hide-armor": {
+    "name": "",
+    "description": ""
+  },
+  "holy-water-flask": {
+    "name": "",
+    "description": ""
+  },
+  "hooded-lantern": {
+    "name": "",
+    "description": ""
+  },
+  "horn": {
+    "name": ""
+  },
+  "hourglass": {
+    "name": ""
+  },
+  "hunk-of-cheese": {
+    "name": ""
+  },
+  "hunting-trap": {
+    "name": "",
+    "description": ""
+  },
+  "ink-1-ounce-bottle": {
+    "name": ""
+  },
+  "ink-pen": {
+    "name": ""
+  },
+  "iron": {
+    "name": ""
+  },
+  "iron-pot": {
+    "name": "",
+    "description": ""
+  },
+  "iron-spike": {
+    "name": ""
+  },
+  "iron-spikes-10": {
+    "name": ""
+  },
+  "javelin": {
+    "name": ""
+  },
+  "jeweler-s-tools": {
+    "name": ""
+  },
+  "jug": {
+    "name": "",
+    "description": ""
+  },
+  "ladder-10-foot": {
+    "name": "",
+    "description": ""
+  },
+  "lamp": {
+    "name": "",
+    "description": ""
+  },
+  "lance": {
+    "name": "",
+    "description": ""
+  },
+  "leather-armor": {
+    "name": "",
+    "description": ""
+  },
+  "leatherworker-s-tools": {
+    "name": ""
+  },
+  "light-crossbow": {
+    "name": ""
+  },
+  "light-hammer": {
+    "name": ""
+  },
+  "linen-1-sq-yd": {
+    "name": ""
+  },
+  "loaf-of-bread": {
+    "name": ""
+  },
+  "lock": {
+    "name": "",
+    "description": ""
+  },
+  "longbow": {
+    "name": ""
+  },
+  "longsword": {
+    "name": ""
+  },
+  "lute": {
+    "name": ""
+  },
+  "lyre": {
+    "name": ""
+  },
+  "mace": {
+    "name": ""
+  },
+  "magnifying-glass": {
+    "name": "",
+    "description": ""
+  },
+  "manacles": {
+    "name": "",
+    "description": ""
+  },
+  "map-or-scroll-case": {
+    "name": "",
+    "description": ""
+  },
+  "mason-s-tools": {
+    "name": ""
+  },
+  "mastiff": {
+    "name": ""
+  },
+  "maul": {
+    "name": ""
+  },
+  "merchant-s-scale": {
+    "name": "",
+    "description": ""
+  },
+  "mess-kit": {
+    "name": "",
+    "description": ""
+  },
+  "military-saddle": {
+    "name": "",
+    "description": ""
+  },
+  "miner-s-pick": {
+    "name": ""
+  },
+  "morningstar": {
+    "name": ""
+  },
+  "mule": {
+    "name": ""
+  },
+  "navigator-s-tools": {
+    "name": "",
+    "description": ""
+  },
+  "net": {
+    "name": "",
+    "description": ""
+  },
+  "oil-flask": {
+    "name": "",
+    "description": ""
+  },
+  "orb": {
+    "name": ""
+  },
+  "ox": {
+    "name": ""
+  },
+  "pack-saddle": {
+    "name": ""
+  },
+  "padded-armor": {
+    "name": "",
+    "description": ""
+  },
+  "painter-s-supplies": {
+    "name": ""
+  },
+  "pan-flute": {
+    "name": ""
+  },
+  "paper-one-sheet": {
+    "name": ""
+  },
+  "parchment-one-sheet": {
+    "name": ""
+  },
+  "pepper": {
+    "name": ""
+  },
+  "perfume-vial": {
+    "name": ""
+  },
+  "pig": {
+    "name": ""
+  },
+  "pike": {
+    "name": ""
+  },
+  "pitcher": {
+    "name": "",
+    "description": ""
+  },
+  "piton": {
+    "name": ""
+  },
+  "plate-armor": {
+    "name": "",
+    "description": ""
+  },
+  "platinum": {
+    "name": ""
+  },
+  "playing-card-set": {
+    "name": ""
+  },
+  "poisoner-s-kit": {
+    "name": "",
+    "description": ""
+  },
+  "pole-10-foot": {
+    "name": ""
+  },
+  "pony": {
+    "name": ""
+  },
+  "portable-ram": {
+    "name": "",
+    "description": ""
+  },
+  "potter-s-tools": {
+    "name": ""
+  },
+  "pouch": {
+    "name": "",
+    "description": ""
+  },
+  "priest-s-pack": {
+    "name": "",
+    "description": ""
+  },
+  "quarterstaff": {
+    "name": ""
+  },
+  "quiver": {
+    "name": "",
+    "description": ""
+  },
+  "rapier": {
+    "name": ""
+  },
+  "rations-1-day": {
+    "name": "",
+    "description": ""
+  },
+  "reliquary": {
+    "name": ""
+  },
+  "riding-horse": {
+    "name": ""
+  },
+  "riding-saddle": {
+    "name": ""
+  },
+  "ring-mail": {
+    "name": "",
+    "description": ""
+  },
+  "robes": {
+    "name": ""
+  },
+  "rod": {
+    "name": ""
+  },
+  "sack": {
+    "name": "",
+    "description": ""
+  },
+  "saddlebags": {
+    "name": ""
+  },
+  "saffron": {
+    "name": ""
+  },
+  "salt": {
+    "name": ""
+  },
+  "scale-mail": {
+    "name": "",
+    "description": ""
+  },
+  "scholar-s-pack": {
+    "name": "",
+    "description": ""
+  },
+  "scimitar": {
+    "name": ""
+  },
+  "sealing-wax": {
+    "name": ""
+  },
+  "shawm": {
+    "name": ""
+  },
+  "sheep": {
+    "name": ""
+  },
+  "shield": {
+    "name": "",
+    "description": ""
+  },
+  "shortbow": {
+    "name": ""
+  },
+  "shortsword": {
+    "name": ""
+  },
+  "shovel": {
+    "name": ""
+  },
+  "sickle": {
+    "name": ""
+  },
+  "signal-whistle": {
+    "name": ""
+  },
+  "signet-ring": {
+    "name": ""
+  },
+  "silk-1-sq-yd": {
+    "name": ""
+  },
+  "silk-rope-50-feet": {
+    "name": "",
+    "description": ""
+  },
+  "silver": {
+    "name": ""
+  },
+  "sled": {
+    "name": ""
+  },
+  "sledgehammer": {
+    "name": ""
+  },
+  "sling": {
+    "name": ""
+  },
+  "sling-bullet": {
+    "name": ""
+  },
+  "sling-bullets-20": {
+    "name": ""
+  },
+  "smith-s-tools": {
+    "name": ""
+  },
+  "soap": {
+    "name": ""
+  },
+  "spear": {
+    "name": ""
+  },
+  "spellbook": {
+    "name": "",
+    "description": ""
+  },
+  "splint-armor": {
+    "name": "",
+    "description": ""
+  },
+  "sprig-of-mistletoe": {
+    "name": ""
+  },
+  "spyglass": {
+    "name": "",
+    "description": ""
+  },
+  "stabling-per-day": {
+    "name": ""
+  },
+  "staff": {
+    "name": ""
+  },
+  "steel-mirror": {
+    "name": ""
+  },
+  "studded-leather-armor": {
+    "name": "",
+    "description": ""
+  },
+  "tankard": {
+    "name": "",
+    "description": ""
+  },
+  "thieves-tools": {
+    "name": "",
+    "description": ""
+  },
+  "tinderbox": {
+    "name": "",
+    "description": ""
+  },
+  "tinker-s-tools": {
+    "name": ""
+  },
+  "torch": {
+    "name": "",
+    "description": ""
+  },
+  "totem": {
+    "name": ""
+  },
+  "traveler-s-clothes": {
+    "name": ""
+  },
+  "trident": {
+    "name": ""
+  },
+  "two-person-tent": {
+    "name": "",
+    "description": ""
+  },
+  "vial": {
+    "name": "",
+    "description": ""
+  },
+  "viol": {
+    "name": ""
+  },
+  "wagon": {
+    "name": ""
+  },
+  "wand": {
+    "name": ""
+  },
+  "war-pick": {
+    "name": ""
+  },
+  "warhammer": {
+    "name": ""
+  },
+  "warhorse": {
+    "name": ""
+  },
+  "waterskin": {
+    "name": "",
+    "description": ""
+  },
+  "weaver-s-tools": {
+    "name": ""
+  },
+  "wheat": {
+    "name": ""
+  },
+  "whetstone": {
+    "name": ""
+  },
+  "whip": {
+    "name": ""
+  },
+  "woodcarver-s-tools": {
+    "name": ""
+  },
+  "wooden-staff": {
+    "name": ""
+  },
+  "yew-wand": {
+    "name": ""
+  }
+}
