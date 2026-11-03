@@ -61,6 +61,17 @@ describe('JournalSettings', () => {
     expect(hook.setJournal.mutate).toHaveBeenCalledWith(null, expect.anything());
   });
 
+  it('enquanto salva, Remover fica desabilitado', () => {
+    hook.setJournal.isPending = true;
+    try {
+      renderWithProviders(<JournalSettings party={party(DOC_ID)} />);
+
+      expect(screen.getByRole('button', { name: t.remove })).toBeDisabled();
+    } finally {
+      hook.setJournal.isPending = false;
+    }
+  });
+
   it('explica como compartilhar o documento', () => {
     renderWithProviders(<JournalSettings party={party(null)} />);
 

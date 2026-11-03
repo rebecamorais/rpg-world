@@ -61,7 +61,7 @@ describe('RLS do diário da mesa (Integration)', () => {
     const { data } = await readJournal(player);
     expect(data).toEqual([{ doc_id: DOC }]);
 
-    // Clear the row so the insert below is not a mere duplicate-key failure
+    // Limpa a linha para o insert abaixo não falhar só por chave duplicada
     await admin().from('party_journals').delete().eq('party_id', partyId);
     const insert = await player.client
       .from('party_journals')
@@ -82,6 +82,21 @@ describe('RLS do diário da mesa (Integration)', () => {
       .select('doc_id')
       .eq('party_id', partyId);
     expect(after).toEqual([{ doc_id: DOC }]);
+  });
+
+  it('jogador ativo não apaga o diário', async () => {
+    await setJournal(gm);
+    await addMember(partyId, player.userId, 'active');
+
+    const del = await player.client
+      .from('party_journals')
+      .delete()
+      .eq('party_id', partyId)
+      .select('party_id');
+    expect(del.error !== null || (del.data ?? []).length === 0).toBe(true);
+
+    const { data } = await admin().from('party_journals').select('doc_id').eq('party_id', partyId);
+    expect(data).toEqual([{ doc_id: DOC }]);
   });
 
   it('convidado, quem pediu e estranho não leem', async () => {

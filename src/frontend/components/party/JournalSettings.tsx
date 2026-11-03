@@ -62,13 +62,18 @@ export function JournalSettings({ party }: { party: PartyView }) {
             />
             <Button
               type="submit"
-              disabled={!docId || docId === party.journalDocId}
+              disabled={!docId || docId === party.journalDocId || setJournal.isPending}
               loading={setJournal.isPending}
             >
               {t('save')}
             </Button>
             {party.journalDocId && (
-              <Button type="button" variant="ghost" onClick={removeJournal}>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={removeJournal}
+                disabled={setJournal.isPending}
+              >
                 {t('remove')}
               </Button>
             )}

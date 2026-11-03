@@ -105,12 +105,10 @@ Decidido para o passo 1, que deixa de ser só um botão:
   convite nem em "minhas mesas". Precisa de teste de integração de RLS cobrindo cada um desses
   casos.
 - **Brecha conhecida:** no modo "link aberto", quem saiu da mesa ou foi removido pode ter guardado
-  o link. O app para de mostrar, mas não consegue revogar. Ainda falta decidir se basta avisar o
-  Mestre ("crie outro documento ou restrinja o compartilhamento") ou se isso muda a abordagem.
+  o link. O app para de mostrar, mas não consegue revogar. Decidido: basta avisar o Mestre ao
+  remover um jogador ("crie outro documento ou restrinja o compartilhamento"); implementado.
 - **Spike (2026-11-03):** no Chromium sem login, os dois documentos de teste (ambos com link aberto) carregaram no iframe com a barra de edição; o Google não bloqueia o embed. O modo restrito e o Safari ainda não foram testados.
-- **Antes de desenhar a fundo:** fazer um spike descartável com o iframe em três situações
-  (logado, deslogado e no Safari) para confirmar o comportamento do Google. Até agora isso é
-  suposição, não foi testado.
+- **Antes de desenhar a fundo:** o spike descartável com o iframe foi feito (ver o bullet Spike acima).
 - **Política de Privacidade:** o link do diário passa a ser um dado da mesa. Incluir na seção 1.
 
 ## Interface

@@ -134,18 +134,18 @@ function PlayerView({ party, live }: { party: PartyView; live: boolean }) {
     <div className="flex flex-col gap-8">
       <PlayerCombatPanel partyId={party.id} edition={party.edition} live={live} />
 
-      <section aria-labelledby="party-characters" className="flex flex-col gap-4">
-        <h2 id="party-characters" className="text-heading">
-          {t('page.characters')}
-        </h2>
-        <PartyRoster roster={party.roster} people={party.people} />
-      </section>
-
       <section aria-labelledby="party-journal" className="flex flex-col gap-4">
         <h2 id="party-journal" className="text-heading">
           {t('journal.title')}
         </h2>
         <PartyJournal docId={party.journalDocId} role={party.role} partyId={party.id} />
+      </section>
+
+      <section aria-labelledby="party-characters" className="flex flex-col gap-4">
+        <h2 id="party-characters" className="text-heading">
+          {t('page.characters')}
+        </h2>
+        <PartyRoster roster={party.roster} people={party.people} />
       </section>
 
       <SectionCard>
