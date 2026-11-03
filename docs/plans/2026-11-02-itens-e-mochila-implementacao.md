@@ -205,13 +205,17 @@ USING (character_id IN (SELECT private.gm_readable_character_ids()))`;
 - `duplicate_character`: copia as moedas e os itens do personagem para os lugares da cópia,
   casando a algibeira com a algibeira e os demais lugares por ordem; quando o original não tem
   mochila, o primeiro lugar dele assume a mochila padrão da cópia (`kind`, nome, posição), para a
-  cópia ficar igual e nunca passar do limite de 20.
+  cópia ficar igual e nunca passar do limite de 20. (Depois, na revisão final: a última mochila
+  não sai, então o original sempre tem uma e esse caso deixou de existir.)
 
 **Bancos locais:** as versões antigas (`20261102201453` e o rascunho `20261102202137`) já rodaram no
 banco de dev e no de teste. Teste: `npx supabase db reset --workdir database/db-test`. Dev (sem
 reset, ele tem dados locais): apagar só os objetos do inventário (tabelas `character_containers` e
 `character_items`, funções e triggers `private.*` que a migração criou), tirar as duas versões de
 `supabase_migrations.schema_migrations` e rodar `npx supabase migration up --workdir database/db-dev`.
+(Nota: `character_containers` e `character_items` são as tabelas da versão local de antes do
+redirecionamento, já apagadas; o esquema final usa `containers` e `inventory_items`. É só um passo
+histórico de limpeza.)
 
 - [ ] **Passo 1: testes de integração**:
   - personagem novo (pc e npc) e personagem antigo (backfill) têm exatamente uma `coin_pouch` e uma
