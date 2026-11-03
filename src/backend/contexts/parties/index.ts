@@ -1,5 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import { SupabaseStorageRepository } from '@backend/shared/infrastructure/repositories/supabase-storage-repository';
+
 import { PartyContext } from './application/PartyContext';
 import { AcceptMemberUseCase } from './application/accept-member.use-case';
 import { CreatePartyUseCase } from './application/create-party.use-case';
@@ -9,6 +11,11 @@ import { GetPartyUseCase } from './application/get-party.use-case';
 import { InviteByUsernameUseCase } from './application/invite-by-username.use-case';
 import { IsGmOfCharacterUseCase } from './application/is-gm-of-character.use-case';
 import { ListMyPartiesUseCase } from './application/list-my-parties.use-case';
+import {
+  GetInviteCardUseCase,
+  RemovePartyImageUseCase,
+  UploadPartyImageUseCase,
+} from './application/party-image.use-cases';
 import { RemoveMemberUseCase } from './application/remove-member.use-case';
 import { RenamePartyUseCase } from './application/rename-party.use-case';
 import { RequestJoinUseCase } from './application/request-join.use-case';
@@ -22,6 +29,7 @@ export type { PartyContext };
 
 export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
   const repository = new SupabasePartyRepository(dbClient);
+  const storage = new SupabaseStorageRepository(dbClient);
 
   const listMyParties = new ListMyPartiesUseCase(repository);
   const createParty = new CreatePartyUseCase(repository);
@@ -38,6 +46,9 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
   const setJournal = new SetJournalUseCase(repository);
   const setMyCharacters = new SetMyCharactersUseCase(repository);
   const isGmOfCharacter = new IsGmOfCharacterUseCase(repository);
+  const getInviteCard = new GetInviteCardUseCase(repository);
+  const uploadImage = new UploadPartyImageUseCase(repository, storage);
+  const removeImage = new RemovePartyImageUseCase(repository);
 
   return {
     listMine: listMyParties.execute.bind(listMyParties),
@@ -47,12 +58,15 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
     delete: deleteParty.execute.bind(deleteParty),
     rotateInviteCode: rotateInviteCode.execute.bind(rotateInviteCode),
     getInvite: getInvite.execute.bind(getInvite),
+    getInviteCard: getInviteCard.execute.bind(getInviteCard),
     requestJoin: requestJoin.execute.bind(requestJoin),
     inviteByUsername: inviteByUsername.execute.bind(inviteByUsername),
     acceptMember: acceptMember.execute.bind(acceptMember),
     removeMember: removeMember.execute.bind(removeMember),
     get: getParty.execute.bind(getParty),
     setJournal: setJournal.execute.bind(setJournal),
+    uploadImage: uploadImage.execute.bind(uploadImage),
+    removeImage: removeImage.execute.bind(removeImage),
     setMyCharacters: setMyCharacters.execute.bind(setMyCharacters),
     isGmOfCharacter: isGmOfCharacter.execute.bind(isGmOfCharacter),
   };

@@ -22,6 +22,13 @@ import {
   SetInventoryCoinsUseCase,
   SetInventoryItemQuantityUseCase,
 } from './application/inventory/inventory.use-cases';
+import {
+  AddPartyChestItemUseCase,
+  GetPartyChestUseCase,
+  RemovePartyChestItemUseCase,
+  SetPartyChestCoinsUseCase,
+  SetPartyChestItemQuantityUseCase,
+} from './application/inventory/party-chest.use-cases';
 import { GetPartyCharacterInventoryUseCase } from './application/party-gm/get-party-character-inventory.use-case';
 import { GetPartyCharacterSpellsUseCase } from './application/party-gm/get-party-character-spells.use-case';
 import { GetPartyCharacterUseCase } from './application/party-gm/get-party-character.use-case';
@@ -42,6 +49,7 @@ export const createCharacterContext = (
   const repository = new SupabaseCharacterRepository(dbClient);
   const spellRepository = new SupabaseCharacterSpellRepository(dbClient);
   const inventoryRepository = new SupabaseInventoryRepository(dbClient);
+  const partyChestRepository = new SupabaseInventoryRepository(dbClient, 'party_id');
   const storageRepository = new SupabaseStorageRepository(dbClient);
 
   const getCharacterUseCase = new GetCharacterUseCase(repository);
@@ -80,6 +88,14 @@ export const createCharacterContext = (
   );
   const setInventoryCoinsUseCase = new SetInventoryCoinsUseCase(repository, inventoryRepository);
 
+  const getPartyChestUseCase = new GetPartyChestUseCase(partyChestRepository, itemCatalog);
+  const addPartyChestItemUseCase = new AddPartyChestItemUseCase(partyChestRepository, itemCatalog);
+  const setPartyChestItemQuantityUseCase = new SetPartyChestItemQuantityUseCase(
+    partyChestRepository,
+  );
+  const removePartyChestItemUseCase = new RemovePartyChestItemUseCase(partyChestRepository);
+  const setPartyChestCoinsUseCase = new SetPartyChestCoinsUseCase(partyChestRepository);
+
   const getPartyCharacterUseCase = new GetPartyCharacterUseCase(repository, partyGmAccess);
   const getPartyCharacterSpellsUseCase = new GetPartyCharacterSpellsUseCase(
     spellRepository,
@@ -109,6 +125,13 @@ export const createCharacterContext = (
     setItemQuantity: setInventoryItemQuantityUseCase.execute.bind(setInventoryItemQuantityUseCase),
     removeItem: removeInventoryItemUseCase.execute.bind(removeInventoryItemUseCase),
     setCoins: setInventoryCoinsUseCase.execute.bind(setInventoryCoinsUseCase),
+    getPartyChest: getPartyChestUseCase.execute.bind(getPartyChestUseCase),
+    addPartyChestItem: addPartyChestItemUseCase.execute.bind(addPartyChestItemUseCase),
+    setPartyChestItemQuantity: setPartyChestItemQuantityUseCase.execute.bind(
+      setPartyChestItemQuantityUseCase,
+    ),
+    removePartyChestItem: removePartyChestItemUseCase.execute.bind(removePartyChestItemUseCase),
+    setPartyChestCoins: setPartyChestCoinsUseCase.execute.bind(setPartyChestCoinsUseCase),
     getInventoryForPartyGm: getPartyCharacterInventoryUseCase.execute.bind(
       getPartyCharacterInventoryUseCase,
     ),

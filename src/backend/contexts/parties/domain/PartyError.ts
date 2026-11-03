@@ -10,6 +10,8 @@ export const PartyErrorCodes = {
   ALREADY_MEMBER: 'party_error_already_member',
   CHARACTER_NOT_ALLOWED: 'party_error_character_not_allowed',
   JOURNAL_URL_INVALID: 'party_error_journal_url_invalid',
+  IMAGE_TOO_LARGE: 'party_error_image_too_large',
+  IMAGE_INVALID_TYPE: 'party_error_image_invalid_type',
 } as const;
 
 export type PartyErrorCode = (typeof PartyErrorCodes)[keyof typeof PartyErrorCodes];

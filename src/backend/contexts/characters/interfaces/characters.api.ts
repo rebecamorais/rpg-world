@@ -73,6 +73,20 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
   setCoins: (id: string, requesterId: string, containerId: string, coins: Coins) =>
     characterContext.setCoins(id, requesterId, containerId, coins),
 
+  getPartyChest: (partyId: string, locale?: string) =>
+    characterContext.getPartyChest(partyId, locale),
+  addPartyChestItem: (
+    partyId: string,
+    input: { ref: string; containerId: string; quantity: number },
+    locale?: string,
+  ) => characterContext.addPartyChestItem(partyId, input, locale),
+  setPartyChestItemQuantity: (partyId: string, itemId: string, quantity: number) =>
+    characterContext.setPartyChestItemQuantity(partyId, itemId, quantity),
+  removePartyChestItem: (partyId: string, itemId: string) =>
+    characterContext.removePartyChestItem(partyId, itemId),
+  setPartyChestCoins: (partyId: string, containerId: string, coins: Coins) =>
+    characterContext.setPartyChestCoins(partyId, containerId, coins),
+
   getForPartyGm: async (partyId: string, id: string, gmId: string) => {
     const character = await characterContext.getForPartyGm(partyId, id, gmId);
     return character.toJSON();

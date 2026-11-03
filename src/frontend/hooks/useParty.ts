@@ -44,6 +44,10 @@ export function useParty(partyId: string) {
     mutationFn: (journalUrl: string | null) => rpgWorldApi.patch(base, { journalUrl }),
     ...options,
   });
+  const removeImage = useMutation({
+    mutationFn: () => rpgWorldApi.delete(`${base}/image`),
+    ...options,
+  });
   const remove = useMutation({ mutationFn: () => rpgWorldApi.delete(base), ...options });
   const rotateCode = useMutation({
     mutationFn: () => rpgWorldApi.post<{ code: string }>(`${base}/invite-code`),
@@ -79,6 +83,7 @@ export function useParty(partyId: string) {
     rename,
     setEdition,
     setJournal,
+    removeImage,
     remove,
     rotateCode,
     invite,

@@ -47,6 +47,17 @@ export interface CharacterContext {
   removeItem(id: string, requesterId: string, itemId: string): Promise<void>;
   setCoins(id: string, requesterId: string, containerId: string, coins: Coins): Promise<void>;
 
+  // The party chest (the GM and the active players; the database decides)
+  getPartyChest(partyId: string, locale?: string): Promise<InventoryDto>;
+  addPartyChestItem(
+    partyId: string,
+    input: { ref: string; containerId: string; quantity: number },
+    locale?: string,
+  ): Promise<InventoryItem>;
+  setPartyChestItemQuantity(partyId: string, itemId: string, quantity: number): Promise<void>;
+  removePartyChestItem(partyId: string, itemId: string): Promise<void>;
+  setPartyChestCoins(partyId: string, containerId: string, coins: Coins): Promise<void>;
+
   // Read only, for the GM of a party the character was brought to
   getForPartyGm(partyId: string, id: string, gmId: string): Promise<Character>;
   getSpellsForPartyGm(

@@ -36,6 +36,7 @@ function PartyLinks({ parties }: { parties: PartySummary[] }) {
         const isOpen = pathname === href || pathname?.startsWith(`${href}/`);
         const pages = [
           { href: `${href}/journal`, label: t('journal') },
+          { href: `${href}/inventory`, label: t('inventory') },
           ...(party.role === 'gm' ? [{ href: `${href}/settings`, label: t('settings') }] : []),
         ];
         return (

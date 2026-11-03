@@ -2,7 +2,7 @@ import { PartyGmAccess } from '@backend/shared/domain/PartyGmAccess';
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
-import { InvitePreview, MemberStatus, MyParties } from '../domain/Party';
+import { InviteCard, InvitePreview, MemberStatus, MyParties } from '../domain/Party';
 import { PartyView } from '../domain/PartyView';
 
 /**
@@ -17,11 +17,14 @@ export interface PartyContext extends PartyGmAccess {
   delete(partyId: string): Promise<void>;
   rotateInviteCode(partyId: string): Promise<string>;
   getInvite(code: string): Promise<InvitePreview>;
+  getInviteCard(code: string): Promise<InviteCard | null>;
   requestJoin(code: string): Promise<MemberStatus>;
   inviteByUsername(partyId: string, username: string): Promise<MemberStatus>;
   acceptMember(partyId: string, memberId: string): Promise<void>;
   removeMember(partyId: string, memberId: string): Promise<void>;
   get(partyId: string, userId: string): Promise<PartyView>;
   setJournal(partyId: string, userId: string, url: string | null): Promise<void>;
+  uploadImage(partyId: string, userId: string, file: Blob): Promise<string>;
+  removeImage(partyId: string, userId: string): Promise<void>;
   setMyCharacters(partyId: string, userId: string, characterIds: string[]): Promise<void>;
 }

@@ -30,16 +30,22 @@ function limitError(error: { code?: string; message: string }): CharacterError |
   return null;
 }
 
-export class SupabaseInventoryRepository implements InventoryRepo {
-  constructor(private readonly client: SupabaseClient<Database>) {}
+/** Whose containers a repository reads and writes: a character's, or a party's (the chest). */
+export type InventoryOwner = 'character_id' | 'party_id';
 
-  async find(characterId: string) {
+export class SupabaseInventoryRepository implements InventoryRepo {
+  constructor(
+    private readonly client: SupabaseClient<Database>,
+    private readonly owner: InventoryOwner = 'character_id',
+  ) {}
+
+  async find(ownerId: string) {
     const { data, error } = await this.client
       .from('containers')
       .select(
         'id, kind, name, position, coins, inventory_items(id, container_id, item_ref, quantity, created_at)',
       )
-      .eq('character_id', characterId)
+      .eq(this.owner, ownerId)
       .order('position')
       .order('created_at')
       .order('id');
@@ -59,8 +65,8 @@ export class SupabaseInventoryRepository implements InventoryRepo {
     return { containers, items };
   }
 
-  async addItem(characterId: string, containerId: string, ref: string, quantity: number) {
-    if (!(await this.ownsContainer(characterId, containerId))) return null;
+  async addItem(ownerId: string, containerId: string, ref: string, quantity: number) {
+    if (!(await this.ownsContainer(ownerId, containerId))) return null;
 
     const { data, error } = await this.client.rpc('add_inventory_item', {
       p_container_id: containerId,
@@ -71,8 +77,8 @@ export class SupabaseInventoryRepository implements InventoryRepo {
     return toEntry(data);
   }
 
-  async setQuantity(characterId: string, itemId: string, quantity: number) {
-    const ids = await this.containerIds(characterId);
+  async setQuantity(ownerId: string, itemId: string, quantity: number) {
+    const ids = await this.containerIds(ownerId);
     const { data, error } = await this.client
       .from('inventory_items')
       .update({ quantity })
@@ -83,8 +89,8 @@ export class SupabaseInventoryRepository implements InventoryRepo {
     return data.length > 0;
   }
 
-  async remove(characterId: string, itemId: string) {
-    const ids = await this.containerIds(characterId);
+  async remove(ownerId: string, itemId: string) {
+    const ids = await this.containerIds(ownerId);
     const { data, error } = await this.client
       .from('inventory_items')
       .delete()
@@ -95,32 +101,32 @@ export class SupabaseInventoryRepository implements InventoryRepo {
     return data.length > 0;
   }
 
-  async setCoins(characterId: string, containerId: string, coins: Coins) {
+  async setCoins(ownerId: string, containerId: string, coins: Coins) {
     const { data, error } = await this.client
       .from('containers')
       .update({ coins })
       .eq('id', containerId)
-      .eq('character_id', characterId)
+      .eq(this.owner, ownerId)
       .select('id');
     if (error) throw new Error(`Failed to set coins: ${error.message}`);
     return data.length > 0;
   }
 
-  private async containerIds(characterId: string): Promise<string[]> {
+  private async containerIds(ownerId: string): Promise<string[]> {
     const { data, error } = await this.client
       .from('containers')
       .select('id')
-      .eq('character_id', characterId);
+      .eq(this.owner, ownerId);
     if (error) throw new Error(`Failed to fetch containers: ${error.message}`);
     return data.map((row) => row.id);
   }
 
-  private async ownsContainer(characterId: string, containerId: string): Promise<boolean> {
+  private async ownsContainer(ownerId: string, containerId: string): Promise<boolean> {
     const { data, error } = await this.client
       .from('containers')
       .select('id')
       .eq('id', containerId)
-      .eq('character_id', characterId)
+      .eq(this.owner, ownerId)
       // The coin pouch holds coins, not items
       .neq('kind', 'coin_pouch')
       .maybeSingle();

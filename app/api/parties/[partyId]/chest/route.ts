@@ -1,0 +1,17 @@
+import { getApi } from '@api';
+
+import { localeQuerySchema } from '@backend/contexts/characters/interfaces/characters.schemas';
+import { partyParamsSchema } from '@backend/contexts/parties/interfaces/parties.schemas';
+
+import { withAuth } from '@shared/http/route-handler';
+import { parseInput } from '@shared/http/validation';
+
+/** The party chest (its coins and entries), items in the language of `?locale=`. */
+export const GET = withAuth(
+  async ({ req, params }) => {
+    const { locale } = parseInput(localeQuerySchema, Object.fromEntries(req.nextUrl.searchParams));
+    const { charactersApi } = await getApi();
+    return charactersApi.getPartyChest(params.partyId, locale);
+  },
+  { params: partyParamsSchema },
+);

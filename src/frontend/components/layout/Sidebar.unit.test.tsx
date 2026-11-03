@@ -39,7 +39,7 @@ describe('Sidebar', () => {
     navigation.pathname = '/characters';
   });
 
-  it('a mesa aberta do mestre ganha o submenu Mesa / Diário / Configurações', () => {
+  it('a mesa aberta do mestre ganha o submenu Mesa / Diário / Inventário / Configurações', () => {
     navigation.pathname = '/parties/gm1/settings';
     renderWithProviders(<Sidebar />);
 
@@ -51,12 +51,16 @@ describe('Sidebar', () => {
       'href',
       '/parties/gm1/journal',
     );
+    expect(sidebar().getByRole('link', { name: t.inventory })).toHaveAttribute(
+      'href',
+      '/parties/gm1/inventory',
+    );
     const settings = sidebar().getByRole('link', { name: t.settings });
     expect(settings).toHaveAttribute('href', '/parties/gm1/settings');
     expect(settings).toHaveAttribute('aria-current', 'page');
   });
 
-  it('na mesa como jogador: Mesa e Diário, sem Configurações', () => {
+  it('na mesa como jogador: Mesa, Diário e Inventário, sem Configurações', () => {
     navigation.pathname = '/parties/pl1/journal';
     renderWithProviders(<Sidebar />);
 

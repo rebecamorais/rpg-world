@@ -95,6 +95,7 @@ test.describe('mesas', () => {
     const user = await createUser('signed-out');
 
     await visitor.goto(`/parties/join/${code}`);
+    await (await hydrated(visitor.getByRole('link', { name: 'Sign in to join' }))).click();
     await expect.poll(() => new URL(visitor.url()).pathname).toBe('/login');
     await (await hydrated(visitor.getByLabel('Email'))).fill(user.email);
     await visitor.getByLabel('Password').fill(PASSWORD);
@@ -240,5 +241,82 @@ test.describe('mesas', () => {
     await expect(player.page.getByRole('link', { name: 'Open in Google Docs' })).toBeVisible();
 
     await player.context.close();
+  });
+
+  test('o inventário da party: o jogador põe moedas e um item, o mestre vê', async ({
+    page,
+    browser,
+    user: _,
+  }) => {
+    const { id: partyId, code } = await createParty(page, 'Mesa do Baú');
+    const player = await person(browser, 'chest-player');
+    await joinParty(page, player.page, player.user.id, partyId, code);
+
+    await player.page.goto(partyUrl(partyId, '/inventory'));
+    await expect(player.page.getByText('The chest is empty.')).toBeVisible();
+
+    // Receive is enabled once the chest has loaded
+    await (await hydrated(player.page.getByRole('button', { name: 'Receive' }))).click();
+    const dialog = player.page.getByRole('dialog', { name: 'Receive' });
+    await dialog.getByLabel('Amount').fill('25');
+    const coins = player.page.waitForResponse(
+      (r) => r.url().includes('/chest/coins') && r.request().method() === 'PUT' && r.ok(),
+    );
+    await dialog.getByRole('button', { name: 'Confirm' }).click();
+    await coins;
+
+    await player.page.getByRole('button', { name: 'Add item' }).click();
+    const catalog = player.page.getByRole('dialog', { name: 'Add item' });
+    await catalog.getByRole('searchbox', { name: 'Search items' }).fill('rope');
+    const added = player.page.waitForResponse(
+      (r) => r.url().includes('/chest/items') && r.request().method() === 'POST' && r.ok(),
+    );
+    await catalog.getByRole('button', { name: 'Add Rope', exact: true }).click();
+    await added;
+
+    // The GM opens it from the sidebar
+    await page.goto(partyUrl(partyId));
+    await (
+      await hydrated(page.getByRole('complementary').getByRole('link', { name: 'Inventory' }))
+    ).click();
+    await expect(page).toHaveURL((url) => url.pathname === partyUrl(partyId, '/inventory'));
+    await expect(page.getByLabel('Gold pieces')).toHaveValue('25');
+    await expect(page.getByLabel('Quantity of Rope')).toHaveText('1');
+
+    await player.context.close();
+  });
+
+  test('o link de convite mostra nome e prévia sem login, e leva ao login', async ({
+    page,
+    browser,
+    user: _,
+  }) => {
+    const { code } = await createParty(page, 'Mesa Pública');
+    const visitor = await browser.newContext();
+    const anon = await visitor.newPage();
+
+    await anon.goto(`/parties/join/${code}`);
+    expect(new URL(anon.url()).pathname).toBe(`/parties/join/${code}`);
+    await expect(anon.getByText('Mesa Pública', { exact: true })).toBeVisible();
+    await expect(anon.locator('meta[property="og:title"]')).toHaveAttribute(
+      'content',
+      'Invite: Mesa Pública',
+    );
+    await expect(anon.locator('meta[property="og:image"]')).toHaveAttribute(
+      'content',
+      /\/og-image\.jpg$/,
+    );
+
+    await anon.getByRole('link', { name: 'Sign in to join' }).click();
+    await expect(anon).toHaveURL(
+      (url) =>
+        url.pathname === '/login' && url.searchParams.get('next') === `/parties/join/${code}`,
+    );
+
+    // Other pages of the app still send a signed-out visitor to the login
+    await anon.goto('/parties');
+    await expect(anon).toHaveURL((url) => url.pathname === '/login');
+
+    await visitor.close();
   });
 });

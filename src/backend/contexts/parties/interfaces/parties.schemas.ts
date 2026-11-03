@@ -28,3 +28,5 @@ export const inviteUsernameSchema = z.object({ username: z.string().min(1).max(6
 export const myCharactersSchema = z.object({ characterIds: z.array(z.uuid()).max(20) });
 
 export const partyCharacterParamsSchema = z.object({ partyId: z.uuid(), id: z.uuid() });
+
+export const partyChestItemParamsSchema = z.object({ partyId: z.uuid(), itemId: z.uuid() });

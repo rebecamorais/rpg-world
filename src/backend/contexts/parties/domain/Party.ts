@@ -38,6 +38,12 @@ export interface InvitePreview {
   myStatus: MemberStatus | 'gm' | null;
 }
 
+/** What anyone with the invite link sees, signed in or not (the link preview on Discord). */
+export interface InviteCard {
+  name: string;
+  imageUrl: string | null;
+}
+
 export function partyName(name: string): string {
   const trimmed = name.trim();
   if (!trimmed || trimmed.length > MAX_NAME_LENGTH) {

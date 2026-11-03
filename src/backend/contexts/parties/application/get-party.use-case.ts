@@ -27,6 +27,7 @@ export class GetPartyUseCase {
       name: party.name,
       system: party.system,
       edition: party.edition,
+      imageUrl: party.imageUrl,
       role: isGm ? 'gm' : 'player',
       people,
       roster,

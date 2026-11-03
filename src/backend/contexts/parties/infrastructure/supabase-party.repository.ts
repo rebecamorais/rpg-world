@@ -5,7 +5,7 @@ import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { Database } from '@database-types';
 
-import { InvitePreview, MemberStatus, PartySummary } from '../domain/Party';
+import { InviteCard, InvitePreview, MemberStatus, PartySummary } from '../domain/Party';
 import { PartyError, PartyErrorCode, PartyErrorCodes } from '../domain/PartyError';
 import { PartyPerson, RosterCharacter } from '../domain/PartyView';
 import { PartyRecord, PartyRepo } from '../domain/repository/party.repo';
@@ -79,6 +79,16 @@ export class SupabasePartyRepository implements PartyRepo {
     return data.length > 0;
   }
 
+  async setImage(id: string, imageUrl: string | null): Promise<boolean> {
+    const { data, error } = await this.client
+      .from('parties')
+      .update({ image_url: imageUrl })
+      .eq('id', id)
+      .select('id');
+    if (error) fail('change party image', error);
+    return data.length > 0;
+  }
+
   async delete(id: string): Promise<boolean> {
     const { data, error } = await this.client.from('parties').delete().eq('id', id).select('id');
     if (error) fail('delete party', error);
@@ -107,6 +117,14 @@ export class SupabasePartyRepository implements PartyRepo {
       gmUsername: row.gm_username,
       myStatus: row.my_status as InvitePreview['myStatus'],
     };
+  }
+
+  async inviteCard(code: string): Promise<InviteCard | null> {
+    const { data, error } = await this.client.rpc('party_invite_card', { p_code: code });
+    if (error) fail('read invite card', error);
+
+    const row = data[0];
+    return row ? { name: row.name, imageUrl: row.image_url } : null;
   }
 
   async requestJoin(code: string): Promise<MemberStatus> {
@@ -150,7 +168,7 @@ export class SupabasePartyRepository implements PartyRepo {
   async findParty(id: string): Promise<PartyRecord | null> {
     const { data, error } = await this.client
       .from('parties')
-      .select('id, name, system, gm_id, edition')
+      .select('id, name, system, gm_id, edition, image_url')
       .eq('id', id)
       .maybeSingle();
     if (error) fail('find party', error);
@@ -161,6 +179,7 @@ export class SupabasePartyRepository implements PartyRepo {
         system: data.system,
         gmId: data.gm_id,
         edition: data.edition as Edition,
+        imageUrl: data.image_url,
       }
     );
   }
