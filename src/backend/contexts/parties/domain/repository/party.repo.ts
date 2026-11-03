@@ -42,6 +42,10 @@ export interface PartyRepo {
   rolePlaySheets(
     characterIds: string[],
   ): Promise<{ id: string; sheet: RolePlaySheet; lore: RolePlayLore | null }[]>;
+  /** The linked Google Doc ID; null when none is linked or the person can't see it. */
+  journalDocId(partyId: string): Promise<string | null>;
+  /** Links the GM's journal doc, or unlinks it with null. */
+  setJournal(partyId: string, docId: string | null): Promise<void>;
   /** The person's own characters; any other is refused (CHARACTER_NOT_ALLOWED). */
   addCharacters(partyId: string, characterIds: string[]): Promise<void>;
   removeCharacters(partyId: string, characterIds: string[]): Promise<void>;

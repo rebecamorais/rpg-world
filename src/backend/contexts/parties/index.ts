@@ -13,6 +13,7 @@ import { RemoveMemberUseCase } from './application/remove-member.use-case';
 import { RenamePartyUseCase } from './application/rename-party.use-case';
 import { RequestJoinUseCase } from './application/request-join.use-case';
 import { RotateInviteCodeUseCase } from './application/rotate-invite-code.use-case';
+import { SetJournalUseCase } from './application/set-journal.use-case';
 import { SetMyCharactersUseCase } from './application/set-my-characters.use-case';
 import { SetPartyEditionUseCase } from './application/set-party-edition.use-case';
 import { SupabasePartyRepository } from './infrastructure/supabase-party.repository';
@@ -34,6 +35,7 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
   const acceptMember = new AcceptMemberUseCase(repository);
   const removeMember = new RemoveMemberUseCase(repository);
   const getParty = new GetPartyUseCase(repository);
+  const setJournal = new SetJournalUseCase(repository);
   const setMyCharacters = new SetMyCharactersUseCase(repository);
   const isGmOfCharacter = new IsGmOfCharacterUseCase(repository);
 
@@ -50,6 +52,7 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
     acceptMember: acceptMember.execute.bind(acceptMember),
     removeMember: removeMember.execute.bind(removeMember),
     get: getParty.execute.bind(getParty),
+    setJournal: setJournal.execute.bind(setJournal),
     setMyCharacters: setMyCharacters.execute.bind(setMyCharacters),
     isGmOfCharacter: isGmOfCharacter.execute.bind(isGmOfCharacter),
   };

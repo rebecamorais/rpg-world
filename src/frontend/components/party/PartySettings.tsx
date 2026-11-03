@@ -8,6 +8,7 @@ import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { useParty } from '@frontend/hooks/useParty';
 
+import { JournalSettings } from './JournalSettings';
 import { PartyManagement } from './PartyManagement';
 import { PartyNotFound } from './PartyPage';
 
@@ -23,6 +24,7 @@ export function PartySettings({ partyId }: { partyId: string }) {
   return (
     <PageContainer title={party.name} eyebrow={t('eyebrow')}>
       <PartyManagement party={party} onDeleted={() => router.push('/parties')} />
+      <JournalSettings party={party} />
     </PageContainer>
   );
 }

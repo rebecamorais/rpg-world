@@ -18,6 +18,7 @@ const hook = {
   removeMember: mutation(),
   rename: mutation(),
   setEdition: mutation(),
+  setJournal: mutation(),
   remove: mutation(),
 };
 vi.mock('@frontend/hooks/useParty', () => ({ useParty: () => hook }));
@@ -31,6 +32,7 @@ const party = (role: PartyView['role']) =>
     people: [],
     roster: [],
     myCharacterIds: [],
+    journalDocId: null,
     edition: '2024',
     gm: role === 'gm' ? { inviteCode: 'a'.repeat(32), rolePlay: [] } : null,
   }) as unknown as PartyView;

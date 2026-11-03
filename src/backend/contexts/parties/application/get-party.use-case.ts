@@ -12,9 +12,10 @@ export class GetPartyUseCase {
     if (!party) throw new PartyError(PartyErrorCodes.NOT_FOUND);
 
     const isGm = party.gmId === userId;
-    const [people, roster] = await Promise.all([
+    const [people, roster, journalDocId] = await Promise.all([
       this.repository.people(partyId),
       this.repository.roster(partyId),
+      this.repository.journalDocId(partyId),
     ]);
     // Invited and requesting people see the party in their list, not its page
     if (!isGm && !people.some((p) => p.userId === userId && p.status === 'active')) {
@@ -30,6 +31,7 @@ export class GetPartyUseCase {
       people,
       roster,
       myCharacterIds: roster.filter((c) => c.ownerId === userId).map((c) => c.characterId),
+      journalDocId,
       gm: null,
     };
     if (!isGm) return view;

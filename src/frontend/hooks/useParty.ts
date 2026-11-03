@@ -40,6 +40,10 @@ export function useParty(partyId: string) {
     mutationFn: (edition: Edition) => rpgWorldApi.patch(base, { edition }),
     ...options,
   });
+  const setJournal = useMutation({
+    mutationFn: (journalUrl: string | null) => rpgWorldApi.patch(base, { journalUrl }),
+    ...options,
+  });
   const remove = useMutation({ mutationFn: () => rpgWorldApi.delete(base), ...options });
   const rotateCode = useMutation({
     mutationFn: () => rpgWorldApi.post<{ code: string }>(`${base}/invite-code`),
@@ -74,6 +78,7 @@ export function useParty(partyId: string) {
     error: query.error,
     rename,
     setEdition,
+    setJournal,
     remove,
     rotateCode,
     invite,

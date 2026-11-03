@@ -16,10 +16,13 @@ export const GET = withAuth(
 );
 
 export const PATCH = withAuth(
-  async ({ body, params }) => {
+  async ({ user, body, params }) => {
     const { partiesApi } = await getApi();
     if (body.name !== undefined) await partiesApi.rename(params.partyId, body.name);
     if (body.edition !== undefined) await partiesApi.setEdition(params.partyId, body.edition);
+    if (body.journalUrl !== undefined) {
+      await partiesApi.setJournal(params.partyId, user.id, body.journalUrl);
+    }
     return null;
   },
   { params: partyParamsSchema, body: partyPatchSchema },

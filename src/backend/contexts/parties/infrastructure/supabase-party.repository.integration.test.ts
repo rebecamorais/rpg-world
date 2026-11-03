@@ -49,6 +49,21 @@ describe('SupabasePartyRepository (Integration)', () => {
     expect(await repo.listMine()).toEqual([]);
   });
 
+  it('o mestre grava, troca e remove o diário', async () => {
+    const repo = new SupabasePartyRepository(gm.client);
+    const id = await repo.create(gm.userId, 'Mesa');
+    const first = '1AbCdEfGhIjKlMnOpQrStUvWxYz_0123456789-ab';
+    const second = '9ZyXwVuTsRqPoNmLkJiHgFeDcBa_0123456789-zz';
+
+    expect(await repo.journalDocId(id)).toBeNull();
+    await repo.setJournal(id, first);
+    expect(await repo.journalDocId(id)).toBe(first);
+    await repo.setJournal(id, second);
+    expect(await repo.journalDocId(id)).toBe(second);
+    await repo.setJournal(id, null);
+    expect(await repo.journalDocId(id)).toBeNull();
+  });
+
   it('em mesa alheia renomear, trocar o código e apagar respondem false', async () => {
     const id = await new SupabasePartyRepository(gm.client).create(gm.userId, 'Mesa');
     const repo = new SupabasePartyRepository(stranger.client);

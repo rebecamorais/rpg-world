@@ -10,9 +10,13 @@ export const partyParamsSchema = z.object({ partyId: z.uuid() });
 export const partyNameSchema = z.object({ name: z.string().max(100) });
 
 export const partyPatchSchema = z
-  .object({ name: z.string().max(100), edition: z.enum(EDITIONS) })
+  .object({
+    name: z.string().max(100),
+    edition: z.enum(EDITIONS),
+    journalUrl: z.string().max(500).nullable(),
+  })
   .partial()
-  .refine((o) => o.name !== undefined || o.edition !== undefined);
+  .refine((o) => o.name !== undefined || o.edition !== undefined || o.journalUrl !== undefined);
 
 export const memberParamsSchema = z.object({ partyId: z.uuid(), userId: z.uuid() });
 

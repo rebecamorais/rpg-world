@@ -239,6 +239,37 @@ export class SupabasePartyRepository implements PartyRepo {
     });
   }
 
+  async journalDocId(partyId: string): Promise<string | null> {
+    const { data, error } = await this.client
+      .from('party_journals')
+      .select('doc_id')
+      .eq('party_id', partyId)
+      .maybeSingle();
+    if (error) fail('read journal', error);
+    return data?.doc_id ?? null;
+  }
+
+  // No upsert: the grant only covers UPDATE (doc_id), which ON CONFLICT DO UPDATE rejects (42501)
+  async setJournal(partyId: string, docId: string | null): Promise<void> {
+    if (docId === null) {
+      const { error } = await this.client.from('party_journals').delete().eq('party_id', partyId);
+      if (error) fail('save journal', error);
+      return;
+    }
+    const updated = await this.client
+      .from('party_journals')
+      .update({ doc_id: docId })
+      .eq('party_id', partyId)
+      .select('party_id');
+    if (updated.error) fail('save journal', updated.error);
+    if (updated.data.length > 0) return;
+
+    const { error } = await this.client
+      .from('party_journals')
+      .insert({ party_id: partyId, doc_id: docId });
+    if (error) fail('save journal', error);
+  }
+
   async addCharacters(partyId: string, characterIds: string[]): Promise<void> {
     // Two saves at once (two tabs, a double click) bring the same character: the second is a no-op
     const { error } = await this.client.from('party_characters').upsert(
