@@ -1,4 +1,15 @@
+import type { Page } from '@playwright/test';
+
 import { characterUrl, createCharacter, expect, hydrated, test } from './support/fixtures';
+
+/** Runs `action` and waits for the inventory write it triggers to succeed (the UI is optimistic). */
+async function saved(page: Page, method: string, path: string, action: () => Promise<void>) {
+  const written = page.waitForResponse(
+    (r) => r.url().includes(`/inventory${path}`) && r.request().method() === method && r.ok(),
+  );
+  await action();
+  await written;
+}
 
 test.describe('inventário', () => {
   test('recebe, paga com troco, adiciona e aumenta um item, e tudo fica salvo', async ({
@@ -13,7 +24,9 @@ test.describe('inventário', () => {
     await (await hydrated(page.getByRole('button', { name: 'Receive' }))).click();
     let dialog = page.getByRole('dialog', { name: 'Receive' });
     await dialog.getByLabel('Amount').fill('10');
-    await dialog.getByRole('button', { name: 'Confirm' }).click();
+    await saved(page, 'PUT', '/coins', () =>
+      dialog.getByRole('button', { name: 'Confirm' }).click(),
+    );
     await expect(dialog).toBeHidden();
     await expect(page.getByLabel('Gold pieces')).toHaveValue('10');
 
@@ -24,7 +37,9 @@ test.describe('inventário', () => {
     await dialog.getByRole('combobox', { name: 'Coin' }).click();
     await page.getByRole('option', { name: 'SP' }).click();
     await expect(dialog.getByText('Change', { exact: true })).toBeVisible();
-    await dialog.getByRole('button', { name: 'Confirm' }).click();
+    await saved(page, 'PUT', '/coins', () =>
+      dialog.getByRole('button', { name: 'Confirm' }).click(),
+    );
     await expect(dialog).toBeHidden();
     await expect(page.getByLabel('Gold pieces')).toHaveValue('9');
     await expect(page.getByLabel('Silver pieces')).toHaveValue('5');
@@ -33,9 +48,13 @@ test.describe('inventário', () => {
     await page.getByRole('button', { name: 'Add item' }).click();
     const catalog = page.getByRole('dialog', { name: 'Add item' });
     await catalog.getByRole('searchbox', { name: 'Search items' }).fill('rope');
-    await catalog.getByRole('button', { name: 'Add Rope', exact: true }).click();
+    await saved(page, 'POST', '/items', () =>
+      catalog.getByRole('button', { name: 'Add Rope', exact: true }).click(),
+    );
     await expect(catalog).toBeHidden();
-    await page.getByRole('button', { name: 'One more Rope' }).click();
+    await saved(page, 'PATCH', '/items/', () =>
+      page.getByRole('button', { name: 'One more Rope' }).click(),
+    );
     await expect(page.getByLabel('Quantity of Rope')).toHaveText('2');
 
     // Everything survives a reload
