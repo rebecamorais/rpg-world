@@ -40,6 +40,6 @@ describe('tags {@item} do conteúdo', () => {
     console.info(
       `{@item}: ${resolved.length} resolvem, ${unresolved.length} não resolvem\n${[...new Set(unresolved)].sort().join('\n')}`,
     );
-    expect(unresolved).toBeDefined();
+    expect(resolved.length).toBeGreaterThan(0);
   });
 });
