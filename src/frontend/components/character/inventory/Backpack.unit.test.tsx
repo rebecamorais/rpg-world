@@ -110,7 +110,10 @@ describe('Backpack', () => {
     renderBackpack([entry('e1', ROPE, 2), entry('e2', TORCH, 5)]);
 
     expect(await screen.findByText('Corda de Cânhamo')).toBeInTheDocument();
-    expect(screen.getByLabelText('Quantity of Corda de Cânhamo')).toHaveTextContent('2');
+    // An <output> (role status): the name is read, and a new quantity is announced
+    expect(screen.getByRole('status', { name: 'Quantity of Corda de Cânhamo' })).toHaveTextContent(
+      '2',
+    );
     expect(screen.getByText('10 lb')).toBeInTheDocument();
     expect(screen.getByText('1 GP')).toBeInTheDocument();
     // 10 x 2 + 1 x 5

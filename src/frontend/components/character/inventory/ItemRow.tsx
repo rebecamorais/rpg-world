@@ -84,12 +84,14 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
           >
             <AppIcon name="Minus" size={12} aria-hidden="true" />
           </Button>
-          <span
+          {/* <output>, not a <span>: a name on a plain span is not read; this one also announces
+              the new quantity after − / + */}
+          <output
             aria-label={t('quantity', { name })}
             className="min-w-8 text-center font-mono text-sm font-bold tabular-nums"
           >
             {quantity}
-          </span>
+          </output>
           <Button
             variant="ghost"
             size="icon"
