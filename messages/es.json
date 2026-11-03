@@ -310,6 +310,134 @@
       "noMatchDescription": "Try another name or turn off a filter.",
       "showing": "{shown} of {total} spells",
       "castingTime": "Casting time"
+    },
+    "coins": {
+      "title": "Coin pouch",
+      "hint": "The character's money. Paying gives change on its own; receiving adds the coins as they came.",
+      "cp": {
+        "short": "CP",
+        "name": "Copper pieces"
+      },
+      "sp": {
+        "short": "SP",
+        "name": "Silver pieces"
+      },
+      "ep": {
+        "short": "EP",
+        "name": "Electrum pieces"
+      },
+      "gp": {
+        "short": "GP",
+        "name": "Gold pieces"
+      },
+      "pp": {
+        "short": "PP",
+        "name": "Platinum pieces"
+      },
+      "pay": "Pay",
+      "receive": "Receive",
+      "payDescription": "Pays with the price's coin; if that isn't enough, breaks a bigger coin and gives change.",
+      "receiveDescription": "Adds the amount to the pouch, in the coin it came in.",
+      "amount": "Amount",
+      "coin": "Coin",
+      "spent": "Paid",
+      "change": "Change",
+      "after": "Pouch after",
+      "none": "nothing",
+      "missing": "Not enough money: {amount} short.",
+      "tooMany": "The pouch holds at most {max} of each coin.",
+      "confirm": "Confirm"
+    },
+    "inventory": {
+      "title": "Backpack",
+      "hint": "What the character carries, apart from the coins. Saved on the spot.",
+      "empty": "The backpack is empty.",
+      "emptyHint": "Add the gear the character carries.",
+      "totalWeight": "Total weight: {weight}",
+      "weight": "{weight} lb",
+      "details": "Details for {name}",
+      "remove": "Remove {name}",
+      "removed": "{name} removed",
+      "undo": "Undo",
+      "quantity": "Quantity of {name}",
+      "decrease": "One less {name}",
+      "increase": "One more {name}",
+      "tagAriaLabel": "{name}, item",
+      "tagAriaLabelShown": "{text} ({name}), item",
+      "unknownHint": "This item is no longer in the catalog. You can remove it.",
+      "stats": {
+        "price": "Price",
+        "weight": "Weight",
+        "ac": "Armor Class",
+        "strength": "Minimum Strength",
+        "stealth": "Stealth",
+        "stealthDisadvantage": "Disadvantage",
+        "damage": "Damage",
+        "versatile": "Versatile",
+        "range": "Range",
+        "category": "Category",
+        "properties": "Properties"
+      },
+      "add": {
+        "title": "Add item",
+        "description": "Common items of the SRD.",
+        "searchLabel": "Search items",
+        "searchPlaceholder": "Search by name",
+        "edition": "Edition",
+        "allEditions": "All editions",
+        "category": "Category",
+        "allCategories": "All categories",
+        "noResults": "No items found.",
+        "clear": "Clear filters",
+        "count": "{count, plural, one {# item} other {# items}}",
+        "pick": "Add {name}",
+        "loading": "Loading items",
+        "tooMany": "Showing the first {max}. Narrow the search to see the rest."
+      },
+      "categories": {
+        "weapon": "Weapons",
+        "armor": "Armor",
+        "shield": "Shields",
+        "gear": "Adventuring gear",
+        "tool": "Tools",
+        "kit": "Kits",
+        "ammunition": "Ammunition",
+        "focus": "Spellcasting focuses",
+        "instrument": "Musical instruments",
+        "mount": "Mounts",
+        "vehicle": "Vehicles",
+        "food": "Food and drink",
+        "trade-good": "Trade goods",
+        "other": "Other"
+      },
+      "category": {
+        "weapon": "Weapon",
+        "armor": "Armor",
+        "shield": "Shield",
+        "gear": "Adventuring gear",
+        "tool": "Tool",
+        "kit": "Kit",
+        "ammunition": "Ammunition",
+        "focus": "Spellcasting focus",
+        "instrument": "Musical instrument",
+        "mount": "Mount",
+        "vehicle": "Vehicle",
+        "food": "Food and drink",
+        "trade-good": "Trade good",
+        "other": "Other"
+      },
+      "properties": {
+        "2H": "Two-Handed",
+        "A": "Ammunition",
+        "F": "Finesse",
+        "H": "Heavy",
+        "L": "Light",
+        "LD": "Loading",
+        "R": "Reach",
+        "S": "Special",
+        "T": "Thrown",
+        "V": "Versatile"
+      }
     }
   },
   "characterHeader": {
