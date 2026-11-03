@@ -702,7 +702,7 @@
   },
   "terms": {
     "title": "Termos de Uso",
-    "lastUpdated": "Última atualização: 15 de outubro de 2026",
+    "lastUpdated": "Última atualização: 3 de novembro de 2026",
     "sections": {
       "acceptance": {
         "title": "1. Aceitação dos Termos",
@@ -743,9 +743,11 @@
       },
       "gameContent": {
         "title": "9. Conteúdo de Jogo e Créditos",
-        "content": "As regras e magias exibidas no RPG World vêm de fontes abertas, usadas de acordo com as suas licenças:",
+        "content": "As regras e magias exibidas no RPG World vêm de fontes abertas, usadas de acordo com as suas licenças. As atribuições dos System Reference Documents estão reproduzidas exatamente como a Wizards of the Coast pede:",
         "items": [
-          "Este trabalho inclui material do <srd>System Reference Document 5.1</srd> (\"SRD 5.1\") e do <srd52>System Reference Document 5.2</srd52> (\"SRD 5.2\") da Wizards of the Coast LLC. Os dois são licenciados sob a <ccby>Creative Commons Attribution 4.0 International License</ccby>.",
+          "This work includes material taken from the System Reference Document 5.1 (“SRD 5.1”) by Wizards of the Coast LLC and available at <srd>https://dnd.wizards.com/resources/systems-reference-document</srd>. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at <ccby>https://creativecommons.org/licenses/by/4.0/legalcode</ccby>.",
+          "This work includes material from the System Reference Document 5.2 (“SRD 5.2”) by Wizards of the Coast LLC, available at <srd52>https://www.dndbeyond.com/srd</srd52>. The SRD 5.2 is licensed under the Creative Commons Attribution 4.0 International License, available at <ccby>https://creativecommons.org/licenses/by/4.0/legalcode</ccby>.",
+          "As magias e condições em espanhol das regras de 2014 vêm da edição oficial em espanhol do SRD 5.1: Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (“SRD 5.1”) de Wizards of the Coast LLC, que está disponible en <srdEs>https://dnd.wizards.com/es/resources/systems-reference-document</srdEs>. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en <ccbyEs>https://creativecommons.org/licenses/by/4.0/legalcode.es</ccbyEs>.",
           "Os dados estruturados das magias de 2014 foram obtidos da <api>5e SRD API</api>, do projeto <database>5e-bits/5e-database</database>, sob a licença MIT. As magias de 2024 foram extraídas do <fivetools>5etools</fivetools>, só das entradas que fazem parte do SRD 5.2.",
           "As traduções em português das magias vêm do <foundry>módulo de tradução do D&D 5e para o Foundry VTT</foundry>, da comunidade Foundry VTT Brasil (Cauã Pessoa e colaboradores), sob a licença MIT.",
           "O RPG World não é afiliado, endossado nem patrocinado pela Wizards of the Coast. Dungeons & Dragons e D&D são marcas da Wizards of the Coast LLC.",

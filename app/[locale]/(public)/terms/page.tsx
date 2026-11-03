@@ -11,6 +11,8 @@ const CREDIT_HREFS = {
   srd: 'https://dnd.wizards.com/resources/systems-reference-document',
   srd52: 'https://www.dndbeyond.com/srd',
   ccby: 'https://creativecommons.org/licenses/by/4.0/legalcode',
+  srdEs: 'https://dnd.wizards.com/es/resources/systems-reference-document',
+  ccbyEs: 'https://creativecommons.org/licenses/by/4.0/legalcode.es',
   api: 'https://www.dnd5eapi.co',
   database: 'https://github.com/5e-bits/5e-database',
   fivetools: 'https://github.com/5etools-mirror-3/5etools-src',
@@ -101,7 +103,7 @@ export default async function TermsPage({ params }: LocaleParams) {
             {t('sections.gameContent.content')}
           </p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed break-words">
-            {['0', '1', '2', '3', '4'].map((key) => (
+            {['0', '1', '2', '3', '4', '5', '6'].map((key) => (
               <li key={key}>{t.rich(`sections.gameContent.items.${key}`, CREDIT_LINKS)}</li>
             ))}
           </ul>
