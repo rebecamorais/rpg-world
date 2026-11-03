@@ -15,14 +15,14 @@ import { useItemFormat } from './useItemFormat';
 export function ItemDetails({ item, nested = false }: { item: ItemDto; nested?: boolean }) {
   const t = useTranslations('characters.inventory.stats');
   const tCharacters = useTranslations('characters');
-  const tCategories = useTranslations('characters.inventory.categories');
+  const tCategory = useTranslations('characters.inventory.category');
   const tProps = useTranslations('characters.inventory.properties');
   const tDamage = useTranslations('spellsData.damageTypes');
   const fmt = useItemFormat();
   const source = parseContentKey(item.key)?.source ?? '';
 
   const stats: { label: string; value: string }[] = [];
-  stats.push({ label: t('category'), value: tCategories(item.category) });
+  stats.push({ label: t('category'), value: tCategory(item.category) });
   if (item.value !== null) stats.push({ label: t('price'), value: fmt.price(item.value) });
   if (item.weight !== null) stats.push({ label: t('weight'), value: fmt.weight(item.weight) });
   if (item.ac !== null) stats.push({ label: t('ac'), value: String(item.ac) });

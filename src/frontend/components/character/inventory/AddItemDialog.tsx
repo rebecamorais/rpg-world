@@ -61,6 +61,7 @@ export function AddItemDialog({ open, onOpenChange, initialEdition, onPick }: Pr
 function AddItemContent({ initialEdition, onPick }: Pick<Props, 'initialEdition' | 'onPick'>) {
   const tAdd = useTranslations('characters.inventory.add');
   const tCategories = useTranslations('characters.inventory.categories');
+  const tCategory = useTranslations('characters.inventory.category');
   const tEditions = useTranslations('spellsDrawer.editions');
   const { character } = useCharacterState();
   const { list, isLoading } = useItems();
@@ -169,9 +170,10 @@ function AddItemContent({ initialEdition, onPick }: Pick<Props, 'initialEdition'
                 key={item.key}
                 item={item}
                 label={tAdd('pick', { name: item.name })}
-                category={tCategories(item.category)}
+                category={tCategory(item.category)}
                 edition={edition ? null : tEditions(item.edition)}
                 price={item.value !== null ? fmt.price(item.value) : null}
+                weight={item.weight !== null ? fmt.weight(item.weight) : null}
                 onPick={() => onPick(item.key)}
               />
             ))}
@@ -193,6 +195,7 @@ function PickRow({
   category,
   edition,
   price,
+  weight,
   onPick,
 }: {
   item: ItemDto;
@@ -200,6 +203,7 @@ function PickRow({
   category: string;
   edition: string | null;
   price: string | null;
+  weight: string | null;
   onPick: () => void;
 }) {
   return (
@@ -216,7 +220,10 @@ function PickRow({
             {[category, edition].filter(Boolean).join(' · ')}
           </span>
         </span>
-        <span className="text-muted-foreground text-sm tabular-nums">{price}</span>
+        <span className="text-muted-foreground flex flex-col items-end text-sm tabular-nums">
+          <span>{price}</span>
+          <span className="text-label">{weight}</span>
+        </span>
         <AppIcon
           name="Plus"
           size={16}

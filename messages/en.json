@@ -410,6 +410,22 @@
         "trade-good": "Trade goods",
         "other": "Other"
       },
+      "category": {
+        "weapon": "Weapon",
+        "armor": "Armor",
+        "shield": "Shield",
+        "gear": "Adventuring gear",
+        "tool": "Tool",
+        "kit": "Kit",
+        "ammunition": "Ammunition",
+        "focus": "Spellcasting focus",
+        "instrument": "Musical instrument",
+        "mount": "Mount",
+        "vehicle": "Vehicle",
+        "food": "Food and drink",
+        "trade-good": "Trade good",
+        "other": "Other"
+      },
       "properties": {
         "2H": "Two-Handed",
         "A": "Ammunition",

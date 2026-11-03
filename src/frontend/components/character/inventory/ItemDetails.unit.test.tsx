@@ -80,7 +80,7 @@ describe('ItemDetails', () => {
     };
     renderWithProviders(<ItemDetails item={sword} />);
 
-    expect(screen.getByText('Weapons')).toBeInTheDocument();
+    expect(screen.getByText('Weapon')).toBeInTheDocument();
     expect(screen.getByText('1d8 Slashing')).toBeInTheDocument();
     expect(screen.getByText('Versatile (1d10), Thrown (20/60), XX')).toBeInTheDocument();
     expect(screen.getByText('Minimum Strength')).toBeInTheDocument();
@@ -102,7 +102,9 @@ describe('ItemDetails', () => {
     );
 
     expect(screen.getByText('Força mínima')).toBeInTheDocument();
-    expect(screen.getByText('Armas')).toBeInTheDocument();
+    expect(screen.getByText('Arma')).toBeInTheDocument();
+    // 65 lb in the pt-BR books' kilograms (1 lb = 0,5 kg)
+    expect(screen.getByText('32,5 kg')).toBeInTheDocument();
     expect(screen.getByText('1d8 Cortante')).toBeInTheDocument();
     expect(screen.getByText('Acuidade, Leve')).toBeInTheDocument();
   });

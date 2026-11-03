@@ -254,8 +254,14 @@ describe('Backpack', () => {
       await user.click(within(dialog).getByRole('combobox', { name: 'Category' }));
       await user.click(await screen.findByRole('option', { name: 'Weapons' }));
 
-      expect(within(dialog).getByRole('button', { name: 'Add Longsword' })).toBeVisible();
+      const longsword = within(dialog).getByRole('button', { name: 'Add Longsword' });
+      expect(longsword).toBeVisible();
       expect(within(dialog).queryByRole('button', { name: 'Add Torch' })).not.toBeInTheDocument();
+      // The row: name, category (singular), price and weight
+      expect(longsword).toHaveTextContent('Weapon');
+      expect(longsword).not.toHaveTextContent('Weapons');
+      expect(longsword).toHaveTextContent('15 GP');
+      expect(longsword).toHaveTextContent('3 lb');
     });
 
     it('com a mochila vazia a edição começa em 2024', async () => {
