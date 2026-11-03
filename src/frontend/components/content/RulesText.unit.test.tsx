@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -25,11 +25,11 @@ vi.mock('@frontend/hooks/useConditions', () => ({
 
 const ITEMS = [
   {
-    key: 'dnd5e:srd-5.2:item:rope-hempen',
-    id: 'rope-hempen',
+    key: 'dnd5e:srd-5.2:item:rope',
+    id: 'rope',
     edition: '2024',
     category: 'gear',
-    name: 'Corda de cânhamo',
+    name: 'Corda',
     description: 'Cinquenta pés de corda.',
     value: 100,
     weight: 10,
@@ -119,8 +119,36 @@ describe('RulesText', () => {
   });
 
   it('item sem texto de exibição usa o nome da tag, resolvido por slug', () => {
-    renderWithProviders(<RulesText text="{@item Rope, Hempen|XPHB}" source="srd-5.2" />);
-    expect(screen.getByRole('button', { name: 'Corda de cânhamo, item' })).toBeInTheDocument();
+    renderWithProviders(<RulesText text="{@item Rope|XPHB}" source="srd-5.2" />);
+    expect(screen.getByRole('button', { name: 'Corda, item' })).toHaveTextContent('Corda');
+  });
+
+  it('texto de exibição igual ao nome não repete o nome no rótulo', () => {
+    renderWithProviders(<RulesText text="{@item Rope|XPHB|corda}" source="srd-5.2" />);
+    expect(screen.getByRole('button', { name: 'Corda, item' })).toHaveTextContent('corda');
+  });
+
+  // fireEvent, not userEvent: user-event takes anything inside a disabled fieldset as disabled,
+  // while a browser only turns off form controls (and <button>), which is the point here
+  const readOnly = () =>
+    renderWithProviders(
+      <fieldset disabled>
+        <RulesText text="Use {@item Tinderbox|XPHB|isqueiro}." source="srd-5.2" />
+      </fieldset>,
+    );
+
+  it('dentro de um fieldset desligado (ficha somente leitura do mestre) o item abre no clique', async () => {
+    readOnly();
+    const tag = screen.getByRole('button', { name: 'Isqueiro, item' });
+    expect(tag).not.toBeDisabled();
+    fireEvent.click(tag);
+    expect(await screen.findByText('Acende fogo.')).toBeInTheDocument();
+  });
+
+  it('dentro de um fieldset desligado o item abre no Enter', async () => {
+    readOnly();
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Isqueiro, item' }), { key: 'Enter' });
+    expect(await screen.findByText('Acende fogo.')).toBeInTheDocument();
   });
 
   it('item desconhecido ou de outro livro vira texto, sem botão', () => {

@@ -23,6 +23,7 @@ export function ItemHint({ itemKey, label, className }: ItemHintProps) {
   const t = useTranslations('characters.inventory');
   const { byKey } = useItems();
   const titleId = React.useId();
+  const [open, setOpen] = React.useState(false);
 
   const item = byKey.get(itemKey);
   if (!item) return <>{label ?? parseContentKey(itemKey)?.id ?? itemKey}</>;
@@ -34,18 +35,27 @@ export function ItemHint({ itemKey, label, className }: ItemHintProps) {
       : t('tagAriaLabel', { name: item.name });
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button
-          type="button"
+        {/* Not a <button>: on the GM's read-only sheet a disabled fieldset turns buttons off, and
+            the GM still needs to read the item's rules (like the backpack row's toggle) */}
+        <span
+          role="button"
+          tabIndex={0}
           aria-label={ariaLabel}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setOpen((o) => !o);
+            }
+          }}
           className={cn(
             'focus-ring touch-target text-primary-flare decoration-primary/60 pointer-events-auto cursor-pointer rounded-sm underline decoration-dotted underline-offset-4',
             className,
           )}
         >
           {label ?? item.name}
-        </button>
+        </span>
       </PopoverTrigger>
       <PopoverContent aria-labelledby={titleId}>
         <p id={titleId} className="text-foreground mb-2 font-semibold">
