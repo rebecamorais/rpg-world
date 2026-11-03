@@ -52,7 +52,7 @@
       "party_error_gm_cannot_join": "Você é o mestre desta mesa.",
       "party_error_already_member": "Essa pessoa já está na mesa.",
       "party_error_character_not_allowed": "Este personagem não pode ser levado para a mesa.",
-      "party_error_journal_url_invalid": "Cole um link de documento do Google Docs.",
+      "party_error_journal_url_invalid": "Cole o link de um documento do Google Docs (docs.google.com/document/…).",
       "feedback_error_invalid_email": "Informe um e-mail válido.",
       "feedback_error_message_too_short": "A mensagem precisa ter pelo menos 10 caracteres.",
       "security_token_missing": "Por favor, complete a verificação de segurança.",

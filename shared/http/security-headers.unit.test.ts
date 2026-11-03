@@ -31,6 +31,11 @@ describe('buildContentSecurityPolicy', () => {
     expect(directive(csp, 'frame-src')).toContain('https://challenges.cloudflare.com');
   });
 
+  it('allows embedding Google Docs (party journal)', () => {
+    const csp = buildContentSecurityPolicy(prod);
+    expect(directive(csp, 'frame-src')).toContain('https://docs.google.com');
+  });
+
   it('allows the Cloudflare Web Analytics beacon the root layout loads', () => {
     const csp = buildContentSecurityPolicy(prod);
     expect(directive(csp, 'script-src')).toContain('https://static.cloudflareinsights.com');

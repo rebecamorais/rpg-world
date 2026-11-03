@@ -8,6 +8,8 @@
 
 const TURNSTILE_ORIGIN = 'https://challenges.cloudflare.com';
 const GITHUB_SPONSORS_ORIGIN = 'https://github.com';
+// Party journal: the Google Docs document is embedded in an iframe
+const GOOGLE_DOCS_ORIGIN = 'https://docs.google.com';
 // Cloudflare Web Analytics (cookieless visit counts): the root layout loads the beacon script, which
 // reports back to cloudflareinsights.com
 const CLOUDFLARE_INSIGHTS_SCRIPT = 'https://static.cloudflareinsights.com';
@@ -59,7 +61,7 @@ export function buildContentSecurityPolicy({
     'img-src': ["'self'", 'blob:', 'data:', 'https:', ...(isDev ? ['http:'] : [])],
     'font-src': ["'self'"],
     'connect-src': ["'self'", ...supabaseOrigins(supabaseUrl), CLOUDFLARE_INSIGHTS_REPORT],
-    'frame-src': [TURNSTILE_ORIGIN, GITHUB_SPONSORS_ORIGIN],
+    'frame-src': [TURNSTILE_ORIGIN, GITHUB_SPONSORS_ORIGIN, GOOGLE_DOCS_ORIGIN],
     'object-src': ["'none'"],
     'base-uri': ["'self'"],
     'form-action': ["'self'"],

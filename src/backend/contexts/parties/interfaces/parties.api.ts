@@ -11,6 +11,9 @@ export const makePartiesApi = (partyContext: PartyContext) => ({
 
   setEdition: (partyId: string, edition: Edition) => partyContext.setEdition(partyId, edition),
 
+  setJournal: (partyId: string, userId: string, url: string | null) =>
+    partyContext.setJournal(partyId, userId, url),
+
   delete: (partyId: string) => partyContext.delete(partyId),
 
   rotateInviteCode: async (partyId: string) => ({
