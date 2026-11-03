@@ -174,7 +174,7 @@
   },
   "landing": {
     "heroTitle": "Your ultimate RPG companion.",
-    "heroSubtitle": "Manage your character sheets, track attributes, spells and combat effortlessly.",
+    "heroSubtitle": "Manage your character sheets, play with your party and track attributes, spells, items and combat effortlessly.",
     "ctaStart": "Start Playing",
     "previewLabel": "Example character sheet",
     "previewName": "Ada the Wise",
@@ -985,9 +985,9 @@
   "features": {
     "seeAll": "See all features",
     "highlightsTitle": "Made for players",
-    "highlightsSubtitle": "The sheet does the math, the spellbook has the SRD spells and everything works in English and Portuguese.",
+    "highlightsSubtitle": "The sheet does the math, the spellbook has the SRD spells, the party brings GM and players together, and everything works in English and Portuguese.",
     "metaTitle": "Features",
-    "metaDescription": "Everything RPG World does today: a D&D 5e character sheet with automatic calculations, a searchable SRD spellbook, character lore and more, in English and Portuguese.",
+    "metaDescription": "Everything RPG World does today: a D&D 5e character sheet with automatic calculations, a searchable SRD spellbook, inventory, parties with real-time combat and a journal, in English and Portuguese.",
     "eyebrow": "Features",
     "title": "Everything you can do in RPG World",
     "subtitle": "Free, open source and no account needed to look around. Create one when you want to build your first character.",
@@ -1026,16 +1026,24 @@
       "languages": {
         "title": "In English and Portuguese",
         "description": "The interface and the spells in both languages. Switch any time."
+      },
+      "inventory": {
+        "title": "Inventory and coins",
+        "description": "A coin pouch with pay and receive (change comes back on its own) and a backpack with the SRD items and total weight."
+      },
+      "parties": {
+        "title": "Parties with a GM and players",
+        "description": "Invite by link or username. The GM sees the party's characters in Role Play mode and runs combat with initiative, HP and conditions in real time."
+      },
+      "partyChest": {
+        "title": "Party chest and journal",
+        "description": "Coins and items the party keeps together, and a Google Docs journal opened right inside the party."
       }
     },
     "planned": {
-      "parties": {
-        "title": "Parties and campaigns",
-        "description": "Dungeon Master and players at the same table, with invites and session notes."
-      },
-      "inventory": {
-        "title": "Inventory and items",
-        "description": "Equipment, magic items and coins on the sheet."
+      "sessions": {
+        "title": "Sessions and notes",
+        "description": "Notes per session with who can see what, a calendar and reminders on Discord."
       },
       "systems": {
         "title": "More systems and languages",
@@ -1083,6 +1091,30 @@
           "title": "Your character's story",
           "description": "Appearance, personality, ideals, bonds, flaws and the full backstory, next to the sheet.",
           "alt": "Story page with appearance, personality traits, ideals, bonds, flaws and the character's backstory"
+        },
+        "inventory": {
+          "tab": "Inventory",
+          "title": "Coins and backpack",
+          "description": "Pay and receive with automatic change and keep the SRD gear, with total weight.",
+          "alt": "A character's inventory with the five coins and a backpack of items with total weight"
+        },
+        "party": {
+          "tab": "Party",
+          "title": "The GM's table",
+          "description": "The players' characters in Role Play mode: traits, ideals, passive Perception and Insight at hand.",
+          "alt": "A party seen by the GM, with Role Play cards of the players' characters"
+        },
+        "combat": {
+          "tab": "Combat",
+          "title": "Real-time combat",
+          "description": "Initiative, HP and conditions for every participant. Players follow the turn order as it happens.",
+          "alt": "The GM's initiative tracker with players and enemies, hit points and conditions"
+        },
+        "chest": {
+          "tab": "Party chest",
+          "title": "The party chest",
+          "description": "The party's coins and items, which the GM and the players can change.",
+          "alt": "The party inventory with coins and a chest of items"
         }
       }
     }

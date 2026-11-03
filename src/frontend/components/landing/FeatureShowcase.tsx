@@ -12,7 +12,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/u
 import SHOWCASE_SIZES from '@frontend/constants/showcase.generated.json';
 
 // Screens captured by scripts/capture-showcase.ts, in the order they are shown
-const SLIDES = ['sheet', 'spellbook', 'search', 'lore'] as const;
+const SLIDES = [
+  'sheet',
+  'spellbook',
+  'search',
+  'lore',
+  'inventory',
+  'party',
+  'combat',
+  'chest',
+] as const;
 type Slide = (typeof SLIDES)[number];
 
 function screenshot(locale: string, slide: Slide, device: 'desktop' | 'mobile') {
