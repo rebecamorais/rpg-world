@@ -471,6 +471,33 @@ export type Database = {
           },
         ];
       };
+      party_journals: {
+        Row: {
+          doc_id: string;
+          party_id: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          doc_id: string;
+          party_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          doc_id?: string;
+          party_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'party_journals_party_id_fkey';
+            columns: ['party_id'];
+            isOneToOne: true;
+            referencedRelation: 'parties';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       party_members: {
         Row: {
           created_at: string;
