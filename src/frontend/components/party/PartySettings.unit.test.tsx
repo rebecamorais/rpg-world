@@ -18,6 +18,7 @@ const hook = {
   removeMember: mutation(),
   rename: mutation(),
   setEdition: mutation(),
+  setJournal: mutation(),
   remove: mutation(),
 };
 vi.mock('@frontend/hooks/useParty', () => ({ useParty: () => hook }));

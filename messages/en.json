@@ -1188,6 +1188,7 @@
       "noMembers": "No players yet.",
       "remove": "Remove",
       "removeConfirm": "Remove {name} from the party? Their characters stay with them.",
+      "removeConfirmJournal": "Remove {name} from the party? Their characters stay with them. They may have kept the journal link: to cut off access, restrict sharing in Google Docs.",
       "nameLabel": "Party name",
       "rename": "Rename",
       "renamed": "Party renamed",
@@ -1200,6 +1201,19 @@
       "edition2014": "2014 rules",
       "edition2024": "2024 rules",
       "editionSaved": "Rules edition saved"
+    },
+    "journal": {
+      "title": "Party journal",
+      "linkLabel": "Google Docs link",
+      "linkPlaceholder": "https://docs.google.com/document/d/…",
+      "save": "Save",
+      "saved": "Journal saved",
+      "remove": "Remove",
+      "removeConfirm": "Remove the party journal? The document in Google Docs is not deleted.",
+      "removed": "Journal removed",
+      "stepShare": "In Google Docs, click <b>Share</b>.",
+      "stepOpen": "<b>Open link (easier):</b> under General access, choose <i>Anyone with the link</i> → <i>Editor</i>. Works without signing in.",
+      "stepInvited": "<b>Invited only (safer):</b> add each player's email. Each one must be signed in to Google in this browser; if the journal doesn't open here, use <i>Open in Google Docs</i>."
     },
     "mine": {
       "title": "My characters at the table",

@@ -137,7 +137,8 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
                     variant="ghost"
                     disabled={removeMember.isPending}
                     onClick={() => {
-                      if (window.confirm(t('removeConfirm', { name: label }))) {
+                      const key = party.journalDocId ? 'removeConfirmJournal' : 'removeConfirm';
+                      if (window.confirm(t(key, { name: label }))) {
                         removeMember.mutate(person.userId);
                       }
                     }}

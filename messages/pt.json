@@ -1188,6 +1188,7 @@
       "noMembers": "Nenhum jogador ainda.",
       "remove": "Tirar",
       "removeConfirm": "Tirar {name} da mesa? Os personagens continuam com a pessoa.",
+      "removeConfirmJournal": "Tirar {name} da mesa? Os personagens continuam com essa pessoa. Ela pode ter guardado o link do diário: para cortar o acesso, restrinja o compartilhamento no Google Docs.",
       "nameLabel": "Nome da mesa",
       "rename": "Renomear",
       "renamed": "Mesa renomeada",
@@ -1200,6 +1201,19 @@
       "edition2014": "Regras de 2014",
       "edition2024": "Regras de 2024",
       "editionSaved": "Edição das regras salva"
+    },
+    "journal": {
+      "title": "Diário da mesa",
+      "linkLabel": "Link do Google Docs",
+      "linkPlaceholder": "https://docs.google.com/document/d/…",
+      "save": "Salvar",
+      "saved": "Diário salvo",
+      "remove": "Remover",
+      "removeConfirm": "Remover o diário da mesa? O documento no Google Docs não é apagado.",
+      "removed": "Diário removido",
+      "stepShare": "No Google Docs, clique em <b>Compartilhar</b>.",
+      "stepOpen": "<b>Link aberto (mais fácil):</b> em Acesso geral, escolha <i>Qualquer pessoa com o link</i> → <i>Editor</i>. Funciona sem login.",
+      "stepInvited": "<b>Só convidados (mais seguro):</b> adicione o e-mail de cada jogador. Cada um precisa estar logado no Google neste navegador; se o diário não abrir aqui, use <i>Abrir no Google Docs</i>."
     },
     "mine": {
       "title": "Meus personagens na mesa",
