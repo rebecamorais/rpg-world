@@ -22,21 +22,30 @@ interface ImageCropDialogProps {
   onCancel: () => void;
   /** `area` is in the original image's pixels; null if the cropper never measured it. */
   onConfirm: (area: CropArea | null) => void;
+  /** Width over height; 1 (the default) is a round avatar, anything else a rectangle. */
+  aspect?: number;
 }
 
-/** Square crop with drag and zoom, shown before the image is uploaded. */
-export function ImageCropDialog({ source, onCancel, onConfirm }: ImageCropDialogProps) {
+/** Crop with drag and zoom (a round avatar by default), shown before the image is uploaded. */
+export function ImageCropDialog({ source, onCancel, onConfirm, aspect = 1 }: ImageCropDialogProps) {
   return (
     <Dialog open={!!source} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent>
         {/* Mounted per image, so zoom and position start over each time */}
-        {source ? <CropBody source={source} onCancel={onCancel} onConfirm={onConfirm} /> : null}
+        {source ? (
+          <CropBody source={source} onCancel={onCancel} onConfirm={onConfirm} aspect={aspect} />
+        ) : null}
       </DialogContent>
     </Dialog>
   );
 }
 
-function CropBody({ source, onCancel, onConfirm }: ImageCropDialogProps & { source: string }) {
+function CropBody({
+  source,
+  onCancel,
+  onConfirm,
+  aspect,
+}: ImageCropDialogProps & { source: string; aspect: number }) {
   const t = useTranslations('avatarUpload');
   const tCommon = useTranslations('common');
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -50,14 +59,17 @@ function CropBody({ source, onCancel, onConfirm }: ImageCropDialogProps & { sour
         <DialogDescription>{t('cropDescription')}</DialogDescription>
       </DialogHeader>
 
-      <div className="bg-muted relative aspect-square w-full overflow-hidden rounded-md">
+      <div
+        className="bg-muted relative w-full overflow-hidden rounded-md"
+        style={{ aspectRatio: aspect === 1 ? 1 : 16 / 10 }}
+      >
         <Cropper
           image={source}
           crop={crop}
           zoom={zoom}
           maxZoom={5}
-          aspect={1}
-          cropShape="round"
+          aspect={aspect}
+          cropShape={aspect === 1 ? 'round' : 'rect'}
           showGrid={false}
           onCropChange={setCrop}
           onZoomChange={setZoom}

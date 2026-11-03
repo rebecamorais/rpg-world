@@ -12,14 +12,16 @@ export const AVAILABLE_FEATURES = [
   { key: 'magic', icon: 'Sparkles' },
   { key: 'spellbook', icon: 'BookOpen' },
   { key: 'lore', icon: 'Scroll' },
+  { key: 'inventory', icon: 'Backpack' },
+  { key: 'parties', icon: 'Swords' },
+  { key: 'partyChest', icon: 'BookMarked' },
   { key: 'customization', icon: 'Palette' },
   { key: 'languages', icon: 'Languages' },
 ] as const;
 
 /** On the roadmap, not available yet. */
 export const PLANNED_FEATURES = [
-  { key: 'parties', icon: 'Swords' },
-  { key: 'inventory', icon: 'Backpack' },
+  { key: 'sessions', icon: 'History' },
   { key: 'systems', icon: 'Book' },
   { key: 'homebrew', icon: 'Wand2' },
 ] as const;

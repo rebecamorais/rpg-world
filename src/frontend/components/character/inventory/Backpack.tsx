@@ -10,7 +10,8 @@ import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useLoadedCharacter } from '@frontend/context/CharacterContext';
-import { type InventoryItem, useInventory } from '@frontend/hooks/useInventory';
+import { type InventoryApi, type InventoryItem, useInventory } from '@frontend/hooks/useInventory';
+import { characterTheme } from '@frontend/lib/color-utils';
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
@@ -25,14 +26,49 @@ function commonEdition(entries: InventoryItem[]): Edition {
   return count['2014'] > count['2024'] ? '2014' : '2024';
 }
 
-/** What the character carries, apart from the coins. Every change is saved on the spot. */
+/** What the character carries, apart from the coins. */
 export function Backpack() {
   const t = useTranslations('characters.inventory');
-  const tCharacters = useTranslations('characters');
   const character = useLoadedCharacter();
-  const { backpack, inventory, addItem, setQuantity, removeItem, restoreItem } = useInventory(
-    character.id,
+  const inventory = useInventory(character.id);
+
+  return (
+    <ItemList
+      inventory={inventory}
+      icon="Backpack"
+      title={t('title')}
+      hint={t('hint')}
+      empty={t('empty')}
+      emptyHint={t('emptyHint')}
+      dialogStyle={characterTheme(character.accentColor).style}
+    />
   );
+}
+
+/**
+ * The items of a container (a character's backpack, or the party chest), apart from the coins.
+ * Every change is saved on the spot.
+ */
+export function ItemList({
+  inventory: source,
+  icon,
+  title,
+  hint,
+  empty,
+  emptyHint,
+  dialogStyle,
+}: {
+  inventory: InventoryApi;
+  icon: string;
+  title: string;
+  hint: string;
+  empty: string;
+  emptyHint: string;
+  dialogStyle?: React.CSSProperties;
+}) {
+  const t = useTranslations('characters.inventory');
+  const tCharacters = useTranslations('characters');
+  const { backpack, inventory, addItem, setQuantity, removeItem, restoreItem } = source;
   const fmt = useItemFormat();
   const [adding, setAdding] = useState(false);
 
@@ -63,8 +99,8 @@ export function Backpack() {
   return (
     <SectionCard>
       <SectionCard.Header>
-        <SectionCard.Title icon="Backpack" hint={t('hint')}>
-          {t('title')}
+        <SectionCard.Title icon={icon} hint={hint}>
+          {title}
         </SectionCard.Title>
         {entries.length > 0 && addButton}
       </SectionCard.Header>
@@ -72,9 +108,9 @@ export function Backpack() {
       {entries.length === 0 ? (
         <SectionCard.Body>
           <EmptyState
-            icon="Backpack"
-            title={t('empty')}
-            description={t('emptyHint')}
+            icon={icon}
+            title={empty}
+            description={emptyHint}
             action={addButton}
             className="border-none bg-transparent"
           />
@@ -102,6 +138,7 @@ export function Backpack() {
         onOpenChange={setAdding}
         initialEdition={commonEdition(entries)}
         onPick={(key) => addItem(key)}
+        style={dialogStyle}
       />
     </SectionCard>
   );

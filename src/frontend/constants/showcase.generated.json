@@ -15,6 +15,22 @@
     "width": 1024,
     "height": 820
   },
+  "/showcase/en/inventory-desktop.webp": {
+    "width": 1024,
+    "height": 820
+  },
+  "/showcase/en/party-desktop.webp": {
+    "width": 1024,
+    "height": 658
+  },
+  "/showcase/en/combat-desktop.webp": {
+    "width": 1024,
+    "height": 820
+  },
+  "/showcase/en/chest-desktop.webp": {
+    "width": 1024,
+    "height": 820
+  },
   "/showcase/en/sheet-mobile.webp": {
     "width": 412,
     "height": 860
@@ -28,6 +44,22 @@
     "height": 825
   },
   "/showcase/en/lore-mobile.webp": {
+    "width": 412,
+    "height": 860
+  },
+  "/showcase/en/inventory-mobile.webp": {
+    "width": 412,
+    "height": 860
+  },
+  "/showcase/en/party-mobile.webp": {
+    "width": 412,
+    "height": 860
+  },
+  "/showcase/en/combat-mobile.webp": {
+    "width": 412,
+    "height": 860
+  },
+  "/showcase/en/chest-mobile.webp": {
     "width": 412,
     "height": 860
   },
@@ -47,6 +79,22 @@
     "width": 1024,
     "height": 820
   },
+  "/showcase/pt/inventory-desktop.webp": {
+    "width": 1024,
+    "height": 820
+  },
+  "/showcase/pt/party-desktop.webp": {
+    "width": 1024,
+    "height": 679
+  },
+  "/showcase/pt/combat-desktop.webp": {
+    "width": 1024,
+    "height": 820
+  },
+  "/showcase/pt/chest-desktop.webp": {
+    "width": 1024,
+    "height": 820
+  },
   "/showcase/pt/sheet-mobile.webp": {
     "width": 412,
     "height": 860
@@ -60,6 +108,22 @@
     "height": 825
   },
   "/showcase/pt/lore-mobile.webp": {
+    "width": 412,
+    "height": 860
+  },
+  "/showcase/pt/inventory-mobile.webp": {
+    "width": 412,
+    "height": 860
+  },
+  "/showcase/pt/party-mobile.webp": {
+    "width": 412,
+    "height": 860
+  },
+  "/showcase/pt/combat-mobile.webp": {
+    "width": 412,
+    "height": 860
+  },
+  "/showcase/pt/chest-mobile.webp": {
     "width": 412,
     "height": 860
   }

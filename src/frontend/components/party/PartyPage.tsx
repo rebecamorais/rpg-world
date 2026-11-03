@@ -24,25 +24,20 @@ import { usePartyChannel } from '@frontend/hooks/usePartyChannel';
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { MyPartyCharacters } from './MyPartyCharacters';
-import { PartyJournal } from './PartyJournal';
 import { PartyRequests } from './PartyRequests';
 import { PartyRoster } from './PartyRoster';
 import { RolePlayCard } from './RolePlayCard';
 
-type GmMode = 'roleplay' | 'combat' | 'journal';
+type GmMode = 'roleplay' | 'combat';
 
-/** Role Play, Combat or Journal, kept in `?mode=`; without one, Combat while a combat is going on. */
+/** Role Play or Combat, kept in `?mode=`; without one, Combat while a combat is going on. */
 function useGmMode(partyId: string) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { encounter, isLoading } = useEncounter(partyId);
   const asked = searchParams.get('mode');
   const mode: GmMode =
-    asked === 'combat' || asked === 'roleplay' || asked === 'journal'
-      ? asked
-      : encounter
-        ? 'combat'
-        : 'roleplay';
+    asked === 'combat' || asked === 'roleplay' ? asked : encounter ? 'combat' : 'roleplay';
 
   // The native history API updates searchParams right away, without asking the server again
   const setMode = (next: string) =>
@@ -53,7 +48,6 @@ function useGmMode(partyId: string) {
 function GmView({ party, live }: { party: PartyView; live: boolean }) {
   const t = useTranslations('parties.page');
   const tCombat = useTranslations('combat');
-  const tJournal = useTranslations('parties.journal');
   const { acceptMember, removeMember } = useParty(party.id);
   const { mode, setMode, isLoading } = useGmMode(party.id);
   const cards = party.gm?.rolePlay ?? [];
@@ -72,7 +66,6 @@ function GmView({ party, live }: { party: PartyView; live: boolean }) {
           <TabsList className="self-start">
             <TabsTrigger value="roleplay">{tCombat('modeRolePlay')}</TabsTrigger>
             <TabsTrigger value="combat">{tCombat('modeCombat')}</TabsTrigger>
-            <TabsTrigger value="journal">{tJournal('tab')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="roleplay" className="flex flex-col gap-4">
@@ -92,11 +85,6 @@ function GmView({ party, live }: { party: PartyView; live: boolean }) {
 
           <TabsContent value="combat">
             <GmCombatPanel party={party} live={live} />
-          </TabsContent>
-
-          <TabsContent value="journal" className="flex flex-col gap-4">
-            <h2 className="sr-only">{tJournal('title')}</h2>
-            <PartyJournal docId={party.journalDocId} role={party.role} partyId={party.id} />
           </TabsContent>
         </Tabs>
       )}
@@ -133,13 +121,6 @@ function PlayerView({ party, live }: { party: PartyView; live: boolean }) {
   return (
     <div className="flex flex-col gap-8">
       <PlayerCombatPanel partyId={party.id} edition={party.edition} live={live} />
-
-      <section aria-labelledby="party-journal" className="flex flex-col gap-4">
-        <h2 id="party-journal" className="text-heading">
-          {t('journal.title')}
-        </h2>
-        <PartyJournal docId={party.journalDocId} role={party.role} partyId={party.id} />
-      </section>
 
       <section aria-labelledby="party-characters" className="flex flex-col gap-4">
         <h2 id="party-characters" className="text-heading">

@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
+import { formatAssetUrl } from '@backend/shared/infrastructure/helpers/format-asset-url';
+
 import { SupabaseFactory } from '@lib/supabase';
 
 import {
@@ -118,6 +120,46 @@ describe('SupabasePartyRepository — convites e membros (Integration)', () => {
     expect(await playerParties()).toEqual([
       expect.objectContaining({ id: partyId, status: 'active' }),
     ]);
+  });
+
+  it('card do convite: nome e imagem para quem nem entrou na conta, nada mais', async () => {
+    const code = await inviteCode(partyId);
+    const gmRepo = new SupabasePartyRepository(gm.client);
+    const anon = new SupabasePartyRepository(SupabaseFactory.createAnon());
+    const imageUrl = formatAssetUrl(`avatars/${gm.userId}/parties/${partyId}-v1.webp`);
+
+    expect(await anon.inviteCard(code)).toEqual({ name: 'Mesa', imageUrl: null });
+    expect(await gmRepo.setImage(partyId, imageUrl)).toBe(true);
+    expect(await anon.inviteCard(code)).toEqual({ name: 'Mesa', imageUrl });
+    expect(await anon.inviteCard('0'.repeat(32))).toBeNull();
+    // A mesa em si continua fechada sem login
+    await expect(anon.findParty(partyId)).rejects.toThrow('permission denied');
+  });
+
+  it('a imagem só pode ser um arquivo enviado para esta mesa, na pasta do mestre', async () => {
+    const repo = new SupabasePartyRepository(gm.client);
+    const otherParty = await repo.create(gm.userId, 'Outra');
+    const refused = [
+      'https://evil.test/pixel.gif',
+      `https://evil.test/avatars/${gm.userId}/parties/${partyId}-v1.svg`,
+      formatAssetUrl(`avatars/${gm.userId}/parties/${otherParty}-v1.webp`),
+      formatAssetUrl(`avatars/${player.userId}/parties/${partyId}-v1.webp`),
+    ];
+    for (const url of refused) {
+      await expect(repo.setImage(partyId, url), url).rejects.toThrow('parties_image_url_check');
+    }
+    expect((await repo.findParty(partyId))?.imageUrl).toBeNull();
+  });
+
+  it('só o mestre muda a imagem da mesa', async () => {
+    const code = await inviteCode(partyId);
+    await new SupabasePartyRepository(player.client).requestJoin(code);
+    await new SupabasePartyRepository(gm.client).activateMember(partyId, player.userId);
+
+    expect(
+      await new SupabasePartyRepository(player.client).setImage(partyId, 'https://evil.test/x'),
+    ).toBe(false);
+    expect((await new SupabasePartyRepository(gm.client).findParty(partyId))?.imageUrl).toBeNull();
   });
 
   it('código inexistente: getInvite null e requestJoin com INVITE_NOT_FOUND', async () => {
@@ -251,6 +293,7 @@ describe('SupabasePartyRepository — página da mesa (Integration)', () => {
       system: 'dnd_5e',
       gmId: gm.userId,
       edition: '2024',
+      imageUrl: null,
     });
     expect((await playerRepo.people(partyId)).map((p) => p.status).sort()).toEqual([
       'active',

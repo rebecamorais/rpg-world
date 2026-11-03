@@ -12,6 +12,11 @@ import { GetPartyUseCase } from './get-party.use-case';
 import { InviteByUsernameUseCase } from './invite-by-username.use-case';
 import { IsGmOfCharacterUseCase } from './is-gm-of-character.use-case';
 import { ListMyPartiesUseCase } from './list-my-parties.use-case';
+import {
+  GetInviteCardUseCase,
+  RemovePartyImageUseCase,
+  UploadPartyImageUseCase,
+} from './party-image.use-cases';
 import { RemoveMemberUseCase } from './remove-member.use-case';
 import { RenamePartyUseCase } from './rename-party.use-case';
 import { RotateInviteCodeUseCase } from './rotate-invite-code.use-case';
@@ -38,6 +43,7 @@ const makePartyRepo = () =>
       system: 'dnd_5e',
       gmId: 'gm-1',
       edition: '2024',
+      imageUrl: null,
     }),
     people: vi.fn<PartyRepo['people']>().mockResolvedValue([]),
     roster: vi.fn<PartyRepo['roster']>().mockResolvedValue([]),
@@ -47,6 +53,8 @@ const makePartyRepo = () =>
     removeCharacters: vi.fn<PartyRepo['removeCharacters']>().mockResolvedValue(undefined),
     journalDocId: vi.fn<PartyRepo['journalDocId']>().mockResolvedValue(null),
     setJournal: vi.fn<PartyRepo['setJournal']>().mockResolvedValue(undefined),
+    inviteCard: vi.fn<PartyRepo['inviteCard']>().mockResolvedValue(null),
+    setImage: vi.fn<PartyRepo['setImage']>().mockResolvedValue(true),
   }) satisfies PartyRepo;
 
 const summary = (overrides: Partial<PartySummary>): PartySummary => ({
@@ -257,6 +265,61 @@ describe('casos de uso das mesas', () => {
       expect(await codeOf(new SetJournalUseCase(repo).execute('p', 'gm-1', DOC_ID))).toBe(
         PartyErrorCodes.NOT_FOUND,
       );
+    });
+  });
+
+  describe('imagem da mesa', () => {
+    const storage = { upload: vi.fn(), download: vi.fn(), remove: vi.fn() };
+    const image = (type = 'image/webp', size = 1000) => new Blob([new Uint8Array(size)], { type });
+    const upload = () => new UploadPartyImageUseCase(repo, storage, () => 'v1');
+
+    beforeEach(() => {
+      storage.upload.mockReset().mockResolvedValue('https://images.test/avatars/gm-1/x.webp');
+    });
+
+    it('o mestre envia: o arquivo vai para a pasta dele e a URL fica na mesa', async () => {
+      const url = await upload().execute('p', 'gm-1', image());
+
+      expect(storage.upload).toHaveBeenCalledWith(
+        'avatars',
+        'gm-1/parties/p-v1.webp',
+        expect.any(Blob),
+      );
+      expect(repo.setImage).toHaveBeenCalledWith('p', url);
+    });
+
+    it('quem não é o mestre responde not found e nada é enviado', async () => {
+      expect(await codeOf(upload().execute('p', 'player-1', image()))).toBe(
+        PartyErrorCodes.NOT_FOUND,
+      );
+      expect(await codeOf(new RemovePartyImageUseCase(repo).execute('p', 'player-1'))).toBe(
+        PartyErrorCodes.NOT_FOUND,
+      );
+      expect(storage.upload).not.toHaveBeenCalled();
+      expect(repo.setImage).not.toHaveBeenCalled();
+    });
+
+    it('recusa arquivo grande demais ou de outro tipo', async () => {
+      expect(
+        await codeOf(upload().execute('p', 'gm-1', image('image/webp', 6 * 1024 * 1024))),
+      ).toBe(PartyErrorCodes.IMAGE_TOO_LARGE);
+      expect(await codeOf(upload().execute('p', 'gm-1', image('image/svg+xml')))).toBe(
+        PartyErrorCodes.IMAGE_INVALID_TYPE,
+      );
+      expect(storage.upload).not.toHaveBeenCalled();
+    });
+
+    it('o mestre remove a imagem', async () => {
+      await new RemovePartyImageUseCase(repo).execute('p', 'gm-1');
+      expect(repo.setImage).toHaveBeenCalledWith('p', null);
+    });
+
+    it('o card do convite vem do repositório', async () => {
+      repo.inviteCard.mockResolvedValue({ name: 'Mesa', imageUrl: null });
+      expect(await new GetInviteCardUseCase(repo).execute('c'.repeat(32))).toEqual({
+        name: 'Mesa',
+        imageUrl: null,
+      });
     });
   });
 

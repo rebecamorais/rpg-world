@@ -49,11 +49,13 @@ const itemsOf = async (characterId: string) =>
 const containerId = async (characterId: string, kind: 'coin_pouch' | 'backpack') =>
   (await containersOf(characterId)).find((c) => c.kind === kind)!.id;
 
-const createPartyChest = async (partyId: string) => {
+/** Every party is created with its chest (trigger); this finds it. */
+const chestOf = async (partyId: string) => {
   const { data, error } = await admin()
     .from('containers')
-    .insert({ party_id: partyId, kind: 'party_chest' })
     .select('id')
+    .eq('party_id', partyId)
+    .eq('kind', 'party_chest')
     .single();
   if (error) throw error;
   return data.id;
@@ -177,7 +179,8 @@ describe('Inventário (Integration)', () => {
         .from('inventory_items')
         .insert({ container_id: backpackId, item_ref: rope, quantity: 2 });
 
-      const containers = await gm.client.from('containers').select('id');
+      // Fora o baú da própria mesa, que o mestre lê e escreve
+      const containers = await gm.client.from('containers').select('id').neq('kind', 'party_chest');
       const items = await gm.client.from('inventory_items').select('item_ref');
       expect(containers.data?.map((c) => c.id).sort()).toEqual([pouchId, backpackId].sort());
       expect(items.data).toEqual([{ item_ref: rope }]);
@@ -382,7 +385,7 @@ describe('Inventário (Integration)', () => {
     let chestId: string;
 
     beforeEach(async () => {
-      chestId = await createPartyChest(partyId);
+      chestId = await chestOf(partyId);
     });
 
     it('o mestre e os jogadores da mesa leem, põem item e mudam as moedas', async () => {
@@ -449,6 +452,15 @@ describe('Inventário (Integration)', () => {
       ]);
     });
 
+    it('toda mesa nasce com o baú, vazio', async () => {
+      const otherParty = await createParty(gm, 'Mesa nova');
+      const { data } = await admin()
+        .from('containers')
+        .select('kind, coins')
+        .eq('party_id', otherParty);
+      expect(data).toEqual([{ kind: 'party_chest', coins: emptyCoins }]);
+    });
+
     it('não há dois baús na mesma mesa', async () => {
       const second = await gm.client
         .from('containers')
@@ -490,8 +502,8 @@ describe('Inventário (Integration)', () => {
         const { error } = await admin().from('containers').insert(row);
         expect(error, JSON.stringify(row)).not.toBeNull();
       }
-      const { data } = await admin().from('containers').select('id').eq('party_id', otherParty);
-      expect(data).toEqual([]);
+      const { data } = await admin().from('containers').select('kind').eq('party_id', otherParty);
+      expect(data).toEqual([{ kind: 'party_chest' }]);
     });
 
     it('o dono de um lugar não muda', async () => {
@@ -502,7 +514,7 @@ describe('Inventário (Integration)', () => {
         .eq('id', backpackId);
       expect(toOther.error?.message).toContain('container_immutable');
 
-      const chestId = await createPartyChest(partyId);
+      const chestId = await chestOf(partyId);
       const otherParty = await createParty(gm, 'Outra mesa');
       const toParty = await gm.client
         .from('containers')
@@ -574,7 +586,7 @@ describe('Inventário (Integration)', () => {
 
   describe('mover itens', () => {
     it('da mochila do jogador para o baú da party da mesa dele funciona', async () => {
-      const chestId = await createPartyChest(partyId);
+      const chestId = await chestOf(partyId);
       await player.client
         .from('inventory_items')
         .insert({ container_id: backpackId, item_ref: rope, quantity: 3 });
@@ -593,7 +605,7 @@ describe('Inventário (Integration)', () => {
       const colleagueChar = await createCharacter(colleague.userId, { name: 'Colega' });
       const colleagueBackpack = await containerId(colleagueChar, 'backpack');
       const foreignParty = await createParty(stranger, 'Mesa alheia');
-      const foreignChest = await createPartyChest(foreignParty);
+      const foreignChest = await chestOf(foreignParty);
       await player.client
         .from('inventory_items')
         .insert({ container_id: backpackId, item_ref: rope, quantity: 1 });
@@ -612,7 +624,7 @@ describe('Inventário (Integration)', () => {
     });
 
     it('do baú da party para a mochila do colega, pelo próprio jogador, falha', async () => {
-      const chestId = await createPartyChest(partyId);
+      const chestId = await chestOf(partyId);
       const colleagueChar = await createCharacter(colleague.userId, { name: 'Colega' });
       const colleagueBackpack = await containerId(colleagueChar, 'backpack');
       await admin()
@@ -661,7 +673,7 @@ describe('Inventário (Integration)', () => {
     });
 
     it('mover um item para um dono no limite falha', async () => {
-      const chestId = await createPartyChest(partyId);
+      const chestId = await chestOf(partyId);
       await fill(chestId, 500);
       await player.client
         .from('inventory_items')
@@ -690,7 +702,7 @@ describe('Inventário (Integration)', () => {
     it('quem não pode escrever recebe o erro do RLS, não o do limite', async () => {
       await addChests(characterId, 18);
       await fill(backpackId, 500);
-      const chestId = await createPartyChest(partyId);
+      const chestId = await chestOf(partyId);
       await fill(chestId, 500);
 
       for (const session of [gm, colleague, stranger]) {

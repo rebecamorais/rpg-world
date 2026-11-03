@@ -19,9 +19,13 @@ const hook = {
   rename: mutation(),
   setEdition: mutation(),
   setJournal: mutation(),
+  removeImage: mutation(),
   remove: mutation(),
 };
 vi.mock('@frontend/hooks/useParty', () => ({ useParty: () => hook }));
+vi.mock('@frontend/context/FileUploaderContext', () => ({
+  useFileUploader: () => ({ upload: vi.fn(), isUploading: false }),
+}));
 
 const t = messages.parties;
 const party = (role: PartyView['role']) =>
@@ -33,6 +37,7 @@ const party = (role: PartyView['role']) =>
     roster: [],
     myCharacterIds: [],
     journalDocId: null,
+    imageUrl: null,
     edition: '2024',
     gm: role === 'gm' ? { inviteCode: 'a'.repeat(32), rolePlay: [] } : null,
   }) as unknown as PartyView;

@@ -383,6 +383,7 @@ export type Database = {
           edition: string;
           gm_id: string;
           id: string;
+          image_url: string | null;
           name: string;
           system: Database['public']['Enums']['rpg_system'];
           updated_at: string;
@@ -393,6 +394,7 @@ export type Database = {
           edition?: string;
           gm_id: string;
           id?: string;
+          image_url?: string | null;
           name: string;
           system?: Database['public']['Enums']['rpg_system'];
           updated_at?: string;
@@ -402,6 +404,7 @@ export type Database = {
           edition?: string;
           gm_id?: string;
           id?: string;
+          image_url?: string | null;
           name?: string;
           system?: Database['public']['Enums']['rpg_system'];
           updated_at?: string;
@@ -627,6 +630,13 @@ export type Database = {
         }[];
       };
       orphan_avatar_objects: { Args: { min_age?: string }; Returns: string[] };
+      party_invite_card: {
+        Args: { p_code: string };
+        Returns: {
+          image_url: string;
+          name: string;
+        }[];
+      };
       party_people: {
         Args: { p_party_id: string };
         Returns: {

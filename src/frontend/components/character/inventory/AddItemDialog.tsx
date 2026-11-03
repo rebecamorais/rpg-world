@@ -16,9 +16,7 @@ import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
-import { useCharacterState } from '@frontend/context/CharacterContext';
 import { useItems } from '@frontend/hooks/useItems';
-import { characterTheme } from '@frontend/lib/color-utils';
 
 import type { ItemDto } from '@backend/contexts/items/domain/item';
 
@@ -39,15 +37,18 @@ interface Props {
   initialEdition: Edition;
   /** Called with the item's key; the dialog closes itself. */
   onPick: (key: string) => void;
+  /** The sheet's accent colors (a character's dialog); the app's own without it. */
+  style?: React.CSSProperties;
 }
 
 /** Search the SRD's common items and add one to the backpack. */
-export function AddItemDialog({ open, onOpenChange, initialEdition, onPick }: Props) {
+export function AddItemDialog({ open, onOpenChange, initialEdition, onPick, style }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {open && (
         <AddItemContent
           initialEdition={initialEdition}
+          style={style}
           onPick={(key) => {
             onPick(key);
             onOpenChange(false);
@@ -58,12 +59,15 @@ export function AddItemDialog({ open, onOpenChange, initialEdition, onPick }: Pr
   );
 }
 
-function AddItemContent({ initialEdition, onPick }: Pick<Props, 'initialEdition' | 'onPick'>) {
+function AddItemContent({
+  initialEdition,
+  onPick,
+  style,
+}: Pick<Props, 'initialEdition' | 'onPick' | 'style'>) {
   const tAdd = useTranslations('characters.inventory.add');
   const tCategories = useTranslations('characters.inventory.categories');
   const tCategory = useTranslations('characters.inventory.category');
   const tEditions = useTranslations('spellsDrawer.editions');
-  const { character } = useCharacterState();
   const { list, isLoading } = useItems();
   const fmt = useItemFormat();
 
@@ -96,7 +100,7 @@ function AddItemContent({ initialEdition, onPick }: Pick<Props, 'initialEdition'
   return (
     <DialogContent
       className="character-context bg-background flex h-[90vh] max-w-2xl flex-col gap-0 p-0"
-      style={characterTheme(character?.accentColor).style}
+      style={style}
     >
       <DialogHeader className="border-border border-b p-4 sm:p-6">
         <DialogTitle>{tAdd('title')}</DialogTitle>

@@ -53,6 +53,8 @@
       "party_error_already_member": "This person is already in the party.",
       "party_error_character_not_allowed": "This character can’t be brought to the party.",
       "party_error_journal_url_invalid": "Paste the link of a Google Docs document (docs.google.com/document/…).",
+      "party_error_image_too_large": "The image exceeds the 5 MB limit.",
+      "party_error_image_invalid_type": "Use a JPEG, PNG or WebP image.",
       "feedback_error_invalid_email": "Please enter a valid e-mail.",
       "feedback_error_message_too_short": "The message must be at least 10 characters long.",
       "security_token_missing": "Please complete the security verification.",
@@ -172,7 +174,7 @@
   },
   "landing": {
     "heroTitle": "Your ultimate RPG companion.",
-    "heroSubtitle": "Manage your character sheets, track attributes, spells and combat effortlessly.",
+    "heroSubtitle": "Manage your character sheets, play with your party and track attributes, spells, items and combat effortlessly.",
     "ctaStart": "Start Playing",
     "previewLabel": "Example character sheet",
     "previewName": "Ada the Wise",
@@ -768,7 +770,7 @@
           "Account: email and password (the password is stored encrypted by <supabase>Supabase</supabase>) or, if you sign in with <google>Google</google>, the email and name of your Google account.",
           "Profile: username, avatar and preferred color.",
           "Characters: sheets, backstory, learned spells and the images you upload.",
-          "Parties: name, rules edition, who is GM and player, invitations, the characters brought along and the journal link (a Google Docs document the GM picks; the content stays with Google, not in RPG World).",
+          "Parties: name, picture, rules edition, who is GM and player, invitations, the characters brought along, the party inventory and the journal link (a Google Docs document the GM picks; the content stays with Google, not in RPG World).",
           "Support: email, type and message, when you use the contact form.",
           "Technical data: when you visit the site, <vercel>Vercel</vercel> and <supabase>Supabase</supabase> log the IP address, browser and requested pages, for security and error diagnosis. On protected forms, <cloudflare>Cloudflare Turnstile</cloudflare> checks the IP and browser signals to tell people from bots. To count visits we use <cloudflare>Cloudflare Web Analytics</cloudflare>, which uses no cookies and does not identify you: it only records aggregate numbers, such as page views and load times."
         ]
@@ -784,7 +786,7 @@
       },
       "sharing": {
         "title": "3. Sharing",
-        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, the magic link, password reset and the contact form; and anonymous visit counts, with Cloudflare Web Analytics), <discord>Discord</discord> (where the support team receives the messages sent through the contact form: email, type, message and, if you are signed in, your account id) and <google>Google</google> (only if you sign in with Google). Your profile (username and avatar) and a summary of the characters you bring to a party (name, avatar, race, class and level) are seen by the people in that party; the GM also sees the sheet of those characters. The journal link is seen only by the GM and active players. Everything else stays visible only to you; avatar images are stored at a public address that is not listed anywhere."
+        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, the magic link, password reset and the contact form; and anonymous visit counts, with Cloudflare Web Analytics), <discord>Discord</discord> (where the support team receives the messages sent through the contact form: email, type, message and, if you are signed in, your account id) and <google>Google</google> (only if you sign in with Google). Your profile (username and avatar) and a summary of the characters you bring to a party (name, avatar, race, class and level) are seen by the people in that party; the GM also sees the sheet of those characters. The journal link and the party inventory are seen only by the GM and active players. The party name and picture show to anyone with the invite link, even without an account (that's what Discord and WhatsApp display when the link is pasted). Everything else stays visible only to you; avatar images are stored at a public address that is not listed anywhere."
       },
       "rights": {
         "title": "4. Your Rights",
@@ -983,9 +985,9 @@
   "features": {
     "seeAll": "See all features",
     "highlightsTitle": "Made for players",
-    "highlightsSubtitle": "The sheet does the math, the spellbook has the SRD spells and everything works in English and Portuguese.",
+    "highlightsSubtitle": "The sheet does the math, the spellbook has the SRD spells, the party brings GM and players together, and everything works in English and Portuguese.",
     "metaTitle": "Features",
-    "metaDescription": "Everything RPG World does today: a D&D 5e character sheet with automatic calculations, a searchable SRD spellbook, character lore and more, in English and Portuguese.",
+    "metaDescription": "Everything RPG World does today: a D&D 5e character sheet with automatic calculations, a searchable SRD spellbook, inventory, parties with real-time combat and a journal, in English and Portuguese.",
     "eyebrow": "Features",
     "title": "Everything you can do in RPG World",
     "subtitle": "Free, open source and no account needed to look around. Create one when you want to build your first character.",
@@ -1024,16 +1026,24 @@
       "languages": {
         "title": "In English and Portuguese",
         "description": "The interface and the spells in both languages. Switch any time."
+      },
+      "inventory": {
+        "title": "Inventory and coins",
+        "description": "A coin pouch with pay and receive (change comes back on its own) and a backpack with the SRD items and total weight."
+      },
+      "parties": {
+        "title": "Parties with a GM and players",
+        "description": "Invite by link or username. The GM sees the party's characters in Role Play mode and runs combat with initiative, HP and conditions in real time."
+      },
+      "partyChest": {
+        "title": "Party chest and journal",
+        "description": "Coins and items the party keeps together, and a Google Docs journal opened right inside the party."
       }
     },
     "planned": {
-      "parties": {
-        "title": "Parties and campaigns",
-        "description": "Dungeon Master and players at the same table, with invites and session notes."
-      },
-      "inventory": {
-        "title": "Inventory and items",
-        "description": "Equipment, magic items and coins on the sheet."
+      "sessions": {
+        "title": "Sessions and notes",
+        "description": "Notes per session with who can see what, a calendar and reminders on Discord."
       },
       "systems": {
         "title": "More systems and languages",
@@ -1081,6 +1091,30 @@
           "title": "Your character's story",
           "description": "Appearance, personality, ideals, bonds, flaws and the full backstory, next to the sheet.",
           "alt": "Story page with appearance, personality traits, ideals, bonds, flaws and the character's backstory"
+        },
+        "inventory": {
+          "tab": "Inventory",
+          "title": "Coins and backpack",
+          "description": "Pay and receive with automatic change and keep the SRD gear, with total weight.",
+          "alt": "A character's inventory with the five coins and a backpack of items with total weight"
+        },
+        "party": {
+          "tab": "Party",
+          "title": "The GM's table",
+          "description": "The players' characters in Role Play mode: traits, ideals, passive Perception and Insight at hand.",
+          "alt": "A party seen by the GM, with Role Play cards of the players' characters"
+        },
+        "combat": {
+          "tab": "Combat",
+          "title": "Real-time combat",
+          "description": "Initiative, HP and conditions for every participant. Players follow the turn order as it happens.",
+          "alt": "The GM's initiative tracker with players and enemies, hit points and conditions"
+        },
+        "chest": {
+          "tab": "Party chest",
+          "title": "The party chest",
+          "description": "The party's coins and items, which the GM and the players can change.",
+          "alt": "The party inventory with coins and a chest of items"
         }
       }
     }
@@ -1128,9 +1162,9 @@
     },
     "nav": {
       "parties": "Parties",
-      "gm": "GM",
-      "player": "Player",
       "overview": "Party",
+      "journal": "Journal",
+      "inventory": "Inventory",
       "settings": "Settings"
     },
     "join": {
@@ -1141,7 +1175,11 @@
       "alreadyInvited": "You've already been invited to this party.",
       "invalidTitle": "This invite is no longer valid",
       "invalidDescription": "Ask the GM for a new link.",
-      "goToParties": "Go to my parties"
+      "goToParties": "Go to my parties",
+      "ogTitle": "Invite: {name}",
+      "ogDescription": "You're invited to the party {name} on RPG World.",
+      "signInHint": "Sign in to ask to join.",
+      "signIn": "Sign in to join"
     },
     "page": {
       "gmEyebrow": "You are the GM",
@@ -1240,6 +1278,28 @@
     "settings": {
       "eyebrow": "Party settings",
       "open": "Settings"
+    },
+    "chest": {
+      "title": "Party inventory",
+      "coinsTitle": "Party coins",
+      "coinsHint": "The party's money. The GM and the players can change it; saved right away.",
+      "itemsTitle": "Party chest",
+      "itemsHint": "What the party keeps together. The GM and the players can add and remove; saved right away.",
+      "empty": "The chest is empty.",
+      "emptyHint": "Add what the party keeps together: treasure, supplies, items found along the way."
+    },
+    "image": {
+      "title": "Party picture",
+      "hint": "Shown on the invite and when someone pastes the link on Discord or WhatsApp. Anyone with the link sees the party name and picture, even signed out.",
+      "alt": "Party picture",
+      "empty": "No picture: the link shows the RPG World image.",
+      "upload": "Upload picture",
+      "change": "Change picture",
+      "uploading": "Uploading…",
+      "remove": "Remove",
+      "removeConfirm": "Remove the party picture?",
+      "saved": "Picture saved",
+      "removed": "Picture removed"
     }
   },
   "enemies": {

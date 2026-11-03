@@ -32,6 +32,11 @@ export const api = {
     setItemQuantity: vi.fn(),
     removeItem: vi.fn(),
     setCoins: vi.fn(),
+    getPartyChest: vi.fn(),
+    addPartyChestItem: vi.fn(),
+    setPartyChestItemQuantity: vi.fn(),
+    removePartyChestItem: vi.fn(),
+    setPartyChestCoins: vi.fn(),
     getInventoryForPartyGm: vi.fn(),
     getSpellsForPartyGm: vi.fn(),
     duplicate: vi.fn(),
@@ -53,7 +58,13 @@ export const api = {
     finish: vi.fn(),
     setConditions: vi.fn(),
   },
-  partiesApi: { rename: vi.fn(), setEdition: vi.fn(), setJournal: vi.fn() },
+  partiesApi: {
+    rename: vi.fn(),
+    setEdition: vi.fn(),
+    setJournal: vi.fn(),
+    uploadImage: vi.fn(),
+    removeImage: vi.fn(),
+  },
 };
 
 export const getApi = async () => api;

@@ -1,6 +1,6 @@
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
-import { InvitePreview, MemberStatus, PartySummary } from '../Party';
+import { InviteCard, InvitePreview, MemberStatus, PartySummary } from '../Party';
 import { PartyPerson, RosterCharacter } from '../PartyView';
 import { RolePlayLore, RolePlaySheet } from '../role-play-card';
 
@@ -10,6 +10,7 @@ export interface PartyRecord {
   system: string;
   gmId: string;
   edition: Edition;
+  imageUrl: string | null;
 }
 
 /**
@@ -24,6 +25,10 @@ export interface PartyRepo {
   delete(id: string): Promise<boolean>;
   setInviteCode(id: string, code: string): Promise<boolean>;
   getInvite(code: string): Promise<InvitePreview | null>;
+  /** Works signed out too: the party's name and picture, by invite code. */
+  inviteCard(code: string): Promise<InviteCard | null>;
+  /** The URL of the party's picture, or null to remove it. */
+  setImage(id: string, imageUrl: string | null): Promise<boolean>;
   /** Asks to join through the link; someone already invited joins at once. */
   requestJoin(code: string): Promise<MemberStatus>;
   /** The GM invites by username; someone who already asked joins at once. */

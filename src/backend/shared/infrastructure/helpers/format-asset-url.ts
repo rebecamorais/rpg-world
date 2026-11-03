@@ -27,3 +27,8 @@ export function formatAssetUrl(path: string): string {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   return `${assetBaseUrl()}/${cleanPath}`;
 }
+
+/** Whether `url` points at our own asset host (what an upload here returns), in this environment. */
+export function isOwnAssetUrl(url: string): boolean {
+  return url.startsWith(`${assetBaseUrl()}/`);
+}

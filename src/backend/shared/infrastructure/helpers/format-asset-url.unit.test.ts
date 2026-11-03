@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { formatAssetUrl } from './format-asset-url';
+import { formatAssetUrl, isOwnAssetUrl } from './format-asset-url';
 
 describe('formatAssetUrl', () => {
   const originalEnv = process.env;
@@ -97,5 +97,16 @@ describe('formatAssetUrl', () => {
         'http://localhost:3100/api/images/avatars/user-123/avatar',
       );
     });
+  });
+});
+
+describe('isOwnAssetUrl', () => {
+  beforeEach(() => vi.stubEnv('NODE_ENV', 'production'));
+  afterEach(() => vi.unstubAllEnvs());
+
+  it('aceita só o host de imagens deste ambiente', () => {
+    expect(isOwnAssetUrl('https://images.rpgworldapp.com/avatars/u/parties/p-v1.webp')).toBe(true);
+    expect(isOwnAssetUrl('https://images.rpgworldapp.com.evil.test/avatars/x.webp')).toBe(false);
+    expect(isOwnAssetUrl('https://evil.test/avatars/u/parties/p-v1.webp')).toBe(false);
   });
 });

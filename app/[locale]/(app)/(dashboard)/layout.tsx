@@ -10,6 +10,8 @@ import { PARTIES_QUERY_KEY, PROFILE_QUERY_KEY } from '@frontend/lib/query-keys';
 
 import { PATHNAME_HEADER } from '@shared/http/pathname-header';
 
+const INVITE_PATH = '/parties/join/';
+
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { authApi, profileApi, partiesApi } = await getApi();
   const user = await authApi.getSessionUser();
@@ -19,6 +21,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const back = asked && asked !== '/characters' ? `?next=${encodeURIComponent(asked)}` : '';
 
   if (!user) {
+    // The invite link opens signed out too: its page shows the party's name and picture (also
+    // the link preview on Discord and WhatsApp) and a way to sign in and come back
+    if (asked?.startsWith(INVITE_PATH)) {
+      return <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 md:py-10">{children}</div>;
+    }
     redirect(`/login${back}`);
   }
 

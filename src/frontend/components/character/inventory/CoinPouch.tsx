@@ -18,7 +18,7 @@ import { NumberInput } from '@frontend/components/ui/number-input';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { SelectField } from '@frontend/components/ui/select-field';
 import { useLoadedCharacter } from '@frontend/context/CharacterContext';
-import { useInventory } from '@frontend/hooks/useInventory';
+import { type InventoryApi, useInventory } from '@frontend/hooks/useInventory';
 import { characterTheme } from '@frontend/lib/color-utils';
 
 import {
@@ -47,10 +47,19 @@ function useFormatCoins() {
 }
 
 /** Pays (with change) or receives an amount; the result is saved to the pouch right away. */
-function CoinDialog({ mode, onDone }: { mode: Mode; onDone: () => void }) {
+function CoinDialog({
+  mode,
+  inventory,
+  style,
+  onDone,
+}: {
+  mode: Mode;
+  inventory: InventoryApi;
+  style?: React.CSSProperties;
+  onDone: () => void;
+}) {
   const t = useTranslations('characters.coins');
-  const character = useLoadedCharacter();
-  const { pouch, setCoins } = useInventory(character.id);
+  const { pouch, setCoins } = inventory;
   const format = useFormatCoins();
   const formatter = useFormatter();
   const [amount, setAmount] = useState(1);
@@ -71,10 +80,7 @@ function CoinDialog({ mode, onDone }: { mode: Mode; onDone: () => void }) {
   };
 
   return (
-    <DialogContent
-      className="character-context sm:max-w-[420px]"
-      style={characterTheme(character.accentColor).style}
-    >
+    <DialogContent className="character-context sm:max-w-[420px]" style={style}>
       <DialogHeader>
         <DialogTitle>{t(mode)}</DialogTitle>
         <DialogDescription>{t(`${mode}Description`)}</DialogDescription>
@@ -150,15 +156,40 @@ function CoinDialog({ mode, onDone }: { mode: Mode; onDone: () => void }) {
   );
 }
 
-/**
- * The coin pouch every character carries: the five coins, editable by hand, and Pay / Receive.
- * Saved on the spot (not through the sheet's save bar). A hand edit is sent when the field loses
- * focus, so typing "120" is one request, not three.
- */
+/** The coin pouch every character carries. */
 export function CoinPouch() {
   const t = useTranslations('characters.coins');
   const character = useLoadedCharacter();
-  const { pouch, setCoins } = useInventory(character.id);
+  const inventory = useInventory(character.id);
+
+  return (
+    <CoinPurse
+      inventory={inventory}
+      title={t('title')}
+      hint={t('hint')}
+      dialogStyle={characterTheme(character.accentColor).style}
+    />
+  );
+}
+
+/**
+ * The five coins of a pouch (a character's, or the party chest), editable by hand, and Pay /
+ * Receive. Saved on the spot (not through the sheet's save bar). A hand edit is sent when the
+ * field loses focus, so typing "120" is one request, not three.
+ */
+export function CoinPurse({
+  inventory,
+  title,
+  hint,
+  dialogStyle,
+}: {
+  inventory: InventoryApi;
+  title: string;
+  hint: string;
+  dialogStyle?: React.CSSProperties;
+}) {
+  const t = useTranslations('characters.coins');
+  const { pouch, setCoins } = inventory;
   const [mode, setMode] = useState<Mode | null>(null);
   // What was typed in each field and not yet sent
   const [typed, setTyped] = useState<Partial<Coins>>({});
@@ -174,8 +205,8 @@ export function CoinPouch() {
   return (
     <SectionCard>
       <SectionCard.Header>
-        <SectionCard.Title icon="coins" iconVariant="game" hint={t('hint')}>
-          {t('title')}
+        <SectionCard.Title icon="coins" iconVariant="game" hint={hint}>
+          {title}
         </SectionCard.Title>
       </SectionCard.Header>
       <SectionCard.Body className="flex flex-col gap-4">
@@ -220,7 +251,15 @@ export function CoinPouch() {
       </SectionCard.Body>
 
       <Dialog open={mode !== null} onOpenChange={(open) => !open && setMode(null)}>
-        {mode && <CoinDialog key={mode} mode={mode} onDone={() => setMode(null)} />}
+        {mode && (
+          <CoinDialog
+            key={mode}
+            mode={mode}
+            inventory={inventory}
+            style={dialogStyle}
+            onDone={() => setMode(null)}
+          />
+        )}
       </Dialog>
     </SectionCard>
   );

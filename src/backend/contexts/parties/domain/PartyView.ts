@@ -38,6 +38,8 @@ export interface PartyView {
   name: string;
   system: string;
   edition: Edition;
+  /** The party's picture, also the invite link's preview; null when the GM hasn't set one. */
+  imageUrl: string | null;
   role: PartyRole;
   people: PartyPerson[];
   roster: RosterCharacter[];

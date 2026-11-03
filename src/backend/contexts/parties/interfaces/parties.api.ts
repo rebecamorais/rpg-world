@@ -14,6 +14,12 @@ export const makePartiesApi = (partyContext: PartyContext) => ({
   setJournal: (partyId: string, userId: string, url: string | null) =>
     partyContext.setJournal(partyId, userId, url),
 
+  uploadImage: async (partyId: string, userId: string, file: Blob) => ({
+    url: await partyContext.uploadImage(partyId, userId, file),
+  }),
+
+  removeImage: (partyId: string, userId: string) => partyContext.removeImage(partyId, userId),
+
   delete: (partyId: string) => partyContext.delete(partyId),
 
   rotateInviteCode: async (partyId: string) => ({
@@ -21,6 +27,8 @@ export const makePartiesApi = (partyContext: PartyContext) => ({
   }),
 
   getInvite: (code: string) => partyContext.getInvite(code),
+
+  getInviteCard: (code: string) => partyContext.getInviteCard(code),
 
   requestJoin: async (code: string) => ({ status: await partyContext.requestJoin(code) }),
 

@@ -4,7 +4,7 @@ import type { Coins } from '@shared/systems/dnd5e/coins';
 
 export interface InventoryContainer {
   id: string;
-  kind: 'coin_pouch' | 'backpack' | 'chest';
+  kind: 'coin_pouch' | 'backpack' | 'chest' | 'party_chest';
   name: string | null;
   position: number;
   coins: Coins;
@@ -29,19 +29,20 @@ export interface InventoryDto {
 }
 
 /**
- * A character's own containers and what is in them (the party chest is not here). The writes
- * answer `false`/`null` when no row changed: the container or entry isn't this character's.
+ * One owner's containers and what is in them: a character's (coin pouch, backpack, chest) or a
+ * party's (its chest). The writes answer `false`/`null` when no row changed: the container or
+ * entry isn't this owner's.
  */
 export interface InventoryRepo {
-  find(characterId: string): Promise<{ containers: InventoryContainer[]; items: InventoryEntry[] }>;
+  find(ownerId: string): Promise<{ containers: InventoryContainer[]; items: InventoryEntry[] }>;
   /** Adds to the entry already in the container, if any (summed in the database). */
   addItem(
-    characterId: string,
+    ownerId: string,
     containerId: string,
     ref: string,
     quantity: number,
   ): Promise<InventoryEntry | null>;
-  setQuantity(characterId: string, itemId: string, quantity: number): Promise<boolean>;
-  remove(characterId: string, itemId: string): Promise<boolean>;
-  setCoins(characterId: string, containerId: string, coins: Coins): Promise<boolean>;
+  setQuantity(ownerId: string, itemId: string, quantity: number): Promise<boolean>;
+  remove(ownerId: string, itemId: string): Promise<boolean>;
+  setCoins(ownerId: string, containerId: string, coins: Coins): Promise<boolean>;
 }

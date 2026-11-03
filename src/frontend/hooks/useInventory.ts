@@ -14,31 +14,50 @@ import type {
 
 import type { Coins } from '@shared/systems/dnd5e/coins';
 
-export type { InventoryDto, InventoryItem };
+export type { InventoryItem };
 
 type Rollback = { previous: InventoryDto | undefined };
 
 /**
  * A character's inventory (coin pouch, backpack and the rest), read from the sheet's source (the
- * owner's route, or the GM's read-only one). Every write is optimistic: the cache changes at
- * once, and on failure it goes back and a toast says why.
+ * owner's route, or the GM's read-only one).
  */
 export function useInventory(characterId: string) {
+  const { apiPath } = useSheetSource(characterId);
+  return useInventoryAt(`${apiPath}/inventory`, characterId);
+}
+
+/** The party chest: one container that holds both the coins and the items. */
+export function usePartyChest(partyId: string) {
+  return useInventoryAt(`/api/parties/${partyId}/chest`, `party-${partyId}`);
+}
+
+export type InventoryApi = ReturnType<typeof useInventoryAt>;
+
+/**
+ * The containers and entries behind `path` (a character's inventory or a party chest). Every write
+ * is optimistic: the cache changes at once, and on failure it goes back and a toast says why.
+ */
+function useInventoryAt(path: string, ownerKey: string) {
   const queryClient = useQueryClient();
   const locale = useLocale();
   const { getErrorMessage } = useErrorMessage();
-  const { apiPath } = useSheetSource(characterId);
-  const key = ['inventory', characterId, locale];
+  const key = ['inventory', ownerKey, locale];
 
   const query = useQuery<InventoryDto>({
     queryKey: key,
-    queryFn: () => rpgWorldApi.get<InventoryDto>(`${apiPath}/inventory?locale=${locale}`),
-    enabled: !!characterId,
+    queryFn: () => rpgWorldApi.get<InventoryDto>(`${path}?locale=${locale}`),
+    enabled: !!ownerKey,
   });
   const inventory = query.data;
 
-  const pouch = inventory?.containers.find((c) => c.kind === 'coin_pouch');
-  const backpack = inventory?.containers.find((c) => c.kind === 'backpack');
+  // The party chest holds the party's coins and its items
+  const pouch = inventory?.containers.find(
+    (c) => c.kind === 'coin_pouch' || c.kind === 'party_chest',
+  );
+  const backpack = inventory?.containers.find(
+    (c) => c.kind === 'backpack' || c.kind === 'party_chest',
+  );
 
   /** Applies `change` to the cached inventory, at once, and remembers what was there. */
   const optimistic = (change: (current: InventoryDto) => InventoryDto): Rollback => {
@@ -70,10 +89,10 @@ export function useInventory(characterId: string) {
   // Once the last write in flight settles, resync with the server: a failed write rolls the cache
   // back to a snapshot that may predate a newer optimistic value, and a refetch while another
   // write is pending would overwrite that newer value.
-  const mutationKey = ['inventory-write', characterId, locale];
+  const mutationKey = ['inventory-write', ownerKey, locale];
   const settle = {
     mutationKey,
-    scope: { id: `inventory-${characterId}` },
+    scope: { id: `inventory-${ownerKey}` },
     onSettled: () => {
       if (queryClient.isMutating({ mutationKey }) === 1) {
         void queryClient.invalidateQueries({ queryKey: key });
@@ -84,7 +103,7 @@ export function useInventory(characterId: string) {
   const add = useMutation({
     ...settle,
     mutationFn: (v: { ref: string; containerId: string; quantity: number }) =>
-      rpgWorldApi.post<InventoryItem>(`${apiPath}/inventory/items?locale=${locale}`, v),
+      rpgWorldApi.post<InventoryItem>(`${path}/items?locale=${locale}`, v),
     onSuccess: upsert,
     onError: (err) => toast.error(getErrorMessage(err)),
   });
@@ -92,7 +111,7 @@ export function useInventory(characterId: string) {
   const quantity = useMutation({
     ...settle,
     mutationFn: (v: { itemId: string; quantity: number }) =>
-      rpgWorldApi.patch(`${apiPath}/inventory/items/${v.itemId}`, { quantity: v.quantity }),
+      rpgWorldApi.patch(`${path}/items/${v.itemId}`, { quantity: v.quantity }),
     onMutate: (v) =>
       optimistic((c) => ({
         ...c,
@@ -103,7 +122,7 @@ export function useInventory(characterId: string) {
 
   const remove = useMutation({
     ...settle,
-    mutationFn: (itemId: string) => rpgWorldApi.delete(`${apiPath}/inventory/items/${itemId}`),
+    mutationFn: (itemId: string) => rpgWorldApi.delete(`${path}/items/${itemId}`),
     onMutate: (itemId) =>
       optimistic((c) => ({ ...c, items: c.items.filter((i) => i.id !== itemId) })),
     onError: rollback,
@@ -111,8 +130,7 @@ export function useInventory(characterId: string) {
 
   const coins = useMutation({
     ...settle,
-    mutationFn: (v: { containerId: string; coins: Coins }) =>
-      rpgWorldApi.put(`${apiPath}/inventory/coins`, v),
+    mutationFn: (v: { containerId: string; coins: Coins }) => rpgWorldApi.put(`${path}/coins`, v),
     onMutate: (v) =>
       optimistic((c) => ({
         ...c,

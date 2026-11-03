@@ -15,7 +15,7 @@ import { GITHUB_REPO, SITE_URL } from '@frontend/constants/site';
 
 // The four features the home page shows before "see all"
 const HIGHLIGHTS = AVAILABLE_FEATURES.filter(({ key }) =>
-  ['calculations', 'spellbook', 'lore', 'languages'].includes(key),
+  ['calculations', 'spellbook', 'parties', 'inventory'].includes(key),
 );
 
 // Structured data so search engines and AI assistants know what the app is
