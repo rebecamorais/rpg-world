@@ -176,4 +176,46 @@ describe('useInventory', () => {
     await waitFor(() => expect(result.current.pouch?.coins.gp).toBe(9));
     expect(api.get.mock.calls.length).toBeGreaterThan(refetches);
   });
+
+  it('duas quantidades seguidas, a primeira mais lenta: a segunda chega ao servidor por último', async () => {
+    let resolveFirst!: () => void;
+    api.patch
+      .mockReturnValueOnce(
+        new Promise<never>((resolve) => (resolveFirst = () => resolve(undefined as never))),
+      )
+      .mockResolvedValueOnce(undefined as never);
+    const { result } = await renderInventory();
+
+    act(() => result.current.setQuantity('i1', 3));
+    act(() => result.current.setQuantity('i1', 4));
+    await waitFor(() => expect(result.current.inventory?.items[0].quantity).toBe(4));
+    await waitFor(() => expect(api.patch).toHaveBeenCalledTimes(1));
+    expect(api.patch).toHaveBeenLastCalledWith('/api/characters/c1/inventory/items/i1', {
+      quantity: 3,
+    });
+
+    act(() => resolveFirst());
+    await waitFor(() => expect(api.patch).toHaveBeenCalledTimes(2));
+    expect(api.patch).toHaveBeenLastCalledWith('/api/characters/c1/inventory/items/i1', {
+      quantity: 4,
+    });
+  });
+
+  it('remover e desfazer: o POST só sai depois do DELETE, e o item fica', async () => {
+    let resolveDelete!: () => void;
+    api.delete.mockReturnValueOnce(
+      new Promise<never>((resolve) => (resolveDelete = () => resolve(undefined as never))),
+    );
+    api.post.mockResolvedValue(rope);
+    const { result } = await renderInventory();
+
+    act(() => result.current.removeItem('i1'));
+    act(() => result.current.restoreItem(rope));
+    await waitFor(() => expect(api.delete).toHaveBeenCalledTimes(1));
+    expect(api.post).not.toHaveBeenCalled();
+
+    act(() => resolveDelete());
+    await waitFor(() => expect(api.post).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(result.current.inventory?.items).toEqual([rope]));
+  });
 });

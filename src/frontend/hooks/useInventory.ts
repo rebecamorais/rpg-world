@@ -64,12 +64,16 @@ export function useInventory(characterId: string) {
         : current,
     );
 
+  // Every write shares one scope, so TanStack Query sends them one at a time, in the order they
+  // were made: absolute values (quantity n, the coins) and an undo (POST after DELETE) can't land
+  // out of order. The optimistic change still shows at once (onMutate runs before the queue).
   // Once the last write in flight settles, resync with the server: a failed write rolls the cache
   // back to a snapshot that may predate a newer optimistic value, and a refetch while another
   // write is pending would overwrite that newer value.
   const mutationKey = ['inventory-write', characterId, locale];
   const settle = {
     mutationKey,
+    scope: { id: `inventory-${characterId}` },
     onSettled: () => {
       if (queryClient.isMutating({ mutationKey }) === 1) {
         void queryClient.invalidateQueries({ queryKey: key });
