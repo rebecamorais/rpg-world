@@ -1213,7 +1213,14 @@
       "removed": "Journal removed",
       "stepShare": "In Google Docs, click <b>Share</b>.",
       "stepOpen": "<b>Open link (easier):</b> under General access, choose <i>Anyone with the link</i> → <i>Editor</i>. Works without signing in.",
-      "stepInvited": "<b>Invited only (safer):</b> add each player's email. Each one must be signed in to Google in this browser; if the journal doesn't open here, use <i>Open in Google Docs</i>."
+      "stepInvited": "<b>Invited only (safer):</b> add each player's email. Each one must be signed in to Google in this browser; if the journal doesn't open here, use <i>Open in Google Docs</i>.",
+      "tab": "Journal",
+      "open": "Open in Google Docs",
+      "setUp": "Set up the journal",
+      "emptyGm": "Paste the link of a Google Docs document in the party settings.",
+      "emptyPlayer": "The GM hasn't set up the journal yet",
+      "mobileNotice": "On a phone the journal opens straight in Google Docs. To edit it in here, use a computer.",
+      "frameTitle": "Party journal"
     },
     "mine": {
       "title": "My characters at the table",

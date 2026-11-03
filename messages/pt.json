@@ -1213,7 +1213,14 @@
       "removed": "Diário removido",
       "stepShare": "No Google Docs, clique em <b>Compartilhar</b>.",
       "stepOpen": "<b>Link aberto (mais fácil):</b> em Acesso geral, escolha <i>Qualquer pessoa com o link</i> → <i>Editor</i>. Funciona sem login.",
-      "stepInvited": "<b>Só convidados (mais seguro):</b> adicione o e-mail de cada jogador. Cada um precisa estar logado no Google neste navegador; se o diário não abrir aqui, use <i>Abrir no Google Docs</i>."
+      "stepInvited": "<b>Só convidados (mais seguro):</b> adicione o e-mail de cada jogador. Cada um precisa estar logado no Google neste navegador; se o diário não abrir aqui, use <i>Abrir no Google Docs</i>.",
+      "tab": "Diário",
+      "open": "Abrir no Google Docs",
+      "setUp": "Configurar o diário",
+      "emptyGm": "Cole o link de um documento do Google Docs nas configurações da mesa.",
+      "emptyPlayer": "O Mestre ainda não configurou o diário",
+      "mobileNotice": "No celular o diário abre direto no Google Docs. Para editar aqui dentro, use o computador.",
+      "frameTitle": "Diário da mesa"
     },
     "mine": {
       "title": "Meus personagens na mesa",

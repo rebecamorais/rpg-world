@@ -202,4 +202,43 @@ test.describe('mesas', () => {
 
     await player.context.close();
   });
+
+  test('o diário da mesa aparece para o jogador, com aviso no celular', async ({
+    page,
+    browser,
+    user: _,
+  }) => {
+    const docId = '1AbCdEfGhIjKlMnOpQrStUvWxYz_0123456789-abcd';
+    const docUrl = `https://docs.google.com/document/d/${docId}/edit`;
+    const { id: partyId, code } = await createParty(page, 'Mesa do Diário');
+    const player = await person(browser, 'journal-player');
+    await joinParty(page, player.page, player.user.id, partyId, code);
+    // Never load Google in tests: the iframe src is all that is asserted
+    await player.context.route('https://docs.google.com/**', (route) =>
+      route.fulfill({ status: 200, body: '' }),
+    );
+
+    await player.page.goto(partyUrl(partyId));
+    await expect(player.page.getByText("The GM hasn't set up the journal yet")).toBeVisible();
+
+    await page.goto(`${partyUrl(partyId)}/settings`);
+    await (await hydrated(page.getByLabel('Google Docs link'))).fill(docUrl);
+    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(page.getByText('Journal saved')).toBeVisible();
+
+    await player.page.reload();
+    const frame = player.page.locator('iframe[title="Party journal"]');
+    await expect(frame).toHaveAttribute('src', docUrl);
+    await expect(player.page.getByRole('link', { name: 'Open in Google Docs' })).toHaveAttribute(
+      'href',
+      docUrl,
+    );
+
+    await player.page.setViewportSize({ width: 390, height: 800 });
+    await expect(frame).toHaveCount(0);
+    await expect(player.page.getByText(/On a phone the journal opens straight/)).toBeVisible();
+    await expect(player.page.getByRole('link', { name: 'Open in Google Docs' })).toBeVisible();
+
+    await player.context.close();
+  });
 });
