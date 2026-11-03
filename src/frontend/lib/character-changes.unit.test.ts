@@ -7,7 +7,6 @@ import { characterChanges } from './character-changes';
 const base = {
   id: 'c1',
   hpCurrent: 10,
-  coins: { cp: 0, sp: 0, ep: 0, gp: 1, pp: 0 },
   attributes: { STR: 10, DEX: 12 },
   skills: { stealth: { isProficient: false } },
 } as unknown as DnD5eCharacter;

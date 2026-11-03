@@ -1,0 +1,484 @@
+{
+  "abacus": { "name": "Abacus" },
+  "acid-vial": {
+    "name": "Acid (vial)",
+    "description": "As an action, you can splash the contents of this vial onto a creature within 5 feet of you or throw the vial up to 20 feet, shattering it on impact. In either case, make a ranged attack against a creature or object, treating the acid as an improvised weapon. On a hit, the target takes {@damage 2d6} acid damage."
+  },
+  "alchemist-s-fire-flask": {
+    "name": "Alchemist's Fire (flask)",
+    "description": "This sticky, adhesive fluid ignites when exposed to air. As an action, you can throw this flask up to 20 feet, shattering it on impact. Make a ranged attack against a creature or object, treating the alchemist's fire as an improvised weapon. On a hit, the target takes {@damage 1d4} fire damage at the start of each of its turns. A creature can end this damage by using its action to make a {@dc 10} Dexterity check to extinguish the flames."
+  },
+  "alchemist-s-supplies": { "name": "Alchemist's Supplies" },
+  "ale-gallon": { "name": "Ale (gallon)" },
+  "ale-mug": { "name": "Ale (mug)" },
+  "amulet": { "name": "Amulet" },
+  "antitoxin-vial": {
+    "name": "Antitoxin (vial)",
+    "description": "A creature that drinks this vial of liquid gains advantage on saving throws against poison for 1 hour. It confers no benefit to undead or constructs."
+  },
+  "arrow": { "name": "Arrow" },
+  "arrows-20": { "name": "Arrows (20)" },
+  "backpack": {
+    "name": "Backpack",
+    "description": "A backpack can hold one cubic foot or 30 pounds of gear. You can also strap items, such as a bedroll or a coil of rope, to the outside of a backpack."
+  },
+  "bagpipes": { "name": "Bagpipes" },
+  "ball-bearing": {
+    "name": "Ball Bearing",
+    "description": "Most commonly found inside a {@item Ball Bearings (Bag of 1,000)|phb|bag of ball bearings}."
+  },
+  "ball-bearings-bag-of-1-000": {
+    "name": "Ball Bearings (bag of 1,000)",
+    "description": "As an action, you can spill these tiny metal balls from their pouch to cover a level area 10 feet square. A creature moving across the covered area must succeed on a {@dc 10} Dexterity saving throw or fall {@condition prone}. A creature moving through the area at half speed doesn't need to make the saving throw."
+  },
+  "barrel": {
+    "name": "Barrel",
+    "description": "A barrel can hold 40 gallons of liquid or 4 cubic feet of solids."
+  },
+  "basic-poison-vial": {
+    "name": "Basic Poison (vial)",
+    "description": "You can use the poison in this vial to coat one slashing or piercing weapon or up to three pieces of ammunition. Applying the poison takes an action. A creature hit by the poisoned weapon or ammunition must make a {@dc 10} Constitution saving throw or take {@damage 1d4} poison damage. Once applied, the poison retains potency for 1 minute before drying."
+  },
+  "basket": {
+    "name": "Basket",
+    "description": "A basket holds 2 cubic feet or 40 pounds of gear."
+  },
+  "battleaxe": { "name": "Battleaxe" },
+  "bedroll": { "name": "Bedroll" },
+  "bell": { "name": "Bell" },
+  "bit-and-bridle": { "name": "Bit and bridle" },
+  "blanket": { "name": "Blanket" },
+  "block-and-tackle": {
+    "name": "Block and Tackle",
+    "description": "A set of pulleys with a cable threaded through them and a hook to attach to objects, a block and tackle allows you to hoist up to four times the weight you can normally lift."
+  },
+  "blowgun": { "name": "Blowgun" },
+  "blowgun-needle": { "name": "Blowgun Needle" },
+  "blowgun-needles-50": { "name": "Blowgun Needles (50)" },
+  "book": {
+    "name": "Book",
+    "description": "A book might contain poetry, historical accounts, information pertaining to a particular field of lore, diagrams and notes on gnomish contraptions, or just about anything else that can be represented using text or pictures. A book of spells is a {@item spellbook|phb}."
+  },
+  "breastplate": {
+    "name": "Breastplate",
+    "description": "This armor consists of a fitted metal chest piece worn with supple leather. Although it leaves the legs and arms relatively unprotected, this armor provides good protection for the wearer's vital organs while leaving the wearer relatively unencumbered."
+  },
+  "brewer-s-supplies": { "name": "Brewer's Supplies" },
+  "bucket": {
+    "name": "Bucket",
+    "description": "A bucket holds 3 gallons of liquid or ½ cubic foot of solids."
+  },
+  "bullseye-lantern": {
+    "name": "Bullseye Lantern",
+    "description": "A bullseye lantern casts bright light in a 60-foot cone and dim light for an additional 60 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil."
+  },
+  "burglar-s-pack": {
+    "name": "Burglar's Pack",
+    "description": "Includes:\n• a {@item backpack|phb}\n• a {@item Ball Bearings (Bag of 1,000)|phb|bag of 1,000 ball bearings}\n• 10 feet of string\n• a {@item bell|phb}\n• 5 {@item candle|phb|candles}\n• a {@item crowbar|phb}\n• a {@item hammer|phb}\n• 10 {@item piton|phb|pitons}\n• a {@item hooded lantern|phb}\n• 2 {@item Oil (flask)|phb|flasks of oil}\n• 5 days {@item Rations (1 day)|phb|rations}\n• a {@item tinderbox|phb}\n• a {@item waterskin|phb}\n• {@item Hempen Rope (50 feet)|phb|50 feet of hempen rope}"
+  },
+  "calligrapher-s-supplies": { "name": "Calligrapher's Supplies" },
+  "caltrop": {
+    "name": "Caltrop",
+    "description": "As an action, you can spread a single bag of caltrops to cover a 5-foot-square area. Any creature that enters the area must succeed on a {@dc 15} Dexterity saving throw or stop moving and take 1 piercing damage. Until the creature regains at least 1 hit point, its walking speed is reduced by 10 feet. A creature moving through the area at half speed doesn't need to make the saving throw."
+  },
+  "caltrops-bag-of-20": {
+    "name": "Caltrops (bag of 20)",
+    "description": "As an action, you can spread a single bag of caltrops to cover a 5-foot-square area. Any creature that enters the area must succeed on a {@dc 15} Dexterity saving throw or stop moving and take 1 piercing damage. Until the creature regains at least 1 hit point, its walking speed is reduced by 10 feet. A creature moving through the area at half speed doesn't need to make the saving throw."
+  },
+  "camel": { "name": "Camel" },
+  "candle": {
+    "name": "Candle",
+    "description": "For 1 hour, a candle sheds bright light in a 5-foot radius and dim light for an additional 5 feet."
+  },
+  "canvas-1-sq-yd": { "name": "Canvas (1 sq. yd.)" },
+  "carpenter-s-tools": { "name": "Carpenter's Tools" },
+  "carriage": { "name": "Carriage" },
+  "cart": { "name": "Cart" },
+  "cartographer-s-tools": { "name": "Cartographer's Tools" },
+  "chain-10-feet": {
+    "name": "Chain (10 feet)",
+    "description": "A chain has 10 hit points. It can be burst with a successful {@dc 20} Strength check."
+  },
+  "chain-mail": {
+    "name": "Chain Mail",
+    "description": "Made of interlocking metal rings, chain mail includes a layer of quilted fabric worn underneath the mail to prevent chafing and to cushion the impact of blows. The suit includes gauntlets."
+  },
+  "chain-shirt": {
+    "name": "Chain Shirt",
+    "description": "Made of interlocking metal rings, a chain shirt is worn between layers of clothing or leather. This armor offers modest protection to the wearer's upper body and allows the sound of the rings rubbing against one another to be muffled by outer layers."
+  },
+  "chalk-1-piece": { "name": "Chalk (1 piece)" },
+  "chariot": { "name": "Chariot" },
+  "chest": { "name": "Chest", "description": "A chest holds 12 cubic feet or 300 pounds of gear." },
+  "chicken": { "name": "Chicken" },
+  "chunk-of-meat": { "name": "Chunk of Meat" },
+  "cinnamon": { "name": "Cinnamon" },
+  "climber-s-kit": {
+    "name": "Climber's Kit",
+    "description": "A climber's kit includes special pitons, boot tips, gloves, and a harness. You can use the climber's kit as an action to anchor yourself; when you do, you can't fall more than 25 feet from the point where you anchored yourself, and you can't climb more than 25 feet away from that point without undoing the anchor."
+  },
+  "cloves": { "name": "Cloves" },
+  "club": { "name": "Club" },
+  "cobbler-s-tools": { "name": "Cobbler's Tools" },
+  "common-clothes": { "name": "Common Clothes" },
+  "common-wine-pitcher": { "name": "Common Wine (pitcher)" },
+  "component-pouch": {
+    "name": "Component Pouch",
+    "description": "A component pouch is a small, watertight leather belt pouch that has compartments to hold all the material components and other special items you need to cast your spells, except for those components that have a specific cost (as indicated in a spell's description)."
+  },
+  "cook-s-utensils": { "name": "Cook's Utensils" },
+  "copper": { "name": "Copper" },
+  "costume-clothes": { "name": "Costume Clothes" },
+  "cotton-cloth-1-sq-yd": { "name": "Cotton Cloth (1 sq. yd.)" },
+  "cow": { "name": "Cow" },
+  "crossbow-bolt": { "name": "Crossbow Bolt" },
+  "crossbow-bolt-case": {
+    "name": "Crossbow Bolt Case",
+    "description": "This wooden case can hold up to twenty {@item crossbow bolt|phb|crossbow bolts}."
+  },
+  "crossbow-bolts-20": { "name": "Crossbow Bolts (20)" },
+  "crowbar": {
+    "name": "Crowbar",
+    "description": "Using a crowbar grants advantage to Strength checks where the crowbar's leverage can be applied."
+  },
+  "crystal": { "name": "Crystal" },
+  "dagger": { "name": "Dagger" },
+  "dart": { "name": "Dart" },
+  "dice-set": { "name": "Dice Set" },
+  "diplomat-s-pack": {
+    "name": "Diplomat's Pack",
+    "description": "Includes:\n• a {@item chest|phb}\n• 2 {@item Map or Scroll Case|phb|cases for maps and scrolls}\n• a set of {@item fine clothes|phb}\n• a {@item Ink (1-ounce bottle)|phb|bottle of ink}\n• an {@item ink pen|phb}\n• a {@item lamp|phb}\n• 2 {@item Oil (flask)|phb|flasks of oil}\n• 5 {@item Paper (one sheet)|phb|sheets of paper}\n• a {@item Perfume (vial)|phb|vial of perfume}\n• {@item sealing wax|phb}\n• {@item soap|phb}"
+  },
+  "disguise-kit": {
+    "name": "Disguise Kit",
+    "description": "This pouch of cosmetics, hair dye, and small props lets you create disguises that change your physical appearance. Proficiency with this kit lets you add your proficiency bonus to any ability checks you make to create a visual disguise."
+  },
+  "donkey": { "name": "Donkey" },
+  "draft-horse": { "name": "Draft Horse" },
+  "drum": { "name": "Drum" },
+  "dulcimer": { "name": "Dulcimer" },
+  "dungeoneer-s-pack": {
+    "name": "Dungeoneer's Pack",
+    "description": "Includes:\n• a {@item backpack|phb}\n• a {@item crowbar|phb}\n• a {@item hammer|phb}\n• 10 {@item piton|phb|pitons}\n• 10 {@item torch|phb|torches}\n• a {@item tinderbox|phb}\n• 10 days of {@item Rations (1 day)|phb|rations}\n• a {@item waterskin|phb}\n• {@item Hempen Rope (50 feet)|phb|50 feet of hempen rope}"
+  },
+  "elephant": { "name": "Elephant" },
+  "emblem": { "name": "Emblem" },
+  "entertainer-s-pack": {
+    "name": "Entertainer's Pack",
+    "description": "Includes:\n• a {@item backpack|phb}\n• a {@item bedroll|phb}\n• 2 {@item Costume Clothes|phb|costumes}\n• 5 {@item candle|phb|candles}\n• 5 days of {@item Rations (1 day)|phb|rations}\n• a {@item waterskin|phb}\n• a {@item disguise kit|phb}"
+  },
+  "exotic-saddle": {
+    "name": "Exotic Saddle",
+    "description": "An exotic saddle is required for riding any aquatic or flying mount."
+  },
+  "explorer-s-pack": {
+    "name": "Explorer's Pack",
+    "description": "Includes:\n• a {@item backpack|phb}\n• a {@item bedroll|phb}\n• a {@item mess kit|phb}\n• a {@item tinderbox|phb}\n• 10 {@item torch|phb|torches}\n• 10 days of {@item Rations (1 day)|phb|rations}\n• a {@item waterskin|phb}\n• {@item Hempen Rope (50 feet)|phb|50 feet of hempen rope}"
+  },
+  "feed-per-day": { "name": "Feed (per day)" },
+  "fine-clothes": { "name": "Fine Clothes" },
+  "fine-wine-bottle": { "name": "Fine Wine (bottle)" },
+  "fishing-tackle": {
+    "name": "Fishing Tackle",
+    "description": "This kit includes a wooden rod, silken line, corkwood bobbers, steel hooks, lead sinkers, velvet lures, and narrow netting."
+  },
+  "flail": { "name": "Flail" },
+  "flask": { "name": "Flask", "description": "A flask holds 1 pint of liquid." },
+  "flour": { "name": "Flour" },
+  "flute": { "name": "Flute" },
+  "forgery-kit": {
+    "name": "Forgery Kit",
+    "description": "This small box contains a variety of papers and parchments, pens and inks, seals and sealing wax, gold and silver leaf, and other supplies necessary to create convincing forgeries of physical documents. Proficiency with this kit lets you add your proficiency bonus to any ability checks you make to create a physical forgery of a document."
+  },
+  "ginger": { "name": "Ginger" },
+  "glaive": { "name": "Glaive" },
+  "glass-bottle": { "name": "Glass Bottle", "description": "A bottle holds 1½ pints of liquid." },
+  "glassblower-s-tools": { "name": "Glassblower's Tools" },
+  "goat": { "name": "Goat" },
+  "gold": { "name": "Gold" },
+  "grappling-hook": { "name": "Grappling Hook" },
+  "greataxe": { "name": "Greataxe" },
+  "greatclub": { "name": "Greatclub" },
+  "greatsword": { "name": "Greatsword" },
+  "halberd": { "name": "Halberd" },
+  "half-plate-armor": {
+    "name": "Half Plate Armor",
+    "description": "Half plate consists of shaped metal plates that cover most of the wearer's body. It does not include leg protection beyond simple greaves that are attached with leather straps."
+  },
+  "hammer": { "name": "Hammer" },
+  "hand-crossbow": { "name": "Hand Crossbow" },
+  "handaxe": { "name": "Handaxe" },
+  "healer-s-kit": {
+    "name": "Healer's Kit",
+    "description": "This kit is a leather pouch containing bandages, salves, and splints. The kit has ten uses. As an action, you can expend one use of the kit to stabilize a creature that has 0 hit points, without needing to make a Wisdom ({@skill Medicine}) check."
+  },
+  "heavy-crossbow": { "name": "Heavy Crossbow" },
+  "hempen-rope-50-feet": {
+    "name": "Hempen Rope (50 feet)",
+    "description": "Rope, whether made of hemp or silk, has 2 hit points and can be burst with a {@dc 17} Strength check."
+  },
+  "herbalism-kit": {
+    "name": "Herbalism Kit",
+    "description": "This kit contains a variety of instruments such as clippers, mortar and pestle, and pouches and vials used by herbalists to create remedies and potions. Proficiency with this kit lets you add your proficiency bonus to any ability checks you make to identify or apply herbs. Also, proficiency with this kit is required to create antitoxin and potions of healing."
+  },
+  "hide-armor": {
+    "name": "Hide Armor",
+    "description": "This crude armor consists of thick furs and pelts. It is commonly worn by barbarian tribes, evil humanoids, and other folk who lack access to the tools and materials needed to create better armor."
+  },
+  "holy-water-flask": {
+    "name": "Holy Water (flask)",
+    "description": "As an action, you can splash the contents of this flask onto a creature within 5 feet of you or throw it up to 20 feet, shattering it on impact. In either case, make a ranged attack against a target creature, treating the holy water as an improvised weapon. If the target is a fiend or undead, it takes {@damage 2d6} radiant damage.\nA cleric or paladin may create holy water by performing a special ritual. The ritual takes 1 hour to perform, uses 25 gp worth of powdered silver, and requires the caster to expend a 1st-level spell slot."
+  },
+  "hooded-lantern": {
+    "name": "Hooded Lantern",
+    "description": "A hooded lantern casts bright light in a 30-foot radius and dim light for an additional 30 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil. As an action, you can lower the hood, reducing the light to dim light in a 5-foot radius."
+  },
+  "horn": { "name": "Horn" },
+  "hourglass": { "name": "Hourglass" },
+  "hunk-of-cheese": { "name": "Hunk of Cheese" },
+  "hunting-trap": {
+    "name": "Hunting Trap",
+    "description": "When you use your action to set it, this trap forms a saw-toothed steel ring that snaps shut when a creature steps on a pressure plate in the center. The trap is affixed by a heavy chain to an immobile object, such as a tree or a spike driven into the ground. A creature that steps on the plate must succeed on a {@dc 13} Dexterity saving throw or take {@damage 1d4} piercing damage and stop moving. Thereafter, until the creature breaks free of the trap, its movement is limited by the length of the chain (typically 3 feet long). A creature can use its action to make a {@dc 13} Strength check, freeing itself or another creature within its reach on a success. Each failed check deals 1 piercing damage to the trapped creature."
+  },
+  "ink-1-ounce-bottle": { "name": "Ink (1-ounce bottle)" },
+  "ink-pen": { "name": "Ink Pen" },
+  "iron": { "name": "Iron" },
+  "iron-pot": { "name": "Iron Pot", "description": "An iron pot holds 1 gallon of liquid." },
+  "iron-spike": { "name": "Iron Spike" },
+  "iron-spikes-10": { "name": "Iron Spikes (10)" },
+  "javelin": { "name": "Javelin" },
+  "jeweler-s-tools": { "name": "Jeweler's Tools" },
+  "jug": { "name": "Jug", "description": "A jug holds 1 gallon of liquid." },
+  "ladder-10-foot": { "name": "Ladder (10-foot)", "description": "Ladder (10-foot)" },
+  "lamp": {
+    "name": "Lamp",
+    "description": "A lamp casts bright light in a 15-foot radius and dim light for an additional 30 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil."
+  },
+  "lance": {
+    "name": "Lance",
+    "description": "Special. You have disadvantage when you use a lance to attack a target within 5 feet of you. Also, a lance requires two hands to wield when you aren't mounted."
+  },
+  "leather-armor": {
+    "name": "Leather Armor",
+    "description": "The breastplate and shoulder protectors of this armor are made of leather that has been stiffened by being boiled in oil. The rest of the armor is made of softer and more flexible materials."
+  },
+  "leatherworker-s-tools": { "name": "Leatherworker's Tools" },
+  "light-crossbow": { "name": "Light Crossbow" },
+  "light-hammer": { "name": "Light Hammer" },
+  "linen-1-sq-yd": { "name": "Linen (1 sq. yd.)" },
+  "loaf-of-bread": { "name": "Loaf of Bread" },
+  "lock": {
+    "name": "Lock",
+    "description": "A key is provided with the lock. Without the key, a creature proficient with {@item thieves' tools|phb} can pick this lock with a successful {@dc 15} Dexterity check. Your DM may decide that better locks are available for higher prices."
+  },
+  "longbow": { "name": "Longbow" },
+  "longsword": { "name": "Longsword" },
+  "lute": { "name": "Lute" },
+  "lyre": { "name": "Lyre" },
+  "mace": { "name": "Mace" },
+  "magnifying-glass": {
+    "name": "Magnifying Glass",
+    "description": "This lens allows a closer look at small objects. It is also useful as a substitute for flint and steel when starting fires. Lighting a fire with a magnifying glass requires light as bright as sunlight to focus, tinder to ignite, and about 5 minutes for the fire to ignite. A magnifying glass grants advantage on any ability check made to appraise or inspect an item that is small or highly detailed."
+  },
+  "manacles": {
+    "name": "Manacles",
+    "description": "These metal restraints can bind a Small or Medium creature. Escaping the manacles requires a successful {@dc 20} Dexterity check. Breaking them requires a successful {@dc 20} Strength check. Each set of manacles comes with one key. Without the key, a creature proficient with {@item thieves' tools|PHB} can pick the manacles' lock with a successful {@dc 15} Dexterity check. Manacles have 15 hit points."
+  },
+  "map-or-scroll-case": {
+    "name": "Map or Scroll Case",
+    "description": "This cylindrical leather case can hold up to ten rolled-up {@item paper (one sheet)|phb|sheets of paper} or five rolled-up {@item parchment (one sheet)|phb|sheets of parchment}."
+  },
+  "mason-s-tools": { "name": "Mason's Tools" },
+  "mastiff": { "name": "Mastiff" },
+  "maul": { "name": "Maul" },
+  "merchant-s-scale": {
+    "name": "Merchant's Scale",
+    "description": "A scale includes a small balance, pans, and a suitable assortment of weights up to 2 pounds. With it, you can measure the exact weight of small objects, such as raw precious metals or trade goods, to help determine their worth."
+  },
+  "mess-kit": {
+    "name": "Mess Kit",
+    "description": "This tin box contains a cup and simple cutlery. The box clamps together, and one side can be used as a cooking pan and the other as a plate or shallow bowl."
+  },
+  "military-saddle": {
+    "name": "Military Saddle",
+    "description": "A military saddle braces the rider, helping you keep your seat on an active mount in battle. It gives you advantage on any check you make to remain mounted."
+  },
+  "miner-s-pick": { "name": "Miner's Pick" },
+  "morningstar": { "name": "Morningstar" },
+  "mule": { "name": "Mule" },
+  "navigator-s-tools": {
+    "name": "Navigator's Tools",
+    "description": "This set of instruments is used for navigation at sea. Proficiency with navigator's tools lets you chart a ship's course and follow navigation charts. In addition, these tools allow you to add your proficiency bonus to any ability check you make to avoid getting lost at sea."
+  },
+  "net": {
+    "name": "Net",
+    "description": "Special. A Large or smaller creature hit by a net is {@condition restrained} until it is freed. A net has no effect on creatures that are formless, or creatures that are Huge or larger. A creature can use its action to make a {@dc 10} Strength check, freeing itself or another creature within its reach on a success. Dealing 5 slashing damage to the net (AC 10) also frees the creature without harming it, ending the effect and destroying the net. When you use an action, bonus action, or reaction to attack with a net, you can make only one attack regardless of the number of attacks you can normally make."
+  },
+  "oil-flask": {
+    "name": "Oil (flask)",
+    "description": "Oil usually comes in a clay flask that holds 1 pint. As an action, you can splash the oil in this flask onto a creature within 5 feet of you or throw it up to 20 feet, shattering it on impact. Make a ranged attack against a target creature or object, treating the oil as an improvised weapon. On a hit, the target is covered in oil. If the target takes any fire damage before the oil dries (after 1 minute), the target takes an additional 5 fire damage from the burning oil. You can also pour a flask of oil on the ground to cover a 5-foot-square area, provided that the surface is level. If lit, the oil burns for 2 rounds and deals 5 fire damage to any creature that enters the area or ends its turn in the area. A creature can take this damage only once per turn."
+  },
+  "orb": { "name": "Orb" },
+  "ox": { "name": "Ox" },
+  "pack-saddle": { "name": "Pack Saddle" },
+  "padded-armor": {
+    "name": "Padded Armor",
+    "description": "Padded armor consists of quilted layers of cloth and batting."
+  },
+  "painter-s-supplies": { "name": "Painter's Supplies" },
+  "pan-flute": { "name": "Pan Flute" },
+  "paper-one-sheet": { "name": "Paper (one sheet)" },
+  "parchment-one-sheet": { "name": "Parchment (one sheet)" },
+  "pepper": { "name": "Pepper" },
+  "perfume-vial": { "name": "Perfume (vial)" },
+  "pig": { "name": "Pig" },
+  "pike": { "name": "Pike" },
+  "pitcher": { "name": "Pitcher", "description": "A pitcher holds 1 gallon of liquid." },
+  "piton": { "name": "Piton" },
+  "plate-armor": {
+    "name": "Plate Armor",
+    "description": "Plate consists of shaped, interlocking metal plates to cover the entire body. A suit of plate includes gauntlets, heavy leather boots, a visored helmet, and thick layers of padding underneath the armor. Buckles and straps distribute the weight over the body."
+  },
+  "platinum": { "name": "Platinum" },
+  "playing-card-set": { "name": "Playing Card Set" },
+  "poisoner-s-kit": {
+    "name": "Poisoner's Kit",
+    "description": "A poisoner's kit includes the vials, chemicals, and other equipment necessary for the creation of poisons. Proficiency with this kit lets you add your proficiency bonus to any ability checks you make to craft or use poisons.\nAdditionally, the {@book Crafting and Harvesting Poison|dmg|8|Crafting and Harvesting Poison} rules require the use of a poisoner's kit."
+  },
+  "pole-10-foot": { "name": "Pole (10-foot)" },
+  "pony": { "name": "Pony" },
+  "portable-ram": {
+    "name": "Portable Ram",
+    "description": "You can use a portable ram to break down doors. When doing so, you gain a +4 bonus on the Strength check. One other character can help you use the ram, giving you advantage on this check."
+  },
+  "potter-s-tools": { "name": "Potter's Tools" },
+  "pouch": {
+    "name": "Pouch",
+    "description": "A cloth or leather pouch can hold up to 20 {@item sling bullet|phb|sling bullets} or 50 {@item blowgun needle|phb|blowgun needles}, among other things. A compartmentalized pouch for holding spell components is called a {@item component pouch|phb}. A pouch can hold up to ⅕ cubic foot or 6 pounds of gear."
+  },
+  "priest-s-pack": {
+    "name": "Priest's Pack",
+    "description": "Includes:\n• a {@item backpack|phb}\n• a {@item blanket|phb}\n• 10 {@item candle|phb|candles}\n• a {@item tinderbox|phb}\n• an alms box\n• 2 blocks of incense\n• a censer\n• vestments\n• 2 days of {@item Rations (1 day)|phb|rations}\n• a {@item waterskin|phb}."
+  },
+  "quarterstaff": { "name": "Quarterstaff" },
+  "quiver": {
+    "name": "Quiver",
+    "description": "A quiver can hold up to 20 {@item arrow|phb|arrows}."
+  },
+  "rapier": { "name": "Rapier" },
+  "rations-1-day": {
+    "name": "Rations (1 day)",
+    "description": "Rations consist of dry foods suitable for extended travel, including jerky, dried fruit, hardtack, and nuts."
+  },
+  "reliquary": { "name": "Reliquary" },
+  "riding-horse": { "name": "Riding Horse" },
+  "riding-saddle": { "name": "Riding Saddle" },
+  "ring-mail": {
+    "name": "Ring Mail",
+    "description": "This armor is leather armor with heavy rings sewn into it. The rings help reinforce the armor against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor."
+  },
+  "robes": { "name": "Robes" },
+  "rod": { "name": "Rod" },
+  "sack": {
+    "name": "Sack",
+    "description": "A sack can hold up to 1 cubic foot or 30 pounds of gear."
+  },
+  "saddlebags": { "name": "Saddlebags" },
+  "saffron": { "name": "Saffron" },
+  "salt": { "name": "Salt" },
+  "scale-mail": {
+    "name": "Scale Mail",
+    "description": "This armor consists of a coat and leggings (and perhaps a separate skirt) of leather covered with overlapping pieces of metal, much like the scales of a fish. The suit includes gauntlets."
+  },
+  "scholar-s-pack": {
+    "name": "Scholar's Pack",
+    "description": "Includes:\n• a {@item backpack|phb}\n• a {@item book|phb} of lore\n• a {@item Ink (1-ounce bottle)|phb|bottle of ink}\n• an {@item ink pen|phb}\n• 10 {@item Parchment (one sheet)|phb|sheets of parchment}\n• a little bag of sand\n• a small knife."
+  },
+  "scimitar": { "name": "Scimitar" },
+  "sealing-wax": { "name": "Sealing Wax" },
+  "shawm": { "name": "Shawm" },
+  "sheep": { "name": "Sheep" },
+  "shield": {
+    "name": "Shield",
+    "description": "A shield is made from wood or metal and is carried in one hand. Wielding a shield increases your Armor Class by 2. You can benefit from only one shield at a time."
+  },
+  "shortbow": { "name": "Shortbow" },
+  "shortsword": { "name": "Shortsword" },
+  "shovel": { "name": "Shovel" },
+  "sickle": { "name": "Sickle" },
+  "signal-whistle": { "name": "Signal Whistle" },
+  "signet-ring": { "name": "Signet Ring" },
+  "silk-1-sq-yd": { "name": "Silk (1 sq. yd.)" },
+  "silk-rope-50-feet": {
+    "name": "Silk Rope (50 feet)",
+    "description": "Rope, whether made of hemp or silk, has 2 hit points and can be burst with a {@dc 17} Strength check."
+  },
+  "silver": { "name": "Silver" },
+  "sled": { "name": "Sled" },
+  "sledgehammer": { "name": "Sledgehammer" },
+  "sling": { "name": "Sling" },
+  "sling-bullet": { "name": "Sling Bullet" },
+  "sling-bullets-20": { "name": "Sling Bullets (20)" },
+  "smith-s-tools": { "name": "Smith's Tools" },
+  "soap": { "name": "Soap" },
+  "spear": { "name": "Spear" },
+  "spellbook": {
+    "name": "Spellbook",
+    "description": "Essential for wizards, a spellbook is a leather-bound tome with 100 blank vellum pages suitable for recording spells."
+  },
+  "splint-armor": {
+    "name": "Splint Armor",
+    "description": "This armor is made of narrow vertical strips of metal riveted to a backing of leather that is worn over cloth padding. Flexible chain mail protects the joints."
+  },
+  "sprig-of-mistletoe": { "name": "Sprig of Mistletoe" },
+  "spyglass": {
+    "name": "Spyglass",
+    "description": "Objects viewed through a spyglass are magnified to twice their size."
+  },
+  "stabling-per-day": { "name": "Stabling (per day)" },
+  "staff": { "name": "Staff" },
+  "steel-mirror": { "name": "Steel Mirror" },
+  "studded-leather-armor": {
+    "name": "Studded Leather Armor",
+    "description": "Made from tough but flexible leather, studded leather is reinforced with close-set rivets or spikes."
+  },
+  "tankard": { "name": "Tankard", "description": "A tankard holds 1 pint of liquid." },
+  "thieves-tools": {
+    "name": "Thieves' Tools",
+    "description": "This set of tools includes a small file, a set of lock picks, a small mirror mounted on a metal handle, a set of narrow-bladed scissors, and a pair of pliers. Proficiency with these tools lets you add your proficiency bonus to any ability checks you make to disarm traps or open locks."
+  },
+  "tinderbox": {
+    "name": "Tinderbox",
+    "description": "This small container holds flint, fire steel, and tinder (usually dry cloth soaked in light oil) used to kindle a fire. Using it to light a torch—or anything else with abundant, exposed fuel—takes an action. Lighting any other fire takes 1 minute."
+  },
+  "tinker-s-tools": { "name": "Tinker's Tools" },
+  "torch": {
+    "name": "Torch",
+    "description": "A torch burns for 1 hour, providing bright light in a 20-foot radius and dim light for an additional 20 feet. If you make a melee attack with a burning torch and hit, it deals 1 fire damage."
+  },
+  "totem": { "name": "Totem" },
+  "traveler-s-clothes": { "name": "Traveler's Clothes" },
+  "trident": { "name": "Trident" },
+  "two-person-tent": {
+    "name": "Two-Person Tent",
+    "description": "A simple and portable canvas shelter, a tent sleeps two."
+  },
+  "vial": { "name": "Vial", "description": "A vial can hold up to 4 ounces of liquid." },
+  "viol": { "name": "Viol" },
+  "wagon": { "name": "Wagon" },
+  "wand": { "name": "Wand" },
+  "war-pick": { "name": "War Pick" },
+  "warhammer": { "name": "Warhammer" },
+  "warhorse": { "name": "Warhorse" },
+  "waterskin": {
+    "name": "Waterskin",
+    "description": "A waterskin can hold up to 4 pints of liquid."
+  },
+  "weaver-s-tools": { "name": "Weaver's Tools" },
+  "wheat": { "name": "Wheat" },
+  "whetstone": { "name": "Whetstone" },
+  "whip": { "name": "Whip" },
+  "woodcarver-s-tools": { "name": "Woodcarver's Tools" },
+  "wooden-staff": { "name": "Wooden Staff" },
+  "yew-wand": { "name": "Yew Wand" }
+}

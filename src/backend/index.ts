@@ -5,6 +5,7 @@ import { makeProfileApi } from '@backend/contexts/users/interfaces/profile.api';
 import { makeCombatApi } from './contexts/combat/interfaces/combat.api';
 import { makeConditionsApi } from './contexts/conditions/interfaces/conditions.api';
 import { makeFeedbackApi } from './contexts/feedback/interfaces/feedback.api';
+import { makeItemsApi } from './contexts/items/interfaces/items.api';
 import { makeLoreApi } from './contexts/lore/interfaces/lore.api';
 import { makePartiesApi } from './contexts/parties/interfaces/parties.api';
 import { makeSpellsApi } from './contexts/spells/interfaces/spells.api';
@@ -21,6 +22,7 @@ export const getApi = async () => {
     combatApi: makeCombatApi(container.contexts.combat),
 
     conditionsApi: makeConditionsApi(container.contexts.conditions),
+    itemsApi: makeItemsApi(container.contexts.items),
     spellsApi: makeSpellsApi(container.contexts.spells),
     feedbackApi: makeFeedbackApi(container.contexts.feedback),
   };

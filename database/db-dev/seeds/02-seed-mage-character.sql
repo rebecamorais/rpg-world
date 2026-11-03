@@ -107,9 +107,6 @@ BEGIN
         '3', jsonb_build_object('max', 2, 'used', 0)
       ),
 
-      -- Moedas
-      'coins', jsonb_build_object('cp', 0, 'sp', 50, 'ep', 0, 'gp', 120, 'pp', 0),
-
       -- Lore
       'personalityTraits', 'Falo sem parar sobre minha área de pesquisa favorita.',
       'ideals',  'Conhecimento — o caminho para a iluminação está no estudo constante.',
@@ -118,6 +115,11 @@ BEGIN
     ),
     now(), now()
   );
+
+  -- Moedas na algibeira (criada pelo trigger do insert acima)
+  UPDATE public.containers
+  SET coins = '{"cp":0,"sp":50,"ep":0,"gp":120,"pp":0}'::jsonb
+  WHERE character_id = char_id AND kind = 'coin_pouch';
 
   -- =========================================================
   -- 3. Associar magias conhecidas ao personagem

@@ -1,0 +1,755 @@
+{
+  "abacus": {
+    "name": "Ábaco"
+  },
+  "acid-vial": {
+    "name": "Ácido (frasco)"
+  },
+  "alchemist-s-fire-flask": {
+    "name": "Fogo de Alquimista (frasco)"
+  },
+  "alchemist-s-supplies": {
+    "name": "Suprimentos de Alquimista"
+  },
+  "ale-gallon": {
+    "name": "Cerveja (galão)"
+  },
+  "ale-mug": {
+    "name": "Cerveja (caneca)"
+  },
+  "amulet": {
+    "name": "Amuleto"
+  },
+  "antitoxin-vial": {
+    "name": "Antitoxina (frasco)"
+  },
+  "arrow": {
+    "name": "Flecha"
+  },
+  "arrows-20": {
+    "name": "Flechas (20)"
+  },
+  "backpack": {
+    "name": "Mochila"
+  },
+  "bagpipes": {
+    "name": "Gaita de Foles"
+  },
+  "ball-bearing": {
+    "name": "Esfera de Metal"
+  },
+  "ball-bearings-bag-of-1-000": {
+    "name": "Esferas de Metal (saco com 1.000)"
+  },
+  "barrel": {
+    "name": "Barril"
+  },
+  "basic-poison-vial": {
+    "name": "Veneno Básico (frasco)"
+  },
+  "basket": {
+    "name": "Cesto"
+  },
+  "battleaxe": {
+    "name": "Machado de Batalha"
+  },
+  "bedroll": {
+    "name": "Saco de Dormir"
+  },
+  "bell": {
+    "name": "Sino"
+  },
+  "bit-and-bridle": {
+    "name": "Freio e rédeas"
+  },
+  "blanket": {
+    "name": "Cobertor"
+  },
+  "block-and-tackle": {
+    "name": "Polia e Roldana"
+  },
+  "blowgun": {
+    "name": "Zarabatana"
+  },
+  "blowgun-needle": {
+    "name": "Agulha de Zarabatana"
+  },
+  "blowgun-needles-50": {
+    "name": "Agulhas de Zarabatana (50)"
+  },
+  "book": {
+    "name": "Livro"
+  },
+  "breastplate": {
+    "name": "Peitoral"
+  },
+  "brewer-s-supplies": {
+    "name": "Suprimentos de Cervejeiro"
+  },
+  "bucket": {
+    "name": "Balde"
+  },
+  "bullseye-lantern": {
+    "name": "Lanterna Foco"
+  },
+  "burglar-s-pack": {
+    "name": "Kit de Ladrão"
+  },
+  "calligrapher-s-supplies": {
+    "name": "Suprimentos de Calígrafo"
+  },
+  "caltrop": {
+    "name": "Abrolho"
+  },
+  "caltrops-bag-of-20": {
+    "name": "Abrolhos (saco com 20)"
+  },
+  "camel": {
+    "name": "Camelo"
+  },
+  "candle": {
+    "name": "Vela"
+  },
+  "canvas-1-sq-yd": {
+    "name": "Lona (1 jarda quadrada)"
+  },
+  "carpenter-s-tools": {
+    "name": "Ferramentas de Carpinteiro"
+  },
+  "carriage": {
+    "name": "Carruagem"
+  },
+  "cart": {
+    "name": "Carroça"
+  },
+  "cartographer-s-tools": {
+    "name": "Ferramentas de Cartógrafo"
+  },
+  "chain-10-feet": {
+    "name": "Corrente (3 metros)"
+  },
+  "chain-mail": {
+    "name": "Cota de Malha"
+  },
+  "chain-shirt": {
+    "name": "Camisa de Malha"
+  },
+  "chalk-1-piece": {
+    "name": "Giz (1 peça)"
+  },
+  "chariot": {
+    "name": "Biga"
+  },
+  "chest": {
+    "name": "Baú"
+  },
+  "chicken": {
+    "name": "Galinha"
+  },
+  "chunk-of-meat": {
+    "name": "Pedaço de Carne"
+  },
+  "cinnamon": {
+    "name": "Canela"
+  },
+  "climber-s-kit": {
+    "name": "Kit de Escalada"
+  },
+  "cloves": {
+    "name": "Cravo-da-índia"
+  },
+  "club": {
+    "name": "Clava"
+  },
+  "cobbler-s-tools": {
+    "name": "Ferramentas de Sapateiro"
+  },
+  "common-clothes": {
+    "name": "Roupas Comuns"
+  },
+  "common-wine-pitcher": {
+    "name": "Vinho Comum (jarra)"
+  },
+  "component-pouch": {
+    "name": "Bolsa de Componentes"
+  },
+  "cook-s-utensils": {
+    "name": "Utensílios de Cozinheiro"
+  },
+  "copper": {
+    "name": "Cobre"
+  },
+  "costume-clothes": {
+    "name": "Roupas de Fantasia"
+  },
+  "cotton-cloth-1-sq-yd": {
+    "name": "Tecido de Algodão (1 jarda quadrada)"
+  },
+  "cow": {
+    "name": "Vaca"
+  },
+  "crossbow-bolt": {
+    "name": "Virote de Besta"
+  },
+  "crossbow-bolt-case": {
+    "name": "Estojo de Virotes"
+  },
+  "crossbow-bolts-20": {
+    "name": "Virotes de Besta (20)"
+  },
+  "crowbar": {
+    "name": "Pé de Cabra"
+  },
+  "crystal": {
+    "name": "Cristal"
+  },
+  "dagger": {
+    "name": "Adaga"
+  },
+  "dart": {
+    "name": "Dardo"
+  },
+  "dice-set": {
+    "name": "Conjunto de Dados"
+  },
+  "diplomat-s-pack": {
+    "name": "Kit de Diplomata"
+  },
+  "disguise-kit": {
+    "name": "Kit de Disfarce"
+  },
+  "donkey": {
+    "name": "Burro"
+  },
+  "draft-horse": {
+    "name": "Cavalo de Tração"
+  },
+  "drum": {
+    "name": "Tambor"
+  },
+  "dulcimer": {
+    "name": "Saltério"
+  },
+  "dungeoneer-s-pack": {
+    "name": "Kit de Aventureiro de Masmorra"
+  },
+  "elephant": {
+    "name": "Elefante"
+  },
+  "emblem": {
+    "name": "Emblema"
+  },
+  "entertainer-s-pack": {
+    "name": "Kit de Artista"
+  },
+  "exotic-saddle": {
+    "name": "Sela Exótica"
+  },
+  "explorer-s-pack": {
+    "name": "Kit de Explorador"
+  },
+  "feed-per-day": {
+    "name": "Ração para Animais (por dia)"
+  },
+  "fine-clothes": {
+    "name": "Roupas Finas"
+  },
+  "fine-wine-bottle": {
+    "name": "Vinho Fino (garrafa)"
+  },
+  "fishing-tackle": {
+    "name": "Equipamento de Pesca"
+  },
+  "flail": {
+    "name": "Mangual"
+  },
+  "flask": {
+    "name": "Frasco"
+  },
+  "flour": {
+    "name": "Farinha"
+  },
+  "flute": {
+    "name": "Flauta"
+  },
+  "forgery-kit": {
+    "name": "Kit de Falsificação"
+  },
+  "ginger": {
+    "name": "Gengibre"
+  },
+  "glaive": {
+    "name": "Glaive"
+  },
+  "glass-bottle": {
+    "name": "Garrafa de Vidro"
+  },
+  "glassblower-s-tools": {
+    "name": "Ferramentas de Vidreiro"
+  },
+  "goat": {
+    "name": "Cabra"
+  },
+  "gold": {
+    "name": "Ouro"
+  },
+  "grappling-hook": {
+    "name": "Gancho de Escalada"
+  },
+  "greataxe": {
+    "name": "Machado Grande"
+  },
+  "greatclub": {
+    "name": "Clava Grande"
+  },
+  "greatsword": {
+    "name": "Espada Grande"
+  },
+  "halberd": {
+    "name": "Alabarda"
+  },
+  "half-plate-armor": {
+    "name": "Meia-Armadura"
+  },
+  "hammer": {
+    "name": "Martelo"
+  },
+  "hand-crossbow": {
+    "name": "Besta de Mão"
+  },
+  "handaxe": {
+    "name": "Machadinha"
+  },
+  "healer-s-kit": {
+    "name": "Kit de Médico"
+  },
+  "heavy-crossbow": {
+    "name": "Besta Pesada"
+  },
+  "hempen-rope-50-feet": {
+    "name": "Corda de Cânhamo (15 metros)"
+  },
+  "herbalism-kit": {
+    "name": "Kit de Herbalismo"
+  },
+  "hide-armor": {
+    "name": "Armadura de Peles"
+  },
+  "holy-water-flask": {
+    "name": "Água Benta (frasco)"
+  },
+  "hooded-lantern": {
+    "name": "Lanterna Furta-Fogo"
+  },
+  "horn": {
+    "name": "Trompa"
+  },
+  "hourglass": {
+    "name": "Ampulheta"
+  },
+  "hunk-of-cheese": {
+    "name": "Pedaço de Queijo"
+  },
+  "hunting-trap": {
+    "name": "Armadilha de Caça"
+  },
+  "ink-1-ounce-bottle": {
+    "name": "Tinta (frasco de 30 gramas)"
+  },
+  "ink-pen": {
+    "name": "Pena de Escrever"
+  },
+  "iron": {
+    "name": "Ferro"
+  },
+  "iron-pot": {
+    "name": "Panela de Ferro"
+  },
+  "iron-spike": {
+    "name": "Pino de Ferro"
+  },
+  "iron-spikes-10": {
+    "name": "Pinos de Ferro (10)"
+  },
+  "javelin": {
+    "name": "Azagaia"
+  },
+  "jeweler-s-tools": {
+    "name": "Ferramentas de Joalheiro"
+  },
+  "jug": {
+    "name": "Jarro"
+  },
+  "ladder-10-foot": {
+    "name": "Escada (3 metros)"
+  },
+  "lamp": {
+    "name": "Lamparina"
+  },
+  "lance": {
+    "name": "Lança de Montaria"
+  },
+  "leather-armor": {
+    "name": "Armadura de Couro"
+  },
+  "leatherworker-s-tools": {
+    "name": "Ferramentas de Curtidor"
+  },
+  "light-crossbow": {
+    "name": "Besta Leve"
+  },
+  "light-hammer": {
+    "name": "Martelo Leve"
+  },
+  "linen-1-sq-yd": {
+    "name": "Linho (1 jarda quadrada)"
+  },
+  "loaf-of-bread": {
+    "name": "Pão"
+  },
+  "lock": {
+    "name": "Fechadura"
+  },
+  "longbow": {
+    "name": "Arco Longo"
+  },
+  "longsword": {
+    "name": "Espada Longa"
+  },
+  "lute": {
+    "name": "Alaúde"
+  },
+  "lyre": {
+    "name": "Lira"
+  },
+  "mace": {
+    "name": "Maça"
+  },
+  "magnifying-glass": {
+    "name": "Lupa"
+  },
+  "manacles": {
+    "name": "Algemas"
+  },
+  "map-or-scroll-case": {
+    "name": "Estojo de Mapas ou Pergaminhos"
+  },
+  "mason-s-tools": {
+    "name": "Ferramentas de Pedreiro"
+  },
+  "mastiff": {
+    "name": "Mastim"
+  },
+  "maul": {
+    "name": "Malho"
+  },
+  "merchant-s-scale": {
+    "name": "Balança de Mercador"
+  },
+  "mess-kit": {
+    "name": "Kit de Refeição"
+  },
+  "military-saddle": {
+    "name": "Sela Militar"
+  },
+  "miner-s-pick": {
+    "name": "Picareta de Mineiro"
+  },
+  "morningstar": {
+    "name": "Maça Estrela"
+  },
+  "mule": {
+    "name": "Mula"
+  },
+  "navigator-s-tools": {
+    "name": "Ferramentas de Navegador"
+  },
+  "net": {
+    "name": "Rede"
+  },
+  "oil-flask": {
+    "name": "Óleo (frasco)"
+  },
+  "orb": {
+    "name": "Orbe"
+  },
+  "ox": {
+    "name": "Boi"
+  },
+  "pack-saddle": {
+    "name": "Sela de Carga"
+  },
+  "padded-armor": {
+    "name": "Armadura Acolchoada"
+  },
+  "painter-s-supplies": {
+    "name": "Suprimentos de Pintor"
+  },
+  "pan-flute": {
+    "name": "Flauta de Pã"
+  },
+  "paper-one-sheet": {
+    "name": "Papel (uma folha)"
+  },
+  "parchment-one-sheet": {
+    "name": "Pergaminho (uma folha)"
+  },
+  "pepper": {
+    "name": "Pimenta"
+  },
+  "perfume-vial": {
+    "name": "Perfume (frasco)"
+  },
+  "pig": {
+    "name": "Porco"
+  },
+  "pike": {
+    "name": "Pique"
+  },
+  "pitcher": {
+    "name": "Jarra"
+  },
+  "piton": {
+    "name": "Piton"
+  },
+  "plate-armor": {
+    "name": "Armadura de Placas"
+  },
+  "platinum": {
+    "name": "Platina"
+  },
+  "playing-card-set": {
+    "name": "Baralho"
+  },
+  "poisoner-s-kit": {
+    "name": "Kit de Venenos"
+  },
+  "pole-10-foot": {
+    "name": "Vara (3 metros)"
+  },
+  "pony": {
+    "name": "Pônei"
+  },
+  "portable-ram": {
+    "name": "Aríete Portátil"
+  },
+  "potter-s-tools": {
+    "name": "Ferramentas de Oleiro"
+  },
+  "pouch": {
+    "name": "Bolsa"
+  },
+  "priest-s-pack": {
+    "name": "Kit de Sacerdote"
+  },
+  "quarterstaff": {
+    "name": "Bordão"
+  },
+  "quiver": {
+    "name": "Aljava"
+  },
+  "rapier": {
+    "name": "Rapieira"
+  },
+  "rations-1-day": {
+    "name": "Rações (1 dia)"
+  },
+  "reliquary": {
+    "name": "Relicário"
+  },
+  "riding-horse": {
+    "name": "Cavalo de Montaria"
+  },
+  "riding-saddle": {
+    "name": "Sela de Montaria"
+  },
+  "ring-mail": {
+    "name": "Cota de Anéis"
+  },
+  "robes": {
+    "name": "Vestes"
+  },
+  "rod": {
+    "name": "Bastão"
+  },
+  "sack": {
+    "name": "Saco"
+  },
+  "saddlebags": {
+    "name": "Alforjes"
+  },
+  "saffron": {
+    "name": "Açafrão"
+  },
+  "salt": {
+    "name": "Sal"
+  },
+  "scale-mail": {
+    "name": "Cota de Escamas"
+  },
+  "scholar-s-pack": {
+    "name": "Kit de Estudioso"
+  },
+  "scimitar": {
+    "name": "Cimitarra"
+  },
+  "sealing-wax": {
+    "name": "Cera de Selar"
+  },
+  "shawm": {
+    "name": "Charamela"
+  },
+  "sheep": {
+    "name": "Ovelha"
+  },
+  "shield": {
+    "name": "Escudo"
+  },
+  "shortbow": {
+    "name": "Arco Curto"
+  },
+  "shortsword": {
+    "name": "Espada Curta"
+  },
+  "shovel": {
+    "name": "Pá"
+  },
+  "sickle": {
+    "name": "Foice"
+  },
+  "signal-whistle": {
+    "name": "Apito de Sinalização"
+  },
+  "signet-ring": {
+    "name": "Anel de Sinete"
+  },
+  "silk-1-sq-yd": {
+    "name": "Seda (1 jarda quadrada)"
+  },
+  "silk-rope-50-feet": {
+    "name": "Corda de Seda (15 metros)"
+  },
+  "silver": {
+    "name": "Prata"
+  },
+  "sled": {
+    "name": "Trenó"
+  },
+  "sledgehammer": {
+    "name": "Marreta"
+  },
+  "sling": {
+    "name": "Funda"
+  },
+  "sling-bullet": {
+    "name": "Projétil de Funda"
+  },
+  "sling-bullets-20": {
+    "name": "Projéteis de Funda (20)"
+  },
+  "smith-s-tools": {
+    "name": "Ferramentas de Ferreiro"
+  },
+  "soap": {
+    "name": "Sabão"
+  },
+  "spear": {
+    "name": "Lança"
+  },
+  "spellbook": {
+    "name": "Grimório"
+  },
+  "splint-armor": {
+    "name": "Armadura de Talas"
+  },
+  "sprig-of-mistletoe": {
+    "name": "Ramo de Visco"
+  },
+  "spyglass": {
+    "name": "Luneta"
+  },
+  "stabling-per-day": {
+    "name": "Estábulo (por dia)"
+  },
+  "staff": {
+    "name": "Cajado"
+  },
+  "steel-mirror": {
+    "name": "Espelho de Aço"
+  },
+  "studded-leather-armor": {
+    "name": "Armadura de Couro Batido"
+  },
+  "tankard": {
+    "name": "Caneca"
+  },
+  "thieves-tools": {
+    "name": "Ferramentas de Ladrão"
+  },
+  "tinderbox": {
+    "name": "Estojo de Isqueiro"
+  },
+  "tinker-s-tools": {
+    "name": "Ferramentas de Funileiro"
+  },
+  "torch": {
+    "name": "Tocha"
+  },
+  "totem": {
+    "name": "Totem"
+  },
+  "traveler-s-clothes": {
+    "name": "Roupas de Viajante"
+  },
+  "trident": {
+    "name": "Tridente"
+  },
+  "two-person-tent": {
+    "name": "Tenda para Duas Pessoas"
+  },
+  "vial": {
+    "name": "Ampola"
+  },
+  "viol": {
+    "name": "Viola"
+  },
+  "wagon": {
+    "name": "Carroção"
+  },
+  "wand": {
+    "name": "Varinha"
+  },
+  "war-pick": {
+    "name": "Picareta de Guerra"
+  },
+  "warhammer": {
+    "name": "Martelo de Guerra"
+  },
+  "warhorse": {
+    "name": "Cavalo de Guerra"
+  },
+  "waterskin": {
+    "name": "Odre"
+  },
+  "weaver-s-tools": {
+    "name": "Ferramentas de Tecelão"
+  },
+  "wheat": {
+    "name": "Trigo"
+  },
+  "whetstone": {
+    "name": "Pedra de Amolar"
+  },
+  "whip": {
+    "name": "Chicote"
+  },
+  "woodcarver-s-tools": {
+    "name": "Ferramentas de Entalhador"
+  },
+  "wooden-staff": {
+    "name": "Cajado de Madeira"
+  },
+  "yew-wand": {
+    "name": "Varinha de Teixo"
+  }
+}

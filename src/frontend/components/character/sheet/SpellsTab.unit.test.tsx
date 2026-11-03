@@ -13,6 +13,10 @@ import { SpellsTab } from './SpellsTab';
 
 vi.mock('@client', () => ({ rpgWorldApi: { get: vi.fn(), post: vi.fn() } }));
 // The condition catalog is its own request; these tests only look at the spell ones
+vi.mock('@frontend/hooks/useItems', () => ({
+  useItems: () => ({ list: [], byKey: new Map(), isLoading: false }),
+}));
+
 vi.mock('@frontend/hooks/useConditions', () => ({
   useConditions: () => ({ list: [], byKey: new Map(), isLoading: false }),
 }));

@@ -165,6 +165,55 @@ export type Database = {
           },
         ];
       };
+      containers: {
+        Row: {
+          character_id: string | null;
+          coins: NonNullable<Json>;
+          created_at: string;
+          id: string;
+          kind: string;
+          name: string | null;
+          party_id: string | null;
+          position: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          character_id?: string | null;
+          coins?: NonNullable<Json>;
+          created_at?: string;
+          id?: string;
+          kind: string;
+          name?: string | null;
+          party_id?: string | null;
+          position?: number;
+        };
+        Update: {
+          character_id?: string | null;
+          coins?: NonNullable<Json>;
+          created_at?: string;
+          id?: string;
+          kind?: string;
+          name?: string | null;
+          party_id?: string | null;
+          position?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'containers_character_id_fkey';
+            columns: ['character_id'];
+            isOneToOne: false;
+            referencedRelation: 'characters';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'containers_party_id_fkey';
+            columns: ['party_id'];
+            isOneToOne: false;
+            referencedRelation: 'parties';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       encounter_participants: {
         Row: {
           character_id: string;
@@ -291,6 +340,39 @@ export type Database = {
             columns: ['user_id'];
             isOneToOne: false;
             referencedRelation: 'profile';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      inventory_items: {
+        Row: {
+          container_id: string;
+          created_at: string;
+          id: string;
+          item_ref: string;
+          quantity: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          container_id: string;
+          created_at?: string;
+          id?: string;
+          item_ref: string;
+          quantity: number;
+        };
+        Update: {
+          container_id?: string;
+          created_at?: string;
+          id?: string;
+          item_ref?: string;
+          quantity?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'inventory_items_container_id_fkey';
+            columns: ['container_id'];
+            isOneToOne: false;
+            referencedRelation: 'containers';
             referencedColumns: ['id'];
           },
         ];
@@ -465,6 +547,22 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      add_inventory_item: {
+        Args: { p_container_id: string; p_item_ref: string; p_quantity: number };
+        Returns: {
+          container_id: string;
+          created_at: string;
+          id: string;
+          item_ref: string;
+          quantity: number;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'inventory_items';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       auth_user_exists: { Args: { p_email: string }; Returns: boolean };
       duplicate_character: { Args: { p_character_id: string; p_name: string }; Returns: string };
       encounter_turns: {

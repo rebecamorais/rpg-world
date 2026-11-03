@@ -31,6 +31,10 @@ const frightened = (edition: '2014' | '2024', name: string, untranslated = false
   name,
   untranslated,
 });
+vi.mock('@frontend/hooks/useItems', () => ({
+  useItems: () => ({ list: [], byKey: new Map(), isLoading: false }),
+}));
+
 vi.mock('@frontend/hooks/useConditions', () => ({
   useConditions: () => ({ list: catalog.list, byKey: new Map(), isLoading: false }),
 }));

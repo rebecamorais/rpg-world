@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Moeda de Platina de fantasia">
+<defs><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset=".26" stop-color="#83b5a7"/><stop offset=".53" stop-color="#ffffff"/><stop offset=".78" stop-color="#83b5a7"/><stop offset="1" stop-color="#245b52"/></linearGradient><linearGradient id="rim" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#245b52"/><stop offset="1" stop-color="#ffffff"/></linearGradient><filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="2.3" flood-opacity=".35"/></filter></defs>
+<path d="M33 8 H67 L92 33 V67 L67 92 H33 L8 67 V33 Z" fill="url(#metal)" stroke="#245b52" stroke-width="3" stroke-linejoin="round" filter="url(#shadow)"/>
+<path d="M33 8 H67 L92 33 V67 L67 92 H33 L8 67 V33 Z" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round" transform="translate(0 1) scale(.93)" style="transform-origin:50px 50px"/>
+<path d="M33 8 H67 L92 33 V67 L67 92 H33 L8 67 V33 Z" fill="none" stroke="#245b52" stroke-width="1.3" stroke-linejoin="round" transform="translate(0 1) scale(.84)" style="transform-origin:50px 50px" opacity=".65"/>
+<g fill="none" stroke="#245b52" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M22 74 V45 L29 39 V25 H39 V42 L45 38 V31 L50 23 L55 31 V38 L61 42 V25 H71 V39 L78 45 V74 Z M19 74 H81 M25 25 L34 14 L43 25 M57 25 L66 14 L75 25 M44 74 V60 Q50 49 56 60 V74 M30 51 H36 V60 H30 Z M64 51 H70 V60 H64 Z M47 43 H53 V50 H47 Z"/></g>
+<g fill="none" stroke="#ffffff" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" transform="translate(-.6 -1)"><path d="M22 74 V45 L29 39 V25 H39 V42 L45 38 V31 L50 23 L55 31 V38 L61 42 V25 H71 V39 L78 45 V74 Z M19 74 H81 M25 25 L34 14 L43 25 M57 25 L66 14 L75 25 M44 74 V60 Q50 49 56 60 V74 M30 51 H36 V60 H30 Z M64 51 H70 V60 H64 Z M47 43 H53 V50 H47 Z"/></g>
+
+<g fill="#18b897" opacity=".95"><circle cx="50" cy="18" r="2.3"/><circle cx="18" cy="50" r="1.8"/><circle cx="82" cy="50" r="1.8"/><circle cx="50" cy="82" r="2.3"/></g>
+<path d="M24 19 L32 16 M70 82 L77 77" stroke="#ffffff" stroke-width="1.4" opacity=".55"/>
+<path d="M34 87 Q50 94 66 87" fill="none" stroke="#39d6ae" stroke-width="1.5" opacity=".8"/>
+</svg>

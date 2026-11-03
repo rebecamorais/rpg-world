@@ -30,7 +30,6 @@ const sheetPayload = () =>
         skills: { STEALTH: { isProficient: true, expertise: true } } as never,
         savingThrowProficiencies: { DEX: true, INT: true },
         spellSlots: { '1': { max: 2, used: 1 } },
-        coins: { cp: 0, sp: 3, ep: 0, gp: 15, pp: 0 },
         accentColor: '#ff4444',
       }).toJSON(),
     ),
@@ -79,7 +78,6 @@ describe('characterUpdatesSchema', () => {
     ['nome gigante', { name: 'x'.repeat(101) }],
     ['death saves acima de 3', { deathSaves: { successes: 4, failures: 0 } }],
     ['nível de slot inválido', { spellSlots: { '10': { max: 1, used: 0 } } }],
-    ['moedas negativas', { coins: { cp: -1, sp: 0, ep: 0, gp: 0, pp: 0 } }],
   ])('rejeita %s', (_label, updates) => {
     expect(characterUpdatesSchema.safeParse(updates).success).toBe(false);
   });

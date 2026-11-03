@@ -1,0 +1,584 @@
+{
+  "acid": {
+    "name": "Acid",
+    "description": "When you take the {@action Attack|XPHB} action, you can replace one of your attacks with throwing a vial of Acid. Target one creature or object you can see within 20 feet of yourself. The target must succeed on a Dexterity saving throw ({@dc 8} plus your Dexterity modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or take {@damage 2d6} Acid damage."
+  },
+  "airship": { "name": "Airship" },
+  "alchemist-s-fire": {
+    "name": "Alchemist's Fire",
+    "description": "When you take the {@action Attack|XPHB} action, you can replace one of your attacks with throwing a flask of Alchemist's Fire. Target one creature or object you can see within 20 feet of yourself. The target must succeed on a Dexterity saving throw ({@dc 8} plus your Dexterity modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or take {@damage 1d4} Fire damage and start {@hazard burning|XPHB}."
+  },
+  "alchemist-s-supplies": {
+    "name": "Alchemist's Supplies",
+    "description": "• Ability:. Intelligence\n• Utilize:. Identify a substance ({@dc 15}), or start a fire ({@dc 15})\n• Craft:. {@item Acid|XPHB}, {@item Alchemist's Fire|XPHB}, {@item Component Pouch|XPHB}, {@item Oil|XPHB}, {@item Paper|XPHB}, {@item Perfume|XPHB}"
+  },
+  "ale-mug": { "name": "Ale (mug)" },
+  "amulet": {
+    "name": "Amulet",
+    "description": "For an Amulet to be an effective Holy Symbol, it must be worn or held."
+  },
+  "antitoxin": {
+    "name": "Antitoxin",
+    "description": "As a {@variantrule Bonus Action|XPHB}, you can drink a vial of Antitoxin to gain {@variantrule Advantage|XPHB} on saving throws to avoid or end the {@condition Poisoned|XPHB} condition for 1 hour."
+  },
+  "arrow": {
+    "name": "Arrow",
+    "description": "Arrows are used with a weapon that has the ammunition property to make a ranged attack. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack (you need a free hand to load a one-handed weapon). At the end of the battle, you can recover half your expended ammunition by taking a minute to search the battlefield.\nArrows are typically stored in a {@item Quiver|XPHB} (bought separately)."
+  },
+  "arrows-20": {
+    "name": "Arrows (20)",
+    "description": "Arrows are used with a weapon that has the ammunition property to make a ranged attack. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack (you need a free hand to load a one-handed weapon). At the end of the battle, you can recover half your expended ammunition by taking a minute to search the battlefield.\nArrows are typically stored in a {@item Quiver|XPHB} (bought separately)."
+  },
+  "backpack": {
+    "name": "Backpack",
+    "description": "A Backpack holds up to 30 pounds within 1 cubic foot. It can also serve as a saddlebag."
+  },
+  "bagpipes": {
+    "name": "Bagpipes",
+    "description": "• Ability:. Charisma\n• Utilize:. Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+  },
+  "ball-bearings": {
+    "name": "Ball Bearings",
+    "description": "As a {@action Utilize|XPHB} action, you can spill Ball Bearings from their pouch. They spread to cover a level, 10-foot-square area within 10 feet of yourself. A creature that enters this area for the first time on a turn must succeed on a {@dc 10} Dexterity saving throw or have the {@condition Prone|XPHB} condition. It takes 10 minutes to recover the Ball Bearings."
+  },
+  "barrel": {
+    "name": "Barrel",
+    "description": "A Barrel holds up to 40 gallons of liquid or up to 4 cubic feet of dry goods."
+  },
+  "basic-poison": {
+    "name": "Basic Poison",
+    "description": "As a {@variantrule Bonus Action|XPHB}, you can use a vial of Basic Poison to coat one weapon or up to three pieces of ammunition. A creature that takes Piercing or Slashing damage from the poisoned weapon or ammunition takes an extra {@damage 1d4} Poison damage. Once applied, the poison retains potency for 1 minute or until its damage is dealt, whichever comes first."
+  },
+  "basket": {
+    "name": "Basket",
+    "description": "A Basket holds up to 40 pounds within 2 cubic feet."
+  },
+  "battleaxe": { "name": "Battleaxe" },
+  "bedroll": {
+    "name": "Bedroll",
+    "description": "A Bedroll sleeps one Small or Medium creature. While in a Bedroll, you automatically succeed on saving throws against {@hazard extreme cold|XDMG} (see the {@book Dungeon Master's Guide|XDMG})."
+  },
+  "bell": {
+    "name": "Bell",
+    "description": "When rung as a {@action Utilize|XPHB} action, a Bell produces a sound that can be heard up to 60 feet away."
+  },
+  "blanket": {
+    "name": "Blanket",
+    "description": "While wrapped in a blanket, you have {@variantrule Advantage|XPHB} on saving throws against {@hazard extreme cold|XDMG} (see the {@book Dungeon Master's Guide|XDMG})."
+  },
+  "block-and-tackle": {
+    "name": "Block and Tackle",
+    "description": "A {@item Block and Tackle|XPHB} allows you to hoist up to four times the weight you can normally lift."
+  },
+  "blowgun": { "name": "Blowgun" },
+  "bolt": {
+    "name": "Bolt",
+    "description": "Crossbow bolts are used with a weapon that has the ammunition property to make a ranged attack. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack (you need a free hand to load a one-handed weapon). At the end of the battle, you can recover half your expended ammunition by taking a minute to search the battlefield.\nBolts are typically stored in a {@item Crossbow Bolt Case|XPHB} (bought separately)."
+  },
+  "bolts-20": {
+    "name": "Bolts (20)",
+    "description": "Crossbow bolts are used with a weapon that has the ammunition property to make a ranged attack. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack (you need a free hand to load a one-handed weapon). At the end of the battle, you can recover half your expended ammunition by taking a minute to search the battlefield.\nBolts are typically stored in a {@item Crossbow Bolt Case|XPHB} (bought separately)."
+  },
+  "book": {
+    "name": "Book",
+    "description": "A Book contains fiction or nonfiction. If you consult an accurate nonfiction Book about its topic, you gain a +5 bonus to Intelligence ({@skill Arcana|XPHB}, {@skill History|XPHB}, {@skill Nature|XPHB}, or {@skill Religion|XPHB}) checks you make about that topic."
+  },
+  "bread-loaf": { "name": "Bread (loaf)" },
+  "breastplate": { "name": "Breastplate" },
+  "brewer-s-supplies": {
+    "name": "Brewer's Supplies",
+    "description": "• Ability:. Intelligence\n• Utilize:. Detect poisoned drink ({@dc 15}), or identify alcohol ({@dc 10})\n• Craft:. {@item Antitoxin|XPHB}"
+  },
+  "bucket": {
+    "name": "Bucket",
+    "description": "A Bucket holds up to half a cubic foot of contents."
+  },
+  "bullseye-lantern": {
+    "name": "Bullseye Lantern",
+    "description": "A Bullseye Lantern burns Oil as fuel to cast {@variantrule Bright Light|XPHB} in a 60-foot Cone and {@variantrule Dim Light|XPHB} for an additional 60 feet."
+  },
+  "burglar-s-pack": {
+    "name": "Burglar's Pack",
+    "description": "A Burglar's Pack contains the following items: {@item Backpack|XPHB}, {@item Ball Bearings|XPHB}, {@item Bell|XPHB}, 10 {@item Candle|XPHB|Candles}, {@item Crowbar|XPHB}, {@item Hooded Lantern|XPHB}, 7 flasks of {@item Oil|XPHB}, 5 days of {@item Rations|XPHB}, {@item Rope|XPHB}, {@item Tinderbox|XPHB}, and {@item Waterskin|XPHB}."
+  },
+  "calligrapher-s-supplies": {
+    "name": "Calligrapher's Supplies",
+    "description": "• Ability:. Dexterity\n• Utilize:. Write text with impressive flourishes that guard against forgery ({@dc 15})\n• Craft:. {@item Ink|XPHB}, {@item Spell Scroll|XDMG}"
+  },
+  "caltrops": {
+    "name": "Caltrops",
+    "description": "As a {@action Utilize|XPHB} action, you can spread Caltrops from their bag to cover a 5-foot-square area within 5 feet of yourself. A creature that enters this area for the first time on a turn must succeed on a {@dc 15} Dexterity saving throw or take 1 Piercing damage and have its {@variantrule Speed|XPHB} reduced to 0 until the start of its next turn. It takes 10 minutes to recover the Caltrops."
+  },
+  "camel": { "name": "Camel" },
+  "candle": {
+    "name": "Candle",
+    "description": "For 1 hour, a lit Candle sheds {@variantrule Bright Light|XPHB} in a 5-foot radius and {@variantrule Dim Light|XPHB} for an additional 5 feet."
+  },
+  "carpenter-s-tools": {
+    "name": "Carpenter's Tools",
+    "description": "• Ability:. Strength\n• Utilize:. Seal or pry open a door or container ({@dc 20})\n• Craft:. {@item Club|XPHB}, {@item Greatclub|XPHB}, {@item Quarterstaff|XPHB}, {@item Barrel|XPHB}, {@item Chest|XPHB}, {@item Ladder|XPHB}, {@item Pole|XPHB}, {@item Portable Ram|XPHB}, {@item Torch|XPHB}"
+  },
+  "carriage": { "name": "Carriage" },
+  "cart": { "name": "Cart" },
+  "cartographer-s-tools": {
+    "name": "Cartographer's Tools",
+    "description": "• Ability:. Wisdom\n• Utilize:. Draft a map of a small area ({@dc 15})\n• Craft:. {@item Map|XPHB}"
+  },
+  "chain": {
+    "name": "Chain",
+    "description": "As a {@action Utilize|XPHB} action, you can wrap a Chain around an unwilling creature within 5 feet of yourself that has the {@condition Grappled|XPHB}, {@condition Incapacitated|XPHB}, or {@condition Restrained|XPHB} condition if you succeed on a {@dc 13} Strength ({@skill Athletics|XPHB}) check. If the creature's legs are bound, the creature has the {@condition Restrained|XPHB} condition until it escapes. Escaping the Chain requires the creature to make a successful {@dc 18} Dexterity ({@skill Acrobatics|XPHB}) check as an action. Bursting the Chain requires a successful {@dc 20} Strength ({@skill Athletics|XPHB}) check as an action."
+  },
+  "chain-mail": { "name": "Chain Mail" },
+  "chain-shirt": { "name": "Chain Shirt" },
+  "chariot": { "name": "Chariot" },
+  "cheese-wedge": { "name": "Cheese (wedge)" },
+  "chest": { "name": "Chest", "description": "A Chest holds up to 12 cubic feet of contents." },
+  "climber-s-kit": {
+    "name": "Climber's Kit",
+    "description": "A Climber's Kit includes boot tips, gloves, pitons, and a harness. As a {@action Utilize|XPHB} action, you can use the Climber's Kit to anchor yourself; when you do, you can't fall more than 25 feet from the anchor point, and you can't move more than 25 feet from there without undoing the anchor as a {@variantrule Bonus Action|XPHB}."
+  },
+  "club": { "name": "Club" },
+  "cobbler-s-tools": {
+    "name": "Cobbler's Tools",
+    "description": "• Ability:. Dexterity\n• Utilize:. Modify footwear to give {@variantrule Advantage|XPHB} on the wearer's next Dexterity ({@skill Acrobatics|XPHB}) check ({@dc 10})\n• Craft:. {@item Climber's Kit|XPHB}"
+  },
+  "common-wine-bottle": { "name": "Common Wine (bottle)" },
+  "component-pouch": {
+    "name": "Component Pouch",
+    "description": "A Component Pouch is watertight and filled with compartments that hold all the free Material components of your spells."
+  },
+  "cook-s-utensils": {
+    "name": "Cook's Utensils",
+    "description": "• Ability:. Wisdom\n• Utilize:. Improve food's flavor ({@dc 10}), or detect spoiled or poisoned food ({@dc 15})\n• Craft:. {@item Rations|XPHB}"
+  },
+  "costume": {
+    "name": "Costume",
+    "description": "While wearing a Costume, you have {@variantrule Advantage|XPHB} on any ability check you make to impersonate the person or type of person it represents."
+  },
+  "crossbow-bolt-case": {
+    "name": "Crossbow Bolt Case",
+    "description": "A {@item Crossbow Bolt Case|XPHB} holds up to 20 Bolts."
+  },
+  "crowbar": {
+    "name": "Crowbar",
+    "description": "Using a Crowbar gives you {@variantrule Advantage|XPHB} on Strength checks where the Crowbar's leverage can be applied."
+  },
+  "crystal": { "name": "Crystal" },
+  "dagger": { "name": "Dagger" },
+  "dart": { "name": "Dart" },
+  "dice-set": {
+    "name": "Dice Set",
+    "description": "• Ability:. Wisdom\n• Utilize:. Discern whether someone is cheating ({@dc 10}), or win the game ({@dc 20})"
+  },
+  "diplomat-s-pack": {
+    "name": "Diplomat's Pack",
+    "description": "A Diplomat's Pack contains the following items: {@item Chest|XPHB}, {@item Fine Clothes|XPHB}, {@item Ink|XPHB}, 5 {@item Ink Pen|XPHB|Ink Pens}, {@item Lamp|XPHB}, 2 {@item Map or Scroll Case|XPHB|Map or Scroll Cases}, 4 flasks of {@item Oil|XPHB}, 5 sheets of {@item Paper|XPHB}, 5 sheets of {@item Parchment|XPHB}, {@item Perfume|XPHB}, and {@item Tinderbox|XPHB}."
+  },
+  "disguise-kit": {
+    "name": "Disguise Kit",
+    "description": "• Ability:. Charisma\n• Utilize:. Apply makeup ({@dc 10})\n• Craft:. {@item Costume|XPHB}"
+  },
+  "draft-horse": { "name": "Draft Horse" },
+  "dragonchess-set": {
+    "name": "Dragonchess Set",
+    "description": "• Ability:. Wisdom\n• Utilize:. Discern whether someone is cheating ({@dc 10}), or win the game ({@dc 20})"
+  },
+  "drum": {
+    "name": "Drum",
+    "description": "• Ability:. Charisma\n• Utilize:. Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+  },
+  "dulcimer": {
+    "name": "Dulcimer",
+    "description": "• Ability:. Charisma\n• Utilize:. Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+  },
+  "dungeoneer-s-pack": {
+    "name": "Dungeoneer's Pack",
+    "description": "A Dungeoneer's Pack contains the following items: {@item Backpack|XPHB}, {@item Caltrops|XPHB}, {@item Crowbar|XPHB}, 2 flasks of {@item Oil|XPHB}, 10 days of {@item Rations|XPHB}, {@item Rope|XPHB}, {@item Tinderbox|XPHB}, 10 {@item Torch|XPHB|Torches}, and {@item Waterskin|XPHB}."
+  },
+  "elephant": { "name": "Elephant" },
+  "emblem": {
+    "name": "Emblem",
+    "description": "For an Emblem to be an effective Holy Symbol, it must be borne on fabric (such as a tabard or banner) or a {@item Shield|XPHB}."
+  },
+  "entertainer-s-pack": {
+    "name": "Entertainer's Pack",
+    "description": "An Entertainer's Pack contains the following items: {@item Backpack|XPHB}, {@item Bedroll|XPHB}, {@item Bell|XPHB}, {@item Bullseye Lantern|XPHB}, 3 {@item Costume|XPHB|Costumes}, {@item Mirror|XPHB}, 8 flasks of {@item Oil|XPHB}, 9 days of {@item Rations|XPHB}, {@item Tinderbox|XPHB}, and {@item Waterskin|XPHB}."
+  },
+  "exotic-saddle": {
+    "name": "Exotic Saddle",
+    "description": "A saddle comes with a bit, a bridle, reins, and any other equipment needed to use the saddle. An Exotic Saddle is required for riding an aquatic or a flying mount."
+  },
+  "explorer-s-pack": {
+    "name": "Explorer's Pack",
+    "description": "An Explorer's Pack contains the following items: {@item Backpack|XPHB}, {@item Bedroll|XPHB}, 2 flasks of {@item Oil|XPHB}, 10 days of {@item Rations|XPHB}, {@item Rope|XPHB}, {@item Tinderbox|XPHB}, 10 {@item Torch|XPHB|Torches}, and {@item Waterskin|XPHB}."
+  },
+  "feed-per-day": { "name": "Feed (per day)" },
+  "fine-clothes": {
+    "name": "Fine Clothes",
+    "description": "Fine Clothes are made of expensive fabrics and adorned with expertly crafted details. Some events and locations admit only people wearing these clothes."
+  },
+  "fine-wine-bottle": { "name": "Fine Wine (bottle)" },
+  "firearm-bullet": {
+    "name": "Firearm Bullet",
+    "description": "Firearm Bullets are destroyed upon use in a modern firearm."
+  },
+  "firearm-bullets-10": {
+    "name": "Firearm Bullets (10)",
+    "description": "Firearm Bullets are destroyed upon use in a modern firearm."
+  },
+  "flail": { "name": "Flail" },
+  "flask": { "name": "Flask", "description": "A Flask holds up to 1 pint." },
+  "flute": {
+    "name": "Flute",
+    "description": "• Ability:. Charisma\n• Utilize:. Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+  },
+  "forgery-kit": {
+    "name": "Forgery Kit",
+    "description": "• Ability:. Dexterity\n• Utilize:. Mimic 10 or fewer words of someone else's handwriting ({@dc 15}), or duplicate a wax seal ({@dc 20})"
+  },
+  "galley": { "name": "Galley" },
+  "glaive": { "name": "Glaive" },
+  "glass-bottle": { "name": "Glass Bottle", "description": "A Glass Bottle holds up to 1½ pints." },
+  "glassblower-s-tools": {
+    "name": "Glassblower's Tools",
+    "description": "• Ability:. Intelligence\n• Utilize:. Discern what a glass object held in the past 24 hours ({@dc 15})\n• Craft:. {@item Glass Bottle|XPHB}, {@item Magnifying Glass|XPHB}, {@item Spyglass|XPHB}, {@item Vial|XPHB}"
+  },
+  "grappling-hook": {
+    "name": "Grappling Hook",
+    "description": "As a {@action Utilize|XPHB} action, you can throw the Grappling Hook at a railing, a ledge, or another catch within 50 feet of yourself, and the hook catches on if you succeed on a {@dc 13} Dexterity ({@skill Acrobatics|XPHB}) check. If you tied a Rope to the hook, you can then climb it."
+  },
+  "greataxe": { "name": "Greataxe" },
+  "greatclub": { "name": "Greatclub" },
+  "greatsword": { "name": "Greatsword" },
+  "halberd": { "name": "Halberd" },
+  "half-plate-armor": { "name": "Half Plate Armor" },
+  "hand-crossbow": { "name": "Hand Crossbow" },
+  "handaxe": { "name": "Handaxe" },
+  "healer-s-kit": {
+    "name": "Healer's Kit",
+    "description": "A Healer's Kit has ten uses. As a {@action Utilize|XPHB} action, you can expend one of its uses to stabilize an {@condition Unconscious|XPHB} creature that has 0 {@variantrule Hit Points|XPHB} without needing to make a Wisdom ({@skill Medicine|XPHB}) check."
+  },
+  "heavy-crossbow": { "name": "Heavy Crossbow" },
+  "herbalism-kit": {
+    "name": "Herbalism Kit",
+    "description": "• Ability:. Intelligence\n• Utilize:. Identify a plant ({@dc 10})\n• Craft:. {@item Antitoxin|XPHB}, {@item Candle|XPHB}, {@item Healer's Kit|XPHB}, {@item Potion of Healing|XDMG}"
+  },
+  "hide-armor": { "name": "Hide Armor" },
+  "holy-water": {
+    "name": "Holy Water",
+    "description": "When you take the {@action Attack|XPHB} action, you can replace one of your attacks with throwing a flask of Holy Water. Target one creature you can see within 20 feet of yourself. The target must succeed on a Dexterity saving throw ({@dc 8} plus your Dexterity modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or take {@damage 2d8} Radiant damage if it is a Fiend or an Undead."
+  },
+  "hooded-lantern": {
+    "name": "Hooded Lantern",
+    "description": "A Hooded Lantern burns Oil as fuel to cast {@variantrule Bright Light|XPHB} in a 30-foot radius and {@variantrule Dim Light|XPHB} for an additional 30 feet. As a {@variantrule Bonus Action|XPHB}, you can lower the hood, reducing the light to {@variantrule Dim Light|XPHB} in a 5-foot radius, or raise it again."
+  },
+  "horn": {
+    "name": "Horn",
+    "description": "• Ability:. Charisma\n• Utilize:. Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+  },
+  "hunting-trap": {
+    "name": "Hunting Trap",
+    "description": "As a {@action Utilize|XPHB} action, you can set a Hunting Trap, which is a sawtooth steel ring that snaps shut when a creature steps on a pressure plate in the center. The trap is affixed by a heavy chain to an immobile object, such as a tree or a spike driven into the ground. A creature that steps on the plate must succeed on a {@dc 13} Dexterity saving throw or take {@damage 1d4} Piercing damage and have its {@variantrule Speed|XPHB} reduced to 0 until the start of its next turn. Thereafter, until the creature breaks free of the trap, its movement is limited by the length of the chain (typically 3 feet). A creature can use its action to make a {@dc 13} Strength ({@skill Athletics|XPHB}) check, freeing itself or another creature within its reach on a success. Each failed check deals 1 Piercing damage to the trapped creature."
+  },
+  "ink": {
+    "name": "Ink",
+    "description": "Ink comes in a 1-ounce bottle, which provides enough ink to write about 500 pages."
+  },
+  "ink-pen": {
+    "name": "Ink Pen",
+    "description": "Using {@item Ink|XPHB}, an Ink Pen is used to write or draw."
+  },
+  "iron-pot": { "name": "Iron Pot", "description": "An Iron Pot holds up to 1 gallon." },
+  "iron-spike": {
+    "name": "Iron Spike",
+    "description": "Iron Spikes come in bundles of ten. As a {@action Utilize|XPHB} action, you can use a blunt object, such as a {@item Light Hammer|XPHB}, to hammer a spike into wood, earth, or a similar material. You can do so to jam a door shut or to then tie a {@item Rope|XPHB} or {@item Chain|XPHB} to the Spike."
+  },
+  "iron-spikes": {
+    "name": "Iron Spikes",
+    "description": "Iron Spikes come in bundles of ten. As a {@action Utilize|XPHB} action, you can use a blunt object, such as a {@item Light Hammer|XPHB}, to hammer a spike into wood, earth, or a similar material. You can do so to jam a door shut or to then tie a {@item Rope|XPHB} or {@item Chain|XPHB} to the Spike."
+  },
+  "javelin": { "name": "Javelin" },
+  "jeweler-s-tools": {
+    "name": "Jeweler's Tools",
+    "description": "• Ability:. Intelligence\n• Utilize:. Discern a gem's value ({@dc 15})\n• Craft:. {@item Arcane Focus|XPHB}, {@item Holy Symbol|XPHB}"
+  },
+  "jug": { "name": "Jug", "description": "A Jug holds up to 1 gallon." },
+  "keelboat": { "name": "Keelboat" },
+  "ladder": {
+    "name": "Ladder",
+    "description": "A Ladder is 10 feet tall. You must climb to move up or down it."
+  },
+  "lamp": {
+    "name": "Lamp",
+    "description": "A Lamp burns {@item Oil|XPHB} as fuel to cast {@variantrule Bright Light|XPHB} in a 15-foot radius and {@variantrule Dim Light|XPHB} for an additional 30 feet."
+  },
+  "lance": {
+    "name": "Lance",
+    "description": "A Lance requires two hands to wield when you aren't mounted."
+  },
+  "leather-armor": { "name": "Leather Armor" },
+  "leatherworker-s-tools": {
+    "name": "Leatherworker's Tools",
+    "description": "• Ability:. Dexterity\n• Utilize:. Add a design to a leather item ({@dc 10})\n• Craft:. {@item Sling|XPHB}, {@item Whip|XPHB}, {@item Hide Armor|XPHB}, {@item Leather Armor|XPHB}, {@item Studded Leather Armor|XPHB}, {@item Backpack|XPHB}, {@item Crossbow Bolt Case|XPHB}, {@item Map or Scroll Case|XPHB}, {@item Parchment|XPHB}, {@item Pouch|XPHB}, {@item Quiver|XPHB}, {@item Waterskin|XPHB}"
+  },
+  "light-crossbow": { "name": "Light Crossbow" },
+  "light-hammer": { "name": "Light Hammer" },
+  "lock": {
+    "name": "Lock",
+    "description": "A Lock comes with a key. Without the key, a creature can use {@item Thieves' Tools|XPHB} to pick this Lock with a successful {@dc 15} Dexterity ({@skill Sleight of Hand|XPHB}) check."
+  },
+  "longbow": { "name": "Longbow" },
+  "longship": { "name": "Longship" },
+  "longsword": { "name": "Longsword" },
+  "lute": {
+    "name": "Lute",
+    "description": "• Ability:. Charisma\n• Utilize:. Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+  },
+  "lyre": {
+    "name": "Lyre",
+    "description": "• Ability:. Charisma\n• Utilize:. Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+  },
+  "mace": { "name": "Mace" },
+  "magnifying-glass": {
+    "name": "Magnifying Glass",
+    "description": "A Magnifying Glass grants {@variantrule Advantage|XPHB} on any ability check made to appraise or inspect a highly detailed item. Lighting a fire with a Magnifying Glass requires light as bright as sunlight to focus, tinder to ignite, and about 5 minutes for the fire to ignite."
+  },
+  "manacles": {
+    "name": "Manacles",
+    "description": "As a {@action Utilize|XPHB} action, you can use Manacles to bind an unwilling Small or Medium creature within 5 feet of yourself that has the {@condition Grappled|XPHB}, {@condition Incapacitated|XPHB}, or {@condition Restrained|XPHB} condition if you succeed on a {@dc 13} Dexterity ({@skill Sleight of Hand|XPHB}) check. While bound, a creature has {@variantrule Disadvantage|XPHB} on attack rolls, and the creature is {@condition Restrained|XPHB} if the Manacles are attached to a chain or hook that is fixed in place. Escaping the Manacles requires a successful {@dc 20} Dexterity ({@skill Sleight of Hand|XPHB}) check as an action. Bursting them requires a successful {@dc 25} Strength ({@skill Athletics|XPHB}) check as an action.\nEach set of Manacles comes with a key. Without the key, a creature can use {@item Thieves' Tools|XPHB} to pick the Manacles' lock with a successful {@dc 15} Dexterity ({@skill Sleight of Hand|XPHB}) check."
+  },
+  "map": {
+    "name": "Map",
+    "description": "If you consult an accurate Map, you gain a +5 bonus to Wisdom ({@skill Survival|XPHB}) checks you make to find your way in the place represented on it."
+  },
+  "map-or-scroll-case": {
+    "name": "Map or Scroll Case",
+    "description": "A {@item Map or Scroll Case|XPHB} holds up to 10 sheets of paper or 5 sheets of parchment."
+  },
+  "mason-s-tools": {
+    "name": "Mason's Tools",
+    "description": "• Ability:. Strength\n• Utilize:. Chisel a symbol or hole in stone ({@dc 10})\n• Craft:. {@item Block and Tackle|XPHB}"
+  },
+  "mastiff": { "name": "Mastiff" },
+  "maul": { "name": "Maul" },
+  "military-saddle": {
+    "name": "Military Saddle",
+    "description": "A saddle comes with a bit, a bridle, reins, and any other equipment needed to use the saddle. A Military Saddle gives {@variantrule Advantage|XPHB} on any ability check you make to remain mounted."
+  },
+  "mirror": {
+    "name": "Mirror",
+    "description": "A handheld steel Mirror is useful for personal cosmetics but also for peeking around corners and reflecting light as a signal."
+  },
+  "morningstar": { "name": "Morningstar" },
+  "mule": { "name": "Mule" },
+  "musket": { "name": "Musket" },
+  "navigator-s-tools": {
+    "name": "Navigator's Tools",
+    "description": "• Ability:. Wisdom\n• Utilize:. Plot a course ({@dc 10}), or determine position by stargazing ({@dc 15})"
+  },
+  "needle": {
+    "name": "Needle",
+    "description": "Blowgun needles are used with a weapon that has the ammunition property to make a ranged attack. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack (you need a free hand to load a one-handed weapon). At the end of the battle, you can recover half your expended ammunition by taking a minute to search the battlefield.\nNeedles are typically stored in a {@item Pouch|XPHB} (bought separately)."
+  },
+  "needles-50": {
+    "name": "Needles (50)",
+    "description": "Blowgun needles are used with a weapon that has the ammunition property to make a ranged attack. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack (you need a free hand to load a one-handed weapon). At the end of the battle, you can recover half your expended ammunition by taking a minute to search the battlefield.\nNeedles are typically stored in a {@item Pouch|XPHB} (bought separately)."
+  },
+  "net": {
+    "name": "Net",
+    "description": "When you take the {@action Attack|XPHB} action, you can replace one of your attacks with throwing a Net. Target a creature you can see within 15 feet of yourself. The target must succeed on a Dexterity saving throw ({@dc 8} plus your Dexterity modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or have the {@condition Restrained|XPHB} condition until it escapes. The target succeeds automatically if it is Huge or larger.\nTo escape, the target or a creature within 5 feet of it must take an action to make a {@dc 10} Strength ({@skill Athletics|XPHB}) check, freeing the {@condition Restrained|XPHB} creature on a success. Destroying the Net (AC 10; 5 HP; {@variantrule Immunity|XPHB} to Bludgeoning, Poison, and Psychic damage) also frees the target, ending the effect."
+  },
+  "oil": {
+    "name": "Oil",
+    "description": "You can douse a creature, object, or space with Oil or use it as fuel, as detailed below.\nDousing a Creature or an Object. When you take the {@action Attack|XPHB} action, you can replace one of your attacks with throwing an Oil flask. Target one creature or object within 20 feet of yourself. The target must succeed on a Dexterity saving throw ({@dc 8} plus your Dexterity modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or be covered in oil. If the target takes Fire damage before the oil dries (after 1 minute), the target takes an extra 5 Fire damage from burning oil.\nDousing a Space. You can take the {@action Utilize|XPHB} action to pour an Oil flask on level ground to cover a 5-foot-square area within 5 feet of yourself. If lit, the oil burns until the end of the turn 2 rounds from when the oil was lit (or 12 seconds) and deals 5 Fire damage to any creature that enters the area or ends its turn there. A creature can take this damage only once per turn.\nFuel. Oil serves as fuel for Lamps and Lanterns. Once lit, a flask of Oil burns for 6 hours in a Lamp or Lantern. That duration doesn't need to be consecutive; you can extinguish the burning Oil (as a {@action Utilize|XPHB} action) and rekindle it again until it has burned for a total of 6 hours."
+  },
+  "orb": { "name": "Orb" },
+  "padded-armor": { "name": "Padded Armor" },
+  "painter-s-supplies": {
+    "name": "Painter's Supplies",
+    "description": "• Ability:. Wisdom\n• Utilize:. Paint a recognizable image of something you've seen ({@dc 10})\n• Craft:. {@item Druidic Focus|XPHB}, {@item Holy Symbol|XPHB}"
+  },
+  "pan-flute": {
+    "name": "Pan Flute",
+    "description": "• Ability:. Charisma\n• Utilize:. Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+  },
+  "paper": {
+    "name": "Paper",
+    "description": "One sheet of Paper can hold about 250 handwritten words."
+  },
+  "parchment": {
+    "name": "Parchment",
+    "description": "One sheet of Parchment can hold about 250 handwritten words."
+  },
+  "perfume": {
+    "name": "Perfume",
+    "description": "Perfume comes in a 4-ounce vial. For 1 hour after applying Perfume to yourself, you have {@variantrule Advantage|XPHB} on Charisma ({@skill Persuasion|XPHB}) checks made to influence an Indifferent Humanoid within 5 feet of yourself."
+  },
+  "pike": { "name": "Pike" },
+  "pistol": { "name": "Pistol" },
+  "plate-armor": { "name": "Plate Armor" },
+  "playing-cards": {
+    "name": "Playing Cards",
+    "description": "• Ability:. Wisdom\n• Utilize:. Discern whether someone is cheating ({@dc 10}), or win the game ({@dc 20})"
+  },
+  "poisoner-s-kit": {
+    "name": "Poisoner's Kit",
+    "description": "• Ability:. Intelligence\n• Utilize:. Detect a poisoned object ({@dc 10})\n• Craft:. {@item Basic Poison|XPHB}"
+  },
+  "pole": {
+    "name": "Pole",
+    "description": "A Pole is 10 feet long. You can use it to touch something up to 10 feet away. If you must make a Strength ({@skill Athletics|XPHB}) check as part of a High or {@variantrule Long Jump|XPHB}, you can use the Pole to vault, giving yourself {@variantrule Advantage|XPHB} on the check."
+  },
+  "pony": { "name": "Pony" },
+  "portable-ram": {
+    "name": "Portable Ram",
+    "description": "You can use a Portable Ram to break down doors. When doing so, you gain a +4 bonus to the Strength check. One other character can help you use the ram, giving you {@variantrule Advantage|XPHB} on this check."
+  },
+  "potter-s-tools": {
+    "name": "Potter's Tools",
+    "description": "• Ability:. Intelligence\n• Utilize:. Discern what a ceramic object held in the past 24 hours ({@dc 15})\n• Craft:. {@item Jug|XPHB}, {@item Lamp|XPHB}"
+  },
+  "pouch": {
+    "name": "Pouch",
+    "description": "A Pouch holds up to 6 pounds within one-fifth of a cubic foot."
+  },
+  "priest-s-pack": {
+    "name": "Priest's Pack",
+    "description": "A Priest's Pack contains the following items: {@item Backpack|XPHB}, {@item Blanket|XPHB}, {@item Holy Water|XPHB}, {@item Lamp|XPHB}, 7 days of {@item Rations|XPHB}, {@item Robe|XPHB}, and {@item Tinderbox|XPHB}."
+  },
+  "quarterstaff": { "name": "Quarterstaff" },
+  "quiver": { "name": "Quiver", "description": "A Quiver holds up to 20 Arrows." },
+  "rapier": { "name": "Rapier" },
+  "rations": {
+    "name": "Rations",
+    "description": "Rations consist of travel-ready food, including jerky, dried fruit, hardtack, and nuts. See \"{@hazard Malnutrition|XPHB}\" for the risks of not eating."
+  },
+  "reliquary": {
+    "name": "Reliquary",
+    "description": "For a Reliquary to be an effective Holy Symbol, it must be held."
+  },
+  "riding-horse": { "name": "Riding Horse" },
+  "riding-saddle": {
+    "name": "Riding Saddle",
+    "description": "A saddle comes with a bit, a bridle, reins, and any other equipment needed to use the saddle."
+  },
+  "ring-mail": { "name": "Ring Mail" },
+  "robe": {
+    "name": "Robe",
+    "description": "A Robe has vocational or ceremonial significance. Some events and locations admit only people wearing a Robe bearing certain colors or symbols."
+  },
+  "rod": { "name": "Rod" },
+  "rope": {
+    "name": "Rope",
+    "description": "As a {@action Utilize|XPHB} action, you can tie a knot with Rope if you succeed on a {@dc 10} Dexterity ({@skill Sleight of Hand|XPHB}) check. The Rope can be burst with a successful {@dc 20} Strength ({@skill Athletics|XPHB}) check.\nYou can bind an unwilling creature with the Rope only if the creature has the {@condition Grappled|XPHB}, {@condition Incapacitated|XPHB}, or {@condition Restrained|XPHB} condition. If the creature's legs are bound, the creature has the {@condition Restrained|XPHB} condition until it escapes. Escaping the Rope requires the creature to make a successful {@dc 15} Dexterity ({@skill Acrobatics|XPHB}) check as an action."
+  },
+  "rowboat": { "name": "Rowboat" },
+  "sack": { "name": "Sack", "description": "A Sack holds up to 30 pounds within 1 cubic foot." },
+  "sailing-ship": { "name": "Sailing Ship" },
+  "scale-mail": { "name": "Scale Mail" },
+  "scholar-s-pack": {
+    "name": "Scholar's Pack",
+    "description": "A Scholar's Pack contains the following items: {@item Backpack|XPHB}, {@item Book|XPHB}, {@item Ink|XPHB}, {@item Ink Pen|XPHB}, {@item Lamp|XPHB}, 10 flasks of {@item Oil|XPHB}, 10 sheets of {@item Parchment|XPHB}, and {@item Tinderbox|XPHB}."
+  },
+  "scimitar": { "name": "Scimitar" },
+  "shawm": {
+    "name": "Shawm",
+    "description": "• Ability:. Charisma\n• Utilize:. Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+  },
+  "shield": { "name": "Shield" },
+  "shortbow": { "name": "Shortbow" },
+  "shortsword": { "name": "Shortsword" },
+  "shovel": {
+    "name": "Shovel",
+    "description": "Working for 1 hour, you can use a Shovel to dig a hole that is 5 feet on each side in soil or similar material."
+  },
+  "sickle": { "name": "Sickle" },
+  "signal-whistle": {
+    "name": "Signal Whistle",
+    "description": "When blown as a {@action Utilize|XPHB} action, a Signal Whistle produces a sound that can be heard up to 600 feet away."
+  },
+  "sled": { "name": "Sled" },
+  "sling": { "name": "Sling" },
+  "sling-bullet": {
+    "name": "Sling Bullet",
+    "description": "Sling bullets are used with a weapon that has the ammunition property to make a ranged attack. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack (you need a free hand to load a one-handed weapon). At the end of the battle, you can recover half your expended ammunition by taking a minute to search the battlefield.\nSling Bullets are typically stored in a {@item Pouch|XPHB} (bought separately)."
+  },
+  "sling-bullets-20": {
+    "name": "Sling Bullets (20)",
+    "description": "Sling bullets are used with a weapon that has the ammunition property to make a ranged attack. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack (you need a free hand to load a one-handed weapon). At the end of the battle, you can recover half your expended ammunition by taking a minute to search the battlefield.\nSling Bullets are typically stored in a {@item Pouch|XPHB} (bought separately)."
+  },
+  "smith-s-tools": {
+    "name": "Smith's Tools",
+    "description": "• Ability:. Strength\n• Utilize:. Pry open a door or container ({@dc 20})\n• Craft:. Any Melee weapon (except {@item Club|XPHB}, {@item Greatclub|XPHB}, {@item Quarterstaff|XPHB}, and {@item Whip|XPHB}), Medium armor (except {@item Hide Armor|XPHB|Hide}), Heavy armor, {@item Ball Bearings|XPHB}, {@item Bucket|XPHB}, {@item Caltrops|XPHB}, {@item Chain|XPHB}, {@item Crowbar|XPHB}, {@item Firearm Bullets (10)|XPHB|Firearm Bullets}, {@item Grappling Hook|XPHB}, {@item Iron Pot|XPHB}, {@item Iron Spikes|XPHB}, {@item Sling Bullets (20)|XPHB|Sling Bullets}"
+  },
+  "spear": { "name": "Spear" },
+  "splint-armor": { "name": "Splint Armor" },
+  "sprig-of-mistletoe": { "name": "Sprig of Mistletoe" },
+  "spyglass": {
+    "name": "Spyglass",
+    "description": "Objects viewed through a Spyglass are magnified to twice their size."
+  },
+  "stabling-per-day": { "name": "Stabling (per day)" },
+  "staff": { "name": "Staff" },
+  "string": {
+    "name": "String",
+    "description": "String is 10 feet long. You can tie a knot in it as a {@action Utilize|XPHB} action."
+  },
+  "studded-leather-armor": { "name": "Studded Leather Armor" },
+  "tent": { "name": "Tent", "description": "A Tent sleeps up to two Small or Medium creatures." },
+  "thieves-tools": {
+    "name": "Thieves' Tools",
+    "description": "• Ability:. Dexterity\n• Utilize:. Pick a lock ({@dc 15}), or disarm a trap ({@dc 15})"
+  },
+  "three-dragon-ante-set": {
+    "name": "Three-Dragon Ante Set",
+    "description": "• Ability:. Wisdom\n• Utilize:. Discern whether someone is cheating ({@dc 10}), or win the game ({@dc 20})"
+  },
+  "tinderbox": {
+    "name": "Tinderbox",
+    "description": "A Tinderbox is a small container holding flint, fire steel, and tinder (usually dry cloth soaked in light oil) used to kindle a fire. Using it to light a {@item Candle|XPHB}, {@item Lamp|XPHB}, {@item Hooded Lantern|XPHB|Lantern}, or {@item Torch|XPHB}—or anything else with exposed fuel—takes a {@variantrule Bonus Action|XPHB}. Lighting any other fire takes 1 minute."
+  },
+  "tinker-s-tools": {
+    "name": "Tinker's Tools",
+    "description": "• Ability:. Dexterity\n• Utilize:. Assemble a Tiny item composed of scrap, which falls apart in 1 minute ({@dc 20})\n• Craft:. {@item Musket|XPHB}, {@item Pistol|XPHB}, {@item Bell|XPHB}, {@item Bullseye Lantern|XPHB}, {@item Flask|XPHB}, {@item Hooded Lantern|XPHB}, {@item Hunting Trap|XPHB}, {@item Lock|XPHB}, {@item Manacles|XPHB}, {@item Mirror|XPHB}, {@item Shovel|XPHB}, {@item Signal Whistle|XPHB}, {@item Tinderbox|XPHB}"
+  },
+  "torch": {
+    "name": "Torch",
+    "description": "A Torch burns for 1 hour, casting {@variantrule Bright Light|XPHB} in a 20-foot radius and {@variantrule Dim Light|XPHB} for an additional 20 feet. When you take the {@action Attack|XPHB} action, you can attack with the Torch, using it as a Simple Melee weapon. On a hit, the target takes 1 Fire damage."
+  },
+  "traveler-s-clothes": {
+    "name": "Traveler's Clothes",
+    "description": "Traveler's Clothes are resilient garments designed for travel in various environments."
+  },
+  "trident": { "name": "Trident" },
+  "trinket": {
+    "name": "Trinket",
+    "description": "When you make your character, you can roll once on the Trinkets table to gain a Tiny trinket, a simple item lightly touched by mystery. The DM might also use this table. It can help stock a room in a dungeon or fill a creature's pockets.\nTrinkets\n{@dice 1d100} | Trinket\n01 | A mummified goblin hand\n02 | A crystal that faintly glows in moonlight\n03 | A gold coin minted in an unknown land\n04 | A diary written in a language you don't know\n05 | A brass ring that never tarnishes\n06 | An old chess piece made from glass\n07 | A pair of knucklebone dice, each with a skull symbol on the side that would normally show six pips\n08 | A small idol depicting a nightmarish creature that gives you unsettling dreams when you sleep near it\n09 | A lock of someone's hair\n10 | The deed for a parcel of land in a realm unknown to you\n11 | A 1-ounce block made from an unknown material\n12 | A small cloth doll skewered with needles\n13 | A tooth from an unknown beast\n14 | An enormous scale, perhaps from a dragon\n15 | A bright-green feather\n16 | An old divination card bearing your likeness\n17 | A glass orb filled with moving smoke\n18 | A 1-pound egg with a bright-red shell\n19 | A pipe that blows bubbles\n20 | A glass jar containing a bit of flesh floating in pickling fluid\n21 | A gnome-crafted music box that plays a song you dimly remember from your childhood\n22 | A wooden statuette of a smug halfling\n23 | A brass orb etched with strange runes\n24 | A multicolored stone disk\n25 | A silver icon of a raven\n26 | A bag containing forty-seven teeth, one of which is rotten\n27 | A shard of obsidian that always feels warm to the touch\n28 | A dragon's talon strung on a leather necklace\n29 | A pair of old socks\n30 | A blank book whose pages refuse to hold ink, chalk, graphite, or any other marking\n31 | A silver badge that is a five-pointed star\n32 | A knife that belonged to a relative\n33 | A glass vial filled with nail clippings\n34 | A rectangular metal device with two tiny metal cups on one end that throws sparks when wet\n35 | A white, sequined glove sized for a human\n36 | A vest with one hundred tiny pockets\n37 | A weightless stone\n38 | A sketch of a goblin\n39 | An empty glass vial that smells of perfume\n40 | A gemstone that looks like a lump of coal when examined by anyone but you\n41 | A scrap of cloth from an old banner\n42 | A rank insignia from a lost legionnaire\n43 | A silver bell without a clapper\n44 | A mechanical canary inside a lamp\n45 | A miniature chest carved to look like it has numerous feet on the bottom\n46 | A dead sprite inside a clear glass bottle\n47 | A metal can that has no opening but sounds as if it is filled with liquid, sand, spiders, or broken glass (your choice)\n48 | A glass orb filled with water, in which swims a clockwork goldfish\n49 | A silver spoon with an M engraved on the handle\n50 | A whistle made from gold-colored wood\n51 | A dead scarab beetle the size of your hand\n52 | Two toy soldiers, one missing a head\n53 | A small box filled with different-sized buttons\n54 | A candle that can't be lit\n55 | A miniature cage with no door\n56 | An old key\n57 | An indecipherable treasure map\n58 | A hilt from a broken sword\n59 | A rabbit's foot\n60 | A glass eye\n61 | A cameo of a hideous person\n62 | A silver skull the size of a coin\n63 | An alabaster mask\n64 | A cone of sticky black incense that stinks\n65 | A nightcap that gives you pleasant dreams when you wear it\n66 | A single caltrop made from bone\n67 | A gold monocle frame without the lens\n68 | A 1-inch cube, each side a different color\n69 | A crystal doorknob\n70 | A packet filled with pink dust\n71 | A fragment of a beautiful song, written as musical notes on two pieces of parchment\n72 | A silver teardrop earring containing a real teardrop\n73 | An eggshell painted with scenes of misery in disturbing detail\n74 | A fan that, when unfolded, shows a sleepy cat\n75 | A set of bone pipes\n76 | A four-leaf clover pressed inside a book discussing manners and etiquette\n77 | A sheet of parchment upon which is drawn a mechanical contraption\n78 | An ornate scabbard that fits no blade you have found\n79 | An invitation to a party where a murder happened\n80 | A bronze pentacle with an etching of a rat's head in its center\n81 | A purple handkerchief embroidered with the name of an archmage\n82 | Half a floor plan for a temple, a castle, or another structure\n83 | A bit of folded cloth that, when unfolded, turns into a stylish cap\n84 | A receipt of deposit at a bank in a far-off city\n85 | A diary with seven missing pages\n86 | An empty silver snuffbox bearing the inscription \"dreams\" on its lid\n87 | An iron holy symbol devoted to an unknown god\n88 | A book about a legendary hero's rise and fall, with the last chapter missing\n89 | A vial of dragon blood\n90 | An ancient arrow of elven design\n91 | A needle that never bends\n92 | An ornate brooch of dwarven design\n93 | An empty wine bottle bearing a pretty label that says, \"The Wizard of Wines Winery, Red Dragon Crush, 331422-W\"\n94 | A mosaic tile with a multicolored, glazed surface\n95 | A petrified mouse\n96 | A black pirate flag adorned with a dragon's skull and crossbones\n97 | A tiny mechanical crab or spider that moves about when it's not being observed\n98 | A glass jar containing lard with a label that reads, \"Griffon Grease\"\n99 | A wooden box with a ceramic bottom that holds a living worm with a head on each end of its body\n00 | A metal urn containing the ashes of a hero"
+  },
+  "vial": { "name": "Vial", "description": "A Vial holds up to 4 ounces." },
+  "viol": {
+    "name": "Viol",
+    "description": "• Ability:. Charisma\n• Utilize:. Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+  },
+  "wagon": { "name": "Wagon" },
+  "wand": { "name": "Wand" },
+  "war-pick": { "name": "War Pick" },
+  "warhammer": { "name": "Warhammer" },
+  "warhorse": { "name": "Warhorse" },
+  "warship": { "name": "Warship" },
+  "waterskin": {
+    "name": "Waterskin",
+    "description": "A Waterskin holds up to 4 pints. If you don't drink sufficient water, you risk dehydration."
+  },
+  "weaver-s-tools": {
+    "name": "Weaver's Tools",
+    "description": "• Ability:. Dexterity\n• Utilize:. Mend a tear in clothing ({@dc 10}), or sew a Tiny design ({@dc 10})\n• Craft:. {@item Padded Armor|XPHB}, {@item Basket|XPHB}, {@item Bedroll|XPHB}, {@item Blanket|XPHB}, {@item Fine Clothes|XPHB}, {@item Net|XPHB}, {@item Robe|XPHB}, {@item Rope|XPHB}, {@item Sack|XPHB}, {@item String|XPHB}, {@item Tent|XPHB}, {@item Traveler's Clothes|XPHB}"
+  },
+  "whip": { "name": "Whip" },
+  "woodcarver-s-tools": {
+    "name": "Woodcarver's Tools",
+    "description": "• Ability:. Dexterity\n• Utilize:. Carve a pattern in wood ({@dc 10})\n• Craft:. {@item Club|XPHB}, {@item Greatclub|XPHB}, {@item Quarterstaff|XPHB}, Ranged weapons (except {@item Pistol|XPHB}, {@item Musket|XPHB}, and {@item Sling|XPHB}), {@item Arcane Focus|XPHB}, {@item Arrows (20)|XPHB|Arrows}, {@item Bolts (20)|XPHB|Bolts}, {@item Druidic Focus|XPHB}, {@item Ink Pen|XPHB}, {@item Needles (50)|XPHB|Needles}"
+  },
+  "wooden-staff": { "name": "Wooden Staff" },
+  "yew-wand": { "name": "Yew Wand" }
+}

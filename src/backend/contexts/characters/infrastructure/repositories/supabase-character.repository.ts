@@ -167,8 +167,6 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         spellAttackBonus: dndData.spellAttackBonus as number | undefined,
         spellSlots: dndData.spellSlots as Record<string, { max: number; used: number }> | undefined,
         spellPoints: dndData.spellPoints as { max: number; current: number } | undefined,
-        coins: dndData.coins as
-          { cp: number; sp: number; ep: number; gp: number; pp: number } | undefined,
         hpTemp: (dndData.hpTemp as number) || 0,
         lore,
         accentColor: (row.theme_color as string) ?? undefined,

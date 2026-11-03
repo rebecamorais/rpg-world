@@ -44,7 +44,6 @@ export interface DnD5eCharacterOptions {
   spellAttackBonus?: number;
   spellSlots?: Record<string, { max: number; used: number }>;
   spellPoints?: { max: number; current: number };
-  coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
   hpTemp?: number;
   lore?: Lore;
   accentColor?: string;
@@ -76,8 +75,6 @@ export class DnD5eCharacter extends Character {
   public spellAttackBonus?: number;
   public spellSlots?: Record<string, { max: number; used: number }>;
   public spellPoints?: { max: number; current: number };
-
-  public coins?: { cp: number; sp: number; ep: number; gp: number; pp: number };
 
   constructor(options: DnD5eCharacterOptions) {
     super(
@@ -116,7 +113,6 @@ export class DnD5eCharacter extends Character {
     this.spellAttackBonus = options.spellAttackBonus;
     this.spellSlots = options.spellSlots;
     this.spellPoints = options.spellPoints;
-    this.coins = options.coins;
   }
 
   private normalizeSavingThrows(
@@ -172,8 +168,6 @@ export class DnD5eCharacter extends Character {
       spellAttackBonus: this.spellAttackBonus,
       spellSlots: this.spellSlots,
       spellPoints: this.spellPoints,
-
-      coins: this.coins,
     };
   }
 }

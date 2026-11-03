@@ -66,6 +66,10 @@
       "security_widget_unavailable": "Não foi possível carregar a verificação de segurança. Desative bloqueadores de conteúdo para este site ou recarregue a página.",
       "image_error_decode": "Não foi possível ler essa imagem. Tente outro arquivo (JPEG, PNG ou WebP).",
       "character_error_spell_not_found": "Magia não encontrada.",
+      "character_error_item_not_found": "Item não encontrado.",
+      "character_error_container_not_found": "Lugar não encontrado.",
+      "character_error_item_limit": "A mochila está cheia: um personagem guarda no máximo 500 itens diferentes.",
+      "character_error_container_limit": "Um personagem tem no máximo 20 lugares.",
       "combat_error_not_found": "Combate não encontrado.",
       "combat_error_exists": "Esta mesa já tem um combate.",
       "combat_error_empty": "Adicione alguém ao combate antes de começar.",
@@ -238,7 +242,7 @@
     "emptyStates": {
       "lore": "A biografia e características físicas aparecerão aqui em breve.",
       "spells": "Suas magias e truques serão listados aqui.",
-      "inventory": "Equipamentos, poções e moedas serão gerenciados aqui."
+      "inventory": "Equipamentos e poções serão gerenciados aqui."
     },
     "loreFields": {
       "appearance": "Aparência",
@@ -306,6 +310,134 @@
       "noMatchDescription": "Tente outro nome ou desligue um filtro.",
       "showing": "{shown} de {total} magias",
       "castingTime": "Tempo de conjuração"
+    },
+    "coins": {
+      "title": "Algibeira",
+      "hint": "O dinheiro do personagem. Pagar devolve o troco sozinho; receber soma na moeda que veio.",
+      "cp": {
+        "short": "PC",
+        "name": "Peças de cobre"
+      },
+      "sp": {
+        "short": "PP",
+        "name": "Peças de prata"
+      },
+      "ep": {
+        "short": "PE",
+        "name": "Peças de eletro"
+      },
+      "gp": {
+        "short": "PO",
+        "name": "Peças de ouro"
+      },
+      "pp": {
+        "short": "PL",
+        "name": "Peças de platina"
+      },
+      "pay": "Pagar",
+      "receive": "Receber",
+      "payDescription": "Paga com a moeda do preço; se não der, quebra uma moeda maior e devolve o troco.",
+      "receiveDescription": "Soma o valor na algibeira, na moeda que veio.",
+      "amount": "Valor",
+      "coin": "Moeda",
+      "spent": "Sai",
+      "change": "Volta de troco",
+      "after": "Algibeira depois",
+      "none": "nada",
+      "missing": "Dinheiro insuficiente: faltam {amount}.",
+      "tooMany": "A algibeira guarda no máximo {max} de cada moeda.",
+      "confirm": "Confirmar"
+    },
+    "inventory": {
+      "title": "Mochila",
+      "hint": "O que o personagem carrega, fora as moedas. Salva na hora.",
+      "empty": "A mochila está vazia.",
+      "emptyHint": "Adicione o equipamento que o personagem leva.",
+      "totalWeight": "Peso total: {weight}",
+      "weight": "{weight} kg",
+      "details": "Detalhes de {name}",
+      "remove": "Remover {name}",
+      "removed": "Item removido: {name}",
+      "undo": "Desfazer",
+      "quantity": "Quantidade de {name}",
+      "decrease": "Diminuir quantidade de {name}",
+      "increase": "Aumentar quantidade de {name}",
+      "tagAriaLabel": "{name}, item",
+      "tagAriaLabelShown": "{text} ({name}), item",
+      "unknownHint": "Este item não está mais no catálogo. Você pode removê-lo.",
+      "stats": {
+        "price": "Preço",
+        "weight": "Peso",
+        "ac": "Classe de Armadura",
+        "strength": "Força mínima",
+        "stealth": "Furtividade",
+        "stealthDisadvantage": "Desvantagem",
+        "damage": "Dano",
+        "versatile": "Versátil",
+        "range": "Alcance",
+        "category": "Categoria",
+        "properties": "Propriedades"
+      },
+      "add": {
+        "title": "Adicionar item",
+        "description": "Itens comuns do SRD.",
+        "searchLabel": "Buscar itens",
+        "searchPlaceholder": "Buscar pelo nome",
+        "edition": "Edição",
+        "allEditions": "Todas as edições",
+        "category": "Categoria",
+        "allCategories": "Todas as categorias",
+        "noResults": "Nenhum item encontrado.",
+        "clear": "Limpar filtros",
+        "count": "{count, plural, one {# item} other {# itens}}",
+        "pick": "Adicionar {name}",
+        "loading": "Carregando itens",
+        "tooMany": "Mostrando os primeiros {max}. Refine a busca para ver o resto."
+      },
+      "categories": {
+        "weapon": "Armas",
+        "armor": "Armaduras",
+        "shield": "Escudos",
+        "gear": "Equipamento de aventura",
+        "tool": "Ferramentas",
+        "kit": "Kits",
+        "ammunition": "Munição",
+        "focus": "Focos de conjuração",
+        "instrument": "Instrumentos musicais",
+        "mount": "Montarias",
+        "vehicle": "Veículos",
+        "food": "Comida e bebida",
+        "trade-good": "Mercadorias",
+        "other": "Outros"
+      },
+      "category": {
+        "weapon": "Arma",
+        "armor": "Armadura",
+        "shield": "Escudo",
+        "gear": "Equipamento de aventura",
+        "tool": "Ferramenta",
+        "kit": "Kit",
+        "ammunition": "Munição",
+        "focus": "Foco de conjuração",
+        "instrument": "Instrumento musical",
+        "mount": "Montaria",
+        "vehicle": "Veículo",
+        "food": "Comida e bebida",
+        "trade-good": "Mercadoria",
+        "other": "Outro"
+      },
+      "properties": {
+        "2H": "Duas Mãos",
+        "A": "Munição",
+        "F": "Acuidade",
+        "H": "Pesada",
+        "L": "Leve",
+        "LD": "Recarga",
+        "R": "Alcance",
+        "S": "Especial",
+        "T": "Arremesso",
+        "V": "Versátil"
+      }
     }
   },
   "characterHeader": {

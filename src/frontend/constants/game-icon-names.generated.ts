@@ -2,6 +2,7 @@
 export const GAME_ICON_NAMES: ReadonlySet<string> = new Set([
   'acid',
   'armor-upgrade',
+  'backpack',
   'bad-gnome',
   'barbarian',
   'biceps',
@@ -13,6 +14,7 @@ export const GAME_ICON_NAMES: ReadonlySet<string> = new Set([
   'chained-heart',
   'character',
   'chemical-bolt',
+  'chest',
   'circle',
   'circle-sparks',
   'click',
