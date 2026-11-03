@@ -1,6 +1,8 @@
 import { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
+import { isOwnAssetUrl } from '@backend/shared/infrastructure/helpers/format-asset-url';
+
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { Database } from '@database-types';
@@ -23,6 +25,12 @@ const DATABASE_ERRORS: Record<string, PartyErrorCode> = {
 
 // RLS refusing an insert, or a character id that doesn't exist
 const INSERT_REFUSED = new Set(['42501', '23503']);
+
+/**
+ * The party's picture is shown to anyone with the invite link, signed out too. The database only
+ * takes a file path of this party; this also drops one from another host.
+ */
+const partyImage = (url: string | null) => (url && isOwnAssetUrl(url) ? url : null);
 
 function fail(action: string, error: PostgrestError): never {
   const code = DATABASE_ERRORS[error.message];
@@ -124,7 +132,7 @@ export class SupabasePartyRepository implements PartyRepo {
     if (error) fail('read invite card', error);
 
     const row = data[0];
-    return row ? { name: row.name, imageUrl: row.image_url } : null;
+    return row ? { name: row.name, imageUrl: partyImage(row.image_url) } : null;
   }
 
   async requestJoin(code: string): Promise<MemberStatus> {
@@ -179,7 +187,7 @@ export class SupabasePartyRepository implements PartyRepo {
         system: data.system,
         gmId: data.gm_id,
         edition: data.edition as Edition,
-        imageUrl: data.image_url,
+        imageUrl: partyImage(data.image_url),
       }
     );
   }

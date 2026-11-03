@@ -4,7 +4,8 @@
 --    lugar, o RLS e os limites já vêm de 20261102201453_inventory.sql (o mestre e os membros ativos
 --    leem e escrevem; o baú não se apaga a não ser junto com a mesa).
 -- 2. A imagem da mesa: a URL de um arquivo no bucket 'avatars', na pasta do mestre. Só o mestre
---    muda (o RLS de UPDATE de parties já é só dele).
+--    muda (o RLS de UPDATE de parties já é só dele), e só para um arquivo enviado para esta mesa:
+--    a imagem aparece para quem nem entrou na conta, então não pode ser um endereço qualquer.
 -- 3. O card do convite: nome e imagem da mesa pelo código, para quem ainda não entrou na conta
 --    (é o que o Discord e o WhatsApp mostram quando alguém cola o link). Nada mais da mesa sai.
 -- 4. A limpeza de arquivos órfãos passa a contar a imagem da mesa como usada.
@@ -40,8 +41,17 @@ REVOKE ALL ON FUNCTION private.create_party_chest() FROM PUBLIC, anon, authentic
 
 -- 2. Imagem da mesa
 
+-- O host muda com o ambiente (images.rpgworldapp.com, /api/images); o caminho é o que o envio
+-- grava: avatars/<mestre>/parties/<mesa>-<versão>.<tipo>
 ALTER TABLE public.parties
-  ADD COLUMN image_url text CHECK (char_length(image_url) <= 500);
+  ADD COLUMN image_url text,
+  ADD CONSTRAINT parties_image_url_check CHECK (
+    char_length(image_url) <= 500
+    AND image_url ~ (
+      '^https?://[^/?#]+(/api/images)?/avatars/' || gm_id::text || '/parties/' || id::text
+      || '-[a-z0-9]+\.(jpeg|png|webp)$'
+    )
+  );
 
 GRANT UPDATE (image_url) ON TABLE public.parties TO authenticated;
 
