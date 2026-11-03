@@ -12,6 +12,18 @@ at <https://creativecommons.org/licenses/by/4.0/legalcode>.
 
 Usado em: textos em inglês das magias (`content/dnd5e/srd-5.1/i18n/en/spells.json`).
 
+## Documento de referencia del sistema 5.1 (español)
+
+Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 ("SRD 5.1") de
+Wizards of the Coast LLC, que está disponible en
+<https://dnd.wizards.com/es/resources/systems-reference-document>. El SRD 5.1 tiene la licencia
+Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible
+en <https://creativecommons.org/licenses/by/4.0/legalcode.es>.
+
+Usado em: magias e condições em espanhol (`content/dnd5e/srd-5.1/i18n/es/`), extraídas do PDF
+oficial (<https://www.dndbeyond.com/srd>). Só a marcação foi acrescentada: as tags de condição
+`{@condition …}` e as tabelas em Markdown, como nos textos em inglês.
+
 ## System Reference Document 5.2
 
 This work includes material from the System Reference Document 5.2 ("SRD 5.2") by Wizards of
