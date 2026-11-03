@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
 import {
@@ -52,6 +52,7 @@ function CoinDialog({ mode, onDone }: { mode: Mode; onDone: () => void }) {
   const character = useLoadedCharacter();
   const { pouch, setCoins } = useInventory(character.id);
   const format = useFormatCoins();
+  const formatter = useFormatter();
   const [amount, setAmount] = useState(1);
   const [coin, setCoin] = useState<Coin>('gp');
   const [valid, setValid] = useState(true);
@@ -59,7 +60,9 @@ function CoinDialog({ mode, onDone }: { mode: Mode; onDone: () => void }) {
   const purse = pouch?.coins ?? EMPTY_PURSE;
   const payment = mode === 'pay' ? pay(purse, amount, coin) : null;
   const after = payment ? (payment.ok ? payment.after : null) : receive(purse, amount, coin);
-  const canConfirm = valid && after !== null && !!pouch;
+  // The database keeps at most MAX_COINS of each coin (received coins, or the change of a payment)
+  const overflow = after !== null && COINS.some((c) => after[c] > MAX_COINS);
+  const canConfirm = valid && after !== null && !overflow && !!pouch;
 
   const confirm = () => {
     if (!after) return;
@@ -109,6 +112,10 @@ function CoinDialog({ mode, onDone }: { mode: Mode; onDone: () => void }) {
         {payment && !payment.ok ? (
           <p role="alert" className="text-danger-flare text-sm">
             {t('missing', { amount: format(fromCopper(payment.missing)) })}
+          </p>
+        ) : overflow ? (
+          <p role="alert" className="text-danger-flare text-sm">
+            {t('tooMany', { max: formatter.number(MAX_COINS) })}
           </p>
         ) : (
           <dl className="text-sm" aria-live="polite">

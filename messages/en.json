@@ -345,6 +345,7 @@
       "after": "Pouch after",
       "none": "nothing",
       "missing": "Not enough money: {amount} short.",
+      "tooMany": "The pouch holds at most {max} of each coin.",
       "confirm": "Confirm"
     },
     "inventory": {

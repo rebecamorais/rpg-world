@@ -119,6 +119,26 @@ describe('CoinPouch', () => {
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeDisabled();
   });
 
+  it('receber além do teto de 1 bilhão de uma moeda avisa e não deixa confirmar', async () => {
+    const user = userEvent.setup();
+    await renderPouch({ ...PURSE, gp: 999_999_995 });
+
+    await user.click(screen.getByRole('button', { name: 'Receive' }));
+    const amount = screen.getByLabelText('Amount');
+    await user.clear(amount);
+    await user.type(amount, '6');
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'The pouch holds at most 1,000,000,000 of each coin.',
+    );
+    expect(screen.getByRole('button', { name: 'Confirm' })).toBeDisabled();
+
+    await user.clear(amount);
+    await user.type(amount, '5');
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Confirm' })).toBeEnabled();
+  });
+
   it('recebe na moeda que veio', async () => {
     const user = userEvent.setup();
     await renderPouch();

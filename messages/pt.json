@@ -345,6 +345,7 @@
       "after": "Algibeira depois",
       "none": "nada",
       "missing": "Dinheiro insuficiente: faltam {amount}.",
+      "tooMany": "A algibeira guarda no máximo {max} de cada moeda.",
       "confirm": "Confirmar"
     },
     "inventory": {
