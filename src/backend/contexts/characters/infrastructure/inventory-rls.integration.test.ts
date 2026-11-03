@@ -191,18 +191,25 @@ describe('Inventário (Integration)', () => {
         .insert({ character_id: characterId, kind: 'chest' });
       expect(insertChest.error?.message).toContain(RLS);
 
-      // Update e delete negados pelo RLS não dão erro: não mexem em nada
+      // Update e delete negados pelo RLS não dão erro: não mexem em nada (a mochila extra poderia
+      // sair, então só o RLS a segura)
+      const { data: extra } = await admin()
+        .from('containers')
+        .insert({ character_id: characterId, kind: 'backpack', position: 2 })
+        .select('id')
+        .single();
       await gm.client
         .from('containers')
         .update({ coins: { ...emptyCoins, gp: 999 } })
         .eq('id', pouchId);
       await gm.client.from('inventory_items').update({ quantity: 99 }).eq('item_ref', rope);
       await gm.client.from('inventory_items').delete().eq('item_ref', rope);
-      await gm.client.from('containers').delete().eq('id', backpackId);
+      await gm.client.from('containers').delete().eq('id', extra!.id);
 
       expect(await containersOf(characterId)).toEqual([
         expect.objectContaining({ id: pouchId, coins: emptyCoins }),
         expect.objectContaining({ id: backpackId }),
+        expect.objectContaining({ id: extra!.id }),
       ]);
       expect(await itemsOf(characterId)).toEqual([
         { container_id: backpackId, item_ref: rope, quantity: 2 },
@@ -261,6 +268,32 @@ describe('Inventário (Integration)', () => {
       expect((await containersOf(characterId)).filter((c) => c.kind === 'coin_pouch')).toHaveLength(
         1,
       );
+    });
+
+    it('a última mochila não se apaga nem vira outro tipo; com duas, uma pode sair', async () => {
+      const remove = await player.client.from('containers').delete().eq('id', backpackId);
+      expect(remove.error?.message).toContain('backpack_required');
+
+      const asAdmin = await admin().from('containers').delete().eq('id', backpackId);
+      expect(asAdmin.error?.message).toContain('backpack_required');
+
+      const retype = await player.client
+        .from('containers')
+        .update({ kind: 'chest' })
+        .eq('id', backpackId);
+      expect(retype.error?.message).toContain('backpack_required');
+
+      const { data: extra } = await player.client
+        .from('containers')
+        .insert({ character_id: characterId, kind: 'backpack', position: 2 })
+        .select('id')
+        .single();
+      const removeFirst = await player.client.from('containers').delete().eq('id', backpackId);
+      expect(removeFirst.error).toBeNull();
+      const removeLast = await player.client.from('containers').delete().eq('id', extra!.id);
+      expect(removeLast.error?.message).toContain('backpack_required');
+
+      expect((await containersOf(characterId)).map((c) => c.id)).toEqual([pouchId, extra!.id]);
     });
 
     it('o dono apaga uma mochila extra com os itens dela', async () => {
@@ -741,10 +774,8 @@ describe('Inventário (Integration)', () => {
       );
     });
 
-    it('copia um original sem mochila (algibeira + 19 baús) sem erro e igual (Ponto 1)', async () => {
-      const remove = await player.client.from('containers').delete().eq('id', backpackId);
-      expect(remove.error).toBeNull();
-      await addChests(characterId, 19, 1);
+    it('copia um original cheio (algibeira, mochila e 18 baús) sem passar do limite (Ponto 1)', async () => {
+      await addChests(characterId, 18);
       const before = await containersOf(characterId);
       expect(before).toHaveLength(20);
 
@@ -757,17 +788,6 @@ describe('Inventário (Integration)', () => {
       const shape = (rows: typeof before) =>
         rows.map(({ kind, name, position, coins }) => ({ kind, name, position, coins }));
       expect(shape(await containersOf(copyId))).toEqual(shape(before));
-    });
-
-    it('copia um original só com a algibeira', async () => {
-      await player.client.from('containers').delete().eq('id', backpackId);
-
-      const { data: copyId, error } = await player.client.rpc('duplicate_character', {
-        p_character_id: characterId,
-        p_name: 'Arani (cópia)',
-      });
-      if (error) throw error;
-      expect((await containersOf(copyId)).map((c) => c.kind)).toEqual(['coin_pouch']);
     });
   });
 });

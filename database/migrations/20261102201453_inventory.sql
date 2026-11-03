@@ -128,8 +128,34 @@ GRANT EXECUTE ON FUNCTION private.can_write_owner(uuid, uuid), private.can_write
 
 -- O dono de um lugar não muda; algibeira e baú da party não viram outro tipo (nem o contrário) e
 -- não se apagam, a não ser junto com o dono (a cascata roda depois de a linha do dono sumir, então
--- ele não existe mais quando chega aqui). SECURITY DEFINER para ver o dono mesmo sem RLS que o
--- mostre.
+-- ele não existe mais quando chega aqui). A última mochila do personagem também fica: não se
+-- apaga nem vira outro tipo enquanto ele existe (o lock por dono, o mesmo do limite de lugares,
+-- impede que duas mochilas saiam ao mesmo tempo achando que sobra a outra). SECURITY DEFINER para
+-- ver o dono mesmo sem RLS que o mostre.
+-- Falha se a mochila p_id é a última do personagem e ele ainda existe
+CREATE FUNCTION private.keep_last_backpack(p_id uuid, p_character_id uuid)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM public.characters WHERE id = p_character_id) THEN
+    RETURN;
+  END IF;
+  PERFORM pg_catalog.pg_advisory_xact_lock(
+    pg_catalog.hashtext('containers'),
+    pg_catalog.hashtext(p_character_id::text)
+  );
+  IF NOT EXISTS (
+    SELECT 1 FROM public.containers
+    WHERE character_id = p_character_id AND kind = 'backpack' AND id <> p_id
+  ) THEN
+    RAISE EXCEPTION USING MESSAGE = 'backpack_required', ERRCODE = 'P0001';
+  END IF;
+END;
+$$;
+
 CREATE FUNCTION private.keep_containers()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -146,6 +172,9 @@ BEGIN
        AND EXISTS (SELECT 1 FROM public.parties WHERE id = OLD.party_id) THEN
       RAISE EXCEPTION USING MESSAGE = 'party_chest_required', ERRCODE = 'P0001';
     END IF;
+    IF OLD.kind = 'backpack' THEN
+      PERFORM private.keep_last_backpack(OLD.id, OLD.character_id);
+    END IF;
     RETURN OLD;
   END IF;
 
@@ -154,6 +183,9 @@ BEGIN
      OR (NEW.kind = 'coin_pouch') <> (OLD.kind = 'coin_pouch')
      OR (NEW.kind = 'party_chest') <> (OLD.kind = 'party_chest') THEN
     RAISE EXCEPTION USING MESSAGE = 'container_immutable', ERRCODE = 'P0001';
+  END IF;
+  IF OLD.kind = 'backpack' AND NEW.kind <> 'backpack' THEN
+    PERFORM private.keep_last_backpack(OLD.id, OLD.character_id);
   END IF;
   RETURN NEW;
 END;
@@ -346,6 +378,7 @@ WHERE NOT EXISTS (
 );
 
 REVOKE ALL ON FUNCTION private.keep_containers() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION private.keep_last_backpack(uuid, uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION private.limit_containers() FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION private.limit_inventory_items() FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION private.keep_inventory_item_ref() FROM PUBLIC, anon, authenticated;
@@ -394,10 +427,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.containers, public.inventor
 -- 6. Duplicar copia o inventário
 --
 -- A cópia já nasce com algibeira e mochila (trigger acima). As moedas da algibeira vão para a
--- algibeira da cópia. A mochila padrão da cópia casa com a primeira mochila do original ou, se ele
--- não tem mochila, com o primeiro lugar que não é a algibeira (e assume tipo, nome e posição dele);
--- se o original só tem a algibeira, a mochila da cópia sai. Os demais lugares são criados. Assim a
--- cópia fica com os mesmos lugares e nunca passa do limite de 20. Cada entrada vai para o lugar
+-- algibeira da cópia. A mochila padrão da cópia casa com a primeira mochila do original (todo
+-- personagem tem ao menos uma: a última não sai) e assume nome e posição dela. Os demais lugares
+-- são criados. Assim a cópia fica com os mesmos lugares e nunca passa do limite de 20. Cada entrada vai para o lugar
 -- correspondente da cópia, nunca para o do original.
 CREATE OR REPLACE FUNCTION public.duplicate_character(p_character_id uuid, p_name text)
 RETURNS uuid
@@ -441,8 +473,8 @@ BEGIN
 
   SELECT id INTO v_match
   FROM public.containers
-  WHERE character_id = p_character_id AND kind <> 'coin_pouch'
-  ORDER BY kind <> 'backpack', position, created_at, id
+  WHERE character_id = p_character_id AND kind = 'backpack'
+  ORDER BY position, created_at, id
   LIMIT 1;
 
   SELECT id INTO v_copy_pouch
@@ -453,10 +485,6 @@ BEGIN
   FROM public.containers
   WHERE character_id = v_id AND kind = 'backpack';
 
-  IF v_match IS NULL THEN
-    DELETE FROM public.containers WHERE id = v_copy_backpack;
-  END IF;
-
   FOR r IN
     SELECT id, kind, name, position, coins
     FROM public.containers
@@ -466,7 +494,7 @@ BEGIN
     IF r.kind = 'coin_pouch' OR r.id = v_match THEN
       v_target := CASE WHEN r.kind = 'coin_pouch' THEN v_copy_pouch ELSE v_copy_backpack END;
       UPDATE public.containers
-      SET kind = r.kind, name = r.name, position = r.position, coins = r.coins
+      SET name = r.name, position = r.position, coins = r.coins
       WHERE id = v_target;
     ELSE
       INSERT INTO public.containers (character_id, kind, name, position, coins)
