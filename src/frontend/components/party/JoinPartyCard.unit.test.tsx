@@ -18,12 +18,15 @@ vi.mock('@client', async (importOriginal) => ({
 }));
 
 const t = messages.parties;
-const invite = { partyId: 'p1', name: 'Mesa', gmUsername: 'mestra', myStatus: null };
+const invite = { partyId: 'p1', name: 'Mesa', gmUsername: 'mestra', hasGm: true, myStatus: null };
 
-function renderCard(myStatus: 'invited' | null) {
+function renderCard(myStatus: 'invited' | null, hasGm = true) {
   return renderWithProviders(
     <UserProvider user={{ id: 'u1', email: 'u@example.com' }}>
-      <JoinPartyCard code={'a'.repeat(32)} invite={{ ...invite, myStatus }} />
+      <JoinPartyCard
+        code={'a'.repeat(32)}
+        invite={{ ...invite, hasGm, gmUsername: hasGm ? 'mestra' : null, myStatus }}
+      />
     </UserProvider>,
   );
 }
@@ -52,5 +55,18 @@ describe('JoinPartyCard', () => {
 
     expect(await screen.findByText(t.join.requested)).toBeInTheDocument();
     expect(invalidate).toHaveBeenCalledWith({ queryKey: PARTIES_QUERY_KEY });
+  });
+
+  it('mesa sem mestre avisa e não oferece entrar nem aceitar', () => {
+    const { unmount } = renderCard(null, false);
+
+    expect(screen.getByText(t.join.withoutGm)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: t.join.request })).not.toBeInTheDocument();
+    expect(screen.queryByText(/is the GM of this table/)).not.toBeInTheDocument();
+    unmount();
+
+    renderCard('invited', false);
+    expect(screen.getByText(t.join.withoutGm)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: t.accept })).not.toBeInTheDocument();
   });
 });

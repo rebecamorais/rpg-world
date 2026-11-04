@@ -1,6 +1,9 @@
+import AxeBuilder from '@axe-core/playwright';
+
 import {
   bring,
   createCharacter,
+  createEnemySheet,
   createParty,
   expect,
   hydrated,
@@ -318,5 +321,86 @@ test.describe('mesas', () => {
     await expect(anon).toHaveURL((url) => url.pathname === '/login');
 
     await visitor.close();
+  });
+
+  test('o mestre exclui a conta com combate aberto: a mesa continua e um jogador vira mestre', async ({
+    page,
+    browser,
+    user,
+  }) => {
+    const { id: partyId, code } = await createParty(page, 'Mesa Sem Mestre');
+    const goblinId = await createEnemySheet(page, 'Goblin', 7);
+    const bia = await person(browser, 'claim-bia');
+    const caio = await person(browser, 'claim-caio');
+    await joinParty(page, bia.page, bia.user.id, partyId, code);
+    await joinParty(page, caio.page, caio.user.id, partyId, code);
+
+    // A combat in progress: its enemies leave with the GM
+    const encounter = `/api/parties/${partyId}/encounter`;
+    expect((await page.request.post(encounter)).status()).toBe(201);
+    await page.request.post(`${encounter}/participants`, { data: { characterId: goblinId } });
+    expect((await page.request.post(`${encounter}/start`)).status()).toBe(204);
+
+    const { error } = await adminClient().auth.admin.deleteUser(user.id);
+    expect(error).toBeNull();
+    const { data: encounters, error: readError } = await adminClient()
+      .from('encounters')
+      .select('party_id')
+      .eq('party_id', partyId);
+    expect(readError).toBeNull();
+    expect(encounters).toEqual([]);
+
+    // The party opens for the players, with no combat; one asks to be the GM
+    await bia.page.goto(partyUrl(partyId));
+    await expect(bia.page.getByText('This party has no GM')).toBeVisible();
+    await expect(bia.page.getByRole('list', { name: 'Combat order' })).toHaveCount(0);
+    await (await hydrated(bia.page.getByRole('button', { name: 'I want to be the GM' }))).click();
+    await expect(bia.page.getByText('You asked to become the GM of this party.')).toBeVisible();
+    await expect(bia.page.getByRole('button', { name: 'Ask support for help' })).toBeDisabled();
+
+    // The other one agrees
+    await caio.page.goto(partyUrl(partyId));
+    await expect(
+      caio.page.getByText(`@${await usernameOf(bia.user)} asked to become the GM`),
+    ).toBeVisible();
+    await expect(caio.page.getByText('read the full sheet')).toBeVisible();
+
+    // Phone width: no sideways scroll, and no serious accessibility violations
+    await caio.page.setViewportSize({ width: 375, height: 740 });
+    expect(
+      await caio.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
+    const axe = await new AxeBuilder({ page: caio.page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze();
+    expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')).toEqual(
+      [],
+    );
+
+    await (await hydrated(caio.page.getByRole('button', { name: 'Agree' }))).click();
+
+    // The new GM sees the GM's view
+    await bia.page.reload();
+    await expect(bia.page.getByText('You are the GM')).toBeVisible();
+    await expect(bia.page.getByRole('tab', { name: 'Combat' })).toBeVisible();
+    await expect(bia.page.getByText('This party has no GM')).toHaveCount(0);
+
+    await bia.context.close();
+    await caio.context.close();
+  });
+
+  test('o botão de suporte leva ao formulário com a mesa; um party inválido é ignorado', async ({
+    page,
+    user: _,
+  }) => {
+    const partyId = crypto.randomUUID();
+    await page.goto(`/support?party=${partyId}`);
+    await expect(page.getByLabel('Message', { exact: true })).toHaveValue(
+      new RegExp(`ID: ${partyId}`),
+    );
+    await expect(page.getByLabel('Message Type')).toHaveText('Account / Access');
+
+    await page.goto('/support?party=nao-e-uuid');
+    await expect(page.getByLabel('Message', { exact: true })).toHaveValue('');
   });
 });

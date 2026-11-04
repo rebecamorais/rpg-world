@@ -50,6 +50,7 @@ function PartyRow({ party, children }: { party: PartySummary; children?: React.R
         ) : (
           <span className="text-title truncate">{party.name}</span>
         )}
+        {!party.hasGm && <span className="text-label text-warning-flare">{t('noGm')}</span>}
         {party.gmUsername && party.role === 'player' && (
           <span className="text-label text-muted-foreground">
             {t('gmBy', { username: party.gmUsername })}

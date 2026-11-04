@@ -24,6 +24,7 @@ import { usePartyChannel } from '@frontend/hooks/usePartyChannel';
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { MyPartyCharacters } from './MyPartyCharacters';
+import { PartyGmClaim } from './PartyGmClaim';
 import { PartyRequests } from './PartyRequests';
 import { PartyRoster } from './PartyRoster';
 import { RolePlayCard } from './RolePlayCard';
@@ -109,7 +110,12 @@ function PlayerView({ party, live }: { party: PartyView; live: boolean }) {
   };
 
   const leave = () => {
-    if (!currentUser || !window.confirm(t('mine.leaveConfirm'))) return;
+    if (!currentUser) return;
+    // Nobody else could open a party without a GM: its last player leaving deletes it
+    const lastPlayer =
+      !party.hasGm && party.people.filter((p) => p.status === 'active').length <= 1;
+    if (!window.confirm(t(lastPlayer ? 'mine.leaveConfirmLastPlayer' : 'mine.leaveConfirm')))
+      return;
     removeMember.mutate(currentUser.id, {
       onSuccess: () => {
         toast.success(t('mine.left'));
@@ -120,7 +126,11 @@ function PlayerView({ party, live }: { party: PartyView; live: boolean }) {
 
   return (
     <div className="flex flex-col gap-8">
-      <PlayerCombatPanel partyId={party.id} edition={party.edition} live={live} />
+      {party.hasGm ? (
+        <PlayerCombatPanel partyId={party.id} edition={party.edition} live={live} />
+      ) : (
+        <PartyGmClaim party={party} />
+      )}
 
       <section aria-labelledby="party-characters" className="flex flex-col gap-4">
         <h2 id="party-characters" className="text-heading">

@@ -86,7 +86,12 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
             {t('requested')}
           </p>
         )}
-        {status === 'invited' && (
+        {!invite.hasGm && (
+          <p role="status" className="text-warning-flare">
+            {t('withoutGm')}
+          </p>
+        )}
+        {status === 'invited' && invite.hasGm && (
           <>
             <p>{t('alreadyInvited')}</p>
             <Button onClick={acceptInvite} loading={isSending} className="self-start">
@@ -94,7 +99,7 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
             </Button>
           </>
         )}
-        {status === null && (
+        {status === null && invite.hasGm && (
           <Button onClick={requestJoin} loading={isSending} className="self-start">
             {t('request')}
           </Button>

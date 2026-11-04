@@ -76,6 +76,20 @@ export function useParty(partyId: string) {
     ...options,
   });
 
+  // The request to become the GM of a party without one: ask, vote on someone else's, give up
+  const claimGm = useMutation({
+    mutationFn: () => rpgWorldApi.post(`${base}/gm-claim`),
+    ...options,
+  });
+  const voteGmClaim = useMutation({
+    mutationFn: (accept: boolean) => rpgWorldApi.patch(`${base}/gm-claim`, { accept }),
+    ...options,
+  });
+  const cancelGmClaim = useMutation({
+    mutationFn: () => rpgWorldApi.delete(`${base}/gm-claim`),
+    ...options,
+  });
+
   return {
     party: query.data,
     isLoading: query.isLoading,
@@ -90,5 +104,8 @@ export function useParty(partyId: string) {
     acceptMember,
     removeMember,
     setMyCharacters,
+    claimGm,
+    voteGmClaim,
+    cancelGmClaim,
   };
 }

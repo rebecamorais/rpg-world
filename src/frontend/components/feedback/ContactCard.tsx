@@ -6,6 +6,8 @@
 
 import { useState } from 'react';
 
+import { useSearchParams } from 'next/navigation';
+
 import { MessageSquare } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -24,7 +26,13 @@ import { useSession } from '@frontend/hooks/useSession';
  * The support page's contact card, with a success screen once the message is sent. The e-mail
  * comes filled in for whoever is signed in (the page is prebuilt, so it arrives from the session).
  */
-export default function ContactCard({ initialEmail = '' }: { initialEmail?: string }) {
+export default function ContactCard({
+  initialEmail = '',
+  partyId,
+}: {
+  initialEmail?: string;
+  partyId?: string | null;
+}) {
   const t = useTranslations('feedback');
   const { user } = useSession();
   const email = initialEmail || user?.email || '';
@@ -65,8 +73,21 @@ export default function ContactCard({ initialEmail = '' }: { initialEmail?: stri
       </CardHeader>
       <CardContent>
         {/* Remounted when the session's e-mail arrives: the form only reads it when it mounts */}
-        <ContactForm key={email} initialEmail={email} onSent={() => setIsSuccess(true)} />
+        <ContactForm
+          key={email}
+          initialEmail={email}
+          partyId={partyId}
+          onSent={() => setIsSuccess(true)}
+        />
       </CardContent>
     </Card>
   );
+}
+
+/**
+ * The support page's card with the `?party=` of the "ask support" button. The page is prebuilt, so
+ * the parameter is read in the browser; its Suspense fallback is the plain card.
+ */
+export function SupportContactCard() {
+  return <ContactCard partyId={useSearchParams().get('party')} />;
 }

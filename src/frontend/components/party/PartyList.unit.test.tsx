@@ -77,6 +77,20 @@ describe('PartyList', () => {
     expect(within(asPlayer).getByRole('link', { name: /Mesa player/ })).toBeInTheDocument();
   });
 
+  it('mesa sem mestre aparece como "Sem mestre" e continua abrindo', async () => {
+    renderList(
+      mine({ asPlayer: [party('orfa', { gmUsername: null, hasGm: false, activePlayers: 2 })] }),
+    );
+
+    const asPlayer = await screen.findByRole('region', { name: t.asPlayer });
+    expect(within(asPlayer).getByText(t.noGm)).toBeInTheDocument();
+    expect(within(asPlayer).queryByText(/GM: @/)).not.toBeInTheDocument();
+    expect(within(asPlayer).getByRole('link', { name: /Mesa orfa/ })).toHaveAttribute(
+      'href',
+      '/parties/orfa',
+    );
+  });
+
   it('criar mesa fica numa seção própria, depois das mesas', async () => {
     renderList(mine({ asGm: [party('gm', { role: 'gm', status: 'gm' })] }));
 

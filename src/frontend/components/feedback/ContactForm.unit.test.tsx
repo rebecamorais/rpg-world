@@ -78,4 +78,31 @@ describe('ContactForm', () => {
     expect(screen.getByLabelText(t.messageLabel)).toHaveValue('A mimic ate my spellbook.');
     await waitFor(() => expect(turnstile.render).toHaveBeenCalledTimes(2));
   });
+
+  it('com o ID de uma mesa, abre como Conta / Acesso com o ID na mensagem, pronta para editar', async () => {
+    const partyId = '3f2b8c1e-5d4a-4b7e-9a10-2c6d8e0f1a23';
+    renderWithProviders(<ContactForm initialEmail="hero@example.com" partyId={partyId} />);
+
+    expect(screen.getByRole('combobox')).toHaveTextContent(t.types.account);
+    const message = screen.getByLabelText(t.messageLabel);
+    expect(message).toHaveValue(t.partyMessage.replace('{partyId}', partyId));
+
+    await userEvent.setup().type(message, ' Obrigada!');
+    await userEvent.setup().click(screen.getByRole('button', { name: t.submit }));
+    await waitFor(() =>
+      expect(submitFeedback).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'account',
+          message: expect.stringContaining(partyId),
+        }),
+      ),
+    );
+  });
+
+  it('ignora um party que não é UUID', () => {
+    renderWithProviders(<ContactForm partyId="não-é-uuid" />);
+
+    expect(screen.getByRole('combobox')).toHaveTextContent(t.types.feedback);
+    expect(screen.getByLabelText(t.messageLabel)).toHaveValue('');
+  });
 });
