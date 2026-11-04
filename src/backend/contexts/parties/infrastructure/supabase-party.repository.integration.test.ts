@@ -112,6 +112,7 @@ describe('SupabasePartyRepository — convites e membros (Integration)', () => {
       partyId,
       name: 'Mesa',
       gmUsername: null,
+      hasGm: true,
       myStatus: null,
     });
     expect(await repo.requestJoin(code)).toBe('requested');

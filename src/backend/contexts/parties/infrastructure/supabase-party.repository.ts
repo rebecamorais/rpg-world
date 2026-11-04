@@ -136,6 +136,7 @@ export class SupabasePartyRepository implements PartyRepo {
       partyId: row.party_id,
       name: row.name,
       gmUsername: row.gm_username,
+      hasGm: row.has_gm,
       myStatus: row.my_status as InvitePreview['myStatus'],
     };
   }

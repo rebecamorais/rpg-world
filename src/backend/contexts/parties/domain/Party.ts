@@ -38,6 +38,8 @@ export interface InvitePreview {
   partyId: string;
   name: string;
   gmUsername: string | null;
+  /** False once the GM's account is gone: nobody could approve a request, so the card won't offer one. */
+  hasGm: boolean;
   /** The opener's link to the party: none yet, a pending request or invite, member or GM. */
   myStatus: MemberStatus | 'gm' | null;
 }

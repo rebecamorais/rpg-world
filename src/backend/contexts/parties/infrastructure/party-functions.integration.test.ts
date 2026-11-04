@@ -51,7 +51,13 @@ describe('Funções das mesas (Integration)', () => {
     it('o preview do convite mostra nome e mestre; código trocado não acha nada', async () => {
       const { data } = await player.client.rpc('get_party_invite', { p_code: code });
       expect(data).toEqual([
-        { party_id: partyId, name: 'Mesa de Quinta', gm_username: gmName, my_status: null },
+        {
+          party_id: partyId,
+          name: 'Mesa de Quinta',
+          gm_username: gmName,
+          my_status: null,
+          has_gm: true,
+        },
       ]);
 
       await rotateCode();

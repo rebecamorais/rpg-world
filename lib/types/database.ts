@@ -716,6 +716,7 @@ export type Database = {
         Args: { p_code: string };
         Returns: {
           gm_username: string;
+          has_gm: boolean;
           my_status: string;
           name: string;
           party_id: string;

@@ -495,12 +495,18 @@ describe('Mesa sem mestre (Integration)', () => {
       expect(await partyRow(partyId)).not.toBeNull();
     });
 
-    it('get_party_invite devolve a mesa com gm_username nulo', async () => {
+    it('get_party_invite devolve a mesa com gm_username nulo e has_gm falso', async () => {
       const asStranger = await stranger.client.rpc('get_party_invite', { p_code: code });
       const asInvited = await otherPlayer.client.rpc('get_party_invite', { p_code: code });
 
       expect(asStranger.data).toEqual([
-        { party_id: partyId, name: 'Mesa de Quinta', gm_username: null, my_status: null },
+        {
+          party_id: partyId,
+          name: 'Mesa de Quinta',
+          gm_username: null,
+          my_status: null,
+          has_gm: false,
+        },
       ]);
       expect(asInvited.data?.[0].my_status).toBe('invited');
     });

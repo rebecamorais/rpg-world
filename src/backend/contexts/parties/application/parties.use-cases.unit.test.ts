@@ -205,7 +205,13 @@ describe('casos de uso das mesas', () => {
     });
 
     it('getInvite devolve o preview', async () => {
-      const preview = { partyId: 'p', name: 'Mesa', gmUsername: 'mestra', myStatus: null };
+      const preview = {
+        partyId: 'p',
+        name: 'Mesa',
+        gmUsername: 'mestra',
+        hasGm: true,
+        myStatus: null,
+      };
       repo.getInvite.mockResolvedValue(preview);
 
       expect(await new GetInviteUseCase(repo).execute('a'.repeat(32))).toEqual(preview);
