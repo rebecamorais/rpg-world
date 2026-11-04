@@ -772,7 +772,7 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: November 3, 2026",
+    "lastUpdated": "Last updated: November 4, 2026",
     "sections": {
       "data": {
         "title": "1. Data Collected",
@@ -797,11 +797,18 @@
       },
       "sharing": {
         "title": "3. Sharing",
-        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, the magic link, password reset and the contact form; and anonymous visit counts, with Cloudflare Web Analytics), <discord>Discord</discord> (where the support team receives the messages sent through the contact form: email, type, message and, if you are signed in, your account id) and <google>Google</google> (only if you sign in with Google). Your profile (username and avatar) and a summary of the characters you bring to a party (name, avatar, race, class and level) are seen by the people in that party; the GM also sees the sheet of those characters. The journal link and the party inventory are seen only by the GM and active players. The party name and picture show to anyone with the invite link, even without an account (that's what Discord and WhatsApp display when the link is pasted). Everything else stays visible only to you; avatar images are stored at a public address that is not listed anywhere."
+        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, the magic link, password reset and the contact form; and anonymous visit counts, with Cloudflare Web Analytics), <discord>Discord</discord> (where the support team receives the messages sent through the contact form: email, type, message and, if you are signed in, your account id) and <google>Google</google> (only if you sign in with Google). Your profile (username and avatar) and a summary of the characters you bring to a party (name, avatar, race, class and level) are seen by the people in that party; the GM also sees the sheet of those characters. In a party without a GM, an active player can become the GM with the agreement of all the other active players and, from then on, sees the sheets of the party's characters. Someone who does not answer that request can be removed from the party by support, after an email and 7 days without a reply, and that person's characters leave the party with them. The journal link and the party inventory are seen only by the GM and active players. The party name and picture show to anyone with the invite link, even without an account (that's what Discord and WhatsApp display when the link is pasted). Everything else stays visible only to you; avatar images are stored at a public address that is not listed anywhere."
       },
       "rights": {
         "title": "4. Your Rights",
-        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data through our <server>Discord server</server>, telling us your account's email. We will process your request within 5 business days."
+        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. You can delete your account at any time in Settings > Profile: you enter your username and password (if you only signed in with Google there is no password step) and we send a confirmation link to the account's email, valid for 1 hour. After the final button, deletion is immediate and cannot be undone. For your other rights, or if you cannot delete from there, contact us through the <support>support form</support> or on <server>Discord</server>; we reply within 5 business days.",
+        "deletionIntro": "When you delete your account:",
+        "deletionItems": [
+          "Your login, profile, characters and NPCs are deleted, with everything they hold. The images you uploaded lose their owner and a daily job removes them within 2 days; cached copies can last up to 1 day.",
+          "Parties where you are GM: if there are active players, the party stays with them and has no GM; without active players, the party is deleted. A party without a GM loses its picture and any ongoing combat. In other people's parties, your membership is deleted and your characters leave them.",
+          "What you put in the party chest and the journal link stay with the party.",
+          "In feedback, we remove your email and the link to your account; the text, type and date remain, and the text may contain what you wrote in it. Copies of messages sent to support on Discord and the text of feedback are deleted if you ask."
+        ]
       },
       "cookies": {
         "title": "5. Cookies",
@@ -809,7 +816,7 @@
       },
       "transfer": {
         "title": "6. International Data Transfer",
-        "content": "To operate the system, we use third-party infrastructure (such as <supabase>Supabase</supabase>, <vercel>Vercel</vercel>, <resend>Resend</resend> and <discord>Discord</discord>). As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. By using RPG World, you consent to this international transfer, conducted under strict security and encryption standards."
+        "content": "To operate the system, we use third-party infrastructure: <supabase>Supabase</supabase>, <vercel>Vercel</vercel>, <resend>Resend</resend>, <cloudflare>Cloudflare</cloudflare>, <discord>Discord</discord> and, only if you sign in with Google, <google>Google</google>. As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. This transfer is necessary to provide the service you asked for when you created the account (<lgpd>LGPD</lgpd>, art. 33, IX, combined with art. 7, V) and is carried out under strict security and encryption standards."
       },
       "retention": {
         "title": "7. Data Retention and Deletion",
@@ -817,7 +824,7 @@
       },
       "contact": {
         "title": "8. Contact and Data Controller",
-        "content": "For any questions regarding your privacy or to exercise your rights (<lgpd>LGPD</lgpd>), talk to the team on our <server>Discord server</server>. For matters about your account, prefer a direct message to the team over the public channels."
+        "content": "For any questions regarding your privacy or to exercise your rights (<lgpd>LGPD</lgpd>), talk to the team through the <support>support form</support> or on our <server>Discord server</server>. For matters about your account, prefer a direct message to the team over the public channels."
       }
     }
   },

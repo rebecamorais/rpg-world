@@ -17,6 +17,7 @@ const PRIVACY_LINKS = richLinks({
   resend: 'https://resend.com/legal/privacy-policy',
   cloudflare: 'https://www.cloudflare.com/privacypolicy/',
   discord: 'https://discord.com/privacy',
+  support: '/support',
 });
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
@@ -79,6 +80,14 @@ export default async function PrivacyPage({ params }: LocaleParams) {
           <p className="text-muted-foreground leading-relaxed">
             {t.rich('sections.rights.content', PRIVACY_LINKS)}
           </p>
+          <p className="text-muted-foreground mt-4 mb-2 leading-relaxed">
+            {t('sections.rights.deletionIntro')}
+          </p>
+          <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed">
+            {['0', '1', '2', '3'].map((key) => (
+              <li key={key}>{t(`sections.rights.deletionItems.${key}`)}</li>
+            ))}
+          </ul>
         </section>
 
         <section>

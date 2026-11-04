@@ -772,7 +772,7 @@
   },
   "privacy": {
     "title": "Política de Privacidade",
-    "lastUpdated": "Última atualização: 3 de novembro de 2026",
+    "lastUpdated": "Última atualização: 4 de novembro de 2026",
     "sections": {
       "data": {
         "title": "1. Dados Coletados",
@@ -797,11 +797,18 @@
       },
       "sharing": {
         "title": "3. Compartilhamento",
-        "content": "Nós não vendemos seus dados para terceiros. Para operar o RPG World usamos estes serviços: <supabase>Supabase</supabase> (banco de dados, login e armazenamento de imagens), <vercel>Vercel</vercel> (hospedagem), <resend>Resend</resend> (envio de e-mails), <cloudflare>Cloudflare Turnstile</cloudflare> (proteção contra robôs no cadastro, no link mágico, na recuperação de senha e no formulário de contato; e contagem anônima de visitas, com o Cloudflare Web Analytics), <discord>Discord</discord> (onde a equipe de suporte recebe as mensagens enviadas pelo formulário de contato: e-mail, tipo, mensagem e, se você estiver logado, o identificador da sua conta) e <google>Google</google> (só se você entrar com o Google). Seu perfil (nome de usuário e avatar) e um resumo dos personagens que você leva para uma mesa (nome, avatar, raça, classe e nível) são vistos pelas pessoas dessa mesa; o Mestre também vê a ficha desses personagens. O link do diário e o inventário da party são vistos só pelo Mestre e pelos jogadores ativos. O nome e a imagem da mesa aparecem para qualquer pessoa com o link de convite, mesmo sem conta (é o que o Discord e o WhatsApp mostram quando o link é colado). O resto continua visível só para você; as imagens de avatar ficam em um endereço público que não é listado em lugar nenhum."
+        "content": "Nós não vendemos seus dados para terceiros. Para operar o RPG World usamos estes serviços: <supabase>Supabase</supabase> (banco de dados, login e armazenamento de imagens), <vercel>Vercel</vercel> (hospedagem), <resend>Resend</resend> (envio de e-mails), <cloudflare>Cloudflare Turnstile</cloudflare> (proteção contra robôs no cadastro, no link mágico, na recuperação de senha e no formulário de contato; e contagem anônima de visitas, com o Cloudflare Web Analytics), <discord>Discord</discord> (onde a equipe de suporte recebe as mensagens enviadas pelo formulário de contato: e-mail, tipo, mensagem e, se você estiver logado, o identificador da sua conta) e <google>Google</google> (só se você entrar com o Google). Seu perfil (nome de usuário e avatar) e um resumo dos personagens que você leva para uma mesa (nome, avatar, raça, classe e nível) são vistos pelas pessoas dessa mesa; o Mestre também vê a ficha desses personagens. Numa mesa sem Mestre, um jogador ativo pode virar Mestre com o acordo de todos os outros jogadores ativos e, a partir daí, passa a ver a ficha dos personagens da mesa. Quem não responde a esse pedido pode ser retirado da mesa pelo suporte, depois de um e-mail e de 7 dias sem resposta, e os personagens dessa pessoa saem da mesa junto. O link do diário e o inventário da party são vistos só pelo Mestre e pelos jogadores ativos. O nome e a imagem da mesa aparecem para qualquer pessoa com o link de convite, mesmo sem conta (é o que o Discord e o WhatsApp mostram quando o link é colado). O resto continua visível só para você; as imagens de avatar ficam em um endereço público que não é listado em lugar nenhum."
       },
       "rights": {
         "title": "4. Seus Direitos",
-        "content": "De acordo com a <lgpd>LGPD</lgpd>, você tem o direito de acessar, corrigir ou excluir seus dados. Enquanto a funcionalidade de exclusão automática está em desenvolvimento, você pode solicitar a exclusão total da sua conta e de todos os dados associados pelo nosso <server>servidor no Discord</server>, informando o e-mail da conta. Processaremos sua solicitação em até 5 dias úteis."
+        "content": "De acordo com a <lgpd>LGPD</lgpd>, você tem o direito de acessar, corrigir ou excluir seus dados. Você pode excluir sua conta a qualquer momento em Configurações > Perfil: informa seu nome de usuário e sua senha (quem entrou só com o Google não tem a etapa da senha) e enviamos um link de confirmação para o e-mail da conta, válido por 1 hora. Depois do botão final, a exclusão é imediata e não pode ser desfeita. Para os demais direitos, ou se não conseguir excluir por lá, fale conosco pelo <support>formulário de suporte</support> ou pelo <server>Discord</server>; respondemos em até 5 dias úteis.",
+        "deletionIntro": "Ao excluir a conta:",
+        "deletionItems": [
+          "São apagados o login, o perfil, os personagens e os NPCs, com tudo o que têm. As imagens que você enviou ficam sem dono e uma rotina diária as remove em até 2 dias; cópias em cache podem durar até 1 dia.",
+          "Mesas em que você é Mestre: se houver jogadores ativos, a mesa fica sem Mestre e continua com eles; sem jogadores ativos, a mesa é apagada. Uma mesa sem Mestre perde a imagem e qualquer combate em andamento. Nas mesas dos outros, sua participação é apagada e seus personagens saem delas.",
+          "O que você colocou no baú da party e o link do diário ficam com a mesa.",
+          "Nos feedbacks, removemos seu e-mail e o vínculo com a conta; o texto, o tipo e a data permanecem, e o texto pode conter o que você escreveu nele. Cópias das mensagens enviadas ao suporte pelo Discord e o texto dos feedbacks são apagados se você pedir."
+        ]
       },
       "cookies": {
         "title": "5. Cookies",
@@ -809,7 +816,7 @@
       },
       "transfer": {
         "title": "6. Transferência Internacional de Dados",
-        "content": "Para o funcionamento do sistema, utilizamos infraestrutura de terceiros (como <supabase>Supabase</supabase>, <vercel>Vercel</vercel>, <resend>Resend</resend> e <discord>Discord</discord>). Como resultado, seus dados podem ser processados e armazenados em servidores localizados fora do Brasil, especificamente nos Estados Unidos. Ao utilizar o RPG World, você consente com essa transferência internacional, realizada sob rígidos padrões de segurança e criptografia."
+        "content": "Para o funcionamento do sistema, utilizamos infraestrutura de terceiros: <supabase>Supabase</supabase>, <vercel>Vercel</vercel>, <resend>Resend</resend>, <cloudflare>Cloudflare</cloudflare>, <discord>Discord</discord> e, só se você entrar com o Google, <google>Google</google>. Como resultado, seus dados podem ser processados e armazenados em servidores localizados fora do Brasil, especificamente nos Estados Unidos. Essa transferência é necessária para prestar o serviço que você pediu ao criar a conta (<lgpd>LGPD</lgpd>, art. 33, IX, combinado com o art. 7º, V) e é realizada sob rígidos padrões de segurança e criptografia."
       },
       "retention": {
         "title": "7. Retenção e Exclusão de Dados",
@@ -817,7 +824,7 @@
       },
       "contact": {
         "title": "8. Contato e Encarregado de Dados",
-        "content": "Para qualquer dúvida sobre sua privacidade ou para exercer seus direitos (<lgpd>LGPD</lgpd>), fale com a equipe pelo nosso <server>servidor no Discord</server>. Para assuntos da sua conta, prefira uma mensagem direta à equipe em vez dos canais públicos."
+        "content": "Para qualquer dúvida sobre sua privacidade ou para exercer seus direitos (<lgpd>LGPD</lgpd>), fale com a equipe pelo <support>formulário de suporte</support> ou pelo nosso <server>servidor no Discord</server>. Para assuntos da sua conta, prefira uma mensagem direta à equipe em vez dos canais públicos."
       }
     }
   },
