@@ -39,26 +39,48 @@ mestre apaga a mesa, o baú e o diário de todos os jogadores. Isso já acontece
 ## Excluir a conta
 
 **Tela:** seção "Zona de perigo" em `/settings/profile`. Antes de confirmar, mostra o que será
-apagado (personagens, NPCs e imagens) e a lista das mesas que ficam sem mestre. Para confirmar,
-digita o próprio username, como já se faz para excluir um personagem. Sem pedir senha: quem entra
-com Google ou link mágico pode não ter uma.
+apagado (personagens, NPCs e imagens) e a lista das mesas que ficam sem mestre ou que serão apagadas.
 
-**Servidor:** `DELETE /api/profile` com `withAuth`. Confere o username e chama
-`auth.admin.deleteUser` com `SupabaseFactory.createAdmin()`. O restante acontece no banco por
-cascata. Depois encerra a sessão, e a pessoa volta para a página inicial com um aviso.
+**Confirmação em duas etapas, quase um último login:**
+
+1. **No app:** a pessoa digita o username e a senha. O servidor confere os dois e envia o e-mail. A
+   senha é conferida com um cliente sem cookies, para não mexer na sessão atual. Nada é apagado aqui.
+2. **No e-mail:** um link de uso único, válido por 1 hora, abre uma página que mostra a conta e o
+   botão final de excluir. A exclusão só roda nesse botão (`POST`), nunca ao abrir o link, porque
+   antivírus e leitores de e-mail costumam abrir links sozinhos. O link funciona mesmo sem sessão,
+   já que muita gente abre o e-mail no celular. Depois do botão, apaga na hora e sem volta.
+
+**Quem não tem senha** (entrou só com Google ou link mágico): digita o username e confirma pelo
+e-mail. O servidor descobre isso sozinho, com uma função só para `service_role` que lê
+`auth.users.encrypted_password`. Não pode ser um "não tenho senha" na tela, porque qualquer um com a
+sessão aberta escolheria essa opção.
+
+**Pedir de novo:** um novo envio invalida o link anterior. Sair da conta não cancela o pedido, e o
+link vence sozinho.
+
+**Servidor:** o token fica só como hash, numa tabela sem acesso para `authenticated`, e sai com a
+conta. O envio usa o `EmailService` e o Resend, como os outros e-mails. O passo final chama
+`auth.admin.deleteUser` com `SupabaseFactory.createAdmin()`, e o restante acontece no banco por
+cascata. Depois encerra a sessão, se houver, e a pessoa volta para a página inicial com um aviso.
 
 **O que acontece com os dados:**
 
-| Dado                                    | Destino                                                        |
-| --------------------------------------- | -------------------------------------------------------------- |
-| Login e perfil                          | Apagados                                                       |
-| Personagens e NPCs, com o que têm       | Apagados (já é cascata); saem das mesas                        |
-| Imagens no bucket `avatars`             | Viram órfãs; o job diário `cleanup-avatars` apaga              |
-| Mesas como mestre, com jogadores ativos | Ficam sem mestre (abaixo)                                      |
-| Mesas como mestre, sem jogadores ativos | Apagadas                                                       |
-| Participação em mesas de outros         | Apagada; pedido pendente é reavaliado (abaixo)                 |
-| Itens já colocados no baú da party      | Ficam: são da mesa                                             |
-| Feedbacks ligados à conta               | Apagados. Hoje `ON DELETE SET NULL` manteria o e-mail guardado |
+| Dado                                    | Destino                                                     |
+| --------------------------------------- | ----------------------------------------------------------- |
+| Login e perfil                          | Apagados                                                    |
+| Personagens e NPCs, com o que têm       | Apagados (já é cascata); saem das mesas                     |
+| Imagens no bucket `avatars`             | Viram órfãs; o job diário `cleanup-avatars` apaga           |
+| Mesas como mestre, com jogadores ativos | Ficam sem mestre (abaixo)                                   |
+| Mesas como mestre, sem jogadores ativos | Apagadas                                                    |
+| Participação em mesas de outros         | Apagada; pedido pendente é reavaliado (abaixo)              |
+| Itens já colocados no baú da party      | Ficam: são da mesa                                          |
+| Feedbacks da conta                      | Anonimizados: sem conta e sem e-mail, o texto fica (abaixo) |
+
+**Feedbacks:** a coluna `email` passa a aceitar `NULL`. Um gatilho `BEFORE DELETE` em `profile` limpa
+o e-mail dos feedbacks da conta, pelo `user_id` e também pelo e-mail dela, porque quem envia sem estar
+logado não fica com `user_id`. Assim vale também para uma exclusão manual. **O texto continua
+guardado e pode ter dados pessoais que a própria pessoa escreveu**, então a política não chama isso
+de anônimo sem esse aviso; quem quiser o texto apagado pede ao suporte.
 
 As mensagens de suporte já enviadas ao Discord não são apagadas automaticamente. A política diz isso.
 
@@ -108,7 +130,7 @@ novo e pode ser aprovado. Se quem pediu sai, o pedido é cancelado.
 
 **Ao virar mestre:** `gm_id` passa a ser o da pessoa, e ela deixa `party_members`, porque o mestre
 não é linha nessa tabela. Os personagens dela saem da mesa, sem perder a ficha, como acontece com
-qualquer personagem que sai. Quem já é mestre de 5 mesas não pode pedir.
+qualquer personagem que sai. Quem já é mestre de 5 mesas não consegue assumir: o botão fica desativado, com o motivo. A conta também é conferida na aprovação, porque a pessoa pode ter criado mesas nesse meio-tempo; nesse caso, o pedido é cancelado. Um jogador único nessa situação continua sem poder assumir até sair de uma das mesas dele.
 
 **Banco:** tabelas `party_gm_claims` (`party_id` PK, `candidate_id`, `created_at`) e
 `party_gm_claim_votes` (`party_id`, `user_id`, `created_at`), sem escrita direta para
@@ -117,9 +139,15 @@ as transições precisam de bloqueio para dois votos simultâneos não se perder
 
 ## Quando alguém não responde
 
-Depois de **7 dias** sem resolver, aparece para os jogadores da mesa o botão **Pedir ajuda ao
+Depois de **1 dia** com um pedido aberto, o botão fica ativo para os jogadores da mesa: **Pedir ajuda ao
 suporte**. Ele abre o formulário de contato (`/support`), que já envia ao Discord, com o tipo, a
 mesa e o pedido já preenchidos.
+
+Nada impede o jogador de falar com o suporte antes disso; o botão só facilita.
+
+**Antes de tirar alguém**, o suporte escreve para o e-mail do jogador que não respondeu e dá **7 dias**
+para ele responder ao pedido na mesa. Sem resposta, tira. Um dia é pouco para perder o lugar numa mesa
+que joga uma vez por semana.
 
 O suporte confere e resolve à mão: **tira da mesa o jogador que não responde**. Os personagens dele
 saem da mesa (`drop_party_characters_of_member` já faz isso), a ficha continua com ele, e o pedido é
@@ -140,11 +168,11 @@ Em `en` e `pt`; `es` e `sv` seguem pelo Crowdin. Atualiza a data. **Esta redaç�
 não substitui revisão jurídica.**
 
 - **Seção 4, Seus Direitos:** troca "enquanto a funcionalidade está em desenvolvimento" por:
-  "Você pode excluir sua conta a qualquer momento em Configurações > Perfil. A exclusão é imediata e
-  não pode ser desfeita. Para os demais direitos, ou se não conseguir excluir por lá, fale conosco
+  "Você pode excluir sua conta a qualquer momento em Configurações > Perfil, confirmando por e-mail.
+  Depois da confirmação, a exclusão é imediata e não pode ser desfeita. Para os demais direitos, ou se não conseguir excluir por lá, fale conosco
   pelo [formulário de suporte] ou pelo [Discord]; respondemos em até 5 dias úteis."
 - **Seção 4, o que acontece ao excluir:** novo trecho. Dados apagados; imagens saem em até 2 dias;
-  mensagens já enviadas ao suporte pelo Discord podem continuar lá até serem apagadas a pedido; o
+  feedbacks perdem a conta e o e-mail, mas o texto fica; mensagens já enviadas ao suporte pelo Discord podem continuar lá até serem apagadas a pedido; o
   que você colocou no baú e o link do diário ficam com a mesa; mesa com jogadores fica sem mestre.
 - **Seção 6, Transferência Internacional:** tira "ao utilizar, você consente". Passa a dizer que a
   transferência é necessária para prestar o serviço que você pediu (LGPD, art. 33, IX, combinado com
@@ -162,8 +190,8 @@ bloqueia o merge (decisão da Rebeca): tudo vai em um PR só, e a revisão vem d
   vazio; pedido, votos, recusa, jogador único, limite de 5, votos simultâneos e reavaliação.
 - **Exclusão (integração):** conta de mestre com e sem jogadores; conta de jogador com pedido
   pendente; feedbacks; o job de órfãos pega as imagens.
-- **Rota (unit):** sem sessão, username errado e sucesso.
-- **Tela (e2e):** excluir e voltar à página inicial; pedido e acordo com duas contas.
+- **Rotas (unit):** sem sessão, username errado, senha errada, sem senha, token vencido, usado ou substituído, abrir o link não apaga, e sucesso.
+- **Tela (e2e):** pedir, abrir o link do e-mail, excluir e voltar à página inicial; pedido e acordo com duas contas.
 
 ## Para quem constrói
 
@@ -192,8 +220,11 @@ Decisão da Rebeca: **este PR deixa tudo pronto, sem pendência para outro PR.**
 vai para o suporte pelo Discord, que tira a pessoa da mesa; recusa não vai para o suporte; apaga na
 hora; sem exportação por enquanto; revisão jurídica não bloqueia; o PR deixa tudo pronto.
 
-**Minhas, para conferir:** `NULL` em vez de ID 0; acordo de **todos**; 7 dias; jogador único vira
-mestre na hora; recusa cancela e pode pedir de novo; confirmar pelo username sem senha; encerrar o
-combate; apagar mesa sem jogadores ativos, inclusive quando o último sair depois; bloquear entradas sem mestre; personagens do novo mestre
-saem da mesa; limite de 5 vale ao assumir; itens do baú ficam; apagar os feedbacks; base legal da
-seção 6.
+**Dela, nesta revisão:** username, senha e confirmação por e-mail; botão de suporte ativo depois de 1
+dia; quem tem 5 mesas não assume; feedbacks anonimizados em vez de apagados.
+
+**Minhas, para conferir:** `NULL` em vez de ID 0; acordo de **todos**; jogador único vira mestre na
+hora; recusa cancela e pode pedir de novo; quem não tem senha confirma só por e-mail; link vale 1 hora e
+funciona sem sessão; suporte espera 7 dias antes de tirar alguém; encerrar o combate; apagar mesa sem
+jogadores ativos, inclusive quando o último sair depois; bloquear entradas sem mestre; personagens do
+novo mestre saem da mesa; itens do baú ficam; texto dos feedbacks fica; base legal da seção 6.
