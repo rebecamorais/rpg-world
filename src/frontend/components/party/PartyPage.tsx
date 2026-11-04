@@ -109,19 +109,22 @@ function PlayerView({ party, live }: { party: PartyView; live: boolean }) {
     }
   };
 
-  const leave = () => {
+  const leave = async () => {
     if (!currentUser) return;
     // Nobody else could open a party without a GM: its last player leaving deletes it
     const lastPlayer =
       !party.hasGm && party.people.filter((p) => p.status === 'active').length <= 1;
     if (!window.confirm(t(lastPlayer ? 'mine.leaveConfirmLastPlayer' : 'mine.leaveConfirm')))
       return;
-    removeMember.mutate(currentUser.id, {
-      onSuccess: () => {
-        toast.success(t('mine.left'));
-        router.push('/parties');
-      },
-    });
+    // mutateAsync, not mutate's callbacks: the party reload that follows answers "not found" and
+    // unmounts this panel before a callback would run
+    try {
+      await removeMember.mutateAsync(currentUser.id);
+      toast.success(t('mine.left'));
+      router.push('/parties');
+    } catch {
+      // useParty already shows the error
+    }
   };
 
   return (

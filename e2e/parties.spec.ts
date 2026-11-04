@@ -354,6 +354,7 @@ test.describe('mesas', () => {
     await bia.page.goto(partyUrl(partyId));
     await expect(bia.page.getByText('This party has no GM')).toBeVisible();
     await expect(bia.page.getByRole('list', { name: 'Combat order' })).toHaveCount(0);
+    bia.page.once('dialog', (dialog) => dialog.accept());
     await (await hydrated(bia.page.getByRole('button', { name: 'I want to be the GM' }))).click();
     await expect(bia.page.getByText('You asked to become the GM of this party.')).toBeVisible();
     await expect(bia.page.getByRole('button', { name: 'Ask support for help' })).toBeDisabled();
