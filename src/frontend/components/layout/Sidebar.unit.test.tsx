@@ -23,6 +23,8 @@ const party = (id: string, role: PartySummary['role']): PartySummary => ({
   status: role === 'gm' ? 'gm' : 'active',
   gmUsername: null,
   pendingRequests: 0,
+  activePlayers: 0,
+  hasGm: true,
 });
 
 vi.mock('@frontend/hooks/useParties', () => ({

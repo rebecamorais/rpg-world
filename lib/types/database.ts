@@ -3,6 +3,44 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      account_deletion_requests: {
+        Row: {
+          expires_at: string;
+          token_hash: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          expires_at: string;
+          token_hash: string;
+          user_id: string;
+        };
+        Update: {
+          expires_at?: string;
+          token_hash?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      account_deletion_throttle: {
+        Row: {
+          failed_password_at: string[];
+          last_email_at: string | null;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          failed_password_at?: string[];
+          last_email_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          failed_password_at?: string[];
+          last_email_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       character_lore: {
         Row: {
           age: string | null;
@@ -308,7 +346,7 @@ export type Database = {
       feedback: {
         Row: {
           created_at: string;
-          email: string;
+          email: string | null;
           id: string;
           message: string;
           status: string;
@@ -318,7 +356,7 @@ export type Database = {
         ComputedFields: never;
         Insert: {
           created_at?: string;
-          email: string;
+          email?: string | null;
           id?: string;
           message: string;
           status?: string;
@@ -327,7 +365,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
-          email?: string;
+          email?: string | null;
           id?: string;
           message?: string;
           status?: string;
@@ -381,7 +419,7 @@ export type Database = {
         Row: {
           created_at: string;
           edition: string;
-          gm_id: string;
+          gm_id: string | null;
           id: string;
           image_url: string | null;
           name: string;
@@ -392,7 +430,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           edition?: string;
-          gm_id: string;
+          gm_id?: string | null;
           id?: string;
           image_url?: string | null;
           name: string;
@@ -402,7 +440,7 @@ export type Database = {
         Update: {
           created_at?: string;
           edition?: string;
-          gm_id?: string;
+          gm_id?: string | null;
           id?: string;
           image_url?: string | null;
           name?: string;
@@ -447,6 +485,67 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'parties';
             referencedColumns: ['id'];
+          },
+        ];
+      };
+      party_gm_claim_votes: {
+        Row: {
+          created_at: string;
+          party_id: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          party_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          party_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'party_gm_claim_votes_party_id_fkey';
+            columns: ['party_id'];
+            isOneToOne: false;
+            referencedRelation: 'party_gm_claims';
+            referencedColumns: ['party_id'];
+          },
+          {
+            foreignKeyName: 'party_gm_claim_votes_party_id_user_id_fkey';
+            columns: ['party_id', 'user_id'];
+            isOneToOne: true;
+            referencedRelation: 'party_members';
+            referencedColumns: ['party_id', 'user_id'];
+          },
+        ];
+      };
+      party_gm_claims: {
+        Row: {
+          candidate_id: string;
+          created_at: string;
+          party_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          candidate_id: string;
+          created_at?: string;
+          party_id: string;
+        };
+        Update: {
+          candidate_id?: string;
+          created_at?: string;
+          party_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'party_gm_claims_party_id_candidate_id_fkey';
+            columns: ['party_id', 'candidate_id'];
+            isOneToOne: false;
+            referencedRelation: 'party_members';
+            referencedColumns: ['party_id', 'user_id'];
           },
         ];
       };
@@ -594,6 +693,12 @@ export type Database = {
         };
       };
       auth_user_exists: { Args: { p_email: string }; Returns: boolean };
+      auth_user_has_password: { Args: { p_user_id: string }; Returns: boolean };
+      auth_user_id_exists: { Args: { p_user_id: string }; Returns: boolean };
+      cancel_party_gm_claim: { Args: { p_party_id: string }; Returns: undefined };
+      claim_account_deletion_email: { Args: { p_user_id: string }; Returns: boolean };
+      claim_account_deletion_password_attempt: { Args: { p_user_id: string }; Returns: boolean };
+      claim_party_gm: { Args: { p_party_id: string }; Returns: string };
       duplicate_character: { Args: { p_character_id: string; p_name: string }; Returns: string };
       encounter_turns: {
         Args: { p_party_id: string };
@@ -611,6 +716,7 @@ export type Database = {
         Args: { p_code: string };
         Returns: {
           gm_username: string;
+          has_gm: boolean;
           my_status: string;
           name: string;
           party_id: string;
@@ -620,7 +726,9 @@ export type Database = {
       my_parties: {
         Args: Record<PropertyKey, never>;
         Returns: {
+          active_players: number;
           gm_username: string;
+          has_gm: boolean;
           name: string;
           party_id: string;
           pending_requests: number;
@@ -630,6 +738,15 @@ export type Database = {
         }[];
       };
       orphan_avatar_objects: { Args: { min_age?: string }; Returns: string[] };
+      party_gm_claim: {
+        Args: { p_party_id: string };
+        Returns: {
+          candidate_id: string;
+          candidate_username: string;
+          created_at: string;
+          pending_user_ids: string[];
+        }[];
+      };
       party_invite_card: {
         Args: { p_code: string };
         Returns: {
@@ -659,6 +776,10 @@ export type Database = {
           theme_color: string;
         }[];
       };
+      release_account_deletion_password_attempt: {
+        Args: { p_user_id: string };
+        Returns: undefined;
+      };
       request_party_join: { Args: { p_code: string }; Returns: string };
       set_encounter_order: {
         Args: { p_participant_ids: string[]; p_party_id: string };
@@ -669,6 +790,20 @@ export type Database = {
         Returns: boolean;
       };
       start_encounter: { Args: { p_party_id: string }; Returns: undefined };
+      support_party_gm_claim: {
+        Args: { p_party_id: string };
+        Returns: {
+          candidate_id: string;
+          created_at: string;
+          pending_email: string;
+          pending_user_id: string;
+        }[];
+      };
+      support_remove_unresponsive_member: {
+        Args: { p_party_id: string; p_user_id: string };
+        Returns: string;
+      };
+      vote_party_gm_claim: { Args: { p_accept: boolean; p_party_id: string }; Returns: string };
     };
     Enums: {
       rpg_system: 'dnd_5e' | 'ezd6' | 'pathfinder_2e';

@@ -1,7 +1,13 @@
 import { AuthError, SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
-import { AuthRepository, EmailLinkType } from '../../domain/AuthRepository';
+import { SupabaseFactory } from '@lib/supabase';
+
+import {
+  AuthRepository,
+  DeleteUserDatabaseError,
+  EmailLinkType,
+} from '../../domain/AuthRepository';
 import { User } from '../../domain/User';
 import { UserError, UserErrorCode, UserErrorCodes } from '../../domain/UserError';
 
@@ -55,9 +61,13 @@ export class SupabaseAuthRepository implements AuthRepository {
    */
   private sessionUser: Promise<User | null> | undefined;
 
+  /** Same lifetime as sessionUser: one lookup per request for each account. */
+  private readonly existingAccounts = new Map<string, Promise<boolean>>();
+
   constructor(
     private readonly authClient: SupabaseClient,
     private readonly dbClient: SupabaseClient,
+    private readonly createIsolatedClient: () => SupabaseClient = SupabaseFactory.createAnon,
   ) {}
 
   async generateSignUpLink(email: string, password: string, confirmUrl: string): Promise<string> {
@@ -191,5 +201,70 @@ export class SupabaseAuthRepository implements AuthRepository {
     if (error) {
       throw authFailure(error, 'Failed to sign out');
     }
+  }
+
+  accountExists(userId: string): Promise<boolean> {
+    let exists = this.existingAccounts.get(userId);
+    if (!exists) {
+      exists = this.readAccountExists(userId);
+      this.existingAccounts.set(userId, exists);
+    }
+    return exists;
+  }
+
+  private async readAccountExists(userId: string): Promise<boolean> {
+    const { data, error } = await this.dbClient.rpc('auth_user_id_exists', { p_user_id: userId });
+
+    // A database hiccup must not log everyone out; the JWT itself was already verified
+    if (error) {
+      console.error('Failed to check if the account exists:', error.message);
+      return true;
+    }
+
+    return data === true;
+  }
+
+  async hasPassword(userId: string): Promise<boolean> {
+    const { data, error } = await this.dbClient.rpc('auth_user_has_password', {
+      p_user_id: userId,
+    });
+
+    if (error) {
+      throw new Error(`Failed to check password: ${error.message}`);
+    }
+
+    return data === true;
+  }
+
+  /**
+   * A sign-in on a throwaway client without cookies, so the session of this request stays as it is.
+   * The session the sign-in opened is ended right away.
+   */
+  async verifyPassword(email: string, password: string): Promise<boolean> {
+    const client = this.createIsolatedClient();
+    const { error } = await client.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      const code = error.code ? EXPECTED_AUTH_ERRORS[error.code] : undefined;
+      if (code === UserErrorCodes.SIGNIN_INVALID_CREDENTIALS) return false;
+      throw authFailure(error, 'Failed to verify password');
+    }
+
+    const { error: signOutError } = await client.auth.signOut({ scope: 'local' });
+    if (signOutError) {
+      console.error('Failed to end the password check session:', signOutError.message);
+    }
+
+    return true;
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const { error } = await this.dbClient.auth.admin.deleteUser(userId);
+    if (!error) return;
+
+    if (error.status === 500) {
+      throw new DeleteUserDatabaseError(error.message);
+    }
+    throw authFailure(error, 'Failed to delete user');
   }
 }

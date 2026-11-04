@@ -8,6 +8,38 @@ type Session = Awaited<ReturnType<typeof createSignedInClient>>;
 
 const admin = () => SupabaseFactory.createAdmin();
 
+type AdminWithHold = {
+  schema(name: 'test_helpers'): {
+    rpc(
+      fn: 'run_and_hold',
+      args: { p_sql: string; p_seconds: number },
+    ): PromiseLike<{ error: { message: string } | null }>;
+  };
+};
+
+/**
+ * Runs `sql` in a transaction that stays open while `during` runs, then commits, the way a slower
+ * request would overlap with `during`. Reports whether the transaction was still open when `during`
+ * finished, which is how a test sees that something waited (or did not wait) for its locks.
+ */
+export async function whileTransactionOpen<T>(sql: string, during: () => PromiseLike<T>) {
+  const holder = (admin() as unknown as AdminWithHold)
+    .schema('test_helpers')
+    .rpc('run_and_hold', { p_sql: sql, p_seconds: 2 });
+  let committed = false;
+  const held = Promise.resolve(holder).then(({ error }) => {
+    if (error) throw new Error(error.message);
+    committed = true;
+  });
+
+  // Time for the request to reach the database and take its locks
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  const result = await during();
+  const finishedBeforeCommit = !committed;
+  await held;
+  return { result, finishedBeforeCommit };
+}
+
 /** A party created by `gm` through their own client (RLS applies). */
 export async function createParty(gm: Session, name = 'Mesa de Quinta') {
   const { data, error } = await gm.client

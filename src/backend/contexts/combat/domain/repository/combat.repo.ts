@@ -59,8 +59,8 @@ export interface ParticipantPatch {
  * answer `false` when nothing was allowed to change.
  */
 export interface CombatRepo {
-  /** Null when the party doesn't exist or the person has no link to it. */
-  findPartyGm(partyId: string): Promise<string | null>;
+  /** Null when the party doesn't exist or the person has no link to it; `gmId` is null without a GM. */
+  findPartyGm(partyId: string): Promise<{ gmId: string | null } | null>;
   /** The GM's view of the combat; null without one (or for anyone but the GM). */
   findEncounter(partyId: string): Promise<EncounterRecord | null>;
   sheets(characterIds: string[]): Promise<CombatSheet[]>;

@@ -12,6 +12,11 @@ import { InviteByUsernameUseCase } from './application/invite-by-username.use-ca
 import { IsGmOfCharacterUseCase } from './application/is-gm-of-character.use-case';
 import { ListMyPartiesUseCase } from './application/list-my-parties.use-case';
 import {
+  CancelGmClaimUseCase,
+  ClaimPartyGmUseCase,
+  VoteGmClaimUseCase,
+} from './application/party-gm-claim.use-cases';
+import {
   GetInviteCardUseCase,
   RemovePartyImageUseCase,
   UploadPartyImageUseCase,
@@ -49,6 +54,9 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
   const getInviteCard = new GetInviteCardUseCase(repository);
   const uploadImage = new UploadPartyImageUseCase(repository, storage);
   const removeImage = new RemovePartyImageUseCase(repository);
+  const claimGm = new ClaimPartyGmUseCase(repository);
+  const voteGmClaim = new VoteGmClaimUseCase(repository);
+  const cancelGmClaim = new CancelGmClaimUseCase(repository);
 
   return {
     listMine: listMyParties.execute.bind(listMyParties),
@@ -67,6 +75,9 @@ export const createPartyContext = (dbClient: SupabaseClient): PartyContext => {
     setJournal: setJournal.execute.bind(setJournal),
     uploadImage: uploadImage.execute.bind(uploadImage),
     removeImage: removeImage.execute.bind(removeImage),
+    claimGm: claimGm.execute.bind(claimGm),
+    voteGmClaim: voteGmClaim.execute.bind(voteGmClaim),
+    cancelGmClaim: cancelGmClaim.execute.bind(cancelGmClaim),
     setMyCharacters: setMyCharacters.execute.bind(setMyCharacters),
     isGmOfCharacter: isGmOfCharacter.execute.bind(isGmOfCharacter),
   };

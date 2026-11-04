@@ -17,6 +17,8 @@ export const api = {
     callbackExchange: vi.fn(),
     verifyEmailLink: vi.fn(),
     signOut: vi.fn(),
+    requestAccountDeletion: vi.fn(),
+    deleteAccount: vi.fn(),
   },
   charactersApi: {
     getById: vi.fn(),
@@ -64,6 +66,9 @@ export const api = {
     setJournal: vi.fn(),
     uploadImage: vi.fn(),
     removeImage: vi.fn(),
+    claimGm: vi.fn(),
+    voteGmClaim: vi.fn(),
+    cancelGmClaim: vi.fn(),
   },
 };
 

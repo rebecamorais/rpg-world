@@ -42,7 +42,7 @@ describe('SupabaseCombatRepository (Integration)', () => {
   });
 
   it('fluxo do mestre: preparar, pôr 1 jogador e 3 goblins, ordenar, começar e passar 2 turnos', async () => {
-    expect(await repo.findPartyGm(partyId)).toBe(gm.userId);
+    expect(await repo.findPartyGm(partyId)).toEqual({ gmId: gm.userId });
     expect(await repo.findEncounter(partyId)).toBeNull();
     expect(await repo.partyCharacterIds(partyId)).toEqual([heroId]);
     expect(await repo.enemySheet(goblinId)).toEqual({ name: 'Goblin' });

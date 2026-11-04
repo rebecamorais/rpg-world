@@ -17,6 +17,10 @@ export interface PartySummary {
   gmUsername: string | null;
   /** Join requests waiting for the GM (0 for players). */
   pendingRequests: number;
+  /** Members with status 'active' (the GM not counted). */
+  activePlayers: number;
+  /** False once the GM's account is gone; gmUsername is null then, and also for a GM with no username chosen. */
+  hasGm: boolean;
 }
 
 export interface MyParties {
@@ -34,6 +38,8 @@ export interface InvitePreview {
   partyId: string;
   name: string;
   gmUsername: string | null;
+  /** False once the GM's account is gone: nobody could approve a request, so the card won't offer one. */
+  hasGm: boolean;
   /** The opener's link to the party: none yet, a pending request or invite, member or GM. */
   myStatus: MemberStatus | 'gm' | null;
 }

@@ -10,7 +10,12 @@ import { Database } from '@database-types';
 import { InviteCard, InvitePreview, MemberStatus, PartySummary } from '../domain/Party';
 import { PartyError, PartyErrorCode, PartyErrorCodes } from '../domain/PartyError';
 import { PartyPerson, RosterCharacter } from '../domain/PartyView';
-import { PartyRecord, PartyRepo } from '../domain/repository/party.repo';
+import {
+  GmClaimRecord,
+  GmClaimStatus,
+  PartyRecord,
+  PartyRepo,
+} from '../domain/repository/party.repo';
 import { RolePlayLore, RolePlaySheet } from '../domain/role-play-card';
 
 // The party functions and triggers raise these messages (see the party migrations)
@@ -21,6 +26,12 @@ const DATABASE_ERRORS: Record<string, PartyErrorCode> = {
   party_user_not_found: PartyErrorCodes.USER_NOT_FOUND,
   party_gm_cannot_join: PartyErrorCodes.GM_CANNOT_JOIN,
   party_already_member: PartyErrorCodes.ALREADY_MEMBER,
+  party_has_gm: PartyErrorCodes.HAS_GM,
+  party_without_gm: PartyErrorCodes.WITHOUT_GM,
+  party_not_active_member: PartyErrorCodes.NOT_ACTIVE_MEMBER,
+  party_claim_exists: PartyErrorCodes.CLAIM_EXISTS,
+  party_claim_not_found: PartyErrorCodes.CLAIM_NOT_FOUND,
+  party_cannot_vote: PartyErrorCodes.CANNOT_VOTE,
 };
 
 // RLS refusing an insert, or a character id that doesn't exist
@@ -53,6 +64,8 @@ export class SupabasePartyRepository implements PartyRepo {
       status: row.status as MemberStatus | 'gm',
       gmUsername: row.gm_username,
       pendingRequests: row.pending_requests,
+      activePlayers: row.active_players,
+      hasGm: row.has_gm,
     }));
   }
 
@@ -123,6 +136,7 @@ export class SupabasePartyRepository implements PartyRepo {
       partyId: row.party_id,
       name: row.name,
       gmUsername: row.gm_username,
+      hasGm: row.has_gm,
       myStatus: row.my_status as InvitePreview['myStatus'],
     };
   }
@@ -226,6 +240,41 @@ export class SupabasePartyRepository implements PartyRepo {
       .maybeSingle();
     if (error) fail('read invite code', error);
     return data?.code ?? null;
+  }
+
+  async gmClaim(partyId: string): Promise<GmClaimRecord | null> {
+    const { data, error } = await this.client.rpc('party_gm_claim', { p_party_id: partyId });
+    if (error) fail('read GM request', error);
+
+    const row = data[0];
+    if (!row) return null;
+    return {
+      candidateId: row.candidate_id,
+      // Typed string by the generator, but NULL until the person picks a username
+      candidateUsername: (row.candidate_username as string | null) ?? null,
+      createdAt: row.created_at,
+      pendingUserIds: row.pending_user_ids,
+    };
+  }
+
+  async claimGm(partyId: string): Promise<GmClaimStatus> {
+    const { data, error } = await this.client.rpc('claim_party_gm', { p_party_id: partyId });
+    if (error) fail('ask to become GM', error);
+    return data as GmClaimStatus;
+  }
+
+  async voteGmClaim(partyId: string, accept: boolean): Promise<GmClaimStatus> {
+    const { data, error } = await this.client.rpc('vote_party_gm_claim', {
+      p_party_id: partyId,
+      p_accept: accept,
+    });
+    if (error) fail('vote on GM request', error);
+    return data as GmClaimStatus;
+  }
+
+  async cancelGmClaim(partyId: string): Promise<void> {
+    const { error } = await this.client.rpc('cancel_party_gm_claim', { p_party_id: partyId });
+    if (error) fail('cancel GM request', error);
   }
 
   async rolePlaySheets(characterIds: string[]) {

@@ -8,10 +8,22 @@ export interface PartyRecord {
   id: string;
   name: string;
   system: string;
-  gmId: string;
+  /** Null when the GM deleted their account and the party lives on without one. */
+  gmId: string | null;
   edition: Edition;
   imageUrl: string | null;
 }
+
+/** What the database knows of an open request to become GM. */
+export interface GmClaimRecord {
+  candidateId: string;
+  candidateUsername: string | null;
+  createdAt: string;
+  pendingUserIds: string[];
+}
+
+/** Where a request stands after asking or voting; `cancelled` is a refusal. */
+export type GmClaimStatus = 'pending' | 'approved' | 'cancelled';
 
 /**
  * Acts as the signed-in user: the database decides who may do what (RLS and the party functions),
@@ -51,6 +63,14 @@ export interface PartyRepo {
   journalDocId(partyId: string): Promise<string | null>;
   /** Links the GM's journal doc, or unlinks it with null. */
   setJournal(partyId: string, docId: string | null): Promise<void>;
+  /** Null when there is no open request, or the person isn't an active member. */
+  gmClaim(partyId: string): Promise<GmClaimRecord | null>;
+  /** An active player asks to become the GM of a party without one. */
+  claimGm(partyId: string): Promise<GmClaimStatus>;
+  /** An active player other than the candidate accepts or refuses; a refusal ends the request. */
+  voteGmClaim(partyId: string, accept: boolean): Promise<GmClaimStatus>;
+  /** The candidate gives up. */
+  cancelGmClaim(partyId: string): Promise<void>;
   /** The person's own characters; any other is refused (CHARACTER_NOT_ALLOWED). */
   addCharacters(partyId: string, characterIds: string[]): Promise<void>;
   removeCharacters(partyId: string, characterIds: string[]): Promise<void>;

@@ -50,6 +50,7 @@ function PartyRow({ party, children }: { party: PartySummary; children?: React.R
         ) : (
           <span className="text-title truncate">{party.name}</span>
         )}
+        {!party.hasGm && <span className="text-label text-warning-flare">{t('noGm')}</span>}
         {party.gmUsername && party.role === 'player' && (
           <span className="text-label text-muted-foreground">
             {t('gmBy', { username: party.gmUsername })}
@@ -101,14 +102,17 @@ export default function PartyList() {
                 >
                   {t('decline')}
                 </Button>
-                <Button
-                  size="sm"
-                  disabled={isResponding}
-                  onClick={() => respond({ partyId: party.id, userId, accept: true })}
-                >
-                  <AppIcon name="Check" size={16} aria-hidden="true" />
-                  {t('accept')}
-                </Button>
+                {/* Nobody joins a party without a GM: accepting would always fail */}
+                {party.hasGm && (
+                  <Button
+                    size="sm"
+                    disabled={isResponding}
+                    onClick={() => respond({ partyId: party.id, userId, accept: true })}
+                  >
+                    <AppIcon name="Check" size={16} aria-hidden="true" />
+                    {t('accept')}
+                  </Button>
+                )}
               </div>
             </PartyRow>
           ))}

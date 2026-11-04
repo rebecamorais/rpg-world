@@ -27,6 +27,8 @@ const party = (id: string, overrides: Partial<PartySummary> = {}): PartySummary 
   status: 'active',
   gmUsername: 'mestra',
   pendingRequests: 0,
+  activePlayers: 0,
+  hasGm: true,
   ...overrides,
 });
 
@@ -75,6 +77,20 @@ describe('PartyList', () => {
     expect(within(asPlayer).getByRole('link', { name: /Mesa player/ })).toBeInTheDocument();
   });
 
+  it('mesa sem mestre aparece como "Sem mestre" e continua abrindo', async () => {
+    renderList(
+      mine({ asPlayer: [party('orfa', { gmUsername: null, hasGm: false, activePlayers: 2 })] }),
+    );
+
+    const asPlayer = await screen.findByRole('region', { name: t.asPlayer });
+    expect(within(asPlayer).getByText(t.noGm)).toBeInTheDocument();
+    expect(within(asPlayer).queryByText(/GM: @/)).not.toBeInTheDocument();
+    expect(within(asPlayer).getByRole('link', { name: /Mesa orfa/ })).toHaveAttribute(
+      'href',
+      '/parties/orfa',
+    );
+  });
+
   it('criar mesa fica numa seção própria, depois das mesas', async () => {
     renderList(mine({ asGm: [party('gm', { role: 'gm', status: 'gm' })] }));
 
@@ -83,6 +99,14 @@ describe('PartyList', () => {
     expect(
       within(screen.getByRole('region', { name: t.asGm })).queryByLabelText(t.create.label),
     ).not.toBeInTheDocument();
+  });
+
+  it('convite de mesa sem mestre não oferece Aceitar, só Recusar', async () => {
+    renderList(mine({ invites: [party('invite', { status: 'invited', hasGm: false })] }));
+
+    const invites = await screen.findByRole('region', { name: t.invites });
+    expect(within(invites).getByRole('button', { name: t.decline })).toBeInTheDocument();
+    expect(within(invites).queryByRole('button', { name: t.accept })).not.toBeInTheDocument();
   });
 
   it('aceitar um convite manda PATCH no próprio membro', async () => {

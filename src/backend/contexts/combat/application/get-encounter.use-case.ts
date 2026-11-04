@@ -7,10 +7,11 @@ export class GetEncounterUseCase {
   constructor(private readonly repository: CombatRepo) {}
 
   async execute(partyId: string, userId: string): Promise<EncounterView | null> {
-    const gmId = await this.repository.findPartyGm(partyId);
-    if (!gmId) return null;
+    const party = await this.repository.findPartyGm(partyId);
+    if (!party) return null;
 
-    if (gmId !== userId) {
+    // A party without a GM has no tracker to show: everyone gets the player view
+    if (party.gmId !== userId) {
       const turns = await this.repository.turns(partyId);
       return turns && { role: 'player', ...turns };
     }

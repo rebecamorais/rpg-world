@@ -1,7 +1,9 @@
 import { PartyError, PartyErrorCodes } from '../domain/PartyError';
-import { PartyView } from '../domain/PartyView';
+import { GmClaim, PartyView } from '../domain/PartyView';
 import { PartyRepo } from '../domain/repository/party.repo';
 import { toRolePlayCard } from '../domain/role-play-card';
+
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** The party page: the GM's Role Play view, or what a player sees. Others get "not found". */
 export class GetPartyUseCase {
@@ -11,7 +13,8 @@ export class GetPartyUseCase {
     const party = await this.repository.findParty(partyId);
     if (!party) throw new PartyError(PartyErrorCodes.NOT_FOUND);
 
-    const isGm = party.gmId === userId;
+    const hasGm = party.gmId !== null;
+    const isGm = hasGm && party.gmId === userId;
     const [people, roster, journalDocId] = await Promise.all([
       this.repository.people(partyId),
       this.repository.roster(partyId),
@@ -29,12 +32,15 @@ export class GetPartyUseCase {
       edition: party.edition,
       imageUrl: party.imageUrl,
       role: isGm ? 'gm' : 'player',
+      hasGm,
+      gmClaim: null,
       people,
       roster,
       myCharacterIds: roster.filter((c) => c.ownerId === userId).map((c) => c.characterId),
       journalDocId,
       gm: null,
     };
+    if (!hasGm) view.gmClaim = await this.openClaim(partyId);
     if (!isGm) return view;
 
     const [inviteCode, sheets] = await Promise.all([
@@ -62,6 +68,15 @@ export class GetPartyUseCase {
             : [];
         }),
       },
+    };
+  }
+
+  private async openClaim(partyId: string): Promise<GmClaim | null> {
+    const claim = await this.repository.gmClaim(partyId);
+    if (!claim) return null;
+    return {
+      ...claim,
+      canAskSupport: Date.now() - new Date(claim.createdAt).getTime() >= DAY_MS,
     };
   }
 }

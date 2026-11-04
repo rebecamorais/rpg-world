@@ -20,6 +20,9 @@ export const partyPatchSchema = z
 
 export const memberParamsSchema = z.object({ partyId: z.uuid(), userId: z.uuid() });
 
+// z.boolean() takes only true or false: null or a missing field must not count as accepting
+export const gmClaimVoteSchema = z.object({ accept: z.boolean() });
+
 export const inviteCodeParamsSchema = z.object({ code: z.string().regex(/^[a-f0-9]{32}$/) });
 
 // Usernames picked before the a-z0-9_ rule may have other characters: the database finds them

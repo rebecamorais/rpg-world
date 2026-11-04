@@ -42,9 +42,12 @@ import { UNEXPECTED_ERROR } from '@shared/http/error-response';
  */
 export default function ContactForm({
   initialEmail = '',
+  partyId,
   onSent,
 }: {
   initialEmail?: string;
+  /** A party the message is about (`/support?party=`): opens as Account / Access with its ID in the text. */
+  partyId?: string | null;
   onSent?: () => void;
 }) {
   const t = useTranslations('feedback');
@@ -64,12 +67,15 @@ export default function ContactForm({
 
   type FeedbackFormValues = z.infer<typeof feedbackSchema>;
 
+  // The ID comes from the URL, so anything that isn't a UUID is ignored
+  const aboutParty = partyId && z.safeParse(z.uuid(), partyId).success ? partyId : null;
+
   const form = useForm<FeedbackFormValues>({
     resolver: zodResolver(feedbackSchema),
     defaultValues: {
       email: initialEmail,
-      type: 'feedback',
-      message: '',
+      type: aboutParty ? 'account' : 'feedback',
+      message: aboutParty ? t('partyMessage', { partyId: aboutParty }) : '',
     },
   });
 

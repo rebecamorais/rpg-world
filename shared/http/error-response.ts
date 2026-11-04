@@ -8,6 +8,7 @@ const STATUS_BY_KIND: Record<AppErrorKind, number> = {
   validation: 400,
   not_found: 404,
   forbidden: 403,
+  rate_limited: 429,
 };
 
 export interface HttpError {

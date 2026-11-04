@@ -11,6 +11,7 @@ const makeEmailService = () =>
     sendPasswordResetEmail: vi.fn(),
     sendMagicLinkEmail: vi.fn(),
     sendAccountExistsEmail: vi.fn(),
+    sendAccountDeletionEmail: vi.fn(),
   }) satisfies EmailService;
 
 describe('RequestPasswordResetUseCase', () => {

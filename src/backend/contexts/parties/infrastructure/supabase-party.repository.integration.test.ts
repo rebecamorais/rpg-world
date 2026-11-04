@@ -45,6 +45,8 @@ describe('SupabasePartyRepository (Integration)', () => {
         status: 'gm',
         gmUsername: null,
         pendingRequests: 0,
+        activePlayers: 0,
+        hasGm: true,
       },
     ]);
     expect(await repo.delete(id)).toBe(true);
@@ -110,6 +112,7 @@ describe('SupabasePartyRepository — convites e membros (Integration)', () => {
       partyId,
       name: 'Mesa',
       gmUsername: null,
+      hasGm: true,
       myStatus: null,
     });
     expect(await repo.requestJoin(code)).toBe('requested');

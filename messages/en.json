@@ -5,6 +5,11 @@
       "unknown": "An unknown error occurred. Please try again.",
       "common_error_invalid_request": "Invalid data. Check the fields and try again.",
       "common_error_unexpected": "Something went wrong on our side. Please try again shortly.",
+      "account_deletion_error_username_mismatch": "That is not your username.",
+      "account_deletion_error_password_invalid": "Incorrect password. If you never created one, for example because you signed in with an e-mail link, use “Forgot password?” to set it.",
+      "account_deletion_error_too_soon": "This e-mail was sent less than a minute ago. Check your inbox, or wait a moment and ask again.",
+      "account_deletion_error_too_many_attempts": "Too many incorrect passwords. Wait 15 minutes and try again, or use “Forgot password?” to set a new one.",
+      "account_deletion_error_link_invalid": "This link has expired or was already used. Please request a new one.",
       "auth_error_signin_invalid_credentials": "Incorrect email or password.",
       "auth_error_signin_email_not_confirmed": "Confirm your email before signing in.",
       "auth_error_rate_limited": "Too many attempts. Wait a moment and try again.",
@@ -55,6 +60,12 @@
       "party_error_journal_url_invalid": "Paste the link of a Google Docs document (docs.google.com/document/…).",
       "party_error_image_too_large": "The image exceeds the 5 MB limit.",
       "party_error_image_invalid_type": "Use a JPEG, PNG or WebP image.",
+      "party_error_has_gm": "This party already has a GM.",
+      "party_error_without_gm": "This party has no GM right now, so it can’t take new people.",
+      "party_error_not_active_member": "Only players of the party can ask to become its GM.",
+      "party_error_claim_exists": "Someone already asked to become the GM of this party.",
+      "party_error_claim_not_found": "There is no open request to become the GM.",
+      "party_error_cannot_vote": "You can’t vote on this request.",
       "feedback_error_invalid_email": "Please enter a valid e-mail.",
       "feedback_error_message_too_short": "The message must be at least 10 characters long.",
       "security_token_missing": "Please complete the security verification.",
@@ -761,7 +772,7 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: November 3, 2026",
+    "lastUpdated": "Last updated: November 4, 2026",
     "sections": {
       "data": {
         "title": "1. Data Collected",
@@ -786,11 +797,18 @@
       },
       "sharing": {
         "title": "3. Sharing",
-        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, the magic link, password reset and the contact form; and anonymous visit counts, with Cloudflare Web Analytics), <discord>Discord</discord> (where the support team receives the messages sent through the contact form: email, type, message and, if you are signed in, your account id) and <google>Google</google> (only if you sign in with Google). Your profile (username and avatar) and a summary of the characters you bring to a party (name, avatar, race, class and level) are seen by the people in that party; the GM also sees the sheet of those characters. The journal link and the party inventory are seen only by the GM and active players. The party name and picture show to anyone with the invite link, even without an account (that's what Discord and WhatsApp display when the link is pasted). Everything else stays visible only to you; avatar images are stored at a public address that is not listed anywhere."
+        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, the magic link, password reset and the contact form; and anonymous visit counts, with Cloudflare Web Analytics), <discord>Discord</discord> (where the support team receives the messages sent through the contact form: email, type, message and, if you are signed in, your account id) and <google>Google</google> (only if you sign in with Google). Your profile (username and avatar) and a summary of the characters you bring to a party (name, avatar, race, class and level) are seen by the people in that party; the GM also sees the sheet of those characters. In a party without a GM, an active player can become the GM with the agreement of all the other active players and, from then on, sees the sheets of the party's characters. Someone who does not answer that request can be removed from the party by support, after an email and 7 days without a reply, and that person's characters leave the party with them. The journal link and the party inventory are seen only by the GM and active players. The party name and picture show to anyone with the invite link, even without an account (that's what Discord and WhatsApp display when the link is pasted). Everything else stays visible only to you; avatar images are stored at a public address that is not listed anywhere."
       },
       "rights": {
         "title": "4. Your Rights",
-        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data through our <server>Discord server</server>, telling us your account's email. We will process your request within 5 business days."
+        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. You can delete your account at any time in Settings > Profile: you enter your username and password (if you only signed in with Google there is no password step) and we send a confirmation link to the account's email, valid for 1 hour. After the final button, deletion is immediate and cannot be undone. For your other rights, or if you cannot delete from there, contact us through the <support>support form</support> or on <server>Discord</server>; we reply within 5 business days.",
+        "deletionIntro": "When you delete your account:",
+        "deletionItems": [
+          "Your login, profile, characters and NPCs are deleted, with everything they hold. The images you uploaded lose their owner and a daily job removes them within 2 days; cached copies can last up to 1 day.",
+          "Parties where you are GM: if there are active players, the party stays with them and has no GM; without active players, the party is deleted. A party without a GM loses its picture and any ongoing combat. In other people's parties, your membership is deleted and your characters leave them.",
+          "What you put in the party chest and the journal link stay with the party.",
+          "In feedback, we remove your email and the link to your account; the text, type and date remain, and the text may contain what you wrote in it. Copies of messages sent to support on Discord and the text of feedback are deleted if you ask."
+        ]
       },
       "cookies": {
         "title": "5. Cookies",
@@ -798,7 +816,7 @@
       },
       "transfer": {
         "title": "6. International Data Transfer",
-        "content": "To operate the system, we use third-party infrastructure (such as <supabase>Supabase</supabase>, <vercel>Vercel</vercel>, <resend>Resend</resend> and <discord>Discord</discord>). As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. By using RPG World, you consent to this international transfer, conducted under strict security and encryption standards."
+        "content": "To operate the system, we use third-party infrastructure: <supabase>Supabase</supabase>, <vercel>Vercel</vercel>, <resend>Resend</resend>, <cloudflare>Cloudflare</cloudflare>, <discord>Discord</discord> and, only if you sign in with Google, <google>Google</google>. As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. This transfer is necessary to provide the service you asked for when you created the account (<lgpd>LGPD</lgpd>, art. 33, IX, combined with art. 7, V) and is carried out under strict security and encryption standards."
       },
       "retention": {
         "title": "7. Data Retention and Deletion",
@@ -806,7 +824,7 @@
       },
       "contact": {
         "title": "8. Contact and Data Controller",
-        "content": "For any questions regarding your privacy or to exercise your rights (<lgpd>LGPD</lgpd>), talk to the team on our <server>Discord server</server>. For matters about your account, prefer a direct message to the team over the public channels."
+        "content": "For any questions regarding your privacy or to exercise your rights (<lgpd>LGPD</lgpd>), talk to the team through the <support>support form</support> or on our <server>Discord server</server>. For matters about your account, prefer a direct message to the team over the public channels."
       }
     }
   },
@@ -965,6 +983,7 @@
     "typeLabel": "Message Type",
     "messageLabel": "Message",
     "messagePlaceholder": "Which mimic bit you? Describe your issue or idea...",
+    "partyMessage": "Hello! My party (ID: {partyId}) has no GM and a request to become the GM that someone still hasn’t answered. Could you help?\n\n",
     "submit": "Cast Message",
     "submitting": "Channeling...",
     "sendAnother": "Send another message",
@@ -1146,6 +1165,7 @@
     "requests": "Waiting for the GM",
     "pendingRequests": "{count, plural, one {# request} other {# requests}}",
     "gmBy": "GM: @{username}",
+    "noGm": "No GM",
     "accept": "Accept",
     "decline": "Decline",
     "withdraw": "Cancel request",
@@ -1173,6 +1193,7 @@
       "request": "Ask to join",
       "requested": "Request sent. The GM will approve it.",
       "alreadyInvited": "You've already been invited to this party.",
+      "withoutGm": "This party has no GM right now, so it can’t take new people. Ask the players to name a new one.",
       "invalidTitle": "This invite is no longer valid",
       "invalidDescription": "Ask the GM for a new link.",
       "goToParties": "Go to my parties",
@@ -1269,7 +1290,29 @@
       "none": "You have no characters yet.",
       "leave": "Leave party",
       "leaveConfirm": "Leave this party? Your characters stay with you.",
+      "leaveConfirmLastPlayer": "You are the last active player of this party, which has no GM. If you leave, the party is deleted, with its chest and journal. Leave anyway?",
       "left": "You left the party"
+    },
+    "gmClaim": {
+      "title": "This party has no GM",
+      "description": "The GM’s account was deleted. The party, characters, chest and journal still work; combat, invites and settings wait for a new GM.",
+      "claim": "I want to be the GM",
+      "claimHint": "Everyone else in the party has to agree. The GM reads the full sheet of every character at the table. You stop being a player and your characters leave the party, keeping their sheets.",
+      "claimHintSolo": "You are the only active player, so you become the GM right away, with no one to agree. The GM reads the full sheet of every character at the table. You stop being a player and your characters leave the party, keeping their sheets.",
+      "claimConfirm": "Ask to be the GM? If everyone agrees, you stop being a player and your characters leave the party, keeping their sheets.",
+      "claimConfirmSolo": "Become the GM of this party now? You stop being a player and your characters leave the party, keeping their sheets.",
+      "limit": "You are already the GM of {max} parties, the most one account can have.",
+      "yourRequest": "You asked to become the GM of this party.",
+      "cancel": "Give up",
+      "askedBy": "{name} asked to become the GM of this party.",
+      "sheetWarning": "If you agree, the new GM will read the full sheet of the characters at the table, yours included.",
+      "accept": "Agree",
+      "decline": "Decline",
+      "youAccepted": "You agreed to this request.",
+      "waitingOn": "Waiting for: {names}",
+      "askSupport": "Ask support for help",
+      "supportLater": "Available one day after the request, for whoever hasn’t answered.",
+      "supportHint": "Support writes to whoever hasn’t answered and gives them 7 days before stepping in."
     },
     "sheet": {
       "back": "Back to the party",
@@ -1402,5 +1445,47 @@
     "edition": "Edition",
     "pickerDescription": "Turn on the conditions affecting this creature.",
     "exhaustionLevel": "Exhaustion level"
+  },
+  "accountDeletion": {
+    "dangerZone": {
+      "title": "Danger zone",
+      "intro": "Deleting your account is permanent and cannot be undone. This will erase:",
+      "erasesLogin": "Your login and profile",
+      "erasesCharacters": "All your characters and NPCs, with everything on them",
+      "erasesImages": "Your images, such as avatars (they are removed shortly after)",
+      "keptTitle": "Parties that stay without a GM",
+      "keptHint": "Their active players can still use them and choose a new GM.",
+      "deletedTitle": "Parties that will be deleted",
+      "deletedHint": "They have no active players.",
+      "lastPlayerTitle": "Parties without a GM where you are the last player",
+      "lastPlayerHint": "They will be deleted too.",
+      "partiesLoading": "Checking your parties…",
+      "partiesError": "We could not load your parties, so we cannot show what the deletion affects.",
+      "partiesRetry": "Try again",
+      "open": "Delete my account",
+      "dialogTitle": "Delete your account?",
+      "dialogDescription": "First we confirm it is you, then we e-mail you a link. Nothing is deleted until you confirm there.",
+      "usernameInstruction": "To continue, type your username: <bold>{username}</bold>",
+      "usernameLabel": "Your username",
+      "passwordLabel": "Password",
+      "forgotPassword": "Forgot my password",
+      "passwordHelp": "If you signed in with an e-mail link before, you have a password you never saw. Set a new one with “Forgot my password”.",
+      "submit": "Send confirmation e-mail",
+      "sentTitle": "Check your e-mail",
+      "sentDescription": "We sent a link to the e-mail of your account. It works once and for 1 hour. Your account is only deleted when you confirm there.",
+      "sendAgain": "Send again",
+      "sendAgainHint": "Sending again makes the previous link stop working."
+    },
+    "confirm": {
+      "title": "Confirm account deletion",
+      "description": "You are about to permanently delete the account <bold>{username}</bold>, with its characters, NPCs and images. This cannot be undone.",
+      "descriptionNoName": "You are about to permanently delete your account, with its characters, NPCs and images. This cannot be undone.",
+      "button": "Delete my account for good",
+      "invalidTitle": "This link does not work",
+      "invalidDescription": "It has expired, was already used or was replaced by a newer one. Request a new one in your profile settings.",
+      "backToSettings": "Go to settings",
+      "metaTitle": "Delete account"
+    },
+    "deleted": "Your account was deleted."
   }
 }

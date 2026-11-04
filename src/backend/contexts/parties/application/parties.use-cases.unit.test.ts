@@ -55,6 +55,10 @@ const makePartyRepo = () =>
     setJournal: vi.fn<PartyRepo['setJournal']>().mockResolvedValue(undefined),
     inviteCard: vi.fn<PartyRepo['inviteCard']>().mockResolvedValue(null),
     setImage: vi.fn<PartyRepo['setImage']>().mockResolvedValue(true),
+    gmClaim: vi.fn<PartyRepo['gmClaim']>().mockResolvedValue(null),
+    claimGm: vi.fn<PartyRepo['claimGm']>().mockResolvedValue('pending'),
+    voteGmClaim: vi.fn<PartyRepo['voteGmClaim']>().mockResolvedValue('pending'),
+    cancelGmClaim: vi.fn<PartyRepo['cancelGmClaim']>().mockResolvedValue(undefined),
   }) satisfies PartyRepo;
 
 const summary = (overrides: Partial<PartySummary>): PartySummary => ({
@@ -65,6 +69,8 @@ const summary = (overrides: Partial<PartySummary>): PartySummary => ({
   status: 'active',
   gmUsername: 'mestra',
   pendingRequests: 0,
+  activePlayers: 0,
+  hasGm: true,
   ...overrides,
 });
 
@@ -199,7 +205,13 @@ describe('casos de uso das mesas', () => {
     });
 
     it('getInvite devolve o preview', async () => {
-      const preview = { partyId: 'p', name: 'Mesa', gmUsername: 'mestra', myStatus: null };
+      const preview = {
+        partyId: 'p',
+        name: 'Mesa',
+        gmUsername: 'mestra',
+        hasGm: true,
+        myStatus: null,
+      };
       repo.getInvite.mockResolvedValue(preview);
 
       expect(await new GetInviteUseCase(repo).execute('a'.repeat(32))).toEqual(preview);

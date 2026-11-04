@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import { rpgWorldApi } from '@client';
+import { APIError, rpgWorldApi } from '@client';
 
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { PARTIES_QUERY_KEY, partyQueryKey } from '@frontend/lib/query-keys';
@@ -10,6 +10,8 @@ import type { MemberStatus } from '@backend/contexts/parties/domain/Party';
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
+const GM_CLAIM_POLL_MS = 20_000;
 
 /** A party page and everything done on it; each change reloads the page and the party list. */
 export function useParty(partyId: string) {
@@ -22,7 +24,15 @@ export function useParty(partyId: string) {
     queryFn: () => rpgWorldApi.get<PartyView>(base),
     enabled: !!partyId,
     retry: false,
+    // Nobody pushes claim changes: without a GM the page polls, so a request or its approval shows up.
+    // After an error (party deleted, member removed) there is nothing to wait for.
+    refetchInterval: (q) =>
+      q.state.status !== 'error' && q.state.data?.hasGm === false ? GM_CLAIM_POLL_MS : false,
   });
+
+  // A refetch that fails keeps the last party in `query.data`; when the answer was "not found" that
+  // party is gone (or the person is out of it), so the page shows the not-found state, not a stale one
+  const notFound = query.error instanceof APIError && query.error.status === 404;
 
   const onSettled = () =>
     Promise.all([
@@ -76,8 +86,22 @@ export function useParty(partyId: string) {
     ...options,
   });
 
+  // The request to become the GM of a party without one: ask, vote on someone else's, give up
+  const claimGm = useMutation({
+    mutationFn: () => rpgWorldApi.post(`${base}/gm-claim`),
+    ...options,
+  });
+  const voteGmClaim = useMutation({
+    mutationFn: (accept: boolean) => rpgWorldApi.patch(`${base}/gm-claim`, { accept }),
+    ...options,
+  });
+  const cancelGmClaim = useMutation({
+    mutationFn: () => rpgWorldApi.delete(`${base}/gm-claim`),
+    ...options,
+  });
+
   return {
-    party: query.data,
+    party: notFound ? undefined : query.data,
     isLoading: query.isLoading,
     error: query.error,
     rename,
@@ -90,5 +114,8 @@ export function useParty(partyId: string) {
     acceptMember,
     removeMember,
     setMyCharacters,
+    claimGm,
+    voteGmClaim,
+    cancelGmClaim,
   };
 }
