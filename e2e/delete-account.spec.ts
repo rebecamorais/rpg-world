@@ -108,6 +108,8 @@ test('com senha: pede na zona de perigo, confirma pelo e-mail e a conta some', a
 
   await expect(page).toHaveURL(/\/\?accountDeleted=1$/);
   await expect(page.getByRole('status')).toHaveText('Your account was deleted.');
+  // A full page load: the header of the deleted account's own session is gone, not just the URL
+  await expect(page.getByRole('link', { name: 'Sign In' }).first()).toBeVisible();
   const login = await page.request.post('/api/auth/login', {
     data: { email: user.email, password: PASSWORD },
   });

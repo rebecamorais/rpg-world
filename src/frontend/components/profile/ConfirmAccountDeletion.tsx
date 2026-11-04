@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 
@@ -33,7 +32,6 @@ interface ConfirmAccountDeletionProps {
  */
 export function ConfirmAccountDeletion({ account, token }: ConfirmAccountDeletionProps) {
   const t = useTranslations('accountDeletion.confirm');
-  const router = useRouter();
   const { getErrorMessage } = useErrorMessage();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +41,10 @@ export function ConfirmAccountDeletion({ account, token }: ConfirmAccountDeletio
     setError(null);
     try {
       await rpgWorldApi.post('/api/account/delete', { token });
-      router.replace('/?accountDeleted=1');
+      // A full page load, like useAuth: the session cookie changed, so the layout and the query
+      // cache of whoever is signed in on this browser must not survive
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- deliberate
+      window.location.assign('/?accountDeleted=1');
     } catch (err) {
       setError(getErrorMessage(err));
       setPending(false);

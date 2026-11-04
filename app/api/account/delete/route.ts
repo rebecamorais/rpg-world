@@ -13,10 +13,12 @@ export const POST = withHandler(
     const { authApi } = await getApi();
     await authApi.deleteAccount(body.token);
 
-    // The account is gone by now, so failing here can't turn that into an error. A session left
-    // behind no longer counts: GetSessionUserUseCase checks that the account exists.
+    // The account is gone by now, so failing here can't turn that into an error. The deleted
+    // account's own session no longer resolves (GetSessionUserUseCase checks that the account
+    // exists); if someone still resolves, the link was opened by another account on this browser,
+    // and that session is not ours to end.
     try {
-      await authApi.signOut();
+      if (!(await authApi.getSessionUser())) await authApi.signOut();
     } catch (error) {
       console.error('Failed to end the session of a deleted account:', error);
     }

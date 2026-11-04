@@ -17,14 +17,23 @@ export default async function ProfilePage() {
   const t = await getTranslations('dashboard');
   const { authApi } = await getApi();
   const user = await authApi.getSessionUser();
-  // Only the page knows: the profile the layout seeds in the client cache doesn't carry it
-  const hasPassword = user ? await authApi.hasPassword(user.id) : false;
+  // Only the page knows: the profile the layout seeds in the client cache doesn't carry it. If the
+  // check fails, only the danger card goes (null), not the whole settings page.
+  let hasPassword: boolean | null = false;
+  if (user) {
+    try {
+      hasPassword = await authApi.hasPassword(user.id);
+    } catch (error) {
+      hasPassword = null;
+      console.error('Failed to check whether the account has a password:', error);
+    }
+  }
 
   return (
     <PageContainer title={t('settingsTitle')} description={t('settingsSubtitle')}>
       <div className="flex flex-col gap-6">
         <ProfileForm />
-        <DeleteAccountCard hasPassword={hasPassword} />
+        {hasPassword !== null && <DeleteAccountCard hasPassword={hasPassword} />}
       </div>
     </PageContainer>
   );

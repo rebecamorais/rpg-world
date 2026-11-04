@@ -24,7 +24,8 @@ describe('POST /api/account/delete', () => {
     expect(api.authApi.deleteAccount).toHaveBeenCalledWith(TOKEN);
   });
 
-  it('encerra a sessão depois de excluir', async () => {
+  it('encerra a sessão da conta excluída (que já não resolve) depois de excluir', async () => {
+    api.authApi.getSessionUser.mockResolvedValue(null);
     const res = await route.POST(jsonRequest(URL_PATH, 'POST', { token: TOKEN }), routeContext());
 
     expect(res.status).toBe(204);
@@ -34,8 +35,18 @@ describe('POST /api/account/delete', () => {
     );
   });
 
+  it('sessão de outra conta aberta neste navegador continua: não encerra', async () => {
+    // Still resolves after the deletion, so it is not the deleted account's
+    const res = await route.POST(jsonRequest(URL_PATH, 'POST', { token: TOKEN }), routeContext());
+
+    expect(res.status).toBe(204);
+    expect(api.authApi.deleteAccount).toHaveBeenCalledWith(TOKEN);
+    expect(api.authApi.signOut).not.toHaveBeenCalled();
+  });
+
   it('falha ao encerrar a sessão não vira erro: a conta já foi excluída', async () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    api.authApi.getSessionUser.mockResolvedValue(null);
     api.authApi.signOut.mockRejectedValue(new Error('connect ECONNREFUSED'));
 
     const res = await route.POST(jsonRequest(URL_PATH, 'POST', { token: TOKEN }), routeContext());

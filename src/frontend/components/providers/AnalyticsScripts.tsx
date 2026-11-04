@@ -14,7 +14,7 @@ const CLOUDFLARE_BEACON_TOKEN = '356fc3bfc2dd43c4b8f065945a42eb32';
 // language segment (the proxy rewrites to /<locale>/...), so the end is what counts.
 const NO_ANALYTICS_SUFFIX = '/delete-account';
 
-export function isAnalyticsPath(pathname: string | null): boolean {
+function isAnalyticsPath(pathname: string | null): boolean {
   return !pathname?.replace(/\/$/, '').endsWith(NO_ANALYTICS_SUFFIX);
 }
 

@@ -1,14 +1,13 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { APIError, rpgWorldApi } from '@client';
 
 import { ConfirmAccountDeletion } from './ConfirmAccountDeletion';
 
-const replace = vi.fn();
-vi.mock('next/navigation', () => ({ useRouter: () => ({ replace }) }));
+const assign = vi.fn();
 vi.mock('@client', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@client')>()),
   rpgWorldApi: { post: vi.fn() },
@@ -18,7 +17,12 @@ const api = vi.mocked(rpgWorldApi);
 const t = messages.accountDeletion.confirm;
 
 describe('ConfirmAccountDeletion', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.stubGlobal('location', { ...window.location, assign });
+  });
+
+  afterEach(() => vi.unstubAllGlobals());
 
   it('mostra o username e o botão', () => {
     renderWithProviders(<ConfirmAccountDeletion account={{ username: 'thorin' }} token="tok" />);
@@ -45,7 +49,7 @@ describe('ConfirmAccountDeletion', () => {
     );
   });
 
-  it('o clique chama a rota e vai para a página inicial com o aviso accountDeleted', async () => {
+  it('o clique chama a rota e carrega a página inicial por inteiro com o aviso accountDeleted', async () => {
     api.post.mockResolvedValue({});
     const user = userEvent.setup();
     renderWithProviders(<ConfirmAccountDeletion account={{ username: 'thorin' }} token="tok" />);
@@ -53,7 +57,7 @@ describe('ConfirmAccountDeletion', () => {
     await user.click(screen.getByRole('button', { name: t.button }));
 
     expect(api.post).toHaveBeenCalledWith('/api/account/delete', { token: 'tok' });
-    await vi.waitFor(() => expect(replace).toHaveBeenCalledWith('/?accountDeleted=1'));
+    await vi.waitFor(() => expect(assign).toHaveBeenCalledWith('/?accountDeleted=1'));
   });
 
   it('link que valeu até abrir a página mas não vale mais: mostra o erro e não sai da página', async () => {
@@ -66,6 +70,6 @@ describe('ConfirmAccountDeletion', () => {
     expect(
       await screen.findByText(messages.common.errors.account_deletion_error_link_invalid),
     ).toBeInTheDocument();
-    expect(replace).not.toHaveBeenCalled();
+    expect(assign).not.toHaveBeenCalled();
   });
 });
