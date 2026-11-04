@@ -16,11 +16,19 @@ describe('RequestAccountDeletionUseCase', () => {
   const hasPassword = vi.fn();
   const verifyPassword = vi.fn();
   const sendAccountDeletionEmail = vi.fn();
+  const claimPasswordAttempt = vi.fn();
+  const releasePasswordAttempt = vi.fn();
+  const clearPasswordAttempts = vi.fn();
+  const claimEmailSlot = vi.fn();
 
   const useCase = new RequestAccountDeletionUseCase(
     {
       save,
       getUsername: async () => 'Hero',
+      claimPasswordAttempt,
+      releasePasswordAttempt,
+      clearPasswordAttempts,
+      claimEmailSlot,
     } as unknown as AccountDeletionRepo,
     { hasPassword, verifyPassword } as unknown as AuthRepository,
     { sendAccountDeletionEmail } as unknown as EmailService,
@@ -33,6 +41,8 @@ describe('RequestAccountDeletionUseCase', () => {
     vi.useFakeTimers({ now: NOW });
     hasPassword.mockResolvedValue(true);
     verifyPassword.mockResolvedValue(true);
+    claimPasswordAttempt.mockResolvedValue(true);
+    claimEmailSlot.mockResolvedValue(true);
   });
 
   afterEach(() => vi.useRealTimers());
@@ -121,5 +131,126 @@ describe('RequestAccountDeletionUseCase', () => {
     expect(save.mock.invocationCallOrder[0]).toBeLessThan(
       sendAccountDeletionEmail.mock.invocationCallOrder[0],
     );
+  });
+
+  describe('limite de e-mails', () => {
+    it('dentro da janela não envia nem troca o link, e responde DELETION_TOO_SOON', async () => {
+      claimEmailSlot.mockResolvedValue(false);
+
+      await expect(
+        useCase.execute({ ...INPUT, password: 'secret' }, CONFIRM_URL),
+      ).rejects.toMatchObject({ code: UserErrorCodes.DELETION_TOO_SOON });
+
+      expect(claimEmailSlot).toHaveBeenCalledWith(INPUT.userId);
+      expect(save).not.toHaveBeenCalled();
+      expect(sendAccountDeletionEmail).not.toHaveBeenCalled();
+    });
+
+    it('vale também para conta sem senha, que não tem outra barreira', async () => {
+      hasPassword.mockResolvedValue(false);
+      claimEmailSlot.mockResolvedValue(false);
+
+      await expect(useCase.execute(INPUT, CONFIRM_URL)).rejects.toMatchObject({
+        code: UserErrorCodes.DELETION_TOO_SOON,
+      });
+
+      expect(sendAccountDeletionEmail).not.toHaveBeenCalled();
+    });
+
+    it('senha errada não gasta a vez do e-mail', async () => {
+      verifyPassword.mockResolvedValue(false);
+
+      await expect(useCase.execute({ ...INPUT, password: 'wrong' }, CONFIRM_URL)).rejects.toThrow();
+
+      expect(claimEmailSlot).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('limite de senhas erradas', () => {
+    it('passou do limite: recusa antes de chamar o Auth, mesmo com a senha certa', async () => {
+      claimPasswordAttempt.mockResolvedValue(false);
+
+      await expect(
+        useCase.execute({ ...INPUT, password: 'secret' }, CONFIRM_URL),
+      ).rejects.toMatchObject({ code: UserErrorCodes.DELETION_TOO_MANY_ATTEMPTS });
+
+      expect(claimPasswordAttempt).toHaveBeenCalledWith(INPUT.userId);
+      expect(verifyPassword).not.toHaveBeenCalled();
+      expect(sendAccountDeletionEmail).not.toHaveBeenCalled();
+    });
+
+    it('reserva a tentativa antes de chamar o Auth: tentativas simultâneas não passam juntas', async () => {
+      await useCase.execute({ ...INPUT, password: 'secret' }, CONFIRM_URL);
+
+      expect(claimPasswordAttempt.mock.invocationCallOrder[0]).toBeLessThan(
+        verifyPassword.mock.invocationCallOrder[0],
+      );
+    });
+
+    it('senha errada fica contada', async () => {
+      verifyPassword.mockResolvedValue(false);
+
+      await expect(useCase.execute({ ...INPUT, password: 'wrong' }, CONFIRM_URL)).rejects.toThrow();
+
+      expect(releasePasswordAttempt).not.toHaveBeenCalled();
+      expect(clearPasswordAttempts).not.toHaveBeenCalled();
+    });
+
+    it('senha certa devolve só a própria tentativa; limpar a janela depende do e-mail enviado', async () => {
+      claimEmailSlot.mockResolvedValue(false);
+
+      await expect(
+        useCase.execute({ ...INPUT, password: 'secret' }, CONFIRM_URL),
+      ).rejects.toMatchObject({ code: UserErrorCodes.DELETION_TOO_SOON });
+
+      expect(releasePasswordAttempt).toHaveBeenCalledExactlyOnceWith(INPUT.userId);
+      expect(clearPasswordAttempts).not.toHaveBeenCalled();
+    });
+
+    it('e-mail que falhou não limpa a janela', async () => {
+      sendAccountDeletionEmail.mockRejectedValue(new Error('provider down'));
+
+      await expect(useCase.execute({ ...INPUT, password: 'secret' }, CONFIRM_URL)).rejects.toThrow(
+        'provider down',
+      );
+
+      expect(clearPasswordAttempts).not.toHaveBeenCalled();
+    });
+
+    it('e-mail enviado limpa a janela', async () => {
+      await useCase.execute({ ...INPUT, password: 'secret' }, CONFIRM_URL);
+
+      expect(clearPasswordAttempts).toHaveBeenCalledExactlyOnceWith(INPUT.userId);
+      expect(sendAccountDeletionEmail.mock.invocationCallOrder[0]).toBeLessThan(
+        clearPasswordAttempts.mock.invocationCallOrder[0],
+      );
+    });
+
+    it('falha do Auth não é senha errada: devolve a tentativa e repassa o erro', async () => {
+      const failure = new Error('auth down');
+      verifyPassword.mockRejectedValue(failure);
+
+      await expect(useCase.execute({ ...INPUT, password: 'secret' }, CONFIRM_URL)).rejects.toBe(
+        failure,
+      );
+
+      expect(releasePasswordAttempt).toHaveBeenCalledExactlyOnceWith(INPUT.userId);
+    });
+
+    it('senha vazia não é um palpite: não reserva tentativa nem chama o Auth', async () => {
+      await expect(useCase.execute({ ...INPUT, password: '' }, CONFIRM_URL)).rejects.toMatchObject({
+        code: UserErrorCodes.DELETION_PASSWORD_INVALID,
+      });
+
+      expect(claimPasswordAttempt).not.toHaveBeenCalled();
+    });
+
+    it('conta sem senha não reserva tentativa', async () => {
+      hasPassword.mockResolvedValue(false);
+
+      await useCase.execute(INPUT, CONFIRM_URL);
+
+      expect(claimPasswordAttempt).not.toHaveBeenCalled();
+    });
   });
 });

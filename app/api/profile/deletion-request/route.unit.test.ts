@@ -110,6 +110,21 @@ describe('POST /api/profile/deletion-request', () => {
     expect(await res.json()).toEqual({ error: UserErrorCodes.DELETION_PASSWORD_INVALID });
   });
 
+  it.each([UserErrorCodes.DELETION_TOO_SOON, UserErrorCodes.DELETION_TOO_MANY_ATTEMPTS])(
+    '%s responde 429 com o código',
+    async (code) => {
+      api.authApi.requestAccountDeletion.mockRejectedValue(new UserError(code));
+
+      const res = await POST(
+        jsonRequest(URL_PATH, 'POST', { username: 'Hero', password: 'secret' }),
+        routeContext(),
+      );
+
+      expect(res.status).toBe(429);
+      expect(await res.json()).toEqual({ error: code });
+    },
+  );
+
   it('sessão sem e-mail responde 500, sem pedir nada', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     resetApi({ id: SESSION_USER.id });

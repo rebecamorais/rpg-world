@@ -48,4 +48,49 @@ export class SupabaseAccountDeletionRepository implements AccountDeletionRepo {
 
     return data?.username ?? null;
   }
+
+  async claimPasswordAttempt(userId: string): Promise<boolean> {
+    const { data, error } = await this.adminClient.rpc('claim_account_deletion_password_attempt', {
+      p_user_id: userId,
+    });
+
+    if (error) {
+      throw new Error(`Failed to claim password attempt: ${error.message}`);
+    }
+
+    return data === true;
+  }
+
+  async releasePasswordAttempt(userId: string): Promise<void> {
+    const { error } = await this.adminClient.rpc('release_account_deletion_password_attempt', {
+      p_user_id: userId,
+    });
+
+    if (error) {
+      throw new Error(`Failed to release password attempt: ${error.message}`);
+    }
+  }
+
+  async clearPasswordAttempts(userId: string): Promise<void> {
+    const { error } = await this.adminClient
+      .from('account_deletion_throttle')
+      .update({ failed_password_at: [] })
+      .eq('user_id', userId);
+
+    if (error) {
+      throw new Error(`Failed to clear password attempts: ${error.message}`);
+    }
+  }
+
+  async claimEmailSlot(userId: string): Promise<boolean> {
+    const { data, error } = await this.adminClient.rpc('claim_account_deletion_email', {
+      p_user_id: userId,
+    });
+
+    if (error) {
+      throw new Error(`Failed to claim e-mail slot: ${error.message}`);
+    }
+
+    return data === true;
+  }
 }

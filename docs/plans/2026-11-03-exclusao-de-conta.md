@@ -55,6 +55,12 @@ e-mail. O servidor descobre isso sozinho, com uma função só para `service_rol
 `auth.users.encrypted_password`. Não pode ser um "não tenho senha" na tela, porque qualquer um com a
 sessão aberta escolheria essa opção.
 
+**Quem entrou por link mágico** antes de 2026-10-20 tem uma senha aleatória que nunca viu, porque o
+Supabase a cria sozinho e ela não se distingue de uma senha real. Essa pessoa passa pela etapa de
+senha, e a tela e o erro levam a "Esqueci minha senha". Não há atalho "não sei minha senha".
+
+**Limites:** 60 segundos entre e-mails e 5 senhas erradas em 15 minutos, por conta.
+
 **Pedir de novo:** um novo envio invalida o link anterior. Sair da conta não cancela o pedido, e o
 link vence sozinho.
 

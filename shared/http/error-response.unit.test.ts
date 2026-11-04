@@ -11,6 +11,7 @@ describe('errorToHttp', () => {
     ['validation', 400],
     ['not_found', 404],
     ['forbidden', 403],
+    ['rate_limited', 429],
   ] as const)('mapeia AppError %s para %i com o código', (kind, status) => {
     expect(errorToHttp(new AppError('some_code', kind))).toEqual({
       status,

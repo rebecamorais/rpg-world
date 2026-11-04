@@ -32,7 +32,11 @@ export interface AuthRepository {
   signOut(): Promise<void>;
   /** Whether the account still exists: a session's JWT outlives a deleted account. */
   accountExists(userId: string): Promise<boolean>;
-  /** Whether the account has a password (false for Google or magic link only). */
+  /**
+   * Whether the account has a password: false only for Google-only accounts. Whoever came in through
+   * the old magic link has a random one they never saw, indistinguishable from a real one, and
+   * recovers it through "Forgot password".
+   */
   hasPassword(userId: string): Promise<boolean>;
   /** Checks the password without touching the current session. */
   verifyPassword(email: string, password: string): Promise<boolean>;

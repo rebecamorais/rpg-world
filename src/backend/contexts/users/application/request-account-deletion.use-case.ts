@@ -32,11 +32,11 @@ export class RequestAccountDeletionUseCase {
     // The account says whether it has a password, never the request: otherwise anyone holding an
     // open session could leave the field empty and skip the check
     if (await this.authRepository.hasPassword(input.userId)) {
-      const correct =
-        !!input.password && (await this.authRepository.verifyPassword(input.email, input.password));
-      if (!correct) {
-        throw new UserError(UserErrorCodes.DELETION_PASSWORD_INVALID);
-      }
+      await this.checkPassword(input);
+    }
+
+    if (!(await this.accountDeletionRepo.claimEmailSlot(input.userId))) {
+      throw new UserError(UserErrorCodes.DELETION_TOO_SOON);
     }
 
     const token = generateAccountDeletionToken();
@@ -48,5 +48,34 @@ export class RequestAccountDeletionUseCase {
 
     // base64url needs no escaping
     await this.emailService.sendAccountDeletionEmail(input.email, `${confirmUrl}?token=${token}`);
+
+    await this.accountDeletionRepo.clearPasswordAttempts(input.userId);
+  }
+
+  /**
+   * The attempt is taken before asking Auth, so simultaneous guesses can't all pass the limit, and
+   * given back unless the answer was "wrong password".
+   */
+  private async checkPassword({ userId, email, password }: RequestAccountDeletionInput) {
+    if (!password) {
+      throw new UserError(UserErrorCodes.DELETION_PASSWORD_INVALID);
+    }
+
+    if (!(await this.accountDeletionRepo.claimPasswordAttempt(userId))) {
+      throw new UserError(UserErrorCodes.DELETION_TOO_MANY_ATTEMPTS);
+    }
+
+    let correct: boolean;
+    try {
+      correct = await this.authRepository.verifyPassword(email, password);
+    } catch (error) {
+      await this.accountDeletionRepo.releasePasswordAttempt(userId);
+      throw error;
+    }
+
+    if (!correct) {
+      throw new UserError(UserErrorCodes.DELETION_PASSWORD_INVALID);
+    }
+    await this.accountDeletionRepo.releasePasswordAttempt(userId);
   }
 }

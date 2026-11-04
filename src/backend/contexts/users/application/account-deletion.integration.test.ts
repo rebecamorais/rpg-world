@@ -70,6 +70,14 @@ async function runSql(sql: string) {
   if (error) throw new Error(error.message);
 }
 
+async function rewindEmailWindow(userId: string) {
+  const { error } = await admin
+    .from('account_deletion_throttle')
+    .update({ last_email_at: new Date(Date.now() - 61_000).toISOString() })
+    .eq('user_id', userId);
+  if (error) throw error;
+}
+
 async function accountGone(userId: string) {
   const { error } = await admin.auth.admin.getUserById(userId);
   return error?.status === 404;
@@ -287,6 +295,7 @@ describe('Exclusão de conta (Integration)', () => {
       const session = await createSignedInClient('again');
       const flow = setup();
       const first = await requestToken(session, flow);
+      await rewindEmailWindow(session.userId);
       const second = await requestToken(session, flow);
 
       await expect(flow.get.execute(first)).resolves.toBeNull();
@@ -309,6 +318,191 @@ describe('Exclusão de conta (Integration)', () => {
       await expect(flow.get.execute(token)).resolves.toBeNull();
       await expect(flow.remove.execute(token)).rejects.toMatchObject(LINK_INVALID);
       expect(await accountGone(session.userId)).toBe(false);
+    });
+  });
+
+  describe('limites', () => {
+    const TOO_SOON = { code: UserErrorCodes.DELETION_TOO_SOON };
+    const TOO_MANY = { code: UserErrorCodes.DELETION_TOO_MANY_ATTEMPTS };
+    const WRONG = { code: UserErrorCodes.DELETION_PASSWORD_INVALID };
+
+    /** A flow whose Auth password check can be counted. */
+    function countedFlow() {
+      const flow = setup();
+      return { ...flow, verify: vi.spyOn(flow.authRepo, 'verifyPassword') };
+    }
+
+    async function failPasswords(flow: ReturnType<typeof setup>, session: Session, times: number) {
+      const input = { ...(await account(session)), password: 'wrong' };
+      for (let i = 0; i < times; i++) {
+        await expect(flow.request.execute(input, CONFIRM_URL)).rejects.toMatchObject(WRONG);
+      }
+    }
+
+    it('segundo pedido em menos de 60 segundos não envia e o primeiro link continua valendo', async () => {
+      const session = await createSignedInClient('too-soon');
+      const flow = setup();
+      const first = await requestToken(session, flow);
+
+      await expect(requestToken(session, flow)).rejects.toMatchObject(TOO_SOON);
+
+      expect(flow.lastToken()).toBe(first);
+      await expect(flow.get.execute(first)).resolves.not.toBeNull();
+    });
+
+    it('depois de 60 segundos pode pedir de novo', async () => {
+      const session = await createSignedInClient('window-over');
+      const flow = setup();
+      const first = await requestToken(session, flow);
+      await rewindEmailWindow(session.userId);
+
+      await expect(requestToken(session, flow)).resolves.not.toBe(first);
+    });
+
+    it('conta sem senha também espera, e pedidos simultâneos enviam um só', async () => {
+      const session = await createSignedInClient('no-password-loop');
+      await runSql(`UPDATE auth.users SET encrypted_password = '' WHERE id = '${session.userId}'`);
+      const flow = setup();
+      const input = await account(session);
+
+      const results = await Promise.allSettled(
+        Array.from({ length: 5 }, () => flow.request.execute(input, CONFIRM_URL)),
+      );
+
+      expect(results.filter((r) => r.status === 'fulfilled')).toHaveLength(1);
+      for (const result of results) {
+        if (result.status === 'rejected') expect(result.reason).toMatchObject(TOO_SOON);
+      }
+    });
+
+    it('a sexta senha errada é recusada sem chamar o Auth, mesmo que esteja certa', async () => {
+      const session = await createSignedInClient('too-many');
+      const flow = countedFlow();
+      await failPasswords(flow, session, 5);
+      expect(flow.verify).toHaveBeenCalledTimes(5);
+
+      await expect(requestToken(session, flow)).rejects.toMatchObject(TOO_MANY);
+
+      expect(flow.verify).toHaveBeenCalledTimes(5);
+    });
+
+    it('senhas erradas simultâneas não passam juntas do limite', async () => {
+      const session = await createSignedInClient('concurrent-wrong');
+      const flow = countedFlow();
+      const input = { ...(await account(session)), password: 'wrong' };
+
+      const results = await Promise.allSettled(
+        Array.from({ length: 12 }, () => flow.request.execute(input, CONFIRM_URL)),
+      );
+
+      expect(flow.verify).toHaveBeenCalledTimes(5);
+      const codes = results.map((r) => (r as PromiseRejectedResult).reason.code);
+      expect(codes.filter((c) => c === WRONG.code)).toHaveLength(5);
+      expect(codes.filter((c) => c === TOO_MANY.code)).toHaveLength(7);
+    });
+
+    it('trocar o link não zera as senhas erradas', async () => {
+      const session = await createSignedInClient('no-skip');
+      const flow = countedFlow();
+      await flow.deletionRepo.save(
+        session.userId,
+        'some-other-hash',
+        new Date(Date.now() + 60_000),
+      );
+      await failPasswords(flow, session, 5);
+      await flow.deletionRepo.save(
+        session.userId,
+        'a-replacement-hash',
+        new Date(Date.now() + 60_000),
+      );
+
+      await expect(requestToken(session, flow)).rejects.toMatchObject(TOO_MANY);
+    });
+
+    it('senha certa sem e-mail enviado não limpa a janela', async () => {
+      const session = await createSignedInClient('correct-no-email');
+      const flow = setup();
+      await requestToken(session, flow);
+      await failPasswords(flow, session, 4);
+
+      // Dentro dos 60 segundos: a senha confere, mas o e-mail não sai
+      await expect(requestToken(session, flow)).rejects.toMatchObject(TOO_SOON);
+      await rewindEmailWindow(session.userId);
+      await failPasswords(flow, session, 1);
+
+      await expect(requestToken(session, flow)).rejects.toMatchObject(TOO_MANY);
+    });
+
+    it('e-mail enviado limpa a janela', async () => {
+      const session = await createSignedInClient('correct-clears');
+      const flow = setup();
+      await failPasswords(flow, session, 4);
+      await requestToken(session, flow);
+      await failPasswords(flow, session, 5);
+
+      await expect(requestToken(session, flow)).rejects.toMatchObject(TOO_MANY);
+    });
+
+    it('senhas erradas de mais de 15 minutos atrás saem da conta, uma a uma', async () => {
+      const session = await createSignedInClient('window-slides');
+      const flow = setup();
+      await failPasswords(flow, session, 5);
+      const { data } = await admin
+        .from('account_deletion_throttle')
+        .select('failed_password_at')
+        .eq('user_id', session.userId)
+        .single();
+      const [, ...rest] = data!.failed_password_at;
+      await admin
+        .from('account_deletion_throttle')
+        .update({
+          failed_password_at: [new Date(Date.now() - 16 * 60_000).toISOString(), ...rest],
+        })
+        .eq('user_id', session.userId);
+
+      // Saiu só uma: cabe mais uma senha errada, e a seguinte já é recusada
+      await failPasswords(flow, session, 1);
+      await expect(requestToken(session, flow)).rejects.toMatchObject(TOO_MANY);
+    });
+
+    it('as contas têm limites separados', async () => {
+      const session = await createSignedInClient('limited');
+      const other = await createSignedInClient('unaffected');
+      const flow = setup();
+      await failPasswords(flow, session, 5);
+
+      await expect(requestToken(other, flow)).resolves.toBeTruthy();
+    });
+
+    it('o estado sai com a conta', async () => {
+      const session = await createSignedInClient('throttle-cascade');
+      const flow = setup();
+      await flow.remove.execute(await requestToken(session, flow));
+
+      const { data } = await admin
+        .from('account_deletion_throttle')
+        .select('user_id')
+        .eq('user_id', session.userId);
+      expect(data).toEqual([]);
+    });
+
+    it('a chave pública e o usuário logado não alcançam a tabela nem as funções', async () => {
+      const { client, userId } = await createSignedInClient('throttle-grants');
+      const anon = SupabaseFactory.createAnon();
+      const params = { p_user_id: userId };
+
+      for (const caller of [client, anon]) {
+        const table = await caller.from('account_deletion_throttle').select('*');
+        expect(table.error?.code).toBe(PERMISSION_DENIED);
+        for (const fn of [
+          'claim_account_deletion_password_attempt',
+          'release_account_deletion_password_attempt',
+          'claim_account_deletion_email',
+        ] as const) {
+          const { error } = await caller.rpc(fn, params);
+          expect(error?.code).toBe(PERMISSION_DENIED);
+        }
+      }
     });
   });
 

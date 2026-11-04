@@ -22,6 +22,25 @@ export type Database = {
         };
         Relationships: [];
       };
+      account_deletion_throttle: {
+        Row: {
+          failed_password_at: string[];
+          last_email_at: string | null;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          failed_password_at?: string[];
+          last_email_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          failed_password_at?: string[];
+          last_email_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       character_lore: {
         Row: {
           age: string | null;
@@ -677,6 +696,8 @@ export type Database = {
       auth_user_has_password: { Args: { p_user_id: string }; Returns: boolean };
       auth_user_id_exists: { Args: { p_user_id: string }; Returns: boolean };
       cancel_party_gm_claim: { Args: { p_party_id: string }; Returns: undefined };
+      claim_account_deletion_email: { Args: { p_user_id: string }; Returns: boolean };
+      claim_account_deletion_password_attempt: { Args: { p_user_id: string }; Returns: boolean };
       claim_party_gm: { Args: { p_party_id: string }; Returns: string };
       duplicate_character: { Args: { p_character_id: string; p_name: string }; Returns: string };
       encounter_turns: {
@@ -751,6 +772,10 @@ export type Database = {
           race: string;
           theme_color: string;
         }[];
+      };
+      release_account_deletion_password_attempt: {
+        Args: { p_user_id: string };
+        Returns: undefined;
       };
       request_party_join: { Args: { p_code: string }; Returns: string };
       set_encounter_order: {

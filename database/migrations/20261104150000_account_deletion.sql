@@ -17,8 +17,10 @@ REVOKE ALL ON TABLE public.account_deletion_requests FROM PUBLIC, anon, authenti
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.account_deletion_requests TO service_role;
 
 -- 2. Se a conta tem senha. O servidor descobre sozinho, em vez de a tela perguntar: um "não tenho
--- senha" escolhido na tela deixaria qualquer um com a sessão aberta pular a conferência. O Auth
--- grava texto vazio em quem nunca teve senha, então NULL não basta.
+-- senha" escolhido na tela deixaria qualquer um com a sessão aberta pular a conferência. Só quem
+-- entrou apenas pelo Google fica sem senha, com NULL ou texto vazio. Quem entrou por link mágico tem
+-- uma senha aleatória que nunca viu, criada pelo Auth e impossível de distinguir de uma real: passa
+-- pela conferência e usa "Esqueci minha senha".
 --
 -- SECURITY DEFINER porque o service_role não lê auth.users. Só o service_role executa.
 CREATE FUNCTION public.auth_user_has_password(p_user_id uuid)

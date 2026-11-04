@@ -25,6 +25,8 @@ export const UserErrorCodes = {
   DELETION_USERNAME_MISMATCH: 'account_deletion_error_username_mismatch',
   DELETION_PASSWORD_INVALID: 'account_deletion_error_password_invalid',
   DELETION_LINK_INVALID: 'account_deletion_error_link_invalid',
+  DELETION_TOO_SOON: 'account_deletion_error_too_soon',
+  DELETION_TOO_MANY_ATTEMPTS: 'account_deletion_error_too_many_attempts',
 } as const;
 
 export type UserErrorCode = (typeof UserErrorCodes)[keyof typeof UserErrorCodes];
@@ -32,6 +34,8 @@ export type UserErrorCode = (typeof UserErrorCodes)[keyof typeof UserErrorCodes]
 // Codes not listed here are validation errors.
 const ERROR_KINDS: Partial<Record<UserErrorCode, AppErrorKind>> = {
   [UserErrorCodes.AUTH_USER_NOT_FOUND]: 'not_found',
+  [UserErrorCodes.DELETION_TOO_SOON]: 'rate_limited',
+  [UserErrorCodes.DELETION_TOO_MANY_ATTEMPTS]: 'rate_limited',
 };
 
 export class UserError extends AppError {
