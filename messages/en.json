@@ -1413,5 +1413,44 @@
     "edition": "Edition",
     "pickerDescription": "Turn on the conditions affecting this creature.",
     "exhaustionLevel": "Exhaustion level"
+  },
+  "accountDeletion": {
+    "dangerZone": {
+      "title": "Danger zone",
+      "intro": "Deleting your account is permanent and cannot be undone. This will erase:",
+      "erasesLogin": "Your login and profile",
+      "erasesCharacters": "All your characters and NPCs, with everything on them",
+      "erasesImages": "Your images, such as avatars (they are removed shortly after)",
+      "keptTitle": "Parties that stay without a GM",
+      "keptHint": "Their active players can still use them and choose a new GM.",
+      "deletedTitle": "Parties that will be deleted",
+      "deletedHint": "They have no active players.",
+      "lastPlayerTitle": "Parties without a GM where you are the last player",
+      "lastPlayerHint": "They will be deleted too.",
+      "open": "Delete my account",
+      "dialogTitle": "Delete your account?",
+      "dialogDescription": "First we confirm it is you, then we e-mail you a link. Nothing is deleted until you confirm there.",
+      "usernameInstruction": "To continue, type your username: <bold>{username}</bold>",
+      "usernameLabel": "Your username",
+      "passwordLabel": "Password",
+      "forgotPassword": "Forgot my password",
+      "passwordHelp": "If you signed in with an e-mail link before, you have a password you never saw. Set a new one with “Forgot my password”.",
+      "submit": "Send confirmation e-mail",
+      "sentTitle": "Check your e-mail",
+      "sentDescription": "We sent a link to the e-mail of your account. It works once and for 1 hour. Your account is only deleted when you confirm there.",
+      "sendAgain": "Send again",
+      "sendAgainHint": "Sending again makes the previous link stop working."
+    },
+    "confirm": {
+      "title": "Confirm account deletion",
+      "description": "You are about to permanently delete the account <bold>{username}</bold>, with its characters, NPCs and images. This cannot be undone.",
+      "descriptionNoName": "You are about to permanently delete your account, with its characters, NPCs and images. This cannot be undone.",
+      "button": "Delete my account for good",
+      "invalidTitle": "This link does not work",
+      "invalidDescription": "It has expired, was already used or was replaced by a newer one. Request a new one in your profile settings.",
+      "backToSettings": "Go to settings",
+      "metaTitle": "Delete account"
+    },
+    "deleted": "Your account was deleted."
   }
 }

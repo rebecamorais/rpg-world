@@ -304,6 +304,8 @@ describe('Mesa sem mestre (Integration)', () => {
           status: 'active',
           gm_username: null,
           pending_requests: 0,
+          active_players: 2,
+          has_gm: false,
         },
       ]);
     });

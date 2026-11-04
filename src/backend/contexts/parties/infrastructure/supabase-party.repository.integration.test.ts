@@ -45,6 +45,8 @@ describe('SupabasePartyRepository (Integration)', () => {
         status: 'gm',
         gmUsername: null,
         pendingRequests: 0,
+        activePlayers: 0,
+        hasGm: true,
       },
     ]);
     expect(await repo.delete(id)).toBe(true);

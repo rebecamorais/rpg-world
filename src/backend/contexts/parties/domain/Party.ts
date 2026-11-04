@@ -17,6 +17,10 @@ export interface PartySummary {
   gmUsername: string | null;
   /** Join requests waiting for the GM (0 for players). */
   pendingRequests: number;
+  /** Members with status 'active' (the GM not counted). */
+  activePlayers: number;
+  /** False once the GM's account is gone; gmUsername is null then, and also for a GM with no username chosen. */
+  hasGm: boolean;
 }
 
 export interface MyParties {

@@ -71,6 +71,15 @@ describe('ApiClient', () => {
     expect(error.data).toEqual({ error: 'character_error_not_found' });
   });
 
+  it('um 429 com código (limite de e-mails da exclusão) chega como o código, não como falha genérica', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ error: 'account_deletion_error_too_soon' }, 429));
+
+    await expect(client.post('/x', {})).rejects.toMatchObject({
+      message: 'account_deletion_error_too_soon',
+      status: 429,
+    });
+  });
+
   it('usa o campo message quando não há error', async () => {
     fetchMock.mockResolvedValue(jsonResponse({ message: 'rate limited' }, 429));
 

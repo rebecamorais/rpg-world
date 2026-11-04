@@ -725,7 +725,9 @@ export type Database = {
       my_parties: {
         Args: Record<PropertyKey, never>;
         Returns: {
+          active_players: number;
           gm_username: string;
+          has_gm: boolean;
           name: string;
           party_id: string;
           pending_requests: number;

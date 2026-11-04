@@ -64,6 +64,8 @@ export class SupabasePartyRepository implements PartyRepo {
       status: row.status as MemberStatus | 'gm',
       gmUsername: row.gm_username,
       pendingRequests: row.pending_requests,
+      activePlayers: row.active_players,
+      hasGm: row.has_gm,
     }));
   }
 

@@ -282,6 +282,8 @@ describe('Funções das mesas (Integration)', () => {
           status: 'gm',
           gm_username: gmName,
           pending_requests: 2,
+          active_players: 0,
+          has_gm: true,
         },
         {
           party_id: otherParty,
@@ -291,7 +293,24 @@ describe('Funções das mesas (Integration)', () => {
           status: 'invited',
           gm_username: null,
           pending_requests: 0,
+          active_players: 0,
+          has_gm: true,
         },
+      ]);
+    });
+  });
+
+  describe('my_parties: active_players e has_gm', () => {
+    it('conta só os jogadores ativos, para o mestre e para quem joga', async () => {
+      await addMember(partyId, player.userId, 'active');
+      await addMember(partyId, stranger.userId, 'requested');
+
+      const asGm = await gm.client.rpc('my_parties');
+      const asPlayer = await player.client.rpc('my_parties');
+
+      expect(asGm.data?.map((p) => [p.active_players, p.has_gm])).toEqual([[1, true]]);
+      expect(asPlayer.data?.map((p) => [p.role, p.active_players, p.has_gm])).toEqual([
+        ['player', 1, true],
       ]);
     });
   });

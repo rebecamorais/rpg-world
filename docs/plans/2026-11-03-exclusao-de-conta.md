@@ -50,7 +50,7 @@ apagado (personagens, NPCs e imagens) e a lista das mesas que ficam sem mestre o
    antivírus e leitores de e-mail costumam abrir links sozinhos. O link funciona mesmo sem sessão,
    já que muita gente abre o e-mail no celular. Depois do botão, apaga na hora e sem volta.
 
-**Quem não tem senha** (entrou só com Google ou link mágico): digita o username e confirma pelo
+**Quem não tem senha** (entrou só com Google): digita o username e confirma pelo
 e-mail. O servidor descobre isso sozinho, com uma função só para `service_role` que lê
 `auth.users.encrypted_password`. Não pode ser um "não tenho senha" na tela, porque qualquer um com a
 sessão aberta escolheria essa opção.

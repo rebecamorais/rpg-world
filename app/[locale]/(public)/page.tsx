@@ -1,11 +1,14 @@
 /**
  * Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio). Licenciado sob a GNU GPLv3.
  */
+import { Suspense } from 'react';
+
 import Link from 'next/link';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
+import { AccountDeletedNotice } from '@frontend/components/landing/AccountDeletedNotice';
 import { AVAILABLE_FEATURES, FeatureGrid } from '@frontend/components/landing/FeatureGrid';
 import HeroCTA from '@frontend/components/layout/HeroCTA';
 import { SheetPreview } from '@frontend/components/layout/SheetPreview';
@@ -52,6 +55,9 @@ export default async function Home({ params }: LocaleParams) {
         }}
       />
       <div className="flex flex-1 flex-col items-center justify-center p-8 text-center transition-all duration-700 md:p-16">
+        <Suspense>
+          <AccountDeletedNotice />
+        </Suspense>
         <HeroCTA />
         <SheetPreview />
       </div>

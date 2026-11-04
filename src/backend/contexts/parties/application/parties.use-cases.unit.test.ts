@@ -69,6 +69,8 @@ const summary = (overrides: Partial<PartySummary>): PartySummary => ({
   status: 'active',
   gmUsername: 'mestra',
   pendingRequests: 0,
+  activePlayers: 0,
+  hasGm: true,
   ...overrides,
 });
 

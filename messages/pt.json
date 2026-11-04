@@ -1413,5 +1413,44 @@
     "edition": "Edição",
     "pickerDescription": "Ligue as condições que afetam esta criatura.",
     "exhaustionLevel": "Nível de exaustão"
+  },
+  "accountDeletion": {
+    "dangerZone": {
+      "title": "Zona de perigo",
+      "intro": "Excluir a conta é definitivo e não tem volta. Isto será apagado:",
+      "erasesLogin": "Seu login e seu perfil",
+      "erasesCharacters": "Todos os seus personagens e NPCs, com tudo o que têm",
+      "erasesImages": "Suas imagens, como avatares (saem pouco depois)",
+      "keptTitle": "Mesas que ficam sem mestre",
+      "keptHint": "Os jogadores ativos ainda podem usá-las e escolher um novo mestre.",
+      "deletedTitle": "Mesas que serão apagadas",
+      "deletedHint": "Elas não têm jogadores ativos.",
+      "lastPlayerTitle": "Mesas sem mestre em que você é a última jogadora",
+      "lastPlayerHint": "Elas também serão apagadas.",
+      "open": "Excluir minha conta",
+      "dialogTitle": "Excluir sua conta?",
+      "dialogDescription": "Primeiro confirmamos que é você, depois enviamos um link por e-mail. Nada é apagado até você confirmar lá.",
+      "usernameInstruction": "Para continuar, digite seu username: <bold>{username}</bold>",
+      "usernameLabel": "Seu username",
+      "passwordLabel": "Senha",
+      "forgotPassword": "Esqueci minha senha",
+      "passwordHelp": "Se você já entrou por link no e-mail, tem uma senha que nunca viu. Crie uma nova em “Esqueci minha senha”.",
+      "submit": "Enviar e-mail de confirmação",
+      "sentTitle": "Confira seu e-mail",
+      "sentDescription": "Enviamos um link para o e-mail da sua conta. Ele vale uma vez e por 1 hora. A conta só é excluída quando você confirmar lá.",
+      "sendAgain": "Enviar de novo",
+      "sendAgainHint": "Enviar de novo faz o link anterior parar de valer."
+    },
+    "confirm": {
+      "title": "Confirmar a exclusão da conta",
+      "description": "Você vai excluir de vez a conta <bold>{username}</bold>, com personagens, NPCs e imagens. Isso não tem volta.",
+      "descriptionNoName": "Você vai excluir de vez a sua conta, com personagens, NPCs e imagens. Isso não tem volta.",
+      "button": "Excluir minha conta de vez",
+      "invalidTitle": "Este link não funciona",
+      "invalidDescription": "Ele venceu, já foi usado ou foi trocado por um mais novo. Peça outro nas configurações do perfil.",
+      "backToSettings": "Ir para as configurações",
+      "metaTitle": "Excluir conta"
+    },
+    "deleted": "Sua conta foi excluída."
   }
 }
