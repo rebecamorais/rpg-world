@@ -190,7 +190,8 @@
     "ctaStart": "Start Playing",
     "previewLabel": "Example character sheet",
     "previewName": "Ada the Wise",
-    "previewClass": "High elf wizard · Level 5"
+    "previewClass": "High elf wizard · Level 5",
+    "ctaDemo": "See the demo"
   },
   "home": {
     "title": "RPG World"
@@ -1137,7 +1138,8 @@
           "alt": "The party inventory with coins and a chest of items"
         }
       }
-    }
+    },
+    "ctaDemo": "See the demo"
   },
   "translationInvite": {
     "title": "Help translate RPG World",
@@ -1499,6 +1501,23 @@
       "contribution": "What she did",
       "sources": "Sources"
     },
-    "notice": "Meet the women who inspired a world of adventure. This collection celebrates remarkable women from history, science, technology, literature, and leadership through original fantasy reinterpretations. Each character is inspired by a historical figure, but her abilities, equipment, adventures, and fictional biography belong to the RPG World fantasy setting. These characters are fictional tributes, not historically accurate portrayals or official endorsements."
+    "notice": "Meet the women who inspired a world of adventure. This collection celebrates remarkable women from history, science, technology, literature, and leadership through original fantasy reinterpretations. Each character is inspired by a historical figure, but her abilities, equipment, adventures, and fictional biography belong to the RPG World fantasy setting. These characters are fictional tributes, not historically accurate portrayals or official endorsements.",
+    "banner": {
+      "text": "The Pioneers demo: you are exploring a read-only campaign.",
+      "signUp": "Create account",
+      "back": "Back to app"
+    },
+    "nav": {
+      "label": "Demo navigation",
+      "overview": "Overview",
+      "chest": "Chest",
+      "npcs": "NPCs"
+    },
+    "invite": {
+      "title": "Make your own adventure",
+      "description": "The demo is read only. Create a free account to build your characters, join a party and save your progress.",
+      "create": "Create account",
+      "keep": "Keep exploring"
+    }
   }
 }

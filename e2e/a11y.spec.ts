@@ -37,7 +37,7 @@ async function landmarks(page: import('@playwright/test').Page) {
 }
 
 test.describe('acessibilidade (axe)', () => {
-  for (const path of ['/', '/features', '/login', '/register', '/forgot-password']) {
+  for (const path of ['/', '/features', '/login', '/register', '/forgot-password', '/demo']) {
     test(`página pública ${path}`, async ({ page }) => {
       await page.goto(path);
       await page.getByRole('main').waitFor();

@@ -7,6 +7,7 @@ import { setRequestLocale } from 'next-intl/server';
 
 import { UserProvider } from '@frontend/context/UserContext';
 import { DemoProvider } from '@frontend/demo/DemoContext';
+import { DemoFrame } from '@frontend/demo/DemoFrame';
 import { buildDemoData, resolveDemoSpells } from '@frontend/demo/data/build';
 import { DEMO_USER } from '@frontend/demo/ids';
 import type { DemoLocale } from '@frontend/demo/types';
@@ -29,13 +30,7 @@ export default async function DemoLayout({
   return (
     <DemoProvider data={data}>
       <UserProvider user={DEMO_USER}>
-        <main
-          id="main-content"
-          tabIndex={-1}
-          className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 outline-none sm:px-6 md:py-10"
-        >
-          {children}
-        </main>
+        <DemoFrame>{children}</DemoFrame>
       </UserProvider>
     </DemoProvider>
   );
