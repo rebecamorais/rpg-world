@@ -117,6 +117,60 @@ describe('DeleteAccountCard', () => {
     expect(send).toBeEnabled();
   });
 
+  it('enquanto as mesas carregam, avisa e não deixa enviar', async () => {
+    api.get.mockImplementation((url: string) =>
+      url === '/api/parties'
+        ? new Promise(() => {})
+        : Promise.resolve({ id: 'u1', username: 'thorin' }),
+    );
+    const user = userEvent.setup();
+    renderWithProviders(<DeleteAccountCard hasPassword={false} />);
+    expect(await screen.findByText(t.partiesLoading)).toBeInTheDocument();
+    const dialog = await openDialog(user);
+
+    await user.type(within(dialog).getByLabelText(t.usernameLabel), 'thorin');
+
+    expect(within(dialog).getByRole('button', { name: t.submit })).toBeDisabled();
+  });
+
+  it('se as mesas falham, mostra o erro com "tentar de novo" e o envio continua desativado', async () => {
+    api.get.mockImplementation(async (url: string) => {
+      if (url === '/api/parties') throw new APIError('internal_error', 500);
+      return { id: 'u1', username: 'thorin' };
+    });
+    const user = userEvent.setup();
+    renderWithProviders(<DeleteAccountCard hasPassword={false} />);
+
+    expect(await screen.findByText(t.partiesError)).toBeInTheDocument();
+    const dialog = await openDialog(user);
+    await user.type(within(dialog).getByLabelText(t.usernameLabel), 'thorin');
+    expect(within(dialog).getByRole('button', { name: t.submit })).toBeDisabled();
+    await user.keyboard('{Escape}');
+
+    api.get.mockImplementation(async (url: string) =>
+      url === '/api/parties'
+        ? parties({ asGm: [party('Com jogadores', { activePlayers: 2 })] })
+        : { id: 'u1', username: 'thorin' },
+    );
+    await user.click(screen.getByRole('button', { name: t.partiesRetry }));
+
+    expect(await screen.findByRole('group', { name: t.keptTitle })).toBeInTheDocument();
+    expect(screen.queryByText(t.partiesError)).not.toBeInTheDocument();
+  });
+
+  it('sem o username do perfil (ainda carregando), o envio fica desativado', async () => {
+    api.get.mockImplementation(async (url: string) =>
+      url === '/api/parties' ? parties() : new Promise(() => {}),
+    );
+    const user = userEvent.setup();
+    renderWithProviders(<DeleteAccountCard hasPassword={false} />);
+    await screen.findByRole('button', { name: t.open });
+    await waitFor(() => expect(screen.queryByText(t.partiesLoading)).not.toBeInTheDocument());
+    const dialog = await openDialog(user);
+
+    expect(within(dialog).getByRole('button', { name: t.submit })).toBeDisabled();
+  });
+
   it('o campo de senha só aparece para quem tem senha', async () => {
     const user = userEvent.setup();
     const { unmount } = renderCard({ hasPassword: false });

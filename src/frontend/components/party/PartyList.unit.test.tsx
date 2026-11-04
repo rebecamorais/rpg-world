@@ -101,6 +101,14 @@ describe('PartyList', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('convite de mesa sem mestre não oferece Aceitar, só Recusar', async () => {
+    renderList(mine({ invites: [party('invite', { status: 'invited', hasGm: false })] }));
+
+    const invites = await screen.findByRole('region', { name: t.invites });
+    expect(within(invites).getByRole('button', { name: t.decline })).toBeInTheDocument();
+    expect(within(invites).queryByRole('button', { name: t.accept })).not.toBeInTheDocument();
+  });
+
   it('aceitar um convite manda PATCH no próprio membro', async () => {
     vi.mocked(rpgWorldApi.patch).mockResolvedValue(undefined);
     renderList(mine({ invites: [party('invite', { status: 'invited' })] }));

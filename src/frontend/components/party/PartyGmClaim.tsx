@@ -38,6 +38,15 @@ export function PartyGmClaim({ party }: { party: PartyView }) {
   const gmCount = parties?.asGm.length ?? 0;
   const atLimit = gmCount >= MAX_GM_PARTIES;
 
+  // The only active player has nobody to wait for: the click makes them the GM on the spot
+  const onlyPlayer =
+    party.people.filter((person) => person.status === 'active').length === 1 &&
+    party.people.some((person) => person.userId === currentUser?.id && person.status === 'active');
+
+  const onClaim = () => {
+    if (window.confirm(t(onlyPlayer ? 'claimConfirmSolo' : 'claimConfirm'))) claimGm.mutate();
+  };
+
   const isCandidate = claim?.candidateId === currentUser?.id;
   const mustAnswer = !!claim && !!currentUser && claim.pendingUserIds.includes(currentUser.id);
 
@@ -51,14 +60,14 @@ export function PartyGmClaim({ party }: { party: PartyView }) {
 
         {!claim && (
           <>
-            <p>{t('claimHint')}</p>
+            <p>{t(onlyPlayer ? 'claimHintSolo' : 'claimHint')}</p>
             {atLimit && (
               <p id="gm-claim-limit" className="text-warning-flare">
                 {t('limit', { max: MAX_GM_PARTIES })}
               </p>
             )}
             <Button
-              onClick={() => claimGm.mutate()}
+              onClick={onClaim}
               loading={claimGm.isPending}
               disabled={atLimit || isBusy}
               aria-describedby={atLimit ? 'gm-claim-limit' : undefined}

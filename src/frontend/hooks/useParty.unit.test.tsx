@@ -2,7 +2,7 @@ import { waitFor } from '@testing-library/react';
 import { renderHookWithProviders } from '@tests/helpers/render';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { rpgWorldApi } from '@client';
+import { APIError, rpgWorldApi } from '@client';
 
 import { useParty } from './useParty';
 
@@ -28,5 +28,21 @@ describe('useParty', () => {
     await vi.advanceTimersByTimeAsync(20_000);
 
     expect(rpgWorldApi.get).toHaveBeenCalledTimes(calls);
+  });
+
+  it('mesa que some (404) numa busca de fundo: não mostra a mesa antiga e para de buscar', async () => {
+    vi.mocked(rpgWorldApi.get).mockReset();
+    vi.mocked(rpgWorldApi.get)
+      .mockResolvedValueOnce({ id: 'p1', hasGm: false })
+      .mockRejectedValue(new APIError('party_error_not_found', 404));
+    const { result } = renderHookWithProviders(() => useParty('p1'));
+    await waitFor(() => expect(result.current.party).toBeDefined());
+
+    await vi.advanceTimersByTimeAsync(20_000);
+    await waitFor(() => expect(result.current.error).toBeTruthy());
+    expect(result.current.party).toBeUndefined();
+
+    await vi.advanceTimersByTimeAsync(60_000);
+    expect(rpgWorldApi.get).toHaveBeenCalledTimes(2);
   });
 });

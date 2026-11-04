@@ -275,6 +275,9 @@ describe('Mesa sem mestre (Integration)', () => {
       await addMember(partyId, player.userId, 'active');
       await addMember(partyId, otherPlayer.userId, 'active');
       await admin().from('party_journals').insert({ party_id: partyId, doc_id: DOC });
+      await admin()
+        .from('inventory_items')
+        .insert({ container_id: await chestId(partyId), item_ref: ROPE, quantity: 2 });
       await deleteAccount(gm);
     });
 
@@ -289,6 +292,16 @@ describe('Mesa sem mestre (Integration)', () => {
       expect(party.data).toEqual([{ id: partyId, gm_id: null }]);
       expect(chest.data).toEqual([{ kind: 'party_chest' }]);
       expect(journal.data).toEqual([{ doc_id: DOC }]);
+    });
+
+    it('os itens do baú', async () => {
+      const items = await player.client
+        .from('inventory_items')
+        .select('item_ref, quantity')
+        .eq('container_id', await chestId(partyId));
+
+      expect(items.error).toBeNull();
+      expect(items.data).toEqual([{ item_ref: ROPE, quantity: 2 }]);
     });
 
     it('my_parties traz a mesa com gm_username nulo', async () => {

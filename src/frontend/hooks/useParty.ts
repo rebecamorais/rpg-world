@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import { rpgWorldApi } from '@client';
+import { APIError, rpgWorldApi } from '@client';
 
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { PARTIES_QUERY_KEY, partyQueryKey } from '@frontend/lib/query-keys';
@@ -24,9 +24,15 @@ export function useParty(partyId: string) {
     queryFn: () => rpgWorldApi.get<PartyView>(base),
     enabled: !!partyId,
     retry: false,
-    // Nobody pushes claim changes: without a GM the page polls, so a request or its approval shows up
-    refetchInterval: (q) => (q.state.data?.hasGm === false ? GM_CLAIM_POLL_MS : false),
+    // Nobody pushes claim changes: without a GM the page polls, so a request or its approval shows up.
+    // After an error (party deleted, member removed) there is nothing to wait for.
+    refetchInterval: (q) =>
+      q.state.status !== 'error' && q.state.data?.hasGm === false ? GM_CLAIM_POLL_MS : false,
   });
+
+  // A refetch that fails keeps the last party in `query.data`; when the answer was "not found" that
+  // party is gone (or the person is out of it), so the page shows the not-found state, not a stale one
+  const notFound = query.error instanceof APIError && query.error.status === 404;
 
   const onSettled = () =>
     Promise.all([
@@ -95,7 +101,7 @@ export function useParty(partyId: string) {
   });
 
   return {
-    party: query.data,
+    party: notFound ? undefined : query.data,
     isLoading: query.isLoading,
     error: query.error,
     rename,

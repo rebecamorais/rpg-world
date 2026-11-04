@@ -102,14 +102,17 @@ export default function PartyList() {
                 >
                   {t('decline')}
                 </Button>
-                <Button
-                  size="sm"
-                  disabled={isResponding}
-                  onClick={() => respond({ partyId: party.id, userId, accept: true })}
-                >
-                  <AppIcon name="Check" size={16} aria-hidden="true" />
-                  {t('accept')}
-                </Button>
+                {/* Nobody joins a party without a GM: accepting would always fail */}
+                {party.hasGm && (
+                  <Button
+                    size="sm"
+                    disabled={isResponding}
+                    onClick={() => respond({ partyId: party.id, userId, accept: true })}
+                  >
+                    <AppIcon name="Check" size={16} aria-hidden="true" />
+                    {t('accept')}
+                  </Button>
+                )}
               </div>
             </PartyRow>
           ))}

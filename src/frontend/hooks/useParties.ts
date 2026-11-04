@@ -52,6 +52,7 @@ export function useParties() {
     parties: query.data,
     isLoading: query.isLoading,
     error: query.error,
+    refetch: query.refetch,
     createParty: create.mutateAsync,
     isCreating: create.isPending,
     respond: respond.mutate,

@@ -88,6 +88,7 @@ function renderClaim(view: PartyView, me: string, asGmCount = 0) {
 describe('PartyGmClaim', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
     vi.mocked(rpgWorldApi.post).mockResolvedValue(undefined);
     vi.mocked(rpgWorldApi.patch).mockResolvedValue(undefined);
     vi.mocked(rpgWorldApi.delete).mockResolvedValue(undefined);
@@ -99,8 +100,38 @@ describe('PartyGmClaim', () => {
     const button = await screen.findByRole('button', { name: t.claim });
     await waitFor(() => expect(button).toBeEnabled());
     expect(screen.getByText(t.claimHint)).toBeInTheDocument();
+    expect(t.claimHint).toMatch(/keeping their sheets/);
 
     await userEvent.setup().click(button);
+    expect(window.confirm).toHaveBeenCalledWith(t.claimConfirm);
+    await waitFor(() => expect(rpgWorldApi.post).toHaveBeenCalledWith('/api/parties/p1/gm-claim'));
+  });
+
+  it('sem confirmar, o pedido não chama a API', async () => {
+    vi.mocked(window.confirm).mockReturnValue(false);
+    renderClaim(party(), 'ana');
+    const button = await screen.findByRole('button', { name: t.claim });
+    await waitFor(() => expect(button).toBeEnabled());
+
+    await userEvent.setup().click(button);
+
+    expect(window.confirm).toHaveBeenCalled();
+    expect(rpgWorldApi.post).not.toHaveBeenCalled();
+  });
+
+  it('único jogador ativo: o texto diz que vira mestre na hora, e a confirmação também', async () => {
+    renderClaim(
+      party({ people: [person('ana', 'ana'), { ...person('bia', 'bia'), status: 'requested' }] }),
+      'ana',
+    );
+    const button = await screen.findByRole('button', { name: t.claim });
+    await waitFor(() => expect(button).toBeEnabled());
+
+    expect(screen.getByText(t.claimHintSolo)).toBeInTheDocument();
+    expect(screen.queryByText(t.claimHint)).not.toBeInTheDocument();
+
+    await userEvent.setup().click(button);
+    expect(window.confirm).toHaveBeenCalledWith(t.claimConfirmSolo);
     await waitFor(() => expect(rpgWorldApi.post).toHaveBeenCalledWith('/api/parties/p1/gm-claim'));
   });
 

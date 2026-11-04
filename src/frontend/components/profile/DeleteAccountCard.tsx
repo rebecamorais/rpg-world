@@ -73,7 +73,7 @@ export function DeleteAccountCard({ hasPassword }: DeleteAccountCardProps) {
   const t = useTranslations('accountDeletion.dangerZone');
   const titleId = useId();
   const { profile } = useProfile();
-  const { parties } = useParties();
+  const { parties, error, refetch } = useParties();
   const [open, setOpen] = useState(false);
 
   // A GM's party with active players goes on without a GM; without them it goes with the account.
@@ -109,6 +109,20 @@ export function DeleteAccountCard({ hasPassword }: DeleteAccountCardProps) {
           hint={t('lastPlayerHint')}
           names={lastPlayer.map((p) => p.name)}
         />
+        {error ? (
+          <div role="alert" className="flex flex-col items-start gap-2">
+            <p className="text-danger-flare text-sm">{t('partiesError')}</p>
+            <Button variant="secondary" size="sm" onClick={() => refetch()}>
+              {t('partiesRetry')}
+            </Button>
+          </div>
+        ) : (
+          !parties && (
+            <p role="status" className="text-muted-foreground text-sm">
+              {t('partiesLoading')}
+            </p>
+          )
+        )}
         <Button
           variant="outline"
           className={cn(DANGER_BUTTON, 'w-full sm:w-auto sm:self-start')}
@@ -124,6 +138,7 @@ export function DeleteAccountCard({ hasPassword }: DeleteAccountCardProps) {
           <RequestDeletionDialog
             username={profile?.username ?? ''}
             hasPassword={hasPassword}
+            partiesLoaded={!!parties}
             onCancel={() => setOpen(false)}
           />
         </DialogContent>
@@ -135,10 +150,13 @@ export function DeleteAccountCard({ hasPassword }: DeleteAccountCardProps) {
 function RequestDeletionDialog({
   username,
   hasPassword,
+  partiesLoaded,
   onCancel,
 }: {
   username: string;
   hasPassword: boolean;
+  /** Until the affected parties show on the card, nobody can confirm blind. */
+  partiesLoaded: boolean;
   onCancel: () => void;
 }) {
   const t = useTranslations('accountDeletion.dangerZone');
@@ -254,7 +272,9 @@ function RequestDeletionDialog({
               type="submit"
               variant="outline"
               className={DANGER_BUTTON}
-              disabled={typed !== username || (hasPassword && !typedPassword)}
+              disabled={
+                !partiesLoaded || !username || typed !== username || (hasPassword && !typedPassword)
+              }
               loading={form.formState.isSubmitting}
             >
               {t('submit')}
