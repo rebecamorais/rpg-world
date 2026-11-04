@@ -40,10 +40,13 @@ const fake = vi.hoisted(() => {
   return { state, channel, client };
 });
 
+const demo = vi.hoisted(() => ({ isDemo: false }));
 vi.mock('@lib/supabase-browser', () => ({ getSupabaseBrowserClient: () => fake.client }));
+vi.mock('@frontend/demo/DemoContext', () => ({ useDemo: () => demo }));
 
 describe('usePartyChannel', () => {
   beforeEach(() => {
+    demo.isDemo = false;
     fake.client.removeChannel.mockClear();
     fake.client.realtime.setAuth.mockClear();
     fake.state.status = undefined;
@@ -108,5 +111,16 @@ describe('usePartyChannel', () => {
     await act(async () => fake.state.status!('SUBSCRIBED'));
 
     await waitFor(() => expect(queryFn).toHaveBeenCalledTimes(2));
+  });
+
+  it('na demo, não abre canal e não está ao vivo', () => {
+    demo.isDemo = true;
+    const getClient = vi.spyOn(fake.client, 'channel');
+
+    const { result } = renderHookWithProviders(() => usePartyChannel('p1'));
+
+    expect(getClient).not.toHaveBeenCalled();
+    expect(fake.client.realtime.setAuth).not.toHaveBeenCalled();
+    expect(result.current.live).toBe(false);
   });
 });

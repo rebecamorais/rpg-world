@@ -1,5 +1,8 @@
 import { useParams } from 'next/navigation';
 
+import { useDemo } from '@frontend/demo/DemoContext';
+import { DEMO_PARTY_ID } from '@frontend/demo/ids';
+
 export interface SheetSource {
   /** The GM of a party reading a sheet brought to it: nothing on the sheet can be changed. */
   readOnly: boolean;
@@ -16,6 +19,17 @@ export interface SheetSource {
  */
 export function useSheetSource(characterId: string, system?: string): SheetSource {
   const params = useParams();
+  const { isDemo } = useDemo();
+
+  if (isDemo) {
+    return {
+      readOnly: true,
+      partyId: DEMO_PARTY_ID,
+      apiPath: `/api/parties/${DEMO_PARTY_ID}/characters/${characterId}`,
+      pagesPath: `/demo/characters/${characterId}`,
+    };
+  }
+
   const partyId = typeof params?.partyId === 'string' ? params.partyId : null;
 
   if (partyId) {

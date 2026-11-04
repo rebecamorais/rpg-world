@@ -16,6 +16,7 @@ import { SectionCard } from '@frontend/components/ui/section-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import AppLink from '@frontend/demo/AppLink';
+import { useDemo } from '@frontend/demo/DemoContext';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useEncounter } from '@frontend/hooks/useEncounter';
 import { useParty } from '@frontend/hooks/useParty';
@@ -51,7 +52,25 @@ function GmView({ party, live }: { party: PartyView; live: boolean }) {
   const tCombat = useTranslations('combat');
   const { acceptMember, removeMember } = useParty(party.id);
   const { mode, setMode, isLoading } = useGmMode(party.id);
+  const { isDemo } = useDemo();
   const cards = party.gm?.rolePlay ?? [];
+
+  const rolePlay = (
+    <>
+      <h2 className="sr-only">{t('rolePlay')}</h2>
+      {cards.length === 0 ? (
+        <p className="text-muted-foreground">{t('noCharactersGm')}</p>
+      ) : (
+        <ul className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          {cards.map((card) => (
+            <li key={card.characterId}>
+              <RolePlayCard partyId={party.id} card={card} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
 
   return (
     <div className="flex flex-col gap-8">
@@ -62,32 +81,25 @@ function GmView({ party, live }: { party: PartyView; live: boolean }) {
         isBusy={acceptMember.isPending || removeMember.isPending}
       />
 
-      {!isLoading && (
-        <Tabs value={mode} onValueChange={setMode} className="flex flex-col gap-4">
-          <TabsList className="self-start">
-            <TabsTrigger value="roleplay">{tCombat('modeRolePlay')}</TabsTrigger>
-            <TabsTrigger value="combat">{tCombat('modeCombat')}</TabsTrigger>
-          </TabsList>
+      {isDemo ? (
+        <div className="flex flex-col gap-4">{rolePlay}</div>
+      ) : (
+        !isLoading && (
+          <Tabs value={mode} onValueChange={setMode} className="flex flex-col gap-4">
+            <TabsList className="self-start">
+              <TabsTrigger value="roleplay">{tCombat('modeRolePlay')}</TabsTrigger>
+              <TabsTrigger value="combat">{tCombat('modeCombat')}</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="roleplay" className="flex flex-col gap-4">
-            <h2 className="sr-only">{t('rolePlay')}</h2>
-            {cards.length === 0 ? (
-              <p className="text-muted-foreground">{t('noCharactersGm')}</p>
-            ) : (
-              <ul className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                {cards.map((card) => (
-                  <li key={card.characterId}>
-                    <RolePlayCard partyId={party.id} card={card} />
-                  </li>
-                ))}
-              </ul>
-            )}
-          </TabsContent>
+            <TabsContent value="roleplay" className="flex flex-col gap-4">
+              {rolePlay}
+            </TabsContent>
 
-          <TabsContent value="combat">
-            <GmCombatPanel party={party} live={live} />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="combat">
+              <GmCombatPanel party={party} live={live} />
+            </TabsContent>
+          </Tabs>
+        )
       )}
     </div>
   );
@@ -195,6 +207,7 @@ export function PartyPage({ partyId }: { partyId: string }) {
   const t = useTranslations('parties');
   const { party, isLoading } = useParty(partyId);
   const { live } = usePartyChannel(partyId);
+  const { isDemo } = useDemo();
 
   if (isLoading) return <LoadingState thematic />;
   if (!party) return <PartyNotFound />;
@@ -204,7 +217,8 @@ export function PartyPage({ partyId }: { partyId: string }) {
       title={party.name}
       eyebrow={party.role === 'gm' ? t('page.gmEyebrow') : t('page.playerEyebrow')}
       actions={
-        party.role === 'gm' && (
+        party.role === 'gm' &&
+        !isDemo && (
           <Button asChild variant="outline">
             <AppLink href={`/parties/${party.id}/settings`}>
               <AppIcon name="Settings2" size={18} aria-hidden="true" />
