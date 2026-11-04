@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
@@ -16,6 +15,7 @@ import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 import { useCurrentUser } from '@frontend/context/UserContext';
+import AppLink from '@frontend/demo/AppLink';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useEncounter } from '@frontend/hooks/useEncounter';
 import { useParty } from '@frontend/hooks/useParty';
@@ -182,9 +182,9 @@ export function PartyNotFound() {
       description={t('notFoundDescription')}
       className="w-full max-w-lg"
       action={
-        <Link href="/parties" className="text-primary-flare text-sm underline">
+        <AppLink href="/parties" className="text-primary-flare text-sm underline">
           {t('backToParties')}
-        </Link>
+        </AppLink>
       }
     />
   );
@@ -206,10 +206,10 @@ export function PartyPage({ partyId }: { partyId: string }) {
       actions={
         party.role === 'gm' && (
           <Button asChild variant="outline">
-            <Link href={`/parties/${party.id}/settings`}>
+            <AppLink href={`/parties/${party.id}/settings`}>
               <AppIcon name="Settings2" size={18} aria-hidden="true" />
               {t('settings.open')}
-            </Link>
+            </AppLink>
           </Button>
         )
       }
