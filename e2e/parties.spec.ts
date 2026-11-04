@@ -207,6 +207,15 @@ test.describe('mesas', () => {
     await player.context.close();
   });
 
+  test('o mestre exclui a mesa: aviso e volta para a lista', async ({ page, user: _ }) => {
+    const { id: partyId } = await createParty(page, 'Mesa Para Apagar');
+    await page.goto(`${partyUrl(partyId)}/settings`);
+    page.once('dialog', (dialog) => dialog.accept());
+    await (await hydrated(page.getByRole('button', { name: 'Delete party' }))).click();
+    await expect(page.getByText('Party deleted')).toBeVisible();
+    await expect.poll(() => new URL(page.url()).pathname).toBe('/parties');
+  });
+
   test('o diário da mesa aparece para o jogador, com aviso no celular', async ({
     page,
     browser,

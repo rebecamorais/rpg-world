@@ -72,14 +72,17 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
     rename.mutate(name, { onSuccess: () => toast.success(t('renamed')) });
   };
 
-  const deleteParty = () => {
+  const deleteParty = async () => {
     if (!window.confirm(t('deleteConfirm'))) return;
-    remove.mutate(undefined, {
-      onSuccess: () => {
-        toast.success(t('deleted'));
-        onDeleted();
-      },
-    });
+    // mutateAsync, not mutate's callbacks: the party reload that follows answers "not found" and
+    // unmounts this panel before a callback would run
+    try {
+      await remove.mutateAsync();
+      toast.success(t('deleted'));
+      onDeleted();
+    } catch {
+      // useParty already shows the error
+    }
   };
 
   return (
