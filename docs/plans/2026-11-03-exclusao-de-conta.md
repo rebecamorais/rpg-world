@@ -76,7 +76,7 @@ cascata. Depois encerra a sessão, se houver, e a pessoa volta para a página in
 | Itens já colocados no baú da party      | Ficam: são da mesa                                          |
 | Feedbacks da conta                      | Anonimizados: sem conta e sem e-mail, o texto fica (abaixo) |
 
-**Feedbacks:** a coluna `email` passa a aceitar `NULL`. Um gatilho `BEFORE DELETE` em `profile` limpa
+**Feedbacks:** a coluna `email` passa a aceitar `NULL`. Um gatilho `BEFORE DELETE` em `auth.users` limpa
 o e-mail dos feedbacks da conta, pelo `user_id` e também pelo e-mail dela, porque quem envia sem estar
 logado não fica com `user_id`. Assim vale também para uma exclusão manual. **O texto continua
 guardado e pode ter dados pessoais que a própria pessoa escreveu**, então a política não chama isso
