@@ -74,13 +74,18 @@ cascata. Depois encerra a sessão, se houver, e a pessoa volta para a página in
 | Mesas como mestre, sem jogadores ativos | Apagadas                                                    |
 | Participação em mesas de outros         | Apagada; pedido pendente é reavaliado (abaixo)              |
 | Itens já colocados no baú da party      | Ficam: são da mesa                                          |
-| Feedbacks da conta                      | Anonimizados: sem conta e sem e-mail, o texto fica (abaixo) |
+| Feedbacks da conta                      | Ficam com o texto e o ID da conta; perdem o e-mail (abaixo) |
 
-**Feedbacks:** a coluna `email` passa a aceitar `NULL`. Um gatilho `BEFORE DELETE` em `auth.users` limpa
-o e-mail dos feedbacks da conta, pelo `user_id` e também pelo e-mail dela, porque quem envia sem estar
-logado não fica com `user_id`. Assim vale também para uma exclusão manual. **O texto continua
-guardado e pode ter dados pessoais que a própria pessoa escreveu**, então a política não chama isso
-de anônimo sem esse aviso; quem quiser o texto apagado pede ao suporte.
+**Feedbacks:** o que importa é o texto, então ele fica, com o ID da conta para identificação, se
+preciso. `feedback.user_id` perde a chave estrangeira para `profile`, porque o `ON DELETE SET NULL`
+apagaria o ID, e passa a ser só um valor. A coluna `email` passa a aceitar `NULL`, e um gatilho
+`BEFORE DELETE` em `auth.users` limpa o e-mail pelo `user_id` e pelo próprio e-mail, porque quem envia
+sem estar logado não fica com `user_id`. Esses, enviados sem login, continuam sem ID. Assim vale
+também para uma exclusão manual.
+
+**Isso não é anonimização, e a política não usa essa palavra.** O texto pode ter dados pessoais que a
+própria pessoa escreveu, e o ID ainda pode ser ligado ao e-mail pelas mensagens já enviadas ao
+Discord, que trazem os dois. Quem quiser o texto apagado pede ao suporte.
 
 As mensagens de suporte já enviadas ao Discord não são apagadas automaticamente. A política diz isso.
 
@@ -172,7 +177,7 @@ não substitui revisão jurídica.**
   Depois da confirmação, a exclusão é imediata e não pode ser desfeita. Para os demais direitos, ou se não conseguir excluir por lá, fale conosco
   pelo [formulário de suporte] ou pelo [Discord]; respondemos em até 5 dias úteis."
 - **Seção 4, o que acontece ao excluir:** novo trecho. Dados apagados; imagens saem em até 2 dias;
-  feedbacks perdem a conta e o e-mail, mas o texto fica; mensagens já enviadas ao suporte pelo Discord podem continuar lá até serem apagadas a pedido; o
+  feedbacks perdem o e-mail, mas o texto e o ID da conta ficam; mensagens já enviadas ao suporte pelo Discord podem continuar lá até serem apagadas a pedido; o
   que você colocou no baú e o link do diário ficam com a mesa; mesa com jogadores fica sem mestre.
 - **Seção 6, Transferência Internacional:** tira "ao utilizar, você consente". Passa a dizer que a
   transferência é necessária para prestar o serviço que você pediu (LGPD, art. 33, IX, combinado com
@@ -221,7 +226,7 @@ vai para o suporte pelo Discord, que tira a pessoa da mesa; recusa não vai para
 hora; sem exportação por enquanto; revisão jurídica não bloqueia; o PR deixa tudo pronto.
 
 **Dela, nesta revisão:** username, senha e confirmação por e-mail; botão de suporte ativo depois de 1
-dia; quem tem 5 mesas não assume; feedbacks anonimizados em vez de apagados.
+dia; quem tem 5 mesas não assume; feedbacks ficam com o texto e o ID da conta, sem o e-mail.
 
 **Minhas, para conferir:** `NULL` em vez de ID 0; acordo de **todos**; jogador único vira mestre na
 hora; recusa cancela e pode pedir de novo; quem não tem senha confirma só por e-mail; link vale 1 hora e
