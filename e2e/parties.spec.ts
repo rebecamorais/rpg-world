@@ -380,8 +380,8 @@ test.describe('mesas', () => {
     await (await hydrated(caio.page.getByRole('button', { name: 'Agree' }))).click();
 
     // The new GM sees the GM's view
-    await bia.page.reload();
-    await expect(bia.page.getByText('You are the GM')).toBeVisible();
+    // No reload: the page polls while the party has no GM
+    await expect(bia.page.getByText('You are the GM')).toBeVisible({ timeout: 30_000 });
     await expect(bia.page.getByRole('tab', { name: 'Combat' })).toBeVisible();
     await expect(bia.page.getByText('This party has no GM')).toHaveCount(0);
 

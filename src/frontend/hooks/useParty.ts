@@ -11,6 +11,8 @@ import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
+const GM_CLAIM_POLL_MS = 20_000;
+
 /** A party page and everything done on it; each change reloads the page and the party list. */
 export function useParty(partyId: string) {
   const queryClient = useQueryClient();
@@ -22,6 +24,8 @@ export function useParty(partyId: string) {
     queryFn: () => rpgWorldApi.get<PartyView>(base),
     enabled: !!partyId,
     retry: false,
+    // Nobody pushes claim changes: without a GM the page polls, so a request or its approval shows up
+    refetchInterval: (q) => (q.state.data?.hasGm === false ? GM_CLAIM_POLL_MS : false),
   });
 
   const onSettled = () =>
