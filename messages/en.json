@@ -1488,5 +1488,17 @@
       "metaTitle": "Delete account"
     },
     "deleted": "Your account was deleted."
+  },
+  "demo": {
+    "metaTitle": "Demo · The Pioneers",
+    "npcsTitle": "NPCs",
+    "inspiration": {
+      "title": "Meet the Inspiration",
+      "realName": "Inspired by",
+      "period": "Lived",
+      "contribution": "What she did",
+      "sources": "Sources"
+    },
+    "notice": "Meet the women who inspired a world of adventure. This collection celebrates remarkable women from history, science, technology, literature, and leadership through original fantasy reinterpretations. Each character is inspired by a historical figure, but her abilities, equipment, adventures, and fictional biography belong to the RPG World fantasy setting. These characters are fictional tributes, not historically accurate portrayals or official endorsements."
   }
 }

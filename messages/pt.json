@@ -1488,5 +1488,17 @@
       "metaTitle": "Excluir conta"
     },
     "deleted": "Sua conta foi excluída."
+  },
+  "demo": {
+    "metaTitle": "Demo · The Pioneers",
+    "npcsTitle": "NPCs",
+    "inspiration": {
+      "title": "Conheça a inspiração",
+      "realName": "Inspirada em",
+      "period": "Viveu",
+      "contribution": "O que ela fez",
+      "sources": "Fontes"
+    },
+    "notice": "Conheça as mulheres que inspiraram um mundo de aventuras. Esta coleção celebra mulheres extraordinárias da história, ciência, tecnologia, literatura e liderança por meio de interpretações originais de fantasia. Cada personagem é inspirada em uma figura histórica, mas suas habilidades, equipamentos, aventuras e biografia fictícia pertencem ao universo de fantasia do RPG World. Essas personagens são homenagens fictícias, não representações historicamente precisas ou endossos oficiais."
   }
 }
