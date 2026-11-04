@@ -29,4 +29,12 @@ describe('FeaturesCta', () => {
 
     expect(screen.getByRole('link', { name: t.ctaStart })).toHaveAttribute('href', '/register');
   });
+
+  it('also links to the demo', () => {
+    vi.mocked(useSession).mockReturnValue({ user: null, status: 'signed-out' });
+
+    renderWithProviders(<FeaturesCta />);
+
+    expect(screen.getByRole('link', { name: t.ctaDemo })).toHaveAttribute('href', '/demo');
+  });
 });

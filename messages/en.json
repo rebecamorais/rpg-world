@@ -5,6 +5,7 @@
       "unknown": "An unknown error occurred. Please try again.",
       "common_error_invalid_request": "Invalid data. Check the fields and try again.",
       "common_error_unexpected": "Something went wrong on our side. Please try again shortly.",
+      "demo_read_only": "This is a read-only demo. Create a free account to play.",
       "account_deletion_error_username_mismatch": "That is not your username.",
       "account_deletion_error_password_invalid": "Incorrect password. If you never created one, for example because you signed in with an e-mail link, use “Forgot password?” to set it.",
       "account_deletion_error_too_soon": "This e-mail was sent less than a minute ago. Check your inbox, or wait a moment and ask again.",
@@ -189,7 +190,8 @@
     "ctaStart": "Start Playing",
     "previewLabel": "Example character sheet",
     "previewName": "Ada the Wise",
-    "previewClass": "High elf wizard · Level 5"
+    "previewClass": "High elf wizard · Level 5",
+    "ctaDemo": "See the demo"
   },
   "home": {
     "title": "RPG World"
@@ -1136,7 +1138,8 @@
           "alt": "The party inventory with coins and a chest of items"
         }
       }
-    }
+    },
+    "ctaDemo": "See the demo"
   },
   "translationInvite": {
     "title": "Help translate RPG World",
@@ -1487,5 +1490,34 @@
       "metaTitle": "Delete account"
     },
     "deleted": "Your account was deleted."
+  },
+  "demo": {
+    "metaTitle": "Demo · The Pioneers",
+    "npcsTitle": "NPCs",
+    "inspiration": {
+      "title": "Meet the Inspiration",
+      "realName": "Inspired by",
+      "period": "Lived",
+      "contribution": "What she did",
+      "sources": "Sources"
+    },
+    "notice": "Meet the women who inspired a world of adventure. This collection celebrates remarkable women from history, science, technology, literature, and leadership through original fantasy reinterpretations. Each character is inspired by a historical figure, but her abilities, equipment, adventures, and fictional biography belong to the RPG World fantasy setting. These characters are fictional tributes, not historically accurate portrayals or official endorsements.",
+    "banner": {
+      "text": "The Pioneers demo: you are exploring a read-only campaign.",
+      "signUp": "Create account",
+      "back": "Back to app"
+    },
+    "nav": {
+      "label": "Demo navigation",
+      "overview": "Overview",
+      "chest": "Chest",
+      "npcs": "NPCs"
+    },
+    "invite": {
+      "title": "Make your own adventure",
+      "description": "The demo is read only. Create a free account to build your characters, join a party and save your progress.",
+      "create": "Create account",
+      "keep": "Keep exploring"
+    }
   }
 }

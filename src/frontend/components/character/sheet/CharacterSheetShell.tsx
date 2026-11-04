@@ -2,7 +2,6 @@
 
 import { ReactNode } from 'react';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
@@ -13,6 +12,7 @@ import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharacterMeta, useCharacterState } from '@frontend/context/CharacterContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
+import AppLink from '@frontend/demo/AppLink';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { useLeaveGuard } from '@frontend/hooks/useUnsavedChanges';
 import { characterTheme } from '@frontend/lib/color-utils';
@@ -24,9 +24,9 @@ function ReadOnlyBar({ partyId }: { partyId: string }) {
 
   return (
     <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-      <Link href={`/parties/${partyId}`} className="text-primary-flare text-sm underline">
+      <AppLink href={`/parties/${partyId}`} className="text-primary-flare text-sm underline">
         {t('back')}
-      </Link>
+      </AppLink>
       <Badge variant="secondary" className="text-label">
         <AppIcon name="Eye" size={14} aria-hidden="true" />
         {t('readOnly')}
@@ -68,12 +68,12 @@ export function CharacterSheetShell({ children }: { children: ReactNode }) {
         title={t('notFoundOrNoPermission')}
         className="w-full max-w-lg"
         action={
-          <Link
+          <AppLink
             href={partyId ? `/parties/${partyId}` : '/characters'}
             className="text-primary-flare text-sm underline"
           >
             {tCommon('back')}
-          </Link>
+          </AppLink>
         }
       />
     );

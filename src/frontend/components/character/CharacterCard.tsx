@@ -1,7 +1,5 @@
 'use client';
 
-import Link from 'next/link';
-
 import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
@@ -16,6 +14,7 @@ import {
 } from '@frontend/components/ui/dropdown-menu';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharactersContext } from '@frontend/context/CharactersContext';
+import AppLink from '@frontend/demo/AppLink';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { useDuplicateCharacter } from '@frontend/hooks/useDuplicateCharacter';
 import { characterTheme } from '@frontend/lib/color-utils';
@@ -70,9 +69,9 @@ export function CharacterCard({ character }: CharacterCardProps) {
             <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
               <div className="flex w-full items-center justify-between gap-2 overflow-hidden">
                 <h2 className="text-title text-character-flare truncate">
-                  <Link href={href} className="outline-none after:absolute after:inset-0">
+                  <AppLink href={href} className="outline-none after:absolute after:inset-0">
                     {character.name}
-                  </Link>
+                  </AppLink>
                 </h2>
                 <Badge
                   variant="secondary"

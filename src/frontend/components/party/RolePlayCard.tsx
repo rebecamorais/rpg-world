@@ -1,11 +1,10 @@
 'use client';
 
-import Link from 'next/link';
-
 import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { Card, CardContent } from '@frontend/components/ui/card';
+import AppLink from '@frontend/demo/AppLink';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
@@ -50,12 +49,12 @@ export function CharacterIdentity({
       )}
       <div className="flex min-w-0 flex-col">
         {href ? (
-          <Link
+          <AppLink
             href={href}
             className="text-title text-character-flare focus-ring truncate rounded-sm hover:underline"
           >
             {character.name}
-          </Link>
+          </AppLink>
         ) : (
           <span className="text-title text-character-flare truncate">{character.name}</span>
         )}
@@ -78,12 +77,12 @@ export function RolePlayCard({ partyId, card }: { partyId: string; card: RolePla
         <div className="bg-character absolute top-0 left-0 h-1 w-full opacity-80" />
         <CardContent className="flex h-full flex-col gap-4 p-5">
           {/* The link is stretched over the card (::after) */}
-          <Link
+          <AppLink
             href={`/parties/${partyId}/characters/${card.characterId}`}
             className="outline-none after:absolute after:inset-0"
           >
             <CharacterIdentity character={card} />
-          </Link>
+          </AppLink>
           <p className="text-label text-muted-foreground -mt-2">
             {card.ownerUsername
               ? t('playedBy', { username: card.ownerUsername })
