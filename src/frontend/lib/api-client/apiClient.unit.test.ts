@@ -95,4 +95,21 @@ describe('ApiClient', () => {
       data: {},
     });
   });
+
+  describe('transporte', () => {
+    it('com transporte ativo, responde sem chamar fetch', async () => {
+      client.setTransport(() => Promise.resolve({ demo: true }));
+      await expect(client.get('/x')).resolves.toEqual({ demo: true });
+      expect(fetchMock).not.toHaveBeenCalled();
+      client.setTransport(null);
+    });
+
+    it.each([undefined, null])('com %s, segue para a rede', async (transport) => {
+      client.setTransport(transport === null ? null : () => undefined);
+      fetchMock.mockResolvedValue(jsonResponse({ id: 1 }));
+      await expect(client.get('/x')).resolves.toEqual({ id: 1 });
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      client.setTransport(null);
+    });
+  });
 });

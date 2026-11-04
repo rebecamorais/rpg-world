@@ -15,7 +15,16 @@ export class APIError extends Error {
   }
 }
 
+/** Answers a request itself (a promise) or leaves it to the network (`undefined`). */
+export type ApiTransport = (method: string, url: string) => Promise<unknown> | undefined;
+
 export class ApiClient {
+  private transport: ApiTransport | null = null;
+
+  setTransport(transport: ApiTransport | null): void {
+    this.transport = transport;
+  }
+
   constructor(private basePath: string = '') {}
 
   private async fetchWrapper<T, B = unknown>(
@@ -35,6 +44,9 @@ export class ApiClient {
     if (body !== undefined) {
       config.body = JSON.stringify(body);
     }
+
+    const answer = this.transport?.(restOptions.method ?? 'GET', url);
+    if (answer) return answer as Promise<T>;
 
     const fullUrl = `${this.basePath}${url}`;
     const response = await fetch(fullUrl, config);
