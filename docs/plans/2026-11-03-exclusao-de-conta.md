@@ -1,7 +1,7 @@
 # Exclusão de conta
 
 **Data:** 2026-11-03
-**Status:** design para revisão. O plano de implementação vem depois.
+**Status:** implementado; PR a abrir. Plano de implementação: `2026-11-04-exclusao-de-conta-implementacao.md`.
 
 ## Por que
 

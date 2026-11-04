@@ -4,7 +4,9 @@
 **Status:** party e papéis entregues como "mesas" (fases 1 e 2, #124–#126); o diário da mesa
 (passo 1 das notas, o link do Google Docs embutido na página da mesa) entregue na branch
 `feat/diario-mesa`; as notas por sessão e a visibilidade por nota (passos 2 e 3) ainda são ideia.
-É o pré-requisito do plano `2026-10-15-sessoes-calendario-discord.md`.
+A mesa agora sobrevive à exclusão da conta do mestre e fica sem mestre até alguém assumir
+(`2026-11-03-exclusao-de-conta.md`). É o pré-requisito do plano
+`2026-10-15-sessoes-calendario-discord.md`.
 
 Hoje cada personagem é visto só pela dona ou dono. A ideia é o usuário poder **criar uma party**,
 convidar pessoas com o papel de **Mestre (Dungeon Master)** ou **Membro da party**, e os membros
