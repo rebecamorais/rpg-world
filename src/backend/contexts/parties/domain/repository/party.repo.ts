@@ -8,7 +8,8 @@ export interface PartyRecord {
   id: string;
   name: string;
   system: string;
-  gmId: string;
+  /** Null when the GM deleted their account and the party lives on without one. */
+  gmId: string | null;
   edition: Edition;
   imageUrl: string | null;
 }
