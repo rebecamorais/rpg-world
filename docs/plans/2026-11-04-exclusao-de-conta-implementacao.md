@@ -148,7 +148,7 @@ Cada um tem teste na tarefa dona:
 - Produz:
   - `account_deletion_requests (user_id PK REFERENCES auth.users ON DELETE CASCADE, token_hash text UNIQUE NOT NULL, expires_at timestamptz NOT NULL)`: RLS ligado, sem política, só `service_role`;
   - `auth_user_has_password(p_user_id uuid) RETURNS boolean`: só `service_role`, no molde de `auth_user_exists`;
-  - gatilho `BEFORE DELETE ON auth.users` que zera `feedback.email` por `user_id` ou por `lower(email)`. **Corrige o design:** tem de ser em `auth.users`, porque o `BEFORE DELETE` de `profile` roda já na cascata, quando a linha de `auth.users` não existe mais e o e-mail não dá para ler. `feedback.email` passa a aceitar `NULL`, e `feedback.user_id` perde a FK para `profile` (o `ON DELETE SET NULL` apagaria o ID);
+  - gatilho `BEFORE DELETE ON auth.users` que zera `feedback.email` por `user_id` ou por `lower(email)`. **Corrige o design:** tem de ser em `auth.users`, porque o `BEFORE DELETE` de `profile` roda já na cascata, quando a linha de `auth.users` não existe mais e o e-mail não dá para ler. `feedback.email` passa a aceitar `NULL`; `feedback.user_id` continua como está, porque o `ON DELETE SET NULL` limpa o vínculo;
   - `EmailService.sendAccountDeletionEmail(email: string, confirmLink: string): Promise<void>`;
   - `RequestAccountDeletionUseCase.execute({ userId, email, username, password? }, confirmUrl): Promise<void>`;
   - `GetAccountDeletionUseCase.execute(token): Promise<{ username: string | null } | null>`;
@@ -158,7 +158,7 @@ Cada um tem teste na tarefa dona:
 
 - [ ] **Passo 1: testes de integração que falham:**
   - excluir apaga conta, personagens e NPCs; a fila de `orphan_avatar_objects` passa a ter as imagens;
-  - feedback com `user_id` e outro sem `user_id` com o mesmo e-mail em maiúsculas: os dois ficam com `email` nulo e `message` igual; o primeiro **mantém o `user_id`**, e o segundo continua sem; feedback de outra pessoa não muda;
+  - feedback com `user_id` e outro sem `user_id` com o mesmo e-mail em maiúsculas: os dois ficam com `user_id` e `email` nulos e `message` igual; feedback de outra pessoa não muda;
   - `auth_user_has_password`: verdadeiro com senha, falso para usuário criado sem senha; `authenticated` não executa;
   - `authenticated` não lê `account_deletion_requests`.
 - [ ] **Passo 2: testes unit que falham:**
@@ -232,9 +232,9 @@ Cada um tem teste na tarefa dona:
 - Modificar: `messages/en.json`, `messages/pt.json`, `app/[locale]/(public)/privacy/page.tsx` (se os novos parágrafos precisarem de marcação), `README.md` (se citar a exclusão), `database/db-test` só se precisar
 - Teste: `app/[locale]/(public)/privacy/*.unit.test.tsx`, se existir; senão, `e2e/static-pages.spec.ts`
 
-- [ ] **Passo 1:** nas seções 3, 4 e 6, aplicar o texto da seção "Política de Privacidade" do design, em `pt` e `en`. Atualizar `privacy.lastUpdated`. Adicionar o trecho sobre feedbacks: o e-mail sai; o texto e o ID da conta ficam, o texto pode ter dados que a pessoa escreveu, e dá para pedir ao suporte para apagar. Não usar a palavra "anônimo". Trocar "Discord" por "formulário de suporte ou Discord" onde a política manda fazer pedidos.
+- [ ] **Passo 1:** nas seções 3, 4 e 6, aplicar o texto da seção "Política de Privacidade" do design, em `pt` e `en`. Atualizar `privacy.lastUpdated`. Adicionar o trecho sobre feedbacks, com este sentido: "Removemos seu e-mail e o vínculo com a conta dos feedbacks; o texto permanece e pode conter o que você escreveu nele. Cópias enviadas ao suporte pelo Discord são apagadas se você pedir." Não prometer anonimato total. Trocar "Discord" por "formulário de suporte ou Discord" onde a política manda fazer pedidos.
 - [ ] **Passo 2:** `grep -n -iE "em desenvolvimento|under development|ao utilizar|by using" messages/pt.json messages/en.json`. Esperado: nada sobre a exclusão ou a transferência. Conferir também os Termos.
-- [ ] **Passo 3:** escrever `docs/suporte/mesa-sem-mestre.md`, sem dados de ninguém: conferir o pedido com `support_party_gm_claim`, escrever ao jogador, esperar 7 dias e, sem resposta, chamar `support_remove_unresponsive_member`; o que dizer ao jogador; recusa não é caso de suporte; o que fazer com pedido de apagar texto de feedback.
+- [ ] **Passo 3:** escrever `docs/suporte/mesa-sem-mestre.md`, sem dados de ninguém: conferir o pedido com `support_party_gm_claim`, escrever ao jogador, esperar 7 dias e, sem resposta, chamar `support_remove_unresponsive_member`; o que dizer ao jogador; recusa não é caso de suporte; pedido de apagar feedback: buscar o e-mail no canal do Discord, apagar as mensagens encontradas e apagar o texto no banco.
 - [ ] **Passo 4:** `npm run test:unit` e `npm run test:e2e -- static-pages`. Esperado: PASS.
 - [ ] **Passo 5: commit** `docs(privacidade): exclusão de conta, mesa sem mestre e transferência internacional`.
 
