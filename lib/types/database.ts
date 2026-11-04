@@ -3,6 +3,25 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      account_deletion_requests: {
+        Row: {
+          expires_at: string;
+          token_hash: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          expires_at: string;
+          token_hash: string;
+          user_id: string;
+        };
+        Update: {
+          expires_at?: string;
+          token_hash?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       character_lore: {
         Row: {
           age: string | null;
@@ -308,7 +327,7 @@ export type Database = {
       feedback: {
         Row: {
           created_at: string;
-          email: string;
+          email: string | null;
           id: string;
           message: string;
           status: string;
@@ -318,7 +337,7 @@ export type Database = {
         ComputedFields: never;
         Insert: {
           created_at?: string;
-          email: string;
+          email?: string | null;
           id?: string;
           message: string;
           status?: string;
@@ -327,7 +346,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
-          email?: string;
+          email?: string | null;
           id?: string;
           message?: string;
           status?: string;
@@ -655,6 +674,8 @@ export type Database = {
         };
       };
       auth_user_exists: { Args: { p_email: string }; Returns: boolean };
+      auth_user_has_password: { Args: { p_user_id: string }; Returns: boolean };
+      auth_user_id_exists: { Args: { p_user_id: string }; Returns: boolean };
       cancel_party_gm_claim: { Args: { p_party_id: string }; Returns: undefined };
       claim_party_gm: { Args: { p_party_id: string }; Returns: string };
       duplicate_character: { Args: { p_character_id: string; p_name: string }; Returns: string };

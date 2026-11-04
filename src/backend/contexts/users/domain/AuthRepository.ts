@@ -3,6 +3,18 @@ import { User } from './User';
 /** E-mail links the app sends itself (via the admin API), verified by its confirm route. */
 export type EmailLinkType = 'signup' | 'recovery' | 'magiclink';
 
+/**
+ * Deleting the user failed inside the database and was rolled back, so it is safe to try again.
+ * The Auth server answers a bare 500 for any such failure, deadlocks (40P01) included: the code
+ * itself never reaches this side.
+ */
+export class DeleteUserDatabaseError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'DeleteUserDatabaseError';
+  }
+}
+
 export interface AuthRepository {
   getSessionUser(): Promise<User | null>;
   signInWithPassword(email: string, password: string): Promise<void>;
@@ -18,4 +30,12 @@ export interface AuthRepository {
   updatePassword(newPassword: string): Promise<void>;
   existsByEmail(email: string): Promise<boolean>;
   signOut(): Promise<void>;
+  /** Whether the account still exists: a session's JWT outlives a deleted account. */
+  accountExists(userId: string): Promise<boolean>;
+  /** Whether the account has a password (false for Google or magic link only). */
+  hasPassword(userId: string): Promise<boolean>;
+  /** Checks the password without touching the current session. */
+  verifyPassword(email: string, password: string): Promise<boolean>;
+  /** @throws DeleteUserDatabaseError, or UserError AUTH_USER_NOT_FOUND if already deleted. */
+  deleteUser(userId: string): Promise<void>;
 }

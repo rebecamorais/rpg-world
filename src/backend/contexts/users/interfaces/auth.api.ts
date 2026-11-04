@@ -1,3 +1,4 @@
+import { RequestAccountDeletionInput } from '../application/request-account-deletion.use-case';
 import { EmailLinkType } from '../domain/AuthRepository';
 import { AuthContext } from '../index';
 
@@ -44,5 +45,21 @@ export const makeAuthApi = (authContext: AuthContext) => ({
   signOut: async () => {
     await authContext.signOut.execute();
     return { success: true };
+  },
+
+  requestAccountDeletion: async (input: RequestAccountDeletionInput, confirmUrl: string) => {
+    await authContext.requestAccountDeletion.execute(input, confirmUrl);
+  },
+
+  getAccountDeletion: async (token: string) => {
+    return authContext.getAccountDeletion.execute(token);
+  },
+
+  deleteAccount: async (token: string) => {
+    await authContext.deleteAccount.execute(token);
+  },
+
+  hasPassword: async (userId: string) => {
+    return authContext.hasPassword.execute(userId);
   },
 });

@@ -57,7 +57,17 @@ export async function proxy(request: NextRequest) {
   const { data } = await supabaseAuth.auth.getClaims();
 
   let response = handleI18n(request);
-  const target = data?.claims ? signedInRedirect(request) : null;
+  let target = data?.claims ? signedInRedirect(request) : null;
+  // The JWT of a deleted account stays valid until it expires. The app already treats it as signed
+  // out and sends it to /login, so bouncing it back from there would be a redirect loop.
+  if (target && SIGNED_OUT_ONLY.has(request.nextUrl.pathname)) {
+    const { data: profile, error } = await supabaseAuth
+      .from('profile')
+      .select('id')
+      .eq('id', data!.claims.sub)
+      .maybeSingle();
+    if (!error && !profile) target = null;
+  }
   if (target) {
     const redirect = NextResponse.redirect(new URL(target, request.url));
     // The remembered link is used once

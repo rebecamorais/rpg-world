@@ -10,12 +10,16 @@ type CookieAdapter = {
 };
 
 const getClaims = vi.fn();
+const profileLookup = vi.fn();
+const from = vi.fn(() => ({
+  select: () => ({ eq: () => ({ maybeSingle: profileLookup }) }),
+}));
 let cookieAdapter: CookieAdapter;
 
 vi.mock('@supabase/ssr', () => ({
   createServerClient: (_url: string, _key: string, options: { cookies: CookieAdapter }) => {
     cookieAdapter = options.cookies;
-    return { auth: { getClaims } };
+    return { auth: { getClaims }, from };
   },
 }));
 
@@ -39,7 +43,11 @@ const signedIn = () =>
   getClaims.mockResolvedValue({ data: { claims: { sub: 'u1' } }, error: null });
 
 describe('proxy', () => {
-  beforeEach(() => getClaims.mockReset().mockResolvedValue({ data: null, error: null }));
+  beforeEach(() => {
+    getClaims.mockReset().mockResolvedValue({ data: null, error: null });
+    from.mockClear();
+    profileLookup.mockReset().mockResolvedValue({ data: { id: 'u1' }, error: null });
+  });
 
   it('não consulta o Supabase para visitantes sem cookie de sessão', async () => {
     await proxy(request({ NEXT_LOCALE: 'pt' }));
@@ -48,6 +56,14 @@ describe('proxy', () => {
   });
 
   describe('idioma', () => {
+    it('o link de exclusão do e-mail, com idioma no caminho, chega à página com o token', async () => {
+      const res = await proxy(request({}, { path: '/pt/delete-account?token=abc' }));
+
+      const location = new URL(res.headers.get('location')!);
+      expect(location.pathname).toBe('/delete-account');
+      expect(location.searchParams.get('token')).toBe('abc');
+    });
+
     it('reescreve / para /pt com Accept-Language pt-BR e sem cookie', async () => {
       const res = await proxy(
         request({}, { path: '/', acceptLanguage: 'pt-BR,pt;q=0.9,en;q=0.8' }),
@@ -206,6 +222,36 @@ describe('proxy', () => {
 
       expect(res.headers.get('location')).toBeNull();
       expect(rewrittenTo(res)).toBe('/en/login');
+    });
+
+    it.each(['/login', '/register'])(
+      'JWT válido de conta excluída abre %s, senão o layout e o proxy ficam se redirecionando',
+      async (path) => {
+        signedIn();
+        profileLookup.mockResolvedValue({ data: null, error: null });
+
+        const res = await proxy(request({ 'sb-127-auth-token': 'token' }, { path }));
+
+        expect(res.headers.get('location')).toBeNull();
+        expect(rewrittenTo(res)).toBe(`/en${path}`);
+      },
+    );
+
+    it('uma falha ao consultar o perfil não trata a conta como excluída', async () => {
+      signedIn();
+      profileLookup.mockResolvedValue({ data: null, error: { message: 'timeout' } });
+
+      const res = await proxy(request({ 'sb-127-auth-token': 'token' }, { path: '/login' }));
+
+      expect(new URL(res.headers.get('location')!).pathname).toBe('/characters');
+    });
+
+    it('só consulta o perfil a caminho do redirect das páginas de entrada', async () => {
+      signedIn();
+
+      await proxy(request({ 'sb-127-auth-token': 'token' }, { path: '/features' }));
+
+      expect(from).not.toHaveBeenCalled();
     });
 
     it('o redirect leva os cookies de sessão renovados', async () => {

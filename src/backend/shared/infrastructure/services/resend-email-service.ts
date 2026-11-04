@@ -4,6 +4,7 @@ import { Resend } from 'resend';
 import 'server-only';
 
 import { EmailService } from '../../domain/EmailService';
+import { AccountDeletionTemplate } from '../email/templates/AccountDeletion';
 import { AccountExistsTemplate } from '../email/templates/AccountExists';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';
 import { MagicLinkTemplate } from '../email/templates/MagicLink';
@@ -68,6 +69,20 @@ export class ResendEmailService implements EmailService {
 
     if (error) {
       throw new Error(`Failed to send account exists email: ${error.message}`);
+    }
+  }
+
+  async sendAccountDeletionEmail(email: string, confirmLink: string): Promise<void> {
+    const { error } = await this.resend.emails.send({
+      from: this.fromEmail,
+      to: [email],
+      subject: 'Confirme a exclusão da sua conta - RPG World',
+      react: React.createElement(AccountDeletionTemplate, { confirmLink }),
+    });
+
+    // Only the error's name: the provider's message can repeat the address
+    if (error) {
+      throw new Error(`Failed to send account deletion email: ${error.name}`);
     }
   }
 }

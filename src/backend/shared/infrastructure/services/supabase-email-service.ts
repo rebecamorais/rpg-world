@@ -5,6 +5,7 @@ import { render } from 'react-email';
 import 'server-only';
 
 import { EmailService } from '../../domain/EmailService';
+import { AccountDeletionTemplate } from '../email/templates/AccountDeletion';
 import { AccountExistsTemplate } from '../email/templates/AccountExists';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';
 import { MagicLinkTemplate } from '../email/templates/MagicLink';
@@ -118,5 +119,21 @@ export class SupabaseEmailService implements EmailService {
       console.warn(`Error: ${(error as Error).message}`);
     }
     console.log('-------------------------------------\n');
+  }
+
+  /** Unlike the others, prints neither the address nor the link: whoever has the link can delete. */
+  async sendAccountDeletionEmail(email: string, confirmLink: string): Promise<void> {
+    const html = await render(React.createElement(AccountDeletionTemplate, { confirmLink }));
+
+    try {
+      await this.transporter.sendMail({
+        from: this.fromEmail,
+        to: email,
+        subject: 'Confirme a exclusão da sua conta - RPG World',
+        html,
+      });
+    } catch {
+      console.warn('Warning: Could not send the account deletion email to local Inbucket.');
+    }
   }
 }

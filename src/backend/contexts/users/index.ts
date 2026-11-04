@@ -3,8 +3,12 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { EmailService } from '../../shared/domain/EmailService';
 import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import { CallbackExchangeUseCase } from './application/callback-exchange.use-case';
+import { DeleteAccountUseCase } from './application/delete-account.use-case';
+import { GetAccountDeletionUseCase } from './application/get-account-deletion.use-case';
 import { GetProfileUseCase } from './application/get-profile.use-case';
 import { GetSessionUserUseCase } from './application/get-session-user.use-case';
+import { HasPasswordUseCase } from './application/has-password.use-case';
+import { RequestAccountDeletionUseCase } from './application/request-account-deletion.use-case';
 import { RequestPasswordResetUseCase } from './application/request-password-reset.use-case';
 import { SignInWithMagicLinkUseCase } from './application/sign-in-with-magic-link.use-case';
 import { SignInWithPasswordUseCase } from './application/sign-in-with-password.use-case';
@@ -14,6 +18,7 @@ import { UpdatePasswordUseCase } from './application/update-password.use-case';
 import { UpdateProfileUseCase } from './application/update-profile.use-case';
 import { UploadAvatarUseCase } from './application/upload-avatar.use-case';
 import { VerifyEmailLinkUseCase } from './application/verify-email-link.use-case';
+import { SupabaseAccountDeletionRepository } from './infrastructure/repositories/supabase-account-deletion.repository';
 import { SupabaseAuthRepository } from './infrastructure/repositories/supabase-auth-repository';
 import { SupabaseProfileRepository } from './infrastructure/repositories/supabase-profile-repository';
 
@@ -38,6 +43,10 @@ export interface AuthContext {
   callbackExchange: CallbackExchangeUseCase;
   verifyEmailLink: VerifyEmailLinkUseCase;
   signOut: SignOutUseCase;
+  requestAccountDeletion: RequestAccountDeletionUseCase;
+  getAccountDeletion: GetAccountDeletionUseCase;
+  deleteAccount: DeleteAccountUseCase;
+  hasPassword: HasPasswordUseCase;
 }
 
 export interface UserProfileContext {
@@ -49,6 +58,7 @@ export interface UserProfileContext {
 export const createAuthContext = (config: AuthContextConfig): AuthContext => {
   const authRepository = new SupabaseAuthRepository(config.userClient, config.adminClient);
   const profileRepository = new SupabaseProfileRepository(config.userClient);
+  const accountDeletionRepo = new SupabaseAccountDeletionRepository(config.adminClient);
 
   return {
     getSession: new GetSessionUserUseCase(authRepository),
@@ -60,6 +70,14 @@ export const createAuthContext = (config: AuthContextConfig): AuthContext => {
     callbackExchange: new CallbackExchangeUseCase(authRepository, profileRepository),
     verifyEmailLink: new VerifyEmailLinkUseCase(authRepository),
     signOut: new SignOutUseCase(authRepository),
+    requestAccountDeletion: new RequestAccountDeletionUseCase(
+      accountDeletionRepo,
+      authRepository,
+      config.emailService,
+    ),
+    getAccountDeletion: new GetAccountDeletionUseCase(accountDeletionRepo),
+    deleteAccount: new DeleteAccountUseCase(accountDeletionRepo, authRepository),
+    hasPassword: new HasPasswordUseCase(authRepository),
   };
 };
 

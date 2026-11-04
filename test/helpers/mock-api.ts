@@ -17,6 +17,8 @@ export const api = {
     callbackExchange: vi.fn(),
     verifyEmailLink: vi.fn(),
     signOut: vi.fn(),
+    requestAccountDeletion: vi.fn(),
+    deleteAccount: vi.fn(),
   },
   charactersApi: {
     getById: vi.fn(),

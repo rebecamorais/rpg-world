@@ -4,4 +4,5 @@ export interface EmailService {
   sendMagicLinkEmail(email: string, signInLink: string): Promise<void>;
   /** Tells the owner of an already registered e-mail that someone tried to sign up with it. */
   sendAccountExistsEmail(email: string, forgotPasswordLink: string): Promise<void>;
+  sendAccountDeletionEmail(email: string, confirmLink: string): Promise<void>;
 }

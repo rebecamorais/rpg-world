@@ -22,6 +22,9 @@ export const UserErrorCodes = {
   AVATAR_UPLOAD_USERID_REQUIRED: 'storage_error_upload_avatar_userid_required',
   AVATAR_UPLOAD_SIZE_LIMIT: 'storage_error_upload_avatar_size_limit',
   AVATAR_UPLOAD_INVALID_TYPE: 'storage_error_upload_avatar_invalid_type',
+  DELETION_USERNAME_MISMATCH: 'account_deletion_error_username_mismatch',
+  DELETION_PASSWORD_INVALID: 'account_deletion_error_password_invalid',
+  DELETION_LINK_INVALID: 'account_deletion_error_link_invalid',
 } as const;
 
 export type UserErrorCode = (typeof UserErrorCodes)[keyof typeof UserErrorCodes];

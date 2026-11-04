@@ -1,6 +1,7 @@
 import { AuthError, JwtPayload, Session, SupabaseClient, User } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { DeleteUserDatabaseError } from '../../domain/AuthRepository';
 import { UserError, UserErrorCodes } from '../../domain/UserError';
 import { SupabaseAuthRepository } from './supabase-auth-repository';
 
@@ -28,6 +29,7 @@ describe('SupabaseAuthRepository', () => {
       auth: {
         admin: {
           generateLink: vi.fn(),
+          deleteUser: vi.fn(),
         },
       },
     } as unknown as InstanceType<typeof SupabaseClient>;
@@ -230,6 +232,164 @@ describe('SupabaseAuthRepository', () => {
       const error = await repository.signInWithPassword('a@b.co', 'x').catch((e) => e);
       expect(error).not.toBeInstanceOf(UserError);
       expect(error.message).toContain('Failed to sign in with password');
+    });
+  });
+
+  describe('accountExists', () => {
+    it('pergunta ao banco uma vez por instância, para cada conta', async () => {
+      vi.mocked(mockDbClient.rpc).mockResolvedValue({ data: true, error: null } as never);
+
+      await expect(repository.accountExists('u1')).resolves.toBe(true);
+      await expect(repository.accountExists('u1')).resolves.toBe(true);
+
+      expect(mockDbClient.rpc).toHaveBeenCalledOnce();
+      expect(mockDbClient.rpc).toHaveBeenCalledWith('auth_user_id_exists', { p_user_id: 'u1' });
+    });
+
+    it('false quando a conta não existe mais', async () => {
+      vi.mocked(mockDbClient.rpc).mockResolvedValue({ data: false, error: null } as never);
+
+      await expect(repository.accountExists('u1')).resolves.toBe(false);
+    });
+
+    it('uma falha do banco não derruba a sessão de quem existe', async () => {
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+      vi.mocked(mockDbClient.rpc).mockResolvedValue({
+        data: null,
+        error: { message: 'timeout' },
+      } as never);
+
+      await expect(repository.accountExists('u1')).resolves.toBe(true);
+      expect(consoleError).toHaveBeenCalled();
+    });
+  });
+
+  describe('hasPassword', () => {
+    it('lê pelo service role', async () => {
+      vi.mocked(mockDbClient.rpc).mockResolvedValue({ data: true, error: null } as never);
+
+      await expect(repository.hasPassword('u1')).resolves.toBe(true);
+      expect(mockDbClient.rpc).toHaveBeenCalledWith('auth_user_has_password', { p_user_id: 'u1' });
+    });
+
+    it('uma falha do banco não vira "não tem senha", que pularia a conferência', async () => {
+      vi.mocked(mockDbClient.rpc).mockResolvedValue({
+        data: null,
+        error: { message: 'timeout' },
+      } as never);
+
+      await expect(repository.hasPassword('u1')).rejects.toThrow('Failed to check password');
+    });
+  });
+
+  describe('verifyPassword', () => {
+    const isolatedAuth = { signInWithPassword: vi.fn(), signOut: vi.fn() };
+    const createIsolated = vi.fn(() => ({ auth: isolatedAuth }) as unknown as SupabaseClient);
+
+    beforeEach(() => {
+      vi.resetAllMocks();
+      createIsolated.mockImplementation(
+        () => ({ auth: isolatedAuth }) as unknown as SupabaseClient,
+      );
+      isolatedAuth.signOut.mockResolvedValue({ error: null });
+      repository = new SupabaseAuthRepository(mockAuthClient, mockDbClient, createIsolated);
+    });
+
+    it('confere em outro cliente, sem tocar o da sessão, e encerra só a sessão que abriu', async () => {
+      isolatedAuth.signInWithPassword.mockResolvedValue({ data: {}, error: null });
+
+      await expect(repository.verifyPassword('a@b.co', 'secret')).resolves.toBe(true);
+
+      expect(isolatedAuth.signInWithPassword).toHaveBeenCalledWith({
+        email: 'a@b.co',
+        password: 'secret',
+      });
+      expect(isolatedAuth.signOut).toHaveBeenCalledWith({ scope: 'local' });
+      expect(mockAuthClient.auth.signInWithPassword).not.toHaveBeenCalled();
+      expect(mockAuthClient.auth.signOut).not.toHaveBeenCalled();
+    });
+
+    it('um cliente novo a cada conferência', async () => {
+      isolatedAuth.signInWithPassword.mockResolvedValue({ data: {}, error: null });
+
+      await repository.verifyPassword('a@b.co', 'one');
+      await repository.verifyPassword('a@b.co', 'two');
+
+      expect(createIsolated).toHaveBeenCalledTimes(2);
+    });
+
+    it.each(['invalid_credentials', 'email_not_confirmed'])('%s é senha errada', async (code) => {
+      isolatedAuth.signInWithPassword.mockResolvedValue({
+        data: {},
+        error: mockAuthError('nope', code),
+      });
+
+      await expect(repository.verifyPassword('a@b.co', 'bad')).resolves.toBe(false);
+      expect(isolatedAuth.signOut).not.toHaveBeenCalled();
+    });
+
+    it('limite de tentativas não é senha errada', async () => {
+      isolatedAuth.signInWithPassword.mockResolvedValue({
+        data: {},
+        error: mockAuthError('slow down', 'over_request_rate_limit'),
+      });
+
+      await expect(repository.verifyPassword('a@b.co', 'x')).rejects.toThrow(
+        UserErrorCodes.AUTH_RATE_LIMITED,
+      );
+    });
+
+    it('falha ao encerrar a sessão aberta não reprova a senha certa nem expõe a senha', async () => {
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+      isolatedAuth.signInWithPassword.mockResolvedValue({ data: {}, error: null });
+      isolatedAuth.signOut.mockResolvedValue({ error: mockAuthError('down') });
+
+      await expect(repository.verifyPassword('a@b.co', 'secret')).resolves.toBe(true);
+
+      expect(consoleError).toHaveBeenCalled();
+      const printed = JSON.stringify(consoleError.mock.calls);
+      expect(printed).not.toContain('secret');
+      expect(printed).not.toContain('a@b.co');
+    });
+  });
+
+  describe('deleteUser', () => {
+    const deleteFailure = (error: AuthError) =>
+      vi.mocked(mockDbClient.auth.admin.deleteUser).mockResolvedValueOnce({
+        data: { user: null },
+        error,
+      });
+
+    it('exclui pelo service role', async () => {
+      vi.mocked(mockDbClient.auth.admin.deleteUser).mockResolvedValueOnce({
+        data: { user: null },
+        error: null,
+      } as never);
+
+      await repository.deleteUser('u1');
+
+      expect(mockDbClient.auth.admin.deleteUser).toHaveBeenCalledWith('u1');
+    });
+
+    it('conta que já não existe vira AUTH_USER_NOT_FOUND', async () => {
+      deleteFailure(mockAuthError('User not found', 'user_not_found'));
+
+      await expect(repository.deleteUser('u1')).rejects.toThrow(UserErrorCodes.AUTH_USER_NOT_FOUND);
+    });
+
+    it('500 do Auth, a única forma como um deadlock aparece, vira DeleteUserDatabaseError', async () => {
+      const failure = new AuthError('Database error deleting user', 500, undefined);
+      deleteFailure(failure);
+
+      await expect(repository.deleteUser('u1')).rejects.toBeInstanceOf(DeleteUserDatabaseError);
+    });
+
+    it('outros erros continuam sendo Error comum', async () => {
+      deleteFailure(new AuthError('forbidden', 403, 'not_admin'));
+
+      const error = await repository.deleteUser('u1').catch((e) => e);
+      expect(error).not.toBeInstanceOf(DeleteUserDatabaseError);
+      expect(error).not.toBeInstanceOf(UserError);
     });
   });
 });
