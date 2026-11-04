@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useLayoutEffect, useMemo, useState } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -36,11 +36,9 @@ export function DemoProvider({ data, children }: { data: DemoData; children: Rea
   const [queryClient] = useState(
     () => new QueryClient({ defaultOptions: { queries: { staleTime: Infinity, retry: false } } }),
   );
-  // Installed while rendering in the browser so the first queries already hit it; never on the server
-  useState(() => {
-    if (typeof window !== 'undefined') rpgWorldApi.setTransport(transport);
-  });
-  useEffect(() => {
+  // Layout effect: runs at commit, before the children's passive effects start their queries,
+  // and never for a render that is discarded
+  useLayoutEffect(() => {
     rpgWorldApi.setTransport(transport);
     return () => rpgWorldApi.setTransport(null);
   }, [transport]);
