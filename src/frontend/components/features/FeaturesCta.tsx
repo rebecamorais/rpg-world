@@ -13,12 +13,17 @@ export function FeaturesCta() {
   const { status } = useSession();
 
   return (
-    <Button asChild size="lg" className="px-8">
-      {status === 'signed-in' ? (
-        <Link href="/characters">{t('ctaCharacters')}</Link>
-      ) : (
-        <Link href="/register">{t('ctaStart')}</Link>
-      )}
-    </Button>
+    <div className="flex flex-wrap items-center justify-center gap-3">
+      <Button asChild size="lg" className="px-8">
+        {status === 'signed-in' ? (
+          <Link href="/characters">{t('ctaCharacters')}</Link>
+        ) : (
+          <Link href="/register">{t('ctaStart')}</Link>
+        )}
+      </Button>
+      <Button asChild size="lg" variant="secondary" className="px-8">
+        <Link href="/demo">{t('ctaDemo')}</Link>
+      </Button>
+    </div>
   );
 }

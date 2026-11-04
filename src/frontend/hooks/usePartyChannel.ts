@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import type { RealtimeChannel } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 
+import { useDemo } from '@frontend/demo/DemoContext';
 import { encounterQueryKey } from '@frontend/lib/query-keys';
 
 import { getSupabaseBrowserClient } from '@lib/supabase-browser';
@@ -15,9 +16,12 @@ import { getSupabaseBrowserClient } from '@lib/supabase-browser';
  */
 export function usePartyChannel(partyId: string) {
   const queryClient = useQueryClient();
+  const { isDemo } = useDemo();
   const [live, setLive] = useState(false);
 
   useEffect(() => {
+    // The demo is a fixed catalog: there is no channel to listen to
+    if (isDemo) return;
     const client = getSupabaseBrowserClient();
     const queryKey = encounterQueryKey(partyId);
     // A fetch already in flight may have read the combat before this change: invalidating alone
@@ -47,7 +51,7 @@ export function usePartyChannel(partyId: string) {
       cancelled = true;
       if (channel) client.removeChannel(channel);
     };
-  }, [partyId, queryClient]);
+  }, [partyId, queryClient, isDemo]);
 
   return { live };
 }

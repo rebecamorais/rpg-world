@@ -5,6 +5,7 @@
       "unknown": "Ocorreu um erro desconhecido. Tente novamente.",
       "common_error_invalid_request": "Dados inválidos. Verifique os campos e tente novamente.",
       "common_error_unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
+      "demo_read_only": "Esta é uma demo somente leitura. Crie uma conta gratuita para jogar.",
       "account_deletion_error_username_mismatch": "Esse não é o seu username.",
       "account_deletion_error_password_invalid": "Senha incorreta. Se você nunca criou uma, por exemplo porque entrava com link por e-mail, use “Esqueceu a senha?” para criar.",
       "account_deletion_error_too_soon": "Este e-mail foi enviado há menos de um minuto. Confira sua caixa de entrada ou espere um pouco para pedir de novo.",
@@ -189,7 +190,8 @@
     "ctaStart": "Começar a Jogar",
     "previewLabel": "Exemplo de ficha de personagem",
     "previewName": "Ada, a Sábia",
-    "previewClass": "Maga elfa · Nível 5"
+    "previewClass": "Maga elfa · Nível 5",
+    "ctaDemo": "Ver demo"
   },
   "home": {
     "title": "RPG World"
@@ -1136,7 +1138,8 @@
           "alt": "Inventário da party com moedas e o baú com itens"
         }
       }
-    }
+    },
+    "ctaDemo": "Ver demo"
   },
   "translationInvite": {
     "title": "Ajude a traduzir o RPG World",
@@ -1487,5 +1490,34 @@
       "metaTitle": "Excluir conta"
     },
     "deleted": "Sua conta foi excluída."
+  },
+  "demo": {
+    "metaTitle": "Demo · The Pioneers",
+    "npcsTitle": "NPCs",
+    "inspiration": {
+      "title": "Conheça a inspiração",
+      "realName": "Inspirada em",
+      "period": "Viveu",
+      "contribution": "O que ela fez",
+      "sources": "Fontes"
+    },
+    "notice": "Conheça as mulheres que inspiraram um mundo de aventuras. Esta coleção celebra mulheres extraordinárias da história, ciência, tecnologia, literatura e liderança por meio de interpretações originais de fantasia. Cada personagem é inspirada em uma figura histórica, mas suas habilidades, equipamentos, aventuras e biografia fictícia pertencem ao universo de fantasia do RPG World. Essas personagens são homenagens fictícias, não representações historicamente precisas ou endossos oficiais.",
+    "banner": {
+      "text": "Demo The Pioneers: você está explorando uma campanha somente leitura.",
+      "signUp": "Criar conta",
+      "back": "Voltar ao app"
+    },
+    "nav": {
+      "label": "Navegação da demo",
+      "overview": "Visão geral",
+      "chest": "Baú",
+      "npcs": "NPCs"
+    },
+    "invite": {
+      "title": "Crie a sua aventura",
+      "description": "A demo é somente leitura. Crie uma conta gratuita para montar seus personagens, entrar numa mesa e salvar seu progresso.",
+      "create": "Criar conta",
+      "keep": "Continuar explorando"
+    }
   }
 }

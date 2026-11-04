@@ -11,10 +11,12 @@ import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { PartyPage } from './PartyPage';
 
+const demo = vi.hoisted(() => ({ isDemo: false, search: '' }));
+vi.mock('@frontend/demo/DemoContext', () => ({ useDemo: () => demo }));
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn() }),
   usePathname: () => '/parties/p1',
-  useSearchParams: () => new URLSearchParams(),
+  useSearchParams: () => new URLSearchParams(demo.search),
 }));
 vi.mock('@client', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@client')>()),
@@ -64,6 +66,8 @@ function renderPage(view: PartyView) {
 
 describe('PartyPage sem mestre', () => {
   beforeEach(() => {
+    demo.isDemo = false;
+    demo.search = '';
     vi.clearAllMocks();
     vi.mocked(rpgWorldApi.delete).mockResolvedValue(undefined);
   });
@@ -102,5 +106,34 @@ describe('PartyPage sem mestre', () => {
     await waitFor(() =>
       expect(rpgWorldApi.delete).toHaveBeenCalledWith('/api/parties/p1/members/ana'),
     );
+  });
+});
+
+describe('PartyPage na demo', () => {
+  it('mostra os cards de Role Play, sem a aba Combate nem as configurações, mesmo com ?mode=combat', async () => {
+    demo.isDemo = true;
+    demo.search = 'mode=combat';
+    const card = {
+      characterId: 'ada',
+      ownerId: 'o1',
+      ownerUsername: 'pioneer_ada',
+      name: 'Ada',
+      avatarUrl: null,
+      race: 'Human',
+      class: 'Wizard',
+      level: 3,
+      accentColor: null,
+      personalityTraits: null,
+      ideals: null,
+      bonds: null,
+      flaws: null,
+      passivePerception: 10,
+      passiveInsight: 10,
+    };
+    renderPage(party({ role: 'gm', hasGm: true, gm: { inviteCode: 'X', rolePlay: [card] } }));
+
+    expect(await screen.findByText('Ada')).toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: messages.combat.modeCombat })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: t.settings.open })).not.toBeInTheDocument();
   });
 });

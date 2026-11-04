@@ -1,7 +1,5 @@
 'use client';
 
-import Link from 'next/link';
-
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
@@ -9,6 +7,7 @@ import { EmptyState, ErrorState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharactersContext } from '@frontend/context/CharactersContext';
 import { useCurrentUser } from '@frontend/context/UserContext';
+import AppLink from '@frontend/demo/AppLink';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import { CharacterCard, CharacterCardSkeleton } from './CharacterCard';
@@ -73,10 +72,10 @@ export default function CharacterList() {
           className="min-h-[450px]"
           action={
             <Button asChild size="lg">
-              <Link href={kind === 'npc' ? '/characters/new?kind=npc' : '/characters/new'}>
+              <AppLink href={kind === 'npc' ? '/characters/new?kind=npc' : '/characters/new'}>
                 <AppIcon name="Plus" size={20} aria-hidden="true" />
                 {kind === 'npc' ? tEnemies('createFirst') : t('createFirst')}
-              </Link>
+              </AppLink>
             </Button>
           }
         />
