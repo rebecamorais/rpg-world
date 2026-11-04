@@ -3,6 +3,8 @@
 O código do RPG World é licenciado sob a GNU GPLv3 (ver [LICENSE](LICENSE)). O conteúdo de regras
 (`content/`) vem das fontes abaixo, cada uma com a sua licença.
 
+Os retratos da demo dos Pioneers em `public/demo/pioneers` foram gerados com IA (ChatGPT / OpenAI Image Generation).
+
 ## System Reference Document 5.1
 
 This work includes material taken from the System Reference Document 5.1 ("SRD 5.1") by Wizards

@@ -21,8 +21,8 @@ test.describe('demo pública', () => {
     await expect(page.getByLabel('Hit Points', { exact: true })).toBeDisabled();
     await expect(page.getByRole('heading', { name: 'Meet the Inspiration' })).toBeVisible();
 
-    for (const tab of ['Lore', 'Spells', 'Inventory', 'Status']) {
-      await page.getByRole('navigation').getByRole('link', { name: tab, exact: true }).click();
+    for (const tab of ['Lore', 'Spellbook', 'Inventory', 'Status']) {
+      await page.getByRole('complementary').getByRole('link', { name: tab, exact: true }).click();
       await expect(page).toHaveURL(/\/demo\/characters\/ada/);
     }
 
@@ -30,7 +30,7 @@ test.describe('demo pública', () => {
     await expect(page.locator('a[href^="/demo/characters/"]')).toHaveCount(7);
 
     await page.goto('/demo/inventory');
-    await expect(page.getByRole('heading', { name: 'Party inventory' })).toBeVisible();
+    await expect(page.getByText('Party inventory', { exact: true })).toBeVisible();
 
     const unexpected = calls.filter((call) => call !== 'GET /api/auth/session');
     expect(unexpected).toEqual([]);

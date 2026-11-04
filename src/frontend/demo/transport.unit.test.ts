@@ -29,6 +29,7 @@ describe('createDemoTransport', () => {
     await expect(t('GET', `/api/parties/${DEMO_PARTY_ID}/characters?kind=npc`)).resolves.toEqual(
       data.npcs,
     );
+    await expect(t('GET', '/api/characters?kind=npc')).resolves.toEqual(data.npcs);
     await expect(t('GET', `${sheet}?x=1`)).resolves.toEqual(data.characters.ada);
     await expect(t('GET', `${sheet}/lore`)).resolves.toEqual(data.lore.ada);
     await expect(t('GET', `${sheet}/spells`)).resolves.toEqual(data.spells.ada);

@@ -14,7 +14,7 @@ function read(data: DemoData, path: string, query: URLSearchParams): unknown {
   if (path === PARTY) return data.party;
   if (path === `${PARTY}/encounter`) return {};
   if (path === `${PARTY}/chest`) return data.chest;
-  if (path === `${PARTY}/characters`) {
+  if (path === '/api/characters' || path === `${PARTY}/characters`) {
     if (query.get('kind') === 'npc') return data.npcs;
     throw notFound();
   }
