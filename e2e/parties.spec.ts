@@ -337,6 +337,8 @@ test.describe('mesas', () => {
     browser,
     user,
   }) => {
+    // The page polls every 20 s without a GM: the wait for the new GM alone can take that long
+    test.setTimeout(120_000);
     const { id: partyId, code } = await createParty(page, 'Mesa Sem Mestre');
     const goblinId = await createEnemySheet(page, 'Goblin', 7);
     const bia = await person(browser, 'claim-bia');
