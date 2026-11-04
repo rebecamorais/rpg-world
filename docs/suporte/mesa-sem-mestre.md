@@ -33,7 +33,9 @@ SELECT public.support_remove_unresponsive_member('<ID-DA-MESA>', '<ID-DO-JOGADOR
 
 Só funciona com um jogador que ainda está pendente em um pedido aberto (o `pending_user_id` do passo 1);
 fora disso dá erro e não muda nada. O retorno diz o que aconteceu com o pedido: `pending` (ainda faltam
-respostas), `approved` (o candidato virou mestre) ou `cancelled`. Repita para cada jogador pendente.
+respostas), `approved` (o candidato virou mestre) ou `cancelled` (o candidato já estava no limite de
+5 mesas como mestre, então ninguém virou mestre e o pedido foi encerrado; ele pode liberar uma vaga e pedir
+de novo). Repita para cada jogador pendente.
 
 Avise quem pediu ajuda do resultado, sem passar dados de quem foi tirado.
 

@@ -166,6 +166,7 @@ Cada um tem teste na tarefa dona:
   - o token tem 32 bytes aleatórios, só o `sha256` vai para o repositório, com validade de 1 hora; pedir de novo substitui e o link anterior deixa de valer;
   - **abrir o link não apaga:** `GetAccountDeletionUseCase` só lê; devolve `null` para vencido, usado ou substituído;
   - `DeleteAccountUseCase`: consome o token de uma vez (`DELETE ... RETURNING` com validade), depois chama `deleteUser`; token inválido → `DELETION_LINK_INVALID`, sem `deleteUser`; dois cliques seguidos: só um apaga;
+    - Nota: foi construído mantendo o token até a cascata removê-lo, então uma exclusão que falha mantém o link funcionando.
   - a conferência da senha usa cliente sem cookies e não troca a sessão;
   - `POST /api/account/delete` responde sem exigir sessão e encerra a sessão quando existe;
   - **sessão antiga:** com a conta excluída, `withAuth` responde 401 mesmo com um JWT ainda válido, e a página protegida redireciona para o login. Se hoje não for assim, corrigir em `get-session-user.use-case.ts`.
