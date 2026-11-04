@@ -3,13 +3,12 @@
  */
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Script from 'next/script';
 
 import { type LocaleParams, routing } from '@/i18n/routing';
-import { Analytics } from '@vercel/analytics/next';
 import { hasLocale } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 
+import { AnalyticsScripts } from '@frontend/components/providers/AnalyticsScripts';
 import Providers from '@frontend/components/providers/Providers';
 import { Toaster } from '@frontend/components/ui/sonner';
 import { clientMessages } from '@frontend/constants/client-messages';
@@ -18,10 +17,9 @@ import { fontVariables } from '@frontend/lib/fonts';
 
 import '../globals.css';
 
-// Cloudflare Web Analytics (cookieless visit counts). The token is public: it only identifies the
-// site. Production only, so local runs, previews and the e2e suite don't count as visits. Same for
-// Vercel Web Analytics, whose script is served same-origin from /_vercel/insights (covered by the CSP).
-const CLOUDFLARE_BEACON_TOKEN = '356fc3bfc2dd43c4b8f065945a42eb32';
+// Cloudflare and Vercel Web Analytics (AnalyticsScripts). Production only, so local runs, previews and
+// the e2e suite don't count as visits. Vercel's script is served same-origin from /_vercel/insights
+// (covered by the CSP).
 const isProduction = process.env.VERCEL_ENV === 'production';
 
 /** Every page exists once per language; the proxy picks which one a visitor gets. */
@@ -95,16 +93,7 @@ export default async function RootLayout({
           {children}
         </Providers>
         <Toaster />
-        {isProduction ? (
-          <>
-            <Script
-              src="https://static.cloudflareinsights.com/beacon.min.js"
-              data-cf-beacon={JSON.stringify({ token: CLOUDFLARE_BEACON_TOKEN })}
-              strategy="afterInteractive"
-            />
-            <Analytics />
-          </>
-        ) : null}
+        <AnalyticsScripts enabled={isProduction} />
       </body>
     </html>
   );
