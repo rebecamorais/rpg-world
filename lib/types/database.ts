@@ -450,6 +450,67 @@ export type Database = {
           },
         ];
       };
+      party_gm_claim_votes: {
+        Row: {
+          created_at: string;
+          party_id: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          party_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          party_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'party_gm_claim_votes_party_id_fkey';
+            columns: ['party_id'];
+            isOneToOne: false;
+            referencedRelation: 'party_gm_claims';
+            referencedColumns: ['party_id'];
+          },
+          {
+            foreignKeyName: 'party_gm_claim_votes_party_id_user_id_fkey';
+            columns: ['party_id', 'user_id'];
+            isOneToOne: true;
+            referencedRelation: 'party_members';
+            referencedColumns: ['party_id', 'user_id'];
+          },
+        ];
+      };
+      party_gm_claims: {
+        Row: {
+          candidate_id: string;
+          created_at: string;
+          party_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          candidate_id: string;
+          created_at?: string;
+          party_id: string;
+        };
+        Update: {
+          candidate_id?: string;
+          created_at?: string;
+          party_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'party_gm_claims_party_id_candidate_id_fkey';
+            columns: ['party_id', 'candidate_id'];
+            isOneToOne: false;
+            referencedRelation: 'party_members';
+            referencedColumns: ['party_id', 'user_id'];
+          },
+        ];
+      };
       party_invites: {
         Row: {
           code: string;
@@ -594,6 +655,8 @@ export type Database = {
         };
       };
       auth_user_exists: { Args: { p_email: string }; Returns: boolean };
+      cancel_party_gm_claim: { Args: { p_party_id: string }; Returns: undefined };
+      claim_party_gm: { Args: { p_party_id: string }; Returns: string };
       duplicate_character: { Args: { p_character_id: string; p_name: string }; Returns: string };
       encounter_turns: {
         Args: { p_party_id: string };
@@ -630,6 +693,15 @@ export type Database = {
         }[];
       };
       orphan_avatar_objects: { Args: { min_age?: string }; Returns: string[] };
+      party_gm_claim: {
+        Args: { p_party_id: string };
+        Returns: {
+          candidate_id: string;
+          candidate_username: string;
+          created_at: string;
+          pending_user_ids: string[];
+        }[];
+      };
       party_invite_card: {
         Args: { p_code: string };
         Returns: {
@@ -669,6 +741,20 @@ export type Database = {
         Returns: boolean;
       };
       start_encounter: { Args: { p_party_id: string }; Returns: undefined };
+      support_party_gm_claim: {
+        Args: { p_party_id: string };
+        Returns: {
+          candidate_id: string;
+          created_at: string;
+          pending_email: string;
+          pending_user_id: string;
+        }[];
+      };
+      support_remove_unresponsive_member: {
+        Args: { p_party_id: string; p_user_id: string };
+        Returns: string;
+      };
+      vote_party_gm_claim: { Args: { p_accept: boolean; p_party_id: string }; Returns: string };
     };
     Enums: {
       rpg_system: 'dnd_5e' | 'ezd6' | 'pathfinder_2e';

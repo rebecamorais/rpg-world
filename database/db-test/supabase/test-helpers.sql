@@ -30,3 +30,19 @@ $$;
 -- Segurança: apenas o service_role (usado pelo Vitest) pode chamar esta função
 REVOKE ALL ON FUNCTION test_helpers.truncate_all_tables() FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION test_helpers.truncate_all_tables() TO service_role;
+
+-- Roda p_sql e segura a transação aberta por p_seconds, para os testes verem o que acontece
+-- enquanto outra transação está no meio do caminho. Pela API cada chamada é uma transação só.
+CREATE OR REPLACE FUNCTION test_helpers.run_and_hold(p_sql text, p_seconds double precision)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    EXECUTE p_sql;
+    PERFORM pg_sleep(p_seconds);
+END;
+$$;
+
+REVOKE ALL ON FUNCTION test_helpers.run_and_hold(text, double precision) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION test_helpers.run_and_hold(text, double precision) TO service_role;

@@ -13,6 +13,7 @@ import {
   createParty,
   inviteCode,
   memberStatus,
+  whileTransactionOpen,
 } from '../../../../../test/helpers/parties';
 import { createSignedInClient } from '../../../../../test/helpers/signed-in-client';
 
@@ -127,6 +128,38 @@ describe('Mesa sem mestre (Integration)', () => {
       expect(roster.data).toEqual([{ character_id: characterId }]);
     });
 
+    it('com combate em andamento, na vez do NPC do mestre, a mesa continua sem o combate', async () => {
+      await addMember(partyId, player.userId, 'active');
+      const characterId = await createCharacter(player.userId);
+      await bring(player, partyId, characterId);
+      await createEncounter(gm, partyId);
+      const npcTurn = await addParticipant(gm, partyId, await createNpc(gm.userId), 'enemy');
+      await addParticipant(gm, partyId, characterId, 'player');
+      const started = await gm.client.rpc('start_encounter', { p_party_id: partyId });
+      expect(started.error).toBeNull();
+      const running = await admin()
+        .from('encounters')
+        .select('round, current_participant_id')
+        .eq('party_id', partyId)
+        .single();
+      expect(running.data).toEqual({ round: 1, current_participant_id: npcTurn });
+
+      await deleteAccount(gm);
+
+      expect((await partyRow(partyId))?.gm_id).toBeNull();
+      const encounters = await admin()
+        .from('encounters')
+        .select('party_id')
+        .eq('party_id', partyId);
+      const participants = await admin()
+        .from('encounter_participants')
+        .select('id')
+        .eq('party_id', partyId);
+      expect(encounters.data).toEqual([]);
+      expect(participants.data).toEqual([]);
+      expect(await memberStatus(partyId, player.userId)).toBe('active');
+    });
+
     it('só com pedido e convite pendentes, a mesa some', async () => {
       await addMember(partyId, player.userId, 'requested');
       await addMember(partyId, otherPlayer.userId, 'invited');
@@ -204,6 +237,19 @@ describe('Mesa sem mestre (Integration)', () => {
       await leave(stranger, partyId);
 
       expect(await partyRow(partyId)).not.toBeNull();
+    });
+
+    it('quem não é ativo sai sem esperar o bloqueio da mesa', async () => {
+      const stranger = await createSignedInClient('stranger');
+      await addMember(partyId, stranger.userId, 'requested');
+
+      const { finishedBeforeCommit } = await whileTransactionOpen(
+        `SELECT 1 FROM public.parties WHERE id = '${partyId}' FOR NO KEY UPDATE`,
+        () => leave(stranger, partyId),
+      );
+
+      expect(finishedBeforeCommit).toBe(true);
+      expect(await memberStatus(partyId, stranger.userId)).toBeNull();
     });
   });
 
@@ -416,6 +462,19 @@ describe('Mesa sem mestre (Integration)', () => {
       expect(await memberStatus(partyId, otherPlayer.userId)).toBe('invited');
     });
 
+    it('request_party_join devolve o status de quem já é ativo ou já pediu', async () => {
+      const requested = await createSignedInClient('requested');
+      await addMember(partyId, requested.userId, 'requested');
+
+      const asActive = await player.client.rpc('request_party_join', { p_code: code });
+      const asRequested = await requested.client.rpc('request_party_join', { p_code: code });
+
+      expect(asActive.error).toBeNull();
+      expect(asActive.data).toBe('active');
+      expect(asRequested.error).toBeNull();
+      expect(asRequested.data).toBe('requested');
+    });
+
     it('aceitar o convite falha com party_without_gm', async () => {
       const { error } = await otherPlayer.client
         .from('party_members')
@@ -442,6 +501,27 @@ describe('Mesa sem mestre (Integration)', () => {
         { party_id: partyId, name: 'Mesa de Quinta', gm_username: null, my_status: null },
       ]);
       expect(asInvited.data?.[0].my_status).toBe('invited');
+    });
+  });
+
+  describe('aceitar um convite enquanto a exclusão do mestre não terminou', () => {
+    it('espera a exclusão e falha com party_without_gm', async () => {
+      await addMember(partyId, player.userId, 'active');
+      await addMember(partyId, otherPlayer.userId, 'invited');
+
+      const { result, finishedBeforeCommit } = await whileTransactionOpen(
+        `UPDATE public.parties SET gm_id = NULL WHERE id = '${partyId}'`,
+        () =>
+          otherPlayer.client
+            .from('party_members')
+            .update({ status: 'active' })
+            .eq('party_id', partyId)
+            .eq('user_id', otherPlayer.userId),
+      );
+
+      expect(finishedBeforeCommit).toBe(false);
+      expect(result.error?.message).toBe('party_without_gm');
+      expect(await memberStatus(partyId, otherPlayer.userId)).toBe('invited');
     });
   });
 
