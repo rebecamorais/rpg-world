@@ -40,6 +40,17 @@ export const makePartiesApi = (partyContext: PartyContext) => ({
 
   removeMember: (partyId: string, memberId: string) => partyContext.removeMember(partyId, memberId),
 
+  claimGm: async (partyId: string) => ({ status: await partyContext.claimGm(partyId) }),
+
+  voteGmClaim: async (partyId: string, accept: boolean) => ({
+    status: await partyContext.voteGmClaim(partyId, accept),
+  }),
+
+  cancelGmClaim: async (partyId: string) => {
+    await partyContext.cancelGmClaim(partyId);
+    return { status: 'cancelled' as const };
+  },
+
   get: (partyId: string, userId: string) => partyContext.get(partyId, userId),
 
   setMyCharacters: (partyId: string, userId: string, characterIds: string[]) =>

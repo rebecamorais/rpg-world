@@ -64,6 +64,9 @@ export const api = {
     setJournal: vi.fn(),
     uploadImage: vi.fn(),
     removeImage: vi.fn(),
+    claimGm: vi.fn(),
+    voteGmClaim: vi.fn(),
+    cancelGmClaim: vi.fn(),
   },
 };
 

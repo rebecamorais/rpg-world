@@ -55,7 +55,7 @@ const goblinSheet = sheet({
 
 const makeRepo = () =>
   ({
-    findPartyGm: vi.fn<CombatRepo['findPartyGm']>().mockResolvedValue('gm-1'),
+    findPartyGm: vi.fn<CombatRepo['findPartyGm']>().mockResolvedValue({ gmId: 'gm-1' }),
     findEncounter: vi.fn<CombatRepo['findEncounter']>().mockResolvedValue({
       round: 0,
       currentParticipantId: null,
@@ -293,6 +293,27 @@ describe('GetEncounterUseCase', () => {
 
     repo.findPartyGm.mockResolvedValue(null);
     expect(await new GetEncounterUseCase(repo).execute('party-1', 'stranger')).toBeNull();
+  });
+
+  it('mesa sem mestre: o jogador ativo recebe a visão de jogador, sem encontro', async () => {
+    const repo = makeRepo();
+    repo.findPartyGm.mockResolvedValue({ gmId: null });
+    repo.turns.mockResolvedValue(null);
+
+    expect(await new GetEncounterUseCase(repo).execute('party-1', 'player-1')).toBeNull();
+    expect(repo.turns).toHaveBeenCalledWith('party-1');
+    expect(repo.findEncounter).not.toHaveBeenCalled();
+  });
+
+  it('mesa sem mestre: o que sobrar de turnos continua só com a visão de jogador', async () => {
+    const repo = makeRepo();
+    repo.findPartyGm.mockResolvedValue({ gmId: null });
+    repo.turns.mockResolvedValue({ round: 2, turns: [] });
+
+    const view = await new GetEncounterUseCase(repo).execute('party-1', 'player-1');
+
+    expect(view?.role).toBe('player');
+    expect(repo.findEncounter).not.toHaveBeenCalled();
   });
 });
 

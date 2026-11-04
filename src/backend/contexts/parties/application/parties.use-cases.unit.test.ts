@@ -55,6 +55,10 @@ const makePartyRepo = () =>
     setJournal: vi.fn<PartyRepo['setJournal']>().mockResolvedValue(undefined),
     inviteCard: vi.fn<PartyRepo['inviteCard']>().mockResolvedValue(null),
     setImage: vi.fn<PartyRepo['setImage']>().mockResolvedValue(true),
+    gmClaim: vi.fn<PartyRepo['gmClaim']>().mockResolvedValue(null),
+    claimGm: vi.fn<PartyRepo['claimGm']>().mockResolvedValue('pending'),
+    voteGmClaim: vi.fn<PartyRepo['voteGmClaim']>().mockResolvedValue('pending'),
+    cancelGmClaim: vi.fn<PartyRepo['cancelGmClaim']>().mockResolvedValue(undefined),
   }) satisfies PartyRepo;
 
 const summary = (overrides: Partial<PartySummary>): PartySummary => ({

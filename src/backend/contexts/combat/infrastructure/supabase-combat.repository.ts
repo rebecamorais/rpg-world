@@ -51,14 +51,14 @@ type SheetData = {
 export class SupabaseCombatRepository implements CombatRepo {
   constructor(private readonly client: SupabaseClient<Database>) {}
 
-  async findPartyGm(partyId: string): Promise<string | null> {
+  async findPartyGm(partyId: string): Promise<{ gmId: string | null } | null> {
     const { data, error } = await this.client
       .from('parties')
       .select('gm_id')
       .eq('id', partyId)
       .maybeSingle();
     if (error) fail('find party', error);
-    return data?.gm_id ?? null;
+    return data && { gmId: data.gm_id };
   }
 
   async findEncounter(partyId: string): Promise<EncounterRecord | null> {

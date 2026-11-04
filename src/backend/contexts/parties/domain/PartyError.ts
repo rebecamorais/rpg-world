@@ -12,6 +12,12 @@ export const PartyErrorCodes = {
   JOURNAL_URL_INVALID: 'party_error_journal_url_invalid',
   IMAGE_TOO_LARGE: 'party_error_image_too_large',
   IMAGE_INVALID_TYPE: 'party_error_image_invalid_type',
+  HAS_GM: 'party_error_has_gm',
+  WITHOUT_GM: 'party_error_without_gm',
+  NOT_ACTIVE_MEMBER: 'party_error_not_active_member',
+  CLAIM_EXISTS: 'party_error_claim_exists',
+  CLAIM_NOT_FOUND: 'party_error_claim_not_found',
+  CANNOT_VOTE: 'party_error_cannot_vote',
 } as const;
 
 export type PartyErrorCode = (typeof PartyErrorCodes)[keyof typeof PartyErrorCodes];
@@ -21,6 +27,7 @@ const ERROR_KINDS: Partial<Record<PartyErrorCode, AppErrorKind>> = {
   [PartyErrorCodes.NOT_FOUND]: 'not_found',
   [PartyErrorCodes.INVITE_NOT_FOUND]: 'not_found',
   [PartyErrorCodes.USER_NOT_FOUND]: 'not_found',
+  [PartyErrorCodes.CLAIM_NOT_FOUND]: 'not_found',
 };
 
 export class PartyError extends AppError {

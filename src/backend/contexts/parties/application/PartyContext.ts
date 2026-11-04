@@ -4,6 +4,7 @@ import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { InviteCard, InvitePreview, MemberStatus, MyParties } from '../domain/Party';
 import { PartyView } from '../domain/PartyView';
+import { GmClaimStatus } from '../domain/repository/party.repo';
 
 /**
  * Operations the parties context exposes to the interface layer. They act as the signed-in user:
@@ -26,5 +27,8 @@ export interface PartyContext extends PartyGmAccess {
   setJournal(partyId: string, userId: string, url: string | null): Promise<void>;
   uploadImage(partyId: string, userId: string, file: Blob): Promise<string>;
   removeImage(partyId: string, userId: string): Promise<void>;
+  claimGm(partyId: string): Promise<GmClaimStatus>;
+  voteGmClaim(partyId: string, accept: boolean): Promise<GmClaimStatus>;
+  cancelGmClaim(partyId: string): Promise<void>;
   setMyCharacters(partyId: string, userId: string, characterIds: string[]): Promise<void>;
 }

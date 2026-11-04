@@ -11,6 +11,8 @@ import {
   memberStatus,
 } from '../../../../../test/helpers/parties';
 import { createSignedInClient } from '../../../../../test/helpers/signed-in-client';
+import { PartyErrorCodes } from '../domain/PartyError';
+import { SupabasePartyRepository } from './supabase-party.repository';
 
 type Session = Awaited<ReturnType<typeof createSignedInClient>>;
 
@@ -133,6 +135,21 @@ describe('Pedido para virar mestre (Integration)', () => {
       expect(await openClaim(partyId)).toBeNull();
       expect(await readsSheet(ana, biaSheet)).toBe(true);
       expect(await readsSheet(ana, caioSheet)).toBe(true);
+    });
+
+    it('um voto sem resposta (null) conta como recusa, não como aceitação', async () => {
+      const partyId = await partyWithoutGm(ana, bia);
+      await claim(ana, partyId);
+
+      const { data, error } = await bia.client.rpc('vote_party_gm_claim', {
+        p_party_id: partyId,
+        p_accept: null as unknown as boolean,
+      });
+
+      expect(error).toBeNull();
+      expect(data).toBe('cancelled');
+      expect(await openClaim(partyId)).toBeNull();
+      expect(await gmOf(partyId)).toBeNull();
     });
 
     it('uma recusa cancela o pedido, e qualquer um pode pedir de novo', async () => {
@@ -630,6 +647,33 @@ describe('Pedido para virar mestre (Integration)', () => {
 
       expect(error?.message).toBe('party_claim_not_found');
       expect(await memberStatus(partyId, bia.userId)).toBe('active');
+    });
+  });
+
+  describe('pelo repositório', () => {
+    it('lê o pedido (nome nulo de quem não escolheu) e traduz os erros do banco', async () => {
+      const partyId = await partyWithoutGm(ana, bia, caio);
+      const asAna = new SupabasePartyRepository(ana.client);
+      const asBia = new SupabasePartyRepository(bia.client);
+
+      expect((await asAna.findParty(partyId))?.gmId).toBeNull();
+      expect(await asAna.gmClaim(partyId)).toBeNull();
+      expect(await asAna.claimGm(partyId)).toBe('pending');
+
+      const open = await asBia.gmClaim(partyId);
+      expect(open).toMatchObject({ candidateId: ana.userId, candidateUsername: null });
+      expect(open?.pendingUserIds.toSorted()).toEqual([bia.userId, caio.userId].toSorted());
+
+      await expect(asBia.claimGm(partyId)).rejects.toMatchObject({
+        message: PartyErrorCodes.CLAIM_EXISTS,
+      });
+      await expect(asAna.voteGmClaim(partyId, true)).rejects.toMatchObject({
+        message: PartyErrorCodes.CANNOT_VOTE,
+      });
+      expect(await asBia.voteGmClaim(partyId, false)).toBe('cancelled');
+      await expect(asAna.cancelGmClaim(partyId)).rejects.toMatchObject({
+        message: PartyErrorCodes.CLAIM_NOT_FOUND,
+      });
     });
   });
 });
