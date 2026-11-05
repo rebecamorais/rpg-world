@@ -7,14 +7,12 @@ implementação.
 O objetivo é ajudar a organizar as sessões de jogo: marcar data, saber quem vai, lembrar todo
 mundo e ter isso no calendário e no Discord, onde a mesa já conversa.
 
-## Pré-requisito: mesa/campanha
+## Base: mesas
 
-Hoje o app só tem personagens (`characters`, `lore`, `spells`, `users`, `feedback`). Sessão
-pertence a um grupo, então antes de tudo é preciso:
+As mesas já existem (#124 a #126), com mestre, jogadores, convite por link e personagens
+vinculados. Detalhes em `2026-10-15-party-e-notas.md`. Sessão pertence a uma mesa, então falta:
 
-- **Campanha** (ou "mesa"): nome, sistema, mestre, jogadores (convite por link), personagens
-  vinculados. Detalhado em `2026-10-15-party-e-notas.md` (party, papéis, notas).
-- **Sessão:** campanha, data/hora com fuso, duração, status (marcada, confirmada, cancelada,
+- **Sessão:** mesa, data/hora com fuso, duração, status (marcada, confirmada, cancelada,
   realizada), local (online/presencial, link da call), notas/resumo depois.
 - **Presença:** cada membro responde vou / talvez / não vou.
 

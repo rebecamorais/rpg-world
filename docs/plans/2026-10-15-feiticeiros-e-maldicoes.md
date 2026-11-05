@@ -1,8 +1,8 @@
 # Feiticeiros & Maldições (Jujutsu Kaisen) como sistema
 
 **Data:** 2026-10-15
-**Status:** planejamento, nada implementado. Vem antes dos próximos passos do D&D (vida e magia,
-limites de uso).
+**Status:** planejamento, nada implementado. O próximo passo é preencher as regras a partir do
+livro (fase 0). Vida e magia já foi entregue (#80), e limites de uso foi arquivado.
 
 Feiticeiros & Maldições (F&M) é um RPG brasileiro feito por fãs, baseado em Jujutsu Kaisen. A
 base lembra o D&D 5e (d20, seis atributos, perícias, nível, bônus de maestria), mas tudo gira em
