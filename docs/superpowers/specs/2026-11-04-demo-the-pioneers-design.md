@@ -101,7 +101,7 @@ Seção na ficha com fatos documentados, sem copiar textos biográficos, e links
 
 - **Artífice:** não está nas opções do app. Ada usa "Artífice" como classe em texto livre, com habilidades originais e nada copiado de livros (decisão de Claude).
 - **Regras:** magias, itens e condições vêm do conteúdo já licenciado em `content/`, seguindo os créditos do `NOTICE.md`.
-- **Margaret Hamilton** faleceu em setembro de 2026 (as fontes divergem sobre o dia). Vira **Maren Hamilton**, escolha da Rebeca.
+- **Margaret Hamilton** faleceu em 30 de setembro de 2026. Vira **Maren Hamilton**, escolha da Rebeca.
 - **Radia Perlman** está viva, segundo a Rebeca. Vira **Mirela Pardan**, anagrama exato. O retrato foi refeito para ser visualmente distinto. O nome real aparece só em Meet the Inspiration.
 - **Hedy Lamarr, Katherine Johnson e Margaret Hamilton:** falecidas há relativamente pouco tempo; possíveis direitos de personalidade pós-morte e de herdeiros.
 - **Imagens:** geradas com ChatGPT (OpenAI Image Generation), com prompts personalizados e referências históricas. Uso apenas como elementos visuais da demo. A Rebeca entende que os termos da OpenAI permitem, em geral, uso público e comercial, e que a proteção autoral pode ser limitada conforme o país.
