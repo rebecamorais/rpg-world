@@ -87,10 +87,10 @@ export const INSPIRATIONS: Record<string, InspirationSource> = {
   },
   ching: {
     realName: 'Ching Shih',
-    period: '1775–1844',
+    period: 'c. 1775–1844',
     contribution: {
-      en: 'Chinese pirate leader who, after her husband’s death in 1807, commanded the Red Flag Fleet, a large confederation of pirate squadrons off the coast of southern China. She negotiated an amnesty with the authorities in 1810.',
-      pt: 'Líder pirata chinesa que, após a morte do marido em 1807, comandou a Frota da Bandeira Vermelha, grande confederação de esquadras piratas na costa do sul da China. Negociou uma anistia com as autoridades em 1810.',
+      en: 'Chinese pirate leader who, after her husband’s death in 1807, took charge of a large confederation of pirate fleets off the coast of southern China, with Zhang Bao commanding its Red Flag Fleet. She negotiated an amnesty with the authorities in 1810.',
+      pt: 'Líder pirata chinesa que, após a morte do marido em 1807, assumiu uma grande confederação de frotas piratas na costa do sul da China, com Zhang Bao no comando da Frota da Bandeira Vermelha. Negociou uma anistia com as autoridades em 1810.',
     },
     sources: [wiki('Ching_Shih')],
   },
@@ -98,14 +98,14 @@ export const INSPIRATIONS: Record<string, InspirationSource> = {
     realName: 'Nzinga of Ndongo and Matamba',
     period: 'c. 1583–1663',
     contribution: {
-      en: 'Ruler of the kingdoms of Ndongo and Matamba, in present-day Angola. She spent decades negotiating, allying and fighting to resist Portuguese colonization and the slave trade.',
-      pt: 'Governante dos reinos de Ndongo e Matamba, no território da atual Angola. Passou décadas negociando, fazendo alianças e lutando para resistir à colonização portuguesa e ao tráfico de escravizados.',
+      en: 'Ruler of the kingdoms of Ndongo and Matamba, in present-day Angola. She spent decades negotiating, allying and fighting to resist Portuguese colonization. She also took part in the slave trade, which helped pay for her wars.',
+      pt: 'Governante dos reinos de Ndongo e Matamba, no território da atual Angola. Passou décadas negociando, fazendo alianças e lutando para resistir à colonização portuguesa. Também participou do tráfico de escravizados, que ajudou a pagar suas guerras.',
     },
     sources: [britannica('Nzinga'), wiki('Nzinga_of_Ndongo_and_Matamba')],
   },
   hypatia: {
     realName: 'Hypatia of Alexandria',
-    period: 'c. 355–415',
+    period: 'c. 350/370–415',
     contribution: {
       en: 'Mathematician, astronomer and philosopher who taught in Alexandria, in Roman Egypt. She wrote commentaries on mathematical works and was killed by a mob in 415.',
       pt: 'Matemática, astrônoma e filósofa que ensinou em Alexandria, no Egito romano. Escreveu comentários sobre obras matemáticas e foi morta por uma multidão em 415.',
