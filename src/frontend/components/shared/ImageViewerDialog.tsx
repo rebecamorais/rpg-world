@@ -19,6 +19,8 @@ import {
 } from '@frontend/lib/image-zoom';
 import { cn } from '@frontend/lib/utils';
 
+import { fullImageUrl } from '@shared/avatar-files';
+
 /** How much one pixel of wheel movement zooms, relative to the current zoom. */
 const WHEEL_SENSITIVITY = 0.002;
 
@@ -45,6 +47,9 @@ const distance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y);
 /** The image and its controls. Mounted while the dialog is open, so each opening starts over. */
 function ZoomStage({ src, alt, onAdjust }: { src: string; alt: string; onAdjust?: () => void }) {
   const t = useTranslations('avatarUpload');
+  const fullUrl = fullImageUrl(src);
+  // A whole image that can't be loaded falls back to the avatar, silently
+  const [fullFailed, setFullFailed] = useState(false);
   const [view, setView] = useState(INITIAL_ZOOM);
   const [isDragging, setIsDragging] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -141,9 +146,10 @@ function ZoomStage({ src, alt, onAdjust }: { src: string; alt: string; onAdjust?
       >
         {/* eslint-disable-next-line @next/next/no-img-element -- served by our image proxy as is */}
         <img
-          src={src}
+          src={fullUrl && !fullFailed ? fullUrl : src}
           alt={alt}
           draggable={false}
+          onError={() => setFullFailed(true)}
           style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.zoom})` }}
           className={cn(
             'h-full w-full object-contain select-none',

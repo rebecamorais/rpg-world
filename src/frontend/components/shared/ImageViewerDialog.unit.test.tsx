@@ -212,4 +212,29 @@ describe('ImageViewerDialog', () => {
 
     expect(stage().className).toContain('bg-background');
   });
+
+  describe('imagem completa', () => {
+    const AVATAR = 'https://img.test/avatars/u/characters/c-v1-avatar.webp';
+    const FULL = 'https://img.test/avatars/u/characters/c-v1.webp';
+
+    it('avatar novo abre a imagem completa', () => {
+      renderViewer({ src: AVATAR });
+
+      expect(image()).toHaveAttribute('src', FULL);
+    });
+
+    it('imagem antiga abre como está', () => {
+      renderViewer({ src: FULL });
+
+      expect(image()).toHaveAttribute('src', FULL);
+    });
+
+    it('se a completa não carregar, mostra o avatar', () => {
+      renderViewer({ src: AVATAR });
+
+      fireEvent.error(image());
+
+      expect(image()).toHaveAttribute('src', AVATAR);
+    });
+  });
 });
