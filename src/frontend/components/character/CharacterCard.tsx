@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
+import { ViewImageButton } from '@frontend/components/shared/ViewImageButton';
 import { Badge } from '@frontend/components/ui/badge';
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
@@ -61,11 +62,18 @@ export function CharacterCard({ character }: CharacterCardProps) {
 
         <CardContent className="flex h-full flex-col p-5 sm:p-6">
           <div className="mb-5 flex items-center gap-4">
-            <CharacterPortrait
-              avatarUrl={character.avatarUrl}
-              characterClass={character.class}
-              className="border-character-muted h-16 w-16 shrink-0 rounded-xl border-2 shadow-[0_0_20px_-6px_var(--character-glow)]"
-            />
+            <div className="relative shrink-0">
+              <CharacterPortrait
+                avatarUrl={character.avatarUrl}
+                characterClass={character.class}
+                className="border-character-muted h-16 w-16 rounded-xl border-2 shadow-[0_0_20px_-6px_var(--character-glow)]"
+              />
+              <ViewImageButton
+                src={character.avatarUrl}
+                name={character.name}
+                className="absolute -right-1 -bottom-1"
+              />
+            </div>
             <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
               <div className="flex w-full items-center justify-between gap-2 overflow-hidden">
                 <h2 className="text-title text-character-flare truncate">

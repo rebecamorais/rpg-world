@@ -54,6 +54,21 @@ describe('ImageUpload', () => {
 
   afterEach(() => vi.unstubAllGlobals());
 
+  it('ver imagem e ajustar reabre o recorte com a imagem atual', async () => {
+    fetchMock.mockImplementation(
+      async () => new Response(new Blob(['img']), { headers: { 'Content-Type': 'image/webp' } }),
+    );
+    renderUpload({ currentUrl: 'https://img.test/avatars/u/a.webp' });
+
+    await userEvent.click(screen.getByRole('button', { name: messages.avatarUpload.view }));
+    await userEvent.click(screen.getByRole('button', { name: messages.avatarUpload.adjust }));
+
+    expect(fetchMock).toHaveBeenCalledWith('/api/images/avatars/u/a.webp');
+    expect(
+      await screen.findByRole('button', { name: messages.avatarUpload.save }),
+    ).toBeInTheDocument();
+  });
+
   it('envia o arquivo para o endpoint do perfil e devolve a URL', async () => {
     const { input, onUploadSuccess } = renderUpload();
 

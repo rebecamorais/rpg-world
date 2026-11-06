@@ -245,4 +245,24 @@ describe('CombatRow', () => {
       screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Arani' }), hidden: true }),
     ).toHaveAttribute('aria-expanded', 'false');
   });
+
+  describe('ampliar a imagem', () => {
+    const view = { name: messages.avatarUpload.viewOf.replace('{name}', 'Arani') };
+
+    it('abre o modal sem abrir os detalhes da linha', async () => {
+      renderRow(gmRow({ avatarUrl: 'https://img.test/a.webp' }));
+
+      await userEvent.click(screen.getByRole('button', view));
+      expect(screen.getByRole('img', { name: 'Arani' })).toBeInTheDocument();
+
+      await userEvent.keyboard('{Escape}');
+      expect(details()).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('sem imagem não mostra o botão', () => {
+      renderRow();
+
+      expect(screen.queryByRole('button', view)).not.toBeInTheDocument();
+    });
+  });
 });

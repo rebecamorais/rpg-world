@@ -1,4 +1,5 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it } from 'vitest';
 
@@ -67,5 +68,27 @@ describe('RolePlayCard', () => {
     for (const label of [t.personalityTraits, t.ideals, t.bonds, t.flaws]) {
       expect(screen.queryByText(label)).not.toBeInTheDocument();
     }
+  });
+
+  describe('ampliar a imagem', () => {
+    const view = { name: messages.avatarUpload.viewOf.replace('{name}', 'Arani') };
+
+    it('abre o modal com a imagem, sem estar dentro do link da ficha', async () => {
+      renderWithProviders(
+        <RolePlayCard partyId="p1" card={card({ avatarUrl: 'https://img.test/a.webp' })} />,
+      );
+      const button = screen.getByRole('button', view);
+
+      expect(button.closest('a')).toBeNull();
+      await userEvent.click(button);
+
+      expect(screen.getByRole('img', { name: 'Arani' })).toBeInTheDocument();
+    });
+
+    it('sem imagem não mostra o botão', () => {
+      renderWithProviders(<RolePlayCard partyId="p1" card={card()} />);
+
+      expect(screen.queryByRole('button', view)).not.toBeInTheDocument();
+    });
   });
 });

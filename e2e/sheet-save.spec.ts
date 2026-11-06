@@ -1,4 +1,9 @@
+import path from 'node:path';
+
 import { characterUrl, createCharacter, expect, hydrated, test } from './support/fixtures';
+import { adminClient } from './support/supabase';
+
+const AVATAR = path.join(import.meta.dirname, 'support', 'avatar.png');
 
 test.describe('salvar a ficha', () => {
   test('mostra alterações não salvas e salva com Ctrl+S', async ({ page, user: _ }) => {
@@ -66,6 +71,87 @@ test('o avatar abre a personalização do personagem', async ({ page, user: _ })
   await (await hydrated(page.getByRole('button', { name: 'Customize Character' }))).click();
 
   await expect(page.getByRole('dialog', { name: 'Customize Character' })).toBeVisible();
+});
+
+test('ajustar a imagem na ficha só grava com Salvar', async ({ page, user: _ }) => {
+  page.on('dialog', (dialog) => dialog.accept()); // the unsaved changes warning on reload
+  const name = 'Adjusted Hero';
+  const id = await createCharacter(page, name);
+  await page.goto(characterUrl(id));
+
+  const cropSave = () =>
+    page.getByRole('dialog', { name: 'Adjust image' }).getByRole('button', { name: 'Save' });
+  const saveSheet = async () => {
+    await page.keyboard.press('ControlOrMeta+s');
+    await expect(page.getByText('Character saved successfully!').first()).toBeVisible();
+  };
+  const openViewer = async () => {
+    await (await hydrated(page.getByRole('button', { name: 'View image', exact: true }))).click();
+    return page.getByRole('img', { name });
+  };
+  const adjust = async () => {
+    await openViewer();
+    await page.getByRole('button', { name: 'Adjust image' }).click();
+    await cropSave().click();
+    await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
+  };
+
+  await (await hydrated(page.getByRole('button', { name: 'Customize Character' }))).click();
+  await page.locator('#image-file-input').setInputFiles(AVATAR);
+  await cropSave().click();
+  // The dialog hides the rest of the page from the accessibility tree: the status shows after it
+  await expect(
+    page.getByRole('dialog', { name: 'Customize Character' }).getByRole('button', {
+      name: 'View image',
+    }),
+  ).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
+  await saveSheet();
+
+  await page.reload();
+  const saved = await (await openViewer()).getAttribute('src');
+  await page.keyboard.press('Escape');
+
+  await adjust();
+  await page.reload();
+  await expect(await openViewer()).toHaveAttribute('src', saved!);
+  await page.keyboard.press('Escape');
+
+  await adjust();
+  await saveSheet();
+  await page.reload();
+  await expect(await openViewer()).not.toHaveAttribute('src', saved!);
+});
+
+test('ajusta uma imagem salva com caminho relativo, como as do seed local', async ({
+  page,
+  user: _,
+}) => {
+  const id = await createCharacter(page, 'Seeded Hero');
+  await adminClient()
+    .from('characters')
+    .update({ avatar_url: '/demo/pioneers/golden-oath.webp' })
+    .eq('id', id);
+  await page.goto(characterUrl(id));
+
+  await (await hydrated(page.getByRole('button', { name: 'View image', exact: true }))).click();
+  await page.getByRole('button', { name: 'Adjust image' }).click();
+
+  await page
+    .getByRole('dialog', { name: 'Adjust image' })
+    .getByRole('button', { name: 'Save' })
+    .click();
+  await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
+  await page.keyboard.press('ControlOrMeta+s');
+  await expect(page.getByText('Character saved successfully!').first()).toBeVisible();
+
+  await page.reload();
+  await (await hydrated(page.getByRole('button', { name: 'View image', exact: true }))).click();
+  await expect(page.getByRole('img', { name: 'Seeded Hero' })).toHaveAttribute(
+    'src',
+    /\/api\/images\/avatars\//,
+  );
 });
 
 test('o skip link leva direto ao conteúdo', async ({ page }) => {

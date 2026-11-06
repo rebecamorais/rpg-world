@@ -14,6 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@frontend/components/ui/dialog';
+import { useReturnFocus } from '@frontend/hooks/useReturnFocus';
 import { CropArea } from '@frontend/lib/crop-image';
 
 interface ImageCropDialogProps {
@@ -28,9 +29,11 @@ interface ImageCropDialogProps {
 
 /** Crop with drag and zoom (a round avatar by default), shown before the image is uploaded. */
 export function ImageCropDialog({ source, onCancel, onConfirm, aspect = 1 }: ImageCropDialogProps) {
+  const returnFocus = useReturnFocus();
+
   return (
     <Dialog open={!!source} onOpenChange={(open) => !open && onCancel()}>
-      <DialogContent>
+      <DialogContent {...returnFocus}>
         {/* Mounted per image, so zoom and position start over each time */}
         {source ? (
           <CropBody source={source} onCancel={onCancel} onConfirm={onConfirm} aspect={aspect} />

@@ -32,7 +32,9 @@ import { CharacterClass } from '@frontend/types/spells';
 import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
 import { ImageViewerDialog } from '../shared/ImageViewerDialog';
+import { AdjustableAvatarViewer } from './AdjustableAvatarViewer';
 import { CharacterCustomizationDialog } from './CharacterCustomizationDialog';
+import { SheetFieldset } from './sheet/SheetFieldset';
 
 /** Same limit as the API's character schema, so a save never fails on length. */
 const TEXT_MAX = 100;
@@ -94,6 +96,22 @@ export default function CharacterHeader() {
                 <AppIcon name="Palette" size={24} className="text-character-flare" />
               </button>
             )}
+            {readOnly ? (
+              <ImageViewerDialog
+                src={avatarUrl}
+                alt={name}
+                open={isViewerOpen}
+                onOpenChange={setIsViewerOpen}
+              />
+            ) : (
+              <AdjustableAvatarViewer
+                characterId={id}
+                src={avatarUrl}
+                alt={name}
+                open={isViewerOpen}
+                onOpenChange={setIsViewerOpen}
+              />
+            )}
           </div>
           {avatarUrl ? (
             <button
@@ -107,13 +125,6 @@ export default function CharacterHeader() {
           ) : null}
         </div>
 
-        <ImageViewerDialog
-          src={avatarUrl}
-          alt={name}
-          open={isViewerOpen}
-          onOpenChange={setIsViewerOpen}
-        />
-
         {!readOnly && (
           <CharacterCustomizationDialog
             open={isColorPickerOpen}
@@ -121,138 +132,141 @@ export default function CharacterHeader() {
           />
         )}
 
-        <div className="grid flex-1 grid-cols-1 gap-8 lg:grid-cols-2">
-          {/* Left Column: Core Stats */}
-          <div className="flex flex-col gap-4">
-            {/* The name is the page's h1 (SheetPage); here it is edited like the other fields */}
-            <InlineField
-              id="char-name"
-              maxLength={TEXT_MAX}
-              label={t('name')}
-              value={name || ''}
-              onChange={(e) => update({ name: e.target.value })}
-              placeholder={t('namePlaceholder')}
-              className="text-heading"
-            />
+        {/* The fields only: the image can be viewed on a read-only sheet too */}
+        <SheetFieldset>
+          <div className="grid flex-1 grid-cols-1 gap-8 lg:grid-cols-2">
+            {/* Left Column: Core Stats */}
+            <div className="flex flex-col gap-4">
+              {/* The name is the page's h1 (SheetPage); here it is edited like the other fields */}
+              <InlineField
+                id="char-name"
+                maxLength={TEXT_MAX}
+                label={t('name')}
+                value={name || ''}
+                onChange={(e) => update({ name: e.target.value })}
+                placeholder={t('namePlaceholder')}
+                className="text-heading"
+              />
 
-            {/* Level & PB Row */}
-            <div className="flex items-center gap-6">
-              <div className="flex shrink-0 items-center gap-2">
-                <FieldLabel htmlFor="char-level">{t('level')}</FieldLabel>
-                <NumberStepper
-                  id="char-level"
-                  min={1}
-                  max={20}
-                  value={level || 1}
-                  onChange={(val) => update({ level: val })}
-                  size="sm"
-                  containerClassName="py-0 gap-2"
-                />
+              {/* Level & PB Row */}
+              <div className="flex items-center gap-6">
+                <div className="flex shrink-0 items-center gap-2">
+                  <FieldLabel htmlFor="char-level">{t('level')}</FieldLabel>
+                  <NumberStepper
+                    id="char-level"
+                    min={1}
+                    max={20}
+                    value={level || 1}
+                    onChange={(val) => update({ level: val })}
+                    size="sm"
+                    containerClassName="py-0 gap-2"
+                  />
+                </div>
+
+                <div className="flex flex-1 items-center gap-2">
+                  <span className="text-label text-muted-foreground whitespace-nowrap">
+                    {t('proficiencyBonus')}
+                  </span>
+                  <div className="bg-muted/40 text-character-flare flex h-8 min-w-8 items-center justify-center rounded-md px-2 font-mono text-sm font-bold">
+                    +{pb}
+                  </div>
+                </div>
               </div>
 
-              <div className="flex flex-1 items-center gap-2">
-                <span className="text-label text-muted-foreground whitespace-nowrap">
-                  {t('proficiencyBonus')}
-                </span>
-                <div className="bg-muted/40 text-character-flare flex h-8 min-w-8 items-center justify-center rounded-md px-2 font-mono text-sm font-bold">
-                  +{pb}
+              {/* XP Section */}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <FieldLabel htmlFor="char-xp">{t('xp')}</FieldLabel>
+                  <div className="flex items-center gap-1 text-xs font-medium">
+                    <NumberInput
+                      ghost
+                      id="char-xp"
+                      min={0}
+                      max={10_000_000}
+                      value={xp}
+                      onValueChange={(next) => update({ xp: next })}
+                      className="text-character-flare h-5 w-16 text-right font-mono text-xs md:text-xs"
+                    />
+                    <span className="text-muted-foreground">/ {nextLevelXp}</span>
+                  </div>
                 </div>
+                <Progress
+                  aria-label={t('xpProgress')}
+                  value={progress}
+                  className="h-2"
+                  indicatorClassName="bg-character"
+                />
               </div>
             </div>
 
-            {/* XP Section */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <FieldLabel htmlFor="char-xp">{t('xp')}</FieldLabel>
-                <div className="flex items-center gap-1 text-xs font-medium">
-                  <NumberInput
-                    ghost
-                    id="char-xp"
-                    min={0}
-                    max={10_000_000}
-                    value={xp}
-                    onValueChange={(next) => update({ xp: next })}
-                    className="text-character-flare h-5 w-16 text-right font-mono text-xs md:text-xs"
-                  />
-                  <span className="text-muted-foreground">/ {nextLevelXp}</span>
-                </div>
-              </div>
-              <Progress
-                aria-label={t('xpProgress')}
-                value={progress}
-                className="h-2"
-                indicatorClassName="bg-character"
+            {/* Right Column: Information Grid */}
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+              <ChoiceSelect
+                id="char-race"
+                maxLength={TEXT_MAX}
+                label={t('race')}
+                value={race || ''}
+                matched={choices.raceOf(race)}
+                options={Object.values(CharacterRace).map((value) => ({
+                  value,
+                  label: choices.raceLabelOf(value),
+                  icon: RACE_ICONS[value],
+                }))}
+                onChange={(value) => update({ race: value })}
+                placeholder={t('racePlaceholder')}
+                otherLabel={t('otherOption')}
+                otherPlaceholder={t('raceOtherPlaceholder')}
+              />
+              <ChoiceSelect
+                id="char-class"
+                maxLength={TEXT_MAX}
+                label={t('class')}
+                value={classNameStr || ''}
+                matched={choices.classOf(classNameStr)}
+                options={Object.values(CharacterClass).map((value) => ({
+                  value,
+                  label: choices.classLabelOf(value),
+                  icon: CLASS_ICONS[value],
+                }))}
+                onChange={(value) => update({ class: value })}
+                placeholder={t('classPlaceholder')}
+                otherLabel={t('otherOption')}
+                otherPlaceholder={t('classOtherPlaceholder')}
+              />
+              <ChoiceSelect
+                id="char-background"
+                maxLength={TEXT_MAX}
+                label={t('background')}
+                value={background || ''}
+                matched={choices.backgroundOf(background)}
+                options={Object.values(CharacterBackground).map((value) => ({
+                  value,
+                  label: choices.backgroundLabelOf(value),
+                  icon: BACKGROUND_ICONS[value],
+                }))}
+                onChange={(value) => update({ background: value })}
+                placeholder={t('backgroundPlaceholder')}
+                otherLabel={t('otherOption')}
+                otherPlaceholder={t('backgroundOtherPlaceholder')}
+              />
+              <ChoiceSelect
+                id="char-alignment"
+                maxLength={TEXT_MAX}
+                label={t('alignment')}
+                value={alignment || ''}
+                matched={choices.alignmentOf(alignment)}
+                options={Object.values(CharacterAlignment).map((value) => ({
+                  value,
+                  label: choices.alignmentLabelOf(value),
+                }))}
+                onChange={(value) => update({ alignment: value })}
+                placeholder={t('alignmentPlaceholder')}
+                otherLabel={t('otherOption')}
+                otherPlaceholder={t('alignmentOtherPlaceholder')}
               />
             </div>
           </div>
-
-          {/* Right Column: Information Grid */}
-          <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-            <ChoiceSelect
-              id="char-race"
-              maxLength={TEXT_MAX}
-              label={t('race')}
-              value={race || ''}
-              matched={choices.raceOf(race)}
-              options={Object.values(CharacterRace).map((value) => ({
-                value,
-                label: choices.raceLabelOf(value),
-                icon: RACE_ICONS[value],
-              }))}
-              onChange={(value) => update({ race: value })}
-              placeholder={t('racePlaceholder')}
-              otherLabel={t('otherOption')}
-              otherPlaceholder={t('raceOtherPlaceholder')}
-            />
-            <ChoiceSelect
-              id="char-class"
-              maxLength={TEXT_MAX}
-              label={t('class')}
-              value={classNameStr || ''}
-              matched={choices.classOf(classNameStr)}
-              options={Object.values(CharacterClass).map((value) => ({
-                value,
-                label: choices.classLabelOf(value),
-                icon: CLASS_ICONS[value],
-              }))}
-              onChange={(value) => update({ class: value })}
-              placeholder={t('classPlaceholder')}
-              otherLabel={t('otherOption')}
-              otherPlaceholder={t('classOtherPlaceholder')}
-            />
-            <ChoiceSelect
-              id="char-background"
-              maxLength={TEXT_MAX}
-              label={t('background')}
-              value={background || ''}
-              matched={choices.backgroundOf(background)}
-              options={Object.values(CharacterBackground).map((value) => ({
-                value,
-                label: choices.backgroundLabelOf(value),
-                icon: BACKGROUND_ICONS[value],
-              }))}
-              onChange={(value) => update({ background: value })}
-              placeholder={t('backgroundPlaceholder')}
-              otherLabel={t('otherOption')}
-              otherPlaceholder={t('backgroundOtherPlaceholder')}
-            />
-            <ChoiceSelect
-              id="char-alignment"
-              maxLength={TEXT_MAX}
-              label={t('alignment')}
-              value={alignment || ''}
-              matched={choices.alignmentOf(alignment)}
-              options={Object.values(CharacterAlignment).map((value) => ({
-                value,
-                label: choices.alignmentLabelOf(value),
-              }))}
-              onChange={(value) => update({ alignment: value })}
-              placeholder={t('alignmentPlaceholder')}
-              otherLabel={t('otherOption')}
-              otherPlaceholder={t('alignmentOtherPlaceholder')}
-            />
-          </div>
-        </div>
+        </SheetFieldset>
       </CardContent>
     </Card>
   );

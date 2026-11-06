@@ -59,4 +59,39 @@ describe('CharacterCard', () => {
     });
     expect(toast.success).toHaveBeenCalledWith(t.duplicateSuccess);
   });
+
+  describe('ampliar a imagem', () => {
+    const view = { name: messages.avatarUpload.viewOf.replace('{name}', 'Goblin') };
+    const withImage = { ...goblin, avatarUrl: 'https://img.test/g.webp' };
+
+    it('abre o modal com a imagem, sem estar dentro do link da ficha', async () => {
+      renderWithProviders(<CharacterCard character={withImage} />);
+      const button = screen.getByRole('button', view);
+
+      expect(button.closest('a')).toBeNull();
+      await userEvent.click(button);
+
+      expect(screen.getByRole('img', { name: 'Goblin' })).toHaveAttribute(
+        'src',
+        withImage.avatarUrl,
+      );
+    });
+
+    it('sem imagem não mostra o botão', () => {
+      renderWithProviders(<CharacterCard character={goblin} />);
+
+      expect(screen.queryByRole('button', view)).not.toBeInTheDocument();
+    });
+  });
+
+  it('o botão de ampliar tem área de toque de 44px', () => {
+    renderWithProviders(
+      <CharacterCard character={{ ...goblin, avatarUrl: 'https://img.test/g.webp' }} />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: messages.avatarUpload.viewOf.replace('{name}', 'Goblin') })
+        .className,
+    ).toContain('pointer-coarse:after:-inset-2');
+  });
 });

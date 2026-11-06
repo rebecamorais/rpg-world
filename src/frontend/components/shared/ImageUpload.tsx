@@ -2,24 +2,15 @@
 
 import { useRef, useState } from 'react';
 
-import dynamic from 'next/dynamic';
-
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 
 import { ImageViewerDialog } from '@frontend/components/shared/ImageViewerDialog';
+import { LazyImageCropDialog } from '@frontend/components/shared/LazyImageCropDialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
 import { UploadTarget, useFileUploader } from '@frontend/context/FileUploaderContext';
-import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
-import { CropArea, cropImage } from '@frontend/lib/crop-image';
+import { useImageCrop } from '@frontend/hooks/useImageCrop';
 import { cn } from '@frontend/lib/utils';
-
-// react-easy-crop is only needed once an image is picked: kept out of the page's first load
-const ImageCropDialog = dynamic(
-  () => import('@frontend/components/shared/ImageCropDialog').then((m) => m.ImageCropDialog),
-  { ssr: false },
-);
 
 interface ImageUploadProps {
   currentUrl?: string;
@@ -51,12 +42,19 @@ export default function ImageUpload({
   const t = useTranslations('avatarUpload');
   const { upload: contextUpload, isUploading: isUploadingContext } = useFileUploader();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [pending, setPending] = useState<{ file: File; source: string } | null>(null);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const { getErrorMessage } = useErrorMessage();
+  const crop = useImageCrop({
+    upload: (file) =>
+      uploadFn
+        ? uploadFn(file)
+        : target
+          ? contextUpload({ file, target, id: targetId })
+          : Promise.reject(new Error('No upload action provided to ImageUpload')),
+    onUploaded: onUploadSuccess,
+    onUploadError,
+  });
 
-  const isUploading = isUploadingProp ?? isUploadingContext;
+  const isUploading = (isUploadingProp ?? isUploadingContext) || crop.isLoadingSource;
 
   const sizeClasses = {
     sm: 'h-16 w-16',
@@ -64,54 +62,13 @@ export default function ImageUpload({
     lg: 'h-32 w-32',
   };
 
-  const displayUrl = preview ?? currentUrl;
+  const displayUrl = crop.preview ?? currentUrl;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     // Clear the input so picking the same file again (e.g. retrying a failed upload) fires change
     e.target.value = '';
-    if (file) setPending({ file, source: URL.createObjectURL(file) });
-  };
-
-  const clearPending = () => {
-    if (pending) URL.revokeObjectURL(pending.source);
-    setPending(null);
-  };
-
-  const handleCropConfirm = async (area: CropArea | null) => {
-    if (!pending) return;
-    const original = pending.file;
-    clearPending();
-
-    let file: File;
-    try {
-      file = await cropImage(original, area);
-    } catch (err: unknown) {
-      toast.error(getErrorMessage(err));
-      onUploadError?.(err);
-      return;
-    }
-
-    // Local preview (blob URL)
-    const objectUrl = URL.createObjectURL(file);
-    setPreview(objectUrl);
-
-    try {
-      const uploadAction = uploadFn
-        ? uploadFn(file)
-        : target
-          ? contextUpload({ file, target, id: targetId })
-          : Promise.reject(new Error('No upload action provided to ImageUpload'));
-
-      const { url } = await uploadAction;
-      onUploadSuccess(url);
-      setPreview(null);
-      URL.revokeObjectURL(objectUrl);
-    } catch (err: unknown) {
-      setPreview(null);
-      URL.revokeObjectURL(objectUrl);
-      onUploadError?.(err);
-    }
+    if (file) crop.pickFile(file);
   };
 
   return (
@@ -164,16 +121,17 @@ export default function ImageUpload({
         </Button>
       ) : null}
 
-      <ImageCropDialog
-        source={pending?.source ?? null}
-        onCancel={clearPending}
-        onConfirm={handleCropConfirm}
+      <LazyImageCropDialog
+        source={crop.cropSource}
+        onCancel={crop.cancel}
+        onConfirm={crop.confirm}
       />
       <ImageViewerDialog
         src={currentUrl}
         alt={t('currentAlt')}
         open={isViewerOpen}
         onOpenChange={setIsViewerOpen}
+        onAdjust={currentUrl ? () => crop.adjust(currentUrl) : undefined}
       />
     </div>
   );

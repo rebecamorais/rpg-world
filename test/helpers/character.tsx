@@ -3,6 +3,7 @@ import { ReactElement, ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { CharacterContextProvider } from '@frontend/context/CharacterContext';
+import { FileUploaderProvider } from '@frontend/context/FileUploaderContext';
 import { useDraft } from '@frontend/hooks/useDraft';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
@@ -35,7 +36,11 @@ export function renderWithCharacter(ui: ReactElement, character: DnD5eCharacter)
     );
   }
 
-  const result = renderWithProviders(<Harness>{ui}</Harness>);
+  const result = renderWithProviders(
+    <FileUploaderProvider>
+      <Harness>{ui}</Harness>
+    </FileUploaderProvider>,
+  );
   return {
     ...result,
     save,
