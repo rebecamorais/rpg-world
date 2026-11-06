@@ -42,6 +42,7 @@ Os NPCs do mestre são Joan of Arc, Ching Shih, Queen Nzinga, Hypatia, Florence 
 
 - **Mestre:** abra [a mesa](http://localhost:3000/parties/dddddddd-dddd-4ddd-8ddd-dddddddddddd) para ver a aba Role Play, abrir as fichas dos jogadores em modo leitura, iniciar um combate e usar o baú.
 - **Jogadores:** edite as próprias fichas, prepare magias e use o inventário. Para ver mestre e jogador ao mesmo tempo, abra a outra conta em uma janela anônima.
+- **Cores das magias:** a Katherine Johnson, de `playerPepper`, conhece magias de vários tipos de dano, inclusive de fora da lista de magos, para facilitar a conferência das cores.
 
 A mesa não tem imagem porque o banco só aceita uma imagem enviada pelo mestre. O envio funciona normalmente em **Configurações** da mesa.
 
