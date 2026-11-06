@@ -33,7 +33,7 @@ export function ViewImageButton({
         onClick={() => setIsOpen(true)}
         aria-label={t('viewOf', { name })}
         className={cn(
-          'focus-ring bg-background border-border hover:text-character-flare relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border shadow-sm transition-colors',
+          'focus-ring bg-background border-border hover:text-character-flare relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border shadow-sm transition-colors pointer-coarse:after:absolute pointer-coarse:after:-inset-2',
           className,
         )}
       >

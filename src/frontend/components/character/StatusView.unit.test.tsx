@@ -93,6 +93,44 @@ describe('StatusView', () => {
       expect(save).not.toHaveBeenCalled();
     });
 
+    it('mostra que está atualizando enquanto envia a imagem ajustada', async () => {
+      params.value = { id: 'c1' };
+      let finishUpload = () => {};
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async (input: string) => {
+          if (input.startsWith('/api/images/')) {
+            return new Response(new Blob(['img']), { headers: { 'Content-Type': 'image/webp' } });
+          }
+          await new Promise<void>((resolve) => (finishUpload = resolve));
+          return new Response(JSON.stringify({ url: NEW_AVATAR }));
+        }),
+      );
+      const { draft } = renderStatus(withAvatar);
+
+      await userEvent.click(screen.getByRole('button', { name: tImage.view }));
+      await userEvent.click(screen.getByRole('button', { name: tImage.adjust }));
+      await userEvent.click(await screen.findByRole('button', { name: tImage.save }));
+
+      expect(await screen.findByText(tImage.adjusting)).toBeInTheDocument();
+
+      finishUpload();
+      await waitFor(() => expect(draft().avatarUrl).toBe(NEW_AVATAR));
+      expect(screen.queryByText(tImage.adjusting)).not.toBeInTheDocument();
+    });
+
+    it('cancelar o recorte devolve o foco ao botão de ver imagem', async () => {
+      params.value = { id: 'c1' };
+      renderStatus(withAvatar);
+      const view = screen.getByRole('button', { name: tImage.view });
+
+      await userEvent.click(view);
+      await userEvent.click(screen.getByRole('button', { name: tImage.adjust }));
+      await userEvent.click(await screen.findByRole('button', { name: messages.common.cancel }));
+
+      await waitFor(() => expect(view).toHaveFocus());
+    });
+
     it('o mestre vê a imagem, mas não pode ajustar', async () => {
       params.value = { partyId: 'p1', id: 'c1' };
       renderStatus(withAvatar);

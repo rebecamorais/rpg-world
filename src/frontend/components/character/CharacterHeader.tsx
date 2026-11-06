@@ -96,6 +96,22 @@ export default function CharacterHeader() {
                 <AppIcon name="Palette" size={24} className="text-character-flare" />
               </button>
             )}
+            {readOnly ? (
+              <ImageViewerDialog
+                src={avatarUrl}
+                alt={name}
+                open={isViewerOpen}
+                onOpenChange={setIsViewerOpen}
+              />
+            ) : (
+              <AdjustableAvatarViewer
+                characterId={id}
+                src={avatarUrl}
+                alt={name}
+                open={isViewerOpen}
+                onOpenChange={setIsViewerOpen}
+              />
+            )}
           </div>
           {avatarUrl ? (
             <button
@@ -108,23 +124,6 @@ export default function CharacterHeader() {
             </button>
           ) : null}
         </div>
-
-        {readOnly ? (
-          <ImageViewerDialog
-            src={avatarUrl}
-            alt={name}
-            open={isViewerOpen}
-            onOpenChange={setIsViewerOpen}
-          />
-        ) : (
-          <AdjustableAvatarViewer
-            characterId={id}
-            src={avatarUrl}
-            alt={name}
-            open={isViewerOpen}
-            onOpenChange={setIsViewerOpen}
-          />
-        )}
 
         {!readOnly && (
           <CharacterCustomizationDialog

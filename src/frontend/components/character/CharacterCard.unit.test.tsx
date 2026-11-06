@@ -83,4 +83,15 @@ describe('CharacterCard', () => {
       expect(screen.queryByRole('button', view)).not.toBeInTheDocument();
     });
   });
+
+  it('o botão de ampliar tem área de toque de 44px', () => {
+    renderWithProviders(
+      <CharacterCard character={{ ...goblin, avatarUrl: 'https://img.test/g.webp' }} />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: messages.avatarUpload.viewOf.replace('{name}', 'Goblin') })
+        .className,
+    ).toContain('pointer-coarse:after:-inset-2');
+  });
 });

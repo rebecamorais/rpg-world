@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@frontend/components/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@frontend/components/ui/dialog';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { useReturnFocus } from '@frontend/hooks/useReturnFocus';
 import {
   INITIAL_ZOOM,
   MAX_ZOOM,
@@ -78,6 +79,8 @@ function ZoomStage({ src, alt, onAdjust }: { src: string; alt: string; onAdjust?
   }, []);
 
   const onPointerDown = (event: React.PointerEvent) => {
+    // The context menu swallows the release of a right click, leaving the image stuck to the cursor
+    if (event.button !== 0) return;
     event.currentTarget.setPointerCapture(event.pointerId);
     pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
     const [first, second] = [...pointers.current.values()];
@@ -129,6 +132,7 @@ function ZoomStage({ src, alt, onAdjust }: { src: string; alt: string; onAdjust?
         onPointerMove={onPointerMove}
         onPointerUp={onPointerEnd}
         onPointerCancel={onPointerEnd}
+        onLostPointerCapture={onPointerEnd}
         onKeyDown={onKeyDown}
         className={cn(
           'focus-ring aspect-square max-h-[80vh] w-full touch-none overflow-hidden rounded-lg',
@@ -148,14 +152,15 @@ function ZoomStage({ src, alt, onAdjust }: { src: string; alt: string; onAdjust?
         />
       </div>
 
-      {/* A solid background: the controls' contrast can't depend on the image behind them */}
-      <div className="bg-background border-border flex flex-wrap items-center justify-center gap-1 rounded-lg border p-1 pointer-coarse:gap-2">
+      {/* A solid background: the controls' contrast can't depend on the image behind them.
+          aria-disabled, not disabled: a disabled button would drop the keyboard focus at the limit */}
+      <div className="bg-background border-border [&_[aria-disabled=true]]:text-muted-foreground flex flex-wrap items-center justify-center gap-1 rounded-lg border p-1 pointer-coarse:gap-2 [&_[aria-disabled=true]]:cursor-not-allowed">
         <Button
           type="button"
           variant="ghost"
           size="icon"
           aria-label={t('zoomOut')}
-          disabled={view.zoom <= MIN_ZOOM}
+          aria-disabled={view.zoom <= MIN_ZOOM}
           onClick={() => zoomBy(-ZOOM_STEP)}
         >
           <AppIcon name="Minus" size={16} aria-hidden="true" />
@@ -165,7 +170,7 @@ function ZoomStage({ src, alt, onAdjust }: { src: string; alt: string; onAdjust?
           variant="ghost"
           size="icon"
           aria-label={t('zoomIn')}
-          disabled={view.zoom >= MAX_ZOOM}
+          aria-disabled={view.zoom >= MAX_ZOOM}
           onClick={() => zoomBy(ZOOM_STEP)}
         >
           <AppIcon name="Plus" size={16} aria-hidden="true" />
@@ -174,7 +179,7 @@ function ZoomStage({ src, alt, onAdjust }: { src: string; alt: string; onAdjust?
           type="button"
           variant="ghost"
           size="sm"
-          disabled={view.zoom <= MIN_ZOOM}
+          aria-disabled={view.zoom <= MIN_ZOOM}
           onClick={() => setView(INITIAL_ZOOM)}
         >
           {t('zoomFit')}
@@ -198,17 +203,29 @@ export function ImageViewerDialog({
   onAdjust,
 }: ImageViewerDialogProps) {
   const t = useTranslations('avatarUpload');
+  const { onOpenAutoFocus, onCloseAutoFocus } = useReturnFocus();
+  // Waits for the focus to come back, so the crop dialog can give it back to the same place
+  const adjustOnClose = useRef(false);
 
   const adjust =
     onAdjust &&
     (() => {
+      adjustOnClose.current = true;
       onOpenChange(false);
-      onAdjust();
     });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[min(90vw,80vh)] border-none bg-transparent p-0 shadow-none">
+      <DialogContent
+        onOpenAutoFocus={onOpenAutoFocus}
+        onCloseAutoFocus={(event) => {
+          onCloseAutoFocus(event);
+          if (adjustOnClose.current) onAdjust?.();
+          adjustOnClose.current = false;
+        }}
+        // The close button sits over the image: its contrast needs a background of its own
+        className="[&>button]:bg-background max-w-[min(90vw,80vh)] border-none bg-transparent p-0 shadow-none [&>button]:top-2 [&>button]:right-2 [&>button]:rounded-full [&>button]:p-1.5"
+      >
         <DialogTitle className="sr-only">{t('viewTitle')}</DialogTitle>
         {src ? <ZoomStage src={src} alt={alt} onAdjust={adjust} /> : null}
       </DialogContent>

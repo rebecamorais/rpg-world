@@ -639,6 +639,7 @@
     "zoomOut": "Afastar",
     "zoomFit": "Ajustar à tela",
     "adjust": "Ajustar imagem",
+    "adjusting": "Atualizando…",
     "adjustLoadError": "Não foi possível carregar a imagem salva. Tente enviar de novo."
   },
   "skills": {

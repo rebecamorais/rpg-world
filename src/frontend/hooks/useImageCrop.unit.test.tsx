@@ -97,4 +97,14 @@ describe('useImageCrop', () => {
     expect(onUploaded).not.toHaveBeenCalled();
     expect(onUploadError).toHaveBeenCalledWith(failure);
   });
+
+  it('um segundo adjust enquanto carrega é ignorado', async () => {
+    const { latest } = setup();
+
+    await act(async () => {
+      await Promise.all([latest.crop.adjust(SAVED), latest.crop.adjust(SAVED)]);
+    });
+
+    expect(loadStoredImage).toHaveBeenCalledOnce();
+  });
 });

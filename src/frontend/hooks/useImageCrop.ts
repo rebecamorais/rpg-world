@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -24,15 +24,21 @@ export function useImageCrop({ upload, onUploaded, onUploadError }: UseImageCrop
   const [pending, setPending] = useState<{ file: Blob; source: string } | null>(null);
   const [isLoadingSource, setIsLoadingSource] = useState(false);
 
+  // A ref: two clicks in the same render would both still see the state as false
+  const isLoading = useRef(false);
+
   const open = (file: Blob) => setPending({ file, source: URL.createObjectURL(file) });
 
   const adjust = async (url: string) => {
+    if (isLoading.current) return;
+    isLoading.current = true;
     setIsLoadingSource(true);
     try {
       open(await loadStoredImage(url));
     } catch {
       toast.error(t('adjustLoadError'));
     } finally {
+      isLoading.current = false;
       setIsLoadingSource(false);
     }
   };

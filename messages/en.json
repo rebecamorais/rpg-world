@@ -639,6 +639,7 @@
     "zoomOut": "Zoom out",
     "zoomFit": "Fit to screen",
     "adjust": "Adjust image",
+    "adjusting": "Updating…",
     "adjustLoadError": "Couldn't load the saved image. Try uploading it again."
   },
   "skills": {

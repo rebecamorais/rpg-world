@@ -1,4 +1,6 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { useState } from 'react';
+
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -41,9 +43,9 @@ describe('ImageViewerDialog', () => {
     renderViewer();
 
     expect(image().style.transform).toContain('scale(1)');
-    expect(button(t.zoomOut)).toBeDisabled();
-    expect(button(t.zoomFit)).toBeDisabled();
-    expect(button(t.zoomIn)).toBeEnabled();
+    expect(button(t.zoomOut)).toHaveAttribute('aria-disabled', 'true');
+    expect(button(t.zoomFit)).toHaveAttribute('aria-disabled', 'true');
+    expect(button(t.zoomIn)).toHaveAttribute('aria-disabled', 'false');
   });
 
   it('aproxima pelo botão e volta ao ajuste', async () => {
@@ -62,7 +64,7 @@ describe('ImageViewerDialog', () => {
     for (let i = 0; i < 8; i++) await userEvent.click(button(t.zoomIn));
 
     expect(image().style.transform).toContain('scale(5)');
-    expect(button(t.zoomIn)).toBeDisabled();
+    expect(button(t.zoomIn)).toHaveAttribute('aria-disabled', 'true');
   });
 
   it('aproxima pela roda do mouse', () => {
@@ -123,13 +125,85 @@ describe('ImageViewerDialog', () => {
     expect(screen.queryByRole('button', { name: t.adjust })).not.toBeInTheDocument();
   });
 
-  it('com onAdjust fecha o modal e chama onAdjust', async () => {
+  it('com onAdjust fecha o modal e só então chama onAdjust', async () => {
     const onAdjust = vi.fn();
-    const { onOpenChange } = renderViewer({ onAdjust });
+    function Harness() {
+      const [open, setOpen] = useState(true);
+      return (
+        <ImageViewerDialog
+          src="https://img.test/a.webp"
+          alt="Lyra"
+          open={open}
+          onOpenChange={setOpen}
+          onAdjust={onAdjust}
+        />
+      );
+    }
+    renderWithProviders(<Harness />);
 
     await userEvent.click(button(t.adjust));
 
-    expect(onOpenChange).toHaveBeenCalledWith(false);
-    expect(onAdjust).toHaveBeenCalledOnce();
+    await waitFor(() => expect(onAdjust).toHaveBeenCalledOnce());
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('o botão no limite não perde o foco do teclado', async () => {
+    renderViewer();
+    await userEvent.click(button(t.zoomIn));
+
+    await userEvent.click(button(t.zoomFit));
+
+    expect(button(t.zoomFit)).toBeEnabled();
+    expect(button(t.zoomFit)).toHaveFocus();
+  });
+
+  it('botão direito não arrasta a imagem', async () => {
+    renderViewer();
+    await userEvent.click(button(t.zoomIn));
+
+    fireEvent.pointerDown(stage(), { pointerId: 1, button: 2, clientX: 100, clientY: 100 });
+    fireEvent.pointerMove(stage(), { pointerId: 1, clientX: 130, clientY: 90 });
+
+    expect(image().style.transform).toContain('translate(0px, 0px)');
+  });
+
+  it('perder o ponteiro encerra o arrasto', async () => {
+    renderViewer();
+    await userEvent.click(button(t.zoomIn));
+
+    fireEvent.pointerDown(stage(), { pointerId: 1, clientX: 100, clientY: 100 });
+    fireEvent.lostPointerCapture(stage(), { pointerId: 1 });
+    fireEvent.pointerMove(stage(), { pointerId: 1, clientX: 130, clientY: 90 });
+
+    expect(image().style.transform).toContain('translate(0px, 0px)');
+  });
+
+  it('o botão de fechar tem fundo próprio, para o contraste não depender da imagem', () => {
+    renderViewer();
+
+    expect(screen.getByRole('dialog').className).toContain('[&>button]:bg-background');
+  });
+
+  it('fechar devolve o foco a quem abriu', async () => {
+    function Harness() {
+      const [open, setOpen] = useState(false);
+      return (
+        <>
+          <button onClick={() => setOpen(true)}>abrir</button>
+          <ImageViewerDialog
+            src="https://img.test/a.webp"
+            alt="Lyra"
+            open={open}
+            onOpenChange={setOpen}
+          />
+        </>
+      );
+    }
+    renderWithProviders(<Harness />);
+
+    await userEvent.click(button('abrir'));
+    await userEvent.keyboard('{Escape}');
+
+    await waitFor(() => expect(button('abrir')).toHaveFocus());
   });
 });
