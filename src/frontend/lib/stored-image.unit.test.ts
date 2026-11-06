@@ -9,6 +9,12 @@ describe('storedImagePath', () => {
     expect(storedImagePath('https://images.rpgworldapp.com/avatars/u/c-1.webp')).toBe(PROXIED);
   });
 
+  it('um caminho relativo já é do próprio domínio', () => {
+    expect(storedImagePath('/demo/pioneers/golden-oath.webp')).toBe(
+      '/demo/pioneers/golden-oath.webp',
+    );
+  });
+
   it('não repete o prefixo quando a URL já passa pela rota', () => {
     expect(storedImagePath('http://localhost:3000/api/images/avatars/u/c-1.webp')).toBe(PROXIED);
   });

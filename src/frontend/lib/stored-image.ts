@@ -5,6 +5,8 @@ const IMAGE_ROUTE = '/api/images';
  * images host, which the browser's connect-src doesn't allow; the host is never used here.
  */
 export function storedImagePath(url: string): string {
+  // Already on the app's own origin: the local seed's portraits, under /public
+  if (url.startsWith('/') && !url.startsWith('//')) return url;
   const { pathname } = new URL(url);
   const path = pathname.startsWith(`${IMAGE_ROUTE}/`)
     ? pathname.slice(IMAGE_ROUTE.length)
