@@ -206,4 +206,10 @@ describe('ImageViewerDialog', () => {
 
     await waitFor(() => expect(button('abrir')).toHaveFocus());
   });
+
+  it('imagem com transparência fica sobre um fundo sólido, não sobre a página', () => {
+    renderViewer();
+
+    expect(stage().className).toContain('bg-background');
+  });
 });

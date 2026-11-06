@@ -135,7 +135,7 @@ function ZoomStage({ src, alt, onAdjust }: { src: string; alt: string; onAdjust?
         onLostPointerCapture={onPointerEnd}
         onKeyDown={onKeyDown}
         className={cn(
-          'focus-ring aspect-square max-h-[80vh] w-full touch-none overflow-hidden rounded-lg',
+          'focus-ring bg-background aspect-square max-h-[80vh] w-full touch-none overflow-hidden rounded-lg',
           view.zoom > MIN_ZOOM && (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
         )}
       >
