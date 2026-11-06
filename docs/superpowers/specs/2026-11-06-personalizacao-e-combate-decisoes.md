@@ -10,6 +10,7 @@ Legenda: **(dona)** foi decidido por ela. **(suposição aprovada)** foi propost
 
 - **(dona)** Sai o modal "Personalizar Personagem". Cor, imagem, background, moldura e o que vier depois ficam em uma página própria da ficha, como Inventário e Grimório.
 - **(dona)** Essa página não aparece no menu da ficha. Ela abre só pelo ícone de engrenagem.
+- **(dona)** Clicar no avatar da ficha abre o "ver ampliado", para todos que veem a ficha. O botãozinho de ampliar no canto do avatar sai da ficha.
 - Quem só lê a ficha, como o mestre vendo a de um jogador, não vê a engrenagem. O mestre vê nos próprios NPCs.
 
 ### Cor
