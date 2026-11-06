@@ -71,7 +71,7 @@ Níveis, atributos, magias e inventário são criados na implementação, coeren
 | Boudica                                      | The Ember Queen            | Bárbara         | Terracota · campo de batalha celta      | feroz, orgulhosa, protetora            | The Rebel's Spear           | `ember-queen.webp`            |
 | Mary Shelley                                 | The Spark of the Forbidden | Bruxa (Warlock) | Turquesa espectral · laboratório gótico | introspectiva, criativa, questionadora | The Galvanic Grimoire       | `spark-of-the-forbidden.webp` |
 
-As imagens estão em `C:\Users\rebec\Pictures\RPGWorld\NPC-The-Pioneers` (no WSL, `/mnt/c/Users/rebec/Pictures/RPGWorld/NPC-The-Pioneers`). Os arquivos já foram renomeados com o título de fantasia de cada personagem, sem nomes reais e sem acento, e vão para `public/` com esses nomes. A subpasta `png` manteve os nomes originais e não entra no repositório.
+As imagens estão em `C:\Users\rebec\Pictures\RPGWorld\NPC-The-Pioneers` (no WSL, `/mnt/c/Users/rebec/Pictures/RPGWorld/NPC-The-Pioneers`). Na versão atual, de 2026-11-05, os arquivos estão numerados de 1 a 13, na ordem desta tabela, e vão para `public/demo/pioneers/` em 768×1024 com os nomes da coluna Imagem.
 
 ### Lore (EN, fonte; a versão pt é traduzida na implementação)
 
@@ -102,11 +102,11 @@ Seção na ficha com fatos documentados, sem copiar textos biográficos, e links
 - **Artífice:** não está nas opções do app. Ada usa "Artífice" como classe em texto livre, com habilidades originais e nada copiado de livros (decisão de Claude).
 - **Regras:** magias, itens e condições vêm do conteúdo já licenciado em `content/`, seguindo os créditos do `NOTICE.md`.
 - **Margaret Hamilton** faleceu em 30 de setembro de 2026. Vira **Maren Hamilton**, escolha da Rebeca.
-- **Radia Perlman** está viva, segundo a Rebeca. Vira **Mirela Pardan**, anagrama exato. O retrato foi refeito para ser visualmente distinto. O nome real aparece só em Meet the Inspiration.
+- **Radia Perlman** está viva, segundo a Rebeca. Vira **Mirela Pardan**, anagrama exato. O nome real aparece só em Meet the Inspiration.
 - **Hedy Lamarr, Katherine Johnson e Margaret Hamilton:** falecidas há relativamente pouco tempo; possíveis direitos de personalidade pós-morte e de herdeiros.
-- **Imagens:** geradas com ChatGPT (OpenAI Image Generation), com prompts personalizados e referências históricas. Uso apenas como elementos visuais da demo. A Rebeca entende que os termos da OpenAI permitem, em geral, uso público e comercial, e que a proteção autoral pode ser limitada conforme o país.
+- **Imagens:** os 13 retratos foram refeitos em 2026-11-05 no ChatGPT (OpenAI Image Generation), a partir de descrições de personagens de fantasia e em estilo ilustrado, não fotorrealista. Uso apenas como elementos visuais da demo. A Rebeca entende que os termos da OpenAI permitem, em geral, uso público e comercial, e que a proteção autoral pode ser limitada conforme o país.
 
-**Obrigatório antes do merge:** a Rebeca revisa o conteúdo e cada retrato, em especial os de Radia e Margaret, e confirma as políticas da OpenAI sobre pessoas reais. Um retrato reprovado não entra no repositório, e a personagem usa o retrato padrão do app. Revisão jurídica é opcional, a critério dela.
+**Regra para retratos:** um retrato reprovado não entra no repositório, e a personagem usa o retrato padrão do app. Revisão jurídica é opcional, a critério da Rebeca, e não foi feita até 2026-11-05.
 
 ## Idiomas
 
