@@ -6,6 +6,12 @@ Legenda: **(dona)** foi decidido por ela. **(suposição aprovada)** foi propost
 
 ## Projeto 2: personalização
 
+### Tela de configurações da ficha
+
+- **(dona)** Sai o modal "Personalizar Personagem". Cor, imagem, background, moldura e o que vier depois ficam em uma página própria da ficha, como Inventário e Grimório.
+- **(dona)** Essa página não aparece no menu da ficha. Ela abre só pelo ícone de engrenagem.
+- Quem só lê a ficha, como o mestre vendo a de um jogador, não vê a engrenagem. O mestre vê nos próprios NPCs.
+
 ### Cor
 
 - **(dona)** Seletor de cor livre ao lado das cores prontas, na tela de personalização do personagem.
