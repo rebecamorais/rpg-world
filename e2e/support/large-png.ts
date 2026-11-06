@@ -14,15 +14,20 @@ function chunk(type: string, data: Buffer) {
  * like the multi-megabyte images AI tools export.
  */
 export function largePng(side: number): Buffer {
+  return widePng(side, side);
+}
+
+/** The same noise, at any proportion. */
+export function widePng(width: number, height: number): Buffer {
   const header = Buffer.alloc(13);
-  header.writeUInt32BE(side, 0);
-  header.writeUInt32BE(side, 4);
+  header.writeUInt32BE(width, 0);
+  header.writeUInt32BE(height, 4);
   header.writeUInt8(8, 8); // bit depth
   header.writeUInt8(2, 9); // RGB
 
-  const row = side * 3 + 1;
-  const pixels = Buffer.alloc(row * side);
-  for (let y = 0; y < side; y++) {
+  const row = width * 3 + 1;
+  const pixels = Buffer.alloc(row * height);
+  for (let y = 0; y < height; y++) {
     pixels[y * row] = 0; // filter: none
     crypto.getRandomValues(pixels.subarray(y * row + 1, (y + 1) * row));
   }
