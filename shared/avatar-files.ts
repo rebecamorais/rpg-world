@@ -14,8 +14,3 @@ export function fullImageUrl(avatarUrl: string): string | null {
 export function avatarPathOf(fullPath: string): string {
   return fullPath.replace(/(\.\w+)$/, '-avatar$1');
 }
-
-/** Whether a stored file may be a whole image: nothing in the database names those. */
-export function isFullImageCandidate(path: string): boolean {
-  return path.includes(CHARACTERS_FOLDER) && !AVATAR_SUFFIX.test(path);
-}

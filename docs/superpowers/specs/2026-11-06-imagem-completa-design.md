@@ -30,7 +30,7 @@ A dona do projeto quer guardar duas versões da imagem de um personagem: a compl
 
 ## Como guardar
 
-Decisão da dona: **sem migração e sem coluna nova**. A imagem completa fica com o nome normal, e o recorte ganha o sufixo `-avatar`:
+Decisão da dona: **sem coluna nova**, e personagens antigos não são convertidos. A imagem completa fica com o nome normal, e o recorte ganha o sufixo `-avatar`:
 
 ```
 <userId>/characters/<characterId>-<versão>.webp          completa
@@ -66,9 +66,8 @@ O nome também separa novos de antigos: uma URL sem `-avatar` é de antes deste 
 ### Limpeza
 
 - `removeCharacterAvatar` apaga o avatar e, quando a URL tem `-avatar`, a imagem completa. Vale para troca e exclusão.
-- **Cuidado com o job diário:** `orphan_avatar_objects` considera órfão todo arquivo que nenhuma linha do banco cita, e a imagem completa nunca é citada. Sem tratamento, ele apagaria toda imagem completa em uso depois de um dia.
-- Em vez de mudar a função SQL, `CleanupOrphanAvatarsUseCase` filtra a lista: um arquivo com nome normal em `/characters/` só é apagado se o `-avatar` dele também estiver na lista de órfãos. Se o par não está na lista, ele está em uso, e o arquivo fica. Na dúvida, o filtro sempre guarda em vez de apagar.
-- Custo aceito: um arquivo antigo abandonado nas 24 horas antes do deploy, ou cuja remoção falhou, deixa de ser limpo. São poucos e não afetam ninguém.
+- **Migração pequena, decidida pela dona depois da revisão:** `orphan_avatar_objects` considera órfão todo arquivo que nenhuma linha do banco cita, e a imagem completa nunca é citada. A função passa a poupar um arquivo quando o `-avatar` dele está em uso ou ainda é recente demais para ser órfão. Só a função muda, sem tabela nem dados.
+- Um filtro em código foi tentado e descartado: ele não distingue imagem antiga abandonada de imagem completa em uso, então nunca apagaria as imagens de contas excluídas, o que quebra a política de privacidade.
 - Personagem duplicado não muda: a cópia já começa sem imagem (`duplicate_character` não copia `avatar_url`).
 
 ## Risco a confirmar
@@ -77,10 +76,10 @@ A cota de armazenamento do Supabase não foi verificada. O limite de 2 MB fica e
 
 ## Qualidade
 
-- Unitários: helper de nome, geração da imagem completa (limites e proporção), fluxo do hook com e sem imagem completa, validação do upload, remoção dos dois arquivos e filtro do job (completa em uso fica, par órfão sai, avatar antigo órfão com sufixo sai).
-- Integração: com o job de verdade, a imagem completa de um avatar em uso continua no bucket.
+- Unitários: helper de nome, geração da imagem completa (limites e proporção), fluxo do hook com e sem imagem completa, validação do upload, e remoção dos dois arquivos.
+- Integração, com a função real: completa de avatar em uso não é listada; par abandonado, imagem antiga abandonada e completa sem avatar são listados; par recente não é separado.
 - E2E: envia uma imagem não quadrada, o modal mostra a completa, o reajuste a reaproveita e salvar remove o par anterior.
-- Nenhuma migração. A descrição do PR deve dizer isso e destacar que o job de limpeza mudou.
+- Migração e app no mesmo PR. A descrição deve avisar que o merge aplica a migração em produção.
 
 ## Deixado para quem construir
 

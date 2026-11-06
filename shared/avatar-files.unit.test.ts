@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { avatarPathOf, fullImageUrl, isFullImageCandidate } from './avatar-files';
+import { avatarPathOf, fullImageUrl } from './avatar-files';
 
 describe('fullImageUrl', () => {
   it('tira o sufixo do avatar de um personagem', () => {
@@ -26,17 +26,4 @@ describe('avatarPathOf', () => {
   it('coloca o sufixo antes da extensão', () => {
     expect(avatarPathOf('u/characters/c-1.webp')).toBe('u/characters/c-1-avatar.webp');
   });
-});
-
-describe('isFullImageCandidate', () => {
-  it('arquivo de personagem sem sufixo pode ser imagem completa', () => {
-    expect(isFullImageCandidate('u/characters/c-1.webp')).toBe(true);
-  });
-
-  it.each(['u/characters/c-1-avatar.webp', 'u/avatar-1.webp', 'u/parties/p-1.webp'])(
-    '%s não é',
-    (path) => {
-      expect(isFullImageCandidate(path)).toBe(false);
-    },
-  );
 });

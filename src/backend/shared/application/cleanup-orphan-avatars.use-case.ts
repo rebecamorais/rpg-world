@@ -1,5 +1,3 @@
-import { avatarPathOf, isFullImageCandidate } from '@shared/avatar-files';
-
 import { StorageRepository } from '../domain/StorageRepository';
 import { AVATAR_BUCKET } from '../domain/avatar';
 
@@ -22,13 +20,7 @@ export class CleanupOrphanAvatarsUseCase {
   ) {}
 
   async execute(): Promise<{ removed: number }> {
-    const found = await this.finder.findOrphans();
-    const listed = new Set(found);
-    // Nothing in the database names a whole image, so it is always listed. It goes only with its
-    // avatar: an avatar that isn't listed is in use. When in doubt, the file stays.
-    const orphans = found.filter(
-      (path) => !isFullImageCandidate(path) || listed.has(avatarPathOf(path)),
-    );
+    const orphans = await this.finder.findOrphans();
 
     for (let start = 0; start < orphans.length; start += BATCH_SIZE) {
       await this.storage.remove(AVATAR_BUCKET, orphans.slice(start, start + BATCH_SIZE));

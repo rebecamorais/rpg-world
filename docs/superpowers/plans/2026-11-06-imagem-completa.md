@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-11-06-imagem-completa-design.md`
 
+> **Mudança depois da revisão final:** o filtro em código da Task 3 foi trocado por uma migração em `orphan_avatar_objects`, porque ele nunca apagaria imagens de contas excluídas. O design é a referência atual.
+
 ## Global Constraints
 
 - Sem migração e sem coluna nova.
