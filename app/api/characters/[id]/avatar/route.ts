@@ -23,6 +23,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   }
 
   const file = formData.get('file');
+  const full = formData.get('full');
 
   if (!file || !(file instanceof File)) {
     return NextResponse.json({ error: 'Missing "file" field' }, { status: 400 });
@@ -32,7 +33,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   try {
     const { id } = parseInput(uuidParamsSchema, await params);
     const { charactersApi } = await getApi();
-    const publicUrl = await charactersApi.uploadAvatar(id, user.id, file);
+    const publicUrl = await charactersApi.uploadAvatar(
+      id,
+      user.id,
+      file,
+      full instanceof File ? full : undefined,
+    );
 
     return NextResponse.json({ url: publicUrl }, { status: 200 });
   } catch (err: unknown) {

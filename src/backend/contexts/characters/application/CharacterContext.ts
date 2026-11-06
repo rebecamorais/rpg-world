@@ -22,7 +22,7 @@ export interface CharacterContext {
   }): Promise<DnD5eCharacter>;
   delete(id: string, ownerUsername: string): Promise<boolean>;
   duplicate(id: string, name: string): Promise<{ id: string }>;
-  uploadAvatar(id: string, userId: string, file: Blob): Promise<string>;
+  uploadAvatar(id: string, userId: string, file: Blob, full?: Blob): Promise<string>;
   isOwner(id: string, userId: string): Promise<boolean>;
 
   // Spells

@@ -37,7 +37,30 @@ describe('POST /api/characters/[id]/avatar', () => {
       ID,
       SESSION_USER.id,
       expect.any(File),
+      undefined,
     );
+  });
+
+  it('repassa a imagem completa quando ela vem no formulário', async () => {
+    api.charactersApi.uploadAvatar.mockResolvedValue('https://images.test/avatar.png');
+    const form = withFile();
+    const full = new File(['whole'], 'full.png', { type: 'image/png' });
+    form.set('full', full);
+
+    await POST(formRequest(url, form), routeContext({ id: ID }));
+
+    const received = api.charactersApi.uploadAvatar.mock.calls[0][3];
+    expect(await received.text()).toBe('whole');
+  });
+
+  it('ignora um campo full que não é arquivo', async () => {
+    api.charactersApi.uploadAvatar.mockResolvedValue('https://images.test/avatar.png');
+    const form = withFile();
+    form.set('full', 'just text');
+
+    await POST(formRequest(url, form), routeContext({ id: ID }));
+
+    expect(api.charactersApi.uploadAvatar.mock.calls[0][3]).toBeUndefined();
   });
 
   it('responde 401 sem sessão', async () => {

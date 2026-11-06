@@ -12,6 +12,7 @@ vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
 // jsdom has no canvas: the crop itself is covered in crop-image.unit.test.ts
 vi.mock('@frontend/lib/crop-image', () => ({
   cropImage: vi.fn(async () => new File(['small'], 'image.webp', { type: 'image/webp' })),
+  fullImage: vi.fn(async () => new File(['whole'], 'full.webp', { type: 'image/webp' })),
 }));
 
 const fetchMock = vi.fn();
@@ -67,6 +68,29 @@ describe('ImageUpload', () => {
     expect(
       await screen.findByRole('button', { name: messages.avatarUpload.save }),
     ).toBeInTheDocument();
+  });
+
+  it('com keepFullImage o formulário leva o campo full', async () => {
+    const { input } = renderUpload({
+      target: 'character',
+      targetId: 'c1',
+      keepFullImage: true,
+    });
+
+    await pickAndSave(input, png());
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    const body = fetchMock.mock.calls[0][1].body as FormData;
+    expect((body.get('full') as File).name).toBe('full.webp');
+  });
+
+  it('sem keepFullImage o formulário não leva o campo full', async () => {
+    const { input } = renderUpload();
+
+    await pickAndSave(input, png());
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    expect((fetchMock.mock.calls[0][1].body as FormData).has('full')).toBe(false);
   });
 
   it('envia o arquivo para o endpoint do perfil e devolve a URL', async () => {

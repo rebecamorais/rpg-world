@@ -49,6 +49,7 @@ export function CharacterCustomizationDialog({
               targetId={id}
               onUploadSuccess={(url: string) => update({ avatarUrl: url })}
               size="lg"
+              keepFullImage
             />
           </div>
 

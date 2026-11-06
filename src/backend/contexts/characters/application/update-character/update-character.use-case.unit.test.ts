@@ -207,6 +207,39 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
       expect(storage.remove).toHaveBeenCalledWith('avatars', 'owner/characters/char-a-v1.png');
     });
 
+    it('trocar um avatar novo apaga também a imagem completa dele', async () => {
+      const previous =
+        'https://images.rpgworldapp.com/avatars/owner/characters/char-a-v1-avatar.webp';
+      const { storage, useCase } = await setup(previous);
+
+      await useCase.execute({
+        id: 'char-a',
+        ownerUsername: 'owner',
+        updates: {
+          avatarUrl:
+            'https://images.rpgworldapp.com/avatars/owner/characters/char-a-v2-avatar.webp',
+        },
+      });
+
+      expect(storage.remove).toHaveBeenCalledWith(
+        'avatars',
+        'owner/characters/char-a-v1-avatar.webp',
+      );
+      expect(storage.remove).toHaveBeenCalledWith('avatars', 'owner/characters/char-a-v1.webp');
+    });
+
+    it('trocar um avatar antigo apaga só ele', async () => {
+      const { storage, useCase } = await setup(url('char-a', 'v1'));
+
+      await useCase.execute({
+        id: 'char-a',
+        ownerUsername: 'owner',
+        updates: { avatarUrl: url('char-a', 'v2') },
+      });
+
+      expect(storage.remove).toHaveBeenCalledTimes(1);
+    });
+
     it('não mexe no storage quando o avatar não faz parte da atualização', async () => {
       const { storage, useCase } = await setup(url('char-a', 'v1'));
 

@@ -1,6 +1,7 @@
 import path from 'node:path';
 
 import { characterUrl, createCharacter, expect, hydrated, test } from './support/fixtures';
+import { widePng } from './support/large-png';
 import { adminClient } from './support/supabase';
 
 const AVATAR = path.join(import.meta.dirname, 'support', 'avatar.png');
@@ -152,6 +153,60 @@ test('ajusta uma imagem salva com caminho relativo, como as do seed local', asyn
     'src',
     /\/api\/images\/avatars\//,
   );
+});
+
+test('guarda a imagem completa, usa no modal e limpa o par anterior', async ({ page, user }) => {
+  const name = 'Full Art Hero';
+  const id = await createCharacter(page, name);
+  await page.goto(characterUrl(id));
+
+  const cropSave = () =>
+    page.getByRole('dialog', { name: 'Adjust image' }).getByRole('button', { name: 'Save' });
+  const saved = () => page.getByText('Character saved successfully!').first();
+  const stored = async () => {
+    const { data } = await adminClient().storage.from('avatars').list(`${user.id}/characters`);
+    return (data ?? []).map((file) => file.name);
+  };
+
+  await (await hydrated(page.getByRole('button', { name: 'Customize Character' }))).click();
+  // 300 x 100: the crop is square, so a whole image keeps its proportion only if it was kept
+  await page.locator('#image-file-input').setInputFiles({
+    name: 'wide.png',
+    mimeType: 'image/png',
+    buffer: widePng(300, 100),
+  });
+  await cropSave().click();
+  await expect(
+    page.getByRole('dialog', { name: 'Customize Character' }).getByRole('button', {
+      name: 'View image',
+    }),
+  ).toBeVisible();
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('ControlOrMeta+s');
+  await expect(saved()).toBeVisible();
+
+  await page.getByRole('button', { name: 'View image', exact: true }).click();
+  const image = page.getByRole('img', { name });
+  await expect(image).toHaveAttribute('src', /\/characters\/[^/]+(?<!-avatar)\.\w+$/);
+  await expect
+    .poll(() => image.evaluate((img: HTMLImageElement) => img.naturalWidth / img.naturalHeight))
+    .toBeCloseTo(3);
+  const first = await stored();
+  expect(first).toHaveLength(2);
+
+  await page.getByRole('button', { name: 'Adjust image' }).click();
+  await cropSave().click();
+  await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
+  await page.keyboard.press('ControlOrMeta+s');
+  await expect(saved()).toBeVisible();
+
+  await expect.poll(stored).toHaveLength(2);
+  expect((await stored()).some((file) => first.includes(file))).toBe(false);
+
+  await page.getByRole('button', { name: 'View image', exact: true }).click();
+  await expect
+    .poll(() => image.evaluate((img: HTMLImageElement) => img.naturalWidth / img.naturalHeight))
+    .toBeCloseTo(3);
 });
 
 test('o skip link leva direto ao conteúdo', async ({ page }) => {

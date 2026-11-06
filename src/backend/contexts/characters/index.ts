@@ -139,9 +139,9 @@ export const createCharacterContext = (
     getSpellsForPartyGm: getPartyCharacterSpellsUseCase.execute.bind(
       getPartyCharacterSpellsUseCase,
     ),
-    uploadAvatar: async (id: string, userId: string, file: Blob) => {
+    uploadAvatar: async (id: string, userId: string, file: Blob, full?: Blob) => {
       const useCase = new UploadCharacterAvatarUseCase(storageRepository, repository);
-      return useCase.execute(id, userId, file);
+      return useCase.execute(id, userId, file, full);
     },
   };
 };

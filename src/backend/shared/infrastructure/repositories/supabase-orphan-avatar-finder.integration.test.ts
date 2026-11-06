@@ -7,6 +7,7 @@ import { SupabaseOrphanAvatarFinder } from './supabase-orphan-avatar-finder';
 import { SupabaseStorageRepository } from './supabase-storage-repository';
 
 const image = () => new Blob([new Uint8Array(8)], { type: 'image/png' });
+const webp = () => new Blob([new Uint8Array(8)], { type: 'image/webp' });
 
 describe('orphan_avatar_objects (Integration)', () => {
   it('lista só os avatares que nenhum perfil ou personagem usa', async () => {
@@ -60,5 +61,66 @@ describe('orphan_avatar_objects (Integration)', () => {
 
     expect(anon.error).not.toBeNull();
     expect(user.error).not.toBeNull();
+  });
+
+  describe('imagem completa, que nenhuma linha do banco cita', () => {
+    const list = async (userId: string, minAge = '0 seconds') =>
+      (await new SupabaseOrphanAvatarFinder(SupabaseFactory.createAdmin(), minAge).findOrphans())
+        .filter((path) => path.startsWith(`${userId}/`))
+        .sort();
+
+    async function setup(name: string) {
+      const { client, userId } = await createSignedInClient(name);
+      const storage = new SupabaseStorageRepository(client);
+      const folder = `${userId}/characters`;
+      return {
+        client,
+        userId,
+        folder,
+        upload: (file: string) => storage.upload('avatars', `${folder}/${file}`, webp()),
+      };
+    }
+
+    it('não lista a imagem completa de um avatar em uso', async () => {
+      const { client, userId, upload } = await setup('full-used');
+      const avatarUrl = await upload('used-avatar.webp');
+      await upload('used.webp');
+      await client
+        .from('characters')
+        .insert({ id: crypto.randomUUID(), name: 'Hero', owner_id: userId, avatar_url: avatarUrl });
+
+      expect(await list(userId)).toEqual([]);
+    });
+
+    it('lista os dois arquivos de um par abandonado', async () => {
+      const { userId, folder, upload } = await setup('full-left');
+      await upload('left.webp');
+      await upload('left-avatar.webp');
+
+      expect(await list(userId)).toEqual([`${folder}/left-avatar.webp`, `${folder}/left.webp`]);
+    });
+
+    it('lista uma imagem antiga abandonada, como a de uma conta excluída', async () => {
+      const { userId, folder, upload } = await setup('old-left');
+      await upload('old-style.webp');
+
+      expect(await list(userId)).toEqual([`${folder}/old-style.webp`]);
+    });
+
+    it('lista a imagem completa cujo avatar não existe mais', async () => {
+      const { userId, folder, upload } = await setup('full-alone');
+      await upload('alone.webp');
+
+      expect(await list(userId)).toEqual([`${folder}/alone.webp`]);
+    });
+
+    it('não separa um par recente quando só a imagem completa já tem a idade mínima', async () => {
+      const { userId, upload } = await setup('full-straddle');
+      await upload('pair.webp');
+      await new Promise((resolve) => setTimeout(resolve, 2100));
+      await upload('pair-avatar.webp');
+
+      expect(await list(userId, '2 seconds')).toEqual([]);
+    });
   });
 });

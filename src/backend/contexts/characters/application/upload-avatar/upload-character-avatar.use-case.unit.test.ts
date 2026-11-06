@@ -92,4 +92,65 @@ describe('UploadCharacterAvatarUseCase', () => {
       CharacterErrorCodes.AVATAR_INVALID_TYPE,
     );
   });
+
+  describe('com a imagem completa', () => {
+    const webp = (size = 1024) => image('image/webp', size);
+
+    it('grava a completa com o nome normal e o avatar com sufixo', async () => {
+      vi.mocked(storage.upload).mockImplementation(
+        async (_, path) => `https://images.test/${path}`,
+      );
+
+      const url = await useCase.execute('char-1', 'owner-1', webp(), webp());
+
+      expect(vi.mocked(storage.upload).mock.calls.map((c) => c[1])).toEqual([
+        'owner-1/characters/char-1-v1.webp',
+        'owner-1/characters/char-1-v1-avatar.webp',
+      ]);
+      expect(url).toBe('https://images.test/owner-1/characters/char-1-v1-avatar.webp');
+    });
+
+    it('recusa completa acima do limite, sem gravar nada', async () => {
+      await expect(
+        useCase.execute('char-1', 'owner-1', webp(), webp(5 * 1024 * 1024 + 1)),
+      ).rejects.toThrow(CharacterErrorCodes.AVATAR_FILE_TOO_LARGE);
+      expect(storage.upload).not.toHaveBeenCalled();
+    });
+
+    it('recusa completa de tipo proibido, sem gravar nada', async () => {
+      await expect(
+        useCase.execute('char-1', 'owner-1', image('image/gif'), image('image/gif')),
+      ).rejects.toThrow(CharacterErrorCodes.AVATAR_INVALID_TYPE);
+      expect(storage.upload).not.toHaveBeenCalled();
+    });
+
+    it('recusa tipos diferentes entre os dois, sem gravar nada', async () => {
+      await expect(
+        useCase.execute('char-1', 'owner-1', webp(), image('image/jpeg')),
+      ).rejects.toThrow(CharacterErrorCodes.AVATAR_INVALID_TYPE);
+      expect(storage.upload).not.toHaveBeenCalled();
+    });
+
+    it('se gravar o avatar falhar, apaga a completa e repassa o erro', async () => {
+      vi.mocked(storage.upload)
+        .mockResolvedValueOnce('https://images.test/full')
+        .mockRejectedValueOnce(new Error('storage fora do ar'));
+
+      await expect(useCase.execute('char-1', 'owner-1', webp(), webp())).rejects.toThrow(
+        'storage fora do ar',
+      );
+      expect(storage.remove).toHaveBeenCalledWith('avatars', 'owner-1/characters/char-1-v1.webp');
+    });
+
+    it('uma falha ao apagar a completa não esconde o erro original', async () => {
+      vi.mocked(storage.upload)
+        .mockResolvedValueOnce('https://images.test/full')
+        .mockRejectedValueOnce(new Error('storage fora do ar'));
+      vi.mocked(storage.remove).mockRejectedValue(new Error('outra falha'));
+
+      await expect(useCase.execute('char-1', 'owner-1', webp(), webp())).rejects.toThrow(
+        'storage fora do ar',
+      );
+    });
+  });
 });
