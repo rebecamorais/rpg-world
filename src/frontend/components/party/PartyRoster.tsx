@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 
+import { ViewImageButton } from '@frontend/components/shared/ViewImageButton';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
@@ -34,7 +35,10 @@ export function PartyRoster({
           <li key={character.characterId} className={cn(theme.className)} style={theme.style}>
             <Card className="border-character-muted bg-card/60 border">
               <CardContent className="flex flex-col gap-2 p-4">
-                <CharacterIdentity character={character} />
+                <div className="flex items-center justify-between gap-3">
+                  <CharacterIdentity character={character} />
+                  <ViewImageButton src={character.avatarUrl} name={character.name} />
+                </div>
                 <p className="text-label text-muted-foreground">
                   {username ? t('playedBy', { username }) : t('playedByUnnamed')}
                 </p>

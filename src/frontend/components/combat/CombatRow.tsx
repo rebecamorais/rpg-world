@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { ConditionBadge } from '@frontend/components/content/ConditionBadge';
 import { CharacterIdentity } from '@frontend/components/party/RolePlayCard';
+import { ViewImageButton } from '@frontend/components/shared/ViewImageButton';
 import { Button } from '@frontend/components/ui/button';
 import { HealthBar } from '@frontend/components/ui/health-bar';
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -69,11 +70,14 @@ const ATTRIBUTES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'] as const;
 /** The character's picture down the card's left side; their class's emblem when there's none. */
 function Portrait({ row }: { row: GmRow }) {
   return (
-    <CharacterPortrait
-      avatarUrl={row.avatarUrl}
-      characterClass={row.class}
-      className="h-auto w-14 self-stretch rounded-none sm:w-28"
-    />
+    <div className="relative flex w-14 shrink-0 self-stretch sm:w-28">
+      <CharacterPortrait
+        avatarUrl={row.avatarUrl}
+        characterClass={row.class}
+        className="h-auto w-full rounded-none"
+      />
+      <ViewImageButton src={row.avatarUrl} name={row.name} className="absolute right-1 bottom-1" />
+    </div>
   );
 }
 

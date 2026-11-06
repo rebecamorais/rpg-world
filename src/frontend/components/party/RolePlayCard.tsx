@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
+import { ViewImageButton } from '@frontend/components/shared/ViewImageButton';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import AppLink from '@frontend/demo/AppLink';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
@@ -75,11 +76,12 @@ export function RolePlayCard({ partyId, card }: { partyId: string; card: RolePla
     <div className={cn(theme.className, 'group relative h-full')} style={theme.style}>
       <Card className="border-character-muted bg-card/60 has-[a:focus-visible]:outline-ring relative h-full overflow-hidden border transition-transform group-hover:-translate-y-0.5 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2">
         <div className="bg-character absolute top-0 left-0 h-1 w-full opacity-80" />
+        <ViewImageButton src={card.avatarUrl} name={card.name} className="absolute top-3 right-3" />
         <CardContent className="flex h-full flex-col gap-4 p-5">
           {/* The link is stretched over the card (::after) */}
           <AppLink
             href={`/parties/${partyId}/characters/${card.characterId}`}
-            className="outline-none after:absolute after:inset-0"
+            className="pr-8 outline-none after:absolute after:inset-0"
           >
             <CharacterIdentity character={card} />
           </AppLink>
