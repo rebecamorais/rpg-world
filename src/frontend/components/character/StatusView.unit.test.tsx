@@ -1,7 +1,8 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { messages } from '@tests/helpers/render';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SaveCharacterButton } from '@frontend/components/character/sheet/SaveControls';
 
@@ -16,15 +17,23 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
-const character = { ...createDnD5eCharacter('owner', 'Thor'), id: 'c1' };
+// jsdom has no canvas: the crop itself is covered in crop-image.unit.test.ts
+vi.mock('@frontend/lib/crop-image', () => ({
+  cropImage: vi.fn(async () => new File(['small'], 'image.webp', { type: 'image/webp' })),
+}));
 
-function renderStatus() {
+const character = { ...createDnD5eCharacter('owner', 'Thor'), id: 'c1' };
+const SAVED_AVATAR = 'https://img.test/avatars/u/a.webp';
+const NEW_AVATAR = 'https://img.test/avatars/u/b.webp';
+const tImage = messages.avatarUpload;
+
+function renderStatus(sheet = character) {
   return renderWithCharacter(
     <>
       <SaveCharacterButton />
       <StatusView />
     </>,
-    character,
+    sheet,
   );
 }
 
@@ -50,5 +59,48 @@ describe('StatusView', () => {
     expect(
       screen.queryByRole('button', { name: messages.characterHeader.customizeTitle }),
     ).not.toBeInTheDocument();
+  });
+
+  describe('ajustar a imagem', () => {
+    const withAvatar = { ...character, avatarUrl: SAVED_AVATAR };
+
+    beforeEach(() => {
+      URL.createObjectURL = vi.fn(() => 'blob:source');
+      URL.revokeObjectURL = vi.fn();
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async (input: string) =>
+          input.startsWith('/api/images/')
+            ? new Response(new Blob(['img']), { headers: { 'Content-Type': 'image/webp' } })
+            : new Response(JSON.stringify({ url: NEW_AVATAR })),
+        ),
+      );
+    });
+
+    afterEach(() => vi.unstubAllGlobals());
+
+    it('o dono ajusta pelo cabeçalho e só a imagem muda no rascunho', async () => {
+      params.value = { id: 'c1' };
+      const { draft, save } = renderStatus(withAvatar);
+      await userEvent.type(screen.getByLabelText(messages.characterHeader.name), ' II');
+
+      await userEvent.click(screen.getByRole('button', { name: tImage.view }));
+      await userEvent.click(screen.getByRole('button', { name: tImage.adjust }));
+      await userEvent.click(await screen.findByRole('button', { name: tImage.save }));
+
+      await waitFor(() => expect(draft().avatarUrl).toBe(NEW_AVATAR));
+      expect(draft().name).toBe('Thor II');
+      expect(save).not.toHaveBeenCalled();
+    });
+
+    it('o mestre vê a imagem, mas não pode ajustar', async () => {
+      params.value = { partyId: 'p1', id: 'c1' };
+      renderStatus(withAvatar);
+
+      await userEvent.click(screen.getByRole('button', { name: tImage.view }));
+
+      expect(screen.getByRole('button', { name: tImage.zoomIn })).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: tImage.adjust })).not.toBeInTheDocument();
+    });
   });
 });
