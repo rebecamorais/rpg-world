@@ -74,7 +74,7 @@ npm run dev
 
 Acesse [http://localhost:3000](http://localhost:3000) no navegador.
 
-Você pode usar o usuário `player@email.com` e senha `player123` para fazer login localmente.
+O banco local já vem com a mesa **The Pioneers** pronta. Entre com `mestre@email.com` e senha `mestre123`; as contas dos jogadores estão em [Ambiente local: logins e mesa pronta](docs/ambiente-local.md).
 
 ### URLs do ambiente local
 
@@ -105,6 +105,7 @@ Para detalhes técnicos mais profundos, consulte nossos guias:
 | `npm run infra down`    | Para todos os containers da infraestrutura                      |
 | `npm run clean`         | Reset total: apaga volumes, recria o banco e limpa o docker     |
 | `npm run db:ui`         | Abre o Supabase Studio e o Inbucket no navegador                |
+| `npm run seed:local`    | Gera o seed da mesa local a partir dos dados da demo            |
 | `npm run test`          | Executa a pipeline completa (Unitários + Infra + Integração)    |
 | `npm run test:unit`     | Executa apenas os testes unitários                              |
 | `npm run test:ui`       | Abre a interface visual do Vitest                               |
