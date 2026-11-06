@@ -41,6 +41,7 @@ export const GAME_ICON_NAMES: ReadonlySet<string> = new Set([
   'expand',
   'fire',
   'fire-spell-cast',
+  'fireball',
   'fireflake',
   'fly',
   'ghost',

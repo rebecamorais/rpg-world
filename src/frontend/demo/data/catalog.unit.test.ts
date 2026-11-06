@@ -45,6 +45,57 @@ describe('demo catalog', () => {
     }
   });
 
+  it.each(['en', 'pt'] as const)('nenhum campo de lore fica vazio em %s', (locale) => {
+    const fields = [
+      'age',
+      'height',
+      'weight',
+      'eyes',
+      'skin',
+      'hair',
+      'backstory',
+      'personalityTraits',
+      'ideals',
+      'bonds',
+      'flaws',
+      'alliesAndEnemies',
+      'organizations',
+      'treasure',
+    ] as const;
+    for (const lore of Object.values(buildDemoData(locale).lore)) {
+      for (const field of fields) {
+        expect(lore[field]).toBeTruthy();
+      }
+    }
+  });
+
+  it('toda personagem tem XP do próprio nível', () => {
+    for (const c of Object.values(buildDemoData('en').characters)) {
+      expect(c.xp).toBeGreaterThan(0);
+    }
+  });
+
+  it('Katherine mostra as cores dos tipos de dano', async () => {
+    const keys = buildDemoData('en').spells.katherine as string[];
+    const spells = await getSpellCatalog().findByKeys(keys);
+    const types = new Set(spells.map((spell) => spell.damageType));
+    for (const type of [
+      'acid',
+      'cold',
+      'fire',
+      'force',
+      'lightning',
+      'necrotic',
+      'poison',
+      'psychic',
+      'radiant',
+      'thunder',
+    ]) {
+      expect(types).toContain(type);
+    }
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
   it('o lore pt é diferente do en', () => {
     const en = buildDemoData('en');
     const pt = buildDemoData('pt');

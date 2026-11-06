@@ -53,7 +53,11 @@ export function LoreTab() {
     >
       {draft ? (
         <SheetFieldset>
-          <LoreSection data={draft} onChange={(field, value) => update({ [field]: value })} />
+          <LoreSection
+            data={draft}
+            readOnly={readOnly}
+            onChange={(field, value) => update({ [field]: value })}
+          />
         </SheetFieldset>
       ) : (
         <LoadingState thematic />

@@ -18,6 +18,8 @@ import type { CharacterSummary } from '@shared/types/character';
 
 import { DEMO_GM_ID, DEMO_OWNER, DEMO_PARTY_ID } from '../ids';
 import type { DemoData, DemoLocale, Inspiration } from '../types';
+import { APPEARANCE } from './appearance';
+import { CONNECTIONS } from './connections';
 import { HEROES } from './heroes';
 import type { Hero } from './heroes';
 import { INSPIRATIONS } from './inspirations';
@@ -26,6 +28,8 @@ import type { Sheet } from './sheets';
 
 const PARTY_NAME = 'The Pioneers';
 const ATTRIBUTES: AttributeKey[] = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+/** The XP that reaches each level the demo uses. */
+const XP_AT_LEVEL: Record<number, number> = { 3: 900, 4: 2700, 5: 6500 };
 
 const mod = (score: number) => Math.floor((score - 10) / 2);
 const proficiency = (level: number) => 2 + Math.floor((level - 1) / 4);
@@ -57,6 +61,7 @@ function buildCharacter(hero: Hero, sheet: Sheet, locale: DemoLocale): DnD5eChar
     subclass: sheet.subclass?.[locale],
     background: sheet.background[locale],
     alignment: sheet.alignment,
+    xp: XP_AT_LEVEL[sheet.level],
     hpCurrent: hpMax,
     hpMax,
     hpTemp: 0,
@@ -151,12 +156,22 @@ export function buildDemoData(locale: DemoLocale): DemoData {
     const sheet = SHEETS[hero.slug];
     const character = buildCharacter(hero, sheet, locale);
     characters[hero.slug] = character;
+    const look = APPEARANCE[hero.slug];
+    const ties = CONNECTIONS[hero.slug];
     lore[hero.slug] = {
+      age: look.age[locale],
+      height: look.height[locale],
+      weight: look.weight[locale],
+      eyes: look.eyes[locale],
+      skin: look.skin[locale],
+      hair: look.hair[locale],
       backstory: character.backstory,
       personalityTraits: character.personalityTraits,
       ideals: character.ideals,
       bonds: character.bonds,
       flaws: character.flaws,
+      alliesAndEnemies: ties.alliesAndEnemies[locale],
+      organizations: ties.organizations[locale],
       treasure: character.treasure,
     };
     spells[hero.slug] = (sheet.caster?.spells ?? []).map(spellKey);
