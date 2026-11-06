@@ -18,6 +18,7 @@ import type { CharacterSummary } from '@shared/types/character';
 
 import { DEMO_GM_ID, DEMO_OWNER, DEMO_PARTY_ID } from '../ids';
 import type { DemoData, DemoLocale, Inspiration } from '../types';
+import { APPEARANCE } from './appearance';
 import { HEROES } from './heroes';
 import type { Hero } from './heroes';
 import { INSPIRATIONS } from './inspirations';
@@ -151,7 +152,14 @@ export function buildDemoData(locale: DemoLocale): DemoData {
     const sheet = SHEETS[hero.slug];
     const character = buildCharacter(hero, sheet, locale);
     characters[hero.slug] = character;
+    const look = APPEARANCE[hero.slug];
     lore[hero.slug] = {
+      age: look.age[locale],
+      height: look.height[locale],
+      weight: look.weight[locale],
+      eyes: look.eyes[locale],
+      skin: look.skin[locale],
+      hair: look.hair[locale],
       backstory: character.backstory,
       personalityTraits: character.personalityTraits,
       ideals: character.ideals,

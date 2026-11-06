@@ -45,6 +45,14 @@ describe('demo catalog', () => {
     }
   });
 
+  it.each(['en', 'pt'] as const)('a aparência nunca fica vazia em %s', (locale) => {
+    for (const lore of Object.values(buildDemoData(locale).lore)) {
+      for (const field of ['age', 'height', 'weight', 'eyes', 'skin', 'hair'] as const) {
+        expect(lore[field]).toBeTruthy();
+      }
+    }
+  });
+
   it('o lore pt é diferente do en', () => {
     const en = buildDemoData('en');
     const pt = buildDemoData('pt');
