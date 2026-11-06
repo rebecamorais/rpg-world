@@ -11,6 +11,7 @@
   "scripts": {
     "infra": "npx tsx scripts/infra.ts",
     "icons": "npx tsx scripts/generate-game-icons.ts",
+    "seed:local": "npx tsx --conditions=react-server scripts/generate-local-seed.ts",
     "showcase": "npx tsx scripts/capture-showcase.ts",
     "dev": "next dev",
     "build": "next build",
