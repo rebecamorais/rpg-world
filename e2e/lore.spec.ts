@@ -14,3 +14,22 @@ test('edita a lore e ela continua lá depois de recarregar', async ({ page, user
   await expect(page.getByLabel('Age', { exact: true })).toHaveValue('111');
   await expect(page.getByLabel('Backstory')).toHaveValue('Found a ring in a cave.');
 });
+
+test('os campos crescem com o texto, sem cortar nem criar rolagem', async ({ page, user: _ }) => {
+  const id = await createCharacter(page, 'Bilbo');
+  await page.goto(characterUrl(id, '/lore'));
+
+  for (const label of ['Backstory', 'Hair']) {
+    const field = await hydrated(page.getByLabel(label, { exact: true }));
+    const before = await field.evaluate((el) => el.clientHeight);
+
+    await field.fill('Uma linha longa de texto sobre a personagem. '.repeat(4).concat('\nFim.'));
+
+    const { clientHeight, scrollHeight } = await field.evaluate((el) => ({
+      clientHeight: el.clientHeight,
+      scrollHeight: el.scrollHeight,
+    }));
+    expect(clientHeight).toBeGreaterThan(before);
+    expect(scrollHeight).toBeLessThanOrEqual(clientHeight);
+  }
+});

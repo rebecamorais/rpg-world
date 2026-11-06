@@ -1,10 +1,11 @@
 'use client';
 
+import type { ReactNode } from 'react';
+
 import { useTranslations } from 'next-intl';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
-import { InlineField } from '@frontend/components/ui/field';
-import { AppIcon } from '@frontend/components/ui/icon';
+import { FieldLabel, InlineField } from '@frontend/components/ui/field';
+import { AppIcon, type IconName } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import type { LoreData } from '@frontend/hooks/useCharacterLore';
 import { cn } from '@frontend/lib/utils';
@@ -12,205 +13,220 @@ import { cn } from '@frontend/lib/utils';
 import { Textarea } from '../ui/textarea';
 
 // maxLength values match the API's lore schema, so a save never fails on length
+const APPEARANCE_MAX_LENGTH = 200;
+const TEXT_MAX_LENGTH = 20_000;
+
+/** Grows with the text. Browsers without field-sizing keep a handle to resize it by hand. */
+const AUTO_HEIGHT = 'field-sizing-content resize-y supports-[field-sizing:content]:resize-none';
+
+type LoreField = keyof LoreData;
+type ChangeLore = (field: LoreField, value: string) => void;
 
 interface Props {
   data: LoreData;
-  onChange: (field: keyof LoreData, value: string) => void;
+  onChange: ChangeLore;
+  /** Shows the lore as text, for whoever can only read this sheet. */
+  readOnly?: boolean;
+}
+
+/** Skin and hair are short descriptions, so they take the whole row and can wrap. */
+const APPEARANCE: { field: LoreField; wide?: boolean }[] = [
+  { field: 'age' },
+  { field: 'height' },
+  { field: 'weight' },
+  { field: 'eyes' },
+  { field: 'skin', wide: true },
+  { field: 'hair', wide: true },
+];
+
+const PERSONALITY: { field: LoreField; icon: IconName }[] = [
+  { field: 'personalityTraits', icon: 'Fingerprint' },
+  { field: 'ideals', icon: 'Sparkles' },
+  { field: 'bonds', icon: 'Bookmark' },
+  { field: 'flaws', icon: 'TriangleAlert' },
+];
+
+const DETAILS: { field: LoreField; icon: IconName }[] = [
+  { field: 'alliesAndEnemies', icon: 'Swords' },
+  { field: 'organizations', icon: 'Shield' },
+  { field: 'treasure', icon: 'Backpack' },
+];
+
+function LoreHeading({ icon, children }: { icon: IconName; children: ReactNode }) {
+  return (
+    <div className="flex items-center gap-2 py-2">
+      <AppIcon name={icon} size={16} className="text-character-flare" aria-hidden="true" />
+      <h2 className="text-label text-muted-foreground">{children}</h2>
+    </div>
+  );
+}
+
+/** The saved text with its line breaks, or a note saying nothing was written. */
+function LoreText({ value }: { value?: string }) {
+  const t = useTranslations('characters.loreFields');
+
+  return value ? (
+    <span className="wrap-anywhere whitespace-pre-line">{value}</span>
+  ) : (
+    <span className="text-muted-foreground italic">{t('notFilled')}</span>
+  );
 }
 
 interface AppearanceFieldProps {
-  label: string;
-  field: keyof LoreData;
+  field: LoreField;
+  wide?: boolean;
   value?: string;
-  onChange: (field: keyof LoreData, value: string) => void;
+  onChange: ChangeLore;
 }
 
-const AppearanceField = ({ label, field, value, onChange }: AppearanceFieldProps) => (
-  <InlineField
-    id={`lore-${field}`}
-    label={label}
-    value={value || ''}
-    maxLength={200}
-    placeholder="—"
-    onChange={(e) => onChange(field, e.target.value)}
-  />
-);
+function AppearanceField({ field, wide, value, onChange }: AppearanceFieldProps) {
+  const t = useTranslations('characters.loreFields');
+  const id = `lore-${field}`;
 
-interface TextAreaFieldProps {
-  label: string;
-  field: keyof LoreData;
-  value?: string;
-  icon: string;
-  onChange: (field: keyof LoreData, value: string) => void;
-  placeholder?: string;
+  if (!wide) {
+    return (
+      <InlineField
+        id={id}
+        label={t(field)}
+        value={value || ''}
+        maxLength={APPEARANCE_MAX_LENGTH}
+        placeholder="—"
+        onChange={(e) => onChange(field, e.target.value)}
+      />
+    );
+  }
+
+  return (
+    <div className="col-span-2 flex flex-col gap-1">
+      <FieldLabel htmlFor={id}>{t(field)}</FieldLabel>
+      <Textarea
+        id={id}
+        value={value || ''}
+        maxLength={APPEARANCE_MAX_LENGTH}
+        placeholder="—"
+        onChange={(e) => onChange(field, e.target.value)}
+        className={cn(
+          AUTO_HEIGHT,
+          'bg-muted/40 hover:bg-muted focus-visible:bg-background min-h-10 border-none font-medium shadow-none',
+        )}
+      />
+    </div>
+  );
 }
 
-const TextAreaField = ({
-  label,
-  field,
-  value,
-  icon,
-  onChange,
-  placeholder,
-}: TextAreaFieldProps) => (
-  <SectionCard className="bg-card/50 hover:border-character-muted shadow-none transition-colors">
-    <SectionCard.Header>
-      <SectionCard.Title as="h3" icon={icon}>
-        {label}
-      </SectionCard.Title>
-    </SectionCard.Header>
-    <Textarea
-      aria-label={label}
-      maxLength={20_000}
-      value={value || ''}
-      placeholder={placeholder}
-      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(field, e.target.value)}
-      className={cn(
-        'text-foreground min-h-[120px] w-full resize-none rounded-none border-none bg-transparent px-4 py-3 text-sm leading-relaxed shadow-none focus-visible:-outline-offset-2',
-        !value && 'italic',
-      )}
-    />
-  </SectionCard>
-);
+interface TextFieldProps {
+  field: LoreField;
+  icon: IconName;
+  value?: string;
+  onChange: ChangeLore;
+  readOnly?: boolean;
+}
 
-export default function LoreSection({ data, onChange }: Props) {
+function TextField({ field, icon, value, onChange, readOnly }: TextFieldProps) {
   const t = useTranslations('characters.loreFields');
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-        {/* Top Row: Appearance and Personality */}
-        <div className="md:col-span-4">
-          {/* Appearance Grid */}
-          <Card className="border-none bg-transparent shadow-none">
-            <CardHeader className="flex flex-row items-center gap-2 px-0 py-2">
-              <AppIcon name="User" size={16} className="text-character-flare" />
-              <CardTitle as="h2" className="text-label text-muted-foreground">
-                {t('appearance')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-3 p-0 pt-2">
-              <AppearanceField label={t('age')} field="age" value={data.age} onChange={onChange} />
-              <AppearanceField
-                label={t('height')}
-                field="height"
-                value={data.height}
-                onChange={onChange}
-              />
-              <AppearanceField
-                label={t('weight')}
-                field="weight"
-                value={data.weight}
-                onChange={onChange}
-              />
-              <AppearanceField
-                label={t('eyes')}
-                field="eyes"
-                value={data.eyes}
-                onChange={onChange}
-              />
-              <AppearanceField
-                label={t('skin')}
-                field="skin"
-                value={data.skin}
-                onChange={onChange}
-              />
-              <AppearanceField
-                label={t('hair')}
-                field="hair"
-                value={data.hair}
-                onChange={onChange}
-              />
-            </CardContent>
-          </Card>
-        </div>
+    <SectionCard
+      className={cn(
+        'bg-card/50 flex flex-col shadow-none transition-colors',
+        !readOnly && 'hover:border-character-muted',
+      )}
+    >
+      <SectionCard.Header>
+        <SectionCard.Title as="h3" icon={icon}>
+          {t(field)}
+        </SectionCard.Title>
+      </SectionCard.Header>
+      {readOnly ? (
+        <p className="text-foreground px-4 py-3 text-sm leading-relaxed">
+          <LoreText value={value} />
+        </p>
+      ) : (
+        <Textarea
+          aria-label={t(field)}
+          maxLength={TEXT_MAX_LENGTH}
+          value={value || ''}
+          placeholder="—"
+          onChange={(e) => onChange(field, e.target.value)}
+          className={cn(
+            AUTO_HEIGHT,
+            'text-foreground min-h-20 flex-1 rounded-none border-none bg-transparent px-4 py-3 leading-relaxed shadow-none focus-visible:-outline-offset-2',
+          )}
+        />
+      )}
+    </SectionCard>
+  );
+}
 
-        <div className="md:col-span-8">
-          {/* Personality Sections */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2 py-2">
-              <AppIcon name="Heart" size={16} className="text-character-flare" />
-              <h2 className="text-label">{t('personality')}</h2>
-            </div>
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              <TextAreaField
-                label={t('personalityTraits')}
-                field="personalityTraits"
-                value={data.personalityTraits}
-                icon="Fingerprint"
+export default function LoreSection({ data, onChange, readOnly }: Props) {
+  const t = useTranslations('characters.loreFields');
+
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+      <div className="md:col-span-4">
+        <LoreHeading icon="User">{t('appearance')}</LoreHeading>
+        {readOnly ? (
+          <dl className="grid grid-cols-2 gap-x-3 gap-y-4 pt-2">
+            {APPEARANCE.map(({ field, wide }) => (
+              <div key={field} className={cn('flex flex-col gap-1', wide && 'col-span-2')}>
+                <dt className="text-label text-muted-foreground">{t(field)}</dt>
+                <dd className="text-sm font-medium">
+                  <LoreText value={data[field]} />
+                </dd>
+              </div>
+            ))}
+          </dl>
+        ) : (
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            {APPEARANCE.map(({ field, wide }) => (
+              <AppearanceField
+                key={field}
+                field={field}
+                wide={wide}
+                value={data[field]}
                 onChange={onChange}
-                placeholder={t('personalityTraits') + '...'}
               />
-              <TextAreaField
-                label={t('ideals')}
-                field="ideals"
-                value={data.ideals}
-                icon="Heart"
-                onChange={onChange}
-                placeholder={t('ideals') + '...'}
-              />
-              <TextAreaField
-                label={t('bonds')}
-                field="bonds"
-                value={data.bonds}
-                icon="Heart"
-                onChange={onChange}
-                placeholder={t('bonds') + '...'}
-              />
-              <TextAreaField
-                label={t('flaws')}
-                field="flaws"
-                value={data.flaws}
-                icon="Heart"
-                onChange={onChange}
-                placeholder={t('flaws') + '...'}
-              />
-            </div>
+            ))}
           </div>
+        )}
+      </div>
+
+      <div className="md:col-span-8">
+        <LoreHeading icon="Heart">{t('personality')}</LoreHeading>
+        <div className="grid grid-cols-1 gap-4 pt-2 lg:grid-cols-2">
+          {PERSONALITY.map(({ field, icon }) => (
+            <TextField
+              key={field}
+              field={field}
+              icon={icon}
+              value={data[field]}
+              onChange={onChange}
+              readOnly={readOnly}
+            />
+          ))}
         </div>
+      </div>
 
-        {/* Bottom Row: Narrative and Details - Full Width */}
-        <div className="flex flex-col gap-6 md:col-span-12">
-          <div className="flex items-center gap-2 py-2">
-            <AppIcon name="History" size={16} className="text-character-flare" />
-            <h2 className="text-label">{t('narrative')}</h2>
-          </div>
-
-          <TextAreaField
-            label={t('backstory')}
-            field="backstory"
-            value={data.backstory}
-            icon="BookOpen"
-            onChange={onChange}
-            placeholder={t('backstory') + '...'}
-          />
-
-          <TextAreaField
-            label={t('alliesAndEnemies')}
-            field="alliesAndEnemies"
-            value={data.alliesAndEnemies}
-            icon="User"
-            onChange={onChange}
-            placeholder={t('alliesAndEnemies') + '...'}
-          />
-
-          <TextAreaField
-            label={t('organizations')}
-            field="organizations"
-            value={data.organizations}
-            icon="User"
-            onChange={onChange}
-            placeholder={t('organizations') + '...'}
-          />
-
-          <TextAreaField
-            label={t('treasure')}
-            field="treasure"
-            value={data.treasure}
-            icon="BookOpen"
-            onChange={onChange}
-            placeholder={t('treasure') + '...'}
-          />
+      <div className="flex flex-col gap-4 md:col-span-12">
+        <LoreHeading icon="History">{t('narrative')}</LoreHeading>
+        <TextField
+          field="backstory"
+          icon="BookOpen"
+          value={data.backstory}
+          onChange={onChange}
+          readOnly={readOnly}
+        />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          {DETAILS.map(({ field, icon }) => (
+            <TextField
+              key={field}
+              field={field}
+              icon={icon}
+              value={data[field]}
+              onChange={onChange}
+              readOnly={readOnly}
+            />
+          ))}
         </div>
       </div>
     </div>

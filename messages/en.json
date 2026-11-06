@@ -277,7 +277,8 @@
       "flaws": "Flaws",
       "alliesAndEnemies": "Allies & Enemies",
       "organizations": "Organizations",
-      "treasure": "Treasure"
+      "treasure": "Treasure",
+      "notFilled": "Not filled in"
     },
     "spells": {
       "preparedLabels": "{count} prepared",
