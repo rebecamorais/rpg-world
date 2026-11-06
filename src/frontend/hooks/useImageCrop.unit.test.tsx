@@ -3,27 +3,29 @@ import { messages, renderWithProviders } from '@tests/helpers/render';
 import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { cropImage } from '@frontend/lib/crop-image';
+import { cropImage, fullImage } from '@frontend/lib/crop-image';
 import { loadStoredImage } from '@frontend/lib/stored-image';
 
 import { useImageCrop } from './useImageCrop';
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
-vi.mock('@frontend/lib/crop-image', () => ({ cropImage: vi.fn() }));
+vi.mock('@frontend/lib/crop-image', () => ({ cropImage: vi.fn(), fullImage: vi.fn() }));
 vi.mock('@frontend/lib/stored-image', () => ({ loadStoredImage: vi.fn() }));
 
 const SAVED = 'https://img.test/avatars/u/a.webp';
 const cropped = new File(['small'], 'image.webp', { type: 'image/webp' });
 const AREA = { x: 0, y: 0, width: 10, height: 10 };
 
-function setup() {
-  const upload = vi.fn(async () => ({ url: 'https://img.test/avatars/u/b.webp' }));
+function setup(keepFull = false) {
+  const upload = vi.fn(async (_file: File, _full?: File) => ({
+    url: 'https://img.test/avatars/u/b.webp',
+  }));
   const onUploaded = vi.fn();
   const onUploadError = vi.fn();
   const latest = {} as { crop: ReturnType<typeof useImageCrop> };
 
   function Harness() {
-    latest.crop = useImageCrop({ upload, onUploaded, onUploadError });
+    latest.crop = useImageCrop({ upload, onUploaded, onUploadError, keepFull });
     return null;
   }
 
@@ -80,7 +82,7 @@ describe('useImageCrop', () => {
 
     await act(() => latest.crop.confirm(AREA));
 
-    expect(upload).toHaveBeenCalledWith(cropped);
+    expect(upload).toHaveBeenCalledWith(cropped, undefined);
     await waitFor(() =>
       expect(onUploaded).toHaveBeenCalledWith('https://img.test/avatars/u/b.webp'),
     );
@@ -106,5 +108,90 @@ describe('useImageCrop', () => {
     });
 
     expect(loadStoredImage).toHaveBeenCalledOnce();
+  });
+
+  describe('imagem completa', () => {
+    const NEW_AVATAR = 'https://img.test/avatars/u/characters/c-v1-avatar.webp';
+    const NEW_FULL = 'https://img.test/avatars/u/characters/c-v1.webp';
+    const OLD_AVATAR = 'https://img.test/avatars/u/characters/c-v0.webp';
+    const stored = new Blob(['whole'], { type: 'image/webp' });
+    const generated = new File(['generated'], 'full.webp', { type: 'image/webp' });
+
+    beforeEach(() => {
+      vi.mocked(fullImage).mockResolvedValue(generated);
+      vi.mocked(loadStoredImage).mockResolvedValue(stored);
+    });
+
+    it('arquivo novo envia o recorte e a completa gerada dele', async () => {
+      const { latest, upload } = setup(true);
+      const picked = new File(['picked'], 'art.png', { type: 'image/png' });
+      act(() => latest.crop.pickFile(picked));
+
+      await act(() => latest.crop.confirm(AREA));
+
+      expect(fullImage).toHaveBeenCalledWith(picked);
+      expect(upload).toHaveBeenCalledWith(cropped, generated);
+    });
+
+    it('sem keepFull não gera nem envia a completa', async () => {
+      const { latest, upload } = setup();
+      act(() => latest.crop.pickFile(new File(['picked'], 'art.png', { type: 'image/png' })));
+
+      await act(() => latest.crop.confirm(AREA));
+
+      expect(fullImage).not.toHaveBeenCalled();
+      expect(upload).toHaveBeenCalledWith(cropped, undefined);
+    });
+
+    it('ajuste lê a completa e reenvia sem recodificar', async () => {
+      const { latest, upload } = setup(true);
+
+      await act(() => latest.crop.adjust(NEW_AVATAR));
+      await act(() => latest.crop.confirm(AREA));
+
+      expect(loadStoredImage).toHaveBeenCalledWith(NEW_FULL);
+      expect(fullImage).not.toHaveBeenCalled();
+      const sent = upload.mock.calls[0][1]!;
+      expect(sent.type).toBe('image/webp');
+      expect(await sent.text()).toBe('whole');
+    });
+
+    it('ajuste em outro formato recodifica a completa', async () => {
+      vi.mocked(cropImage).mockResolvedValue(
+        new File(['small'], 'image.jpg', { type: 'image/jpeg' }),
+      );
+      const { latest, upload } = setup(true);
+
+      await act(() => latest.crop.adjust(NEW_AVATAR));
+      await act(() => latest.crop.confirm(AREA));
+
+      expect(fullImage).toHaveBeenCalledWith(stored);
+      expect(upload.mock.calls[0][1]).toBe(generated);
+    });
+
+    it('completa indisponível usa o avatar e não envia full', async () => {
+      vi.mocked(loadStoredImage).mockRejectedValueOnce(new Error('404'));
+      const { latest, upload } = setup(true);
+
+      await act(() => latest.crop.adjust(NEW_AVATAR));
+      await act(() => latest.crop.confirm(AREA));
+
+      expect(vi.mocked(loadStoredImage).mock.calls.map(([url]) => url)).toEqual([
+        NEW_FULL,
+        NEW_AVATAR,
+      ]);
+      expect(toast.error).not.toHaveBeenCalled();
+      expect(upload).toHaveBeenCalledWith(cropped, undefined);
+    });
+
+    it('imagem antiga não tenta a completa', async () => {
+      const { latest, upload } = setup(true);
+
+      await act(() => latest.crop.adjust(OLD_AVATAR));
+      await act(() => latest.crop.confirm(AREA));
+
+      expect(vi.mocked(loadStoredImage).mock.calls.map(([url]) => url)).toEqual([OLD_AVATAR]);
+      expect(upload).toHaveBeenCalledWith(cropped, undefined);
+    });
   });
 });

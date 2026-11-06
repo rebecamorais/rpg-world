@@ -4,37 +4,73 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
-import { CropArea, cropImage } from '@frontend/lib/crop-image';
+import { CropArea, cropImage, fullImage } from '@frontend/lib/crop-image';
 import { loadStoredImage } from '@frontend/lib/stored-image';
 
+import { fullImageUrl } from '@shared/avatar-files';
+
 interface UseImageCropOptions {
-  upload: (file: File) => Promise<{ url: string }>;
+  upload: (file: File, full?: File) => Promise<{ url: string }>;
   onUploaded: (url: string) => void;
   onUploadError?: (err: unknown) => void;
+  /** Also sends the whole image, for the viewer and to crop again later. */
+  keepFull?: boolean;
+}
+
+/** Where the whole image sent with a crop comes from, if any. */
+type FullSource = 'generate' | 'reuse' | 'none';
+
+/** The whole image to send. Both files must share a format: re-encoded only if they don't. */
+async function fullVersion(original: Blob, source: FullSource, cropType: string) {
+  if (source === 'none') return undefined;
+  if (source === 'generate' || original.type !== cropType) return fullImage(original);
+  return new File([original], 'full', { type: original.type });
 }
 
 /**
  * From an image to its cropped upload: a file just picked, or (`adjust`) the image already saved.
  * Show `cropSource` in the crop dialog. A failure at any point leaves the current image as it is.
  */
-export function useImageCrop({ upload, onUploaded, onUploadError }: UseImageCropOptions) {
+export function useImageCrop({
+  upload,
+  onUploaded,
+  onUploadError,
+  keepFull = false,
+}: UseImageCropOptions) {
   const t = useTranslations('avatarUpload');
   const { getErrorMessage } = useErrorMessage();
   const [preview, setPreview] = useState<string | null>(null);
-  const [pending, setPending] = useState<{ file: Blob; source: string } | null>(null);
+  const [pending, setPending] = useState<{ file: Blob; source: string; full: FullSource } | null>(
+    null,
+  );
   const [isLoadingSource, setIsLoadingSource] = useState(false);
 
   // A ref: two clicks in the same render would both still see the state as false
   const isLoading = useRef(false);
 
-  const open = (file: Blob) => setPending({ file, source: URL.createObjectURL(file) });
+  const open = (file: Blob, full: FullSource) =>
+    setPending({ file, source: URL.createObjectURL(file), full });
+
+  /** The whole image when there is one; otherwise, or if it can't be read, the avatar. */
+  const loadForAdjust = async (url: string) => {
+    const fullUrl = keepFull ? fullImageUrl(url) : null;
+    if (fullUrl) {
+      try {
+        open(await loadStoredImage(fullUrl), 'reuse');
+        return;
+      } catch {
+        // Falls through to the avatar
+      }
+    }
+    open(await loadStoredImage(url), 'none');
+  };
 
   const adjust = async (url: string) => {
     if (isLoading.current) return;
     isLoading.current = true;
     setIsLoadingSource(true);
     try {
-      open(await loadStoredImage(url));
+      await loadForAdjust(url);
     } catch {
       toast.error(t('adjustLoadError'));
     } finally {
@@ -50,12 +86,14 @@ export function useImageCrop({ upload, onUploaded, onUploadError }: UseImageCrop
 
   const confirm = async (area: CropArea | null) => {
     if (!pending) return;
-    const original = pending.file;
+    const { file: original, full: fullSource } = pending;
     cancel();
 
     let file: File;
+    let full: File | undefined;
     try {
       file = await cropImage(original, area);
+      full = await fullVersion(original, fullSource, file.type);
     } catch (err: unknown) {
       toast.error(getErrorMessage(err));
       onUploadError?.(err);
@@ -67,7 +105,7 @@ export function useImageCrop({ upload, onUploaded, onUploadError }: UseImageCrop
     setPreview(objectUrl);
 
     try {
-      const { url } = await upload(file);
+      const { url } = await upload(file, full);
       onUploaded(url);
     } catch (err: unknown) {
       onUploadError?.(err);
@@ -81,7 +119,7 @@ export function useImageCrop({ upload, onUploaded, onUploadError }: UseImageCrop
     preview,
     cropSource: pending?.source ?? null,
     isLoadingSource,
-    pickFile: open,
+    pickFile: (file: File) => open(file, keepFull ? 'generate' : 'none'),
     adjust,
     cancel,
     confirm,

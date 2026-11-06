@@ -21,6 +21,8 @@ interface ImageUploadProps {
   target?: UploadTarget;
   targetId?: string;
   size?: 'sm' | 'md' | 'lg';
+  /** Also keeps the whole image, for the viewer and to crop again without a new upload. */
+  keepFullImage?: boolean;
 }
 
 /**
@@ -38,17 +40,19 @@ export default function ImageUpload({
   target,
   targetId,
   size = 'md',
+  keepFullImage = false,
 }: ImageUploadProps) {
   const t = useTranslations('avatarUpload');
   const { upload: contextUpload, isUploading: isUploadingContext } = useFileUploader();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const crop = useImageCrop({
-    upload: (file) =>
+    keepFull: keepFullImage,
+    upload: (file, full) =>
       uploadFn
         ? uploadFn(file)
         : target
-          ? contextUpload({ file, target, id: targetId })
+          ? contextUpload({ file, full, target, id: targetId })
           : Promise.reject(new Error('No upload action provided to ImageUpload')),
     onUploaded: onUploadSuccess,
     onUploadError,

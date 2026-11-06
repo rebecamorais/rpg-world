@@ -10,6 +10,8 @@ export type UploadTarget = 'profile' | 'character' | 'item' | 'party';
 
 export interface UploadParams {
   file: File;
+  /** The whole image `file` was cut from (characters). */
+  full?: File;
   target: UploadTarget;
   id?: string; // characterId, itemId, partyId, etc.
 }
@@ -45,12 +47,13 @@ export function FileUploaderProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const { getErrorMessage } = useErrorMessage();
 
-  const upload = async ({ file, target, id }: UploadParams): Promise<{ url: string }> => {
+  const upload = async ({ file, full, target, id }: UploadParams): Promise<{ url: string }> => {
     setIsUploading(true);
     setError(null);
 
     const formData = new FormData();
     formData.append('file', file);
+    if (full) formData.append('full', full);
 
     try {
       const endpoint = getEndpoint(target, id);

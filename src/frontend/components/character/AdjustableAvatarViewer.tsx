@@ -30,7 +30,8 @@ export function AdjustableAvatarViewer({
   const { upload } = useFileUploader();
   const { update } = useCharacterActions();
   const crop = useImageCrop({
-    upload: (file) => upload({ file, target: 'character', id: characterId }),
+    keepFull: true,
+    upload: (file, full) => upload({ file, full, target: 'character', id: characterId }),
     onUploaded: (url) => update({ avatarUrl: url }),
   });
 
