@@ -7,7 +7,7 @@ import { buildDemoData } from './build';
  * The passwords are public: this file only ever goes to database/db-dev/seeds.
  */
 
-export const LOCAL_SEED_FILE = 'database/db-dev/seeds/03-seed-the-pioneers.sql';
+export const LOCAL_SEED_FILE = 'database/db-dev/seeds/01-seed-the-pioneers.sql';
 
 const PARTY_ID = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd';
 

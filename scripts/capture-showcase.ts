@@ -5,18 +5,18 @@
  *   npx next dev -p 3005            (with .env.local pointing to the dev Supabase)
  *   npm run showcase -- [baseUrl]
  *
- * It signs in as the dev seed player, creates an example character, takes the shots in each
+ * It signs in as the dev seed GM, creates an example character, takes the shots in each
  * language, desktop and mobile, and deletes the character at the end. For the party screens the
- * seed player is the GM, and the second seed user joins with two characters.
+ * seed GM runs a new party, and a seed player joins with two characters.
  */
 import { type APIRequestContext, type Page, chromium } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import sharp from 'sharp';
 
 const BASE_URL = process.argv[2] ?? 'http://localhost:3005';
-const PLAYER = { email: 'player@email.com', password: 'player123' };
+const PLAYER = { email: 'mestre@email.com', password: 'mestre123' };
 // Joins the example party as a player
-const COMPANION = { email: 'user-normal@example.com', password: 'AnotherValidPassword123!' };
+const COMPANION = { email: 'playerchilli@email.com', password: 'chilli123' };
 const OUT_DIR = 'public/showcase';
 // Image sizes for next/image, read by the features page
 const MANIFEST = 'src/frontend/constants/showcase.generated.json';
@@ -107,7 +107,7 @@ type Companion = {
   byLocale: Record<Locale, { updates: object; lore: object }>;
 };
 
-// The second seed user's characters, brought to the party
+// The seed player's characters, brought to the party
 const COMPANIONS: Companion[] = [
   {
     name: 'Bram',
@@ -360,14 +360,6 @@ async function main() {
   const companionContext = await browser.newContext({ baseURL: BASE_URL });
   const companion = companionContext.request;
   await ok(await companion.post('/api/auth/login', { data: COMPANION }), 'companion login');
-  // The Role Play cards show who plays each character
-  const profile = await json<{ usernameChosen: boolean }>(
-    await companion.get('/api/profile'),
-    'profile',
-  );
-  if (!profile.usernameChosen) {
-    await ok(await companion.patch('/api/profile', { data: { username: 'bia' } }), 'username');
-  }
   const companionIds: string[] = [];
   let partyId: string | null = null;
   let goblinId: string | null = null;
@@ -375,7 +367,7 @@ async function main() {
   try {
     await stock(request, `/api/characters/${id}/inventory`, ARANI_COINS, ARANI_ITEMS);
 
-    // The party: the seed player is the GM, the companion joins with two characters
+    // The party: the seed GM runs it, the companion joins with two characters
     ({ id: partyId } = await json<{ id: string }>(
       await request.post('/api/parties', { data: { name: PARTY_NAME } }),
       'create party',

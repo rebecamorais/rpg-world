@@ -30,12 +30,11 @@ Abra <http://localhost:3000/login> e escolha **E-mail e senha**.
 
 ## Contas
 
-| Papel   | E-mail                   | Senha       | Username                     | Personagens                                      |
-| ------- | ------------------------ | ----------- | ---------------------------- | ------------------------------------------------ |
-| Mestre  | `mestre@email.com`       | `mestre123` | `mestre`                     | 7 NPCs, em **Meus NPCs**                         |
-| Jogador | `playerchilli@email.com` | `chilli123` | `playerChilli`               | Grace Hopper, Hedy Lamarr e Mirela Pardan        |
-| Jogador | `playerpepper@email.com` | `pepper123` | `playerPepper`               | Ada Lovelace, Katherine Johnson e Maren Hamilton |
-| Avulso  | `player@email.com`       | `player123` | escolhido no primeiro acesso | Alatar, o Sábio, fora da mesa                    |
+| Papel   | E-mail                   | Senha       | Username       | Personagens                                      |
+| ------- | ------------------------ | ----------- | -------------- | ------------------------------------------------ |
+| Mestre  | `mestre@email.com`       | `mestre123` | `mestre`       | 7 NPCs, em **Meus NPCs**                         |
+| Jogador | `playerchilli@email.com` | `chilli123` | `playerChilli` | Grace Hopper, Hedy Lamarr e Mirela Pardan        |
+| Jogador | `playerpepper@email.com` | `pepper123` | `playerPepper` | Ada Lovelace, Katherine Johnson e Maren Hamilton |
 
 Os NPCs do mestre são Joan of Arc, Ching Shih, Queen Nzinga, Hypatia, Florence Nightingale, Boudica e Mary Shelley.
 
@@ -58,7 +57,7 @@ npx supabase db reset --workdir database/db-dev
 
 ## Mudar os dados da mesa
 
-O arquivo `database/db-dev/seeds/03-seed-the-pioneers.sql` é gerado a partir dos dados da demo, em `src/frontend/demo/data`. Não edite o SQL à mão. Depois de mudar os dados, gere o arquivo de novo:
+O arquivo `database/db-dev/seeds/01-seed-the-pioneers.sql` é gerado a partir dos dados da demo, em `src/frontend/demo/data`. Não edite o SQL à mão. Depois de mudar os dados, gere o arquivo de novo:
 
 ```bash
 npm run seed:local
