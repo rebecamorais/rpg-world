@@ -1,6 +1,14 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ImageDecodeError, centeredSquare, encodeWithinLimit, fitWithin } from './crop-image';
+import {
+  FULL_MAX_BYTES,
+  FULL_MAX_SIDE,
+  ImageDecodeError,
+  centeredSquare,
+  encodeWithinLimit,
+  fitWithin,
+  fullImage,
+} from './crop-image';
 
 const blob = (size: number, type = 'image/webp') => new Blob([new Uint8Array(size)], { type });
 const canvas = () => ({}) as HTMLCanvasElement;
@@ -68,5 +76,48 @@ describe('encodeWithinLimit', () => {
     await expect(
       encodeWithinLimit(canvas, { width: 10, height: 10 }, 200, async () => null),
     ).rejects.toBeInstanceOf(ImageDecodeError);
+  });
+});
+
+describe('fullImage', () => {
+  const drawImage = vi.fn();
+
+  function stubBitmap(width: number, height: number) {
+    vi.stubGlobal(
+      'createImageBitmap',
+      vi.fn(async () => ({ width, height, close: vi.fn() })),
+    );
+    vi.stubGlobal('document', {
+      createElement: () => ({
+        getContext: () => ({ drawImage }),
+        toBlob: (done: (blob: Blob) => void) => done(new Blob(['x'], { type: 'image/webp' })),
+      }),
+    });
+  }
+
+  beforeEach(() => drawImage.mockClear());
+
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('mantém a imagem inteira e a proporção dentro do limite', async () => {
+    stubBitmap(4000, 2000);
+
+    const file = await fullImage(new Blob(['img']));
+
+    expect(drawImage.mock.calls[0].slice(1)).toEqual([0, 0, 4000, 2000, 0, 0, FULL_MAX_SIDE, 1024]);
+    expect(file.type).toBe('image/webp');
+  });
+
+  it('não aumenta imagem pequena', async () => {
+    stubBitmap(800, 600);
+
+    await fullImage(new Blob(['img']));
+
+    expect(drawImage.mock.calls[0].slice(1)).toEqual([0, 0, 800, 600, 0, 0, 800, 600]);
+  });
+
+  it('os limites são 2048px e 2 MB', () => {
+    expect(FULL_MAX_SIDE).toBe(2048);
+    expect(FULL_MAX_BYTES).toBe(2 * 1024 * 1024);
   });
 });

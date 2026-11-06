@@ -17,6 +17,9 @@ type Encoder = (canvas: HTMLCanvasElement, type: string, quality: number) => Pro
 // Big enough for a full-screen view, small enough to stay far below the server's 5 MB ceiling
 const DEFAULT_MAX_SIDE = 1024;
 const DEFAULT_MAX_BYTES = 800 * 1024;
+// The whole image, for the viewer and to crop again. Lower these to spend less storage.
+export const FULL_MAX_SIDE = 2048;
+export const FULL_MAX_BYTES = 2 * 1024 * 1024;
 const QUALITIES = [0.85, 0.75, 0.6];
 const MAX_SHRINKS = 3;
 
@@ -80,18 +83,12 @@ async function loadImage(file: Blob): Promise<ImageBitmap> {
   }
 }
 
-/**
- * Crops `file` to `area` (in the original image's pixels), resizes and compresses it.
- * Drawing on a canvas also drops the EXIF data, GPS location included.
- */
-export async function cropImage(
-  file: Blob,
-  area: CropArea | null,
-  { maxSide = DEFAULT_MAX_SIDE, maxBytes = DEFAULT_MAX_BYTES }: CropImageOptions = {},
+/** Draws `crop` of an already open image, resizes and compresses it, and closes the image. */
+async function encodeArea(
+  image: ImageBitmap,
+  crop: CropArea,
+  { maxSide = DEFAULT_MAX_SIDE, maxBytes = DEFAULT_MAX_BYTES }: CropImageOptions,
 ): Promise<File> {
-  const image = await loadImage(file);
-  const crop = area ?? centeredSquare(image.width, image.height);
-
   const draw = (width: number, height: number) => {
     const canvas = document.createElement('canvas');
     canvas.width = width;
@@ -114,4 +111,27 @@ export async function cropImage(
   } finally {
     image.close();
   }
+}
+
+/**
+ * Crops `file` to `area` (in the original image's pixels), resizes and compresses it.
+ * Drawing on a canvas also drops the EXIF data, GPS location included.
+ */
+export async function cropImage(
+  file: Blob,
+  area: CropArea | null,
+  options: CropImageOptions = {},
+): Promise<File> {
+  const image = await loadImage(file);
+  return encodeArea(image, area ?? centeredSquare(image.width, image.height), options);
+}
+
+/** The whole image, smaller and without EXIF data, in the format this browser encodes. */
+export async function fullImage(file: Blob): Promise<File> {
+  const image = await loadImage(file);
+  return encodeArea(
+    image,
+    { x: 0, y: 0, width: image.width, height: image.height },
+    { maxSide: FULL_MAX_SIDE, maxBytes: FULL_MAX_BYTES },
+  );
 }
