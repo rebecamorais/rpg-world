@@ -633,7 +633,13 @@
     "zoom": "Zoom",
     "save": "Salvar",
     "view": "Ver imagem",
-    "viewTitle": "Imagem em tela cheia"
+    "viewTitle": "Imagem em tela cheia",
+    "viewOf": "Ver imagem de {name}",
+    "zoomIn": "Aproximar",
+    "zoomOut": "Afastar",
+    "zoomFit": "Ajustar à tela",
+    "adjust": "Ajustar imagem",
+    "adjustLoadError": "Não foi possível carregar a imagem salva. Tente enviar de novo."
   },
   "skills": {
     "title": "Perícias",

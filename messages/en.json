@@ -633,7 +633,13 @@
     "zoom": "Zoom",
     "save": "Save",
     "view": "View image",
-    "viewTitle": "Full-screen image"
+    "viewTitle": "Full-screen image",
+    "viewOf": "View {name}'s image",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "zoomFit": "Fit to screen",
+    "adjust": "Adjust image",
+    "adjustLoadError": "Couldn't load the saved image. Try uploading it again."
   },
   "skills": {
     "title": "Skills",
