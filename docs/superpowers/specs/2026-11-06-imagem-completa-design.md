@@ -59,7 +59,7 @@ O nome também separa novos de antigos: uma URL sem `-avatar` é de antes deste 
 
 ### Reajuste
 
-- Lê a imagem completa quando a URL tem `-avatar`. Nos demais casos, ou se a leitura falhar, lê o avatar, como hoje.
+- Lê a imagem completa quando a URL tem `-avatar`. Se essa leitura falhar, mostra o erro e não abre o recorte: abrir com o avatar e salvar apagaria a imagem completa para sempre. Nos demais casos, lê o avatar, como hoje.
 - Ao confirmar, envia o novo recorte e a imagem completa que foi lida, sem recodificar, para não perder qualidade a cada ajuste. Exceção, decisão do autor: se o navegador gerar o recorte em outro formato, como JPEG onde não há WebP, a imagem completa é recodificada só nesse caso, porque os dois arquivos precisam ter a mesma extensão. Se só havia o avatar, nenhum `full` é enviado e o caso segue como hoje.
 - Na ficha, continua indo para o rascunho e grava só com Salvar.
 

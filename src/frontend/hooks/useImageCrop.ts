@@ -51,18 +51,14 @@ export function useImageCrop({
   const open = (file: Blob, full: FullSource) =>
     setPending({ file, source: URL.createObjectURL(file), full });
 
-  /** The whole image when there is one; otherwise, or if it can't be read, the avatar. */
+  /**
+   * The whole image when there is one, never the avatar in its place: saving a crop without it
+   * would delete the whole image for good, and a read can fail for a moment.
+   */
   const loadForAdjust = async (url: string) => {
     const fullUrl = keepFull ? fullImageUrl(url) : null;
-    if (fullUrl) {
-      try {
-        open(await loadStoredImage(fullUrl), 'reuse');
-        return;
-      } catch {
-        // Falls through to the avatar
-      }
-    }
-    open(await loadStoredImage(url), 'none');
+    if (fullUrl) open(await loadStoredImage(fullUrl), 'reuse');
+    else open(await loadStoredImage(url), 'none');
   };
 
   const adjust = async (url: string) => {

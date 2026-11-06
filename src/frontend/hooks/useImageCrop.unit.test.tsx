@@ -169,19 +169,16 @@ describe('useImageCrop', () => {
       expect(upload.mock.calls[0][1]).toBe(generated);
     });
 
-    it('completa indisponível usa o avatar e não envia full', async () => {
-      vi.mocked(loadStoredImage).mockRejectedValueOnce(new Error('404'));
+    it('falha ao ler a completa avisa e não abre o recorte com o avatar', async () => {
+      vi.mocked(loadStoredImage).mockRejectedValueOnce(new Error('falha momentânea'));
       const { latest, upload } = setup(true);
 
       await act(() => latest.crop.adjust(NEW_AVATAR));
-      await act(() => latest.crop.confirm(AREA));
 
-      expect(vi.mocked(loadStoredImage).mock.calls.map(([url]) => url)).toEqual([
-        NEW_FULL,
-        NEW_AVATAR,
-      ]);
-      expect(toast.error).not.toHaveBeenCalled();
-      expect(upload).toHaveBeenCalledWith(cropped, undefined);
+      expect(vi.mocked(loadStoredImage).mock.calls.map(([url]) => url)).toEqual([NEW_FULL]);
+      expect(toast.error).toHaveBeenCalledWith(messages.avatarUpload.adjustLoadError);
+      expect(latest.crop.cropSource).toBeNull();
+      expect(upload).not.toHaveBeenCalled();
     });
 
     it('imagem antiga não tenta a completa', async () => {

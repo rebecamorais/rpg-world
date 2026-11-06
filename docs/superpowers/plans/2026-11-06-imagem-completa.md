@@ -24,7 +24,7 @@
 - Upload em que a gravação do avatar falha depois da completa: nada vai para o rascunho e a completa não fica para trás (Task 2).
 - `full` maior que 5 MB, com tipo proibido ou diferente de `file`: envio recusado com o erro de sempre (Task 2).
 - Imagem antiga, perfil, demo e seed local: o modal não tenta buscar arquivo inexistente (Task 1 e Task 6).
-- Reajuste com a imagem completa indisponível: usa o avatar e não envia `full` (Task 5).
+- Reajuste com a imagem completa indisponível: mostra o erro e não abre o recorte, para não perder a imagem completa (Task 5).
 - Trocar a imagem de um personagem novo por um upload ou excluí-lo: os dois arquivos saem (Task 3).
 
 ---
@@ -197,7 +197,7 @@ Expected: FAIL.
 - `sem keepFull não gera nem envia completa`.
 - `ajuste lê a completa e reenvia sem recodificar`: com URL `-avatar`, `loadStoredImage` recebe a URL completa, e `fullImage` não é chamado quando os tipos batem.
 - `ajuste em outro formato recodifica a completa`: com a completa em `image/webp` e o recorte em `image/jpeg`, `fullImage` é chamado.
-- `completa indisponível usa o avatar e não envia full`: a primeira leitura rejeita, a segunda usa a URL do avatar, e `upload` recebe só o recorte.
+- `falha ao ler a completa avisa e não abre o recorte com o avatar`: a leitura rejeita, aparece o erro e nada é enviado.
 - `imagem antiga não tenta a completa`: `loadStoredImage` é chamado uma vez, com a URL original.
 
 `ImageUpload`: `com keepFullImage o formulário leva o campo full`.
@@ -209,7 +209,7 @@ Expected: FAIL nos testes novos.
 
 - [ ] **Step 3: Implementar**
 
-`pending` guarda de onde vem a completa: `generate` (arquivo novo), `reuse` (lida do armazenamento) ou `none`. A leitura em `adjust` tenta `fullImageUrl(url)` e, se falhar, usa `url` com `none`.
+`pending` guarda de onde vem a completa: `generate` (arquivo novo), `reuse` (lida do armazenamento) ou `none`. A leitura em `adjust` usa `fullImageUrl(url)` quando existe, sem recorrer ao avatar se falhar, e `url` com `none` nos demais casos.
 
 - [ ] **Step 4: Confirmar que passa**, com o mesmo comando mais `StatusView.unit.test.tsx`.
 
