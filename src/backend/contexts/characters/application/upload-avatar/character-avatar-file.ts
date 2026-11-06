@@ -2,19 +2,33 @@ import { isFileIn, removeReplacedAsset } from '@backend/shared/application/remov
 import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 import { AVATAR_BUCKET } from '@backend/shared/domain/avatar';
 
+import { fullImageUrl } from '@shared/avatar-files';
+
 import { Character } from '../../domain/entity/Character';
 
 /**
- * Deletes the avatar file `previousUrl` pointed to, when it is no longer the character's avatar.
- * Only files UploadCharacterAvatarUseCase creates for this character are touched:
- * `<ownerId>/characters/<characterId>-<version>.<ext>`.
+ * Deletes the avatar file `previousUrl` pointed to and its whole image, when it is no longer the
+ * character's avatar. Only files UploadCharacterAvatarUseCase creates for this character are touched:
+ * `<ownerId>/characters/<characterId>-<version>[-avatar].<ext>`.
  */
-export function removeCharacterAvatar(
+export async function removeCharacterAvatar(
   storage: StorageRepository,
   character: Pick<Character, 'id' | 'ownerUsername'> & { avatarUrl?: string },
   previousUrl: string | undefined,
 ): Promise<void> {
-  return removeReplacedAsset(storage, AVATAR_BUCKET, previousUrl, character.avatarUrl, (path) =>
-    isFileIn(path, `${character.ownerUsername}/characters`, `${character.id}-`),
+  const isRemovable = (path: string) =>
+    isFileIn(path, `${character.ownerUsername}/characters`, `${character.id}-`);
+
+  await removeReplacedAsset(storage, AVATAR_BUCKET, previousUrl, character.avatarUrl, isRemovable);
+
+  const previousFull = previousUrl && fullImageUrl(previousUrl);
+  if (!previousFull) return;
+  const currentFull = character.avatarUrl ? fullImageUrl(character.avatarUrl) : null;
+  await removeReplacedAsset(
+    storage,
+    AVATAR_BUCKET,
+    previousFull,
+    currentFull ?? undefined,
+    isRemovable,
   );
 }

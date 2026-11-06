@@ -57,6 +57,23 @@ describe('DeleteCharacterUseCase ', () => {
     expect(storage.remove).toHaveBeenCalledWith('avatars', 'owner-1/characters/char-1-v1.png');
   });
 
+  it('apaga também a imagem completa de um avatar novo', async () => {
+    const storage = { remove: vi.fn().mockResolvedValue(undefined) };
+    const withStorage = new DeleteCharacterUseCase(repo, storage as unknown as StorageRepository);
+    const char = await repo.findById('char-1');
+    char!.avatarUrl =
+      'https://images.rpgworldapp.com/avatars/owner-1/characters/char-1-v1-avatar.webp';
+    await repo.save(char!);
+
+    await withStorage.execute('char-1', 'owner-1');
+
+    expect(storage.remove).toHaveBeenCalledWith(
+      'avatars',
+      'owner-1/characters/char-1-v1-avatar.webp',
+    );
+    expect(storage.remove).toHaveBeenCalledWith('avatars', 'owner-1/characters/char-1-v1.webp');
+  });
+
   it('não apaga avatar quem não é o dono', async () => {
     const storage = { remove: vi.fn() };
     const withStorage = new DeleteCharacterUseCase(repo, storage as unknown as StorageRepository);

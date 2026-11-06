@@ -28,4 +28,28 @@ describe('CleanupOrphanAvatarsUseCase', () => {
     await expect(useCase.execute()).resolves.toEqual({ removed: 0 });
     expect(storage.remove).not.toHaveBeenCalled();
   });
+
+  describe('imagens completas, que nenhuma linha do banco cita', () => {
+    const removed = (storage: ReturnType<typeof setup>['storage']) =>
+      storage.remove.mock.calls.flatMap(([, paths]) => paths);
+
+    it('guarda a completa cujo avatar está em uso e apaga o resto', async () => {
+      const inUse = 'u/characters/c-1.webp'; // its -avatar isn't an orphan: something uses it
+      const pair = ['u/characters/c-2.webp', 'u/characters/c-2-avatar.webp'];
+      const profile = 'u/avatar-3.webp';
+      const { storage, useCase } = setup([inUse, ...pair, profile]);
+
+      await expect(useCase.execute()).resolves.toEqual({ removed: 3 });
+
+      expect(removed(storage)).toEqual([...pair, profile]);
+    });
+
+    it('avatar órfão sai mesmo sem a completa na lista', async () => {
+      const { storage, useCase } = setup(['u/characters/c-1-avatar.webp']);
+
+      await useCase.execute();
+
+      expect(removed(storage)).toEqual(['u/characters/c-1-avatar.webp']);
+    });
+  });
 });
