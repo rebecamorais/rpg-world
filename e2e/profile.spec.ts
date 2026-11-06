@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import path from 'node:path';
 
 import { expect, hydrated, signIn, test } from './support/fixtures';
@@ -69,6 +70,46 @@ test('troca o avatar, servido pelo proxy com uma URL nova a cada envio', async (
   // Saved with the upload, without pressing Save
   await page.reload();
   await expect(avatar).toHaveAttribute('src', second!);
+});
+
+test('ajusta a imagem salva sem reenviar o arquivo', async ({ page, user: _ }) => {
+  await page.goto('/settings/profile');
+  await hydrated(page.getByLabel('Username', { exact: true }));
+  const avatar = page.getByRole('img', { name: 'Current avatar' });
+  await page.locator('#image-file-input').setInputFiles(AVATAR);
+  await page.getByRole('dialog').getByRole('button', { name: 'Save' }).click();
+  await expect(avatar).toHaveAttribute('src', /\/api\/images\/avatars\//);
+  const before = await avatar.getAttribute('src');
+
+  await page.getByRole('button', { name: 'View image', exact: true }).click();
+  await page.getByRole('button', { name: 'Adjust image' }).click();
+  await page
+    .getByRole('dialog', { name: 'Adjust image' })
+    .getByRole('button', { name: 'Save' })
+    .click();
+
+  await expect(avatar).not.toHaveAttribute('src', before!);
+  await expect
+    .poll(() => avatar.evaluate((img: HTMLImageElement) => img.naturalWidth))
+    .toBeGreaterThan(0);
+});
+
+test('modal da imagem com zoom não tem violações de acessibilidade', async ({ page, user: _ }) => {
+  await page.goto('/settings/profile');
+  await hydrated(page.getByLabel('Username', { exact: true }));
+  await page.locator('#image-file-input').setInputFiles(AVATAR);
+  await page.getByRole('dialog').getByRole('button', { name: 'Save' }).click();
+  await page.getByRole('button', { name: 'View image', exact: true }).click();
+  await page.getByRole('button', { name: 'Zoom in' }).click();
+
+  const results = await new AxeBuilder({ page })
+    .include('[role="dialog"]')
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze();
+
+  expect(
+    results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical'),
+  ).toEqual([]);
 });
 
 test('imagem grande é recortada e comprimida antes de subir', async ({ page, user }) => {
