@@ -38,6 +38,23 @@ function renderStatus(sheet = character) {
 }
 
 describe('StatusView', () => {
+  it('na ficha do dono a engrenagem leva à página de aparência', () => {
+    params.value = { id: 'c1' };
+    renderStatus();
+
+    expect(screen.getByRole('link', { name: messages.characterAppearance.title })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/\/character\/c1\/appearance$/),
+    );
+  });
+
+  it('sem imagem, o avatar não abre o ver ampliado', () => {
+    params.value = { id: 'c1' };
+    renderStatus();
+
+    expect(screen.queryByRole('button', { name: tImage.view })).not.toBeInTheDocument();
+  });
+
   it('na ficha do dono os campos são editáveis e há botão salvar', () => {
     params.value = { id: 'c1' };
     renderStatus();
@@ -57,7 +74,7 @@ describe('StatusView', () => {
       screen.queryByRole('button', { name: messages.common.saveChanges }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: messages.characterHeader.customizeTitle }),
+      screen.queryByRole('link', { name: messages.characterAppearance.title }),
     ).not.toBeInTheDocument();
   });
 

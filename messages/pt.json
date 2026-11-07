@@ -253,7 +253,8 @@
       "status": "Status",
       "lore": "Lore",
       "spells": "Grimório",
-      "inventory": "Inventário"
+      "inventory": "Inventário",
+      "appearance": "Aparência"
     },
     "emptyStates": {
       "lore": "A biografia e características físicas aparecerão aqui em breve.",
@@ -470,10 +471,6 @@
     "alignment": "Alinhamento",
     "alignmentPlaceholder": "Definir Alinhamento...",
     "xp": "Experiência",
-    "customizeDescription": "Altere o avatar e a cor de destaque do personagem",
-    "customizeTitle": "Personalizar Personagem",
-    "avatarLabel": "Avatar",
-    "accentColorLabel": "Cor de Destaque",
     "xpProgress": "Progresso para o próximo nível",
     "name": "Nome",
     "otherOption": "Outro…",
@@ -481,6 +478,26 @@
     "raceOtherPlaceholder": "Nome da raça",
     "backgroundOtherPlaceholder": "Nome do antecedente",
     "alignmentOtherPlaceholder": "Alinhamento"
+  },
+  "characterAppearance": {
+    "title": "Aparência da ficha",
+    "description": "Aqui só muda o visual da ficha. Os dados do personagem continuam iguais.",
+    "back": "Voltar para a ficha",
+    "colorTitle": "Cor",
+    "colorHint": "Usada no nome, na moldura do avatar e nos destaques da ficha.",
+    "systemColors": "Cores do sistema",
+    "anyColor": "Qualquer cor",
+    "colorCode": "Código da cor",
+    "colorCodeInvalid": "Use um código como #c2410c.",
+    "imageTitle": "Imagem do personagem",
+    "imageHint": "Aparece na ficha, nos cards e no combate.",
+    "backgroundTitle": "Fundo da ficha",
+    "backgroundHint": "Ocupa a página atrás da ficha, em todas as abas. É só desta ficha: o mestre vê ao abrir.",
+    "backgroundAdd": "Adicionar fundo",
+    "backgroundReplace": "Trocar fundo",
+    "backgroundRemove": "Remover fundo",
+    "backgroundSending": "Enviando…",
+    "preview": "Prévia"
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",

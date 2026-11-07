@@ -54,7 +54,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <Sidebar />
 
             {/* Content area (the main landmark is in the root layout) */}
-            <div className="min-w-0 flex-1">
+            {/* Positioned: a sheet's background art fills this whole area (SheetBackdrop) */}
+            <div className="relative min-w-0 flex-1">
               {/* Same width, side and top spacing on every dashboard page */}
               <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 md:py-10">{children}</div>
             </div>

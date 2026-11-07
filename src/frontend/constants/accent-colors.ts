@@ -2,6 +2,9 @@
  * The color choices of the profile and of a character. Hex values only (#rrggbb), the format the
  * schemas accept; the empty one keeps the app's default. Names are keys of `profileForm.colors`.
  */
+/** The app's color (--brand), for the color input, which can't start from a CSS variable. */
+export const DEFAULT_ACCENT_HEX = '#663399';
+
 export const ACCENT_COLORS = [
   { name: 'default', value: '' },
   { name: 'red', value: '#ef4444' },

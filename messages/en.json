@@ -253,7 +253,8 @@
       "status": "Status",
       "lore": "Lore",
       "spells": "Spellbook",
-      "inventory": "Inventory"
+      "inventory": "Inventory",
+      "appearance": "Appearance"
     },
     "emptyStates": {
       "lore": "Biography and physical characteristics will appear here soon.",
@@ -470,10 +471,6 @@
     "alignment": "Alignment",
     "alignmentPlaceholder": "Define Alignment...",
     "xp": "Experience",
-    "customizeDescription": "Change the avatar and accent color of the character",
-    "customizeTitle": "Customize Character",
-    "avatarLabel": "Avatar",
-    "accentColorLabel": "Accent Color",
     "xpProgress": "Progress to next level",
     "name": "Name",
     "otherOption": "Other…",
@@ -481,6 +478,26 @@
     "raceOtherPlaceholder": "Race name",
     "backgroundOtherPlaceholder": "Background name",
     "alignmentOtherPlaceholder": "Alignment"
+  },
+  "characterAppearance": {
+    "title": "Sheet appearance",
+    "description": "This only changes how the sheet looks. The character's data stays the same.",
+    "back": "Back to the sheet",
+    "colorTitle": "Color",
+    "colorHint": "Used for the name, the avatar's frame and the sheet's highlights.",
+    "systemColors": "System colors",
+    "anyColor": "Any color",
+    "colorCode": "Color code",
+    "colorCodeInvalid": "Use a code like #c2410c.",
+    "imageTitle": "Character image",
+    "imageHint": "Appears on the sheet, on cards and in combat.",
+    "backgroundTitle": "Sheet background",
+    "backgroundHint": "Fills the page behind the sheet, on every tab. It's yours alone: the GM sees it when opening this sheet.",
+    "backgroundAdd": "Add background",
+    "backgroundReplace": "Replace background",
+    "backgroundRemove": "Remove background",
+    "backgroundSending": "Sending…",
+    "preview": "Preview"
   },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",

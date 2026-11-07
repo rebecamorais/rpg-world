@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { characterTheme, safeAccentColor } from './color-utils';
+import { characterTheme, safeAccentColor, sixDigitHex } from './color-utils';
 
 describe('safeAccentColor', () => {
   it.each(['#ff0000', '#F00', '#6d28d9'])('aceita %s', (color) => {
@@ -26,5 +26,17 @@ describe('characterTheme', () => {
   it('usa a cor da marca quando a cor salva é inválida ou não existe', () => {
     expect(characterTheme('not-a-color').style).toEqual({ '--character-color': 'var(--brand)' });
     expect(characterTheme(undefined).style).toEqual({ '--character-color': 'var(--brand)' });
+  });
+});
+
+describe('sixDigitHex', () => {
+  it.each([
+    ['#abc', '#aabbcc'],
+    ['#C2410C', '#c2410c'],
+    ['red', undefined],
+    ['', undefined],
+    [null, undefined],
+  ])('%s vira %s', (color, expected) => {
+    expect(sixDigitHex(color)).toBe(expected);
   });
 });

@@ -25,6 +25,7 @@ import {
   useCharacterMeta,
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
+import AppLink from '@frontend/demo/AppLink';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { CharacterClass } from '@frontend/types/spells';
@@ -33,7 +34,6 @@ import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
 import { ImageViewerDialog } from '../shared/ImageViewerDialog';
 import { AdjustableAvatarViewer } from './AdjustableAvatarViewer';
-import { CharacterCustomizationDialog } from './CharacterCustomizationDialog';
 import { SheetFieldset } from './sheet/SheetFieldset';
 
 /** Same limit as the API's character schema, so a save never fails on length. */
@@ -49,16 +49,17 @@ export default function CharacterHeader() {
     alignment,
     xp = 0,
     avatarUrl,
+    system,
   } = useLoadedCharacter();
   const { update } = useCharacterActions();
   const { id } = useCharacterMeta();
   // Read only (the GM): no customizing; the fields are off through SheetFieldset
-  const { readOnly } = useSheetSource(id);
+  const { readOnly, pagesPath } = useSheetSource(id, system);
   const pb = getProficiencyBonus(level);
   const t = useTranslations('characterHeader');
   const choices = useCharacterChoices();
   const tImage = useTranslations('avatarUpload');
-  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+  const tAppearance = useTranslations('characterAppearance');
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   // Simple XP progress calculation
@@ -74,28 +75,36 @@ export default function CharacterHeader() {
   );
 
   return (
-    <Card className="overflow-hidden shadow-sm">
-      <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start">
+    <Card className="relative overflow-hidden shadow-sm">
+      {!readOnly && (
+        <AppLink
+          href={`${pagesPath}/appearance`}
+          aria-label={tAppearance('title')}
+          title={tAppearance('title')}
+          className="focus-ring text-muted-foreground hover:text-character-flare absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-lg transition-colors"
+        >
+          <AppIcon name="Settings" size={18} aria-hidden="true" />
+        </AppLink>
+      )}
+      <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start md:pr-14">
         <div className="relative self-start">
           {/* The button sits over the avatar instead of wrapping it: the initials would be its
               visible text and not match the aria-label (WCAG 2.5.3). The avatar is hidden from
               screen readers: the h1 already names the character */}
-          <div className="relative rounded-full transition-transform has-[button:active]:scale-95 has-[button:hover]:scale-105">
+          <div className="relative rounded-lg transition-transform has-[button:active]:scale-95 has-[button:hover]:scale-105">
             <CharacterPortrait
               avatarUrl={avatarUrl}
               characterClass={classNameStr}
-              className="border-character-muted shadow-character-muted h-20 w-20 shrink-0 border-2 shadow-md transition-all"
+              className="h-20 w-20 shrink-0"
             />
-            {!readOnly && (
+            {avatarUrl ? (
               <button
                 type="button"
-                onClick={() => setIsColorPickerOpen(true)}
-                aria-label={t('customizeTitle')}
-                className="focus-ring bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity hover:opacity-100 focus-visible:opacity-100"
-              >
-                <AppIcon name="Palette" size={24} className="text-character-flare" />
-              </button>
-            )}
+                onClick={() => setIsViewerOpen(true)}
+                aria-label={tImage('view')}
+                className="focus-ring absolute inset-0 cursor-zoom-in rounded-lg"
+              />
+            ) : null}
             {readOnly ? (
               <ImageViewerDialog
                 src={avatarUrl}
@@ -113,24 +122,7 @@ export default function CharacterHeader() {
               />
             )}
           </div>
-          {avatarUrl ? (
-            <button
-              type="button"
-              onClick={() => setIsViewerOpen(true)}
-              aria-label={tImage('view')}
-              className="focus-ring bg-background border-border hover:text-character-flare absolute -right-1 -bottom-1 flex h-7 w-7 items-center justify-center rounded-full border shadow-sm transition-colors"
-            >
-              <AppIcon name="Maximize2" size={14} />
-            </button>
-          ) : null}
         </div>
-
-        {!readOnly && (
-          <CharacterCustomizationDialog
-            open={isColorPickerOpen}
-            onOpenChange={setIsColorPickerOpen}
-          />
-        )}
 
         {/* The fields only: the image can be viewed on a read-only sheet too */}
         <SheetFieldset>

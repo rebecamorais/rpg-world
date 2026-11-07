@@ -18,6 +18,8 @@ import { useLeaveGuard } from '@frontend/hooks/useUnsavedChanges';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
+import { SheetBackdrop } from './SheetBackdrop';
+
 /** On the GM's read-only view: says so, and leads back to the party. */
 function ReadOnlyBar({ partyId }: { partyId: string }) {
   const t = useTranslations('parties.sheet');
@@ -83,17 +85,21 @@ export function CharacterSheetShell({ children }: { children: ReactNode }) {
 
   return (
     <div
-      // Room for the fixed save bar; width and padding come from the dashboard layout
-      className={cn(theme.className, 'relative isolate w-full pb-20')}
+      // Not positioned, so the backdrop reaches past the page's width to the dashboard's content area
+      className={cn(theme.className, 'isolate w-full')}
       style={theme.style}
     >
-      {/* The character's color lights the top of their sheet */}
-      <div
-        aria-hidden="true"
-        className="bg-character pointer-events-none absolute top-0 left-[10%] -z-10 h-64 w-2/3 -translate-y-1/3 rounded-full opacity-15 blur-3xl"
-      />
-      {readOnly && partyId && <ReadOnlyBar partyId={partyId} />}
-      {children}
+      {character.sheetBackgroundUrl && <SheetBackdrop url={character.sheetBackgroundUrl} />}
+      {/* Room for the fixed save bar; width and padding come from the dashboard layout */}
+      <div className="relative pb-20">
+        {/* The character's color lights the top of their sheet */}
+        <div
+          aria-hidden="true"
+          className="bg-character pointer-events-none absolute top-0 left-[10%] -z-10 h-64 w-2/3 -translate-y-1/3 rounded-full opacity-15 blur-3xl"
+        />
+        {readOnly && partyId && <ReadOnlyBar partyId={partyId} />}
+        {children}
+      </div>
     </div>
   );
 }

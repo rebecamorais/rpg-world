@@ -10,6 +10,13 @@ export function safeAccentColor(color?: string | null): string | undefined {
   return color && HEX_COLOR.test(color) ? color : undefined;
 }
 
+/** The color in the #rrggbb form an `<input type="color">` requires; undefined if invalid. */
+export function sixDigitHex(color?: string | null): string | undefined {
+  const safe = safeAccentColor(color)?.toLowerCase();
+  if (safe?.length !== 4) return safe;
+  return `#${[...safe.slice(1)].map((digit) => digit + digit).join('')}`;
+}
+
 /**
  * Props that theme a subtree with the character's color. Use them on the sheet and on anything
  * rendered in a portal (dialogs, drawers), which sits outside the sheet's `.character-context`:
