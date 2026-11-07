@@ -721,12 +721,16 @@ export type Database = {
       encounter_turns: {
         Args: { p_party_id: string };
         Returns: {
+          avatar_url: string;
           conditions: Json;
+          hidden_turn: boolean;
           is_current: boolean;
           is_mine: boolean;
+          life: string;
           name: string;
           participant_id: string;
           round: number;
+          side: string;
         }[];
       };
       end_turn: { Args: { p_participant_id: string; p_party_id: string }; Returns: undefined };

@@ -202,3 +202,59 @@ CREATE POLICY "encounter_participants_insert_gm"
 -- 7. O mestre muda o lado e as colunas novas (a política de UPDATE já é só dele)
 GRANT UPDATE (side, visibility, npc_fate, death_successes, death_failures, death_revealed)
   ON TABLE public.encounter_participants TO authenticated;
+
+-- 8. encounter_turns devolve só o que o jogador pode ver. O oculto não sai (o filtro fica no JOIN,
+--    para a linha "só a rodada" continuar saindo quando ninguém é visível); o anônimo sai sem nome
+--    e sem imagem; ninguém recebe PV, testes nem destino, só a vida resumida ('normal', 'down' ou
+--    'dead', este só depois de o mestre revelar). Na vez de um oculto ninguém é o atual e todas as
+--    linhas trazem hidden_turn. Mudar o tipo de retorno pede DROP + CREATE.
+DROP FUNCTION public.encounter_turns(uuid);
+
+CREATE FUNCTION public.encounter_turns(p_party_id uuid)
+RETURNS TABLE (
+  round int,
+  participant_id uuid,
+  side text,
+  name text,
+  avatar_url text,
+  life text,
+  is_current boolean,
+  is_mine boolean,
+  conditions jsonb,
+  hidden_turn boolean
+)
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+  SELECT
+    e.round,
+    ep.id,
+    ep.side,
+    CASE WHEN ep.visibility = 'anonymous' THEN NULL ELSE coalesce(ep.label, c.name) END,
+    CASE WHEN ep.side = 'player' OR ep.visibility = 'visible' THEN c.avatar_url END,
+    CASE
+      WHEN ep.id IS NULL THEN NULL
+      WHEN ep.side = 'player' OR ep.hp_current > 0 THEN 'normal'
+      WHEN ep.death_revealed THEN 'dead'
+      ELSE 'down'
+    END,
+    CASE WHEN ep.id IS NOT NULL THEN coalesce(ep.id = e.current_participant_id, false) END,
+    CASE WHEN ep.id IS NOT NULL THEN ep.side = 'player' AND c.owner_id = (SELECT auth.uid()) END,
+    ep.conditions,
+    EXISTS (
+      SELECT 1 FROM public.encounter_participants AS cur
+      WHERE cur.id = e.current_participant_id AND cur.visibility = 'hidden'
+    )
+  FROM public.encounters AS e
+  LEFT JOIN public.encounter_participants AS ep
+    ON ep.party_id = e.party_id AND ep.visibility <> 'hidden'
+  LEFT JOIN public.characters AS c ON c.id = ep.character_id
+  WHERE e.party_id = p_party_id
+    AND (private.is_party_gm(p_party_id) OR private.is_party_member(p_party_id))
+  ORDER BY ep.position, ep.created_at;
+$$;
+
+REVOKE ALL ON FUNCTION public.encounter_turns(uuid) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.encounter_turns(uuid) TO authenticated, service_role;

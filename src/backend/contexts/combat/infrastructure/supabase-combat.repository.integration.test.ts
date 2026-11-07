@@ -107,6 +107,12 @@ describe('SupabaseCombatRepository (Integration)', () => {
     await repo.addParticipants(partyId, [
       { characterId: goblinId, side: 'enemy', label: 'Goblin' },
     ]);
+    // NPC entra oculto; visível, o jogador o vê
+    await gm.client
+      .from('encounter_participants')
+      .update({ visibility: 'visible' })
+      .eq('party_id', partyId)
+      .neq('side', 'player');
     await repo.start(partyId);
 
     expect(await playerRepo.turns(partyId)).toEqual({

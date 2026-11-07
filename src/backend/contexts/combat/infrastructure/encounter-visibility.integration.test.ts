@@ -266,4 +266,164 @@ describe('Visibilidade, lado neutro e destino do NPC (Integration)', () => {
     await gm.client.from('encounter_participants').delete().eq('id', goblin);
     expect(await encounter()).toEqual({ round: 2, current_participant_id: orc });
   });
+  describe('encounter_turns para o jogador', () => {
+    const GOBLIN_AVATAR = 'https://example.com/goblin.png';
+
+    const turns = async () => {
+      const { data, error } = await player.client.rpc('encounter_turns', { p_party_id: partyId });
+      if (error) throw error;
+      return data;
+    };
+
+    const rowOf = async (id: string) => (await turns()).find((row) => row.participant_id === id);
+
+    const goblinCharacter = async () => {
+      const { data } = await admin()
+        .from('encounter_participants')
+        .select('character_id')
+        .eq('id', goblin)
+        .single();
+      return data!.character_id;
+    };
+
+    beforeEach(async () => {
+      const { error } = await admin()
+        .from('characters')
+        .update({ avatar_url: GOBLIN_AVATAR })
+        .eq('id', await goblinCharacter());
+      if (error) throw error;
+    });
+
+    it('oculto não aparece para o jogador', async () => {
+      const rows = await turns();
+      expect(rows.map((row) => row.participant_id)).toEqual([hero, friend]);
+    });
+
+    it('anônimo vem sem nome e sem imagem, com o lado', async () => {
+      await update(gm, goblin, { visibility: 'anonymous' });
+      expect(await rowOf(goblin)).toMatchObject({
+        name: null,
+        avatar_url: null,
+        side: 'enemy',
+        life: 'normal',
+      });
+    });
+
+    it('visível vem com nome, imagem e lado', async () => {
+      await update(gm, goblin, { visibility: 'visible' });
+      expect(await rowOf(goblin)).toMatchObject({
+        name: 'Goblin 1',
+        avatar_url: GOBLIN_AVATAR,
+        side: 'enemy',
+        life: 'normal',
+        is_current: false,
+        is_mine: false,
+        hidden_turn: false,
+      });
+      expect(await rowOf(hero)).toMatchObject({ name: 'Arani', side: 'player', is_mine: true });
+    });
+
+    it('turno de oculto: ninguém atual e hidden_turn', async () => {
+      await setOrder([goblin, hero, friend]);
+      await start();
+      expect((await encounter())?.current_participant_id).toBe(goblin);
+
+      const rows = await turns();
+      expect(rows).toHaveLength(2);
+      expect(rows.every((row) => row.is_current === false)).toBe(true);
+      expect(rows.every((row) => row.hidden_turn === true)).toBe(true);
+    });
+
+    it('ocultar no meio do turno do NPC esconde o turno', async () => {
+      await update(gm, goblin, { visibility: 'visible' });
+      await setOrder([goblin, hero, friend]);
+      await start();
+
+      let rows = await turns();
+      expect(rows.find((row) => row.participant_id === goblin)?.is_current).toBe(true);
+      expect(rows.every((row) => row.hidden_turn === false)).toBe(true);
+
+      await update(gm, goblin, { visibility: 'hidden' });
+      rows = await turns();
+      expect(rows.map((row) => row.participant_id)).toEqual([hero, friend]);
+      expect(rows.every((row) => row.is_current === false)).toBe(true);
+      expect(rows.every((row) => row.hidden_turn === true)).toBe(true);
+    });
+
+    it('morto não revelado vem como down; revelado como dead', async () => {
+      await update(gm, goblin, { visibility: 'visible' });
+
+      await update(gm, goblin, { hp_current: 0, npc_fate: 'death_saves' });
+      expect((await rowOf(goblin))?.life).toBe('down');
+
+      await update(gm, goblin, { npc_fate: 'dead' });
+      expect((await rowOf(goblin))?.life).toBe('down');
+
+      await update(gm, goblin, { death_revealed: true });
+      expect((await rowOf(goblin))?.life).toBe('dead');
+
+      // Anônimo também mostra a vida
+      await update(gm, goblin, { visibility: 'anonymous' });
+      expect((await rowOf(goblin))?.life).toBe('dead');
+    });
+
+    it('jogador com 0 PV na ficha continua normal', async () => {
+      const { data } = await admin()
+        .from('encounter_participants')
+        .select('character_id')
+        .eq('id', hero)
+        .single();
+      const { error } = await admin()
+        .from('characters')
+        .update({ hp_current: 0 })
+        .eq('id', data!.character_id);
+      if (error) throw error;
+
+      expect((await rowOf(hero))?.life).toBe('normal');
+    });
+
+    it('a resposta nunca traz PV, testes nem destino', async () => {
+      await update(gm, goblin, { visibility: 'visible', hp_current: 0, npc_fate: 'dead' });
+      await start();
+
+      const rows = await turns();
+      expect(rows).toHaveLength(3);
+      for (const row of rows) {
+        expect(Object.keys(row).sort()).toEqual(
+          [
+            'round',
+            'participant_id',
+            'side',
+            'name',
+            'avatar_url',
+            'life',
+            'is_current',
+            'is_mine',
+            'conditions',
+            'hidden_turn',
+          ].sort(),
+        );
+      }
+    });
+
+    it('sem ninguém visível: uma linha só com a rodada e hidden_turn', async () => {
+      await gm.client.from('encounter_participants').delete().in('id', [hero, friend]);
+      await start();
+
+      expect(await turns()).toEqual([
+        {
+          round: 1,
+          participant_id: null,
+          side: null,
+          name: null,
+          avatar_url: null,
+          life: null,
+          is_current: null,
+          is_mine: null,
+          conditions: null,
+          hidden_turn: true,
+        },
+      ]);
+    });
+  });
 });
