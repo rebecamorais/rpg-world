@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
-import { NavItem } from '@frontend/components/ui/nav-item';
+import { NavItem, navLabelClass, useSidebarExpanded } from '@frontend/components/ui/nav-item';
 import { useCharacter } from '@frontend/hooks/useCharacter';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
@@ -13,18 +13,12 @@ import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 import { CharacterTab } from '@frontend/types/character-sheet';
 
-export default function CharacterNavSection({
-  characterId,
-  compact = false,
-}: {
-  characterId: string;
-  /** For the collapsed menu: the portrait and the tabs' icons. */
-  compact?: boolean;
-}) {
+export default function CharacterNavSection({ characterId }: { characterId: string }) {
   // The sheet loads the character (with the server's copy); fetching here too would race it
   const { character } = useCharacter(characterId, { fetch: false });
   const pathname = usePathname();
   const t = useTranslations('characters.tabs');
+  const expanded = useSidebarExpanded();
   const { classLabel } = useCharacterChoices();
   const { pagesPath } = useSheetSource(characterId, character?.system);
 
@@ -49,37 +43,34 @@ export default function CharacterNavSection({
 
   return (
     <section
-      className={cn(
-        'character-context animate-in fade-in slide-in-from-left-2 flex flex-col duration-300',
-        compact ? 'items-center gap-2' : 'gap-4',
-      )}
+      className="character-context animate-in fade-in slide-in-from-left-2 flex flex-col gap-4 duration-300"
       style={characterTheme(character.accentColor).style}
     >
-      {compact ? (
+      <div
+        className={cn(
+          'flex items-center gap-3 rounded-xl border transition-[padding,background-color,border-color] duration-200',
+          expanded ? 'border-character-muted bg-character-surface p-2' : 'border-transparent',
+        )}
+      >
         <CharacterPortrait
           avatarUrl={avatarUrl}
           characterClass={character.class}
-          className="h-9 w-9"
+          className={cn(
+            'shrink-0 transition-all duration-200',
+            expanded ? 'h-12 w-12' : 'h-10 w-10',
+          )}
         />
-      ) : (
-        <div className="border-character-muted bg-character-surface flex items-center gap-3 rounded-xl border p-2">
-          <CharacterPortrait
-            avatarUrl={avatarUrl}
-            characterClass={character.class}
-            className="h-12 w-12"
-          />
-          <div className="flex min-w-0 flex-col">
-            <span className="text-character-flare font-display truncate text-sm font-bold">
-              {characterName}
+        <div className={cn(navLabelClass(expanded), 'flex flex-col')}>
+          <span className="text-character-flare font-display truncate text-sm font-bold">
+            {characterName}
+          </span>
+          {character.class && (
+            <span className="text-label text-muted-foreground truncate">
+              {classLabel(character.class)}
             </span>
-            {character.class && (
-              <span className="text-label text-muted-foreground truncate">
-                {classLabel(character.class)}
-              </span>
-            )}
-          </div>
+          )}
         </div>
-      )}
+      </div>
 
       <div className="flex flex-col gap-1">
         {navItems.map((item) => {
@@ -95,8 +86,7 @@ export default function CharacterNavSection({
               label={item.label}
               icon={item.icon}
               isActive={isActive}
-              isSubItem={!compact}
-              iconOnly={compact}
+              isSubItem
             />
           );
         })}
