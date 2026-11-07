@@ -27,6 +27,7 @@ export const api = {
     update: vi.fn(),
     delete: vi.fn(),
     uploadAvatar: vi.fn(),
+    uploadSheetBackground: vi.fn(),
     getSpells: vi.fn(),
     toggleSpell: vi.fn(),
     getInventory: vi.fn(),

@@ -11,11 +11,13 @@ import {
 import { CharacterRepo } from '../../domain/repository';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
 import { findOwnedCharacter } from '../find-owned-character';
+import { removeCharacterSheetBackground } from '../sheet-background/sheet-background-file';
 import { removeCharacterAvatar } from '../upload-avatar/character-avatar-file';
 
 export interface CharacterUpdates {
   name?: string;
   avatarUrl?: string;
+  sheetBackgroundUrl?: string;
   accentColor?: string;
   class?: string;
   race?: string;
@@ -49,6 +51,7 @@ export interface CharacterUpdates {
 const SIMPLE_FIELDS = [
   'name',
   'avatarUrl',
+  'sheetBackgroundUrl',
   'accentColor',
   'class',
   'race',
@@ -104,6 +107,7 @@ export class UpdateCharacterUseCase {
 
     const { level, hpCurrent, hpMax, attributes, skills, savingThrowProficiencies } = updates;
     const previousAvatarUrl = character.avatarUrl;
+    const previousSheetBackgroundUrl = character.sheetBackgroundUrl;
 
     // Aplica atualizações diretas para campos simples
     applyUpdates(character, pickSimpleUpdates(updates));
@@ -138,6 +142,14 @@ export class UpdateCharacterUseCase {
 
     if (this.storageRepository && updates.avatarUrl !== undefined) {
       await removeCharacterAvatar(this.storageRepository, character, previousAvatarUrl);
+    }
+
+    if (this.storageRepository && updates.sheetBackgroundUrl !== undefined) {
+      await removeCharacterSheetBackground(
+        this.storageRepository,
+        character,
+        previousSheetBackgroundUrl,
+      );
     }
 
     return character;

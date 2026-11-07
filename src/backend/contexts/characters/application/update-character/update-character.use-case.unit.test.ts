@@ -181,6 +181,50 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
     ).rejects.toThrowError('character_error_update_unauthorized');
   });
 
+  describe('fundo da ficha substituído', () => {
+    const url = (version: string) =>
+      `https://images.rpgworldapp.com/avatars/owner/characters/char-a-background-${version}.webp`;
+
+    async function withBackground() {
+      const storage = { upload: vi.fn(), remove: vi.fn().mockResolvedValue(undefined) };
+      const repository = new InMemoryCharacterRepository();
+      const character = makeCharacter('char-a', 'owner');
+      character.sheetBackgroundUrl = url('v1');
+      await repository.save(character);
+      return {
+        storage,
+        useCase: new UpdateCharacterUseCase(repository, storage as unknown as StorageRepository),
+      };
+    }
+
+    it.each([
+      ['trocar', url('v2')],
+      ['remover', ''],
+    ])('%s o fundo apaga o arquivo anterior', async (_action, sheetBackgroundUrl) => {
+      const { storage, useCase } = await withBackground();
+
+      const saved = await useCase.execute({
+        id: 'char-a',
+        ownerUsername: 'owner',
+        updates: { sheetBackgroundUrl },
+      });
+
+      expect(saved.sheetBackgroundUrl).toBe(sheetBackgroundUrl);
+      expect(storage.remove).toHaveBeenCalledWith(
+        'avatars',
+        'owner/characters/char-a-background-v1.webp',
+      );
+    });
+
+    it('salvar outro campo não mexe no fundo', async () => {
+      const { storage, useCase } = await withBackground();
+
+      await useCase.execute({ id: 'char-a', ownerUsername: 'owner', updates: { name: 'Novo' } });
+
+      expect(storage.remove).not.toHaveBeenCalled();
+    });
+  });
+
   describe('avatar substituído', () => {
     const url = (character: string, version: string) =>
       `https://images.rpgworldapp.com/avatars/owner/characters/${character}-${version}.png`;

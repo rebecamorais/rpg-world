@@ -32,6 +32,7 @@ import {
 import { GetPartyCharacterInventoryUseCase } from './application/party-gm/get-party-character-inventory.use-case';
 import { GetPartyCharacterSpellsUseCase } from './application/party-gm/get-party-character-spells.use-case';
 import { GetPartyCharacterUseCase } from './application/party-gm/get-party-character.use-case';
+import { UploadSheetBackgroundUseCase } from './application/sheet-background/upload-sheet-background.use-case';
 import { GetCharacterSpellsUseCase } from './application/spells/get-character-spells.use-case';
 import { ToggleCharacterSpellUseCase } from './application/spells/toggle-character-spell.use-case';
 import { UpdateCharacterUseCase } from './application/update-character/update-character.use-case';
@@ -142,6 +143,10 @@ export const createCharacterContext = (
     uploadAvatar: async (id: string, userId: string, file: Blob, full?: Blob) => {
       const useCase = new UploadCharacterAvatarUseCase(storageRepository, repository);
       return useCase.execute(id, userId, file, full);
+    },
+    uploadSheetBackground: async (id: string, userId: string, file: Blob) => {
+      const useCase = new UploadSheetBackgroundUseCase(storageRepository, repository);
+      return useCase.execute(id, userId, file);
     },
   };
 };

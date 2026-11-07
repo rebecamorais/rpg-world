@@ -3,6 +3,7 @@ import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 import { CharacterErrorCodes } from '../../domain/CharacterError';
 import { CharacterRepo } from '../../domain/repository';
 import { findOwnedCharacter } from '../find-owned-character';
+import { removeCharacterSheetBackground } from '../sheet-background/sheet-background-file';
 import { removeCharacterAvatar } from '../upload-avatar/character-avatar-file';
 
 export class DeleteCharacterUseCase {
@@ -19,12 +20,17 @@ export class DeleteCharacterUseCase {
 
     const deleted = await this.repository.delete(id);
 
-    // The avatar goes with the character
+    // The character's images go with it
     if (deleted && this.storageRepository) {
       await removeCharacterAvatar(
         this.storageRepository,
         { id: character.id, ownerUsername: character.ownerUsername },
         character.avatarUrl,
+      );
+      await removeCharacterSheetBackground(
+        this.storageRepository,
+        { id: character.id, ownerUsername: character.ownerUsername },
+        character.sheetBackgroundUrl,
       );
     }
 

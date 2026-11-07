@@ -36,6 +36,7 @@ export const duplicateCharacterSchema = z.object({ name: text().min(1) });
 export const characterUpdatesSchema = z.object({
   name: optional(text()),
   avatarUrl: optional(httpUrlOrEmpty),
+  sheetBackgroundUrl: optional(httpUrlOrEmpty),
   accentColor: optional(text(32)),
   class: optional(text()),
   race: optional(text()),

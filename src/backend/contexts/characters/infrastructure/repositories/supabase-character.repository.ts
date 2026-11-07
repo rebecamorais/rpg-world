@@ -79,6 +79,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       level: _level,
       accentColor: _accentColor,
       avatarUrl: _avatarUrl,
+      sheetBackgroundUrl: _sheetBackgroundUrl,
       kind: _kind,
       ...rest
     } = json;
@@ -93,6 +94,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       hp_max: hpMax as number,
       attributes: attributes as NonNullable<Json>,
       avatar_url: character.avatarUrl ?? null,
+      sheet_background_url: character.sheetBackgroundUrl || null,
       theme_color: character.accentColor ?? '#6d28d9',
       kind: character.kind,
       system_data: { ...rest, hpTemp: hpTemp ?? 0 } as unknown as NonNullable<Json>,
@@ -171,6 +173,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         lore,
         accentColor: (row.theme_color as string) ?? undefined,
         avatarUrl: row.avatar_url ?? undefined,
+        sheetBackgroundUrl: row.sheet_background_url ?? undefined,
         kind: row.kind as CharacterKind,
       });
     }

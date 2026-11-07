@@ -17,6 +17,8 @@ export interface CharacterBase {
   hair?: string;
   backstory?: string;
   accentColor?: string;
+  /** The art behind the sheet, not the D&D background (`background`). */
+  sheetBackgroundUrl?: string;
 }
 
 /** A playable character (pc) or one of the GM's enemy sheets (npc). */

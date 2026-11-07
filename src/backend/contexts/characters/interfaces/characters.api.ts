@@ -45,6 +45,9 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
   uploadAvatar: async (id: string, userId: string, file: Blob, full?: Blob) => {
     return characterContext.uploadAvatar(id, userId, file, full);
   },
+  uploadSheetBackground: async (id: string, userId: string, file: Blob) => {
+    return characterContext.uploadSheetBackground(id, userId, file);
+  },
   getSpells: async (id: string, requesterId: string, locale?: string) => {
     return characterContext.getSpells(id, requesterId, locale);
   },

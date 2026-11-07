@@ -29,6 +29,7 @@ export abstract class Character {
     public accentColor?: string,
     avatarUrl?: string,
     public kind: CharacterKind = 'pc',
+    public sheetBackgroundUrl?: string,
   ) {
     this.id = id;
     this.name = name;
