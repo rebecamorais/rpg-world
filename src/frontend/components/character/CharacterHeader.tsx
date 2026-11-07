@@ -72,7 +72,7 @@ export default function CharacterHeader() {
 
   return (
     <Card className="overflow-hidden shadow-sm">
-      <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start">
+      <CardContent className="flex flex-col gap-5 p-5 md:flex-row">
         <div className="relative self-start">
           {/* The button sits over the avatar instead of wrapping it: the initials would be its
               visible text and not match the aria-label (WCAG 2.5.3). The avatar is hidden from
@@ -81,7 +81,7 @@ export default function CharacterHeader() {
             <CharacterPortrait
               avatarUrl={avatarUrl}
               characterClass={classNameStr}
-              className="h-28 w-28 shrink-0 md:h-32 md:w-32"
+              className="h-48 w-48 shrink-0"
             />
             {avatarUrl ? (
               <button
@@ -112,9 +112,10 @@ export default function CharacterHeader() {
 
         {/* The fields only: the image can be viewed on a read-only sheet too */}
         <SheetFieldset>
-          <div className="grid flex-1 grid-cols-1 gap-8 lg:grid-cols-2">
+          <div className="grid min-w-0 flex-1 grid-cols-1 gap-x-6 gap-y-4 lg:grid-cols-[minmax(0,4fr)_minmax(0,5fr)]">
             {/* Left Column: Core Stats */}
-            <div className="flex flex-col gap-4">
+            {/* Spread over the avatar's height, so the card has no empty corner */}
+            <div className="flex flex-col justify-between gap-4">
               {/* The name is the page's h1 (SheetPage); here it is edited like the other fields */}
               <InlineField
                 id="char-name"
@@ -178,7 +179,7 @@ export default function CharacterHeader() {
             </div>
 
             {/* Right Column: Information Grid */}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+            <div className="grid grid-cols-2 content-between gap-x-4 gap-y-4">
               <ChoiceSelect
                 id="char-race"
                 maxLength={TEXT_MAX}

@@ -48,7 +48,7 @@ function StatBlock({
   return (
     <div
       className={cn(
-        'border-border bg-background/60 hover:border-character-muted flex items-center gap-3 rounded-xl border px-3 py-2 transition-colors',
+        'border-input bg-muted hover:border-character-muted flex items-center gap-3 rounded-xl border px-3 py-2 transition-colors',
         className,
       )}
       {...props}
