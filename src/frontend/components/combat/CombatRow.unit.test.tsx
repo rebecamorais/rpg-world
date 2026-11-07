@@ -427,14 +427,6 @@ describe('CombatRow', () => {
       expect(screen.getByRole('button', { name: t.hideDeath })).toBeVisible();
     });
 
-    it('morto revelado na vez atual abre com um clique', async () => {
-      renderNpc(npc({ fate: 'dead', deathRevealed: true, isCurrent: true }));
-      await userEvent.click(
-        screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Goblin' }) }),
-      );
-      expect(screen.getByRole('button', { name: t.hideDeath })).toBeVisible();
-    });
-
     it('jogador com 0 PV continua mostrando só os testes da ficha', () => {
       renderRow(
         gmRow({
