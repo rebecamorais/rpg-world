@@ -11,6 +11,7 @@ import {
   joinParty,
   partyUrl,
   person,
+  revealNpc,
   test,
 } from './support/fixtures';
 
@@ -83,6 +84,12 @@ test.describe('combate', () => {
     await page.getByRole('button', { name: 'Start' }).click();
     await expect(page.getByRole('heading', { name: 'Round 1' })).toBeVisible();
 
+    // New NPCs start hidden: the player sees only their own character, and no trace of the goblins
+    await expect(order(player.page).getByRole('listitem')).toHaveText([/^Arani/]);
+    await expect(player.page.getByText(/Goblin \d/)).toHaveCount(0);
+
+    await revealNpc(page, 'Goblin 1');
+    await revealNpc(page, 'Goblin 2');
     await expect(order(player.page).getByRole('listitem')).toHaveText([
       /^Goblin 1/,
       /^Arani/,
@@ -104,6 +111,8 @@ test.describe('combate', () => {
     await page.goto(partyUrl(partyId));
     await player.page.goto(partyUrl(partyId));
     await hydrated(page.getByRole('button', { name: 'End turn' }));
+    await revealNpc(page, 'Goblin 1');
+    await revealNpc(page, 'Goblin 2');
 
     await expect(current(page)).toContainText('Goblin 1');
     await page.getByRole('button', { name: 'End turn' }).click();

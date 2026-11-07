@@ -12,6 +12,7 @@ import {
   joinParty,
   partyUrl,
   person,
+  revealNpc,
   test,
 } from './support/fixtures';
 
@@ -119,6 +120,7 @@ test.describe('condições no combate', () => {
     await page.goto(partyUrl(partyId));
 
     const goblin = rowOf(page, 'Goblin 1');
+    await revealNpc(page, 'Goblin 1');
     await (await hydrated(goblin.getByRole('button', { name: 'Conditions of Goblin 1' }))).click();
     const picker = page.getByRole('dialog', { name: 'Conditions' });
     await picker.getByRole('switch', { name: 'Prone' }).click();
