@@ -100,7 +100,7 @@ export default function ImageUpload({
         </Avatar>
 
         {/* Upload overlay */}
-        <div className="bg-overlay absolute inset-0 flex items-center justify-center rounded-full opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="bg-overlay absolute inset-0 flex items-center justify-center rounded-lg opacity-0 transition-opacity group-hover:opacity-100">
           {isUploading ? (
             <span className="text-foreground text-xs font-medium">{t('loading')}</span>
           ) : (

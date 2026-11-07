@@ -7,7 +7,7 @@ import { cn } from '@frontend/lib/utils';
 /**
  * A character's picture; without one, their class's emblem on their color instead of initials.
  * Decorative (the name is always next to it), and drawn in the surrounding character-context's
- * color. Size and shape come from `className`.
+ * color, framed by that color with a soft glow. Size comes from `className`.
  */
 export function CharacterPortrait({
   avatarUrl,
@@ -22,7 +22,13 @@ export function CharacterPortrait({
   const cls = useCharacterChoices().classOf(characterClass);
 
   return (
-    <Avatar aria-hidden="true" className={cn('bg-character-surface', className)}>
+    <Avatar
+      aria-hidden="true"
+      className={cn(
+        'bg-character-surface border-character border-2 shadow-[0_0_12px_-2px_var(--character-glow)]',
+        className,
+      )}
+    >
       {avatarUrl && <AvatarImage src={avatarUrl} alt="" className="object-cover object-top" />}
       <AvatarFallback
         data-class={cls ?? 'unknown'}

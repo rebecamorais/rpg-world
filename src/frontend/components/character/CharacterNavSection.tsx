@@ -48,7 +48,7 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
         <CharacterPortrait
           avatarUrl={avatarUrl}
           characterClass={character.class}
-          className="border-character-muted h-12 w-12 rounded-lg border"
+          className="h-12 w-12"
         />
         <div className="flex min-w-0 flex-col">
           <span className="text-character-flare font-display truncate text-sm font-bold">

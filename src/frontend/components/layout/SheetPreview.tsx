@@ -26,10 +26,7 @@ export async function SheetPreview() {
     >
       <Card className="flex flex-col gap-5 p-5 shadow-2xl sm:p-6">
         <div className="flex items-center gap-4">
-          <CharacterPortrait
-            characterClass="wizard"
-            className="border-character-muted h-14 w-14 rounded-xl border-2"
-          />
+          <CharacterPortrait characterClass="wizard" className="h-14 w-14" />
           <div className="min-w-0">
             <p className="text-title text-character-flare truncate">{t('previewName')}</p>
             <p className="text-caption text-muted-foreground">{t('previewClass')}</p>

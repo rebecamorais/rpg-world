@@ -67,16 +67,20 @@ function NumberCell({
 
 const ATTRIBUTES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'] as const;
 
-/** The character's picture down the card's left side; their class's emblem when there's none. */
+/** The character's picture at the card's left; their class's emblem when there's none. */
 function Portrait({ row }: { row: GmRow }) {
   return (
-    <div className="relative flex w-14 shrink-0 self-stretch sm:w-28">
+    <div className="relative shrink-0 self-start pt-5 pl-4">
       <CharacterPortrait
         avatarUrl={row.avatarUrl}
         characterClass={row.class}
-        className="h-auto w-full rounded-none"
+        className="h-14 w-14 sm:h-24 sm:w-24"
       />
-      <ViewImageButton src={row.avatarUrl} name={row.name} className="absolute right-1 bottom-1" />
+      <ViewImageButton
+        src={row.avatarUrl}
+        name={row.name}
+        className="absolute -right-1 -bottom-1"
+      />
     </div>
   );
 }
