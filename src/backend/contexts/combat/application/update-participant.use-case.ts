@@ -10,6 +10,18 @@ export class UpdateParticipantUseCase {
     const participant = encounter?.participants.find((p) => p.id === participantId);
     if (!participant) throw new CombatError(CombatErrorCodes.NOT_FOUND);
 
+    // Side, visibility, fate and death saves are npc settings
+    const npcOnly: (keyof ParticipantPatch)[] = [
+      'side',
+      'visibility',
+      'fate',
+      'deathSaves',
+      'deathRevealed',
+    ];
+    if (participant.side === 'player' && npcOnly.some((key) => patch[key] !== undefined)) {
+      throw new CombatError(CombatErrorCodes.INVALID_CHANGE);
+    }
+
     const changes: ParticipantPatch = { ...patch };
     if (changes.label !== undefined) changes.label = changes.label.trim();
     if (changes.hpCurrent !== undefined) {

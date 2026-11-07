@@ -20,5 +20,8 @@ export const gmRow = (overrides: Partial<GmRow> = {}): GmRow => ({
   attributes: { STR: 8, DEX: 14, CON: 13, INT: 18, WIS: 12, CHA: 10 },
   conditions: [],
   isCurrent: false,
+  visibility: 'visible',
+  fate: null,
+  deathRevealed: false,
   ...overrides,
 });

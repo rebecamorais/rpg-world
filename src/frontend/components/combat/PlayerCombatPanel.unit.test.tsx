@@ -38,17 +38,24 @@ const t = messages.combat;
 const view = (current: 'mine' | 'theirs'): PlayerEncounterView => ({
   role: 'player',
   round: 3,
+  hiddenTurn: false,
   turns: [
     {
       participantId: 'a',
+      side: 'player',
       name: 'Arani',
+      avatarUrl: null,
+      life: 'normal',
       isCurrent: current === 'mine',
       isMine: true,
       conditions: [],
     },
     {
       participantId: 'b',
+      side: 'enemy',
       name: 'Goblin 1',
+      avatarUrl: null,
+      life: 'normal',
       isCurrent: current === 'theirs',
       isMine: false,
       conditions: [],
@@ -91,7 +98,7 @@ describe('PlayerCombatPanel', () => {
   });
 
   it('na rodada 0: o mestre está preparando', () => {
-    hook.encounter = { role: 'player', round: 0, turns: [] };
+    hook.encounter = { role: 'player', round: 0, hiddenTurn: false, turns: [] };
     renderWithProviders(<PlayerCombatPanel partyId="p" edition="2024" live />);
     expect(screen.getByText(t.playerPreparing)).toBeInTheDocument();
   });
@@ -132,7 +139,7 @@ describe('PlayerCombatPanel', () => {
       ...turn,
       conditions: [{ key: PRONE.key, level: null }],
     }));
-    hook.encounter = { role: 'player', round: 3, turns };
+    hook.encounter = { role: 'player', round: 3, hiddenTurn: false, turns };
     renderWithProviders(<PlayerCombatPanel partyId="p" edition="2024" live />);
 
     expect(screen.getAllByRole('button', { name: 'Caído, condition' })).toHaveLength(2);

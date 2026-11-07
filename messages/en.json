@@ -91,6 +91,7 @@
       "combat_error_not_your_turn": "It is not this participant's turn (it may have passed already).",
       "combat_error_full": "A combat has at most 50 participants.",
       "combat_error_invalid_condition": "That condition is not valid.",
+      "combat_error_invalid_change": "That change doesn't apply to players.",
       "combat_error_character_not_allowed": "This character can't join this combat."
     },
     "save": "Save",

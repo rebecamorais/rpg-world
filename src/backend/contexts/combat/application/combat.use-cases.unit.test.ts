@@ -40,6 +40,10 @@ const participant = (overrides: Partial<ParticipantRecord> = {}): ParticipantRec
   hpCurrent: null,
   hpTemp: null,
   conditions: [],
+  visibility: 'visible',
+  fate: null,
+  deathSaves: { successes: 0, failures: 0 },
+  deathRevealed: false,
   ...overrides,
 });
 
@@ -106,6 +110,9 @@ describe('toGmRow', () => {
       attributes: { WIS: 14 },
       conditions: [],
       isCurrent: true,
+      visibility: 'visible',
+      fate: null,
+      deathRevealed: false,
     });
   });
 
@@ -131,6 +138,29 @@ describe('toGmRow', () => {
       passivePerception: 10,
       isCurrent: false,
     });
+  });
+});
+
+describe('toGmRow death saves of npcs', () => {
+  const npc = (overrides: Partial<ParticipantRecord>) =>
+    participant({ id: 'p-g', characterId: 'goblin', side: 'enemy', hpCurrent: 0, ...overrides });
+
+  it('a linha do mestre traz os testes do NPC quando o destino é death_saves', () => {
+    const row = toGmRow(
+      npc({ fate: 'death_saves', deathSaves: { successes: 2, failures: 1 }, deathRevealed: true }),
+      goblinSheet,
+      null,
+    );
+    expect(row).toMatchObject({
+      fate: 'death_saves',
+      deathRevealed: true,
+      deathSaves: { successes: 2, failures: 1 },
+    });
+  });
+
+  it('o NPC sem destino death_saves não tem testes', () => {
+    expect(toGmRow(npc({}), goblinSheet, null).deathSaves).toBeNull();
+    expect(toGmRow(npc({ fate: 'dead' }), goblinSheet, null).deathSaves).toBeNull();
   });
 });
 
@@ -239,8 +269,18 @@ describe('GetEncounterUseCase', () => {
     repo.turns.mockResolvedValue({
       round: 2,
       turns: [
-        { participantId: 'p-hero', name: 'Arani', isCurrent: true, isMine: true, conditions: [] },
+        {
+          participantId: 'p-hero',
+          side: 'player',
+          name: 'Arani',
+          avatarUrl: null,
+          life: 'normal',
+          isCurrent: true,
+          isMine: true,
+          conditions: [],
+        },
       ],
+      hiddenTurn: false,
     });
 
     const view = await new GetEncounterUseCase(repo).execute('party-1', 'player-1');
@@ -248,8 +288,18 @@ describe('GetEncounterUseCase', () => {
     expect(view).toEqual({
       role: 'player',
       round: 2,
+      hiddenTurn: false,
       turns: [
-        { participantId: 'p-hero', name: 'Arani', isCurrent: true, isMine: true, conditions: [] },
+        {
+          participantId: 'p-hero',
+          side: 'player',
+          name: 'Arani',
+          avatarUrl: null,
+          life: 'normal',
+          isCurrent: true,
+          isMine: true,
+          conditions: [],
+        },
       ],
     });
     expect(repo.findEncounter).not.toHaveBeenCalled();
@@ -308,7 +358,7 @@ describe('GetEncounterUseCase', () => {
   it('mesa sem mestre: o que sobrar de turnos continua só com a visão de jogador', async () => {
     const repo = makeRepo();
     repo.findPartyGm.mockResolvedValue({ gmId: null });
-    repo.turns.mockResolvedValue({ round: 2, turns: [] });
+    repo.turns.mockResolvedValue({ round: 2, turns: [], hiddenTurn: false });
 
     const view = await new GetEncounterUseCase(repo).execute('party-1', 'player-1');
 
@@ -426,6 +476,37 @@ describe('UpdateParticipantUseCase', () => {
       hpCurrent: 7,
       label: 'Chefe',
     });
+  });
+
+  it('recusa lado, visibilidade, destino e testes na linha de um jogador', async () => {
+    const repo = makeRepo();
+    repo.findEncounter.mockResolvedValue({
+      round: 1,
+      currentParticipantId: null,
+      participants: [participant()],
+    });
+    const patches = [
+      { side: 'enemy' },
+      { visibility: 'hidden' },
+      { fate: 'dead' },
+      { deathSaves: { successes: 1, failures: 0 } },
+      { deathRevealed: true },
+    ] as const;
+
+    for (const patch of patches) {
+      await expect(
+        new UpdateParticipantUseCase(repo).execute('party-1', 'p-hero', patch),
+      ).rejects.toMatchObject({ code: CombatErrorCodes.INVALID_CHANGE });
+    }
+    expect(repo.updateParticipant).not.toHaveBeenCalled();
+  });
+
+  it('aceita mudar o lado de um NPC para neutro', async () => {
+    const repo = withGoblin();
+
+    await new UpdateParticipantUseCase(repo).execute('party-1', 'p-g', { side: 'neutral' });
+
+    expect(repo.updateParticipant).toHaveBeenCalledWith('party-1', 'p-g', { side: 'neutral' });
   });
 
   it('participante que não está no combate: NOT_FOUND', async () => {

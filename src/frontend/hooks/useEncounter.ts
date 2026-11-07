@@ -6,7 +6,11 @@ import { rpgWorldApi } from '@client';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { encounterQueryKey } from '@frontend/lib/query-keys';
 
-import type { ActiveCondition, EncounterView } from '@backend/contexts/combat/domain/Encounter';
+import type {
+  ActiveCondition,
+  EncounterView,
+  NpcSide,
+} from '@backend/contexts/combat/domain/Encounter';
 import type { ParticipantPatch } from '@backend/contexts/combat/domain/repository/combat.repo';
 
 /** The party's combat (null without one) and everything done on it; each change reloads it. */
@@ -34,7 +38,7 @@ export function useEncounter(partyId: string) {
   const finish = useMutation({ mutationFn: () => rpgWorldApi.delete(base), ...options });
   const start = useMutation({ mutationFn: () => rpgWorldApi.post(`${base}/start`), ...options });
   const addParticipant = useMutation({
-    mutationFn: (input: { characterId: string; count?: number; side?: 'ally' | 'enemy' }) =>
+    mutationFn: (input: { characterId: string; count?: number; side?: NpcSide }) =>
       rpgWorldApi.post(`${base}/participants`, input),
     ...options,
   });

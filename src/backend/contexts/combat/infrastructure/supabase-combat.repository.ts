@@ -4,7 +4,7 @@ import 'server-only';
 import { Database, Json } from '@database-types';
 
 import { CombatError, CombatErrorCode, CombatErrorCodes } from '../domain/CombatError';
-import { ActiveCondition, Side } from '../domain/Encounter';
+import { ActiveCondition, Life, NpcFate, Side, Visibility } from '../domain/Encounter';
 import {
   CombatRepo,
   CombatSheet,
@@ -19,6 +19,7 @@ const DATABASE_ERRORS: Record<string, CombatErrorCode> = {
   encounter_empty: CombatErrorCodes.EMPTY,
   encounter_not_your_turn: CombatErrorCodes.NOT_YOUR_TURN,
   encounter_full: CombatErrorCodes.FULL,
+  encounter_invalid_change: CombatErrorCodes.INVALID_CHANGE,
 };
 
 // RLS refusing an insert
@@ -71,7 +72,7 @@ export class SupabaseCombatRepository implements CombatRepo {
       this.client
         .from('encounter_participants')
         .select(
-          'id, character_id, side, label, initiative, position, hp_current, hp_temp, conditions',
+          'id, character_id, side, label, initiative, position, hp_current, hp_temp, conditions, visibility, npc_fate, death_successes, death_failures, death_revealed',
         )
         .eq('party_id', partyId)
         .order('position')
@@ -94,6 +95,10 @@ export class SupabaseCombatRepository implements CombatRepo {
         hpCurrent: row.hp_current,
         hpTemp: row.hp_temp,
         conditions: toConditions(row.conditions),
+        visibility: row.visibility as Visibility,
+        fate: row.npc_fate as NpcFate | null,
+        deathSaves: { successes: row.death_successes, failures: row.death_failures },
+        deathRevealed: row.death_revealed,
       })),
     };
   }
@@ -142,11 +147,16 @@ export class SupabaseCombatRepository implements CombatRepo {
     // Preparing with nobody yet: one row with only the round
     return {
       round: data[0].round,
+      hiddenTurn: data[0].hidden_turn,
       turns: data
         .filter((row) => row.participant_id !== null)
         .map((row) => ({
           participantId: row.participant_id,
-          name: row.name,
+          // The generated types say non-null, but anonymous rows carry no name or avatar
+          side: row.side as Side,
+          name: row.name as string | null,
+          avatarUrl: row.avatar_url as string | null,
+          life: row.life as Life,
           isCurrent: row.is_current,
           isMine: row.is_mine,
           conditions: toConditions(row.conditions),
@@ -211,6 +221,12 @@ export class SupabaseCombatRepository implements CombatRepo {
         initiative: patch.initiative,
         hp_current: patch.hpCurrent,
         hp_temp: patch.hpTemp,
+        side: patch.side,
+        visibility: patch.visibility,
+        npc_fate: patch.fate,
+        death_successes: patch.deathSaves?.successes,
+        death_failures: patch.deathSaves?.failures,
+        death_revealed: patch.deathRevealed,
       })
       .eq('party_id', partyId)
       .eq('id', id)

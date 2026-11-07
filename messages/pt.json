@@ -91,6 +91,7 @@
       "combat_error_not_your_turn": "Não é a vez deste participante (a vez pode já ter passado).",
       "combat_error_full": "O combate tem no máximo 50 participantes.",
       "combat_error_invalid_condition": "Essa condição não é válida.",
+      "combat_error_invalid_change": "Essa mudança não vale para jogadores.",
       "combat_error_character_not_allowed": "Este personagem não pode entrar neste combate."
     },
     "save": "Salvar",

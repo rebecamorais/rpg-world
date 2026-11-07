@@ -26,7 +26,7 @@ import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 import { CombatConnection } from './CombatConnection';
 import { CombatRow } from './CombatRow';
 
-const NPC_SIDES: NpcSide[] = ['enemy', 'ally'];
+const NPC_SIDES: NpcSide[] = ['enemy', 'ally', 'neutral'];
 
 /** Picks one of the GM's NPC sheets, how many come from it and on which side they fight. */
 function AddNpc({

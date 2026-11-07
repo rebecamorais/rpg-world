@@ -108,7 +108,7 @@ export function PlayerCombatPanel({
                           <Button
                             variant="ghost"
                             size="sm"
-                            aria-label={t('conditionsOf', { name: turn.name })}
+                            aria-label={t('conditionsOf', { name: turn.name ?? '' })}
                             className="touch-target"
                           >
                             <AppIcon name="Activity" size={16} aria-hidden="true" />

@@ -101,7 +101,7 @@ describe('SupabaseCombatRepository (Integration)', () => {
   it('a visão do jogador pelo repositório: ordem, nomes e de quem é a vez', async () => {
     await repo.create(partyId);
     const playerRepo = new SupabaseCombatRepository(player.client);
-    expect(await playerRepo.turns(partyId)).toEqual({ round: 0, turns: [] });
+    expect(await playerRepo.turns(partyId)).toEqual({ round: 0, hiddenTurn: false, turns: [] });
 
     await repo.addParticipants(partyId, [{ characterId: heroId, side: 'player', label: null }]);
     await repo.addParticipants(partyId, [
@@ -117,17 +117,24 @@ describe('SupabaseCombatRepository (Integration)', () => {
 
     expect(await playerRepo.turns(partyId)).toEqual({
       round: 1,
+      hiddenTurn: false,
       turns: [
         {
           participantId: expect.any(String),
+          side: 'player',
           name: 'Arani',
+          avatarUrl: null,
+          life: 'normal',
           isCurrent: true,
           isMine: true,
           conditions: [],
         },
         {
           participantId: expect.any(String),
+          side: 'enemy',
           name: 'Goblin',
+          avatarUrl: null,
+          life: 'normal',
           isCurrent: false,
           isMine: false,
           conditions: [],
@@ -138,6 +145,46 @@ describe('SupabaseCombatRepository (Integration)', () => {
 
     await repo.finish(partyId);
     expect(await playerRepo.turns(partyId)).toBeNull();
+  });
+
+  it('visibilidade, destino e testes do NPC: updateParticipant grava e findEncounter devolve; mudar o lado de um jogador é INVALID_CHANGE', async () => {
+    await repo.create(partyId);
+    await repo.addParticipants(partyId, [{ characterId: heroId, side: 'player', label: null }]);
+    await repo.addParticipants(partyId, [
+      { characterId: goblinId, side: 'enemy', label: 'Goblin' },
+    ]);
+    const [hero, goblin] = (await repo.findEncounter(partyId))!.participants;
+
+    expect(
+      await repo.updateParticipant(partyId, goblin.id, {
+        side: 'neutral',
+        visibility: 'anonymous',
+        hpCurrent: 0,
+        fate: 'death_saves',
+        deathSaves: { successes: 2, failures: 1 },
+      }),
+    ).toBe(true);
+
+    const [, stored] = (await repo.findEncounter(partyId))!.participants;
+    expect(stored).toMatchObject({
+      side: 'neutral',
+      visibility: 'anonymous',
+      fate: 'death_saves',
+      deathSaves: { successes: 2, failures: 1 },
+      deathRevealed: false,
+    });
+
+    // The reveal only holds for the dead
+    await repo.updateParticipant(partyId, goblin.id, { fate: 'dead', deathRevealed: true });
+    expect((await repo.findEncounter(partyId))!.participants[1]).toMatchObject({
+      fate: 'dead',
+      deathRevealed: true,
+    });
+    expect(hero).toMatchObject({ visibility: 'visible', fate: null, deathRevealed: false });
+
+    expect(await error(repo.updateParticipant(partyId, hero.id, { side: 'enemy' }))).toBe(
+      CombatErrorCodes.INVALID_CHANGE,
+    );
   });
 
   it('condições: setConditions grava, turns e findEncounter devolvem, e quem não pode recebe false', async () => {
