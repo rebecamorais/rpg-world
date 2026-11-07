@@ -91,6 +91,7 @@ export const GAME_ICON_NAMES: ReadonlySet<string> = new Set([
   'spartan-helmet',
   'spear-feather',
   'spyglass',
+  'stable',
   'stopwatch',
   'swap-bag',
   'talk',

@@ -24,6 +24,7 @@ import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { ConditionsPicker } from './ConditionsPicker';
 import { NpcControls } from './NpcControls';
+import { NpcFateControls } from './NpcFateControls';
 import { SideBadge } from './SideBadge';
 
 /** A number field saved when it loses focus; empty means "none" where `nullable`. */
@@ -70,9 +71,9 @@ function NumberCell({
 const ATTRIBUTES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'] as const;
 
 /** The character's picture at the card's left; their class's emblem when there's none. */
-function Portrait({ row }: { row: GmRow }) {
+function Portrait({ row, down }: { row: GmRow; down: boolean }) {
   return (
-    <div className="relative shrink-0 self-start pt-5 pl-4">
+    <div className={cn('relative shrink-0 self-start pt-5 pl-4', down && 'opacity-60 grayscale')}>
       <CharacterPortrait
         avatarUrl={row.avatarUrl}
         characterClass={row.class}
@@ -139,6 +140,44 @@ export function CombatRow({
   const expanded = opened ?? row.isCurrent;
   const toggle = () => setOpened(!expanded);
   const detailsId = `combat-details-${row.participantId}`;
+  // Only an npc can be down or dead; a player's death saves come from their sheet
+  const down = isNpc && row.hp.current === 0;
+  // A death the players know of is a thin line, like in their list, until the GM opens it
+  const collapsed = isNpc && row.fate === 'dead' && row.deathRevealed && opened !== true;
+
+  if (collapsed) {
+    return (
+      <li
+        aria-current={row.isCurrent ? 'true' : undefined}
+        onClick={(event) => {
+          if (!(event.target as HTMLElement).closest('a, button, input')) toggle();
+        }}
+        className={cn(
+          'border-border text-muted-foreground flex cursor-pointer items-center gap-2 rounded-md border border-dashed px-3 py-1',
+          row.isCurrent && 'border-primary',
+        )}
+      >
+        <CharacterPortrait
+          avatarUrl={row.avatarUrl}
+          characterClass={row.class}
+          className="size-5 grayscale"
+        />
+        <s className="text-sm">{row.name}</s>
+        <SideBadge side={row.side} className="ml-auto" />
+        <AppIcon name="Skull" size={14} aria-hidden="true" />
+        <span className="sr-only">{t('dead')}</span>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={t('detailsOf', { name: row.name })}
+          aria-expanded={false}
+          onClick={toggle}
+        >
+          <AppIcon name="ChevronRight" size={16} aria-hidden="true" />
+        </Button>
+      </li>
+    );
+  }
 
   return (
     <li
@@ -166,7 +205,7 @@ export function CombatRow({
         className="bg-character absolute top-0 left-0 z-10 h-1 w-full opacity-80"
       />
 
-      <Portrait row={row} />
+      <Portrait row={row} down={down} />
 
       <div className="flex min-w-0 flex-1 flex-col gap-4 p-4 pt-5">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
@@ -279,6 +318,16 @@ export function CombatRow({
             side={row.side as NpcSide}
             onVisibility={(visibility) => onChange({ visibility })}
             onSide={(side) => onChange({ side })}
+          />
+        )}
+
+        {isNpc && row.hp.current === 0 && (
+          <NpcFateControls
+            name={row.name}
+            fate={row.fate}
+            deathSaves={row.deathSaves}
+            revealed={row.deathRevealed}
+            onChange={onChange}
           />
         )}
 

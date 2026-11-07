@@ -357,4 +357,79 @@ describe('CombatRow', () => {
       expect(onChange).toHaveBeenCalledWith({ side: 'neutral' });
     });
   });
+
+  describe('NPC caído e morto', () => {
+    const npc = (overrides = {}) =>
+      gmRow({
+        participantId: 'p-g',
+        characterId: 'goblin',
+        side: 'enemy',
+        name: 'Goblin',
+        hp: { current: 0, max: 7, temp: 0 },
+        ...overrides,
+      });
+    const renderNpc = (row: ReturnType<typeof gmRow>, onChange = vi.fn()) => {
+      renderWithProviders(
+        <ul>
+          <CombatRow
+            partyId="party-1"
+            row={row}
+            isFirst={false}
+            isLast={false}
+            onChange={onChange}
+            onMove={vi.fn()}
+            onRemove={vi.fn()}
+            edition="2024"
+            onConditionsChange={vi.fn()}
+          />
+        </ul>,
+      );
+      return onChange;
+    };
+
+    it('NPC com 0 PV oferece Testes contra a morte e Morto', async () => {
+      const onChange = renderNpc(npc());
+      expect(screen.getByText(fill(t.chooseFate, { name: 'Goblin' }))).toBeInTheDocument();
+      await userEvent.click(screen.getByRole('button', { name: t.fateDeathSaves }));
+      expect(onChange).toHaveBeenCalledWith({ fate: 'death_saves' });
+      expect(screen.getByRole('button', { name: t.fateDead })).toBeInTheDocument();
+    });
+
+    it('NPC com PV não oferece destino', () => {
+      renderNpc(npc({ hp: { current: 3, max: 7, temp: 0 } }));
+      expect(screen.queryByRole('button', { name: t.fateDead })).not.toBeInTheDocument();
+    });
+
+    it('marcar a 2ª falha chama onChange com os contadores', async () => {
+      const onChange = renderNpc(
+        npc({ fate: 'death_saves', deathSaves: { successes: 0, failures: 0 } }),
+      );
+      await userEvent.click(screen.getByRole('button', { name: fill(t.deathFailure, { n: 2 }) }));
+      expect(onChange).toHaveBeenCalledWith({ deathSaves: { successes: 0, failures: 2 } });
+    });
+
+    it('morto revelado fica recolhido e ainda abre ao clicar', async () => {
+      renderNpc(npc({ fate: 'dead', deathRevealed: true }));
+      expect(screen.getByText('Goblin').closest('s')).not.toBeNull();
+      expect(screen.queryByRole('button', { name: t.hideDeath })).not.toBeInTheDocument();
+      await userEvent.click(
+        screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Goblin' }) }),
+      );
+      expect(screen.getByRole('button', { name: t.hideDeath })).toBeVisible();
+      expect(screen.getByRole('button', { name: t.undoDead })).toBeVisible();
+    });
+
+    it('jogador com 0 PV continua mostrando só os testes da ficha', () => {
+      renderRow(
+        gmRow({
+          hp: { current: 0, max: 20, temp: 0 },
+          deathSaves: { successes: 1, failures: 2 },
+        }),
+      );
+      expect(
+        screen.getByText(fill(t.deathSaves, { successes: 1, failures: 2 })),
+      ).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: t.fateDead })).not.toBeInTheDocument();
+    });
+  });
 });
