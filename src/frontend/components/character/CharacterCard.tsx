@@ -66,7 +66,7 @@ export function CharacterCard({ character }: CharacterCardProps) {
               <CharacterPortrait
                 avatarUrl={character.avatarUrl}
                 characterClass={character.class}
-                className="border-character-muted h-16 w-16 rounded-xl border-2 shadow-[0_0_20px_-6px_var(--character-glow)]"
+                className="h-16 w-16"
               />
               <ViewImageButton
                 src={character.avatarUrl}

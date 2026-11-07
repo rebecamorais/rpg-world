@@ -153,6 +153,7 @@ export type Database = {
           level: number;
           name: string;
           owner_id: string;
+          sheet_background_url: string | null;
           system: Database['public']['Enums']['rpg_system'];
           system_data: NonNullable<Json>;
           theme_color: string | null;
@@ -171,6 +172,7 @@ export type Database = {
           level?: number;
           name: string;
           owner_id: string;
+          sheet_background_url?: string | null;
           system?: Database['public']['Enums']['rpg_system'];
           system_data?: NonNullable<Json>;
           theme_color?: string | null;
@@ -188,6 +190,7 @@ export type Database = {
           level?: number;
           name?: string;
           owner_id?: string;
+          sheet_background_url?: string | null;
           system?: Database['public']['Enums']['rpg_system'];
           system_data?: NonNullable<Json>;
           theme_color?: string | null;

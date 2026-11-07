@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
-export type UploadTarget = 'profile' | 'character' | 'item' | 'party';
+export type UploadTarget = 'profile' | 'character' | 'sheetBackground' | 'item' | 'party';
 
 export interface UploadParams {
   file: File;
@@ -27,6 +27,7 @@ const FileUploaderContext = createContext<FileUploaderContextType | undefined>(u
 const endpoints: Record<UploadTarget, (id?: string) => string> = {
   profile: () => '/api/profile/avatar',
   character: (id?: string) => `/api/characters/${id}/avatar`,
+  sheetBackground: (id?: string) => `/api/characters/${id}/sheet-background`,
   item: (id?: string) => `/api/items/${id}/image`,
   party: (id?: string) => `/api/parties/${id}/image`,
 };

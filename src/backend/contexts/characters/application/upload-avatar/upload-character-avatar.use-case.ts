@@ -12,7 +12,7 @@ import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError
 import { CharacterRepo } from '../../domain/repository/character.repo';
 import { assertOwnsCharacter } from '../find-owned-character';
 
-function assertValidImage(image: Blob) {
+export function assertValidImage(image: Blob) {
   if (image.size > MAX_AVATAR_SIZE_BYTES) {
     throw new CharacterError(CharacterErrorCodes.AVATAR_FILE_TOO_LARGE);
   }

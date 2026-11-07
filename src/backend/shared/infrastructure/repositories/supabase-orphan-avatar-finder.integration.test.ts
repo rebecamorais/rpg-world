@@ -38,6 +38,27 @@ describe('orphan_avatar_objects (Integration)', () => {
     expect(orphans).not.toContain(`${userId}/characters/char-saved.png`);
   });
 
+  it('poupa o fundo de ficha em uso e lista o que foi trocado', async () => {
+    const { client, userId } = await createSignedInClient('orphan-background');
+    const storage = new SupabaseStorageRepository(client);
+    const characterId = crypto.randomUUID();
+    const inUse = `${userId}/characters/${characterId}-background-v2.webp`;
+    const replaced = `${userId}/characters/${characterId}-background-v1.webp`;
+    const url = await storage.upload('avatars', inUse, webp());
+    await storage.upload('avatars', replaced, webp());
+    await client
+      .from('characters')
+      .insert({ id: characterId, name: 'Hero', owner_id: userId, sheet_background_url: url });
+
+    const orphans = await new SupabaseOrphanAvatarFinder(
+      SupabaseFactory.createAdmin(),
+      '0 seconds',
+    ).findOrphans();
+
+    expect(orphans).not.toContain(inUse);
+    expect(orphans).toContain(replaced);
+  });
+
   it('deixa de fora os envios recentes, que ainda podem estar esperando o formulário', async () => {
     const { client, userId } = await createSignedInClient('recent');
     await new SupabaseStorageRepository(client).upload(

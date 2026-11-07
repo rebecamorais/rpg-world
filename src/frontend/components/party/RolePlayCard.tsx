@@ -45,7 +45,7 @@ export function CharacterIdentity({
         <CharacterPortrait
           avatarUrl={character.avatarUrl}
           characterClass={character.class}
-          className="border-character-muted h-12 w-12 shrink-0 rounded-lg border"
+          className="h-12 w-12 shrink-0"
         />
       )}
       <div className="flex min-w-0 flex-col">

@@ -23,6 +23,7 @@ export interface CharacterContext {
   delete(id: string, ownerUsername: string): Promise<boolean>;
   duplicate(id: string, name: string): Promise<{ id: string }>;
   uploadAvatar(id: string, userId: string, file: Blob, full?: Blob): Promise<string>;
+  uploadSheetBackground(id: string, userId: string, file: Blob): Promise<string>;
   isOwner(id: string, userId: string): Promise<boolean>;
 
   // Spells

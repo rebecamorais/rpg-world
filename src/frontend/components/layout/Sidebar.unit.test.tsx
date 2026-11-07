@@ -1,6 +1,7 @@
-import { screen, within } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { PartySummary } from '@backend/contexts/parties/domain/Party';
 
@@ -91,5 +92,58 @@ describe('Sidebar', () => {
     renderWithProviders(<Sidebar />);
     expect(sidebar().queryByRole('link', { name: t.journal })).not.toBeInTheDocument();
     expect(sidebar().queryByRole('link', { name: t.settings })).not.toBeInTheDocument();
+  });
+
+  describe('recolher', () => {
+    const tDash = messages.dashboard;
+    const panel = () => screen.getByTestId('sidebar-panel');
+
+    afterEach(() => {
+      document.cookie = 'sidebar-pinned=; path=/; max-age=0';
+    });
+
+    it('abre por padrão, e recolher guarda a escolha', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Sidebar />);
+
+      await user.click(sidebar().getByRole('button', { name: tDash.collapseMenu }));
+
+      expect(document.cookie).toContain('sidebar-pinned=false');
+      expect(screen.getByRole('complementary')).toHaveAttribute('data-sidebar', 'rail');
+    });
+
+    it('recolhido, cresce com o mouse e encolhe quando ele sai', () => {
+      renderWithProviders(<Sidebar initialPinned={false} />);
+      expect(panel()).toHaveAttribute('data-expanded', 'false');
+
+      fireEvent.mouseEnter(screen.getByRole('complementary'));
+      expect(panel()).toHaveAttribute('data-expanded', 'true');
+
+      fireEvent.mouseLeave(screen.getByRole('complementary'));
+      expect(panel()).toHaveAttribute('data-expanded', 'false');
+    });
+
+    it('recolhido, cresce com o foco do teclado e os links seguem com nome', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Sidebar initialPinned={false} />);
+
+      await user.tab();
+
+      expect(panel()).toHaveAttribute('data-expanded', 'true');
+      expect(sidebar().getByRole('link', { name: tDash.myCharacters })).toHaveAttribute(
+        'href',
+        '/characters',
+      );
+    });
+
+    it('recolhido, manter aberto volta ao menu fixo', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Sidebar initialPinned={false} />);
+
+      await user.click(sidebar().getByRole('button', { name: tDash.keepMenuOpen }));
+
+      expect(document.cookie).toContain('sidebar-pinned=true');
+      expect(screen.getByRole('complementary')).toHaveAttribute('data-sidebar', 'pinned');
+    });
   });
 });

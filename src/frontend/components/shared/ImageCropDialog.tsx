@@ -23,11 +23,11 @@ interface ImageCropDialogProps {
   onCancel: () => void;
   /** `area` is in the original image's pixels; null if the cropper never measured it. */
   onConfirm: (area: CropArea | null) => void;
-  /** Width over height; 1 (the default) is a round avatar, anything else a rectangle. */
+  /** Width over height; 1 (the default) is a square avatar. */
   aspect?: number;
 }
 
-/** Crop with drag and zoom (a round avatar by default), shown before the image is uploaded. */
+/** Crop with drag and zoom (a square avatar by default), shown before the image is uploaded. */
 export function ImageCropDialog({ source, onCancel, onConfirm, aspect = 1 }: ImageCropDialogProps) {
   const returnFocus = useReturnFocus();
 
@@ -72,7 +72,7 @@ function CropBody({
           zoom={zoom}
           maxZoom={5}
           aspect={aspect}
-          cropShape={aspect === 1 ? 'round' : 'rect'}
+          cropShape="rect"
           showGrid={false}
           onCropChange={setCrop}
           onZoomChange={setZoom}

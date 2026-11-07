@@ -42,13 +42,13 @@ export function AdjustableAvatarViewer({
         <img
           src={crop.preview}
           alt=""
-          className="absolute inset-0 h-full w-full rounded-full object-cover"
+          className="absolute inset-0 h-full w-full rounded-lg object-cover"
         />
       )}
       {(crop.isLoadingSource || crop.preview) && (
         <div
           role="status"
-          className="bg-overlay text-foreground absolute inset-0 flex items-center justify-center rounded-full text-center text-xs font-medium"
+          className="bg-overlay text-foreground absolute inset-0 flex items-center justify-center rounded-lg text-center text-xs font-medium"
         >
           {t('adjusting')}
         </div>

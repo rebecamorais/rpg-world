@@ -46,12 +46,14 @@ export function SaveControls({
 
   return (
     <>
-      <div className="flex items-center gap-3">
+      {/* `contents`: the save state goes first in the page's actions, so whatever comes before the
+          button there (the sheet's gear) stays right next to it */}
+      <div className="contents">
         {/* Always rendered, so screen readers hear the change */}
         <span
           role="status"
           title={isDirty ? t('saveShortcut') : undefined}
-          className="text-label text-warning-flare hidden items-center gap-1.5 sm:flex"
+          className="text-label text-warning-flare order-first mr-1 hidden items-center gap-1.5 sm:flex"
         >
           {isDirty && (
             <>

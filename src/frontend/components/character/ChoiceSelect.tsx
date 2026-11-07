@@ -78,7 +78,7 @@ export function ChoiceSelect({
       >
         <SelectTrigger
           id={id}
-          className="bg-muted/40 hover:bg-muted h-10 border-none px-3 font-medium"
+          className="bg-muted border-input hover:border-character-muted hover:bg-muted h-10 px-3 font-medium"
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
@@ -122,7 +122,7 @@ export function ChoiceSelect({
           maxLength={maxLength}
           placeholder={otherPlaceholder}
           onChange={(event) => onChange(event.target.value)}
-          className="bg-muted/40 hover:bg-muted focus-visible:bg-background h-10 px-3 font-medium"
+          className="bg-muted border-input hover:border-character-muted focus-visible:bg-background h-10 border border-solid px-3 font-medium"
         />
       )}
     </div>

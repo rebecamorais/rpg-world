@@ -65,13 +65,30 @@ test.describe('salvar a ficha', () => {
   });
 });
 
-test('o avatar abre a personalização do personagem', async ({ page, user: _ }) => {
+test('a engrenagem abre a aparência, e a cor escolhida só grava com Salvar', async ({
+  page,
+  user: _,
+}) => {
+  page.on('dialog', (dialog) => dialog.accept()); // the unsaved changes warning on reload
   const id = await createCharacter(page, 'Stylish Hero');
   await page.goto(characterUrl(id));
 
-  await (await hydrated(page.getByRole('button', { name: 'Customize Character' }))).click();
+  await (await hydrated(page.getByRole('link', { name: 'Sheet appearance' }))).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Sheet appearance' })).toBeVisible();
 
-  await expect(page.getByRole('dialog', { name: 'Customize Character' })).toBeVisible();
+  const code = page.getByLabel('Color code');
+  await (await hydrated(code)).fill('#c2410c');
+  await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByLabel('Color code')).not.toHaveValue('#c2410c');
+
+  await (await hydrated(page.getByLabel('Color code'))).fill('#c2410c');
+  await page.keyboard.press('ControlOrMeta+s');
+  await expect(page.getByText('Character saved successfully!').first()).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByLabel('Color code')).toHaveValue('#c2410c');
 });
 
 test('ajustar a imagem na ficha só grava com Salvar', async ({ page, user: _ }) => {
@@ -97,20 +114,14 @@ test('ajustar a imagem na ficha só grava com Salvar', async ({ page, user: _ })
     await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
   };
 
-  await (await hydrated(page.getByRole('button', { name: 'Customize Character' }))).click();
+  await (await hydrated(page.getByRole('link', { name: 'Sheet appearance' }))).click();
   await page.locator('#image-file-input').setInputFiles(AVATAR);
   await cropSave().click();
-  // The dialog hides the rest of the page from the accessibility tree: the status shows after it
-  await expect(
-    page.getByRole('dialog', { name: 'Customize Character' }).getByRole('button', {
-      name: 'View image',
-    }),
-  ).toBeVisible();
-  await page.keyboard.press('Escape');
+  await expect(page.getByRole('button', { name: 'View image' })).toBeVisible();
   await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
   await saveSheet();
 
-  await page.reload();
+  await page.goto(characterUrl(id));
   const saved = await (await openViewer()).getAttribute('src');
   await page.keyboard.press('Escape');
 
@@ -168,7 +179,7 @@ test('guarda a imagem completa, usa no modal e limpa o par anterior', async ({ p
     return (data ?? []).map((file) => file.name);
   };
 
-  await (await hydrated(page.getByRole('button', { name: 'Customize Character' }))).click();
+  await (await hydrated(page.getByRole('link', { name: 'Sheet appearance' }))).click();
   // 300 x 100: the crop is square, so a whole image keeps its proportion only if it was kept
   await page.locator('#image-file-input').setInputFiles({
     name: 'wide.png',
@@ -176,15 +187,12 @@ test('guarda a imagem completa, usa no modal e limpa o par anterior', async ({ p
     buffer: widePng(300, 100),
   });
   await cropSave().click();
-  await expect(
-    page.getByRole('dialog', { name: 'Customize Character' }).getByRole('button', {
-      name: 'View image',
-    }),
-  ).toBeVisible();
-  await page.keyboard.press('Escape');
+  await expect(page.getByRole('button', { name: 'View image' })).toBeVisible();
   await page.keyboard.press('ControlOrMeta+s');
   await expect(saved()).toBeVisible();
 
+  await page.getByRole('link', { name: 'Back to the sheet' }).click();
+  await hydrated(page.getByRole('button', { name: 'View image', exact: true }));
   await page.getByRole('button', { name: 'View image', exact: true }).click();
   const image = page.getByRole('img', { name });
   await expect(image).toHaveAttribute('src', /\/characters\/[^/]+(?<!-avatar)\.\w+$/);

@@ -38,6 +38,13 @@ function renderStatus(sheet = character) {
 }
 
 describe('StatusView', () => {
+  it('sem imagem, o avatar não abre o ver ampliado', () => {
+    params.value = { id: 'c1' };
+    renderStatus();
+
+    expect(screen.queryByRole('button', { name: tImage.view })).not.toBeInTheDocument();
+  });
+
   it('na ficha do dono os campos são editáveis e há botão salvar', () => {
     params.value = { id: 'c1' };
     renderStatus();
@@ -55,9 +62,6 @@ describe('StatusView', () => {
     for (const field of fields) expect(field).toBeDisabled();
     expect(
       screen.queryByRole('button', { name: messages.common.saveChanges }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole('button', { name: messages.characterHeader.customizeTitle }),
     ).not.toBeInTheDocument();
   });
 

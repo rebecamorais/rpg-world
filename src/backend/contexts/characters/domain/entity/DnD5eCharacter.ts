@@ -48,6 +48,7 @@ export interface DnD5eCharacterOptions {
   lore?: Lore;
   accentColor?: string;
   avatarUrl?: string;
+  sheetBackgroundUrl?: string;
 }
 
 export class DnD5eCharacter extends Character {
@@ -89,6 +90,7 @@ export class DnD5eCharacter extends Character {
       options.accentColor,
       options.avatarUrl,
       options.kind,
+      options.sheetBackgroundUrl,
     );
     this.class = options.classStr ?? '';
     this.race = options.race ?? '';
@@ -139,6 +141,7 @@ export class DnD5eCharacter extends Character {
       level: this.level,
       avatarUrl: this.avatarUrl,
       accentColor: this.accentColor,
+      sheetBackgroundUrl: this.sheetBackgroundUrl,
       attributes: this.attributes.getAll(),
       hpCurrent: this.hp.current,
       hpMax: this.hp.max,

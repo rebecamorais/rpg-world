@@ -22,7 +22,7 @@ function InlineField({ id, label, className, containerClassName, ...props }: Inl
       <GhostInput
         id={id}
         className={cn(
-          'bg-muted/40 hover:bg-muted focus-visible:bg-background h-10 px-3 font-medium',
+          'bg-muted border-input hover:border-character-muted focus-visible:bg-background h-10 border border-solid px-3 font-medium',
           className,
         )}
         {...props}

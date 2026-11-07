@@ -8,7 +8,6 @@ import { CharacterPortrait } from '@frontend/components/character/CharacterPortr
 import { ChoiceSelect } from '@frontend/components/character/ChoiceSelect';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { FieldLabel, InlineField } from '@frontend/components/ui/field';
-import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Progress } from '@frontend/components/ui/progress';
@@ -33,7 +32,6 @@ import { getProficiencyBonus } from '@shared/systems/dnd5e/calculations';
 
 import { ImageViewerDialog } from '../shared/ImageViewerDialog';
 import { AdjustableAvatarViewer } from './AdjustableAvatarViewer';
-import { CharacterCustomizationDialog } from './CharacterCustomizationDialog';
 import { SheetFieldset } from './sheet/SheetFieldset';
 
 /** Same limit as the API's character schema, so a save never fails on length. */
@@ -58,7 +56,6 @@ export default function CharacterHeader() {
   const t = useTranslations('characterHeader');
   const choices = useCharacterChoices();
   const tImage = useTranslations('avatarUpload');
-  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   // Simple XP progress calculation
@@ -75,27 +72,25 @@ export default function CharacterHeader() {
 
   return (
     <Card className="overflow-hidden shadow-sm">
-      <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start">
+      <CardContent className="flex flex-col gap-5 p-5 md:flex-row">
         <div className="relative self-start">
           {/* The button sits over the avatar instead of wrapping it: the initials would be its
               visible text and not match the aria-label (WCAG 2.5.3). The avatar is hidden from
               screen readers: the h1 already names the character */}
-          <div className="relative rounded-full transition-transform has-[button:active]:scale-95 has-[button:hover]:scale-105">
+          <div className="relative rounded-lg transition-transform has-[button:active]:scale-95 has-[button:hover]:scale-105">
             <CharacterPortrait
               avatarUrl={avatarUrl}
               characterClass={classNameStr}
-              className="border-character-muted shadow-character-muted h-20 w-20 shrink-0 border-2 shadow-md transition-all"
+              className="h-48 w-48 shrink-0"
             />
-            {!readOnly && (
+            {avatarUrl ? (
               <button
                 type="button"
-                onClick={() => setIsColorPickerOpen(true)}
-                aria-label={t('customizeTitle')}
-                className="focus-ring bg-background/80 absolute inset-0 flex items-center justify-center rounded-full opacity-0 backdrop-blur-[2px] transition-opacity hover:opacity-100 focus-visible:opacity-100"
-              >
-                <AppIcon name="Palette" size={24} className="text-character-flare" />
-              </button>
-            )}
+                onClick={() => setIsViewerOpen(true)}
+                aria-label={tImage('view')}
+                className="focus-ring absolute inset-0 cursor-zoom-in rounded-lg"
+              />
+            ) : null}
             {readOnly ? (
               <ImageViewerDialog
                 src={avatarUrl}
@@ -113,30 +108,14 @@ export default function CharacterHeader() {
               />
             )}
           </div>
-          {avatarUrl ? (
-            <button
-              type="button"
-              onClick={() => setIsViewerOpen(true)}
-              aria-label={tImage('view')}
-              className="focus-ring bg-background border-border hover:text-character-flare absolute -right-1 -bottom-1 flex h-7 w-7 items-center justify-center rounded-full border shadow-sm transition-colors"
-            >
-              <AppIcon name="Maximize2" size={14} />
-            </button>
-          ) : null}
         </div>
-
-        {!readOnly && (
-          <CharacterCustomizationDialog
-            open={isColorPickerOpen}
-            onOpenChange={setIsColorPickerOpen}
-          />
-        )}
 
         {/* The fields only: the image can be viewed on a read-only sheet too */}
         <SheetFieldset>
-          <div className="grid flex-1 grid-cols-1 gap-8 lg:grid-cols-2">
+          <div className="grid min-w-0 flex-1 grid-cols-1 gap-x-6 gap-y-4 lg:grid-cols-[minmax(0,4fr)_minmax(0,5fr)]">
             {/* Left Column: Core Stats */}
-            <div className="flex flex-col gap-4">
+            {/* Spread over the avatar's height, so the card has no empty corner */}
+            <div className="flex flex-col justify-between gap-4">
               {/* The name is the page's h1 (SheetPage); here it is edited like the other fields */}
               <InlineField
                 id="char-name"
@@ -200,7 +179,7 @@ export default function CharacterHeader() {
             </div>
 
             {/* Right Column: Information Grid */}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+            <div className="grid grid-cols-2 content-between gap-x-4 gap-y-4">
               <ChoiceSelect
                 id="char-race"
                 maxLength={TEXT_MAX}
