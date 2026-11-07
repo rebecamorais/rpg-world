@@ -91,12 +91,14 @@ export function PlayerTurnRow({
       )}
     >
       <div className="flex items-center gap-3">
-        <div className={cn('relative shrink-0', down && 'opacity-60 grayscale')}>
-          {anonymous ? (
-            <UnknownMarker className="size-10 text-lg" />
-          ) : (
-            <CharacterPortrait avatarUrl={avatarUrl} className="size-10" />
-          )}
+        <div className="relative shrink-0">
+          <div className={cn(down && 'opacity-60 grayscale')}>
+            {anonymous ? (
+              <UnknownMarker className="size-10 text-lg" />
+            ) : (
+              <CharacterPortrait avatarUrl={avatarUrl} className="size-10" />
+            )}
+          </div>
           <ViewImageButton
             src={avatarUrl}
             name={name}

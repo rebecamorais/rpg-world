@@ -224,6 +224,15 @@ describe('PlayerCombatPanel', () => {
     expect(within(li).getByText('Orc')).toHaveClass('text-muted-foreground');
   });
 
+  it('caído com imagem: o botão de ampliar fica fora do trecho esmaecido', () => {
+    withTurns([{ side: 'enemy', name: 'Orc', life: 'down', avatarUrl: 'https://x/a.png' }]);
+    const zoom = screen.getByRole('button');
+    const dimmed = document.querySelector('.opacity-60');
+    expect(dimmed).not.toBeNull();
+    expect(dimmed).not.toContainElement(zoom);
+    expect(zoom.closest('.opacity-60, .grayscale')).toBeNull();
+  });
+
   it('morto mostra a linha fina com nome riscado e caveira', () => {
     withTurns([{ side: 'enemy', name: 'Orc', life: 'dead' }]);
     const li = screen.getByRole('listitem');
