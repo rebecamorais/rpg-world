@@ -49,6 +49,59 @@ describe('useEncounter', () => {
     );
   });
 
+  it('destino, testes e revelação aparecem na hora', async () => {
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({
+      role: 'gm',
+      round: 0,
+      rows: [
+        {
+          participantId: 'a',
+          fate: 'dead',
+          deathSaves: null,
+          deathRevealed: true,
+          hp: { current: 0, max: 7, temp: 0 },
+        },
+      ],
+    });
+    vi.mocked(rpgWorldApi.patch).mockReturnValue(new Promise(() => {}));
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+    await waitFor(() => expect(result.current.encounter).not.toBeNull());
+
+    result.current.updateParticipant.mutate({ participantId: 'a', fate: 'death_saves' });
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({
+        rows: [
+          { fate: 'death_saves', deathRevealed: false, deathSaves: { successes: 0, failures: 0 } },
+        ],
+      }),
+    );
+
+    result.current.updateParticipant.mutate({
+      participantId: 'a',
+      deathSaves: { successes: 1, failures: 2 },
+    });
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({
+        rows: [{ fate: 'death_saves', deathSaves: { successes: 1, failures: 2 } }],
+      }),
+    );
+
+    result.current.updateParticipant.mutate({ participantId: 'a', fate: 'dead' });
+    result.current.updateParticipant.mutate({ participantId: 'a', deathRevealed: true });
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({
+        rows: [{ fate: 'dead', deathSaves: null, deathRevealed: true }],
+      }),
+    );
+
+    result.current.updateParticipant.mutate({ participantId: 'a', fate: null });
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({
+        rows: [{ fate: null, deathSaves: null, deathRevealed: false }],
+      }),
+    );
+  });
+
   it('setConditions manda a lista inteira e já a mostra na linha e na vez', async () => {
     const conditions = [{ key: 'dnd5e:srd-5.2:condition:prone', level: null }];
     vi.mocked(rpgWorldApi.get).mockResolvedValue({

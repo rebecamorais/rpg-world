@@ -61,6 +61,19 @@ export function useEncounter(partyId: string) {
                       visibility: patch.visibility ?? row.visibility,
                       initiative:
                         patch.initiative === undefined ? row.initiative : patch.initiative,
+                      fate: patch.fate === undefined ? row.fate : patch.fate,
+                      // Mirrors the database: only a dead npc can be revealed as dead
+                      deathRevealed:
+                        patch.fate !== undefined && patch.fate !== 'dead'
+                          ? false
+                          : (patch.deathRevealed ?? row.deathRevealed),
+                      deathSaves:
+                        patch.deathSaves ??
+                        (patch.fate === undefined
+                          ? row.deathSaves
+                          : patch.fate === 'death_saves'
+                            ? (row.deathSaves ?? { successes: 0, failures: 0 })
+                            : null),
                       hp: {
                         ...row.hp,
                         current: patch.hpCurrent ?? row.hp.current,
