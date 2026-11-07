@@ -8,7 +8,6 @@ import { CharacterPortrait } from '@frontend/components/character/CharacterPortr
 import { ChoiceSelect } from '@frontend/components/character/ChoiceSelect';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { FieldLabel, InlineField } from '@frontend/components/ui/field';
-import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Progress } from '@frontend/components/ui/progress';
@@ -25,7 +24,6 @@ import {
   useCharacterMeta,
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
-import AppLink from '@frontend/demo/AppLink';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { CharacterClass } from '@frontend/types/spells';
@@ -49,17 +47,15 @@ export default function CharacterHeader() {
     alignment,
     xp = 0,
     avatarUrl,
-    system,
   } = useLoadedCharacter();
   const { update } = useCharacterActions();
   const { id } = useCharacterMeta();
   // Read only (the GM): no customizing; the fields are off through SheetFieldset
-  const { readOnly, pagesPath } = useSheetSource(id, system);
+  const { readOnly } = useSheetSource(id);
   const pb = getProficiencyBonus(level);
   const t = useTranslations('characterHeader');
   const choices = useCharacterChoices();
   const tImage = useTranslations('avatarUpload');
-  const tAppearance = useTranslations('characterAppearance');
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   // Simple XP progress calculation
@@ -75,18 +71,8 @@ export default function CharacterHeader() {
   );
 
   return (
-    <Card className="relative overflow-hidden shadow-sm">
-      {!readOnly && (
-        <AppLink
-          href={`${pagesPath}/appearance`}
-          aria-label={tAppearance('title')}
-          title={tAppearance('title')}
-          className="focus-ring text-muted-foreground hover:text-character-flare absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-lg transition-colors"
-        >
-          <AppIcon name="Settings" size={18} aria-hidden="true" />
-        </AppLink>
-      )}
-      <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start md:pr-14">
+    <Card className="overflow-hidden shadow-sm">
+      <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-start">
         <div className="relative self-start">
           {/* The button sits over the avatar instead of wrapping it: the initials would be its
               visible text and not match the aria-label (WCAG 2.5.3). The avatar is hidden from
