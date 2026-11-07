@@ -1433,7 +1433,15 @@
     "ally": "Aliado",
     "addAlly": "Adicionar aliado",
     "side": "Lado",
-    "conditionsOf": "Condições de {name}"
+    "conditionsOf": "Condições de {name}",
+    "player": "Jogador",
+    "neutral": "Neutro",
+    "unknownEnemy": "Inimigo desconhecido",
+    "unknownAlly": "Aliado desconhecido",
+    "unknownNeutral": "Neutro desconhecido",
+    "gmTurn": "O mestre está conduzindo o turno",
+    "down": "Caído",
+    "dead": "Morto"
   },
   "characterRaces": {
     "dragonborn": "Draconato",

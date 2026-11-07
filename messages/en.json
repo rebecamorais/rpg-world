@@ -1433,7 +1433,15 @@
     "ally": "Ally",
     "addAlly": "Add ally",
     "side": "Side",
-    "conditionsOf": "Conditions of {name}"
+    "conditionsOf": "Conditions of {name}",
+    "player": "Player",
+    "neutral": "Neutral",
+    "unknownEnemy": "Unknown enemy",
+    "unknownAlly": "Unknown ally",
+    "unknownNeutral": "Unknown neutral",
+    "gmTurn": "The GM is running this turn",
+    "down": "Down",
+    "dead": "Dead"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

@@ -5,17 +5,15 @@ import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
-import { ConditionBadge } from '@frontend/components/content/ConditionBadge';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useEncounter } from '@frontend/hooks/useEncounter';
-import { cn } from '@frontend/lib/utils';
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { CombatConnection } from './CombatConnection';
-import { ConditionsPicker } from './ConditionsPicker';
+import { PlayerTurnRow } from './PlayerTurnRow';
 
 /**
  * The combat as a player sees it: the round, the order with names only and whose turn it is.
@@ -31,7 +29,6 @@ export function PlayerCombatPanel({
   live: boolean;
 }) {
   const t = useTranslations('combat');
-  const tCond = useTranslations('conditions');
   const { encounter, endTurn, setConditions } = useEncounter(partyId);
   const mine =
     encounter?.role === 'player'
@@ -68,57 +65,21 @@ export function PlayerCombatPanel({
           <p className="text-muted-foreground">{t('playerPreparing')}</p>
         ) : (
           <>
+            {encounter.hiddenTurn && (
+              <p role="status" className="text-muted-foreground">
+                {t('gmTurn')}
+              </p>
+            )}
             <ol aria-label={t('order')} className="flex flex-col gap-2">
               {encounter.turns.map((turn) => (
-                <li
+                <PlayerTurnRow
                   key={turn.participantId}
-                  aria-current={turn.isCurrent ? 'true' : undefined}
-                  className={cn(
-                    'border-border flex flex-col gap-2 rounded-md border px-3 py-2',
-                    turn.isCurrent && 'border-primary bg-primary/10 animate-turn-glow',
-                  )}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className={cn(turn.isMine && 'font-semibold')}>{turn.name}</span>
-                    {turn.isCurrent && (
-                      <span className="text-label text-primary-flare">
-                        {turn.isMine ? t('yourTurn') : t('currentTurn')}
-                      </span>
-                    )}
-                  </div>
-                  {(turn.conditions.length > 0 || turn.isMine) && (
-                    // On touch screens the gap keeps each badge's touch area apart
-                    <div className="flex flex-wrap items-center gap-2 pointer-coarse:gap-3">
-                      {turn.conditions.map((condition) => (
-                        <ConditionBadge
-                          key={condition.key}
-                          conditionKey={condition.key}
-                          level={condition.level}
-                          defaultEdition={edition}
-                        />
-                      ))}
-                      {turn.isMine && (
-                        <ConditionsPicker
-                          value={turn.conditions}
-                          defaultEdition={edition}
-                          onChange={(conditions) =>
-                            setConditions.mutate({ participantId: turn.participantId, conditions })
-                          }
-                        >
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            aria-label={t('conditionsOf', { name: turn.name ?? '' })}
-                            className="touch-target"
-                          >
-                            <AppIcon name="Activity" size={16} aria-hidden="true" />
-                            {tCond('title')}
-                          </Button>
-                        </ConditionsPicker>
-                      )}
-                    </div>
-                  )}
-                </li>
+                  turn={turn}
+                  edition={edition}
+                  onConditionsChange={(conditions) =>
+                    setConditions.mutate({ participantId: turn.participantId, conditions })
+                  }
+                />
               ))}
             </ol>
             {mine && (
