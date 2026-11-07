@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { PartySummary } from '@backend/contexts/parties/domain/Party';
 
@@ -91,5 +92,39 @@ describe('Sidebar', () => {
     renderWithProviders(<Sidebar />);
     expect(sidebar().queryByRole('link', { name: t.journal })).not.toBeInTheDocument();
     expect(sidebar().queryByRole('link', { name: t.settings })).not.toBeInTheDocument();
+  });
+
+  describe('recolher', () => {
+    const tDash = messages.dashboard;
+    afterEach(() => {
+      document.cookie = 'sidebar-pinned=; path=/; max-age=0';
+    });
+
+    it('abre por padrão, e recolher guarda a escolha e deixa os ícones', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Sidebar />);
+
+      await user.click(sidebar().getByRole('button', { name: tDash.collapseMenu }));
+
+      expect(document.cookie).toContain('sidebar-pinned=false');
+      expect(screen.getByRole('complementary')).toHaveAttribute('data-sidebar', 'rail');
+      expect(
+        within(screen.getByRole('navigation', { name: tDash.menu })).getByRole('link', {
+          name: tDash.myCharacters,
+        }),
+      ).toHaveAttribute('href', '/characters');
+    });
+
+    it('recolhido, manter aberto volta ao menu completo', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Sidebar initialPinned={false} />);
+
+      await user.click(
+        sidebar().getAllByRole('button', { name: tDash.keepMenuOpen, hidden: true })[0],
+      );
+
+      expect(document.cookie).toContain('sidebar-pinned=true');
+      expect(screen.getByRole('complementary')).toHaveAttribute('data-sidebar', 'pinned');
+    });
   });
 });

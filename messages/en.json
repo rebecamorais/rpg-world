@@ -594,7 +594,9 @@
     "settingsTitle": "Settings",
     "settingsSubtitle": "Manage your adventurer profile information.",
     "menuDescription": "Main navigation and shortcuts.",
-    "openMenu": "Open menu"
+    "openMenu": "Open menu",
+    "collapseMenu": "Collapse menu",
+    "keepMenuOpen": "Keep menu open"
   },
   "changePassword": {
     "title": "Change Your Password",

@@ -594,7 +594,9 @@
     "settingsTitle": "Configurações",
     "settingsSubtitle": "Gerencie as informações do seu perfil de aventureiro.",
     "menuDescription": "Navegação principal e atalhos.",
-    "openMenu": "Abrir menu"
+    "openMenu": "Abrir menu",
+    "collapseMenu": "Recolher menu",
+    "keepMenuOpen": "Manter menu aberto"
   },
   "changePassword": {
     "title": "Altere sua Senha",

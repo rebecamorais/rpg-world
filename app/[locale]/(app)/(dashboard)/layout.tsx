@@ -1,10 +1,11 @@
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { getApi } from '@api';
 
 import Sidebar from '@frontend/components/layout/Sidebar';
 import { SeededQuery } from '@frontend/components/providers/SeededQuery';
+import { SIDEBAR_PINNED_COOKIE } from '@frontend/constants/sidebar';
 import { UserProvider } from '@frontend/context/UserContext';
 import { PARTIES_QUERY_KEY, PROFILE_QUERY_KEY } from '@frontend/lib/query-keys';
 
@@ -32,6 +33,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   // The sidebar shows the username and avatar from the first paint, instead of a placeholder
   // swapped after /api/profile. The layout stays mounted while navigating the dashboard, so this
   // only runs on a full page load. If it fails, the sidebar fetches it as before.
+  const sidebarPinned = (await cookies()).get(SIDEBAR_PINNED_COOKIE)?.value !== 'false';
   const [profile, parties] = await Promise.all([
     profileApi.getProfile(user.id).catch(() => null),
     partiesApi.listMine().catch(() => null),
@@ -48,16 +50,19 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <UserProvider user={user}>
           <div
             data-dashboard
-            className="bg-sidebar text-foreground flex min-h-[calc(100vh-var(--header-height))]"
+            className="group/dashboard bg-sidebar text-foreground flex min-h-[calc(100vh-var(--header-height))]"
           >
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar initialPinned={sidebarPinned} />
 
             {/* Content area (the main landmark is in the root layout) */}
             {/* Positioned: a sheet's background art fills this whole area (SheetBackdrop) */}
             <div className="relative min-w-0 flex-1">
-              {/* Same width, side and top spacing on every dashboard page */}
-              <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 md:py-10">{children}</div>
+              {/* Same width, side and top spacing on every dashboard page; collapsing the menu
+                  only gives the page more room if its limit grows too */}
+              <div className="mx-auto w-full max-w-5xl px-4 py-6 group-has-[[data-sidebar=rail]]/dashboard:max-w-7xl sm:px-6 md:py-10">
+                {children}
+              </div>
             </div>
           </div>
         </UserProvider>
