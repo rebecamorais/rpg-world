@@ -27,7 +27,7 @@ jobs:
       - name: Setup Supabase CLI
         # Sem `version`, o v3 usa a versão do CLI fixada no package-lock.json.
         # Fixada por SHA: esse job tem o token de produção do Supabase
-        uses: supabase/setup-cli@45a513f8c64c0bc8e0e3dfe572b5c95be85f6359 # v3.0.1
+        uses: supabase/setup-cli@689adcfb80d947100a1eab127289b97d1fb07b13 # v3.2.0
 
       - name: Link Project
         # A senha vai pelo env (o CLI lê SUPABASE_DB_PASSWORD), não pela linha de comando
