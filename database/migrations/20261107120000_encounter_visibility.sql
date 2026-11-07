@@ -89,7 +89,7 @@ END;
 $$;
 
 -- 4. Ao mudar um participante: jogador não vira npc nem o contrário; NPC com PV sai do chão (sem
---    destino, testes nem revelação); três falhas matam; só o morto fica revelado.
+--    destino, testes nem revelação); desfazer morto ou limpar o destino zera os testes; três falhas matam; só o morto fica revelado.
 CREATE FUNCTION private.guard_participant_update()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -106,6 +106,12 @@ BEGIN
     NEW.death_successes := 0;
     NEW.death_failures := 0;
     NEW.death_revealed := false;
+  END IF;
+
+  -- Desfazer "morto" (ou limpar o destino) recomeça os testes; senão as 3 falhas matariam de novo
+  IF (OLD.npc_fate = 'dead' AND NEW.npc_fate IS DISTINCT FROM 'dead') OR (NEW.side <> 'player' AND NEW.npc_fate IS NULL) THEN
+    NEW.death_successes := 0;
+    NEW.death_failures := 0;
   END IF;
 
   IF NEW.npc_fate = 'death_saves' AND NEW.death_failures >= 3 THEN

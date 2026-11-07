@@ -190,6 +190,37 @@ describe('Visibilidade, lado neutro e destino do NPC (Integration)', () => {
     });
   });
 
+  it('desfazer morto depois de 3 falhas volta aos testes com contadores zerados', async () => {
+    await update(gm, goblin, { hp_current: 0, npc_fate: 'death_saves', death_failures: 3 });
+    expect((await participant(goblin))?.npc_fate).toBe('dead');
+
+    const undo = await update(gm, goblin, { npc_fate: 'death_saves' });
+    expect(undo.error).toBeNull();
+    expect(await participant(goblin)).toMatchObject({
+      npc_fate: 'death_saves',
+      death_successes: 0,
+      death_failures: 0,
+      death_revealed: false,
+    });
+  });
+
+  it('limpar o destino zera os contadores', async () => {
+    await update(gm, goblin, {
+      hp_current: 0,
+      npc_fate: 'death_saves',
+      death_failures: 2,
+      death_successes: 1,
+    });
+
+    const clear = await update(gm, goblin, { npc_fate: null });
+    expect(clear.error).toBeNull();
+    expect(await participant(goblin)).toMatchObject({
+      npc_fate: null,
+      death_successes: 0,
+      death_failures: 0,
+    });
+  });
+
   it('desmarcar morto tira a revelação; curar zera tudo', async () => {
     const notDead = await update(gm, goblin, {
       hp_current: 0,
