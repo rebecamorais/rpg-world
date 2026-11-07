@@ -57,6 +57,8 @@ export function useEncounter(partyId: string) {
                   ? {
                       ...row,
                       name: patch.label ?? row.name,
+                      side: patch.side ?? row.side,
+                      visibility: patch.visibility ?? row.visibility,
                       initiative:
                         patch.initiative === undefined ? row.initiative : patch.initiative,
                       hp: {

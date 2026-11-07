@@ -23,6 +23,8 @@ import { getModifier } from '@shared/systems/dnd5e/calculations';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { ConditionsPicker } from './ConditionsPicker';
+import { NpcControls } from './NpcControls';
+import { SideBadge } from './SideBadge';
 
 /** A number field saved when it loses focus; empty means "none" where `nullable`. */
 function NumberCell({
@@ -137,7 +139,6 @@ export function CombatRow({
   const expanded = opened ?? row.isCurrent;
   const toggle = () => setOpened(!expanded);
   const detailsId = `combat-details-${row.participantId}`;
-  const status = row.isCurrent ? t('currentTurn') : row.side === 'player' ? null : t(row.side);
 
   return (
     <li
@@ -185,11 +186,14 @@ export function CombatRow({
           </div>
 
           {/* Its own item, so on a phone the buttons can drop below it */}
-          {status && (
-            <span className="text-label text-character-flare bg-character-surface ml-auto rounded-full px-2 py-0.5 whitespace-nowrap">
-              {status}
-            </span>
-          )}
+          <div className="ml-auto flex items-center gap-2">
+            <SideBadge side={row.side} />
+            {row.isCurrent && (
+              <span className="text-label text-character-flare bg-character-surface rounded-full px-2 py-0.5 whitespace-nowrap">
+                {t('currentTurn')}
+              </span>
+            )}
+          </div>
 
           {/* On touch screens the gap keeps each button's 44px touch area apart */}
           <div className="ml-auto flex items-center gap-1 pointer-coarse:gap-2">
@@ -266,6 +270,16 @@ export function CombatRow({
             </Button>
           </ConditionsPicker>
         </div>
+
+        {row.side !== 'player' && (
+          <NpcControls
+            name={row.name}
+            visibility={row.visibility}
+            side={row.side}
+            onVisibility={(visibility) => onChange({ visibility })}
+            onSide={(side) => onChange({ side })}
+          />
+        )}
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">

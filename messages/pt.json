@@ -1441,7 +1441,15 @@
     "unknownNeutral": "Neutro desconhecido",
     "gmTurn": "O mestre está conduzindo o turno",
     "down": "Caído",
-    "dead": "Morto"
+    "dead": "Morto",
+    "show": "Mostrar",
+    "anonymize": "Anonimizar",
+    "hide": "Ocultar",
+    "visibilityVisible": "Visível",
+    "visibilityAnonymous": "Anônimo",
+    "visibilityHidden": "Oculto",
+    "changeSideOf": "Lado de {name}",
+    "addNeutral": "Adicionar neutro"
   },
   "characterRaces": {
     "dragonborn": "Draconato",

@@ -27,6 +27,7 @@ import { CombatConnection } from './CombatConnection';
 import { CombatRow } from './CombatRow';
 
 const NPC_SIDES: NpcSide[] = ['enemy', 'ally', 'neutral'];
+const ADD_LABEL = { enemy: 'addEnemy', ally: 'addAlly', neutral: 'addNeutral' } as const;
 
 /** Picks one of the GM's NPC sheets, how many come from it and on which side they fight. */
 function AddNpc({
@@ -112,7 +113,7 @@ function AddNpc({
         </div>
       </div>
       <Button type="submit" variant="outline" disabled={!sheetId} loading={isBusy}>
-        {side === 'ally' ? t('addAlly') : t('addEnemy')}
+        {t(ADD_LABEL[side])}
       </Button>
       <Button asChild variant="ghost">
         <Link href="/characters/npcs">{t('manageEnemySheets')}</Link>

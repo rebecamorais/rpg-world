@@ -97,7 +97,7 @@ describe('CombatRow', () => {
       }),
     );
     expect(screen.getByLabelText(fill(t.hpOf, { name: 'Guarda' }))).toHaveValue(9);
-    expect(screen.getByText(t.ally)).toBeInTheDocument();
+    expect(screen.getAllByText(t.ally).length).toBeGreaterThan(0);
     expect(screen.queryByText(t.enemy)).not.toBeInTheDocument();
   });
 
@@ -263,6 +263,90 @@ describe('CombatRow', () => {
       renderRow();
 
       expect(screen.queryByRole('button', view)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('controles do mestre sobre NPCs', () => {
+    const goblin = (overrides = {}) =>
+      gmRow({
+        participantId: 'p-g',
+        characterId: 'goblin',
+        side: 'enemy',
+        name: 'Goblin',
+        ...overrides,
+      });
+    const renderWith = (row: ReturnType<typeof gmRow>, onChange = vi.fn()) => {
+      renderWithProviders(
+        <ul>
+          <CombatRow
+            partyId="party-1"
+            row={row}
+            isFirst={false}
+            isLast={false}
+            onChange={onChange}
+            onMove={vi.fn()}
+            onRemove={vi.fn()}
+            edition="2024"
+            onConditionsChange={vi.fn()}
+          />
+        </ul>,
+      );
+      return onChange;
+    };
+
+    it('mostra o lado também no turno do NPC, junto de "Vez atual"', () => {
+      renderWith(goblin({ isCurrent: true }));
+      expect(screen.getByText(t.currentTurn)).toBeInTheDocument();
+      expect(screen.getAllByText(t.enemy).length).toBeGreaterThan(0);
+    });
+
+    it('o jogador também mostra o lado', () => {
+      renderRow(gmRow({ isCurrent: true }));
+      expect(screen.getByText(t.player)).toBeInTheDocument();
+      expect(screen.getByText(t.currentTurn)).toBeInTheDocument();
+    });
+
+    it('NPC mostra o estado de visibilidade e três ações com rótulo', () => {
+      renderWith(goblin({ visibility: 'anonymous' }));
+      const group = screen.getByRole('group', { name: 'Goblin' });
+      expect(group).toBeInTheDocument();
+      expect(screen.getByText(t.visibilityAnonymous)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: t.anonymize })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
+      expect(screen.getByRole('button', { name: t.show })).toHaveAttribute('aria-pressed', 'false');
+      expect(screen.getByRole('button', { name: t.hide })).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('clicar em Anonimizar chama onChange({ visibility: "anonymous" })', async () => {
+      const onChange = renderWith(goblin());
+      await userEvent.click(screen.getByRole('button', { name: t.anonymize }));
+      expect(onChange).toHaveBeenCalledWith({ visibility: 'anonymous' });
+    });
+
+    it('a ação mostra um tooltip com o mesmo texto, também ao tocar', async () => {
+      renderWith(goblin());
+      await userEvent.click(screen.getByRole('button', { name: t.hide }));
+      expect(await screen.findByRole('tooltip')).toHaveTextContent(t.hide);
+    });
+
+    it('jogador não tem controles de visibilidade nem de lado', () => {
+      renderRow();
+      expect(screen.queryByRole('button', { name: t.hide })).not.toBeInTheDocument();
+      expect(screen.queryByRole('group', { name: 'Arani' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('combobox', { name: fill(t.changeSideOf, { name: 'Arani' }) }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('trocar o lado chama onChange({ side: "neutral" })', async () => {
+      const onChange = renderWith(goblin());
+      await userEvent.click(
+        screen.getByRole('combobox', { name: fill(t.changeSideOf, { name: 'Goblin' }) }),
+      );
+      await userEvent.click(await screen.findByRole('option', { name: t.neutral }));
+      expect(onChange).toHaveBeenCalledWith({ side: 'neutral' });
     });
   });
 });

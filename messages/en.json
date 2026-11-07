@@ -1441,7 +1441,15 @@
     "unknownNeutral": "Unknown neutral",
     "gmTurn": "The GM is running this turn",
     "down": "Down",
-    "dead": "Dead"
+    "dead": "Dead",
+    "show": "Show",
+    "anonymize": "Make anonymous",
+    "hide": "Hide",
+    "visibilityVisible": "Visible",
+    "visibilityAnonymous": "Anonymous",
+    "visibilityHidden": "Hidden",
+    "changeSideOf": "Side of {name}",
+    "addNeutral": "Add neutral"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",
