@@ -50,7 +50,7 @@ function ActionButton({
           onClick={(event) => {
             event.preventDefault();
             setOpen(true);
-            onPress();
+            if (!pressed) onPress();
           }}
           className={cn(
             'focus-ring touch-target inline-flex h-9 w-9 items-center justify-center rounded-md transition-colors pointer-coarse:h-11 pointer-coarse:w-11',

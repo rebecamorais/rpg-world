@@ -16,7 +16,7 @@ import { StatBlock } from '@frontend/components/ui/stat-block';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
-import type { ActiveCondition, GmRow } from '@backend/contexts/combat/domain/Encounter';
+import type { ActiveCondition, GmRow, NpcSide } from '@backend/contexts/combat/domain/Encounter';
 import type { ParticipantPatch } from '@backend/contexts/combat/domain/repository/combat.repo';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
@@ -271,11 +271,12 @@ export function CombatRow({
           </ConditionsPicker>
         </div>
 
-        {row.side !== 'player' && (
+        {isNpc && (
           <NpcControls
             name={row.name}
             visibility={row.visibility}
-            side={row.side}
+            // `isNpc` means the side is not 'player'
+            side={row.side as NpcSide}
             onVisibility={(visibility) => onChange({ visibility })}
             onSide={(side) => onChange({ side })}
           />

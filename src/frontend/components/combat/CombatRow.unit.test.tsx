@@ -97,7 +97,8 @@ describe('CombatRow', () => {
       }),
     );
     expect(screen.getByLabelText(fill(t.hpOf, { name: 'Guarda' }))).toHaveValue(9);
-    expect(screen.getAllByText(t.ally).length).toBeGreaterThan(0);
+    // The badge and the side select's value
+    expect(screen.getAllByText(t.ally)).toHaveLength(2);
     expect(screen.queryByText(t.enemy)).not.toBeInTheDocument();
   });
 
@@ -297,7 +298,8 @@ describe('CombatRow', () => {
     it('mostra o lado também no turno do NPC, junto de "Vez atual"', () => {
       renderWith(goblin({ isCurrent: true }));
       expect(screen.getByText(t.currentTurn)).toBeInTheDocument();
-      expect(screen.getAllByText(t.enemy).length).toBeGreaterThan(0);
+      // The badge and the side select's value: without the badge there'd be one
+      expect(screen.getAllByText(t.enemy)).toHaveLength(2);
     });
 
     it('o jogador também mostra o lado', () => {
@@ -317,6 +319,12 @@ describe('CombatRow', () => {
       );
       expect(screen.getByRole('button', { name: t.show })).toHaveAttribute('aria-pressed', 'false');
       expect(screen.getByRole('button', { name: t.hide })).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('clicar no estado atual não envia um patch repetido', async () => {
+      const onChange = renderWith(goblin());
+      await userEvent.click(screen.getByRole('button', { name: t.show }));
+      expect(onChange).not.toHaveBeenCalled();
     });
 
     it('clicar em Anonimizar chama onChange({ visibility: "anonymous" })', async () => {
