@@ -1450,7 +1450,7 @@
     "hideDeath": "Esconder morte",
     "deathSuccess": "Sucesso {n}",
     "deathFailure": "Falha {n}",
-    "stable": "Estável",
+    "deathStable": "Estável",
     "deathHiddenHint": "Os jogadores veem só “caído”.",
     "show": "Mostrar",
     "anonymize": "Anonimizar",

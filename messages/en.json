@@ -1450,7 +1450,7 @@
     "hideDeath": "Hide death",
     "deathSuccess": "Success {n}",
     "deathFailure": "Failure {n}",
-    "stable": "Stable",
+    "deathStable": "Stable",
     "deathHiddenHint": "Players only see “down”.",
     "show": "Show",
     "anonymize": "Make anonymous",

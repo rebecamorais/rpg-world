@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
 
 import type { NpcFate } from '@backend/contexts/combat/domain/Encounter';
@@ -34,11 +35,21 @@ function Marks({
             aria-pressed={pressed}
             onClick={() => onCount(n === count ? n - 1 : n)}
             className={cn(
-              'focus-ring touch-target size-6 rounded-full border-2 transition-colors',
+              'focus-ring touch-target inline-flex size-6 items-center justify-center rounded-full border-2 transition-colors',
               failure ? 'border-danger-flare' : 'border-success-flare',
               pressed && (failure ? 'bg-danger-flare' : 'bg-success-flare'),
             )}
-          />
+          >
+            {/* A glyph, not only the fill, tells marked from unmarked */}
+            {pressed && (
+              <AppIcon
+                name={failure ? 'X' : 'Check'}
+                size={14}
+                aria-hidden="true"
+                className="text-background"
+              />
+            )}
+          </button>
         );
       })}
     </div>
@@ -94,7 +105,7 @@ export function NpcFateControls({
             onCount={(failures) => onChange({ deathSaves: { ...saves, failures } })}
           />
           {saves.successes >= 3 && (
-            <span className="text-label text-success-flare">{t('stable')}</span>
+            <span className="text-label text-success-flare">{t('deathStable')}</span>
           )}
           <Button variant="outline" size="sm" onClick={() => onChange({ fate: 'dead' })}>
             {t('fateDead')}

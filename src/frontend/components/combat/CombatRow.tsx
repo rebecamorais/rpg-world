@@ -22,6 +22,7 @@ import type { ParticipantPatch } from '@backend/contexts/combat/domain/repositor
 import { getModifier } from '@shared/systems/dnd5e/calculations';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
+import { CollapsedDeadRow } from './CollapsedDeadRow';
 import { ConditionsPicker } from './ConditionsPicker';
 import { NpcControls } from './NpcControls';
 import { NpcFateControls } from './NpcFateControls';
@@ -145,39 +146,7 @@ export function CombatRow({
   // A death the players know of is a thin line, like in their list, until the GM opens it
   const collapsed = isNpc && row.fate === 'dead' && row.deathRevealed && opened !== true;
 
-  if (collapsed) {
-    return (
-      <li
-        aria-current={row.isCurrent ? 'true' : undefined}
-        onClick={(event) => {
-          if (!(event.target as HTMLElement).closest('a, button, input')) toggle();
-        }}
-        className={cn(
-          'border-border text-muted-foreground flex cursor-pointer items-center gap-2 rounded-md border border-dashed px-3 py-1',
-          row.isCurrent && 'border-primary',
-        )}
-      >
-        <CharacterPortrait
-          avatarUrl={row.avatarUrl}
-          characterClass={row.class}
-          className="size-5 grayscale"
-        />
-        <s className="text-sm">{row.name}</s>
-        <SideBadge side={row.side} className="ml-auto" />
-        <AppIcon name="Skull" size={14} aria-hidden="true" />
-        <span className="sr-only">{t('dead')}</span>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={t('detailsOf', { name: row.name })}
-          aria-expanded={false}
-          onClick={toggle}
-        >
-          <AppIcon name="ChevronRight" size={16} aria-hidden="true" />
-        </Button>
-      </li>
-    );
-  }
+  if (collapsed) return <CollapsedDeadRow row={row} onExpand={() => setOpened(true)} />;
 
   return (
     <li

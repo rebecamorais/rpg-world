@@ -52,7 +52,7 @@ describe('NpcFateControls', () => {
 
   it('3 sucessos mostram Estável', () => {
     setup({ fate: 'death_saves', deathSaves: { successes: 3, failures: 0 } });
-    expect(screen.getByText(t.stable)).toBeInTheDocument();
+    expect(screen.getByText(t.deathStable)).toBeInTheDocument();
   });
 
   it('em testes também oferece Morto', async () => {
