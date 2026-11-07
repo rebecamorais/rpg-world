@@ -81,7 +81,7 @@ export default function CharacterHeader() {
             <CharacterPortrait
               avatarUrl={avatarUrl}
               characterClass={classNameStr}
-              className="h-20 w-20 shrink-0"
+              className="h-28 w-28 shrink-0 md:h-32 md:w-32"
             />
             {avatarUrl ? (
               <button
