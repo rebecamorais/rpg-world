@@ -190,7 +190,7 @@ describe('PlayerCombatPanel', () => {
   it('anônimo mostra "Inimigo desconhecido" sem imagem e sem botão de ampliar', () => {
     withTurns([{ side: 'enemy', name: null, avatarUrl: 'https://x/a.png' }]);
     expect(screen.getByText(t.unknownEnemy)).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /view|ampliar/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
     expect(document.querySelector('img')).toBeNull();
   });
 
@@ -219,7 +219,9 @@ describe('PlayerCombatPanel', () => {
     withTurns([{ side: 'enemy', name: 'Orc', life: 'down' }]);
     const li = screen.getByRole('listitem');
     expect(li).toHaveTextContent(t.down);
-    expect(li.className).toContain('grayscale');
+    // Only the picture and name dim; the labels keep their contrast
+    expect(li.className).not.toContain('opacity');
+    expect(within(li).getByText('Orc')).toHaveClass('text-muted-foreground');
   });
 
   it('morto mostra a linha fina com nome riscado e caveira', () => {

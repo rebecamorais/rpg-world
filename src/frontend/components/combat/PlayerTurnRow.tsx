@@ -16,6 +16,13 @@ import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import { ConditionsPicker } from './ConditionsPicker';
 import { SideBadge } from './SideBadge';
 
+const UNKNOWN_KEY = {
+  player: 'unknownEnemy', // players are never anonymous; the key only keeps the lookup total
+  ally: 'unknownAlly',
+  neutral: 'unknownNeutral',
+  enemy: 'unknownEnemy',
+} as const;
+
 /** The picture of someone the player can't identify yet: a square "?" in the portrait's place. */
 function UnknownMarker({ className }: { className: string }) {
   return (
@@ -47,15 +54,7 @@ export function PlayerTurnRow({
   const t = useTranslations('combat');
   const tCond = useTranslations('conditions');
   const anonymous = turn.name === null;
-  const name =
-    turn.name ??
-    t(
-      turn.side === 'ally'
-        ? 'unknownAlly'
-        : turn.side === 'neutral'
-          ? 'unknownNeutral'
-          : 'unknownEnemy',
-    );
+  const name = turn.name ?? t(UNKNOWN_KEY[turn.side]);
   // An anonymous one's picture never shows, even if the NPC has one
   const avatarUrl = anonymous ? null : turn.avatarUrl;
   const dead = turn.life === 'dead';
@@ -89,11 +88,10 @@ export function PlayerTurnRow({
       className={cn(
         'border-border flex flex-col gap-2 rounded-md border px-3 py-2',
         turn.isCurrent && 'border-primary bg-primary/10 animate-turn-glow',
-        down && 'opacity-60 grayscale',
       )}
     >
       <div className="flex items-center gap-3">
-        <div className="relative shrink-0">
+        <div className={cn('relative shrink-0', down && 'opacity-60 grayscale')}>
           {anonymous ? (
             <UnknownMarker className="size-10 text-lg" />
           ) : (
@@ -106,7 +104,9 @@ export function PlayerTurnRow({
           />
         </div>
         <div className="flex min-w-0 flex-1 flex-col">
-          <span className={cn(turn.isMine && 'font-semibold')}>{name}</span>
+          <span className={cn(turn.isMine && 'font-semibold', down && 'text-muted-foreground')}>
+            {name}
+          </span>
           <SideBadge side={turn.side} />
         </div>
         {down && <span className="text-label">{t('down')}</span>}
