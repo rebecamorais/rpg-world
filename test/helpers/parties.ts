@@ -120,7 +120,7 @@ export async function addParticipant(
   gm: Session,
   partyId: string,
   characterId: string,
-  side: 'player' | 'ally' | 'enemy',
+  side: 'player' | 'ally' | 'neutral' | 'enemy',
   label: string | null = side === 'player' ? null : 'Goblin',
 ) {
   const { data, error } = await gm.client
