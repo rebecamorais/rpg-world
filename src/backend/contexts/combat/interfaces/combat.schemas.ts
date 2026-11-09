@@ -11,7 +11,7 @@ export const participantSchema = z.object({
   characterId: z.uuid(),
   count: z.number().int().min(1).max(MAX_ENEMIES_PER_ADD).default(1),
   // Only for an npc sheet; a party character is always a player
-  side: z.enum(['ally', 'enemy']).default('enemy'),
+  side: z.enum(['ally', 'neutral', 'enemy']).default('enemy'),
 });
 
 export const participantPatchSchema = z
@@ -20,6 +20,14 @@ export const participantPatchSchema = z
     initiative: z.number().int().min(-10).max(99).nullable(),
     hpCurrent: z.number().int().min(0).max(9999),
     hpTemp: z.number().int().min(0).max(9999),
+    side: z.enum(['ally', 'neutral', 'enemy']),
+    visibility: z.enum(['visible', 'anonymous', 'hidden']),
+    fate: z.enum(['death_saves', 'dead']).nullable(),
+    deathSaves: z.object({
+      successes: z.number().int().min(0).max(3),
+      failures: z.number().int().min(0).max(3),
+    }),
+    deathRevealed: z.boolean(),
   })
   .partial();
 

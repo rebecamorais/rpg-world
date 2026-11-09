@@ -97,7 +97,8 @@ describe('CombatRow', () => {
       }),
     );
     expect(screen.getByLabelText(fill(t.hpOf, { name: 'Guarda' }))).toHaveValue(9);
-    expect(screen.getByText(t.ally)).toBeInTheDocument();
+    // The badge and the side select's value
+    expect(screen.getAllByText(t.ally)).toHaveLength(2);
     expect(screen.queryByText(t.enemy)).not.toBeInTheDocument();
   });
 
@@ -263,6 +264,180 @@ describe('CombatRow', () => {
       renderRow();
 
       expect(screen.queryByRole('button', view)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('controles do mestre sobre NPCs', () => {
+    const goblin = (overrides = {}) =>
+      gmRow({
+        participantId: 'p-g',
+        characterId: 'goblin',
+        side: 'enemy',
+        name: 'Goblin',
+        ...overrides,
+      });
+    const renderWith = (row: ReturnType<typeof gmRow>, onChange = vi.fn()) => {
+      renderWithProviders(
+        <ul>
+          <CombatRow
+            partyId="party-1"
+            row={row}
+            isFirst={false}
+            isLast={false}
+            onChange={onChange}
+            onMove={vi.fn()}
+            onRemove={vi.fn()}
+            edition="2024"
+            onConditionsChange={vi.fn()}
+          />
+        </ul>,
+      );
+      return onChange;
+    };
+
+    it('mostra o lado também no turno do NPC, junto de "Vez atual"', () => {
+      renderWith(goblin({ isCurrent: true }));
+      expect(screen.getByText(t.currentTurn)).toBeInTheDocument();
+      // The badge and the side select's value: without the badge there'd be one
+      expect(screen.getAllByText(t.enemy)).toHaveLength(2);
+    });
+
+    it('o jogador também mostra o lado', () => {
+      renderRow(gmRow({ isCurrent: true }));
+      expect(screen.getByText(t.player)).toBeInTheDocument();
+      expect(screen.getByText(t.currentTurn)).toBeInTheDocument();
+    });
+
+    it('NPC mostra o estado de visibilidade e três ações com rótulo', () => {
+      renderWith(goblin({ visibility: 'anonymous' }));
+      const group = screen.getByRole('group', { name: 'Goblin' });
+      expect(group).toBeInTheDocument();
+      expect(screen.getByText(t.visibilityAnonymous)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: t.anonymize })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
+      expect(screen.getByRole('button', { name: t.show })).toHaveAttribute('aria-pressed', 'false');
+      expect(screen.getByRole('button', { name: t.hide })).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('clicar no estado atual não envia um patch repetido', async () => {
+      const onChange = renderWith(goblin());
+      await userEvent.click(screen.getByRole('button', { name: t.show }));
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('clicar em Anonimizar chama onChange({ visibility: "anonymous" })', async () => {
+      const onChange = renderWith(goblin());
+      await userEvent.click(screen.getByRole('button', { name: t.anonymize }));
+      expect(onChange).toHaveBeenCalledWith({ visibility: 'anonymous' });
+    });
+
+    it('a ação mostra um tooltip com o mesmo texto, também ao tocar', async () => {
+      renderWith(goblin());
+      await userEvent.click(screen.getByRole('button', { name: t.hide }));
+      expect(await screen.findByRole('tooltip')).toHaveTextContent(t.hide);
+    });
+
+    it('jogador não tem controles de visibilidade nem de lado', () => {
+      renderRow();
+      expect(screen.queryByRole('button', { name: t.hide })).not.toBeInTheDocument();
+      expect(screen.queryByRole('group', { name: 'Arani' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('combobox', { name: fill(t.changeSideOf, { name: 'Arani' }) }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('trocar o lado chama onChange({ side: "neutral" })', async () => {
+      const onChange = renderWith(goblin());
+      await userEvent.click(
+        screen.getByRole('combobox', { name: fill(t.changeSideOf, { name: 'Goblin' }) }),
+      );
+      await userEvent.click(await screen.findByRole('option', { name: t.neutral }));
+      expect(onChange).toHaveBeenCalledWith({ side: 'neutral' });
+    });
+  });
+
+  describe('NPC caído e morto', () => {
+    const npc = (overrides = {}) =>
+      gmRow({
+        participantId: 'p-g',
+        characterId: 'goblin',
+        side: 'enemy',
+        name: 'Goblin',
+        hp: { current: 0, max: 7, temp: 0 },
+        ...overrides,
+      });
+    const renderNpc = (row: ReturnType<typeof gmRow>, onChange = vi.fn()) => {
+      renderWithProviders(
+        <ul>
+          <CombatRow
+            partyId="party-1"
+            row={row}
+            isFirst={false}
+            isLast={false}
+            onChange={onChange}
+            onMove={vi.fn()}
+            onRemove={vi.fn()}
+            edition="2024"
+            onConditionsChange={vi.fn()}
+          />
+        </ul>,
+      );
+      return onChange;
+    };
+
+    it('NPC com 0 PV oferece Testes contra a morte e Morto', async () => {
+      const onChange = renderNpc(npc());
+      expect(screen.getByText(fill(t.chooseFate, { name: 'Goblin' }))).toBeInTheDocument();
+      await userEvent.click(screen.getByRole('button', { name: t.fateDeathSaves }));
+      expect(onChange).toHaveBeenCalledWith({ fate: 'death_saves' });
+      expect(screen.getByRole('button', { name: t.fateDead })).toBeInTheDocument();
+    });
+
+    it('NPC com PV não oferece destino', () => {
+      renderNpc(npc({ hp: { current: 3, max: 7, temp: 0 } }));
+      expect(screen.queryByRole('button', { name: t.fateDead })).not.toBeInTheDocument();
+    });
+
+    it('marcar a 2ª falha chama onChange com os contadores', async () => {
+      const onChange = renderNpc(
+        npc({ fate: 'death_saves', deathSaves: { successes: 0, failures: 0 } }),
+      );
+      await userEvent.click(screen.getByRole('button', { name: fill(t.deathFailure, { n: 2 }) }));
+      expect(onChange).toHaveBeenCalledWith({ deathSaves: { successes: 0, failures: 2 } });
+    });
+
+    it('morto revelado fica recolhido e ainda abre ao clicar', async () => {
+      renderNpc(npc({ fate: 'dead', deathRevealed: true }));
+      expect(screen.getByText('Goblin').closest('s')).not.toBeNull();
+      expect(screen.queryByRole('button', { name: t.hideDeath })).not.toBeInTheDocument();
+      await userEvent.click(
+        screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Goblin' }) }),
+      );
+      expect(screen.getByRole('button', { name: t.hideDeath })).toBeVisible();
+      expect(screen.getByRole('button', { name: t.undoDead })).toBeVisible();
+    });
+
+    it('morto revelado na vez atual abre com um clique', async () => {
+      renderNpc(npc({ fate: 'dead', deathRevealed: true, isCurrent: true }));
+      await userEvent.click(
+        screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Goblin' }) }),
+      );
+      expect(screen.getByRole('button', { name: t.hideDeath })).toBeVisible();
+    });
+
+    it('jogador com 0 PV continua mostrando só os testes da ficha', () => {
+      renderRow(
+        gmRow({
+          hp: { current: 0, max: 20, temp: 0 },
+          deathSaves: { successes: 1, failures: 2 },
+        }),
+      );
+      expect(
+        screen.getByText(fill(t.deathSaves, { successes: 1, failures: 2 })),
+      ).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: t.fateDead })).not.toBeInTheDocument();
     });
   });
 });

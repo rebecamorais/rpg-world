@@ -16,13 +16,17 @@ import { StatBlock } from '@frontend/components/ui/stat-block';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
-import type { ActiveCondition, GmRow } from '@backend/contexts/combat/domain/Encounter';
+import type { ActiveCondition, GmRow, NpcSide } from '@backend/contexts/combat/domain/Encounter';
 import type { ParticipantPatch } from '@backend/contexts/combat/domain/repository/combat.repo';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
+import { CollapsedDeadRow } from './CollapsedDeadRow';
 import { ConditionsPicker } from './ConditionsPicker';
+import { NpcControls } from './NpcControls';
+import { NpcFateControls } from './NpcFateControls';
+import { SideBadge } from './SideBadge';
 
 /** A number field saved when it loses focus; empty means "none" where `nullable`. */
 function NumberCell({
@@ -68,9 +72,9 @@ function NumberCell({
 const ATTRIBUTES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'] as const;
 
 /** The character's picture at the card's left; their class's emblem when there's none. */
-function Portrait({ row }: { row: GmRow }) {
+function Portrait({ row, down }: { row: GmRow; down: boolean }) {
   return (
-    <div className="relative shrink-0 self-start pt-5 pl-4">
+    <div className={cn('relative shrink-0 self-start pt-5 pl-4', down && 'opacity-60 grayscale')}>
       <CharacterPortrait
         avatarUrl={row.avatarUrl}
         characterClass={row.class}
@@ -137,7 +141,12 @@ export function CombatRow({
   const expanded = opened ?? row.isCurrent;
   const toggle = () => setOpened(!expanded);
   const detailsId = `combat-details-${row.participantId}`;
-  const status = row.isCurrent ? t('currentTurn') : row.side === 'player' ? null : t(row.side);
+  // Only an npc can be down or dead; a player's death saves come from their sheet
+  const down = isNpc && row.hp.current === 0;
+  // A death the players know of is a thin line, like in their list, until the GM opens it
+  const collapsed = isNpc && row.fate === 'dead' && row.deathRevealed && opened !== true;
+
+  if (collapsed) return <CollapsedDeadRow row={row} onExpand={() => setOpened(true)} />;
 
   return (
     <li
@@ -165,7 +174,7 @@ export function CombatRow({
         className="bg-character absolute top-0 left-0 z-10 h-1 w-full opacity-80"
       />
 
-      <Portrait row={row} />
+      <Portrait row={row} down={down} />
 
       <div className="flex min-w-0 flex-1 flex-col gap-4 p-4 pt-5">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
@@ -185,11 +194,14 @@ export function CombatRow({
           </div>
 
           {/* Its own item, so on a phone the buttons can drop below it */}
-          {status && (
-            <span className="text-label text-character-flare bg-character-surface ml-auto rounded-full px-2 py-0.5 whitespace-nowrap">
-              {status}
-            </span>
-          )}
+          <div className="ml-auto flex items-center gap-2">
+            <SideBadge side={row.side} />
+            {row.isCurrent && (
+              <span className="text-label text-character-flare bg-character-surface rounded-full px-2 py-0.5 whitespace-nowrap">
+                {t('currentTurn')}
+              </span>
+            )}
+          </div>
 
           {/* On touch screens the gap keeps each button's 44px touch area apart */}
           <div className="ml-auto flex items-center gap-1 pointer-coarse:gap-2">
@@ -266,6 +278,27 @@ export function CombatRow({
             </Button>
           </ConditionsPicker>
         </div>
+
+        {isNpc && (
+          <NpcControls
+            name={row.name}
+            visibility={row.visibility}
+            // `isNpc` means the side is not 'player'
+            side={row.side as NpcSide}
+            onVisibility={(visibility) => onChange({ visibility })}
+            onSide={(side) => onChange({ side })}
+          />
+        )}
+
+        {isNpc && row.hp.current === 0 && (
+          <NpcFateControls
+            name={row.name}
+            fate={row.fate}
+            deathSaves={row.deathSaves}
+            revealed={row.deathRevealed}
+            onChange={onChange}
+          />
+        )}
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">

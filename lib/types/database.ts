@@ -260,41 +260,56 @@ export type Database = {
           character_id: string;
           conditions: NonNullable<Json>;
           created_at: string;
+          death_failures: number;
+          death_revealed: boolean;
+          death_successes: number;
           hp_current: number | null;
           hp_temp: number | null;
           id: string;
           initiative: number | null;
           label: string | null;
+          npc_fate: string | null;
           party_id: string;
           position: number;
           side: string;
+          visibility: string;
         };
         ComputedFields: never;
         Insert: {
           character_id: string;
           conditions?: NonNullable<Json>;
           created_at?: string;
+          death_failures?: number;
+          death_revealed?: boolean;
+          death_successes?: number;
           hp_current?: number | null;
           hp_temp?: number | null;
           id?: string;
           initiative?: number | null;
           label?: string | null;
+          npc_fate?: string | null;
           party_id: string;
           position?: number;
           side: string;
+          visibility?: string;
         };
         Update: {
           character_id?: string;
           conditions?: NonNullable<Json>;
           created_at?: string;
+          death_failures?: number;
+          death_revealed?: boolean;
+          death_successes?: number;
           hp_current?: number | null;
           hp_temp?: number | null;
           id?: string;
           initiative?: number | null;
           label?: string | null;
+          npc_fate?: string | null;
           party_id?: string;
           position?: number;
           side?: string;
+          visibility?: string;
         };
         Relationships: [
           {
@@ -706,12 +721,16 @@ export type Database = {
       encounter_turns: {
         Args: { p_party_id: string };
         Returns: {
+          avatar_url: string;
           conditions: Json;
+          hidden_turn: boolean;
           is_current: boolean;
           is_mine: boolean;
+          life: string;
           name: string;
           participant_id: string;
           round: number;
+          side: string;
         }[];
       };
       end_turn: { Args: { p_participant_id: string; p_party_id: string }; Returns: undefined };

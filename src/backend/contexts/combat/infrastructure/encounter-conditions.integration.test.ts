@@ -90,6 +90,11 @@ describe('Condições no combate e edição da mesa (Integration)', () => {
     it('o mestre põe num inimigo e num jogador; o jogador vê as duas em encounter_turns', async () => {
       expect((await setConditions(gm, goblin, PRONE)).data).toBe(true);
       expect((await setConditions(gm, hero, PRONE)).data).toBe(true);
+      // NPC entra oculto; visível, o jogador vê as condições dele
+      await gm.client
+        .from('encounter_participants')
+        .update({ visibility: 'visible' })
+        .eq('id', goblin);
 
       const { data, error } = await player.client.rpc('encounter_turns', { p_party_id: partyId });
       if (error) throw error;

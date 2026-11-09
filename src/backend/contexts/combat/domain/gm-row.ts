@@ -25,8 +25,7 @@ export function toGmRow(
     name: participant.label ?? sheet.name,
     initiative: participant.initiative,
     hp,
-    deathSaves:
-      isPlayer && hp.current === 0 ? (sheet.deathSaves ?? { successes: 0, failures: 0 }) : null,
+    deathSaves: deathSavesOf(participant, sheet, hp.current),
     avatarUrl: sheet.avatarUrl,
     accentColor: sheet.accentColor,
     race: sheet.race,
@@ -43,5 +42,15 @@ export function toGmRow(
     attributes: sheet.attributes,
     conditions: participant.conditions,
     isCurrent: participant.id === currentParticipantId,
+    visibility: participant.visibility,
+    fate: participant.fate,
+    deathRevealed: participant.deathRevealed,
   };
+}
+
+function deathSavesOf(participant: ParticipantRecord, sheet: CombatSheet, hp: number) {
+  if (participant.side === 'player') {
+    return hp === 0 ? (sheet.deathSaves ?? { successes: 0, failures: 0 }) : null;
+  }
+  return participant.fate === 'death_saves' ? participant.deathSaves : null;
 }

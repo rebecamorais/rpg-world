@@ -173,39 +173,67 @@ describe('Funções do combate (Integration)', () => {
   });
 
   describe('encounter_turns', () => {
-    it('devolve exatamente as colunas round, participant_id, name, is_current, is_mine, conditions', async () => {
+    it('devolve exatamente as colunas da visão do jogador', async () => {
+      // NPC entra oculto; visível, o jogador o vê
+      await gm.client
+        .from('encounter_participants')
+        .update({ visibility: 'visible' })
+        .eq('id', goblin);
       await start();
 
       const { data, error } = await player.client.rpc('encounter_turns', { p_party_id: partyId });
       if (error) throw error;
 
       expect(data.map((row) => Object.keys(row).sort())).toEqual(
-        Array(3).fill(['conditions', 'is_current', 'is_mine', 'name', 'participant_id', 'round']),
+        Array(3).fill([
+          'avatar_url',
+          'conditions',
+          'hidden_turn',
+          'is_current',
+          'is_mine',
+          'life',
+          'name',
+          'participant_id',
+          'round',
+          'side',
+        ]),
       );
       expect(data).toEqual([
         {
           round: 1,
           participant_id: hero,
+          side: 'player',
           name: 'Arani',
+          avatar_url: null,
+          life: 'normal',
           is_current: true,
           is_mine: true,
           conditions: [],
+          hidden_turn: false,
         },
         {
           round: 1,
           participant_id: friend,
+          side: 'player',
           name: 'Brom',
+          avatar_url: null,
+          life: 'normal',
           is_current: false,
           is_mine: false,
           conditions: [],
+          hidden_turn: false,
         },
         {
           round: 1,
           participant_id: goblin,
+          side: 'enemy',
           name: 'Goblin 1',
+          avatar_url: null,
+          life: 'normal',
           is_current: false,
           is_mine: false,
           conditions: [],
+          hidden_turn: false,
         },
       ]);
     });
@@ -221,10 +249,14 @@ describe('Funções do combate (Integration)', () => {
         {
           round: 0,
           participant_id: null,
+          side: null,
           name: null,
+          avatar_url: null,
+          life: null,
           is_current: null,
           is_mine: null,
           conditions: null,
+          hidden_turn: false,
         },
       ]);
     });
