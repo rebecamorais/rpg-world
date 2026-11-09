@@ -92,6 +92,7 @@
       "combat_error_full": "A combat has at most 50 participants.",
       "combat_error_invalid_condition": "That condition is not valid.",
       "combat_error_invalid_change": "That change doesn't apply to players.",
+      "combat_error_at_start": "The combat is already at its first turn.",
       "combat_error_character_not_allowed": "This character can't join this combat."
     },
     "save": "Save",
@@ -1414,8 +1415,6 @@
     "tempHpOf": "{name}'s temporary HP",
     "ac": "AC",
     "passivePerception": "Passive perception",
-    "moveUp": "Move {name} up",
-    "moveDown": "Move {name} down",
     "remove": "Remove {name} from the combat",
     "removeConfirm": "Remove {name} from the combat?",
     "currentTurn": "Current turn",
@@ -1424,6 +1423,8 @@
     "reconnecting": "Reconnecting… the screen updates by itself when the connection is back.",
     "yourTurn": "Your turn",
     "endMyTurn": "End my turn",
+    "yourInitiative": "Your initiative",
+    "viewSheet": "View sheet",
     "playerPreparing": "The GM is preparing the combat.",
     "order": "Combat order",
     "yours": "yours",
@@ -1459,7 +1460,13 @@
     "visibilityAnonymous": "Anonymous",
     "visibilityHidden": "Hidden",
     "changeSideOf": "Side of {name}",
-    "addNeutral": "Add neutral"
+    "addNeutral": "Add neutral",
+    "previousTurn": "Previous turn",
+    "turnBackTo": "Turn went back to {name}",
+    "swapWith": "Swap with {name}",
+    "orderChanged": "order changed",
+    "openSheet": "Open sheet",
+    "forPlayers": "For the players"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

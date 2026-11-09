@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PUT as setOrder } from './order/route';
 import { PUT as setConditions } from './participants/[participantId]/conditions/route';
+import { PUT as setMyInitiative } from './participants/[participantId]/initiative/route';
 import {
   DELETE as removeParticipant,
   PATCH as updateParticipant,
@@ -10,6 +11,7 @@ import {
 import { POST as addParticipant } from './participants/route';
 import { GET, POST as create, DELETE as finish } from './route';
 import { POST as start } from './start/route';
+import { POST as previousTurn } from './turn/previous/route';
 import { POST as endTurn } from './turn/route';
 
 vi.mock('@api', () => import('@tests/helpers/mock-api'));
@@ -105,6 +107,31 @@ describe('/api/parties/[partyId]/encounter', () => {
     );
     expect(ended.status).toBe(204);
     expect(api.combatApi.endTurn).toHaveBeenCalledWith(PARTY, PARTICIPANT);
+  });
+
+  it('voltar turno: POST sem corpo (204)', async () => {
+    const res = await previousTurn(jsonRequest(`${base}/turn/previous`, 'POST'), party());
+    expect(res.status).toBe(204);
+    expect(api.combatApi.previousTurn).toHaveBeenCalledWith(PARTY);
+  });
+
+  it('iniciativa do jogador: PUT com número ou null (204)', async () => {
+    const url = `${base}/participants/${PARTICIPANT}/initiative`;
+    expect((await setMyInitiative(jsonRequest(url, 'PUT', { initiative: 15 }), row())).status).toBe(
+      204,
+    );
+    expect(api.combatApi.setMyInitiative).toHaveBeenCalledWith(PARTY, PARTICIPANT, 15);
+
+    await setMyInitiative(jsonRequest(url, 'PUT', { initiative: null }), row());
+    expect(api.combatApi.setMyInitiative).toHaveBeenLastCalledWith(PARTY, PARTICIPANT, null);
+  });
+
+  it('iniciativa fora de -10..99, decimal ou ausente responde 400', async () => {
+    const url = `${base}/participants/${PARTICIPANT}/initiative`;
+    for (const body of [{ initiative: 100 }, { initiative: -11 }, { initiative: 1.5 }, {}]) {
+      expect((await setMyInitiative(jsonRequest(url, 'PUT', body), row())).status).toBe(400);
+    }
+    expect(api.combatApi.setMyInitiative).not.toHaveBeenCalled();
   });
 
   it('body inválido responde 400 sem chamar a API', async () => {

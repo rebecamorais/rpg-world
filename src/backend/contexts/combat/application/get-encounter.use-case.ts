@@ -20,13 +20,19 @@ export class GetEncounterUseCase {
     if (!encounter) return null;
 
     const ids = [...new Set(encounter.participants.map((p) => p.characterId))];
-    const sheets = new Map((await this.repository.sheets(ids)).map((s) => [s.id, s]));
+    const [sheetList, usernames] = await Promise.all([
+      this.repository.sheets(ids),
+      this.repository.usernames(partyId),
+    ]);
+    const sheets = new Map(sheetList.map((s) => [s.id, s]));
     return {
       role: 'gm',
       round: encounter.round,
       rows: encounter.participants.flatMap((participant) => {
         const sheet = sheets.get(participant.characterId);
-        return sheet ? [toGmRow(participant, sheet, encounter.currentParticipantId)] : [];
+        if (!sheet) return [];
+        const ownerUsername = usernames[sheet.ownerId] ?? null;
+        return [toGmRow(participant, sheet, encounter.currentParticipantId, ownerUsername)];
       }),
     };
   }

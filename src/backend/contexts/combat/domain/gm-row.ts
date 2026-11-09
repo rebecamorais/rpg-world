@@ -11,6 +11,7 @@ export function toGmRow(
   participant: ParticipantRecord,
   sheet: CombatSheet,
   currentParticipantId: string | null,
+  ownerUsername: string | null = null,
 ): GmRow {
   const isPlayer = participant.side === 'player';
   const hp = isPlayer
@@ -24,6 +25,7 @@ export function toGmRow(
     side: participant.side,
     name: participant.label ?? sheet.name,
     initiative: participant.initiative,
+    ownerUsername: isPlayer ? ownerUsername : null,
     hp,
     deathSaves: deathSavesOf(participant, sheet, hp.current),
     avatarUrl: sheet.avatarUrl,

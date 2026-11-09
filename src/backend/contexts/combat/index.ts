@@ -34,6 +34,8 @@ export const createCombatContext = (
     setOrder: commands.setOrder.bind(commands),
     start: commands.start.bind(commands),
     endTurn: commands.endTurn.bind(commands),
+    previousTurn: commands.previousTurn.bind(commands),
+    setMyInitiative: commands.setMyInitiative.bind(commands),
     finish: commands.finish.bind(commands),
   };
 };

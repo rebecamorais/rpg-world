@@ -14,10 +14,14 @@ export const participantSchema = z.object({
   side: z.enum(['ally', 'neutral', 'enemy']).default('enemy'),
 });
 
+export const initiativeSchema = z.object({
+  initiative: z.number().int().min(-10).max(99).nullable(),
+});
+
 export const participantPatchSchema = z
   .object({
     label: z.string().trim().min(1).max(60),
-    initiative: z.number().int().min(-10).max(99).nullable(),
+    initiative: initiativeSchema.shape.initiative,
     hpCurrent: z.number().int().min(0).max(9999),
     hpTemp: z.number().int().min(0).max(9999),
     side: z.enum(['ally', 'neutral', 'enemy']),

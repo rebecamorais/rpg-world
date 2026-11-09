@@ -24,6 +24,11 @@ export const makeCombatApi = (combatContext: CombatContext) => ({
   endTurn: (partyId: string, participantId: string) =>
     combatContext.endTurn(partyId, participantId),
 
+  previousTurn: (partyId: string) => combatContext.previousTurn(partyId),
+
+  setMyInitiative: (partyId: string, participantId: string, initiative: number | null) =>
+    combatContext.setMyInitiative(partyId, participantId, initiative),
+
   finish: (partyId: string) => combatContext.finish(partyId),
 
   setConditions: (partyId: string, participantId: string, conditions: ActiveCondition[]) =>

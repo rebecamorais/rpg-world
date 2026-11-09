@@ -23,6 +23,12 @@ export interface TurnEntry {
   life: Life;
   isCurrent: boolean;
   isMine: boolean;
+  /** Only on the player's own row. */
+  initiative: number | null;
+  /** Only on the player's own row: the sheet to open. */
+  characterId: string | null;
+  /** Player rows whose owner chose a username. */
+  ownerUsername: string | null;
   conditions: ActiveCondition[];
 }
 
@@ -41,6 +47,8 @@ export interface GmRow {
   side: Side;
   name: string;
   initiative: number | null;
+  /** Players whose owner chose a username; npcs: null. */
+  ownerUsername: string | null;
   /** Players: from their sheet. NPCs (enemies and allies): the participant's own, with the sheet's max. */
   hp: { current: number; max: number; temp: number };
   /** A player at 0 HP (from the sheet), or an npc whose fate is death_saves (the participant's own). */

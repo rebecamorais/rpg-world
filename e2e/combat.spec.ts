@@ -9,6 +9,7 @@ import {
   expect,
   hydrated,
   joinParty,
+  openRow,
   partyUrl,
   person,
   revealNpc,
@@ -61,11 +62,14 @@ test.describe('combate', () => {
     await expect(player.page.getByText('The GM is preparing the combat.')).toBeVisible();
 
     await page.getByRole('button', { name: "Add the party's characters" }).click();
+    await openRow(page, 'Arani');
     await expect(page.getByLabel("Arani's initiative")).toBeVisible();
     await page.getByRole('combobox', { name: 'NPC' }).click();
     await page.getByRole('option', { name: 'Goblin' }).click();
     await page.getByLabel('How many').fill('2');
     await page.getByRole('button', { name: 'Add enemy' }).click();
+    await openRow(page, 'Goblin 1');
+    await openRow(page, 'Goblin 2');
     await expect(page.getByLabel("Goblin 2's initiative")).toBeVisible();
 
     for (const [name, initiative] of [
@@ -81,6 +85,16 @@ test.describe('combate', () => {
     }
     await page.getByRole('button', { name: 'Sort by initiative' }).click();
     await expect(order(page).getByRole('listitem').first()).toContainText('Goblin 1');
+
+    // Still preparing: the player sees only their own row and types their initiative
+    await expect(order(player.page).getByRole('listitem')).toHaveText([/^Arani/]);
+    const own = player.page.getByLabel('Your initiative', { exact: true });
+    await (await hydrated(own)).fill('20');
+    await own.blur();
+    await expect(
+      page.getByRole('button', { name: /Sort by initiative · order changed/ }),
+    ).toBeVisible();
+
     await page.getByRole('button', { name: 'Start' }).click();
     await expect(page.getByRole('heading', { name: 'Round 1' })).toBeVisible();
 
@@ -98,7 +112,10 @@ test.describe('combate', () => {
     await expect(current(player.page)).toContainText('Goblin 1');
     // No HP, initiative or AC reaches the player
     await expect(player.page.getByText('/7')).toHaveCount(0);
-    await expect(order(player.page)).not.toContainText('15');
+    // Goblin 1's row only: the players' @ are random and may contain "15"
+    await expect(
+      order(player.page).getByRole('listitem').filter({ hasText: 'Goblin 1' }),
+    ).not.toContainText('15');
   });
 
   test('o jogador encerra o próprio turno e a tela do mestre anda; o mestre encerra o turno de um goblin', async ({
@@ -115,6 +132,15 @@ test.describe('combate', () => {
     await revealNpc(page, 'Goblin 2');
 
     await expect(current(page)).toContainText('Goblin 1');
+
+    // The player types their own initiative: the GM's sort button lights up
+    const own = player.page.getByLabel('Your initiative', { exact: true });
+    await (await hydrated(own)).fill('20');
+    await own.blur();
+    await expect(
+      page.getByRole('button', { name: /Sort by initiative · order changed/ }),
+    ).toBeVisible();
+
     await page.getByRole('button', { name: 'End turn' }).click();
 
     await expect(player.page.getByText('Your turn', { exact: true })).toBeVisible();

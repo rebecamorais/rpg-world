@@ -28,6 +28,7 @@ export interface EncounterRecord {
 /** What the GM's row needs from a sheet. */
 export interface CombatSheet {
   id: string;
+  ownerId: string;
   name: string;
   hpCurrent: number;
   hpMax: number;
@@ -77,6 +78,8 @@ export interface CombatRepo {
   turns(
     partyId: string,
   ): Promise<{ round: number; hiddenTurn: boolean; turns: TurnEntry[] } | null>;
+  /** Chosen usernames of the party's people, by user id. */
+  usernames(partyId: string): Promise<Record<string, string>>;
   /** The characters brought to the party. */
   partyCharacterIds(partyId: string): Promise<string[]>;
   /** One of the signed-in user's npc sheets; null for any other character. */
@@ -88,6 +91,14 @@ export interface CombatRepo {
   setOrder(partyId: string, participantIds: string[]): Promise<void>;
   start(partyId: string): Promise<void>;
   endTurn(partyId: string, participantId: string): Promise<void>;
+  /** Goes back one turn (the GM only); raises when already at the first turn. */
+  previousTurn(partyId: string): Promise<void>;
+  /** A player sets (or clears) the initiative of their own participant; `false` when not allowed. */
+  setMyInitiative(
+    partyId: string,
+    participantId: string,
+    initiative: number | null,
+  ): Promise<boolean>;
   finish(partyId: string): Promise<boolean>;
   /** Replaces the participant's conditions; `false` when not found or the person isn't allowed. */
   setConditions(

@@ -5,7 +5,6 @@ import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
-import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useEncounter } from '@frontend/hooks/useEncounter';
@@ -29,7 +28,7 @@ export function PlayerCombatPanel({
   live: boolean;
 }) {
   const t = useTranslations('combat');
-  const { encounter, endTurn, setConditions } = useEncounter(partyId);
+  const { encounter, endTurn, setConditions, setMyInitiative } = useEncounter(partyId);
   const mine =
     encounter?.role === 'player'
       ? encounter.turns.find((turn) => turn.isCurrent && turn.isMine)
@@ -61,38 +60,33 @@ export function PlayerCombatPanel({
       </SectionCard.Header>
       <SectionCard.Body className="flex flex-col gap-4">
         <CombatConnection live={live} />
-        {encounter.round === 0 ? (
-          <p className="text-muted-foreground">{t('playerPreparing')}</p>
-        ) : (
-          <>
-            {encounter.hiddenTurn && (
-              <p role="status" className="text-muted-foreground">
-                {t('gmTurn')}
-              </p>
-            )}
-            <ol aria-label={t('order')} className="flex flex-col gap-2">
-              {encounter.turns.map((turn) => (
-                <PlayerTurnRow
-                  key={turn.participantId}
-                  turn={turn}
-                  edition={edition}
-                  onConditionsChange={(conditions) =>
-                    setConditions.mutate({ participantId: turn.participantId, conditions })
-                  }
-                />
-              ))}
-            </ol>
-            {mine && (
-              <Button
-                className="self-start"
-                onClick={() => endTurn.mutate(mine.participantId)}
-                loading={endTurn.isPending}
-              >
-                {t('endMyTurn')}
-              </Button>
-            )}
-          </>
+        {encounter.round === 0 && <p className="text-muted-foreground">{t('playerPreparing')}</p>}
+        {encounter.hiddenTurn && (
+          <p role="status" className="text-muted-foreground">
+            {t('gmTurn')}
+          </p>
         )}
+        {/* While preparing, only the player's own rows: they can type their initiative already */}
+        <ol aria-label={t('order')} className="flex flex-col gap-2">
+          {(encounter.round === 0
+            ? encounter.turns.filter((turn) => turn.isMine)
+            : encounter.turns
+          ).map((turn) => (
+            <PlayerTurnRow
+              key={turn.participantId}
+              turn={turn}
+              edition={edition}
+              onConditionsChange={(conditions) =>
+                setConditions.mutate({ participantId: turn.participantId, conditions })
+              }
+              onInitiativeChange={(initiative) =>
+                setMyInitiative.mutate({ participantId: turn.participantId, initiative })
+              }
+              onEndTurn={() => endTurn.mutate(turn.participantId)}
+              endingTurn={endTurn.isPending}
+            />
+          ))}
+        </ol>
       </SectionCard.Body>
     </SectionCard>
   );

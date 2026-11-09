@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { act, waitFor } from '@testing-library/react';
 import { renderHookWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -122,5 +122,26 @@ describe('usePartyChannel', () => {
     expect(getClient).not.toHaveBeenCalled();
     expect(fake.client.realtime.setAuth).not.toHaveBeenCalled();
     expect(result.current.live).toBe(false);
+  });
+
+  // The GM's own change still on its way: refetching now would read the database before it is
+  // saved and undo it on screen; the change refetches when it finishes, bringing this one too
+  it('um aviso com uma mudança do combate a caminho espera por ela, em vez de buscar já', async () => {
+    const { result, queryClient } = renderHookWithProviders(() => {
+      const change = useMutation({
+        mutationKey: encounterQueryKey('party-1'),
+        mutationFn: () => new Promise(() => {}),
+      });
+      usePartyChannel('party-1');
+      return change;
+    });
+    const invalidate = vi.spyOn(queryClient, 'invalidateQueries');
+    await subscribed();
+
+    act(() => result.current.mutate());
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+    await act(async () => fake.state.broadcast!());
+
+    expect(invalidate).not.toHaveBeenCalled();
   });
 });

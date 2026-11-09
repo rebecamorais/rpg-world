@@ -722,12 +722,15 @@ export type Database = {
         Args: { p_party_id: string };
         Returns: {
           avatar_url: string;
+          character_id: string;
           conditions: Json;
           hidden_turn: boolean;
+          initiative: number;
           is_current: boolean;
           is_mine: boolean;
           life: string;
           name: string;
+          owner_username: string;
           participant_id: string;
           round: number;
           side: string;
@@ -798,6 +801,7 @@ export type Database = {
           theme_color: string;
         }[];
       };
+      previous_turn: { Args: { p_party_id: string }; Returns: undefined };
       release_account_deletion_password_attempt: {
         Args: { p_user_id: string };
         Returns: undefined;
@@ -806,6 +810,10 @@ export type Database = {
       set_encounter_order: {
         Args: { p_participant_ids: string[]; p_party_id: string };
         Returns: undefined;
+      };
+      set_my_initiative: {
+        Args: { p_initiative: number; p_participant_id: string; p_party_id: string };
+        Returns: boolean;
       };
       set_participant_conditions: {
         Args: { p_conditions: Json; p_participant_id: string; p_party_id: string };

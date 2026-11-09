@@ -8,7 +8,7 @@ import { useEncounter } from './useEncounter';
 
 vi.mock('@client', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@client')>()),
-  rpgWorldApi: { get: vi.fn(), patch: vi.fn(), put: vi.fn() },
+  rpgWorldApi: { get: vi.fn(), patch: vi.fn(), put: vi.fn(), post: vi.fn() },
 }));
 
 describe('useEncounter', () => {
@@ -122,5 +122,138 @@ describe('useEncounter', () => {
       ),
     );
     await waitFor(() => expect(result.current.encounter).toMatchObject({ rows: [{ conditions }] }));
+  });
+
+  it('a iniciativa do jogador aparece na hora na visão do jogador', async () => {
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({
+      role: 'player',
+      round: 0,
+      hiddenTurn: false,
+      turns: [
+        { participantId: 'a', isMine: true, initiative: null },
+        { participantId: 'b', isMine: false, initiative: null },
+      ],
+    });
+    vi.mocked(rpgWorldApi.put).mockReturnValue(new Promise(() => {}));
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+    await waitFor(() => expect(result.current.encounter).not.toBeNull());
+
+    result.current.setMyInitiative.mutate({ participantId: 'a', initiative: 17 });
+
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({
+        turns: [{ initiative: 17 }, { initiative: null }],
+      }),
+    );
+    expect(rpgWorldApi.put).toHaveBeenCalledWith(
+      '/api/parties/party-1/encounter/participants/a/initiative',
+      { initiative: 17 },
+    );
+  });
+
+  it('previousTurn chama a rota de voltar turno', async () => {
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({});
+    vi.mocked(rpgWorldApi.post).mockResolvedValue(undefined);
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+
+    result.current.previousTurn.mutate();
+
+    await waitFor(() =>
+      expect(rpgWorldApi.post).toHaveBeenCalledWith('/api/parties/party-1/encounter/turn/previous'),
+    );
+  });
+
+  // Two initiatives typed in a row: when the first save answers, refetching would read the
+  // database before the second is saved and undo it on screen, and "Sort" would see the old value
+  it('com outra mudança ainda a caminho, não busca de novo (só quando a última termina)', async () => {
+    const row = (participantId: string, initiative: number | null) => ({
+      participantId,
+      initiative,
+      hp: { current: 5, max: 7, temp: 0 },
+    });
+    vi.mocked(rpgWorldApi.get).mockReset();
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({
+      role: 'gm',
+      round: 0,
+      rows: [row('a', null), row('b', null)],
+    });
+    let answerFirst!: () => void;
+    let answerSecond!: () => void;
+    vi.mocked(rpgWorldApi.patch)
+      .mockReturnValueOnce(new Promise<void>((resolve) => (answerFirst = resolve)))
+      .mockReturnValueOnce(new Promise<void>((resolve) => (answerSecond = resolve)));
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+    await waitFor(() => expect(result.current.encounter).not.toBeNull());
+    expect(rpgWorldApi.get).toHaveBeenCalledTimes(1);
+
+    result.current.updateParticipant.mutate({ participantId: 'a', initiative: 15 });
+    result.current.updateParticipant.mutate({ participantId: 'b', initiative: 10 });
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({
+        rows: [{ initiative: 15 }, { initiative: 10 }],
+      }),
+    );
+
+    // The database has the first one only
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({
+      role: 'gm',
+      round: 0,
+      rows: [row('a', 15), row('b', null)],
+    });
+    answerFirst();
+    await waitFor(() => expect(result.current.updateParticipant.isPending).toBe(true));
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(rpgWorldApi.get).toHaveBeenCalledTimes(1);
+    expect(result.current.encounter).toMatchObject({
+      rows: [{ initiative: 15 }, { initiative: 10 }],
+    });
+
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({
+      role: 'gm',
+      round: 0,
+      rows: [row('a', 15), row('b', 10)],
+    });
+    answerSecond();
+    await waitFor(() => expect(rpgWorldApi.get).toHaveBeenCalledTimes(2));
+  });
+
+  // The previous change's refetch can still be on its way when the next one finishes: it read the
+  // database before that one, so the next one must fetch again rather than wait for it
+  it('uma mudança que termina durante a busca da anterior busca de novo', async () => {
+    const row = (participantId: string) => ({
+      participantId,
+      initiative: null,
+      hp: { current: 5, max: 7, temp: 0 },
+    });
+    const view = { role: 'gm', round: 0, rows: [row('a'), row('b')] };
+    vi.mocked(rpgWorldApi.get).mockReset();
+    vi.mocked(rpgWorldApi.get).mockResolvedValueOnce(view);
+    vi.mocked(rpgWorldApi.patch).mockResolvedValueOnce(undefined);
+    vi.mocked(rpgWorldApi.put).mockReturnValueOnce(new Promise(() => {}));
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+    await waitFor(() => expect(result.current.encounter).not.toBeNull());
+
+    // The first change's refetch never answers
+    vi.mocked(rpgWorldApi.get).mockReturnValueOnce(new Promise(() => {}));
+    result.current.updateParticipant.mutate({ participantId: 'a', initiative: 15 });
+    await waitFor(() => expect(rpgWorldApi.get).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(result.current.updateParticipant.isPending).toBe(false));
+
+    let answerOrder!: () => void;
+    vi.mocked(rpgWorldApi.put).mockReset();
+    vi.mocked(rpgWorldApi.put).mockReturnValueOnce(
+      new Promise<void>((resolve) => (answerOrder = resolve)),
+    );
+    vi.mocked(rpgWorldApi.get).mockResolvedValue(view);
+    result.current.setOrder.mutate(['b', 'a']);
+    // Shown at once, like the other changes
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({
+        rows: [{ participantId: 'b' }, { participantId: 'a' }],
+      }),
+    );
+    answerOrder();
+
+    await waitFor(() => expect(rpgWorldApi.get).toHaveBeenCalledTimes(3));
   });
 });
