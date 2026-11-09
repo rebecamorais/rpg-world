@@ -12,6 +12,9 @@ import { SPELLS } from '../support/global-setup';
 
 async function settle(page: Page) {
   await page.evaluate(() => document.fonts.ready);
+  // Filling fields scrolls the page to reach them, and where it stops varies: the sidebar is
+  // sticky, so on a scrolled page the full-page shot draws it lower. Always shoot from the top
+  await page.evaluate(() => window.scrollTo(0, 0));
   // Turnstile draws a third-party widget (in a shadow root) that may or may not have loaded by
   // now. Its slot keeps the same reserved height either way, so making it transparent makes the
   // screen the same in both cases.
