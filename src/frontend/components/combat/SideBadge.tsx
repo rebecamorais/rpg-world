@@ -25,3 +25,19 @@ export function SideBadge({ side, className }: { side: Side; className?: string 
     </span>
   );
 }
+
+/** A player's character shows who plays it (`@username`); an NPC, or no username, its side. */
+export function OwnerOrSideBadge({
+  side,
+  ownerUsername,
+}: {
+  side: Side;
+  ownerUsername: string | null;
+}) {
+  if (side !== 'player' || !ownerUsername) return <SideBadge side={side} />;
+  return (
+    <span className={cn('text-label inline-flex items-center gap-1', SIDES.player.color)}>
+      <AppIcon name={SIDES.player.icon} size={12} aria-hidden="true" />@{ownerUsername}
+    </span>
+  );
+}

@@ -1,4 +1,6 @@
-import { screen } from '@testing-library/react';
+import type React from 'react';
+
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it, vi } from 'vitest';
@@ -29,228 +31,295 @@ const fill = (text: string, values: Record<string, string | number>) =>
   Object.entries(values).reduce((s, [k, v]) => s.replace(`{${k}}`, String(v)), text);
 
 const onConditions = vi.fn();
-const rowElement = (row = gmRow(), waiting = false) => (
+const rowElement = (
+  row = gmRow(),
+  waiting = false,
+  props: Partial<React.ComponentProps<typeof CombatRow>> = {},
+) => (
   <ul>
     <CombatRow
       partyId="party-1"
       row={row}
-      isFirst={false}
-      isLast={false}
       waiting={waiting}
+      swapWith={[]}
+      onSwap={vi.fn()}
       onChange={vi.fn()}
-      onMove={vi.fn()}
       onRemove={vi.fn()}
       edition="2024"
       onConditionsChange={onConditions}
+      {...props}
     />
   </ul>
 );
 const renderRow = (row = gmRow(), waiting = false) => renderWithProviders(rowElement(row, waiting));
 const details = (name = 'Arani') =>
   screen.getByRole('button', { name: fill(t.detailsOf, { name }) });
+const open = (name = 'Arani') => userEvent.click(details(name));
+
+const goblin = (overrides = {}) =>
+  gmRow({
+    participantId: 'p-g',
+    characterId: 'goblin',
+    side: 'enemy',
+    name: 'Goblin',
+    hp: { current: 5, max: 7, temp: 1 },
+    ...overrides,
+  });
 
 describe('CombatRow', () => {
-  it('fechado mostra quem é e o PV; aberto, CA, percepção, deslocamento e modificadores', async () => {
-    renderRow();
-    expect(screen.getByText(/Elfa · Maga/)).toBeInTheDocument();
-    expect(screen.getByText('12 / 20')).toBeInTheDocument();
+  describe('linha fechada', () => {
+    it('linha fechada não tem campo nem botão de edição', () => {
+      renderRow(goblin());
+      const row = screen.getByRole('listitem');
+      expect(within(row).queryAllByRole('textbox')).toHaveLength(0);
+      expect(within(row).queryAllByRole('spinbutton')).toHaveLength(0);
+      expect(within(row).queryAllByRole('combobox')).toHaveLength(0);
+      expect(within(row).getAllByRole('button')).toEqual([details('Goblin')]);
+    });
 
-    await userEvent.click(details());
-    expect(screen.getByText(messages.combatStats.armorClass)).toBeVisible();
-    expect(screen.getByText(t.passivePerception)).toBeVisible();
-    expect(screen.getByText(messages.combatStats.speed)).toBeVisible();
-    // INT 18 → +4, STR 8 → -1
-    expect(screen.getByText('+4')).toBeVisible();
-    expect(screen.getByText('-1')).toBeVisible();
+    it('linha fechada mostra iniciativa, nome, @, PV e condições', () => {
+      renderRow(
+        gmRow({
+          ownerUsername: 'rebeca',
+          conditions: [{ key: 'dnd5e:srd-5.2:condition:prone', level: null }],
+        }),
+      );
+      const row = screen.getByRole('listitem');
+      expect(within(row).getByText('12')).toBeInTheDocument();
+      expect(within(row).getByRole('link', { name: 'Arani' })).toBeInTheDocument();
+      expect(within(row).getByText('@rebeca')).toBeInTheDocument();
+      expect(within(row).queryByText(t.player)).not.toBeInTheDocument();
+      expect(within(row).getByText('12 / 20')).toBeInTheDocument();
+      expect(within(row).getByRole('button', { name: 'Caído, condition' })).toBeInTheDocument();
+    });
+
+    it('sem iniciativa mostra um traço', () => {
+      renderRow(gmRow({ initiative: null }));
+      expect(screen.getByText('—')).toBeInTheDocument();
+    });
+
+    it('jogador sem @ mostra "Jogador"', () => {
+      renderRow(gmRow({ ownerUsername: null }));
+      expect(screen.getByText(t.player)).toBeInTheDocument();
+    });
+
+    it('NPC mostra o selo de estado; visível não tem selo', () => {
+      const { unmount } = renderRow(goblin({ visibility: 'hidden' }));
+      // The closed row's badge comes first; the open part's controls say it too
+      expect(screen.getAllByText(t.visibilityHidden)[0]).toBeVisible();
+      expect(screen.getAllByText(t.enemy)[0]).toBeVisible();
+      unmount();
+
+      renderRow(goblin());
+      // Only the (closed) open part's controls say "Visible": no badge on the closed row
+      expect(screen.getByText(t.visibilityVisible)).not.toBeVisible();
+      expect(screen.queryByText(t.visibilityHidden)).not.toBeInTheDocument();
+    });
+
+    it('com PV 0 o jogador mostra os testes contra a morte', () => {
+      renderRow(
+        gmRow({ hp: { current: 0, max: 20, temp: 0 }, deathSaves: { successes: 2, failures: 1 } }),
+      );
+      expect(screen.getByText(fill(t.deathSaves, { successes: 2, failures: 1 }))).toBeVisible();
+    });
+
+    it('o nome abre a ficha certa: a da mesa para jogador, a normal para inimigo', () => {
+      renderRow();
+      expect(screen.getByRole('link', { name: 'Arani' })).toHaveAttribute(
+        'href',
+        '/parties/party-1/characters/hero',
+      );
+
+      renderRow(goblin());
+      expect(screen.getByRole('link', { name: 'Goblin' })).toHaveAttribute(
+        'href',
+        '/system/DnD_5e/character/goblin',
+      );
+    });
+
+    it('não existe mais subir nem descer', async () => {
+      renderRow();
+      await open();
+      expect(screen.queryByRole('button', { name: /^(Move|Subir|Descer)/ })).toBeNull();
+      expect(messages.combat).not.toHaveProperty('moveUp');
+      expect(messages.combat).not.toHaveProperty('moveDown');
+    });
+
+    it('a linha da vez atual brilha e fica marcada com aria-current', () => {
+      renderRow(gmRow({ isCurrent: true }));
+      expect(screen.getByRole('listitem')).toHaveClass('animate-turn-glow');
+      expect(screen.getByRole('listitem')).toHaveAttribute('aria-current', 'true');
+      expect(screen.getByText(t.currentTurn)).toBeInTheDocument();
+    });
+
+    it('o card usa a cor que o dono escolheu para o personagem', () => {
+      renderRow(gmRow({ accentColor: '#16a34a' }));
+      expect(screen.getByRole('listitem').style.getPropertyValue('--character-color')).toBe(
+        '#16a34a',
+      );
+    });
+
+    it('esperando a vez, o card fica esmaecido até ser aberto', async () => {
+      renderRow(gmRow(), true);
+      expect(screen.getByRole('listitem')).toHaveClass('grayscale-[.7]');
+
+      await open();
+      expect(screen.getByRole('listitem')).not.toHaveClass('grayscale-[.7]');
+    });
+
+    it('fora do combate em andamento, o card não esmaece', () => {
+      renderRow(gmRow(), false);
+      expect(screen.getByRole('listitem')).not.toHaveClass('grayscale-[.7]');
+    });
+
+    it('sem foto, o retrato mostra o emblema da classe, escondido do leitor de tela', () => {
+      const { container } = renderRow();
+      // Maga → wizard
+      expect(container.querySelector('[data-class]')).toHaveAttribute('data-class', 'wizard');
+      expect(
+        container.querySelector('[data-class]')!.closest('[aria-hidden="true"]'),
+      ).not.toBeNull();
+    });
+
+    it('não mostra magia', () => {
+      renderRow();
+      expect(screen.queryByText(/4\/4|3\/4/)).not.toBeInTheDocument();
+    });
   });
 
-  it('a linha da vez atual brilha', () => {
-    renderRow(gmRow({ isCurrent: true }));
-    expect(screen.getByRole('listitem')).toHaveClass('animate-turn-glow');
+  describe('abrir e fechar', () => {
+    it('clicar na linha abre; clicar num campo da linha aberta não fecha', async () => {
+      renderRow(goblin());
+      expect(details('Goblin')).toHaveAttribute('aria-expanded', 'false');
+      expect(screen.getByText(messages.combatStats.armorClass)).not.toBeVisible();
+
+      await userEvent.click(screen.getByText('5 / 7'));
+      expect(details('Goblin')).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByText(messages.combatStats.armorClass)).toBeVisible();
+
+      await userEvent.click(screen.getByLabelText(fill(t.hpOf, { name: 'Goblin' })));
+      await userEvent.click(screen.getByLabelText(fill(t.initiativeOf, { name: 'Goblin' })));
+      await userEvent.click(screen.getByRole('button', { name: t.anonymize }));
+      expect(details('Goblin')).toHaveAttribute('aria-expanded', 'true');
+
+      await userEvent.click(details('Goblin'));
+      expect(details('Goblin')).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('abre na vez do personagem e volta a fechar quando a vez passa', async () => {
+      const { rerender } = renderRow(gmRow({ isCurrent: true }));
+      expect(details()).toHaveAttribute('aria-expanded', 'true');
+
+      // The GM's choice is dropped once the turn moves on
+      await open();
+      rerender(rowElement(gmRow({ isCurrent: false })));
+      expect(details()).toHaveAttribute('aria-expanded', 'false');
+      rerender(rowElement(gmRow({ isCurrent: true })));
+      expect(details()).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    it('clicar dentro do seletor de condições não fecha a linha', async () => {
+      renderRow();
+      await open();
+      await userEvent.click(
+        screen.getByRole('button', { name: fill(t.conditionsOf, { name: 'Arani' }) }),
+      );
+      await userEvent.click(screen.getByRole('switch', { name: 'Caído' }));
+      expect(onConditions).toHaveBeenCalledWith([
+        { key: 'dnd5e:srd-5.2:condition:prone', level: null },
+      ]);
+      // The modal hides the card from the accessibility tree while it is open
+      expect(
+        screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Arani' }), hidden: true }),
+      ).toHaveAttribute('aria-expanded', 'true');
+    });
   });
 
-  it('o jogador não tem campo de PV; o inimigo tem PV e temporário editáveis', async () => {
-    renderRow();
-    expect(screen.queryByLabelText(fill(t.hpOf, { name: 'Arani' }))).not.toBeInTheDocument();
-    expect(screen.getByText('12 / 20')).toBeInTheDocument();
+  describe('linha aberta', () => {
+    it('a linha aberta tem iniciativa, PV, visibilidade, lado, condições, abrir ficha e tirar do combate', async () => {
+      const onRemove = vi.fn();
+      renderWithProviders(rowElement(goblin(), false, { onRemove }));
+      await open('Goblin');
 
-    renderRow(
-      gmRow({
-        participantId: 'p-g',
-        side: 'enemy',
-        name: 'Goblin 1',
-        hp: { current: 5, max: 7, temp: 1 },
-      }),
-    );
-    expect(screen.getByLabelText(fill(t.hpOf, { name: 'Goblin 1' }))).toHaveValue(5);
-    await userEvent.click(details('Goblin 1'));
-    expect(screen.getByLabelText(fill(t.tempHpOf, { name: 'Goblin 1' }))).toHaveValue(1);
-  });
+      expect(screen.getByLabelText(fill(t.initiativeOf, { name: 'Goblin' }))).toHaveValue(12);
+      expect(screen.getByLabelText(fill(t.hpOf, { name: 'Goblin' }))).toHaveValue(5);
+      expect(screen.getByLabelText(fill(t.tempHpOf, { name: 'Goblin' }))).toHaveValue(1);
+      expect(screen.getByRole('group', { name: 'Goblin' })).toBeVisible();
+      expect(
+        screen.getByRole('combobox', { name: fill(t.changeSideOf, { name: 'Goblin' }) }),
+      ).toBeVisible();
+      expect(
+        screen.getByRole('button', { name: fill(t.conditionsOf, { name: 'Goblin' }) }),
+      ).toBeVisible();
+      expect(screen.getByRole('link', { name: t.openSheet })).toHaveAttribute(
+        'href',
+        '/system/DnD_5e/character/goblin',
+      );
+      expect(screen.getByText(messages.combatStats.armorClass)).toBeVisible();
+      expect(screen.getByText(t.passivePerception)).toBeVisible();
+      expect(screen.getByText(messages.combatStats.speed)).toBeVisible();
 
-  it('o NPC aliado tem PV editável como o inimigo e aparece marcado como aliado', () => {
-    renderRow(
-      gmRow({
-        participantId: 'p-a',
-        side: 'ally',
-        name: 'Guarda',
-        hp: { current: 9, max: 11, temp: 0 },
-      }),
-    );
-    expect(screen.getByLabelText(fill(t.hpOf, { name: 'Guarda' }))).toHaveValue(9);
-    // The badge and the side select's value
-    expect(screen.getAllByText(t.ally)).toHaveLength(2);
-    expect(screen.queryByText(t.enemy)).not.toBeInTheDocument();
-  });
+      await userEvent.click(
+        screen.getByRole('button', { name: fill(t.remove, { name: 'Goblin' }) }),
+      );
+      expect(onRemove).toHaveBeenCalled();
+    });
 
-  it('o PV temporário tem rótulo visível e a iniciativa vazia mostra um traço', async () => {
-    renderRow(
-      gmRow({
-        participantId: 'p-g',
-        side: 'enemy',
-        name: 'Goblin 1',
-        initiative: null,
-        hp: { current: 5, max: 7, temp: 0 },
-      }),
-    );
+    it('mostra os modificadores dos atributos', async () => {
+      renderRow();
+      await open();
+      // INT 18 → +4, STR 8 → -1
+      expect(screen.getByText('+4')).toBeVisible();
+      expect(screen.getByText('-1')).toBeVisible();
+    });
 
-    await userEvent.click(details('Goblin 1'));
-    expect(screen.getByText(t.tempHp)).toBeVisible();
-    expect(screen.getByLabelText(fill(t.initiativeOf, { name: 'Goblin 1' }))).toHaveAttribute(
-      'placeholder',
-      '—',
-    );
-  });
+    it('o jogador não tem campo de PV; o NPC tem PV e temporário editáveis', async () => {
+      const onChange = vi.fn();
+      renderRow();
+      await open();
+      expect(screen.queryByLabelText(fill(t.hpOf, { name: 'Arani' }))).not.toBeInTheDocument();
+      expect(screen.getByLabelText(fill(t.initiativeOf, { name: 'Arani' }))).toBeVisible();
 
-  it('com PV 0 o jogador mostra os testes contra a morte', () => {
-    renderRow(
-      gmRow({ hp: { current: 0, max: 20, temp: 0 }, deathSaves: { successes: 2, failures: 1 } }),
-    );
+      renderWithProviders(rowElement(goblin(), false, { onChange }));
+      await open('Goblin');
+      const hp = screen.getByLabelText(fill(t.hpOf, { name: 'Goblin' }));
+      await userEvent.clear(hp);
+      await userEvent.type(hp, '3');
+      await userEvent.tab();
+      expect(onChange).toHaveBeenCalledWith({ hpCurrent: 3 });
+    });
 
-    expect(screen.getByText(fill(t.deathSaves, { successes: 2, failures: 1 }))).toBeInTheDocument();
-  });
+    it('"Trocar com" só aparece com vizinho de mesma iniciativa e grava a troca', async () => {
+      const onSwap = vi.fn();
+      const { unmount } = renderRow();
+      await open();
+      expect(screen.queryByRole('button', { name: /^Swap with/ })).toBeNull();
+      unmount();
 
-  it('o nome abre a ficha certa: a da mesa para jogador, a normal para inimigo', () => {
-    renderRow();
-    expect(screen.getByRole('link', { name: /^Arani/ })).toHaveAttribute(
-      'href',
-      '/parties/party-1/characters/hero',
-    );
-
-    renderRow(
-      gmRow({ participantId: 'p-g', characterId: 'goblin', side: 'enemy', name: 'Goblin' }),
-    );
-    expect(screen.getByRole('link', { name: /^Goblin/ })).toHaveAttribute(
-      'href',
-      '/system/DnD_5e/character/goblin',
-    );
-  });
-
-  it('fechado mostra só iniciativa, nome e PV; abre pelo botão ou por um clique no card', async () => {
-    renderRow();
-    expect(details()).toHaveAttribute('aria-expanded', 'false');
-    expect(screen.getByText(messages.combatStats.armorClass)).not.toBeVisible();
-
-    await userEvent.click(details());
-    expect(details()).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByText(messages.combatStats.armorClass)).toBeVisible();
-
-    await userEvent.click(screen.getByText('12 / 20'));
-    expect(details()).toHaveAttribute('aria-expanded', 'false');
-  });
-
-  it('só o nome leva à ficha; o avatar e a linha de raça e classe abrem o card', async () => {
-    renderRow();
-    expect(screen.getByRole('link', { name: 'Arani' })).toHaveTextContent(/^Arani$/);
-
-    await userEvent.click(screen.getByText(/Elfa · Maga/));
-    expect(details()).toHaveAttribute('aria-expanded', 'true');
-  });
-
-  it('o card usa a cor que o dono escolheu para o personagem', () => {
-    renderRow(gmRow({ accentColor: '#16a34a' }));
-    expect(screen.getByRole('listitem').style.getPropertyValue('--character-color')).toBe(
-      '#16a34a',
-    );
-  });
-
-  it('clicar no nome ou num campo não abre o card', async () => {
-    renderRow();
-    await userEvent.click(screen.getByLabelText(fill(t.initiativeOf, { name: 'Arani' })));
-    expect(details()).toHaveAttribute('aria-expanded', 'false');
-  });
-
-  it('abre na vez do personagem e volta a fechar quando a vez passa', async () => {
-    const { rerender } = renderRow(gmRow({ isCurrent: true }));
-    expect(details()).toHaveAttribute('aria-expanded', 'true');
-
-    // The GM's choice is dropped once the turn moves on
-    await userEvent.click(details());
-    rerender(rowElement(gmRow({ isCurrent: false })));
-    expect(details()).toHaveAttribute('aria-expanded', 'false');
-    rerender(rowElement(gmRow({ isCurrent: true })));
-    expect(details()).toHaveAttribute('aria-expanded', 'true');
-  });
-
-  it('não mostra magia', () => {
-    renderRow();
-    expect(screen.queryByText(/4\/4|3\/4/)).not.toBeInTheDocument();
-  });
-
-  it('esperando a vez, o card fica esmaecido até ser aberto', async () => {
-    renderRow(gmRow(), true);
-    expect(screen.getByRole('listitem')).toHaveClass('grayscale-[.7]');
-
-    await userEvent.click(details());
-    expect(screen.getByRole('listitem')).not.toHaveClass('grayscale-[.7]');
-  });
-
-  it('fora do combate em andamento, o card não esmaece', () => {
-    renderRow(gmRow(), false);
-    expect(screen.getByRole('listitem')).not.toHaveClass('grayscale-[.7]');
-  });
-
-  it('sem foto, o retrato mostra o emblema da classe, escondido do leitor de tela', () => {
-    const { container } = renderRow();
-    // Maga → wizard
-    expect(container.querySelector('[data-class]')).toHaveAttribute('data-class', 'wizard');
-    expect(container.querySelector('[data-class]')!.closest('[aria-hidden="true"]')).not.toBeNull();
-  });
-
-  it('a vez atual fica marcada com aria-current', () => {
-    renderRow(gmRow({ isCurrent: true }));
-    expect(screen.getByRole('listitem')).toHaveAttribute('aria-current', 'true');
-  });
-
-  it('mostra os selos das condições e o botão abre o seletor', async () => {
-    renderRow(gmRow({ conditions: [{ key: 'dnd5e:srd-5.2:condition:prone', level: null }] }));
-    expect(screen.getByRole('button', { name: 'Caído, condition' })).toBeInTheDocument();
-
-    await userEvent.click(
-      screen.getByRole('button', { name: fill(t.conditionsOf, { name: 'Arani' }) }),
-    );
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByRole('switch', { name: 'Caído' })).toBeChecked();
-  });
-
-  it('clicar dentro do seletor não abre o card', async () => {
-    renderRow();
-    await userEvent.click(
-      screen.getByRole('button', { name: fill(t.conditionsOf, { name: 'Arani' }) }),
-    );
-    await userEvent.click(screen.getByRole('switch', { name: 'Caído' }));
-    expect(onConditions).toHaveBeenCalledWith([
-      { key: 'dnd5e:srd-5.2:condition:prone', level: null },
-    ]);
-    // The modal hides the card from the accessibility tree while it is open
-    expect(
-      screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Arani' }), hidden: true }),
-    ).toHaveAttribute('aria-expanded', 'false');
+      renderWithProviders(
+        rowElement(gmRow(), false, {
+          onSwap,
+          swapWith: [
+            { participantId: 'p-g', name: 'Goblin' },
+            { participantId: 'p-b', name: 'Brom' },
+          ],
+        }),
+      );
+      await open();
+      await userEvent.click(
+        screen.getByRole('button', { name: fill(t.swapWith, { name: 'Brom' }) }),
+      );
+      expect(onSwap).toHaveBeenCalledWith('p-b');
+      expect(
+        screen.getByRole('button', { name: fill(t.swapWith, { name: 'Goblin' }) }),
+      ).toBeVisible();
+    });
   });
 
   describe('ampliar a imagem', () => {
     const view = { name: messages.avatarUpload.viewOf.replace('{name}', 'Arani') };
 
-    it('abre o modal sem abrir os detalhes da linha', async () => {
+    it('clicar no avatar abre a imagem ampliada, sem abrir a linha', async () => {
       renderRow(gmRow({ avatarUrl: 'https://img.test/a.webp' }));
 
       await userEvent.click(screen.getByRole('button', view));
@@ -260,38 +329,18 @@ describe('CombatRow', () => {
       expect(details()).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('sem imagem não mostra o botão', () => {
-      renderRow();
-
+    it('sem imagem, o avatar não amplia e um clique abre a linha', async () => {
+      const { container } = renderRow();
       expect(screen.queryByRole('button', view)).not.toBeInTheDocument();
+
+      await userEvent.click(container.querySelector('[data-class]')!);
+      expect(details()).toHaveAttribute('aria-expanded', 'true');
     });
   });
 
   describe('controles do mestre sobre NPCs', () => {
-    const goblin = (overrides = {}) =>
-      gmRow({
-        participantId: 'p-g',
-        characterId: 'goblin',
-        side: 'enemy',
-        name: 'Goblin',
-        ...overrides,
-      });
     const renderWith = (row: ReturnType<typeof gmRow>, onChange = vi.fn()) => {
-      renderWithProviders(
-        <ul>
-          <CombatRow
-            partyId="party-1"
-            row={row}
-            isFirst={false}
-            isLast={false}
-            onChange={onChange}
-            onMove={vi.fn()}
-            onRemove={vi.fn()}
-            edition="2024"
-            onConditionsChange={vi.fn()}
-          />
-        </ul>,
-      );
+      renderWithProviders(rowElement(row, false, { onChange }));
       return onChange;
     };
 
@@ -302,17 +351,17 @@ describe('CombatRow', () => {
       expect(screen.getAllByText(t.enemy)).toHaveLength(2);
     });
 
-    it('o jogador também mostra o lado', () => {
-      renderRow(gmRow({ isCurrent: true }));
-      expect(screen.getByText(t.player)).toBeInTheDocument();
-      expect(screen.getByText(t.currentTurn)).toBeInTheDocument();
+    it('o NPC aliado aparece marcado como aliado', () => {
+      renderWith(goblin({ side: 'ally', name: 'Guarda' }));
+      // The badge and the side select's value
+      expect(screen.getAllByText(t.ally)).toHaveLength(2);
+      expect(screen.queryByText(t.enemy)).not.toBeInTheDocument();
     });
 
-    it('NPC mostra o estado de visibilidade e três ações com rótulo', () => {
+    it('NPC aberto mostra as três ações de visibilidade com rótulo', async () => {
       renderWith(goblin({ visibility: 'anonymous' }));
-      const group = screen.getByRole('group', { name: 'Goblin' });
-      expect(group).toBeInTheDocument();
-      expect(screen.getByText(t.visibilityAnonymous)).toBeInTheDocument();
+      await open('Goblin');
+      expect(screen.getByRole('group', { name: 'Goblin' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: t.anonymize })).toHaveAttribute(
         'aria-pressed',
         'true',
@@ -323,24 +372,28 @@ describe('CombatRow', () => {
 
     it('clicar no estado atual não envia um patch repetido', async () => {
       const onChange = renderWith(goblin());
+      await open('Goblin');
       await userEvent.click(screen.getByRole('button', { name: t.show }));
       expect(onChange).not.toHaveBeenCalled();
     });
 
     it('clicar em Anonimizar chama onChange({ visibility: "anonymous" })', async () => {
       const onChange = renderWith(goblin());
+      await open('Goblin');
       await userEvent.click(screen.getByRole('button', { name: t.anonymize }));
       expect(onChange).toHaveBeenCalledWith({ visibility: 'anonymous' });
     });
 
     it('a ação mostra um tooltip com o mesmo texto, também ao tocar', async () => {
       renderWith(goblin());
+      await open('Goblin');
       await userEvent.click(screen.getByRole('button', { name: t.hide }));
       expect(await screen.findByRole('tooltip')).toHaveTextContent(t.hide);
     });
 
-    it('jogador não tem controles de visibilidade nem de lado', () => {
+    it('jogador não tem controles de visibilidade nem de lado', async () => {
       renderRow();
+      await open();
       expect(screen.queryByRole('button', { name: t.hide })).not.toBeInTheDocument();
       expect(screen.queryByRole('group', { name: 'Arani' })).not.toBeInTheDocument();
       expect(
@@ -350,6 +403,7 @@ describe('CombatRow', () => {
 
     it('trocar o lado chama onChange({ side: "neutral" })', async () => {
       const onChange = renderWith(goblin());
+      await open('Goblin');
       await userEvent.click(
         screen.getByRole('combobox', { name: fill(t.changeSideOf, { name: 'Goblin' }) }),
       );
@@ -359,44 +413,39 @@ describe('CombatRow', () => {
   });
 
   describe('NPC caído e morto', () => {
-    const npc = (overrides = {}) =>
-      gmRow({
-        participantId: 'p-g',
-        characterId: 'goblin',
-        side: 'enemy',
-        name: 'Goblin',
-        hp: { current: 0, max: 7, temp: 0 },
-        ...overrides,
-      });
+    const npc = (overrides = {}) => goblin({ hp: { current: 0, max: 7, temp: 0 }, ...overrides });
     const renderNpc = (row: ReturnType<typeof gmRow>, onChange = vi.fn()) => {
-      renderWithProviders(
-        <ul>
-          <CombatRow
-            partyId="party-1"
-            row={row}
-            isFirst={false}
-            isLast={false}
-            onChange={onChange}
-            onMove={vi.fn()}
-            onRemove={vi.fn()}
-            edition="2024"
-            onConditionsChange={vi.fn()}
-          />
-        </ul>,
-      );
+      renderWithProviders(rowElement(row, false, { onChange }));
       return onChange;
     };
 
+    it('o selo fechado diz caído, morto (não revelado) ou estável', () => {
+      const { unmount } = renderWithProviders(rowElement(npc()));
+      expect(screen.getAllByText(t.down)[0]).toBeVisible();
+      unmount();
+
+      const second = renderWithProviders(rowElement(npc({ fate: 'dead' })));
+      expect(screen.getAllByText(t.dead)[0]).toBeVisible();
+      second.unmount();
+
+      renderWithProviders(
+        rowElement(npc({ fate: 'death_saves', deathSaves: { successes: 3, failures: 1 } })),
+      );
+      expect(screen.getAllByText(t.deathStable)[0]).toBeVisible();
+    });
+
     it('NPC com 0 PV oferece Testes contra a morte e Morto', async () => {
       const onChange = renderNpc(npc());
-      expect(screen.getByText(fill(t.chooseFate, { name: 'Goblin' }))).toBeInTheDocument();
+      await open('Goblin');
+      expect(screen.getByText(fill(t.chooseFate, { name: 'Goblin' }))).toBeVisible();
       await userEvent.click(screen.getByRole('button', { name: t.fateDeathSaves }));
       expect(onChange).toHaveBeenCalledWith({ fate: 'death_saves' });
       expect(screen.getByRole('button', { name: t.fateDead })).toBeInTheDocument();
     });
 
-    it('NPC com PV não oferece destino', () => {
+    it('NPC com PV não oferece destino', async () => {
       renderNpc(npc({ hp: { current: 3, max: 7, temp: 0 } }));
+      await open('Goblin');
       expect(screen.queryByRole('button', { name: t.fateDead })).not.toBeInTheDocument();
     });
 
@@ -404,6 +453,7 @@ describe('CombatRow', () => {
       const onChange = renderNpc(
         npc({ fate: 'death_saves', deathSaves: { successes: 0, failures: 0 } }),
       );
+      await open('Goblin');
       await userEvent.click(screen.getByRole('button', { name: fill(t.deathFailure, { n: 2 }) }));
       expect(onChange).toHaveBeenCalledWith({ deathSaves: { successes: 0, failures: 2 } });
     });
@@ -412,31 +462,26 @@ describe('CombatRow', () => {
       renderNpc(npc({ fate: 'dead', deathRevealed: true }));
       expect(screen.getByText('Goblin').closest('s')).not.toBeNull();
       expect(screen.queryByRole('button', { name: t.hideDeath })).not.toBeInTheDocument();
-      await userEvent.click(
-        screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Goblin' }) }),
-      );
+      await open('Goblin');
       expect(screen.getByRole('button', { name: t.hideDeath })).toBeVisible();
       expect(screen.getByRole('button', { name: t.undoDead })).toBeVisible();
     });
 
     it('morto revelado na vez atual abre com um clique', async () => {
       renderNpc(npc({ fate: 'dead', deathRevealed: true, isCurrent: true }));
-      await userEvent.click(
-        screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Goblin' }) }),
-      );
+      await open('Goblin');
       expect(screen.getByRole('button', { name: t.hideDeath })).toBeVisible();
     });
 
-    it('jogador com 0 PV continua mostrando só os testes da ficha', () => {
+    it('jogador com 0 PV continua mostrando só os testes da ficha', async () => {
       renderRow(
         gmRow({
           hp: { current: 0, max: 20, temp: 0 },
           deathSaves: { successes: 1, failures: 2 },
         }),
       );
-      expect(
-        screen.getByText(fill(t.deathSaves, { successes: 1, failures: 2 })),
-      ).toBeInTheDocument();
+      expect(screen.getByText(fill(t.deathSaves, { successes: 1, failures: 2 }))).toBeVisible();
+      await open();
       expect(screen.queryByRole('button', { name: t.fateDead })).not.toBeInTheDocument();
     });
   });

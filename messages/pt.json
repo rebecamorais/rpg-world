@@ -1415,8 +1415,6 @@
     "tempHpOf": "PV temporário de {name}",
     "ac": "CA",
     "passivePerception": "Percepção passiva",
-    "moveUp": "Subir {name}",
-    "moveDown": "Descer {name}",
     "remove": "Tirar {name} do combate",
     "removeConfirm": "Tirar {name} do combate?",
     "currentTurn": "Vez atual",
@@ -1460,7 +1458,13 @@
     "visibilityAnonymous": "Anônimo",
     "visibilityHidden": "Oculto",
     "changeSideOf": "Lado de {name}",
-    "addNeutral": "Adicionar neutro"
+    "addNeutral": "Adicionar neutro",
+    "previousTurn": "Voltar turno",
+    "turnBackTo": "Vez voltou para {name}",
+    "swapWith": "Trocar com {name}",
+    "orderChanged": "ordem mudou",
+    "openSheet": "Abrir ficha",
+    "forPlayers": "Para os jogadores"
   },
   "characterRaces": {
     "dragonborn": "Draconato",

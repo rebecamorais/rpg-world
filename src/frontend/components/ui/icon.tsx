@@ -1,5 +1,6 @@
 import {
   Activity,
+  ArrowUpDown,
   Backpack,
   Book,
   BookMarked,
@@ -26,6 +27,8 @@ import {
   Fingerprint,
   Footprints,
   Heart,
+  HeartCrack,
+  HeartPulse,
   History,
   Hourglass,
   Languages,
@@ -96,6 +99,8 @@ const SYSTEM_ICONS = {
   Fingerprint,
   Footprints,
   Heart,
+  HeartCrack,
+  HeartPulse,
   History,
   Languages,
   Hourglass,
@@ -131,6 +136,7 @@ const SYSTEM_ICONS = {
   Activity,
   Scroll,
   Backpack,
+  ArrowUpDown,
 } as const;
 
 const ICON_SIZE_PRESETS = {

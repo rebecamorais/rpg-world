@@ -1415,8 +1415,6 @@
     "tempHpOf": "{name}'s temporary HP",
     "ac": "AC",
     "passivePerception": "Passive perception",
-    "moveUp": "Move {name} up",
-    "moveDown": "Move {name} down",
     "remove": "Remove {name} from the combat",
     "removeConfirm": "Remove {name} from the combat?",
     "currentTurn": "Current turn",
@@ -1460,7 +1458,13 @@
     "visibilityAnonymous": "Anonymous",
     "visibilityHidden": "Hidden",
     "changeSideOf": "Side of {name}",
-    "addNeutral": "Add neutral"
+    "addNeutral": "Add neutral",
+    "previousTurn": "Previous turn",
+    "turnBackTo": "Turn went back to {name}",
+    "swapWith": "Swap with {name}",
+    "orderChanged": "order changed",
+    "openSheet": "Open sheet",
+    "forPlayers": "For the players"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

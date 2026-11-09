@@ -6,124 +6,50 @@ import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { ConditionBadge } from '@frontend/components/content/ConditionBadge';
-import { CharacterIdentity } from '@frontend/components/party/RolePlayCard';
-import { ViewImageButton } from '@frontend/components/shared/ViewImageButton';
 import { Button } from '@frontend/components/ui/button';
 import { HealthBar } from '@frontend/components/ui/health-bar';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Input } from '@frontend/components/ui/input';
-import { StatBlock } from '@frontend/components/ui/stat-block';
+import AppLink from '@frontend/demo/AppLink';
 import { characterTheme } from '@frontend/lib/color-utils';
-import { cn, getStatColorClass } from '@frontend/lib/utils';
+import { cn } from '@frontend/lib/utils';
 
-import type { ActiveCondition, GmRow, NpcSide } from '@backend/contexts/combat/domain/Encounter';
+import type { ActiveCondition, GmRow } from '@backend/contexts/combat/domain/Encounter';
 import type { ParticipantPatch } from '@backend/contexts/combat/domain/repository/combat.repo';
 
-import { getModifier } from '@shared/systems/dnd5e/calculations';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { CollapsedDeadRow } from './CollapsedDeadRow';
-import { ConditionsPicker } from './ConditionsPicker';
-import { NpcControls } from './NpcControls';
-import { NpcFateControls } from './NpcFateControls';
-import { SideBadge } from './SideBadge';
-
-/** A number field saved when it loses focus; empty means "none" where `nullable`. */
-function NumberCell({
-  label,
-  value,
-  min,
-  max,
-  nullable = false,
-  placeholder,
-  onCommit,
-}: {
-  label: string;
-  value: number | null;
-  min: number;
-  max: number;
-  nullable?: boolean;
-  placeholder?: string;
-  onCommit: (value: number | null) => void;
-}) {
-  return (
-    <Input
-      // A new value from the server (another device, a clamp) resets the field
-      key={value ?? ''}
-      type="number"
-      inputMode="numeric"
-      aria-label={label}
-      min={min}
-      max={max}
-      defaultValue={value ?? ''}
-      placeholder={placeholder}
-      onBlur={(event) => {
-        const text = event.currentTarget.value.trim();
-        const next = text === '' ? null : Math.round(Number(text));
-        if (next === value || (next === null && !nullable) || Number.isNaN(next)) return;
-        onCommit(next === null ? null : Math.min(max, Math.max(min, next)));
-      }}
-      // 44px tall where it's tapped, like the buttons' touch area
-      className="h-9 w-16 px-2 text-center font-mono tabular-nums pointer-coarse:h-11"
-    />
-  );
-}
-
-const ATTRIBUTES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'] as const;
-
-/** The character's picture at the card's left; their class's emblem when there's none. */
-function Portrait({ row, down }: { row: GmRow; down: boolean }) {
-  return (
-    <div className={cn('relative shrink-0 self-start pt-5 pl-4', down && 'opacity-60 grayscale')}>
-      <CharacterPortrait
-        avatarUrl={row.avatarUrl}
-        characterClass={row.class}
-        className="h-14 w-14 sm:h-24 sm:w-24"
-      />
-      <ViewImageButton
-        src={row.avatarUrl}
-        name={row.name}
-        className="absolute -right-1 -bottom-1"
-      />
-    </div>
-  );
-}
+import { CombatRowDetails } from './CombatRowDetails';
+import { RowStatus } from './RowStatus';
+import { OwnerOrSideBadge } from './SideBadge';
+import { ZoomablePortrait } from './ZoomablePortrait';
 
 /**
- * A participant in the GM's initiative tracker, drawn like the character card on the home page.
- * Closed: initiative, who it is (opens the sheet) and HP. Opened, by a click or because it's
- * their turn: AC, passive perception, speed, an enemy's temp HP and the attribute modifiers. Only
- * enemies' HP is edited here; a player's comes from their sheet, and their death saves show at 0.
- * While someone else plays (`waiting`), the card fades back so the turn stands out.
+ * A participant in the GM's initiative tracker. Closed, it only reads; every edit lives in the
+ * open part (`CombatRowDetails`). While someone else plays (`waiting`), it fades back.
  */
 export function CombatRow({
   partyId,
   row,
-  isFirst,
-  isLast,
   waiting = false,
-  onChange,
-  onMove,
-  onRemove,
   edition,
+  swapWith,
+  onSwap,
+  onChange,
+  onRemove,
   onConditionsChange,
 }: {
   partyId: string;
   row: GmRow;
-  isFirst: boolean;
-  isLast: boolean;
   waiting?: boolean;
-  onChange: (patch: ParticipantPatch) => void;
-  onMove: (direction: -1 | 1) => void;
-  onRemove: () => void;
-  /** The party's edition: the picker opens on it, and badges of the other one say so. */
   edition: Edition;
+  swapWith: { participantId: string; name: string }[];
+  onSwap: (participantId: string) => void;
+  onChange: (patch: ParticipantPatch) => void;
+  onRemove: () => void;
   onConditionsChange: (conditions: ActiveCondition[]) => void;
 }) {
   const t = useTranslations('combat');
-  const tStats = useTranslations('combatStats');
-  const tCond = useTranslations('conditions');
-  const tAttr = useTranslations('attributes.abbreviations');
   // An npc (enemy or ally) has its own HP in the combat and opens the GM's own sheet
   const isNpc = row.side !== 'player';
   const sheetHref = isNpc
@@ -131,7 +57,7 @@ export function CombatRow({
     : `/parties/${partyId}/characters/${row.characterId}`;
   const theme = characterTheme(row.accentColor);
 
-  // The GM's choice holds until the turn comes or goes; then the card follows the turn again
+  // The GM's choice holds until the turn comes or goes; then the row follows the turn again
   const [opened, setOpened] = useState<boolean | null>(null);
   const [turnSeen, setTurnSeen] = useState(row.isCurrent);
   if (turnSeen !== row.isCurrent) {
@@ -141,7 +67,6 @@ export function CombatRow({
   const expanded = opened ?? row.isCurrent;
   const toggle = () => setOpened(!expanded);
   const detailsId = `combat-details-${row.participantId}`;
-  // Only an npc can be down or dead; a player's death saves come from their sheet
   const down = isNpc && row.hp.current === 0;
   // A death the players know of is a thin line, like in their list, until the GM opens it
   const collapsed = isNpc && row.fate === 'dead' && row.deathRevealed && opened !== true;
@@ -151,17 +76,19 @@ export function CombatRow({
   return (
     <li
       aria-current={row.isCurrent ? 'true' : undefined}
-      // A click anywhere but on a field, link or button opens it; the chevron is the keyboard way
+      // A click on the closed part toggles (the chevron is the keyboard way); nothing in the open
+      // part does, nor in its dialogs and selects, portals whose clicks still bubble here
       onClick={(event) => {
-        // The picker's dialog is a portal, but its clicks still bubble to the card
-        if (!event.currentTarget.contains(event.target as Node)) return;
-        if (!(event.target as HTMLElement).closest('a, button, input')) toggle();
+        const target = event.target as HTMLElement;
+        if (!event.currentTarget.contains(target)) return;
+        if (target.closest('[data-row-details], a, button, input')) return;
+        toggle();
       }}
       // The turn's glow and border take the character's color too
       style={{ ...theme.style, '--primary': 'var(--character-color)' } as CSSProperties}
       className={cn(
         theme.className,
-        'bg-card/60 border-character-muted relative flex cursor-pointer overflow-hidden rounded-xl border transition-[opacity,filter] duration-300',
+        'bg-card/60 border-character-muted relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-xl border p-3 transition-[opacity,filter] duration-300',
         row.isCurrent && 'border-primary animate-turn-glow',
         // Faded, not disabled: back in full on hover, focus or when opened
         waiting &&
@@ -171,216 +98,102 @@ export function CombatRow({
     >
       <div
         aria-hidden="true"
-        className="bg-character absolute top-0 left-0 z-10 h-1 w-full opacity-80"
+        className="bg-character absolute top-0 left-0 h-1 w-full opacity-80"
       />
 
-      <Portrait row={row} down={down} />
+      <div className="flex items-center gap-3">
+        <span className="text-foreground w-7 shrink-0 text-center font-mono text-lg font-bold tabular-nums">
+          <span className="sr-only">{t('initiative')} </span>
+          {row.initiative ?? '—'}
+        </span>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-4 p-4 pt-5">
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-          <NumberCell
-            label={t('initiativeOf', { name: row.name })}
-            value={row.initiative}
-            min={-10}
-            max={99}
-            nullable
-            placeholder="—"
-            onCommit={(initiative) => onChange({ initiative })}
+        <ZoomablePortrait
+          src={row.avatarUrl}
+          name={row.name}
+          className={cn('size-11 sm:size-12', down && 'opacity-60 grayscale')}
+        >
+          <CharacterPortrait
+            avatarUrl={row.avatarUrl}
+            characterClass={row.class}
+            className="size-full rounded-lg"
           />
+        </ZoomablePortrait>
 
-          {/* Never squeezed out by the buttons: on a phone they drop to the next line */}
-          <div className="min-w-0 flex-1 basis-40">
-            <CharacterIdentity character={row} href={sheetHref} withAvatar={false} />
-          </div>
-
-          {/* Its own item, so on a phone the buttons can drop below it */}
-          <div className="ml-auto flex items-center gap-2">
-            <SideBadge side={row.side} />
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
+          <AppLink
+            href={sheetHref}
+            className="text-title text-character-flare focus-ring max-w-full self-start truncate rounded-sm hover:underline"
+          >
+            {row.name}
+          </AppLink>
+          {/* On touch screens the gap keeps each condition badge's touch area apart */}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pointer-coarse:gap-3">
+            <OwnerOrSideBadge side={row.side} ownerUsername={row.ownerUsername} />
+            <RowStatus row={row} />
             {row.isCurrent && (
               <span className="text-label text-character-flare bg-character-surface rounded-full px-2 py-0.5 whitespace-nowrap">
                 {t('currentTurn')}
               </span>
             )}
-          </div>
-
-          {/* On touch screens the gap keeps each button's 44px touch area apart */}
-          <div className="ml-auto flex items-center gap-1 pointer-coarse:gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={t('moveUp', { name: row.name })}
-              disabled={isFirst}
-              onClick={() => onMove(-1)}
-            >
-              <AppIcon name="ChevronUp" size={16} aria-hidden="true" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={t('moveDown', { name: row.name })}
-              disabled={isLast}
-              onClick={() => onMove(1)}
-            >
-              <AppIcon name="ChevronDown" size={16} aria-hidden="true" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={t('remove', { name: row.name })}
-              onClick={onRemove}
-              className="text-danger-flare"
-            >
-              <AppIcon name="X" size={16} aria-hidden="true" />
-            </Button>
-            {/* Keeps the details chevron apart from the move-down one */}
-            <span aria-hidden="true" className="bg-border mx-1 h-5 w-px" />
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={t('detailsOf', { name: row.name })}
-              aria-expanded={expanded}
-              aria-controls={detailsId}
-              onClick={toggle}
-            >
-              <AppIcon
-                name="ChevronRight"
-                size={16}
-                aria-hidden="true"
-                className={cn('transition-transform duration-200', expanded && 'rotate-90')}
+            {row.conditions.map((condition) => (
+              <ConditionBadge
+                key={condition.key}
+                conditionKey={condition.key}
+                level={condition.level}
+                defaultEdition={edition}
               />
-            </Button>
+            ))}
           </div>
         </div>
 
-        {/* On touch screens the gap keeps each badge's touch area apart */}
-        <div className="flex flex-wrap items-center gap-2 pointer-coarse:gap-3">
-          {row.conditions.map((condition) => (
-            <ConditionBadge
-              key={condition.key}
-              conditionKey={condition.key}
-              level={condition.level}
-              defaultEdition={edition}
-            />
-          ))}
-          <ConditionsPicker
-            value={row.conditions}
-            defaultEdition={edition}
-            onChange={onConditionsChange}
-          >
-            <Button
-              variant="ghost"
-              size="sm"
-              aria-label={t('conditionsOf', { name: row.name })}
-              className="touch-target"
-            >
-              <AppIcon name="Activity" size={16} aria-hidden="true" />
-              {tCond('title')}
-            </Button>
-          </ConditionsPicker>
-        </div>
-
-        {isNpc && (
-          <NpcControls
-            name={row.name}
-            visibility={row.visibility}
-            // `isNpc` means the side is not 'player'
-            side={row.side as NpcSide}
-            onVisibility={(visibility) => onChange({ visibility })}
-            onSide={(side) => onChange({ side })}
-          />
-        )}
-
-        {isNpc && row.hp.current === 0 && (
-          <NpcFateControls
-            name={row.name}
-            fate={row.fate}
-            deathSaves={row.deathSaves}
-            revealed={row.deathRevealed}
-            onChange={onChange}
-          />
-        )}
-
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-label text-danger-flare">{tStats('hitPointsShort')}</span>
-            {isNpc ? (
-              <span className="flex items-center gap-1">
-                <NumberCell
-                  label={t('hpOf', { name: row.name })}
-                  value={row.hp.current}
-                  min={0}
-                  max={row.hp.max}
-                  onCommit={(hpCurrent) => onChange({ hpCurrent: hpCurrent ?? 0 })}
-                />
-                <span className="text-muted-foreground font-mono text-sm font-bold">
-                  / {row.hp.max}
-                </span>
-              </span>
-            ) : (
-              <span className="text-foreground font-mono text-sm font-bold tabular-nums">
-                {`${row.hp.current} / ${row.hp.max}`}
-                {row.hp.temp > 0 && <span className="text-warning"> +{row.hp.temp}</span>}
-              </span>
-            )}
-          </div>
+        <div className="flex w-20 shrink-0 flex-col items-end gap-1 sm:w-28">
+          <span className="text-foreground font-mono text-sm font-bold tabular-nums">
+            {`${row.hp.current} / ${row.hp.max}`}
+            {row.hp.temp > 0 && <span className="text-warning"> +{row.hp.temp}</span>}
+          </span>
           <HealthBar
             current={row.hp.current}
             max={row.hp.max}
             temp={row.hp.temp}
             aria-hidden="true"
           />
-          {row.deathSaves && (
-            <p className="text-caption text-danger-flare">{t('deathSaves', row.deathSaves)}</p>
-          )}
         </div>
 
-        <div id={detailsId} hidden={!expanded} className="animate-fade-in flex flex-col gap-2">
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(7rem,1fr))] gap-2">
-            <StatBlock icon="shoulder-armor" label={tStats('armorClass')}>
-              {row.ac}
-            </StatBlock>
-            <StatBlock icon="Eye" iconVariant="system" label={t('passivePerception')}>
-              {row.passivePerception}
-            </StatBlock>
-            <StatBlock icon="boot-prints" label={tStats('speed')} unit={tStats('speedUnit')}>
-              {row.speed}
-            </StatBlock>
-            {isNpc && (
-              <StatBlock icon="Shield" iconVariant="system" label={t('tempHp')}>
-                <NumberCell
-                  label={t('tempHpOf', { name: row.name })}
-                  value={row.hp.temp}
-                  min={0}
-                  max={9999}
-                  onCommit={(hpTemp) => onChange({ hpTemp: hpTemp ?? 0 })}
-                />
-              </StatBlock>
-            )}
-          </div>
-
-          <dl className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-            {ATTRIBUTES.map((key) => {
-              const mod = getModifier(row.attributes[key] ?? 10);
-              return (
-                <div
-                  key={key}
-                  className="border-border bg-background/60 flex flex-col items-center rounded-lg border py-2"
-                >
-                  <dt className="text-label text-muted-foreground">{tAttr(key)}</dt>
-                  <dd
-                    className={cn(
-                      'font-mono text-lg font-bold tabular-nums',
-                      getStatColorClass(mod),
-                    )}
-                  >
-                    {mod >= 0 ? `+${mod}` : mod}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
-        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={t('detailsOf', { name: row.name })}
+          aria-expanded={expanded}
+          aria-controls={detailsId}
+          onClick={toggle}
+          className="shrink-0"
+        >
+          <AppIcon
+            name="ChevronRight"
+            size={16}
+            aria-hidden="true"
+            className={cn('transition-transform duration-200', expanded && 'rotate-90')}
+          />
+        </Button>
       </div>
+
+      {/* A player's death saves come from their sheet: read here, never edited */}
+      {row.deathSaves && !isNpc && (
+        <p className="text-caption text-danger-flare">{t('deathSaves', row.deathSaves)}</p>
+      )}
+
+      <CombatRowDetails
+        id={detailsId}
+        hidden={!expanded}
+        row={row}
+        sheetHref={sheetHref}
+        edition={edition}
+        swapWith={swapWith}
+        onSwap={onSwap}
+        onChange={onChange}
+        onRemove={onRemove}
+        onConditionsChange={onConditionsChange}
+      />
     </li>
   );
 }

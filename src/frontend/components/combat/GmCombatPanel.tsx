@@ -5,8 +5,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import {
   Select,
@@ -17,10 +19,18 @@ import {
 } from '@frontend/components/ui/select';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useEncounter } from '@frontend/hooks/useEncounter';
-import { sortByInitiative } from '@frontend/lib/initiative-order';
+import {
+  isSortedByInitiative,
+  sortByInitiative,
+  tiedNeighbors,
+} from '@frontend/lib/initiative-order';
 import { cn } from '@frontend/lib/utils';
 
-import { MAX_ENEMIES_PER_ADD, type NpcSide } from '@backend/contexts/combat/domain/Encounter';
+import {
+  type GmRow,
+  MAX_ENEMIES_PER_ADD,
+  type NpcSide,
+} from '@backend/contexts/combat/domain/Encounter';
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { CombatConnection } from './CombatConnection';
@@ -28,6 +38,22 @@ import { CombatRow } from './CombatRow';
 
 const NPC_SIDES: NpcSide[] = ['enemy', 'ally', 'neutral'];
 const ADD_LABEL = { enemy: 'addEnemy', ally: 'addAlly', neutral: 'addNeutral' } as const;
+
+/**
+ * Who gets the turn back, as `previous_turn` picks it: the last row before the current one that
+ * isn't a death the players know of, or else (wrapping, one round back) the last such row. Null at
+ * the start, round 1 with nobody playable before the current one, where the server refuses.
+ */
+function previousPlayable(rows: GmRow[], round: number): GmRow | null {
+  const index = rows.findIndex((row) => row.isCurrent);
+  if (index < 0) return null;
+  const playable = (row: GmRow) => !row.deathRevealed;
+  const before = rows.slice(0, index).findLast(playable);
+  if (before) return before;
+  if (round <= 1) return null;
+  // Only revealed deaths left: the server's fallback, so going back never gets stuck
+  return rows.findLast(playable) ?? rows[index - 1] ?? rows[rows.length - 1];
+}
 
 /** Picks one of the GM's NPC sheets, how many come from it and on which side they fight. */
 function AddNpc({
@@ -148,11 +174,10 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
   const missing = party.roster.filter((c) => !inCombat.has(c.characterId));
   const current = rows.find((row) => row.isCurrent);
 
-  const move = (index: number, direction: -1 | 1) => {
-    const order = [...ids];
-    [order[index], order[index + direction]] = [order[index + direction], order[index]];
-    combat.setOrder.mutate(order);
-  };
+  const swap = (a: string, b: string) =>
+    combat.setOrder.mutate(ids.map((id) => (id === a ? b : id === b ? a : id)));
+  const back = round > 0 ? previousPlayable(rows, round) : null;
+  const sorted = isSortedByInitiative(rows);
 
   return (
     <div className="flex flex-col gap-5">
@@ -169,12 +194,31 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
             </Button>
           ) : (
             current && (
-              <Button
-                onClick={() => combat.endTurn.mutate(current.participantId)}
-                loading={combat.endTurn.isPending}
-              >
-                {t('endTurn')}
-              </Button>
+              <>
+                <Button
+                  variant="outline"
+                  disabled={!back}
+                  loading={combat.previousTurn.isPending}
+                  onClick={() => {
+                    // The name is known now; after the refetch the list may have changed
+                    const name = back?.name;
+                    combat.previousTurn.mutate(undefined, {
+                      onSuccess: () => {
+                        if (name) toast(t('turnBackTo', { name }));
+                      },
+                    });
+                  }}
+                >
+                  <AppIcon name="RotateCcw" size={16} aria-hidden="true" />
+                  {t('previousTurn')}
+                </Button>
+                <Button
+                  onClick={() => combat.endTurn.mutate(current.participantId)}
+                  loading={combat.endTurn.isPending}
+                >
+                  {t('endTurn')}
+                </Button>
+              </>
             )
           )}
           <Button
@@ -201,13 +245,14 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
               key={row.participantId}
               partyId={party.id}
               row={row}
-              isFirst={index === 0}
-              isLast={index === rows.length - 1}
               waiting={round > 0 && !row.isCurrent}
               onChange={(patch) =>
                 combat.updateParticipant.mutate({ participantId: row.participantId, ...patch })
               }
-              onMove={(direction) => move(index, direction)}
+              swapWith={Object.values(tiedNeighbors(rows, index))
+                .filter((neighbor) => neighbor !== undefined)
+                .map(({ participantId, name }) => ({ participantId, name }))}
+              onSwap={(other) => swap(row.participantId, other)}
               edition={party.edition}
               onConditionsChange={(conditions) =>
                 combat.setConditions.mutate({ participantId: row.participantId, conditions })
@@ -234,8 +279,15 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
           </Button>
         )}
         {rows.length > 1 && (
-          <Button variant="outline" onClick={() => combat.setOrder.mutate(sortByInitiative(rows))}>
+          // Lit up when the list is out of order, e.g. after a player typed their initiative
+          <Button
+            variant="outline"
+            onClick={() => combat.setOrder.mutate(sortByInitiative(rows))}
+            className={cn(!sorted && 'border-warning-flare text-warning-flare')}
+          >
+            <AppIcon name="ArrowUpDown" size={16} aria-hidden="true" />
             {t('sortByInitiative')}
+            {!sorted && <span>· {t('orderChanged')}</span>}
           </Button>
         )}
       </div>
