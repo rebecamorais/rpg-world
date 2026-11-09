@@ -112,8 +112,9 @@ export function TurnstileWidget({
 
   return (
     <div className="my-2 flex flex-col items-center gap-2">
-      {/* Reserves the widget's height (65px) so the form doesn't jump when it loads */}
-      <div ref={containerRef} data-turnstile className="min-h-[65px]" />
+      {/* Reserves the loaded widget's height so the form doesn't jump when it appears: the iframe
+          is 65px, but Cloudflare's wrapper around it measures 71px */}
+      <div ref={containerRef} data-turnstile className="min-h-[71px]" />
       {unavailable && (
         <p role="alert" className="text-danger-flare text-center text-sm">
           {getMessage('security_widget_unavailable')}
