@@ -82,7 +82,16 @@ describe('previous_turn (Integration)', () => {
     await start();
     await endTurn(hero);
 
-    expect((await previousTurn(player)).error?.message).toBe('encounter_not_your_turn');
+    expect((await previousTurn(player)).error?.message).toBe('encounter_not_found');
+    expect(await encounter()).toEqual({ round: 1, current_participant_id: goblin });
+  });
+
+  it('quem não é da mesa também recebe encounter_not_found', async () => {
+    const stranger = await createSignedInClient('stranger');
+    await start();
+    await endTurn(hero);
+
+    expect((await previousTurn(stranger)).error?.message).toBe('encounter_not_found');
     expect(await encounter()).toEqual({ round: 1, current_participant_id: goblin });
   });
 

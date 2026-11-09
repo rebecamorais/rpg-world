@@ -72,10 +72,11 @@ BEGIN
   SELECT round, current_participant_id INTO v_round, v_current
   FROM public.encounters WHERE party_id = p_party_id
   FOR UPDATE;
-  IF coalesce(v_round, 0) = 0 THEN
+  -- Non-GMs get the same answer as a missing combat: they can't learn whether one is running
+  IF NOT private.is_party_gm(p_party_id) OR coalesce(v_round, 0) = 0 THEN
     RAISE EXCEPTION USING MESSAGE = 'encounter_not_found', ERRCODE = 'P0001';
   END IF;
-  IF NOT private.is_party_gm(p_party_id) OR v_current IS NULL THEN
+  IF v_current IS NULL THEN
     RAISE EXCEPTION USING MESSAGE = 'encounter_not_your_turn', ERRCODE = 'P0001';
   END IF;
 

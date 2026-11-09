@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import {
   addMember,
   bring,
+  chooseUsername,
   createCharacter,
   createNpc,
   createParty,
@@ -163,7 +164,11 @@ describe('SupabaseCombatRepository (Integration)', () => {
     expect((await repo.findEncounter(partyId))!.participants[0].initiative).toBe(15);
     expect(await playerRepo.setMyInitiative(partyId, mine.id, null)).toBe(true);
     expect((await repo.findEncounter(partyId))!.participants[0].initiative).toBeNull();
-    expect(await repo.usernames(partyId)).toBeTypeOf('object');
+    // Only usernames the person picked are shown
+    expect(await repo.usernames(partyId)).not.toHaveProperty(player.userId);
+    await chooseUsername(player.userId, 'arani_dona');
+    expect(await repo.usernames(partyId)).toMatchObject({ [player.userId]: 'arani_dona' });
+    expect(await repo.usernames(partyId)).not.toHaveProperty(gm.userId);
 
     await repo.start(partyId);
     await expect(repo.previousTurn(partyId)).rejects.toMatchObject({

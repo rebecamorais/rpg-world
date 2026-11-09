@@ -95,7 +95,11 @@ describe('Iniciativa do jogador e @ na lista de turnos (Integration)', () => {
     it('vale com o combate em andamento, na própria vez e com 0 PV', async () => {
       const { error } = await gm.client.rpc('start_encounter', { p_party_id: partyId });
       if (error) throw error;
-      await admin().from('characters').update({ hp_current: 0 }).eq('id', heroCharacter);
+      const down = await admin()
+        .from('characters')
+        .update({ hp_current: 0 })
+        .eq('id', heroCharacter);
+      if (down.error) throw down.error;
 
       const set = await setInitiative(player, hero, -3);
       expect(set.data).toBe(true);
@@ -169,7 +173,7 @@ describe('Iniciativa do jogador e @ na lista de turnos (Integration)', () => {
         p_participant_id: hero,
         p_initiative: 5,
       });
-      expect(error).not.toBeNull();
+      expect(error?.code).toBe('42501');
     });
   });
 
