@@ -24,6 +24,7 @@ describe('Funções do combate (Integration)', () => {
   let stranger: Session;
   let partyId: string;
   let hero: string;
+  let heroCharacter: string;
   let friend: string;
   let goblin: string;
 
@@ -58,6 +59,7 @@ describe('Funções do combate (Integration)', () => {
     await bring(colleague, partyId, friendId);
     const goblinId = await createNpc(gm.userId, 'Goblin', 7);
     await createEncounter(gm, partyId);
+    heroCharacter = heroId;
     hero = await addParticipant(gm, partyId, heroId, 'player');
     friend = await addParticipant(gm, partyId, friendId, 'player');
     goblin = await addParticipant(gm, partyId, goblinId, 'enemy', 'Goblin 1');
@@ -187,12 +189,15 @@ describe('Funções do combate (Integration)', () => {
       expect(data.map((row) => Object.keys(row).sort())).toEqual(
         Array(3).fill([
           'avatar_url',
+          'character_id',
           'conditions',
           'hidden_turn',
+          'initiative',
           'is_current',
           'is_mine',
           'life',
           'name',
+          'owner_username',
           'participant_id',
           'round',
           'side',
@@ -210,6 +215,9 @@ describe('Funções do combate (Integration)', () => {
           is_mine: true,
           conditions: [],
           hidden_turn: false,
+          initiative: null,
+          character_id: heroCharacter,
+          owner_username: null,
         },
         {
           round: 1,
@@ -222,6 +230,9 @@ describe('Funções do combate (Integration)', () => {
           is_mine: false,
           conditions: [],
           hidden_turn: false,
+          initiative: null,
+          character_id: null,
+          owner_username: null,
         },
         {
           round: 1,
@@ -234,6 +245,9 @@ describe('Funções do combate (Integration)', () => {
           is_mine: false,
           conditions: [],
           hidden_turn: false,
+          initiative: null,
+          character_id: null,
+          owner_username: null,
         },
       ]);
     });
@@ -257,6 +271,9 @@ describe('Funções do combate (Integration)', () => {
           is_mine: null,
           conditions: null,
           hidden_turn: false,
+          initiative: null,
+          character_id: null,
+          owner_username: null,
         },
       ]);
     });

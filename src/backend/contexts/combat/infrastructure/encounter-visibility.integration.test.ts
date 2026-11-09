@@ -432,6 +432,9 @@ describe('Visibilidade, lado neutro e destino do NPC (Integration)', () => {
             'is_mine',
             'conditions',
             'hidden_turn',
+            'initiative',
+            'character_id',
+            'owner_username',
           ].sort(),
         );
       }
@@ -453,6 +456,9 @@ describe('Visibilidade, lado neutro e destino do NPC (Integration)', () => {
           is_mine: null,
           conditions: null,
           hidden_turn: true,
+          initiative: null,
+          character_id: null,
+          owner_username: null,
         },
       ]);
     });
