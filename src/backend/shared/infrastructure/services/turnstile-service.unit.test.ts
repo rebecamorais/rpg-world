@@ -63,4 +63,32 @@ describe('TurnstileService', () => {
     const { signal } = vi.mocked(global.fetch).mock.calls[0][1] as RequestInit;
     expect(signal).toBeInstanceOf(AbortSignal);
   });
+
+  // Cloudflare answers success to its always-pass test secret whatever the token: asking it over
+  // the network only adds a way to fail (the e2e suite runs the production build with this secret)
+  it('o segredo de teste "sempre passa" da Cloudflare passa sem ir à rede, também em produção', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('TURNSTILE_SECRET_KEY', '1x0000000000000000000000000000000AA');
+    global.fetch = vi.fn();
+
+    const result = await TurnstileService.verify('token');
+
+    expect(result).toEqual({ success: true });
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  // Not one of Cloudflare's: Cloudflare refuses it, so in production it must not pass
+  it('o segredo falso local só passa fora de produção', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('TURNSTILE_SECRET_KEY', '1x00000000000000000000000000000000');
+    global.fetch = vi.fn().mockResolvedValue({
+      json: async () => ({ success: false, 'error-codes': ['invalid-input-secret'] }),
+    });
+    vi.spyOn(console, 'error').mockImplementationOnce(() => {});
+
+    const result = await TurnstileService.verify('token');
+
+    expect(result.success).toBe(false);
+    expect(global.fetch).toHaveBeenCalled();
+  });
 });

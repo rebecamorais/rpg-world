@@ -1,6 +1,9 @@
 import 'server-only';
 
 const VERIFY_TIMEOUT_MS = 5000;
+// https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+const ALWAYS_PASS_TEST_SECRET = '1x0000000000000000000000000000000AA';
+const LOCAL_TEST_SECRET = '1x00000000000000000000000000000000';
 
 interface TurnstileVerificationResponse {
   success: boolean;
@@ -21,9 +24,11 @@ export class TurnstileService {
     }
 
     try {
-      // Special handling for Turnstile "Always Pass" keys in Development/Test
-      const isTestSecret = secretKey === '1x00000000000000000000000000000000';
-      if (isTestSecret && process.env.NODE_ENV !== 'production') {
+      // Cloudflare's "always passes" test secret: Cloudflare answers success whatever the token,
+      // so asking it over the network would only add a way to fail (e2e runs the production build)
+      if (secretKey === ALWAYS_PASS_TEST_SECRET) return { success: true };
+      // A local stand-in Cloudflare refuses: only outside production
+      if (secretKey === LOCAL_TEST_SECRET && process.env.NODE_ENV !== 'production') {
         return { success: true };
       }
 
