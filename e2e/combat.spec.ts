@@ -85,6 +85,16 @@ test.describe('combate', () => {
     }
     await page.getByRole('button', { name: 'Sort by initiative' }).click();
     await expect(order(page).getByRole('listitem').first()).toContainText('Goblin 1');
+
+    // Still preparing: the player sees only their own row and types their initiative
+    await expect(order(player.page).getByRole('listitem')).toHaveText([/^Arani/]);
+    const own = player.page.getByLabel('Your initiative', { exact: true });
+    await (await hydrated(own)).fill('20');
+    await own.blur();
+    await expect(
+      page.getByRole('button', { name: /Sort by initiative · order changed/ }),
+    ).toBeVisible();
+
     await page.getByRole('button', { name: 'Start' }).click();
     await expect(page.getByRole('heading', { name: 'Round 1' })).toBeVisible();
 
