@@ -798,6 +798,7 @@ export type Database = {
           theme_color: string;
         }[];
       };
+      previous_turn: { Args: { p_party_id: string }; Returns: undefined };
       release_account_deletion_password_attempt: {
         Args: { p_user_id: string };
         Returns: undefined;
