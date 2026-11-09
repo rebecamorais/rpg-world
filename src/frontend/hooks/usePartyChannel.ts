@@ -26,7 +26,10 @@ export function usePartyChannel(partyId: string) {
     const queryKey = encounterQueryKey(partyId);
     // A fetch already in flight may have read the combat before this change: invalidating alone
     // would reuse it (TanStack dedupes a first load), so it's cancelled and fetched again
+    // With one of this person's changes still on its way, that change refetches when it finishes
+    // (useEncounter); refetching now would read the database before it's saved and undo it on screen
     const refresh = async () => {
+      if (queryClient.isMutating({ mutationKey: queryKey }) > 0) return;
       await queryClient.cancelQueries({ queryKey });
       await queryClient.invalidateQueries({ queryKey });
     };

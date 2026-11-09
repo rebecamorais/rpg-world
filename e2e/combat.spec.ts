@@ -112,7 +112,10 @@ test.describe('combate', () => {
     await expect(current(player.page)).toContainText('Goblin 1');
     // No HP, initiative or AC reaches the player
     await expect(player.page.getByText('/7')).toHaveCount(0);
-    await expect(order(player.page)).not.toContainText('15');
+    // Goblin 1's row only: the players' @ are random and may contain "15"
+    await expect(
+      order(player.page).getByRole('listitem').filter({ hasText: 'Goblin 1' }),
+    ).not.toContainText('15');
   });
 
   test('o jogador encerra o próprio turno e a tela do mestre anda; o mestre encerra o turno de um goblin', async ({

@@ -30,9 +30,19 @@ export function useEncounter(partyId: string) {
     retry: false,
   });
 
-  const onSettled = () => queryClient.invalidateQueries({ queryKey: encounterQueryKey(partyId) });
+  // Every change shares the key: refetching while another one is still on its way would read the
+  // database before it's saved and undo it on screen ("Sort by initiative" would then see the old
+  // value). Only the last one to finish refetches (it still counts as running in onSettled). The
+  // refetch isn't awaited: a change is done once the server answers, so the next one to finish,
+  // or a broadcast (usePartyChannel), fetches again instead of trusting a fetch already under way
+  const mutationKey = encounterQueryKey(partyId);
+  const onSettled = () => {
+    if (queryClient.isMutating({ mutationKey }) === 1) {
+      void queryClient.invalidateQueries({ queryKey: encounterQueryKey(partyId) });
+    }
+  };
   const onError = (err: Error) => toast.error(getErrorMessage(err));
-  const options = { onSettled, onError };
+  const options = { mutationKey, onSettled, onError };
 
   const create = useMutation({ mutationFn: () => rpgWorldApi.post(base), ...options });
   const finish = useMutation({ mutationFn: () => rpgWorldApi.delete(base), ...options });
@@ -95,6 +105,19 @@ export function useEncounter(partyId: string) {
   });
   const setOrder = useMutation({
     mutationFn: (participantIds: string[]) => rpgWorldApi.put(`${base}/order`, { participantIds }),
+    // Shown at once; a fetch already on its way read the old order, so it's cancelled
+    onMutate: async (participantIds) => {
+      await queryClient.cancelQueries({ queryKey: encounterQueryKey(partyId) });
+      queryClient.setQueryData<EncounterView | null>(encounterQueryKey(partyId), (view) => {
+        if (view?.role !== 'gm') return view;
+        const position = new Map(participantIds.map((id, index) => [id, index]));
+        const rank = (id: string) => position.get(id) ?? participantIds.length;
+        return {
+          ...view,
+          rows: [...view.rows].sort((a, b) => rank(a.participantId) - rank(b.participantId)),
+        };
+      });
+    },
     ...options,
   });
   const endTurn = useMutation({
