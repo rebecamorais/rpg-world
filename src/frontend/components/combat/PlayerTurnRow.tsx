@@ -4,9 +4,9 @@ import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { ConditionBadge } from '@frontend/components/content/ConditionBadge';
-import { ViewImageButton } from '@frontend/components/shared/ViewImageButton';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
+import AppLink from '@frontend/demo/AppLink';
 import { cn } from '@frontend/lib/utils';
 
 import type { ActiveCondition, TurnEntry } from '@backend/contexts/combat/domain/Encounter';
@@ -14,7 +14,9 @@ import type { ActiveCondition, TurnEntry } from '@backend/contexts/combat/domain
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { ConditionsPicker } from './ConditionsPicker';
-import { SideBadge } from './SideBadge';
+import { NumberCell } from './NumberCell';
+import { OwnerOrSideBadge, SideBadge } from './SideBadge';
+import { ZoomablePortrait } from './ZoomablePortrait';
 
 const UNKNOWN_KEY = {
   player: 'unknownEnemy', // players are never anonymous; the key only keeps the lookup total
@@ -46,10 +48,16 @@ export function PlayerTurnRow({
   turn,
   edition,
   onConditionsChange,
+  onInitiativeChange,
+  onEndTurn,
+  endingTurn = false,
 }: {
   turn: TurnEntry;
   edition: Edition;
   onConditionsChange: (conditions: ActiveCondition[]) => void;
+  onInitiativeChange: (initiative: number | null) => void;
+  onEndTurn: () => void;
+  endingTurn?: boolean;
 }) {
   const t = useTranslations('combat');
   const tCond = useTranslations('conditions');
@@ -91,25 +99,20 @@ export function PlayerTurnRow({
       )}
     >
       <div className="flex items-center gap-3">
-        <div className="relative shrink-0">
-          <div className={cn(down && 'opacity-60 grayscale')}>
+        <ZoomablePortrait src={avatarUrl} name={name} className="size-10">
+          <div className={cn('size-full', down && 'opacity-60 grayscale')}>
             {anonymous ? (
               <UnknownMarker className="size-10 text-lg" />
             ) : (
               <CharacterPortrait avatarUrl={avatarUrl} className="size-10" />
             )}
           </div>
-          <ViewImageButton
-            src={avatarUrl}
-            name={name}
-            className="absolute -right-2 -bottom-2 h-5 w-5"
-          />
-        </div>
+        </ZoomablePortrait>
         <div className="flex min-w-0 flex-1 flex-col">
           <span className={cn(turn.isMine && 'font-semibold', down && 'text-muted-foreground')}>
             {name}
           </span>
-          <SideBadge side={turn.side} />
+          <OwnerOrSideBadge side={turn.side} ownerUsername={turn.ownerUsername} />
         </div>
         {down && <span className="text-label">{t('down')}</span>}
         {turn.isCurrent && (
@@ -118,6 +121,40 @@ export function PlayerTurnRow({
           </span>
         )}
       </div>
+      {turn.isMine && (
+        <div className="flex flex-wrap items-center gap-2 pointer-coarse:gap-3">
+          <label className="text-label flex items-center gap-2">
+            {t('yourInitiative')}
+            <NumberCell
+              label={t('yourInitiative')}
+              value={turn.initiative}
+              min={-10}
+              max={99}
+              nullable
+              placeholder="—"
+              onCommit={onInitiativeChange}
+            />
+          </label>
+          {turn.characterId && (
+            <Button asChild variant="outline" size="sm" className="touch-target">
+              <AppLink href={`/system/DnD_5e/character/${turn.characterId}`}>
+                <AppIcon name="Scroll" size={16} aria-hidden="true" />
+                {t('viewSheet')}
+              </AppLink>
+            </Button>
+          )}
+          {turn.isCurrent && (
+            <Button
+              size="sm"
+              className="touch-target ml-auto"
+              onClick={onEndTurn}
+              loading={endingTurn}
+            >
+              {t('endMyTurn')}
+            </Button>
+          )}
+        </div>
+      )}
       {(turn.conditions.length > 0 || turn.isMine) && (
         // On touch screens the gap keeps each badge's touch area apart
         <div className="flex flex-wrap items-center gap-2 pointer-coarse:gap-3">

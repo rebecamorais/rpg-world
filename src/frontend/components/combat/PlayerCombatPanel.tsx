@@ -5,7 +5,6 @@ import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
-import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useEncounter } from '@frontend/hooks/useEncounter';
@@ -29,7 +28,7 @@ export function PlayerCombatPanel({
   live: boolean;
 }) {
   const t = useTranslations('combat');
-  const { encounter, endTurn, setConditions } = useEncounter(partyId);
+  const { encounter, endTurn, setConditions, setMyInitiative } = useEncounter(partyId);
   const mine =
     encounter?.role === 'player'
       ? encounter.turns.find((turn) => turn.isCurrent && turn.isMine)
@@ -79,18 +78,14 @@ export function PlayerCombatPanel({
                   onConditionsChange={(conditions) =>
                     setConditions.mutate({ participantId: turn.participantId, conditions })
                   }
+                  onInitiativeChange={(initiative) =>
+                    setMyInitiative.mutate({ participantId: turn.participantId, initiative })
+                  }
+                  onEndTurn={() => endTurn.mutate(turn.participantId)}
+                  endingTurn={endTurn.isPending}
                 />
               ))}
             </ol>
-            {mine && (
-              <Button
-                className="self-start"
-                onClick={() => endTurn.mutate(mine.participantId)}
-                loading={endTurn.isPending}
-              >
-                {t('endMyTurn')}
-              </Button>
-            )}
           </>
         )}
       </SectionCard.Body>

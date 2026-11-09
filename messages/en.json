@@ -1423,6 +1423,8 @@
     "reconnecting": "Reconnecting… the screen updates by itself when the connection is back.",
     "yourTurn": "Your turn",
     "endMyTurn": "End my turn",
+    "yourInitiative": "Your initiative",
+    "viewSheet": "View sheet",
     "playerPreparing": "The GM is preparing the combat.",
     "order": "Combat order",
     "yours": "yours",
