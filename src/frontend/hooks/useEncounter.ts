@@ -101,6 +101,34 @@ export function useEncounter(partyId: string) {
     mutationFn: (participantId: string) => rpgWorldApi.post(`${base}/turn`, { participantId }),
     ...options,
   });
+  const previousTurn = useMutation({
+    mutationFn: () => rpgWorldApi.post(`${base}/turn/previous`),
+    ...options,
+  });
+  const setMyInitiative = useMutation({
+    mutationFn: ({
+      participantId,
+      initiative,
+    }: {
+      participantId: string;
+      initiative: number | null;
+    }) => rpgWorldApi.put(`${base}/participants/${participantId}/initiative`, { initiative }),
+    // Shown at once, on the player's own row
+    onMutate: async ({ participantId, initiative }) => {
+      await queryClient.cancelQueries({ queryKey: encounterQueryKey(partyId) });
+      queryClient.setQueryData<EncounterView | null>(encounterQueryKey(partyId), (view) =>
+        view?.role === 'player'
+          ? {
+              ...view,
+              turns: view.turns.map((turn) =>
+                turn.participantId === participantId ? { ...turn, initiative } : turn,
+              ),
+            }
+          : view,
+      );
+    },
+    ...options,
+  });
 
   const setConditions = useMutation({
     mutationFn: ({
@@ -147,6 +175,8 @@ export function useEncounter(partyId: string) {
     removeParticipant,
     setOrder,
     endTurn,
+    previousTurn,
+    setMyInitiative,
     setConditions,
   };
 }

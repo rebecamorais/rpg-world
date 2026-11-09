@@ -19,6 +19,8 @@ export interface CombatContext {
   setOrder(partyId: string, participantIds: string[]): Promise<void>;
   start(partyId: string): Promise<void>;
   endTurn(partyId: string, participantId: string): Promise<void>;
+  previousTurn(partyId: string): Promise<void>;
+  setMyInitiative(partyId: string, participantId: string, initiative: number | null): Promise<void>;
   finish(partyId: string): Promise<void>;
   setConditions(
     partyId: string,

@@ -128,6 +128,9 @@ describe('SupabaseCombatRepository (Integration)', () => {
           isCurrent: true,
           isMine: true,
           conditions: [],
+          initiative: null,
+          characterId: heroId,
+          ownerUsername: null,
         },
         {
           participantId: expect.any(String),
@@ -138,6 +141,9 @@ describe('SupabaseCombatRepository (Integration)', () => {
           isCurrent: false,
           isMine: false,
           conditions: [],
+          initiative: null,
+          characterId: null,
+          ownerUsername: null,
         },
       ],
     });
@@ -145,6 +151,24 @@ describe('SupabaseCombatRepository (Integration)', () => {
 
     await repo.finish(partyId);
     expect(await playerRepo.turns(partyId)).toBeNull();
+  });
+
+  it('iniciativa do jogador e voltar turno pelo repositório', async () => {
+    await repo.create(partyId);
+    await repo.addParticipants(partyId, [{ characterId: heroId, side: 'player', label: null }]);
+    const playerRepo = new SupabaseCombatRepository(player.client);
+    const [mine] = (await repo.findEncounter(partyId))!.participants;
+
+    expect(await playerRepo.setMyInitiative(partyId, mine.id, 15)).toBe(true);
+    expect((await repo.findEncounter(partyId))!.participants[0].initiative).toBe(15);
+    expect(await playerRepo.setMyInitiative(partyId, mine.id, null)).toBe(true);
+    expect((await repo.findEncounter(partyId))!.participants[0].initiative).toBeNull();
+    expect(await repo.usernames(partyId)).toBeTypeOf('object');
+
+    await repo.start(partyId);
+    await expect(repo.previousTurn(partyId)).rejects.toMatchObject({
+      code: CombatErrorCodes.AT_START,
+    });
   });
 
   it('visibilidade, destino e testes do NPC: updateParticipant grava e findEncounter devolve; mudar o lado de um jogador é INVALID_CHANGE', async () => {

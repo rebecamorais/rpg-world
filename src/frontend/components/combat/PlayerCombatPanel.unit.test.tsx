@@ -49,6 +49,9 @@ const view = (current: 'mine' | 'theirs'): PlayerEncounterView => ({
       isCurrent: current === 'mine',
       isMine: true,
       conditions: [],
+      initiative: null,
+      characterId: null,
+      ownerUsername: null,
     },
     {
       participantId: 'b',
@@ -59,6 +62,9 @@ const view = (current: 'mine' | 'theirs'): PlayerEncounterView => ({
       isCurrent: current === 'theirs',
       isMine: false,
       conditions: [],
+      initiative: null,
+      characterId: null,
+      ownerUsername: null,
     },
   ],
 });

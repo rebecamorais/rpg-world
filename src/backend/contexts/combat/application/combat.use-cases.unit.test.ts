@@ -13,6 +13,7 @@ import { UpdateParticipantUseCase } from './update-participant.use-case';
 
 const sheet = (overrides: Partial<CombatSheet> = {}): CombatSheet => ({
   id: 'hero',
+  ownerId: 'player-1',
   name: 'Arani',
   hpCurrent: 12,
   hpMax: 20,
@@ -67,6 +68,7 @@ const makeRepo = () =>
     }),
     sheets: vi.fn<CombatRepo['sheets']>().mockResolvedValue([]),
     turns: vi.fn<CombatRepo['turns']>().mockResolvedValue(null),
+    usernames: vi.fn<CombatRepo['usernames']>().mockResolvedValue({}),
     partyCharacterIds: vi.fn<CombatRepo['partyCharacterIds']>().mockResolvedValue(['hero']),
     enemySheet: vi.fn<CombatRepo['enemySheet']>().mockResolvedValue(null),
     create: vi.fn<CombatRepo['create']>().mockResolvedValue(undefined),
@@ -76,6 +78,8 @@ const makeRepo = () =>
     setOrder: vi.fn<CombatRepo['setOrder']>().mockResolvedValue(undefined),
     start: vi.fn<CombatRepo['start']>().mockResolvedValue(undefined),
     endTurn: vi.fn<CombatRepo['endTurn']>().mockResolvedValue(undefined),
+    previousTurn: vi.fn<CombatRepo['previousTurn']>().mockResolvedValue(undefined),
+    setMyInitiative: vi.fn<CombatRepo['setMyInitiative']>().mockResolvedValue(true),
     finish: vi.fn<CombatRepo['finish']>().mockResolvedValue(true),
     setConditions: vi.fn<CombatRepo['setConditions']>().mockResolvedValue(true),
   }) satisfies CombatRepo;
@@ -113,7 +117,14 @@ describe('toGmRow', () => {
       visibility: 'visible',
       fate: null,
       deathRevealed: false,
+      ownerUsername: null,
     });
+  });
+
+  it('o jogador mostra o nome de usuário do dono; o NPC, nunca', () => {
+    expect(toGmRow(participant(), sheet(), null, 'arani_fan').ownerUsername).toBe('arani_fan');
+    const npc = participant({ id: 'p-g', characterId: 'goblin', side: 'enemy' });
+    expect(toGmRow(npc, goblinSheet, null, 'gm-name').ownerUsername).toBeNull();
   });
 
   it('o inimigo usa o rótulo e o PV do participante, com o máximo da ficha, e nunca mostra testes contra a morte', () => {
@@ -278,6 +289,9 @@ describe('GetEncounterUseCase', () => {
           isCurrent: true,
           isMine: true,
           conditions: [],
+          initiative: 14,
+          characterId: 'hero',
+          ownerUsername: 'arani_fan',
         },
       ],
       hiddenTurn: false,
@@ -299,6 +313,9 @@ describe('GetEncounterUseCase', () => {
           isCurrent: true,
           isMine: true,
           conditions: [],
+          initiative: 14,
+          characterId: 'hero',
+          ownerUsername: 'arani_fan',
         },
       ],
     });
@@ -334,6 +351,28 @@ describe('GetEncounterUseCase', () => {
       ['Goblin', true],
     ]);
     expect(repo.sheets).toHaveBeenCalledWith(['hero', 'goblin']);
+  });
+
+  it('o mestre vê o nome de usuário do dono só nas linhas de jogador', async () => {
+    const repo = makeRepo();
+    repo.findEncounter.mockResolvedValue({
+      round: 0,
+      currentParticipantId: null,
+      participants: [
+        participant(),
+        participant({ id: 'p-g', characterId: 'goblin', side: 'enemy', label: 'Goblin' }),
+      ],
+    });
+    repo.sheets.mockResolvedValue([goblinSheet, sheet()]);
+    repo.usernames.mockResolvedValue({ 'player-1': 'arani_fan' });
+
+    const view = await new GetEncounterUseCase(repo).execute('party-1', 'gm-1');
+
+    expect(view && 'rows' in view && view.rows.map((r) => r.ownerUsername)).toEqual([
+      'arani_fan',
+      null,
+    ]);
+    expect(repo.usernames).toHaveBeenCalledWith('party-1');
   });
 
   it('sem combate, ou mesa que a pessoa não vê, responde null', async () => {
@@ -531,5 +570,24 @@ describe('EncounterCommands', () => {
     await expect(commands.finish('party-1')).rejects.toMatchObject({
       code: CombatErrorCodes.NOT_FOUND,
     });
+  });
+});
+
+describe('EncounterCommands player initiative and previous turn', () => {
+  it('previousTurn repassa para o repositório', async () => {
+    const repo = makeRepo();
+    await new EncounterCommands(repo).previousTurn('party-1');
+    expect(repo.previousTurn).toHaveBeenCalledWith('party-1');
+  });
+
+  it('setMyInitiative repassa; false vira NOT_FOUND', async () => {
+    const repo = makeRepo();
+    await new EncounterCommands(repo).setMyInitiative('party-1', 'p-hero', 15);
+    expect(repo.setMyInitiative).toHaveBeenCalledWith('party-1', 'p-hero', 15);
+
+    repo.setMyInitiative.mockResolvedValue(false);
+    await expect(
+      new EncounterCommands(repo).setMyInitiative('party-1', 'p-hero', null),
+    ).rejects.toMatchObject({ code: CombatErrorCodes.NOT_FOUND });
   });
 });

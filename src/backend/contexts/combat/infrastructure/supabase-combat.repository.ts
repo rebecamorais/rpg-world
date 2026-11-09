@@ -20,6 +20,7 @@ const DATABASE_ERRORS: Record<string, CombatErrorCode> = {
   encounter_not_your_turn: CombatErrorCodes.NOT_YOUR_TURN,
   encounter_full: CombatErrorCodes.FULL,
   encounter_invalid_change: CombatErrorCodes.INVALID_CHANGE,
+  encounter_at_start: CombatErrorCodes.AT_START,
 };
 
 // RLS refusing an insert
@@ -110,7 +111,7 @@ export class SupabaseCombatRepository implements CombatRepo {
     const { data, error } = await this.client
       .from('characters')
       .select(
-        'id, name, hp_current, hp_max, level, attributes, system_data, avatar_url, theme_color',
+        'id, owner_id, name, hp_current, hp_max, level, attributes, system_data, avatar_url, theme_color',
       )
       .in('id', characterIds)
       .is('deleted_at', null);
@@ -120,6 +121,7 @@ export class SupabaseCombatRepository implements CombatRepo {
       const sheet = (row.system_data as SheetData) ?? {};
       return {
         id: row.id,
+        ownerId: row.owner_id,
         name: row.name,
         hpCurrent: row.hp_current,
         hpMax: row.hp_max,
@@ -160,8 +162,20 @@ export class SupabaseCombatRepository implements CombatRepo {
           isCurrent: row.is_current,
           isMine: row.is_mine,
           conditions: toConditions(row.conditions),
+          // Only on the player's own row; the generated types say non-null
+          initiative: (row.initiative as number | null) ?? null,
+          characterId: (row.character_id as string | null) ?? null,
+          ownerUsername: (row.owner_username as string | null) ?? null,
         })),
     };
+  }
+
+  async usernames(partyId: string): Promise<Record<string, string>> {
+    const { data, error } = await this.client.rpc('party_people', { p_party_id: partyId });
+    if (error) fail('list party people', error);
+    const names: Record<string, string> = {};
+    for (const row of data) if (row.username) names[row.user_id] = row.username;
+    return names;
   }
 
   async partyCharacterIds(partyId: string): Promise<string[]> {
@@ -265,6 +279,22 @@ export class SupabaseCombatRepository implements CombatRepo {
       p_participant_id: participantId,
     });
     if (error) fail('end turn', error);
+  }
+
+  async previousTurn(partyId: string): Promise<void> {
+    const { error } = await this.client.rpc('previous_turn', { p_party_id: partyId });
+    if (error) fail('go back a turn', error);
+  }
+
+  async setMyInitiative(partyId: string, participantId: string, initiative: number | null) {
+    const { data, error } = await this.client.rpc('set_my_initiative', {
+      p_party_id: partyId,
+      p_participant_id: participantId,
+      // The generated type says number; the function accepts null to clear
+      p_initiative: initiative as number,
+    });
+    if (error) fail('set initiative', error);
+    return data;
   }
 
   async setConditions(partyId: string, participantId: string, conditions: ActiveCondition[]) {

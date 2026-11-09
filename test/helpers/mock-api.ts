@@ -58,6 +58,8 @@ export const api = {
     setOrder: vi.fn(),
     start: vi.fn(),
     endTurn: vi.fn(),
+    previousTurn: vi.fn(),
+    setMyInitiative: vi.fn(),
     finish: vi.fn(),
     setConditions: vi.fn(),
   },

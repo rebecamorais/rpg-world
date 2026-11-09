@@ -8,7 +8,7 @@ import { useEncounter } from './useEncounter';
 
 vi.mock('@client', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@client')>()),
-  rpgWorldApi: { get: vi.fn(), patch: vi.fn(), put: vi.fn() },
+  rpgWorldApi: { get: vi.fn(), patch: vi.fn(), put: vi.fn(), post: vi.fn() },
 }));
 
 describe('useEncounter', () => {
@@ -122,5 +122,44 @@ describe('useEncounter', () => {
       ),
     );
     await waitFor(() => expect(result.current.encounter).toMatchObject({ rows: [{ conditions }] }));
+  });
+
+  it('a iniciativa do jogador aparece na hora na visão do jogador', async () => {
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({
+      role: 'player',
+      round: 0,
+      hiddenTurn: false,
+      turns: [
+        { participantId: 'a', isMine: true, initiative: null },
+        { participantId: 'b', isMine: false, initiative: null },
+      ],
+    });
+    vi.mocked(rpgWorldApi.put).mockReturnValue(new Promise(() => {}));
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+    await waitFor(() => expect(result.current.encounter).not.toBeNull());
+
+    result.current.setMyInitiative.mutate({ participantId: 'a', initiative: 17 });
+
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({
+        turns: [{ initiative: 17 }, { initiative: null }],
+      }),
+    );
+    expect(rpgWorldApi.put).toHaveBeenCalledWith(
+      '/api/parties/party-1/encounter/participants/a/initiative',
+      { initiative: 17 },
+    );
+  });
+
+  it('previousTurn chama a rota de voltar turno', async () => {
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({});
+    vi.mocked(rpgWorldApi.post).mockResolvedValue(undefined);
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+
+    result.current.previousTurn.mutate();
+
+    await waitFor(() =>
+      expect(rpgWorldApi.post).toHaveBeenCalledWith('/api/parties/party-1/encounter/turn/previous'),
+    );
   });
 });

@@ -7,6 +7,7 @@ export const gmRow = (overrides: Partial<GmRow> = {}): GmRow => ({
   side: 'player',
   name: 'Arani',
   initiative: 12,
+  ownerUsername: null,
   hp: { current: 12, max: 20, temp: 0 },
   deathSaves: null,
   avatarUrl: null,

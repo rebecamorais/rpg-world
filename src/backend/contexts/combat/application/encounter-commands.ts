@@ -3,7 +3,7 @@ import { CombatRepo } from '../domain/repository/combat.repo';
 
 /**
  * The operations that are one database call each. Who may run them (the GM; a player only to end
- * their own turn) is decided by the database, which raises the matching CombatError.
+ * their own turn and set their own initiative) is decided by the database, which raises the matching CombatError.
  */
 export class EncounterCommands {
   constructor(private readonly repository: CombatRepo) {}
@@ -28,6 +28,16 @@ export class EncounterCommands {
 
   endTurn(partyId: string, participantId: string) {
     return this.repository.endTurn(partyId, participantId);
+  }
+
+  previousTurn(partyId: string) {
+    return this.repository.previousTurn(partyId);
+  }
+
+  async setMyInitiative(partyId: string, participantId: string, initiative: number | null) {
+    if (!(await this.repository.setMyInitiative(partyId, participantId, initiative))) {
+      throw new CombatError(CombatErrorCodes.NOT_FOUND);
+    }
   }
 
   async finish(partyId: string) {
