@@ -36,8 +36,15 @@ export function OwnerOrSideBadge({
 }) {
   if (side !== 'player' || !ownerUsername) return <SideBadge side={side} />;
   return (
-    <span className={cn('text-label inline-flex items-center gap-1', SIDES.player.color)}>
-      <AppIcon name={SIDES.player.icon} size={12} aria-hidden="true" />@{ownerUsername}
+    // A long username shrinks with an ellipsis instead of running under the HP bar
+    <span
+      className={cn(
+        'text-label inline-flex max-w-full min-w-0 items-center gap-1',
+        SIDES.player.color,
+      )}
+    >
+      <AppIcon name={SIDES.player.icon} size={12} aria-hidden="true" className="shrink-0" />
+      <span className="truncate">@{ownerUsername}</span>
     </span>
   );
 }
