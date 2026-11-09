@@ -99,7 +99,7 @@
     "sade": "^1.8.1",
     "server-only": "^0.0.1",
     "sharp": "^0.35.5",
-    "supabase": "2.122.0",
+    "supabase": "3.0.0",
     "tailwindcss": "^4.3.5",
     "tsx": "^4.23.15",
     "typescript": "~6.0.3",
