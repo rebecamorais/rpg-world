@@ -74,7 +74,7 @@
     "@iconify/utils": "^3.1.7",
     "@playwright/test": "^1.64.1",
     "@stryker-mutator/core": "^10.1.1",
-    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/postcss": "^4.3.5",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
@@ -100,7 +100,7 @@
     "server-only": "^0.0.1",
     "sharp": "^0.35.5",
     "supabase": "2.122.0",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.3.5",
     "tsx": "^4.23.15",
     "typescript": "~6.0.3",
     "vitest": "^5.0.5"
