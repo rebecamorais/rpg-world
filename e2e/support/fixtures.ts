@@ -84,6 +84,17 @@ export async function createEnemySheet(page: Page, name: string, hpMax: number):
   return id;
 }
 
+/** The GM shows a hidden NPC to the players, from its row in the combat order (new NPCs start hidden). */
+export async function revealNpc(gm: Page, name: string) {
+  const row = gm
+    .getByRole('list', { name: 'Combat order' })
+    .getByRole('listitem')
+    .filter({ hasText: name });
+  const show = await hydrated(row.getByRole('button', { name: 'Show', exact: true }));
+  await show.click();
+  await expect(show).toHaveAttribute('aria-pressed', 'true');
+}
+
 export const partyUrl = (id: string, path = '') => `/parties/${id}${path}`;
 
 export const characterUrl = (id: string, tab = '') => `/system/DnD_5e/character/${id}${tab}`;

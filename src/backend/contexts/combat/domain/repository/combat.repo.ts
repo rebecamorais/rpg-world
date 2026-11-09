@@ -1,4 +1,4 @@
-import { ActiveCondition, Side, TurnEntry } from '../Encounter';
+import { ActiveCondition, NpcFate, NpcSide, Side, TurnEntry, Visibility } from '../Encounter';
 
 export interface ParticipantRecord {
   id: string;
@@ -12,6 +12,10 @@ export interface ParticipantRecord {
   hpCurrent: number | null;
   hpTemp: number | null;
   conditions: ActiveCondition[];
+  visibility: Visibility;
+  fate: NpcFate | null;
+  deathSaves: { successes: number; failures: number };
+  deathRevealed: boolean;
 }
 
 export interface EncounterRecord {
@@ -51,6 +55,11 @@ export interface ParticipantPatch {
   initiative?: number | null;
   hpCurrent?: number;
   hpTemp?: number;
+  side?: NpcSide;
+  visibility?: Visibility;
+  fate?: NpcFate | null;
+  deathSaves?: { successes: number; failures: number };
+  deathRevealed?: boolean;
 }
 
 /**
@@ -65,7 +74,9 @@ export interface CombatRepo {
   findEncounter(partyId: string): Promise<EncounterRecord | null>;
   sheets(characterIds: string[]): Promise<CombatSheet[]>;
   /** What a player sees; null without a combat. */
-  turns(partyId: string): Promise<{ round: number; turns: TurnEntry[] } | null>;
+  turns(
+    partyId: string,
+  ): Promise<{ round: number; hiddenTurn: boolean; turns: TurnEntry[] } | null>;
   /** The characters brought to the party. */
   partyCharacterIds(partyId: string): Promise<string[]>;
   /** One of the signed-in user's npc sheets; null for any other character. */

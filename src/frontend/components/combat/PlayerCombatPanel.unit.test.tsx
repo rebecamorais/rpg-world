@@ -38,17 +38,24 @@ const t = messages.combat;
 const view = (current: 'mine' | 'theirs'): PlayerEncounterView => ({
   role: 'player',
   round: 3,
+  hiddenTurn: false,
   turns: [
     {
       participantId: 'a',
+      side: 'player',
       name: 'Arani',
+      avatarUrl: null,
+      life: 'normal',
       isCurrent: current === 'mine',
       isMine: true,
       conditions: [],
     },
     {
       participantId: 'b',
+      side: 'enemy',
       name: 'Goblin 1',
+      avatarUrl: null,
+      life: 'normal',
       isCurrent: current === 'theirs',
       isMine: false,
       conditions: [],
@@ -91,7 +98,7 @@ describe('PlayerCombatPanel', () => {
   });
 
   it('na rodada 0: o mestre está preparando', () => {
-    hook.encounter = { role: 'player', round: 0, turns: [] };
+    hook.encounter = { role: 'player', round: 0, hiddenTurn: false, turns: [] };
     renderWithProviders(<PlayerCombatPanel partyId="p" edition="2024" live />);
     expect(screen.getByText(t.playerPreparing)).toBeInTheDocument();
   });
@@ -132,7 +139,7 @@ describe('PlayerCombatPanel', () => {
       ...turn,
       conditions: [{ key: PRONE.key, level: null }],
     }));
-    hook.encounter = { role: 'player', round: 3, turns };
+    hook.encounter = { role: 'player', round: 3, hiddenTurn: false, turns };
     renderWithProviders(<PlayerCombatPanel partyId="p" edition="2024" live />);
 
     expect(screen.getAllByRole('button', { name: 'Caído, condition' })).toHaveLength(2);
@@ -145,5 +152,98 @@ describe('PlayerCombatPanel', () => {
     await userEvent.click(mine);
     await userEvent.click(screen.getByRole('switch', { name: 'Caído' }));
     expect(hook.setConditions.mutate).toHaveBeenCalledWith({ participantId: 'a', conditions: [] });
+  });
+
+  const withTurns = (
+    turns: Partial<PlayerEncounterView['turns'][number]>[],
+    hiddenTurn = false,
+  ) => {
+    const base = view('theirs').turns[1];
+    hook.encounter = {
+      role: 'player',
+      round: 3,
+      hiddenTurn,
+      turns: turns.map((turn, i) => ({
+        ...base,
+        isCurrent: false,
+        participantId: `x${i}`,
+        ...turn,
+      })),
+    };
+    renderWithProviders(<PlayerCombatPanel partyId="p" edition="2024" live />);
+  };
+
+  it('mostra o lado de cada participante com texto, inclusive no turno atual', () => {
+    withTurns([
+      { side: 'player', name: 'Arani', isCurrent: true, isMine: true },
+      { side: 'enemy', name: 'Orc' },
+      { side: 'ally', name: 'Bardo' },
+      { side: 'neutral', name: 'Mercador' },
+    ]);
+    const items = within(screen.getByRole('list', { name: t.order })).getAllByRole('listitem');
+    expect(items[0]).toHaveTextContent(t.player);
+    expect(items[1]).toHaveTextContent(t.enemy);
+    expect(items[2]).toHaveTextContent(t.ally);
+    expect(items[3]).toHaveTextContent(t.neutral);
+  });
+
+  it('anônimo mostra "Inimigo desconhecido" sem imagem e sem botão de ampliar', () => {
+    withTurns([{ side: 'enemy', name: null, avatarUrl: 'https://x/a.png' }]);
+    expect(screen.getByText(t.unknownEnemy)).toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(document.querySelector('img')).toBeNull();
+  });
+
+  it('anônimo que vira aliado mostra "Aliado desconhecido"', () => {
+    withTurns([{ side: 'ally', name: null }]);
+    expect(screen.getByText(t.unknownAlly)).toBeInTheDocument();
+  });
+
+  it('anônimo neutro mostra "Neutro desconhecido"', () => {
+    withTurns([{ side: 'neutral', name: null }]);
+    expect(screen.getByText(t.unknownNeutral)).toBeInTheDocument();
+  });
+
+  it('visível com imagem tem o botão de ampliar', () => {
+    withTurns([{ side: 'enemy', name: 'Orc', avatarUrl: 'https://x/a.png' }]);
+    expect(screen.getAllByRole('button')).toHaveLength(1);
+    expect(screen.getByRole('button')).toHaveAccessibleName(/Orc/);
+  });
+
+  it('visível sem imagem não tem botão de ampliar', () => {
+    withTurns([{ side: 'enemy', name: 'Orc', avatarUrl: null }]);
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('caído fica com a linha marcada como caída', () => {
+    withTurns([{ side: 'enemy', name: 'Orc', life: 'down' }]);
+    const li = screen.getByRole('listitem');
+    expect(li).toHaveTextContent(t.down);
+    // Only the picture and name dim; the labels keep their contrast
+    expect(li.className).not.toContain('opacity');
+    expect(within(li).getByText('Orc')).toHaveClass('text-muted-foreground');
+  });
+
+  it('caído com imagem: o botão de ampliar fica fora do trecho esmaecido', () => {
+    withTurns([{ side: 'enemy', name: 'Orc', life: 'down', avatarUrl: 'https://x/a.png' }]);
+    const zoom = screen.getByRole('button');
+    const dimmed = document.querySelector('.opacity-60');
+    expect(dimmed).not.toBeNull();
+    expect(dimmed).not.toContainElement(zoom);
+    expect(zoom.closest('.opacity-60, .grayscale')).toBeNull();
+  });
+
+  it('morto mostra a linha fina com nome riscado e caveira', () => {
+    withTurns([{ side: 'enemy', name: 'Orc', life: 'dead' }]);
+    const li = screen.getByRole('listitem');
+    expect(li.querySelector('s')).toHaveTextContent('Orc');
+    expect(li).toHaveTextContent(t.dead);
+    expect(li.className).toContain('border-dashed');
+  });
+
+  it('turno de oculto: nenhuma linha atual e a mensagem do mestre', () => {
+    withTurns([{ side: 'player', name: 'Arani', isMine: true }], true);
+    expect(screen.getByRole('status')).toHaveTextContent(t.gmTurn);
+    expect(document.querySelector('[aria-current]')).toBeNull();
   });
 });

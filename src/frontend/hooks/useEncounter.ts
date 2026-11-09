@@ -6,7 +6,11 @@ import { rpgWorldApi } from '@client';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { encounterQueryKey } from '@frontend/lib/query-keys';
 
-import type { ActiveCondition, EncounterView } from '@backend/contexts/combat/domain/Encounter';
+import type {
+  ActiveCondition,
+  EncounterView,
+  NpcSide,
+} from '@backend/contexts/combat/domain/Encounter';
 import type { ParticipantPatch } from '@backend/contexts/combat/domain/repository/combat.repo';
 
 /** The party's combat (null without one) and everything done on it; each change reloads it. */
@@ -34,7 +38,7 @@ export function useEncounter(partyId: string) {
   const finish = useMutation({ mutationFn: () => rpgWorldApi.delete(base), ...options });
   const start = useMutation({ mutationFn: () => rpgWorldApi.post(`${base}/start`), ...options });
   const addParticipant = useMutation({
-    mutationFn: (input: { characterId: string; count?: number; side?: 'ally' | 'enemy' }) =>
+    mutationFn: (input: { characterId: string; count?: number; side?: NpcSide }) =>
       rpgWorldApi.post(`${base}/participants`, input),
     ...options,
   });
@@ -53,8 +57,23 @@ export function useEncounter(partyId: string) {
                   ? {
                       ...row,
                       name: patch.label ?? row.name,
+                      side: patch.side ?? row.side,
+                      visibility: patch.visibility ?? row.visibility,
                       initiative:
                         patch.initiative === undefined ? row.initiative : patch.initiative,
+                      fate: patch.fate === undefined ? row.fate : patch.fate,
+                      // Mirrors the database: only a dead npc can be revealed as dead
+                      deathRevealed:
+                        patch.fate !== undefined && patch.fate !== 'dead'
+                          ? false
+                          : (patch.deathRevealed ?? row.deathRevealed),
+                      deathSaves:
+                        patch.deathSaves ??
+                        (patch.fate === undefined
+                          ? row.deathSaves
+                          : patch.fate === 'death_saves'
+                            ? (row.deathSaves ?? { successes: 0, failures: 0 })
+                            : null),
                       hp: {
                         ...row.hp,
                         current: patch.hpCurrent ?? row.hp.current,

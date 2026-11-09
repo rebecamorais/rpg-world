@@ -149,6 +149,18 @@ describe('GmCombatPanel', () => {
     expect(screen.getByRole('button', { name: t.addAlly })).toBeInTheDocument();
   });
 
+  it('adicionar NPC oferece aliado, neutro e inimigo', async () => {
+    const user = userEvent.setup();
+    hook.encounter = running(0);
+    renderWithProviders(<GmCombatPanel party={party} live />);
+
+    for (const side of [t.ally, t.neutral, t.enemy]) {
+      expect(screen.getByRole('button', { name: side })).toBeInTheDocument();
+    }
+    await user.click(screen.getByRole('button', { name: t.neutral }));
+    expect(screen.getByRole('button', { name: t.addNeutral })).toBeInTheDocument();
+  });
+
   it('o link para os NPCs leva à aba de NPCs', () => {
     hook.encounter = running(0);
     renderWithProviders(<GmCombatPanel party={party} live />);

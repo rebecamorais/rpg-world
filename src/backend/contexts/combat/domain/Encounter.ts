@@ -1,4 +1,4 @@
-export type Side = 'player' | 'ally' | 'enemy';
+export type Side = 'player' | 'ally' | 'neutral' | 'enemy';
 /** An npc sheet of the GM joins on either side. */
 export type NpcSide = Exclude<Side, 'player'>;
 
@@ -8,10 +8,19 @@ export interface ActiveCondition {
   level: number | null;
 }
 
+export type Visibility = 'visible' | 'anonymous' | 'hidden';
+/** What happens to an npc at 0 HP: rolls death saves, or is dead. */
+export type NpcFate = 'death_saves' | 'dead';
+export type Life = 'normal' | 'down' | 'dead';
+
 /** What a player sees of each participant: no initiative, HP or AC, of anyone. */
 export interface TurnEntry {
   participantId: string;
-  name: string;
+  side: Side;
+  /** null when anonymous: the client shows "Unknown enemy/ally/neutral". */
+  name: string | null;
+  avatarUrl: string | null;
+  life: Life;
   isCurrent: boolean;
   isMine: boolean;
   conditions: ActiveCondition[];
@@ -21,6 +30,7 @@ export interface PlayerEncounterView {
   role: 'player';
   /** 0 while the GM prepares the list. */
   round: number;
+  hiddenTurn: boolean;
   turns: TurnEntry[];
 }
 
@@ -33,7 +43,7 @@ export interface GmRow {
   initiative: number | null;
   /** Players: from their sheet. NPCs (enemies and allies): the participant's own, with the sheet's max. */
   hp: { current: number; max: number; temp: number };
-  /** Only for a player at 0 HP. */
+  /** A player at 0 HP (from the sheet), or an npc whose fate is death_saves (the participant's own). */
   deathSaves: { successes: number; failures: number } | null;
   avatarUrl: string | null;
   accentColor: string | null;
@@ -47,6 +57,11 @@ export interface GmRow {
   attributes: Record<string, number>;
   conditions: ActiveCondition[];
   isCurrent: boolean;
+  /** Players: 'visible'. */
+  visibility: Visibility;
+  /** Npcs at 0 HP only. */
+  fate: NpcFate | null;
+  deathRevealed: boolean;
 }
 
 export interface GmEncounterView {
