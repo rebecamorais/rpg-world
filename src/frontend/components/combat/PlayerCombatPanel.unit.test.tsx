@@ -110,6 +110,16 @@ describe('PlayerCombatPanel', () => {
     expect(screen.getByText(t.playerPreparing)).toBeInTheDocument();
   });
 
+  it('rodada 0: a própria linha com "Sua iniciativa" e sem as outras', () => {
+    hook.encounter = { ...view('theirs'), round: 0 };
+    renderWithProviders(<PlayerCombatPanel partyId="p" edition="2024" live />);
+    expect(screen.getByText(t.playerPreparing)).toBeInTheDocument();
+    const items = screen.getAllByRole('listitem');
+    expect(items).toHaveLength(1);
+    expect(within(items[0]).getByLabelText(t.yourInitiative)).toBeInTheDocument();
+    expect(screen.queryByText('Goblin 1')).not.toBeInTheDocument();
+  });
+
   it('"Encerrar meu turno" só aparece na vez dele, e encerra o turno daquele participante', async () => {
     hook.encounter = view('theirs');
     const { unmount } = renderWithProviders(<PlayerCombatPanel partyId="p" edition="2024" live />);

@@ -9,7 +9,11 @@ const view = { name: messages.avatarUpload.viewOf.replace('{name}', 'Arani') };
 
 describe('ZoomablePortrait', () => {
   it('clicar no avatar abre a imagem ampliada', async () => {
-    renderWithProviders(<ZoomablePortrait src="https://img.test/a.webp" name="Arani" />);
+    renderWithProviders(
+      <ZoomablePortrait src="https://img.test/a.webp" name="Arani">
+        <span>retrato</span>
+      </ZoomablePortrait>,
+    );
 
     await userEvent.click(screen.getByRole('button', view));
     expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -23,13 +27,6 @@ describe('ZoomablePortrait', () => {
       </ZoomablePortrait>,
     );
     expect(screen.getByText('retrato')).toBeInTheDocument();
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
-  });
-
-  it('com zoomable={false} não amplia', () => {
-    renderWithProviders(
-      <ZoomablePortrait src="https://img.test/a.webp" name="Arani" zoomable={false} />,
-    );
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 });

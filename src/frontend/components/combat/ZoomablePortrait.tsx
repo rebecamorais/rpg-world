@@ -4,33 +4,28 @@ import { type ReactNode, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { ImageViewerDialog } from '@frontend/components/shared/ImageViewerDialog';
 import { cn } from '@frontend/lib/utils';
 
 /**
  * A character's picture that opens it in the viewer when clicked, like the sheet's header. The
- * picture is `children` (a plain portrait by default); without an image, or with `zoomable` off,
- * it's only the picture. Size and position come from `className`.
+ * picture is `children`; without an image it's only the picture. Size and position come from `className`.
  */
 export function ZoomablePortrait({
   src,
   name,
-  zoomable = true,
   className,
   children,
 }: {
   src?: string | null;
   name: string;
-  zoomable?: boolean;
   className?: string;
-  children?: ReactNode;
+  children: ReactNode;
 }) {
   const t = useTranslations('avatarUpload');
   const [isOpen, setIsOpen] = useState(false);
-  const picture = children ?? <CharacterPortrait avatarUrl={src} className="size-full" />;
 
-  if (!src || !zoomable) return <div className={cn('relative shrink-0', className)}>{picture}</div>;
+  if (!src) return <div className={cn('relative shrink-0', className)}>{children}</div>;
 
   return (
     // The button sits over the picture instead of wrapping it, so its name is only the label
@@ -40,7 +35,7 @@ export function ZoomablePortrait({
         className,
       )}
     >
-      {picture}
+      {children}
       <button
         type="button"
         onClick={() => setIsOpen(true)}
