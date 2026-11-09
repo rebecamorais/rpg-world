@@ -84,12 +84,24 @@ export async function createEnemySheet(page: Page, name: string, hpMax: number):
   return id;
 }
 
-/** The GM shows a hidden NPC to the players, from its row in the combat order (new NPCs start hidden). */
-export async function revealNpc(gm: Page, name: string) {
+/**
+ * The GM's row for `name`, opened: its edits (initiative, HP, visibility...) live in the details
+ * the chevron reveals. The current turn's row is already open, so this never closes one.
+ */
+export async function openRow(gm: Page, name: string) {
   const row = gm
     .getByRole('list', { name: 'Combat order' })
     .getByRole('listitem')
     .filter({ hasText: name });
+  const chevron = await hydrated(row.getByRole('button', { name: `Details of ${name}` }));
+  if ((await chevron.getAttribute('aria-expanded')) !== 'true') await chevron.click();
+  await expect(chevron).toHaveAttribute('aria-expanded', 'true');
+  return row;
+}
+
+/** The GM shows a hidden NPC to the players, from its row in the combat order (new NPCs start hidden). */
+export async function revealNpc(gm: Page, name: string) {
+  const row = await openRow(gm, name);
   const show = await hydrated(row.getByRole('button', { name: 'Show', exact: true }));
   await show.click();
   await expect(show).toHaveAttribute('aria-pressed', 'true');

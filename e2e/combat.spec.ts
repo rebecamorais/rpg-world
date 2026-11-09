@@ -9,6 +9,7 @@ import {
   expect,
   hydrated,
   joinParty,
+  openRow,
   partyUrl,
   person,
   revealNpc,
@@ -61,11 +62,14 @@ test.describe('combate', () => {
     await expect(player.page.getByText('The GM is preparing the combat.')).toBeVisible();
 
     await page.getByRole('button', { name: "Add the party's characters" }).click();
+    await openRow(page, 'Arani');
     await expect(page.getByLabel("Arani's initiative")).toBeVisible();
     await page.getByRole('combobox', { name: 'NPC' }).click();
     await page.getByRole('option', { name: 'Goblin' }).click();
     await page.getByLabel('How many').fill('2');
     await page.getByRole('button', { name: 'Add enemy' }).click();
+    await openRow(page, 'Goblin 1');
+    await openRow(page, 'Goblin 2');
     await expect(page.getByLabel("Goblin 2's initiative")).toBeVisible();
 
     for (const [name, initiative] of [
@@ -115,6 +119,15 @@ test.describe('combate', () => {
     await revealNpc(page, 'Goblin 2');
 
     await expect(current(page)).toContainText('Goblin 1');
+
+    // The player types their own initiative: the GM's sort button lights up
+    const own = player.page.getByLabel('Your initiative', { exact: true });
+    await (await hydrated(own)).fill('20');
+    await own.blur();
+    await expect(
+      page.getByRole('button', { name: /Sort by initiative · order changed/ }),
+    ).toBeVisible();
+
     await page.getByRole('button', { name: 'End turn' }).click();
 
     await expect(player.page.getByText('Your turn', { exact: true })).toBeVisible();
