@@ -19,6 +19,14 @@ export class TurnstileService {
       return { success: false, error: 'internal_configuration_error' };
     }
 
+    // A test secret on the real production deploy would let everyone through: refuse every form
+    // and say why in the logs, rather than go on without a captcha
+    const isTestSecret = secretKey === ALWAYS_PASS_TEST_SECRET || secretKey === LOCAL_TEST_SECRET;
+    if (isTestSecret && process.env.VERCEL_ENV === 'production') {
+      console.error('[Turnstile] TURNSTILE_SECRET_KEY is a test secret on the production deploy');
+      return { success: false, error: 'internal_configuration_error' };
+    }
+
     if (!token) {
       return { success: false, error: 'security_token_missing' };
     }

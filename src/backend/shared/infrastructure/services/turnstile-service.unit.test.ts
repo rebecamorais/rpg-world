@@ -5,6 +5,7 @@ import { TurnstileService } from './turnstile-service';
 vi.mock('server-only', () => ({}));
 describe('TurnstileService', () => {
   beforeEach(() => {
+    vi.unstubAllEnvs();
     vi.stubEnv('TURNSTILE_SECRET_KEY', 'mock-secret');
     vi.clearAllMocks();
   });
@@ -90,5 +91,29 @@ describe('TurnstileService', () => {
 
     expect(result.success).toBe(false);
     expect(global.fetch).toHaveBeenCalled();
+  });
+
+  // A test secret on the real production deploy lets everyone through: refuse it loudly instead
+  it.each(['1x0000000000000000000000000000000AA', '1x00000000000000000000000000000000'])(
+    'no deploy de produção, um segredo de teste (%s) é recusado',
+    async (secret) => {
+      vi.stubEnv('VERCEL_ENV', 'production');
+      vi.stubEnv('TURNSTILE_SECRET_KEY', secret);
+      global.fetch = vi.fn();
+      const logged = vi.spyOn(console, 'error').mockImplementationOnce(() => {});
+
+      const result = await TurnstileService.verify('token');
+
+      expect(result).toEqual({ success: false, error: 'internal_configuration_error' });
+      expect(global.fetch).not.toHaveBeenCalled();
+      expect(logged).toHaveBeenCalled();
+    },
+  );
+
+  it('em preview, o segredo de teste continua passando', async () => {
+    vi.stubEnv('VERCEL_ENV', 'preview');
+    vi.stubEnv('TURNSTILE_SECRET_KEY', '1x0000000000000000000000000000000AA');
+
+    expect(await TurnstileService.verify('token')).toEqual({ success: true });
   });
 });
