@@ -92,7 +92,7 @@ export function CombatRow({
       style={{ ...theme.style, '--primary': 'var(--character-color)' } as CSSProperties}
       className={cn(
         theme.className,
-        'group bg-card/60 border-character-muted relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-xl border p-3 transition-[opacity,filter] duration-300',
+        'group bg-card/60 border-character-muted relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-xl border p-3',
         row.isCurrent && 'border-primary animate-turn-glow',
       )}
     >
@@ -155,7 +155,7 @@ export function CombatRow({
         <div className="flex w-16 shrink-0 flex-col items-end gap-1 sm:w-28">
           <span className="text-foreground font-mono text-sm font-bold tabular-nums">
             {`${row.hp.current} / ${row.hp.max}`}
-            {row.hp.temp > 0 && <span className="text-warning"> +{row.hp.temp}</span>}
+            {row.hp.temp > 0 && <span className="text-warning-flare"> +{row.hp.temp}</span>}
           </span>
           <HealthBar
             current={row.hp.current}

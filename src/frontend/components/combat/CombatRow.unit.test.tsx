@@ -77,6 +77,12 @@ describe('CombatRow', () => {
       expect(within(row).getAllByRole('button')).toEqual([details('Goblin')]);
     });
 
+    it('o PV temporário usa a cor de texto com contraste nos dois temas', () => {
+      renderRow(goblin());
+      const temp = screen.getAllByText('+1').find((el) => el.tagName === 'SPAN');
+      expect(temp).toHaveClass('text-warning-flare');
+    });
+
     it('linha fechada mostra iniciativa, nome, @, PV e condições', () => {
       renderRow(
         gmRow({

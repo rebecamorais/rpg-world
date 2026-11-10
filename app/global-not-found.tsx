@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { AppIcon } from '@frontend/components/ui/icon';
 import { fontVariables } from '@frontend/lib/fonts';
+import { THEME_SCRIPT } from '@frontend/lib/theme';
 
 import './globals.css';
 
@@ -22,7 +23,11 @@ export default async function GlobalNotFound() {
   ]);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Sets the chosen theme from its cookie before first paint */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body
         className={`${fontVariables} bg-background text-foreground flex min-h-screen flex-col antialiased`}
       >

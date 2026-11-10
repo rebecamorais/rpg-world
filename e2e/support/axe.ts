@@ -25,7 +25,11 @@ export async function violations(
         await new Promise<void>((resolve) =>
           requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
         );
-        await Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {})));
+        // Capped: an infinite animation never finishes
+        await Promise.race([
+          Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))),
+          new Promise<void>((resolve) => setTimeout(resolve, 2000)),
+        ]);
       }, theme);
       let builder = new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
