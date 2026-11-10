@@ -1,5 +1,4 @@
-import AxeBuilder from '@axe-core/playwright';
-
+import { violations } from './support/axe';
 import {
   bring,
   createCharacter,
@@ -382,12 +381,7 @@ test.describe('mesas', () => {
     expect(
       await caio.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
     ).toBe(true);
-    const axe = await new AxeBuilder({ page: caio.page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-      .analyze();
-    expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')).toEqual(
-      [],
-    );
+    expect(await violations(caio.page)).toEqual([]);
 
     await (await hydrated(caio.page.getByRole('button', { name: 'Agree' }))).click();
 

@@ -1,6 +1,6 @@
-import AxeBuilder from '@axe-core/playwright';
 import type { Page } from '@playwright/test';
 
+import { violations } from './support/axe';
 import {
   bring,
   characterUrl,
@@ -18,17 +18,6 @@ import {
 
 const HOLD_PERSON_2024 = 'dnd5e:srd-5.2:spell:hold-person';
 const HOLD_PERSON_2014 = 'dnd5e:srd-5.1:spell:hold-person';
-
-/** Serious and critical WCAG A/AA violations on the page, or only inside `include`. */
-async function violations(page: Page, include?: string, disabledRules: string[] = []) {
-  const builder = new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-    .disableRules(disabledRules);
-  const results = await (include ? builder.include(include) : builder).analyze();
-  return results.violations
-    .filter((v) => v.impact === 'serious' || v.impact === 'critical')
-    .map((v) => ({ id: v.id, nodes: v.nodes.map((n) => n.target.join(' ')) }));
-}
 
 async function learnedSpell(page: Page, spellId: string) {
   const id = await createCharacter(page, 'Elminster');
@@ -73,13 +62,13 @@ test.describe('condições nas magias', () => {
     const card = page.getByRole('article', { name: /Hold Person/ });
     await (await hydrated(card.getByRole('button', { name: /Expand Hold Person/ }))).click();
 
-    expect(await violations(page, 'article')).toEqual([]);
+    expect(await violations(page, { include: 'article' })).toEqual([]);
 
     const term = card.locator('p').getByRole('button', { name: 'Paralyzed, condition' });
     await term.click();
     const popover = page.getByRole('dialog');
     await expect(popover).toContainText('While you have the Paralyzed condition');
-    expect(await violations(page, '[role="dialog"]')).toEqual([]);
+    expect(await violations(page, { include: '[role="dialog"]' })).toEqual([]);
 
     await page.keyboard.press('Escape');
     await expect(popover).toBeHidden();
@@ -126,13 +115,13 @@ test.describe('condições no combate', () => {
     await picker.getByRole('switch', { name: 'Prone' }).click();
     await expect(picker.getByRole('switch', { name: 'Prone' })).toBeChecked();
     // The dialog's own contents; the dimmed page behind it is not what a user reads now
-    expect(await violations(page, '[role="dialog"]')).toEqual([]);
+    expect(await violations(page, { include: '[role="dialog"]' })).toEqual([]);
     await page.keyboard.press('Escape');
 
     await expect(goblin.getByRole('button', { name: 'Prone, condition' })).toBeVisible();
-    expect(await violations(page, '[aria-label="Combat order"]')).toEqual([]);
+    expect(await violations(page, { include: '[aria-label="Combat order"]' })).toEqual([]);
     // The current row, where the badges sit at full opacity, with every rule
-    expect(await violations(page, '[aria-current="true"]')).toEqual([]);
+    expect(await violations(page, { include: '[aria-current="true"]' })).toEqual([]);
     await expect(
       rowOf(player.page, 'Goblin 1').getByRole('button', { name: 'Prone, condition' }),
     ).toBeVisible();

@@ -1,5 +1,4 @@
-import AxeBuilder from '@axe-core/playwright';
-
+import { violations } from './support/axe';
 import {
   characterUrl,
   createCharacter,
@@ -12,21 +11,6 @@ import {
   test,
 } from './support/fixtures';
 import { adminClient } from './support/supabase';
-
-/** Serious and critical WCAG A/AA violations: id, impact and the offending elements. */
-async function violations(page: import('@playwright/test').Page, disabledRules: string[] = []) {
-  const results = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-    .disableRules(disabledRules)
-    .analyze();
-  return results.violations
-    .filter((v) => v.impact === 'serious' || v.impact === 'critical')
-    .map((v) => ({
-      id: v.id,
-      impact: v.impact,
-      nodes: v.nodes.map((n) => `${n.target.join(' ')} → ${n.html.slice(0, 160)}`),
-    }));
-}
 
 /** Every page has one main landmark and one h1, so screen readers can jump straight to it. */
 async function landmarks(page: import('@playwright/test').Page) {
@@ -80,8 +64,17 @@ test.describe('acessibilidade (axe)', () => {
     }
   });
 
-  // The player picks any color; text in that color is lightened until it reads on the dark theme
-  for (const accentColor of ['#fde047', '#1e1b4b', '#7f1d1d']) {
+  // The player picks any color, a preset or their own; text in that color is adjusted until it
+  // reads on both themes
+  for (const accentColor of [
+    '#fde047',
+    '#1e1b4b',
+    '#7f1d1d',
+    '#ef4444',
+    '#3b82f6',
+    '#ec4899',
+    '#a855f7',
+  ]) {
     test(`cor de destaque ${accentColor} continua legível`, async ({ page, user: _ }) => {
       const id = await createCharacter(page, 'Colorful Hero');
       const res = await page.request.put(`/api/characters/${id}`, {
