@@ -1,11 +1,14 @@
 @import 'tailwindcss';
 
 /*
- * DESIGN TOKENS (dark only)
+ * DESIGN TOKENS
  * Names follow shadcn/ui, so generated components keep working. Components use these tokens,
  * never the raw Tailwind palette (zinc-800, orange-500...).
+ * Dark is the default (:root); the light theme (:root[data-theme='light']) redefines only what
+ * changes. src/frontend/lib/theme-tokens.unit.test.ts checks the contrast of both.
  */
 :root {
+  color-scheme: dark;
   --background: #09090b;
   --foreground: #fafafa;
   --card: #121214;
@@ -16,13 +19,14 @@
   /* Secondary text: 7.8:1 on background. Don't fade it further with opacity. */
   --muted-foreground: #a1a1aa;
   /* Placeholder: dimmer than secondary text, so an empty field never reads as filled in */
-  --placeholder: #71717a;
+  --placeholder: #82828b;
   --secondary: #18181b;
   --secondary-foreground: #fafafa;
   --accent: #1e1b4b;
   --accent-foreground: #fafafa;
   --border: #27272a;
-  --input: #27272a;
+  /* Field border: 3:1 on background and card (WCAG non-text contrast) */
+  --input: #63636b;
   --sidebar: #09090b;
   /* Backdrop behind dialogs, sheets and full-screen loaders */
   --overlay: rgb(0 0 0 / 0.8);
@@ -33,7 +37,7 @@
   --info: #3b82f6;
   --warning: #eab308;
   --destructive: var(--danger);
-  --destructive-foreground: #ffffff;
+  --destructive-foreground: #000000;
 
   /* Brand. Inside a character sheet, --character-color replaces it (see .character-context). */
   --brand: #663399;
@@ -50,15 +54,43 @@
   --coin-pp: #39d6ae;
   /* Each spell card sets its own (damage type, category or school). */
   --spell-color: var(--muted-foreground);
+  /* The faint brand light at the top of the page (body background) */
+  --atmosphere: color-mix(in srgb, var(--brand), transparent 82%);
 
   --header-height: 80px;
+}
+
+/* Light: the same app with the lights on (neutral zinc, not parchment). */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --background: #fafafa;
+  --foreground: #09090b;
+  --card: #f4f4f5;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --muted: #f4f4f5;
+  --muted-foreground: #52525b;
+  --placeholder: #6b6b74;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #09090b;
+  --accent: #ede9fe;
+  --accent-foreground: #1e1b4b;
+  --border: #e4e4e7;
+  --input: #8a8a93;
+  --sidebar: #fafafa;
+  --overlay: rgb(0 0 0 / 0.4);
+  --atmosphere: color-mix(in srgb, var(--brand), transparent 92%);
 }
 
 /*
  * DERIVED COLORS
  * Declared on both selectors so they are recomputed where --primary / --character-color change.
- * -flare: text and icon variant, lightened until it passes WCAG AA on the dark surfaces.
+ * -flare: text and icon variant, lightened (dark) or darkened (light) until it passes WCAG AA on
+ *   the theme's surfaces.
  * -on: text on top of a solid fill (white or black, whichever contrasts).
+ * The numbers come from src/frontend/lib/contrast.ts, whose sweep test proves them: change both.
+ * Without relative color support the fallbacks below are best effort.
  */
 :root,
 .character-context,
@@ -77,6 +109,7 @@
   --character-surface: color-mix(in srgb, var(--character-primary), transparent 90%);
   --character-muted: color-mix(in srgb, var(--character-primary), transparent 70%);
   --character-glow: color-mix(in srgb, var(--character-primary), transparent 50%);
+  --turn-glow: var(--primary-glow);
 
   --spell-flare: color-mix(in oklch, var(--spell-color), white 45%);
   --spell-surface: color-mix(in srgb, var(--spell-color), transparent 90%);
@@ -97,16 +130,84 @@
   --warning-muted: color-mix(in srgb, var(--warning), transparent 70%);
 }
 
-/* Exact versions where relative colors are supported: lift lightness only as much as needed. */
-@supports (color: oklch(from red l c h)) {
+/* Light fallback: darken instead of lighten. */
+:root[data-theme='light'],
+[data-theme='light'] .character-context,
+[data-theme='light'] .spell-context {
+  --primary-flare: color-mix(in oklch, var(--primary), black 45%);
+  --character-flare: color-mix(in oklch, var(--character-primary), black 45%);
+  --spell-flare: color-mix(in oklch, var(--spell-color), black 45%);
+  --danger-flare: color-mix(in srgb, var(--danger), black 30%);
+  --success-flare: color-mix(in srgb, var(--success), black 30%);
+  --info-flare: color-mix(in srgb, var(--info), black 30%);
+  --warning-flare: color-mix(in srgb, var(--warning), black 30%);
+  /* A strong glow reads as a smudge on a light surface */
+  --turn-glow: color-mix(in srgb, var(--primary), transparent 70%);
+}
+
+/*
+ * Exact versions where relative colors and pow() are supported: move lightness only as much as
+ * needed. -on is black when the fill's relative luminance (gamma 2.2) is above 0.179, else white.
+ */
+@supports (color: color(from red srgb pow(r, 2.2) g b)) {
   :root,
   .character-context,
   .spell-context {
     --primary-flare: oklch(from var(--primary) max(l, 0.74) min(c, 0.2) h);
-    --primary-on: oklch(from var(--primary) clamp(0, (0.68 - l) * 1000, 1) 0 0);
+    --primary-on: color(
+      from var(--primary) srgb
+        clamp(
+          0,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          1
+        )
+        clamp(
+          0,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          1
+        )
+        clamp(
+          0,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          1
+        )
+    );
     --character-flare: oklch(from var(--character-primary) max(l, 0.74) min(c, 0.2) h);
-    --character-on: oklch(from var(--character-primary) clamp(0, (0.68 - l) * 1000, 1) 0 0);
+    --character-on: color(
+      from var(--character-primary) srgb
+        clamp(
+          0,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          1
+        )
+        clamp(
+          0,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          1
+        )
+        clamp(
+          0,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          1
+        )
+    );
     --spell-flare: oklch(from var(--spell-color) max(l, 0.74) min(c, 0.2) h);
+    --danger-flare: oklch(from var(--danger) max(l, 0.74) min(c, 0.2) h);
+    --success-flare: oklch(from var(--success) max(l, 0.74) min(c, 0.2) h);
+    --info-flare: oklch(from var(--info) max(l, 0.74) min(c, 0.2) h);
+    --warning-flare: oklch(from var(--warning) max(l, 0.74) min(c, 0.2) h);
+  }
+
+  :root[data-theme='light'],
+  [data-theme='light'] .character-context,
+  [data-theme='light'] .spell-context {
+    --primary-flare: oklch(from var(--primary) min(l, 0.42) min(c, 0.2) h);
+    --character-flare: oklch(from var(--character-primary) min(l, 0.42) min(c, 0.2) h);
+    --spell-flare: oklch(from var(--spell-color) min(l, 0.42) min(c, 0.2) h);
+    --danger-flare: oklch(from var(--danger) min(l, 0.42) min(c, 0.2) h);
+    --success-flare: oklch(from var(--success) min(l, 0.42) min(c, 0.2) h);
+    --info-flare: oklch(from var(--info) min(l, 0.42) min(c, 0.2) h);
+    --warning-flare: oklch(from var(--warning) min(l, 0.42) min(c, 0.2) h);
   }
 }
 
@@ -280,7 +381,7 @@
   /* Whose turn it is: a slow breath in the character's color */
   @keyframes turn-glow {
     50% {
-      box-shadow: 0 0 14px 1px var(--primary-glow);
+      box-shadow: 0 0 14px 1px var(--turn-glow);
     }
   }
 
@@ -305,11 +406,7 @@
     @apply bg-background text-foreground font-sans antialiased;
     /* Atmosphere: a faint light from the top in the brand color, over a fine grain */
     background-image:
-      radial-gradient(
-        ellipse 90% 45% at 50% -5%,
-        color-mix(in srgb, var(--brand), transparent 82%),
-        transparent 70%
-      ),
+      radial-gradient(ellipse 90% 45% at 50% -5%, var(--atmosphere), transparent 70%),
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-repeat: no-repeat, repeat;
     background-attachment: fixed, scroll;

@@ -59,3 +59,21 @@ it('the preset accent colors get black text', () => {
   for (const hex of ['#ef4444', '#3b82f6', '#ec4899', '#a855f7'])
     expect(toHex(onColor(parseHex(hex)))).toBe('#000000');
 });
+
+it('onColor reaches 4.5:1 off the grid too (seeded random sRGB sweep)', () => {
+  // mulberry32: deterministic, so a failure always reproduces
+  let seed = 0x5eed;
+  const random = () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  const failures: string[] = [];
+  for (let i = 0; i < 50_000; i++) {
+    const c = { r: random(), g: random(), b: random() };
+    const ratio = contrastRatio(onColor(c), c);
+    if (ratio < 4.5) failures.push(`${toHex(c)}: ${ratio.toFixed(3)}`);
+  }
+  expect(failures).toEqual([]);
+});
