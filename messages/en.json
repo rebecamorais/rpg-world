@@ -110,6 +110,8 @@
     "en": "English",
     "pt": "Portuguese",
     "contactTooltip": "Report a bug",
+    "useLightTheme": "Use light theme",
+    "useDarkTheme": "Use dark theme",
     "passwordMinLength": "Password must be at least {min} characters.",
     "passwordTooLong": "Password is too long. Use up to 72 characters (fewer with accents or emoji).",
     "passwordsDoNotMatch": "Passwords do not match.",

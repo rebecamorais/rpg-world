@@ -110,6 +110,8 @@
     "en": "Inglês",
     "pt": "Português",
     "contactTooltip": "Reportar um Bug",
+    "useLightTheme": "Usar tema claro",
+    "useDarkTheme": "Usar tema escuro",
     "passwordMinLength": "A senha precisa ter pelo menos {min} caracteres.",
     "passwordTooLong": "A senha é longa demais. Use até 72 caracteres (menos se tiver acentos ou emoji).",
     "passwordsDoNotMatch": "As senhas não coincidem.",
