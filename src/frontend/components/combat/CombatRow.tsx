@@ -65,6 +65,10 @@ export function CombatRow({
     setOpened(null);
   }
   const expanded = opened ?? row.isCurrent;
+  // Only the art fades (never the text, so contrast holds); it returns on hover, focus or opening
+  const faded = waiting && !expanded;
+  const fadedArt =
+    'opacity-60 grayscale transition-[opacity,filter] duration-300 group-focus-within:opacity-100 group-focus-within:grayscale-0 group-hover:opacity-100 group-hover:grayscale-0';
   const toggle = () => setOpened(!expanded);
   const detailsId = `combat-details-${row.participantId}`;
   const down = isNpc && row.hp.current === 0;
@@ -88,17 +92,16 @@ export function CombatRow({
       style={{ ...theme.style, '--primary': 'var(--character-color)' } as CSSProperties}
       className={cn(
         theme.className,
-        'bg-card/60 border-character-muted relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-xl border p-3 transition-[opacity,filter] duration-300',
+        'group bg-card/60 border-character-muted relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-xl border p-3 transition-[opacity,filter] duration-300',
         row.isCurrent && 'border-primary animate-turn-glow',
-        // Faded, not disabled: back in full on hover, focus or when opened
-        waiting &&
-          !expanded &&
-          'opacity-75 grayscale-[.7] focus-within:opacity-100 focus-within:grayscale-0 hover:opacity-100 hover:grayscale-0',
       )}
     >
       <div
         aria-hidden="true"
-        className="bg-character absolute top-0 left-0 h-1 w-full opacity-80"
+        className={cn(
+          'bg-character absolute top-0 left-0 h-1 w-full opacity-80',
+          faded && fadedArt,
+        )}
       />
 
       <div className="flex items-center gap-3">
@@ -110,7 +113,7 @@ export function CombatRow({
         <ZoomablePortrait
           src={row.avatarUrl}
           name={row.name}
-          className={cn('size-11 sm:size-12', down && 'opacity-60 grayscale')}
+          className={cn('size-11 sm:size-12', down ? 'opacity-60 grayscale' : faded && fadedArt)}
         >
           <CharacterPortrait
             avatarUrl={row.avatarUrl}
@@ -122,7 +125,10 @@ export function CombatRow({
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <AppLink
             href={sheetHref}
-            className="text-title text-character-flare focus-ring max-w-full self-start truncate rounded-sm hover:underline"
+            className={cn(
+              'text-title focus-ring max-w-full self-start truncate rounded-sm hover:underline',
+              faded ? 'text-muted-foreground' : 'text-character-flare',
+            )}
           >
             {row.name}
           </AppLink>

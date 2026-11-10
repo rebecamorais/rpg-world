@@ -130,8 +130,7 @@ test.describe('condições no combate', () => {
     await page.keyboard.press('Escape');
 
     await expect(goblin.getByRole('button', { name: 'Prone, condition' })).toBeVisible();
-    // Every row, minus contrast: the dimmed rows of other turns already fail it by design
-    expect(await violations(page, '[aria-label="Combat order"]', ['color-contrast'])).toEqual([]);
+    expect(await violations(page, '[aria-label="Combat order"]')).toEqual([]);
     // The current row, where the badges sit at full opacity, with every rule
     expect(await violations(page, '[aria-current="true"]')).toEqual([]);
     await expect(

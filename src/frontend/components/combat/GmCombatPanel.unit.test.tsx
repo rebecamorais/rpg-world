@@ -82,7 +82,7 @@ describe('GmCombatPanel', () => {
     hook.encounter = running(0);
     const { unmount } = renderWithProviders(<GmCombatPanel party={party} live />);
     for (const card of screen.getAllByRole('listitem')) {
-      expect(card).not.toHaveClass('grayscale-[.7]');
+      expect(card.querySelector('.bg-character')).not.toHaveClass('grayscale');
     }
     unmount();
 
@@ -90,9 +90,9 @@ describe('GmCombatPanel', () => {
     hook.encounter.rows[1].isCurrent = true;
     renderWithProviders(<GmCombatPanel party={party} live />);
     const [arani, goblin, brom] = screen.getAllByRole('listitem');
-    expect(arani).toHaveClass('grayscale-[.7]');
-    expect(goblin).not.toHaveClass('grayscale-[.7]');
-    expect(brom).toHaveClass('grayscale-[.7]');
+    expect(arani.querySelector('.bg-character')).toHaveClass('grayscale');
+    expect(goblin.querySelector('.bg-character')).not.toHaveClass('grayscale');
+    expect(brom.querySelector('.bg-character')).toHaveClass('grayscale');
   });
 
   it('a ordenação salva a ordem do sortByInitiative', async () => {
