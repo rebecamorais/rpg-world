@@ -1,7 +1,7 @@
 export const THEMES = ['dark', 'light'] as const;
 export type Theme = (typeof THEMES)[number];
 export const DEFAULT_THEME: Theme = 'dark';
-export const THEME_COOKIE = 'theme';
+const THEME_COOKIE = 'theme';
 
 /** Anything but a known theme falls back to the default. */
 export function parseTheme(value: string | undefined | null): Theme {

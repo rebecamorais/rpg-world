@@ -39,7 +39,7 @@ export function toHex(c: Rgb): string {
 const toLinear = (v: number) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
 const fromLinear = (v: number) => (v <= 0.0031308 ? v * 12.92 : 1.055 * v ** (1 / 2.4) - 0.055);
 
-export function relativeLuminance(c: Rgb): number {
+function relativeLuminance(c: Rgb): number {
   return 0.2126 * toLinear(c.r) + 0.7152 * toLinear(c.g) + 0.0722 * toLinear(c.b);
 }
 
