@@ -1,9 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import type { Page } from '@playwright/test';
 
-// e2e does not resolve the app's path aliases; keep in sync with THEMES in src/frontend/lib/theme.ts
-const THEMES = ['dark', 'light'] as const;
-type Theme = (typeof THEMES)[number];
+import { THEMES, type Theme } from '../../src/frontend/lib/theme';
 
 /**
  * Serious and critical WCAG A/AA violations on the page (or only inside `include`), checked once
@@ -15,17 +13,20 @@ export async function violations(
 ): Promise<{ theme: Theme; id: string; impact: string; nodes: string[] }[]> {
   const before = await page.evaluate(() => document.documentElement.dataset.theme);
   const found: { theme: Theme; id: string; impact: string; nodes: string[] }[] = [];
+  // Switching tokens re-runs every transition-colors; axe must read the final colors, not a blend
+  const still = await page.addStyleTag({
+    content: '*, *::before, *::after { transition: none !important; animation: none !important; }',
+  });
   try {
     for (const theme of THEMES) {
-      await page.evaluate(
-        (t) =>
-          new Promise<void>((resolve) => {
-            document.documentElement.dataset.theme = t;
-            // Two frames: styles recalculated and painted before axe reads the colors
-            requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-          }),
-        theme,
-      );
+      await page.evaluate(async (t) => {
+        document.documentElement.dataset.theme = t;
+        // Two frames: styles recalculated and painted before axe reads the colors
+        await new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        );
+        await Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {})));
+      }, theme);
       let builder = new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
         .disableRules(opts.disabledRules ?? []);
@@ -45,7 +46,11 @@ export async function violations(
     await page.evaluate((t) => {
       if (t === undefined) delete document.documentElement.dataset.theme;
       else document.documentElement.dataset.theme = t;
+      // Flush styles now, while transitions are still off
+      void getComputedStyle(document.body).color;
     }, before);
+    // Removed only after the restore, so going back to the old theme doesn't animate either
+    await still.evaluate((el) => (el as Element).remove());
   }
   return found;
 }
