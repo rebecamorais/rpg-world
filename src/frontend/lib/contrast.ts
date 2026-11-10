@@ -12,6 +12,12 @@ export const FLARE_MAX_L_LIGHT = 0.42;
 export const FLARE_MAX_C = 0.2;
 /** `-on` picks black above this relative luminance (gamma 2.2), white otherwise. */
 export const ON_LUMINANCE = 0.179;
+/**
+ * Slope of the `-on` step in CSS: clamp(0, (ON_LUMINANCE - Y) * ON_RAMP, 1). Steep enough that
+ * no 8-bit color lands on the ramp (closest |Y - 0.179| is ~1.9e-9), so the result is always
+ * pure black or pure white, never gray.
+ */
+export const ON_RAMP = 1e9;
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
@@ -116,10 +122,11 @@ export function flare(color: Rgb, theme: ThemeName): Rgb {
   return fromOklch({ l: nextL, c: Math.min(c, FLARE_MAX_C), h });
 }
 
-/** Text color on top of a solid fill: black or white by gamma-2.2 luminance. */
+/** Text color on top of a solid fill, exactly as the CSS computes it (see ON_RAMP). */
 export function onColor(color: Rgb): Rgb {
   const y = 0.2126 * color.r ** 2.2 + 0.7152 * color.g ** 2.2 + 0.0722 * color.b ** 2.2;
-  return y > ON_LUMINANCE ? { r: 0, g: 0, b: 0 } : { r: 1, g: 1, b: 1 };
+  const v = clamp01((ON_LUMINANCE - y) * ON_RAMP);
+  return { r: v, g: v, b: v };
 }
 
 type SurfaceName = 'background' | 'card' | 'popover' | 'muted' | 'veilOverBlack' | 'veilOverWhite';

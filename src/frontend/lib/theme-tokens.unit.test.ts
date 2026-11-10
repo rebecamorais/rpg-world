@@ -7,6 +7,7 @@ import {
   FLARE_MAX_L_LIGHT,
   FLARE_MIN_L_DARK,
   ON_LUMINANCE,
+  ON_RAMP,
   SURFACES,
   type ThemeName,
   contrastRatio,
@@ -39,7 +40,8 @@ function color(theme: ThemeName, name: string): string {
   if (value === undefined) throw new Error(`--${name} is not declared for ${theme}`);
   const alias = value.match(/^var\(--([\w-]+)\)$/);
   if (alias) return color(theme, alias[1]);
-  if (!/^#[0-9a-f]{3,6}$/i.test(value)) throw new Error(`--${name} is not a hex color: ${value}`);
+  if (!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(value))
+    throw new Error(`--${name} is not a hex color: ${value}`);
   return value;
 }
 
@@ -111,9 +113,15 @@ describe.each(THEMES)('%s theme', (theme) => {
   });
 });
 
-it('globals.css uses the same numbers as contrast.ts', () => {
-  expect(css).toContain(`max(l, ${FLARE_MIN_L_DARK})`);
-  expect(css).toContain(`min(l, ${FLARE_MAX_L_LIGHT})`);
-  expect(css).toContain(`min(c, ${FLARE_MAX_C})`);
-  expect(css).toContain(`(${ON_LUMINANCE} -`);
+// Every occurrence of each formula in globals.css must use the contrast.ts number.
+it.each([
+  ['max(l, X)', /max\(l, ([\d.]+)\)/g, FLARE_MIN_L_DARK],
+  ['min(l, X)', /min\(l, ([\d.]+)\)/g, FLARE_MAX_L_LIGHT],
+  ['min(c, X)', /min\(c, ([\d.]+)\)/g, FLARE_MAX_C],
+  ['-on threshold', /clamp\(\s*0,\s*\(([\d.]+) -/g, ON_LUMINANCE],
+  ['-on ramp', /\)\s*\*\s*([\d.e]+),\s*1\s*\)/g, ON_RAMP],
+])('globals.css uses the contrast.ts number in every %s', (_, pattern, expected) => {
+  const found = [...css.matchAll(pattern)].map(([, n]) => Number(n));
+  expect(found.length).toBeGreaterThan(0);
+  expect(found.filter((n) => n !== expected)).toEqual([]);
 });

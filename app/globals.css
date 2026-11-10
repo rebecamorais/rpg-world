@@ -148,6 +148,7 @@
 /*
  * Exact versions where relative colors and pow() are supported: move lightness only as much as
  * needed. -on is black when the fill's relative luminance (gamma 2.2) is above 0.179, else white.
+ * Its three channels are intentionally identical: the same 0 or 1 gives pure black or white.
  */
 @supports (color: color(from red srgb pow(r, 2.2) g b)) {
   :root,
@@ -158,17 +159,20 @@
       from var(--primary) srgb
         clamp(
           0,
-          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) *
+            1000000000,
           1
         )
         clamp(
           0,
-          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) *
+            1000000000,
           1
         )
         clamp(
           0,
-          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) *
+            1000000000,
           1
         )
     );
@@ -177,17 +181,20 @@
       from var(--character-primary) srgb
         clamp(
           0,
-          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) *
+            1000000000,
           1
         )
         clamp(
           0,
-          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) *
+            1000000000,
           1
         )
         clamp(
           0,
-          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) * 100000,
+          (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) *
+            1000000000,
           1
         )
     );

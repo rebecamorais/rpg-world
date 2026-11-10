@@ -60,8 +60,8 @@ it('the preset accent colors get black text', () => {
     expect(toHex(onColor(parseHex(hex)))).toBe('#000000');
 });
 
-it('onColor reaches 4.5:1 off the grid too (seeded random sRGB sweep)', () => {
-  // mulberry32: deterministic, so a failure always reproduces
+// mulberry32: deterministic, so a failure always reproduces
+const seededColors = (count: number): Rgb[] => {
   let seed = 0x5eed;
   const random = () => {
     seed = (seed + 0x6d2b79f5) | 0;
@@ -69,11 +69,23 @@ it('onColor reaches 4.5:1 off the grid too (seeded random sRGB sweep)', () => {
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
-  const failures: string[] = [];
-  for (let i = 0; i < 50_000; i++) {
-    const c = { r: random(), g: random(), b: random() };
-    const ratio = contrastRatio(onColor(c), c);
-    if (ratio < 4.5) failures.push(`${toHex(c)}: ${ratio.toFixed(3)}`);
-  }
+  return Array.from({ length: count }, () => ({ r: random(), g: random(), b: random() }));
+};
+const offGrid = seededColors(50_000);
+
+it('onColor reaches 4.5:1 off the grid too (seeded random sRGB sweep)', () => {
+  const failures = offGrid
+    .map((c) => [c, contrastRatio(onColor(c), c)] as const)
+    .filter(([, ratio]) => ratio < 4.5)
+    .map(([c, ratio]) => `${toHex(c)}: ${ratio.toFixed(3)}`);
   expect(failures).toEqual([]);
+});
+
+it('onColor is always pure black or pure white, never a gray from the CSS ramp', () => {
+  // Closest to the threshold among 8-bit colors, and two that a 1e5 ramp turned gray
+  const edges = ['#c10eef', '#007ea4', '#006cfd'].map(parseHex);
+  const grays = [...offGrid, ...edges]
+    .filter((c) => !['#000000', '#ffffff'].includes(toHex(onColor(c))) || onColor(c).r % 1 !== 0)
+    .map(toHex);
+  expect(grays).toEqual([]);
 });
