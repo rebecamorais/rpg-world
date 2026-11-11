@@ -2,8 +2,9 @@ name: Crowdin status
 
 # Reminder, never a blocker: every PR gets warnings when translations are waiting somewhere.
 # - a Crowdin pull request (l10n/crowdin) is open → merge it
-# - Crowdin has approved translations that are not in the repository → run the Crowdin workflow
 # - strings were translated on Crowdin and wait for a proofreader → approve them on Crowdin
+# Only cheap API calls: no Crowdin build per push (they hit "Too Many Project Builds"). To bring
+# approved translations, comment /sincronizar (see crowdin.yml).
 # Pull requests from forks get no secrets, so the Crowdin checks are skipped there.
 on:
   pull_request:
@@ -64,54 +65,3 @@ jobs:
                 echo "::warning title=Crowdin::$lang: $pending string(s) traduzida(s) esperando aprovação no Crowdin"
                 echo "- 📝 \`$lang\`: $pending string(s) esperando aprovação no Crowdin" >> "$GITHUB_STEP_SUMMARY"
               done
-
-      # Downloads the approved translations into the workspace only: nothing is committed or pushed
-      - name: Download approved translations
-        if: env.CROWDIN_PERSONAL_TOKEN != ''
-        uses: crowdin/github-action@5b9790df740c85af5412a3a3a91b24988d5d324f # v3.5.1
-        with:
-          upload_sources: false
-          upload_translations: false
-          download_translations: true
-          export_only_approved: true
-          push_translations: false
-          create_pull_request: false
-
-      - name: Approved translations missing from the repository
-        if: env.CROWDIN_PERSONAL_TOKEN != ''
-        run: |
-          set -euo pipefail
-          # Counts the strings Crowdin has a real translation for (not the English fallback) that
-          # differ from the repository. Formatting, and keys a PR adds before Crowdin knows them,
-          # never count.
-          total=0
-          lines=()
-          while IFS= read -r file; do
-            case "$file" in
-              messages/*) en="messages/en.json" ;;
-              *) en=$(echo "$file" | sed -E 's#/i18n/[a-z]{2}/#/i18n/en/#') ;;
-            esac
-            [ -f "$en" ] || continue
-            git show "HEAD:$file" > "$RUNNER_TEMP/old.json" 2>/dev/null || echo '{}' > "$RUNNER_TEMP/old.json"
-            count=$(jq -n --slurpfile new "$file" --slurpfile en "$en" --slurpfile old "$RUNNER_TEMP/old.json" '
-              $new[0] as $n | $en[0] as $e | $old[0] as $o
-              | [$n | paths(scalars) as $p
-                  | ($n | getpath($p)) as $v
-                  | select($v != ($e | getpath($p)) and $v != ($o | getpath($p)))]
-              | length')
-            if [ "$count" -gt 0 ]; then
-              total=$((total + count))
-              lines+=("  - \`$file\`: $count")
-            fi
-          done < <(git status --porcelain --untracked-files=all -- messages content \
-            | awk '{print $2}' | grep '\.json$' | grep -v '/en\.json$' | grep -v '/i18n/en/' || true)
-
-          if [ "$total" -gt 0 ]; then
-            echo "::warning title=Crowdin::$total string(s) aprovada(s) no Crowdin que não estão no repositório. Rode Actions → Crowdin → Run workflow."
-            {
-              echo "- 🌍 $total string(s) aprovada(s) no Crowdin fora do repositório (rode o workflow **Crowdin**):"
-              printf '%s\n' "${lines[@]}"
-            } >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "- ✅ Tudo que foi aprovado no Crowdin já está no repositório" >> "$GITHUB_STEP_SUMMARY"
-          fi

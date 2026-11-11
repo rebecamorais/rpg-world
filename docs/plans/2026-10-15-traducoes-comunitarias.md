@@ -15,11 +15,16 @@ comunidade**, sem tradução automática.
   Idiomas no projeto: português, espanhol e sueco.
 - **Fontes em inglês** (`crowdin.yml`): `messages/en.json` (interface) e
   `content/dnd5e/*/i18n/en/*.json` (magias do SRD 5.1 e 5.2, um arquivo por livro).
-- **Action `crowdin.yml`, só manual** (Actions → Crowdin → Run workflow), rodada quando há algo
+- **Action `crowdin.yml`, só manual** (Actions → Crowdin → Run workflow, ou um comentário
+  começando com `/sincronizar` em qualquer issue ou PR, só da dona do repositório; desde
+  2026-11-11), rodada quando há algo
   para trazer do Crowdin: envia o inglês, envia as traduções editadas no repositório e abre ou
   atualiza o PR "i18n: traduções do Crowdin" com o que foi **aprovado** (`export_only_approved`).
   O PR é revisado e entra como qualquer outro. Enquanto ela não roda, texto novo em inglês não
   aparece no Crowdin para traduzir.
+  - O check "Crowdin status" dos PRs só faz chamadas baratas (PR do Crowdin aberto, strings
+    esperando aprovação). Até 2026-11-11 ele baixava as traduções a cada push para comparar com o
+    repositório, e o Crowdin passou a recusar com "Too Many Project Builds".
   - Um PR aberto pela Action não roda os testes (o `GITHUB_TOKEN` não dispara outros
     workflows): rodar `npm run test:unit` no branch `l10n/crowdin` antes do merge.
 - **O que falta traduzir aparece em inglês:** na interface, a chave vem em inglês (o next-intl
