@@ -4,7 +4,7 @@ name: Crowdin status
 # - a Crowdin pull request (l10n/crowdin) is open → merge it
 # - strings were translated on Crowdin and wait for a proofreader → approve them on Crowdin
 # Only cheap API calls: no Crowdin build per push (they hit "Too Many Project Builds"). To bring
-# approved translations, comment /sincronizar (see crowdin.yml).
+# approved translations, comment /sync-crowdin (see crowdin.yml).
 # Pull requests from forks get no secrets, so the Crowdin checks are skipped there.
 on:
   pull_request:

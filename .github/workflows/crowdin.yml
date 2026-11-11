@@ -1,7 +1,7 @@
 name: Crowdin
 
 # Run by hand when there is something to bring from Crowdin: Actions → Crowdin → Run workflow, or a
-# comment starting with /sincronizar on any issue or pull request (only the repository owner; the
+# comment starting with /sync-crowdin on any issue or pull request (only the repository owner; the
 # run always syncs `main`, never the pull request's branch).
 # It sends the English texts, sends the translations edited in the repository (approved, so the
 # pull request doesn't put them back in English) and opens or updates a pull request with the
@@ -23,15 +23,15 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  # The 🚀 reaction on the /sincronizar comment
+  # The 🚀 reaction on the /sync-crowdin comment
   issues: write
 
 jobs:
   sync:
-    # Any comment fires the event: only the owner's /sincronizar runs the sync
+    # Any comment fires the event: only the owner's /sync-crowdin runs the sync
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (startsWith(github.event.comment.body, '/sincronizar') &&
+      (startsWith(github.event.comment.body, '/sync-crowdin') &&
        github.event.comment.user.login == github.repository_owner)
     # At the job, not the workflow: a skipped run (any other comment) must not take the queue spot
     concurrency:

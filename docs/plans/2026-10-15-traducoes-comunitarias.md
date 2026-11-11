@@ -16,7 +16,7 @@ comunidade**, sem tradução automática.
 - **Fontes em inglês** (`crowdin.yml`): `messages/en.json` (interface) e
   `content/dnd5e/*/i18n/en/*.json` (magias do SRD 5.1 e 5.2, um arquivo por livro).
 - **Action `crowdin.yml`, só manual** (Actions → Crowdin → Run workflow, ou um comentário
-  começando com `/sincronizar` em qualquer issue ou PR, só da dona do repositório; desde
+  começando com `/sync-crowdin` em qualquer issue ou PR, só da dona do repositório; desde
   2026-11-11), rodada quando há algo
   para trazer do Crowdin: envia o inglês, envia as traduções editadas no repositório e abre ou
   atualiza o PR "i18n: traduções do Crowdin" com o que foi **aprovado** (`export_only_approved`).
