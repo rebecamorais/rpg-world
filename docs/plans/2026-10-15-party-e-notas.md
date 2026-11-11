@@ -1,8 +1,10 @@
 # Party, papéis e notas de sessão
 
 **Data:** 2026-10-15
-**Status:** party e papéis entregues como "mesas" (fases 1 e 2, #124–#126); o diário da mesa
-(passo 1 das notas, o link do Google Docs embutido na página da mesa) entregue no #142; as notas por sessão e a visibilidade por nota (passos 2 e 3) ainda são ideia.
+**Status:** entregue (2026-11-11). Party e papéis entregues como "mesas" (fases 1 e 2, #124–#126);
+o diário da mesa (passo 1 das notas, o link do Google Docs embutido na página da mesa) no #142.
+As notas por sessão e a visibilidade por nota (passos 2 e 3) foram **arquivadas** em 2026-11-11
+(ver "Notas de sessão").
 A mesa agora sobrevive à exclusão da conta do mestre e fica sem mestre até alguém assumir
 (`2026-11-03-exclusao-de-conta.md`). É o pré-requisito do plano
 `2026-10-15-sessoes-calendario-discord.md`.
@@ -75,6 +77,11 @@ Do mais simples para o mais completo:
    pessoal de cada jogador.
 
 Sugestão: começar pelo 1 e já desenhar o 2 com o 3 em mente (coluna `visibility` desde o início).
+
+**Decidido (2026-11-11): só o passo 1.** Os passos 2 e 3 foram arquivados. O diário no Google Docs
+já cobre o que a mesa escreve junta, e o Mestre guarda segredos e planejamento na ferramenta que
+preferir (caderno, Notion, outro documento). Um editor de notas no app repetiria o que essas
+ferramentas já fazem melhor. Se um dia fizer falta, o desenho acima continua valendo.
 
 ### Diário da mesa no Google Docs (brainstorm de 2026-11-03)
 
@@ -151,7 +158,8 @@ liberar o resumo dos personagens para a party, antes de ir para produção:
 
 - "Background" é o antecedente, a história, ou os dois?
 - O Mestre vê a ficha completa (só leitura)? Faz sentido para preparar encontros.
-- Membros escrevem notas da party ou só o Mestre?
+- ~~Membros escrevem notas da party ou só o Mestre?~~ Sem notas no app; o diário do Docs é editado
+  pelo Mestre e pelos jogadores ativos.
 - Um personagem em várias parties ao mesmo tempo?
 - O que acontece com os personagens quando a party é apagada? (Só desvincula, nunca apaga.)
 
@@ -162,5 +170,5 @@ liberar o resumo dos personagens para a party, antes de ir para produção:
 3. Função de resumo e página da party com os cards só leitura, **com a Política de Privacidade
    atualizada no mesmo PR** (ver acima).
 4. Link de notas externo na party.
-5. Notas por sessão com visibilidade.
+5. ~~Notas por sessão com visibilidade.~~ Arquivado em 2026-11-11.
 6. Sessões, calendário e Discord (outro plano).
