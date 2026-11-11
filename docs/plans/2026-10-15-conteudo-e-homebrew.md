@@ -1,8 +1,14 @@
 # Conteúdo oficial em arquivos, homebrew no banco
 
+**Issue:** [#91](https://github.com/rebecamorais/rpg-world/issues/91)
+
 **Data:** 2026-10-15
+**Pausado (2026-11-11):** as mecânicas de classe ([#175](https://github.com/rebecamorais/rpg-world/issues/175)) vêm
+antes, por pedido de quem joga. O homebrew não é um ganho rápido; a ordem está no
+[Project Roadmap](https://github.com/users/rebecamorais/projects/1).
+
 **Status (2026-10-22):** passos 1 a 3 da ordem feitos para magias: arquivos em
-`content/dnd5e/srd-5.1` e `srd-5.2`, `FileSpellCatalog`, `character_spells.spell_ref` (#81) e as
+`content/dnd5e/srd-5.1` e `srd-5.2`, `FileSpellCatalog`, `character_spells.spell_ref` ([#81](https://github.com/rebecamorais/rpg-world/issues/81)) e as
 tabelas `spells` / `spell_translations` apagadas (`2026-10-21-magias-por-edicao.md`). Próximo:
 homebrew (passo 4).
 

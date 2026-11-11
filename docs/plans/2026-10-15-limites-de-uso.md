@@ -1,7 +1,8 @@
 # Limites de uso por conta
 
 **Data:** 2026-10-15
-**Status:** planejamento, nada implementado.
+**Status:** arquivado em 2026-10-21 (sem custo nem usuários que justifiquem; limites entram junto
+com cada feature quando fizer falta). Sem issue.
 
 O objetivo é limitar o uso por conta desde já (ex.: até 10 personagens, 4 parties) para conter o
 custo de banco e de imagens, e deixar o terreno pronto para um dia existir um plano premium,

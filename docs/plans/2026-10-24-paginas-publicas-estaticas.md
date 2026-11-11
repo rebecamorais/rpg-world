@@ -42,7 +42,7 @@ carregar foi descartado, porque o texto piscaria em inglês em toda visita.
 3. Nada muda nas URLs públicas nem nas logadas (`/`, `/features`, `/characters`,
    `/system/DnD_5e/character/<id>`, `/api/...`).
 4. As páginas logadas (dashboard, ficha) continuam como estão: dinâmicas, com os dados vindo do
-   servidor (PRs #110 e #115).
+   servidor (PRs [#110](https://github.com/rebecamorais/rpg-world/issues/110) e [#115](https://github.com/rebecamorais/rpg-world/issues/115)).
 
 ## Não-objetivos
 
@@ -375,7 +375,7 @@ sem o aviso guardado`.
 ## Resultados da medição
 
 Medido com `curl -w '%{time_starttransfer}'` em `https://www.rpgworldapp.com`, de São Paulo, sem
-cookie, 5 vezes. "Fria" é a primeira chamada da série. Depois: 2026-10-28, com o #118 em produção
+cookie, 5 vezes. "Fria" é a primeira chamada da série. Depois: 2026-10-28, com o [#118](https://github.com/rebecamorais/rpg-world/issues/118) em produção
 (`x-vercel-cache: HIT`, `x-nextjs-prerender: 1`).
 
 | URL         | antes (fria) | antes (quente, mediana) | depois (fria) | depois (quente, mediana) |

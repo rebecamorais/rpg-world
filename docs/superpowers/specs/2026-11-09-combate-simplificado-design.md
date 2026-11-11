@@ -1,6 +1,6 @@
 # Combate simplificado: linhas enxutas, voltar turno e iniciativa do jogador
 
-Continuação do [Projeto 3](2026-11-07-combate-identificacao-e-visibilidade-design.md), já mergeado no PR #163. O texto vem da conversa de 09/11, que partiu de uma revisão de UX das telas de combate.
+Continuação do [Projeto 3](2026-11-07-combate-identificacao-e-visibilidade-design.md), já mergeado no PR [#163](https://github.com/rebecamorais/rpg-world/issues/163). O texto vem da conversa de 09/11, que partiu de uma revisão de UX das telas de combate.
 
 Legenda: **(dona)** foi decidido por ela. **(decisão do builder)** é escolha técnica ou de detalhe que não muda o que ela pediu.
 

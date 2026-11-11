@@ -1,5 +1,7 @@
 # Mesas — fase 1: plano de implementação
 
+**Issue:** [#90](https://github.com/rebecamorais/rpg-world/issues/90)
+
 > **Para agentes:** SUB-SKILL OBRIGATÓRIA: superpowers:subagent-driven-development (recomendado) ou
 > superpowers:executing-plans, tarefa por tarefa. Os passos usam checkbox (`- [ ]`).
 
@@ -20,7 +22,7 @@ só leitura é a ficha atual numa rota da mesa: o modo vem dos parâmetros da ro
 TanStack Query, Vitest (unit + integration), Playwright.
 
 **Spec:** [`2026-10-28-mesas-fase-1-role-play.md`](2026-10-28-mesas-fase-1-role-play.md). A
-preparação (username escolhido, `kind`, volta depois do login) já está na main (#121).
+preparação (username escolhido, `kind`, volta depois do login) já está na main ([#121](https://github.com/rebecamorais/rpg-world/issues/121)).
 
 **Entrega em dois PRs** (migrações em PR próprio):
 
@@ -106,7 +108,7 @@ REFERENCES characters ON DELETE CASCADE, PRIMARY KEY (party_id, character_id))` 
   mesas do `gm_id` e levanta `party_gm_limit` com 5 ou mais.
 - Trigger `AFTER DELETE ON party_members` (`SECURITY DEFINER`): apaga de `party_characters` as
   linhas daquela mesa cujo personagem é do `OLD.user_id`.
-- Junta o adiado do #121: `ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA private REVOKE
+- Junta o adiado do [#121](https://github.com/rebecamorais/rpg-world/issues/121): `ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA private REVOKE
 EXECUTE ON FUNCTIONS FROM PUBLIC`.
 
 **Políticas e grants** (`authenticated`; `service_role` recebe tudo, como nas outras tabelas):
@@ -293,7 +295,7 @@ export interface MyParties {
 
 - [ ] **Passo 1: testes unitários:** `create com nome só de espaços → party_error_name_invalid`;
       `listMine separa mestre, jogador, convites e pedidos`; `rename/delete de mesa alheia →
-    party_error_not_found`; `rotateInviteCode devolve 32 hex diferente do anterior`. Integração:
+party_error_not_found`; `rotateInviteCode devolve 32 hex diferente do anterior`. Integração:
       `o repositório traduz party_gm_limit para PartyError GM_LIMIT`.
 - [ ] **Passo 2:** rodar unit e integration de `parties`. Esperado: falham.
 - [ ] **Passo 3:** implementar e registrar no container.
@@ -324,15 +326,15 @@ MemberStatus`, `acceptMember(partyId, requesterId, memberId)` (mestre aprovando 
   convite ou desiste do pedido).
 - Schemas: `inviteUsernameSchema = z.object({ username: z.string().trim().replace(/^@/, '').min(1).max(60) })`
   — sem a regex de `^[a-z0-9_]+$`: usernames escolhidos antes da regra (tratados como escolhidos na
-  migração do #121) podem ter `.` ou maiúsculas e precisam ser achados;
+  migração do [#121](https://github.com/rebecamorais/rpg-world/issues/121)) podem ter `.` ou maiúsculas e precisam ser achados;
   `inviteCodeParamsSchema = z.object({ code: z.string().regex(/^[a-f0-9]{32}$/) })`,
   `memberParamsSchema = z.object({ partyId: z.uuid(), userId: z.uuid() })`.
 
 - [ ] **Passo 1: testes:** unit — `acceptMember sem linha afetada → party_error_not_found`;
       `getInvite de código inexistente → party_error_invite_not_found`. Integração (repositório
       Supabase de ponta a ponta) — `pedido pelo link → mestre aprova → aparece em asPlayer do
-    jogador`; `convite por username → jogador aceita`; `jogador recusa convite → some dos
-    invites`; `mestre tira membro`.
+jogador`; `convite por username → jogador aceita`; `jogador recusa convite → some dos
+invites`; `mestre tira membro`.
 - [ ] **Passo 2:** rodar. Esperado: falham.
 - [ ] **Passo 3:** implementar.
 - [ ] **Passo 4:** rodar. Esperado: passam.
@@ -405,8 +407,8 @@ personalityTraits?, ideals?, bonds?, flaws? } | null, ownerUsername: string | nu
 - [ ] **Passo 1: testes:** `calculatePassiveInsight(14, 5, true) === 15`; `toRolePlayCard` com
       `system_data.passivePerception = 10` salvo mas WIS 16 e proficiência no nível 1 → 15;
       `sem lore → traço/ideal/vínculo/defeito null`; unit — `get de quem é só invited →
-    party_error_not_found`; `get do jogador vem com gm: null`; `setMyCharacters troca A por B
-    (remove A, insere B)`; integração — `o mestre recebe os cards com passivas calculadas`;
+party_error_not_found`; `get do jogador vem com gm: null`; `setMyCharacters troca A por B
+(remove A, insere B)`; integração — `o mestre recebe os cards com passivas calculadas`;
       `setMyCharacters com npc → party_error_character_not_allowed`.
 - [ ] **Passo 2:** rodar. Esperado: falham.
 - [ ] **Passo 3:** implementar.
@@ -438,7 +440,7 @@ personalityTraits?, ideals?, bonds?, flaws? } | null, ownerUsername: string | nu
 - `findOwnedCharacter` não muda: nenhum caso de uso de escrita ganha caminho para o mestre.
 
 - [ ] **Passo 1: testes unitários:** `getForPartyGm com acesso devolve a ficha`; `sem acesso →
-    not_found, sem ler o repositório`; idem para magias e lore.
+not_found, sem ler o repositório`; idem para magias e lore.
 - [ ] **Passo 2:** rodar. Esperado: falham.
 - [ ] **Passo 3:** implementar.
 - [ ] **Passo 4:** rodar. Esperado: passam.
@@ -546,7 +548,7 @@ personalityTraits?, ideals?, bonds?, flaws? } | null, ownerUsername: string | nu
 
 - [ ] **Passo 1: testes:** `RolePlayCard mostra as passivas e linka para a ficha da mesa`;
       `RolePlayCard sem lore não mostra rótulos vazios`; `MyPartyCharacters envia só os ids
-    marcados`.
+marcados`.
 - [ ] **Passo 2:** rodar. Esperado: falham.
 - [ ] **Passo 3:** implementar.
 - [ ] **Passo 4:** `npm run test:unit`. Esperado: passa.
@@ -585,8 +587,8 @@ personalityTraits?, ideals?, bonds?, flaws? } | null, ownerUsername: string | nu
   `charactersApi.getForPartyGm(partyId, id, user.id)`; título `"<aba> · <nome> · RPG World"`.
 
 - [ ] **Passo 1: testes:** `useSheetSource com partyId → readOnly e caminhos da mesa`; `sem partyId
-    → caminhos do dono`; `StatusView em modo só leitura não tem campo editável habilitado nem
-    botão salvar` (render com `CharacterContextProvider` e params mockados).
+→ caminhos do dono`; `StatusView em modo só leitura não tem campo editável habilitado nem
+botão salvar` (render com `CharacterContextProvider` e params mockados).
 - [ ] **Passo 2:** rodar. Esperado: falham.
 - [ ] **Passo 3:** implementar.
 - [ ] **Passo 4:** `npm run test:unit` e os e2e da ficha (`sheet-save`, `lore`, `spells`,

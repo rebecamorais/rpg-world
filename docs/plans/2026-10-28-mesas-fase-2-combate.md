@@ -1,7 +1,9 @@
 # Mesas — fase 2: modo Combate (iniciativa em tempo real)
 
+**Issue:** [#90](https://github.com/rebecamorais/rpg-world/issues/90)
+
 **Data:** 2026-10-28
-**Status:** entregue (#126). Plano de implementação: `2026-10-31-mesas-fase-2-plano.md`. Fase 1:
+**Status:** entregue ([#126](https://github.com/rebecamorais/rpg-world/issues/126)). Plano de implementação: `2026-10-31-mesas-fase-2-plano.md`. Fase 1:
 [`2026-10-28-mesas-fase-1-role-play.md`](2026-10-28-mesas-fase-1-role-play.md).
 
 ## Por quê

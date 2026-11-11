@@ -1,29 +1,30 @@
 # RPG World 🎲
 
-Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio). Licenciado sob a GNU GPLv3.
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/7u6guShqhQ) [![Roadmap](https://img.shields.io/badge/Roadmap-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/users/rebecamorais/projects/1) [![Crowdin](https://img.shields.io/badge/Crowdin-2E3340?style=for-the-badge&logo=crowdin&logoColor=white)](https://crowdin.com/project/rpgworld)
 
-Um aplicativo web para criação e gestão de fichas de personagens de RPG de mesa, focado inicialmente no sistema **Dungeons & Dragons 5ª Edição**. Projetado para ser rápido, acessível e expansível.
+Fichas de RPG de mesa no navegador, começando por **Dungeons & Dragons 5ª Edição**. Gratuito, de código aberto, em português e inglês, com tema escuro e claro.
 
-🔗 **Acesse o projeto online:** [rpgworldapp.com](https://rpgworldapp.com/)
+🔗 **Acesse:** [rpgworldapp.com](https://rpgworldapp.com/) · **Conheça sem conta:** [demo da mesa The Pioneers](https://rpgworldapp.com/demo)
+
+## ✨ O que já dá para fazer
+
+- **Ficha completa em uma página:** atributos, salvaguardas, perícias com proficiência e especialização, CA, iniciativa, deslocamento e dado de vida. Modificadores, bônus de proficiência e percepção passiva são calculados sozinhos.
+- **Vida e magia do seu jeito:** PV, PV temporário e salvaguardas contra a morte; espaços de magia por círculo ou pontos de magia.
+- **Grimório do SRD:** 658 magias do SRD 5.1 (2014) e do SRD 5.2 (2024), com busca e filtro por edição, nível, escola, classe e tipo de dano.
+- **Inventário:** algibeira com pagar e receber (o troco vem sozinho) e mochila com os itens do SRD e o peso total.
+- **História do personagem:** aparência, traços, ideais, vínculos, defeitos e história, com avatar e cor de destaque.
+- **Mesas:** convite por link ou nome de usuário; o mestre vê os personagens em modo Role Play e conduz o combate com iniciativa, vida e condições em tempo real; baú da party e diário no Google Docs.
+
+## 🗺️ Próximos passos
+
+O que vem agora e em que ordem está no [Project Roadmap](https://github.com/users/rebecamorais/projects/1). A próxima grande entrega são as **mecânicas de classe** (pontos de feitiçaria, Forma Selvagem e os demais recursos, com descanso curto e longo), pedido de quem joga.
 
 ## 🚀 Tecnologias
 
-- **Framework:** Next.js 16 (React 19)
-- **Linguagem:** TypeScript
-- **Estilização:** Tailwind CSS
-- **Conteúdo de regras:** arquivos versionados em `content/` (magias do SRD 5.1 e do SRD 5.2), traduzidos pela comunidade no [Crowdin](https://crowdin.com/project/rpgworld)
-- **Banco de Dados/Auth:** Supabase (Postgres, Auth e Storage).
-
-## ✨ Funcionalidades Principais (Fase 1 Em Desenvolvimento)
-
-O projeto está atualmente focado em fechar sua base funcional com as seguintes metas:
-
-1. **Gestão e Escopo de Contas:** Controle de personagens amarrado à usuários cadastrados (via banco de dados).
-2. **Limite de 10 Personagens:** Restrição inicial por usuário para manter o escopo seguro e focado.
-3. **Múltiplos Sistemas (Arquitetura):** Código modular para permitir adicionar mais sistemas além do D&D 5e facilmente no futuro.
-4. **Ficha Completa em uma Single Page:** Todos os atributos, perícias, salvaguardas, PV, CA e Iniciativa numa tela compacta com suporte para foto de perfil do personagem.
-5. **Automação das Regras (D&D 5e):** Cálculo automático e estrito de Modificadores, Bônus de Proficiência e Percepção Passiva a partir de Atributos Base.
-6. **Grimório / Magias Integradas:** consultar, aprender e preparar as 658 magias do SRD 5.1 (2014) e do SRD 5.2 (2024), com filtro por edição, em inglês e português. As de 2024 vêm do 5etools (`npm run content:spells`).
+- **Framework:** Next.js 16 (React 19), TypeScript e Tailwind CSS 4
+- **Banco de dados e auth:** Supabase (Postgres com RLS, Auth, Storage e Realtime)
+- **Conteúdo de regras:** arquivos versionados em `content/` (magias, itens e condições do SRD 5.1 e 5.2), traduzidos pela comunidade no [Crowdin](https://crowdin.com/project/rpgworld)
+- **Testes:** Vitest, Playwright com axe (acessibilidade AA nos dois temas) e Stryker
 
 ## 🛠️ Como rodar o projeto localmente
 
@@ -92,8 +93,8 @@ O banco local já vem com a mesa **The Pioneers** pronta. Entre com `mestre@emai
 
 Para detalhes técnicos mais profundos, consulte nossos guias:
 
-- [🗺️ Mapa e Estrutura do Projeto](.docs/MAP_AND_STRUCTURE.md) - Guia de navegação por diretórios e arquitetura.
-- [🏆 Regras de Ouro & Princípios](.docs/RULES_REFERENCE.md) - Padrões de código, banco de dados e testes.
+- [🗺️ Mapa e Estrutura do Projeto](.agents/rules/MAP_AND_STRUCTURE.md) - Guia de navegação por diretórios e arquitetura.
+- [🏆 Regras de Ouro & Princípios](.agents/rules/RULES_REFERENCE.md) - Padrões de código, banco de dados e testes.
 - [🤝 Guia de Contribuição](CONTRIBUTING.md) - Como configurar o ambiente e padrões de desenvolvimento.
 
 ## 🛠️ Scripts Disponíveis

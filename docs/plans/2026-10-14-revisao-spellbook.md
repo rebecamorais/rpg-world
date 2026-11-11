@@ -5,7 +5,7 @@
 estados: lista, card expandido, troca de página, busca sem resultado. Mais leitura do código de
 `Spellbook`, `SpellSearchDialog` e `spell-card/*`.
 
-**Status (2026-10-15):** blocos 1 a 5 entregues no PR #60; o seed do Alatar também. Ficou para
+**Status (2026-10-15):** blocos 1 a 5 entregues no PR [#60](https://github.com/rebecamorais/rpg-world/issues/60); o seed do Alatar também. Ficou para
 depois só o limite de preparadas ("3/7" do S3), que depende de uma regra de preparo por classe.
 
 A pergunta que guiou a revisão: **o que o jogador faz aqui?** Fora da mesa, monta o grimório

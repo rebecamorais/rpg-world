@@ -38,6 +38,17 @@ Para garantir a consistência entre os desenvolvedores, seguimos um ambiente rig
 
 ## 🚀 2. Fluxo de Desenvolvimento
 
+### O que fazer agora
+
+- **Roadmap:** o [Project Roadmap](https://github.com/users/rebecamorais/projects/1) mostra o
+  estado (Idea → Planned → In progress → Done) e a prioridade (Now, Next, Later, Someday) de cada
+  issue. Comece pelo que está em **Now**, ou pergunte no Discord antes de pegar outra coisa.
+- **Issues:** toda funcionalidade tem uma issue; as grandes têm uma issue-mãe com sub-issues. O
+  PR fecha a issue com `Closes #N`.
+- **Planos:** o porquê de cada decisão fica em `docs/plans/` e `docs/superpowers/specs/`, com o
+  link da issue no topo. O processo completo por feature está em
+  [`docs/plans/2026-10-20-roadmap.md`](docs/plans/2026-10-20-roadmap.md).
+
 ### Comandos de Operação
 
 | Comando            | Função                                              |

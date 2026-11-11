@@ -21,6 +21,7 @@ export const AVAILABLE_FEATURES = [
 
 /** On the roadmap, not available yet. */
 export const PLANNED_FEATURES = [
+  { key: 'classes', icon: 'Zap' },
   { key: 'sessions', icon: 'History' },
   { key: 'systems', icon: 'Book' },
   { key: 'homebrew', icon: 'Wand2' },

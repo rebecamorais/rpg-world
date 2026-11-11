@@ -1,8 +1,10 @@
 # Magias por edição (SRD 5.2 pelo 5etools) — plano de implementação (PR B)
 
-**Status:** entregue no #97 (2026-10-22). O que tinha ficado para depois (rótulo "Melhoria do
+**Issue:** [#91](https://github.com/rebecamorais/rpg-world/issues/91), [#92](https://github.com/rebecamorais/rpg-world/issues/92)
+
+**Status:** entregue no [#97](https://github.com/rebecamorais/rpg-world/issues/97) (2026-10-22). O que tinha ficado para depois (rótulo "Melhoria do
 Truque", os dois tempos de conjuração do Plant Growth e a condição de uso das reações e ações
-bônus, também nas magias de 2014) entrou no #101.
+bônus, também nas magias de 2014) entrou no [#101](https://github.com/rebecamorais/rpg-world/issues/101).
 
 > **Para quem executa:** use superpowers:subagent-driven-development (recomendado) ou
 > superpowers:executing-plans, tarefa por tarefa. Passos com checkbox (`- [ ]`).
@@ -53,7 +55,7 @@ grimório.
 - Merge na `main` aplica migrações em produção na hora.
 - Textos de interface via next-intl (`messages/en.json` e `messages/pt.json`); pre-commit roda os
   guardas.
-- Um PR, commits por tópico, descrição em português, com `Closes #92` e `Refs #91` (o #91 inclui
+- Um PR, commits por tópico, descrição em português, com `Closes #92` e `Refs #91` (o [#91](https://github.com/rebecamorais/rpg-world/issues/91) inclui
   homebrew, que fica para depois).
 
 ## Foco da revisão

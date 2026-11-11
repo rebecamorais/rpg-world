@@ -1,6 +1,6 @@
 # Imagem completa do personagem
 
-Continuação do projeto [zoom e reajuste](2026-11-06-imagem-zoom-e-reajuste-design.md), já em produção pelo PR #152.
+Continuação do projeto [zoom e reajuste](2026-11-06-imagem-zoom-e-reajuste-design.md), já em produção pelo PR [#152](https://github.com/rebecamorais/rpg-world/issues/152).
 
 ## Intenção
 

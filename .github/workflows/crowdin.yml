@@ -1,6 +1,8 @@
 name: Crowdin
 
-# Run by hand (Actions → Crowdin → Run workflow) when there is something to bring from Crowdin.
+# Run by hand when there is something to bring from Crowdin: Actions → Crowdin → Run workflow, or a
+# comment starting with /sincronizar on any issue or pull request (only the repository owner; the
+# run always syncs `main`, never the pull request's branch).
 # It sends the English texts, sends the translations edited in the repository (approved, so the
 # pull request doesn't put them back in English) and opens or updates a pull request with the
 # approved translations, reviewed and merged like any PR.
@@ -15,29 +17,51 @@ on:
         description: 'Also send the translations edited in the repository (overwrites Crowdin)'
         type: boolean
         default: true
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: write
   pull-requests: write
-
-concurrency:
-  group: crowdin
-  cancel-in-progress: false
+  # The 🚀 reaction on the /sincronizar comment
+  issues: write
 
 jobs:
   sync:
+    # Any comment fires the event: only the owner's /sincronizar runs the sync
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (startsWith(github.event.comment.body, '/sincronizar') &&
+       github.event.comment.user.login == github.repository_owner)
+    # At the job, not the workflow: a skipped run (any other comment) must not take the queue spot
+    concurrency:
+      group: crowdin
+      cancel-in-progress: false
     runs-on: ubuntu-latest
+    env:
+      # A comment has no inputs: it sends the repository's translations, like the default run
+      UPLOAD_TRANSLATIONS: ${{ github.event_name == 'issue_comment' || inputs.upload_translations }}
     steps:
+      - name: Say the sync started
+        if: github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMENT_ID: ${{ github.event.comment.id }}
+        run: |
+          gh api -X POST "repos/$GITHUB_REPOSITORY/issues/comments/$COMMENT_ID/reactions" \
+            -f content=rocket --silent
+
+      # issue_comment checks out the default branch: the sync always starts from main
       - uses: actions/checkout@v7
 
       # Pinned to a commit: this step gets a token that can push and open pull requests
       - uses: crowdin/github-action@5b9790df740c85af5412a3a3a91b24988d5d324f # v3.5.1
         with:
           upload_sources: true
-          upload_translations: ${{ inputs.upload_translations }}
+          upload_translations: ${{ env.UPLOAD_TRANSLATIONS }}
           # Translations in the repository were reviewed in their pull request: they start approved.
           # Crowdin skips the ones equal to the English (untranslated keys come back in English)
-          auto_approve_imported: ${{ inputs.upload_translations }}
+          auto_approve_imported: ${{ env.UPLOAD_TRANSLATIONS }}
           download_translations: true
           # Only what a proofreader approved reaches the app; the rest stays in English
           export_only_approved: true

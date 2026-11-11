@@ -1,5 +1,7 @@
 # Tema claro e contraste AA — plano de implementação
 
+**Issue:** [#151](https://github.com/rebecamorais/rpg-world/issues/151)
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Tema claro opcional (escuro continua padrão), trocado por um botão no topo, com contraste WCAG AA garantido por testes nos dois temas.
@@ -35,10 +37,12 @@
 ### Task 1: Modelo de contraste e varredura das cores livres
 
 **Files:**
+
 - Create: `src/frontend/lib/contrast.ts`
 - Test: `src/frontend/lib/contrast.unit.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `type Rgb = { r: number; g: number; b: number }` (0–1, sRGB)
   - `type ThemeName = 'dark' | 'light'`
@@ -58,30 +62,41 @@ O `-on` usa luminância com gama 2.2, não limite de L em OKLCH, porque a CSS co
 
 ```ts
 describe('contrastRatio', () => {
-  it('white on black is 21', () => expect(contrastRatio(parseHex('#fff'), parseHex('#000'))).toBeCloseTo(21, 1));
+  it('white on black is 21', () =>
+    expect(contrastRatio(parseHex('#fff'), parseHex('#000'))).toBeCloseTo(21, 1));
   it('white on #ef4444 fails AA (the bug being fixed)', () =>
     expect(contrastRatio(parseHex('#ffffff'), parseHex('#ef4444'))).toBeCloseTo(3.76, 1));
 });
 
 describe('oklch round trip', () => {
   it.each(['#663399', '#ef4444', '#fde047', '#09090b'])('%s', (hex) =>
-    expect(toHex(fromOklch(toOklch(parseHex(hex))))).toBe(hex));
+    expect(toHex(fromOklch(toOklch(parseHex(hex))))).toBe(hex),
+  );
 });
 
 // The free picker: every hue, from near black to near white, saturated to grey
-const sweep = () => { /* h 0..355 step 5 × l 0.05..0.97 step 0.04 × c in [0, 0.05, 0.12, 0.2, 0.37], via fromOklch */ };
+const sweep = () => {
+  /* h 0..355 step 5 × l 0.05..0.97 step 0.04 × c in [0, 0.05, 0.12, 0.2, 0.37], via fromOklch */
+};
 
 describe.each(['dark', 'light'] as const)('flare on %s', (theme) => {
   it('reaches 4.5:1 on every surface of the theme, for every color', () => {
-    const failures = sweep().flatMap((color) => Object.entries(SURFACES[theme])
-      .filter(([, bg]) => contrastRatio(flare(color, theme), bg) < 4.5)
-      .map(([name, bg]) => `${toHex(color)} on ${name}: ${contrastRatio(flare(color, theme), bg).toFixed(2)}`));
+    const failures = sweep().flatMap((color) =>
+      Object.entries(SURFACES[theme])
+        .filter(([, bg]) => contrastRatio(flare(color, theme), bg) < 4.5)
+        .map(
+          ([name, bg]) =>
+            `${toHex(color)} on ${name}: ${contrastRatio(flare(color, theme), bg).toFixed(2)}`,
+        ),
+    );
     expect(failures).toEqual([]);
   });
 });
 
 it('onColor reaches 4.5:1 on every solid color', () => {
-  const failures = sweep().filter((c) => contrastRatio(onColor(c), c) < 4.5).map(toHex);
+  const failures = sweep()
+    .filter((c) => contrastRatio(onColor(c), c) < 4.5)
+    .map(toHex);
   expect(failures).toEqual([]);
 });
 
@@ -109,10 +124,12 @@ Expected: FAIL (module not found)
 ### Task 2: Tokens do tema claro e fórmulas derivadas no CSS
 
 **Files:**
+
 - Modify: `app/globals.css`, nos tokens (linhas 1–55), nas derivadas (57–116) e no comentário do topo
 - Test: `src/frontend/lib/theme-tokens.unit.test.ts` (novo)
 
 **Interfaces:**
+
 - Consumes: `contrastRatio`, `over`, `parseHex`, `SURFACES` e as constantes da Tarefa 1.
 - Produces: os seletores claros, usados pelas Tarefas 3–6:
   - `:root[data-theme='light']` para os tokens.
@@ -161,11 +178,13 @@ Pares que hoje reprovam no escuro aparecem aqui e precisam ser corrigidos no esc
 ### Task 3: Escolha do tema — cookie, script inline, botão e toasts
 
 **Files:**
+
 - Create: `src/frontend/lib/theme.ts`, `src/frontend/hooks/useTheme.ts`, `src/frontend/components/layout/ThemeToggle.tsx`
 - Modify: `app/[locale]/layout.tsx:72-80` (script no `<head>`), `src/frontend/components/layout/HeaderSessionActions.tsx` (botão), `src/frontend/components/ui/sonner.tsx`, `src/frontend/components/ui/icon.tsx` (registrar `Sun` e `Moon` do lucide), `messages/en.json`, `messages/pt.json`
 - Test: `src/frontend/lib/theme.unit.test.ts`, `src/frontend/components/layout/ThemeToggle.unit.test.tsx`
 
 **Interfaces:**
+
 - Produces:
   - `THEMES = ['dark', 'light'] as const`, `type Theme = (typeof THEMES)[number]`, `DEFAULT_THEME: Theme = 'dark'`, `THEME_COOKIE = 'theme'`
   - `parseTheme(value: string | undefined | null): Theme`
@@ -196,6 +215,7 @@ Pares que hoje reprovam no escuro aparecem aqui e precisam ser corrigidos no esc
 ### Task 4: Linhas de combate fora da vez legíveis
 
 **Files:**
+
 - Modify: `src/frontend/components/combat/CombatRow.tsx:93-96`
 - Modify: `e2e/conditions.spec.ts:132-136`
 - Test: `src/frontend/components/combat/CombatRow.unit.test.tsx`, com um caso novo
@@ -211,10 +231,12 @@ Pares que hoje reprovam no escuro aparecem aqui e precisam ser corrigidos no esc
 ### Task 5: Axe nos dois temas e e2e do tema
 
 **Files:**
+
 - Create: `e2e/support/axe.ts`, `e2e/theme.spec.ts`
 - Modify: `e2e/a11y.spec.ts`, `e2e/conditions.spec.ts`, `e2e/delete-account.spec.ts`, `e2e/parties.spec.ts:385`, `e2e/profile.spec.ts:105` (trocam o `AxeBuilder` local pelo helper)
 
 **Interfaces:**
+
 - Consumes: `THEMES` (Tarefa 3) e o seletor `data-theme` (Tarefa 2).
 - Produces: `violations(page: Page, opts?: { include?: string; disabledRules?: string[] }): Promise<{ theme: Theme; id: string; impact: string; nodes: string[] }[]>`. Roda o axe com as tags `wcag2a`, `wcag2aa`, `wcag21a` e `wcag21aa`, uma vez por tema: põe `document.documentElement.dataset.theme` e espera dois `requestAnimationFrame` antes de cada análise. Filtra `serious` e `critical`, e no fim restaura o tema de antes.
 
@@ -232,6 +254,7 @@ Pares que hoje reprovam no escuro aparecem aqui e precisam ser corrigidos no esc
 ### Task 6: Screenshots, documentação e PR
 
 **Files:**
+
 - Modify: `e2e/visual/screens.visual.spec.ts`, os baselines em `e2e/visual/__screenshots__/`, `ACCESSIBILITY.md`
 
 - [ ] **Step 1: Acrescente os screenshots do claro:** uma página pública (`/`), a ficha do `heroCharacter` e o combate. Use os mesmos passos dos screenshots escuros, com o cookie `theme=light` posto antes do `goto`, e o nome com sufixo `-light`.
@@ -239,4 +262,4 @@ Pares que hoje reprovam no escuro aparecem aqui e precisam ser corrigidos no esc
 - [ ] **Step 3: `ACCESSIBILITY.md`.** Em "Como verificamos": o axe roda nos dois temas, os tokens e as cores livres têm teste de contraste. Em "Limitações conhecidas": troque "Só tema escuro" por "Sem modo de alto contraste", e acrescente a reserva para navegadores sem `oklch(from …)`, que é só melhor esforço.
 - [ ] **Step 4: Verificação completa** — `npm run lint`, `npx tsc --noEmit`, `npm run test:unit` e `npm run test:e2e`. Expected: tudo passa.
 - [ ] **Step 5: Commit** — `docs: tema claro na acessibilidade e screenshots / light theme in accessibility docs and screenshots`
-- [ ] **Step 6: Push e PR.** O título e o corpo vão em pt e en. O corpo traz screenshots de antes e depois nos dois temas, a lista de mudanças visíveis no escuro (texto preto em vermelho, azul, rosa e roxo claro; combate; controles nativos), e "Refs #151" (a issue continua aberta para foco, teclado e leitor de tela).
+- [ ] **Step 6: Push e PR.** O título e o corpo vão em pt e en. O corpo traz screenshots de antes e depois nos dois temas, a lista de mudanças visíveis no escuro (texto preto em vermelho, azul, rosa e roxo claro; combate; controles nativos), e "Refs [#151](https://github.com/rebecamorais/rpg-world/issues/151)" (a issue continua aberta para foco, teclado e leitor de tela).
