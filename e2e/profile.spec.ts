@@ -1,6 +1,6 @@
-import AxeBuilder from '@axe-core/playwright';
 import path from 'node:path';
 
+import { violations } from './support/axe';
 import { expect, hydrated, signIn, test } from './support/fixtures';
 import { largePng } from './support/large-png';
 import { createUser } from './support/supabase';
@@ -102,14 +102,7 @@ test('modal da imagem com zoom não tem violações de acessibilidade', async ({
   await page.getByRole('button', { name: 'View image', exact: true }).click();
   await page.getByRole('button', { name: 'Zoom in' }).click();
 
-  const results = await new AxeBuilder({ page })
-    .include('[role="dialog"]')
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-    .analyze();
-
-  expect(
-    results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical'),
-  ).toEqual([]);
+  expect(await violations(page, { include: '[role="dialog"]' })).toEqual([]);
 });
 
 test('imagem grande é recortada e comprimida antes de subir', async ({ page, user }) => {

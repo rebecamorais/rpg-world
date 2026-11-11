@@ -1,6 +1,15 @@
 import type { Page } from '@playwright/test';
 
-import { characterUrl, createCharacter, expect, test } from '../support/fixtures';
+import { BASE_URL } from '../support/env';
+import {
+  characterUrl,
+  createCharacter,
+  createEnemySheet,
+  createParty,
+  expect,
+  partyUrl,
+  test,
+} from '../support/fixtures';
 import { SPELLS } from '../support/global-setup';
 
 /**
@@ -173,5 +182,45 @@ test.describe('telas logadas', () => {
     await page.goto('/settings/profile');
     await page.getByRole('main').first().waitFor();
     await snap(page, 'profile', [page.getByText(user.email)]);
+  });
+});
+
+test.describe('tema claro', () => {
+  // The inline script reads the cookie before paint, so the page never renders dark first
+  test.beforeEach(async ({ context }) => {
+    await context.addCookies([{ name: 'theme', value: 'light', url: BASE_URL }]);
+  });
+
+  test('home', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('heading').first().waitFor();
+    await snap(page, 'home-light');
+  });
+
+  test('ficha e combate', async ({ page, user: _ }, testInfo) => {
+    const res = await page.request.patch('/api/profile', {
+      data: {
+        username: `${testInfo.project.name}_light`.replace(/\W+/g, '_').slice(0, 30),
+      },
+    });
+    expect(res.ok(), `PATCH profile failed with ${res.status()}`).toBe(true);
+
+    const id = await heroCharacter(page);
+    await page.goto(characterUrl(id));
+    await expect(page.getByRole('heading', { name: 'Arani the Bold' })).toBeVisible();
+    await snap(page, 'sheet-status-light');
+
+    const { id: partyId } = await createParty(page, 'Mesa do Tema');
+    const goblinId = await createEnemySheet(page, 'Goblin', 7);
+    const base = `/api/parties/${partyId}/encounter`;
+    expect((await page.request.post(base)).status()).toBe(201);
+    await page.request.post(`${base}/participants`, { data: { characterId: goblinId, count: 2 } });
+    expect((await page.request.post(`${base}/start`)).status()).toBe(204);
+
+    await page.goto(partyUrl(partyId));
+    await expect(
+      page.getByRole('list', { name: 'Combat order' }).getByRole('listitem'),
+    ).toHaveCount(2);
+    await snap(page, 'combat-light');
   });
 });

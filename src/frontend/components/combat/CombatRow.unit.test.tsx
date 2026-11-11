@@ -77,6 +77,12 @@ describe('CombatRow', () => {
       expect(within(row).getAllByRole('button')).toEqual([details('Goblin')]);
     });
 
+    it('o PV temporário usa a cor de texto com contraste nos dois temas', () => {
+      renderRow(goblin());
+      const temp = screen.getAllByText('+1').find((el) => el.tagName === 'SPAN');
+      expect(temp).toHaveClass('text-warning-flare');
+    });
+
     it('linha fechada mostra iniciativa, nome, @, PV e condições', () => {
       renderRow(
         gmRow({
@@ -159,17 +165,22 @@ describe('CombatRow', () => {
       );
     });
 
-    it('esperando a vez, o card fica esmaecido até ser aberto', async () => {
+    it('a waiting row fades only its art, never its text', async () => {
       renderRow(gmRow(), true);
-      expect(screen.getByRole('listitem')).toHaveClass('grayscale-[.7]');
+      const li = screen.getByRole('listitem');
+      expect(li.className).not.toMatch(/opacity-|grayscale/);
+      expect(li).toHaveClass('group');
+      expect(li.querySelector('.bg-character')).toHaveClass('grayscale');
 
       await open();
-      expect(screen.getByRole('listitem')).not.toHaveClass('grayscale-[.7]');
+      expect(li.querySelector('.bg-character')).not.toHaveClass('grayscale');
     });
 
-    it('fora do combate em andamento, o card não esmaece', () => {
+    it('fora do combate em andamento, a arte não esmaece', () => {
       renderRow(gmRow(), false);
-      expect(screen.getByRole('listitem')).not.toHaveClass('grayscale-[.7]');
+      expect(screen.getByRole('listitem').querySelector('.bg-character')).not.toHaveClass(
+        'grayscale',
+      );
     });
 
     it('sem foto, o retrato mostra o emblema da classe, escondido do leitor de tela', () => {

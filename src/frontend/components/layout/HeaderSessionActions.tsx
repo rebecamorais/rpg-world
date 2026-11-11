@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl';
 import LanguageSwitcher from '@frontend/components/LanguageSwitcher';
 import { HeaderSupportLink } from '@frontend/components/layout/HeaderSupportLink';
 import { MobileMenu } from '@frontend/components/layout/Sidebar';
+import { ThemeToggle } from '@frontend/components/layout/ThemeToggle';
 import UserMenu from '@frontend/components/layout/UserMenu';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -88,6 +89,7 @@ export function HeaderSessionActions({ serverUser }: KnownSession) {
       )}
       <span className="bg-border mx-1 hidden h-5 w-px sm:block" aria-hidden="true" />
       <div className="flex items-center gap-1">
+        <ThemeToggle />
         <HeaderSupportLink email={user?.email ?? undefined} />
         <LanguageSwitcher signedIn={status === 'signed-in'} />
       </div>
