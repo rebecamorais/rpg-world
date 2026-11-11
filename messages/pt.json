@@ -1093,9 +1093,13 @@
       }
     },
     "planned": {
+      "classes": {
+        "title": "Mecânicas de classe",
+        "description": "Pontos de feitiçaria, Forma Selvagem e os outros recursos de cada classe, com descanso curto e longo."
+      },
       "sessions": {
-        "title": "Sessões e notas",
-        "description": "Notas por sessão com o que cada um pode ver, calendário e avisos no Discord."
+        "title": "Sessões e calendário",
+        "description": "Sessões marcadas, quem vai, calendário e avisos no Discord."
       },
       "systems": {
         "title": "Mais sistemas e idiomas",

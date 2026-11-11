@@ -1093,9 +1093,13 @@
       }
     },
     "planned": {
+      "classes": {
+        "title": "Class mechanics",
+        "description": "Sorcery points, Wild Shape and every other class resource, with short and long rests."
+      },
       "sessions": {
-        "title": "Sessions and notes",
-        "description": "Notes per session with who can see what, a calendar and reminders on Discord."
+        "title": "Sessions and calendar",
+        "description": "Scheduled sessions, who is coming, a calendar and reminders on Discord."
       },
       "systems": {
         "title": "More systems and languages",
