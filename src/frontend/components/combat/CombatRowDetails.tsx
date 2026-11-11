@@ -76,7 +76,7 @@ export function CombatRowDetails({
       className="animate-fade-in flex cursor-auto flex-col gap-4"
     >
       <Group>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(7rem,1fr))] gap-2">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2">
           <StatBlock icon="Zap" iconVariant="system" label={t('initiative')}>
             <NumberCell
               label={t('initiativeOf', { name: row.name })}
@@ -90,7 +90,14 @@ export function CombatRowDetails({
           </StatBlock>
           {isNpc && (
             <>
-              <StatBlock icon="Heart" iconVariant="system" label={tStats('hitPointsShort')}>
+              {/* Wider: the field plus "/ max" don't fit in one column. Full row on phones, so it
+                  never adds a column the grid doesn't have */}
+              <StatBlock
+                icon="Heart"
+                iconVariant="system"
+                label={tStats('hitPointsShort')}
+                className="col-span-full sm:col-span-2"
+              >
                 <span className="flex items-center gap-1">
                   <NumberCell
                     label={t('hpOf', { name: row.name })}
@@ -99,7 +106,7 @@ export function CombatRowDetails({
                     max={row.hp.max}
                     onCommit={(hpCurrent) => onChange({ hpCurrent: hpCurrent ?? 0 })}
                   />
-                  <span className="text-muted-foreground font-mono text-sm font-bold">
+                  <span className="text-muted-foreground font-mono text-sm font-bold whitespace-nowrap">
                     / {row.hp.max}
                   </span>
                 </span>

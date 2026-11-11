@@ -86,24 +86,24 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
         >
           <AppIcon name="Plus" size={16} />
         </Button>
-
-        {tempHp > 0 && (
-          <div className="text-warning-flare ml-2 flex items-baseline self-end pb-2 font-bold">
-            <span className="text-xs">(+</span>
-            <NumberInput
-              ghost
-              aria-label={t('tempHp')}
-              value={tempHp}
-              min={0}
-              max={SMALLINT_MAX}
-              onValueChange={(next) => onHpChange('hpTemp', next)}
-              showIcon={false}
-              className="text-warning-flare h-auto w-8 p-0 text-center font-mono text-xs font-bold md:text-xs"
-            />
-            <span className="text-xs">)</span>
-          </div>
-        )}
       </div>
+      {/* Own line: next to the buttons it overflowed narrow cards */}
+      {tempHp > 0 && (
+        <div className="text-warning-flare -mt-1 flex items-baseline font-bold">
+          <span className="text-xs">(+</span>
+          <NumberInput
+            ghost
+            aria-label={t('tempHp')}
+            value={tempHp}
+            min={0}
+            max={SMALLINT_MAX}
+            onValueChange={(next) => onHpChange('hpTemp', next)}
+            showIcon={false}
+            className="text-warning-flare h-auto w-8 p-0 text-center font-mono text-xs font-bold md:text-xs"
+          />
+          <span className="text-xs">)</span>
+        </div>
+      )}
 
       <HealthBar
         current={currentHp ?? 0}
