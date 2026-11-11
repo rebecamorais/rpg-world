@@ -1,5 +1,7 @@
 # Magias oficiais em arquivo — plano de implementação (PR A)
 
+**Issue:** [#91](https://github.com/rebecamorais/rpg-world/issues/91)
+
 > **Para quem executa:** use superpowers:subagent-driven-development (recomendado) ou
 > superpowers:executing-plans, tarefa por tarefa. Passos com checkbox (`- [ ]`).
 
@@ -283,7 +285,7 @@ it('em português faltam só as 4 conhecidas', () => {
 - [ ] **Passo 1:** `npx supabase db reset --workdir database/db-dev` → seed roda sem erro; Alatar
       continua com as magias dele
 - [ ] **Passo 2:** `npm run test:e2e` → PASSA; `npm run test:visual -- --update-snapshots=all`
-      (as telas da ficha também mudaram no #80) e conferir os PNG gerados
+      (as telas da ficha também mudaram no [#80](https://github.com/rebecamorais/rpg-world/issues/80)) e conferir os PNG gerados
 - [ ] **Passo 3:** no `next dev`: buscar "bola de fogo" e "relampago" em português, aprender e
       esquecer uma magia, preparar, recarregar a ficha do Alatar; abrir uma das 4 magias sem `pt`
 - [ ] **Passo 4:** commit `test(magias): e2e e seeds com o catálogo em arquivo`

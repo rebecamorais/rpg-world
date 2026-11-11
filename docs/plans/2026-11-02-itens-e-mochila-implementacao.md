@@ -1,5 +1,7 @@
 # Itens comuns e mochila: plano de implementação
 
+**Issue:** [#105](https://github.com/rebecamorais/rpg-world/issues/105)
+
 > **Para agentes:** use superpowers:subagent-driven-development ou superpowers:executing-plans,
 > tarefa por tarefa. Os passos usam caixas (`- [ ]`) para acompanhar.
 

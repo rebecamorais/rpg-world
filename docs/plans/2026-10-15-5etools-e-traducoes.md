@@ -1,7 +1,9 @@
 # Conteúdo do 5etools com tradução pt-BR e inglês
 
+**Issue:** [#92](https://github.com/rebecamorais/rpg-world/issues/92)
+
 **Data:** 2026-10-15
-**Status (2026-10-22):** entregue no #97 para magias (`2026-10-21-magias-por-edicao.md`): importador em
+**Status (2026-10-22):** entregue no [#97](https://github.com/rebecamorais/rpg-world/issues/97) para magias (`2026-10-21-magias-por-edicao.md`): importador em
 `scripts/content/` (5etools v2.38.0, só `srd52`), 339 magias do SRD 5.2 ao lado das 319 do 5.1,
 filtro e etiqueta de edição. O pt do 2024 não existe em nenhuma fonte e não há tradução
 automática: aparece em inglês com o selo "Em inglês" até chegar pelo Crowdin. Próximo conteúdo:

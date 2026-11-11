@@ -1,7 +1,9 @@
 # Mesas — fase 1: criar mesas, convidar e o modo Role Play
 
+**Issue:** [#90](https://github.com/rebecamorais/rpg-world/issues/90)
+
 **Data:** 2026-10-28
-**Status:** entregue (#124, #125). Plano de implementação: `2026-10-31-mesas-fase-1-plano.md`.
+**Status:** entregue ([#124](https://github.com/rebecamorais/rpg-world/issues/124), [#125](https://github.com/rebecamorais/rpg-world/issues/125)). Plano de implementação: `2026-10-31-mesas-fase-1-plano.md`.
 **Fase 2:** [`2026-10-28-mesas-fase-2-combate.md`](2026-10-28-mesas-fase-2-combate.md)
 
 ## Por quê

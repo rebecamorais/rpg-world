@@ -1,8 +1,8 @@
 # Revisão de UX: mesas, combate e NPCs
 
 **Data:** 2026-11-01
-**Status:** entregue (#128); o NPC aliado no combate veio depois, em `feat/melhorias-mapeadas`.
-**Origem:** revisão das telas depois das fases 1 e 2 das mesas (#124–#126), com prints no desktop
+**Status:** entregue ([#128](https://github.com/rebecamorais/rpg-world/issues/128)); o NPC aliado no combate veio depois, em `feat/melhorias-mapeadas`.
+**Origem:** revisão das telas depois das fases 1 e 2 das mesas ([#124](https://github.com/rebecamorais/rpg-world/issues/124)–[#126](https://github.com/rebecamorais/rpg-world/issues/126)), com prints no desktop
 (1440px) e no celular (390px), como mestre e como jogador.
 
 ## Decisões

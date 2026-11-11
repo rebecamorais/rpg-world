@@ -1,5 +1,7 @@
 # Exclusão de conta e mesa sem mestre: plano de implementação
 
+**Issue:** [#146](https://github.com/rebecamorais/rpg-world/issues/146)
+
 > **Para agentes:** use `superpowers:subagent-driven-development` para executar tarefa por tarefa. Os passos usam checkbox (`- [ ]`).
 
 **Objetivo:** a pessoa exclui a própria conta, com senha e confirmação por e-mail, e as mesas dela sobrevivem, com os jogadores escolhendo um novo mestre por acordo.

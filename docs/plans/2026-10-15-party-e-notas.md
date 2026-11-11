@@ -1,8 +1,10 @@
 # Party, papéis e notas de sessão
 
+**Issue:** [#90](https://github.com/rebecamorais/rpg-world/issues/90)
+
 **Data:** 2026-10-15
-**Status:** entregue (2026-11-11). Party e papéis entregues como "mesas" (fases 1 e 2, #124–#126);
-o diário da mesa (passo 1 das notas, o link do Google Docs embutido na página da mesa) no #142.
+**Status:** entregue (2026-11-11). Party e papéis entregues como "mesas" (fases 1 e 2, [#124](https://github.com/rebecamorais/rpg-world/issues/124)–[#126](https://github.com/rebecamorais/rpg-world/issues/126));
+o diário da mesa (passo 1 das notas, o link do Google Docs embutido na página da mesa) no [#142](https://github.com/rebecamorais/rpg-world/issues/142).
 As notas por sessão e a visibilidade por nota (passos 2 e 3) foram **arquivadas** em 2026-11-11
 (ver "Notas de sessão").
 A mesa agora sobrevive à exclusão da conta do mestre e fica sem mestre até alguém assumir

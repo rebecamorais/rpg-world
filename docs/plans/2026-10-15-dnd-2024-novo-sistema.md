@@ -1,5 +1,7 @@
 # D&D 2024 ("5.5") como um novo sistema
 
+**Issue:** [#95](https://github.com/rebecamorais/rpg-world/issues/95)
+
 **Data:** 2026-10-15
 **Status:** ideia, nada decidido. Depende em parte do plano `2026-10-15-5etools-e-traducoes.md`.
 

@@ -1,7 +1,9 @@
 # Exclusão de conta
 
+**Issue:** [#146](https://github.com/rebecamorais/rpg-world/issues/146)
+
 **Data:** 2026-11-03
-**Status:** entregue no #147. Plano de implementação: `2026-11-04-exclusao-de-conta-implementacao.md`.
+**Status:** entregue no [#147](https://github.com/rebecamorais/rpg-world/issues/147). Plano de implementação: `2026-11-04-exclusao-de-conta-implementacao.md`.
 
 ## Por que
 

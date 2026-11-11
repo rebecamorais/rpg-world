@@ -1,5 +1,7 @@
 # Diário da mesa (Google Docs): plano de implementação
 
+**Issue:** [#90](https://github.com/rebecamorais/rpg-world/issues/90)
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** o Mestre cola o link de um Google Docs nas configurações da mesa, e o Mestre e os jogadores ativos abrem esse documento dentro da página da mesa (computador) ou pelo botão "Abrir no Google Docs" (sempre; é o único caminho no celular).
@@ -205,7 +207,7 @@ Comportamento:
 
 - Modify: `messages/en.json`, `messages/pt.json` (`privacy.lastUpdated`, `privacy.sections.data.items`, `privacy.sections.sharing.content`)
 
-Hoje a política não cita as mesas e diz que os personagens e o perfil são "visíveis só para você", o que já não é verdade desde #124–#126. Como o diário é um dado da mesa, a correção vai junto (decisão minha; ver o handoff).
+Hoje a política não cita as mesas e diz que os personagens e o perfil são "visíveis só para você", o que já não é verdade desde [#124](https://github.com/rebecamorais/rpg-world/issues/124)–[#126](https://github.com/rebecamorais/rpg-world/issues/126). Como o diário é um dado da mesa, a correção vai junto (decisão minha; ver o handoff).
 
 - `data.items`: novo item depois de "Characters". Texto pt: "Mesas: nome, edição de regras, quem é Mestre e jogador, convites, personagens levados e o link do diário (um documento do Google Docs que o Mestre escolhe; o conteúdo fica no Google, não no RPG World)."
 - `sharing.content`: trocar a última frase por "Seu perfil (nome de usuário e avatar) e um resumo dos personagens que você leva para uma mesa são vistos pelas pessoas dessa mesa; o Mestre também vê a ficha desses personagens. O link do diário é visto só pelo Mestre e pelos jogadores ativos. O resto continua visível só para você; as imagens de avatar ficam num endereço público que não é listado em lugar nenhum." Conferir os campos exatos em `RosterCharacter` e `RolePlayCard` antes de fechar o texto.

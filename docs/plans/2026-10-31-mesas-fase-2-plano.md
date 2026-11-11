@@ -1,5 +1,7 @@
 # Mesas — fase 2: plano de implementação (combate + correções da fase 1)
 
+**Issue:** [#90](https://github.com/rebecamorais/rpg-world/issues/90)
+
 > **Para agentes:** SUB-SKILL OBRIGATÓRIA: superpowers:subagent-driven-development (recomendado) ou
 > superpowers:executing-plans, tarefa por tarefa. Os passos usam checkbox (`- [ ]`).
 
@@ -22,7 +24,7 @@ mestre; o PV de cada inimigo fica no participante. No app, um contexto novo `com
 Vitest (unit + integration), Playwright.
 
 **Spec:** [`2026-10-28-mesas-fase-2-combate.md`](2026-10-28-mesas-fase-2-combate.md). A fase 1 está
-na main (#124, #125); o plano dela é
+na main ([#124](https://github.com/rebecamorais/rpg-world/issues/124), [#125](https://github.com/rebecamorais/rpg-world/issues/125)); o plano dela é
 [`2026-10-31-mesas-fase-1-plano.md`](2026-10-31-mesas-fase-1-plano.md).
 
 **Spike já feito (2026-10-31, banco de teste):** um canal `private: true` com política `FOR SELECT`

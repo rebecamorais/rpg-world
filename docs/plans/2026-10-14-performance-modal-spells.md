@@ -3,7 +3,7 @@
 **Data:** 2026-10-14
 **Escopo:** `SpellSearchDialog` e `SpellCard` (o Spellbook também ganha, porque usa o mesmo card).
 **Sintoma:** o modal trava um pouco ao abrir, rolar a lista, passar o mouse e expandir um card.
-**Status (2026-10-15):** concluído. Fases 1–4 no PR #60 (junto da revisão do Spellbook), fase 5 e
+**Status (2026-10-15):** concluído. Fases 1–4 no PR [#60](https://github.com/rebecamorais/rpg-world/issues/60) (junto da revisão do Spellbook), fase 5 e
 medição final na branch `perf/spells-fase-5`. Ver "Medição depois" abaixo.
 
 ## Medição de base (2026-10-14)

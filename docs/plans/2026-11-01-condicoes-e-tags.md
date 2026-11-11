@@ -2,7 +2,7 @@
 
 **Data:** 2026-11-01
 **Status:** entregue (PR a abrir).
-**Issue:** #105 (este plano cobre as condições; itens ficam para um segundo PR, que reaproveita
+**Issue:** [#105](https://github.com/rebecamorais/rpg-world/issues/105) (este plano cobre as condições; itens ficam para um segundo PR, que reaproveita
 o mesmo formato).
 **Planos relacionados:** `2026-10-15-5etools-e-traducoes.md` (passo 5), `2026-10-21-magias-em-arquivo.md`,
 `2026-10-21-magias-por-edicao.md`, `2026-10-15-traducoes-comunitarias.md`.
@@ -16,7 +16,7 @@ estado nenhum além de PV.
 
 A ideia central é que **o texto guardado carrega referências**. O formato do 5etools,
 `{@condition frightened}`, vira o padrão de todo texto de regra no app: magias agora, itens no
-próximo PR, homebrew no banco (#91) e outros sistemas (F&M, #94) depois. A interface lê a tag,
+próximo PR, homebrew no banco ([#91](https://github.com/rebecamorais/rpg-world/issues/91)) e outros sistemas (F&M, [#94](https://github.com/rebecamorais/rpg-world/issues/94)) depois. A interface lê a tag,
 mostra o nome no idioma de quem lê e, quando sabe o que fazer com aquele tipo, deixa tocar.
 
 ## Objetivos
@@ -37,7 +37,7 @@ mostra o nome no idioma de quem lê e, quando sabe o que fazer com aquele tipo, 
   fica para depois.
 - Efeito mecânico (desvantagem automática, velocidade zero…).
 - Condição na ficha fora do combate.
-- Itens (segundo PR do #105), doenças e `status` do 5etools.
+- Itens (segundo PR do [#105](https://github.com/rebecamorais/rpg-world/issues/105)), doenças e `status` do 5etools.
 
 ## O que não pode acontecer
 
@@ -126,7 +126,7 @@ mostra o nome no idioma de quem lê e, quando sabe o que fazer com aquele tipo, 
 - As condições de uma magia saem das tags do texto en dela (descrição e "em níveis superiores"),
   calculadas ao carregar o catálogo, sem campo novo no arquivo.
 - O cartão da magia mostra os selos (tocar abre o mesmo popover).
-- Filtro por condição no grimório (junto dos filtros do #108) e na busca de magias, só com as
+- Filtro por condição no grimório (junto dos filtros do [#108](https://github.com/rebecamorais/rpg-world/issues/108)) e na busca de magias, só com as
   condições que existem na lista.
 
 ### Condições no combate
@@ -173,5 +173,5 @@ mostra o nome no idioma de quem lê e, quando sabe o que fazer com aquele tipo, 
 
 Mesmo do roadmap: branch `feat/condicoes` a partir da `main`, TDD (unit para parser e conversão;
 integração para migração e RLS), conferir no app no desktop e no celular, como mestre e como jogador,
-`/code-review`, PR único com descrição em pt e en, "Parte de #105" (a issue fecha com o PR dos
+`/code-review`, PR único com descrição em pt e en, "Parte de [#105](https://github.com/rebecamorais/rpg-world/issues/105)" (a issue fecha com o PR dos
 itens). Migração vai para produção no merge.

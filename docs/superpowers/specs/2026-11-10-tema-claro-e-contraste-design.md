@@ -1,6 +1,8 @@
 # Tema claro e contraste WCAG AA
 
-Primeira parte da issue #151. O texto vem da conversa de 10/11.
+**Issue:** [#151](https://github.com/rebecamorais/rpg-world/issues/151)
+
+Primeira parte da issue [#151](https://github.com/rebecamorais/rpg-world/issues/151). O texto vem da conversa de 10/11.
 
 Legenda: **(dona)** foi decidido por ela. **(decisão do builder)** é escolha técnica ou de detalhe que não muda o que ela pediu.
 
@@ -20,7 +22,7 @@ Sucesso é qualquer pessoa trocar para o fundo claro com um clique e tudo contin
 
 ## Fora do escopo
 
-- **Foco, teclado e leitor de tela:** fase seguinte da #151 **(dona)**. Inclui ligar as regras completas do `eslint-plugin-jsx-a11y`.
+- **Foco, teclado e leitor de tela:** fase seguinte da [#151](https://github.com/rebecamorais/rpg-world/issues/151) **(dona)**. Inclui ligar as regras completas do `eslint-plugin-jsx-a11y`.
 - **Temas de ficha** (pergaminho, tech, neon…), escolhidos pelo dono do personagem e vistos por todos: projeto próprio, depois deste **(dona)**. Este projeto só deixa a estrutura pronta para eles (seção 1).
 - **Mais temas do app além de claro e escuro:** depois **(dona)**.
 - **Seguir o tema do sistema operacional:** não entra. Quem tem o sistema em modo claro abre o app no escuro até escolher **(dona: o escuro é o padrão)**.
@@ -99,6 +101,7 @@ Sucesso é qualquer pessoa trocar para o fundo claro com um clique e tudo contin
 1. **Axe nos dois temas:** os testes de axe que já existem (`a11y`, `profile`, `parties`, `conditions`, `delete-account`) rodam uma vez com o tema escuro e outra com o claro. O tema entra pelo cookie antes de abrir a página. Nenhuma tela nova de teste é obrigatória **(decisão do builder: o ganho vem de dobrar o que já existe)**.
 2. **Teste unitário dos tokens (Vitest):** lê os valores do `globals.css` nos dois temas e confere os pares que importam. Texto e texto secundário sobre fundo, painel, popover e muted precisam de 4.5:1, e sobre o pior caso do véu da ficha (85% do fundo sobre preto e sobre branco). Borda de campo sobre fundo e painel precisa de 3:1 (contraste de componente). `-on` sobre a cor cheia precisa de 4.5:1. Quando falhar, o teste diz qual par quebrou e o valor encontrado. As cores derivadas por fórmula CSS são cobertas pelo teste 3.
 3. **Teste das cores livres do personagem:** uma função em TypeScript reproduz as fórmulas de `-flare` e `-on` (escuro e claro). O teste percorre o círculo de cores (tons de 0 a 360, várias luminosidades e saturações, inclusive preto, branco e cinzas) e confere que `-flare` dá 4.5:1 sobre fundo, painel e o pior caso do véu da ficha, e que `-on` dá 4.5:1 sobre a cor, nos dois temas. O `-flare` vale também para spell e para as cores de status. O `-on` vale para primary e character (spell não tem `-on`). A função de TypeScript e o CSS precisam usar os mesmos números: um comentário em cada lado aponta para o outro **(decisão do builder: navegador nenhum calcula `oklch(from ...)` no Vitest)**.
+
 - **Testes visuais:** os screenshots do escuro devem continuar iguais, exceto o combate. Acrescentar pelo menos o screenshot de uma página pública, da ficha e do combate no claro **(decisão do builder)**.
 - Teste do botão: troca o tema, o cookie fica gravado, e ao recarregar a página já abre no tema escolhido.
 

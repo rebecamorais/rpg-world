@@ -1,7 +1,9 @@
 # Traduções comunitárias: vários idiomas e vários sistemas
 
+**Issue:** [#93](https://github.com/rebecamorais/rpg-world/issues/93)
+
 **Data:** 2026-10-15 (reescrito em 2026-10-23)
-**Status:** entregue no #101 a base (Crowdin funcionando para a interface e para as magias). Este plano
+**Status:** entregue no [#101](https://github.com/rebecamorais/rpg-world/issues/101) a base (Crowdin funcionando para a interface e para as magias). Este plano
 agora lista o que já existe, como liberar um idioma novo e o que ficou para depois.
 
 O objetivo continua o mesmo: conteúdo de regras e interface **em vários idiomas, feito em

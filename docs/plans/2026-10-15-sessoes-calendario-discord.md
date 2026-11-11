@@ -1,5 +1,7 @@
 # Sessões: calendário e Discord
 
+**Issue:** [#96](https://github.com/rebecamorais/rpg-world/issues/96)
+
 **Data:** 2026-10-15
 **Status:** só ideias. Ainda falta pensar no que se quer de verdade antes de planejar a
 implementação.
@@ -9,7 +11,7 @@ mundo e ter isso no calendário e no Discord, onde a mesa já conversa.
 
 ## Base: mesas
 
-As mesas já existem (#124 a #126), com mestre, jogadores, convite por link e personagens
+As mesas já existem ([#124](https://github.com/rebecamorais/rpg-world/issues/124) a [#126](https://github.com/rebecamorais/rpg-world/issues/126)), com mestre, jogadores, convite por link e personagens
 vinculados. Detalhes em `2026-10-15-party-e-notas.md`. Sessão pertence a uma mesa, então falta:
 
 - **Sessão:** mesa, data/hora com fuso, duração, status (marcada, confirmada, cancelada,

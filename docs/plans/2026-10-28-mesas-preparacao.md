@@ -1,5 +1,7 @@
 # Mesas — preparação (username obrigatório, `characters.kind`, volta depois do login)
 
+**Issue:** [#90](https://github.com/rebecamorais/rpg-world/issues/90)
+
 > **Para agentes:** SUB-SKILL OBRIGATÓRIA: superpowers:subagent-driven-development (recomendado) ou
 > superpowers:executing-plans, tarefa por tarefa. Os passos usam checkbox (`- [ ]`).
 
