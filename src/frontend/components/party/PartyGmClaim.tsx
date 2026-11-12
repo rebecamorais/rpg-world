@@ -111,10 +111,16 @@ export function PartyGmClaim({ party }: { party: PartyView }) {
                     variant="ghost"
                     onClick={() => voteGmClaim.mutate(false)}
                     disabled={isBusy}
+                    // Both buttons send the same mutation: the spinner goes on the one clicked
+                    loading={voteGmClaim.isPending && voteGmClaim.variables === false}
                   >
                     {t('decline')}
                   </Button>
-                  <Button onClick={() => voteGmClaim.mutate(true)} disabled={isBusy}>
+                  <Button
+                    onClick={() => voteGmClaim.mutate(true)}
+                    disabled={isBusy}
+                    loading={voteGmClaim.isPending && voteGmClaim.variables === true}
+                  >
                     {t('accept')}
                   </Button>
                 </div>

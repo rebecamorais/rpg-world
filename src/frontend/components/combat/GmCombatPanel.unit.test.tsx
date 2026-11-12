@@ -219,7 +219,56 @@ describe('GmCombatPanel', () => {
     renderWithProviders(<GmCombatPanel party={party} live />);
     expect(screen.queryByRole('button', { name: t.start })).not.toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: t.endTurn }));
-    expect(hook.endTurn.mutate).toHaveBeenCalledWith('b');
+    expect(hook.endTurn.mutate).toHaveBeenCalledWith('b', expect.anything());
+  });
+
+  it('"Encerrar turno" avisa de quem é a vez, pulando mortes reveladas', async () => {
+    hook.encounter = running(2);
+    hook.encounter.rows[1].isCurrent = true;
+    hook.encounter.rows.splice(
+      2,
+      0,
+      gmRow({
+        participantId: 'd',
+        characterId: 'goblin',
+        side: 'enemy',
+        name: 'Goblin morto',
+        hp: { current: 0, max: 7, temp: 0 },
+        fate: 'dead',
+        deathRevealed: true,
+      }),
+    );
+    hook.endTurn.mutate.mockImplementation((_: unknown, options?: { onSuccess?: () => void }) =>
+      options?.onSuccess?.(),
+    );
+    renderWithProviders(<GmCombatPanel party={party} live />);
+
+    await userEvent.click(screen.getByRole('button', { name: t.endTurn }));
+    expect(toast).toHaveBeenCalledWith(fill(t.turnPassedTo, { name: 'Brom' }));
+  });
+
+  it('"Encerrar turno" no último volta ao primeiro', async () => {
+    hook.encounter = running(2);
+    hook.encounter.rows[2].isCurrent = true;
+    hook.endTurn.mutate.mockImplementation((_: unknown, options?: { onSuccess?: () => void }) =>
+      options?.onSuccess?.(),
+    );
+    renderWithProviders(<GmCombatPanel party={party} live />);
+
+    await userEvent.click(screen.getByRole('button', { name: t.endTurn }));
+    expect(toast).toHaveBeenCalledWith(fill(t.turnPassedTo, { name: 'Arani' }));
+  });
+
+  it('a quantidade de NPCs aceita apagar e digitar outro número', async () => {
+    const user = userEvent.setup();
+    hook.encounter = running(0);
+    renderWithProviders(<GmCombatPanel party={party} live />);
+
+    const count = screen.getByLabelText(t.count);
+    await user.clear(count);
+    expect(count).toHaveValue('');
+    await user.type(count, '5');
+    expect(count).toHaveValue('5');
   });
 
   it('"Adicionar personagens da mesa" adiciona só os que ainda não estão', async () => {

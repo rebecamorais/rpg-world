@@ -54,7 +54,7 @@ export default async function Home({ params }: LocaleParams) {
           __html: JSON.stringify(STRUCTURED_DATA).replace(/</g, '\\u003c'),
         }}
       />
-      <div className="flex flex-1 flex-col items-center justify-center p-8 text-center transition-all duration-700 md:p-16">
+      <div className="flex flex-1 flex-col items-center justify-center p-8 text-center md:p-16">
         <Suspense>
           <AccountDeletedNotice />
         </Suspense>

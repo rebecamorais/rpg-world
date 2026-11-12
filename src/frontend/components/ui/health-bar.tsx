@@ -20,7 +20,7 @@ export function HealthBar({ current, max, temp = 0, className, ...props }: Healt
       <div className="border-border bg-background relative h-3 w-full overflow-hidden rounded-full border shadow-inner">
         {/* 1. Normal HP Bar */}
         <div
-          className="from-danger-flare to-danger absolute top-0 left-0 z-10 h-full bg-gradient-to-b shadow-[0_0_12px_var(--danger-muted)] transition-all duration-700 ease-in-out"
+          className="from-danger-flare to-danger absolute top-0 left-0 z-10 h-full bg-gradient-to-b shadow-[0_0_12px_var(--danger-muted)] transition-[width] duration-700 ease-in-out"
           style={{ width: `${hpPercentage}%` }}
         >
           {/* Highlight */}
@@ -30,7 +30,7 @@ export function HealthBar({ current, max, temp = 0, className, ...props }: Healt
         {/* 2. Temp HP Bar, striped to tell it apart */}
         {temp > 0 && (
           <div
-            className="from-warning-muted to-warning absolute top-0 z-20 h-full bg-gradient-to-b shadow-[0_0_15px_var(--warning)] transition-all duration-700 ease-in-out"
+            className="from-warning-muted to-warning absolute top-0 z-20 h-full bg-gradient-to-b shadow-[0_0_15px_var(--warning)] transition-[width] duration-700 ease-in-out"
             style={{ width: `${tempHpPercentage}%` }}
           >
             <div className="bg-stripes text-foreground absolute inset-0 opacity-20" />

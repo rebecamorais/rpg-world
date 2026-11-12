@@ -79,8 +79,15 @@ export default function FooterContent({
   const tLanding = useTranslations('landing');
   const [hasCopied, setHasCopied] = useState(false);
 
-  const handleCopyPix = () => {
-    navigator.clipboard.writeText(PIX_KEY);
+  const handleCopyPix = async () => {
+    try {
+      await navigator.clipboard.writeText(PIX_KEY);
+    } catch {
+      // Denied permission or an insecure context: the key goes in the message, since the compact
+      // footer doesn't show it
+      toast.error(t('support.pixCopyFailed', { key: PIX_KEY }));
+      return;
+    }
     setHasCopied(true);
     toast.success(t('support.pixCopy'));
     setTimeout(() => setHasCopied(false), 2000);
@@ -143,7 +150,9 @@ export default function FooterContent({
     <footer className="border-border bg-sidebar mt-auto border-t pt-10 pb-8 sm:pt-16 sm:pb-10">
       <div className="container mx-auto grid grid-cols-2 gap-x-6 gap-y-8 px-6 lg:grid-cols-4">
         <div className="col-span-2 flex flex-col gap-2 lg:col-span-1">
-          <span className="text-foreground text-lg font-bold tracking-tight">Rebs Tech Studio</span>
+          <span translate="no" className="text-foreground text-lg font-bold tracking-tight">
+            Rebs Tech Studio
+          </span>
           <p className="text-muted-foreground max-w-xs text-sm leading-relaxed">
             {tLanding('heroSubtitle')}
           </p>
@@ -228,7 +237,10 @@ export default function FooterContent({
               <span>{t('support.pixTitle')}</span>
             </div>
             <div className="flex items-center gap-2 overflow-hidden">
-              <code className="bg-background text-muted-foreground flex-1 truncate rounded px-2 py-1 font-mono text-xs">
+              <code
+                translate="no"
+                className="bg-background text-muted-foreground flex-1 truncate rounded px-2 py-1 font-mono text-xs"
+              >
                 {PIX_KEY}
               </code>
               <Button

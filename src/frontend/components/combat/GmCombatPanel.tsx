@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Input } from '@frontend/components/ui/input';
+import { NumberInput } from '@frontend/components/ui/number-input';
 import {
   Select,
   SelectContent,
@@ -53,6 +53,23 @@ function previousPlayable(rows: GmRow[], round: number): GmRow | null {
   if (round <= 1) return null;
   // Only revealed deaths left: the server's fallback, so going back never gets stuck
   return rows.findLast(playable) ?? rows[index - 1] ?? rows[rows.length - 1];
+}
+
+/**
+ * Who gets the turn after the current one, as `end_turn` picks it: the next row that isn't a death
+ * the players know of, wrapping to the top; with only revealed deaths left, simply the next row.
+ */
+function nextPlayable(rows: GmRow[]): GmRow | null {
+  const index = rows.findIndex((row) => row.isCurrent);
+  if (index < 0) return null;
+  const playable = (row: GmRow) => !row.deathRevealed;
+  return (
+    rows.slice(index + 1).find(playable) ??
+    rows.find(playable) ??
+    rows[index + 1] ??
+    rows[0] ??
+    null
+  );
 }
 
 /** Picks one of the GM's NPC sheets, how many come from it and on which side they fight. */
@@ -105,15 +122,12 @@ function AddNpc({
       </label>
       <label className="flex flex-col gap-1">
         <span className="text-label text-muted-foreground">{t('count')}</span>
-        <Input
-          type="number"
-          inputMode="numeric"
+        {/* Keeps the typed text (clearing it doesn't snap back to 1); only a valid count is used */}
+        <NumberInput
           min={1}
           max={MAX_ENEMIES_PER_ADD}
           value={count}
-          onChange={(event) =>
-            setCount(Math.min(MAX_ENEMIES_PER_ADD, Math.max(1, Number(event.target.value) || 1)))
-          }
+          onValueChange={setCount}
           className="w-20"
         />
       </label>
@@ -213,7 +227,15 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
                   {t('previousTurn')}
                 </Button>
                 <Button
-                  onClick={() => combat.endTurn.mutate(current.participantId)}
+                  onClick={() => {
+                    // Same as going back: say whose turn it is now, read before the refetch
+                    const name = nextPlayable(rows)?.name;
+                    combat.endTurn.mutate(current.participantId, {
+                      onSuccess: () => {
+                        if (name) toast(t('turnPassedTo', { name }));
+                      },
+                    });
+                  }}
                   loading={combat.endTurn.isPending}
                 >
                   {t('endTurn')}
@@ -271,6 +293,7 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
         {missing.length > 0 && (
           <Button
             variant="outline"
+            loading={combat.addParticipant.isPending}
             onClick={() =>
               missing.forEach((c) => combat.addParticipant.mutate({ characterId: c.characterId }))
             }
@@ -282,6 +305,7 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
           // Lit up when the list is out of order, e.g. after a player typed their initiative
           <Button
             variant="outline"
+            loading={combat.setOrder.isPending}
             onClick={() => combat.setOrder.mutate(sortByInitiative(rows))}
             className={cn(!sorted && 'border-warning-flare text-warning-flare')}
           >

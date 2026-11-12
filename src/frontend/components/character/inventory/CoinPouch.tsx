@@ -40,9 +40,10 @@ type Mode = 'pay' | 'receive';
 /** "45 PO + 1 PL", skipping the coins at zero. */
 function useFormatCoins() {
   const t = useTranslations('characters.coins');
+  const formatter = useFormatter();
   return (coins: Coins, separator = ' + ') =>
     COINS.filter((coin) => coins[coin] > 0)
-      .map((coin) => `${coins[coin]} ${t(`${coin}.short`)}`)
+      .map((coin) => `${formatter.number(coins[coin])} ${t(`${coin}.short`)}`)
       .join(separator) || t('none');
 }
 

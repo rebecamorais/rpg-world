@@ -95,6 +95,34 @@ describe('LoginForm', () => {
     expect(screen.queryByText(/relation/)).not.toBeInTheDocument();
   });
 
+  it('marca o modo de entrada escolhido para leitores de tela', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<LoginForm />);
+
+    expect(screen.getByRole('button', { name: t.passwordTab })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await user.click(screen.getByRole('button', { name: t.magicLinkTab }));
+    expect(screen.getByRole('button', { name: t.magicLinkTab })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(screen.getByRole('button', { name: t.passwordTab })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+  });
+
+  it('entrar com o Google é um link para a rota de login', () => {
+    renderWithProviders(<LoginForm />);
+
+    expect(screen.getByRole('link', { name: t.googleLogin })).toHaveAttribute(
+      'href',
+      '/api/auth/google',
+    );
+  });
+
   describe('magic link', () => {
     beforeEach(() => {
       window.turnstile = turnstile;

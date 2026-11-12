@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -74,6 +74,7 @@ function AddItemContent({
   const [search, setSearch] = useState('');
   const [edition, setEdition] = useState<Edition | null>(initialEdition);
   const [category, setCategory] = useState<ItemCategory | null>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   const matches = useMemo(() => {
     const needle = normalizeSearch(search.trim());
@@ -99,8 +100,15 @@ function AddItemContent({
 
   return (
     <DialogContent
-      className="character-context bg-background flex h-[90vh] max-w-2xl flex-col gap-0 p-0"
+      className="character-context bg-background flex h-[90dvh] max-w-2xl flex-col gap-0 p-0"
       style={style}
+      // Start in the search only with a mouse: on a phone that opens the keyboard, which covers
+      // the list people came to browse. There the dialog itself takes the focus instead.
+      onOpenAutoFocus={(e) => {
+        e.preventDefault();
+        const fine = window.matchMedia?.('(pointer: fine)').matches;
+        (fine ? searchRef.current : (e.currentTarget as HTMLElement | null))?.focus();
+      }}
     >
       <DialogHeader className="border-border border-b p-4 sm:p-6">
         <DialogTitle>{tAdd('title')}</DialogTitle>
@@ -118,7 +126,7 @@ function AddItemContent({
               aria-label={tAdd('searchLabel')}
               placeholder={tAdd('searchPlaceholder')}
               type="search"
-              autoFocus
+              ref={searchRef}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="border-border bg-muted text-foreground pl-10"
@@ -210,21 +218,28 @@ function PickRow({
   weight: string | null;
   onPick: () => void;
 }) {
+  const id = useId();
   return (
     <li>
+      {/* The name says what the button does ("Add Rope"); the rest of the row (category, price,
+          weight) is read as its description, so it isn't lost behind the label */}
       <button
         type="button"
         aria-label={label}
+        aria-describedby={`${id}-kind ${id}-cost`}
         onClick={onPick}
         className="hover:bg-muted focus-visible:outline-ring flex w-full items-center gap-3 rounded-md px-3 py-2 text-left focus-visible:outline-2"
       >
         <span className="min-w-0 flex-1">
           <span className="text-foreground block truncate font-medium">{item.name}</span>
-          <span className="text-muted-foreground text-label block">
+          <span id={`${id}-kind`} className="text-muted-foreground text-label block">
             {[category, edition].filter(Boolean).join(' · ')}
           </span>
         </span>
-        <span className="text-muted-foreground flex flex-col items-end text-sm tabular-nums">
+        <span
+          id={`${id}-cost`}
+          className="text-muted-foreground flex flex-col items-end text-sm tabular-nums"
+        >
           <span>{price}</span>
           <span className="text-label">{weight}</span>
         </span>

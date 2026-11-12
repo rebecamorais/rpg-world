@@ -49,6 +49,36 @@ test.describe('salvar a ficha', () => {
     await expect(page).toHaveURL(/\/characters$/);
   });
 
+  test('o Voltar do navegador também avisa, e as outras abas mostram o rascunho', async ({
+    page,
+    user: _,
+  }) => {
+    const id = await createCharacter(page, 'Backtrack Hero');
+    await page.goto('/characters');
+    await page.getByRole('link', { name: 'Backtrack Hero' }).click();
+    await expect(page).toHaveURL(characterUrl(id));
+    await (await hydrated(page.getByLabel('AC', { exact: true }))).fill('15');
+
+    // Another tab: the character draft keeps its save bar there
+    await page.getByRole('complementary').getByRole('link', { name: 'Inventory' }).click();
+    await expect(page.getByText('Unsaved sheet changes')).toBeVisible();
+
+    // Back to another tab of the sheet: no question
+    await page.goBack();
+    await expect(page).toHaveURL(characterUrl(id));
+
+    // Back out of the sheet: asks, and "stay" keeps the draft
+    page.once('dialog', (dialog) => void dialog.dismiss());
+    // A cancelled Back never finishes loading, so goBack would wait for its timeout
+    await page.goBack({ timeout: 2_000 }).catch(() => {});
+    await expect(page).toHaveURL(characterUrl(id));
+    await expect(page.getByLabel('AC', { exact: true })).toHaveValue('15');
+
+    page.once('dialog', (dialog) => void dialog.accept());
+    await page.goBack();
+    await expect(page).toHaveURL(/\/characters$/);
+  });
+
   test('marca os testes contra a morte ao lado dos pontos de vida', async ({ page, user: _ }) => {
     const id = await createCharacter(page, 'Dying Hero');
     await page.goto(characterUrl(id));
@@ -115,7 +145,7 @@ test('ajustar a imagem na ficha só grava com Salvar', async ({ page, user: _ })
   };
 
   await (await hydrated(page.getByRole('link', { name: 'Sheet appearance' }))).click();
-  await page.locator('#image-file-input').setInputFiles(AVATAR);
+  await page.getByTestId('image-upload-input').setInputFiles(AVATAR);
   await cropSave().click();
   await expect(page.getByRole('button', { name: 'View image' })).toBeVisible();
   await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
@@ -181,7 +211,7 @@ test('guarda a imagem completa, usa no modal e limpa o par anterior', async ({ p
 
   await (await hydrated(page.getByRole('link', { name: 'Sheet appearance' }))).click();
   // 300 x 100: the crop is square, so a whole image keeps its proportion only if it was kept
-  await page.locator('#image-file-input').setInputFiles({
+  await page.getByTestId('image-upload-input').setInputFiles({
     name: 'wide.png',
     mimeType: 'image/png',
     buffer: widePng(300, 100),

@@ -31,6 +31,10 @@ export function NumberCell({
       max={max}
       defaultValue={value ?? ''}
       placeholder={placeholder}
+      // Enter saves too: blurring runs the same commit as tapping elsewhere
+      onKeyDown={(event) => {
+        if (event.key === 'Enter') event.currentTarget.blur();
+      }}
       onBlur={(event) => {
         const text = event.currentTarget.value.trim();
         const next = text === '' ? null : Math.round(Number(text));

@@ -3,14 +3,12 @@
 import { useTranslations } from 'next-intl';
 
 import { SectionCard } from '@frontend/components/ui/section-card';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { setSavingThrow } from '@frontend/lib/character-sheet-updates';
 import { cn } from '@frontend/lib/utils';
 
 import { calculateSavingThrow } from '@shared/systems/dnd5e/calculations';
 import { ATTRIBUTE_KEYS } from '@shared/systems/dnd5e/constants';
-import rules from '@shared/systems/dnd5e/rules.json';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 import { ProficiencyDot, ProficiencyLegend, proficiencyValueClass } from './ProficiencyLegend';
@@ -67,27 +65,17 @@ export default function SavingThrowsSection() {
                   {label}
                 </span>
               </button>
-              <div className="text-sm">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span
-                      className={cn(
-                        'mx-2 cursor-help font-mono font-bold underline decoration-dotted underline-offset-4',
-                        proficiencyValueClass(finalValue, isProficient),
-                      )}
-                    >
-                      {sign}
-                      {finalValue}
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="flex flex-col gap-1 text-sm">
-                      <p className="font-semibold">{stateLabel}</p>
-                      <p className="text-muted-foreground">{rules.formulas.savingThrow}</p>
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
+              {/* No per-row tooltip (it only opened on hover): the title's hint explains the roll,
+                  and the toggle's name says whether the row is proficient */}
+              <span
+                className={cn(
+                  'mx-2 font-mono text-sm font-bold',
+                  proficiencyValueClass(finalValue, isProficient),
+                )}
+              >
+                {sign}
+                {finalValue}
+              </span>
             </div>
           );
         })}

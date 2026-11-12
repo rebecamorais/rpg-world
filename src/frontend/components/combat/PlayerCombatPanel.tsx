@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useEncounter } from '@frontend/hooks/useEncounter';
+import { cn } from '@frontend/lib/utils';
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
@@ -61,11 +62,13 @@ export function PlayerCombatPanel({
       <SectionCard.Body className="flex flex-col gap-4">
         <CombatConnection live={live} />
         {encounter.round === 0 && <p className="text-muted-foreground">{t('playerPreparing')}</p>}
-        {encounter.hiddenTurn && (
-          <p role="status" className="text-muted-foreground">
-            {t('gmTurn')}
-          </p>
-        )}
+        {/* Always mounted, so the message is announced when the GM's hidden turn starts */}
+        <p
+          role="status"
+          className={cn('text-muted-foreground', !encounter.hiddenTurn && 'sr-only')}
+        >
+          {encounter.hiddenTurn && t('gmTurn')}
+        </p>
         {/* While preparing, only the player's own rows: they can type their initiative already */}
         <ol aria-label={t('order')} className="flex flex-col gap-2">
           {(encounter.round === 0

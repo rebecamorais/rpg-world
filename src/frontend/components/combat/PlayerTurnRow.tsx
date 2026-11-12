@@ -82,7 +82,7 @@ export function PlayerTurnRow({
         ) : (
           <CharacterPortrait avatarUrl={avatarUrl} className="size-5 grayscale" />
         )}
-        <s className="text-sm">{name}</s>
+        <s className="min-w-0 truncate text-sm">{name}</s>
         <SideBadge side={turn.side} className="ml-auto" />
         <AppIcon name="Skull" size={14} aria-hidden="true" />
         <span className="sr-only">{t('dead')}</span>
@@ -109,7 +109,13 @@ export function PlayerTurnRow({
           </div>
         </ZoomablePortrait>
         <div className="flex min-w-0 flex-1 flex-col">
-          <span className={cn(turn.isMine && 'font-semibold', down && 'text-muted-foreground')}>
+          <span
+            className={cn(
+              'truncate',
+              turn.isMine && 'font-semibold',
+              down && 'text-muted-foreground',
+            )}
+          >
             {name}
           </span>
           <OwnerOrSideBadge side={turn.side} ownerUsername={turn.ownerUsername} />

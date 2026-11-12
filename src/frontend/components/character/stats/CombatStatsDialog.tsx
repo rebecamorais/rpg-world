@@ -116,10 +116,18 @@ export const CombatStatsDialog = ({
             </TabsList>
 
             <TabsContent value="slots" className="mt-4 space-y-1">
-              <Label className="text-muted-foreground mb-2 block text-sm font-bold uppercase">
+              {/* Names the group of steppers below: a <label> needs a single control to point at */}
+              <p
+                id="spell-slots-capacity"
+                className="text-muted-foreground mb-2 block text-sm leading-none font-bold uppercase"
+              >
                 {tm('slotsCapacity')}
-              </Label>
-              <div className="flex flex-col gap-1 pr-2">
+              </p>
+              <div
+                role="group"
+                aria-labelledby="spell-slots-capacity"
+                className="flex flex-col gap-1 pr-2"
+              >
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((lvl) => {
                   const level = lvl.toString();
                   return (
@@ -143,11 +151,14 @@ export const CombatStatsDialog = ({
 
             <TabsContent value="points" className="mt-4 space-y-4">
               <div className="space-y-2">
-                <Label className="text-muted-foreground text-sm font-bold uppercase">
+                <Label
+                  htmlFor="spell-points-capacity"
+                  className="text-muted-foreground text-sm font-bold uppercase"
+                >
                   {tm('pointsCapacity')}
                 </Label>
                 <NumberInput
-                  aria-label={tm('pointsCapacity')}
+                  id="spell-points-capacity"
                   value={character.spellPoints?.max ?? 0}
                   min={0}
                   max={10_000}

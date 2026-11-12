@@ -76,8 +76,8 @@ test('no celular, salva pela barra fixa que aparece com alterações', async ({ 
 
   await (await hydrated(page.getByRole('button', { name: 'Lose 1 HP' }))).click();
 
-  const bar = page.locator('body > div').filter({ hasText: 'Unsaved changes' }).last();
-  await bar.getByRole('button', { name: 'Save', exact: true }).click();
+  // Only the fixed bar has a plain "Save" (the header's button is "Save Changes")
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
 
   await expect(page.getByText('Character saved successfully!')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Save', exact: true })).toBeHidden();

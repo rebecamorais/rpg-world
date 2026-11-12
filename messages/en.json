@@ -96,12 +96,12 @@
       "combat_error_character_not_allowed": "This character can't join this combat."
     },
     "save": "Save",
-    "saving": "Saving...",
+    "saving": "Saving…",
     "cancel": "Cancel",
     "back": "← Back",
     "edit": "Edit",
     "delete": "Delete",
-    "loading": "Loading...",
+    "loading": "Loading…",
     "logout": "Log out",
     "confirm": "Confirm",
     "saveChanges": "Save Changes",
@@ -120,6 +120,8 @@
     "increase": "Increase",
     "skipToContent": "Skip to content",
     "unsavedChanges": "Unsaved changes",
+    "unsavedSheet": "Unsaved sheet changes",
+    "unsavedLore": "Unsaved lore changes",
     "allSaved": "All changes saved",
     "discard": "Discard",
     "discardConfirm": "Discard your unsaved changes?",
@@ -149,7 +151,7 @@
     "magicLinkSubmit": "Send magic link",
     "dividerText": "or",
     "googleLogin": "Continue with Google",
-    "processing": "Processing...",
+    "processing": "Processing…",
     "verifyEmailTitle": "Check your email 📬",
     "verifyEmailDescription": "If <bold>{email}</bold> has an account, a magic link is on its way. Click it to sign in.",
     "invalidEmailError": "Invalid email.",
@@ -170,7 +172,7 @@
     "confirmPasswordLabel": "Confirm Password",
     "confirmPasswordPlaceholder": "••••••••",
     "submit": "Register",
-    "processing": "Creating account...",
+    "processing": "Creating account…",
     "successTitle": "Account created!",
     "successDescription": "Check your email to confirm your registration.",
     "alreadyHaveAccount": "Already have an account?",
@@ -182,10 +184,10 @@
   },
   "auth": {
     "confirm": {
-      "title": "Confirming...",
+      "title": "Confirming…",
       "errorTitle": "Authentication Error",
       "waiting": "Please wait while we validate your access.",
-      "redirecting": "Redirecting to login..."
+      "redirecting": "Redirecting to login…"
     }
   },
   "landing": {
@@ -209,7 +211,7 @@
     "systemLabel": "RPG System",
     "systemPlaceholder": "Select the System",
     "submit": "Create",
-    "submitting": "Creating...",
+    "submitting": "Creating…",
     "requireLogin": "Please sign in to create a character.",
     "success": "Character successfully created!",
     "systems": {
@@ -217,7 +219,7 @@
     }
   },
   "characters": {
-    "loading": "Loading characters...",
+    "loading": "Loading characters…",
     "emptyState": "No characters yet",
     "createFirstDescription": "Start your journey by creating your first RPG character.",
     "createFirst": "Create first character",
@@ -291,11 +293,11 @@
       "addBtn": "Add Spell"
     },
     "addItem": "Add Item",
-    "loadErrorTitle": "Something went wrong",
+    "loadErrorTitle": "Couldn’t load. Reload the page to try again",
     "levelShort": "Lv {level}",
     "defaultClass": "Adventurer",
     "cardActions": "Actions for {name}",
-    "loadingList": "Loading characters",
+    "loadingList": "Loading characters…",
     "subtitle": "Your sheets, ready for the next session.",
     "learnSpell": "Learn spell",
     "learnedBadge": "Learned",
@@ -314,7 +316,7 @@
     },
     "spellbookFilters": {
       "searchLabel": "Search the spellbook",
-      "searchPlaceholder": "Search by name",
+      "searchPlaceholder": "Search by name…",
       "filters": "Spellbook filters",
       "prepared": "Prepared",
       "concentration": "Concentration",
@@ -405,7 +407,7 @@
         "title": "Add item",
         "description": "Common items of the SRD.",
         "searchLabel": "Search items",
-        "searchPlaceholder": "Search by name",
+        "searchPlaceholder": "Search by name…",
         "edition": "Edition",
         "allEditions": "All editions",
         "category": "Category",
@@ -467,14 +469,14 @@
     "namePlaceholder": "Character Name",
     "proficiencyBonus": "Bonus",
     "class": "Class",
-    "classPlaceholder": "Define Class...",
+    "classPlaceholder": "Define Class…",
     "level": "Level",
     "race": "Race",
-    "racePlaceholder": "Define Race...",
+    "racePlaceholder": "Define Race…",
     "background": "Background",
-    "backgroundPlaceholder": "Define Background...",
+    "backgroundPlaceholder": "Define Background…",
     "alignment": "Alignment",
-    "alignmentPlaceholder": "Define Alignment...",
+    "alignmentPlaceholder": "Define Alignment…",
     "xp": "Experience",
     "xpProgress": "Progress to next level",
     "name": "Name",
@@ -553,7 +555,7 @@
     "passivePerceptionShort": "Perception"
   },
   "spellsDrawer": {
-    "searchPlaceholder": "Search spells",
+    "searchPlaceholder": "Search spells…",
     "learn": "Learn",
     "title": "Spell list",
     "description": "Manage your character's known spells.",
@@ -564,6 +566,10 @@
     "noSpellsFound": "No spells found.",
     "clearFilters": "Clear all filters",
     "pagination": "{from}–{to} of {total} spells",
+    "paginationLabel": "Spell pages",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "goToPage": "Page {page}",
     "toasts": {
       "learned": "Spell learned!",
       "forgotten": "Spell forgotten.",
@@ -582,7 +588,7 @@
       "damage": "Damage type",
       "edition": "Edition"
     },
-    "loading": "Loading spells",
+    "loading": "Loading spells…",
     "allEditions": "All editions",
     "editions": {
       "2014": "2014",
@@ -600,8 +606,9 @@
     "level": "Lv {level}",
     "pointsCapacity": "Spell Points Capacity",
     "systemPlaceholder": "Magic",
-    "slot": "Level {level} slot {slot}",
-    "configure": "Configure magic system"
+    "configure": "Configure magic system",
+    "slotAvailable": "Level {level} slot {slot}, available",
+    "slotSpent": "Level {level} slot {slot}, spent"
   },
   "dashboard": {
     "menu": "Menu",
@@ -625,7 +632,7 @@
     "confirmPasswordLabel": "Confirm New Password",
     "confirmPasswordPlaceholder": "••••••••",
     "submit": "Update Password",
-    "processing": "Updating...",
+    "processing": "Updating…",
     "success": "Password updated successfully!",
     "error": "Failed to update password."
   },
@@ -638,7 +645,7 @@
     "fullNamePlaceholder": "e.g.: Rebeca",
     "primaryColorLabel": "Theme Color",
     "save": "Save Profile",
-    "saving": "Saving...",
+    "saving": "Saving…",
     "saveSuccess": "Profile updated successfully!",
     "validation": {
       "usernameMin": "Username must be at least 3 characters.",
@@ -663,7 +670,7 @@
   },
   "avatarUpload": {
     "button": "Change Avatar",
-    "loading": "Uploading...",
+    "loading": "Uploading…",
     "currentAlt": "Current avatar",
     "error": "Error uploading image.",
     "cropTitle": "Adjust image",
@@ -884,7 +891,7 @@
     "emailLabel": "Email",
     "emailPlaceholder": "your@email.com",
     "submit": "Send recovery email",
-    "processing": "Sending...",
+    "processing": "Sending…",
     "successTitle": "Email sent! 📬",
     "successDescription": "If this email is registered, you will receive a recovery link shortly.",
     "backToLogin": "Back to Login"
@@ -897,7 +904,7 @@
     "confirmPasswordLabel": "Confirm New Password",
     "confirmPasswordPlaceholder": "••••••••",
     "submit": "Update Password",
-    "processing": "Updating...",
+    "processing": "Updating…",
     "successTitle": "Password changed! 🎉",
     "successDescription": "Your password has been successfully reset. You can now log in.",
     "login": "Log In",
@@ -1011,19 +1018,20 @@
       "pixTitle": "Make a Pix",
       "pixCopy": "Pix key copied!",
       "pixCopyLabel": "Copy Pix key",
-      "githubSponsorsCta": "Sponsor on GitHub"
+      "githubSponsorsCta": "Sponsor on GitHub",
+      "pixCopyFailed": "Couldn't copy. The Pix key is: {key}"
     },
     "copyright": "© {year} Rebs Tech Studio. All rights reserved."
   },
   "loadingMessages": {
-    "weapons": "Equipping weapons...",
-    "ritual": "Preparing ritual...",
-    "gods": "Consulting the gods...",
-    "armor": "Polishing armor...",
-    "spirits": "Summoning spirits...",
-    "blades": "Sharpening blades...",
-    "scrolls": "Reading ancient scrolls...",
-    "battlefield": "Preparing the battlefield..."
+    "weapons": "Equipping weapons…",
+    "ritual": "Preparing ritual…",
+    "gods": "Consulting the gods…",
+    "armor": "Polishing armor…",
+    "spirits": "Summoning spirits…",
+    "blades": "Sharpening blades…",
+    "scrolls": "Reading ancient scrolls…",
+    "battlefield": "Preparing the battlefield…"
   },
   "feedback": {
     "title": "Talk to the Game Master",
@@ -1032,10 +1040,10 @@
     "emailPlaceholder": "your@email.com",
     "typeLabel": "Message Type",
     "messageLabel": "Message",
-    "messagePlaceholder": "Which mimic bit you? Describe your issue or idea...",
+    "messagePlaceholder": "Which mimic bit you? Describe your issue or idea…",
     "partyMessage": "Hello! My party (ID: {partyId}) has no GM and a request to become the GM that someone still hasn’t answered. Could you help?\n\n",
     "submit": "Cast Message",
-    "submitting": "Channeling...",
+    "submitting": "Channeling…",
     "sendAnother": "Send another message",
     "success": "Message sent successfully! The Game Master received your call.",
     "error": "Failed to send message. Try again after a short rest.",
@@ -1044,7 +1052,8 @@
       "feature": "Feature Request",
       "feedback": "General Feedback",
       "account": "Account / Access"
-    }
+    },
+    "messageMin": "Write at least {min} characters."
   },
   "seo": {
     "title": "RPG World: free D&D 5e character sheets",
@@ -1209,7 +1218,7 @@
     "label": "Username",
     "placeholder": "e.g.: aria_the_bold",
     "submit": "Continue",
-    "saving": "Saving..."
+    "saving": "Saving…"
   },
   "parties": {
     "title": "Parties",
@@ -1283,7 +1292,12 @@
       "approve": "Approve",
       "decline": "Decline",
       "invitedTitle": "Invites sent",
-      "cancel": "Cancel invite"
+      "cancel": "Cancel invite",
+      "approveFrom": "Approve {name}'s request",
+      "declineFrom": "Decline {name}'s request",
+      "declineConfirm": "Decline {name}'s request to join the party?",
+      "cancelFor": "Cancel invite for {name}",
+      "cancelConfirm": "Cancel the invite for {name}?"
     },
     "manage": {
       "title": "Manage the party",
@@ -1398,7 +1412,12 @@
       "removeConfirm": "Remove the party picture?",
       "saved": "Picture saved",
       "removed": "Picture removed"
-    }
+    },
+    "acceptInvite": "Accept the invite to {name}",
+    "declineInvite": "Decline the invite to {name}",
+    "declineInviteConfirm": "Decline the invite to {name}? You'll need a new invite to join later.",
+    "withdrawFrom": "Cancel request to join {name}",
+    "withdrawConfirm": "Cancel your request to join {name}?"
   },
   "enemies": {
     "subtitle": "Sheets for everyone who isn't a player: enemies in your parties' combats, and anyone else in the story.",
@@ -1489,7 +1508,8 @@
     "swapWith": "Swap with {name}",
     "orderChanged": "order changed",
     "openSheet": "Open sheet",
-    "forPlayers": "For the players"
+    "forPlayers": "For the players",
+    "turnPassedTo": "Now it's {name}'s turn"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

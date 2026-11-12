@@ -24,6 +24,7 @@ function Marks({
   const t = useTranslations('combat');
   const failure = kind === 'deathFailure';
   return (
+    // Bigger on touch: 36px marks 8px apart put the 44px targets edge to edge instead of overlapping
     <div className="flex items-center gap-1 pointer-coarse:gap-2">
       {MARKS.map((n) => {
         const pressed = n <= count;
@@ -35,7 +36,7 @@ function Marks({
             aria-pressed={pressed}
             onClick={() => onCount(n === count ? n - 1 : n)}
             className={cn(
-              'focus-ring touch-target inline-flex size-6 items-center justify-center rounded-full border-2 transition-colors',
+              'focus-ring touch-target inline-flex size-6 items-center justify-center rounded-full border-2 transition-colors pointer-coarse:size-9',
               failure ? 'border-danger-flare' : 'border-success-flare',
               pressed && (failure ? 'bg-danger-flare' : 'bg-success-flare'),
             )}

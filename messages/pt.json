@@ -96,12 +96,12 @@
       "combat_error_character_not_allowed": "Este personagem não pode entrar neste combate."
     },
     "save": "Salvar",
-    "saving": "Salvando...",
+    "saving": "Salvando…",
     "cancel": "Cancelar",
     "back": "← Voltar",
     "edit": "Editar",
     "delete": "Excluir",
-    "loading": "Carregando...",
+    "loading": "Carregando…",
     "logout": "Sair",
     "confirm": "Confirmar",
     "saveChanges": "Salvar Alterações",
@@ -120,6 +120,8 @@
     "increase": "Aumentar",
     "skipToContent": "Pular para o conteúdo",
     "unsavedChanges": "Alterações não salvas",
+    "unsavedSheet": "Alterações na ficha não salvas",
+    "unsavedLore": "Alterações na história não salvas",
     "allSaved": "Tudo salvo",
     "discard": "Descartar",
     "discardConfirm": "Descartar as alterações não salvas?",
@@ -149,7 +151,7 @@
     "magicLinkSubmit": "Enviar link mágico",
     "dividerText": "ou",
     "googleLogin": "Continuar com Google",
-    "processing": "Processando...",
+    "processing": "Processando…",
     "verifyEmailTitle": "Verifique seu e-mail 📬",
     "verifyEmailDescription": "Se <bold>{email}</bold> tiver uma conta, o link mágico já está a caminho. Clique nele para entrar.",
     "invalidEmailError": "E-mail inválido.",
@@ -170,7 +172,7 @@
     "confirmPasswordLabel": "Confirmar Senha",
     "confirmPasswordPlaceholder": "••••••••",
     "submit": "Cadastrar",
-    "processing": "Criando conta...",
+    "processing": "Criando conta…",
     "successTitle": "Conta criada!",
     "successDescription": "Verifique seu e-mail para confirmar seu cadastro.",
     "alreadyHaveAccount": "Já tem uma conta?",
@@ -182,10 +184,10 @@
   },
   "auth": {
     "confirm": {
-      "title": "Confirmando...",
+      "title": "Confirmando…",
       "errorTitle": "Erro na Autenticação",
       "waiting": "Aguarde um momento enquanto validamos seu acesso.",
-      "redirecting": "Redirecionando para login..."
+      "redirecting": "Redirecionando para login…"
     }
   },
   "landing": {
@@ -209,7 +211,7 @@
     "systemLabel": "Sistema RPG",
     "systemPlaceholder": "Selecione o Sistema",
     "submit": "Criar",
-    "submitting": "Criando...",
+    "submitting": "Criando…",
     "requireLogin": "Faça login para criar personagem.",
     "success": "Personagem criado com sucesso!",
     "systems": {
@@ -217,7 +219,7 @@
     }
   },
   "characters": {
-    "loading": "Carregando personagens...",
+    "loading": "Carregando personagens…",
     "emptyState": "Nenhum personagem ainda",
     "createFirstDescription": "Comece sua jornada criando seu primeiro personagem de RPG.",
     "createFirst": "Criar primeiro personagem",
@@ -291,11 +293,11 @@
       "addBtn": "Adicionar Magia"
     },
     "addItem": "Adicionar Item",
-    "loadErrorTitle": "Ocorreu um erro",
+    "loadErrorTitle": "Não foi possível carregar. Recarregue a página para tentar de novo",
     "levelShort": "Nv {level}",
     "defaultClass": "Aventureiro",
     "cardActions": "Ações de {name}",
-    "loadingList": "Carregando personagens",
+    "loadingList": "Carregando personagens…",
     "subtitle": "Suas fichas, prontas para a próxima sessão.",
     "learnSpell": "Aprender magia",
     "learnedBadge": "Aprendida",
@@ -314,7 +316,7 @@
     },
     "spellbookFilters": {
       "searchLabel": "Buscar no grimório",
-      "searchPlaceholder": "Buscar pelo nome",
+      "searchPlaceholder": "Buscar pelo nome…",
       "filters": "Filtros do grimório",
       "prepared": "Preparadas",
       "concentration": "Concentração",
@@ -405,7 +407,7 @@
         "title": "Adicionar item",
         "description": "Itens comuns do SRD.",
         "searchLabel": "Buscar itens",
-        "searchPlaceholder": "Buscar pelo nome",
+        "searchPlaceholder": "Buscar pelo nome…",
         "edition": "Edição",
         "allEditions": "Todas as edições",
         "category": "Categoria",
@@ -467,14 +469,14 @@
     "namePlaceholder": "Nome do Personagem",
     "proficiencyBonus": "Bônus",
     "class": "Classe",
-    "classPlaceholder": "Definir Classe...",
+    "classPlaceholder": "Definir Classe…",
     "level": "Nível",
     "race": "Raça",
-    "racePlaceholder": "Definir Raça...",
+    "racePlaceholder": "Definir Raça…",
     "background": "Antecedente",
-    "backgroundPlaceholder": "Definir Antecedente...",
+    "backgroundPlaceholder": "Definir Antecedente…",
     "alignment": "Alinhamento",
-    "alignmentPlaceholder": "Definir Alinhamento...",
+    "alignmentPlaceholder": "Definir Alinhamento…",
     "xp": "Experiência",
     "xpProgress": "Progresso para o próximo nível",
     "name": "Nome",
@@ -553,7 +555,7 @@
     "passivePerceptionShort": "Percepção"
   },
   "spellsDrawer": {
-    "searchPlaceholder": "Buscar magia",
+    "searchPlaceholder": "Buscar magia…",
     "learn": "Aprender",
     "title": "Lista de Magias",
     "description": "Gerencie as magias conhecidas pelo seu personagem.",
@@ -564,6 +566,10 @@
     "noSpellsFound": "Nenhuma magia encontrada.",
     "clearFilters": "Limpar todos os filtros",
     "pagination": "{from}–{to} de {total} magias",
+    "paginationLabel": "Páginas de magias",
+    "previousPage": "Página anterior",
+    "nextPage": "Próxima página",
+    "goToPage": "Página {page}",
     "toasts": {
       "learned": "Magia aprendida!",
       "forgotten": "Magia esquecida.",
@@ -582,7 +588,7 @@
       "damage": "Tipo de dano",
       "edition": "Edição"
     },
-    "loading": "Carregando magias",
+    "loading": "Carregando magias…",
     "allEditions": "Todas as edições",
     "editions": {
       "2014": "2014",
@@ -600,8 +606,9 @@
     "level": "Nv {level}",
     "pointsCapacity": "Capacidade de Spell Points",
     "systemPlaceholder": "Magia",
-    "slot": "Espaço {slot} do {level}º círculo",
-    "configure": "Configurar sistema de magia"
+    "configure": "Configurar sistema de magia",
+    "slotAvailable": "Espaço {slot} do {level}º círculo, disponível",
+    "slotSpent": "Espaço {slot} do {level}º círculo, gasto"
   },
   "dashboard": {
     "menu": "Menu",
@@ -625,7 +632,7 @@
     "confirmPasswordLabel": "Confirmar Nova Senha",
     "confirmPasswordPlaceholder": "••••••••",
     "submit": "Atualizar Senha",
-    "processing": "Atualizando...",
+    "processing": "Atualizando…",
     "success": "Senha atualizada com sucesso!",
     "error": "Falha ao atualizar senha."
   },
@@ -638,7 +645,7 @@
     "fullNamePlaceholder": "ex: Rebeca",
     "primaryColorLabel": "Cor do Tema",
     "save": "Salvar Perfil",
-    "saving": "Salvando...",
+    "saving": "Salvando…",
     "saveSuccess": "Perfil atualizado com sucesso!",
     "validation": {
       "usernameMin": "Username deve ter ao menos 3 caracteres.",
@@ -663,7 +670,7 @@
   },
   "avatarUpload": {
     "button": "Alterar Avatar",
-    "loading": "Enviando...",
+    "loading": "Enviando…",
     "currentAlt": "Avatar atual",
     "error": "Erro ao carregar imagem.",
     "cropTitle": "Ajustar imagem",
@@ -884,7 +891,7 @@
     "emailLabel": "E-mail",
     "emailPlaceholder": "seu@email.com",
     "submit": "Enviar e-mail de recuperação",
-    "processing": "Enviando...",
+    "processing": "Enviando…",
     "successTitle": "E-mail enviado! 📬",
     "successDescription": "Se esse e-mail estiver cadastrado, você receberá um link de recuperação em instantes.",
     "backToLogin": "Voltar para o Login"
@@ -897,7 +904,7 @@
     "confirmPasswordLabel": "Confirmar Nova Senha",
     "confirmPasswordPlaceholder": "••••••••",
     "submit": "Atualizar Senha",
-    "processing": "Atualizando...",
+    "processing": "Atualizando…",
     "successTitle": "Senha alterada! 🎉",
     "successDescription": "Sua senha foi redefinida com sucesso. Você já pode fazer login.",
     "login": "Fazer Login",
@@ -1011,19 +1018,20 @@
       "pixTitle": "Fazer um Pix",
       "pixCopy": "Chave Pix copiada!",
       "pixCopyLabel": "Copiar chave Pix",
-      "githubSponsorsCta": "Apoiar no GitHub"
+      "githubSponsorsCta": "Apoiar no GitHub",
+      "pixCopyFailed": "Não foi possível copiar. A chave Pix é: {key}"
     },
     "copyright": "© {year} Rebs Tech Studio. Todos os direitos reservados."
   },
   "loadingMessages": {
-    "weapons": "Equipando armas...",
-    "ritual": "Preparando ritual...",
-    "gods": "Consultando os deuses...",
-    "armor": "Polindo armaduras...",
-    "spirits": "Invocando espíritos...",
-    "blades": "Afiando lâminas...",
-    "scrolls": "Lendo pergaminhos antigos...",
-    "battlefield": "Preparando o campo de batalha..."
+    "weapons": "Equipando armas…",
+    "ritual": "Preparando ritual…",
+    "gods": "Consultando os deuses…",
+    "armor": "Polindo armaduras…",
+    "spirits": "Invocando espíritos…",
+    "blades": "Afiando lâminas…",
+    "scrolls": "Lendo pergaminhos antigos…",
+    "battlefield": "Preparando o campo de batalha…"
   },
   "feedback": {
     "title": "Falar com o Mestre",
@@ -1032,10 +1040,10 @@
     "emailPlaceholder": "seu@email.com",
     "typeLabel": "Tipo de Mensagem",
     "messageLabel": "Mensagem",
-    "messagePlaceholder": "Qual mímico te mordeu? Descreva o problema ou ideia...",
+    "messagePlaceholder": "Qual mímico te mordeu? Descreva o problema ou ideia…",
     "partyMessage": "Olá! Minha mesa (ID: {partyId}) está sem mestre e tem um pedido para virar mestre que alguém ainda não respondeu. Podem ajudar?\n\n",
     "submit": "Enviar Mensagem",
-    "submitting": "Canalizando...",
+    "submitting": "Canalizando…",
     "sendAnother": "Enviar outra mensagem",
     "success": "Mensagem enviada com sucesso! O Mestre recebeu seu chamado.",
     "error": "Falha ao enviar mensagem. Tente novamente após um descanso curto.",
@@ -1044,7 +1052,8 @@
       "feature": "Sugestão de Funcionalidade",
       "feedback": "Feedback Geral",
       "account": "Conta / Acesso"
-    }
+    },
+    "messageMin": "Escreva pelo menos {min} caracteres."
   },
   "seo": {
     "title": "RPG World: fichas de D&D 5e grátis",
@@ -1209,7 +1218,7 @@
     "label": "Nome de usuário",
     "placeholder": "ex.: aria_a_valente",
     "submit": "Continuar",
-    "saving": "Salvando..."
+    "saving": "Salvando…"
   },
   "parties": {
     "title": "Mesas",
@@ -1283,7 +1292,12 @@
       "approve": "Aprovar",
       "decline": "Recusar",
       "invitedTitle": "Convites enviados",
-      "cancel": "Cancelar convite"
+      "cancel": "Cancelar convite",
+      "approveFrom": "Aprovar o pedido de {name}",
+      "declineFrom": "Recusar o pedido de {name}",
+      "declineConfirm": "Recusar o pedido de {name} para entrar na mesa?",
+      "cancelFor": "Cancelar convite para {name}",
+      "cancelConfirm": "Cancelar o convite para {name}?"
     },
     "manage": {
       "title": "Gerenciar a mesa",
@@ -1398,7 +1412,12 @@
       "removeConfirm": "Remover a imagem da mesa?",
       "saved": "Imagem salva",
       "removed": "Imagem removida"
-    }
+    },
+    "acceptInvite": "Aceitar o convite para {name}",
+    "declineInvite": "Recusar o convite para {name}",
+    "declineInviteConfirm": "Recusar o convite para {name}? Para entrar depois, você vai precisar de um novo convite.",
+    "withdrawFrom": "Cancelar pedido para entrar em {name}",
+    "withdrawConfirm": "Cancelar seu pedido para entrar em {name}?"
   },
   "enemies": {
     "subtitle": "Fichas de quem não é jogador: inimigos nos combates das suas mesas, e quem mais aparecer na história.",
@@ -1489,7 +1508,8 @@
     "swapWith": "Trocar com {name}",
     "orderChanged": "ordem mudou",
     "openSheet": "Abrir ficha",
-    "forPlayers": "Para os jogadores"
+    "forPlayers": "Para os jogadores",
+    "turnPassedTo": "Agora é a vez de {name}"
   },
   "characterRaces": {
     "dragonborn": "Draconato",

@@ -43,6 +43,7 @@ export function CreatePartyForm({ gmCount }: { gmCount: number }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder={t('placeholder')}
+          autoComplete="off"
           maxLength={60}
           required
           disabled={atLimit}

@@ -118,9 +118,12 @@ export default function ResetPasswordForm() {
   if (isInitializing) {
     return (
       <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
-        <CardContent className="text-muted-foreground pt-6 text-center">
-          <div className="border-primary-flare mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent" />
-          {t('processing')}...
+        <CardContent role="status" className="text-muted-foreground pt-6 text-center">
+          <div
+            aria-hidden="true"
+            className="border-primary-flare mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"
+          />
+          {t('processing')}
         </CardContent>
       </Card>
     );
@@ -163,6 +166,7 @@ export default function ResetPasswordForm() {
                     <Input
                       type="password"
                       placeholder={t('newPasswordPlaceholder')}
+                      autoComplete="new-password"
                       className="bg-muted/50"
                       {...field}
                     />
@@ -181,6 +185,7 @@ export default function ResetPasswordForm() {
                     <Input
                       type="password"
                       placeholder={t('confirmPasswordPlaceholder')}
+                      autoComplete="new-password"
                       className="bg-muted/50"
                       {...field}
                     />

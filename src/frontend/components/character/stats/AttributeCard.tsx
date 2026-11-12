@@ -17,7 +17,6 @@ import {
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Label } from '@frontend/components/ui/label';
 import { NumberInput } from '@frontend/components/ui/number-input';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
@@ -78,31 +77,21 @@ export default function AttributeCard({ label, value, onChange, icon }: Props) {
 
           <span className="text-label text-muted-foreground mb-1">{label}</span>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex flex-col items-center">
-                {/* Modificador principal */}
-                <span
-                  className={cn('mb-2 font-mono text-3xl font-bold', getStatColorClass(modifier))}
-                >
-                  {modifier >= 0 ? `+${modifier}` : modifier}
-                </span>
+          {/* No tooltip here: it only opened on hover, and a tap opens the dialog, which shows
+              how the modifier is calculated */}
+          <div className="flex flex-col items-center">
+            {/* Modificador principal */}
+            <span className={cn('mb-2 font-mono text-3xl font-bold', getStatColorClass(modifier))}>
+              {modifier >= 0 ? `+${modifier}` : modifier}
+            </span>
 
-                {/* Valor de Exibição (Pequeno, na base oval) */}
-                <div className="border-border bg-secondary pointer-events-none z-10 mt-[-10px] flex w-14 items-center justify-center rounded-full border px-2 py-0.5">
-                  <span className="text-secondary-foreground text-center text-sm font-bold">
-                    {clamped}
-                  </span>
-                </div>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <div className="flex flex-col gap-1 text-sm">
-                <p className="font-semibold">{tAttr('modifierCalc')}</p>
-                <p className="text-muted-foreground">{rules.formulas.attributeModifier}</p>
-              </div>
-            </TooltipContent>
-          </Tooltip>
+            {/* Valor de Exibição (Pequeno, na base oval) */}
+            <div className="border-border bg-secondary pointer-events-none z-10 mt-[-10px] flex w-14 items-center justify-center rounded-full border px-2 py-0.5">
+              <span className="text-secondary-foreground text-center text-sm font-bold">
+                {clamped}
+              </span>
+            </div>
+          </div>
         </button>
       </DialogTrigger>
 
@@ -124,6 +113,12 @@ export default function AttributeCard({ label, value, onChange, icon }: Props) {
               onKeyDown={handleKeyDown}
               autoFocus
             />
+          </div>
+          <div className="text-sm">
+            <p className="font-semibold">{tAttr('modifierCalc')}</p>
+            <p className="text-muted-foreground font-mono text-xs">
+              {rules.formulas.attributeModifier}
+            </p>
           </div>
         </div>
         <DialogFooter>

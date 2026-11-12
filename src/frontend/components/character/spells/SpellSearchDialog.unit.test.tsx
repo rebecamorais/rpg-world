@@ -198,7 +198,7 @@ describe('SpellSearchDialog', () => {
     renderDialog();
 
     expect(await screen.findByText('1–12 of 30 spells')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: '2' }));
+    await user.click(screen.getByRole('button', { name: 'Page 2' }));
     expect(await screen.findByText('13–24 of 30 spells')).toBeInTheDocument();
 
     await user.type(screen.getByRole('searchbox', { name: t.searchLabel }), 'x');

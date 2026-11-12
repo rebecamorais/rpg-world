@@ -18,6 +18,7 @@ export function SheetTabBar({ characterId, system }: { characterId: string; syst
 
   return (
     <nav
+      data-scroll-pad="sheet-tabs"
       aria-label={t('label')}
       className="border-border bg-card/95 fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
     >

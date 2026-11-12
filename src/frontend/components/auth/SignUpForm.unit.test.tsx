@@ -68,6 +68,7 @@ describe('SignUpForm', () => {
     renderWithProviders(<SignUpForm />);
 
     expect(screen.getByRole('button', { name: t.submit })).toBeDisabled();
+    expect(signUp).not.toHaveBeenCalled();
   });
 
   it('valida senha curta e senhas diferentes antes de enviar', async () => {

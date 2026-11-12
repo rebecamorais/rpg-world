@@ -111,6 +111,8 @@ export default function ForgotPasswordForm() {
                     <Input
                       type="email"
                       placeholder={t('emailPlaceholder')}
+                      autoComplete="email"
+                      spellCheck={false}
                       className="bg-muted/50"
                       {...field}
                     />
@@ -122,6 +124,7 @@ export default function ForgotPasswordForm() {
             <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
 
             <FormRootError />
+            {/* Waits for the security check: a click before it passes would only get an error */}
             <Button
               type="submit"
               disabled={!turnstileToken}

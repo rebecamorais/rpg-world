@@ -157,6 +157,7 @@ export function Spellbook({
           {/* Index: shortcuts to each level. A sticky chip row on phones, a sidebar on desktop */}
           <nav
             aria-label={t('spellbookIndex')}
+            data-scroll-pad="spell-index"
             className="bg-sidebar sticky top-0 z-20 -mx-4 px-4 py-2 sm:-mx-6 sm:px-6 md:top-6 md:mx-0 md:w-48 md:shrink-0 md:bg-transparent md:p-0"
           >
             <p className="text-label text-muted-foreground mb-3 hidden md:block">

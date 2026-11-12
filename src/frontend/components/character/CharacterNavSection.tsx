@@ -35,7 +35,7 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
           avatarUrl={avatarUrl}
           characterClass={character.class}
           className={cn(
-            'shrink-0 transition-all duration-200',
+            'shrink-0 transition-[width,height] duration-200',
             expanded ? 'h-12 w-12' : 'h-10 w-10',
           )}
         />

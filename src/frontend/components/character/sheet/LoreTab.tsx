@@ -46,7 +46,13 @@ export function LoreTab() {
       tab={t('tabs.lore')}
       actions={
         readOnly ? null : (
-          <SaveControls isDirty={isDirty} isSaving={isSaving} onSave={save} onDiscard={discard} />
+          <SaveControls
+            isDirty={isDirty}
+            isSaving={isSaving}
+            onSave={save}
+            onDiscard={discard}
+            label={tCommon('unsavedLore')}
+          />
         )
       }
       loading={isLoading}

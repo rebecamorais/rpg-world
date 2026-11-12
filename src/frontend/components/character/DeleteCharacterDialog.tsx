@@ -34,6 +34,7 @@ export function DeleteCharacterDialog({
 }: DeleteCharacterDialogProps) {
   const t = useTranslations('characters');
   const tCommon = useTranslations('common');
+  const canDelete = !!character && confirmName === character.name;
 
   return (
     <Dialog open={!!character} onOpenChange={(open) => !open && onCancel()}>
@@ -52,24 +53,34 @@ export function DeleteCharacterDialog({
             bold: (chunks) => <strong>{chunks}</strong>,
           })}
         </p>
-        <div className="py-2">
+        {/* A form, so Enter confirms once the name matches */}
+        <form
+          id="delete-character"
+          className="py-2"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (canDelete && !isPending) onConfirm();
+          }}
+        >
           <Input
             aria-label={t('deleteConfirmPlaceholder')}
             autoComplete="off"
+            spellCheck={false}
             value={confirmName}
             onChange={(e) => onConfirmNameChange(e.target.value)}
             placeholder={t('deleteConfirmPlaceholder')}
             className="bg-muted"
           />
-        </div>
+        </form>
         <DialogFooter>
           <Button variant="secondary" onClick={onCancel}>
             {tCommon('cancel')}
           </Button>
           <Button
+            type="submit"
+            form="delete-character"
             variant="destructive"
-            onClick={onConfirm}
-            disabled={confirmName !== character?.name}
+            disabled={!canDelete}
             loading={isPending}
           >
             {tCommon('delete')}

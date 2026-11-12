@@ -100,6 +100,9 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
               onChange={(e) => setUsername(e.target.value)}
               placeholder={t('invitePlaceholder')}
               autoComplete="off"
+              // A username: no spelling squiggles, no capital first letter on phones
+              spellCheck={false}
+              autoCapitalize="none"
               maxLength={60}
               className="max-w-xs"
             />
@@ -161,6 +164,7 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
               id={ids.name}
               value={name}
               onChange={(e) => setName(e.target.value)}
+              autoComplete="off"
               maxLength={60}
               className="max-w-xs"
             />

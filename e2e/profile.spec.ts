@@ -51,7 +51,7 @@ test('troca o avatar, servido pelo proxy com uma URL nova a cada envio', async (
   const avatar = page.getByRole('img', { name: 'Current avatar' });
 
   async function upload(previousSrc: string | null) {
-    await page.locator('#image-file-input').setInputFiles(AVATAR);
+    await page.getByTestId('image-upload-input').setInputFiles(AVATAR);
     await page.getByRole('dialog').getByRole('button', { name: 'Save' }).click();
     if (previousSrc) await expect(avatar).not.toHaveAttribute('src', previousSrc);
     await expect(avatar).toHaveAttribute('src', new RegExp(`/api/images/avatars/${user.id}/`));
@@ -76,7 +76,7 @@ test('ajusta a imagem salva sem reenviar o arquivo', async ({ page, user: _ }) =
   await page.goto('/settings/profile');
   await hydrated(page.getByLabel('Username', { exact: true }));
   const avatar = page.getByRole('img', { name: 'Current avatar' });
-  await page.locator('#image-file-input').setInputFiles(AVATAR);
+  await page.getByTestId('image-upload-input').setInputFiles(AVATAR);
   await page.getByRole('dialog').getByRole('button', { name: 'Save' }).click();
   await expect(avatar).toHaveAttribute('src', /\/api\/images\/avatars\//);
   const before = await avatar.getAttribute('src');
@@ -97,7 +97,7 @@ test('ajusta a imagem salva sem reenviar o arquivo', async ({ page, user: _ }) =
 test('modal da imagem com zoom não tem violações de acessibilidade', async ({ page, user: _ }) => {
   await page.goto('/settings/profile');
   await hydrated(page.getByLabel('Username', { exact: true }));
-  await page.locator('#image-file-input').setInputFiles(AVATAR);
+  await page.getByTestId('image-upload-input').setInputFiles(AVATAR);
   await page.getByRole('dialog').getByRole('button', { name: 'Save' }).click();
   await page.getByRole('button', { name: 'View image', exact: true }).click();
   await page.getByRole('button', { name: 'Zoom in' }).click();
@@ -111,7 +111,7 @@ test('imagem grande é recortada e comprimida antes de subir', async ({ page, us
 
   await page.goto('/settings/profile');
   await hydrated(page.getByLabel('Username', { exact: true }));
-  await page.locator('#image-file-input').setInputFiles({
+  await page.getByTestId('image-upload-input').setInputFiles({
     name: 'ai-art.png',
     mimeType: 'image/png',
     buffer: original,

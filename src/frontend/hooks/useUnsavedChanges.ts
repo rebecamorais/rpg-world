@@ -3,8 +3,22 @@
 import { useEffect, useRef } from 'react';
 
 /**
+ * Events already answered by one guard. A sheet can hold two drafts (the character and the
+ * lore), each with its own guard: the second must not ask again what the first just asked.
+ */
+const answered = new WeakSet<Event>();
+
+/** The bits of the Navigation API the guard uses (not in every browser, nor in TS's DOM lib yet). */
+interface TraverseEvent extends Event {
+  navigationType: string;
+  destination: { url: string };
+}
+
+/**
  * While there are unsaved edits, asks before leaving: closing or reloading the tab
- * (beforeunload) and clicking an in-app link to a page outside `stayWithin`.
+ * (beforeunload), clicking an in-app link and going Back/Forward (browser button, Android
+ * back gesture) to a page outside `stayWithin`. Back/Forward needs the Navigation API: without
+ * it, there's no asking (popstate comes after Next has already rendered the other page).
  */
 export function useLeaveGuard(
   isDirty: boolean,
@@ -35,17 +49,36 @@ export function useLeaveGuard(
       if (url.origin !== window.location.origin) return; // beforeunload covers it
       if (stayWithinRef.current(url.pathname)) return;
 
+      if (answered.has(event)) return;
+      answered.add(event);
       if (!window.confirm(message)) {
         event.preventDefault();
         event.stopPropagation();
       }
     };
 
+    // Back/Forward: popstate is too late (Next renders the other page on it, unmounting this
+    // draft), but the Navigation API's navigate event comes first and can be cancelled. The
+    // browser only allows that after the user interacted with the page, which editing is.
+    const navigation = (window as { navigation?: EventTarget }).navigation;
+    const onNavigate = (event: Event) => {
+      const { navigationType, destination, cancelable } = event as TraverseEvent;
+      if (navigationType !== 'traverse' || !cancelable) return;
+      const url = new URL(destination.url);
+      if (url.origin !== window.location.origin) return; // beforeunload covers it
+      if (stayWithinRef.current(url.pathname)) return;
+      if (answered.has(event)) return;
+      answered.add(event);
+      if (!window.confirm(message)) event.preventDefault();
+    };
+
     window.addEventListener('beforeunload', onBeforeUnload);
     document.addEventListener('click', onClick, true);
+    navigation?.addEventListener('navigate', onNavigate);
     return () => {
       window.removeEventListener('beforeunload', onBeforeUnload);
       document.removeEventListener('click', onClick, true);
+      navigation?.removeEventListener('navigate', onNavigate);
     };
   }, [isDirty, message]);
 }

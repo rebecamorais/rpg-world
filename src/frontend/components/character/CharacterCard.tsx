@@ -34,6 +34,7 @@ interface CharacterCardProps {
 export function CharacterCard({ character }: CharacterCardProps) {
   const t = useTranslations('characters');
   const tCommon = useTranslations('common');
+  const tSystems = useTranslations('characterCreation.systems');
   const { classLabel } = useCharacterChoices();
   const { kind, setCharacterToDelete } = useCharactersContext();
   const duplicate = useDuplicateCharacter();
@@ -50,12 +51,12 @@ export function CharacterCard({ character }: CharacterCardProps) {
     <div className={cn(theme.className, 'group relative h-full')} style={theme.style}>
       <Card
         className={cn(
-          'border-character-muted relative h-full overflow-hidden border shadow-[0_20px_40px_-20px_var(--character-muted)] transition-all duration-500 hover:translate-y-[-4px] hover:shadow-2xl sm:border-2',
+          'border-character-muted relative h-full overflow-hidden border shadow-[0_20px_40px_-20px_var(--character-muted)] transition-[translate,box-shadow] duration-500 hover:translate-y-[-4px] hover:shadow-2xl sm:border-2',
           'bg-card/40 has-[a:focus-visible]:outline-ring backdrop-blur-xl has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2',
         )}
       >
         {/* Accent color bar */}
-        <div className="bg-character absolute top-0 left-0 h-1.5 w-full opacity-80 transition-all duration-500 group-hover:h-2 group-hover:opacity-100" />
+        <div className="bg-character absolute top-0 left-0 h-1.5 w-full opacity-80 transition-[height,opacity] duration-500 group-hover:h-2 group-hover:opacity-100" />
 
         {/* Background decoration */}
         <div className="bg-character pointer-events-none absolute -top-8 -right-8 h-32 w-32 rounded-full opacity-10 blur-3xl transition-opacity group-hover:opacity-20" />
@@ -100,7 +101,8 @@ export function CharacterCard({ character }: CharacterCardProps) {
           <div className="border-border mt-auto flex items-center justify-between border-t pt-4">
             <div className="text-label text-muted-foreground flex items-center gap-2">
               <AppIcon name="Swords" size={14} className="text-character-flare" />
-              <span>{character.system.replace('_', ' ')}</span>
+              {/* D&D 5e is the only system so far; its name is translated, not the internal id */}
+              <span>{tSystems('dnd5e')}</span>
             </div>
 
             {/* Above the stretched link; visible without hover, on touch too */}
