@@ -107,15 +107,11 @@ describe('ContactForm', () => {
     expect(screen.getByLabelText(t.messageLabel)).toHaveValue('');
   });
 
-  it('sem o Turnstile resolvido não envia e explica o que falta no formulário', async () => {
+  it('mantém o envio bloqueado enquanto o Turnstile não é resolvido', () => {
     delete window.turnstile;
     renderWithProviders(<ContactForm initialEmail="hero@example.com" />);
 
-    await fillAndSubmit();
-
-    expect(await screen.findByRole('alert')).toHaveTextContent(
-      messages.common.errors.security_token_missing,
-    );
+    expect(screen.getByRole('button', { name: messages.feedback.submit })).toBeDisabled();
     expect(submitFeedback).not.toHaveBeenCalled();
   });
 

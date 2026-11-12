@@ -209,9 +209,10 @@ export default function LoginForm() {
             )}
 
             <FormRootError />
-            {/* Not disabled while the challenge is pending: submitting early explains what's missing */}
+            {/* Waits for the security check: a click before it passes would only get an error */}
             <Button
               type="submit"
+              disabled={authMode === 'magic' && !turnstileToken}
               loading={form.formState.isSubmitting}
               className="mt-2 w-full font-semibold"
             >

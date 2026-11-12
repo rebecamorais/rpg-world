@@ -187,8 +187,13 @@ export default function ContactForm({
         <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
 
         <FormRootError />
-        {/* Not disabled while the challenge is pending: submitting early explains what's missing */}
-        <Button type="submit" loading={form.formState.isSubmitting} className="w-full font-bold">
+        {/* Waits for the security check: a click before it passes would only get an error */}
+        <Button
+          type="submit"
+          disabled={!turnstileToken}
+          loading={form.formState.isSubmitting}
+          className="w-full font-bold"
+        >
           {form.formState.isSubmitting ? (
             t('submitting')
           ) : (

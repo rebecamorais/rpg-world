@@ -124,9 +124,10 @@ export default function ForgotPasswordForm() {
             <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
 
             <FormRootError />
-            {/* Not disabled while the challenge is pending: submitting early explains what's missing */}
+            {/* Waits for the security check: a click before it passes would only get an error */}
             <Button
               type="submit"
+              disabled={!turnstileToken}
               loading={form.formState.isSubmitting}
               className="mt-2 w-full font-semibold"
             >

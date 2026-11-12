@@ -160,13 +160,14 @@ describe('LoginForm', () => {
       expect(screen.queryByText(t.verifyEmailTitle)).not.toBeInTheDocument();
     });
 
-    it('sem o Turnstile resolvido não envia e explica o que falta', async () => {
+    it('não envia sem o Turnstile resolvido', async () => {
       delete window.turnstile;
-      await sendMagicLink();
+      const user = userEvent.setup();
+      renderWithProviders(<LoginForm />);
 
-      expect(
-        await screen.findByText(messages.common.errors.security_token_missing),
-      ).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: t.magicLinkTab }));
+
+      expect(screen.getByRole('button', { name: t.magicLinkSubmit })).toBeDisabled();
       expect(requestMagicLink).not.toHaveBeenCalled();
     });
   });
