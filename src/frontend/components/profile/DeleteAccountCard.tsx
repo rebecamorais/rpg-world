@@ -134,7 +134,7 @@ export function DeleteAccountCard({ hasPassword }: DeleteAccountCardProps) {
       </SectionCard.Body>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="border-danger-muted max-h-[90vh] overflow-y-auto">
+        <DialogContent className="border-danger-muted max-h-[90dvh] overflow-y-auto">
           <RequestDeletionDialog
             username={profile?.username ?? ''}
             hasPassword={hasPassword}

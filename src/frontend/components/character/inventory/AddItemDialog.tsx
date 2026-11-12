@@ -99,7 +99,7 @@ function AddItemContent({
 
   return (
     <DialogContent
-      className="character-context bg-background flex h-[90vh] max-w-2xl flex-col gap-0 p-0"
+      className="character-context bg-background flex h-[90dvh] max-w-2xl flex-col gap-0 p-0"
       style={style}
     >
       <DialogHeader className="border-border border-b p-4 sm:p-6">
