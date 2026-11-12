@@ -20,7 +20,7 @@ function GhostInput({ className, containerClassName, showIcon = true, ...props }
     <div className={cn('group relative m-0 flex items-center', containerClassName)}>
       <Input
         className={cn(
-          'no-spinner h-7 border-none bg-transparent p-0 shadow-none transition-all focus-visible:px-2 disabled:cursor-default',
+          'no-spinner h-7 border-none bg-transparent p-0 shadow-none transition-colors focus-visible:px-2 disabled:cursor-default',
           className,
           showIcon && 'pr-5',
         )}

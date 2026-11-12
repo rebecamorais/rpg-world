@@ -51,7 +51,7 @@ export function NumberStepper({
       )}
       <div
         className={cn(
-          'border-border bg-muted focus-within:outline-ring flex items-center gap-1 rounded-md border p-0.5 focus-within:outline-2',
+          'border-border bg-muted has-[input:focus-visible]:outline-ring flex items-center gap-1 rounded-md border p-0.5 has-[input:focus-visible]:outline-2',
           className,
         )}
       >

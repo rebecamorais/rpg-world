@@ -428,6 +428,27 @@
   h1,
   h2 {
     @apply font-display tracking-normal;
+    /* Spreads a wrapping title over its lines, so no word is left alone on the last one */
+    text-wrap: balance;
+  }
+
+  /* Taps act at once: no double-tap-to-zoom delay on controls, and no grey flash on tap
+     (the focus-ring utility still shows keyboard focus) */
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  label,
+  summary,
+  [role='button'],
+  [role='tab'],
+  [role='checkbox'],
+  [role='switch'] {
+    touch-action: manipulation;
   }
 
   /* Fixed and sticky bars must not cover the field that gets keyboard focus: the browser keeps
