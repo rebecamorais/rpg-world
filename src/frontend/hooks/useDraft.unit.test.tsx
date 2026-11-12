@@ -125,6 +125,48 @@ describe('useDraft', () => {
     expect(result.current.draft).toEqual(server);
   });
 
+  it('saveFields salva só os campos dados, sobre o servidor, e mantém as outras edições', async () => {
+    const { result } = renderDraft(server);
+    act(() => result.current.update({ name: 'Pending', hp: 9 }));
+    let saved: Hero | undefined;
+    let fields: Partial<Hero> | undefined;
+
+    await act(() =>
+      result.current.saveFields({ hp: 4 }, async (whole, patch) => {
+        saved = whole;
+        fields = patch;
+      }),
+    );
+
+    // The pending name is not saved; the saved hp no longer counts as an edit
+    expect(saved).toEqual({ ...server, hp: 4 });
+    expect(fields).toEqual({ hp: 4 });
+    expect(result.current.isDirty).toBe(true);
+    expect(result.current.draft).toMatchObject({ name: 'Pending', hp: 12 });
+  });
+
+  it('saveFields sem outras edições deixa o rascunho limpo', async () => {
+    const { result } = renderDraft(server);
+    act(() => result.current.update({ hp: 9 }));
+
+    await act(() => result.current.saveFields({ hp: 4 }, async () => {}));
+
+    expect(result.current.isDirty).toBe(false);
+  });
+
+  it('saveFields que falha não mexe nas edições', async () => {
+    const { result } = renderDraft(server);
+    act(() => result.current.update({ hp: 9 }));
+
+    await act(async () => {
+      await result.current
+        .saveFields({ hp: 4 }, () => Promise.reject(new Error('boom')))
+        .catch(() => {});
+    });
+
+    expect(result.current.draft?.hp).toBe(9);
+  });
+
   it('update, commit e discard mantêm a identidade entre renders', () => {
     const { result } = renderDraft(server);
     const before = result.current;

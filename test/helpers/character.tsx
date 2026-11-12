@@ -16,6 +16,7 @@ import { renderWithProviders } from './render';
  */
 export function renderWithCharacter(ui: ReactElement, character: DnD5eCharacter) {
   const save = vi.fn(async () => {});
+  const saveNow = vi.fn(async (_fields: Partial<DnD5eCharacter>) => {});
   const latest: { draft: DnD5eCharacter | null; isDirty: boolean } = {
     draft: character,
     isDirty: false,
@@ -28,7 +29,7 @@ export function renderWithCharacter(ui: ReactElement, character: DnD5eCharacter)
     return (
       <CharacterContextProvider
         state={{ character: draft, isDirty }}
-        actions={{ update, save, discard }}
+        actions={{ update, save, saveNow, discard }}
         meta={{ id: character.id, isLoading: false, isSaving: false, error: null }}
       >
         {children}
@@ -44,6 +45,7 @@ export function renderWithCharacter(ui: ReactElement, character: DnD5eCharacter)
   return {
     ...result,
     save,
+    saveNow,
     draft: () => latest.draft!,
     isDirty: () => latest.isDirty,
   };
