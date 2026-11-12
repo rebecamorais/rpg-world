@@ -4,23 +4,41 @@ import { useTranslations } from 'next-intl';
 
 import { Hint } from '@frontend/components/ui/hint';
 import { SectionCard } from '@frontend/components/ui/section-card';
-import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import {
+  useCharacterActions,
+  useCharacterMeta,
+  useLoadedCharacter,
+} from '@frontend/context/CharacterContext';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { setSkill } from '@frontend/lib/character-sheet-updates';
-import { cn, getStatColorClass } from '@frontend/lib/utils';
+import { cn } from '@frontend/lib/utils';
 
 import { calculateSkillValue } from '@shared/systems/dnd5e/calculations';
 import { SKILLS_CATALOG, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import type { CharacterSkill } from '@shared/systems/dnd5e/types';
 
 /** Empty: no proficiency. Filled: proficient. Filled with a hole: expertise. */
-function SkillDot({ proficient, expertise }: { proficient: boolean; expertise?: boolean }) {
+function SkillDot({
+  proficient,
+  expertise,
+  muted = false,
+}: {
+  proficient: boolean;
+  expertise?: boolean;
+  /** Neutral, smaller tone for the legend, so it doesn't compete with the skills themselves. */
+  muted?: boolean;
+}) {
+  const filled = muted
+    ? 'border-muted-foreground bg-muted-foreground'
+    : 'border-character bg-character';
   return (
     <span
       aria-hidden="true"
       className={cn(
-        'flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all',
+        'flex flex-shrink-0 items-center justify-center rounded-full border-2 transition-all',
+        muted ? 'h-3 w-3' : 'h-3.5 w-3.5',
         proficient
-          ? 'border-character bg-character'
+          ? filled
           : 'border-muted-foreground group-hover:border-foreground bg-transparent',
       )}
     >
@@ -29,8 +47,8 @@ function SkillDot({ proficient, expertise }: { proficient: boolean; expertise?: 
   );
 }
 
-/** What each dot means and how to change it; the dots alone don't say. */
-function SkillLegend() {
+/** What each dot means, and how to change it when the sheet can be edited; the dots alone don't say. */
+function SkillLegend({ editable }: { editable: boolean }) {
   const t = useTranslations('skills');
   const states = [
     { label: t('none'), proficient: false, expertise: false },
@@ -39,22 +57,24 @@ function SkillLegend() {
   ];
 
   return (
-    <div className="text-muted-foreground mb-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:col-span-2">
-      <ul aria-label={t('legend')} className="flex flex-wrap items-center gap-x-4 gap-y-1">
+    <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+      <ul aria-label={t('legend')} className="flex flex-wrap items-center gap-x-3 gap-y-1">
         {states.map((state) => (
           <li key={state.label} className="flex items-center gap-1.5">
-            <SkillDot proficient={state.proficient} expertise={state.expertise} />
+            <SkillDot muted proficient={state.proficient} expertise={state.expertise} />
             {state.label}
           </li>
         ))}
       </ul>
-      <span>{t('legendHint')}</span>
+      {editable && <span className="text-muted-foreground/80 italic">{t('legendHint')}</span>}
     </div>
   );
 }
 
 export default function SkillsSection() {
-  const { attributes, level, skills = {} } = useLoadedCharacter();
+  const { attributes, level, skills = {}, system } = useLoadedCharacter();
+  const { id } = useCharacterMeta();
+  const { readOnly } = useSheetSource(id, system);
   const { update } = useCharacterActions();
   const onSkillChange = (key: SkillKey, skill: CharacterSkill) => update(setSkill(key, skill));
   const t = useTranslations('skills');
@@ -141,7 +161,11 @@ export default function SkillsSection() {
           <span
             className={cn(
               'mx-2 w-6 shrink-0 text-right font-mono font-bold',
-              getStatColorClass(finalValue),
+              finalValue < 0
+                ? 'text-danger-flare'
+                : skillData.isProficient
+                  ? 'text-character-flare'
+                  : 'text-muted-foreground',
             )}
           >
             {sign}
@@ -154,11 +178,11 @@ export default function SkillsSection() {
 
   return (
     <SectionCard className="w-full">
-      <SectionCard.Header>
+      <SectionCard.Header className="flex-wrap">
         <SectionCard.Title icon="Scroll">{t('title')}</SectionCard.Title>
+        <SkillLegend editable={!readOnly} />
       </SectionCard.Header>
       <SectionCard.Body className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
-        <SkillLegend />
         <div className="flex flex-col gap-y-2">{firstCol.map(renderSkill)}</div>
         <div className="flex flex-col gap-y-2">{secondCol.map(renderSkill)}</div>
       </SectionCard.Body>
