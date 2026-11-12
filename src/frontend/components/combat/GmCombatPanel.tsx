@@ -19,6 +19,7 @@ import {
 } from '@frontend/components/ui/select';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useEncounter } from '@frontend/hooks/useEncounter';
+import { useMediaQuery } from '@frontend/hooks/useMediaQuery';
 import {
   isSortedByInitiative,
   sortByInitiative,
@@ -27,14 +28,18 @@ import {
 import { cn } from '@frontend/lib/utils';
 
 import {
+  type ActiveCondition,
   type GmRow,
   MAX_ENEMIES_PER_ADD,
   type NpcSide,
 } from '@backend/contexts/combat/domain/Encounter';
+import type { ParticipantPatch } from '@backend/contexts/combat/domain/repository/combat.repo';
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { CombatConnection } from './CombatConnection';
 import { CombatRow } from './CombatRow';
+import { SelectedPanel } from './SelectedPanel';
+import { TurnBar } from './TurnBar';
 
 const NPC_SIDES: NpcSide[] = ['enemy', 'ally', 'neutral'];
 const ADD_LABEL = { enemy: 'addEnemy', ally: 'addAlly', neutral: 'addNeutral' } as const;
@@ -170,6 +175,17 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
   const t = useTranslations('combat');
   const combat = useEncounter(party.id);
   const encounter = combat.encounter?.role === 'gm' ? combat.encounter : null;
+  // Larger screens: the open row's edits sit in a panel beside the list instead of inside it
+  const sidePanel = useMediaQuery('(min-width: 1024px)') === true;
+  const [picked, setPicked] = useState<string | null>(null);
+  const [addingNpc, setAddingNpc] = useState(false);
+  // Like an open row: the GM's pick holds until the turn moves, then the panel follows the turn
+  const currentId = encounter?.rows.find((row) => row.isCurrent)?.participantId ?? null;
+  const [turnSeen, setTurnSeen] = useState(currentId);
+  if (turnSeen !== currentId) {
+    setTurnSeen(currentId);
+    setPicked(null);
+  }
 
   if (!encounter) {
     return (
@@ -187,77 +203,32 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
   const inCombat = new Set(rows.map((row) => row.characterId));
   const missing = party.roster.filter((c) => !inCombat.has(c.characterId));
   const current = rows.find((row) => row.isCurrent);
+  const selected = rows.find((row) => row.participantId === picked) ?? current ?? rows[0] ?? null;
 
   const swap = (a: string, b: string) =>
     combat.setOrder.mutate(ids.map((id) => (id === a ? b : id === b ? a : id)));
   const back = round > 0 ? previousPlayable(rows, round) : null;
+  const next = round > 0 ? nextPlayable(rows) : null;
   const sorted = isSortedByInitiative(rows);
 
-  return (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-heading">{round === 0 ? t('preparing') : t('round', { round })}</h2>
-        <div className="flex flex-wrap gap-2">
-          {round === 0 ? (
-            <Button
-              onClick={() => combat.start.mutate()}
-              disabled={rows.length === 0}
-              loading={combat.start.isPending}
-            >
-              {t('start')}
-            </Button>
-          ) : (
-            current && (
-              <>
-                <Button
-                  variant="outline"
-                  disabled={!back}
-                  loading={combat.previousTurn.isPending}
-                  onClick={() => {
-                    // The name is known now; after the refetch the list may have changed
-                    const name = back?.name;
-                    combat.previousTurn.mutate(undefined, {
-                      onSuccess: () => {
-                        if (name) toast(t('turnBackTo', { name }));
-                      },
-                    });
-                  }}
-                >
-                  <AppIcon name="RotateCcw" size={16} aria-hidden="true" />
-                  {t('previousTurn')}
-                </Button>
-                <Button
-                  onClick={() => {
-                    // Same as going back: say whose turn it is now, read before the refetch
-                    const name = nextPlayable(rows)?.name;
-                    combat.endTurn.mutate(current.participantId, {
-                      onSuccess: () => {
-                        if (name) toast(t('turnPassedTo', { name }));
-                      },
-                    });
-                  }}
-                  loading={combat.endTurn.isPending}
-                >
-                  {t('endTurn')}
-                </Button>
-              </>
-            )
-          )}
-          <Button
-            variant="ghost"
-            className="text-danger-flare"
-            loading={combat.finish.isPending}
-            onClick={() => {
-              if (window.confirm(t('endCombatConfirm'))) combat.finish.mutate();
-            }}
-          >
-            {t('endCombat')}
-          </Button>
-        </div>
-      </div>
+  const handlers = (row: GmRow, index: number) => ({
+    onChange: (patch: ParticipantPatch) =>
+      combat.updateParticipant.mutate({ participantId: row.participantId, ...patch }),
+    swapWith: Object.values(tiedNeighbors(rows, index))
+      .filter((neighbor) => neighbor !== undefined)
+      .map(({ participantId, name }) => ({ participantId, name })),
+    onSwap: (other: string) => swap(row.participantId, other),
+    onConditionsChange: (conditions: ActiveCondition[]) =>
+      combat.setConditions.mutate({ participantId: row.participantId, conditions }),
+    onRemove: () => {
+      if (window.confirm(t('removeConfirm', { name: row.name }))) {
+        combat.removeParticipant.mutate(row.participantId);
+      }
+    },
+  });
 
-      <CombatConnection live={live} />
-
+  const list = (
+    <div className="flex min-w-0 flex-col gap-4">
       {rows.length === 0 ? (
         <p className="text-muted-foreground">{t('empty')}</p>
       ) : (
@@ -268,28 +239,17 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
               partyId={party.id}
               row={row}
               waiting={round > 0 && !row.isCurrent}
-              onChange={(patch) =>
-                combat.updateParticipant.mutate({ participantId: row.participantId, ...patch })
-              }
-              swapWith={Object.values(tiedNeighbors(rows, index))
-                .filter((neighbor) => neighbor !== undefined)
-                .map(({ participantId, name }) => ({ participantId, name }))}
-              onSwap={(other) => swap(row.participantId, other)}
               edition={party.edition}
-              onConditionsChange={(conditions) =>
-                combat.setConditions.mutate({ participantId: row.participantId, conditions })
-              }
-              onRemove={() => {
-                if (window.confirm(t('removeConfirm', { name: row.name }))) {
-                  combat.removeParticipant.mutate(row.participantId);
-                }
-              }}
+              detailsInline={!sidePanel}
+              selected={selected?.participantId === row.participantId}
+              onSelect={() => setPicked(row.participantId)}
+              {...handlers(row, index)}
             />
           ))}
         </ol>
       )}
 
-      <div className="flex flex-wrap items-end gap-4">
+      <div className="flex flex-wrap items-center gap-2">
         {missing.length > 0 && (
           <Button
             variant="outline"
@@ -314,14 +274,123 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
             {!sorted && <span>· {t('orderChanged')}</span>}
           </Button>
         )}
+        {/* Adding an NPC is now and then: behind a button, so the list stays the screen */}
+        <Button
+          variant="outline"
+          aria-expanded={addingNpc}
+          aria-controls="combat-add-npc"
+          onClick={() => setAddingNpc((open) => !open)}
+        >
+          <AppIcon name={addingNpc ? 'X' : 'Plus'} size={16} aria-hidden="true" />
+          {t('addNpc')}
+        </Button>
       </div>
 
-      <AddNpc
-        isBusy={combat.addParticipant.isPending}
-        onAdd={(characterId, count, side) =>
-          combat.addParticipant.mutate({ characterId, count, side })
-        }
-      />
+      <div id="combat-add-npc" hidden={!addingNpc}>
+        <AddNpc
+          isBusy={combat.addParticipant.isPending}
+          onAdd={(characterId, count, side) =>
+            combat.addParticipant.mutate({ characterId, count, side })
+          }
+        />
+      </div>
+
+      <TurnBar>
+        <p className="text-muted-foreground min-w-0 flex-1 truncate text-sm">
+          {round === 0
+            ? t('preparing')
+            : next
+              ? t.rich('nextUp', {
+                  name: next.name,
+                  strong: (chunks) => (
+                    <span className="text-foreground font-semibold">{chunks}</span>
+                  ),
+                })
+              : null}
+        </p>
+        {round === 0 ? (
+          <Button
+            onClick={() => combat.start.mutate()}
+            disabled={rows.length === 0}
+            loading={combat.start.isPending}
+          >
+            {t('start')}
+          </Button>
+        ) : (
+          current && (
+            <>
+              <Button
+                variant="outline"
+                disabled={!back}
+                loading={combat.previousTurn.isPending}
+                aria-label={t('previousTurn')}
+                onClick={() => {
+                  // The name is known now; after the refetch the list may have changed
+                  const name = back?.name;
+                  combat.previousTurn.mutate(undefined, {
+                    onSuccess: () => {
+                      if (name) toast(t('turnBackTo', { name }));
+                    },
+                  });
+                }}
+              >
+                <AppIcon name="RotateCcw" size={16} aria-hidden="true" />
+                <span className="max-sm:sr-only">{t('previousTurn')}</span>
+              </Button>
+              <Button
+                onClick={() => {
+                  // Same as going back: say whose turn it is now, read before the refetch
+                  const name = next?.name;
+                  combat.endTurn.mutate(current.participantId, {
+                    onSuccess: () => {
+                      if (name) toast(t('turnPassedTo', { name }));
+                    },
+                  });
+                }}
+                loading={combat.endTurn.isPending}
+              >
+                {t('endTurn')}
+              </Button>
+            </>
+          )
+        )}
+      </TurnBar>
+    </div>
+  );
+
+  return (
+    // Phones: room under the list for the turn bar, above the tab bar
+    <div className="flex flex-col gap-5 pb-20 md:pb-0">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-heading">{round === 0 ? t('preparing') : t('round', { round })}</h2>
+        <Button
+          variant="ghost"
+          className="text-danger-flare"
+          loading={combat.finish.isPending}
+          onClick={() => {
+            if (window.confirm(t('endCombatConfirm'))) combat.finish.mutate();
+          }}
+        >
+          {t('endCombat')}
+        </Button>
+      </div>
+
+      <CombatConnection live={live} />
+
+      {sidePanel && selected ? (
+        <div className="grid grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start gap-6">
+          {list}
+          <SelectedPanel
+            key={selected.participantId}
+            partyId={party.id}
+            row={selected}
+            edition={party.edition}
+            {...handlers(selected, rows.indexOf(selected))}
+          />
+        </div>
+      ) : (
+        list
+      )}
     </div>
   );
 }

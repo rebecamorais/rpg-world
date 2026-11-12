@@ -466,7 +466,11 @@
     html:has([data-scroll-pad='spell-index']) {
       scroll-padding-top: 4rem;
     }
-    /* Tab bar + save bar stacked above it */
+    /* The combat's turn bar sits above the party's tab bar: toasts go above both */
+    html:has([data-turn-bar]) {
+      --turn-bar: 4.5rem;
+    }
+    /* Tab bar + save bar (or turn bar) stacked above it */
     html:has([data-scroll-pad='sheet-tabs'], [data-scroll-pad='party-tabs']) {
       scroll-padding-bottom: calc(9rem + env(safe-area-inset-bottom));
     }

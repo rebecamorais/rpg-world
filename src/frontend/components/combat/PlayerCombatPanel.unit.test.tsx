@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { PlayerEncounterView } from '@backend/contexts/combat/domain/Encounter';
 
-import { PlayerCombatPanel } from './PlayerCombatPanel';
+import { PlayerCombatPanel, nextOwnTurn } from './PlayerCombatPanel';
 
 const PRONE = {
   key: 'dnd5e:srd-5.2:condition:prone',
@@ -33,6 +33,7 @@ vi.mock('@frontend/hooks/useConditions', () => ({
 }));
 
 const t = messages.combat;
+const endTurnOf = (name: string) => t.endTurnOf.replace('{name}', name);
 
 const view = (current: 'mine' | 'theirs'): PlayerEncounterView => ({
   role: 'player',
@@ -97,16 +98,16 @@ describe('PlayerCombatPanel', () => {
     expect(screen.queryByText('Goblin 1')).not.toBeInTheDocument();
   });
 
-  it('"Encerrar meu turno" só aparece na vez dele, e encerra o turno daquele participante', async () => {
+  it('"Encerrar turno de …" só aparece na vez dele, na barra, e encerra o turno daquele participante', async () => {
     hook.encounter = view('theirs');
     const { unmount } = renderWithProviders(<PlayerCombatPanel partyId="p" edition="2024" live />);
-    expect(screen.queryByRole('button', { name: t.endMyTurn })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: endTurnOf('Arani') })).not.toBeInTheDocument();
     unmount();
 
     hook.encounter = view('mine');
     renderWithProviders(<PlayerCombatPanel partyId="p" edition="2024" live />);
     expect(screen.getByText(t.yourTurn)).toBeInTheDocument();
-    await userEvent.click(screen.getByRole('button', { name: t.endMyTurn }));
+    await userEvent.click(screen.getByRole('button', { name: endTurnOf('Arani') }));
     expect(hook.endTurn.mutate).toHaveBeenCalledWith('a');
   });
 
@@ -263,7 +264,8 @@ describe('PlayerCombatPanel', () => {
       const row = mineTurn();
       expect(row.getByLabelText(t.yourInitiative)).toHaveValue(14);
       expect(row.getByRole('button', { name: /Arani/ })).toBeInTheDocument();
-      expect(row.getByRole('link', { name: t.viewSheet })).toHaveAttribute(
+      // In a new tab: the combat stays open
+      expect(row.getByRole('link', { name: new RegExp(`^${t.openSheet}`) })).toHaveAttribute(
         'href',
         '/system/DnD_5e/character/c1',
       );
@@ -297,16 +299,16 @@ describe('PlayerCombatPanel', () => {
       });
     });
 
-    it('"Encerrar meu turno" fica dentro da própria linha, só na vez dele', async () => {
-      const row = mineTurn();
-      await userEvent.click(row.getByRole('button', { name: t.endMyTurn }));
+    it('na vez dele, "Encerrar turno de …" fica na barra de turno, uma vez só', async () => {
+      mineTurn();
+      await userEvent.click(screen.getByRole('button', { name: endTurnOf('Arani') }));
       expect(hook.endTurn.mutate).toHaveBeenCalledWith('x0');
-      expect(screen.getAllByRole('button', { name: t.endMyTurn })).toHaveLength(1);
+      expect(screen.getAllByRole('button', { name: endTurnOf('Arani') })).toHaveLength(1);
     });
 
-    it('fora da vez dele não há "Encerrar meu turno"', () => {
-      const row = mineTurn({ isCurrent: false });
-      expect(row.queryByRole('button', { name: t.endMyTurn })).not.toBeInTheDocument();
+    it('fora da vez dele não há "Encerrar turno"', () => {
+      mineTurn({ isCurrent: false });
+      expect(screen.queryByRole('button', { name: endTurnOf('Arani') })).not.toBeInTheDocument();
     });
 
     it('outras linhas não têm campo, link nem iniciativa', () => {
@@ -327,5 +329,27 @@ describe('PlayerCombatPanel', () => {
       const row = mineTurn({ ownerUsername: null });
       expect(row.getByText(t.player)).toBeInTheDocument();
     });
+  });
+});
+
+describe('nextOwnTurn', () => {
+  const turn = (participantId: string, isMine: boolean, isCurrent = false, life = 'normal') =>
+    ({ participantId, name: participantId, isMine, isCurrent, life }) as Parameters<
+      typeof nextOwnTurn
+    >[0][number];
+
+  it('conta quantos turnos faltam até o próximo personagem dele, dando a volta na lista', () => {
+    expect(nextOwnTurn([turn('a', true), turn('b', false, true), turn('c', false)])).toEqual({
+      name: 'a',
+      count: 2,
+    });
+  });
+
+  it('pula os mortos; na vez dele, ou sem vez visível, não conta nada', () => {
+    expect(
+      nextOwnTurn([turn('a', true, false, 'dead'), turn('b', false, true), turn('c', true)]),
+    ).toEqual({ name: 'c', count: 1 });
+    expect(nextOwnTurn([turn('a', true, true), turn('b', false)])).toBeNull();
+    expect(nextOwnTurn([turn('a', true), turn('b', false)])).toBeNull();
   });
 });

@@ -6,7 +6,6 @@ import { CharacterPortrait } from '@frontend/components/character/CharacterPortr
 import { ConditionBadge } from '@frontend/components/content/ConditionBadge';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
-import AppLink from '@frontend/demo/AppLink';
 import { cn } from '@frontend/lib/utils';
 
 import type { ActiveCondition, TurnEntry } from '@backend/contexts/combat/domain/Encounter';
@@ -15,6 +14,7 @@ import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { ConditionsPicker } from './ConditionsPicker';
 import { NumberCell } from './NumberCell';
+import { SheetLink } from './SheetLink';
 import { OwnerOrSideBadge, SideBadge } from './SideBadge';
 import { ZoomablePortrait } from './ZoomablePortrait';
 
@@ -49,15 +49,11 @@ export function PlayerTurnRow({
   edition,
   onConditionsChange,
   onInitiativeChange,
-  onEndTurn,
-  endingTurn = false,
 }: {
   turn: TurnEntry;
   edition: Edition;
   onConditionsChange: (conditions: ActiveCondition[]) => void;
   onInitiativeChange: (initiative: number | null) => void;
-  onEndTurn: () => void;
-  endingTurn?: boolean;
 }) {
   const t = useTranslations('combat');
   const tCond = useTranslations('conditions');
@@ -142,22 +138,7 @@ export function PlayerTurnRow({
             />
           </label>
           {turn.characterId && (
-            <Button asChild variant="outline" size="sm" className="touch-target">
-              <AppLink href={`/system/DnD_5e/character/${turn.characterId}`}>
-                <AppIcon name="Scroll" size={16} aria-hidden="true" />
-                {t('viewSheet')}
-              </AppLink>
-            </Button>
-          )}
-          {turn.isCurrent && (
-            <Button
-              size="sm"
-              className="touch-target ml-auto"
-              onClick={onEndTurn}
-              loading={endingTurn}
-            >
-              {t('endMyTurn')}
-            </Button>
+            <SheetLink href={`/system/DnD_5e/character/${turn.characterId}`} name={name} />
           )}
         </div>
       )}
