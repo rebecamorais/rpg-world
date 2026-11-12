@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { StatBlock } from '@frontend/components/ui/stat-block';
-import AppLink from '@frontend/demo/AppLink';
 import { cn, getStatColorClass } from '@frontend/lib/utils';
 
 import type { ActiveCondition, GmRow, NpcSide } from '@backend/contexts/combat/domain/Encounter';
@@ -20,6 +19,7 @@ import { ConditionsPicker } from './ConditionsPicker';
 import { NpcControls } from './NpcControls';
 import { NpcFateControls } from './NpcFateControls';
 import { NumberCell } from './NumberCell';
+import { SheetLink } from './SheetLink';
 
 const ATTRIBUTES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'] as const;
 
@@ -176,12 +176,7 @@ export function CombatRowDetails({
             {tCond('title')}
           </Button>
         </ConditionsPicker>
-        <Button asChild variant="outline" size="sm" className="touch-target">
-          <AppLink href={sheetHref}>
-            <AppIcon name="Scroll" size={16} aria-hidden="true" />
-            {t('openSheet')}
-          </AppLink>
-        </Button>
+        <SheetLink href={sheetHref} name={row.name} />
         {swapWith.map((neighbor) => (
           <Button
             key={neighbor.participantId}
