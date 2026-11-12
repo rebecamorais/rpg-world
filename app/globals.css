@@ -430,6 +430,27 @@
     @apply font-display tracking-normal;
   }
 
+  /* Fixed and sticky bars must not cover the field that gets keyboard focus: the browser keeps
+     this much room when it scrolls a focused element into view. Each bar marks itself with
+     data-scroll-pad; the sizes follow the bars' heights (plus a little air). */
+  html:has([data-scroll-pad='demo-header']) {
+    scroll-padding-top: 7rem;
+  }
+  @media (width < 64rem) {
+    html:has([data-scroll-pad='vitals']) {
+      scroll-padding-top: 6rem;
+    }
+  }
+  @media (width < 48rem) {
+    html:has([data-scroll-pad='spell-index']) {
+      scroll-padding-top: 4rem;
+    }
+    /* Tab bar + save bar stacked above it */
+    html:has([data-scroll-pad='sheet-tabs']) {
+      scroll-padding-bottom: calc(9rem + env(safe-area-inset-bottom));
+    }
+  }
+
   /* Ensure all clickable elements show the hand cursor */
   button,
   a,

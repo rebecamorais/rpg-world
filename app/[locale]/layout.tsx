@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2026 Rebeca Morais Cruz (Rebs Tech Studio). Licenciado sob a GNU GPLv3.
  */
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 
 import { type LocaleParams, routing } from '@/i18n/routing';
@@ -27,6 +27,17 @@ const isProduction = process.env.VERCEL_ENV === 'production';
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
+/**
+ * `viewportFit: 'cover'` lets the page reach under the iPhone's notch and home bar, so the
+ * `env(safe-area-inset-*)` paddings (bottom bars, toasts) get real values instead of 0.
+ * The `theme-color` comes from THEME_SCRIPT: it depends on the theme cookie.
+ */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+};
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const { locale } = await params;

@@ -50,6 +50,7 @@ export function VitalsBar() {
 
   return (
     <section
+      data-scroll-pad="vitals"
       aria-label={t('summary')}
       className="border-border bg-card/95 sticky top-0 z-30 -mx-1 flex flex-col gap-3 rounded-xl border p-3 shadow-lg backdrop-blur-md lg:hidden"
     >

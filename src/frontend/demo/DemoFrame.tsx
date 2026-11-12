@@ -34,7 +34,10 @@ export function DemoFrame({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <header className="border-border bg-card sticky top-0 z-40 border-b">
+      <header
+        data-scroll-pad="demo-header"
+        className="border-border bg-card sticky top-0 z-40 border-b"
+      >
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:px-8">
           <p className="text-muted-foreground min-w-0 text-sm">{t('banner.text')}</p>
           <Button asChild size="sm">
