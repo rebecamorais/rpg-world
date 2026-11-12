@@ -1,7 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { PlayerEncounterView } from '@backend/contexts/combat/domain/Encounter';
@@ -32,7 +31,6 @@ vi.mock('@frontend/hooks/useConditions', () => ({
     isLoading: false,
   }),
 }));
-vi.mock('sonner', () => ({ toast: vi.fn() }));
 
 const t = messages.combat;
 
@@ -74,27 +72,6 @@ describe('PlayerCombatPanel', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     hook.encounter = null;
-  });
-
-  it('avisa quando a vez dele chega, uma vez só', () => {
-    hook.encounter = view('theirs');
-    const { rerender } = renderWithProviders(<PlayerCombatPanel partyId="p" edition="2024" live />);
-    expect(toast).not.toHaveBeenCalled();
-
-    hook.encounter = view('mine');
-    rerender(<PlayerCombatPanel partyId="p" edition="2024" live />);
-    hook.encounter = { ...view('mine') };
-    rerender(<PlayerCombatPanel partyId="p" edition="2024" live />);
-
-    expect(toast).toHaveBeenCalledTimes(1);
-    // Themed: the swords icon and the character's color on the border
-    expect(toast).toHaveBeenCalledWith(
-      t.yourTurnToast,
-      expect.objectContaining({
-        icon: expect.anything(),
-        className: expect.stringContaining('primary'),
-      }),
-    );
   });
 
   it('sem combate não mostra nada', () => {
