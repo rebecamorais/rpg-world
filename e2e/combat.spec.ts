@@ -63,6 +63,7 @@ test.describe('combate', () => {
     await page.getByRole('button', { name: "Add the party's characters" }).click();
     await openRow(page, 'Arani');
     await expect(page.getByLabel("Arani's initiative")).toBeVisible();
+    await page.getByRole('button', { name: 'Add NPC' }).click();
     await page.getByRole('combobox', { name: 'NPC' }).click();
     await page.getByRole('option', { name: 'Goblin' }).click();
     await page.getByLabel('How many').fill('2');
@@ -145,10 +146,11 @@ test.describe('combate', () => {
     await expect(player.page.getByText('Your turn', { exact: true })).toBeVisible();
     // The toast reaches whoever scrolled down to the sheet
     await expect(player.page.getByText('Your turn!')).toBeVisible();
-    await (await hydrated(player.page.getByRole('button', { name: 'End my turn' }))).click();
+    // On their turn the button to end it is in the turn bar, with the character's name
+    await (await hydrated(player.page.getByRole('button', { name: "End Arani's turn" }))).click();
 
     await expect(current(page)).toContainText('Goblin 2');
-    await expect(player.page.getByRole('button', { name: 'End my turn' })).toHaveCount(0);
+    await expect(player.page.getByRole('button', { name: "End Arani's turn" })).toHaveCount(0);
     await page.getByRole('button', { name: 'End turn' }).click();
     await expect(page.getByRole('heading', { name: 'Round 2' })).toBeVisible();
     await expect(current(player.page)).toContainText('Goblin 1');

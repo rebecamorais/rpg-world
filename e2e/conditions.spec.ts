@@ -10,6 +10,7 @@ import {
   expect,
   hydrated,
   joinParty,
+  openRow,
   partyUrl,
   person,
   revealNpc,
@@ -110,7 +111,9 @@ test.describe('condições no combate', () => {
 
     const goblin = rowOf(page, 'Goblin 1');
     await revealNpc(page, 'Goblin 1');
-    await (await hydrated(goblin.getByRole('button', { name: 'Conditions of Goblin 1' }))).click();
+    // Its edits: in the row on a phone, in the panel beside the list on a wide screen
+    const edits = await openRow(page, 'Goblin 1');
+    await (await hydrated(edits.getByRole('button', { name: 'Conditions of Goblin 1' }))).click();
     const picker = page.getByRole('dialog', { name: 'Conditions' });
     await picker.getByRole('switch', { name: 'Prone' }).click();
     await expect(picker.getByRole('switch', { name: 'Prone' })).toBeChecked();
