@@ -26,12 +26,12 @@ export function DeathSavesCard() {
   return (
     <Card className="bg-background/60 flex flex-col gap-3 p-4 shadow-sm">
       <div className="flex items-center justify-between">
-        <h3 className="text-label text-muted-foreground flex items-center gap-2">
+        <h2 className="text-label text-muted-foreground flex items-center gap-2">
           <Hint label={t('deathSaves')} hint={t('deathSavesHint')}>
             <AppIcon name="death-skull" variant="game" size="sm" aria-hidden="true" />
           </Hint>
           {t('deathSaves')}
-        </h3>
+        </h2>
         <Tooltip>
           <TooltipTrigger asChild>
             <button

@@ -1,5 +1,6 @@
 import { violations } from './support/axe';
 import {
+  bring,
   characterUrl,
   createCharacter,
   createParty,
@@ -8,9 +9,10 @@ import {
   joinParty,
   partyUrl,
   person,
+  signIn,
   test,
 } from './support/fixtures';
-import { adminClient } from './support/supabase';
+import { adminClient, createUser } from './support/supabase';
 
 /** Every page has one main landmark and one h1, so screen readers can jump straight to it. */
 async function landmarks(page: import('@playwright/test').Page) {
@@ -21,13 +23,46 @@ async function landmarks(page: import('@playwright/test').Page) {
 }
 
 test.describe('acessibilidade (axe)', () => {
-  for (const path of ['/', '/features', '/login', '/register', '/forgot-password', '/demo']) {
+  for (const path of [
+    '/',
+    '/features',
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/privacy',
+    '/terms',
+    '/support',
+    '/auth/error',
+    '/demo',
+    '/demo?mode=combat',
+    '/demo/npcs',
+    '/demo/inventory',
+    '/demo/characters/mirela',
+    '/demo/characters/mirela/lore',
+    '/demo/characters/mirela/spells',
+    '/demo/characters/mirela/inventory',
+  ]) {
     test(`página pública ${path}`, async ({ page }) => {
       await page.goto(path);
       await page.getByRole('main').waitFor();
       await page.waitForTimeout(300);
       expect(await violations(page)).toEqual([]);
       expect(await landmarks(page)).toEqual({ main: 1, h1: 1 });
+    });
+  }
+
+  // The skip link is the first stop and lands on the content, past header and sidebar
+  for (const path of ['/', '/demo', '/characters']) {
+    test(`pular para o conteúdo em ${path}`, async ({ page }) => {
+      if (path === '/characters') await signIn(page, await createUser('a11y-skip'));
+      await page.goto(path);
+      await hydrated(page.getByRole('main').first());
+      await page.keyboard.press('Tab');
+      const skip = page.getByRole('link', { name: 'Skip to content' });
+      await expect(skip).toBeFocused();
+      await expect(skip).toBeInViewport();
+      await page.keyboard.press('Enter');
+      await expect(page.locator('#main-content')).toBeFocused();
     });
   }
 
@@ -48,13 +83,21 @@ test.describe('acessibilidade (axe)', () => {
   });
 
   test('páginas logadas: lista, ficha, lore, magias e perfil', async ({ page, user: _ }) => {
+    test.setTimeout(90_000); // a dozen pages, axe twice on each (one per theme)
     const id = await createCharacter(page, 'Accessible Hero');
     for (const path of [
       '/characters',
+      '/characters/new',
+      '/characters/npcs',
+      '/enemies',
+      '/parties',
       characterUrl(id),
       characterUrl(id, '/lore'),
       characterUrl(id, '/spells'),
+      characterUrl(id, '/inventory'),
+      characterUrl(id, '/appearance'),
       '/settings/profile',
+      '/change-password',
     ]) {
       await page.goto(path);
       await page.getByRole('main').first().waitFor();
@@ -90,6 +133,43 @@ test.describe('acessibilidade (axe)', () => {
       }
     });
   }
+
+  test('escolha de nome de usuário', async ({ page }) => {
+    await signIn(page, await createUser('a11y-username', undefined, { usernameChosen: false }));
+    await page.goto('/choose-username');
+    await page.getByRole('main').first().waitFor();
+    await page.waitForTimeout(300);
+    expect(await violations(page)).toEqual([]);
+    expect(await landmarks(page)).toEqual({ main: 1, h1: 1 });
+  });
+
+  test('mesa: visão do mestre, do jogador e do convite', async ({ page, browser, user: _ }) => {
+    test.setTimeout(90_000);
+    const { id, code } = await createParty(page, 'Accessible Party');
+    const bia = await person(browser, 'a11y-party-bia');
+    await joinParty(page, bia.page, bia.user.id, id, code);
+    await bring(bia.page, id, [await createCharacter(bia.page, 'Bia Hero')]);
+    const outsider = await person(browser, 'a11y-party-out');
+
+    const check = async (who: import('@playwright/test').Page, path: string, label: string) => {
+      await who.goto(path);
+      await who.getByRole('main').first().waitFor();
+      await who.waitForTimeout(500);
+      expect.soft(await violations(who), label).toEqual([]);
+      expect.soft(await landmarks(who), label).toEqual({ main: 1, h1: 1 });
+    };
+
+    for (const tab of ['', '/inventory', '/journal', '/settings']) {
+      await check(page, partyUrl(id, tab), `mestre ${tab || '/'}`);
+    }
+    for (const tab of ['', '/inventory', '/journal']) {
+      await check(bia.page, partyUrl(id, tab), `jogador ${tab || '/'}`);
+    }
+    await check(outsider.page, `/parties/join/${code}`, 'convite');
+
+    await bia.context.close();
+    await outsider.context.close();
+  });
 
   test('mesa sem mestre: sem pedido, com pedido (candidato e quem vota) e com o suporte liberado', async ({
     page,
