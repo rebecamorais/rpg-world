@@ -25,6 +25,18 @@ function renderSkills(acrobatics?: CharacterSkill) {
 }
 
 describe('SkillsSection', () => {
+  it('a legenda explica as bolinhas, ao tocar no ícone de ajuda', async () => {
+    renderSkills();
+
+    await userEvent.click(screen.getByRole('button', { name: 'What is Legend?' }));
+
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip).toHaveTextContent('None');
+    expect(tooltip).toHaveTextContent('Proficient');
+    expect(tooltip).toHaveTextContent('Expertise');
+    expect(tooltip).toHaveTextContent('Tap a skill to cycle through them.');
+  });
+
   it('o atributo da perícia explica o que ela cobre, ao tocar', async () => {
     renderSkills();
 

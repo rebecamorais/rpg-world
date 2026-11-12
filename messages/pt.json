@@ -691,6 +691,8 @@
     "proficientIn": "Proficiente em {label}",
     "expertiseIn": "Especialista em {label}",
     "noProficiencyIn": "Sem proficiência em {label}",
+    "legend": "Legenda",
+    "legendHint": "Toque numa perícia para alternar.",
     "usesAttribute": "Usa {attribute}.",
     "descriptions": {
       "ACROBATICS": "Manter o equilíbrio, fazer acrobacias e escapar de apertos com agilidade.",
