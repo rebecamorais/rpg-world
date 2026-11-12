@@ -104,9 +104,9 @@ test.describe('condições no combate', () => {
     user: _,
   }) => {
     const { partyId, player } = await runningTable(page, browser, 'cond-player');
-    await player.page.goto(partyUrl(partyId));
+    await player.page.goto(partyUrl(partyId, '/combat'));
     await hydrated(player.page.getByRole('heading', { name: 'Round 1' }));
-    await page.goto(partyUrl(partyId));
+    await page.goto(partyUrl(partyId, '/combat'));
 
     const goblin = rowOf(page, 'Goblin 1');
     await revealNpc(page, 'Goblin 1');
@@ -137,9 +137,9 @@ test.describe('condições no combate', () => {
     user: _,
   }) => {
     const { partyId, player } = await runningTable(page, browser, 'poison-player');
-    await page.goto(partyUrl(partyId));
+    await page.goto(partyUrl(partyId, '/combat'));
     await hydrated(page.getByRole('heading', { name: 'Round 1' }));
-    await player.page.goto(partyUrl(partyId));
+    await player.page.goto(partyUrl(partyId, '/combat'));
     const mine = rowOf(player.page, 'Arani');
     await (await hydrated(mine.getByRole('button', { name: 'Conditions of Arani' }))).click();
     await player.page.getByRole('switch', { name: 'Poisoned' }).click();

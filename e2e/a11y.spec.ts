@@ -159,10 +159,10 @@ test.describe('acessibilidade (axe)', () => {
       expect.soft(await landmarks(who), label).toEqual({ main: 1, h1: 1 });
     };
 
-    for (const tab of ['', '/inventory', '/journal', '/settings']) {
+    for (const tab of ['', '/combat', '/inventory', '/journal', '/settings']) {
       await check(page, partyUrl(id, tab), `mestre ${tab || '/'}`);
     }
-    for (const tab of ['', '/inventory', '/journal']) {
+    for (const tab of ['', '/combat', '/inventory', '/journal']) {
       await check(bia.page, partyUrl(id, tab), `jogador ${tab || '/'}`);
     }
     await check(outsider.page, `/parties/join/${code}`, 'convite');
