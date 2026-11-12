@@ -18,6 +18,7 @@ import { useLeaveGuard } from '@frontend/hooks/useUnsavedChanges';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
+import { SaveBarSlotProvider } from './SaveControls';
 import { SheetBackdrop } from './SheetBackdrop';
 import { SheetTabBar } from './SheetTabBar';
 
@@ -100,7 +101,7 @@ export function CharacterSheetShell({ children }: { children: ReactNode }) {
           className="bg-character pointer-events-none absolute top-0 left-[10%] -z-10 h-64 w-2/3 -translate-y-1/3 rounded-full opacity-15 blur-3xl"
         />
         {readOnly && partyId && <ReadOnlyBar partyId={partyId} />}
-        {children}
+        <SaveBarSlotProvider>{children}</SaveBarSlotProvider>
       </div>
       <SheetTabBar characterId={id} system={character.system} />
     </div>

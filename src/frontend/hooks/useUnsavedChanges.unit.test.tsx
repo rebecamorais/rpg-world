@@ -1,5 +1,5 @@
 import { fireEvent, render, renderHook } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { useLeaveGuard, useSaveShortcut } from './useUnsavedChanges';
 
@@ -49,6 +49,63 @@ describe('useLeaveGuard', () => {
     rerender(<Links isDirty={false} />);
     expect(click(getByText('List'))).toBe(false);
     expect(confirm).not.toHaveBeenCalled();
+  });
+
+  it('com dois rascunhos na ficha, pergunta uma vez só', () => {
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const { getAllByText } = render(
+      <>
+        <Links isDirty />
+        <Links isDirty />
+      </>,
+    );
+
+    expect(click(getAllByText('List')[0])).toBe(false);
+    expect(confirm).toHaveBeenCalledTimes(1);
+  });
+
+  describe('Voltar/Avançar do navegador', () => {
+    // jsdom has no Navigation API: a bare EventTarget stands in for window.navigation
+    const navigation = new EventTarget();
+    beforeAll(() =>
+      Object.defineProperty(window, 'navigation', { value: navigation, configurable: true }),
+    );
+    afterAll(() => Reflect.deleteProperty(window, 'navigation'));
+
+    /** Returns whether the Back press was cancelled. */
+    function traverseTo(pathname: string, { cancelable = true } = {}) {
+      const event = Object.assign(new Event('navigate', { cancelable }), {
+        navigationType: 'traverse',
+        destination: { url: new URL(pathname, window.location.href).href },
+      });
+      navigation.dispatchEvent(event);
+      return event.defaultPrevented;
+    }
+
+    it('ao sair da ficha, pergunta e respeita a resposta', () => {
+      vi.spyOn(window, 'confirm').mockReturnValueOnce(false).mockReturnValueOnce(true);
+      render(<Links isDirty />);
+
+      expect(traverseTo('/characters')).toBe(true);
+      expect(traverseTo('/characters')).toBe(false);
+    });
+
+    it('voltar para outra aba da mesma ficha não pergunta', () => {
+      const confirm = vi.spyOn(window, 'confirm');
+      render(<Links isDirty />);
+
+      expect(traverseTo('/sheet/lore')).toBe(false);
+      expect(confirm).not.toHaveBeenCalled();
+    });
+
+    it('quando o navegador não deixa cancelar, nem pergunta', () => {
+      const confirm = vi.spyOn(window, 'confirm');
+      render(<Links isDirty />);
+
+      traverseTo('/characters', { cancelable: false });
+
+      expect(confirm).not.toHaveBeenCalled();
+    });
   });
 
   it('pede confirmação ao fechar ou recarregar a aba', () => {

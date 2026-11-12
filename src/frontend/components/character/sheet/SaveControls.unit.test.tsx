@@ -8,7 +8,7 @@ import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import CombatStatsSection from '../stats/CombatStatsSection';
-import { SaveCharacterButton } from './SaveControls';
+import { SaveBarSlotProvider, SaveCharacterButton } from './SaveControls';
 
 const t = messages.common;
 
@@ -63,5 +63,43 @@ describe('SaveCharacterButton', () => {
 
     expect(speed).toHaveAttribute('aria-invalid', 'true');
     expect(speed).toHaveClass('border-danger');
+  });
+});
+
+describe('SaveBarSlotProvider', () => {
+  async function editAc() {
+    const user = userEvent.setup();
+    await user.clear(screen.getByLabelText('AC'));
+    await user.type(screen.getByLabelText('AC'), '15');
+  }
+
+  it('numa aba sem botão de salvar, o rascunho do personagem ainda mostra a barra', async () => {
+    const { save } = renderWithCharacter(
+      <SaveBarSlotProvider>
+        <CombatStatsSection />
+      </SaveBarSlotProvider>,
+      character,
+    );
+
+    await editAc();
+
+    expect(screen.getByText(t.unsavedSheet)).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: t.save }));
+    expect(save).toHaveBeenCalled();
+  });
+
+  it('na aba com botão de salvar, mostra uma barra só', async () => {
+    renderWithCharacter(
+      <SaveBarSlotProvider>
+        <SaveCharacterButton />
+        <CombatStatsSection />
+      </SaveBarSlotProvider>,
+      character,
+    );
+
+    await editAc();
+
+    expect(screen.getAllByRole('button', { name: t.save })).toHaveLength(1);
+    expect(screen.queryByText(t.unsavedSheet)).not.toBeInTheDocument();
   });
 });

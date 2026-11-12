@@ -184,7 +184,7 @@ export default function SpellSearchDialog({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
-        className="character-context bg-background flex h-[90vh] max-w-4xl flex-col p-0"
+        className="character-context bg-background flex h-[90dvh] max-w-4xl flex-col p-0"
         style={characterTheme(accentColor).style}
       >
         {/* Thematic Glow */}
@@ -401,12 +401,13 @@ export default function SpellSearchDialog({
               })}
             </p>
 
-            <div className="flex items-center gap-2">
+            <nav aria-label={t('paginationLabel')} className="flex items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 disabled={page === 0}
                 onClick={() => goToPage(page - 1)}
+                aria-label={t('previousPage')}
                 className="border-border bg-muted text-foreground hover:bg-background h-8 w-8 p-0 disabled:opacity-40"
               >
                 <AppIcon name="ChevronLeft" size={16} />
@@ -432,6 +433,7 @@ export default function SpellSearchDialog({
                       size="sm"
                       onClick={() => goToPage(pageNum)}
                       aria-current={isActive ? 'page' : undefined}
+                      aria-label={t('goToPage', { page: pageNum + 1 })}
                       className={cn(
                         'h-8 w-8 p-0 font-mono text-xs',
                         isActive
@@ -450,11 +452,12 @@ export default function SpellSearchDialog({
                 size="sm"
                 disabled={page >= totalPages - 1}
                 onClick={() => goToPage(page + 1)}
+                aria-label={t('nextPage')}
                 className="border-border bg-muted text-foreground hover:bg-background h-8 w-8 p-0 disabled:opacity-40"
               >
                 <AppIcon name="ChevronRight" size={16} />
               </Button>
-            </div>
+            </nav>
           </footer>
         )}
       </DialogContent>
