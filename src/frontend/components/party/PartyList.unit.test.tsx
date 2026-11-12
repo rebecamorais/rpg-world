@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -18,6 +19,7 @@ vi.mock('@client', async (importOriginal) => ({
 }));
 
 const t = messages.parties;
+const named = (text: string, name: string) => text.replace('{name}', name);
 
 const party = (id: string, overrides: Partial<PartySummary> = {}): PartySummary => ({
   id,
@@ -63,8 +65,12 @@ describe('PartyList', () => {
 
     const invites = await screen.findByRole('region', { name: t.invites });
     expect(within(invites).getByText('Mesa invite')).toBeInTheDocument();
-    expect(within(invites).getByRole('button', { name: t.accept })).toBeInTheDocument();
-    expect(within(invites).getByRole('button', { name: t.decline })).toBeInTheDocument();
+    expect(
+      within(invites).getByRole('button', { name: named(t.acceptInvite, 'Mesa invite') }),
+    ).toHaveTextContent(t.accept);
+    expect(
+      within(invites).getByRole('button', { name: named(t.declineInvite, 'Mesa invite') }),
+    ).toHaveTextContent(t.decline);
 
     const asGm = screen.getByRole('region', { name: t.asGm });
     expect(within(asGm).getByRole('link', { name: /Mesa gm/ })).toHaveAttribute(
@@ -105,19 +111,54 @@ describe('PartyList', () => {
     renderList(mine({ invites: [party('invite', { status: 'invited', hasGm: false })] }));
 
     const invites = await screen.findByRole('region', { name: t.invites });
-    expect(within(invites).getByRole('button', { name: t.decline })).toBeInTheDocument();
-    expect(within(invites).queryByRole('button', { name: t.accept })).not.toBeInTheDocument();
+    expect(
+      within(invites).getByRole('button', { name: named(t.declineInvite, 'Mesa invite') }),
+    ).toBeInTheDocument();
+    expect(
+      within(invites).queryByRole('button', { name: named(t.acceptInvite, 'Mesa invite') }),
+    ).not.toBeInTheDocument();
   });
 
   it('aceitar um convite manda PATCH no próprio membro', async () => {
     vi.mocked(rpgWorldApi.patch).mockResolvedValue(undefined);
     renderList(mine({ invites: [party('invite', { status: 'invited' })] }));
 
-    (await screen.findByRole('button', { name: t.accept })).click();
+    (await screen.findByRole('button', { name: named(t.acceptInvite, 'Mesa invite') })).click();
 
     await vi.waitFor(() =>
       expect(rpgWorldApi.patch).toHaveBeenCalledWith('/api/parties/invite/members/user-1'),
     );
+  });
+
+  it('recusar um convite pede confirmação com o nome da mesa', async () => {
+    const confirm = vi
+      .spyOn(window, 'confirm')
+      .mockReturnValueOnce(false)
+      .mockReturnValueOnce(true);
+    vi.mocked(rpgWorldApi.delete).mockResolvedValue(undefined);
+    renderList(mine({ invites: [party('invite', { status: 'invited' })] }));
+
+    const decline = await screen.findByRole('button', {
+      name: named(t.declineInvite, 'Mesa invite'),
+    });
+    await userEvent.click(decline);
+    expect(confirm).toHaveBeenCalledWith(named(t.declineInviteConfirm, 'Mesa invite'));
+    expect(rpgWorldApi.delete).not.toHaveBeenCalled();
+
+    await userEvent.click(decline);
+    await vi.waitFor(() => expect(rpgWorldApi.delete).toHaveBeenCalled());
+  });
+
+  it('cancelar um pedido pede confirmação com o nome da mesa', async () => {
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
+    renderList(mine({ requests: [party('pedido', { status: 'requested' })] }));
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: named(t.withdrawFrom, 'Mesa pedido') }),
+    );
+
+    expect(confirm).toHaveBeenCalledWith(named(t.withdrawConfirm, 'Mesa pedido'));
+    expect(rpgWorldApi.delete).not.toHaveBeenCalled();
   });
 
   it('com 5 mesas como mestre o botão de criar fica desabilitado com o aviso do limite', async () => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -45,6 +45,8 @@ export default function ImageUpload({
   const t = useTranslations('avatarUpload');
   const { upload: contextUpload, isUploading: isUploadingContext } = useFileUploader();
   const inputRef = useRef<HTMLInputElement>(null);
+  // Unique per instance: a page can show more than one uploader
+  const inputId = useId();
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const crop = useImageCrop({
     keepFull: keepFullImage,
@@ -84,12 +86,12 @@ export default function ImageUpload({
         disabled={isUploading}
         aria-label={t('button')}
         className={cn(
-          'group relative transition-transform hover:scale-105 active:scale-95 disabled:opacity-60',
+          'group focus-ring relative rounded-lg transition-transform hover:scale-105 active:scale-95 disabled:opacity-60',
         )}
       >
         <Avatar
           className={cn(
-            'border-border bg-muted group-hover:border-primary-flare border-2 shadow-md transition-colors',
+            'border-border bg-muted group-hover:border-primary-flare group-focus-visible:border-primary-flare border-2 shadow-md transition-colors',
             sizeClasses[size],
           )}
         >
@@ -99,8 +101,13 @@ export default function ImageUpload({
           <AvatarFallback className="bg-muted text-2xl font-bold">🧙</AvatarFallback>
         </Avatar>
 
-        {/* Upload overlay */}
-        <div className="bg-overlay absolute inset-0 flex items-center justify-center rounded-lg opacity-0 transition-opacity group-hover:opacity-100">
+        {/* Upload overlay: also on keyboard focus and while uploading, not only on hover */}
+        <div
+          className={cn(
+            'bg-overlay absolute inset-0 flex items-center justify-center rounded-lg opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100',
+            isUploading && 'opacity-100',
+          )}
+        >
           {isUploading ? (
             <span className="text-foreground text-xs font-medium">{t('loading')}</span>
           ) : (
@@ -116,7 +123,8 @@ export default function ImageUpload({
         accept="image/jpeg,image/png,image/webp"
         className="hidden"
         onChange={handleFileChange}
-        id="image-file-input"
+        id={inputId}
+        data-testid="image-upload-input"
       />
 
       {currentUrl ? (

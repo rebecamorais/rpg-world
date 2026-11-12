@@ -76,7 +76,7 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
   return (
     <Card className="w-full max-w-lg">
       <CardContent className="flex flex-col gap-4 p-6">
-        <p className="text-heading">{invite.name}</p>
+        <h2 className="text-heading">{invite.name}</h2>
         {invite.gmUsername && (
           <p className="text-muted-foreground">{t('invitedBy', { username: invite.gmUsername })}</p>
         )}

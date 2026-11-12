@@ -87,8 +87,13 @@ function GmView({ party, live }: { party: PartyView; live: boolean }) {
         !isLoading && (
           <Tabs value={mode} onValueChange={setMode} className="flex flex-col gap-4">
             <TabsList className="self-start">
-              <TabsTrigger value="roleplay">{tCombat('modeRolePlay')}</TabsTrigger>
-              <TabsTrigger value="combat">{tCombat('modeCombat')}</TabsTrigger>
+              {/* Switched mid-session on a phone: a full 44px tap height */}
+              <TabsTrigger value="roleplay" className="pointer-coarse:min-h-11">
+                {tCombat('modeRolePlay')}
+              </TabsTrigger>
+              <TabsTrigger value="combat" className="pointer-coarse:min-h-11">
+                {tCombat('modeCombat')}
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="roleplay" className="flex flex-col gap-4">

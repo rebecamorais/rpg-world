@@ -86,7 +86,7 @@ export default async function JoinPartyPage({ params }: { params: Params }) {
           {card ? (
             <Card className="w-full max-w-lg">
               <CardContent className="flex flex-col gap-4 p-6">
-                <p className="text-heading">{card.name}</p>
+                <h2 className="text-heading">{card.name}</h2>
                 <p className="text-muted-foreground">{t('signInHint')}</p>
                 <Button asChild className="self-start">
                   <Link href={`/login?next=${encodeURIComponent(`/parties/join/${code}`)}`}>

@@ -145,7 +145,7 @@ test('ajustar a imagem na ficha só grava com Salvar', async ({ page, user: _ })
   };
 
   await (await hydrated(page.getByRole('link', { name: 'Sheet appearance' }))).click();
-  await page.locator('#image-file-input').setInputFiles(AVATAR);
+  await page.getByTestId('image-upload-input').setInputFiles(AVATAR);
   await cropSave().click();
   await expect(page.getByRole('button', { name: 'View image' })).toBeVisible();
   await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
@@ -211,7 +211,7 @@ test('guarda a imagem completa, usa no modal e limpa o par anterior', async ({ p
 
   await (await hydrated(page.getByRole('link', { name: 'Sheet appearance' }))).click();
   // 300 x 100: the crop is square, so a whole image keeps its proportion only if it was kept
-  await page.locator('#image-file-input').setInputFiles({
+  await page.getByTestId('image-upload-input').setInputFiles({
     name: 'wide.png',
     mimeType: 'image/png',
     buffer: widePng(300, 100),

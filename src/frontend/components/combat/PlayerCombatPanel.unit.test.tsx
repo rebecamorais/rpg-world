@@ -260,7 +260,7 @@ describe('PlayerCombatPanel', () => {
 
   it('turno de oculto: nenhuma linha atual e a mensagem do mestre', () => {
     withTurns([{ side: 'player', name: 'Arani', isMine: true }], true);
-    expect(screen.getByRole('status')).toHaveTextContent(t.gmTurn);
+    expect(screen.getByText(t.gmTurn)).toHaveAttribute('role', 'status');
     expect(document.querySelector('[aria-current]')).toBeNull();
   });
 

@@ -30,7 +30,7 @@ export function CollapsedDeadRow({ row, onExpand }: { row: GmRow; onExpand: () =
         characterClass={row.class}
         className="size-5 grayscale"
       />
-      <s className="text-sm">{row.name}</s>
+      <s className="min-w-0 truncate text-sm">{row.name}</s>
       <SideBadge side={row.side} className="ml-auto" />
       <AppIcon name="Skull" size={14} aria-hidden="true" />
       <span className="sr-only">{t('dead')}</span>

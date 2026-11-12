@@ -154,6 +154,8 @@ export function CombatRow({
 
         <div className="flex w-16 shrink-0 flex-col items-end gap-1 sm:w-28">
           <span className="text-foreground font-mono text-sm font-bold tabular-nums">
+            {/* Without it a screen reader only says "12 / 20" */}
+            <span className="sr-only">{t('hp')} </span>
             {`${row.hp.current} / ${row.hp.max}`}
             {row.hp.temp > 0 && <span className="text-warning-flare"> +{row.hp.temp}</span>}
           </span>

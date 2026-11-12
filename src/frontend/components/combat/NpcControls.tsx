@@ -106,7 +106,10 @@ export function NpcControls({
       </div>
 
       <Select value={side} onValueChange={(next) => onSide(next as NpcSide)}>
-        <SelectTrigger className="h-9 w-36" aria-label={t('changeSideOf', { name })}>
+        <SelectTrigger
+          className="h-9 w-36 pointer-coarse:h-11"
+          aria-label={t('changeSideOf', { name })}
+        >
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

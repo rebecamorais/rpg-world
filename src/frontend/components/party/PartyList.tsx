@@ -94,11 +94,17 @@ export default function PartyList() {
           {parties.invites.map((party) => (
             <PartyRow key={party.id} party={party}>
               <div className="flex gap-2">
+                {/* Every row has the same buttons: the label names the party they answer */}
                 <Button
                   size="sm"
                   variant="ghost"
                   disabled={isResponding}
-                  onClick={() => respond({ partyId: party.id, userId, accept: false })}
+                  aria-label={t('declineInvite', { name: party.name })}
+                  onClick={() => {
+                    if (window.confirm(t('declineInviteConfirm', { name: party.name }))) {
+                      respond({ partyId: party.id, userId, accept: false });
+                    }
+                  }}
                 >
                   {t('decline')}
                 </Button>
@@ -107,6 +113,7 @@ export default function PartyList() {
                   <Button
                     size="sm"
                     disabled={isResponding}
+                    aria-label={t('acceptInvite', { name: party.name })}
                     onClick={() => respond({ partyId: party.id, userId, accept: true })}
                   >
                     <AppIcon name="Check" size={16} aria-hidden="true" />
@@ -143,7 +150,12 @@ export default function PartyList() {
                 size="sm"
                 variant="ghost"
                 disabled={isResponding}
-                onClick={() => respond({ partyId: party.id, userId, accept: false })}
+                aria-label={t('withdrawFrom', { name: party.name })}
+                onClick={() => {
+                  if (window.confirm(t('withdrawConfirm', { name: party.name }))) {
+                    respond({ partyId: party.id, userId, accept: false });
+                  }
+                }}
               >
                 {t('withdraw')}
               </Button>

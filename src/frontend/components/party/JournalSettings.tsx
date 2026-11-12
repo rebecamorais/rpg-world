@@ -49,7 +49,8 @@ export function JournalSettings({ party }: { party: PartyView }) {
         <SectionCard.Title icon="BookOpen">{t('title')}</SectionCard.Title>
       </SectionCard.Header>
       <SectionCard.Body className="flex flex-col gap-4">
-        <form onSubmit={save} className="flex flex-col gap-2">
+        {/* noValidate: a bare document id is accepted too, which the browser's url check would refuse */}
+        <form onSubmit={save} noValidate className="flex flex-col gap-2">
           <Label htmlFor={fieldId}>{t('linkLabel')}</Label>
           <div className="flex flex-wrap gap-2">
             <Input
@@ -57,7 +58,9 @@ export function JournalSettings({ party }: { party: PartyView }) {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder={t('linkPlaceholder')}
+              type="url"
               autoComplete="off"
+              spellCheck={false}
               className="max-w-md"
             />
             <Button
