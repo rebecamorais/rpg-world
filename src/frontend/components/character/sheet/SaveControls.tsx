@@ -86,11 +86,12 @@ export function SaveControls({
       {/* `contents`: the save state goes first in the page's actions, so whatever comes before the
           button there (the sheet's gear) stays right next to it */}
       <div className="contents">
-        {/* Always rendered, so screen readers hear the change */}
+        {/* Always rendered, so screen readers hear the change; on phones only visually hidden
+            (not `hidden`), so it's still announced there */}
         <span
           role="status"
           title={isDirty ? t('saveShortcut') : undefined}
-          className="text-label text-warning-flare order-first mr-1 hidden items-center gap-1.5 sm:flex"
+          className="text-label text-warning-flare sr-only order-first mr-1 items-center gap-1.5 sm:not-sr-only sm:flex"
         >
           {isDirty && (
             <>

@@ -20,7 +20,7 @@ export function ProficiencyDot({ proficient, expertise, className }: Proficiency
     <span
       aria-hidden="true"
       className={cn(
-        'flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all',
+        'flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors',
         proficient
           ? 'border-character bg-character'
           : 'border-muted-foreground group-hover:border-foreground bg-transparent',

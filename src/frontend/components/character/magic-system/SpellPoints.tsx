@@ -68,7 +68,7 @@ export function SpellPoints({
 
         <div className="border-border bg-muted relative mt-2 h-2 w-full overflow-hidden rounded-full border">
           <div
-            className="from-info-muted to-info-flare absolute top-0 left-0 h-full bg-gradient-to-r shadow-[0_0_10px_var(--info-muted)] transition-all duration-500 ease-in-out"
+            className="from-info-muted to-info-flare absolute top-0 left-0 h-full bg-gradient-to-r shadow-[0_0_10px_var(--info-muted)] transition-[width] duration-500 ease-in-out"
             style={{ width: `${percentage}%` }}
           />
         </div>

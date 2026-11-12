@@ -44,6 +44,13 @@ describe('CharacterCard', () => {
     expect(screen.queryByText(t.defaultClass)).not.toBeInTheDocument();
   });
 
+  it('mostra o nome traduzido do sistema, não o id interno', () => {
+    renderWithProviders(<CharacterCard character={goblin} />);
+
+    expect(screen.getByText(messages.characterCreation.systems.dnd5e)).toBeVisible();
+    expect(screen.queryByText('DnD 5e')).not.toBeInTheDocument();
+  });
+
   it('Duplicar cria a cópia com o nome "(cópia)" e abre a ficha nova', async () => {
     const user = userEvent.setup();
     renderWithProviders(<CharacterCard character={goblin} />);

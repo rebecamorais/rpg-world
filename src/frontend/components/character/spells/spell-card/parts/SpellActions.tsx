@@ -18,11 +18,12 @@ export const SpellActions = React.memo(
   ({ spell, onForgetSpell, displayValues }: SpellActionsProps) => (
     <div className="border-border flex items-center justify-end border-t pt-2">
       <button
+        type="button"
         onClick={(e) => {
           e.stopPropagation();
           onForgetSpell?.(spell.id);
         }}
-        className="focus-ring text-muted-foreground hover:bg-danger-surface hover:text-danger-flare flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all"
+        className="focus-ring text-muted-foreground hover:bg-danger-surface hover:text-danger-flare flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors"
       >
         <AppIcon name="Trash2" size={18} aria-hidden="true" />
         {displayValues.forgetLabel}

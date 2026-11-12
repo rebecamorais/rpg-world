@@ -78,28 +78,45 @@ export function SpellSlots({
 
           return (
             <div key={lvl} className={cn('flex flex-col gap-0.5', !isActive && 'opacity-30')}>
-              <span className="text-label text-muted-foreground">{lvl}º</span>
-              <div className="flex flex-wrap gap-1">
+              <span className="text-label text-muted-foreground">{t('level', { level: lvl })}</span>
+              {/* Each slot is a 24px button around a small mark, side by side with no gap, so the
+                  hit areas are big enough to tap and never overlap a neighbor's */}
+              <div className="flex flex-wrap">
                 {isActive ? (
-                  Array.from({ length: slotData.max }).map((_, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      aria-label={t('slot', { level: lvl, slot: i + 1 })}
-                      aria-pressed={i < available}
-                      onClick={() =>
-                        handleSlotToggle(lvl.toString(), slotData.used, slotData.max, i < available)
-                      }
-                      className={cn(
-                        'focus-ring touch-target h-2 w-2 rounded-[1px] transition-all duration-300',
-                        i < available
-                          ? 'bg-info-flare shadow-[0_0_8px_var(--info-muted)]'
-                          : 'border-info-muted border bg-transparent',
-                      )}
-                    />
-                  ))
+                  Array.from({ length: slotData.max }).map((_, i) => {
+                    const isAvailable = i < available;
+                    return (
+                      <button
+                        key={i}
+                        type="button"
+                        // The state is in the name, not in aria-pressed ("pressed" meaning
+                        // "available" read backwards): an available slot spends one, a spent
+                        // one recovers one
+                        aria-label={t(isAvailable ? 'slotAvailable' : 'slotSpent', {
+                          level: lvl,
+                          slot: i + 1,
+                        })}
+                        onClick={() =>
+                          handleSlotToggle(lvl.toString(), slotData.used, slotData.max, isAvailable)
+                        }
+                        className="focus-ring flex size-6 items-center justify-center rounded-sm"
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={cn(
+                            'size-2.5 rounded-[1px] transition-[background-color,border-color,box-shadow] duration-300',
+                            isAvailable
+                              ? 'bg-info-flare shadow-[0_0_8px_var(--info-muted)]'
+                              : 'border-info-muted border bg-transparent',
+                          )}
+                        />
+                      </button>
+                    );
+                  })
                 ) : (
-                  <div className="border-info-muted h-2 w-2 rounded-[1px] border" />
+                  <span className="flex size-6 items-center justify-center">
+                    <span className="border-info-muted size-2.5 rounded-[1px] border" />
+                  </span>
                 )}
               </div>
             </div>

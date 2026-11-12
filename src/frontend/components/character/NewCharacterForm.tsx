@@ -93,6 +93,8 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
                     <FormControl>
                       <Input
                         maxLength={100}
+                        // A character's name, not the user's: no personal autofill
+                        autoComplete="off"
                         disabled={createMutation.isPending}
                         placeholder={t('namePlaceholder')}
                         {...field}

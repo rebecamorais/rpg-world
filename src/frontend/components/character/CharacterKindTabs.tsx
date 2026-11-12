@@ -26,7 +26,7 @@ export function CharacterKindTabs({ current }: { current: CharacterKind }) {
           href={href}
           aria-current={kind === current ? 'page' : undefined}
           className={cn(
-            'focus-ring touch-target hover:text-foreground inline-flex items-center rounded-sm px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-all',
+            'focus-ring touch-target hover:text-foreground inline-flex items-center rounded-sm px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-[color,background-color,box-shadow]',
             kind === current && 'bg-background text-foreground shadow-sm',
           )}
         >

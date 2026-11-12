@@ -77,7 +77,7 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
           <Button
             variant="ghost"
             size="icon"
-            className="hover:bg-background h-6 w-6 rounded-sm p-0"
+            className="hover:bg-background touch-target h-6 w-6 rounded-sm p-0"
             aria-label={t('decrease', { name })}
             disabled={quantity <= 1}
             onClick={() => onQuantity(quantity - 1)}
@@ -95,7 +95,7 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
           <Button
             variant="ghost"
             size="icon"
-            className="hover:bg-background h-6 w-6 rounded-sm p-0"
+            className="hover:bg-background touch-target h-6 w-6 rounded-sm p-0"
             aria-label={t('increase', { name })}
             disabled={quantity >= MAX_QUANTITY}
             onClick={() => onQuantity(quantity + 1)}

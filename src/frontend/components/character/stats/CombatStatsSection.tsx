@@ -75,6 +75,8 @@ const CombatHeader = () => {
           <NumberInput
             ghost
             aria-label={t('initiative')}
+            // Initiative can be negative, and the iPhone's numeric keypad has no minus sign
+            inputMode="text"
             value={character.initiative}
             min={-1_000}
             max={1_000}

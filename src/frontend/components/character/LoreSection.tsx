@@ -91,6 +91,8 @@ function AppearanceField({ field, wide, value, onChange }: AppearanceFieldProps)
         value={value || ''}
         maxLength={APPEARANCE_MAX_LENGTH}
         placeholder="—"
+        // The character's traits ("Age", "Height"…): the browser's personal autofill doesn't belong
+        autoComplete="off"
         onChange={(e) => onChange(field, e.target.value)}
       />
     );

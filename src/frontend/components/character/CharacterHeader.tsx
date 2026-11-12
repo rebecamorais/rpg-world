@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
 import { ChoiceSelect } from '@frontend/components/character/ChoiceSelect';
@@ -55,6 +55,7 @@ export default function CharacterHeader() {
   const { readOnly } = useSheetSource(id);
   const pb = getProficiencyBonus(level);
   const t = useTranslations('characterHeader');
+  const format = useFormatter();
   const choices = useCharacterChoices();
   const tImage = useTranslations('avatarUpload');
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -144,6 +145,8 @@ export default function CharacterHeader() {
                 <InlineField
                   id="char-name"
                   maxLength={TEXT_MAX}
+                  // A character's name, not the user's: keep the browser's personal autofill away
+                  autoComplete="off"
                   label={t('name')}
                   value={name || ''}
                   onChange={(e) => update({ name: e.target.value })}
@@ -190,7 +193,7 @@ export default function CharacterHeader() {
                         onValueChange={(next) => update({ xp: next })}
                         className="text-character-flare h-5 w-16 text-right font-mono text-xs md:text-xs"
                       />
-                      <span className="text-muted-foreground">/ {nextLevelXp}</span>
+                      <span className="text-muted-foreground">/ {format.number(nextLevelXp)}</span>
                     </div>
                   </div>
                   <Progress
