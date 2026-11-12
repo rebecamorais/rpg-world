@@ -258,7 +258,8 @@
       "lore": "Lore",
       "spells": "Grimório",
       "inventory": "Inventário",
-      "appearance": "Aparência"
+      "appearance": "Aparência",
+      "label": "Abas da ficha"
     },
     "emptyStates": {
       "lore": "A biografia e características físicas aparecerão aqui em breve.",
@@ -481,7 +482,9 @@
     "classOtherPlaceholder": "Nome da classe",
     "raceOtherPlaceholder": "Nome da raça",
     "backgroundOtherPlaceholder": "Nome do antecedente",
-    "alignmentOtherPlaceholder": "Alinhamento"
+    "alignmentOtherPlaceholder": "Alinhamento",
+    "hideIdentity": "Esconder detalhes",
+    "showIdentity": "Ver detalhes"
   },
   "characterAppearance": {
     "title": "Aparência da ficha",
@@ -535,7 +538,19 @@
       "passivePerception": "10 + seu bônus de Percepção. É o que você nota sem procurar."
     },
     "configureHp": "Configurar vida",
-    "configureHpDescription": "Vida máxima e vida temporária deste personagem"
+    "configureHpDescription": "Vida máxima e vida temporária deste personagem",
+    "adjustHp": "Ajustar PV",
+    "adjustHpDescription": "Dano, cura ou PV temporário. Salva na hora.",
+    "adjustHpAmount": "Quanto?",
+    "damage": "Dano",
+    "heal": "Cura",
+    "setTempHp": "Temporário",
+    "hpSaved": "PV {current} / {max}",
+    "hpSavedTemp": "PV {current} / {max} (+{temp})",
+    "undo": "Desfazer",
+    "summary": "Combate num relance",
+    "speedShort": "Desloc.",
+    "passivePerceptionShort": "Percepção"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Buscar magia",

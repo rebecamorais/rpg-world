@@ -19,11 +19,17 @@ import {
   SelectValue,
 } from '@frontend/components/ui/select';
 import { StatBlock } from '@frontend/components/ui/stat-block';
-import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import {
+  useCharacterActions,
+  useCharacterMeta,
+  useLoadedCharacter,
+} from '@frontend/context/CharacterContext';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { setHitDice, setSpellPoints, setSpellSlots } from '@frontend/lib/character-sheet-updates';
 
 import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
 
+import { AdjustHitPoints } from './AdjustHitPoints';
 import { CombatConfigSection, CombatStatsDialog } from './CombatStatsDialog';
 
 // Sized to its content, so a unit (speed's "m") sits right after the number
@@ -153,6 +159,8 @@ const ResourceGrid = () => {
   const tm = useTranslations('magicSystem');
   const character = useLoadedCharacter();
   const { update } = useCharacterActions();
+  const { id } = useCharacterMeta();
+  const { readOnly } = useSheetSource(id);
   // Kept out of the cards: switching the magic system swaps the card, which would close it
   const [config, setConfig] = useState<CombatConfigSection | null>(null);
 
@@ -165,6 +173,15 @@ const ResourceGrid = () => {
           tempHp={character.hpTemp ?? 0}
           onHpChange={(field, value) => update({ [field]: value })}
           action={<CardConfigButton label={t('configureHp')} onClick={() => setConfig('hp')} />}
+          footer={
+            !readOnly && (
+              <AdjustHitPoints>
+                <Button variant="outline" size="sm">
+                  {t('adjustHp')}
+                </Button>
+              </AdjustHitPoints>
+            )
+          }
         />
 
         <MagicSystemCard
