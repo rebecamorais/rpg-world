@@ -9,7 +9,8 @@ import { UserProvider } from '@frontend/context/UserContext';
 
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
-import { PartyPage } from './PartyPage';
+import { PartyFrame } from './PartyFrame';
+import { PartyCombatTab, PartyPage, PartyTableTab } from './PartyPage';
 
 const demo = vi.hoisted(() => ({ isDemo: false, search: '' }));
 vi.mock('@frontend/demo/DemoContext', () => ({ useDemo: () => demo }));
@@ -53,44 +54,74 @@ const party = (overrides: Partial<PartyView> = {}): PartyView => ({
   ...overrides,
 });
 
-function renderPage(view: PartyView) {
-  vi.mocked(rpgWorldApi.get).mockImplementation(async (url: string) =>
-    url === '/api/parties' ? { asGm: [], asPlayer: [], invites: [], requests: [] } : view,
-  );
-  return renderWithProviders(
-    <UserProvider user={{ id: 'ana', email: 'a@example.com' }}>
+const encounter = vi.hoisted(() => ({ view: null as unknown }));
+
+/** The party at a tab: the frame (name, menu, tabs) around that tab's content. */
+function renderPage(view: PartyView, tab: 'overview' | 'combat' | 'demo' = 'overview') {
+  vi.mocked(rpgWorldApi.get).mockImplementation(async (url: string) => {
+    if (url === '/api/parties') return { asGm: [], asPlayer: [], invites: [], requests: [] };
+    if (url.endsWith('/encounter')) return encounter.view ?? {};
+    return view;
+  });
+  const content =
+    tab === 'demo' ? (
       <PartyPage partyId="p1" />
-    </UserProvider>,
+    ) : (
+      <PartyFrame partyId="p1">
+        {tab === 'combat' ? <PartyCombatTab partyId="p1" /> : <PartyTableTab partyId="p1" />}
+      </PartyFrame>
+    );
+  return renderWithProviders(
+    <UserProvider user={{ id: 'ana', email: 'a@example.com' }}>{content}</UserProvider>,
   );
+}
+
+/** Leaving is in the player's own menu, out of the way of play. */
+async function leaveParty() {
+  const user = userEvent.setup();
+  await user.click(await screen.findByRole('button', { name: t.mine.open }));
+  await user.click(await screen.findByRole('button', { name: t.mine.leave }));
 }
 
 describe('PartyPage sem mestre', () => {
   beforeEach(() => {
     demo.isDemo = false;
     demo.search = '';
+    encounter.view = null;
     vi.clearAllMocks();
     vi.mocked(rpgWorldApi.delete).mockResolvedValue(undefined);
   });
 
-  it('mostra o pedido de mestre no lugar do combate', async () => {
+  it('mostra o pedido de mestre na mesa e no lugar do combate', async () => {
     renderPage(party());
+    expect(await screen.findByRole('button', { name: t.gmClaim.claim })).toBeInTheDocument();
+  });
+
+  it('na aba Combate, sem mestre, mostra o pedido e não o combate', async () => {
+    renderPage(party(), 'combat');
 
     expect(await screen.findByRole('button', { name: t.gmClaim.claim })).toBeInTheDocument();
     expect(screen.queryByText('combat panel')).not.toBeInTheDocument();
   });
 
-  it('com mestre, a página de jogador segue com o combate e sem o pedido', async () => {
-    renderPage(party({ hasGm: true }));
+  it('com mestre e um combate, a aba Combate mostra o combate e não o pedido', async () => {
+    encounter.view = { role: 'player', round: 1, hiddenTurn: false, turns: [] };
+    renderPage(party({ hasGm: true }), 'combat');
 
     expect(await screen.findByText('combat panel')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: t.gmClaim.claim })).not.toBeInTheDocument();
+  });
+
+  it('com mestre e sem combate, a aba Combate diz que não há combate', async () => {
+    renderPage(party({ hasGm: true }), 'combat');
+    expect(await screen.findByText(messages.combat.noCombatPlayer)).toBeInTheDocument();
   });
 
   it('o último jogador que sai é avisado de que a mesa será apagada', async () => {
     const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
     renderPage(party({ people: [person('ana')] }));
 
-    await userEvent.setup().click(await screen.findByRole('button', { name: t.mine.leave }));
+    await leaveParty();
 
     expect(confirm).toHaveBeenCalledWith(t.mine.leaveConfirmLastPlayer);
     expect(rpgWorldApi.delete).not.toHaveBeenCalled();
@@ -100,12 +131,62 @@ describe('PartyPage sem mestre', () => {
     const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true);
     renderPage(party());
 
-    await userEvent.setup().click(await screen.findByRole('button', { name: t.mine.leave }));
+    await leaveParty();
 
     expect(confirm).toHaveBeenCalledWith(t.mine.leaveConfirm);
     await waitFor(() =>
       expect(rpgWorldApi.delete).toHaveBeenCalledWith('/api/parties/p1/members/ana'),
     );
+  });
+});
+
+describe('Abas da mesa', () => {
+  beforeEach(() => {
+    demo.isDemo = false;
+    encounter.view = null;
+    vi.clearAllMocks();
+  });
+
+  it('o mestre vê as quatro abas, Gerenciar, e o aviso de combate em andamento na mesa', async () => {
+    encounter.view = { role: 'gm', round: 2, rows: [] };
+    renderPage(party({ role: 'gm', hasGm: true, gm: { inviteCode: 'X', rolePlay: [] } }));
+
+    expect(await screen.findByRole('link', { name: t.settings.manage })).toHaveAttribute(
+      'href',
+      '/parties/p1/settings',
+    );
+    const [tabs] = screen.getAllByRole('navigation', { name: t.tabs.label });
+    expect(tabs).toBeInTheDocument();
+    for (const [tab, href] of [
+      [t.tabs.overview, '/parties/p1'],
+      [t.tabs.journal, '/parties/p1/journal'],
+      [t.tabs.chest, '/parties/p1/inventory'],
+    ]) {
+      expect(screen.getAllByRole('link', { name: tab })[0]).toHaveAttribute('href', href);
+    }
+    // The combat tab carries the round, and the table leads to the combat going on
+    expect(
+      await screen.findAllByRole('link', { name: new RegExp(t.tabs.combat) }),
+    ).not.toHaveLength(0);
+    expect(
+      await screen.findByRole('link', { name: new RegExp(t.page.goToCombat) }),
+    ).toHaveAttribute('href', '/parties/p1/combat');
+    // The current tab is marked
+    expect(screen.getAllByRole('link', { name: t.tabs.overview })[0]).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+  });
+
+  it('o jogador escolhe os personagens no menu "Meus personagens", fora da tela de jogo', async () => {
+    renderPage(party({ hasGm: true }));
+
+    expect(await screen.findByRole('button', { name: t.mine.open })).toBeInTheDocument();
+    expect(screen.queryByText(t.mine.description)).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: t.settings.manage })).not.toBeInTheDocument();
+
+    await userEvent.setup().click(screen.getByRole('button', { name: t.mine.open }));
+    expect(await screen.findByRole('dialog', { name: t.mine.title })).toBeInTheDocument();
   });
 });
 
@@ -130,10 +211,13 @@ describe('PartyPage na demo', () => {
       passivePerception: 10,
       passiveInsight: 10,
     };
-    renderPage(party({ role: 'gm', hasGm: true, gm: { inviteCode: 'X', rolePlay: [card] } }));
+    renderPage(
+      party({ role: 'gm', hasGm: true, gm: { inviteCode: 'X', rolePlay: [card] } }),
+      'demo',
+    );
 
     expect(await screen.findByText('Ada')).toBeInTheDocument();
-    expect(screen.queryByRole('tab', { name: messages.combat.modeCombat })).not.toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: t.settings.open })).not.toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: t.tabs.label })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: t.settings.manage })).not.toBeInTheDocument();
   });
 });

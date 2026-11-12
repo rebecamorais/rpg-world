@@ -1245,11 +1245,7 @@
       "title": "Criar mesa"
     },
     "nav": {
-      "parties": "Mesas",
-      "overview": "Mesa",
-      "journal": "Diário",
-      "inventory": "Inventário",
-      "settings": "Configurações"
+      "parties": "Mesas"
     },
     "join": {
       "title": "Convite para mesa",
@@ -1285,7 +1281,8 @@
       "openSheet": "Abrir a ficha de {name}",
       "notFoundTitle": "Mesa não encontrada",
       "notFoundDescription": "Ela pode ter sido apagada, ou você não está mais nela.",
-      "backToParties": "Voltar para minhas mesas"
+      "backToParties": "Voltar para minhas mesas",
+      "goToCombat": "Ir para o combate"
     },
     "requestsSection": {
       "title": "Pedidos para entrar",
@@ -1360,7 +1357,8 @@
       "leave": "Sair da mesa",
       "leaveConfirm": "Sair desta mesa? Seus personagens continuam com você.",
       "leaveConfirmLastPlayer": "Você é a última pessoa jogando nesta mesa, que está sem mestre. Se sair, a mesa é apagada, com o baú e o diário. Sair mesmo assim?",
-      "left": "Você saiu da mesa"
+      "left": "Você saiu da mesa",
+      "open": "Meus personagens"
     },
     "gmClaim": {
       "title": "Esta mesa está sem mestre",
@@ -1389,7 +1387,8 @@
     },
     "settings": {
       "eyebrow": "Configurações da mesa",
-      "open": "Configurações"
+      "manage": "Gerenciar",
+      "backToTable": "Voltar para a mesa"
     },
     "chest": {
       "title": "Inventário da party",
@@ -1417,7 +1416,14 @@
     "declineInvite": "Recusar o convite para {name}",
     "declineInviteConfirm": "Recusar o convite para {name}? Para entrar depois, você vai precisar de um novo convite.",
     "withdrawFrom": "Cancelar pedido para entrar em {name}",
-    "withdrawConfirm": "Cancelar seu pedido para entrar em {name}?"
+    "withdrawConfirm": "Cancelar seu pedido para entrar em {name}?",
+    "tabs": {
+      "label": "Abas da mesa",
+      "overview": "Mesa",
+      "combat": "Combate",
+      "journal": "Diário",
+      "chest": "Baú"
+    }
   },
   "enemies": {
     "subtitle": "Fichas de quem não é jogador: inimigos nos combates das suas mesas, e quem mais aparecer na história.",
@@ -1430,8 +1436,6 @@
   },
   "combat": {
     "title": "Combate",
-    "modeRolePlay": "Role Play",
-    "modeCombat": "Combate",
     "prepare": "Preparar combate",
     "noCombat": "Nenhum combate em andamento. Prepare um para montar a ordem de iniciativa.",
     "round": "Rodada {round}",
@@ -1509,7 +1513,8 @@
     "orderChanged": "ordem mudou",
     "openSheet": "Abrir ficha",
     "forPlayers": "Para os jogadores",
-    "turnPassedTo": "Agora é a vez de {name}"
+    "turnPassedTo": "Agora é a vez de {name}",
+    "noCombatPlayer": "Nenhum combate em andamento. Quando o mestre começar um, ele aparece aqui."
   },
   "characterRaces": {
     "dragonborn": "Draconato",

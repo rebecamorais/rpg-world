@@ -34,7 +34,6 @@ vi.mock('@frontend/hooks/useParties', () => ({
   }),
 }));
 
-const t = messages.parties.nav;
 const sidebar = () => within(screen.getByRole('complementary'));
 
 describe('Sidebar', () => {
@@ -42,37 +41,16 @@ describe('Sidebar', () => {
     navigation.pathname = '/characters';
   });
 
-  it('a mesa aberta do mestre ganha o submenu Mesa / Diário / Inventário / Configurações', () => {
-    navigation.pathname = '/parties/gm1/settings';
+  it('a mesa aberta fica marcada em qualquer aba dela, sem submenu (as abas estão na mesa)', () => {
+    navigation.pathname = '/parties/gm1/journal';
     renderWithProviders(<Sidebar />);
 
-    expect(sidebar().getByRole('link', { name: t.overview })).toHaveAttribute(
-      'href',
-      '/parties/gm1',
-    );
-    expect(sidebar().getByRole('link', { name: t.journal })).toHaveAttribute(
-      'href',
-      '/parties/gm1/journal',
-    );
-    expect(sidebar().getByRole('link', { name: t.inventory })).toHaveAttribute(
-      'href',
-      '/parties/gm1/inventory',
-    );
-    const settings = sidebar().getByRole('link', { name: t.settings });
-    expect(settings).toHaveAttribute('href', '/parties/gm1/settings');
-    expect(settings).toHaveAttribute('aria-current', 'page');
-  });
-
-  it('na mesa como jogador: Mesa, Diário e Inventário, sem Configurações', () => {
-    navigation.pathname = '/parties/pl1/journal';
-    renderWithProviders(<Sidebar />);
-
-    expect(sidebar().getByRole('link', { name: t.journal })).toHaveAttribute(
+    expect(sidebar().getByRole('link', { name: 'Mesa gm1' })).toHaveAttribute(
       'aria-current',
       'page',
     );
-    expect(sidebar().getByRole('link', { name: t.overview })).not.toHaveAttribute('aria-current');
-    expect(sidebar().queryByRole('link', { name: t.settings })).not.toBeInTheDocument();
+    expect(sidebar().getByRole('link', { name: 'Mesa pl1' })).not.toHaveAttribute('aria-current');
+    expect(sidebar().queryByRole('link', { name: /journal|diário/i })).not.toBeInTheDocument();
   });
 
   it('todas as mesas ficam sob Mesas, sem separar Mestre e Jogador', () => {
@@ -86,12 +64,6 @@ describe('Sidebar', () => {
     expect(
       sidebar().queryByRole('button', { name: messages.common.logout }),
     ).not.toBeInTheDocument();
-  });
-
-  it('fora da mesa não há submenu', () => {
-    renderWithProviders(<Sidebar />);
-    expect(sidebar().queryByRole('link', { name: t.journal })).not.toBeInTheDocument();
-    expect(sidebar().queryByRole('link', { name: t.settings })).not.toBeInTheDocument();
   });
 
   describe('recolher', () => {

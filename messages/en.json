@@ -1245,11 +1245,7 @@
       "title": "Create a party"
     },
     "nav": {
-      "parties": "Parties",
-      "overview": "Party",
-      "journal": "Journal",
-      "inventory": "Inventory",
-      "settings": "Settings"
+      "parties": "Parties"
     },
     "join": {
       "title": "Party invite",
@@ -1285,7 +1281,8 @@
       "openSheet": "Open {name}'s sheet",
       "notFoundTitle": "Party not found",
       "notFoundDescription": "It may have been deleted, or you're no longer in it.",
-      "backToParties": "Back to my parties"
+      "backToParties": "Back to my parties",
+      "goToCombat": "Go to combat"
     },
     "requestsSection": {
       "title": "Join requests",
@@ -1360,7 +1357,8 @@
       "leave": "Leave party",
       "leaveConfirm": "Leave this party? Your characters stay with you.",
       "leaveConfirmLastPlayer": "You are the last active player of this party, which has no GM. If you leave, the party is deleted, with its chest and journal. Leave anyway?",
-      "left": "You left the party"
+      "left": "You left the party",
+      "open": "My characters"
     },
     "gmClaim": {
       "title": "This party has no GM",
@@ -1389,7 +1387,8 @@
     },
     "settings": {
       "eyebrow": "Party settings",
-      "open": "Settings"
+      "manage": "Manage",
+      "backToTable": "Back to the table"
     },
     "chest": {
       "title": "Party inventory",
@@ -1417,7 +1416,14 @@
     "declineInvite": "Decline the invite to {name}",
     "declineInviteConfirm": "Decline the invite to {name}? You'll need a new invite to join later.",
     "withdrawFrom": "Cancel request to join {name}",
-    "withdrawConfirm": "Cancel your request to join {name}?"
+    "withdrawConfirm": "Cancel your request to join {name}?",
+    "tabs": {
+      "label": "Party tabs",
+      "overview": "Table",
+      "combat": "Combat",
+      "journal": "Journal",
+      "chest": "Chest"
+    }
   },
   "enemies": {
     "subtitle": "Sheets for everyone who isn't a player: enemies in your parties' combats, and anyone else in the story.",
@@ -1430,8 +1436,6 @@
   },
   "combat": {
     "title": "Combat",
-    "modeRolePlay": "Role Play",
-    "modeCombat": "Combat",
     "prepare": "Prepare combat",
     "noCombat": "No combat going on. Prepare one to set up the initiative order.",
     "round": "Round {round}",
@@ -1509,7 +1513,8 @@
     "orderChanged": "order changed",
     "openSheet": "Open sheet",
     "forPlayers": "For the players",
-    "turnPassedTo": "Now it's {name}'s turn"
+    "turnPassedTo": "Now it's {name}'s turn",
+    "noCombatPlayer": "No combat going on. When the GM starts one, it shows here."
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

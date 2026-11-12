@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
-import { PartyPage } from '@frontend/components/party/PartyPage';
-import { SeededQuery } from '@frontend/components/providers/SeededQuery';
-import { partyQueryKey } from '@frontend/lib/query-keys';
+import { PartyTableTab } from '@frontend/components/party/PartyPage';
 
-import { loadParty } from './load-party';
+import { loadParty } from '../load-party';
 
 export async function generateMetadata({
   params,
@@ -15,13 +14,16 @@ export async function generateMetadata({
   return party ? { title: party.name } : {};
 }
 
-export default async function PartyRoute({ params }: { params: Promise<{ partyId: string }> }) {
-  const { partyId } = await params;
-  const party = await loadParty(partyId);
+export default async function PartyTableRoute({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ partyId: string }>;
+  searchParams: Promise<{ mode?: string }>;
+}) {
+  const [{ partyId }, { mode }] = await Promise.all([params, searchParams]);
+  // Links from before the tabs kept the combat in ?mode=combat
+  if (mode === 'combat') redirect(`/parties/${partyId}/combat`);
 
-  return (
-    <SeededQuery queryKey={partyQueryKey(partyId)} data={party}>
-      <PartyPage partyId={partyId} />
-    </SeededQuery>
-  );
+  return <PartyTableTab partyId={partyId} />;
 }
