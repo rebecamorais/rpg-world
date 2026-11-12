@@ -691,6 +691,8 @@
     "proficientIn": "Proficient in {label}",
     "expertiseIn": "Expertise in {label}",
     "noProficiencyIn": "No proficiency in {label}",
+    "legend": "Legend",
+    "legendHint": "Tap a skill to cycle through them.",
     "usesAttribute": "Uses {attribute}.",
     "descriptions": {
       "ACROBATICS": "Keep your balance, perform stunts and slip out of tight spots.",

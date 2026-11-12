@@ -12,6 +12,47 @@ import { calculateSkillValue } from '@shared/systems/dnd5e/calculations';
 import { SKILLS_CATALOG, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import type { CharacterSkill } from '@shared/systems/dnd5e/types';
 
+/** Empty: no proficiency. Filled: proficient. Filled with a hole: expertise. */
+function SkillDot({ proficient, expertise }: { proficient: boolean; expertise?: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        'flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all',
+        proficient
+          ? 'border-character bg-character'
+          : 'border-muted-foreground group-hover:border-foreground bg-transparent',
+      )}
+    >
+      {expertise && <span className="bg-background h-1 w-1 rounded-full" />}
+    </span>
+  );
+}
+
+/** What each dot means and how to change it; the dots alone don't say. */
+function SkillLegend() {
+  const t = useTranslations('skills');
+  const states = [
+    { label: t('none'), proficient: false, expertise: false },
+    { label: t('proficient'), proficient: true, expertise: false },
+    { label: t('expertise'), proficient: true, expertise: true },
+  ];
+
+  return (
+    <div className="text-muted-foreground mb-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:col-span-2">
+      <ul aria-label={t('legend')} className="flex flex-wrap items-center gap-x-4 gap-y-1">
+        {states.map((state) => (
+          <li key={state.label} className="flex items-center gap-1.5">
+            <SkillDot proficient={state.proficient} expertise={state.expertise} />
+            {state.label}
+          </li>
+        ))}
+      </ul>
+      <span>{t('legendHint')}</span>
+    </div>
+  );
+}
+
 export default function SkillsSection() {
   const { attributes, level, skills = {} } = useLoadedCharacter();
   const { update } = useCharacterActions();
@@ -79,17 +120,7 @@ export default function SkillsSection() {
           onClick={toggleProficiency}
           className="focus-ring flex min-w-0 flex-1 items-center gap-3 rounded-sm text-left text-sm"
         >
-          <span
-            aria-hidden="true"
-            className={cn(
-              'flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all',
-              skillData.isProficient
-                ? 'border-character bg-character'
-                : 'border-muted-foreground group-hover:border-foreground bg-transparent',
-            )}
-          >
-            {skillData.expertise && <span className="bg-background h-1 w-1 rounded-full" />}
-          </span>
+          <SkillDot proficient={skillData.isProficient} expertise={skillData.expertise} />
           <span
             className={cn(
               'flex-1 truncate font-medium transition-colors',
@@ -127,6 +158,7 @@ export default function SkillsSection() {
         <SectionCard.Title icon="Scroll">{t('title')}</SectionCard.Title>
       </SectionCard.Header>
       <SectionCard.Body className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
+        <SkillLegend />
         <div className="flex flex-col gap-y-2">{firstCol.map(renderSkill)}</div>
         <div className="flex flex-col gap-y-2">{secondCol.map(renderSkill)}</div>
       </SectionCard.Body>

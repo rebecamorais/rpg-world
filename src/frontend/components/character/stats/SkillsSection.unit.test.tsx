@@ -25,6 +25,16 @@ function renderSkills(acrobatics?: CharacterSkill) {
 }
 
 describe('SkillsSection', () => {
+  it('a legenda explica o que cada bolinha significa', () => {
+    renderSkills();
+
+    const legend = screen.getByRole('list', { name: 'Legend' });
+    expect(legend).toHaveTextContent('None');
+    expect(legend).toHaveTextContent('Proficient');
+    expect(legend).toHaveTextContent('Expertise');
+    expect(screen.getByText('Tap a skill to cycle through them.')).toBeInTheDocument();
+  });
+
   it('o atributo da perícia explica o que ela cobre, ao tocar', async () => {
     renderSkills();
 
