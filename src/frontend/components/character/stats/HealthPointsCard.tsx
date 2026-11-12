@@ -18,6 +18,8 @@ export interface HealthPointsCardProps extends React.ComponentProps<'div'> {
   onHpChange: (field: 'hpCurrent' | 'hpMax' | 'hpTemp', value: number) => void;
   /** Shown in the top-right corner, e.g. the settings button. */
   action?: React.ReactNode;
+  /** Shown under the bar, e.g. "Adjust HP". */
+  footer?: React.ReactNode;
 }
 
 /** hp_* columns are smallint. */
@@ -121,6 +123,7 @@ export function HealthPointsCard({
   tempHp,
   onHpChange,
   action,
+  footer,
   className,
   ...props
 }: HealthPointsCardProps) {
@@ -137,6 +140,7 @@ export function HealthPointsCard({
 
       <HealthHeader action={action} />
       <HealthValues currentHp={currentHp} maxHp={maxHp} tempHp={tempHp} onHpChange={onHpChange} />
+      {footer && <div className="relative flex justify-center">{footer}</div>}
     </Card>
   );
 }

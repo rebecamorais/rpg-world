@@ -258,7 +258,8 @@
       "lore": "Lore",
       "spells": "Spellbook",
       "inventory": "Inventory",
-      "appearance": "Appearance"
+      "appearance": "Appearance",
+      "label": "Sheet tabs"
     },
     "emptyStates": {
       "lore": "Biography and physical characteristics will appear here soon.",
@@ -481,7 +482,9 @@
     "classOtherPlaceholder": "Class name",
     "raceOtherPlaceholder": "Race name",
     "backgroundOtherPlaceholder": "Background name",
-    "alignmentOtherPlaceholder": "Alignment"
+    "alignmentOtherPlaceholder": "Alignment",
+    "hideIdentity": "Hide details",
+    "showIdentity": "Show details"
   },
   "characterAppearance": {
     "title": "Sheet appearance",
@@ -535,7 +538,19 @@
       "passivePerception": "10 + your Perception bonus. What you notice without looking."
     },
     "configureHp": "Configure hit points",
-    "configureHpDescription": "This character's maximum and temporary hit points"
+    "configureHpDescription": "This character's maximum and temporary hit points",
+    "adjustHp": "Adjust HP",
+    "adjustHpDescription": "Damage, healing or temporary HP. Saved right away.",
+    "adjustHpAmount": "How much?",
+    "damage": "Damage",
+    "heal": "Heal",
+    "setTempHp": "Temporary",
+    "hpSaved": "HP {current} / {max}",
+    "hpSavedTemp": "HP {current} / {max} (+{temp})",
+    "undo": "Undo",
+    "summary": "Combat at a glance",
+    "speedShort": "Speed",
+    "passivePerceptionShort": "Perception"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Search spells",

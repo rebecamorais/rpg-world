@@ -13,6 +13,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={theme}
       className="toaster group"
       position="bottom-right"
+      // Phones: above the character sheet's tab bar, so a toast (and its Undo) is never under it
+      mobileOffset={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom))' }}
       toastOptions={{
         classNames: {
           toast:

@@ -9,6 +9,7 @@ import CombatStatsSection from '@frontend/components/character/stats/CombatStats
 import { DeathSavesCard } from '@frontend/components/character/stats/DeathSavesCard';
 import SavingThrowsSection from '@frontend/components/character/stats/SavingThrowsSection';
 import SkillsSection from '@frontend/components/character/stats/SkillsSection';
+import { VitalsBar } from '@frontend/components/character/stats/VitalsBar';
 import { ErrorState } from '@frontend/components/ui/empty-state';
 import { useCharacterMeta } from '@frontend/context/CharacterContext';
 
@@ -23,6 +24,9 @@ export default function StatusView() {
   return (
     <div className="flex flex-col gap-6">
       {error && <ErrorState title={t('loadErrorTitle')} description={error} />}
+
+      {/* Phones and tablets: the hit points stay in reach while the sheet scrolls */}
+      <VitalsBar />
 
       <CharacterHeader />
 

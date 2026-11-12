@@ -33,6 +33,11 @@ export interface CharacterActions {
   /** Changes the draft: `update({ ac: 15 })` or a patch from `lib/character-sheet-updates`. */
   update: (patch: DraftPatch<DnD5eCharacter>) => void;
   save: () => Promise<void>;
+  /**
+   * Saves these fields at once, leaving the other edits pending: what changes during play (hit
+   * points) doesn't wait for the save button. Rejects when the save fails (the error is shown).
+   */
+  saveNow: (fields: Partial<DnD5eCharacter>) => Promise<void>;
   /** Drops the unsaved edits. */
   discard: () => void;
 }
@@ -96,7 +101,7 @@ export function CharacterProvider({
     updateCharacter,
     isSaving,
   } = useCharacter(id, { initial: initialCharacter });
-  const { draft, isDirty, update, commit, discard } = useDraft(fetched);
+  const { draft, isDirty, update, commit, saveFields, discard } = useDraft(fetched);
 
   const save = useCallback(async () => {
     try {
@@ -109,8 +114,17 @@ export function CharacterProvider({
     }
   }, [commit, updateCharacter, t]);
 
+  const saveNow = useCallback(
+    (fields: Partial<DnD5eCharacter>) =>
+      saveFields(fields, (character, changes) => updateCharacter({ character, changes })),
+    [saveFields, updateCharacter],
+  );
+
   const state = useMemo(() => ({ character: draft, isDirty }), [draft, isDirty]);
-  const actions = useMemo(() => ({ update, save, discard }), [update, save, discard]);
+  const actions = useMemo(
+    () => ({ update, save, saveNow, discard }),
+    [update, save, saveNow, discard],
+  );
   const meta = useMemo(
     () => ({ id, isLoading, isSaving, error: error ? getErrorMessage(error) : null }),
     [id, isLoading, isSaving, error, getErrorMessage],
