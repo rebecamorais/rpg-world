@@ -54,4 +54,26 @@ describe('ChangePasswordPage', () => {
     expect(await screen.findByText(message)).toBeInTheDocument();
     expect(screen.queryByText('auth_error_update_password_same')).not.toBeInTheDocument();
   });
+
+  it('volta para as configurações da conta, não para o login', () => {
+    renderWithProviders(<ChangePasswordPage />);
+
+    expect(screen.getByRole('link', { name: messages.common.back })).toHaveAttribute(
+      'href',
+      '/settings/profile',
+    );
+  });
+
+  it('pede ao navegador para sugerir uma senha nova nos dois campos', () => {
+    renderWithProviders(<ChangePasswordPage />);
+
+    expect(screen.getByLabelText(t.newPasswordLabel)).toHaveAttribute(
+      'autocomplete',
+      'new-password',
+    );
+    expect(screen.getByLabelText(t.confirmPasswordLabel)).toHaveAttribute(
+      'autocomplete',
+      'new-password',
+    );
+  });
 });

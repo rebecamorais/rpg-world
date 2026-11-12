@@ -111,6 +111,8 @@ export default function ForgotPasswordForm() {
                     <Input
                       type="email"
                       placeholder={t('emailPlaceholder')}
+                      autoComplete="email"
+                      spellCheck={false}
                       className="bg-muted/50"
                       {...field}
                     />
@@ -122,9 +124,9 @@ export default function ForgotPasswordForm() {
             <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
 
             <FormRootError />
+            {/* Not disabled while the challenge is pending: submitting early explains what's missing */}
             <Button
               type="submit"
-              disabled={!turnstileToken}
               loading={form.formState.isSubmitting}
               className="mt-2 w-full font-semibold"
             >

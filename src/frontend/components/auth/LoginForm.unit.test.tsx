@@ -95,6 +95,34 @@ describe('LoginForm', () => {
     expect(screen.queryByText(/relation/)).not.toBeInTheDocument();
   });
 
+  it('marca o modo de entrada escolhido para leitores de tela', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<LoginForm />);
+
+    expect(screen.getByRole('button', { name: t.passwordTab })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await user.click(screen.getByRole('button', { name: t.magicLinkTab }));
+    expect(screen.getByRole('button', { name: t.magicLinkTab })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(screen.getByRole('button', { name: t.passwordTab })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+  });
+
+  it('entrar com o Google é um link para a rota de login', () => {
+    renderWithProviders(<LoginForm />);
+
+    expect(screen.getByRole('link', { name: t.googleLogin })).toHaveAttribute(
+      'href',
+      '/api/auth/google',
+    );
+  });
+
   describe('magic link', () => {
     beforeEach(() => {
       window.turnstile = turnstile;
@@ -132,14 +160,13 @@ describe('LoginForm', () => {
       expect(screen.queryByText(t.verifyEmailTitle)).not.toBeInTheDocument();
     });
 
-    it('não envia sem o Turnstile resolvido', async () => {
+    it('sem o Turnstile resolvido não envia e explica o que falta', async () => {
       delete window.turnstile;
-      const user = userEvent.setup();
-      renderWithProviders(<LoginForm />);
+      await sendMagicLink();
 
-      await user.click(screen.getByRole('button', { name: t.magicLinkTab }));
-
-      expect(screen.getByRole('button', { name: t.magicLinkSubmit })).toBeDisabled();
+      expect(
+        await screen.findByText(messages.common.errors.security_token_missing),
+      ).toBeInTheDocument();
       expect(requestMagicLink).not.toHaveBeenCalled();
     });
   });

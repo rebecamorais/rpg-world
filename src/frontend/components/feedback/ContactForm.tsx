@@ -21,6 +21,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormRootError,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import {
@@ -34,6 +35,9 @@ import { Textarea } from '@frontend/components/ui/textarea';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 
 import { UNEXPECTED_ERROR } from '@shared/http/error-response';
+
+/** Same minimum the feedback action enforces on the server. */
+const MESSAGE_MIN_LENGTH = 10;
 
 /**
  * Feedback fields and submission, without a frame: the support page wraps it in a card
@@ -51,6 +55,8 @@ export default function ContactForm({
   onSent?: () => void;
 }) {
   const t = useTranslations('feedback');
+  const tCommon = useTranslations('common');
+  const tRegister = useTranslations('register');
   const { getMessage } = useErrorMessage();
   const {
     token: turnstileToken,
@@ -60,9 +66,11 @@ export default function ContactForm({
   } = useTurnstile();
 
   const feedbackSchema = z.object({
-    email: z.email(),
-    type: z.string().check(z.minLength(1)),
-    message: z.string().check(z.minLength(10)),
+    email: z.email(tRegister('errors.invalidEmail')),
+    type: z.string().check(z.minLength(1, tCommon('errors.requiredFields'))),
+    message: z
+      .string()
+      .check(z.minLength(MESSAGE_MIN_LENGTH, t('messageMin', { min: MESSAGE_MIN_LENGTH }))),
   });
 
   type FeedbackFormValues = z.infer<typeof feedbackSchema>;
@@ -80,8 +88,9 @@ export default function ContactForm({
   });
 
   const onSubmit = async (data: FeedbackFormValues) => {
+    // Errors stay on the form (not only in a toast) so they're still there to read and fix
     if (!turnstileToken) {
-      toast.error(getMessage('security_token_missing'));
+      form.setError('root', { message: getMessage('security_token_missing') });
       return;
     }
 
@@ -94,11 +103,13 @@ export default function ContactForm({
       } else {
         // Security and validation codes tell the user what to fix; anything else keeps the
         // themed generic message
-        toast.error(result.error === UNEXPECTED_ERROR ? t('error') : getMessage(result.error));
+        form.setError('root', {
+          message: result.error === UNEXPECTED_ERROR ? t('error') : getMessage(result.error),
+        });
       }
     } catch (error) {
       console.error('Feedback submission error:', error);
-      toast.error(t('error'));
+      form.setError('root', { message: t('error') });
     }
     // Tokens are single-use, so a new submission needs a fresh challenge either way
     resetTurnstile();
@@ -116,6 +127,9 @@ export default function ContactForm({
                 <FormLabel className="text-foreground">{t('emailLabel')}</FormLabel>
                 <FormControl>
                   <Input
+                    type="email"
+                    autoComplete="email"
+                    spellCheck={false}
                     placeholder={t('emailPlaceholder')}
                     className="focus:border-primary-glow focus:ring-primary/20 border-border bg-muted text-foreground"
                     {...field}
@@ -172,12 +186,9 @@ export default function ContactForm({
 
         <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
 
-        <Button
-          type="submit"
-          disabled={!turnstileToken}
-          loading={form.formState.isSubmitting}
-          className="w-full font-bold"
-        >
+        <FormRootError />
+        {/* Not disabled while the challenge is pending: submitting early explains what's missing */}
+        <Button type="submit" loading={form.formState.isSubmitting} className="w-full font-bold">
           {form.formState.isSubmitting ? (
             t('submitting')
           ) : (

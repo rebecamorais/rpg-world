@@ -113,9 +113,14 @@ export default function ProfileForm() {
       });
       toast.success(t('saveSuccess'));
     } catch (err: unknown) {
+      // Shown on the form, where it can be read and fixed: a taken username under its field
       const errorCode = err instanceof Error ? err.message : 'unknown';
-      const localizedMsg = getMessage(errorCode);
-      toast.error(localizedMsg);
+      const message = getMessage(errorCode);
+      if (errorCode === 'profile_error_username_taken') {
+        form.setError('username', { message }, { shouldFocus: true });
+      } else {
+        form.setError('root', { message });
+      }
     }
   };
 
@@ -159,6 +164,8 @@ export default function ProfileForm() {
                       <Input
                         placeholder={t('usernamePlaceholder')}
                         autoComplete="username"
+                        spellCheck={false}
+                        autoCapitalize="none"
                         className="border-border bg-muted text-foreground focus:border-primary-flare"
                         {...field}
                       />
@@ -205,7 +212,7 @@ export default function ProfileForm() {
                               type="button"
                               onClick={() => field.onChange(color.value)}
                               className={cn(
-                                'group relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all hover:scale-110',
+                                'group focus-ring relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-transform hover:scale-110',
                                 isSelected
                                   ? 'border-primary-flare ring-primary-flare/20 ring-2'
                                   : 'border-transparent',

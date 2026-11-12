@@ -133,6 +133,8 @@ export default function SignUpForm() {
                     <Input
                       type="email"
                       placeholder={t('emailPlaceholder')}
+                      autoComplete="email"
+                      spellCheck={false}
                       className="bg-muted/50"
                       {...field}
                     />
@@ -152,6 +154,7 @@ export default function SignUpForm() {
                     <Input
                       type="password"
                       placeholder={t('passwordPlaceholder')}
+                      autoComplete="new-password"
                       className="bg-muted/50"
                       {...field}
                     />
@@ -171,6 +174,7 @@ export default function SignUpForm() {
                     <Input
                       type="password"
                       placeholder={t('confirmPasswordPlaceholder')}
+                      autoComplete="new-password"
                       className="bg-muted/50"
                       {...field}
                     />
@@ -183,9 +187,9 @@ export default function SignUpForm() {
             <TurnstileWidget key={turnstileKey} onTokenChange={setTurnstileToken} />
 
             <FormRootError />
+            {/* Not disabled while the challenge is pending: submitting early explains what's missing */}
             <Button
               type="submit"
-              disabled={!turnstileToken}
               loading={form.formState.isSubmitting}
               className="mt-2 w-full font-semibold"
             >

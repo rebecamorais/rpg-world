@@ -231,7 +231,13 @@ function RequestDeletionDialog({
               <FormItem>
                 <FormLabel>{t('usernameLabel')}</FormLabel>
                 <FormControl>
-                  <Input autoComplete="off" className="bg-muted" {...field} />
+                  <Input
+                    autoComplete="off"
+                    spellCheck={false}
+                    autoCapitalize="none"
+                    className="bg-muted"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

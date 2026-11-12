@@ -59,9 +59,10 @@ export default function ChangePasswordPage() {
   return (
     <div className="relative flex flex-1 items-center justify-center p-8">
       <div className="absolute top-4 left-4">
+        {/* Only opened signed in (a password change asked at login): back goes to the account */}
         <Link
-          href="/login"
-          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+          href="/settings/profile"
+          className="text-muted-foreground hover:text-foreground focus-ring rounded-sm text-sm transition-colors"
         >
           {commonT('back')}
         </Link>
@@ -85,6 +86,7 @@ export default function ChangePasswordPage() {
                       <Input
                         type="password"
                         placeholder={t('newPasswordPlaceholder')}
+                        autoComplete="new-password"
                         className="bg-muted/50"
                         {...field}
                       />
@@ -104,6 +106,7 @@ export default function ChangePasswordPage() {
                       <Input
                         type="password"
                         placeholder={t('confirmPasswordPlaceholder')}
+                        autoComplete="new-password"
                         className="bg-muted/50"
                         {...field}
                       />

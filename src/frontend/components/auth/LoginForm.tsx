@@ -97,11 +97,6 @@ export default function LoginForm() {
     }
   };
 
-  const handleGoogleSignIn = () => {
-    // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- an API route that redirects to Google, not a page
-    window.location.href = '/api/auth/google';
-  };
-
   if (emailSent) {
     return (
       <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
@@ -127,8 +122,10 @@ export default function LoginForm() {
       <CardContent className="flex flex-col gap-4">
         <div className="bg-muted flex rounded-lg p-1">
           <button
+            type="button"
             onClick={() => setAuthMode('magic')}
-            className={`flex-1 rounded-md py-1.5 text-sm font-medium transition-all ${
+            aria-pressed={authMode === 'magic'}
+            className={`focus-ring flex-1 rounded-md py-1.5 text-sm font-medium transition-colors ${
               authMode === 'magic'
                 ? 'bg-primary text-primary-on shadow-lg'
                 : 'text-muted-foreground hover:text-foreground'
@@ -137,8 +134,10 @@ export default function LoginForm() {
             {t('magicLinkTab')}
           </button>
           <button
+            type="button"
             onClick={() => setAuthMode('password')}
-            className={`flex-1 rounded-md py-1.5 text-sm font-medium transition-all ${
+            aria-pressed={authMode === 'password'}
+            className={`focus-ring flex-1 rounded-md py-1.5 text-sm font-medium transition-colors ${
               authMode === 'password'
                 ? 'bg-primary text-primary-on shadow-lg'
                 : 'text-muted-foreground hover:text-foreground'
@@ -161,6 +160,7 @@ export default function LoginForm() {
                       type="email"
                       placeholder={t('emailPlaceholder')}
                       autoComplete="email"
+                      spellCheck={false}
                       className="bg-muted/50"
                       {...field}
                     />
@@ -209,9 +209,9 @@ export default function LoginForm() {
             )}
 
             <FormRootError />
+            {/* Not disabled while the challenge is pending: submitting early explains what's missing */}
             <Button
               type="submit"
-              disabled={authMode === 'magic' && !turnstileToken}
               loading={form.formState.isSubmitting}
               className="mt-2 w-full font-semibold"
             >
@@ -233,14 +233,14 @@ export default function LoginForm() {
           </div>
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          className="bg-muted hover:bg-background w-full"
-          onClick={handleGoogleSignIn}
-        >
-          <GoogleIcon />
-          {t('googleLogin')}
+        {/* A link, not a button: it navigates (to an API route that redirects to Google), so a
+            plain <a> keeps open-in-new-tab and isn't prefetched like next/link would be */}
+        <Button variant="outline" asChild className="bg-muted hover:bg-background w-full">
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- an API route, not a page */}
+          <a href="/api/auth/google">
+            <GoogleIcon />
+            {t('googleLogin')}
+          </a>
         </Button>
 
         <div className="border-border mt-4 flex flex-col gap-4 border-t pt-6 text-center">
@@ -266,7 +266,12 @@ export default function LoginForm() {
 
 function GoogleIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
+    <svg
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      className="mr-2 h-4 w-4"
+    >
       <path
         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
         fill="#4285F4"

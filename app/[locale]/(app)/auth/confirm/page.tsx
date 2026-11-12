@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 
+import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@frontend/components/ui/card';
 
 import { getSupabaseBrowserClient } from '@lib/supabase-browser';
@@ -64,16 +66,28 @@ export default function AuthConfirmPage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-4 py-6">
-          {!failed ? (
-            <div className="border-primary-flare h-10 w-10 animate-spin rounded-full border-4 border-t-transparent" />
-          ) : (
-            <p className="text-danger-flare text-center">
-              {tCommon('errors.expired_link_description')}
+          {/* Mounted from the start, so screen readers announce when the spinner turns into the error */}
+          <div role="status" className="flex flex-col items-center gap-4">
+            {!failed ? (
+              <div
+                aria-hidden="true"
+                className="border-primary-flare h-10 w-10 animate-spin rounded-full border-4 border-t-transparent"
+              />
+            ) : (
+              <p className="text-danger-flare text-center">
+                {tCommon('errors.expired_link_description')}
+              </p>
+            )}
+            <p className="text-muted-foreground text-center text-sm">
+              {failed ? t('redirecting') : t('waiting')}
             </p>
+          </div>
+          {/* The redirect is automatic, but whoever is still reading can go now */}
+          {failed && (
+            <Button asChild className="w-full">
+              <Link href="/login">{tCommon('back')}</Link>
+            </Button>
           )}
-          <p className="text-muted-foreground text-center text-sm">
-            {failed ? t('redirecting') : t('waiting')}
-          </p>
         </CardContent>
       </Card>
     </div>

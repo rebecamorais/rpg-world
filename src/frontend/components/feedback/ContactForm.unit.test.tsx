@@ -73,7 +73,8 @@ describe('ContactForm', () => {
 
     await fillAndSubmit();
 
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith(t.error));
+    // On the form, not only in a toast that disappears
+    expect(await screen.findByRole('alert')).toHaveTextContent(t.error);
     expect(onSent).not.toHaveBeenCalled();
     expect(screen.getByLabelText(t.messageLabel)).toHaveValue('A mimic ate my spellbook.');
     await waitFor(() => expect(turnstile.render).toHaveBeenCalledTimes(2));
@@ -104,5 +105,30 @@ describe('ContactForm', () => {
 
     expect(screen.getByRole('combobox')).toHaveTextContent(t.types.feedback);
     expect(screen.getByLabelText(t.messageLabel)).toHaveValue('');
+  });
+
+  it('sem o Turnstile resolvido não envia e explica o que falta no formulário', async () => {
+    delete window.turnstile;
+    renderWithProviders(<ContactForm initialEmail="hero@example.com" />);
+
+    await fillAndSubmit();
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      messages.common.errors.security_token_missing,
+    );
+    expect(submitFeedback).not.toHaveBeenCalled();
+  });
+
+  it('mostra as validações traduzidas antes de enviar', async () => {
+    const user = userEvent.setup();
+    // Passes the browser's type="email" check but not the form schema (no TLD)
+    renderWithProviders(<ContactForm initialEmail="hero@example" />);
+
+    await user.type(screen.getByLabelText(t.messageLabel), 'curta');
+    await user.click(screen.getByRole('button', { name: t.submit }));
+
+    expect(await screen.findByText(messages.register.errors.invalidEmail)).toBeInTheDocument();
+    expect(screen.getByText(t.messageMin.replace('{min}', '10'))).toBeInTheDocument();
+    expect(submitFeedback).not.toHaveBeenCalled();
   });
 });

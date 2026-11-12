@@ -61,6 +61,9 @@ export default function ChooseUsernameForm() {
         <Input
           id="choose-username"
           autoComplete="username"
+          // Usernames are lowercase: phones would otherwise capitalize and "correct" them
+          spellCheck={false}
+          autoCapitalize="none"
           placeholder={t('placeholder')}
           aria-invalid={!!error}
           aria-describedby={error ? 'choose-username-error' : undefined}

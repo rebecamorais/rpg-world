@@ -63,11 +63,14 @@ describe('SignUpForm', () => {
     });
   });
 
-  it('mantém o envio bloqueado enquanto o Turnstile não é resolvido', () => {
+  it('sem o Turnstile resolvido não envia e explica o que falta', async () => {
     delete window.turnstile;
     renderWithProviders(<SignUpForm />);
 
-    expect(screen.getByRole('button', { name: t.submit })).toBeDisabled();
+    await fillAndSubmit();
+
+    expect(await screen.findByText(t.errors.turnstileRequired)).toBeInTheDocument();
+    expect(signUp).not.toHaveBeenCalled();
   });
 
   it('valida senha curta e senhas diferentes antes de enviar', async () => {

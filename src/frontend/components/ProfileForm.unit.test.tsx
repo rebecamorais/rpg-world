@@ -86,8 +86,25 @@ describe('ProfileForm', () => {
 
     await user.click(screen.getByRole('button', { name: t.save }));
 
-    await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith(messages.common.errors.profile_error_username_taken),
+    // Under the username field, which gets the focus to be fixed
+    expect(
+      await screen.findByText(messages.common.errors.profile_error_username_taken),
+    ).toBeInTheDocument();
+    const username = screen.getByLabelText(t.usernameLabel);
+    expect(username).toHaveAttribute('aria-invalid', 'true');
+    expect(username).toHaveFocus();
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it('outros erros ao salvar aparecem no formulário', async () => {
+    api.patch.mockRejectedValue(new APIError('common_error_unexpected', 500));
+    const user = userEvent.setup();
+    await renderForm();
+
+    await user.click(screen.getByRole('button', { name: t.save }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      messages.common.errors.common_error_unexpected,
     );
   });
 

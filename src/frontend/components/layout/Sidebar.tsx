@@ -84,7 +84,7 @@ function UserAvatar() {
   const username = profile?.username || tCommon('title');
 
   return (
-    <Avatar className="ring-primary/20 border-border h-8 w-8 rounded-lg border ring-2 transition-all hover:scale-105 active:scale-95">
+    <Avatar className="ring-primary/20 border-border h-8 w-8 rounded-lg border ring-2">
       {profile?.avatarUrl && (
         <AvatarImage src={profile.avatarUrl} alt={username} className="object-cover" />
       )}
@@ -200,8 +200,9 @@ function SidebarContent({
       {withLogout && (
         <div className="mt-auto pt-6">
           <button
+            type="button"
             onClick={() => signOut()}
-            className="group text-muted-foreground hover:bg-danger-surface hover:text-danger-flare mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+            className="group focus-ring text-muted-foreground hover:bg-danger-surface hover:text-danger-flare mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
           >
             <AppIcon
               name="LogOut"
