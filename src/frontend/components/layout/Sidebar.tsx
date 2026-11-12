@@ -34,44 +34,17 @@ import { cn } from '@frontend/lib/utils';
 
 import type { PartySummary } from '@backend/contexts/parties/domain/Party';
 
-/** Each party under "Parties"; the open one shows its pages (the settings only for its GM). */
+/** Each party under "Parties". Its pages (table, combat, journal, chest) are tabs on the party. */
 function PartyLinks({ parties }: { parties: PartySummary[] }) {
   const pathname = usePathname();
-  const t = useTranslations('parties.nav');
 
   return (
     <div className="flex flex-col">
       {parties.map((party) => {
         const href = `/parties/${party.id}`;
         const isOpen = pathname === href || pathname?.startsWith(`${href}/`);
-        const pages = [
-          { href: `${href}/journal`, label: t('journal') },
-          { href: `${href}/inventory`, label: t('inventory') },
-          ...(party.role === 'gm' ? [{ href: `${href}/settings`, label: t('settings') }] : []),
-        ];
         return (
-          <div key={party.id} className="flex flex-col">
-            <NavItem href={href} label={party.name} isActive={isOpen} isSubItem />
-            {isOpen && (
-              <div className="ml-4 flex flex-col">
-                <NavItem
-                  href={href}
-                  label={t('overview')}
-                  isActive={!pages.some((page) => pathname.startsWith(page.href))}
-                  isSubItem
-                />
-                {pages.map((page) => (
-                  <NavItem
-                    key={page.href}
-                    href={page.href}
-                    label={page.label}
-                    isActive={pathname.startsWith(page.href)}
-                    isSubItem
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+          <NavItem key={party.id} href={href} label={party.name} isActive={isOpen} isSubItem />
         );
       })}
     </div>

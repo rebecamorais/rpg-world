@@ -1,11 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 
-import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useEncounter } from '@frontend/hooks/useEncounter';
 import { cn } from '@frontend/lib/utils';
@@ -18,6 +14,7 @@ import { PlayerTurnRow } from './PlayerTurnRow';
 /**
  * The combat as a player sees it: the round, the order with names only and whose turn it is.
  * No initiative, HP or AC of anyone (the API doesn't send them). They end only their own turn.
+ * The "your turn" toast comes from the party frame (useYourTurnToast), so it shows on every tab.
  */
 export function PlayerCombatPanel({
   partyId,
@@ -30,23 +27,6 @@ export function PlayerCombatPanel({
 }) {
   const t = useTranslations('combat');
   const { encounter, endTurn, setConditions, setMyInitiative } = useEncounter(partyId);
-  const mine =
-    encounter?.role === 'player'
-      ? encounter.turns.find((turn) => turn.isCurrent && turn.isMine)
-      : undefined;
-
-  // The page may be scrolled down to the sheet: a toast says the turn came, once per turn
-  const announced = useRef(mine?.participantId);
-  useEffect(() => {
-    if (mine && announced.current !== mine.participantId) {
-      toast(t('yourTurnToast'), {
-        icon: <AppIcon name="Swords" size={16} className="text-primary-flare" aria-hidden="true" />,
-        // ! beats the Toaster's default border, which is more specific
-        className: '!border-primary !shadow-[0_0_18px_var(--primary-glow)] font-display',
-      });
-    }
-    announced.current = mine?.participantId;
-  }, [mine, t]);
 
   if (encounter?.role !== 'player') return null;
 

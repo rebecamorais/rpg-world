@@ -26,9 +26,7 @@ test.describe('mesas', () => {
   test('jogador entra pelo link e o mestre aprova', async ({ page, browser, user: _ }) => {
     const { id: partyId } = await createParty(page, 'Mesa de Quinta');
     await page.goto(partyUrl(partyId));
-    await (
-      await hydrated(page.getByRole('complementary').getByRole('link', { name: 'Settings' }))
-    ).click();
+    await (await hydrated(page.getByRole('main').getByRole('link', { name: 'Manage' }))).click();
     await expect.poll(() => new URL(page.url()).pathname).toBe(`${partyUrl(partyId)}/settings`);
     // The origin is filled in once the page hydrates (the server doesn't know it)
     const linkField = await hydrated(page.getByLabel('Invite link'));
@@ -49,8 +47,10 @@ test.describe('mesas', () => {
     const asPlayer = player.page.getByRole('region', { name: 'As player' });
     await asPlayer.getByRole('link', { name: 'Mesa de Quinta' }).click();
     await expect.poll(() => new URL(player.page.url()).pathname).toBe(partyUrl(partyId));
-    await (await hydrated(player.page.getByRole('checkbox', { name: /Arani/ }))).check();
-    await player.page.getByRole('button', { name: 'Save' }).click();
+    // Who they bring is in their own menu, out of the way of play
+    await (await hydrated(player.page.getByRole('button', { name: 'My characters' }))).click();
+    await player.page.getByRole('checkbox', { name: /Arani/ }).check();
+    await player.page.getByRole('dialog').getByRole('button', { name: 'Save' }).click();
     await expect(player.page.getByText('Characters updated')).toBeVisible();
 
     await page.reload();
@@ -195,7 +195,8 @@ test.describe('mesas', () => {
 
     await player.page.goto(partyUrl(partyId));
     player.page.once('dialog', (dialog) => dialog.accept());
-    await (await hydrated(player.page.getByRole('button', { name: 'Leave party' }))).click();
+    await (await hydrated(player.page.getByRole('button', { name: 'My characters' }))).click();
+    await player.page.getByRole('button', { name: 'Leave party' }).click();
     await expect.poll(() => new URL(player.page.url()).pathname).toBe('/parties');
 
     await player.page.goto('/characters');
@@ -288,7 +289,9 @@ test.describe('mesas', () => {
     // The GM opens it from the sidebar
     await page.goto(partyUrl(partyId));
     await (
-      await hydrated(page.getByRole('complementary').getByRole('link', { name: 'Inventory' }))
+      await hydrated(
+        page.getByRole('navigation', { name: 'Party tabs' }).getByRole('link', { name: 'Chest' }),
+      )
     ).click();
     await expect(page).toHaveURL((url) => url.pathname === partyUrl(partyId, '/inventory'));
     await expect(page.getByLabel('Gold pieces')).toHaveValue('25');
@@ -388,7 +391,7 @@ test.describe('mesas', () => {
     // The new GM sees the GM's view
     // No reload: the page polls while the party has no GM
     await expect(bia.page.getByText('You are the GM')).toBeVisible({ timeout: 30_000 });
-    await expect(bia.page.getByRole('tab', { name: 'Combat' })).toBeVisible();
+    await expect(bia.page.getByRole('link', { name: 'Manage' })).toBeVisible();
     await expect(bia.page.getByText('This party has no GM')).toHaveCount(0);
 
     await bia.context.close();

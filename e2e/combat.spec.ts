@@ -53,12 +53,11 @@ test.describe('combate', () => {
     user: _,
   }) => {
     const { partyId, player } = await table(page, browser, 'combat-player');
-    await player.page.goto(partyUrl(partyId));
+    await player.page.goto(partyUrl(partyId, '/combat'));
     await hydrated(player.page.getByRole('heading', { name: 'Mesa de Combate' }));
 
-    await page.goto(partyUrl(partyId));
-    await (await hydrated(page.getByRole('tab', { name: 'Combat' }))).click();
-    await page.getByRole('button', { name: 'Prepare combat' }).click();
+    await page.goto(partyUrl(partyId, '/combat'));
+    await (await hydrated(page.getByRole('button', { name: 'Prepare combat' }))).click();
     await expect(player.page.getByText('The GM is preparing the combat.')).toBeVisible();
 
     await page.getByRole('button', { name: "Add the party's characters" }).click();
@@ -125,8 +124,8 @@ test.describe('combate', () => {
   }) => {
     const { partyId, goblinId, heroId, player } = await table(page, browser, 'turn-player');
     await runningCombat(page, partyId, heroId, goblinId);
-    await page.goto(partyUrl(partyId));
-    await player.page.goto(partyUrl(partyId));
+    await page.goto(partyUrl(partyId, '/combat'));
+    await player.page.goto(partyUrl(partyId, '/combat'));
     await hydrated(page.getByRole('button', { name: 'End turn' }));
     await revealNpc(page, 'Goblin 1');
     await revealNpc(page, 'Goblin 2');
@@ -162,7 +161,7 @@ test.describe('combate', () => {
   }) => {
     const { partyId, goblinId, heroId, player } = await table(page, browser, 'hp-player');
     await runningCombat(page, partyId, heroId, goblinId);
-    await page.goto(partyUrl(partyId));
+    await page.goto(partyUrl(partyId, '/combat'));
     const hero = order(page).getByRole('listitem').filter({ hasText: 'Arani' });
     await expect(hero).toContainText('12 / 20');
 

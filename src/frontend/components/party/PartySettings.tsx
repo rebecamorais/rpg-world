@@ -6,6 +6,9 @@ import { useTranslations } from 'next-intl';
 
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
+import { Button } from '@frontend/components/ui/button';
+import { AppIcon } from '@frontend/components/ui/icon';
+import AppLink from '@frontend/demo/AppLink';
 import { useParty } from '@frontend/hooks/useParty';
 
 import { JournalSettings } from './JournalSettings';
@@ -23,7 +26,18 @@ export function PartySettings({ partyId }: { partyId: string }) {
   if (party?.role !== 'gm') return <PartyNotFound />;
 
   return (
-    <PageContainer title={party.name} eyebrow={t('eyebrow')}>
+    <PageContainer
+      title={party.name}
+      eyebrow={t('eyebrow')}
+      actions={
+        <Button asChild variant="outline">
+          <AppLink href={`/parties/${party.id}`}>
+            <AppIcon name="ChevronLeft" size={18} aria-hidden="true" />
+            {t('backToTable')}
+          </AppLink>
+        </Button>
+      }
+    >
       <PartyManagement party={party} onDeleted={() => router.push('/parties')} />
       <PartyImageSettings party={party} />
       <JournalSettings party={party} />

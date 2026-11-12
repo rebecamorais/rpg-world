@@ -59,7 +59,7 @@ test('linha em espera com hover continua passando', async ({ page, user: _ }) =>
   await page.request.post(`${base}/participants`, { data: { characterId: goblinId, count: 2 } });
   expect((await page.request.post(`${base}/start`)).status()).toBe(204);
 
-  await page.goto(partyUrl(partyId));
+  await page.goto(partyUrl(partyId, '/combat'));
   const order = page.getByRole('list', { name: 'Combat order' });
   const waiting = order.getByRole('listitem').and(page.locator(':not([aria-current="true"])'));
   await expect(order.getByRole('listitem')).toHaveCount(2);

@@ -8,6 +8,7 @@ import { Button } from '@frontend/components/ui/button';
 import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useMediaQuery } from '@frontend/hooks/useMediaQuery';
+import { useParty } from '@frontend/hooks/useParty';
 
 import type { PartyRole } from '@backend/contexts/parties/domain/Party';
 
@@ -66,4 +67,11 @@ export function PartyJournal({
       {isDesktop === false && <p className="text-muted-foreground">{t('mobileNotice')}</p>}
     </div>
   );
+}
+
+/** The journal tab: the party's journal for the GM and the players alike. */
+export function PartyJournalTab({ partyId }: { partyId: string }) {
+  const { party } = useParty(partyId);
+  if (!party) return null;
+  return <PartyJournal docId={party.journalDocId} role={party.role} partyId={party.id} />;
 }

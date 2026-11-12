@@ -467,7 +467,7 @@
       scroll-padding-top: 4rem;
     }
     /* Tab bar + save bar stacked above it */
-    html:has([data-scroll-pad='sheet-tabs']) {
+    html:has([data-scroll-pad='sheet-tabs'], [data-scroll-pad='party-tabs']) {
       scroll-padding-bottom: calc(9rem + env(safe-area-inset-bottom));
     }
   }

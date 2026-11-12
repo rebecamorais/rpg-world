@@ -217,7 +217,7 @@ test.describe('tema claro', () => {
     await page.request.post(`${base}/participants`, { data: { characterId: goblinId, count: 2 } });
     expect((await page.request.post(`${base}/start`)).status()).toBe(204);
 
-    await page.goto(partyUrl(partyId));
+    await page.goto(partyUrl(partyId, '/combat'));
     await expect(
       page.getByRole('list', { name: 'Combat order' }).getByRole('listitem'),
     ).toHaveCount(2);
