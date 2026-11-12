@@ -6,12 +6,14 @@ import { SectionCard } from '@frontend/components/ui/section-card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { setSavingThrow } from '@frontend/lib/character-sheet-updates';
-import { cn, getStatColorClass } from '@frontend/lib/utils';
+import { cn } from '@frontend/lib/utils';
 
 import { calculateSavingThrow } from '@shared/systems/dnd5e/calculations';
 import { ATTRIBUTE_KEYS } from '@shared/systems/dnd5e/constants';
 import rules from '@shared/systems/dnd5e/rules.json';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
+
+import { ProficiencyDot, ProficiencyLegend, proficiencyValueClass } from './ProficiencyLegend';
 
 export default function SavingThrowsSection() {
   const { attributes, level, savingThrowProficiencies: savingThrows } = useLoadedCharacter();
@@ -27,6 +29,9 @@ export default function SavingThrowsSection() {
         <SectionCard.Title icon="shield-reflect" iconVariant="game" hint={tSection('hint')}>
           {tSection('title')}
         </SectionCard.Title>
+        <SectionCard.Actions>
+          <ProficiencyLegend />
+        </SectionCard.Actions>
       </SectionCard.Header>
       <SectionCard.Body className="grid grid-cols-1 gap-2">
         {ATTRIBUTE_KEYS.map((key) => {
@@ -52,15 +57,7 @@ export default function SavingThrowsSection() {
                 onClick={() => onSavingThrowChange(key, !isProficient)}
                 className="focus-ring flex flex-1 items-center gap-3 rounded-sm text-left text-sm"
               >
-                <span
-                  aria-hidden="true"
-                  className={cn(
-                    'h-3 w-3 flex-shrink-0 rounded-full border-2 transition-all',
-                    isProficient
-                      ? 'border-character bg-character'
-                      : 'border-muted-foreground group-hover:border-foreground bg-transparent',
-                  )}
-                />
+                <ProficiencyDot proficient={isProficient} className="h-3 w-3" />
                 <span
                   className={cn(
                     'font-medium transition-colors',
@@ -76,7 +73,7 @@ export default function SavingThrowsSection() {
                     <span
                       className={cn(
                         'mx-2 cursor-help font-mono font-bold underline decoration-dotted underline-offset-4',
-                        getStatColorClass(finalValue),
+                        proficiencyValueClass(finalValue, isProficient),
                       )}
                     >
                       {sign}

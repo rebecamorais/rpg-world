@@ -6,11 +6,13 @@ import { Hint } from '@frontend/components/ui/hint';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { setSkill } from '@frontend/lib/character-sheet-updates';
-import { cn, getStatColorClass } from '@frontend/lib/utils';
+import { cn } from '@frontend/lib/utils';
 
 import { calculateSkillValue } from '@shared/systems/dnd5e/calculations';
 import { SKILLS_CATALOG, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import type { CharacterSkill } from '@shared/systems/dnd5e/types';
+
+import { ProficiencyDot, ProficiencyLegend, proficiencyValueClass } from './ProficiencyLegend';
 
 export default function SkillsSection() {
   const { attributes, level, skills = {} } = useLoadedCharacter();
@@ -79,17 +81,7 @@ export default function SkillsSection() {
           onClick={toggleProficiency}
           className="focus-ring flex min-w-0 flex-1 items-center gap-3 rounded-sm text-left text-sm"
         >
-          <span
-            aria-hidden="true"
-            className={cn(
-              'flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all',
-              skillData.isProficient
-                ? 'border-character bg-character'
-                : 'border-muted-foreground group-hover:border-foreground bg-transparent',
-            )}
-          >
-            {skillData.expertise && <span className="bg-background h-1 w-1 rounded-full" />}
-          </span>
+          <ProficiencyDot proficient={skillData.isProficient} expertise={skillData.expertise} />
           <span
             className={cn(
               'flex-1 truncate font-medium transition-colors',
@@ -110,7 +102,7 @@ export default function SkillsSection() {
           <span
             className={cn(
               'mx-2 w-6 shrink-0 text-right font-mono font-bold',
-              getStatColorClass(finalValue),
+              proficiencyValueClass(finalValue, skillData.isProficient),
             )}
           >
             {sign}
@@ -125,6 +117,9 @@ export default function SkillsSection() {
     <SectionCard className="w-full">
       <SectionCard.Header>
         <SectionCard.Title icon="Scroll">{t('title')}</SectionCard.Title>
+        <SectionCard.Actions>
+          <ProficiencyLegend withExpertise />
+        </SectionCard.Actions>
       </SectionCard.Header>
       <SectionCard.Body className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
         <div className="flex flex-col gap-y-2">{firstCol.map(renderSkill)}</div>
