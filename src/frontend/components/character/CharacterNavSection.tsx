@@ -1,45 +1,24 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-
-import { useTranslations } from 'next-intl';
-
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
+import { useSheetTabs } from '@frontend/components/character/sheet/useSheetTabs';
 import { NavItem, navLabelClass, useSidebarExpanded } from '@frontend/components/ui/nav-item';
 import { useCharacter } from '@frontend/hooks/useCharacter';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
-import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
-import { CharacterTab } from '@frontend/types/character-sheet';
 
 export default function CharacterNavSection({ characterId }: { characterId: string }) {
   // The sheet loads the character (with the server's copy); fetching here too would race it
   const { character } = useCharacter(characterId, { fetch: false });
-  const pathname = usePathname();
-  const t = useTranslations('characters.tabs');
   const expanded = useSidebarExpanded();
   const { classLabel } = useCharacterChoices();
-  const { pagesPath } = useSheetSource(characterId, character?.system);
+  const tabs = useSheetTabs(characterId, character?.system);
 
   const characterName = character?.name;
   const avatarUrl = character?.avatarUrl;
 
   if (!characterName || !character?.system) return null;
-
-  const basePath = pagesPath;
-
-  const navItems = [
-    { id: CharacterTab.STATUS, label: t('status'), icon: 'Shield', href: basePath },
-    { id: CharacterTab.LORE, label: t('lore'), icon: 'Files', href: `${basePath}/lore` },
-    { id: CharacterTab.SPELLS, label: t('spells'), icon: 'BookOpen', href: `${basePath}/spells` },
-    {
-      id: CharacterTab.INVENTORY,
-      label: t('inventory'),
-      icon: 'Sword',
-      href: `${basePath}/inventory`,
-    },
-  ];
 
   return (
     <section
@@ -73,23 +52,16 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
       </div>
 
       <div className="flex flex-col gap-1">
-        {navItems.map((item) => {
-          const isActive =
-            item.id === CharacterTab.STATUS
-              ? pathname === item.href
-              : pathname?.startsWith(item.href);
-
-          return (
-            <NavItem
-              key={item.id}
-              href={item.href}
-              label={item.label}
-              icon={item.icon}
-              isActive={isActive}
-              isSubItem
-            />
-          );
-        })}
+        {tabs.map((item) => (
+          <NavItem
+            key={item.id}
+            href={item.href}
+            label={item.label}
+            icon={item.icon}
+            isActive={item.isActive}
+            isSubItem
+          />
+        ))}
       </div>
     </section>
   );

@@ -19,6 +19,7 @@ import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
 import { SheetBackdrop } from './SheetBackdrop';
+import { SheetTabBar } from './SheetTabBar';
 
 /** On the GM's read-only view: says so, and leads back to the party. */
 function ReadOnlyBar({ partyId }: { partyId: string }) {
@@ -90,8 +91,9 @@ export function CharacterSheetShell({ children }: { children: ReactNode }) {
       style={theme.style}
     >
       {character.sheetBackgroundUrl && <SheetBackdrop url={character.sheetBackgroundUrl} />}
-      {/* Room for the fixed save bar; width and padding come from the dashboard layout */}
-      <div className="relative pb-20">
+      {/* Room for the fixed save bar (and, on phones, the tab bar under it); width and padding come
+          from the dashboard layout */}
+      <div className="relative pb-36 md:pb-20">
         {/* The character's color lights the top of their sheet */}
         <div
           aria-hidden="true"
@@ -100,6 +102,7 @@ export function CharacterSheetShell({ children }: { children: ReactNode }) {
         {readOnly && partyId && <ReadOnlyBar partyId={partyId} />}
         {children}
       </div>
+      <SheetTabBar characterId={id} system={character.system} />
     </div>
   );
 }

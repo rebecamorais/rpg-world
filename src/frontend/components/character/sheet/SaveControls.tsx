@@ -77,7 +77,7 @@ export function SaveControls({
       {isDirty &&
         typeof document !== 'undefined' &&
         createPortal(
-          <div className="border-border bg-popover/95 fixed inset-x-4 bottom-4 z-40 flex items-center justify-between gap-4 rounded-xl border p-3 shadow-2xl backdrop-blur-md sm:right-6 sm:left-auto sm:pl-4">
+          <div className="border-border bg-popover/95 fixed inset-x-4 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 flex items-center justify-between gap-4 rounded-xl border p-3 shadow-2xl backdrop-blur-md sm:right-6 sm:left-auto sm:pl-4 md:bottom-4">
             {hasErrors ? (
               <span role="alert" className="text-label text-danger-flare flex items-center gap-1.5">
                 <span className="bg-danger h-2 w-2 rounded-full" aria-hidden="true" />
