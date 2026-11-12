@@ -146,3 +146,22 @@ describe('StatusView', () => {
     });
   });
 });
+
+describe('StatusView no celular', () => {
+  it('a identidade vira uma linha e os campos abrem por um botão', async () => {
+    params.value = { id: 'c1' };
+    renderStatus({ ...character, class: 'wizard', level: 4 });
+    const toggle = screen.getByRole('button', { name: messages.characterHeader.showIdentity });
+
+    expect(screen.getByText('Wizard 4')).toBeInTheDocument();
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(document.getElementById('char-identity')).toHaveClass('max-md:hidden');
+
+    await userEvent.click(toggle);
+
+    expect(
+      screen.getByRole('button', { name: messages.characterHeader.hideIdentity }),
+    ).toHaveAttribute('aria-expanded', 'true');
+    expect(document.getElementById('char-identity')).not.toHaveClass('max-md:hidden');
+  });
+});
