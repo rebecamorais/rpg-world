@@ -1,0 +1,511 @@
+{
+  "$comment": "Grimoire Enchantments component registry. Phase 1 (spec only): nothing here exists in code yet. IDs are stable and match the spec files, theme presets and assets. References point to research/component-references.md.",
+  "version": 2,
+  "updated": "2026-11-13",
+  "vocabulary": {
+    "category": [
+      "borders",
+      "backgrounds",
+      "ornaments",
+      "typography",
+      "accessories",
+      "interactions"
+    ],
+    "technique": ["css", "svg", "css+svg", "react", "static-asset"],
+    "tiers": {
+      "F1": "safe on repeated cards",
+      "F2": "expanded card / dialog",
+      "F3": "full-page background",
+      "F4": "occasional one-shot interaction"
+    },
+    "cost": ["very-low", "low", "moderate", "high"],
+    "animation": ["none", "on-event", "ambient-optional"],
+    "surfaces": [
+      "spell-card-compact",
+      "spell-card-expanded",
+      "spellbook-page",
+      "character-sheet",
+      "inventory-card",
+      "campaign"
+    ],
+    "status": ["proposed", "playground", "shipped", "deprecated"],
+    "phase": ["playground-1", "playground-2", "later"]
+  },
+  "themes": [
+    "legacy",
+    "arcane-scholar",
+    "ancient-manuscript",
+    "wildwood-codex",
+    "shadow-archive",
+    "celestial-codex",
+    "elemental-archive"
+  ],
+  "components": [
+    {
+      "id": "runic-border",
+      "name": "RunicBorder",
+      "category": "borders",
+      "status": "proposed",
+      "styles": ["static", "hover-glow", "active", "ritual"],
+      "technique": "css+svg",
+      "tiers": ["F1", "F2", "F4"],
+      "cost": "low",
+      "animation": "on-event",
+      "surfaces": [
+        "spell-card-compact",
+        "spell-card-expanded",
+        "spellbook-page",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": ["Noto Sans Runic"],
+      "assets": ["runic-border/segment.svg", "runic-border/segment-vertical.svg"],
+      "references": [
+        "REF-16",
+        "REF-36",
+        "REF-34",
+        "REF-17",
+        "REF-35",
+        "REF-21",
+        "REF-18",
+        "REF-85",
+        "REF-84"
+      ],
+      "spec": "catalog/borders/runic-border.md",
+      "scores": {
+        "visualImpact": 4,
+        "reusability": 5,
+        "simplicity": 4,
+        "performance": 5,
+        "compatibility": 4,
+        "total": 22
+      },
+      "phase": "playground-1"
+    },
+    {
+      "id": "arcane-corners",
+      "name": "ArcaneCorners",
+      "category": "borders",
+      "status": "proposed",
+      "styles": ["geometric", "runic", "ornamental", "filigree"],
+      "technique": "css+svg",
+      "tiers": ["F1", "F2", "F4"],
+      "cost": "very-low",
+      "animation": "on-event",
+      "surfaces": [
+        "spell-card-compact",
+        "spell-card-expanded",
+        "spellbook-page",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": [],
+      "assets": [
+        "arcane-corners/geometric.svg",
+        "arcane-corners/runic.svg",
+        "arcane-corners/ornamental.svg",
+        "arcane-corners/filigree.svg"
+      ],
+      "references": ["REF-15", "REF-38", "REF-01", "REF-86", "REF-87", "REF-07"],
+      "spec": "catalog/borders/arcane-corners.md",
+      "scores": {
+        "visualImpact": 4,
+        "reusability": 5,
+        "simplicity": 4,
+        "performance": 5,
+        "compatibility": 4,
+        "total": 22
+      },
+      "phase": "playground-1"
+    },
+    {
+      "id": "astral-dust",
+      "name": "AstralDust",
+      "category": "backgrounds",
+      "status": "proposed",
+      "styles": ["static-stars", "arcane-gradient", "cosmic-dust", "ambient-glow"],
+      "technique": "css",
+      "tiers": ["F2", "F3"],
+      "cost": "low",
+      "animation": "ambient-optional",
+      "surfaces": ["spell-card-expanded", "spellbook-page", "character-sheet", "campaign"],
+      "dependencies": [],
+      "fonts": [],
+      "assets": [
+        "astral-dust/stars-tile.svg",
+        "astral-dust/stars-tile-sparse.svg",
+        "astral-dust/constellation.svg"
+      ],
+      "references": ["REF-43", "REF-41", "REF-39", "REF-88", "REF-89", "REF-67", "REF-09"],
+      "spec": "catalog/backgrounds/astral-dust.md",
+      "scores": {
+        "visualImpact": 3,
+        "reusability": 3,
+        "simplicity": 4,
+        "performance": 4,
+        "compatibility": 4,
+        "total": 18
+      },
+      "phase": "playground-2"
+    },
+    {
+      "id": "ancient-parchment",
+      "name": "AncientParchment",
+      "category": "backgrounds",
+      "status": "proposed",
+      "styles": ["light", "dark", "weathered", "manuscript"],
+      "technique": "css+svg",
+      "tiers": ["F2", "F3"],
+      "cost": "low",
+      "animation": "none",
+      "surfaces": [
+        "spell-card-expanded",
+        "spellbook-page",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": [],
+      "assets": ["ancient-parchment/stains.svg"],
+      "references": ["REF-08", "REF-40", "REF-39", "REF-90", "REF-91", "REF-27", "REF-69"],
+      "spec": "catalog/backgrounds/ancient-parchment.md",
+      "scores": {
+        "visualImpact": 4,
+        "reusability": 3,
+        "simplicity": 3,
+        "performance": 4,
+        "compatibility": 2,
+        "total": 16
+      },
+      "phase": "later"
+    },
+    {
+      "id": "sigil-watermark",
+      "name": "SigilWatermark",
+      "category": "ornaments",
+      "status": "proposed",
+      "styles": ["arcane", "celestial", "alchemical", "botanical"],
+      "technique": "svg",
+      "tiers": ["F2", "F3"],
+      "cost": "very-low",
+      "animation": "on-event",
+      "surfaces": [
+        "spell-card-expanded",
+        "spellbook-page",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": [],
+      "assets": [
+        "sigil-watermark/arcane.svg",
+        "sigil-watermark/celestial.svg",
+        "sigil-watermark/alchemical.svg",
+        "sigil-watermark/botanical.svg"
+      ],
+      "references": [
+        "REF-92",
+        "REF-93",
+        "REF-94",
+        "REF-96",
+        "REF-05",
+        "REF-26",
+        "REF-39",
+        "REF-11"
+      ],
+      "spec": "catalog/ornaments/sigil-watermark.md",
+      "scores": {
+        "visualImpact": 4,
+        "reusability": 4,
+        "simplicity": 5,
+        "performance": 5,
+        "compatibility": 5,
+        "total": 23
+      },
+      "phase": "playground-1"
+    },
+    {
+      "id": "school-emblem",
+      "name": "SchoolEmblem",
+      "category": "ornaments",
+      "status": "proposed",
+      "styles": ["tile", "ring", "shield", "medallion"],
+      "technique": "react",
+      "tiers": ["F1", "F2"],
+      "cost": "very-low",
+      "animation": "none",
+      "surfaces": [
+        "spell-card-compact",
+        "spell-card-expanded",
+        "spellbook-page",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": [],
+      "assets": ["school-emblem/shield.svg", "school-emblem/medallion.svg"],
+      "references": ["REF-54", "REF-95", "REF-06", "REF-04", "REF-93", "REF-97", "REF-33"],
+      "spec": "catalog/ornaments/school-emblem.md",
+      "scores": {
+        "visualImpact": 3,
+        "reusability": 5,
+        "simplicity": 5,
+        "performance": 5,
+        "compatibility": 5,
+        "total": 23
+      },
+      "phase": "later"
+    },
+    {
+      "id": "rune-divider",
+      "name": "RuneDivider",
+      "category": "ornaments",
+      "status": "proposed",
+      "styles": ["minimal", "geometric", "ornamental", "botanical"],
+      "technique": "css+svg",
+      "tiers": ["F1", "F2", "F3"],
+      "cost": "very-low",
+      "animation": "none",
+      "surfaces": [
+        "spell-card-expanded",
+        "spellbook-page",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": ["Noto Sans Runic"],
+      "assets": [
+        "rune-divider/ornamental.svg",
+        "rune-divider/botanical.svg",
+        "rune-divider/runic.svg"
+      ],
+      "references": ["REF-26", "REF-46", "REF-84", "REF-98", "REF-90", "REF-87", "REF-02"],
+      "spec": "catalog/ornaments/rune-divider.md",
+      "scores": {
+        "visualImpact": 4,
+        "reusability": 5,
+        "simplicity": 5,
+        "performance": 5,
+        "compatibility": 5,
+        "total": 24
+      },
+      "phase": "playground-1"
+    },
+    {
+      "id": "arcane-title",
+      "name": "ArcaneTitle",
+      "category": "typography",
+      "status": "proposed",
+      "styles": ["scholarly", "manuscript", "celestial", "runic"],
+      "technique": "css",
+      "tiers": ["F1", "F2", "F3", "F4"],
+      "cost": "very-low",
+      "animation": "on-event",
+      "surfaces": [
+        "spell-card-compact",
+        "spell-card-expanded",
+        "spellbook-page",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": [
+        "Cinzel",
+        "IM Fell English",
+        "Cormorant Garamond",
+        "Cinzel Decorative",
+        "Uncial Antiqua",
+        "Noto Sans Runic"
+      ],
+      "assets": ["arcane-title/flank-rune.svg", "arcane-title/initial-frame.svg"],
+      "references": [
+        "REF-28",
+        "REF-30",
+        "REF-31",
+        "REF-32",
+        "REF-73",
+        "REF-84",
+        "REF-57",
+        "REF-52",
+        "REF-53",
+        "REF-51",
+        "REF-101",
+        "REF-23"
+      ],
+      "spec": "catalog/typography/arcane-title.md",
+      "scores": {
+        "visualImpact": 4,
+        "reusability": 5,
+        "simplicity": 4,
+        "performance": 5,
+        "compatibility": 5,
+        "total": 23
+      },
+      "phase": "later"
+    },
+    {
+      "id": "magic-bookmark",
+      "name": "MagicBookmark",
+      "category": "accessories",
+      "status": "proposed",
+      "styles": ["ribbon", "arcane-tab", "metallic"],
+      "technique": "css+svg",
+      "tiers": ["F1"],
+      "cost": "very-low",
+      "animation": "on-event",
+      "surfaces": [
+        "spell-card-compact",
+        "spell-card-expanded",
+        "spellbook-page",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": [],
+      "assets": ["magic-bookmark/glyph-star.svg", "magic-bookmark/metallic-clasp.svg"],
+      "references": ["REF-106", "REF-108", "REF-49", "REF-110"],
+      "spec": "catalog/accessories/magic-bookmark.md",
+      "scores": {
+        "visualImpact": 3,
+        "reusability": 4,
+        "simplicity": 4,
+        "performance": 5,
+        "compatibility": 3,
+        "total": 19
+      },
+      "phase": "later"
+    },
+    {
+      "id": "prepared-seal",
+      "name": "PreparedSeal",
+      "category": "accessories",
+      "status": "proposed",
+      "styles": ["wax", "arcane-stamp", "glowing-glyph", "minimal"],
+      "technique": "css+svg",
+      "tiers": ["F1", "F4"],
+      "cost": "low",
+      "animation": "on-event",
+      "surfaces": [
+        "spell-card-compact",
+        "spell-card-expanded",
+        "spellbook-page",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": [],
+      "assets": [
+        "prepared-seal/wax-body.svg",
+        "prepared-seal/wax-relief.svg",
+        "prepared-seal/arcane-stamp.svg",
+        "prepared-seal/glowing-glyph.svg"
+      ],
+      "references": [
+        "REF-107",
+        "REF-54",
+        "REF-56",
+        "REF-14",
+        "REF-95",
+        "REF-35",
+        "REF-109",
+        "REF-33"
+      ],
+      "spec": "catalog/accessories/prepared-seal.md",
+      "scores": {
+        "visualImpact": 4,
+        "reusability": 4,
+        "simplicity": 3,
+        "performance": 4,
+        "compatibility": 4,
+        "total": 19
+      },
+      "phase": "playground-2"
+    },
+    {
+      "id": "enchanted-hover",
+      "name": "EnchantedHover",
+      "category": "interactions",
+      "status": "proposed",
+      "styles": ["border-glow", "surface-shimmer", "gradient-highlight"],
+      "technique": "css",
+      "tiers": ["F1"],
+      "cost": "low",
+      "animation": "on-event",
+      "surfaces": [
+        "spell-card-compact",
+        "spell-card-expanded",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": [],
+      "assets": [],
+      "references": ["REF-21", "REF-16", "REF-49", "REF-105", "REF-39", "REF-20", "REF-47"],
+      "spec": "catalog/interactions/enchanted-hover.md",
+      "scores": {
+        "visualImpact": 3,
+        "reusability": 5,
+        "simplicity": 5,
+        "performance": 5,
+        "compatibility": 5,
+        "total": 23
+      },
+      "phase": "playground-2"
+    },
+    {
+      "id": "sigil-pulse",
+      "name": "SigilPulse",
+      "category": "interactions",
+      "status": "proposed",
+      "styles": ["single-pulse", "expanding-ring", "rune-flash"],
+      "technique": "css+svg",
+      "tiers": ["F4"],
+      "cost": "low",
+      "animation": "on-event",
+      "surfaces": [
+        "spell-card-compact",
+        "spell-card-expanded",
+        "spellbook-page",
+        "character-sheet",
+        "inventory-card",
+        "campaign"
+      ],
+      "dependencies": [],
+      "fonts": ["Noto Sans Runic"],
+      "assets": ["sigil-pulse/activation-sigil.svg"],
+      "references": [
+        "REF-56",
+        "REF-14",
+        "REF-102",
+        "REF-55",
+        "REF-50",
+        "REF-84",
+        "REF-104",
+        "REF-35",
+        "REF-22"
+      ],
+      "spec": "catalog/interactions/sigil-pulse.md",
+      "scores": {
+        "visualImpact": 4,
+        "reusability": 5,
+        "simplicity": 4,
+        "performance": 4,
+        "compatibility": 4,
+        "total": 21
+      },
+      "phase": "playground-2"
+    }
+  ]
+}
