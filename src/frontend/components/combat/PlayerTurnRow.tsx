@@ -7,6 +7,7 @@ import { SheetPreview } from '@frontend/components/character/sheet/SheetPreview'
 import { ConditionBadge } from '@frontend/components/content/ConditionBadge';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { StatBlock } from '@frontend/components/ui/stat-block';
 import { cn } from '@frontend/lib/utils';
 
 import type { ActiveCondition, TurnEntry } from '@backend/contexts/combat/domain/Encounter';
@@ -15,6 +16,7 @@ import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { ConditionsPicker } from './ConditionsPicker';
 import { NumberCell } from './NumberCell';
+import { AdjustOwnHitPoints, OwnHp } from './OwnHitPoints';
 import { OwnerOrSideBadge, SideBadge } from './SideBadge';
 import { ZoomablePortrait } from './ZoomablePortrait';
 
@@ -43,13 +45,17 @@ function UnknownMarker({ className }: { className: string }) {
 /**
  * One line of the player's turn order: side, name (or "unknown" while anonymous), picture and
  * conditions. Down fades to gray; dead is a thin, dashed line with the name struck through.
+ * The player's own rows also show their HP and "Adjust HP"; on their turn the row becomes a
+ * card with HP, AC and speed too.
  */
 export function PlayerTurnRow({
+  partyId,
   turn,
   edition,
   onConditionsChange,
   onInitiativeChange,
 }: {
+  partyId: string;
   turn: TurnEntry;
   edition: Edition;
   onConditionsChange: (conditions: ActiveCondition[]) => void;
@@ -57,6 +63,7 @@ export function PlayerTurnRow({
 }) {
   const t = useTranslations('combat');
   const tCond = useTranslations('conditions');
+  const tStats = useTranslations('combatStats');
   const anonymous = turn.name === null;
   const name = turn.name ?? t(UNKNOWN_KEY[turn.side]);
   // An anonymous one's picture never shows, even if the NPC has one
@@ -86,21 +93,36 @@ export function PlayerTurnRow({
     );
   }
 
+  const vitals = turn.isMine ? turn.vitals : null;
+  // Their own turn: the row grows into a card with what they need to play it
+  const card = !!vitals && turn.isCurrent;
+  const portraitSize = card ? 'size-12 sm:size-14' : 'size-10';
+  const adjust = vitals && turn.characterId && (
+    <AdjustOwnHitPoints
+      partyId={partyId}
+      characterId={turn.characterId}
+      name={name}
+      hp={vitals.hp}
+      compact={!card}
+    />
+  );
+
   return (
     <li
       aria-current={turn.isCurrent ? 'true' : undefined}
       className={cn(
         'border-border flex flex-col gap-2 rounded-md border px-3 py-2',
         turn.isCurrent && 'border-primary bg-primary/10 animate-turn-glow',
+        card && 'gap-3 rounded-xl p-3 sm:p-4',
       )}
     >
       <div className="flex items-center gap-3">
-        <ZoomablePortrait src={avatarUrl} name={name} className="size-10">
+        <ZoomablePortrait src={avatarUrl} name={name} className={portraitSize}>
           <div className={cn('size-full', down && 'opacity-60 grayscale')}>
             {anonymous ? (
               <UnknownMarker className="size-10 text-lg" />
             ) : (
-              <CharacterPortrait avatarUrl={avatarUrl} className="size-10" />
+              <CharacterPortrait avatarUrl={avatarUrl} className={portraitSize} />
             )}
           </div>
         </ZoomablePortrait>
@@ -109,6 +131,7 @@ export function PlayerTurnRow({
             className={cn(
               'truncate',
               turn.isMine && 'font-semibold',
+              card && 'text-title',
               down && 'text-muted-foreground',
             )}
           >
@@ -122,7 +145,25 @@ export function PlayerTurnRow({
             {turn.isMine ? t('yourTurn') : t('currentTurn')}
           </span>
         )}
+        {/* Their own HP beside the name, as on the GM's row; the card shows it larger below */}
+        {vitals && !card && <OwnHp hp={vitals.hp} className="w-16 shrink-0 sm:w-28" />}
       </div>
+      {vitals && card && (
+        <div className="flex flex-col gap-3">
+          <div className="flex items-end gap-3">
+            <OwnHp hp={vitals.hp} size="lg" className="flex-1" />
+            {adjust}
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <StatBlock icon="shoulder-armor" label={tStats('armorClass')}>
+              {vitals.ac}
+            </StatBlock>
+            <StatBlock icon="boot-prints" label={tStats('speed')} unit={tStats('speedUnit')}>
+              {vitals.speed}
+            </StatBlock>
+          </div>
+        </div>
+      )}
       {turn.isMine && (
         <div className="flex flex-wrap items-center gap-2 pointer-coarse:gap-3">
           <label className="text-label flex items-center gap-2">
@@ -137,6 +178,7 @@ export function PlayerTurnRow({
               onCommit={onInitiativeChange}
             />
           </label>
+          {!card && adjust}
           {turn.characterId && (
             <SheetPreview
               characterId={turn.characterId}

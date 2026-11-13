@@ -9,6 +9,7 @@ import {
   createParty,
 } from '../../../../../test/helpers/parties';
 import { createSignedInClient } from '../../../../../test/helpers/signed-in-client';
+import { GetEncounterUseCase } from '../application/get-encounter.use-case';
 import { CombatErrorCodes } from '../domain/CombatError';
 import { SupabaseCombatRepository } from './supabase-combat.repository';
 
@@ -152,6 +153,44 @@ describe('SupabaseCombatRepository (Integration)', () => {
 
     await repo.finish(partyId);
     expect(await playerRepo.turns(partyId)).toBeNull();
+  });
+
+  it('a visão do jogador traz PV, CA e deslocamento só do próprio personagem', async () => {
+    const other = await createSignedInClient('other-player');
+    await addMember(partyId, other.userId, 'active');
+    const borinId = await createCharacter(other.userId, {
+      name: 'Borin',
+      hp_max: 30,
+      hp_current: 25,
+      system_data: { ac: 18, speed: 7 },
+    });
+    await bring(other, partyId, borinId);
+
+    await repo.create(partyId);
+    await repo.addParticipants(partyId, [{ characterId: heroId, side: 'player', label: null }]);
+    await repo.addParticipants(partyId, [{ characterId: borinId, side: 'player', label: null }]);
+    await repo.addParticipants(partyId, [
+      { characterId: goblinId, side: 'enemy', label: 'Goblin' },
+    ]);
+    await gm.client
+      .from('encounter_participants')
+      .update({ visibility: 'visible' })
+      .eq('party_id', partyId)
+      .neq('side', 'player');
+    await repo.start(partyId);
+
+    const playerRepo = new SupabaseCombatRepository(player.client);
+    const view = await new GetEncounterUseCase(playerRepo).execute(partyId, player.userId);
+
+    expect(view?.role).toBe('player');
+    const turns = view?.role === 'player' ? view.turns : [];
+    expect(turns.map((turn) => [turn.name, turn.vitals])).toEqual([
+      ['Arani', { hp: { current: 12, max: 20, temp: 2 }, ac: 15, speed: 9 }],
+      ['Borin', null],
+      ['Goblin', null],
+    ]);
+    // Nothing of Borin's sheet or the goblin's HP reaches this player
+    expect(JSON.stringify(view)).not.toMatch(/"current":25|"max":30|"ac":18|"max":7/);
   });
 
   it('iniciativa do jogador e voltar turno pelo repositório', async () => {

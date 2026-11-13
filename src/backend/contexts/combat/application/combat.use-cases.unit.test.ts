@@ -4,7 +4,12 @@ import { getConditionCatalog } from '@backend/contexts/conditions';
 
 import { CombatErrorCodes } from '../domain/CombatError';
 import { toGmRow } from '../domain/gm-row';
-import { CombatRepo, CombatSheet, ParticipantRecord } from '../domain/repository/combat.repo';
+import {
+  CombatRepo,
+  CombatSheet,
+  ParticipantRecord,
+  TurnRecord,
+} from '../domain/repository/combat.repo';
 import { AddParticipantUseCase } from './add-participant.use-case';
 import { EncounterCommands } from './encounter-commands';
 import { GetEncounterUseCase } from './get-encounter.use-case';
@@ -275,27 +280,26 @@ describe('SetConditionsUseCase', () => {
 });
 
 describe('GetEncounterUseCase', () => {
-  it('o jogador recebe só rodada e ordem: sem iniciativa, PV nem CA', async () => {
+  const turn = (overrides: Partial<TurnRecord> = {}): TurnRecord => ({
+    participantId: 'p-hero',
+    side: 'player',
+    name: 'Arani',
+    avatarUrl: null,
+    life: 'normal',
+    isCurrent: true,
+    isMine: true,
+    conditions: [],
+    initiative: 14,
+    characterId: 'hero',
+    ownerUsername: 'arani_fan',
+    ...overrides,
+  });
+  const someoneElse = { isCurrent: false, isMine: false, initiative: null, characterId: null };
+
+  it('o jogador recebe rodada e ordem, com PV, CA e deslocamento só do próprio personagem', async () => {
     const repo = makeRepo();
-    repo.turns.mockResolvedValue({
-      round: 2,
-      turns: [
-        {
-          participantId: 'p-hero',
-          side: 'player',
-          name: 'Arani',
-          avatarUrl: null,
-          life: 'normal',
-          isCurrent: true,
-          isMine: true,
-          conditions: [],
-          initiative: 14,
-          characterId: 'hero',
-          ownerUsername: 'arani_fan',
-        },
-      ],
-      hiddenTurn: false,
-    });
+    repo.turns.mockResolvedValue({ round: 2, turns: [turn()], hiddenTurn: false });
+    repo.sheets.mockResolvedValue([sheet()]);
 
     const view = await new GetEncounterUseCase(repo).execute('party-1', 'player-1');
 
@@ -316,11 +320,62 @@ describe('GetEncounterUseCase', () => {
           initiative: 14,
           characterId: 'hero',
           ownerUsername: 'arani_fan',
+          vitals: { hp: { current: 12, max: 20, temp: 3 }, ac: 15, speed: 9 },
         },
       ],
     });
     expect(repo.findEncounter).not.toHaveBeenCalled();
+    expect(repo.sheets).toHaveBeenCalledWith(['hero']);
+  });
+
+  it('o PV de outro jogador e do NPC nunca chega à visão do jogador', async () => {
+    const repo = makeRepo();
+    repo.turns.mockResolvedValue({
+      round: 1,
+      hiddenTurn: false,
+      turns: [
+        turn(),
+        turn({ ...someoneElse, participantId: 'p-other', name: 'Borin', ownerUsername: null }),
+        turn({ ...someoneElse, participantId: 'p-g', side: 'enemy', name: 'Goblin' }),
+      ],
+    });
+    // Even if the database handed over sheets that aren't theirs, none of it goes out
+    repo.sheets.mockResolvedValue([
+      sheet(),
+      sheet({ id: 'borin', ownerId: 'player-2', name: 'Borin', hpCurrent: 4, ac: 18 }),
+      goblinSheet,
+    ]);
+
+    const view = await new GetEncounterUseCase(repo).execute('party-1', 'player-1');
+
+    expect(repo.sheets).toHaveBeenCalledWith(['hero']);
+    const turns = view?.role === 'player' ? view.turns : [];
+    expect(turns.map((t) => [t.name, t.vitals])).toEqual([
+      ['Arani', { hp: { current: 12, max: 20, temp: 3 }, ac: 15, speed: 9 }],
+      ['Borin', null],
+      ['Goblin', null],
+    ]);
+    expect(JSON.stringify(view)).not.toMatch(/"current":4|"max":7|"ac":(13|18)/);
+  });
+
+  it('linha marcada como sua, mas com ficha de outra pessoa, fica sem PV', async () => {
+    const repo = makeRepo();
+    repo.turns.mockResolvedValue({ round: 1, turns: [turn()], hiddenTurn: false });
+    repo.sheets.mockResolvedValue([sheet({ ownerId: 'player-2' })]);
+
+    const view = await new GetEncounterUseCase(repo).execute('party-1', 'player-1');
+
+    expect(view?.role === 'player' && view.turns[0].vitals).toBeNull();
+  });
+
+  it('sem personagem seu no combate, nenhuma ficha é lida', async () => {
+    const repo = makeRepo();
+    repo.turns.mockResolvedValue({ round: 1, turns: [turn(someoneElse)], hiddenTurn: false });
+
+    const view = await new GetEncounterUseCase(repo).execute('party-1', 'player-1');
+
     expect(repo.sheets).not.toHaveBeenCalled();
+    expect(view?.role === 'player' && view.turns[0].vitals).toBeNull();
   });
 
   it('o mestre recebe uma linha por participante, na ordem, com o atual marcado', async () => {
