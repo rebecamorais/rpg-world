@@ -118,7 +118,11 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
         <h2 id="party-characters" className="text-heading">
           {t('characters')}
         </h2>
-        <PartyRoster roster={party.roster} people={party.people} />
+        <PartyRoster
+          roster={party.roster}
+          people={party.people}
+          myCharacterIds={party.myCharacterIds}
+        />
       </section>
     </div>
   );

@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
+import { SheetPreview } from '@frontend/components/character/sheet/SheetPreview';
 import { ViewImageButton } from '@frontend/components/shared/ViewImageButton';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import AppLink from '@frontend/demo/AppLink';
@@ -112,6 +113,15 @@ export function RolePlayCard({ partyId, card }: { partyId: string; card: RolePla
               )}
             </dl>
           )}
+
+          {/* Above the stretched link (z-10): the whole sheet, read-only, without leaving */}
+          <div className="relative z-10 mt-auto">
+            <SheetPreview
+              characterId={card.characterId}
+              name={card.name}
+              source={{ kind: 'party', partyId }}
+            />
+          </div>
         </CardContent>
       </Card>
     </div>

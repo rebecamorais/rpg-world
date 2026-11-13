@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { SheetPreview } from '@frontend/components/character/sheet/SheetPreview';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { StatBlock } from '@frontend/components/ui/stat-block';
@@ -19,7 +20,6 @@ import { ConditionsPicker } from './ConditionsPicker';
 import { NpcControls } from './NpcControls';
 import { NpcFateControls } from './NpcFateControls';
 import { NumberCell } from './NumberCell';
-import { SheetLink } from './SheetLink';
 
 const ATTRIBUTES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'] as const;
 
@@ -41,8 +41,8 @@ function Group({ title, children }: { title?: string; children: ReactNode }) {
 export function CombatRowDetails({
   id,
   hidden,
+  partyId,
   row,
-  sheetHref,
   edition,
   swapWith,
   onSwap,
@@ -52,8 +52,8 @@ export function CombatRowDetails({
 }: {
   id: string;
   hidden?: boolean;
+  partyId: string;
   row: GmRow;
-  sheetHref: string;
   edition: Edition;
   /** The neighbors with exactly the same initiative, each offered as "Swap with". */
   swapWith: { participantId: string; name: string }[];
@@ -176,7 +176,13 @@ export function CombatRowDetails({
             {tCond('title')}
           </Button>
         </ConditionsPicker>
-        <SheetLink href={sheetHref} name={row.name} />
+        {/* A player's sheet, read through the party; an NPC is the GM's own sheet, theirs to edit */}
+        <SheetPreview
+          characterId={row.characterId}
+          name={row.name}
+          source={isNpc ? { kind: 'own' } : { kind: 'party', partyId }}
+          canEdit={isNpc}
+        />
         {swapWith.map((neighbor) => (
           <Button
             key={neighbor.participantId}

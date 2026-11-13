@@ -1509,7 +1509,6 @@
     "turnBackTo": "Vez voltou para {name}",
     "swapWith": "Trocar com {name}",
     "orderChanged": "ordem mudou",
-    "openSheet": "Abrir ficha",
     "forPlayers": "Para os jogadores",
     "turnPassedTo": "Agora é a vez de {name}",
     "noCombatPlayer": "Nenhum combate em andamento. Quando o mestre começar um, ele aparece aqui.",

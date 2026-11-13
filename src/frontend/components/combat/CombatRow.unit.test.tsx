@@ -263,10 +263,10 @@ describe('CombatRow', () => {
       expect(
         screen.getByRole('button', { name: fill(t.conditionsOf, { name: 'Goblin' }) }),
       ).toBeVisible();
-      expect(screen.getByRole('link', { name: new RegExp(`^${t.openSheet}`) })).toHaveAttribute(
-        'href',
-        '/system/DnD_5e/character/goblin',
-      );
+      // The whole sheet opens over the combat, read-only (an NPC's has "Edit sheet" inside)
+      expect(
+        screen.getByRole('button', { name: `${messages.sheetViewer.open} Goblin` }),
+      ).toBeVisible();
       expect(screen.getByText(messages.combatStats.armorClass)).toBeVisible();
       expect(screen.getByText(t.passivePerception)).toBeVisible();
       expect(screen.getByText(messages.combatStats.speed)).toBeVisible();

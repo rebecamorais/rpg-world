@@ -21,7 +21,7 @@ const renderDetails = (props: Partial<React.ComponentProps<typeof CombatRowDetai
     <CombatRowDetails
       id="details"
       row={gmRow({ side: 'enemy', name: 'Goblin', hp: { current: 0, max: 7, temp: 0 } })}
-      sheetHref="/system/DnD_5e/character/goblin"
+      partyId="party-1"
       edition="2024"
       swapWith={[]}
       onSwap={vi.fn()}
@@ -40,7 +40,7 @@ describe('CombatRowDetails', () => {
       messages.combatStats.armorClass,
       fill(t.chooseFate, { name: 'Goblin' }),
       t.forPlayers,
-      t.openSheet,
+      messages.sheetViewer.open,
       messages.attributes.abbreviations.STR,
     ].map((part) => text.indexOf(part));
     expect(order.every((index) => index >= 0)).toBe(true);

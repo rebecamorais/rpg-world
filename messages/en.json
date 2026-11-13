@@ -1509,7 +1509,6 @@
     "turnBackTo": "Turn went back to {name}",
     "swapWith": "Swap with {name}",
     "orderChanged": "order changed",
-    "openSheet": "Open sheet",
     "forPlayers": "For the players",
     "turnPassedTo": "Now it's {name}'s turn",
     "noCombatPlayer": "No combat going on. When the GM starts one, it shows here.",

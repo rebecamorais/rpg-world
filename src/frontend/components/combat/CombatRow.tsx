@@ -25,7 +25,7 @@ import { OwnerOrSideBadge } from './SideBadge';
 import { ZoomablePortrait } from './ZoomablePortrait';
 
 /** An npc (enemy or ally) opens the GM's own sheet; a player's, the read-only one of the party. */
-export const sheetHrefOf = (partyId: string, row: GmRow) =>
+const sheetHrefOf = (partyId: string, row: GmRow) =>
   row.side !== 'player'
     ? `/system/DnD_5e/character/${row.characterId}`
     : `/parties/${partyId}/characters/${row.characterId}`;
@@ -143,6 +143,8 @@ export function CombatRow({
             href={sheetHref}
             target="_blank"
             rel="noopener noreferrer"
+            // The visible name first, then where it opens
+            aria-label={`${row.name} ${t('newTab')}`}
             className={cn(
               // Two lines before cutting: the name matters more than the space on a phone
               'text-title focus-ring line-clamp-2 max-w-full self-start rounded-sm break-words hover:underline',
@@ -150,7 +152,6 @@ export function CombatRow({
             )}
           >
             {row.name}
-            <span className="sr-only"> {t('newTab')}</span>
           </AppLink>
           {/* On touch screens the gap keeps each condition badge's touch area apart */}
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pointer-coarse:gap-3">
@@ -215,8 +216,8 @@ export function CombatRow({
         <CombatRowDetails
           id={detailsId}
           hidden={!expanded}
+          partyId={partyId}
           row={row}
-          sheetHref={sheetHref}
           edition={edition}
           swapWith={swapWith}
           onSwap={onSwap}

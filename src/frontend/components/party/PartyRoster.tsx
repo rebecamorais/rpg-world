@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 
+import { SheetPreview } from '@frontend/components/character/sheet/SheetPreview';
 import { ViewImageButton } from '@frontend/components/shared/ViewImageButton';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { characterTheme } from '@frontend/lib/color-utils';
@@ -15,9 +16,12 @@ import { CharacterIdentity } from './RolePlayCard';
 export function PartyRoster({
   roster,
   people,
+  myCharacterIds = [],
 }: {
   roster: RosterCharacter[];
   people: PartyPerson[];
+  /** The ones the person looking brought: theirs to open whole. */
+  myCharacterIds?: string[];
 }) {
   const t = useTranslations('parties.page');
   const usernames = new Map(people.map((p) => [p.userId, p.username]));
@@ -42,6 +46,17 @@ export function PartyRoster({
                 <p className="text-label text-muted-foreground">
                   {username ? t('playedBy', { username }) : t('playedByUnnamed')}
                 </p>
+                {/* Their own characters: the whole sheet, read-only, and "Edit sheet" from it */}
+                {myCharacterIds.includes(character.characterId) && (
+                  <div className="self-start">
+                    <SheetPreview
+                      characterId={character.characterId}
+                      name={character.name}
+                      source={{ kind: 'own' }}
+                      canEdit
+                    />
+                  </div>
+                )}
               </CardContent>
             </Card>
           </li>

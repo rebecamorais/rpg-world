@@ -55,6 +55,20 @@ test.describe('mesas', () => {
 
     await page.reload();
     await expect(page.getByText('Passive Perception')).toBeVisible();
+
+    // The whole sheet without leaving the table: read-only, its tabs switched in place
+    await page.getByRole('button', { name: 'View sheet Arani' }).click();
+    const viewer = page.getByRole('dialog', { name: 'Arani' });
+    await expect(viewer.getByLabel('AC', { exact: true })).toBeDisabled();
+    await viewer.getByRole('tab', { name: 'Lore' }).click();
+    await expect(viewer.getByRole('tab', { name: 'Lore' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    await expect(viewer.getByRole('link', { name: /Edit sheet/ })).toHaveCount(0);
+    expect(new URL(page.url()).pathname).toBe(partyUrl(partyId));
+    await page.keyboard.press('Escape');
+
     await page.getByRole('link', { name: /Arani/ }).click();
     await expect(page.getByText('Read only')).toBeVisible();
     await expect(page.getByLabel('AC', { exact: true })).toBeDisabled();
