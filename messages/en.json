@@ -1631,5 +1631,11 @@
       "create": "Create account",
       "keep": "Keep exploring"
     }
+  },
+  "sheetViewer": {
+    "open": "View sheet",
+    "description": "Read only. To change anything, open the sheet.",
+    "edit": "Edit sheet",
+    "newTab": "(opens in a new tab)"
   }
 }

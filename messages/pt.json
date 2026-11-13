@@ -1631,5 +1631,11 @@
       "create": "Criar conta",
       "keep": "Continuar explorando"
     }
+  },
+  "sheetViewer": {
+    "open": "Ver ficha",
+    "description": "Só leitura. Para mudar algo, abra a ficha.",
+    "edit": "Editar ficha",
+    "newTab": "(abre em nova aba)"
   }
 }

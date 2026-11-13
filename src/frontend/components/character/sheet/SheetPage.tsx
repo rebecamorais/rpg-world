@@ -43,6 +43,18 @@ function AppearanceLink() {
  */
 export function SheetPage({ tab, actions, ...props }: SheetPageProps) {
   const { name } = useLoadedCharacter();
+  const { id } = useCharacterMeta();
+  const { embedded } = useSheetSource(id);
+
+  // Inside the party's viewer the tab is one of several in a panel: no page title of its own
+  if (embedded) {
+    return (
+      <div className="flex flex-col gap-4">
+        {actions && <div className="flex flex-wrap justify-end gap-2">{actions}</div>}
+        {props.children}
+      </div>
+    );
+  }
 
   return (
     <PageContainer

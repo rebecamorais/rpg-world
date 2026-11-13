@@ -12,21 +12,24 @@ import SkillsSection from '@frontend/components/character/stats/SkillsSection';
 import { VitalsBar } from '@frontend/components/character/stats/VitalsBar';
 import { ErrorState } from '@frontend/components/ui/empty-state';
 import { useCharacterMeta } from '@frontend/context/CharacterContext';
+import { useSheetSource } from '@frontend/hooks/useSheetSource';
 
 /**
  * The Status tab of the character sheet. Each section reads the character from
  * CharacterContext (provided by the sheet layout), so nothing is passed down from here.
  */
 export default function StatusView() {
-  const { error } = useCharacterMeta();
+  const { id, error } = useCharacterMeta();
+  const { embedded } = useSheetSource(id);
   const t = useTranslations('characters');
 
   return (
     <div className="flex flex-col gap-6">
       {error && <ErrorState title={t('loadErrorTitle')} description={error} />}
 
-      {/* Phones and tablets: the hit points stay in reach while the sheet scrolls */}
-      <VitalsBar />
+      {/* Phones and tablets: the hit points stay in reach while the sheet scrolls. Not inside the
+          party's viewer: there the sheet is a panel, and the combat already shows the HP */}
+      {!embedded && <VitalsBar />}
 
       <CharacterHeader />
 
