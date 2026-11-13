@@ -13,7 +13,17 @@ export type Visibility = 'visible' | 'anonymous' | 'hidden';
 export type NpcFate = 'death_saves' | 'dead';
 export type Life = 'normal' | 'down' | 'dead';
 
-/** What a player sees of each participant: no initiative, HP or AC, of anyone. */
+/** A player's own character in their view: what the sheet says, to play without opening it. */
+export interface OwnVitals {
+  hp: { current: number; max: number; temp: number };
+  ac: number;
+  speed: number;
+}
+
+/**
+ * What a player sees of each participant: no initiative, HP or AC of anyone but their own
+ * characters.
+ */
 export interface TurnEntry {
   participantId: string;
   side: Side;
@@ -30,6 +40,8 @@ export interface TurnEntry {
   /** Player rows whose owner chose a username. */
   ownerUsername: string | null;
   conditions: ActiveCondition[];
+  /** Only on the player's own row (from their sheet); null on everyone else's. */
+  vitals: OwnVitals | null;
 }
 
 export interface PlayerEncounterView {

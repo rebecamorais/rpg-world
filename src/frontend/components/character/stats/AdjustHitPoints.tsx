@@ -41,9 +41,16 @@ const CHANGES: { change: HitPointsChange; label: 'damage' | 'heal' | 'setTempHp'
 
 /**
  * "You take 7 damage": one number and one button, saved at once (no save button mid-combat),
- * with an Undo on the toast. `children` is the trigger, a button.
+ * with an Undo on the toast. `children` is the trigger, a button. `onSaved` runs after each save
+ * (and after an Undo), for screens that show the HP from elsewhere (the combat).
  */
-export function AdjustHitPoints({ children }: { children: ReactNode }) {
+export function AdjustHitPoints({
+  children,
+  onSaved,
+}: {
+  children: ReactNode;
+  onSaved?: () => void;
+}) {
   const t = useTranslations('combatStats');
   const character = useLoadedCharacter();
   const { saveNow } = useCharacterActions();
@@ -79,11 +86,20 @@ export function AdjustHitPoints({ children }: { children: ReactNode }) {
 
     setOpen(false);
     setAmount('');
+    onSaved?.();
     const after = { current: fields.hpCurrent ?? character.hpCurrent, max: character.hpMax };
     const afterTemp = fields.hpTemp ?? temp;
     toast.success(
       afterTemp > 0 ? t('hpSavedTemp', { ...after, temp: afterTemp }) : t('hpSaved', after),
-      { action: { label: t('undo'), onClick: () => saveNow(before).catch(() => {}) } },
+      {
+        action: {
+          label: t('undo'),
+          onClick: () =>
+            saveNow(before)
+              .then(() => onSaved?.())
+              .catch(() => {}),
+        },
+      },
     );
   };
 

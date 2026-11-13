@@ -23,6 +23,7 @@ const turn = (participantId: string, isMine: boolean, isCurrent: boolean) => ({
   initiative: null,
   characterId: null,
   ownerUsername: null,
+  vitals: null,
 });
 
 const view = (current: 'mine' | 'theirs'): PlayerEncounterView => ({

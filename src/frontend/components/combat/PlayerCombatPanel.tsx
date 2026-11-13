@@ -7,33 +7,40 @@ import { SectionCard } from '@frontend/components/ui/section-card';
 import { useEncounter } from '@frontend/hooks/useEncounter';
 import { cn } from '@frontend/lib/utils';
 
-import type { PlayerEncounterView } from '@backend/contexts/combat/domain/Encounter';
+import type { OwnVitals, PlayerEncounterView } from '@backend/contexts/combat/domain/Encounter';
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { CombatConnection } from './CombatConnection';
+import { OwnHp } from './OwnHitPoints';
 import { PlayerTurnRow } from './PlayerTurnRow';
 import { TurnBar } from './TurnBar';
 
 type Turn = PlayerEncounterView['turns'][number];
 
 /**
- * The player's next turn: which of their characters plays next, and in how many turns from now.
- * Null while it's theirs, before the combat starts, or while nobody visible has the turn.
+ * The player's next turn: which of their characters plays next (with its HP), and in how many
+ * turns from now. Null while it's theirs, before the combat starts, or while nobody visible has
+ * the turn.
  */
-export function nextOwnTurn(turns: Turn[]): { name: string; count: number } | null {
+export function nextOwnTurn(
+  turns: Turn[],
+): { name: string; count: number; hp: OwnVitals['hp'] | null } | null {
   const index = turns.findIndex((turn) => turn.isCurrent);
   if (index < 0 || turns[index].isMine) return null;
   for (let step = 1; step < turns.length; step++) {
     const turn = turns[(index + step) % turns.length];
-    if (turn.isMine && turn.life !== 'dead' && turn.name) return { name: turn.name, count: step };
+    if (turn.isMine && turn.life !== 'dead' && turn.name) {
+      return { name: turn.name, count: step, hp: turn.vitals?.hp ?? null };
+    }
   }
   return null;
 }
 
 /**
- * The combat as a player sees it: the round, the order with names only and whose turn it is.
- * No initiative, HP or AC of anyone (the API doesn't send them). They end only their own turn.
+ * The combat as a player sees it: the round, the order with names and whose turn it is. Only
+ * their own characters come with initiative, HP, AC and speed (the API sends nobody else's).
+ * They end only their own turn; on it, their row becomes a card to play it from.
  * The "your turn" toast comes from the party frame (useYourTurnToast), so it shows on every tab.
  */
 export function PlayerCombatPanel({
@@ -83,6 +90,7 @@ export function PlayerCombatPanel({
             ).map((turn) => (
               <PlayerTurnRow
                 key={turn.participantId}
+                partyId={partyId}
                 turn={turn}
                 edition={edition}
                 onConditionsChange={(conditions) =>
@@ -100,9 +108,10 @@ export function PlayerCombatPanel({
       {/* Their turn: the button to end it, in reach. Otherwise, how long until it comes */}
       {mine ? (
         <TurnBar>
+          {mine.vitals && <OwnHp hp={mine.vitals.hp} className="w-20 shrink-0 sm:w-28" />}
           <Button
             size="lg"
-            className="w-full"
+            className="min-w-0 flex-1"
             onClick={() => endTurn.mutate(mine.participantId)}
             loading={endTurn.isPending}
           >
@@ -119,6 +128,7 @@ export function PlayerCombatPanel({
                 strong: (chunks) => <span className="text-foreground font-semibold">{chunks}</span>,
               })}
             </p>
+            {upcoming.hp && <OwnHp hp={upcoming.hp} className="w-20 shrink-0 sm:w-28" />}
           </TurnBar>
         )
       )}

@@ -45,6 +45,9 @@ export interface CombatSheet {
   deathSaves: { successes: number; failures: number } | null;
 }
 
+/** A row of the player's view as the database gives it; the own vitals come from the sheets. */
+export type TurnRecord = Omit<TurnEntry, 'vitals'>;
+
 export interface NewParticipant {
   characterId: string;
   side: Side;
@@ -73,11 +76,12 @@ export interface CombatRepo {
   findPartyGm(partyId: string): Promise<{ gmId: string | null } | null>;
   /** The GM's view of the combat; null without one (or for anyone but the GM). */
   findEncounter(partyId: string): Promise<EncounterRecord | null>;
+  /** The sheets among these that the signed-in user may read (RLS); the rest are left out. */
   sheets(characterIds: string[]): Promise<CombatSheet[]>;
   /** What a player sees; null without a combat. */
   turns(
     partyId: string,
-  ): Promise<{ round: number; hiddenTurn: boolean; turns: TurnEntry[] } | null>;
+  ): Promise<{ round: number; hiddenTurn: boolean; turns: TurnRecord[] } | null>;
   /** Chosen usernames of the party's people, by user id. */
   usernames(partyId: string): Promise<Record<string, string>>;
   /** The characters brought to the party. */
