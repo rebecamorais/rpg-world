@@ -61,7 +61,7 @@
       ],
       "dependencies": [],
       "fonts": ["Noto Sans Runic"],
-      "assets": ["runic-border/segment.svg", "runic-border/segment-vertical.svg"],
+      "assets": ["runic-border/segment.svg"],
       "references": [
         "REF-16",
         "REF-36",

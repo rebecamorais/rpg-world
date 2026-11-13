@@ -118,7 +118,7 @@ interface RunicBorderProps {
 Nenhum obrigatório: o anel é gradiente e as runas vêm da fonte. Arte opcional da dona (prompts gerados fora do repositório):
 
 - `runic-border/segment.svg`: faixa horizontal curta de runas inventadas, alternativa à fonte.
-- `runic-border/segment-vertical.svg`: a mesma faixa na vertical (pode virar rotação do horizontal; decidir no Playground).
+- A faixa vertical não tem asset próprio: o CSS gira o `segment.svg` com `rotate(90deg)`.
 
 ## 10. Referências
 
