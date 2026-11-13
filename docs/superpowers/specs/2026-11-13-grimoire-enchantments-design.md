@@ -16,7 +16,8 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
 
 1. **(dona)** A coleção se chama Grimoire Enchantments e tem 12 componentes iniciais em 6 categorias.
 2. **(dona)** Os componentes visuais não conhecem regras de nenhum sistema. Recebem identificadores ("emblema", "estado selecionado"), e o mapeamento para D&D 5e fica fora deles.
-3. **(dona)** A arte SVG (cantos, lacres, sigilos, divisórias, marcadores) é gerada por ela fora do repositório, com o ChatGPT. Os prompts de geração ficam fora do repositório; as specs só listam os nomes e o motivo de cada asset.
+3. **(dona)** Os SVGs (cantos, lacres, sigilos, divisórias, marcadores) são **código vetorial gerado pelo Claude Code** a partir de uma geometria definida, nunca imagens vetorizadas. A dona aprova a direção visual no Playground. Ela também segue um contrato visual próprio (famílias Arcane, Ornamental e Botanical, traço pelo tamanho mínimo, área segura, critérios de aceite e produção em lotes). O contrato e as specs de produção ficam fora do repositório, e as specs do catálogo só listam o nome e o motivo de cada asset.
+   - **Sem SVG** para o que o CSS ou a fonte já resolvem: a faixa vertical da borda é o CSS girando a horizontal, e as manchas do pergaminho são gradientes.
 4. **(dona, spec do tema claro)** Temas de ficha são escolhidos pelo dono do personagem e vistos por todos. O Grimoire fornece a estrutura desses temas.
 5. **(dona)** Os docs são escritos em português, e tudo o que é código fica em inglês: IDs, componentes, props, tokens, classes, `data-*`, nomes de arquivo e comentários (`runic-border` / `RunicBorder`).
 6. **(dona)** O Playground vai para uma rota interna `/dev/grimoire`, fora da produção.

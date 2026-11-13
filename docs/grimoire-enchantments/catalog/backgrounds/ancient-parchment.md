@@ -34,7 +34,7 @@ Fundos · Status: proposto, depois do 1º grupo · Custo: Baixo · Faixas: `F2` 
 - **Grão:** `feTurbulence` + `feColorMatrix` **estático** em data-URI, como o `body` já faz (REF-08 mostra o mesmo ruído animado; aqui ele fica parado). Tile pequeno (128–160 px), repetido.
 - **Vinheta:** `radial-gradient` nas bordas, ou `mask-image` com gradiente radial (REF-39).
 - **Pauta (`manuscript`):** `repeating-linear-gradient(to bottom, transparent 0 calc(var(--line) - 1px), var(--rule) calc(var(--line) - 1px) var(--line))`, alinhada ao `line-height` do texto (REF-40 usa SVG `<pattern>`; aqui é gradiente, mais barato). Margem: um `linear-gradient` vertical de 1 px.
-- **Manchas (`weathered`):** o asset `ancient-parchment/stains.svg` como camada de `background-image`, sem desfoque.
+- **Manchas (`weathered`):** primeiro em CSS, com `radial-gradient` de bordas suaves e opacidade baixa nos cantos. Uma máscara binária não representa bem uma mancha suave. O asset `ancient-parchment/stains.svg` só volta se o CSS não atender.
 - **Proibido:** shader WebGL (REF-27), ruído animado (REF-08, REF-69), `filter: blur`.
 
 **Estratégia de estilo:** `@utility enchant-parchment` com `data-tone` e `data-layers="weathered manuscript"`. Todas as camadas num único `background-image` de um elemento: 0 nós extras.
@@ -104,7 +104,7 @@ No registro, as variantes são `light | dark | weathered | manuscript`; na API, 
 
 Os prompts de geração ficam fora do repositório.
 
-- `ancient-parchment/stains.svg`: 3 manchas orgânicas nos cantos, cortadas pela borda (variante `weathered`).
+- `ancient-parchment/stains.svg` (**opcional**, só se o CSS não atender): 3 manchas orgânicas nos cantos, cortadas pela borda (variante `weathered`).
 
 O grão não é asset: é um data-URI gerado no CSS.
 
