@@ -79,18 +79,21 @@ export function CharacterContextProvider({
 }
 
 /**
- * Loads the character of the current route and keeps the sheet's draft. `initialCharacter` is
+ * Loads the character of the current route (or `characterId`) and keeps the sheet's draft. `initialCharacter` is
  * the one the server already loaded, so the sheet opens without fetching it again.
  */
 export function CharacterProvider({
   initialCharacter,
+  characterId,
   children,
 }: {
   initialCharacter?: DnD5eCharacter;
+  /** A sheet shown outside its own route (the party's sheet viewer) names its character. */
+  characterId?: string;
   children: ReactNode;
 }) {
   const params = useParams();
-  const id = params?.id as string;
+  const id = characterId ?? (params?.id as string);
   const t = useTranslations('characters');
   const { getErrorMessage } = useErrorMessage();
 

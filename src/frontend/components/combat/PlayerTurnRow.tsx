@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { CharacterPortrait } from '@frontend/components/character/CharacterPortrait';
+import { SheetPreview } from '@frontend/components/character/sheet/SheetPreview';
 import { ConditionBadge } from '@frontend/components/content/ConditionBadge';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -14,7 +15,6 @@ import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { ConditionsPicker } from './ConditionsPicker';
 import { NumberCell } from './NumberCell';
-import { SheetLink } from './SheetLink';
 import { OwnerOrSideBadge, SideBadge } from './SideBadge';
 import { ZoomablePortrait } from './ZoomablePortrait';
 
@@ -138,7 +138,12 @@ export function PlayerTurnRow({
             />
           </label>
           {turn.characterId && (
-            <SheetLink href={`/system/DnD_5e/character/${turn.characterId}`} name={name} />
+            <SheetPreview
+              characterId={turn.characterId}
+              name={name}
+              source={{ kind: 'own' }}
+              canEdit
+            />
           )}
         </div>
       )}

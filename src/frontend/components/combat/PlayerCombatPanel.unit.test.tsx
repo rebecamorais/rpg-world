@@ -263,12 +263,13 @@ describe('PlayerCombatPanel', () => {
     it('tem "Sua iniciativa", Condições e Ver ficha', () => {
       const row = mineTurn();
       expect(row.getByLabelText(t.yourInitiative)).toHaveValue(14);
-      expect(row.getByRole('button', { name: /Arani/ })).toBeInTheDocument();
-      // In a new tab: the combat stays open
-      expect(row.getByRole('link', { name: new RegExp(`^${t.openSheet}`) })).toHaveAttribute(
-        'href',
-        '/system/DnD_5e/character/c1',
-      );
+      expect(
+        row.getByRole('button', { name: t.conditionsOf.replace('{name}', 'Arani') }),
+      ).toBeInTheDocument();
+      // The whole sheet opens over the combat, read-only, with "Edit sheet" inside
+      expect(
+        row.getByRole('button', { name: `${messages.sheetViewer.open} Arani` }),
+      ).toBeInTheDocument();
     });
 
     it('sem characterId não há Ver ficha', () => {

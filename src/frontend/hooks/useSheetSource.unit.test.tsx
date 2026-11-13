@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { useSheetSource } from './useSheetSource';
+import { type SheetSource, SheetSourceContext, useSheetSource } from './useSheetSource';
 
 const params = vi.hoisted(() => ({ value: {} as Record<string, string> }));
 const demo = vi.hoisted(() => ({ isDemo: false }));
@@ -51,5 +51,25 @@ describe('useSheetSource', () => {
       apiPath: '/api/parties/the-pioneers/characters/ada',
       pagesPath: '/demo/characters/ada',
     });
+  });
+
+  it('dentro do visualizador da mesa, o contexto manda mais que o endereço', () => {
+    // On the party page: the route has a partyId, but the player reads their own sheet
+    params.value = { partyId: 'p1' };
+    const own: SheetSource = {
+      readOnly: true,
+      partyId: null,
+      apiPath: '/api/characters/c1',
+      pagesPath: '/system/DnD_5e/character/c1',
+      embedded: true,
+    };
+
+    const { result } = renderHook(() => useSheetSource('c1'), {
+      wrapper: ({ children }) => (
+        <SheetSourceContext.Provider value={own}>{children}</SheetSourceContext.Provider>
+      ),
+    });
+
+    expect(result.current).toEqual(own);
   });
 });

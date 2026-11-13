@@ -216,7 +216,7 @@ describe('PartyPage na demo', () => {
       'demo',
     );
 
-    expect(await screen.findByText('Ada')).toBeInTheDocument();
+    expect((await screen.findAllByText('Ada'))[0]).toBeInTheDocument();
     expect(screen.queryByRole('navigation', { name: t.tabs.label })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: t.settings.manage })).not.toBeInTheDocument();
   });

@@ -14,7 +14,6 @@ import type { ParticipantPatch } from '@backend/contexts/combat/domain/repositor
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
-import { sheetHrefOf } from './CombatRow';
 import { CombatRowDetails } from './CombatRowDetails';
 import { OwnerOrSideBadge } from './SideBadge';
 
@@ -88,8 +87,8 @@ export function SelectedPanel({
 
       <CombatRowDetails
         id={`combat-panel-${row.participantId}`}
+        partyId={partyId}
         row={row}
-        sheetHref={sheetHrefOf(partyId, row)}
         edition={edition}
         swapWith={swapWith}
         onSwap={onSwap}

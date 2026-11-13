@@ -1,3 +1,5 @@
+import { createContext, useContext } from 'react';
+
 import { useParams } from 'next/navigation';
 
 import { useDemo } from '@frontend/demo/DemoContext';
@@ -11,15 +13,30 @@ export interface SheetSource {
   apiPath: string;
   /** The sheet's tabs live under this path. */
   pagesPath: string;
+  /**
+   * Shown inside another page (the party's sheet viewer) rather than as its own page: no page
+   * title, no tab bar, no fixed bars of its own.
+   */
+  embedded?: boolean;
 }
 
 /**
+ * Where a sheet shown outside its own route reads from (the party's sheet viewer): set by the
+ * viewer, it wins over the route, so the sheet's components need no change.
+ */
+export const SheetSourceContext = createContext<SheetSource | null>(null);
+
+/**
  * Whose sheet this route shows. Under /parties/<partyId>/characters/<id> it is the GM's read-only
- * view of a player's sheet; anywhere else, the owner's own sheet.
+ * view of a player's sheet; anywhere else, the owner's own sheet. Inside a SheetSourceContext
+ * (the party's sheet viewer), whatever it says.
  */
 export function useSheetSource(characterId: string, system?: string): SheetSource {
   const params = useParams();
   const { isDemo } = useDemo();
+  const embedded = useContext(SheetSourceContext);
+
+  if (embedded) return embedded;
 
   if (isDemo) {
     return {
