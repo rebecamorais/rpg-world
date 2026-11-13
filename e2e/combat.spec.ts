@@ -177,6 +177,41 @@ test.describe('combate', () => {
     await expect(hero).toContainText('Death saves: 1 successes, 2 failures');
   });
 
+  test('a jogadora vê o próprio PV, ajusta no cartão "Sua vez" no celular e a linha do mestre atualiza', async ({
+    page,
+    browser,
+    user: _,
+  }) => {
+    const { partyId, goblinId, heroId, player } = await table(page, browser, 'hp-own');
+    await runningCombat(page, partyId, heroId, goblinId);
+    await player.page.setViewportSize({ width: 375, height: 800 });
+    await page.goto(partyUrl(partyId, '/combat'));
+    await player.page.goto(partyUrl(partyId, '/combat'));
+
+    // Their own HP is in their row, outside their turn too
+    const mine = order(player.page).getByRole('listitem').filter({ hasText: 'Arani' });
+    await expect(mine).toContainText('12 / 20');
+
+    // Goblin 1's turn ends: Arani's row becomes the "your turn" card
+    await (await hydrated(page.getByRole('button', { name: 'End turn' }))).click();
+    await expect(mine).toHaveAttribute('aria-current', 'true');
+    await expect(mine.getByText('AC', { exact: true })).toBeVisible();
+    await expect(mine.getByText('Speed', { exact: true })).toBeVisible();
+
+    const adjust = await hydrated(mine.getByRole('button', { name: 'Adjust HP Arani' }));
+    expect((await adjust.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await adjust.click();
+    const dialog = player.page.getByRole('dialog', { name: 'Adjust HP' });
+    await dialog.getByLabel('How much?').fill('5');
+    await dialog.getByRole('button', { name: 'Damage' }).click();
+
+    // Saved to the sheet: the card, the turn bar and the GM's row follow
+    await expect(mine).toContainText('7 / 20');
+    await expect(player.page.locator('[data-turn-bar]')).toContainText('7 / 20');
+    const hero = order(page).getByRole('listitem').filter({ hasText: 'Arani' });
+    await expect(hero).toContainText('7 / 20');
+  });
+
   test('o mestre duplica um NPC', async ({ page, user: _ }) => {
     await createEnemySheet(page, 'Goblin', 7);
     // The old address still leads to the NPCs tab
