@@ -1468,9 +1468,7 @@
     "enemy": "Inimigo",
     "reconnecting": "Reconectando… a tela atualiza sozinha quando a conexão voltar.",
     "yourTurn": "Sua vez",
-    "endMyTurn": "Encerrar meu turno",
     "yourInitiative": "Sua iniciativa",
-    "viewSheet": "Ver ficha",
     "playerPreparing": "O mestre está preparando o combate.",
     "order": "Ordem do combate",
     "yours": "seu",
@@ -1514,7 +1512,12 @@
     "openSheet": "Abrir ficha",
     "forPlayers": "Para os jogadores",
     "turnPassedTo": "Agora é a vez de {name}",
-    "noCombatPlayer": "Nenhum combate em andamento. Quando o mestre começar um, ele aparece aqui."
+    "noCombatPlayer": "Nenhum combate em andamento. Quando o mestre começar um, ele aparece aqui.",
+    "nextUp": "Próximo: <strong>{name}</strong>",
+    "addNpc": "Adicionar NPC",
+    "turnsUntil": "<strong>{name}</strong> em {count, plural, one {# turno} other {# turnos}}",
+    "endTurnOf": "Encerrar turno de {name}",
+    "newTab": "(abre em nova aba)"
   },
   "characterRaces": {
     "dragonborn": "Draconato",

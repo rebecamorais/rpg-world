@@ -92,7 +92,8 @@ describe('CombatRow', () => {
       );
       const row = screen.getByRole('listitem');
       expect(within(row).getByText('12')).toBeInTheDocument();
-      expect(within(row).getByRole('link', { name: 'Arani' })).toBeInTheDocument();
+      // The sheet opens in a new tab: the link says so after the name, for screen readers
+      expect(within(row).getByRole('link', { name: /^Arani/ })).toBeInTheDocument();
       expect(within(row).getByText('@rebeca')).toBeInTheDocument();
       expect(within(row).queryByText(t.player)).not.toBeInTheDocument();
       expect(within(row).getByText('12 / 20')).toBeInTheDocument();
@@ -131,13 +132,13 @@ describe('CombatRow', () => {
 
     it('o nome abre a ficha certa: a da mesa para jogador, a normal para inimigo', () => {
       renderRow();
-      expect(screen.getByRole('link', { name: 'Arani' })).toHaveAttribute(
+      expect(screen.getByRole('link', { name: /^Arani/ })).toHaveAttribute(
         'href',
         '/parties/party-1/characters/hero',
       );
 
       renderRow(goblin());
-      expect(screen.getByRole('link', { name: 'Goblin' })).toHaveAttribute(
+      expect(screen.getByRole('link', { name: /^Goblin/ })).toHaveAttribute(
         'href',
         '/system/DnD_5e/character/goblin',
       );
@@ -262,7 +263,7 @@ describe('CombatRow', () => {
       expect(
         screen.getByRole('button', { name: fill(t.conditionsOf, { name: 'Goblin' }) }),
       ).toBeVisible();
-      expect(screen.getByRole('link', { name: t.openSheet })).toHaveAttribute(
+      expect(screen.getByRole('link', { name: new RegExp(`^${t.openSheet}`) })).toHaveAttribute(
         'href',
         '/system/DnD_5e/character/goblin',
       );

@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { toast } from 'sonner';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { GmEncounterView } from '@backend/contexts/combat/domain/Encounter';
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
@@ -263,6 +263,8 @@ describe('GmCombatPanel', () => {
     const user = userEvent.setup();
     hook.encounter = running(0);
     renderWithProviders(<GmCombatPanel party={party} live />);
+    // The form is behind "Add NPC": the list stays the screen
+    await user.click(screen.getByRole('button', { name: t.addNpc }));
 
     const count = screen.getByLabelText(t.count);
     await user.clear(count);
@@ -294,6 +296,8 @@ describe('GmCombatPanel', () => {
     const user = userEvent.setup();
     hook.encounter = running(0);
     renderWithProviders(<GmCombatPanel party={party} live />);
+    // The form is behind "Add NPC": the list stays the screen
+    await user.click(screen.getByRole('button', { name: t.addNpc }));
 
     const enemy = screen.getByRole('button', { name: t.enemy });
     const ally = screen.getByRole('button', { name: t.ally });
@@ -310,6 +314,8 @@ describe('GmCombatPanel', () => {
     const user = userEvent.setup();
     hook.encounter = running(0);
     renderWithProviders(<GmCombatPanel party={party} live />);
+    // The form is behind "Add NPC": the list stays the screen
+    await user.click(screen.getByRole('button', { name: t.addNpc }));
 
     for (const side of [t.ally, t.neutral, t.enemy]) {
       expect(screen.getByRole('button', { name: side })).toBeInTheDocument();
@@ -318,9 +324,10 @@ describe('GmCombatPanel', () => {
     expect(screen.getByRole('button', { name: t.addNeutral })).toBeInTheDocument();
   });
 
-  it('o link para os NPCs leva à aba de NPCs', () => {
+  it('o link para os NPCs leva à aba de NPCs', async () => {
     hook.encounter = running(0);
     renderWithProviders(<GmCombatPanel party={party} live />);
+    await userEvent.setup().click(screen.getByRole('button', { name: t.addNpc }));
 
     expect(screen.getByRole('link', { name: t.manageEnemySheets })).toHaveAttribute(
       'href',
@@ -349,5 +356,46 @@ describe('GmCombatPanel', () => {
     renderWithProviders(<GmCombatPanel party={party} live={false} />);
 
     expect(screen.getByRole('status')).toHaveTextContent(t.reconnecting);
+  });
+
+  describe('tela larga', () => {
+    const fight = (): GmEncounterView => {
+      const view = running(1);
+      return { ...view, rows: view.rows.map((row, i) => ({ ...row, isCurrent: i === 0 })) };
+    };
+
+    beforeEach(() => {
+      vi.spyOn(window, 'matchMedia').mockImplementation(
+        (query) =>
+          ({
+            matches: true,
+            media: query,
+            addEventListener: () => {},
+            removeEventListener: () => {},
+          }) as unknown as MediaQueryList,
+      );
+    });
+    afterEach(() => vi.restoreAllMocks());
+
+    it('as edições ficam num painel ao lado: primeiro quem tem a vez, depois quem o mestre escolher', async () => {
+      hook.encounter = fight();
+      renderWithProviders(<GmCombatPanel party={party} live />);
+
+      expect(screen.getByRole('heading', { name: 'Arani' })).toBeInTheDocument();
+      // The turn bar says who plays next ("Next: Goblin", the name in bold)
+      const nextUp = t.nextUp.replace(/<\/?strong>/g, '').replace('{name}', 'Goblin');
+      expect(
+        screen.getByText((_, el) => el?.tagName === 'P' && el.textContent === nextUp),
+      ).toBeInTheDocument();
+
+      await userEvent.click(
+        screen.getByRole('button', { name: t.detailsOf.replace('{name}', 'Goblin') }),
+      );
+
+      expect(screen.getByRole('heading', { name: 'Goblin' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: t.detailsOf.replace('{name}', 'Goblin') }),
+      ).toHaveAttribute('aria-pressed', 'true');
+    });
   });
 });

@@ -13,8 +13,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={theme}
       className="toaster group"
       position="bottom-right"
-      // Phones: above the character sheet's tab bar, so a toast (and its Undo) is never under it
-      mobileOffset={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom))' }}
+      // Phones: above the tab bar (sheet or party), and above the combat's turn bar when it
+      // shows, so a toast (and its Undo) never covers a button
+      mobileOffset={{
+        bottom: 'calc(4.5rem + var(--turn-bar, 0px) + env(safe-area-inset-bottom))',
+      }}
       toastOptions={{
         classNames: {
           toast:

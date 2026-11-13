@@ -24,6 +24,12 @@ import { RowStatus } from './RowStatus';
 import { OwnerOrSideBadge } from './SideBadge';
 import { ZoomablePortrait } from './ZoomablePortrait';
 
+/** An npc (enemy or ally) opens the GM's own sheet; a player's, the read-only one of the party. */
+export const sheetHrefOf = (partyId: string, row: GmRow) =>
+  row.side !== 'player'
+    ? `/system/DnD_5e/character/${row.characterId}`
+    : `/parties/${partyId}/characters/${row.characterId}`;
+
 /**
  * A participant in the GM's initiative tracker. Closed, it only reads; every edit lives in the
  * open part (`CombatRowDetails`). While someone else plays (`waiting`), it fades back.
@@ -38,6 +44,9 @@ export function CombatRow({
   onChange,
   onRemove,
   onConditionsChange,
+  detailsInline = true,
+  selected = false,
+  onSelect,
 }: {
   partyId: string;
   row: GmRow;
@@ -48,13 +57,18 @@ export function CombatRow({
   onChange: (patch: ParticipantPatch) => void;
   onRemove: () => void;
   onConditionsChange: (conditions: ActiveCondition[]) => void;
+  /**
+   * Phones: the row opens in place. Larger screens: the edits live in a panel beside the list,
+   * so the row only picks itself (`onSelect`) and shows it is the one there (`selected`).
+   */
+  detailsInline?: boolean;
+  selected?: boolean;
+  onSelect?: () => void;
 }) {
   const t = useTranslations('combat');
   // An npc (enemy or ally) has its own HP in the combat and opens the GM's own sheet
   const isNpc = row.side !== 'player';
-  const sheetHref = isNpc
-    ? `/system/DnD_5e/character/${row.characterId}`
-    : `/parties/${partyId}/characters/${row.characterId}`;
+  const sheetHref = sheetHrefOf(partyId, row);
   const theme = characterTheme(row.accentColor);
 
   // The GM's choice holds until the turn comes or goes; then the row follows the turn again
@@ -64,12 +78,12 @@ export function CombatRow({
     setTurnSeen(row.isCurrent);
     setOpened(null);
   }
-  const expanded = opened ?? row.isCurrent;
+  const expanded = detailsInline ? (opened ?? row.isCurrent) : selected;
   // Only the art fades (never the text, so contrast holds); it returns on hover, focus or opening
   const faded = waiting && !expanded;
   const fadedArt =
     'opacity-60 grayscale transition-[opacity,filter] duration-300 group-focus-within:opacity-100 group-focus-within:grayscale-0 group-hover:opacity-100 group-hover:grayscale-0';
-  const toggle = () => setOpened(!expanded);
+  const toggle = () => (detailsInline ? setOpened(!expanded) : onSelect?.());
   const detailsId = `combat-details-${row.participantId}`;
   const down = isNpc && row.hp.current === 0;
   // A death the players know of is a thin line, like in their list, until the GM opens it
@@ -94,6 +108,7 @@ export function CombatRow({
         theme.className,
         'group bg-card/60 border-character-muted relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-xl border p-3',
         row.isCurrent && 'border-primary animate-turn-glow',
+        !detailsInline && selected && !row.isCurrent && 'border-foreground/40',
       )}
     >
       <div
@@ -123,14 +138,19 @@ export function CombatRow({
         </ZoomablePortrait>
 
         <div className="flex min-w-0 flex-1 flex-col gap-1">
+          {/* The sheet opens in a new tab: the combat stays where it was */}
           <AppLink
             href={sheetHref}
+            target="_blank"
+            rel="noopener noreferrer"
             className={cn(
-              'text-title focus-ring max-w-full self-start truncate rounded-sm hover:underline',
+              // Two lines before cutting: the name matters more than the space on a phone
+              'text-title focus-ring line-clamp-2 max-w-full self-start rounded-sm break-words hover:underline',
               faded ? 'text-muted-foreground' : 'text-character-flare',
             )}
           >
             {row.name}
+            <span className="sr-only"> {t('newTab')}</span>
           </AppLink>
           {/* On touch screens the gap keeps each condition badge's touch area apart */}
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pointer-coarse:gap-3">
@@ -171,8 +191,9 @@ export function CombatRow({
           variant="ghost"
           size="icon"
           aria-label={t('detailsOf', { name: row.name })}
-          aria-expanded={expanded}
-          aria-controls={detailsId}
+          {...(detailsInline
+            ? { 'aria-expanded': expanded, 'aria-controls': detailsId }
+            : { 'aria-pressed': selected })}
           onClick={toggle}
           className="shrink-0"
         >
@@ -190,18 +211,20 @@ export function CombatRow({
         <p className="text-caption text-danger-flare">{t('deathSaves', row.deathSaves)}</p>
       )}
 
-      <CombatRowDetails
-        id={detailsId}
-        hidden={!expanded}
-        row={row}
-        sheetHref={sheetHref}
-        edition={edition}
-        swapWith={swapWith}
-        onSwap={onSwap}
-        onChange={onChange}
-        onRemove={onRemove}
-        onConditionsChange={onConditionsChange}
-      />
+      {detailsInline && (
+        <CombatRowDetails
+          id={detailsId}
+          hidden={!expanded}
+          row={row}
+          sheetHref={sheetHref}
+          edition={edition}
+          swapWith={swapWith}
+          onSwap={onSwap}
+          onChange={onChange}
+          onRemove={onRemove}
+          onConditionsChange={onConditionsChange}
+        />
+      )}
     </li>
   );
 }

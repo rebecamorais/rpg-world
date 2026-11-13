@@ -1468,9 +1468,7 @@
     "enemy": "Enemy",
     "reconnecting": "Reconnecting… the screen updates by itself when the connection is back.",
     "yourTurn": "Your turn",
-    "endMyTurn": "End my turn",
     "yourInitiative": "Your initiative",
-    "viewSheet": "View sheet",
     "playerPreparing": "The GM is preparing the combat.",
     "order": "Combat order",
     "yours": "yours",
@@ -1514,7 +1512,12 @@
     "openSheet": "Open sheet",
     "forPlayers": "For the players",
     "turnPassedTo": "Now it's {name}'s turn",
-    "noCombatPlayer": "No combat going on. When the GM starts one, it shows here."
+    "noCombatPlayer": "No combat going on. When the GM starts one, it shows here.",
+    "nextUp": "Next: <strong>{name}</strong>",
+    "addNpc": "Add NPC",
+    "turnsUntil": "<strong>{name}</strong> in {count, plural, one {# turn} other {# turns}}",
+    "endTurnOf": "End {name}'s turn",
+    "newTab": "(opens in a new tab)"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

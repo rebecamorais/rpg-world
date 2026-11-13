@@ -94,6 +94,12 @@ export async function openRow(gm: Page, name: string) {
     .getByRole('listitem')
     .filter({ hasText: name });
   const chevron = await hydrated(row.getByRole('button', { name: `Details of ${name}` }));
+  // Wide screens: the row picks itself and its edits show in the panel beside the list
+  if ((await chevron.getAttribute('aria-pressed')) !== null) {
+    if ((await chevron.getAttribute('aria-pressed')) !== 'true') await chevron.click();
+    await expect(chevron).toHaveAttribute('aria-pressed', 'true');
+    return gm.getByRole('region', { name, exact: true });
+  }
   if ((await chevron.getAttribute('aria-expanded')) !== 'true') await chevron.click();
   await expect(chevron).toHaveAttribute('aria-expanded', 'true');
   return row;
