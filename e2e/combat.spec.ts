@@ -77,7 +77,8 @@ test.describe('combate', () => {
       ['Goblin 1', '15'],
       ['Goblin 2', '5'],
     ]) {
-      const field = page.getByLabel(`${name}'s initiative`);
+      // Wide screens show one participant's edits at a time: pick it first
+      const field = (await openRow(page, name)).getByLabel(`${name}'s initiative`);
       await field.fill(initiative);
       // Saved on blur; sorting right after must already see it (no waiting for the server)
       await field.blur();
