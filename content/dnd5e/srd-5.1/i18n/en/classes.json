@@ -1,0 +1,1422 @@
+{
+  "barbarian": {
+    "name": "Barbarian",
+    "subclassTitle": "Primal Path",
+    "features": {
+      "rage": {
+        "name": "Rage",
+        "description": "In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action.\nWhile raging, you gain the following benefits if you aren't wearing heavy armor:\n• You have advantage on Strength checks and Strength saving throws.\n• When you make a melee weapon attack using Strength, you gain a +2 bonus to the damage roll. This bonus increases as you level.\n• You have resistance to bludgeoning, piercing, and slashing damage.\nIf you are able to cast spells, you can't cast them or concentrate on them while raging.\nYour rage lasts for 1 minute. It ends early if you are knocked {@condition unconscious} or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action.\nOnce you have raged the maximum number of times for your barbarian level, you must finish a long rest before you can rage again. You may rage 2 times at 1st level, 3 at 3rd, 4 at 6th, 5 at 12th, and 6 at 17th."
+      },
+      "unarmored-defense": {
+        "name": "Unarmored Defense",
+        "description": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit."
+      },
+      "danger-sense": {
+        "name": "Danger Sense",
+        "description": "At 2nd level, you gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger. You have advantage on Dexterity saving throws against effects that you can see, such as traps and spells. To gain this benefit, you can't be {@condition blinded}, {@condition deafened}, or {@condition incapacitated}."
+      },
+      "reckless-attack": {
+        "name": "Reckless Attack",
+        "description": "Starting at 2nd level, you can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn."
+      },
+      "primal-path": {
+        "name": "Primal Path",
+        "description": "At 3rd level, you choose a path that shapes the nature of your rage from the list of available paths. Your choice grants you features at 3rd level and again at 6th, 10th, and 14th levels."
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "extra-attack": {
+        "name": "Extra Attack",
+        "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the {@action Attack} action on your turn."
+      },
+      "fast-movement": {
+        "name": "Fast Movement",
+        "description": "Starting at 5th level, your speed increases by 10 feet while you aren't wearing heavy armor."
+      },
+      "path-feature-6": {
+        "name": "Path Feature",
+        "description": "At 6th level, you gain a feature from your Primal Path."
+      },
+      "feral-instinct": {
+        "name": "Feral Instinct",
+        "description": "By 7th level, your instincts are so honed that you have advantage on initiative rolls.\nAdditionally, if you are {@status surprised} at the beginning of combat and aren't {@condition incapacitated}, you can act normally on your first turn, but only if you enter your rage before doing anything else on that turn."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "brutal-critical-1-die": {
+        "name": "Brutal Critical (1 die)",
+        "description": "Beginning at 9th level, you can roll one additional weapon damage die when determining the extra damage for a critical hit with a melee attack.\nThis increases to two additional dice at 13th level and three additional dice at 17th level."
+      },
+      "path-feature-10": {
+        "name": "Path feature",
+        "description": "At 10th level, you gain a feature from your Primal Path."
+      },
+      "relentless-rage": {
+        "name": "Relentless Rage",
+        "description": "Starting at 11th level, your rage can keep you fighting despite grievous wounds. If you drop to 0 hit points while you're raging and don't die outright, you can make a {@dc 10} Constitution saving throw. If you succeed, you drop to 1 hit point instead.\nEach time you use this feature after the first, the DC increases by 5. When you finish a short or long rest, the DC resets to 10."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "brutal-critical-2-dice": {
+        "name": "Brutal Critical (2 dice)",
+        "description": "At 13th level, you can roll two additional weapon damage dice when determining the extra damage for a critical hit with a melee attack.\nThis increases to three additional dice at 17th level."
+      },
+      "path-feature-14": {
+        "name": "Path feature",
+        "description": "At 14th level, you gain a feature from your Primal Path."
+      },
+      "persistent-rage": {
+        "name": "Persistent Rage",
+        "description": "Beginning at 15th level, your rage is so fierce that it ends early only if you fall {@condition unconscious} or if you choose to end it."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "brutal-critical-3-dice": {
+        "name": "Brutal Critical (3 dice)",
+        "description": "At 17th level, you can roll three additional weapon damage dice when determining the extra damage for a critical hit with a melee attack."
+      },
+      "indomitable-might": {
+        "name": "Indomitable Might",
+        "description": "Beginning at 18th level, if your total for a Strength check is less than your Strength score, you can use that score in place of the total."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "primal-champion": {
+        "name": "Primal Champion",
+        "description": "At 20th level, you embody the power of the wilds. Your Strength and Constitution scores increase by 4. Your maximum for those scores is now 24."
+      }
+    },
+    "resources": { "rage": { "name": "Rage" } },
+    "choices": {},
+    "subclasses": {
+      "berserker": {
+        "name": "Path of the Berserker",
+        "features": {
+          "path-of-the-berserker": {
+            "name": "Path of the Berserker",
+            "description": "For some barbarians, rage is a means to an end—that end being violence. The Path of the Berserker is a path of untrammeled fury, slick with blood. As you enter the berserker's rage, you thrill in the chaos of battle, heedless of your own health or well-being.\nFrenzy. Starting when you choose this path at 3rd level, you can go into a frenzy when you rage. If you do so, for the duration of your rage you can make a single melee weapon attack as a bonus action on each of your turns after this one. When your rage ends, you suffer one level of {@condition exhaustion}."
+          },
+          "mindless-rage": {
+            "name": "Mindless Rage",
+            "description": "Beginning at 6th level, you can't be {@condition charmed} or {@condition frightened} while raging. If you are {@condition charmed} or {@condition frightened} when you enter your rage, the effect is suspended for the duration of the rage."
+          },
+          "intimidating-presence": {
+            "name": "Intimidating Presence",
+            "description": "Beginning at 10th level, you can use your action to frighten someone with your menacing presence. When you do so, choose one creature that you can see within 30 feet of you. If the creature can see or hear you, it must succeed on a Wisdom saving throw (DC equal to 8 + your proficiency bonus + your Charisma modifier) or be {@condition frightened} of you until the end of your next turn. On subsequent turns, you can use your action to extend the duration of this effect on the {@condition frightened} creature until the end of your next turn. This effect ends if the creature ends its turn out of line of sight or more than 60 feet away from you.\nIf the creature succeeds on its saving throw, you can't use this feature on that creature again for 24 hours."
+          },
+          "retaliation": {
+            "name": "Retaliation",
+            "description": "Starting at 14th level, when you take damage from a creature that is within 5 feet of you, you can use your reaction to make a melee weapon attack against that creature."
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "bard": {
+    "name": "Bard",
+    "subclassTitle": "Bard College",
+    "features": {
+      "bardic-inspiration": {
+        "name": "Bardic Inspiration",
+        "description": "You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a {@dice d6}.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the {@dice d20} before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.\nYou can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.\nYour Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a {@dice d8} at 5th level, a {@dice d10} at 10th level, and a {@dice d12} at 15th level."
+      },
+      "spellcasting": {
+        "name": "Spellcasting",
+        "description": "You have learned to untangle and reshape the fabric of reality in harmony with your wishes and music. Your spells are part of your vast repertoire, magic that you can tune to different situations. See {@book chapter 10|PHB|10} for the general rules of spellcasting and {@book chapter 11|PHB|11} for the {@filter bard spell list|spells|class=bard}.\nCantrips. You know two cantrips of your choice from the bard spell list. You learn additional bard cantrips of your choice at higher levels, learning a 3rd cantrip at 4th level and a 4th at 10th level.\nSpell Slots. The Bard table shows how many spell slots you have to cast your {@filter bard spells|spells|class=bard} of 1st level and higher. To cast one of these spells, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.\nFor example, if you know the 1st-level spell {@spell cure wounds} and have a 1st-level and a 2nd-level spell slot available, you can cast {@spell cure wounds} using either slot.\nSpells Known of 1st Level and Higher. You know four 1st-level spells of your choice from the bard spell list.\nYou learn an additional bard spell of your choice at each level except 12th, 16th, 19th, and 20th. Each of these spells must be of a level for which you have spell slots. For instance, when you reach 3rd level in this class, you can learn one new spell of 1st or 2nd level.\nAdditionally, when you gain a level in this class, you can choose one of the bard spells you know and replace it with another spell from the bard spell list, which also must be of a level for which you have spell slots.\nSpellcasting Ability. Charisma is your spellcasting ability for your bard spells. Your magic comes from the heart and soul you pour into the performance of your music or oration. You use your Charisma whenever a spell refers to your spellcasting ability. In addition, you use your Charisma modifier when setting the saving throw DC for a bard spell you cast and when making an attack roll with one.\nSpell save DC = 8 + your proficiency bonus + your Charisma modifier\nSpell attack modifier = your proficiency bonus + your Charisma modifier\nRitual Casting. You can cast any bard spell you know as a ritual if that spell has the ritual tag.\nSpellcasting Focus. You can use a {@item musical instrument|PHB} as a spellcasting focus for your bard spells."
+      },
+      "jack-of-all-trades": {
+        "name": "Jack of All Trades",
+        "description": "Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus."
+      },
+      "song-of-rest-d6": {
+        "name": "Song of Rest (d6)",
+        "description": "Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points by spending Hit Dice at the end of the short rest, each of those creatures regains an extra {@dice 1d6} hit points.\nThe extra hit points increase when you reach certain levels in this class: to {@dice 1d8} at 9th level, to {@dice 1d10} at 13th level, and to {@dice 1d12} at 17th level."
+      },
+      "bard-college": {
+        "name": "Bard College",
+        "description": "At 3rd level, you delve into the advanced techniques of a bard college of your choice from the list of available colleges. Your choice grants you features at 3rd level and again at 6th and 14th level."
+      },
+      "expertise-3": {
+        "name": "Expertise",
+        "description": "At 3rd level, choose two of your skill proficiencies. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies.\nAt 10th level, you can choose another two skill proficiencies to gain this benefit."
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "bardic-inspiration-d8": {
+        "name": "Bardic Inspiration (d8)",
+        "description": "At 5th level, your Bardic Inspiration die changes to a {@dice d8}."
+      },
+      "font-of-inspiration": {
+        "name": "Font of Inspiration",
+        "description": "Beginning when you reach 5th level, you regain all of your expended uses of Bardic Inspiration when you finish a short or long rest."
+      },
+      "countercharm": {
+        "name": "Countercharm",
+        "description": "At 6th level, you gain the ability to use musical notes or words of power to disrupt mind-influencing effects. As an action, you can start a performance that lasts until the end of your next turn. During that time, you and any friendly creatures within 30 feet of you have advantage on saving throws against being {@condition frightened} or {@condition charmed}. A creature must be able to hear you to gain this benefit. The performance ends early if you are {@condition incapacitated} or silenced or if you voluntarily end it (no action required)."
+      },
+      "bard-college-feature-6": {
+        "name": "Bard College feature",
+        "description": "At 6th level, you gain a feature from your Bard College."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "song-of-rest-d8": {
+        "name": "Song of Rest (d8)",
+        "description": "At 9th level, the extra hit points gained from Song of Rest increases to {@dice 1d8}."
+      },
+      "bardic-inspiration-d10": {
+        "name": "Bardic Inspiration (d10)",
+        "description": "At 10th level, your Bardic Inspiration die changes to a {@dice d10}."
+      },
+      "expertise-10": {
+        "name": "Expertise",
+        "description": "At 10th level, you can choose another two skill proficiencies. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies."
+      },
+      "magical-secrets-10": {
+        "name": "Magical Secrets",
+        "description": "By 10th level, you have plundered magical knowledge from a wide spectrum of disciplines. Choose two spells from any classes, including this one. A spell you choose must be of a level you can cast, as shown on the Bard table, or a cantrip.\nThe chosen spells count as bard spells for you and are included in the number in the Spells Known column of the Bard table.\nYou learn two additional spells from any classes at 14th level and again at 18th level."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "song-of-rest-d10": {
+        "name": "Song of Rest (d10)",
+        "description": "At 13th level, the extra hit points gained from Song of Rest increases to {@dice 1d10}."
+      },
+      "magical-secrets-14": {
+        "name": "Magical Secrets",
+        "description": "At 14th level, choose two additional spells from any classes, including this one. A spell you choose must be of a level you can cast, as shown on the Bard table, or a cantrip.\nThe chosen spells count as bard spells for you and are included in the number in the Spells Known column of the Bard table."
+      },
+      "bard-college-feature-14": {
+        "name": "Bard College feature",
+        "description": "At 14th level, you gain a feature from your Bard College."
+      },
+      "bardic-inspiration-d12": {
+        "name": "Bardic Inspiration (d12)",
+        "description": "At 15th level, your Bardic Inspiration die changes to a {@dice d12}."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "song-of-rest-d12": {
+        "name": "Song of Rest (d12)",
+        "description": "At 17th level, the extra hit points gained from Song of Rest increases to {@dice 1d12}."
+      },
+      "magical-secrets-18": {
+        "name": "Magical Secrets",
+        "description": "At 18th level, choose two additional spells from any class, including this one. A spell you choose must be of a level you can cast, as shown on the Bard table, or a cantrip.\nThe chosen spells count as bard spells for you and are included in the number in the Spells Known column of the Bard table."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "superior-inspiration": {
+        "name": "Superior Inspiration",
+        "description": "At 20th level, when you roll initiative and have no uses of Bardic Inspiration left, you regain one use."
+      }
+    },
+    "resources": { "bardic-inspiration": { "name": "Bardic Inspiration" } },
+    "choices": {},
+    "subclasses": {
+      "lore": {
+        "name": "College of Lore",
+        "features": {
+          "college-of-lore": {
+            "name": "College of Lore",
+            "description": "Bards of the College of Lore know something about most things, collecting bits of knowledge from sources as diverse as scholarly tomes and peasant tales. Whether singing folk ballads in taverns or elaborate compositions in royal courts, these bards use their gifts to hold audiences spellbound. When the applause dies down, the audience members might find themselves questioning everything they held to be true, from their faith in the priesthood of the local temple to their loyalty to the king.\nThe loyalty of these bards lies in the pursuit of beauty and truth, not in fealty to a monarch or following the tenets of a deity. A noble who keeps such a bard as a herald or advisor knows that the bard would rather be honest than politic.\nThe college's members gather in libraries and sometimes in actual colleges, complete with classrooms and dormitories, to share their lore with one another. They also meet at festivals or affairs of state, where they can expose corruption, unravel lies, and poke fun at self-important figures of authority.\nBonus Proficiencies. When you join the College of Lore at 3rd level, you gain proficiency with three skills of your choice.\nCutting Words. Also at 3rd level, you learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll. You can choose to use this feature after the creature makes its roll, but before the DM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can't hear you or if it's immune to being {@condition charmed}."
+          },
+          "additional-magical-secrets": {
+            "name": "Additional Magical Secrets",
+            "description": "At 6th level, you learn two spells of your choice from any class. A spell you choose must be of a level you can cast, as shown on the Bard table, or a cantrip. The chosen spells count as bard spells for you but don't count against the number of bard spells you know."
+          },
+          "peerless-skill": {
+            "name": "Peerless Skill",
+            "description": "Starting at 14th level, when you make an ability check, you can expend one use of Bardic Inspiration. Roll a Bardic Inspiration die and add the number rolled to your ability check. You can choose to do so after you roll the die for the ability check, but before the DM tells you whether you succeed or fail."
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "cleric": {
+    "name": "Cleric",
+    "subclassTitle": "Divine Domain",
+    "features": {
+      "spellcasting": {
+        "name": "Spellcasting",
+        "description": "As a conduit for divine power, you can cast cleric spells. See {@book chapter 10|PHB|10} for the general rules of spellcasting and {@book chapter 11|PHB|11} for a selection of {@filter cleric spells|spells|class=cleric}.\nCantrips. At 1st level, you know three cantrips of your choice from the cleric spell list. You learn additional cleric cantrips of your choice at higher levels, as shown in the Cantrips Known column of the Cleric table.\nPreparing and Casting Spells. The Cleric table shows how many spell slots you have to cast your {@filter cleric spells|spells|class=cleric} of 1st level and higher. To cast one of these spells, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.\nYou prepare the list of cleric spells that are available for you to cast, choosing from the cleric spell list. When you do so, choose a number of cleric spells equal to your Wisdom modifier + your cleric level (minimum of one spell). The spells must be of a level for which you have spell slots.\nFor example, if you are a 3rd-level cleric, you have four 1st-level and two 2nd-level spell slots. With a Wisdom of 16, your list of prepared spells can include six spells of 1st or 2nd level, in any combination. If you prepare the 1st-level spell {@spell cure wounds}, you can cast it using a 1st-level or 2nd-level slot. Casting the spell doesn't remove it from your list of prepared spells.\nYou can change your list of prepared spells when you finish a long rest. Preparing a new list of cleric spells requires time spent in prayer and meditation: at least 1 minute per spell level for each spell on your list.\nSpellcasting Ability. Wisdom is your spellcasting ability for your cleric spells. The power of your spells comes from your devotion to your deity. You use your Wisdom whenever a cleric spell refers to your spellcasting ability. In addition, you use your Wisdom modifier when setting the saving throw DC for a cleric spell you cast and when making an attack roll with one.\nSpell save DC = 8 + your proficiency bonus + your Wisdom modifier\nSpell attack modifier = your proficiency bonus + your Wisdom modifier\nRitual Casting. You can cast a cleric spell as a ritual if that spell has the ritual tag and you have the spell prepared.\nSpellcasting Focus. You can use a {@item holy symbol|phb} as a spellcasting focus for your cleric spells."
+      },
+      "divine-domain": {
+        "name": "Divine Domain",
+        "description": "Choose one domain related to your deity from the list of available domains. Each domain is detailed in their own feature, and each one provides examples of gods associated with it. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels.\nDomain Spells. Each domain has a list of spells—its domain spells—that you gain at the cleric levels noted in the domain description. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day.\nIf you have a domain spell that doesn't appear on the cleric spell list, the spell is nonetheless a cleric spell for you."
+      },
+      "channel-divinity-2": {
+        "name": "Channel Divinity",
+        "description": "At 2nd level, you gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects. You start with two such effects: Turn Undead and an effect determined by your domain. Some domains grant you additional effects as you advance in levels, as noted in the domain description.\nWhen you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again.\nSome Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC.\nBeginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.\nChannel Divinity: Turn Undead. As an action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.\nA turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the {@action Dash} action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the {@action Dodge} action."
+      },
+      "divine-domain-feature-2": {
+        "name": "Divine Domain feature",
+        "description": "At 2nd level, you gain a feature from your Divine Domain."
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "destroy-undead-cr-1-2": {
+        "name": "Destroy Undead (CR 1/2)",
+        "description": "Starting at 5th level, when an {@filter undead of CR 1/2 or lower|bestiary|challenge rating=[&0;&1/2]|type=undead|miscellaneous=!swarm} fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
+      },
+      "channel-divinity-6": {
+        "name": "Channel Divinity",
+        "description": "Beginning at 6th level, you can use your Channel Divinity twice between rests."
+      },
+      "divine-domain-feature-6": {
+        "name": "Divine Domain feature",
+        "description": "At 6th level, you gain a feature from your Divine Domain."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "destroy-undead-cr-1": {
+        "name": "Destroy Undead (CR 1)",
+        "description": "Starting at 8th level, when an {@filter undead of CR 1 or lower|bestiary|challenge rating=[&0;&1]|type=undead|miscellaneous=!swarm} fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
+      },
+      "divine-domain-feature-8": {
+        "name": "Divine Domain feature",
+        "description": "At 8th level, you gain a feature from your Divine Domain."
+      },
+      "divine-intervention": {
+        "name": "Divine Intervention",
+        "description": "Beginning at 10th level, you can call on your deity to intervene on your behalf when your need is great.\nImploring your deity's aid requires you to use your action. Describe the assistance you seek, and roll percentile dice. If you roll a number equal to or lower than your cleric level, your deity intervenes. The DM chooses the nature of the intervention; the effect of any cleric spell or cleric domain spell would be appropriate. If your deity intervenes, you can't use this feature again for 7 days. Otherwise, you can use it again after you finish a long rest.\nAt 20th level, your call for intervention succeeds automatically, no roll required."
+      },
+      "destroy-undead-cr-2": {
+        "name": "Destroy Undead (CR 2)",
+        "description": "Starting at 11th level, when an {@filter undead of CR 2 or lower|bestiary|challenge rating=[&0;&2]|type=undead|miscellaneous=!swarm} fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "destroy-undead-cr-3": {
+        "name": "Destroy Undead (CR 3)",
+        "description": "Starting at 14th level, when an {@filter undead of CR 3 or lower|bestiary|challenge rating=[&0;&3]|type=undead|miscellaneous=!swarm} fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "destroy-undead-cr-4": {
+        "name": "Destroy Undead (CR 4)",
+        "description": "Starting at 17th level, when an {@filter undead of CR 4 or lower|bestiary|challenge rating=[&0;&4]|type=undead|miscellaneous=!swarm} fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
+      },
+      "divine-domain-feature-17": {
+        "name": "Divine Domain feature",
+        "description": "At 17th level, you gain a feature from your Divine Domain."
+      },
+      "channel-divinity-18": {
+        "name": "Channel Divinity",
+        "description": "Beginning at 18th level, you can use your Channel Divinity three times between rests."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "divine-intervention-improvement": {
+        "name": "Divine Intervention Improvement",
+        "description": "At 20th level, your call for intervention succeeds automatically, no roll required."
+      }
+    },
+    "resources": {
+      "channel-divinity": { "name": "Channel Divinity" },
+      "divine-intervention": {
+        "name": "Divine Intervention",
+        "note": "If your deity intervenes, you can't use it again for 7 days."
+      }
+    },
+    "choices": {},
+    "subclasses": {
+      "life": {
+        "name": "Life Domain",
+        "features": {
+          "life-domain": {
+            "name": "Life Domain",
+            "description": "The Life domain focuses on the vibrant positive energy—one of the fundamental forces of the universe—that sustains all life. The gods of life promote vitality and health through healing the sick and wounded, caring for those in need, and driving away the forces of death and undeath. Almost any non-evil deity can claim influence over this domain, particularly agricultural deities (such as {@deity Chauntea}, {@deity Arawai|Eberron}, and {@deity Demeter|Greek}), sun gods (such as {@deity Lathander}, {@deity Pelor|Greyhawk}, and {@deity Re-Horakhty|Egyptian}), gods of healing or endurance (such as {@deity Ilmater}, {@deity Mishakal|Dragonlance}, {@deity Apollo|Greek}, and {@deity Diancecht|Celtic}), and gods of home and community (such as {@deity Hestia|Greek}, {@deity Hathor|Egyptian}, and {@deity Boldrei|Eberron}).\nAt each indicated cleric level, you add the listed spells to your spells prepared.\nLife Domain Spells\nCleric Level | Spells\n1st | {@spell bless}, {@spell cure wounds}\n3rd | {@spell lesser restoration}, {@spell spiritual weapon}\n5th | {@spell beacon of hope}, {@spell revivify}\n7th | {@spell death ward}, {@spell guardian of faith}\n9th | {@spell mass cure wounds}, {@spell raise dead}\nBonus Proficiency. When you choose this domain at 1st level, you gain proficiency with heavy armor.\nDisciple of Life. Also starting at 1st level, your healing spells are more effective. Whenever you use a spell of 1st level or higher to restore hit points to a creature, the creature regains additional hit points equal to 2 + the spell's level."
+          },
+          "channel-divinity-preserve-life": {
+            "name": "Channel Divinity: Preserve Life",
+            "description": "Starting at 2nd level, you can use your Channel Divinity to heal the badly injured.\nAs an action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum. You can't use this feature on an undead or a construct."
+          },
+          "blessed-healer": {
+            "name": "Blessed Healer",
+            "description": "Beginning at 6th level, the healing spells you cast on others heal you as well. When you cast a spell of 1st level or higher that restores hit points to a creature other than you, you regain hit points equal to 2 + the spell's level."
+          },
+          "divine-strike": {
+            "name": "Divine Strike",
+            "description": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra {@damage 1d8} radiant damage to the target. When you reach 14th level, the extra damage increases to {@damage 2d8}."
+          },
+          "supreme-healing": {
+            "name": "Supreme Healing",
+            "description": "Starting at 17th level, when you would normally roll one or more dice to restore hit points with a spell, you instead use the highest number possible for each die. For example, instead of restoring {@dice 2d6} hit points to a creature, you restore 12."
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "druid": {
+    "name": "Druid",
+    "subclassTitle": "Druid Circle",
+    "features": {
+      "druidic": {
+        "name": "Druidic",
+        "description": "You know {@language Druidic}, the secret language of druids. You can speak the language and use it to leave hidden messages. You and others who know this language automatically spot such a message. Others spot the message's presence with a successful {@dc 15} Wisdom ({@skill Perception}) check but can't decipher it without magic."
+      },
+      "spellcasting": {
+        "name": "Spellcasting",
+        "description": "Drawing on the divine essence of nature itself, you can cast spells to shape that essence to your will. See {@book chapter 10|PHB|10} for the general rules of spellcasting and {@book chapter 11|PHB|11} for the {@filter druid spell list|spells|class=druid}.\nCantrips. At 1st level, you know two cantrips of your choice from the {@filter druid spell list|spells|level=0|class=druid}. You learn additional druid cantrips of your choice at higher levels, as shown in the Cantrips Known column of the Druid table.\nPreparing and Casting Spells. The Druid table shows how many spell slots you have to cast your {@filter druid spells|spells|class=druid} of 1st level and higher. To cast one of these druid spells, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.\nYou prepare the list of druid spells that are available for you to cast, choosing from the druid spell list. When you do so, choose a number of druid spells equal to your Wisdom modifier + your druid level (minimum of one spell). The spells must be of a level for which you have spell slots.\nFor example, if you are a 3rd-level druid, you have four 1st-level and two 2nd-level spell slots. With a Wisdom of 16, your list of prepared spells can include six spells of 1st or 2nd level, in any combination. If you prepare the 1st-level spell {@spell cure wounds}, you can cast it using a 1st-level or 2nd-level slot. Casting the spell doesn't remove it from your list of prepared spells.\nYou can also change your list of prepared spells when you finish a long rest. Preparing a new list of druid spells requires time spent in prayer and meditation: at least 1 minute per spell level for each spell on your list.\nSpellcasting Ability. Wisdom is your spellcasting ability for your druid spells, since your magic draws upon your devotion and attunement to nature. You use your Wisdom whenever a spell refers to your spellcasting ability. In addition, you use your Wisdom modifier when setting the saving throw DC for a druid spell you cast and when making an attack roll with one.\nSpell save DC = 8 + your proficiency bonus + your Wisdom modifier\nSpell attack modifier = your proficiency bonus + your Wisdom modifier\nRitual Casting. You can cast a druid spell as a ritual if that spell has the ritual tag and you have the spell prepared.\nSpellcasting Focus. You can use a {@item druidic focus|phb} as a spellcasting focus for your druid spells."
+      },
+      "wild-shape": {
+        "name": "Wild Shape",
+        "description": "Starting at 2nd level, you can use your action to magically assume the shape of a beast that you have seen before. You can use this feature twice. You regain expended uses when you finish a short or long rest.\nYour druid level determines the beasts you can transform into, as shown in the Beast Shapes table. At 2nd level, for example, you can transform into any beast that has a challenge rating of 1/4 or lower that doesn't have a flying or swimming speed.\nBeast Shapes\nLevel | Max. CR | Limitations | Example\n2nd | {@filter 1/4|bestiary|challenge rating=[&0;&1/4]|type=beast|speed type=!fly;!swim|miscellaneous=!swarm} | No flying or swimming speed | Wolf\n4th | {@filter 1/2|bestiary|challenge rating=[&0;&1/2]|type=beast|speed type=!fly|miscellaneous=!swarm} | No flying speed | Crocodile\n8th | {@filter 1|bestiary|challenge rating=[&0;&1]|type=beast|miscellaneous=!swarm} | — | Giant eagle\nYou can stay in a beast shape for a number of hours equal to half your druid level (rounded down). You then revert to your normal form unless you expend another use of this feature. You can revert to your normal form earlier by using a bonus action on your turn. You automatically revert if you fall {@condition unconscious}, drop to 0 hit points, or die.\nWhile you are transformed, the following rules apply:\n• Your game statistics are replaced by the statistics of the beast, but you retain your alignment, personality, and Intelligence, Wisdom, and Charisma scores. You also retain all of your skill and saving throw proficiencies, in addition to gaining those of the creature. If the creature has the same proficiency as you and the bonus in its stat block is higher than yours, use the creature's bonus instead of yours. If the creature has any legendary or lair actions, you can't use them.\n• When you transform, you assume the beast's hit points and Hit Dice. When you revert to your normal form, you return to the number of hit points you had before you transformed. However, if you revert as a result of dropping to 0 hit points, any excess damage carries over to your normal form. For example, if you take 10 damage in animal form and have only 1 hit point left, you revert and take 9 damage. As long as the excess damage doesn't reduce your normal form to 0 hit points, you aren't knocked {@condition unconscious}.\n• You can't cast spells, and your ability to speak or take any action that requires hands is limited to the capabilities of your beast form. Transforming doesn't break your {@status concentration} on a spell you've already cast, however, or prevent you from taking actions that are part of a spell, such as {@spell call lightning}, that you've already cast.\n• You retain the benefit of any features from your class, race, or other source and can use them if the new form is physically capable of doing so. However, you can't use any of your special senses, such as {@sense darkvision}, unless your new form also has that sense.\n• You choose whether your equipment falls to the ground in your space, merges into your new form, or is worn by it. Worn equipment functions as normal, but the DM decides whether it is practical for the new form to wear a piece of equipment, based on the creature's shape and size. Your equipment doesn't change size or shape to match the new form, and any equipment that the new form can't wear must either fall to the ground or merge with it. Equipment that merges with the form has no effect until you leave the form."
+      },
+      "druid-circle": {
+        "name": "Druid Circle",
+        "description": "At 2nd level, you choose to identify with a circle of druids from the list of available circles. Your choice grants you features at 2nd level and again at 6th, 10th, and 14th level."
+      },
+      "wild-shape-improvement-4": {
+        "name": "Wild Shape Improvement",
+        "description": "At 4th level, your Wild Shape improves as shown on the Beast Shapes table."
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "druid-circle-feature-6": {
+        "name": "Druid Circle feature",
+        "description": "At 6th level, you gain a feature granted by your Druid Circle."
+      },
+      "wild-shape-improvement-8": {
+        "name": "Wild Shape Improvement",
+        "description": "At 8th level, your Wild Shape improves as shown on the Beast Shapes table."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "druid-circle-feature-10": {
+        "name": "Druid Circle feature",
+        "description": "At 10th level, you gain a feature granted by your Druid Circle feature."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "druid-circle-feature-14": {
+        "name": "Druid Circle feature",
+        "description": "At 14th level, you gain a feature granted by your Druid Circle feature."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "timeless-body": {
+        "name": "Timeless Body",
+        "description": "Starting at 18th level, the primal magic that you wield causes you to age more slowly. For every 10 years that pass, your body ages only 1 year."
+      },
+      "beast-spells": {
+        "name": "Beast Spells",
+        "description": "Beginning at 18th level, you can cast many of your druid spells in any shape you assume using Wild Shape. You can perform the somatic and verbal components of a druid spell while in a beast shape, but you aren't able to provide material components."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "archdruid": {
+        "name": "Archdruid",
+        "description": "At 20th level, you can use your Wild Shape an unlimited number of times.\nAdditionally, you can ignore the verbal and somatic components of your druid spells, as well as any material components that lack a cost and aren't consumed by a spell. You gain this benefit in both your normal shape and your beast shape from Wild Shape."
+      }
+    },
+    "resources": { "wild-shape": { "name": "Wild Shape" } },
+    "choices": {},
+    "subclasses": {
+      "land": {
+        "name": "Circle of the Land",
+        "features": {
+          "circle-of-the-land": {
+            "name": "Circle of the Land",
+            "description": "The Circle of the Land is made up of mystics and sages who safeguard ancient knowledge and rites through a vast oral tradition. These druids meet within sacred circles of trees or standing stones to whisper primal secrets in {@language Druidic}. The circle's wisest members preside as the chief priests of communities that hold to the Old Faith and serve as advisors to the rulers of those folk. As a member of this circle, your magic is influenced by the land where you were initiated into the circle's mysterious rites.\nBonus Cantrip. You learn one additional druid cantrip of your choice. This cantrip doesn't count against the number of druid cantrips you know.\nNatural Recovery. Starting at 2nd level, you can regain some of your magical energy by sitting in meditation and communing with nature. During a short rest, you choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your druid level (rounded up), and none of the slots can be 6th level or higher. You can't use this feature again until you finish a long rest.\nFor example, when you are a 4th-level druid, you can recover up to two levels worth of spell slots. You can recover either a 2nd-level slot or two 1st-level slots.\nCircle Spells. Your mystical connection to the land infuses you with the ability to cast certain spells. At 3rd, 5th, 7th, and 9th level you gain access to circle spells connected to the land where you became a druid. Choose that land—arctic, coast, desert, forest, grassland, mountain, swamp, or Underdark—and consult the associated list of spells.\nOnce you gain access to a circle spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day. If you gain access to a spell that doesn't appear on the druid spell list, the spell is nonetheless a druid spell for you.\nArctic\nDruid Level | Circle Spells\n3rd | {@spell hold person}, {@spell spike growth}\n5th | {@spell sleet storm}, {@spell slow}\n7th | {@spell freedom of movement}, {@spell ice storm}\n9th | {@spell commune with nature}, {@spell cone of cold}\nCoast\nDruid Level | Circle Spells\n3rd | {@spell mirror image}, {@spell misty step}\n5th | {@spell water breathing}, {@spell water walk}\n7th | {@spell control water}, {@spell freedom of movement}\n9th | {@spell conjure elemental}, {@spell scrying}\nDesert\nDruid Level | Circle Spells\n3rd | {@spell blur}, {@spell silence}\n5th | {@spell create food and water}, {@spell protection from energy}\n7th | {@spell blight}, {@spell hallucinatory terrain}\n9th | {@spell insect plague}, {@spell wall of stone}\nForest\nDruid Level | Circle Spells\n3rd | {@spell barkskin}, {@spell spider climb}\n5th | {@spell call lightning}, {@spell plant growth}\n7th | {@spell divination}, {@spell freedom of movement}\n9th | {@spell commune with nature}, {@spell tree stride}\nGrassland\nDruid Level | Circle Spells\n3rd | {@spell invisibility}, {@spell pass without trace}\n5th | {@spell daylight}, {@spell haste}\n7th | {@spell divination}, {@spell freedom of movement}\n9th | {@spell dream}, {@spell insect plague}\nMountain\nDruid Level | Circle Spells\n3rd | {@spell spider climb}, {@spell spike growth}\n5th | {@spell lightning bolt}, {@spell meld into stone}\n7th | {@spell stone shape}, {@spell stoneskin}\n9th | {@spell passwall}, {@spell wall of stone}\nSwamp\nDruid Level | Circle Spells\n3rd | {@spell darkness}, {@spell Melf's acid arrow}\n5th | {@spell water walk}, {@spell stinking cloud}\n7th | {@spell freedom of movement}, {@spell locate creature}\n9th | {@spell insect plague}, {@spell scrying}\nUnderdark\nDruid Level | Circle Spells\n3rd | {@spell spider climb}, {@spell web}\n5th | {@spell gaseous form}, {@spell stinking cloud}\n7th | {@spell greater invisibility}, {@spell stone shape}\n9th | {@spell cloudkill}, {@spell insect plague}"
+          },
+          "land-s-stride": {
+            "name": "Land's Stride",
+            "description": "Starting at 6th level, moving through nonmagical {@quickref difficult terrain||3} costs you no extra movement. You can also pass through nonmagical plants without being slowed by them and without taking damage from them if they have thorns, spines, or a similar hazard.\nIn addition, you have advantage on saving throws against plants that are magically created or manipulated to impede movement, such as those created by the {@spell entangle} spell."
+          },
+          "nature-s-ward": {
+            "name": "Nature's Ward",
+            "description": "When you reach 10th level, you can't be {@condition charmed} or {@condition frightened} by elementals or fey, and you are immune to poison and disease."
+          },
+          "nature-s-sanctuary": {
+            "name": "Nature's Sanctuary",
+            "description": "When you reach 14th level, creatures of the natural world sense your connection to nature and become hesitant to attack you. When a beast or plant creature attacks you, that creature must make a Wisdom saving throw against your druid spell save DC. On a failed save, the creature must choose a different target, or the attack automatically misses. On a successful save, the creature is immune to this effect for 24 hours.\nThe creature is aware of this effect before it makes its attack against you."
+          }
+        },
+        "resources": {
+          "natural-recovery": { "name": "Natural Recovery", "note": "Used during a short rest." }
+        }
+      }
+    }
+  },
+  "fighter": {
+    "name": "Fighter",
+    "subclassTitle": "Martial Archetype",
+    "features": {
+      "fighting-style": {
+        "name": "Fighting Style",
+        "description": "You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take the same Fighting Style option more than once, even if you get to choose again.\n• {@optfeature Archery|PHB}\n• {@optfeature Defense|PHB}\n• {@optfeature Dueling|PHB}\n• {@optfeature Great Weapon Fighting|PHB}\n• {@optfeature Protection|PHB}\n• {@optfeature Two-Weapon Fighting|PHB}"
+      },
+      "second-wind": {
+        "name": "Second Wind",
+        "description": "You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to {@dice 1d10} + your fighter level.\nOnce you use this feature, you must finish a short or long rest before you can use it again."
+      },
+      "action-surge": {
+        "name": "Action Surge",
+        "description": "Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action.\nOnce you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn."
+      },
+      "martial-archetype": {
+        "name": "Martial Archetype",
+        "description": "At 3rd level, you choose an archetype from the list available that you strive to emulate in your combat styles and techniques. The archetype you choose grants you features at 3rd level and again at 7th, 10th, 15th, and 18th level."
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "extra-attack": {
+        "name": "Extra Attack",
+        "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the {@action Attack} action on your turn.\nThe number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class."
+      },
+      "ability-score-improvement-6": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 6th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "martial-archetype-feature-7": {
+        "name": "Martial Archetype feature",
+        "description": "At 7th level, you gain a feature granted by your Martial Archetype."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "indomitable": {
+        "name": "Indomitable",
+        "description": "Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest.\nYou can use this feature twice between long rests starting at 13th level and three times between long rests starting at 17th level."
+      },
+      "martial-archetype-feature-10": {
+        "name": "Martial Archetype feature",
+        "description": "At 10th level, you gain a feature granted by your Martial Archetype."
+      },
+      "extra-attack-2": {
+        "name": "Extra Attack (2)",
+        "description": "At 11th level, you can attack three times whenever you take the {@action Attack} action on your turn."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "indomitable-two-uses": {
+        "name": "Indomitable (two uses)",
+        "description": "At 13th level, you can use Indomitable twice between long rests."
+      },
+      "ability-score-improvement-14": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 14th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "martial-archetype-feature-15": {
+        "name": "Martial Archetype feature",
+        "description": "At 15th level, you gain a feature granted by your Martial Archetype."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "action-surge-two-uses": {
+        "name": "Action Surge (two uses)",
+        "description": "At 17th level, you can use Action Surge twice before a rest, but only once on the same turn."
+      },
+      "indomitable-three-uses": {
+        "name": "Indomitable (three uses)",
+        "description": "At 17th level, you can use Indomitable three times between long rests."
+      },
+      "martial-archetype-feature-18": {
+        "name": "Martial Archetype feature",
+        "description": "At 18th level, you gain a feature granted by your Martial Archetype."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "extra-attack-3": {
+        "name": "Extra Attack (3)",
+        "description": "At 20th level, you can attack four times whenever you take the {@action Attack} action on your turn."
+      }
+    },
+    "resources": {
+      "second-wind": { "name": "Second Wind" },
+      "action-surge": { "name": "Action Surge" },
+      "indomitable": { "name": "Indomitable" }
+    },
+    "choices": { "fighting-style": { "name": "Fighting Style" } },
+    "subclasses": {
+      "champion": {
+        "name": "Champion",
+        "features": {
+          "champion": {
+            "name": "Champion",
+            "description": "The archetypal Champion focuses on the development of raw physical power honed to deadly perfection. Those who model themselves on this archetype combine rigorous training with physical excellence to deal devastating blows.\nImproved Critical. Beginning when you choose this archetype at 3rd level, your weapon attacks score a critical hit on a roll of 19 or 20."
+          },
+          "remarkable-athlete": {
+            "name": "Remarkable Athlete",
+            "description": "Starting at 7th level, you can add half your proficiency bonus (round up) to any Strength, Dexterity, or Constitution check you make that doesn't already use your proficiency bonus.\nIn addition, when you make a running long jump, the distance you can cover increases by a number of feet equal to your Strength modifier."
+          },
+          "additional-fighting-style": {
+            "name": "Additional Fighting Style",
+            "description": "At 10th level, you can choose a second option from the Fighting Style class feature."
+          },
+          "superior-critical": {
+            "name": "Superior Critical",
+            "description": "Starting at 15th level, your weapon attacks score a critical hit on a roll of 18-20."
+          },
+          "survivor": {
+            "name": "Survivor",
+            "description": "At 18th level, you attain the pinnacle of resilience in battle. At the start of each of your turns, you regain hit points equal to 5 + your Constitution modifier if you have no more than half of your hit points left. You don't gain this benefit if you have 0 hit points."
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "monk": {
+    "name": "Monk",
+    "subclassTitle": "Monastic Tradition",
+    "features": {
+      "unarmored-defense": {
+        "name": "Unarmored Defense",
+        "description": "Beginning at 1st level, while you are wearing no armor and not wielding a shield, your AC equals 10 + your Dexterity modifier + your Wisdom modifier."
+      },
+      "martial-arts": {
+        "name": "Martial Arts",
+        "description": "Your practice of martial arts gives you mastery of combat styles that use unarmed strikes and monk weapons, which are {@item shortsword|phb|shortswords} and any {@filter simple melee weapons that don't have the two-handed or heavy property|items|source=phb|category=basic|type=simple weapon;melee weapon=sand|property=!heavy;!two-handed}.\nYou gain the following benefits while you are unarmed or wielding only monk weapons and you aren't wearing armor or wielding a {@item shield|phb}.\n• You can use Dexterity instead of Strength for the attack and damage rolls of your unarmed strikes and monk weapons.\n• You can roll a {@dice d4} in place of the normal damage of your unarmed strike or monk weapon. This die changes as you gain monk levels, as shown in the Martial Arts column of the Monk table.\n• When you use the {@action Attack} action with an unarmed strike or a monk weapon on your turn, you can make one unarmed strike as a bonus action. For example, if you take the {@action Attack} action and attack with a quarterstaff, you can also make an unarmed strike as a bonus action, assuming you haven't already taken a bonus action this turn.\nCertain monasteries use specialized forms of the monk weapons. For example, you might use a club that is two lengths of wood connected by a short chain (called a nunchaku) or a sickle with a shorter, straighter blade (called a kama)."
+      },
+      "ki": {
+        "name": "Ki",
+        "description": "Starting at 2nd level, your training allows you to harness the mystic energy of ki. Your access to this energy is represented by a number of ki points. Your monk level determines the number of points you have, as shown in the Ki Points column of the Monk table.\nYou can spend these points to fuel various ki features. You start knowing three such features: Flurry of Blows, Patient Defense, and Step of the Wind. You learn more ki features as you gain levels in this class.\nWhen you spend a ki point, it is unavailable until you finish a short or long rest, at the end of which you draw all of your expended ki back into yourself. You must spend at least 30 minutes of the rest meditating to regain your ki points.\nSome of your ki features require your target to make a saving throw to resist the feature's effects. The saving throw DC is calculated as follows:\nKi save DC = 8 + your proficiency bonus + your Wisdom modifier\nFlurry of Blows. Immediately after you take the {@action Attack} action on your turn, you can spend 1 ki point to make two unarmed strikes as a bonus action.\nPatient Defense. You can spend 1 ki point to take the {@action Dodge} action as a bonus action on your turn.\nStep of the Wind. You can spend 1 ki point to take the {@action Disengage} or {@action Dash} action as a bonus action on your turn, and your jump distance is doubled for the turn."
+      },
+      "unarmored-movement": {
+        "name": "Unarmored Movement",
+        "description": "Starting at 2nd level, your speed increases by 10 feet while you are not wearing armor or wielding a shield. This bonus increases when you reach certain monk levels, as shown in the Monk table.\nAt 9th level, you gain the ability to move along vertical surfaces and across liquids on your turn without falling during the move."
+      },
+      "deflect-missiles": {
+        "name": "Deflect Missiles",
+        "description": "Starting at 3rd level, you can use your reaction to deflect or catch the missile when you are hit by a ranged weapon attack. When you do so, the damage you take from the attack is reduced by {@dice 1d10} + your Dexterity modifier + your monk level.\nIf you reduce the damage to 0, you can catch the missile if it is small enough for you to hold in one hand and you have at least one hand free. If you catch a missile in this way, you can spend 1 ki point to make a ranged attack (range 20/60 feet) with the weapon or piece of ammunition you just caught, as part of the same reaction. You make this attack with proficiency, regardless of your weapon proficiencies, and the missile counts as a monk weapon for the attack."
+      },
+      "monastic-tradition": {
+        "name": "Monastic Tradition",
+        "description": "When you reach 3rd level, you commit yourself to a monastic tradition, chosen from the list of available traditions. Your tradition grants you features at 3rd level and again at 6th, 11th, and 17th level."
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "slow-fall": {
+        "name": "Slow Fall",
+        "description": "Beginning at 4th level, you can use your reaction when you fall to reduce any falling damage you take by an amount equal to five times your monk level."
+      },
+      "extra-attack": {
+        "name": "Extra Attack",
+        "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the {@action Attack} action on your turn."
+      },
+      "stunning-strike": {
+        "name": "Stunning Strike",
+        "description": "Starting at 5th level, you can interfere with the flow of ki in an opponent's body. When you hit another creature with a melee weapon attack, you can spend 1 ki point to attempt a stunning strike. The target must succeed on a Constitution saving throw or be {@condition stunned} until the end of your next turn."
+      },
+      "ki-empowered-strikes": {
+        "name": "Ki-Empowered Strikes",
+        "description": "Starting at 6th level, your unarmed strikes count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage."
+      },
+      "monastic-tradition-feature-6": {
+        "name": "Monastic Tradition feature",
+        "description": "At 6th level, you gain one feature granted by your Monastic Tradition."
+      },
+      "evasion": {
+        "name": "Evasion",
+        "description": "At 7th level, your instinctive agility lets you dodge out of the way of certain area effects, such as a blue dragon's lightning breath or a {@spell fireball} spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail."
+      },
+      "stillness-of-mind": {
+        "name": "Stillness of Mind",
+        "description": "Starting at 7th level, you can use your action to end one effect on yourself that is causing you to be {@condition charmed} or {@condition frightened}."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "unarmored-movement-improvement": {
+        "name": "Unarmored Movement improvement",
+        "description": "At 9th level, you gain the ability to move along vertical surfaces and across liquids on your turn without falling during the move."
+      },
+      "purity-of-body": {
+        "name": "Purity of Body",
+        "description": "At 10th level, your mastery of the ki flowing through you makes you immune to disease and poison."
+      },
+      "monastic-tradition-feature-11": {
+        "name": "Monastic Tradition feature",
+        "description": "At 11th level, you gain one feature granted by your Monastic Tradition."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "tongue-of-the-sun-and-moon": {
+        "name": "Tongue of the Sun and Moon",
+        "description": "Starting at 13th level, you learn to touch the ki of other minds so that you understand all spoken languages. Moreover, any creature that can understand a language can understand what you say."
+      },
+      "diamond-soul": {
+        "name": "Diamond Soul",
+        "description": "Beginning at 14th level, your mastery of ki grants you proficiency in all saving throws.\nAdditionally, whenever you make a saving throw and fail, you can spend 1 ki point to reroll it and take the second result."
+      },
+      "timeless-body": {
+        "name": "Timeless Body",
+        "description": "At 15th level, your ki sustains you so that you suffer none of the frailty of old age, and you can't be aged magically. You can still die of old age, however. In addition, you no longer need food or water."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "monastic-tradition-feature-17": {
+        "name": "Monastic Tradition feature",
+        "description": "At 17th level, you gain one feature granted by your Monastic Tradition."
+      },
+      "empty-body": {
+        "name": "Empty Body",
+        "description": "Beginning at 18th level, you can use your action to spend 4 ki points to become {@condition invisible} for 1 minute. During that time, you also have resistance to all damage but force damage.\nAdditionally, you can spend 8 ki points to cast the {@spell astral projection} spell, without needing material components. When you do so, you can't take any other creatures with you."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "perfect-self": {
+        "name": "Perfect Self",
+        "description": "At 20th level, when you roll for initiative and have no ki points remaining, you regain 4 ki points."
+      }
+    },
+    "resources": { "ki": { "name": "Ki Points" } },
+    "choices": {},
+    "subclasses": {
+      "open-hand": {
+        "name": "Way of the Open Hand",
+        "features": {
+          "way-of-the-open-hand": {
+            "name": "Way of the Open Hand",
+            "description": "Monks of the Way of the Open Hand are the ultimate masters of martial arts combat, whether armed or unarmed. They learn techniques to push and trip their opponents, manipulate ki to heal damage to their bodies, and practice advanced meditation that can protect them from harm.\nOpen Hand Technique. You can manipulate your enemy's ki when you harness your own. Whenever you hit a creature with one of the attacks granted by your Flurry of Blows, you can impose one of the following effects on that target.\n• It must succeed on a Dexterity saving throw or be knocked {@condition prone}.\n• It must make a Strength saving throw. If it fails, you can push it up to 15 feet away from you.\n• It can't take reactions until the end of your next turn."
+          },
+          "wholeness-of-body": {
+            "name": "Wholeness of Body",
+            "description": "You gain the ability to heal yourself. As an action, you can regain hit points equal to three times your monk level. You must finish a long rest before you can use this feature again."
+          },
+          "tranquility": {
+            "name": "Tranquility",
+            "description": "Beginning at 11th level, you can enter a special meditation that surrounds you with an aura of peace. At the end of a long rest, you gain the effect of a {@spell sanctuary} spell that lasts until the start of your next long rest (the spell can end early as normal). The saving throw DC for the spell equals 8 + your Wisdom modifier + your proficiency bonus."
+          },
+          "quivering-palm": {
+            "name": "Quivering Palm",
+            "description": "You gain the ability to set up lethal vibrations in someone's body. When you hit a creature with an unarmed strike, you can spend 3 ki points to start these imperceptible vibrations, which last for a number of days equal to your monk level. The vibrations are harmless unless you use your action to end them. To do so, you and the target must be on the same plane of existence. When you use this action, the creature must make a Constitution saving throw. If it fails, it is reduced to 0 hit points. If it succeeds, it takes {@damage 10d10} necrotic damage.\nYou can have only one creature under the effect of this feature at a time. You can choose to end the vibrations harmlessly without using an action."
+          }
+        },
+        "resources": { "wholeness-of-body": { "name": "Wholeness of Body" } }
+      }
+    }
+  },
+  "paladin": {
+    "name": "Paladin",
+    "subclassTitle": "Sacred Oath",
+    "features": {
+      "divine-sense": {
+        "name": "Divine Sense",
+        "description": "The presence of strong evil registers on your senses like a noxious odor, and powerful good rings like heavenly music in your ears. As an action, you can open your awareness to detect such forces. Until the end of your next turn, you know the location of any celestial, fiend, or undead within 60 feet of you that is not behind {@quickref Cover||3||total cover}. You know the type (celestial, fiend, or undead) of any being whose presence you sense, but not its identity (the vampire Count Strahd von Zarovich, for instance). Within the same radius, you also detect the presence of any place or object that has been consecrated or desecrated, as with the {@spell hallow} spell.\nYou can use this feature a number of times equal to 1 + your Charisma modifier. When you finish a long rest, you regain all expended uses."
+      },
+      "lay-on-hands": {
+        "name": "Lay on Hands",
+        "description": "Your blessed touch can heal wounds. You have a pool of healing power that replenishes when you take a long rest. With that pool, you can restore a total number of hit points equal to your paladin level × 5.\nAs an action, you can touch a creature and draw power from the pool to restore a number of hit points to that creature, up to the maximum amount remaining in your pool.\nAlternatively, you can expend 5 hit points from your pool of healing to cure the target of one disease or neutralize one poison affecting it. You can cure multiple diseases and neutralize multiple poisons with a single use of Lay on Hands, expending hit points separately for each one.\nThis feature has no effect on undead and constructs."
+      },
+      "divine-smite": {
+        "name": "Divine Smite",
+        "description": "Starting at 2nd level, when you hit a creature with a melee weapon attack, you can expend one spell slot to deal radiant damage to the target, in addition to the weapon's damage. The extra damage is {@damage 2d8} for a 1st-level spell slot, plus {@damage 1d8} for each spell level higher than 1st, to a maximum of {@damage 5d8}. The damage increases by {@damage 1d8} if the target is an undead or a fiend, to a maximum of {@damage 6d8}."
+      },
+      "fighting-style": {
+        "name": "Fighting Style",
+        "description": "At 2nd level, you adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take the same Fighting Style option more than once, even if you get to choose again.\n• {@optfeature Defense|PHB}\n• {@optfeature Dueling|PHB}\n• {@optfeature Great Weapon Fighting|PHB}\n• {@optfeature Protection|PHB}"
+      },
+      "spellcasting": {
+        "name": "Spellcasting",
+        "description": "By 2nd level, you have learned to draw on divine magic through meditation and prayer to cast spells as a cleric does. See {@book chapter 10|PHB|10} for the general rules of spellcasting and {@book chapter 11|PHB|11} for the {@filter paladin spell list|spells|class=paladin}.\nPreparing and Casting Spells. The Paladin table shows how many spell slots you have to cast your {@filter paladin spells|spells|class=paladin}. To cast one of your paladin spells of 1st level or higher, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.\nYou prepare the list of paladin spells that are available for you to cast, choosing from the paladin spell list. When you do so, choose a number of paladin spells equal to your Charisma modifier + half your paladin level, rounded down (minimum of one spell). The spells must be of a level for which you have spell slots.\nFor example, if you are a 5th-level paladin, you have four 1st-level and two 2nd-level spell slots. With a Charisma of 14, your list of prepared spells can include four spells of 1st or 2nd-level, in any combination. If you prepare the 1st-level spell {@spell cure wounds}, you can cast it using a 1st-level or a 2nd-level slot. Casting the spell doesn't remove it from your list of prepared spells.\nYou can change your list of prepared spells when you finish a long rest. Preparing a new list of paladin spells requires time spent in prayer and meditation: at least 1 minute per spell level for each spell on your list.\nSpellcasting Ability. Charisma is your spellcasting ability for your paladin spells, since their power derives from the strength of your convictions. You use your Charisma whenever a spell refers to your spellcasting ability. In addition, you use your Charisma modifier when setting the saving throw DC for a paladin spell you cast and when making an attack roll with one.\nSpell save DC = 8 + your proficiency bonus + your Charisma modifier\nSpell attack modifier = your proficiency bonus + your Charisma modifier\nSpellcasting Focus. You can use a {@item holy symbol|phb} as a spellcasting focus for your paladin spells."
+      },
+      "divine-health": {
+        "name": "Divine Health",
+        "description": "By 3rd level, the divine magic flowing through you makes you immune to disease."
+      },
+      "sacred-oath": {
+        "name": "Sacred Oath",
+        "description": "When you reach 3rd level, you swear the oath that binds you as a paladin forever. Up to this time you have been in a preparatory stage, committed to the path but not yet sworn to it. Now you choose from the list of available oaths.\nYour choice grants you features at 3rd level and again at 7th, 15th, and 20th level. Those features include oath spells and the Channel Divinity feature.\nOath Spells. Each oath has a list of associated spells. You gain access to these spells at the levels specified in the oath description. Once you gain access to an oath spell, you always have it prepared. Oath spells don't count against the number of spells you can prepare each day.\nIf you gain an oath spell that doesn't appear on the paladin spell list, the spell is nonetheless a paladin spell for you.\nChannel Divinity. Your oath allows you to channel divine energy to fuel magical effects. Each Channel Divinity option provided by your oath explains how to use it.\nWhen you use your Channel Divinity, you choose which option to use. You must then finish a short or long rest to use your Channel Divinity again.\nSome Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your paladin spell save DC.\nBreaking Your Oath. A paladin tries to hold to the highest standards of conduct, but even the most virtuous paladin is fallible. Sometimes the right path proves too demanding, sometimes a situation calls for the lesser of two evils, and sometimes the heat of emotion causes a paladin to transgress his or her oath.\nA paladin who has broken a vow typically seeks absolution from a cleric who shares his or her faith or from another paladin of the same order. The paladin might spend an all-night vigil in prayer as a sign of penitence, or undertake a fast or similar act of self-denial. After a rite of confession and forgiveness, the paladin starts fresh.\nIf a paladin willfully violates his or her oath and shows no sign of repentance, the consequences can be more serious. At the DM's discretion, an impenitent paladin might be forced to abandon this class and adopt another, or perhaps to take the Oathbreaker paladin option that appears in the Dungeon Master's Guide."
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "extra-attack": {
+        "name": "Extra Attack",
+        "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the {@action Attack} action on your turn."
+      },
+      "aura-of-protection": {
+        "name": "Aura of Protection",
+        "description": "Starting at 6th level, whenever you or a friendly creature within 10 feet of you must make a saving throw, the creature gains a bonus to the saving throw equal to your Charisma modifier (with a minimum bonus of +1). You must be conscious to grant this bonus.\nAt 18th level, the range of this aura increases to 30 feet."
+      },
+      "sacred-oath-feature-7": {
+        "name": "Sacred Oath feature",
+        "description": "At 7th level, you gain a feature granted to you by your Sacred Oath."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "aura-of-courage": {
+        "name": "Aura of Courage",
+        "description": "Starting at 10th level, you and friendly creatures within 10 feet of you can't be {@condition frightened} while you are conscious.\nAt 18th level, the range of this aura increases to 30 feet."
+      },
+      "improved-divine-smite": {
+        "name": "Improved Divine Smite",
+        "description": "By 11th level, you are so suffused with righteous might that all your melee weapon strikes carry divine power with them. Whenever you hit a creature with a melee weapon, the creature takes an extra {@damage 1d8} radiant damage."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "cleansing-touch": {
+        "name": "Cleansing Touch",
+        "description": "Beginning at 14th level, you can use your action to end one spell on yourself or on one willing creature that you touch.\nYou can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain expended uses when you finish a long rest."
+      },
+      "sacred-oath-feature-15": {
+        "name": "Sacred Oath feature",
+        "description": "At 15th level, you gain a feature granted to you by your Sacred Oath."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "aura-improvements": {
+        "name": "Aura improvements",
+        "description": "At 18th level, the range of your Aura of Protection increases to 30 feet."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "sacred-oath-feature-20": {
+        "name": "Sacred Oath feature",
+        "description": "At 20th level, you gain a feature granted to you by your Sacred Oath."
+      }
+    },
+    "resources": {
+      "divine-sense": { "name": "Divine Sense" },
+      "lay-on-hands": { "name": "Lay on Hands" },
+      "channel-divinity": { "name": "Channel Divinity" },
+      "cleansing-touch": { "name": "Cleansing Touch" }
+    },
+    "choices": { "fighting-style": { "name": "Fighting Style" } },
+    "subclasses": {
+      "devotion": {
+        "name": "Oath of Devotion",
+        "features": {
+          "oath-of-devotion": {
+            "name": "Oath of Devotion",
+            "description": "The Oath of Devotion binds a paladin to the loftiest ideals of justice, virtue, and order. Sometimes called cavaliers, white knights, or holy warriors, these paladins meet the ideal of the knight in shining armor, acting with honor in pursuit of justice and the greater good. They hold themselves to the highest standards of conduct, and some, for better or worse, hold the rest of the world to the same standards. Many who swear this oath are devoted to gods of law and good and use their gods' tenets as the measure of their devotion. They hold angels—the perfect servants of good—as their ideals, and incorporate images of angelic wings into their helmets or coats of arms.\nTenets of Devotion. Though the exact words and strictures of the Oath of Devotion vary, paladins of this oath share these tenets.\nHonesty. Don't lie or cheat. Let your word be your promise.\nCourage. Never fear to act, though caution is wise.\nCompassion. Aid others, protect the weak, and punish those who threaten them. Show mercy to your foes, but temper it with wisdom.\nHonor. Treat others with fairness, and let your honorable deeds be an example to them. Do as much good as possible while causing the least amount of harm.\nDuty. Be responsible for your actions and their consequences, protect those entrusted to your care, and obey those who have just authority over you.\nOath Spells. You gain oath spells at the paladin levels listed.\nOath of Devotion Spells\nPaladin Level | Spells\n3rd | {@spell protection from evil and good}, {@spell sanctuary}\n5th | {@spell lesser restoration}, {@spell zone of truth}\n9th | {@spell beacon of hope}, {@spell dispel magic}\n13th | {@spell freedom of movement}, {@spell guardian of faith}\n17th | {@spell commune}, {@spell flame strike}\nChannel Divinity. When you take this oath at 3rd level, you gain the following two Channel Divinity options.\nSacred Weapon. As an action, you can imbue one weapon that you are holding with positive energy, using your Channel Divinity. For 1 minute, you add your Charisma modifier to attack rolls made with that weapon (with a minimum bonus of +1). The weapon also emits bright light in a 20-foot radius and dim light 20 feet beyond that. If the weapon is not already magical, it becomes magical for the duration.\nYou can end this effect on your turn as part of any other action. If you are no longer holding or carrying this weapon, or if you fall {@condition unconscious}, this effect ends.\nTurn the Unholy. As an action, you present your holy symbol and speak a prayer censuring fiends and undead, using your Channel Divinity. Each fiend or undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes damage.\nA turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the {@action Dash} action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the {@action Dodge} action."
+          },
+          "aura-of-devotion": {
+            "name": "Aura of Devotion",
+            "description": "Starting at 7th level, you and friendly creatures within 10 feet of you can't be {@condition charmed} while you are conscious.\nAt 18th level, the range of this aura increases to 30 feet."
+          },
+          "purity-of-spirit": {
+            "name": "Purity of Spirit",
+            "description": "Beginning at 15th level, you are always under the effects of a {@spell protection from evil and good} spell."
+          },
+          "holy-nimbus": {
+            "name": "Holy Nimbus",
+            "description": "At 20th level, as an action, you can emanate an aura of sunlight. For 1 minute, bright light shines from you in a 30-foot radius, and dim light shines 30 feet beyond that.\nWhenever an enemy creature starts its turn in the bright light, the creature takes 10 radiant damage.\nIn addition, for the duration, you have advantage on saving throws against spells cast by fiends or undead.\nOnce you use this feature, you can't use it again until you finish a long rest."
+          }
+        },
+        "resources": { "holy-nimbus": { "name": "Holy Nimbus" } }
+      }
+    }
+  },
+  "ranger": {
+    "name": "Ranger",
+    "subclassTitle": "Ranger Archetype",
+    "features": {
+      "favored-enemy": {
+        "name": "Favored Enemy",
+        "description": "Beginning at 1st level, you have significant experience studying, tracking, hunting, and even talking to a certain type of enemy.\nChoose a type of favored enemy: {@filter aberrations|bestiary|type=aberration}, {@filter beasts|bestiary|type=beast}, {@filter celestials|bestiary|type=celestial}, {@filter constructs|bestiary|type=construct}, {@filter dragons|bestiary|type=dragon}, {@filter elementals|bestiary|type=elemental}, {@filter fey|bestiary|type=fey}, {@filter fiends|bestiary|type=fiend}, {@filter giants|bestiary|type=giant}, {@filter monstrosities|bestiary|type=monstrosity}, {@filter oozes|bestiary|type=ooze}, {@filter plants|bestiary|type=plant}, or {@filter undead|bestiary|type=undead}. Alternatively, you can select two races of {@filter humanoid|bestiary|type=humanoid} (such as {@creature gnoll||gnolls} and {@creature orc||orcs}) as favored enemies.\nYou have advantage on Wisdom ({@skill Survival}) checks to track your favored enemies, as well as on Intelligence checks to recall information about them.\nWhen you gain this feature, you also learn one language of your choice that is spoken by your favored enemies, if they speak one at all.\nYou choose one additional favored enemy, as well as an associated language, at 6th and 14th level. As you gain levels, your choices should reflect the types of monsters you have encountered on your adventures."
+      },
+      "natural-explorer": {
+        "name": "Natural Explorer",
+        "description": "You are particularly familiar with one type of natural environment and are adept at traveling and surviving in such regions. Choose one type of favored terrain: arctic, coast, desert, forest, grassland, mountain, swamp, or the Underdark. When you make an Intelligence or Wisdom check related to your favored terrain, your proficiency bonus is doubled if you are using a skill that you're proficient in.\nWhile traveling for an hour or more in your favored terrain, you gain the following benefits:\n• Difficult terrain doesn't slow your group's travel.\n• Your group can't become lost except by magical means.\n• Even when you are engaged in another activity while traveling (such as foraging, navigating, or tracking), you remain alert to danger.\n• If you are traveling alone, you can move stealthily at a normal pace.\n• When you forage, you find twice as much food as you normally would.\n• While tracking other creatures, you also learn their exact number, their sizes, and how long ago they passed through the area.\nYou choose additional favored terrain types at 6th and 10th level."
+      },
+      "fighting-style": {
+        "name": "Fighting Style",
+        "description": "At 2nd level, you adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.\n• {@optfeature Archery|PHB}\n• {@optfeature Defense|PHB}\n• {@optfeature Dueling|PHB}\n• {@optfeature Two-Weapon Fighting|PHB}"
+      },
+      "spellcasting": {
+        "name": "Spellcasting",
+        "description": "By the time you reach 2nd level, you have learned to use the magical essence of nature to cast spells, much as a druid does. See {@book chapter 10|PHB|10} for the general rules of spellcasting and {@book chapter 11|PHB|11} for the {@filter ranger spell list|spells|class=ranger}.\nSpell Slots. The Ranger table shows how many spell slots you have to cast your {@filter ranger spells|spells|class=ranger} of 1st level and higher. To cast one of these spells, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.\nFor example, if you know the 1st-level spell {@spell animal friendship} and have a 1st-level and a 2nd-level spell slot available, you can cast {@spell animal friendship} using either slot.\nSpells Known of 1st Level and Higher. You know two 1st-level spells of your choice from the ranger spell list.\nThe Spells Known column of the Ranger table shows when you learn more ranger spells of your choice. Each of these spells must be of a level for which you have spell slots. For instance, when you reach 5th level in this class, you can learn one new spell of 1st or 2nd level.\nAdditionally, when you gain a level in this class, you can choose one of the ranger spells you know and replace it with another spell from the ranger spell list, which also must be of a level for which you have spell slots.\nSpellcasting Ability. Wisdom is your spellcasting ability for your ranger spells, since your magic draws on your attunement to nature. You use your Wisdom whenever a spell refers to your spellcasting ability. In addition, you use your Wisdom modifier when setting the saving throw DC for a ranger spell you cast and when making an attack roll with one.\nSpell save DC = 8 + your proficiency bonus + your Wisdom modifier\nSpell attack modifier = your proficiency bonus + your Wisdom modifier"
+      },
+      "ranger-archetype": {
+        "name": "Ranger Archetype",
+        "description": "At 3rd level, you choose an archetype that you strive to emulate from the list of available archetypes. Your choice grants features at 3rd level, and again at 7th, 11th, and 15th level."
+      },
+      "primeval-awareness": {
+        "name": "Primeval Awareness",
+        "description": "Beginning at 3rd level, you can use your action and expend one ranger spell slot to focus your awareness on the region around you. For 1 minute per level of the spell slot you expend, you can sense whether the following types of creatures are present within 1 mile of you (or within up to 6 miles if you are in your favored terrain): aberrations, celestials, dragons, elementals, fey, fiends, and undead. This feature doesn't reveal the creatures' location or number."
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "extra-attack": {
+        "name": "Extra Attack",
+        "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the {@action Attack} action on your turn."
+      },
+      "favored-enemy-and-natural-explorer-improvements": {
+        "name": "Favored Enemy and Natural Explorer improvements",
+        "description": "At 6th level, you gain an additional favored terrain.\nAt 6th level, you choose one additional favored enemy, as well as an associated language. Your choice should reflect the types of monsters you have encountered on your adventures."
+      },
+      "ranger-archetype-feature-7": {
+        "name": "Ranger Archetype feature",
+        "description": "At 7th level, you gain a feature granted to you by your Ranger Archetype."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "land-s-stride": {
+        "name": "Land's Stride",
+        "description": "Starting at 8th level, moving through nonmagical {@quickref difficult terrain||3} costs you no extra movement. You can also pass through nonmagical plants without being slowed by them and without taking damage from them if they have thorns, spines, or a similar hazard.\nIn addition, you have advantage on saving throws against plants that are magically created or manipulated to impede movement, such as those created by the {@spell entangle} spell."
+      },
+      "hide-in-plain-sight": {
+        "name": "Hide in Plain Sight",
+        "description": "Starting at 10th level, you can spend 1 minute creating camouflage for yourself. You must have access to fresh mud, dirt, plants, soot, and other naturally occurring materials with which to create your camouflage.\nOnce you are camouflaged in this way, you can try to hide by pressing yourself up against a solid surface, such as a tree or wall, that is at least as tall and wide as you are. You gain a +10 bonus to Dexterity ({@skill Stealth}) checks as long as you remain there without moving or taking actions. Once you move or take an action or a reaction, you must camouflage yourself again to gain this benefit."
+      },
+      "natural-explorer-improvement": {
+        "name": "Natural Explorer improvement",
+        "description": "You gain an additional favored terrain."
+      },
+      "ranger-archetype-feature-11": {
+        "name": "Ranger Archetype feature",
+        "description": "At 11th level, you gain a feature granted to you by your Ranger Archetype."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "vanish": {
+        "name": "Vanish",
+        "description": "Starting at 14th level, you can use the {@action Hide} action as a bonus action on your turn. Also, you can't be tracked by nonmagical means, unless you choose to leave a trail."
+      },
+      "favored-enemy-improvement": {
+        "name": "Favored Enemy improvement",
+        "description": "At 14th level, you choose one additional favored enemy, as well as an associated language. Your choice should reflect the types of monsters you have encountered on your adventures."
+      },
+      "ranger-archetype-feature-15": {
+        "name": "Ranger Archetype feature",
+        "description": "At 15th level, you gain a feature granted to you by your Ranger Archetype."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "feral-senses": {
+        "name": "Feral Senses",
+        "description": "At 18th level, you gain preternatural senses that help you fight creatures you can't see. When you attack a creature you can't see, your inability to see it doesn't impose disadvantage on your attack rolls against it. You are also aware of the location of any {@condition invisible} creature within 30 feet of you, provided that the creature isn't hidden from you and you aren't {@condition blinded} or {@condition deafened}."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "foe-slayer": {
+        "name": "Foe Slayer",
+        "description": "At 20th level, you become an unparalleled hunter of your enemies. Once on each of your turns, you can add your Wisdom modifier to the attack roll or the damage roll of an attack you make against one of your favored enemies. You can choose to use this feature before or after the roll, but before any effects of the roll are applied."
+      }
+    },
+    "resources": {},
+    "choices": { "fighting-style": { "name": "Fighting Style" } },
+    "subclasses": {
+      "hunter": {
+        "name": "Hunter",
+        "features": {
+          "hunter": {
+            "name": "Hunter",
+            "description": "Emulating the Hunter archetype means accepting your place as a bulwark between civilization and the terrors of the wilderness. As you walk the Hunter's path, you learn specialized techniques for fighting the threats you face, from rampaging ogres and hordes of orcs to towering giants and terrifying dragons.\nHunter's Prey. At 3rd level, you gain one of the following features of your choice.\nColossus Slayer. Your tenacity can wear down the most potent foes. When you hit a creature with a weapon attack, the creature takes an extra {@damage 1d8} damage if it's below its hit point maximum. You can deal this extra damage only once per turn.\nGiant Killer. When a Large or larger creature within 5 feet of you hits or misses you with an attack, you can use your reaction to attack that creature immediately after its attack, provided that you can see the creature.\nHorde Breaker. Once on each of your turns when you make a weapon attack, you can make another attack with the same weapon against a different creature that is within 5 feet of the original target and within range of your weapon."
+          },
+          "defensive-tactics": {
+            "name": "Defensive Tactics",
+            "description": "At 7th level, you gain one of the following features of your choice.\nEscape the Horde. Opportunity attacks against you are made with disadvantage.\nMultiattack Defense. When a creature hits you with an attack, you gain a +4 bonus to AC against all subsequent attacks made by that creature for the rest of the turn.\nSteel Will. You have advantage on saving throws against being {@condition frightened}."
+          },
+          "multiattack": {
+            "name": "Multiattack",
+            "description": "At 11th level, you gain one of the following features of your choice.\nVolley. You can use your action to make a ranged attack against any number of creatures within 10 feet of a point you can see within your weapon's range. You must have ammunition for each target, as normal, and you make a separate attack roll for each target.\nWhirlwind Attack. You can use your action to make a melee attack against any number of creatures within 5 feet of you, with a separate attack roll for each target."
+          },
+          "superior-hunter-s-defense": {
+            "name": "Superior Hunter's Defense",
+            "description": "At 15th level, you gain one of the following features of your choice.\nEvasion. You can nimbly dodge out of the way of certain area effects, such as a red dragon's fiery breath or a {@spell lightning bolt} spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.\nStand Against the Tide. When a hostile creature misses you with a melee attack, you can use your reaction to force that creature to repeat the same attack against another creature (other than itself) of your choice.\nUncanny Dodge. When an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you."
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "rogue": {
+    "name": "Rogue",
+    "subclassTitle": "Roguish Archetype",
+    "features": {
+      "expertise-1": {
+        "name": "Expertise",
+        "description": "At 1st level, choose two of your skill proficiencies, or one of your skill proficiencies and your proficiency with {@item thieves' tools|phb}. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies.\nAt 6th level, you can choose two more of your proficiencies (in skills or with {@item thieves' tools|phb}) to gain this benefit."
+      },
+      "sneak-attack": {
+        "name": "Sneak Attack",
+        "description": "Beginning at 1st level, you know how to strike subtly and exploit a foe's distraction. Once per turn, you can deal an extra {@damage 1d6} damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon.\nYou don't need advantage on the attack roll if another enemy of the target is within 5 feet of it, that enemy isn't {@condition incapacitated}, and you don't have disadvantage on the attack roll.\nThe amount of the extra damage increases as you gain levels in this class, as shown in the Sneak Attack column of the Rogue table."
+      },
+      "thieves-cant": {
+        "name": "Thieves' Cant",
+        "description": "During your rogue training you learned thieves' cant, a secret mix of dialect, jargon, and code that allows you to hide messages in seemingly normal conversation. Only another creature that knows thieves' cant understands such messages. It takes four times longer to convey such a message than it does to speak the same idea plainly.\nIn addition, you understand a set of secret signs and symbols used to convey short, simple messages, such as whether an area is dangerous or the territory of a thieves' guild, whether loot is nearby, or whether the people in an area are easy marks or will provide a safe house for thieves on the run."
+      },
+      "cunning-action": {
+        "name": "Cunning Action",
+        "description": "Starting at 2nd level, your quick thinking and agility allow you to move and act quickly. You can take a bonus action on each of your turns in combat. This action can be used only to take the {@action Dash}, {@action Disengage}, or {@action Hide} action."
+      },
+      "roguish-archetype": {
+        "name": "Roguish Archetype",
+        "description": "At 3rd level, you choose an archetype that you emulate in the exercise of your rogue abilities from the list of available archetypes. Your archetype choice grants you features at 3rd level and then again at 9th, 13th, and 17th level."
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "uncanny-dodge": {
+        "name": "Uncanny Dodge",
+        "description": "Starting at 5th level, when an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you."
+      },
+      "expertise-6": {
+        "name": "Expertise",
+        "description": "At 6th level, you can choose two more of your proficiencies (in skills or with {@item thieves' tools|phb}) to gain the benefit of Expertise."
+      },
+      "evasion": {
+        "name": "Evasion",
+        "description": "Beginning at 7th level, you can nimbly dodge out of the way of certain area effects, such as a red dragon's fiery breath or an {@spell ice storm} spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "roguish-archetype-feature-9": {
+        "name": "Roguish Archetype feature",
+        "description": "At 9th level, you gain a feature granted by your Roguish Archetype."
+      },
+      "ability-score-improvement-10": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 10th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "reliable-talent": {
+        "name": "Reliable Talent",
+        "description": "By 11th level, you have refined your chosen skills until they approach perfection. Whenever you make an ability check that lets you add your proficiency bonus, you can treat a {@dice d20} roll of 9 or lower as a 10."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "roguish-archetype-feature-13": {
+        "name": "Roguish Archetype feature",
+        "description": "At 13th level, you gain a feature granted by your Roguish Archetype."
+      },
+      "blindsense": {
+        "name": "Blindsense",
+        "description": "Starting at 14th level, if you are able to hear, you are aware of the location of any hidden or {@condition invisible} creature within 10 feet of you."
+      },
+      "slippery-mind": {
+        "name": "Slippery Mind",
+        "description": "By 15th level, you have acquired greater mental strength. You gain proficiency in Wisdom saving throws."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "roguish-archetype-feature-17": {
+        "name": "Roguish Archetype feature",
+        "description": "At 17th level, you gain a feature granted by your Roguish Archetype."
+      },
+      "elusive": {
+        "name": "Elusive",
+        "description": "Beginning at 18th level, you are so evasive that attackers rarely gain the upper hand against you. No attack roll has advantage against you while you aren't {@condition incapacitated}."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "stroke-of-luck": {
+        "name": "Stroke of Luck",
+        "description": "At 20th level, you have an uncanny knack for succeeding when you need to. If your attack misses a target within range, you can turn the miss into a hit. Alternatively, if you fail an ability check, you can treat the {@dice d20} roll as a 20.\nOnce you use this feature, you can't use it again until you finish a short or long rest."
+      }
+    },
+    "resources": { "stroke-of-luck": { "name": "Stroke of Luck" } },
+    "choices": {},
+    "subclasses": {
+      "thief": {
+        "name": "Thief",
+        "features": {
+          "thief": {
+            "name": "Thief",
+            "description": "You hone your skills in the larcenous arts. Burglars, bandits, cutpurses, and other criminals typically follow this archetype, but so do rogues who prefer to think of themselves as professional treasure seekers, explorers, delvers, and investigators. In addition to improving your agility and stealth, you learn skills useful for delving into ancient ruins, reading unfamiliar languages, and using magic items you normally couldn't employ.\nFast Hands. Starting at 3rd level, you can use the bonus action granted by your Cunning Action to make a Dexterity ({@skill Sleight of Hand}) check, use your {@item thieves' tools|phb} to disarm a trap or open a lock, or take the {@action Use an Object} action.\nSecond-Story Work. When you choose this archetype at 3rd level, you gain the ability to climb faster than normal; climbing no longer costs you extra movement.\nIn addition, when you make a running jump, the distance you cover increases by a number of feet equal to your Dexterity modifier."
+          },
+          "supreme-sneak": {
+            "name": "Supreme Sneak",
+            "description": "Starting at 9th level, you have advantage on a Dexterity ({@skill Stealth}) check if you move no more than half your speed on the same turn."
+          },
+          "use-magic-device": {
+            "name": "Use Magic Device",
+            "description": "By 13th level, you have learned enough about the workings of magic that you can improvise the use of items even when they are not intended for you. You ignore all class, race, and level requirements on the use of magic items."
+          },
+          "thief-s-reflexes": {
+            "name": "Thief's Reflexes",
+            "description": "When you reach 17th level, you have become adept at laying ambushes and quickly escaping danger. You can take two turns during the first round of any combat. You take your first turn at your normal initiative and your second turn at your initiative minus 10. You can't use this feature when you are {@status surprised}."
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "sorcerer": {
+    "name": "Sorcerer",
+    "subclassTitle": "Sorcerous Origin",
+    "features": {
+      "spellcasting": {
+        "name": "Spellcasting",
+        "description": "An event in your past, or in the life of a parent or ancestor, left an indelible mark on you, infusing you with arcane magic. This font of magic, whatever its origin, fuels your spells. See {@book chapter 10|PHB|10} for the general rules of spellcasting and {@book chapter 11|PHB|11} for the {@filter sorcerer spell list|spells|class=sorcerer}.\nCantrips. At 1st level, you know four cantrips of your choice from the sorcerer spell list. You learn an additional sorcerer cantrip of your choice at 4th level and another at 10th level.\nSpell Slots. The Sorcerer table shows how many spell slots you have to cast your {@filter sorcerer spells|spells|class=sorcerer} of 1st level and higher. To cast one of these sorcerer spells, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.\nFor example, if you know the 1st-level spell {@spell burning hands} and have a 1st-level and a 2nd-level spell slot available, you can cast {@spell burning hands} using either slot.\nSpells Known of 1st Level and Higher. You know two 1st-level spells of your choice from the sorcerer spell list.\nYou learn an additional sorcerer spell of your choice at each level except 12th, 14th, 16th, 18th, 19th, and 20th. Each of these spells must be of a level for which you have spell slots. For instance, when you reach 3rd level in this class, you can learn one new spell of 1st or 2nd level.\nAdditionally, when you gain a level in this class, you can choose one of the sorcerer spells you know and replace it with another spell from the sorcerer spell list, which also must be of a level for which you have spell slots.\nSpellcasting Ability. Charisma is your spellcasting ability for your sorcerer spells, since the power of your magic relies on your ability to project your will into the world. You use your Charisma whenever a spell refers to your spellcasting ability. In addition, you use your Charisma modifier when setting the saving throw DC for a sorcerer spell you cast and when making an attack roll with one.\nSpell save DC = 8 + your proficiency bonus + your Charisma modifier\nSpell attack modifier = your proficiency bonus + your Charisma modifier\nSpellcasting Focus. You can use an {@item arcane focus|phb} as a spellcasting focus for your sorcerer spells."
+      },
+      "sorcerous-origin": {
+        "name": "Sorcerous Origin",
+        "description": "Choose a sorcerous origin, which describes the source of your innate magical power, from the list of available origins.\nYour choice grants you features when you choose it at 1st level and again at 6th, 14th, and 18th level."
+      },
+      "font-of-magic": {
+        "name": "Font of Magic",
+        "description": "At 2nd level, you tap into a deep wellspring of magic within yourself. This wellspring is represented by sorcery points, which allow you to create a variety of magical effects.\nSorcery Points. You have 2 sorcery points, and you gain one additional point every time you level up, to a maximum of 20 at level 20. You can never have more sorcery points than shown on the table for your level. You regain all spent sorcery points when you finish a long rest.\nFlexible Casting. You can use your sorcery points to gain additional spell slots, or sacrifice spell slots to gain additional sorcery points. You learn other ways to use your sorcery points as you reach higher levels.\nCreating Spell Slots. You can transform unexpended sorcery points into one spell slot as a bonus action on your turn. The created spell slots vanish at the end of a long rest. The Creating Spell Slots table shows the cost of creating a spell slot of a given level. You can create spell slots no higher in level than 5th.\nCreating Spell Slots\nSpell Slot Level | Sorcery Point Cost\n1st | 2\n2nd | 3\n3rd | 5\n4th | 6\n5th | 7\nConverting a Spell Slot to Sorcery Points. As a bonus action on your turn, you can expend one spell slot and gain a number of sorcery points equal to the slot's level."
+      },
+      "metamagic-3": {
+        "name": "Metamagic",
+        "description": "At 3rd level, you gain the ability to twist your spells to suit your needs. You gain two of the following Metamagic options of your choice. You gain another one at 10th and 17th level.\nYou can use only one Metamagic option on a spell when you cast it, unless otherwise noted.\n• {@optfeature Careful Spell|PHB}\n• {@optfeature Distant Spell|PHB}\n• {@optfeature Empowered Spell|PHB}\n• {@optfeature Extended Spell|PHB}\n• {@optfeature Heightened Spell|PHB}\n• {@optfeature Quickened Spell|PHB}\n• {@optfeature Subtle Spell|PHB}\n• {@optfeature Twinned Spell|PHB}"
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "sorcerous-origin-feature-6": {
+        "name": "Sorcerous Origin feature",
+        "description": "At 6th level, you gain a feature granted by your Sorcerous Origin."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "metamagic-10": {
+        "name": "Metamagic",
+        "description": "At 10th level, you learn an additional metamagic option."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "sorcerous-origin-feature-14": {
+        "name": "Sorcerous Origin feature",
+        "description": "At 14th level, you gain a feature granted by your Sorcerous Origin."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "metamagic-17": {
+        "name": "Metamagic",
+        "description": "At 17th level, you learn an additional metamagic option."
+      },
+      "sorcerous-origin-feature-18": {
+        "name": "Sorcerous Origin feature",
+        "description": "At 18th level, you gain a feature granted by your Sorcerous Origin."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "sorcerous-restoration": {
+        "name": "Sorcerous Restoration",
+        "description": "At 20th level, you regain 4 expended sorcery points whenever you finish a short rest."
+      }
+    },
+    "resources": { "sorcery-points": { "name": "Sorcery Points" } },
+    "choices": { "metamagic": { "name": "Metamagic" } },
+    "subclasses": {
+      "draconic": {
+        "name": "Draconic Bloodline",
+        "features": {
+          "draconic-bloodline": {
+            "name": "Draconic Bloodline",
+            "description": "Your innate magic comes from draconic magic that was mingled with your blood or that of your ancestors. Most often, sorcerers with this origin trace their descent back to a mighty sorcerer of ancient times who made a bargain with a dragon or who might even have claimed a dragon parent. Some of these bloodlines are well established in the world, but most are obscure. Any given sorcerer could be the first of a new bloodline, as a result of a pact or some other exceptional circumstance.\nDragon Ancestor. At 1st level, you choose one type of dragon as your ancestor. The damage type associated with each dragon is used by features you gain later.\nDraconic Ancestry\nDragon | Damage Type\nBlack | {@filter Acid|spells|damage type=acid|class=sorcerer}\nBlue | {@filter Lightning|spells|damage type=lightning|class=sorcerer}\nBrass | {@filter Fire|spells|damage type=fire|class=sorcerer}\nBronze | {@filter Lightning|spells|damage type=lightning|class=sorcerer}\nCopper | {@filter Acid|spells|damage type=acid|class=sorcerer}\nGold | {@filter Fire|spells|damage type=fire|class=sorcerer}\nGreen | {@filter Poison|spells|damage type=poison|class=sorcerer}\nRed | {@filter Fire|spells|damage type=fire|class=sorcerer}\nSilver | {@filter Cold|spells|damage type=cold|class=sorcerer}\nWhite | {@filter Cold|spells|damage type=cold|class=sorcerer}\nYou can speak, read, and write {@language Draconic}. Additionally, whenever you make a Charisma check when interacting with dragons, your proficiency bonus is doubled if it applies to the check.\nDraconic Resilience. As magic flows through your body, it causes physical traits of your dragon ancestors to emerge. At 1st level, your hit point maximum increases by 1 and increases by 1 again whenever you gain a level in this class.\nAdditionally, parts of your skin are covered by a thin sheen of dragon-like scales. When you aren't wearing armor, your AC equals 13 + your Dexterity modifier."
+          },
+          "elemental-affinity": {
+            "name": "Elemental Affinity",
+            "description": "Starting at 6th level, when you cast a spell that deals damage of the type associated with your draconic ancestry, you can add your Charisma modifier to one damage roll of that spell. At the same time, you can spend 1 sorcery point to gain resistance to that damage type for 1 hour."
+          },
+          "dragon-wings": {
+            "name": "Dragon Wings",
+            "description": "At 14th level, you gain the ability to sprout a pair of dragon wings from your back, gaining a flying speed equal to your current speed. You can create these wings as a bonus action on your turn. They last until you dismiss them as a bonus action on your turn.\nYou can't manifest your wings while wearing armor unless the armor is made to accommodate them, and clothing not made to accommodate your wings might be destroyed when you manifest them."
+          },
+          "draconic-presence": {
+            "name": "Draconic Presence",
+            "description": "Beginning at 18th level, you can channel the dread presence of your dragon ancestor, causing those around you to become awestruck or {@condition frightened}. As an action, you can spend 5 sorcery points to draw on this power and exude an aura of awe or fear (your choice) to a distance of 60 feet. For 1 minute or until you lose your {@status concentration} (as if you were casting a {@status concentration} spell), each hostile creature that starts its turn in this aura must succeed on a Wisdom saving throw or be {@condition charmed} (if you chose awe) or {@condition frightened} (if you chose fear) until the aura ends. A creature that succeeds on this saving throw is immune to your aura for 24 hours."
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "warlock": {
+    "name": "Warlock",
+    "subclassTitle": "Otherworldly Patron",
+    "features": {
+      "pact-magic": {
+        "name": "Pact Magic",
+        "description": "Your arcane research and the magic bestowed on you by your patron have given you facility with spells. See {@book chapter 10|PHB|10} for the general rules of spellcasting and {@book chapter 11|PHB|11} for the {@filter warlock spell list|spells|class=warlock}.\nCantrips. You know two cantrips of your choice from the warlock spell list. You learn additional warlock cantrips of your choice at higher levels, as shown in the Cantrips Known column of the Warlock table.\nSpell Slots. The Warlock table shows how many spell slots you have to cast your {@filter warlock spells|spells|class=warlock} of 1st through 5th level. The table also shows what the level of those slots is; all of your spell slots are the same level. To cast one of your warlock spells of 1st level or higher, you must expend a spell slot. You regain all expended spell slots when you finish a short or long rest.\nFor example, when you are 5th level, you have two 3rd-level spell slots. To cast the 1st-level spell {@spell witch bolt}, you must spend one of those slots, and you cast it as a 3rd-level spell.\nSpells Known of 1st Level and Higher. At 1st level, you know two 1st-level spells of your choice from the warlock spell list.\nThe Spells Known column of the Warlock table shows when you learn more warlock spells of your choice of 1st level and higher. A spell you choose must be of a level no higher than what's shown in the table's Slot Level column for your level. When you reach 6th level, for example, you learn a new warlock spell, which can be 1st, 2nd, or 3rd level.\nAdditionally, when you gain a level in this class, you can choose one of the warlock spells you know and replace it with another spell from the warlock spell list, which also must be of a level for which you have spell slots.\nSpellcasting Ability. Charisma is your spellcasting ability for your warlock spells, so you use your Charisma whenever a spell refers to your spellcasting ability. In addition, you use your Charisma modifier when setting the saving throw DC for a warlock spell you cast and when making an attack roll with one.\nSpell save DC = 8 + your proficiency bonus + your Charisma modifier\nSpell attack modifier = your proficiency bonus + your Charisma modifier\nSpellcasting Focus. You can use an {@item arcane focus|phb} as a spellcasting focus for your warlock spells."
+      },
+      "otherworldly-patron": {
+        "name": "Otherworldly Patron",
+        "description": "At 1st level, you have struck a bargain with an otherworldly being chosen from the list of available patrons. Your choice grants you features at 1st level and again at 6th, 10th, and 14th level."
+      },
+      "eldritch-invocations": {
+        "name": "Eldritch Invocations",
+        "description": "In your study of occult lore, you have unearthed eldritch invocations, fragments of forbidden knowledge that imbue you with an abiding magical ability.\nAt 2nd level, you gain two eldritch invocations of your choice. A list of the available options can be found on the {@filter Optional Features|optionalfeatures|Feature Type=EI} page. When you gain certain warlock levels, you gain additional invocations of your choice, as shown in the Invocations Known column of the Warlock table.\nAdditionally, when you gain a level in this class, you can choose one of the invocations you know and replace it with another invocation that you could learn at that level.\nIf an eldritch invocation has prerequisites, you must meet them to learn it. You can learn the invocation at the same time that you meet its prerequisites. A level prerequisite refers to your level in this class."
+      },
+      "pact-boon": {
+        "name": "Pact Boon",
+        "description": "At 3rd level, your otherworldly patron bestows a gift upon you for your loyal service. You gain one of the following features of your choice.\n• {@optfeature Pact of the Chain|PHB}\n• {@optfeature Pact of the Blade|PHB}\n• {@optfeature Pact of the Tome|PHB}"
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "otherworldly-patron-feature-6": {
+        "name": "Otherworldly Patron feature",
+        "description": "At 6th level, you gain a feature granted by your Otherworldly Patron."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "otherworldly-patron-feature-10": {
+        "name": "Otherworldly Patron feature",
+        "description": "At 10th level, you gain a feature granted by your Otherworldly Patron."
+      },
+      "mystic-arcanum-6th-level": {
+        "name": "Mystic Arcanum (6th level)",
+        "description": "At 11th level, your patron bestows upon you a magical secret called an arcanum. Choose one {@filter 6th-level spell from the warlock spell list|spells|level=6|class=Warlock} as this arcanum.\nYou can cast your arcanum spell once without expending a spell slot. You must finish a long rest before you can do so again.\nAt higher levels, you gain more warlock spells of your choice that can be cast in this way: one 7th-level spell at 13th level, one 8th-level spell at 15th level, and one 9th-level spell at 17th level. You regain all uses of your Mystic Arcanum when you finish a long rest."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "mystic-arcanum-7th-level": {
+        "name": "Mystic Arcanum (7th level)",
+        "description": "At 13th level, your patron bestows upon you a magical secret called an arcanum. Choose one {@filter 7th-level spell from the warlock spell list|spells|level=7|class=Warlock} as this arcanum.\nYou can cast your arcanum spell once without expending a spell slot. You must finish a long rest before you can do so again."
+      },
+      "otherworldly-patron-feature-14": {
+        "name": "Otherworldly Patron feature",
+        "description": "At 14th level, you gain a feature granted by your Otherworldly Patron."
+      },
+      "mystic-arcanum-8th-level": {
+        "name": "Mystic Arcanum (8th level)",
+        "description": "At 15th level, your patron bestows upon you a magical secret called an arcanum. Choose one {@filter 8th-level spell from the warlock spell list|spells|level=8|class=Warlock} as this arcanum.\nYou can cast your arcanum spell once without expending a spell slot. You must finish a long rest before you can do so again."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "mystic-arcanum-9th-level": {
+        "name": "Mystic Arcanum (9th level)",
+        "description": "At 17th level, your patron bestows upon you a magical secret called an arcanum. Choose one {@filter 9th-level spell from the warlock spell list|spells|level=9|class=Warlock} as this arcanum.\nYou can cast your arcanum spell once without expending a spell slot. You must finish a long rest before you can do so again."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "eldritch-master": {
+        "name": "Eldritch Master",
+        "description": "At 20th level, you can draw on your inner reserve of mystical power while entreating your patron to regain expended spell slots. You can spend 1 minute entreating your patron for aid to regain all your expended spell slots from your Pact Magic feature. Once you regain spell slots with this feature, you must finish a long rest before you can do so again."
+      }
+    },
+    "resources": {
+      "pact-slots": { "name": "Pact Magic Spell Slots" },
+      "mystic-arcanum-6": { "name": "Mystic Arcanum (level 6)" },
+      "mystic-arcanum-7": { "name": "Mystic Arcanum (level 7)" },
+      "mystic-arcanum-8": { "name": "Mystic Arcanum (level 8)" },
+      "mystic-arcanum-9": { "name": "Mystic Arcanum (level 9)" },
+      "eldritch-master": { "name": "Eldritch Master" }
+    },
+    "choices": {
+      "eldritch-invocations": { "name": "Eldritch Invocations" },
+      "pact-boon": { "name": "Pact Boon" }
+    },
+    "subclasses": {
+      "fiend": {
+        "name": "The Fiend",
+        "features": {
+          "the-fiend": {
+            "name": "The Fiend",
+            "description": "You have made a pact with a fiend from the lower planes of existence, a being whose aims are evil, even if you strive against those aims. Such beings desire the corruption or destruction of all things, ultimately including you. Fiends powerful enough to forge a pact include demon lords such as Demogorgon, Orcus, Fraz-Urb'luu, and Baphomet; archdevils such as Asmodeus, Dispater, Mephistopheles, and Belial; pit fiends and balors that are especially mighty; and ultroloths and other lords of the yugoloths.\nExpanded Spell List. The Fiend lets you choose from an expanded list of spells when you learn a warlock spell. The following spells are added to the warlock spell list for you.\nFiend Expanded Spells\nSpell Level | Spells\n1st | {@spell burning hands}, {@spell command}\n2nd | {@spell blindness/deafness}, {@spell scorching ray}\n3rd | {@spell fireball}, {@spell stinking cloud}\n4th | {@spell fire shield}, {@spell wall of fire}\n5th | {@spell flame strike}, {@spell hallow}\nDark One's Blessing. Starting at 1st level, when you reduce a hostile creature to 0 hit points, you gain temporary hit points equal to your Charisma modifier + your warlock level (minimum of 1)."
+          },
+          "dark-one-s-own-luck": {
+            "name": "Dark One's Own Luck",
+            "description": "Starting at 6th level, you can call on your patron to alter fate in your favor. When you make an ability check or a saving throw, you can use this feature to add a {@dice d10} to your roll. You can do so after seeing the initial roll but before any of the roll's effects occur.\nOnce you use this feature, you can't use it again until you finish a short or long rest."
+          },
+          "fiendish-resilience": {
+            "name": "Fiendish Resilience",
+            "description": "Starting at 10th level, you can choose one damage type when you finish a short or long rest. You gain resistance to that damage type until you choose a different one with this feature. Damage from magical weapons or silver weapons ignores this resistance."
+          },
+          "hurl-through-hell": {
+            "name": "Hurl Through Hell",
+            "description": "Starting at 14th level, when you hit a creature with an attack, you can use this feature to instantly transport the target through the lower planes. The creature disappears and hurtles through a nightmare landscape.\nAt the end of your next turn, the target returns to the space it previously occupied, or the nearest unoccupied space. If the target is not a fiend, it takes {@damage 10d10} psychic damage as it reels from its horrific experience.\nOnce you use this feature, you can't use it again until you finish a long rest."
+          }
+        },
+        "resources": {
+          "dark-one-s-own-luck": { "name": "Dark One's Own Luck" },
+          "hurl-through-hell": { "name": "Hurl Through Hell" }
+        }
+      }
+    }
+  },
+  "wizard": {
+    "name": "Wizard",
+    "subclassTitle": "Arcane Tradition",
+    "features": {
+      "arcane-recovery": {
+        "name": "Arcane Recovery",
+        "description": "You have learned to regain some of your magical energy by studying your spellbook. Once per day when you finish a short rest, you can choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your wizard level (rounded up), and none of the slots can be 6th level or higher.\nFor example, if you're a 4th-level wizard, you can recover up to two levels worth of spell slots. You can recover either a 2nd-level spell slot or two 1st-level spell slots."
+      },
+      "spellcasting": {
+        "name": "Spellcasting",
+        "description": "As a student of arcane magic, you have a spellbook containing spells that show the first glimmerings of your true power. See {@book chapter 10|PHB|10} for the general rules of spellcasting and {@book chapter 11|PHB|11} for the {@filter wizard spell list|spells|class=wizard}.\nCantrips. At 1st level, you know three cantrips of your choice from the wizard spell list. You learn additional wizard cantrips of your choice at higher levels, as shown in the Cantrips Known column of the Wizard table.\nSpellbook. At 1st level, you have a spellbook containing six 1st-level {@filter wizard spells|spells|class=wizard} of your choice. Your spellbook is the repository of the wizard spells you know, except your cantrips, which are fixed in your mind.\nPreparing and Casting Spells. The Wizard table shows how many spell slots you have to cast your wizard spells of 1st level and higher. To cast one of these spells, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.\nYou prepare the list of wizard spells that are available for you to cast. To do so, choose a number of wizard spells from your spellbook equal to your Intelligence modifier + your wizard level (minimum of one spell). The spells must be of a level for which you have spell slots.\nFor example, if you're a 3rd-level wizard, you have four 1st-level and two 2nd-level spell slots. With an Intelligence of 16, your list of prepared spells can include six spells of 1st or 2nd level, in any combination, chosen from your spellbook. If you prepare the 1st-level spell {@spell magic missile}, you can cast it using a 1st-level or a 2nd-level slot. Casting the spell doesn't remove it from your list of prepared spells.\nYou can change your list of prepared spells when you finish a long rest. Preparing a new list of wizard spells requires time spent studying your spellbook and memorizing the incantations and gestures you must make to cast the spell: at least 1 minute per spell level for each spell on your list.\nSpellcasting Ability. Intelligence is your spellcasting ability for your wizard spells, since you learn your wizard spells through dedicated study and memorization. You use your Intelligence whenever a spell refers to your spellcasting ability. In addition, you use your Intelligence modifier when setting the saving throw DC for a wizard spell you cast and when making an attack roll with one.\nSpell save DC = 8 + your proficiency bonus + your Intelligence modifier\nSpell attack modifier = your proficiency bonus + your Intelligence modifier\nRitual Casting. You can cast a wizard spell as a ritual if that spell has the ritual tag and you have the spell in your spellbook. You don't need to have the spell prepared.\nSpellcasting Focus. You can use an {@item arcane focus|phb} as a spellcasting focus for your wizard spells.\nLearning Spells of 1st Level and Higher. Each time you gain a wizard level, you can add two wizard spells of your choice to your spellbook. Each of these spells must be of a level for which you have spell slots, as shown on the Wizard table. On your adventures, you might find other spells that you can add to your spellbook (see \"Your Spellbook\").\nYour Spellbook. The spells that you add to your spellbook as you gain levels reflect the arcane research you conduct on your own, as well as intellectual breakthroughs you have had about the nature of the multiverse. You might find other spells during your adventures. You could discover a spell recorded on a scroll in an evil wizard's chest, for example, or in a dusty tome in an ancient library.\nA spellbook doesn't contain cantrips.\nCopying a Spell into the Book. When you find a wizard spell of 1st level or higher, you can add it to your spellbook if it is of a spell level you can prepare and if you can spare the time to decipher and copy it.\nCopying a spell into your spellbook involves reproducing the basic form of the spell, then deciphering the unique system of notation used by the wizard who wrote it. You must practice the spell until you understand the sounds or gestures required, then transcribe it into your spellbook using your own notation.\nFor each level of the spell, the process takes 2 hours and costs 50 gp. The cost represents material components you expend as you experiment with the spell to master it, as well as the fine inks you need to record it. Once you have spent this time and money, you can prepare the spell just like your other spells.\nCopying from a Spell Scroll. A wizard spell on a spell scroll can be copied just as spells in spellbooks can be copied. When you copy a spell from a spell scroll, you must succeed on an Intelligence ({@skill Arcana}) check with a DC equal to 10 + the spell's level. If the check succeeds, the spell is successfully copied. Whether the check succeeds or fails, the spell scroll is destroyed.\nReplacing the Book. You can copy a spell from your own spellbook into another book—for example, if you want to make a backup copy of your spellbook. This is just like copying a new spell into your spellbook, but faster and easier, since you understand your own notation and already know how to cast the spell. You need spend only 1 hour and 10 gp for each level of the copied spell.\nIf you lose your spellbook, you can use the same procedure to transcribe the spells that you have prepared into a new spellbook. Filling out the remainder of your spellbook requires you to find new spells to do so, as normal. For this reason, many wizards keep backup spellbooks in a safe place.\nThe Book's Appearance. Your spellbook is a unique compilation of spells, with its own decorative flourishes and margin notes. It might be a plain, functional leather volume that you received as a gift from your master, a finely bound gilt-edged tome you found in an ancient library, or even a loose collection of notes scrounged together after you lost your previous spellbook in a mishap."
+      },
+      "arcane-tradition": {
+        "name": "Arcane Tradition",
+        "description": "When you reach 2nd level, you choose an arcane tradition from the list of available traditions, shaping your practice of magic. Your choice grants you features at 2nd level and again at 6th, 10th, and 14th level."
+      },
+      "ability-score-improvement-4": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "arcane-tradition-feature-6": {
+        "name": "Arcane Tradition feature",
+        "description": "At 6th level, you gain a feature granted by your Arcane Tradition."
+      },
+      "ability-score-improvement-8": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "arcane-tradition-feature-10": {
+        "name": "Arcane Tradition feature",
+        "description": "At 10th level, you gain a feature granted by your Arcane Tradition."
+      },
+      "ability-score-improvement-12": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "arcane-tradition-feature-14": {
+        "name": "Arcane Tradition feature",
+        "description": "At 14th level, you gain a feature granted by your Arcane Tradition."
+      },
+      "ability-score-improvement-16": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "spell-mastery": {
+        "name": "Spell Mastery",
+        "description": "At 18th level, you have achieved such mastery over certain spells that you can cast them at will. Choose a 1st-level wizard spell and a 2nd-level wizard spell that are in your spellbook. You can cast those spells at their lowest level without expending a spell slot when you have them prepared. If you want to cast either spell at a higher level, you must expend a spell slot as normal.\nBy spending 8 hours in study, you can exchange one or both of the spells you chose for different spells of the same levels."
+      },
+      "ability-score-improvement-19": {
+        "name": "Ability Score Improvement",
+        "description": "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.\nIf your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+      },
+      "signature-spells": {
+        "name": "Signature Spells",
+        "description": "When you reach 20th level, you gain mastery over two powerful spells and can cast them with little effort. Choose two 3rd-level wizard spells in your spellbook as your signature spells. You always have these spells prepared, they don't count against the number of spells you have prepared, and you can cast each of them once at 3rd level without expending a spell slot. When you do so, you can't do so again until you finish a short or long rest.\nIf you want to cast either spell at a higher level, you must expend a spell slot as normal."
+      }
+    },
+    "resources": {
+      "arcane-recovery": {
+        "name": "Arcane Recovery",
+        "note": "Used when you finish a short rest."
+      },
+      "signature-spells": {
+        "name": "Signature Spells",
+        "note": "One free casting of each of the two spells."
+      }
+    },
+    "choices": {},
+    "subclasses": {
+      "evocation": {
+        "name": "School of Evocation",
+        "features": {
+          "school-of-evocation": {
+            "name": "School of Evocation",
+            "description": "You focus your study on magic that creates powerful elemental effects such as bitter cold, searing flame, rolling thunder, crackling lightning, and burning acid. Some evokers find employment in military forces, serving as artillery to blast enemy armies from afar. Others use their spectacular power to protect the weak, while some seek their own gain as bandits, adventurers, or aspiring tyrants.\nEvocation Savant. Beginning when you select this school at 2nd level, the gold and time you must spend to copy an evocation spell into your spellbook is halved.\nSculpt Spells. Beginning at 2nd level, you can create pockets of relative safety within the effects of your evocation spells. When you cast an evocation spell that affects other creatures that you can see, you can choose a number of them equal to 1 + the spell's level. The chosen creatures automatically succeed on their saving throws against the spell, and they take no damage if they would normally take half damage on a successful save."
+          },
+          "potent-cantrip": {
+            "name": "Potent Cantrip",
+            "description": "Starting at 6th level, your damaging cantrips affect even creatures that avoid the brunt of the effect. When a creature succeeds on a saving throw against your cantrip, the creature takes half the cantrip's damage (if any) but suffers no additional effect from the cantrip."
+          },
+          "empowered-evocation": {
+            "name": "Empowered Evocation",
+            "description": "Beginning at 10th level, you can add your Intelligence modifier to one damage roll of any wizard evocation spell you cast."
+          },
+          "overchannel": {
+            "name": "Overchannel",
+            "description": "Starting at 14th level, you can increase the power of your simpler spells. When you cast a wizard spell of 1st through 5th-level that deals damage, you can deal maximum damage with that spell.\nThe first time you do so, you suffer no adverse effect. If you use this feature again before you finish a long rest, you take {@damage 2d12} necrotic damage for each level of the spell, immediately after you cast it. Each time you use this feature again before finishing a long rest, the necrotic damage per spell level increases by {@damage 1d12}. This damage ignores resistance and immunity."
+          }
+        },
+        "resources": {
+          "overchannel": {
+            "name": "Overchannel",
+            "note": "Using it again before a long rest deals necrotic damage to you, more each time."
+          }
+        }
+      }
+    }
+  }
+}

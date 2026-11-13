@@ -1,0 +1,1348 @@
+[
+  {
+    "id": "barbarian",
+    "hitDie": 12,
+    "proficiencies": {
+      "savingThrows": ["STR", "CON"],
+      "armor": ["light", "medium", "shield"],
+      "weapons": ["simple", "martial"],
+      "tools": [],
+      "skills": {
+        "count": 2,
+        "from": ["ANIMAL_HANDLING", "ATHLETICS", "INTIMIDATION", "NATURE", "PERCEPTION", "SURVIVAL"]
+      }
+    },
+    "features": [
+      { "id": "rage", "level": 1 },
+      { "id": "unarmored-defense", "level": 1 },
+      { "id": "weapon-mastery", "level": 1 },
+      { "id": "danger-sense", "level": 2 },
+      { "id": "reckless-attack", "level": 2 },
+      { "id": "barbarian-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "primal-knowledge", "level": 3 },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "extra-attack", "level": 5 },
+      { "id": "fast-movement", "level": 5 },
+      { "id": "subclass-feature-6", "level": 6, "gainsSubclassFeature": true },
+      { "id": "feral-instinct", "level": 7 },
+      { "id": "instinctive-pounce", "level": 7 },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "brutal-strike", "level": 9 },
+      { "id": "subclass-feature-10", "level": 10, "gainsSubclassFeature": true },
+      { "id": "relentless-rage", "level": 11 },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "improved-brutal-strike-13", "level": 13 },
+      { "id": "subclass-feature-14", "level": 14, "gainsSubclassFeature": true },
+      { "id": "persistent-rage", "level": 15 },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "improved-brutal-strike-17", "level": 17 },
+      { "id": "indomitable-might", "level": 18 },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "primal-champion", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "rage",
+        "feature": "rage",
+        "level": 1,
+        "unit": "uses",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 1, "value": 2 },
+            { "level": 3, "value": 3 },
+            { "level": 6, "value": 4 },
+            { "level": 12, "value": 5 },
+            { "level": 17, "value": 6 }
+          ]
+        },
+        "recovery": [
+          { "rest": "short", "amount": 1 },
+          { "rest": "long", "amount": "all" }
+        ]
+      },
+      {
+        "id": "persistent-rage",
+        "feature": "persistent-rage",
+        "level": 15,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 15, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      }
+    ],
+    "choices": [
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "berserker",
+        "features": [
+          { "id": "path-of-the-berserker", "level": 3 },
+          { "id": "mindless-rage", "level": 6 },
+          { "id": "retaliation", "level": 10 },
+          { "id": "intimidating-presence", "level": 14 }
+        ],
+        "resources": [
+          {
+            "id": "intimidating-presence",
+            "feature": "intimidating-presence",
+            "level": 14,
+            "unit": "uses",
+            "max": { "type": "steps", "steps": [{ "level": 14, "value": 1 }] },
+            "recovery": [{ "rest": "long", "amount": "all" }]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bard",
+    "hitDie": 8,
+    "proficiencies": {
+      "savingThrows": ["DEX", "CHA"],
+      "armor": ["light"],
+      "weapons": ["simple"],
+      "tools": [],
+      "toolChoice": { "count": 3, "from": ["musical-instrument"] },
+      "skills": {
+        "count": 3,
+        "from": [
+          "ACROBATICS",
+          "ANIMAL_HANDLING",
+          "ARCANA",
+          "ATHLETICS",
+          "DECEPTION",
+          "HISTORY",
+          "INSIGHT",
+          "INTIMIDATION",
+          "INVESTIGATION",
+          "MEDICINE",
+          "NATURE",
+          "PERCEPTION",
+          "PERFORMANCE",
+          "PERSUASION",
+          "RELIGION",
+          "SLEIGHT_OF_HAND",
+          "STEALTH",
+          "SURVIVAL"
+        ]
+      }
+    },
+    "spellcasting": { "ability": "CHA", "progression": "full" },
+    "features": [
+      { "id": "bardic-inspiration", "level": 1 },
+      { "id": "spellcasting", "level": 1 },
+      { "id": "expertise-2", "level": 2 },
+      { "id": "jack-of-all-trades", "level": 2 },
+      { "id": "bard-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "font-of-inspiration", "level": 5 },
+      { "id": "subclass-feature-6", "level": 6, "gainsSubclassFeature": true },
+      { "id": "countercharm", "level": 7 },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "expertise-9", "level": 9 },
+      { "id": "magical-secrets", "level": 10 },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "subclass-feature-14", "level": 14, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "superior-inspiration", "level": 18 },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "words-of-creation", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "bardic-inspiration",
+        "feature": "bardic-inspiration",
+        "level": 1,
+        "unit": "uses",
+        "max": { "type": "ability", "ability": "CHA", "bonus": 0, "minimum": 1 },
+        "recovery": [
+          { "rest": "long", "amount": "all" },
+          { "rest": "short", "amount": "all", "fromLevel": 5 }
+        ],
+        "die": [
+          { "level": 1, "value": 6 },
+          { "level": 5, "value": 8 },
+          { "level": 10, "value": 10 },
+          { "level": 15, "value": 12 }
+        ]
+      }
+    ],
+    "choices": [
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "lore",
+        "features": [
+          { "id": "college-of-lore", "level": 3 },
+          { "id": "magical-discoveries", "level": 6 },
+          { "id": "peerless-skill", "level": 14 }
+        ],
+        "resources": []
+      }
+    ]
+  },
+  {
+    "id": "cleric",
+    "hitDie": 8,
+    "proficiencies": {
+      "savingThrows": ["WIS", "CHA"],
+      "armor": ["light", "medium", "shield"],
+      "weapons": ["simple"],
+      "tools": [],
+      "skills": { "count": 2, "from": ["HISTORY", "INSIGHT", "MEDICINE", "PERSUASION", "RELIGION"] }
+    },
+    "spellcasting": { "ability": "WIS", "progression": "full" },
+    "features": [
+      { "id": "spellcasting", "level": 1 },
+      { "id": "divine-order", "level": 1 },
+      { "id": "channel-divinity", "level": 2 },
+      { "id": "cleric-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "sear-undead", "level": 5 },
+      { "id": "subclass-feature-6", "level": 6, "gainsSubclassFeature": true },
+      { "id": "blessed-strikes", "level": 7 },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "divine-intervention", "level": 10 },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "improved-blessed-strikes", "level": 14 },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "subclass-feature-17", "level": 17, "gainsSubclassFeature": true },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "greater-divine-intervention", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "channel-divinity",
+        "feature": "channel-divinity",
+        "level": 2,
+        "unit": "uses",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 2, "value": 2 },
+            { "level": 6, "value": 3 },
+            { "level": 18, "value": 4 }
+          ]
+        },
+        "recovery": [
+          { "rest": "short", "amount": 1 },
+          { "rest": "long", "amount": "all" }
+        ]
+      },
+      {
+        "id": "divine-intervention",
+        "feature": "divine-intervention",
+        "level": 10,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 10, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      }
+    ],
+    "choices": [
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "life",
+        "features": [
+          { "id": "life-domain", "level": 3 },
+          { "id": "blessed-healer", "level": 6 },
+          { "id": "supreme-healing", "level": 17 }
+        ],
+        "resources": []
+      }
+    ]
+  },
+  {
+    "id": "druid",
+    "hitDie": 8,
+    "proficiencies": {
+      "savingThrows": ["INT", "WIS"],
+      "armor": ["light", "shield"],
+      "weapons": ["simple"],
+      "tools": ["herbalism-kit"],
+      "skills": {
+        "count": 2,
+        "from": [
+          "ARCANA",
+          "ANIMAL_HANDLING",
+          "INSIGHT",
+          "MEDICINE",
+          "NATURE",
+          "PERCEPTION",
+          "RELIGION",
+          "SURVIVAL"
+        ]
+      }
+    },
+    "spellcasting": { "ability": "WIS", "progression": "full" },
+    "features": [
+      { "id": "druidic", "level": 1 },
+      { "id": "primal-order", "level": 1 },
+      { "id": "spellcasting", "level": 1 },
+      { "id": "wild-companion", "level": 2 },
+      { "id": "wild-shape", "level": 2 },
+      { "id": "druid-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "wild-resurgence", "level": 5 },
+      { "id": "subclass-feature-6", "level": 6, "gainsSubclassFeature": true },
+      { "id": "elemental-fury", "level": 7 },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "subclass-feature-10", "level": 10, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "subclass-feature-14", "level": 14, "gainsSubclassFeature": true },
+      { "id": "improved-elemental-fury", "level": 15 },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "beast-spells", "level": 18 },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "archdruid", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "wild-shape",
+        "feature": "wild-shape",
+        "level": 2,
+        "unit": "uses",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 2, "value": 2 },
+            { "level": 6, "value": 3 },
+            { "level": 17, "value": 4 }
+          ]
+        },
+        "recovery": [
+          { "rest": "short", "amount": 1 },
+          { "rest": "long", "amount": "all" }
+        ]
+      },
+      {
+        "id": "wild-resurgence",
+        "feature": "wild-resurgence",
+        "level": 5,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 5, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "nature-magician",
+        "feature": "archdruid",
+        "level": 20,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 20, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      }
+    ],
+    "choices": [
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "land",
+        "features": [
+          { "id": "circle-of-the-land", "level": 3 },
+          { "id": "natural-recovery", "level": 6 },
+          { "id": "nature-s-ward", "level": 10 },
+          { "id": "nature-s-sanctuary", "level": 14 }
+        ],
+        "resources": [
+          {
+            "id": "natural-recovery-spell",
+            "feature": "natural-recovery",
+            "level": 6,
+            "unit": "uses",
+            "max": { "type": "steps", "steps": [{ "level": 6, "value": 1 }] },
+            "recovery": [{ "rest": "long", "amount": "all" }]
+          },
+          {
+            "id": "natural-recovery-slots",
+            "feature": "natural-recovery",
+            "level": 6,
+            "unit": "uses",
+            "max": { "type": "steps", "steps": [{ "level": 6, "value": 1 }] },
+            "recovery": [{ "rest": "long", "amount": "all" }]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fighter",
+    "hitDie": 10,
+    "proficiencies": {
+      "savingThrows": ["STR", "CON"],
+      "armor": ["light", "medium", "heavy", "shield"],
+      "weapons": ["simple", "martial"],
+      "tools": [],
+      "skills": {
+        "count": 2,
+        "from": [
+          "ACROBATICS",
+          "ANIMAL_HANDLING",
+          "ATHLETICS",
+          "HISTORY",
+          "INSIGHT",
+          "INTIMIDATION",
+          "PERSUASION",
+          "PERCEPTION",
+          "SURVIVAL"
+        ]
+      }
+    },
+    "features": [
+      { "id": "fighting-style", "level": 1 },
+      { "id": "second-wind", "level": 1 },
+      { "id": "weapon-mastery", "level": 1 },
+      { "id": "action-surge-2", "level": 2 },
+      { "id": "tactical-mind", "level": 2 },
+      { "id": "fighter-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "extra-attack", "level": 5 },
+      { "id": "tactical-shift", "level": 5 },
+      { "id": "ability-score-improvement-6", "level": 6 },
+      { "id": "subclass-feature-7", "level": 7, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "indomitable-9", "level": 9 },
+      { "id": "tactical-master", "level": 9 },
+      { "id": "subclass-feature-10", "level": 10, "gainsSubclassFeature": true },
+      { "id": "two-extra-attacks", "level": 11 },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "indomitable-13", "level": 13 },
+      { "id": "studied-attacks", "level": 13 },
+      { "id": "ability-score-improvement-14", "level": 14 },
+      { "id": "subclass-feature-15", "level": 15, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "action-surge-17", "level": 17 },
+      { "id": "indomitable-17", "level": 17 },
+      { "id": "subclass-feature-18", "level": 18, "gainsSubclassFeature": true },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "three-extra-attacks", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "second-wind",
+        "feature": "second-wind",
+        "level": 1,
+        "unit": "uses",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 1, "value": 2 },
+            { "level": 4, "value": 3 },
+            { "level": 10, "value": 4 }
+          ]
+        },
+        "recovery": [
+          { "rest": "short", "amount": 1 },
+          { "rest": "long", "amount": "all" }
+        ]
+      },
+      {
+        "id": "action-surge",
+        "feature": "action-surge-2",
+        "level": 2,
+        "unit": "uses",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 2, "value": 1 },
+            { "level": 17, "value": 2 }
+          ]
+        },
+        "recovery": [
+          { "rest": "short", "amount": "all" },
+          { "rest": "long", "amount": "all" }
+        ]
+      },
+      {
+        "id": "indomitable",
+        "feature": "indomitable-9",
+        "level": 9,
+        "unit": "uses",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 9, "value": 1 },
+            { "level": 13, "value": 2 },
+            { "level": 17, "value": 3 }
+          ]
+        },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      }
+    ],
+    "choices": [
+      {
+        "id": "fighting-style",
+        "kind": "feat",
+        "categories": ["FS"],
+        "count": [{ "level": 1, "value": 1 }]
+      },
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "champion",
+        "features": [
+          { "id": "champion", "level": 3 },
+          { "id": "additional-fighting-style", "level": 7 },
+          { "id": "heroic-warrior", "level": 10 },
+          { "id": "superior-critical", "level": 15 },
+          { "id": "survivor", "level": 18 }
+        ],
+        "resources": []
+      }
+    ]
+  },
+  {
+    "id": "monk",
+    "hitDie": 8,
+    "proficiencies": {
+      "savingThrows": ["STR", "DEX"],
+      "armor": [],
+      "weapons": ["simple"],
+      "martialWeaponsWithProperty": ["L"],
+      "tools": [],
+      "toolChoice": { "count": 1, "from": ["artisan-tools", "musical-instrument"] },
+      "skills": {
+        "count": 2,
+        "from": ["ACROBATICS", "ATHLETICS", "HISTORY", "INSIGHT", "RELIGION", "STEALTH"]
+      }
+    },
+    "features": [
+      { "id": "martial-arts", "level": 1 },
+      { "id": "unarmored-defense", "level": 1 },
+      { "id": "monk-s-focus", "level": 2 },
+      { "id": "unarmored-movement", "level": 2 },
+      { "id": "uncanny-metabolism", "level": 2 },
+      { "id": "deflect-attacks", "level": 3 },
+      { "id": "monk-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "slow-fall", "level": 4 },
+      { "id": "extra-attack", "level": 5 },
+      { "id": "stunning-strike", "level": 5 },
+      { "id": "empowered-strikes", "level": 6 },
+      { "id": "subclass-feature-6", "level": 6, "gainsSubclassFeature": true },
+      { "id": "evasion", "level": 7 },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "acrobatic-movement", "level": 9 },
+      { "id": "heightened-focus", "level": 10 },
+      { "id": "self-restoration", "level": 10 },
+      { "id": "subclass-feature-11", "level": 11, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "deflect-energy", "level": 13 },
+      { "id": "disciplined-survivor", "level": 14 },
+      { "id": "perfect-focus", "level": 15 },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "subclass-feature-17", "level": 17, "gainsSubclassFeature": true },
+      { "id": "superior-defense", "level": 18 },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "body-and-mind", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "focus-points",
+        "feature": "monk-s-focus",
+        "level": 2,
+        "unit": "points",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 2, "value": 2 },
+            { "level": 3, "value": 3 },
+            { "level": 4, "value": 4 },
+            { "level": 5, "value": 5 },
+            { "level": 6, "value": 6 },
+            { "level": 7, "value": 7 },
+            { "level": 8, "value": 8 },
+            { "level": 9, "value": 9 },
+            { "level": 10, "value": 10 },
+            { "level": 11, "value": 11 },
+            { "level": 12, "value": 12 },
+            { "level": 13, "value": 13 },
+            { "level": 14, "value": 14 },
+            { "level": 15, "value": 15 },
+            { "level": 16, "value": 16 },
+            { "level": 17, "value": 17 },
+            { "level": 18, "value": 18 },
+            { "level": 19, "value": 19 },
+            { "level": 20, "value": 20 }
+          ]
+        },
+        "recovery": [
+          { "rest": "short", "amount": "all" },
+          { "rest": "long", "amount": "all" }
+        ]
+      },
+      {
+        "id": "uncanny-metabolism",
+        "feature": "uncanny-metabolism",
+        "level": 2,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 2, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      }
+    ],
+    "choices": [
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "open-hand",
+        "features": [
+          { "id": "warrior-of-the-open-hand", "level": 3 },
+          { "id": "wholeness-of-body", "level": 6 },
+          { "id": "fleet-step", "level": 11 },
+          { "id": "quivering-palm", "level": 17 }
+        ],
+        "resources": [
+          {
+            "id": "wholeness-of-body",
+            "feature": "wholeness-of-body",
+            "level": 6,
+            "unit": "uses",
+            "max": { "type": "ability", "ability": "WIS", "bonus": 0, "minimum": 1 },
+            "recovery": [{ "rest": "long", "amount": "all" }]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "paladin",
+    "hitDie": 10,
+    "proficiencies": {
+      "savingThrows": ["WIS", "CHA"],
+      "armor": ["light", "medium", "heavy", "shield"],
+      "weapons": ["simple", "martial"],
+      "tools": [],
+      "skills": {
+        "count": 2,
+        "from": ["ATHLETICS", "INSIGHT", "INTIMIDATION", "MEDICINE", "PERSUASION", "RELIGION"]
+      }
+    },
+    "spellcasting": { "ability": "CHA", "progression": "half-round-up" },
+    "features": [
+      { "id": "lay-on-hands", "level": 1 },
+      { "id": "spellcasting", "level": 1 },
+      { "id": "weapon-mastery", "level": 1 },
+      { "id": "fighting-style", "level": 2 },
+      { "id": "paladin-s-smite", "level": 2 },
+      { "id": "channel-divinity", "level": 3 },
+      { "id": "paladin-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "extra-attack", "level": 5 },
+      { "id": "faithful-steed", "level": 5 },
+      { "id": "aura-of-protection", "level": 6 },
+      { "id": "subclass-feature-7", "level": 7, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "abjure-foes", "level": 9 },
+      { "id": "aura-of-courage", "level": 10 },
+      { "id": "radiant-strikes", "level": 11 },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "restoring-touch", "level": 14 },
+      { "id": "subclass-feature-15", "level": 15, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "aura-expansion", "level": 18 },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "subclass-feature-20", "level": 20, "gainsSubclassFeature": true }
+    ],
+    "resources": [
+      {
+        "id": "lay-on-hands",
+        "feature": "lay-on-hands",
+        "level": 1,
+        "unit": "hit-points",
+        "max": { "type": "classLevel", "multiplier": 5 },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "paladin-s-smite",
+        "feature": "paladin-s-smite",
+        "level": 2,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 2, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "channel-divinity",
+        "feature": "channel-divinity",
+        "level": 3,
+        "unit": "uses",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 3, "value": 2 },
+            { "level": 11, "value": 3 }
+          ]
+        },
+        "recovery": [
+          { "rest": "short", "amount": 1 },
+          { "rest": "long", "amount": "all" }
+        ]
+      },
+      {
+        "id": "faithful-steed",
+        "feature": "faithful-steed",
+        "level": 5,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 5, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      }
+    ],
+    "choices": [
+      {
+        "id": "fighting-style",
+        "kind": "feat",
+        "categories": ["FS", "FS:P"],
+        "count": [{ "level": 2, "value": 1 }]
+      },
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "devotion",
+        "features": [
+          { "id": "oath-of-devotion", "level": 3 },
+          { "id": "aura-of-devotion", "level": 7 },
+          { "id": "smite-of-protection", "level": 15 },
+          { "id": "holy-nimbus", "level": 20 }
+        ],
+        "resources": [
+          {
+            "id": "holy-nimbus",
+            "feature": "holy-nimbus",
+            "level": 20,
+            "unit": "uses",
+            "max": { "type": "steps", "steps": [{ "level": 20, "value": 1 }] },
+            "recovery": [{ "rest": "long", "amount": "all" }]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ranger",
+    "hitDie": 10,
+    "proficiencies": {
+      "savingThrows": ["STR", "DEX"],
+      "armor": ["light", "medium", "shield"],
+      "weapons": ["simple", "martial"],
+      "tools": [],
+      "skills": {
+        "count": 3,
+        "from": [
+          "ANIMAL_HANDLING",
+          "ATHLETICS",
+          "INSIGHT",
+          "INVESTIGATION",
+          "NATURE",
+          "PERCEPTION",
+          "STEALTH",
+          "SURVIVAL"
+        ]
+      }
+    },
+    "spellcasting": { "ability": "WIS", "progression": "half-round-up" },
+    "features": [
+      { "id": "spellcasting", "level": 1 },
+      { "id": "favored-enemy", "level": 1 },
+      { "id": "weapon-mastery", "level": 1 },
+      { "id": "deft-explorer", "level": 2 },
+      { "id": "fighting-style", "level": 2 },
+      { "id": "ranger-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "extra-attack", "level": 5 },
+      { "id": "roving", "level": 6 },
+      { "id": "subclass-feature-7", "level": 7, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "expertise", "level": 9 },
+      { "id": "tireless", "level": 10 },
+      { "id": "subclass-feature-11", "level": 11, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "relentless-hunter", "level": 13 },
+      { "id": "nature-s-veil", "level": 14 },
+      { "id": "subclass-feature-15", "level": 15, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "precise-hunter", "level": 17 },
+      { "id": "feral-senses", "level": 18 },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "foe-slayer", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "favored-enemy",
+        "feature": "favored-enemy",
+        "level": 1,
+        "unit": "uses",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 1, "value": 2 },
+            { "level": 5, "value": 3 },
+            { "level": 9, "value": 4 },
+            { "level": 13, "value": 5 },
+            { "level": 17, "value": 6 }
+          ]
+        },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "tireless",
+        "feature": "tireless",
+        "level": 10,
+        "unit": "uses",
+        "max": { "type": "ability", "ability": "WIS", "bonus": 0, "minimum": 1 },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "nature-s-veil",
+        "feature": "nature-s-veil",
+        "level": 14,
+        "unit": "uses",
+        "max": { "type": "ability", "ability": "WIS", "bonus": 0, "minimum": 1 },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      }
+    ],
+    "choices": [
+      {
+        "id": "fighting-style",
+        "kind": "feat",
+        "categories": ["FS", "FS:R"],
+        "count": [{ "level": 2, "value": 1 }]
+      },
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "hunter",
+        "features": [
+          { "id": "hunter", "level": 3 },
+          { "id": "defensive-tactics", "level": 7 },
+          { "id": "superior-hunter-s-prey", "level": 11 },
+          { "id": "superior-hunter-s-defense", "level": 15 }
+        ],
+        "resources": []
+      }
+    ]
+  },
+  {
+    "id": "rogue",
+    "hitDie": 8,
+    "proficiencies": {
+      "savingThrows": ["DEX", "INT"],
+      "armor": ["light"],
+      "weapons": ["simple"],
+      "martialWeaponsWithProperty": ["F", "L"],
+      "tools": ["thieves-tools"],
+      "skills": {
+        "count": 4,
+        "from": [
+          "ACROBATICS",
+          "ATHLETICS",
+          "DECEPTION",
+          "INSIGHT",
+          "INTIMIDATION",
+          "INVESTIGATION",
+          "PERCEPTION",
+          "PERSUASION",
+          "SLEIGHT_OF_HAND",
+          "STEALTH"
+        ]
+      }
+    },
+    "features": [
+      { "id": "expertise-1", "level": 1 },
+      { "id": "sneak-attack", "level": 1 },
+      { "id": "thieves-cant", "level": 1 },
+      { "id": "weapon-mastery", "level": 1 },
+      { "id": "cunning-action", "level": 2 },
+      { "id": "rogue-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "steady-aim", "level": 3 },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "cunning-strike", "level": 5 },
+      { "id": "uncanny-dodge", "level": 5 },
+      { "id": "expertise-6", "level": 6 },
+      { "id": "evasion", "level": 7 },
+      { "id": "reliable-talent", "level": 7 },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "subclass-feature-9", "level": 9, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-10", "level": 10 },
+      { "id": "improved-cunning-strike", "level": 11 },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "subclass-feature-13", "level": 13, "gainsSubclassFeature": true },
+      { "id": "devious-strikes", "level": 14 },
+      { "id": "slippery-mind", "level": 15 },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "subclass-feature-17", "level": 17, "gainsSubclassFeature": true },
+      { "id": "elusive", "level": 18 },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "stroke-of-luck", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "stroke-of-luck",
+        "feature": "stroke-of-luck",
+        "level": 20,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 20, "value": 1 }] },
+        "recovery": [
+          { "rest": "short", "amount": "all" },
+          { "rest": "long", "amount": "all" }
+        ]
+      }
+    ],
+    "choices": [
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "thief",
+        "features": [
+          { "id": "thief", "level": 3 },
+          { "id": "supreme-sneak", "level": 9 },
+          { "id": "use-magic-device", "level": 13 },
+          { "id": "thief-s-reflexes", "level": 17 }
+        ],
+        "resources": []
+      }
+    ]
+  },
+  {
+    "id": "sorcerer",
+    "hitDie": 6,
+    "proficiencies": {
+      "savingThrows": ["CON", "CHA"],
+      "armor": [],
+      "weapons": ["simple"],
+      "tools": [],
+      "skills": {
+        "count": 2,
+        "from": ["ARCANA", "DECEPTION", "INSIGHT", "INTIMIDATION", "PERSUASION", "RELIGION"]
+      }
+    },
+    "spellcasting": { "ability": "CHA", "progression": "full" },
+    "features": [
+      { "id": "spellcasting", "level": 1 },
+      { "id": "innate-sorcery", "level": 1 },
+      { "id": "font-of-magic", "level": 2 },
+      { "id": "metamagic-2", "level": 2 },
+      { "id": "metamagic-options", "level": 2 },
+      { "id": "sorcerer-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "sorcerous-restoration", "level": 5 },
+      { "id": "subclass-feature-6", "level": 6, "gainsSubclassFeature": true },
+      { "id": "sorcery-incarnate", "level": 7 },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "metamagic-10", "level": 10 },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "subclass-feature-14", "level": 14, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "metamagic-17", "level": 17 },
+      { "id": "subclass-feature-18", "level": 18, "gainsSubclassFeature": true },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "arcane-apotheosis", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "innate-sorcery",
+        "feature": "innate-sorcery",
+        "level": 1,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 1, "value": 2 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "sorcery-points",
+        "feature": "font-of-magic",
+        "level": 2,
+        "unit": "points",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 2, "value": 2 },
+            { "level": 3, "value": 3 },
+            { "level": 4, "value": 4 },
+            { "level": 5, "value": 5 },
+            { "level": 6, "value": 6 },
+            { "level": 7, "value": 7 },
+            { "level": 8, "value": 8 },
+            { "level": 9, "value": 9 },
+            { "level": 10, "value": 10 },
+            { "level": 11, "value": 11 },
+            { "level": 12, "value": 12 },
+            { "level": 13, "value": 13 },
+            { "level": 14, "value": 14 },
+            { "level": 15, "value": 15 },
+            { "level": 16, "value": 16 },
+            { "level": 17, "value": 17 },
+            { "level": 18, "value": 18 },
+            { "level": 19, "value": 19 },
+            { "level": 20, "value": 20 }
+          ]
+        },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "sorcerous-restoration",
+        "feature": "sorcerous-restoration",
+        "level": 5,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 5, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      }
+    ],
+    "choices": [
+      {
+        "id": "metamagic",
+        "kind": "optional-feature",
+        "categories": ["MM"],
+        "count": [
+          { "level": 2, "value": 2 },
+          { "level": 10, "value": 4 },
+          { "level": 17, "value": 6 }
+        ]
+      },
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "draconic",
+        "features": [
+          { "id": "draconic-sorcery", "level": 3 },
+          { "id": "elemental-affinity", "level": 6 },
+          { "id": "dragon-wings", "level": 14 },
+          { "id": "dragon-companion", "level": 18 }
+        ],
+        "resources": [
+          {
+            "id": "dragon-wings",
+            "feature": "dragon-wings",
+            "level": 14,
+            "unit": "uses",
+            "max": { "type": "steps", "steps": [{ "level": 14, "value": 1 }] },
+            "recovery": [{ "rest": "long", "amount": "all" }]
+          },
+          {
+            "id": "dragon-companion",
+            "feature": "dragon-companion",
+            "level": 18,
+            "unit": "uses",
+            "max": { "type": "steps", "steps": [{ "level": 18, "value": 1 }] },
+            "recovery": [{ "rest": "long", "amount": "all" }]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "warlock",
+    "hitDie": 8,
+    "proficiencies": {
+      "savingThrows": ["WIS", "CHA"],
+      "armor": ["light"],
+      "weapons": ["simple"],
+      "tools": [],
+      "skills": {
+        "count": 2,
+        "from": [
+          "ARCANA",
+          "DECEPTION",
+          "HISTORY",
+          "INTIMIDATION",
+          "INVESTIGATION",
+          "NATURE",
+          "RELIGION"
+        ]
+      }
+    },
+    "spellcasting": { "ability": "CHA", "progression": "pact" },
+    "features": [
+      { "id": "eldritch-invocations", "level": 1 },
+      { "id": "pact-magic", "level": 1 },
+      { "id": "eldritch-invocation-options", "level": 1 },
+      { "id": "magical-cunning", "level": 2 },
+      { "id": "warlock-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "subclass-feature-6", "level": 6, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "contact-patron", "level": 9 },
+      { "id": "subclass-feature-10", "level": 10, "gainsSubclassFeature": true },
+      { "id": "mystic-arcanum-11", "level": 11 },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "mystic-arcanum-13", "level": 13 },
+      { "id": "subclass-feature-14", "level": 14, "gainsSubclassFeature": true },
+      { "id": "mystic-arcanum-15", "level": 15 },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "mystic-arcanum-17", "level": 17 },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "eldritch-master", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "pact-slots",
+        "feature": "pact-magic",
+        "level": 1,
+        "unit": "spell-slots",
+        "max": {
+          "type": "steps",
+          "steps": [
+            { "level": 1, "value": 1 },
+            { "level": 2, "value": 2 },
+            { "level": 11, "value": 3 },
+            { "level": 17, "value": 4 }
+          ]
+        },
+        "recovery": [
+          { "rest": "short", "amount": "all" },
+          { "rest": "long", "amount": "all" }
+        ],
+        "spellLevel": [
+          { "level": 1, "value": 1 },
+          { "level": 3, "value": 2 },
+          { "level": 5, "value": 3 },
+          { "level": 7, "value": 4 },
+          { "level": 9, "value": 5 }
+        ]
+      },
+      {
+        "id": "magical-cunning",
+        "feature": "magical-cunning",
+        "level": 2,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 2, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "contact-patron",
+        "feature": "contact-patron",
+        "level": 9,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 9, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "mystic-arcanum-6",
+        "feature": "mystic-arcanum-11",
+        "level": 11,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 11, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }],
+        "spellLevel": [{ "level": 11, "value": 6 }]
+      },
+      {
+        "id": "mystic-arcanum-7",
+        "feature": "mystic-arcanum-13",
+        "level": 13,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 13, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }],
+        "spellLevel": [{ "level": 13, "value": 7 }]
+      },
+      {
+        "id": "mystic-arcanum-8",
+        "feature": "mystic-arcanum-15",
+        "level": 15,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 15, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }],
+        "spellLevel": [{ "level": 15, "value": 8 }]
+      },
+      {
+        "id": "mystic-arcanum-9",
+        "feature": "mystic-arcanum-17",
+        "level": 17,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 17, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }],
+        "spellLevel": [{ "level": 17, "value": 9 }]
+      }
+    ],
+    "choices": [
+      {
+        "id": "eldritch-invocations",
+        "kind": "optional-feature",
+        "categories": ["EI"],
+        "count": [
+          { "level": 1, "value": 1 },
+          { "level": 2, "value": 3 },
+          { "level": 5, "value": 5 },
+          { "level": 7, "value": 6 },
+          { "level": 9, "value": 7 },
+          { "level": 12, "value": 8 },
+          { "level": 15, "value": 9 },
+          { "level": 18, "value": 10 }
+        ]
+      },
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "fiend",
+        "features": [
+          { "id": "fiend-patron", "level": 3 },
+          { "id": "dark-one-s-own-luck", "level": 6 },
+          { "id": "fiendish-resilience", "level": 10 },
+          { "id": "hurl-through-hell", "level": 14 }
+        ],
+        "resources": [
+          {
+            "id": "dark-one-s-own-luck",
+            "feature": "dark-one-s-own-luck",
+            "level": 6,
+            "unit": "uses",
+            "max": { "type": "ability", "ability": "CHA", "bonus": 0, "minimum": 1 },
+            "recovery": [{ "rest": "long", "amount": "all" }]
+          },
+          {
+            "id": "hurl-through-hell",
+            "feature": "hurl-through-hell",
+            "level": 14,
+            "unit": "uses",
+            "max": { "type": "steps", "steps": [{ "level": 14, "value": 1 }] },
+            "recovery": [{ "rest": "long", "amount": "all" }]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "wizard",
+    "hitDie": 6,
+    "proficiencies": {
+      "savingThrows": ["INT", "WIS"],
+      "armor": [],
+      "weapons": ["simple"],
+      "tools": [],
+      "skills": {
+        "count": 2,
+        "from": ["ARCANA", "HISTORY", "INSIGHT", "INVESTIGATION", "MEDICINE", "NATURE", "RELIGION"]
+      }
+    },
+    "spellcasting": { "ability": "INT", "progression": "full" },
+    "features": [
+      { "id": "spellcasting", "level": 1 },
+      { "id": "ritual-adept", "level": 1 },
+      { "id": "arcane-recovery", "level": 1 },
+      { "id": "scholar", "level": 2 },
+      { "id": "wizard-subclass", "level": 3, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-4", "level": 4 },
+      { "id": "memorize-spell", "level": 5 },
+      { "id": "subclass-feature-6", "level": 6, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-8", "level": 8 },
+      { "id": "subclass-feature-10", "level": 10, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-12", "level": 12 },
+      { "id": "subclass-feature-14", "level": 14, "gainsSubclassFeature": true },
+      { "id": "ability-score-improvement-16", "level": 16 },
+      { "id": "spell-mastery", "level": 18 },
+      { "id": "epic-boon", "level": 19 },
+      { "id": "signature-spells", "level": 20 }
+    ],
+    "resources": [
+      {
+        "id": "arcane-recovery",
+        "feature": "arcane-recovery",
+        "level": 1,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 1, "value": 1 }] },
+        "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "signature-spells",
+        "feature": "signature-spells",
+        "level": 20,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 20, "value": 2 }] },
+        "recovery": [
+          { "rest": "short", "amount": "all" },
+          { "rest": "long", "amount": "all" }
+        ]
+      }
+    ],
+    "choices": [
+      {
+        "id": "epic-boon",
+        "kind": "feat",
+        "categories": ["EB"],
+        "count": [{ "level": 19, "value": 1 }]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "evoker",
+        "features": [
+          { "id": "evoker", "level": 3 },
+          { "id": "sculpt-spells", "level": 6 },
+          { "id": "empowered-evocation", "level": 10 },
+          { "id": "overchannel", "level": 14 }
+        ],
+        "resources": [
+          {
+            "id": "overchannel",
+            "feature": "overchannel",
+            "level": 14,
+            "unit": "uses",
+            "max": { "type": "steps", "steps": [{ "level": 14, "value": 1 }] },
+            "recovery": [{ "rest": "long", "amount": "all" }]
+          }
+        ]
+      }
+    ]
+  }
+]

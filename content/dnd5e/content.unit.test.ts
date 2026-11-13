@@ -5,6 +5,11 @@ import { z } from 'zod';
 
 import { conditionIdsOf, stripTags, tagsOf } from '@shared/content/tags';
 import {
+  classDataSchema,
+  classTextSchema,
+  classTranslationSchema,
+} from '@shared/systems/dnd5e/content/class.schema';
+import {
   conditionDataSchema,
   conditionTextSchema,
   conditionTranslationSchema,
@@ -30,6 +35,26 @@ const conditionTextsOf = (source: string, locale: string) =>
   z
     .record(z.string(), locale === 'en' ? conditionTextSchema : conditionTranslationSchema)
     .parse(read(source, `i18n/${locale}/conditions.json`));
+
+const classesOf = (source: string) => z.array(classDataSchema).parse(read(source, 'classes.json'));
+const classTextsOf = (source: string, locale: string) =>
+  z
+    .record(z.string(), locale === 'en' ? classTextSchema : classTranslationSchema)
+    .parse(read(source, `i18n/${locale}/classes.json`));
+const englishClassTextsOf = (source: string) =>
+  z.record(z.string(), classTextSchema).parse(read(source, 'i18n/en/classes.json'));
+
+/** Class texts are nested (class → features → id): as flat records of fields, keyed by path. */
+function flatTexts(texts: object, path = ''): Record<string, Record<string, string | undefined>> {
+  const fields: Record<string, string> = {};
+  const nested = Object.entries(texts).flatMap(([key, value]) => {
+    if (typeof value === 'string') fields[key] = value;
+    return value && typeof value === 'object'
+      ? Object.entries(flatTexts(value, path ? `${path}/${key}` : key))
+      : [];
+  });
+  return Object.fromEntries([...(Object.keys(fields).length ? [[path, fields]] : []), ...nested]);
+}
 
 const SOURCES = ['srd-5.1', 'srd-5.2'];
 
@@ -115,6 +140,131 @@ describe.each(SOURCES)('condições do %s', (source) => {
   });
 });
 
+describe.each(SOURCES)('classes do %s', (source) => {
+  const classes = classesOf(source);
+  const en = englishClassTextsOf(source);
+
+  it('as 12 classes passam no schema, com ids únicos e uma subclasse cada', () => {
+    expect(classes.map((c) => c.id)).toEqual([
+      'barbarian',
+      'bard',
+      'cleric',
+      'druid',
+      'fighter',
+      'monk',
+      'paladin',
+      'ranger',
+      'rogue',
+      'sorcerer',
+      'warlock',
+      'wizard',
+    ]);
+    expect(classes.filter((c) => c.subclasses.length !== 1).map((c) => c.id)).toEqual([]);
+  });
+
+  it('todo id dos dados tem texto em inglês, e só eles', () => {
+    const ids = (list: { id: string }[]) => list.map((x) => x.id).sort();
+    for (const c of classes) {
+      const text = en[c.id];
+      expect(Object.keys(text.features).sort()).toEqual(ids(c.features));
+      expect(Object.keys(text.resources).sort()).toEqual(ids(c.resources));
+      expect(Object.keys(text.choices).sort()).toEqual(ids(c.choices));
+      expect(Object.keys(text.subclasses).sort()).toEqual(ids(c.subclasses));
+      for (const s of c.subclasses) {
+        expect(Object.keys(text.subclasses[s.id].features).sort()).toEqual(ids(s.features));
+        expect(Object.keys(text.subclasses[s.id].resources).sort()).toEqual(ids(s.resources));
+      }
+    }
+    expect(Object.keys(en).sort()).toEqual(ids(classes));
+  });
+
+  it('as traduções só têm ids que existem', () => {
+    const paths = new Set(Object.keys(flatTexts(en)));
+    for (const locale of ['en', 'pt']) {
+      expect(
+        Object.keys(flatTexts(classTextsOf(source, locale))).filter((p) => !paths.has(p)),
+      ).toEqual([]);
+    }
+  });
+
+  it('todo recurso vem de uma característica da mesma classe ou subclasse, no nível dela', () => {
+    const wrong = classes.flatMap((c) =>
+      [c, ...c.subclasses].flatMap(({ features, resources }) =>
+        resources
+          .filter((r) => {
+            const feature = features.find((f) => f.id === r.feature);
+            const first = r.max.type === 'steps' ? r.max.steps[0].level : r.level;
+            return !feature || r.level < feature.level || first !== r.level;
+          })
+          .map((r) => `${c.id}/${r.id}`),
+      ),
+    );
+    expect(wrong).toEqual([]);
+  });
+
+  it('armas e ferramentas apontam para itens do mesmo livro', () => {
+    const items = new Set(
+      z
+        .array(z.object({ id: z.string() }).passthrough())
+        .parse(read(source, 'items.json'))
+        .map((i) => i.id),
+    );
+    const missing = classes.flatMap(({ id, proficiencies: p }) =>
+      [...p.weapons.filter((w) => w !== 'simple' && w !== 'martial'), ...p.tools]
+        .filter((item) => !items.has(item))
+        .map((item) => `${id}: ${item}`),
+    );
+    expect(missing).toEqual([]);
+  });
+});
+
+describe('recursos de classe', () => {
+  const resource = (source: string, classId: string, id: string) =>
+    classesOf(source)
+      .find((c) => c.id === classId)
+      ?.resources.find((r) => r.id === id);
+
+  it('no SRD 5.1, a Fúria fica ilimitada no nível 20 e volta no descanso longo', () => {
+    const rage = resource('srd-5.1', 'barbarian', 'rage');
+    expect(rage?.max).toEqual({
+      type: 'steps',
+      steps: [
+        { level: 1, value: 2 },
+        { level: 3, value: 3 },
+        { level: 6, value: 4 },
+        { level: 12, value: 5 },
+        { level: 17, value: 6 },
+        { level: 20, value: null },
+      ],
+    });
+    expect(rage?.recovery).toEqual([{ rest: 'long', amount: 'all' }]);
+  });
+
+  it('no SRD 5.2, a Fúria devolve um uso no descanso curto', () => {
+    expect(resource('srd-5.2', 'barbarian', 'rage')?.recovery).toEqual([
+      { rest: 'short', amount: 1 },
+      { rest: 'long', amount: 'all' },
+    ]);
+  });
+
+  it('a Inspiração de Bardo usa Carisma e volta no descanso curto a partir do nível 5', () => {
+    for (const source of SOURCES) {
+      const inspiration = resource(source, 'bard', 'bardic-inspiration');
+      expect(inspiration?.max).toEqual({ type: 'ability', ability: 'CHA', bonus: 0, minimum: 1 });
+      expect(inspiration?.recovery).toContainEqual({ rest: 'short', amount: 'all', fromLevel: 5 });
+      expect(inspiration?.die?.map((d) => d.value)).toEqual([6, 8, 10, 12]);
+    }
+  });
+
+  it('os espaços de pacto voltam no descanso curto e sobem até o 5º círculo', () => {
+    for (const source of SOURCES) {
+      const slots = resource(source, 'warlock', 'pact-slots');
+      expect(slots?.recovery).toContainEqual({ rest: 'short', amount: 'all' });
+      expect(slots?.spellLevel?.at(-1)).toEqual({ level: 9, value: 5 });
+    }
+  });
+});
+
 // A condition tag is a link: it must land on a condition of the same book
 describe.each(SOURCES)('tags de condição do %s', (source) => {
   it('toda tag condition aponta para uma condição do mesmo livro', () => {
@@ -122,6 +272,7 @@ describe.each(SOURCES)('tags de condição do %s', (source) => {
     const texts = [
       ...Object.values(textsOf(source, 'en')),
       ...Object.values(conditionTextsOf(source, 'en')),
+      ...Object.values(flatTexts(classTextsOf(source, 'en'))),
     ];
     const missing = texts.flatMap((text) =>
       conditionIdsOf(...Object.values(text)).filter((id) => !ids.has(id)),
@@ -129,6 +280,18 @@ describe.each(SOURCES)('tags de condição do %s', (source) => {
     expect([...new Set(missing)]).toEqual([]);
   });
 });
+
+const KINDS = ['spells', 'conditions', 'classes'] as const;
+const textsOfKind = (
+  source: string,
+  locale: string,
+  kind: (typeof KINDS)[number],
+): Record<string, Record<string, string | undefined>> =>
+  kind === 'spells'
+    ? textsOf(source, locale)
+    : kind === 'conditions'
+      ? conditionTextsOf(source, locale)
+      : flatTexts(classTextsOf(source, locale));
 
 // Translations keep the tags of the English text, so a link survives translation
 const tagKeys = (text: string) =>
@@ -141,9 +304,8 @@ describe.each(SOURCES)('tags nas traduções do %s', (source) => {
   const has = (locale: string, kind: string) =>
     existsSync(path.join(import.meta.dirname, source, 'i18n', locale, `${kind}.json`));
 
-  it.each(['spells', 'conditions'])('%s: as mesmas tags do inglês em cada campo', (kind) => {
-    const load = (locale: string): Record<string, Record<string, string | undefined>> =>
-      kind === 'spells' ? textsOf(source, locale) : conditionTextsOf(source, locale);
+  it.each(KINDS)('%s: as mesmas tags do inglês em cada campo', (kind) => {
+    const load = (locale: string) => textsOfKind(source, locale, kind);
     const en = load('en');
     const different: string[] = [];
     for (const locale of locales.filter((l) => l !== 'en' && has(l, kind))) {
@@ -158,13 +320,6 @@ describe.each(SOURCES)('tags nas traduções do %s', (source) => {
     expect(different).toEqual([]);
   });
 });
-
-const KINDS = ['spells', 'conditions'] as const;
-const textsOfKind = (source: string, locale: string, kind: (typeof KINDS)[number]) =>
-  (kind === 'spells' ? textsOf(source, locale) : conditionTextsOf(source, locale)) as Record<
-    string,
-    Record<string, string | undefined>
-  >;
 
 /** Every content file of the book, in every locale: `[locale, kind]`. */
 const contentFilesOf = (source: string) =>
