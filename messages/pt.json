@@ -466,6 +466,7 @@
       "view": "Visualização",
       "viewList": "Lista",
       "viewGrid": "Grade",
+      "tile": "{name}, {quantity} un.",
       "group": {
         "weapons": "Armas",
         "armor": "Armaduras e escudos",

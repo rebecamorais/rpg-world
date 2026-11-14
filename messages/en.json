@@ -466,6 +466,7 @@
       "view": "View",
       "viewList": "List",
       "viewGrid": "Grid",
+      "tile": "{name}, {quantity}",
       "group": {
         "weapons": "Weapons",
         "armor": "Armor and shields",
