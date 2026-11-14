@@ -43,9 +43,10 @@ describe('useInventoryView', () => {
       throw new Error('blocked');
     });
 
-    const { result } = renderHook(() => useInventoryView(KEY));
+    const { result } = renderHook(() => useInventoryView('rpg-world:test-blocked'));
     expect(result.current[0]).toBe('list');
-    expect(() => act(() => result.current[1]('grid'))).not.toThrow();
+    act(() => result.current[1]('grid'));
+    expect(result.current[0]).toBe('grid');
   });
 
   it('valor desconhecido vira lista', () => {

@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 
 export type InventoryView = 'list' | 'grid';
 
@@ -8,9 +8,13 @@ export const INVENTORY_VIEW_KEYS = {
 } as const;
 
 const DEFAULT_VIEW: InventoryView = 'list';
+// Choices that could not be saved (blocked storage): kept for this session only
+const memory = new Map<string, InventoryView>();
 const listeners = new Set<() => void>();
 
 function read(key: string): InventoryView {
+  const remembered = memory.get(key);
+  if (remembered) return remembered;
   try {
     return localStorage.getItem(key) === 'grid' ? 'grid' : DEFAULT_VIEW;
   } catch {
@@ -34,13 +38,18 @@ export function useInventoryView(storageKey: string): [InventoryView, (v: Invent
     () => read(storageKey),
     () => DEFAULT_VIEW,
   );
-  const setView = (next: InventoryView) => {
-    try {
-      localStorage.setItem(storageKey, next);
-    } catch {
-      // Storage blocked: the choice just won't be remembered
-    }
-    listeners.forEach((l) => l());
-  };
+  const setView = useCallback(
+    (next: InventoryView) => {
+      try {
+        localStorage.setItem(storageKey, next);
+        memory.delete(storageKey);
+      } catch {
+        // Storage blocked: keep the choice in memory so the toggle still works this session
+        memory.set(storageKey, next);
+      }
+      listeners.forEach((l) => l());
+    },
+    [storageKey],
+  );
   return [view, setView];
 }
