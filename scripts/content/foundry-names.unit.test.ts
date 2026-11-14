@@ -15,10 +15,21 @@ describe('ptNameIndex', () => {
 
   it('finds by English name', () => expect(index.get('Rage', ['Barbarian'])).toBe('Fúria'));
 
-  it('prefers the class variant', () =>
+  it('prefers the class variant, without its suffix', () =>
     expect(index.get('Ability Score Improvement', ['Fighter'])).toBe(
-      'Aumento no Valor de Atributo (Guerreiro)',
+      'Aumento no Valor de Atributo',
     ));
+
+  it('keeps parentheses that are part of the English name too', () => {
+    const own = ptNameIndex([
+      { 'Brutal Critical (1 die) (Barbarian)': { name: 'Crítico Brutal (1 dado) (Bárbaro)' } },
+    ]);
+    expect(own.get('Brutal Critical (1 die)', ['Barbarian'])).toBe('Crítico Brutal (1 dado)');
+    const bare = ptNameIndex([
+      { 'Brutal Critical (1 die) (Barbarian)': { name: 'Crítico Brutal (1 dado)' } },
+    ]);
+    expect(bare.get('Brutal Critical (1 die)', ['Barbarian'])).toBe('Crítico Brutal (1 dado)');
+  });
 
   it('falls back to the plain name', () =>
     expect(index.get('Ability Score Improvement', ['Wizard'])).toBe(

@@ -38,7 +38,7 @@ describe('translateClassNames', () => {
     expect(translation.fighter).toEqual({
       name: 'Guerreiro',
       features: {
-        asi: { name: 'Aumento no Valor de Atributo (Guerreiro)' },
+        asi: { name: 'Aumento no Valor de Atributo' },
         'second-wind': { name: 'Retomar o Fôlego' },
       },
       resources: { 'second-wind': { name: 'Retomar o Fôlego' } },

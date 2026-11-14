@@ -21,8 +21,16 @@ const DND5E_RAW = `https://raw.githubusercontent.com/foundryvtt/dnd5e/${DND5E_CO
 const DND5E_API = 'https://api.github.com/repos/foundryvtt/dnd5e';
 const CLASSES_DIR = 'packs/_source/classes24';
 
+/** Hundreds of small downloads: a dropped connection is retried twice before giving up. */
 async function get(url: string, headers: Record<string, string> = {}): Promise<Response> {
-  const response = await fetch(url, { headers });
+  let response: Response | undefined;
+  for (let attempt = 1; !response; attempt++) {
+    try {
+      response = await fetch(url, { headers });
+    } catch (error) {
+      if (attempt === 3) throw new Error(`${url}: ${String(error)}`);
+    }
+  }
   if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
   return response;
 }

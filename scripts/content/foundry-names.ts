@@ -40,9 +40,15 @@ function indexOf(pairs: [enName: string, translated: string | undefined][]): Nam
     else names.set(enName, name);
   }
   const lookup = (enName: string) => (ambiguous.has(enName) ? undefined : names.get(enName));
+  // "Expertise (Bard)" is translated "Especialização (Bardo)": the suffix only told them apart
+  const parens = (s: string) => s.split('(').length;
+  const variant = (enName: string, c: string) => {
+    const name = lookup(`${enName} (${c})`);
+    return name && parens(name) > parens(enName) ? name.replace(/\s*\([^()]*\)$/, '') : name;
+  };
   return {
     get: (enName, context) =>
-      context.map((c) => lookup(`${enName} (${c})`)).find(Boolean) ?? lookup(enName),
+      context.map((c) => variant(enName, c)).find(Boolean) ?? lookup(enName),
     ambiguous,
   };
 }
