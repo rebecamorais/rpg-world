@@ -52,14 +52,26 @@ describe('ItemDetails', () => {
     renderWithProviders(<ItemDetails item={plate} />);
 
     expect(screen.getByText(/Heavy armor\. You are Blinded by nothing\./)).toBeInTheDocument();
-    expect(screen.queryByText('In English')).not.toBeInTheDocument();
+    expect(screen.queryByRole('note')).not.toBeInTheDocument();
   });
 
-  it('sem tradução, mostra o texto em inglês com lang="en" e o selo "não traduzido"', () => {
+  it('sem tradução, mostra o texto em inglês com lang="en" e o aviso (role note)', () => {
     renderWithProviders(<ItemDetails item={{ ...plate, untranslated: true }} />);
 
-    expect(screen.getByText('In English')).toBeInTheDocument();
+    expect(screen.getByRole('note')).toHaveTextContent('Description in English for now.');
     expect(screen.getByText(/Heavy armor/).closest('[lang]')).toHaveAttribute('lang', 'en');
+  });
+
+  it('com tradução, não mostra o aviso', () => {
+    renderWithProviders(<ItemDetails item={plate} />);
+
+    expect(screen.queryByRole('note')).not.toBeInTheDocument();
+  });
+
+  it('nested usa o aviso compacto', () => {
+    renderWithProviders(<ItemDetails item={{ ...plate, untranslated: true }} nested />);
+
+    expect(screen.getByRole('note')).toHaveClass('text-label');
   });
 
   it('preço fracionário fica em cobre', () => {

@@ -10,9 +10,8 @@ import type { InventoryItem } from '@frontend/hooks/useInventory';
 import { cn } from '@frontend/lib/utils';
 
 import { ItemDetails } from './ItemDetails';
+import { MAX_QUANTITY } from './QuantityStepper';
 import { useItemFormat } from './useItemFormat';
-
-const MAX_QUANTITY = 9999;
 
 interface Props {
   entry: InventoryItem;
