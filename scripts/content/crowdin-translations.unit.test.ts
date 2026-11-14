@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { assertIdentifiers, identifierOf, leafPaths, withoutPaths } from './crowdin-translations';
+import {
+  assertIdentifiers,
+  identifierOf,
+  leafPaths,
+  translationImport,
+  withoutPaths,
+} from './crowdin-translations';
 
 const json = { fighter: { name: 'Guerreiro', features: { asi: { name: 'AVA' } } } };
 
@@ -41,4 +47,15 @@ describe('assertIdentifiers', () => {
     expect(() =>
       assertIdentifiers(['fighter/name', 'fighter/subclassTitle'], en, 'classes.json'),
     ).toThrow(/classes\.json/));
+});
+
+describe('translationImport', () => {
+  it('never approves and keeps unreviewed names out of the translation memory', () =>
+    expect(translationImport(7, 42)).toEqual({
+      storageId: 7,
+      fileId: 42,
+      importEqSuggestions: false,
+      autoApproveImported: false,
+      addToTm: false,
+    }));
 });

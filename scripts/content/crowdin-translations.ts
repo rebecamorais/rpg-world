@@ -49,6 +49,18 @@ export function assertIdentifiers(crowdinIds: string[], en: unknown, file: strin
   }
 }
 
+/**
+ * How a translated file is imported: as suggestions only. Never approved, never equal to the
+ * English, and kept out of the translation memory until someone approves them on Crowdin.
+ */
+export const translationImport = (storageId: number, fileId: number) => ({
+  storageId,
+  fileId,
+  importEqSuggestions: false,
+  autoApproveImported: false,
+  addToTm: false,
+});
+
 const API = 'https://api.crowdin.com/api/v2';
 
 export class CrowdinClient {
@@ -143,12 +155,7 @@ export class CrowdinClient {
     await this.request(`/projects/${this.projectId}/translations/${languageId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        storageId: storage.data.id,
-        fileId,
-        importEqSuggestions: false,
-        autoApproveImported: false,
-      }),
+      body: JSON.stringify(translationImport(storage.data.id, fileId)),
     });
   }
 }
