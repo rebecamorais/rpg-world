@@ -86,7 +86,7 @@ As cores abaixo são **propostas iniciais** e serão ajustadas no Playground com
 - **Fundo:** `ancient-parchment` `weathered` com um tom esverdeado.
 - **Borda:** `runic-border` `static`, sem runas.
 - **Ornamentos:** `arcane-corners` `ornamental`, `rune-divider` `botanical`, `sigil-watermark` `botanical`.
-- **Tipografia:** `arcane-title` `scholarly`.
+- **Tipografia:** `arcane-title` `scholarly` com a fonte Almendra (`--grimoire-title-font`), que carrega só neste tema.
 - **Efeitos:** `enchanted-hover` `surface-shimmer`, bem suave.
 - **Combinação:** `ancient-parchment` + `runic-border` + `arcane-corners` + `rune-divider` + `sigil-watermark`.
 
@@ -96,7 +96,7 @@ As cores abaixo são **propostas iniciais** e serão ajustadas no Playground com
 - **Fundo:** liso, com vinheta radial na página.
 - **Borda:** `runic-border` `static` discreto; as runas aparecem no `hover-glow`.
 - **Ornamentos:** `arcane-corners` `geometric`, `sigil-watermark` `alchemical`.
-- **Tipografia:** `arcane-title` `runic` (Uncial Antiqua + runas da Noto Sans Runic).
+- **Tipografia:** `arcane-title` `runic` (Cinzel + runas da Noto Sans Runic).
 - **Efeitos:** `sigil-pulse` `rune-flash`.
 - **Combinação:** `runic-border` + `arcane-corners` + `sigil-watermark` + `prepared-seal` `minimal`.
 - **Cuidado:** a superfície mais escura precisa manter o `--muted-foreground` em 7:1, e o teste de contraste confere isso.
@@ -107,7 +107,7 @@ As cores abaixo são **propostas iniciais** e serão ajustadas no Playground com
 - **Fundo:** `astral-dust` `static-stars` na página e `arcane-gradient` no card aberto. O `ambient-glow` é opcional, **só no fundo de página** (F3) e sem `prefers-reduced-motion`.
 - **Borda:** `runic-border` `static`; `active` com brilho na magia preparada.
 - **Ornamentos:** `arcane-corners` `geometric`, `rune-divider` `minimal`, `sigil-watermark` `celestial` e `school-emblem` com `frame="ring"`.
-- **Tipografia:** `arcane-title` `celestial` (Cinzel Decorative, que carrega só neste tema).
+- **Tipografia:** `arcane-title` `celestial` (Marcellus, que carrega só neste tema).
 - **Efeitos:** brilho moderado.
 - **Combinação:** `astral-dust` + `runic-border` + `arcane-corners` + `rune-divider` + `sigil-watermark`.
 
@@ -133,4 +133,4 @@ As cores abaixo são **propostas iniciais** e serão ajustadas no Playground com
 
 - Os 6 temas ficam todos, ou alguns fogem da "fantasia sóbria"? (`ancient-manuscript` no claro muda bastante a cara do app.)
 - O tema vale só para a ficha e o spellbook do personagem, ou também para a página da mesa quando a ficha aparece lá? A sugestão é **sim**, porque é "visto por todos".
-- Uma fonte nova por tema (IM Fell English, Cinzel Decorative, Uncial Antiqua, Noto Sans Runic) vale o custo de carregamento? A sugestão é carregar só a fonte do tema ativo. Como o `next/font` não carrega sob demanda por atributo, isso fica para medir no `/dev/grimoire`.
+- Uma fonte nova por tema (Marcellus, IM Fell English, Almendra, Noto Sans Runic) vale o custo de carregamento? A sugestão é carregar só a fonte do tema ativo. Como o `next/font` não carrega sob demanda por atributo, isso fica para medir no `/dev/grimoire`.

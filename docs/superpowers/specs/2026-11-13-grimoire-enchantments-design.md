@@ -45,6 +45,13 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
     - `sigil-watermark`: usa o ícone da escola em tamanho grande, como o `SpellVFX` já faz;
     - `runic-border` e `rune-divider`: não mudam, porque já funcionavam com CSS e a fonte de runas.
 
+19. **(dona)** Fontes: a **Cinzel** continua a padrão. As alternativas são **Marcellus**, **IM Fell English** e **Almendra**. Cada uma entra como no máximo uma fonte extra por tema, só no nome da magia e nos títulos:
+    - Marcellus no `celestial-codex`;
+    - IM Fell English no `ancient-manuscript`;
+    - Almendra no `wildwood-codex`.
+
+    Cinzel Decorative, Uncial Antiqua, Cormorant Garamond e as fontes góticas ficam de fora, e a variante `runic` do título usa Cinzel com runas da Noto Sans Runic.
+
 ## Fora do escopo
 
 - Implementar componentes, instalar pacotes, alterar a UI atual ou o banco de dados.
