@@ -1,38 +1,41 @@
 name: Bug
-description: Algo não funciona como deveria.
+description: Algo não funciona como deveria. / Something doesn't work as it should.
 labels: [bug]
 body:
+  - type: markdown
+    attributes:
+      value: Escreva em português ou inglês. / Write in Portuguese or English.
   - type: textarea
     id: what
     attributes:
-      label: O que aconteceu
-      description: E o que você esperava que acontecesse.
+      label: O que aconteceu / What happened
+      description: E o que você esperava que acontecesse. / And what you expected to happen.
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
-      label: Como reproduzir
+      label: Como reproduzir / How to reproduce
       placeholder: |
-        1. Abrir a ficha...
-        2. Clicar em...
-        3. Ver o erro
+        1. Abrir a ficha... / Open the sheet...
+        2. Clicar em... / Click on...
+        3. Ver o erro / See the error
     validations:
       required: true
   - type: input
     id: where
     attributes:
-      label: Onde
-      description: Navegador, sistema e se foi no celular ou no desktop.
-      placeholder: Chrome 130 no Android
+      label: Onde / Where
+      description: Navegador, sistema e se foi no celular ou no desktop. / Browser, OS, and whether it was on mobile or desktop.
+      placeholder: Chrome 130 no Android / Chrome 130 on Android
   - type: checkboxes
     id: a11y
     attributes:
-      label: Acessibilidade
+      label: Acessibilidade / Accessibility
       options:
-        - label: É uma barreira de acessibilidade (leitor de tela, teclado, contraste, zoom)
+        - label: É uma barreira de acessibilidade (leitor de tela, teclado, contraste, zoom) / It's an accessibility barrier (screen reader, keyboard, contrast, zoom)
   - type: textarea
     id: extra
     attributes:
-      label: Prints ou vídeo
-      description: Arraste os arquivos aqui. Ajuda muito.
+      label: Prints ou vídeo / Screenshots or video
+      description: Arraste os arquivos aqui. Ajuda muito. / Drag the files here. It helps a lot.
