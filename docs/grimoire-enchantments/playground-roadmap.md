@@ -42,7 +42,7 @@ A combinação sugerida no prompt da #195 era RunicBorder, ArcaneCorners, SigilW
 
 Juntos, os quatro montam o tema `arcane-scholar` em F1 e F2, sem animação contínua e sem dependência npm nova.
 
-**Arte P1:** `arcane-corners/runic.svg`, `arcane-corners/geometric.svg` e `sigil-watermark/arcane.svg` (prompts mantidos fora do repositório). Nada trava o código, porque o Playground começa com placeholders e com as runas da fonte.
+**Arte:** os SVGs próprios estão **arquivados** (decisão 18 da spec-mãe). O primeiro grupo usa só CSS, as máscaras de referência e a fonte de runas: os cantos viram colchetes em CSS e o sigilo usa o ícone da escola.
 
 **Código que pode ser copiado** (MIT, com o aviso no `NOTICE.md`):
 

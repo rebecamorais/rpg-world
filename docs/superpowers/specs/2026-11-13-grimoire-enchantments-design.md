@@ -16,7 +16,7 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
 
 1. **(dona)** A coleção se chama Grimoire Enchantments e tem 12 componentes iniciais em 6 categorias.
 2. **(dona)** Os componentes visuais não conhecem regras de nenhum sistema. Recebem identificadores ("emblema", "estado selecionado"), e o mapeamento para D&D 5e fica fora deles.
-3. **(dona)** Os SVGs (cantos, lacres, sigilos, divisórias, marcadores) são **código vetorial gerado pelo Claude Code** a partir de uma geometria definida, nunca imagens vetorizadas. A dona aprova a direção visual no Playground. Ela também segue um contrato visual próprio (famílias Arcane, Ornamental e Botanical, traço pelo tamanho mínimo, área segura, critérios de aceite e produção em lotes). O contrato e as specs de produção ficam fora do repositório, e as specs do catálogo só listam o nome e o motivo de cada asset.
+3. ~~**(dona)** Os SVGs (cantos, lacres, sigilos, divisórias, marcadores) seriam código vetorial gerado pelo Claude Code.~~ **Arquivado em 14/11 (dona):** os assets SVG próprios saíram do plano por enquanto (ver a decisão 18).
    - **Sem SVG** para o que o CSS ou a fonte já resolvem: a faixa vertical da borda é o CSS girando a horizontal, e as manchas do pergaminho são gradientes.
 4. **(dona, spec do tema claro)** Temas de ficha são escolhidos pelo dono do personagem e vistos por todos. O Grimoire fornece a estrutura desses temas.
 5. **(dona)** Os docs são escritos em português, e tudo o que é código fica em inglês: IDs, componentes, props, tokens, classes, `data-*`, nomes de arquivo e comentários (`runic-border` / `RunicBorder`).
@@ -37,6 +37,13 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
     - **depois:** as inventadas da arte dela, como alternativa.
 16. **(dona)** O primeiro grupo do Playground é `runic-border`, `arcane-corners`, `sigil-watermark` e `rune-divider`. O `astral-dust` vai para a segunda leva, porque só cabe no card aberto e no fundo de página ([playground-roadmap.md](../../grimoire-enchantments/playground-roadmap.md)).
 17. **(decisão do builder)** Código de terceiros só entra quando a licença foi **verificada** como compatível: Magic UI e forever (MIT), e os 3 itens do 21st que declaram MIT no próprio código. Aceternity (licença própria, que proíbe redistribuir o código-fonte), SVGBackgrounds (proíbe redistribuir) e os itens do 21st sem licença declarada servem só de inspiração.
+
+### Revisão de 14/11
+
+18. **(dona)** A ideia dos SVGs próprios está **arquivada**. O foco volta para bordas e fundos inspirados nos favoritos dela no 21st.dev (lista "RPGWorld"), sempre feitos com CSS, gradientes, máscaras e a fonte de runas. As seções "Assets" das specs ficam como referência futura, mas não fazem parte do plano atual. O contrato visual e as specs de produção dos SVGs estão guardados fora do repositório, caso a ideia volte. Sem arte, o primeiro grupo fica assim:
+    - `arcane-corners`: colchetes de canto em CSS, como na REF-15;
+    - `sigil-watermark`: usa o ícone da escola em tamanho grande, como o `SpellVFX` já faz;
+    - `runic-border` e `rune-divider`: não mudam, porque já funcionavam com CSS e a fonte de runas.
 
 ## Fora do escopo
 
