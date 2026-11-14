@@ -18,12 +18,12 @@ Categoria: Tipografia · Status: proposto (fora do primeiro grupo do Playground)
 
 **Direção:** inscrição de manuscrito, sóbria. Quatro tons de "voz", em vez de quatro efeitos diferentes. O texto é sempre legível antes de ser decorado.
 
-| Variante             | Aparência                                                            | Fonte                                                           | Cor                                                                         | Uso sugerido                                                             | Interação                                    | Fallback estático                                    |
-| -------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------- | ---------------------------------------------------- |
-| `scholarly` (padrão) | Capitulares romanas, sem enfeite. É o visual de hoje                 | Cinzel (REF-28), **já carregada**                               | `foreground`                                                                | Tudo; tema `legacy`, `arcane-scholar`                                    | Nenhuma                                      | É ela mesma                                          |
-| `manuscript`         | Impresso antigo; capitular opcional com moldura (`initial-frame`)    | IM Fell English (REF-31) ou Cormorant Garamond itálico (REF-30) | Texto `foreground`, moldura `--grimoire-ornament`                           | Página do grimório, diário; tema `ancient-manuscript`                    | Nenhuma                                      | Sem moldura, com Cinzel até a fonte do tema carregar |
-| `celestial`          | Capitulares ornadas, com um gradiente que desliza devagar e não gira | Cinzel Decorative (REF-73)                                      | Gradiente entre `*-flare` e `--grimoire-ornament` (`background-clip: text`) | Nome do personagem, título de capítulo; tema `celestial-codex`           | Deslize opcional de uma vez no evento (`F4`) | Cor sólida `*-flare`                                 |
-| `runic`              | Letra uncial, ladeada por uma sequência curta de runas               | Uncial Antiqua (REF-32) + runas da Noto Sans Runic (REF-84)     | Texto `foreground`, runas `--grimoire-ornament-muted`                       | Título de seção, nome de tomo; temas `shadow-archive` e `wildwood-codex` | Nenhuma                                      | Runas ocultas; só o texto                            |
+| Variante             | Aparência                                                         | Fonte                                               | Cor                                                                         | Uso sugerido                                                   | Interação                                    | Fallback estático                                    |
+| -------------------- | ----------------------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------- | ---------------------------------------------------- |
+| `scholarly` (padrão) | Capitulares romanas, sem enfeite. É o visual de hoje              | Cinzel (REF-28), **já carregada**                   | `foreground`                                                                | Tudo; tema `legacy`, `arcane-scholar`                          | Nenhuma                                      | É ela mesma                                          |
+| `manuscript`         | Impresso antigo; capitular opcional com moldura (`initial-frame`) | IM Fell English (REF-31)                            | Texto `foreground`, moldura `--grimoire-ornament`                           | Página do grimório, diário; tema `ancient-manuscript`          | Nenhuma                                      | Sem moldura, com Cinzel até a fonte do tema carregar |
+| `celestial`          | Romana serena, com um gradiente que desliza devagar e não gira    | Marcellus (REF-29)                                  | Gradiente entre `*-flare` e `--grimoire-ornament` (`background-clip: text`) | Nome do personagem, título de capítulo; tema `celestial-codex` | Deslize opcional de uma vez no evento (`F4`) | Cor sólida `*-flare`                                 |
+| `runic`              | Cinzel ladeada por uma sequência curta de runas                   | Cinzel (REF-28) + runas da Noto Sans Runic (REF-84) | Texto `foreground`, runas `--grimoire-ornament-muted`                       | Título de seção, nome de tomo; tema `shadow-archive`           | Nenhuma                                      | Runas ocultas; só o texto                            |
 
 **Brilho dourado opcional (todas as variantes):** uma faixa de luz atravessa o título **uma vez**, num evento (abrir o tomo, preparar). Usa a técnica de duas camadas recortadas no texto (REF-52, REF-101), disparada por uma única chamada WAAPI (REF-53). Nunca em loop.
 
@@ -75,12 +75,12 @@ As classes `arcane-title arcane-title-<variant>` também ficam disponíveis solt
   - `src/frontend/components/ui/section-card.tsx` (`SectionCard.Title`);
   - `src/frontend/components/shared/PageHeader.tsx`.
 
-**Fontes:**
+**Fontes (decisão da dona, 14/11):** Cinzel é a padrão; as alternativas são **Marcellus** (REF-29), **IM Fell English** (REF-31) e **Almendra** (REF-78). Cinzel Decorative, Uncial Antiqua, Cormorant Garamond e as góticas ficam de fora. A Almendra não é uma variante: entra como `--grimoire-title-font` do tema `wildwood-codex`, sobre a variante `scholarly`. Uma fonte extra por tema, no máximo, e sempre só no nome da magia e nos títulos.
 
 - **Na fase 2, só a Cinzel**, que já está carregada.
 - A fonte de cada tema só é declarada quando o tema for implementado, com `preload: false`, e aplicada dentro de `[data-grimoire=…]`. O `next/font` não carrega por atributo: a fonte entra no CSS e o navegador só a baixa quando um nó a usa.
 - A Noto Sans Runic entra com o subset de runas. **Não verificado:** se o `next/font/google` aceita `subsets: ['runic']`. Conferir em `node_modules/next/dist/docs/` antes de implementar.
-- **pt-BR:** os acentos foram conferidos no próprio arquivo da fonte em Cinzel Decorative, IM Fell English, Uncial Antiqua e Noto Sans Runic. Na Cinzel e na Cormorant, foi conferida só a lista de subsets (`latin`).
+- **pt-BR:** os acentos foram conferidos no próprio arquivo da fonte em IM Fell English e Noto Sans Runic. Na Cinzel, na Marcellus e na Almendra, foi conferida só a lista de subsets (`latin`, `latin-ext`). A [página de amostra](https://claude.ai/artifact/L32HiGHP4841DPnkFdL4PF) mostra as quatro com nomes reais.
 
 ## 4. Personalização
 
@@ -153,6 +153,5 @@ Os prompts de geração ficam fora do repositório.
 
 ## 10. Questões em aberto
 
-- O tema `arcane-scholar` fica só com a Cinzel, ou troca para Marcellus (REF-29)? A sugestão é manter a Cinzel.
 - `manuscript` com `::first-letter` falha se o título começar com um ícone. A capitular viraria prop?
 - As runas em `attr()` funcionam em todos os navegadores-alvo, ou já começamos com um `span aria-hidden`?

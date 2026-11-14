@@ -318,28 +318,20 @@
         "campaign"
       ],
       "dependencies": [],
-      "fonts": [
-        "Cinzel",
-        "IM Fell English",
-        "Cormorant Garamond",
-        "Cinzel Decorative",
-        "Uncial Antiqua",
-        "Noto Sans Runic"
-      ],
+      "fonts": ["Cinzel", "Marcellus", "IM Fell English", "Almendra", "Noto Sans Runic"],
       "assets": ["arcane-title/flank-rune.svg", "arcane-title/initial-frame.svg"],
       "references": [
         "REF-28",
-        "REF-30",
         "REF-31",
-        "REF-32",
-        "REF-73",
         "REF-84",
         "REF-57",
         "REF-52",
         "REF-53",
         "REF-51",
         "REF-101",
-        "REF-23"
+        "REF-23",
+        "REF-29",
+        "REF-78"
       ],
       "spec": "catalog/typography/arcane-title.md",
       "scores": {
