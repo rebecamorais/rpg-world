@@ -462,8 +462,22 @@
         "S": "Especial",
         "T": "Arremesso",
         "V": "Versátil"
+      },
+      "view": "Visualização",
+      "viewList": "Lista",
+      "viewGrid": "Grade",
+      "tile": "{name}, {quantity} un.",
+      "group": {
+        "weapons": "Armas",
+        "armor": "Armaduras e escudos",
+        "magic": "Magia",
+        "tools": "Ferramentas e kits",
+        "gear": "Equipamento",
+        "other": "Outros"
       }
-    }
+    },
+    "untranslatedNotice": "Descrição em inglês por enquanto.",
+    "untranslatedHelp": "Ajude a traduzir"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",

@@ -103,3 +103,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## Game Icons
+
+Ícones de <https://game-icons.net> por Lorc, Delapouite e colaboradores, licenciados sob
+Creative Commons Attribution 3.0 (CC BY 3.0), disponível em
+<https://creativecommons.org/licenses/by/3.0/>.
+
+Usado em: ícones de jogo da interface (`src/frontend/constants/game-icons.svg`), inclusive as
+imagens padrão dos itens.

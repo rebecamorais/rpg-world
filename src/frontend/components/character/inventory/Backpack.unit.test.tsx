@@ -1,12 +1,15 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
+import { renderWithProviders } from '@tests/helpers/render';
 import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
 
 import { SheetFieldset } from '@frontend/components/character/sheet/SheetFieldset';
+import { PartyChest } from '@frontend/components/party/PartyChestPage';
+import { INVENTORY_VIEW_KEYS } from '@frontend/hooks/useInventoryView';
 
 import type { ItemDto } from '@backend/contexts/items/domain/item';
 
@@ -94,6 +97,7 @@ describe('Backpack', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     params.value = {};
+    localStorage.clear();
     api.patch.mockResolvedValue(undefined);
     api.delete.mockResolvedValue(undefined);
     api.post.mockResolvedValue(entry('new', ROPE));
@@ -137,7 +141,9 @@ describe('Backpack', () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 1)]);
 
-    expect(await screen.findByRole('button', { name: 'One less Corda de Cânhamo' })).toBeDisabled();
+    // At 1 the − is the trash can: there is no "one less"
+    expect(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' })).toBeEnabled();
+    expect(screen.queryByRole('button', { name: 'One less Corda de Cânhamo' })).toBeNull();
     api.get.mockImplementation(async (url: string) =>
       url.startsWith('/api/items') ? CATALOG : inventory([entry('e1', ROPE, 2)]),
     );
@@ -149,12 +155,11 @@ describe('Backpack', () => {
     expect(screen.getByLabelText('Quantity of Corda de Cânhamo')).toHaveTextContent('2');
   });
 
-  it('remover fica nos detalhes e o aviso "Undo" devolve o item', async () => {
+  it('na quantidade 1 o − vira lixeira; remover avisa e Undo devolve', async () => {
     const user = userEvent.setup();
-    renderBackpack([entry('e1', ROPE, 3)]);
+    renderBackpack([entry('e1', ROPE, 1)]);
 
-    await user.click(await screen.findByRole('button', { name: 'Details for Corda de Cânhamo' }));
-    await user.click(screen.getByRole('button', { name: 'Remove Corda de Cânhamo' }));
+    await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
 
     expect(api.delete).toHaveBeenCalledWith('/api/characters/c1/inventory/items/e1');
     await waitFor(() => expect(toast).toHaveBeenCalled());
@@ -170,7 +175,7 @@ describe('Backpack', () => {
       expect(api.post).toHaveBeenCalledWith('/api/characters/c1/inventory/items?locale=en', {
         ref: ROPE.key,
         containerId: 'bag1',
-        quantity: 3,
+        quantity: 1,
       }),
     );
   });
@@ -180,7 +185,8 @@ describe('Backpack', () => {
     renderBackpack([entry('e1', 'dnd5e:srd-5.2:item:gone')]);
 
     expect(await screen.findByText('dnd5e:srd-5.2:item:gone')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Remove dnd5e:srd-5.2:item:gone' }));
+    const other = screen.getByRole('region', { name: 'Other' });
+    await user.click(within(other).getByRole('button', { name: 'Remove dnd5e:srd-5.2:item:gone' }));
 
     expect(api.delete).toHaveBeenCalledWith('/api/characters/c1/inventory/items/e1');
   });
@@ -207,7 +213,176 @@ describe('Backpack', () => {
     expect(screen.getByText('Strong rope.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'One less Rope' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'One more Rope' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Remove Rope' })).toBeDisabled();
+  });
+
+  it('agrupa por tipo com peso do grupo', async () => {
+    renderBackpack([
+      entry('e1', item({ id: 'dagger', name: 'Dagger', category: 'weapon', weight: 1 }), 2),
+      entry('e2', ROPE),
+    ]);
+
+    const weapons = await screen.findByRole('region', { name: 'Weapons' });
+    expect(within(weapons).getByRole('heading', { name: 'Weapons' })).toHaveClass(
+      'text-item-flare',
+    );
+    expect(within(weapons).getByText('Dagger')).toBeInTheDocument();
+    expect(within(weapons).getByText('2 lb')).toBeInTheDocument();
+    const gear = screen.getByRole('region', { name: 'Gear' });
+    expect(within(gear).getByText('Corda de Cânhamo')).toBeInTheDocument();
+    expect(within(gear).getAllByText('10 lb').length).toBeGreaterThan(0);
+  });
+
+  it('detalhes abertos não têm botão de remover fora do stepper', async () => {
+    const user = userEvent.setup();
+    renderBackpack([entry('e1', ROPE, 3)]);
+
+    await user.click(await screen.findByRole('button', { name: 'Details for Corda de Cânhamo' }));
+
+    expect(screen.queryByRole('button', { name: /^Remove / })).toBeNull();
+  });
+
+  it('mestre (somente leitura): a lixeira (quantidade 1) fica desativada', async () => {
+    params.value = { partyId: 'p1' };
+    renderBackpack([entry('e1', ROPE, 1)], true);
+
+    expect(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' })).toBeDisabled();
+  });
+
+  describe('grade', () => {
+    const RICH_ROPE = item({ id: 'rope', name: 'Rope', description: 'Strong rope.', weight: 10 });
+
+    async function toGrid() {
+      fireEvent.click(await screen.findByRole('radio', { name: 'Grid' }));
+    }
+
+    it('começa na lista e lembra a grade', async () => {
+      renderBackpack([entry('e1', RICH_ROPE, 2)]);
+
+      expect(await screen.findByRole('radio', { name: 'List' })).toHaveAttribute(
+        'aria-checked',
+        'true',
+      );
+      expect(screen.getByRole('radiogroup', { name: 'View' })).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Rope, 2' })).toBeNull();
+
+      await toGrid();
+
+      expect(screen.getByRole('button', { name: 'Rope, 2' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'Grid' })).toHaveAttribute('aria-checked', 'true');
+      expect(localStorage.getItem(INVENTORY_VIEW_KEYS.backpack)).toBe('grid');
+    });
+
+    it('setas trocam a visualização', async () => {
+      renderBackpack([entry('e1', RICH_ROPE, 2)]);
+
+      fireEvent.keyDown(await screen.findByRole('radio', { name: 'List' }), { key: 'ArrowRight' });
+      expect(screen.getByRole('button', { name: 'Rope, 2' })).toBeInTheDocument();
+      fireEvent.keyDown(screen.getByRole('radio', { name: 'Grid' }), { key: 'ArrowLeft' });
+      expect(screen.queryByRole('button', { name: 'Rope, 2' })).toBeNull();
+    });
+
+    it('baú usa outra chave', async () => {
+      localStorage.setItem(INVENTORY_VIEW_KEYS.backpack, 'grid');
+      api.get.mockImplementation(async (url: string) =>
+        url.startsWith('/api/items') ? CATALOG : inventory([entry('e1', RICH_ROPE, 2)]),
+      );
+      renderWithProviders(<PartyChest partyId="p1" />);
+
+      expect(await screen.findByRole('radio', { name: 'List' })).toHaveAttribute(
+        'aria-checked',
+        'true',
+      );
+      expect(screen.queryByRole('button', { name: 'Rope, 2' })).toBeNull();
+    });
+
+    it('grade: selecionar abre o painel com stepper e detalhes', async () => {
+      renderBackpack([entry('e1', RICH_ROPE, 2)]);
+      await toGrid();
+
+      const tile = screen.getByRole('button', { name: 'Rope, 2' });
+      expect(tile).toHaveAttribute('aria-pressed', 'false');
+      expect(screen.queryByText('Strong rope.')).toBeNull();
+      fireEvent.click(tile);
+
+      expect(tile).toHaveAttribute('aria-pressed', 'true');
+      expect(screen.getByRole('region', { name: 'Rope' })).toHaveAttribute(
+        'id',
+        tile.getAttribute('aria-controls'),
+      );
+      expect(screen.getByRole('status', { name: 'Quantity of Rope' })).toHaveTextContent('2');
+      expect(screen.getByText('Strong rope.')).toBeInTheDocument();
+
+      fireEvent.keyDown(tile, { key: 'Enter' });
+      expect(tile).toHaveAttribute('aria-pressed', 'false');
+      expect(screen.queryByText('Strong rope.')).toBeNull();
+    });
+
+    it('grade: remover o selecionado fecha o painel e Undo devolve', async () => {
+      renderBackpack([entry('e1', RICH_ROPE, 1)]);
+      await toGrid();
+      fireEvent.click(screen.getByRole('button', { name: 'Rope, 1' }));
+      expect(screen.getByText('Strong rope.')).toBeInTheDocument();
+
+      api.get.mockImplementation(async (url: string) =>
+        url.startsWith('/api/items') ? CATALOG : inventory([]),
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'Remove Rope' }));
+
+      await waitFor(() =>
+        expect(api.delete).toHaveBeenCalledWith('/api/characters/c1/inventory/items/e1'),
+      );
+      await waitFor(() => expect(screen.queryByText('Strong rope.')).toBeNull());
+      expect(screen.queryByRole('status', { name: 'Quantity of Rope' })).toBeNull();
+
+      await waitFor(() => expect(toast).toHaveBeenCalled());
+      const [, options] = vi.mocked(toast).mock.calls[0] as unknown as [
+        string,
+        { action: { onClick: () => void } },
+      ];
+      options.action.onClick();
+      await waitFor(() =>
+        expect(api.post).toHaveBeenCalledWith('/api/characters/c1/inventory/items?locale=en', {
+          ref: RICH_ROPE.key,
+          containerId: 'bag1',
+          quantity: 1,
+        }),
+      );
+    });
+
+    it('grade: item fora do catálogo', async () => {
+      renderBackpack([entry('e1', 'dnd5e:srd-5.2:item:gone')]);
+      await toGrid();
+
+      fireEvent.click(screen.getByRole('button', { name: 'dnd5e:srd-5.2:item:gone, 1' }));
+
+      expect(
+        screen.getByText('This item is no longer in the catalog. You can remove it.'),
+      ).toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'Remove dnd5e:srd-5.2:item:gone' }));
+      await waitFor(() =>
+        expect(api.delete).toHaveBeenCalledWith('/api/characters/c1/inventory/items/e1'),
+      );
+    });
+
+    it('mestre na grade', async () => {
+      params.value = { partyId: 'p1' };
+      renderBackpack([entry('e1', RICH_ROPE, 2), entry('e2', TORCH, 1)], true);
+
+      // fireEvent: user-event treats everything in a disabled fieldset as disabled, a browser does not
+      await toGrid();
+      fireEvent.click(screen.getByRole('button', { name: 'Rope, 2' }));
+
+      expect(screen.getByText('Strong rope.')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'One less Rope' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'One more Rope' })).toBeDisabled();
+      expect(screen.getAllByRole('button', { name: 'Add Item' })).not.toHaveLength(0);
+      for (const add of screen.getAllByRole('button', { name: 'Add Item' })) {
+        expect(add).toBeDisabled();
+      }
+
+      fireEvent.click(screen.getByRole('button', { name: 'Torch, 1' }));
+      expect(screen.getByRole('button', { name: 'Remove Torch' })).toBeDisabled();
+    });
   });
 
   describe('AddItemDialog', () => {
