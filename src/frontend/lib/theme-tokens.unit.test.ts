@@ -135,3 +135,9 @@ it.each([
   expect(found.length).toBeGreaterThan(0);
   expect(found.filter((n) => n !== expected)).toEqual([]);
 });
+
+it('every selector list that declares --spell-flare also includes .item-context', () => {
+  const rules = [...css.matchAll(/([^{}]+)\{([^{}]*--spell-flare:[^{}]*)\}/g)];
+  expect(rules.length).toBeGreaterThanOrEqual(4);
+  for (const [, selectors] of rules) expect(selectors).toContain('.item-context');
+});

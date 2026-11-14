@@ -173,7 +173,8 @@
 @supports (color: color(from red srgb pow(r, 2.2) g b)) {
   :root,
   .character-context,
-  .spell-context {
+  .spell-context,
+  .item-context {
     --primary-flare: oklch(from var(--primary) max(l, 0.74) min(c, 0.2) h);
     --primary-on: color(
       from var(--primary) srgb
