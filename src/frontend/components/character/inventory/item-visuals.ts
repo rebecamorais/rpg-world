@@ -1,5 +1,7 @@
 import type { CSSProperties } from 'react';
 
+import type { InventoryItem } from '@frontend/hooks/useInventory';
+
 import type { ItemDto } from '@backend/contexts/items/domain/item';
 
 import type { ItemCategory } from '@shared/systems/dnd5e/content/item.schema';
@@ -36,6 +38,17 @@ const GROUP_BY_CATEGORY: Record<ItemCategory, ItemGroup> = {
 /** Group of an item category; `null` (item outside the catalog) is `other`. */
 export function groupOf(category: ItemCategory | null): ItemGroup {
   return category ? GROUP_BY_CATEGORY[category] : 'other';
+}
+
+/** Splits entries into backpack sections: `ITEM_GROUPS` order, non-empty only, entries keep their order. */
+export function groupEntries(
+  entries: InventoryItem[],
+): { group: ItemGroup; entries: InventoryItem[]; weight: number }[] {
+  return ITEM_GROUPS.map((group) => {
+    const inGroup = entries.filter((e) => groupOf(e.item?.category ?? null) === group);
+    const weight = inGroup.reduce((sum, e) => sum + (e.item?.weight ?? 0) * e.quantity, 0);
+    return { group, entries: inGroup, weight };
+  }).filter((g) => g.entries.length > 0);
 }
 
 // Icon names are string literals on purpose: `npm run icons` builds the sprite from them.

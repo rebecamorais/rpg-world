@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
 
 import { GAME_ICON_NAMES } from '@frontend/constants/game-icon-names.generated';
+import type { InventoryItem } from '@frontend/hooks/useInventory';
 
 import type { ItemCategory } from '@shared/systems/dnd5e/content/item.schema';
 
@@ -12,6 +13,7 @@ import {
   ITEM_ICONS,
   UNKNOWN_ITEM_ICON,
   gameIconOf,
+  groupEntries,
   groupOf,
   itemGroupStyle,
 } from './item-visuals';
@@ -106,5 +108,30 @@ describe('itemGroupStyle', () => {
   it('aponta --item-color para o token do grupo', () => {
     for (const group of ITEM_GROUPS)
       expect(itemGroupStyle(group)).toEqual({ '--item-color': `var(--item-${group})` });
+  });
+});
+
+describe('groupEntries', () => {
+  const entry = (id: string, category: ItemCategory | null, weight: number, quantity: number) =>
+    ({
+      id,
+      quantity,
+      item: category ? { id, category, weight } : null,
+    }) as unknown as InventoryItem;
+
+  it('agrupa na ordem dos grupos, preserva a ordem das entradas e soma peso com quantidade', () => {
+    const rope = entry('rope', 'gear', 5, 2);
+    const dagger = entry('dagger', 'weapon', 1, 3);
+    const unknown = entry('custom', null, 0, 1);
+    const staff = entry('quarterstaff', 'weapon', 4, 1);
+    expect(groupEntries([rope, dagger, unknown, staff])).toEqual([
+      { group: 'weapons', entries: [dagger, staff], weight: 7 },
+      { group: 'gear', entries: [rope], weight: 10 },
+      { group: 'other', entries: [unknown], weight: 0 },
+    ]);
+  });
+
+  it('lista vazia não gera grupos', () => {
+    expect(groupEntries([])).toEqual([]);
   });
 });
