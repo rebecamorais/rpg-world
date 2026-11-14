@@ -2,9 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 
-import { Card } from '@frontend/components/ui/card';
-import { Hint } from '@frontend/components/ui/hint';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { SectionCard } from '@frontend/components/ui/section-card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { setDeathSaves } from '@frontend/lib/character-sheet-updates';
@@ -24,14 +23,11 @@ export function DeathSavesCard() {
   const next = (current: number, i: number) => (current === i + 1 ? i : i + 1);
 
   return (
-    <Card className="bg-background/60 flex flex-col gap-3 p-4 shadow-sm">
-      <div className="flex items-center justify-between">
-        <h2 className="text-label text-muted-foreground flex items-center gap-2">
-          <Hint label={t('deathSaves')} hint={t('deathSavesHint')}>
-            <AppIcon name="death-skull" variant="game" size="sm" aria-hidden="true" />
-          </Hint>
+    <SectionCard>
+      <SectionCard.Header>
+        <SectionCard.Title icon="death-skull" iconVariant="game" hint={t('deathSavesHint')}>
           {t('deathSaves')}
-        </h2>
+        </SectionCard.Title>
         <Tooltip>
           <TooltipTrigger asChild>
             <button
@@ -46,9 +42,9 @@ export function DeathSavesCard() {
           </TooltipTrigger>
           <TooltipContent>{t('resetDeathSaves')}</TooltipContent>
         </Tooltip>
-      </div>
+      </SectionCard.Header>
 
-      <div className="grid grid-cols-2 gap-4">
+      <SectionCard.Body className="grid grid-cols-2 gap-4">
         <fieldset className="flex flex-col gap-2">
           <legend className="text-caption text-success-flare mb-2">{t('successes')}</legend>
           <div className="flex gap-3">
@@ -89,7 +85,7 @@ export function DeathSavesCard() {
             ))}
           </div>
         </fieldset>
-      </div>
-    </Card>
+      </SectionCard.Body>
+    </SectionCard>
   );
 }

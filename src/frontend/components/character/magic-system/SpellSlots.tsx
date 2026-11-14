@@ -5,8 +5,9 @@ import * as React from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Card } from '@frontend/components/ui/card';
-import { AppIcon } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
+
+import { ResourceCardHeader } from '../ResourceCardHeader';
 
 interface Props extends React.ComponentProps<'div'> {
   slots: Record<string, { max: number; used: number }>;
@@ -46,29 +47,23 @@ export function SpellSlots({
   return (
     <Card
       className={cn(
-        'group bg-background/60 hover:border-info-muted relative flex min-h-[160px] flex-col justify-between overflow-hidden p-3 shadow-sm transition-colors',
+        'group bg-background/60 hover:border-info-muted relative flex min-h-[160px] flex-col justify-between overflow-hidden p-4 shadow-sm transition-colors',
         className,
       )}
       {...props}
     >
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-1.5">
-          <AppIcon
-            name="crystal-ball"
-            variant="game"
-            size="lg"
-            className="text-info-flare"
-            aria-hidden="true"
-          />
-          {systemLabel}
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="bg-info-surface text-info-flare rounded-full px-2 py-0.5 font-mono text-xs font-bold tabular-nums">
+      <ResourceCardHeader
+        icon="crystal-ball"
+        iconVariant="game"
+        iconClassName="text-info-flare"
+        title={systemLabel}
+        badge={
+          <span className="bg-info-surface text-info-flare rounded-full px-2 py-0.5 font-mono text-xs font-bold tabular-nums">
             {totalAvailable} / {totalMax}
-          </div>
-          {action}
-        </div>
-      </div>
+          </span>
+        }
+        action={action}
+      />
 
       <div className="my-auto grid grid-cols-5 gap-x-1 gap-y-3 pt-4">
         {allLevels.map((lvl) => {
