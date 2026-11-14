@@ -137,7 +137,9 @@ describe('Backpack', () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 1)]);
 
-    expect(await screen.findByRole('button', { name: 'One less Corda de Cânhamo' })).toBeDisabled();
+    // At 1 the − is the trash can: there is no "one less"
+    expect(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' })).toBeEnabled();
+    expect(screen.queryByRole('button', { name: 'One less Corda de Cânhamo' })).toBeNull();
     api.get.mockImplementation(async (url: string) =>
       url.startsWith('/api/items') ? CATALOG : inventory([entry('e1', ROPE, 2)]),
     );
@@ -149,12 +151,11 @@ describe('Backpack', () => {
     expect(screen.getByLabelText('Quantity of Corda de Cânhamo')).toHaveTextContent('2');
   });
 
-  it('remover fica nos detalhes e o aviso "Undo" devolve o item', async () => {
+  it('na quantidade 1 o − vira lixeira; remover avisa e Undo devolve', async () => {
     const user = userEvent.setup();
-    renderBackpack([entry('e1', ROPE, 3)]);
+    renderBackpack([entry('e1', ROPE, 1)]);
 
-    await user.click(await screen.findByRole('button', { name: 'Details for Corda de Cânhamo' }));
-    await user.click(screen.getByRole('button', { name: 'Remove Corda de Cânhamo' }));
+    await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
 
     expect(api.delete).toHaveBeenCalledWith('/api/characters/c1/inventory/items/e1');
     await waitFor(() => expect(toast).toHaveBeenCalled());
@@ -170,7 +171,7 @@ describe('Backpack', () => {
       expect(api.post).toHaveBeenCalledWith('/api/characters/c1/inventory/items?locale=en', {
         ref: ROPE.key,
         containerId: 'bag1',
-        quantity: 3,
+        quantity: 1,
       }),
     );
   });
@@ -180,7 +181,8 @@ describe('Backpack', () => {
     renderBackpack([entry('e1', 'dnd5e:srd-5.2:item:gone')]);
 
     expect(await screen.findByText('dnd5e:srd-5.2:item:gone')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Remove dnd5e:srd-5.2:item:gone' }));
+    const other = screen.getByRole('region', { name: 'Other' });
+    await user.click(within(other).getByRole('button', { name: 'Remove dnd5e:srd-5.2:item:gone' }));
 
     expect(api.delete).toHaveBeenCalledWith('/api/characters/c1/inventory/items/e1');
   });
@@ -207,7 +209,36 @@ describe('Backpack', () => {
     expect(screen.getByText('Strong rope.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'One less Rope' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'One more Rope' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Remove Rope' })).toBeDisabled();
+  });
+
+  it('agrupa por tipo com peso do grupo', async () => {
+    renderBackpack([
+      entry('e1', item({ id: 'dagger', name: 'Dagger', category: 'weapon', weight: 1 }), 2),
+      entry('e2', ROPE),
+    ]);
+
+    const weapons = await screen.findByRole('region', { name: 'Weapons' });
+    expect(within(weapons).getByText('Dagger')).toBeInTheDocument();
+    expect(within(weapons).getByText('2 lb')).toBeInTheDocument();
+    const gear = screen.getByRole('region', { name: 'Gear' });
+    expect(within(gear).getByText('Corda de Cânhamo')).toBeInTheDocument();
+    expect(within(gear).getAllByText('10 lb').length).toBeGreaterThan(0);
+  });
+
+  it('detalhes abertos não têm botão de remover fora do stepper', async () => {
+    const user = userEvent.setup();
+    renderBackpack([entry('e1', ROPE, 3)]);
+
+    await user.click(await screen.findByRole('button', { name: 'Details for Corda de Cânhamo' }));
+
+    expect(screen.queryByRole('button', { name: /^Remove / })).toBeNull();
+  });
+
+  it('mestre (somente leitura): a lixeira (quantidade 1) fica desativada', async () => {
+    params.value = { partyId: 'p1' };
+    renderBackpack([entry('e1', ROPE, 1)], true);
+
+    expect(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' })).toBeDisabled();
   });
 
   describe('AddItemDialog', () => {

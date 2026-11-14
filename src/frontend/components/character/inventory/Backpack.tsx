@@ -16,7 +16,7 @@ import { characterTheme } from '@frontend/lib/color-utils';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { AddItemDialog } from './AddItemDialog';
-import { ItemRow } from './ItemRow';
+import { GroupedItemList } from './GroupedItemList';
 import { useItemFormat } from './useItemFormat';
 
 /** The edition most of the backpack's items are from; 2024 when it is empty (or a tie). */
@@ -117,16 +117,7 @@ export function ItemList({
         </SectionCard.Body>
       ) : (
         <>
-          <ul>
-            {entries.map((entry) => (
-              <ItemRow
-                key={entry.id}
-                entry={entry}
-                onQuantity={(n) => setQuantity(entry.id, n)}
-                onRemove={() => remove(entry)}
-              />
-            ))}
-          </ul>
+          <GroupedItemList entries={entries} onQuantity={setQuantity} onRemove={remove} />
           <p className="bg-muted/40 border-border text-muted-foreground border-t px-4 py-2 text-right text-sm">
             {t('totalWeight', { weight: fmt.weight(totalWeight) })}
           </p>
