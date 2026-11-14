@@ -14,9 +14,10 @@ import 'server-only';
 
 import { SupabaseFactory } from '@lib/supabase';
 
-// One day, in the browser and on the CDN. Upload URLs are versioned, so a new image never waits
-// for this; it only bounds how long a replaced (and deleted) avatar can still be served.
-const CACHE_MAX_AGE = 86_400;
+// Upload URLs are versioned: a file's bytes never change under its URL, so the browser keeps it for a
+// year without asking again. The CDN keeps it one day: that bounds how long a replaced (and deleted)
+// avatar can still be served to someone who has its URL.
+const CACHE_CONTROL = 'public, max-age=31536000, s-maxage=86400, immutable';
 
 // Only buckets meant to be public may be served. The public object endpoint enforces the same (it
 // only serves buckets marked public), so a missing entry here can't expose a private bucket.
@@ -78,7 +79,7 @@ export async function GET(
       headers: {
         'Content-Type': inline ? mimeType : 'application/octet-stream',
         ...(inline ? {} : { 'Content-Disposition': 'attachment' }),
-        'Cache-Control': `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}`,
+        'Cache-Control': CACHE_CONTROL,
         'X-Robots-Tag': 'noindex',
       },
     });
