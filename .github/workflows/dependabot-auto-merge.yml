@@ -1,0 +1,80 @@
+name: Dependabot Auto-merge
+
+# Patch e minor do Dependabot mergeiam sozinhos, um atrás do outro, quando o CI passa.
+# Major fica para revisão manual.
+#
+# Usa um token pessoal (DEPENDABOT_AUTOMERGE_TOKEN) em vez do GITHUB_TOKEN porque:
+# - a aprovação precisa ser da code owner (ruleset `protected`);
+# - ações feitas com GITHUB_TOKEN não disparam outros workflows, então o merge não
+#   rodaria os workflows de push na main e a atualização da branch não rodaria o CI.
+# O secret fica em Dependabot secrets (job approve) e em Actions secrets (job next).
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  # Aprova e liga o auto-merge. Roda de novo a cada push do Dependabot, porque o
+  # ruleset descarta aprovações antigas quando a branch muda.
+  approve:
+    # Só pushes do próprio Dependabot; quando a fila atualiza a branch, quem reaprova é o job next
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - id: meta
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+
+      - if: steps.meta.outputs.update-type != 'version-update:semver-major'
+        env:
+          GH_TOKEN: ${{ secrets.DEPENDABOT_AUTOMERGE_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr review --approve "$PR_URL" --body "Patch/minor: aprovado automaticamente / auto-approved."
+          gh pr merge --auto --squash "$PR_URL"
+
+  # Depois de cada merge na main, o ruleset exige branch atualizada. Atualiza o
+  # PR do Dependabot mais antigo que está esperando, e a fila anda sozinha.
+  # Só pega PRs com auto-merge ligado, ou seja, que o job approve já liberou.
+  next:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions: {}
+    # Um merge por vez: dois pushes seguidos não atualizam dois PRs ao mesmo tempo
+    concurrency:
+      group: dependabot-auto-merge-next
+    steps:
+      - env:
+          GH_TOKEN: ${{ secrets.DEPENDABOT_AUTOMERGE_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          # Só o mais antigo: os outros esperam a vez, senão o CI roda à toa em todos
+          read -r pr old < <(gh pr list --author app/dependabot --state open \
+            --json number,autoMergeRequest,headRefOid,createdAt \
+            --jq '[.[] | select(.autoMergeRequest != null)] | sort_by(.createdAt) | .[0]
+                  | select(. != null) | "\(.number) \(.headRefOid)"')
+          if [ -z "$pr" ]; then
+            echo "Nenhum PR do Dependabot na fila."
+            exit 0
+          fi
+          # mergeStateStatus demora a ser recalculado depois de um push; a comparação não
+          behind=$(gh api "repos/$GH_REPO/compare/$old...$GITHUB_SHA" --jq .ahead_by)
+          if [ "$behind" = "0" ]; then
+            echo "#$pr já está atualizado, esperando o CI."
+            exit 0
+          fi
+          echo "Atualizando #$pr ($behind commits atrás)"
+          gh pr update-branch "$pr"
+          # O merge da main entra como commit novo e pode descartar a aprovação
+          for _ in $(seq 1 30); do
+            [ "$(gh pr view "$pr" --json headRefOid --jq .headRefOid)" != "$old" ] && break
+            sleep 2
+          done
+          gh pr review --approve "$pr" --body "Branch atualizada com a main / branch updated with main."
