@@ -103,6 +103,14 @@ describe('Backpack', () => {
     api.post.mockResolvedValue(entry('new', ROPE));
   });
 
+  it('enquanto carrega, mostra o esqueleto e não o estado vazio', async () => {
+    api.get.mockImplementation(() => new Promise(() => {}));
+    renderWithCharacter(<Backpack />, character);
+
+    expect(await screen.findByRole('status')).toHaveTextContent('Loading items');
+    expect(screen.queryByText('The backpack is empty.')).not.toBeInTheDocument();
+  });
+
   it('vazia, mostra o estado vazio com "Add Item"', async () => {
     renderBackpack([]);
 

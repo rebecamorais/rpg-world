@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@frontend/components/ui/dropdown-menu';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { Skeleton } from '@frontend/components/ui/skeleton';
 import { useCharactersContext } from '@frontend/context/CharactersContext';
 import AppLink from '@frontend/demo/AppLink';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
@@ -145,11 +146,11 @@ export function CharacterCard({ character }: CharacterCardProps) {
 export function CharacterCardSkeleton() {
   return (
     <Card className="bg-card/40 flex h-full min-h-[180px] flex-col gap-4 p-5 sm:min-h-[220px] sm:p-6">
-      <div className="bg-muted h-7 w-2/3 animate-pulse rounded-md" />
-      <div className="bg-muted h-4 w-1/3 animate-pulse rounded-md" />
+      <Skeleton className="h-7 w-2/3" />
+      <Skeleton className="h-4 w-1/3" />
       <div className="border-border mt-auto flex items-center justify-between border-t pt-4">
-        <div className="bg-muted h-4 w-20 animate-pulse rounded-md" />
-        <div className="bg-muted h-8 w-8 animate-pulse rounded-md" />
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-8 w-8" />
       </div>
     </Card>
   );
