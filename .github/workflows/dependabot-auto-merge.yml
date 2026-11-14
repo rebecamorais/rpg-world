@@ -32,17 +32,19 @@ jobs:
       - id: meta
         uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
 
-      - if: steps.meta.outputs.update-type != 'version-update:semver-major'
+      # Lista fechada: tipo vazio ou desconhecido não passa
+      - if: contains(fromJSON('["version-update:semver-patch","version-update:semver-minor"]'), steps.meta.outputs.update-type)
         env:
           GH_TOKEN: ${{ secrets.DEPENDABOT_AUTOMERGE_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: |
+          gh pr edit "$PR_URL" --add-label automerge
           gh pr review --approve "$PR_URL" --body "Patch/minor: aprovado automaticamente / auto-approved."
           gh pr merge --auto --squash "$PR_URL"
 
   # Depois de cada merge na main, o ruleset exige branch atualizada. Atualiza o
   # PR do Dependabot mais antigo que está esperando, e a fila anda sozinha.
-  # Só pega PRs com auto-merge ligado, ou seja, que o job approve já liberou.
+  # Só pega PRs com o label automerge, que o job approve põe depois de checar o tipo.
   next:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -57,7 +59,7 @@ jobs:
         run: |
           # Só o mais antigo: os outros esperam a vez, senão o CI roda à toa em todos
           read -r pr old < <(gh pr list --author app/dependabot --state open \
-            --json number,autoMergeRequest,headRefOid,createdAt \
+            --label automerge --json number,autoMergeRequest,headRefOid,createdAt \
             --jq '[.[] | select(.autoMergeRequest != null)] | sort_by(.createdAt) | .[0]
                   | select(. != null) | "\(.number) \(.headRefOid)"')
           if [ -z "$pr" ]; then
@@ -73,8 +75,23 @@ jobs:
           echo "Atualizando #$pr ($behind commits atrás)"
           gh pr update-branch "$pr"
           # O merge da main entra como commit novo e pode descartar a aprovação
+          new="$old"
           for _ in $(seq 1 30); do
-            [ "$(gh pr view "$pr" --json headRefOid --jq .headRefOid)" != "$old" ] && break
+            new=$(gh pr view "$pr" --json headRefOid --jq .headRefOid)
+            [ "$new" != "$old" ] && break
             sleep 2
           done
-          gh pr review --approve "$pr" --body "Branch atualizada com a main / branch updated with main."
+          if [ "$new" = "$old" ]; then
+            echo "::error::#$pr não foi atualizado a tempo; não aprovo."
+            exit 1
+          fi
+          # Fora os merges da main, todo commit tem que ser do Dependabot
+          others=$(gh api "repos/$GH_REPO/pulls/$pr/commits" --paginate \
+            --jq '.[] | select((.parents | length) == 1 and .author.login != "dependabot[bot]") | .sha')
+          if [ -n "$others" ]; then
+            echo "::error::#$pr tem commits de outra pessoa; precisa de revisão manual."
+            exit 1
+          fi
+          # Aprova exatamente o commit novo, não o que estiver no topo depois
+          gh api -X POST "repos/$GH_REPO/pulls/$pr/reviews" -f commit_id="$new" -f event=APPROVE \
+            -f body="Branch atualizada com a main / branch updated with main." --silent
