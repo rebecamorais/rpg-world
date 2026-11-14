@@ -53,6 +53,14 @@ describe('CoinPouch', () => {
     api.put.mockResolvedValue(undefined);
   });
 
+  it('enquanto carrega, não mostra as moedas zeradas', async () => {
+    api.get.mockImplementation(() => new Promise(() => {}));
+    renderWithCharacter(<CoinPouch />, character);
+
+    expect(await screen.findByRole('status')).toHaveTextContent('Loading');
+    expect(screen.queryByLabelText('Gold pieces')).not.toBeInTheDocument();
+  });
+
   it('mostra as cinco moedas da algibeira do inventário', async () => {
     await renderPouch();
 

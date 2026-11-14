@@ -24,6 +24,7 @@ import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import { AddItemDialog } from './AddItemDialog';
 import { GroupedItemList } from './GroupedItemList';
 import { ItemGrid } from './ItemGrid';
+import { ItemListSkeleton } from './ItemListSkeleton';
 import { useItemFormat } from './useItemFormat';
 
 /** The edition most of the backpack's items are from; 2024 when it is empty (or a tie). */
@@ -79,7 +80,7 @@ export function ItemList({
 }) {
   const t = useTranslations('characters.inventory');
   const tCharacters = useTranslations('characters');
-  const { backpack, inventory, addItem, setQuantity, removeItem, restoreItem } = source;
+  const { backpack, inventory, isLoading, addItem, setQuantity, removeItem, restoreItem } = source;
   const fmt = useItemFormat();
   const [adding, setAdding] = useState(false);
   const [view, setView] = useInventoryView(viewKey);
@@ -122,7 +123,10 @@ export function ItemList({
         )}
       </SectionCard.Header>
 
-      {entries.length === 0 ? (
+      {/* Not the empty state while loading: the backpack isn't known to be empty yet */}
+      {isLoading ? (
+        <ItemListSkeleton view={view} label={t('add.loading')} />
+      ) : entries.length === 0 ? (
         <SectionCard.Body>
           <EmptyState
             icon={icon}

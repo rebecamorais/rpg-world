@@ -17,6 +17,7 @@ import { Label } from '@frontend/components/ui/label';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { SelectField } from '@frontend/components/ui/select-field';
+import { Skeleton } from '@frontend/components/ui/skeleton';
 import { useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { type InventoryApi, useInventory } from '@frontend/hooks/useInventory';
 import { characterTheme } from '@frontend/lib/color-utils';
@@ -190,7 +191,8 @@ export function CoinPurse({
   dialogStyle?: React.CSSProperties;
 }) {
   const t = useTranslations('characters.coins');
-  const { pouch, setCoins } = inventory;
+  const tCommon = useTranslations('common');
+  const { pouch, isLoading, setCoins } = inventory;
   const [mode, setMode] = useState<Mode | null>(null);
   // What was typed in each field and not yet sent
   const [typed, setTyped] = useState<Partial<Coins>>({});
@@ -210,7 +212,12 @@ export function CoinPurse({
           {title}
         </SectionCard.Title>
       </SectionCard.Header>
-      <SectionCard.Body className="flex flex-col gap-4">
+      <SectionCard.Body className="flex flex-col gap-4" aria-busy={isLoading}>
+        {isLoading && (
+          <span role="status" className="sr-only">
+            {tCommon('loading')}
+          </span>
+        )}
         <ul className="grid grid-cols-5 gap-2">
           {COINS.map((coin) => (
             <li
@@ -218,19 +225,24 @@ export function CoinPurse({
               className="group border-border bg-background/60 flex flex-col items-center gap-1 rounded-lg border px-1 py-2"
             >
               <CoinIcon coin={coin} />
-              <NumberInput
-                ghost
-                showIcon={false}
-                aria-label={t(`${coin}.name`)}
-                value={typed[coin] ?? purse[coin]}
-                min={0}
-                max={MAX_COINS}
-                onValueChange={(value) => setTyped((t) => ({ ...t, [coin]: value }))}
-                onBlur={() => commit(coin)}
-                onKeyDown={(e) => e.key === 'Enter' && commit(coin)}
-                containerClassName="w-full"
-                className="h-auto w-full p-0 text-center font-mono text-lg font-bold tabular-nums md:text-lg"
-              />
+              {/* Not 0 while loading: the purse isn't known to be empty yet */}
+              {isLoading ? (
+                <Skeleton aria-hidden="true" className="my-0.5 h-6 w-3/4" />
+              ) : (
+                <NumberInput
+                  ghost
+                  showIcon={false}
+                  aria-label={t(`${coin}.name`)}
+                  value={typed[coin] ?? purse[coin]}
+                  min={0}
+                  max={MAX_COINS}
+                  onValueChange={(value) => setTyped((t) => ({ ...t, [coin]: value }))}
+                  onBlur={() => commit(coin)}
+                  onKeyDown={(e) => e.key === 'Enter' && commit(coin)}
+                  containerClassName="w-full"
+                  className="h-auto w-full p-0 text-center font-mono text-lg font-bold tabular-nums md:text-lg"
+                />
+              )}
               <abbr
                 title={t(`${coin}.name`)}
                 className="text-label text-muted-foreground no-underline"
