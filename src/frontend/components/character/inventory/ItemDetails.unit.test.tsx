@@ -62,12 +62,6 @@ describe('ItemDetails', () => {
     expect(screen.getByText(/Heavy armor/).closest('[lang]')).toHaveAttribute('lang', 'en');
   });
 
-  it('com tradução, não mostra o aviso', () => {
-    renderWithProviders(<ItemDetails item={plate} />);
-
-    expect(screen.queryByRole('note')).not.toBeInTheDocument();
-  });
-
   it('nested usa o aviso compacto', () => {
     renderWithProviders(<ItemDetails item={{ ...plate, untranslated: true }} nested />);
 

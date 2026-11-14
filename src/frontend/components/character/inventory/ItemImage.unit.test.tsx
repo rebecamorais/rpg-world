@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { ItemImage } from './ItemImage';
 import { UNKNOWN_ITEM_ICON, gameIconOf } from './item-visuals';
 
-const item = { id: 'spellbook', category: 'adventuring-gear' } as never;
+const item = { id: 'spellbook', category: 'gear' } as const;
 
 describe('ItemImage', () => {
   it('renders the uploaded image over art and icon', () => {

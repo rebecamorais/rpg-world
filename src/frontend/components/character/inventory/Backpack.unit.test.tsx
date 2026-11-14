@@ -222,6 +222,9 @@ describe('Backpack', () => {
     ]);
 
     const weapons = await screen.findByRole('region', { name: 'Weapons' });
+    expect(within(weapons).getByRole('heading', { name: 'Weapons' })).toHaveClass(
+      'text-item-flare',
+    );
     expect(within(weapons).getByText('Dagger')).toBeInTheDocument();
     expect(within(weapons).getByText('2 lb')).toBeInTheDocument();
     const gear = screen.getByRole('region', { name: 'Gear' });
@@ -302,6 +305,10 @@ describe('Backpack', () => {
       fireEvent.click(tile);
 
       expect(tile).toHaveAttribute('aria-pressed', 'true');
+      expect(screen.getByRole('region', { name: 'Rope' })).toHaveAttribute(
+        'id',
+        tile.getAttribute('aria-controls'),
+      );
       expect(screen.getByRole('status', { name: 'Quantity of Rope' })).toHaveTextContent('2');
       expect(screen.getByText('Strong rope.')).toBeInTheDocument();
 

@@ -32,7 +32,9 @@ export function GroupedItemList({ entries, onQuantity, onRemove }: Props) {
               className="item-context border-border bg-muted/40 text-item-flare text-label flex items-center justify-between border-b px-4 py-1.5 font-semibold"
               style={itemGroupStyle(group)}
             >
-              <h3 id={headingId}>{t(`group.${group}`)}</h3>
+              <h3 id={headingId} className="text-item-flare">
+                {t(`group.${group}`)}
+              </h3>
               <span className="tabular-nums">{fmt.weight(weight)}</span>
             </div>
             <ul>

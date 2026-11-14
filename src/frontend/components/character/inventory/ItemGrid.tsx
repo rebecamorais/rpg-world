@@ -72,7 +72,9 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
                   ×{entry.quantity}
                 </span>
               )}
-              <span className="text-foreground text-label w-full truncate text-center">{name}</span>
+              <span className="text-foreground text-label line-clamp-2 w-full text-center break-words">
+                {name}
+              </span>
             </span>
           );
         })}
@@ -113,15 +115,20 @@ function GridPanel({
   const t = useTranslations('characters.inventory');
   const { item, quantity } = entry;
   const name = item?.name ?? entry.ref;
+  const nameId = `${id}-name`;
 
   return (
     <div
       id={id}
+      role="region"
+      aria-labelledby={nameId}
       className="item-context border-item-muted bg-background/40 flex flex-col gap-3 rounded-md border p-3"
       style={itemGroupStyle(groupOf(item?.category ?? null))}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-foreground min-w-0 truncate font-medium">{name}</p>
+        <p id={nameId} className="text-foreground min-w-0 truncate font-medium">
+          {name}
+        </p>
         <QuantityStepper
           name={name}
           quantity={quantity}
