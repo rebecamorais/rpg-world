@@ -7,6 +7,7 @@ import { CoinPurse } from '@frontend/components/character/inventory/CoinPouch';
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { usePartyChest } from '@frontend/hooks/useInventory';
+import { INVENTORY_VIEW_KEYS } from '@frontend/hooks/useInventoryView';
 import { useParty } from '@frontend/hooks/useParty';
 
 import { PartyNotFound } from './PartyPage';
@@ -21,6 +22,7 @@ export function PartyChest({ partyId }: { partyId: string }) {
       <CoinPurse inventory={chest} title={t('coinsTitle')} hint={t('coinsHint')} />
       <ItemList
         inventory={chest}
+        viewKey={INVENTORY_VIEW_KEYS.chest}
         icon="Backpack"
         title={t('itemsTitle')}
         hint={t('itemsHint')}

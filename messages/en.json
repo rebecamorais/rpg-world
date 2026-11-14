@@ -462,8 +462,22 @@
         "S": "Special",
         "T": "Thrown",
         "V": "Versatile"
+      },
+      "view": "View",
+      "viewList": "List",
+      "viewGrid": "Grid",
+      "tile": "{name}, {quantity}",
+      "group": {
+        "weapons": "Weapons",
+        "armor": "Armor and shields",
+        "magic": "Magic",
+        "tools": "Tools and kits",
+        "gear": "Gear",
+        "other": "Other"
       }
-    }
+    },
+    "untranslatedNotice": "Description in English for now.",
+    "untranslatedHelp": "Help translate"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
