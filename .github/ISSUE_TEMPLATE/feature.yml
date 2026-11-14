@@ -1,27 +1,30 @@
-name: Sugestão
-description: Uma ideia de funcionalidade ou melhoria.
+name: Sugestão / Feature request
+description: Uma ideia de funcionalidade ou melhoria. / An idea for a feature or improvement.
 labels: [enhancement]
 body:
+  - type: markdown
+    attributes:
+      value: Escreva em português ou inglês. / Write in Portuguese or English.
   - type: textarea
     id: problem
     attributes:
-      label: Qual problema isso resolve
-      description: O que você tenta fazer na mesa ou na ficha e hoje não consegue (ou é difícil).
+      label: Qual problema isso resolve / What problem does this solve
+      description: O que você tenta fazer na mesa ou na ficha e hoje não consegue (ou é difícil). / What you try to do at the table or on the sheet and can't today (or is hard).
     validations:
       required: true
   - type: textarea
     id: idea
     attributes:
-      label: Como você imagina
+      label: Como você imagina / How you picture it
     validations:
       required: true
   - type: input
     id: system
     attributes:
-      label: Sistema
+      label: Sistema / System
       placeholder: D&D 5e (2014), D&D 2024, Feiticeiros & Maldições...
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternativas
-      description: Outras soluções ou o que você usa hoje no lugar.
+      label: Alternativas / Alternatives
+      description: Outras soluções ou o que você usa hoje no lugar. / Other solutions, or what you use instead today.
