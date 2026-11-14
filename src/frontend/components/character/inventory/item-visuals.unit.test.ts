@@ -13,6 +13,7 @@ import {
   UNKNOWN_ITEM_ICON,
   gameIconOf,
   groupOf,
+  itemGroupStyle,
 } from './item-visuals';
 
 const require = createRequire(import.meta.url);
@@ -98,5 +99,12 @@ describe('ícones', () => {
   it('todo id mapeado existe no SRD', () => {
     const ids = srdItemIds();
     for (const id of Object.keys(ITEM_ICONS)) expect(ids.has(id), id).toBe(true);
+  });
+});
+
+describe('itemGroupStyle', () => {
+  it('aponta --item-color para o token do grupo', () => {
+    for (const group of ITEM_GROUPS)
+      expect(itemGroupStyle(group)).toEqual({ '--item-color': `var(--item-${group})` });
   });
 });

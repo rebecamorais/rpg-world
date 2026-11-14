@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 import type { ItemDto } from '@backend/contexts/items/domain/item';
 
 import type { ItemCategory } from '@shared/systems/dnd5e/content/item.schema';
@@ -112,4 +114,9 @@ export const ITEM_ICONS: Readonly<Record<string, string>> = {
 export function gameIconOf(item: Pick<ItemDto, 'id' | 'category'> | null): string {
   if (!item) return UNKNOWN_ITEM_ICON;
   return ITEM_ICONS[item.id] ?? CATEGORY_ICONS[item.category];
+}
+
+/** Sets the group colour that `.item-context` derives its flare/surface/muted from. */
+export function itemGroupStyle(group: ItemGroup): CSSProperties {
+  return { '--item-color': `var(--item-${group})` } as CSSProperties;
 }

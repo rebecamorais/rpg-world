@@ -107,6 +107,16 @@ describe.each(THEMES)('%s theme', (theme) => {
   it('--input border reaches 3:1 on background and card', () =>
     expect(failures(theme, ['input'], surfaces(theme, ['background', 'card']), 3)).toEqual([]));
 
+  it('item group colors reach 3:1 on background and card', () =>
+    expect(
+      failures(
+        theme,
+        ['weapons', 'armor', 'magic', 'tools', 'gear', 'other'].map((g) => `item-${g}`),
+        surfaces(theme, ['background', 'card']),
+        3,
+      ),
+    ).toEqual([]));
+
   it('SURFACES in contrast.ts match globals.css', () => {
     for (const name of ['background', 'card', 'popover', 'muted'] as const)
       expect(toHex(SURFACES[theme][name]), `--${name}`).toBe(color(theme, name).toLowerCase());

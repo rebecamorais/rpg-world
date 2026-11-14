@@ -54,6 +54,14 @@
   --coin-pp: #39d6ae;
   /* Each spell card sets its own (damage type, category or school). */
   --spell-color: var(--muted-foreground);
+  /* Backpack groups: muted tones, 3:1 on background and card. Each item sets --item-color. */
+  --item-weapons: #d0654f;
+  --item-armor: #8fa3b8;
+  --item-magic: #a77fd6;
+  --item-tools: #c9a45c;
+  --item-gear: #5fa7c9;
+  --item-other: var(--muted-foreground);
+  --item-color: var(--item-other);
   /* The faint brand light at the top of the page (body background) */
   --atmosphere: color-mix(in srgb, var(--brand), transparent 82%);
 
@@ -81,6 +89,11 @@
   --sidebar: #fafafa;
   --overlay: rgb(0 0 0 / 0.4);
   --atmosphere: color-mix(in srgb, var(--brand), transparent 92%);
+  --item-weapons: #b4472f;
+  --item-armor: #5d7389;
+  --item-magic: #8a5cbf;
+  --item-tools: #8f6d1f;
+  --item-gear: #2f7ea3;
 }
 
 /*
@@ -94,7 +107,8 @@
  */
 :root,
 .character-context,
-.spell-context {
+.spell-context,
+.item-context {
   --primary-flare: color-mix(in oklch, var(--primary), white 45%);
   --primary-on: #ffffff;
   --primary-surface: color-mix(in srgb, var(--primary), transparent 90%);
@@ -116,6 +130,10 @@
   --spell-muted: color-mix(in srgb, var(--spell-color), transparent 70%);
   --spell-glow: color-mix(in srgb, var(--spell-color), transparent 50%);
 
+  --item-flare: color-mix(in oklch, var(--item-color), white 45%);
+  --item-surface: color-mix(in srgb, var(--item-color), transparent 90%);
+  --item-muted: color-mix(in srgb, var(--item-color), transparent 70%);
+
   --danger-flare: color-mix(in srgb, var(--danger), white 20%);
   --danger-surface: color-mix(in srgb, var(--danger), transparent 90%);
   --danger-muted: color-mix(in srgb, var(--danger), transparent 70%);
@@ -133,10 +151,12 @@
 /* Light fallback: darken instead of lighten. */
 :root[data-theme='light'],
 [data-theme='light'] .character-context,
-[data-theme='light'] .spell-context {
+[data-theme='light'] .spell-context,
+[data-theme='light'] .item-context {
   --primary-flare: color-mix(in oklch, var(--primary), black 45%);
   --character-flare: color-mix(in oklch, var(--character-primary), black 45%);
   --spell-flare: color-mix(in oklch, var(--spell-color), black 45%);
+  --item-flare: color-mix(in oklch, var(--item-color), black 45%);
   --danger-flare: color-mix(in srgb, var(--danger), black 30%);
   --success-flare: color-mix(in srgb, var(--success), black 30%);
   --info-flare: color-mix(in srgb, var(--info), black 30%);
@@ -199,14 +219,17 @@
         )
     );
     --spell-flare: oklch(from var(--spell-color) max(l, 0.74) min(c, 0.2) h);
+    --item-flare: oklch(from var(--item-color) max(l, 0.74) min(c, 0.2) h);
   }
 
   :root[data-theme='light'],
   [data-theme='light'] .character-context,
-  [data-theme='light'] .spell-context {
+  [data-theme='light'] .spell-context,
+  [data-theme='light'] .item-context {
     --primary-flare: oklch(from var(--primary) min(l, 0.42) min(c, 0.2) h);
     --character-flare: oklch(from var(--character-primary) min(l, 0.42) min(c, 0.2) h);
     --spell-flare: oklch(from var(--spell-color) min(l, 0.42) min(c, 0.2) h);
+    --item-flare: oklch(from var(--item-color) min(l, 0.42) min(c, 0.2) h);
     --danger-flare: oklch(from var(--danger) min(l, 0.42) min(c, 0.2) h);
     --success-flare: oklch(from var(--success) min(l, 0.42) min(c, 0.2) h);
     --info-flare: oklch(from var(--info) min(l, 0.42) min(c, 0.2) h);
@@ -263,6 +286,11 @@
   --color-spell-surface: var(--spell-surface);
   --color-spell-muted: var(--spell-muted);
   --color-spell-glow: var(--spell-glow);
+
+  --color-item: var(--item-color);
+  --color-item-flare: var(--item-flare);
+  --color-item-surface: var(--item-surface);
+  --color-item-muted: var(--item-muted);
 
   --color-danger: var(--danger);
   --color-danger-flare: var(--danger-flare);
