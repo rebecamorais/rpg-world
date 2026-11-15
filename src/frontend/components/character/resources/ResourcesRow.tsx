@@ -15,9 +15,10 @@ function useRowKind() {
   const { readOnly } = useSheetSource(id);
   const { boxes, classId } = useResourceBoxes();
 
-  // The edition card only for one of the 12 classes: choosing would show nothing for another
+  // A sheet with no edition can still have boxes of the player's own, and those come first. The
+  // edition card only for one of the 12 classes: choosing would show nothing for another
   const kind =
-    !readOnly && !character.edition && classId ? 'edition' : boxes.length > 0 ? 'resources' : null;
+    boxes.length > 0 ? 'resources' : !readOnly && !character.edition && classId ? 'edition' : null;
   return { kind, boxes, classId };
 }
 

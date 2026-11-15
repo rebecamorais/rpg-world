@@ -2,25 +2,29 @@ import { useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { useClassResources } from '@frontend/hooks/useClassResources';
 
-import { buildResourceBoxes, matchSubclass } from '@shared/systems/dnd5e/class-resources';
-import type { ResourceBox } from '@shared/systems/dnd5e/class-resources';
+import {
+  buildResourceBoxes,
+  listResourceBoxes,
+  matchSubclass,
+} from '@shared/systems/dnd5e/class-resources';
 
-/** The class resource boxes of the loaded sheet: none until it has an edition and a listed class. */
+/**
+ * The resource boxes of the loaded sheet. The class's come once it has an edition and a listed
+ * class; the player's own are always there. `all` also has the hidden ones, for the settings.
+ */
 export function useResourceBoxes() {
   const character = useLoadedCharacter();
   const { classOf } = useCharacterChoices();
   const classId = classOf(character.class);
   const { content } = useClassResources(character.edition, classId);
 
-  const boxes: ResourceBox[] = content
-    ? buildResourceBoxes({
-        content,
-        subclassId: matchSubclass(content, character.subclass),
-        level: character.level,
-        attributes: character.attributes,
-        state: character.resources,
-      })
-    : [];
+  const input = {
+    content,
+    subclassId: content && matchSubclass(content, character.subclass),
+    level: character.level,
+    attributes: character.attributes,
+    state: character.resources,
+  };
 
-  return { boxes, content, classId };
+  return { boxes: buildResourceBoxes(input), all: listResourceBoxes(input), content, classId };
 }

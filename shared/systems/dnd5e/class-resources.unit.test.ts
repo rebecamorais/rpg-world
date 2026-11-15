@@ -7,8 +7,12 @@ import {
   type ResourceContent,
   type ResourceState,
   buildResourceBoxes,
+  customFromClass,
+  listResourceBoxes,
   matchSubclass,
+  recoveryFor,
   recoveryOn,
+  restChoiceOf,
 } from './class-resources';
 import type { ClassData, ClassText } from './content/class.schema';
 import type { AttributeKey } from './types';
@@ -22,6 +26,7 @@ const ATTRS: Record<AttributeKey, number> = {
   CHA: 10,
 };
 const LONG = { rest: 'long', amount: 'all' } as const;
+const once: ResourceContent['max'] = { type: 'steps', steps: [{ level: 1, value: 1 }] };
 
 function res(
   over: Partial<ResourceContent> & Pick<ResourceContent, 'id' | 'max'>,
@@ -284,5 +289,190 @@ describe('matchSubclass', () => {
     expect(matchSubclass(c, 'Path of Wild Magic')).toBeNull();
     expect(matchSubclass(c, undefined)).toBeNull();
     expect(matchSubclass(c, '  ')).toBeNull();
+  });
+});
+
+describe('o que a jogadora mudou numa caixinha da classe', () => {
+  const c = content('barbarian', [rage]);
+  const KEY = 'class:barbarian:rage';
+
+  it('máximo, nome, descrição, cor e recuperação dela vencem os da classe', () => {
+    const [box] = build(c, 1, {
+      state: {
+        [KEY]: {
+          used: 1,
+          overrides: {
+            max: 5,
+            name: 'Fúria',
+            description: 'Meu texto',
+            color: '#ef4444',
+            recovery: recoveryFor('short'),
+          },
+        },
+      },
+    });
+
+    expect(box).toMatchObject({ name: 'Fúria', description: 'Meu texto', max: 5, used: 1 });
+    expect(box.color).toBe('#ef4444');
+    expect(recoveryOn(box, 'short')).toBe('all');
+  });
+
+  it('subir de nível atualiza o que ela não mudou e mantém o que mudou', () => {
+    const state = { [KEY]: { used: 0, overrides: { name: 'Fúria' } } };
+    expect(build(c, 1, { state })[0]).toMatchObject({ name: 'Fúria', max: 2 });
+    expect(build(c, 3, { state })[0]).toMatchObject({ name: 'Fúria', max: 3 });
+
+    const fixed = { [KEY]: { used: 0, overrides: { max: 4 } } };
+    expect(build(c, 1, { state: fixed })[0].max).toBe(4);
+    expect(build(c, 3, { state: fixed })[0].max).toBe(4);
+  });
+
+  it('o máximo dela vale mesmo onde a classe diz ilimitado, e limita o que foi gasto', () => {
+    const [box] = build(c, 20, { state: { [KEY]: { used: 9, overrides: { max: 6 } } } });
+    expect(box).toMatchObject({ max: 6, used: 6 });
+  });
+
+  it('nome e descrição vazios seguem a classe', () => {
+    const [box] = build(c, 1, {
+      state: { [KEY]: { used: 0, overrides: { name: '', description: '' } } },
+    });
+    expect(box).toMatchObject({ name: 'rage', description: 'desc rage' });
+  });
+
+  it('recuperação "nenhuma" tira a caixinha dos dois descansos', () => {
+    const [box] = build(c, 1, {
+      state: { [KEY]: { used: 0, overrides: { recovery: recoveryFor('none') } } },
+    });
+    expect(recoveryOn(box, 'short')).toBeNull();
+    expect(recoveryOn(box, 'long')).toBeNull();
+  });
+
+  it('escondida sai da ficha e do descanso, e continua na lista da configuração', () => {
+    const input = {
+      content: c,
+      subclassId: null,
+      level: 3,
+      attributes: ATTRS,
+      state: { [KEY]: { used: 1, hidden: true } },
+    };
+
+    expect(buildResourceBoxes(input)).toEqual([]);
+    expect(listResourceBoxes(input)).toMatchObject([
+      { key: KEY, hidden: true, used: 1, base: { name: 'rage', max: 3, recovery: [LONG] } },
+    ]);
+  });
+
+  it('a caixinha da ficha não leva os campos da configuração', () => {
+    const [box] = build(c, 1);
+    expect(box).not.toHaveProperty('hidden');
+    expect(box).not.toHaveProperty('base');
+  });
+});
+
+describe('caixinhas próprias', () => {
+  const A = 'custom:0193a1b2-0000-7000-8000-000000000001';
+  const B = 'custom:0193a1b3-0000-7000-8000-000000000002';
+  const own = (name: string, max = 2) => ({
+    name,
+    max,
+    recovery: recoveryFor('long'),
+    source: 'item' as const,
+  });
+  const boxes = (state: Record<string, ResourceState>, c: ClassResourcesContent | null = null) =>
+    buildResourceBoxes({ content: c, subclassId: null, level: 3, attributes: ATTRS, state });
+
+  it('aparecem sem edição nem classe conhecida, com o que foi salvo nelas', () => {
+    const [box] = boxes({
+      [A]: { used: 5, custom: { ...own('Anel'), color: '#22c55e', description: 'Do anel' } },
+    });
+
+    expect(box).toEqual({
+      key: A,
+      name: 'Anel',
+      description: 'Do anel',
+      unit: 'uses',
+      max: 2,
+      used: 2,
+      recovery: [LONG],
+      source: 'item',
+      color: '#22c55e',
+    });
+  });
+
+  it('vêm depois das da classe, na ordem em que foram criadas', () => {
+    const state = { [B]: { used: 0, custom: own('Segunda') }, [A]: { used: 0, custom: own('Zê') } };
+    expect(boxes(state, content('barbarian', [rage])).map((b) => b.name)).toEqual([
+      'rage',
+      'Zê',
+      'Segunda',
+    ]);
+  });
+
+  it('chave custom sem a caixinha (excluída) não vira caixinha', () => {
+    expect(boxes({ [A]: { used: 0 } })).toEqual([]);
+  });
+
+  it('escondida some da ficha e não tem "padrão da classe" na configuração', () => {
+    const input = {
+      content: null,
+      subclassId: null,
+      level: 3,
+      attributes: ATTRS,
+      state: { [A]: { used: 0, hidden: true, custom: own('Anel') } },
+    };
+    expect(buildResourceBoxes(input)).toEqual([]);
+    expect(listResourceBoxes(input)[0]).toMatchObject({ hidden: true });
+    expect(listResourceBoxes(input)[0].base).toBeUndefined();
+  });
+});
+
+describe('recoveryFor e restChoiceOf', () => {
+  it('curto também volta no longo; longo só no longo; nenhuma, em nenhum', () => {
+    expect(recoveryFor('short')).toEqual([{ rest: 'short', amount: 'all' }, LONG]);
+    expect(recoveryFor('long')).toEqual([LONG]);
+    expect(recoveryFor('none')).toEqual([]);
+  });
+
+  it('restChoiceOf lê de volta a escolha, e o mais próximo para regras mais finas', () => {
+    for (const choice of ['short', 'long', 'none'] as const) {
+      expect(restChoiceOf(recoveryFor(choice))).toBe(choice);
+    }
+    expect(restChoiceOf([{ rest: 'short', amount: 1 }, LONG])).toBe('short');
+  });
+});
+
+describe('customFromClass', () => {
+  it('copia nome, descrição e o máximo no nível do personagem', () => {
+    expect(customFromClass(rage, 'class', 3, ATTRS)).toEqual({
+      name: 'rage',
+      description: 'desc rage',
+      max: 3,
+      recovery: [LONG],
+      source: 'class',
+    });
+  });
+
+  it('recurso de nível mais alto é copiado como no nível em que a classe o ganha', () => {
+    const late = res({
+      id: 'late',
+      level: 6,
+      max: { type: 'steps', steps: [{ level: 6, value: 2 }] },
+      recovery: [LONG, { rest: 'short', amount: 'all', fromLevel: 6 }],
+    });
+    const copy = customFromClass(late, 'subclass', 1, ATTRS);
+
+    expect(copy.max).toBe(2);
+    expect(copy.source).toBe('subclass');
+    // Without fromLevel: the copy no longer follows the class level
+    expect(copy.recovery).toEqual([LONG, { rest: 'short', amount: 'all' }]);
+  });
+
+  it('ilimitado vira o maior número que a classe dá', () => {
+    expect(customFromClass(rage, 'class', 20, ATTRS).max).toBe(3);
+  });
+
+  it('corta a descrição no limite que a ficha aceita', () => {
+    const long = res({ id: 'x', max: once, description: 'a'.repeat(2500) });
+    expect(customFromClass(long, 'class', 1, ATTRS).description).toHaveLength(2000);
   });
 });

@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { ResourceBoxesEditor } from '@frontend/components/character/resources/ResourceBoxesEditor';
 import { SaveCharacterButton } from '@frontend/components/character/sheet/SaveControls';
 import ImageUpload from '@frontend/components/shared/ImageUpload';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
@@ -112,6 +113,7 @@ export function AppearanceTab() {
             hint={ts('classResourcesHint')}
           >
             <EditionSettings />
+            <ResourceBoxesEditor />
           </Section>
           <Section title={t('colorTitle')} hint={t('colorHint')}>
             <AccentColorPicker />

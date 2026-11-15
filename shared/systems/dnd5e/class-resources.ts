@@ -5,10 +5,14 @@ import type { ClassResource } from './content/class.schema';
 import type { Edition } from './content/editions';
 import type { AttributeKey } from './types';
 
-type Recovery = ClassResource['recovery'][number];
+export type Recovery = ClassResource['recovery'][number];
 
-/** Per-sheet edits of a resource box (#180). */
-interface ResourceOverrides {
+/** Where a box comes from. The class and its subclass build theirs; the player's own say it. */
+export const RESOURCE_SOURCES = ['class', 'subclass', 'feat', 'item', 'manual'] as const;
+export type ResourceSource = (typeof RESOURCE_SOURCES)[number];
+
+/** Per-sheet edits of a class box: each one wins over what the class says, at any level. */
+export interface ResourceOverrides {
   max?: number;
   recovery?: Recovery[];
   color?: string;
@@ -16,16 +20,17 @@ interface ResourceOverrides {
   description?: string;
 }
 
-/** A box the player made up (#180). */
-interface CustomResource {
+/** A box the player made up, or copied from another class. */
+export interface CustomResource {
   name: string;
   max: number;
   recovery: Recovery[];
   color?: string;
-  source: 'class' | 'subclass' | 'feat' | 'item' | 'manual';
+  description?: string;
+  source: ResourceSource;
 }
 
-/** What the sheet saves for one box. The max and texts come from the content, not from here. */
+/** What the sheet saves for one box. A class box's max and texts come from the content, not from here. */
 export interface ResourceState {
   used: number;
   hidden?: boolean;
@@ -56,8 +61,10 @@ export interface ClassResourcesContent {
 export const RESOURCE_KEY =
   /^(?:class:[a-z0-9-]+:[a-z0-9-]+|subclass:[a-z0-9-]+\/[a-z0-9-]+:[a-z0-9-]+|custom:[0-9a-f-]{36})$/;
 
+const CUSTOM_PREFIX = 'custom:';
+
 export interface ResourceBox {
-  /** `class:<classId>:<id>` or `subclass:<classId>/<subId>:<id>` */
+  /** `class:<classId>:<id>`, `subclass:<classId>/<subId>:<id>` or `custom:<uuid>` */
   key: string;
   name: string;
   description: string;
@@ -72,7 +79,16 @@ export interface ResourceBox {
   recovery: Recovery[];
   /** Faces at this level. */
   die?: number;
-  source: 'class' | 'subclass';
+  source: ResourceSource;
+  /** The player's color for this box; without one it takes the sheet's. */
+  color?: string;
+}
+
+/** A box as the sheet's settings list it: hidden ones too, with what the class says under the edits. */
+export interface EditableResourceBox extends ResourceBox {
+  hidden: boolean;
+  /** What the class gives at this level; absent on a box the player made. */
+  base?: Pick<ResourceBox, 'name' | 'description' | 'max' | 'recovery'>;
 }
 
 /** The value of the last step whose level is <= `level`, or undefined if none applies yet. */
@@ -103,53 +119,155 @@ function resolveMax(
   }
 }
 
-/** Boxes of the class, then of the subclass when `subclassId` is the SRD one, in content order. */
-export function buildResourceBoxes(input: {
-  content: ClassResourcesContent;
+const clamp = (used: number, max: number | null) =>
+  max === null ? 0 : Math.min(Math.max(used, 0), max);
+
+interface BoxesInput {
+  /** null when the sheet has no edition yet or its class isn't a listed one: only the player's own boxes. */
+  content: ClassResourcesContent | null;
   subclassId: string | null;
   level: number;
   attributes: Record<AttributeKey, number>;
   state: Record<string, ResourceState> | undefined;
-}): ResourceBox[] {
+}
+
+/**
+ * Every box of the sheet, hidden ones included: the class's, the subclass's when `subclassId` is
+ * the SRD one, then the player's own in the order they were made. The class's follow the level;
+ * what the player changed in one stays on top of it.
+ */
+export function listResourceBoxes(input: BoxesInput): EditableResourceBox[] {
   const { content, subclassId, level, attributes, state } = input;
 
   const toBoxes = (
     resources: ResourceContent[],
     prefix: string,
     source: ResourceBox['source'],
-  ): ResourceBox[] =>
+  ): EditableResourceBox[] =>
     resources.flatMap((r) => {
       if (r.level > level || r.unit === 'spell-slots') return [];
-      const max = resolveMax(r.max, level, attributes);
       const key = `${prefix}:${r.id}`;
-      const saved = state?.[key]?.used ?? 0;
+      const saved = state?.[key];
+      const edits = saved?.overrides ?? {};
+      const base = {
+        name: r.name,
+        description: r.description,
+        max: resolveMax(r.max, level, attributes),
+        recovery: r.recovery.filter((rec) => (rec.fromLevel ?? 1) <= level),
+      };
+      const max = edits.max ?? base.max;
       const die = r.die && stepValue(r.die, level)?.value;
       return [
         {
           key,
-          name: r.name,
-          description: r.description,
+          name: edits.name || base.name,
+          description: edits.description || base.description,
           ...(r.note !== undefined && { note: r.note }),
           unit: r.unit,
           max,
-          used: max === null ? 0 : Math.min(Math.max(saved, 0), max),
-          recovery: r.recovery.filter((rec) => (rec.fromLevel ?? 1) <= level),
+          used: clamp(saved?.used ?? 0, max),
+          recovery: edits.recovery ?? base.recovery,
           ...(die && { die }),
           source,
+          ...(edits.color && { color: edits.color }),
+          hidden: saved?.hidden === true,
+          base,
+        },
+      ];
+    });
+
+  const custom = Object.keys(state ?? {})
+    .filter((key) => key.startsWith(CUSTOM_PREFIX))
+    // The key carries the time it was made (see newCustomKey); the saved map keeps no order
+    .sort()
+    .flatMap((key): EditableResourceBox[] => {
+      const saved = state![key];
+      const box = saved.custom;
+      if (!box) return [];
+      return [
+        {
+          key,
+          name: box.name,
+          description: box.description ?? '',
+          unit: 'uses',
+          max: box.max,
+          used: clamp(saved.used, box.max),
+          recovery: box.recovery,
+          source: box.source,
+          ...(box.color && { color: box.color }),
+          hidden: saved.hidden === true,
         },
       ];
     });
 
   return [
-    ...toBoxes(content.resources, `class:${content.classId}`, 'class'),
-    ...(subclassId !== null && subclassId === content.subclass.id
+    ...(content ? toBoxes(content.resources, `class:${content.classId}`, 'class') : []),
+    ...(content && subclassId !== null && subclassId === content.subclass.id
       ? toBoxes(
           content.subclass.resources,
           `subclass:${content.classId}/${content.subclass.id}`,
           'subclass',
         )
       : []),
+    ...custom,
   ];
+}
+
+/** The boxes the sheet shows and the rest checklist reads: the listed ones the player didn't hide. */
+export function buildResourceBoxes(input: BoxesInput): ResourceBox[] {
+  return listResourceBoxes(input).flatMap(({ hidden, base: _, ...box }) => (hidden ? [] : [box]));
+}
+
+/** The three recoveries a box can be set to. A class box may follow finer rules until it is. */
+export const REST_CHOICES = ['short', 'long', 'none'] as const;
+export type RestChoice = (typeof REST_CHOICES)[number];
+
+/** What comes back on a short rest also comes back on a long one. */
+export function recoveryFor(choice: RestChoice): Recovery[] {
+  if (choice === 'none') return [];
+  const long: Recovery = { rest: 'long', amount: 'all' };
+  return choice === 'short' ? [{ rest: 'short', amount: 'all' }, long] : [long];
+}
+
+/** The closest of the three choices to a recovery. */
+export function restChoiceOf(recovery: Recovery[]): RestChoice {
+  if (recovery.some((r) => r.rest === 'short')) return 'short';
+  return recovery.some((r) => r.rest === 'long') ? 'long' : 'none';
+}
+
+/** The longest description the sheet saves for a box. */
+export const MAX_RESOURCE_DESCRIPTION = 2000;
+
+/**
+ * A class resource as a box of the player's own, for a sheet of another class (a rogue with Wild
+ * Shape). It is a copy at this level: from here on only the player changes it.
+ */
+export function customFromClass(
+  resource: ResourceContent,
+  source: 'class' | 'subclass',
+  level: number,
+  attributes: Record<AttributeKey, number>,
+): CustomResource {
+  // Not below the level that gives the resource: the copy would start with nothing to spend
+  const at = Math.max(level, resource.level);
+  const resolved = resolveMax(resource.max, at, attributes);
+  // A box of the player's own always counts: unlimited becomes the highest count the class gives
+  const max =
+    resolved ??
+    (resource.max.type === 'steps'
+      ? Math.max(1, ...resource.max.steps.flatMap((step) => step.value ?? []))
+      : 1);
+  return {
+    name: resource.name,
+    max,
+    recovery: resource.recovery
+      .filter((rec) => (rec.fromLevel ?? 1) <= at)
+      .map(({ rest, amount }) => ({ rest, amount })),
+    ...(resource.description && {
+      description: resource.description.slice(0, MAX_RESOURCE_DESCRIPTION),
+    }),
+    source,
+  };
 }
 
 /** What a rest gives back to this box: 'all', a number, or null for nothing. */
