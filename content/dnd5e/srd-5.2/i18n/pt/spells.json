@@ -1,104 +1,104 @@
 {
   "acid-arrow": {
-    "name": "",
+    "name": "Flecha Ácida",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "acid-splash": {
-    "name": "",
+    "name": "Bolha Ácida",
     "description": "",
     "higherLevel": ""
   },
   "aid": {
-    "name": "",
+    "name": "Auxílio",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "alarm": {
-    "name": "",
+    "name": "Alarme",
     "description": "",
     "material": ""
   },
   "alter-self": {
-    "name": "",
+    "name": "Alterar-se",
     "description": ""
   },
   "animal-friendship": {
-    "name": "",
+    "name": "Amizade Animal",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "animal-messenger": {
-    "name": "",
+    "name": "Mensageiro Animal",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "animal-shapes": {
-    "name": "",
+    "name": "Formas Animais",
     "description": ""
   },
   "animate-dead": {
-    "name": "",
+    "name": "Animar Mortos",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "animate-objects": {
-    "name": "",
+    "name": "Animar Objetos",
     "description": "",
     "higherLevel": ""
   },
   "antilife-shell": {
-    "name": "",
+    "name": "Cúpula Antivida",
     "description": ""
   },
   "antimagic-field": {
-    "name": "",
+    "name": "Campo Antimagia",
     "description": "",
     "material": ""
   },
   "antipathy-sympathy": {
-    "name": "",
+    "name": "Antipatia/Simpatia",
     "description": "",
     "material": ""
   },
   "arcane-eye": {
-    "name": "",
+    "name": "Olho Arcano",
     "description": "",
     "material": ""
   },
   "arcane-hand": {
-    "name": "",
+    "name": "Mão Arcana",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "arcane-lock": {
-    "name": "",
+    "name": "Tranca Arcana",
     "description": "",
     "material": ""
   },
   "arcane-sword": {
-    "name": "",
+    "name": "Espada Arcana",
     "description": "",
     "material": ""
   },
   "arcanists-magic-aura": {
-    "name": "",
+    "name": "Aura Mágica do Arcanista",
     "description": "",
     "material": ""
   },
   "astral-projection": {
-    "name": "",
+    "name": "Projeção Astral",
     "description": "",
     "material": ""
   },
   "augury": {
-    "name": "",
+    "name": "Augúrio",
     "description": "",
     "material": ""
   },
@@ -107,29 +107,29 @@
     "description": ""
   },
   "awaken": {
-    "name": "",
+    "name": "Despertar",
     "description": "",
     "material": ""
   },
   "bane": {
-    "name": "",
+    "name": "Perdição",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "banishment": {
-    "name": "",
+    "name": "Banimento",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "barkskin": {
-    "name": "",
+    "name": "Pele-casca",
     "description": "",
     "material": ""
   },
   "beacon-of-hope": {
-    "name": "",
+    "name": "Sinal de Esperança",
     "description": ""
   },
   "befuddlement": {
@@ -138,59 +138,59 @@
     "material": ""
   },
   "bestow-curse": {
-    "name": "",
+    "name": "Rogar Maldição",
     "description": "",
     "higherLevel": ""
   },
   "black-tentacles": {
-    "name": "",
+    "name": "Tentáculos Negros",
     "description": "",
     "material": ""
   },
   "blade-barrier": {
-    "name": "",
+    "name": "Barreira de Lâminas",
     "description": ""
   },
   "bless": {
-    "name": "",
+    "name": "Bênção",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "blight": {
-    "name": "",
+    "name": "Malogro",
     "description": "",
     "higherLevel": ""
   },
   "blindness-deafness": {
-    "name": "",
+    "name": "Cegueira/Surdez",
     "description": "",
     "higherLevel": ""
   },
   "blink": {
-    "name": "",
+    "name": "Piscar",
     "description": ""
   },
   "blur": {
-    "name": "",
+    "name": "Turvar",
     "description": ""
   },
   "burning-hands": {
-    "name": "",
+    "name": "Mãos Flamejantes",
     "description": "",
     "higherLevel": ""
   },
   "call-lightning": {
-    "name": "",
+    "name": "Convocar Relâmpagos",
     "description": "",
     "higherLevel": ""
   },
   "calm-emotions": {
-    "name": "",
+    "name": "Acalmar Emoções",
     "description": ""
   },
   "chain-lightning": {
-    "name": "",
+    "name": "Corrente de Relâmpagos",
     "description": "",
     "higherLevel": "",
     "material": ""
@@ -201,12 +201,12 @@
     "higherLevel": ""
   },
   "charm-person": {
-    "name": "",
+    "name": "Enfeitiçar Pessoa",
     "description": "",
     "higherLevel": ""
   },
   "chill-touch": {
-    "name": "",
+    "name": "Toque Necrótico",
     "description": "",
     "higherLevel": ""
   },
@@ -217,38 +217,38 @@
     "material": ""
   },
   "circle-of-death": {
-    "name": "",
+    "name": "Círculo da Morte",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "clairvoyance": {
-    "name": "",
+    "name": "Clarividência",
     "description": "",
     "material": ""
   },
   "clone": {
-    "name": "",
+    "name": "Clone",
     "description": "",
     "material": ""
   },
   "cloudkill": {
-    "name": "",
+    "name": "Névoa Mortal",
     "description": "",
     "higherLevel": ""
   },
   "color-spray": {
-    "name": "",
+    "name": "Leque Cromático",
     "description": "",
     "material": ""
   },
   "command": {
-    "name": "",
+    "name": "Comando",
     "description": "",
     "higherLevel": ""
   },
   "commune": {
-    "name": "",
+    "name": "Comunhão",
     "description": "",
     "material": ""
   },
@@ -257,188 +257,188 @@
     "description": ""
   },
   "comprehend-languages": {
-    "name": "",
+    "name": "Compreender Idiomas",
     "description": "",
     "material": ""
   },
   "compulsion": {
-    "name": "",
+    "name": "Compulsão",
     "description": ""
   },
   "cone-of-cold": {
-    "name": "",
+    "name": "Cone de Frio",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "confusion": {
-    "name": "",
+    "name": "Confusão",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "conjure-animals": {
-    "name": "",
+    "name": "Conjurar Animais",
     "description": "",
     "higherLevel": ""
   },
   "conjure-celestial": {
-    "name": "",
+    "name": "Invocar Celestial",
     "description": "",
     "higherLevel": ""
   },
   "conjure-elemental": {
-    "name": "",
+    "name": "Invocar Elemental",
     "description": "",
     "higherLevel": ""
   },
   "conjure-fey": {
-    "name": "",
+    "name": "Invocar Feérico",
     "description": "",
     "higherLevel": ""
   },
   "conjure-minor-elementals": {
-    "name": "",
+    "name": "Invocar Elementais Menores",
     "description": "",
     "higherLevel": ""
   },
   "conjure-woodland-beings": {
-    "name": "",
+    "name": "Invocar Seres da Floresta",
     "description": "",
     "higherLevel": ""
   },
   "contact-other-plane": {
-    "name": "",
+    "name": "Contato Extraplanar",
     "description": ""
   },
   "contagion": {
-    "name": "",
+    "name": "Contágio",
     "description": ""
   },
   "contingency": {
-    "name": "",
+    "name": "Contingência",
     "description": "",
     "material": ""
   },
   "continual-flame": {
-    "name": "",
+    "name": "Chama Contínua",
     "description": "",
     "material": ""
   },
   "control-water": {
-    "name": "",
+    "name": "Controlar Água",
     "description": "",
     "material": ""
   },
   "control-weather": {
-    "name": "",
+    "name": "Controlar o Clima",
     "description": "",
     "material": ""
   },
   "counterspell": {
-    "name": "",
+    "name": "Contramagia",
     "description": "",
     "trigger": ""
   },
   "create-food-and-water": {
-    "name": "",
+    "name": "Criar Comida e Água",
     "description": ""
   },
   "create-or-destroy-water": {
-    "name": "",
+    "name": "Criar ou Destruir Água",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "create-undead": {
-    "name": "",
+    "name": "Criar Mortos-Vivos",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "creation": {
-    "name": "",
+    "name": "Criação",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "cure-wounds": {
-    "name": "",
+    "name": "Curar Ferimentos",
     "description": "",
     "higherLevel": ""
   },
   "dancing-lights": {
-    "name": "",
+    "name": "Luzes Dançantes",
     "description": "",
     "material": ""
   },
   "darkness": {
-    "name": "",
+    "name": "Escuridão",
     "description": "",
     "material": ""
   },
   "darkvision": {
-    "name": "",
+    "name": "Visão no Escuro",
     "description": "",
     "material": ""
   },
   "daylight": {
-    "name": "",
+    "name": "Luz do Dia",
     "description": ""
   },
   "death-ward": {
-    "name": "",
+    "name": "Proteção Contra Morte",
     "description": ""
   },
   "delayed-blast-fireball": {
-    "name": "",
+    "name": "Bola de Fogo Adiável",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "demiplane": {
-    "name": "",
+    "name": "Semiplano",
     "description": ""
   },
   "detect-evil-and-good": {
-    "name": "",
+    "name": "Detectar o Bem e o Mal",
     "description": ""
   },
   "detect-magic": {
-    "name": "",
+    "name": "Detectar Magia",
     "description": ""
   },
   "detect-poison-and-disease": {
-    "name": "",
+    "name": "Detectar Veneno e Doença",
     "description": "",
     "material": ""
   },
   "detect-thoughts": {
-    "name": "",
+    "name": "Detectar Pensamentos",
     "description": "",
     "material": ""
   },
   "dimension-door": {
-    "name": "",
+    "name": "Porta Dimensional",
     "description": ""
   },
   "disguise-self": {
-    "name": "",
+    "name": "Disfarçar-se",
     "description": ""
   },
   "disintegrate": {
-    "name": "",
+    "name": "Desintegrar",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "dispel-evil-and-good": {
-    "name": "",
+    "name": "Dissipar o Bem e o Mal",
     "description": "",
     "material": ""
   },
   "dispel-magic": {
-    "name": "",
+    "name": "Dissipar Magia",
     "description": "",
     "higherLevel": ""
   },
@@ -448,12 +448,12 @@
     "higherLevel": ""
   },
   "divination": {
-    "name": "",
+    "name": "Presságio",
     "description": "",
     "material": ""
   },
   "divine-favor": {
-    "name": "",
+    "name": "Favor Divino",
     "description": ""
   },
   "divine-smite": {
@@ -463,21 +463,21 @@
     "trigger": ""
   },
   "divine-word": {
-    "name": "",
+    "name": "Palavra Sagrada",
     "description": ""
   },
   "dominate-beast": {
-    "name": "",
+    "name": "Dominar Fera",
     "description": "",
     "higherLevel": ""
   },
   "dominate-monster": {
-    "name": "",
+    "name": "Dominar Monstro",
     "description": "",
     "higherLevel": ""
   },
   "dominate-person": {
-    "name": "",
+    "name": "Dominar Pessoa",
     "description": "",
     "higherLevel": ""
   },
@@ -488,21 +488,21 @@
     "material": ""
   },
   "dream": {
-    "name": "",
+    "name": "Sonho",
     "description": "",
     "material": ""
   },
   "druidcraft": {
-    "name": "",
+    "name": "Arte Druídica",
     "description": ""
   },
   "earthquake": {
-    "name": "",
+    "name": "Terremoto",
     "description": "",
     "material": ""
   },
   "eldritch-blast": {
-    "name": "",
+    "name": "Raio Místico",
     "description": "",
     "higherLevel": ""
   },
@@ -511,13 +511,13 @@
     "description": ""
   },
   "enhance-ability": {
-    "name": "",
+    "name": "Aprimorar Atributo",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "enlarge-reduce": {
-    "name": "",
+    "name": "Aumentar/Reduzir",
     "description": "",
     "material": ""
   },
@@ -528,297 +528,297 @@
     "trigger": ""
   },
   "entangle": {
-    "name": "",
+    "name": "Emaranhar",
     "description": ""
   },
   "enthrall": {
-    "name": "",
+    "name": "Cativar",
     "description": ""
   },
   "etherealness": {
-    "name": "",
+    "name": "Forma Etérea",
     "description": "",
     "higherLevel": ""
   },
   "expeditious-retreat": {
-    "name": "",
+    "name": "Retirada Acelerada",
     "description": ""
   },
   "eyebite": {
-    "name": "",
+    "name": "Mau Olhado",
     "description": ""
   },
   "fabricate": {
-    "name": "",
+    "name": "Fabricar",
     "description": ""
   },
   "faerie-fire": {
-    "name": "",
+    "name": "Fogo das Fadas",
     "description": ""
   },
   "faithful-hound": {
-    "name": "",
+    "name": "Cão Fiel",
     "description": "",
     "material": ""
   },
   "false-life": {
-    "name": "",
+    "name": "Vitalidade Vazia",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "fear": {
-    "name": "",
+    "name": "Medo",
     "description": "",
     "material": ""
   },
   "feather-fall": {
-    "name": "",
+    "name": "Queda Suave",
     "description": "",
     "material": "",
     "trigger": ""
   },
   "find-familiar": {
-    "name": "",
+    "name": "Convocar Familiar",
     "description": "",
     "material": ""
   },
   "find-steed": {
-    "name": "",
+    "name": "Convocar Montaria",
     "description": "",
     "higherLevel": ""
   },
   "find-the-path": {
-    "name": "",
+    "name": "Encontrar o Caminho",
     "description": "",
     "material": ""
   },
   "find-traps": {
-    "name": "",
+    "name": "Encontrar Armadilhas",
     "description": ""
   },
   "finger-of-death": {
-    "name": "",
+    "name": "Dedo da Morte",
     "description": ""
   },
   "fire-bolt": {
-    "name": "",
+    "name": "Raio de Fogo",
     "description": "",
     "higherLevel": ""
   },
   "fire-shield": {
-    "name": "",
+    "name": "Escudo Ardente",
     "description": "",
     "material": ""
   },
   "fire-storm": {
-    "name": "",
+    "name": "Tempestade de Fogo",
     "description": ""
   },
   "fireball": {
-    "name": "",
+    "name": "Bola de Fogo",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "flame-blade": {
-    "name": "",
+    "name": "Lâmina Flamejante",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "flame-strike": {
-    "name": "",
+    "name": "Coluna de Chamas",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "flaming-sphere": {
-    "name": "",
+    "name": "Esfera Flamejante",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "flesh-to-stone": {
-    "name": "",
+    "name": "De Carne Para Pedra",
     "description": "",
     "material": ""
   },
   "floating-disk": {
-    "name": "",
+    "name": "Disco Flutuante",
     "description": "",
     "material": ""
   },
   "fly": {
-    "name": "",
+    "name": "Voo",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "fog-cloud": {
-    "name": "",
+    "name": "Névoa Obscurecente",
     "description": "",
     "higherLevel": ""
   },
   "forbiddance": {
-    "name": "",
+    "name": "Proibição",
     "description": "",
     "material": ""
   },
   "forcecage": {
-    "name": "",
+    "name": "Cárcere de Energia",
     "description": "",
     "material": ""
   },
   "foresight": {
-    "name": "",
+    "name": "Sexto Sentido",
     "description": "",
     "material": ""
   },
   "freedom-of-movement": {
-    "name": "",
+    "name": "Movimentação Livre",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "freezing-sphere": {
-    "name": "",
+    "name": "Esfera Congelante",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "gaseous-form": {
-    "name": "",
+    "name": "Forma Gasosa",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "gate": {
-    "name": "",
+    "name": "Portal",
     "description": "",
     "material": ""
   },
   "geas": {
-    "name": "",
+    "name": "Missão",
     "description": "",
     "higherLevel": ""
   },
   "gentle-repose": {
-    "name": "",
+    "name": "Repouso Tranquilo",
     "description": "",
     "material": ""
   },
   "giant-insect": {
-    "name": "",
+    "name": "Inseto Gigante",
     "description": "",
     "higherLevel": ""
   },
   "glibness": {
-    "name": "",
+    "name": "Loquacidade",
     "description": ""
   },
   "globe-of-invulnerability": {
-    "name": "",
+    "name": "Globo de Invulnerabilidade",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "glyph-of-warding": {
-    "name": "",
+    "name": "Glifo de Proteção",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "goodberry": {
-    "name": "",
+    "name": "Bom Fruto",
     "description": "",
     "material": ""
   },
   "grease": {
-    "name": "",
+    "name": "Graxa",
     "description": "",
     "material": ""
   },
   "greater-invisibility": {
-    "name": "",
+    "name": "Invisibilidade Maior",
     "description": ""
   },
   "greater-restoration": {
-    "name": "",
+    "name": "Restauração Maior",
     "description": "",
     "material": ""
   },
   "guardian-of-faith": {
-    "name": "",
+    "name": "Defensor da Fé",
     "description": ""
   },
   "guards-and-wards": {
-    "name": "",
+    "name": "Proteger Fortaleza",
     "description": "",
     "material": ""
   },
   "guidance": {
-    "name": "",
+    "name": "Orientação",
     "description": ""
   },
   "guiding-bolt": {
-    "name": "",
+    "name": "Raio Guia",
     "description": "",
     "higherLevel": ""
   },
   "gust-of-wind": {
-    "name": "",
+    "name": "Lufada de Vento",
     "description": "",
     "material": ""
   },
   "hallow": {
-    "name": "",
+    "name": "Consagrar",
     "description": "",
     "material": ""
   },
   "hallucinatory-terrain": {
-    "name": "",
+    "name": "Terreno Alucinatório",
     "description": "",
     "material": ""
   },
   "harm": {
-    "name": "",
+    "name": "Moléstia",
     "description": ""
   },
   "haste": {
-    "name": "",
+    "name": "Celeridade",
     "description": "",
     "material": ""
   },
   "heal": {
-    "name": "",
+    "name": "Cura Completa",
     "description": "",
     "higherLevel": ""
   },
   "healing-word": {
-    "name": "",
+    "name": "Palavra Curativa",
     "description": "",
     "higherLevel": ""
   },
   "heat-metal": {
-    "name": "",
+    "name": "Esquentar Metal",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "hellish-rebuke": {
-    "name": "",
+    "name": "Repreensão Diabólica",
     "description": "",
     "higherLevel": "",
     "trigger": ""
   },
   "heroes-feast": {
-    "name": "",
+    "name": "Banquete de Heróis",
     "description": "",
     "material": ""
   },
   "heroism": {
-    "name": "",
+    "name": "Heroísmo",
     "description": "",
     "higherLevel": ""
   },
@@ -829,35 +829,35 @@
     "material": ""
   },
   "hideous-laughter": {
-    "name": "",
+    "name": "Gargalhada Nefasta",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "hold-monster": {
-    "name": "",
+    "name": "Imobilizar Monstro",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "hold-person": {
-    "name": "",
+    "name": "Imobilizar Pessoa",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "holy-aura": {
-    "name": "",
+    "name": "Aura Sagrada",
     "description": "",
     "material": ""
   },
   "hunters-mark": {
-    "name": "",
+    "name": "Marca do Predador",
     "description": "",
     "higherLevel": ""
   },
   "hypnotic-pattern": {
-    "name": "",
+    "name": "Padrão Hipnótico",
     "description": "",
     "material": ""
   },
@@ -868,180 +868,180 @@
     "material": ""
   },
   "ice-storm": {
-    "name": "",
+    "name": "Tempestade Glacial",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "identify": {
-    "name": "",
+    "name": "Indentificar",
     "description": "",
     "material": ""
   },
   "illusory-script": {
-    "name": "",
+    "name": "Escrita Ilusória",
     "description": "",
     "material": ""
   },
   "imprisonment": {
-    "name": "",
+    "name": "Aprisionamento",
     "description": "",
     "material": ""
   },
   "incendiary-cloud": {
-    "name": "",
+    "name": "Nuvem Incendiária",
     "description": ""
   },
   "inflict-wounds": {
-    "name": "",
+    "name": "Infligir Ferimentos",
     "description": "",
     "higherLevel": ""
   },
   "insect-plague": {
-    "name": "",
+    "name": "Praga de Insetos",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "instant-summons": {
-    "name": "",
+    "name": "Convocação Instantânea",
     "description": "",
     "material": ""
   },
   "invisibility": {
-    "name": "",
+    "name": "Invisibilidade",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "irresistible-dance": {
-    "name": "",
+    "name": "Dança Irresistível",
     "description": ""
   },
   "jump": {
-    "name": "",
+    "name": "Salto",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "knock": {
-    "name": "",
+    "name": "Arrombar",
     "description": ""
   },
   "legend-lore": {
-    "name": "",
+    "name": "Lendas e Histórias",
     "description": "",
     "material": ""
   },
   "lesser-restoration": {
-    "name": "",
+    "name": "Restauração Menor",
     "description": ""
   },
   "levitate": {
-    "name": "",
+    "name": "Levitação",
     "description": "",
     "material": ""
   },
   "light": {
-    "name": "",
+    "name": "Luz",
     "description": "",
     "material": ""
   },
   "lightning-bolt": {
-    "name": "",
+    "name": "Relâmpago",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "locate-animals-or-plants": {
-    "name": "",
+    "name": "Localizar Animais ou Plantas",
     "description": "",
     "material": ""
   },
   "locate-creature": {
-    "name": "",
+    "name": "Localizar Criatura",
     "description": "",
     "material": ""
   },
   "locate-object": {
-    "name": "",
+    "name": "Localizar Objeto",
     "description": "",
     "material": ""
   },
   "longstrider": {
-    "name": "",
+    "name": "Passos Largos",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "mage-armor": {
-    "name": "",
+    "name": "Armadura Arcana",
     "description": "",
     "material": ""
   },
   "mage-hand": {
-    "name": "",
+    "name": "Mãos Mágicas",
     "description": ""
   },
   "magic-circle": {
-    "name": "",
+    "name": "Círculo Mágico",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "magic-jar": {
-    "name": "",
+    "name": "Receptáculo Arcano",
     "description": "",
     "material": ""
   },
   "magic-missile": {
-    "name": "",
+    "name": "Mísseis Mágicos",
     "description": "",
     "higherLevel": ""
   },
   "magic-mouth": {
-    "name": "",
+    "name": "Boca Encantada",
     "description": "",
     "material": ""
   },
   "magic-weapon": {
-    "name": "",
+    "name": "Arma Mágica",
     "description": "",
     "higherLevel": ""
   },
   "magnificent-mansion": {
-    "name": "",
+    "name": "Mansão Magnífica",
     "description": "",
     "material": ""
   },
   "major-image": {
-    "name": "",
+    "name": "Imagem Maior",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "mass-cure-wounds": {
-    "name": "",
+    "name": "Curar Ferimentos em Massa",
     "description": "",
     "higherLevel": ""
   },
   "mass-heal": {
-    "name": "",
+    "name": "Cura Completa em Massa",
     "description": ""
   },
   "mass-healing-word": {
-    "name": "",
+    "name": "Palavra Curativa em Massa",
     "description": "",
     "higherLevel": ""
   },
   "mass-suggestion": {
-    "name": "",
+    "name": "Sugestão em Massa",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "maze": {
-    "name": "",
+    "name": "Labirinto",
     "description": ""
   },
   "meld-into-stone": {
@@ -1049,21 +1049,21 @@
     "description": ""
   },
   "mending": {
-    "name": "",
+    "name": "Reparar",
     "description": "",
     "material": ""
   },
   "message": {
-    "name": "",
+    "name": "Mensagem",
     "description": "",
     "material": ""
   },
   "meteor-swarm": {
-    "name": "",
+    "name": "Chuva de Meteoros",
     "description": ""
   },
   "mind-blank": {
-    "name": "",
+    "name": "Limpar a Mente",
     "description": ""
   },
   "mind-spike": {
@@ -1072,44 +1072,44 @@
     "higherLevel": ""
   },
   "minor-illusion": {
-    "name": "",
+    "name": "Ilusão Menor",
     "description": "",
     "material": ""
   },
   "mirage-arcane": {
-    "name": "",
+    "name": "Miragem Arcana",
     "description": ""
   },
   "mirror-image": {
-    "name": "",
+    "name": "Reflexos",
     "description": ""
   },
   "mislead": {
-    "name": "",
+    "name": "Despistar",
     "description": ""
   },
   "misty-step": {
-    "name": "",
+    "name": "Passo Nebuloso",
     "description": ""
   },
   "modify-memory": {
-    "name": "",
+    "name": "Modificar Memória",
     "description": "",
     "higherLevel": ""
   },
   "moonbeam": {
-    "name": "",
+    "name": "Raio Lunar",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "move-earth": {
-    "name": "",
+    "name": "Mover Terra",
     "description": "",
     "material": ""
   },
   "nondetection": {
-    "name": "",
+    "name": "Indetectável",
     "description": "",
     "material": ""
   },
@@ -1119,7 +1119,7 @@
     "material": ""
   },
   "passwall": {
-    "name": "",
+    "name": "Criar Passagem",
     "description": "",
     "material": ""
   },
@@ -1129,40 +1129,40 @@
     "material": ""
   },
   "phantasmal-killer": {
-    "name": "",
+    "name": "Assassino Fantasmagórico",
     "description": "",
     "higherLevel": ""
   },
   "phantom-steed": {
-    "name": "",
+    "name": "Montaria Fantasmagórica",
     "description": ""
   },
   "planar-ally": {
-    "name": "",
+    "name": "Aliado Extraplanar",
     "description": ""
   },
   "planar-binding": {
-    "name": "",
+    "name": "Âncora Planar",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "plane-shift": {
-    "name": "",
+    "name": "Transição Planar",
     "description": "",
     "material": ""
   },
   "plant-growth": {
-    "name": "",
+    "name": "Crescimento de Plantas",
     "description": ""
   },
   "poison-spray": {
-    "name": "",
+    "name": "Rajada de Veneno",
     "description": "",
     "higherLevel": ""
   },
   "polymorph": {
-    "name": "",
+    "name": "Polimorfia",
     "description": "",
     "material": ""
   },
@@ -1171,48 +1171,48 @@
     "description": ""
   },
   "power-word-kill": {
-    "name": "",
+    "name": "Palavra de Poder: Matar",
     "description": ""
   },
   "power-word-stun": {
-    "name": "",
+    "name": "Palavra de Poder: Atordoar",
     "description": ""
   },
   "prayer-of-healing": {
-    "name": "",
+    "name": "Oração de Cura",
     "description": "",
     "higherLevel": ""
   },
   "prestidigitation": {
-    "name": "",
+    "name": "Prestidigitação Arcana",
     "description": ""
   },
   "prismatic-spray": {
-    "name": "",
+    "name": "Rajada Prismática",
     "description": ""
   },
   "prismatic-wall": {
-    "name": "",
+    "name": "Muralha Prismática",
     "description": ""
   },
   "private-sanctum": {
-    "name": "",
+    "name": "Santuário Particular",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "produce-flame": {
-    "name": "",
+    "name": "Criar Chamas",
     "description": "",
     "higherLevel": ""
   },
   "programmed-illusion": {
-    "name": "",
+    "name": "Ilusão Programada",
     "description": "",
     "material": ""
   },
   "project-image": {
-    "name": "",
+    "name": "Projetar Imagem",
     "description": "",
     "material": ""
   },
@@ -1221,29 +1221,29 @@
     "description": ""
   },
   "protection-from-evil-and-good": {
-    "name": "",
+    "name": "Proteção Contra o Bem e o Mal",
     "description": "",
     "material": ""
   },
   "protection-from-poison": {
-    "name": "",
+    "name": "Proteção Contra Veneno",
     "description": ""
   },
   "purify-food-and-drink": {
-    "name": "",
+    "name": "Purificar Alimentos e Bebidas",
     "description": ""
   },
   "raise-dead": {
-    "name": "",
+    "name": "Reviver os Mortos",
     "description": "",
     "material": ""
   },
   "ray-of-enfeeblement": {
-    "name": "",
+    "name": "Raio do Enfraquecimento",
     "description": ""
   },
   "ray-of-frost": {
-    "name": "",
+    "name": "Raio de Gelo",
     "description": "",
     "higherLevel": ""
   },
@@ -1253,65 +1253,65 @@
     "higherLevel": ""
   },
   "regenerate": {
-    "name": "",
+    "name": "Regeneração",
     "description": "",
     "material": ""
   },
   "reincarnate": {
-    "name": "",
+    "name": "Reencarnar",
     "description": "",
     "material": ""
   },
   "remove-curse": {
-    "name": "",
+    "name": "Remover Maldição",
     "description": ""
   },
   "resilient-sphere": {
-    "name": "",
+    "name": "Esfera Resiliente",
     "description": "",
     "material": ""
   },
   "resistance": {
-    "name": "",
+    "name": "Resistência",
     "description": ""
   },
   "resurrection": {
-    "name": "",
+    "name": "Ressurreição",
     "description": "",
     "material": ""
   },
   "reverse-gravity": {
-    "name": "",
+    "name": "Inverter a Gravidade",
     "description": "",
     "material": ""
   },
   "revivify": {
-    "name": "",
+    "name": "Revivificar",
     "description": "",
     "material": ""
   },
   "rope-trick": {
-    "name": "",
+    "name": "Corda Extradimensional",
     "description": "",
     "material": ""
   },
   "sacred-flame": {
-    "name": "",
+    "name": "Chama Sagrada",
     "description": "",
     "higherLevel": ""
   },
   "sanctuary": {
-    "name": "",
+    "name": "Santuário",
     "description": "",
     "material": ""
   },
   "scorching-ray": {
-    "name": "",
+    "name": "Raio Ardente",
     "description": "",
     "higherLevel": ""
   },
   "scrying": {
-    "name": "",
+    "name": "Vidência",
     "description": "",
     "material": ""
   },
@@ -1322,52 +1322,52 @@
     "trigger": ""
   },
   "secret-chest": {
-    "name": "",
+    "name": "Arca Secreta",
     "description": "",
     "material": ""
   },
   "see-invisibility": {
-    "name": "",
+    "name": "Ver o Invisível",
     "description": "",
     "material": ""
   },
   "seeming": {
-    "name": "",
+    "name": "Similaridade",
     "description": ""
   },
   "sending": {
-    "name": "",
+    "name": "Remeter",
     "description": "",
     "material": ""
   },
   "sequester": {
-    "name": "",
+    "name": "Refugiar",
     "description": "",
     "material": ""
   },
   "shapechange": {
-    "name": "",
+    "name": "Metamorfose",
     "description": "",
     "material": ""
   },
   "shatter": {
-    "name": "",
+    "name": "Despedaçar",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "shield": {
-    "name": "",
+    "name": "Égide",
     "description": "",
     "trigger": ""
   },
   "shield-of-faith": {
-    "name": "",
+    "name": "Escudo da Fé",
     "description": "",
     "material": ""
   },
   "shillelagh": {
-    "name": "",
+    "name": "Bordão Místico",
     "description": "",
     "higherLevel": "",
     "material": ""
@@ -1379,36 +1379,36 @@
     "trigger": ""
   },
   "shocking-grasp": {
-    "name": "",
+    "name": "Toque Chocante",
     "description": "",
     "higherLevel": ""
   },
   "silence": {
-    "name": "",
+    "name": "Silêncio",
     "description": ""
   },
   "silent-image": {
-    "name": "",
+    "name": "Imagem Silenciosa",
     "description": "",
     "material": ""
   },
   "simulacrum": {
-    "name": "",
+    "name": "Simulacro",
     "description": "",
     "material": ""
   },
   "sleep": {
-    "name": "",
+    "name": "Sono",
     "description": "",
     "material": ""
   },
   "sleet-storm": {
-    "name": "",
+    "name": "Nevasca",
     "description": "",
     "material": ""
   },
   "slow": {
-    "name": "",
+    "name": "Lentidão",
     "description": "",
     "material": ""
   },
@@ -1418,42 +1418,42 @@
     "higherLevel": ""
   },
   "spare-the-dying": {
-    "name": "",
+    "name": "Acudir os Moribundos",
     "description": "",
     "higherLevel": ""
   },
   "speak-with-animals": {
-    "name": "",
+    "name": "Falar com Animais",
     "description": ""
   },
   "speak-with-dead": {
-    "name": "",
+    "name": "Falar com Mortos",
     "description": "",
     "material": ""
   },
   "speak-with-plants": {
-    "name": "",
+    "name": "Falar com Plantas",
     "description": ""
   },
   "spider-climb": {
-    "name": "",
+    "name": "Escalada de Aranha",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "spike-growth": {
-    "name": "",
+    "name": "Crescer Espinhos",
     "description": "",
     "material": ""
   },
   "spirit-guardians": {
-    "name": "",
+    "name": "Guardiões Espirituais",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "spiritual-weapon": {
-    "name": "",
+    "name": "Arma Espiritual",
     "description": "",
     "higherLevel": ""
   },
@@ -1463,26 +1463,26 @@
     "higherLevel": ""
   },
   "stinking-cloud": {
-    "name": "",
+    "name": "Nuvem Fétida",
     "description": "",
     "material": ""
   },
   "stone-shape": {
-    "name": "",
+    "name": "Moldar Rochas",
     "description": "",
     "material": ""
   },
   "stoneskin": {
-    "name": "",
+    "name": "Pele-rocha",
     "description": "",
     "material": ""
   },
   "storm-of-vengeance": {
-    "name": "",
+    "name": "Tempestade da Vingança",
     "description": ""
   },
   "suggestion": {
-    "name": "",
+    "name": "Sugestão",
     "description": "",
     "material": ""
   },
@@ -1493,86 +1493,86 @@
     "material": ""
   },
   "sunbeam": {
-    "name": "",
+    "name": "Raio Solar",
     "description": "",
     "material": ""
   },
   "sunburst": {
-    "name": "",
+    "name": "Explosão Solar",
     "description": "",
     "material": ""
   },
   "symbol": {
-    "name": "",
+    "name": "Símbolo",
     "description": "",
     "material": ""
   },
   "telekinesis": {
-    "name": "",
+    "name": "Telecinese",
     "description": ""
   },
   "telepathic-bond": {
-    "name": "",
+    "name": "Ligação Telepática",
     "description": "",
     "material": ""
   },
   "teleport": {
-    "name": "",
+    "name": "Teleporte",
     "description": ""
   },
   "teleportation-circle": {
-    "name": "",
+    "name": "Círculo de Teleporte",
     "description": "",
     "material": ""
   },
   "thaumaturgy": {
-    "name": "",
+    "name": "Taumaturgia",
     "description": ""
   },
   "thunderwave": {
-    "name": "",
+    "name": "Onda Trovejante",
     "description": "",
     "higherLevel": ""
   },
   "time-stop": {
-    "name": "",
+    "name": "Parar o Tempo",
     "description": ""
   },
   "tiny-hut": {
-    "name": "",
+    "name": "Pequeno Refúgio",
     "description": "",
     "material": ""
   },
   "tongues": {
-    "name": "",
+    "name": "Línguas",
     "description": "",
     "material": ""
   },
   "transport-via-plants": {
-    "name": "",
+    "name": "Teleporte via Plantas",
     "description": ""
   },
   "tree-stride": {
-    "name": "",
+    "name": "Passo Arbóreo",
     "description": ""
   },
   "true-polymorph": {
-    "name": "",
+    "name": "Polimorfia Total",
     "description": "",
     "material": ""
   },
   "true-resurrection": {
-    "name": "",
+    "name": "Ressurreição Verdadeira",
     "description": "",
     "material": ""
   },
   "true-seeing": {
-    "name": "",
+    "name": "Visão da Verdade",
     "description": "",
     "material": ""
   },
   "true-strike": {
-    "name": "",
+    "name": "Golpe Certeiro",
     "description": "",
     "higherLevel": "",
     "material": ""
@@ -1582,17 +1582,17 @@
     "description": ""
   },
   "unseen-servant": {
-    "name": "",
+    "name": "Servo Invisível",
     "description": "",
     "material": ""
   },
   "vampiric-touch": {
-    "name": "",
+    "name": "Toque Vampírico",
     "description": "",
     "higherLevel": ""
   },
   "vicious-mockery": {
-    "name": "",
+    "name": "Zombaria Perversa",
     "description": "",
     "higherLevel": ""
   },
@@ -1603,77 +1603,77 @@
     "material": ""
   },
   "wall-of-fire": {
-    "name": "",
+    "name": "Muralha de Fogo",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "wall-of-force": {
-    "name": "",
+    "name": "Muralha de Energia",
     "description": "",
     "material": ""
   },
   "wall-of-ice": {
-    "name": "",
+    "name": "Muralha de Gelo",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "wall-of-stone": {
-    "name": "",
+    "name": "Muralha de Pedra",
     "description": "",
     "material": ""
   },
   "wall-of-thorns": {
-    "name": "",
+    "name": "Muralha de Espinhos",
     "description": "",
     "higherLevel": "",
     "material": ""
   },
   "warding-bond": {
-    "name": "",
+    "name": "Vínculo de Proteção",
     "description": "",
     "material": ""
   },
   "water-breathing": {
-    "name": "",
+    "name": "Respirar na Água",
     "description": "",
     "material": ""
   },
   "water-walk": {
-    "name": "",
+    "name": "Caminhar Sobre as Águas",
     "description": "",
     "material": ""
   },
   "web": {
-    "name": "",
+    "name": "Teia",
     "description": "",
     "material": ""
   },
   "weird": {
-    "name": "",
+    "name": "Encarnação Fantasmagórica",
     "description": ""
   },
   "wind-walk": {
-    "name": "",
+    "name": "Caminhar no Vento",
     "description": "",
     "material": ""
   },
   "wind-wall": {
-    "name": "",
+    "name": "Muralha de Vento",
     "description": "",
     "material": ""
   },
   "wish": {
-    "name": "",
+    "name": "Desejo",
     "description": ""
   },
   "word-of-recall": {
-    "name": "",
+    "name": "Palavra de Regresso",
     "description": ""
   },
   "zone-of-truth": {
-    "name": "",
+    "name": "Zona da Verdade",
     "description": ""
   }
 }
