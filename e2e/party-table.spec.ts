@@ -81,7 +81,7 @@ test.describe('aba Mesa: retorno, vazios e lista de mesas', () => {
     await joinParty(page, player.page, player.user.id, partyId, code);
     await player.page.goto(partyUrl(partyId));
     await (await hydrated(player.page.getByRole('button', { name: 'Choose characters' }))).click();
-    const dialog = player.page.getByRole('dialog', { name: 'My place in the party' });
+    const dialog = player.page.getByRole('dialog', { name: 'My party membership' });
     await dialog.getByRole('checkbox', { name: /Arani/ }).check();
     await dialog.getByRole('button', { name: 'Save' }).click();
     await expect(player.page.getByText('Characters updated')).toBeVisible();
@@ -98,7 +98,7 @@ test.describe('aba Mesa: retorno, vazios e lista de mesas', () => {
     ).toBeFocused();
 
     // Leaving: its own title, apart from Save, saying what happens to the characters
-    await player.page.getByRole('button', { name: 'My place in the party' }).click();
+    await player.page.getByRole('button', { name: 'My party membership' }).click();
     await player.page.getByRole('dialog').getByRole('button', { name: 'Leave party' }).click();
     const confirm = player.page.getByRole('alertdialog', { name: 'Leave the party?' });
     await expect(confirm).toContainText('To come back, you ask again');

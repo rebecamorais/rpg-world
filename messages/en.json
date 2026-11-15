@@ -237,7 +237,7 @@
     "emptyState": "No characters yet",
     "createFirstDescription": "Start your journey by creating your first RPG character.",
     "createFirst": "Create first character",
-    "title": "Characters",
+    "title": "My characters",
     "level": "Level {level}",
     "requireLogin": "Please log in to see your characters.",
     "notFoundOrNoPermission": "Character not found or you don't have permission.",
@@ -1426,7 +1426,7 @@
       "noCharactersGm": "No characters in the party yet",
       "noCharactersGmHint": "Invite players: each one picks who to bring.",
       "noCharactersGmWaiting": "The players haven't picked who to bring yet",
-      "noCharactersGmWaitingHint": "Each player picks their characters in My place in the party, and they show up here.",
+      "noCharactersGmWaitingHint": "Each player picks their characters in My party membership, and they show up here.",
       "invitePlayers": "Invite players",
       "noCharactersPlayer": "No characters in the party yet",
       "noCharactersPlayerHint": "Choose who you bring. The other players' characters show up here too.",
@@ -1530,7 +1530,7 @@
       "frameTitle": "Party journal"
     },
     "mine": {
-      "title": "My place in the party",
+      "title": "My party membership",
       "description": "Choose who you bring. You can change it any time.",
       "save": "Save",
       "saved": "Characters updated",
@@ -1541,7 +1541,7 @@
       "leaveConfirm": "Your characters leave the party (and its combat, if there is one) but stay with you. To come back, you ask again through the invite and the GM approves.",
       "leaveConfirmLastPlayer": "You are the last active player of this party, which has no GM. If you leave, the party is deleted, with its chest and journal.",
       "left": "You left the party",
-      "open": "My place in the party"
+      "open": "My party membership"
     },
     "gmClaim": {
       "title": "This party has no GM",

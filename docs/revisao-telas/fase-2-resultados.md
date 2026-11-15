@@ -21,12 +21,14 @@ As 12 causas estão corrigidas neste PR, com e2e (`e2e/party-realtime.spec.ts`, 
 
 Dos achados de uma tela só, ficaram para depois: busca e ordem na lista de personagens com muitos itens (c-listas#6), o card de NPC mostrar ND ou PV em vez do nível (c-listas#17) e a coroa de mestre e o contador de pedidos na sidebar (d-navegacao#17).
 
-Perguntas que ficaram abertas (o padrão está aplicado):
+Perguntas que ficaram abertas, respondidas pela Rebeca:
 
-- Depois de uma recusa, a jogadora pode pedir de novo na hora. Ter um tempo de espera?
-- O h1 de `/characters` é "Personagens"; o de NPCs agora é "Meus NPCs". Trocar o primeiro para "Meus personagens"?
-- O "Fale conosco" sem login abre com o tipo "Dúvida ou comentário" já escolhido. Abrir sem tipo?
-- O Baú tem uma linha "Compartilhado com a mesa" acima das moedas; os textos de ajuda de moedas e itens continuam só no balão do título.
+- Depois de uma recusa, a jogadora pode pedir de novo na hora: **fica assim**. Se aparecer abuso, um limite de pedidos no backend.
+- O h1 de `/characters` passa a **"Meus personagens"** (en "My characters"), como "Meus NPCs".
+- O "Fale conosco" sem login **continua abrindo com "Dúvida ou comentário"** escolhido.
+- Em inglês, "Minha participação" passa de "My place in the party" para **"My party membership"**.
+
+O Baú tem uma linha "Compartilhado com a mesa" acima das moedas; os textos de ajuda de moedas e itens continuam só no balão do título.
 
 ## Causas
 

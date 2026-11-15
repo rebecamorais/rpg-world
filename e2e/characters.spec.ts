@@ -10,7 +10,7 @@ import {
 test.describe('ciclo do personagem', () => {
   test('cria, edita, salva e continua igual depois de recarregar', async ({ page, user: _ }) => {
     await page.goto('/characters');
-    await expect(page).toHaveTitle('Characters · RPG World');
+    await expect(page).toHaveTitle('My characters · RPG World');
     await page.getByRole('link', { name: 'Create first character' }).click();
 
     await (await hydrated(page.getByLabel('Name *'))).fill('Thorin');

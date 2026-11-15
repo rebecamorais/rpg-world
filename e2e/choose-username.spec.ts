@@ -15,7 +15,7 @@ test.describe('escolher o username', () => {
     await page.getByRole('button', { name: 'Continue' }).click();
 
     await expect(page).toHaveURL(/\/characters$/);
-    await expect(page.getByRole('heading', { name: 'Characters' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'My characters' })).toBeVisible();
   });
 
   test('abrir uma ficha direto também passa pela escolha', async ({ page }) => {

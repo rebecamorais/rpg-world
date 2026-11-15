@@ -49,7 +49,7 @@ test.describe('mesas', () => {
     await expect.poll(() => new URL(player.page.url()).pathname).toBe(partyUrl(partyId));
     // Who they bring is in their own menu, out of the way of play
     await (
-      await hydrated(player.page.getByRole('button', { name: 'My place in the party' }))
+      await hydrated(player.page.getByRole('button', { name: 'My party membership' }))
     ).click();
     await player.page.getByRole('checkbox', { name: /Arani/ }).check();
     await player.page.getByRole('dialog').getByRole('button', { name: 'Save' }).click();
@@ -211,7 +211,7 @@ test.describe('mesas', () => {
 
     await player.page.goto(partyUrl(partyId));
     await (
-      await hydrated(player.page.getByRole('button', { name: 'My place in the party' }))
+      await hydrated(player.page.getByRole('button', { name: 'My party membership' }))
     ).click();
     await player.page.getByRole('button', { name: 'Leave party' }).click();
     await player.page.getByRole('alertdialog').getByRole('button', { name: 'Leave party' }).click();

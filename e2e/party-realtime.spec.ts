@@ -124,7 +124,7 @@ test.describe('mesa em tempo real', () => {
 
     const joined = channelJoined(player.page, partyId);
     await player.page.goto(partyUrl(partyId));
-    await hydrated(player.page.getByRole('button', { name: 'My place in the party' }));
+    await hydrated(player.page.getByRole('button', { name: 'My party membership' }));
     await joined;
 
     const removed = await page.request.delete(`/api/parties/${partyId}/members/${player.user.id}`);
