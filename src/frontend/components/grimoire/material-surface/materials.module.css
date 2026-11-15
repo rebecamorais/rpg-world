@@ -253,41 +253,76 @@
 
 /* ---------- Light theme: same materials with the lights on ---------- */
 :global(:root[data-theme='light']) .surface[data-material='glacial-glass'] {
+  /* On a light page the light comes from behind: near-white glass with a hint of the tint, bright
+     glints, a thicker (more tinted) edge, and a lit top rim over a darker bottom rim for depth */
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.7), transparent 30%),
-    radial-gradient(
-      ellipse 85% 80% at 50% 45%,
+    linear-gradient(180deg, rgb(255 255 255 / 0.9), rgb(255 255 255 / 0) 34%),
+    linear-gradient(
+      108deg,
+      transparent 38%,
+      rgb(255 255 255 / 0.6) 45%,
       transparent 52%,
-      color-mix(in srgb, var(--m), transparent 65%) 100%
+      transparent 62%,
+      rgb(255 255 255 / 0.4) 66%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 92% 88% at 50% 40%,
+      transparent 58%,
+      color-mix(in srgb, var(--m), transparent 62%) 100%
     ),
     linear-gradient(
       165deg,
-      color-mix(in srgb, var(--m) 30%, var(--card)),
-      color-mix(in srgb, var(--m) 14%, var(--card)) 50%,
-      color-mix(in srgb, var(--m) 22%, var(--card))
+      color-mix(in srgb, var(--m) 16%, white),
+      color-mix(in srgb, var(--m) 7%, white) 50%,
+      color-mix(in srgb, var(--m) 20%, var(--card))
     );
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.9),
-    inset 0 0 22px color-mix(in srgb, var(--m), transparent 70%);
+    inset 0 1px 0 rgb(255 255 255),
+    inset 0 0 0 1px rgb(255 255 255 / 0.55),
+    inset 0 -1px 0 color-mix(in srgb, var(--m), black 25%),
+    inset 0 0 18px color-mix(in srgb, var(--m), transparent 72%);
+}
+/* Frost as white crystals at the edges: tinted lines read as a wire fence on a light page */
+:global(:root[data-theme='light']) .ornament[data-material='glacial-glass'] {
+  background:
+    repeating-linear-gradient(60deg, rgb(255 255 255 / 0.75) 0 1px, transparent 1px 11px),
+    repeating-linear-gradient(-60deg, rgb(255 255 255 / 0.6) 0 1px, transparent 1px 15px);
+  mask-image: radial-gradient(ellipse 80% 74% at 50% 45%, transparent 66%, #000 100%);
 }
 :global(:root[data-theme='light']) .surface[data-material='alchemical-corrosion'] {
+  /* A wet sheen and a deeper pool: pastel alone looked flat, not liquid */
   background-color: color-mix(in srgb, var(--m) 14%, var(--card));
   background-image:
+    linear-gradient(172deg, transparent 16%, rgb(255 255 255 / 0.55) 23%, transparent 31%),
     url('/grimoire/materials/acid-pits.svg'), url('/grimoire/materials/acid-pits.svg'),
     radial-gradient(
       70% 90% at 100% 100%,
-      color-mix(in srgb, var(--m), transparent 65%),
+      color-mix(in srgb, var(--m), transparent 50%),
       transparent 70%
+    ),
+    linear-gradient(
+      20deg,
+      color-mix(in srgb, var(--m) 26%, var(--card)),
+      color-mix(in srgb, var(--m) 8%, var(--card)) 60%
     );
   background-position:
+    0 0,
     right 6px bottom 2px,
     left -56px bottom -30px,
+    0 0,
     0 0;
   background-size:
+    auto,
     120px 90px,
     120px 90px,
+    auto,
     auto;
   background-repeat: no-repeat;
+}
+/* Drips and bubble rims in a deeper shade of the tint, so they read on a light surface */
+:global(:root[data-theme='light']) .ornament[data-material='alchemical-corrosion'] {
+  background: color-mix(in oklab, var(--m), black 32%);
 }
 :global(:root[data-theme='light']) .surface[data-material='crypt-stone'] {
   /* Lighter, more tinted stone and softer slabs on the light theme: full-strength blotches on a
