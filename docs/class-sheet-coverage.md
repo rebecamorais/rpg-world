@@ -22,18 +22,18 @@ A matriz cobre **todas** as características de `content/dnd5e/srd-5.1/classes.j
 
 ### Valem para as 12 classes, em todo nível
 
-| O quê                               | Destino    | Na ficha                                                                                                                                           |
-| ----------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Bônus de proficiência               | automático | Já é derivado do nível.                                                                                                                            |
-| Dado de vida (tipo)                 | automático | Vem da classe; a quantidade é sempre o nível.                                                                                                      |
-| Dados de vida restantes             | automático | Já seguem o nível (`setLevel`).                                                                                                                    |
-| PV máximo no nv 1                   | automático | Máximo do dado + mod. CON, editável.                                                                                                               |
-| PV máximo nos outros níveis         | escolha    | Pendência "rolar ou média" a cada nível ganho.                                                                                                     |
-| Mudança do mod. CON                 | escolha    | **Uma** pendência, recalculada a cada mudança: (mod. atual − mod. conferido) × nível conferido. Um toque aplica; não há como aplicar duas vezes.   |
-| Salvaguardas da classe              | automático | As 2 da classe.                                                                                                                                    |
-| Armaduras, armas, ferramentas fixas | automático | Lista da classe (campo novo).                                                                                                                      |
-| Perícias e ferramentas à escolha    | escolha    | N da lista, no onboarding.                                                                                                                         |
-| Máximo dos espaços de magia         | automático | Pela tabela do tipo de conjurador, em todo nível de conjurador. Os usados salvos não são cortados quando o máximo desce; só a exibição é limitada. |
+| O quê                               | Destino    | Na ficha                                                                                                                                                                   |
+| ----------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bônus de proficiência               | automático | Já é derivado do nível.                                                                                                                                                    |
+| Dado de vida (tipo)                 | automático | Vem da classe; a quantidade é sempre o nível.                                                                                                                              |
+| Dados de vida restantes             | automático | Calculados: nível − dados gastos. Só os **gastos** são salvos, e a mudança de nível não os regrava. Hoje `setLevel` regrava os restantes; a fase 1 troca isso (decisão 2). |
+| PV máximo no nv 1                   | automático | Máximo do dado + mod. CON, editável.                                                                                                                                       |
+| PV máximo nos outros níveis         | escolha    | Pendência "rolar ou média" a cada nível ganho.                                                                                                                             |
+| Mudança do mod. CON                 | escolha    | **Uma** pendência, recalculada a cada mudança: (mod. atual − mod. conferido) × nível conferido. Um toque aplica; não há como aplicar duas vezes.                           |
+| Salvaguardas da classe              | automático | As 2 da classe.                                                                                                                                                            |
+| Armaduras, armas, ferramentas fixas | automático | Lista da classe (campo novo).                                                                                                                                              |
+| Perícias e ferramentas à escolha    | escolha    | N da lista, no onboarding.                                                                                                                                                 |
+| Máximo dos espaços de magia         | automático | Pela tabela do tipo de conjurador, em todo nível de conjurador. Os usados salvos não são cortados quando o máximo desce; só a exibição é limitada.                         |
 
 **Conferência:** 247 ids de característica classificados, mais os marcadores de subclasse; 93 escolha, 61 automático, 59 fora do escopo, 34 informativo.
 
@@ -292,14 +292,14 @@ Campos, ids, padrão + ajuste, e o que acontece com ficha antiga. Sem tela nova.
   - Nenhum valor de ficha existente muda sem uma ação da pessoa, nem ao abrir, nem ao salvar outro campo.
   - **Estado salvo x efetivo:** diminuir um máximo não regrava o estado. Descer de nível e voltar, sem tocar em nada, devolve usos, espaços usados e dados de vida idênticos.
 - **Testes de regressão**
-  - Unidade: leitura do dado de vida legado (`hitDieSides`) e `setLevel` para cima e para baixo.
+  - Unidade: leitura do dado de vida legado (`hitDieSides`); mudar o nível para cima e para baixo não regrava os dados gastos.
   - Unidade: função "valor efetivo = ajuste ?? padrão" para cada campo, com e sem ajuste.
   - Integração: ficha de antes da mudança, lida do banco, devolve os mesmos valores (uma por formato legado conhecido).
   - Unidade: o portão de edição (`2014`, `2024`, ausente).
   - Unidade: ajuste desligado e religado devolve o mesmo valor, por item (salvaguarda, círculo, proficiência).
   - Unidade: nv 5 → 3 → 5 com 3 espaços de 2º gastos: aparecem 2 no nv 3 e 3 de volta no nv 5; o valor salvo é 3 o tempo todo.
   - Unidade: no nv 3, tocar num espaço grava a partir do efetivo (2), e voltar ao nv 5 mostra o que ela gravou.
-  - Unidade: dados de vida com 0 restantes no nv 5 → 3 → 5 continuam com 0 restantes (**hoje dá 2**: é o caso que a fase corrige).
+  - Unidade: **nível 5 com 0 dados restantes → nível 3 → nível 5 = 0 dados restantes** (hoje dá 2: é o caso que a fase corrige). No nível 3 aparecem 0 restantes, e os gastos salvos continuam 5.
   - Unidade: `hitDice.current` antigo lido como gastos = nível − current.
 
 ### Fase 2 — Dados determinísticos do SRD
