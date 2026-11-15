@@ -369,7 +369,7 @@ describe.each(SOURCES)('textos do %s', (source) => {
   });
 });
 
-// Crowdin exports untranslated texts as "", so a missing description is "" or no entry at all
+// Untranslated texts may come back as "", so a missing description is "" or no entry at all
 it('em português, no SRD 5.1, faltam só as 4 conhecidas', () => {
   const pt = textsOf('srd-5.1', 'pt');
   expect(

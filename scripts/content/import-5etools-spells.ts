@@ -6,7 +6,7 @@
  *
  * Only entries 5etools marks as SRD (`srd52`, `srd`). For 5.2, rewrites the rules data and the
  * English texts; for 5.1, only the other casting times and the reaction's trigger. Translations
- * (i18n/<locale>/) come from Crowdin and are never touched, apart from creating an empty file for
+ * (i18n/<locale>/) come from Weblate and are never touched, apart from creating an empty file for
  * Portuguese the first time.
  */
 import { existsSync, readFileSync } from 'node:fs';

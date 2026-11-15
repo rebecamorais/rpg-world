@@ -1,6 +1,8 @@
 import { hasLocale } from 'next-intl';
 import { getRequestConfig } from 'next-intl/server';
 
+import en from '../../messages/en.json';
+import { withFallback } from './messages';
 import { routing } from './routing';
 
 // The locale is the one the proxy picked (the [locale] segment), never read from a cookie here:
@@ -13,6 +15,10 @@ export default getRequestConfig(async ({ requestLocale }) => {
   return {
     locale,
     timeZone: 'UTC',
-    messages: (await import(`../../messages/${locale}.json`)).default,
+    // What a language doesn't have yet (or has empty) shows in English
+    messages:
+      locale === routing.defaultLocale
+        ? en
+        : withFallback((await import(`../../messages/${locale}.json`)).default, en),
   };
 });

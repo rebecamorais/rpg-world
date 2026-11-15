@@ -303,7 +303,7 @@
     "learnedBadge": "Aprendida",
     "spellCount": "{count, plural, one {# magia} other {# magias}}",
     "untranslatedBadge": "Em inglês",
-    "untranslatedHint": "Ainda sem tradução. Você pode ajudar no Crowdin.",
+    "untranslatedHint": "Ainda sem tradução. Você pode ajudar no Weblate.",
     "edition": "Edição",
     "cantripUpgrade": "Melhoria do Truque",
     "duplicate": "Duplicar",
@@ -1265,8 +1265,8 @@
   },
   "translationInvite": {
     "title": "Ajude a traduzir o RPG World",
-    "description": "As traduções são feitas pela comunidade no Crowdin. Qualquer pessoa pode sugerir ou revisar textos e magias, em português ou em outro idioma.",
-    "action": "Traduzir no Crowdin"
+    "description": "As traduções são feitas pela comunidade no Weblate. Qualquer pessoa pode sugerir ou revisar textos e magias, em português ou em outro idioma.",
+    "action": "Traduzir no Weblate"
   },
   "notFound": {
     "title": "Página não encontrada",

@@ -68,5 +68,5 @@ next-env.d.ts
 /.superpowers/
 /.claude/worktrees/
 
-# Foundry translations staged for Crowdin (npm run content:foundry-class-names)
+# Foundry translations sent to Weblate (npm run content:foundry-class-names)
 /.foundry-import/

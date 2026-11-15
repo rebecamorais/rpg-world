@@ -43,7 +43,7 @@ export const spellTextSchema = z.object({
 
 /**
  * Texts of a spell in a translated language. Translators work field by field: a field may be
- * missing or "" (how Crowdin exports what is not translated yet), and then the English one shows.
+ * missing or "" (how a translation tool leaves what is not translated yet), and then the English one shows.
  */
 export const spellTranslationSchema = z
   .object({

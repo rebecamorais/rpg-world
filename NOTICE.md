@@ -74,7 +74,7 @@ SOFTWARE.
 
 As traduções em português das magias do SRD 5.1 (`content/dnd5e/srd-5.1/i18n/pt/spells.json`) e
 dos nomes das classes, subclasses e características (`content/dnd5e/srd-5.{1,2}/i18n/pt/classes.json`,
-enviados ao Crowdin por `npm run content:foundry-class-names` e revisados lá) vêm do módulo de
+enviados ao Weblate por `npm run content:foundry-class-names` e revisados lá) vêm do módulo de
 tradução do sistema D&D 5e para o Foundry VTT, mantido pela comunidade Foundry VTT Brasil:
 <https://gitlab.com/fvtt-brasil/dnd5e>. Agradecemos a Cauã Pessoa e a todas as pessoas que
 contribuíram com essa tradução. No SRD 5.2 só se reaproveitam os nomes cujo original em inglês não
@@ -121,7 +121,7 @@ imagens padrão dos itens.
 ## Traducción al español del SRD 5.2.1: translate-dnd5e-sdr2-es
 
 Os nomes em espanhol das classes, subclasses e características do SRD 5.2
-(`content/dnd5e/srd-5.2/i18n/es/classes.json`, enviados ao Crowdin por
+(`content/dnd5e/srd-5.2/i18n/es/classes.json`, enviados ao Weblate por
 `npm run content:foundry-class-names` e revisados lá) vêm do módulo "D&D 5e SRD 2024 Spanish
 Translation" para o Foundry VTT, de [foundryvtt-sinregistrar](https://github.com/foundryvtt-sinregistrar):
 <https://github.com/foundryvtt-sinregistrar/translate-dnd5e-sdr2-es>. O módulo é licenciado sob a

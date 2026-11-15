@@ -46,7 +46,7 @@ das decisões de moderação quando for apropriado.
 ## Escopo
 
 Este Código de Conduta vale em todos os espaços da comunidade (repositório, issues, pull requests,
-discussões, Crowdin e Discord) e também quando alguém representa oficialmente a comunidade em
+discussões, Weblate e Discord) e também quando alguém representa oficialmente a comunidade em
 espaços públicos.
 
 ## Como denunciar

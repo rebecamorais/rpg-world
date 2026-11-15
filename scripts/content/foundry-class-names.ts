@@ -33,7 +33,7 @@ function getIn(tree: TextTree, path: string[]): unknown {
 }
 
 /**
- * Fills the names `existing` lacks (missing or "", as Crowdin exports untranslated texts).
+ * Fills the names `existing` lacks (missing or "", as untranslated texts come back).
  * The result holds only the new names; `report` lists, by path, what had no match.
  */
 export function translateClassNames(
