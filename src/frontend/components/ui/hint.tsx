@@ -19,7 +19,8 @@ interface HintProps {
 
 /**
  * A small button that explains `label`, on hover or on tap: touch screens have no hover, which
- * is all a plain tooltip opens with.
+ * is all a plain tooltip opens with. Not a <button>: inside a disabled fieldset (the GM's
+ * read-only sheet) a button is disabled too, and an explanation is there to be read, not edited.
  */
 export function Hint({ label, hint, children, className }: HintProps) {
   const t = useTranslations('common');
@@ -28,8 +29,9 @@ export function Hint({ label, hint, children, className }: HintProps) {
   return (
     <Tooltip open={open} onOpenChange={setOpen}>
       <TooltipTrigger asChild>
-        <button
-          type="button"
+        <span
+          role="button"
+          tabIndex={0}
           aria-label={t('whatIs', { label })}
           // Radix closes a tooltip when its trigger is pressed or clicked; here a tap is how it opens
           onPointerDown={(e) => e.preventDefault()}
@@ -37,10 +39,17 @@ export function Hint({ label, hint, children, className }: HintProps) {
             e.preventDefault();
             setOpen(true);
           }}
-          className={cn('focus-ring touch-target cursor-help rounded-md', className)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setOpen(true);
+            }
+          }}
+          // inline-block: what a <button> is, so a width or the touch target still apply
+          className={cn('focus-ring touch-target inline-block cursor-help rounded-md', className)}
         >
           {children}
-        </button>
+        </span>
       </TooltipTrigger>
       <TooltipContent className="max-w-xs">
         <p className="text-foreground font-semibold">{label}</p>

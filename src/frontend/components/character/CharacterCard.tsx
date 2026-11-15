@@ -49,7 +49,12 @@ export function CharacterCard({ character }: CharacterCardProps) {
    * so the actions menu is a sibling of the link instead of a button inside it.
    */
   return (
-    <div className={cn(theme.className, 'group relative h-full')} style={theme.style}>
+    <div
+      // Where the focus lands after the card before it is deleted (CharacterList)
+      data-character-id={character.id}
+      className={cn(theme.className, 'group relative h-full')}
+      style={theme.style}
+    >
       <Card
         className={cn(
           'border-character-muted relative h-full overflow-hidden border shadow-[0_20px_40px_-20px_var(--character-muted)] transition-[translate,box-shadow] duration-500 hover:translate-y-[-4px] hover:shadow-2xl sm:border-2',
@@ -77,25 +82,31 @@ export function CharacterCard({ character }: CharacterCardProps) {
               />
             </div>
             <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
-              <div className="flex w-full items-center justify-between gap-2 overflow-hidden">
-                <h2 className="text-title text-character-flare truncate">
-                  <AppLink href={href} className="outline-none after:absolute after:inset-0">
-                    {character.name}
-                  </AppLink>
-                </h2>
+              {/* Two lines before cutting, and the whole name on hover: "Revisão F2 C NPC 1" and
+                  "… NPC 2" must not end up looking the same */}
+              <h2
+                title={character.name}
+                className="text-title text-character-flare line-clamp-2 w-full break-normal hyphens-auto"
+              >
+                <AppLink href={href} className="outline-none after:absolute after:inset-0">
+                  {character.name}
+                </AppLink>
+              </h2>
+              {/* The level sits with the class, not beside the name, so the name gets the full width */}
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <Badge
-                  variant="secondary"
-                  className="text-label bg-muted/80 border-l-character shrink-0 border-l-[3px] px-2.5 py-1"
+                  variant="outline"
+                  className="text-label border-character-muted bg-character-surface text-character-flare shrink-0 px-2 py-0.5"
                 >
                   {t('levelShort', { level: character.level })}
                 </Badge>
+                {/* An NPC without a class is just a sheet; "Adventurer" fits only player characters */}
+                {(character.class || kind !== 'npc') && (
+                  <p className="text-caption text-muted-foreground">
+                    {classLabel(character.class) || t('defaultClass')}
+                  </p>
+                )}
               </div>
-              {/* An NPC without a class is just a sheet; "Adventurer" fits only player characters */}
-              {(character.class || kind !== 'npc') && (
-                <p className="text-label text-muted-foreground line-clamp-1">
-                  {classLabel(character.class) || t('defaultClass')}
-                </p>
-              )}
             </div>
           </div>
 
@@ -142,12 +153,17 @@ export function CharacterCard({ character }: CharacterCardProps) {
   );
 }
 
-/** Placeholder card while the list loads, same size as a CharacterCard. */
+/** Placeholder card while the list loads, same size and layout as a CharacterCard. */
 export function CharacterCardSkeleton() {
   return (
-    <Card className="bg-card/40 flex h-full min-h-[180px] flex-col gap-4 p-5 sm:min-h-[220px] sm:p-6">
-      <Skeleton className="h-7 w-2/3" />
-      <Skeleton className="h-4 w-1/3" />
+    <Card className="bg-card/40 flex h-full min-h-[180px] flex-col p-5 sm:min-h-[220px] sm:p-6">
+      <div className="mb-5 flex items-center gap-4">
+        <Skeleton className="h-16 w-16 shrink-0 rounded-lg" />
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <Skeleton className="h-7 w-2/3" />
+          <Skeleton className="h-4 w-1/3" />
+        </div>
+      </div>
       <div className="border-border mt-auto flex items-center justify-between border-t pt-4">
         <Skeleton className="h-4 w-20" />
         <Skeleton className="h-8 w-8" />

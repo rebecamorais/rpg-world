@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Badge } from '@frontend/components/ui/badge';
+import { Button } from '@frontend/components/ui/button';
 import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCharacterMeta, useCharacterState } from '@frontend/context/CharacterContext';
@@ -28,9 +29,13 @@ function ReadOnlyBar({ partyId }: { partyId: string }) {
 
   return (
     <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-      <AppLink href={`/parties/${partyId}`} className="text-primary-flare text-sm underline">
-        {t('back')}
-      </AppLink>
+      {/* A button, like the way back from the party's settings: it is this page's way out */}
+      <Button asChild variant="outline" size="sm">
+        <AppLink href={`/parties/${partyId}`}>
+          <AppIcon name="ChevronLeft" size={16} aria-hidden="true" />
+          {t('back')}
+        </AppLink>
+      </Button>
       <Badge variant="secondary" className="text-label">
         <AppIcon name="Eye" size={14} aria-hidden="true" />
         {t('readOnly')}

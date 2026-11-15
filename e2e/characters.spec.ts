@@ -1,4 +1,11 @@
-import { characterUrl, createCharacter, expect, hydrated, test } from './support/fixtures';
+import {
+  characterUrl,
+  createCharacter,
+  createEnemySheet,
+  expect,
+  hydrated,
+  test,
+} from './support/fixtures';
 
 test.describe('ciclo do personagem', () => {
   test('cria, edita, salva e continua igual depois de recarregar', async ({ page, user: _ }) => {
@@ -90,5 +97,99 @@ test.describe('ciclo do personagem', () => {
     expect(apiCalls).not.toContain('/api/characters');
     expect(apiCalls).not.toContain('/api/profile');
     expect(apiCalls).not.toContain(`/api/characters/${id}`);
+  });
+
+  test('"Novo personagem" fica no cabeçalho de /characters, como o dos NPCs', async ({
+    page,
+    user: _,
+  }) => {
+    await createCharacter(page, 'Existing Hero');
+    await page.goto('/characters');
+
+    // The page header's, not the sidebar's
+    await page.locator('header').getByRole('link', { name: 'New character' }).click();
+    await expect.poll(() => new URL(page.url()).pathname).toBe('/characters/new');
+  });
+
+  test('a aba de NPCs tem o próprio h1, e as abas são sublinhadas', async ({ page, user: _ }) => {
+    await page.goto('/characters/npcs');
+
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('My NPCs');
+    const current = page
+      .getByRole('navigation', { name: 'Characters or NPCs' })
+      .getByRole('link', { name: 'My NPCs' });
+    await expect(current).toHaveAttribute('aria-current', 'page');
+    await expect(current).toHaveCSS('border-bottom-style', 'solid');
+  });
+
+  test('pelo teclado, excluir manda o foco para o card seguinte', async ({ page, user: _ }) => {
+    // Newest first: Maren, then Katherine
+    await createCharacter(page, 'Katherine');
+    await createCharacter(page, 'Maren');
+    await page.goto('/characters');
+
+    await (await hydrated(page.getByRole('button', { name: 'Actions for Maren' }))).focus();
+    await page.keyboard.press('Enter');
+    await page.getByRole('menuitem', { name: 'Delete' }).press('Enter');
+    const dialog = page.getByRole('dialog', { name: 'Delete character?' });
+    await dialog.getByPlaceholder('Type the exact name here').fill('Maren');
+    await page.keyboard.press('Enter');
+
+    await expect(dialog).toBeHidden();
+    await expect(page.getByRole('link', { name: 'Katherine', exact: true })).toBeFocused();
+  });
+
+  test('excluir um NPC fala de NPC', async ({ page, user: _ }) => {
+    await createEnemySheet(page, 'Goblin', 7);
+    await page.goto('/characters/npcs');
+
+    await (await hydrated(page.getByRole('button', { name: 'Actions for Goblin' }))).click();
+    await page.getByRole('menuitem', { name: 'Delete' }).click();
+    const dialog = page.getByRole('dialog', { name: 'Delete NPC?' });
+    await expect(dialog).toContainText("To confirm, type the NPC's name: Goblin");
+    await dialog.getByPlaceholder('Type the exact name here').fill('Goblin');
+    await dialog.getByRole('button', { name: 'Delete' }).click();
+
+    await expect(page.getByText('NPC deleted successfully.')).toBeVisible();
+  });
+
+  test('em 768 com a sidebar, um card por linha e o nome inteiro à vista', async ({
+    page,
+    user: _,
+  }) => {
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await createCharacter(page, 'Katherine Johnson');
+    await createCharacter(page, 'Maren Hamilton');
+    await page.goto('/characters');
+
+    const first = page.getByRole('heading', { name: 'Maren Hamilton' });
+    const second = page.getByRole('heading', { name: 'Katherine Johnson' });
+    await expect(first).toHaveAttribute('title', 'Maren Hamilton');
+    const [a, b] = [await first.boundingBox(), await second.boundingBox()];
+    // One column: the second card is below the first, not beside it
+    expect(b!.y).toBeGreaterThan(a!.y + a!.height);
+    expect(Math.abs(a!.x - b!.x)).toBeLessThan(1);
+    // Not cut: the heading is as wide as its text needs
+    expect(await first.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+  });
+
+  test('um nome sem espaços não estoura o diálogo de excluir no celular', async ({
+    page,
+    user: _,
+  }) => {
+    const name = 'Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+    await createCharacter(page, name);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/characters');
+
+    await (await hydrated(page.getByRole('button', { name: `Actions for ${name}` }))).click();
+    await page.getByRole('menuitem', { name: 'Delete' }).click();
+    const dialog = page.getByRole('dialog', { name: 'Delete character?' });
+    await expect(dialog).toBeVisible();
+
+    expect(await dialog.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+    const box = (await dialog.boundingBox())!;
+    const confirm = (await dialog.getByRole('button', { name: 'Delete' }).boundingBox())!;
+    expect(confirm.x + confirm.width).toBeLessThanOrEqual(box.x + box.width);
   });
 });

@@ -16,4 +16,15 @@ describe('CharacterKindTabs', () => {
     expect(npcs).toHaveAttribute('href', '/characters/npcs');
     expect(npcs).toHaveAttribute('aria-current', 'page');
   });
+
+  it('sublinhadas como as abas da mesa, não em pílula', () => {
+    renderWithProviders(<CharacterKindTabs current="pc" />);
+
+    const current = screen.getByRole('link', { name: t.pc });
+    const other = screen.getByRole('link', { name: t.npc });
+    expect(current).toHaveClass('border-b-2', 'border-primary');
+    expect(other).toHaveClass('border-b-2', 'border-transparent');
+    expect(current).not.toHaveClass('bg-background');
+    expect(screen.getByRole('navigation', { name: t.label })).toHaveClass('border-b');
+  });
 });

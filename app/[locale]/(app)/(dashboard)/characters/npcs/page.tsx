@@ -27,15 +27,16 @@ async function loadNpcs() {
 
 /** The NPCs tab: npc sheets (enemies in combat, and anyone else), same list and sheet as PCs. */
 export default async function NpcsPage() {
-  const [t, tCharacters, sheets] = await Promise.all([
+  const [t, tKinds, sheets] = await Promise.all([
     getTranslations('enemies'),
-    getTranslations('characters'),
+    getTranslations('characters.kinds'),
     loadNpcs(),
   ]);
 
   return (
     <PageContainer
-      title={tCharacters('title')}
+      // Its own h1, the same as the document title: "Characters" twice read as the same page
+      title={tKinds('npc')}
       description={t('subtitle')}
       actions={
         <Button asChild>

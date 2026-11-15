@@ -52,7 +52,10 @@ export function NavItem({ href, label, isActive, isSubItem, icon }: NavItemProps
       )}
     >
       {icon && <AppIcon name={icon} size={16} className="shrink-0" />}
-      <span className={navLabelClass(expanded)}>{label}</span>
+      {/* The label is cut with an ellipsis in a narrow menu: the title keeps the whole name */}
+      <span className={navLabelClass(expanded)} title={label}>
+        {label}
+      </span>
     </Link>
   );
 }

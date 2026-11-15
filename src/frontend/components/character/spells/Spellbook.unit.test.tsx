@@ -76,8 +76,17 @@ describe('Spellbook', () => {
     renderWithProviders(<Spellbook characterSpells={[]} onAddSpell={onAddSpell} />);
 
     expect(screen.getByText(messages.spellsDrawer.emptyState)).toBeInTheDocument();
+    expect(screen.getByText(messages.spellsDrawer.emptyStateHint)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: t.spells.addBtn }));
     expect(onAddSpell).toHaveBeenCalled();
+  });
+
+  it('sem como adicionar (ficha só leitura), o vazio não pede para procurar magias', () => {
+    renderWithProviders(<Spellbook characterSpells={[]} />);
+
+    expect(screen.getByText(messages.spellsDrawer.emptyState)).toBeInTheDocument();
+    expect(screen.queryByText(messages.spellsDrawer.emptyStateHint)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: t.spells.addBtn })).not.toBeInTheDocument();
   });
 
   it('mostra todos os níveis numa lista só, em ordem, com atalhos no índice', () => {

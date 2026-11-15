@@ -97,8 +97,10 @@ function DialogContent({
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Content
+        // minmax(0,1fr): the one column is the dialog's width, so a long word (a name with no
+        // spaces) wraps inside it instead of widening the grid past the dialog's edge
         className={cn(
-          'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed top-[50%] left-[50%] z-50 grid max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 overflow-y-auto overscroll-contain rounded-lg border p-6 shadow-lg duration-200',
+          'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed top-[50%] left-[50%] z-50 grid max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg translate-x-[-50%] translate-y-[-50%] grid-cols-[minmax(0,1fr)] gap-4 overflow-y-auto overscroll-contain rounded-lg border p-6 shadow-lg duration-200',
           className,
         )}
         // The close button comes first now, and Radix would open on it: the focus goes to the
@@ -169,7 +171,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
-  return <DialogPrimitive.Title className={cn('text-title', className)} {...props} />;
+  return <DialogPrimitive.Title className={cn('text-title break-words', className)} {...props} />;
 }
 
 function DialogDescription({
@@ -178,7 +180,7 @@ function DialogDescription({
 }: React.ComponentProps<typeof DialogPrimitive.Description>) {
   return (
     <DialogPrimitive.Description
-      className={cn('text-muted-foreground text-body', className)}
+      className={cn('text-muted-foreground text-body break-words', className)}
       {...props}
     />
   );
