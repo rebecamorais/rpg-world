@@ -78,7 +78,11 @@ describe('useCharacter', () => {
         finish();
         await saved;
       });
-      expect(api.put).toHaveBeenCalledWith('/api/characters/c1', { updates: { hpCurrent: 7 } });
+      expect(api.put).toHaveBeenCalledWith(
+        '/api/characters/c1',
+        { updates: { hpCurrent: 7 } },
+        { keepalive: true },
+      );
       expect(invalidate).not.toHaveBeenCalled();
     });
 
@@ -137,7 +141,11 @@ describe('useCharacter', () => {
       await act(() =>
         result.current.saveQuietly({ character: { ...ARANI, ac: 15 }, changes: { ac: 15 } }),
       );
-      expect(api.put).toHaveBeenLastCalledWith('/api/characters/c1', { updates: { ac: 15 } });
+      expect(api.put).toHaveBeenLastCalledWith(
+        '/api/characters/c1',
+        { updates: { ac: 15 } },
+        { keepalive: true },
+      );
     });
   });
 });

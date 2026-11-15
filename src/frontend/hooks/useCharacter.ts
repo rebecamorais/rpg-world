@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -7,6 +7,7 @@ import { rpgWorldApi } from '@client';
 
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
+import { SaveBatcher } from '@frontend/lib/save-batcher';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 
@@ -58,9 +59,28 @@ export function useCharacter(
     },
   });
 
-  // Quick saves go one at a time: the server rewrites the sheet's data on each save, so two in
-  // flight together could undo each other
-  const queue = useRef<Promise<unknown>>(Promise.resolve());
+  // One request at a time, the taps made meanwhile batched into the next (see SaveBatcher)
+  const batcher = useMemo(
+    () =>
+      new SaveBatcher(
+        // keepalive: a reload or a closed tab right after a tap doesn't drop the save
+        (changes) =>
+          rpgWorldApi.put(`/api/characters/${id}`, { updates: changes }, { keepalive: true }),
+        (err) => {
+          toast.error(getErrorMessage(err));
+          void queryClient.invalidateQueries({ queryKey: ['character', id] });
+        },
+      ),
+    // getErrorMessage only changes with the language
+    [id, queryClient, getErrorMessage],
+  );
+
+  // A page going away sends what is still waiting at once, instead of after the request in flight
+  useEffect(() => {
+    const flush = () => batcher.flush();
+    window.addEventListener('pagehide', flush);
+    return () => window.removeEventListener('pagehide', flush);
+  }, [batcher]);
 
   /**
    * Saves what changes during play (a tap on a hit die, a resource box, the HP) in the background.
@@ -73,20 +93,9 @@ export function useCharacter(
       // A refetch still in flight would bring back the copy from before this change
       void queryClient.cancelQueries({ queryKey: ['character', id] });
       queryClient.setQueryData(['character', id], character);
-      const send = queue.current
-        .catch(() => {})
-        .then(() => rpgWorldApi.put(`/api/characters/${character.id}`, { updates: changes }));
-      queue.current = send;
-      return send.then(
-        () => undefined,
-        (err: Error) => {
-          toast.error(getErrorMessage(err));
-          void queryClient.invalidateQueries({ queryKey: ['character', id] });
-          throw err;
-        },
-      );
+      return batcher.push(changes);
     },
-    [queryClient, id, getErrorMessage],
+    [queryClient, id, batcher],
   );
 
   return {
