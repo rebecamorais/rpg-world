@@ -490,12 +490,17 @@ function checkSlots(c: FiveToolsClass, progression: ClassSpellcasting['progressi
     if (progression !== 'pact') throw new Error(`${c.name} (${c.source}): no spell slot table`);
     return;
   }
+  if (rows.length !== 20) {
+    throw new Error(`${c.name} (${c.source}): ${rows.length} rows of spell slots, expected 20`);
+  }
   rows.forEach((row, i) => {
     const expected = slotMaximums(progression, i + 1);
-    const given = row.filter((slots) => slots > 0);
-    if (given.join() !== expected.join()) {
+    // Position by position: a slot in the wrong spell level is not the same table
+    const columns = Math.max(row.length, expected.length);
+    const same = Array.from({ length: columns }, (_, n) => (row[n] ?? 0) === (expected[n] ?? 0));
+    if (same.includes(false)) {
       throw new Error(
-        `${c.name} (${c.source}), level ${i + 1}: slots ${given}, computed ${expected}`,
+        `${c.name} (${c.source}), level ${i + 1}: slots ${row}, computed ${expected}`,
       );
     }
   });

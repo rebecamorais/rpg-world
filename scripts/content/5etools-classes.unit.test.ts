@@ -487,6 +487,21 @@ describe('conjuração', () => {
     );
   });
 
+  it('exige as 20 linhas e o espaço no círculo certo', () => {
+    expect(() => convert(caster({ classTableGroups: slots(FULL.slice(0, 19)) }))).toThrow(
+      '19 rows',
+    );
+    expect(() => convert(caster({ classTableGroups: slots([...FULL, FULL[19]]) }))).toThrow(
+      '21 rows',
+    );
+    // Nível 3: os mesmos números (4 e 2), mas o 2 um círculo adiante
+    const shifted = FULL.map((row, i) => (i === 2 ? [4, 0, 2, 0, 0, 0, 0, 0, 0] : row));
+    expect(() => convert(caster({ classTableGroups: slots(shifted) }))).toThrow('level 3');
+    // Linha mais curta que a calculada também é recusada
+    const short = FULL.map((row, i) => (i === 2 ? [4] : row));
+    expect(() => convert(caster({ classTableGroups: slots(short) }))).toThrow('level 3');
+  });
+
   it('Magia de Pacto não tem tabela de espaços comuns', () => {
     const warlock = caster({
       casterProgression: 'pact',
