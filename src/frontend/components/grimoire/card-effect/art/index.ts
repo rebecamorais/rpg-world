@@ -3,12 +3,14 @@ import { art as arcanePaths } from './arcane-paths';
 import { art as flameRibbons } from './flame-ribbons';
 import { art as frostCrystals } from './frost-crystals';
 import { art as resonance } from './resonance';
+import { art as toxicMistFilaments } from './toxic-mist-filaments';
 
 export const ART = {
   'arcane-paths': arcanePaths,
   'flame-ribbons': flameRibbons,
   'frost-crystals': frostCrystals,
   resonance: resonance,
+  'toxic-mist-filaments': toxicMistFilaments,
 } as const;
 
 export type ArtName = keyof typeof ART;
