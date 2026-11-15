@@ -1,8 +1,8 @@
 # Matriz de cobertura e fases — classe na ficha, SRD 5.1 / Coverage matrix and phases — class on the sheet, SRD 5.1
 
-> **Planejamento (#181).** Complemento do [mapa](class-sheet-map.md). Destinos, fases e critérios são **PROPOSTA**. Aprovadas pela Rebeca em 2026-11-15: as decisões 1, 2, 7 e 9, que liberam a **Fase 1**.
+> **Planejamento (#181).** Complemento do [mapa](class-sheet-map.md). Destinos, fases e critérios são **PROPOSTA**. Aprovadas pela Rebeca em 2026-11-15: as decisões 1, 2, 7 e 9, que liberam a **Fase 1**, e as decisões 3, 8 e 10, que liberam a **Fase 3**.
 >
-> **Planning (#181).** Companion to the [map](class-sheet-map.md). Destinations, phases and criteria are a **PROPOSAL**. Approved by Rebeca on 2026-11-15: decisions 1, 2, 7 and 9, which unblock **Phase 1**. English summary at the end.
+> **Planning (#181).** Companion to the [map](class-sheet-map.md). Destinations, phases and criteria are a **PROPOSAL**. Approved by Rebeca on 2026-11-15: decisions 1, 2, 7 and 9, which unblock **Phase 1**, and decisions 3, 8 and 10, which unblock **Phase 3**. English summary at the end.
 
 ## PT
 
@@ -321,7 +321,7 @@ Tabelas 1–20 e o que falta no conteúdo. Sem tela nova.
 
 Escolher edição e classe, preencher o determinístico, apresentar as escolhas.
 
-- Depende de: fases 1 e 2; decisões 3 (PV), 8 (proficiências e idiomas), 10 (onde pedir as escolhas).
+- Depende de: fases 1 e 2; decisões 3 (PV), 8 (proficiências e idiomas), 10 (onde pedir as escolhas). **As três foram aprovadas em 2026-11-15: a fase está liberada.** Fica fora dela: progressão de nível (fase 4), Grimório (fase 5) e multiclasse.
 - **Critérios de aceite**
   - Criar com edição 2014 e classe oficial preenche: dado de vida, PV do nv 1, as 2 salvaguardas, proficiências fixas, idiomas de classe, atributo de conjuração, máximo dos espaços, caixinhas (#177).
   - Perícias e ferramentas à escolha aparecem como escolha, e pular deixa a pendência visível na ficha.
