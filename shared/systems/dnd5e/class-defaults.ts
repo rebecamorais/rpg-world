@@ -2,7 +2,7 @@ import { getModifier } from './calculations';
 import type { ClassContent } from './class-resources';
 import { ATTRIBUTE_KEYS } from './constants';
 import type { Edition } from './content/editions';
-import type { HitDie } from './hit-dice';
+import { type HitDice, type HitDie, type LegacyHitDice, readHitDice } from './hit-dice';
 import { followsSrd2014 } from './sheet-values';
 import type { AttributeKey } from './types';
 
@@ -120,4 +120,33 @@ export function effectiveSavingThrows(
       ];
     }),
   ) as Record<AttributeKey, EffectiveSavingThrow>;
+}
+
+export interface EffectiveHitDie {
+  die: HitDie;
+  /** `inherit`: no die stored, the class decides. `manual`: the player set it, and it wins. */
+  source: 'inherit' | 'manual';
+  /** What the class gives; null when the sheet does not follow a class. */
+  classDefault: HitDie | null;
+}
+
+/** What a sheet with no die of its own and no class to follow shows. */
+const FALLBACK_HIT_DIE: HitDie = 'd8';
+
+/**
+ * The sheet's hit die: the one the player stored when there is one, else the class's, else a d8.
+ * Only the die: how many were spent is a state of its own (`hitDiceRemaining`) and never changes
+ * with where the die comes from.
+ */
+export function effectiveHitDie(
+  hitDice: HitDice | LegacyHitDice | undefined | null,
+  defaults: Pick<ClassDefaults, 'hitDie'> | null,
+): EffectiveHitDie {
+  const stored = readHitDice(hitDice, 0).die;
+  const classDefault = defaults?.hitDie ?? null;
+  return {
+    die: stored ?? classDefault ?? FALLBACK_HIT_DIE,
+    source: stored ? 'manual' : 'inherit',
+    classDefault,
+  };
 }

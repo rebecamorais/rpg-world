@@ -623,6 +623,7 @@
     "speed": "Deslocamento",
     "initiative": "Iniciativa",
     "speedUnit": "m",
+    "followClassDie": "Seguir a classe ({die})",
     "hitDice": "Dados de Vida",
     "diceOptions": {
       "d6": "d6",

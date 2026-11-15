@@ -10,6 +10,7 @@ import {
   addCustomResource,
   editResourceBox,
   hitDiceAvailable,
+  inheritHitDie,
   inheritSavingThrow,
   newCustomKey,
   removeCustomResource,
@@ -72,6 +73,14 @@ describe('character sheet patches', () => {
     expect(resolvePatch(inheritSavingThrow('DEX'), adjusted)).toEqual({
       savingThrowProficiencies: { STR: false, WIS: true },
     });
+  });
+
+  it('dado de vida de volta à classe: sai o dado, ficam os gastos', () => {
+    const spent = { ...character, level: 5, hitDice: { die: 'd8' as const, spent: 2 } };
+    expect(resolvePatch(inheritHitDie(), spent)).toEqual({ hitDice: { spent: 2 } });
+    // No formato antigo os gastos vêm dos restantes: 3 de 5 são 2 gastos
+    const legacy = { ...character, level: 5, hitDice: { total: '5d10', current: 3 } };
+    expect(resolvePatch(inheritHitDie(), legacy)).toEqual({ hitDice: { spent: 2 } });
   });
 
   it('completa pontos de magia e dados de vida com o valor atual', () => {

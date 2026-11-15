@@ -623,6 +623,7 @@
     "speed": "Speed",
     "initiative": "Initiative",
     "speedUnit": "m",
+    "followClassDie": "Follow the class ({die})",
     "hitDice": "Hit Dice",
     "diceOptions": {
       "d6": "d6",
