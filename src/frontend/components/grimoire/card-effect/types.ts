@@ -52,6 +52,8 @@ export const EFFECTS = {
   // Thunder: pressure waves bending from the top toward the bottom right (the owner's drawing)
   'thunder-soundwaves': { parts: 'art', enter: 'fade', ripple: ['thick', 3] },
   soundwave: { parts: 'fx', enter: 'grow', ripple: ['thick', 3] },
+  // Slashing: three blade cuts with trailing winds, nicks and splinters (the owner's drawing)
+  'slashing-slash-marks': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
   slashes: { parts: 'fx', enter: 'flash', ripple: ['round', 2] },
   'alchemy-circle': { parts: 'fx', enter: 'spin', ripple: ['round', 2] },
   'ward-mesh': { parts: 'fx', enter: 'fade', ripple: ['diamond', 2] },

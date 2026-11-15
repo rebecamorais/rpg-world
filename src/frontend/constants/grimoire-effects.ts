@@ -19,7 +19,7 @@ const BY_DAMAGE: Partial<Record<string, EffectId>> = {
   piercing: 'thrust',
   poison: 'toxic-mist-filaments',
   thunder: 'thunder-soundwaves',
-  slashing: 'slashes',
+  slashing: 'slashing-slash-marks',
 };
 
 const BY_SCHOOL: Partial<Record<string, EffectId>> = {

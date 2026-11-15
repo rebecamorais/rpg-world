@@ -12,6 +12,7 @@ import styles from './effects.module.css';
 const FULL_CARD: ReadonlySet<ArtName> = new Set([
   'acid-bubbles',
   'lightning-branches',
+  'slashing-slash-marks',
   'thunder-soundwaves',
 ]);
 
