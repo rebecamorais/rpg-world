@@ -234,6 +234,7 @@ export default function Sidebar({ initialPinned = true }: { initialPinned?: bool
       }}
       className={cn(
         'relative z-30 hidden shrink-0 transition-[width] duration-200 ease-out sm:block',
+        // Mirrored by --sidebar-offset (globals.css), where the sheet's tab bar starts below md
         pinned ? 'w-64' : 'w-16',
       )}
     >

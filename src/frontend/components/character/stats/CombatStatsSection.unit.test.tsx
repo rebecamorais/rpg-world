@@ -94,6 +94,8 @@ describe('CombatStatsSection', () => {
     renderCombat();
 
     // 10 + WIS modifier (10 → +0), no proficiency
+    // Icon only: the name opens from the icon, and screen readers hear it before the number
+    expect(screen.getByRole('button', { name: 'What is Passive Perception?' })).toBeInTheDocument();
     expect(screen.getByText('Passive Perception:').parentElement).toHaveTextContent('10');
   });
 

@@ -45,6 +45,42 @@ function Detail({
 const SEPARATOR =
   "[&>li+li]:before:text-muted-foreground/40 [&>li+li]:before:mr-1 [&>li+li]:before:content-['•'_/_'']";
 
+/** The V/S/M icons, each with its tooltip. */
+function Components({
+  components,
+  className,
+}: {
+  components: SpellComponentDisplay[];
+  className?: string;
+}) {
+  if (components.length === 0) return null;
+  return (
+    <div className={cn('pointer-events-auto shrink-0 items-center gap-1', className)}>
+      {components.map((comp) => (
+        <Tooltip key={comp.letter}>
+          <TooltipTrigger asChild>
+            {/* Not focusable: the label is already in the text for screen readers. */}
+            <span className="flex size-6 items-center justify-center">
+              <span className="sr-only">{comp.label}</span>
+              <AppIcon
+                variant="game"
+                name={comp.icon}
+                size="xs"
+                className={cn('shrink-0', comp.color)}
+                aria-hidden="true"
+              />
+            </span>
+          </TooltipTrigger>
+          <TooltipContent className="max-w-xs">
+            <p className="text-foreground font-semibold">{comp.label}</p>
+            {comp.hint && <p className="text-muted-foreground">{comp.hint}</p>}
+          </TooltipContent>
+        </Tooltip>
+      ))}
+    </div>
+  );
+}
+
 export const SpellHeader = React.memo(
   ({
     spell,
@@ -55,7 +91,7 @@ export const SpellHeader = React.memo(
     showLevel,
     action,
   }: SpellHeaderProps) => (
-    <header className="flex items-center gap-4">
+    <header className="flex items-center gap-3 sm:gap-4">
       <div
         className="bg-spell-surface text-spell-flare ring-spell-muted shrink-0 rounded-lg p-2.5 ring-1"
         aria-hidden="true"
@@ -66,9 +102,12 @@ export const SpellHeader = React.memo(
       <div className="flex min-w-0 flex-1 flex-col justify-center">
         <div className="flex items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-2">
+            {/* Two lines before cutting, between words: truncated on a phone, "Bola de Fogo" and
+                "Bola de Fogo Adiável" both read "Bola ..." */}
             <h3
               id={`spell-name-${spell.id}`}
-              className="text-foreground font-display truncate text-lg font-semibold"
+              title={spell.name}
+              className="text-foreground font-display line-clamp-2 text-lg font-semibold break-normal hyphens-auto"
             >
               {spell.name}
             </h3>
@@ -86,32 +125,14 @@ export const SpellHeader = React.memo(
             )}
           </div>
 
-          <div className="pointer-events-auto flex shrink-0 items-center gap-1">
-            {displayValues.components.map((comp: SpellComponentDisplay) => (
-              <Tooltip key={comp.letter}>
-                <TooltipTrigger asChild>
-                  {/* Not focusable: the label is already in the text for screen readers. */}
-                  <span className="flex size-6 items-center justify-center">
-                    <span className="sr-only">{comp.label}</span>
-                    <AppIcon
-                      variant="game"
-                      name={comp.icon}
-                      size="xs"
-                      className={cn('shrink-0', comp.color)}
-                      aria-hidden="true"
-                    />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs">
-                  <p className="text-foreground font-semibold">{comp.label}</p>
-                  {comp.hint && <p className="text-muted-foreground">{comp.hint}</p>}
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </div>
+          {/* Beside the name from sm up; on a phone they go down to the details line, so the name
+              keeps the width (the hidden copy is display: none, read by nobody) */}
+          <Components components={displayValues.components} className="hidden sm:flex" />
         </div>
 
-        <div className="text-label text-muted-foreground mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+        {/* Caption type: uppercase would read "18 m" as "18M" and "8d6" as "8D6". Only the level
+            and the school, words, take the label style */}
+        <div className="text-caption text-muted-foreground mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
           {/* Open, the chips below carry casting time, range and duration: the header says
               what the spell is (level, school, damage) instead of repeating them */}
           <ul className={cn('flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1', SEPARATOR)}>
@@ -125,10 +146,12 @@ export const SpellHeader = React.memo(
               </Detail>
             )}
 
-            {showLevel && <Detail className="text-foreground">{displayValues.level}</Detail>}
+            {showLevel && (
+              <Detail className="text-label text-foreground">{displayValues.level}</Detail>
+            )}
 
             {isExpanded ? (
-              <Detail>{displayValues.school}</Detail>
+              <Detail className="text-label">{displayValues.school}</Detail>
             ) : (
               <Detail
                 icon={
@@ -166,8 +189,9 @@ export const SpellHeader = React.memo(
             )}
           </ul>
 
+          {/* Wraps instead of running past the card's edge at 320px ("INSTANTÂNE") */}
           {!isExpanded && (
-            <div className="flex shrink-0 items-center gap-3">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
               <div className="flex items-center gap-1">
                 <AppIcon name="Crosshair" size="xs" className="opacity-60" aria-hidden="true" />
                 <span>
@@ -190,6 +214,8 @@ export const SpellHeader = React.memo(
               </div>
             </div>
           )}
+
+          <Components components={displayValues.components} className="-my-1 flex sm:hidden" />
         </div>
       </div>
 

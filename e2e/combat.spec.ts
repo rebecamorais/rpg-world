@@ -195,8 +195,8 @@ test.describe('combate', () => {
     // Goblin 1's turn ends: Arani's row becomes the "your turn" card
     await (await hydrated(page.getByRole('button', { name: 'End turn' }))).click();
     await expect(mine).toHaveAttribute('aria-current', 'true');
-    await expect(mine.getByText('AC', { exact: true })).toBeVisible();
-    await expect(mine.getByText('Speed', { exact: true })).toBeVisible();
+    await expect(mine.getByRole('button', { name: 'What is AC?' })).toBeVisible();
+    await expect(mine.getByRole('button', { name: 'What is Speed?' })).toBeVisible();
 
     const adjust = await hydrated(mine.getByRole('button', { name: 'Adjust HP Arani' }));
     expect((await adjust.boundingBox())!.height).toBeGreaterThanOrEqual(44);

@@ -10,7 +10,8 @@ import { cn } from '@frontend/lib/utils';
 interface HintProps {
   /** What is being explained, shown in bold and in the button's name ("What is …?"). */
   label: string;
-  hint: React.ReactNode;
+  /** The explanation under the name; without it, the tip is just the name. */
+  hint?: React.ReactNode;
   /** What the button shows: an icon, an abbreviation… */
   children: React.ReactNode;
   className?: string;
@@ -43,7 +44,7 @@ export function Hint({ label, hint, children, className }: HintProps) {
       </TooltipTrigger>
       <TooltipContent className="max-w-xs">
         <p className="text-foreground font-semibold">{label}</p>
-        <div className="text-muted-foreground">{hint}</div>
+        {hint && <div className="text-muted-foreground">{hint}</div>}
       </TooltipContent>
     </Tooltip>
   );

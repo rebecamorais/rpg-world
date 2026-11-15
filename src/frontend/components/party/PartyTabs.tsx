@@ -80,7 +80,7 @@ export function PartyTabs({ partyId }: { partyId: string }) {
       <nav
         data-scroll-pad="party-tabs"
         aria-label={t('label')}
-        className="border-border bg-card/95 fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
+        className="border-border bg-card/95 fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] backdrop-blur-md transition-[left] duration-200 ease-out sm:left-(--sidebar-offset) md:hidden"
       >
         <ul className="grid grid-cols-4">
           {tabs.map((tab) => (

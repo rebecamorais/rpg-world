@@ -58,7 +58,7 @@ export function SpellSlots({
         iconClassName="text-info-flare"
         title={systemLabel}
         badge={
-          <span className="bg-info-surface text-info-flare rounded-full px-2 py-0.5 font-mono text-xs font-bold tabular-nums">
+          <span className="bg-info-surface text-info-flare rounded-full px-2 py-0.5 font-mono text-xs font-bold whitespace-nowrap tabular-nums">
             {totalAvailable} / {totalMax}
           </span>
         }
@@ -66,17 +66,28 @@ export function SpellSlots({
       />
 
       {/* The rest checklist's "go" focuses the first slot in here, not the gear */}
-      <div data-rest-focus className="my-auto grid grid-cols-5 gap-x-1 gap-y-3 pt-4">
+      {/* Each level as wide as its slots, wrapping as a whole: a fixed grid of five columns split
+          a level's four slots into 2 + 2 */}
+      <div data-rest-focus className="my-auto flex flex-wrap gap-x-3 gap-y-3 pt-4">
         {allLevels.map((lvl) => {
           const slotData = slots[lvl.toString()];
           const isActive = (slotData?.max || 0) > 0;
           const available = Math.max(0, (slotData?.max || 0) - (slotData?.used || 0));
 
           return (
-            <div key={lvl} className={cn('flex flex-col gap-0.5', !isActive && 'opacity-30')}>
-              <span className="text-label text-muted-foreground">{t('level', { level: lvl })}</span>
-              {/* Each slot is a 24px button around a small mark, side by side with no gap, so the
-                  hit areas are big enough to tap and never overlap a neighbor's */}
+            <div key={lvl} className="flex max-w-full min-w-9 flex-col gap-0.5">
+              {/* A level with no slots reads as empty in its own color: opacity made the text
+                  unreadable in the light theme */}
+              <span
+                className={cn(
+                  'text-label whitespace-nowrap',
+                  isActive ? 'text-muted-foreground' : 'text-placeholder',
+                )}
+              >
+                {t('level', { level: lvl })}
+              </span>
+              {/* Each slot is a button around a small mark, side by side with no gap, so the hit
+                  areas (24px, 44px to a finger) never overlap a neighbor's */}
               <div className="flex flex-wrap">
                 {isActive ? (
                   Array.from({ length: slotData.max }).map((_, i) => {
@@ -95,15 +106,18 @@ export function SpellSlots({
                         onClick={() =>
                           handleSlotToggle(lvl.toString(), slotData.used, slotData.max, isAvailable)
                         }
-                        className="focus-ring flex size-6 items-center justify-center rounded-sm"
+                        className="focus-ring flex size-6 items-center justify-center rounded-sm pointer-coarse:size-11"
                       >
                         <span
                           aria-hidden="true"
+                          data-slot-mark={isAvailable ? 'available' : 'spent'}
                           className={cn(
-                            'size-2.5 rounded-[1px] transition-[background-color,border-color,box-shadow] duration-300',
+                            'relative size-2.5 rounded-[1px] transition-[background-color,border-color,box-shadow] duration-300 pointer-coarse:size-3.5',
                             isAvailable
                               ? 'bg-info-flare shadow-[0_0_8px_var(--info-muted)]'
-                              : 'border-info-muted border bg-transparent',
+                              : // Spent: an outline strong enough to see (3:1) and a stroke across
+                                // it, so it never depends on the color alone
+                                'border-info-flare after:bg-info-flare border bg-transparent after:absolute after:top-1/2 after:left-1/2 after:h-px after:w-[141%] after:-translate-1/2 after:-rotate-45',
                           )}
                         />
                       </button>
@@ -111,7 +125,7 @@ export function SpellSlots({
                   })
                 ) : (
                   <span className="flex size-6 items-center justify-center">
-                    <span className="border-info-muted size-2.5 rounded-[1px] border" />
+                    <span className="border-placeholder size-2.5 rounded-[1px] border border-dashed" />
                   </span>
                 )}
               </div>

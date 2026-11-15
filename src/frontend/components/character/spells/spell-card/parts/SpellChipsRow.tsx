@@ -14,41 +14,58 @@ interface SpellChipsRowProps {
   displayValues: SpellDisplayValues;
 }
 
+// A chip never wider than the card: at 320px "INSTANTÂNEA" ran past the edge and was cut. Its text
+// wraps instead, breaking a word only when that word alone doesn't fit
+const CHIP = 'min-w-0 max-w-full';
+const ChipText = ({ children }: { children: React.ReactNode }) => (
+  <span className="min-w-0 break-words">{children}</span>
+);
+
 export const SpellChipsRow = React.memo(({ spell, displayValues }: SpellChipsRowProps) => (
-  <div className="pointer-events-auto flex flex-wrap gap-1">
+  <div className="pointer-events-auto flex min-w-0 flex-wrap gap-1">
     {(spell.castingTime || spell.castingValue) && (
       <SpellChip
+        className={CHIP}
         icon={
           <AppIcon variant="game" name={MECHANIC_ICONS.castingTime} size="xs" aria-hidden="true" />
         }
         tooltip={displayValues.castingTimePrefix}
       >
-        <span className="sr-only">{displayValues.castingTimePrefix}: </span>
-        {displayValues.castingTime}
+        <ChipText>
+          <span className="sr-only">{displayValues.castingTimePrefix}: </span>
+          {displayValues.castingTime}
+        </ChipText>
       </SpellChip>
     )}
     {(spell.rangeUnit || spell.rangeValue !== undefined) && (
       <SpellChip
+        className={CHIP}
         icon={<AppIcon name="Crosshair" size="xs" aria-hidden="true" />}
         tooltip={displayValues.rangePrefix}
       >
-        <span className="sr-only">{displayValues.rangePrefix}: </span>
-        {displayValues.range}
+        <ChipText>
+          <span className="sr-only">{displayValues.rangePrefix}: </span>
+          {displayValues.range}
+        </ChipText>
       </SpellChip>
     )}
     {(spell.durationUnit || spell.durationValue !== undefined) && (
       <SpellChip
+        className={CHIP}
         icon={
           <AppIcon variant="game" name={MECHANIC_ICONS.duration} size="xs" aria-hidden="true" />
         }
         tooltip={displayValues.durationPrefix}
       >
-        <span className="sr-only">{displayValues.durationPrefix}: </span>
-        {displayValues.duration}
+        <ChipText>
+          <span className="sr-only">{displayValues.durationPrefix}: </span>
+          {displayValues.duration}
+        </ChipText>
       </SpellChip>
     )}
     {spell.concentration && (
       <SpellChip
+        className={CHIP}
         variant="concentration"
         tooltip={displayValues.concentrationLabel}
         icon={
@@ -60,16 +77,17 @@ export const SpellChipsRow = React.memo(({ spell, displayValues }: SpellChipsRow
           />
         }
       >
-        {displayValues.concentrationLabel}
+        <ChipText>{displayValues.concentrationLabel}</ChipText>
       </SpellChip>
     )}
     {spell.ritual && (
       <SpellChip
+        className={CHIP}
         variant="ritual"
         tooltip={displayValues.ritualLabel}
         icon={<AppIcon variant="game" name={MECHANIC_ICONS.ritual} size="xs" aria-hidden="true" />}
       >
-        {displayValues.ritualLabel}
+        <ChipText>{displayValues.ritualLabel}</ChipText>
       </SpellChip>
     )}
   </div>

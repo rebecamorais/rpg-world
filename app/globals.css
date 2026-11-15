@@ -487,9 +487,24 @@
   html:has([data-scroll-pad='demo-header']) {
     scroll-padding-top: 7rem;
   }
+  /* The VitalsBar is ~8.5rem tall with its "Adjust HP" button, more once its numbers wrap (narrow
+     screens, zoom): 6rem left a focused field behind it. Partial: a fixed guess, not the bar's
+     measured height, so a bar wrapped to three lines can still cover a field's top. Measuring it
+     would take JS (a ResizeObserver feeding a variable), not worth it for that rare case */
   @media (width < 64rem) {
     html:has([data-scroll-pad='vitals']) {
-      scroll-padding-top: 6rem;
+      scroll-padding-top: 9rem;
+    }
+  }
+  /* A short window (a landscape phone, 400% zoom) can't spare 9rem at the top: there the bar
+     scrolls away with the page instead of covering most of it */
+  @media (width < 64rem) and (height < 30rem) {
+    html:has([data-scroll-pad='vitals']) {
+      scroll-padding-top: 0;
+    }
+    /* Important: this base rule has to beat the bar's own `sticky` utility */
+    [data-scroll-pad='vitals'] {
+      position: static !important;
     }
   }
   @media (width < 48rem) {
@@ -499,6 +514,24 @@
     /* Tab bar + save bar (or turn bar) stacked above it */
     html:has([data-scroll-pad='sheet-tabs'], [data-scroll-pad='party-tabs']) {
       scroll-padding-bottom: calc(9rem + env(safe-area-inset-bottom));
+      /* What the fixed tab bar covers at the bottom of the page: the footer keeps this much room
+         under its last line (FooterContent, both versions) */
+      --bottom-bar-height: calc(3.5rem + 1px + env(safe-area-inset-bottom));
+    }
+  }
+
+  /* Width of the side menu (Sidebar: w-64 pinned, w-16 as a rail; hidden on phones), for the
+     fixed bars that start to its right instead of under it (SheetTabBar, RestChecklist, PartyTabs,
+     TurnBar) */
+  :root {
+    --sidebar-offset: 0px;
+  }
+  @media (width >= 40rem) {
+    html:has([data-sidebar='pinned']) {
+      --sidebar-offset: 16rem;
+    }
+    html:has([data-sidebar='rail']) {
+      --sidebar-offset: 4rem;
     }
   }
 

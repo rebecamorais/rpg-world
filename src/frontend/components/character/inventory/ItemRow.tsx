@@ -62,7 +62,12 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
             <ItemImage item={item} size={20} />
           </div>
           <div className="flex min-w-0 flex-1 basis-40 items-center gap-2">
-            <span className="text-muted-foreground truncate line-through">{name}</span>
+            <span
+              title={name}
+              className="text-muted-foreground line-clamp-2 min-w-0 break-normal hyphens-auto line-through"
+            >
+              {name}
+            </span>
             <span className="sr-only">{t('removedTag')}</span>
             <Button
               variant="link"
@@ -111,29 +116,35 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
                   setOpen((o) => !o);
                 }
               }}
-              className="text-foreground focus-visible:outline-ring flex w-full cursor-pointer items-center gap-1.5 text-left font-medium focus-visible:outline-2"
+              className="text-foreground focus-visible:outline-ring flex w-full cursor-pointer items-start gap-1.5 text-left font-medium focus-visible:outline-2"
             >
               <AppIcon
                 name="ChevronRight"
                 size={14}
                 aria-hidden="true"
                 className={cn(
-                  'text-muted-foreground shrink-0 transition-transform',
+                  // On the first line's middle when the name takes two
+                  'text-muted-foreground mt-[0.3125rem] shrink-0 transition-transform',
                   open && 'rotate-90',
                 )}
               />
-              <span className="truncate">{name}</span>
+              {/* Two lines before cutting, between words: the name is what the row is for, and
+                  truncated at 390px "Explorer's Pack" and "Explorer's Kit" read the same */}
+              <span title={name} className="line-clamp-2 min-w-0 break-normal hyphens-auto">
+                {name}
+              </span>
             </span>
           ) : (
             <div>
               <p
                 tabIndex={-1}
-                className="text-foreground truncate font-medium"
+                title={name}
+                className="text-foreground line-clamp-2 font-medium break-normal hyphens-auto"
                 data-item-focus={entry.id}
               >
                 {name}
               </p>
-              <p className="text-muted-foreground text-label">{t('unknownHint')}</p>
+              <p className="text-muted-foreground text-caption">{t('unknownHint')}</p>
             </div>
           )}
         </div>

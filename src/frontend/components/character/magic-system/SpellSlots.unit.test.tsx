@@ -33,6 +33,34 @@ describe('SpellSlots', () => {
     expect(onSlotsChange).toHaveBeenLastCalledWith('1', 2, 0);
   });
 
+  it('nível sem espaços fica legível: cor de texto vazio, sem opacidade', () => {
+    renderSlots({ '1': { max: 2, used: 0 } });
+
+    const empty = screen.getByText('Lv 4');
+    expect(empty).toHaveClass('text-placeholder');
+    expect(empty.closest('[class*="opacity-"]')).toBeNull();
+  });
+
+  it('o espaço gasto tem contorno forte e um traço, não só a cor', () => {
+    renderSlots({ '1': { max: 2, used: 1 } });
+
+    const spent = screen
+      .getByRole('button', { name: 'Level 1 slot 2, spent' })
+      .querySelector('[data-slot-mark]');
+    expect(spent).toHaveAttribute('data-slot-mark', 'spent');
+    expect(spent).toHaveClass('border-info-flare', 'after:bg-info-flare');
+    expect(spent).not.toHaveClass('border-info-muted');
+  });
+
+  it('cada espaço chega a 44px no toque, e os de um nível não quebram numa grade fixa', () => {
+    renderSlots({ '1': { max: 4, used: 0 } });
+
+    const slot = screen.getByRole('button', { name: 'Level 1 slot 1, available' });
+    expect(slot).toHaveClass('size-6', 'pointer-coarse:size-11');
+    // The levels wrap as a whole (flex-wrap), not in five fixed columns that split 4 into 2 + 2
+    expect(slot.closest('[data-rest-focus]')).not.toHaveClass('grid-cols-5');
+  });
+
   it('o rótulo do círculo vem da tradução, sem "º" fixo', () => {
     renderSlots({ '3': { max: 1, used: 0 } });
 

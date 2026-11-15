@@ -407,8 +407,8 @@ describe('PlayerCombatPanel: PV dos próprios personagens', () => {
     expect(card).toHaveAttribute('aria-current', 'true');
     expect(within(card).getByText(t.yourTurn)).toBeInTheDocument();
     expect(card).toHaveTextContent(`${t.hp} 12 / 20 +3`);
-    expect(within(card).getByText(statsT.armorClass).parentElement).toHaveTextContent('15');
-    expect(within(card).getByText(statsT.speed).parentElement).toHaveTextContent(
+    expect(within(card).getByText(`${statsT.armorClass}:`).parentElement).toHaveTextContent('15');
+    expect(within(card).getByText(`${statsT.speed}:`).parentElement).toHaveTextContent(
       `9${statsT.speedUnit}`,
     );
     // The card's button is 44px tall (touch target on phones)

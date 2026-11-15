@@ -95,7 +95,7 @@ export default function FooterContent({
 
   if (compact) {
     return (
-      <footer className="border-border bg-sidebar mt-auto border-t py-4">
+      <footer className="border-border bg-sidebar mt-auto border-t pt-4 pb-[calc(1rem+var(--bottom-bar-height,0px))]">
         <div className="container mx-auto flex flex-wrap items-center gap-x-5 gap-y-2 px-6">
           <span className="text-muted-foreground text-xs">
             {t('copyright', { year: new Date().getFullYear() })}
@@ -147,7 +147,9 @@ export default function FooterContent({
       ];
 
   return (
-    <footer className="border-border bg-sidebar mt-auto border-t pt-10 pb-8 sm:pt-16 sm:pb-10">
+    // On a page with a fixed tab bar (sheet, party) the bottom padding grows by the bar's height
+    // and the safe area, set in globals.css: its last links ended up under the bar
+    <footer className="border-border bg-sidebar mt-auto border-t pt-10 pb-[calc(2rem+var(--bottom-bar-height,0px))] sm:pt-16 sm:pb-[calc(2.5rem+var(--bottom-bar-height,0px))]">
       <div className="container mx-auto grid grid-cols-2 gap-x-6 gap-y-8 px-6 lg:grid-cols-4">
         <div className="col-span-2 flex flex-col gap-2 lg:col-span-1">
           <span translate="no" className="text-foreground text-lg font-bold tracking-tight">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -77,7 +77,12 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
                   ×{entry.quantity}
                 </span>
               )}
-              <span className="text-foreground text-label line-clamp-2 w-full text-center break-words">
+              {/* Sentence case, breaking only between words: in spaced capitals with break-words
+                  a tile read "STUDDE D…". The whole name is in the title */}
+              <span
+                title={name}
+                className="text-foreground text-caption line-clamp-2 w-full text-center font-medium break-normal hyphens-auto"
+              >
                 {name}
               </span>
             </span>
@@ -118,7 +123,10 @@ function RemovedTile({ entry }: { entry: InventoryItem }) {
       style={itemGroupStyle(groupOf(entry.item?.category ?? null))}
     >
       <ItemImage item={entry.item} size={32} />
-      <span className="text-foreground text-label line-clamp-2 w-full text-center break-words line-through">
+      <span
+        title={name}
+        className="text-foreground text-caption line-clamp-2 w-full text-center font-medium break-normal hyphens-auto line-through"
+      >
         {name}
       </span>
       <span className="sr-only">{t('removedTag')}</span>
@@ -142,9 +150,19 @@ function GridPanel({
   const { item, quantity } = entry;
   const name = item?.name ?? entry.ref;
   const nameId = `${id}-name`;
+  const panel = useRef<HTMLDivElement>(null);
+
+  // The panel opens under the grid, often below the fold or behind the phone's tab bar, where a tap
+  // looked like it did nothing: bring it into view (the tab bar's scroll-padding counts). Only as
+  // far as needed, and without the animation for whoever asked the system for less motion
+  useEffect(() => {
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    panel.current?.scrollIntoView?.({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+  }, [entry.id]);
 
   return (
     <div
+      ref={panel}
       id={id}
       role="region"
       aria-labelledby={nameId}
@@ -156,7 +174,8 @@ function GridPanel({
           <div className="flex min-w-0 items-center gap-2">
             <p
               id={nameId}
-              className="text-muted-foreground min-w-0 truncate font-medium line-through"
+              title={name}
+              className="text-muted-foreground line-clamp-2 min-w-0 font-medium break-normal hyphens-auto line-through"
             >
               {name}
             </p>
@@ -172,7 +191,11 @@ function GridPanel({
             </Button>
           </div>
         ) : (
-          <p id={nameId} className="text-foreground min-w-0 truncate font-medium">
+          <p
+            id={nameId}
+            title={name}
+            className="text-foreground line-clamp-2 min-w-0 font-medium break-normal hyphens-auto"
+          >
             {name}
           </p>
         )}
@@ -190,7 +213,7 @@ function GridPanel({
         {item ? (
           <ItemDetails item={item} />
         ) : (
-          <p className="text-muted-foreground text-label">{t('unknownHint')}</p>
+          <p className="text-muted-foreground text-caption">{t('unknownHint')}</p>
         )}
       </div>
     </div>

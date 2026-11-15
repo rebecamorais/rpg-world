@@ -50,7 +50,9 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
   const t = useTranslations('combatStats');
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-2 py-4">
-      <div className="flex items-center justify-center gap-2">
+      {/* Tighter in a narrow card (320px phone, side panel), so the card's overflow never cuts
+          the − or the + off */}
+      <div className="flex items-center justify-center gap-1 @[16rem]:gap-2">
         <Button
           variant="outline"
           size="icon"
@@ -72,7 +74,7 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
             max={SMALLINT_MAX}
             onValueChange={(next) => onHpChange('hpCurrent', next)}
             showIcon={false}
-            className="text-foreground h-auto w-24 p-0 text-right font-mono text-5xl font-bold tabular-nums md:text-5xl"
+            className="text-foreground h-auto w-20 p-0 text-right font-mono text-5xl font-bold tabular-nums md:text-5xl @[16rem]:w-24"
           />
           <div className="flex items-baseline gap-1 self-end px-1 pb-1.5 font-bold">
             <span className="text-muted-foreground text-lg" aria-hidden="true">
@@ -133,7 +135,7 @@ export function HealthPointsCard({
   return (
     <Card
       className={cn(
-        'group hover:border-danger-muted bg-background/60 relative flex min-h-[160px] flex-col justify-between overflow-hidden p-4 shadow-sm transition-colors',
+        'group hover:border-danger-muted bg-background/60 @container relative flex min-h-[160px] flex-col justify-between overflow-hidden p-4 shadow-sm transition-colors',
         className,
       )}
       {...props}

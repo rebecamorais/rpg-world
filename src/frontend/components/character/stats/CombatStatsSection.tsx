@@ -69,8 +69,11 @@ const CombatHeader = () => {
   );
 
   return (
-    <CardHeader className="border-border bg-muted/30 border-b px-4 py-4 md:px-6 md:py-3">
-      <div className="grid grid-cols-3 gap-3 md:grid-cols-5">
+    // Columns by the card's own width, not the screen's: with the sidebar open, or in the party's
+    // sheet panel, the card is much narrower than the viewport. Icon-only blocks are narrow: five
+    // fit from 28rem
+    <CardHeader className="border-border bg-muted/30 @container border-b px-4 py-4 md:px-6 md:py-3">
+      <div className="grid grid-cols-3 gap-3 @md:grid-cols-5">
         <StatBlock icon="shoulder-armor" label={t('armorClass')} hint={t('hints.armorClass')}>
           <NumberInput
             ghost
@@ -148,7 +151,6 @@ const CombatHeader = () => {
           label={tCharacters('passivePerception')}
           hint={t('hints.passivePerception')}
         >
-          <span className="sr-only">{tCharacters('passivePerception')}: </span>
           {passivePerception}
         </StatBlock>
       </div>
@@ -205,8 +207,10 @@ const ResourceGrid = () => {
   const [config, setConfig] = useState<CombatConfigSection | null>(null);
 
   return (
-    <CardContent className="p-4 sm:p-6">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+    // Side by side only when each card has room for its row of − value +: the card's width decides,
+    // not the screen's (sidebar open at 768px, the party's sheet panel)
+    <CardContent className="@container p-4 sm:p-6">
+      <div className="grid grid-cols-1 gap-6 @xl:grid-cols-2">
         <HealthPointsCard
           id="sheet-hp"
           currentHp={character.hpCurrent ?? 0}
