@@ -80,7 +80,7 @@ As classes `arcane-title arcane-title-<variant>` também ficam disponíveis solt
 - **Na fase 2, só a Cinzel**, que já está carregada.
 - A fonte de cada tema só é declarada quando o tema for implementado, com `preload: false`, e aplicada dentro de `[data-grimoire=…]`. O `next/font` não carrega por atributo: a fonte entra no CSS e o navegador só a baixa quando um nó a usa.
 - A Noto Sans Runic entra com o subset de runas. **Não verificado:** se o `next/font/google` aceita `subsets: ['runic']`. Conferir em `node_modules/next/dist/docs/` antes de implementar.
-- **pt-BR:** os acentos foram conferidos no próprio arquivo da fonte em IM Fell English e Noto Sans Runic. Na Cinzel, na Marcellus e na Almendra, foi conferida só a lista de subsets (`latin`, `latin-ext`). A [página de amostra](https://claude.ai/artifact/L32HiGHP4841DPnkFdL4PF) mostra as quatro com nomes reais.
+- **pt-BR:** os acentos foram conferidos no próprio arquivo da fonte em IM Fell English e Noto Sans Runic. Na Cinzel, na Marcellus e na Almendra, foi conferida só a lista de subsets (`latin`, `latin-ext`). A [página de amostra](https://claude.ai/artifact/AtKgqUc3DDRpAZfNgCTpfm#fontes) mostra as quatro com nomes reais.
 
 ## 4. Personalização
 

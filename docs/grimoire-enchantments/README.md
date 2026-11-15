@@ -7,6 +7,7 @@ Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tip
 - **Estado:**
   - **Catálogo:** fase 1 ([#195](https://github.com/rebecamorais/rpg-world/issues/195)) concluída.
   - **Laboratório:** existe em `/dev/grimoire`, com 4 superfícies de material, 21 efeitos do card aberto e ladrilhos de item. Só abre fora da produção.
+  - **Amostras:** todas as amostras visuais feitas com a dona estão num artifact só, [Grimório](https://claude.ai/artifact/AtKgqUc3DDRpAZfNgCTpfm), com uma aba para cada (materiais, efeitos por tipo, card aberto, fontes). É privado: só a dona tem acesso.
   - **Spellbook:** ainda não usa nada daqui.
 
 ## Como ler

@@ -1,6 +1,6 @@
 # Exploração: efeitos do card aberto
 
-Explorado em 14/11/2026, com a dona, numa amostra interativa: [Card Aberto do Grimório](https://claude.ai/artifact/REcpKeiuD2wcDau9A5cq4U). A amostra é privada; só a dona tem acesso. **Ainda não vai para o spellbook**, e a exploração de outros efeitos continua.
+Explorado em 14/11/2026, com a dona, numa amostra interativa: [Card Aberto do Grimório](https://claude.ai/artifact/AtKgqUc3DDRpAZfNgCTpfm#card-aberto). A amostra é privada; só a dona tem acesso. **Ainda não vai para o spellbook**, e a exploração de outros efeitos continua.
 
 ## Regra que guiou tudo
 

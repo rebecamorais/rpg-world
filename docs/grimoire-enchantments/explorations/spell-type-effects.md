@@ -1,6 +1,6 @@
 # Exploração: efeitos por tipo de magia
 
-Explorado em 14/11/2026 com a dona, numa amostra interativa: [Efeitos por Tipo de Magia](https://claude.ai/artifact/4J3ndMnmGiDi5KAm5F3x85). A amostra é privada; só a dona tem acesso. **Desde 15/11 está no laboratório (`/dev/grimoire`), mas não no spellbook.**
+Explorado em 14/11/2026 com a dona, numa amostra interativa: [Efeitos por Tipo de Magia](https://claude.ai/artifact/AtKgqUc3DDRpAZfNgCTpfm#efeitos). A amostra é privada; só a dona tem acesso. **Desde 15/11 está no laboratório (`/dev/grimoire`), mas não no spellbook.**
 
 ## Ideia (dona)
 
