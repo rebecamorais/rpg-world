@@ -24,6 +24,11 @@ function getSnapshot() {
   }
 }
 
+/** Test-only: forgets the in-memory dismissal so each test starts clean. */
+export function resetSettingsHintForTests() {
+  dismissedInMemory = false;
+}
+
 /**
  * Whether to point at the sheet's gear because it now holds the edition setting. Shown once per
  * browser; every storage access can throw (private mode, blocked data), and then it stays hidden.

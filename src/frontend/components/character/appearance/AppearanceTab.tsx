@@ -75,8 +75,9 @@ function EditionSettings() {
 }
 
 /**
- * The sheet's settings: how it looks and which edition its class resources follow. Opened by the gear on the sheet and left out of its menu. The page exists
- * only under the owner's route, so whoever only reads a sheet never reaches it.
+ * The sheet's settings: how it looks and which edition its class resources follow. Opened by the
+ * gear on the sheet and left out of its menu. The page exists only under the owner's route, so
+ * whoever only reads a sheet never reaches it.
  */
 export function AppearanceTab() {
   const t = useTranslations('characterAppearance');

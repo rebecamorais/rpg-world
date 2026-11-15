@@ -65,7 +65,7 @@ function AppearanceLink() {
 /**
  * A tab of the character sheet: same page frame as the rest of the dashboard, with the
  * character's name as the page's h1, the tab as the eyebrow, and on every tab the gear that opens
- * the sheet's appearance, right before the tab's own actions.
+ * the sheet's settings, right before the tab's own actions.
  */
 export function SheetPage({ tab, actions, ...props }: SheetPageProps) {
   const { name } = useLoadedCharacter();

@@ -2,12 +2,15 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { useSettingsHint } from './useSettingsHint';
+import { resetSettingsHintForTests, useSettingsHint } from './useSettingsHint';
 
 const KEY = 'rpgworld:hint:sheet-settings-177';
 
 describe('useSettingsHint', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    localStorage.clear();
+    resetSettingsHintForTests();
+  });
   afterEach(() => vi.restoreAllMocks());
 
   it('mostra a dica quando o armazenamento está vazio e some ao dispensar', () => {

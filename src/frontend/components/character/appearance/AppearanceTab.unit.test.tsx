@@ -37,4 +37,12 @@ describe('AppearanceTab', () => {
     expect(draft().edition).toBe('2024');
     expect(screen.getByRole('radio', { name: messages.sheetSettings.edition2024 })).toBeChecked();
   });
+
+  it('sem edição definida na ficha, nenhuma opção de edição vem marcada', () => {
+    renderWithCharacter(<AppearanceTab />, { ...character, edition: undefined });
+
+    for (const radio of screen.getAllByRole('radio', { name: /20(14|24)/ })) {
+      expect(radio).not.toBeChecked();
+    }
+  });
 });
