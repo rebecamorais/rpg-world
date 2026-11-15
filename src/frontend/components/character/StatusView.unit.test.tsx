@@ -170,15 +170,15 @@ describe('StatusView no celular', () => {
   });
 });
 
-describe('StatusView e a linha de recursos', () => {
-  const deathSaves = () => screen.getByText(messages.savingThrows.deathSaves);
+describe('StatusView e os recursos de classe', () => {
+  const column = (text: string) => screen.getByText(text).closest('[data-column]');
 
-  it('sem edição, o cartão da edição vem logo abaixo do cabeçalho com as mortes ao lado', () => {
+  it('as mortes ficam na coluna lateral e o cartão da edição na principal', () => {
     params.value = { id: 'c1' };
     renderStatus({ ...character, class: 'Monk' });
 
-    expect(screen.getByText(messages.classResources.newTitle)).toBeInTheDocument();
-    expect(deathSaves().closest('.md\\:grid-cols-2')).not.toBeNull();
+    expect(column(messages.classResources.newTitle)).toHaveAttribute('data-column', 'main');
+    expect(column(messages.savingThrows.deathSaves)).toHaveAttribute('data-column', 'side');
   });
 
   it('com edição e sem caixas, as mortes continuam na coluna lateral', () => {
@@ -186,7 +186,6 @@ describe('StatusView e a linha de recursos', () => {
     renderStatus({ ...character, edition: '2014', class: 'Artífice' });
 
     expect(screen.queryByText(messages.classResources.newTitle)).not.toBeInTheDocument();
-    expect(deathSaves().closest('.md\\:grid-cols-2')).toBeNull();
-    expect(deathSaves().closest('.\\[grid-area\\:side\\]')).not.toBeNull();
+    expect(column(messages.savingThrows.deathSaves)).toHaveAttribute('data-column', 'side');
   });
 });

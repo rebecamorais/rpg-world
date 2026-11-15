@@ -17,6 +17,10 @@ import { VitalsBar } from '@frontend/components/character/stats/VitalsBar';
 import { ErrorState } from '@frontend/components/ui/empty-state';
 import { useCharacterMeta } from '@frontend/context/CharacterContext';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
+import { cn } from '@frontend/lib/utils';
+
+/** Tablets have two columns only for the resources and the death saves; the rest takes both. */
+const WIDE = 'md:max-lg:col-span-2';
 
 /**
  * The Status tab of the character sheet. Each section reads the character from
@@ -39,20 +43,34 @@ export default function StatusView() {
       <CharacterHeader />
 
       <SheetFieldset>
-        <ResourcesRow />
-
-        {/* Phones: combat first, it is what changes during play. Desktop: two columns. */}
-        <div className="grid grid-cols-1 gap-6 [grid-template-areas:'combat'_'side'_'skills'] lg:grid-cols-[280px_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:[grid-template-areas:'side_combat'_'side_skills']">
-          <div className="[grid-area:combat]">
-            <CombatStatsSection />
+        {/* Desktop: two columns that stack on their own, so a tall card on one side never opens a
+            gap on the other. Below that the columns dissolve and `order` interleaves the cards:
+            what changes during play (resources, death saves, combat) comes first. */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-[280px_minmax(0,1fr)]">
+          <div className="contents lg:flex lg:flex-col lg:gap-6" data-column="side">
+            {/* Tablets: beside the resources when there are any */}
+            <div className={cn('order-2', !rowVisible && WIDE)}>
+              <DeathSavesCard />
+            </div>
+            <div className={cn('order-4', WIDE)}>
+              <SavingThrowsSection />
+            </div>
+            <div className={cn('order-5', WIDE)}>
+              <AttributesSection />
+            </div>
           </div>
-          <div className="flex flex-col gap-6 [grid-area:side]">
-            {!rowVisible && <DeathSavesCard />}
-            <SavingThrowsSection />
-            <AttributesSection />
-          </div>
-          <div className="[grid-area:skills]">
-            <SkillsSection />
+          <div className="contents lg:flex lg:min-w-0 lg:flex-col lg:gap-6" data-column="main">
+            {rowVisible && (
+              <div className="order-1">
+                <ResourcesRow />
+              </div>
+            )}
+            <div className={cn('order-3', WIDE)}>
+              <CombatStatsSection />
+            </div>
+            <div className={cn('order-6', WIDE)}>
+              <SkillsSection />
+            </div>
           </div>
         </div>
       </SheetFieldset>
