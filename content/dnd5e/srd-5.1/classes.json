@@ -57,6 +57,18 @@
         "recovery": [{ "rest": "long", "amount": "all" }]
       }
     ],
+    "tables": [
+      {
+        "id": "rage-damage",
+        "feature": "rage",
+        "kind": "bonus",
+        "values": [
+          { "level": 1, "value": 2 },
+          { "level": 9, "value": 3 },
+          { "level": 16, "value": 4 }
+        ]
+      }
+    ],
     "choices": [],
     "subclasses": [
       {
@@ -104,7 +116,33 @@
         ]
       }
     },
-    "spellcasting": { "ability": "CHA", "progression": "full" },
+    "spellcasting": {
+      "ability": "CHA",
+      "progression": "full",
+      "cantrips": [
+        { "level": 1, "value": 2 },
+        { "level": 4, "value": 3 },
+        { "level": 10, "value": 4 }
+      ],
+      "spellsKnown": [
+        { "level": 1, "value": 4 },
+        { "level": 2, "value": 5 },
+        { "level": 3, "value": 6 },
+        { "level": 4, "value": 7 },
+        { "level": 5, "value": 8 },
+        { "level": 6, "value": 9 },
+        { "level": 7, "value": 10 },
+        { "level": 8, "value": 11 },
+        { "level": 9, "value": 12 },
+        { "level": 10, "value": 14 },
+        { "level": 11, "value": 15 },
+        { "level": 13, "value": 16 },
+        { "level": 14, "value": 18 },
+        { "level": 15, "value": 19 },
+        { "level": 17, "value": 20 },
+        { "level": 18, "value": 22 }
+      ]
+    },
     "features": [
       { "id": "bardic-inspiration", "level": 1 },
       { "id": "spellcasting", "level": 1 },
@@ -175,7 +213,16 @@
       "tools": [],
       "skills": { "count": 2, "from": ["HISTORY", "INSIGHT", "MEDICINE", "PERSUASION", "RELIGION"] }
     },
-    "spellcasting": { "ability": "WIS", "progression": "full" },
+    "spellcasting": {
+      "ability": "WIS",
+      "progression": "full",
+      "cantrips": [
+        { "level": 1, "value": 3 },
+        { "level": 4, "value": 4 },
+        { "level": 10, "value": 5 }
+      ],
+      "prepared": { "levelDivisor": 1 }
+    },
     "features": [
       { "id": "spellcasting", "level": 1 },
       { "id": "divine-domain", "level": 1, "gainsSubclassFeature": true },
@@ -275,7 +322,16 @@
         ]
       }
     },
-    "spellcasting": { "ability": "WIS", "progression": "full" },
+    "spellcasting": {
+      "ability": "WIS",
+      "progression": "full",
+      "cantrips": [
+        { "level": 1, "value": 2 },
+        { "level": 4, "value": 3 },
+        { "level": 10, "value": 4 }
+      ],
+      "prepared": { "levelDivisor": 1 }
+    },
     "features": [
       { "id": "druidic", "level": 1 },
       { "id": "spellcasting", "level": 1 },
@@ -529,6 +585,31 @@
         ]
       }
     ],
+    "tables": [
+      {
+        "id": "martial-arts",
+        "feature": "martial-arts",
+        "kind": "die",
+        "values": [
+          { "level": 1, "value": 4 },
+          { "level": 5, "value": 6 },
+          { "level": 11, "value": 8 },
+          { "level": 17, "value": 10 }
+        ]
+      },
+      {
+        "id": "unarmored-movement",
+        "feature": "unarmored-movement",
+        "kind": "speed",
+        "values": [
+          { "level": 2, "value": 10 },
+          { "level": 6, "value": 15 },
+          { "level": 10, "value": 20 },
+          { "level": 14, "value": 25 },
+          { "level": 18, "value": 30 }
+        ]
+      }
+    ],
     "choices": [],
     "subclasses": [
       {
@@ -565,7 +646,7 @@
         "from": ["ATHLETICS", "INSIGHT", "INTIMIDATION", "MEDICINE", "PERSUASION", "RELIGION"]
       }
     },
-    "spellcasting": { "ability": "CHA", "progression": "half" },
+    "spellcasting": { "ability": "CHA", "progression": "half", "prepared": { "levelDivisor": 2 } },
     "features": [
       { "id": "divine-sense", "level": 1 },
       { "id": "lay-on-hands", "level": 1 },
@@ -678,7 +759,22 @@
         ]
       }
     },
-    "spellcasting": { "ability": "WIS", "progression": "half" },
+    "spellcasting": {
+      "ability": "WIS",
+      "progression": "half",
+      "spellsKnown": [
+        { "level": 2, "value": 2 },
+        { "level": 3, "value": 3 },
+        { "level": 5, "value": 4 },
+        { "level": 7, "value": 5 },
+        { "level": 9, "value": 6 },
+        { "level": 11, "value": 7 },
+        { "level": 13, "value": 8 },
+        { "level": 15, "value": 9 },
+        { "level": 17, "value": 10 },
+        { "level": 19, "value": 11 }
+      ]
+    },
     "features": [
       { "id": "favored-enemy", "level": 1 },
       { "id": "natural-explorer", "level": 1 },
@@ -788,6 +884,26 @@
         ]
       }
     ],
+    "tables": [
+      {
+        "id": "sneak-attack",
+        "feature": "sneak-attack",
+        "kind": "dice",
+        "faces": 6,
+        "values": [
+          { "level": 1, "value": 1 },
+          { "level": 3, "value": 2 },
+          { "level": 5, "value": 3 },
+          { "level": 7, "value": 4 },
+          { "level": 9, "value": 5 },
+          { "level": 11, "value": 6 },
+          { "level": 13, "value": 7 },
+          { "level": 15, "value": 8 },
+          { "level": 17, "value": 9 },
+          { "level": 19, "value": 10 }
+        ]
+      }
+    ],
     "choices": [],
     "subclasses": [
       {
@@ -815,7 +931,31 @@
         "from": ["ARCANA", "DECEPTION", "INSIGHT", "INTIMIDATION", "PERSUASION", "RELIGION"]
       }
     },
-    "spellcasting": { "ability": "CHA", "progression": "full" },
+    "spellcasting": {
+      "ability": "CHA",
+      "progression": "full",
+      "cantrips": [
+        { "level": 1, "value": 4 },
+        { "level": 4, "value": 5 },
+        { "level": 10, "value": 6 }
+      ],
+      "spellsKnown": [
+        { "level": 1, "value": 2 },
+        { "level": 2, "value": 3 },
+        { "level": 3, "value": 4 },
+        { "level": 4, "value": 5 },
+        { "level": 5, "value": 6 },
+        { "level": 6, "value": 7 },
+        { "level": 7, "value": 8 },
+        { "level": 8, "value": 9 },
+        { "level": 9, "value": 10 },
+        { "level": 10, "value": 11 },
+        { "level": 11, "value": 12 },
+        { "level": 13, "value": 13 },
+        { "level": 15, "value": 14 },
+        { "level": 17, "value": 15 }
+      ]
+    },
     "features": [
       { "id": "spellcasting", "level": 1 },
       { "id": "sorcerous-origin", "level": 1, "gainsSubclassFeature": true },
@@ -915,7 +1055,31 @@
         ]
       }
     },
-    "spellcasting": { "ability": "CHA", "progression": "pact" },
+    "spellcasting": {
+      "ability": "CHA",
+      "progression": "pact",
+      "cantrips": [
+        { "level": 1, "value": 2 },
+        { "level": 4, "value": 3 },
+        { "level": 10, "value": 4 }
+      ],
+      "spellsKnown": [
+        { "level": 1, "value": 2 },
+        { "level": 2, "value": 3 },
+        { "level": 3, "value": 4 },
+        { "level": 4, "value": 5 },
+        { "level": 5, "value": 6 },
+        { "level": 6, "value": 7 },
+        { "level": 7, "value": 8 },
+        { "level": 8, "value": 9 },
+        { "level": 9, "value": 10 },
+        { "level": 11, "value": 11 },
+        { "level": 13, "value": 12 },
+        { "level": 15, "value": 13 },
+        { "level": 17, "value": 14 },
+        { "level": 19, "value": 15 }
+      ]
+    },
     "features": [
       { "id": "pact-magic", "level": 1 },
       { "id": "otherworldly-patron", "level": 1, "gainsSubclassFeature": true },
@@ -1075,7 +1239,17 @@
         "from": ["ARCANA", "HISTORY", "INSIGHT", "INVESTIGATION", "MEDICINE", "RELIGION"]
       }
     },
-    "spellcasting": { "ability": "INT", "progression": "full" },
+    "spellcasting": {
+      "ability": "INT",
+      "progression": "full",
+      "cantrips": [
+        { "level": 1, "value": 3 },
+        { "level": 4, "value": 4 },
+        { "level": 10, "value": 5 }
+      ],
+      "prepared": { "levelDivisor": 1 },
+      "spellbook": { "initial": 6, "perLevel": 2 }
+    },
     "features": [
       { "id": "arcane-recovery", "level": 1 },
       { "id": "spellcasting", "level": 1 },

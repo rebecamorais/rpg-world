@@ -306,7 +306,7 @@ Campos, ids, padrão + ajuste, e o que acontece com ficha antiga. Sem tela nova.
 
 Tabelas 1–20 e o que falta no conteúdo. Sem tela nova.
 
-- Depende de: fase 1.
+- Depende de: fase 1. **Entregue:** os dados e as contas existem e têm teste; a ficha ainda não os usa (isso é das fases 3 a 5, que dependem das decisões pendentes).
 - **Critérios de aceite**
   - Tabelas de espaços (completo, meio, pacto), truques e magias conhecidas, Artes Marciais, Ataque Furtivo, Movimento sem Armadura e dano de fúria estão nos dados, com os números do SRD 5.1.
   - A API de conteúdo expõe proficiências, salvaguardas, perícias à escolha, conjuração e características, por ids.

@@ -33,6 +33,36 @@ describe('FileClassCatalog (SRD)', () => {
     expect(catalog.resources('2014', 'artificer')).toBeNull();
   });
 
+  it('traz os dados da classe por id: proficiências, conjuração, características e tabelas', () => {
+    const monk = catalog.resources('2014', 'monk', 'en');
+    expect(monk?.proficiencies.savingThrows).toEqual(['STR', 'DEX']);
+    expect(monk?.proficiencies.skills.count).toBe(2);
+    expect(monk?.spellcasting).toBeUndefined();
+    expect(monk?.features.find((f) => f.id === 'martial-arts')).toEqual({
+      id: 'martial-arts',
+      level: 1,
+      name: en51.monk.features['martial-arts'].name,
+    });
+    expect(monk?.subclassFeatures.length).toBeGreaterThan(0);
+    expect(monk?.tables.map((t) => t.id)).toEqual(['martial-arts', 'unarmored-movement']);
+
+    const wizard = catalog.resources('2014', 'wizard', 'en');
+    expect(wizard?.spellcasting).toMatchObject({ ability: 'INT', progression: 'full' });
+    expect(wizard?.spellcasting?.spellbook).toEqual({ initial: 6, perLevel: 2 });
+    expect(wizard?.tables).toEqual([]);
+
+    const sorcerer = catalog.resources('2014', 'sorcerer', 'en');
+    expect(sorcerer?.choices).toMatchObject([{ id: 'metamagic', name: 'Metamagic' }]);
+  });
+
+  it('o nome da característica vem no idioma, e cai no inglês quando falta', () => {
+    const pt = catalog.resources('2014', 'monk', 'pt');
+    expect(pt?.features.every((f) => f.name)).toBe(true);
+    expect(pt?.features.map((f) => f.id)).toEqual(
+      catalog.resources('2014', 'monk', 'en')?.features.map((f) => f.id),
+    );
+  });
+
   it('não leva a descrição de features sem recurso', () => {
     const json = JSON.stringify(catalog.resources('2014', 'monk', 'en'));
     expect(json).not.toContain(en51.monk.features['unarmored-defense'].description);

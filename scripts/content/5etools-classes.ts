@@ -1,11 +1,14 @@
 import { contentIdFromName } from '@shared/content/content-key';
 import { stripTags } from '@shared/content/tags';
+import { slotMaximums } from '@shared/systems/dnd5e/class-progression';
 import type {
   ClassChoice,
   ClassData,
   ClassFeature,
   ClassProficiencies,
   ClassResource,
+  ClassSpellcasting,
+  ClassTable,
   ClassText,
   ResourceMax,
   Steps,
@@ -49,7 +52,20 @@ export interface FiveToolsClass {
     toolProficiencies?: Record<string, boolean | number>[];
     skills: ({ choose: { from: string[]; count: number } } | { any: number })[];
   };
-  classTableGroups?: { title?: string; colLabels: string[]; rows?: TableCell[][] }[];
+  /** By class level, 1 to 20. */
+  cantripProgression?: number[];
+  spellsKnownProgression?: number[];
+  /** Spells added to the spellbook at each level (wizard). */
+  spellsKnownProgressionFixed?: number[];
+  /** A formula: `<$level$> + <$wis_mod$>`, `<$level$> / 2 + <$cha_mod$>`. */
+  preparedSpells?: string;
+  classTableGroups?: {
+    title?: string;
+    colLabels: string[];
+    rows?: TableCell[][];
+    /** Slots per spell level, by class level. */
+    rowsSpellProgression?: number[][];
+  }[];
   /** `Name|Class|ClassSource|Level|Source`, or an object when it gives a subclass feature. */
   classFeatures: (string | { classFeature: string; gainSubclassFeature?: boolean })[];
   optionalfeatureProgression?: { name: string; featureType: string[]; progression: Progression }[];
@@ -120,6 +136,14 @@ export interface ResourceSpec {
   recovery: ClassResource['recovery'];
   die?: NonNullable<ClassResource['die']> | { column: string };
   spellLevel?: Steps<number> | { column: string };
+}
+
+/** A number of the class table that is not spent (Rage Damage, Sneak Attack…), read from `column`. */
+export interface TableSpec {
+  id: string;
+  feature: string;
+  kind: ClassTable['kind'];
+  column: string;
 }
 
 export interface ResourceSpecs {
@@ -322,13 +346,42 @@ export function toSteps<T>(values: T[]): Steps<T> {
   return steps;
 }
 
-/** The steps of a column of the class table, found by its label (tags stripped). */
-function columnSteps(c: FiveToolsClass, label: string): Steps<number | null> {
+/** The cells of a column of the class table, found by its label (tags stripped). */
+function columnCells(c: FiveToolsClass, label: string): TableCell[] {
   for (const group of c.classTableGroups ?? []) {
     const index = group.colLabels.findIndex((l) => stripTags(l) === label);
-    if (index >= 0 && group.rows) return toSteps(group.rows.map((row) => cellValue(row[index])));
+    if (index >= 0 && group.rows) return group.rows.map((row) => row[index]);
   }
   throw new Error(`${c.name} (${c.source}): no table column "${label}"`);
+}
+
+const columnSteps = (c: FiveToolsClass, label: string): Steps<number | null> =>
+  toSteps(columnCells(c, label).map(cellValue));
+
+/** A column of dice of one size (Sneak Attack: 1d6 to 10d6): how many, and their faces. */
+function diceColumn(c: FiveToolsClass, label: string) {
+  const dice = columnCells(c, label).map((cell) => {
+    if (typeof cell !== 'object' || cell.type !== 'dice' || cell.toRoll.length !== 1) {
+      throw new Error(`${c.name}, ${label}: not a dice cell: ${JSON.stringify(cell)}`);
+    }
+    return cell.toRoll[0];
+  });
+  const faces = dice[0].faces;
+  if (dice.some((d) => d.faces !== faces)) throw new Error(`${c.name}, ${label}: mixed dice`);
+  return { faces, values: toSteps(dice.map((d) => d.number)) };
+}
+
+export function toTable(spec: TableSpec, c: FiveToolsClass, features: ClassFeature[]): ClassTable {
+  if (!features.some((f) => f.id === spec.feature)) {
+    throw new Error(`${c.name}, ${spec.id}: no feature "${spec.feature}"`);
+  }
+  const { id, feature, kind } = spec;
+  if (kind === 'dice') return { id, feature, kind, ...diceColumn(c, spec.column) };
+  const values = columnSteps(c, spec.column);
+  if (values.some((step) => step.value === null)) {
+    throw new Error(`${c.name}, ${spec.id}: "Unlimited" in a table that is not a resource`);
+  }
+  return { id, feature, kind, values: values as Steps<number> };
 }
 
 // --- Proficiencies, spellcasting, choices -------------------------------------------------------
@@ -428,11 +481,66 @@ const PROGRESSIONS: Record<string, NonNullable<ClassData['spellcasting']>['progr
   pact: 'pact',
 };
 
-function toSpellcasting(c: FiveToolsClass): Pick<ClassData, 'spellcasting'> {
+/** The slots the class table gives must be the ones the sheet computes from the progression. */
+function checkSlots(c: FiveToolsClass, progression: ClassSpellcasting['progression']) {
+  const rows = c.classTableGroups?.find(
+    (group) => group.rowsSpellProgression,
+  )?.rowsSpellProgression;
+  if (!rows) {
+    if (progression !== 'pact') throw new Error(`${c.name} (${c.source}): no spell slot table`);
+    return;
+  }
+  rows.forEach((row, i) => {
+    const expected = slotMaximums(progression, i + 1);
+    const given = row.filter((slots) => slots > 0);
+    if (given.join() !== expected.join()) {
+      throw new Error(
+        `${c.name} (${c.source}), level ${i + 1}: slots ${given}, computed ${expected}`,
+      );
+    }
+  });
+}
+
+const PREPARED = /^<\$level\$>( \/ 2)? \+ <\$(\w+)_mod\$>$/;
+
+/** How many cantrips and spells the class has by level: only where 5etools gives the 2014 fields. */
+function toSpellCounts(c: FiveToolsClass): Partial<ClassSpellcasting> {
+  const counts: Partial<ClassSpellcasting> = {};
+  if (c.cantripProgression) counts.cantrips = toSteps(c.cantripProgression);
+  if (c.spellsKnownProgression) counts.spellsKnown = toSteps(c.spellsKnownProgression);
+  if (c.preparedSpells) {
+    const formula = PREPARED.exec(c.preparedSpells);
+    if (!formula || formula[2] !== c.spellcastingAbility) {
+      throw new Error(`${c.name}: prepared spells formula "${c.preparedSpells}"`);
+    }
+    counts.prepared = { levelDivisor: formula[1] ? 2 : 1 };
+  }
+  if (c.spellsKnownProgressionFixed) {
+    const [initial, perLevel, ...rest] = c.spellsKnownProgressionFixed;
+    if (rest.some((added) => added !== perLevel)) {
+      throw new Error(`${c.name}: spellbook progression ${c.spellsKnownProgressionFixed}`);
+    }
+    counts.spellbook = { initial, perLevel };
+  }
+  return counts;
+}
+
+export function toSpellcasting(
+  c: FiveToolsClass,
+  book: ClassBook,
+): Pick<ClassData, 'spellcasting'> {
   if (!c.spellcastingAbility) return {};
   const progression = PROGRESSIONS[c.casterProgression ?? ''];
   if (!progression) throw new Error(`${c.name}: caster progression ${c.casterProgression}`);
-  return { spellcasting: { ability: upper(c.spellcastingAbility), progression } };
+  checkSlots(c, progression);
+  return {
+    spellcasting: {
+      ability: upper(c.spellcastingAbility),
+      progression,
+      // The sheet only follows the class on the 2014 edition (#181): 5.2 keeps what it had
+      ...(book === 'srd-5.1' ? toSpellCounts(c) : {}),
+    },
+  };
 }
 
 /** By level (an array of 20) or as the total at the levels where it changes. */
@@ -515,6 +623,7 @@ export function toClass(
   c: FiveToolsClass,
   ctx: ClassContext,
   specs: ResourceSpecs,
+  tableSpecs: TableSpec[] = [],
 ): { data: ClassData; text: ClassText } {
   const features = convertFeatures(
     c.classFeatures.map((ref) =>
@@ -553,9 +662,12 @@ export function toClass(
     id: toClassId(c),
     hitDie: c.hd.faces as ClassData['hitDie'],
     proficiencies: toProficiencies(c),
-    ...toSpellcasting(c),
+    ...toSpellcasting(c, ctx.book),
     features: features.data,
     resources: specs.class.map((spec) => toResource(spec, c, features.data)),
+    ...(tableSpecs.length
+      ? { tables: tableSpecs.map((spec) => toTable(spec, c, features.data)) }
+      : {}),
     choices: choices.data,
     subclasses: subclasses.map((s) => ({
       id: s.id,

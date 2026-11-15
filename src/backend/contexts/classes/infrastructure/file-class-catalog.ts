@@ -1,6 +1,11 @@
-import type { ClassResourcesContent, ResourceContent } from '@shared/systems/dnd5e/class-resources';
+import type {
+  ClassContent,
+  FeatureContent,
+  ResourceContent,
+} from '@shared/systems/dnd5e/class-resources';
 import type {
   ClassData,
+  ClassFeature,
   ClassResource,
   ClassText,
   ClassTranslation,
@@ -33,11 +38,7 @@ export class FileClassCatalog implements ClassCatalog {
     this.byEdition = new Map(sources.map((source) => [source.edition, source]));
   }
 
-  resources(
-    edition: Edition,
-    classId: string,
-    requestedLocale?: string,
-  ): ClassResourcesContent | null {
+  resources(edition: Edition, classId: string, requestedLocale?: string): ClassContent | null {
     const source = this.byEdition.get(edition);
     const data = source?.classes.find((c) => c.id === classId);
     const text = source?.texts[classId];
@@ -76,6 +77,16 @@ export class FileClassCatalog implements ClassCatalog {
         };
       });
 
+    const named = (
+      features: ClassFeature[],
+      texts: FeatureTexts,
+      local: FeatureTexts | undefined,
+    ): FeatureContent[] =>
+      features.map((feature) => ({
+        ...feature,
+        name: pick(local?.[feature.id]?.name, texts[feature.id]?.name) ?? feature.id,
+      }));
+
     const subclassNames = [subclassText.name];
     const localName = subTranslation?.name;
     if (localName && localName !== subclassText.name) subclassNames.push(localName);
@@ -84,6 +95,16 @@ export class FileClassCatalog implements ClassCatalog {
       classId,
       edition,
       hitDie: data.hitDie,
+      proficiencies: data.proficiencies,
+      ...(data.spellcasting ? { spellcasting: data.spellcasting } : {}),
+      features: named(data.features, text.features, translation?.features),
+      subclassFeatures: named(subclass.features, subclassText.features, subTranslation?.features),
+      tables: data.tables ?? [],
+      choices: data.choices.map((choice) => ({
+        ...choice,
+        name:
+          pick(translation?.choices?.[choice.id]?.name, text.choices[choice.id]?.name) ?? choice.id,
+      })),
       resources: build(
         data.resources,
         text.features,

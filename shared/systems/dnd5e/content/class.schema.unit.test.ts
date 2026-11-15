@@ -103,6 +103,36 @@ describe('schema das classes', () => {
     expect(classDataSchema.safeParse({ ...barbarian, resources }).success).toBe(true);
   });
 
+  it('aceita os números da tabela e as contagens de magia; faces só com dados', () => {
+    const values = [{ level: 1, value: 2 }];
+    const withTables = (tables: unknown) => classDataSchema.safeParse({ ...barbarian, tables });
+    expect(
+      withTables([{ id: 'rage-damage', feature: 'rage', kind: 'bonus', values }]).success,
+    ).toBe(true);
+    expect(
+      withTables([{ id: 'sneak-attack', feature: 'rage', kind: 'dice', faces: 6, values }]).success,
+    ).toBe(true);
+    expect(withTables([{ id: 'x', feature: 'rage', kind: 'dice', values }]).success).toBe(false);
+    expect(
+      withTables([{ id: 'x', feature: 'rage', kind: 'bonus', faces: 6, values }]).success,
+    ).toBe(false);
+
+    const spellcasting = {
+      ability: 'INT',
+      progression: 'full',
+      cantrips: values,
+      prepared: { levelDivisor: 1 },
+      spellbook: { initial: 6, perLevel: 2 },
+    };
+    expect(classDataSchema.safeParse({ ...barbarian, spellcasting }).success).toBe(true);
+    expect(
+      classDataSchema.safeParse({
+        ...barbarian,
+        spellcasting: { ...spellcasting, prepared: { levelDivisor: 3 } },
+      }).success,
+    ).toBe(false);
+  });
+
   it('texto em inglês exige nome e descrição; a tradução pode faltar campos', () => {
     const text = {
       name: 'Barbarian',
