@@ -1,7 +1,7 @@
 import { recoveryOn } from '@shared/systems/dnd5e/class-resources';
 import type { ResourceBox } from '@shared/systems/dnd5e/class-resources';
 
-export type RestTarget = 'sheet-hp' | 'sheet-hit-dice' | 'sheet-spell-slots' | 'sheet-resources';
+type RestTarget = 'sheet-hp' | 'sheet-hit-dice' | 'sheet-spell-slots' | 'sheet-resources';
 
 export interface RestItem {
   id: string;

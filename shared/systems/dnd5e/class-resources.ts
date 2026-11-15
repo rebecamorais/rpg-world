@@ -5,10 +5,10 @@ import type { ClassResource } from './content/class.schema';
 import type { Edition } from './content/editions';
 import type { AttributeKey } from './types';
 
-export type Recovery = ClassResource['recovery'][number];
+type Recovery = ClassResource['recovery'][number];
 
 /** Per-sheet edits of a resource box (#180). */
-export interface ResourceOverrides {
+interface ResourceOverrides {
   max?: number;
   recovery?: Recovery[];
   color?: string;
@@ -17,7 +17,7 @@ export interface ResourceOverrides {
 }
 
 /** A box the player made up (#180). */
-export interface CustomResource {
+interface CustomResource {
   name: string;
   max: number;
   recovery: Recovery[];
