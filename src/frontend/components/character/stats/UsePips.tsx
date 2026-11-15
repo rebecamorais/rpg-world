@@ -36,7 +36,6 @@ export function UsePips({
   'data-rest-focus': restFocus,
 }: UsePipsProps) {
   const t = useTranslations('usePips');
-  const [pending, setPending] = React.useState(false);
 
   if (max === null) {
     return <span className={cn('text-muted-foreground text-sm', className)}>{t('unlimited')}</span>;
@@ -44,21 +43,15 @@ export function UsePips({
 
   const spentCount = Math.min(Math.max(used, 0), max);
   const availableCount = max - spentCount;
-  const locked = disabled || pending;
+  const locked = disabled;
 
-  // Disables every button while the save is in flight, and re-enables when it settles
-  // (even on rejection) so a failed save never leaves the control stuck
-  const change = async (next: number) => {
+  // Never locks while saving: the sheet shows the change at once and saves in the background, so
+  // taps can follow each other (see saveNow)
+  const change = (next: number) => {
     if (locked) return;
-    const bounded = Math.min(Math.max(next, 0), max);
-    setPending(true);
-    try {
-      await onChange(bounded);
-    } catch {
-      // The caller owns error reporting; here a failure only has to unlock the control
-    } finally {
-      setPending(false);
-    }
+    Promise.resolve(onChange(Math.min(Math.max(next, 0), max))).catch(() => {
+      // The caller owns error reporting
+    });
   };
 
   const summary = t('summary', { label, available: availableCount, max });

@@ -1,4 +1,4 @@
-import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { messages } from '@tests/helpers/render';
@@ -93,25 +93,20 @@ describe('ResourcesRow', () => {
     expect(sentNow()).toEqual({ resources: { 'class:monk:ki': { used: 1 } } });
   });
 
-  it('enquanto uma caixinha salva, as outras da caixa esperam', async () => {
+  it('enquanto uma caixinha salva, as outras continuam livres para tocar', async () => {
     loaded.content = MONK_TWO_BOXES;
-    let finish = () => {};
     const { saveNow } = renderWithCharacter(
       <ResourcesRow />,
       sheet({ class: 'monk', level: 5, edition: '2014' }),
     );
-    saveNow.mockImplementationOnce(() => new Promise<void>((resolve) => (finish = resolve)));
+    saveNow.mockImplementationOnce(() => new Promise<void>(() => {}));
 
     await userEvent.click(screen.getByRole('button', { name: 'Ki 1, available' }));
 
     const focus = screen.getAllByRole('button', { name: /^Focus \d, available$/ });
-    for (const pip of focus) expect(pip).toBeDisabled();
+    for (const pip of focus) expect(pip).toBeEnabled();
     await userEvent.click(focus[0]);
-    expect(saveNow).toHaveBeenCalledTimes(1);
-
-    await act(async () => finish());
-    for (const pip of screen.getAllByRole('button', { name: /^Focus \d, available$/ }))
-      expect(pip).toBeEnabled();
+    expect(saveNow).toHaveBeenCalledTimes(2);
   });
 
   it('a classe em português ("Monge") também acha o Ki', () => {

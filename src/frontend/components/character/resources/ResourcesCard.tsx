@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 import { useTranslations } from 'next-intl';
 
 import { UsePips } from '@frontend/components/character/stats/UsePips';
@@ -27,20 +25,11 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
   const character = useLoadedCharacter();
   const { saveNow } = useCharacterActions();
   const { readOnly, pagesPath } = useSheetSource(character.id, character.system);
-  // One save at a time for the whole card: the server rewrites the sheet's data on each save, so
-  // two taps on different boxes in flight together could undo each other
-  const [saving, setSaving] = useState(false);
   // The book the rules texts come from, for the condition links in them
   const source = editionSource(character.edition);
 
-  const spend = async (key: string, used: number) => {
-    setSaving(true);
-    try {
-      await saveNow(setResourceUsed(key, used));
-    } finally {
-      setSaving(false);
-    }
-  };
+  // Shown at once and saved in the background, one save after the other (see saveNow)
+  const spend = (key: string, used: number) => saveNow(setResourceUsed(key, used));
 
   return (
     <Card id="sheet-resources" className="bg-background/60 flex flex-col gap-3 p-4 shadow-sm">
@@ -114,7 +103,7 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
               max={box.max}
               used={box.used}
               asNumber={box.unit === 'hit-points'}
-              disabled={readOnly || saving}
+              disabled={readOnly}
               data-rest-focus={index === 0}
               onChange={(used) => spend(box.key, used)}
             />

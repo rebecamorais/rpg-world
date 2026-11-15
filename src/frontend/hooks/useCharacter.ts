@@ -1,3 +1,5 @@
+import { useCallback, useRef } from 'react';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -56,11 +58,43 @@ export function useCharacter(
     },
   });
 
+  // Quick saves go one at a time: the server rewrites the sheet's data on each save, so two in
+  // flight together could undo each other
+  const queue = useRef<Promise<unknown>>(Promise.resolve());
+
+  /**
+   * Saves what changes during play (a tap on a hit die, a resource box, the HP) in the background.
+   * The sheet shows `character` at once and nothing else on screen reacts: no "Saving…", no lock,
+   * no refetch afterwards. Rejects when the save fails, after showing the error and reloading the
+   * character from the server.
+   */
+  const saveQuietly = useCallback(
+    ({ character, changes }: { character: DnD5eCharacter; changes: Partial<DnD5eCharacter> }) => {
+      // A refetch still in flight would bring back the copy from before this change
+      void queryClient.cancelQueries({ queryKey: ['character', id] });
+      queryClient.setQueryData(['character', id], character);
+      const send = queue.current
+        .catch(() => {})
+        .then(() => rpgWorldApi.put(`/api/characters/${character.id}`, { updates: changes }));
+      queue.current = send;
+      return send.then(
+        () => undefined,
+        (err: Error) => {
+          toast.error(getErrorMessage(err));
+          void queryClient.invalidateQueries({ queryKey: ['character', id] });
+          throw err;
+        },
+      );
+    },
+    [queryClient, id, getErrorMessage],
+  );
+
   return {
     character,
     isLoading: query.isLoading,
     error: query.error,
     updateCharacter: updateMutation.mutateAsync,
+    saveQuietly,
     isSaving: updateMutation.isPending,
   };
 }
