@@ -40,8 +40,11 @@ export interface InvitePreview {
   gmUsername: string | null;
   /** False once the GM's account is gone: nobody could approve a request, so the card won't offer one. */
   hasGm: boolean;
-  /** The opener's link to the party: none yet, a pending request or invite, member or GM. */
-  myStatus: MemberStatus | 'gm' | null;
+  /**
+   * The opener's link to the party: none yet, a pending request or invite, member or GM. 'declined'
+   * when there is none and the GM turned down their last request (who did it is never stored).
+   */
+  myStatus: MemberStatus | 'gm' | 'declined' | null;
 }
 
 /** What anyone with the invite link sees, signed in or not (the link preview on Discord). */

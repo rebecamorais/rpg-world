@@ -1398,6 +1398,9 @@
       "invitedBy": "@{username} is the GM of this table.",
       "request": "Ask to join",
       "requested": "Request sent. The GM will approve it.",
+      "declined": "Your request to join was declined. You can ask again.",
+      "requestAgain": "Ask again",
+      "approved": "Your request was approved.",
       "alreadyInvited": "You've already been invited to this party.",
       "withoutGm": "This party has no GM right now, so it can’t take new people. Ask the players to name a new one.",
       "invalidTitle": "This invite is no longer valid",
@@ -1428,6 +1431,8 @@
       "notFoundTitle": "Party not found",
       "notFoundDescription": "It may have been deleted, or you're no longer in it.",
       "backToParties": "Back to my parties",
+      "removed": "You're no longer in this party.",
+      "deleted": "This party was deleted.",
       "goToCombat": "Go to combat"
     },
     "requestsSection": {

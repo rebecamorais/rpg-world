@@ -1398,6 +1398,9 @@
       "invitedBy": "@{username} é o mestre desta mesa.",
       "request": "Pedir para entrar",
       "requested": "Pedido enviado. O mestre vai aprovar.",
+      "declined": "Seu pedido para entrar foi recusado. Você pode pedir de novo.",
+      "requestAgain": "Pedir de novo",
+      "approved": "Seu pedido foi aprovado.",
       "alreadyInvited": "Você já foi convidado para esta mesa.",
       "withoutGm": "Esta mesa está sem mestre no momento e não pode receber gente nova. Peça aos jogadores que escolham um novo.",
       "invalidTitle": "Este convite não vale mais",
@@ -1428,6 +1431,8 @@
       "notFoundTitle": "Mesa não encontrada",
       "notFoundDescription": "Ela pode ter sido apagada, ou você não está mais nela.",
       "backToParties": "Voltar para minhas mesas",
+      "removed": "Você não está mais nesta mesa.",
+      "deleted": "Esta mesa foi apagada.",
       "goToCombat": "Ir para o combate"
     },
     "requestsSection": {
