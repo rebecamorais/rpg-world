@@ -205,3 +205,48 @@ describe('SpellCard: condições', () => {
     expect(screen.getAllByRole('button', { name: 'Frightened, condition' })).toHaveLength(2);
   });
 });
+
+describe('SpellCard com material (exploração do Grimoire)', () => {
+  const material = {
+    id: 'glacial-glass' as const,
+    surface: <span data-testid="surface" />,
+    ornament: <span data-testid="ornament" />,
+  };
+
+  it('sem material, continua como antes: recorta na borda e não ganha camadas novas', () => {
+    const { container } = renderWithProviders(<SpellCard spell={FIREBALL} />);
+    const card = container.querySelector('article')!;
+
+    expect(card).toHaveClass('overflow-hidden');
+    expect(card).not.toHaveClass('overflow-visible');
+    expect(card.querySelector('[data-material-clip]')).toBeNull();
+    expect(card.style.contentVisibility).toBe('auto');
+  });
+
+  it('com material, a borda externa deixa de recortar e o recorte passa para a camada interna', () => {
+    const { container } = renderWithProviders(<SpellCard spell={FIREBALL} material={material} />);
+    const card = container.querySelector('article')!;
+    const clip = card.querySelector('[data-material-clip]')!;
+
+    expect(card).toHaveClass('overflow-visible');
+    expect(card).not.toHaveClass('overflow-hidden');
+    expect(clip).toHaveClass('overflow-hidden');
+    expect(clip).toContainElement(screen.getByTestId('surface'));
+    // The ornament sits outside the clip, free to reach past the edge
+    expect(clip).not.toContainElement(screen.getByTestId('ornament'));
+    expect(card.style.contentVisibility).toBe('auto');
+  });
+
+  it('com material, o fundo do card aberto fica dentro do recorte e o card continua abrindo', async () => {
+    const user = userEvent.setup();
+    const onToggle = vi.fn();
+    const { container } = renderWithProviders(
+      <SpellCard spell={FIREBALL} material={material} isExpanded onToggle={onToggle} />,
+    );
+    const clip = container.querySelector('[data-material-clip]')!;
+
+    expect(clip.childElementCount).toBe(3); // surface, stripe, SpellVFX
+    await user.click(screen.getByRole('button', { expanded: true }));
+    expect(onToggle).toHaveBeenCalledWith('fireball');
+  });
+});

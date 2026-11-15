@@ -1,0 +1,369 @@
+/*
+ * Grimoire material surfaces (exploration). Static: nothing here animates.
+ *
+ * Layers:
+ *   .surface  – color, texture, light. Fills its parent; the parent clips it to the corners.
+ *   .ornament – frost, drips, cracks, gilding. Decorative, never catches the pointer, may reach
+ *               past the edge where the host has no clip (see the OverflowBorders note in
+ *               docs/grimoire-enchantments/explorations/material-surfaces.md).
+ *
+ * Colors come from the app's tokens (--card, --foreground) mixed with each material's own hue.
+ * Dark is the default theme; :root[data-theme='light'] adjusts the mix.
+ */
+
+/* ---------- Standalone panel (MaterialSurface) ---------- */
+.panel {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-xl, 0.75rem);
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- Layers ---------- */
+.surface {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.ornament {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  pointer-events: none;
+}
+
+/* Shared textures: one small static SVG each, rasterized once and tiled */
+.surface,
+.ornament {
+  --grain-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.018' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.4 -.45'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+  --mottle-soft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.018' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 -.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+  --fibers: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.035 .14' numOctaves='4' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .05 0 0 0 .55 -.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+}
+
+/* =========================================================================================
+ * 1. Glacial Glass: ice-tinted glass. A cold body, a specular band on top, a faint diagonal
+ *    glint, a bright inner rim, and frost that gathers at the edges (the center stays clear).
+ *    No backdrop-filter: the "glass" is light and rim, not blur.
+ * ======================================================================================= */
+.surface[data-material='glacial-glass'],
+.ornament[data-material='glacial-glass'] {
+  --m: #7dd3fc;
+  --m-deep: #0c4a6e;
+}
+.surface[data-material='glacial-glass'] {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.1), transparent 26%),
+    linear-gradient(
+      108deg,
+      transparent 38%,
+      rgb(255 255 255 / 0.05) 44%,
+      transparent 50%,
+      transparent 62%,
+      rgb(255 255 255 / 0.035) 66%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 85% 80% at 50% 45%,
+      transparent 52%,
+      color-mix(in srgb, var(--m), transparent 78%) 100%
+    ),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--m) 24%, var(--card)),
+      color-mix(in srgb, var(--m) 10%, var(--card)) 48%,
+      color-mix(in srgb, var(--m-deep) 22%, var(--card))
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    inset 0 0 0 1px rgb(255 255 255 / 0.05),
+    inset 0 0 26px color-mix(in srgb, var(--m), transparent 80%);
+}
+/* Frost: two families of fine facets, only near the edges */
+.ornament[data-material='glacial-glass'] {
+  background:
+    repeating-linear-gradient(
+      60deg,
+      color-mix(in srgb, var(--m), transparent 72%) 0 1px,
+      transparent 1px 11px
+    ),
+    repeating-linear-gradient(
+      -60deg,
+      color-mix(in srgb, var(--m), transparent 76%) 0 1px,
+      transparent 1px 15px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, white, transparent 90%) 0 1px,
+      transparent 1px 9px
+    );
+  mask-image: radial-gradient(ellipse 78% 72% at 50% 45%, transparent 62%, #000 100%);
+  border-radius: inherit;
+}
+
+/* =========================================================================================
+ * 2. Alchemical Corrosion: viscous green acid. A wet sheen, a few bubbles with a lit rim,
+ *    small corrosion pits, and drips hanging from the top edge.
+ * ======================================================================================= */
+.surface[data-material='alchemical-corrosion'],
+.ornament[data-material='alchemical-corrosion'] {
+  --m: #84cc16;
+  --m-deep: #1a2e05;
+}
+.surface[data-material='alchemical-corrosion'] {
+  background:
+    /* wet sheen */
+    linear-gradient(172deg, transparent 18%, rgb(255 255 255 / 0.045) 24%, transparent 32%),
+    /* bubbles: dark core, lit rim */
+    radial-gradient(
+        circle at 88% 74%,
+        transparent 0 5px,
+        color-mix(in srgb, var(--m), transparent 45%) 5.5px 6.5px,
+        transparent 7px
+      ),
+    radial-gradient(
+      circle at 80% 86%,
+      transparent 0 3px,
+      color-mix(in srgb, var(--m), transparent 50%) 3.5px 4.3px,
+      transparent 4.8px
+    ),
+    radial-gradient(
+      circle at 93% 58%,
+      transparent 0 2px,
+      color-mix(in srgb, var(--m), transparent 55%) 2.4px 3px,
+      transparent 3.4px
+    ),
+    radial-gradient(
+      circle at 8% 82%,
+      transparent 0 4px,
+      color-mix(in srgb, var(--m), transparent 55%) 4.5px 5.3px,
+      transparent 5.8px
+    ),
+    /* corrosion pits */
+    radial-gradient(circle at 70% 40%, rgb(0 0 0 / 0.35) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 24% 66%, rgb(0 0 0 / 0.3) 0 1px, transparent 2px),
+    radial-gradient(circle at 56% 88%, rgb(0 0 0 / 0.3) 0 2px, transparent 3px),
+    /* pooled acid at the bottom right, and the body */
+    radial-gradient(
+        70% 90% at 100% 100%,
+        color-mix(in srgb, var(--m), transparent 76%),
+        transparent 70%
+      ),
+    linear-gradient(
+      20deg,
+      color-mix(in srgb, var(--m-deep) 55%, var(--card)),
+      color-mix(in srgb, var(--m) 12%, var(--card)) 55%,
+      color-mix(in srgb, var(--m) 7%, var(--card))
+    );
+  box-shadow: inset 0 0 22px color-mix(in srgb, var(--m), transparent 84%);
+}
+/* Drips: elongated drops from the top edge, with a bead at the tip */
+.ornament[data-material='alchemical-corrosion'] {
+  --drip: color-mix(in srgb, var(--m), transparent 55%);
+  background:
+    radial-gradient(4px 4px at 14% 30px, var(--drip) 0 3px, transparent 3.5px),
+    radial-gradient(5px 26px at 14% 0, var(--drip) 0 60%, transparent 100%),
+    radial-gradient(3px 3px at 31% 17px, var(--drip) 0 2.5px, transparent 3px),
+    radial-gradient(4px 15px at 31% 0, var(--drip) 0 60%, transparent 100%),
+    radial-gradient(4.5px 4.5px at 63% 40px, var(--drip) 0 3.5px, transparent 4px),
+    radial-gradient(6px 36px at 63% 0, var(--drip) 0 60%, transparent 100%),
+    radial-gradient(3px 12px at 84% 0, var(--drip) 0 60%, transparent 100%),
+    linear-gradient(to bottom, color-mix(in srgb, var(--m), transparent 70%), transparent 9px);
+  border-radius: inherit;
+}
+
+/* =========================================================================================
+ * 3. Crypt Stone: cold, matte necrotic stone. Mottled slabs (large soft noise), fine grain,
+ *    a faint violet glow seeping from below, a heavy vignette, and two hairline cracks.
+ * ======================================================================================= */
+.surface[data-material='crypt-stone'],
+.ornament[data-material='crypt-stone'] {
+  --m: #a855f7;
+  --stone: #57534e;
+}
+.surface[data-material='crypt-stone'] {
+  background:
+    var(--grain-dark) 0 0 / 180px 180px,
+    var(--grain-light) 40px 60px / 180px 180px,
+    var(--mottle) 0 0 / 320px 320px,
+    radial-gradient(
+      70% 55% at 50% 112%,
+      color-mix(in srgb, var(--m), transparent 74%),
+      transparent 72%
+    ),
+    radial-gradient(circle at 50% 42%, transparent 38%, rgb(0 0 0 / 0.5) 125%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--stone) 34%, var(--card)),
+      color-mix(in srgb, var(--stone) 22%, var(--card))
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.04),
+    inset 0 -14px 26px -14px color-mix(in srgb, var(--m), transparent 70%);
+}
+/* Cracks: two hairline fractures from the corners, as a static SVG mask */
+.ornament[data-material='crypt-stone'] {
+  background: rgb(0 0 0 / 0.8);
+  /* Fixed-size cracks anchored to two corners, so they keep their shape on any card height */
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 54'%3E%3Cpath d='M90 0 L80 7 L83 13 L72 20 L75 27 L64 33 M80 7 L72 4 M72 20 L63 18' fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+      right top / 90px 54px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'%3E%3Cpath d='M0 40 L10 33 L7 27 L17 21 M10 33 L17 37' fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+      left bottom / 60px 40px no-repeat;
+  border-radius: inherit;
+}
+
+/* =========================================================================================
+ * 4. Divine Parchment: radiant, aged parchment. Warm fibers, a soft burn at the edges, a
+ *    hint of light falling from above, and a gilded double rule inside the frame.
+ * ======================================================================================= */
+.surface[data-material='divine-parchment'],
+.ornament[data-material='divine-parchment'] {
+  --m: #fde68a;
+  --vellum: #a16207;
+}
+.surface[data-material='divine-parchment'] {
+  background:
+    var(--fibers) 0 0 / 240px 240px,
+    var(--grain-dark) 0 0 / 180px 180px,
+    /* light from above: a soft glow, not stripes, so nothing competes with the text */
+    radial-gradient(
+        60% 45% at 50% -8%,
+        color-mix(in srgb, var(--m), transparent 78%),
+        transparent 75%
+      ),
+    radial-gradient(
+      circle at 50% 38%,
+      transparent 42%,
+      color-mix(in srgb, var(--vellum), black 55%) 140%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--m) 20%, var(--card)),
+      color-mix(in srgb, var(--vellum) 16%, var(--card)) 60%,
+      color-mix(in srgb, var(--vellum) 22%, var(--card))
+    );
+}
+/* Gilding: a thin double rule 5px inside the frame, and four small gilt points */
+.ornament[data-material='divine-parchment'] {
+  inset: 5px;
+  border: 1px solid color-mix(in srgb, var(--m), transparent 55%);
+  border-radius: calc(var(--radius-xl, 0.75rem) - 5px);
+  box-shadow:
+    inset 0 0 0 2px transparent,
+    inset 0 0 0 3px color-mix(in srgb, var(--m), transparent 80%);
+  background:
+    radial-gradient(circle at 0 0, var(--m) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 100% 0, var(--m) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 0 100%, var(--m) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 100% 100%, var(--m) 0 1.5px, transparent 2px);
+}
+
+/* ---------- Light theme: same materials with the lights on ---------- */
+:global(:root[data-theme='light']) .surface[data-material='glacial-glass'] {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.7), transparent 30%),
+    radial-gradient(
+      ellipse 85% 80% at 50% 45%,
+      transparent 52%,
+      color-mix(in srgb, var(--m), transparent 65%) 100%
+    ),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--m) 30%, var(--card)),
+      color-mix(in srgb, var(--m) 14%, var(--card)) 50%,
+      color-mix(in srgb, var(--m) 22%, var(--card))
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    inset 0 0 22px color-mix(in srgb, var(--m), transparent 70%);
+}
+:global(:root[data-theme='light']) .surface[data-material='alchemical-corrosion'] {
+  background-color: color-mix(in srgb, var(--m) 14%, var(--card));
+  background-image:
+    radial-gradient(
+      circle at 88% 74%,
+      transparent 0 5px,
+      color-mix(in srgb, var(--m), black 25%) 5.5px 6.5px,
+      transparent 7px
+    ),
+    radial-gradient(
+      circle at 80% 86%,
+      transparent 0 3px,
+      color-mix(in srgb, var(--m), black 25%) 3.5px 4.3px,
+      transparent 4.8px
+    ),
+    radial-gradient(
+      circle at 8% 82%,
+      transparent 0 4px,
+      color-mix(in srgb, var(--m), black 25%) 4.5px 5.3px,
+      transparent 5.8px
+    ),
+    radial-gradient(
+      70% 90% at 100% 100%,
+      color-mix(in srgb, var(--m), transparent 65%),
+      transparent 70%
+    );
+}
+:global(:root[data-theme='light']) .surface[data-material='crypt-stone'] {
+  /* Softer slabs on the light theme: full-strength blotches cut the secondary text's contrast */
+  background:
+    var(--grain-dark) 0 0 / 180px 180px,
+    var(--mottle-soft) 0 0 / 320px 320px,
+    radial-gradient(
+      70% 55% at 50% 112%,
+      color-mix(in srgb, var(--m), transparent 82%),
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--stone) 18%, var(--card)),
+      color-mix(in srgb, var(--stone) 26%, var(--card))
+    );
+}
+:global(:root[data-theme='light']) .ornament[data-material='crypt-stone'] {
+  background: rgb(0 0 0 / 0.35);
+}
+:global(:root[data-theme='light']) .surface[data-material='divine-parchment'] {
+  background:
+    var(--fibers) 0 0 / 240px 240px,
+    radial-gradient(
+      circle at 50% 38%,
+      transparent 45%,
+      color-mix(in srgb, var(--vellum), transparent 70%) 140%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--m) 40%, var(--card)),
+      color-mix(in srgb, var(--m) 26%, var(--card))
+    );
+}
+:global(:root[data-theme='light']) .ornament[data-material='divine-parchment'] {
+  border-color: color-mix(in srgb, var(--vellum), transparent 45%);
+}
+
+/* High contrast: materials step aside, the plain card stays */
+@media (forced-colors: active) {
+  .surface,
+  .ornament {
+    display: none;
+  }
+}
