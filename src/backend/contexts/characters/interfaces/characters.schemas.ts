@@ -2,7 +2,11 @@ import { z } from 'zod';
 
 import { ITEM_KEY, SPELL_KEY } from '@shared/content/content-key';
 import { httpUrlOrEmpty, optional, optionalQuery } from '@shared/http/validation';
-import { RESOURCE_KEY } from '@shared/systems/dnd5e/class-resources';
+import {
+  MAX_RESOURCE_DESCRIPTION,
+  RESOURCE_KEY,
+  RESOURCE_SOURCES,
+} from '@shared/systems/dnd5e/class-resources';
 import { ATTRIBUTE_KEYS, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import { EDITIONS } from '@shared/systems/dnd5e/content/editions';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
@@ -50,7 +54,7 @@ const resourceState = z.object({
       recovery: optional(z.array(recovery).max(4)),
       color: optional(text(32)),
       name: optional(text()),
-      description: optional(text(2000)),
+      description: optional(text(MAX_RESOURCE_DESCRIPTION)),
     }),
   ),
   custom: optional(
@@ -59,7 +63,8 @@ const resourceState = z.object({
       max: int(0, 1_000),
       recovery: z.array(recovery).max(4),
       color: optional(text(32)),
-      source: z.enum(['class', 'subclass', 'feat', 'item', 'manual']),
+      description: optional(text(MAX_RESOURCE_DESCRIPTION)),
+      source: z.enum(RESOURCE_SOURCES),
     }),
   ),
 });

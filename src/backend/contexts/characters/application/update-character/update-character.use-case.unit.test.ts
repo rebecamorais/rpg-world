@@ -325,6 +325,26 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
     expect(result.toJSON()).toMatchObject({ edition: '2024', resources: result.resources });
   });
 
+  it('chave custom enviada sem a caixinha é excluída; as outras ficam', async () => {
+    const own = (name: string) => ({
+      used: 0,
+      custom: { name, max: 1, recovery: [], source: 'manual' as const },
+    });
+    const A = 'custom:0193a1b2-0000-7000-8000-000000000001';
+    const B = 'custom:0193a1b3-0000-7000-8000-000000000002';
+    const stored = makeCharacter('own-char', 'owner');
+    stored.resources = { 'class:monk:ki': { used: 3 }, [A]: own('Anel'), [B]: own('Amuleto') };
+    await repo.save(stored);
+
+    const result = await useCase.execute({
+      id: 'own-char',
+      ownerUsername: 'owner',
+      updates: { resources: { [A]: { used: 0 } } },
+    });
+
+    expect(result.resources).toEqual({ 'class:monk:ki': { used: 3 }, [B]: own('Amuleto') });
+  });
+
   describe('limite de caixinhas', () => {
     const boxes = (n: number) =>
       Object.fromEntries(Array.from({ length: n }, (_, i) => [`class:monk:r${i}`, { used: 0 }]));

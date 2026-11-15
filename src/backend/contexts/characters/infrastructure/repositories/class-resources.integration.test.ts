@@ -54,4 +54,34 @@ describe('edição e recursos de classe (Integration)', () => {
       'class:monk:x': { used: 1 },
     });
   });
+
+  it('caixinha própria e edição da classe vão e voltam do banco; excluir tira a própria', async () => {
+    const useCase = new UpdateCharacterUseCase(repo);
+    const OWN = 'custom:0193a1b2-0000-7000-8000-000000000001';
+    const ring = {
+      name: 'Anel da Sorte',
+      max: 3,
+      recovery: [{ rest: 'long' as const, amount: 'all' as const }],
+      color: '#ef4444',
+      description: 'Rola de novo um d20.',
+      source: 'item' as const,
+    };
+    const ki = { used: 2, hidden: true, overrides: { max: 4, name: 'Chi' } };
+
+    await useCase.execute({
+      id: characterId,
+      ownerUsername: ownerId,
+      updates: { resources: { 'class:monk:ki': ki, [OWN]: { used: 1, custom: ring } } },
+    });
+    const saved = (await repo.findById(characterId)) as DnD5eCharacter;
+    expect(saved.resources).toEqual({ 'class:monk:ki': ki, [OWN]: { used: 1, custom: ring } });
+
+    await useCase.execute({
+      id: characterId,
+      ownerUsername: ownerId,
+      updates: { resources: { [OWN]: { used: 0 } } },
+    });
+    const after = (await repo.findById(characterId)) as DnD5eCharacter;
+    expect(after.resources).toEqual({ 'class:monk:ki': ki });
+  });
 });

@@ -196,6 +196,22 @@ describe('edition e resources no update', () => {
     expect(parse({ resources: { 'class:monk:ki': ok } })).toBe(true);
   });
 
+  it('caixinha própria aceita descrição até 2000 caracteres e recusa origem desconhecida', () => {
+    const KEY = 'custom:3f2b8c1e-4d5a-4b6c-8d7e-9f0a1b2c3d4e';
+    const own = (extra: object) => ({
+      resources: {
+        [KEY]: {
+          used: 0,
+          custom: { name: 'Anel', max: 1, recovery: [], source: 'item', ...extra },
+        },
+      },
+    });
+
+    expect(parse(own({ description: 'y'.repeat(2000) }))).toBe(true);
+    expect(parse(own({ description: 'y'.repeat(2001) }))).toBe(false);
+    expect(parse(own({ source: 'potion' }))).toBe(false);
+  });
+
   it('aceita 100 caixinhas por pedido e recusa 101', () => {
     const boxes = (n: number) =>
       Object.fromEntries(Array.from({ length: n }, (_, i) => [`class:monk:r${i}`, { used: 0 }]));

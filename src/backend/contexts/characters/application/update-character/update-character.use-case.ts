@@ -141,8 +141,14 @@ export class UpdateCharacterUseCase {
     }
 
     if (resources) {
-      const merged = { ...character.resources, ...resources };
-      // The merge never deletes, so cap the stored map (#180 adds removal)
+      // Merged key by key. A `custom:` key sent without its box removes it: that is how a box of
+      // the player's own is deleted, since a key left out of the update means "unchanged"
+      const merged = Object.fromEntries(
+        Object.entries({ ...character.resources, ...resources }).filter(
+          ([key, state]) => !key.startsWith('custom:') || state.custom,
+        ),
+      );
+      // Class boxes are never deleted, so cap the stored map
       if (Object.keys(merged).length > MAX_RESOURCES) {
         throw new CharacterError(CharacterErrorCodes.RESOURCE_LIMIT);
       }
