@@ -208,7 +208,7 @@ describe('SpellCard: condições', () => {
 });
 
 describe('SpellCard com efeito (exploração do Grimoire)', () => {
-  const effect: CardEffect = { id: 'embers', layers: () => <span data-testid="effect" /> };
+  const effect: CardEffect = { id: 'flame-ribbons', layers: () => <span data-testid="effect" /> };
 
   it('sem efeito, não vira anfitrião de efeitos', () => {
     const { container } = renderWithProviders(<SpellCard spell={FIREBALL} isExpanded />);

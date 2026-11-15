@@ -27,12 +27,12 @@ const COUNT = 100;
 const ALL_SCENARIOS = [
   'none',
   // Open-card effects (fx:<id>): only the opened card shows one, so they show up in the open phase
-  'fx:frost',
-  'fx:embers',
+  'fx:sunburst',
+  'fx:flame-ribbons',
+  'fx:thunder-soundwaves',
   'fx:alchemy-circle',
-  'fx:bolt',
 ] as const;
-// SCENARIOS=none,fx:frost re-measures just a few
+// SCENARIOS=none,fx:sunburst re-measures just a few
 // (any fx:<effect id> works here too, beyond the ones listed above)
 const SCENARIOS: readonly string[] = process.env.SCENARIOS
   ? process.env.SCENARIOS.split(',').filter(

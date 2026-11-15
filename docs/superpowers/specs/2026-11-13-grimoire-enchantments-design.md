@@ -81,16 +81,17 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
     - **Sem regra de jogo na biblioteca:** qual efeito cada conteúdo usa fica fora dela, num mapa por sistema. O de D&D 5e está em `src/frontend/constants/grimoire-effects.ts` (o dano, senão a escola). Outro sistema ganha o seu mapa, e a biblioteca não muda.
     - O mapa é um exemplo, usado só no laboratório. Nada chega ao spellbook antes de uma decisão explícita.
 
-26. **(dona)** **Efeitos do card aberto no laboratório:** os efeitos por tipo aprovados na amostra viraram a peça `<EffectLayers>` (`src/frontend/components/grimoire/card-effect/`): ids neutros (`frost`, `embers`, `ward-mesh`...), cor por `--grimoire-tint` e o mapa de D&D 5e fora da biblioteca (`src/frontend/constants/grimoire-effects.ts`). O `SpellCard` ganhou a prop opcional `effect`, que troca o fundo do card aberto. O laboratório virou uma página só, `/dev/grimoire`. Medição e detalhes em [explorations/spell-type-effects.md](../../grimoire-enchantments/explorations/spell-type-effects.md). **Ainda não estão no spellbook.**
+26. **(dona)** **Efeitos do card aberto no laboratório:** os efeitos por tipo aprovados na amostra viraram a peça `<EffectLayers>` (`src/frontend/components/grimoire/card-effect/`): ids neutros (`sunburst`, `ward-mesh`...), cor por `--grimoire-tint` e o mapa de D&D 5e fora da biblioteca (`src/frontend/constants/grimoire-effects.ts`). O `SpellCard` ganhou a prop opcional `effect`, que troca o fundo do card aberto. O laboratório virou uma página só, `/dev/grimoire`. Medição e detalhes em [explorations/spell-type-effects.md](../../grimoire-enchantments/explorations/spell-type-effects.md). **Ainda não estão no spellbook.**
 
-27. **(dona)** **Fundos por tipo de dano, fechados (15/11):** cada um dos 13 tipos tem o seu fundo de card aberto. Doze são desenhos SVG da dona, convertidos para a cor da magia por `scripts/grimoire-svg-effect.ts`; o radiante segue em CSS.
+27. **(dona)** **Fundos por tipo de dano (15/11):** cada um dos 13 tipos tem o seu fundo de card aberto. **Só os 12 desenhos SVG da dona estão fechados e validados**; eles são convertidos para a cor da magia por `scripts/grimoire-svg-effect.ts`.
     - **Faixa no topo:** fogo (`flame-ribbons`), força (`arcane-paths`) e psíquico (`resonance`).
     - **Card inteiro, esticado:** trovão (`thunder-soundwaves`), elétrico (`lightning-branches`), veneno (`toxic-mist-filaments`), cortante (`slashing-slash-marks`), contundente (`impact-fractures`) e perfurante (`piercing-needle-thrusts`).
     - **Na altura do card, sem deformar:** frio (`frost-crystals`), ácido (`acid-bloom`) e necrótico (`necrotic-stag-skull`).
-    - **CSS:** radiante (`sunburst`).
     - **Leitura:** com efeito, o texto das regras fica numa caixa translúcida com grão de pontinhos (`effectTextBackdrop`); no tema claro ela é cinza.
+    - **Ainda não validados:** o radiante (`sunburst`, em CSS) e os 8 efeitos de escola em CSS. Ficam no código para as magias sem dano, mas a decisão sobre eles está aberta.
+    - **Limpeza:** os 13 efeitos antigos em CSS que os desenhos substituíram saíram da biblioteca. As medições deles ficam na doc dos efeitos, como registro.
 
-    As escolas seguem com os efeitos em CSS. **Ainda não estão no spellbook.**
+    O catálogo de desenhos está fechado; a implementação continua em validação no laboratório. **Ainda não estão no spellbook.**
 
 ## Fora do escopo
 

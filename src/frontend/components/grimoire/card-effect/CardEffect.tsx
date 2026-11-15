@@ -56,16 +56,9 @@ export function EffectLayers({ effect }: { effect: EffectId }) {
       {parts === 'art' ? (
         // An 'art' effect's id is its drawing's name (types.unit.test.ts checks every one has one)
         <EffectArt name={effect as ArtName} />
-      ) : parts === 'glow+icons' ? (
-        <>
-          <span className={styles.glow} data-effect={effect} />
-          <span className={styles.deco} data-effect={effect} data-size="big" />
-          <span className={styles.deco} data-effect={effect} data-size="small" />
-        </>
       ) : (
         <span className={styles.fx} data-effect={effect} />
       )}
-      {parts === 'fx+bolt' && <span className={styles.bolt} />}
       {enter === 'spin' && (
         <span className={styles.ring}>
           <span className={styles.spin} />
