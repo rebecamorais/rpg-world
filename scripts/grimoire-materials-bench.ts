@@ -36,8 +36,11 @@ const ALL_SCENARIOS = [
   'fx:bolt',
 ] as const;
 // SCENARIOS=none,crypt-stone re-measures just a few
-const SCENARIOS = process.env.SCENARIOS
-  ? ALL_SCENARIOS.filter((s) => process.env.SCENARIOS!.split(',').includes(s))
+// (any fx:<effect id> works here too, beyond the ones listed above)
+const SCENARIOS: readonly string[] = process.env.SCENARIOS
+  ? process.env.SCENARIOS.split(',').filter(
+      (s) => (ALL_SCENARIOS as readonly string[]).includes(s) || s.startsWith('fx:'),
+    )
   : ALL_SCENARIOS;
 const THEMES = (process.env.THEMES ?? 'dark,light').split(',') as ('dark' | 'light')[];
 const DEVICES = {

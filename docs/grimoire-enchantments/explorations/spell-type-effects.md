@@ -136,10 +136,45 @@ Foram medidos 4 efeitos, um de cada jeito de montar: `frost` (brilho e ícones),
 3. **`embers` e `alchemy-circle` são os mais caros no raster.** São os que animam o motivo inteiro ao entrar: a brasa sobe, e a luz gira pela borda.
 4. **A rolagem não muda.** Com os cards fechados não há efeito. As diferenças na rolagem ficam dentro do ruído das amostras.
 
+### Medição (rodada 2): os outros 17 efeitos
+
+Dados em [card-effects-bench-round2.json](card-effects-bench-round2.json). É o mesmo benchmark da rodada 1, com 3 amostras em vez de 5, os dois temas, desktop e celular. A linha de base (o card de hoje) foi medida de novo na mesma rodada.
+
+**Ao abrir o card no celular com a CPU 4x mais lenta (mediana dos dois temas):**
+
+| Efeito     | style | paint | raster | frames > 33 ms |
+| ---------- | ----- | ----- | ------ | -------------- |
+| sem efeito | 13    | 46    | 62     | 2              |
+| grave-mist | 40    | 94    | 93     | 1              |
+| sunlight   | 43    | 95    | 117    | 1              |
+| echo       | 44    | 86    | 106    | 1              |
+| shockwave  | 50    | 90    | 96     | 1              |
+| impact     | 41    | 87    | 112    | 1              |
+| drips      | 44    | 97    | 105    | 1              |
+| thrust     | 41    | 88    | 109    | 1              |
+| miasma     | 46    | 83    | 130    | 2              |
+| soundwave  | 55    | 82    | 88     | 1              |
+| slashes    | 38    | 83    | 113    | 2              |
+| ward-mesh  | 46    | 86    | 119    | 1              |
+| portal     | 44    | 87    | 119    | 1              |
+| star-map   | 40    | 82    | 116    | 1              |
+| swirl      | 44    | 88    | 108    | 2              |
+| mirage     | 45    | 86    | 110    | 1              |
+| burst      | 47    | 90    | 104    | 1              |
+| crypt-fog  | 41    | 78    | 104    | 1              |
+
+Os tempos estão em ms.
+
+**Leitura das duas rodadas (todos os 21 efeitos):**
+
+1. **Nenhum efeito aumentou os frames lentos ao abrir.** A mediana ficou igual ou abaixo da linha de base em todos.
+2. **Todos custam a mesma faixa:** de 25 a 45 ms a mais de estilo, de 30 a 70 ms a mais de pintura e de 25 a 85 ms a mais de raster, uma vez, na abertura.
+3. **Os mais caros no raster** são os que animam o motivo inteiro ao entrar: `embers` (148 ms), `alchemy-circle` (134 ms) e `miasma` (130 ms). Se um dia for preciso cortar, a primeira troca é a entrada deles para `fade`.
+
 ## Próximos passos
 
 - ~~Levar a lógica "dano, senão escola" para um mapa no código.~~ Feito: `grimoire-materials.ts` e `grimoire-effects.ts`.
-- ~~Prototipar no laboratório e medir com o benchmark.~~ Feito em 15/11 (acima).
+- ~~Prototipar no laboratório e medir com o benchmark.~~ Feito em 15/11 (acima): os 21 efeitos medidos em duas rodadas.
 - Revisão visual dos 21 efeitos pela dona, em `/dev/grimoire`.
 - Decidir a ondulação por toque no `SpellCard`, já que o toque fecha o card.
 - Decidir quais motivos viram material (superfície) e quais ficam como detalhe (ícone, ondulação).

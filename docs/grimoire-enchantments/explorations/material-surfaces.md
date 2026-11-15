@@ -314,6 +314,16 @@ A exploração está **concluída** como estudo técnico. O PR continua como ras
 - Medir num Android real.
 - Decidir **onde** os materiais aparecem no spellbook: no card aberto, nos preparados ou em todos.
 
+## Efeitos do card aberto (15/11)
+
+Os 21 efeitos por tipo usam o mesmo laboratório (`/dev/grimoire`) e o mesmo benchmark, com cenários `fx:<id>`. Foram medidos em duas rodadas: [card-effects-bench-round1.json](card-effects-bench-round1.json) e [card-effects-bench-round2.json](card-effects-bench-round2.json).
+
+- **Frames:** nenhum efeito aumentou os frames lentos ao abrir o card, nem no celular lento.
+- **Custo:** abrir custa mais estilo, pintura e raster, uma vez só.
+- **Rolagem:** não muda, porque com os cards fechados não há efeito.
+
+Os detalhes estão em [spell-type-effects.md](spell-type-effects.md).
+
 ## Próximos passos (para a dona decidir)
 
 1. Aprovar ou recusar cada material pelo visual, no `/dev/grimoire`.
