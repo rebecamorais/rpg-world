@@ -36,7 +36,7 @@
   --success: #22c55e;
   --info: #3b82f6;
   --warning: #eab308;
-  /* Deeper than --danger: white text on it is 4.8:1 (AA). Black on #ef4444 read as a warning sign. */
+  /* A deeper red than the danger token, so white text on it reaches 4.8:1 (AA) */
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
 
