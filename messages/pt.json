@@ -106,6 +106,7 @@
     "loading": "Carregando…",
     "logout": "Sair",
     "confirm": "Confirmar",
+    "confirmTitle": "Tem certeza?",
     "saveChanges": "Salvar Alterações",
     "close": "Fechar",
     "title": "RPG World",
@@ -1406,7 +1407,8 @@
       "declineFrom": "Recusar o pedido de {name}",
       "declineConfirm": "Recusar o pedido de {name} para entrar na mesa?",
       "cancelFor": "Cancelar convite para {name}",
-      "cancelConfirm": "Cancelar o convite para {name}?"
+      "cancelConfirm": "Cancelar o convite para {name}?",
+      "cancelInvite": "Cancelar convite"
     },
     "manage": {
       "title": "Gerenciar a mesa",
@@ -1431,7 +1433,9 @@
       "rename": "Renomear",
       "renamed": "Mesa renomeada",
       "deleteParty": "Apagar mesa",
-      "deleteConfirm": "Apagar esta mesa? Nenhum personagem é apagado.",
+      "dangerZone": "Zona de perigo",
+      "deleteHint": "Apagar a mesa desfaz tudo o que é dela: baú (moedas e itens), combate, imagem, link do diário, convites e pedidos. Os personagens continuam com os donos.",
+      "deleteConfirm": "Apagar esta mesa? O baú, o combate, a imagem, o diário e os convites somem para sempre. Nenhum personagem é apagado.",
       "deleted": "Mesa apagada",
       "unnamed": "jogador sem nome de usuário",
       "editionLabel": "Edição das regras",

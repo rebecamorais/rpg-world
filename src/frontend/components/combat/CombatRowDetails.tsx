@@ -196,9 +196,9 @@ export function CombatRowDetails({
           </Button>
         ))}
         <Button
-          variant="ghost"
+          variant="destructive-ghost"
           size="sm"
-          className="text-danger-flare touch-target ml-auto"
+          className="touch-target ml-auto"
           onClick={onRemove}
         >
           <AppIcon name="X" size={16} aria-hidden="true" />

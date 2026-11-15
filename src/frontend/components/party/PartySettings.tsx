@@ -12,6 +12,7 @@ import AppLink from '@frontend/demo/AppLink';
 import { useParty } from '@frontend/hooks/useParty';
 
 import { JournalSettings } from './JournalSettings';
+import { PartyDangerZone } from './PartyDangerZone';
 import { PartyImageSettings } from './PartyImageSettings';
 import { PartyManagement } from './PartyManagement';
 import { PartyNotFound } from './PartyPage';
@@ -38,9 +39,12 @@ export function PartySettings({ partyId }: { partyId: string }) {
         </Button>
       }
     >
-      <PartyManagement party={party} onDeleted={() => router.push('/parties')} />
-      <PartyImageSettings party={party} />
-      <JournalSettings party={party} />
+      <div className="flex flex-col gap-6">
+        <PartyManagement party={party} />
+        <PartyImageSettings party={party} />
+        <JournalSettings party={party} />
+        <PartyDangerZone party={party} onDeleted={() => router.push('/parties')} />
+      </div>
     </PageContainer>
   );
 }

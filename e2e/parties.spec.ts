@@ -208,9 +208,9 @@ test.describe('mesas', () => {
     await bring(player.page, partyId, [characterId]);
 
     await player.page.goto(partyUrl(partyId));
-    player.page.once('dialog', (dialog) => dialog.accept());
     await (await hydrated(player.page.getByRole('button', { name: 'My characters' }))).click();
     await player.page.getByRole('button', { name: 'Leave party' }).click();
+    await player.page.getByRole('alertdialog').getByRole('button', { name: 'Leave party' }).click();
     await expect.poll(() => new URL(player.page.url()).pathname).toBe('/parties');
 
     await player.page.goto('/characters');
@@ -224,8 +224,8 @@ test.describe('mesas', () => {
   test('o mestre exclui a mesa: aviso e volta para a lista', async ({ page, user: _ }) => {
     const { id: partyId } = await createParty(page, 'Mesa Para Apagar');
     await page.goto(`${partyUrl(partyId)}/settings`);
-    page.once('dialog', (dialog) => dialog.accept());
     await (await hydrated(page.getByRole('button', { name: 'Delete party' }))).click();
+    await page.getByRole('alertdialog').getByRole('button', { name: 'Delete party' }).click();
     await expect(page.getByText('Party deleted')).toBeVisible();
     await expect.poll(() => new URL(page.url()).pathname).toBe('/parties');
   });
@@ -381,8 +381,8 @@ test.describe('mesas', () => {
     await bia.page.goto(partyUrl(partyId));
     await expect(bia.page.getByText('This party has no GM')).toBeVisible();
     await expect(bia.page.getByRole('list', { name: 'Combat order' })).toHaveCount(0);
-    bia.page.once('dialog', (dialog) => dialog.accept());
     await (await hydrated(bia.page.getByRole('button', { name: 'I want to be the GM' }))).click();
+    await bia.page.getByRole('alertdialog').getByRole('button', { name: 'Confirm' }).click();
     await expect(bia.page.getByText('You asked to become the GM of this party.')).toBeVisible();
     await expect(bia.page.getByRole('button', { name: 'Ask support for help' })).toBeDisabled();
 

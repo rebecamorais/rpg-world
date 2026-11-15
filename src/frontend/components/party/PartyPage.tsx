@@ -10,6 +10,7 @@ import { PlayerCombatPanel } from '@frontend/components/combat/PlayerCombatPanel
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
 import { Button } from '@frontend/components/ui/button';
+import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import {
   Dialog,
   DialogContent,
@@ -146,6 +147,7 @@ export function PartyCombatTab({ partyId }: { partyId: string }) {
 /** A player's own business with the party, out of the way of play: who they bring, and leaving. */
 export function MyPartyMenu({ party }: { party: PartyView }) {
   const t = useTranslations('parties');
+  const confirm = useConfirm();
   const router = useRouter();
   const { currentUser } = useCurrentUser();
   const { characters } = useCharacters();
@@ -165,8 +167,12 @@ export function MyPartyMenu({ party }: { party: PartyView }) {
     // Nobody else could open a party without a GM: its last player leaving deletes it
     const lastPlayer =
       !party.hasGm && party.people.filter((p) => p.status === 'active').length <= 1;
-    if (!window.confirm(t(lastPlayer ? 'mine.leaveConfirmLastPlayer' : 'mine.leaveConfirm')))
-      return;
+    const ok = await confirm({
+      description: t(lastPlayer ? 'mine.leaveConfirmLastPlayer' : 'mine.leaveConfirm'),
+      confirmLabel: t('mine.leave'),
+      destructive: true,
+    });
+    if (!ok) return;
     // mutateAsync, not mutate's callbacks: the party reload that follows answers "not found" and
     // unmounts this dialog before a callback would run
     try {
@@ -200,10 +206,10 @@ export function MyPartyMenu({ party }: { party: PartyView }) {
           isSaving={setMyCharacters.isPending}
         />
         <Button
-          variant="ghost"
+          variant="destructive-ghost"
           onClick={leave}
           loading={removeMember.isPending}
-          className="text-danger-flare justify-self-start"
+          className="justify-self-start"
         >
           {t('mine.leave')}
         </Button>

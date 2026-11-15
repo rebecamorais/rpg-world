@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
+import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { SectionCard } from '@frontend/components/ui/section-card';
@@ -18,6 +19,7 @@ import { googleDocUrl, parseGoogleDocId } from '@shared/google-docs';
 /** The GM pastes, swaps or removes the Google Docs link of the party journal. */
 export function JournalSettings({ party }: { party: PartyView }) {
   const t = useTranslations('parties.journal');
+  const confirm = useConfirm();
   const fieldId = useId();
   const { setJournal } = useParty(party.id);
   const [url, setUrl] = useState(party.journalDocId ? googleDocUrl(party.journalDocId) : '');
@@ -33,8 +35,13 @@ export function JournalSettings({ party }: { party: PartyView }) {
     setJournal.mutate(url, { onSuccess: () => toast.success(t('saved')) });
   };
 
-  const removeJournal = () => {
-    if (!window.confirm(t('removeConfirm'))) return;
+  const removeJournal = async () => {
+    const ok = await confirm({
+      description: t('removeConfirm'),
+      confirmLabel: t('remove'),
+      destructive: true,
+    });
+    if (!ok) return;
     setJournal.mutate(null, {
       onSuccess: () => {
         setUrl('');
@@ -73,7 +80,7 @@ export function JournalSettings({ party }: { party: PartyView }) {
             {party.journalDocId && (
               <Button
                 type="button"
-                variant="ghost"
+                variant="destructive-ghost"
                 onClick={removeJournal}
                 disabled={setJournal.isPending}
               >

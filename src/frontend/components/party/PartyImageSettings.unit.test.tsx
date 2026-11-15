@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -29,7 +29,6 @@ describe('PartyImageSettings', () => {
   });
 
   it('com imagem: mostra, troca e remove depois de confirmar', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     renderWithProviders(<PartyImageSettings party={party('https://images.test/mesa.webp')} />);
 
     expect(screen.getByRole('img', { name: t.alt })).toHaveAttribute(
@@ -38,7 +37,12 @@ describe('PartyImageSettings', () => {
     );
     expect(screen.getByRole('button', { name: t.change })).toBeVisible();
 
-    await userEvent.click(screen.getByRole('button', { name: t.remove }));
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button', { name: t.remove }));
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(t.removeConfirm);
+    expect(removeImage.mutate).not.toHaveBeenCalled();
+    await user.click(within(dialog).getByRole('button', { name: t.remove }));
     expect(removeImage.mutate).toHaveBeenCalled();
   });
 });

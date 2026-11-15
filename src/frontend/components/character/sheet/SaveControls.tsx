@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { createPortal } from 'react-dom';
 
 import { Button } from '@frontend/components/ui/button';
+import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import {
   useCharacterActions,
   useCharacterMeta,
@@ -145,11 +146,17 @@ function SaveBar({
   const slot = useSaveBarSlot();
   const canSave = isDirty && !isSaving && !hasErrors;
   useSaveShortcut(canSave ? onSave : null);
+  const confirm = useConfirm();
 
   if (!isDirty || typeof document === 'undefined') return null;
 
-  const discard = () => {
-    if (window.confirm(t('discardConfirm'))) onDiscard();
+  const discard = async () => {
+    const ok = await confirm({
+      description: t('discardConfirm'),
+      confirmLabel: t('discard'),
+      destructive: true,
+    });
+    if (ok) onDiscard();
   };
 
   return createPortal(

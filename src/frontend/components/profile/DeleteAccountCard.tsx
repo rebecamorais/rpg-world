@@ -84,8 +84,9 @@ export function DeleteAccountCard({ hasPassword }: DeleteAccountCardProps) {
 
   return (
     <SectionCard role="region" aria-labelledby={titleId} className="border-danger-muted">
-      <SectionCard.Header className="sm:px-6">
-        <SectionCard.Title id={titleId} icon="TriangleAlert">
+      <SectionCard.Header className="bg-danger-surface sm:px-6">
+        <SectionCard.Title id={titleId} className="text-danger-flare">
+          <AppIcon name="TriangleAlert" size={14} className="shrink-0" aria-hidden="true" />
           {t('title')}
         </SectionCard.Title>
       </SectionCard.Header>

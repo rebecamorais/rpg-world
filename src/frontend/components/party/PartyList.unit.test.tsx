@@ -131,33 +131,39 @@ describe('PartyList', () => {
   });
 
   it('recusar um convite pede confirmação com o nome da mesa', async () => {
-    const confirm = vi
-      .spyOn(window, 'confirm')
-      .mockReturnValueOnce(false)
-      .mockReturnValueOnce(true);
     vi.mocked(rpgWorldApi.delete).mockResolvedValue(undefined);
     renderList(mine({ invites: [party('invite', { status: 'invited' })] }));
+    const user = userEvent.setup();
 
     const decline = await screen.findByRole('button', {
       name: named(t.declineInvite, 'Mesa invite'),
     });
-    await userEvent.click(decline);
-    expect(confirm).toHaveBeenCalledWith(named(t.declineInviteConfirm, 'Mesa invite'));
+    await user.click(decline);
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(named(t.declineInviteConfirm, 'Mesa invite'));
+    await user.click(within(dialog).getByRole('button', { name: messages.common.cancel }));
     expect(rpgWorldApi.delete).not.toHaveBeenCalled();
 
-    await userEvent.click(decline);
+    await user.click(decline);
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.decline }),
+    );
     await vi.waitFor(() => expect(rpgWorldApi.delete).toHaveBeenCalled());
   });
 
   it('cancelar um pedido pede confirmação com o nome da mesa', async () => {
-    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
     renderList(mine({ requests: [party('pedido', { status: 'requested' })] }));
+    const user = userEvent.setup();
 
-    await userEvent.click(
+    await user.click(
       await screen.findByRole('button', { name: named(t.withdrawFrom, 'Mesa pedido') }),
     );
 
-    expect(confirm).toHaveBeenCalledWith(named(t.withdrawConfirm, 'Mesa pedido'));
+    expect(screen.getByRole('alertdialog')).toHaveTextContent(
+      named(t.withdrawConfirm, 'Mesa pedido'),
+    );
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
     expect(rpgWorldApi.delete).not.toHaveBeenCalled();
   });
 

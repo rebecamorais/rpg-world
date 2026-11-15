@@ -36,8 +36,9 @@
   --success: #22c55e;
   --info: #3b82f6;
   --warning: #eab308;
-  --destructive: var(--danger);
-  --destructive-foreground: #000000;
+  /* A deeper red than the danger token, so white text on it reaches 4.8:1 (AA) */
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
 
   /* Brand. Inside a character sheet, --character-color replaces it (see .character-context). */
   --brand: #663399;

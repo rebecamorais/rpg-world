@@ -13,6 +13,8 @@ const buttonVariants = cva(
       variant: {
         default: 'bg-primary text-primary-on hover:bg-primary/90 shadow',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm',
+        /** Red text, no fill: removing one row of a list. A whole-thing delete uses `destructive`. */
+        'destructive-ghost': 'text-danger-flare hover:bg-danger-surface hover:text-danger-flare',
         outline:
           'border-border bg-background hover:bg-muted hover:text-foreground border shadow-sm',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-muted border shadow-sm',

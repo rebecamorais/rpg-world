@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
+import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { SectionCard } from '@frontend/components/ui/section-card';
@@ -28,9 +29,10 @@ const useOrigin = () =>
     () => '',
   );
 
-/** The GM's controls: invite, the link, players, name and deleting the party. */
-export function PartyManagement({ party, onDeleted }: { party: PartyView; onDeleted: () => void }) {
+/** The GM's controls: invite, the link, players, name and rules edition. Deleting is in PartyDangerZone. */
+export function PartyManagement({ party }: { party: PartyView }) {
   const t = useTranslations('parties.manage');
+  const confirm = useConfirm();
   const ids = {
     invite: useId(),
     link: useId(),
@@ -39,7 +41,7 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
     editionHint: useId(),
   };
   const origin = useOrigin();
-  const { invite, rotateCode, removeMember, rename, setEdition, remove } = useParty(party.id);
+  const { invite, rotateCode, removeMember, rename, setEdition } = useParty(party.id);
   const [username, setUsername] = useState('');
   const [name, setName] = useState(party.name);
 
@@ -62,27 +64,19 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
     toast.success(t('copied'));
   };
 
-  const rotate = () => {
-    if (!window.confirm(t('rotateConfirm'))) return;
+  const rotate = async () => {
+    const ok = await confirm({
+      description: t('rotateConfirm'),
+      confirmLabel: t('rotate'),
+      destructive: true,
+    });
+    if (!ok) return;
     rotateCode.mutate(undefined, { onSuccess: () => toast.success(t('rotated')) });
   };
 
   const saveName = (event: FormEvent) => {
     event.preventDefault();
     rename.mutate(name, { onSuccess: () => toast.success(t('renamed')) });
-  };
-
-  const deleteParty = async () => {
-    if (!window.confirm(t('deleteConfirm'))) return;
-    // mutateAsync, not mutate's callbacks: the party reload that follows answers "not found" and
-    // unmounts this panel before a callback would run
-    try {
-      await remove.mutateAsync();
-      toast.success(t('deleted'));
-      onDeleted();
-    } catch {
-      // useParty already shows the error
-    }
   };
 
   return (
@@ -140,13 +134,16 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
                   <span>{label}</span>
                   <Button
                     size="sm"
-                    variant="ghost"
+                    variant="destructive-ghost"
                     disabled={removeMember.isPending}
-                    onClick={() => {
+                    onClick={async () => {
                       const key = party.journalDocId ? 'removeConfirmJournal' : 'removeConfirm';
-                      if (window.confirm(t(key, { name: label }))) {
-                        removeMember.mutate(person.userId);
-                      }
+                      const ok = await confirm({
+                        description: t(key, { name: label }),
+                        confirmLabel: t('remove'),
+                        destructive: true,
+                      });
+                      if (ok) removeMember.mutate(person.userId);
                     }}
                   >
                     {t('remove')}
@@ -200,16 +197,6 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
             className="max-w-xs"
           />
         </div>
-
-        <Button
-          type="button"
-          variant="destructive"
-          onClick={deleteParty}
-          loading={remove.isPending}
-          className="self-start"
-        >
-          {t('deleteParty')}
-        </Button>
       </SectionCard.Body>
     </SectionCard>
   );

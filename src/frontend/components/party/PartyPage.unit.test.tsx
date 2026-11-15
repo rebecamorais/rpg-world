@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -118,22 +118,24 @@ describe('PartyPage sem mestre', () => {
   });
 
   it('o último jogador que sai é avisado de que a mesa será apagada', async () => {
-    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
     renderPage(party({ people: [person('ana')] }));
 
     await leaveParty();
 
-    expect(confirm).toHaveBeenCalledWith(t.mine.leaveConfirmLastPlayer);
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(t.mine.leaveConfirmLastPlayer);
+    await userEvent.click(within(dialog).getByRole('button', { name: messages.common.cancel }));
     expect(rpgWorldApi.delete).not.toHaveBeenCalled();
   });
 
   it('com outros jogadores ativos, o aviso é o de sempre', async () => {
-    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true);
     renderPage(party());
 
     await leaveParty();
 
-    expect(confirm).toHaveBeenCalledWith(t.mine.leaveConfirm);
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(t.mine.leaveConfirm);
+    await userEvent.click(within(dialog).getByRole('button', { name: t.mine.leave }));
     await waitFor(() =>
       expect(rpgWorldApi.delete).toHaveBeenCalledWith('/api/parties/p1/members/ana'),
     );

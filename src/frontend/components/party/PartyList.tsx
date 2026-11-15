@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Button } from '@frontend/components/ui/button';
 import { Card } from '@frontend/components/ui/card';
+import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { ErrorState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCurrentUser } from '@frontend/context/UserContext';
@@ -79,6 +80,7 @@ function PartyRow({ party, children }: { party: PartySummary; children?: React.R
 /** The parties page: invitations first (they wait for an answer), then GM and player tables. */
 export default function PartyList() {
   const t = useTranslations('parties');
+  const confirm = useConfirm();
   const { getErrorMessage } = useErrorMessage();
   const { parties, isLoading, error, respond, isResponding } = useParties();
   const { currentUser } = useCurrentUser();
@@ -97,13 +99,16 @@ export default function PartyList() {
                 {/* Every row has the same buttons: the label names the party they answer */}
                 <Button
                   size="sm"
-                  variant="ghost"
+                  variant="destructive-ghost"
                   disabled={isResponding}
                   aria-label={t('declineInvite', { name: party.name })}
-                  onClick={() => {
-                    if (window.confirm(t('declineInviteConfirm', { name: party.name }))) {
-                      respond({ partyId: party.id, userId, accept: false });
-                    }
+                  onClick={async () => {
+                    const ok = await confirm({
+                      description: t('declineInviteConfirm', { name: party.name }),
+                      confirmLabel: t('decline'),
+                      destructive: true,
+                    });
+                    if (ok) respond({ partyId: party.id, userId, accept: false });
                   }}
                 >
                   {t('decline')}
@@ -148,13 +153,16 @@ export default function PartyList() {
             <PartyRow key={party.id} party={party}>
               <Button
                 size="sm"
-                variant="ghost"
+                variant="destructive-ghost"
                 disabled={isResponding}
                 aria-label={t('withdrawFrom', { name: party.name })}
-                onClick={() => {
-                  if (window.confirm(t('withdrawConfirm', { name: party.name }))) {
-                    respond({ partyId: party.id, userId, accept: false });
-                  }
+                onClick={async () => {
+                  const ok = await confirm({
+                    description: t('withdrawConfirm', { name: party.name }),
+                    confirmLabel: t('withdraw'),
+                    destructive: true,
+                  });
+                  if (ok) respond({ partyId: party.id, userId, accept: false });
                 }}
               >
                 {t('withdraw')}

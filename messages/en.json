@@ -106,6 +106,7 @@
     "loading": "Loading…",
     "logout": "Log out",
     "confirm": "Confirm",
+    "confirmTitle": "Are you sure?",
     "saveChanges": "Save Changes",
     "close": "Close",
     "title": "RPG World",
@@ -1406,7 +1407,8 @@
       "declineFrom": "Decline {name}'s request",
       "declineConfirm": "Decline {name}'s request to join the party?",
       "cancelFor": "Cancel invite for {name}",
-      "cancelConfirm": "Cancel the invite for {name}?"
+      "cancelConfirm": "Cancel the invite for {name}?",
+      "cancelInvite": "Cancel invite"
     },
     "manage": {
       "title": "Manage the party",
@@ -1431,7 +1433,9 @@
       "rename": "Rename",
       "renamed": "Party renamed",
       "deleteParty": "Delete party",
-      "deleteConfirm": "Delete this party? No character is deleted.",
+      "dangerZone": "Danger zone",
+      "deleteHint": "Deleting the party removes everything that belongs to it: the chest (coins and items), combat, picture, journal link, invites and requests. Characters stay with their owners.",
+      "deleteConfirm": "Delete this party? The chest, combat, picture, journal and invites are gone for good. No character is deleted.",
       "deleted": "Party deleted",
       "unnamed": "player without a username",
       "editionLabel": "Rules edition",

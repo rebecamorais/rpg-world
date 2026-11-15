@@ -34,7 +34,8 @@ export function DeleteCharacterDialog({
 }: DeleteCharacterDialogProps) {
   const t = useTranslations('characters');
   const tCommon = useTranslations('common');
-  const canDelete = !!character && confirmName === character.name;
+  // trim: a name pasted with a trailing space would keep the button off with no clue why
+  const canDelete = !!character && confirmName.trim() === character.name.trim();
 
   return (
     <Dialog open={!!character} onOpenChange={(open) => !open && onCancel()}>

@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
+import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import {
@@ -173,6 +174,7 @@ function AddNpc({
  */
 export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean }) {
   const t = useTranslations('combat');
+  const confirm = useConfirm();
   const combat = useEncounter(party.id);
   const encounter = combat.encounter?.role === 'gm' ? combat.encounter : null;
   // Larger screens: the open row's edits sit in a panel beside the list instead of inside it
@@ -220,10 +222,13 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
     onSwap: (other: string) => swap(row.participantId, other),
     onConditionsChange: (conditions: ActiveCondition[]) =>
       combat.setConditions.mutate({ participantId: row.participantId, conditions }),
-    onRemove: () => {
-      if (window.confirm(t('removeConfirm', { name: row.name }))) {
-        combat.removeParticipant.mutate(row.participantId);
-      }
+    onRemove: async () => {
+      const ok = await confirm({
+        description: t('removeConfirm', { name: row.name }),
+        confirmLabel: t('remove', { name: row.name }),
+        destructive: true,
+      });
+      if (ok) combat.removeParticipant.mutate(row.participantId);
     },
   });
 
@@ -364,11 +369,15 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-heading">{round === 0 ? t('preparing') : t('round', { round })}</h2>
         <Button
-          variant="ghost"
-          className="text-danger-flare"
+          variant="destructive-ghost"
           loading={combat.finish.isPending}
-          onClick={() => {
-            if (window.confirm(t('endCombatConfirm'))) combat.finish.mutate();
+          onClick={async () => {
+            const ok = await confirm({
+              description: t('endCombatConfirm'),
+              confirmLabel: t('endCombat'),
+              destructive: true,
+            });
+            if (ok) combat.finish.mutate();
           }}
         >
           {t('endCombat')}
