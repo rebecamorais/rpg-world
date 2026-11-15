@@ -3,7 +3,7 @@
 Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tipografia, acessórios e interações que fazem a interface parecer um objeto encantado. As decisões estão na [spec-mãe](../superpowers/specs/2026-11-13-grimoire-enchantments-design.md).
 
 - **Épico:** [#194](https://github.com/rebecamorais/rpg-world/issues/194)
-- **Branch e PR:** `feat/grimoire-library` ([#219](https://github.com/rebecamorais/rpg-world/pull/219)), de longa duração e em rascunho.
+- **Branch e PR:** `feat/grimoire-material-surfaces` ([#219](https://github.com/rebecamorais/rpg-world/pull/219)), de longa duração e em rascunho.
 - **Estado:**
   - **Catálogo:** fase 1 ([#195](https://github.com/rebecamorais/rpg-world/issues/195)) concluída.
   - **Laboratório:** existe em `/dev/grimoire/materials`, com 4 superfícies de material. Só abre fora da produção.

@@ -72,7 +72,7 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
 23. **(dona)** **Superfícies de material:** Glacial Glass, Alchemical Corrosion (versão em máscaras SVG), Crypt Stone e Divine Parchment são os candidatos, todos na cor da magia e aprovados na revisão visual. Foram medidos em 3 rodadas de benchmark. As variantes descartadas (Corrosion só de gradientes, texturas em WebP) saíram do código. Está em [explorations/material-surfaces.md](../../grimoire-enchantments/explorations/material-surfaces.md). **Ainda não estão no spellbook.**
 24. **(dona)** **Biblioteca:**
     - O Grimório é uma biblioteca de estilos e componentes de card.
-    - Ele cresce numa **branch de longa duração**, `feat/grimoire-library`, com **um PR só** (#219), que fica em rascunho e reúne docs, assets, componentes e o laboratório `/dev/grimoire`.
+    - Ele cresce numa **branch de longa duração**, `feat/grimoire-material-surfaces`, com **um PR só** (#219), que fica em rascunho e reúne docs, assets, componentes e o laboratório `/dev/grimoire`.
     - O PR do catálogo (#198) foi fechado sem merge: os commits dele estão nessa branch.
     - Nada chega ao spellbook antes de uma decisão explícita.
 
