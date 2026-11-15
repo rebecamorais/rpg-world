@@ -85,30 +85,6 @@ export const SpellHeader = React.memo(
               </div>
             )}
           </div>
-
-          <div className="pointer-events-auto flex shrink-0 items-center gap-1">
-            {displayValues.components.map((comp: SpellComponentDisplay) => (
-              <Tooltip key={comp.letter}>
-                <TooltipTrigger asChild>
-                  {/* Not focusable: the label is already in the text for screen readers. */}
-                  <span className="flex size-6 items-center justify-center">
-                    <span className="sr-only">{comp.label}</span>
-                    <AppIcon
-                      variant="game"
-                      name={comp.icon}
-                      size="xs"
-                      className={cn('shrink-0', comp.color)}
-                      aria-hidden="true"
-                    />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs">
-                  <p className="text-foreground font-semibold">{comp.label}</p>
-                  {comp.hint && <p className="text-muted-foreground">{comp.hint}</p>}
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </div>
         </div>
 
         <div className="text-label text-muted-foreground mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
@@ -163,6 +139,33 @@ export const SpellHeader = React.memo(
                 <span className="sr-only">{displayValues.allDamageLabel}: </span>
                 {displayValues.damage}
               </Detail>
+            )}
+
+            {/* Verbal, somatic, material: on the details line, so the title's corner stays free */}
+            {displayValues.components.length > 0 && (
+              <li className="pointer-events-auto flex items-center">
+                {displayValues.components.map((comp: SpellComponentDisplay) => (
+                  <Tooltip key={comp.letter}>
+                    <TooltipTrigger asChild>
+                      {/* Not focusable: the label is already in the text for screen readers. */}
+                      <span className="flex size-5 items-center justify-center">
+                        <span className="sr-only">{comp.label}</span>
+                        <AppIcon
+                          variant="game"
+                          name={comp.icon}
+                          size="xs"
+                          className={cn('shrink-0', comp.color)}
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p className="text-foreground font-semibold">{comp.label}</p>
+                      {comp.hint && <p className="text-muted-foreground">{comp.hint}</p>}
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </li>
             )}
           </ul>
 
