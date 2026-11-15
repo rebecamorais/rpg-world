@@ -7,22 +7,22 @@ Plano de 2026-11-15. Cobre as 31 telas únicas e os 20 modais do app. Continua a
 Cada tela ou modal é revista numa sessão própria, nesta ordem:
 
 1. **Tarefa.** Escrever em uma frase o que a pessoa vai fazer ali, e fazer essa tarefa do começo ao fim no app rodando.
-2. **Matriz de estados.** Passar pela tela em cada combinação que se aplica a ela:
+2. **Níveis de cobertura.** Combinar todos os eixos (tema, largura, papel, dados, idioma) daria centenas de casos por tela. Em vez disso, cada tela passa por três níveis, proporcionais ao risco:
 
-   | Eixo    | Valores                                                                       |
-   | ------- | ----------------------------------------------------------------------------- |
-   | Tema    | escuro e claro                                                                |
-   | Largura | 390px, 768px e 1280px                                                         |
-   | Papel   | visitante, jogador, mestre e demo (só os que abrem a tela)                    |
-   | Dados   | carregando, vazio, com poucos dados, com muitos dados e textos longos, e erro |
-   | Idioma  | pt e en (en é o mais longo nos botões); es e sv só para ver se nada quebra    |
+   | Nível        | O que cobre                                                                                                     | Quando                                                               |
+   | ------------ | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+   | Essencial    | A tarefa principal, nos dois temas, em 390px e 1280px, em pt e en                                               | Toda tela                                                            |
+   | Crítico      | Os [critérios transversais](#critérios-transversais) que se aplicam: dados, permissões, rede, ações destrutivas | Toda tela que salva, mostra dados de outra pessoa ou é usada ao vivo |
+   | Exploratório | es e sv, 320px e 768px, dados extremos (nomes longos, acentos, listas grandes), casos da tela                   | Fases 1 e 2, ou quando o essencial achou algo                        |
 
 3. **Checklist comum** (abaixo), item por item.
 4. **Pontos da tela:** as perguntas específicas da tabela de cada tela.
 5. **Registro.** Cada achado vai para o documento da área (`telas-*.md`) com severidade, `arquivo:linha` e uma proposta, no formato que já existe. Os prints de antes ficam no PR.
-6. **Fechamento.** A tela está revista quando todas as linhas da matriz foram vistas e cada achado tem um destino: corrigido, issue no Project 1 ou descartado com o motivo.
+6. **Fechamento.** A tela está revista quando os níveis que se aplicam foram vistos e cada achado tem um destino: corrigido, issue no Project 1 ou descartado com o motivo. Perda de dados ou falha de permissão bloqueia a entrega: corrige antes, não vira issue.
 
-Uma tela por PR quando houver correção. Telas pequenas da mesma área podem ir juntas.
+Os PRs são **por causa**, não por tela. Uma correção num componente compartilhado (o stepper, o `text-label`, o tema claro) resolve várias telas de uma vez; nesse caso o PR confere todas as telas que usam o componente. Achado que é só de uma tela vai num PR daquela área.
+
+Toda correção mantém a fantasia sóbria do app. Quando estilo e legibilidade brigam, ganha a legibilidade: a ficha é lida no celular, no meio da sessão.
 
 ### Checklist comum
 
@@ -38,6 +38,35 @@ Uma tela por PR quando houver correção. Telas pequenas da mesma área podem ir
 | Acessibilidade | Tudo funciona no teclado, com foco visível e na ordem da leitura. Alvos de toque com 44px. Ícone sozinho tem `aria-label`. Erro de campo ligado ao campo.         |
 | Texto          | Sem inglês na interface em pt, sem "party" no lugar de "mesa". Frases em caixa normal, sem Title Case. Nenhum texto fixo no código.                               |
 | Responsivo     | Sem rolagem horizontal. Nada fixo cobre o conteúdo. Nomes longos truncam com `title` ou quebram, sem empurrar os botões.                                          |
+
+## Critérios transversais
+
+Riscos que não aparecem olhando uma tela parada. Cada tela confere os grupos que se aplicam a ela, no nível **Crítico**.
+
+| Grupo                        | O que conferir                                                                                                                                                                                                                                                    |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dados e persistência         | Falha ao salvar mantém o rascunho. Clicar duas vezes não cria duas operações. A mesma ficha em duas abas, ou mestre e jogador mexendo ao mesmo tempo, não sobrescreve nada sem avisar. Sair com alterações pendentes avisa. Atualizar a página no meio da edição. |
+| Rede e tempo real            | Sem conexão, a tela diz que está desatualizada. Ao reconectar, o estado se acerta ou o conflito é mostrado. Uma alteração que falhou não parece ter dado certo. Vale para o combate e para tudo que é compartilhado na mesa.                                      |
+| Permissões                   | Visitante, jogador, mestre e demo veem e mudam só o que podem. Abrir a URL direto não mostra dados de outra pessoa. A API recusa a operação proibida, não só a interface esconde o botão. Só leitura não tem controle que parece editável.                        |
+| Acessibilidade (WCAG 2.2 AA) | A tarefa principal funciona só com teclado e com leitor de tela, que anuncia erros e resultados. Zoom de 200% e 400% não impede a tarefa. Nenhuma informação só pela cor. O foco não some atrás de elemento fixo. `prefers-reduced-motion` é respeitado.          |
+| Entrada                      | Teclado virtual aberto não esconde o botão principal. Imagem inválida ou grande demais tem mensagem. Datas e números no formato do idioma.                                                                                                                        |
+
+Referência: [WCAG 2.2 Quick Reference](https://www.w3.org/WAI/WCAG22/quickref/).
+
+### Testes automáticos
+
+A base já existe: Playwright com projetos de desktop e celular, `@axe-core/playwright` em `e2e/a11y*.spec.ts`, screenshots em `e2e/visual/` e o teste de contraste dos tokens. O review amplia o que existe, sem criar outra estrutura e sem repetir testes:
+
+| O que falta hoje                                     | Onde entraria                                                               |
+| ---------------------------------------------------- | --------------------------------------------------------------------------- |
+| Salvar a ficha com a conexão caindo (`setOffline`)   | `e2e/sheet-save.spec.ts`                                                    |
+| Mestre e jogador no mesmo combate, em dois contextos | `e2e/combat.spec.ts`, como `isolation.spec.ts` e `parties.spec.ts` já fazem |
+| O que o jogador não vê do mestre, e vice-versa       | `e2e/isolation.spec.ts`, que hoje cobre só personagens                      |
+| Modais da fase 1 no celular                          | `*.mobile.spec.ts` (já há para PV e condições; faltam magia, item e moedas) |
+| Safari/iPhone                                        | Um projeto `webkit` só com os fluxos da fase 1, rodando como smoke          |
+| Textos longos, acentos e caracteres especiais        | Os dados de teste dos specs da fase 1                                       |
+
+Screenshot novo só onde uma regressão visual passaria despercebida (tema claro, 390px). Os prints de antes e depois de cada correção vão no PR.
 
 ## Ordem sugerida
 
