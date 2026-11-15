@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { toast } from 'sonner';
@@ -337,18 +337,21 @@ describe('GmCombatPanel', () => {
 
   it('encerrar o combate pede confirmação', async () => {
     hook.encounter = running(1);
-    const confirm = vi
-      .spyOn(window, 'confirm')
-      .mockReturnValueOnce(false)
-      .mockReturnValueOnce(true);
     renderWithProviders(<GmCombatPanel party={party} live />);
+    const user = userEvent.setup();
     const end = screen.getByRole('button', { name: t.endCombat });
 
-    await userEvent.click(end);
+    await user.click(end);
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(t.endCombatConfirm);
+    await user.click(within(dialog).getByRole('button', { name: messages.common.cancel }));
     expect(hook.finish.mutate).not.toHaveBeenCalled();
-    await userEvent.click(end);
+
+    await user.click(end);
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.endCombat }),
+    );
     expect(hook.finish.mutate).toHaveBeenCalled();
-    expect(confirm).toHaveBeenCalledWith(t.endCombatConfirm);
   });
 
   it('sem conexão em tempo real mostra "Reconectando…"', () => {

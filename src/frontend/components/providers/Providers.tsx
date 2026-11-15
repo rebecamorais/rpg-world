@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 
 import QueryProvider from '@frontend/components/providers/QueryProvider';
+import { ConfirmProvider } from '@frontend/components/ui/confirm-dialog';
 import { TooltipProvider } from '@frontend/components/ui/tooltip';
 import { FileUploaderProvider } from '@frontend/context/FileUploaderContext';
 
@@ -23,7 +24,9 @@ export default function Providers({ children, locale, messages }: ProvidersProps
     <QueryProvider>
       <NextIntlClientProvider locale={locale} messages={messages} timeZone={TIME_ZONE}>
         <FileUploaderProvider>
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <ConfirmProvider>{children}</ConfirmProvider>
+          </TooltipProvider>
         </FileUploaderProvider>
       </NextIntlClientProvider>
     </QueryProvider>

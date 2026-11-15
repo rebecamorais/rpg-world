@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
+import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useParties } from '@frontend/hooks/useParties';
@@ -20,6 +21,7 @@ const MAX_GM_PARTIES = 5;
 /** A party without a GM: ask to become it, answer someone else's request, or call support. */
 export function PartyGmClaim({ party }: { party: PartyView }) {
   const t = useTranslations('parties.gmClaim');
+  const confirm = useConfirm();
   const unnamed = useTranslations('parties.manage')('unnamed');
   const { currentUser } = useCurrentUser();
   const { parties } = useParties();
@@ -43,8 +45,9 @@ export function PartyGmClaim({ party }: { party: PartyView }) {
     party.people.filter((person) => person.status === 'active').length === 1 &&
     party.people.some((person) => person.userId === currentUser?.id && person.status === 'active');
 
-  const onClaim = () => {
-    if (window.confirm(t(onlyPlayer ? 'claimConfirmSolo' : 'claimConfirm'))) claimGm.mutate();
+  const onClaim = async () => {
+    const ok = await confirm({ description: t(onlyPlayer ? 'claimConfirmSolo' : 'claimConfirm') });
+    if (ok) claimGm.mutate();
   };
 
   const isCandidate = claim?.candidateId === currentUser?.id;

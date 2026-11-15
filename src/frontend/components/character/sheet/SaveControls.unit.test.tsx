@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { messages } from '@tests/helpers/render';
@@ -63,6 +63,26 @@ describe('SaveCharacterButton', () => {
 
     expect(speed).toHaveAttribute('aria-invalid', 'true');
     expect(speed).toHaveClass('border-danger');
+  });
+
+  it('descartar pede confirmação e só então volta ao salvo', async () => {
+    const user = userEvent.setup();
+    renderSheet();
+
+    await user.clear(screen.getByLabelText('AC'));
+    await user.type(screen.getByLabelText('AC'), '15');
+    await user.click(screen.getByRole('button', { name: t.discard }));
+
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(t.discardConfirm);
+    await user.click(within(dialog).getByRole('button', { name: t.cancel }));
+    expect(screen.getByLabelText('AC')).toHaveValue('15');
+
+    await user.click(screen.getByRole('button', { name: t.discard }));
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.discard }),
+    );
+    expect(screen.getByLabelText('AC')).toHaveValue('14');
   });
 });
 

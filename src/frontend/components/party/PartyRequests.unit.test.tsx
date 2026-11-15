@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -51,38 +51,42 @@ describe('PartyRequests', () => {
   });
 
   it('recusar um pedido pede confirmação antes', async () => {
-    const confirm = vi
-      .spyOn(window, 'confirm')
-      .mockReturnValueOnce(false)
-      .mockReturnValueOnce(true);
     const { onRemove } = renderRequests();
+    const user = userEvent.setup();
     const decline = screen.getByRole('button', { name: named(t.declineFrom, '@bia') });
 
-    await userEvent.click(decline);
-    expect(confirm).toHaveBeenCalledWith(named(t.declineConfirm, '@bia'));
+    await user.click(decline);
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(named(t.declineConfirm, '@bia'));
+    await user.click(within(dialog).getByRole('button', { name: messages.common.cancel }));
     expect(onRemove).not.toHaveBeenCalled();
 
-    await userEvent.click(decline);
+    await user.click(decline);
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.decline }),
+    );
     expect(onRemove).toHaveBeenCalledWith('bia');
   });
 
   it('cancelar um convite pede confirmação antes', async () => {
-    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true);
     const { onRemove } = renderRequests();
+    const user = userEvent.setup();
 
-    await userEvent.click(screen.getByRole('button', { name: named(t.cancelFor, '@caio') }));
+    await user.click(screen.getByRole('button', { name: named(t.cancelFor, '@caio') }));
 
-    expect(confirm).toHaveBeenCalledWith(named(t.cancelConfirm, '@caio'));
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(named(t.cancelConfirm, '@caio'));
+    expect(onRemove).not.toHaveBeenCalled();
+    await user.click(within(dialog).getByRole('button', { name: t.cancelInvite }));
     expect(onRemove).toHaveBeenCalledWith('caio');
   });
 
   it('aprovar não pede confirmação', async () => {
-    const confirm = vi.spyOn(window, 'confirm');
     const { onApprove } = renderRequests();
 
     await userEvent.click(screen.getByRole('button', { name: named(t.approveFrom, '@ana') }));
 
-    expect(confirm).not.toHaveBeenCalled();
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
     expect(onApprove).toHaveBeenCalledWith('ana');
   });
 });

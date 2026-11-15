@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -51,12 +51,16 @@ describe('JournalSettings', () => {
   });
 
   it('com diário: mostra o link e Remover, depois de confirmar, tira o diário', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     renderWithProviders(<JournalSettings party={party(DOC_ID)} />);
+    const user = userEvent.setup();
 
     expect(screen.getByLabelText(t.linkLabel)).toHaveValue(googleDocUrl(DOC_ID));
     expect(screen.getByRole('button', { name: t.save })).toBeDisabled();
-    await userEvent.click(screen.getByRole('button', { name: t.remove }));
+    await user.click(screen.getByRole('button', { name: t.remove }));
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(t.removeConfirm);
+    expect(hook.setJournal.mutate).not.toHaveBeenCalled();
+    await user.click(within(dialog).getByRole('button', { name: t.remove }));
 
     expect(hook.setJournal.mutate).toHaveBeenCalledWith(null, expect.anything());
   });

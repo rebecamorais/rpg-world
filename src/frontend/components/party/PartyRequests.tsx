@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
+import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { SectionCard } from '@frontend/components/ui/section-card';
 
 import type { PartyPerson } from '@backend/contexts/parties/domain/PartyView';
@@ -23,6 +24,7 @@ export function PartyRequests({
   isBusy: boolean;
 }) {
   const t = useTranslations('parties.requestsSection');
+  const confirm = useConfirm();
   const unnamed = useTranslations('parties.manage')('unnamed');
   const requested = people.filter((p) => p.status === 'requested');
   const invited = people.filter((p) => p.status === 'invited');
@@ -49,11 +51,16 @@ export function PartyRequests({
                   <div className="flex gap-2">
                     <Button
                       size="sm"
-                      variant="ghost"
+                      variant="destructive-ghost"
                       disabled={isBusy}
                       aria-label={t('declineFrom', { name })}
-                      onClick={() => {
-                        if (window.confirm(t('declineConfirm', { name }))) onRemove(person.userId);
+                      onClick={async () => {
+                        const ok = await confirm({
+                          description: t('declineConfirm', { name }),
+                          confirmLabel: t('decline'),
+                          destructive: true,
+                        });
+                        if (ok) onRemove(person.userId);
                       }}
                     >
                       {t('decline')}
@@ -86,11 +93,16 @@ export function PartyRequests({
                     <span>{name}</span>
                     <Button
                       size="sm"
-                      variant="ghost"
+                      variant="destructive-ghost"
                       disabled={isBusy}
                       aria-label={t('cancelFor', { name })}
-                      onClick={() => {
-                        if (window.confirm(t('cancelConfirm', { name }))) onRemove(person.userId);
+                      onClick={async () => {
+                        const ok = await confirm({
+                          description: t('cancelConfirm', { name }),
+                          confirmLabel: t('cancelInvite'),
+                          destructive: true,
+                        });
+                        if (ok) onRemove(person.userId);
                       }}
                     >
                       {t('cancel')}

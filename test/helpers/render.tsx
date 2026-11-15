@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RenderOptions, render, renderHook } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 
+import { ConfirmProvider } from '@frontend/components/ui/confirm-dialog';
 import { TooltipProvider } from '@frontend/components/ui/tooltip';
 
 import en from '../../messages/en.json';
@@ -18,7 +19,9 @@ function createWrapper() {
     return (
       <NextIntlClientProvider locale="en" messages={en} timeZone="UTC">
         <QueryClientProvider client={queryClient}>
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <ConfirmProvider>{children}</ConfirmProvider>
+          </TooltipProvider>
         </QueryClientProvider>
       </NextIntlClientProvider>
     );

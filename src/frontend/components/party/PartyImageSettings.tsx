@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
+import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useFileUploader } from '@frontend/context/FileUploaderContext';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
@@ -31,6 +32,7 @@ const PREVIEW_HEIGHT = 630;
 /** The GM's picture for the party: the invite link's preview. Saved as soon as it is cropped. */
 export function PartyImageSettings({ party }: { party: PartyView }) {
   const t = useTranslations('parties.image');
+  const confirm = useConfirm();
   const queryClient = useQueryClient();
   const { getErrorMessage } = useErrorMessage();
   const { upload, isUploading } = useFileUploader();
@@ -63,8 +65,13 @@ export function PartyImageSettings({ party }: { party: PartyView }) {
     toast.success(t('saved'));
   };
 
-  const remove = () => {
-    if (!window.confirm(t('removeConfirm'))) return;
+  const remove = async () => {
+    const ok = await confirm({
+      description: t('removeConfirm'),
+      confirmLabel: t('remove'),
+      destructive: true,
+    });
+    if (!ok) return;
     removeImage.mutate(undefined, { onSuccess: () => toast.success(t('removed')) });
   };
 
@@ -98,12 +105,7 @@ export function PartyImageSettings({ party }: { party: PartyView }) {
             {isUploading ? t('uploading') : party.imageUrl ? t('change') : t('upload')}
           </Button>
           {party.imageUrl && (
-            <Button
-              variant="ghost"
-              onClick={remove}
-              disabled={removeImage.isPending}
-              className="text-danger-flare"
-            >
+            <Button variant="destructive-ghost" onClick={remove} disabled={removeImage.isPending}>
               {t('remove')}
             </Button>
           )}

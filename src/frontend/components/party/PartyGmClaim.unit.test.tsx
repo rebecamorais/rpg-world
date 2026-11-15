@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -88,7 +88,6 @@ function renderClaim(view: PartyView, me: string, asGmCount = 0) {
 describe('PartyGmClaim', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     vi.mocked(rpgWorldApi.post).mockResolvedValue(undefined);
     vi.mocked(rpgWorldApi.patch).mockResolvedValue(undefined);
     vi.mocked(rpgWorldApi.delete).mockResolvedValue(undefined);
@@ -102,20 +101,26 @@ describe('PartyGmClaim', () => {
     expect(screen.getByText(t.claimHint)).toBeInTheDocument();
     expect(t.claimHint).toMatch(/keeping their sheets/);
 
-    await userEvent.setup().click(button);
-    expect(window.confirm).toHaveBeenCalledWith(t.claimConfirm);
+    const user = userEvent.setup();
+    await user.click(button);
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(t.claimConfirm);
+    await user.click(within(dialog).getByRole('button', { name: messages.common.confirm }));
     await waitFor(() => expect(rpgWorldApi.post).toHaveBeenCalledWith('/api/parties/p1/gm-claim'));
   });
 
   it('sem confirmar, o pedido não chama a API', async () => {
-    vi.mocked(window.confirm).mockReturnValue(false);
     renderClaim(party(), 'ana');
     const button = await screen.findByRole('button', { name: t.claim });
     await waitFor(() => expect(button).toBeEnabled());
+    const user = userEvent.setup();
 
-    await userEvent.setup().click(button);
+    await user.click(button);
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: messages.common.cancel }),
+    );
 
-    expect(window.confirm).toHaveBeenCalled();
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
     expect(rpgWorldApi.post).not.toHaveBeenCalled();
   });
 
@@ -130,8 +135,11 @@ describe('PartyGmClaim', () => {
     expect(screen.getByText(t.claimHintSolo)).toBeInTheDocument();
     expect(screen.queryByText(t.claimHint)).not.toBeInTheDocument();
 
-    await userEvent.setup().click(button);
-    expect(window.confirm).toHaveBeenCalledWith(t.claimConfirmSolo);
+    const user = userEvent.setup();
+    await user.click(button);
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent(t.claimConfirmSolo);
+    await user.click(within(dialog).getByRole('button', { name: messages.common.confirm }));
     await waitFor(() => expect(rpgWorldApi.post).toHaveBeenCalledWith('/api/parties/p1/gm-claim'));
   });
 
@@ -202,7 +210,13 @@ describe('PartyGmClaim', () => {
     const { queryClient } = renderClaim(party(), 'ana');
     const invalidate = vi.spyOn(queryClient, 'invalidateQueries');
 
-    await userEvent.setup().click(await screen.findByRole('button', { name: t.claim }));
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole('button', { name: t.claim }));
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', {
+        name: messages.common.confirm,
+      }),
+    );
 
     await waitFor(() => {
       expect(invalidate).toHaveBeenCalledWith({ queryKey: partyQueryKey('p1') });
