@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { getApi } from '@api';
 
+import { MainContent } from '@frontend/components/layout/PageFrame';
 import Sidebar from '@frontend/components/layout/Sidebar';
 import { SeededQuery } from '@frontend/components/providers/SeededQuery';
 import { SIDEBAR_PINNED_COOKIE } from '@frontend/constants/sidebar';
@@ -25,7 +26,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
     // The invite link opens signed out too: its page shows the party's name and picture (also
     // the link preview on Discord and WhatsApp) and a way to sign in and come back
     if (asked?.startsWith(INVITE_PATH)) {
-      return <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 md:py-10">{children}</div>;
+      return (
+        <MainContent className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 md:py-10">
+          {children}
+        </MainContent>
+      );
     }
     redirect(`/login${back}`);
   }
@@ -33,7 +38,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
   // The sidebar shows the username and avatar from the first paint, instead of a placeholder
   // swapped after /api/profile. The layout stays mounted while navigating the dashboard, so this
   // only runs on a full page load. If it fails, the sidebar fetches it as before.
-  const sidebarPinned = (await cookies()).get(SIDEBAR_PINNED_COOKIE)?.value !== 'false';
+  // No cookie: the person never chose, and the sidebar picks by the screen width
+  const savedPinned = (await cookies()).get(SIDEBAR_PINNED_COOKIE)?.value;
+  const sidebarPinned = savedPinned === undefined ? undefined : savedPinned !== 'false';
   const [profile, parties] = await Promise.all([
     profileApi.getProfile(user.id).catch(() => null),
     partiesApi.listMine().catch(() => null),
@@ -55,15 +62,16 @@ export default async function DashboardLayout({ children }: { children: React.Re
             {/* Sidebar */}
             <Sidebar initialPinned={sidebarPinned} />
 
-            {/* Content area (the main landmark is in the root layout) */}
-            {/* Positioned: a sheet's background art fills this whole area (SheetBackdrop) */}
-            <div className="relative min-w-0 flex-1">
+            {/* Content area: the main landmark, beside the sidebar and not around it, so "Skip to
+                content" lands on the page. Positioned: a sheet's background art fills this whole
+                area (SheetBackdrop) */}
+            <MainContent className="relative min-w-0 flex-1">
               {/* Same width, side and top spacing on every dashboard page; collapsing the menu
                   only gives the page more room if its limit grows too */}
               <div className="mx-auto w-full max-w-5xl px-4 py-6 group-has-[[data-sidebar=rail]]/dashboard:max-w-7xl sm:px-6 md:py-10">
                 {children}
               </div>
-            </div>
+            </MainContent>
           </div>
         </UserProvider>
       </SeededQuery>

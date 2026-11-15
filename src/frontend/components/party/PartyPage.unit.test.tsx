@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
+import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
@@ -21,20 +22,24 @@ vi.mock('next/navigation', () => ({
 }));
 vi.mock('@client', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@client')>()),
-  rpgWorldApi: { get: vi.fn(), post: vi.fn(), patch: vi.fn(), delete: vi.fn() },
+  rpgWorldApi: { get: vi.fn(), post: vi.fn(), patch: vi.fn(), put: vi.fn(), delete: vi.fn() },
 }));
 vi.mock('@frontend/hooks/usePartyChannel', () => ({ usePartyChannel: () => ({ live: true }) }));
-vi.mock('@frontend/hooks/useCharacters', () => ({ useCharacters: () => ({ characters: [] }) }));
+const mine = vi.hoisted(() => ({
+  characters: [] as { id: string; name: string; level: number; class: string }[],
+}));
+vi.mock('@frontend/hooks/useCharacters', () => ({ useCharacters: () => mine }));
 vi.mock('@frontend/components/combat/PlayerCombatPanel', () => ({
   PlayerCombatPanel: () => <p>combat panel</p>,
 }));
 
 const t = messages.parties;
-const person = (userId: string) => ({
+const named = (text: string, name: string) => text.replace('{name}', name);
+const person = (userId: string, status: PartyView['people'][number]['status'] = 'active') => ({
   userId,
   username: userId,
   avatarUrl: null,
-  status: 'active' as const,
+  status,
 });
 
 const party = (overrides: Partial<PartyView> = {}): PartyView => ({
@@ -122,7 +127,7 @@ describe('PartyPage sem mestre', () => {
 
     await leaveParty();
 
-    const dialog = screen.getByRole('alertdialog');
+    const dialog = screen.getByRole('alertdialog', { name: t.mine.leaveTitleLastPlayer });
     expect(dialog).toHaveTextContent(t.mine.leaveConfirmLastPlayer);
     await userEvent.click(within(dialog).getByRole('button', { name: messages.common.cancel }));
     expect(rpgWorldApi.delete).not.toHaveBeenCalled();
@@ -133,7 +138,8 @@ describe('PartyPage sem mestre', () => {
 
     await leaveParty();
 
-    const dialog = screen.getByRole('alertdialog');
+    // Its own title, not "Are you sure?", and it says what happens to the characters
+    const dialog = screen.getByRole('alertdialog', { name: t.mine.leaveTitle });
     expect(dialog).toHaveTextContent(t.mine.leaveConfirm);
     await userEvent.click(within(dialog).getByRole('button', { name: t.mine.leave }));
     await waitFor(() =>
@@ -180,15 +186,153 @@ describe('Abas da mesa', () => {
     );
   });
 
-  it('o jogador escolhe os personagens no menu "Meus personagens", fora da tela de jogo', async () => {
+  it('o jogador escolhe os personagens em "Minha participação", fora da tela de jogo', async () => {
     renderPage(party({ hasGm: true }));
 
+    // The button carries the dialog's own name
+    expect(t.mine.open).toBe(t.mine.title);
     expect(await screen.findByRole('button', { name: t.mine.open })).toBeInTheDocument();
     expect(screen.queryByText(t.mine.description)).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: t.settings.manage })).not.toBeInTheDocument();
 
     await userEvent.setup().click(screen.getByRole('button', { name: t.mine.open }));
     expect(await screen.findByRole('dialog', { name: t.mine.title })).toBeInTheDocument();
+  });
+});
+
+describe('Aba Mesa: vazios e respostas do mestre', () => {
+  const gmParty = (people: PartyView['people']) =>
+    party({ role: 'gm', hasGm: true, people, gm: { inviteCode: 'X', rolePlay: [] } });
+
+  beforeEach(() => {
+    demo.isDemo = false;
+    encounter.view = null;
+    vi.clearAllMocks();
+  });
+
+  it('a jogadora numa mesa vazia escolhe quem levar dali mesmo', async () => {
+    renderPage(party({ hasGm: true }));
+
+    expect(await screen.findByText(t.page.noCharactersPlayer)).toBeInTheDocument();
+    expect(screen.getByText(t.page.noCharactersPlayerHint)).toBeInTheDocument();
+    await userEvent.setup().click(screen.getByRole('button', { name: t.page.chooseCharacters }));
+    expect(await screen.findByRole('dialog', { name: t.mine.title })).toBeInTheDocument();
+  });
+
+  it('salvar dali enche a mesa sem fechar o diálogo; ao fechar, o foco vai à lista', async () => {
+    mine.characters = [{ id: 'c1', name: 'Arani', level: 3, class: 'wizard' }];
+    const arani = {
+      characterId: 'c1',
+      ownerId: 'ana',
+      name: 'Arani',
+      avatarUrl: null,
+      race: 'elf',
+      class: 'wizard',
+      level: 3,
+      accentColor: null,
+    };
+    try {
+      renderPage(party({ hasGm: true }));
+      // The save fills the table: the reload after it brings the roster back with Arani in it
+      const filled = party({ hasGm: true, roster: [arani], myCharacterIds: ['c1'] });
+      const before = vi.mocked(rpgWorldApi.get).getMockImplementation()!;
+      vi.mocked(rpgWorldApi.put).mockImplementation(async () => {
+        vi.mocked(rpgWorldApi.get).mockImplementation(async (url: string) =>
+          url === '/api/parties/p1' ? filled : before(url),
+        );
+        return undefined;
+      });
+      const user = userEvent.setup();
+      await user.click(await screen.findByRole('button', { name: t.page.chooseCharacters }));
+      const dialog = await screen.findByRole('dialog', { name: t.mine.title });
+      await user.click(within(dialog).getByRole('checkbox', { name: /Arani/ }));
+      await user.click(within(dialog).getByRole('button', { name: t.mine.save }));
+
+      // Behind the open dialog, so hidden from the accessibility tree for now
+      const list = await screen.findByRole('region', { name: t.page.characters, hidden: true });
+      expect(await within(list).findByText('Arani')).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: t.mine.title })).toBeInTheDocument();
+
+      await user.keyboard('{Escape}');
+      await waitFor(() =>
+        expect(screen.queryByRole('dialog', { name: t.mine.title })).not.toBeInTheDocument(),
+      );
+      expect(screen.getByRole('heading', { name: t.page.characters })).toHaveFocus();
+    } finally {
+      mine.characters = [];
+    }
+  });
+
+  it('o mestre sem jogadores é levado ao convite', async () => {
+    renderPage(gmParty([]));
+
+    expect(await screen.findByText(t.page.noCharactersGm)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: t.page.invitePlayers })).toHaveAttribute(
+      'href',
+      '/parties/p1/settings#invite',
+    );
+  });
+
+  it('com jogadores ativos e sem personagens, o mestre lê que falta eles escolherem', async () => {
+    renderPage(gmParty([person('ana')]));
+
+    expect(await screen.findByText(t.page.noCharactersGmWaiting)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: t.page.invitePlayers })).not.toBeInTheDocument();
+  });
+
+  it('aprovar um pedido gira só aquele botão e avisa quem entrou', async () => {
+    const success = vi.spyOn(toast, 'success');
+    let finish = () => {};
+    vi.mocked(rpgWorldApi.patch).mockImplementation(
+      () => new Promise<undefined>((resolve) => (finish = () => resolve(undefined))),
+    );
+    renderPage(gmParty([person('ana', 'requested'), person('bia', 'requested')]));
+    const user = userEvent.setup();
+
+    const approveAna = await screen.findByRole('button', {
+      name: named(t.requestsSection.approveFrom, '@ana'),
+    });
+    await user.click(approveAna);
+
+    await waitFor(() => expect(approveAna).toHaveAttribute('aria-busy', 'true'));
+    expect(
+      screen.getByRole('button', { name: named(t.requestsSection.approveFrom, '@bia') }),
+    ).toBeEnabled();
+    finish();
+    await waitFor(() =>
+      expect(success).toHaveBeenCalledWith(named(t.requestsSection.approved, '@ana')),
+    );
+  });
+
+  it('recusar um pedido e cancelar um convite têm cada um o seu aviso', async () => {
+    const success = vi.spyOn(toast, 'success');
+    vi.mocked(rpgWorldApi.delete).mockResolvedValue(undefined);
+    renderPage(gmParty([person('ana', 'requested'), person('caio', 'invited')]));
+    const user = userEvent.setup();
+
+    await user.click(
+      await screen.findByRole('button', { name: named(t.requestsSection.declineFrom, '@ana') }),
+    );
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', {
+        name: t.requestsSection.decline,
+      }),
+    );
+    await waitFor(() =>
+      expect(success).toHaveBeenCalledWith(named(t.requestsSection.declined, '@ana')),
+    );
+
+    await user.click(
+      screen.getByRole('button', { name: named(t.requestsSection.cancelFor, '@caio') }),
+    );
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', {
+        name: t.requestsSection.cancelInvite,
+      }),
+    );
+    await waitFor(() =>
+      expect(success).toHaveBeenCalledWith(named(t.requestsSection.canceled, '@caio')),
+    );
   });
 });
 

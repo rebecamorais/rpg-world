@@ -19,6 +19,8 @@ export function PartyChest({ partyId }: { partyId: string }) {
 
   return (
     <div className="flex flex-col gap-6">
+      {/* In plain sight, not only behind the titles' hint: what changes here changes for everyone */}
+      <p className="text-caption text-muted-foreground">{t('shared')}</p>
       <CoinPurse
         inventory={chest}
         title={t('coinsTitle')}

@@ -67,7 +67,8 @@ export function SheetPreview({
       >
         <SheetHeader className="pr-10">
           <SheetTitle className="text-title">{name}</SheetTitle>
-          <SheetDescription>{t('description')}</SheetDescription>
+          {/* Only who can edit is told to open the sheet: the GM can't change a player's */}
+          <SheetDescription>{t(canEdit ? 'description' : 'descriptionNoEdit')}</SheetDescription>
           {canEdit && (
             <Button asChild variant="outline" size="sm" className="self-start">
               <AppLink

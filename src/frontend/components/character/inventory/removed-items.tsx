@@ -117,6 +117,8 @@ export function useRemovedItems({
   };
 
   const remove = (entry: InventoryItem) => {
+    // A second tap that lands before the row turns into its placeholder: already on its way out
+    if (current.current.some((r) => r.entry.id === entry.id)) return;
     const index = entries.findIndex((e) => e.id === entry.id);
     removeItem(entry.id);
     const next = [...current.current, { entry, index }];

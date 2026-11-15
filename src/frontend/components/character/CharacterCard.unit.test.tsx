@@ -8,7 +8,7 @@ import { rpgWorldApi } from '@client';
 
 import type { CharacterSummary } from '@shared/types/character';
 
-import { CharacterCard } from './CharacterCard';
+import { CharacterCard, CharacterCardSkeleton } from './CharacterCard';
 
 const push = vi.fn();
 
@@ -42,6 +42,30 @@ describe('CharacterCard', () => {
     context.kind = 'npc';
     renderWithProviders(<CharacterCard character={goblin} />);
     expect(screen.queryByText(t.defaultClass)).not.toBeInTheDocument();
+  });
+
+  it('o nome longo quebra em até duas linhas e guarda o nome inteiro no title', () => {
+    const name = 'Revisão F2 C NPC 1 com um nome bem comprido';
+    renderWithProviders(<CharacterCard character={{ ...goblin, name }} />);
+
+    const heading = screen.getByRole('heading', { name });
+    expect(heading).toHaveAttribute('title', name);
+    expect(heading).toHaveClass('line-clamp-2', 'break-normal');
+    expect(heading).not.toHaveClass('truncate');
+  });
+
+  it('o selo de nível fica na linha da classe, não ao lado do nome', () => {
+    renderWithProviders(<CharacterCard character={{ ...goblin, level: 7 }} />);
+
+    const level = screen.getByText(t.levelShort.replace('{level}', '7'));
+    expect(level.parentElement).toContainElement(screen.getByText(t.defaultClass));
+    expect(level.parentElement).not.toContainElement(screen.getByRole('heading'));
+  });
+
+  it('o esqueleto tem o lugar do retrato, como o card', () => {
+    const { container } = renderWithProviders(<CharacterCardSkeleton />);
+
+    expect(container.querySelector('.h-16.w-16')).toBeInTheDocument();
   });
 
   it('mostra o nome traduzido do sistema, não o id interno', () => {

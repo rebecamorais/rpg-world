@@ -119,11 +119,11 @@ describe('Backpack', () => {
     expect(screen.queryByText('The backpack is empty.')).not.toBeInTheDocument();
   });
 
-  it('vazia, mostra o estado vazio com "Add Item"', async () => {
+  it('vazia, mostra o estado vazio com "Add item"', async () => {
     renderBackpack([]);
 
     expect(await screen.findByText('The backpack is empty.')).toBeInTheDocument();
-    expect(await screen.findByRole('button', { name: 'Add Item' })).toBeEnabled();
+    expect(await screen.findByRole('button', { name: 'Add item' })).toBeEnabled();
   });
 
   it('lista nome, quantidade, peso e preço, e soma o peso total', async () => {
@@ -197,6 +197,20 @@ describe('Backpack', () => {
     );
   });
 
+  it('dois toques na lixeira antes de a linha virar o lugar guardado removem uma vez só', async () => {
+    renderBackpack([entry('e1', ROPE, 1), entry('e2', ROPE, 2)]);
+    const trash = (await screen.findAllByRole('button', { name: 'Remove Corda de Cânhamo' }))[0];
+
+    // The same button, tapped again before the removed row takes its place
+    fireEvent.click(trash);
+    fireEvent.click(trash);
+
+    await waitFor(() => expect(toast).toHaveBeenCalled());
+    expect(api.delete).toHaveBeenCalledTimes(1);
+    // One removal in the toast, not "2 items removed"
+    expect(vi.mocked(toast).mock.calls.at(-1)?.[0]).toBe('Corda de Cânhamo removed');
+  });
+
   it('remover pela lixeira leva o foco ao item seguinte, não ao topo da página', async () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 1), entry('e2', TORCH, 1)]);
@@ -209,14 +223,14 @@ describe('Backpack', () => {
     );
   });
 
-  it('remover o último item leva o foco a "Add Item"', async () => {
+  it('remover o último item leva o foco a "Add item"', async () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 1)]);
     api.get.mockImplementation(serve([]));
 
     await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
 
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Add Item' })).toHaveFocus());
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Add item' })).toHaveFocus());
   });
 
   it('item que saiu do catálogo mostra a ref e deixa remover (Ponto 2)', async () => {
@@ -236,7 +250,7 @@ describe('Backpack', () => {
 
     expect(await screen.findByLabelText('Quantity of Corda de Cânhamo')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'One more Corda de Cânhamo' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Add Item' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Add item' })).toBeDisabled();
   });
 
   it('mestre (somente leitura): ainda abre os detalhes, mas + − e remover ficam desativados', async () => {
@@ -325,7 +339,7 @@ describe('Backpack', () => {
       // Before: the empty state came at once and took the placeholder with it
       expect(screen.queryByText('The backpack is empty.')).toBeNull();
       expect(screen.getByRole('button', { name: 'Undo removing Corda de Cânhamo' })).toBeVisible();
-      // The header still has the view switch and "Add Item"
+      // The header still has the view switch and "Add item"
       expect(screen.getByRole('radiogroup', { name: 'View' })).toBeInTheDocument();
 
       act(() => lastToast()[1].onAutoClose());
@@ -574,8 +588,8 @@ describe('Backpack', () => {
       expect(screen.getByText('Strong rope.')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'One less Rope' })).toBeDisabled();
       expect(screen.getByRole('button', { name: 'One more Rope' })).toBeDisabled();
-      expect(screen.getAllByRole('button', { name: 'Add Item' })).not.toHaveLength(0);
-      for (const add of screen.getAllByRole('button', { name: 'Add Item' })) {
+      expect(screen.getAllByRole('button', { name: 'Add item' })).not.toHaveLength(0);
+      for (const add of screen.getAllByRole('button', { name: 'Add item' })) {
         expect(add).toBeDisabled();
       }
 
@@ -588,8 +602,8 @@ describe('Backpack', () => {
     async function openDialog(items: ReturnType<typeof entry>[] = []) {
       const user = userEvent.setup();
       renderBackpack(items);
-      await waitFor(() => expect(screen.getByRole('button', { name: 'Add Item' })).toBeEnabled());
-      await user.click(screen.getByRole('button', { name: 'Add Item' }));
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Add item' })).toBeEnabled());
+      await user.click(screen.getByRole('button', { name: 'Add item' }));
       const dialog = await screen.findByRole('dialog');
       await within(dialog).findAllByRole('button', { name: /^Add / });
       return { user, dialog };

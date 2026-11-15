@@ -199,7 +199,7 @@ describe('ResourcesRow', () => {
       renderWithCharacter(<ResourcesRow />, sheet({ class: 'monk', level: 5, edition: '2014' }));
 
       for (const pip of kiPips()) expect(pip).toBeDisabled();
-      expect(screen.queryByRole('link', { name: tRes.edit })).not.toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: tRes.editLabel })).not.toBeInTheDocument();
     });
   });
 
@@ -268,13 +268,13 @@ describe('ResourcesRow', () => {
     });
   });
 
-  it('"editar" leva às configurações da ficha', () => {
+  it('a engrenagem leva às configurações da ficha', () => {
     renderWithCharacter(
       <ResourcesRow />,
       sheet({ class: 'monk', level: 5, edition: '2014', system: 'DnD_5e' }),
     );
 
-    expect(screen.getByRole('link', { name: tRes.edit })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: tRes.editLabel })).toHaveAttribute(
       'href',
       '/system/DnD_5e/character/c1/appearance#class-resources',
     );

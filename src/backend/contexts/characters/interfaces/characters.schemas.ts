@@ -179,7 +179,7 @@ export const setCoinsSchema = z.object({
 const coinDelta = int(-1_000_000_000, 1_000_000_000).optional();
 
 /** How much each coin goes up or down; the coins left out don't change. */
-export const changeCoinsSchema = z.object({
+const addCoinsSchema = z.object({
   containerId: z.uuid(),
   delta: z.strictObject({
     cp: coinDelta,
@@ -190,3 +190,27 @@ export const changeCoinsSchema = z.object({
   }),
   key: operationKey,
 });
+
+const coinValue = int(0, 1_000_000_000).optional();
+const someCoins = z.strictObject({
+  cp: coinValue,
+  sp: coinValue,
+  ep: coinValue,
+  gp: coinValue,
+  pp: coinValue,
+});
+const sameCoins = (a: object, b: object) =>
+  Object.keys(a).sort().join() === Object.keys(b).sort().join();
+
+/**
+ * The final value of the coins typed by hand, and what each one was on the screen (`expected`):
+ * the same coins in both, at least one.
+ */
+const typedCoinsSchema = z
+  .object({ containerId: z.uuid(), coins: someCoins, expected: someCoins, key: operationKey })
+  .refine(({ coins, expected }) => Object.keys(coins).length > 0 && sameCoins(coins, expected), {
+    path: ['expected'],
+  });
+
+/** A change to the coins: a `delta` to add (Pay, Receive) or the typed final values. */
+export const changeCoinsSchema = z.union([addCoinsSchema, typedCoinsSchema]);

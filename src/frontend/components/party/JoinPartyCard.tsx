@@ -1,26 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
-import { rpgWorldApi } from '@client';
+import { APIError, rpgWorldApi } from '@client';
 
 import { Button } from '@frontend/components/ui/button';
 import { Card, CardContent } from '@frontend/components/ui/card';
 import { EmptyState } from '@frontend/components/ui/empty-state';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
-import { PARTIES_QUERY_KEY } from '@frontend/lib/query-keys';
+import { PARTIES_QUERY_KEY, partyInviteQueryKey } from '@frontend/lib/query-keys';
 
 import type { InvitePreview, MemberStatus } from '@backend/contexts/parties/domain/Party';
 
-/** The party behind an invite link, and the one action that fits where the person stands. */
+/** Same pace as the party without a GM (useParty): a request waits for a person, not a timer. */
+export const INVITE_POLL_MS = 20_000;
+
+/** The link no longer leads anywhere: the GM changed it, or the party was deleted. */
+const isGone = (error: unknown) => error instanceof APIError && error.status === 404;
+
+/**
+ * The party behind an invite link, and the one action that fits where the person stands. While a
+ * request waits, the page asks again every 20 s: whoever asked isn't a member yet, so the party's
+ * private channel won't let them listen. Approved, it opens the party; declined, it says so.
+ */
 export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePreview | null }) {
   const t = useTranslations('parties.join');
   const tParties = useTranslations('parties');
@@ -28,10 +38,38 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
   const queryClient = useQueryClient();
   const { currentUser } = useCurrentUser();
   const { getErrorMessage } = useErrorMessage();
-  const [status, setStatus] = useState(invite?.myStatus ?? null);
   const [isSending, setIsSending] = useState(false);
+  const queryKey = partyInviteQueryKey(code);
 
-  if (!invite) {
+  // The server's preview is the first answer; only a pending request asks again
+  const { data, error } = useQuery({
+    queryKey,
+    queryFn: () => rpgWorldApi.get<InvitePreview>(`/api/parties/join/${code}`),
+    initialData: invite ?? undefined,
+    staleTime: INVITE_POLL_MS,
+    // Dropped on leaving the page: coming back starts from the server's fresh preview again
+    gcTime: 0,
+    enabled: !!invite,
+    retry: false,
+    // A link that's gone (the GM changed it, the request went with it) stops asking: nothing would
+    // answer it any more. Any other failure tries again on the next round.
+    refetchInterval: (q) =>
+      !isGone(q.state.error) && q.state.data?.myStatus === 'requested' ? INVITE_POLL_MS : false,
+  });
+  // The latest answer: the GM may have changed while the request waited
+  const shown = data ?? invite;
+  const status = shown?.myStatus ?? null;
+  const partyId = invite?.partyId;
+
+  // Approved while the page was open: straight to the party, as the server page does on a reload
+  useEffect(() => {
+    if (status !== 'active' || !partyId) return;
+    toast.success(t('approved'), { id: `party-approved-${partyId}` });
+    void queryClient.invalidateQueries({ queryKey: PARTIES_QUERY_KEY });
+    router.push(`/parties/${partyId}`);
+  }, [status, partyId, queryClient, router, t]);
+
+  if (!shown || isGone(error)) {
     return (
       <EmptyState
         icon="Mailbox"
@@ -53,8 +91,8 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
       const next = await request();
       // The party list (sidebar, /parties) shows the new invite or request status
       await queryClient.invalidateQueries({ queryKey: PARTIES_QUERY_KEY });
-      if (next === 'active') router.push(`/parties/${invite.partyId}`);
-      else setStatus(next);
+      if (next === 'active') router.push(`/parties/${shown.partyId}`);
+      else queryClient.setQueryData<InvitePreview>(queryKey, { ...shown, myStatus: next });
     } catch (err) {
       toast.error(getErrorMessage(err));
     } finally {
@@ -69,16 +107,16 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
     );
   const acceptInvite = () =>
     send(async () => {
-      await rpgWorldApi.patch(`/api/parties/${invite.partyId}/members/${currentUser?.id}`);
+      await rpgWorldApi.patch(`/api/parties/${shown.partyId}/members/${currentUser?.id}`);
       return 'active';
     });
 
   return (
     <Card className="w-full max-w-lg">
       <CardContent className="flex flex-col gap-4 p-6">
-        <h2 className="text-heading">{invite.name}</h2>
-        {invite.gmUsername && (
-          <p className="text-muted-foreground">{t('invitedBy', { username: invite.gmUsername })}</p>
+        <h2 className="text-heading">{shown.name}</h2>
+        {shown.gmUsername && (
+          <p className="text-muted-foreground">{t('invitedBy', { username: shown.gmUsername })}</p>
         )}
 
         {status === 'requested' && (
@@ -86,12 +124,18 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
             {t('requested')}
           </p>
         )}
-        {!invite.hasGm && (
+        {/* Only that it was declined: who did it isn't stored */}
+        {status === 'declined' && shown.hasGm && (
+          <p role="status" className="text-warning-flare">
+            {t('declined')}
+          </p>
+        )}
+        {!shown.hasGm && (
           <p role="status" className="text-warning-flare">
             {t('withoutGm')}
           </p>
         )}
-        {status === 'invited' && invite.hasGm && (
+        {status === 'invited' && shown.hasGm && (
           <>
             <p>{t('alreadyInvited')}</p>
             <Button onClick={acceptInvite} loading={isSending} className="self-start">
@@ -99,9 +143,9 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
             </Button>
           </>
         )}
-        {status === null && invite.hasGm && (
+        {(status === null || status === 'declined') && shown.hasGm && (
           <Button onClick={requestJoin} loading={isSending} className="self-start">
-            {t('request')}
+            {status === 'declined' ? t('requestAgain') : t('request')}
           </Button>
         )}
       </CardContent>

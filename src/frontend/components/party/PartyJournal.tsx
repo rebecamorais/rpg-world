@@ -1,12 +1,11 @@
 'use client';
 
-import Link from 'next/link';
-
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
 import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
+import AppLink from '@frontend/demo/AppLink';
 import { useMediaQuery } from '@frontend/hooks/useMediaQuery';
 import { useParty } from '@frontend/hooks/useParty';
 
@@ -14,7 +13,10 @@ import type { PartyRole } from '@backend/contexts/parties/domain/Party';
 
 import { googleDocUrl } from '@shared/google-docs';
 
-/** The party's Google Docs journal: embedded on a computer, a notice on a phone. */
+/**
+ * The party's Google Docs journal: embedded on a wide screen; on a narrow one, the button to open
+ * it in Google Docs is the whole screen's action.
+ */
 export function PartyJournal({
   docId,
   role,
@@ -28,34 +30,53 @@ export function PartyJournal({
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
   if (!docId) {
-    return (
+    return role === 'gm' ? (
       <EmptyState
         icon="BookOpen"
-        title={role === 'gm' ? t('emptyGm') : t('emptyPlayer')}
+        title={t('emptyGmTitle')}
+        description={t('emptyGm')}
         action={
-          role === 'gm' ? (
-            <Link
-              href={`/parties/${partyId}/settings`}
-              className="text-primary-flare text-sm underline"
-            >
-              {t('setUp')}
-            </Link>
-          ) : undefined
+          <Button asChild>
+            {/* Straight to the journal card, far down the settings */}
+            <AppLink href={`/parties/${partyId}/settings#journal`}>{t('setUp')}</AppLink>
+          </Button>
         }
       />
+    ) : (
+      <EmptyState icon="BookOpen" title={t('emptyPlayer')} description={t('emptyPlayerHint')} />
     );
   }
 
   const url = googleDocUrl(docId);
+  const open = (
+    <a href={url} target="_blank" rel="noopener noreferrer">
+      <AppIcon name="ExternalLink" size={18} aria-hidden="true" />
+      {t('open')}
+    </a>
+  );
+
+  if (isDesktop === false) {
+    return (
+      <div className="flex flex-col gap-3">
+        <Button asChild className="w-full">
+          {open}
+        </Button>
+        <p className="text-body text-muted-foreground">{t('narrowNotice')}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4">
-      <Button asChild variant="outline" className="self-start">
-        <a href={url} target="_blank" rel="noopener noreferrer">
-          <AppIcon name="ExternalLink" size={18} aria-hidden="true" />
-          {t('open')}
-        </a>
-      </Button>
+      <div className="flex flex-col items-start gap-2">
+        <Button asChild variant="outline">
+          {open}
+        </Button>
+        {/* Google's own error page shows inside the frame, white and in English: say what to do */}
+        <p className="text-caption text-muted-foreground">
+          {t(role === 'gm' ? 'frameHelpGm' : 'frameHelpPlayer')}
+        </p>
+      </div>
       {isDesktop === true && (
         <iframe
           src={url}
@@ -64,7 +85,6 @@ export function PartyJournal({
           className="h-[75vh] w-full rounded-md border"
         />
       )}
-      {isDesktop === false && <p className="text-muted-foreground">{t('mobileNotice')}</p>}
     </div>
   );
 }

@@ -1,10 +1,13 @@
 import { act, waitFor } from '@testing-library/react';
 import { renderHookWithProviders } from '@tests/helpers/render';
+import { createTranslator } from 'next-intl';
 import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
 
+import en from '../../../messages/en.json';
+import pt from '../../../messages/pt.json';
 import { coinsDelta, useInventory, usePartyChest } from './useInventory';
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
@@ -31,14 +34,25 @@ async function renderInventory() {
   return hook;
 }
 
+/** An answer from the server with this status and body, as the API client throws it. */
+const answered = (status: number, error: string, data: object = {}) =>
+  Object.assign(new Error(error), { status, data: { error, ...data } });
+
 /** A request that fails only when the test says so, to look at the screen in between. */
-function failLater() {
+function failLater(err: Error = new Error('boom')) {
   let fail!: () => void;
   const promise = new Promise<never>((_, reject) => {
-    fail = () => reject(new Error('boom'));
+    fail = () => reject(err);
   });
   return { promise, fail };
 }
+
+/** The "Try again" of the last error toast, if it has one. */
+const retryAction = () => {
+  const options = vi.mocked(toast.error).mock.lastCall?.[1] as
+    { action?: { label: string; onClick: () => void } } | undefined;
+  return options?.action;
+};
 
 describe('useInventory', () => {
   beforeEach(() => {
@@ -272,7 +286,7 @@ describe('useInventory', () => {
   });
 
   it('"Tentar de novo" reenvia a mesma operação com a mesma chave', async () => {
-    const request = failLater();
+    const request = failLater(answered(503, 'common_error_unexpected'));
     api.patch.mockReturnValueOnce(request.promise).mockResolvedValueOnce(undefined as never);
     const { result } = await renderInventory();
 
@@ -282,15 +296,168 @@ describe('useInventory', () => {
     await waitFor(() => expect(toast.error).toHaveBeenCalled());
     expect(result.current.pouch?.coins.gp).toBe(5);
 
-    const [, options] = vi.mocked(toast.error).mock.calls[0];
-    const action = (options as { action: { label: string; onClick: () => void } }).action;
-    expect(action.label).toBe('Try again');
-    act(() => action.onClick());
+    const action = retryAction();
+    expect(action?.label).toBe('Try again');
+    act(() => action?.onClick());
 
     await waitFor(() => expect(api.patch).toHaveBeenCalledTimes(2));
     const [first, again] = api.patch.mock.calls.map(([, body]) => body);
     expect(again).toEqual(first);
     expect(again).toEqual({ containerId: 'pouch1', delta: { gp: 2 }, key: expect.any(String) });
+  });
+
+  it('sem conexão também oferece "Tentar de novo"', async () => {
+    api.patch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+    const { result } = await renderInventory();
+
+    act(() => result.current.setQuantity('i1', 3));
+
+    await waitFor(() => expect(toast.error).toHaveBeenCalled());
+    expect(retryAction()?.label).toBe('Try again');
+  });
+
+  // Sending the same thing again would fail the same way: the toast says what changed instead
+  it('conflito (409) não oferece "Tentar de novo"', async () => {
+    api.patch.mockRejectedValueOnce(answered(409, 'character_error_not_enough_coins'));
+    const { result } = await renderInventory();
+
+    act(() => result.current.setCoins({ ...ZERO, gp: 1 }));
+
+    await waitFor(() => expect(toast.error).toHaveBeenCalled());
+    expect(vi.mocked(toast.error).mock.lastCall?.[0]).toMatch(/^The coins changed somewhere else/);
+    expect(retryAction()).toBeUndefined();
+  });
+
+  it('item que outra pessoa já tirou (404): diz isso, sem "Tentar de novo"', async () => {
+    api.delete.mockRejectedValueOnce(answered(404, 'character_error_item_not_found'));
+    const { result } = await renderInventory();
+
+    act(() => result.current.removeItem('i1'));
+
+    await waitFor(() => expect(toast.error).toHaveBeenCalled());
+    expect(vi.mocked(toast.error).mock.lastCall?.[0]).toBe(
+      'This item was already taken out somewhere else. The list was updated.',
+    );
+    expect(retryAction()).toBeUndefined();
+  });
+
+  describe('moeda digitada à mão (valor final)', () => {
+    it('manda o valor final e o que a tela mostrava, e mostra na hora', async () => {
+      let resolve!: () => void;
+      api.patch.mockReturnValueOnce(new Promise((r) => (resolve = () => r(undefined as never))));
+      const { result } = await renderInventory();
+
+      act(() => result.current.setCoinTo('gp', 70, 5));
+
+      await waitFor(() => expect(result.current.pouch?.coins.gp).toBe(70));
+      expect(api.patch).toHaveBeenCalledWith('/api/characters/c1/inventory/coins', {
+        containerId: 'pouch1',
+        coins: { gp: 70 },
+        expected: { gp: 5 },
+        key: expect.any(String),
+      });
+      act(() => resolve());
+    });
+
+    it('o mesmo valor que a tela mostrava não manda nada', async () => {
+      const { result } = await renderInventory();
+
+      act(() => result.current.setCoinTo('gp', 5, 5));
+
+      expect(api.patch).not.toHaveBeenCalled();
+    });
+
+    it('mudou em outro lugar (409): volta, diz quanto há agora e não oferece "Tentar de novo"', async () => {
+      const request = failLater(
+        answered(409, 'character_error_coins_changed', { coins: { ...ZERO, gp: 55 } }),
+      );
+      api.patch.mockReturnValueOnce(request.promise);
+      const { result } = await renderInventory();
+
+      act(() => result.current.setCoinTo('gp', 70, 5));
+      await waitFor(() => expect(result.current.pouch?.coins.gp).toBe(70));
+      api.get.mockResolvedValue({
+        ...inventory(),
+        containers: [
+          { ...inventory().containers[0], coins: { ...ZERO, gp: 55 } },
+          inventory().containers[1],
+        ],
+      });
+      act(() => request.fail());
+
+      await waitFor(() => expect(toast.error).toHaveBeenCalled());
+      expect(vi.mocked(toast.error).mock.lastCall?.[0]).toBe(
+        "Changed somewhere else: it's now 55 GP. What you typed was not saved.",
+      );
+      expect(retryAction()).toBeUndefined();
+      // The refetch brings what the server has, not what was typed
+      await waitFor(() => expect(result.current.pouch?.coins.gp).toBe(55));
+    });
+
+    it('mudou em outro lugar com 1 moeda: a frase concorda com o número', async () => {
+      const request = failLater(
+        answered(409, 'character_error_coins_changed', { coins: { ...ZERO, gp: 1 } }),
+      );
+      api.patch.mockReturnValueOnce(request.promise);
+      const { result } = await renderInventory();
+
+      act(() => result.current.setCoinTo('gp', 70, 5));
+      await waitFor(() => expect(result.current.pouch?.coins.gp).toBe(70));
+      act(() => request.fail());
+
+      await waitFor(() => expect(toast.error).toHaveBeenCalled());
+      expect(vi.mocked(toast.error).mock.lastCall?.[0]).toBe(
+        "Changed somewhere else: it's now 1 GP. What you typed was not saved.",
+      );
+    });
+
+    it.each([
+      ['pt', pt, 1, 'Mudou em outro lugar: agora é 1 PO. O valor digitado não foi salvo.'],
+      ['pt', pt, 55, 'Mudou em outro lugar: agora são 55 PO. O valor digitado não foi salvo.'],
+      ['pt', pt, 1200, 'Mudou em outro lugar: agora são 1.200 PO. O valor digitado não foi salvo.'],
+      ['en', en, 1, "Changed somewhere else: it's now 1 GP. What you typed was not saved."],
+      ['en', en, 1200, "Changed somewhere else: it's now 1,200 GP. What you typed was not saved."],
+    ])('o aviso em %s com %i concorda no plural', (locale, messages, count, text) => {
+      const t = createTranslator({ locale, messages, namespace: 'characters.coins' });
+      expect(t('changedElsewhere', { count, coin: t('gp.short') })).toBe(text);
+    });
+
+    it('erro do servidor (5xx): volta ao que era e oferece "Tentar de novo" com a mesma chave', async () => {
+      const request = failLater(answered(500, 'common_error_unexpected'));
+      api.patch.mockReturnValueOnce(request.promise).mockResolvedValueOnce(undefined as never);
+      const { result } = await renderInventory();
+
+      act(() => result.current.setCoinTo('gp', 70, 5));
+      await waitFor(() => expect(api.patch).toHaveBeenCalledTimes(1));
+      act(() => request.fail());
+      await waitFor(() => expect(toast.error).toHaveBeenCalled());
+      expect(result.current.pouch?.coins.gp).toBe(5);
+
+      act(() => retryAction()?.onClick());
+      await waitFor(() => expect(api.patch).toHaveBeenCalledTimes(2));
+      const [first, again] = api.patch.mock.calls.map(([, body]) => body);
+      expect(again).toEqual(first);
+    });
+
+    it('no baú da mesa, vai para a rota do baú', async () => {
+      api.get.mockResolvedValue({
+        containers: [{ id: 'chest1', kind: 'party_chest', name: null, position: 0, coins: ZERO }],
+        items: [],
+      });
+      const { result } = renderHookWithProviders(() => usePartyChest('p1'));
+      await waitFor(() => expect(result.current.pouch?.id).toBe('chest1'));
+
+      act(() => result.current.setCoinTo('gp', 70, 0));
+
+      await waitFor(() =>
+        expect(api.patch).toHaveBeenCalledWith('/api/parties/p1/chest/coins', {
+          containerId: 'chest1',
+          coins: { gp: 70 },
+          expected: { gp: 0 },
+          key: expect.any(String),
+        }),
+      );
+    });
   });
 
   it('a mesma quantidade ou as mesmas moedas não mandam nada', async () => {

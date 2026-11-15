@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import { getTranslations } from 'next-intl/server';
 
@@ -8,6 +9,8 @@ import { CharacterKindTabs } from '@frontend/components/character/CharacterKindT
 import CharacterList from '@frontend/components/character/CharacterList';
 import { SeededQuery } from '@frontend/components/providers/SeededQuery';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
+import { Button } from '@frontend/components/ui/button';
+import { AppIcon } from '@frontend/components/ui/icon';
 import { CharactersProvider } from '@frontend/context/CharactersContext';
 import { CHARACTERS_QUERY_KEY } from '@frontend/lib/query-keys';
 
@@ -24,10 +27,27 @@ async function loadCharacters() {
 
 /** The list comes with the page (no spinner, then GET /api/characters after hydration). */
 export default async function CharactersPage() {
-  const [t, characters] = await Promise.all([getTranslations('characters'), loadCharacters()]);
+  const [t, tDashboard, characters] = await Promise.all([
+    getTranslations('characters'),
+    getTranslations('dashboard'),
+    loadCharacters(),
+  ]);
 
   return (
-    <PageContainer title={t('title')} description={t('subtitle')}>
+    <PageContainer
+      title={t('title')}
+      description={t('subtitle')}
+      // The page's main action in its header, like the NPCs tab: on a phone the sidebar's
+      // "New character" is behind the menu
+      actions={
+        <Button asChild>
+          <Link href="/characters/new">
+            <AppIcon name="Plus" size={18} aria-hidden="true" />
+            {tDashboard('newCharacter')}
+          </Link>
+        </Button>
+      }
+    >
       <CharacterKindTabs current="pc" />
       <SeededQuery queryKey={CHARACTERS_QUERY_KEY} data={characters}>
         <CharactersProvider>

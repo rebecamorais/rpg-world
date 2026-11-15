@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { toast } from 'sonner';
@@ -82,6 +82,59 @@ describe('PartySettings', () => {
     expect(screen.getByText(t.page.notFoundTitle)).toBeVisible();
     expect(router.replace).not.toHaveBeenCalled();
     expect(toast).not.toHaveBeenCalled();
+  });
+
+  it('"Tirar" diz quem sai; só aquela linha espera, e o aviso diz quem saiu', async () => {
+    const people = ['ana', 'bia'].map((userId) => ({
+      userId,
+      username: userId,
+      avatarUrl: null,
+      status: 'active' as const,
+    }));
+    hook.party = { ...party('gm'), people } as PartyView;
+    let finish = () => {};
+    hook.removeMember.mutateAsync.mockImplementation(
+      () => new Promise<void>((resolve) => (finish = resolve)),
+    );
+    const success = vi.spyOn(toast, 'success');
+    renderWithProviders(<PartySettings partyId="party-1" />);
+    const user = userEvent.setup();
+    const removeFrom = (name: string) => t.manage.removeFrom.replace('{name}', name);
+
+    await user.click(screen.getByRole('button', { name: removeFrom('@ana') }));
+    const dialog = screen.getByRole('alertdialog', {
+      name: t.manage.removeTitle.replace('{name}', '@ana'),
+    });
+    await user.click(within(dialog).getByRole('button', { name: t.manage.remove }));
+
+    expect(hook.removeMember.mutateAsync).toHaveBeenCalledWith('ana');
+    expect(screen.getByRole('button', { name: removeFrom('@ana') })).toHaveAttribute(
+      'aria-busy',
+      'true',
+    );
+    expect(screen.getByRole('button', { name: removeFrom('@bia') })).toBeEnabled();
+    finish();
+    await vi.waitFor(() =>
+      expect(success).toHaveBeenCalledWith(t.manage.removed.replace('{name}', '@ana')),
+    );
+  });
+
+  it('aberta em #journal, rola até o card do diário', () => {
+    hook.party = party('gm');
+    // jsdom has no scrollIntoView: the stub goes away after this test
+    const original = Element.prototype.scrollIntoView;
+    const scroll = vi.fn();
+    Element.prototype.scrollIntoView = scroll;
+    window.location.hash = '#journal';
+    try {
+      renderWithProviders(<PartySettings partyId="party-1" />);
+
+      expect(scroll).toHaveBeenCalled();
+      expect(scroll.mock.contexts[0]).toBe(document.getElementById('journal'));
+    } finally {
+      window.location.hash = '';
+      Element.prototype.scrollIntoView = original;
+    }
   });
 
   it('o campo de edição tem rótulo e a dica como descrição', () => {

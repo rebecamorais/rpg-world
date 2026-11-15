@@ -127,4 +127,35 @@ describe('ContactForm', () => {
     expect(screen.getByText(t.messageMin.replace('{min}', '10'))).toBeInTheDocument();
     expect(submitFeedback).not.toHaveBeenCalled();
   });
+
+  it('o rascunho volta como estava e cada mudança é avisada a quem o guarda', async () => {
+    const user = userEvent.setup();
+    const onDraftChange = vi.fn();
+    renderWithProviders(
+      <ContactForm
+        initialEmail="hero@example.com"
+        draft={{ type: 'bug', message: 'The door' }}
+        onDraftChange={onDraftChange}
+      />,
+    );
+
+    expect(screen.getByRole('combobox')).toHaveTextContent(t.types.bug);
+    expect(screen.getByLabelText(t.emailLabel)).toHaveValue('hero@example.com');
+    await user.type(screen.getByLabelText(t.messageLabel), ' bites.');
+
+    expect(onDraftChange).toHaveBeenLastCalledWith(
+      expect.objectContaining({ type: 'bug', message: 'The door bites.' }),
+    );
+  });
+
+  it('o Turnstile segue o tema e o idioma do app, não os do sistema', () => {
+    document.documentElement.dataset.theme = 'light';
+    renderWithProviders(<ContactForm />);
+
+    expect(turnstile.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ theme: 'light', language: 'en' }),
+    );
+    delete document.documentElement.dataset.theme;
+  });
 });

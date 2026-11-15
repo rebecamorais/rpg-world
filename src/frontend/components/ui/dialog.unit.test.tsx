@@ -162,4 +162,21 @@ describe('DialogContent', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     expect(trigger).toHaveFocus();
   });
+
+  it('a coluna do diálogo não cresce com uma palavra longa, e o texto quebra', () => {
+    const word = 'Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+    renderWithProviders(
+      <Dialog open>
+        <DialogContent>
+          <DialogTitle>{word}</DialogTitle>
+          <DialogDescription>{word}</DialogDescription>
+        </DialogContent>
+      </Dialog>,
+    );
+
+    // minmax(0,1fr): the track can shrink below the word's width (1fr alone grows with it)
+    expect(screen.getByRole('dialog')).toHaveClass('grid', 'grid-cols-[minmax(0,1fr)]');
+    expect(screen.getByRole('heading', { name: word })).toHaveClass('break-words');
+    expect(screen.getByText(word, { selector: 'p' })).toHaveClass('break-words');
+  });
 });

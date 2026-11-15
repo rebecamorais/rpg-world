@@ -25,18 +25,27 @@ function mount(signedIn: boolean, locale: 'en' | 'pt') {
   return renderHook(() => useTranslationInvite(signedIn), { wrapper });
 }
 
-/** Picks a language: the switcher then reloads, so the page mounts again in it. */
-function switchTo(signedIn: boolean, from: 'en' | 'pt', to: 'en' | 'pt') {
+/**
+ * Picks a language: the switcher then loads the page in it, so it mounts again in `to`. With
+ * `cancelled`, the person stayed (unsaved edits): the next page is still in `from`.
+ */
+function switchTo(
+  signedIn: boolean,
+  from: 'en' | 'pt',
+  to: 'en' | 'pt',
+  { cancelled = false } = {},
+) {
   const before = mount(signedIn, from);
-  act(() => before.result.current());
+  act(() => before.result.current(to));
   before.unmount();
-  return mount(signedIn, to);
+  return mount(signedIn, cancelled ? from : to);
 }
 
 describe('useTranslationInvite', () => {
   beforeEach(() => {
     vi.mocked(toast).mockClear();
     sessionStorage.clear();
+    localStorage.clear();
   });
 
   it('logado, ao trocar de idioma convida para traduzir depois do reload, já no idioma novo', () => {
@@ -61,11 +70,21 @@ describe('useTranslationInvite', () => {
     expect(open).toHaveBeenCalledWith(WEBLATE_PROJECT, '_blank', 'noopener,noreferrer');
   });
 
-  it('convida a cada troca, e só uma vez por troca', () => {
+  it('convida uma vez só: as trocas seguintes não cobrem a tela de novo', () => {
     switchTo(true, 'en', 'pt').unmount();
     mount(true, 'pt').unmount();
-    switchTo(true, 'pt', 'en');
-    expect(toast).toHaveBeenCalledTimes(2);
+    switchTo(true, 'pt', 'en').unmount();
+    switchTo(true, 'en', 'pt');
+    expect(toast).toHaveBeenCalledTimes(1);
+  });
+
+  it('troca cancelada (alterações não salvas): não convida na página que ficou no idioma antigo', () => {
+    switchTo(true, 'en', 'pt', { cancelled: true }).unmount();
+    expect(toast).not.toHaveBeenCalled();
+
+    // The invite is still owed to the next real switch
+    switchTo(true, 'en', 'pt');
+    expect(toast).toHaveBeenCalledTimes(1);
   });
 
   it('sem login, não convida', () => {

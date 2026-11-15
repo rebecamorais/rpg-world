@@ -12,6 +12,40 @@ test.describe('celular', () => {
     await drawer.getByRole('link', { name: 'My Profile' }).click();
 
     await expect(page).toHaveURL(/\/settings\/profile$/);
+    // The drawer closes with the tap: left open, it covered the page it had just opened
+    await expect(drawer).toBeHidden();
+
+    // Again from the new page, to another one
+    await page.getByRole('banner').getByRole('button', { name: 'Open menu' }).click();
+    await drawer.getByRole('link', { name: 'Parties', exact: true }).click();
+    await expect(page).toHaveURL(/\/parties$/);
+    await expect(drawer).toBeHidden();
+  });
+
+  test('o "Sair" da gaveta é o mesmo do header do desktop', async ({ page, user: _ }) => {
+    await page.goto('/characters');
+    await page.getByRole('banner').getByRole('button', { name: 'Open menu' }).click();
+    const drawer = page.getByRole('dialog', { name: 'Menu' });
+
+    await drawer.getByRole('button', { name: 'Log out' }).click();
+    await expect(page).toHaveURL(/\/login/);
+  });
+
+  test('o footer do app separa o apoio numa linha própria, com o rótulo no começo', async ({
+    page,
+    user: _,
+  }) => {
+    await page.goto('/characters');
+    const support = page.getByRole('contentinfo').getByRole('group', { name: 'Support' });
+    const label = (await support.getByText('Support', { exact: true }).boundingBox())!;
+    const discord = (await page
+      .getByRole('contentinfo')
+      .getByRole('link', { name: 'Discord' })
+      .boundingBox())!;
+    const kofi = (await support.getByRole('link', { name: 'Ko-fi' }).boundingBox())!;
+
+    expect(label.y).toBeGreaterThanOrEqual(discord.y + discord.height);
+    expect(label.x).toBeLessThan(kofi.x);
   });
 
   test('pula para um nível do grimório pelo índice', async ({ page, user: _ }) => {

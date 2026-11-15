@@ -14,6 +14,7 @@ import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { DISCORD_INVITE, GITHUB_REPO } from '@frontend/constants/site';
 import { useSession } from '@frontend/hooks/useSession';
+import { cn } from '@frontend/lib/utils';
 
 import type { User } from '@shared/types/user';
 
@@ -50,9 +51,17 @@ const linkClass =
 const cardClass =
   'group border-border bg-card/40 hover:border-muted-foreground/40 hover:bg-muted focus-ring flex items-center justify-between gap-3 rounded-lg border p-3 transition-colors';
 
-function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
+function FooterColumn({
+  title,
+  className,
+  children,
+}: {
+  title: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className={cn('flex flex-col gap-3', className)}>
       <h2 className="text-label text-muted-foreground">{title}</h2>
       <ul className="flex flex-col gap-2">{children}</ul>
     </div>
@@ -96,38 +105,60 @@ export default function FooterContent({
   if (compact) {
     return (
       <footer className="border-border bg-sidebar mt-auto border-t pt-4 pb-[calc(1rem+var(--bottom-bar-height,0px))]">
-        <div className="container mx-auto flex flex-wrap items-center gap-x-5 gap-y-2 px-6">
-          <span className="text-muted-foreground text-xs">
-            {t('copyright', { year: new Date().getFullYear() })}
-          </span>
-          <Link href="/terms" className={linkClass}>
-            {t('legal.terms')}
-          </Link>
-          <Link href="/privacy" className={linkClass}>
-            {t('legal.privacy')}
-          </Link>
-          <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" className={linkClass}>
-            {t('socials.github')}
-          </a>
-          <a href={DISCORD_INVITE} target="_blank" rel="noopener noreferrer" className={linkClass}>
-            {t('socials.discord')}
-          </a>
-          <span className="text-label text-muted-foreground sm:ml-auto">{t('support.title')}</span>
-          <a href={KOFI} target="_blank" rel="noopener noreferrer" className={linkClass}>
-            {t('support.kofi')}
-          </a>
-          <a href={GITHUB_SPONSORS} target="_blank" rel="noopener noreferrer" className={linkClass}>
-            {t('support.githubSponsorsCta')}
-          </a>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleCopyPix}
-            className="text-muted-foreground h-7 px-2"
+        {/* Two groups, each wrapping on its own: on phones the support line starts with its
+            label, instead of the label falling mid-line between Discord and Ko-fi */}
+        <div className="container mx-auto flex flex-col gap-2 px-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-5">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <span className="text-muted-foreground text-xs">
+              {t('copyright', { year: new Date().getFullYear() })}
+            </span>
+            <Link href="/terms" className={linkClass}>
+              {t('legal.terms')}
+            </Link>
+            <Link href="/privacy" className={linkClass}>
+              {t('legal.privacy')}
+            </Link>
+            <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" className={linkClass}>
+              {t('socials.github')}
+            </a>
+            <a
+              href={DISCORD_INVITE}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              {t('socials.discord')}
+            </a>
+          </div>
+          <div
+            role="group"
+            aria-labelledby="footer-support"
+            className="flex flex-wrap items-center gap-x-5 gap-y-2"
           >
-            <AppIcon name={hasCopied ? 'Check' : 'QrCode'} size={14} aria-hidden="true" />
-            {t('support.pixCopyLabel')}
-          </Button>
+            <span id="footer-support" className="text-label text-muted-foreground">
+              {t('support.title')}
+            </span>
+            <a href={KOFI} target="_blank" rel="noopener noreferrer" className={linkClass}>
+              {t('support.kofi')}
+            </a>
+            <a
+              href={GITHUB_SPONSORS}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              {t('support.githubSponsorsCta')}
+            </a>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopyPix}
+              className="text-muted-foreground h-7 px-2"
+            >
+              <AppIcon name={hasCopied ? 'Check' : 'QrCode'} size={14} aria-hidden="true" />
+              {t('support.pixCopyLabel')}
+            </Button>
+          </div>
         </div>
       </footer>
     );
@@ -150,8 +181,9 @@ export default function FooterContent({
     // On a page with a fixed tab bar (sheet, party) the bottom padding grows by the bar's height
     // and the safe area, set in globals.css: its last links ended up under the bar
     <footer className="border-border bg-sidebar mt-auto border-t pt-10 pb-[calc(2rem+var(--bottom-bar-height,0px))] sm:pt-16 sm:pb-[calc(2.5rem+var(--bottom-bar-height,0px))]">
-      <div className="container mx-auto grid grid-cols-2 gap-x-6 gap-y-8 px-6 lg:grid-cols-4">
-        <div className="col-span-2 flex flex-col gap-2 lg:col-span-1">
+      {/* Phones: Explore across, Legal and Community side by side, then Support across */}
+      <div className="container mx-auto grid grid-cols-2 gap-x-6 gap-y-8 px-6 sm:grid-cols-3 lg:grid-cols-[2fr_1fr_1fr_1fr_2fr]">
+        <div className="col-span-2 flex flex-col gap-2 sm:col-span-3 lg:col-span-1">
           <span translate="no" className="text-foreground text-lg font-bold tracking-tight">
             Rebs Tech Studio
           </span>
@@ -163,7 +195,7 @@ export default function FooterContent({
           </p>
         </div>
 
-        <FooterColumn title={t('explore.title')}>
+        <FooterColumn title={t('explore.title')} className="col-span-2 sm:col-span-1">
           {explore.map((link) => (
             <li key={link.href}>
               <Link href={link.href} className={linkClass}>
@@ -184,6 +216,9 @@ export default function FooterContent({
               {t('legal.privacy')}
             </Link>
           </li>
+        </FooterColumn>
+
+        <FooterColumn title={t('socials.title')}>
           <li>
             <a
               href={GITHUB_REPO}
@@ -208,7 +243,7 @@ export default function FooterContent({
           </li>
         </FooterColumn>
 
-        <div className="col-span-2 flex flex-col gap-3 lg:col-span-1">
+        <div className="col-span-2 flex flex-col gap-3 sm:col-span-3 lg:col-span-1">
           <h2 className="text-label text-muted-foreground">{t('support.title')}</h2>
           <a href={KOFI} target="_blank" rel="noopener noreferrer" className={cardClass}>
             <span className="flex items-center gap-3">
@@ -233,9 +268,13 @@ export default function FooterContent({
             <AppIcon name="ExternalLink" size={12} className="text-muted-foreground" />
           </a>
 
+          {/* Same icon circle as the cards above, so the three texts line up; copying is a quiet
+              outline, not the heaviest thing in the footer */}
           <div className="border-border bg-card/40 flex flex-col gap-2 rounded-lg border p-3">
             <div className="text-foreground flex items-center gap-3 text-sm font-semibold">
-              <AppIcon name="QrCode" size={16} className="text-primary-flare" />
+              <span className="bg-primary-surface text-primary-flare flex h-8 w-8 items-center justify-center rounded-full">
+                <AppIcon name="QrCode" size={16} />
+              </span>
               <span>{t('support.pixTitle')}</span>
             </div>
             <div className="flex items-center gap-2 overflow-hidden">
@@ -246,6 +285,7 @@ export default function FooterContent({
                 {PIX_KEY}
               </code>
               <Button
+                variant="outline"
                 size="icon"
                 onClick={handleCopyPix}
                 aria-label={t('support.pixCopyLabel')}

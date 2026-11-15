@@ -3,7 +3,15 @@ import { act, waitFor } from '@testing-library/react';
 import { renderHookWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { encounterQueryKey } from '@frontend/lib/query-keys';
+import { rpgWorldApi } from '@client';
+
+import { usePartyChest } from '@frontend/hooks/useInventory';
+import {
+  PARTIES_QUERY_KEY,
+  encounterQueryKey,
+  partyChestQueryKey,
+  partyQueryKey,
+} from '@frontend/lib/query-keys';
 
 import { usePartyChannel } from './usePartyChannel';
 
@@ -14,13 +22,13 @@ type BroadcastCallback = () => void;
 const fake = vi.hoisted(() => {
   const state = {
     status: undefined as StatusCallback | undefined,
-    broadcast: undefined as BroadcastCallback | undefined,
+    broadcasts: {} as Record<string, BroadcastCallback>,
     topic: '',
     options: undefined as unknown,
   };
   const channel = {
-    on: vi.fn((_type: string, _filter: unknown, callback: BroadcastCallback) => {
-      state.broadcast = callback;
+    on: vi.fn((_type: string, filter: { event: string }, callback: BroadcastCallback) => {
+      state.broadcasts[filter.event] = callback;
       return channel;
     }),
     subscribe: vi.fn((callback: StatusCallback) => {
@@ -43,6 +51,12 @@ const fake = vi.hoisted(() => {
 const demo = vi.hoisted(() => ({ isDemo: false }));
 vi.mock('@lib/supabase-browser', () => ({ getSupabaseBrowserClient: () => fake.client }));
 vi.mock('@frontend/demo/DemoContext', () => ({ useDemo: () => demo }));
+vi.mock('@client', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@client')>()),
+  rpgWorldApi: { get: vi.fn() },
+}));
+
+const broadcast = (event: string) => fake.state.broadcasts[event]!();
 
 describe('usePartyChannel', () => {
   beforeEach(() => {
@@ -50,7 +64,7 @@ describe('usePartyChannel', () => {
     fake.client.removeChannel.mockClear();
     fake.client.realtime.setAuth.mockClear();
     fake.state.status = undefined;
-    fake.state.broadcast = undefined;
+    fake.state.broadcasts = {};
   });
 
   const subscribed = async () => {
@@ -72,8 +86,80 @@ describe('usePartyChannel', () => {
     expect(invalidate).toHaveBeenCalledWith({ queryKey: encounterQueryKey('party-1') });
 
     invalidate.mockClear();
-    await act(async () => fake.state.broadcast!());
+    await act(async () => broadcast('encounter'));
     expect(invalidate).toHaveBeenCalledWith({ queryKey: encounterQueryKey('party-1') });
+  });
+
+  it('ouve os avisos da mesa e do baú além do combate', async () => {
+    renderHookWithProviders(() => usePartyChannel('party-1'));
+    await subscribed();
+
+    expect(Object.keys(fake.state.broadcasts).sort()).toEqual(['chest', 'encounter', 'party']);
+  });
+
+  // Who is at the table and what they brought: the party tab and the party list (pending requests)
+  it('o aviso "party" busca de novo a mesa e a lista de mesas, não o combate', async () => {
+    const { queryClient } = renderHookWithProviders(() => usePartyChannel('party-1'));
+    const invalidate = vi.spyOn(queryClient, 'invalidateQueries');
+    await subscribed();
+
+    await act(async () => broadcast('party'));
+
+    expect(invalidate).toHaveBeenCalledWith({ queryKey: partyQueryKey('party-1') });
+    expect(invalidate).toHaveBeenCalledWith({ queryKey: PARTIES_QUERY_KEY });
+    expect(invalidate).not.toHaveBeenCalledWith({ queryKey: encounterQueryKey('party-1') });
+  });
+
+  it('cada SUBSCRIBED busca de novo a mesa e o baú também', async () => {
+    const { queryClient } = renderHookWithProviders(() => usePartyChannel('party-1'));
+    const invalidate = vi.spyOn(queryClient, 'invalidateQueries');
+    await subscribed();
+
+    await act(async () => fake.state.status!('SUBSCRIBED'));
+
+    expect(invalidate).toHaveBeenCalledWith({ queryKey: partyQueryKey('party-1') });
+    expect(invalidate).toHaveBeenCalledWith({ queryKey: partyChestQueryKey('party-1') });
+  });
+
+  // The real chest hook, so a change to its keys can't silently stop the channel from reaching it
+  describe('baú', () => {
+    const chest = { containers: [], items: [] };
+
+    it('o aviso "chest" busca de novo o baú aberto', async () => {
+      vi.mocked(rpgWorldApi.get).mockResolvedValue(chest);
+      renderHookWithProviders(() => {
+        usePartyChest('party-1');
+        return usePartyChannel('party-1');
+      });
+      await subscribed();
+      await waitFor(() => expect(rpgWorldApi.get).toHaveBeenCalledTimes(1));
+
+      await act(async () => broadcast('chest'));
+
+      await waitFor(() => expect(rpgWorldApi.get).toHaveBeenCalledTimes(2));
+      expect(vi.mocked(rpgWorldApi.get).mock.calls[1][0]).toMatch('/api/parties/party-1/chest');
+    });
+
+    // The person's own coin change still on its way: it refetches when it lands
+    it('com uma escrita do baú a caminho, o aviso espera por ela', async () => {
+      vi.mocked(rpgWorldApi.get).mockResolvedValue(chest);
+      const { result, queryClient } = renderHookWithProviders(() => {
+        const write = useMutation({
+          mutationKey: ['inventory-write', 'party-party-1', 'en'],
+          mutationFn: () => new Promise(() => {}),
+        });
+        usePartyChannel('party-1');
+        return write;
+      });
+      const invalidate = vi.spyOn(queryClient, 'invalidateQueries');
+      await subscribed();
+
+      act(() => result.current.mutate());
+      await waitFor(() => expect(result.current.isPending).toBe(true));
+      await act(async () => broadcast('chest'));
+
+      expect(invalidate).not.toHaveBeenCalled();
+    });
   });
 
   it('live fica falso quando a conexão cai, e volta ao reassinar', async () => {
@@ -140,7 +226,7 @@ describe('usePartyChannel', () => {
 
     act(() => result.current.mutate());
     await waitFor(() => expect(result.current.isPending).toBe(true));
-    await act(async () => fake.state.broadcast!());
+    await act(async () => broadcast('encounter'));
 
     expect(invalidate).not.toHaveBeenCalled();
   });

@@ -29,13 +29,14 @@ export function HeaderSessionMobileMenu({ serverUser }: KnownSession) {
 }
 
 /**
- * The header's right side: sign in/register, or back + user menu, then support and language. While a session cookie is being checked it shows a same-size placeholder, never
+ * The header's right side: sign in/register, or "My characters" + sign out, then theme, contact
+ * and language. While a session cookie is being checked it shows a same-size placeholder, never
  * the signed-out buttons.
  */
 export function HeaderSessionActions({ serverUser }: KnownSession) {
   const tLogin = useTranslations('login');
   const tRegister = useTranslations('register');
-  const tCommon = useTranslations('common');
+  const tDash = useTranslations('dashboard');
   const { user, status } = useSession(serverUser);
 
   const queryClient = useQueryClient();
@@ -79,16 +80,18 @@ export function HeaderSessionActions({ serverUser }: KnownSession) {
             variant="ghost"
             asChild
             size="sm"
-            // Where the dashboard's sidebar is, it already has the way back
+            // Where the dashboard's sidebar is, it already has the way there. Named for where it
+            // goes: it isn't a "Back", it always opens the characters
             className="text-muted-foreground hover:text-foreground [body:has([data-dashboard])_&]:hidden"
           >
-            <Link href="/characters">{tCommon('back')}</Link>
+            <Link href="/characters">{tDash('myCharacters')}</Link>
           </Button>
           <UserMenu />
         </div>
       )}
       <span className="bg-border mx-1 hidden h-5 w-px sm:block" aria-hidden="true" />
-      <div className="flex items-center gap-1">
+      {/* gap-2: each control's touch area grows past its edges (touch-target), up to its neighbor */}
+      <div className="flex items-center gap-2">
         <ThemeToggle />
         <HeaderSupportLink email={user?.email ?? undefined} />
         <LanguageSwitcher signedIn={status === 'signed-in'} />

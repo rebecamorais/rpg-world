@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
+import { getTranslations } from 'next-intl/server';
+
 import { PartyTableTab } from '@frontend/components/party/PartyPage';
 
 import { loadParty } from '../load-party';
@@ -10,8 +12,12 @@ export async function generateMetadata({
 }: {
   params: Promise<{ partyId: string }>;
 }): Promise<Metadata> {
-  const party = await loadParty((await params).partyId);
-  return party ? { title: party.name } : {};
+  // "· Table" like the other tabs, so switching tabs is announced
+  const [t, party] = await Promise.all([
+    getTranslations('parties.tabs'),
+    loadParty((await params).partyId),
+  ]);
+  return party ? { title: `${party.name} · ${t('overview')}` } : {};
 }
 
 export default async function PartyTableRoute({

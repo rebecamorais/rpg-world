@@ -107,10 +107,11 @@ describe('PartyList', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('convite de mesa sem mestre não oferece Aceitar, só Recusar', async () => {
+  it('convite de mesa sem mestre não oferece Aceitar, só Recusar, e diz quando dá', async () => {
     renderList(mine({ invites: [party('invite', { status: 'invited', hasGm: false })] }));
 
     const invites = await screen.findByRole('region', { name: t.invites });
+    expect(within(invites).getByText(t.noGmInviteHint)).toBeInTheDocument();
     expect(
       within(invites).getByRole('button', { name: named(t.declineInvite, 'Mesa invite') }),
     ).toBeInTheDocument();
@@ -139,7 +140,7 @@ describe('PartyList', () => {
       name: named(t.declineInvite, 'Mesa invite'),
     });
     await user.click(decline);
-    const dialog = screen.getByRole('alertdialog');
+    const dialog = screen.getByRole('alertdialog', { name: t.declineInviteTitle });
     expect(dialog).toHaveTextContent(named(t.declineInviteConfirm, 'Mesa invite'));
     await user.click(within(dialog).getByRole('button', { name: messages.common.cancel }));
     expect(rpgWorldApi.delete).not.toHaveBeenCalled();
@@ -159,7 +160,7 @@ describe('PartyList', () => {
       await screen.findByRole('button', { name: named(t.withdrawFrom, 'Mesa pedido') }),
     );
 
-    expect(screen.getByRole('alertdialog')).toHaveTextContent(
+    expect(screen.getByRole('alertdialog', { name: t.withdrawTitle })).toHaveTextContent(
       named(t.withdrawConfirm, 'Mesa pedido'),
     );
     await user.keyboard('{Escape}');
@@ -176,5 +177,67 @@ describe('PartyList', () => {
 
     expect(await screen.findByRole('button', { name: t.create.submit })).toBeDisabled();
     expect(screen.getByText(t.create.limit.replace('{max}', '5'))).toBeInTheDocument();
+  });
+
+  it('os pedidos pendentes vêm logo depois dos convites, antes das mesas', async () => {
+    renderList(
+      mine({
+        invites: [party('invite', { status: 'invited' })],
+        requests: [party('pedido', { status: 'requested' })],
+        asGm: [party('gm', { role: 'gm', status: 'gm' })],
+        asPlayer: [party('player')],
+      }),
+    );
+
+    await screen.findByRole('region', { name: t.requests });
+    const order = screen.getAllByRole('region').map((region) => region.getAttribute('aria-label'));
+    expect(order).toEqual([t.invites, t.requests, t.asGm, t.asPlayer, t.create.title]);
+    const pending = screen.getByRole('region', { name: t.requests });
+    expect(within(pending).getByText(t.requestWaiting)).toBeInTheDocument();
+  });
+
+  it('a mesa de que sou mestre mostra quantos jogadores tem', async () => {
+    renderList(
+      mine({
+        asGm: [
+          party('cheia', { role: 'gm', status: 'gm', activePlayers: 3 }),
+          party('vazia', { role: 'gm', status: 'gm', activePlayers: 0 }),
+        ],
+      }),
+    );
+
+    const asGm = await screen.findByRole('region', { name: t.asGm });
+    expect(within(asGm).getByText('3 players')).toBeInTheDocument();
+    expect(within(asGm).getByText('No players yet')).toBeInTheDocument();
+  });
+
+  it('o nome da mesa quebra em duas linhas com o nome inteiro no título, e o mestre em caixa normal', async () => {
+    const name = 'Convite para a Grande Expedição às Montanhas Geladas do Norte';
+    renderList(mine({ asPlayer: [party('longa', { name, gmUsername: 'Mestra_X' })] }));
+
+    const link = await screen.findByRole('link', { name });
+    expect(link).toHaveAttribute('title', name);
+    expect(link).toHaveClass('line-clamp-2');
+    expect(link).not.toHaveClass('truncate');
+    const gm = screen.getByText('GM: @Mestra_X');
+    expect(gm).toHaveClass('text-caption');
+    expect(gm).not.toHaveClass('text-label');
+  });
+
+  it('responder a um convite trava só aquela linha', async () => {
+    vi.mocked(rpgWorldApi.patch).mockReturnValue(new Promise(() => {}));
+    renderList(
+      mine({
+        invites: [party('a', { status: 'invited' }), party('b', { status: 'invited' })],
+      }),
+    );
+    const user = userEvent.setup();
+
+    const acceptA = await screen.findByRole('button', { name: named(t.acceptInvite, 'Mesa a') });
+    await user.click(acceptA);
+
+    await vi.waitFor(() => expect(acceptA).toHaveAttribute('aria-busy', 'true'));
+    expect(screen.getByRole('button', { name: named(t.declineInvite, 'Mesa a') })).toBeDisabled();
+    expect(screen.getByRole('button', { name: named(t.acceptInvite, 'Mesa b') })).toBeEnabled();
   });
 });

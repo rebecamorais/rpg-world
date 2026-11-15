@@ -11,3 +11,12 @@ export const SESSION_QUERY_KEY = ['session'] as const;
 export const PARTIES_QUERY_KEY = ['parties'] as const;
 export const partyQueryKey = (partyId: string) => ['party', partyId] as const;
 export const encounterQueryKey = (partyId: string) => ['encounter', partyId] as const;
+/** The invite page's preview of the party, polled while a request waits for the GM. */
+export const partyInviteQueryKey = (code: string) => ['party-invite', code] as const;
+/**
+ * The party chest and its writes, as usePartyChest builds them (useInventory adds the locale last,
+ * so these prefixes cover every language). The party channel invalidates the chest through them.
+ */
+export const partyChestQueryKey = (partyId: string) => ['inventory', `party-${partyId}`] as const;
+export const partyChestMutationKey = (partyId: string) =>
+  ['inventory-write', `party-${partyId}`] as const;

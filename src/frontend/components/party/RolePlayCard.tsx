@@ -16,9 +16,12 @@ import type {
   RosterCharacter,
 } from '@backend/contexts/parties/domain/PartyView';
 
+const NAME_CLASS = 'text-title text-character-flare line-clamp-2 break-normal hyphens-auto';
+
 /**
- * Avatar, name and "race · class · level" of a character at the table. With `href`, only the name
- * is a link to the sheet.
+ * Avatar, name and "level · race · class" of a character at the table. With `href`, only the name
+ * is a link to the sheet. Nothing is cut short: the name takes two lines (all of it in the
+ * tooltip), and the details wrap with the level first, so a narrow card never hides it.
  */
 export function CharacterIdentity({
   character,
@@ -33,9 +36,9 @@ export function CharacterIdentity({
   const t = useTranslations('parties.page');
   const choices = useCharacterChoices();
   const details = [
+    t('level', { level: character.level }),
     choices.raceLabel(character.race),
     choices.classLabel(character.class),
-    t('level', { level: character.level }),
   ]
     .filter(Boolean)
     .join(' · ');
@@ -53,14 +56,17 @@ export function CharacterIdentity({
         {href ? (
           <AppLink
             href={href}
-            className="text-title text-character-flare focus-ring truncate rounded-sm hover:underline"
+            title={character.name}
+            className={cn(NAME_CLASS, 'focus-ring rounded-sm hover:underline')}
           >
             {character.name}
           </AppLink>
         ) : (
-          <span className="text-title text-character-flare truncate">{character.name}</span>
+          <span title={character.name} className={NAME_CLASS}>
+            {character.name}
+          </span>
         )}
-        <span className="text-label text-muted-foreground truncate">{details}</span>
+        <span className="text-caption text-muted-foreground">{details}</span>
       </div>
     </div>
   );
@@ -68,25 +74,33 @@ export function CharacterIdentity({
 
 const LORE_FIELDS = ['personalityTraits', 'ideals', 'bonds', 'flaws'] as const;
 
-/** A character in the GM's Role Play view; the whole card opens the read-only sheet. */
+/**
+ * A character in the GM's Role Play view; a click anywhere on the card opens the read-only sheet.
+ * The stretched link is out of the Tab order: the keyboard opens the sheet with "View sheet" (the
+ * same sheet, without leaving the table), after "View image" when the character has an avatar.
+ */
 export function RolePlayCard({ partyId, card }: { partyId: string; card: RolePlayCardData }) {
   const t = useTranslations('parties.page');
   const theme = characterTheme(card.accentColor ?? undefined);
 
   return (
     <div className={cn(theme.className, 'group relative h-full')} style={theme.style}>
-      <Card className="border-character-muted bg-card/60 has-[a:focus-visible]:outline-ring relative h-full overflow-hidden border transition-transform group-hover:-translate-y-0.5 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2">
+      <Card className="border-character-muted bg-card/60 relative h-full overflow-hidden border transition-transform group-hover:-translate-y-0.5">
         <div className="bg-character absolute top-0 left-0 h-1 w-full opacity-80" />
         <ViewImageButton src={card.avatarUrl} name={card.name} className="absolute top-3 right-3" />
         <CardContent className="flex h-full flex-col gap-4 p-5">
-          {/* The link is stretched over the card (::after) */}
+          {/*
+            The link is stretched over the card (::after), for the pointer. Out of the Tab order
+            (8 players were 16 stops), but not aria-hidden: it holds the character's name
+          */}
           <AppLink
             href={`/parties/${partyId}/characters/${card.characterId}`}
+            tabIndex={-1}
             className="pr-8 outline-none after:absolute after:inset-0"
           >
             <CharacterIdentity character={card} />
           </AppLink>
-          <p className="text-label text-muted-foreground -mt-2">
+          <p className="text-caption text-muted-foreground -mt-2">
             {card.ownerUsername
               ? t('playedBy', { username: card.ownerUsername })
               : t('playedByUnnamed')}

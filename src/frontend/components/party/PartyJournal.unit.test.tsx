@@ -33,34 +33,50 @@ describe('PartyJournal', () => {
     expect(link).toHaveAttribute('target', '_blank');
   });
 
-  it('no celular com diário: aviso e link, sem iframe', () => {
+  it('o jogador lê o que fazer se o documento não abrir; o mestre, onde conferir', () => {
+    desktop(true);
+    const { unmount } = renderWithProviders(
+      <PartyJournal docId={DOC_ID} role="player" partyId="p1" />,
+    );
+    expect(screen.getByText(t.frameHelpPlayer)).toBeInTheDocument();
+    unmount();
+
+    renderWithProviders(<PartyJournal docId={DOC_ID} role="gm" partyId="p1" />);
+    expect(screen.getByText(t.frameHelpGm)).toBeInTheDocument();
+  });
+
+  it('estreito com diário: o botão em largura toda e um aviso que não fala de aparelho', () => {
     desktop(false);
     renderWithProviders(<PartyJournal docId={DOC_ID} role="player" partyId="p1" />);
 
     expect(screen.queryByTitle(t.frameTitle)).not.toBeInTheDocument();
-    expect(screen.getByText(t.mobileNotice)).toBeInTheDocument();
+    expect(screen.getByText(t.narrowNotice)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: t.open })).toHaveClass('w-full');
     expect(screen.getByRole('link', { name: t.open })).toHaveAttribute(
       'href',
       googleDocUrl(DOC_ID),
     );
   });
 
-  it('sem diário, o jogador vê que o Mestre ainda não configurou', () => {
+  it('sem diário, o jogador vê que o mestre ainda não configurou', () => {
     desktop(true);
     renderWithProviders(<PartyJournal docId={null} role="player" partyId="p1" />);
 
     expect(screen.getByText(t.emptyPlayer)).toBeInTheDocument();
+    expect(screen.getByText(t.emptyPlayerHint)).toBeInTheDocument();
     expect(screen.queryByTitle(t.frameTitle)).not.toBeInTheDocument();
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 
-  it('sem diário, o Mestre vê o link para as configurações', () => {
+  it('sem diário, o mestre vê um título curto, a instrução e o link direto ao card do diário', () => {
     desktop(true);
     renderWithProviders(<PartyJournal docId={null} role="gm" partyId="p1" />);
 
+    expect(screen.getByText(t.emptyGmTitle)).toBeInTheDocument();
+    expect(screen.getByText(t.emptyGm)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: t.setUp })).toHaveAttribute(
       'href',
-      '/parties/p1/settings',
+      '/parties/p1/settings#journal',
     );
   });
 });

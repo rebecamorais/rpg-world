@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
-import { renderWithProviders } from '@tests/helpers/render';
+import { messages, renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it, vi } from 'vitest';
 
 import { useSession } from '@frontend/hooks/useSession';
@@ -36,13 +36,17 @@ describe('HeaderSessionActions', () => {
     expect(screen.getByRole('link', { name: 'Register' })).toBeInTheDocument();
   });
 
-  it('signed-in mostra o menu do usuário', () => {
+  it('signed-in leva aos personagens pelo nome do destino (não "Voltar") e mostra o Sair', () => {
     session.mockReturnValue({ user: { id: 'u1', email: 'a@b.c' }, status: 'signed-in' });
 
     renderWithProviders(<HeaderSessionActions />);
 
     expect(screen.queryByRole('link', { name: 'Sign In' })).toBeNull();
-    expect(screen.getByRole('link', { name: /Back/ })).toHaveAttribute('href', '/characters');
+    expect(screen.getByRole('link', { name: messages.dashboard.myCharacters })).toHaveAttribute(
+      'href',
+      '/characters',
+    );
+    expect(screen.getByRole('button', { name: messages.common.logout })).toBeInTheDocument();
   });
 
   it('com a sessão do servidor, guarda-a para as páginas públicas não perguntarem de novo', () => {

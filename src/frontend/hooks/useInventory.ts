@@ -6,13 +6,14 @@ import { rpgWorldApi } from '@client';
 
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
+import { isRetryable, statusOf } from '@frontend/lib/error-message';
 
 import type {
   InventoryDto,
   InventoryItem,
 } from '@backend/contexts/characters/domain/repository/inventory.repo';
 
-import { COINS, type Coins } from '@shared/systems/dnd5e/coins';
+import { COINS, type Coin, type Coins } from '@shared/systems/dnd5e/coins';
 
 export type { InventoryItem };
 
@@ -21,6 +22,8 @@ type CoinsDelta = Partial<Coins>;
 type AddVars = { ref: string; containerId: string; quantity: number; key: string };
 type QuantityVars = { itemId: string; delta: number; key: string };
 type CoinsVars = { containerId: string; delta: CoinsDelta; key: string };
+/** A coin typed by hand: its final `value`, and what the screen showed (`seen`) when typing began. */
+type TypedCoinVars = { containerId: string; coin: Coin; value: number; seen: number; key: string };
 /** The entry a DELETE took out of the cache, and where it was, to put back if it fails. */
 type Removed = { entry: InventoryItem; index: number } | undefined;
 
@@ -60,15 +63,22 @@ export type InventoryApi = ReturnType<typeof useInventoryAt>;
  * so two tabs (or the GM and a player on the chest) add up instead of undoing each other. Each
  * carries an idempotency key: the same request sent again is applied once.
  *
- * A failed write undoes only its own change and shows a toast with "Try again", which sends the
- * very same operation again (same variables, so the same key): when the first try did reach the
- * server and only the answer was lost, the retry is not applied twice.
+ * A coin typed by hand is the exception: it goes as the final value, with the value the screen
+ * showed, and the server refuses it (409) when someone changed that coin meanwhile.
+ *
+ * A failed write undoes only its own change and shows a toast. Only when the same request can
+ * work later (no connection, a server failure) does it offer "Try again", which sends the very
+ * same operation again (same variables, so the same key): when the first try did reach the server
+ * and only the answer was lost, the retry is not applied twice. A conflict or an entry that is
+ * gone would fail the same way: the toast says what changed and the refetch shows it.
  */
 function useInventoryAt(path: string, ownerKey: string, { shared = false } = {}) {
   const queryClient = useQueryClient();
   const locale = useLocale();
   const { getErrorMessage } = useErrorMessage();
   const t = useTranslations('common');
+  const tCoins = useTranslations('characters.coins');
+  const tInventory = useTranslations('characters.inventory');
   const key = ['inventory', ownerKey, locale];
   const mutationKey = ['inventory-write', ownerKey, locale];
 
@@ -152,12 +162,24 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
     );
   /**
    * Undoes only this operation (other writes still on their way keep their optimistic value) and
-   * offers "Try again", which calls `retry`: the same mutation with the same variables, key
-   * included, so the server applies it at most once even if the failed try did land.
+   * says why. "Try again" (`retry`: the same mutation with the same variables, key included, so
+   * the server applies it at most once even if the failed try did land) only where it can work.
    */
-  const failed = (err: unknown, undo: () => void, retry: () => void) => {
+  const failed = (err: unknown, undo: () => void, retry: () => void, message?: string) => {
     undo();
-    toast.error(getErrorMessage(err), { action: { label: t('retry'), onClick: retry } });
+    toast.error(message ?? getErrorMessage(err), {
+      action: isRetryable(err) ? { label: t('retry'), onClick: retry } : undefined,
+    });
+  };
+  /** A 404 on an entry: someone took it out (another tab, or someone else on the chest). */
+  const goneMessage = (err: unknown) =>
+    statusOf(err) === 404 ? tInventory('itemGone') : undefined;
+  /** The 409 of a typed coin carries the coins now: "Changed somewhere else: it's now 55 GP". */
+  const typedCoinMessage = (err: unknown, coin: Coin) => {
+    const now = (err as { data?: { coins?: Partial<Coins> } } | undefined)?.data?.coins?.[coin];
+    if (statusOf(err) !== 409 || typeof now !== 'number') return undefined;
+    // Count and coin apart: the ICU plural agrees with the count ("agora é 1 PO", "agora são 55 PO")
+    return tCoins('changedElsewhere', { count: now, coin: tCoins(`${coin}.short`) });
   };
 
   // The callbacks name their return type: they call their own mutation (the retry), and an
@@ -188,6 +210,7 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
         err,
         () => shiftQuantity(v.itemId, -v.delta),
         () => quantity.mutate(v),
+        goneMessage(err),
       ),
   });
 
@@ -211,6 +234,7 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
         err,
         () => removed && restoreEntry(removed),
         () => remove.mutate(itemId),
+        goneMessage(err),
       ),
   });
 
@@ -231,6 +255,46 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
 
   /** What the cache shows now (with the writes still on their way), not what the last render saw. */
   const cached = () => queryClient.getQueryData<InventoryDto>(key);
+
+  /** Puts `value` as `coin` of a container in the cache, if it still shows `from` there. */
+  const putCoin = (containerId: string, coin: Coin, from: number, value: number) =>
+    queryClient.setQueryData<InventoryDto>(key, (c) =>
+      c
+        ? {
+            ...c,
+            containers: c.containers.map((k) =>
+              k.id === containerId && k.coins[coin] === from
+                ? { ...k, coins: { ...k.coins, [coin]: value } }
+                : k,
+            ),
+          }
+        : c,
+    );
+
+  const typedCoin = useMutation({
+    ...settle,
+    mutationFn: ({ containerId, coin, value, seen, key: opKey }: TypedCoinVars) =>
+      rpgWorldApi.patch(`${path}/coins`, {
+        containerId,
+        coins: { [coin]: value },
+        expected: { [coin]: seen },
+        key: opKey,
+      }),
+    // Shows the typed value at once, and remembers what the cache had to put it back on failure
+    onMutate: (v): number | undefined => {
+      void queryClient.cancelQueries({ queryKey: key });
+      const before = cached()?.containers.find((c) => c.id === v.containerId)?.coins[v.coin];
+      if (before !== undefined) putCoin(v.containerId, v.coin, before, v.value);
+      return before;
+    },
+    onError: (err, v, before): void =>
+      failed(
+        err,
+        () => before !== undefined && putCoin(v.containerId, v.coin, v.value, before),
+        () => typedCoin.mutate(v),
+        typedCoinMessage(err, v.coin),
+      ),
+  });
 
   return {
     inventory,
@@ -262,13 +326,25 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
         quantity: item.quantity,
         key: crypto.randomUUID(),
       }),
-    /** Shows `next` in the coin pouch at once; the server gets the difference, coin by coin. */
+    /**
+     * Shows `next` in the coin pouch at once; the server gets the difference, coin by coin. For
+     * Pay and Receive: two people paying at once both count.
+     */
     setCoins: (next: Coins) => {
       const current = cached()?.containers.find((c) => c.id === pouch?.id);
       if (!current) return;
       const delta = coinsDelta(current.coins, next);
       if (Object.keys(delta).length === 0) return;
       coins.mutate({ containerId: current.id, delta, key: crypto.randomUUID() });
+    },
+    /**
+     * A coin typed by hand: `value` is the final count, written only if the server still has
+     * `seen` (what the field showed when the person began typing). If someone changed it
+     * meanwhile, nothing is written and a toast says what it is now.
+     */
+    setCoinTo: (coin: Coin, value: number, seen: number) => {
+      if (!pouch || value === seen) return;
+      typedCoin.mutate({ containerId: pouch.id, coin, value, seen, key: crypto.randomUUID() });
     },
   };
 }

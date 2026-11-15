@@ -4,6 +4,8 @@
 
 'use client';
 
+import { useEffect } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -39,19 +41,27 @@ import { UNEXPECTED_ERROR } from '@shared/http/error-response';
 /** Same minimum the feedback action enforces on the server. */
 const MESSAGE_MIN_LENGTH = 10;
 
+/** What was typed so far, kept by whoever mounts the form (the header's dialog). */
+export type FeedbackDraft = { email?: string; type?: string; message?: string };
+
 /**
  * Feedback fields and submission, without a frame: the support page wraps it in a card
  * (`ContactCard`) and the header's dialog brings its own heading. `onSent` runs after the
- * success toast, so each one decides what comes next.
+ * success toast, so each one decides what comes next. `draft` and `onDraftChange` let the
+ * dialog keep what was typed while the form is unmounted (closed).
  */
 export default function ContactForm({
   initialEmail = '',
   partyId,
+  draft,
+  onDraftChange,
   onSent,
 }: {
   initialEmail?: string;
   /** A party the message is about (`/support?party=`): opens as Account / Access with its ID in the text. */
   partyId?: string | null;
+  draft?: FeedbackDraft | null;
+  onDraftChange?: (draft: FeedbackDraft) => void;
   onSent?: () => void;
 }) {
   const t = useTranslations('feedback');
@@ -84,8 +94,17 @@ export default function ContactForm({
       email: initialEmail,
       type: aboutParty ? 'account' : 'feedback',
       message: aboutParty ? t('partyMessage', { partyId: aboutParty }) : '',
+      ...draft,
     },
   });
+
+  useEffect(() => {
+    if (!onDraftChange) return;
+    return form.subscribe({
+      formState: { values: true },
+      callback: ({ values }) => onDraftChange(values),
+    });
+  }, [form, onDraftChange]);
 
   const onSubmit = async (data: FeedbackFormValues) => {
     // Errors stay on the form (not only in a toast) so they're still there to read and fix

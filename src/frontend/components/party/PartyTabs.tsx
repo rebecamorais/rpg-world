@@ -32,15 +32,41 @@ function usePartyTabs(partyId: string): PartyTab[] {
   }));
 }
 
-/** "Round 2" on the Combat tab while a combat runs, so it shows from any other tab. */
-function CombatBadge({ partyId }: { partyId: string }) {
+/** "Round 2" while a combat runs (not while it is being prepared), or null. */
+function useCombatRound(partyId: string): CombatRound | null {
   const t = useTranslations('combat');
   const { encounter } = useEncounter(partyId);
   if (!encounter || encounter.round === 0) return null;
+  return { round: encounter.round, label: t('round', { round: encounter.round }) };
+}
 
+interface CombatRound {
+  round: number;
+  label: string;
+}
+
+/**
+ * The round on the Combat tab, so it shows from any other tab. `compact` is the phone's bar, too
+ * narrow for the words: just the number on the icon's corner. Both are only seen: the link's own
+ * name says it (text in a child span ran into "CombatRound 2").
+ */
+function CombatBadge({ round, compact = false }: { round: CombatRound; compact?: boolean }) {
+  if (compact) {
+    return (
+      <span
+        aria-hidden="true"
+        className="border-warning-muted bg-card text-warning-flare absolute top-1 left-1/2 ml-2 min-w-5 rounded-full border px-1 text-center text-xs leading-4 font-bold"
+      >
+        {round.round}
+      </span>
+    );
+  }
   return (
-    <span className="bg-warning/15 text-warning-flare rounded-full px-2 py-0.5 text-xs font-semibold">
-      {t('round', { round: encounter.round })}
+    <span
+      aria-hidden="true"
+      className="bg-warning/15 text-warning-flare rounded-full px-2 py-0.5 text-xs font-semibold"
+    >
+      {round.label}
     </span>
   );
 }
@@ -52,6 +78,10 @@ function CombatBadge({ partyId }: { partyId: string }) {
 export function PartyTabs({ partyId }: { partyId: string }) {
   const t = useTranslations('parties.tabs');
   const tabs = usePartyTabs(partyId);
+  const round = useCombatRound(partyId);
+  // "Combat, round 2" while a combat runs; the other tabs keep their visible text as their name
+  const nameOf = (tab: PartyTab) =>
+    tab.id === 'combat' && round ? t('combatRound', { round: round.round }) : undefined;
 
   return (
     <>
@@ -62,6 +92,7 @@ export function PartyTabs({ partyId }: { partyId: string }) {
               <AppLink
                 href={tab.href}
                 aria-current={tab.isActive ? 'page' : undefined}
+                aria-label={nameOf(tab)}
                 className={cn(
                   'focus-ring -mb-px flex h-11 items-center gap-2 border-b-2 px-4 text-sm font-semibold transition-colors',
                   tab.isActive
@@ -69,8 +100,10 @@ export function PartyTabs({ partyId }: { partyId: string }) {
                     : 'text-muted-foreground hover:text-foreground border-transparent',
                 )}
               >
+                {/* The same icons as the phone's bar: one look for both */}
+                <AppIcon name={tab.icon} size={16} aria-hidden="true" />
                 {t(tab.id)}
-                {tab.id === 'combat' && <CombatBadge partyId={partyId} />}
+                {tab.id === 'combat' && round && <CombatBadge round={round} />}
               </AppLink>
             </li>
           ))}
@@ -88,8 +121,9 @@ export function PartyTabs({ partyId }: { partyId: string }) {
               <AppLink
                 href={tab.href}
                 aria-current={tab.isActive ? 'page' : undefined}
+                aria-label={nameOf(tab)}
                 className={cn(
-                  'focus-ring flex min-h-14 flex-col items-center justify-center gap-1 text-xs transition-colors',
+                  'focus-ring relative flex min-h-14 flex-col items-center justify-center gap-1 text-xs transition-colors',
                   tab.isActive
                     ? 'text-primary-flare font-semibold'
                     : 'text-muted-foreground hover:text-foreground',
@@ -97,6 +131,7 @@ export function PartyTabs({ partyId }: { partyId: string }) {
               >
                 <AppIcon name={tab.icon} size={20} aria-hidden="true" />
                 {t(tab.id)}
+                {tab.id === 'combat' && round && <CombatBadge round={round} compact />}
               </AppLink>
             </li>
           ))}

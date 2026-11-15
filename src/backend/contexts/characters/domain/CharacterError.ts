@@ -26,6 +26,8 @@ export const CharacterErrorCodes = {
   NOT_ENOUGH_COINS: 'character_error_not_enough_coins',
   /** Another tab took the last of the item first. */
   ITEM_QUANTITY_CONFLICT: 'character_error_item_quantity_conflict',
+  /** A coin typed by hand: it no longer was what the screen showed (details: the coins now). */
+  COINS_CHANGED: 'character_error_coins_changed',
   DOMAIN_ATTRIBUTE_BELOW_ONE: 'domain_error_attribute_below_one',
   DOMAIN_HP_MAX_BELOW_ONE: 'domain_error_hp_max_below_one',
   DOMAIN_HP_DAMAGE_NEGATIVE: 'domain_error_hp_damage_negative',
@@ -49,6 +51,7 @@ const ERROR_KINDS: Partial<Record<CharacterErrorCode, AppErrorKind>> = {
   [CharacterErrorCodes.CONFLICT]: 'conflict',
   [CharacterErrorCodes.NOT_ENOUGH_COINS]: 'conflict',
   [CharacterErrorCodes.ITEM_QUANTITY_CONFLICT]: 'conflict',
+  [CharacterErrorCodes.COINS_CHANGED]: 'conflict',
 };
 
 export class CharacterError extends AppError {

@@ -20,7 +20,9 @@ describe('SheetPreview', () => {
     await userEvent.click(screen.getByRole('button', { name: `${t.open} Arani` }));
 
     const panel = await screen.findByRole('dialog', { name: 'Arani' });
-    expect(panel).toHaveTextContent(t.description);
+    // The GM can't change a player's sheet: not told to "open the sheet" to change it
+    expect(panel).toHaveTextContent(t.descriptionNoEdit);
+    expect(panel).not.toHaveTextContent(t.description);
     expect(await screen.findByText('sheet of c1')).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: new RegExp(t.edit) })).not.toBeInTheDocument();
   });
@@ -33,6 +35,7 @@ describe('SheetPreview', () => {
     await userEvent.click(screen.getByRole('button', { name: `${t.open} Arani` }));
 
     const edit = await screen.findByRole('link', { name: `${t.edit} ${t.newTab}` });
+    expect(screen.getByRole('dialog', { name: 'Arani' })).toHaveTextContent(t.description);
     expect(edit).toHaveAttribute('href', '/system/DnD_5e/character/c1');
     expect(edit).toHaveAttribute('target', '_blank');
   });

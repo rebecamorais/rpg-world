@@ -116,7 +116,8 @@ export function Spellbook({
       <EmptyState
         icon="BookOpen"
         title={tDrawer('emptyState')}
-        description={tDrawer('emptyStateHint')}
+        // Without a way to add (a read-only sheet), "search and add" asks for what can't be done
+        description={onAddSpell ? tDrawer('emptyStateHint') : undefined}
         action={
           onAddSpell && (
             <Button onClick={onAddSpell}>

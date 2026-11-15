@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { PartyPerson } from '@backend/contexts/parties/domain/PartyView';
 
-import { PartyRequests } from './PartyRequests';
+import { PartyRequests, type PendingAnswers } from './PartyRequests';
 
 const t = messages.parties.requestsSection;
 const named = (text: string, name: string) => text.replace('{name}', name);
@@ -17,7 +17,7 @@ const person = (userId: string, status: PartyPerson['status']): PartyPerson => (
   status,
 });
 
-function renderRequests() {
+function renderRequests(pending?: PendingAnswers) {
   const onApprove = vi.fn();
   const onRemove = vi.fn();
   renderWithProviders(
@@ -25,7 +25,7 @@ function renderRequests() {
       people={[person('ana', 'requested'), person('bia', 'requested'), person('caio', 'invited')]}
       onApprove={onApprove}
       onRemove={onRemove}
-      isBusy={false}
+      pending={pending}
     />,
   );
   return { onApprove, onRemove };
@@ -56,8 +56,8 @@ describe('PartyRequests', () => {
     const decline = screen.getByRole('button', { name: named(t.declineFrom, '@bia') });
 
     await user.click(decline);
-    const dialog = screen.getByRole('alertdialog');
-    expect(dialog).toHaveTextContent(named(t.declineConfirm, '@bia'));
+    const dialog = screen.getByRole('alertdialog', { name: named(t.declineTitle, '@bia') });
+    expect(dialog).toHaveTextContent(t.declineConfirm);
     await user.click(within(dialog).getByRole('button', { name: messages.common.cancel }));
     expect(onRemove).not.toHaveBeenCalled();
 
@@ -74,8 +74,8 @@ describe('PartyRequests', () => {
 
     await user.click(screen.getByRole('button', { name: named(t.cancelFor, '@caio') }));
 
-    const dialog = screen.getByRole('alertdialog');
-    expect(dialog).toHaveTextContent(named(t.cancelConfirm, '@caio'));
+    const dialog = screen.getByRole('alertdialog', { name: named(t.cancelTitle, '@caio') });
+    expect(dialog).toHaveTextContent(t.cancelConfirm);
     expect(onRemove).not.toHaveBeenCalled();
     await user.click(within(dialog).getByRole('button', { name: t.cancelInvite }));
     expect(onRemove).toHaveBeenCalledWith('caio');
@@ -88,5 +88,18 @@ describe('PartyRequests', () => {
 
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
     expect(onApprove).toHaveBeenCalledWith('ana');
+  });
+
+  it('só a linha respondida espera: o botão apertado gira, as outras linhas seguem livres', () => {
+    renderRequests(new Map([['ana', 'approve']]));
+
+    const approveAna = screen.getByRole('button', { name: named(t.approveFrom, '@ana') });
+    expect(approveAna).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByRole('button', { name: named(t.declineFrom, '@ana') })).toBeDisabled();
+    expect(screen.getByRole('button', { name: named(t.declineFrom, '@ana') })).not.toHaveAttribute(
+      'aria-busy',
+    );
+    expect(screen.getByRole('button', { name: named(t.approveFrom, '@bia') })).toBeEnabled();
+    expect(screen.getByRole('button', { name: named(t.cancelFor, '@caio') })).toBeEnabled();
   });
 });

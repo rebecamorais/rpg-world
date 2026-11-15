@@ -48,7 +48,9 @@ test.describe('mesas', () => {
     await asPlayer.getByRole('link', { name: 'Mesa de Quinta' }).click();
     await expect.poll(() => new URL(player.page.url()).pathname).toBe(partyUrl(partyId));
     // Who they bring is in their own menu, out of the way of play
-    await (await hydrated(player.page.getByRole('button', { name: 'My characters' }))).click();
+    await (
+      await hydrated(player.page.getByRole('button', { name: 'My party membership' }))
+    ).click();
     await player.page.getByRole('checkbox', { name: /Arani/ }).check();
     await player.page.getByRole('dialog').getByRole('button', { name: 'Save' }).click();
     await expect(player.page.getByText('Characters updated')).toBeVisible();
@@ -208,7 +210,9 @@ test.describe('mesas', () => {
     await bring(player.page, partyId, [characterId]);
 
     await player.page.goto(partyUrl(partyId));
-    await (await hydrated(player.page.getByRole('button', { name: 'My characters' }))).click();
+    await (
+      await hydrated(player.page.getByRole('button', { name: 'My party membership' }))
+    ).click();
     await player.page.getByRole('button', { name: 'Leave party' }).click();
     await player.page.getByRole('alertdialog').getByRole('button', { name: 'Leave party' }).click();
     await expect.poll(() => new URL(player.page.url()).pathname).toBe('/parties');
@@ -230,7 +234,7 @@ test.describe('mesas', () => {
     await expect.poll(() => new URL(page.url()).pathname).toBe('/parties');
   });
 
-  test('o diário da mesa aparece para o jogador, com aviso no celular', async ({
+  test('o diário da mesa aparece para o jogador, com aviso na largura estreita', async ({
     page,
     browser,
     user: _,
@@ -263,7 +267,7 @@ test.describe('mesas', () => {
 
     await player.page.setViewportSize({ width: 390, height: 800 });
     await expect(frame).toHaveCount(0);
-    await expect(player.page.getByText(/On a phone the journal opens straight/)).toBeVisible();
+    await expect(player.page.getByText(/At this width the journal opens straight/)).toBeVisible();
     await expect(player.page.getByRole('link', { name: 'Open in Google Docs' })).toBeVisible();
 
     await player.context.close();

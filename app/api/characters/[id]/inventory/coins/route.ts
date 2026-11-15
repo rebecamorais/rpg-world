@@ -18,14 +18,15 @@ export const PUT = withAuth(
   { params: uuidParamsSchema, body: setCoinsSchema },
 );
 
-/** Adds `delta` to each coin in the database and answers `{ coins }`; a repeated key applies once. */
+/**
+ * Adds `delta` to each coin in the database and answers `{ coins }`; a repeated key applies once.
+ * A coin typed by hand comes as its final value (`coins`) with what the screen showed
+ * (`expected`), and answers 409 with the coins now if another tab changed it meanwhile.
+ */
 export const PATCH = withAuth(
-  async ({ user, body, params }) => {
+  async ({ user, body: { containerId, ...change }, params }) => {
     const { charactersApi } = await getApi();
-    return charactersApi.changeCoins(params.id, user.id, body.containerId, {
-      delta: body.delta,
-      key: body.key,
-    });
+    return charactersApi.changeCoins(params.id, user.id, containerId, change);
   },
   { params: uuidParamsSchema, body: changeCoinsSchema },
 );

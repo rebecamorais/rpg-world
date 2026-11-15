@@ -54,4 +54,16 @@ describe('MyPartyCharacters', () => {
 
     expect(screen.getByText(t.none)).toBeInTheDocument();
   });
+
+  it('nome e "nível · classe" empilhados, o nível primeiro', () => {
+    renderWithProviders(
+      <MyPartyCharacters characters={characters} selected={[]} onSave={vi.fn()} isSaving={false} />,
+    );
+
+    const details = screen.getByText('Level 2 · Guerreiro');
+    expect(details).toHaveClass('text-caption');
+    // Name above, details below, in one column
+    expect(details.previousElementSibling).toHaveTextContent('Borin');
+    expect(details.parentElement).toHaveClass('flex-col');
+  });
 });

@@ -12,9 +12,9 @@ test('jogadora cria, copia e edita caixinhas na configuração, e usa na ficha e
   expect(res.ok()).toBe(true);
   await page.goto(characterUrl(id));
 
-  // "edit" on the Resources box lands on the boxes, in the sheet's settings
+  // The gear on the Resources box lands on the boxes, in the sheet's settings
   await (
-    await hydrated(page.locator('#sheet-resources').getByRole('link', { name: 'edit' }))
+    await hydrated(page.locator('#sheet-resources').getByRole('link', { name: 'Edit class resources' }))
   ).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Sheet settings' })).toBeVisible();
   const settings = page.locator('#class-resources');

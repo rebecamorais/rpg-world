@@ -40,11 +40,18 @@ export default function CharacterNavSection({ characterId }: { characterId: stri
           )}
         />
         <div className={cn(navLabelClass(expanded), 'flex flex-col')}>
-          <span className="text-character-flare font-display truncate text-sm font-bold">
+          {/* Cut to fit the menu; the title keeps the whole name and class */}
+          <span
+            title={characterName}
+            className="text-character-flare font-display truncate text-sm font-bold"
+          >
             {characterName}
           </span>
           {character.class && (
-            <span className="text-label text-muted-foreground truncate">
+            <span
+              title={classLabel(character.class)}
+              className="text-label text-muted-foreground truncate"
+            >
               {classLabel(character.class)}
             </span>
           )}

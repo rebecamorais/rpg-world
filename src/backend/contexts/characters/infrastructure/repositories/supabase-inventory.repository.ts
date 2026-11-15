@@ -22,7 +22,11 @@ const toEntry = (row: ItemRow): InventoryEntry => ({
 });
 
 /** The database triggers raise these as P0001 with the rule's name as the message. */
-function limitError(error: { code?: string; message: string }): CharacterError | null {
+function limitError(error: {
+  code?: string;
+  message: string;
+  details?: string;
+}): CharacterError | null {
   if (error.code !== 'P0001') return null;
   if (error.message === 'item_limit') return new CharacterError(CharacterErrorCodes.ITEM_LIMIT);
   if (error.message === 'container_limit') {
@@ -34,7 +38,21 @@ function limitError(error: { code?: string; message: string }): CharacterError |
   if (error.message === 'item_quantity_conflict') {
     return new CharacterError(CharacterErrorCodes.ITEM_QUANTITY_CONFLICT);
   }
+  if (error.message === 'coins_changed') {
+    // The coins now ride in DETAIL, so the screen can say what they became
+    return new CharacterError(CharacterErrorCodes.COINS_CHANGED, coinsIn(error.details));
+  }
   return null;
+}
+
+/** `{ coins }` from the JSON a function put in DETAIL, or nothing when it isn't there. */
+function coinsIn(details: string | undefined): { coins: Coins } | undefined {
+  try {
+    const coins: unknown = details ? JSON.parse(details) : null;
+    return coins && typeof coins === 'object' ? { coins: coins as Coins } : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 /** Whose containers a repository reads and writes: a character's, or a party's (the chest). */
@@ -137,6 +155,24 @@ export class SupabaseInventoryRepository implements InventoryRepo {
       p_key: key,
     });
     if (error) throw limitError(error) ?? new Error(`Failed to change coins: ${error.message}`);
+    return data as Coins | null;
+  }
+
+  async setCoinsIfUnchanged(
+    ownerId: string,
+    containerId: string,
+    coins: Partial<Coins>,
+    expected: Partial<Coins>,
+    key: string,
+  ) {
+    const { data, error } = await this.client.rpc('set_container_coins_if_unchanged', {
+      p_owner_id: ownerId,
+      p_container_id: containerId,
+      p_coins: coins,
+      p_expected: expected,
+      p_key: key,
+    });
+    if (error) throw limitError(error) ?? new Error(`Failed to set coins: ${error.message}`);
     return data as Coins | null;
   }
 

@@ -11,17 +11,21 @@ import type { PartyPerson } from '@backend/contexts/parties/domain/PartyView';
 export const personName = (person: PartyPerson, unnamed: string) =>
   person.username ? `@${person.username}` : unnamed;
 
+/** What is being done to whom: each row waits on its own answer, the others stay usable. */
+export type PendingAnswers = ReadonlyMap<string, 'approve' | 'remove'>;
+
 /** The GM's pending answers: join requests to approve, and invites sent that can be withdrawn. */
 export function PartyRequests({
   people,
   onApprove,
   onRemove,
-  isBusy,
+  pending = new Map(),
 }: {
   people: PartyPerson[];
   onApprove: (userId: string) => void;
   onRemove: (userId: string) => void;
-  isBusy: boolean;
+  /** Rows waiting on the server, by user id, and which of their buttons was pressed. */
+  pending?: PendingAnswers;
 }) {
   const t = useTranslations('parties.requestsSection');
   const confirm = useConfirm();
@@ -41,6 +45,7 @@ export function PartyRequests({
           <ul className="flex flex-col gap-2">
             {requested.map((person) => {
               const name = personName(person, unnamed);
+              const answer = pending.get(person.userId);
               return (
                 <li
                   key={person.userId}
@@ -52,10 +57,12 @@ export function PartyRequests({
                     <Button
                       size="sm"
                       variant="destructive-ghost"
-                      disabled={isBusy}
+                      disabled={!!answer}
+                      loading={answer === 'remove'}
                       aria-label={t('declineFrom', { name })}
                       onClick={async () => {
                         const ok = await confirm({
+                          title: t('declineTitle', { name }),
                           description: t('declineConfirm', { name }),
                           confirmLabel: t('decline'),
                           destructive: true,
@@ -67,7 +74,8 @@ export function PartyRequests({
                     </Button>
                     <Button
                       size="sm"
-                      disabled={isBusy}
+                      disabled={!!answer}
+                      loading={answer === 'approve'}
                       aria-label={t('approveFrom', { name })}
                       onClick={() => onApprove(person.userId)}
                     >
@@ -94,10 +102,11 @@ export function PartyRequests({
                     <Button
                       size="sm"
                       variant="destructive-ghost"
-                      disabled={isBusy}
+                      loading={pending.has(person.userId)}
                       aria-label={t('cancelFor', { name })}
                       onClick={async () => {
                         const ok = await confirm({
+                          title: t('cancelTitle', { name }),
                           description: t('cancelConfirm', { name }),
                           confirmLabel: t('cancelInvite'),
                           destructive: true,

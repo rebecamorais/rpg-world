@@ -13,6 +13,20 @@ import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { CharacterCard, CharacterCardSkeleton } from './CharacterCard';
 import { DeleteCharacterDialog } from './DeleteCharacterDialog';
 
+/*
+ * Columns by the list's own width, not the screen's: with the sidebar open at 768px, two
+ * columns left each card about 220px and every name read "R.". 2xl (42rem) gives each card
+ * room for its name.
+ */
+const GRID = 'grid auto-rows-fr grid-cols-1 gap-5 sm:gap-6 @2xl:grid-cols-2';
+
+/** The page's h1, focusable from code only, for when the list it introduced is gone. */
+function pageHeading(): HTMLElement | null {
+  const heading = document.querySelector<HTMLElement>('main h1') ?? document.querySelector('h1');
+  if (heading && !heading.hasAttribute('tabindex')) heading.tabIndex = -1;
+  return heading;
+}
+
 /**
  * Main dashboard component showing the list of adventure characters.
  * Integrates with CharactersContext for shared state and operations.
@@ -33,7 +47,24 @@ export default function CharacterList() {
     setConfirmName,
     handleDelete,
     isDeleting,
+    takeFocusAfterDelete,
   } = useCharactersContext();
+
+  // The deleted card took the dialog's opener with it: the focus would fall to <body>, and the
+  // next Tab would start over from the top of the page. It goes to the next card instead (the
+  // one before at the end of the list), or to the page's title once the list is empty.
+  const focusAfterDelete = (event: Event) => {
+    const deleted = takeFocusAfterDelete();
+    if (!deleted) return;
+    const target = deleted.next
+      ? document.querySelector<HTMLElement>(
+          `[data-character-id="${CSS.escape(deleted.next)}"] h2 a`,
+        )
+      : pageHeading();
+    if (!target) return;
+    event.preventDefault();
+    target.focus();
+  };
 
   if (!currentUser) return null;
 
@@ -47,11 +78,11 @@ export default function CharacterList() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6" aria-busy="true">
+      <div className="@container space-y-6" aria-busy="true">
         <span role="status" className="sr-only">
           {t('loadingList')}
         </span>
-        <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2">
+        <div className={GRID}>
           {[0, 1, 2, 3].map((i) => (
             <CharacterCardSkeleton key={i} />
           ))}
@@ -84,8 +115,8 @@ export default function CharacterList() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="grid auto-rows-fr grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2">
+    <div className="@container space-y-6">
+      <div className={GRID}>
         {characters.map((character) => (
           <CharacterCard key={character.id} character={character} />
         ))}
@@ -93,6 +124,7 @@ export default function CharacterList() {
 
       <DeleteCharacterDialog
         character={characterToDelete}
+        kind={kind}
         confirmName={confirmName}
         onConfirmNameChange={setConfirmName}
         onConfirm={handleDelete}
@@ -101,6 +133,7 @@ export default function CharacterList() {
           setConfirmName('');
         }}
         isPending={isDeleting}
+        onCloseAutoFocus={focusAfterDelete}
       />
     </div>
   );

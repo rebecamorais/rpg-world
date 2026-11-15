@@ -30,4 +30,35 @@ describe('HeaderSupportLink', () => {
     expect(trigger).toHaveFocus();
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
+
+  it('"Fale conosco" no botão e no título: o mesmo nome do começo ao fim', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<HeaderSupportLink />);
+
+    await user.click(screen.getByRole('button', { name: messages.common.contactTooltip }));
+
+    expect(messages.feedback.title).toBe(messages.common.contactTooltip);
+    expect(
+      await screen.findByRole('dialog', { name: messages.common.contactTooltip }),
+    ).toBeInTheDocument();
+  });
+
+  it('fechar sem querer não perde o que foi escrito', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<HeaderSupportLink email="hero@example.com" />);
+    const trigger = screen.getByRole('button', { name: messages.common.contactTooltip });
+
+    await user.click(trigger);
+    await user.type(
+      await screen.findByLabelText(messages.feedback.messageLabel),
+      'A mimic ate my spellbook.',
+    );
+    await user.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+    await user.click(trigger);
+    expect(await screen.findByLabelText(messages.feedback.messageLabel)).toHaveValue(
+      'A mimic ate my spellbook.',
+    );
+  });
 });

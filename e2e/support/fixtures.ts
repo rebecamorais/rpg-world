@@ -155,6 +155,8 @@ export const test = base.extend<Fixtures>({
         'https://github.githubassets.com',
         // Cloudflare Turnstile on the sign-up and password recovery forms
         'https://challenges.cloudflare.com',
+        // The party journal: the GM's Google Docs document, embedded on purpose (frame-src in the CSP)
+        'https://docs.google.com',
       ]);
       const requests: string[] = [];
       page.on('request', (request) => {
