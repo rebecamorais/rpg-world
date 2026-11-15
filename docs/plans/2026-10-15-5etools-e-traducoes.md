@@ -18,7 +18,8 @@ condições.
 - **Lista:** mostra as duas edições com filtro, que começa na edição do personagem; dá para
   aprender magia de qualquer edição.
 - **Esquema:** em vez de `source` na tabela `spells`, o conteúdo oficial vai para arquivo (plano de
-  conteúdo e homebrew). Primeiro passo: `2026-10-21-magias-em-arquivo.md`.
+  conteúdo e homebrew). Primeiro passo: as magias em arquivo, entregue no
+  [#91](https://github.com/rebecamorais/rpg-world/issues/91).
 
 O objetivo é trazer mais conteúdo de D&D (magias, condições, itens, talvez monstros) do formato do
 5etools, sempre com **inglês como base e português do Brasil** lado a lado. A tabela de magias já
