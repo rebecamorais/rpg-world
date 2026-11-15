@@ -366,6 +366,21 @@
     ),
     linear-gradient(to bottom, #000 45%, transparent 85%);
 }
+/* Fire: filled ribbons weigh more than the other drawings' fine lines, so they burn at half
+   strength; they start at 44% of the width (the title stays clear) and burn out before the rules
+   text, also on a tall phone card */
+.art[data-art='flame-ribbons'] {
+  opacity: calc(var(--k) * 0.55);
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent 44%,
+      rgb(0 0 0 / 0.1) 54%,
+      rgb(0 0 0 / 0.6) 68%,
+      #000 84%
+    ),
+    linear-gradient(to bottom, #000 25%, rgb(0 0 0 / 0.45) 50%, transparent 72%);
+}
 /* Psychic: the drawing's own fades (from 42% of the width; gone by 93% of the height) */
 .art[data-art='resonance'] {
   mask-image:

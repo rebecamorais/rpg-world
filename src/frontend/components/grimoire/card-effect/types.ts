@@ -22,6 +22,8 @@ interface EffectSpec {
  * game system's map (D&D 5e: src/frontend/constants/grimoire-effects.ts).
  */
 export const EFFECTS = {
+  // Fire: curved, pointed flame ribbons, heat trails and sparks on the right (the owner's drawing)
+  'flame-ribbons': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
   embers: { parts: 'fx', enter: 'rise', ripple: ['round', 2] },
   'grave-mist': { parts: 'glow+icons', enter: 'fade', ripple: ['smoke', 2] },
   sunlight: { parts: 'glow+icons', enter: 'fade', ripple: ['glow', 3] },
