@@ -52,4 +52,27 @@ describe('PartyRoster', () => {
     // No link to a sheet the player can't open
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
+
+  it('mesa vazia: explica e oferece a ação de quem olha', () => {
+    renderWithProviders(
+      <PartyRoster roster={[]} people={[]} emptyAction={<button type="button">bring</button>} />,
+    );
+
+    expect(screen.getByText(messages.parties.page.noCharactersPlayer)).toBeInTheDocument();
+    expect(screen.getByText(messages.parties.page.noCharactersPlayerHint)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'bring' })).toBeInTheDocument();
+  });
+
+  it('"Jogado por" em caixa normal: o nome de usuário diferencia maiúsculas', () => {
+    renderWithProviders(
+      <PartyRoster
+        roster={[character()]}
+        people={[{ userId: 'u1', username: 'Bia_X', avatarUrl: null, status: 'active' }]}
+      />,
+    );
+
+    const playedBy = screen.getByText('Played by @Bia_X');
+    expect(playedBy).toHaveClass('text-caption');
+    expect(playedBy).not.toHaveClass('text-label');
+  });
 });

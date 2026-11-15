@@ -36,6 +36,15 @@ export function PartySettings({ partyId }: { partyId: string }) {
     router.replace(`/parties/${partyId}`);
   }, [notTheGm, partyId, router, t]);
 
+  // Opened straight at #journal or #invite: the cards render after the party loads, past the
+  // browser's own jump to the anchor, so it is done once they are there
+  const ready = !!party && !notTheGm;
+  useEffect(() => {
+    if (!ready) return;
+    const target = window.location.hash.slice(1);
+    if (target) document.getElementById(target)?.scrollIntoView();
+  }, [ready]);
+
   if (isLoading || notTheGm) return <LoadingState thematic />;
   if (!party) return <PartyNotFound />;
 

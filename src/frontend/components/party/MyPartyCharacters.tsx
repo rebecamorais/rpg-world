@@ -49,13 +49,16 @@ export function MyPartyCharacters({
                 type="checkbox"
                 checked={picked.has(character.id)}
                 onChange={() => toggle(character.id)}
-                className="accent-primary h-4 w-4"
+                className="accent-primary h-4 w-4 shrink-0"
               />
-              <span className="font-medium">{character.name}</span>
-              <span className="text-label text-muted-foreground">
-                {[classLabel(character.class), tPage('level', { level: character.level })]
-                  .filter(Boolean)
-                  .join(' · ')}
+              {/* Stacked, not side by side: a long name left "· Level 12" alone in a column */}
+              <span className="flex min-w-0 flex-col">
+                <span className="font-medium break-words">{character.name}</span>
+                <span className="text-caption text-muted-foreground">
+                  {[tPage('level', { level: character.level }), classLabel(character.class)]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </span>
               </span>
             </label>
           </li>

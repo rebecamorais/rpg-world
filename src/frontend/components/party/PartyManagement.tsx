@@ -18,6 +18,7 @@ import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 import { EDITIONS, type Edition } from '@shared/systems/dnd5e/content/editions';
 
 import { personName } from './PartyRequests';
+import { useMemberAnswers } from './useMemberAnswers';
 
 const noSubscription = () => () => {};
 
@@ -41,7 +42,8 @@ export function PartyManagement({ party }: { party: PartyView }) {
     editionHint: useId(),
   };
   const origin = useOrigin();
-  const { invite, rotateCode, removeMember, rename, setEdition } = useParty(party.id);
+  const { invite, rotateCode, rename, setEdition } = useParty(party.id);
+  const { pending, answer } = useMemberAnswers(party.id);
   const [username, setUsername] = useState('');
   const [name, setName] = useState(party.name);
 
@@ -85,7 +87,8 @@ export function PartyManagement({ party }: { party: PartyView }) {
         <SectionCard.Title icon="Settings2">{t('title')}</SectionCard.Title>
       </SectionCard.Header>
       <SectionCard.Body className="flex flex-col gap-6">
-        <form onSubmit={sendInvite} className="flex flex-col gap-2">
+        {/* #invite: where "Invite players" on an empty table lands */}
+        <form id="invite" onSubmit={sendInvite} className="flex scroll-mt-24 flex-col gap-2">
           <Label htmlFor={ids.invite}>{t('inviteLabel')}</Label>
           <div className="flex flex-wrap gap-2">
             <Input
@@ -108,7 +111,7 @@ export function PartyManagement({ party }: { party: PartyView }) {
 
         <div className="flex flex-col gap-2">
           <Label htmlFor={ids.link}>{t('link')}</Label>
-          <p className="text-label text-muted-foreground">{t('linkHint')}</p>
+          <p className="text-caption text-muted-foreground">{t('linkHint')}</p>
           <div className="flex flex-wrap gap-2">
             <Input id={ids.link} value={link} readOnly className="max-w-md font-mono text-xs" />
             <Button type="button" variant="outline" onClick={copy}>
@@ -132,18 +135,21 @@ export function PartyManagement({ party }: { party: PartyView }) {
                   className="flex flex-wrap items-center justify-between gap-2"
                 >
                   <span>{label}</span>
+                  {/* Every row has the same button: the label names who it removes */}
                   <Button
                     size="sm"
                     variant="destructive-ghost"
-                    disabled={removeMember.isPending}
+                    loading={pending.has(person.userId)}
+                    aria-label={t('removeFrom', { name: label })}
                     onClick={async () => {
                       const key = party.journalDocId ? 'removeConfirmJournal' : 'removeConfirm';
                       const ok = await confirm({
+                        title: t('removeTitle', { name: label }),
                         description: t(key, { name: label }),
                         confirmLabel: t('remove'),
                         destructive: true,
                       });
-                      if (ok) removeMember.mutate(person.userId);
+                      if (ok) answer(person.userId, 'remove', t('removed', { name: label }));
                     }}
                   >
                     {t('remove')}
@@ -178,7 +184,7 @@ export function PartyManagement({ party }: { party: PartyView }) {
 
         <div className="flex flex-col gap-2">
           <Label htmlFor={ids.edition}>{t('editionLabel')}</Label>
-          <p id={ids.editionHint} className="text-label text-muted-foreground">
+          <p id={ids.editionHint} className="text-caption text-muted-foreground">
             {t('editionHint')}
           </p>
           <SelectField

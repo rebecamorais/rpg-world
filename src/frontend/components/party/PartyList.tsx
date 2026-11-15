@@ -28,61 +28,92 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function PartyRow({ party, children }: { party: PartySummary; children?: React.ReactNode }) {
+// Two lines before it is cut, the whole name in the tooltip
+const NAME_CLASS = 'text-title line-clamp-2 break-normal hyphens-auto';
+
+/**
+ * One party: its name and what to know about it on the left, the arrow on the right, and the
+ * buttons (invites, requests) always on a line of their own, so rows line up whatever the name.
+ */
+function PartyRow({
+  party,
+  note,
+  children,
+}: {
+  party: PartySummary;
+  /** A line under the name, such as why the person is waiting. */
+  note?: string;
+  children?: React.ReactNode;
+}) {
   const t = useTranslations('parties');
   const canOpen = party.status === 'active' || party.status === 'gm';
 
   return (
     <Card
       className={cn(
-        'bg-card/60 relative flex flex-wrap items-center justify-between gap-3 px-4 py-3',
+        'bg-card/60 relative flex flex-col gap-3 px-4 py-3',
         canOpen && 'hover:border-primary/60 transition-colors',
       )}
     >
-      <div className="flex min-w-0 flex-col">
-        {canOpen ? (
-          // The whole card opens the party; the buttons of invites and requests stay above it
-          <Link
-            href={`/parties/${party.id}`}
-            className="text-title focus-ring truncate rounded after:absolute after:inset-0"
-          >
-            {party.name}
-          </Link>
-        ) : (
-          <span className="text-title truncate">{party.name}</span>
-        )}
-        {!party.hasGm && <span className="text-label text-warning-flare">{t('noGm')}</span>}
-        {party.gmUsername && party.role === 'player' && (
-          <span className="text-label text-muted-foreground">
-            {t('gmBy', { username: party.gmUsername })}
-          </span>
+      <div className="flex items-center gap-3">
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          {canOpen ? (
+            // The whole card opens the party; the buttons of invites and requests stay above it
+            <Link
+              href={`/parties/${party.id}`}
+              title={party.name}
+              className={cn(NAME_CLASS, 'focus-ring rounded after:absolute after:inset-0')}
+            >
+              {party.name}
+            </Link>
+          ) : (
+            <span title={party.name} className={NAME_CLASS}>
+              {party.name}
+            </span>
+          )}
+          {!party.hasGm && <span className="text-label text-warning-flare">{t('noGm')}</span>}
+          {/* Usernames in their own case: they are case-sensitive */}
+          {party.gmUsername && party.role === 'player' && (
+            <span className="text-caption text-muted-foreground">
+              {t('gmBy', { username: party.gmUsername })}
+            </span>
+          )}
+          {party.role === 'gm' && (
+            <span className="text-caption text-muted-foreground">
+              {t('players', { count: party.activePlayers })}
+            </span>
+          )}
+          {note && <span className="text-caption text-muted-foreground">{note}</span>}
+          {party.pendingRequests > 0 && (
+            <span className="text-label text-warning-flare flex items-center gap-1.5">
+              <span className="bg-warning h-2 w-2 rounded-full" aria-hidden="true" />
+              {t('pendingRequests', { count: party.pendingRequests })}
+            </span>
+          )}
+        </div>
+        {canOpen && (
+          <AppIcon
+            name="ChevronRight"
+            size={18}
+            aria-hidden="true"
+            className="text-muted-foreground shrink-0"
+          />
         )}
       </div>
-      {party.pendingRequests > 0 && (
-        <span className="text-label text-warning-flare flex items-center gap-1.5">
-          <span className="bg-warning h-2 w-2 rounded-full" aria-hidden="true" />
-          {t('pendingRequests', { count: party.pendingRequests })}
-        </span>
-      )}
-      {children}
-      {canOpen && (
-        <AppIcon
-          name="ChevronRight"
-          size={18}
-          aria-hidden="true"
-          className="text-muted-foreground ml-auto"
-        />
-      )}
+      {children && <div className="flex flex-wrap items-center gap-2">{children}</div>}
     </Card>
   );
 }
 
-/** The parties page: invitations first (they wait for an answer), then GM and player tables. */
+/**
+ * The parties page: what waits on an answer first (invitations to answer, then the person's own
+ * requests), then GM and player tables, then a new one.
+ */
 export default function PartyList() {
   const t = useTranslations('parties');
   const confirm = useConfirm();
   const { getErrorMessage } = useErrorMessage();
-  const { parties, isLoading, error, respond, isResponding } = useParties();
+  const { parties, isLoading, error, respond, respondingTo } = useParties();
   const { currentUser } = useCurrentUser();
   const userId = currentUser?.id ?? '';
 
@@ -93,17 +124,20 @@ export default function PartyList() {
     <div className="flex flex-col gap-8">
       {parties.invites.length > 0 && (
         <Section title={t('invites')}>
-          {parties.invites.map((party) => (
-            <PartyRow key={party.id} party={party}>
-              <div className="flex gap-2">
+          {parties.invites.map((party) => {
+            const answer = respondingTo(party.id);
+            return (
+              <PartyRow key={party.id} party={party}>
                 {/* Every row has the same buttons: the label names the party they answer */}
                 <Button
                   size="sm"
                   variant="destructive-ghost"
-                  disabled={isResponding}
+                  disabled={!!answer}
+                  loading={answer === 'decline'}
                   aria-label={t('declineInvite', { name: party.name })}
                   onClick={async () => {
                     const ok = await confirm({
+                      title: t('declineInviteTitle'),
                       description: t('declineInviteConfirm', { name: party.name }),
                       confirmLabel: t('decline'),
                       destructive: true,
@@ -114,18 +148,47 @@ export default function PartyList() {
                   {t('decline')}
                 </Button>
                 {/* Nobody joins a party without a GM: accepting would always fail */}
-                {party.hasGm && (
+                {party.hasGm ? (
                   <Button
                     size="sm"
-                    disabled={isResponding}
+                    disabled={!!answer}
+                    loading={answer === 'accept'}
                     aria-label={t('acceptInvite', { name: party.name })}
                     onClick={() => respond({ partyId: party.id, userId, accept: true })}
                   >
                     <AppIcon name="Check" size={16} aria-hidden="true" />
                     {t('accept')}
                   </Button>
+                ) : (
+                  <span className="text-caption text-muted-foreground">{t('noGmInviteHint')}</span>
                 )}
-              </div>
+              </PartyRow>
+            );
+          })}
+        </Section>
+      )}
+
+      {parties.requests.length > 0 && (
+        <Section title={t('requests')}>
+          {parties.requests.map((party) => (
+            <PartyRow key={party.id} party={party} note={t('requestWaiting')}>
+              <Button
+                size="sm"
+                variant="destructive-ghost"
+                loading={!!respondingTo(party.id)}
+                aria-label={t('withdrawFrom', { name: party.name })}
+                onClick={async () => {
+                  const ok = await confirm({
+                    title: t('withdrawTitle'),
+                    description: t('withdrawConfirm', { name: party.name }),
+                    confirmLabel: t('withdraw'),
+                    destructive: true,
+                  });
+                  if (ok) respond({ partyId: party.id, userId, accept: false });
+                }}
+              >
+                {t('withdraw')}
+              </Button>
             </PartyRow>
           ))}
         </Section>
@@ -146,31 +209,6 @@ export default function PartyList() {
           <PartyRow key={party.id} party={party} />
         ))}
       </Section>
-
-      {parties.requests.length > 0 && (
-        <Section title={t('requests')}>
-          {parties.requests.map((party) => (
-            <PartyRow key={party.id} party={party}>
-              <Button
-                size="sm"
-                variant="destructive-ghost"
-                disabled={isResponding}
-                aria-label={t('withdrawFrom', { name: party.name })}
-                onClick={async () => {
-                  const ok = await confirm({
-                    description: t('withdrawConfirm', { name: party.name }),
-                    confirmLabel: t('withdraw'),
-                    destructive: true,
-                  });
-                  if (ok) respond({ partyId: party.id, userId, accept: false });
-                }}
-              >
-                {t('withdraw')}
-              </Button>
-            </PartyRow>
-          ))}
-        </Section>
-      )}
 
       <Section title={t('create.title')}>
         <CreatePartyForm gmCount={parties.asGm.length} />

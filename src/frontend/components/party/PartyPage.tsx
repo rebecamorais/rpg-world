@@ -1,5 +1,7 @@
 'use client';
 
+import { useRef, useState } from 'react';
+
 import { useRouter } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
@@ -31,10 +33,42 @@ import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { MyPartyCharacters } from './MyPartyCharacters';
 import { PartyGmClaim } from './PartyGmClaim';
-import { PartyRequests } from './PartyRequests';
+import { PartyRequests, personName } from './PartyRequests';
 import { PartyRoster } from './PartyRoster';
 import { RolePlayCard } from './RolePlayCard';
 import { usePartyLive } from './partyLive';
+import { useMemberAnswers } from './useMemberAnswers';
+
+/** Nobody brought a character yet: invite players, or wait for the ones already in. */
+function RolePlayEmpty({ party }: { party: PartyView }) {
+  const t = useTranslations('parties.page');
+  const hasPlayers = party.people.some((p) => p.status === 'active');
+
+  if (hasPlayers) {
+    return (
+      <EmptyState
+        icon="Users"
+        title={t('noCharactersGmWaiting')}
+        description={t('noCharactersGmWaitingHint')}
+      />
+    );
+  }
+  return (
+    <EmptyState
+      icon="Users"
+      title={t('noCharactersGm')}
+      description={t('noCharactersGmHint')}
+      action={
+        <Button asChild variant="outline">
+          <AppLink href={`/parties/${party.id}/settings#invite`}>
+            <AppIcon name="UserPlus" size={18} aria-hidden="true" />
+            {t('invitePlayers')}
+          </AppLink>
+        </Button>
+      }
+    />
+  );
+}
 
 /** The GM's Role Play cards: who is at the table, their passives and what drives them. */
 function RolePlayList({ party }: { party: PartyView }) {
@@ -42,14 +76,15 @@ function RolePlayList({ party }: { party: PartyView }) {
   const cards = party.gm?.rolePlay ?? [];
 
   return (
-    <section aria-labelledby="party-roleplay" className="flex flex-col gap-4">
+    // Columns follow the room the section has, not the screen: the sidebar takes 256px of it
+    <section aria-labelledby="party-roleplay" className="@container flex flex-col gap-4">
       <h2 id="party-roleplay" className="text-heading">
         {t('rolePlay')}
       </h2>
       {cards.length === 0 ? (
-        <p className="text-muted-foreground">{t('noCharactersGm')}</p>
+        <RolePlayEmpty party={party} />
       ) : (
-        <ul className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <ul className="grid grid-cols-1 gap-5 @2xl:grid-cols-2">
           {cards.map((card) => (
             <li key={card.characterId}>
               <RolePlayCard partyId={party.id} card={card} />
@@ -94,17 +129,39 @@ function CombatBanner({ partyId }: { partyId: string }) {
  */
 export function PartyTableTab({ partyId }: { partyId: string }) {
   const t = useTranslations('parties.page');
-  const { party, acceptMember, removeMember } = useParty(partyId);
+  const tRequests = useTranslations('parties.requestsSection');
+  const unnamed = useTranslations('parties.manage')('unnamed');
+  const { party } = useParty(partyId);
+  const { pending, answer } = useMemberAnswers(partyId);
+  // The empty table's own way into the player's menu: one dialog, mounted whatever the roster is
+  const [mineOpen, setMineOpen] = useState(false);
+  const heading = useRef<HTMLHeadingElement>(null);
   if (!party) return null;
 
   if (party.role === 'gm') {
+    // The name is read now: once answered, the person leaves the list the toast talks about
+    const find = (userId: string) => party.people.find((p) => p.userId === userId);
+    const nameOf = (userId: string) => {
+      const person = find(userId);
+      return person ? personName(person, unnamed) : unnamed;
+    };
     return (
       <div className="flex flex-col gap-6">
         <PartyRequests
           people={party.people}
-          onApprove={(userId) => acceptMember.mutate(userId)}
-          onRemove={(userId) => removeMember.mutate(userId)}
-          isBusy={acceptMember.isPending || removeMember.isPending}
+          onApprove={(userId) =>
+            answer(userId, 'approve', tRequests('approved', { name: nameOf(userId) }))
+          }
+          onRemove={(userId) =>
+            answer(
+              userId,
+              'remove',
+              tRequests(find(userId)?.status === 'invited' ? 'canceled' : 'declined', {
+                name: nameOf(userId),
+              }),
+            )
+          }
+          pending={pending}
         />
         <CombatBanner partyId={party.id} />
         <RolePlayList party={party} />
@@ -116,15 +173,30 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
     <div className="flex flex-col gap-6">
       {party.hasGm ? <CombatBanner partyId={party.id} /> : <PartyGmClaim party={party} />}
       <section aria-labelledby="party-characters" className="flex flex-col gap-4">
-        <h2 id="party-characters" className="text-heading">
+        <h2 id="party-characters" ref={heading} tabIndex={-1} className="text-heading outline-none">
           {t('characters')}
         </h2>
         <PartyRoster
           roster={party.roster}
           people={party.people}
           myCharacterIds={party.myCharacterIds}
+          // The empty table leads straight to picking who to bring
+          emptyAction={<Button onClick={() => setMineOpen(true)}>{t('chooseCharacters')}</Button>}
         />
       </section>
+      {/* Outside the roster's empty state: saving fills the table, and that would unmount it
+          open. Its button is gone by then, so the focus goes to the list's heading. */}
+      <MyPartyMenu
+        party={party}
+        open={mineOpen}
+        onOpenChange={setMineOpen}
+        onCloseAutoFocus={(event) => {
+          if (party.roster.length > 0) {
+            event.preventDefault();
+            heading.current?.focus();
+          }
+        }}
+      />
     </div>
   );
 }
@@ -144,8 +216,21 @@ export function PartyCombatTab({ partyId }: { partyId: string }) {
   return <PlayerCombatPanel partyId={party.id} edition={party.edition} live={live} />;
 }
 
-/** A player's own business with the party, out of the way of play: who they bring, and leaving. */
-export function MyPartyMenu({ party }: { party: PartyView }) {
+/**
+ * A player's own business with the party, out of the way of play: who they bring, and leaving.
+ * With `open` it is opened from outside and has no button of its own (the empty table's).
+ */
+export function MyPartyMenu({
+  party,
+  open,
+  onOpenChange,
+  onCloseAutoFocus,
+}: {
+  party: PartyView;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  onCloseAutoFocus?: (event: Event) => void;
+}) {
   const t = useTranslations('parties');
   const confirm = useConfirm();
   const router = useRouter();
@@ -162,12 +247,13 @@ export function MyPartyMenu({ party }: { party: PartyView }) {
     }
   };
 
+  // Nobody else could open a party without a GM: its last player leaving deletes it
+  const lastPlayer = !party.hasGm && party.people.filter((p) => p.status === 'active').length <= 1;
+
   const leave = async () => {
     if (!currentUser) return;
-    // Nobody else could open a party without a GM: its last player leaving deletes it
-    const lastPlayer =
-      !party.hasGm && party.people.filter((p) => p.status === 'active').length <= 1;
     const ok = await confirm({
+      title: t(lastPlayer ? 'mine.leaveTitleLastPlayer' : 'mine.leaveTitle'),
       description: t(lastPlayer ? 'mine.leaveConfirmLastPlayer' : 'mine.leaveConfirm'),
       confirmLabel: t('mine.leave'),
       destructive: true,
@@ -185,14 +271,16 @@ export function MyPartyMenu({ party }: { party: PartyView }) {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">
-          <AppIcon name="User" size={18} aria-hidden="true" />
-          {t('mine.open')}
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {open === undefined && (
+        <DialogTrigger asChild>
+          <Button variant="outline">
+            <AppIcon name="User" size={18} aria-hidden="true" />
+            {t('mine.open')}
+          </Button>
+        </DialogTrigger>
+      )}
+      <DialogContent onCloseAutoFocus={onCloseAutoFocus}>
         <DialogHeader>
           <DialogTitle>{t('mine.title')}</DialogTitle>
           <DialogDescription>{t('mine.description')}</DialogDescription>
@@ -205,14 +293,17 @@ export function MyPartyMenu({ party }: { party: PartyView }) {
           onSave={save}
           isSaving={setMyCharacters.isPending}
         />
-        <Button
-          variant="destructive-ghost"
-          onClick={leave}
-          loading={removeMember.isPending}
-          className="justify-self-start"
-        >
-          {t('mine.leave')}
-        </Button>
+        {/* Apart from Save, below a rule: leaving is not one more way to save the list */}
+        <div className="border-border border-t pt-4">
+          <Button
+            // Deleting the whole party is red all over (acoes-destrutivas.md)
+            variant={lastPlayer ? 'destructive' : 'destructive-ghost'}
+            onClick={leave}
+            loading={removeMember.isPending}
+          >
+            {t('mine.leave')}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

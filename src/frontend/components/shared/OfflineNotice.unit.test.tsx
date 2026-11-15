@@ -17,6 +17,9 @@ describe('OfflineNotice', () => {
       window.dispatchEvent(new Event('offline'));
     });
     expect(status).toHaveTextContent(messages.common.offline);
+    // Opaque over the header: a see-through tint let the logo show through the text
+    expect(status).toHaveClass('bg-card', 'border-warning');
+    expect(status).not.toHaveClass('bg-warning-surface');
 
     act(() => {
       vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(true);
