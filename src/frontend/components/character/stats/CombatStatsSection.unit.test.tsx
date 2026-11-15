@@ -1,7 +1,7 @@
 import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SheetSourceContext } from '@frontend/hooks/useSheetSource';
 
@@ -9,6 +9,28 @@ import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import CombatStatsSection from './CombatStatsSection';
+
+const loaded = vi.hoisted(() => ({ content: null as unknown }));
+vi.mock('@frontend/hooks/useClassResources', () => ({
+  useClassResources: (edition: unknown, classId: string | null) => ({
+    content: edition && classId ? loaded.content : null,
+  }),
+}));
+
+/** The barbarian as the content API sends it, with only what the class defaults read. */
+const BARBARIAN = {
+  classId: 'barbarian',
+  edition: '2014',
+  hitDie: 12,
+  proficiencies: {
+    savingThrows: ['STR', 'CON'],
+    armor: [],
+    weapons: [],
+    tools: [],
+    skills: { count: 2, from: ['ATHLETICS'] },
+  },
+};
+const barbarian2014 = { class: 'barbarian', edition: '2014' } as Partial<DnD5eCharacter>;
 
 const character = {
   ...createDnD5eCharacter('owner', 'Thor', { hpCurrent: 9, hpMax: 12, ac: 14, initiative: 2 }),
@@ -23,6 +45,74 @@ function renderCombat(overrides: Partial<DnD5eCharacter> = {}) {
 }
 
 describe('CombatStatsSection', () => {
+  beforeEach(() => {
+    loaded.content = null;
+  });
+
+  describe('dado de vida e a classe', () => {
+    const die = () => screen.getByRole('combobox', { name: 'Hit Dice' });
+    const followClass = () => screen.queryByRole('option', { name: 'Follow the class (d12)' });
+
+    beforeEach(() => {
+      loaded.content = BARBARIAN;
+    });
+
+    it('ficha nova de Bárbaro em 2014 herda o d12 sem nada salvo', async () => {
+      const { draft } = renderCombat({ ...barbarian2014, hitDice: undefined });
+
+      expect(die()).toHaveTextContent(/^d12$/);
+      expect(draft().hitDice).toBeUndefined();
+      // Já segue a classe: não há para onde voltar
+      await userEvent.click(die());
+      expect(followClass()).toBeNull();
+    });
+
+    it('gastar um dado numa ficha que herda não grava o dado', () => {
+      const { sentNow } = renderCombat({ ...barbarian2014, level: 4, hitDice: undefined });
+
+      fireEvent.change(screen.getByLabelText('Hit dice remaining'), { target: { value: '3' } });
+
+      expect(sentNow()).toEqual({ hitDice: { spent: 1 } });
+    });
+
+    it('ficha antiga com d8 gravado continua em d8, e "seguir a classe" tira só o dado', async () => {
+      const { draft } = renderCombat({
+        ...barbarian2014,
+        level: 5,
+        hitDice: { die: 'd8', spent: 2 },
+      });
+      expect(die()).toHaveTextContent(/^d8$/);
+
+      await userEvent.click(die());
+      await userEvent.click(followClass()!);
+
+      // Os dados gastos ficam como estavam
+      expect(draft().hitDice).toEqual({ spent: 2 });
+      expect(die()).toHaveTextContent(/^d12$/);
+      expect(screen.getByLabelText('Hit dice remaining')).toHaveValue('3');
+    });
+
+    it('dado definido à mão vence a classe; igual ao da classe não oferece volta', async () => {
+      renderCombat({ ...barbarian2014, hitDice: { die: 'd12', spent: 0 } });
+
+      await userEvent.click(die());
+
+      expect(followClass()).toBeNull();
+    });
+
+    it.each([
+      ['sem edição', { class: 'barbarian' }],
+      ['em 2024', { class: 'barbarian', edition: '2024' as const }],
+    ])('%s: sem dado salvo continua d8 e não há "seguir a classe"', async (_, sheet) => {
+      renderCombat({ ...sheet, hitDice: undefined });
+      expect(die()).toHaveTextContent(/^d8$/);
+
+      await userEvent.click(die());
+
+      expect(screen.queryByRole('option', { name: /Follow the class/ })).toBeNull();
+    });
+  });
+
   it('mostra CA, iniciativa, deslocamento e PV atuais', () => {
     renderCombat();
 

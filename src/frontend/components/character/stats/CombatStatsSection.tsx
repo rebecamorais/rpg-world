@@ -24,16 +24,19 @@ import {
   useCharacterMeta,
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
+import { useClassDefaults } from '@frontend/hooks/useClassDefaults';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import {
   hitDiceAvailable,
+  inheritHitDie,
   setHitDiceSpent,
   setHitDie,
   setSpellPoints,
 } from '@frontend/lib/character-sheet-updates';
 
 import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
-import { HIT_DIE_OPTIONS, readHitDice } from '@shared/systems/dnd5e/hit-dice';
+import { effectiveHitDie } from '@shared/systems/dnd5e/class-defaults';
+import { HIT_DIE_OPTIONS } from '@shared/systems/dnd5e/hit-dice';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import { AdjustHitPoints } from './AdjustHitPoints';
@@ -42,6 +45,9 @@ import { CombatConfigSection, CombatStatsDialog } from './CombatStatsDialog';
 // Sized to its content, so a unit (speed's "m") sits right after the number
 const STAT_INPUT =
   'field-sizing-content h-7 w-auto min-w-[1ch] p-0 font-mono text-xl font-bold focus-visible:px-1 md:text-xl';
+
+/** The select's value for "back to the class's die": not a die, so it never gets stored. */
+const FOLLOW_CLASS = 'class';
 
 const CombatHeader = () => {
   const t = useTranslations('combatStats');
@@ -53,8 +59,15 @@ const CombatHeader = () => {
   const { readOnly } = useSheetSource(id);
   const level = character.level;
   const available = hitDiceAvailable(character);
-  // A sheet with no die yet shows a d8
-  const hitDie = readHitDice(character.hitDice, level).die ?? 'd8';
+  // The die the player set, else the class's; a sheet with neither shows a d8
+  const {
+    die: hitDie,
+    source: hitDieSource,
+    classDefault: classHitDie,
+  } = effectiveHitDie(character.hitDice, useClassDefaults());
+  // Only where it shows: a die set by hand that is the class's anyway needs no way back
+  const canFollowClass =
+    hitDieSource === 'manual' && classHitDie !== null && classHitDie !== hitDie;
   const passivePerception = calculatePassivePerception(
     character.attributes.WIS ?? 10,
     character.level,
@@ -148,6 +161,7 @@ const CombatHeader = () => {
             onValueChange={(val) => {
               const die = HIT_DIE_OPTIONS.find((option) => option === val);
               if (die) update(setHitDie(die));
+              else if (val === FOLLOW_CLASS) update(inheritHitDie());
             }}
           >
             <SelectTrigger
@@ -162,6 +176,11 @@ const CombatHeader = () => {
                   {t(`diceOptions.${key}`)}
                 </SelectItem>
               ))}
+              {canFollowClass && (
+                <SelectItem value={FOLLOW_CLASS}>
+                  {t('followClassDie', { die: classHitDie })}
+                </SelectItem>
+              )}
             </SelectContent>
           </Select>
         </StatBlock>

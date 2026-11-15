@@ -213,10 +213,8 @@ export class UpdateCharacterUseCase {
     }
 
     if (savingThrowProficiencies !== undefined) {
-      character.savingThrowProficiencies = savingThrowProficiencies as Record<
-        AttributeKey,
-        boolean
-      >;
+      // The whole map, as the sheet has it: an ability left out goes back to following the class
+      character.savingThrowProficiencies = { ...savingThrowProficiencies };
     }
   }
 

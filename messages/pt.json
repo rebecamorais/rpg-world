@@ -625,6 +625,7 @@
     "speed": "Deslocamento",
     "initiative": "Iniciativa",
     "speedUnit": "m",
+    "followClassDie": "Seguir a classe ({die})",
     "hitDice": "Dados de Vida",
     "diceOptions": {
       "d6": "d6",
@@ -908,6 +909,7 @@
   },
   "savingThrows": {
     "title": "Salvaguardas",
+    "followClass": "Voltar {label} ao que a classe diz",
     "deathSaveSuccess": "Sucesso no teste contra a morte {count}",
     "deathSaveFailure": "Falha no teste contra a morte {count}",
     "resetDeathSaves": "Zerar testes contra a morte",

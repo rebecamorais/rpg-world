@@ -3,7 +3,7 @@ import { useLocale } from 'next-intl';
 
 import { rpgWorldApi } from '@client';
 
-import type { ClassResourcesContent } from '@shared/systems/dnd5e/class-resources';
+import type { ClassContent } from '@shared/systems/dnd5e/class-resources';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
 /** The query for one class's resources; shared so the edition card can load them before saving. */
@@ -12,7 +12,7 @@ export const classResourcesQuery = (
   classId: string | null,
   locale: string,
 ) =>
-  queryOptions<ClassResourcesContent>({
+  queryOptions<ClassContent>({
     queryKey: ['class-resources', edition, classId, locale],
     queryFn: () =>
       rpgWorldApi.get(
@@ -23,7 +23,7 @@ export const classResourcesQuery = (
     retry: false,
   });
 
-/** The resources of one class and its SRD subclass, in the screen's language. Never changes in a session. */
+/** One class and its SRD subclass, in the screen's language: resources and rules data. Never changes in a session. */
 export function useClassResources(edition: Edition | undefined, classId: string | null) {
   const locale = useLocale();
   const query = useQuery({
