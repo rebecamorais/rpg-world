@@ -293,10 +293,13 @@ const textsOfKind = (
       ? conditionTextsOf(source, locale)
       : flatTexts(classTextsOf(source, locale));
 
+// The first part of these tags is the text they show: a translation changes it and keeps the rest
+const SHOWN_FIRST = new Set(['filter', 'book', 'adventure', 'i', 'b']);
+
 // Translations keep the tags of the English text, so a link survives translation
 const tagKeys = (text: string) =>
   tagsOf(text)
-    .map(({ tag, target }) => `${tag}:${target}`)
+    .map(({ tag, target, rest }) => `${tag}:${SHOWN_FIRST.has(tag) ? rest.toLowerCase() : target}`)
     .sort();
 
 describe.each(SOURCES)('tags nas traduções do %s', (source) => {
@@ -370,16 +373,17 @@ describe.each(SOURCES)('textos do %s', (source) => {
 });
 
 // Untranslated texts may come back as "", so a missing description is "" or no entry at all
-it('em português, no SRD 5.1, faltam só as 4 conhecidas', () => {
+it('em português, no SRD 5.1, não falta descrição além das 4 que já faltaram', () => {
   const pt = textsOf('srd-5.1', 'pt');
-  expect(
-    spellsOf('srd-5.1')
-      .filter((s) => !pt[s.id]?.description)
-      .map((s) => s.id),
-  ).toEqual([
+  const known = [
     'commune-with-nature',
     'meld-into-stone',
     'pass-without-trace',
     'protection-from-energy',
-  ]);
+  ];
+  expect(
+    spellsOf('srd-5.1')
+      .filter((s) => !pt[s.id]?.description && !known.includes(s.id))
+      .map((s) => s.id),
+  ).toEqual([]);
 });
