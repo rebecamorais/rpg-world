@@ -11,6 +11,13 @@ async function saved(page: Page, method: string, path: string, action: () => Pro
   await written;
 }
 
+/**
+ * A coin's field, by role: unlike `getByLabel`, a role locator skips hidden elements. While the
+ * page streams in, React keeps the server's copy of it in a hidden `<div id="S:…">` for a moment,
+ * next to the one already on screen, and a locator that sees both fails in strict mode (#192).
+ */
+const coinField = (page: Page, name: string) => page.getByRole('textbox', { name });
+
 test.describe('inventário', () => {
   test('recebe, paga com troco, adiciona e aumenta um item, e tudo fica salvo', async ({
     page,
@@ -28,7 +35,7 @@ test.describe('inventário', () => {
       dialog.getByRole('button', { name: 'Confirm' }).click(),
     );
     await expect(dialog).toBeHidden();
-    await expect(page.getByLabel('Gold pieces')).toHaveValue('10');
+    await expect(coinField(page, 'Gold pieces')).toHaveValue('10');
 
     // Pay 5 SP out of gold only: a gold piece is broken and the change comes back in silver
     await page.getByRole('button', { name: 'Pay' }).click();
@@ -41,8 +48,8 @@ test.describe('inventário', () => {
       dialog.getByRole('button', { name: 'Confirm' }).click(),
     );
     await expect(dialog).toBeHidden();
-    await expect(page.getByLabel('Gold pieces')).toHaveValue('9');
-    await expect(page.getByLabel('Silver pieces')).toHaveValue('5');
+    await expect(coinField(page, 'Gold pieces')).toHaveValue('9');
+    await expect(coinField(page, 'Silver pieces')).toHaveValue('5');
 
     // Add a rope and make it two
     await page.getByRole('button', { name: 'Add item' }).click();
@@ -59,8 +66,8 @@ test.describe('inventário', () => {
 
     // Everything survives a reload
     await page.reload();
-    await expect(page.getByLabel('Gold pieces')).toHaveValue('9');
-    await expect(page.getByLabel('Silver pieces')).toHaveValue('5');
+    await expect(coinField(page, 'Gold pieces')).toHaveValue('9');
+    await expect(coinField(page, 'Silver pieces')).toHaveValue('5');
     await expect(page.getByLabel('Quantity of Rope')).toHaveText('2');
   });
 });
