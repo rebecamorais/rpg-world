@@ -5,8 +5,7 @@
  *   npx next build && GRIMOIRE_LAB=1 npx next start -p 3006
  *   npx tsx scripts/grimoire-materials-bench.ts http://localhost:3006 out.json
  *
- * For each scenario (the card as it is today, each material, and each lab variant such as
- * `crypt-stone+webp`), theme, device (desktop; phone with a 4x slower CPU) and sample, it opens a
+ * For each scenario (the card as it is today, then each material), theme, device (desktop; phone with a 4x slower CPU) and sample, it opens a
  * fresh page with 100 SpellCards and records three phases separately: the initial render,
  * scrolling the whole list with the mouse wheel (all cards closed), and opening the first card
  * (its SpellVFX background appears over the material). Chrome's
@@ -28,13 +27,10 @@ const ALL_SCENARIOS = [
   'none',
   'glacial-glass',
   'alchemical-corrosion',
-  'alchemical-corrosion+baked',
   'crypt-stone',
-  'crypt-stone+webp',
   'divine-parchment',
-  'divine-parchment+webp',
 ] as const;
-// SCENARIOS=none,alchemical-corrosion,alchemical-corrosion+baked re-measures just a few
+// SCENARIOS=none,crypt-stone re-measures just a few
 const SCENARIOS = process.env.SCENARIOS
   ? ALL_SCENARIOS.filter((s) => process.env.SCENARIOS!.split(',').includes(s))
   : ALL_SCENARIOS;
@@ -162,11 +158,7 @@ async function sample(
   const page = await context.newPage();
   const cdp = await context.newCDPSession(page);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: d.cpu });
-  const [material, variant] = scenario.split('+');
-  const query =
-    scenario === 'none'
-      ? `count=${COUNT}`
-      : `material=${material}${variant ? `&variant=${variant}` : ''}&count=${COUNT}`;
+  const query = scenario === 'none' ? `count=${COUNT}` : `material=${scenario}&count=${COUNT}`;
 
   let lcp = 0;
   const initial = await trace(cdp, async () => {

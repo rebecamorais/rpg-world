@@ -253,14 +253,14 @@ A rodada 1 e os seus dados ([material-surfaces-bench-round1.json](material-surfa
 
 ## Recomendação (atualizada na rodada 2)
 
-| Material                         | Visual                       | Legibilidade                               | Desempenho                                                                           | Recomendação                                 |
-| -------------------------------- | ---------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------ | -------------------------------------------- |
-| **Alchemical Corrosion `baked`** | Aprovado (igual ao original) | Ok; as gotas ficam acima do nome           | Raster −44% a −67% contra o original, sem perda de frames; mais barato que a Glacial | **Candidato.** Substitui a original          |
-| **Crypt Stone**                  | Aprovado                     | Aprovada nos dois temas (claro revalidado) | O mais barato entre os originais                                                     | **Candidato**                                |
-| **Glacial Glass**                | Aprovado                     | Ok                                         | Raster +65% a +246%, sem perda de frames                                             | **Candidato**                                |
-| **Divine Parchment**             | Aprovado depois do ajuste    | Ok nos dois temas                          | Raster +113% a +211%, sem perda consistente de frames                                | **Candidato**                                |
-| Alchemical Corrosion original    | Aprovado                     | Ok                                         | A única que perde frames                                                             | **Descartar** em favor da `baked`            |
-| Variantes `webp`                 | Iguais ao SVG                | —                                          | Ganho pequeno e quase nunca consistente, com cerca de 490 KB de imagens              | **Não usar.** Manter o `feTurbulence` inline |
+| Material                                                     | Visual                       | Legibilidade                               | Desempenho                                                                           | Recomendação                                 |
+| ------------------------------------------------------------ | ---------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------ | -------------------------------------------- |
+| **Alchemical Corrosion** (versão em máscaras, antes `baked`) | Aprovado (igual ao original) | Ok; as gotas ficam acima do nome           | Raster −44% a −67% contra o original, sem perda de frames; mais barato que a Glacial | **Candidato.** Substitui a original          |
+| **Crypt Stone**                                              | Aprovado                     | Aprovada nos dois temas (claro revalidado) | O mais barato entre os originais                                                     | **Candidato**                                |
+| **Glacial Glass**                                            | Aprovado                     | Ok                                         | Raster +65% a +246%, sem perda de frames                                             | **Candidato**                                |
+| **Divine Parchment**                                         | Aprovado depois do ajuste    | Ok nos dois temas                          | Raster +113% a +211%, sem perda consistente de frames                                | **Candidato**                                |
+| Alchemical Corrosion original                                | Aprovado                     | Ok                                         | A única que perde frames                                                             | **Descartar** em favor da `baked`            |
+| Variantes `webp`                                             | Iguais ao SVG                | —                                          | Ganho pequeno e quase nunca consistente, com cerca de 490 KB de imagens              | **Não usar.** Manter o `feTurbulence` inline |
 
 Recomendação geral, que continua valendo:
 
@@ -268,6 +268,33 @@ Recomendação geral, que continua valendo:
 - Antes de integrar, vale escolher **onde** o material aparece. Por exemplo: só no card aberto, só nos preparados, ou numa versão "leve" nos cards fechados.
 - Também vale medir num Android real.
 - **Lição:** o custo vem do número de camadas pintadas por card. Juntar detalhes em poucos assets estáticos (máscaras) é o que mais reduz o custo sem mudar o visual.
+
+## Estado final da exploração (15/11)
+
+A exploração está **concluída** como estudo técnico. O PR continua como rascunho e **nenhum material foi integrado ao spellbook**.
+
+**Limpeza das variantes descartadas:**
+
+- A **Alchemical Corrosion** passou a ser a versão em máscaras SVG estáticas (a antiga variante `baked`). A versão só com gradientes saiu, porque era a única que perdia frames.
+- A variante **`webp`** saiu:
+  - os 5 arquivos WebP (cerca de 500 KB, que ficariam públicos em `public/`);
+  - as regras de CSS;
+  - o `scripts/grimoire-bake-textures.ts`.
+
+  As texturas continuam em `feTurbulence` inline (menos de 1 KB cada).
+
+- Sem variantes restantes, o mecanismo de variantes também saiu: `data-variant`, `?variant=` e a seção "original × otimizada" do laboratório.
+- **O histórico das medições continua inteiro.** Ficam os três arquivos de dados (rodada 1, rodada 2 e rodada 2b) e as seções acima. O `grimoire-materials-report.ts` ainda lê as variantes desses arquivos antigos. As versões removidas estão no histórico do git do PR.
+
+**Revisão visual final:** os quatro materiais foram vistos nos dois temas, no desktop e no celular, nos painéis do laboratório e na lista de `SpellCard`s com um card aberto, sempre na cor de cada magia. Todos aprovados.
+
+**Detalhe anotado para uma próxima etapa:** no celular, a rachadura do canto superior direito da Crypt Stone cruza os ícones de componente (V, S, M). É só decorativa e não atrapalha a leitura.
+
+**Fica para outra etapa:**
+
+- **OverflowBorders.** A direção preferida é a opção B: o ornamento como irmão do elemento com `content-visibility`, dentro de um invólucro. Antes, é preciso validar o custo e a semântica.
+- Medir num Android real.
+- Decidir **onde** os materiais aparecem no spellbook: no card aberto, nos preparados ou em todos.
 
 ## Próximos passos (para a dona decidir)
 
