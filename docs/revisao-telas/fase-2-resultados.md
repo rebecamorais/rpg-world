@@ -15,6 +15,19 @@ Foram 62 achados novos: 12 causas e 13 achados de uma tela só. 9 foram juntados
 
 Padrões do coordenador, que a Rebeca pode mudar: o baú entra no canal de tempo real da mesa agora e o histórico de quem mexeu fica para depois; a jogadora recusada vê que o pedido foi recusado; o botão da participação se chama "Minha participação"; pedidos pendentes numa seção "Pendentes"; a linha da mesa de que se é mestre mostra quantos jogadores ativos tem; a linha "D&D 5ª edição" continua nos cards.
 
+## Correções: status
+
+As 12 causas estão corrigidas neste PR, com e2e (`e2e/party-realtime.spec.ts`, `e2e/party-table*.spec.ts`, `e2e/sheet-read-only.spec.ts`, `e2e/sidebar.spec.ts`, `e2e/header*.spec.ts`, `e2e/inventory.spec.ts`), e o card de recursos de classe ganhou o mesmo `SectionCard` dos vizinhos, com a engrenagem.
+
+Dos achados de uma tela só, ficaram para depois: busca e ordem na lista de personagens com muitos itens (c-listas#6), o card de NPC mostrar ND ou PV em vez do nível (c-listas#17) e a coroa de mestre e o contador de pedidos na sidebar (d-navegacao#17).
+
+Perguntas que ficaram abertas (o padrão está aplicado):
+
+- Depois de uma recusa, a jogadora pode pedir de novo na hora. Ter um tempo de espera?
+- O h1 de `/characters` é "Personagens"; o de NPCs agora é "Meus NPCs". Trocar o primeiro para "Meus personagens"?
+- O "Fale conosco" sem login abre com o tipo "Dúvida ou comentário" já escolhido. Abrir sem tipo?
+- O Baú tem uma linha "Compartilhado com a mesa" acima das moedas; os textos de ajuda de moedas e itens continuam só no balão do título.
+
 ## Causas
 
 | #   | Causa                                                                                                                                                                        | Severidade | Tamanho | Telas                                                                                                                                                                                                                                          |
