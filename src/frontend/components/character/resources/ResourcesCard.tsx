@@ -11,6 +11,8 @@ import { useCharacterActions, useLoadedCharacter } from '@frontend/context/Chara
 import AppLink from '@frontend/demo/AppLink';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { setResourceUsed } from '@frontend/lib/character-sheet-updates';
+import { characterTheme } from '@frontend/lib/color-utils';
+import { cn } from '@frontend/lib/utils';
 
 import { recoveryOn } from '@shared/systems/dnd5e/class-resources';
 import type { ResourceBox } from '@shared/systems/dnd5e/class-resources';
@@ -52,7 +54,15 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
 
       <ul className="flex flex-col gap-3">
         {boxes.map((box, index) => (
-          <li key={box.key} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+          <li
+            key={box.key}
+            // A box with a color of its own re-themes its row: the tags and squares follow it
+            style={box.color ? characterTheme(box.color).style : undefined}
+            className={cn(
+              'flex flex-wrap items-center justify-between gap-x-3 gap-y-1',
+              box.color && characterTheme(box.color).className,
+            )}
+          >
             <div className="flex flex-wrap items-center gap-2">
               <Popover>
                 <PopoverTrigger asChild>
@@ -73,7 +83,9 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
                 </PopoverTrigger>
                 <PopoverContent>
                   <p className="font-semibold">{box.name}</p>
-                  <p className="text-muted-foreground">{box.description}</p>
+                  {box.description && (
+                    <p className="text-muted-foreground whitespace-pre-line">{box.description}</p>
+                  )}
                   {box.note && <p className="text-muted-foreground mt-2 italic">{box.note}</p>}
                 </PopoverContent>
               </Popover>

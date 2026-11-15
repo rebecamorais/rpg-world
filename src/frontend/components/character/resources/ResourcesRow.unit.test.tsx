@@ -209,6 +209,71 @@ describe('ResourcesRow', () => {
     });
   });
 
+  describe('caixinhas editadas e próprias (#180)', () => {
+    const OWN = 'custom:0193a1b2-0000-7000-8000-000000000001';
+    const ring = {
+      name: 'Ring',
+      max: 2,
+      recovery: [{ rest: 'long' as const, amount: 'all' as const }],
+      source: 'item' as const,
+    };
+
+    it('caixinha própria aparece sem edição e em classe fora das 12, no lugar do cartão', () => {
+      renderWithCharacter(
+        <ResourcesRow />,
+        sheet({ class: 'Chef', resources: { [OWN]: { used: 1, custom: ring } } }),
+      );
+
+      expect(screen.getByRole('group', { name: 'Ring, 1 of 2 available' })).toBeInTheDocument();
+      expect(screen.queryByText(tRes.newTitle)).not.toBeInTheDocument();
+    });
+
+    it('caixinha escondida some; escondendo a única, a linha some junto', () => {
+      renderWithCharacter(
+        <ResourcesRow />,
+        sheet({
+          class: 'monk',
+          level: 5,
+          edition: '2014',
+          resources: { 'class:monk:ki': { used: 0, hidden: true } },
+        }),
+      );
+
+      expect(screen.queryByRole('button', { name: 'Ki' })).not.toBeInTheDocument();
+      expect(deathSaves()).not.toBeInTheDocument();
+    });
+
+    it('usos e nome editados valem na ficha, e a cor da caixinha pinta a linha dela', () => {
+      renderWithCharacter(
+        <ResourcesRow />,
+        sheet({
+          class: 'monk',
+          level: 5,
+          edition: '2014',
+          resources: {
+            'class:monk:ki': { used: 0, overrides: { max: 3, name: 'Chi', color: '#ef4444' } },
+          },
+        }),
+      );
+
+      expect(screen.getByRole('group', { name: 'Chi, 3 of 3 available' })).toBeInTheDocument();
+      const row = screen.getByRole('button', { name: 'Chi' }).closest('li')!;
+      expect(row).toHaveClass('character-context');
+      expect(row.style.getPropertyValue('--character-color')).toBe('#ef4444');
+    });
+
+    it('gastar numa caixinha própria envia a caixinha inteira daquela chave', async () => {
+      const { sentNow } = renderWithCharacter(
+        <ResourcesRow />,
+        sheet({ class: 'Chef', resources: { [OWN]: { used: 0, custom: ring } } }),
+      );
+
+      await userEvent.click(screen.getByRole('button', { name: 'Ring 1, available' }));
+
+      expect(sentNow()).toEqual({ resources: { [OWN]: { used: 1, custom: ring } } });
+    });
+  });
+
   it('"editar" leva às configurações da ficha', () => {
     renderWithCharacter(
       <ResourcesRow />,
