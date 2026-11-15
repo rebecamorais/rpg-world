@@ -51,6 +51,8 @@ export interface CharacterUpdates {
   resources?: Record<string, ResourceState>;
 }
 
+const MAX_RESOURCES = 200;
+
 // Campos copiados diretamente. Qualquer chave fora desta lista (id, ownerUsername, system...)
 // é ignorada para impedir mass-assignment vindo do cliente.
 const SIMPLE_FIELDS = [
@@ -139,7 +141,12 @@ export class UpdateCharacterUseCase {
     }
 
     if (resources) {
-      character.resources = { ...character.resources, ...resources };
+      const merged = { ...character.resources, ...resources };
+      // The merge never deletes, so cap the stored map (#180 adds removal)
+      if (Object.keys(merged).length > MAX_RESOURCES) {
+        throw new CharacterError(CharacterErrorCodes.RESOURCE_LIMIT);
+      }
+      character.resources = merged;
     }
 
     if (savingThrowProficiencies !== undefined) {

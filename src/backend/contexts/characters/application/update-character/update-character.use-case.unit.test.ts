@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 
+import { CharacterErrorCodes } from '../../domain/CharacterError';
 import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';
 import { Attributes } from '../../domain/value-object/Attributes';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
@@ -322,5 +323,37 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
     });
     expect(result.edition).toBe('2024');
     expect(result.toJSON()).toMatchObject({ edition: '2024', resources: result.resources });
+  });
+
+  describe('limite de caixinhas', () => {
+    const boxes = (n: number) =>
+      Object.fromEntries(Array.from({ length: n }, (_, i) => [`class:monk:r${i}`, { used: 0 }]));
+
+    beforeEach(async () => {
+      const full = makeCharacter('full-char', 'owner');
+      full.resources = boxes(200);
+      await repo.save(full);
+    });
+
+    it('recusa uma chave nova quando já há 200', async () => {
+      await expect(
+        useCase.execute({
+          id: 'full-char',
+          ownerUsername: 'owner',
+          updates: { resources: { 'class:monk:new': { used: 0 } } },
+        }),
+      ).rejects.toMatchObject({ message: CharacterErrorCodes.RESOURCE_LIMIT });
+    });
+
+    it('aceita sobrescrever uma chave existente quando há 200', async () => {
+      const result = await useCase.execute({
+        id: 'full-char',
+        ownerUsername: 'owner',
+        updates: { resources: { 'class:monk:r0': { used: 4 } } },
+      });
+
+      expect(Object.keys(result.resources ?? {})).toHaveLength(200);
+      expect(result.resources?.['class:monk:r0']).toEqual({ used: 4 });
+    });
   });
 });

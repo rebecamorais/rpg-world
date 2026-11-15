@@ -84,6 +84,7 @@
       "character_error_item_not_found": "Item não encontrado.",
       "character_error_container_not_found": "Lugar não encontrado.",
       "character_error_item_limit": "A mochila está cheia: um personagem guarda no máximo 500 itens diferentes.",
+      "character_error_resource_limit": "Um personagem tem no máximo 200 caixinhas de recurso.",
       "character_error_container_limit": "Um personagem tem no máximo 20 lugares.",
       "combat_error_not_found": "Combate não encontrado.",
       "combat_error_exists": "Esta mesa já tem um combate.",

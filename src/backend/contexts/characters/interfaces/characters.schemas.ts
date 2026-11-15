@@ -107,7 +107,11 @@ export const characterUpdatesSchema = z.object({
   spellPoints: optional(z.object({ max: int(0, 10_000), current: int(0, 10_000) })),
 
   edition: optional(z.enum(EDITIONS)),
-  resources: optional(z.record(z.string().max(200).regex(RESOURCE_KEY), resourceState)),
+  resources: optional(
+    z
+      .record(z.string().max(200).regex(RESOURCE_KEY), resourceState)
+      .refine((boxes) => Object.keys(boxes).length <= 100),
+  ),
 });
 
 export const updateCharacterSchema = z.object({ updates: characterUpdatesSchema });

@@ -196,6 +196,13 @@ describe('edition e resources no update', () => {
     expect(parse({ resources: { 'class:monk:ki': ok } })).toBe(true);
   });
 
+  it('aceita 100 caixinhas por pedido e recusa 101', () => {
+    const boxes = (n: number) =>
+      Object.fromEntries(Array.from({ length: n }, (_, i) => [`class:monk:r${i}`, { used: 0 }]));
+    expect(parse({ resources: boxes(100) })).toBe(true);
+    expect(parse({ resources: boxes(101) })).toBe(false);
+  });
+
   it('recusa valores acima dos limites', () => {
     const box = (overrides: object) => ({ resources: { 'class:monk:ki': { used: 0, overrides } } });
     expect(parse(box({ max: 1001 }))).toBe(false);
