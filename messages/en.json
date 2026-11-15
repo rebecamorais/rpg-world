@@ -301,7 +301,7 @@
     "learnedBadge": "Learned",
     "spellCount": "{count, plural, one {# spell} other {# spells}}",
     "untranslatedBadge": "In English",
-    "untranslatedHint": "Not translated yet. You can help on Crowdin.",
+    "untranslatedHint": "Not translated yet. You can help on Weblate.",
     "edition": "Edition",
     "cantripUpgrade": "Cantrip Upgrade",
     "duplicate": "Duplicate",
@@ -1217,8 +1217,8 @@
   },
   "translationInvite": {
     "title": "Help translate RPG World",
-    "description": "The translations are made by the community on Crowdin. Anyone can suggest or review texts and spells, in Portuguese or another language.",
-    "action": "Translate on Crowdin"
+    "description": "The translations are made by the community on Weblate. Anyone can suggest or review texts and spells, in Portuguese or another language.",
+    "action": "Translate on Weblate"
   },
   "notFound": {
     "title": "Page not found",

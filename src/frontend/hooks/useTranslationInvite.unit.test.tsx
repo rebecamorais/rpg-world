@@ -5,7 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CROWDIN_PROJECT } from '@frontend/constants/site';
+import { WEBLATE_PROJECT } from '@frontend/constants/site';
 
 import en from '../../../messages/en.json';
 import pt from '../../../messages/pt.json';
@@ -51,14 +51,14 @@ describe('useTranslationInvite', () => {
     });
   });
 
-  it('o botão abre o projeto no Crowdin', () => {
+  it('o botão abre o projeto no Weblate', () => {
     const open = vi.spyOn(window, 'open').mockReturnValue(null);
     switchTo(true, 'en', 'pt');
 
     const [, options] = vi.mocked(toast).mock.calls[0];
     const action = (options as unknown as { action: { onClick: () => void } }).action;
     action.onClick();
-    expect(open).toHaveBeenCalledWith(CROWDIN_PROJECT, '_blank', 'noopener,noreferrer');
+    expect(open).toHaveBeenCalledWith(WEBLATE_PROJECT, '_blank', 'noopener,noreferrer');
   });
 
   it('convida a cada troca, e só uma vez por troca', () => {
