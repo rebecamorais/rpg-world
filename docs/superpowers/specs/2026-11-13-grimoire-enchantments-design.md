@@ -58,9 +58,9 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
 
     A "Revelação", com o sigilo girando e o brilho no nome, foi rejeitada. Shaders (WebGL) e o Motion (#156) ficam fora por enquanto. Os efeitos aprovados estão em [explorations/open-card-effects.md](../../grimoire-enchantments/explorations/open-card-effects.md). Ainda não vão para o spellbook, porque a exploração continua.
 
-### Revisão de 15/11 (efeitos por tipo, materiais e biblioteca)
+### Revisão de 15/11 (efeitos por tipo e biblioteca)
 
-21. **(dona)** **Cor:** todo efeito e todo material usa a **cor da magia** (`--spell-color`), a mesma do card, da faixa e dos selos. Uma cor própria só existe como reserva, fora de uma magia. A cor de cada magia continua vindo de `useSpellDisplay` (dano, senão escola).
+21. **(dona)** **Cor:** todo efeito usa a **cor da magia** (`--spell-color`), a mesma do card, da faixa e dos selos. Uma cor própria só existe como reserva, fora de uma magia. A cor de cada magia continua vindo de `useSpellDisplay` (dano, senão escola).
 22. **(dona)** **Efeitos por tipo de magia:** o efeito do card aberto segue a mesma regra da cor (o tipo de dano, senão a escola). Ele combina:
     - uma superfície tingida;
     - ícones do tipo (um grande e apagado, alguns pequenos);
@@ -69,20 +69,19 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
 
     Está em [explorations/spell-type-effects.md](../../grimoire-enchantments/explorations/spell-type-effects.md).
 
-23. **(dona)** **Superfícies de material:** Glacial Glass, Alchemical Corrosion (versão em máscaras SVG), Crypt Stone e Divine Parchment são os candidatos, todos na cor da magia e aprovados na revisão visual. Foram medidos em 3 rodadas de benchmark. As variantes descartadas (Corrosion só de gradientes, texturas em WebP) saíram do código. Está em [explorations/material-surfaces.md](../../grimoire-enchantments/explorations/material-surfaces.md). **Ainda não estão no spellbook.**
+23. **(dona)** **Sem materiais:** as superfícies de material (vidro, ácido, pedra, pergaminho) foram removidas do código e das docs em 15/11. Os desenhos SVG da dona, que cobrem o card aberto, ficaram melhores, e os materiais não voltam.
 24. **(dona)** **Biblioteca:**
     - O Grimório é uma biblioteca de estilos e componentes de card.
     - Ele cresce numa **branch de longa duração**, `feat/grimoire-material-surfaces`, com **um PR só** (#219), que fica em rascunho e reúne docs, assets, componentes e o laboratório `/dev/grimoire`.
     - O PR do catálogo (#198) foi fechado sem merge: os commits dele estão nessa branch.
     - Nada chega ao spellbook antes de uma decisão explícita.
 
-25. **(dona)** **Reuso fora das magias e em outros sistemas:** os efeitos e materiais servem a qualquer card (magia, item da mochila, ficha) e a qualquer sistema de jogo.
-    - **Cor:** o material lê `--grimoire-tint`, e quem define é o card que o recebe: `var(--spell-color)` na magia, `var(--item-color)` no item, `var(--character-color)` na ficha. A regra da decisão 21 continua: o material usa sempre a cor do card.
-    - **Peça única:** `<MaterialLayers>` desenha o recorte (com a superfície) e o ornamento. O `SpellCard` usa a mesma peça, por `CardMaterial.layers`.
-    - **Sem regra de jogo na biblioteca:** qual material cada conteúdo usa fica fora dela, num mapa por sistema. O de D&D 5e está em `src/frontend/constants/grimoire-materials.ts` (magia: o dano, senão a escola; item: o grupo da mochila). Outro sistema ganha o seu mapa, e a biblioteca não muda.
-    - Os mapas são exemplos, usados só no laboratório. Nada chega ao spellbook nem à mochila antes de uma decisão explícita.
+25. **(dona)** **Reuso fora das magias e em outros sistemas:** os efeitos servem a qualquer card (magia, item da mochila, ficha) e a qualquer sistema de jogo.
+    - **Cor:** o efeito lê `--grimoire-tint`, e quem define é o card que o recebe: `var(--spell-color)` na magia, `var(--item-color)` no item, `var(--character-color)` na ficha. A regra da decisão 21 continua: o efeito usa sempre a cor do card.
+    - **Sem regra de jogo na biblioteca:** qual efeito cada conteúdo usa fica fora dela, num mapa por sistema. O de D&D 5e está em `src/frontend/constants/grimoire-effects.ts` (o dano, senão a escola). Outro sistema ganha o seu mapa, e a biblioteca não muda.
+    - O mapa é um exemplo, usado só no laboratório. Nada chega ao spellbook antes de uma decisão explícita.
 
-26. **(dona)** **Efeitos do card aberto no laboratório:** os efeitos por tipo aprovados na amostra viraram a peça `<EffectLayers>` (`src/frontend/components/grimoire/card-effect/`), no mesmo molde dos materiais: ids neutros (`frost`, `embers`, `ward-mesh`...), cor por `--grimoire-tint` e o mapa de D&D 5e fora da biblioteca (`src/frontend/constants/grimoire-effects.ts`). O `SpellCard` ganhou a prop opcional `effect`, que troca o fundo do card aberto. O laboratório virou uma página só, `/dev/grimoire`. Medição e detalhes em [explorations/spell-type-effects.md](../../grimoire-enchantments/explorations/spell-type-effects.md). **Ainda não estão no spellbook.**
+26. **(dona)** **Efeitos do card aberto no laboratório:** os efeitos por tipo aprovados na amostra viraram a peça `<EffectLayers>` (`src/frontend/components/grimoire/card-effect/`): ids neutros (`frost`, `embers`, `ward-mesh`...), cor por `--grimoire-tint` e o mapa de D&D 5e fora da biblioteca (`src/frontend/constants/grimoire-effects.ts`). O `SpellCard` ganhou a prop opcional `effect`, que troca o fundo do card aberto. O laboratório virou uma página só, `/dev/grimoire`. Medição e detalhes em [explorations/spell-type-effects.md](../../grimoire-enchantments/explorations/spell-type-effects.md). **Ainda não estão no spellbook.**
 
 ## Fora do escopo
 

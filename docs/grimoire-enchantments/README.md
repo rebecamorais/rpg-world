@@ -6,8 +6,8 @@ Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tip
 - **Branch e PR:** `feat/grimoire-material-surfaces` ([#219](https://github.com/rebecamorais/rpg-world/pull/219)), de longa duração e em rascunho.
 - **Estado:**
   - **Catálogo:** fase 1 ([#195](https://github.com/rebecamorais/rpg-world/issues/195)) concluída.
-  - **Laboratório:** existe em `/dev/grimoire`, com 4 superfícies de material, 21 efeitos do card aberto e ladrilhos de item. Só abre fora da produção.
-  - **Amostras:** todas as amostras visuais feitas com a dona estão num artifact só, [Grimório](https://claude.ai/artifact/AtKgqUc3DDRpAZfNgCTpfm), com uma aba para cada (materiais, efeitos por tipo, card aberto, fontes). É privado: só a dona tem acesso.
+  - **Laboratório:** existe em `/dev/grimoire`, com os efeitos do card aberto (os desenhos SVG da dona e os efeitos em CSS). Só abre fora da produção.
+  - **Amostras:** todas as amostras visuais feitas com a dona estão num artifact só, [Grimório](https://claude.ai/artifact/AtKgqUc3DDRpAZfNgCTpfm), com uma aba para cada (por tipo de dano, efeitos por tipo, card aberto, fontes). É privado: só a dona tem acesso.
   - **Spellbook:** ainda não usa nada daqui.
 
 ## Como ler
@@ -54,7 +54,7 @@ Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tip
   | `F4`  | Interação ocasional (um evento, efeito único) |
 
 - **Custo:** Muito baixo, Baixo, Moderado ou Alto. São estimativas de engenharia; o benchmark do Playground confirma.
-- **Cores:** todo efeito e todo material usa a **cor do conteúdo do card** (da magia, do item ou do personagem), nunca uma cor fixa (decisões 21 e 25 da spec-mãe). O card define `--grimoire-tint` com a cor dele, e o material lê esse token. Fora isso, só tokens (`--spell-*`, `--character-*`, `--primary-*`, `--grimoire-*`). O `design-tokens.unit.test.ts` barra a paleta crua.
+- **Cores:** todo efeito usa a **cor do conteúdo do card** (da magia, do item ou do personagem), nunca uma cor fixa (decisões 21 e 25 da spec-mãe). O card define `--grimoire-tint` com a cor dele, e o efeito lê esse token. Fora isso, só tokens (`--spell-*`, `--character-*`, `--primary-*`, `--grimoire-*`). O `design-tokens.unit.test.ts` barra a paleta crua.
 - **Runas:** as runas reais vêm da Noto Sans Runic (REF-84) e são sempre decorativas (`aria-hidden`). As runas inventadas da arte da dona entram depois, como alternativa.
 - **Código de terceiros:** só se copia o que a biblioteca de referências marca como **Código: Sim** (MIT: Magic UI, forever, 3 itens do 21st), e o aviso vai para o `NOTICE.md`. Aceternity, SVGBackgrounds e itens sem licença declarada servem só de inspiração.
 - **Pasta futura do código:** `src/frontend/components/grimoire/`, um arquivo por componente. O CSS compartilhado fica em `@utility`/`@layer components`.
