@@ -228,3 +228,9 @@ O teste `types.unit.test.ts` confere que todo efeito `art` tem desenho e que nen
 - Revisão visual dos 21 efeitos pela dona, em `/dev/grimoire`.
 - Decidir a ondulação por toque no `SpellCard`, já que o toque fecha o card.
 - Decidir quais motivos viram material (superfície) e quais ficam como detalhe (ícone, ondulação).
+
+## Fundo para o texto das regras (15/11)
+
+Com os desenhos ocupando o card inteiro, cada um precisava de uma força baixa para não atrapalhar a leitura (35% a 70%). A dona sugeriu o contrário: o texto das regras ganha um fundo próprio. Com efeito, o `SpellCard` põe a descrição numa caixa `bg-card/80` com cantos arredondados e uma margem negativa, para o texto continuar alinhado com o cabeçalho. O contêiner que anima a abertura ganha a mesma folga dos lados, senão a caixa seria cortada.
+
+Sem `backdrop-filter`: o fundo é só uma cor translúcida, sem custo de desfoque. No tema escuro a caixa é discreta; no claro ela aparece como um cartão claro por cima do desenho. Com ela, as forças dos desenhos podem subir, se a dona quiser.

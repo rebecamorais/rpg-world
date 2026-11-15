@@ -157,9 +157,18 @@ export const SpellCard = React.memo(function SpellCard({
           )}
         >
           {/* inert while collapsed: hidden content can't take focus or be read. */}
-          <div className="overflow-hidden" inert={!isExpanded}>
+          {/* With an effect, the room the rules text's backdrop reaches into (it would be clipped) */}
+          <div className={cn('overflow-hidden', effect && '-mx-3 px-3')} inert={!isExpanded}>
             <div className="flex flex-col gap-4 pt-4">
-              <SpellDetails spell={spell} castingTime={displayValues.castingTime} />
+              {effect ? (
+                // A backdrop for the rules text, so the effect never gets in the way of reading it;
+                // the negative margin keeps the text in line with the header
+                <div data-grimoire-backdrop="" className="bg-card/80 -mx-3 rounded-lg px-3 py-2.5">
+                  <SpellDetails spell={spell} castingTime={displayValues.castingTime} />
+                </div>
+              ) : (
+                <SpellDetails spell={spell} castingTime={displayValues.castingTime} />
+              )}
 
               <SpellChipsRow spell={spell} displayValues={displayValues} />
 
