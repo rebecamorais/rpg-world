@@ -248,8 +248,6 @@
     },
     "loreFields": {
       "appearance": "Appearance",
-      "personality": "Personality",
-      "narrative": "Narrative",
       "age": "Age",
       "height": "Height",
       "weight": "Weight",

@@ -1,11 +1,9 @@
 'use client';
 
-import type { ReactNode } from 'react';
-
 import { useTranslations } from 'next-intl';
 
 import { FieldLabel, InlineField } from '@frontend/components/ui/field';
-import { AppIcon, type IconName } from '@frontend/components/ui/icon';
+import type { IconName } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import type { LoreData } from '@frontend/hooks/useCharacterLore';
 import { cn } from '@frontend/lib/utils';
@@ -51,15 +49,6 @@ const DETAILS: { field: LoreField; icon: IconName }[] = [
   { field: 'organizations', icon: 'Shield' },
   { field: 'treasure', icon: 'Backpack' },
 ];
-
-function LoreHeading({ icon, children }: { icon: IconName; children: ReactNode }) {
-  return (
-    <div className="flex items-center gap-2 py-2">
-      <AppIcon name={icon} size={16} className="text-character-flare" aria-hidden="true" />
-      <h2 className="text-label text-muted-foreground">{children}</h2>
-    </div>
-  );
-}
 
 /** The saved text with its line breaks, or a note saying nothing was written. */
 function LoreText({ value }: { value?: string }) {
@@ -129,15 +118,10 @@ function TextField({ field, icon, value, onChange, readOnly }: TextFieldProps) {
 
   return (
     <SectionCard
-      className={cn(
-        'bg-card/50 flex flex-col shadow-none transition-colors',
-        !readOnly && 'hover:border-character-muted',
-      )}
+      className={cn('flex flex-col transition-colors', !readOnly && 'hover:border-character-muted')}
     >
       <SectionCard.Header>
-        <SectionCard.Title as="h3" icon={icon}>
-          {t(field)}
-        </SectionCard.Title>
+        <SectionCard.Title icon={icon}>{t(field)}</SectionCard.Title>
       </SectionCard.Header>
       {readOnly ? (
         <p className="text-foreground px-4 py-3 text-sm leading-relaxed">
@@ -165,52 +149,52 @@ export default function LoreSection({ data, onChange, readOnly }: Props) {
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-      <div className="md:col-span-4">
-        <LoreHeading icon="User">{t('appearance')}</LoreHeading>
-        {readOnly ? (
-          <dl className="grid grid-cols-2 gap-x-3 gap-y-4 pt-2">
-            {APPEARANCE.map(({ field, wide }) => (
-              <div key={field} className={cn('flex flex-col gap-1', wide && 'col-span-2')}>
-                <dt className="text-label text-muted-foreground">{t(field)}</dt>
-                <dd className="text-sm font-medium">
-                  <LoreText value={data[field]} />
-                </dd>
-              </div>
-            ))}
-          </dl>
-        ) : (
-          <div className="grid grid-cols-2 gap-3 pt-2">
-            {APPEARANCE.map(({ field, wide }) => (
-              <AppearanceField
-                key={field}
-                field={field}
-                wide={wide}
-                value={data[field]}
-                onChange={onChange}
-              />
-            ))}
-          </div>
-        )}
+      <SectionCard className="md:col-span-4">
+        <SectionCard.Header>
+          <SectionCard.Title icon="User">{t('appearance')}</SectionCard.Title>
+        </SectionCard.Header>
+        <SectionCard.Body>
+          {readOnly ? (
+            <dl className="grid grid-cols-2 gap-x-3 gap-y-4">
+              {APPEARANCE.map(({ field, wide }) => (
+                <div key={field} className={cn('flex flex-col gap-1', wide && 'col-span-2')}>
+                  <dt className="text-label text-muted-foreground">{t(field)}</dt>
+                  <dd className="text-sm font-medium">
+                    <LoreText value={data[field]} />
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {APPEARANCE.map(({ field, wide }) => (
+                <AppearanceField
+                  key={field}
+                  field={field}
+                  wide={wide}
+                  value={data[field]}
+                  onChange={onChange}
+                />
+              ))}
+            </div>
+          )}
+        </SectionCard.Body>
+      </SectionCard>
+
+      <div className="grid grid-cols-1 gap-6 md:col-span-8 lg:grid-cols-2">
+        {PERSONALITY.map(({ field, icon }) => (
+          <TextField
+            key={field}
+            field={field}
+            icon={icon}
+            value={data[field]}
+            onChange={onChange}
+            readOnly={readOnly}
+          />
+        ))}
       </div>
 
-      <div className="md:col-span-8">
-        <LoreHeading icon="Heart">{t('personality')}</LoreHeading>
-        <div className="grid grid-cols-1 gap-4 pt-2 lg:grid-cols-2">
-          {PERSONALITY.map(({ field, icon }) => (
-            <TextField
-              key={field}
-              field={field}
-              icon={icon}
-              value={data[field]}
-              onChange={onChange}
-              readOnly={readOnly}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-4 md:col-span-12">
-        <LoreHeading icon="History">{t('narrative')}</LoreHeading>
+      <div className="flex flex-col gap-6 md:col-span-12">
         <TextField
           field="backstory"
           icon="BookOpen"
@@ -218,7 +202,7 @@ export default function LoreSection({ data, onChange, readOnly }: Props) {
           onChange={onChange}
           readOnly={readOnly}
         />
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {DETAILS.map(({ field, icon }) => (
             <TextField
               key={field}

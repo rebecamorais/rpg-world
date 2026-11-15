@@ -270,8 +270,6 @@
     },
     "loreFields": {
       "appearance": "Aparência",
-      "personality": "Personalidade",
-      "narrative": "Narrativa",
       "age": "Idade",
       "height": "Altura",
       "weight": "Peso",
