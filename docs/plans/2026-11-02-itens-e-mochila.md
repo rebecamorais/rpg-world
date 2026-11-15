@@ -1,7 +1,7 @@
 # Itens comuns e mochila
 
 **Data:** 2026-11-02
-**Status:** design aprovado; implementação a seguir.
+**Status:** entregue no [#138](https://github.com/rebecamorais/rpg-world/pull/138).
 **Issue:** [#105](https://github.com/rebecamorais/rpg-world/issues/105), parte 2 (itens). A parte 1 (condições) saiu no [#134](https://github.com/rebecamorais/rpg-world/issues/134).
 **Planos relacionados:** `2026-10-15-5etools-e-traducoes.md` (passo 5),
 `2026-10-15-conteudo-e-homebrew.md`, `2026-11-01-condicoes-e-tags.md`.
