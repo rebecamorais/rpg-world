@@ -45,6 +45,9 @@ describe('createDemoTransport', () => {
 
   it('answers 404 to anything else', async () => {
     await expect(t('GET', '/api/qualquer-coisa')).rejects.toMatchObject({ status: 404 });
+    await expect(
+      t('GET', '/api/content/classes?edition=2014&class=monk&locale=en'),
+    ).rejects.toMatchObject({ status: 404 });
     await expect(t('GET', `${sheet.replace('ada', 'nobody')}`)).rejects.toMatchObject({
       status: 404,
     });
