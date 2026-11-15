@@ -1,499 +1,492 @@
 {
   "barbarian": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Bárbaro",
+    "subclassTitle": "Trilha Primitiva",
     "features": {
       "rage": {
-        "name": "",
+        "name": "Fúria",
         "description": ""
       },
       "unarmored-defense": {
-        "name": "",
-        "description": ""
+        "name": "Defesa sem Armadura",
+        "description": "Quando você não estiver vestindo qualquer armadura, sua Classe de Armadura será 10 + seu modificador de Destreza + seu modificador de Constituição. Você pode usar um escudo e continuar a receber esse benefício."
       },
       "danger-sense": {
-        "name": "",
+        "name": "Sentido de Perigo",
         "description": ""
       },
       "reckless-attack": {
-        "name": "",
+        "name": "Ataque Imprudente",
         "description": ""
       },
       "primal-path": {
-        "name": "",
-        "description": ""
+        "name": "Trilha Primitiva",
+        "description": "No 3° nível, você escolhe uma trilha que molda a natureza da sua fúria, como a Trilha do Berserker. Sua escolha lhe concede características no 3° nível e, novamente, no 6°, 10° e 14° níveis."
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "extra-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque Extra",
+        "description": "Durante o seu turno, sempre que executar a ação {@action Attack||Atacar}, você pode realizar dois ataques em vez de um."
       },
       "fast-movement": {
-        "name": "",
+        "name": "Movimento Rápido",
         "description": ""
       },
       "path-feature-6": {
-        "name": "",
+        "name": "Característica de Trilha",
         "description": ""
       },
       "feral-instinct": {
-        "name": "",
-        "description": ""
+        "name": "Instintos Primitivos",
+        "description": "No 7° nível, seus instintos encontram-se tão apurados, que você passa a ter vantagem nas jogadas de iniciativa.\nAlém disso, se no início do combate você estiver {@status surprised||surpreso} (mas não {@condition incapacitated||incapacitado}), é capaz de agir normalmente em seu primeiro turno, mas apenas se entrar em fúria antes de realizar qualquer outra ação."
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "brutal-critical-1-die": {
-        "name": "",
-        "description": ""
+        "name": "Crítico Brutal (1 dado)",
+        "description": "A partir do 9° nível, você pode jogar um dado de dano extra para determinar o dano adicional de um acerto crítico obtido com um ataque corpo a corpo.\nAumente para dois dados adicionais no 13° nível e para três no 17°."
       },
       "path-feature-10": {
-        "name": "",
+        "name": "Característica de Trilha",
         "description": ""
       },
       "relentless-rage": {
-        "name": "",
-        "description": ""
+        "name": "Fúria Implacável",
+        "description": "A partir do 11° nível, sua fúria pode mantê-lo em combate, independentemente da gravidade dos seus ferimentos. Se os seus pontos de vida chegarem a 0 enquanto você estiver em fúria, e não se tratar de uma morte automática, você pode realizar uma salvaguarda de Constituição com {@dc 10|CD 10}. Se for bem-sucedido, seus pontos de vida sobem para 1.\nCada vez que usar esta característica, a CD aumenta em 5. Após um período de descanso curto ou longo, ela volta a ser 10."
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "brutal-critical-2-dice": {
-        "name": "",
+        "name": "Crítico Brutal (2 dados)",
         "description": ""
       },
       "path-feature-14": {
-        "name": "",
+        "name": "Característica de Trilha",
         "description": ""
       },
       "persistent-rage": {
-        "name": "",
-        "description": ""
+        "name": "Fúria Persistente",
+        "description": "A partir do 15° nível, sua fúria é tão intensa que só termina mais cedo caso você fique {@condition unconscious||inconsciente} ou escolha encerrá-la."
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "brutal-critical-3-dice": {
-        "name": "",
+        "name": "Crítico Brutal (3 dados)",
         "description": ""
       },
       "indomitable-might": {
-        "name": "",
-        "description": ""
+        "name": "Força Indomável",
+        "description": "A partir do 18° nível, caso o seu resultado em um teste de Força seja menor do que o valor da sua Força, você pode usar o valor da Força no lugar do resultado do teste."
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "primal-champion": {
-        "name": "",
-        "description": ""
+        "name": "Campeão Primitivo",
+        "description": "No 20° nível, você personifica o poder das áreas selvagens. Seus valores de Força e Constituição aumentam em 4. O valor máximo desses atributos passa a ser 24."
       }
     },
     "resources": {
       "rage": {
-        "name": ""
+        "name": "Fúria"
       }
     },
-    "choices": {},
     "subclasses": {
       "berserker": {
-        "name": "",
+        "name": "Trilha do Berserker",
         "features": {
           "path-of-the-berserker": {
-            "name": "",
-            "description": ""
+            "name": "Trilha do Berserker",
+            "description": "Para alguns bárbaros, a fúria é apenas um meio para se atingir um fim - e esse fim é a violência. A Trilha do Berserker é um caminho de fúria desenfreada, banhada em sangue. Assim que você é tomado pela fúria do berserker, passa a exultar no caos da batalha, descuidando-se da sua própria saúde ou bem-estar.\nFrenesi. Ao escolher esta trilha no terceiro nível, você se torna capaz de entrar em frenesi quando se enfurece. Ao fazê-lo, por toda a duração da sua fúria, pode usar sua ação bônus a cada turno para realizar um único ataque com uma arma de combate corpo a corpo. Ao final da fúria, você sofre um nível de {@condition exhaustion||exaustão} (conforme descrito no Apêndice A)."
           },
           "mindless-rage": {
-            "name": "",
-            "description": ""
+            "name": "Fúria Irracional",
+            "description": "A partir do 6° nível, você não pode ser {@condition charmed||enfeitiçado} ou {@condition frightened||amedrontado} enquanto estiver em fúria. Se estiver {@condition charmed||enfeitiçado} ou {@condition frightened||amedrontado} ao entrar em fúria, o efeito é suspenso pelo tempo que a fúria durar."
           },
           "intimidating-presence": {
-            "name": "",
-            "description": ""
+            "name": "Presença Intimidante",
+            "description": "A partir do 10° nível, você pode usar sua ação para amedrontar alguém com sua presença ameaçadora. Como alvo, escolha uma criatura que você possa ver e que esteja a até 9 metros de distância. Caso ela possa vê-lo ou ouvi-lo, precisa ser bem-sucedida em uma salvaguarda de Sabedoria (CD igual a 8 + seu bônus de proficiência + seu modificador de Carisma), ou ficará {@condition frightened||amedrontada} por você até o fim do seu próximo turno. Nos turnos subsequentes, você poderá usar sua ação para estender a duração deste efeito sobre a criatura {@condition frightened||amedrontada} até o final do seu próximo turno. Este efeito termina se, ao final do seu turno, a criatura estiver fora da sua linha de visão, ou a uma distância superior a 18 metros de você.\nCaso a criatura seja bem-sucedida em sua salvaguarda, ela ficará imune aos efeitos desta característica por 24 horas."
           },
           "retaliation": {
-            "name": "",
-            "description": ""
+            "name": "Retaliação",
+            "description": "A partir do 14° nível, ao sofrer dano causado por uma criatura que esteja a até 1,5 m de distância, você pode usar sua reação para atacá-la com uma arma de combate corpo a corpo."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "bard": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Bardo",
+    "subclassTitle": "Colégio de Bardo",
     "features": {
       "bardic-inspiration": {
-        "name": "",
-        "description": ""
+        "name": "Inspiração de Bardo",
+        "description": "Você pode inspirar os outros por meio da música ou das palavras. Para isso, no seu turno, deve usar uma ação bônus para escolher uma criatura que não seja você mesmo, que esteja a no máximo 18 metros [60 pés] de distância, e que seja capaz de ouvi-lo. Essa criatura ganha 1{@dice d6} de Inspiração Bárdica.\nUma vez durante os próximos 10 minutos, essa criatura poderá jogar o d6 e adicionar o resultado a qualquer teste de atributo, salvaguarda ou jogada de ataque que realizar. Ela pode jogar o {@dice d20} antes de decidir se usará o dado de Inspiração Bárdica, mas precisa decidir antes de o DM dizer se a jogada foi bem-sucedida ou não. Uma vez que o dado de Inspiração Bárdica tenha sido jogado, ele será gasto. Uma criatura pode ganhar apenas um dado de Inspiração Bárdica por vez.\nVocê pode usar esta característica uma quantidade de vezes igual ao seu modificador de Carisma (uma vez, no mínimo). Você recupera todos os usos ao final de um descanso longo.\nSeu dado de Inspiração Bárdica muda quando você alcança certos níveis nesta classe. O dado se torna 1{@dice d8} no 5° nível, 1{@dice d10} no 10° e 1{@dice d12} no 15° nível."
       },
       "spellcasting": {
-        "name": "",
+        "name": "Conjuração",
         "description": ""
       },
       "jack-of-all-trades": {
-        "name": "",
+        "name": "Pau pra Toda Obra",
         "description": ""
       },
       "song-of-rest-d6": {
-        "name": "",
-        "description": ""
+        "name": "Canção do Descanso (d6)",
+        "description": "A partir do 2° nível, durante um descanso curto, você pode usar uma música ou discurso tranquilizador para ajudar a revitalizar seus aliados feridos. Ao final do descanso, se você ou quaisquer criaturas amigáveis que possam ouvir sua atuação tiverem recuperado pontos de vida devido ao gasto de um ou mais Dados de Vida, todos recuperam {@dice 1d6} pontos de vida a mais.\nA quantidade de pontos de vida adicionais aumenta quando você chega a certos níveis nesta classe: {@dice 1d8} no 9° nível, {@dice 1d10} no 13° e {@dice 1d12} no 17° nível."
       },
       "bard-college": {
-        "name": "",
-        "description": ""
+        "name": "Colégio de Bardo",
+        "description": "No 3° nível, você se aprofunda nas técnicas avançadas de um colégio de bardo à sua escolha, como o Colégio do Conhecimento. Sua escolha lhe concede características no 3° nível e, novamente, no 6° e 14° níveis."
       },
       "expertise-3": {
-        "name": "",
-        "description": ""
+        "name": "Especialização",
+        "description": "No 3° nível, escolha duas perícias nas quais já seja proficiente. Seu bônus de proficiência é duplicado em qualquer teste de atributo que utilize uma dessas perícias.\nNo 10° nível, você pode atribuir este mesmo benefício a outras duas perícias em que seja proficiente."
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "bardic-inspiration-d8": {
-        "name": "",
+        "name": "Inspiração de Bardo (d8)",
         "description": ""
       },
       "font-of-inspiration": {
-        "name": "",
-        "description": ""
+        "name": "Fonte de Inspiração",
+        "description": "Começando no momento em que você atinge o 5° nível, você recupera todas as utilizações gastas da sua Inspiração de Bardo quando você termina um descanso curto ou longo."
       },
       "countercharm": {
-        "name": "",
-        "description": ""
+        "name": "Contra-Encantamento",
+        "description": "No 6° nível, você ganha a habilidade de usar notas musicais ou palavras de poder para desfazer efeitos que influenciam a mente. Como sua ação no turno, você pode dar início a uma apresentação que dura até o final do seu próximo turno. Durante esse tempo, você e quaisquer criaturas amigáveis a até 9 metros de distância adquirem vantagem em salvaguardas contra serem {@condition frightened||amedrontadas} ou {@condition charmed||enfeitiçadas}. Uma criatura deve ser capaz de ouvi-lo para receber esse benefício. A apresentação se encerra antes do tempo, caso você seja {@condition incapacitated||incapacitado} ou silenciado, ou se decidir encerrá-la voluntariamente (nenhuma ação é necessária)."
       },
       "bard-college-feature-6": {
-        "name": "",
+        "name": "Habilidade de Colégio de Bardo",
         "description": ""
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "song-of-rest-d8": {
-        "name": "",
+        "name": "Canção do Descanso (d8)",
         "description": ""
       },
       "bardic-inspiration-d10": {
-        "name": "",
+        "name": "Inspiração de Bardo (d10)",
         "description": ""
       },
       "expertise-10": {
-        "name": "",
+        "name": "Especialização",
         "description": ""
       },
       "magical-secrets-10": {
-        "name": "",
-        "description": ""
+        "name": "Segredos Mágicos",
+        "description": "No 10° nível, você já reuniu conhecimento mágico de um amplo acervo de disciplinas. Escolha duas magias de qualquer classe, incluindo as de bardo. Essas magias devem ser truques ou pertencer a um círculo que você possa conjurar, conforme mostrado na tabela O Bardo.\nAs magias escolhidas contam como magias de bardo, e devem ser incluídas na quantidade mostrada na coluna Magias, da tabela O Bardo.\nVocê aprende duas magias adicionais de qualquer classe no 14° nível e novamente no 18° nível."
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "song-of-rest-d10": {
-        "name": "",
+        "name": "Canção do Descanso (d10)",
         "description": ""
       },
       "magical-secrets-14": {
-        "name": "",
+        "name": "Segredos Mágicos",
         "description": ""
       },
       "bard-college-feature-14": {
-        "name": "",
+        "name": "Habilidade de Colégio de Bardo",
         "description": ""
       },
       "bardic-inspiration-d12": {
-        "name": "",
+        "name": "Inspiração de Bardo (d12)",
         "description": ""
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "song-of-rest-d12": {
-        "name": "",
+        "name": "Canção do Descanso (d12)",
         "description": ""
       },
       "magical-secrets-18": {
-        "name": "",
+        "name": "Segredos Mágicos",
         "description": ""
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "superior-inspiration": {
-        "name": "",
-        "description": ""
+        "name": "Inspiração Superior",
+        "description": "No 20° nível, quando jogar a iniciativa e não tiver mais usos de Inspiração de Bardo disponíveis, você recupera um uso."
       }
     },
     "resources": {
       "bardic-inspiration": {
-        "name": ""
+        "name": "Inspiração de Bardo"
       }
     },
-    "choices": {},
     "subclasses": {
       "lore": {
-        "name": "",
+        "name": "Colégio do Conhecimento",
         "features": {
           "college-of-lore": {
-            "name": "",
-            "description": ""
+            "name": "Colégio do Conhecimento",
+            "description": "Bardos deste colégio sabem um pouco de tudo, recolhendo fragmentos de conhecimento das fontes mais diversas, desde os tomos eruditos às histórias dos camponeses. Seja cantando baladas populares em tavernas ou composições elaboradas nas cortes reais, estes bardos usam seus dons para manter o público encantado. Quando os aplausos terminam, o público pode parecer atônito, questionando aquilo em que até então acreditou, desde sua fé no clero local até sua fidelidade ao rei.\nA lealdade desses bardos se dirige à busca pela beleza e a verdade, e não à obediência a um monarca ou a princípios religiosos. Um nobre que empregue um bardo, seja como arauto, seja como conselheiro, sabe que este sempre preferirá a sinceridade à polidez.\nOs membros deste colégio se reúnem em bibliotecas e, às vezes, em academias repletas de salas de estudo e alojamentos, onde compartilham entre si os seus conhecimentos. Eles também se juntam em festivais ou assembleias de estado, onde podem expor a corrupção, desvendar as mentiras e zombar das figuras de autoridade.\nProficiência Bônus. Ao entrar para o Colégio do Conhecimento no 3° nível, você ganha proficiência em três perícias, à sua escolha.\nPalavras de Interrupção. Também no 3° nível, você aprende como usar sua perspicácia para distrair, confundir e, de outras formas, atrapalhar a confiança e competência de outros. Quando uma criatura que você pode ver a até 18 metros de você realizar uma jogada de ataque, um teste de habilidade ou uma jogada de dano, você pode usar sua reação para gastar um uso de Inspiração de Bardo, rolando o dado de Inspiração de Bardo e subtraindo o número rolado da rolagem da criatura. Você escolhe usar essa característica depois da criatura fazer a rolagem, mas antes do Mestre determinar se a jogada de ataque ou teste de habilidade foi bem ou mal sucedido, ou antes da criatura causar dano. A criatura será imune se não puder ouvir ou se não puder ser {@condition charmed||enfeitiçada}."
           },
           "additional-magical-secrets": {
-            "name": "",
-            "description": ""
+            "name": "Segredos Mágicos Adicionais",
+            "description": "No 6° nível, você aprende duas magias de qualquer classe à sua escolha. Essas magias devem ser truques ou pertencer a um círculo que você possa conjurar, conforme mostrado na tabela O Bardo. As magias escolhidas contam como magias de bardo, mas não contam para o número de magias de bardo que você conhece."
           },
           "peerless-skill": {
-            "name": "",
-            "description": ""
+            "name": "Perícia Inigualável",
+            "description": "A partir do 14° nível, ao fazer um teste de atributo, você pode gastar um uso de Inspiração de Bardo. Jogue um dado de Inspiração de Bardo e adicione o número obtido ao resultado do seu teste de atributo. Você pode gastar o dado de Inspiração de Bardo depois de jogar o d20 para o teste de atributo, mas antes que o DM diga se foi bem-sucedido ou não."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "cleric": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Clérigo",
+    "subclassTitle": "Domínio Divino",
     "features": {
       "spellcasting": {
-        "name": "",
+        "name": "Conjuração",
         "description": ""
       },
       "divine-domain": {
-        "name": "",
+        "name": "Domínio Divino",
         "description": ""
       },
       "channel-divinity-2": {
-        "name": "",
-        "description": ""
+        "name": "Canalizar Divindade",
+        "description": "No 2° nível, você ganha a habilidade de canalizar energia diretamente da sua divindade e usá-la como fonte de efeitos mágicos. Você começa com os dois efeitos a seguir: Expulsar Mortos-Vivos e um efeito determinado por seu domínio. À medida que você avança em níveis, alguns domínios lhe rendem efeitos adicionais, conforme descrito nas características do domínio.\nAo usar Canalizar Divindade, você escolhe qual efeito criará. Em seguida, precisa terminar um descanso curto ou longo, antes de poder usar Canalizar Divindade novamente.\nAlguns efeitos de Canalizar Divindade exigem testes de salvaguarda. Quando você usa um efeito de classe como este, a CD é igual à das salvaguardas feitas contra magias de clérigo.\nA partir do 6° nível, você pode usar Canalizar Divindade duas vezes entre descansos, e a partir do 18° nível, três vezes. Ao final de um período de descanso curto ou longo, você readquire os usos gastos.\nCanalizar Divindade: Expulsar Mortos-Vivos. Como sua ação no turno, você exibe o seu símbolo sagrado e entoa uma prece contra o morto-vivo. Cada morto-vivo capaz de vê-lo ou ouvi-lo e que esteja a até 9 metros de você deve realizar uma salvaguarda de Sabedoria. Em caso de falha, o morto-vivo será expulso por 1 minuto ou até sofrer algum dano.\nUma criatura expulsa deve gastar seus turnos tentando se distanciar ao máximo de você, não podendo se aproximar a menos de 9 metros por vontade própria. Ela também não pode usar reações, podendo usar somente a ação {@action Dash||Correr} ou tentar escapar de qualquer efeito que a impeça de se mover. Caso não possa se mover, a criatura pode usar a ação {@action Dodge||Esquivar}."
       },
       "divine-domain-feature-2": {
-        "name": "",
+        "name": "Característica de Domínio Divino",
         "description": ""
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "destroy-undead-cr-1-2": {
-        "name": "",
+        "name": "Destruir Mortos-Vivos (ND 1/2)",
         "description": ""
       },
       "channel-divinity-6": {
-        "name": "",
+        "name": "Canalizar Divindade",
         "description": ""
       },
       "divine-domain-feature-6": {
-        "name": "",
+        "name": "Característica de Domínio Divino",
         "description": ""
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "destroy-undead-cr-1": {
-        "name": "",
+        "name": "Destruir Mortos-Vivos (ND 1)",
         "description": ""
       },
       "divine-domain-feature-8": {
-        "name": "",
+        "name": "Característica de Domínio Divino",
         "description": ""
       },
       "divine-intervention": {
-        "name": "",
-        "description": ""
+        "name": "Intervenção Divina",
+        "description": "A partir do 10° nível, em momentos de grande necessidade, você pode invocar sua divindade para intervir a seu favor.\nIsso requer o uso de uma ação. Descreva a ajuda que está buscando, e jogue um dado percentual. Se você tirar um número menor ou igual ao seu nível de clérigo, sua divindade intervirá. O DM escolhe a natureza da intervenção, porém o mais apropriado seria um efeito semelhante ao de qualquer uma das magias de clérigo ou de domínio. Caso sua divindade lhe conceda uma intervenção, você perde a capacidade de usar esta característica pelos próximos 7 dias. Caso contrário, pode usá-la novamente após um descanso longo.\nNo 20° nível, seu clamor por uma intervenção é automaticamente bem-sucedido, dispensando a jogada de dado."
       },
       "destroy-undead-cr-2": {
-        "name": "",
+        "name": "Destruir Mortos-Vivos (ND 2)",
         "description": ""
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "destroy-undead-cr-3": {
-        "name": "",
+        "name": "Destruir Mortos-Vivos (ND 3)",
         "description": ""
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "destroy-undead-cr-4": {
-        "name": "",
+        "name": "Destruir Mortos-Vivos (ND 4)",
         "description": ""
       },
       "divine-domain-feature-17": {
-        "name": "",
+        "name": "Característica de Domínio Divino",
         "description": ""
       },
       "channel-divinity-18": {
-        "name": "",
+        "name": "Canalizar Divindade",
         "description": ""
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "divine-intervention-improvement": {
-        "name": "",
-        "description": ""
+        "name": "Aprimoramento de Intervenção Divina",
+        "description": "No 20° nível, seu clamor por uma intervenção é automaticamente bem-sucedido, dispensando a jogada de dado."
       }
     },
     "resources": {
       "channel-divinity": {
-        "name": ""
+        "name": "Canalizar Divindade"
       },
       "divine-intervention": {
-        "name": "",
-        "note": ""
+        "name": "Intervenção Divina",
+        "note": "Caso sua divindade lhe conceda uma intervenção, você perde a capacidade de usar esta característica pelos próximos 7 dias."
       }
     },
-    "choices": {},
     "subclasses": {
       "life": {
-        "name": "",
+        "name": "Domínio da Vida",
         "features": {
           "life-domain": {
-            "name": "",
+            "name": "Domínio da Vida",
             "description": ""
           },
           "channel-divinity-preserve-life": {
-            "name": "",
-            "description": ""
+            "name": "Canalizar Divindade: Preservar a Vida",
+            "description": "A partir do 2° nível, você pode usar sua característica Canalizar Divindade para curar os gravemente feridos.\nComo sua ação no turno, você exibe o seu símbolo sagrado, e evoca a energia curativa, capaz de restaurar um número de pontos de vida igual a cinco vezes o seu nível de clérigo. Escolha quaisquer criaturas a até 9 metros de você e divida esses pontos de vida entre elas. Esta característica só pode restaurar a uma criatura metade da sua quantidade máxima de pontos de vida. Você não pode usar esta característica em um constructo ou morto-vivo."
           },
           "blessed-healer": {
-            "name": "",
-            "description": ""
+            "name": "Curandeiro Abençoado",
+            "description": "A partir do 6° nível, suas magias de cura conjuradas sobre terceiros também o curam. Ao conjurar uma magia de 1° círculo ou superior, que restaure pontos de vida a outrem, você recupera uma quantidade de pontos de vida igual a 2 + o círculo da magia."
           },
           "divine-strike": {
-            "name": "",
-            "description": ""
+            "name": "Golpe Divino",
+            "description": "No 8º nível, você ganha a habilidade de infundir os golpes da sua arma com energia divina. Uma vez a cada turno em que você atinge uma criatura com um ataque armado, pode fazer com que o ataque cause {@damage 1d8} pontos de dano radiante. Ao alcançar o 14º nível, o dano adicional aumenta para {@damage 2d8}."
           },
           "supreme-healing": {
-            "name": "",
-            "description": ""
+            "name": "Cura Suprema",
+            "description": "A partir do 17º nível, quando normalmente você jogaria um ou mais dados para recuperar pontos de vida com uma magia, você usa o maior resultado possível nos dados. Por exemplo, ao invés de recuperar {@dice 2d6} pontos de vida, você recupera 12."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "druid": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Druida",
+    "subclassTitle": "Círculo Druídico",
     "features": {
       "druidic": {
-        "name": "",
+        "name": "Druídico",
         "description": ""
       },
       "spellcasting": {
-        "name": "",
+        "name": "Conjuração",
         "description": ""
       },
       "wild-shape": {
-        "name": "",
+        "name": "Forma Selvagem",
         "description": ""
       },
       "druid-circle": {
-        "name": "",
-        "description": ""
+        "name": "Círculo Druídico",
+        "description": "No 2° nível, você escolhe identificar-se com um círculo de druidas, como o Círculo da Terra. Sua escolha lhe confere características no 2°, 6°, 10° e 14° níveis."
       },
       "wild-shape-improvement-4": {
-        "name": "",
+        "name": "Aprimoramento da Forma Selvagem",
         "description": ""
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "druid-circle-feature-6": {
-        "name": "",
+        "name": "Característica de Círculo Druídico",
         "description": ""
       },
       "wild-shape-improvement-8": {
-        "name": "",
+        "name": "Aprimoramento da Forma Selvagem",
         "description": ""
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "druid-circle-feature-10": {
-        "name": "",
+        "name": "Característica de Círculo Druídico",
         "description": ""
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "druid-circle-feature-14": {
-        "name": "",
+        "name": "Característica de Círculo Druídico",
         "description": ""
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "timeless-body": {
-        "name": "",
-        "description": ""
+        "name": "Corpo Atemporal",
+        "description": "A partir do 18° nível, a magia primal que você domina faz com que você envelheça mais lentamente. A cada 10 anos que se passam, seu corpo envelhece apenas um."
       },
       "beast-spells": {
-        "name": "",
-        "description": ""
+        "name": "Magias Bestiais",
+        "description": "A partir do 18° nível, você pode conjurar muitas de suas magias de druida em qualquer forma que assuma, usando Forma Selvagem. Você pode executar os componentes verbais e somáticos de uma magia de druida enquanto está na forma animal, mas não é capaz de manipular componentes materiais."
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "archdruid": {
-        "name": "",
-        "description": ""
+        "name": "Arquidruida",
+        "description": "No 20° nível, você pode usar Forma Selvagem um número ilimitado de vezes.\nAlém disso, torna-se capaz de ignorar os componentes somáticos e verbais de suas magias de druida, bem como quaisquer componentes materiais que não tenham um custo e não sejam consumidos por uma magia. Você ganha este benefício tanto em sua forma normal quanto em sua Forma Animal."
       }
     },
     "resources": {
       "wild-shape": {
-        "name": ""
+        "name": "Forma Selvagem"
       }
     },
-    "choices": {},
     "subclasses": {
       "land": {
-        "name": "",
+        "name": "Círculo da Terra",
         "features": {
           "circle-of-the-land": {
-            "name": "",
+            "name": "Círculo da Terra",
             "description": ""
           },
           "land-s-stride": {
-            "name": "",
-            "description": ""
+            "name": "Caminho da Floresta",
+            "description": "A partir do 6° nível, mover-se através de {@quickref difficult terrain||3||terreno difícil} não-mágico não te custará nenhum movimento extra. Você também pode passar através de plantas não-mágicas sem ser atrasado por elas e sem sofrer dano delas se elas tiverem espinhos, espinhas ou perigos similares.\nAlém disso, você tem vantagem em testes de resistência contra plantas criadas magicamente ou manipuladas para impedir movimentação, como as criadas pela magia {@spell entangle||Emaranhar}."
           },
           "nature-s-ward": {
-            "name": "",
-            "description": ""
+            "name": "Proteção Natural",
+            "description": "Ao alcançar o 10° nível, você não pode ser {@condition charmed||enfeitiçado} ou {@condition frightened||amedrontado} por elementais ou feéricos, sendo imune a venenos e doenças."
           },
           "nature-s-sanctuary": {
-            "name": "",
-            "description": ""
+            "name": "Santuário Natural",
+            "description": "Ao alcançar o 14° nível, as criaturas do mundo natural sentem sua conexão com a natureza e hesitam em atacá-lo. Quando uma criatura que seja uma fera ou planta atacá-lo, ela deve realizar uma salvaguarda de Sabedoria contra a CD para evitar as suas magias de druida. Caso falhe, deve escolher um alvo diferente ou o ataque falha automaticamente. Caso tenha sucesso, a criatura fica imune a este efeito por 24 horas.\nEla estará ciente desse efeito antes de atacá-lo."
           }
         },
         "resources": {
           "natural-recovery": {
-            "name": "",
+            "name": "Recuperação Natural",
             "note": ""
           }
         }
@@ -501,463 +494,461 @@
     }
   },
   "fighter": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Guerreiro",
+    "subclassTitle": "Arquétipo Marcial",
     "features": {
       "fighting-style": {
-        "name": "",
-        "description": ""
+        "name": "Estilo de Luta",
+        "description": "Você adota um estilo particular de luta como sua especialidade. Escolha uma das seguintes opções. Caso você tenha a opção de escolher um novo Estilo de Luta, não pode escolher um que já possua.\n• {@optfeature Archery|PHB|Arquearia}\n• {@optfeature Defense|PHB|Defensivo}\n• {@optfeature Dueling|PHB|Duelismo}\n• {@optfeature Great Weapon Fighting|PHB|Combate com Armas Grandes}\n• {@optfeature Protection|PHB|Protetivo}\n• {@optfeature Two-Weapon Fighting|PHB|Combate com Duas Armas}"
       },
       "second-wind": {
-        "name": "",
-        "description": ""
+        "name": "Recuperar o Fôlego",
+        "description": "Você possui uma fonte limitada de vitalidade, a qual pode usar para se proteger do perigo. No seu turno, use sua ação bônus para recuperar uma quantidade de pontos de vida igual a {@dice 1d10} + seu nível de guerreiro.\nUma vez usada esta característica, você deve completar um descanso curto ou longo antes de poder utilizá-la novamente."
       },
       "action-surge": {
-        "name": "",
-        "description": ""
+        "name": "Surto de Ação",
+        "description": "A partir do 2° nível, você é capaz de superar os seus limites normais momentaneamente. No seu turno, você pode realizar uma ação extra, além da sua ação comum e de uma possível ação bônus.\nUma vez usada esta característica, você deve completar um descanso curto ou longo antes de poder utilizá-la novamente. A partir do 17° nível, você pode usar esta característica duas vezes antes de precisar de um descanso, mas somente uma vez por turno."
       },
       "martial-archetype": {
-        "name": "",
-        "description": ""
+        "name": "Arquétipo Marcial",
+        "description": "No 3° nível, você escolhe um arquétipo que busca incorporar nos seus estilos e técnicas de combate, como o Campeão. O arquétipo escolhido lhe concede características no 3° nível e, novamente, no 7°, 10°, 15° e 18° níveis."
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "extra-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque Extra",
+        "description": "Durante o seu turno, sempre que executar a ação {@action Attack||Atacar}, você pode realizar dois ataques em vez de um.\nA quantidade de ataques aumenta para três quando você alcança o 11° nível e para quatro quando alcança o 20° nível."
       },
       "ability-score-improvement-6": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "martial-archetype-feature-7": {
-        "name": "",
+        "name": "Característica de Arquétipo Marcial",
         "description": ""
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "indomitable": {
-        "name": "",
-        "description": ""
+        "name": "Indomável",
+        "description": "A partir do 9º nível, você pode jogar de novo um teste de resistência que falhou. Se o fizer, você deve usar o novo valor e não pode usar essa característica de novo antes de terminar um descanso longo.\nVocê pode usar esta característica duas vezes entre descansos longos quando chegar no 13º nível e três vezes entre descansos longos quando chegar no 17º nível."
       },
       "martial-archetype-feature-10": {
-        "name": "",
+        "name": "Característica de Arquétipo Marcial",
         "description": ""
       },
       "extra-attack-2": {
-        "name": "",
+        "name": "Ataque Extra (2)",
         "description": ""
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "indomitable-two-uses": {
-        "name": "",
+        "name": "Indomável (dois usos)",
         "description": ""
       },
       "ability-score-improvement-14": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "martial-archetype-feature-15": {
-        "name": "",
+        "name": "Característica de Arquétipo Marcial",
         "description": ""
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "action-surge-two-uses": {
-        "name": "",
+        "name": "Surto de Ação (dois usos)",
         "description": ""
       },
       "indomitable-three-uses": {
-        "name": "",
+        "name": "Indomável (três usos)",
         "description": ""
       },
       "martial-archetype-feature-18": {
-        "name": "",
+        "name": "Característica de Arquétipo Marcial",
         "description": ""
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "extra-attack-3": {
-        "name": "",
+        "name": "Ataque Extra (3)",
         "description": ""
       }
     },
     "resources": {
       "second-wind": {
-        "name": ""
+        "name": "Recuperar o Fôlego"
       },
       "action-surge": {
-        "name": ""
+        "name": "Surto de Ação"
       },
       "indomitable": {
-        "name": ""
+        "name": "Indomável"
       }
     },
     "choices": {
       "fighting-style": {
-        "name": ""
+        "name": "Estilo de Luta"
       }
     },
     "subclasses": {
       "champion": {
-        "name": "",
+        "name": "Campeão",
         "features": {
           "champion": {
-            "name": "",
-            "description": ""
+            "name": "Campeão",
+            "description": "O arquétipo Campeão se concentra no desenvolvimento da força física, cultivando uma perfeição mortífera. Aqueles que se inspiram neste arquétipo combinam o treinamento rigoroso com a excelência física, desferindo golpes devastadores.\nCrítico Aprimorado. Seus ataques armados passam a causar um acerto crítico nas jogadas com resultados 19 ou 20."
           },
           "remarkable-athlete": {
-            "name": "",
+            "name": "Atleta Extraordinário",
             "description": ""
           },
           "additional-fighting-style": {
-            "name": "",
+            "name": "Estilo de Luta Adicional",
             "description": ""
           },
           "superior-critical": {
-            "name": "",
-            "description": ""
+            "name": "Crítico Superior",
+            "description": "A partir do 15° nível, seus ataques armados causam acerto crítico em uma jogada com resultados 18, 19 ou 20."
           },
           "survivor": {
-            "name": "",
+            "name": "Sobrevivente",
             "description": ""
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "monk": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Monge",
+    "subclassTitle": "Tradição Monástica",
     "features": {
       "unarmored-defense": {
-        "name": "",
-        "description": ""
+        "name": "Defesa sem Armadura",
+        "description": "A partir do 1° nível, sempre que não estiver usando nenhuma armadura ou escudo, a sua Classe da Armadura (CA) será igual a 10 + seu modificador de Destreza + seu modificador de Sabedoria."
       },
       "martial-arts": {
-        "name": "",
+        "name": "Artes Marciais",
         "description": ""
       },
       "ki": {
-        "name": "",
-        "description": ""
+        "name": "Ki",
+        "description": "A partir do 2° nível, seu treinamento permite que você utilize o poder místico do ki. Seu acesso a essa energia é representado por um número de pontos de ki. Seu nível de Monge determina o número de pontos possuídos, então um monge de 2º nível possui 2 pontos de ki, um monge de 16º nível possui 16.\nVocê pode usar esses pontos para ativar diversas características de ki. Você começa com três características: Torrente de Golpes, Defesa Paciente e Passos do Vento. Você aprende mais características de ki conforme ganha níveis nesta classe.\nAo usar um ponto de ki, ele ficará gasto até que você complete um descanso curto ou longo, após o que você recupera todos os pontos gastos. É preciso meditar por pelo menos 30 minutos durante o período de descanso para recuperar seus pontos de ki.\nAlgumas características de ki exigem que seu alvo realize uma salvaguarda para evitar seus efeitos. A CD desses testes é calculada da seguinte forma:\nCD para evitar os efeitos do seu ki = 8 + seu bônus de proficiência + seu modificador de Sabedoria\nTorrente de Golpes. Imediatamente após você realizar a ação de {@action Attack||Ataque} no seu turno, você pode gastar 1 ponto de chi para realizar dois golpes desarmados com uma ação bônus.\nDefesa Paciente. Você pode usar 1 ponto de ki para executar a ação {@action Dodge||Esquivar} como sua ação bônus do turno.\nPassos do Vento. Você pode gastar 1 ponto de ki para executar a ação {@action Disengage||Desengajar} ou {@action Dash||Correr} como sua ação bônus do turno. Sua distância de salto é dobrada."
       },
       "unarmored-movement": {
-        "name": "",
-        "description": ""
+        "name": "Movimento sem Armadura",
+        "description": "A partir do 2° nível, seu deslocamento aumenta em 3 metros enquanto você não estiver usando armadura nem empunhando um escudo. Esse bônus aumenta quando você alcança certos níveis como monge, conforme mostrado na tabela O Monge.\nNo 9° nível, você ganha a habilidade de mover-se sobre superfícies verticais ou líquidas sem cair ou afundar durante o seu deslocamento."
       },
       "deflect-missiles": {
-        "name": "",
-        "description": ""
+        "name": "Desviar Projéteis",
+        "description": "A partir do 3° nível, você pode usar sua reação para desviar ou segurar um projétil disparado contra você. Ao fazê-lo, o dano que você receberia é reduzido em {@dice 1d10} + seu modificador de Destreza + seu nível de monge.\nSe o dano for reduzido a 0 e o projétil for pequeno o suficiente para caber em sua mão (que deve estar livre), você pode agarrá-lo. Como parte da mesma reação, você pode gastar 1 ponto de ki para executar um ataque à distância com o projétil que acabou de agarrar. Independentemente das suas proficiências com armas, você faz esse ataque com proficiência, e o projétil conta como uma arma de monge cujo alcance é de 6 metros [20 pés] e alcance máximo de 18 metros [60 pés]."
       },
       "monastic-tradition": {
-        "name": "",
-        "description": ""
+        "name": "Tradição Monástica",
+        "description": "Ao chegar ao 3° nível, você se compromete com uma tradição monástica, como o Caminho da Mão Espalmada. Sua tradição lhe garante características no 3°, 6°, 11° e 17° níveis."
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "slow-fall": {
-        "name": "",
-        "description": ""
+        "name": "Queda Lenta",
+        "description": "A partir do 4° nível, ao sofrer uma queda, você pode usar sua reação para reduzir o dano resultante em uma quantidade equivalente a cinco vezes seu nível de monge."
       },
       "extra-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque Extra",
+        "description": "Durante o seu turno, sempre que executar a ação {@action Attack||Atacar}, você pode realizar dois ataques em vez de um."
       },
       "stunning-strike": {
-        "name": "",
+        "name": "Golpe Atordoante",
         "description": ""
       },
       "ki-empowered-strikes": {
-        "name": "",
-        "description": ""
+        "name": "Golpes de Chi",
+        "description": "A partir do 6° nível, seus golpes desarmados contam como armas mágicas com o propósito de ultrapassar a resistência ou imunidade a ataque e danos não-mágicos."
       },
       "monastic-tradition-feature-6": {
-        "name": "",
+        "name": "Característica de Tradição Monástica",
         "description": ""
       },
       "evasion": {
-        "name": "",
+        "name": "Evasão",
         "description": ""
       },
       "stillness-of-mind": {
-        "name": "",
-        "description": ""
+        "name": "Mente Tranquila",
+        "description": "A partir do 7° nível, você pode usar sua ação para encerrar qualquer efeito que o tenha deixado {@condition charmed||enfeitiçado} ou {@condition frightened||amedrontado}."
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "unarmored-movement-improvement": {
-        "name": "",
-        "description": ""
+        "name": "Aperfeiçoamento do Deslocamento sem Armadura",
+        "description": "No 9° nível, você ganha a habilidade de mover-se sobre superfícies verticais ou líquidas sem cair ou afundar durante o seu deslocamento."
       },
       "purity-of-body": {
-        "name": "",
-        "description": ""
+        "name": "Pureza do Corpo",
+        "description": "No 10° nível, seu domínio sobre o fluxo do ki em seu corpo o torna imune a doenças e venenos."
       },
       "monastic-tradition-feature-11": {
-        "name": "",
+        "name": "Característica de Tradição Monástica",
         "description": ""
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "tongue-of-the-sun-and-moon": {
-        "name": "",
-        "description": ""
+        "name": "Idioma do Sol e da Lua",
+        "description": "A partir do 13° nível, você aprende a tocar o ki de outras mentes, sendo capaz de entender todos os idiomas falados. Além disso, toda criatura capaz de entender qualquer idioma passa a entender o que você diz."
       },
       "diamond-soul": {
-        "name": "",
-        "description": ""
+        "name": "Alma de Diamante",
+        "description": "A partir do 14° nível, sua maestria do chi concede a você proficiência em todos os testes de resistência.\nAlém disso, toda vez que você realizar um teste de resistência e falha, você pode gastar 1 ponto de chi para jogar novamente e ficar com o segundo resultado."
       },
       "timeless-body": {
-        "name": "",
+        "name": "Corpo Atemporal",
         "description": ""
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "monastic-tradition-feature-17": {
-        "name": "",
+        "name": "Característica de Tradição Monástica",
         "description": ""
       },
       "empty-body": {
-        "name": "",
-        "description": ""
+        "name": "Corpo Vazio",
+        "description": "A partir do 18° nível, você pode usar sua ação para gastar 4 pontos de chi e ficar {@condition invisible||invisível} por 1 minuto. Durante esse tempo, você também adquire resistência a todos os danos, exceto dano de energia.\nAlém disso, você pode gastar 8 pontos de chi para conjurar a magia {@spell astral projection||Projeção Astral}, sem precisar de componentes materiais. Quando o fizer, você não pode levar qualquer outra criatura com você."
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "perfect-self": {
-        "name": "",
-        "description": ""
+        "name": "Autoaperfeiçoamento",
+        "description": "No 20° nível, caso tenha gastado todos os seus pontos de ki, ao jogar para iniciativa você recupera 4 pontos de ki."
       }
     },
     "resources": {
       "ki": {
-        "name": ""
+        "name": "Pontos de Ki"
       }
     },
-    "choices": {},
     "subclasses": {
       "open-hand": {
-        "name": "",
+        "name": "Caminho da Mão Espalmada",
         "features": {
           "way-of-the-open-hand": {
-            "name": "",
-            "description": ""
+            "name": "Caminho da Mão Espalmada",
+            "description": "Os monges do Caminho da Mão Espalmada são os mestres absolutos do combate com artes marciais, quer se utilizem de armas ou não. Eles aprendem técnicas para empurrar e derrubar seus oponentes, manipular o ki para curar o dano causado em seus próprios corpos, e praticam a meditação avançada, capaz de protegê-los do perigo.\nTécnica da Mão Espalmada. A partir do momento em que você escolhe esta tradição, no 3º nível, passa a ser capaz de manipular o ki do seu inimigo, ao controlar o seu próprio. Sempre que acertar uma criatura com um dos seus ataques de Torrente de Golpes, pode impor a ela um dos efeitos a seguir:\n• Ela precisa ser bem-sucedida em uma salvaguarda de Destreza ou ficará {@condition prone||caída}.\n• Ela deve realizar uma salvaguarda de Força. Em caso de falha, você pode empurrá-la a até 4,5 metros de distância.\n• Ela não pode executar reações até o final do seu próximo turno."
           },
           "wholeness-of-body": {
-            "name": "",
-            "description": ""
+            "name": "Integridade Corporal",
+            "description": "No 6° nível, você adquire a habilidade de curar a si mesmo. Como sua ação no turno, você pode recuperar uma quantidade de pontos de vida igual a três vezes seu nível de monge. É preciso completar um descanso longo antes de utilizar esta característica novamente."
           },
           "tranquility": {
-            "name": "",
-            "description": ""
+            "name": "Tranquilidade",
+            "description": "A partir do 11° nível, você pode entrar num estado especial de meditação que lhe confere uma aura de paz. Ao final de um descanso longo, você ganha o efeito da magia {@spell sanctuary||santuário}, o qual dura até o começo do seu próximo descanso longo (a magia pode terminar de forma prematura, conforme as regras normais). A CD da salvaguarda contra a magia é igual a 8 + o seu modificador de Sabedoria + o seu bônus de proficiência."
           },
           "quivering-palm": {
-            "name": "",
+            "name": "Palma Vibrante",
             "description": ""
           }
         },
         "resources": {
           "wholeness-of-body": {
-            "name": ""
+            "name": "Integridade Corporal"
           }
         }
       }
     }
   },
   "paladin": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Paladino",
+    "subclassTitle": "Juramento Sagrado",
     "features": {
       "divine-sense": {
-        "name": "",
-        "description": ""
+        "name": "Sentido Divino",
+        "description": "A presença de um mal poderoso é registrada pelos seus sentidos como um odor pernicioso, e os poderes do bem ressoam como a música celestial em seus ouvidos. Como uma ação, você pode abrir sua consciência para detectar tais forças. Até o fim do seu próximo turno, você consegue determinar a localização de qualquer celestial, ínfero ou morto-vivo, dentro de um raio de 18 metros a partir de você, que não esteja sob {@quickref Cover||3||cobertura total}. Você consegue saber o tipo (celestial, ínfero ou morto-vivo) de qualquer ser cuja presença tenha sentido, mas não a identidade (o vampiro Conde Strahd von Zarovich, por exemplo). Dentro do mesmo raio de ação, você também é capaz de detectar a presença de qualquer local ou objeto que tenha sido consagrado ou profanado com a magia {@spell hallow||consagrar}.\nVocê pode usar esta característica um número de vezes igual a 1 + seu modificador de Carisma, recuperando todos os usos gastos ao final de um descanso longo."
       },
       "lay-on-hands": {
-        "name": "",
-        "description": ""
+        "name": "Mãos Consagradas",
+        "description": "Seu toque abençoado pode curar ferimentos. Você possui uma reserva de poder curativo que se regenera ao fim de um descanso longo. Com essa reserva, você pode restaurar um total de pontos de vida igual ao seu nível x 5.\nComo uma ação, você pode tocar uma criatura e transferir-lhe parte dessa reserva, restaurando-lhe os pontos de vida até o valor máximo.\nSe preferir, pode gastar 5 pontos de sua reserva para curar a criatura de uma doença, ou neutralizar um veneno que a esteja afetando. Você pode curar múltiplas doenças e neutralizar múltiplos venenos com um único uso de Repousar Mãos, gastando 5 pontos separadamente para cada doença ou veneno.\nEsta característica não afeta mortos-vivos ou constructos."
       },
       "divine-smite": {
-        "name": "",
+        "name": "Destruição Divina",
         "description": ""
       },
       "fighting-style": {
-        "name": "",
-        "description": ""
+        "name": "Estilo de Luta",
+        "description": "Você adota um estilo particular de luta como sua especialidade. Escolha uma das seguintes opções. Caso você tenha a opção de escolher um novo Estilo de Luta, não pode escolher um que já possua.\n• {@optfeature Defense|PHB|Defensivo}\n• {@optfeature Dueling|PHB|Duelismo}\n• {@optfeature Great Weapon Fighting|PHB|Combate com Armas Grandes}\n• {@optfeature Protection|PHB|Protetivo}"
       },
       "spellcasting": {
-        "name": "",
+        "name": "Conjuração",
         "description": ""
       },
       "divine-health": {
-        "name": "",
-        "description": ""
+        "name": "Saúde Divina",
+        "description": "No 3° nível, a magia divina flui pelo seu corpo, tornando-o imune a doenças."
       },
       "sacred-oath": {
-        "name": "",
-        "description": ""
+        "name": "Juramento Sagrado",
+        "description": "No 3º nível, você realiza um voto que o marca como um paladino para sempre. Até esse momento, você seguia em um estágio preparatório, trilhando seu caminho, mas ainda não consagrado a ele. Agora você deve escolher um juramento, como o Juramento da Devoção.\nSua escolha garante a você características no 3º nível e novamente no 7º, 15º e 20º níveis, incluindo Canalizar Divindade e magias de juramento.\nMagias de Juramento. Cada juramento possui uma lista de magias que você obtém do juramento. Uma vez obtida uma magia de juramento, ela sempre estará preparada e não contará para o número de magias que você pode preparar por dia.\nSe você ganhar uma magia de juramento que não aparece na lista de magias de paladino, a magia continua sendo uma magia de paladino para você.\nCanalizar Divindade. Seu juramento permite que você canalize energia divina como fonte de efeitos mágicos. Cada opção do Canalizar Divindade fornecida pelo seu juramento explica como usá-la.\nQuando você usa Canalizar Divindade, você escolhe qual opção usar. Você deve então terminar um descanso curto ou longo para usar o Canalizar Divindade novamente.\nAlguns efeitos do Canalizar Divindade requerem testes de resistência. Quando você usa tal efeito desta classe, a CD é igual a sua salvaguarda de feitiço de paladino.\nQuebrando seu Juramento. Um paladino tenta manter os mais elevados padrões de conduta, embora até os mais virtuosos falhem. Às vezes, o caminho da retidão prova-se muito exigente. Em alguns casos, uma situação exige a escolha entre o menor de dois males. Em outras, o calor da emoção faz o paladino transgredir seu juramento.\nUm paladino que quebre o seu voto geralmente busca a absolvição de um clérigo que compartilhe da sua fé, ou de outro paladino da mesma ordem. O paladino desgraçado deverá fazer vigília e orações durante uma noite, como prova de penitência, ou realizar um ato de remissão semelhante. Após cumprido o ritual de confissão e perdão, o paladino se renova.\nCaso um paladino viole deliberadamente o seu juramento e não mostre sinais de arrependimento, as consequências podem ser mais graves. De acordo com o julgamento do DM, um paladino impenitente pode ser forçado a abandonar sua classe e adotar uma nova."
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "extra-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque Extra",
+        "description": "Durante o seu turno, sempre que executar a ação {@action Attack||Atacar}, você pode realizar dois ataques em vez de um."
       },
       "aura-of-protection": {
-        "name": "",
-        "description": ""
+        "name": "Aura de Proteção",
+        "description": "A partir do 6° nível, sempre que você ou uma criatura amigável, e que esteja a até 3 metros de distância, precisar realizar uma salvaguarda, ambos ganham um bônus igual ao seu modificador de Carisma (com um mínimo de +1). É preciso que você esteja consciente para conferir esse bônus.\nNo 18° nível, o raio da aura aumenta para 9 metros."
       },
       "sacred-oath-feature-7": {
-        "name": "",
+        "name": "Característica de Juramento Sagrado",
         "description": ""
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "aura-of-courage": {
-        "name": "",
-        "description": ""
+        "name": "Aura de Coragem",
+        "description": "A partir do 10° nível, enquanto você estiver consciente, você e quaisquer criaturas amigáveis num raio de até 3 metros não podem ser {@condition frightened||amedrontados}.\nNo 18° nível, o raio da aura aumenta para 9 metros."
       },
       "improved-divine-smite": {
-        "name": "",
-        "description": ""
+        "name": "Destruição Divina Aprimorada",
+        "description": "No 11° nível, você está tão imbuído do poder da justiça que todos os seus ataques feitos com uma arma de combate corpo a corpo estão carregados de poder divino. Sempre que você acertar uma criatura com uma arma de combate corpo a corpo, seu dano aumenta em {@damage 1d8} pontos de dano radiante. Se você também usar Destruição Divina com um ataque, deve adicionar o d8 acima com o dano adicional de Destruição Divina."
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "cleansing-touch": {
-        "name": "",
-        "description": ""
+        "name": "Toque Purificador",
+        "description": "Começando no 14° nível, você pode usar uma ação para encerrar uma magia que esteja agindo sobre o seu corpo, ou sobre uma criatura que permita que você a toque.\nVocê pode usar esta característica um número de vezes igual ao seu modificador de Carisma (no mínimo uma vez), recuperando os usos gastos ao final de um descanso longo."
       },
       "sacred-oath-feature-15": {
-        "name": "",
+        "name": "Característica de Juramento Sagrado",
         "description": ""
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "aura-improvements": {
         "name": "",
-        "description": ""
+        "description": "No 18° nível, o raio da aura aumenta para 9 metros."
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "sacred-oath-feature-20": {
-        "name": "",
+        "name": "Característica de Juramento Sagrado",
         "description": ""
       }
     },
     "resources": {
       "divine-sense": {
-        "name": ""
+        "name": "Sentido Divino"
       },
       "lay-on-hands": {
-        "name": ""
+        "name": "Mãos Consagradas"
       },
       "channel-divinity": {
-        "name": ""
+        "name": "Canalizar Divindade"
       },
       "cleansing-touch": {
-        "name": ""
+        "name": "Toque Purificador"
       }
     },
     "choices": {
       "fighting-style": {
-        "name": ""
+        "name": "Estilo de Luta"
       }
     },
     "subclasses": {
       "devotion": {
-        "name": "",
+        "name": "Juramento da Devoção",
         "features": {
           "oath-of-devotion": {
-            "name": "",
+            "name": "Juramento da Devoção",
             "description": ""
           },
           "aura-of-devotion": {
-            "name": "",
-            "description": ""
+            "name": "Aura de Devoção",
+            "description": "A partir do 7° nível, enquanto estiver consciente, você e quaisquer criaturas amigáveis num raio de até 3 metros não podem ser {@condition charmed||enfeitiçadas}.\nNo 18° nível, o raio da aura aumenta para 9 metros."
           },
           "purity-of-spirit": {
-            "name": "",
-            "description": ""
+            "name": "Pureza de Espírito",
+            "description": "Começando no 15° nível, você estará sempre sob os efeitos da magia {@spell protection from evil and good||proteção contra o bem e o mal}."
           },
           "holy-nimbus": {
-            "name": "",
-            "description": ""
+            "name": "Resplendor Sagrado",
+            "description": "No 20° nível, como uma ação, você pode emanar uma aura de luz solar. Durante 1 minuto, você emanará luz plena em um raio de 9 metros e meia-luz por mais 9 metros.\nSempre que uma criatura inimiga iniciar o turno dela na área de luz plena, sofrerá 10 pontos de dano radiante.\nAlém disso, enquanto durar a luz, você tem vantagem em salvaguardas contra magias conjuradas por ínferos e mortos-vivos.\nUma vez usada esta característica, ela não pode ser usada novamente até que você termine um descanso longo."
           }
         },
         "resources": {
           "holy-nimbus": {
-            "name": ""
+            "name": "Resplendor Sagrado"
           }
         }
       }
     }
   },
   "ranger": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Patrulheiro",
+    "subclassTitle": "Arquétipo de Patrulheiro",
     "features": {
       "favored-enemy": {
-        "name": "",
-        "description": ""
+        "name": "Inimigo Favorito",
+        "description": "A partir do 1° nível, você tem experiência significativa estudando, rastreando, caçando e, até mesmo, falando com certos tipos de inimigos.\nEscolha um tipo de inimigo favorito: {@filter aberrações|bestiary|type=aberration}, {@filter bestas|bestiary|type=beast}, {@filter celestiais|bestiary|type=celestial}, {@filter constructos|bestiary|type=construct}, {@filter corruptores|bestiary|type=fiend}, {@filter dragões|bestiary|type=dragon}, {@filter elementais|bestiary|type=elemental}, {@filter fadas|bestiary|type=fey}, {@filter gigantes|bestiary|type=giant}, {@filter limos|bestiary|type=ooze}, {@filter monstruosidades|bestiary|type=monstrosity}, {@filter mortos-vivos|bestiary|type=undead} ou {@filter plantas|bestiary|type=plant}. Alternativamente, você pode escolher duas raças de {@filter humanoides|bestiary|type=humanoid} (como {@creature gnoll||gnolls} e {@creature orc||orcs}) para seus inimigos favoritos.\nVocê tem vantagem em testes de Sabedoria ({@skill Survival||Sobrevivência}) para rastrear seus inimigos favoritos, assim como em testes de Inteligência para lembrar informações sobre eles.\nQuando você adquire essa característica, você também aprende um idioma, à sua escolha, que seja falado pelos seus inimigos favoritos, se eles falarem algum.\nVocê escolhe um inimigo favorito adicional, assim como um idioma associado, no 6° e 14° nível. A medida que você ganha níveis, suas escolhas deverão refletir os tipos de monstros que você encontrou nas suas aventuras."
       },
       "natural-explorer": {
-        "name": "",
-        "description": ""
+        "name": "Explorador Natural",
+        "description": "Você está particularmente familiarizado com um tipo de terreno natural, sendo capaz de viajar e sobreviver quando se encontrar nele. Escolha um tipo de terreno favorito: ártico, campo, litoral, deserto, floresta, montanha, pântano ou a Umbreterna. Ao realizar um teste de Inteligência ou Sabedoria relacionado ao seu terreno favorito, e estiver usando uma perícia na qual você é proficiente, seu bônus de proficiência é dobrado.\nAo viajar por uma hora ou mais no seu terreno favorito, você ganha os benefícios a seguir:\n• Terreno difícil não atrasa a viagem do seu grupo.\n• Seu grupo não se perde, exceto por meios mágicos.\n• Mesmo quando estiver engajado em outra atividade enquanto viaja (forrageando, guiando ou rastreando), você se mantém alerta ao perigo.\n• Se estiver viajando sozinho, você pode mover-se furtivamente em ritmo normal.\n• Ao forragear, você encontra duas vezes mais comida do que normalmente encontraria.\n• Ao rastrear outras criaturas, você também descobre seus tamanhos, há quanto tempo passaram pela área, e seu número exato.\nVocê escolhe terrenos favoritos adicionais no 6° e 10° níveis."
       },
       "fighting-style": {
-        "name": "",
-        "description": ""
+        "name": "Estilo de Luta",
+        "description": "Você adota um estilo particular de luta como sua especialidade. Escolha uma das seguintes opções. Caso você tenha a opção de escolher um novo Estilo de Luta, não pode escolher um que já possua.\n• {@optfeature Archery|PHB|Arquearia}\n• {@optfeature Defense|PHB|Defensivo}\n• {@optfeature Dueling|PHB|Duelismo}\n• {@optfeature Two-Weapon Fighting|PHB|Combate com Duas Armas}"
       },
       "spellcasting": {
-        "name": "",
+        "name": "Conjuração",
         "description": ""
       },
       "ranger-archetype": {
-        "name": "",
-        "description": ""
+        "name": "Arquétipo de Patrulheiro",
+        "description": "No 3° nível, você escolhe um arquétipo, o qual se esforça para seguir, como o Caçador. Sua escolha lhe garante características no 3° nível e novamente no 7°, 11° e 15° níveis."
       },
       "primeval-awareness": {
-        "name": "",
-        "description": ""
+        "name": "Consciência Primitiva",
+        "description": "Começando no 3° nível, você pode usar sua ação e gastar um espaço de magia de guardião para focar sua consciência na região ao seu redor. Durante um minuto por círculo do espaço de magia gasto, você pode sentir se as criaturas a seguir estão presentes num raio de 1,5 quilômetros (ou a até 9 quilômetros, caso se trate do seu terreno favorito): aberrações, celestiais, dragões, feéricos, ínferos e mortos-vivos. Esta característica não revela a localização das criaturas ou o seu número."
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "extra-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque Extra",
+        "description": "Durante o seu turno, sempre que executar a ação {@action Attack||Atacar}, você pode realizar dois ataques em vez de um."
       },
       "favored-enemy-and-natural-explorer-improvements": {
         "name": "",
@@ -968,16 +959,16 @@
         "description": ""
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "land-s-stride": {
-        "name": "",
-        "description": ""
+        "name": "Caminho da Floresta",
+        "description": "A partir do 8° nível, mover-se através de {@quickref difficult terrain||3||terreno difícil}, não-mágico, não lhe custa movimento adicional. Você também pode passar por vegetação não mágica sem ser atrasado e sem sofrer dano.\nAlém disso, você tem vantagem em salvaguardas contra plantas criadas ou manipuladas magicamente para impedir movimento, como aquelas criadas pela magia {@spell entangle||constrição}."
       },
       "hide-in-plain-sight": {
-        "name": "",
-        "description": ""
+        "name": "Sumir de Vista",
+        "description": "A partir do 10° nível, você pode dedicar 1 minuto a criar uma camuflagem para si mesmo, contanto que tenha acesso a lama fresca, terra, plantas, fuligem e materiais naturais semelhantes.\nUma vez camuflado, você pode tentar se esconder, posicionando-se contra uma superfície sólida que seja, no mínimo, tão alta e larga quanto você, como uma árvore ou uma parede. Você ganha um bônus de +10 em testes de Destreza ({@skill Stealth||Furtividade}) enquanto permanecer imóvel e sem executar ações. Caso se mova ou execute alguma ação ou reação, você deve se camuflar novamente para recuperar este benefício."
       },
       "natural-explorer-improvement": {
         "name": "",
@@ -988,12 +979,12 @@
         "description": ""
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "vanish": {
-        "name": "",
-        "description": ""
+        "name": "Desaparecer",
+        "description": "A partir do 14° nível, você pode usar a ação {@action Hide||Esconder-se} como sua ação bônus. Além disso, não pode ser rastreado por meios não-mágicos, a não ser que escolha deixar rastros."
       },
       "favored-enemy-improvement": {
         "name": "",
@@ -1004,348 +995,343 @@
         "description": ""
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "feral-senses": {
-        "name": "",
-        "description": ""
+        "name": "Sentidos Selvagens",
+        "description": "No 18° nível, você ganha sentidos sobrenaturais que o ajudam a lutar contra criaturas invisíveis. Ao atacar uma criatura que não possa ver, não sofrerá desvantagem nas suas jogadas de ataque contra ela. Você também está ciente da localização de qualquer criatura {@condition invisible||invisível} a até 9 metros de distância, desde que ela não esteja escondida e você não esteja {@condition blinded||cego} ou {@condition deafened||surdo}."
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "foe-slayer": {
-        "name": "",
-        "description": ""
+        "name": "Matador de Inimigos",
+        "description": "No 20° nível, você se torna um caçador incomparável de inimigos. Uma vez em cada um dos seus turnos, você pode adicionar seu modificador de Sabedoria na jogada de ataque ou jogada de dano de um ataque que você faça contra um dos seus inimigos favoritos. Você pode escolher usar essa característica antes ou depois da rolagem, mas antes de qualquer efeito da jogada ser aplicado."
       }
     },
-    "resources": {},
     "choices": {
       "fighting-style": {
-        "name": ""
+        "name": "Estilo de Luta"
       }
     },
     "subclasses": {
       "hunter": {
-        "name": "",
+        "name": "Caçador",
         "features": {
           "hunter": {
-            "name": "",
-            "description": ""
+            "name": "Caçador",
+            "description": "Assumir o arquétipo do Caçador significa aceitar seu papel como uma barreira entre a civilização e os horrores dos ermos. Ao seguir este caminho, você aprende técnicas especializadas no combate às ameaças que enfrenta, desde ataques de ogros e hordas de orques, até imponentes gigantes e terríveis dragões.\nPresa do Caçador. No 3° nível, você ganha uma das características a seguir, à sua escolha.\nAssassino de Colossos. Sua tenacidade pode derrubar os mais poderosos oponentes. Quando você atinge uma criatura com um ataque com arma, a criatura sofre {@damage 1d8} de dano extra, se ela estiver abaixo do máximo de pontos de vida dela. Você só pode causar esse dano extra uma vez por turno.\nMatador de Gigantes. Quando uma criatura Grande ou maior, que esteja a até 1,5 metro de distância, atacá-lo, você pode usar sua reação para contra-atacar.\nDestruidor de Hordas. Uma vez por turno, ao realizar um ataque armado, você pode realizar outro ataque, com a mesma arma contra outra criatura que esteja a até 1,5 metros do alvo do primeiro ataque e dentro do alcance da sua arma."
           },
           "defensive-tactics": {
-            "name": "",
-            "description": ""
+            "name": "Táticas Defensivas",
+            "description": "No 7° nível, você ganha uma das características a seguir, à sua escolha.\nEscapar de Hordas. Ataques de oportunidade contra você são feitos com desvantagem.\nDefesa Contra Ataques Múltiplos. Quando uma criatura atacá-lo, você ganha um bônus de +4 na sua CA contra todos os ataques subsequentes feitos por essa criatura no restante do turno.\nVontade de Aço. Você tem vantagem em testes de resistência contra ficar {@condition frightened||amedrontado}."
           },
           "multiattack": {
-            "name": "",
+            "name": "Ataque Múltiplo",
             "description": ""
           },
           "superior-hunter-s-defense": {
-            "name": "",
-            "description": ""
+            "name": "Defesa de Caçador Superior",
+            "description": "No 15° nível, você ganha uma das características a seguir, à sua escolha.\nEvasão. Quando submetido a qualquer efeito - como o sopro de fogo de um dragão vermelho ou a magia {@spell lightning bolt||relâmpago} - que lhe permita realizar uma salvaguarda de Destreza para reduzir o dano pela metade, caso obtenha sucesso na salvaguarda, não sofre qualquer dano e, caso obtenha falha, sofre apenas metade do dano.\nLutar Contra a Maré. Quando uma criatura hostil falha ao atacá-lo, você pode usar sua reação para forçá-la a repetir o ataque contra outra criatura (que não seja ela mesma), à sua escolha.\nEsquiva Sobrenatural. Quando um atacante que você possa ver, atinge você com um ataque, você pode usar sua reação para reduzir o dano causado pelo ataque à metade."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "rogue": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Ladino",
+    "subclassTitle": "Arquétipo de Ladino",
     "features": {
       "expertise-1": {
-        "name": "",
-        "description": ""
+        "name": "Especialização",
+        "description": "No 1º nível, você escolhe duas de suas perícias que seja proficiente, ou uma perícia que seja proficiente e {@item thieves' tools|phb|ferramentas de ladrão}. Seu bônus de proficiência é dobrado em qualquer teste de habilidade que fizer com elas.\nNo 6º nível, você pode escolher outras duas de suas proficiências (em perícias ou {@item thieves' tools|phb|ferramentas de ladrão}) para ganhar esse benefício."
       },
       "sneak-attack": {
-        "name": "",
+        "name": "Ataque Furtivo",
         "description": ""
       },
       "thieves-cant": {
-        "name": "",
-        "description": ""
+        "name": "Gíria do Ladrão",
+        "description": "Durante o seu treinamento de ladino, você aprendeu a gíria do ladrão, uma mistura secreta de dialeto, jargões e códigos, que permite que você oculte mensagens em uma conversa aparentemente normal. Apenas outra criatura que conheça a gíria do ladrão é capaz de entender essas mensagens. Leva quatro vezes mais tempo transmitir uma mensagem desse modo, do que levaria para transmiti-la do modo habitual.\nAlém disso, você entende uma série de sinais secretos e símbolos usados para a passagem de mensagens simples e curtas, como, por exemplo, se uma área é perigosa, se se trata do território de uma guilda de ladrões, se há um tesouro por perto, se as pessoas de determinado local são alvos fáceis, ou se darão abrigo a ladrões em fuga."
       },
       "cunning-action": {
-        "name": "",
-        "description": ""
+        "name": "Ação Ardilosa",
+        "description": "A partir do 2° nível, seu pensamento rápido e sua agilidade permitem que você se movimente e aja com rapidez. Você pode executar uma ação bônus em cada um dos seus turnos durante um combate. Ela pode ser usada apenas para a realização das ações {@action Dash||Correr}, {@action Disengage||Desengajar} ou {@action Hide||Esconder-se}."
       },
       "roguish-archetype": {
-        "name": "",
-        "description": ""
+        "name": "Arquétipo de Ladino",
+        "description": "No 3º nível, você escolhe um arquétipo, o qual seguirá no exercício das suas habilidades de ladino, como o Ladrão. Seu arquétipo lhe garante características no 3º nível, e novamente no 9º, 13º e 17º níveis."
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "uncanny-dodge": {
-        "name": "",
-        "description": ""
+        "name": "Esquiva Sobrenatural",
+        "description": "A partir do 5° nível, você pode usar sua reação para reduzir o dano sofrido pela metade quando for atingido por um atacante que você possa enxergar."
       },
       "expertise-6": {
-        "name": "",
-        "description": ""
+        "name": "Especialização",
+        "description": "No 6º nível, você pode escolher outras duas de suas proficiências (em perícias ou {@item thieves' tools|phb|ferramentas de ladrão}) para ganhar esse benefício."
       },
       "evasion": {
-        "name": "",
+        "name": "Evasão",
         "description": ""
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "roguish-archetype-feature-9": {
-        "name": "",
+        "name": "Característica de Arquétipo de Ladino",
         "description": ""
       },
       "ability-score-improvement-10": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "reliable-talent": {
-        "name": "",
+        "name": "Talento Confiável",
         "description": ""
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "roguish-archetype-feature-13": {
-        "name": "",
+        "name": "Característica de Arquétipo de Ladino",
         "description": ""
       },
       "blindsense": {
-        "name": "",
-        "description": ""
+        "name": "Sentido Cego",
+        "description": "A partir do 14° nível, se você for capaz de ouvir, conseguirá determinar a localização de qualquer criatura {@condition invisible||invisível} ou escondida a uma distância de até 3 metros."
       },
       "slippery-mind": {
-        "name": "",
-        "description": ""
+        "name": "Mente Escorregadia",
+        "description": "No 15° nível, você adquire uma grande força mental, que lhe garante proficiência em salvaguardas de Sabedoria."
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "roguish-archetype-feature-17": {
-        "name": "",
+        "name": "Característica de Arquétipo de Ladino",
         "description": ""
       },
       "elusive": {
-        "name": "",
-        "description": ""
+        "name": "Elusivo",
+        "description": "Começando no 18° nível, você é tão evasivo que os atacantes não têm vantagem contra você, a não ser que esteja {@condition incapacitated||incapacitado}."
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "stroke-of-luck": {
-        "name": "",
-        "description": ""
+        "name": "Golpe de Sorte",
+        "description": "No 20º nível, você adquire um talento incrível para obter sucesso quando mais precisa. Se um ataque seu erra um alvo que esteja dentro do seu alcance, você pode transformar automaticamente esse erro em um acerto. Alternativamente, ao falhar em um teste de atributo, pode tratar a jogada do {@dice d20} como um 20.\nApós usar esta característica, você não pode tornar a usá-la até completar um descanso curto ou longo."
       }
     },
     "resources": {
       "stroke-of-luck": {
-        "name": ""
+        "name": "Golpe de Sorte"
       }
     },
-    "choices": {},
     "subclasses": {
       "thief": {
-        "name": "",
+        "name": "Ladrão",
         "features": {
           "thief": {
-            "name": "",
-            "description": ""
+            "name": "Ladrão",
+            "description": "Você apura suas perícias nas artes da ladroagem. Assaltantes, bandidos, punguistas, trombadinhas e outros criminosos costumam seguir este arquétipo, assim como ladinos que preferem ver a si mesmos como caçadores de tesouro, exploradores, pesquisadores e investigadores profissionais. Além de melhorar suas perícias e furtividade, você desenvolve habilidades úteis para explorar ruínas antigas, ler idiomas desconhecidos e usar itens mágicos que, de outro modo, não conseguiria usar.\nMão Leve. A partir do 3° nível, você pode usar a ação bônus, dada pela sua Ação Ardilosa, para testar Destreza ({@skill Sleight of Hand||Prestidigitação}) no uso das suas {@item thieves' tools|phb|ferramentas de ladrão} para desarmar armadilhas, abrir fechaduras, ou ainda executar a ação {@action Use an Object||Usar Objeto}.\nAndarilho de Telhados. Ao escolher este arquétipo no 3° nível, você ganha a habilidade de escalar mais rapidamente que o normal, de modo que essa ação passa a não lhe custar mais movimento adicional.\nAlém disso, ao saltar em distância, seu alcance aumenta em 30 centímetros para cada ponto do seu modificador de Destreza."
           },
           "supreme-sneak": {
-            "name": "",
-            "description": ""
+            "name": "Furtividade Suprema",
+            "description": "A partir do 9° nível, você tem vantagem em seus testes de Destreza ({@skill Stealth||Furtividade}) quando estiver se movendo, durante o mesmo turno, a no máximo a metade do seu deslocamento."
           },
           "use-magic-device": {
-            "name": "",
-            "description": ""
+            "name": "Usar Dispositivo Mágico",
+            "description": "No 13° nível, você aprendeu o suficiente sobre o funcionamento dos itens mágicos para, mesmo quando não foram feitos para você, ignorar todos os requerimentos de classe, raça e nível na sua utilização."
           },
           "thief-s-reflexes": {
-            "name": "",
-            "description": ""
+            "name": "Reflexos de Ladrão",
+            "description": "Ao chegar no 17° nível, você se tornou perito em fazer emboscadas e escapar rapidamente do perigo. Você passa a ter dois turnos durante a primeira rodada de qualquer combate: o primeiro, realizado na sua iniciativa normal, e o segundo, na sua iniciativa menos 10. Você não pode usar esta característica ao ser {@status surprised||surpreendido}."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "sorcerer": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Feiticeiro",
+    "subclassTitle": "Origem de Feitiçaria",
     "features": {
       "spellcasting": {
-        "name": "",
+        "name": "Conjuração",
         "description": ""
       },
       "sorcerous-origin": {
-        "name": "",
-        "description": ""
+        "name": "Origem de Feitiçaria",
+        "description": "Escolha uma origem de feitiçaria que indique a fonte do seu poder mágico inato, como a Linhagem Dracônica.\nSua escolha lhe concede características logo no 1° nível e novamente no 6°, 14° e 18° níveis."
       },
       "font-of-magic": {
-        "name": "",
-        "description": ""
+        "name": "Fonte de Magia",
+        "description": "No 2° nível, sua magia passa a se alimentar de uma profunda fonte dentro de você. Essa fonte é representada por pontos de feitiçaria, que lhe permitem criar uma variedade de efeitos mágicos.\nPontos de Feitiçaria. Você tem 2 pontos de feitiçaria, ganhando mais pontos conforme atinge níveis mais altos. Seu nível de feiticeiro é igual ao número de pontos de feitiçaria que você tem, então um feiticeiro de 4º nível tem 4 pontos de feitiçaria, um feiticeiro de 16º nível tem 16. Você não pode ter mais pontos de feitiçaria do que o mostrado para o seu nível. Você recupera todos os pontos de feitiçaria gastos ao terminar um descanso longo.\nConjuração Flexível. Você pode usar seus pontos de feitiçaria para ganhar espaços de magia adicionais, ou sacrificar espaços de magia para ganhar pontos de feitiçaria adicionais. Você aprende outros modos de usar seus pontos de feitiçaria conforme alcança níveis mais altos.\nCriando Espaços de Magia. Você pode transformar pontos de feitiçaria não gastos em um espaço de magia usando sua ação bônus em seu turno. A tabela Criando Espaços de Magia mostra o custo para a criação de um espaço de magia de determinado círculo. Você não pode criar um espaço de magia superior ao 5° círculo. Qualquer espaço de magia criado com esta característica desaparece ao final de um descanso longo.\nCriando Espaços de Magia\nCírculo do Espaço de Magia | Custo em Pontos de Feitiçaria\n1° | 2\n2° | 3\n3° | 5\n4° | 6\n5° | 7\nConvertendo um Espaço de Magia em Pontos de Feitiçaria. Ao usar sua ação bônus no seu turno, você pode gastar um espaço de magia e ganhar um número de pontos de feitiçaria igual ao círculo do espaço."
       },
       "metamagic-3": {
-        "name": "",
-        "description": ""
+        "name": "Metamagia",
+        "description": "No 3° nível, você ganha a habilidade de distorcer suas magias para que elas se ajustem às suas necessidades. Você ganha duas das opções de Metamagia descritas a seguir, à sua escolha. Outras são adquiridas no 10° e 17° níveis.\nVocê pode usar apenas uma opção de Metamagia por conjuração, a não ser que seja dito o contrário.\n• {@optfeature Careful Spell|PHB|Magia Cautelosa}\n• {@optfeature Distant Spell|PHB|Magia Distante}\n• {@optfeature Empowered Spell|PHB|Magia Potencializada}\n• {@optfeature Extended Spell|PHB|Magia Persistente}\n• {@optfeature Heightened Spell|PHB|Magia Agravada}\n• {@optfeature Quickened Spell|PHB|Magia Acelerada}\n• {@optfeature Subtle Spell|PHB|Magia Sutil}\n• {@optfeature Twinned Spell|PHB|Magia Duplicada}"
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "sorcerous-origin-feature-6": {
-        "name": "",
+        "name": "Característica de Origem de Feitiçaria",
         "description": ""
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "metamagic-10": {
-        "name": "",
+        "name": "Metamagia",
         "description": ""
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "sorcerous-origin-feature-14": {
-        "name": "",
+        "name": "Característica de Origem de Feitiçaria",
         "description": ""
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "metamagic-17": {
-        "name": "",
+        "name": "Metamagia",
         "description": ""
       },
       "sorcerous-origin-feature-18": {
-        "name": "",
+        "name": "Característica de Origem de Feitiçaria",
         "description": ""
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "sorcerous-restoration": {
-        "name": "",
-        "description": ""
+        "name": "Restauração Feiticeira",
+        "description": "No 20° nível você recupera 4 pontos de feitiçaria ao final de um descanso curto."
       }
     },
     "resources": {
       "sorcery-points": {
-        "name": ""
+        "name": "Pontos de Feitiçaria"
       }
     },
     "choices": {
       "metamagic": {
-        "name": ""
+        "name": "Metamagia"
       }
     },
     "subclasses": {
       "draconic": {
-        "name": "",
+        "name": "Linhagem Dracônica",
         "features": {
           "draconic-bloodline": {
-            "name": "",
-            "description": ""
+            "name": "Linhagem Dracônica",
+            "description": "Sua magia inata vem da magia dracônica misturada ao seu sangue ou ao sangue dos seus ancestrais. Geralmente, os feiticeiros com esta origem traçam sua ascendência até algum feiticeiro poderoso de épocas ancestrais, que fez um acordo com um dragão ou pode, de fato, ter sido um descendente direto de um dragão. Algumas dessas linhagens são bem estabelecidas no mundo, mas muitas são obscuras. Qualquer feiticeiro pode ser o primeiro de uma nova linhagem, como resultado de um pacto ou de alguma outra circunstância excepcional.\nAncestral Dragão. No 1° nível, você deve escolher um tipo de dragão como seu ancestral. O tipo de dano associado a cada dragão se expressa nas características que você recebe posteriormente.\nDragão | Tipo de Dano\nNegro | {@filter Corrosivo|spells|damage type=acid|class=sorcerer}\nAzul | {@filter Elétrico|spells|damage type=lightning|class=sorcerer}\nLatão | {@filter Ígneo|spells|damage type=fire|class=sorcerer}\nBronze | {@filter Elétrico|spells|damage type=lightning|class=sorcerer}\nCobre | {@filter Corrosivo|spells|damage type=acid|class=sorcerer}\nOuro | {@filter Ígneo|spells|damage type=fire|class=sorcerer}\nVerde | {@filter Venenoso|spells|damage type=poison|class=sorcerer}\nVermelho | {@filter Ígneo|spells|damage type=fire|class=sorcerer}\nPrata | {@filter Gélido|spells|damage type=cold|class=sorcerer}\nBranco | {@filter Gélido|spells|damage type=cold|class=sorcerer}\nVocê pode falar, ler e escrever {@language Draconic||Dracônico}. Além disso, sempre que realizar um teste de Carisma para interagir com dragões, dobre o seu bônus de proficiência, caso aplicável.\nResiliência Dracônica. Conforme a magia flui através de seu corpo, ela faz com que traços físicos dos seus ancestrais dragões aflorem. No 1° nível, seus pontos de vida máximos aumentam em 1, e novamente em 1 sempre que você ganhar um nível nesta classe.\nAlém disso, partes da sua pele são cobertas por finas escamas reluzentes, semelhantes às de um dragão. Quando não estiver usando armadura, sua CA passa a ser igual a 13 + seu modificador de Destreza."
           },
           "elemental-affinity": {
-            "name": "",
-            "description": ""
+            "name": "Afinidade Elemental",
+            "description": "A partir do 6° nível, ao conjurar uma magia que cause dano do tipo associado com a sua ancestralidade dracônica, você pode adicionar seu modificador de Carisma a uma jogada de dano com essa magia. Ao mesmo tempo, pode gastar 1 ponto de feitiçaria para ganhar resistência contra aquele tipo de dano durante 1 hora."
           },
           "dragon-wings": {
-            "name": "",
-            "description": ""
+            "name": "Asas de Dragão",
+            "description": "No 14° nível, você adquire a habilidade de brotar um par de asas de dragão das suas costas, ganhando deslocamento de voo igual ao seu deslocamento atual. Você pode criar essas asas com uma ação bônus, no seu turno. Elas duram até que você as dissipe, com uma ação bônus no seu turno.\nVocê não pode manifestar suas asas quando estiver vestindo uma armadura, a não ser que a armadura seja feita para acomodá-las, e roupas que não forem feitas para se acomodar às suas asas devem ser destruídas quando você manifestá-las."
           },
           "draconic-presence": {
-            "name": "",
-            "description": ""
+            "name": "Presença Dracônica",
+            "description": "Começando no 18° nível, você pode canalizar a presença assustadora do seu ancestral dragão, fazendo com que aqueles que estejam ao seu redor fiquem impressionados ou {@condition frightened||amedrontados}. Com uma ação, você pode gastar 5 pontos de feitiçaria para utilizar este poder, e emanar uma aura de reverência ou medo (à sua escolha) a uma distância de até 18 metros. Durante 1 minuto, ou até que você perca a {@status concentration||concentração} (como se estivesse conjurando uma magia que exija {@status concentration||concentração}), cada criatura hostil que começar o turno dela dentro do raio de ação desta aura, deve ser bem-sucedida em uma salvaguarda de Sabedoria, ou será {@condition charmed||enfeitiçada} (se você escolheu reverência) ou {@condition frightened||amedrontada} (se você escolheu medo) até a aura acabar. Uma criatura que seja bem-sucedida nessa salvaguarda fica imune a sua aura por 24 horas."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "warlock": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Bruxo",
+    "subclassTitle": "Patrono Sobrenatural",
     "features": {
       "pact-magic": {
-        "name": "",
+        "name": "Magia de Pacto",
         "description": ""
       },
       "otherworldly-patron": {
-        "name": "",
-        "description": ""
+        "name": "Patrono Sobrenatural",
+        "description": "No 1° nível, você fez uma barganha com uma entidade sobrenatural como o Ínfero. Sua escolha lhe concede características no 1° nível e novamente no 6°, 10° e 14° níveis."
       },
       "eldritch-invocations": {
-        "name": "",
+        "name": "Invocações Místicas",
         "description": ""
       },
       "pact-boon": {
-        "name": "",
-        "description": ""
+        "name": "Dádiva do Pacto",
+        "description": "No 3° nível seu patrono transcendental lhe concede uma dádiva pelos seus serviços leais. Você ganha uma das seguintes características, à sua escolha.\n• {@optfeature Pact of the Chain|PHB|Pacto da Corrente}\n• {@optfeature Pact of the Blade|PHB|Pacto da Lâmina}\n• {@optfeature Pact of the Tome|PHB|Pacto do Tomo}"
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "otherworldly-patron-feature-6": {
-        "name": "",
+        "name": "Característica de Patrono Sobrenatural",
         "description": ""
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "otherworldly-patron-feature-10": {
-        "name": "",
+        "name": "Característica de Patrono Sobrenatural",
         "description": ""
       },
       "mystic-arcanum-6th-level": {
-        "name": "",
-        "description": ""
+        "name": "Arcana Mística (6° círculo)",
+        "description": "No 11° nível seu patrono lhe revela um segredo mágico chamado arcana: uma {@filter magia de 6° círculo da lista de magias do bruxo|spells|level=6|class=Warlock} à sua escolha.\nVocê pode conjurar sua magia arcana uma vez sem gastar um espaço de magia. Você deve terminar um descanso longo antes de poder fazer isso novamente.\nEm níveis mais altos, você ganha mais magias de bruxo que podem ser conjuradas dessa maneira: uma de 7° círculo, à sua escolha, no 13° nível; uma de 8° círculo no 15° nível e uma de 9° círculo no 17° nível. Você recupera todos os usos da sua Arcana Mística ao terminar um descanso longo."
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "mystic-arcanum-7th-level": {
-        "name": "",
+        "name": "Arcana Mística (7° círculo)",
         "description": ""
       },
       "otherworldly-patron-feature-14": {
-        "name": "",
+        "name": "Característica de Patrono Sobrenatural",
         "description": ""
       },
       "mystic-arcanum-8th-level": {
-        "name": "",
+        "name": "Arcana Mística (8° círculo)",
         "description": ""
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "mystic-arcanum-9th-level": {
-        "name": "",
+        "name": "Arcana Mística (9° círculo)",
         "description": ""
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "eldritch-master": {
-        "name": "",
-        "description": ""
+        "name": "Mestre Místico",
+        "description": "No 20° nível você pode recarregar sua reserva de poder místico ao pedir ao seu patrono a recuperação dos espaços de magia gastos. Você deve gastar 1 minuto suplicando ao seu patrono por ajuda para recuperar todos os seus espaços de magia gastos da sua característica Magia de Pacto. Uma vez que tenha recuperado espaços de magia com esta característica, você precisa finalizar um descanso longo antes de poder usá-la novamente."
       }
     },
     "resources": {
@@ -1353,153 +1339,152 @@
         "name": ""
       },
       "mystic-arcanum-6": {
-        "name": ""
+        "name": "Arcana Mística (6° círculo)"
       },
       "mystic-arcanum-7": {
-        "name": ""
+        "name": "Arcana Mística (7° círculo)"
       },
       "mystic-arcanum-8": {
-        "name": ""
+        "name": "Arcana Mística (8° círculo)"
       },
       "mystic-arcanum-9": {
-        "name": ""
+        "name": "Arcana Mística (9° círculo)"
       },
       "eldritch-master": {
-        "name": ""
+        "name": "Mestre Místico"
       }
     },
     "choices": {
       "eldritch-invocations": {
-        "name": ""
+        "name": "Invocações Místicas"
       },
       "pact-boon": {
-        "name": ""
+        "name": "Dádiva do Pacto"
       }
     },
     "subclasses": {
       "fiend": {
-        "name": "",
+        "name": "O Ínfero",
         "features": {
           "the-fiend": {
-            "name": "",
+            "name": "O Ínfero",
             "description": ""
           },
           "dark-one-s-own-luck": {
-            "name": "",
-            "description": ""
+            "name": "A Sorte do Próprio Tenebroso",
+            "description": "A partir do 6° nível, você pode chamar seu patrono para que ele altere o destino a seu favor. Ao realizar um teste de atributo ou salvaguarda, você pode usar esta característica para adicionar {@dice d10} à sua jogada. Isso pode ser feito após a jogada inicial, porém antes de ela surtir efeito.\nUma vez usada esta característica, ela não pode ser usada novamente até que você complete um período de descanso curto ou longo."
           },
           "fiendish-resilience": {
-            "name": "",
-            "description": ""
+            "name": "Resistência Ínfera",
+            "description": "A partir do 10° nível, ao terminar um período de descanso curto ou longo, você pode escolher um tipo de dano, contra o qual ganha resistência até escolher outro tipo, usando novamente esta característica. Dano causado por armas mágicas ou de prata ignoram esta resistência."
           },
           "hurl-through-hell": {
-            "name": "",
-            "description": ""
+            "name": "Lançar no Inferno",
+            "description": "A partir do 14° nível, ao atingir uma criatura com um ataque, você pode usar esta característica para transportá-la instantaneamente para os planos inferiores. A criatura desaparece e é lançada numa paisagem de pesadelos.\nNo final do seu próximo turno, o alvo retorna para o espaço que ocupava anteriormente ou para o espaço desocupado mais próximo. Se não se tratava de um ínfero, o alvo sofre {@damage 10d10} pontos de dano psíquico, por conta da experiência aterrorizante.\nUma vez usada esta característica, você só pode utilizá-la novamente após completar um descanso longo."
           }
         },
         "resources": {
           "dark-one-s-own-luck": {
-            "name": ""
+            "name": "A Sorte do Próprio Tenebroso"
           },
           "hurl-through-hell": {
-            "name": ""
+            "name": "Lançar no Inferno"
           }
         }
       }
     }
   },
   "wizard": {
-    "name": "",
-    "subclassTitle": "",
+    "name": "Mago",
+    "subclassTitle": "Tradição Arcana",
     "features": {
       "arcane-recovery": {
-        "name": "",
-        "description": ""
+        "name": "Recuperação Arcana",
+        "description": "Você aprendeu a recuperar sua energia mágica ao estudar seu livro de magias. Uma vez por dia, ao fim de um descanso curto, você pode recuperar espaços de magia gastos. Esses espaços devem ter um círculo combinado que equivale a menos da metade do seu nível de mago (arredondado para cima) e nenhum deles pode ser de 6° círculo ou superior.\nPor exemplo, caso você seja um mago de 4° nível, pode recuperar até dois espaços de magia. Você pode recuperar um espaço de magia de 2° círculo ou dois espaços de magia de 1° círculo."
       },
       "spellcasting": {
-        "name": "",
+        "name": "Conjuração",
         "description": ""
       },
       "arcane-tradition": {
-        "name": "",
-        "description": ""
+        "name": "Tradição Arcana",
+        "description": "Ao alcançar o 2° nível, você precisa escolher uma tradição arcana, moldando sua prática de magia por meio de uma das oito escolas, como Evocação. Sua escolha lhe confere características no 2°, 6°, 10° e 14° níveis."
       },
       "ability-score-improvement-4": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "arcane-tradition-feature-6": {
-        "name": "",
+        "name": "Característica de Tradição Arcana",
         "description": ""
       },
       "ability-score-improvement-8": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "arcane-tradition-feature-10": {
-        "name": "",
+        "name": "Característica de Tradição Arcana",
         "description": ""
       },
       "ability-score-improvement-12": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "arcane-tradition-feature-14": {
-        "name": "",
+        "name": "Característica de Tradição Arcana",
         "description": ""
       },
       "ability-score-improvement-16": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "spell-mastery": {
-        "name": "",
-        "description": ""
+        "name": "Maestria de Magias",
+        "description": "No 18º nível, você alcança domínio suficiente sobre determinadas magias a ponto de poder conjurá-las à vontade. Escolha uma magia de 1º e uma de 2º círculo que estejam no seu grimório. Quando as tiver preparadas, poderá conjurá-las em seu círculo mais baixo sem gastar nenhum espaço de magia. Se quiser fazê-lo em círculos mais altos, precisa gastar um espaço de magia, como de costume.\nAo passar 8 horas estudando, você pode trocar uma ou ambas as magias que escolheu por magias diferentes do mesmo círculo."
       },
       "ability-score-improvement-19": {
-        "name": "",
+        "name": "Aumento no Valor de Atributo",
         "description": ""
       },
       "signature-spells": {
-        "name": "",
-        "description": ""
+        "name": "Assinatura Mágica",
+        "description": "Ao alcançar o 20° nível, você ganha o domínio de mais duas magias poderosas, que podem ser conjuradas com pouco esforço. Escolha duas magias de mago de 3° círculo em seu grimório como suas assinaturas mágicas. Essas magias estão sempre preparadas, não contam para o seu número de magias preparadas e, no 3° nível, podem ser conjuradas uma vez cada, sem o gasto de um espaço de magia, tornando a ficar disponíveis após um descanso curto ou longo.\nCaso queira conjurar essas magias em um círculo mais alto, precisará gastar um espaço de magia, como de costume."
       }
     },
     "resources": {
       "arcane-recovery": {
-        "name": "",
+        "name": "Recuperação Arcana",
         "note": ""
       },
       "signature-spells": {
-        "name": "",
+        "name": "Assinatura Mágica",
         "note": ""
       }
     },
-    "choices": {},
     "subclasses": {
       "evocation": {
-        "name": "",
+        "name": "Escola de Evocação",
         "features": {
           "school-of-evocation": {
-            "name": "",
+            "name": "Escola de Evocação",
             "description": ""
           },
           "potent-cantrip": {
-            "name": "",
-            "description": ""
+            "name": "Truque Potente",
+            "description": "A partir do 6° nível, o dano dos seus truques afeta criaturas mesmo que elas possam evitá-lo. Quando uma criatura é bem-sucedida em uma salvaguarda contra um truque seu, ela sofre metade do dano (se houver), mas não sofre nenhum dos efeitos adicionais."
           },
           "empowered-evocation": {
-            "name": "",
-            "description": ""
+            "name": "Evocação Potencializada",
+            "description": "A partir do 10º nível, você pode adicionar seu modificador de Inteligência no resultado das jogadas de dano de qualquer magia de evocação de mago que você conjurar."
           },
           "overchannel": {
-            "name": "",
-            "description": ""
+            "name": "Sobrecarga",
+            "description": "A partir do 14º nível, você pode aumentar o poder de suas magias mais simples. Ao conjurar uma magia de mago de 1º ao 5º círculo que cause dano, você pode causar dano máximo.\nAo fazê-lo pela primeira vez, você não sofre nenhum efeito adverso. Se usar esta característica novamente antes de um descanso longo, sofrerá {@damage 2d12} pontos de dano necrótico para cada círculo da magia, imediatamente após conjurá-la. Cada vez que você voltar a usar esta característica antes de um descanso longo, o dano necrótico por círculo da magia aumenta em {@damage 1d12}. Esse dano ignora resistência e imunidade."
           }
         },
         "resources": {
           "overchannel": {
-            "name": "",
+            "name": "Sobrecarga",
             "note": ""
           }
         }

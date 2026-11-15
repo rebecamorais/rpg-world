@@ -18,11 +18,11 @@ describe('FileClassCatalog (SRD)', () => {
     expect(ki?.description).toBe(en51.monk.features.ki.description);
   });
 
-  it('pt vazio cai no inglês nos textos do Ki', () => {
-    const en = catalog.resources('2014', 'monk', 'en')?.resources.find((r) => r.id === 'ki');
+  // Traduzido ou não (o vazio cai no inglês, ver "textos traduzidos"), o Ki em pt sempre tem texto
+  it('monk 2014 em português traz nome e descrição do Ki', () => {
     const pt = catalog.resources('2014', 'monk', 'pt')?.resources.find((r) => r.id === 'ki');
-    expect(pt?.name).toBe(en?.name);
-    expect(pt?.description).toBe(en?.description);
+    expect(pt?.name).toBeTruthy();
+    expect(pt?.description).toBeTruthy();
   });
 
   it('barbarian 2024 tem a subclasse berserker', () => {
