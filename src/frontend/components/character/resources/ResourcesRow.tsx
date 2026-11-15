@@ -27,19 +27,26 @@ export function useResourcesRowVisible(): boolean {
   return useRowKind().kind !== null;
 }
 
-/** Under the header: the class resources (or the edition card) beside the death saves. */
+/**
+ * Under the header: the death saves on the left, as wide as the saving throws' column below them
+ * on desktop, and the class resources (or the edition card) taking the rest. On phones the
+ * resources come first: they are what changes during play.
+ */
 export function ResourcesRow() {
   const { kind, boxes, classId } = useRowKind();
   if (!kind) return null;
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+    // Same columns and gap as the grid under it (StatusView), so the two line up
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-[280px_minmax(0,1fr)]">
       {kind === 'edition' && classId ? (
         <EditionCard classId={classId} />
       ) : (
         <ResourcesCard boxes={boxes} />
       )}
-      <DeathSavesCard />
+      <div className="md:order-first">
+        <DeathSavesCard />
+      </div>
     </div>
   );
 }
