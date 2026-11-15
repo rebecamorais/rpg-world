@@ -40,7 +40,9 @@ export const EFFECTS = {
   // Bludgeoning: cracks radiating from a point of impact, with facets and chips (the owner's drawing)
   'impact-fractures': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
   impact: { parts: 'fx', enter: 'flash', ripple: ['round', 2] },
-  // Acid: an acid film on the top edge, effervescent bubbles and corrosion pits (the owner's drawing)
+  // Acid: corroded pits and etched rings with a few bubbles, a film on the top edge (the owner's drawing, v3)
+  'acid-etching': { parts: 'art', enter: 'fade', ripple: ['splash', 3] },
+  // Acid, v2: an acid film on the top edge, effervescent bubbles and corrosion pits (the owner's drawing)
   'acid-effervescence': { parts: 'art', enter: 'fade', ripple: ['splash', 3] },
   drips: { parts: 'glow+icons', enter: 'fade', ripple: ['splash', 3] },
   // Cold: faceted ice glass and a six-armed crystal on the right (the owner's drawing)

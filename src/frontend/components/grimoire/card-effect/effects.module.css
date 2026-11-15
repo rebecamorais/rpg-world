@@ -410,7 +410,12 @@
       transparent 90%
     );
 }
-/* Acid: like thunder, the effervescence stretched over the whole card (the SVG cropped to where it
+/* Acid: like the cold crystal, the etching keeps its shape, filling the card's height from the top
+   right (EffectArt's FIT, the SVG cropped to the drawing) */
+.art[data-art='acid-etching'] {
+  height: 100%;
+}
+/* Acid, v2: like thunder, the effervescence stretched over the whole card (the SVG cropped to where it
    is). Its own shapes are already see-through, so it keeps full strength */
 .art[data-art='acid-effervescence'] {
   height: 100%;
