@@ -1,13 +1,12 @@
 'use client';
 
-import Link from 'next/link';
-
 import { useTranslations } from 'next-intl';
 
 import { UsePips } from '@frontend/components/character/stats/UsePips';
 import { Card } from '@frontend/components/ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '@frontend/components/ui/popover';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import AppLink from '@frontend/demo/AppLink';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { setResourceUsed } from '@frontend/lib/character-sheet-updates';
 
@@ -21,19 +20,19 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
   const t = useTranslations('classResources');
   const character = useLoadedCharacter();
   const { saveNow } = useCharacterActions();
-  const { readOnly, pagesPath } = useSheetSource(character.id);
+  const { readOnly, pagesPath } = useSheetSource(character.id, character.system);
 
   return (
     <Card id="sheet-resources" className="bg-background/60 flex flex-col gap-3 p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <h2 className="text-label text-muted-foreground">{t('title')}</h2>
         {!readOnly && (
-          <Link
+          <AppLink
             href={`${pagesPath}/appearance#class-resources`}
-            className="text-caption text-character-flare focus-ring rounded-sm underline"
+            className="text-caption text-character-flare focus-ring inline-flex items-center rounded-sm underline pointer-coarse:min-h-11"
           >
             {t('edit')}
-          </Link>
+          </AppLink>
         )}
       </div>
 
@@ -45,7 +44,7 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="focus-ring text-sm font-semibold underline decoration-dotted underline-offset-4"
+                    className="focus-ring inline-flex items-center text-sm font-semibold underline decoration-dotted underline-offset-4 pointer-coarse:min-h-11"
                   >
                     {box.name}
                   </button>

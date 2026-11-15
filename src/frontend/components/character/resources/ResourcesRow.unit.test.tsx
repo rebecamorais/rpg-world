@@ -109,6 +109,7 @@ describe('ResourcesRow', () => {
     renderWithCharacter(<ResourcesRow />, sheet({ class: 'monk', level: 5, edition: '2014' }));
 
     expect(screen.queryByRole('heading', { name: tRes.title })).not.toBeInTheDocument();
+    expect(deathSaves()).not.toBeInTheDocument();
   });
 
   it('sem edição mostra o cartão da edição e escolher salva a edição', async () => {
@@ -141,11 +142,14 @@ describe('ResourcesRow', () => {
   });
 
   it('"editar" leva às configurações da ficha', () => {
-    renderWithCharacter(<ResourcesRow />, sheet({ class: 'monk', level: 5, edition: '2014' }));
+    renderWithCharacter(
+      <ResourcesRow />,
+      sheet({ class: 'monk', level: 5, edition: '2014', system: 'DnD_5e' }),
+    );
 
     expect(screen.getByRole('link', { name: tRes.edit })).toHaveAttribute(
       'href',
-      '/system/undefined/character/c1/appearance#class-resources',
+      '/system/DnD_5e/character/c1/appearance#class-resources',
     );
   });
 });

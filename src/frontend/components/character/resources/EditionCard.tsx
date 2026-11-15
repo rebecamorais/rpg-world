@@ -6,9 +6,7 @@ import { Button } from '@frontend/components/ui/button';
 import { Card } from '@frontend/components/ui/card';
 import { useCharacterActions } from '@frontend/context/CharacterContext';
 
-import type { Edition } from '@shared/systems/dnd5e/content/editions';
-
-const EDITIONS: Edition[] = ['2014', '2024'];
+import { EDITIONS } from '@shared/systems/dnd5e/content/editions';
 
 /** Offered to sheets with no edition yet: choosing one unlocks the class resources. */
 export function EditionCard() {
