@@ -173,12 +173,23 @@ Os tempos estão em ms.
 
 ## Efeitos desenhados pela dona (15/11)
 
-A dona desenhou dois efeitos novos em SVG e pediu que entrassem na biblioteca. Os dois seguem as regras do Grimório: cor da magia (`--grimoire-tint`), só no card aberto e parados depois de aparecer. Os efeitos antigos desses tipos (`sunlight` e `shockwave`) continuam no catálogo, para comparar.
+A dona desenhou efeitos novos em SVG e pediu que entrassem na biblioteca. Os dois seguem as regras do Grimório: cor da magia (`--grimoire-tint`), só no card aberto e parados depois de aparecer. Os efeitos antigos desses tipos (`sunlight`, `shockwave` e `echo`) continuam no catálogo, para comparar.
 
-| Efeito         | Tipo de dano | Como foi feito                                                                                                                                                                                                                                                                                                 |
-| -------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sunburst`     | Radiante     | Só CSS: raios longos alternados, num `repeating-conic-gradient`, saindo de um ponto logo acima da borda a 68% da largura, com um halo na origem. As máscaras apagam os raios para longe da origem e de cima para baixo, até no máximo 150 px do topo, para não chegar às regras no card alto do celular.       |
-| `arcane-paths` | Força        | A geometria do SVG estático da dona (32 trilhas finas, 3 trilhas de energia, 3 pontos de energia e poeira) redesenhada em `ArcanePaths.tsx` como SVG inline, em quatro tons da cor da magia. Fica no canto de cima à direita, com no máximo 168 px de altura, e some em direção ao título e no terço de baixo. |
+**Como entra um desenho novo:** a dona manda o SVG estático, de 740x168, e ele vai para `docs/grimoire-enchantments/effects-art/<id>.svg`. Depois:
+
+1. `npx tsx scripts/grimoire-svg-effect.ts docs/grimoire-enchantments/effects-art/<id>.svg <id>` gera `src/frontend/components/grimoire/card-effect/art/<id>.ts`. O script troca cada cor fixa por um de quatro tons da cor da magia, pela luminosidade. Também dá a cada card os seus próprios ids de gradiente e tira do desenho a máscara, o título e qualquer animação.
+2. O efeito entra em `EFFECTS` (`types.ts`) com `parts: 'art'`.
+3. A máscara do desenho vira CSS em `effects.module.css` (`.art[data-art='<id>']`), para acompanhar o tamanho do card.
+4. O mapa do sistema (`grimoire-effects.ts`) liga o tipo ao efeito.
+5. Se o nome do efeito também for o nome de um ícone de jogo (como `resonance`), rode `npm run icons`: o teste do sprite lê todo texto entre aspas do código.
+
+O teste `types.unit.test.ts` confere que todo efeito `art` tem desenho e que nenhum desenho ficou com cor fixa.
+
+| Efeito         | Tipo de dano | Como foi feito                                                                                                                                                                                                                                                                                                                    |
+| -------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sunburst`     | Radiante     | Só CSS: raios longos alternados, num `repeating-conic-gradient`, saindo de um ponto logo acima da borda a 68% da largura, com um halo na origem. As máscaras apagam os raios para longe da origem e de cima para baixo, até no máximo 150 px do topo, para não chegar às regras no card alto do celular.                          |
+| `arcane-paths` | Força        | A geometria do SVG estático da dona (32 trilhas finas, 3 trilhas de energia, 3 pontos de energia e poeira) convertida em desenho de efeito (`art/arcane-paths.ts`, ver abaixo), em quatro tons da cor da magia. Fica no canto de cima à direita, com no máximo 168 px de altura, e some em direção ao título e no terço de baixo. |
+| `resonance`    | Psíquico     | O SVG estático da dona com contornos de onda de pensamento em volta de um ponto focal à direita, com traços pontilhados e poeira. Usa as mesmas máscaras do original: começa a 42% da largura e some antes de 93% da altura.                                                                                                      |
 
 **Decisões da dona:**
 
