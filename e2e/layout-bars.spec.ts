@@ -142,6 +142,7 @@ test('a ficha no painel lateral da mesa não estoura o card de combate', async (
   const header = panel.locator('#sheet-hit-dice').locator('xpath=../..');
   await expectNoOverflow(header.locator('.text-label'));
   await expectNoOverflow(header.locator('.font-mono'));
-  await expectInside(panel.getByRole('button', { name: 'Lose 1 HP' }), hp);
+  // Read-only: no −/+ (the GM can't change it); the HP number still fits in its card
+  await expectNoOverflow(hp.locator('.font-mono'));
   await player.context.close();
 });

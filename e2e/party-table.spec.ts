@@ -33,7 +33,7 @@ test.describe('aba Mesa: retorno, vazios e lista de mesas', () => {
 
     await page.goto(partyUrl(partyId));
     // The tab names itself in the document title, like Combat, Journal and Chest
-    await expect(page).toHaveTitle(/Mesa dos Pedidos · Table/);
+    await expect(page).toHaveTitle(/Mesa dos Pedidos · Party/);
 
     // Ana's approval held on the way: Bia's row stays usable meanwhile
     let release = () => {};
