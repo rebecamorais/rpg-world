@@ -8,6 +8,9 @@ import styles from './effects.module.css';
  * colours are tones of the host's tint and its fade is CSS. The markup is our own generated
  * constant, never user content; the prefix keeps each card's gradient ids unique.
  */
+/** Drawings that stretch over the whole card instead of sitting as a banner on its top edge. */
+const FULL_CARD: ReadonlySet<ArtName> = new Set(['thunder-soundwaves']);
+
 export function EffectArt({ name }: { name: ArtName }) {
   const prefix = useId().replace(/[^\w-]/g, '');
   const { viewBox, markup } = ART[name];
@@ -16,7 +19,7 @@ export function EffectArt({ name }: { name: ArtName }) {
       className={styles.art}
       data-art={name}
       viewBox={viewBox}
-      preserveAspectRatio="xMaxYMin slice"
+      preserveAspectRatio={FULL_CARD.has(name) ? 'none' : 'xMaxYMin slice'}
       fill="none"
       focusable="false"
       dangerouslySetInnerHTML={{ __html: markup.replaceAll('__ID__', prefix) }}
