@@ -75,6 +75,9 @@ export function EffectLayers({ effect }: { effect: EffectId }) {
   );
 }
 
+/** The class for the reading text under an effect: a see-through veil with a fine dot grain. */
+export const effectTextBackdrop = styles.textBackdrop;
+
 /** The same layers in the shape a card takes as a prop. Build once per id (stable for memo). */
 export function cardEffect(id: EffectId): CardEffect {
   return { id, layers: () => <EffectLayers effect={id} /> };

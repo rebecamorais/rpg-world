@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 
+import { effectTextBackdrop } from '@frontend/components/grimoire/card-effect/CardEffect';
 import type { CardEffect } from '@frontend/components/grimoire/card-effect/types';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useIsSpellPending } from '@frontend/hooks/useCharacterSpells';
@@ -142,7 +143,10 @@ export const SpellCard = React.memo(function SpellCard({
               {effect ? (
                 // A backdrop for the rules text, so the effect never gets in the way of reading it;
                 // the negative margin keeps the text in line with the header
-                <div data-grimoire-backdrop="" className="bg-card/80 -mx-3 rounded-lg px-3 py-2.5">
+                <div
+                  data-grimoire-backdrop=""
+                  className={cn(effectTextBackdrop, '-mx-3 px-3 py-2.5')}
+                >
                   <SpellDetails spell={spell} castingTime={displayValues.castingTime} />
                 </div>
               ) : (

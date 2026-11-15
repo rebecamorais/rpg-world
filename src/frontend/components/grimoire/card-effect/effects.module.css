@@ -725,8 +725,51 @@
   }
 }
 
+/* ---------- The text's backdrop ----------
+   Under an effect, the host puts its reading text (a spell's rules) on this: a see-through veil of
+   the card's own colour with a fine dot grain in the tint, its edges fading out (no hard box). It
+   all sits on ::before, behind the text, so the mask never touches the letters. No blur. */
+.textBackdrop {
+  position: relative;
+  isolation: isolate;
+}
+.textBackdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 0.75rem;
+  background:
+    radial-gradient(
+        color-mix(in oklab, var(--grimoire-tint, currentColor), transparent 55%) 0.75px,
+        transparent 1.25px
+      )
+      0 0 / 9px 9px,
+    color-mix(in srgb, var(--card), transparent 45%);
+  /* Soft edges on every side, but full strength across the text */
+  mask-image:
+    linear-gradient(to right, transparent, #000 4%, #000 96%, transparent),
+    linear-gradient(to bottom, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+  mask-composite: intersect;
+}
+:global(:root[data-theme='light']) .textBackdrop::before {
+  background:
+    radial-gradient(
+        color-mix(
+            in oklab,
+            color-mix(in oklab, var(--grimoire-tint, currentColor), black 20%),
+            transparent 45%
+          )
+          0.75px,
+        transparent 1.25px
+      )
+      0 0 / 9px 9px,
+    color-mix(in srgb, var(--card), transparent 35%);
+}
+
 @media (forced-colors: active) {
-  .layer {
+  .layer,
+  .textBackdrop::before {
     display: none;
   }
 }
