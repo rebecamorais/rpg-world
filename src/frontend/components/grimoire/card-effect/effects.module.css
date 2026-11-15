@@ -426,6 +426,13 @@
   height: 100%;
   opacity: calc(var(--k) * 0.35);
 }
+/* Bludgeoning: like thunder, the cracks stretched over the whole card (the SVG cropped to where
+   they are), with the point of impact on the right; the bright cracks cross the text, so like
+   lightning it sits at under half strength */
+.art[data-art='impact-fractures'] {
+  height: 100%;
+  opacity: calc(var(--k) * 0.45);
+}
 /* Lightning: like thunder, the drawing over the whole card, with a glow of the spell's colour
    where the bolt strikes (top right) and along its path down to the left */
 .art[data-art='lightning-branches'] {

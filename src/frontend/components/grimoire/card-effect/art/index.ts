@@ -3,6 +3,7 @@ import { art as acidBubbles } from './acid-bubbles';
 import { art as arcanePaths } from './arcane-paths';
 import { art as flameRibbons } from './flame-ribbons';
 import { art as frostCrystals } from './frost-crystals';
+import { art as impactFractures } from './impact-fractures';
 import { art as lightningBranches } from './lightning-branches';
 import { art as resonance } from './resonance';
 import { art as slashingSlashMarks } from './slashing-slash-marks';
@@ -14,6 +15,7 @@ export const ART = {
   'arcane-paths': arcanePaths,
   'flame-ribbons': flameRibbons,
   'frost-crystals': frostCrystals,
+  'impact-fractures': impactFractures,
   'lightning-branches': lightningBranches,
   resonance: resonance,
   'slashing-slash-marks': slashingSlashMarks,

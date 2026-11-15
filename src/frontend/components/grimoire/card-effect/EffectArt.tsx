@@ -11,6 +11,7 @@ import styles from './effects.module.css';
 /** Drawings that stretch over the whole card instead of sitting as a banner on its top edge. */
 const FULL_CARD: ReadonlySet<ArtName> = new Set([
   'acid-bubbles',
+  'impact-fractures',
   'lightning-branches',
   'slashing-slash-marks',
   'thunder-soundwaves',

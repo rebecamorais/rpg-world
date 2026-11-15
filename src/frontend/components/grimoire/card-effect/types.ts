@@ -35,6 +35,8 @@ export const EFFECTS = {
   // Force: fine floating trails and energy points on the right, static
   'arcane-paths': { parts: 'art', enter: 'fade', ripple: ['thick', 2] },
   shockwave: { parts: 'fx', enter: 'grow', ripple: ['thick', 2] },
+  // Bludgeoning: cracks radiating from a point of impact, with facets and chips (the owner's drawing)
+  'impact-fractures': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
   impact: { parts: 'fx', enter: 'flash', ripple: ['round', 2] },
   // Acid: slime dripping from the top edge and a bubbling pool in the bottom right (the owner's drawing)
   'acid-bubbles': { parts: 'art', enter: 'fade', ripple: ['splash', 3] },
