@@ -314,6 +314,16 @@ A exploração está **concluída** como estudo técnico. O PR continua como ras
 - Medir num Android real.
 - Decidir **onde** os materiais aparecem no spellbook: no card aberto, nos preparados ou em todos.
 
+## Tema claro: revisão (15/11)
+
+A dona viu os materiais no tema claro e pediu ajustes:
+
+- **Glacial Glass:** a base virou quase branca, com reflexos brancos, a borda tingida e uma linha clara em cima e outra mais escura embaixo, que dão a espessura. A geada virou cristais brancos, só nas bordas. Antes eram linhas tingidas, que pareciam uma tela de arame.
+- **Alchemical Corrosion:** as gotas e as bolhas ganharam um tom mais escuro da cor da magia, e a superfície ganhou um brilho úmido e uma poça mais forte.
+- **Crypt Stone e Divine Parchment:** destoavam dos outros por causa do "preto de fundo". As texturas de ruído preto (granulado, manchas e fibras) viravam uma película cinza suja no fundo claro. A pedra virou uma pedra clara tingida, e o pergaminho, um velino claro. As texturas continuam por baixo de um véu claro, a vinheta ficou só um toque, e as rachaduras da pedra seguem a cor da magia.
+
+O tema escuro não mudou.
+
 ## Efeitos do card aberto (15/11)
 
 Os 21 efeitos por tipo usam o mesmo laboratório (`/dev/grimoire`) e o mesmo benchmark, com cenários `fx:<id>`. Foram medidos em duas rodadas: [card-effects-bench-round1.json](card-effects-bench-round1.json) e [card-effects-bench-round2.json](card-effects-bench-round2.json).

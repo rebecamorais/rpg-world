@@ -171,6 +171,37 @@ Os tempos estão em ms.
 2. **Todos custam a mesma faixa:** de 25 a 45 ms a mais de estilo, de 30 a 70 ms a mais de pintura e de 25 a 85 ms a mais de raster, uma vez, na abertura.
 3. **Os mais caros no raster** são os que animam o motivo inteiro ao entrar: `embers` (148 ms), `alchemy-circle` (134 ms) e `miasma` (130 ms). Se um dia for preciso cortar, a primeira troca é a entrada deles para `fade`.
 
+## Efeitos desenhados pela dona (15/11)
+
+A dona desenhou dois efeitos novos em SVG e pediu que entrassem na biblioteca. Os dois seguem as regras do Grimório: cor da magia (`--grimoire-tint`), só no card aberto e parados depois de aparecer. Os efeitos antigos desses tipos (`sunlight` e `shockwave`) continuam no catálogo, para comparar.
+
+| Efeito         | Tipo de dano | Como foi feito                                                                                                                                                                                                                                                                                                 |
+| -------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sunburst`     | Radiante     | Só CSS: raios longos alternados, num `repeating-conic-gradient`, saindo de um ponto logo acima da borda a 68% da largura, com um halo na origem. As máscaras apagam os raios para longe da origem e de cima para baixo, até no máximo 150 px do topo, para não chegar às regras no card alto do celular.       |
+| `arcane-paths` | Força        | A geometria do SVG estático da dona (32 trilhas finas, 3 trilhas de energia, 3 pontos de energia e poeira) redesenhada em `ArcanePaths.tsx` como SVG inline, em quatro tons da cor da magia. Fica no canto de cima à direita, com no máximo 168 px de altura, e some em direção ao título e no terço de baixo. |
+
+**Decisões da dona:**
+
+- O Sunburst aparece **só no card aberto**, como os outros efeitos. O pedido original também falava em cards compactos.
+- Os SVGs são **estáticos**. A versão animada do Floating Paths, com o fluxo sem fim, ficou de fora.
+
+**O que mudou em relação aos pedidos:**
+
+- **Cores:** o roxo e o ciano do Floating Paths e o dourado fixo do Sunburst viraram tons da cor da magia. Na Força, que é quase branca, as trilhas ficam prateadas.
+- **Tema claro:** os dois usam tons mais escuros da cor, para aparecer no fundo claro.
+
+**Medição do Sunburst** ([card-effects-bench-sunburst.json](card-effects-bench-sunburst.json), 5 amostras, os dois temas). Mediana ao abrir o card, em ms:
+
+|                     | style | paint | raster | frames > 33 ms |
+| ------------------- | ----- | ----- | ------ | -------------- |
+| Celular, sem efeito | 15    | 55    | 63     | 1              |
+| Celular, `sunlight` | 61    | 117   | 116    | 2              |
+| Celular, `sunburst` | 55    | 98    | 147    | 1              |
+| Desktop, sem efeito | 6     | 17    | 239    | 0              |
+| Desktop, `sunburst` | 16    | 25    | 354    | 0              |
+
+**Leitura:** o Sunburst não aumentou os frames lentos. Ele custa mais raster que o `sunlight`, por causa dos gradientes cônicos com máscara, mas fica na mesma faixa do `embers`. O `arcane-paths` é um SVG parado, pintado uma vez ao abrir.
+
 ## Próximos passos
 
 - ~~Levar a lógica "dano, senão escola" para um mapa no código.~~ Feito: `grimoire-materials.ts` e `grimoire-effects.ts`.
