@@ -22,18 +22,18 @@ A matriz cobre **todas** as características de `content/dnd5e/srd-5.1/classes.j
 
 ### Valem para as 12 classes, em todo nível
 
-| O quê                               | Destino    | Na ficha                                                        |
-| ----------------------------------- | ---------- | --------------------------------------------------------------- |
-| Bônus de proficiência               | automático | Já é derivado do nível.                                         |
-| Dado de vida (tipo)                 | automático | Vem da classe; a quantidade é sempre o nível.                   |
-| Dados de vida restantes             | automático | Já seguem o nível (`setLevel`).                                 |
-| PV máximo no nv 1                   | automático | Máximo do dado + mod. CON, editável.                            |
-| PV máximo nos outros níveis         | escolha    | Pendência "rolar ou média" a cada nível ganho.                  |
-| Mudança do mod. CON                 | escolha    | Pendência "±1 PV por nível" com um toque para aplicar.          |
-| Salvaguardas da classe              | automático | As 2 da classe.                                                 |
-| Armaduras, armas, ferramentas fixas | automático | Lista da classe (campo novo).                                   |
-| Perícias e ferramentas à escolha    | escolha    | N da lista, no onboarding.                                      |
-| Máximo dos espaços de magia         | automático | Pela tabela do tipo de conjurador, em todo nível de conjurador. |
+| O quê                               | Destino    | Na ficha                                                                                                                                           |
+| ----------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bônus de proficiência               | automático | Já é derivado do nível.                                                                                                                            |
+| Dado de vida (tipo)                 | automático | Vem da classe; a quantidade é sempre o nível.                                                                                                      |
+| Dados de vida restantes             | automático | Já seguem o nível (`setLevel`).                                                                                                                    |
+| PV máximo no nv 1                   | automático | Máximo do dado + mod. CON, editável.                                                                                                               |
+| PV máximo nos outros níveis         | escolha    | Pendência "rolar ou média" a cada nível ganho.                                                                                                     |
+| Mudança do mod. CON                 | escolha    | **Uma** pendência, recalculada a cada mudança: (mod. atual − mod. conferido) × nível conferido. Um toque aplica; não há como aplicar duas vezes.   |
+| Salvaguardas da classe              | automático | As 2 da classe.                                                                                                                                    |
+| Armaduras, armas, ferramentas fixas | automático | Lista da classe (campo novo).                                                                                                                      |
+| Perícias e ferramentas à escolha    | escolha    | N da lista, no onboarding.                                                                                                                         |
+| Máximo dos espaços de magia         | automático | Pela tabela do tipo de conjurador, em todo nível de conjurador. Os usados salvos não são cortados quando o máximo desce; só a exibição é limitada. |
 
 **Conferência:** 247 ids de característica classificados, mais os marcadores de subclasse; 93 escolha, 61 automático, 59 fora do escopo, 34 informativo.
 
@@ -63,19 +63,19 @@ Marcadores sem regra própria (apontam para a subclasse): `primal-path`, `path-f
 
 ### Bardo (Colégio do Conhecimento)
 
-| Nv               | Característica                                                                                         | Destino                      | Na ficha                                                                                                                                                                                                             |
-| ---------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1                | Conjuração<br>`spellcasting`                                                                           | automático                   | Atributo CAR; máximo dos espaços pela tabela de conjurador completo; CD e ataque derivados. Truques e magias conhecidas: contagem informativa no Grimório.                                                           |
-| 1, 5, 10, 15, 20 | Inspiração de Bardo (dado, Fonte de Inspiração, Inspiração Superior)<br>`bardic-inspiration` … (6 ids) | automático · caixinha (#177) | Máximo = mod. CAR; dado d6 / d8 / d10 / d12; volta no DC a partir do nv 5.                                                                                                                                           |
-| 2                | Pau pra Toda Obra<br>`jack-of-all-trades`                                                              | automático                   | Metade do PB (arred. pra baixo) em **todo teste de atributo sem PB**: perícias sem proficiência e teste puro de atributo. Iniciativa: nota enquanto ela for número manual. Percepção e intuição passivas: a decidir. |
-| 2, 9, 13, 17     | Canção do Descanso<br>`song-of-rest-d6` … (4 ids)                                                      | informativo                  | Linha no checklist de descanso curto: d6 / d8 / d10 / d12 extra.                                                                                                                                                     |
-| 3                | Colégio do Conhecimento (Proficiências Adicionais, Palavras de Corte)<br>`college-of-lore`             | escolha                      | +3 perícias à escolha. Palavras de Corte gasta a Inspiração (fora do escopo).                                                                                                                                        |
-| 3, 10            | Especialização<br>`expertise-3`, `expertise-10`                                                        | escolha                      | 2 perícias proficientes com PB dobrado, cada vez.                                                                                                                                                                    |
-| 4, 8, 12, 16, 19 | AVA<br>`ability-score-improvement-4` … (5 ids)                                                         | escolha                      | Lembrete pendente até a pessoa aplicar (+2, +1/+1 ou talento). Os atributos continuam manuais.                                                                                                                       |
-| 6                | Contra-Encantamento<br>`countercharm`                                                                  | fora do escopo               | Combate.                                                                                                                                                                                                             |
-| 6                | Segredos Mágicos Adicionais<br>`additional-magical-secrets`                                            | escolha                      | 2 magias de qualquer classe. **Não contam** no limite de conhecidas: entram como fonte adicional no Grimório.                                                                                                        |
-| 10, 14, 18       | Segredos Mágicos<br>`magical-secrets-10` … (3 ids)                                                     | escolha                      | 2 magias de qualquer classe, cada vez. **Já estão** na coluna de conhecidas da tabela do bardo.                                                                                                                      |
-| 14               | Perícia Inigualável<br>`peerless-skill`                                                                | fora do escopo               | Gasta a Inspiração num teste próprio.                                                                                                                                                                                |
+| Nv               | Característica                                                                                         | Destino                      | Na ficha                                                                                                                                                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1                | Conjuração<br>`spellcasting`                                                                           | automático                   | Atributo CAR; máximo dos espaços pela tabela de conjurador completo; CD e ataque derivados. Truques e magias conhecidas: contagem informativa no Grimório.                                                                    |
+| 1, 5, 10, 15, 20 | Inspiração de Bardo (dado, Fonte de Inspiração, Inspiração Superior)<br>`bardic-inspiration` … (6 ids) | automático · caixinha (#177) | Máximo = mod. CAR; dado d6 / d8 / d10 / d12; volta no DC a partir do nv 5.                                                                                                                                                    |
+| 2                | Pau pra Toda Obra<br>`jack-of-all-trades`                                                              | automático                   | Metade do PB (arred. pra baixo) em **todo teste de atributo sem PB**: perícias sem proficiência e teste puro de atributo. Iniciativa: nota enquanto ela for número manual. Percepção e intuição passivas entram (decisão 13). |
+| 2, 9, 13, 17     | Canção do Descanso<br>`song-of-rest-d6` … (4 ids)                                                      | informativo                  | Linha no checklist de descanso curto: d6 / d8 / d10 / d12 extra.                                                                                                                                                              |
+| 3                | Colégio do Conhecimento (Proficiências Adicionais, Palavras de Corte)<br>`college-of-lore`             | escolha                      | +3 perícias à escolha. Palavras de Corte gasta a Inspiração (fora do escopo).                                                                                                                                                 |
+| 3, 10            | Especialização<br>`expertise-3`, `expertise-10`                                                        | escolha                      | 2 perícias proficientes com PB dobrado, cada vez.                                                                                                                                                                             |
+| 4, 8, 12, 16, 19 | AVA<br>`ability-score-improvement-4` … (5 ids)                                                         | escolha                      | Lembrete pendente até a pessoa aplicar (+2, +1/+1 ou talento). Os atributos continuam manuais.                                                                                                                                |
+| 6                | Contra-Encantamento<br>`countercharm`                                                                  | fora do escopo               | Combate.                                                                                                                                                                                                                      |
+| 6                | Segredos Mágicos Adicionais<br>`additional-magical-secrets`                                            | escolha                      | 2 magias de qualquer classe. **Não contam** no limite de conhecidas: entram como fonte adicional no Grimório.                                                                                                                 |
+| 10, 14, 18       | Segredos Mágicos<br>`magical-secrets-10` … (3 ids)                                                     | escolha                      | 2 magias de qualquer classe, cada vez. **Já estão** na coluna de conhecidas da tabela do bardo.                                                                                                                               |
+| 14               | Perícia Inigualável<br>`peerless-skill`                                                                | fora do escopo               | Gasta a Inspiração num teste próprio.                                                                                                                                                                                         |
 
 Marcadores sem regra própria (apontam para a subclasse): `bard-college`, `bard-college-feature-6`, `bard-college-feature-14`.
 
@@ -287,11 +287,20 @@ Campos, ids, padrão + ajuste, e o que acontece com ficha antiga. Sem tela nova.
   - O dado de vida é lido de `1d8`, `5d8` e vazio com o mesmo resultado; a quantidade mostrada é sempre o nível.
   - Ficha sem edição, com edição 2024 ou com classe fora das 12: o motor de 2014 devolve "sem padrão" para tudo.
   - Um ajuste gravado sobrevive a subir nível, descer nível, mudar atributo, trocar de classe e voltar, trocar de edição e voltar.
+  - Os ajustes são **por item**: seguir o SRD na salvaguarda de SAB não muda a de CON; seguir o SRD no 2º círculo não muda o 1º.
+  - "Seguir o SRD" desliga o ajuste e guarda o valor; "usar meu valor de novo" devolve exatamente o número anterior. Só "apagar ajuste" remove.
+  - Nenhum valor de ficha existente muda sem uma ação da pessoa, nem ao abrir, nem ao salvar outro campo.
+  - **Estado salvo x efetivo:** diminuir um máximo não regrava o estado. Descer de nível e voltar, sem tocar em nada, devolve usos, espaços usados e dados de vida idênticos.
 - **Testes de regressão**
   - Unidade: leitura do dado de vida legado (`hitDieSides`) e `setLevel` para cima e para baixo.
   - Unidade: função "valor efetivo = ajuste ?? padrão" para cada campo, com e sem ajuste.
   - Integração: ficha de antes da mudança, lida do banco, devolve os mesmos valores (uma por formato legado conhecido).
   - Unidade: o portão de edição (`2014`, `2024`, ausente).
+  - Unidade: ajuste desligado e religado devolve o mesmo valor, por item (salvaguarda, círculo, proficiência).
+  - Unidade: nv 5 → 3 → 5 com 3 espaços de 2º gastos: aparecem 2 no nv 3 e 3 de volta no nv 5; o valor salvo é 3 o tempo todo.
+  - Unidade: no nv 3, tocar num espaço grava a partir do efetivo (2), e voltar ao nv 5 mostra o que ela gravou.
+  - Unidade: dados de vida com 0 restantes no nv 5 → 3 → 5 continuam com 0 restantes (**hoje dá 2**: é o caso que a fase corrige).
+  - Unidade: `hitDice.current` antigo lido como gastos = nível − current.
 
 ### Fase 2 — Dados determinísticos do SRD
 
@@ -332,10 +341,19 @@ Resumo do que o nível trouxe, escolhas pendentes e ajustes preservados.
   - Uma pendência não resolvida continua visível na ficha em qualquer sessão, até ser resolvida ou dispensada.
   - Descer de nível não apaga escolha nem ajuste: o que é de nível mais alto fica guardado e inativo.
   - Mudar o mod. CON propõe o acerto do PV máximo (±1 por nível) e não mexe sem confirmação.
+  - A pendência de CON é **uma só e idempotente**: é recalculada de uma referência salva (mod. e nível conferidos), aplicar move a referência, e aplicar de novo não soma nada.
+  - Ficha existente ganha a referência em silêncio, sem pendência e sem mudar o PV.
 - **Testes de regressão**
   - Unidade: nível para frente e para trás (5 → 6 → 5) mantém ajustes, usos gastos dentro do novo máximo e escolhas.
   - Unidade: AVA do **Guerreiro** em 4, 6, 8, 12, 14, 16, 19 e do **Ladino** em 4, 8, 10, 12, 16, 19; as outras classes em 4, 8, 12, 16, 19.
   - Unidade: CON 14 → 16 no nv 7 propõe +7 PV; 16 → 14 propõe −7.
+  - Unidade: CON 14 → 16 → 18 no nv 7, sem resolver no meio: uma pendência de +14, não duas de +7.
+  - Unidade: CON 14 → 16 → 14 sem resolver: nenhuma pendência.
+  - Unidade: aplicar a pendência duas vezes seguidas soma uma vez só; dispensar também zera.
+  - Unidade: nv 3 → 4 com +2 em CON (mod. +1): +3 pelos níveis antigos, e o nv 4 entra na pendência de nível já com o mod. novo; o total não conta o nv 4 duas vezes.
+  - Unidade: CON muda, o nível sobe e só depois ela resolve: a diferença de CON usa o nível conferido, não o atual.
+  - Unidade: editar o PV máximo à mão com pendência aberta não aplica nem apaga a pendência.
+  - Integração: ficha de antes da mudança abre sem pendência de PV.
   - Unidade: Alma de Diamante (monge 14) e Mente Escorregadia (ladino 15) respeitam uma salvaguarda desligada à mão.
   - Unidade: Resiliência Dracônica soma +1 PV por nível na conta proposta.
 
@@ -346,12 +364,22 @@ Tipos de conjuração, espaços comuns e de pacto, limites e recuperação.
 - Depende de: fase 2; decisões 4 (espaços), 5 (Magia de Pacto), 6 (contagens do Grimório).
 - **Critérios de aceite**
   - Espaços de pacto e espaços comuns têm estado separado; gastar um não altera o outro.
+  - **Nenhuma ficha mostra o pacto duas vezes:** a linha de pacto só aparece na ficha com estado de pacto. Bruxo existente continua vendo só o `spellSlots` de hoje até aceitar o convite.
+  - O convite "Separar espaços de pacto" preserva os usados, não toca nas outras linhas de `spellSlots` e tem "desfazer", que devolve a ficha ao formato anterior com os usados atuais.
+  - As contagens de preparadas usam a marca que já existe (`character_spells.is_prepared`); nenhuma magia perde a marca.
   - O checklist de descanso curto lista os espaços de pacto e **não** os comuns; o de descanso longo lista os dois.
   - O Grimório mostra, sem bloquear: truques, conhecidas ou preparadas, e as fontes adicionais (domínio, círculo, juramento, Segredos Mágicos Adicionais, Arcana Mística, Tomo) fora do limite.
   - O Mago vê duas contagens: magias no grimório e magias preparadas.
   - Passar do limite mostra um aviso e deixa salvar (homebrew).
 - **Testes de regressão**
   - Unidade: **Bruxo** nv 5 com 2 espaços de 3º; depois do descanso curto o checklist aponta os espaços de pacto.
+  - Unidade: bruxo existente nv 5 com `spellSlots['3'] = { max: 2, used: 1 }` e sem estado de pacto: a ficha mostra uma linha só, e o checklist continua com o lembrete de hoje.
+  - Unidade: aceitar o convite nessa ficha dá pacto com 1 usado e nenhuma linha de 3º em `spellSlots`; desfazer devolve `{ max: 2, used: 1 }`.
+  - Unidade: gastar mais um espaço de pacto depois do convite e desfazer devolve `used: 2`.
+  - Unidade: bruxo com linhas de 1º e 2º anotadas à mão: o convite só mexe na linha do círculo de pacto.
+  - Unidade: bruxo sem linha no círculo de pacto: o convite cria o pacto com 0 usados e não altera `spellSlots`.
+  - Unidade: máximo de pacto anotado diferente da tabela vira ajuste do pacto.
+  - Unidade: classe que não é bruxo nunca recebe o convite nem a linha de pacto.
   - Unidade: **Mago** nv 3, INT 16, com 10 magias no grimório: preparadas 6 de 10, sem aviso de limite no grimório.
   - Unidade: **Clérigo da Vida** nv 3 com as 4 magias de domínio fora da conta de preparadas.
   - Unidade: **Bardo** nv 10 do Conhecimento: 14 conhecidas (com os Segredos Mágicos do nv 10) + 2 adicionais do nv 6 fora da conta.
@@ -377,10 +405,10 @@ The [map](class-sheet-map.md) states what each SRD 5.1 rule is. This matrix stat
 
 **Phases (proposal)**, each shippable alone and each blocked on its pending decisions in the map:
 
-1. **Contract and compatibility.** Fields, ids, default + adjustment, legacy sheets. Accept: an existing sheet shows exactly the same values after the change; the 2014 engine returns nothing for sheets with no edition, edition 2024 or an unlisted class; adjustments survive level, attribute, class and edition changes.
+1. **Contract and compatibility.** Fields, ids, default + adjustment, legacy sheets. Accept: an existing sheet shows exactly the same values after the change and nothing changes without a player action; the 2014 engine returns nothing for sheets with no edition, edition 2024 or an unlisted class; adjustments are per item, survive level, attribute, class and edition changes, and can be switched off and back on without losing the value; lowering a maximum never rewrites stored state, so going down a level and back returns the same sheet (hit dice included, which is not the case today).
 2. **Deterministic SRD data.** Tables 1–20 in content, content API exposing proficiencies/saves/skills/casting/features, half proficiency. Tests: every table row by row for the 12 classes.
 3. **Character creation (#178).** Pick edition and class, fill deterministic values, present choices. Tests: level 1 Barbarian, Bard, Life Cleric and Wizard.
-4. **Level progression.** What the level brought, pending choices, preserved adjustments. Tests: level up and back down, CON change (±1 HP per level, on confirmation), Fighter and Rogue ASI levels.
-5. **Grimoire and resources.** Pact slots apart from regular slots, informational spell counts with extra sources outside the limit, wizard spellbook vs prepared. Tests: Warlock after a short rest, Wizard with a spellbook larger than the prepared list.
+4. **Level progression.** What the level brought, pending choices, preserved adjustments. Tests: level up and back down, Fighter and Rogue ASI levels, and an idempotent CON item (two changes before resolving give one difference, a change and its reversal give none, applying twice adds once, CON and level changing together count no level twice).
+5. **Grimoire and resources.** Pact slots apart from regular slots, informational spell counts with extra sources outside the limit, wizard spellbook vs prepared. Tests: Warlock after a short rest; an existing Warlock that keeps pact slots in `spellSlots` shows them once, and the opt-in migration keeps used slots and can be undone; Wizard with a spellbook larger than the prepared list, counted from the existing `is_prepared` flag.
 
 Out of every phase: multiclassing, combat automation, AC and speed written by the app, resistances and immunities, extra speeds, 2024 rules, sorcery point conversion (#204), self-applying rest (#205).

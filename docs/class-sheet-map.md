@@ -375,7 +375,7 @@ Três níveis:
 | Atributo de conjuração                                                            | **Preenche**                                                                          | —                                                                                                                                                | Fixo pela classe.                                                                                                                                                                                                                     |
 | CD e ataque de magia                                                              | **derivado** (8 + PB + mod. / PB + mod.), com ajuste manual                           | derivado                                                                                                                                         | Hoje são números guardados e sem tela. Itens (+1/+2) entram como ajuste.                                                                                                                                                              |
 | Sistema de magia                                                                  | **Preenche** "espaços" para conjuradores                                              | —                                                                                                                                                | Ficha existente com "pontos" não muda.                                                                                                                                                                                                |
-| Máximo dos espaços de magia                                                       | **Preenche** pela tabela                                                              | **Preenche** pela tabela, sem apagar o máximo que ela mudou                                                                                      | Mesmo modelo das caixinhas (padrão + ajuste por cima). Os espaços **usados** nunca são mexidos, só limitados ao novo máximo.                                                                                                          |
+| Máximo dos espaços de magia                                                       | **Preenche** pela tabela                                                              | **Preenche** pela tabela, sem apagar o máximo que ela mudou                                                                                      | Mesmo modelo das caixinhas (padrão + ajuste por cima). O número de espaços **usados** que está salvo nunca é reescrito por uma mudança de máximo; a tela mostra no máximo o que cabe.                                                 |
 | Espaços de pacto (bruxo)                                                          | **Preenche** quantidade e círculo, com estado próprio                                 | **Preenche** pela tabela                                                                                                                         | Separados dos espaços comuns: voltam no descanso curto e, quando houver multiclasse, as duas reservas convivem. Hoje não são caixinha (decisão 5).                                                                                    |
 | Truques, conhecidas, preparadas                                                   | **Mostra** contagens separadas no Grimório ("3 de 4 truques", "5 de 6 preparadas")    | **Mostra** atualizado                                                                                                                            | Referência, **nunca bloqueia** (homebrew). Fontes adicionais (domínio, círculo, juramento, Arcana Mística) aparecem marcadas e fora da conta. Mago: "no grimório" e "preparadas" são duas contagens.                                  |
 | CA                                                                                | **Sugere** a fórmula da classe (Defesa sem Armadura, Resiliência Dracônica) como dica | **Sugere**                                                                                                                                       | Depende de armadura, escudo, itens e estilo de luta; o inventário ainda não liga com a CA.                                                                                                                                            |
@@ -397,6 +397,7 @@ O modelo da ficha está em `src/backend/contexts/characters/domain/entity/DnD5eC
 - `savingThrowProficiencies` (booleano por atributo).
 - `skills { isProficient, expertise }`, com o PB dobrado já calculado em `shared/systems/dnd5e/calculations.ts`.
 - `spellcastingSystem` (`slots`/`points`), `spellSlots { max, used }` por círculo (o máximo é manual), `spellPoints`. **Os espaços de pacto do bruxo moram aqui também**, anotados à mão: o recurso `pact-slots` do `classes.json` é pulado por `listResourceBoxes` e por `ResourceBoxesEditor` (`unit: 'spell-slots'`) e só alimenta o lembrete `pactSlotsBack` do descanso curto (`src/frontend/lib/rest-checklist.ts`).
+- **Magia preparada:** cada magia da ficha tem uma marca salva (`character_spells.is_prepared`, `togglePrepared`, botão no cartão da magia). Não há registro de onde a magia veio (classe, domínio, juramento).
 - `spellcastingAbility`, `spellSaveDc`, `spellAttackBonus`: **guardados mas sem tela.** Só a demo preenche (`src/frontend/demo/data/build.ts`); nenhum componente da ficha mostra.
 - `ac`, `speed`, `initiative`: números manuais (`src/frontend/components/character/stats/CombatStatsSection.tsx`).
 - `resources` com padrão + `overrides` (#177/#180), o modelo a copiar para os espaços de magia.
@@ -419,19 +420,20 @@ O modelo da ficha está em `src/backend/contexts/characters/domain/entity/DnD5eC
 
 A #177 já decidiu, para as caixinhas, que "o valor guardado separa 'veio do SRD' de 'a pessoa mudou'". Esta seção propõe o mesmo para os outros campos. Sem isso, "preencher sem sobrescrever" não tem como funcionar.
 
-| Parte      | O que é                                                                 | Onde fica                                  |
-| ---------- | ----------------------------------------------------------------------- | ------------------------------------------ |
-| **Padrão** | O que o SRD dá para aquela classe, nível e atributos                    | **Nunca é salvo.** É calculado na exibição |
-| **Ajuste** | O que a pessoa mudou de propósito                                       | Salvo à parte, só quando ela edita         |
-| **Estado** | O que se gasta: usos, espaços usados, dados de vida restantes, PV atual | Salvo, sempre limitado ao máximo efetivo   |
+| Parte      | O que é                                                                 | Onde fica                                                                                                       |
+| ---------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Padrão** | O que o SRD dá para aquela classe, nível e atributos                    | **Nunca é salvo.** É calculado na exibição                                                                      |
+| **Ajuste** | O que a pessoa mudou de propósito                                       | Salvo à parte, só quando ela edita. **Um por item:** cada salvaguarda, cada círculo de magia, cada proficiência |
+| **Estado** | O que se gasta: usos, espaços usados, dados de vida restantes, PV atual | Salvo como a pessoa deixou. O limite pelo máximo efetivo é aplicado **na exibição**, não no valor salvo         |
 
 **Valor efetivo = ajuste, se existir; senão, padrão.**
 
 1. **"Mudou" nunca é deduzido** comparando o valor salvo com o do SRD. Um ajuste igual ao padrão continua sendo ajuste até a pessoa escolher "voltar ao padrão". (Comparar falha no caso mais comum: ela põe 3 espaços de 1º, sobe de nível, o SRD passa a dar 3, e o app acha que ela não mexeu.)
-2. É o modelo que as caixinhas já usam: `resources[key].overrides`, `editResourceBox` e `resetResourceBox`.
+2. É o modelo que as caixinhas já usam: `resources[key].overrides`, `editResourceBox` e `resetResourceBox`. Uma diferença a acertar: hoje `resetResourceBox` **apaga** o ajuste; a regra 6 propõe desligar sem apagar.
 3. **Escolhas** (perícias, Especialização, Estilo de Luta, magias, terreno) são dados da pessoa, nem padrão nem ajuste. O app nunca apaga uma escolha.
 4. **PV máximo é sempre um número dela.** O app só propõe a diferença (nível novo, mudança de CON) e ela aplica.
-5. **Ficha existente:** todo valor já salvo é tratado como **ajuste**. A ficha só passa a seguir o padrão de um campo quando a pessoa pedir, numa revisão que não bloqueia ("seguir a classe", campo a campo). Assim nenhuma ficha muda sozinha no dia em que a novidade entra. Ficha nova nasce sem ajustes.
+5. **Ficha existente: regra de compatibilidade.** Todo valor já salvo entra como **ajuste**, item por item, e nada é alterado em silêncio. Isso vale para a entrada da novidade, não é um estado permanente: a ficha oferece "seguir o SRD" numa revisão que não bloqueia, por item ou para tudo de uma vez. Ficha nova nasce sem ajustes.
+6. **Voltar ao SRD não apaga.** "Seguir o SRD" **desliga** o ajuste e guarda o valor antigo, que volta com um toque ("usar meu valor de novo"). Só "apagar ajuste" remove de vez, e é uma ação separada.
 
 | Campo                        | Padrão                                 | Ajuste                                     | Valor que já existe hoje                                       |
 | ---------------------------- | -------------------------------------- | ------------------------------------------ | -------------------------------------------------------------- |
@@ -446,32 +448,74 @@ A #177 já decidiu, para as caixinhas, que "o valor guardado separa 'veio do SRD
 
 **O que cada mudança faz:**
 
-| Mudança                                                     | Padrão                                                          | Ajustes                                                                                                                                                                          | Estado e escolhas                                                                                        |
-| ----------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Subir de nível                                              | recalculado                                                     | ficam                                                                                                                                                                            | o dado de vida novo já vem disponível (é assim hoje); nascem as pendências do nível                      |
-| Descer de nível                                             | recalculado                                                     | ficam                                                                                                                                                                            | estado limitado ao novo máximo; escolhas de nível mais alto ficam guardadas e inativas, não são apagadas |
-| Mudar atributo                                              | recalculado onde depende (CD, preparadas, usos por modificador) | ficam                                                                                                                                                                            | mod. CON mudou: pendência "±1 PV por nível"                                                              |
-| Trocar de classe oficial                                    | passa a ser o da nova classe                                    | os de campo ficam e aparecem numa lista "ajustes que continuam valendo"; os de caixinha ficam guardados pela chave da classe antiga (`class:<id>:…`) e voltam se a classe voltar | escolhas da classe antiga guardadas e inativas                                                           |
-| Ir para classe desconhecida, tirar a edição ou ir para 2024 | deixa de existir                                                | os valores efetivos do momento são gravados como ajuste, para nada sumir da ficha                                                                                                | ficam                                                                                                    |
-| Voltar para 2014 com classe oficial                         | volta a ser calculado                                           | os ajustes continuam valendo até "voltar ao padrão"                                                                                                                              | voltam a ficar ativos                                                                                    |
+| Mudança                                                     | Padrão                                                          | Ajustes                                                                                                                                                                          | Estado e escolhas                                                                                                                                      |
+| ----------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Subir de nível                                              | recalculado                                                     | ficam                                                                                                                                                                            | o dado de vida novo já vem disponível (é assim hoje); nascem as pendências do nível                                                                    |
+| Descer de nível                                             | recalculado                                                     | ficam                                                                                                                                                                            | o estado salvo **não é cortado**, só o que aparece é limitado ao novo máximo; escolhas de nível mais alto ficam guardadas e inativas, não são apagadas |
+| Mudar atributo                                              | recalculado onde depende (CD, preparadas, usos por modificador) | ficam                                                                                                                                                                            | mod. CON mudou: **uma** pendência de PV, recalculada a cada mudança (ver abaixo)                                                                       |
+| Trocar de classe oficial                                    | passa a ser o da nova classe                                    | os de campo ficam e aparecem numa lista "ajustes que continuam valendo"; os de caixinha ficam guardados pela chave da classe antiga (`class:<id>:…`) e voltam se a classe voltar | escolhas da classe antiga guardadas e inativas                                                                                                         |
+| Ir para classe desconhecida, tirar a edição ou ir para 2024 | deixa de existir                                                | os valores efetivos do momento são gravados como ajuste, para nada sumir da ficha                                                                                                | ficam                                                                                                                                                  |
+| Voltar para 2014 com classe oficial                         | volta a ser calculado                                           | os ajustes continuam valendo até "voltar ao padrão"                                                                                                                              | voltam a ficar ativos                                                                                                                                  |
+
+### Estado salvo e estado efetivo — PROPOSTA
+
+Quando o máximo diminui (nível desce, atributo cai, ajuste muda), o que está **salvo** e o que **aparece** se separam:
+
+- **Salvo:** o número que a pessoa deixou. Uma mudança de máximo nunca o reescreve.
+- **Efetivo:** `min(salvo, máximo efetivo)`, calculado na exibição. É o que a tela e o checklist de descanso usam.
+- **Só uma ação dela grava.** Quando ela toca num espaço ou numa caixinha, grava-se a partir do valor efetivo. A partir daí o número antigo deixa de existir, porque foi ela que mexeu.
+- **Descer e voltar sem mexer devolve a ficha igual.** Ex.: nv 5 com 3 espaços de 2º gastos, desce para o nv 3 (máximo 2: aparecem 2 gastos), volta para o nv 5: 3 gastos de novo.
+
+As caixinhas já funcionam assim: `listResourceBoxes` calcula `clamp(saved.used, max)` e não grava. **Os dados de vida, não:** `setLevel` regrava `hitDice.current` a cada mudança de nível. Com 0 dados restantes no nv 5, descer para o 3 e voltar dá 2 restantes. Para ficar reversível, a proposta é guardar os dados **gastos** (o novo nível já chega disponível sem regravar nada) e ler o `current` antigo como `nível − current`. Entra na decisão 2.
+
+### Magia de Pacto e o `spellSlots` antigo — PROPOSTA
+
+A regra que impede espaços duplicados: **a linha de pacto só existe na ficha que tem estado de pacto**, e esse estado só nasce de dois jeitos.
+
+1. **Ficha nova** criada como bruxo em 2014: nasce com o estado de pacto e sem nada de pacto em `spellSlots`.
+2. **Ficha existente:** continua exatamente como hoje (tudo em `spellSlots`, sem linha de pacto, lembrete do descanso curto apontando para os espaços de magia) até a pessoa aceitar o convite "Separar espaços de pacto". O convite não bloqueia e pode ser dispensado.
+
+O que o convite faz, mostrado antes de confirmar:
+
+- Pega a linha de `spellSlots` do círculo de pacto do nível dela (nv 5 → 3º círculo).
+- Passa os **usados** dessa linha para o estado de pacto e tira o máximo dela. Se o máximo anotado era diferente do da tabela, ele vira ajuste do pacto.
+- **Não toca nas outras linhas.** Quem anotou espaços de outra classe à mão (multiclasse caseira) fica com eles onde estão.
+- Se não há linha no círculo de pacto, cria o estado de pacto com 0 usados e não mexe em mais nada.
+- Guarda uma cópia do `spellSlots` de antes. **"Desfazer"** devolve a linha, leva os usados atuais do pacto de volta para ela e remove o estado de pacto.
+
+Sair da classe bruxo guarda o estado de pacto inativo, como as outras escolhas. O app nunca tenta adivinhar qual linha de `spellSlots` "é o pacto" sem o convite.
+
+### PV e mudança de CON: uma pendência só — PROPOSTA
+
+A pendência não é uma fila de eventos. É uma **conta refeita a cada vez**, a partir de um ponto de referência salvo:
+
+- A ficha guarda **com que mod. CON e em que nível o PV máximo foi conferido pela última vez** (`conMod`, `nível`).
+- Diferença de CON = (mod. atual − mod. conferido) × nível conferido. Os níveis ganhos depois disso entram na pendência de nível (rolar ou média), já com o mod. atual.
+- **Resolver** (aplicar ou dispensar) soma a diferença ao PV máximo, se aplicada, e move a referência para o mod. e o nível atuais. Aplicar de novo dá diferença 0: **não há como somar duas vezes**.
+- CON muda duas vezes antes de resolver (14 → 16 → 18 no nv 7): uma pendência só, de +14.
+- CON muda e volta (14 → 16 → 14): diferença 0, a pendência some sozinha.
+- CON e nível mudam juntos (nv 3 → 4 com AVA em CON): +3 pelos três níveis antigos, e o nv 4 entra na pendência de nível com o mod. novo. Nada é contado duas vezes.
+- **Ficha existente** não tem referência: ela é criada em silêncio com os valores atuais, sem pendência. O PV que já está lá é considerado certo.
+- Editar o PV máximo à mão não mexe na referência; a pendência continua lá até ser aplicada ou dispensada.
+- Nível que desce não gera conta (o app não sabe quanto ela rolou): vira um lembrete "revise o PV máximo".
 
 ### Decisões pendentes
 
 **Nenhuma está aprovada.** Cada uma traz a minha recomendação e, quando difere, a da revisão externa de 2026-11-15. As seis perguntas da primeira versão deste mapa estão aqui dentro (3, 4, 8, 10, 11, 12).
 
-1. **Contrato de padrão + ajuste + estado.** Recomendo o da seção acima, incluindo "valor já salvo = ajuste". É a decisão que destrava as outras.
-2. **Dados de vida: guardar só o dado?** Recomendo que sim: o campo passa a significar "tipo do dado" (`d8`), a quantidade vem do nível, e a leitura continua aceitando `1d8` e `5d8`. Não precisa de migração no banco, só parar de gravar a quantidade. A revisão externa descreveu isso como inconsistência entre `setHitDice` e `setLevel`; pelo código é um formato antigo já tratado de propósito, mas o nome e os dois formatos merecem a limpeza.
-3. **PV máximo: aplicar ou sugerir?** Recomendo **aplicar no nv 1** (máximo do dado + CON, editável), como a #178 descreve, e **pendência** nos outros níveis (rolar ou média) e na mudança de CON. A primeira versão deste mapa recomendava só sugerir sempre; mudei porque no nv 1 a regra não tem escolha e a #178 pede preenchido.
+1. **Contrato de padrão + ajuste + estado.** Recomendo o da seção acima: ajustes por item, "valor já salvo = ajuste" como regra de compatibilidade, voltar ao SRD sem apagar, e estado salvo separado do efetivo. É a decisão que destrava as outras. A decidir junto: se as caixinhas (#180) passam a desligar o ajuste em vez de apagar, para tudo funcionar igual.
+2. **Dados de vida: guardar só o dado?** Recomendo que sim: o campo passa a significar "tipo do dado" (`d8`), a quantidade vem do nível, e a leitura continua aceitando `1d8` e `5d8`. Não precisa de migração no banco, só parar de gravar a quantidade. Junto, guardar os dados **gastos** em vez dos restantes, para descer e voltar de nível não alterar nada (ver "Estado salvo e estado efetivo"). A revisão externa descreveu isso como inconsistência entre `setHitDice` e `setLevel`; pelo código é um formato antigo já tratado de propósito, mas o nome e os dois formatos merecem a limpeza.
+3. **PV máximo: aplicar ou sugerir?** Recomendo **aplicar no nv 1** (máximo do dado + CON, editável), como a #178 descreve, e **pendência** nos outros níveis (rolar ou média) e na mudança de CON, com a conta idempotente da seção "PV e mudança de CON". A primeira versão deste mapa recomendava só sugerir sempre; mudei porque no nv 1 a regra não tem escolha e a #178 pede preenchido.
 4. **O máximo dos espaços de magia segue a tabela sozinho?** Recomendo que sim, com padrão + ajuste, só para classe oficial em 2014 e sistema "espaços". Ficha com "pontos" fica como está. Espaços usados nunca são mexidos.
-5. **Magia de Pacto: onde moram os espaços?** Recomendo um estado próprio (quantidade e círculo vindos de `pact-slots`, usados à parte), mostrado no mesmo cartão dos espaços de magia como uma linha separada, e listado no descanso curto. A alternativa é continuar em `spellSlots`, que é mais barata, mas mistura as duas reservas e quebra no dia da multiclasse. Quem já anota o pacto em `spellSlots` continua igual até pedir para trocar.
-6. **Contagens no Grimório.** Recomendo quatro contagens informativas (truques, conhecidas, preparadas, fontes adicionais), sem nunca bloquear. Para o mago, "no grimório" e "preparadas" separadas, o que pede uma marca de "preparada" por magia. A confirmar: se o Grimório de hoje já tem essa marca.
+5. **Magia de Pacto: onde moram os espaços?** Recomendo um estado próprio (quantidade e círculo vindos de `pact-slots`, usados à parte), mostrado no mesmo cartão dos espaços de magia como uma linha separada, e listado no descanso curto. Ficha existente só muda pelo convite "Separar espaços de pacto", que preserva os usados e pode ser desfeito (seção acima). A alternativa é continuar em `spellSlots`, que é mais barata, mas mistura as duas reservas e quebra no dia da multiclasse.
+6. **Contagens no Grimório.** Recomendo quatro contagens informativas (truques, conhecidas, preparadas, fontes adicionais), sem nunca bloquear. **Conferido:** o Grimório já tem a marca de preparada, salva por magia em `character_spells.is_prepared` (`togglePrepared`, botão no cartão da magia). Então "no grimório" é o número de magias da ficha e "preparadas" é o número com a marca: as contagens não pedem estrutura nova. O que **não existe** é dizer de onde a magia veio (domínio, círculo, juramento, Arcana Mística), necessário para deixar as fontes adicionais fora da conta. A decidir: uma coluna de origem por magia, ou calcular pela lista da subclasse.
 7. **Unidade do deslocamento.** Recomendo **metros como valor guardado**, porque é o que o app já faz (etiqueta, campo decimal, combate e testes): corrigir o padrão de ficha nova de 30 para 9 e as fichas da demo, e escrever as dicas de classe nas duas unidades ("+3 m / 10 ft", 5 ft = 1,5 m). **A revisão externa recomenda o contrário**: pés como unidade interna e conversão na exibição. Isso exigiria converter todas as fichas, e um "30" salvo não diz se foi digitado em metros ou é o padrão em pés. Nos dois caminhos: **não converter ficha existente sozinho**; no máximo uma dica na ficha com deslocamento 30 ("30 m? O padrão do SRD é 9 m").
 8. **Proficiências e idiomas: etiquetas ou texto livre?** Recomendo etiquetas com `id` preenchidas pela classe, mais um texto livre "outras" para raça, antecedente e mesa. Pede uma lista de idiomas do SRD com `id`, que não existe hoje.
 9. **Portão de edição.** Recomendo exigir `edition === '2014'` para tudo deste mapa. Ficha sem edição ou em 2024 fica manual. A confirmar: se a ficha sem edição deve ganhar algum convite, além do cartão da #177.
 10. **Onde pedir as escolhas?** Recomendo perícias e ferramentas da classe no onboarding (#178), e as escolhas de nível (Especialização, AVA, estilos, invocações, PV) como **pendência que fica visível na ficha até ser resolvida ou dispensada**, sem aplicar nada sozinha. A primeira versão falava em "lembrete no level-up"; um lembrete que some perde a escolha de quem fechou a tela.
 11. **CD e ataque de magia: calcular ou continuar campo?** Recomendo calcular na exibição e mostrar no Grimório, com um bônus somado. Os valores já salvos (hoje só a demo preenche, e nenhuma tela mostra) são preservados como valor fixo, em vez de ignorados.
 12. **CA: preencher ou só dica?** Recomendo só dica: depende de armadura, escudo, itens e estilo de luta, e o inventário ainda não liga com a CA.
-13. **Bônus que entram sozinhos em testes.** Meia proficiência nas perícias (bardo 2, guerreiro campeão 7), Aura de Proteção nas salvaguardas (paladino 6), Alma de Diamante e Mente Escorregadia. Recomendo automático com um jeito de desligar, porque esses valores já são calculados na exibição. A decidir junto: se a meia proficiência entra na percepção e intuição passivas, e se a iniciativa passa a ser calculada (hoje é número manual).
+13. **Bônus que entram sozinhos em testes.** Meia proficiência nas perícias (bardo 2, guerreiro campeão 7), Aura de Proteção nas salvaguardas (paladino 6), Alma de Diamante e Mente Escorregadia. Recomendo automático com um jeito de desligar, porque esses valores já são calculados na exibição. **Passivas:** recomendo aplicar a meia proficiência na percepção e na intuição passivas quando a perícia não é proficiente, porque o SRD define o valor passivo como "10 + todos os modificadores que normalmente se aplicam ao teste". **Iniciativa:** enquanto for número manual, o app só mostra a nota e não altera o valor; se um dia passar a ser calculada, o número de hoje entra como ajuste. A revisão externa recomenda o mesmo nos dois pontos.
 
 ### Revisão de 2026-11-15
 
@@ -495,6 +539,16 @@ Feita a partir de uma revisão externa do PR #228, com cada ponto conferido no c
 **Ponto da revisão externa que não entrou:** trocar "Weblate" por "Crowdin". O projeto saiu do Crowdin e a tradução está no Weblate (README, `NOTICE.md`); quem está desatualizado é o texto da #179.
 
 **Ponto em que a recomendação daqui difere da revisão externa:** a unidade do deslocamento (decisão 7).
+
+**Segunda rodada, no mesmo dia.** A revisão externa retirou a sugestão do Crowdin, concordou com metros no deslocamento e pediu quatro critérios, todos conferidos e incorporados:
+
+- **Compatibilidade:** ajustes por item, "valor salvo = ajuste" como regra de entrada e não estado permanente, voltar ao SRD sem apagar o valor antigo.
+- **Magia de Pacto:** a linha de pacto só existe com estado de pacto; ficha existente migra por convite, com os usados preservados e "desfazer".
+- **Estado salvo x efetivo:** a contradição apontada era real (o mapa dizia "sempre limitado ao máximo" e "nunca mexidos"). Ficou: o salvo não é cortado, o limite é da exibição. Na conferência apareceu que os dados de vida hoje **não** são reversíveis (`setLevel` regrava).
+- **PV e CON:** uma pendência só, calculada a partir de uma referência salva, sem como aplicar duas vezes.
+- **Grimório:** confirmado que a marca de preparada existe e é salva (`character_spells.is_prepared`).
+
+Não sobrou divergência com a revisão externa. As 13 decisões continuam **pendentes**: quem aprova é a Rebeca.
 
 **Fora do escopo, de propósito:** multiclasse, automação de combate, regras de 2024. As decisões da #177 e da #179 não foram alteradas.
 
@@ -537,18 +591,20 @@ The PT tables above are shared; their columns read: _Campo_ = field, _Valor_ = v
 
 **Pending decisions** (none approved; recommendation in brackets):
 
-1. Default + adjustment + state contract. [as above, stored values count as adjustments]
-2. Hit dice: store only the die? [yes; keep reading `1d8` and `5d8`]
-3. HP max: apply or suggest? [apply at level 1 as #178 describes; pending item on later levels and on CON changes]
+1. Default + adjustment + state contract. [as above: one adjustment per item (each save, each slot level, each proficiency); "stored values count as adjustments" is a compatibility rule for existing sheets, not a permanent state; "follow the SRD" switches an adjustment off and keeps its value so it can be restored; stored state is never clamped, only the displayed value is]
+2. Hit dice: store only the die? [yes; keep reading `1d8` and `5d8`. Also store dice **spent** rather than remaining: today `setLevel` rewrites `current`, so going down a level and back is not reversible]
+3. HP max: apply or suggest? [apply at level 1 as #178 describes; pending item on later levels and on CON changes. The CON item is **one derived difference**, (current mod − checked mod) × checked level, from a stored reference; resolving moves the reference, so it cannot be applied twice, and two changes before resolving collapse into one]
 4. Slot maxima follow the table? [yes, default + adjustment, known classes on "slots" only; used slots untouched]
-5. Pact Magic: where do the slots live? [their own state, shown as a separate row, listed on short rest]
-6. Grimoire counts. [four informational counts, never blocking; wizard spellbook vs prepared]
+5. Pact Magic: where do the slots live? [their own state, shown as a separate row, listed on short rest. The pact row exists only on sheets that have pact state, so nothing is shown twice: new warlock sheets start with it; existing sheets keep `spellSlots` as today until the player accepts an opt-in that moves the used count, leaves other rows alone and can be undone]
+6. Grimoire counts. [four informational counts, never blocking. Checked: the Grimoire already persists a prepared flag per spell (`character_spells.is_prepared`), so spellbook vs prepared needs no new structure; what is missing is where a spell came from, needed to keep extra sources outside the limit]
 7. Speed unit. [metres as the stored value, since the app already works that way; fix the default 30 → 9. The external review recommends feet internally with display conversion. Either way, never convert existing sheets automatically]
 8. Proficiencies and languages: tags or free text? [tags with ids + a free "other" text]
 9. Edition gate. [require `edition === '2014'`]
 10. Where to ask for choices? [class skills/tools in onboarding #178; level choices as a pending item that stays on the sheet until resolved]
 11. Spell DC/attack: derive or keep stored? [derive, show in the Grimoire; keep stored values as a fixed value]
 12. AC: fill in or hint? [hint]
-13. Bonuses applied by themselves (half proficiency, Aura of Protection, Diamond Soul, Slippery Mind). [automatic, with a way to turn off]
+13. Bonuses applied by themselves (half proficiency, Aura of Protection, Diamond Soul, Slippery Mind). [automatic, with a way to turn off; half proficiency also on passive Perception and Insight, since the SRD passive score is 10 + all modifiers that normally apply; initiative is left untouched while it is a manual number]
 
 **Revision of 2026-11-15.** Each point of an external review of PR #228 was checked against the code and the official SRD 5.1 PDF. Corrected: pact slots are not resource boxes; hit dice store the die, not the count; Tongue of the Sun and Moon is not a language proficiency; the Favored Enemy language is conditional; half proficiency covers every ability check without proficiency; bard Magical Secrets are inside Spells Known except Lore's Additional ones; Unarmored Movement also requires no shield; Aura of Devotion was missing; the retroactive CON rule for HP was missing. Checked and kept: slot, cantrip and spells-known tables, class tables, ASI levels and the proficiency lists. Not adopted: replacing "Weblate" with "Crowdin" (the project moved to Weblate; #179's text is the outdated one). Differs from the review: the speed unit (decision 7).
+
+**Second round, same day.** The external review withdrew the Crowdin point, agreed on metres and asked for four criteria, all checked and included: per-item adjustments with a non-destructive return to the SRD; pact slots coexisting with legacy `spellSlots` through an opt-in, undoable migration; stored versus effective state when a maximum drops (the contradiction it pointed out was real); and an idempotent CON/HP pending item. It also asked to confirm the prepared flag, which exists. No disagreement with the external review remains. All 13 decisions are still **pending** Rebeca's approval.
