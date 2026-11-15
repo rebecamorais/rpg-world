@@ -193,7 +193,9 @@ A rodada 1 e os seus dados ([material-surfaces-bench-round1.json](material-surfa
 1. **A cor do material segue a magia.**
    - Todo material usa `--m: var(--spell-color, <cor própria>)`. A cor própria só vale onde não há magia (os painéis do laboratório).
    - As cores derivadas saem dela: o tom escuro do gelo e do ácido (`color-mix(in oklab, var(--m), black …)`) e o tom envelhecido do pergaminho.
-   - A pedra continua cinza; só o brilho dela fica na cor da magia.
+   - A pedra também é tingida: `--stone` mistura a cor da magia com o cinza da pedra (45% no tema escuro; no claro, 60% com um cinza mais claro, para não esconder a cor nem cortar o contraste). Na primeira versão a pedra ficava cinza neutra, e a dona pediu a cor da magia.
+   - As fibras do pergaminho deixaram de ser marrons (elas viravam um tom barrento por cima da cor da magia): agora só escurecem, e o papel leva mais da cor da magia. O WebP das fibras foi regerado a partir do mesmo SVG.
+   - Essas duas mudanças só trocam cores dentro do mesmo número de camadas. Pelo resultado da Glacial (abaixo), não devem mudar o custo, mas não foram medidas de novo.
    - Assim o material nunca briga com a faixa, o ícone e os selos do card, como nos efeitos por tipo de magia.
 2. **Variante `baked` da Alchemical Corrosion.** As bolhas, as gotas e a película do topo saíram dos cerca de 18 gradientes e foram para três SVGs estáticos e minúsculos em `public/grimoire/materials/`. São formas pretas usadas como **máscara** sobre a cor da magia, então funcionam com qualquer cor. As corrosões são uma imagem preta comum.
 3. **Variante `webp` da Crypt Stone e do Divine Parchment.** As mesmas texturas de ruído foram pré-renderizadas em WebP pelo `scripts/grimoire-bake-textures.ts` (o Chromium desenha o mesmo SVG em 2×), no lugar do `feTurbulence`.
