@@ -1,62 +1,62 @@
 {
   "blinded": {
-    "name": "",
+    "name": "Cegado",
     "description": ""
   },
   "charmed": {
-    "name": "",
+    "name": "Hechizado",
     "description": ""
   },
   "deafened": {
-    "name": "",
+    "name": "Sordo",
     "description": ""
   },
   "exhaustion": {
-    "name": "",
+    "name": "Agotamiento",
     "description": ""
   },
   "frightened": {
-    "name": "",
+    "name": "Asustado",
     "description": ""
   },
   "grappled": {
-    "name": "",
+    "name": "Agarrado",
     "description": ""
   },
   "incapacitated": {
-    "name": "",
+    "name": "Incapacitado",
     "description": ""
   },
   "invisible": {
-    "name": "",
+    "name": "Invisible",
     "description": ""
   },
   "paralyzed": {
-    "name": "",
+    "name": "Paralizado",
     "description": ""
   },
   "petrified": {
-    "name": "",
+    "name": "Petrificado",
     "description": ""
   },
   "poisoned": {
-    "name": "",
+    "name": "Envenenado",
     "description": ""
   },
   "prone": {
-    "name": "",
+    "name": "Derribado",
     "description": ""
   },
   "restrained": {
-    "name": "",
+    "name": "Restringido",
     "description": ""
   },
   "stunned": {
-    "name": "",
+    "name": "Aturdido",
     "description": ""
   },
   "unconscious": {
-    "name": "",
+    "name": "Inconsciente",
     "description": ""
   }
 }

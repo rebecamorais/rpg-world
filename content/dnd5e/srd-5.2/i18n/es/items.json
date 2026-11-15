@@ -1,136 +1,136 @@
 {
   "acid": {
-    "name": "",
-    "description": ""
+    "name": "Ácido",
+    "description": "Cuando realizas la acción de {@action Attack|XPHB|Atacar}, puedes reemplazar uno de tus ataques por lanzar un vial de ácido. Elige como objetivo a una criatura u objeto que puedas ver a 20 pies o menos de ti. El objetivo debe superar una tirada de salvación de Destreza ({@dc 8|CD 8} + tu modificador de Destreza + tu {@variantrule Proficiency|XPHB|bonificador de competencia}) o sufrir {@damage 2d6} de daño de Ácido."
   },
   "airship": {
     "name": ""
   },
   "alchemist-s-fire": {
-    "name": "",
-    "description": ""
+    "name": "Fuego de alquimista",
+    "description": "Cuando realizas la acción de {@action Attack|XPHB|Atacar}, puedes reemplazar uno de tus ataques por lanzar un frasco de fuego de alquimista. Elige como objetivo a una criatura u objeto que puedas ver a 20 pies o menos de ti. El objetivo debe superar una tirada de salvación de Destreza ({@dc 8|CD 8} + tu modificador de Destreza + tu {@variantrule Proficiency|XPHB|bonificador de competencia}) o sufrir {@damage 1d4} de daño de Fuego y comenzar a {@hazard burning|XPHB|Ardiendo}."
   },
   "alchemist-s-supplies": {
-    "name": "",
-    "description": ""
+    "name": "Suministros de alquimista",
+    "description": "• Característica: Inteligencia\n• Utilizar: Identificar una sustancia ({@dc 15|CD 15}) o iniciar un fuego ({@dc 15|CD 15})\n• Fabricar: {@item Acid|XPHB|Ácido}, {@item Alchemist's Fire|XPHB|Fuego de alquimista}, {@item Component Pouch|XPHB|Bolsa de componentes}, {@item Oil|XPHB|Aceite}, {@item Paper|XPHB|Papel}, {@item Perfume|XPHB|Perfume}"
   },
   "ale-mug": {
     "name": ""
   },
   "amulet": {
-    "name": "",
+    "name": "Amuleto",
     "description": ""
   },
   "antitoxin": {
-    "name": "",
-    "description": ""
+    "name": "Antitoxina",
+    "description": "Como {@variantrule Bonus Action|XPHB|acción adicional}, puedes beber un vial de antitoxina para obtener {@variantrule Advantage|XPHB|Ventaja} en las tiradas de salvación para evitar o terminar la condición de {@condition Poisoned|XPHB|Envenenado} durante 1 hora."
   },
   "arrow": {
     "name": "",
     "description": ""
   },
   "arrows-20": {
-    "name": "",
+    "name": "Flechas",
     "description": ""
   },
   "backpack": {
-    "name": "",
-    "description": ""
+    "name": "Mochila",
+    "description": "Una mochila puede contener hasta 30 libras en 1 pie cúbico. También puede servir como alforja."
   },
   "bagpipes": {
-    "name": "",
-    "description": ""
+    "name": "Gaita",
+    "description": "• Característica: Carisma\n• Utilizar: Tocar una melodía conocida ({@dc 10|CD 10}) o improvisar una canción ({@dc 15|CD 15})"
   },
   "ball-bearings": {
-    "name": "",
-    "description": ""
+    "name": "Bolas de acero",
+    "description": "Como acción {@action Utilize|XPHB|Utilizar}, puedes esparcir bolas de acero desde su bolsa. Se dispersan para cubrir una zona nivelada de 10 pies cuadrados dentro de 10 pies de ti. Una criatura que entre por primera vez en el área en un turno debe superar una tirada de salvación de Destreza {@dc 10|CD 10} o sufrir la condición {@condition Prone|XPHB|Derribado}. Recuperarlas lleva 10 minutos."
   },
   "barrel": {
-    "name": "",
-    "description": ""
+    "name": "Barril",
+    "description": "Un barril puede contener hasta 40 galones de líquido o hasta 4 pies cúbicos de mercancías secas."
   },
   "basic-poison": {
-    "name": "",
-    "description": ""
+    "name": "Veneno básico",
+    "description": "Como {@variantrule Bonus Action|XPHB|acción adicional}, puedes usar un vial de veneno básico para recubrir un arma o hasta tres piezas de munición. Una criatura que sufra daño perforante o cortante del arma o munición envenenada sufre {@damage 1d4} de daño de veneno adicional. Una vez aplicado, el veneno conserva su potencia durante 1 minuto o hasta que se inflige su daño, lo que ocurra primero."
   },
   "basket": {
-    "name": "",
-    "description": ""
+    "name": "Cesta",
+    "description": "Una cesta puede contener hasta 40 libras en 2 pies cúbicos."
   },
   "battleaxe": {
-    "name": ""
+    "name": "Hacha de batalla"
   },
   "bedroll": {
-    "name": "",
+    "name": "Rollo de cama",
     "description": ""
   },
   "bell": {
-    "name": "",
-    "description": ""
+    "name": "Campana",
+    "description": "Cuando se hace sonar como acción de {@action Utilize|XPHB|Utilizar}, una campana produce un sonido que puede oírse hasta a 60 pies de distancia."
   },
   "blanket": {
-    "name": "",
-    "description": ""
+    "name": "Manta",
+    "description": "Mientras estás envuelto en una manta, tienes {@variantrule Advantage|XPHB|Ventaja} en las tiradas de salvación contra el {@hazard extreme cold|XDMG|frío extremo} (ver {@book Efectos ambientales|XDMG})."
   },
   "block-and-tackle": {
-    "name": "",
-    "description": ""
+    "name": "Polipasto",
+    "description": "Un {@item Block and Tackle|XPHB|polipasto} te permite izar hasta cuatro veces el peso que normalmente puedes levantar."
   },
   "blowgun": {
-    "name": ""
+    "name": "Cerbatana"
   },
   "bolt": {
     "name": "",
     "description": ""
   },
   "bolts-20": {
-    "name": "",
+    "name": "Virotes",
     "description": ""
   },
   "book": {
-    "name": "",
-    "description": ""
+    "name": "Libro",
+    "description": "Un libro contiene ficción o no ficción. Si consultas un libro de no ficción preciso sobre su tema, obtienes un bonificador de +5 a las pruebas de Inteligencia ({@skill Arcana|XPHB|Arcana}, {@skill History|XPHB|Historia}, {@skill Nature|XPHB|Naturaleza} o {@skill Religion|XPHB|Religión}) que hagas sobre ese tema."
   },
   "bread-loaf": {
     "name": ""
   },
   "breastplate": {
-    "name": ""
+    "name": "Coraza"
   },
   "brewer-s-supplies": {
-    "name": "",
-    "description": ""
+    "name": "Suministros de cervecero",
+    "description": "• Característica: Inteligencia\n• Utilizar: Detectar una bebida envenenada ({@dc 15|CD 15}) o identificar alcohol ({@dc 10|CD 10})\n• Fabricar: {@item Antitoxin|XPHB|Antitoxina}"
   },
   "bucket": {
-    "name": "",
-    "description": ""
+    "name": "Cubo",
+    "description": "Un cubo puede contener hasta medio pie cúbico de contenido."
   },
   "bullseye-lantern": {
-    "name": "",
+    "name": "Linterna de ojo de buey",
     "description": ""
   },
   "burglar-s-pack": {
-    "name": "",
-    "description": ""
+    "name": "Mochila de ladrón",
+    "description": "Una mochila de ladrón contiene los siguientes objetos: {@item Backpack|XPHB|Mochila}, {@item Ball Bearings|XPHB|Bolas de acero}, {@item Bell|XPHB|Campana}, 10 {@item Candle|XPHB|Vela}, {@item Crowbar|XPHB|Palanca}, {@item Hooded Lantern|XPHB|Farol con capucha}, 7 {@item Oil|XPHB|Aceite}, 5 días de {@item Rations|XPHB|Raciones}, {@item Rope|XPHB|Cuerda}, {@item Tinderbox|XPHB|Caja de yesca} y {@item Waterskin|XPHB|Odre}."
   },
   "calligrapher-s-supplies": {
-    "name": "",
-    "description": ""
+    "name": "Suministros de calígrafo",
+    "description": "• Característica: Destreza\n• Utilizar: Escribir un texto con florituras impresionantes que lo protejan contra la falsificación ({@dc 15|CD 15})\n• Fabricar: {@item Ink|XPHB|Tinta}, {@item Spell Scroll|XDMG|Pergamino de conjuros}"
   },
   "caltrops": {
-    "name": "",
-    "description": ""
+    "name": "Abrojos",
+    "description": "Como acción de {@action Utilize|XPHB|Utilizar}, puedes esparcir abrojos de su bolsa para cubrir un área de 5 pies cuadrados a 5 pies o menos de ti. Una criatura que entre en esta área por primera vez en un turno debe superar una tirada de salvación de Destreza {@dc 15|CD 15} o sufrir 1 punto de daño perforante y tener su {@variantrule Speed|XPHB|Velocidad} reducida a 0 hasta el inicio de su siguiente turno. Se tardan 10 minutos en recuperar los abrojos."
   },
   "camel": {
     "name": ""
   },
   "candle": {
-    "name": "",
-    "description": ""
+    "name": "Vela",
+    "description": "Durante 1 hora, una vela encendida emite {@variantrule Bright Light|XPHB|Luz brillante} en un radio de 5 pies y {@variantrule Dim Light|XPHB|Luz tenue} durante 5 pies adicionales."
   },
   "carpenter-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de carpintero",
+    "description": "• Característica: Fuerza\n• Utilizar: Sellar o forzar la apertura de una puerta o un contenedor ({@dc 20|CD 20})\n• Fabricar: {@item Club|XPHB|Garrote}, {@item Greatclub|XPHB|Garrote grande}, {@item Quarterstaff|XPHB|Bastón (Quarterstaff)}, {@item Barrel|XPHB|Barril}, {@item Chest|XPHB|Cofre}, {@item Ladder|XPHB|Escalera}, {@item Pole|XPHB|Pértiga}, {@item Portable Ram|XPHB|Ariete portátil}, {@item Torch|XPHB|Antorcha}"
   },
   "carriage": {
     "name": ""
@@ -139,18 +139,18 @@
     "name": ""
   },
   "cartographer-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de cartógrafo",
+    "description": "• Característica: Sabiduría\n• Utilizar: Trazar un mapa de un área pequeña ({@dc 15|CD 15})\n• Fabricar: {@item Map|XPHB|Mapa}"
   },
   "chain": {
-    "name": "",
-    "description": ""
+    "name": "Cadena",
+    "description": "Como acción de {@action Utilize|XPHB|Utilizar}, puedes envolver una cadena alrededor de una criatura reacia a 5 pies o menos de ti que tenga la condición de {@condition Grappled|XPHB|Agarrado}, {@condition Incapacitated|XPHB|Incapacitado} o {@condition Restrained|XPHB|Restringido}, si superas una prueba de Fuerza ({@skill Athletics|XPHB|Atletismo}) {@dc 13|CD 13}. Si las piernas de la criatura quedan atadas, la criatura tiene la condición de {@condition Restrained|XPHB|Restringido} hasta que escape. Escapar de la cadena requiere que la criatura realice una prueba de Destreza ({@skill Acrobatics|XPHB|Acrobacias}) {@dc 18|CD 18} como acción. Romper la cadena requiere una prueba de Fuerza ({@skill Athletics|XPHB|Atletismo}) {@dc 20|CD 20} como acción."
   },
   "chain-mail": {
-    "name": ""
+    "name": "Cota de malla"
   },
   "chain-shirt": {
-    "name": ""
+    "name": "Camisote de malla"
   },
   "chariot": {
     "name": ""
@@ -159,107 +159,107 @@
     "name": ""
   },
   "chest": {
-    "name": "",
-    "description": ""
+    "name": "Cofre",
+    "description": "Un cofre puede contener hasta 12 pies cúbicos de contenido."
   },
   "climber-s-kit": {
-    "name": "",
-    "description": ""
+    "name": "Equipo de escalada",
+    "description": "Un equipo de escalada incluye puntas para botas, guantes, pitones y un arnés. Como acción de {@action Utilize|XPHB|Utilizar}, puedes usar el equipo de escalada para anclarte; cuando lo haces, no puedes caer más de 25 pies desde el punto de anclaje, y no puedes moverte más de 25 pies desde allí sin deshacer el anclaje como {@variantrule Bonus Action|XPHB|acción adicional}."
   },
   "club": {
-    "name": ""
+    "name": "Garrote"
   },
   "cobbler-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de zapatero",
+    "description": "• Característica: Destreza\n• Utilizar: Modificar el calzado para otorgar {@variantrule Advantage|XPHB|Ventaja} en la próxima prueba de Destreza ({@skill Acrobatics|XPHB|Acrobacias}) del portador ({@dc 10|CD 10})\n• Fabricar: {@item Climber's Kit|XPHB|Equipo de escalada}"
   },
   "common-wine-bottle": {
     "name": ""
   },
   "component-pouch": {
-    "name": "",
-    "description": ""
+    "name": "Bolsa de componentes",
+    "description": "Una bolsa de componentes es impermeable y está llena de compartimentos que contienen todos los componentes Materiales gratuitos de tus conjuros."
   },
   "cook-s-utensils": {
-    "name": "",
-    "description": ""
+    "name": "Utensilios de cocina",
+    "description": "• Característica: Sabiduría\n• Utilizar: Mejorar el sabor de la comida ({@dc 10|CD 10}) o detectar comida en mal estado o envenenada ({@dc 15|CD 15})\n• Fabricar: {@item Rations|XPHB|Raciones}"
   },
   "costume": {
-    "name": "",
-    "description": ""
+    "name": "Disfraz",
+    "description": "Mientras llevas un disfraz, tienes {@variantrule Advantage|XPHB|Ventaja} en cualquier prueba de característica que hagas para suplantar a la persona o al tipo de persona que representa."
   },
   "crossbow-bolt-case": {
-    "name": "",
-    "description": ""
+    "name": "Estuche para virotes de ballesta",
+    "description": "Un {@item Crossbow Bolt Case|XPHB|estuche para virotes de ballesta} puede contener hasta 20 virotes."
   },
   "crowbar": {
-    "name": "",
-    "description": ""
+    "name": "Palanca",
+    "description": "Usar una palanca te da {@variantrule Advantage|XPHB|Ventaja} en las pruebas de Fuerza en las que pueda aplicarse el apalancamiento de la palanca."
   },
   "crystal": {
-    "name": ""
+    "name": "Cristal"
   },
   "dagger": {
-    "name": ""
+    "name": "Daga"
   },
   "dart": {
-    "name": ""
+    "name": "Dardo"
   },
   "dice-set": {
-    "name": "",
-    "description": ""
+    "name": "Dados",
+    "description": "• Característica: Sabiduría\n• Utilizar: Discernir si alguien hace trampas ({@dc 10|CD 10}) o ganar la partida ({@dc 20|CD 20})"
   },
   "diplomat-s-pack": {
-    "name": "",
-    "description": ""
+    "name": "Mochila de diplomático",
+    "description": "Una mochila de diplomático contiene los siguientes objetos: {@item Chest|XPHB|Cofre}, {@item Fine Clothes|XPHB|Ropa fina}, {@item Ink|XPHB|Tinta}, 5 {@item Ink Pen|XPHB|Pluma de tinta}, {@item Lamp|XPHB|Lámpara}, 2 {@item Map or Scroll Case|XPHB|Estuches para mapas o pergaminos}, 4 {@item Oil|XPHB|Aceite}, 5 hojas de {@item Paper|XPHB|Papel}, 5 hojas de {@item Parchment|XPHB|Pergamino}, {@item Perfume|XPHB|Perfume} y {@item Tinderbox|XPHB|Caja de yesca}."
   },
   "disguise-kit": {
-    "name": "",
-    "description": ""
+    "name": "Kit de disfraz",
+    "description": "• Característica: Carisma\n• Utilizar: Aplicar maquillaje ({@dc 10|CD 10})\n• Fabricar: {@item Costume|XPHB|Disfraz}"
   },
   "draft-horse": {
     "name": ""
   },
   "dragonchess-set": {
-    "name": "",
-    "description": ""
+    "name": "Ajedrez dracónico",
+    "description": "• Característica: Sabiduría\n• Utilizar: Discernir si alguien hace trampas ({@dc 10|CD 10}) o ganar la partida ({@dc 20|CD 20})"
   },
   "drum": {
-    "name": "",
-    "description": ""
+    "name": "Tambor",
+    "description": "• Característica: Carisma\n• Utilizar: Tocar una melodía conocida ({@dc 10|CD 10}) o improvisar una canción ({@dc 15|CD 15})"
   },
   "dulcimer": {
-    "name": "",
-    "description": ""
+    "name": "Dulcémele",
+    "description": "• Característica: Carisma\n• Utilizar: Tocar una melodía conocida ({@dc 10|CD 10}) o improvisar una canción ({@dc 15|CD 15})"
   },
   "dungeoneer-s-pack": {
-    "name": "",
-    "description": ""
+    "name": "Mochila de explorador de mazmorras",
+    "description": "Una mochila de explorador de mazmorras contiene los siguientes objetos: {@item Backpack|XPHB|Mochila}, {@item Caltrops|XPHB|Abrojos}, {@item Crowbar|XPHB|Palanca}, 2 frascos de {@item Oil|XPHB|Aceite}, 10 días de {@item Rations|XPHB|Raciones}, {@item Rope|XPHB|Cuerda}, {@item Tinderbox|XPHB|Caja de yesca}, 10 {@item Torch|XPHB|Antorcha} y {@item Waterskin|XPHB|Odre}."
   },
   "elephant": {
     "name": ""
   },
   "emblem": {
-    "name": "",
+    "name": "Emblema",
     "description": ""
   },
   "entertainer-s-pack": {
-    "name": "",
-    "description": ""
+    "name": "Mochila de artista",
+    "description": "Una mochila de artista contiene los siguientes objetos: {@item Backpack|XPHB|Mochila}, {@item Bedroll|XPHB|Rollo de cama}, {@item Bell|XPHB|Campana}, {@item Bullseye Lantern|XPHB|Farol de ojo de buey}, 3 {@item Costume|XPHB|Disfraz}, {@item Mirror|XPHB|Espejo}, 8 frascos de {@item Oil|XPHB|Aceite}, 9 días de {@item Rations|XPHB|Raciones}, {@item Tinderbox|XPHB|Caja de yesca} y {@item Waterskin|XPHB|Odre}."
   },
   "exotic-saddle": {
     "name": "",
     "description": ""
   },
   "explorer-s-pack": {
-    "name": "",
-    "description": ""
+    "name": "Mochila de explorador",
+    "description": "Una mochila de explorador contiene los siguientes objetos: {@item Backpack|XPHB|Mochila}, {@item Bedroll|XPHB|Rollo de cama}, 2 frascos de {@item Oil|XPHB|Aceite}, 10 días de {@item Rations|XPHB|Raciones}, {@item Rope|XPHB|Cuerda}, {@item Tinderbox|XPHB|Caja de yesca}, 10 {@item Torch|XPHB|Antorcha} y {@item Waterskin|XPHB|Odre}."
   },
   "feed-per-day": {
     "name": ""
   },
   "fine-clothes": {
-    "name": "",
+    "name": "Ropa fina",
     "description": ""
   },
   "fine-wine-bottle": {
@@ -270,321 +270,321 @@
     "description": ""
   },
   "firearm-bullets-10": {
-    "name": "",
+    "name": "Balas, arma de fuego",
     "description": ""
   },
   "flail": {
-    "name": ""
+    "name": "Mayal"
   },
   "flask": {
-    "name": "",
-    "description": ""
+    "name": "Frasco",
+    "description": "Un frasco puede contener hasta 1 pinta."
   },
   "flute": {
-    "name": "",
-    "description": ""
+    "name": "Flauta",
+    "description": "• Característica: Carisma\n• Utilizar: Tocar una melodía conocida ({@dc 10|CD 10}) o improvisar una canción ({@dc 15|CD 15})"
   },
   "forgery-kit": {
-    "name": "",
-    "description": ""
+    "name": "Kit de falsificación",
+    "description": "• Característica: Destreza\n• Utilizar: Imitar 10 palabras o menos de la caligrafía de otra persona ({@dc 15|CD 15}) o duplicar un sello de cera ({@dc 20|CD 20})"
   },
   "galley": {
     "name": ""
   },
   "glaive": {
-    "name": ""
+    "name": "Guja"
   },
   "glass-bottle": {
-    "name": "",
-    "description": ""
+    "name": "Botella de cristal",
+    "description": "Una botella de cristal puede contener hasta 1½ pintas."
   },
   "glassblower-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de soplador de vidrio",
+    "description": "• Característica: Inteligencia\n• Utilizar: Determinar qué contuvo un objeto de vidrio en las últimas 24 horas ({@dc 15|CD 15})\n• Fabricar: {@item Glass Bottle|XPHB|Botella de vidrio}, {@item Magnifying Glass|XPHB|Lupa}, {@item Spyglass|XPHB|Catalejo}, {@item Vial|XPHB|Vial}"
   },
   "grappling-hook": {
-    "name": "",
-    "description": ""
+    "name": "Garfio",
+    "description": "Como acción de {@action Utilize|XPHB|Utilizar}, puedes lanzar el garfio a una barandilla, un saliente u otro punto de enganche a 50 pies o menos de ti, y el gancho se engancha si superas una prueba de Destreza ({@skill Acrobatics|XPHB|Acrobacias}) {@dc 13|CD 13}. Si ataste una Cuerda al gancho, puedes trepar por ella."
   },
   "greataxe": {
-    "name": ""
+    "name": "Hacha a dos manos"
   },
   "greatclub": {
-    "name": ""
+    "name": "Garrote grande"
   },
   "greatsword": {
-    "name": ""
+    "name": "Espadón"
   },
   "halberd": {
-    "name": ""
+    "name": "Alabarda"
   },
   "half-plate-armor": {
-    "name": ""
+    "name": "Armadura media"
   },
   "hand-crossbow": {
-    "name": ""
+    "name": "Ballesta de mano"
   },
   "handaxe": {
-    "name": ""
+    "name": "Hacha de mano"
   },
   "healer-s-kit": {
-    "name": "",
-    "description": ""
+    "name": "Botiquín",
+    "description": "Un botiquín tiene diez usos. Como acción de {@action Utilize|XPHB|Utilizar}, puedes gastar uno de sus usos para estabilizar a una criatura {@condition Unconscious|XPHB|inconsciente} que tenga 0 {@variantrule Hit Points|XPHB|puntos de golpe} sin necesidad de hacer una prueba de Sabiduría ({@skill Medicine|XPHB|Medicina})."
   },
   "heavy-crossbow": {
-    "name": ""
+    "name": "Ballesta pesada"
   },
   "herbalism-kit": {
-    "name": "",
-    "description": ""
+    "name": "Kit de herboristería",
+    "description": "• Característica: Inteligencia\n• Utilizar: Identificar una planta ({@dc 10|CD 10})\n• Fabricar: {@item Antitoxin|XPHB|Antitoxina}, {@item Candle|XPHB|Vela}, {@item Healer's Kit|XPHB|Botiquín}, {@item Potion of Healing|XDMG|Poción de curación}"
   },
   "hide-armor": {
-    "name": ""
+    "name": "Armadura de pieles"
   },
   "holy-water": {
-    "name": "",
-    "description": ""
+    "name": "Agua bendita",
+    "description": "Cuando realizas la acción de {@action Attack|XPHB|Atacar}, puedes reemplazar uno de tus ataques por lanzar un frasco de agua bendita. Elige como objetivo a una criatura que puedas ver a 20 pies o menos de ti. El objetivo debe superar una tirada de salvación de Destreza ({@dc 8|CD 8} + tu modificador de Destreza + tu {@variantrule Proficiency|XPHB|bonificador por competencia}) o sufrir {@damage 2d8} de daño radiante si es un demonio o un no muerto."
   },
   "hooded-lantern": {
-    "name": "",
+    "name": "Linterna con capucha",
     "description": ""
   },
   "horn": {
-    "name": "",
-    "description": ""
+    "name": "Cuerno",
+    "description": "• Característica: Carisma\n• Utilizar: Tocar una melodía conocida ({@dc 10|CD 10}) o improvisar una canción ({@dc 15|CD 15})"
   },
   "hunting-trap": {
-    "name": "",
-    "description": ""
+    "name": "Trampa de caza",
+    "description": "Como acción de {@action Utilize|XPHB|Utilizar}, puedes colocar una trampa de caza, que es un aro de acero dentado que se cierra de golpe cuando una criatura pisa una placa de presión en el centro. La trampa está sujeta mediante una cadena pesada a un objeto inmóvil, como un árbol o una estaca clavada en el suelo. Una criatura que pise la placa debe superar una tirada de salvación de Destreza {@dc 13|CD 13} o sufrir {@damage 1d4} de daño perforante y tener su {@variantrule Speed|XPHB|Velocidad} reducida a 0 hasta el inicio de su siguiente turno. A partir de entonces, hasta que la criatura se libere de la trampa, su movimiento queda limitado por la longitud de la cadena (normalmente 3 pies). Una criatura puede usar su acción para hacer una prueba de Fuerza ({@skill Athletics|XPHB|Atletismo}) {@dc 13|CD 13} y, si tiene éxito, liberarse a sí misma o a otra criatura a su alcance. Cada prueba fallida inflige 1 de daño perforante a la criatura atrapada."
   },
   "ink": {
-    "name": "",
-    "description": ""
+    "name": "Tinta",
+    "description": "La tinta viene en una botella de 1 onza, que proporciona suficiente tinta para escribir unas 500 páginas."
   },
   "ink-pen": {
-    "name": "",
-    "description": ""
+    "name": "Pluma de tinta",
+    "description": "Usando {@item Ink|XPHB|tinta}, una pluma de tinta se utiliza para escribir o dibujar."
   },
   "iron-pot": {
-    "name": "",
-    "description": ""
+    "name": "Olla de hierro",
+    "description": "Una olla de hierro puede contener hasta 1 galón."
   },
   "iron-spike": {
     "name": "",
-    "description": ""
+    "description": "Los clavos de hierro vienen en manojos de diez. Como acción de {@action Utilize|XPHB|Utilizar}, puedes usar un objeto romo, como un {@item Light Hammer|XPHB|martillo ligero}, para clavar un clavo en madera, tierra u otro material similar. Puedes hacerlo para trabar una puerta o para atar luego una {@item Rope|XPHB|cuerda} o {@item Chain|XPHB|cadena} al clavo."
   },
   "iron-spikes": {
-    "name": "",
-    "description": ""
+    "name": "Clavos de hierro",
+    "description": "Los clavos de hierro vienen en manojos de diez. Como acción de {@action Utilize|XPHB|Utilizar}, puedes usar un objeto romo, como un {@item Light Hammer|XPHB|martillo ligero}, para clavar un clavo en madera, tierra u otro material similar. Puedes hacerlo para trabar una puerta o para atar luego una {@item Rope|XPHB|cuerda} o {@item Chain|XPHB|cadena} al clavo."
   },
   "javelin": {
-    "name": ""
+    "name": "Jabalina"
   },
   "jeweler-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de joyero",
+    "description": "• Característica: Inteligencia\n• Utilizar: Determinar el valor de una gema ({@dc 15|CD 15})\n• Fabricar: {@item Arcane Focus|XPHB|Foco arcano}, {@item Holy Symbol|XPHB|Símbolo sagrado}"
   },
   "jug": {
-    "name": "",
-    "description": ""
+    "name": "Jarra",
+    "description": "Una jarra puede contener hasta 1 galón."
   },
   "keelboat": {
     "name": ""
   },
   "ladder": {
-    "name": "",
-    "description": ""
+    "name": "Escalera",
+    "description": "Una escalera mide 10 pies de alto. Debes trepar para subir o bajar por ella."
   },
   "lamp": {
-    "name": "",
-    "description": ""
+    "name": "Lámpara",
+    "description": "Una lámpara quema {@item Oil|XPHB|Aceite} como combustible para emitir {@variantrule Bright Light|XPHB|Luz brillante} en un radio de 15 pies y {@variantrule Dim Light|XPHB|Luz tenue} durante 30 pies adicionales."
   },
   "lance": {
-    "name": "",
+    "name": "Lanza de caballería",
     "description": ""
   },
   "leather-armor": {
-    "name": ""
+    "name": "Armadura de cuero"
   },
   "leatherworker-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de peletero",
+    "description": "• Característica: Destreza\n• Utilizar: Añadir un diseño a un objeto de cuero ({@dc 10|CD 10})\n• Fabricar: {@item Sling|XPHB|Honda}, {@item Whip|XPHB|Látigo}, {@item Hide Armor|XPHB|Armadura de pieles}, {@item Leather Armor|XPHB|Armadura de cuero}, {@item Studded Leather Armor|XPHB|Armadura de cuero tachonado}, {@item Backpack|XPHB|Mochila}, {@item Crossbow Bolt Case|XPHB|Carcaj de virotes}, {@item Map or Scroll Case|XPHB|Estuche para mapas o pergaminos}, {@item Parchment|XPHB|Pergamino}, {@item Pouch|XPHB|Faltriquera}, {@item Quiver|XPHB|Carcaj}, {@item Waterskin|XPHB|Odre}"
   },
   "light-crossbow": {
-    "name": ""
+    "name": "Ballesta ligera"
   },
   "light-hammer": {
-    "name": ""
+    "name": "Martillo ligero"
   },
   "lock": {
-    "name": "",
-    "description": ""
+    "name": "Candado",
+    "description": "Un candado viene con una llave. Sin la llave, una criatura puede usar {@item Thieves' Tools|XPHB|herramientas de ladrón} para forzar este candado con una prueba de Destreza ({@skill Sleight of Hand|XPHB|Juego de manos}) {@dc 15|CD 15} superada."
   },
   "longbow": {
-    "name": ""
+    "name": "Arco largo"
   },
   "longship": {
     "name": ""
   },
   "longsword": {
-    "name": ""
+    "name": "Espada larga"
   },
   "lute": {
-    "name": "",
-    "description": ""
+    "name": "Laúd",
+    "description": "• Característica: Carisma\n• Utilizar: Tocar una melodía conocida ({@dc 10|CD 10}) o improvisar una canción ({@dc 15|CD 15})"
   },
   "lyre": {
-    "name": "",
-    "description": ""
+    "name": "Lira",
+    "description": "• Característica: Carisma\n• Utilizar: Tocar una melodía conocida ({@dc 10|CD 10}) o improvisar una canción ({@dc 15|CD 15})"
   },
   "mace": {
-    "name": ""
+    "name": "Maza"
   },
   "magnifying-glass": {
-    "name": "",
-    "description": ""
+    "name": "Lupa",
+    "description": "Una lupa otorga {@variantrule Advantage|XPHB|Ventaja} en cualquier prueba de característica que se haga para tasar o inspeccionar un objeto muy detallado. Encender un fuego con una lupa requiere una luz tan brillante como la luz solar para concentrarla, yesca para prender y unos 5 minutos para que el fuego prenda."
   },
   "manacles": {
-    "name": "",
-    "description": ""
+    "name": "Grilletes",
+    "description": "Como acción de {@action Utilize|XPHB|Utilizar}, puedes usar grilletes para atar a una criatura reacia Pequeña o Mediana a 5 pies o menos de ti que tenga la condición de {@condition Grappled|XPHB|Agarrado}, {@condition Incapacitated|XPHB|Incapacitado} o {@condition Restrained|XPHB|Restringido}, si superas una prueba de Destreza ({@skill Sleight of Hand|XPHB|Juego de manos}) {@dc 13|CD 13}. Mientras está atada, una criatura tiene {@variantrule Disadvantage|XPHB|Desventaja} en las tiradas de ataque, y la criatura está {@condition Restrained|XPHB|Restringida} si los grilletes están sujetos a una cadena o gancho fijado en su lugar. Escapar de los grilletes requiere una prueba de Destreza ({@skill Sleight of Hand|XPHB|Juego de manos}) {@dc 20|CD 20} como acción. Romperlos requiere una prueba de Fuerza ({@skill Athletics|XPHB|Atletismo}) {@dc 25|CD 25} como acción.\nCada juego de grilletes viene con una llave. Sin la llave, una criatura puede usar {@item Thieves' Tools|XPHB|herramientas de ladrón} para forzar la cerradura de los grilletes con una prueba de Destreza ({@skill Sleight of Hand|XPHB|Juego de manos}) {@dc 15|CD 15} superada."
   },
   "map": {
-    "name": "",
-    "description": ""
+    "name": "Mapa",
+    "description": "Si consultas un mapa preciso, obtienes un bonificador de +5 a las pruebas de Sabiduría ({@skill Survival|XPHB|Supervivencia}) que hagas para orientarte en el lugar representado en él."
   },
   "map-or-scroll-case": {
-    "name": "",
+    "name": "Tubo para mapas o pergaminos",
     "description": ""
   },
   "mason-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de albañil",
+    "description": "• Característica: Fuerza\n• Utilizar: Cincelar un símbolo o un agujero en piedra ({@dc 10|CD 10})\n• Fabricar: {@item Block and Tackle|XPHB|Polipasto}"
   },
   "mastiff": {
     "name": ""
   },
   "maul": {
-    "name": ""
+    "name": "Gran maza"
   },
   "military-saddle": {
     "name": "",
     "description": ""
   },
   "mirror": {
-    "name": "",
-    "description": ""
+    "name": "Espejo",
+    "description": "Un espejo de acero de mano es útil para el aseo personal, pero también para asomarse por esquinas y reflejar luz como señal."
   },
   "morningstar": {
-    "name": ""
+    "name": "Lucero del alba"
   },
   "mule": {
     "name": ""
   },
   "musket": {
-    "name": ""
+    "name": "Mosquete"
   },
   "navigator-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de navegante",
+    "description": "• Característica: Sabiduría\n• Utilizar: Trazar un rumbo ({@dc 10|CD 10}) o determinar la posición observando las estrellas ({@dc 15|CD 15})"
   },
   "needle": {
     "name": "",
     "description": ""
   },
   "needles-50": {
-    "name": "",
+    "name": "Agujas",
     "description": ""
   },
   "net": {
-    "name": "",
-    "description": ""
+    "name": "Red",
+    "description": "Cuando realizas la acción de {@action Attack|XPHB|Atacar}, puedes reemplazar uno de tus ataques por lanzar una red. Elige como objetivo a una criatura que puedas ver a 15 pies o menos de ti. El objetivo debe superar una tirada de salvación de Destreza ({@dc 8|CD 8} + tu modificador de Destreza + tu {@variantrule Proficiency|XPHB|bonificador por competencia}) o tener la condición de {@condition Restrained|XPHB|Restringido} hasta que escape. El objetivo tiene éxito automáticamente si es Enorme o mayor.\nPara escapar, el objetivo o una criatura a 5 pies o menos de él debe realizar una acción para hacer una prueba de Fuerza ({@skill Athletics|XPHB|Atletismo}) {@dc 10|CD 10} y, si tiene éxito, liberar a la criatura {@condition Restrained|XPHB|Restringida}. Destruir la red (CA 10; 5 PG; {@variantrule Immunity|XPHB|Inmunidad} al daño contundente, veneno y psíquico) también libera al objetivo, poniendo fin al efecto."
   },
   "oil": {
-    "name": "",
-    "description": ""
+    "name": "Aceite",
+    "description": "Puedes empapar a una criatura, objeto o espacio con aceite, o usarlo como combustible, tal y como se detalla a continuación.\nEmpapar a una criatura o a un objeto. Cuando realizas la acción de {@action Attack|XPHB|Atacar}, puedes reemplazar uno de tus ataques por lanzar un frasco de aceite. Elige como objetivo a una criatura u objeto a 20 pies o menos de ti. El objetivo debe superar una tirada de salvación de Destreza ({@dc 8|CD 8} + tu modificador de Destreza + tu {@variantrule Proficiency|XPHB|bonificador por competencia}) o quedar cubierto de aceite. Si el objetivo sufre daño de fuego antes de que el aceite se seque (tras 1 minuto), el objetivo sufre 5 de daño de fuego adicional por el aceite en llamas.\nEmpapar un espacio. Puedes realizar la acción de {@action Utilize|XPHB|Utilizar} para verter un frasco de aceite en suelo llano y cubrir un área cuadrada de 5 pies, a 5 pies o menos de ti. Si se enciende, el aceite arde hasta el final del turno 2 asaltos después de que el aceite se encendiera (o 12 segundos) e inflige 5 de daño de fuego a cualquier criatura que entre en el área o termine su turno allí. Una criatura solo puede sufrir este daño una vez por turno.\nCombustible. El aceite sirve como combustible para lámparas y faroles. Una vez encendido, un frasco de aceite arde durante 6 horas en una lámpara o farol. Esa duración no tiene por qué ser consecutiva; puedes apagar el aceite en llamas (como acción de {@action Utilize|XPHB|Utilizar}) y volver a encenderlo hasta que haya ardido un total de 6 horas."
   },
   "orb": {
-    "name": ""
+    "name": "Orbe"
   },
   "padded-armor": {
-    "name": ""
+    "name": "Armadura acolchada"
   },
   "painter-s-supplies": {
-    "name": "",
-    "description": ""
+    "name": "Suministros de pintor",
+    "description": "• Característica: Sabiduría\n• Utilizar: Pintar una imagen reconocible de algo que hayas visto ({@dc 10|CD 10})\n• Fabricar: {@item Druidic Focus|XPHB|Foco druídico}, {@item Holy Symbol|XPHB|Símbolo sagrado}"
   },
   "pan-flute": {
-    "name": "",
-    "description": ""
+    "name": "Flauta de pan",
+    "description": "• Característica: Carisma\n• Utilizar: Tocar una melodía conocida ({@dc 10|CD 10}) o improvisar una canción ({@dc 15|CD 15})"
   },
   "paper": {
-    "name": "",
-    "description": ""
+    "name": "Papel",
+    "description": "Una hoja de papel puede contener unas 250 palabras escritas a mano."
   },
   "parchment": {
-    "name": "",
-    "description": ""
+    "name": "Pergamino",
+    "description": "Una hoja de pergamino puede contener unas 250 palabras escritas a mano."
   },
   "perfume": {
-    "name": "",
-    "description": ""
+    "name": "Perfume",
+    "description": "El perfume viene en un vial de 4 onzas. Durante 1 hora tras aplicarte perfume, tienes {@variantrule Advantage|XPHB|Ventaja} en las pruebas de Carisma ({@skill Persuasion|XPHB|Persuasión}) que hagas para influir en un humanoide Indiferente a 5 pies o menos de ti."
   },
   "pike": {
-    "name": ""
+    "name": "Pica"
   },
   "pistol": {
-    "name": ""
+    "name": "Pistola"
   },
   "plate-armor": {
-    "name": ""
+    "name": "Armadura de placas"
   },
   "playing-cards": {
-    "name": "",
-    "description": ""
+    "name": "Cartas de juego",
+    "description": "• Característica: Sabiduría\n• Utilizar: Discernir si alguien hace trampas ({@dc 10|CD 10}) o ganar la partida ({@dc 20|CD 20})"
   },
   "poisoner-s-kit": {
-    "name": "",
-    "description": ""
+    "name": "Kit de envenenador",
+    "description": "• Característica: Inteligencia\n• Utilizar: Detectar un objeto envenenado ({@dc 10|CD 10})\n• Fabricar: {@item Basic Poison|XPHB|Veneno básico}"
   },
   "pole": {
-    "name": "",
-    "description": ""
+    "name": "Pértiga",
+    "description": "Una pértiga mide 10 pies de largo. Puedes usarla para tocar algo a 10 pies o menos de ti. Si debes hacer una prueba de Fuerza ({@skill Athletics|XPHB|Atletismo}) como parte de un salto alto o {@variantrule Long Jump|XPHB|salto de longitud}, puedes usar la pértiga para impulsarte, obteniendo {@variantrule Advantage|XPHB|Ventaja} en la prueba."
   },
   "pony": {
     "name": ""
   },
   "portable-ram": {
-    "name": "",
-    "description": ""
+    "name": "Ariete portátil",
+    "description": "Puedes usar un ariete portátil para derribar puertas. Cuando lo haces, obtienes un bonificador de +4 a la prueba de Fuerza. Otro personaje puede ayudarte a usar el ariete, otorgándote {@variantrule Advantage|XPHB|Ventaja} en esta prueba."
   },
   "potter-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de alfarero",
+    "description": "• Característica: Inteligencia\n• Utilizar: Determinar qué sostuvo un objeto de cerámica en las últimas 24 horas ({@dc 15|CD 15})\n• Fabricar: {@item Jug|XPHB|Jarra}, {@item Lamp|XPHB|Lámpara}"
   },
   "pouch": {
-    "name": "",
-    "description": ""
+    "name": "Faltriquera",
+    "description": "Una faltriquera puede contener hasta 6 libras en un quinto de pie cúbico."
   },
   "priest-s-pack": {
-    "name": "",
-    "description": ""
+    "name": "Mochila de sacerdote",
+    "description": "Una mochila de sacerdote contiene los siguientes objetos: {@item Backpack|XPHB|Mochila}, {@item Blanket|XPHB|Manta}, {@item Holy Water|XPHB|Agua bendita}, {@item Lamp|XPHB|Lámpara}, 7 días de {@item Rations|XPHB|Raciones}, {@item Robe|XPHB|Toga} y {@item Tinderbox|XPHB|Caja de yesca}."
   },
   "quarterstaff": {
-    "name": ""
+    "name": "Bastón (Quarterstaff)"
   },
   "quiver": {
-    "name": "",
-    "description": ""
+    "name": "Carcaj",
+    "description": "Un carcaj puede contener hasta 20 flechas."
   },
   "rapier": {
-    "name": ""
+    "name": "Estoque"
   },
   "rations": {
-    "name": "",
-    "description": ""
+    "name": "Raciones",
+    "description": "Las raciones consisten en comida lista para viajar, como cecina, fruta desecada, galleta marinera y frutos secos. Consulta {@hazard Malnutrition|XPHB|Malnutrición} en el glosario de reglas para conocer los riesgos de no comer."
   },
   "reliquary": {
-    "name": "",
+    "name": "Relicario",
     "description": ""
   },
   "riding-horse": {
@@ -595,161 +595,161 @@
     "description": ""
   },
   "ring-mail": {
-    "name": ""
+    "name": "Armadura de anillas"
   },
   "robe": {
-    "name": "",
-    "description": ""
+    "name": "Toga",
+    "description": "Una toga tiene significado vocacional o ceremonial. Algunos eventos y lugares admiten solo a personas que lleven una toga con ciertos colores o símbolos."
   },
   "rod": {
-    "name": ""
+    "name": "Vara"
   },
   "rope": {
-    "name": "",
-    "description": ""
+    "name": "Cuerda",
+    "description": "Como acción de {@action Utilize|XPHB|Utilizar}, puedes hacer un nudo con una cuerda si superas una prueba de Destreza ({@skill Sleight of Hand|XPHB|Juego de manos}) {@dc 10|CD 10}. La cuerda se puede romper con una prueba de Fuerza ({@skill Athletics|XPHB|Atletismo}) {@dc 20|CD 20} superada.\nSolo puedes atar con la cuerda a una criatura reacia si la criatura tiene la condición de {@condition Grappled|XPHB|Agarrado}, {@condition Incapacitated|XPHB|Incapacitado} o {@condition Restrained|XPHB|Restringido}. Si se atan las piernas de la criatura, la criatura tiene la condición de {@condition Restrained|XPHB|Restringido} hasta que escape. Escapar de la cuerda requiere que la criatura supere una prueba de Destreza ({@skill Acrobatics|XPHB|Acrobacias}) {@dc 15|CD 15} como acción."
   },
   "rowboat": {
     "name": ""
   },
   "sack": {
-    "name": "",
-    "description": ""
+    "name": "Saco",
+    "description": "Un saco puede contener hasta 30 libras en 1 pie cúbico."
   },
   "sailing-ship": {
     "name": ""
   },
   "scale-mail": {
-    "name": ""
+    "name": "Cota de escamas"
   },
   "scholar-s-pack": {
-    "name": "",
-    "description": ""
+    "name": "Mochila de erudito",
+    "description": "Una mochila de erudito contiene los siguientes objetos: {@item Backpack|XPHB|Mochila}, {@item Book|XPHB|Libro}, {@item Ink|XPHB|Tinta}, {@item Ink Pen|XPHB|Pluma de tinta}, {@item Lamp|XPHB|Lámpara}, 10 frascos de {@item Oil|XPHB|Aceite}, 10 hojas de {@item Parchment|XPHB|Pergamino} y {@item Tinderbox|XPHB|Caja de yesca}."
   },
   "scimitar": {
-    "name": ""
+    "name": "Cimitarra"
   },
   "shawm": {
-    "name": "",
-    "description": ""
+    "name": "Chirimía",
+    "description": "• Característica: Carisma\n• Utilizar: Tocar una melodía conocida ({@dc 10|CD 10}) o improvisar una canción ({@dc 15|CD 15})"
   },
   "shield": {
-    "name": ""
+    "name": "Escudo"
   },
   "shortbow": {
-    "name": ""
+    "name": "Arco corto"
   },
   "shortsword": {
-    "name": ""
+    "name": "Espada corta"
   },
   "shovel": {
-    "name": "",
-    "description": ""
+    "name": "Pala",
+    "description": "Trabajando durante 1 hora, puedes usar una pala para cavar un hoyo de 5 pies de lado en tierra u otro material similar."
   },
   "sickle": {
-    "name": ""
+    "name": "Hoz"
   },
   "signal-whistle": {
-    "name": "",
-    "description": ""
+    "name": "Silbato de señales",
+    "description": "Cuando se sopla como acción de {@action Utilize|XPHB|Utilizar}, un silbato de señales produce un sonido que se puede oír hasta a 600 pies de distancia."
   },
   "sled": {
     "name": ""
   },
   "sling": {
-    "name": ""
+    "name": "Honda"
   },
   "sling-bullet": {
     "name": "",
     "description": ""
   },
   "sling-bullets-20": {
-    "name": "",
+    "name": "Balas, honda",
     "description": ""
   },
   "smith-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de herrero",
+    "description": "• Característica: Fuerza\n• Utilizar: Forzar la apertura de una puerta o un contenedor ({@dc 20|CD 20})\n• Fabricar: Cualquier arma cuerpo a cuerpo (excepto {@item Club|XPHB|Garrote}, {@item Greatclub|XPHB|Garrote grande}, {@item Quarterstaff|XPHB|Bastón (Quarterstaff)} y {@item Whip|XPHB|Látigo}), armadura intermedia (excepto {@item Hide Armor|XPHB|Armadura de pieles}), armadura pesada, {@item Ball Bearings|XPHB|Bolas de acero}, {@item Bucket|XPHB|Cubo}, {@item Caltrops|XPHB|Abrojos}, {@item Chain|XPHB|Cadena}, {@item Crowbar|XPHB|Palanca}, {@item Firearm Bullets (10)|XPHB|Balas, arma de fuego}, {@item Grappling Hook|XPHB|Garfio}, {@item Iron Pot|XPHB|Olla de hierro}, {@item Iron Spikes|XPHB|Clavos de hierro}, {@item Sling Bullets (20)|XPHB|Balas, honda}"
   },
   "spear": {
-    "name": ""
+    "name": "Lanza"
   },
   "splint-armor": {
-    "name": ""
+    "name": "Armadura de bandas"
   },
   "sprig-of-mistletoe": {
-    "name": ""
+    "name": "Ramita de muérdago"
   },
   "spyglass": {
-    "name": "",
-    "description": ""
+    "name": "Catalejo",
+    "description": "Los objetos vistos a través de un catalejo se magnifican al doble de su tamaño."
   },
   "stabling-per-day": {
     "name": ""
   },
   "staff": {
-    "name": ""
+    "name": "Bastón"
   },
   "string": {
-    "name": "",
-    "description": ""
+    "name": "Cordel",
+    "description": "El cordel mide 10 pies de largo. Puedes hacer un nudo en él como acción de {@action Utilize|XPHB|Utilizar}."
   },
   "studded-leather-armor": {
-    "name": ""
+    "name": "Armadura de cuero tachonado"
   },
   "tent": {
-    "name": "",
-    "description": ""
+    "name": "Tienda de campaña",
+    "description": "Una tienda de campaña da cobijo para dormir a hasta dos criaturas Pequeñas o Medianas."
   },
   "thieves-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de ladrón",
+    "description": "• Característica: Destreza\n• Utilizar: Forzar una cerradura ({@dc 15|CD 15}) o desactivar una trampa ({@dc 15|CD 15})"
   },
   "three-dragon-ante-set": {
-    "name": "",
-    "description": ""
+    "name": "Apuesta de tres dragones",
+    "description": "• Característica: Sabiduría\n• Utilizar: Discernir si alguien hace trampas ({@dc 10|CD 10}) o ganar la partida ({@dc 20|CD 20})"
   },
   "tinderbox": {
-    "name": "",
-    "description": ""
+    "name": "Caja de yesca",
+    "description": "Una caja de yesca es un pequeño recipiente que contiene pedernal, eslabón y yesca (normalmente tela seca empapada en aceite ligero) que se usa para encender fuego. Usarla para encender una {@item Candle|XPHB|vela}, {@item Lamp|XPHB|lámpara}, {@item Hooded Lantern|XPHB|farol} o {@item Torch|XPHB|antorcha} —o cualquier otra cosa con combustible expuesto— requiere una {@variantrule Bonus Action|XPHB|acción adicional}. Encender cualquier otro fuego requiere 1 minuto."
   },
   "tinker-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de calderero",
+    "description": "• Característica: Destreza\n• Utilizar: Montar un objeto diminuto compuesto de chatarra, que se deshace en 1 minuto ({@dc 20|CD 20})\n• Fabricar: {@item Musket|XPHB|Mosquete}, {@item Pistol|XPHB|Pistola}, {@item Bell|XPHB|Campana}, {@item Bullseye Lantern|XPHB|Farol de ojo de buey}, {@item Flask|XPHB|Frasco}, {@item Hooded Lantern|XPHB|Farol encapuchado}, {@item Hunting Trap|XPHB|Trampa de caza}, {@item Lock|XPHB|Candado}, {@item Manacles|XPHB|Grilletes}, {@item Mirror|XPHB|Espejo}, {@item Shovel|XPHB|Pala}, {@item Signal Whistle|XPHB|Silbato de señales}, {@item Tinderbox|XPHB|Caja de yesca}"
   },
   "torch": {
-    "name": "",
-    "description": ""
+    "name": "Antorcha",
+    "description": "Una antorcha arde durante 1 hora, emitiendo {@variantrule Bright Light|XPHB|Luz brillante} en un radio de 20 pies y {@variantrule Dim Light|XPHB|Luz tenue} durante 20 pies adicionales. Cuando realizas la acción de {@action Attack|XPHB|Atacar}, puedes atacar con la antorcha, usándola como arma cuerpo a cuerpo simple. Si impactas, el objetivo sufre 1 punto de daño de fuego."
   },
   "traveler-s-clothes": {
-    "name": "",
-    "description": ""
+    "name": "Ropa de viajero",
+    "description": "La ropa de viajero son prendas resistentes diseñadas para viajar en diversos entornos."
   },
   "trident": {
-    "name": ""
+    "name": "Tridente"
   },
   "trinket": {
     "name": "",
     "description": ""
   },
   "vial": {
-    "name": "",
-    "description": ""
+    "name": "Vial",
+    "description": "Un vial puede contener hasta 4 onzas."
   },
   "viol": {
-    "name": "",
-    "description": ""
+    "name": "Viola",
+    "description": "• Característica: Carisma\n• Utilizar: Tocar una melodía conocida ({@dc 10|CD 10}) o improvisar una canción ({@dc 15|CD 15})"
   },
   "wagon": {
     "name": ""
   },
   "wand": {
-    "name": ""
+    "name": "Varita"
   },
   "war-pick": {
-    "name": ""
+    "name": "Pico de guerra"
   },
   "warhammer": {
-    "name": ""
+    "name": "Martillo de guerra"
   },
   "warhorse": {
     "name": ""
@@ -758,24 +758,24 @@
     "name": ""
   },
   "waterskin": {
-    "name": "",
-    "description": ""
+    "name": "Odre",
+    "description": "Un odre puede contener hasta 4 pintas. Si no bebes suficiente agua, corres el riesgo de sufrir deshidratación."
   },
   "weaver-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de tejedor",
+    "description": "• Característica: Destreza\n• Utilizar: Remendar un desgarro en la ropa ({@dc 10|CD 10}) o coser un diseño diminuto ({@dc 10|CD 10})\n• Fabricar: {@item Padded Armor|XPHB|Armadura acolchada}, {@item Basket|XPHB|Cesta}, {@item Bedroll|XPHB|Rollo de cama}, {@item Blanket|XPHB|Manta}, {@item Fine Clothes|XPHB|Ropa fina}, {@item Net|XPHB|Red}, {@item Robe|XPHB|Toga}, {@item Rope|XPHB|Cuerda}, {@item Sack|XPHB|Saco}, {@item String|XPHB|Cordel}, {@item Tent|XPHB|Tienda de campaña}, {@item Traveler's Clothes|XPHB|Ropa de viajero}"
   },
   "whip": {
-    "name": ""
+    "name": "Látigo"
   },
   "woodcarver-s-tools": {
-    "name": "",
-    "description": ""
+    "name": "Herramientas de tallista de madera",
+    "description": "• Característica: Destreza\n• Utilizar: Tallar un patrón en madera ({@dc 10|CD 10})\n• Fabricar: {@item Club|XPHB|Garrote}, {@item Greatclub|XPHB|Garrote grande}, {@item Quarterstaff|XPHB|Bastón (Quarterstaff)}, armas a distancia (excepto {@item Pistol|XPHB|Pistola}, {@item Musket|XPHB|Mosquete} y {@item Sling|XPHB|Honda}), {@item Arcane Focus|XPHB|Foco arcano}, {@item Arrows (20)|XPHB|Flechas}, {@item Bolts (20)|XPHB|Virotes}, {@item Druidic Focus|XPHB|Foco druídico}, {@item Ink Pen|XPHB|Pluma de tinta}, {@item Needles (50)|XPHB|Agujas}"
   },
   "wooden-staff": {
-    "name": ""
+    "name": "Bastón de madera"
   },
   "yew-wand": {
-    "name": ""
+    "name": "Varita de tejo"
   }
 }

@@ -1,119 +1,119 @@
 {
   "barbarian": {
-    "name": "",
+    "name": "Bárbaro",
     "subclassTitle": "",
     "features": {
       "rage": {
-        "name": "",
-        "description": ""
+        "name": "Furia",
+        "description": "Puedes imbuirte de un poder primordial llamado Furia, una fuerza que te otorga una fuerza y una resistencia extraordinarias. Puedes entrar en ella como una {@variantrule Bonus Action|XPHB|Acción adicional} si no llevas armadura pesada.\nPuedes entrar en tu Furia el número de veces indicado para tu nivel de bárbaro en la columna Furias de la tabla de Rasgos del bárbaro. Recuperas un uso gastado cuando terminas un {@variantrule Short Rest|XPHB|Descanso corto}, y recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nMientras esté activa, tu Furia sigue las reglas siguientes.\nResistencia al daño. Tienes {@variantrule Resistance|XPHB|Resistencia} al daño contundente, perforante y cortante.\nDaño de furia. Cuando realizas un ataque usando Fuerza —ya sea con un arma o con un {@variantrule Unarmed Strike|XPHB|Golpe sin armas}— e infliges daño al objetivo, obtienes un bonificador al daño que aumenta a medida que ganas niveles como bárbaro, como se muestra en la columna Daño de furia de la tabla de Rasgos del bárbaro.\nVentaja de Fuerza. Tienes {@variantrule Advantage|XPHB|Ventaja} en las pruebas de Fuerza y en las tiradas de salvación de Fuerza.\nSin Concentración ni conjuros. No puedes mantener la {@status Concentration|XPHB|Concentración} y no puedes lanzar conjuros.\nDuración. La Furia dura hasta el final de tu siguiente turno, y termina antes si te pones armadura pesada o tienes la condición {@condition Incapacitated|XPHB|Incapacitado}. Si tu Furia sigue activa en tu siguiente turno, puedes extender la Furia durante otra ronda haciendo una de las siguientes cosas:\n• Hacer una tirada de ataque contra un enemigo.\n• Obligar a un enemigo a hacer una tirada de salvación.\n• Realizar una {@variantrule Bonus Action|XPHB|Acción adicional} para extender tu Furia.\nCada vez que la Furia se extiende, dura hasta el final de tu siguiente turno. Puedes mantener una Furia hasta 10 minutos."
       },
       "unarmored-defense": {
-        "name": "",
-        "description": ""
+        "name": "Defensa sin armadura",
+        "description": "Mientras no lleves ninguna armadura, tu {@variantrule Armor Class|XPHB|Clase de Armadura} base es igual a 10 + tus modificadores de Destreza y Constitución. Puedes usar un {@item Shield|XPHB|Escudo} y seguir obteniendo este beneficio."
       },
       "weapon-mastery": {
-        "name": "",
-        "description": ""
+        "name": "Maestría con armas",
+        "description": "Tu entrenamiento con armas te permite usar las {@variantrule weapon mastery properties|XPHB|propiedades de maestría} de dos tipos de {@filter armas cuerpo a cuerpo simples|items|type=simple weapon;melee weapon=sand} o {@filter marciales|items|type=martial weapon;melee weapon=sand} a tu elección, como {@item Greataxe|XPHB|hachas a dos manos} y {@item Handaxe|XPHB|hachas de mano}. Cada vez que terminas un {@variantrule Long Rest|XPHB|Descanso largo}, puedes practicar ejercicios con armas y cambiar una de esas elecciones de arma.\nCuando alcanzas ciertos niveles de bárbaro, obtienes la capacidad de usar las {@variantrule weapon mastery properties|XPHB|propiedades de maestría} de más tipos de armas, como se muestra en la columna Maestría con armas de la tabla de Rasgos del bárbaro."
       },
       "danger-sense": {
-        "name": "",
-        "description": ""
+        "name": "Sentir el peligro",
+        "description": "Obtienes un sentido sobrenatural de cuándo las cosas no son como deberían, dándote ventaja al esquivar peligros. Tienes {@variantrule Advantage|XPHB|Ventaja} en las tiradas de salvación de Destreza a menos que tengas la condición {@condition Incapacitated|XPHB|Incapacitado}."
       },
       "reckless-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque temerario",
+        "description": "Puedes dejar de lado toda preocupación por la defensa para atacar con mayor ferocidad. Cuando realizas tu primera tirada de ataque en tu turno, puedes decidir atacar temerariamente. Al hacerlo, obtienes {@variantrule Advantage|XPHB|Ventaja} en las tiradas de ataque que usen Fuerza hasta el inicio de tu siguiente turno, pero las tiradas de ataque contra ti tienen {@variantrule Advantage|XPHB|Ventaja} durante ese tiempo."
       },
       "barbarian-subclass": {
         "name": "",
         "description": ""
       },
       "primal-knowledge": {
-        "name": "",
-        "description": ""
+        "name": "Conocimiento primordial",
+        "description": "Obtienes competencia en otra habilidad a tu elección de la lista de habilidades disponibles para los bárbaros a nivel 1.\nAdemás, mientras tu Furia esté activa, puedes canalizar el poder primordial cuando intentas ciertas tareas; siempre que hagas una prueba de característica usando una de las siguientes habilidades, puedes hacerla como una prueba de Fuerza incluso si normalmente usa una característica diferente: {@skill Acrobatics|XPHB|Acrobacias}, {@skill Intimidation|XPHB|Intimidación}, {@skill Perception|XPHB|Percepción}, {@skill Stealth|XPHB|Sigilo} o {@skill Survival|XPHB|Supervivencia}. Cuando usas esta aptitud, tu Fuerza representa el poder primordial fluyendo a través de ti, afinando tu agilidad, presencia y sentidos."
       },
       "ability-score-improvement-4": {
         "name": "",
         "description": ""
       },
       "extra-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque adicional",
+        "description": "Puedes atacar dos veces en lugar de una siempre que realices la acción {@action Attack|XPHB|Atacar} en tu turno."
       },
       "fast-movement": {
-        "name": "",
-        "description": ""
+        "name": "Movimiento rápido",
+        "description": "Tu velocidad aumenta en 10 pies mientras no lleves armadura pesada."
       },
       "subclass-feature-6": {
         "name": "",
         "description": ""
       },
       "feral-instinct": {
-        "name": "",
-        "description": ""
+        "name": "Instinto feroz",
+        "description": "Tus instintos están tan afinados que tienes {@variantrule Advantage|XPHB|Ventaja} en las tiradas de {@variantrule Initiative|XPHB|Iniciativa}."
       },
       "instinctive-pounce": {
-        "name": "",
-        "description": ""
+        "name": "Embestida instintiva",
+        "description": "Como parte de la {@variantrule Bonus Action|XPHB|Acción adicional} que realizas para entrar en tu Furia, puedes moverte hasta la mitad de tu {@variantrule Speed|XPHB|Velocidad}."
       },
       "ability-score-improvement-8": {
         "name": "",
         "description": ""
       },
       "brutal-strike": {
-        "name": "",
-        "description": ""
+        "name": "Golpe brutal",
+        "description": "Si usas Ataque temerario, puedes renunciar a cualquier {@variantrule Advantage|XPHB|Ventaja} en una tirada de ataque basada en Fuerza de tu elección en tu turno. La tirada de ataque elegida no debe tener {@variantrule Disadvantage|XPHB|Desventaja}. Si la tirada de ataque elegida impacta, el objetivo recibe {@damage 1d10} de daño adicional del mismo tipo que el infligido por el arma o el {@variantrule Unarmed Strike|XPHB|Golpe sin armas}, y puedes causar un efecto de Golpe brutal de tu elección. Tienes las siguientes opciones de efecto.\nGolpe contundente. El objetivo es empujado 15 pies en línea recta alejándose de ti. Luego puedes moverte hasta la mitad de tu {@variantrule Speed|XPHB|Velocidad} en línea recta hacia el objetivo sin provocar {@action Opportunity Attack|XPHB|Ataques de oportunidad}.\nGolpe a los tendones. La {@variantrule Speed|XPHB|Velocidad} del objetivo se reduce en 15 pies hasta el inicio de tu siguiente turno. Un objetivo solo puede verse afectado por un Golpe a los tendones a la vez: el más reciente."
       },
       "subclass-feature-10": {
         "name": "",
         "description": ""
       },
       "relentless-rage": {
-        "name": "",
-        "description": ""
+        "name": "Furia implacable",
+        "description": "Tu Furia puede mantenerte luchando a pesar de heridas terribles. Si caes a 0 {@variantrule Hit Points|XPHB|Puntos de Golpe} mientras tu Furia está activa y no mueres inmediatamente, puedes hacer una tirada de salvación de Constitución con {@dc 10|CD 10}. Si tienes éxito, tus {@variantrule Hit Points|XPHB|Puntos de Golpe} pasan a ser un número igual al doble de tu nivel de bárbaro.\nCada vez que uses este rasgo después de la primera, la CD aumenta en 5. Cuando terminas un {@variantrule Short Rest|XPHB|Descanso corto} o {@variantrule Long Rest|XPHB|largo}, la CD se restablece a 10."
       },
       "ability-score-improvement-12": {
         "name": "",
         "description": ""
       },
       "improved-brutal-strike-13": {
-        "name": "",
-        "description": ""
+        "name": "Golpe brutal mejorado",
+        "description": "Has perfeccionado nuevas formas de atacar con furia. Los siguientes efectos pasan a estar entre tus opciones de Golpe brutal.\nGolpe tambaleante. El objetivo tiene {@variantrule Disadvantage|XPHB|Desventaja} en la siguiente tirada de salvación que haga, y no puede realizar {@action Opportunity Attack|XPHB|Ataques de oportunidad} hasta el inicio de tu siguiente turno.\nGolpe desgarrador. Antes del inicio de tu siguiente turno, la siguiente tirada de ataque realizada por otra criatura contra el objetivo obtiene un bonificador de +5 a la tirada. Una tirada de ataque solo puede beneficiarse de un bonificador de Golpe desgarrador."
       },
       "subclass-feature-14": {
         "name": "",
         "description": ""
       },
       "persistent-rage": {
-        "name": "",
-        "description": ""
+        "name": "Furia persistente",
+        "description": "Cuando tiras {@variantrule Initiative|XPHB|Iniciativa}, puedes recuperar todos los usos gastados de Furia. Después de recuperar usos de Furia de este modo, no puedes volver a hacerlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}.\nAdemás, tu Furia es tan feroz que ahora dura 10 minutos sin que tengas que hacer nada para extenderla de asalto en asalto. Tu Furia termina antes si tienes la condición {@condition Unconscious|XPHB|Inconsciente} (no solo la condición {@condition Incapacitated|XPHB|Incapacitado}) o si te pones armadura pesada."
       },
       "ability-score-improvement-16": {
         "name": "",
         "description": ""
       },
       "improved-brutal-strike-17": {
-        "name": "",
-        "description": ""
+        "name": "Golpe brutal mejorado",
+        "description": "El daño adicional de tu Golpe brutal aumenta a {@damage 2d10}. Además, puedes usar dos efectos diferentes de Golpe brutal siempre que uses tu rasgo Golpe brutal."
       },
       "indomitable-might": {
-        "name": "",
-        "description": ""
+        "name": "Poderío indómito",
+        "description": "Si tu resultado total en una prueba de Fuerza o una tirada de salvación de Fuerza es inferior a tu puntuación de Fuerza, puedes usar esa puntuación en lugar del total."
       },
       "epic-boon": {
         "name": "",
         "description": ""
       },
       "primal-champion": {
-        "name": "",
-        "description": ""
+        "name": "Campeón primordial",
+        "description": "Encarnas el poder primordial. Tus puntuaciones de Fuerza y Constitución aumentan en 4, hasta un máximo de 25."
       }
     },
     "resources": {
       "rage": {
-        "name": ""
+        "name": "Furia"
       },
       "persistent-rage": {
-        "name": "",
+        "name": "Furia persistente",
         "note": ""
       }
     },
@@ -124,28 +124,28 @@
     },
     "subclasses": {
       "berserker": {
-        "name": "",
+        "name": "Senda del berserker",
         "features": {
           "path-of-the-berserker": {
-            "name": "",
-            "description": ""
+            "name": "Senda del berserker",
+            "description": "{@i Canaliza la furia en una violencia desatada}\nLos bárbaros que recorren la Senda del berserker dirigen su Furia principalmente hacia la violencia. Su senda es la de una furia desatada, y se deleitan en el caos de la batalla mientras permiten que su Furia los posea y los potencie.\nFrenesí. Si usas Reckless Attack mientras tu Furia está activa, infliges daño adicional al primer objetivo al que impactes en tu turno con un ataque basado en Fuerza. Para determinar el daño adicional, tira un número de d6 igual a tu bonificación de Daño de furia y súmalos. El daño es del mismo tipo que el arma o {@variantrule Unarmed Strike|XPHB|Golpe sin armas} usado para el ataque."
           },
           "mindless-rage": {
-            "name": "",
-            "description": ""
+            "name": "Furia irracional",
+            "description": "Tienes {@variantrule Immunity|XPHB|Inmunidad} a las condiciones {@condition Charmed|XPHB|Hechizado} y {@condition Frightened|XPHB|Asustado} mientras tu Furia esté activa. Si estás {@condition Charmed|XPHB|Hechizado} o {@condition Frightened|XPHB|Asustado} cuando entras en tu Furia, la condición termina en ti."
           },
           "retaliation": {
-            "name": "",
-            "description": ""
+            "name": "Represalia",
+            "description": "Cuando recibes daño de una criatura que está a 5 pies o menos de ti, puedes usar una {@variantrule Reaction|XPHB|Reacción} para hacer un ataque cuerpo a cuerpo contra esa criatura, usando un arma o un {@variantrule Unarmed Strike|XPHB|Golpe sin armas}."
           },
           "intimidating-presence": {
-            "name": "",
-            "description": ""
+            "name": "Presencia intimidante",
+            "description": "Como una {@variantrule Bonus Action|XPHB|Acción adicional}, puedes sembrar el terror en otros con tu presencia amenazadora y tu poder primordial. Cuando lo haces, cada criatura de tu elección en una {@variantrule Emanation [Area of Effect]|XPHB|emanación} de 30 pies que se origina en ti debe hacer una tirada de salvación de Sabiduría ({@dc 8|CD 8} + tu modificador de Fuerza + tu {@variantrule Proficiency|XPHB|bonificador de competencia}). Con una salvación fallida, una criatura tiene la condición {@condition Frightened|XPHB|Asustado} durante 1 minuto. Al final de cada uno de los turnos de la criatura {@condition Frightened|XPHB|Asustado}, la criatura repite la salvación, terminando el efecto sobre sí misma con un éxito.\nUna vez que uses este rasgo, no puedes volver a usarlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}, a menos que gastes un uso de tu Furia (no requiere acción) para recuperar su uso."
           }
         },
         "resources": {
           "intimidating-presence": {
-            "name": "",
+            "name": "Presencia intimidante",
             "note": ""
           }
         }
@@ -153,23 +153,23 @@
     }
   },
   "bard": {
-    "name": "",
+    "name": "Bardo",
     "subclassTitle": "",
     "features": {
       "bardic-inspiration": {
-        "name": "",
-        "description": ""
+        "name": "Inspiración bárdica",
+        "description": "Puedes inspirar sobrenaturalmente a otros mediante palabras, música o danza. Esta inspiración está representada por tu dado de Inspiración bárdica, que comienza como un {@dice d6}.\nUsar Inspiración bárdica. Como una {@variantrule Bonus Action|XPHB|Acción adicional}, puedes inspirar a otra criatura a 60 pies de ti que pueda verte u oírte. Esa criatura obtiene uno de tus dados de Inspiración bárdica. Una criatura solo puede tener un dado de Inspiración bárdica a la vez.\nUna vez durante la siguiente hora, cuando la criatura falle una {@variantrule D20 Test|XPHB|Prueba de d20}, la criatura puede tirar el dado de Inspiración bárdica y sumar el resultado al {@dice d20}, pudiendo convertir el fallo en éxito. Un dado de Inspiración bárdica se gasta cuando se tira.\nNúmero de usos. Puedes conceder un dado de Inspiración bárdica un número de veces igual a tu modificador de Carisma (mínimo 1 vez), y recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nA niveles superiores. Tu dado de Inspiración bárdica cambia cuando alcanzas ciertos niveles de bardo, como se muestra en la columna Dado bárdico de la tabla de Rasgos del bardo. El dado pasa a {@dice d8} en el nivel 5, a {@dice d10} en el nivel 10 y a {@dice d12} en el nivel 15."
       },
       "spellcasting": {
-        "name": "",
-        "description": ""
+        "name": "Lanzamiento de conjuros",
+        "description": "Has aprendido a lanzar conjuros a través de tus artes bárdicas. Consulta {@book Adquirir conjuros|XPHB|7} para las reglas de lanzamiento de conjuros. La información de abajo detalla cómo usas esas reglas con los conjuros de bardo, que aparecen en la {@filter Lista de conjuros de bardo|spells|class=Bard}.\nTrucos. Conoces dos trucos a tu elección de la {@filter lista de conjuros de bardo|spells|class=Bard}. Se recomiendan {@spell Dancing Lights|XPHB|Luces danzantes} y {@spell Vicious Mockery|XPHB|Burla dañina}.\nCada vez que ganas un nivel de bardo, puedes sustituir uno de tus trucos por otro truco a tu elección de la {@filter lista de conjuros de bardo|spells|class=Bard}.\nCuando alcanzas los niveles 4 y 10 de bardo, aprendes otro truco a tu elección de la {@filter lista de conjuros de bardo|spells|class=Bard}, como se muestra en la columna Trucos de la tabla de Bard Features.\nEspacios de conjuro. La tabla de Rasgos del bardo muestra cuántos espacios de conjuro tienes para lanzar tus conjuros de nivel 1+. Recuperas todos los espacios gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nConjuros preparados de nivel 1+. Preparas la lista de conjuros de nivel 1+ que tienes disponibles para lanzar con este rasgo. Para empezar, elige cuatro conjuros de nivel 1 de la {@filter lista de conjuros de bardo|spells|class=Bard}. Se recomiendan {@spell Charm Person|XPHB|Hechizar persona}, {@spell Color Spray|XPHB|Rociada de color}, {@spell Dissonant Whispers|XPHB|Susurros discordantes} y {@spell Healing Word|XPHB|Palabra de curación}.\nEl número de conjuros en tu lista aumenta a medida que ganas niveles de bardo, como se muestra en la columna Conjuros preparados de la tabla de Rasgos del bardo. Cada vez que ese número aumente, elige conjuros adicionales de la {@filter lista de conjuros de bardo|spells|class=Bard} hasta que el número de conjuros en tu lista coincida con el número de la tabla. Los conjuros elegidos deben ser de un nivel para el que tengas espacios de conjuro. Por ejemplo, si eres un bardo de nivel 3, tu lista de conjuros preparados puede incluir seis conjuros de niveles 1 y 2 en cualquier combinación.\nSi otro rasgo de bardo te otorga conjuros que siempre tienes preparados, esos conjuros no cuentan para el número de conjuros que puedes preparar con este rasgo, pero, por lo demás, esos conjuros cuentan como conjuros de bardo para ti.\nCambiar tus conjuros preparados. Cada vez que ganas un nivel de bardo, puedes sustituir un conjuro de tu lista por otro conjuro de bardo para el que tengas espacios de conjuro.\nCaracterística de lanzamiento de conjuros. Carisma es tu característica de lanzamiento de conjuros para tus conjuros de bardo.\nFoco de lanzamiento de conjuros. Puedes usar un {@item Musical Instrument|XPHB|instrumento musical} como {@variantrule Spellcasting Focus|XPHB|Foco de lanzamiento de conjuros} para tus conjuros de bardo."
       },
       "expertise-2": {
-        "name": "",
-        "description": ""
+        "name": "Pericia",
+        "description": "Obtienes {@variantrule Expertise|XPHB|Pericia} en dos de tus competencias en habilidades a tu elección. Se recomiendan {@skill Performance|XPHB|Interpretación} y {@skill Persuasion|XPHB|Persuasión} si tienes competencia en ellas.\nEn el nivel 9 de bardo, obtienes {@variantrule Expertise|XPHB|Pericia} en dos competencias en habilidades más a tu elección."
       },
       "jack-of-all-trades": {
-        "name": "",
+        "name": "Aprendiz de todo",
         "description": ""
       },
       "bard-subclass": {
@@ -181,28 +181,28 @@
         "description": ""
       },
       "font-of-inspiration": {
-        "name": "",
-        "description": ""
+        "name": "Fuente de inspiración",
+        "description": "Ahora recuperas todos tus usos gastados de Inspiración bárdica cuando terminas un {@variantrule Short Rest|XPHB|Descanso corto} o {@variantrule Long Rest|XPHB|largo}.\nAdemás, puedes gastar un espacio de conjuro (no requiere acción) para recuperar un uso gastado de Inspiración bárdica."
       },
       "subclass-feature-6": {
         "name": "",
         "description": ""
       },
       "countercharm": {
-        "name": "",
-        "description": ""
+        "name": "Contracanto",
+        "description": "Puedes usar notas musicales o palabras de poder para interferir en efectos que influyen en la mente. Si tú o una criatura a 30 pies de ti falla una tirada de salvación contra un efecto que aplica la condición {@condition Charmed|XPHB|Hechizado} o {@condition Frightened|XPHB|Asustado}, puedes usar una {@variantrule Reaction|XPHB|Reacción} para hacer que la salvación se repita, y la nueva tirada tiene {@variantrule Advantage|XPHB|Ventaja}."
       },
       "ability-score-improvement-8": {
         "name": "",
         "description": ""
       },
       "expertise-9": {
-        "name": "",
-        "description": ""
+        "name": "Pericia",
+        "description": "Obtienes {@variantrule Expertise|XPHB|Pericia} en dos de tus competencias en habilidades a tu elección."
       },
       "magical-secrets": {
-        "name": "",
-        "description": ""
+        "name": "Secretos mágicos",
+        "description": "Has aprendido secretos de diversas tradiciones mágicas. Siempre que alcances un nivel de bardo (incluido este nivel) y aumente el número de Conjuros preparados en la tabla de Rasgos del bardo, puedes elegir cualquiera de tus nuevos conjuros preparados de las {@filter listas de conjuros|spells|class=Bard;Cleric;Druid;Wizard} de {@filter Lista de conjuros de bardo|spells|class=Bard}, {@filter Lista de conjuros de clérigo|spells|class=Cleric}, {@filter Lista de conjuros de druida|spells|class=Druid} y {@filter Lista de conjuros de mago|spells|class=Wizard}, y los conjuros elegidos cuentan como conjuros de bardo para ti. Además, siempre que sustituyas un conjuro preparado de esta clase, puedes sustituirlo por un conjuro de esas listas."
       },
       "ability-score-improvement-12": {
         "name": "",
@@ -217,21 +217,21 @@
         "description": ""
       },
       "superior-inspiration": {
-        "name": "",
-        "description": ""
+        "name": "Inspiración superior",
+        "description": "Cuando tiras {@variantrule Initiative|XPHB|Iniciativa}, recuperas usos gastados de Inspiración bárdica hasta tener dos, si tienes menos que eso."
       },
       "epic-boon": {
         "name": "",
         "description": ""
       },
       "words-of-creation": {
-        "name": "",
-        "description": ""
+        "name": "Palabras de creación",
+        "description": "Has dominado dos de las Palabras de creación: las palabras de vida y muerte. Por tanto, siempre tienes preparados los conjuros {@spell Power Word Heal|XPHB|Palabra de poder: sanar} y {@spell Power Word Kill|XPHB|Palabra de poder: matar}. Cuando lanzas cualquiera de esos conjuros, puedes elegir como objetivo a una segunda criatura con él si esa criatura está a 10 pies del primer objetivo."
       }
     },
     "resources": {
       "bardic-inspiration": {
-        "name": ""
+        "name": "Inspiración bárdica"
       }
     },
     "choices": {
@@ -241,40 +241,39 @@
     },
     "subclasses": {
       "lore": {
-        "name": "",
+        "name": "Colegio del Saber",
         "features": {
           "college-of-lore": {
-            "name": "",
-            "description": ""
+            "name": "Colegio del Saber",
+            "description": "{@i Explora las profundidades del conocimiento mágico}\nLos bardos del Colegio del Saber recopilan conjuros y secretos de fuentes diversas, como tomos eruditos, ritos místicos y relatos campesinos. Los miembros del colegio se reúnen en bibliotecas y universidades para compartir su saber entre ellos. También se encuentran en festivales o asuntos de estado, donde pueden destapar corrupción, desentrañar mentiras y burlarse de figuras de autoridad engreídas.\nCompetencias adicionales. Obtienes competencia con tres habilidades de tu elección.\nPalabras hirientes. Aprendes a usar tu ingenio para distraer, confundir y, en general, minar sobrenaturalmente la confianza y la competencia de otros. Cuando una criatura que puedas ver a 60 pies de ti hace una tirada de daño o tiene éxito en una prueba de característica o una tirada de ataque, puedes usar una {@variantrule Reaction|XPHB|Reacción} para gastar un uso de tu Inspiración bárdica; tira tu dado de Inspiración bárdica y resta el resultado de la tirada de la criatura, reduciendo el daño o pudiendo convertir el éxito en un fallo."
           },
           "magical-discoveries": {
-            "name": "",
-            "description": ""
+            "name": "Descubrimientos mágicos",
+            "description": "Aprendes dos conjuros a tu elección. Estos conjuros pueden proceder de la lista de conjuros de {@filter Lista de conjuros de clérigo|spells|class=Cleric}, {@filter Lista de conjuros de druida|spells|class=Druid} o {@filter Lista de conjuros de mago|spells|class=Wizard}, o cualquier combinación de ellas. Un conjuro que elijas debe ser un truco o un conjuro para el que tengas espacios de conjuro, como se muestra en la tabla de Bard Features.\nSiempre tienes preparados los conjuros elegidos, y cada vez que ganas un nivel de bardo, puedes sustituir uno de los conjuros por otro que cumpla estos requisitos."
           },
           "peerless-skill": {
-            "name": "",
-            "description": ""
+            "name": "Habilidad sin par",
+            "description": "Cuando haces una prueba de característica o una tirada de ataque y fallas, puedes gastar un uso de Inspiración bárdica; tira el dado de Inspiración bárdica y suma el resultado al {@dice d20}, pudiendo convertir un fallo en éxito. En caso de fallo, la Inspiración bárdica no se gasta."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "cleric": {
-    "name": "",
+    "name": "Clérigo",
     "subclassTitle": "",
     "features": {
       "spellcasting": {
-        "name": "",
-        "description": ""
+        "name": "Lanzamiento de conjuros",
+        "description": "Has aprendido a lanzar conjuros mediante oración y meditación. Consulta {@book Adquirir conjuros|XPHB|7} para las reglas de lanzamiento de conjuros. La información de abajo detalla cómo usas esas reglas con los conjuros de clérigo, que aparecen en la {@filter Lista de conjuros de clérigo|spells|class=Cleric}.\nTrucos. Conoces tres trucos a tu elección de la {@filter lista de conjuros de clérigo|spells|class=Cleric}. Se recomiendan {@spell Guidance|XPHB|Guía}, {@spell Sacred Flame|XPHB|Llama sagrada} y {@spell Thaumaturgy|XPHB|Taumaturgia}.\nCada vez que ganas un nivel de clérigo, puedes sustituir uno de tus trucos por otro truco a tu elección de la {@filter lista de conjuros de clérigo|spells|class=Cleric}.\nCuando alcanzas los niveles 4 y 10 de clérigo, aprendes otro truco a tu elección de la {@filter lista de conjuros de clérigo|spells|class=Cleric}, como se muestra en la columna Trucos de la tabla de Cleric Features.\nEspacios de conjuro. La tabla de Rasgos del clérigo muestra cuántos espacios de conjuro tienes para lanzar tus conjuros de nivel 1+. Recuperas todos los espacios gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nConjuros preparados de nivel 1+. Preparas la lista de conjuros de nivel 1+ que tienes disponibles para lanzar con este rasgo. Para empezar, elige cuatro conjuros de nivel 1 de la {@filter lista de conjuros de clérigo|spells|class=Cleric}. Se recomiendan {@spell Bless|XPHB|Bendición}, {@spell Cure Wounds|XPHB|Curar heridas}, {@spell Guiding Bolt|XPHB|Saeta guía} y {@spell Shield of Faith|XPHB|Escudo de fe}.\nEl número de conjuros en tu lista aumenta a medida que ganas niveles de clérigo, como se muestra en la columna Conjuros preparados de la tabla de Rasgos del clérigo. Cada vez que ese número aumente, elige conjuros adicionales de la {@filter lista de conjuros de clérigo|spells|class=Cleric} hasta que el número de conjuros en tu lista coincida con el número de la tabla. Los conjuros elegidos deben ser de un nivel para el que tengas espacios de conjuro. Por ejemplo, si eres un clérigo de nivel 3, tu lista de conjuros preparados puede incluir seis conjuros de niveles 1 y 2 en cualquier combinación.\nSi otro rasgo de clérigo te otorga conjuros que siempre tienes preparados, esos conjuros no cuentan para el número de conjuros que puedes preparar con este rasgo, pero, por lo demás, esos conjuros cuentan como conjuros de clérigo para ti.\nCambiar tus conjuros preparados. Siempre que terminas un {@variantrule Long Rest|XPHB|Descanso largo}, puedes cambiar tu lista de conjuros preparados, sustituyendo cualquiera de los conjuros de la lista por otros conjuros de clérigo para los que tengas espacios de conjuro.\nCaracterística de lanzamiento de conjuros. Sabiduría es tu característica de lanzamiento de conjuros para tus conjuros de clérigo.\nFoco de lanzamiento de conjuros. Puedes usar un {@item Holy Symbol|XPHB|Símbolo sagrado} como {@variantrule Spellcasting Focus|XPHB|Foco de lanzamiento de conjuros} para tus conjuros de clérigo."
       },
       "divine-order": {
-        "name": "",
-        "description": ""
+        "name": "Orden divina",
+        "description": "Te has dedicado a uno de los siguientes roles sagrados a tu elección.\nProtector. Entrenado para la batalla, obtienes competencia con {@filter armas marciales|items|type=martial weapon} y entrenamiento con {@filter armadura pesada|items|type=Heavy Armor}.\nTaumaturgo. Conoces un truco adicional de la {@filter Lista de conjuros de clérigo|spells|class=Cleric}. Además, tu conexión mística con lo divino te otorga un bonificador a las pruebas de Inteligencia ({@skill Arcana|XPHB|Arcanos} o {@skill Religion|XPHB|Religión}). El bonificador es igual a tu modificador de Sabiduría (mínimo +1)."
       },
       "channel-divinity": {
-        "name": "",
-        "description": ""
+        "name": "Canalizar Divinidad",
+        "description": "Puedes canalizar energía divina directamente de los Planos Exteriores para alimentar efectos mágicos. Comienzas con dos efectos: Chispa Divina y Ahuyentar a los Muertos Vivientes, cada uno descrito a continuación. Cada vez que uses Canalizar Divinidad de esta clase, elige qué efecto de Canalizar Divinidad de esta clase crear. Obtienes opciones de efecto adicionales a niveles superiores de clérigo.\nPuedes usar Canalizar Divinidad de esta clase dos veces. Recuperas uno de sus usos gastados cuando terminas un {@variantrule Short Rest|XPHB|Descanso Corto}, y recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso Largo}. Obtienes usos adicionales cuando alcanzas ciertos niveles de clérigo, como se muestra en la columna Canalizar Divinidad de la tabla de Rasgos de Clérigo.\nSi un efecto de Canalizar Divinidad requiere una tirada de salvación, la CD es igual a la CD de salvación de conjuros del rasgo Lanzamiento de Conjuros de esta clase.\nChispa Divina. Como acción de {@action Magic|XPHB|Magia}, apuntas tu {@item Holy Symbol|XPHB|Símbolo Sagrado} a otra criatura que puedas ver a 30 pies o menos de ti y concentras energía divina en ella. Tira {@dice 1d8} y añade tu modificador de Sabiduría. O bien restauras a la criatura {@variantrule Hit Points|XPHB|Puntos de Golpe} iguales a ese total, o bien obligas a la criatura a hacer una tirada de salvación de Constitución. Si falla la salvación, la criatura sufre daño Necrótico o Radiante (a tu elección) igual a ese total. Si la supera, sufre la mitad de ese daño (redondeando hacia abajo).\nTiras un {@dice d8} adicional cuando alcanzas los niveles de clérigo 7 ({@dice 2d8}), 13 ({@dice 3d8}) y 18 ({@dice 4d8}).\nAhuyentar a los Muertos Vivientes. Como acción de {@action Magic|XPHB|Magia}, presentas tu {@item Holy Symbol|XPHB|Símbolo Sagrado} y censuras a las criaturas No Muertas. Cada No Muerto que elijas a 30 pies o menos de ti debe hacer una tirada de salvación de Sabiduría. Si la criatura falla, obtiene las condiciones {@condition Frightened|XPHB|Asustado} e {@condition Incapacitated|XPHB|Incapacitado} durante 1 minuto. Mientras dure, intenta alejarse de ti todo lo posible en sus turnos. Este efecto termina antes sobre la criatura si recibe cualquier daño, si tienes la condición {@condition Incapacitated|XPHB|Incapacitado} o si mueres."
       },
       "cleric-subclass": {
         "name": "",
@@ -285,32 +284,32 @@
         "description": ""
       },
       "sear-undead": {
-        "name": "",
-        "description": ""
+        "name": "Abrasar muertos vivientes",
+        "description": "Siempre que uses Ahuyentar a los no muertos, puedes tirar un número de d8 igual a tu modificador de Sabiduría (mínimo {@dice 1d8}) y sumar los resultados. Cada no muerto que falle su tirada de salvación contra ese uso de Ahuyentar a los no muertos recibe daño radiante igual al total obtenido. Este daño no termina el efecto de ahuyentar."
       },
       "subclass-feature-6": {
         "name": "",
         "description": ""
       },
       "blessed-strikes": {
-        "name": "",
-        "description": ""
+        "name": "Golpes benditos",
+        "description": "El poder divino te impregna en la batalla. Obtienes una de las siguientes opciones a tu elección (si obtienes cualquiera de las opciones de una subclase de clérigo en un libro anterior, usa solo la opción que elijas para este rasgo).\nGolpe divino. Una vez en cada uno de tus turnos, cuando impactas a una criatura con una tirada de ataque usando un arma, puedes hacer que el objetivo reciba {@damage 1d8} de daño necrótico o radiante adicional (a tu elección).\nLanzamiento de conjuros potente. Añade tu modificador de Sabiduría al daño que infliges con cualquier truco de clérigo."
       },
       "ability-score-improvement-8": {
         "name": "",
         "description": ""
       },
       "divine-intervention": {
-        "name": "",
-        "description": ""
+        "name": "Intervención divina",
+        "description": "Puedes invocar a tu deidad o panteón para que intervenga en tu favor. Como una acción de {@action Magic|XPHB|Magia}, elige cualquier Lista de conjuros de clérigo de nivel 5 o inferior que no requiera una {@variantrule Reaction|XPHB|Reacción} para lanzarse. Como parte de la misma acción, lanzas ese conjuro sin gastar un espacio de conjuro ni necesitar componentes materiales. No puedes volver a usar este rasgo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "ability-score-improvement-12": {
         "name": "",
         "description": ""
       },
       "improved-blessed-strikes": {
-        "name": "",
-        "description": ""
+        "name": "Golpes benditos mejorados",
+        "description": "La opción que elegiste para Golpes benditos se vuelve más poderosa.\nGolpe divino. El daño adicional de tu Golpe divino aumenta a {@damage 2d8}.\nLanzamiento de conjuros potente. Cuando lanzas un truco de clérigo e infliges daño a una criatura con él, puedes infundirte vitalidad a ti mismo o a otra criatura a 60 pies de ti, otorgando una cantidad de {@variantrule Temporary Hit Points|XPHB|Puntos de Golpe temporales} igual al doble de tu modificador de Sabiduría."
       },
       "ability-score-improvement-16": {
         "name": "",
@@ -325,16 +324,16 @@
         "description": ""
       },
       "greater-divine-intervention": {
-        "name": "",
-        "description": ""
+        "name": "Intervención divina superior",
+        "description": "Puedes invocar una intervención divina aún más poderosa. Cuando usas tu rasgo Intervención divina, puedes elegir {@spell Wish|XPHB|Deseo} al seleccionar un conjuro. Si lo haces, no puedes volver a usar Intervención divina hasta que termines {@dice 2d4} Descansos largos."
       }
     },
     "resources": {
       "channel-divinity": {
-        "name": ""
+        "name": "Canalizar Divinidad"
       },
       "divine-intervention": {
-        "name": "",
+        "name": "Intervención divina",
         "note": ""
       }
     },
@@ -345,48 +344,47 @@
     },
     "subclasses": {
       "life": {
-        "name": "",
+        "name": "Dominio de la Vida",
         "features": {
           "life-domain": {
-            "name": "",
-            "description": ""
+            "name": "Dominio de la Vida",
+            "description": "{@i Alivia las heridas del mundo}\nEl Dominio de la Vida se centra en la energía positiva que ayuda a sustentar toda vida en el multiverso. Los clérigos que recurren a este dominio son maestros de la curación, usando esa fuerza vital para sanar muchas heridas.\nLa propia existencia depende de la energía positiva asociada a este dominio, por lo que un clérigo de casi cualquier tradición religiosa podría elegirlo. Este dominio se asocia especialmente con deidades agrícolas, dioses de la curación o la resistencia, y dioses del hogar y la comunidad. Las órdenes religiosas de sanación también buscan la magia de este dominio.\nConjuros del Dominio de la Vida. Tu conexión con este dominio divino garantiza que siempre tengas ciertos conjuros listos. Cuando alcanzas el nivel de clérigo especificado en la tabla de Conjuros del Dominio de la Vida, a partir de entonces siempre tienes preparados los conjuros indicados.\nConjuros del Dominio de la Vida\nNivel de clérigo | Conjuros preparados\n3 | {@spell Aid|XPHB|Auxilio}, {@spell Bless|XPHB|Bendición}, {@spell Cure Wounds|XPHB|Curar heridas}, {@spell Lesser Restoration|XPHB|Restablecimiento menor}\n5 | {@spell Mass Healing Word|XPHB|Palabra de curación en masa}, {@spell Revivify|XPHB|Revivir}\n7 | {@spell Aura of Life|XPHB|Aura de vida}, {@spell Death Ward|XPHB|Guarda contra la muerte}\n9 | {@spell Greater Restoration|XPHB|Restablecimiento mayor}, {@spell Mass Cure Wounds|XPHB|Curar heridas en masa}\nDiscípulo de la vida. Cuando un conjuro que lanzas usando un espacio de conjuro restaura {@variantrule Hit Points|XPHB|Puntos de Golpe} a una criatura, esa criatura recupera {@variantrule Hit Points|XPHB|Puntos de Golpe} adicionales en el turno en que lanzas el conjuro. Los {@variantrule Hit Points|XPHB|Puntos de Golpe} adicionales son iguales a 2 + el nivel del espacio de conjuro.\nPreservar vida. Como una acción de {@action Magic|XPHB|Magia}, presentas tu {@item Holy Symbol|XPHB|Símbolo sagrado} y gastas un uso de tu Canalizar divinidad para evocar energía curativa que puede restaurar un número de {@variantrule Hit Points|XPHB|Puntos de Golpe} igual a cinco veces tu nivel de clérigo. Elige criaturas {@status Bloodied|XPHB|Ensangrentadas} a 30 pies de ti (lo que puede incluirte) y reparte esos {@variantrule Hit Points|XPHB|Puntos de Golpe} entre ellas. Este rasgo no puede restaurar a una criatura por encima de la mitad de su máximo de {@variantrule Hit Points|XPHB|Puntos de Golpe}."
           },
           "blessed-healer": {
-            "name": "",
-            "description": ""
+            "name": "Sanador bendito",
+            "description": "Los conjuros de curación que lanzas sobre otros también te curan a ti. Inmediatamente después de lanzar un conjuro con un espacio de conjuro que restaura {@variantrule Hit Points|XPHB|Puntos de Golpe} a una o más criaturas distintas de ti, recuperas {@variantrule Hit Points|XPHB|Puntos de Golpe} iguales a 2 + el nivel del espacio de conjuro."
           },
           "supreme-healing": {
-            "name": "",
-            "description": ""
+            "name": "Curación suprema",
+            "description": "Cuando normalmente tirarías uno o más dados para restaurar {@variantrule Hit Points|XPHB|Puntos de Golpe} a una criatura con un conjuro o Canalizar divinidad, no tires esos dados para la curación; en su lugar, usa el valor más alto posible para cada dado. Por ejemplo, en lugar de restaurar {@dice 2d6} {@variantrule Hit Points|XPHB|Puntos de Golpe} a una criatura con un conjuro, restauras 12."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "druid": {
-    "name": "",
+    "name": "Druida",
     "subclassTitle": "",
     "features": {
       "druidic": {
-        "name": "",
-        "description": ""
+        "name": "Druídico",
+        "description": "Conoces el Druídico, el idioma secreto de los druidas. Mientras aprendías esta lengua antigua, también desbloqueaste la magia de comunicarte con los animales; siempre tienes preparado el conjuro {@spell Speak with Animals|XPHB|Hablar con los animales}.\nPuedes usar el Druídico para dejar mensajes ocultos. Tú y otras criaturas que conozcan el Druídico detectáis automáticamente esos mensajes. Otras criaturas detectan la presencia del mensaje con una prueba {@dc 15|CD 15} Inteligencia ({@skill Investigation|XPHB|Investigación}) exitosa, pero no pueden descifrarlo sin magia."
       },
       "primal-order": {
-        "name": "",
-        "description": ""
+        "name": "Orden primordial",
+        "description": "Te has dedicado a uno de los siguientes roles sagrados a tu elección.\nMago. Conoces un truco adicional de la {@filter lista de conjuros de druida|spells|class=Druid}. Además, tu conexión mística con la naturaleza te otorga un bonificador a las pruebas de Inteligencia ({@skill Arcana|XPHB|Arcanos} o {@skill Nature|XPHB|Naturaleza}). El bonificador es igual a tu modificador de Sabiduría (bonificador mínimo de +1).\nGuardián. Entrenado para la batalla, obtienes competencia con {@filter armas marciales|items|type=martial weapon} y entrenamiento con {@filter armadura media|items|type=Medium Armor}."
       },
       "spellcasting": {
-        "name": "",
-        "description": ""
+        "name": "Lanzamiento de conjuros",
+        "description": "Has aprendido a lanzar conjuros estudiando las fuerzas místicas de la naturaleza. Consulta {@book Adquirir conjuros|XPHB|7} para las reglas de lanzamiento de conjuros. La información de abajo detalla cómo usas esas reglas con los conjuros de druida, que aparecen en la {@filter Lista de conjuros de druida|spells|class=Druid}.\nTrucos. Conoces dos trucos a tu elección de la {@filter lista de conjuros de druida|spells|class=Druid}. Se recomiendan {@spell Druidcraft|XPHB|Saber Druídico} y {@spell Produce Flame|XPHB|Crear llama}.\nCada vez que ganas un nivel de druida, puedes sustituir uno de tus trucos por otro truco a tu elección de la {@filter lista de conjuros de druida|spells|class=Druid}.\nCuando alcanzas los niveles 4 y 10 de druida, aprendes otro truco a tu elección de la {@filter lista de conjuros de druida|spells|class=Druid}, como se muestra en la columna Trucos de la tabla de Druid Features.\nEspacios de conjuro. La tabla de Rasgos del druida muestra cuántos espacios de conjuro tienes para lanzar tus conjuros de nivel 1+. Recuperas todos los espacios gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nConjuros preparados de nivel 1+. Preparas la lista de conjuros de nivel 1+ que tienes disponibles para lanzar con este rasgo. Para empezar, elige cuatro conjuros de nivel 1 de la {@filter lista de conjuros de druida|spells|class=Druid}. Se recomiendan {@spell Animal Friendship|XPHB|Encantar animal}, {@spell Cure Wounds|XPHB|Curar heridas}, {@spell Faerie Fire|XPHB|Fuego feérico} y {@spell Thunderwave|XPHB|Ola atronadora}.\nEl número de conjuros en tu lista aumenta a medida que ganas niveles de druida, como se muestra en la columna Conjuros preparados de la tabla de Rasgos del druida. Cada vez que ese número aumente, elige conjuros adicionales de la {@filter lista de conjuros de druida|spells|class=Druid} hasta que el número de conjuros en tu lista coincida con el número de la tabla. Los conjuros elegidos deben ser de un nivel para el que tengas espacios de conjuro. Por ejemplo, si eres un druida de nivel 3, tu lista de conjuros preparados puede incluir seis conjuros de niveles 1 y 2 en cualquier combinación.\nSi otro rasgo de druida te otorga conjuros que siempre tienes preparados, esos conjuros no cuentan para el número de conjuros que puedes preparar con este rasgo, pero, por lo demás, esos conjuros cuentan como conjuros de druida para ti.\nCambiar tus conjuros preparados. Siempre que terminas un {@variantrule Long Rest|XPHB|Descanso largo}, puedes cambiar tu lista de conjuros preparados, sustituyendo cualquiera de los conjuros por otros conjuros de druida para los que tengas espacios de conjuro.\nCaracterística de lanzamiento de conjuros. Sabiduría es tu característica de lanzamiento de conjuros para tus conjuros de druida.\nFoco de lanzamiento de conjuros. Puedes usar un {@item Druidic Focus|XPHB|Foco druídico} como {@variantrule Spellcasting Focus|XPHB|Foco de lanzamiento de conjuros} para tus conjuros de druida."
       },
       "wild-companion": {
-        "name": "",
-        "description": ""
+        "name": "Compañero salvaje",
+        "description": "Puedes invocar un espíritu de la naturaleza que adopta una forma animal para ayudarte. Como una acción de {@action Magic|XPHB|Magia}, puedes gastar un espacio de conjuro o un uso de Forma salvaje para lanzar el conjuro {@spell Find Familiar|XPHB|Encontrar familiar} sin componentes materiales.\nCuando lanzas el conjuro de esta forma, el familiar es un feérico y desaparece cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "wild-shape": {
-        "name": "",
-        "description": ""
+        "name": "Forma salvaje",
+        "description": "El poder de la naturaleza te permite adoptar la forma de un animal. Como {@variantrule Bonus Action|XPHB|acción adicional}, te transformas en una forma de Bestia que hayas aprendido con este rasgo (consulta \"Formas conocidas\" más abajo). Permaneces en esa forma durante un número de horas igual a la mitad de tu nivel de druida o hasta que uses Forma salvaje de nuevo, tengas la condición de {@condition Incapacitated|XPHB|Incapacitado} o mueras. También puedes abandonar la forma antes como {@variantrule Bonus Action|XPHB|acción adicional}.\nNúmero de usos. Puedes usar Forma salvaje dos veces. Recuperas un uso gastado cuando terminas un {@variantrule Short Rest|XPHB|Descanso corto} y recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nObtienes usos adicionales cuando alcanzas ciertos niveles de druida, como se muestra en la columna Forma salvaje de la tabla de Druid Features.\nFormas conocidas. Conoces cuatro formas de Bestia para este rasgo, elegidas entre perfiles de Bestia con un {@variantrule Challenge Rating|XPHB|índice de desafío} máximo de 1/4 y que no tengan {@variantrule Fly Speed|XPHB|velocidad de vuelo}. Se recomiendan {@creature Rat|XMM|Rat}, {@creature Riding Horse|XMM|Riding Horse}, {@creature Spider|XMM|Spider} y {@creature Wolf|XMM|Wolf}. Siempre que termines un {@variantrule Long Rest|XPHB|Descanso largo}, puedes sustituir una de tus formas conocidas por otra forma válida.\nCuando alcanzas ciertos niveles de druida, tu número de formas conocidas y el {@variantrule Challenge Rating|XPHB|índice de desafío} máximo para esas formas aumenta, como se muestra en la tabla de Formas de bestia. Además, a partir de nivel 8, puedes adoptar una forma que tenga {@variantrule Fly Speed|XPHB|velocidad de vuelo}.\nAl elegir formas conocidas, puedes mirar en el {@book Manual de Monstruos|XMM} o en otros lugares para encontrar Bestias válidas si el Dungeon Master te lo permite.\nFormas de bestia\nNivel de druida | Formas conocidas | ID máx. | Velocidad de vuelo\n2 | 4 | {@filter 1/4|bestiary|challenge rating=[&0;&1/4]|type=beast|speed type=!fly|miscellaneous=!swarm} | No\n4 | 6 | {@filter 1/2|bestiary|challenge rating=[&0;&1/2]|type=beast|speed type=!fly|miscellaneous=!swarm} | No\n8 | 8 | {@filter 1|bestiary|challenge rating=[&0;&1]|type=beast|miscellaneous=!swarm} | Sí\nReglas mientras estás transformado. Mientras estás en una forma, conservas tu personalidad, recuerdos y capacidad de hablar, y se aplican las reglas siguientes:\n• Puntos de golpe temporales. Cuando adoptas una forma de Forma salvaje, obtienes una cantidad de {@variantrule Temporary Hit Points|XPHB|Puntos de Golpe temporales} igual a tu nivel de druida.\n• Estadísticas de juego. Tus estadísticas de juego son sustituidas por el bloque de estadísticas de la Bestia, pero conservas tu tipo de criatura; {@variantrule Hit Points|XPHB|Puntos de Golpe}; {@variantrule Hit Point Dice|XPHB|Dados de Golpe}; puntuaciones de Inteligencia, Sabiduría y Carisma; rasgos de clase; idiomas y dotes. También conservas tus competencias en habilidades y tiradas de salvación, y usas tu {@variantrule Proficiency|XPHB|bonificador de competencia} para ellas, además de obtener las competencias de la criatura. Si un modificador de habilidad o de tirada de salvación en el bloque de estadísticas de la Bestia es mayor que el tuyo, usa el del bloque de estadísticas.\n• Sin lanzamiento de conjuros. No puedes lanzar conjuros, pero transformarte no rompe tu {@status Concentration|XPHB|Concentración} ni interfiere de otro modo con un conjuro que ya hayas lanzado.\n• Objetos. Tu capacidad para manipular objetos la determinan las extremidades de la forma, en lugar de las tuyas. Además, eliges si tu equipo cae en tu espacio, se fusiona con tu nueva forma o es llevado por ella. El equipo llevado funciona con normalidad, pero el DM decide si es práctico que la nueva forma lleve una pieza de equipo según el tamaño y la forma de la criatura. Tu equipo no cambia de tamaño o forma para ajustarse a la nueva forma, y cualquier equipo que la nueva forma no pueda llevar debe caer al suelo o fusionarse con la forma. El equipo que se fusiona con la forma no tiene efecto mientras estás en esa forma."
       },
       "druid-subclass": {
         "name": "",
@@ -397,16 +395,16 @@
         "description": ""
       },
       "wild-resurgence": {
-        "name": "",
-        "description": ""
+        "name": "Resurgimiento salvaje",
+        "description": "Una vez en cada uno de tus turnos, si no te quedan usos de Forma salvaje, puedes obtener un uso gastando un espacio de conjuro (no requiere acción).\nAdemás, puedes gastar un uso de Forma salvaje (no requiere acción) para obtener un espacio de conjuro de nivel 1, pero no puedes volver a hacerlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "subclass-feature-6": {
         "name": "",
         "description": ""
       },
       "elemental-fury": {
-        "name": "",
-        "description": ""
+        "name": "Furia elemental",
+        "description": "El poder de los elementos fluye a través de ti. Obtienes una de las siguientes opciones a tu elección.\nLanzamiento de conjuros potente. Añade tu modificador de Sabiduría al daño que infliges con cualquier truco de druida.\nGolpe primordial. Una vez en cada uno de tus turnos, cuando impactas a una criatura con una tirada de ataque usando un arma o el ataque de una forma de bestia con Forma salvaje, puedes hacer que el objetivo sufra {@damage 1d8} de daño adicional de frío, fuego, relámpago o trueno (elige cuando impactes)."
       },
       "ability-score-improvement-8": {
         "name": "",
@@ -425,36 +423,36 @@
         "description": ""
       },
       "improved-elemental-fury": {
-        "name": "",
-        "description": ""
+        "name": "Furia elemental mejorada",
+        "description": "La opción que elegiste para Furia elemental se vuelve más poderosa, como se detalla a continuación.\nLanzamiento de conjuros potente. Cuando lanzas un truco de druida con un alcance de 10 pies o más, el alcance del conjuro aumenta en 300 pies.\nGolpe primordial. El daño adicional de tu Golpe primordial aumenta a {@damage 2d8}."
       },
       "ability-score-improvement-16": {
         "name": "",
         "description": ""
       },
       "beast-spells": {
-        "name": "",
-        "description": ""
+        "name": "Conjuros bestiales",
+        "description": "Mientras usas Forma salvaje, puedes lanzar conjuros en forma de bestia, excepto cualquier conjuro que tenga un componente material con un coste especificado o que consuma su componente material."
       },
       "epic-boon": {
         "name": "",
         "description": ""
       },
       "archdruid": {
-        "name": "",
-        "description": ""
+        "name": "Archidruida",
+        "description": "La vitalidad de la naturaleza florece constantemente en tu interior, otorgándote los siguientes beneficios.\nForma salvaje perenne. Siempre que tiras {@variantrule Initiative|XPHB|Iniciativa} y no te quedan usos de Forma salvaje, recuperas un uso gastado.\nMago de la naturaleza. Puedes convertir usos de Forma salvaje en un espacio de conjuro (no requiere acción). Elige un número de usos no gastados de Forma salvaje y conviértelos en un único espacio de conjuro, contribuyendo cada uso con 2 niveles de conjuro. Por ejemplo, si conviertes dos usos de Forma salvaje, produces un espacio de conjuro de nivel 4. Una vez que uses este beneficio, no puedes volver a hacerlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}.\nLongevidad. La magia primordial que manejas hace que envejezcas más despacio. Por cada diez años que pasan, tu cuerpo envejece solo un año."
       }
     },
     "resources": {
       "wild-shape": {
-        "name": ""
+        "name": "Forma salvaje"
       },
       "wild-resurgence": {
-        "name": "",
+        "name": "Resurgimiento salvaje",
         "note": ""
       },
       "nature-magician": {
-        "name": "",
+        "name": "Mago de la naturaleza",
         "note": ""
       }
     },
@@ -465,23 +463,23 @@
     },
     "subclasses": {
       "land": {
-        "name": "",
+        "name": "Círculo de la Tierra",
         "features": {
           "circle-of-the-land": {
-            "name": "",
-            "description": ""
+            "name": "Círculo de la Tierra",
+            "description": "{@i Celebra la conexión con el mundo natural}\nEl Círculo de la Tierra lo componen místicos y sabios que salvaguardan conocimientos y ritos antiguos. Estos druidas se reúnen en círculos sagrados de árboles o piedras erguidas para susurrar secretos primordiales en druídico. Los miembros más sabios del círculo presiden como sumos sacerdotes de sus comunidades.\nConjuros del Círculo de la Tierra. Siempre que termines un {@variantrule Long Rest|XPHB|Descanso largo}, elige un tipo de terreno: árido, polar, templado o tropical. Consulta la tabla de abajo que corresponda al tipo elegido; tienes preparados los conjuros indicados para tu nivel de druida y niveles inferiores.\nTerreno árido\nNivel de druida | Conjuros del círculo\n3 | {@spell Blur|XPHB|Contorno borroso}, {@spell Burning Hands|XPHB|Manos ardientes}, {@spell Fire Bolt|XPHB|Descarga de fuego}\n5 | {@spell Fireball|XPHB|Bola de fuego}\n7 | {@spell Blight|XPHB|Marchitar}\n9 | {@spell Wall of Stone|XPHB|Muro de piedra}\nTerreno polar\nNivel de druida | Conjuros del círculo\n3 | {@spell Fog Cloud|XPHB|Nube de oscurecimiento}, {@spell Hold Person|XPHB|Inmovilizar persona}, {@spell Ray of Frost|XPHB|Rayo de escarcha}\n5 | {@spell Sleet Storm|XPHB|Tormenta de aguanieve}\n7 | {@spell Ice Storm|XPHB|Tormenta de hielo}\n9 | {@spell Cone of Cold|XPHB|Cono de frío}\nTerreno templado\nNivel de druida | Conjuros del círculo\n3 | {@spell Misty Step|XPHB|Paso brumoso}, {@spell Shocking Grasp|XPHB|Agarre electrizante}, {@spell Sleep|XPHB|Dormir}\n5 | {@spell Lightning Bolt|XPHB|Relámpago}\n7 | {@spell Freedom of Movement|XPHB|Libertad de movimiento}\n9 | {@spell Tree Stride|XPHB|Paso arbóreo}\nTerreno tropical\nNivel de druida | Conjuros del círculo\n3 | {@spell Acid Splash|XPHB|Salpicadura ácida}, {@spell Ray of Sickness|XPHB|Rayo nauseabundo}, {@spell Web|XPHB|Telaraña}\n5 | {@spell Stinking Cloud|XPHB|Nube apestosa}\n7 | {@spell Polymorph|XPHB|Polimorfar}\n9 | {@spell Insect Plague|XPHB|Plaga de insectos}\nAyuda de la tierra. Como una acción de {@action Magic|XPHB|Magia}, puedes gastar un uso de tu Forma salvaje y elegir un punto a 60 pies de ti. Durante un instante aparecen flores que dan vitalidad y espinas que drenan la vida en una {@variantrule Sphere [Area of Effect]|XPHB|esfera} de 10 pies de radio centrada en ese punto. Cada criatura a tu elección en la {@variantrule Sphere [Area of Effect]|XPHB|esfera} debe hacer una tirada de salvación de Constitución contra tu CD de salvación de conjuros; sufre {@damage 2d6} de daño necrótico si falla, o la mitad si tiene éxito. Una criatura a tu elección en esa zona recupera {@dice 2d6} {@variantrule Hit Points|XPHB|Puntos de Golpe}.\nEl daño y la curación aumentan en {@dice 1d6} cuando alcanzas los niveles 10 ({@dice 3d6}) y 14 ({@dice 4d6}) de druida."
           },
           "natural-recovery": {
-            "name": "",
-            "description": ""
+            "name": "Recuperación natural",
+            "description": "Puedes lanzar uno de los conjuros de nivel 1+ que tengas preparados mediante tu rasgo Conjuros del círculo sin gastar un espacio de conjuro, y debes terminar un {@variantrule Long Rest|XPHB|Descanso largo} antes de poder hacerlo de nuevo.\nAdemás, cuando terminas un {@variantrule Short Rest|XPHB|Descanso corto}, puedes elegir espacios de conjuro gastados para recuperarlos. Los espacios pueden tener un nivel combinado igual o inferior a la mitad de tu nivel de druida (redondea hacia arriba), y ninguno puede ser de nivel 6+. Por ejemplo, si eres un druida de nivel 6, puedes recuperar hasta tres niveles en total de espacios de conjuro. Puedes recuperar un espacio de nivel 3, un espacio de nivel 2 y uno de nivel 1, o tres espacios de nivel 1. Una vez que recuperas espacios con este rasgo, no puedes volver a hacerlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}."
           },
           "nature-s-ward": {
-            "name": "",
-            "description": ""
+            "name": "Guardián de la naturaleza",
+            "description": "Eres inmune a la condición {@condition Poisoned|XPHB|Envenenado} y tienes {@variantrule Resistance|XPHB|Resistencia} a un tipo de daño asociado con tu elección actual de terreno en el rasgo Conjuros del círculo, como se muestra en la tabla de Guardián de la naturaleza.\nGuardián de la naturaleza\nTipo de terreno | Resistencia\nÁrido | Fuego\nPolar | Frío\nTemplado | Relámpago\nTropical | Veneno"
           },
           "nature-s-sanctuary": {
-            "name": "",
-            "description": ""
+            "name": "Santuario de la naturaleza",
+            "description": "Como una acción de {@action Magic|XPHB|Magia}, puedes gastar un uso de tu Forma salvaje y hacer que aparezcan árboles y enredaderas espectrales en un {@variantrule Cube [Area of Effect]|XPHB|cubo} de 15 pies apoyado en el suelo dentro de 120 pies de ti. Permanecen allí durante 1 minuto o hasta que tengas la condición de {@condition Incapacitated|XPHB|Incapacitado} o mueras. Tú y tus aliados tenéis {@variantrule Cover|XPHB|Cobertura media} mientras estéis en esa zona, y tus aliados obtienen la {@variantrule Resistance|XPHB|Resistencia} actual de tu Guardián de la naturaleza mientras permanezcan allí.\nComo {@variantrule Bonus Action|XPHB|acción adicional}, puedes mover el {@variantrule Cube [Area of Effect]|XPHB|cubo} hasta 60 pies a un punto del suelo dentro de 120 pies de ti."
           }
         },
         "resources": {
@@ -498,28 +496,28 @@
     }
   },
   "fighter": {
-    "name": "",
+    "name": "Guerrero",
     "subclassTitle": "",
     "features": {
       "fighting-style": {
-        "name": "",
-        "description": ""
+        "name": "Estilo de combate",
+        "description": "Has perfeccionado tu destreza marcial y obtienes una {@filter dote de estilo de combate|feats|category=FS} a tu elección. Se recomienda {@feat Defense|XPHB|Defensa}.\nCada vez que ganas un nivel de guerrero, puedes sustituir la dote que elegiste por una {@filter dote de Estilo de combate|feats|category=FS} diferente."
       },
       "second-wind": {
-        "name": "",
-        "description": ""
+        "name": "Segundo aliento",
+        "description": "Tienes una reserva limitada de resistencia física y mental de la que puedes tirar. Como {@variantrule Bonus Action|XPHB|acción adicional}, puedes usarla para recuperar {@variantrule Hit Points|XPHB|Puntos de Golpe} iguales a {@dice 1d10} más tu nivel de guerrero.\nPuedes usar este rasgo dos veces. Recuperas un uso gastado cuando terminas un {@variantrule Short Rest|XPHB|Descanso corto} y recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nCuando alcanzas ciertos niveles de guerrero, obtienes más usos de este rasgo, como se muestra en la columna Segundo aliento de la tabla de Rasgos del guerrero."
       },
       "weapon-mastery": {
-        "name": "",
-        "description": ""
+        "name": "Maestría con armas",
+        "description": "Tu entrenamiento con armas te permite usar las {@variantrule weapon mastery properties|XPHB|propiedades de maestría} de tres tipos de armas {@filter simples|items|type=simple weapon} o {@filter marciales|items|type=martial weapon} a tu elección. Cada vez que terminas un {@variantrule Long Rest|XPHB|Descanso largo}, puedes practicar ejercicios con armas y cambiar una de esas elecciones de arma.\nCuando alcanzas ciertos niveles de guerrero, obtienes la capacidad de usar las {@variantrule weapon mastery properties|XPHB|propiedades de maestría} de más tipos de armas, como se muestra en la columna Maestría con armas de la tabla de Rasgos del guerrero."
       },
       "action-surge-2": {
-        "name": "",
-        "description": ""
+        "name": "Oleada de acción",
+        "description": "Puedes exigirte más allá de tus límites normales durante un instante. En tu turno, puedes realizar una acción adicional, excepto la acción de {@action Magic|XPHB|Magia}.\nUna vez que uses este rasgo, no puedes volver a hacerlo hasta que termines un {@variantrule Short Rest|XPHB|Descanso corto} o un {@variantrule Long Rest|XPHB|Descanso largo}. A partir del nivel 17, puedes usarlo dos veces antes de un descanso, pero solo una vez por turno."
       },
       "tactical-mind": {
-        "name": "",
-        "description": ""
+        "name": "Mente táctica",
+        "description": "Tienes una mente para la táctica dentro y fuera del campo de batalla. Cuando fallas una prueba de característica, puedes gastar un uso de tu Segundo aliento para impulsarte hacia el éxito. En lugar de recuperar {@variantrule Hit Points|XPHB|Puntos de Golpe}, tiras {@dice 1d10} y sumas el resultado a la prueba de característica, lo que podría convertirla en un éxito. Si la prueba sigue fallando, este uso de Segundo aliento no se gasta."
       },
       "fighter-subclass": {
         "name": "",
@@ -530,12 +528,12 @@
         "description": ""
       },
       "extra-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque adicional",
+        "description": "Puedes atacar dos veces en lugar de una siempre que realices la acción de {@action Attack|XPHB|Atacar} en tu turno."
       },
       "tactical-shift": {
-        "name": "",
-        "description": ""
+        "name": "Cambio táctico",
+        "description": "Siempre que actives tu Segundo aliento con una {@variantrule Bonus Action|XPHB|acción adicional}, puedes moverte hasta la mitad de tu {@variantrule Speed|XPHB|Velocidad} sin provocar {@action Opportunity Attack|XPHB|ataques de oportunidad}."
       },
       "ability-score-improvement-6": {
         "name": "",
@@ -550,32 +548,32 @@
         "description": ""
       },
       "indomitable-9": {
-        "name": "",
-        "description": ""
+        "name": "Indomable",
+        "description": "Si fallas una tirada de salvación, puedes repetirla con un bonificador igual a tu nivel de guerrero. Debes usar el nuevo resultado y no puedes volver a usar este rasgo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}.\nPuedes usar este rasgo dos veces antes de un {@variantrule Long Rest|XPHB|Descanso largo} a partir del nivel 13 y tres veces antes de un {@variantrule Long Rest|XPHB|Descanso largo} a partir del nivel 17."
       },
       "tactical-master": {
-        "name": "",
-        "description": ""
+        "name": "Maestro táctico",
+        "description": "Cuando atacas con un arma cuya propiedad de maestría puedes usar, puedes reemplazar esa propiedad por la propiedad {@itemMastery Push|XPHB|Empujar}, {@itemMastery Sap|XPHB|Mermar} o {@itemMastery Slow|XPHB|Ralentizar} para ese ataque."
       },
       "subclass-feature-10": {
         "name": "",
         "description": ""
       },
       "two-extra-attacks": {
-        "name": "",
-        "description": ""
+        "name": "Dos ataques adicionales",
+        "description": "Puedes atacar tres veces en lugar de una siempre que realices la acción de {@action Attack|XPHB|Atacar} en tu turno."
       },
       "ability-score-improvement-12": {
         "name": "",
         "description": ""
       },
       "indomitable-13": {
-        "name": "",
-        "description": ""
+        "name": "Indomable",
+        "description": "Si fallas una tirada de salvación, puedes repetirla con un bonificador igual a tu nivel de guerrero. Debes usar el nuevo resultado y no puedes volver a usar este rasgo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}.\nPuedes usar este rasgo dos veces antes de un {@variantrule Long Rest|XPHB|Descanso largo} a partir del nivel 13 y tres veces antes de un {@variantrule Long Rest|XPHB|Descanso largo} a partir del nivel 17."
       },
       "studied-attacks": {
-        "name": "",
-        "description": ""
+        "name": "Ataques estudiados",
+        "description": "Estudias a tus oponentes y aprendes de cada ataque que realizas. Si haces una tirada de ataque contra una criatura y fallas, tienes {@variantrule Advantage|XPHB|Ventaja} en tu siguiente tirada de ataque contra esa criatura antes del final de tu siguiente turno."
       },
       "ability-score-improvement-14": {
         "name": "",
@@ -590,12 +588,12 @@
         "description": ""
       },
       "action-surge-17": {
-        "name": "",
-        "description": ""
+        "name": "Oleada de acción",
+        "description": "Puedes exigirte más allá de tus límites normales durante un instante. En tu turno, puedes realizar una acción adicional, excepto la acción de {@action Magic|XPHB|Magia}.\nUna vez que uses este rasgo, no puedes volver a hacerlo hasta que termines un {@variantrule Short Rest|XPHB|Descanso corto} o un {@variantrule Long Rest|XPHB|Descanso largo}. A partir del nivel 17, puedes usarlo dos veces antes de un descanso, pero solo una vez por turno."
       },
       "indomitable-17": {
-        "name": "",
-        "description": ""
+        "name": "Indomable",
+        "description": "Si fallas una tirada de salvación, puedes repetirla con un bonificador igual a tu nivel de guerrero. Debes usar el nuevo resultado y no puedes volver a usar este rasgo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}.\nPuedes usar este rasgo dos veces antes de un {@variantrule Long Rest|XPHB|Descanso largo} a partir del nivel 13 y tres veces antes de un {@variantrule Long Rest|XPHB|Descanso largo} a partir del nivel 17."
       },
       "subclass-feature-18": {
         "name": "",
@@ -606,24 +604,24 @@
         "description": ""
       },
       "three-extra-attacks": {
-        "name": "",
-        "description": ""
+        "name": "Tres ataques adicionales",
+        "description": "Puedes atacar cuatro veces en lugar de una siempre que realices la acción de {@action Attack|XPHB|Atacar} en tu turno."
       }
     },
     "resources": {
       "second-wind": {
-        "name": ""
+        "name": "Segundo aliento"
       },
       "action-surge": {
-        "name": ""
+        "name": "Oleada de acción"
       },
       "indomitable": {
-        "name": ""
+        "name": "Indomable"
       }
     },
     "choices": {
       "fighting-style": {
-        "name": ""
+        "name": "Estilo de combate"
       },
       "epic-boon": {
         "name": ""
@@ -631,60 +629,59 @@
     },
     "subclasses": {
       "champion": {
-        "name": "",
+        "name": "Campeón",
         "features": {
           "champion": {
-            "name": "",
-            "description": ""
+            "name": "Campeón",
+            "description": "{@i Busca la excelencia física en combate}\nUn Campeón se centra en el desarrollo de la destreza marcial en una búsqueda implacable de la victoria. Los campeones combinan un entrenamiento riguroso con la excelencia física para asestar golpes devastadores, resistir el peligro y granjearse gloria. Ya sea en competiciones atléticas o en batallas sangrientas, los Campeones luchan por la corona del vencedor.\nCrítico mejorado. Tus tiradas de ataque con armas y Golpes sin armas pueden obtener un {@variantrule Critical Hit|XPHB|impacto crítico} con un resultado de 19 o 20 en el {@dice d20}.\nAtleta notable. Gracias a tu atletismo, tienes {@variantrule Advantage|XPHB|Ventaja} en las tiradas de {@variantrule Initiative|XPHB|Iniciativa} y en las pruebas de Fuerza ({@skill Athletics|XPHB|Atletismo}).\nAdemás, inmediatamente después de obtener un {@variantrule Critical Hit|XPHB|impacto crítico}, puedes moverte hasta la mitad de tu {@variantrule Speed|XPHB|Velocidad} sin provocar {@action Opportunity Attack|XPHB|ataques de oportunidad}."
           },
           "additional-fighting-style": {
-            "name": "",
-            "description": ""
+            "name": "Estilo de combate adicional",
+            "description": "Obtienes otra {@filter dote de estilo de combate|feats|category=FS} a tu elección."
           },
           "heroic-warrior": {
-            "name": "",
-            "description": ""
+            "name": "Guerrero heroico",
+            "description": "La emoción de la batalla te impulsa hacia la victoria. Durante el combate, puedes darte {@variantrule Heroic Inspiration|XPHB|Inspiración heroica} siempre que empieces tu turno sin ella."
           },
           "superior-critical": {
-            "name": "",
-            "description": ""
+            "name": "Crítico superior",
+            "description": "Tus tiradas de ataque con armas y Golpes sin armas ahora pueden obtener un {@variantrule Critical Hit|XPHB|impacto crítico} con un resultado de 18–20 en el {@dice d20}."
           },
           "survivor": {
-            "name": "",
-            "description": ""
+            "name": "Superviviente",
+            "description": "Alcanzas la cima de la resiliencia en batalla, lo que te otorga los siguientes beneficios.\nDesafiar a la muerte. Tienes {@variantrule Advantage|XPHB|Ventaja} en las {@variantrule Death Saving Throw|XPHB|tiradas de salvación contra la muerte}. Además, cuando sacas 18–20 en una {@variantrule Death Saving Throw|XPHB|tirada de salvación contra la muerte}, obtienes el beneficio de sacar un 20 en ella.\nReunión heroica. Al inicio de cada uno de tus turnos, recuperas {@variantrule Hit Points|XPHB|Puntos de Golpe} iguales a 5 más tu modificador de Constitución si estás {@status Bloodied|XPHB|Ensangrentado} y tienes al menos 1 {@variantrule Hit Points|XPHB|Punto de Golpe}."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "monk": {
-    "name": "",
+    "name": "Monje",
     "subclassTitle": "",
     "features": {
       "martial-arts": {
-        "name": "",
-        "description": ""
+        "name": "Artes marciales",
+        "description": "Tu práctica de artes marciales te da dominio de estilos de combate que usan tu {@variantrule Unarmed Strike|XPHB|Golpe sin armas} y las armas de monje, que son las siguientes:\n• {@filter Armas cuerpo a cuerpo simples|items|type=simple weapon;melee weapon=sand}\n• {@filter Armas cuerpo a cuerpo marciales que tengan la propiedad Ligera|items|type=martial weapon;melee weapon=sand|property=light}\nObtienes los siguientes beneficios mientras estés desarmado o empuñes solo armas de monje y no lleves armadura ni empuñes un {@item Shield|XPHB|Escudo}.\nGolpe sin armas adicional. Puedes hacer un {@variantrule Unarmed Strike|XPHB|Golpe sin armas} como {@variantrule Bonus Action|XPHB|Acción adicional}.\nDado de artes marciales. Puedes tirar {@damage 1d6} en lugar del daño normal de tu {@variantrule Unarmed Strike|XPHB|Golpe sin armas} o de tus armas de monje. Este dado cambia a medida que ganas niveles de monje, como se muestra en la columna Artes marciales de la tabla de Rasgos de monje.\nAtaques diestros. Puedes usar tu modificador de Destreza en lugar de tu modificador de Fuerza para las tiradas de ataque y daño de tus Golpes sin armas y armas de monje. Además, cuando usas la opción Agarrar o Empujar de tu {@variantrule Unarmed Strike|XPHB|Golpe sin armas}, puedes usar tu modificador de Destreza en lugar de tu modificador de Fuerza para determinar la CD de la tirada de salvación."
       },
       "unarmored-defense": {
-        "name": "",
-        "description": ""
+        "name": "Defensa sin armadura",
+        "description": "Mientras no lleves armadura ni empuñes un {@item Shield|XPHB|Escudo}, tu {@variantrule Armor Class|XPHB|Clase de armadura} base es 10 + tus modificadores de Destreza y Sabiduría."
       },
       "monk-s-focus": {
-        "name": "",
-        "description": ""
+        "name": "Concentración del monje",
+        "description": "Tu concentración y tu entrenamiento marcial te permiten aprovechar un pozo de energía extraordinaria en tu interior. Esta energía está representada por Puntos de Concentración. Tu nivel de monje determina el número de puntos que tienes, como se muestra en la columna Puntos de Concentración de la tabla Rasgos de monje.\nPuedes gastar estos puntos para potenciar o alimentar ciertos rasgos de monje. Empiezas conociendo tres de esos rasgos: Ráfaga de golpes, Defensa paciente y Paso del viento, cada uno de los cuales se detalla a continuación.\nCuando gastas un Punto de Concentración, no está disponible hasta que termines un {@variantrule Short Rest|XPHB|Descanso corto} o {@variantrule Long Rest|XPHB|largo}, al final del cual recuperas todos tus puntos gastados.\nAlgunos rasgos que usan Puntos de Concentración requieren que tu objetivo haga una tirada de salvación. La CD de salvación es 8 + tu modificador de Sabiduría + tu {@variantrule Proficiency|XPHB|bonificador por competencia}.\nRáfaga de golpes. Puedes gastar 1 punto de Concentración para hacer dos Golpes sin armas como {@variantrule Bonus Action|XPHB|Acción adicional}.\nDefensa paciente. Puedes realizar la acción de {@action Disengage|XPHB|Retirarse} como {@variantrule Bonus Action|XPHB|Acción adicional}. Alternativamente, puedes gastar 1 punto de Concentración para realizar tanto la acción de {@action Disengage|XPHB|Retirarse} como la de {@action Dodge|XPHB|Esquivar} como {@variantrule Bonus Action|XPHB|Acción adicional}.\nPaso del viento. Puedes realizar la acción de {@action Dash|XPHB|Correr} como {@variantrule Bonus Action|XPHB|Acción adicional}. Alternativamente, puedes gastar 1 punto de Concentración para realizar tanto la acción de {@action Disengage|XPHB|Retirarse} como la de {@action Dash|XPHB|Correr} como {@variantrule Bonus Action|XPHB|Acción adicional}, y tu distancia de salto se duplica durante el turno."
       },
       "unarmored-movement": {
-        "name": "",
-        "description": ""
+        "name": "Movimiento sin armadura",
+        "description": "Tu velocidad aumenta en 10 pies mientras no lleves armadura ni empuñes un {@item Shield|XPHB|Escudo}. Este bonificador aumenta cuando alcanzas ciertos niveles de monje, como se muestra en la tabla Rasgos de monje."
       },
       "uncanny-metabolism": {
-        "name": "",
-        "description": ""
+        "name": "Metabolismo insólito",
+        "description": "Cuando tiras {@variantrule Initiative|XPHB|Iniciativa}, puedes recuperar todos los Puntos de Concentración gastados. Cuando lo haces, tira tu dado de Artes marciales y recupera un número de {@variantrule Hit Points|XPHB|Puntos de golpe} igual a tu nivel de monje + el resultado obtenido.\nUna vez uses este rasgo, no puedes volver a usarlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "deflect-attacks": {
-        "name": "",
-        "description": ""
+        "name": "Desviar ataques",
+        "description": "Cuando una tirada de ataque te golpea y su daño incluye daño contundente, perforante o cortante, puedes usar tu {@variantrule Reaction|XPHB|Reacción} para reducir el daño total del ataque contra ti. La reducción es igual a {@dice 1d10} + tu modificador de Destreza + tu nivel de monje.\nSi reduces el daño a 0, puedes gastar 1 punto de Concentración para redirigir parte de la fuerza del ataque. Si lo haces, elige una criatura que puedas ver a 5 pies de ti si el ataque era cuerpo a cuerpo, o una criatura que puedas ver a 60 pies de ti que no esté tras {@variantrule Cover|XPHB|Cobertura total} si el ataque era a distancia. Esa criatura debe superar una tirada de salvación de Destreza o recibir daño igual a dos tiradas de tu dado de Artes marciales + tu modificador de Destreza. El daño es del mismo tipo que el infligido por el ataque."
       },
       "monk-subclass": {
         "name": "",
@@ -695,40 +692,40 @@
         "description": ""
       },
       "slow-fall": {
-        "name": "",
-        "description": ""
+        "name": "Caída lenta",
+        "description": "Puedes usar una {@variantrule Reaction|XPHB|Reacción} cuando caes para reducir cualquier daño que recibas por la caída en una cantidad igual a cinco veces tu nivel de monje."
       },
       "extra-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque adicional",
+        "description": "Puedes atacar dos veces en lugar de una siempre que realices la acción de {@action Attack|XPHB|Atacar} en tu turno."
       },
       "stunning-strike": {
-        "name": "",
-        "description": ""
+        "name": "Golpe aturdidor",
+        "description": "Una vez por turno, cuando golpeas a una criatura con un arma de monje o un {@variantrule Unarmed Strike|XPHB|Golpe sin armas}, puedes gastar 1 Punto de Concentración para intentar un golpe aturdidor. El objetivo debe hacer una tirada de salvación de Constitución. Si falla, el objetivo tiene la condición de {@condition Stunned|XPHB|Aturdido} hasta el inicio de tu siguiente turno. Si la supera, la {@variantrule Speed|XPHB|Velocidad} del objetivo se reduce a la mitad hasta el inicio de tu siguiente turno, y la siguiente tirada de ataque hecha contra el objetivo antes de entonces tiene {@variantrule Advantage|XPHB|Ventaja}."
       },
       "empowered-strikes": {
-        "name": "",
-        "description": ""
+        "name": "Golpes potenciados",
+        "description": "Siempre que inflijas daño con tu {@variantrule Unarmed Strike|XPHB|Golpe sin armas}, puede infligir el daño de Fuerza o su tipo de daño normal, a tu elección."
       },
       "subclass-feature-6": {
         "name": "",
         "description": ""
       },
       "evasion": {
-        "name": "",
-        "description": ""
+        "name": "Evasión",
+        "description": "Cuando estás sometido a un efecto que te permite hacer una tirada de salvación de Destreza para recibir solo la mitad del daño, en su lugar no recibes daño si superas la tirada de salvación y solo la mitad del daño si la fallas.\nNo te beneficias de este rasgo si tienes la condición de {@condition Incapacitated|XPHB|Incapacitado}."
       },
       "ability-score-improvement-8": {
         "name": "",
         "description": ""
       },
       "acrobatic-movement": {
-        "name": "",
-        "description": ""
+        "name": "Movimiento acrobático",
+        "description": "Mientras no lleves armadura ni empuñes un {@item Shield|XPHB|escudo}, obtienes la capacidad de moverte por superficies verticales y a través de líquidos en tu turno sin caer durante ese movimiento."
       },
       "heightened-focus": {
-        "name": "",
-        "description": ""
+        "name": "Concentración intensificada",
+        "description": "Tus rasgos Ráfaga de golpes, Defensa paciente y Paso del viento obtienen los siguientes beneficios.\nRáfaga de golpes. Puedes gastar 1 punto de Concentración para usar Ráfaga de golpes y hacer tres Golpes sin armas con ella en lugar de dos.\nDefensa paciente. Cuando gastas 1 punto de Concentración para usar Defensa paciente, obtienes una cantidad de {@variantrule Temporary Hit Points|XPHB|Puntos de golpe temporales} igual a dos tiradas de tu dado de Artes marciales.\nPaso del viento. Cuando gastas 1 punto de Concentración para usar Paso del viento, puedes elegir una criatura voluntaria a 5 pies de ti que sea Grande o más pequeña. Mueves a la criatura contigo hasta el final de tu turno. El movimiento de la criatura no provoca {@action Opportunity Attack|XPHB|Ataques de oportunidad}."
       },
       "self-restoration": {
         "name": "",
@@ -743,16 +740,16 @@
         "description": ""
       },
       "deflect-energy": {
-        "name": "",
-        "description": ""
+        "name": "Desviar energía",
+        "description": "Ahora puedes usar tu rasgo Desviar ataques contra ataques que inflijan cualquier tipo de daño, no solo contundente, perforante o cortante."
       },
       "disciplined-survivor": {
-        "name": "",
-        "description": ""
+        "name": "Superviviente disciplinado",
+        "description": "Tu disciplina física y mental te otorga competencia en todas las tiradas de salvación.\nAdemás, siempre que hagas una tirada de salvación y falles, puedes gastar 1 punto de Concentración para repetirla, y debes usar la nueva tirada."
       },
       "perfect-focus": {
-        "name": "",
-        "description": ""
+        "name": "Concentración perfecta",
+        "description": "Cuando tiras {@variantrule Initiative|XPHB|Iniciativa} y no usas Metabolismo insólito, recuperas Puntos de Concentración gastados hasta tener 4 si tienes 3 o menos."
       },
       "ability-score-improvement-16": {
         "name": "",
@@ -763,16 +760,16 @@
         "description": ""
       },
       "superior-defense": {
-        "name": "",
-        "description": ""
+        "name": "Defensa superior",
+        "description": "Al inicio de tu turno, puedes gastar 3 Puntos de Concentración para reforzarte contra el daño durante 1 minuto o hasta que tengas la condición de {@condition Incapacitated|XPHB|Incapacitado}. Durante ese tiempo, tienes {@variantrule Resistance|XPHB|Resistencia} a todo el daño excepto al daño de Fuerza."
       },
       "epic-boon": {
         "name": "",
         "description": ""
       },
       "body-and-mind": {
-        "name": "",
-        "description": ""
+        "name": "Cuerpo y mente",
+        "description": "Has desarrollado tu cuerpo y tu mente hasta nuevas cotas. Tus puntuaciones de Destreza y Sabiduría aumentan en 4, hasta un máximo de 25."
       }
     },
     "resources": {
@@ -780,7 +777,7 @@
         "name": ""
       },
       "uncanny-metabolism": {
-        "name": "",
+        "name": "Metabolismo insólito",
         "note": ""
       }
     },
@@ -791,60 +788,60 @@
     },
     "subclasses": {
       "open-hand": {
-        "name": "",
+        "name": "Guerrero de la mano abierta",
         "features": {
           "warrior-of-the-open-hand": {
-            "name": "",
-            "description": ""
+            "name": "Guerrero de la mano abierta",
+            "description": "{@i Domina técnicas de combate sin armas}\nLos guerreros de la mano abierta son maestros del combate sin armas. Aprenden técnicas para empujar y derribar a sus oponentes y manipular su propia energía para protegerse del daño.\nTécnica de la mano abierta. Siempre que golpeas a una criatura con un ataque concedido por tu Ráfaga de golpes, puedes imponer uno de los siguientes efectos a ese objetivo.\nAturdir. El objetivo no puede hacer {@action Opportunity Attack|XPHB|Ataques de oportunidad} hasta el inicio de su siguiente turno.\nEmpujar. El objetivo debe superar una tirada de salvación de Fuerza o ser empujado hasta 15 pies lejos de ti.\nDerribar. El objetivo debe superar una tirada de salvación de Destreza o tener la condición de {@condition Prone|XPHB|Derribado}."
           },
           "wholeness-of-body": {
-            "name": "",
-            "description": ""
+            "name": "Plenitud del cuerpo",
+            "description": "Obtienes la capacidad de curarte a ti mismo. Como {@variantrule Bonus Action|XPHB|Acción adicional}, puedes tirar tu dado de Artes marciales. Recuperas una cantidad de {@variantrule Hit Points|XPHB|Puntos de golpe} igual al resultado obtenido + tu modificador de Sabiduría (mínimo de 1 {@variantrule Hit Points|XPHB|Punto de golpe} recuperado).\nPuedes usar este rasgo un número de veces igual a tu modificador de Sabiduría (mínimo una vez), y recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}."
           },
           "fleet-step": {
-            "name": "",
-            "description": ""
+            "name": "Paso veloz",
+            "description": "Cuando realizas una {@variantrule Bonus Action|XPHB|Acción adicional} distinta de Paso del viento, también puedes usar Paso del viento inmediatamente después de esa {@variantrule Bonus Action|XPHB|Acción adicional}."
           },
           "quivering-palm": {
-            "name": "",
-            "description": ""
+            "name": "Palma vibrante",
+            "description": "Obtienes la capacidad de provocar vibraciones letales en el cuerpo de alguien. Cuando golpeas a una criatura con un {@variantrule Unarmed Strike|XPHB|Golpe sin armas}, puedes gastar 4 Puntos de Concentración para iniciar estas vibraciones imperceptibles, que duran un número de días igual a tu nivel de monje. Las vibraciones son inofensivas a menos que uses una acción para terminarlas. Alternativamente, cuando realizas la acción de {@action Attack|XPHB|Atacar} en tu turno, puedes renunciar a uno de los ataques para terminar las vibraciones. Para terminarlas, tú y el objetivo debéis estar en el mismo plano de existencia. Cuando las terminas, el objetivo debe hacer una tirada de salvación de Constitución, recibiendo {@damage 10d12} de daño de Fuerza si falla la salvación, o la mitad si la supera.\nSolo puedes tener a una criatura bajo el efecto de este rasgo a la vez. Puedes terminar las vibraciones de forma inofensiva (no requiere acción)."
           }
         },
         "resources": {
           "wholeness-of-body": {
-            "name": ""
+            "name": "Plenitud del cuerpo"
           }
         }
       }
     }
   },
   "paladin": {
-    "name": "",
+    "name": "Paladín",
     "subclassTitle": "",
     "features": {
       "lay-on-hands": {
-        "name": "",
-        "description": ""
+        "name": "Imposición de manos",
+        "description": "Tu toque bendito puede curar heridas. Tienes una reserva de poder curativo que se repone cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}. Con esa reserva, puedes restaurar un total de {@variantrule Hit Points|XPHB|Puntos de golpe} igual a cinco veces tu nivel de paladín.\nComo {@variantrule Bonus Action|XPHB|Acción adicional}, puedes tocar a una criatura (que podría ser tú mismo) y extraer poder de la reserva para restaurar una cantidad de {@variantrule Hit Points|XPHB|Puntos de golpe} a esa criatura, hasta el máximo restante en la reserva.\nTambién puedes gastar 5 {@variantrule Hit Points|XPHB|Puntos de golpe} de la reserva de poder curativo para eliminar la condición {@condition Poisoned|XPHB|Envenenado} de la criatura; esos puntos no restauran también {@variantrule Hit Points|XPHB|Puntos de golpe} a la criatura."
       },
       "spellcasting": {
-        "name": "",
+        "name": "Lanzamiento de conjuros",
         "description": ""
       },
       "weapon-mastery": {
-        "name": "",
-        "description": ""
+        "name": "Dominio de armas",
+        "description": "Tu adiestramiento con armas te permite usar las {@variantrule weapon mastery properties|XPHB|propiedades de dominio} de dos tipos de {@filter armas|items|type=simple weapon;martial weapon} a tu elección con las que tengas competencia, como {@item Longsword|XPHB|espadas largas} y {@item Javelin|XPHB|jabalinas}.\nSiempre que termines un {@variantrule Long Rest|XPHB|Descanso largo}, puedes cambiar los tipos de armas que elegiste. Por ejemplo, podrías pasar a usar las {@variantrule weapon mastery properties|XPHB|propiedades de dominio} de {@item Halberd|XPHB|alabardas} y {@item Flail|XPHB|mayales}."
       },
       "fighting-style": {
-        "name": "",
-        "description": ""
+        "name": "Estilo de combate",
+        "description": "Obtienes un {@filter dote de Estilo de combate|feats|category=FS} de tu elección. En lugar de elegir uno de esos dotes, puedes elegir la opción de abajo."
       },
       "paladin-s-smite": {
-        "name": "",
-        "description": ""
+        "name": "Castigo del paladín",
+        "description": "Siempre tienes preparado el conjuro {@spell Divine Smite|XPHB|Castigo Divino}. Además, puedes lanzarlo sin gastar un espacio de conjuro, pero debes terminar un {@variantrule Long Rest|XPHB|Descanso largo} antes de poder lanzarlo de este modo de nuevo."
       },
       "channel-divinity": {
-        "name": "",
-        "description": ""
+        "name": "Canalización divina",
+        "description": "Puedes canalizar energía divina directamente de los Planos Exteriores, usándola para alimentar efectos mágicos. Empiezas con un efecto de este tipo: Sentido divino, que se describe a continuación. Otros rasgos de paladín te dan opciones adicionales de efectos de Canalización divina. Cada vez que uses la Canalización divina de esta clase, eliges qué efecto de esta clase crear.\nPuedes usar la Canalización divina de esta clase dos veces. Recuperas uno de sus usos gastados cuando terminas un {@variantrule Short Rest|XPHB|Descanso corto} y recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}. Obtienes un uso adicional cuando alcanzas el nivel 11 de paladín.\nSi un efecto de Canalización divina requiere una tirada de salvación, la CD es igual a la CD de salvación de conjuros de la dote de Lanzamiento de conjuros de esta clase.\nSentido divino. Como {@variantrule Bonus Action|XPHB|Acción adicional}, puedes abrir tu percepción para detectar Celestiales, Demonios y No muertos. Durante los siguientes 10 minutos, o hasta que tengas la condición de {@condition Incapacitated|XPHB|Incapacitado}, conoces la ubicación de cualquier criatura de esos tipos a 60 pies de ti y conoces su tipo de criatura. Dentro del mismo radio, también detectas la presencia de cualquier lugar u objeto que haya sido consagrado o profanado, como con el conjuro {@spell Hallow|XPHB|Consagrar}."
       },
       "paladin-subclass": {
         "name": "",
@@ -855,16 +852,16 @@
         "description": ""
       },
       "extra-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque adicional",
+        "description": "Puedes atacar dos veces en lugar de una siempre que realices la acción de {@action Attack|XPHB|Atacar} en tu turno."
       },
       "faithful-steed": {
-        "name": "",
-        "description": ""
+        "name": "Corcel fiel",
+        "description": "Puedes invocar la ayuda de un corcel de otros mundos. Siempre tienes preparado el conjuro {@spell Find Steed|XPHB|Hallar corcel}.\nTambién puedes lanzar el conjuro una vez sin gastar un espacio de conjuro, y recuperas la capacidad de hacerlo de este modo cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "aura-of-protection": {
-        "name": "",
-        "description": ""
+        "name": "Aura de protección",
+        "description": "Irradias un aura protectora invisible en una {@variantrule Emanation [Area of Effect]|XPHB|Emanación} de 10 pies que se origina en ti. El aura está inactiva mientras tengas la condición de {@condition Incapacitated|XPHB|Incapacitado}.\nTú y tus aliados en el aura obtenéis un bonificador a las tiradas de salvación igual a tu modificador de Carisma (bonificador mínimo de +1).\nSi hay otro paladín presente, una criatura solo puede beneficiarse de un Aura de protección a la vez; la criatura elige de cuál mientras esté dentro de ellas."
       },
       "subclass-feature-7": {
         "name": "",
@@ -875,24 +872,24 @@
         "description": ""
       },
       "abjure-foes": {
-        "name": "",
-        "description": ""
+        "name": "Abjurar enemigos",
+        "description": "Como acción {@action Magic|XPHB|Mágica}, puedes gastar un uso de la Canalización divina de esta clase para abrumar a los enemigos con pavor reverente. Al presentar tu {@item Holy Symbol|XPHB|Símbolo sagrado} o arma, puedes elegir como objetivo a un número de criaturas igual a tu modificador de Carisma (mínimo de una criatura) que puedas ver a 60 pies de ti. Cada objetivo debe superar una tirada de salvación de Sabiduría o tendrá la condición de {@condition Frightened|XPHB|Asustado} durante 1 minuto o hasta que reciba cualquier daño. Mientras esté {@condition Frightened|XPHB|Asustado} de este modo, un objetivo solo puede hacer una de las siguientes cosas en sus turnos: moverse, realizar una acción o realizar una {@variantrule Bonus Action|XPHB|Acción adicional}."
       },
       "aura-of-courage": {
-        "name": "",
-        "description": ""
+        "name": "Aura de valor",
+        "description": "Tú y tus aliados tenéis {@variantrule Immunity|XPHB|Inmunidad} a la condición de {@condition Frightened|XPHB|Asustado} mientras estéis dentro de tu Aura de protección. Si un aliado {@condition Frightened|XPHB|Asustado} entra en el aura, esa condición no tiene efecto sobre ese aliado mientras permanezca allí."
       },
       "radiant-strikes": {
-        "name": "",
-        "description": ""
+        "name": "Golpes radiantes",
+        "description": "Tus golpes ahora portan poder sobrenatural. Cuando impactas a un objetivo con una tirada de ataque usando un arma cuerpo a cuerpo o un {@variantrule Unarmed Strike|XPHB|Golpe sin armas}, el objetivo recibe {@damage 1d8} de daño Radiante adicional."
       },
       "ability-score-improvement-12": {
         "name": "",
         "description": ""
       },
       "restoring-touch": {
-        "name": "",
-        "description": ""
+        "name": "Toque restaurador",
+        "description": "Cuando usas Imposición de manos sobre una criatura, también puedes eliminar una o más de las siguientes condiciones de esa criatura: {@condition Blinded|XPHB|Cegado}, {@condition Charmed|XPHB|Hechizado}, {@condition Deafened|XPHB|Ensordecido}, {@condition Frightened|XPHB|Asustado}, {@condition Paralyzed|XPHB|Paralizado} o {@condition Stunned|XPHB|Aturdido}. Debes gastar 5 {@variantrule Hit Points|XPHB|Puntos de golpe} de la reserva curativa de Imposición de manos por cada una de esas condiciones que elimines; esos puntos no restauran también {@variantrule Hit Points|XPHB|Puntos de golpe} a la criatura."
       },
       "subclass-feature-15": {
         "name": "",
@@ -903,8 +900,8 @@
         "description": ""
       },
       "aura-expansion": {
-        "name": "",
-        "description": ""
+        "name": "Expansión del aura",
+        "description": "Tu Aura de protección ahora es una {@variantrule Emanation [Area of Effect]|XPHB|Emanación} de 30 pies."
       },
       "epic-boon": {
         "name": "",
@@ -917,23 +914,23 @@
     },
     "resources": {
       "lay-on-hands": {
-        "name": ""
+        "name": "Imposición de manos"
       },
       "paladin-s-smite": {
-        "name": "",
+        "name": "Castigo del paladín",
         "note": ""
       },
       "channel-divinity": {
-        "name": ""
+        "name": "Canalización divina"
       },
       "faithful-steed": {
-        "name": "",
+        "name": "Corcel fiel",
         "note": ""
       }
     },
     "choices": {
       "fighting-style": {
-        "name": ""
+        "name": "Estilo de combate"
       },
       "epic-boon": {
         "name": ""
@@ -941,28 +938,28 @@
     },
     "subclasses": {
       "devotion": {
-        "name": "",
+        "name": "Juramento de devoción",
         "features": {
           "oath-of-devotion": {
-            "name": "",
-            "description": ""
+            "name": "Juramento de devoción",
+            "description": "{@i Defiende los ideales de justicia y orden}\nEl Juramento de devoción vincula a los paladines con los ideales de justicia y orden. Estos paladines encarnan el arquetipo del caballero de brillante armadura. Se exigen los más altos estándares de conducta y algunos —para bien o para mal— exigen al resto del mundo los mismos estándares.\nMuchos que juran este juramento están dedicados a dioses de la ley y el bien y usan los preceptos de sus dioses como medida de su devoción personal. Otros toman a los ángeles como ideales e incorporan imágenes de alas angélicas en sus yelmos o escudos de armas.\nEstos paladines comparten los siguientes preceptos:\n• Que tu palabra sea tu promesa.\n• Protege a los débiles y nunca temas actuar.\n• Que tus actos honorables sean un ejemplo.\nConjuros del Juramento de devoción. La magia de tu juramento hace que siempre tengas ciertos conjuros preparados; cuando alcanzas el nivel de paladín indicado en la tabla de Conjuros del Juramento de devoción, a partir de entonces siempre tienes preparados los conjuros listados.\nConjuros del Juramento de devoción\nNivel de paladín | Conjuros\n3 | {@spell Protection from Evil and Good|XPHB|Protección contra el bien y el mal}, {@spell Shield of Faith|XPHB|Escudo de fe}\n5 | {@spell Aid|XPHB|Auxilio}, {@spell Zone of Truth|XPHB|Zona de la verdad}\n9 | {@spell Beacon of Hope|XPHB|Señal de esperanza}, {@spell Dispel Magic|XPHB|Disipar magia}\n13 | {@spell Freedom of Movement|XPHB|Libertad de movimiento}, {@spell Guardian of Faith|XPHB|Guardián de la fe}\n17 | {@spell Commune|XPHB|Comunión}, {@spell Flame Strike|XPHB|Castigo flamígero}\nArma sagrada. Cuando realizas la acción de {@action Attack|XPHB|Atacar}, puedes gastar un uso de tu Canalización divina para imbuir con energía positiva un arma cuerpo a cuerpo que estés empuñando. Durante 10 minutos, o hasta que vuelvas a usar este rasgo, añades tu modificador de Carisma a las tiradas de ataque que hagas con esa arma (bonificador mínimo de +1) y, cada vez que impactes con ella, puedes hacer que inflija su tipo de daño normal o daño Radiante.\nEl arma también emite {@variantrule Bright Light|XPHB|Luz brillante} en un radio de 20 pies y {@variantrule Dim Light|XPHB|Luz tenue} 20 pies más allá.\nPuedes terminar este efecto antes de tiempo (no requiere acción). Este efecto también termina si no llevas el arma contigo."
           },
           "aura-of-devotion": {
-            "name": "",
-            "description": ""
+            "name": "Aura de devoción",
+            "description": "Tú y tus aliados tenéis {@variantrule Immunity|XPHB|Inmunidad} a la condición de {@condition Charmed|XPHB|Hechizado} mientras estéis dentro de tu Aura de protección. Si un aliado {@condition Charmed|XPHB|Hechizado} entra en el aura, esa condición no tiene efecto sobre ese aliado mientras permanezca allí."
           },
           "smite-of-protection": {
-            "name": "",
-            "description": ""
+            "name": "Castigo de protección",
+            "description": "Tu castigo mágico ahora irradia energía protectora. Siempre que lances {@spell Divine Smite|XPHB|Castigo Divino}, tú y tus aliados tenéis {@variantrule Cover|XPHB|Cobertura media} mientras estéis dentro de tu Aura de protección. El aura tiene este beneficio hasta el inicio de tu siguiente turno."
           },
           "holy-nimbus": {
-            "name": "",
-            "description": ""
+            "name": "Nimbo sagrado",
+            "description": "Como {@variantrule Bonus Action|XPHB|Acción adicional}, puedes imbuir tu Aura de protección con poder sagrado, otorgando los beneficios siguientes durante 10 minutos o hasta que los termines (no requiere acción). Una vez uses este rasgo, no puedes volver a usarlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}. También puedes recuperar su uso gastando un espacio de conjuro de nivel 5 (no requiere acción).\nGuarda sagrada. Tienes {@variantrule Advantage|XPHB|Ventaja} en cualquier tirada de salvación que te veas obligado a hacer por un Demonio o un No muerto.\nDaño radiante. Siempre que un enemigo empiece su turno dentro del aura, esa criatura recibe daño Radiante igual a tu modificador de Carisma + tu {@variantrule Proficiency|XPHB|bonificador por competencia}.\nLuz solar. El aura se llena de {@variantrule Bright Light|XPHB|Luz brillante} que es luz solar."
           }
         },
         "resources": {
           "holy-nimbus": {
-            "name": "",
+            "name": "Nimbo sagrado",
             "note": ""
           }
         }
@@ -970,28 +967,28 @@
     }
   },
   "ranger": {
-    "name": "",
+    "name": "Explorador",
     "subclassTitle": "",
     "features": {
       "spellcasting": {
-        "name": "",
-        "description": ""
+        "name": "Lanzamiento de conjuros",
+        "description": "Has aprendido a canalizar la esencia mágica de la naturaleza para lanzar conjuros. Consulta las {@book Adquirir conjuros|XPHB|7}. La información de abajo detalla cómo usas esas reglas con los conjuros de explorador, que aparecen en la {@filter Lista de conjuros de explorador|spells|class=Ranger}.\nEspacios de conjuro. La tabla Rasgos de explorador muestra cuántos espacios de conjuro tienes para lanzar tus conjuros de nivel 1+. Recuperas todos los espacios gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nConjuros preparados de nivel 1+. Preparas la lista de conjuros de nivel 1+ que están disponibles para ti con este rasgo. Para empezar, elige dos {@filter conjuros de explorador de nivel 1|spells|class=Ranger|level=1}. Se recomiendan {@spell Cure Wounds|XPHB|Curar heridas} y {@spell Ensnaring Strike|XPHB|Castigo apresador}.\nEl número de conjuros en tu lista aumenta a medida que subes niveles de explorador, como se muestra en la columna Conjuros preparados de la tabla Rasgos de explorador. Cada vez que ese número aumente, elige conjuros adicionales de explorador hasta que el número de conjuros de tu lista coincida con el número de la tabla. Los conjuros elegidos deben ser de un nivel para el que tengas espacios de conjuro. Por ejemplo, si eres explorador de nivel 5, tu lista de conjuros preparados puede incluir seis conjuros de explorador de nivel 1 o 2 en cualquier combinación.\nSi otro rasgo de explorador te da conjuros que siempre tienes preparados, esos conjuros no cuentan contra el número de conjuros que puedes preparar con este rasgo, pero por lo demás cuentan como conjuros de explorador para ti.\nCambiar tus conjuros preparados. Cada vez que termines un {@variantrule Long Rest|XPHB|Descanso largo}, puedes reemplazar un conjuro de tu lista por otro conjuro de explorador para el que tengas espacios de conjuro.\nCaracterística para lanzar conjuros. Sabiduría es tu característica para lanzar conjuros de explorador.\nFoco de lanzamiento. Puedes usar un {@item Druidic Focus|XPHB|Foco druídico} como {@variantrule Spellcasting Focus|XPHB|foco de lanzamiento} para tus conjuros de explorador."
       },
       "favored-enemy": {
-        "name": "",
-        "description": ""
+        "name": "Enemigo predilecto",
+        "description": "Siempre tienes preparado el conjuro {@spell Hunter's Mark|XPHB|Marca del cazador}. Puedes lanzarlo dos veces sin gastar un espacio de conjuro y recuperas todos los usos gastados de esta capacidad cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nEl número de veces que puedes lanzar el conjuro sin gastar un espacio de conjuro aumenta cuando alcanzas ciertos niveles de explorador, como se muestra en la columna Enemigo predilecto de la tabla Rasgos de explorador."
       },
       "weapon-mastery": {
-        "name": "",
-        "description": ""
+        "name": "Dominio de armas",
+        "description": "Tu adiestramiento con armas te permite usar las {@variantrule weapon mastery properties|XPHB|propiedades de dominio} de dos tipos de {@filter armas|items|type=simple weapon;martial weapon} a tu elección con las que tengas competencia, como {@item Longbow|XPHB|arcos largos} y {@item Shortsword|XPHB|espadas cortas}.\nSiempre que termines un {@variantrule Long Rest|XPHB|Descanso largo}, puedes cambiar los tipos de armas que elegiste. Por ejemplo, podrías pasar a usar las {@variantrule weapon mastery properties|XPHB|propiedades de dominio} de {@item Scimitar|XPHB|cimitarras} y {@item Longsword|XPHB|espadas largas}."
       },
       "deft-explorer": {
-        "name": "",
-        "description": ""
+        "name": "Explorador diestro",
+        "description": "Gracias a tus viajes, obtienes los siguientes beneficios.\nPericia. Elige una de tus competencias con habilidades en la que no tengas {@variantrule Expertise|XPHB|Pericia}. Obtienes {@variantrule Expertise|XPHB|Pericia} en esa habilidad.\nIdiomas. Conoces dos idiomas a tu elección de las tablas de idiomas del {@book capítulo 2|XPHB|2|Choose Languages}."
       },
       "fighting-style": {
-        "name": "",
-        "description": ""
+        "name": "Estilo de combate",
+        "description": "Obtienes un {@filter dote de Estilo de combate|feats|category=FS} a tu elección. En lugar de elegir uno de esos dotes, puedes elegir la opción de abajo."
       },
       "ranger-subclass": {
         "name": "",
@@ -1002,12 +999,12 @@
         "description": ""
       },
       "extra-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque adicional",
+        "description": "Puedes atacar dos veces en lugar de una cuando realizas la acción {@action Attack|XPHB|Atacar} en tu turno."
       },
       "roving": {
-        "name": "",
-        "description": ""
+        "name": "Errante",
+        "description": "Tu {@variantrule Speed|XPHB|velocidad} aumenta en 10 pies mientras no lleves armadura pesada. Además, tienes {@variantrule Climb Speed|XPHB|velocidad de trepar} y {@variantrule Swim Speed|XPHB|velocidad de nadar} iguales a tu {@variantrule Speed|XPHB|velocidad}."
       },
       "subclass-feature-7": {
         "name": "",
@@ -1018,12 +1015,12 @@
         "description": ""
       },
       "expertise": {
-        "name": "",
-        "description": ""
+        "name": "Pericia",
+        "description": "Elige dos de tus competencias con habilidades en las que no tengas {@variantrule Expertise|XPHB|Pericia}. Obtienes {@variantrule Expertise|XPHB|Pericia} en esas habilidades."
       },
       "tireless": {
-        "name": "",
-        "description": ""
+        "name": "Incansable",
+        "description": "Fuerzas primigenias ahora te ayudan a mantenerte durante tus viajes, otorgándote los siguientes beneficios.\nPuntos de golpe temporales. Como acción {@action Magic|XPHB|Mágica}, puedes darte un número de {@variantrule Temporary Hit Points|XPHB|Puntos de Golpe Temporales} igual a {@dice 1d8} + tu modificador de Sabiduría (mínimo 1). Puedes usar esta acción un número de veces igual a tu modificador de Sabiduría (mínimo 1), y recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nReducir agotamiento. Siempre que termines un {@variantrule Short Rest|XPHB|Descanso corto}, tu nivel de {@condition Exhaustion|XPHB|Agotamiento}, si lo hubiera, se reduce en 1."
       },
       "subclass-feature-11": {
         "name": "",
@@ -1034,12 +1031,12 @@
         "description": ""
       },
       "relentless-hunter": {
-        "name": "",
-        "description": ""
+        "name": "Cazador implacable",
+        "description": "Recibir daño no puede romper tu {@status Concentration|XPHB|Concentración} sobre Marca del cazador."
       },
       "nature-s-veil": {
-        "name": "",
-        "description": ""
+        "name": "Velo de la naturaleza",
+        "description": "Invocas espíritus de la naturaleza para ocultarte mágicamente. Como {@variantrule Bonus Action|XPHB|Acción adicional}, te das a ti mismo la condición de {@condition Invisible|XPHB|Invisible} hasta el final de tu siguiente turno.\nPuedes usar este rasgo un número de veces igual a tu modificador de Sabiduría (mínimo 1), y recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "subclass-feature-15": {
         "name": "",
@@ -1050,37 +1047,37 @@
         "description": ""
       },
       "precise-hunter": {
-        "name": "",
-        "description": ""
+        "name": "Cazador preciso",
+        "description": "Tienes {@variantrule Advantage|XPHB|Ventaja} en las tiradas de ataque contra la criatura que esté marcada actualmente por tu Marca del cazador."
       },
       "feral-senses": {
-        "name": "",
-        "description": ""
+        "name": "Sentidos ferales",
+        "description": "Tu conexión con las fuerzas de la naturaleza te otorga {@sense Blindsight|XPHB|Percepción ciega} (Blindsight) con un alcance de 30 pies."
       },
       "epic-boon": {
         "name": "",
         "description": ""
       },
       "foe-slayer": {
-        "name": "",
-        "description": ""
+        "name": "Azote de enemigos",
+        "description": "Marca del cazador usa {@damage d10} en lugar de {@damage d6}."
       }
     },
     "resources": {
       "favored-enemy": {
-        "name": "",
+        "name": "Enemigo predilecto",
         "note": ""
       },
       "tireless": {
-        "name": ""
+        "name": "Incansable"
       },
       "nature-s-veil": {
-        "name": ""
+        "name": "Velo de la naturaleza"
       }
     },
     "choices": {
       "fighting-style": {
-        "name": ""
+        "name": "Estilo de combate"
       },
       "epic-boon": {
         "name": ""
@@ -1088,84 +1085,83 @@
     },
     "subclasses": {
       "hunter": {
-        "name": "",
+        "name": "Cazador",
         "features": {
           "hunter": {
-            "name": "",
-            "description": ""
+            "name": "Cazador",
+            "description": "{@i Protege a la naturaleza y a la gente de la destrucción}\nDas caza a tus presas en la naturaleza y en otros lugares, usando tus aptitudes como Cazador para proteger la naturaleza y a la gente de fuerzas que las destruirían.\nPresa del cazador. Obtienes una de las siguientes opciones de rasgo a tu elección. Siempre que termines un {@variantrule Short Rest|XPHB|Descanso corto} o {@variantrule Long Rest|XPHB|largo}, puedes reemplazar la opción elegida por la otra.\nMatacolosos. Tu tenacidad puede desgastar incluso a los enemigos más resistentes. Cuando impactas a una criatura con un arma, el arma inflige {@damage 1d8} de daño adicional al objetivo si le falta cualquier {@variantrule Hit Points|XPHB|punto de golpe}. Solo puedes infligir este daño adicional una vez por turno.\nRompehordas. Una vez en cada uno de tus turnos cuando haces un ataque con un arma, puedes hacer otro ataque con la misma arma contra una criatura diferente que esté a 5 pies o menos del objetivo original, que esté dentro del alcance del arma y a la que no hayas atacado este turno.\nSaber del cazador. Puedes recurrir a las fuerzas de la naturaleza para revelar ciertas fortalezas y debilidades de tu presa. Mientras una criatura esté marcada por tu Marca del cazador, sabes si esa criatura tiene Inmunidades, Resistencias o Vulnerabilidades, y si tiene alguna, sabes cuáles son."
           },
           "defensive-tactics": {
-            "name": "",
-            "description": ""
+            "name": "Tácticas defensivas",
+            "description": "Obtienes una de las siguientes opciones de rasgo a tu elección. Siempre que termines un {@variantrule Short Rest|XPHB|Descanso corto} o {@variantrule Long Rest|XPHB|largo}, puedes reemplazar la opción elegida por la otra.\nEscapar de la horda. Los {@action Opportunity Attack|XPHB|Ataques de oportunidad} tienen {@variantrule Disadvantage|XPHB|Desventaja} contra ti.\nDefensa contra múltiples ataques. Cuando una criatura te impacta con una tirada de ataque, esa criatura tiene {@variantrule Disadvantage|XPHB|Desventaja} en todas las demás tiradas de ataque contra ti este turno."
           },
           "superior-hunter-s-prey": {
-            "name": "",
-            "description": ""
+            "name": "Presa superior del cazador",
+            "description": "Una vez por turno, cuando infliges daño a una criatura marcada por tu Marca del cazador, también puedes infligir el daño adicional de ese conjuro a una criatura diferente que puedas ver a 30 pies o menos de la primera criatura."
           },
           "superior-hunter-s-defense": {
-            "name": "",
-            "description": ""
+            "name": "Defensa superior del cazador",
+            "description": "Cuando recibes daño, puedes usar tu {@variantrule Reaction|XPHB|Reacción} para darte {@variantrule Resistance|XPHB|Resistencia} a ese daño y a cualquier otro daño del mismo tipo hasta el final del turno actual."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "rogue": {
-    "name": "",
+    "name": "Pícaro",
     "subclassTitle": "",
     "features": {
       "expertise-1": {
-        "name": "",
-        "description": ""
+        "name": "Pericia",
+        "description": "Obtienes {@variantrule Expertise|XPHB|Pericia} en dos de tus competencias con habilidades a tu elección. Se recomiendan {@skill Sleight of Hand|XPHB|Juego de manos} y {@skill Stealth|XPHB|Sigilo} si tienes competencia en ellas.\nEn el nivel 6 de pícaro, obtienes {@variantrule Expertise|XPHB|Pericia} en dos competencias con habilidades más a tu elección."
       },
       "sneak-attack": {
-        "name": "",
-        "description": ""
+        "name": "Ataque furtivo",
+        "description": "Sabes golpear con sutileza y aprovechar la distracción de un enemigo. Una vez por turno, puedes infligir {@damage 1d6} de daño adicional a una criatura a la que impactes con una tirada de ataque si tienes {@variantrule Advantage|XPHB|Ventaja} en la tirada y el ataque usa un arma con Sutileza o un arma a distancia. El tipo del daño adicional es el mismo que el tipo del arma.\nNo necesitas {@variantrule Advantage|XPHB|Ventaja} en la tirada de ataque si al menos uno de tus aliados está a 5 pies o menos del objetivo, el aliado no tiene la condición de {@condition Incapacitated|XPHB|Incapacitado} y tú no tienes {@variantrule Disadvantage|XPHB|Desventaja} en la tirada de ataque.\nEl daño adicional aumenta a medida que ganas niveles de pícaro, como se muestra en la columna Ataque furtivo de la tabla Rasgos de pícaro."
       },
       "thieves-cant": {
-        "name": "",
-        "description": ""
+        "name": "Jerga de ladrones",
+        "description": "Aprendiste varios idiomas en las comunidades donde ejercías tus talentos de pícaro. Conoces la Jerga de ladrones y otro idioma adicional a tu elección, que eliges de las tablas de idiomas en {@book Creación de personaje|XPHB|2|Choose Languages}."
       },
       "weapon-mastery": {
-        "name": "",
-        "description": ""
+        "name": "Dominio de armas",
+        "description": "Tu adiestramiento con armas te permite usar las {@variantrule weapon mastery properties|XPHB|propiedades de dominio} de dos tipos de {@filter armas|items|type=simple weapon;martial weapon} a tu elección con las que tengas competencia, como {@item Dagger|XPHB|dagas} y {@item Shortbow|XPHB|arcos cortos}.\nSiempre que termines un {@variantrule Long Rest|XPHB|Descanso largo}, puedes cambiar los tipos de armas que elegiste. Por ejemplo, podrías pasar a usar las {@variantrule weapon mastery properties|XPHB|propiedades de dominio} de {@item Scimitar|XPHB|cimitarras} y {@item Shortsword|XPHB|espadas cortas}."
       },
       "cunning-action": {
-        "name": "",
-        "description": ""
+        "name": "Acción astuta",
+        "description": "Tu rapidez mental y agilidad te permiten moverte y actuar con celeridad. En tu turno, puedes realizar una de las siguientes acciones como {@variantrule Bonus Action|XPHB|Acción adicional}: {@action Dash|XPHB|Correr}, {@action Disengage|XPHB|Retirarse} o {@action Hide|XPHB|Ocultarse}."
       },
       "rogue-subclass": {
         "name": "",
         "description": ""
       },
       "steady-aim": {
-        "name": "",
-        "description": ""
+        "name": "Puntería firme",
+        "description": "Como {@variantrule Bonus Action|XPHB|Acción adicional}, te das a ti mismo {@variantrule Advantage|XPHB|Ventaja} en tu siguiente tirada de ataque del turno actual. Solo puedes usar este rasgo si no te has movido durante este turno, y después de usarlo, tu {@variantrule Speed|XPHB|Velocidad} es 0 hasta el final del turno actual."
       },
       "ability-score-improvement-4": {
         "name": "",
         "description": ""
       },
       "cunning-strike": {
-        "name": "",
-        "description": ""
+        "name": "Golpe astuto",
+        "description": "Has desarrollado maneras astutas de usar tu Ataque furtivo. Cuando infliges daño de Ataque furtivo, puedes añadir uno de los siguientes efectos de Golpe astuto. Cada efecto tiene un coste en dados, que es el número de dados de daño del Ataque furtivo al que debes renunciar para añadir el efecto. Retiras el dado antes de tirar, y el efecto ocurre inmediatamente después de que se aplique el daño del ataque. Por ejemplo, si añades el efecto Veneno, retira {@dice 1d6} del daño del Ataque furtivo antes de tirar.\nSi un efecto de Golpe astuto requiere una tirada de salvación, la CD es igual a 8 + tu modificador de Destreza + tu {@variantrule Proficiency|XPHB|bonificador por competencia}.\nVeneno (Coste: 1d6). Añades una toxina a tu golpe, obligando al objetivo a hacer una tirada de salvación de Constitución. Si falla, el objetivo tiene la condición de {@condition Poisoned|XPHB|Envenenado} durante 1 minuto. Al final de cada uno de sus turnos, el objetivo {@condition Poisoned|XPHB|Envenenado} repite la salvación, terminando el efecto sobre sí mismo si tiene éxito.\nPara usar este efecto, debes llevar un {@item Poisoner's Kit|XPHB|Kit de envenenador}.\nDerribar (Coste: 1d6). Si el objetivo es Grande o más pequeño, debe superar una tirada de salvación de Destreza o tendrá la condición de {@condition Prone|XPHB|Derribado}.\nRetirada (Coste: 1d6). Inmediatamente después del ataque, te mueves hasta la mitad de tu {@variantrule Speed|XPHB|Velocidad} sin provocar {@action Opportunity Attack|XPHB|Ataques de oportunidad}."
       },
       "uncanny-dodge": {
-        "name": "",
-        "description": ""
+        "name": "Esquiva asombrosa",
+        "description": "Cuando un atacante al que puedas ver te impacta con una tirada de ataque, puedes usar tu {@variantrule Reaction|XPHB|Reacción} para reducir a la mitad el daño del ataque contra ti (redondeando hacia abajo)."
       },
       "expertise-6": {
-        "name": "",
-        "description": ""
+        "name": "Pericia",
+        "description": "Obtienes {@variantrule Expertise|XPHB|Pericia} en dos de tus competencias con habilidades a tu elección."
       },
       "evasion": {
-        "name": "",
-        "description": ""
+        "name": "Evasión",
+        "description": "Puedes esquivar ágilmente ciertos peligros. Cuando estás sujeto a un efecto que te permite hacer una tirada de salvación de Destreza para recibir solo la mitad del daño, en su lugar no recibes daño si superas la salvación y recibes solo la mitad del daño si la fallas. No puedes usar este rasgo si tienes la condición de {@condition Incapacitated|XPHB|Incapacitado}."
       },
       "reliable-talent": {
-        "name": "",
-        "description": ""
+        "name": "Talento fiable",
+        "description": "Siempre que hagas una prueba de característica que use una de tus competencias con habilidades o herramientas, puedes tratar una tirada de {@dice d20} de 9 o menos como si fuera un 10."
       },
       "ability-score-improvement-8": {
         "name": "",
@@ -1180,8 +1176,8 @@
         "description": ""
       },
       "improved-cunning-strike": {
-        "name": "",
-        "description": ""
+        "name": "Golpe astuto mejorado",
+        "description": "Puedes usar hasta dos efectos de Golpe astuto cuando infliges daño de Ataque furtivo, pagando el coste en dados de cada efecto."
       },
       "ability-score-improvement-12": {
         "name": "",
@@ -1192,12 +1188,12 @@
         "description": ""
       },
       "devious-strikes": {
-        "name": "",
-        "description": ""
+        "name": "Golpes taimados",
+        "description": "Has practicado nuevas formas de usar tu Ataque furtivo de manera taimada. Los siguientes efectos pasan a estar entre tus opciones de Golpe astuto.\nAturdir (Coste: 2d6). El objetivo debe superar una tirada de salvación de Constitución; si falla, en su siguiente turno solo puede hacer una de las siguientes cosas: moverse, o realizar una acción, o una {@variantrule Bonus Action|XPHB|Acción adicional}.\nNoquear (Coste: 6d6). El objetivo debe superar una tirada de salvación de Constitución; si falla, tiene la condición de {@condition Unconscious|XPHB|Inconsciente} durante 1 minuto o hasta que reciba cualquier daño. El objetivo {@condition Unconscious|XPHB|Inconsciente} repite la salvación al final de cada uno de sus turnos, terminando el efecto sobre sí mismo si tiene éxito.\nOfuscar (Coste: 3d6). El objetivo debe superar una tirada de salvación de Destreza; si falla, tiene la condición de {@condition Blinded|XPHB|Cegado} hasta el final de su siguiente turno."
       },
       "slippery-mind": {
-        "name": "",
-        "description": ""
+        "name": "Mente escurridiza",
+        "description": "Tu mente astuta es excepcionalmente difícil de controlar. Obtienes competencia en las tiradas de salvación de Sabiduría y Carisma."
       },
       "ability-score-improvement-16": {
         "name": "",
@@ -1208,21 +1204,21 @@
         "description": ""
       },
       "elusive": {
-        "name": "",
-        "description": ""
+        "name": "Escurridizo",
+        "description": "Eres tan evasivo que los atacantes rara vez consiguen ventaja contra ti. Ninguna tirada de ataque puede tener {@variantrule Advantage|XPHB|Ventaja} contra ti a menos que tengas la condición de {@condition Incapacitated|XPHB|Incapacitado}."
       },
       "epic-boon": {
         "name": "",
         "description": ""
       },
       "stroke-of-luck": {
-        "name": "",
-        "description": ""
+        "name": "Golpe de suerte",
+        "description": "Tienes un talento maravilloso para tener éxito cuando lo necesitas. Si fallas una {@variantrule D20 Test|XPHB|prueba de d20}, puedes convertir la tirada en un 20.\nUna vez uses este rasgo, no puedes volver a usarlo hasta que termines un {@variantrule Short Rest|XPHB|Descanso corto} o {@variantrule Long Rest|XPHB|largo}."
       }
     },
     "resources": {
       "stroke-of-luck": {
-        "name": ""
+        "name": "Golpe de suerte"
       }
     },
     "choices": {
@@ -1232,51 +1228,50 @@
     },
     "subclasses": {
       "thief": {
-        "name": "",
+        "name": "Ladrón",
         "features": {
           "thief": {
-            "name": "",
-            "description": ""
+            "name": "Ladrón",
+            "description": "{@i Caza tesoros como un aventurero clásico}\nUna mezcla de asaltante, cazatesoros y explorador; eres el epítome de un aventurero. Además de mejorar tu agilidad y tu sigilo, obtienes aptitudes útiles para explorar ruinas y sacar el máximo partido a los objetos mágicos que encuentres allí.\nManos rápidas. Como {@variantrule Bonus Action|XPHB|Acción adicional}, puedes hacer una de las siguientes cosas.\nJuego de manos. Haz una prueba de Destreza ({@skill Sleight of Hand|XPHB|Juego de manos}) para forzar una cerradura o desactivar una trampa con {@item Thieves' Tools|XPHB|Herramientas de ladrón}, o para robar un objeto del bolsillo.\nUsar un objeto. Realiza la acción de {@action Utilize|XPHB|Utilizar}, o realiza la acción {@action Magic|XPHB|Mágica} para usar un objeto mágico que requiera esa acción.\nTrabajo de segunda planta. Te has entrenado para acceder a lugares especialmente difíciles de alcanzar, lo que te otorga los siguientes beneficios.\nEscalador. Obtienes una {@variantrule Climb Speed|XPHB|Velocidad de trepar} igual a tu {@variantrule Speed|XPHB|Velocidad}.\nSaltador. Puedes determinar tu distancia de salto usando tu Destreza en lugar de tu Fuerza."
           },
           "supreme-sneak": {
-            "name": "",
-            "description": ""
+            "name": "Sigilo supremo",
+            "description": "Obtienes la siguiente opción de Golpe astuto.\nAtaque sigiloso (Coste: 1d6). Si tienes la condición {@condition Invisible|XPHB|Invisible} de la acción de {@action Hide|XPHB|Ocultarse}, este ataque no termina esa condición sobre ti si terminas el turno detrás de {@variantrule Cover|XPHB|Cobertura de tres cuartos} o {@variantrule Cover|XPHB|Cobertura total}."
           },
           "use-magic-device": {
-            "name": "",
-            "description": ""
+            "name": "Usar objeto mágico",
+            "description": "Has aprendido a maximizar el uso de objetos mágicos, lo que te otorga los siguientes beneficios.\nVinculación. Puedes vincularte a hasta cuatro objetos mágicos a la vez.\nCargas. Siempre que uses una propiedad de un objeto mágico que gaste cargas, tira {@dice 1d6}. Si obtienes un 6, usas la propiedad sin gastar las cargas.\nPergaminos. Puedes usar cualquier {@item Spell Scroll|XDMG|pergamino de conjuro}, usando Inteligencia como tu característica para lanzar conjuros de ese conjuro. Si el conjuro es un truco o un conjuro de nivel 1, puedes lanzarlo de forma fiable. Si el pergamino contiene un conjuro de nivel superior, primero debes superar una prueba de {@skill Arcana|XPHB|Arcanos} ({@dc 10|CD 10} + el nivel del conjuro). Si tienes éxito, lanzas el conjuro del pergamino. Si fallas, el pergamino se desintegra."
           },
           "thief-s-reflexes": {
-            "name": "",
-            "description": ""
+            "name": "Reflejos de ladrón",
+            "description": "Eres experto en tender emboscadas y escapar del peligro con rapidez. Puedes tener dos turnos durante la primera ronda de cualquier combate. Realizas tu primer turno con tu {@variantrule Initiative|XPHB|Iniciativa} normal y tu segundo turno con tu {@variantrule Initiative|XPHB|Iniciativa} menos 10."
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "sorcerer": {
-    "name": "",
+    "name": "Hechicero",
     "subclassTitle": "",
     "features": {
       "spellcasting": {
-        "name": "",
-        "description": ""
+        "name": "Lanzamiento de conjuros",
+        "description": "Recurriendo a tu magia innata, puedes lanzar conjuros. Consulta las {@book Adquirir conjuros|XPHB|7}. La información de abajo detalla cómo usas esas reglas con los conjuros de hechicero, que aparecen más adelante en la descripción de la clase, en la {@filter Lista de conjuros de hechicero|spells|class=Sorcerer}.\nTrucos. Conoces cuatro trucos de hechicero de tu elección. Se recomiendan {@spell Light|XPHB|Luz}, {@spell Prestidigitation|XPHB|Prestidigitación}, {@spell Shocking Grasp|XPHB|Agarre electrizante} y {@spell Sorcerous Burst|XPHB|Estallido mágico}. Siempre que ganes un nivel de hechicero, puedes reemplazar uno de los trucos que obtuviste con este rasgo por otro truco de hechicero de tu elección.\nCuando alcanzas los niveles 4 y 10 de hechicero, aprendes otro truco de hechicero de tu elección, como se muestra en la columna Trucos de la tabla Rasgos de hechicero.\nEspacios de conjuro. La tabla Rasgos de hechicero muestra cuántos espacios de conjuro tienes para lanzar tus conjuros de nivel 1+. Recuperas todos los espacios gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nConjuros preparados de nivel 1+. Preparas la lista de conjuros de nivel 1+ que están disponibles para ti con este rasgo. Para empezar, elige dos conjuros de hechicero de nivel 1. Se recomiendan {@spell Burning Hands|XPHB} y {@spell Detect Magic|XPHB}.\nEl número de conjuros en tu lista aumenta a medida que subes niveles de hechicero, como se muestra en la columna Conjuros preparados de la tabla Rasgos de hechicero. Cada vez que ese número aumente, elige conjuros adicionales de hechicero hasta que el número de conjuros de tu lista coincida con el número de la tabla. Los conjuros elegidos deben ser de un nivel para el que tengas espacios de conjuro. Por ejemplo, si eres hechicero de nivel 3, tu lista de conjuros preparados puede incluir seis conjuros de hechicero de nivel 1 o 2 en cualquier combinación.\nSi otro rasgo de hechicero te da conjuros que siempre tienes preparados, esos conjuros no cuentan contra el número de conjuros que puedes preparar con este rasgo, pero por lo demás cuentan como conjuros de hechicero para ti.\nCambiar tus conjuros preparados. Siempre que ganes un nivel de hechicero, puedes reemplazar un conjuro de tu lista por otro conjuro de hechicero para el que tengas espacios de conjuro.\nCaracterística para lanzar conjuros. Carisma es tu característica para lanzar conjuros de hechicero.\nFoco de lanzamiento. Puedes usar un {@item Arcane Focus|XPHB|Foco arcano} como {@variantrule Spellcasting Focus|XPHB|foco de lanzamiento} para tus conjuros de hechicero."
       },
       "innate-sorcery": {
-        "name": "",
-        "description": ""
+        "name": "Hechicería innata",
+        "description": "Un suceso de tu pasado dejó una marca indeleble en ti, infundiéndote una magia latente. Como {@variantrule Bonus Action|XPHB|Acción adicional}, puedes desatar esa magia durante 1 minuto; mientras dure, obtienes los siguientes beneficios:\n• La CD de salvación de tus conjuros de hechicero aumenta en 1.\n• Tienes {@variantrule Advantage|XPHB|Ventaja} en las tiradas de ataque de los conjuros de hechicero que lances.\nPuedes usar este rasgo dos veces, y recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "font-of-magic": {
-        "name": "",
-        "description": ""
+        "name": "Fuente de magia",
+        "description": "Puedes recurrir al manantial de magia que hay en tu interior. Este manantial se representa mediante Puntos de hechicería, que te permiten crear diversos efectos mágicos.\nTienes 2 Puntos de hechicería, y obtienes más al alcanzar niveles superiores, como se muestra en la columna Puntos de hechicería de la tabla Rasgos de hechicero. No puedes tener más Puntos de hechicería que el número mostrado en la tabla para tu nivel. Recuperas todos los Puntos de hechicería gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nPuedes usar tus Puntos de hechicería para alimentar las opciones de abajo, junto con otros rasgos, como Metamagia, que usan esos puntos.\nConvertir espacios de conjuro en Puntos de hechicería. Puedes gastar un espacio de conjuro para ganar una cantidad de Puntos de hechicería igual al nivel del espacio (no requiere acción).\nCrear espacios de conjuro. Como {@variantrule Bonus Action|XPHB|Acción adicional}, puedes transformar Puntos de hechicería no gastados en un espacio de conjuro. La tabla Crear espacios de conjuro muestra el coste de crear un espacio de conjuro de un nivel dado e indica el nivel mínimo de hechicero que debes tener para crearlo. No puedes crear un espacio de conjuro de nivel superior a 5.\nCualquier espacio de conjuro que crees con este rasgo desaparece cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nCrear espacios de conjuro\nNivel del espacio | Coste en Puntos de hechicería | Nivel mín. de hechicero\n1 | 2 | 2\n2 | 3 | 3\n3 | 5 | 5\n4 | 6 | 7\n5 | 7 | 9"
       },
       "metamagic-2": {
-        "name": "",
-        "description": ""
+        "name": "Metamagia",
+        "description": "Como tu magia fluye desde dentro, puedes alterar tus conjuros para adaptarlos a tus necesidades; obtienes dos opciones de Metamagia de tu elección de entre \"{@filter Opciones de Metamagia|optionalfeatures|feature type=MM|source=XPHB}\". Usas las opciones elegidas para modificar temporalmente los conjuros que lanzas. Para usar una opción, debes gastar la cantidad de Puntos de hechicería que cueste.\nSolo puedes usar una opción de Metamagia en un conjuro cuando lo lanzas, a menos que se indique lo contrario en una de esas opciones.\nSiempre que ganes un nivel de hechicero, puedes reemplazar una de tus opciones de Metamagia por otra que no conozcas. Obtienes dos opciones más a nivel 10 de hechicero y dos más a nivel 17 de hechicero."
       },
       "metamagic-options": {
-        "name": "",
+        "name": "Opciones de Metamagia",
         "description": ""
       },
       "sorcerer-subclass": {
@@ -1288,24 +1283,24 @@
         "description": ""
       },
       "sorcerous-restoration": {
-        "name": "",
-        "description": ""
+        "name": "Restauración hechiceril",
+        "description": "Cuando terminas un {@variantrule Short Rest|XPHB|Descanso corto}, puedes recuperar Puntos de hechicería gastados, pero no más de una cantidad igual a la mitad de tu nivel de hechicero (redondeando hacia abajo). Una vez uses este rasgo, no puedes volver a hacerlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "subclass-feature-6": {
         "name": "",
         "description": ""
       },
       "sorcery-incarnate": {
-        "name": "",
-        "description": ""
+        "name": "Hechicería encarnada",
+        "description": "Si no te quedan usos de Hechicería innata, puedes usarla si gastas 2 Puntos de hechicería cuando realizas la {@variantrule Bonus Action|XPHB|Acción adicional} para activarla.\nAdemás, mientras tu rasgo de Hechicería innata esté activo, puedes usar hasta dos de tus {@filter opciones de Metamagia|optionalfeatures|feature type=MM} en cada conjuro que lances."
       },
       "ability-score-improvement-8": {
         "name": "",
         "description": ""
       },
       "metamagic-10": {
-        "name": "",
-        "description": ""
+        "name": "Metamagia",
+        "description": "Como tu magia fluye desde dentro, puedes alterar tus conjuros para adaptarlos a tus necesidades; obtienes dos opciones de Metamagia de tu elección de entre \"{@filter Opciones de Metamagia|optionalfeatures|feature type=MM|source=XPHB}\".\nSolo puedes usar una opción de Metamagia en un conjuro cuando lo lanzas, a menos que se indique lo contrario en una de esas opciones.\nSiempre que ganes un nivel de hechicero, puedes reemplazar una de tus opciones de Metamagia por otra que no conozcas."
       },
       "ability-score-improvement-12": {
         "name": "",
@@ -1320,8 +1315,8 @@
         "description": ""
       },
       "metamagic-17": {
-        "name": "",
-        "description": ""
+        "name": "Metamagia",
+        "description": "Como tu magia fluye desde dentro, puedes alterar tus conjuros para adaptarlos a tus necesidades; obtienes dos opciones de Metamagia de tu elección de entre \"{@filter Opciones de Metamagia|optionalfeatures|feature type=MM|source=XPHB}\".\nSolo puedes usar una opción de Metamagia en un conjuro cuando lo lanzas, a menos que se indique lo contrario en una de esas opciones.\nSiempre que ganes un nivel de hechicero, puedes reemplazar una de tus opciones de Metamagia por otra que no conozcas."
       },
       "subclass-feature-18": {
         "name": "",
@@ -1332,26 +1327,26 @@
         "description": ""
       },
       "arcane-apotheosis": {
-        "name": "",
-        "description": ""
+        "name": "Apoteosis arcana",
+        "description": "Mientras tu rasgo de Hechicería innata esté activo, puedes usar una opción de Metamagia en cada uno de tus turnos sin gastar Puntos de hechicería."
       }
     },
     "resources": {
       "innate-sorcery": {
-        "name": "",
+        "name": "Hechicería innata",
         "note": ""
       },
       "sorcery-points": {
-        "name": ""
+        "name": "Puntos de hechicería"
       },
       "sorcerous-restoration": {
-        "name": "",
+        "name": "Restauración hechiceril",
         "note": ""
       }
     },
     "choices": {
       "metamagic": {
-        "name": ""
+        "name": "Metamagia"
       },
       "epic-boon": {
         "name": ""
@@ -1359,32 +1354,32 @@
     },
     "subclasses": {
       "draconic": {
-        "name": "",
+        "name": "Hechicería dracónica",
         "features": {
           "draconic-sorcery": {
-            "name": "",
-            "description": ""
+            "name": "Hechicería dracónica",
+            "description": "{@i Respira la magia de los dragones}\nTu magia innata proviene del don de un dragón. Quizá un dragón ancestral, al enfrentarse a la muerte, legó parte de su poder mágico a ti o a uno de tus antepasados. Puede que absorbieras magia en un lugar impregnado del poder de los dragones. O quizá manipulaste un tesoro tomado de la guarida de un dragón que estaba empapado de poder dracónico. O puede que tengas un dragón como antepasado.\nResiliencia dracónica. La magia de tu cuerpo manifiesta rasgos físicos de tu don dracónico. Tu máximo de {@variantrule Hit Points|XPHB|Puntos de golpe} aumenta en 3, y aumenta en 1 cada vez que ganas otro nivel de hechicero.\nPartes de tu cuerpo también están cubiertas de escamas parecidas a las de un dragón. Mientras no lleves armadura, tu {@variantrule Armor Class|XPHB|Clase de Armadura} base es 10 + tus modificadores de Destreza y Carisma.\nConjuros dracónicos. Cuando alcanzas un nivel de hechicero indicado en la tabla Conjuros dracónicos, a partir de entonces siempre tienes preparados los conjuros listados.\nConjuros dracónicos\nNivel de hechicero | Conjuros\n3 | {@spell Alter Self|XPHB|Alterar el propio aspecto}, {@spell Chromatic Orb|XPHB|Orbe cromático}, {@spell Command|XPHB|Orden imperiosa}, {@spell Dragon's Breath|XPHB|Aliento de dragón}\n5 | {@spell Fear|XPHB|Terror}, {@spell Fly|XPHB|Volar}\n7 | {@spell Arcane Eye|XPHB|Ojo arcano}, {@spell Charm Monster|XPHB|Hechizar monstruo}\n9 | {@spell Legend Lore|XPHB|Conocer las leyendas}, {@spell Summon Dragon|XPHB|Invocar dragón}"
           },
           "elemental-affinity": {
-            "name": "",
-            "description": ""
+            "name": "Afinidad elemental",
+            "description": "Tu magia dracónica tiene afinidad con un tipo de daño asociado a los dragones. Elige uno de esos tipos: ácido, frío, fuego, relámpago o veneno.\nTienes {@variantrule Resistance|XPHB|Resistencia} a ese tipo de daño, y cuando lanzas un conjuro que inflige daño de ese tipo, puedes añadir tu modificador de Carisma a una tirada de daño de ese conjuro."
           },
           "dragon-wings": {
-            "name": "",
-            "description": ""
+            "name": "Alas de dragón",
+            "description": "Como {@variantrule Bonus Action|XPHB|Acción adicional}, puedes hacer que aparezcan alas dracónicas en tu espalda. Las alas duran 1 hora o hasta que las descartes (no requiere acción). Mientras duren, tienes una {@variantrule Fly Speed|XPHB|Velocidad de vuelo} de 60 pies.\nUna vez uses este rasgo, no puedes volver a usarlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}, a menos que gastes 3 Puntos de hechicería (no requiere acción) para recuperar su uso."
           },
           "dragon-companion": {
-            "name": "",
-            "description": ""
+            "name": "Compañero dracónico",
+            "description": "Puedes lanzar {@spell Summon Dragon|XPHB|Invocar dragón} sin componente Material. También puedes lanzar el conjuro una vez sin gastar un espacio de conjuro, y recuperas la capacidad de hacerlo cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nSiempre que empieces a lanzar el conjuro, puedes modificarlo para que no requiera {@status Concentration|XPHB|Concentración}. Si lo haces, la duración del conjuro pasa a ser 1 minuto para ese lanzamiento."
           }
         },
         "resources": {
           "dragon-wings": {
-            "name": "",
+            "name": "Alas de dragón",
             "note": ""
           },
           "dragon-companion": {
-            "name": "",
+            "name": "Compañero dracónico",
             "note": ""
           }
         }
@@ -1392,24 +1387,24 @@
     }
   },
   "warlock": {
-    "name": "",
+    "name": "Brujo",
     "subclassTitle": "",
     "features": {
       "eldritch-invocations": {
-        "name": "",
-        "description": ""
+        "name": "Invocaciones arcanas",
+        "description": "Has desenterrado invocaciones arcanas, fragmentos de conocimiento prohibido que te imbuyen de una capacidad mágica duradera u otras enseñanzas. Obtienes una invocación de tu elección, como Pacto del tomo. Las invocaciones se describen en la sección {@filter Opciones de invocaciones sobrenaturales|optionalfeatures|feature type=EI|source=XPHB}.\nPrerrequisitos. Si una invocación tiene un prerrequisito, debes cumplirlo para aprender esa invocación. Por ejemplo, si una invocación requiere ser brujo de nivel 5 o superior, puedes seleccionar esa invocación cuando alcances el nivel 5 de brujo.\nSustituir y obtener invocaciones. Siempre que ganes un nivel de brujo, puedes sustituir una de tus invocaciones por otra para la que cumplas los requisitos. No puedes sustituir una invocación si es un prerrequisito para otra invocación que tengas.\nCuando alcanzas ciertos niveles de brujo, obtienes más invocaciones de tu elección, como se muestra en la columna Invocaciones de la tabla Rasgos de brujo.\nNo puedes elegir la misma invocación más de una vez, a menos que su descripción diga lo contrario."
       },
       "pact-magic": {
-        "name": "",
-        "description": ""
+        "name": "Magia de pacto",
+        "description": "Mediante una ceremonia oculta, has formado un pacto con una entidad misteriosa para obtener poderes mágicos. La entidad es una voz en las sombras —su identidad no está clara—, pero su don para ti es tangible: la capacidad de lanzar conjuros. Consulta las {@book reglas de lanzamiento de conjuros|XPHB|7}. La información de abajo detalla cómo usas esas reglas con los conjuros de brujo, que aparecen en la {@filter Lista de conjuros de brujo|spells|class=Warlock}.\nTrucos. Conoces dos trucos de brujo de tu elección. Se recomiendan {@spell Eldritch Blast|XPHB|Descarga sobrenatural} y {@spell Prestidigitation|XPHB|Prestidigitación}. Siempre que ganes un nivel de brujo, puedes reemplazar uno de los trucos que obtuviste con este rasgo por otro truco de brujo de tu elección.\nCuando alcanzas los niveles 4 y 10 de brujo, aprendes otro truco de brujo de tu elección, como se muestra en la columna Trucos de la tabla Rasgos de brujo.\nEspacios de conjuro. La tabla Rasgos de brujo muestra cuántos espacios de conjuro tienes para lanzar tus conjuros de brujo de niveles 1–5. La tabla también muestra el nivel de esos espacios; todos son del mismo nivel. Recuperas todos los espacios de conjuro gastados de Magia de pacto cuando terminas un {@variantrule Short Rest|XPHB|Descanso corto} o {@variantrule Long Rest|XPHB|largo}.\nPor ejemplo, cuando eres brujo de nivel 5, tienes dos espacios de conjuro de nivel 3. Para lanzar el conjuro de nivel 1 {@spell Witch Bolt|XPHB}, debes gastar uno de esos espacios, y lo lanzas como un conjuro de nivel 3.\nConjuros preparados de nivel 1+. Preparas la lista de conjuros de nivel 1+ que están disponibles para ti con este rasgo. Para empezar, elige dos conjuros de brujo de nivel 1. Se recomiendan {@spell Charm Person|XPHB|Hechizar persona} y {@spell Hex|XPHB|Maleficio}.\nEl número de conjuros en tu lista aumenta a medida que subes niveles de brujo, como se muestra en la columna Conjuros preparados de la tabla Rasgos de brujo. Cada vez que ese número aumente, elige conjuros adicionales de brujo hasta que el número de conjuros de tu lista coincida con el número de la tabla. Los conjuros elegidos deben ser de un nivel no superior al que se muestra en la columna Nivel de espacios de la tabla para tu nivel. Cuando alcanzas el nivel 6, por ejemplo, aprendes un conjuro nuevo de brujo, que puede ser de nivel 1–3.\nSi otro rasgo de brujo te da conjuros que siempre tienes preparados, esos conjuros no cuentan contra el número de conjuros que puedes preparar con este rasgo, pero por lo demás cuentan como conjuros de brujo para ti.\nCambiar tus conjuros preparados. Siempre que ganes un nivel de brujo, puedes reemplazar un conjuro de tu lista por otro conjuro de brujo de un nivel permitido.\nCaracterística para lanzar conjuros. Carisma es tu característica para lanzar conjuros de brujo.\nFoco de lanzamiento. Puedes usar un {@item Arcane Focus|XPHB|Foco arcano} como {@variantrule Spellcasting Focus|XPHB|foco de lanzamiento} para tus conjuros de brujo."
       },
       "eldritch-invocation-options": {
-        "name": "",
+        "name": "Opciones de invocaciones sobrenaturales",
         "description": ""
       },
       "magical-cunning": {
-        "name": "",
-        "description": ""
+        "name": "Astucia mágica",
+        "description": "Puedes realizar un rito esotérico durante 1 minuto. Al final, recuperas espacios de conjuro gastados de Magia de pacto, pero no más de una cantidad igual a la mitad de tu máximo (redondeando hacia arriba). Una vez uses este rasgo, no puedes volver a hacerlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "warlock-subclass": {
         "name": "",
@@ -1428,23 +1423,23 @@
         "description": ""
       },
       "contact-patron": {
-        "name": "",
-        "description": ""
+        "name": "Contactar con el patrón",
+        "description": "En el pasado, normalmente contactabas con tu patrón mediante intermediarios. Ahora puedes comunicarte directamente; siempre tienes preparado el conjuro {@spell Contact Other Plane|XPHB|Contactar con otro plano}. Con este rasgo, puedes lanzar el conjuro sin gastar un espacio de conjuro para contactar con tu patrón, y superas automáticamente la tirada de salvación del conjuro.\nUna vez lances el conjuro con este rasgo, no puedes volver a hacerlo de esta manera hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "subclass-feature-10": {
         "name": "",
         "description": ""
       },
       "mystic-arcanum-11": {
-        "name": "",
-        "description": ""
+        "name": "Arcano místico",
+        "description": "Tu patrón te concede un secreto mágico llamado arcano. Elige un conjuro de brujo de nivel 6 como este arcano.\nPuedes lanzar tu conjuro de arcano una vez sin gastar un espacio de conjuro, y debes terminar un {@variantrule Long Rest|XPHB|Descanso largo} antes de poder lanzarlo de esta forma de nuevo.\nObtienes otro conjuro de brujo de tu elección que puede lanzarse de esta manera cuando alcanzas los niveles 13 (conjuro de nivel 7), 15 (conjuro de nivel 8) y 17 (conjuro de nivel 9) de brujo. Recuperas todos los usos de tu Arcano místico cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nSiempre que ganes un nivel de brujo, puedes reemplazar uno de tus conjuros de arcano por otro conjuro de brujo del mismo nivel."
       },
       "ability-score-improvement-12": {
         "name": "",
         "description": ""
       },
       "mystic-arcanum-13": {
-        "name": "",
+        "name": "Arcano místico",
         "description": ""
       },
       "subclass-feature-14": {
@@ -1452,7 +1447,7 @@
         "description": ""
       },
       "mystic-arcanum-15": {
-        "name": "",
+        "name": "Arcano místico",
         "description": ""
       },
       "ability-score-improvement-16": {
@@ -1460,7 +1455,7 @@
         "description": ""
       },
       "mystic-arcanum-17": {
-        "name": "",
+        "name": "Arcano místico",
         "description": ""
       },
       "epic-boon": {
@@ -1468,20 +1463,20 @@
         "description": ""
       },
       "eldritch-master": {
-        "name": "",
-        "description": ""
+        "name": "Maestro arcano",
+        "description": "Cuando usas tu rasgo Astucia mágica, recuperas todos tus espacios de conjuro gastados de Magia de pacto."
       }
     },
     "resources": {
       "pact-slots": {
-        "name": ""
+        "name": "Espacios de conjuro de Magia de pacto"
       },
       "magical-cunning": {
-        "name": "",
+        "name": "Astucia mágica",
         "note": ""
       },
       "contact-patron": {
-        "name": "",
+        "name": "Contactar con el patrón",
         "note": ""
       },
       "mystic-arcanum-6": {
@@ -1499,7 +1494,7 @@
     },
     "choices": {
       "eldritch-invocations": {
-        "name": ""
+        "name": "Invocaciones arcanas"
       },
       "epic-boon": {
         "name": ""
@@ -1507,31 +1502,31 @@
     },
     "subclasses": {
       "fiend": {
-        "name": "",
+        "name": "Patrón infernal",
         "features": {
           "fiend-patron": {
-            "name": "",
-            "description": ""
+            "name": "Patrón infernal",
+            "description": "{@i Haz un trato con los Planos Inferiores}\nTu pacto extrae poder de los Planos Inferiores, los reinos de la perdición. Podrías forjar un acuerdo con un señor demoníaco como Demogorgon u Orcus; un archidiablo como Asmodeus; o un diablo mayor, un balor, un yugoloth o una bruja nocturna especialmente poderosa. Los objetivos de ese patrón son malvados: la corrupción o destrucción de todas las cosas, lo que al final también te incluye a ti, y tu camino se define por hasta qué punto luchas contra esos objetivos.\nConjuros infernales. La magia de tu patrón se asegura de que siempre tengas ciertos conjuros listos; cuando alcanzas un nivel de brujo indicado en la tabla Conjuros infernales, a partir de entonces siempre tienes preparados los conjuros listados.\nConjuros infernales\nNivel de brujo | Conjuros\n3 | {@spell Burning Hands|XPHB|Manos ardientes}, {@spell Command|XPHB|Orden imperiosa}, {@spell Scorching Ray|XPHB|Rayo abrasador}, {@spell Suggestion|XPHB|Sugestión}\n5 | {@spell Fireball|XPHB|Bola de fuego}, {@spell Stinking Cloud|XPHB|Nube apestosa}\n7 | {@spell Fire Shield|XPHB|Escudo de fuego}, {@spell Wall of Fire|XPHB|Muro de fuego}\n9 | {@spell Geas|XPHB|Geas}, {@spell Insect Plague|XPHB|Plaga de insectos}\nBendición del Oscuro. Cuando reduces a un enemigo a 0 {@variantrule Hit Points|XPHB|Puntos de golpe}, obtienes {@variantrule Temporary Hit Points|XPHB|Puntos de golpe temporales} iguales a tu modificador de Carisma + tu nivel de brujo (mínimo de 1 {@variantrule Temporary Hit Points|XPHB|Punto de golpe temporal}). También obtienes este beneficio si otra persona reduce a 0 {@variantrule Hit Points|XPHB|Puntos de golpe} a un enemigo que esté a 10 pies o menos de ti."
           },
           "dark-one-s-own-luck": {
-            "name": "",
-            "description": ""
+            "name": "Suerte propia del Oscuro",
+            "description": "Puedes invocar a tu patrón infernal para alterar el destino a tu favor. Cuando hagas una prueba de característica o una tirada de salvación, puedes usar este rasgo para añadir {@dice 1d10} a tu tirada. Puedes hacerlo después de ver la tirada pero antes de que ocurra cualquiera de los efectos de la tirada.\nPuedes usar este rasgo un número de veces igual a tu modificador de Carisma (mínimo de una vez), pero no puedes usarlo más de una vez por tirada. Recuperas todos los usos gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}."
           },
           "fiendish-resilience": {
-            "name": "",
-            "description": ""
+            "name": "Resiliencia infernal",
+            "description": "Elige un tipo de daño, que no sea Fuerza, cada vez que termines un {@variantrule Short Rest|XPHB|Descanso corto} o {@variantrule Long Rest|XPHB|largo}. Tienes {@variantrule Resistance|XPHB|Resistencia} a ese tipo de daño hasta que elijas uno diferente con este rasgo."
           },
           "hurl-through-hell": {
-            "name": "",
-            "description": ""
+            "name": "Arrojar a través del Infierno",
+            "description": "Una vez por turno, cuando impactas a una criatura con una tirada de ataque, puedes intentar transportar instantáneamente al objetivo a través de los Planos Inferiores. El objetivo debe superar una tirada de salvación de Carisma contra la CD de salvación de tus conjuros o desaparece y sale despedido a través de un paisaje de pesadilla. El objetivo sufre {@damage 8d10} de daño psíquico si no es un infernal, y tiene la condición {@condition Incapacitated|XPHB|Incapacitado} hasta el final de tu siguiente turno; entonces regresa al espacio que ocupaba antes o al espacio desocupado más cercano.\nUna vez uses este rasgo, no puedes volver a usarlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}, a menos que gastes un espacio de conjuro de Magia de pacto (no requiere acción) para recuperar su uso."
           }
         },
         "resources": {
           "dark-one-s-own-luck": {
-            "name": ""
+            "name": "Suerte propia del Oscuro"
           },
           "hurl-through-hell": {
-            "name": "",
+            "name": "Arrojar a través del Infierno",
             "note": ""
           }
         }
@@ -1539,24 +1534,24 @@
     }
   },
   "wizard": {
-    "name": "",
+    "name": "Mago",
     "subclassTitle": "",
     "features": {
       "spellcasting": {
-        "name": "",
-        "description": ""
+        "name": "Lanzamiento de conjuros",
+        "description": "Como estudiante de magia arcana, has aprendido a lanzar conjuros. Consulta las {@book Adquirir conjuros|XPHB|7}. La información de abajo detalla cómo usas esas reglas con los conjuros de mago, que aparecen en la {@filter Lista de conjuros de mago|spells|class=Wizard}.\nTrucos. Conoces tres trucos de mago a tu elección. Se recomiendan {@spell Light|XPHB|Luz}, {@spell Mage Hand|XPHB|Mano de mago} y {@spell Ray of Frost|XPHB|Rayo de escarcha}. Siempre que termines un {@variantrule Long Rest|XPHB|Descanso largo}, puedes reemplazar uno de tus trucos de este rasgo por otro truco de mago a tu elección.\nCuando alcanzas los niveles 4 y 10 de mago, aprendes otro truco de mago a tu elección, como se muestra en la columna de Trucos de la tabla Rasgos de mago.\nLibro de conjuros. Tu aprendizaje como mago culminó en la creación de un libro único: tu libro de conjuros. Es un objeto diminuto que pesa 3 libras, contiene 100 páginas y solo puede ser leído por ti o por alguien que lance {@spell Identify|XPHB|Identificar}. Tú determinas el aspecto y los materiales del libro, como un tomo con bordes dorados o una colección de vitela atada con cuerda.\nEl libro contiene los conjuros de nivel 1+ que conoces. Comienza con seis conjuros de mago de nivel 1 a tu elección. Se recomiendan {@spell Detect Magic|XPHB|Detectar magia}, {@spell Feather Fall|XPHB|Caída de pluma}, {@spell Mage Armor|XPHB|Armadura de mago}, {@spell Magic Missile|XPHB|Proyectil mágico}, {@spell Sleep|XPHB|Dormir} y {@spell Thunderwave|XPHB|Ola atronadora}.\nSiempre que ganes un nivel de mago después del 1, añade dos conjuros de mago a tu elección a tu libro de conjuros. Cada uno de esos conjuros debe ser de un nivel para el que tengas espacios de conjuro, como se muestra en la tabla Rasgos de mago. Los conjuros son la culminación de la investigación arcana que realizas con regularidad.\nEspacios de conjuro. La tabla Rasgos de mago muestra cuántos espacios de conjuro tienes para lanzar tus conjuros de nivel 1+. Recuperas todos los espacios gastados cuando terminas un {@variantrule Long Rest|XPHB|Descanso largo}.\nConjuros preparados de nivel 1+. Preparas la lista de conjuros de nivel 1+ que están disponibles para que los lances con este rasgo. Para hacerlo, elige cuatro conjuros de tu libro de conjuros. Los conjuros elegidos deben ser de un nivel para el que tengas espacios de conjuro.\nEl número de conjuros en tu lista aumenta a medida que ganas niveles de mago, como se muestra en la columna Conjuros preparados de la tabla Rasgos de mago. Siempre que ese número aumente, elige conjuros de mago adicionales hasta que el número de conjuros de tu lista coincida con el número de la tabla. Los conjuros elegidos deben ser de un nivel para el que tengas espacios de conjuro. Por ejemplo, si eres un mago de nivel 3, tu lista de conjuros preparados puede incluir seis conjuros de nivel 1 y 2 en cualquier combinación, elegidos de tu libro de conjuros.\nSi otro rasgo de mago te da conjuros que siempre tienes preparados, esos conjuros no cuentan contra el número de conjuros que puedes preparar con este rasgo, pero por lo demás cuentan como conjuros de mago para ti.\nCambiar tus conjuros preparados. Siempre que termines un {@variantrule Long Rest|XPHB|Descanso largo}, puedes cambiar tu lista de conjuros preparados, reemplazando cualquiera de los conjuros de la lista por conjuros de tu libro de conjuros.\nCaracterística para lanzar conjuros. Inteligencia es tu característica para lanzar conjuros de mago.\nFoco de lanzamiento de conjuros. Puedes usar un {@item Arcane Focus|XPHB|foco arcano} o tu libro de conjuros como {@variantrule Spellcasting Focus|XPHB|foco de lanzamiento de conjuros} para tus conjuros de mago.\nAmpliar y reemplazar un libro de conjuros. Los conjuros que añades a tu libro de conjuros al subir de nivel reflejan tu investigación mágica continua, pero podrías encontrar otros conjuros durante tus aventuras que puedas añadir al libro. Podrías descubrir un conjuro de mago en un {@item Spell Scroll|XDMG|Pergamino de conjuros}, por ejemplo, y después copiarlo a tu libro de conjuros.\nCopiar un conjuro en el libro. Cuando encuentras un conjuro de mago de nivel 1+, puedes copiarlo en tu libro de conjuros si es de un nivel que puedas preparar y si tienes tiempo para copiarlo. Por cada nivel del conjuro, la transcripción tarda 2 horas y cuesta 50 GP. Después puedes preparar el conjuro como los demás conjuros de tu libro de conjuros.\nCopiar el libro. Puedes copiar un conjuro de tu libro de conjuros a otro libro. Esto es como copiar un conjuro nuevo en tu libro de conjuros, pero más rápido, ya que ya sabes cómo lanzar el conjuro. Solo necesitas gastar 1 hora y 10 GP por cada nivel del conjuro copiado.\nSi pierdes tu libro de conjuros, puedes usar el mismo procedimiento para transcribir los conjuros de mago que tengas preparados a un nuevo libro de conjuros. Completar el resto del nuevo libro requiere que encuentres nuevos conjuros para hacerlo. Por esta razón, muchos magos guardan un libro de conjuros de respaldo."
       },
       "ritual-adept": {
-        "name": "",
-        "description": ""
+        "name": "Adepto a los rituales",
+        "description": "Puedes lanzar cualquier conjuro como {@variantrule Ritual|XPHB|Ritual} si ese conjuro tiene la etiqueta {@variantrule Ritual|XPHB|Ritual} y el conjuro está en tu libro de conjuros. No necesitas tener el conjuro preparado, pero debes leer del libro para lanzarlo de esta manera."
       },
       "arcane-recovery": {
-        "name": "",
-        "description": ""
+        "name": "Recuperación arcana",
+        "description": "Puedes recuperar parte de tu energía mágica estudiando tu libro de conjuros. Cuando terminas un {@variantrule Short Rest|XPHB|Descanso corto}, puedes elegir espacios de conjuro gastados para recuperarlos. Los espacios de conjuro pueden tener un nivel combinado igual a no más de la mitad de tu nivel de mago (redondeando hacia arriba), y ninguno de los espacios puede ser de nivel 6 o superior. Por ejemplo, si eres un mago de nivel 4, puedes recuperar hasta dos niveles de espacios de conjuro, recuperando o bien un espacio de conjuro de nivel 2 o bien dos espacios de conjuro de nivel 1.\nUna vez uses este rasgo, no puedes volver a hacerlo hasta que termines un {@variantrule Long Rest|XPHB|Descanso largo}."
       },
       "scholar": {
-        "name": "",
-        "description": ""
+        "name": "Erudito",
+        "description": "Mientras estudiabas magia, también te especializaste en otro campo de estudio. Elige una de las siguientes habilidades en la que tengas competencia: {@skill Arcana|XPHB|Arcana}, {@skill History|XPHB|Historia}, {@skill Investigation|XPHB|Investigación}, {@skill Medicine|XPHB|Medicina}, {@skill Nature|XPHB|Naturaleza} o {@skill Religion|XPHB|Religión}. Tienes {@variantrule Expertise|XPHB|Pericia} en la habilidad elegida."
       },
       "wizard-subclass": {
         "name": "",
@@ -1567,8 +1562,8 @@
         "description": ""
       },
       "memorize-spell": {
-        "name": "",
-        "description": ""
+        "name": "Memorizar conjuro",
+        "description": "Siempre que termines un {@variantrule Short Rest|XPHB|Descanso corto}, puedes estudiar tu libro de conjuros y reemplazar uno de los conjuros de mago de nivel 1+ que tengas preparados para tu rasgo Lanzamiento de conjuros por otro conjuro de nivel 1+ del libro."
       },
       "subclass-feature-6": {
         "name": "",
@@ -1595,25 +1590,25 @@
         "description": ""
       },
       "spell-mastery": {
-        "name": "",
-        "description": ""
+        "name": "Maestría de conjuros",
+        "description": "Has alcanzado tal maestría sobre ciertos conjuros que puedes lanzarlos a voluntad. Elige un conjuro de nivel 1 y un conjuro de nivel 2 de tu libro de conjuros que tengan un tiempo de lanzamiento de una acción. Siempre tienes esos conjuros preparados, y puedes lanzarlos a su nivel más bajo sin gastar un espacio de conjuro. Para lanzar cualquiera de ellos a un nivel superior, debes gastar un espacio de conjuro.\nSiempre que termines un {@variantrule Long Rest|XPHB|Descanso largo}, puedes estudiar tu libro de conjuros y reemplazar uno de esos conjuros por un conjuro válido del mismo nivel del libro."
       },
       "epic-boon": {
         "name": "",
         "description": ""
       },
       "signature-spells": {
-        "name": "",
-        "description": ""
+        "name": "Conjuros característicos",
+        "description": "Elige dos conjuros de nivel 3 de tu libro de conjuros como tus conjuros característicos. Siempre tienes estos conjuros preparados, y puedes lanzar cada uno de ellos una vez a nivel 3 sin gastar un espacio de conjuro. Cuando lo haces, no puedes volver a lanzar ese conjuro de esta manera hasta que termines un {@variantrule Short Rest|XPHB|Descanso corto} o {@variantrule Long Rest|XPHB|largo}. Para lanzar cualquiera de ellos a un nivel superior, debes gastar un espacio de conjuro."
       }
     },
     "resources": {
       "arcane-recovery": {
-        "name": "",
+        "name": "Recuperación arcana",
         "note": ""
       },
       "signature-spells": {
-        "name": "",
+        "name": "Conjuros característicos",
         "note": ""
       }
     },
@@ -1624,28 +1619,28 @@
     },
     "subclasses": {
       "evoker": {
-        "name": "",
+        "name": "Evocador",
         "features": {
           "evoker": {
-            "name": "",
+            "name": "Evocador",
             "description": ""
           },
           "sculpt-spells": {
-            "name": "",
-            "description": ""
+            "name": "Esculpir conjuros",
+            "description": "Puedes crear zonas de seguridad relativa dentro de los efectos de tus evocaciones. Cuando lanzas un conjuro de Evocación que afecte a otras criaturas que puedas ver, puedes elegir un número de ellas igual a 1 más el nivel del conjuro. Las criaturas elegidas superan automáticamente sus tiradas de salvación contra el conjuro, y no reciben daño si normalmente recibirían la mitad del daño al superar una tirada de salvación."
           },
           "empowered-evocation": {
-            "name": "",
-            "description": ""
+            "name": "Evocación potenciada",
+            "description": "Siempre que lances un conjuro de mago de la escuela de Evocación, puedes añadir tu modificador de Inteligencia a una tirada de daño de ese conjuro."
           },
           "overchannel": {
-            "name": "",
-            "description": ""
+            "name": "Sobrecargar",
+            "description": "Puedes aumentar el poder de tus conjuros. Cuando lances un conjuro de mago con un espacio de conjuro de nivel 1–5 que inflija daño, puedes hacer daño máximo con ese conjuro en el turno en el que lo lanzas.\nLa primera vez que lo haces, no sufres ningún efecto adverso. Si vuelves a usar este rasgo antes de terminar un {@variantrule Long Rest|XPHB|Descanso largo}, recibes {@damage 2d12} de daño necrótico por cada nivel del espacio de conjuro inmediatamente después de lanzar el conjuro. Este daño ignora {@variantrule Resistance|XPHB|Resistencia} e {@variantrule Immunity|XPHB|Inmunidad}.\nCada vez que uses este rasgo de nuevo antes de terminar un {@variantrule Long Rest|XPHB|Descanso largo}, el daño necrótico por nivel de conjuro aumenta en {@damage 1d12}."
           }
         },
         "resources": {
           "overchannel": {
-            "name": "",
+            "name": "Sobrecargar",
             "note": ""
           }
         }

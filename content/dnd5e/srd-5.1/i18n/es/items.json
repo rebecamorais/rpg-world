@@ -11,7 +11,7 @@
     "description": ""
   },
   "alchemist-s-supplies": {
-    "name": ""
+    "name": "Suministros de alquimista"
   },
   "ale-gallon": {
     "name": ""
@@ -20,7 +20,7 @@
     "name": ""
   },
   "amulet": {
-    "name": ""
+    "name": "Amuleto"
   },
   "antitoxin-vial": {
     "name": "",
@@ -30,14 +30,14 @@
     "name": ""
   },
   "arrows-20": {
-    "name": ""
+    "name": "Flechas"
   },
   "backpack": {
-    "name": "",
+    "name": "Mochila",
     "description": ""
   },
   "bagpipes": {
-    "name": ""
+    "name": "Gaita"
   },
   "ball-bearing": {
     "name": "",
@@ -48,7 +48,7 @@
     "description": ""
   },
   "barrel": {
-    "name": "",
+    "name": "Barril",
     "description": ""
   },
   "basic-poison-vial": {
@@ -56,30 +56,30 @@
     "description": ""
   },
   "basket": {
-    "name": "",
+    "name": "Cesta",
     "description": ""
   },
   "battleaxe": {
-    "name": ""
+    "name": "Hacha de batalla"
   },
   "bedroll": {
-    "name": ""
+    "name": "Rollo de cama"
   },
   "bell": {
-    "name": ""
+    "name": "Campana"
   },
   "bit-and-bridle": {
     "name": ""
   },
   "blanket": {
-    "name": ""
+    "name": "Manta"
   },
   "block-and-tackle": {
-    "name": "",
+    "name": "Polipasto",
     "description": ""
   },
   "blowgun": {
-    "name": ""
+    "name": "Cerbatana"
   },
   "blowgun-needle": {
     "name": ""
@@ -88,30 +88,30 @@
     "name": ""
   },
   "book": {
-    "name": "",
+    "name": "Libro",
     "description": ""
   },
   "breastplate": {
-    "name": "",
+    "name": "Coraza",
     "description": ""
   },
   "brewer-s-supplies": {
-    "name": ""
+    "name": "Suministros de cervecero"
   },
   "bucket": {
-    "name": "",
+    "name": "Cubo",
     "description": ""
   },
   "bullseye-lantern": {
-    "name": "",
+    "name": "Linterna de ojo de buey",
     "description": ""
   },
   "burglar-s-pack": {
-    "name": "",
+    "name": "Mochila de ladrón",
     "description": ""
   },
   "calligrapher-s-supplies": {
-    "name": ""
+    "name": "Suministros de calígrafo"
   },
   "caltrop": {
     "name": "",
@@ -125,14 +125,14 @@
     "name": ""
   },
   "candle": {
-    "name": "",
+    "name": "Vela",
     "description": ""
   },
   "canvas-1-sq-yd": {
     "name": ""
   },
   "carpenter-s-tools": {
-    "name": ""
+    "name": "Herramientas de carpintero"
   },
   "carriage": {
     "name": ""
@@ -141,18 +141,18 @@
     "name": ""
   },
   "cartographer-s-tools": {
-    "name": ""
+    "name": "Herramientas de cartógrafo"
   },
   "chain-10-feet": {
     "name": "",
     "description": ""
   },
   "chain-mail": {
-    "name": "",
+    "name": "Cota de malla",
     "description": ""
   },
   "chain-shirt": {
-    "name": "",
+    "name": "Camisote de malla",
     "description": ""
   },
   "chalk-1-piece": {
@@ -162,7 +162,7 @@
     "name": ""
   },
   "chest": {
-    "name": "",
+    "name": "Cofre",
     "description": ""
   },
   "chicken": {
@@ -175,17 +175,17 @@
     "name": ""
   },
   "climber-s-kit": {
-    "name": "",
+    "name": "Equipo de escalada",
     "description": ""
   },
   "cloves": {
     "name": ""
   },
   "club": {
-    "name": ""
+    "name": "Garrote"
   },
   "cobbler-s-tools": {
-    "name": ""
+    "name": "Herramientas de zapatero"
   },
   "common-clothes": {
     "name": ""
@@ -194,11 +194,11 @@
     "name": ""
   },
   "component-pouch": {
-    "name": "",
+    "name": "Bolsa de componentes",
     "description": ""
   },
   "cook-s-utensils": {
-    "name": ""
+    "name": "Utensilios de cocina"
   },
   "copper": {
     "name": ""
@@ -216,34 +216,34 @@
     "name": ""
   },
   "crossbow-bolt-case": {
-    "name": "",
+    "name": "Estuche para virotes de ballesta",
     "description": ""
   },
   "crossbow-bolts-20": {
     "name": ""
   },
   "crowbar": {
-    "name": "",
+    "name": "Palanca",
     "description": ""
   },
   "crystal": {
-    "name": ""
+    "name": "Cristal"
   },
   "dagger": {
-    "name": ""
+    "name": "Daga"
   },
   "dart": {
-    "name": ""
+    "name": "Dardo"
   },
   "dice-set": {
-    "name": ""
+    "name": "Dados"
   },
   "diplomat-s-pack": {
-    "name": "",
+    "name": "Mochila de diplomático",
     "description": ""
   },
   "disguise-kit": {
-    "name": "",
+    "name": "Kit de disfraz",
     "description": ""
   },
   "donkey": {
@@ -253,23 +253,23 @@
     "name": ""
   },
   "drum": {
-    "name": ""
+    "name": "Tambor"
   },
   "dulcimer": {
-    "name": ""
+    "name": "Dulcémele"
   },
   "dungeoneer-s-pack": {
-    "name": "",
+    "name": "Mochila de explorador de mazmorras",
     "description": ""
   },
   "elephant": {
     "name": ""
   },
   "emblem": {
-    "name": ""
+    "name": "Emblema"
   },
   "entertainer-s-pack": {
-    "name": "",
+    "name": "Mochila de artista",
     "description": ""
   },
   "exotic-saddle": {
@@ -277,14 +277,14 @@
     "description": ""
   },
   "explorer-s-pack": {
-    "name": "",
+    "name": "Mochila de explorador",
     "description": ""
   },
   "feed-per-day": {
     "name": ""
   },
   "fine-clothes": {
-    "name": ""
+    "name": "Ropa fina"
   },
   "fine-wine-bottle": {
     "name": ""
@@ -294,34 +294,34 @@
     "description": ""
   },
   "flail": {
-    "name": ""
+    "name": "Mayal"
   },
   "flask": {
-    "name": "",
+    "name": "Frasco",
     "description": ""
   },
   "flour": {
     "name": ""
   },
   "flute": {
-    "name": ""
+    "name": "Flauta"
   },
   "forgery-kit": {
-    "name": "",
+    "name": "Kit de falsificación",
     "description": ""
   },
   "ginger": {
     "name": ""
   },
   "glaive": {
-    "name": ""
+    "name": "Guja"
   },
   "glass-bottle": {
-    "name": "",
+    "name": "Botella de cristal",
     "description": ""
   },
   "glassblower-s-tools": {
-    "name": ""
+    "name": "Herramientas de soplador de vidrio"
   },
   "goat": {
     "name": ""
@@ -330,50 +330,50 @@
     "name": ""
   },
   "grappling-hook": {
-    "name": ""
+    "name": "Garfio"
   },
   "greataxe": {
-    "name": ""
+    "name": "Hacha a dos manos"
   },
   "greatclub": {
-    "name": ""
+    "name": "Garrote grande"
   },
   "greatsword": {
-    "name": ""
+    "name": "Espadón"
   },
   "halberd": {
-    "name": ""
+    "name": "Alabarda"
   },
   "half-plate-armor": {
-    "name": "",
+    "name": "Armadura media",
     "description": ""
   },
   "hammer": {
     "name": ""
   },
   "hand-crossbow": {
-    "name": ""
+    "name": "Ballesta de mano"
   },
   "handaxe": {
-    "name": ""
+    "name": "Hacha de mano"
   },
   "healer-s-kit": {
-    "name": "",
+    "name": "Botiquín",
     "description": ""
   },
   "heavy-crossbow": {
-    "name": ""
+    "name": "Ballesta pesada"
   },
   "hempen-rope-50-feet": {
     "name": "",
     "description": ""
   },
   "herbalism-kit": {
-    "name": "",
+    "name": "Kit de herboristería",
     "description": ""
   },
   "hide-armor": {
-    "name": "",
+    "name": "Armadura de pieles",
     "description": ""
   },
   "holy-water-flask": {
@@ -381,11 +381,11 @@
     "description": ""
   },
   "hooded-lantern": {
-    "name": "",
+    "name": "Linterna con capucha",
     "description": ""
   },
   "horn": {
-    "name": ""
+    "name": "Cuerno"
   },
   "hourglass": {
     "name": ""
@@ -394,20 +394,20 @@
     "name": ""
   },
   "hunting-trap": {
-    "name": "",
+    "name": "Trampa de caza",
     "description": ""
   },
   "ink-1-ounce-bottle": {
     "name": ""
   },
   "ink-pen": {
-    "name": ""
+    "name": "Pluma de tinta"
   },
   "iron": {
     "name": ""
   },
   "iron-pot": {
-    "name": "",
+    "name": "Olla de hierro",
     "description": ""
   },
   "iron-spike": {
@@ -417,13 +417,13 @@
     "name": ""
   },
   "javelin": {
-    "name": ""
+    "name": "Jabalina"
   },
   "jeweler-s-tools": {
-    "name": ""
+    "name": "Herramientas de joyero"
   },
   "jug": {
-    "name": "",
+    "name": "Jarra",
     "description": ""
   },
   "ladder-10-foot": {
@@ -431,25 +431,25 @@
     "description": ""
   },
   "lamp": {
-    "name": "",
+    "name": "Lámpara",
     "description": ""
   },
   "lance": {
-    "name": "",
+    "name": "Lanza de caballería",
     "description": ""
   },
   "leather-armor": {
-    "name": "",
+    "name": "Armadura de cuero",
     "description": ""
   },
   "leatherworker-s-tools": {
-    "name": ""
+    "name": "Herramientas de peletero"
   },
   "light-crossbow": {
-    "name": ""
+    "name": "Ballesta ligera"
   },
   "light-hammer": {
-    "name": ""
+    "name": "Martillo ligero"
   },
   "linen-1-sq-yd": {
     "name": ""
@@ -458,44 +458,44 @@
     "name": ""
   },
   "lock": {
-    "name": "",
+    "name": "Candado",
     "description": ""
   },
   "longbow": {
-    "name": ""
+    "name": "Arco largo"
   },
   "longsword": {
-    "name": ""
+    "name": "Espada larga"
   },
   "lute": {
-    "name": ""
+    "name": "Laúd"
   },
   "lyre": {
-    "name": ""
+    "name": "Lira"
   },
   "mace": {
-    "name": ""
+    "name": "Maza"
   },
   "magnifying-glass": {
-    "name": "",
+    "name": "Lupa",
     "description": ""
   },
   "manacles": {
-    "name": "",
+    "name": "Grilletes",
     "description": ""
   },
   "map-or-scroll-case": {
-    "name": "",
+    "name": "Tubo para mapas o pergaminos",
     "description": ""
   },
   "mason-s-tools": {
-    "name": ""
+    "name": "Herramientas de albañil"
   },
   "mastiff": {
     "name": ""
   },
   "maul": {
-    "name": ""
+    "name": "Gran maza"
   },
   "merchant-s-scale": {
     "name": "",
@@ -513,17 +513,17 @@
     "name": ""
   },
   "morningstar": {
-    "name": ""
+    "name": "Lucero del alba"
   },
   "mule": {
     "name": ""
   },
   "navigator-s-tools": {
-    "name": "",
+    "name": "Herramientas de navegante",
     "description": ""
   },
   "net": {
-    "name": "",
+    "name": "Red",
     "description": ""
   },
   "oil-flask": {
@@ -531,7 +531,7 @@
     "description": ""
   },
   "orb": {
-    "name": ""
+    "name": "Orbe"
   },
   "ox": {
     "name": ""
@@ -540,14 +540,14 @@
     "name": ""
   },
   "padded-armor": {
-    "name": "",
+    "name": "Armadura acolchada",
     "description": ""
   },
   "painter-s-supplies": {
-    "name": ""
+    "name": "Suministros de pintor"
   },
   "pan-flute": {
-    "name": ""
+    "name": "Flauta de pan"
   },
   "paper-one-sheet": {
     "name": ""
@@ -565,7 +565,7 @@
     "name": ""
   },
   "pike": {
-    "name": ""
+    "name": "Pica"
   },
   "pitcher": {
     "name": "",
@@ -575,7 +575,7 @@
     "name": ""
   },
   "plate-armor": {
-    "name": "",
+    "name": "Armadura de placas",
     "description": ""
   },
   "platinum": {
@@ -585,7 +585,7 @@
     "name": ""
   },
   "poisoner-s-kit": {
-    "name": "",
+    "name": "Kit de envenenador",
     "description": ""
   },
   "pole-10-foot": {
@@ -595,36 +595,36 @@
     "name": ""
   },
   "portable-ram": {
-    "name": "",
+    "name": "Ariete portátil",
     "description": ""
   },
   "potter-s-tools": {
-    "name": ""
+    "name": "Herramientas de alfarero"
   },
   "pouch": {
-    "name": "",
+    "name": "Faltriquera",
     "description": ""
   },
   "priest-s-pack": {
-    "name": "",
+    "name": "Mochila de sacerdote",
     "description": ""
   },
   "quarterstaff": {
-    "name": ""
+    "name": "Bastón (Quarterstaff)"
   },
   "quiver": {
-    "name": "",
+    "name": "Carcaj",
     "description": ""
   },
   "rapier": {
-    "name": ""
+    "name": "Estoque"
   },
   "rations-1-day": {
     "name": "",
     "description": ""
   },
   "reliquary": {
-    "name": ""
+    "name": "Relicario"
   },
   "riding-horse": {
     "name": ""
@@ -633,17 +633,17 @@
     "name": ""
   },
   "ring-mail": {
-    "name": "",
+    "name": "Armadura de anillas",
     "description": ""
   },
   "robes": {
     "name": ""
   },
   "rod": {
-    "name": ""
+    "name": "Vara"
   },
   "sack": {
-    "name": "",
+    "name": "Saco",
     "description": ""
   },
   "saddlebags": {
@@ -656,43 +656,43 @@
     "name": ""
   },
   "scale-mail": {
-    "name": "",
+    "name": "Cota de escamas",
     "description": ""
   },
   "scholar-s-pack": {
-    "name": "",
+    "name": "Mochila de erudito",
     "description": ""
   },
   "scimitar": {
-    "name": ""
+    "name": "Cimitarra"
   },
   "sealing-wax": {
     "name": ""
   },
   "shawm": {
-    "name": ""
+    "name": "Chirimía"
   },
   "sheep": {
     "name": ""
   },
   "shield": {
-    "name": "",
+    "name": "Escudo",
     "description": ""
   },
   "shortbow": {
-    "name": ""
+    "name": "Arco corto"
   },
   "shortsword": {
-    "name": ""
+    "name": "Espada corta"
   },
   "shovel": {
-    "name": ""
+    "name": "Pala"
   },
   "sickle": {
-    "name": ""
+    "name": "Hoz"
   },
   "signal-whistle": {
-    "name": ""
+    "name": "Silbato de señales"
   },
   "signet-ring": {
     "name": ""
@@ -714,49 +714,49 @@
     "name": ""
   },
   "sling": {
-    "name": ""
+    "name": "Honda"
   },
   "sling-bullet": {
     "name": ""
   },
   "sling-bullets-20": {
-    "name": ""
+    "name": "Balas, honda"
   },
   "smith-s-tools": {
-    "name": ""
+    "name": "Herramientas de herrero"
   },
   "soap": {
     "name": ""
   },
   "spear": {
-    "name": ""
+    "name": "Lanza"
   },
   "spellbook": {
     "name": "",
     "description": ""
   },
   "splint-armor": {
-    "name": "",
+    "name": "Armadura de bandas",
     "description": ""
   },
   "sprig-of-mistletoe": {
-    "name": ""
+    "name": "Ramita de muérdago"
   },
   "spyglass": {
-    "name": "",
+    "name": "Catalejo",
     "description": ""
   },
   "stabling-per-day": {
     "name": ""
   },
   "staff": {
-    "name": ""
+    "name": "Bastón"
   },
   "steel-mirror": {
     "name": ""
   },
   "studded-leather-armor": {
-    "name": "",
+    "name": "Armadura de cuero tachonado",
     "description": ""
   },
   "tankard": {
@@ -764,61 +764,61 @@
     "description": ""
   },
   "thieves-tools": {
-    "name": "",
+    "name": "Herramientas de ladrón",
     "description": ""
   },
   "tinderbox": {
-    "name": "",
+    "name": "Caja de yesca",
     "description": ""
   },
   "tinker-s-tools": {
-    "name": ""
+    "name": "Herramientas de calderero"
   },
   "torch": {
-    "name": "",
+    "name": "Antorcha",
     "description": ""
   },
   "totem": {
     "name": ""
   },
   "traveler-s-clothes": {
-    "name": ""
+    "name": "Ropa de viajero"
   },
   "trident": {
-    "name": ""
+    "name": "Tridente"
   },
   "two-person-tent": {
     "name": "",
     "description": ""
   },
   "vial": {
-    "name": "",
+    "name": "Vial",
     "description": ""
   },
   "viol": {
-    "name": ""
+    "name": "Viola"
   },
   "wagon": {
     "name": ""
   },
   "wand": {
-    "name": ""
+    "name": "Varita"
   },
   "war-pick": {
-    "name": ""
+    "name": "Pico de guerra"
   },
   "warhammer": {
-    "name": ""
+    "name": "Martillo de guerra"
   },
   "warhorse": {
     "name": ""
   },
   "waterskin": {
-    "name": "",
+    "name": "Odre",
     "description": ""
   },
   "weaver-s-tools": {
-    "name": ""
+    "name": "Herramientas de tejedor"
   },
   "wheat": {
     "name": ""
@@ -827,15 +827,15 @@
     "name": ""
   },
   "whip": {
-    "name": ""
+    "name": "Látigo"
   },
   "woodcarver-s-tools": {
-    "name": ""
+    "name": "Herramientas de tallista de madera"
   },
   "wooden-staff": {
-    "name": ""
+    "name": "Bastón de madera"
   },
   "yew-wand": {
-    "name": ""
+    "name": "Varita de tejo"
   }
 }
