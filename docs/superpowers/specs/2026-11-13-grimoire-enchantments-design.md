@@ -52,6 +52,12 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
 
     Cinzel Decorative, Uncial Antiqua, Cormorant Garamond e as fontes góticas ficam de fora, e a variante `runic` do título usa Cinzel com runas da Noto Sans Runic.
 
+20. **(dona, 14/11)** O card aberto ganha um efeito especial **sem custo de desempenho**:
+    - uma base parada (Borda arcana + Aura ou Brasa);
+    - efeitos de borda que só rodam no hover ou uma vez ao abrir, sempre presos ao anel da borda.
+
+    A "Revelação", com o sigilo girando e o brilho no nome, foi rejeitada. Shaders (WebGL) e o Motion (#156) ficam fora por enquanto. Os efeitos aprovados estão em [explorations/open-card-effects.md](../../grimoire-enchantments/explorations/open-card-effects.md). Ainda não vão para o spellbook, porque a exploração continua.
+
 ## Fora do escopo
 
 - Implementar componentes, instalar pacotes, alterar a UI atual ou o banco de dados.
