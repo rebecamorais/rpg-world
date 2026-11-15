@@ -122,6 +122,35 @@ describe('useCharacter', () => {
       });
     });
 
+    it('uma busca no meio de um toque salvando espera o servidor ter o toque', async () => {
+      let finish = () => {};
+      api.put.mockImplementation(() => new Promise((resolve) => (finish = () => resolve({}))));
+      api.get.mockResolvedValue({ ...ARANI, hpCurrent: 7 });
+      const { result, queryClient } = renderHookWithProviders(() =>
+        useCharacter('c1', { initial: ARANI }),
+      );
+
+      let saved!: Promise<void>;
+      act(() => {
+        saved = result.current.saveQuietly({
+          character: { ...ARANI, hpCurrent: 7 },
+          changes: { hpCurrent: 7 },
+        });
+      });
+      // The Save button or the window coming back to focus asks for the sheet meanwhile
+      void queryClient.invalidateQueries({ queryKey: ['character', 'c1'] });
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(api.get).not.toHaveBeenCalled();
+      expect(result.current.character?.hpCurrent).toBe(7);
+
+      await act(async () => {
+        finish();
+        await saved;
+      });
+      await waitFor(() => expect(api.get).toHaveBeenCalled());
+      expect(result.current.character?.hpCurrent).toBe(7);
+    });
+
     it('se falhar, rejeita e recarrega a personagem do servidor; a fila segue', async () => {
       api.put.mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce({});
       api.get.mockResolvedValue(ARANI);

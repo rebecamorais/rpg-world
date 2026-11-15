@@ -87,4 +87,22 @@ describe('SaveBatcher', () => {
     calls[2].finish();
     await fourth;
   });
+
+  it('settled espera a fila esvaziar, inclusive o que entrou depois', async () => {
+    const { send, calls } = controlledSend();
+    const batcher = new SaveBatcher(send, vi.fn());
+    await batcher.settled();
+
+    void batcher.push({ hpCurrent: 7 });
+    void batcher.push({ hpCurrent: 6 });
+    let settled = false;
+    void batcher.settled().then(() => (settled = true));
+
+    calls[0].finish();
+    await tick();
+    expect(settled).toBe(false);
+    calls[1].finish();
+    await tick();
+    expect(settled).toBe(true);
+  });
 });

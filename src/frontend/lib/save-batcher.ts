@@ -26,6 +26,7 @@ interface Batch {
 export class SaveBatcher {
   private inFlight = false;
   private next: Batch | null = null;
+  private idle: (() => void)[] = [];
 
   constructor(
     private readonly send: (changes: Changes) => Promise<unknown>,
@@ -51,9 +52,23 @@ export class SaveBatcher {
     void this.deliver(batch);
   }
 
+  /**
+   * Resolves once nothing is in flight or waiting: a fetch made before that would bring back the
+   * sheet without the changes still on their way, and another save could undo them.
+   */
+  settled(): Promise<void> {
+    if (!this.inFlight && !this.next) return Promise.resolve();
+    return new Promise((resolve) => this.idle.push(resolve));
+  }
+
   private run(): void {
     const batch = this.next;
-    if (!batch) return;
+    if (!batch) {
+      const idle = this.idle;
+      this.idle = [];
+      for (const resolve of idle) resolve();
+      return;
+    }
     this.next = null;
     this.inFlight = true;
     void this.deliver(batch).finally(() => {

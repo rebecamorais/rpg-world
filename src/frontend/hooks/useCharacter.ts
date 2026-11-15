@@ -23,9 +23,27 @@ export function useCharacter(
   const { getErrorMessage } = useErrorMessage();
   const { apiPath } = useSheetSource(id);
 
+  // One request at a time, the taps made meanwhile batched into the next (see SaveBatcher)
+  const batcher = useMemo(
+    () =>
+      new SaveBatcher(
+        // keepalive: a reload or a closed tab right after a tap doesn't drop the save
+        (changes) =>
+          rpgWorldApi.put(`/api/characters/${id}`, { updates: changes }, { keepalive: true }),
+        (err) => {
+          toast.error(getErrorMessage(err));
+          void queryClient.invalidateQueries({ queryKey: ['character', id] });
+        },
+      ),
+    // getErrorMessage only changes with the language
+    [id, queryClient, getErrorMessage],
+  );
+
   const query = useQuery({
     queryKey: ['character', id],
     queryFn: async () => {
+      // A tap still saving would come back undone: fetch once the server has it
+      await batcher.settled();
       const data = await rpgWorldApi.get<DnD5eCharacter>(apiPath);
       return data;
     },
@@ -47,6 +65,8 @@ export function useCharacter(
       character: DnD5eCharacter;
       changes: Partial<DnD5eCharacter>;
     }) => {
+      // After the taps saving in the background: two saves together could undo each other
+      await batcher.settled();
       await rpgWorldApi.put(`/api/characters/${character.id}`, { updates: changes });
     },
     onSuccess: (_data, { character }) => {
@@ -58,22 +78,6 @@ export function useCharacter(
       toast.error(getErrorMessage(err));
     },
   });
-
-  // One request at a time, the taps made meanwhile batched into the next (see SaveBatcher)
-  const batcher = useMemo(
-    () =>
-      new SaveBatcher(
-        // keepalive: a reload or a closed tab right after a tap doesn't drop the save
-        (changes) =>
-          rpgWorldApi.put(`/api/characters/${id}`, { updates: changes }, { keepalive: true }),
-        (err) => {
-          toast.error(getErrorMessage(err));
-          void queryClient.invalidateQueries({ queryKey: ['character', id] });
-        },
-      ),
-    // getErrorMessage only changes with the language
-    [id, queryClient, getErrorMessage],
-  );
 
   // A page going away sends what is still waiting at once, instead of after the request in flight
   useEffect(() => {
