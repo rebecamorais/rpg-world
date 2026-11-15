@@ -119,7 +119,7 @@ As capturas foram feitas no build de produção, nos temas escuro e claro, no de
   - **pela página:** intervalos entre frames (p50 e p95), frames acima de 33 ms, frames longos (`long-animation-frame`) e LCP.
 - **Critério:** uma diferença só é **consistente (●)** quando as faixas de amostras não se sobrepõem, ou seja, todas as amostras do material ficam acima (ou abaixo) de todas as do original.
 
-Dados brutos: [material-surfaces-bench.json](material-surfaces-bench.json). Para reproduzir:
+Dados brutos: [material-surfaces-bench-round1.json](material-surfaces-bench-round1.json). Para reproduzir:
 
 ```bash
 GRIMOIRE_LAB=1 npx next build && GRIMOIRE_LAB=1 npx next start -p 3006
@@ -186,23 +186,89 @@ Valores em ms: mediana [mín–máx], e a variação da mediana contra o card or
 - **5 amostras:** são suficientes para os sinais grandes (raster e frames da Corrosion), mas não para as diferenças pequenas de style, layout e paint. Essas ficam como **não conclusivas**.
 - **Só cards fechados:** a medição foi feita com todos os cards fechados. O card aberto (com `SpellVFX`) e o tema claro não foram medidos.
 
-## Recomendação
+## Rodada 2 (15/11): variantes, card aberto, dois temas e cor da magia
 
-| Material                 | Visual                    | Legibilidade                                | Desempenho                                                                     | Recomendação                                                                                                                                                        |
-| ------------------------ | ------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Crypt Stone**          | Aprovado no escuro        | Escuro ok; claro corrigido, falta revalidar | O menor custo de raster (+154% desktop, +94% celular), sem impacto em frames   | **Candidato.** Revalidar o tema claro                                                                                                                               |
-| **Glacial Glass**        | Aprovado                  | Ok                                          | Raster +191% / +76%, sem impacto em frames; 1 amostra fora da curva no celular | **Candidato.** Repetir a medição no celular                                                                                                                         |
-| **Divine Parchment**     | Aprovado depois do ajuste | Ok depois do ajuste                         | Raster +239% / +112%; 0 a 2 frames > 33 ms no desktop (não consistente)        | **Candidato com ressalva.** Reduzir uma camada de textura e medir de novo                                                                                           |
-| **Alchemical Corrosion** | Aprovado                  | Uma bolha encosta nos chips                 | **O único com perda de frames consistente** no desktop; raster +437%           | **Não aprovar como está.** Juntar bolhas, gotas e corrosões numa textura estática única (1 SVG ou WebP em tile) no lugar de cerca de 18 gradientes, e medir de novo |
+A rodada 1 e os seus dados ([material-surfaces-bench-round1.json](material-surfaces-bench-round1.json)) ficam como estavam, para comparação. As mudanças desta rodada:
 
-Recomendação geral:
+1. **A cor do material segue a magia.**
+   - Todo material usa `--m: var(--spell-color, <cor própria>)`. A cor própria só vale onde não há magia (os painéis do laboratório).
+   - As cores derivadas saem dela: o tom escuro do gelo e do ácido (`color-mix(in oklab, var(--m), black …)`) e o tom envelhecido do pergaminho.
+   - A pedra continua cinza; só o brilho dela fica na cor da magia.
+   - Assim o material nunca briga com a faixa, o ícone e os selos do card, como nos efeitos por tipo de magia.
+2. **Variante `baked` da Alchemical Corrosion.** As bolhas, as gotas e a película do topo saíram dos cerca de 18 gradientes e foram para três SVGs estáticos e minúsculos em `public/grimoire/materials/`. São formas pretas usadas como **máscara** sobre a cor da magia, então funcionam com qualquer cor. As corrosões são uma imagem preta comum.
+3. **Variante `webp` da Crypt Stone e do Divine Parchment.** As mesmas texturas de ruído foram pré-renderizadas em WebP pelo `scripts/grimoire-bake-textures.ts` (o Chromium desenha o mesmo SVG em 2×), no lugar do `feTurbulence`.
+4. **Revalidação visual:**
+   - Crypt Stone no tema claro: **aprovada** depois do ajuste.
+   - Divine Parchment: **aprovado** nos dois temas.
+   - `baked` contra o original: **praticamente igual**. As gotas foram reduzidas para não passar por cima do nome nos cards fechados.
+   - `webp` contra o SVG: **indistinguível**.
+5. **Benchmark ampliado:** os mesmos 100 cards e o mesmo método da rodada 1, agora nos **dois temas** e com uma fase nova, **"abrir o card"**. Essa fase clica no primeiro card e mede a abertura com o `SpellVFX` por cima do material.
+   - **Rodada 2:** 7 cenários × 2 temas × 2 aparelhos × 5 amostras ([dados](material-surfaces-bench-round2.json)). As amostras `baked` foram descartadas, porque os SVGs mudaram no meio da medição.
+   - **Rodada 2b:** a versão final, com a cor da magia e a `baked` com máscaras, comparada com o card original, a Glacial Glass e a Corrosion original ([dados](material-surfaces-bench-round2b.json)).
+   - **Ambiente:** o mesmo da rodada 1 (Chromium 158 headless, WSL2), com os builds em `.next-bench`. Um servidor `next dev` parado esteve ligado durante parte da rodada 2, o que é ruído possível. Por isso só comparo cenários **dentro da mesma rodada**.
 
-- **Antes de qualquer integração**, considerar o material **só no card aberto**, ou em poucos cards (por exemplo, os preparados), e não nos 100 de uma vez. O custo está no raster de cada card que aparece na tela durante a rolagem. Uma alternativa é medir uma versão "leve" de cada material, só com a cor e a luz, para os cards fechados.
-- Medir num aparelho Android real antes de levar qualquer material ao spellbook.
+### Variante × original (mediana; variação contra o material original na mesma rodada)
+
+| Variante                          | Aparelho | Tema   | Raster na rolagem | Composite na rolagem | Raster ao abrir |
+| --------------------------------- | -------- | ------ | ----------------- | -------------------- | --------------- |
+| `alchemical-corrosion+baked` (2b) | desktop  | escuro | 3127 **−59% ●**   | 123 **−68% ●**       | 544 **−44% ●**  |
+|                                   | desktop  | claro  | 2639 **−59% ●**   | 111 **−42% ●**       | 444 **−51% ●**  |
+|                                   | celular  | escuro | 577 **−44% ●**    | 408 −1%              | 273 **−58% ●**  |
+|                                   | celular  | claro  | 499 **−44% ●**    | 405 +1%              | 180 **−67% ●**  |
+| `crypt-stone+webp` (2)            | desktop  | escuro | 3209 −7%          | 127 −2%              | 554 −11%        |
+|                                   | desktop  | claro  | 3125 −1%          | 123 +6%              | 540 −7%         |
+|                                   | celular  | escuro | 583 **−25% ●**    | 519 +19%             | 238 −15%        |
+|                                   | celular  | claro  | 548 −18%          | 533 +27%             | 211 −17%        |
+| `divine-parchment+webp` (2)       | desktop  | escuro | 4024 −2%          | 120 −17%             | 767 −1%         |
+|                                   | desktop  | claro  | 3426 −2%          | 109 −1%              | 639 −7%         |
+|                                   | celular  | escuro | 740 −14%          | 462 −7%              | 313 −14%        |
+
+### Contra o card original (rodada 2b, tema escuro; mediana e variação)
+
+| Fase                    | Aparelho | Glacial Glass   | Corrosion original | Corrosion `baked` |
+| ----------------------- | -------- | --------------- | ------------------ | ----------------- |
+| Rolagem: raster         | desktop  | +246% ●         | +552% ●            | **+170% ●**       |
+| Rolagem: raster         | celular  | +65% ●          | +161% ●            | **+46% ●**        |
+| Rolagem: frames > 33 ms | desktop  | 0 (original: 0) | 0 [0–2]            | 0                 |
+| Abrir: raster           | desktop  | +201% ●         | +319% ●            | **+135% ●**       |
+| Abrir: raster           | celular  | +232% ●         | +628% ●            | **+206% ●**       |
+| Abrir: frame p95        | desktop  | 16,7 ms         | 16,8 [16,8–33,3] ● | 16,7 ms           |
+
+### Leitura da rodada 2
+
+1. **A `baked` resolveu a Corrosion.** O raster caiu de 44% a 67%, de forma consistente nos dois aparelhos, nos dois temas e nas duas fases. Ela não perde frames, e agora custa **menos que a Glacial Glass**. O que pesava era a pilha de gradientes, não o visual em si.
+2. **O WebP não compensa.** A queda de raster vai de 1% a 25%, e só um caso é consistente (pedra no celular, tema escuro). Em troca:
+   - os arquivos pesam cerca de **490 KB** (de 63 a 135 KB cada; ruído fino quase não comprime), contra menos de 1 KB de cada SVG inline;
+   - surge algum tempo de decodificação de imagem;
+   - os frames não melhoram.
+
+   **Recomendação: manter o `feTurbulence` inline.**
+
+3. **Abrir o card com o `SpellVFX`:** todos os materiais aumentam o raster da abertura. Só a Corrosion original pesa a ponto de mexer no p95 dos frames; os demais abrem com frames de 16,7 ms.
+4. **O tema claro segue o padrão do escuro.** Nenhum material mostra custo diferente por tema.
+5. **A cor da magia não mudou o custo.** A Glacial ficou na mesma faixa da rodada 2. Trocar a cor fixa por `var(--spell-color)` é o mesmo `color-mix`.
+
+## Recomendação (atualizada na rodada 2)
+
+| Material                         | Visual                       | Legibilidade                               | Desempenho                                                                           | Recomendação                                 |
+| -------------------------------- | ---------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------ | -------------------------------------------- |
+| **Alchemical Corrosion `baked`** | Aprovado (igual ao original) | Ok; as gotas ficam acima do nome           | Raster −44% a −67% contra o original, sem perda de frames; mais barato que a Glacial | **Candidato.** Substitui a original          |
+| **Crypt Stone**                  | Aprovado                     | Aprovada nos dois temas (claro revalidado) | O mais barato entre os originais                                                     | **Candidato**                                |
+| **Glacial Glass**                | Aprovado                     | Ok                                         | Raster +65% a +246%, sem perda de frames                                             | **Candidato**                                |
+| **Divine Parchment**             | Aprovado depois do ajuste    | Ok nos dois temas                          | Raster +113% a +211%, sem perda consistente de frames                                | **Candidato**                                |
+| Alchemical Corrosion original    | Aprovado                     | Ok                                         | A única que perde frames                                                             | **Descartar** em favor da `baked`            |
+| Variantes `webp`                 | Iguais ao SVG                | —                                          | Ganho pequeno e quase nunca consistente, com cerca de 490 KB de imagens              | **Não usar.** Manter o `feTurbulence` inline |
+
+Recomendação geral, que continua valendo:
+
+- **Material em 100 cards fechados de uma vez é o pior caso**, e mesmo assim só a Corrosion original perdeu frames.
+- Antes de integrar, vale escolher **onde** o material aparece. Por exemplo: só no card aberto, só nos preparados, ou numa versão "leve" nos cards fechados.
+- Também vale medir num Android real.
+- **Lição:** o custo vem do número de camadas pintadas por card. Juntar detalhes em poucos assets estáticos (máscaras) é o que mais reduz o custo sem mudar o visual.
 
 ## Próximos passos (para a dona decidir)
 
 1. Aprovar ou recusar cada material pelo visual, no `/dev/grimoire/materials`.
 2. Escolher a saída do OverflowBorders (A, B ou C acima), se ornamentos que passam da borda continuarem no plano.
-3. Refazer a Corrosion como textura única e medir de novo.
+3. ~~Refazer a Corrosion como textura única e medir de novo.~~ Feito na rodada 2 (`baked`).
 4. Medir num celular real.

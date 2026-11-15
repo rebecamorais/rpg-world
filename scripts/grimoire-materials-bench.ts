@@ -5,9 +5,11 @@
  *   npx next build && GRIMOIRE_LAB=1 npx next start -p 3006
  *   npx tsx scripts/grimoire-materials-bench.ts http://localhost:3006 out.json
  *
- * For each scenario (the card as it is today, then each material), device (desktop; phone with
- * a 4x slower CPU) and sample, it opens a fresh page with 100 SpellCards and records two phases
- * separately: the initial render, and scrolling the whole list with the mouse wheel. Chrome's
+ * For each scenario (the card as it is today, each material, and each lab variant such as
+ * `crypt-stone+webp`), theme, device (desktop; phone with a 4x slower CPU) and sample, it opens a
+ * fresh page with 100 SpellCards and records three phases separately: the initial render,
+ * scrolling the whole list with the mouse wheel (all cards closed), and opening the first card
+ * (its SpellVFX background appears over the material). Chrome's
  * trace gives style, layout, paint, raster and compositing time; the page itself records frame
  * intervals and long animation frames. Samples are interleaved across scenarios so drift in the
  * machine hits all of them alike.
@@ -22,13 +24,21 @@ const OUT = process.argv[3] ?? 'grimoire-bench.json';
 const SAMPLES = Number(process.env.SAMPLES ?? 5);
 const COUNT = 100;
 
-const SCENARIOS = [
+const ALL_SCENARIOS = [
   'none',
   'glacial-glass',
   'alchemical-corrosion',
+  'alchemical-corrosion+baked',
   'crypt-stone',
+  'crypt-stone+webp',
   'divine-parchment',
+  'divine-parchment+webp',
 ] as const;
+// SCENARIOS=none,alchemical-corrosion,alchemical-corrosion+baked re-measures just a few
+const SCENARIOS = process.env.SCENARIOS
+  ? ALL_SCENARIOS.filter((s) => process.env.SCENARIOS!.split(',').includes(s))
+  : ALL_SCENARIOS;
+const THEMES = (process.env.THEMES ?? 'dark,light').split(',') as ('dark' | 'light')[];
 const DEVICES = {
   desktop: { viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1, cpu: 1, mobile: false },
   phone: { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, cpu: 4, mobile: true },
@@ -76,7 +86,8 @@ async function trace(cdp: CDPSession, run: () => Promise<void>): Promise<Sums> {
   return sums;
 }
 
-async function scrollPhase(page: Page) {
+/** Starts recording frame intervals and long animation frames in the page. */
+async function recordFrames(page: Page) {
   await page.evaluate(() => {
     const w = window as unknown as { __frames: number[]; __loaf: number[] };
     w.__frames = [];
@@ -90,12 +101,10 @@ async function scrollPhase(page: Page) {
     };
     requestAnimationFrame(tick);
   });
-  await page.mouse.move(400, 400);
-  for (let i = 0; i < 110; i++) {
-    await page.mouse.wheel(0, 120);
-    await page.waitForTimeout(16);
-  }
-  await page.waitForTimeout(600);
+}
+
+/** Reads what recordFrames collected. */
+function readFrames(page: Page) {
   return page.evaluate(() => {
     const w = window as unknown as { __frames: number[]; __loaf: number[] };
     const gaps = w.__frames.slice(1).map((t, i) => t - w.__frames[i]);
@@ -114,7 +123,31 @@ async function scrollPhase(page: Page) {
   });
 }
 
-async function sample(browser: Browser, device: keyof typeof DEVICES, scenario: string) {
+async function scrollPhase(page: Page) {
+  await recordFrames(page);
+  await page.mouse.move(400, 400);
+  for (let i = 0; i < 110; i++) {
+    await page.mouse.wheel(0, 120);
+    await page.waitForTimeout(16);
+  }
+  await page.waitForTimeout(600);
+  return readFrames(page);
+}
+
+/** Opens the first card of the list (SpellVFX appears) and waits for its transition. */
+async function openPhase(page: Page) {
+  await recordFrames(page);
+  await page.locator('[data-lab-list] > article').first().locator('button[aria-expanded]').click();
+  await page.waitForTimeout(800);
+  return readFrames(page);
+}
+
+async function sample(
+  browser: Browser,
+  device: keyof typeof DEVICES,
+  theme: 'dark' | 'light',
+  scenario: string,
+) {
   const d = DEVICES[device];
   const context = await browser.newContext({
     viewport: d.viewport,
@@ -124,10 +157,16 @@ async function sample(browser: Browser, device: keyof typeof DEVICES, scenario: 
   });
   // tsx (esbuild keepNames) wraps named functions in __name(); define it inside the page too
   await context.addInitScript({ content: 'window.__name = (fn) => fn;' });
+  // The app's theme script reads this cookie before the first paint
+  await context.addCookies([{ name: 'theme', value: theme, url: BASE }]);
   const page = await context.newPage();
   const cdp = await context.newCDPSession(page);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: d.cpu });
-  const query = scenario === 'none' ? `count=${COUNT}` : `material=${scenario}&count=${COUNT}`;
+  const [material, variant] = scenario.split('+');
+  const query =
+    scenario === 'none'
+      ? `count=${COUNT}`
+      : `material=${material}${variant ? `&variant=${variant}` : ''}&count=${COUNT}`;
 
   let lcp = 0;
   const initial = await trace(cdp, async () => {
@@ -151,8 +190,22 @@ async function sample(browser: Browser, device: keyof typeof DEVICES, scenario: 
   const scroll = await trace(cdp, async () => {
     frames = await scrollPhase(page);
   });
+  // Back to the top of the list (not measured), then open the first card
+  await page.locator('[data-lab-list]').evaluate((el) => el.scrollIntoView({ block: 'start' }));
+  await page.waitForTimeout(500);
+  let opening: Awaited<ReturnType<typeof readFrames>> | undefined;
+  const open = await trace(cdp, async () => {
+    opening = await openPhase(page);
+  });
   await context.close();
-  return { device, scenario, initial: { ...initial, lcp }, scroll: { ...scroll, ...frames! } };
+  return {
+    device,
+    theme,
+    scenario,
+    initial: { ...initial, lcp },
+    scroll: { ...scroll, ...frames! },
+    open: { ...open, ...opening! },
+  };
 }
 
 function environment(version: string) {
@@ -175,6 +228,8 @@ function environment(version: string) {
     headless: true,
     samples: SAMPLES,
     cards: COUNT,
+    themes: THEMES,
+    scenarios: SCENARIOS,
     devices: DEVICES,
   };
 }
@@ -182,12 +237,14 @@ function environment(version: string) {
 const browser = await chromium.launch();
 const results: Awaited<ReturnType<typeof sample>>[] = [];
 // Warm-up (server caches, fonts), not recorded
-await sample(browser, 'desktop', 'none');
+await sample(browser, 'desktop', 'dark', 'none');
 for (let s = 0; s < SAMPLES; s++) {
   for (const device of Object.keys(DEVICES) as (keyof typeof DEVICES)[]) {
-    for (const scenario of SCENARIOS) {
-      results.push(await sample(browser, device, scenario));
-      process.stdout.write('.');
+    for (const theme of THEMES) {
+      for (const scenario of SCENARIOS) {
+        results.push(await sample(browser, device, theme, scenario));
+        process.stdout.write('.');
+      }
     }
   }
 }
