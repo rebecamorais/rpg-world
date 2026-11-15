@@ -611,6 +611,14 @@
     "slotAvailable": "Level {level} slot {slot}, available",
     "slotSpent": "Level {level} slot {slot}, spent"
   },
+  "usePips": {
+    "summary": "{label}, {available} of {max} available",
+    "available": "{label} {slot}, available",
+    "spent": "{label} {slot}, spent",
+    "unlimited": "unlimited",
+    "spendOne": "Spend one use of {label}",
+    "returnOne": "Return one use of {label}"
+  },
   "dashboard": {
     "menu": "Menu",
     "newCharacter": "New character",

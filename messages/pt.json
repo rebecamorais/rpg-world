@@ -611,6 +611,14 @@
     "slotAvailable": "Espaço {slot} do {level}º círculo, disponível",
     "slotSpent": "Espaço {slot} do {level}º círculo, gasto"
   },
+  "usePips": {
+    "summary": "{label}, {available} de {max} disponíveis",
+    "available": "{label} {slot}, disponível",
+    "spent": "{label} {slot}, gasto",
+    "unlimited": "ilimitado",
+    "spendOne": "Gastar um uso de {label}",
+    "returnOne": "Devolver um uso de {label}"
+  },
   "dashboard": {
     "menu": "Menu",
     "newCharacter": "Novo personagem",
