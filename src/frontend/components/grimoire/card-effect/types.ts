@@ -2,9 +2,10 @@ import type { ReactNode } from 'react';
 
 /**
  * How an effect is built: `fx` is one gradient motif, `glow+icons` is a glow placed per effect
- * plus icon details (one big and faded, a few small), `fx+bolt` adds a lightning shape.
+ * plus icon details (one big and faded, a few small), `fx+bolt` adds a lightning shape, `paths`
+ * is an inline SVG of floating trails (ArcanePaths).
  */
-type Parts = 'fx' | 'glow+icons' | 'fx+bolt';
+type Parts = 'fx' | 'glow+icons' | 'fx+bolt' | 'paths';
 /** The entrance accent, played once when the card opens. */
 type Enter = 'fade' | 'rise' | 'grow' | 'flash' | 'flicker' | 'spin';
 type RippleShape = 'round' | 'diamond' | 'splash' | 'dashed' | 'thick' | 'glow' | 'smoke';
@@ -24,7 +25,11 @@ export const EFFECTS = {
   embers: { parts: 'fx', enter: 'rise', ripple: ['round', 2] },
   'grave-mist': { parts: 'glow+icons', enter: 'fade', ripple: ['smoke', 2] },
   sunlight: { parts: 'glow+icons', enter: 'fade', ripple: ['glow', 3] },
+  // Radiant: sun rays fanning from just above the top edge, fading before the rules text
+  sunburst: { parts: 'fx', enter: 'fade', ripple: ['glow', 3] },
   echo: { parts: 'fx', enter: 'grow', ripple: ['dashed', 3] },
+  // Force: fine floating trails and energy points on the right, static
+  'arcane-paths': { parts: 'paths', enter: 'fade', ripple: ['thick', 2] },
   shockwave: { parts: 'fx', enter: 'grow', ripple: ['thick', 2] },
   impact: { parts: 'fx', enter: 'flash', ripple: ['round', 2] },
   drips: { parts: 'glow+icons', enter: 'fade', ripple: ['splash', 3] },

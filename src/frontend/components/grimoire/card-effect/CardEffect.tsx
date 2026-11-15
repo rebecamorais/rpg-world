@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
+import { ArcanePaths } from './ArcanePaths';
 import styles from './effects.module.css';
 import { type CardEffect, EFFECTS, type EffectId } from './types';
 
@@ -51,7 +52,9 @@ export function EffectLayers({ effect }: { effect: EffectId }) {
 
   return (
     <span ref={ref} aria-hidden="true" className={styles.layer} data-enter={enter}>
-      {parts === 'glow+icons' ? (
+      {parts === 'paths' ? (
+        <ArcanePaths />
+      ) : parts === 'glow+icons' ? (
         <>
           <span className={styles.glow} data-effect={effect} />
           <span className={styles.deco} data-effect={effect} data-size="big" />

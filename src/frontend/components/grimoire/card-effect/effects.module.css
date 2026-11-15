@@ -137,6 +137,53 @@
     radial-gradient(60% 80% at 80% 30%, var(--s2), transparent 70%);
 }
 
+/*
+ * Sunburst (radiant): long alternating rays fanning out from a light source just above the top
+ * edge, at ~68% of the width so they don't compete with the title. Two repeating conics (strong
+ * and faint rays) make the alternation; a soft halo sits at the source; the masks fade the rays
+ * away from the source and keep the lower part of the card quiet for the rules text. Tinted by the
+ * host (lightened toward ivory), scales with any card size, static once shown.
+ */
+.fx[data-effect='sunburst'] {
+  --ray: color-mix(in oklab, var(--t), #fffbeb 35%);
+  --ray-a: color-mix(in srgb, var(--ray), transparent 66%);
+  --ray-b: color-mix(in srgb, var(--ray), transparent 82%);
+  background:
+    radial-gradient(
+      ellipse 34% 60% at 68% -8%,
+      color-mix(in srgb, var(--ray), transparent 45%),
+      color-mix(in srgb, var(--ray), transparent 80%) 45%,
+      transparent 75%
+    ),
+    repeating-conic-gradient(
+      from 0deg at 68% -28px,
+      var(--ray-a) 0deg 2.6deg,
+      transparent 3.4deg 11deg
+    ),
+    repeating-conic-gradient(
+      from 5.5deg at 68% -28px,
+      var(--ray-b) 0deg 1.6deg,
+      transparent 2.2deg 11deg
+    ),
+    linear-gradient(to bottom, color-mix(in srgb, var(--ray), transparent 88%), transparent 45%);
+  mask-image:
+    radial-gradient(farthest-side at 68% 0%, #000 10%, rgb(0 0 0 / 0.45) 55%, transparent 100%),
+    /* capped in px: on a tall (phone, open) card the rays still end before the rules text */
+    linear-gradient(
+        to bottom,
+        #000 0%,
+        rgb(0 0 0 / 0.6) min(35%, 56px),
+        transparent min(72%, 150px)
+      );
+  mask-composite: intersect;
+}
+:global(:root[data-theme='light']) .fx[data-effect='sunburst'] {
+  /* On a light page the rays need a deeper tone of the tint to show at all */
+  --ray: color-mix(in oklab, var(--t), #b45309 38%);
+  --ray-a: color-mix(in srgb, var(--ray), transparent 48%);
+  --ray-b: color-mix(in srgb, var(--ray), transparent 72%);
+}
+
 /* ---------- School-like motifs ---------- */
 .fx[data-effect='alchemy-circle'] {
   background:
@@ -230,6 +277,83 @@
     79% 30%,
     84% 0
   );
+}
+
+/*
+ * Arcane paths (force), drawn by ArcanePaths.tsx: an inline SVG so its strokes take the host's
+ * tint in four tones. Anchored top right, at most 168px tall (the drawing's own height), faded
+ * toward the title on the left like the original drawing's mask.
+ */
+.paths {
+  --p0: color-mix(in oklab, var(--t), black 30%);
+  --p1: var(--t);
+  --p2: color-mix(in oklab, var(--t), white 35%);
+  --p3: color-mix(in oklab, var(--t), white 65%);
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: min(100%, 168px);
+  opacity: var(--k);
+  /* toward the title on the left, and off the bottom third so on a narrow (phone) card the
+     lowest energy point doesn't sit on the rules text */
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent 0%,
+      rgb(0 0 0 / 0.02) 30%,
+      rgb(0 0 0 / 0.37) 48%,
+      rgb(0 0 0 / 0.9) 67%,
+      #000 100%
+    ),
+    linear-gradient(to bottom, #000 45%, transparent 85%);
+  mask-composite: intersect;
+}
+:global(:root[data-theme='light']) .paths {
+  /* Deeper tones, so a pale tint (force is near white) still draws on a light page */
+  --p0: color-mix(in oklab, var(--t), black 60%);
+  --p1: color-mix(in oklab, var(--t), black 48%);
+  --p2: color-mix(in oklab, var(--t), black 36%);
+  --p3: color-mix(in oklab, var(--t), black 24%);
+}
+.tone0 {
+  stroke: var(--p0);
+}
+.tone1 {
+  stroke: var(--p1);
+}
+.tone2 {
+  stroke: var(--p2);
+}
+.tone3 {
+  stroke: var(--p3);
+}
+.fill2 {
+  fill: var(--p2);
+}
+.fill3 {
+  fill: var(--p3);
+}
+.core {
+  fill: color-mix(in oklab, var(--p3), white 60%);
+}
+.stop0 {
+  stop-color: var(--p0);
+}
+.stop1 {
+  stop-color: var(--p1);
+}
+.stop2 {
+  stop-color: var(--p2);
+}
+.stop3 {
+  stop-color: var(--p3);
+}
+.flow {
+  stroke: var(--p2);
+  /* The static drawing's sparse energy dashes */
+  stroke-dasharray: 3 65;
+  opacity: 0.37;
 }
 
 /* ---------- Icon details + a glow placed per effect ---------- */
@@ -327,6 +451,7 @@
   animation: flash 0.5s ease-out both;
 }
 .layer[data-enter='fade'] .fx,
+.layer[data-enter='fade'] .paths,
 .layer .glow,
 .layer .deco {
   animation: fade 0.7s ease-out both;
