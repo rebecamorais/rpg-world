@@ -12,7 +12,7 @@ import { cn } from '@frontend/lib/utils';
 import { ItemDetails } from './ItemDetails';
 import { ItemImage } from './ItemImage';
 import { QuantityStepper } from './QuantityStepper';
-import { groupEntries, groupOf, itemGroupStyle } from './item-visuals';
+import { ADD_ITEM_FOCUS, groupEntries, groupOf, itemGroupStyle } from './item-visuals';
 
 interface Props {
   entries: InventoryItem[];
@@ -53,6 +53,7 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
               aria-pressed={isSelected}
               aria-controls={isSelected ? panelId : undefined}
               aria-label={t('tile', { name, quantity: entry.quantity })}
+              data-item-focus={entry.id}
               onClick={() => toggle(entry.id)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -83,6 +84,7 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
           aria-label={tCharacters('addItem')}
           disabled={!canAdd}
           onClick={onAdd}
+          data-item-focus={ADD_ITEM_FOCUS}
           className="text-muted-foreground aspect-square h-auto rounded-md border-dashed"
         >
           <AppIcon name="Plus" size={20} aria-hidden="true" />
