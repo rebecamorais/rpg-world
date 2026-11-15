@@ -522,7 +522,7 @@
 
   /* Width of the side menu (Sidebar: w-64 pinned, w-16 as a rail; hidden on phones), for the
      fixed bars that start to its right instead of under it (SheetTabBar, RestChecklist, PartyTabs,
-     TurnBar) */
+     TurnBar). 'auto' is the first paint with no saved choice: a rail below lg, pinned from it */
   :root {
     --sidebar-offset: 0px;
   }
@@ -530,8 +530,20 @@
     html:has([data-sidebar='pinned']) {
       --sidebar-offset: 16rem;
     }
-    html:has([data-sidebar='rail']) {
+    html:has([data-sidebar='rail'], [data-sidebar='auto']) {
       --sidebar-offset: 4rem;
+    }
+  }
+  @media (width >= 64rem) {
+    html:has([data-sidebar='auto']) {
+      --sidebar-offset: 16rem;
+    }
+  }
+  /* Until hydration says which, 'auto' draws the open menu inside the rail's width: its labels
+     would peek out of the strip for a moment */
+  @media (40rem <= width < 64rem) {
+    [data-sidebar='auto'] [data-testid='sidebar-panel'] > * {
+      visibility: hidden;
     }
   }
 

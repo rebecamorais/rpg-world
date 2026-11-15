@@ -66,3 +66,19 @@ test('uma página que não existe responde 404 com o layout do site', async ({ p
     page.getByRole('banner').getByRole('link', { name: 'Go to the home page' }),
   ).toBeVisible();
 });
+
+test('logada, o 404 leva aos personagens, não à landing', async ({ page, user: _ }) => {
+  const response = await page.goto('/esta-pagina-nao-existe');
+
+  expect(response?.status()).toBe(404);
+  await page.getByRole('main').getByRole('link', { name: 'Go to my characters' }).click();
+  await expect(page).toHaveURL(/\/characters$/);
+});
+
+test('/settings, o nome que o footer usa, abre o perfil em vez de um 404', async ({
+  page,
+  user: _,
+}) => {
+  await page.goto('/settings');
+  await expect(page).toHaveURL(/\/settings\/profile$/);
+});

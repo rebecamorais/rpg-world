@@ -1,5 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 
+import { BASE_URL } from './support/env';
 import {
   bring,
   characterUrl,
@@ -43,12 +44,21 @@ async function expectOnTop(page: Page, locator: Locator) {
   expect(hit).toBe(await locator.textContent());
 }
 
-// 640 is a 1280px desktop at 200% zoom; up to 767 the side menu is open and the tab bar shows
+/**
+ * The side menu kept open, as someone who pinned it: with no saved choice it's a rail below
+ * 1024px, and these check the widest menu next to the page.
+ */
+async function pinMenu(page: Page) {
+  await page.context().addCookies([{ name: 'sidebar-pinned', value: 'true', url: BASE_URL }]);
+}
+
+// 640 is a 1280px desktop at 200% zoom; up to 767 the side menu shows and the tab bar too
 for (const width of [640, 700, 767]) {
   test(`em ${width}px a barra de abas começa à direita do menu lateral`, async ({
     page,
     user: _,
   }) => {
+    await pinMenu(page);
     await page.setViewportSize({ width, height: 800 });
     const id = await createCharacter(page, 'Side Hero');
     await page.goto(characterUrl(id));
@@ -94,6 +104,7 @@ test('os números de combate mostram só o ícone, e o nome abre no ícone', asy
 });
 
 test('em 768px com o menu aberto o card de combate cabe inteiro', async ({ page, user: _ }) => {
+  await pinMenu(page);
   await page.setViewportSize({ width: 768, height: 1000 });
   const id = await createCharacter(page, 'Narrow Hero');
   await page.goto(characterUrl(id));

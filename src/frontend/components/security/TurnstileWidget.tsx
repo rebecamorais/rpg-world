@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useLocale } from 'next-intl';
+
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { parseTheme } from '@frontend/lib/theme';
 
 declare global {
   interface Window {
@@ -17,6 +20,9 @@ declare global {
 
 const SCRIPT_ID = 'cloudflare-turnstile-script';
 const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+
+/** Turnstile's language codes for the app's locales. */
+const TURNSTILE_LANGUAGE: Record<string, string> = { en: 'en', pt: 'pt-br' };
 
 /**
  * Token state for a form protected by Turnstile. Render `<TurnstileWidget key={resetKey} />`
@@ -45,6 +51,9 @@ export function TurnstileWidget({
   const onTokenChangeRef = useRef(onTokenChange);
   const [unavailable, setUnavailable] = useState(false);
   const { getMessage } = useErrorMessage();
+  // The language only changes with a full reload (LanguageSwitcher)
+  const locale = useLocale();
+  const language = useRef(TURNSTILE_LANGUAGE[locale] ?? 'auto');
 
   useEffect(() => {
     onTokenChangeRef.current = onTokenChange;
@@ -59,6 +68,10 @@ export function TurnstileWidget({
       try {
         widgetId = window.turnstile.render(containerRef.current, {
           sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '',
+          // The app's theme and language, not the system's: a dark modal got a white box at its
+          // end. The theme is read off <html> as the widget renders (switching later keeps it)
+          theme: parseTheme(document.documentElement.dataset.theme),
+          language: language.current,
           callback: (token: string) => onTokenChangeRef.current(token),
           'expired-callback': () => onTokenChangeRef.current(null),
           'error-callback': () => onTokenChangeRef.current(null),

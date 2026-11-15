@@ -114,15 +114,14 @@
     "saveChanges": "Salvar Alterações",
     "close": "Fechar",
     "title": "RPG World",
-    "en": "Inglês",
-    "pt": "Português",
-    "contactTooltip": "Reportar um Bug",
+    "contactTooltip": "Fale conosco",
     "useLightTheme": "Usar tema claro",
     "useDarkTheme": "Usar tema escuro",
     "passwordMinLength": "A senha precisa ter pelo menos {min} caracteres.",
     "passwordTooLong": "A senha é longa demais. Use até 72 caracteres (menos se tiver acentos ou emoji).",
     "passwordsDoNotMatch": "As senhas não coincidem.",
     "language": "Idioma",
+    "notifications": "Notificações",
     "decrease": "Diminuir",
     "increase": "Aumentar",
     "skipToContent": "Pular para o conteúdo",
@@ -755,6 +754,7 @@
   },
   "dashboard": {
     "menu": "Menu",
+    "mainNavigation": "Navegação principal",
     "newCharacter": "Novo personagem",
     "myCharacters": "Meus Personagens",
     "myProfile": "Meu Perfil",
@@ -1148,7 +1148,7 @@
       "features": "Funcionalidades"
     },
     "socials": {
-      "title": "Social",
+      "title": "Comunidade",
       "github": "GitHub",
       "discord": "Discord"
     },
@@ -1180,8 +1180,8 @@
     "battlefield": "Preparando o campo de batalha…"
   },
   "feedback": {
-    "title": "Falar com o Mestre",
-    "subtitle": "Tem um feedback, dúvida ou encontrou um bug? Adoraríamos ouvir você.",
+    "title": "Fale conosco",
+    "subtitle": "Sua mensagem vai para a equipe do RPG World: conte um bug, uma ideia ou tire uma dúvida.",
     "emailLabel": "E-mail",
     "emailPlaceholder": "seu@email.com",
     "typeLabel": "Tipo de Mensagem",
@@ -1191,12 +1191,12 @@
     "submit": "Enviar Mensagem",
     "submitting": "Canalizando…",
     "sendAnother": "Enviar outra mensagem",
-    "success": "Mensagem enviada com sucesso! O Mestre recebeu seu chamado.",
+    "success": "Mensagem enviada! A equipe do RPG World vai ler.",
     "error": "Falha ao enviar mensagem. Tente novamente após um descanso curto.",
     "types": {
-      "bug": "Relatório de Bug",
-      "feature": "Sugestão de Funcionalidade",
-      "feedback": "Feedback Geral",
+      "bug": "Bug",
+      "feature": "Ideia",
+      "feedback": "Dúvida ou comentário",
       "account": "Conta / Acesso"
     },
     "messageMin": "Escreva pelo menos {min} caracteres."
@@ -1356,7 +1356,8 @@
   "notFound": {
     "title": "Página não encontrada",
     "description": "A página que você procura não existe ou mudou de lugar.",
-    "home": "Ir para o início"
+    "home": "Ir para o início",
+    "characters": "Ir para meus personagens"
   },
   "chooseUsername": {
     "title": "Escolha seu nome de usuário",

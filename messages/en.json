@@ -114,15 +114,14 @@
     "saveChanges": "Save Changes",
     "close": "Close",
     "title": "RPG World",
-    "en": "English",
-    "pt": "Portuguese",
-    "contactTooltip": "Report a bug",
+    "contactTooltip": "Contact us",
     "useLightTheme": "Use light theme",
     "useDarkTheme": "Use dark theme",
     "passwordMinLength": "Password must be at least {min} characters.",
     "passwordTooLong": "Password is too long. Use up to 72 characters (fewer with accents or emoji).",
     "passwordsDoNotMatch": "Passwords do not match.",
     "language": "Language",
+    "notifications": "Notifications",
     "decrease": "Decrease",
     "increase": "Increase",
     "skipToContent": "Skip to content",
@@ -755,6 +754,7 @@
   },
   "dashboard": {
     "menu": "Menu",
+    "mainNavigation": "Main navigation",
     "newCharacter": "New character",
     "myCharacters": "My Characters",
     "myProfile": "My Profile",
@@ -1148,7 +1148,7 @@
       "features": "Features"
     },
     "socials": {
-      "title": "Social",
+      "title": "Community",
       "github": "GitHub",
       "discord": "Discord"
     },
@@ -1180,8 +1180,8 @@
     "battlefield": "Preparing the battlefield…"
   },
   "feedback": {
-    "title": "Talk to the Game Master",
-    "subtitle": "Have feedback, questions, or found a bug? We'd love to hear from you.",
+    "title": "Contact us",
+    "subtitle": "Your message goes to the RPG World team: report a bug, share an idea or ask a question.",
     "emailLabel": "Email",
     "emailPlaceholder": "your@email.com",
     "typeLabel": "Message Type",
@@ -1191,12 +1191,12 @@
     "submit": "Cast Message",
     "submitting": "Channeling…",
     "sendAnother": "Send another message",
-    "success": "Message sent successfully! The Game Master received your call.",
+    "success": "Message sent! The RPG World team will read it.",
     "error": "Failed to send message. Try again after a short rest.",
     "types": {
-      "bug": "Bug Report",
-      "feature": "Feature Request",
-      "feedback": "General Feedback",
+      "bug": "Bug",
+      "feature": "Idea",
+      "feedback": "Question or comment",
       "account": "Account / Access"
     },
     "messageMin": "Write at least {min} characters."
@@ -1356,7 +1356,8 @@
   "notFound": {
     "title": "Page not found",
     "description": "The page you are looking for doesn't exist or has moved.",
-    "home": "Go to the home page"
+    "home": "Go to the home page",
+    "characters": "Go to my characters"
   },
   "chooseUsername": {
     "title": "Choose your username",

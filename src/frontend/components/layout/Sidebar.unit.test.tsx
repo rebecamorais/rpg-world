@@ -1,11 +1,11 @@
-import { fireEvent, screen, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { PartySummary } from '@backend/contexts/parties/domain/Party';
 
-import Sidebar from './Sidebar';
+import Sidebar, { MobileMenu } from './Sidebar';
 
 const navigation = vi.hoisted(() => ({ pathname: '/characters' }));
 
@@ -66,6 +66,13 @@ describe('Sidebar', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('a navegação tem nome, separada da de personagens ou NPCs', () => {
+    renderWithProviders(<Sidebar />);
+    expect(
+      sidebar().getByRole('navigation', { name: messages.dashboard.mainNavigation }),
+    ).toBeInTheDocument();
+  });
+
   describe('recolher', () => {
     const tDash = messages.dashboard;
     const panel = () => screen.getByTestId('sidebar-panel');
@@ -74,14 +81,98 @@ describe('Sidebar', () => {
       document.cookie = 'sidebar-pinned=; path=/; max-age=0';
     });
 
-    it('abre por padrão, e recolher guarda a escolha', async () => {
-      const user = userEvent.setup();
+    /** A screen of at least 1024px (lg), where the menu starts open. */
+    function stubWide(wide: boolean) {
+      vi.spyOn(window, 'matchMedia').mockImplementation(
+        (query: string) =>
+          ({
+            matches: wide && query === '(min-width: 64rem)',
+            media: query,
+            addEventListener: () => {},
+            removeEventListener: () => {},
+          }) as unknown as MediaQueryList,
+      );
+    }
+
+    afterEach(() => vi.restoreAllMocks());
+
+    it('sem escolha salva, abaixo de 1024px começa em trilho de ícones', () => {
+      stubWide(false);
       renderWithProviders(<Sidebar />);
+
+      expect(screen.getByRole('complementary')).toHaveAttribute('data-sidebar', 'rail');
+      expect(panel()).toHaveAttribute('data-expanded', 'false');
+      expect(sidebar().getByRole('button', { name: tDash.keepMenuOpen })).toBeInTheDocument();
+    });
+
+    it('sem escolha salva, a partir de 1024px começa fixa e aberta', () => {
+      stubWide(true);
+      renderWithProviders(<Sidebar />);
+
+      expect(screen.getByRole('complementary')).toHaveAttribute('data-sidebar', 'pinned');
+      expect(sidebar().getByRole('button', { name: tDash.collapseMenu })).toBeInTheDocument();
+    });
+
+    it('a escolha salva vence a largura da tela', () => {
+      stubWide(false);
+      renderWithProviders(<Sidebar initialPinned />);
+      expect(screen.getByRole('complementary')).toHaveAttribute('data-sidebar', 'pinned');
+    });
+
+    it('recolher guarda a escolha', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Sidebar initialPinned />);
 
       await user.click(sidebar().getByRole('button', { name: tDash.collapseMenu }));
 
       expect(document.cookie).toContain('sidebar-pinned=false');
       expect(screen.getByRole('complementary')).toHaveAttribute('data-sidebar', 'rail');
+    });
+
+    it('recolher pelo botão fecha na hora, com o mouse ainda em cima, e só cresce de novo depois que ele sai', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Sidebar initialPinned />);
+
+      await user.click(sidebar().getByRole('button', { name: tDash.collapseMenu }));
+      expect(panel()).toHaveAttribute('data-expanded', 'false');
+
+      fireEvent.mouseLeave(screen.getByRole('complementary'));
+      fireEvent.mouseEnter(screen.getByRole('complementary'));
+      expect(panel()).toHaveAttribute('data-expanded', 'true');
+    });
+
+    it('recolher pelo teclado não reabre pelo foco até o foco sair do menu', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(
+        <>
+          <Sidebar initialPinned />
+          <button type="button">page</button>
+        </>,
+      );
+
+      sidebar().getByRole('button', { name: tDash.collapseMenu }).focus();
+      await user.keyboard('{Enter}');
+      expect(panel()).toHaveAttribute('data-expanded', 'false');
+
+      // Still inside the menu: Tab back onto its links keeps it closed
+      await user.tab({ shift: true });
+      expect(panel()).toHaveAttribute('data-expanded', 'false');
+
+      // Out and back in: it grows with the focus again
+      screen.getByRole('button', { name: 'page' }).focus();
+      await user.tab({ shift: true });
+      expect(panel()).toHaveAttribute('data-expanded', 'true');
+    });
+
+    it('Esc fecha o menu aberto pelo foco do teclado', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Sidebar initialPinned={false} />);
+
+      await user.tab();
+      expect(panel()).toHaveAttribute('data-expanded', 'true');
+
+      await user.keyboard('{Escape}');
+      expect(panel()).toHaveAttribute('data-expanded', 'false');
     });
 
     it('recolhido, cresce com o mouse e encolhe quando ele sai', () => {
@@ -117,5 +208,32 @@ describe('Sidebar', () => {
       expect(document.cookie).toContain('sidebar-pinned=true');
       expect(screen.getByRole('complementary')).toHaveAttribute('data-sidebar', 'pinned');
     });
+  });
+});
+
+describe('MobileMenu', () => {
+  it('a gaveta fecha ao tocar num link', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<MobileMenu />);
+
+    await user.click(screen.getByRole('button', { name: messages.dashboard.openMenu }));
+    const drawer = await screen.findByRole('dialog', { name: messages.dashboard.menu });
+    const link = within(drawer).getByRole('link', { name: messages.dashboard.myCharacters });
+    // The navigation itself is Next's; only the drawer closing is under test here
+    link.addEventListener('click', (event) => event.preventDefault());
+    await user.click(link);
+
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  });
+
+  it('o "Sair" da gaveta é o mesmo do header, com ícone', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<MobileMenu />);
+
+    await user.click(screen.getByRole('button', { name: messages.dashboard.openMenu }));
+    const drawer = await screen.findByRole('dialog', { name: messages.dashboard.menu });
+    expect(
+      within(drawer).getByRole('button', { name: messages.common.logout }),
+    ).toBeInTheDocument();
   });
 });

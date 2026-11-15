@@ -66,13 +66,14 @@ test.describe('acessibilidade (axe)', () => {
     });
   }
 
-  test('modal de bug report do cabeçalho', async ({ page }) => {
+  test('modal "Fale conosco" do cabeçalho', async ({ page }) => {
     await page.goto('/');
     const trigger = await hydrated(
-      page.getByRole('banner').getByRole('button', { name: 'Report a bug' }),
+      page.getByRole('banner').getByRole('button', { name: 'Contact us' }),
     );
     await trigger.click();
-    const dialog = page.getByRole('dialog', { name: 'Talk to the Game Master' });
+    // The same name from the button to the dialog's title
+    const dialog = page.getByRole('dialog', { name: 'Contact us' });
     await dialog.getByLabel('Message', { exact: true }).waitFor();
     await page.waitForTimeout(300);
     expect(await violations(page)).toEqual([]);

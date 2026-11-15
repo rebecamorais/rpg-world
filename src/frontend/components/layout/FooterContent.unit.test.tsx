@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { toast } from 'sonner';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -68,5 +68,28 @@ describe('FooterContent', () => {
 
     await waitFor(() => expect(toast.error).toHaveBeenCalledOnce());
     expect(toast.success).not.toHaveBeenCalled();
+  });
+
+  it('GitHub e Discord ficam numa coluna Comunidade, fora de Legal', () => {
+    renderWithProviders(<FooterContent serverUser={null} />);
+
+    const column = (title: string) =>
+      within(screen.getByRole('heading', { name: title }).parentElement!);
+    expect(
+      column(t.socials.title).getByRole('link', { name: t.socials.github }),
+    ).toBeInTheDocument();
+    expect(
+      column(t.socials.title).getByRole('link', { name: t.socials.discord }),
+    ).toBeInTheDocument();
+    expect(column(t.legal.title).queryByRole('link', { name: t.socials.github })).toBeNull();
+  });
+
+  it('compacto: o apoio é um grupo com o rótulo no começo, separado dos links legais', () => {
+    renderWithProviders(<FooterContent serverUser={{ id: 'u1' }} compact />);
+
+    const support = screen.getByRole('group', { name: t.support.title });
+    expect(within(support).getByRole('link', { name: t.support.kofi })).toBeInTheDocument();
+    expect(within(support).queryByRole('link', { name: t.socials.discord })).toBeNull();
+    expect(support.firstElementChild).toHaveTextContent(t.support.title);
   });
 });
