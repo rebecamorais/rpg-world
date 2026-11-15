@@ -39,6 +39,13 @@ export const orderSchema = z.object({ participantIds: z.array(z.uuid()).min(1).m
 
 export const turnSchema = z.object({ participantId: z.uuid() });
 
+/** One condition on (with its level, for exhaustion) or off. */
+export const conditionChangeSchema = z.object({
+  key: z.string().max(80),
+  active: z.boolean(),
+  level: z.number().int().nullable().optional(),
+});
+
 export const conditionsSchema = z.object({
   conditions: z
     .array(z.object({ key: z.string().max(80), level: z.number().int().nullable().default(null) }))

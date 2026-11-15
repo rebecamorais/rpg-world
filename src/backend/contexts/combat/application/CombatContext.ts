@@ -1,5 +1,6 @@
 import { ActiveCondition, EncounterView, NpcSide } from '../domain/Encounter';
 import { ParticipantPatch } from '../domain/repository/combat.repo';
+import { ConditionChangeInput } from './change-condition.use-case';
 
 /**
  * Operations the combat context exposes to the interface layer. They act as the signed-in user:
@@ -26,5 +27,11 @@ export interface CombatContext {
     partyId: string,
     participantId: string,
     conditions: ActiveCondition[],
+  ): Promise<void>;
+  /** One condition on or off; the others stay as the database has them. */
+  changeCondition(
+    partyId: string,
+    participantId: string,
+    change: ConditionChangeInput,
   ): Promise<void>;
 }

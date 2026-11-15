@@ -26,6 +26,26 @@ describe('/api/characters/[id]/inventory/items/[itemId]', () => {
     expect(api.charactersApi.setItemQuantity).not.toHaveBeenCalled();
   });
 
+  it('PATCH com delta e chave soma no banco e devolve a quantidade nova', async () => {
+    const key = '3d2c1b0a-9f8e-4d7c-8b6a-5f4e3d2c1b0a';
+    api.charactersApi.changeItemQuantity.mockResolvedValue({ quantity: 3 });
+
+    const res = await PATCH(jsonRequest(url, 'PATCH', { delta: 1, key }), context());
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ quantity: 3 });
+    expect(api.charactersApi.changeItemQuantity).toHaveBeenCalledWith(ID, SESSION_USER.id, ITEM, {
+      delta: 1,
+      key,
+    });
+  });
+
+  it('PATCH com delta sem chave responde 400', async () => {
+    const res = await PATCH(jsonRequest(url, 'PATCH', { delta: 1 }), context());
+    expect(res.status).toBe(400);
+    expect(api.charactersApi.changeItemQuantity).not.toHaveBeenCalled();
+  });
+
   it('PATCH responde 400 com itemId que não é uuid', async () => {
     const res = await PATCH(
       jsonRequest(url, 'PATCH', { quantity: 1 }),

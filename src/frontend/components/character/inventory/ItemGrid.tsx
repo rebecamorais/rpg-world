@@ -11,8 +11,9 @@ import { cn } from '@frontend/lib/utils';
 
 import { ItemDetails } from './ItemDetails';
 import { ItemImage } from './ItemImage';
-import { QuantityStepper } from './QuantityStepper';
+import { QuantityStepper, RemoveItemButton } from './QuantityStepper';
 import { ADD_ITEM_FOCUS, groupEntries, groupOf, itemGroupStyle } from './item-visuals';
+import { useIsRemoved, useRemovedItem } from './removed-items';
 
 interface Props {
   entries: InventoryItem[];
@@ -30,7 +31,9 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
   const t = useTranslations('characters.inventory');
   const tCharacters = useTranslations('characters');
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  // Derived: once the entry leaves the backpack (removed), the panel closes on its own
+  const isRemoved = useIsRemoved();
+  // Derived. A removed entry keeps its panel (as a placeholder) while its toast shows, so what is
+  // under the panel doesn't move up under the finger; it closes once the entry leaves the list
   const selected = entries.find((e) => e.id === selectedId) ?? null;
   const ordered = groupEntries(entries).flatMap((g) => g.entries);
   const panelId = useId();
@@ -43,6 +46,7 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
         {ordered.map((entry) => {
           const name = entry.item?.name ?? entry.ref;
           const isSelected = entry.id === selected?.id;
+          if (isRemoved(entry.id)) return <RemovedTile key={entry.id} entry={entry} />;
           return (
             // Not a <button>: a disabled fieldset (the GM's read-only view) disables buttons, and the
             // GM still needs to read the item's rules
@@ -103,6 +107,25 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
   );
 }
 
+/** A tile holds its place, faded, until the removal's toast closes, so the grid doesn't shift. */
+function RemovedTile({ entry }: { entry: InventoryItem }) {
+  const t = useTranslations('characters.inventory');
+  const name = entry.item?.name ?? entry.ref;
+
+  return (
+    <span
+      className="item-context bg-item-surface text-item-flare border-item-muted relative flex aspect-square flex-col items-center justify-center gap-1 rounded-md border border-dashed p-1 opacity-40"
+      style={itemGroupStyle(groupOf(entry.item?.category ?? null))}
+    >
+      <ItemImage item={entry.item} size={32} />
+      <span className="text-foreground text-label line-clamp-2 w-full text-center break-words line-through">
+        {name}
+      </span>
+      <span className="sr-only">{t('removedTag')}</span>
+    </span>
+  );
+}
+
 function GridPanel({
   id,
   entry,
@@ -115,6 +138,7 @@ function GridPanel({
   onRemove: () => void;
 }) {
   const t = useTranslations('characters.inventory');
+  const { removed, undo } = useRemovedItem(entry.id);
   const { item, quantity } = entry;
   const name = item?.name ?? entry.ref;
   const nameId = `${id}-name`;
@@ -128,21 +152,47 @@ function GridPanel({
       style={itemGroupStyle(groupOf(item?.category ?? null))}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p id={nameId} className="text-foreground min-w-0 truncate font-medium">
-          {name}
-        </p>
-        <QuantityStepper
-          name={name}
-          quantity={quantity}
-          onQuantity={onQuantity}
-          onRemove={onRemove}
-        />
+        {removed ? (
+          <div className="flex min-w-0 items-center gap-2">
+            <p
+              id={nameId}
+              className="text-muted-foreground min-w-0 truncate font-medium line-through"
+            >
+              {name}
+            </p>
+            <span className="sr-only">{t('removedTag')}</span>
+            <Button
+              variant="link"
+              size="sm"
+              className="h-auto shrink-0 p-0 pointer-coarse:min-h-11 pointer-coarse:min-w-11"
+              aria-label={t('undoRemove', { name })}
+              onClick={undo}
+            >
+              {t('undo')}
+            </Button>
+          </div>
+        ) : (
+          <p id={nameId} className="text-foreground min-w-0 truncate font-medium">
+            {name}
+          </p>
+        )}
+        {/* Removed: same size, but not there, so a tap where the trash was does nothing */}
+        <div
+          className={cn('flex items-center gap-3', removed && 'invisible')}
+          aria-hidden={removed || undefined}
+          inert={removed}
+        >
+          <QuantityStepper name={name} quantity={quantity} onQuantity={onQuantity} />
+          <RemoveItemButton name={name} onRemove={onRemove} />
+        </div>
       </div>
-      {item ? (
-        <ItemDetails item={item} />
-      ) : (
-        <p className="text-muted-foreground text-label">{t('unknownHint')}</p>
-      )}
+      <div className={cn(removed && 'opacity-40')} inert={removed}>
+        {item ? (
+          <ItemDetails item={item} />
+        ) : (
+          <p className="text-muted-foreground text-label">{t('unknownHint')}</p>
+        )}
+      </div>
     </div>
   );
 }

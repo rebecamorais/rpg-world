@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { APIError } from './api-client';
-import { errorCodeOf, translateErrorCode } from './error-message';
+import { NETWORK_ERROR, errorCodeOf, isNetworkError, translateErrorCode } from './error-message';
 
 const messages: Record<string, string> = {
   'errors.unknown': 'Unknown error',
@@ -41,9 +41,36 @@ describe('errorCodeOf', () => {
   });
 });
 
+describe('isNetworkError', () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it.each(['Failed to fetch', 'NetworkError when attempting to fetch resource.', 'Load failed'])(
+    'recognizes the TypeError fetch throws when the request never left (%s)',
+    (message) => {
+      expect(isNetworkError(new TypeError(message))).toBe(true);
+      expect(errorCodeOf(new TypeError(message))).toBe(NETWORK_ERROR);
+    },
+  );
+
+  it('counts any thrown error while the browser is offline', () => {
+    vi.stubGlobal('navigator', { onLine: false });
+    expect(isNetworkError(new Error('aborted'))).toBe(true);
+  });
+
+  it('never counts an answer from the server, even while offline', () => {
+    vi.stubGlobal('navigator', { onLine: false });
+    expect(isNetworkError(new APIError('character_error_not_found', 404))).toBe(false);
+  });
+
+  it('does not count other errors', () => {
+    expect(isNetworkError(new TypeError('x is not a function'))).toBe(false);
+    expect(isNetworkError('Failed to fetch')).toBe(false);
+  });
+});
+
 describe('errorCodeOf + translateErrorCode', () => {
   it('never shows the raw message of an unexpected error', () => {
-    const err = new TypeError('Failed to fetch');
+    const err = new TypeError('x is not a function');
     expect(translateErrorCode(t, errorCodeOf(err))).toBe('Unknown error');
   });
 });

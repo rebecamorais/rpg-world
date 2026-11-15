@@ -1,10 +1,14 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { resolvePatch } from '@frontend/hooks/useDraft';
 
 import { buildResourceBoxes } from '@shared/systems/dnd5e/class-resources';
 import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
+import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import { MONK } from '../resources/fixtures';
 import { RestButtons } from './RestButtons';
@@ -12,6 +16,7 @@ import { RestButtons } from './RestButtons';
 const sheet = vi.hoisted(() => ({ readOnly: false }));
 
 vi.mock('next/navigation', () => ({ useParams: () => ({ id: 'c1' }) }));
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 vi.mock('@frontend/hooks/useSheetSource', () => ({
   useSheetSource: () => ({ readOnly: sheet.readOnly }),
 }));
@@ -45,6 +50,7 @@ const monk = () => ({
 const scrollIntoView = vi.fn();
 
 beforeEach(() => {
+  vi.mocked(toast.success).mockClear();
   sheet.readOnly = false;
   Element.prototype.scrollIntoView = scrollIntoView;
 });
@@ -249,5 +255,86 @@ describe('RestChecklist', () => {
     renderWithCharacter(<RestButtons />, monk());
     expect(screen.queryByRole('button', { name: 'Short rest' })).toBeNull();
     expect(screen.queryByRole('button', { name: 'Long rest' })).toBeNull();
+  });
+
+  describe('Recuperar', () => {
+    it('no longo, salva numa operação só o que volta sozinho e marca esses itens', async () => {
+      const user = userEvent.setup();
+      const { saveNow, sentNow } = renderWithCharacter(<RestButtons />, {
+        ...monk(),
+        hpCurrent: 3,
+        hpMax: 30,
+        resources: { 'class:monk:ki': { used: 4 } },
+      });
+      await user.click(screen.getByRole('button', { name: 'Long rest' }));
+
+      await user.click(screen.getByRole('button', { name: 'Recover' }));
+
+      expect(saveNow).toHaveBeenCalledTimes(1);
+      expect(sentNow()).toMatchObject({
+        hpCurrent: 30,
+        hitDice: { total: '5d8', current: 5 },
+        resources: { 'class:monk:ki': { used: 0 } },
+      });
+      expect(screen.getByRole('checkbox', { name: 'Full HP' })).toBeChecked();
+      expect(screen.getByRole('checkbox', { name: /Ki returns/ })).toBeChecked();
+      expect(screen.getByRole('button', { name: 'Recover' })).toBeDisabled();
+    });
+
+    /**
+     * Recovers, then resolves the Undo patch on the server copy as it is by then. Resolving the
+     * Recover patch (as saveNow would) is what records what Undo puts back.
+     */
+    async function recoverAndUndo(
+      character: DnD5eCharacter,
+      afterRecover: (recovered: DnD5eCharacter) => DnD5eCharacter = (recovered) => recovered,
+    ) {
+      const user = userEvent.setup();
+      const { saveNow } = renderWithCharacter(<RestButtons />, character);
+      await user.click(screen.getByRole('button', { name: 'Long rest' }));
+      await user.click(screen.getByRole('button', { name: 'Recover' }));
+      const recovered = {
+        ...character,
+        ...resolvePatch(saveNow.mock.calls[0][0], character),
+      } as DnD5eCharacter;
+
+      const { action } = vi.mocked(toast.success).mock.calls[0][1] as unknown as {
+        action: { onClick: () => Promise<void> };
+      };
+      await action.onClick();
+      return resolvePatch(saveNow.mock.calls.at(-1)![0], afterRecover(recovered));
+    }
+
+    it('Desfazer devolve o que havia e desmarca', async () => {
+      const undo = await recoverAndUndo({ ...monk(), hpCurrent: 3, hpMax: 30 });
+
+      expect(undo).toMatchObject({ hpCurrent: 3, hitDice: { total: '5d8', current: 3 } });
+      expect(await screen.findByRole('button', { name: 'Recover' })).toBeEnabled();
+      expect(screen.getByRole('checkbox', { name: 'Full HP' })).not.toBeChecked();
+    });
+
+    it('Desfazer não desfaz o que mudou depois do Recuperar', async () => {
+      // A hit taken after recovering is play: Undo leaves the HP as it is now
+      const undo = await recoverAndUndo({ ...monk(), hpCurrent: 3, hpMax: 30 }, (recovered) => ({
+        ...recovered,
+        hpCurrent: 22,
+      }));
+
+      expect(undo).not.toHaveProperty('hpCurrent');
+      expect(undo).toMatchObject({ hitDice: { total: '5d8', current: 3 } });
+    });
+
+    it('se falhar, não marca nada nem oferece Desfazer', async () => {
+      const user = userEvent.setup();
+      const { saveNow } = renderWithCharacter(<RestButtons />, monk());
+      saveNow.mockRejectedValueOnce(new Error('offline'));
+      await user.click(screen.getByRole('button', { name: 'Long rest' }));
+
+      await user.click(screen.getByRole('button', { name: 'Recover' }));
+
+      expect(toast.success).not.toHaveBeenCalled();
+      expect(screen.getByRole('checkbox', { name: 'Full HP' })).not.toBeChecked();
+      expect(screen.getByRole('button', { name: 'Recover' })).toBeEnabled();
+    });
   });
 });

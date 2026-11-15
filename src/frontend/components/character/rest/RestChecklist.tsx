@@ -4,12 +4,19 @@ import { useEffect, useId, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 import { createPortal } from 'react-dom';
+import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
-import { useCharacterState, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import {
+  useCharacterActions,
+  useCharacterState,
+  useLoadedCharacter,
+} from '@frontend/context/CharacterContext';
+import { MERGED_BY_KEY } from '@frontend/lib/character-changes';
 import { hitDiceAvailable, hitDieSides } from '@frontend/lib/character-sheet-updates';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { type RestItem, buildRestChecklist } from '@frontend/lib/rest-checklist';
+import { restRecovery } from '@frontend/lib/rest-recovery';
 import { cn } from '@frontend/lib/utils';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
@@ -32,6 +39,38 @@ function magicToRestore(character: DnD5eCharacter): 'slots' | 'points' | null {
   return (character.spellPoints?.max ?? 0) > 0 ? 'points' : null;
 }
 
+const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
+/**
+ * What Undo of "Recover" saves, read on the server copy now: `before` back only where the sheet
+ * still holds what the recovery set (key by key in the merged maps). A hit taken or a box spent
+ * after recovering is play, not part of the rest, and stays.
+ */
+function undoRecovery(
+  server: DnD5eCharacter,
+  before: Partial<DnD5eCharacter>,
+  applied: Partial<DnD5eCharacter>,
+): Partial<DnD5eCharacter> {
+  const now = server as unknown as Record<string, unknown>;
+  const was = before as Record<string, unknown>;
+  const undo: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(applied)) {
+    if ((MERGED_BY_KEY as readonly string[]).includes(key) && value && typeof value === 'object') {
+      const current = (now[key] ?? {}) as Record<string, unknown>;
+      const previous = (was[key] ?? {}) as Record<string, unknown>;
+      const entries = Object.entries(value).filter(
+        ([entry, set]) => entry in previous && same(current[entry], set),
+      );
+      if (entries.length > 0) {
+        undo[key] = { ...current, ...Object.fromEntries(entries.map(([e]) => [e, previous[e]])) };
+      }
+    } else if (same(now[key], value)) {
+      undo[key] = was[key];
+    }
+  }
+  return undo as Partial<DnD5eCharacter>;
+}
+
 /**
  * Where "go" puts the focus: the block's `data-rest-focus` control (the field to change, not the
  * gear or the edit link that may come first), else the block's first focusable.
@@ -45,20 +84,25 @@ function focusTarget(block: HTMLElement) {
 }
 
 /**
- * What to update on the sheet after a rest. Ticks live only here: nothing is written to the sheet.
- * Not modal and no focus trap, so the sheet stays editable. On a phone it is a bar above the tab bar.
+ * What to update on the sheet after a rest. "Recover" gives back, in one save with an Undo, what
+ * comes back by itself (HP, hit dice, slots, boxes) and ticks those items; the rest (spending hit
+ * dice) is for the player, and ticks live only here. Not modal and no focus trap, so the sheet
+ * stays editable. On a phone it is a bar above the tab bar.
  */
 export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClose: () => void }) {
   const t = useTranslations('restChecklist');
   const character = useLoadedCharacter();
   const { boxes, content } = useResourceBoxes();
   const { isDirty } = useCharacterState();
+  const { saveNow } = useCharacterActions();
   const slot = useSaveBarSlot();
   const titleId = useId();
   const heading = useRef<HTMLHeadingElement>(null);
   const [ticked, setTicked] = useState<ReadonlySet<string>>(new Set());
   // Phone only: collapsed, the list hides and the bar is one button tall
   const [collapsed, setCollapsed] = useState(false);
+  const [recovering, setRecovering] = useState(false);
+  const [recovered, setRecovered] = useState(false);
 
   const level = character.level;
   const items = buildRestChecklist({
@@ -112,6 +156,46 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
   };
 
   const title = rest === 'short' ? t('shortTitle') : t('longTitle');
+  const recoverable = restRecovery(rest, character, boxes);
+
+  const recover = async () => {
+    const { items: done } = recoverable;
+    // What Undo puts back, taken from the server copy (not the draft: a pending edit in one of
+    // these fields was never saved, so Undo must not save it), and what the recovery set
+    let before: Partial<DnD5eCharacter> = {};
+    let applied: Partial<DnD5eCharacter> = {};
+    setRecovering(true);
+    try {
+      // Read on the server copy, like every tap during play: a pending sheet edit stays pending
+      await saveNow((server) => {
+        applied = restRecovery(rest, server, boxes).fields;
+        before = Object.fromEntries(
+          Object.keys(applied).map((key) => [key, server[key as keyof DnD5eCharacter]]),
+        ) as Partial<DnD5eCharacter>;
+        return applied;
+      });
+    } catch {
+      // saveNow already showed the error, with "Try again"
+      return;
+    } finally {
+      setRecovering(false);
+    }
+    setRecovered(true);
+    setTicked((current) => new Set([...current, ...done]));
+    toast.success(t('recovered', { title }), {
+      action: {
+        label: t('undo'),
+        onClick: () =>
+          saveNow((server) => undoRecovery(server, before, applied))
+            .then(() => {
+              setRecovered(false);
+              setTicked((current) => new Set([...current].filter((id) => !done.includes(id))));
+            })
+            .catch(() => {}),
+      },
+    });
+  };
+
   const progress = t('progress', { title, done: ticked.size, total: items.length });
   const theme = characterTheme(character.accentColor);
 
@@ -161,6 +245,25 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
           {t('done')}
         </Button>
       </div>
+      {recoverable.items.length > 0 && (
+        <div
+          className={cn('flex items-center gap-3 px-3 pb-2', collapsed ? 'hidden md:flex' : 'flex')}
+        >
+          <Button
+            variant="character"
+            size="sm"
+            onClick={recover}
+            loading={recovering}
+            disabled={recovered}
+            aria-describedby={`${titleId}-recover`}
+          >
+            {t('recover')}
+          </Button>
+          <p id={`${titleId}-recover`} className="text-caption text-muted-foreground">
+            {t('recoverHint')}
+          </p>
+        </div>
+      )}
       <ul
         className={`flex-col gap-1 overflow-y-auto px-3 pb-3 ${collapsed ? 'hidden md:flex' : 'flex'}`}
       >

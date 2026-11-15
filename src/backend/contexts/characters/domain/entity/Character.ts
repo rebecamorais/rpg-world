@@ -16,6 +16,13 @@ export abstract class Character {
   public level: number;
   public lore: Lore;
   public avatarUrl?: string;
+  /**
+   * Goes up when a write changes the sheet's draft fields (not game state such as HP or spent
+   * slots); a draft save sent with an older one is a conflict.
+   */
+  public revision = 0;
+  /** Goes up with every write; the compare-and-set token of a full-row save. Not sent out. */
+  public rowVersion = 0;
 
   constructor(
     id: string,

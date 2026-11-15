@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
 import { EmptyState } from '@frontend/components/ui/empty-state';
@@ -26,6 +25,7 @@ import { GroupedItemList } from './GroupedItemList';
 import { ItemGrid } from './ItemGrid';
 import { ItemListSkeleton } from './ItemListSkeleton';
 import { ADD_ITEM_FOCUS, groupEntries } from './item-visuals';
+import { RemovedItemsProvider, useRemovedItems } from './removed-items';
 import { useItemFormat } from './useItemFormat';
 
 /** The edition most of the backpack's items are from; 2024 when it is empty (or a tie). */
@@ -90,14 +90,20 @@ export function ItemList({
   const entries = (inventory?.items ?? []).filter((i) => i.containerId === backpack?.id);
   const totalWeight = entries.reduce((sum, i) => sum + (i.item?.weight ?? 0) * i.quantity, 0);
 
+  // The removed row keeps its place until its toast closes: the list doesn't move under the finger
+  const removal = useRemovedItems({
+    entries,
+    removeItem,
+    restoreItem,
+    toastId: `inventory-removed-${viewKey}`,
+  });
+
   const remove = (entry: InventoryItem) => {
-    const name = entry.item?.name ?? entry.ref;
     focusNext(entries, entry);
-    removeItem(entry.id);
-    toast(t('removed', { name }), {
-      action: { label: t('undo'), onClick: () => restoreItem(entry) },
-    });
+    removal.remove(entry);
   };
+  // Empty by what is drawn: the last item's placeholder (and its Undo) stays until the toast goes
+  const isEmpty = removal.display.length === 0;
 
   const addButton = (
     <Button
@@ -119,7 +125,7 @@ export function ItemList({
         <SectionCard.Title icon={icon} hint={hint}>
           {title}
         </SectionCard.Title>
-        {entries.length > 0 && (
+        {!isEmpty && (
           <div className="flex items-center gap-2">
             <ViewToggle view={view} onChange={setView} />
             {addButton}
@@ -130,7 +136,7 @@ export function ItemList({
       {/* Not the empty state while loading: the backpack isn't known to be empty yet */}
       {isLoading ? (
         <ItemListSkeleton view={view} label={t('add.loading')} />
-      ) : entries.length === 0 ? (
+      ) : isEmpty ? (
         <SectionCard.Body>
           <EmptyState
             icon={icon}
@@ -141,22 +147,22 @@ export function ItemList({
           />
         </SectionCard.Body>
       ) : (
-        <>
+        <RemovedItemsProvider value={removal.context}>
           {view === 'grid' ? (
             <ItemGrid
-              entries={entries}
+              entries={removal.display}
               onQuantity={setQuantity}
               onRemove={remove}
               onAdd={() => setAdding(true)}
               canAdd={!!backpack}
             />
           ) : (
-            <GroupedItemList entries={entries} onQuantity={setQuantity} onRemove={remove} />
+            <GroupedItemList entries={removal.display} onQuantity={setQuantity} onRemove={remove} />
           )}
           <p className="bg-muted/40 border-border text-muted-foreground border-t px-4 py-2 text-right text-sm">
             {t('totalWeight', { weight: fmt.weight(totalWeight) })}
           </p>
-        </>
+        </RemovedItemsProvider>
       )}
 
       <AddItemDialog
@@ -176,15 +182,18 @@ export function ItemList({
  */
 function useFocusAfterRemove() {
   const root = useRef<HTMLDivElement>(null);
-  const pending = useRef<string | null>(null);
+  const pending = useRef<{ target: string; removed: string } | null>(null);
 
-  // Every render: the target shows up once the removal has re-rendered the list
+  // Every render: the target shows up once the removal has re-rendered the list. Not before the
+  // removed row is gone: the header's "Add Item" is still there on that first render.
   useEffect(() => {
-    const target = pending.current;
-    if (!target) return;
-    const el = [...(root.current?.querySelectorAll<HTMLElement>('[data-item-focus]') ?? [])].find(
-      (candidate) => candidate.dataset.itemFocus === target,
-    );
+    if (!pending.current) return;
+    const { target, removed } = pending.current;
+    const candidates = [
+      ...(root.current?.querySelectorAll<HTMLElement>('[data-item-focus]') ?? []),
+    ];
+    if (candidates.some((candidate) => candidate.dataset.itemFocus === removed)) return;
+    const el = candidates.find((candidate) => candidate.dataset.itemFocus === target);
     if (el) {
       el.focus();
       pending.current = null;
@@ -194,7 +203,10 @@ function useFocusAfterRemove() {
   const next = (entries: InventoryItem[], removed: InventoryItem) => {
     const ordered = groupEntries(entries).flatMap((g) => g.entries);
     const index = ordered.findIndex((e) => e.id === removed.id);
-    pending.current = ordered[index + 1]?.id ?? ordered[index - 1]?.id ?? ADD_ITEM_FOCUS;
+    pending.current = {
+      target: ordered[index + 1]?.id ?? ordered[index - 1]?.id ?? ADD_ITEM_FOCUS,
+      removed: removed.id,
+    };
   };
 
   return { root, next };

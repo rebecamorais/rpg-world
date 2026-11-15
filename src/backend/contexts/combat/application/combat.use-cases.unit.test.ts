@@ -11,6 +11,7 @@ import {
   TurnRecord,
 } from '../domain/repository/combat.repo';
 import { AddParticipantUseCase } from './add-participant.use-case';
+import { ChangeConditionUseCase } from './change-condition.use-case';
 import { EncounterCommands } from './encounter-commands';
 import { GetEncounterUseCase } from './get-encounter.use-case';
 import { SetConditionsUseCase } from './set-conditions.use-case';
@@ -87,6 +88,7 @@ const makeRepo = () =>
     setMyInitiative: vi.fn<CombatRepo['setMyInitiative']>().mockResolvedValue(true),
     finish: vi.fn<CombatRepo['finish']>().mockResolvedValue(true),
     setConditions: vi.fn<CombatRepo['setConditions']>().mockResolvedValue(true),
+    changeCondition: vi.fn<CombatRepo['changeCondition']>().mockResolvedValue(true),
   }) satisfies CombatRepo;
 
 describe('toGmRow', () => {
@@ -276,6 +278,76 @@ describe('SetConditionsUseCase', () => {
     const repo = makeRepo();
     repo.setConditions.mockResolvedValue(false);
     expect(await run([], repo).result).toBe(CombatErrorCodes.NOT_FOUND);
+  });
+});
+
+describe('ChangeConditionUseCase', () => {
+  const PRONE = 'dnd5e:srd-5.2:condition:prone';
+  const EXHAUSTION = 'dnd5e:srd-5.2:condition:exhaustion';
+  const run = (
+    change: { key: string; active: boolean; level?: number | null },
+    repo = makeRepo(),
+  ) => {
+    const result = new ChangeConditionUseCase(repo, getConditionCatalog())
+      .execute('party-1', 'p-hero', change)
+      .then(() => null)
+      .catch((e) => e.code);
+    return { repo, result };
+  };
+
+  it('liga uma condição só, sem nível', async () => {
+    const { repo, result } = run({ key: PRONE, active: true });
+    expect(await result).toBeNull();
+    expect(repo.changeCondition).toHaveBeenCalledWith('party-1', 'p-hero', {
+      key: PRONE,
+      active: true,
+      level: null,
+    });
+  });
+
+  it('exaustão sem nível vira 1; com nível, o nível', async () => {
+    const first = run({ key: EXHAUSTION, active: true });
+    await first.result;
+    expect(first.repo.changeCondition).toHaveBeenCalledWith('party-1', 'p-hero', {
+      key: EXHAUSTION,
+      active: true,
+      level: 1,
+    });
+    const second = run({ key: EXHAUSTION, active: true, level: 4 });
+    await second.result;
+    expect(second.repo.changeCondition).toHaveBeenCalledWith('party-1', 'p-hero', {
+      key: EXHAUSTION,
+      active: true,
+      level: 4,
+    });
+  });
+
+  it('recusa ligar chave fora do catálogo, nível em condição sem níveis e nível fora do limite', async () => {
+    for (const change of [
+      { key: 'dnd5e:srd-5.2:condition:nope', active: true },
+      { key: PRONE, active: true, level: 2 },
+      { key: EXHAUSTION, active: true, level: 7 },
+    ]) {
+      const { repo, result } = run(change);
+      expect(await result).toBe(CombatErrorCodes.INVALID_CONDITION);
+      expect(repo.changeCondition).not.toHaveBeenCalled();
+    }
+  });
+
+  it('desliga qualquer chave, até uma que o catálogo já não conhece', async () => {
+    const GONE = 'dnd5e:srd-5.2:condition:gone';
+    const { repo, result } = run({ key: GONE, active: false, level: 3 });
+    expect(await result).toBeNull();
+    expect(repo.changeCondition).toHaveBeenCalledWith('party-1', 'p-hero', {
+      key: GONE,
+      active: false,
+    });
+  });
+
+  it('o repositório devolvendo false vira NOT_FOUND', async () => {
+    const repo = makeRepo();
+    repo.changeCondition.mockResolvedValue(false);
+    expect(await run({ key: PRONE, active: false }, repo).result).toBe(CombatErrorCodes.NOT_FOUND);
   });
 });
 

@@ -9,8 +9,8 @@ import { hasLocale } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { AnalyticsScripts } from '@frontend/components/providers/AnalyticsScripts';
+import { AppToaster } from '@frontend/components/providers/AppToaster';
 import Providers from '@frontend/components/providers/Providers';
-import { Toaster } from '@frontend/components/ui/sonner';
 import { clientMessages } from '@frontend/constants/client-messages';
 import { SITE_URL } from '@frontend/constants/site';
 import { fontVariables } from '@frontend/lib/fonts';
@@ -106,7 +106,7 @@ export default async function RootLayout({
         <Providers locale={locale} messages={messages}>
           {children}
         </Providers>
-        <Toaster />
+        <AppToaster />
         <AnalyticsScripts enabled={isProduction} />
       </body>
     </html>

@@ -1,6 +1,9 @@
 import { getApi } from '@api';
 
-import { setCoinsSchema } from '@backend/contexts/characters/interfaces/characters.schemas';
+import {
+  changeCoinsSchema,
+  setCoinsSchema,
+} from '@backend/contexts/characters/interfaces/characters.schemas';
 
 import { withAuth } from '@shared/http/route-handler';
 import { uuidParamsSchema } from '@shared/http/validation';
@@ -13,4 +16,16 @@ export const PUT = withAuth(
     return null; // → 204 No Content
   },
   { params: uuidParamsSchema, body: setCoinsSchema },
+);
+
+/** Adds `delta` to each coin in the database and answers `{ coins }`; a repeated key applies once. */
+export const PATCH = withAuth(
+  async ({ user, body, params }) => {
+    const { charactersApi } = await getApi();
+    return charactersApi.changeCoins(params.id, user.id, body.containerId, {
+      delta: body.delta,
+      key: body.key,
+    });
+  },
+  { params: uuidParamsSchema, body: changeCoinsSchema },
 );

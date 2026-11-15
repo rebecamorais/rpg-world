@@ -30,6 +30,8 @@ test('aprende, prepara e esquece uma magia', async ({ page, user: _ }) => {
 
   await fireball.getByRole('button', { name: /Expand Fireball/ }).click();
   await fireball.getByRole('button', { name: 'Forget spell' }).click();
+  // Forgetting asks first; learning and preparing don't
+  await page.getByRole('alertdialog').getByRole('button', { name: 'Forget', exact: true }).click();
   await expect(page.getByText('Spell forgotten.')).toBeVisible();
   await expect(fireball).toHaveCount(0);
 });

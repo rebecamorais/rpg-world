@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useState } from 'react';
+import { type FormEvent, type ReactNode, useId, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -43,6 +43,8 @@ const CHANGES: { change: HitPointsChange; label: 'damage' | 'heal' | 'setTempHp'
  * "You take 7 damage": one number and one button, saved at once (no save button mid-combat),
  * with an Undo on the toast. `children` is the trigger, a button. `onSaved` runs after each save
  * (and after an Undo), for screens that show the HP from elsewhere (the combat).
+ * Opens with the focus in the number; Enter applies the selected change (Damage until another
+ * one is used), and a second Enter or click while it saves does nothing.
  */
 export function AdjustHitPoints({
   children,
@@ -57,12 +59,24 @@ export function AdjustHitPoints({
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState('');
   const [saving, setSaving] = useState(false);
+  // What Enter applies: the last change used, Damage at first (the common case mid-combat)
+  const [selected, setSelected] = useState<HitPointsChange>('damage');
+  // The state above only shows on the next render: a double Enter would get past it
+  const busy = useRef(false);
+  const field = useRef<HTMLInputElement>(null);
+  const hintId = useId();
 
   const value = /^\d+$/.test(amount) ? Math.min(Number(amount), SMALLINT_MAX) : null;
   const temp = character.hpTemp ?? 0;
 
+  const canApply = (change: HitPointsChange) =>
+    // Temporary HP can be set to 0 (to drop them); damage and healing need an amount
+    value !== null && (change === 'temp' || value > 0);
+
   const apply = async (change: HitPointsChange) => {
-    if (value === null) return;
+    if (value === null || !canApply(change) || busy.current) return;
+    busy.current = true;
+    setSelected(change);
     const fields = applyHitPoints(character, change, value);
     // What Undo puts back: these same fields, as they were
     const was: Partial<DnD5eCharacter> = {
@@ -81,6 +95,7 @@ export function AdjustHitPoints({
       // saveNow already showed the error; the sheet stays open with the number typed
       return;
     } finally {
+      busy.current = false;
       setSaving(false);
     }
 
@@ -103,11 +118,23 @@ export function AdjustHitPoints({
     );
   };
 
+  const submit = (event: FormEvent) => {
+    event.preventDefault();
+    void apply(selected);
+  };
+
+  const selectedLabel = CHANGES.find((c) => c.change === selected)!.label;
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent
         side="bottom"
+        // Straight to the number: on a phone that is the tap that opens the keypad
+        onOpenAutoFocus={(event) => {
+          event.preventDefault();
+          field.current?.focus();
+        }}
         className="mx-auto flex w-full max-w-md flex-col gap-5 rounded-t-xl sm:bottom-6 sm:rounded-xl sm:border"
       >
         <SheetHeader className="pr-8 text-left">
@@ -120,36 +147,59 @@ export function AdjustHitPoints({
           {temp > 0 && <span className="text-warning-flare"> (+{temp})</span>}
         </p>
 
-        <div className="flex flex-col gap-2">
-          <label htmlFor="hp-amount" className="text-label text-muted-foreground">
-            {t('adjustHpAmount')}
-          </label>
-          <Input
-            id="hp-amount"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            autoComplete="off"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value.replace(/\D/g, '').slice(0, 5))}
-            className="h-14 text-center font-mono text-3xl font-bold tabular-nums md:text-3xl"
-          />
-        </div>
+        <form onSubmit={submit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="hp-amount" className="text-label text-muted-foreground">
+              {t('adjustHpAmount')}
+            </label>
+            <Input
+              ref={field}
+              id="hp-amount"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              autoComplete="off"
+              enterKeyHint="done"
+              aria-describedby={hintId}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value.replace(/\D/g, '').slice(0, 5))}
+              className="h-14 text-center font-mono text-3xl font-bold tabular-nums md:text-3xl"
+            />
+            <p id={hintId} className="text-caption text-muted-foreground">
+              {t('adjustHpEnter', { action: t(selectedLabel) })}
+            </p>
+          </div>
 
-        <div className="grid grid-cols-3 gap-2">
-          {CHANGES.map(({ change, label, tone }) => (
-            <Button
-              key={change}
-              variant="outline"
-              onClick={() => apply(change)}
-              // Temporary HP can be set to 0 (to drop them); damage and healing need an amount
-              disabled={value === null || (change !== 'temp' && value === 0)}
-              loading={saving}
-              className={cn('h-12 font-semibold', tone)}
-            >
-              {t(label)}
-            </Button>
-          ))}
-        </div>
+          <div className="grid grid-cols-3 gap-2">
+            {CHANGES.map(({ change, label, tone }) =>
+              // The selected one is the form's submit button: Enter and its click both go
+              // through onSubmit, once
+              change === selected ? (
+                <Button
+                  key={change}
+                  type="submit"
+                  variant="outline"
+                  disabled={!canApply(change)}
+                  loading={saving}
+                  className={cn('h-12 font-semibold ring-2 ring-current/40', tone)}
+                >
+                  {t(label)}
+                </Button>
+              ) : (
+                <Button
+                  key={change}
+                  type="button"
+                  variant="outline"
+                  onClick={() => apply(change)}
+                  disabled={!canApply(change)}
+                  loading={saving}
+                  className={cn('h-12 font-semibold', tone)}
+                >
+                  {t(label)}
+                </Button>
+              ),
+            )}
+          </div>
+        </form>
       </SheetContent>
     </Sheet>
   );

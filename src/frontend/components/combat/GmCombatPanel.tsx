@@ -44,6 +44,8 @@ import { TurnBar } from './TurnBar';
 
 const NPC_SIDES: NpcSide[] = ['enemy', 'ally', 'neutral'];
 const ADD_LABEL = { enemy: 'addEnemy', ally: 'addAlly', neutral: 'addNeutral' } as const;
+// One "whose turn" toast at a time: each turn replaces the last instead of stacking over the panel
+const TURN_TOAST_ID = 'combat-turn';
 
 /**
  * Who gets the turn back, as `previous_turn` picks it: the last row before the current one that
@@ -334,7 +336,7 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
                   const name = back?.name;
                   combat.previousTurn.mutate(undefined, {
                     onSuccess: () => {
-                      if (name) toast(t('turnBackTo', { name }));
+                      if (name) toast(t('turnBackTo', { name }), { id: TURN_TOAST_ID });
                     },
                   });
                 }}
@@ -348,7 +350,7 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
                   const name = next?.name;
                   combat.endTurn.mutate(current.participantId, {
                     onSuccess: () => {
-                      if (name) toast(t('turnPassedTo', { name }));
+                      if (name) toast(t('turnPassedTo', { name }), { id: TURN_TOAST_ID });
                     },
                   });
                 }}

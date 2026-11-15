@@ -3,6 +3,7 @@ import { CharacterSpell } from '@frontend/hooks/useCharacterSpells';
 
 interface SpellsSectionProps {
   characterSpells: CharacterSpell[];
+  characterId?: string;
   // Left out on a read-only spellbook
   onForgetSpell?: (spellId: string) => void | Promise<unknown>;
   onTogglePrepared?: (spellId: string, isPrepared: boolean) => void | Promise<unknown>;
@@ -11,6 +12,7 @@ interface SpellsSectionProps {
 
 export default function SpellsSection({
   characterSpells,
+  characterId,
   onForgetSpell,
   onTogglePrepared,
   onAddSpell,
@@ -20,6 +22,7 @@ export default function SpellsSection({
       <div className="grid grid-cols-1 gap-6">
         <Spellbook
           characterSpells={characterSpells}
+          characterId={characterId}
           onForgetSpell={onForgetSpell}
           onTogglePrepared={onTogglePrepared}
           onAddSpell={onAddSpell}

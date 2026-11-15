@@ -31,10 +31,10 @@ import {
   setHitDice,
   setHitDiceRemaining,
   setSpellPoints,
-  setSpellSlots,
 } from '@frontend/lib/character-sheet-updates';
 
 import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
+import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import { AdjustHitPoints } from './AdjustHitPoints';
 import { CombatConfigSection, CombatStatsDialog } from './CombatStatsDialog';
@@ -168,6 +168,19 @@ const CombatHeader = () => {
   );
 };
 
+/**
+ * Spends or gets back a slot, read on the server copy: the level's capacity is a sheet edit
+ * (the card's settings) and stays in the draft until the sheet is saved.
+ */
+const setSlotUsed =
+  (level: string, max: number, used: number) =>
+  (c: DnD5eCharacter): Partial<DnD5eCharacter> => ({
+    spellSlots: { ...c.spellSlots, [level]: { max: c.spellSlots?.[level]?.max ?? max, used } },
+  });
+
+// saveNow already showed the error and put the server's value back on screen
+const ignore = () => {};
+
 /** Small gear in a card's corner that opens that card's settings. */
 const CardConfigButton = ({ label, onClick }: { label: string; onClick: () => void }) => (
   <Button
@@ -185,7 +198,7 @@ const ResourceGrid = () => {
   const t = useTranslations('combatStats');
   const tm = useTranslations('magicSystem');
   const character = useLoadedCharacter();
-  const { update } = useCharacterActions();
+  const { saveNow } = useCharacterActions();
   const { id } = useCharacterMeta();
   const { readOnly } = useSheetSource(id);
   // Kept out of the cards: switching the magic system swaps the card, which would close it
@@ -199,7 +212,8 @@ const ResourceGrid = () => {
           currentHp={character.hpCurrent ?? 0}
           maxHp={character.hpMax || 1}
           tempHp={character.hpTemp ?? 0}
-          onHpChange={(field, value) => update({ [field]: value })}
+          // Play, not editing: saved at once like the Adjust HP, never left in the draft
+          onHpChange={(field, value) => saveNow({ [field]: value }).catch(ignore)}
           action={<CardConfigButton label={t('configureHp')} onClick={() => setConfig('hp')} />}
           footer={
             !readOnly && (
@@ -215,8 +229,8 @@ const ResourceGrid = () => {
         <MagicSystemCard
           id="sheet-spell-slots"
           character={character}
-          onPointsChange={(field, value) => update(setSpellPoints(field, value))}
-          onSlotsChange={(level, max, used) => update(setSpellSlots(level, max, used))}
+          onPointsChange={(field, value) => saveNow(setSpellPoints(field, value)).catch(ignore)}
+          onSlotsChange={(level, max, used) => saveNow(setSlotUsed(level, max, used)).catch(ignore)}
           action={<CardConfigButton label={tm('configure')} onClick={() => setConfig('magic')} />}
         />
       </div>

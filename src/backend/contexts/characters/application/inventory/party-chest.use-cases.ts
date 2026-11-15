@@ -2,7 +2,13 @@ import type { Coins } from '@shared/systems/dnd5e/coins';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import { InventoryDto, InventoryItem, InventoryRepo } from '../../domain/repository/inventory.repo';
-import { AddInventoryItemInput, ItemLookup, loadInventory } from './inventory.use-cases';
+import {
+  AddInventoryItemInput,
+  CoinsChange,
+  ItemLookup,
+  QuantityChange,
+  loadInventory,
+} from './inventory.use-cases';
 
 /*
  * The party chest: the same containers and entries as a character's inventory, owned by the party.
@@ -34,12 +40,12 @@ export class AddPartyChestItemUseCase {
   /** Adding what is already in the chest sums the quantity (in the database). */
   async execute(
     partyId: string,
-    { ref, containerId, quantity }: AddInventoryItemInput,
+    { ref, containerId, quantity, key }: AddInventoryItemInput,
     locale?: string,
   ): Promise<InventoryItem> {
     if (!this.items.find(ref)) throw new CharacterError(CharacterErrorCodes.ITEM_NOT_FOUND);
 
-    const entry = await this.chest.addItem(partyId, containerId, ref, quantity);
+    const entry = await this.chest.addItem(partyId, containerId, ref, quantity, key);
     if (!entry) throw new CharacterError(CharacterErrorCodes.CONTAINER_NOT_FOUND);
 
     const [item] = this.items.findByKeys([ref], locale);
@@ -54,6 +60,21 @@ export class SetPartyChestItemQuantityUseCase {
     if (!(await this.chest.setQuantity(partyId, itemId, quantity))) {
       throw new CharacterError(CharacterErrorCodes.ITEM_NOT_FOUND);
     }
+  }
+}
+
+/** The chest is shared: the GM and the players change it at once, so it takes operations. */
+export class ChangePartyChestItemQuantityUseCase {
+  constructor(private readonly chest: InventoryRepo) {}
+
+  async execute(
+    partyId: string,
+    itemId: string,
+    { delta, key }: QuantityChange,
+  ): Promise<{ quantity: number }> {
+    const quantity = await this.chest.changeQuantity(partyId, itemId, delta, key);
+    if (quantity === null) throw new CharacterError(CharacterErrorCodes.ITEM_NOT_FOUND);
+    return { quantity };
   }
 }
 
@@ -74,5 +95,19 @@ export class SetPartyChestCoinsUseCase {
     if (!(await this.chest.setCoins(partyId, containerId, coins))) {
       throw new CharacterError(CharacterErrorCodes.CONTAINER_NOT_FOUND);
     }
+  }
+}
+
+export class ChangePartyChestCoinsUseCase {
+  constructor(private readonly chest: InventoryRepo) {}
+
+  async execute(
+    partyId: string,
+    containerId: string,
+    { delta, key }: CoinsChange,
+  ): Promise<{ coins: Coins }> {
+    const coins = await this.chest.changeCoins(partyId, containerId, delta, key);
+    if (!coins) throw new CharacterError(CharacterErrorCodes.CONTAINER_NOT_FOUND);
+    return { coins };
   }
 }

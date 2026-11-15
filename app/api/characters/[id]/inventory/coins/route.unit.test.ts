@@ -1,7 +1,7 @@
 import { SESSION_USER, api, jsonRequest, resetApi, routeContext } from '@tests/helpers/mock-api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { PUT } from './route';
+import { PATCH, PUT } from './route';
 
 vi.mock('@api', () => import('@tests/helpers/mock-api'));
 
@@ -45,5 +45,22 @@ describe('/api/characters/[id]/inventory/coins', () => {
       routeContext({ id: ID }),
     );
     expect(res.status).toBe(400);
+  });
+
+  it('PATCH soma a diferença com a chave e devolve as moedas', async () => {
+    const key = '3d2c1b0a-9f8e-4d7c-8b6a-5f4e3d2c1b0a';
+    api.charactersApi.changeCoins.mockResolvedValue({ coins });
+
+    const res = await PATCH(
+      jsonRequest(url, 'PATCH', { containerId: CONTAINER, delta: { gp: 2, sp: -1 }, key }),
+      routeContext({ id: ID }),
+    );
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ coins });
+    expect(api.charactersApi.changeCoins).toHaveBeenCalledWith(ID, SESSION_USER.id, CONTAINER, {
+      delta: { gp: 2, sp: -1 },
+      key,
+    });
   });
 });

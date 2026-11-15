@@ -12,7 +12,7 @@ import { PartyChestPage } from './PartyChestPage';
 
 vi.mock('sonner', () => ({ toast: Object.assign(vi.fn(), { error: vi.fn() }) }));
 vi.mock('@client', () => ({
-  rpgWorldApi: { get: vi.fn(), post: vi.fn(), put: vi.fn(), patch: vi.fn(), delete: vi.fn() },
+  rpgWorldApi: { get: vi.fn(), post: vi.fn(), patch: vi.fn(), delete: vi.fn() },
 }));
 
 const hook = { party: null as PartyView | null, isLoading: false };
@@ -62,9 +62,11 @@ describe('PartyChestPage', () => {
     await userEvent.tab();
 
     await waitFor(() =>
-      expect(api.put).toHaveBeenCalledWith('/api/parties/party-1/chest/coins', {
+      // The change: the GM and the players paying from the chest at once all count
+      expect(api.patch).toHaveBeenCalledWith('/api/parties/party-1/chest/coins', {
         containerId: 'chest',
-        coins: { cp: 0, sp: 0, ep: 0, gp: 45, pp: 0 },
+        delta: { gp: 15 },
+        key: expect.any(String),
       }),
     );
   });

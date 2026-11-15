@@ -66,6 +66,52 @@ describe('/api/characters/[id]', () => {
     expect(api.charactersApi.update).not.toHaveBeenCalled();
   });
 
+  it('PUT com a revisão vista repassa a revisão e devolve a nova', async () => {
+    api.charactersApi.update.mockResolvedValue({ id: ID, revision: 8 });
+
+    const res = await PUT(
+      jsonRequest(url, 'PUT', { updates: { ac: 18 }, revision: 7 }),
+      routeContext({ id: ID }),
+    );
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ id: ID, revision: 8 });
+    expect(api.charactersApi.update).toHaveBeenCalledWith({
+      id: ID,
+      ownerUsername: SESSION_USER.id,
+      updates: { ac: 18 },
+      revision: 7,
+    });
+  });
+
+  it('PUT com revisão antiga responde 409 com code conflict e a revisão de agora', async () => {
+    api.charactersApi.update.mockRejectedValue(
+      new AppError('character_error_conflict', 'conflict', { code: 'conflict', revision: 9 }),
+    );
+
+    const res = await PUT(
+      jsonRequest(url, 'PUT', { updates: { ac: 18 }, revision: 7 }),
+      routeContext({ id: ID }),
+    );
+
+    expect(res.status).toBe(409);
+    expect(await res.json()).toEqual({
+      error: 'character_error_conflict',
+      code: 'conflict',
+      revision: 9,
+    });
+  });
+
+  it('PUT recusa revisão que não é inteiro não negativo', async () => {
+    const res = await PUT(
+      jsonRequest(url, 'PUT', { updates: { ac: 18 }, revision: -1 }),
+      routeContext({ id: ID }),
+    );
+
+    expect(res.status).toBe(400);
+    expect(api.charactersApi.update).not.toHaveBeenCalled();
+  });
+
   it('DELETE remove o personagem e responde 204', async () => {
     api.charactersApi.delete.mockResolvedValue({ deleted: true });
 

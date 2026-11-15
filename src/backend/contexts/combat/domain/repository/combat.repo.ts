@@ -110,4 +110,17 @@ export interface CombatRepo {
     participantId: string,
     conditions: ActiveCondition[],
   ): Promise<boolean>;
+  /**
+   * Turns one condition on (with its level) or off, leaving the others as the database has them;
+   * `false` when not found or the person isn't allowed.
+   */
+  changeCondition(
+    partyId: string,
+    participantId: string,
+    change: ConditionChange,
+  ): Promise<boolean>;
 }
+
+/** One condition switched: on (with its level, `null` without levels) or off. */
+export type ConditionChange =
+  { key: string; active: true; level: number | null } | { key: string; active: false };

@@ -1,3 +1,4 @@
+import { ConditionChangeInput } from '../application/change-condition.use-case';
 import { ActiveCondition, NpcSide } from '../domain/Encounter';
 import { ParticipantPatch } from '../domain/repository/combat.repo';
 import { CombatContext } from '../index';
@@ -33,4 +34,7 @@ export const makeCombatApi = (combatContext: CombatContext) => ({
 
   setConditions: (partyId: string, participantId: string, conditions: ActiveCondition[]) =>
     combatContext.setConditions(partyId, participantId, conditions),
+
+  changeCondition: (partyId: string, participantId: string, change: ConditionChangeInput) =>
+    combatContext.changeCondition(partyId, participantId, change),
 });

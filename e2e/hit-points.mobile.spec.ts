@@ -22,7 +22,7 @@ test('no celular, ajustar PV salva na hora e desfazer devolve', async ({ page, u
   await page.reload();
   await expect(page.getByRole('region', { name: 'Combat at a glance' })).toContainText('13 / 20');
 
-  // The tab bar sits at the bottom; the toast stays above it, so Undo can be tapped
+  // On phones the toast sits at the top, away from the tab bar and the HP panel: Undo is tappable
   await (await hydrated(vitals.getByRole('button', { name: 'Adjust HP' }))).click();
   await sheet.getByLabel('How much?').fill('2');
   await sheet.getByRole('button', { name: 'Heal' }).click();

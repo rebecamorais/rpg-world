@@ -31,7 +31,7 @@ test.describe('inventário', () => {
     await (await hydrated(page.getByRole('button', { name: 'Receive' }))).click();
     let dialog = page.getByRole('dialog', { name: 'Receive' });
     await dialog.getByLabel('Amount').fill('10');
-    await saved(page, 'PUT', '/coins', () =>
+    await saved(page, 'PATCH', '/coins', () =>
       dialog.getByRole('button', { name: 'Confirm' }).click(),
     );
     await expect(dialog).toBeHidden();
@@ -44,7 +44,7 @@ test.describe('inventário', () => {
     await dialog.getByRole('combobox', { name: 'Coin' }).click();
     await page.getByRole('option', { name: 'SP' }).click();
     await expect(dialog.getByText('Change', { exact: true })).toBeVisible();
-    await saved(page, 'PUT', '/coins', () =>
+    await saved(page, 'PATCH', '/coins', () =>
       dialog.getByRole('button', { name: 'Confirm' }).click(),
     );
     await expect(dialog).toBeHidden();

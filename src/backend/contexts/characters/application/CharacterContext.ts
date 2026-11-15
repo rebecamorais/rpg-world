@@ -5,6 +5,11 @@ import { DnD5eCharacter } from '../domain/entity/DnD5eCharacter';
 import { CharacterSpellRelation } from '../domain/repository/character-spell.repo';
 import { InventoryDto, InventoryItem } from '../domain/repository/inventory.repo';
 import { CreateCharacterInput } from './create-character/create-character.use-case';
+import {
+  AddInventoryItemInput,
+  CoinsChange,
+  QuantityChange,
+} from './inventory/inventory.use-cases';
 import { ToggleSpellAction } from './spells/toggle-character-spell.use-case';
 import { CharacterUpdates } from './update-character/update-character.use-case';
 
@@ -19,6 +24,8 @@ export interface CharacterContext {
     id: string;
     ownerUsername: string;
     updates: CharacterUpdates;
+    /** The revision the client last saw; a different one is a conflict (409). */
+    revision?: number;
   }): Promise<DnD5eCharacter>;
   delete(id: string, ownerUsername: string): Promise<boolean>;
   duplicate(id: string, name: string): Promise<{ id: string }>;
@@ -41,23 +48,46 @@ export interface CharacterContext {
   addItem(
     id: string,
     requesterId: string,
-    input: { ref: string; containerId: string; quantity: number },
+    input: AddInventoryItemInput,
     locale?: string,
   ): Promise<InventoryItem>;
   setItemQuantity(id: string, requesterId: string, itemId: string, quantity: number): Promise<void>;
+  /** Adds `delta` in the database (concurrent tabs add up); a repeated key applies once. */
+  changeItemQuantity(
+    id: string,
+    requesterId: string,
+    itemId: string,
+    change: QuantityChange,
+  ): Promise<{ quantity: number }>;
   removeItem(id: string, requesterId: string, itemId: string): Promise<void>;
   setCoins(id: string, requesterId: string, containerId: string, coins: Coins): Promise<void>;
+  changeCoins(
+    id: string,
+    requesterId: string,
+    containerId: string,
+    change: CoinsChange,
+  ): Promise<{ coins: Coins }>;
 
   // The party chest (the GM and the active players; the database decides)
   getPartyChest(partyId: string, locale?: string): Promise<InventoryDto>;
   addPartyChestItem(
     partyId: string,
-    input: { ref: string; containerId: string; quantity: number },
+    input: AddInventoryItemInput,
     locale?: string,
   ): Promise<InventoryItem>;
   setPartyChestItemQuantity(partyId: string, itemId: string, quantity: number): Promise<void>;
+  changePartyChestItemQuantity(
+    partyId: string,
+    itemId: string,
+    change: QuantityChange,
+  ): Promise<{ quantity: number }>;
   removePartyChestItem(partyId: string, itemId: string): Promise<void>;
   setPartyChestCoins(partyId: string, containerId: string, coins: Coins): Promise<void>;
+  changePartyChestCoins(
+    partyId: string,
+    containerId: string,
+    change: CoinsChange,
+  ): Promise<{ coins: Coins }>;
 
   // Read only, for the GM of a party the character was brought to
   getForPartyGm(partyId: string, id: string, gmId: string): Promise<Character>;

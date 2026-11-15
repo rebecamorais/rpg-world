@@ -121,6 +121,40 @@ describe('CharacterContext', () => {
     expect(result.current.state.isDirty).toBe(true);
   });
 
+  it('clique duplo em Salvar manda um PUT só', async () => {
+    const { result } = await renderLoaded();
+    act(() => result.current.actions.update({ ac: 18 }));
+
+    await act(async () => {
+      await Promise.all([result.current.actions.save(), result.current.actions.save()]);
+    });
+
+    expect(api.put).toHaveBeenCalledTimes(1);
+  });
+
+  it('no conflito, avisa no meta e mantém o rascunho; Descartar traz a ficha do servidor', async () => {
+    const conflict = Object.assign(new Error('An error occurred'), {
+      status: 409,
+      data: { code: 'conflict', revision: 3 },
+    });
+    api.put.mockRejectedValue(conflict);
+    const { result } = await renderLoaded();
+    act(() => result.current.actions.update({ ac: 18 }));
+
+    await act(() => result.current.actions.save());
+
+    expect(result.current.meta.conflict).toBe(true);
+    expect(result.current.state).toMatchObject({ isDirty: true, character: { ac: 18 } });
+    expect(toast.error).not.toHaveBeenCalled();
+
+    const gets = api.get.mock.calls.length;
+    act(() => result.current.actions.discard());
+    expect(result.current.state.isDirty).toBe(false);
+    await waitFor(() => expect(api.get.mock.calls.length).toBeGreaterThan(gets));
+    // Cleared once the server's copy is in, not before
+    await waitFor(() => expect(result.current.meta.conflict).toBe(false));
+  });
+
   it('traduz o erro de carregamento', async () => {
     api.get.mockRejectedValue(new Error('character_error_not_found'));
     const { result } = renderContext();

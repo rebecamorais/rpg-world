@@ -121,9 +121,11 @@ export default function AttributeCard({ label, value, onChange, icon }: Props) {
             </p>
           </div>
         </div>
-        <DialogFooter>
+        {/* An attribute is a sheet edit: it goes into the draft, so the button doesn't say Save */}
+        <DialogFooter className="items-center gap-3 sm:justify-between">
+          <p className="text-caption text-muted-foreground">{tCommon('draftNote')}</p>
           <Button onClick={handleSave} disabled={!isValid}>
-            {tCommon('save')}
+            {tCommon('apply')}
           </Button>
         </DialogFooter>
       </DialogContent>

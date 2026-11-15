@@ -4,7 +4,12 @@ import type { Coins } from '@shared/systems/dnd5e/coins';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import { CharacterRepo } from '../../domain/repository';
-import { InventoryDto, InventoryItem, InventoryRepo } from '../../domain/repository/inventory.repo';
+import {
+  CoinsDelta,
+  InventoryDto,
+  InventoryItem,
+  InventoryRepo,
+} from '../../domain/repository/inventory.repo';
 import { assertOwnsCharacter } from '../find-owned-character';
 
 /** Where the items themselves come from (the content catalog). */
@@ -14,6 +19,8 @@ export interface AddInventoryItemInput {
   ref: string;
   containerId: string;
   quantity: number;
+  /** Idempotency key: the same key twice adds once. */
+  key?: string;
 }
 
 /** The character's containers and entries; an entry whose item left the catalog has `item: null`. */
@@ -62,13 +69,13 @@ export class AddInventoryItemUseCase {
   async execute(
     characterId: string,
     requesterId: string,
-    { ref, containerId, quantity }: AddInventoryItemInput,
+    { ref, containerId, quantity, key }: AddInventoryItemInput,
     locale?: string,
   ): Promise<InventoryItem> {
     await assertOwnsCharacter(this.characters, characterId, requesterId, 'write');
     if (!this.items.find(ref)) throw new CharacterError(CharacterErrorCodes.ITEM_NOT_FOUND);
 
-    const entry = await this.inventory.addItem(characterId, containerId, ref, quantity);
+    const entry = await this.inventory.addItem(characterId, containerId, ref, quantity, key);
     if (!entry) throw new CharacterError(CharacterErrorCodes.CONTAINER_NOT_FOUND);
 
     const [item] = this.items.findByKeys([ref], locale);
@@ -93,6 +100,37 @@ export class SetInventoryItemQuantityUseCase {
     if (!(await this.inventory.setQuantity(characterId, itemId, quantity))) {
       throw new CharacterError(CharacterErrorCodes.ITEM_NOT_FOUND);
     }
+  }
+}
+
+/** An operation (`delta`, with an idempotency `key`) instead of the final value. */
+export interface QuantityChange {
+  delta: number;
+  key: string;
+}
+
+export interface CoinsChange {
+  delta: CoinsDelta;
+  key: string;
+}
+
+export class ChangeInventoryItemQuantityUseCase {
+  constructor(
+    private readonly characters: CharacterRepo,
+    private readonly inventory: InventoryRepo,
+  ) {}
+
+  /** Adds `delta` in the database, so two tabs taking one each take two. */
+  async execute(
+    characterId: string,
+    requesterId: string,
+    itemId: string,
+    { delta, key }: QuantityChange,
+  ): Promise<{ quantity: number }> {
+    await assertOwnsCharacter(this.characters, characterId, requesterId, 'write');
+    const quantity = await this.inventory.changeQuantity(characterId, itemId, delta, key);
+    if (quantity === null) throw new CharacterError(CharacterErrorCodes.ITEM_NOT_FOUND);
+    return { quantity };
   }
 }
 
@@ -126,5 +164,25 @@ export class SetInventoryCoinsUseCase {
     if (!(await this.inventory.setCoins(characterId, containerId, coins))) {
       throw new CharacterError(CharacterErrorCodes.CONTAINER_NOT_FOUND);
     }
+  }
+}
+
+export class ChangeInventoryCoinsUseCase {
+  constructor(
+    private readonly characters: CharacterRepo,
+    private readonly inventory: InventoryRepo,
+  ) {}
+
+  /** Adds `delta` to each coin in the database; spending more than there is is a conflict. */
+  async execute(
+    characterId: string,
+    requesterId: string,
+    containerId: string,
+    { delta, key }: CoinsChange,
+  ): Promise<{ coins: Coins }> {
+    await assertOwnsCharacter(this.characters, characterId, requesterId, 'write');
+    const coins = await this.inventory.changeCoins(characterId, containerId, delta, key);
+    if (!coins) throw new CharacterError(CharacterErrorCodes.CONTAINER_NOT_FOUND);
+    return { coins };
   }
 }

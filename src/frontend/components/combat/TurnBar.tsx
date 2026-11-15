@@ -5,7 +5,7 @@ import { cn } from '@frontend/lib/utils';
 /**
  * The combat's turn controls, always in reach: on a phone, fixed right above the party's tab bar
  * (in reach of the thumb, however far the list scrolls); on larger screens, stuck to the bottom
- * of the list. Toasts move up while it shows (see `--turn-bar` in globals.css).
+ * of the list.
  */
 export function TurnBar({ children, className }: { children: ReactNode; className?: string }) {
   return (

@@ -38,6 +38,8 @@ vi.mock('@frontend/hooks/useCharacters', () => ({
 const t = messages.combat;
 const fill = (text: string, values: Record<string, string | number>) =>
   Object.entries(values).reduce((s, [k, v]) => s.replace(`{${k}}`, String(v)), text);
+// Every turn toast shares one id, so the next one replaces it instead of stacking
+const TURN_TOAST = { id: 'combat-turn' };
 const party = {
   id: 'party-1',
   edition: '2024',
@@ -156,7 +158,7 @@ describe('GmCombatPanel', () => {
 
       await userEvent.click(screen.getByRole('button', { name: t.previousTurn }));
       expect(hook.previousTurn.mutate).toHaveBeenCalled();
-      expect(toast).toHaveBeenCalledWith(fill(t.turnBackTo, { name: 'Arani' }));
+      expect(toast).toHaveBeenCalledWith(fill(t.turnBackTo, { name: 'Arani' }), TURN_TOAST);
     });
 
     it('voltando do primeiro, a vez vai para o último jogável', async () => {
@@ -179,7 +181,7 @@ describe('GmCombatPanel', () => {
       renderWithProviders(<GmCombatPanel party={party} live />);
 
       await userEvent.click(screen.getByRole('button', { name: t.previousTurn }));
-      expect(toast).toHaveBeenCalledWith(fill(t.turnBackTo, { name: 'Brom' }));
+      expect(toast).toHaveBeenCalledWith(fill(t.turnBackTo, { name: 'Brom' }), TURN_TOAST);
     });
 
     it('fica desabilitado na rodada 1 com a vez no primeiro jogável', () => {
@@ -244,7 +246,7 @@ describe('GmCombatPanel', () => {
     renderWithProviders(<GmCombatPanel party={party} live />);
 
     await userEvent.click(screen.getByRole('button', { name: t.endTurn }));
-    expect(toast).toHaveBeenCalledWith(fill(t.turnPassedTo, { name: 'Brom' }));
+    expect(toast).toHaveBeenCalledWith(fill(t.turnPassedTo, { name: 'Brom' }), TURN_TOAST);
   });
 
   it('"Encerrar turno" no último volta ao primeiro', async () => {
@@ -256,7 +258,7 @@ describe('GmCombatPanel', () => {
     renderWithProviders(<GmCombatPanel party={party} live />);
 
     await userEvent.click(screen.getByRole('button', { name: t.endTurn }));
-    expect(toast).toHaveBeenCalledWith(fill(t.turnPassedTo, { name: 'Arani' }));
+    expect(toast).toHaveBeenCalledWith(fill(t.turnPassedTo, { name: 'Arani' }), TURN_TOAST);
   });
 
   it('a quantidade de NPCs aceita apagar e digitar outro número', async () => {

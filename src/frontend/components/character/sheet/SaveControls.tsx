@@ -5,6 +5,7 @@ import { type ReactNode, createContext, useContext, useEffect, useState } from '
 import { useTranslations } from 'next-intl';
 import { createPortal } from 'react-dom';
 
+import { OfflineNotice } from '@frontend/components/shared/OfflineNotice';
 import { Button } from '@frontend/components/ui/button';
 import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import {
@@ -13,6 +14,7 @@ import {
   useCharacterState,
 } from '@frontend/context/CharacterContext';
 import { useHasFieldErrors } from '@frontend/context/FieldValidityContext';
+import { useOnline } from '@frontend/hooks/useOnline';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { useSaveShortcut } from '@frontend/hooks/useUnsavedChanges';
 import { cn } from '@frontend/lib/utils';
@@ -26,6 +28,9 @@ interface SaveControlsProps {
   hasErrors?: boolean;
   /** What the fixed bar says is unsaved, when the sheet can show more than one bar. */
   label?: string;
+  /** The save was refused because the sheet changed elsewhere: the bar offers Reload instead. */
+  conflict?: boolean;
+  onReload?: () => void;
 }
 
 /**
@@ -55,6 +60,7 @@ export function SaveBarSlotProvider({ children }: { children: ReactNode }) {
 
   return (
     <SaveBarSlotContext.Provider value={{ element, ...slot }}>
+      <OfflineNotice />
       {children}
       {claims === 0 && <CharacterSaveBar />}
       <div
@@ -84,6 +90,8 @@ export function SaveControls({
   onDiscard,
   hasErrors = false,
   label,
+  conflict,
+  onReload,
 }: SaveControlsProps) {
   const t = useTranslations('common');
 
@@ -110,7 +118,8 @@ export function SaveControls({
           variant="character"
           size="sm"
           onClick={onSave}
-          disabled={!isDirty || hasErrors}
+          // After a conflict the bar's Reload comes first: saving again would be refused again
+          disabled={!isDirty || hasErrors || conflict}
           loading={isSaving}
           className="text-label h-8 px-4"
         >
@@ -125,6 +134,8 @@ export function SaveControls({
         onDiscard={onDiscard}
         hasErrors={hasErrors}
         label={label}
+        conflict={conflict}
+        onReload={onReload}
       />
     </>
   );
@@ -132,7 +143,8 @@ export function SaveControls({
 
 /**
  * The bar fixed at the bottom while there are edits, with Discard and Save (the page header
- * scrolls away). Ctrl/Cmd+S saves.
+ * scrolls away). Ctrl/Cmd+S saves. Offline it says nothing will be saved (Save then fails at
+ * once, keeping the edits); after a conflict, Save gives way to Reload.
  */
 function SaveBar({
   isDirty,
@@ -141,10 +153,13 @@ function SaveBar({
   onDiscard,
   hasErrors = false,
   label,
+  conflict = false,
+  onReload,
 }: SaveControlsProps) {
   const t = useTranslations('common');
   const slot = useSaveBarSlot();
-  const canSave = isDirty && !isSaving && !hasErrors;
+  const online = useOnline();
+  const canSave = isDirty && !isSaving && !hasErrors && !conflict;
   useSaveShortcut(canSave ? onSave : null);
   const confirm = useConfirm();
 
@@ -168,10 +183,20 @@ function SaveBar({
           'fixed inset-x-4 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 sm:right-6 sm:left-auto md:bottom-4',
       )}
     >
-      {hasErrors ? (
+      {conflict ? (
+        <span role="alert" className="text-danger-flare flex items-center gap-1.5 text-sm">
+          <span className="bg-danger h-2 w-2 shrink-0 rounded-full" aria-hidden="true" />
+          {t('changedElsewhere')}
+        </span>
+      ) : hasErrors ? (
         <span role="alert" className="text-label text-danger-flare flex items-center gap-1.5">
           <span className="bg-danger h-2 w-2 rounded-full" aria-hidden="true" />
           {t('fixFieldsToSave')}
+        </span>
+      ) : !online ? (
+        <span className="text-warning-flare flex items-center gap-1.5 text-sm">
+          <span className="bg-warning h-2 w-2 shrink-0 rounded-full" aria-hidden="true" />
+          {t('offlineDraft')}
         </span>
       ) : (
         <span className="text-label text-warning-flare flex items-center gap-1.5">
@@ -183,15 +208,21 @@ function SaveBar({
         <Button variant="ghost" size="sm" onClick={discard} disabled={isSaving}>
           {t('discard')}
         </Button>
-        <Button
-          variant="character"
-          size="sm"
-          onClick={onSave}
-          loading={isSaving}
-          disabled={hasErrors}
-        >
-          {t('save')}
-        </Button>
+        {conflict && onReload ? (
+          <Button variant="character" size="sm" onClick={onReload}>
+            {t('reload')}
+          </Button>
+        ) : (
+          <Button
+            variant="character"
+            size="sm"
+            onClick={onSave}
+            loading={isSaving}
+            disabled={hasErrors}
+          >
+            {t('save')}
+          </Button>
+        )}
       </div>
     </div>,
     slot ?? document.body,
@@ -201,13 +232,21 @@ function SaveBar({
 /** The character draft's state and actions, for its save controls. Null on a read-only sheet. */
 function useCharacterSave() {
   const { isDirty } = useCharacterState();
-  const { id, isSaving } = useCharacterMeta();
-  const { save, discard } = useCharacterActions();
+  const { id, isSaving, conflict } = useCharacterMeta();
+  const { save, discard, reload } = useCharacterActions();
   const hasErrors = useHasFieldErrors();
   const { readOnly } = useSheetSource(id);
 
   if (readOnly) return null;
-  return { isDirty, isSaving, onSave: save, onDiscard: discard, hasErrors };
+  return {
+    isDirty,
+    isSaving,
+    onSave: save,
+    onDiscard: discard,
+    hasErrors,
+    conflict,
+    onReload: reload,
+  };
 }
 
 /**

@@ -1,14 +1,14 @@
 import { fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
-import { messages } from '@tests/helpers/render';
-import { describe, expect, it } from 'vitest';
+import { messages, renderWithProviders } from '@tests/helpers/render';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import CombatStatsSection from '../stats/CombatStatsSection';
-import { SaveBarSlotProvider, SaveCharacterButton } from './SaveControls';
+import { SaveBarSlotProvider, SaveCharacterButton, SaveControls } from './SaveControls';
 
 const t = messages.common;
 
@@ -121,5 +121,37 @@ describe('SaveBarSlotProvider', () => {
 
     expect(screen.getAllByRole('button', { name: t.save })).toHaveLength(1);
     expect(screen.queryByText(t.unsavedSheet)).not.toBeInTheDocument();
+  });
+});
+
+describe('SaveControls: sem conexão e conflito', () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  function renderBar(props: Partial<Parameters<typeof SaveControls>[0]> = {}) {
+    const handlers = { onSave: vi.fn(), onDiscard: vi.fn(), onReload: vi.fn() };
+    renderWithProviders(<SaveControls isDirty isSaving={false} {...handlers} {...props} />);
+    return handlers;
+  }
+
+  it('offline, a barra diz que as alterações continuam aqui e Descartar segue ativo', () => {
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false);
+    renderBar();
+
+    expect(screen.getByText(t.offlineDraft)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: t.discard })).toBeEnabled();
+    expect(screen.getByRole('button', { name: t.save })).toBeEnabled();
+  });
+
+  it('no conflito, troca Salvar por Recarregar e segura o Ctrl+S', async () => {
+    const { onSave, onReload } = renderBar({ conflict: true });
+
+    expect(screen.getByRole('alert')).toHaveTextContent(t.changedElsewhere);
+    expect(screen.queryByRole('button', { name: t.save })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: t.saveChanges })).toBeDisabled();
+    fireEvent.keyDown(window, { key: 's', ctrlKey: true });
+    expect(onSave).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByRole('button', { name: t.reload }));
+    expect(onReload).toHaveBeenCalled();
   });
 });

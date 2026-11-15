@@ -9,11 +9,12 @@ const STATUS_BY_KIND: Record<AppErrorKind, number> = {
   not_found: 404,
   forbidden: 403,
   rate_limited: 429,
+  conflict: 409,
 };
 
 export interface HttpError {
   status: number;
-  body: { error: string; issues?: ValidationIssue[] };
+  body: { error: string; issues?: ValidationIssue[]; [detail: string]: unknown };
 }
 
 /**
@@ -27,7 +28,7 @@ export function errorToHttp(err: unknown): HttpError {
   }
 
   if (err instanceof AppError) {
-    return { status: STATUS_BY_KIND[err.kind], body: { error: err.code } };
+    return { status: STATUS_BY_KIND[err.kind], body: { ...err.details, error: err.code } };
   }
 
   console.error('Unexpected error while handling request:', err);

@@ -101,6 +101,25 @@ describe('useDraft', () => {
     expect(result.current.draft?.hp).toBe(5);
   });
 
+  it('um salvamento em segundo plano que termina durante o commit não deixa o rascunho sujo', async () => {
+    const { result } = renderDraft(server);
+    act(() => result.current.update({ name: 'Saved' }));
+    let finish!: () => void;
+
+    let saving!: Promise<void>;
+    act(() => {
+      saving = result.current.commit(() => new Promise<void>((resolve) => (finish = resolve)));
+    });
+    // An HP tap lands while the Save waits: it rebuilds the edits with the same content
+    await act(() => result.current.saveFields({ hp: 7 }, async () => {}));
+    await act(async () => {
+      finish();
+      await saving;
+    });
+
+    expect(result.current.isDirty).toBe(false);
+  });
+
   it('não salva se o persist falhar', async () => {
     const { result } = renderDraft(server);
     act(() => result.current.update({ name: 'Unsaved' }));

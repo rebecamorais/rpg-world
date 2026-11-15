@@ -17,6 +17,8 @@ import { GetCharactersByOwnerUseCase } from './application/get-characters/get-ch
 import { GetCharacterUseCase } from './application/get-characters/get-characters.use-case';
 import {
   AddInventoryItemUseCase,
+  ChangeInventoryCoinsUseCase,
+  ChangeInventoryItemQuantityUseCase,
   GetInventoryUseCase,
   RemoveInventoryItemUseCase,
   SetInventoryCoinsUseCase,
@@ -24,6 +26,8 @@ import {
 } from './application/inventory/inventory.use-cases';
 import {
   AddPartyChestItemUseCase,
+  ChangePartyChestCoinsUseCase,
+  ChangePartyChestItemQuantityUseCase,
   GetPartyChestUseCase,
   RemovePartyChestItemUseCase,
   SetPartyChestCoinsUseCase,
@@ -96,6 +100,18 @@ export const createCharacterContext = (
   );
   const removePartyChestItemUseCase = new RemovePartyChestItemUseCase(partyChestRepository);
   const setPartyChestCoinsUseCase = new SetPartyChestCoinsUseCase(partyChestRepository);
+  const changeInventoryItemQuantityUseCase = new ChangeInventoryItemQuantityUseCase(
+    repository,
+    inventoryRepository,
+  );
+  const changeInventoryCoinsUseCase = new ChangeInventoryCoinsUseCase(
+    repository,
+    inventoryRepository,
+  );
+  const changePartyChestItemQuantityUseCase = new ChangePartyChestItemQuantityUseCase(
+    partyChestRepository,
+  );
+  const changePartyChestCoinsUseCase = new ChangePartyChestCoinsUseCase(partyChestRepository);
 
   const getPartyCharacterUseCase = new GetPartyCharacterUseCase(repository, partyGmAccess);
   const getPartyCharacterSpellsUseCase = new GetPartyCharacterSpellsUseCase(
@@ -133,6 +149,14 @@ export const createCharacterContext = (
     ),
     removePartyChestItem: removePartyChestItemUseCase.execute.bind(removePartyChestItemUseCase),
     setPartyChestCoins: setPartyChestCoinsUseCase.execute.bind(setPartyChestCoinsUseCase),
+    changeItemQuantity: changeInventoryItemQuantityUseCase.execute.bind(
+      changeInventoryItemQuantityUseCase,
+    ),
+    changeCoins: changeInventoryCoinsUseCase.execute.bind(changeInventoryCoinsUseCase),
+    changePartyChestItemQuantity: changePartyChestItemQuantityUseCase.execute.bind(
+      changePartyChestItemQuantityUseCase,
+    ),
+    changePartyChestCoins: changePartyChestCoinsUseCase.execute.bind(changePartyChestCoinsUseCase),
     getInventoryForPartyGm: getPartyCharacterInventoryUseCase.execute.bind(
       getPartyCharacterInventoryUseCase,
     ),

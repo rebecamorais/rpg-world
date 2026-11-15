@@ -8,6 +8,7 @@ import { ActiveCondition, Life, NpcFate, Side, Visibility } from '../domain/Enco
 import {
   CombatRepo,
   CombatSheet,
+  ConditionChange,
   EncounterRecord,
   NewParticipant,
   ParticipantPatch,
@@ -304,6 +305,19 @@ export class SupabaseCombatRepository implements CombatRepo {
       p_conditions: conditions as unknown as Json,
     });
     if (error) fail('change conditions', error);
+    return data;
+  }
+
+  async changeCondition(partyId: string, participantId: string, change: ConditionChange) {
+    const { data, error } = await this.client.rpc('change_participant_condition', {
+      p_party_id: partyId,
+      p_participant_id: participantId,
+      p_key: change.key,
+      // The generated type says number; the function takes null for a condition without levels
+      p_level: (change.active ? change.level : null) as number,
+      p_active: change.active,
+    });
+    if (error) fail('change a condition', error);
     return data;
   }
 

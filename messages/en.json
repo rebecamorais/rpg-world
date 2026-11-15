@@ -87,6 +87,9 @@
       "character_error_item_limit": "The backpack is full: a character holds at most 500 entries.",
       "character_error_resource_limit": "A character has at most 200 resource boxes.",
       "character_error_container_limit": "A character has at most 20 containers.",
+      "character_error_conflict": "This sheet changed somewhere else. Reload to see the current version.",
+      "character_error_not_enough_coins": "The coins changed somewhere else and there is no longer enough to spend this. The values were updated.",
+      "character_error_item_quantity_conflict": "The quantity changed somewhere else. The values were updated.",
       "combat_error_not_found": "Combat not found.",
       "combat_error_exists": "This party already has a combat.",
       "combat_error_empty": "Add someone to the combat before starting.",
@@ -95,7 +98,8 @@
       "combat_error_invalid_condition": "That condition is not valid.",
       "combat_error_invalid_change": "That change doesn't apply to players.",
       "combat_error_at_start": "The combat is already at its first turn.",
-      "combat_error_character_not_allowed": "This character can't join this combat."
+      "combat_error_character_not_allowed": "This character can't join this combat.",
+      "common_error_network": "No connection. Nothing was saved."
     },
     "save": "Save",
     "saving": "Saving…",
@@ -139,7 +143,14 @@
     },
     "fixFieldsToSave": "Fix the fields in red to save",
     "whatIs": "What is {label}?",
-    "done": "Done"
+    "done": "Done",
+    "retry": "Try again",
+    "reload": "Reload",
+    "apply": "Apply",
+    "offline": "No connection. Nothing you change now is saved.",
+    "offlineDraft": "No connection: your changes are still here",
+    "changedElsewhere": "Changed somewhere else. Reload to see it; your changes stay here.",
+    "draftNote": "Changes go into the sheet. Save the sheet to keep them."
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -384,6 +395,9 @@
       "details": "Details for {name}",
       "remove": "Remove {name}",
       "removed": "{name} removed",
+      "removedMany": "{count} items removed",
+      "removedTag": "removed",
+      "undoRemove": "Undo removing {name}",
       "undo": "Undo",
       "quantity": "Quantity of {name}",
       "decrease": "One less {name}",
@@ -638,7 +652,8 @@
     "undo": "Undo",
     "summary": "Combat at a glance",
     "speedShort": "Speed",
-    "passivePerceptionShort": "Perception"
+    "passivePerceptionShort": "Perception",
+    "adjustHpEnter": "Enter applies: {action}"
   },
   "hitDiceRemaining": {
     "label": "Hit dice remaining"
@@ -660,7 +675,11 @@
     "fullHp": "Full HP",
     "hitDiceBack": "Recover {count, plural, one {# hit die} other {# hit dice}}",
     "spellSlotsBack": "Spell slots return",
-    "spellPointsBack": "Spell points return"
+    "spellPointsBack": "Spell points return",
+    "recover": "Recover",
+    "recoverHint": "Applies at once what comes back by itself. The rest stays on the list.",
+    "recovered": "{title}: recovered",
+    "undo": "Undo"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Search spells…",
@@ -684,6 +703,11 @@
       "prepared": "Spell prepared.",
       "unprepared": "Spell unprepared.",
       "undo": "Undo"
+    },
+    "forgetConfirm": {
+      "description": "{name} leaves the spellbook and the prepared spells.",
+      "descriptionUnnamed": "The spell leaves the spellbook and the prepared spells.",
+      "confirm": "Forget"
     },
     "searchLabel": "Search spells",
     "clearActiveFilters": "Clear filters ({count})",
@@ -885,7 +909,9 @@
     "successes": "Successes",
     "failures": "Failures",
     "hint": "Roll to resist spells, poisons and other dangers: d20 + ability modifier + proficiency, if marked.",
-    "deathSavesHint": "At 0 HP, roll a d20 each turn: 10 or higher is a success. 3 successes stabilize you; 3 failures, you die. A 1 counts as two failures; a 20 brings you back with 1 HP."
+    "deathSavesHint": "At 0 HP, roll a d20 each turn: 10 or higher is a success. 3 successes stabilize you; 3 failures, you die. A 1 counts as two failures; a 20 brings you back with 1 HP.",
+    "deathSavesReset": "Death saves cleared",
+    "undo": "Undo"
   },
   "terms": {
     "title": "Terms of Use",
@@ -1636,7 +1662,8 @@
     "addNpc": "Add NPC",
     "turnsUntil": "<strong>{name}</strong> in {count, plural, one {# turn} other {# turns}}",
     "endTurnOf": "End {name}'s turn",
-    "newTab": "(opens in a new tab)"
+    "newTab": "(opens in a new tab)",
+    "offline": "No connection. The screen won’t update and nothing you do is sent."
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

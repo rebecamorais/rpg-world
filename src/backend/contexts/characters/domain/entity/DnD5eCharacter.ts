@@ -146,6 +146,7 @@ export class DnD5eCharacter extends Character {
       system: this.system,
       ownerUsername: this.ownerUsername,
       kind: this.kind,
+      revision: this.revision,
       level: this.level,
       avatarUrl: this.avatarUrl,
       accentColor: this.accentColor,

@@ -6,6 +6,8 @@ import { CharacterErrorCodes } from '../../domain/CharacterError';
 import { InventoryRepo } from '../../domain/repository/inventory.repo';
 import {
   AddPartyChestItemUseCase,
+  ChangePartyChestCoinsUseCase,
+  ChangePartyChestItemQuantityUseCase,
   GetPartyChestUseCase,
   RemovePartyChestItemUseCase,
   SetPartyChestCoinsUseCase,
@@ -31,6 +33,8 @@ const makeRepo = () =>
     setQuantity: vi.fn().mockResolvedValue(true),
     remove: vi.fn().mockResolvedValue(true),
     setCoins: vi.fn().mockResolvedValue(true),
+    changeQuantity: vi.fn<InventoryRepo['changeQuantity']>().mockResolvedValue(3),
+    changeCoins: vi.fn<InventoryRepo['changeCoins']>().mockResolvedValue(COINS),
   }) satisfies InventoryRepo;
 
 describe('party chest use cases', () => {
@@ -72,7 +76,7 @@ describe('party chest use cases', () => {
       quantity: 1,
     });
 
-    expect(repo.addItem).toHaveBeenCalledWith(PARTY, 'chest', ROPE, 1);
+    expect(repo.addItem).toHaveBeenCalledWith(PARTY, 'chest', ROPE, 1, undefined);
     expect(entry.item).toBe(rope);
   });
 
@@ -108,6 +112,27 @@ describe('party chest use cases', () => {
     });
     await expect(
       new SetPartyChestCoinsUseCase(repo).execute(PARTY, 'chest', COINS),
+    ).rejects.toMatchObject({ code: CharacterErrorCodes.CONTAINER_NOT_FOUND });
+  });
+
+  it('quantidade e moedas como operação: diferença e chave; nada mudou é not found', async () => {
+    const quantity = new ChangePartyChestItemQuantityUseCase(repo);
+    const coins = new ChangePartyChestCoinsUseCase(repo);
+
+    expect(await quantity.execute(PARTY, 'e1', { delta: 1, key: 'k1' })).toEqual({ quantity: 3 });
+    expect(await coins.execute(PARTY, 'chest', { delta: { gp: 1 }, key: 'k2' })).toEqual({
+      coins: COINS,
+    });
+    expect(repo.changeQuantity).toHaveBeenCalledWith(PARTY, 'e1', 1, 'k1');
+    expect(repo.changeCoins).toHaveBeenCalledWith(PARTY, 'chest', { gp: 1 }, 'k2');
+
+    repo.changeQuantity.mockResolvedValue(null);
+    repo.changeCoins.mockResolvedValue(null);
+    await expect(quantity.execute(PARTY, 'e1', { delta: 1, key: 'k3' })).rejects.toMatchObject({
+      code: CharacterErrorCodes.ITEM_NOT_FOUND,
+    });
+    await expect(
+      coins.execute(PARTY, 'chest', { delta: { gp: 1 }, key: 'k4' }),
     ).rejects.toMatchObject({ code: CharacterErrorCodes.CONTAINER_NOT_FOUND });
   });
 });

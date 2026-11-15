@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it, vi } from 'vitest';
@@ -62,6 +62,50 @@ describe('SpellCard na busca de magias', () => {
     await user.click(screen.getByRole('button', { name: t.forgetSpell }));
 
     expect(onForgetSpell).toHaveBeenCalledWith('fireball');
+  });
+
+  it('enquanto a magia salva, o botão dela trava; o de outra magia não', async () => {
+    const onLearnSpell = vi.fn();
+    const { queryClient } = renderWithProviders(
+      <>
+        <SpellCard
+          spell={FIREBALL}
+          characterId="c1"
+          onLearnSpell={onLearnSpell}
+          onForgetSpell={vi.fn()}
+        />
+        <SpellCard
+          spell={{ ...FIREBALL, id: 'shield', name: 'Shield' }}
+          characterId="c1"
+          onLearnSpell={onLearnSpell}
+          onForgetSpell={vi.fn()}
+        />
+        {/* Another character's Fireball */}
+        <SpellCard
+          spell={FIREBALL}
+          characterId="c2"
+          onLearnSpell={onLearnSpell}
+          onForgetSpell={vi.fn()}
+        />
+      </>,
+    );
+
+    // A write to Fireball that hasn't answered yet, as useCharacterSpells makes it
+    void queryClient
+      .getMutationCache()
+      .build(queryClient, {
+        mutationKey: ['character-spells-write', 'c1'],
+        mutationFn: () => new Promise(() => {}),
+      })
+      .execute({ id: 'fireball', action: 'learn' });
+
+    const [fireball, shield, otherFireball] = screen.getAllByRole('button', {
+      name: t.learnSpell,
+    });
+    await waitFor(() => expect(fireball).toBeDisabled());
+    expect(fireball).toHaveAttribute('aria-busy', 'true');
+    expect(shield).toBeEnabled();
+    expect(otherFireball).toBeEnabled();
   });
 
   it('expandir só mostra a magia, sem repetir a ação', () => {

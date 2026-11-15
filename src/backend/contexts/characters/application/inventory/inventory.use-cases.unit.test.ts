@@ -11,6 +11,8 @@ import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-char
 import { GetPartyCharacterInventoryUseCase } from '../party-gm/get-party-character-inventory.use-case';
 import {
   AddInventoryItemUseCase,
+  ChangeInventoryCoinsUseCase,
+  ChangeInventoryItemQuantityUseCase,
   GetInventoryUseCase,
   RemoveInventoryItemUseCase,
   SetInventoryCoinsUseCase,
@@ -35,6 +37,8 @@ const makeRepo = () =>
     setQuantity: vi.fn().mockResolvedValue(true),
     remove: vi.fn().mockResolvedValue(true),
     setCoins: vi.fn().mockResolvedValue(true),
+    changeQuantity: vi.fn<InventoryRepo['changeQuantity']>().mockResolvedValue(3),
+    changeCoins: vi.fn<InventoryRepo['changeCoins']>().mockResolvedValue(COINS),
   }) satisfies InventoryRepo;
 
 describe('inventory use cases', () => {
@@ -119,7 +123,7 @@ describe('inventory use cases', () => {
         'pt',
       );
 
-      expect(repo.addItem).toHaveBeenCalledWith('char-1', 'bag', ROPE, 2);
+      expect(repo.addItem).toHaveBeenCalledWith('char-1', 'bag', ROPE, 2, undefined);
       expect(entry).toEqual({ id: 'i1', containerId: 'bag', ref: ROPE, quantity: 2, item: rope });
     });
 
@@ -176,6 +180,45 @@ describe('inventory use cases', () => {
     });
   });
 
+  describe('ChangeInventoryItemQuantityUseCase', () => {
+    const change = { delta: -1, key: 'key-1' };
+
+    it('manda a diferença e a chave, e devolve a quantidade nova', async () => {
+      const answer = await new ChangeInventoryItemQuantityUseCase(characters, repo).execute(
+        'char-1',
+        'owner-1',
+        'i1',
+        change,
+      );
+      expect(repo.changeQuantity).toHaveBeenCalledWith('char-1', 'i1', -1, 'key-1');
+      expect(answer).toEqual({ quantity: 3 });
+    });
+
+    it('entrada que não é do personagem responde ITEM_NOT_FOUND', async () => {
+      repo.changeQuantity.mockResolvedValue(null);
+      await expect(
+        new ChangeInventoryItemQuantityUseCase(characters, repo).execute(
+          'char-1',
+          'owner-1',
+          'i1',
+          change,
+        ),
+      ).rejects.toMatchObject({ message: CharacterErrorCodes.ITEM_NOT_FOUND });
+    });
+
+    it('quem não é dono recebe erro de acesso', async () => {
+      await expect(
+        new ChangeInventoryItemQuantityUseCase(characters, repo).execute(
+          'char-1',
+          'gm-1',
+          'i1',
+          change,
+        ),
+      ).rejects.toMatchObject({ message: CharacterErrorCodes.ACCESS_FORBIDDEN });
+      expect(repo.changeQuantity).not.toHaveBeenCalled();
+    });
+  });
+
   describe('RemoveInventoryItemUseCase', () => {
     it('remove a entrada', async () => {
       await new RemoveInventoryItemUseCase(characters, repo).execute('char-1', 'owner-1', 'i1');
@@ -220,6 +263,45 @@ describe('inventory use cases', () => {
         new SetInventoryCoinsUseCase(characters, repo).execute('char-1', 'gm-1', 'pouch', COINS),
       ).rejects.toMatchObject({ message: CharacterErrorCodes.ACCESS_FORBIDDEN });
       expect(repo.setCoins).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('ChangeInventoryCoinsUseCase', () => {
+    const change = { delta: { gp: 1 }, key: 'key-1' };
+
+    it('manda a diferença e devolve as moedas de agora', async () => {
+      const answer = await new ChangeInventoryCoinsUseCase(characters, repo).execute(
+        'char-1',
+        'owner-1',
+        'pouch',
+        change,
+      );
+      expect(repo.changeCoins).toHaveBeenCalledWith('char-1', 'pouch', { gp: 1 }, 'key-1');
+      expect(answer).toEqual({ coins: COINS });
+    });
+
+    it('lugar de outro personagem responde CONTAINER_NOT_FOUND', async () => {
+      repo.changeCoins.mockResolvedValue(null);
+      await expect(
+        new ChangeInventoryCoinsUseCase(characters, repo).execute(
+          'char-1',
+          'owner-1',
+          'pouch',
+          change,
+        ),
+      ).rejects.toMatchObject({ message: CharacterErrorCodes.CONTAINER_NOT_FOUND });
+    });
+
+    it('quem não é dono recebe erro de acesso', async () => {
+      await expect(
+        new ChangeInventoryCoinsUseCase(characters, repo).execute(
+          'char-1',
+          'gm-1',
+          'pouch',
+          change,
+        ),
+      ).rejects.toMatchObject({ message: CharacterErrorCodes.ACCESS_FORBIDDEN });
+      expect(repo.changeCoins).not.toHaveBeenCalled();
     });
   });
 

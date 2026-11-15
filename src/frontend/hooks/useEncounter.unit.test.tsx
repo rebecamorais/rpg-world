@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
 
-import { useEncounter } from './useEncounter';
+import { conditionChanges, useEncounter } from './useEncounter';
 
 vi.mock('@client', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@client')>()),
@@ -102,26 +102,85 @@ describe('useEncounter', () => {
     );
   });
 
-  it('setConditions manda a lista inteira e já a mostra na linha e na vez', async () => {
-    const conditions = [{ key: 'dnd5e:srd-5.2:condition:prone', level: null }];
+  it('setConditions recebe a lista inteira, mas manda só a condição que mudou e já a mostra', async () => {
+    const PRONE = { key: 'dnd5e:srd-5.2:condition:prone', level: null };
+    const POISONED = { key: 'dnd5e:srd-5.2:condition:poisoned', level: null };
     vi.mocked(rpgWorldApi.get).mockResolvedValue({
       role: 'gm',
       round: 0,
-      rows: [{ participantId: 'a', conditions: [] }],
+      rows: [{ participantId: 'a', conditions: [POISONED] }],
     });
-    vi.mocked(rpgWorldApi.put).mockReturnValue(new Promise(() => {}));
+    vi.mocked(rpgWorldApi.patch).mockReturnValue(new Promise(() => {}));
     const { result } = renderHookWithProviders(() => useEncounter('party-1'));
     await waitFor(() => expect(result.current.encounter).not.toBeNull());
 
-    result.current.setConditions.mutate({ participantId: 'a', conditions });
+    result.current.setConditions.mutate({ participantId: 'a', conditions: [POISONED, PRONE] });
 
     await waitFor(() =>
-      expect(rpgWorldApi.put).toHaveBeenCalledWith(
+      expect(rpgWorldApi.patch).toHaveBeenCalledWith(
         '/api/parties/party-1/encounter/participants/a/conditions',
-        { conditions },
+        { key: PRONE.key, active: true, level: null },
       ),
     );
-    await waitFor(() => expect(result.current.encounter).toMatchObject({ rows: [{ conditions }] }));
+    expect(rpgWorldApi.patch).toHaveBeenCalledTimes(1);
+    expect(rpgWorldApi.put).not.toHaveBeenCalled();
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({
+        rows: [{ conditions: [POISONED, PRONE] }],
+      }),
+    );
+  });
+
+  it('ligar uma condição que falha desfaz só ela, sem apagar a que outro ligou', async () => {
+    const PRONE = { key: 'dnd5e:srd-5.2:condition:prone', level: null };
+    const POISONED = { key: 'dnd5e:srd-5.2:condition:poisoned', level: null };
+    // The refetch after the failure brings what the other person switched meanwhile
+    vi.mocked(rpgWorldApi.get)
+      .mockResolvedValueOnce({
+        role: 'gm',
+        round: 0,
+        rows: [{ participantId: 'a', conditions: [] }],
+      })
+      .mockResolvedValue({
+        role: 'gm',
+        round: 0,
+        rows: [{ participantId: 'a', conditions: [POISONED] }],
+      });
+    vi.mocked(rpgWorldApi.patch).mockRejectedValueOnce(new Error('boom'));
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+    await waitFor(() => expect(result.current.encounter).not.toBeNull());
+
+    result.current.setConditions.mutate({ participantId: 'a', conditions: [PRONE] });
+
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({ rows: [{ conditions: [POISONED] }] }),
+    );
+  });
+
+  it('mudar o participante e falhar volta ao valor de antes', async () => {
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({
+      role: 'gm',
+      round: 0,
+      rows: [{ participantId: 'a', initiative: 3, hp: { current: 5, max: 7, temp: 0 } }],
+    });
+    let fail!: () => void;
+    vi.mocked(rpgWorldApi.patch).mockReturnValueOnce(
+      new Promise((_, reject) => (fail = () => reject(new Error('boom')))),
+    );
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+    await waitFor(() => expect(result.current.encounter).not.toBeNull());
+    // Offline: the refetch after the failure doesn't come back, the snapshot is what shows
+    vi.mocked(rpgWorldApi.get).mockReturnValue(new Promise(() => {}));
+
+    result.current.updateParticipant.mutate({ participantId: 'a', initiative: 18 });
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({ rows: [{ initiative: 18 }] }),
+    );
+    fail();
+
+    await waitFor(() =>
+      expect(result.current.encounter).toMatchObject({ rows: [{ initiative: 3 }] }),
+    );
   });
 
   it('a iniciativa do jogador aparece na hora na visão do jogador', async () => {
@@ -255,5 +314,19 @@ describe('useEncounter', () => {
     answerOrder();
 
     await waitFor(() => expect(rpgWorldApi.get).toHaveBeenCalledTimes(3));
+  });
+});
+
+describe('conditionChanges', () => {
+  const A = { key: 'a', level: null };
+  const B = { key: 'b', level: null };
+
+  it('uma por condição: liga a nova, desliga a que saiu, muda o nível', () => {
+    expect(conditionChanges([A], [A, B])).toEqual([{ key: 'b', active: true, level: null }]);
+    expect(conditionChanges([A, B], [B])).toEqual([{ key: 'a', active: false }]);
+    expect(conditionChanges([{ key: 'x', level: 1 }], [{ key: 'x', level: 2 }])).toEqual([
+      { key: 'x', active: true, level: 2 },
+    ]);
+    expect(conditionChanges([A, B], [B, A])).toEqual([]);
   });
 });

@@ -1,6 +1,14 @@
 'use client';
 
-import { type ReactNode, createContext, useCallback, useContext, useMemo } from 'react';
+import {
+  type ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 
 import { useParams } from 'next/navigation';
 
@@ -38,11 +46,14 @@ export interface CharacterActions {
    * points) doesn't wait for the save button. A function patch reads the server copy, not the
    * draft, so a pending edit in the same field isn't saved with it. Only what changed is sent.
    * The sheet shows it at once and the save runs in the background, without "Saving…" or a lock.
-   * Rejects when the save fails (the error is shown and the sheet reloads).
+   * Rejects when the save fails: the error is shown with "Try again" and the fields go back to
+   * what the server has. Offline it fails at once; nothing waits to be sent later.
    */
   saveNow: (patch: DraftPatch<DnD5eCharacter>) => Promise<void>;
   /** Drops the unsaved edits. */
   discard: () => void;
+  /** After a conflict: fetches what the other device saved, keeping the draft on top of it. */
+  reload?: () => Promise<void>;
 }
 
 export interface CharacterMeta {
@@ -51,6 +62,8 @@ export interface CharacterMeta {
   isSaving: boolean;
   /** Translated load error, if any. */
   error: string | null;
+  /** The last save was refused: the sheet changed elsewhere since it loaded. */
+  conflict?: boolean;
 }
 
 const StateContext = createContext<CharacterState | null>(null);
@@ -107,17 +120,25 @@ export function CharacterProvider({
     updateCharacter,
     saveQuietly,
     isSaving,
+    conflict,
+    reload,
   } = useCharacter(id, { initial: initialCharacter });
   const { draft, isDirty, update, commit, saveFields, discard } = useDraft(fetched);
 
+  // A double click lands before the button shows it's saving: the second one is ignored here
+  const saving = useRef(false);
   const save = useCallback(async () => {
+    if (saving.current) return;
+    saving.current = true;
     try {
       await commit((character, edits, base) =>
         updateCharacter({ character, changes: characterChanges(base, edits) }),
       );
       toast.success(t('saveSuccess'));
     } catch {
-      // useCharacter already shows the error
+      // useCharacter already shows the error (or the conflict, on the save bar)
+    } finally {
+      saving.current = false;
     }
   }, [commit, updateCharacter, t]);
 
@@ -131,14 +152,24 @@ export function CharacterProvider({
     [saveFields, saveQuietly],
   );
 
+  // Dropping the edits after a conflict also brings what the other device saved
+  const conflictRef = useRef(conflict);
+  useEffect(() => {
+    conflictRef.current = conflict;
+  });
+  const discardEdits = useCallback(() => {
+    discard();
+    if (conflictRef.current) void reload();
+  }, [discard, reload]);
+
   const state = useMemo(() => ({ character: draft, isDirty }), [draft, isDirty]);
   const actions = useMemo(
-    () => ({ update, save, saveNow, discard }),
-    [update, save, saveNow, discard],
+    () => ({ update, save, saveNow, discard: discardEdits, reload }),
+    [update, save, saveNow, discardEdits, reload],
   );
   const meta = useMemo(
-    () => ({ id, isLoading, isSaving, error: error ? getErrorMessage(error) : null }),
-    [id, isLoading, isSaving, error, getErrorMessage],
+    () => ({ id, isLoading, isSaving, error: error ? getErrorMessage(error) : null, conflict }),
+    [id, isLoading, isSaving, error, getErrorMessage, conflict],
   );
 
   return (

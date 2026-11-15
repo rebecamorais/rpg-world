@@ -15,6 +15,9 @@ describe('CharacterError', () => {
     [CharacterErrorCodes.ACCESS_FORBIDDEN, 403],
     [CharacterErrorCodes.CREATE_NAME_REQUIRED, 400],
     [CharacterErrorCodes.DOMAIN_HP_MAX_BELOW_ONE, 400],
+    [CharacterErrorCodes.CONFLICT, 409],
+    [CharacterErrorCodes.NOT_ENOUGH_COINS, 409],
+    [CharacterErrorCodes.ITEM_QUANTITY_CONFLICT, 409],
   ])('%s responde %i', (code, status) => {
     expect(errorToHttp(new CharacterError(code))).toEqual({ status, body: { error: code } });
   });

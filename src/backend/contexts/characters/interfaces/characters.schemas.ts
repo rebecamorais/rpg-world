@@ -119,7 +119,11 @@ export const characterUpdatesSchema = z.object({
   ),
 });
 
-export const updateCharacterSchema = z.object({ updates: characterUpdatesSchema });
+export const updateCharacterSchema = z.object({
+  updates: characterUpdatesSchema,
+  /** The revision the client last saw; without it the save goes on top of what is there. */
+  revision: z.number().int().min(0).optional(),
+});
 
 export const toggleSpellSchema = z.object({
   id: spellKeySchema,
@@ -139,9 +143,19 @@ export const addInventoryItemSchema = z.object({
   ref: z.string().max(200).regex(ITEM_KEY),
   containerId: z.uuid(),
   quantity,
+  key: z.uuid().optional(),
 });
 
-export const setItemQuantitySchema = z.object({ quantity });
+const setItemQuantitySchema = z.object({ quantity });
+
+/** An idempotency key: the same request sent twice is applied once. */
+const operationKey = z.uuid();
+
+/** Adding to (or taking from) the quantity, instead of the final value. */
+const changeItemQuantitySchema = z.object({ delta: int(-9999, 9999), key: operationKey });
+
+/** The absolute quantity (the app before operations) or a change. */
+export const itemQuantityBodySchema = z.union([setItemQuantitySchema, changeItemQuantitySchema]);
 
 /** Exactly the five coins, whole numbers from 0 to a billion. */
 export const setCoinsSchema = z.object({
@@ -153,4 +167,19 @@ export const setCoinsSchema = z.object({
     gp: int(0, 1_000_000_000),
     pp: int(0, 1_000_000_000),
   }),
+});
+
+const coinDelta = int(-1_000_000_000, 1_000_000_000).optional();
+
+/** How much each coin goes up or down; the coins left out don't change. */
+export const changeCoinsSchema = z.object({
+  containerId: z.uuid(),
+  delta: z.strictObject({
+    cp: coinDelta,
+    sp: coinDelta,
+    ep: coinDelta,
+    gp: coinDelta,
+    pp: coinDelta,
+  }),
+  key: operationKey,
 });
