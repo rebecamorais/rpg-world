@@ -1,6 +1,6 @@
 # RPG World 🎲
 
-[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/7u6guShqhQ) [![Roadmap](https://img.shields.io/badge/Roadmap-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/users/rebecamorais/projects/1) [![Crowdin](https://img.shields.io/badge/Crowdin-2E3340?style=for-the-badge&logo=crowdin&logoColor=white)](https://crowdin.com/project/rpgworld)
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/7u6guShqhQ) [![Roadmap](https://img.shields.io/badge/Roadmap-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/users/rebecamorais/projects/1) [![Weblate](https://hosted.weblate.org/widget/rpgworldapp/svg-badge.svg)](https://hosted.weblate.org/engage/rpgworldapp/)
 
 Fichas de RPG de mesa no navegador, começando por **Dungeons & Dragons 5ª Edição**. Gratuito, de código aberto, em português e inglês, com tema escuro e claro.
 
@@ -23,7 +23,7 @@ O que vem agora e em que ordem está no [Project Roadmap](https://github.com/use
 
 - **Framework:** Next.js 16 (React 19), TypeScript e Tailwind CSS 4
 - **Banco de dados e auth:** Supabase (Postgres com RLS, Auth, Storage e Realtime)
-- **Conteúdo de regras:** arquivos versionados em `content/` (magias, itens e condições do SRD 5.1 e 5.2), traduzidos pela comunidade no [Crowdin](https://crowdin.com/project/rpgworld)
+- **Conteúdo de regras:** arquivos versionados em `content/` (magias, itens e condições do SRD 5.1 e 5.2), traduzidos pela comunidade no [Weblate](https://hosted.weblate.org/engage/rpgworldapp/)
 - **Testes:** Vitest, Playwright com axe (acessibilidade AA nos dois temas) e Stryker
 
 ## 🛠️ Como rodar o projeto localmente
@@ -126,6 +126,14 @@ sobre as próximas features. Bugs e sugestões também podem virar
 
 Antes de participar, leia o [Código de Conduta](CODE_OF_CONDUCT.md). Para contribuir com código,
 veja o [Guia de Contribuição](CONTRIBUTING.md).
+
+### 🌍 Traduções
+
+As traduções da interface e das regras são feitas no [Weblate](https://hosted.weblate.org/engage/rpgworldapp/), uma plataforma de
+tradução livre que hospeda gratuitamente projetos de software livre. Qualquer pessoa pode sugerir
+ou revisar textos; o que é aceito chega aqui num pull request.
+
+[![Estado das traduções](https://hosted.weblate.org/widget/rpgworldapp/multi-auto.svg)](https://hosted.weblate.org/engage/rpgworldapp/)
 
 ---
 

@@ -43,8 +43,8 @@ const source: SpellSource = {
     light: text('Light'),
   },
   translations: {
-    // Shield has no Portuguese text; Light only has its name so far. Crowdin sends what is not
-    // translated yet as "" (Lightning Bolt's description, Fireball's material).
+    // Shield has no Portuguese text; Light only has its name so far. What is not translated yet
+    // may come back as "" (Lightning Bolt's description, Fireball's material).
     pt: {
       fireball: { ...text('Bola de Fogo'), higherLevel: 'Mais dano.', material: '' },
       'lightning-bolt': { name: 'Relâmpago', description: '' },
@@ -115,7 +115,7 @@ describe('FileSpellCatalog', () => {
     expect(light.description).toBe('Light description.');
   });
 
-  it('texto vazio vindo do Crowdin conta como não traduzido', async () => {
+  it('texto vazio vindo da ferramenta de tradução conta como não traduzido', async () => {
     const [bolt] = await catalog.findByKeys(['dnd5e:srd-5.1:spell:lightning-bolt'], 'pt');
     expect(bolt.name).toBe('Relâmpago');
     expect(bolt.description).toBe('Lightning Bolt description.');

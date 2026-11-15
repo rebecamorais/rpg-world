@@ -4,7 +4,7 @@
  *   npm run content:conditions
  *
  * Only entries 5etools marks as SRD (`srd`, `srd52`). Rewrites the rules data and the English
- * texts, keeping the 5etools tags in the text. Translations (i18n/<locale>/) come from Crowdin and
+ * texts, keeping the 5etools tags in the text. Translations (i18n/<locale>/) come from Weblate and
  * are never touched, apart from creating an empty file for Portuguese the first time.
  */
 import { existsSync } from 'node:fs';
