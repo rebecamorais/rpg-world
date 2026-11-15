@@ -4,11 +4,11 @@
   },
   "acid-vial": {
     "name": "Ácido (frasco)",
-    "description": ""
+    "description": "Com uma ação, você pode derramar o conteúdo deste frasco sobre uma criatura que esteja a até 1,5 metro de distância, ou arremessar o frasco a até 6 metros, quebrando-o com o impacto. Em ambos os casos, faça um ataque à distância contra uma criatura ou objeto, tratando o ácido como uma arma improvisada. Com um acerto, o alvo sofre {@damage 2d6} pontos de dano ácido."
   },
   "alchemist-s-fire-flask": {
     "name": "Fogo de Alquimista (frasco)",
-    "description": ""
+    "description": "Este fluido pegajoso e adesivo inflama em contato com o ar. Com uma ação, você pode arremessar este frasco a até 6 metros de distância, quebrando-o com o impacto. Faça um ataque à distância contra uma criatura ou objeto, tratando o fogo alquímico como uma arma improvisada. Com um acerto, o alvo sofre {@damage 1d4} pontos de dano ígneo no início de cada um dos seus turnos, até encerrar o processo usando sua ação para realizar um teste de Destreza com {@dc 10|CD 10} e, com um sucesso, extinguir as chamas."
   },
   "alchemist-s-supplies": {
     "name": "Suprimentos de Alquimista"
@@ -24,7 +24,7 @@
   },
   "antitoxin-vial": {
     "name": "Antitoxina (frasco)",
-    "description": ""
+    "description": "Uma criatura que beber o líquido deste frasco passa a ter vantagem nas salvaguardas contra veneno por 1 hora. Este benefício não funciona para mortos-vivos ou constructos."
   },
   "arrow": {
     "name": "Flecha"
@@ -34,7 +34,7 @@
   },
   "backpack": {
     "name": "Mochila",
-    "description": ""
+    "description": "Uma mochila pode conter 30 litros ou 15 quilos de equipamento. Você também pode amarrar outros itens, como um saco de dormir ou um rolo de corda, do lado de fora de uma mochila."
   },
   "bagpipes": {
     "name": "Gaita de Foles"
@@ -45,19 +45,19 @@
   },
   "ball-bearings-bag-of-1-000": {
     "name": "Esferas de Metal (saco com 1.000)",
-    "description": ""
+    "description": "Com uma ação, você pode espalhar estas minúsculas 1.000 bolas de metal numa área plana e quadrada de até 3 metros. Uma criatura que se mova através da área deve ser bem-sucedida em uma salvaguarda de Destreza com {@dc 10|CD 10} ou {@condition prone||cairá}. Uma criatura que se mova através da área com metade de seu deslocamento não precisa realizar a salvaguarda."
   },
   "barrel": {
     "name": "Barril",
-    "description": ""
+    "description": "Um barril pode conter 160 litros de líquido ou 0,16 metro³ de sólido."
   },
   "basic-poison-vial": {
     "name": "Veneno Básico (frasco)",
-    "description": ""
+    "description": "Você pode usar o veneno deste frasco para revestir uma arma cortante ou perfurante ou até três peças de munição. Aplicar o veneno demora uma ação. Uma criatura atingida por uma arma ou munição envenenada deve ser bem-sucedida em uma salvaguarda de Constituição com {@dc 10|CD 10} ou sofrerá {@damage 1d4} pontos de dano venenoso. Uma vez aplicado, o veneno mantém seu efeito durante 1 minuto antes de secar."
   },
   "basket": {
     "name": "Cesto",
-    "description": ""
+    "description": "Um cesto pode conter 60 litros ou 20 quilos de equipamento."
   },
   "battleaxe": {
     "name": "Machado de Batalha"
@@ -76,7 +76,7 @@
   },
   "block-and-tackle": {
     "name": "Polia e Roldana",
-    "description": ""
+    "description": "Um conjunto de polias com um cabo que as atravessa e um gancho para se prender a objetos, permitindo que se erga até quatro vezes o peso que normalmente poderia ser levantado."
   },
   "blowgun": {
     "name": "Zarabatana"
@@ -89,22 +89,22 @@
   },
   "book": {
     "name": "Livro",
-    "description": ""
+    "description": "Um livro pode conter poemas, relatos históricos, informações referentes a um determinado campo de conhecimento, diagramas e notas sobre engenhocas gnômicas ou versar sobre qualquer outras coisa que possa ser representada usando texto ou imagens. Um livro que contém magias é um {@item spellbook|phb|grimório} ou simplesmente um livro de magias."
   },
   "breastplate": {
     "name": "Peitoral",
-    "description": ""
+    "description": "Esta armadura é composta por um pedaço de metal revestido de couro que se ajusta ao peito. Embora deixe as pernas e braços relativamente desprotegidos, esta armadura fornece boa proteção para os órgãos vitais do usuário, deixando-o relativamente com pouca carga."
   },
   "brewer-s-supplies": {
     "name": "Suprimentos de Cervejeiro"
   },
   "bucket": {
     "name": "Balde",
-    "description": ""
+    "description": "Um balde pode conter 12 litros de líquido ou 0,012 metro³ de sólido."
   },
   "bullseye-lantern": {
     "name": "Lanterna Foco",
-    "description": ""
+    "description": "Uma lanterna focada, que projeta um facho de luz plena em um cone de 18 metros e meia-luz por mais 18 metros. Uma vez acesa, ela queima por 6 horas, consumindo um frasco (500 mililitros) de óleo."
   },
   "burglar-s-pack": {
     "name": "Kit de Ladrão",
@@ -115,18 +115,18 @@
   },
   "caltrop": {
     "name": "Abrolho",
-    "description": ""
+    "description": "Com uma ação, você pode espalhar um saco de estrepes em uma área (quadrado) de 1,5 metro. Qualquer criatura que entre nessa área deve ser bem-sucedida em uma salvaguarda de Destreza com {@dc 15|CD 15} ou encerrará seu movimento neste turno, sofrendo 1 ponto de dano perfurante. Receber este dano reduz o deslocamento da criatura em 3 metros até que ela recupere pelo menos 1 ponto de vida. Uma criatura que se mova através da área com metade do seu deslocamento não precisa realizar a salvaguarda."
   },
   "caltrops-bag-of-20": {
     "name": "Abrolhos (saco com 20)",
-    "description": ""
+    "description": "Com uma ação, você pode espalhar um saco de estrepes em uma área (quadrado) de 1,5 metro. Qualquer criatura que entre nessa área deve ser bem-sucedida em uma salvaguarda de Destreza com {@dc 15|CD 15} ou encerrará seu movimento neste turno, sofrendo 1 ponto de dano perfurante. Receber este dano reduz o deslocamento da criatura em 3 metros até que ela recupere pelo menos 1 ponto de vida. Uma criatura que se mova através da área com metade do seu deslocamento não precisa realizar a salvaguarda."
   },
   "camel": {
     "name": "Camelo"
   },
   "candle": {
     "name": "Vela",
-    "description": ""
+    "description": "Durante 1 hora, uma vela projeta luz plena em um raio de 1,5 metro e meia-luz por mais 1,5 metro."
   },
   "canvas-1-sq-yd": {
     "name": "Lona (1 jarda quadrada)"
@@ -145,15 +145,15 @@
   },
   "chain-10-feet": {
     "name": "Corrente (3 metros)",
-    "description": ""
+    "description": "Uma corrente tem 10 pontos de vida. Ela pode ser rompida com um teste bem-sucedido de Força com {@dc 20|CD 20}."
   },
   "chain-mail": {
     "name": "Cota de Malha",
-    "description": ""
+    "description": "Feita de anéis de metal interligados, a cota de malha inclui uma camada de tecido acolchoado usada sob a cota para evitar o atrito e amortecer o impacto dos golpes. O traje inclui manoplas."
   },
   "chain-shirt": {
     "name": "Camisa de Malha",
-    "description": ""
+    "description": "Feita de anéis de metal interligados, é basicamente um camisão de malha usado entre camadas de tecido ou couro. Esta armadura oferece uma proteção limitada para a parte superior do corpo e permite que o som dos anéis se esfregando uns contra os outros seja abafado pelas camadas exteriores."
   },
   "chalk-1-piece": {
     "name": "Giz (1 peça)"
@@ -163,7 +163,7 @@
   },
   "chest": {
     "name": "Baú",
-    "description": ""
+    "description": "Um baú pode conter 360 litros ou 150 quilos de equipamento."
   },
   "chicken": {
     "name": "Galinha"
@@ -176,7 +176,7 @@
   },
   "climber-s-kit": {
     "name": "Kit de Escalada",
-    "description": ""
+    "description": "Um conjunto de escalada inclui pitões especiais, biqueiras para botas, luvas e um cinto de segurança. Você pode usar este kit com uma ação para ancorar-se; ao fazê-lo, você não pode cair nem subir mais do que 7,5 metros a partir do ponto de ancoragem sem desfazê-la."
   },
   "cloves": {
     "name": "Cravo-da-índia"
@@ -195,7 +195,7 @@
   },
   "component-pouch": {
     "name": "Bolsa de Componentes",
-    "description": ""
+    "description": "Trata-se de uma pequena bolsa de couro à prova d'água, atrelada ao cinto, que possui compartimentos para armazenar todos os componentes materiais e demais itens especiais que você precisa para conjurar magias, exceto os componentes que têm um custo específico (como indicado na descrição das magias)."
   },
   "cook-s-utensils": {
     "name": "Utensílios de Cozinheiro"
@@ -217,14 +217,14 @@
   },
   "crossbow-bolt-case": {
     "name": "Estojo de Virotes",
-    "description": ""
+    "description": "Este estojo de madeira pode guardar até vinte {@item crossbow bolt|phb|virotes de besta}."
   },
   "crossbow-bolts-20": {
     "name": "Virotes de Besta (20)"
   },
   "crowbar": {
     "name": "Pé de Cabra",
-    "description": ""
+    "description": "Usar um pé-de-cabra concede vantagem em testes de Força em que uma alavanca possa ser aplicada."
   },
   "crystal": {
     "name": "Cristal"
@@ -244,7 +244,7 @@
   },
   "disguise-kit": {
     "name": "Kit de Disfarce",
-    "description": ""
+    "description": "Esta bolsa de cosméticos, tintura de cabelo e pequenos adereços permite que você crie disfarces que alteram a sua aparência. A proficiência com este kit permite a você adicionar seu bônus de proficiência a qualquer teste de atributo usado na criação de um disfarce visual."
   },
   "donkey": {
     "name": "Burro"
@@ -274,7 +274,7 @@
   },
   "exotic-saddle": {
     "name": "Sela Exótica",
-    "description": ""
+    "description": "Uma sela exótica é necessária para cavalgar qualquer montaria aquática ou voadora."
   },
   "explorer-s-pack": {
     "name": "Kit de Explorador",
@@ -291,7 +291,7 @@
   },
   "fishing-tackle": {
     "name": "Equipamento de Pesca",
-    "description": ""
+    "description": "Este conjunto inclui uma vara de madeira, linha de seda, boias de cortiça, anzóis de aço, chumbadas, iscas de veludo e puçás."
   },
   "flail": {
     "name": "Mangual"
@@ -308,7 +308,7 @@
   },
   "forgery-kit": {
     "name": "Kit de Falsificação",
-    "description": ""
+    "description": "Esta caixa pequena contém uma variedade de papéis e pergaminhos, penas e tintas, selos e cera de lacre, folhas de ouro e prata e outros suprimentos necessários para a criação de falsificações convincentes de documentos. A proficiência com este kit permite que você adicione seu bônus de proficiência a qualquer teste de atributo usado na falsificação de um documento."
   },
   "ginger": {
     "name": "Gengibre"
@@ -318,7 +318,7 @@
   },
   "glass-bottle": {
     "name": "Garrafa de Vidro",
-    "description": ""
+    "description": "Uma garrafa pode conter 750 mililitros de líquido."
   },
   "glassblower-s-tools": {
     "name": "Ferramentas de Vidreiro"
@@ -346,7 +346,7 @@
   },
   "half-plate-armor": {
     "name": "Meia-Armadura",
-    "description": ""
+    "description": "Esta armadura consiste em placas de metal moldadas que cobrem a maior parte do corpo do usuário. Ela não inclui proteção para as pernas a não ser por tornozeleiras simples, presas com tiras de couro."
   },
   "hammer": {
     "name": "Martelo"
@@ -359,30 +359,30 @@
   },
   "healer-s-kit": {
     "name": "Kit de Médico",
-    "description": ""
+    "description": "Trata-se de uma bolsa de couro contendo ataduras, pomadas e talas. O conjunto dura dez aplicações. Com uma ação, você pode usá-lo uma vez para estabilizar uma criatura com 0 pontos de vida, sem a necessidade de fazer um teste de Sabedoria ({@skill Medicine||Medicina})."
   },
   "heavy-crossbow": {
     "name": "Besta Pesada"
   },
   "hempen-rope-50-feet": {
     "name": "Corda de Cânhamo (15 metros)",
-    "description": ""
+    "description": "Corda, feita de cânhamo ou seda, tem 2 pontos de vida e pode ser arrebentada com um teste de Força {@dc 17|CD 17}."
   },
   "herbalism-kit": {
     "name": "Kit de Herbalismo",
-    "description": ""
+    "description": "Este kit contém uma variedade de instrumentos como tesouras, almofariz e pilão, além de bolsas usadas na criação de remédios e poções. Proficiência com este conjunto permite que você adicione seu bônus de proficiência a qualquer teste de atributo usado na identificação ou aplicação de ervas. Além disso, é necessária a proficiência com este kit para a criação de antitoxinas e poções de cura."
   },
   "hide-armor": {
     "name": "Armadura de Peles",
-    "description": ""
+    "description": "Esta armadura rústica consiste em peles e couros grossos. Geralmente é usada por tribos bárbaras, humanoides malignos e outros povos que não têm acesso às ferramentas e materiais necessários para a criação de armaduras melhores."
   },
   "holy-water-flask": {
     "name": "Água Benta (frasco)",
-    "description": ""
+    "description": "Com uma ação, você pode derramar o conteúdo deste frasco em uma criatura que esteja a até 1,5 metro de distância ou arremessar o frasco a até 6 metros, quebrando-o com o impacto. Em ambos os casos, faça um ataque à distância contra a criatura alvejada, tratando a água benta como uma arma improvisada. Se o alvo for um ínfero ou morto-vivo, sofrerá {@damage 2d6} pontos de dano radiante.\nUm clérigo ou paladino pode criar água benta através da realização de um ritual especial. O ritual leva 1 hora para ser realizado, usa pó de prata no valor de 25 Po e requer que o conjurador gaste um espaço de magia de 1° círculo."
   },
   "hooded-lantern": {
     "name": "Lanterna Furta-Fogo",
-    "description": ""
+    "description": "Uma lanterna coberta projeta luz plena em um raio de 9 metros e meia-luz por mais 9 metros. Uma vez acesa, ela queima por 6 horas, consumindo um frasco (500 mililitros) de óleo. Com uma ação, você pode baixar a capa da lanterna, reduzindo a luz para meia-luz em um raio de 1,5 metro."
   },
   "horn": {
     "name": "Trompa"
@@ -395,7 +395,7 @@
   },
   "hunting-trap": {
     "name": "Armadilha de Caça",
-    "description": ""
+    "description": "Ao usar sua ação para preparar uma armadilha, você forma um anel com dentes de aço que se fecham quando uma criatura pisa em uma placa de pressão no centro. A armadilha é presa por uma corrente pesada a um objeto imóvel, como uma árvore ou um piquete encravado no chão. A criatura que pisar na placa deve ser bem-sucedida em uma salvaguarda de Destreza com {@dc 13|CD 13} ou sofrerá {@damage 1d4} pontos de dano perfurante e cessará seu movimento. Daí em diante, até que a criatura se liberte da armadilha, seu movimento ficará limitado pelo comprimento da corrente (normalmente 3 metros). Uma criatura pode usar uma ação em um teste de Força com {@dc 13|CD 13} para se libertar ou para libertar outra criatura dentro do alcance, em caso de sucesso. Cada falha no teste causa 1 ponto de dano perfurante na criatura aprisionada."
   },
   "ink-1-ounce-bottle": {
     "name": "Tinta (frasco de 30 gramas)"
@@ -408,7 +408,7 @@
   },
   "iron-pot": {
     "name": "Panela de Ferro",
-    "description": ""
+    "description": "Uma panela de ferro tem capacidade de 4 litros de líquido."
   },
   "iron-spike": {
     "name": "Pino de Ferro"
@@ -424,7 +424,7 @@
   },
   "jug": {
     "name": "Jarro",
-    "description": ""
+    "description": "Um jarro ou ânfora comporta 4 litros de líquido."
   },
   "ladder-10-foot": {
     "name": "Escada (3 metros)",
@@ -432,15 +432,15 @@
   },
   "lamp": {
     "name": "Lamparina",
-    "description": ""
+    "description": "Uma lanterna (ou lamparina) projeta luz plena em um raio de 4,5 metros e cria penumbra por mais 9 metros. Uma vez acesa, ela queima por 6 horas, consumindo um frasco (500 mililitros) de óleo."
   },
   "lance": {
     "name": "Lança de Montaria",
-    "description": ""
+    "description": "Especial. Você possui desvantagem ao usar uma lança de montaria para atacar um alvo a menos do que 1,5 metro de distância de você. Além disso, uma lança de montaria requer duas mãos para ser empunhada quando você não estiver montado."
   },
   "leather-armor": {
     "name": "Armadura de Couro",
-    "description": ""
+    "description": "Os protetores de peitoral e ombros desta armadura são feitos de peças de couro que foram reforçadas ao serem curtidas em óleo. O restante da armadura é feito de materiais mais macios e flexíveis."
   },
   "leatherworker-s-tools": {
     "name": "Ferramentas de Curtidor"
@@ -459,7 +459,7 @@
   },
   "lock": {
     "name": "Fechadura",
-    "description": ""
+    "description": "Uma chave é fornecida com a fechadura. Sem a chave, uma criatura proficiente com {@item thieves' tools|phb|ferramentas de ladrão} pode abrir a fechadura com um teste bem-sucedido de Destreza com {@dc 15|CD 15}. O DM pode decidir que fechaduras melhores (CD acima de 15) estão disponíveis por preços mais altos."
   },
   "longbow": {
     "name": "Arco Longo"
@@ -478,15 +478,15 @@
   },
   "magnifying-glass": {
     "name": "Lupa",
-    "description": ""
+    "description": "Esta lente permite um olhar mais próximo sobre pequenos objetos. Ela também é útil como um substituto para a pederneira e isqueiro ao atear fogo. Acender fogo com uma lupa requer uma luz brilhante como a do sol para fazer foco, um material inflamável para queimar e cerca de 5 minutos para criar a chama. Uma lupa concede vantagem em qualquer teste de atributo feito para avaliar ou inspecionar um item que seja pequeno ou muito detalhado."
   },
   "manacles": {
     "name": "Algemas",
-    "description": ""
+    "description": "Estas contenções de metal podem prender uma criatura Pequena ou Média. Escapar de grilhões requer um teste bem-sucedido de Destreza com {@dc 20|CD 20}. Quebrá-los requer um teste bem-sucedido de Força com {@dc 20|CD 20}. Cada conjunto de grilhões vem com uma chave. Sem ela, uma criatura proficiente com {@item thieves' tools|PHB|ferramentas de ladrão} pode destravar os grilhões sendo bem-sucedida em um teste de Destreza com {@dc 15|CD 15}. Os grilhões têm 15 pontos de vida."
   },
   "map-or-scroll-case": {
     "name": "Estojo de Mapas ou Pergaminhos",
-    "description": ""
+    "description": "Este estojo de couro cilíndrico pode guardar até dez {@item paper (one sheet)|phb|folhas de papel} ou cinco {@item parchment (one sheet)|phb|folhas de pergaminho} enroladas."
   },
   "mason-s-tools": {
     "name": "Ferramentas de Pedreiro"
@@ -499,15 +499,15 @@
   },
   "merchant-s-scale": {
     "name": "Balança de Mercador",
-    "description": ""
+    "description": "Uma balança de mercador inclui uma pequena balança, pratos e um sortimento de pesos de até 1 quilo. Com ela, você pode medir o peso exato de pequenos objetos, como metais preciosos brutos ou bens de troca, de forma a ajudar a determinar seu valor."
   },
   "mess-kit": {
     "name": "Kit de Refeição",
-    "description": ""
+    "description": "Este recipiente de lata contém uma caneca e talheres simples. O recipiente e a tampa se fecham com um encaixe, sendo possível usar um lado como panela para cozinhar e o outro como prato ou tigela rasa."
   },
   "military-saddle": {
     "name": "Sela Militar",
-    "description": ""
+    "description": "Uma sela militar mantém o cavaleiro no lugar, ajudando-o a ficar sentado em uma montaria ativa em batalha. Ela lhe dá vantagem em qualquer teste que fizer para permanecer montado."
   },
   "miner-s-pick": {
     "name": "Picareta de Mineiro"
@@ -520,15 +520,15 @@
   },
   "navigator-s-tools": {
     "name": "Ferramentas de Navegador",
-    "description": ""
+    "description": "Este conjunto de instrumentos é utilizado para navegação no mar. Proficiência com ferramentas de navegador permite que você trace o curso de um navio e siga cartas de navegação. Além disso, estas ferramentas permitem que você adicione seu bônus de proficiência a testes de atributos usados para não se perder no mar."
   },
   "net": {
     "name": "Rede",
-    "description": ""
+    "description": "Especial. Uma criatura de tamanho Grande ou menor atingida por uma rede estará {@condition restrained||contida} até ser libertada. A rede não tem efeito em criaturas que não possuem forma ou naquelas de tamanho Enorme ou maior. Uma criatura pode usar sua ação para fazer um teste de Força com {@dc 10|CD 10}, libertando-se ou libertando outra criatura dentro de seu alcance em caso de sucesso. Causar 5 pontos de dano cortante à rede (CA 10) também liberta a criatura sem machucá-la, destruindo a rede. Ao usar uma ação, ação bônus ou reação para atacar com uma rede, você pode realizar apenas um ataque, independentemente do número de ataques que você pode fazer normalmente."
   },
   "oil-flask": {
     "name": "Óleo (frasco)",
-    "description": ""
+    "description": "Óleo costuma ser vendido em frascos de argila de 500 mililitros. Com uma ação, você pode derramar o conteúdo deste frasco em uma criatura que esteja a até 1,5 metro de distância ou arremessar o frasco a até 6 metros, quebrando-o com o impacto. Faça um ataque à distância contra uma criatura ou objeto, tratando o óleo como uma arma improvisada. Com um acerto, o alvo ficará coberto de óleo. Caso ele receba qualquer dano ígneo antes de o óleo secar (após 1 minuto), ele sofre 5 pontos de dano ígneo devido ao óleo fervente. Você também pode despejar um frasco de óleo no chão para cobrir uma área de 1,5 metro, desde que a superfície seja nivelada. Se incendiado, o óleo queimará durante 2 rodadas e causará 5 pontos de dano ígneo a qualquer criatura que entre na área ou termine seu turno dentro dela. Uma criatura pode receber este dano apenas uma vez durante o seu turno."
   },
   "orb": {
     "name": "Orbe"
@@ -541,7 +541,7 @@
   },
   "padded-armor": {
     "name": "Armadura Acolchoada",
-    "description": ""
+    "description": "Uma armadura acolchoada consiste em camadas estofadas de tecido e forro."
   },
   "painter-s-supplies": {
     "name": "Suprimentos de Pintor"
@@ -569,14 +569,14 @@
   },
   "pitcher": {
     "name": "Jarra",
-    "description": ""
+    "description": "Um jarro ou ânfora comporta 4 litros de líquido."
   },
   "piton": {
     "name": "Piton"
   },
   "plate-armor": {
     "name": "Armadura de Placas",
-    "description": ""
+    "description": "Esta armadura consiste em placas de metal moldadas e conectadas de modo a cobrir todo o corpo do usuário. O conjunto de placas inclui manoplas, pesadas botas de couro, um elmo com visor e espessas camadas de enchimento por baixo da armadura. Cintas e fivelas ajudam a distribuir o seu peso pelo corpo."
   },
   "platinum": {
     "name": "Platina"
@@ -596,14 +596,14 @@
   },
   "portable-ram": {
     "name": "Aríete Portátil",
-    "description": ""
+    "description": "Você pode usar um aríete portátil para quebrar portas. Ao fazer isso, ganha um bônus de +4 no teste de Força. Outro personagem pode ajudar você a usar o aríete, dando-lhe vantagem neste teste."
   },
   "potter-s-tools": {
     "name": "Ferramentas de Oleiro"
   },
   "pouch": {
     "name": "Bolsa",
-    "description": ""
+    "description": "Uma algibeira de tecido ou de couro pode conter até 20 {@item sling bullet|phb|balas de funda} ou 50 {@item blowgun needle|phb|dardos de zarabatana}, entre outras coisas. Uma algibeira compartimentada para guardar componentes de magia é chamada {@item component pouch|phb|bolsa de componentes}. Uma algibeira tem capacidade de 6 litros ou 3 quilos de equipamento."
   },
   "priest-s-pack": {
     "name": "Kit de Sacerdote",
@@ -614,14 +614,14 @@
   },
   "quiver": {
     "name": "Aljava",
-    "description": ""
+    "description": "Uma aljava pode guardar até 20 {@item arrow|phb|flechas}."
   },
   "rapier": {
     "name": "Rapieira"
   },
   "rations-1-day": {
     "name": "Rações (1 dia)",
-    "description": ""
+    "description": "Rações consistem em alimentos secos adequados para viagens longas, incluindo charque, frutas secas, biscoito seco e nozes."
   },
   "reliquary": {
     "name": "Relicário"
@@ -634,7 +634,7 @@
   },
   "ring-mail": {
     "name": "Cota de Anéis",
-    "description": ""
+    "description": "Trata-se de uma armadura de couro com anéis pesados costurados em toda a sua extensão. Os anéis ajudam a reforçar a armadura contra golpes de espadas e machado. A cota de anéis é inferior à cota de malha, em geral sendo usada apenas por aqueles que não podem comprar uma armadura melhor."
   },
   "robes": {
     "name": "Vestes"
@@ -644,7 +644,7 @@
   },
   "sack": {
     "name": "Saco",
-    "description": ""
+    "description": "Uma saca é capaz de armazenar 30 litros ou 15 quilos de equipamento."
   },
   "saddlebags": {
     "name": "Alforjes"
@@ -657,7 +657,7 @@
   },
   "scale-mail": {
     "name": "Cota de Escamas",
-    "description": ""
+    "description": "Esta armadura é composta por um casaco e perneiras (e, talvez, por um saiote) feitos de couro e cobertos com camadas sobrepostas de peças de metal que lembram as escamas de um peixe. O traje inclui manoplas."
   },
   "scholar-s-pack": {
     "name": "Kit de Estudioso",
@@ -676,8 +676,8 @@
     "name": "Ovelha"
   },
   "shield": {
-    "name": "Escudo",
-    "description": ""
+    "name": "Égide",
+    "description": "Um escudo pode ser feito de madeira ou metal e pode ser carregado em uma das mãos. Empunhar um escudo aumenta sua Classe de Armadura em 2. Você só recebe este benefício por um único escudo empunhado."
   },
   "shortbow": {
     "name": "Arco Curto"
@@ -702,7 +702,7 @@
   },
   "silk-rope-50-feet": {
     "name": "Corda de Seda (15 metros)",
-    "description": ""
+    "description": "Corda, feita de cânhamo ou seda, tem 2 pontos de vida e pode ser arrebentada com um teste de Força {@dc 17|CD 17}."
   },
   "silver": {
     "name": "Prata"
@@ -733,18 +733,18 @@
   },
   "spellbook": {
     "name": "Grimório",
-    "description": ""
+    "description": "Essencial para magos, um livro de magias é um tomo encadernado em couro com 100 páginas de velino em branco, adequadas para a inscrição de magias."
   },
   "splint-armor": {
     "name": "Armadura de Talas",
-    "description": ""
+    "description": "Esta armadura é feita de finas tiras verticais de metal, rebitadas em um revestimento protetor de couro que, por sua vez, fica sobre um enchimento de tecido. Uma cota de malha flexível protege as articulações."
   },
   "sprig-of-mistletoe": {
     "name": "Ramo de Visco"
   },
   "spyglass": {
     "name": "Luneta",
-    "description": ""
+    "description": "Objetos vistos através de uma luneta tem seu tamanho ampliado em até duas vezes."
   },
   "stabling-per-day": {
     "name": "Estábulo (por dia)"
@@ -757,7 +757,7 @@
   },
   "studded-leather-armor": {
     "name": "Armadura de Couro Batido",
-    "description": ""
+    "description": "Feita de um couro mais rígido, porém flexível, reforçado com rebites próximos uns dos outros ou com cravos."
   },
   "tankard": {
     "name": "Caneca",
@@ -765,18 +765,18 @@
   },
   "thieves-tools": {
     "name": "Ferramentas de Ladrão",
-    "description": ""
+    "description": "Este conjunto de ferramentas inclui uma lima pequena, um conjunto de gazuas, um pequeno espelho montado em um cabo de metal, um conjunto de tesouras de lâminas estreitas e um par de alicates. Proficiência com essas ferramentas permite que você adicione seu bônus de proficiência a qualquer teste de atributo feito para desarmar armadilhas ou abrir fechaduras."
   },
   "tinderbox": {
     "name": "Estojo de Isqueiro",
-    "description": ""
+    "description": "Este pequeno recipiente contém sílica, pederneira e uma acendalha (geralmente um pano seco embebido em óleo) usados para atear fogo. Usar este item para acender uma tocha - ou qualquer coisa exposta com combustível abundante - requer uma ação. Acender outros tipos de fogo leva 1 minuto."
   },
   "tinker-s-tools": {
     "name": "Ferramentas de Funileiro"
   },
   "torch": {
     "name": "Tocha",
-    "description": ""
+    "description": "Uma tocha queima durante 1 hora, projetando luz plena em um raio de 6 metros e meia-luz por mais 6 metros. Se você fizer um ataque corpo a corpo com uma tocha acesa e acertar, ela causa 1 ponto de dano ígneo."
   },
   "totem": {
     "name": "Totem"
@@ -789,11 +789,11 @@
   },
   "two-person-tent": {
     "name": "Tenda para Duas Pessoas",
-    "description": ""
+    "description": "Um abrigo de lona simples e portátil para até duas pessoas."
   },
   "vial": {
     "name": "Ampola",
-    "description": ""
+    "description": "Um frasco pode conter até 150 mililitros de líquido."
   },
   "viol": {
     "name": "Viola"
