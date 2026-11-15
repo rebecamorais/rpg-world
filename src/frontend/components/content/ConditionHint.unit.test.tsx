@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it, vi } from 'vitest';
@@ -31,6 +31,15 @@ const CONDITIONS = [
     description: 'Caído 2014.',
     maxLevel: null,
     untranslated: true,
+  },
+  {
+    key: 'dnd5e:srd-5.1:condition:levels',
+    id: 'levels',
+    edition: '2014',
+    name: 'Níveis',
+    description:
+      'Six levels.\nLevel | Effect\n1 | Disadvantage on ability checks\n2 | Speed halved',
+    maxLevel: 6,
   },
 ];
 
@@ -83,6 +92,28 @@ describe('ConditionHint', () => {
 
     expect(screen.getByRole('dialog', { name: /Caído/ })).toBeInTheDocument();
     expect(screen.getByText('Caído 2014.').closest('[lang]')).toHaveAttribute('lang', 'en');
+  });
+
+  it('o texto em inglês vem com o aviso de sem tradução', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ConditionHint conditionKey="dnd5e:srd-5.1:condition:prone" />);
+    await user.click(screen.getByRole('button', { name: 'Caído, condition' }));
+
+    const note = screen.getByRole('note');
+    expect(note).toHaveTextContent('Description in English for now.');
+    // A sentence: normal case, never the uppercase label
+    expect(note).not.toHaveClass('text-label');
+  });
+
+  it('a tabela de níveis da regra vira tabela, não texto com "|"', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ConditionHint conditionKey="dnd5e:srd-5.1:condition:levels" />);
+    await user.click(screen.getByRole('button', { name: 'Níveis, condition' }));
+
+    const table = screen.getByRole('table');
+    expect(within(table).getByRole('columnheader', { name: 'Effect' })).toBeInTheDocument();
+    expect(within(table).getByRole('cell', { name: 'Speed halved' })).toBeInTheDocument();
+    expect(screen.queryByText(/\|/)).not.toBeInTheDocument();
   });
 
   it('não marca idioma quando a descrição está traduzida', async () => {

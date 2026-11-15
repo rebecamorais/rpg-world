@@ -34,14 +34,25 @@ export function rulesBlocks(text: string): Block[] {
   return blocks;
 }
 
-/** Rules text as paragraphs and tables, with its tags shown the way `RulesText` shows them. */
-export function RulesBlocks({ text, source }: { text: string; source: string }) {
+/**
+ * Rules text as paragraphs and tables, with its tags shown the way `RulesText` shows them.
+ * `nested`: already inside a popover, so tags stay plain text (see `RulesText`).
+ */
+export function RulesBlocks({
+  text,
+  source,
+  nested = false,
+}: {
+  text: string;
+  source: string;
+  nested?: boolean;
+}) {
   return (
     <div className="flex flex-col gap-2">
       {rulesBlocks(text).map((block, i) =>
         block.kind === 'paragraph' ? (
           <p key={i}>
-            <RulesText text={block.text} source={source} />
+            <RulesText text={block.text} source={source} nested={nested} />
           </p>
         ) : (
           <div key={i} className="overflow-x-auto">
@@ -55,7 +66,7 @@ export function RulesBlocks({ text, source }: { text: string; source: string }) 
                 <tr className="border-border border-b">
                   {block.header.map((cell, c) => (
                     <th key={c} scope="col" className="text-foreground py-1 pr-3 font-semibold">
-                      <RulesText text={cell} source={source} />
+                      <RulesText text={cell} source={source} nested={nested} />
                     </th>
                   ))}
                 </tr>
@@ -65,7 +76,7 @@ export function RulesBlocks({ text, source }: { text: string; source: string }) 
                   <tr key={r} className="border-border border-b last:border-0">
                     {row.map((cell, c) => (
                       <td key={c} className="py-1 pr-3 align-top">
-                        <RulesText text={cell} source={source} />
+                        <RulesText text={cell} source={source} nested={nested} />
                       </td>
                     ))}
                   </tr>

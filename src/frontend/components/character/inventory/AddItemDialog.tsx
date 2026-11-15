@@ -205,7 +205,7 @@ function AddItemContent({
           </ul>
         )}
         {tooMany && (
-          <p className="text-muted-foreground text-label px-3 py-2">
+          <p className="text-muted-foreground text-caption px-3 py-2">
             {tAdd('tooMany', { max: MAX_ROWS })}
           </p>
         )}
@@ -254,7 +254,8 @@ function PickRow({
           className="text-muted-foreground flex flex-col items-end text-sm tabular-nums"
         >
           <span>{price}</span>
-          <span className="text-label">{weight}</span>
+          {/* Units in their own case: "1 kg", not "1 KG" */}
+          <span className="text-caption">{weight}</span>
         </span>
         <AppIcon
           name="Plus"

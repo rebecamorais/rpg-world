@@ -111,7 +111,8 @@ export function ItemList({
       size="sm"
       disabled={!backpack}
       onClick={() => setAdding(true)}
-      className="text-label h-8 px-3"
+      // No text-label: buttons keep the case of their text
+      className="h-8 px-3"
       data-item-focus={ADD_ITEM_FOCUS}
     >
       <AppIcon name="Plus" size={14} aria-hidden="true" />
@@ -121,12 +122,13 @@ export function ItemList({
 
   return (
     <SectionCard ref={focusRoot}>
-      <SectionCard.Header>
+      {/* Wraps on narrow phones: at 320px the actions ran past the card's right edge */}
+      <SectionCard.Header className="flex-wrap">
         <SectionCard.Title icon={icon} hint={hint}>
           {title}
         </SectionCard.Title>
         {!isEmpty && (
-          <div className="flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-2">
             <ViewToggle view={view} onChange={setView} />
             {addButton}
           </div>

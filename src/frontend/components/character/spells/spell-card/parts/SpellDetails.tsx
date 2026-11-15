@@ -32,7 +32,8 @@ export const SpellDetails = React.memo(({ spell, castingTime }: SpellDetailsProp
       <div className="space-y-4">
         {/* No translation yet: the text shows in English, and translating is open to anyone */}
         {spell.untranslated && (
-          <p className="text-muted-foreground text-label flex items-center gap-1.5">
+          // A sentence: caption in normal case, since uppercase sentences are hard to read
+          <p className="text-muted-foreground text-caption flex items-center gap-1.5">
             <AppIcon name="Languages" size="xs" aria-hidden="true" />
             <span className="text-foreground font-medium">{tCharacters('untranslatedBadge')}</span>
             <span>{tCharacters('untranslatedHint')}</span>

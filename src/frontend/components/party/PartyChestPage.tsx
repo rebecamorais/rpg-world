@@ -19,7 +19,16 @@ export function PartyChest({ partyId }: { partyId: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <CoinPurse inventory={chest} title={t('coinsTitle')} hint={t('coinsHint')} />
+      <CoinPurse
+        inventory={chest}
+        title={t('coinsTitle')}
+        hint={t('coinsHint')}
+        dialogText={{
+          receiveDescription: t('coinsReceiveDescription'),
+          after: t('coinsAfter'),
+          tooMany: (max) => t('coinsTooMany', { max }),
+        }}
+      />
       <ItemList
         inventory={chest}
         viewKey={INVENTORY_VIEW_KEYS.chest}

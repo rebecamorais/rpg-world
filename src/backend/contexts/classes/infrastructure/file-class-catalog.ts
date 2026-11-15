@@ -63,15 +63,16 @@ export class FileClassCatalog implements ClassCatalog {
       resources.map((resource) => {
         const name = pick(localResources?.[resource.id]?.name, resourceTexts[resource.id]?.name);
         const note = pick(localResources?.[resource.id]?.note, resourceTexts[resource.id]?.note);
+        const localDescription = localFeatures?.[resource.feature]?.description;
+        const description = pick(localDescription, features[resource.feature]?.description) ?? '';
+        // The rules text fell back to English: the sheet says so and marks its language
+        const untranslated = locale !== FALLBACK_LOCALE && !localDescription && !!description;
         return {
           ...resource,
           name: name ?? resource.id,
           ...(note ? { note } : {}),
-          description:
-            pick(
-              localFeatures?.[resource.feature]?.description,
-              features[resource.feature]?.description,
-            ) ?? '',
+          description,
+          ...(untranslated && { untranslated: true }),
         };
       });
 

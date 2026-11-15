@@ -246,21 +246,21 @@
     "collapse": "Recolher",
     "school": "Escola",
     "saveSuccess": "Personagem salvo com sucesso!",
-    "passivePerception": "Percepção Passiva",
-    "allDamage": "Todos os Danos",
+    "passivePerception": "Percepção passiva",
+    "allDamage": "Todos os danos",
     "forgetSpell": "Esquecer magia",
     "prepareSpell": "Preparar magia",
-    "unprepareSpell": "Despreparar magia",
+    "unprepareSpell": "Remover das preparadas",
     "levelDetail": "Nível {level}",
     "spellbookIndex": "Índice",
     "cantrip": "Truque",
     "cantrips": "Truques",
-    "levelName": "{level}º Nível",
-    "levelSpells": "Magias de {level}º Nível",
+    "levelName": "{level}º nível",
+    "levelSpells": "Magias de {level}º nível",
     "concentration": "Concentração",
     "ritual": "Ritual",
-    "atHigherLevels": "Em Níveis Superiores",
-    "castingTime": "Tempo de Conjuramento",
+    "atHigherLevels": "Em níveis superiores",
+    "castingTime": "Tempo de conjuramento",
     "range": "Alcance",
     "duration": "Duração",
     "deleteDialogTitle": "Excluir personagem?",
@@ -301,10 +301,10 @@
       "notFilled": "Não preenchido"
     },
     "spells": {
-      "preparedLabels": "{count} preparadas",
-      "addBtn": "Adicionar Magia"
+      "preparedLabels": "{count, plural, one {# preparada} other {# preparadas}}",
+      "addBtn": "Adicionar magia"
     },
-    "addItem": "Adicionar Item",
+    "addItem": "Adicionar item",
     "loadErrorTitle": "Não foi possível carregar. Recarregue a página para tentar de novo",
     "levelShort": "Nv {level}",
     "defaultClass": "Aventureiro",
@@ -317,7 +317,7 @@
     "untranslatedBadge": "Em inglês",
     "untranslatedHint": "Ainda sem tradução. Você pode ajudar no Weblate.",
     "edition": "Edição",
-    "cantripUpgrade": "Melhoria do Truque",
+    "cantripUpgrade": "Melhoria do truque",
     "duplicate": "Duplicar",
     "copyName": "{name} (cópia)",
     "duplicateSuccess": "Ficha duplicada.",
@@ -609,17 +609,17 @@
     "copyNoneLeft": "A ficha já tem todos os recursos desta classe."
   },
   "attributeCard": {
-    "modifierCalc": "Cálculo do Modificador",
+    "modifierCalc": "Como o modificador é calculado",
     "adjustValue": "Ajuste o valor base deste atributo (1 a 30).",
-    "baseValue": "Valor Base"
+    "baseValue": "Valor base"
   },
   "combatStats": {
-    "status": "Status de Combate",
+    "status": "Status de combate",
     "armorClass": "CA",
     "hitPoints": "Pontos de Vida",
     "hitPointsMax": "PV máximos",
     "hitPointsShort": "PV",
-    "tempHp": "Vida Temp",
+    "tempHp": "PV temporário",
     "speed": "Deslocamento",
     "initiative": "Iniciativa",
     "speedUnit": "m",
@@ -653,6 +653,8 @@
     "summary": "Combate num relance",
     "speedShort": "Desloc.",
     "passivePerceptionShort": "Percepção",
+    "initiativeShort": "Inic.",
+    "passivePerceptionAbbr": "Perc. passiva",
     "adjustHpEnter": "Enter aplica: {action}"
   },
   "hitDiceRemaining": {
@@ -684,7 +686,7 @@
   "spellsDrawer": {
     "searchPlaceholder": "Buscar magia…",
     "learn": "Aprender",
-    "title": "Lista de Magias",
+    "title": "Buscar magia",
     "description": "Gerencie as magias conhecidas pelo seu personagem.",
     "emptyState": "Nenhuma magia aprendida ainda.",
     "allLevels": "Todos os níveis",
@@ -701,7 +703,7 @@
       "learned": "Magia aprendida!",
       "forgotten": "Magia esquecida.",
       "prepared": "Magia preparada.",
-      "unprepared": "Magia não preparada.",
+      "unprepared": "Magia removida das preparadas.",
       "undo": "Desfazer"
     },
     "forgetConfirm": {
@@ -730,17 +732,17 @@
   "magicSystem": {
     "titleConfig": "Configurar magia",
     "configDescription": "Configure o sistema mágico utilizado por este personagem",
-    "systemUsed": "Sistema Usado",
-    "slotsCapacity": "Capacidade de Slots por Nível",
-    "circle": "Círculo {level}",
-    "spellPoints": "Pontos de Magia",
-    "spellSlots": "Espaços de Magia",
+    "systemUsed": "Sistema usado",
+    "slotsCapacity": "Espaços por nível",
+    "circle": "Nível {level}",
+    "spellPoints": "Pontos de magia",
+    "spellSlots": "Espaços de magia",
     "level": "Nv {level}",
-    "pointsCapacity": "Capacidade de Spell Points",
+    "pointsCapacity": "Pontos de magia (máximo)",
     "systemPlaceholder": "Magia",
     "configure": "Configurar sistema de magia",
-    "slotAvailable": "Espaço {slot} do {level}º círculo, disponível",
-    "slotSpent": "Espaço {slot} do {level}º círculo, gasto"
+    "slotAvailable": "Espaço {slot} do {level}º nível, disponível",
+    "slotSpent": "Espaço {slot} do {level}º nível, gasto"
   },
   "usePips": {
     "summary": "{label}, {available} de {max} disponíveis",
@@ -1230,7 +1232,7 @@
       },
       "magic": {
         "title": "Magia do seu jeito",
-        "description": "Use espaços de magia por círculo ou pontos de magia, como a sua mesa preferir."
+        "description": "Use espaços de magia por nível ou pontos de magia, como a sua mesa preferir."
       },
       "spellbook": {
         "title": "Grimório com as magias do SRD",
@@ -1257,8 +1259,8 @@
         "description": "Convide pelo link ou pelo nome de usuário. O mestre vê os personagens da mesa em modo Role Play e conduz o combate com iniciativa, vida e condições em tempo real."
       },
       "partyChest": {
-        "title": "Baú da party e diário",
-        "description": "Moedas e itens que a party guarda junto, e um diário no Google Docs aberto dentro da mesa."
+        "title": "Baú da mesa e diário",
+        "description": "Moedas e itens que a mesa guarda junto, e um diário no Google Docs aberto ali mesmo."
       }
     },
     "planned": {
@@ -1276,7 +1278,7 @@
       },
       "homebrew": {
         "title": "Homebrew",
-        "description": "Crie magias, itens, classes e antecedentes e compartilhe com a sua party ou com a comunidade."
+        "description": "Crie magias, itens, classes e antecedentes e compartilhe com a sua mesa ou com a comunidade."
       }
     },
     "openTitle": "Gratuito e de código aberto",
@@ -1302,7 +1304,7 @@
         "spellbook": {
           "tab": "Grimório",
           "title": "O grimório organizado por nível",
-          "description": "Truques e magias por círculo, com as preparadas marcadas e um índice para pular de nível.",
+          "description": "Truques e magias por nível, com as preparadas marcadas e um índice para pular de nível.",
           "alt": "Grimório com truques e magias de 1º nível, algumas marcadas como preparadas"
         },
         "search": {
@@ -1336,10 +1338,10 @@
           "alt": "Rastreador de iniciativa do mestre com jogadores e inimigos, pontos de vida e condições"
         },
         "chest": {
-          "tab": "Baú da party",
-          "title": "O baú da party",
-          "description": "As moedas e os itens da party, que o mestre e os jogadores podem mexer.",
-          "alt": "Inventário da party com moedas e o baú com itens"
+          "tab": "Baú da mesa",
+          "title": "O baú da mesa",
+          "description": "As moedas e os itens da mesa, que o mestre e os jogadores podem mexer.",
+          "alt": "Inventário da mesa com moedas e o baú com itens"
         }
       }
     },
@@ -1529,21 +1531,29 @@
     },
     "sheet": {
       "back": "Voltar para a mesa",
-      "readOnly": "Só leitura"
+      "readOnly": "Só leitura",
+      "privateTitle": "Esta ficha é privada",
+      "privateDescription": "Só quem joga com o personagem e o mestre da mesa veem a ficha.",
+      "missingTitle": "Este personagem não está na mesa",
+      "missingDescription": "Ele pode ter saído ou sido apagado."
     },
     "settings": {
       "eyebrow": "Configurações da mesa",
       "manage": "Gerenciar",
-      "backToTable": "Voltar para a mesa"
+      "backToTable": "Voltar para a mesa",
+      "gmOnly": "Só o mestre abre as configurações da mesa."
     },
     "chest": {
-      "title": "Inventário da party",
-      "coinsTitle": "Moedas da party",
-      "coinsHint": "O dinheiro da party. O mestre e os jogadores da mesa podem mexer; salva na hora.",
-      "itemsTitle": "Baú da party",
-      "itemsHint": "O que a party guarda junto. O mestre e os jogadores da mesa podem pôr e tirar; salva na hora.",
+      "title": "Inventário da mesa",
+      "coinsTitle": "Moedas da mesa",
+      "coinsHint": "O dinheiro da mesa. O mestre e os jogadores podem mexer; salva na hora.",
+      "coinsReceiveDescription": "Soma o valor no baú, na moeda que veio.",
+      "coinsAfter": "Baú depois",
+      "coinsTooMany": "O baú guarda no máximo {max} de cada moeda.",
+      "itemsTitle": "Baú da mesa",
+      "itemsHint": "O que a mesa guarda junto. O mestre e os jogadores podem pôr e tirar; salva na hora.",
       "empty": "O baú está vazio.",
-      "emptyHint": "Adicione o que a party guarda junto: tesouros, suprimentos, itens achados."
+      "emptyHint": "Adicione o que a mesa guarda junto: tesouros, suprimentos, itens achados."
     },
     "image": {
       "title": "Imagem da mesa",
@@ -1599,7 +1609,8 @@
     "start": "Começar",
     "endTurn": "Encerrar turno",
     "endCombat": "Encerrar combate",
-    "endCombatConfirm": "Encerrar o combate? A ordem e o PV dos inimigos serão perdidos.",
+    "endCombatTitle": "Encerrar combate?",
+    "endCombatConfirm": "A ordem, o PV dos NPCs e as condições de todos, personagens inclusive, serão perdidos.",
     "initiative": "Iniciativa",
     "initiativeOf": "Iniciativa de {name}",
     "hp": "PV",

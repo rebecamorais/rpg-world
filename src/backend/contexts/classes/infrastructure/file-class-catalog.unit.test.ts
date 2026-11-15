@@ -112,6 +112,16 @@ describe('FileClassCatalog (textos traduzidos)', () => {
     expect(content?.subclass.names).toEqual(['Berserker']);
   });
 
+  it('marca a descrição que caiu no inglês, e só ela', () => {
+    const catalog = catalogWith({ features: { rage: { description: 'Fúria' } } });
+    const pt = catalog.resources('2014', 'barbarian', 'pt');
+    expect(pt?.resources[0].untranslated).toBeUndefined();
+    expect(pt?.subclass.resources[0].untranslated).toBe(true);
+    // English is the original, never "untranslated"
+    const en = catalog.resources('2014', 'barbarian', 'en');
+    expect(en?.subclass.resources[0].untranslated).toBeUndefined();
+  });
+
   it('nome da subclasse igual nos dois idiomas não duplica', () => {
     const content = catalogWith({
       subclasses: { berserker: { name: 'Berserker' } },

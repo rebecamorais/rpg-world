@@ -375,6 +375,7 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
           loading={combat.finish.isPending}
           onClick={async () => {
             const ok = await confirm({
+              title: t('endCombatTitle'),
               description: t('endCombatConfirm'),
               confirmLabel: t('endCombat'),
               destructive: true,

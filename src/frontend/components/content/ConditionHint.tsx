@@ -4,7 +4,8 @@ import * as React from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { RulesText } from '@frontend/components/content/RulesText';
+import { RulesBlocks } from '@frontend/components/content/RulesBlocks';
+import { UntranslatedNotice } from '@frontend/components/content/UntranslatedNotice';
 import { Popover, PopoverContent, PopoverTrigger } from '@frontend/components/ui/popover';
 import { useConditions } from '@frontend/hooks/useConditions';
 import { cn } from '@frontend/lib/utils';
@@ -69,16 +70,26 @@ export function ConditionHint({
           {children ?? label ?? condition.name}
         </button>
       </PopoverTrigger>
-      <PopoverContent aria-labelledby={titleId}>
+      {/* Capped below the screen's room: a long rule (Exhaustion) covered the switches under it */}
+      <PopoverContent
+        aria-labelledby={titleId}
+        className="max-h-[min(24rem,var(--radix-popover-content-available-height))]"
+      >
         <p id={titleId} className="text-foreground font-semibold">
           {condition.name} <span className="text-muted-foreground">· {condition.edition}</span>
         </p>
-        {/* An untranslated description is the English one */}
+        {/* An untranslated description is the English one: say so, and mark its language */}
+        {condition.untranslated && (
+          <div className="mt-1">
+            <UntranslatedNotice compact />
+          </div>
+        )}
+        {/* Blocks, not plain text: Exhaustion's levels are a table */}
         <div
           lang={condition.untranslated ? 'en' : undefined}
-          className="text-muted-foreground mt-1 whitespace-pre-wrap"
+          className="text-muted-foreground mt-1"
         >
-          <RulesText
+          <RulesBlocks
             text={condition.description}
             source={parseContentKey(condition.key)?.source ?? ''}
             nested

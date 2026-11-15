@@ -44,6 +44,8 @@ export interface ResourceContent extends ClassResource {
   name: string;
   note?: string;
   description: string;
+  /** The description is the English one: the locale has no translation of it yet. */
+  untranslated?: boolean;
 }
 
 export interface ClassResourcesContent {
@@ -69,6 +71,8 @@ export interface ResourceBox {
   key: string;
   name: string;
   description: string;
+  /** The class's description, still in English for this locale (not one the player wrote). */
+  untranslated?: boolean;
   note?: string;
   /** Spell slots never reach a box. */
   unit: 'uses' | 'points' | 'hit-points';
@@ -163,6 +167,7 @@ export function listResourceBoxes(input: BoxesInput): EditableResourceBox[] {
           key,
           name: edits.name || base.name,
           description: edits.description || base.description,
+          ...(r.untranslated && !edits.description && { untranslated: true }),
           ...(r.note !== undefined && { note: r.note }),
           unit: r.unit,
           max,

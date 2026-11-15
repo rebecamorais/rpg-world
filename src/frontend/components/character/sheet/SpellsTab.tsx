@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -15,6 +15,26 @@ import { useSheetSource } from '@frontend/hooks/useSheetSource';
 
 import { SheetPage } from './SheetPage';
 
+/**
+ * Where focus goes once a spell's card is gone: the next card of its level, else the one before,
+ * else the title of a neighbouring level. Read before forgetting, while the card is still there.
+ */
+function focusTargetAfter(root: HTMLElement | null, spellId: string): HTMLElement | null {
+  // Matched by attribute value: spell ids have colons, which a selector would need escaped
+  const card = [...(root?.querySelectorAll('article[aria-labelledby]') ?? [])].find(
+    (el) => el.getAttribute('aria-labelledby') === `spell-name-${spellId}`,
+  );
+  if (!card) return null;
+  const sibling = card.nextElementSibling ?? card.previousElementSibling;
+  const toggle = sibling?.querySelector<HTMLElement>('button[aria-expanded]');
+  if (toggle) return toggle;
+
+  // The level empties with this card, so its section goes too
+  const section = card.closest('section[data-level]');
+  const level = section?.nextElementSibling ?? section?.previousElementSibling;
+  return level?.querySelector<HTMLElement>('h2') ?? null;
+}
+
 /** The Spellbook tab: loads the character's spells only here and owns the search dialog. */
 export function SpellsTab() {
   const { id } = useCharacterMeta();
@@ -25,6 +45,50 @@ export function SpellsTab() {
   // Read only (the GM): the spellbook opens to read, nothing is learned, forgotten or prepared
   const { readOnly } = useSheetSource(id);
 
+  const listRef = useRef<HTMLDivElement>(null);
+  const addRef = useRef<HTMLButtonElement>(null);
+  // The spell being forgotten and where focus goes after; `settled` once the forget call returned
+  const pendingFocus = useRef<{ id: string; target: HTMLElement | null; settled: boolean } | null>(
+    null,
+  );
+
+  // The forgotten card unmounts with its forget button, and focus would fall to the page's top
+  useEffect(() => {
+    const pending = pendingFocus.current;
+    if (!pending) return;
+    if (spells.some((s) => s.id === pending.id)) {
+      // Cancelled or failed: the spell is still there, and so is the focus
+      if (pending.settled) pendingFocus.current = null;
+      return;
+    }
+    pendingFocus.current = null;
+    const target = pending.target?.isConnected ? pending.target : addRef.current;
+    if (!target) return;
+    // A level title isn't focusable by itself; -1 lets the script focus it without a Tab stop
+    if (target.tagName === 'H2' && !target.hasAttribute('tabindex')) {
+      target.setAttribute('tabindex', '-1');
+    }
+    target.focus();
+  }, [spells]);
+
+  const forgetFromSpellbook = useCallback(
+    async (spellId: string) => {
+      pendingFocus.current = {
+        id: spellId,
+        target: focusTargetAfter(listRef.current, spellId),
+        settled: false,
+      };
+      try {
+        await forgetSpell(spellId);
+      } finally {
+        // Even if it threw: left unsettled, it would take the focus on a later list change.
+        // Not cleared here: on success the list may not have re-rendered without the card yet
+        if (pendingFocus.current?.id === spellId) pendingFocus.current.settled = true;
+      }
+    },
+    [forgetSpell],
+  );
+
   const preparedCount = spells.filter((s) => s.isPrepared).length;
 
   const actions = (
@@ -34,10 +98,12 @@ export function SpellsTab() {
       </span>
       {!readOnly && (
         <Button
+          ref={addRef}
           variant="outline"
           size="sm"
           onClick={() => setIsSearchOpen(true)}
-          className="text-label h-8 px-3"
+          // No text-label: buttons keep the case of their text
+          className="h-8 px-3"
         >
           <Plus aria-hidden="true" />
           {t('spells.addBtn')}
@@ -58,13 +124,16 @@ export function SpellsTab() {
           ))}
         </div>
       ) : (
-        <SpellsSection
-          characterId={id}
-          characterSpells={spells}
-          onForgetSpell={readOnly ? undefined : forgetSpell}
-          onTogglePrepared={readOnly ? undefined : togglePrepared}
-          onAddSpell={readOnly ? undefined : () => setIsSearchOpen(true)}
-        />
+        // `contents`: only a root to find the cards in, the layout stays the section's own
+        <div ref={listRef} className="contents">
+          <SpellsSection
+            characterId={id}
+            characterSpells={spells}
+            onForgetSpell={readOnly ? undefined : forgetFromSpellbook}
+            onTogglePrepared={readOnly ? undefined : togglePrepared}
+            onAddSpell={readOnly ? undefined : () => setIsSearchOpen(true)}
+          />
+        </div>
       )}
 
       {/* Mounted once the spellbook is in: the list starts on the edition of its spells */}

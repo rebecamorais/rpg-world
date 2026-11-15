@@ -339,6 +339,15 @@ describe('o que a jogadora mudou numa caixinha da classe', () => {
     expect(box).toMatchObject({ name: 'rage', description: 'desc rage' });
   });
 
+  it('a descrição da classe ainda em inglês fica marcada; a que ela escreveu, não', () => {
+    const english = content('barbarian', [{ ...rage, untranslated: true }]);
+    expect(build(english, 1)[0].untranslated).toBe(true);
+    const [own] = build(english, 1, {
+      state: { [KEY]: { used: 0, overrides: { description: 'Meu texto' } } },
+    });
+    expect(own.untranslated).toBeUndefined();
+  });
+
   it('recuperação "nenhuma" tira a caixinha dos dois descansos', () => {
     const [box] = build(c, 1, {
       state: { [KEY]: { used: 0, overrides: { recovery: recoveryFor('none') } } },

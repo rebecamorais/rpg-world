@@ -31,6 +31,21 @@ Revisão de 2026-11-15, feita sobre o app inteiro. As contagens vêm de grep em 
 | 16  | Baixa     | `components/character` (30 `font-mono`)                                 | _(sugestão)_ Geist Mono em todo número, mas a fase 1 previa `tabular-nums` da Inter.                                                                                                                                                                         | Mono só onde há colunas a alinhar.                                                                                       |
 | 17  | Baixa     | `messages/pt.json`                                                      | Title Case em português ("Salvar Perfil", "Nova Senha", "Criar Conta").                                                                                                                                                                                      | Caixa de frase.                                                                                                          |
 
+### Regra do `text-label` (rodada 3, causa 8 da fase 1)
+
+`text-label` é caixa alta, negrito e espaçado. Serve só para rótulos curtos, de uma a três palavras, que nomeiam algo: título de seção ou de grupo ("Mochila", "Armas"), nome de campo ou de atributo, nível e escola de uma magia, abreviação de moeda.
+
+Não usar `text-label` em:
+
+- **Frases** (avisos, dicas, "Mostrando os primeiros 100…", o aviso de sem tradução): `text-caption` em caixa normal, com `text-muted-foreground` quando for ajuda.
+- **Unidades, pesos e alcances** ("35,5 kg", "18 m"): `text-caption` ou `text-xs` com `tabular-nums`. Em caixa alta o "kg" vira "KG" e o "m" vira "M".
+- **@username**: `text-caption` sem transformar. O username diferencia maiúsculas, e a versão em caixa alta é mais larga e corta antes no celular.
+- **Botões**: sem classe de tipo; o `Button` já tem a dele.
+
+Um cabeçalho de `SectionCard` com ações (botão, alternar visão) leva `flex-wrap` e as ações com `ml-auto`, para o botão ir para a linha de baixo em vez de sair do card em 320px.
+
+Quando estilo e legibilidade brigam, ganha a legibilidade.
+
 ## Espaçamento e alinhamento
 
 | #   | Sev.  | Onde                                                                                  | Problema                                                                                                                                                                                                                               | Proposta                                                      |

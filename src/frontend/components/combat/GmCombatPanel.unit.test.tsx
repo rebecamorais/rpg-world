@@ -345,6 +345,7 @@ describe('GmCombatPanel', () => {
 
     await user.click(end);
     const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveAccessibleName(t.endCombatTitle);
     expect(dialog).toHaveTextContent(t.endCombatConfirm);
     await user.click(within(dialog).getByRole('button', { name: messages.common.cancel }));
     expect(hook.finish.mutate).not.toHaveBeenCalled();

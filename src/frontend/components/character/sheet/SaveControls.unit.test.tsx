@@ -122,6 +122,26 @@ describe('SaveBarSlotProvider', () => {
     expect(screen.getAllByRole('button', { name: t.save })).toHaveLength(1);
     expect(screen.queryByText(t.unsavedSheet)).not.toBeInTheDocument();
   });
+
+  // Between sm and md the tab bar starts right of the side menu; the bars stack over that span
+  it('a coluna de barras começa onde começa a barra de abas', async () => {
+    renderWithCharacter(
+      <SaveBarSlotProvider>
+        <CombatStatsSection />
+      </SaveBarSlotProvider>,
+      character,
+    );
+
+    await editAc();
+
+    const column = screen.getByText(t.unsavedSheet).closest('.fixed');
+    expect(column).toHaveClass(
+      'inset-x-4',
+      'sm:left-[calc(var(--sidebar-offset)+1rem)]',
+      'md:right-6',
+      'md:left-auto',
+    );
+  });
 });
 
 describe('SaveControls: sem conexão e conflito', () => {
