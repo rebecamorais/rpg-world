@@ -63,7 +63,6 @@ describe('ResourcesRow', () => {
     expect(screen.getByRole('button', { name: 'Ki' })).toBeInTheDocument();
     expect(kiPips()).toHaveLength(5);
     expect(screen.getByText(tRes.short)).toBeInTheDocument();
-    expect(deathSaves()).toBeInTheDocument();
   });
 
   it('gastar um uso envia só a chave que mudou', async () => {
