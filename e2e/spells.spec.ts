@@ -7,7 +7,7 @@ test('aprende, prepara e esquece uma magia', async ({ page, user: _ }) => {
   // Learn Fireball from the catalog
   // The empty spellbook also offers it; use the page header's
   await page.getByRole('button', { name: 'Add Spell' }).first().click();
-  const catalog = page.getByRole('dialog', { name: 'Spell list' });
+  const catalog = page.getByRole('dialog', { name: 'Add Spell' });
   const search = catalog.getByRole('searchbox', { name: 'Search spells' });
   await search.fill('fireball');
   // "Delayed Blast Fireball" matches too
@@ -42,7 +42,7 @@ test('esquecer pelo teclado leva o foco ao próximo card', async ({ page, user: 
   await page.goto(characterUrl(id, '/spells'));
 
   await page.getByRole('button', { name: 'Add Spell' }).first().click();
-  const catalog = page.getByRole('dialog', { name: 'Spell list' });
+  const catalog = page.getByRole('dialog', { name: 'Add Spell' });
   const search = catalog.getByRole('searchbox', { name: 'Search spells' });
   for (const [query, name] of [
     ['fireball', /^Fireball/],

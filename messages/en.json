@@ -675,6 +675,7 @@
     "pactSlotsBack": "Pact slots return",
     "notBackShort": "Spell slots and HP do not return on a short rest",
     "fullHp": "Full HP",
+    "tempHpGone": "Clear temporary HP, if any are left",
     "hitDiceBack": "Recover {count, plural, one {# hit die} other {# hit dice}}",
     "spellSlotsBack": "Spell slots return",
     "spellPointsBack": "Spell points return",
@@ -686,7 +687,7 @@
   "spellsDrawer": {
     "searchPlaceholder": "Search spells…",
     "learn": "Learn",
-    "title": "Spell list",
+    "title": "Add Spell",
     "description": "Manage your character's known spells.",
     "emptyState": "No spells learned yet.",
     "allLevels": "All levels",

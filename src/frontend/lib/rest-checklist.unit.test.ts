@@ -88,6 +88,31 @@ describe('buildRestChecklist', () => {
     expect(items[1].values).toEqual({ count: 2 });
   });
 
+  it('com PV temporário, o descanso longo lembra de zerar (à mão)', () => {
+    const items = buildRestChecklist({
+      ...base,
+      rest: 'long',
+      level: 5,
+      hitDie: 8,
+      boxes: [],
+      hasTempHp: true,
+    });
+    expect(items.map((i) => i.message)).toEqual(['fullHp', 'tempHpGone', 'hitDiceBack']);
+    expect(items[1].target).toBe('sheet-hp');
+  });
+
+  it('o descanso curto não fala do PV temporário', () => {
+    const items = buildRestChecklist({
+      ...base,
+      rest: 'short',
+      level: 5,
+      hitDie: 8,
+      boxes: [],
+      hasTempHp: true,
+    });
+    expect(items.some((i) => i.message === 'tempHpGone')).toBe(false);
+  });
+
   it('descanso longo no nível 1 devolve ao menos 1 dado', () => {
     const items = buildRestChecklist({ ...base, rest: 'long', level: 1, hitDie: 8, boxes: [] });
     expect(items[1].values).toEqual({ count: 1 });

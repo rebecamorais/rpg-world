@@ -13,7 +13,7 @@ async function searchFireball(page: Page, characterId: string) {
   await page.goto(characterUrl(characterId, '/spells'));
   // The empty spellbook also offers it; use the page header's
   await (await hydrated(page.getByRole('button', { name: 'Add Spell' }).first())).click();
-  const catalog = page.getByRole('dialog', { name: 'Spell list' });
+  const catalog = page.getByRole('dialog', { name: 'Add Spell' });
   await catalog.getByRole('searchbox', { name: 'Search spells' }).fill('fireball');
   await expect(catalog.getByRole('article')).toHaveCount(2);
   return { catalog, fireball: catalog.getByRole('article', { name: /^Fireball/ }) };

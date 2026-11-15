@@ -130,6 +130,7 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
     boxes,
     magic: magicToRestore(character),
     hasPactSlots: !!content?.resources.some((r) => r.unit === 'spell-slots' && r.level <= level),
+    hasTempHp: (character.hpTemp ?? 0) > 0,
   });
 
   // Opening moves the focus here, so the list is what the keyboard reads next. No trap: Tab

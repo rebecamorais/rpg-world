@@ -53,7 +53,7 @@ Decisões técnicas tomadas na rodada 2, além das de cima:
 - **Recarregar, no conflito, mantém o rascunho por cima** da versão nova. Para ver só a outra versão, Descartar.
 - **Sem cliente antigo quebrado:** quem não manda a revisão (o app já publicado) continua salvando como antes. Os endpoints de valor absoluto continuam no ar.
 
-Ainda em aberto: o Recuperar do descanso longo não zera o PV temporário (no 2024 ele some no descanso longo), e o aviso no topo cobre o cabeçalho no celular por cerca de 4 segundos.
+O PV temporário e o aviso no topo foram decididos na rodada 3 (veja abaixo).
 
 ## Rodada 3: status
 
@@ -66,7 +66,7 @@ Decisões da rodada 3:
 - **Configurações da mesa:** o jogador que abre volta para a mesa com um aviso de que só o mestre gerencia.
 - **Glossário aplicado:** "mesa" também na landing e nas features; "Nível" nos espaços de magia; "Remover das preparadas".
 
-Ainda em aberto: "party" nos textos de privacidade e termos; o título "Buscar magia" e o botão "Adicionar magia" com nomes diferentes; o aviso das configurações é um toast, não uma faixa fixa.
+Respostas da Rebeca (2026-11-15): "mesa" também nos textos de privacidade e termos; o modal de busca se chama "Adicionar magia", como o botão; o aviso das configurações fica como toast; o descanso longo lembra de zerar o PV temporário na lista, sem fazer sozinho; o aviso no topo do celular fica como está.
 
 ## Causas
 

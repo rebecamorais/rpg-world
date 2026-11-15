@@ -26,6 +26,8 @@ export function buildRestChecklist(input: {
   /** What the long rest gives back to the sheet's magic: slots, points, or nothing to track. */
   magic: 'slots' | 'points' | null;
   hasPactSlots: boolean;
+  /** Temporary HP left: they end on a long rest, but by hand (Recover leaves them). */
+  hasTempHp?: boolean;
 }): RestItem[] {
   const { rest, boxes } = input;
 
@@ -74,6 +76,9 @@ export function buildRestChecklist(input: {
 
   return [
     { id: 'full-hp', target: 'sheet-hp', message: 'fullHp' },
+    ...(input.hasTempHp
+      ? [{ id: 'temp-hp', target: 'sheet-hp' as const, message: 'tempHpGone' }]
+      : []),
     {
       id: 'hit-dice-back',
       target: 'sheet-hit-dice',

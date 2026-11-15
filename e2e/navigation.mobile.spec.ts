@@ -38,7 +38,7 @@ test.describe('celular', () => {
     const id = await createCharacter(page, 'Pocket Wizard');
     await page.goto(characterUrl(id, '/spells'));
     await page.getByRole('button', { name: 'Add Spell' }).first().click();
-    const catalog = page.getByRole('dialog', { name: 'Spell list' });
+    const catalog = page.getByRole('dialog', { name: 'Add Spell' });
     // Fireball (level 3) and Delayed Blast Fireball (level 7): the filter keeps one
     await catalog.getByRole('searchbox', { name: 'Search spells' }).fill('fireball');
     await expect(catalog.getByRole('article')).toHaveCount(2);

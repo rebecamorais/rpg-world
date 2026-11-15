@@ -157,7 +157,7 @@ test.describe('telas logadas', () => {
     await expect(page.getByRole('button', { name: /Expand Fireball/ })).toBeVisible();
 
     await page.getByRole('button', { name: 'Add Spell' }).click();
-    const catalog = page.getByRole('dialog', { name: 'Spell list' });
+    const catalog = page.getByRole('dialog', { name: 'Add Spell' });
     // The first page of the official catalog
     await expect(catalog.getByRole('article')).toHaveCount(12);
     await snap(page, 'spells-search');
