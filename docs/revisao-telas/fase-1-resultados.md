@@ -41,6 +41,20 @@ No app local, com o banco do seed. "Offline" é `context.setOffline(true)` no Pl
 | 5     | Inventário em 390px. Três toques rápidos no − de um item com quantidade 2.                | O item fica em 1 e a lixeira não está no lugar do −. | Com quantidade 1 o − vira lixeira; o item sai, a lista sobe e o terceiro toque remove o item de baixo.                                                                                                                    | — (script `s5` do agente C)                                                                        |
 | 5     | Buscar magia. Duplo clique no + de aprender.                                              | Uma requisição.                                      | Dois POST e dois toasts "Magia aprendida!".                                                                                                                                                                               | —                                                                                                  |
 
+## Rodada 2: status
+
+As causas 1 a 5, que bloqueiam, estão corrigidas neste PR, cada uma com um teste e2e que reproduz o problema (`e2e/safe-interaction*.spec.ts`, `e2e/offline-save.spec.ts` e `e2e/concurrent-writes.spec.ts`). As causas 6 a 12 ficam para a próxima rodada (P1 e P2).
+
+Decisões técnicas tomadas na rodada 2, além das de cima:
+
+- **A revisão da ficha só sobe com edições da ficha.** PV, PV temporário, testes contra a morte, espaços e pontos de magia, recursos, dados de vida, avatar e fundo não mudam a revisão. Assim, o mestre aplicar dano no combate não dá "Mudou em outro lugar" no rascunho de CA da jogadora.
+- **Remoções seguidas viram um aviso só** ("2 itens removidos"), com Desfazer de todas, e cada linha removida tem o próprio Desfazer.
+- **Corrida na última unidade ou em moedas a mais:** a segunda escrita é recusada (409) e a tela volta ao valor do servidor.
+- **Recarregar, no conflito, mantém o rascunho por cima** da versão nova. Para ver só a outra versão, Descartar.
+- **Sem cliente antigo quebrado:** quem não manda a revisão (o app já publicado) continua salvando como antes. Os endpoints de valor absoluto continuam no ar.
+
+Ainda em aberto: o Recuperar do descanso longo não zera o PV temporário (no 2024 ele some no descanso longo), e o aviso no topo cobre o cabeçalho no celular por cerca de 4 segundos.
+
 ## Causas
 
 | #   | Causa                                                                                                                                   | Severidade | Bloqueia | Tamanho | Telas                                                                                                                                                                                                                                                           |
