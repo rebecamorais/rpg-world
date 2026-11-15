@@ -126,7 +126,8 @@
 
 /* =========================================================================================
  * 2. Alchemical Corrosion: viscous acid. A wet sheen, bubbles with a lit rim, small corrosion
- *    pits, and drips hanging from the top edge. The details live in three tiny static SVGs
+ *    pits and scattered spatter (solid dots and rings, dark and in the spell's green; the owner
+ *    asked for them instead of drips on the top edge). The details live in tiny static SVGs
  *    (public/grimoire/materials/acid-*.svg) instead of ~18 gradient layers: the first version,
  *    all gradients, was the only material that dropped frames (see the exploration doc).
  * ======================================================================================= */
@@ -140,6 +141,7 @@
     linear-gradient(172deg, transparent 18%, rgb(255 255 255 / 0.045) 24%, transparent 32%),
     url('/grimoire/materials/acid-pits.svg') right 6px bottom 2px / 120px 90px no-repeat,
     url('/grimoire/materials/acid-pits.svg') left -56px bottom -30px / 120px 90px no-repeat,
+    url('/grimoire/materials/acid-spatter.svg') 0 0 / 160px 120px repeat,
     radial-gradient(
       70% 90% at 100% 100%,
       color-mix(in srgb, var(--m), transparent 76%),
@@ -152,13 +154,14 @@
       color-mix(in srgb, var(--m) 7%, var(--card))
     );
 }
-/* Drips, the wet film on top and the bubble rims: one layer painted in the spell color and cut
-   by static masks (the assets are black shapes), so they follow any spell's hue */
+/* The wet film on top, green spatter and the bubble rims: one layer painted in the spell color
+   and cut by static masks (the assets are black shapes), so they follow any spell's hue. The
+   spatter tile is the dark one's, larger and offset, so the green dots don't sit on the dark ones */
 .ornament[data-material='alchemical-corrosion'] {
   background: var(--m);
   mask:
-    url('/grimoire/materials/acid-drips.svg') 0 0 / 200px 26px repeat-x,
     linear-gradient(to bottom, rgb(0 0 0 / 0.3), transparent 9px),
+    url('/grimoire/materials/acid-spatter.svg') 53px 37px / 230px 172px repeat,
     url('/grimoire/materials/acid-bubbles.svg') right 4px bottom 0 / 80px 60px no-repeat,
     url('/grimoire/materials/acid-bubbles.svg') left -40px bottom -24px / 80px 60px no-repeat;
 }
@@ -296,6 +299,7 @@
   background-image:
     linear-gradient(172deg, transparent 16%, rgb(255 255 255 / 0.55) 23%, transparent 31%),
     url('/grimoire/materials/acid-pits.svg'), url('/grimoire/materials/acid-pits.svg'),
+    url('/grimoire/materials/acid-spatter.svg'),
     radial-gradient(
       70% 90% at 100% 100%,
       color-mix(in srgb, var(--m), transparent 50%),
@@ -311,16 +315,18 @@
     right 6px bottom 2px,
     left -56px bottom -30px,
     0 0,
+    0 0,
     0 0;
   background-size:
     auto,
     120px 90px,
     120px 90px,
+    160px 120px,
     auto,
     auto;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat, no-repeat, no-repeat;
 }
-/* Drips and bubble rims in a deeper shade of the tint, so they read on a light surface */
+/* Spatter and bubble rims in a deeper shade of the tint, so they read on a light surface */
 :global(:root[data-theme='light']) .ornament[data-material='alchemical-corrosion'] {
   background: color-mix(in oklab, var(--m), black 32%);
 }

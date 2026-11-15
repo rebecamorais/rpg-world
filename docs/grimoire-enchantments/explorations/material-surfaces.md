@@ -340,3 +340,12 @@ Os detalhes estão em [spell-type-effects.md](spell-type-effects.md).
 2. Escolher a saída do OverflowBorders (A, B ou C acima), se ornamentos que passam da borda continuarem no plano.
 3. ~~Refazer a Corrosion como textura única e medir de novo.~~ Feito na rodada 2 (`baked`).
 4. Medir num celular real.
+
+## Ácido sem gotas no topo (15/11)
+
+A pedido da dona, as gotas da borda de cima do Alchemical Corrosion saíram (`acid-drips.svg` foi apagado). No lugar entrou um respingo espalhado pelo card todo: bolinhas cheias e anéis num ladrilho estático pequeno (`acid-spatter.svg`, 160 × 120). O mesmo ladrilho aparece duas vezes:
+
+- **No fundo, em preto translúcido:** as bolinhas escuras.
+- **Na camada da cor da magia, como máscara:** as bolinhas verdes, maiores e deslocadas, para não caírem em cima das escuras.
+
+A película do topo e os anéis das bolhas nos cantos continuam. Com o desenho do ácido aberto por cima, o topo agora tem só as gotas do desenho, não duas camadas de gotas.
