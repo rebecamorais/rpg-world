@@ -381,6 +381,13 @@
     ),
     linear-gradient(to bottom, #000 25%, rgb(0 0 0 / 0.45) 50%, transparent 72%);
 }
+/* Cold: the ice starts at 40% of the width (the title stays clear) and thaws before the rules
+   text, also on a tall phone card */
+.art[data-art='frost-crystals'] {
+  mask-image:
+    linear-gradient(to right, transparent 40%, rgb(0 0 0 / 0.3) 55%, #000 72%),
+    linear-gradient(to bottom, #000 28%, rgb(0 0 0 / 0.45) 52%, transparent 76%);
+}
 /* Psychic: the drawing's own fades (from 42% of the width; gone by 93% of the height) */
 .art[data-art='resonance'] {
   mask-image:

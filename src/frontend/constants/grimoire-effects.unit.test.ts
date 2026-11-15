@@ -5,7 +5,7 @@ import { spellEffectOf } from './grimoire-effects';
 
 describe('spellEffectOf', () => {
   it('uses the damage type first, then the school', () => {
-    expect(spellEffectOf({ damageType: 'Cold', school: 'abjuration' })).toBe('frost');
+    expect(spellEffectOf({ damageType: 'Cold', school: 'abjuration' })).toBe('frost-crystals');
     expect(spellEffectOf({ damageType: null, school: 'abjuration' })).toBe('ward-mesh');
   });
 
