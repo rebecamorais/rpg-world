@@ -1,14 +1,15 @@
 /**
- * Benchmark for the Grimoire material surfaces (/dev/grimoire).
+ * Benchmark for the Grimoire's open-card effects (/dev/grimoire).
  *
  * Run against a production build, never `next dev`:
  *   npx next build && GRIMOIRE_LAB=1 npx next start -p 3006
- *   npx tsx scripts/grimoire-materials-bench.ts http://localhost:3006 out.json
+ *   npx tsx scripts/grimoire-bench.ts http://localhost:3006 out.json
  *
- * For each scenario (the card as it is today, each material, then a few open-card effects), theme, device (desktop; phone with a 4x slower CPU) and sample, it opens a
+ * For each scenario (the card as it is today, then open-card effects), theme, device (desktop;
+ * phone with a 4x slower CPU) and sample, it opens a
  * fresh page with 100 SpellCards and records three phases separately: the initial render,
  * scrolling the whole list with the mouse wheel (all cards closed), and opening the first card
- * (its SpellVFX background appears over the material). Chrome's
+ * (where the effect appears). Chrome's
  * trace gives style, layout, paint, raster and compositing time; the page itself records frame
  * intervals and long animation frames. Samples are interleaved across scenarios so drift in the
  * machine hits all of them alike.
@@ -25,17 +26,13 @@ const COUNT = 100;
 
 const ALL_SCENARIOS = [
   'none',
-  'glacial-glass',
-  'alchemical-corrosion',
-  'crypt-stone',
-  'divine-parchment',
   // Open-card effects (fx:<id>): only the opened card shows one, so they show up in the open phase
   'fx:frost',
   'fx:embers',
   'fx:alchemy-circle',
   'fx:bolt',
 ] as const;
-// SCENARIOS=none,crypt-stone re-measures just a few
+// SCENARIOS=none,fx:frost re-measures just a few
 // (any fx:<effect id> works here too, beyond the ones listed above)
 const SCENARIOS: readonly string[] = process.env.SCENARIOS
   ? process.env.SCENARIOS.split(',').filter(
@@ -167,11 +164,7 @@ async function sample(
   const cdp = await context.newCDPSession(page);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: d.cpu });
   const query =
-    scenario === 'none'
-      ? `count=${COUNT}`
-      : scenario.startsWith('fx:')
-        ? `effect=${scenario.slice(3)}&count=${COUNT}`
-        : `material=${scenario}&count=${COUNT}`;
+    scenario === 'none' ? `count=${COUNT}` : `effect=${scenario.slice(3)}&count=${COUNT}`;
 
   let lcp = 0;
   const initial = await trace(cdp, async () => {

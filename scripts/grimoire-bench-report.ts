@@ -1,11 +1,11 @@
 /**
- * Summarizes grimoire-materials-bench.ts output as Markdown tables.
- *   npx tsx scripts/grimoire-materials-report.ts bench.json
+ * Summarizes grimoire-bench.ts output as Markdown tables.
+ *   npx tsx scripts/grimoire-bench-report.ts bench.json
  *
  * For each device, theme, phase and metric: the median and the [min–max] range of the samples,
  * and the median's change against the card as it is today ("none"). A difference is marked
- * consistent only when the ranges don't overlap (every material sample above, or below, every
- * baseline one). Lab variants (`crypt-stone+webp`) are also compared against their original.
+ * consistent only when the ranges don't overlap (every effect sample above, or below, every
+ * baseline one).
  * Files from the first round (no theme, no open phase) still work: they read as dark.
  */
 import { readFileSync } from 'node:fs';
@@ -89,29 +89,4 @@ for (const device of devices) {
   }
 }
 
-// Each lab variant against its own original, on the metrics that moved in round 1
-const variants = scenarios.filter((s) => s.includes('+'));
-if (variants.length) {
-  console.log(
-    '\n### Variante × original (mediana da variante; variação contra o material original)\n',
-  );
-  console.log(
-    '| Variante | Aparelho | Tema | raster rolagem | composite rolagem | frames > 33 ms rolagem | raster abrir |',
-  );
-  console.log('|---|---|---|---|---|---|---|');
-  for (const variant of variants) {
-    const original = variant.split('+')[0];
-    for (const device of devices) {
-      for (const theme of themes) {
-        const cell = (phase: string, metric: string) => {
-          const v = values(device, theme, variant, phase, metric);
-          return `${fmt(median(v))} ${compare(v, values(device, theme, original, phase, metric))}`;
-        };
-        console.log(
-          `| ${variant} | ${device} | ${theme} | ${cell('scroll', 'raster')} | ${cell('scroll', 'composite')} | ${cell('scroll', 'framesOver33ms')} | ${cell('open', 'raster')} |`,
-        );
-      }
-    }
-  }
-}
 console.log('\n**●** = diferença consistente: as faixas de amostras não se sobrepõem.');

@@ -3,7 +3,6 @@
 import React, { useMemo } from 'react';
 
 import type { CardEffect } from '@frontend/components/grimoire/card-effect/types';
-import type { CardMaterial } from '@frontend/components/grimoire/material-surface/types';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useIsSpellPending } from '@frontend/hooks/useCharacterSpells';
 import { cn } from '@frontend/lib/utils';
@@ -30,11 +29,6 @@ interface SpellCardProps {
   isLearned?: boolean;
   showLevel?: boolean;
   /**
-   * Grimoire exploration (/dev/grimoire only): a material surface for the card.
-   * Without it the card renders exactly as before. Pass a stable object so the memo holds.
-   */
-  material?: CardMaterial;
-  /**
    * Grimoire exploration (lab only): the open card's effect, in place of the current background.
    * Without it the card renders exactly as before. Pass a stable object.
    */
@@ -51,7 +45,6 @@ export const SpellCard = React.memo(function SpellCard({
   onLearnSpell,
   isLearned,
   showLevel,
-  material,
   effect,
 }: SpellCardProps) {
   const { theme, mainIcon, displayValues } = useSpellDisplay(spell);
@@ -81,16 +74,13 @@ export const SpellCard = React.memo(function SpellCard({
     () =>
       ({
         '--spell-color': theme.hex,
-        // A material takes the spell's color, clipped inside the 1px border
-        ...((material || effect) && { '--grimoire-tint': 'var(--spell-color)' }),
-        ...(material && {
-          '--grimoire-clip-radius': 'calc(var(--radius-xl) - 1px)',
-        }),
+        // An effect takes the spell's color
+        ...(effect && { '--grimoire-tint': 'var(--spell-color)' }),
         contentVisibility: 'auto',
         // Height of a collapsed card, so off-screen cards don't make the scrollbar jump
         containIntrinsicSize: 'auto 96px',
       }) as React.CSSProperties,
-    [theme.hex, material, effect],
+    [theme.hex, effect],
   );
 
   // The spell's color lives in this stripe, the icon and the badges; the surface stays plain
@@ -105,23 +95,12 @@ export const SpellCard = React.memo(function SpellCard({
         'spell-context group bg-card relative overflow-hidden rounded-xl border p-4 pl-5 outline-none sm:p-5 sm:pl-6',
         'transition-[border-color] duration-200',
         isExpanded ? 'border-spell-muted' : 'border-border hover:border-spell-muted',
-        // With a material the outer box stops clipping (room for ornaments past the edge);
-        // the inner layer below keeps the rounded clip for what is painted inside
-        material && 'overflow-visible',
       )}
       style={cardStyles}
       aria-labelledby={`spell-name-${spell.id}`}
       data-grimoire-host={effect ? '' : undefined}
     >
-      {/* With a material, the stripe and the open card's background are clipped with its surface */}
-      {material
-        ? material.layers(
-            <>
-              {stripe}
-              {openLayer}
-            </>,
-          )
-        : stripe}
+      {stripe}
 
       {/* Primary Toggle Action (Clickable Background) */}
       <button
@@ -136,7 +115,7 @@ export const SpellCard = React.memo(function SpellCard({
         </span>
       </button>
 
-      {!material && openLayer}
+      {openLayer}
 
       <div className="pointer-events-none relative z-10 flex h-full flex-col">
         <SpellHeader

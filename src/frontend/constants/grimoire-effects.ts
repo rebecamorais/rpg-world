@@ -1,8 +1,8 @@
 import type { EffectId } from '@frontend/components/grimoire/card-effect/types';
 
 /*
- * D&D 5e: which Grimoire effect an open spell card wears. Like the materials map, the library
- * knows nothing about spells; this map is an example used by the lab (/dev/grimoire)
+ * D&D 5e: which Grimoire effect an open spell card wears. The library knows nothing about
+ * spells; this map is an example used by the lab (/dev/grimoire)
  * only. Every damage type and every school has one, so every spell gets an effect.
  */
 

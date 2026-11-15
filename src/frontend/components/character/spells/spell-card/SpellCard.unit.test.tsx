@@ -4,7 +4,6 @@ import { messages, renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { CardEffect } from '@frontend/components/grimoire/card-effect/types';
-import type { CardMaterial } from '@frontend/components/grimoire/material-surface/types';
 import type { Spell } from '@frontend/types/spells';
 
 import { SpellCard } from './SpellCard';
@@ -205,62 +204,6 @@ describe('SpellCard: condições', () => {
     );
     // The badge and the tag in the text
     expect(screen.getAllByRole('button', { name: 'Frightened, condition' })).toHaveLength(2);
-  });
-});
-
-describe('SpellCard com material (exploração do Grimoire)', () => {
-  // Same shape as cardMaterial(): the clipped surface (with the card's own paint) and the ornament
-  const material: CardMaterial = {
-    id: 'glacial-glass',
-    layers: (clipped) => (
-      <>
-        <span data-material-clip="" className="overflow-hidden">
-          <span data-testid="surface" />
-          {clipped}
-        </span>
-        <span data-testid="ornament" />
-      </>
-    ),
-  };
-
-  it('sem material, continua como antes: recorta na borda e não ganha camadas novas', () => {
-    const { container } = renderWithProviders(<SpellCard spell={FIREBALL} />);
-    const card = container.querySelector('article')!;
-
-    expect(card).toHaveClass('overflow-hidden');
-    expect(card).not.toHaveClass('overflow-visible');
-    expect(card.querySelector('[data-material-clip]')).toBeNull();
-    expect(card.style.contentVisibility).toBe('auto');
-    expect(card.style.getPropertyValue('--grimoire-tint')).toBe('');
-  });
-
-  it('com material, a borda externa deixa de recortar e o recorte passa para a camada interna', () => {
-    const { container } = renderWithProviders(<SpellCard spell={FIREBALL} material={material} />);
-    const card = container.querySelector('article')!;
-    const clip = card.querySelector('[data-material-clip]')!;
-
-    expect(card).toHaveClass('overflow-visible');
-    expect(card).not.toHaveClass('overflow-hidden');
-    expect(clip).toHaveClass('overflow-hidden');
-    expect(clip).toContainElement(screen.getByTestId('surface'));
-    // The ornament sits outside the clip, free to reach past the edge
-    expect(clip).not.toContainElement(screen.getByTestId('ornament'));
-    expect(card.style.contentVisibility).toBe('auto');
-    // The material takes the spell's color through the library's neutral token
-    expect(card.style.getPropertyValue('--grimoire-tint')).toBe('var(--spell-color)');
-  });
-
-  it('com material, o fundo do card aberto fica dentro do recorte e o card continua abrindo', async () => {
-    const user = userEvent.setup();
-    const onToggle = vi.fn();
-    const { container } = renderWithProviders(
-      <SpellCard spell={FIREBALL} material={material} isExpanded onToggle={onToggle} />,
-    );
-    const clip = container.querySelector('[data-material-clip]')!;
-
-    expect(clip.childElementCount).toBe(3); // surface, stripe, SpellVFX
-    await user.click(screen.getByRole('button', { expanded: true }));
-    expect(onToggle).toHaveBeenCalledWith('fireball');
   });
 });
 

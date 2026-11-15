@@ -2,8 +2,8 @@
  * Grimoire card effects (exploration): a motif per kind of content, shown on an OPEN card.
  * Carried over from the approved sample (docs/grimoire-enchantments/explorations/spell-type-effects.md).
  *
- * Color: every effect is tinted by --grimoire-tint, set by the HOST card to its own color (the
- * same token the materials read). Effect ids are neutral motifs (frost, embers...): which content
+ * Color: every effect is tinted by --grimoire-tint, set by the HOST card to its own color.
+ * Effect ids are neutral motifs (frost, embers...): which content
  * wears which one is a game system's map, outside this library.
  *
  * Cost: gradients, masks and tiny inline SVGs, painted once when the card opens. Motion only on
