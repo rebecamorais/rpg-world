@@ -1,10 +1,10 @@
 # Condições e tags no texto
 
 **Data:** 2026-11-01
-**Status:** entregue (PR a abrir).
+**Status:** entregue no [#134](https://github.com/rebecamorais/rpg-world/issues/134).
 **Issue:** [#105](https://github.com/rebecamorais/rpg-world/issues/105) (este plano cobre as condições; itens ficam para um segundo PR, que reaproveita
 o mesmo formato).
-**Planos relacionados:** `2026-10-15-5etools-e-traducoes.md` (passo 5), `2026-10-21-magias-em-arquivo.md`,
+**Planos relacionados:** `2026-10-15-5etools-e-traducoes.md` (passo 5),
 `2026-10-21-magias-por-edicao.md`, `2026-10-15-traducoes-comunitarias.md`.
 
 ## Por quê
