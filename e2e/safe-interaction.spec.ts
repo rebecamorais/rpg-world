@@ -60,8 +60,10 @@ test.describe('interação segura', () => {
     await expect(page.getByText('Spell forgotten.')).toBeVisible();
     await expect(fireball.getByText('Learned')).toHaveCount(0);
 
-    // Before: the click fell on the modal's overlay, the modal closed and the spell stayed forgotten
-    await page.getByRole('button', { name: 'Undo' }).click();
+    // Before: the click fell on the modal's overlay, the modal closed and the spell stayed forgotten.
+    // By role, inside the toasts' region: the modal must not hide it from screen readers either
+    const toasts = page.getByRole('region', { name: /Notifications/ });
+    await toasts.getByRole('button', { name: 'Undo' }).click();
     await expect(catalog).toBeVisible();
     await expect(fireball.getByText('Learned')).toBeVisible();
 

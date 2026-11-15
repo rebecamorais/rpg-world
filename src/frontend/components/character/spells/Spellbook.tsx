@@ -16,6 +16,8 @@ import { SpellCard } from './spell-card/SpellCard';
 
 interface SpellbookProps {
   characterSpells: CharacterSpell[];
+  /** Whose spellbook it is; the cards only wait on that character's writes. */
+  characterId?: string;
   onForgetSpell?: (id: string) => void;
   onTogglePrepared?: (id: string, isPrepared: boolean) => void;
   /** Opens the spell search; offered when the spellbook is empty. */
@@ -52,6 +54,7 @@ function useLevelInView(levels: number[]) {
 
 export function Spellbook({
   characterSpells,
+  characterId,
   onForgetSpell,
   onTogglePrepared,
   onAddSpell,
@@ -213,6 +216,7 @@ export function Spellbook({
                     <SpellCard
                       key={spell.id}
                       spell={spell}
+                      characterId={characterId}
                       isExpanded={expandedSpellId === spell.id}
                       onToggle={toggleExpand}
                       onForgetSpell={onForgetSpell}

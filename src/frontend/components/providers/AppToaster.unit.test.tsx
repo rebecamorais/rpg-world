@@ -39,7 +39,8 @@ async function renderWithModal() {
   act(() => {
     toast('Spell forgotten.', { action: { label: 'Undo', onClick: onUndo } });
   });
-  const undo = await screen.findByRole('button', { name: 'Undo', hidden: true });
+  // Not `hidden: true`: the Undo must be in the accessibility tree with the modal open
+  const undo = await screen.findByRole('button', { name: 'Undo' });
   return { onOpenChange, onUndo, undo };
 }
 
@@ -78,6 +79,22 @@ describe('AppToaster', () => {
     await renderWithModal();
 
     expect(document.querySelector('[data-sonner-toaster]')).toHaveClass('pointer-events-auto');
+  });
+
+  it('com um modal aberto, o leitor de tela ainda alcança os toasts', async () => {
+    stubPhone(false);
+    await renderWithModal();
+    const region = screen.getByRole('region', { name: /Notifications/ });
+
+    // What the modal does to the rest of the page (Radix's hideOthers)
+    act(() => {
+      region.setAttribute('aria-hidden', 'true');
+      region.setAttribute('data-aria-hidden', 'true');
+    });
+
+    await waitFor(() => expect(region).not.toHaveAttribute('aria-hidden'));
+    expect(region).not.toHaveAttribute('data-aria-hidden');
+    expect(screen.getByRole('button', { name: 'Undo' })).toBeInTheDocument();
   });
 
   it('no celular fica no topo', async () => {

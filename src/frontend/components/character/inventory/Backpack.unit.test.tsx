@@ -79,10 +79,16 @@ const inventory = (items: ReturnType<typeof entry>[]) => ({
   items,
 });
 
+/** The API's answers: the item catalog, the conditions (item rules link them) and the inventory. */
+const serve = (items: ReturnType<typeof entry>[]) => async (url: string) =>
+  url.startsWith('/api/items')
+    ? CATALOG
+    : url.startsWith('/api/conditions')
+      ? []
+      : inventory(items);
+
 function renderBackpack(items: ReturnType<typeof entry>[], readOnly = false) {
-  api.get.mockImplementation(async (url: string) =>
-    url.startsWith('/api/items') ? CATALOG : inventory(items),
-  );
+  api.get.mockImplementation(serve(items));
   return renderWithCharacter(
     readOnly ? (
       <SheetFieldset>
@@ -147,20 +153,20 @@ describe('Backpack', () => {
     expect(screen.queryByText('Torch')).not.toBeInTheDocument();
   });
 
-  it('− na quantidade 1 não vai a 0; + manda o valor absoluto', async () => {
+  it('− na quantidade 1 não vai a 0; + manda a diferença', async () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 1)]);
 
     // At 1 the − stops; removing is its own button
     expect(await screen.findByRole('button', { name: 'One less Corda de Cânhamo' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Remove Corda de Cânhamo' })).toBeEnabled();
-    api.get.mockImplementation(async (url: string) =>
-      url.startsWith('/api/items') ? CATALOG : inventory([entry('e1', ROPE, 2)]),
-    );
+    api.get.mockImplementation(serve([entry('e1', ROPE, 2)]));
     await user.click(screen.getByRole('button', { name: 'One more Corda de Cânhamo' }));
 
+    // +1, not "2": two tabs adding at once both count
     expect(api.patch).toHaveBeenCalledWith('/api/characters/c1/inventory/items/e1', {
-      quantity: 2,
+      delta: 1,
+      key: expect.any(String),
     });
     expect(screen.getByLabelText('Quantity of Corda de Cânhamo')).toHaveTextContent('2');
   });
@@ -186,6 +192,7 @@ describe('Backpack', () => {
         ref: ROPE.key,
         containerId: 'bag1',
         quantity: 1,
+        key: expect.any(String),
       }),
     );
   });
@@ -193,9 +200,7 @@ describe('Backpack', () => {
   it('remover pela lixeira leva o foco ao item seguinte, não ao topo da página', async () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 1), entry('e2', TORCH, 1)]);
-    api.get.mockImplementation(async (url: string) =>
-      url.startsWith('/api/items') ? CATALOG : inventory([entry('e2', TORCH, 1)]),
-    );
+    api.get.mockImplementation(serve([entry('e2', TORCH, 1)]));
 
     await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
 
@@ -207,9 +212,7 @@ describe('Backpack', () => {
   it('remover o último item leva o foco a "Add Item"', async () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 1)]);
-    api.get.mockImplementation(async (url: string) =>
-      url.startsWith('/api/items') ? CATALOG : inventory([]),
-    );
+    api.get.mockImplementation(serve([]));
 
     await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
 
@@ -293,9 +296,7 @@ describe('Backpack', () => {
     it('a linha fica no lugar, sem controles, até o toast fechar', async () => {
       const user = userEvent.setup();
       renderBackpack([entry('e1', ROPE, 1), entry('e2', TORCH, 1)]);
-      api.get.mockImplementation(async (url: string) =>
-        url.startsWith('/api/items') ? CATALOG : inventory([entry('e2', TORCH, 1)]),
-      );
+      api.get.mockImplementation(serve([entry('e2', TORCH, 1)]));
 
       await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
 
@@ -313,12 +314,61 @@ describe('Backpack', () => {
       await waitFor(() => expect(within(gear).getAllByRole('listitem')).toHaveLength(1));
     });
 
+    it('remover o último item deixa a linha (e o Desfazer) até o toast fechar', async () => {
+      const user = userEvent.setup();
+      renderBackpack([entry('e1', ROPE, 1)]);
+      api.get.mockImplementation(serve([]));
+
+      await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
+      await waitFor(() => expect(api.delete).toHaveBeenCalled());
+
+      // Before: the empty state came at once and took the placeholder with it
+      expect(screen.queryByText('The backpack is empty.')).toBeNull();
+      expect(screen.getByRole('button', { name: 'Undo removing Corda de Cânhamo' })).toBeVisible();
+      // The header still has the view switch and "Add Item"
+      expect(screen.getByRole('radiogroup', { name: 'View' })).toBeInTheDocument();
+
+      act(() => lastToast()[1].onAutoClose());
+      expect(await screen.findByText('The backpack is empty.')).toBeInTheDocument();
+    });
+
+    it('remoção recusada: o item volta e o Desfazer não o duplica', async () => {
+      const user = userEvent.setup();
+      renderBackpack([entry('e1', ROPE, 1), entry('e2', TORCH, 1)]);
+      let refuse!: (error: Error) => void;
+      api.delete.mockImplementation(
+        (url: string) =>
+          new Promise((resolve, reject) =>
+            url.endsWith('/e2') ? (refuse = reject) : resolve(undefined),
+          ),
+      );
+      // What the server has: the rope left, the torch didn't
+      api.get.mockImplementation(serve([entry('e2', TORCH, 1)]));
+
+      await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
+      await user.click(screen.getByRole('button', { name: 'Remove Torch' }));
+      expect(lastToast()[0]).toBe('2 items removed');
+      await waitFor(() => expect(api.delete).toHaveBeenCalledTimes(2));
+
+      // The torch's DELETE fails: it is back in the list, and the toast only counts the rope
+      await act(async () => refuse(new Error('boom')));
+      await waitFor(() => expect(lastToast()[0]).toBe('Corda de Cânhamo removed'));
+      expect(screen.getByRole('button', { name: 'Remove Torch' })).toBeVisible();
+
+      lastToast()[1].action.onClick();
+      await waitFor(() => expect(api.post).toHaveBeenCalledTimes(1));
+      expect(api.post).toHaveBeenCalledWith('/api/characters/c1/inventory/items?locale=en', {
+        ref: ROPE.key,
+        containerId: 'bag1',
+        quantity: 1,
+        key: expect.any(String),
+      });
+    });
+
     it('o Desfazer da própria linha devolve o item e fecha o toast', async () => {
       const user = userEvent.setup();
       renderBackpack([entry('e1', ROPE, 2), entry('e2', TORCH, 1)]);
-      api.get.mockImplementation(async (url: string) =>
-        url.startsWith('/api/items') ? CATALOG : inventory([entry('e2', TORCH, 1)]),
-      );
+      api.get.mockImplementation(serve([entry('e2', TORCH, 1)]));
 
       await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
       await user.click(screen.getByRole('button', { name: 'Undo removing Corda de Cânhamo' }));
@@ -327,6 +377,7 @@ describe('Backpack', () => {
         ref: ROPE.key,
         containerId: 'bag1',
         quantity: 2,
+        key: expect.any(String),
       });
       expect(toast.dismiss).toHaveBeenCalledWith(lastToast()[1].id);
     });
@@ -395,9 +446,7 @@ describe('Backpack', () => {
 
     it('baú usa outra chave', async () => {
       localStorage.setItem(INVENTORY_VIEW_KEYS.backpack, 'grid');
-      api.get.mockImplementation(async (url: string) =>
-        url.startsWith('/api/items') ? CATALOG : inventory([entry('e1', RICH_ROPE, 2)]),
-      );
+      api.get.mockImplementation(serve([entry('e1', RICH_ROPE, 2)]));
       renderWithProviders(<PartyChest partyId="p1" />);
 
       expect(await screen.findByRole('radio', { name: 'List' })).toHaveAttribute(
@@ -429,36 +478,55 @@ describe('Backpack', () => {
       expect(screen.queryByText('Strong rope.')).toBeNull();
     });
 
-    it('grade: remover o selecionado fecha o painel e Undo devolve', async () => {
+    it('grade: remover o selecionado deixa o painel no lugar, riscado, com o próprio Desfazer', async () => {
       renderBackpack([entry('e1', RICH_ROPE, 1)]);
       await toGrid();
       fireEvent.click(screen.getByRole('button', { name: 'Rope, 1' }));
       expect(screen.getByText('Strong rope.')).toBeInTheDocument();
 
-      api.get.mockImplementation(async (url: string) =>
-        url.startsWith('/api/items') ? CATALOG : inventory([]),
-      );
+      api.get.mockImplementation(serve([]));
       fireEvent.click(screen.getByRole('button', { name: 'Remove Rope' }));
 
       await waitFor(() =>
         expect(api.delete).toHaveBeenCalledWith('/api/characters/c1/inventory/items/e1'),
       );
-      await waitFor(() => expect(screen.queryByText('Strong rope.')).toBeNull());
-      expect(screen.queryByRole('status', { name: 'Quantity of Rope' })).toBeNull();
+      // Before: the panel unmounted and what was under it moved up under the finger
+      const panel = await screen.findByRole('region', { name: 'Rope' });
+      await waitFor(() =>
+        expect(within(panel).getByRole('button', { name: 'Undo removing Rope' })).toBeVisible(),
+      );
+      expect(within(panel).getByText('Strong rope.')).toBeInTheDocument();
+      // Where the trash and the stepper were there is nothing to tap
+      expect(within(panel).queryByRole('button', { name: 'Remove Rope' })).toBeNull();
+      expect(within(panel).queryByRole('status', { name: 'Quantity of Rope' })).toBeNull();
 
-      await waitFor(() => expect(toast).toHaveBeenCalled());
-      const [, options] = vi.mocked(toast).mock.calls[0] as unknown as [
-        string,
-        { action: { onClick: () => void } },
-      ];
-      options.action.onClick();
+      fireEvent.click(within(panel).getByRole('button', { name: 'Undo removing Rope' }));
       await waitFor(() =>
         expect(api.post).toHaveBeenCalledWith('/api/characters/c1/inventory/items?locale=en', {
           ref: RICH_ROPE.key,
           containerId: 'bag1',
           quantity: 1,
+          key: expect.any(String),
         }),
       );
+    });
+
+    it('grade: o painel do removido fecha quando o toast fecha', async () => {
+      renderBackpack([entry('e1', RICH_ROPE, 1), entry('e2', TORCH, 1)]);
+      await toGrid();
+      fireEvent.click(screen.getByRole('button', { name: 'Rope, 1' }));
+      api.get.mockImplementation(serve([entry('e2', TORCH, 1)]));
+      fireEvent.click(screen.getByRole('button', { name: 'Remove Rope' }));
+      await waitFor(() => expect(toast).toHaveBeenCalled());
+
+      const [, options] = vi.mocked(toast).mock.calls.at(-1) as unknown as [
+        string,
+        { onAutoClose: () => void },
+      ];
+      act(() => options.onAutoClose());
+
+      await waitFor(() => expect(screen.queryByRole('region', { name: 'Rope' })).toBeNull());
+      expect(api.post).not.toHaveBeenCalled();
     });
 
     it('grade: o selo ×N só aparece com mais de um', async () => {
@@ -473,9 +541,7 @@ describe('Backpack', () => {
       renderBackpack([entry('e1', RICH_ROPE, 1), entry('e2', TORCH, 1)]);
       await toGrid();
       fireEvent.click(screen.getByRole('button', { name: 'Rope, 1' }));
-      api.get.mockImplementation(async (url: string) =>
-        url.startsWith('/api/items') ? CATALOG : inventory([entry('e2', TORCH, 1)]),
-      );
+      api.get.mockImplementation(serve([entry('e2', TORCH, 1)]));
 
       fireEvent.click(screen.getByRole('button', { name: 'Remove Rope' }));
 
@@ -601,6 +667,7 @@ describe('Backpack', () => {
         ref: TORCH.key,
         containerId: 'bag1',
         quantity: 1,
+        key: expect.any(String),
       });
       await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     });

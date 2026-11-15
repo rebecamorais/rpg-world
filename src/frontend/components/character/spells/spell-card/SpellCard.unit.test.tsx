@@ -68,9 +68,22 @@ describe('SpellCard na busca de magias', () => {
     const onLearnSpell = vi.fn();
     const { queryClient } = renderWithProviders(
       <>
-        <SpellCard spell={FIREBALL} onLearnSpell={onLearnSpell} onForgetSpell={vi.fn()} />
+        <SpellCard
+          spell={FIREBALL}
+          characterId="c1"
+          onLearnSpell={onLearnSpell}
+          onForgetSpell={vi.fn()}
+        />
         <SpellCard
           spell={{ ...FIREBALL, id: 'shield', name: 'Shield' }}
+          characterId="c1"
+          onLearnSpell={onLearnSpell}
+          onForgetSpell={vi.fn()}
+        />
+        {/* Another character's Fireball */}
+        <SpellCard
+          spell={FIREBALL}
+          characterId="c2"
           onLearnSpell={onLearnSpell}
           onForgetSpell={vi.fn()}
         />
@@ -81,15 +94,18 @@ describe('SpellCard na busca de magias', () => {
     void queryClient
       .getMutationCache()
       .build(queryClient, {
-        mutationKey: ['character-spells-write'],
+        mutationKey: ['character-spells-write', 'c1'],
         mutationFn: () => new Promise(() => {}),
       })
       .execute({ id: 'fireball', action: 'learn' });
 
-    const [fireball, shield] = screen.getAllByRole('button', { name: t.learnSpell });
+    const [fireball, shield, otherFireball] = screen.getAllByRole('button', {
+      name: t.learnSpell,
+    });
     await waitFor(() => expect(fireball).toBeDisabled());
     expect(fireball).toHaveAttribute('aria-busy', 'true');
     expect(shield).toBeEnabled();
+    expect(otherFireball).toBeEnabled();
   });
 
   it('expandir só mostra a magia, sem repetir a ação', () => {

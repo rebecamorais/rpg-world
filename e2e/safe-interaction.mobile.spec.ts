@@ -102,6 +102,9 @@ test.describe('interação segura no celular', () => {
     await (await hydrated(page.getByRole('button', { name: 'Remove Candle' }))).click();
     const toast = page.locator('[data-sonner-toast]').filter({ hasText: 'Candle removed' });
     await expect(toast).toBeVisible();
+    // Sonner slides it in from above the screen: measure once it has landed
+    await expect(toast).toHaveAttribute('data-mounted', 'true');
+    await expect.poll(async () => (await toast.boundingBox())?.y ?? -1).toBeGreaterThanOrEqual(0);
     const box = (await toast.boundingBox())!;
     expect(box.y).toBeLessThan(844 / 3);
     expect(box.y).toBeGreaterThanOrEqual(0);

@@ -59,6 +59,7 @@ export function SpellsTab() {
         </div>
       ) : (
         <SpellsSection
+          characterId={id}
           characterSpells={spells}
           onForgetSpell={readOnly ? undefined : forgetSpell}
           onTogglePrepared={readOnly ? undefined : togglePrepared}

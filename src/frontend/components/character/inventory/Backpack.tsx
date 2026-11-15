@@ -102,6 +102,8 @@ export function ItemList({
     focusNext(entries, entry);
     removal.remove(entry);
   };
+  // Empty by what is drawn: the last item's placeholder (and its Undo) stays until the toast goes
+  const isEmpty = removal.display.length === 0;
 
   const addButton = (
     <Button
@@ -123,7 +125,7 @@ export function ItemList({
         <SectionCard.Title icon={icon} hint={hint}>
           {title}
         </SectionCard.Title>
-        {entries.length > 0 && (
+        {!isEmpty && (
           <div className="flex items-center gap-2">
             <ViewToggle view={view} onChange={setView} />
             {addButton}
@@ -134,7 +136,7 @@ export function ItemList({
       {/* Not the empty state while loading: the backpack isn't known to be empty yet */}
       {isLoading ? (
         <ItemListSkeleton view={view} label={t('add.loading')} />
-      ) : entries.length === 0 ? (
+      ) : isEmpty ? (
         <SectionCard.Body>
           <EmptyState
             icon={icon}

@@ -21,8 +21,19 @@ interface SpellWrite {
   silent?: boolean;
 }
 
-/** Shared by every spellbook write, so a card can tell its own spell is being saved. */
-const SPELL_WRITE_KEY = ['character-spells-write'];
+/**
+ * Shared by every spellbook write, so a card can tell its own spell is being saved. Per
+ * character: two characters can have the same spell, and one's save must not lock the other's.
+ * Without an id it is the prefix of every character's writes.
+ */
+const spellWriteKey = (characterId?: string) =>
+  characterId ? ['character-spells-write', characterId] : ['character-spells-write'];
+
+/**
+ * One toast for learn, prepare and unprepare: a run of taps replaces it instead of stacking a
+ * pile. Forgetting has its own (with Undo), which these never replace.
+ */
+const SPELL_WRITE_TOAST = 'spell-write';
 
 /** The spellbook after an action the server confirmed; learning brings the learned spell. */
 function applyAction(
@@ -46,10 +57,10 @@ function applyAction(
  * Whether a write to this spell is on its way. Per spell, not one flag for the whole list: the
  * other cards stay usable while one saves.
  */
-export function useIsSpellPending(id: string): boolean {
+export function useIsSpellPending(id: string, characterId?: string): boolean {
   const pending = useMutationState({
     filters: {
-      mutationKey: SPELL_WRITE_KEY,
+      mutationKey: spellWriteKey(characterId),
       status: 'pending',
       predicate: (mutation) => (mutation.state.variables as SpellWrite | undefined)?.id === id,
     },
@@ -90,7 +101,7 @@ export function useCharacterSpells(
   // Not optimistic: the cache only changes with the server's answer, so a failed write has
   // nothing to roll back. Meanwhile the card shows it is saving (useIsSpellPending).
   const mutation = useMutation({
-    mutationKey: SPELL_WRITE_KEY,
+    mutationKey: spellWriteKey(characterId),
     mutationFn: async ({ id, action }: SpellWrite): Promise<{ spell: CharacterSpell | null }> => {
       return rpgWorldApi.post(`/api/characters/${characterId}/spells?locale=${locale}`, {
         id,
@@ -109,9 +120,10 @@ export function useCharacterSpells(
       });
       if (silent) return;
 
-      if (action === 'learn') toast.success(t('learned'));
-      if (action === 'prepare') toast.success(t('prepared'));
-      if (action === 'unprepare') toast.success(t('unprepared'));
+      const toastOptions = { id: SPELL_WRITE_TOAST };
+      if (action === 'learn') toast.success(t('learned'), toastOptions);
+      if (action === 'prepare') toast.success(t('prepared'), toastOptions);
+      if (action === 'unprepare') toast.success(t('unprepared'), toastOptions);
     },
     onError: (error: Error) => {
       toast.error(getErrorMessage(error));

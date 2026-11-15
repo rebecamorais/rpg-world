@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -77,15 +77,24 @@ export function useRemovedItems({
   const [removed, setRemoved] = useState<Removed[]>([]);
   // The toast's callbacks outlive the render that made them; they read the batch from here
   const current = useRef<Removed[]>([]);
+  // Removed entries seen out of the list. One that shows up in it again came back because its
+  // DELETE failed (the rollback): it was never removed, so Undo must not add a second copy
+  const gone = useRef(new Set<string>());
+  const latest = useRef(entries);
 
   const commit = (next: Removed[]) => {
     current.current = next;
     setRemoved(next);
   };
-  const clear = () => commit([]);
+  const clear = () => {
+    gone.current.clear();
+    commit([]);
+  };
+
+  const cameBack = (id: string) => gone.current.has(id) && latest.current.some((e) => e.id === id);
 
   const undoAll = () => {
-    for (const { entry } of current.current) restoreItem(entry);
+    for (const { entry } of current.current) if (!cameBack(entry.id)) restoreItem(entry);
     clear();
   };
 
@@ -118,11 +127,28 @@ export function useRemovedItems({
   const undo = (id: string) => {
     const found = current.current.find((r) => r.entry.id === id);
     if (!found) return;
-    restoreItem(found.entry);
+    if (!cameBack(id)) restoreItem(found.entry);
+    gone.current.delete(id);
     const next = current.current.filter((r) => r !== found);
     commit(next);
     announce(next);
   };
+
+  // Drops from the batch (and from the toast's count) the entries whose removal failed. Not
+  // "in the list" alone: right after the tap the entry is still there, until the optimistic
+  // removal reaches the cache
+  useEffect(() => {
+    latest.current = entries;
+    const batch = current.current;
+    for (const { entry } of batch) {
+      if (!entries.some((e) => e.id === entry.id)) gone.current.add(entry.id);
+    }
+    const kept = batch.filter((r) => !cameBack(r.entry.id));
+    if (kept.length === batch.length) return;
+    for (const r of batch) if (!kept.includes(r)) gone.current.delete(r.entry.id);
+    commit(kept);
+    announce(kept);
+  });
 
   // A removal the server refused puts the entry back in the list: it is no longer a placeholder
   const shown = removed.filter((r) => !entries.some((e) => e.id === r.entry.id));

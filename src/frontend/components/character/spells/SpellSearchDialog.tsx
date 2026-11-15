@@ -378,6 +378,7 @@ export default function SpellSearchDialog({
                 <SpellCard
                   key={spell.id}
                   spell={spell}
+                  characterId={character?.id}
                   isExpanded={expandedId === spell.id}
                   onToggle={toggleExpand}
                   onLearnSpell={onLearnSpell}

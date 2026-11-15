@@ -67,7 +67,8 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
             <Button
               variant="link"
               size="sm"
-              className="h-auto shrink-0 p-0"
+              // 44px to a finger, as the trash it replaces; the desktop row keeps its height
+              className="h-auto shrink-0 p-0 pointer-coarse:min-h-11 pointer-coarse:min-w-11"
               aria-label={t('undoRemove', { name })}
               onClick={undo}
             >

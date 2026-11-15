@@ -106,6 +106,19 @@ describe('useCharacterSpells', () => {
     expect(toast.success).toHaveBeenCalledTimes(1);
   });
 
+  it('aprender, preparar e despreparar dividem um toast; o de esquecer fica à parte', async () => {
+    const { result } = await renderSpells(false);
+
+    await act(() => result.current.learnSpell('shield'));
+    await act(() => result.current.togglePrepared('fly', true));
+    await act(() => result.current.togglePrepared('fly', false));
+    await forget(result.current.forgetSpell, 'fly');
+
+    const ids = vi.mocked(toast.success).mock.calls.map(([, options]) => options?.id);
+    // The same id: each one replaces the last instead of stacking, and none hides the Undo
+    expect(ids).toEqual(['spell-write', 'spell-write', 'spell-write', 'spell-forgotten-fly']);
+  });
+
   it('desfazer não prepara uma magia que não estava preparada', async () => {
     const { result } = await renderSpells(false);
 
@@ -164,7 +177,12 @@ describe('useCharacterSpells', () => {
     let answer!: (value: { spell: null }) => void;
     api.post.mockImplementationOnce(() => new Promise((resolve) => (answer = resolve)));
     const pending = renderHook(
-      () => ({ shield: useIsSpellPending('shield'), fly: useIsSpellPending('fly') }),
+      () => ({
+        shield: useIsSpellPending('shield', 'c1'),
+        fly: useIsSpellPending('fly', 'c1'),
+        // Another character with the same spell isn't waiting on this one's save
+        otherShield: useIsSpellPending('shield', 'c2'),
+      }),
       {
         wrapper: ({ children }) => (
           <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
@@ -176,7 +194,9 @@ describe('useCharacterSpells', () => {
     act(() => {
       learning = result.current.learnSpell('shield');
     });
-    await waitFor(() => expect(pending.result.current).toEqual({ shield: true, fly: false }));
+    await waitFor(() =>
+      expect(pending.result.current).toEqual({ shield: true, fly: false, otherShield: false }),
+    );
 
     // Fly isn't waiting on Shield's request
     await act(() => result.current.togglePrepared('fly', true));
@@ -186,7 +206,9 @@ describe('useCharacterSpells', () => {
       answer({ spell: null });
       await learning;
     });
-    await waitFor(() => expect(pending.result.current).toEqual({ shield: false, fly: false }));
+    await waitFor(() =>
+      expect(pending.result.current).toEqual({ shield: false, fly: false, otherShield: false }),
+    );
   });
 
   it('uma falha avisa e não muda o grimório', async () => {

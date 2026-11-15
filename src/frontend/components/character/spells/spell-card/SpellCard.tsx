@@ -17,6 +17,8 @@ import { LearnSpellAction, PrepareSpellAction } from './parts/SpellQuickAction';
 
 interface SpellCardProps {
   spell: Spell;
+  /** Whose spellbook the card belongs to, so it only waits on that character's writes. */
+  characterId?: string;
   isExpanded?: boolean;
   /** Called with the spell's id; a stable function lets the card skip re-rendering. */
   onToggle?: (id: string) => void;
@@ -29,6 +31,7 @@ interface SpellCardProps {
 
 export const SpellCard = React.memo(function SpellCard({
   spell,
+  characterId,
   isExpanded = false,
   onToggle,
   onForgetSpell,
@@ -39,7 +42,7 @@ export const SpellCard = React.memo(function SpellCard({
 }: SpellCardProps) {
   const { theme, mainIcon, displayValues } = useSpellDisplay(spell);
   // This spell's own write, not the whole list's: the other cards stay usable meanwhile
-  const pending = useIsSpellPending(spell.id);
+  const pending = useIsSpellPending(spell.id, characterId);
 
   const quickAction = onLearnSpell ? (
     <LearnSpellAction
