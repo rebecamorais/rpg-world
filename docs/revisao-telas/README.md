@@ -14,6 +14,7 @@ Severidade: **Alta** atrapalha o uso ou pode fazer perder dados. **Média** é i
 
 | Documento                                                        | O que tem                                                                                                        |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| [plano-por-tela.md](plano-por-tela.md)                           | O plano de review de UX/UI de cada tela e modal: método, checklist, ordem e pontos de cada uma                   |
 | [acoes-destrutivas.md](acoes-destrutivas.md)                     | A regra de vermelho e confirmação, e o inventário das 21 ações que apagam ou removem algo                        |
 | [componentes-e-design-system.md](componentes-e-design-system.md) | Cores e tokens (inclusive o tema claro), tipografia, espaçamento, raio e sombra, ícones e primitivos duplicados  |
 | [telas-publicas-e-conta.md](telas-publicas-e-conta.md)           | Landing, features, login, cadastro, senha, username, perfil, exclusão de conta, header, sidebar e footer         |

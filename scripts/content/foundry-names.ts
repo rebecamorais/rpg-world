@@ -3,7 +3,7 @@
  * See import-foundry-class-names.ts.
  */
 
-/** The `entries` of a Babele file: keyed by English name (pt-BR) or by Foundry id (es). */
+/** The `entries` of a Babele file: keyed by English name (Foundry VTT Brasil) or by Foundry id. */
 export type BabeleEntries = Record<string, { name?: string }>;
 
 export type NameIndex = {
@@ -61,11 +61,23 @@ export const ptNameIndex = (files: BabeleEntries[]): NameIndex =>
     ),
   );
 
-/** sinregistrar: entries keyed by Foundry id, named in English by the dnd5e system's packs. */
-export const esNameIndex = (entries: BabeleEntries, enNameById: Map<string, string>): NameIndex =>
+/** sinregistrar (es) and decito (pt): entries keyed by Foundry id, named in English by the dnd5e system's packs. */
+export const idNameIndex = (entries: BabeleEntries, enNameById: Map<string, string>): NameIndex =>
   indexOf(
     Object.entries(entries).flatMap(([id, e]) => {
       const en = enNameById.get(id);
       return en ? [[en, e.name] as [string, string | undefined]] : [];
     }),
   );
+
+/** Looks a name up in each index in turn: the first one that has it wins. */
+export const firstOf = (...indexes: NameIndex[]): NameIndex => ({
+  get: (enName, context) => {
+    for (const index of indexes) {
+      const name = index.get(enName, context);
+      if (name) return name;
+    }
+    return undefined;
+  },
+  ambiguous: new Set(indexes.flatMap((index) => [...index.ambiguous])),
+});
