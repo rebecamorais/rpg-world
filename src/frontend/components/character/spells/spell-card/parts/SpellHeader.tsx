@@ -59,6 +59,8 @@ export const SpellHeader = React.memo(
       <div
         className="bg-spell-surface text-spell-flare ring-spell-muted shrink-0 rounded-lg p-2.5 ring-1"
         aria-hidden="true"
+        // Where a Grimoire effect's opening ripple starts (inert otherwise)
+        data-grimoire-origin=""
       >
         <AppIcon variant="game" name={mainIcon} size="lg" />
       </div>

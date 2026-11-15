@@ -82,6 +82,8 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
     - **Sem regra de jogo na biblioteca:** qual material cada conteúdo usa fica fora dela, num mapa por sistema. O de D&D 5e está em `src/frontend/constants/grimoire-materials.ts` (magia: o dano, senão a escola; item: o grupo da mochila). Outro sistema ganha o seu mapa, e a biblioteca não muda.
     - Os mapas são exemplos, usados só no laboratório. Nada chega ao spellbook nem à mochila antes de uma decisão explícita.
 
+26. **(dona)** **Efeitos do card aberto no laboratório:** os efeitos por tipo aprovados na amostra viraram a peça `<EffectLayers>` (`src/frontend/components/grimoire/card-effect/`), no mesmo molde dos materiais: ids neutros (`frost`, `embers`, `ward-mesh`...), cor por `--grimoire-tint` e o mapa de D&D 5e fora da biblioteca (`src/frontend/constants/grimoire-effects.ts`). O `SpellCard` ganhou a prop opcional `effect`, que troca o fundo do card aberto. O laboratório virou uma página só, `/dev/grimoire`. Medição e detalhes em [explorations/spell-type-effects.md](../../grimoire-enchantments/explorations/spell-type-effects.md). **Ainda não estão no spellbook.**
+
 ## Fora do escopo
 
 - Implementar componentes, instalar pacotes, alterar a UI atual ou o banco de dados.

@@ -1,6 +1,6 @@
 # Exploração: Material Surface System
 
-Fase de exploração, feita em 15/11/2026 na branch `feat/grimoire-material-surfaces`. Os materiais **não estão no spellbook**: só existem no laboratório interno `/dev/grimoire/materials`. Nenhum material foi aprovado ainda; este documento traz os dados para a decisão da dona.
+Fase de exploração, feita em 15/11/2026 na branch `feat/grimoire-material-surfaces`. Os materiais **não estão no spellbook**: só existem no laboratório interno `/dev/grimoire`. Nenhum material foi aprovado ainda; este documento traz os dados para a decisão da dona.
 
 ## Objetivo
 
@@ -26,7 +26,7 @@ Arquivos:
 - `src/frontend/constants/grimoire-materials.ts`: o mapa de D&D 5e, de exemplo (magia: o dano, senão a escola; item: o grupo da mochila).
 - `src/frontend/components/grimoire/material-surface/materials.module.css`: os quatro materiais. É um **CSS Module**, então só é carregado onde o componente é importado.
 - `src/frontend/components/character/spells/spell-card/SpellCard.tsx`: a prop opcional `material`.
-- `app/[locale]/dev/grimoire/materials/page.tsx` + `src/frontend/dev/grimoire/`: o laboratório.
+- `app/[locale]/dev/grimoire/page.tsx` + `src/frontend/dev/grimoire/`: o laboratório.
 - `scripts/grimoire-materials-bench.ts` e `scripts/grimoire-materials-report.ts`: o benchmark e o relatório.
 
 ### Usar em qualquer card (decisão 25 da spec-mãe)
@@ -83,9 +83,9 @@ A arquitetura atual já é compatível com A e B: o contêiner externo não reco
 
 ## Laboratório e segurança
 
-- **Rota:** `/dev/grimoire/materials`, com parâmetros `?material=<id>&count=<1–100>&expanded=1`.
+- **Rota:** `/dev/grimoire`, com parâmetros `?material=<id>&count=<1–100>&expanded=1`.
 - **Trava:** `isGrimoireLabEnabled()` (`src/frontend/dev/grimoire/lab-access.ts`, com teste unitário). A página existe em desenvolvimento. Num build de produção, ela só existe se o build for feito com `GRIMOIRE_LAB=1`, o que só o benchmark local faz. A Vercel nunca define essa variável.
-- **Verificado num build de produção normal (`next build` + `next start`):** a rota sai como página estática de 404, e `/dev/grimoire/materials`, `?material=crypt-stone&count=100` e `/pt/dev/...` respondem 404. A página também declara `robots: noindex, nofollow`.
+- **Verificado num build de produção normal (`next build` + `next start`):** a rota sai como página estática de 404, e `/dev/grimoire`, `?material=crypt-stone&count=100` e `/pt/dev/...` respondem 404. A página também declara `robots: noindex, nofollow`.
 - **Dados:** são magias reais do SRD, lidas do catálogo do próprio projeto (`getSpellCatalog().findAll`). Nenhum conteúdo foi copiado.
 - **Texto:** o laboratório é uma ferramenta interna, não é traduzido e fica em `src/frontend/dev/`, fora das pastas que a trava `hardcoded-text` lê. A página em `app/` não tem texto.
 
@@ -316,7 +316,7 @@ A exploração está **concluída** como estudo técnico. O PR continua como ras
 
 ## Próximos passos (para a dona decidir)
 
-1. Aprovar ou recusar cada material pelo visual, no `/dev/grimoire/materials`.
+1. Aprovar ou recusar cada material pelo visual, no `/dev/grimoire`.
 2. Escolher a saída do OverflowBorders (A, B ou C acima), se ornamentos que passam da borda continuarem no plano.
 3. ~~Refazer a Corrosion como textura única e medir de novo.~~ Feito na rodada 2 (`baked`).
 4. Medir num celular real.

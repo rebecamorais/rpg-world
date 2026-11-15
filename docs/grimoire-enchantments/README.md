@@ -6,7 +6,7 @@ Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tip
 - **Branch e PR:** `feat/grimoire-material-surfaces` ([#219](https://github.com/rebecamorais/rpg-world/pull/219)), de longa duração e em rascunho.
 - **Estado:**
   - **Catálogo:** fase 1 ([#195](https://github.com/rebecamorais/rpg-world/issues/195)) concluída.
-  - **Laboratório:** existe em `/dev/grimoire/materials`, com 4 superfícies de material. Só abre fora da produção.
+  - **Laboratório:** existe em `/dev/grimoire`, com 4 superfícies de material, 21 efeitos do card aberto e ladrilhos de item. Só abre fora da produção.
   - **Spellbook:** ainda não usa nada daqui.
 
 ## Como ler

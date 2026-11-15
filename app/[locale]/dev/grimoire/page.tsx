@@ -5,7 +5,7 @@ import { type LocaleParams } from '@/i18n/routing';
 import { setRequestLocale } from 'next-intl/server';
 
 import { groupOf } from '@frontend/components/character/inventory/item-visuals';
-import { MaterialsLab } from '@frontend/dev/grimoire/MaterialsLab';
+import { GrimoireLab } from '@frontend/dev/grimoire/GrimoireLab';
 import { isGrimoireLabEnabled } from '@frontend/dev/grimoire/lab-access';
 import { parseLabParams } from '@frontend/dev/grimoire/lab-params';
 
@@ -14,8 +14,8 @@ import { getSpellCatalog } from '@backend/contexts/spells/infrastructure/srd-spe
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
-/** Internal lab for the Grimoire material surfaces. Not part of the product. */
-export default async function GrimoireMaterialsPage({
+/** Internal lab for the Grimoire library (materials, effects). Not part of the product. */
+export default async function GrimoireLabPage({
   params,
   searchParams,
 }: LocaleParams & { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
@@ -36,5 +36,5 @@ export default async function GrimoireMaterialsPage({
       return seen < 4;
     });
 
-  return <MaterialsLab spells={spells} items={items} {...parseLabParams(await searchParams)} />;
+  return <GrimoireLab spells={spells} items={items} {...parseLabParams(await searchParams)} />;
 }

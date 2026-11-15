@@ -4,7 +4,7 @@ import type { MaterialId } from '@frontend/components/grimoire/material-surface/
 /*
  * D&D 5e: which Grimoire material a card wears. The material library knows nothing about game
  * systems; each system maps its own content here (another system gets its own map, the library
- * doesn't change). Example mappings, used by the lab (/dev/grimoire/materials) for now: nothing
+ * doesn't change). Example mappings, used by the lab (/dev/grimoire) for now: nothing
  * in the spellbook or the backpack reads them yet.
  */
 

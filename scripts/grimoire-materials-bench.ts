@@ -1,11 +1,11 @@
 /**
- * Benchmark for the Grimoire material surfaces (/dev/grimoire/materials).
+ * Benchmark for the Grimoire material surfaces (/dev/grimoire).
  *
  * Run against a production build, never `next dev`:
  *   npx next build && GRIMOIRE_LAB=1 npx next start -p 3006
  *   npx tsx scripts/grimoire-materials-bench.ts http://localhost:3006 out.json
  *
- * For each scenario (the card as it is today, then each material), theme, device (desktop; phone with a 4x slower CPU) and sample, it opens a
+ * For each scenario (the card as it is today, each material, then a few open-card effects), theme, device (desktop; phone with a 4x slower CPU) and sample, it opens a
  * fresh page with 100 SpellCards and records three phases separately: the initial render,
  * scrolling the whole list with the mouse wheel (all cards closed), and opening the first card
  * (its SpellVFX background appears over the material). Chrome's
@@ -29,6 +29,11 @@ const ALL_SCENARIOS = [
   'alchemical-corrosion',
   'crypt-stone',
   'divine-parchment',
+  // Open-card effects (fx:<id>): only the opened card shows one, so they show up in the open phase
+  'fx:frost',
+  'fx:embers',
+  'fx:alchemy-circle',
+  'fx:bolt',
 ] as const;
 // SCENARIOS=none,crypt-stone re-measures just a few
 const SCENARIOS = process.env.SCENARIOS
@@ -158,11 +163,16 @@ async function sample(
   const page = await context.newPage();
   const cdp = await context.newCDPSession(page);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: d.cpu });
-  const query = scenario === 'none' ? `count=${COUNT}` : `material=${scenario}&count=${COUNT}`;
+  const query =
+    scenario === 'none'
+      ? `count=${COUNT}`
+      : scenario.startsWith('fx:')
+        ? `effect=${scenario.slice(3)}&count=${COUNT}`
+        : `material=${scenario}&count=${COUNT}`;
 
   let lcp = 0;
   const initial = await trace(cdp, async () => {
-    await page.goto(`${BASE}/dev/grimoire/materials?${query}`, { waitUntil: 'load' });
+    await page.goto(`${BASE}/dev/grimoire?${query}`, { waitUntil: 'load' });
     await page.waitForTimeout(1500);
     lcp = await page.evaluate(
       () =>

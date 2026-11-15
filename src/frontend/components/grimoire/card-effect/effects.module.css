@@ -1,0 +1,496 @@
+/*
+ * Grimoire card effects (exploration): a motif per kind of content, shown on an OPEN card.
+ * Carried over from the approved sample (docs/grimoire-enchantments/explorations/spell-type-effects.md).
+ *
+ * Color: every effect is tinted by --grimoire-tint, set by the HOST card to its own color (the
+ * same token the materials read). Effect ids are neutral motifs (frost, embers...): which content
+ * wears which one is a game system's map, outside this library.
+ *
+ * Cost: gradients, masks and tiny inline SVGs, painted once when the card opens. Motion only on
+ * events, always with an end: one entrance accent (up to 1s) and short-lived ripples. No loops,
+ * canvas, WebGL or blur. Reduced motion: no entrance, no ripples.
+ */
+
+.layer {
+  --t: var(--grimoire-tint, #94a3b8);
+  --k: 1; /* motif strength: lower on the light theme */
+  --fx-shade: rgb(0 0 0 / 0.6);
+  --s1: color-mix(in srgb, var(--t), transparent 92%);
+  --s2: color-mix(in srgb, var(--t), transparent 85%);
+  --s3: color-mix(in srgb, var(--t), transparent 75%);
+  --s4: color-mix(in srgb, var(--t), transparent 60%);
+  --s5: color-mix(in srgb, var(--t), transparent 35%);
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  --g-flake: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M12%201v22M2.5%206.5l19%2011M2.5%2017.5l19-11M9%202.5l3%202.5%203-2.5M9%2021.5l3-2.5%203%202.5M3.2%2010.4l3.7-1.3-.7-3.9M20.8%2013.6l-3.7%201.3.7%203.9M3.2%2013.6l3.7%201.3-.7%203.9M20.8%2010.4l-3.7-1.3.7-3.9'%20fill='none'%20stroke='%23000'%20stroke-width='1.4'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E");
+  --g-flake2: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M12%202v20M3.3%207l17.4%2010M3.3%2017L20.7%207'%20stroke='%23000'%20stroke-width='1.6'%20stroke-linecap='round'/%3E%3Ccircle%20cx='12'%20cy='12'%20r='2.2'%20fill='%23000'/%3E%3C/svg%3E");
+  --g-drop: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M12%202.5c3.5%205%206%208.2%206%2011.5a6%206%200%200%201-12%200c0-3.3%202.5-6.5%206-11.5Z'%20fill='%23000'/%3E%3C/svg%3E");
+  --g-skull: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20fill-rule='evenodd'%20d='M12%203a7.5%207.5%200%200%200-7.5%207.5c0%202.6%201.3%204.4%202.7%205.4V19h9.6v-3.1c1.4-1%202.7-2.8%202.7-5.4A7.5%207.5%200%200%200%2012%203ZM7.6%2011a1.7%201.7%200%201%200%203.4%200a1.7%201.7%200%201%200-3.4%200ZM13%2011a1.7%201.7%200%201%200%203.4%200a1.7%201.7%200%201%200-3.4%200Z'/%3E%3C/svg%3E");
+  --g-star: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M12%201.5l2.2%207.3%207.3%202.2-7.3%202.2L12%2020.5l-2.2-7.3L2.5%2011l7.3-2.2Z'%20fill='%23000'/%3E%3C/svg%3E");
+}
+
+:global(:root[data-theme='light']) .layer {
+  --k: 0.8;
+  --fx-shade: rgb(0 0 0 / 0.1);
+}
+
+.fx,
+.glow,
+.bolt,
+.deco {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.fx {
+  opacity: var(--k);
+}
+
+/* ---------- Damage-like motifs ---------- */
+.fx[data-effect='embers'] {
+  background:
+    radial-gradient(circle at 18% 88%, var(--s5) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 32% 70%, var(--s4) 0 1px, transparent 2px),
+    radial-gradient(circle at 61% 80%, var(--s5) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 78% 64%, var(--s4) 0 1px, transparent 2px),
+    radial-gradient(circle at 88% 86%, var(--s5) 0 1px, transparent 2px),
+    radial-gradient(circle at 46% 58%, var(--s3) 0 1px, transparent 2px),
+    radial-gradient(90% 60% at 50% 108%, var(--s4), var(--s1) 50%, transparent 78%);
+}
+.fx[data-effect='echo'] {
+  background: repeating-radial-gradient(
+    circle at 86% 18%,
+    var(--s4) 0 1.5px,
+    transparent 1.5px 13px
+  );
+}
+.fx[data-effect='shockwave'] {
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      transparent 0 58px,
+      var(--s4) 59px 60px,
+      transparent 61px 104px,
+      var(--s3) 105px 106px,
+      transparent 107px 160px,
+      var(--s2) 161px 162px,
+      transparent 163px
+    ),
+    radial-gradient(circle at 100% 0%, var(--s3), transparent 45%);
+}
+.fx[data-effect='impact'] {
+  background:
+    radial-gradient(circle at 84% 26%, var(--fx-shade) 0 10px, transparent 11px),
+    radial-gradient(
+      circle at 84% 26%,
+      transparent 0 18px,
+      var(--s4) 19px 21px,
+      transparent 22px 34px,
+      var(--s3) 35px 36px,
+      transparent 37px
+    ),
+    conic-gradient(
+      from 0deg at 84% 26%,
+      transparent 0 20deg,
+      var(--s3) 20deg 22deg,
+      transparent 22deg 95deg,
+      var(--s3) 95deg 97deg,
+      transparent 97deg 200deg,
+      var(--s3) 200deg 202deg,
+      transparent 202deg 290deg,
+      var(--s3) 290deg 292deg,
+      transparent 292deg
+    );
+}
+.fx[data-effect='bolt'] {
+  background: radial-gradient(40% 80% at 74% 30%, var(--s3), transparent 70%);
+}
+.fx[data-effect='thrust'] {
+  background:
+    linear-gradient(90deg, transparent 20%, var(--s4) 92%, transparent 92.5%) 0 34% / 100% 2px
+      no-repeat,
+    conic-gradient(from 60deg at 92% 34%, var(--s4) 0 60deg, transparent 60deg) 0 0 / 100% 100%,
+    radial-gradient(18% 40% at 92% 34%, var(--s3), transparent 70%);
+}
+.fx[data-effect='miasma'] {
+  background:
+    radial-gradient(45% 40% at 10% 100%, var(--s3), transparent 70%),
+    radial-gradient(40% 32% at 45% 108%, var(--s3), transparent 70%),
+    radial-gradient(35% 36% at 80% 100%, var(--s3), transparent 70%),
+    radial-gradient(circle at 30% 70%, var(--s4) 0 2px, transparent 3px),
+    radial-gradient(circle at 66% 62%, var(--s4) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 52% 76%, var(--s4) 0 2.5px, transparent 3.5px);
+}
+.fx[data-effect='soundwave'] {
+  background: repeating-radial-gradient(circle at 0% 50%, var(--s3) 0 2px, transparent 2px 22px);
+}
+.fx[data-effect='slashes'] {
+  background:
+    linear-gradient(118deg, transparent 58%, var(--s4) 58.4% 58.8%, transparent 59.2%),
+    linear-gradient(118deg, transparent 66%, var(--s4) 66.4% 67%, transparent 67.4%),
+    linear-gradient(118deg, transparent 74%, var(--s3) 74.4% 74.8%, transparent 75.2%),
+    radial-gradient(60% 80% at 80% 30%, var(--s2), transparent 70%);
+}
+
+/* ---------- School-like motifs ---------- */
+.fx[data-effect='alchemy-circle'] {
+  background:
+    radial-gradient(
+      circle at 86% 32%,
+      transparent 0 40px,
+      var(--s4) 41px 42px,
+      transparent 43px 56px,
+      var(--s3) 57px 58px,
+      transparent 59px
+    ),
+    repeating-conic-gradient(from 0deg at 86% 32%, var(--s3) 0 1deg, transparent 1deg 30deg);
+  mask-image: radial-gradient(circle at 86% 32%, #000 0 60px, transparent 62px);
+}
+.fx[data-effect='ward-mesh'] {
+  background:
+    repeating-linear-gradient(0deg, var(--s2) 0 1px, transparent 1px 20px),
+    repeating-linear-gradient(60deg, var(--s2) 0 1px, transparent 1px 20px),
+    repeating-linear-gradient(-60deg, var(--s2) 0 1px, transparent 1px 20px),
+    radial-gradient(60% 90% at 100% 0, var(--s3), transparent 70%);
+}
+.fx[data-effect='portal'] {
+  background:
+    radial-gradient(circle at 86% 40%, var(--s3) 0 18px, transparent 34px),
+    radial-gradient(
+      circle at 86% 40%,
+      transparent 0 34px,
+      var(--s5) 35px 37px,
+      transparent 38px 46px,
+      var(--s3) 47px 48px,
+      transparent 49px
+    );
+}
+.fx[data-effect='star-map'] {
+  background:
+    radial-gradient(circle, var(--s5) 0 1px, transparent 1.6px) 0 0 / 22px 22px,
+    radial-gradient(circle, var(--s4) 0 1px, transparent 1.6px) 11px 11px / 22px 22px,
+    radial-gradient(60% 90% at 100% 0, var(--s3), transparent 70%);
+}
+.fx[data-effect='swirl'] {
+  background: conic-gradient(
+    from 0deg at 84% 22%,
+    var(--s3),
+    transparent 22%,
+    var(--s3) 48%,
+    transparent 72%,
+    var(--s3)
+  );
+}
+.fx[data-effect='mirage'] {
+  background:
+    repeating-linear-gradient(170deg, var(--s2) 0 10px, transparent 10px 26px),
+    radial-gradient(70% 90% at 100% 0, var(--s3), transparent 70%);
+}
+.fx[data-effect='burst'] {
+  background:
+    repeating-conic-gradient(from 0deg at 86% 24%, var(--s3) 0 4deg, transparent 4deg 18deg),
+    radial-gradient(circle at 86% 24%, var(--s4), transparent 30%);
+}
+.fx[data-effect='crypt-fog'] {
+  background:
+    radial-gradient(50% 30% at 20% 108%, var(--s3), transparent 70%),
+    radial-gradient(50% 30% at 75% 108%, var(--s3), transparent 70%),
+    radial-gradient(circle at 50% 45%, transparent 40%, var(--fx-shade) 125%);
+}
+/* Motifs that stay in the top corner, away from the rules text */
+.fx[data-effect='echo'],
+.fx[data-effect='ward-mesh'],
+.fx[data-effect='star-map'],
+.fx[data-effect='swirl'],
+.fx[data-effect='mirage'],
+.fx[data-effect='burst'] {
+  mask-image: radial-gradient(85% 120% at 100% 0%, #000 20%, transparent 75%);
+}
+
+/* A lightning bolt behind the text */
+.bolt {
+  background: var(--t);
+  opacity: calc(var(--k) * 0.22);
+  clip-path: polygon(
+    78% 0,
+    70% 34%,
+    77% 34%,
+    64% 72%,
+    72% 72%,
+    58% 100%,
+    61% 100%,
+    80% 64%,
+    73% 64%,
+    86% 30%,
+    79% 30%,
+    84% 0
+  );
+}
+
+/* ---------- Icon details + a glow placed per effect ---------- */
+.glow {
+  opacity: var(--k);
+  background: radial-gradient(
+    var(--gw, 55%) var(--gh, 70%) at var(--gx, 100%) var(--gy, 0%),
+    color-mix(in srgb, var(--t), transparent 72%),
+    transparent 72%
+  );
+}
+.deco {
+  z-index: 1;
+  background: var(--t);
+}
+.deco[data-size='big'] {
+  opacity: calc(var(--k) * 0.13);
+}
+.deco[data-size='small'] {
+  opacity: calc(var(--k) * 0.3);
+}
+.glow[data-effect='frost'] {
+  --gx: 0%;
+  --gy: 0%;
+}
+.deco[data-size='big'][data-effect='frost'] {
+  mask: var(--g-flake) no-repeat right -26px top -30px / 170px 170px;
+}
+.deco[data-size='small'][data-effect='frost'] {
+  mask:
+    var(--g-flake2) no-repeat 22% 18px / 16px 16px,
+    var(--g-flake) no-repeat 58% 6px / 12px 12px,
+    var(--g-flake2) no-repeat 8px 78% / 14px 14px,
+    var(--g-flake) no-repeat 72% 82% / 18px 18px,
+    var(--g-flake2) no-repeat 44% 92% / 10px 10px;
+}
+.glow[data-effect='drips'] {
+  --gx: 100%;
+  --gy: 100%;
+  --gw: 60%;
+  --gh: 80%;
+}
+.deco[data-size='big'][data-effect='drips'] {
+  mask: var(--g-drop) no-repeat right -10px bottom -40px / 150px 150px;
+}
+.deco[data-size='small'][data-effect='drips'] {
+  mask:
+    var(--g-drop) no-repeat 14% 0px / 14px 14px,
+    var(--g-drop) no-repeat 30% 10px / 9px 9px,
+    var(--g-drop) no-repeat 62% 0px / 16px 16px,
+    var(--g-drop) no-repeat 80% 14px / 10px 10px;
+}
+.glow[data-effect='grave-mist'] {
+  --gx: 50%;
+  --gy: 110%;
+  --gw: 80%;
+  --gh: 60%;
+}
+.deco[data-size='big'][data-effect='grave-mist'] {
+  mask: var(--g-skull) no-repeat right -22px top -18px / 140px 140px;
+}
+.deco[data-size='small'][data-effect='grave-mist'] {
+  mask:
+    var(--g-skull) no-repeat 10% 86% / 12px 12px,
+    var(--g-skull) no-repeat 48% 92% / 10px 10px,
+    var(--g-skull) no-repeat 82% 84% / 14px 14px;
+}
+.glow[data-effect='sunlight'] {
+  --gx: 50%;
+  --gy: -10%;
+  --gw: 70%;
+  --gh: 60%;
+}
+.deco[data-size='big'][data-effect='sunlight'] {
+  mask: var(--g-star) no-repeat center top -60px / 180px 180px;
+}
+.deco[data-size='small'][data-effect='sunlight'] {
+  mask:
+    var(--g-star) no-repeat 12% 20px / 12px 12px,
+    var(--g-star) no-repeat 30% 6px / 8px 8px,
+    var(--g-star) no-repeat 70% 12px / 10px 10px,
+    var(--g-star) no-repeat 88% 30px / 14px 14px,
+    var(--g-star) no-repeat 52% 40px / 7px 7px;
+}
+
+/* ---------- Entrance: once, when the card opens ---------- */
+.layer[data-enter='rise'] .fx {
+  animation: rise 0.8s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+.layer[data-enter='grow'] .fx {
+  animation: grow 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  transform-origin: 86% 18%;
+}
+.layer[data-enter='flash'] .fx {
+  animation: flash 0.5s ease-out both;
+}
+.layer[data-enter='fade'] .fx,
+.layer .glow,
+.layer .deco {
+  animation: fade 0.7s ease-out both;
+}
+.layer .deco[data-size='small'] {
+  animation-delay: 0.12s;
+}
+.layer[data-enter='flicker'] .bolt {
+  animation: flicker 0.45s steps(1) both;
+}
+
+/* A light that runs once around the border */
+.ring {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  border-radius: inherit;
+  padding: 1.5px;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+.spin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: conic-gradient(from 0deg, transparent 0 62%, var(--t) 82%, transparent 96%);
+  animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes grow {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+@keyframes flash {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: calc(var(--k) * 1.6);
+  }
+  100% {
+    opacity: var(--k);
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes flicker {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.55;
+  }
+  30% {
+    opacity: 0.1;
+  }
+  45% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: calc(var(--k) * 0.22);
+  }
+}
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    rotate: 360deg;
+    opacity: 0;
+  }
+}
+
+/* ---------- Ripples: short-lived rings; only scale and opacity animate ---------- */
+.ripple {
+  position: absolute;
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  left: var(--rx);
+  top: var(--ry);
+  translate: -50% -50%;
+  border: 1.5px solid var(--t);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ripple var(--rd, 0.9s) cubic-bezier(0.2, 0.7, 0.3, 1) var(--rdl, 0s) forwards;
+}
+.ripple[data-shape='diamond'] {
+  border-radius: 4px;
+  rotate: 45deg;
+}
+.ripple[data-shape='splash'] {
+  border: 0;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--t), transparent 55%),
+    transparent 70%
+  );
+  --rs: 5;
+}
+.ripple[data-shape='dashed'] {
+  border-style: dashed;
+}
+.ripple[data-shape='thick'] {
+  border-width: 4px;
+  --rd: 0.6s;
+}
+.ripple[data-shape='glow'] {
+  border-width: 1px;
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--t), transparent 40%),
+    inset 0 0 10px color-mix(in srgb, var(--t), transparent 60%);
+}
+.ripple[data-shape='smoke'] {
+  border-width: 6px;
+  border-color: color-mix(in srgb, var(--t), transparent 70%);
+  --rd: 1.5s;
+  --rs: 5;
+}
+@keyframes ripple {
+  0% {
+    opacity: 0.85;
+    scale: 0.25;
+  }
+  100% {
+    opacity: 0;
+    scale: var(--rs, 7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer *,
+  .layer {
+    animation: none !important;
+  }
+  .ring,
+  .ripple {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .layer {
+    display: none;
+  }
+}
