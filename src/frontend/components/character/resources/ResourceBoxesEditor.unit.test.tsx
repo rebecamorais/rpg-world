@@ -137,10 +137,38 @@ describe('ResourceBoxesEditor', () => {
     expect(screen.getByRole('status')).toHaveTextContent('free');
   });
 
+  it('a descrição da caixinha da classe vem preenchida com o texto da regra, sem marcações', async () => {
+    catalog.classes = {
+      monk: {
+        ...MONK,
+        resources: [{ ...MONK.resources[0], description: 'Fall {@condition prone}.' }],
+      },
+    };
+    const { draft } = renderEditor();
+    await open('Ki');
+    const description = fields('Ki').getByLabelText(t.description);
+
+    expect(description).toHaveValue('Fall prone.');
+
+    // Edited, only the new text is kept; back to the rule's text, nothing is
+    await userEvent.type(description, ' Twice.');
+    expect(draft().resources?.[KI].overrides).toEqual({ description: 'Fall prone. Twice.' });
+    await userEvent.type(description, '{Backspace>7}');
+    expect(draft().resources).toEqual({ [KI]: { used: 0 } });
+
+    // Emptied: the field stays empty while typing and the box goes back to the rule
+    await userEvent.clear(description);
+    expect(description).toHaveValue('');
+    expect(draft().resources).toEqual({ [KI]: { used: 0 } });
+    await userEvent.tab();
+    expect(description).toHaveValue('Fall prone.');
+  });
+
   it('descrição e cor entram na edição; "voltar ao que a classe diz" tira tudo', async () => {
     const { draft } = renderEditor();
     await open('Ki');
 
+    await userEvent.clear(fields('Ki').getByLabelText(t.description));
     await userEvent.type(fields('Ki').getByLabelText(t.description), 'Mine');
     await userEvent.click(
       fields('Ki').getByRole('button', { name: messages.profileForm.colors.red }),
@@ -178,7 +206,7 @@ describe('ResourceBoxesEditor', () => {
     const { draft } = renderEditor(sheet({ resources: { [OWN]: { used: 1, custom: ring } } }));
     await open('Ring');
 
-    expect(screen.getByText('Ring').closest('li')).toHaveTextContent('Item · 2 uses · long');
+    expect(screen.getByText('Ring').closest('li')).toHaveTextContent('Own · Item · 2 uses · long');
     const uses = fields('Ring').getByLabelText(t.uses);
     await userEvent.clear(uses);
     // Its own box always has a count: empty holds the save and keeps the last one
@@ -243,5 +271,40 @@ describe('ResourceBoxesEditor', () => {
 
     expect(screen.getByText(t.copyNeedsEdition)).toBeInTheDocument();
     expect(screen.queryByRole('combobox', { name: t.copyClass })).not.toBeInTheDocument();
+  });
+
+  it('caixinha própria tem lixeira na linha, sem abrir; a da classe não, e diz por quê', async () => {
+    const { draft } = renderEditor(sheet({ resources: { [OWN]: { used: 1, custom: ring } } }));
+
+    expect(screen.queryByRole('button', { name: 'Delete Ki' })).not.toBeInTheDocument();
+    await open('Ki');
+    expect(fields('Ki').getByText(t.classBoxNote)).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Delete Ring' }));
+    expect(screen.queryByText('Ring')).not.toBeInTheDocument();
+    expect(draft().resources?.[OWN]).toEqual({ used: 0 });
+    expect(screen.getByRole('button', { name: t.add })).toHaveFocus();
+  });
+
+  it('copiar não oferece o que a ficha já tem, da classe dela ou copiado antes', async () => {
+    const LAY = 'custom:0193a1b2-0000-7000-8000-000000000009';
+    renderEditor(
+      sheet({
+        resources: {
+          [LAY]: { used: 0, custom: { ...ring, name: 'Lay on Hands', source: 'class' } },
+        },
+      }),
+    );
+    await userEvent.click(screen.getByRole('button', { name: t.copy }));
+
+    await userEvent.click(screen.getByRole('combobox', { name: t.copyClass }));
+    await userEvent.click(screen.getByRole('option', { name: messages.spellsData.classes.monk }));
+    expect(screen.getByText(t.copyNoneLeft)).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('combobox', { name: t.copyClass }));
+    await userEvent.click(
+      screen.getByRole('option', { name: messages.spellsData.classes.paladin }),
+    );
+    expect(screen.getByText(t.copyNoneLeft)).toBeInTheDocument();
   });
 });

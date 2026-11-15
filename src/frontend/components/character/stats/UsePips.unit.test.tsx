@@ -1,4 +1,4 @@
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it, vi } from 'vitest';
@@ -65,29 +65,22 @@ describe('UsePips', () => {
     for (const b of screen.getAllByRole('button')) expect(b).toBeDisabled();
   });
 
-  it('com onChange pendente desabilita os botões até resolver', async () => {
-    let resolve!: () => void;
-    const onChange = vi.fn(() => new Promise<void>((r) => (resolve = r)));
+  it('não trava enquanto salva: os toques seguem um atrás do outro', async () => {
+    const onChange = vi.fn(() => new Promise<void>(() => {}));
     renderWithProviders(<UsePips label="Ki" max={3} used={0} onChange={onChange} />);
 
     await userEvent.click(available(1));
-    for (const b of screen.getAllByRole('button')) expect(b).toBeDisabled();
-    await userEvent.click(available(2));
-    expect(onChange).toHaveBeenCalledTimes(1);
-
-    await act(async () => resolve());
     for (const b of screen.getAllByRole('button')) expect(b).toBeEnabled();
+    await userEvent.click(available(2));
+    expect(onChange).toHaveBeenCalledTimes(2);
   });
 
-  it('reabilita os botões mesmo se onChange rejeitar', async () => {
-    let reject!: (e: Error) => void;
-    const onChange = vi.fn(() => new Promise<void>((_, rj) => (reject = rj)));
+  it('um onChange que rejeita não quebra o controle', async () => {
+    const onChange = vi.fn(() => Promise.reject(new Error('falhou')));
     renderWithProviders(<UsePips label="Ki" max={3} used={0} onChange={onChange} />);
 
     await userEvent.click(available(1));
-    expect(available(2)).toBeDisabled();
 
-    await act(async () => reject(new Error('falhou')));
     expect(available(2)).toBeEnabled();
   });
 });

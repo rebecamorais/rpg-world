@@ -21,12 +21,39 @@ test('ficha antiga de Monge: escolhe a edição, gasta Ki e usa o descanso curto
   await expect(resources).toBeVisible();
   await expect(resources.getByRole('group', { name: 'Ki Points, 5 of 5 available' })).toBeVisible();
 
+  // The tap shows at once and saves in the background
+  const saved = page.waitForResponse(
+    (r) =>
+      r.request().method() === 'PUT' &&
+      r.url().endsWith(`/api/characters/${id}`) &&
+      // Not the edition's, which may still be on its way
+      (r.request().postData() ?? '').includes('class:monk:ki'),
+  );
   await resources.getByRole('button', { name: 'Ki Points 1, available' }).click();
   await expect(resources.getByRole('group', { name: 'Ki Points, 4 of 5 available' })).toBeVisible();
+  expect((await saved).ok()).toBe(true);
 
   await page.reload();
   await expect(
     page.locator('#sheet-resources').getByRole('group', { name: 'Ki Points, 4 of 5 available' }),
+  ).toBeVisible();
+
+  // A reload right after a tap doesn't drop it: the save outlives the page (keepalive)
+  await (
+    await hydrated(
+      page.locator('#sheet-resources').getByRole('button', { name: 'Ki Points 1, available' }),
+    )
+  ).click();
+  await page.reload();
+  await expect
+    .poll(async () => {
+      const sheet = await (await page.request.get(`/api/characters/${id}`)).json();
+      return (sheet.resources ?? sheet.character?.resources)?.['class:monk:ki']?.used;
+    })
+    .toBe(2);
+  await page.reload();
+  await expect(
+    page.locator('#sheet-resources').getByRole('group', { name: 'Ki Points, 3 of 5 available' }),
   ).toBeVisible();
 
   await (await hydrated(page.getByRole('button', { name: 'Short rest' }))).click();

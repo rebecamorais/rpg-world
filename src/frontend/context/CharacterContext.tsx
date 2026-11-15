@@ -37,7 +37,8 @@ export interface CharacterActions {
    * Saves this patch at once, leaving the other edits pending: what changes during play (hit
    * points) doesn't wait for the save button. A function patch reads the server copy, not the
    * draft, so a pending edit in the same field isn't saved with it. Only what changed is sent.
-   * Rejects when the save fails (the error is shown).
+   * The sheet shows it at once and the save runs in the background, without "Saving…" or a lock.
+   * Rejects when the save fails (the error is shown and the sheet reloads).
    */
   saveNow: (patch: DraftPatch<DnD5eCharacter>) => Promise<void>;
   /** Drops the unsaved edits. */
@@ -104,6 +105,7 @@ export function CharacterProvider({
     isLoading,
     error,
     updateCharacter,
+    saveQuietly,
     isSaving,
   } = useCharacter(id, { initial: initialCharacter });
   const { draft, isDirty, update, commit, saveFields, discard } = useDraft(fetched);
@@ -124,9 +126,9 @@ export function CharacterProvider({
       saveFields(patch, async (character, fields, base) => {
         // Key by key for the merged maps: a tap on one resource box doesn't resend the others
         const changes = characterChanges(base, fields);
-        if (Object.keys(changes).length > 0) await updateCharacter({ character, changes });
+        if (Object.keys(changes).length > 0) await saveQuietly({ character, changes });
       }),
-    [saveFields, updateCharacter],
+    [saveFields, saveQuietly],
   );
 
   const state = useMemo(() => ({ character: draft, isDirty }), [draft, isDirty]);

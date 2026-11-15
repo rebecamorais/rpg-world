@@ -43,6 +43,7 @@ const sheet = {
   error: null,
   isSaving: false,
   updateCharacter: vi.fn().mockResolvedValue(undefined),
+  saveQuietly: vi.fn().mockResolvedValue(undefined),
 };
 vi.mock('@frontend/hooks/useCharacter', () => ({ useCharacter: () => sheet }));
 vi.mock('@frontend/hooks/useConditions', () => ({
@@ -379,6 +380,7 @@ describe('PlayerCombatPanel: PV dos próprios personagens', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     sheet.updateCharacter.mockResolvedValue(undefined);
+    sheet.saveQuietly.mockResolvedValue(undefined);
   });
 
   it('fora da vez: PV atual / máximo e temporário na própria linha, com "Ajustar PV"', () => {
@@ -449,7 +451,7 @@ describe('PlayerCombatPanel: PV dos próprios personagens', () => {
     await userEvent.click(within(dialog).getByRole('button', { name: statsT.damage }));
 
     // The temporary HP take the damage first
-    expect(sheet.updateCharacter).toHaveBeenCalledWith(
+    expect(sheet.saveQuietly).toHaveBeenCalledWith(
       expect.objectContaining({ changes: { hpCurrent: 10, hpTemp: 0 } }),
     );
     expect(invalidate).toHaveBeenCalledWith({ queryKey: encounterQueryKey('p') });

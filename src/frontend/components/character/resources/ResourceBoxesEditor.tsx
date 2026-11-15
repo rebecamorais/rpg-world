@@ -28,6 +28,7 @@ import { characterTheme, sixDigitHex } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 import { CharacterClass } from '@frontend/types/spells';
 
+import { stripTags } from '@shared/content/tags';
 import {
   type CustomResource,
   type EditableResourceBox,
@@ -166,6 +167,48 @@ function BoxColorPicker({
   );
 }
 
+/**
+ * The box's description. On a class box it starts with the rule's text (tags as plain text), ready
+ * to edit: only a text that differs from it is kept, and emptying it goes back to the rule.
+ */
+function DescriptionField({
+  id,
+  value,
+  classText,
+  onChange,
+}: {
+  id: string;
+  value: string | undefined;
+  classText: string | undefined;
+  onChange: (value: string | undefined) => void;
+}) {
+  const t = useTranslations('resourceEditor');
+  // While typing, the field keeps what is typed, even emptied; on leaving it shows what is kept
+  const [typing, setTyping] = useState<string | null>(null);
+
+  return (
+    <div className="flex flex-col gap-1">
+      <FieldLabel htmlFor={id}>{t('description')}</FieldLabel>
+      <Textarea
+        id={id}
+        value={typing ?? value ?? classText ?? ''}
+        maxLength={MAX_RESOURCE_DESCRIPTION}
+        rows={classText ? 6 : 3}
+        aria-describedby={`${id}-hint`}
+        onChange={(e) => {
+          const text = e.target.value;
+          setTyping(text);
+          onChange(text === '' || text === classText ? undefined : text);
+        }}
+        onBlur={() => setTyping(null)}
+      />
+      <p id={`${id}-hint`} className="text-caption text-muted-foreground">
+        {t(classText ? 'descriptionHintClass' : 'descriptionHint')}
+      </p>
+    </div>
+  );
+}
+
 /** The fields of one box. A class box shows what the class says wherever the player set nothing. */
 function BoxFields({
   box,
@@ -271,22 +314,15 @@ function BoxFields({
 
       <BoxColorPicker color={edits.color} onChange={(color) => change({ color })} />
 
-      <div className="flex flex-col gap-1">
-        <FieldLabel htmlFor={`${id}-description`}>{t('description')}</FieldLabel>
-        <Textarea
-          id={`${id}-description`}
-          value={edits.description ?? ''}
-          placeholder={box.base ? t('descriptionAsClass') : undefined}
-          maxLength={MAX_RESOURCE_DESCRIPTION}
-          aria-describedby={`${id}-description-hint`}
-          onChange={(e) => change({ description: e.target.value })}
-        />
-        <p id={`${id}-description-hint`} className="text-caption text-muted-foreground">
-          {t('descriptionHint')}
-        </p>
-      </div>
+      <DescriptionField
+        id={`${id}-description`}
+        value={edits.description}
+        classText={box.base && stripTags(box.base.description)}
+        onChange={(description) => change({ description })}
+      />
 
-      <div className="flex justify-end">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        {own ? <span /> : <p className="text-caption text-muted-foreground">{t('classBoxNote')}</p>}
         {own ? (
           <Button
             type="button"
@@ -340,6 +376,8 @@ function BoxRow({
   const panelId = useId();
   const theme = characterTheme(box.color);
   const name = box.name.trim() || t('unnamed');
+  // Only the player's own boxes can go: the class's come back with the class, so they are hidden
+  const own = !box.base;
   const rests = (['short', 'long'] as const).filter((rest) => recoveryOn(box, rest) !== null);
 
   return (
@@ -358,6 +396,7 @@ function BoxRow({
             <span className="truncate text-sm font-semibold">{name}</span>
             <span className="text-caption text-muted-foreground">
               {[
+                ...(own ? [t('own')] : []),
                 t(`sources.${box.source}`),
                 box.max === null ? tPips('unlimited') : t('usesCount', { count: box.max }),
                 ...rests.map((rest) => tRes(rest)),
@@ -389,6 +428,22 @@ function BoxRow({
             <AppIcon name={open ? 'ChevronUp' : 'Pencil'} aria-hidden="true" />
             {t(open ? 'close' : 'edit')}
           </Button>
+          {own && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              title={t('remove')}
+              aria-label={t('removeBox', { name })}
+              className="text-danger-flare"
+              onClick={() => {
+                update(removeCustomResource(box.key));
+                onRemoved();
+              }}
+            >
+              <AppIcon name="Trash2" aria-hidden="true" />
+            </Button>
+          )}
         </div>
       </div>
       {open && (
@@ -401,7 +456,14 @@ function BoxRow({
 }
 
 /** Picks a resource of one of the official classes and hands it over as a box of the player's own. */
-function CopyFromClass({ onCopy }: { onCopy: (box: CustomResource) => void }) {
+function CopyFromClass({
+  onCopy,
+  boxes,
+}: {
+  onCopy: (box: CustomResource) => void;
+  /** The sheet's boxes: what it already has is not offered again. */
+  boxes: EditableResourceBox[];
+}) {
   const t = useTranslations('resourceEditor');
   const { edition, level, attributes } = useLoadedCharacter();
   const { classLabelOf } = useCharacterChoices();
@@ -410,7 +472,6 @@ function CopyFromClass({ onCopy }: { onCopy: (box: CustomResource) => void }) {
   const [picked, setPicked] = useState('');
   const { content } = useClassResources(edition, classId || null);
 
-  // Spell slots are tracked with the sheet's magic, never in a box
   const choices = content
     ? [
         ...content.resources.map((resource) => ({ resource, source: 'class' as const })),
@@ -418,12 +479,22 @@ function CopyFromClass({ onCopy }: { onCopy: (box: CustomResource) => void }) {
           resource,
           source: 'subclass' as const,
         })),
-      ].filter(({ resource }) => resource.unit !== 'spell-slots')
+      ].filter(({ resource, source }) => {
+        // Spell slots are tracked with the sheet's magic, never in a box
+        if (resource.unit === 'spell-slots') return false;
+        const key =
+          source === 'class'
+            ? `class:${content.classId}:${resource.id}`
+            : `subclass:${content.classId}/${content.subclass.id}:${resource.id}`;
+        // Already on the sheet, from its class or copied before (hidden ones too: show them instead)
+        return !boxes.some((box) => box.key === key || (!box.base && box.name === resource.name));
+      })
     : [];
   const options = choices.map(({ resource, source }) => ({
     value: `${source}:${resource.id}`,
     label: resource.name,
   }));
+  const noneLeft = content !== null && options.length === 0;
   const choice = choices.find(({ resource, source }) => `${source}:${resource.id}` === picked);
 
   if (!edition) {
@@ -450,16 +521,23 @@ function CopyFromClass({ onCopy }: { onCopy: (box: CustomResource) => void }) {
           />
         </div>
         <div className="flex flex-col gap-1">
-          <FieldLabel htmlFor={`${id}-resource`}>{t('copyResource')}</FieldLabel>
-          <SelectField
-            // The list belongs to the class: a new one starts with nothing picked
-            key={classId}
-            id={`${id}-resource`}
-            value={picked}
-            placeholder={t('copyPick')}
-            options={options}
-            onValueChange={setPicked}
-          />
+          {/* Labels the list; with nothing left to pick, it heads the message instead */}
+          <FieldLabel htmlFor={noneLeft ? undefined : `${id}-resource`}>
+            {t('copyResource')}
+          </FieldLabel>
+          {noneLeft ? (
+            <p className="text-caption text-muted-foreground py-2">{t('copyNoneLeft')}</p>
+          ) : (
+            <SelectField
+              // The list belongs to the class: a new one starts with nothing picked
+              key={classId}
+              id={`${id}-resource`}
+              value={picked}
+              placeholder={t('copyPick')}
+              options={options}
+              onValueChange={setPicked}
+            />
+          )}
         </div>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -556,7 +634,7 @@ export function ResourceBoxesEditor() {
           {t('copy')}
         </Button>
       </div>
-      {copying && <CopyFromClass onCopy={add} />}
+      {copying && <CopyFromClass onCopy={add} boxes={all} />}
     </div>
   );
 }

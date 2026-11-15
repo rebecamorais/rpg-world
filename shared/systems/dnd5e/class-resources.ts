@@ -1,4 +1,5 @@
 import { normalizeSearch } from '@shared/content/normalize-search';
+import { stripTags } from '@shared/content/tags';
 
 import { getModifier } from './calculations';
 import type { ClassResource } from './content/class.schema';
@@ -235,8 +236,8 @@ export function restChoiceOf(recovery: Recovery[]): RestChoice {
   return recovery.some((r) => r.rest === 'long') ? 'long' : 'none';
 }
 
-/** The longest description the sheet saves for a box. */
-export const MAX_RESOURCE_DESCRIPTION = 2000;
+/** The longest description the sheet saves for a box: room for the longest rule text (~3,800). */
+export const MAX_RESOURCE_DESCRIPTION = 5000;
 
 /**
  * A class resource as a box of the player's own, for a sheet of another class (a rogue with Wild
@@ -263,8 +264,9 @@ export function customFromClass(
     recovery: resource.recovery
       .filter((rec) => (rec.fromLevel ?? 1) <= at)
       .map(({ rest, amount }) => ({ rest, amount })),
+    // Plain text: the copy is the player's to edit, and tags would show as code in the field
     ...(resource.description && {
-      description: resource.description.slice(0, MAX_RESOURCE_DESCRIPTION),
+      description: stripTags(resource.description).slice(0, MAX_RESOURCE_DESCRIPTION),
     }),
     source,
   };

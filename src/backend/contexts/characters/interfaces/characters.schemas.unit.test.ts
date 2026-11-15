@@ -196,7 +196,7 @@ describe('edition e resources no update', () => {
     expect(parse({ resources: { 'class:monk:ki': ok } })).toBe(true);
   });
 
-  it('caixinha própria aceita descrição até 2000 caracteres e recusa origem desconhecida', () => {
+  it('caixinha própria aceita descrição até 5000 caracteres e recusa origem desconhecida', () => {
     const KEY = 'custom:3f2b8c1e-4d5a-4b6c-8d7e-9f0a1b2c3d4e';
     const own = (extra: object) => ({
       resources: {
@@ -207,8 +207,8 @@ describe('edition e resources no update', () => {
       },
     });
 
-    expect(parse(own({ description: 'y'.repeat(2000) }))).toBe(true);
-    expect(parse(own({ description: 'y'.repeat(2001) }))).toBe(false);
+    expect(parse(own({ description: 'y'.repeat(5000) }))).toBe(true);
+    expect(parse(own({ description: 'y'.repeat(5001) }))).toBe(false);
     expect(parse(own({ source: 'potion' }))).toBe(false);
   });
 
@@ -224,7 +224,7 @@ describe('edition e resources no update', () => {
     expect(parse(box({ max: 1001 }))).toBe(false);
     expect(parse(box({ max: -1 }))).toBe(false);
     expect(parse(box({ name: 'x'.repeat(101) }))).toBe(false);
-    expect(parse(box({ description: 'y'.repeat(2001) }))).toBe(false);
+    expect(parse(box({ description: 'y'.repeat(5001) }))).toBe(false);
     expect(parse(box({ color: 'z'.repeat(33) }))).toBe(false);
     const long = { rest: 'long', amount: 'all' };
     expect(parse(box({ recovery: [long, long, long, long, long] }))).toBe(false);

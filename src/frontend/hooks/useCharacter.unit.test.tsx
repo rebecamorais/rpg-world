@@ -53,4 +53,128 @@ describe('useCharacter', () => {
 
     expect(api.put).toHaveBeenCalledWith('/api/characters/c1', { updates: { hpCurrent: 7 } });
   });
+
+  describe('saveQuietly (o que muda durante o jogo)', () => {
+    it('mostra na hora, sem "salvando" nem recarregar depois', async () => {
+      let finish = () => {};
+      api.put.mockImplementation(() => new Promise((resolve) => (finish = () => resolve({}))));
+      const { result, queryClient } = renderHookWithProviders(() =>
+        useCharacter('c1', { initial: ARANI }),
+      );
+      const invalidate = vi.spyOn(queryClient, 'invalidateQueries');
+
+      let saved!: Promise<void>;
+      act(() => {
+        saved = result.current.saveQuietly({
+          character: { ...ARANI, hpCurrent: 7 },
+          changes: { hpCurrent: 7 },
+        });
+      });
+
+      // Still in flight: the sheet already shows it, and nothing says "Saving…"
+      await waitFor(() => expect(result.current.character?.hpCurrent).toBe(7));
+      expect(result.current.isSaving).toBe(false);
+      await act(async () => {
+        finish();
+        await saved;
+      });
+      expect(api.put).toHaveBeenCalledWith(
+        '/api/characters/c1',
+        { updates: { hpCurrent: 7 } },
+        { keepalive: true },
+      );
+      expect(invalidate).not.toHaveBeenCalled();
+    });
+
+    it('dois toques seguidos vão ao servidor um depois do outro, na ordem', async () => {
+      const sent: unknown[] = [];
+      const finishers: (() => void)[] = [];
+      api.put.mockImplementation((_path, body) => {
+        sent.push(body);
+        return new Promise((resolve) => finishers.push(() => resolve({})));
+      });
+      const { result } = renderHookWithProviders(() => useCharacter('c1', { initial: ARANI }));
+
+      let first!: Promise<void>;
+      let second!: Promise<void>;
+      act(() => {
+        first = result.current.saveQuietly({
+          character: { ...ARANI, hpCurrent: 7 },
+          changes: { hpCurrent: 7 },
+        });
+        second = result.current.saveQuietly({
+          character: { ...ARANI, hpCurrent: 6 },
+          changes: { hpCurrent: 6 },
+        });
+      });
+
+      await waitFor(() => expect(sent).toHaveLength(1));
+      expect(result.current.character?.hpCurrent).toBe(6);
+      await act(async () => {
+        finishers[0]();
+        await first;
+      });
+      await waitFor(() => expect(sent).toHaveLength(2));
+      expect(sent).toEqual([{ updates: { hpCurrent: 7 } }, { updates: { hpCurrent: 6 } }]);
+      await act(async () => {
+        finishers[1]();
+        await second;
+      });
+    });
+
+    it('uma busca no meio de um toque salvando espera o servidor ter o toque', async () => {
+      let finish = () => {};
+      api.put.mockImplementation(() => new Promise((resolve) => (finish = () => resolve({}))));
+      api.get.mockResolvedValue({ ...ARANI, hpCurrent: 7 });
+      const { result, queryClient } = renderHookWithProviders(() =>
+        useCharacter('c1', { initial: ARANI }),
+      );
+
+      let saved!: Promise<void>;
+      act(() => {
+        saved = result.current.saveQuietly({
+          character: { ...ARANI, hpCurrent: 7 },
+          changes: { hpCurrent: 7 },
+        });
+      });
+      // The Save button or the window coming back to focus asks for the sheet meanwhile
+      void queryClient.invalidateQueries({ queryKey: ['character', 'c1'] });
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(api.get).not.toHaveBeenCalled();
+      expect(result.current.character?.hpCurrent).toBe(7);
+
+      await act(async () => {
+        finish();
+        await saved;
+      });
+      await waitFor(() => expect(api.get).toHaveBeenCalled());
+      expect(result.current.character?.hpCurrent).toBe(7);
+    });
+
+    it('se falhar, rejeita e recarrega a personagem do servidor; a fila segue', async () => {
+      api.put.mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce({});
+      api.get.mockResolvedValue(ARANI);
+      const { result } = renderHookWithProviders(() => useCharacter('c1', { initial: ARANI }));
+
+      await act(async () => {
+        await expect(
+          result.current.saveQuietly({
+            character: { ...ARANI, hpCurrent: 7 },
+            changes: { hpCurrent: 7 },
+          }),
+        ).rejects.toThrow('offline');
+      });
+      await waitFor(() => expect(api.get).toHaveBeenCalled());
+      await waitFor(() => expect(result.current.character?.hpCurrent).toBeUndefined());
+
+      await act(() =>
+        result.current.saveQuietly({ character: { ...ARANI, ac: 15 }, changes: { ac: 15 } }),
+      );
+      expect(api.put).toHaveBeenLastCalledWith(
+        '/api/characters/c1',
+        { updates: { ac: 15 } },
+        { keepalive: true },
+      );
+    });
+  });
 });
