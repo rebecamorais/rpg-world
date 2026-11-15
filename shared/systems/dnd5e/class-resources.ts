@@ -1,3 +1,5 @@
+import { normalizeSearch } from '@shared/content/normalize-search';
+
 import { getModifier } from './calculations';
 import type { ClassResource } from './content/class.schema';
 import type { Edition } from './content/editions';
@@ -155,12 +157,7 @@ export function recoveryOn(box: ResourceBox, rest: 'short' | 'long'): 'all' | nu
   return box.recovery.find((r) => r.rest === rest)?.amount ?? null;
 }
 
-const normalize = (text: string) =>
-  text
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .toLowerCase()
-    .trim();
+const normalize = (text: string) => normalizeSearch(text).trim();
 
 /** The SRD subclass if the free-text subclass names it (English or locale name; case, accents and surrounding spaces ignored). */
 export function matchSubclass(

@@ -3,8 +3,6 @@ import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import type { ClassCatalog } from './domain/class-resources';
 import { getClassCatalog } from './infrastructure/srd-classes';
 
-export { getClassCatalog };
-
 export class ClassesContext {
   constructor(readonly catalog: ClassCatalog) {}
 
