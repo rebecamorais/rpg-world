@@ -18,6 +18,8 @@ interface UsePipsProps {
   /** Forces the number form (used by the hit points unit). */
   asNumber?: boolean;
   className?: string;
+  /** Marks the control the rest checklist's "go" button focuses. */
+  'data-rest-focus'?: boolean;
 }
 
 /** Above this many uses, squares stop fitting and a number with − / + takes over. */
@@ -31,6 +33,7 @@ export function UsePips({
   disabled,
   asNumber,
   className,
+  'data-rest-focus': restFocus,
 }: UsePipsProps) {
   const t = useTranslations('usePips');
   const [pending, setPending] = React.useState(false);
@@ -64,7 +67,12 @@ export function UsePips({
     const buttonClass =
       'focus-ring border-character-muted text-character-flare flex size-6 items-center justify-center rounded-sm border disabled:opacity-40 pointer-coarse:size-11';
     return (
-      <div role="group" aria-label={summary} className={cn('flex items-center gap-2', className)}>
+      <div
+        role="group"
+        aria-label={summary}
+        data-rest-focus={restFocus || undefined}
+        className={cn('flex items-center gap-2', className)}
+      >
         <button
           type="button"
           aria-label={t('spendOne', { label })}
@@ -91,7 +99,12 @@ export function UsePips({
   }
 
   return (
-    <div role="group" aria-label={summary} className={cn('flex flex-wrap', className)}>
+    <div
+      role="group"
+      aria-label={summary}
+      data-rest-focus={restFocus || undefined}
+      className={cn('flex flex-wrap', className)}
+    >
       {Array.from({ length: max }).map((_, i) => {
         const isAvailable = i < availableCount;
         return (

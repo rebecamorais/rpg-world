@@ -37,7 +37,7 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
       </div>
 
       <ul className="flex flex-col gap-3">
-        {boxes.map((box) => (
+        {boxes.map((box, index) => (
           <li key={box.key} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
             <div className="flex flex-wrap items-center gap-2">
               <Popover>
@@ -75,6 +75,7 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
               used={box.used}
               asNumber={box.unit === 'hit-points'}
               disabled={readOnly}
+              data-rest-focus={index === 0}
               onChange={(used) => {
                 const patch = setResourceUsed(box.key, used);
                 return saveNow(typeof patch === 'function' ? patch(character) : patch);

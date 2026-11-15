@@ -126,6 +126,53 @@ describe('RestChecklist', () => {
     );
   });
 
+  it('"ir" foca o campo marcado, não a engrenagem que vem antes', async () => {
+    const user = userEvent.setup();
+    const { container } = renderWithCharacter(<RestButtons />, monk());
+    const target = document.createElement('div');
+    target.id = 'sheet-hp';
+    const gear = document.createElement('button');
+    gear.textContent = 'engrenagem';
+    const field = document.createElement('input');
+    field.setAttribute('aria-label', 'PV');
+    field.setAttribute('data-rest-focus', '');
+    target.append(gear, field);
+    container.appendChild(target);
+
+    await user.click(screen.getByRole('button', { name: 'Long rest' }));
+    await user.click(screen.getByRole('button', { name: 'go: Full HP' }));
+
+    expect(screen.getByRole('textbox', { name: 'PV' })).toHaveFocus();
+  });
+
+  it('Esc que fecha um diálogo ou popover da ficha não fecha a checklist', async () => {
+    const user = userEvent.setup();
+    const { container } = renderWithCharacter(<RestButtons />, monk());
+    await user.click(screen.getByRole('button', { name: 'Short rest' }));
+
+    // Focus inside another layer (a dialog open on the sheet)
+    const dialog = document.createElement('div');
+    dialog.setAttribute('role', 'dialog');
+    const inner = document.createElement('button');
+    inner.textContent = 'dentro';
+    dialog.appendChild(inner);
+    container.appendChild(dialog);
+    inner.focus();
+    await user.keyboard('{Escape}');
+    expect(screen.getByRole('complementary')).toBeInTheDocument();
+
+    // A layer that already handled the Esc (Radix calls preventDefault in the capture phase)
+    dialog.remove();
+    const handled = (event: KeyboardEvent) => event.preventDefault();
+    document.addEventListener('keydown', handled, { capture: true });
+    try {
+      await user.keyboard('{Escape}');
+      expect(screen.getByRole('complementary')).toBeInTheDocument();
+    } finally {
+      document.removeEventListener('keydown', handled, { capture: true });
+    }
+  });
+
   it('"ir" sem o bloco na tela não quebra e recolhe a faixa', async () => {
     const user = userEvent.setup();
     renderWithCharacter(<RestButtons />, monk());

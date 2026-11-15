@@ -7,6 +7,8 @@ import { createPortal } from 'react-dom';
 
 import { Button } from '@frontend/components/ui/button';
 import { useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { hitDiceAvailable } from '@frontend/lib/character-sheet-updates';
+import { characterTheme } from '@frontend/lib/color-utils';
 import { type RestItem, buildRestChecklist } from '@frontend/lib/rest-checklist';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
@@ -15,6 +17,20 @@ import { useResourceBoxes } from '../resources/useResourceBoxes';
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
+/** Layers Esc belongs to: a dialog, or a popover/select/menu floating over the sheet. */
+const OTHER_LAYER = '[role="dialog"], [role="alertdialog"], [data-radix-popper-content-wrapper]';
+
+/**
+ * Where "go" puts the focus: the block's `data-rest-focus` control (the field to change, not the
+ * gear or the edit link that may come first), else the block's first focusable.
+ */
+function focusTarget(block: HTMLElement) {
+  const marked = block.querySelector<HTMLElement>('[data-rest-focus]');
+  if (marked?.matches(FOCUSABLE)) return marked;
+  return (
+    marked?.querySelector<HTMLElement>(FOCUSABLE) ?? block.querySelector<HTMLElement>(FOCUSABLE)
+  );
+}
 
 /**
  * What to update on the sheet after a rest. Ticks live only here: nothing is written to the sheet.
@@ -35,14 +51,20 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
     level,
     hitDie: content?.hitDie ?? null,
     conMod: getModifier(character.attributes.CON ?? 10),
-    hitDiceAvailable: Math.min(Math.max(character.hitDice?.current ?? level, 0), level),
+    hitDiceAvailable: hitDiceAvailable(character),
     boxes,
     hasSpellSlots: character.spellcastingSystem === 'slots',
     hasPactSlots: !!content?.resources.some((r) => r.unit === 'spell-slots' && r.level <= level),
   });
 
   useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => event.key === 'Escape' && onClose();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      // A popover, select or dialog on the sheet closing on this Esc: Radix marks it handled
+      if (event.defaultPrevented) return;
+      if (event.target instanceof Element && event.target.closest(OTHER_LAYER)) return;
+      onClose();
+    };
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [onClose]);
@@ -57,7 +79,7 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
   const go = (target: RestItem['target']) => {
     const element = target ? document.getElementById(target) : null;
     element?.scrollIntoView({ block: 'center' });
-    element?.querySelector<HTMLElement>(FOCUSABLE)?.focus({ preventScroll: true });
+    if (element) focusTarget(element)?.focus({ preventScroll: true });
     setCollapsed(true);
   };
 
@@ -71,23 +93,31 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
 
   const title = rest === 'short' ? t('shortTitle') : t('longTitle');
   const progress = t('progress', { title, done: ticked.size, total: items.length });
+  const theme = characterTheme(character.accentColor);
 
   // In the body: a transformed ancestor in the page frame would turn `fixed` into relative
   return createPortal(
     <aside
       aria-labelledby={titleId}
-      className="border-border bg-card/95 fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 flex max-h-[60dvh] flex-col border-t shadow-lg backdrop-blur-md md:inset-x-auto md:right-4 md:bottom-4 md:max-h-[70dvh] md:w-80 md:rounded-lg md:border"
+      // Out of the sheet's `.character-context`, so it brings the character's color along.
+      // Below lg the sticky VitalsBar (~9rem) holds the top: the list stops short of it
+      className={`${theme.className} border-border bg-card/95 fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 flex max-h-[min(60dvh,calc(100dvh_-_3.5rem_-_env(safe-area-inset-bottom)_-_9rem))] flex-col border-t shadow-lg backdrop-blur-md md:inset-x-auto md:right-4 md:bottom-4 md:max-h-[min(70dvh,calc(100dvh_-_1rem_-_9rem))] md:w-80 md:rounded-lg md:border lg:max-h-[70dvh]`}
+      style={theme.style}
     >
       <div className="flex items-center justify-between gap-2 px-3">
-        <h2 id={titleId} className="min-w-0 flex-1 text-sm font-semibold">
+        <h2 className="min-w-0 flex-1 text-sm font-semibold">
+          {/* Phone: the title expands and collapses the list. md+: the list is always open */}
           <button
             type="button"
             aria-expanded={!collapsed}
             onClick={() => setCollapsed((value) => !value)}
-            className="focus-ring min-h-11 w-full truncate text-left md:pointer-events-none"
+            className="focus-ring min-h-11 w-full truncate text-left md:hidden"
           >
             {progress}
           </button>
+          <span id={titleId} className="hidden min-h-11 truncate leading-[2.75rem] md:block">
+            {progress}
+          </span>
         </h2>
         <Button size="sm" onClick={onClose}>
           {t('done')}
@@ -113,7 +143,7 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
               <Button
                 variant="outline"
                 size="sm"
-                aria-label={`${t('go')}: ${text(item)}`}
+                aria-label={t('goTo', { item: text(item) })}
                 onClick={() => go(item.target)}
               >
                 {t('go')}

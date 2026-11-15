@@ -52,6 +52,10 @@ export const setHitDiceRemaining =
   (current: number): Patch =>
   (c) => ({ hitDice: { total: c.hitDice?.total ?? '', current } });
 
+/** Hit dice left to spend, between 0 and the level. A sheet that never set them has them all. */
+export const hitDiceAvailable = (c: Pick<DnD5eCharacter, 'hitDice' | 'level'>) =>
+  Math.min(Math.max(c.hitDice?.current ?? c.level, 0), c.level);
+
 export const setResourceUsed =
   (key: string, used: number): Patch =>
   (c) => ({ resources: { ...c.resources, [key]: { ...c.resources?.[key], used } } });

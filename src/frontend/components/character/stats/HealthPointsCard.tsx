@@ -64,6 +64,8 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
           <NumberInput
             ghost
             aria-label={t('hitPoints')}
+            // Where the rest checklist's "go" lands, rather than the settings gear above it
+            data-rest-focus
             value={currentHp}
             min={0}
             max={SMALLINT_MAX}

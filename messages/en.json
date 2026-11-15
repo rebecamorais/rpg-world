@@ -583,6 +583,7 @@
     "progress": "{title} · {done} of {total}",
     "done": "Done",
     "go": "go",
+    "goTo": "go: {item}",
     "spendHitDice": "Roll {die} {bonus} per hit die spent ({left} left)",
     "spendHitDiceNoDie": "Spend hit dice, if you want ({left} left)",
     "boxBack": "{name} returns: {amount, select, all {all} other {{amount}}}",

@@ -583,6 +583,7 @@
     "progress": "{title} · {done} de {total}",
     "done": "Terminei",
     "go": "ir",
+    "goTo": "ir: {item}",
     "spendHitDice": "Role {die} {bonus} por dado de vida gasto (sobram {left})",
     "spendHitDiceNoDie": "Gaste dados de vida, se quiser (sobram {left})",
     "boxBack": "{name} volta: {amount, select, all {todos} other {{amount}}}",

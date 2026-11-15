@@ -26,6 +26,7 @@ import {
 } from '@frontend/context/CharacterContext';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import {
+  hitDiceAvailable,
   setHitDice,
   setHitDiceRemaining,
   setSpellPoints,
@@ -58,7 +59,7 @@ const CombatHeader = () => {
   const { id } = useCharacterMeta();
   const { readOnly } = useSheetSource(id);
   const level = character.level;
-  const available = Math.min(Math.max(character.hitDice?.current ?? level, 0), level);
+  const available = hitDiceAvailable(character);
   const passivePerception = calculatePassivePerception(
     character.attributes.WIS ?? 10,
     character.level,
@@ -155,6 +156,7 @@ const CombatHeader = () => {
         <span className="text-label text-muted-foreground">{tRemaining('label')}</span>
         <UsePips
           label={tRemaining('label')}
+          data-rest-focus
           max={level}
           used={level - available}
           disabled={readOnly}

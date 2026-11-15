@@ -51,6 +51,7 @@ export function SpellPoints({
             <NumberInput
               ghost
               aria-label={t('spellPoints')}
+              data-rest-focus
               value={current}
               min={0}
               max={10_000}
