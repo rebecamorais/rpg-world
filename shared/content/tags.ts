@@ -13,9 +13,12 @@ const TAG_START = /\{@(\w+)/y;
 /** What 5etools shows for a tag with this (already flat) body. */
 function shown(tag: string, parts: string[]): string {
   if (tag === 'chance') return `${parts[0]}%`;
-  if (tag === 'dc') return `DC ${parts[0]}`;
+  // A translation says it its own way: {@dc 15|CD 15}
+  if (tag === 'dc') return parts[1] || `DC ${parts[0]}`;
   // The third part of these is a filter or a chapter, not display text
   if (tag === 'filter' || tag === 'book' || tag === 'adventure') return parts[0];
+  // {@quickref Cover||3||total cover}: the third part is the chapter, the fifth the display text
+  if (tag === 'quickref') return parts[4] || parts[0];
   if (tag === 'scaledamage' || tag === 'scaledice') return parts[2] ?? parts[0];
   return parts[2] || parts[0];
 }
@@ -73,16 +76,23 @@ export function parseTags(text: string): TagNode[] {
   return nodes;
 }
 
-/** Every tag, nested ones included, innermost first (one pass per level, like `stripTags`). */
-export function tagsOf(text: string): { tag: string; target: string }[] {
-  const found: { tag: string; target: string }[] = [];
+/**
+ * Every tag, nested ones included, innermost first (one pass per level, like `stripTags`).
+ * `rest` is what follows the first part (source, filter, chapter…).
+ */
+export function tagsOf(text: string): { tag: string; target: string; rest: string }[] {
+  const found: { tag: string; target: string; rest: string }[] = [];
   let previous: string;
   let current = text;
   do {
     previous = current;
     current = current.replace(TAG, (_, tag: string, body: string) => {
       const parts = body.split('|');
-      found.push({ tag, target: parts[0].trim().toLowerCase() });
+      found.push({
+        tag,
+        target: parts[0].trim().toLowerCase(),
+        rest: parts.slice(1).join('|'),
+      });
       return shown(tag, parts);
     });
   } while (current !== previous);

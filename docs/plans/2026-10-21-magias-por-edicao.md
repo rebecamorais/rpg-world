@@ -22,7 +22,8 @@ grimório.
 **Stack:** Next.js (App Router), TypeScript, Zod, Supabase/Postgres, Vitest, Playwright.
 
 **Especificação:** `docs/plans/2026-10-15-5etools-e-traducoes.md` (status de 2026-10-21),
-`docs/plans/2026-10-21-magias-em-arquivo.md` ("Fica para o PR B") e as decisões abaixo.
+o plano das magias em arquivo ([#91](https://github.com/rebecamorais/rpg-world/issues/91), "Fica para o PR B"; removido do repositório depois
+da entrega) e as decisões abaixo.
 
 ## Decisões (conversa de 2026-10-22)
 
@@ -242,8 +243,7 @@ só em `pt`.
 - Modificar: `e2e/spells.spec.ts`, `e2e/navigation.mobile.spec.ts`,
   `e2e/visual/screens.visual.spec.ts` se dependerem de nomes repetidos ou contagens
 - Modificar: `docs/plans/2026-10-20-roadmap.md` (6 entregue com o PR; 5 continua em andamento por
-  causa do homebrew), `2026-10-15-5etools-e-traducoes.md`, `2026-10-15-conteudo-e-homebrew.md`,
-  `2026-10-21-magias-em-arquivo.md` (link para este plano)
+  causa do homebrew), `2026-10-15-5etools-e-traducoes.md`, `2026-10-15-conteudo-e-homebrew.md`
 
 - [ ] **Passo 1:** `npm run test:e2e` → PASSA (ajustar buscas por nome exato e escolher edição
       onde o teste aprende uma magia); `npm run test:visual -- --update-snapshots=all` e conferir
