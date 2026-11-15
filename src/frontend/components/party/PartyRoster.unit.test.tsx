@@ -36,4 +36,20 @@ describe('PartyRoster', () => {
 
     expect(screen.queryByRole('button', view)).not.toBeInTheDocument();
   });
+
+  it('a ficha de colega é privada: "Ver ficha" e link só nos próprios personagens', () => {
+    renderWithProviders(
+      <PartyRoster
+        roster={[character(), character({ characterId: 'c2', ownerId: 'u2', name: 'Bran' })]}
+        people={[]}
+        myCharacterIds={['c2']}
+      />,
+    );
+
+    const open = messages.sheetViewer.open;
+    expect(screen.queryByRole('button', { name: `${open} Arani` })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: `${open} Bran` })).toBeInTheDocument();
+    // No link to a sheet the player can't open
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
 });

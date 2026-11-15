@@ -1,8 +1,11 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { useRouter } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { PageContainer } from '@frontend/components/shared/PageContainer';
@@ -22,9 +25,19 @@ export function PartySettings({ partyId }: { partyId: string }) {
   const t = useTranslations('parties.settings');
   const router = useRouter();
   const { party, isLoading } = useParty(partyId);
+  // A player at this table already knows it exists: "not found" read like a bug, so they go to
+  // the table and are told why. Strangers still get "not found" (nothing to reveal).
+  const notTheGm = !!party && party.role !== 'gm';
 
-  if (isLoading) return <LoadingState thematic />;
-  if (party?.role !== 'gm') return <PartyNotFound />;
+  useEffect(() => {
+    if (!notTheGm) return;
+    // The id keeps it to one notice if the effect runs twice
+    toast(t('gmOnly'), { id: `party-settings-gm-only-${partyId}` });
+    router.replace(`/parties/${partyId}`);
+  }, [notTheGm, partyId, router, t]);
+
+  if (isLoading || notTheGm) return <LoadingState thematic />;
+  if (!party) return <PartyNotFound />;
 
   return (
     <PageContainer

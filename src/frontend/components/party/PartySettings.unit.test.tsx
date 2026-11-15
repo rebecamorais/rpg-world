@@ -1,13 +1,19 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
+import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { PartySettings } from './PartySettings';
 
-vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }));
+const router = vi.hoisted(() => ({ push: vi.fn(), replace: vi.fn() }));
+vi.mock('next/navigation', () => ({ useRouter: () => router }));
+vi.mock('sonner', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('sonner')>();
+  return { ...actual, toast: Object.assign(vi.fn(), actual.toast) };
+});
 
 const mutation = () => ({ mutate: vi.fn(), mutateAsync: vi.fn(), isPending: false });
 const hook = {
@@ -45,6 +51,8 @@ const party = (role: PartyView['role']) =>
 describe('PartySettings', () => {
   beforeEach(() => {
     hook.party = null;
+    router.replace.mockClear();
+    vi.mocked(toast).mockClear();
   });
 
   it('o mestre vê convite, link, jogadores, nome e apagar', () => {
@@ -57,12 +65,23 @@ describe('PartySettings', () => {
     expect(screen.getByRole('button', { name: t.manage.deleteParty })).toBeVisible();
   });
 
-  it('o jogador não tem configurações: mesa não encontrada', () => {
+  it('o jogador da mesa vai para a mesa, com o aviso de que só o mestre gerencia', () => {
     hook.party = party('player');
     renderWithProviders(<PartySettings partyId="party-1" />);
 
-    expect(screen.getByText(t.page.notFoundTitle)).toBeVisible();
+    expect(router.replace).toHaveBeenCalledWith('/parties/party-1');
+    expect(toast).toHaveBeenCalledWith(t.settings.gmOnly, expect.anything());
+    // Not "not found": the party exists and they are in it
+    expect(screen.queryByText(t.page.notFoundTitle)).not.toBeInTheDocument();
     expect(screen.queryByLabelText(t.manage.inviteLabel)).not.toBeInTheDocument();
+  });
+
+  it('quem não está na mesa continua vendo mesa não encontrada', () => {
+    renderWithProviders(<PartySettings partyId="party-1" />);
+
+    expect(screen.getByText(t.page.notFoundTitle)).toBeVisible();
+    expect(router.replace).not.toHaveBeenCalled();
+    expect(toast).not.toHaveBeenCalled();
   });
 
   it('o campo de edição tem rótulo e a dica como descrição', () => {

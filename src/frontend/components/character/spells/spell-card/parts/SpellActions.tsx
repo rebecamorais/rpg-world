@@ -21,13 +21,16 @@ export const SpellActions = React.memo(
     <div className="border-border flex items-center justify-end border-t pt-2">
       <button
         type="button"
-        disabled={pending}
+        // aria-disabled, not disabled: the confirmation gives the focus back here, and a disabled
+        // button (while the forget saves) would drop it on <body> for a keyboard user
+        aria-disabled={pending || undefined}
         aria-busy={pending || undefined}
         onClick={(e) => {
           e.stopPropagation();
+          if (pending) return;
           onForgetSpell?.(spell.id);
         }}
-        className="focus-ring text-danger-flare hover:bg-danger-surface flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-wait disabled:opacity-70"
+        className="focus-ring text-danger-flare hover:bg-danger-surface flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors aria-disabled:cursor-wait aria-disabled:opacity-70"
       >
         <AppIcon name="Trash2" size={18} aria-hidden="true" />
         {displayValues.forgetLabel}

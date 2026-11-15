@@ -130,10 +130,12 @@ export function AdjustHitPoints({
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent
         side="bottom"
-        // Straight to the number: on a phone that is the tap that opens the keypad
+        // Straight to the number: on a phone that is the tap that opens the keypad. Selected, so a
+        // number left from a closed attempt is replaced, not added to ("3" then "5" made 35)
         onOpenAutoFocus={(event) => {
           event.preventDefault();
           field.current?.focus();
+          field.current?.select();
         }}
         className="mx-auto flex w-full max-w-md flex-col gap-5 rounded-t-xl sm:bottom-6 sm:rounded-xl sm:border"
       >
