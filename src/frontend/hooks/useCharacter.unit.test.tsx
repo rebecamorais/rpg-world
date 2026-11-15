@@ -215,6 +215,73 @@ describe('useCharacter', () => {
       expect(result.current.character?.hpCurrent).toBe(23);
     });
 
+    it('duas falhas no mesmo toast: "Tentar de novo" manda as duas', async () => {
+      api.put
+        .mockRejectedValueOnce(new TypeError('Failed to fetch'))
+        .mockRejectedValueOnce(new TypeError('Failed to fetch'))
+        .mockResolvedValueOnce({});
+      const { result } = renderHookWithProviders(() =>
+        useCharacter('c1', { initial: { ...ARANI, hpCurrent: 33, ac: 12 } }),
+      );
+
+      await act(async () => {
+        await result.current
+          .saveQuietly({
+            character: { ...ARANI, hpCurrent: 23, ac: 12 },
+            changes: { hpCurrent: 23 },
+          })
+          .catch(() => {});
+      });
+      await act(async () => {
+        await result.current
+          .saveQuietly({ character: { ...ARANI, hpCurrent: 33, ac: 15 }, changes: { ac: 15 } })
+          .catch(() => {});
+      });
+
+      // The second toast replaced the first (same id): its action carries both
+      const { action } = vi.mocked(toast.error).mock.calls[1][1] as unknown as {
+        action: { onClick: () => void };
+      };
+      await act(async () => action.onClick());
+
+      await waitFor(() => expect(api.put).toHaveBeenCalledTimes(3));
+      expect(api.put).toHaveBeenLastCalledWith(
+        '/api/characters/c1',
+        { updates: { hpCurrent: 23, ac: 15 } },
+        { keepalive: true },
+      );
+    });
+
+    it('se o primeiro toque falha e o seguinte na mesma chave dá certo, fica o seguinte', async () => {
+      let failFirst = (_error: Error) => {};
+      api.put
+        .mockImplementationOnce(() => new Promise((_resolve, reject) => (failFirst = reject)))
+        .mockResolvedValueOnce({});
+      const { result, queryClient } = renderHookWithProviders(() =>
+        useCharacter('c1', { initial: { ...ARANI, hpCurrent: 33 } }),
+      );
+
+      let first!: Promise<void>;
+      let second!: Promise<void>;
+      act(() => {
+        first = result.current.saveQuietly({
+          character: { ...ARANI, hpCurrent: 23 },
+          changes: { hpCurrent: 23 },
+        });
+        second = result.current.saveQuietly({
+          character: { ...ARANI, hpCurrent: 20 },
+          changes: { hpCurrent: 20 },
+        });
+      });
+      await act(async () => {
+        failFirst(new Error('offline'));
+        await first.catch(() => {});
+        await second;
+      });
+
+      expect(queryClient.getQueryData(['character', 'c1'])).toMatchObject({ hpCurrent: 20 });
+    });
+
     it('a falha só desfaz o que ela levava, não os toques já salvos', async () => {
       api.put.mockResolvedValueOnce({}).mockRejectedValueOnce(new Error('offline'));
       const { result } = renderHookWithProviders(() =>
@@ -260,8 +327,9 @@ describe('useCharacter', () => {
       expect(queryClient.getQueryData(['character', 'c1'])).toMatchObject({ ac: 15, revision: 5 });
     });
 
-    it('um toque salvo leva a revisão adiante, e o Salvar seguinte não conflita com ele', async () => {
-      api.put.mockResolvedValueOnce({ revision: 5 }).mockResolvedValueOnce({ revision: 6 });
+    it('um toque salvo não mexe na revisão, e o Salvar seguinte não conflita com ele', async () => {
+      // The taps of play don't move the revision on the server
+      api.put.mockResolvedValueOnce({ revision: 4 }).mockResolvedValueOnce({ revision: 5 });
       const { result } = renderHookWithProviders(() => useCharacter('c1', { initial: SAVED }));
 
       await act(() =>
@@ -276,6 +344,60 @@ describe('useCharacter', () => {
 
       expect(api.put).toHaveBeenLastCalledWith('/api/characters/c1', {
         updates: { ac: 15 },
+        revision: 4,
+      });
+    });
+
+    it('um toque que termina durante o Salvar não troca a revisão que o Salvar guardou', async () => {
+      let finishSave = () => {};
+      api.put
+        // The Save: answers last
+        .mockImplementationOnce(
+          () => new Promise((resolve) => (finishSave = () => resolve({ revision: 5 }))),
+        )
+        // The tap made while the Save is on its way: the server already counts the Save
+        .mockResolvedValueOnce({ revision: 5 });
+      api.get.mockImplementation(() => new Promise(() => {}));
+      const { result, queryClient } = renderHookWithProviders(() =>
+        useCharacter('c1', { initial: SAVED }),
+      );
+
+      let saved!: Promise<unknown>;
+      act(() => {
+        saved = result.current.updateCharacter({
+          character: { ...SAVED, ac: 15 },
+          changes: { ac: 15 },
+        });
+      });
+      await waitFor(() => expect(api.put).toHaveBeenCalledTimes(1));
+      await act(() =>
+        result.current.saveQuietly({
+          character: { ...SAVED, hpCurrent: 7 },
+          changes: { hpCurrent: 7 },
+        }),
+      );
+      // The tap answered first and took nothing from it
+      expect(queryClient.getQueryData(['character', 'c1'])).toMatchObject({ revision: 4 });
+      await act(async () => {
+        finishSave();
+        await saved;
+      });
+      expect(api.put).toHaveBeenNthCalledWith(1, '/api/characters/c1', {
+        updates: { ac: 15 },
+        revision: 4,
+      });
+      expect(queryClient.getQueryData(['character', 'c1'])).toMatchObject({ revision: 5 });
+
+      // A tap built from the render before the Save landed doesn't bring the revision back
+      api.put.mockResolvedValueOnce({ revision: 5 });
+      await act(() =>
+        result.current.saveQuietly({
+          character: { ...SAVED, hpCurrent: 6 },
+          changes: { hpCurrent: 6 },
+        }),
+      );
+      expect(queryClient.getQueryData(['character', 'c1'])).toMatchObject({
+        hpCurrent: 6,
         revision: 5,
       });
     });
@@ -316,9 +438,15 @@ describe('useCharacter', () => {
       expect(result.current.conflict).toBe(true);
       expect(toast.error).not.toHaveBeenCalled();
 
-      act(() => result.current.reload());
+      let reloaded!: Promise<void>;
+      act(() => {
+        reloaded = result.current.reload();
+      });
+      // Until the new copy is in, Save stays held: it would send the old revision again
+      expect(result.current.conflict).toBe(true);
+      await act(() => reloaded);
       expect(result.current.conflict).toBe(false);
-      await waitFor(() => expect(result.current.character).toMatchObject({ ac: 20, revision: 6 }));
+      expect(result.current.character).toMatchObject({ ac: 20, revision: 6 });
     });
   });
 });

@@ -74,7 +74,8 @@ test('no celular, salva pela barra fixa que aparece com alterações', async ({ 
   const id = await createCharacter(page, 'Thumb Hero');
   await page.goto(characterUrl(id));
 
-  await (await hydrated(page.getByRole('button', { name: 'Lose 1 HP' }))).click();
+  // A sheet edit (AC), not a play action: HP saves at once and never opens the bar
+  await (await hydrated(page.getByLabel('AC', { exact: true }))).fill('15');
 
   // Only the fixed bar has a plain "Save" (the header's button is "Save Changes")
   await page.getByRole('button', { name: 'Save', exact: true }).click();

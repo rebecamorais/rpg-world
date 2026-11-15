@@ -1663,7 +1663,7 @@
     "turnsUntil": "<strong>{name}</strong> em {count, plural, one {# turno} other {# turnos}}",
     "endTurnOf": "Encerrar turno de {name}",
     "newTab": "(abre em nova aba)",
-    "offline": "Sem conexão. A tela não atualiza e nada é enviado até a conexão voltar."
+    "offline": "Sem conexão. A tela não atualiza e nada do que você fizer é enviado."
   },
   "characterRaces": {
     "dragonborn": "Draconato",

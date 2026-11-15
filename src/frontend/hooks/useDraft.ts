@@ -25,9 +25,17 @@ function reducer<T>(edits: Edits<T>, action: DraftAction<T>): Edits<T> {
       const patch = resolvePatch(action.patch, { ...action.base, ...edits });
       return { ...edits, ...patch };
     }
-    case 'commit':
-      // Keeps what the user typed while the save was in flight
-      return edits === action.saved ? null : edits;
+    case 'commit': {
+      if (edits === action.saved || !edits) return null;
+      // Keeps what the user typed while the save was in flight. Compared by value: a background
+      // save landing meanwhile rebuilds the edits object without changing what is in it
+      const saved: Partial<T> = action.saved ?? {};
+      const rest: Partial<T> = {};
+      for (const [key, value] of Object.entries(edits) as [keyof T, T[keyof T]][]) {
+        if (!(key in saved) || !same(value, saved[key])) rest[key] = value;
+      }
+      return Object.keys(rest).length > 0 ? rest : null;
+    }
     case 'saved': {
       if (!edits) return edits;
       // A saved field that was also edited keeps the edit, with the patch applied on top of it

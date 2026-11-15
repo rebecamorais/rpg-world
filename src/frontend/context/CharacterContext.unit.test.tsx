@@ -150,8 +150,9 @@ describe('CharacterContext', () => {
     const gets = api.get.mock.calls.length;
     act(() => result.current.actions.discard());
     expect(result.current.state.isDirty).toBe(false);
-    expect(result.current.meta.conflict).toBe(false);
     await waitFor(() => expect(api.get.mock.calls.length).toBeGreaterThan(gets));
+    // Cleared once the server's copy is in, not before
+    await waitFor(() => expect(result.current.meta.conflict).toBe(false));
   });
 
   it('traduz o erro de carregamento', async () => {

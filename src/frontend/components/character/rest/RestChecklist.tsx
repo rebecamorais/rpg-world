@@ -12,6 +12,7 @@ import {
   useCharacterState,
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
+import { MERGED_BY_KEY } from '@frontend/lib/character-changes';
 import { hitDiceAvailable, hitDieSides } from '@frontend/lib/character-sheet-updates';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { type RestItem, buildRestChecklist } from '@frontend/lib/rest-checklist';
@@ -36,6 +37,38 @@ function magicToRestore(character: DnD5eCharacter): 'slots' | 'points' | null {
     return slots.some((slot) => slot.max > 0) ? 'slots' : null;
   }
   return (character.spellPoints?.max ?? 0) > 0 ? 'points' : null;
+}
+
+const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
+/**
+ * What Undo of "Recover" saves, read on the server copy now: `before` back only where the sheet
+ * still holds what the recovery set (key by key in the merged maps). A hit taken or a box spent
+ * after recovering is play, not part of the rest, and stays.
+ */
+function undoRecovery(
+  server: DnD5eCharacter,
+  before: Partial<DnD5eCharacter>,
+  applied: Partial<DnD5eCharacter>,
+): Partial<DnD5eCharacter> {
+  const now = server as unknown as Record<string, unknown>;
+  const was = before as Record<string, unknown>;
+  const undo: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(applied)) {
+    if ((MERGED_BY_KEY as readonly string[]).includes(key) && value && typeof value === 'object') {
+      const current = (now[key] ?? {}) as Record<string, unknown>;
+      const previous = (was[key] ?? {}) as Record<string, unknown>;
+      const entries = Object.entries(value).filter(
+        ([entry, set]) => entry in previous && same(current[entry], set),
+      );
+      if (entries.length > 0) {
+        undo[key] = { ...current, ...Object.fromEntries(entries.map(([e]) => [e, previous[e]])) };
+      }
+    } else if (same(now[key], value)) {
+      undo[key] = was[key];
+    }
+  }
+  return undo as Partial<DnD5eCharacter>;
 }
 
 /**
@@ -126,15 +159,21 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
   const recoverable = restRecovery(rest, character, boxes);
 
   const recover = async () => {
-    const { fields, items: done } = recoverable;
-    // What Undo puts back: these fields as the sheet shows them now
-    const before = Object.fromEntries(
-      Object.keys(fields).map((key) => [key, character[key as keyof DnD5eCharacter]]),
-    ) as Partial<DnD5eCharacter>;
+    const { items: done } = recoverable;
+    // What Undo puts back, taken from the server copy (not the draft: a pending edit in one of
+    // these fields was never saved, so Undo must not save it), and what the recovery set
+    let before: Partial<DnD5eCharacter> = {};
+    let applied: Partial<DnD5eCharacter> = {};
     setRecovering(true);
     try {
       // Read on the server copy, like every tap during play: a pending sheet edit stays pending
-      await saveNow((server) => restRecovery(rest, server, boxes).fields);
+      await saveNow((server) => {
+        applied = restRecovery(rest, server, boxes).fields;
+        before = Object.fromEntries(
+          Object.keys(applied).map((key) => [key, server[key as keyof DnD5eCharacter]]),
+        ) as Partial<DnD5eCharacter>;
+        return applied;
+      });
     } catch {
       // saveNow already showed the error, with "Try again"
       return;
@@ -147,7 +186,7 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
       action: {
         label: t('undo'),
         onClick: () =>
-          saveNow(before)
+          saveNow((server) => undoRecovery(server, before, applied))
             .then(() => {
               setRecovered(false);
               setTicked((current) => new Set([...current].filter((id) => !done.includes(id))));

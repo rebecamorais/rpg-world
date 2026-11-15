@@ -9,6 +9,7 @@ import { type APIError, rpgWorldApi } from '@client';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import {
+  FailedChanges,
   QuietSaver,
   type Revisioned,
   type SaveResult,
@@ -17,11 +18,14 @@ import {
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e';
 
-/** One toast for every failed background save: a burst of failed taps shows one error, not ten. */
+/**
+ * One toast for every failed background save: a burst of failed taps shows one error, not ten.
+ * Its "Try again" sends what all of them carried (see `retry` below).
+ */
 const QUIET_ERROR_TOAST = 'character-quiet-save-error';
 
 /** The 409 of a save that started from an older revision. By shape: tests mock the API client. */
-export function isConflict(err: unknown): boolean {
+function isConflict(err: unknown): boolean {
   const { status, data } = (err ?? {}) as Partial<APIError>;
   return status === 409 && (data as { code?: unknown } | undefined)?.code === 'conflict';
 }
@@ -44,6 +48,8 @@ export function useCharacter(
   // Another device saved since this sheet loaded: the draft waits until the person reloads
   const [conflict, setConflict] = useState(false);
 
+  const [failed] = useState(() => new FailedChanges());
+
   // One request at a time, the taps made meanwhile batched into the next (see QuietSaver)
   const saver = useMemo(() => {
     const quiet: QuietSaver = new QuietSaver({
@@ -58,21 +64,30 @@ export function useCharacter(
       write: (update) => queryClient.setQueryData<Revisioned>(queryKey, update),
       // The field is already back to the server's value; "Try again" sends what was typed
       // (nothing is queued to go by itself later)
-      onFail: (err, changes) =>
+      onFail: (err, changes) => {
+        // Everything it carried is being written by a later save: nothing was lost
+        if (Object.keys(changes).length === 0) return;
+        failed.add(changes);
         toast.error(getErrorMessage(err), {
           id: QUIET_ERROR_TOAST,
           action: {
             label: t('retry'),
             onClick: () => {
+              const all = failed.take();
               const now = queryClient.getQueryData<DnD5eCharacter>(queryKey);
-              if (now) quiet.push(applyChanges(now, changes), changes).catch(() => {});
+              if (now && Object.keys(all).length > 0) {
+                quiet.push(applyChanges(now, all), all).catch(() => {});
+              }
             },
           },
-        }),
+          onDismiss: () => failed.take(),
+          onAutoClose: () => failed.take(),
+        });
+      },
     });
     return quiet;
     // getErrorMessage and t only change with the language
-  }, [id, queryKey, queryClient, getErrorMessage, t]);
+  }, [id, queryKey, queryClient, getErrorMessage, t, failed]);
 
   const query = useQuery({
     queryKey,
@@ -102,7 +117,7 @@ export function useCharacter(
     }) => {
       // After the taps saving in the background: two saves together could undo each other
       await saver.settled();
-      // The revision the draft sits on, taken after the taps (they move it, see QuietSaver)
+      // The revision the draft sits on (the taps don't move it, see QuietSaver)
       const revision = queryClient.getQueryData<Revisioned>(queryKey)?.revision;
       const result = await rpgWorldApi.put<SaveResult>(`/api/characters/${character.id}`, {
         updates: changes,
@@ -143,16 +158,25 @@ export function useCharacter(
     ({ character, changes }: { character: DnD5eCharacter; changes: Partial<DnD5eCharacter> }) => {
       // A refetch still in flight would bring back the copy from before this change
       void queryClient.cancelQueries({ queryKey });
+      failed.supersede(changes);
       return saver.push(character, changes);
     },
-    [queryClient, queryKey, saver],
+    [queryClient, queryKey, saver, failed],
   );
 
-  /** Fetches the server's copy again after a conflict; the draft stays on top of it. */
-  const reload = useCallback(() => {
-    setConflict(false);
-    void queryClient.invalidateQueries({ queryKey });
-  }, [queryClient, queryKey]);
+  /**
+   * Fetches the server's copy again after a conflict; the draft stays on top of it. The conflict
+   * (and the disabled Save) holds until the new copy is in: saving earlier would send the old
+   * revision and be refused again.
+   */
+  const reload = useCallback(async () => {
+    try {
+      await queryClient.refetchQueries({ queryKey }, { throwOnError: true });
+      setConflict(false);
+    } catch (err) {
+      toast.error(getErrorMessage(err));
+    }
+  }, [queryClient, queryKey, getErrorMessage]);
 
   return {
     character,

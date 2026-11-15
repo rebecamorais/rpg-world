@@ -53,7 +53,7 @@ export interface CharacterActions {
   /** Drops the unsaved edits. */
   discard: () => void;
   /** After a conflict: fetches what the other device saved, keeping the draft on top of it. */
-  reload?: () => void;
+  reload?: () => Promise<void>;
 }
 
 export interface CharacterMeta {
@@ -159,7 +159,7 @@ export function CharacterProvider({
   });
   const discardEdits = useCallback(() => {
     discard();
-    if (conflictRef.current) reload();
+    if (conflictRef.current) void reload();
   }, [discard, reload]);
 
   const state = useMemo(() => ({ character: draft, isDirty }), [draft, isDirty]);

@@ -1663,7 +1663,7 @@
     "turnsUntil": "<strong>{name}</strong> in {count, plural, one {# turn} other {# turns}}",
     "endTurnOf": "End {name}'s turn",
     "newTab": "(opens in a new tab)",
-    "offline": "No connection. The screen won’t update and nothing is sent until the connection is back."
+    "offline": "No connection. The screen won’t update and nothing you do is sent."
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

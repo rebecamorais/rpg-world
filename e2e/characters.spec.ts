@@ -18,7 +18,8 @@ test.describe('ciclo do personagem', () => {
     await page.getByRole('button', { name: /^STR/ }).click();
     const dialog = page.getByRole('dialog', { name: 'Edit STR' });
     await dialog.getByLabel('Base Value').fill('16');
-    await dialog.getByRole('button', { name: 'Save' }).click();
+    // An attribute goes into the draft: the dialog applies it, the sheet's Save keeps it
+    await dialog.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByRole('button', { name: /^STR/ })).toContainText('+3');
 
     await page.getByLabel('Hit Points', { exact: true }).fill('7');

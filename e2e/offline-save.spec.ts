@@ -211,7 +211,7 @@ test.describe('o jogo salva na hora', () => {
     await page.goto(characterUrl(id));
 
     await (await hydrated(page.getByRole('button', { name: 'Long rest' }))).click();
-    await page.getByRole('button', { name: 'Recover' }).click();
+    await page.getByRole('button', { name: 'Recover', exact: true }).click();
 
     await expect(hitPoints(page)).toHaveValue('30');
     await expect(page.getByRole('checkbox', { name: 'Full HP' })).toBeChecked();
@@ -279,7 +279,7 @@ test.describe('conflito entre abas', () => {
     await (await hydrated(other.getByLabel('AC', { exact: true }))).fill('18');
     await other.getByRole('button', { name: 'Save Changes' }).click();
 
-    await expect(other.getByRole('alert')).toContainText('Changed somewhere else');
+    await expect(other.getByText(/^Changed somewhere else/)).toBeVisible();
     // The draft stays until the person chooses
     await expect(other.getByLabel('AC', { exact: true })).toHaveValue('18');
     const saved = await (await page.request.get(`/api/characters/${id}`)).json();
