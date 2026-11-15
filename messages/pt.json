@@ -575,6 +575,23 @@
   "hitDiceRemaining": {
     "label": "Dados de vida restantes"
   },
+  "restChecklist": {
+    "shortRest": "Descanso curto",
+    "longRest": "Descanso longo",
+    "shortTitle": "Descanso curto",
+    "longTitle": "Descanso longo",
+    "progress": "{title} · {done} de {total}",
+    "done": "Terminei",
+    "go": "ir",
+    "spendHitDice": "Role {die} {bonus} por dado de vida gasto (sobram {left})",
+    "spendHitDiceNoDie": "Gaste dados de vida, se quiser (sobram {left})",
+    "boxBack": "{name} volta: {amount, select, all {todos} other {{amount}}}",
+    "pactSlotsBack": "Espaços de pacto voltam",
+    "notBackShort": "Espaços de magia e PV não voltam no descanso curto",
+    "fullHp": "PV cheio",
+    "hitDiceBack": "Recupere {count, plural, one {# dado de vida} other {# dados de vida}}",
+    "spellSlotsBack": "Espaços de magia voltam"
+  },
   "spellsDrawer": {
     "searchPlaceholder": "Buscar magia…",
     "learn": "Aprender",

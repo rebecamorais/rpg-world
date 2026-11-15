@@ -575,6 +575,23 @@
   "hitDiceRemaining": {
     "label": "Hit dice remaining"
   },
+  "restChecklist": {
+    "shortRest": "Short rest",
+    "longRest": "Long rest",
+    "shortTitle": "Short rest",
+    "longTitle": "Long rest",
+    "progress": "{title} · {done} of {total}",
+    "done": "Done",
+    "go": "go",
+    "spendHitDice": "Roll {die} {bonus} per hit die spent ({left} left)",
+    "spendHitDiceNoDie": "Spend hit dice, if you want ({left} left)",
+    "boxBack": "{name} returns: {amount, select, all {all} other {{amount}}}",
+    "pactSlotsBack": "Pact slots return",
+    "notBackShort": "Spell slots and HP do not return on a short rest",
+    "fullHp": "Full HP",
+    "hitDiceBack": "Recover {count, plural, one {# hit die} other {# hit dice}}",
+    "spellSlotsBack": "Spell slots return"
+  },
   "spellsDrawer": {
     "searchPlaceholder": "Search spells…",
     "learn": "Learn",
