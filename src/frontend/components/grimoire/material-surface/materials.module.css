@@ -325,38 +325,42 @@
   background: color-mix(in oklab, var(--m), black 32%);
 }
 :global(:root[data-theme='light']) .surface[data-material='crypt-stone'] {
-  /* Lighter, more tinted stone and softer slabs on the light theme: full-strength blotches on a
-     gray base cut the secondary text's contrast and hid the spell's color */
-  --stone: color-mix(in oklab, var(--m) 60%, #a8a29e);
+  /* A pale, tinted stone like the other light materials: the slabs and grain stay, washed by a
+     light veil on top, since full-strength black noise read as a dirty gray film on a light page */
+  --stone: color-mix(in oklab, var(--m) 55%, #e7e5e4);
   background:
+    linear-gradient(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.55)),
     var(--grain-dark) 0 0 / 180px 180px,
     var(--mottle-soft) 0 0 / 320px 320px,
     radial-gradient(
       70% 55% at 50% 112%,
-      color-mix(in srgb, var(--m), transparent 82%),
+      color-mix(in srgb, var(--m), transparent 78%),
       transparent 72%
     ),
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--stone) 18%, var(--card)),
-      color-mix(in srgb, var(--stone) 26%, var(--card))
+      color-mix(in srgb, var(--stone) 22%, var(--card)),
+      color-mix(in srgb, var(--stone) 32%, var(--card))
     );
 }
 :global(:root[data-theme='light']) .ornament[data-material='crypt-stone'] {
-  background: rgb(0 0 0 / 0.35);
+  background: color-mix(in oklab, var(--m), black 45%);
+  opacity: 0.45;
 }
 :global(:root[data-theme='light']) .surface[data-material='divine-parchment'] {
+  /* Light vellum: the fibers stay under a light veil and the burnt edge is only a hint */
   background:
+    linear-gradient(rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.5)),
     var(--fibers) 0 0 / 240px 240px,
     radial-gradient(
       circle at 50% 38%,
-      transparent 45%,
-      color-mix(in srgb, var(--vellum), transparent 70%) 140%
+      transparent 50%,
+      color-mix(in srgb, var(--vellum), transparent 85%) 140%
     ),
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--m) 40%, var(--card)),
-      color-mix(in srgb, var(--m) 26%, var(--card))
+      color-mix(in srgb, var(--m) 34%, var(--card)),
+      color-mix(in srgb, var(--m) 22%, var(--card))
     );
 }
 :global(:root[data-theme='light']) .ornament[data-material='divine-parchment'] {
