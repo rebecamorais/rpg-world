@@ -40,6 +40,8 @@ export const EFFECTS = {
   // Cold: faceted ice glass and a six-armed crystal on the right (the owner's drawing)
   'frost-crystals': { parts: 'art', enter: 'fade', ripple: ['diamond', 2] },
   frost: { parts: 'glow+icons', enter: 'fade', ripple: ['diamond', 2] },
+  // Lightning: a forked bolt with branches from the top right corner (the owner's drawing)
+  'lightning-branches': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
   bolt: { parts: 'fx+bolt', enter: 'flicker', ripple: ['round', 2] },
   thrust: { parts: 'fx', enter: 'flash', ripple: ['round', 2] },
   // Poison: organic mist, branching filaments, drops and spores, top right (the owner's drawing)

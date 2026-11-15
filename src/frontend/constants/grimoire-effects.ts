@@ -15,7 +15,7 @@ const BY_DAMAGE: Partial<Record<string, EffectId>> = {
   bludgeoning: 'impact',
   acid: 'drips',
   cold: 'frost-crystals',
-  lightning: 'bolt',
+  lightning: 'lightning-branches',
   piercing: 'thrust',
   poison: 'toxic-mist-filaments',
   thunder: 'thunder-soundwaves',

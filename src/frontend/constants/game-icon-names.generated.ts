@@ -76,6 +76,7 @@ export const GAME_ICON_NAMES: ReadonlySet<string> = new Set([
   'knapsack',
   'leather-armor',
   'lightning-bow',
+  'lightning-branches',
   'lightning-tree',
   'load',
   'lockpicks',

@@ -9,7 +9,7 @@ import styles from './effects.module.css';
  * constant, never user content; the prefix keeps each card's gradient ids unique.
  */
 /** Drawings that stretch over the whole card instead of sitting as a banner on its top edge. */
-const FULL_CARD: ReadonlySet<ArtName> = new Set(['thunder-soundwaves']);
+const FULL_CARD: ReadonlySet<ArtName> = new Set(['lightning-branches', 'thunder-soundwaves']);
 
 export function EffectArt({ name }: { name: ArtName }) {
   const prefix = useId().replace(/[^\w-]/g, '');
