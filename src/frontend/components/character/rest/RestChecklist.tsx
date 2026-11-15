@@ -19,7 +19,8 @@ import { restRecovery } from '@frontend/lib/rest-recovery';
 import { cn } from '@frontend/lib/utils';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
-import { hitDiceRemaining, hitDieSides } from '@shared/systems/dnd5e/hit-dice';
+import { classDefaults, effectiveHitDie } from '@shared/systems/dnd5e/class-defaults';
+import { hitDiceRemaining } from '@shared/systems/dnd5e/hit-dice';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import { useResourceBoxes } from '../resources/useResourceBoxes';
@@ -123,8 +124,13 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
   const items = buildRestChecklist({
     rest,
     level,
-    // The sheet's own die first: the player may have set one other than the class's
-    hitDie: hitDieSides(character.hitDice) ?? content?.hitDie ?? null,
+    // The same die the sheet shows: the player's own first, else the class's
+    hitDie: Number(
+      effectiveHitDie(
+        character.hitDice,
+        classDefaults(character.edition, content, character.attributes),
+      ).die.slice(1),
+    ),
     conMod: getModifier(character.attributes.CON ?? 10),
     hitDiceAvailable: hitDiceRemaining(character.hitDice, level),
     boxes,

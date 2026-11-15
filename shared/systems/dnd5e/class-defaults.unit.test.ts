@@ -2,7 +2,12 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import { type SavedSavingThrows, classDefaults, effectiveSavingThrows } from './class-defaults';
+import {
+  type SavedSavingThrows,
+  classDefaults,
+  effectiveHitDie,
+  effectiveSavingThrows,
+} from './class-defaults';
 import type { ClassData } from './content/class.schema';
 import type { Edition } from './content/editions';
 import type { AttributeKey } from './types';
@@ -181,5 +186,44 @@ describe('salvaguardas: herdar, proficiente, não proficiente', () => {
     }
     const saves = effectiveSavingThrows(old, defaultsOf('fighter'));
     expect(Object.values(saves).every((save) => save.source === 'manual')).toBe(true);
+  });
+});
+
+describe('dado de vida: herdar ou definido à mão', () => {
+  const barbarian = defaultsOf('barbarian');
+
+  it('sem dado salvo, vale o da classe', () => {
+    expect(effectiveHitDie(undefined, barbarian)).toEqual({
+      die: 'd12',
+      source: 'inherit',
+      classDefault: 'd12',
+    });
+    // Ter gasto dados não é ter escolhido um dado
+    expect(effectiveHitDie({ spent: 3 }, barbarian).source).toBe('inherit');
+  });
+
+  it('o dado salvo vence a classe, no formato atual e no antigo', () => {
+    expect(effectiveHitDie({ die: 'd8', spent: 0 }, barbarian)).toEqual({
+      die: 'd8',
+      source: 'manual',
+      classDefault: 'd12',
+    });
+    expect(effectiveHitDie({ total: '5d10', current: 2 }, barbarian).die).toBe('d10');
+  });
+
+  it('sem classe para seguir e sem dado salvo, d8', () => {
+    expect(effectiveHitDie(undefined, null)).toEqual({
+      die: 'd8',
+      source: 'inherit',
+      classDefault: null,
+    });
+    expect(effectiveHitDie({ die: 'd6', spent: 0 }, null).die).toBe('d6');
+  });
+
+  it('trocar de classe muda só o dado herdado', () => {
+    const wizard = defaultsOf('wizard');
+    expect(effectiveHitDie({ spent: 1 }, wizard).die).toBe('d6');
+    expect(effectiveHitDie({ spent: 1 }, barbarian).die).toBe('d12');
+    expect(effectiveHitDie({ die: 'd8', spent: 1 }, wizard).die).toBe('d8');
   });
 });

@@ -64,6 +64,11 @@ export const setHitDie =
   (die: HitDie): Patch =>
   (c) => ({ hitDice: { die, spent: readHitDice(c.hitDice, c.level).spent } });
 
+/** The die back to what the class gives: the stored die is removed, the dice spent stay. */
+export const inheritHitDie = (): Patch => (c) => ({
+  hitDice: { spent: readHitDice(c.hitDice, c.level).spent },
+});
+
 /**
  * A play action, so it writes the number it is given. Saved with `saveNow`, the patch reads the
  * server copy: a pending die edit stays pending.
