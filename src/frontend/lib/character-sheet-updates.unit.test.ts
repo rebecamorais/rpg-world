@@ -10,6 +10,7 @@ import {
   addCustomResource,
   editResourceBox,
   hitDiceAvailable,
+  inheritSavingThrow,
   newCustomKey,
   removeCustomResource,
   resetResourceBox,
@@ -52,6 +53,25 @@ describe('character sheet patches', () => {
       skills: { ...character.skills, PERCEPTION: { isProficient: true, expertise: true } },
     });
     expect(apply(setSavingThrow('CON', true)).savingThrowProficiencies?.CON).toBe(true);
+  });
+
+  it('salvaguarda: grava só a que foi tocada, e voltar a herdar apaga só ela', () => {
+    // Ficha nova: nenhuma salva
+    expect(character.savingThrowProficiencies).toEqual({});
+    expect(apply(setSavingThrow('CON', true))).toEqual({ savingThrowProficiencies: { CON: true } });
+
+    const adjusted = { ...character, savingThrowProficiencies: { STR: false, WIS: true } };
+    // Desligar à mão é um valor salvo, diferente de não ter valor
+    expect(resolvePatch(setSavingThrow('CON', false), adjusted)).toEqual({
+      savingThrowProficiencies: { STR: false, WIS: true, CON: false },
+    });
+    expect(resolvePatch(inheritSavingThrow('STR'), adjusted)).toEqual({
+      savingThrowProficiencies: { WIS: true },
+    });
+    // Herdar uma que já herda não muda nada
+    expect(resolvePatch(inheritSavingThrow('DEX'), adjusted)).toEqual({
+      savingThrowProficiencies: { STR: false, WIS: true },
+    });
   });
 
   it('completa pontos de magia e dados de vida com o valor atual', () => {

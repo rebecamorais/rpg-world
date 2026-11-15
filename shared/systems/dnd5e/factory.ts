@@ -1,4 +1,3 @@
-import { ATTRIBUTE_KEYS } from './constants';
 import type { SkillKey } from './constants';
 import type { AttributeKey } from './types';
 import type { DnD5eCharacter } from './types';
@@ -15,13 +14,6 @@ const defaultAttributes: Record<AttributeKey, number> = {
 
 function defaultSkills(): Partial<Record<SkillKey, CharacterSkill>> {
   return {};
-}
-
-function defaultSavingThrowProficiencies(): Record<AttributeKey, boolean> {
-  return ATTRIBUTE_KEYS.reduce(
-    (acc, key) => ({ ...acc, [key]: false }),
-    {} as Record<AttributeKey, boolean>,
-  );
 }
 
 export function createDnD5eCharacter(
@@ -43,7 +35,7 @@ export function createDnD5eCharacter(
     initiative: overrides?.initiative ?? 0,
     attributes: { ...defaultAttributes, ...overrides?.attributes },
     skills: overrides?.skills ?? defaultSkills(),
-    savingThrowProficiencies:
-      overrides?.savingThrowProficiencies ?? defaultSavingThrowProficiencies(),
+    // None set by hand: a new sheet follows its class (see `effectiveSavingThrows`)
+    savingThrowProficiencies: overrides?.savingThrowProficiencies ?? {},
   };
 }

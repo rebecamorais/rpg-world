@@ -34,7 +34,8 @@ interface DnD5eCharacterData {
 
   attributes: Record<AttributeKey, number>;
   skills: Partial<Record<SkillKey, CharacterSkill>>;
-  savingThrowProficiencies: Record<AttributeKey, boolean>;
+  /** Only the ones set by hand, on or off; the rest follow the class (see `effectiveSavingThrows`). */
+  savingThrowProficiencies: Partial<Record<AttributeKey, boolean>>;
   passivePerception?: number;
 
   spellcastingSystem?: 'slots' | 'points';

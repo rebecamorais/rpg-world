@@ -905,6 +905,7 @@
   },
   "savingThrows": {
     "title": "Salvaguardas",
+    "followClass": "Voltar {label} ao que a classe diz",
     "deathSaveSuccess": "Sucesso no teste contra a morte {count}",
     "deathSaveFailure": "Falha no teste contra a morte {count}",
     "resetDeathSaves": "Zerar testes contra a morte",
