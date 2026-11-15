@@ -21,14 +21,15 @@ export const PUT = withAuth(
 /**
  * Adds `delta` to each coin in the database and answers `{ coins }`: the GM and the players adding
  * at once add up. A repeated key applies once; spending more than there is answers 409.
+ *
+ * A coin typed by hand comes as its final value (`coins`) with what the screen showed
+ * (`expected`): it is written only if the chest still has that, or else 409 with the coins now,
+ * so someone looking at an old screen can't undo what another person just did.
  */
 export const PATCH = withAuth(
-  async ({ body, params }) => {
+  async ({ body: { containerId, ...change }, params }) => {
     const { charactersApi } = await getApi();
-    return charactersApi.changePartyChestCoins(params.partyId, body.containerId, {
-      delta: body.delta,
-      key: body.key,
-    });
+    return charactersApi.changePartyChestCoins(params.partyId, containerId, change);
   },
   { params: partyParamsSchema, body: changeCoinsSchema },
 );

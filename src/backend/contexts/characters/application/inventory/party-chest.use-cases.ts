@@ -7,6 +7,7 @@ import {
   CoinsChange,
   ItemLookup,
   QuantityChange,
+  applyCoinsChange,
   loadInventory,
 } from './inventory.use-cases';
 
@@ -104,9 +105,9 @@ export class ChangePartyChestCoinsUseCase {
   async execute(
     partyId: string,
     containerId: string,
-    { delta, key }: CoinsChange,
+    change: CoinsChange,
   ): Promise<{ coins: Coins }> {
-    const coins = await this.chest.changeCoins(partyId, containerId, delta, key);
+    const coins = await applyCoinsChange(this.chest, partyId, containerId, change);
     if (!coins) throw new CharacterError(CharacterErrorCodes.CONTAINER_NOT_FOUND);
     return { coins };
   }

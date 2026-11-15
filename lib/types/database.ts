@@ -847,6 +847,16 @@ export type Database = {
         Returns: undefined;
       };
       request_party_join: { Args: { p_code: string }; Returns: string };
+      set_container_coins_if_unchanged: {
+        Args: {
+          p_coins: Json;
+          p_container_id: string;
+          p_expected: Json;
+          p_key: string;
+          p_owner_id: string;
+        };
+        Returns: Json;
+      };
       set_encounter_order: {
         Args: { p_participant_ids: string[]; p_party_id: string };
         Returns: undefined;

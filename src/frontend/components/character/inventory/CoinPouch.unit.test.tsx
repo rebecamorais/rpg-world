@@ -84,13 +84,63 @@ describe('CoinPouch', () => {
     await user.tab();
 
     await waitFor(() => expect(api.patch).toHaveBeenCalledTimes(1));
-    // The change, not the final value: two tabs paying at once both count
+    // The final value, with what the field showed: a stale screen can't add up to a number nobody
+    // typed (it saw 45, another tab made it 50, typing 120 must not give 125)
     expect(api.patch).toHaveBeenCalledWith('/api/characters/c1/inventory/coins', {
       containerId: 'pouch1',
-      delta: { gp: 75 },
+      coins: { gp: 120 },
+      expected: { gp: 45 },
       key: expect.any(String),
     });
     expect(gold).toHaveValue('120');
+  });
+
+  it('mudou em outro lugar enquanto digitava: avisa quanto há agora e o campo mostra isso', async () => {
+    const user = userEvent.setup();
+    await renderPouch();
+    const gold = screen.getByLabelText('Gold pieces');
+    api.patch.mockRejectedValueOnce(
+      Object.assign(new Error('character_error_coins_changed'), {
+        status: 409,
+        data: { error: 'character_error_coins_changed', coins: { ...PURSE, gp: 50 } },
+      }),
+    );
+    api.get.mockResolvedValue(inventory({ ...PURSE, gp: 50 }));
+
+    await user.clear(gold);
+    await user.type(gold, '70');
+    await user.tab();
+
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(
+        "Changed somewhere else: it's now 50 GP. What you typed was not saved.",
+        { action: undefined },
+      ),
+    );
+    await waitFor(() => expect(gold).toHaveValue('50'));
+  });
+
+  it('digitar e voltar ao mesmo número não manda nada', async () => {
+    const user = userEvent.setup();
+    await renderPouch();
+    const gold = screen.getByLabelText('Gold pieces');
+
+    await user.clear(gold);
+    await user.type(gold, '45');
+    await user.tab();
+
+    expect(api.patch).not.toHaveBeenCalled();
+  });
+
+  // The read-only sheet (the GM's) hides what is marked data-sheet-edit: no Pay or Receive there
+  it('Pagar e Receber ficam marcados como edição da ficha', async () => {
+    await renderPouch();
+
+    const pay = screen.getByRole('button', { name: 'Pay' });
+    expect(pay.closest('[data-sheet-edit]')).toContainElement(
+      screen.getByRole('button', { name: 'Receive' }),
+    );
+    expect(screen.getByLabelText('Gold pieces').closest('[data-sheet-edit]')).toBeNull();
   });
 
   it('paga com troco: mostra o que sai e o que volta, e a tela muda na hora', async () => {

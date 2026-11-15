@@ -66,6 +66,18 @@ export interface InventoryRepo {
     delta: CoinsDelta,
     key: string,
   ): Promise<Coins | null>;
+  /**
+   * Writes `coins` as the final value of those coins, only if each still is `expected` (what the
+   * person saw); otherwise throws COINS_CHANGED with the coins now. A repeated `key` writes
+   * nothing and answers the current coins.
+   */
+  setCoinsIfUnchanged(
+    ownerId: string,
+    containerId: string,
+    coins: Partial<Coins>,
+    expected: Partial<Coins>,
+    key: string,
+  ): Promise<Coins | null>;
 }
 
 /** How much each coin goes up (or down); coins left out don't change. */

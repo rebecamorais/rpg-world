@@ -109,9 +109,31 @@ export interface QuantityChange {
   key: string;
 }
 
-export interface CoinsChange {
-  delta: CoinsDelta;
-  key: string;
+/**
+ * A change to the coins, with an idempotency `key`: a `delta` to add (Pay, Receive), or the final
+ * value of the coins typed by hand, written only if they still are `expected` (what the person
+ * saw), so a stale screen can't overwrite what someone else did meanwhile.
+ */
+export type CoinsChange =
+  | { delta: CoinsDelta; key: string }
+  | { coins: Partial<Coins>; expected: Partial<Coins>; key: string };
+
+/** Applies `change` to an owner's container (a character's or a party's); null: not theirs. */
+export function applyCoinsChange(
+  inventory: InventoryRepo,
+  ownerId: string,
+  containerId: string,
+  change: CoinsChange,
+): Promise<Coins | null> {
+  return 'delta' in change
+    ? inventory.changeCoins(ownerId, containerId, change.delta, change.key)
+    : inventory.setCoinsIfUnchanged(
+        ownerId,
+        containerId,
+        change.coins,
+        change.expected,
+        change.key,
+      );
 }
 
 export class ChangeInventoryItemQuantityUseCase {
@@ -173,15 +195,18 @@ export class ChangeInventoryCoinsUseCase {
     private readonly inventory: InventoryRepo,
   ) {}
 
-  /** Adds `delta` to each coin in the database; spending more than there is is a conflict. */
+  /**
+   * Adds `delta` to each coin in the database (spending more than there is is a conflict), or
+   * writes the typed coins if they still are what the person saw (if not, a conflict too).
+   */
   async execute(
     characterId: string,
     requesterId: string,
     containerId: string,
-    { delta, key }: CoinsChange,
+    change: CoinsChange,
   ): Promise<{ coins: Coins }> {
     await assertOwnsCharacter(this.characters, characterId, requesterId, 'write');
-    const coins = await this.inventory.changeCoins(characterId, containerId, delta, key);
+    const coins = await applyCoinsChange(this.inventory, characterId, containerId, change);
     if (!coins) throw new CharacterError(CharacterErrorCodes.CONTAINER_NOT_FOUND);
     return { coins };
   }

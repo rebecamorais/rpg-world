@@ -39,6 +39,7 @@ const makeRepo = () =>
     setCoins: vi.fn().mockResolvedValue(true),
     changeQuantity: vi.fn<InventoryRepo['changeQuantity']>().mockResolvedValue(3),
     changeCoins: vi.fn<InventoryRepo['changeCoins']>().mockResolvedValue(COINS),
+    setCoinsIfUnchanged: vi.fn<InventoryRepo['setCoinsIfUnchanged']>().mockResolvedValue(COINS),
   }) satisfies InventoryRepo;
 
 describe('inventory use cases', () => {
@@ -302,6 +303,25 @@ describe('inventory use cases', () => {
         ),
       ).rejects.toMatchObject({ message: CharacterErrorCodes.ACCESS_FORBIDDEN });
       expect(repo.changeCoins).not.toHaveBeenCalled();
+    });
+
+    it('moeda digitada: manda o valor final com o que a pessoa viu, sem somar', async () => {
+      const typed = { coins: { gp: 70 }, expected: { gp: 50 }, key: 'key-2' };
+      const answer = await new ChangeInventoryCoinsUseCase(characters, repo).execute(
+        'char-1',
+        'owner-1',
+        'pouch',
+        typed,
+      );
+      expect(repo.setCoinsIfUnchanged).toHaveBeenCalledWith(
+        'char-1',
+        'pouch',
+        { gp: 70 },
+        { gp: 50 },
+        'key-2',
+      );
+      expect(repo.changeCoins).not.toHaveBeenCalled();
+      expect(answer).toEqual({ coins: COINS });
     });
   });
 

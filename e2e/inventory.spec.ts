@@ -51,6 +51,11 @@ test.describe('inventário', () => {
     await expect(coinField(page, 'Gold pieces')).toHaveValue('9');
     await expect(coinField(page, 'Silver pieces')).toHaveValue('5');
 
+    // A coin typed by hand is its final value (sent with the 5 the field showed), not a difference
+    await coinField(page, 'Silver pieces').fill('42');
+    await saved(page, 'PATCH', '/coins', () => coinField(page, 'Silver pieces').press('Enter'));
+    await expect(coinField(page, 'Silver pieces')).toHaveValue('42');
+
     // Add a rope and make it two
     await page.getByRole('button', { name: 'Add item' }).click();
     const catalog = page.getByRole('dialog', { name: 'Add item' });
@@ -67,7 +72,7 @@ test.describe('inventário', () => {
     // Everything survives a reload
     await page.reload();
     await expect(coinField(page, 'Gold pieces')).toHaveValue('9');
-    await expect(coinField(page, 'Silver pieces')).toHaveValue('5');
+    await expect(coinField(page, 'Silver pieces')).toHaveValue('42');
     await expect(page.getByLabel('Quantity of Rope')).toHaveText('2');
   });
 });

@@ -194,6 +194,11 @@ export function CoinPouch() {
  * The five coins of a pouch (a character's, or the party chest), editable by hand, and Pay /
  * Receive. Saved on the spot (not through the sheet's save bar). A hand edit is sent when the
  * field loses focus, so typing "120" is one request, not three.
+ *
+ * The typed number is the final value, not a difference: it goes with the value the field showed
+ * when typing began, and if someone changed that coin meanwhile the server refuses it and a toast
+ * says what it is now (on a shared chest, adding to an old screen would give a number nobody
+ * typed). Pay and Receive still add up.
  */
 export function CoinPurse({
   inventory,
@@ -211,17 +216,20 @@ export function CoinPurse({
 }) {
   const t = useTranslations('characters.coins');
   const tCommon = useTranslations('common');
-  const { pouch, isLoading, setCoins } = inventory;
+  const { pouch, isLoading, setCoinTo } = inventory;
   const [mode, setMode] = useState<Mode | null>(null);
-  // What was typed in each field and not yet sent
-  const [typed, setTyped] = useState<Partial<Coins>>({});
+  // What was typed in each field and not yet sent, and what the field showed before it
+  const [typed, setTyped] = useState<Partial<Record<Coin, { value: number; seen: number }>>>({});
 
   const purse = pouch?.coins ?? EMPTY_PURSE;
 
+  const type = (coin: Coin, value: number) =>
+    setTyped((all) => ({ ...all, [coin]: { value, seen: all[coin]?.seen ?? purse[coin] } }));
+
   const commit = (coin: Coin) => {
-    const value = typed[coin];
+    const edit = typed[coin];
     setTyped(({ [coin]: _sent, ...rest }) => rest);
-    if (value !== undefined && value !== purse[coin]) setCoins({ ...purse, [coin]: value });
+    if (edit) setCoinTo(coin, edit.value, edit.seen);
   };
 
   return (
@@ -252,10 +260,10 @@ export function CoinPurse({
                   ghost
                   showIcon={false}
                   aria-label={t(`${coin}.name`)}
-                  value={typed[coin] ?? purse[coin]}
+                  value={typed[coin]?.value ?? purse[coin]}
                   min={0}
                   max={MAX_COINS}
-                  onValueChange={(value) => setTyped((t) => ({ ...t, [coin]: value }))}
+                  onValueChange={(value) => type(coin, value)}
                   onBlur={() => commit(coin)}
                   onKeyDown={(e) => e.key === 'Enter' && commit(coin)}
                   containerClassName="w-full"
@@ -272,7 +280,8 @@ export function CoinPurse({
           ))}
         </ul>
 
-        <div className="flex gap-2">
+        {/* data-sheet-edit: the read-only sheet (the GM reading it) hides Pay and Receive */}
+        <div data-sheet-edit className="flex gap-2">
           <Button variant="outline" size="sm" disabled={!pouch} onClick={() => setMode('pay')}>
             {t('pay')}
           </Button>

@@ -90,6 +90,7 @@
       "character_error_conflict": "This sheet changed somewhere else. Reload to see the current version.",
       "character_error_not_enough_coins": "The coins changed somewhere else and there is no longer enough to spend this. The values were updated.",
       "character_error_item_quantity_conflict": "The quantity changed somewhere else. The values were updated.",
+      "character_error_coins_changed": "The coins changed somewhere else, so what you typed was not saved. The values were updated.",
       "combat_error_not_found": "Combat not found.",
       "combat_error_exists": "This party already has a combat.",
       "combat_error_empty": "Add someone to the combat before starting.",
@@ -303,7 +304,7 @@
       "preparedLabels": "{count} prepared",
       "addBtn": "Add Spell"
     },
-    "addItem": "Add Item",
+    "addItem": "Add item",
     "loadErrorTitle": "Couldn’t load. Reload the page to try again",
     "levelShort": "Lv {level}",
     "defaultClass": "Adventurer",
@@ -382,9 +383,11 @@
       "none": "nothing",
       "missing": "Not enough money: {amount} short.",
       "tooMany": "The pouch holds at most {max} of each coin.",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "changedElsewhere": "Changed somewhere else: it's now {amount}. What you typed was not saved."
     },
     "inventory": {
+      "itemGone": "This item was already taken out somewhere else. The list was updated.",
       "title": "Backpack",
       "hint": "What the character carries, apart from the coins. Saved on the spot.",
       "empty": "The backpack is empty.",
@@ -756,8 +759,8 @@
     "menu": "Menu",
     "mainNavigation": "Main navigation",
     "newCharacter": "New character",
-    "myCharacters": "My Characters",
-    "myProfile": "My Profile",
+    "myCharacters": "My characters",
+    "myProfile": "My profile",
     "attributes": "Attributes",
     "spells": "Spells",
     "settingsTitle": "Settings",
@@ -1184,11 +1187,11 @@
     "subtitle": "Your message goes to the RPG World team: report a bug, share an idea or ask a question.",
     "emailLabel": "Email",
     "emailPlaceholder": "your@email.com",
-    "typeLabel": "Message Type",
+    "typeLabel": "Message type",
     "messageLabel": "Message",
     "messagePlaceholder": "Which mimic bit you? Describe your issue or idea…",
     "partyMessage": "Hello! My party (ID: {partyId}) has no GM and a request to become the GM that someone still hasn’t answered. Could you help?\n\n",
-    "submit": "Cast Message",
+    "submit": "Cast message",
     "submitting": "Channeling…",
     "sendAnother": "Send another message",
     "success": "Message sent! The RPG World team will read it.",
@@ -1233,7 +1236,7 @@
       },
       "magic": {
         "title": "Magic your way",
-        "description": "Use spell slots by level or spell points, whichever your table prefers."
+        "description": "Use spell slots by level or spell points, whichever your party prefers."
       },
       "spellbook": {
         "title": "A spellbook with the SRD spells",
@@ -1328,7 +1331,7 @@
         },
         "party": {
           "tab": "Party",
-          "title": "The GM's table",
+          "title": "The party, as the GM sees it",
           "description": "The players' characters in Role Play mode: traits, ideals, passive Perception and Insight at hand.",
           "alt": "A party seen by the GM, with Role Play cards of the players' characters"
         },
@@ -1361,7 +1364,7 @@
   },
   "chooseUsername": {
     "title": "Choose your username",
-    "description": "It's how your game master finds you to invite you to a table. You can change it later in your profile.",
+    "description": "It's how your game master finds you to invite you to a party. You can change it later in your profile.",
     "label": "Username",
     "placeholder": "e.g.: aria_the_bold",
     "submit": "Continue",
@@ -1369,7 +1372,7 @@
   },
   "parties": {
     "title": "Parties",
-    "subtitle": "Your tables, as GM and as player.",
+    "subtitle": "Your parties, as GM and as player.",
     "asGm": "As GM",
     "asPlayer": "As player",
     "invites": "Invitations",
@@ -1399,7 +1402,7 @@
     },
     "join": {
       "title": "Party invite",
-      "invitedBy": "@{username} is the GM of this table.",
+      "invitedBy": "@{username} is the GM of this party.",
       "request": "Ask to join",
       "requested": "Request sent. The GM will approve it.",
       "declined": "Your request to join was declined. You can ask again.",
@@ -1544,15 +1547,15 @@
       "title": "This party has no GM",
       "description": "The GM’s account was deleted. The party, characters, chest and journal still work; combat, invites and settings wait for a new GM.",
       "claim": "I want to be the GM",
-      "claimHint": "Everyone else in the party has to agree. The GM reads the full sheet of every character at the table. You stop being a player and your characters leave the party, keeping their sheets.",
-      "claimHintSolo": "You are the only active player, so you become the GM right away, with no one to agree. The GM reads the full sheet of every character at the table. You stop being a player and your characters leave the party, keeping their sheets.",
+      "claimHint": "Everyone else in the party has to agree. The GM reads the full sheet of every character in the party. You stop being a player and your characters leave the party, keeping their sheets.",
+      "claimHintSolo": "You are the only active player, so you become the GM right away, with no one to agree. The GM reads the full sheet of every character in the party. You stop being a player and your characters leave the party, keeping their sheets.",
       "claimConfirm": "Ask to be the GM? If everyone agrees, you stop being a player and your characters leave the party, keeping their sheets.",
       "claimConfirmSolo": "Become the GM of this party now? You stop being a player and your characters leave the party, keeping their sheets.",
       "limit": "You are already the GM of {max} parties, the most one account can have.",
       "yourRequest": "You asked to become the GM of this party.",
       "cancel": "Give up",
       "askedBy": "{name} asked to become the GM of this party.",
-      "sheetWarning": "If you agree, the new GM will read the full sheet of the characters at the table, yours included.",
+      "sheetWarning": "If you agree, the new GM will read the full sheet of the characters in the party, yours included.",
       "accept": "Agree",
       "decline": "Decline",
       "youAccepted": "You agreed to this request.",
@@ -1572,7 +1575,7 @@
     "settings": {
       "eyebrow": "Party settings",
       "manage": "Manage",
-      "backToTable": "Back to the table",
+      "backToTable": "Back to the party",
       "gmOnly": "Only the GM can open the party settings."
     },
     "chest": {
@@ -1585,7 +1588,8 @@
       "itemsTitle": "Party chest",
       "itemsHint": "What the party keeps together. The GM and the players can add and remove; saved right away.",
       "empty": "The chest is empty.",
-      "emptyHint": "Add what the party keeps together: treasure, supplies, items found along the way."
+      "emptyHint": "Add what the party keeps together: treasure, supplies, items found along the way.",
+      "shared": "Shared with the party: the GM and the players all change it, and everything saves right away."
     },
     "image": {
       "title": "Party picture",
@@ -1609,7 +1613,7 @@
     "withdrawConfirm": "The GM of {name} won't see your request anymore. To join later, ask again through the invite.",
     "tabs": {
       "label": "Party tabs",
-      "overview": "Table",
+      "overview": "Party",
       "combat": "Combat",
       "journal": "Journal",
       "chest": "Chest",

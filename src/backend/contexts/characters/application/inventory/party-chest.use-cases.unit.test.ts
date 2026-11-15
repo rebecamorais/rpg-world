@@ -35,6 +35,7 @@ const makeRepo = () =>
     setCoins: vi.fn().mockResolvedValue(true),
     changeQuantity: vi.fn<InventoryRepo['changeQuantity']>().mockResolvedValue(3),
     changeCoins: vi.fn<InventoryRepo['changeCoins']>().mockResolvedValue(COINS),
+    setCoinsIfUnchanged: vi.fn<InventoryRepo['setCoinsIfUnchanged']>().mockResolvedValue(COINS),
   }) satisfies InventoryRepo;
 
 describe('party chest use cases', () => {
@@ -134,5 +135,25 @@ describe('party chest use cases', () => {
     await expect(
       coins.execute(PARTY, 'chest', { delta: { gp: 1 }, key: 'k4' }),
     ).rejects.toMatchObject({ code: CharacterErrorCodes.CONTAINER_NOT_FOUND });
+  });
+
+  it('moeda digitada no baú: valor final só se ainda for o que a pessoa viu', async () => {
+    const coins = new ChangePartyChestCoinsUseCase(repo);
+    const typed = { coins: { gp: 70 }, expected: { gp: 50 }, key: 'k5' };
+
+    expect(await coins.execute(PARTY, 'chest', typed)).toEqual({ coins: COINS });
+    expect(repo.setCoinsIfUnchanged).toHaveBeenCalledWith(
+      PARTY,
+      'chest',
+      { gp: 70 },
+      { gp: 50 },
+      'k5',
+    );
+    expect(repo.changeCoins).not.toHaveBeenCalled();
+
+    repo.setCoinsIfUnchanged.mockResolvedValue(null);
+    await expect(coins.execute(PARTY, 'chest', typed)).rejects.toMatchObject({
+      code: CharacterErrorCodes.CONTAINER_NOT_FOUND,
+    });
   });
 });

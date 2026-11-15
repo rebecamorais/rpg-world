@@ -22,6 +22,23 @@ export function isNetworkError(err: unknown): boolean {
   return err instanceof TypeError && /fetch|network|load failed/i.test(err.message);
 }
 
+/** The HTTP status of an answer the server gave (an APIError), or nothing. Checked by shape. */
+export function statusOf(err: unknown): number | undefined {
+  const status = err instanceof Error ? (err as { status?: unknown }).status : undefined;
+  return typeof status === 'number' ? status : undefined;
+}
+
+/**
+ * Whether sending the very same request again can work: it never got an answer (the connection),
+ * or the server failed (5xx). Any other answer (409 conflict, 404 gone, 400 invalid) would come
+ * back the same, so offering "Try again" there only fails twice.
+ */
+export function isRetryable(err: unknown): boolean {
+  if (isNetworkError(err)) return true;
+  const status = statusOf(err);
+  return status !== undefined && status >= 500;
+}
+
 /**
  * Candidate error code of a thrown error. Our API and server actions carry the code in
  * `Error.message` (see `APIError`); any other message is not a known code and is never shown,

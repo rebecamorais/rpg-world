@@ -62,13 +62,45 @@ describe('PartyChestPage', () => {
     await userEvent.tab();
 
     await waitFor(() =>
-      // The change: the GM and the players paying from the chest at once all count
+      // The typed number is the final value, sent with what the screen showed: if the GM changed
+      // the chest meanwhile, the server refuses it instead of adding to an old screen
       expect(api.patch).toHaveBeenCalledWith('/api/parties/party-1/chest/coins', {
         containerId: 'chest',
-        delta: { gp: 15 },
+        coins: { gp: 45 },
+        expected: { gp: 30 },
         key: expect.any(String),
       }),
     );
+  });
+
+  it('receber no baú continua somando', async () => {
+    renderWithProviders(<PartyChestPage partyId="party-1" />);
+    const receive = screen.getByRole('button', { name: messages.characters.coins.receive });
+    await waitFor(() => expect(receive).toBeEnabled());
+
+    await userEvent.click(receive);
+    const dialog = await screen.findByRole('dialog');
+    const amount = within(dialog).getByLabelText(messages.characters.coins.amount);
+    await userEvent.clear(amount);
+    await userEvent.type(amount, '5');
+    await userEvent.click(
+      within(dialog).getByRole('button', { name: messages.characters.coins.confirm }),
+    );
+
+    await waitFor(() =>
+      expect(api.patch).toHaveBeenCalledWith('/api/parties/party-1/chest/coins', {
+        containerId: 'chest',
+        delta: { gp: 5 },
+        key: expect.any(String),
+      }),
+    );
+  });
+
+  // Not only behind the titles' hint icon: whoever opens the chest sees it is everyone's
+  it('diz à vista que o baú é compartilhado com a mesa', () => {
+    renderWithProviders(<PartyChestPage partyId="party-1" />);
+
+    expect(screen.getByText(t.shared)).toBeVisible();
   });
 
   it('os diálogos de moedas e de itens abrem fora de uma ficha', async () => {

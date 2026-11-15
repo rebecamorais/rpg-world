@@ -1,7 +1,14 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { APIError } from './api-client';
-import { NETWORK_ERROR, errorCodeOf, isNetworkError, translateErrorCode } from './error-message';
+import {
+  NETWORK_ERROR,
+  errorCodeOf,
+  isNetworkError,
+  isRetryable,
+  statusOf,
+  translateErrorCode,
+} from './error-message';
 
 const messages: Record<string, string> = {
   'errors.unknown': 'Unknown error',
@@ -72,5 +79,34 @@ describe('errorCodeOf + translateErrorCode', () => {
   it('never shows the raw message of an unexpected error', () => {
     const err = new TypeError('x is not a function');
     expect(translateErrorCode(t, errorCodeOf(err))).toBe('Unknown error');
+  });
+});
+
+describe('isRetryable', () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('a request that never got an answer can work next time', () => {
+    expect(isRetryable(new TypeError('Failed to fetch'))).toBe(true);
+  });
+
+  it.each([500, 502, 503])('the server failing (%i) can work next time', (status) => {
+    expect(isRetryable(new APIError('common_error_unexpected', status))).toBe(true);
+  });
+
+  it.each([400, 403, 404, 409])('an answer that would come back the same (%i) is not', (status) => {
+    expect(isRetryable(new APIError('character_error_conflict', status))).toBe(false);
+  });
+
+  it('nor an error with no answer and no connection problem', () => {
+    expect(isRetryable(new Error('boom'))).toBe(false);
+    expect(isRetryable(undefined)).toBe(false);
+  });
+});
+
+describe('statusOf', () => {
+  it('reads the status of an answer, and nothing for other errors', () => {
+    expect(statusOf(new APIError('x', 404))).toBe(404);
+    expect(statusOf(new TypeError('Failed to fetch'))).toBeUndefined();
+    expect(statusOf('boom')).toBeUndefined();
   });
 });

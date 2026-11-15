@@ -7,7 +7,7 @@ import { CharacterErrorCodes } from '../../domain/CharacterError';
 import { SupabaseInventoryRepository } from './supabase-inventory.repository';
 
 /** A client whose container lookup finds the container and whose rpc fails with `error`. */
-function repoFailingWith(error: { code?: string; message: string }) {
+function repoFailingWith(error: { code?: string; message: string; details?: string }) {
   const lookup = {
     select: () => lookup,
     eq: () => lookup,
@@ -160,5 +160,51 @@ describe('SupabaseInventoryRepository: operações com chave', () => {
       message: code,
       kind: 'conflict',
     });
+  });
+
+  it('setCoinsIfUnchanged manda o valor digitado e o que a pessoa viu', async () => {
+    const coins = { cp: 0, sp: 0, ep: 0, gp: 70, pp: 0 };
+    const { repo, calls } = repoAnswering(coins);
+
+    expect(await repo.setCoinsIfUnchanged('p1', 'k1', { gp: 70 }, { gp: 50 }, 'key-1')).toEqual(
+      coins,
+    );
+    expect(calls).toEqual([
+      [
+        'set_container_coins_if_unchanged',
+        {
+          p_owner_id: 'p1',
+          p_container_id: 'k1',
+          p_coins: { gp: 70 },
+          p_expected: { gp: 50 },
+          p_key: 'key-1',
+        },
+      ],
+    ]);
+  });
+
+  it('coins_changed do banco vira conflito com as moedas de agora', async () => {
+    const now = { cp: 0, sp: 0, ep: 0, gp: 55, pp: 0 };
+    const repo = repoFailingWith({
+      code: 'P0001',
+      message: 'coins_changed',
+      details: JSON.stringify(now),
+    });
+
+    await expect(
+      repo.setCoinsIfUnchanged('p1', 'k1', { gp: 70 }, { gp: 50 }, 'key'),
+    ).rejects.toMatchObject({
+      message: CharacterErrorCodes.COINS_CHANGED,
+      kind: 'conflict',
+      details: { coins: now },
+    });
+  });
+
+  it('coins_changed sem DETAIL legível ainda é conflito', async () => {
+    const repo = repoFailingWith({ code: 'P0001', message: 'coins_changed', details: 'x' });
+
+    await expect(
+      repo.setCoinsIfUnchanged('p1', 'k1', { gp: 70 }, { gp: 50 }, 'key'),
+    ).rejects.toMatchObject({ message: CharacterErrorCodes.COINS_CHANGED, kind: 'conflict' });
   });
 });

@@ -90,6 +90,7 @@
       "character_error_conflict": "Esta ficha mudou em outro lugar. Recarregue para ver a versão atual.",
       "character_error_not_enough_coins": "As moedas mudaram em outro lugar e não dá mais para gastar isso. Os valores foram atualizados.",
       "character_error_item_quantity_conflict": "A quantidade mudou em outro lugar. Os valores foram atualizados.",
+      "character_error_coins_changed": "As moedas mudaram em outro lugar e o valor digitado não foi salvo. Os valores foram atualizados.",
       "combat_error_not_found": "Combate não encontrado.",
       "combat_error_exists": "Esta mesa já tem um combate.",
       "combat_error_empty": "Adicione alguém ao combate antes de começar.",
@@ -382,9 +383,11 @@
       "none": "nada",
       "missing": "Dinheiro insuficiente: faltam {amount}.",
       "tooMany": "A algibeira guarda no máximo {max} de cada moeda.",
-      "confirm": "Confirmar"
+      "confirm": "Confirmar",
+      "changedElsewhere": "Mudou em outro lugar: agora são {amount}. O valor digitado não foi salvo."
     },
     "inventory": {
+      "itemGone": "Este item já saiu daqui em outro lugar. A lista foi atualizada.",
       "title": "Mochila",
       "hint": "O que o personagem carrega, fora as moedas. Salva na hora.",
       "empty": "A mochila está vazia.",
@@ -756,8 +759,8 @@
     "menu": "Menu",
     "mainNavigation": "Navegação principal",
     "newCharacter": "Novo personagem",
-    "myCharacters": "Meus Personagens",
-    "myProfile": "Meu Perfil",
+    "myCharacters": "Meus personagens",
+    "myProfile": "Meu perfil",
     "attributes": "Atributos",
     "spells": "Magias",
     "settingsTitle": "Configurações",
@@ -1184,11 +1187,11 @@
     "subtitle": "Sua mensagem vai para a equipe do RPG World: conte um bug, uma ideia ou tire uma dúvida.",
     "emailLabel": "E-mail",
     "emailPlaceholder": "seu@email.com",
-    "typeLabel": "Tipo de Mensagem",
+    "typeLabel": "Tipo de mensagem",
     "messageLabel": "Mensagem",
     "messagePlaceholder": "Qual mímico te mordeu? Descreva o problema ou ideia…",
     "partyMessage": "Olá! Minha mesa (ID: {partyId}) está sem mestre e tem um pedido para virar mestre que alguém ainda não respondeu. Podem ajudar?\n\n",
-    "submit": "Enviar Mensagem",
+    "submit": "Enviar mensagem",
     "submitting": "Canalizando…",
     "sendAnother": "Enviar outra mensagem",
     "success": "Mensagem enviada! A equipe do RPG World vai ler.",
@@ -1585,7 +1588,8 @@
       "itemsTitle": "Baú da mesa",
       "itemsHint": "O que a mesa guarda junto. O mestre e os jogadores podem pôr e tirar; salva na hora.",
       "empty": "O baú está vazio.",
-      "emptyHint": "Adicione o que a mesa guarda junto: tesouros, suprimentos, itens achados."
+      "emptyHint": "Adicione o que a mesa guarda junto: tesouros, suprimentos, itens achados.",
+      "shared": "Compartilhado com a mesa: o mestre e os jogadores mexem aqui, e tudo salva na hora."
     },
     "image": {
       "title": "Imagem da mesa",

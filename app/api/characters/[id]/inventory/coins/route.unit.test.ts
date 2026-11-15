@@ -63,4 +63,44 @@ describe('/api/characters/[id]/inventory/coins', () => {
       key,
     });
   });
+
+  it('PATCH com a moeda digitada manda o valor final e o que a tela mostrava', async () => {
+    const key = '3d2c1b0a-9f8e-4d7c-8b6a-5f4e3d2c1b0a';
+    api.charactersApi.changeCoins.mockResolvedValue({ coins });
+
+    const res = await PATCH(
+      jsonRequest(url, 'PATCH', {
+        containerId: CONTAINER,
+        coins: { gp: 70 },
+        expected: { gp: 50 },
+        key,
+      }),
+      routeContext({ id: ID }),
+    );
+
+    expect(res.status).toBe(200);
+    expect(api.charactersApi.changeCoins).toHaveBeenCalledWith(ID, SESSION_USER.id, CONTAINER, {
+      coins: { gp: 70 },
+      expected: { gp: 50 },
+      key,
+    });
+  });
+
+  it.each([
+    ['moedas diferentes no valor e no esperado', { coins: { gp: 70 }, expected: { sp: 50 } }],
+    ['nenhuma moeda', { coins: {}, expected: {} }],
+    ['sem o esperado', { coins: { gp: 70 } }],
+    ['valor negativo', { coins: { gp: -1 }, expected: { gp: 50 } }],
+  ])('PATCH responde 400 com %s', async (_name, typed) => {
+    const res = await PATCH(
+      jsonRequest(url, 'PATCH', {
+        containerId: CONTAINER,
+        key: '3d2c1b0a-9f8e-4d7c-8b6a-5f4e3d2c1b0a',
+        ...typed,
+      }),
+      routeContext({ id: ID }),
+    );
+    expect(res.status).toBe(400);
+    expect(api.charactersApi.changeCoins).not.toHaveBeenCalled();
+  });
 });
