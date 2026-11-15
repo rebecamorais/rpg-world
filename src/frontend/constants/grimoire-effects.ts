@@ -13,7 +13,7 @@ const BY_DAMAGE: Partial<Record<string, EffectId>> = {
   psychic: 'resonance',
   force: 'arcane-paths',
   bludgeoning: 'impact-fractures',
-  acid: 'acid-bubbles',
+  acid: 'acid-effervescence',
   cold: 'frost-crystals',
   lightning: 'lightning-branches',
   piercing: 'piercing-needle-thrusts',

@@ -11,7 +11,7 @@ import styles from './effects.module.css';
  * The ones that fill the height also take `height: 100%` in effects.module.css.
  */
 const FIT: Partial<Record<ArtName, string>> = {
-  'acid-bubbles': 'none',
+  'acid-effervescence': 'none',
   'impact-fractures': 'none',
   'toxic-mist-filaments': 'none',
   'lightning-branches': 'none',

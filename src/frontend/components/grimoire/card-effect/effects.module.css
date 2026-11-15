@@ -410,11 +410,10 @@
       transparent 90%
     );
 }
-/* Acid: the drawing over the whole card (drips along the top edge, the pool in the bottom right).
-   Its shapes are solid, not lines, so it sits well below full strength behind the text */
-.art[data-art='acid-bubbles'] {
+/* Acid: like thunder, the effervescence stretched over the whole card (the SVG cropped to where it
+   is). Its own shapes are already see-through, so it keeps full strength */
+.art[data-art='acid-effervescence'] {
   height: 100%;
-  opacity: calc(var(--k) * 0.32);
 }
 /* Slashing: like thunder, the cuts stretched over the whole card (the SVG cropped to where they
    are). Solid shapes, so they sit well below full strength behind the text */
