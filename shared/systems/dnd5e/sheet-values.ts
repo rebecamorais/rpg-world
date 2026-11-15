@@ -40,7 +40,29 @@ export function effectiveState(saved: number | undefined, max: number): number {
   return Math.min(Math.max(saved ?? 0, 0), Math.max(max, 0));
 }
 
-/** Only a sheet explicitly set to 2014 gets SRD 5.1 class defaults: none yet, or 2024, stays manual. */
-export function followsSrd2014(edition: Edition | undefined): boolean {
-  return edition === '2014';
+/**
+ * What the class fills in on a sheet, and for which editions each part was checked against its
+ * SRD (docs/class-sheet-coverage.md). An edition is added to a part only once that part was
+ * verified for it: 2024 never gets a 2014 rule by default. A sheet with no edition follows nothing.
+ */
+export const CLASS_AUTOMATION = {
+  savingThrows: ['2014', '2024'],
+  hitDie: ['2014', '2024'],
+  proficiencies: ['2014'],
+  skillChoices: ['2014'],
+  spellProgression: ['2014'],
+} as const satisfies Record<string, readonly Edition[]>;
+
+export type ClassAutomation = keyof typeof CLASS_AUTOMATION;
+
+/** Whether a sheet of this edition gets that part from its class. */
+export function followsClass(part: ClassAutomation, edition: Edition | undefined): boolean {
+  return edition !== undefined && (CLASS_AUTOMATION[part] as readonly Edition[]).includes(edition);
+}
+
+/** Whether a sheet of this edition gets everything the class fills in: only 2014 so far. */
+export function followsClassFully(edition: Edition | undefined): boolean {
+  return (Object.keys(CLASS_AUTOMATION) as ClassAutomation[]).every((part) =>
+    followsClass(part, edition),
+  );
 }

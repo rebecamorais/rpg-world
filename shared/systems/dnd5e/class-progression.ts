@@ -11,7 +11,7 @@ import type { AttributeKey } from './types';
 /*
  * What a class gives at a level, from its content: spell slots, spell counts and the numbers of
  * its table. Pure rules: nothing here reads or writes a sheet. Only sheets on the 2014 edition
- * follow them (`followsSrd2014`).
+ * follow them (`CLASS_AUTOMATION`).
  */
 
 /** Slots of a full caster by class level (rows) and spell level, 1st first (SRD 5.1 class tables). */

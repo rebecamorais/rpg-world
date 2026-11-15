@@ -8,6 +8,20 @@
 
 O mapa diz **o que a regra é**. Esta matriz diz **o que a ficha faz com cada característica**, para nenhuma ficar descrita no mapa e esquecida na implementação. Só SRD 5.1 (2014), só a subclasse do SRD, sem multiclasse e sem automação de combate.
 
+### O que vale em cada edição
+
+A matriz abaixo é do SRD 5.1. Desde a revisão da decisão 9 (2026-11-15), cada parte do que a classe preenche é liberada por edição, só depois de conferida contra o SRD dela. No código: `CLASS_AUTOMATION` em `shared/systems/dnd5e/sheet-values.ts`.
+
+| O que a classe preenche                         | D&D 2014 | D&D 2024 |
+| ----------------------------------------------- | -------- | -------- |
+| Salvaguardas da classe                          | sim      | sim      |
+| Dado de vida                                    | sim      | sim      |
+| Proficiências de armas, armaduras e ferramentas | sim      | pendente |
+| Perícias e ferramentas à escolha                | sim      | pendente |
+| Progressão de magia                             | sim      | pendente |
+
+"Pendente" quer dizer que a ficha de 2024 continua manual nessa parte: ela **não** recebe a regra de 2014. Salvaguardas e dado de vida são iguais nas 12 classes dos dois livros, mas cada ficha lê o livro da própria edição. Ficha sem edição não segue nada.
+
 A matriz cobre **todas** as características de `content/dnd5e/srd-5.1/classes.json`, pelo `id` (o mesmo em qualquer idioma). Um script conferiu que nenhum `id` ficou sem destino nem apareceu duas vezes.
 
 ### Destinos
@@ -402,6 +416,8 @@ The [map](class-sheet-map.md) states what each SRD 5.1 rule is. This matrix stat
 - **escolha** (choice): the player must decide; it stays as a **visible pending item on the sheet** until resolved, not a dismissable notice.
 - **informativo** (informational): a hint, a note, or the read-only "class numbers" line. Writes to no field.
 - **fora do escopo** (out of scope): table or combat rule, or no field on the sheet (immunities, resistances, flight).
+
+**Per edition.** Since decision 9 was revised (2026-11-15), each part the class fills in is opened per edition, only after being checked against that edition's SRD (`CLASS_AUTOMATION`). Class saving throws and the hit die apply to 2014 and 2024; weapon, armor and tool proficiencies, skill and tool choices, and spell progression are 2014-only for now. A 2024 sheet never gets a 2014 rule, and a sheet with no edition follows nothing.
 
 **Phases (proposal)**, each shippable alone and each blocked on its pending decisions in the map:
 
