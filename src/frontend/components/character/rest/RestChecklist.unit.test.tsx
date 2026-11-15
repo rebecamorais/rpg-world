@@ -22,7 +22,6 @@ vi.mock('../resources/useResourceBoxes', async () => {
       const character = useLoadedCharacter();
       return {
         content: MONK,
-        isLoading: false,
         boxes: buildResourceBoxes({
           content: MONK,
           subclassId: null,
@@ -63,6 +62,65 @@ describe('RestChecklist', () => {
 
     await user.click(screen.getByRole('checkbox', { name: /Ki returns/ }));
     expect(screen.getByRole('complementary', { name: 'Short rest · 1 of 3' })).toBeInTheDocument();
+  });
+
+  it('abrir leva o foco ao título da lista', async () => {
+    const user = userEvent.setup();
+    renderWithCharacter(<RestButtons />, monk());
+    await user.click(screen.getByRole('button', { name: 'Short rest' }));
+
+    expect(screen.getByRole('heading', { name: /^Short rest · / })).toHaveFocus();
+  });
+
+  it('o dado do curto vem do dado da ficha, não do da classe', async () => {
+    const user = userEvent.setup();
+    renderWithCharacter(<RestButtons />, { ...monk(), hitDice: { total: '5d10', current: 3 } });
+    await user.click(screen.getByRole('button', { name: 'Short rest' }));
+
+    expect(screen.getByText('Roll d10 +2 per hit die spent (3 left)')).toBeInTheDocument();
+  });
+
+  it('ficha sem dado escolhido usa o dado da classe', async () => {
+    const user = userEvent.setup();
+    renderWithCharacter(<RestButtons />, { ...monk(), hitDice: { total: '', current: 3 } });
+    await user.click(screen.getByRole('button', { name: 'Short rest' }));
+
+    expect(screen.getByText('Roll d8 +2 per hit die spent (3 left)')).toBeInTheDocument();
+  });
+
+  it('ficha com pontos de magia (o padrão) lembra deles no longo', async () => {
+    const user = userEvent.setup();
+    renderWithCharacter(<RestButtons />, { ...monk(), spellPoints: { max: 6, current: 1 } });
+    await user.click(screen.getByRole('button', { name: 'Long rest' }));
+
+    expect(screen.getByText('Spell points return')).toBeInTheDocument();
+    expect(screen.queryByText('Spell slots return')).toBeNull();
+  });
+
+  it('sem pontos nem espaços de magia, o longo não fala de magia', async () => {
+    const user = userEvent.setup();
+    renderWithCharacter(<RestButtons />, {
+      ...monk(),
+      spellcastingSystem: 'slots',
+      spellSlots: { '1': { max: 0, used: 0 } },
+    });
+    await user.click(screen.getByRole('button', { name: 'Long rest' }));
+
+    expect(screen.queryByText('Spell slots return')).toBeNull();
+    expect(screen.queryByText('Spell points return')).toBeNull();
+  });
+
+  it('ficha com espaços de magia lembra deles no longo', async () => {
+    const user = userEvent.setup();
+    renderWithCharacter(<RestButtons />, {
+      ...monk(),
+      spellcastingSystem: 'slots',
+      spellSlots: { '1': { max: 2, used: 1 } },
+    });
+    await user.click(screen.getByRole('button', { name: 'Long rest' }));
+
+    expect(screen.getByText('Spell slots return')).toBeInTheDocument();
+    expect(screen.queryByText('Spell points return')).toBeNull();
   });
 
   it('"Terminei" fecha e devolve o foco ao botão que abriu', async () => {

@@ -43,7 +43,7 @@ const BARD: ClassResourcesContent = {
 const base = {
   conMod: 2,
   hitDiceAvailable: 3,
-  hasSpellSlots: false,
+  magic: null,
   hasPactSlots: false,
 };
 
@@ -127,8 +127,18 @@ describe('buildRestChecklist', () => {
       level: 3,
       hitDie: 8,
       boxes: [],
-      hasSpellSlots: true,
+      magic: 'slots',
     });
     expect(long.map((i) => i.message)).toContain('spellSlotsBack');
+    expect(long.map((i) => i.message)).not.toContain('spellPointsBack');
+  });
+
+  it('pontos de magia voltam no longo, e só no longo', () => {
+    const at = (rest: 'short' | 'long') =>
+      buildRestChecklist({ ...base, rest, level: 3, hitDie: 8, boxes: [], magic: 'points' });
+    const long = at('long').find((i) => i.message === 'spellPointsBack');
+    expect(long?.target).toBe('sheet-spell-slots');
+    expect(at('long').map((i) => i.message)).not.toContain('spellSlotsBack');
+    expect(at('short').map((i) => i.message)).not.toContain('spellPointsBack');
   });
 });

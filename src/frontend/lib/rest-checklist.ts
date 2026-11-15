@@ -23,7 +23,8 @@ export function buildRestChecklist(input: {
   conMod: number;
   hitDiceAvailable: number;
   boxes: ResourceBox[];
-  hasSpellSlots: boolean;
+  /** What the long rest gives back to the sheet's magic: slots, points, or nothing to track. */
+  magic: 'slots' | 'points' | null;
   hasPactSlots: boolean;
 }): RestItem[] {
   const { rest, boxes } = input;
@@ -79,8 +80,11 @@ export function buildRestChecklist(input: {
       message: 'hitDiceBack',
       values: { count: Math.max(1, Math.floor(input.level / 2)) },
     },
-    ...(input.hasSpellSlots
+    ...(input.magic === 'slots'
       ? [{ id: 'spell-slots', target: 'sheet-spell-slots' as const, message: 'spellSlotsBack' }]
+      : []),
+    ...(input.magic === 'points'
+      ? [{ id: 'spell-points', target: 'sheet-spell-slots' as const, message: 'spellPointsBack' }]
       : []),
     ...boxItems,
   ];

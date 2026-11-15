@@ -38,3 +38,38 @@ test('no celular, a faixa do descanso fica acima da barra de abas e o "go" recol
   await expect(page.locator('#sheet-hit-dice')).toBeInViewport();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
 });
+
+test('no celular, a barra de salvar e a faixa do descanso se empilham sem se cobrir', async ({
+  page,
+  user: _,
+}) => {
+  const id = await createCharacter(page, 'Phone Monk');
+  const res = await page.request.put(`/api/characters/${id}`, {
+    data: { updates: { class: 'Monk', level: 5, edition: '2014' } },
+  });
+  expect(res.ok()).toBe(true);
+  await page.goto(characterUrl(id));
+
+  await (await hydrated(page.getByRole('button', { name: 'Long rest' }))).click();
+  const list = page.getByRole('complementary', { name: /^Long rest/ });
+  await expect(list).toBeVisible();
+
+  // An edit while the list is open: the save bar shows up
+  await page.getByLabel('AC', { exact: true }).fill('15');
+  const discard = page.getByRole('button', { name: 'Discard' });
+  await expect(discard).toBeVisible();
+  const saveBar = discard.locator('xpath=../..');
+
+  const listBox = (await list.boundingBox())!;
+  const barBox = (await saveBar.boundingBox())!;
+  const overlaps =
+    listBox.x < barBox.x + barBox.width &&
+    barBox.x < listBox.x + listBox.width &&
+    listBox.y < barBox.y + barBox.height &&
+    barBox.y < listBox.y + listBox.height;
+  expect(overlaps).toBe(false);
+
+  // "Done" takes the tap (Playwright checks nothing covers it)
+  await list.getByRole('button', { name: 'Done' }).click();
+  await expect(list).toBeHidden();
+});

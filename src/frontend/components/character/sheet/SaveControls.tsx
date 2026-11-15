@@ -64,6 +64,11 @@ export function SaveBarSlotProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/** The sheet's column of fixed bottom bars, or null outside a sheet. */
+export function useSaveBarSlot(): HTMLElement | null {
+  return useContext(SaveBarSlotContext)?.element ?? null;
+}
+
 /**
  * Save controls of a sheet tab:
  * - in the page header, the save state ("Unsaved changes") and the save button;
@@ -137,7 +142,7 @@ function SaveBar({
   label,
 }: SaveControlsProps) {
   const t = useTranslations('common');
-  const slot = useContext(SaveBarSlotContext)?.element;
+  const slot = useSaveBarSlot();
   const canSave = isDirty && !isSaving && !hasErrors;
   useSaveShortcut(canSave ? onSave : null);
 
