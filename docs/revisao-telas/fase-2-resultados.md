@@ -4,6 +4,17 @@ Resultado da fase 2 do [plano por tela](plano-por-tela.md): aba Mesa, Baú, Diá
 
 Foram 62 achados novos: 12 causas e 13 achados de uma tela só. 9 foram juntados ou descartados na síntese. Nenhuma escrita proibida passou pela API (o que não foi testado está em [O que não foi coberto](#o-que-não-foi-coberto)).
 
+## Decisões (2026-11-15)
+
+| Tema                          | Decisão                                                                                                                   |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Sidebar sem preferência salva | **Trilho de ícones abaixo de 1024px**; fixa e aberta a partir de 1024px. A escolha da pessoa fica salva.                  |
+| Moeda digitada à mão no baú   | **Valor final.** Se outra pessoa mexeu antes, "Mudou em outro lugar" em vez de somar errado. Os botões continuam somando. |
+| Termos                        | Em inglês, **party**. Em pt, o título **Role Play** fica.                                                                 |
+| Canal de feedback             | Botão e modal chamados **"Fale conosco"**, ícone de balão de conversa; o tipo (bug, ideia, dúvida) se escolhe dentro.     |
+
+Padrões do coordenador, que a Rebeca pode mudar: o baú entra no canal de tempo real da mesa agora e o histórico de quem mexeu fica para depois; a jogadora recusada vê que o pedido foi recusado; o botão da participação se chama "Minha participação"; pedidos pendentes numa seção "Pendentes"; a linha da mesa de que se é mestre mostra quantos jogadores ativos tem; a linha "D&D 5ª edição" continua nos cards.
+
 ## Causas
 
 | #   | Causa                                                                                                                                                                        | Severidade | Tamanho | Telas                                                                                                                                                                                                                                          |
