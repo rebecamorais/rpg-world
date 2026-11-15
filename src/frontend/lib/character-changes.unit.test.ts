@@ -36,4 +36,18 @@ describe('characterChanges', () => {
 
     expect(characterChanges(base, edits)).toEqual({});
   });
+
+  it('em resources manda só a caixinha que mudou', () => {
+    const withBoxes = {
+      ...base,
+      resources: { 'class:monk:ki': { used: 3 }, 'class:monk:x': { used: 1 } },
+    } as unknown as DnD5eCharacter;
+    const edits = {
+      resources: { 'class:monk:ki': { used: 1 }, 'class:monk:x': { used: 1 } },
+    } as unknown as Partial<DnD5eCharacter>;
+
+    expect(characterChanges(withBoxes, edits)).toEqual({
+      resources: { 'class:monk:ki': { used: 1 } },
+    });
+  });
 });

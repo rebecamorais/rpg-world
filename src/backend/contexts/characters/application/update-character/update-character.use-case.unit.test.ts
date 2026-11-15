@@ -304,4 +304,23 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
       expect(storage.remove).not.toHaveBeenCalled();
     });
   });
+
+  it('junta resources por chave e guarda a edição', async () => {
+    const stored = makeCharacter('res-char', 'owner');
+    stored.resources = { 'class:monk:ki': { used: 3 }, 'class:monk:x': { used: 1 } };
+    await repo.save(stored);
+
+    const result = await useCase.execute({
+      id: 'res-char',
+      ownerUsername: 'owner',
+      updates: { edition: '2024', resources: { 'class:monk:ki': { used: 1 } } },
+    });
+
+    expect(result.resources).toEqual({
+      'class:monk:ki': { used: 1 },
+      'class:monk:x': { used: 1 },
+    });
+    expect(result.edition).toBe('2024');
+    expect(result.toJSON()).toMatchObject({ edition: '2024', resources: result.resources });
+  });
 });

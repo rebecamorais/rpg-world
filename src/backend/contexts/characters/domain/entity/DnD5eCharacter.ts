@@ -1,6 +1,8 @@
 import { Lore } from '@backend/contexts/lore/domain/Lore';
 
+import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
 import type { SkillKey } from '@shared/systems/dnd5e/constants/skill';
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 import { Attributes } from '../value-object/Attributes';
@@ -44,6 +46,8 @@ export interface DnD5eCharacterOptions {
   spellAttackBonus?: number;
   spellSlots?: Record<string, { max: number; used: number }>;
   spellPoints?: { max: number; current: number };
+  edition?: Edition;
+  resources?: Record<string, ResourceState>;
   hpTemp?: number;
   lore?: Lore;
   accentColor?: string;
@@ -76,6 +80,8 @@ export class DnD5eCharacter extends Character {
   public spellAttackBonus?: number;
   public spellSlots?: Record<string, { max: number; used: number }>;
   public spellPoints?: { max: number; current: number };
+  public edition?: Edition;
+  public resources?: Record<string, ResourceState>;
 
   constructor(options: DnD5eCharacterOptions) {
     super(
@@ -115,6 +121,8 @@ export class DnD5eCharacter extends Character {
     this.spellAttackBonus = options.spellAttackBonus;
     this.spellSlots = options.spellSlots;
     this.spellPoints = options.spellPoints;
+    this.edition = options.edition;
+    this.resources = options.resources;
   }
 
   private normalizeSavingThrows(
@@ -171,6 +179,8 @@ export class DnD5eCharacter extends Character {
       spellAttackBonus: this.spellAttackBonus,
       spellSlots: this.spellSlots,
       spellPoints: this.spellPoints,
+      edition: this.edition,
+      resources: this.resources,
     };
   }
 }

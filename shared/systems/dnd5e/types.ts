@@ -1,6 +1,8 @@
 import type { CharacterBase } from '@shared/types/character';
 
+import type { ResourceState } from './class-resources';
 import type { SkillKey } from './constants';
+import type { Edition } from './content/editions';
 
 export type AttributeKey = 'STR' | 'DEX' | 'CON' | 'INT' | 'WIS' | 'CHA';
 
@@ -39,6 +41,10 @@ interface DnD5eCharacterData {
   spellAttackBonus?: number;
   spellSlots?: Record<string, { max: number; used: number }>;
   spellPoints?: { max: number; current: number };
+
+  // Class resource boxes (Rage, Ki...) and the rules edition they follow
+  edition?: Edition;
+  resources?: Record<string, ResourceState>;
 
   // D&D 5e Specific Lore
   personalityTraits?: string;

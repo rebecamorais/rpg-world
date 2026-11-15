@@ -46,7 +46,15 @@ export const setSpellSlots =
 
 export const setHitDice =
   (total: string): Patch =>
-  (c) => ({ hitDice: { total, current: c.hitDice?.current ?? 0 } });
+  (c) => ({ hitDice: { total, current: c.hitDice?.current ?? c.level } });
+
+export const setHitDiceRemaining =
+  (current: number): Patch =>
+  (c) => ({ hitDice: { total: c.hitDice?.total ?? '', current } });
+
+export const setResourceUsed =
+  (key: string, used: number): Patch =>
+  (c) => ({ resources: { ...c.resources, [key]: { ...c.resources?.[key], used } } });
 
 export const setDeathSaves = (successes: number, failures: number): Patch => ({
   deathSaves: { successes, failures },

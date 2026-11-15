@@ -1,6 +1,9 @@
 import { applyUpdates } from '@backend/shared/application/apply-updates';
 import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 
+import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import {
   AttributeKey,
@@ -44,6 +47,8 @@ export interface CharacterUpdates {
   spellAttackBonus?: number;
   spellSlots?: Record<string, { max: number; used: number }>;
   spellPoints?: { max: number; current: number };
+  edition?: Edition;
+  resources?: Record<string, ResourceState>;
 }
 
 // Campos copiados diretamente. Qualquer chave fora desta lista (id, ownerUsername, system...)
@@ -72,6 +77,7 @@ const SIMPLE_FIELDS = [
   'spellAttackBonus',
   'spellSlots',
   'spellPoints',
+  'edition',
 ] as const satisfies readonly (keyof CharacterUpdates & keyof DnD5eCharacter)[];
 
 type SimpleField = (typeof SIMPLE_FIELDS)[number];
@@ -105,7 +111,8 @@ export class UpdateCharacterUseCase {
       throw new CharacterError(CharacterErrorCodes.UPDATE_SYSTEM_NOT_SUPPORTED);
     }
 
-    const { level, hpCurrent, hpMax, attributes, skills, savingThrowProficiencies } = updates;
+    const { level, hpCurrent, hpMax, attributes, skills, savingThrowProficiencies, resources } =
+      updates;
     const previousAvatarUrl = character.avatarUrl;
     const previousSheetBackgroundUrl = character.sheetBackgroundUrl;
 
@@ -129,6 +136,10 @@ export class UpdateCharacterUseCase {
 
     if (skills) {
       character.skills = { ...character.skills, ...skills };
+    }
+
+    if (resources) {
+      character.resources = { ...character.resources, ...resources };
     }
 
     if (savingThrowProficiencies !== undefined) {
