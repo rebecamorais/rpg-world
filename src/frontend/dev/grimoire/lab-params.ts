@@ -4,8 +4,8 @@ import {
 } from '@frontend/components/grimoire/material-surface/types';
 
 export interface LabParams {
-  /** null = the card as it is today (the baseline) */
-  material: MaterialId | null;
+  /** null = the card as it is today (the baseline); 'auto' = each spell by the D&D map */
+  material: MaterialId | 'auto' | null;
   count: number;
   /** Open the first card, to see the material under SpellVFX */
   expanded: boolean;
@@ -18,9 +18,12 @@ export function parseLabParams(query: Record<string, string | string[] | undefin
   const material = one(query.material);
   const count = Number(one(query.count));
   return {
-    material: (MATERIAL_IDS as readonly string[]).includes(material ?? '')
-      ? (material as MaterialId)
-      : null,
+    material:
+      material === 'auto'
+        ? 'auto'
+        : (MATERIAL_IDS as readonly string[]).includes(material ?? '')
+          ? (material as MaterialId)
+          : null,
     count: Number.isInteger(count) && count > 0 ? Math.min(count, 100) : 24,
     expanded: one(query.expanded) === '1',
   };

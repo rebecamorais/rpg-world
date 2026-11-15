@@ -7,9 +7,10 @@
  *               past the edge where the host has no clip (see the OverflowBorders note in
  *               docs/grimoire-enchantments/explorations/material-surfaces.md).
  *
- * Color: every material is tinted by the spell's own --spell-color (set by SpellCard), so the
- * material never fights the card's stripe, icon and badges. Each material's own hue is only the
- * fallback where there is no spell (the lab's sample panels).
+ * Color: every material is tinted by --grimoire-tint, a neutral token the HOST card sets to its
+ * own color: a spell card to --spell-color, an item tile to --item-color, a sheet to
+ * --character-color. So the material never fights the card's stripe, icon and badges, and the
+ * library knows nothing about spells or items. Each material's own hue is only the fallback.
  * Dark is the default theme; :root[data-theme='light'] adjusts the mix.
  */
 
@@ -26,7 +27,8 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  border-radius: inherit;
+  /* The host may set its inner radius (its own radius minus its border); otherwise inherit it */
+  border-radius: var(--grimoire-clip-radius, inherit);
   pointer-events: none;
 }
 
@@ -68,8 +70,8 @@
  * ======================================================================================= */
 .surface[data-material='glacial-glass'],
 .ornament[data-material='glacial-glass'] {
-  /* The spell's own color drives the material; ice blue only when there is no spell */
-  --m: var(--spell-color, #7dd3fc);
+  /* The host's color drives the material (--grimoire-tint); ice blue only as a fallback */
+  --m: var(--grimoire-tint, #7dd3fc);
   --m-deep: color-mix(in oklab, var(--m), black 72%);
 }
 .surface[data-material='glacial-glass'] {
@@ -130,7 +132,7 @@
  * ======================================================================================= */
 .surface[data-material='alchemical-corrosion'],
 .ornament[data-material='alchemical-corrosion'] {
-  --m: var(--spell-color, #84cc16);
+  --m: var(--grimoire-tint, #84cc16);
   --m-deep: color-mix(in oklab, var(--m), black 82%);
 }
 .surface[data-material='alchemical-corrosion'] {
@@ -167,7 +169,7 @@
  * ======================================================================================= */
 .surface[data-material='crypt-stone'],
 .ornament[data-material='crypt-stone'] {
-  --m: var(--spell-color, #a855f7);
+  --m: var(--grimoire-tint, #a855f7);
   /* Stone tinted by the spell: enough gray to read as stone, enough hue to belong to the spell */
   --stone: color-mix(in oklab, var(--m) 45%, #57534e);
 }
@@ -209,7 +211,7 @@
  * ======================================================================================= */
 .surface[data-material='divine-parchment'],
 .ornament[data-material='divine-parchment'] {
-  --m: var(--spell-color, #fde68a);
+  --m: var(--grimoire-tint, #fde68a);
   --vellum: color-mix(in oklab, var(--m), black 45%);
 }
 .surface[data-material='divine-parchment'] {

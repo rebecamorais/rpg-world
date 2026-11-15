@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-/** The material surfaces being explored for the Grimoire (see docs/grimoire-enchantments). */
+/** The material surfaces of the Grimoire library (see docs/grimoire-enchantments). */
 export const MATERIAL_IDS = [
   'glacial-glass',
   'alchemical-corrosion',
@@ -11,16 +11,18 @@ export const MATERIAL_IDS = [
 export type MaterialId = (typeof MATERIAL_IDS)[number];
 
 /**
- * What a card needs to wear a material. The card places the layers itself, so it never imports
- * the material styles: a card without a material ships none of them.
+ * What a card needs to wear a material, whatever the card shows (a spell, an item, a character)
+ * and whatever the game system. The card stays in charge of its own frame:
+ *
+ * - it must be `position: relative` with rounded corners (the material clips to them);
+ * - it sets `--grimoire-tint` to its own color (e.g. `var(--spell-color)`);
+ * - it calls `layers()` once, passing whatever else it wants clipped with the surface (a color
+ *   stripe, a background); its content goes after, above the layers.
+ *
+ * The card never imports the material styles: a card without a material ships none of them.
  */
 export interface CardMaterial {
   id: MaterialId;
-  /** Color, texture and light. Goes inside the card's clip, under everything else. */
-  surface: ReactNode;
-  /**
-   * Frost, cracks, drips, gilding. Decorative only (aria-hidden, no pointer events). It may
-   * reach past the card's edge where the host allows it (the future OverflowBorders).
-   */
-  ornament: ReactNode;
+  /** The material's layers: the clipped surface (with `clipped` inside it) and the ornament. */
+  layers: (clipped?: ReactNode) => ReactNode;
 }

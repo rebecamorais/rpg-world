@@ -15,7 +15,7 @@ O app já escolhe a cor e o ícone de cada magia em `useSpellDisplay` (`src/fron
 
 Assim, toda magia tem um efeito. Cerca de **77% das magias não causam dano**: 499 das 658, somando o SRD 5.1 e o 5.2. Por isso as escolas importam tanto quanto os danos.
 
-**Cor (dona):** o efeito usa **sempre a cor da magia** (`--spell-color`), a mesma do card, da faixa e dos selos. Nunca uma cor fixa do efeito.
+**Cor (dona):** o efeito usa **sempre a cor da magia** (`--spell-color`), a mesma do card, da faixa e dos selos. Nunca uma cor fixa do efeito. Fora das magias, vale a cor do card que recebe o efeito, por `--grimoire-tint` (decisão 25 da spec-mãe).
 
 ## Os mais comuns
 
@@ -92,6 +92,6 @@ Os números são quantas magias de cada tipo existem nos SRD 5.1 e 5.2 somados.
 
 ## Próximos passos
 
-- Levar a lógica "dano, senão escola" para um mapa de efeitos no código, ao lado de `DAMAGE_THEMES` e `SCHOOL_THEMES`.
+- ~~Levar a lógica "dano, senão escola" para um mapa no código.~~ Feito para os materiais em `src/frontend/constants/grimoire-materials.ts`. Os efeitos seguem o mesmo formato quando forem para o código.
 - Prototipar no laboratório (`/dev/grimoire/...`), como foi feito com os materiais, e medir com o benchmark (`scripts/grimoire-materials-bench.ts`).
 - Decidir quais motivos viram material (superfície) e quais ficam como detalhe (ícone, ondulação).

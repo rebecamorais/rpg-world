@@ -76,6 +76,12 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
     - O PR do catálogo (#198) foi fechado sem merge: os commits dele estão nessa branch.
     - Nada chega ao spellbook antes de uma decisão explícita.
 
+25. **(dona)** **Reuso fora das magias e em outros sistemas:** os efeitos e materiais servem a qualquer card (magia, item da mochila, ficha) e a qualquer sistema de jogo.
+    - **Cor:** o material lê `--grimoire-tint`, e quem define é o card que o recebe: `var(--spell-color)` na magia, `var(--item-color)` no item, `var(--character-color)` na ficha. A regra da decisão 21 continua: o material usa sempre a cor do card.
+    - **Peça única:** `<MaterialLayers>` desenha o recorte (com a superfície) e o ornamento. O `SpellCard` usa a mesma peça, por `CardMaterial.layers`.
+    - **Sem regra de jogo na biblioteca:** qual material cada conteúdo usa fica fora dela, num mapa por sistema. O de D&D 5e está em `src/frontend/constants/grimoire-materials.ts` (magia: o dano, senão a escola; item: o grupo da mochila). Outro sistema ganha o seu mapa, e a biblioteca não muda.
+    - Os mapas são exemplos, usados só no laboratório. Nada chega ao spellbook nem à mochila antes de uma decisão explícita.
+
 ## Fora do escopo
 
 - Implementar componentes, instalar pacotes, alterar a UI atual ou o banco de dados.

@@ -74,11 +74,16 @@ export const SpellCard = React.memo(function SpellCard({
     () =>
       ({
         '--spell-color': theme.hex,
+        // A material takes the spell's color, clipped inside the 1px border
+        ...(material && {
+          '--grimoire-tint': 'var(--spell-color)',
+          '--grimoire-clip-radius': 'calc(var(--radius-xl) - 1px)',
+        }),
         contentVisibility: 'auto',
         // Height of a collapsed card, so off-screen cards don't make the scrollbar jump
         containIntrinsicSize: 'auto 96px',
       }) as React.CSSProperties,
-    [theme.hex],
+    [theme.hex, material],
   );
 
   // The spell's color lives in this stripe, the icon and the badges; the surface stays plain
@@ -97,19 +102,15 @@ export const SpellCard = React.memo(function SpellCard({
       style={cardStyles}
       aria-labelledby={`spell-name-${spell.id}`}
     >
-      {material ? (
-        <span
-          aria-hidden="true"
-          data-material-clip=""
-          className="pointer-events-none absolute inset-0 overflow-hidden rounded-[calc(var(--radius-xl)-1px)]"
-        >
-          {material.surface}
-          {stripe}
-          {isExpanded && <SpellVFX mainIcon={mainIcon} spell={spell} />}
-        </span>
-      ) : (
-        stripe
-      )}
+      {/* With a material, the stripe and the open card's background are clipped with its surface */}
+      {material
+        ? material.layers(
+            <>
+              {stripe}
+              {isExpanded && <SpellVFX mainIcon={mainIcon} spell={spell} />}
+            </>,
+          )
+        : stripe}
 
       {/* Primary Toggle Action (Clickable Background) */}
       <button
@@ -125,8 +126,6 @@ export const SpellCard = React.memo(function SpellCard({
       </button>
 
       {!material && isExpanded && <SpellVFX mainIcon={mainIcon} spell={spell} />}
-
-      {material?.ornament}
 
       <div className="pointer-events-none relative z-10 flex h-full flex-col">
         <SpellHeader

@@ -5,10 +5,13 @@
  * its text is in Portuguese and stays out of next-intl on purpose (it lives outside the folders
  * the hardcoded-text guard reads).
  */
-import { useCallback, useState } from 'react';
+import { type CSSProperties, useCallback, useState } from 'react';
 
+import { ItemImage } from '@frontend/components/character/inventory/ItemImage';
+import { groupOf, itemGroupStyle } from '@frontend/components/character/inventory/item-visuals';
 import { SpellCard } from '@frontend/components/character/spells/spell-card/SpellCard';
 import {
+  MaterialLayers,
   MaterialSurface,
   cardMaterial,
 } from '@frontend/components/grimoire/material-surface/MaterialSurface';
@@ -17,7 +20,11 @@ import {
   MATERIAL_IDS,
   type MaterialId,
 } from '@frontend/components/grimoire/material-surface/types';
+import { ITEM_GROUP_MATERIALS, spellMaterialOf } from '@frontend/constants/grimoire-materials';
+import { cn } from '@frontend/lib/utils';
 import type { Spell } from '@frontend/types/spells';
+
+import type { ItemDto } from '@backend/contexts/items/domain/item';
 
 import type { LabParams } from './lab-params';
 
@@ -65,11 +72,17 @@ export function MaterialsLab({
   material,
   count,
   expanded,
-}: LabParams & { spells: Spell[] }) {
+  items,
+}: LabParams & { spells: Spell[]; items: ItemDto[] }) {
   const current = { material, count, expanded };
   const [openId, setOpenId] = useState<string | null>(expanded ? (spells[0]?.id ?? null) : null);
   const toggle = useCallback((id: string) => setOpenId((prev) => (prev === id ? null : id)), []);
-  const cardMat = material ? MATERIALS[material] : undefined;
+  // 'auto': each spell wears what the D&D map gives it (damage type, else school), or nothing
+  const materialOf = (spell: Spell) => {
+    if (material !== 'auto') return material ? MATERIALS[material] : undefined;
+    const id = spellMaterialOf(spell);
+    return id ? MATERIALS[id] : undefined;
+  };
 
   return (
     <main className="mx-auto flex max-w-4xl flex-col gap-10 px-4 py-10">
@@ -127,13 +140,16 @@ export function MaterialsLab({
               <SpellCard
                 spell={spells[0]}
                 material={{
-                  ...MATERIALS['glacial-glass'],
-                  ornament: (
-                    <span
-                      aria-hidden="true"
-                      data-overflow-probe=""
-                      className="border-spell pointer-events-none absolute -top-2.5 -right-2.5 z-20 size-5 rotate-45 border-2 border-dashed"
-                    />
+                  id: 'glacial-glass',
+                  layers: (clipped) => (
+                    <>
+                      {MATERIALS['glacial-glass'].layers(clipped)}
+                      <span
+                        aria-hidden="true"
+                        data-overflow-probe=""
+                        className="border-spell pointer-events-none absolute -top-2.5 -right-2.5 z-20 size-5 rotate-45 border-2 border-dashed"
+                      />
+                    </>
                   ),
                 }}
               />
@@ -156,6 +172,9 @@ export function MaterialsLab({
               {id}
             </a>
           ))}
+          <a className="text-body underline" href={href({ material: 'auto' }, current)}>
+            auto (por tipo de magia)
+          </a>
           <a className="text-body underline" href={href({ count: 100 }, current)}>
             100 cards
           </a>
@@ -174,10 +193,59 @@ export function MaterialsLab({
               showLevel
               isExpanded={openId === spell.id}
               onToggle={toggle}
-              material={cardMat}
+              material={materialOf(spell)}
             />
           ))}
         </div>
+      </section>
+
+      {/* 4. The same library on another card: backpack item tiles */}
+      <section className="flex flex-col gap-4" aria-labelledby="lab-items">
+        <h2 id="lab-items" className="text-title">
+          Itens da mochila
+        </h2>
+        <p className="text-body text-muted-foreground max-w-prose">
+          Ladrilhos com as mesmas classes do ItemGrid e itens reais do catálogo. O material vem do
+          grupo do item (mapa de exemplo de D&amp;D) e a cor é a do grupo: o ladrilho define
+          --grimoire-tint como var(--item-color). A mochila de verdade não muda.
+        </p>
+        {[false, true].map((withMaterial) => (
+          <div
+            key={String(withMaterial)}
+            className="flex flex-col gap-2"
+            data-lab-items={withMaterial ? 'material' : 'plain'}
+          >
+            <h3 className="text-heading">{withMaterial ? 'Com material' : 'Sem material'}</h3>
+            <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 lg:grid-cols-8">
+              {items.map((item) => {
+                const group = groupOf(item.category);
+                const id = withMaterial ? ITEM_GROUP_MATERIALS[group] : null;
+                return (
+                  <span
+                    key={item.key}
+                    className={cn(
+                      'item-context bg-item-surface text-item-flare border-item-muted relative flex aspect-square flex-col items-center justify-center gap-1 rounded-md border p-1',
+                    )}
+                    style={
+                      {
+                        ...itemGroupStyle(group),
+                        '--grimoire-tint': 'var(--item-color)',
+                      } as CSSProperties
+                    }
+                  >
+                    {id && <MaterialLayers material={id} />}
+                    <span className="relative z-10 flex flex-col items-center gap-1">
+                      <ItemImage item={item} size={32} />
+                      <span className="text-foreground text-label line-clamp-2 w-full text-center break-words">
+                        {item.name}
+                      </span>
+                    </span>
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </section>
     </main>
   );

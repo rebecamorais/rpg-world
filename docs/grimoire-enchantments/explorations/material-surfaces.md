@@ -18,12 +18,30 @@ O material tem três camadas:
 
 Arquivos:
 
-- `src/frontend/components/grimoire/material-surface/types.ts`: `MATERIAL_IDS`, `MaterialId` e `CardMaterial` (`{ id, surface, ornament }`).
-- `src/frontend/components/grimoire/material-surface/MaterialSurface.tsx`: `cardMaterial(id)`, que entrega as camadas para um card que já tem moldura, e `<MaterialSurface>`, um painel completo em três camadas.
+- `src/frontend/components/grimoire/material-surface/types.ts`: `MATERIAL_IDS`, `MaterialId` e `CardMaterial` (`{ id, layers }`). `layers(clipped)` devolve o recorte, com a superfície e o que o card quiser recortar junto, e o ornamento.
+- `src/frontend/components/grimoire/material-surface/MaterialSurface.tsx`:
+  - `<MaterialLayers>`: a peça que qualquer card usa (magia, item, ficha);
+  - `cardMaterial(id)`: as mesmas camadas no formato que o `SpellCard` recebe;
+  - `<MaterialSurface>`: um painel completo em três camadas, com a prop `tint`.
+- `src/frontend/constants/grimoire-materials.ts`: o mapa de D&D 5e, de exemplo (magia: o dano, senão a escola; item: o grupo da mochila).
 - `src/frontend/components/grimoire/material-surface/materials.module.css`: os quatro materiais. É um **CSS Module**, então só é carregado onde o componente é importado.
 - `src/frontend/components/character/spells/spell-card/SpellCard.tsx`: a prop opcional `material`.
 - `app/[locale]/dev/grimoire/materials/page.tsx` + `src/frontend/dev/grimoire/`: o laboratório.
 - `scripts/grimoire-materials-bench.ts` e `scripts/grimoire-materials-report.ts`: o benchmark e o relatório.
+
+### Usar em qualquer card (decisão 25 da spec-mãe)
+
+A biblioteca não conhece magias, itens nem sistemas de jogo. O card que recebe o material:
+
+1. é `position: relative`, com cantos arredondados;
+2. define `--grimoire-tint` com a cor do conteúdo dele (`var(--spell-color)`, `var(--item-color)`, `var(--character-color)`);
+3. define `--grimoire-clip-radius` se o raio interno for diferente do dele (por exemplo, `calc(var(--radius-xl) - 1px)` com borda de 1 px);
+4. desenha `<MaterialLayers material="crypt-stone" />` uma vez, com o conteúdo por cima (`relative z-10`).
+
+Qual material cada conteúdo usa fica num mapa por sistema, fora da biblioteca. O laboratório mostra os dois usos:
+
+- `?material=auto` aplica o mapa de magias de D&D;
+- a seção "Itens da mochila" usa ladrilhos com as classes do `ItemGrid` e itens reais do catálogo.
 
 ### Decisões técnicas
 
@@ -191,7 +209,7 @@ Valores em ms: mediana [mín–máx], e a variação da mediana contra o card or
 A rodada 1 e os seus dados ([material-surfaces-bench-round1.json](material-surfaces-bench-round1.json)) ficam como estavam, para comparação. As mudanças desta rodada:
 
 1. **A cor do material segue a magia.**
-   - Todo material usa `--m: var(--spell-color, <cor própria>)`. A cor própria só vale onde não há magia (os painéis do laboratório).
+   - Todo material usa `--m: var(--spell-color, <cor própria>)` (depois virou `--grimoire-tint`, decisão 25). A cor própria só vale onde não há magia (os painéis do laboratório).
    - As cores derivadas saem dela: o tom escuro do gelo e do ácido (`color-mix(in oklab, var(--m), black …)`) e o tom envelhecido do pergaminho.
    - A pedra também é tingida: `--stone` mistura a cor da magia com o cinza da pedra (45% no tema escuro; no claro, 60% com um cinza mais claro, para não esconder a cor nem cortar o contraste). Na primeira versão a pedra ficava cinza neutra, e a dona pediu a cor da magia.
    - As fibras do pergaminho deixaram de ser marrons (elas viravam um tom barrento por cima da cor da magia): agora só escurecem, e o papel leva mais da cor da magia. O WebP das fibras foi regerado a partir do mesmo SVG.
