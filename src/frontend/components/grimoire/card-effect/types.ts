@@ -47,6 +47,8 @@ export const EFFECTS = {
   // Lightning: a forked bolt with branches from the top right corner (the owner's drawing)
   'lightning-branches': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
   bolt: { parts: 'fx+bolt', enter: 'flicker', ripple: ['round', 2] },
+  // Piercing: needle-thin thrusts converging on the right, with spear tips (the owner's drawing)
+  'piercing-needle-thrusts': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
   thrust: { parts: 'fx', enter: 'flash', ripple: ['round', 2] },
   // Poison: organic mist, branching filaments, drops and spores, top right (the owner's drawing)
   'toxic-mist-filaments': { parts: 'art', enter: 'fade', ripple: ['round', 2] },

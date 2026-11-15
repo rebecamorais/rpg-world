@@ -13,6 +13,7 @@ const FULL_CARD: ReadonlySet<ArtName> = new Set([
   'acid-bubbles',
   'impact-fractures',
   'lightning-branches',
+  'piercing-needle-thrusts',
   'slashing-slash-marks',
   'thunder-soundwaves',
 ]);

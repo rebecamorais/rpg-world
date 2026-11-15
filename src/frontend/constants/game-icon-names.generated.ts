@@ -131,7 +131,6 @@ export const GAME_ICON_NAMES: ReadonlySet<string> = new Set([
   'talk',
   'templar-shield',
   'thermometer-cold',
-  'thrust',
   'tied-scroll',
   'tombstone',
   'toolbox',
