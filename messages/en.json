@@ -490,9 +490,17 @@
     "hideIdentity": "Hide details",
     "showIdentity": "Show details"
   },
+  "sheetSettings": {
+    "classResourcesTitle": "Class resources",
+    "classResourcesHint": "Rules edition used to build the class boxes.",
+    "edition2014": "2014 (SRD 5.1)",
+    "edition2024": "2024 (SRD 5.2)",
+    "hint": "New: edition and resources here",
+    "dismiss": "Got it"
+  },
   "characterAppearance": {
-    "title": "Sheet appearance",
-    "description": "This only changes how the sheet looks. The character's data stays the same.",
+    "title": "Sheet settings",
+    "description": "This changes how the sheet looks and how its class resources work. The character's data stays the same.",
     "back": "Back to the sheet",
     "colorTitle": "Color",
     "colorHint": "Used for the name, the avatar's frame and the sheet's highlights.",

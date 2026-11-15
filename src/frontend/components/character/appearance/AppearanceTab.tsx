@@ -16,13 +16,25 @@ import {
 import AppLink from '@frontend/demo/AppLink';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 
+import { EDITIONS } from '@shared/systems/dnd5e/content/editions';
+
 import { AccentColorPicker } from './AccentColorPicker';
 import { AppearancePreview } from './AppearancePreview';
 import { SheetBackgroundSettings } from './SheetBackgroundSettings';
 
-function Section({ title, hint, children }: { title: string; hint: string; children: ReactNode }) {
+function Section({
+  id,
+  title,
+  hint,
+  children,
+}: {
+  id?: string;
+  title: string;
+  hint: string;
+  children: ReactNode;
+}) {
   return (
-    <SectionCard>
+    <SectionCard id={id}>
       <SectionCard.Header>
         <SectionCard.Title>{title}</SectionCard.Title>
       </SectionCard.Header>
@@ -34,12 +46,41 @@ function Section({ title, hint, children }: { title: string; hint: string; child
   );
 }
 
+/** The rules edition the class boxes follow. Native radios: there is no radio primitive in ui. */
+function EditionSettings() {
+  const t = useTranslations('sheetSettings');
+  const { edition } = useLoadedCharacter();
+  const { update } = useCharacterActions();
+
+  return (
+    <div role="radiogroup" aria-label={t('classResourcesTitle')} className="flex flex-wrap gap-2">
+      {EDITIONS.map((value) => (
+        <label
+          key={value}
+          className="border-border has-checked:border-character-flare has-checked:bg-muted has-focus-visible:ring-ring flex min-h-8 cursor-pointer items-center gap-2 rounded-md border px-3 py-1 text-sm has-focus-visible:ring-2 pointer-coarse:min-h-11"
+        >
+          <input
+            type="radio"
+            name="edition"
+            value={value}
+            checked={edition === value}
+            onChange={() => update({ edition: value })}
+            className="accent-character-flare"
+          />
+          {t(`edition${value}`)}
+        </label>
+      ))}
+    </div>
+  );
+}
+
 /**
- * How the sheet looks. Opened by the gear on the sheet and left out of its menu. The page exists
+ * The sheet's settings: how it looks and which edition its class resources follow. Opened by the gear on the sheet and left out of its menu. The page exists
  * only under the owner's route, so whoever only reads a sheet never reaches it.
  */
 export function AppearanceTab() {
   const t = useTranslations('characterAppearance');
+  const ts = useTranslations('sheetSettings');
   const { id } = useCharacterMeta();
   const { avatarUrl, system } = useLoadedCharacter();
   const { update } = useCharacterActions();
@@ -64,6 +105,13 @@ export function AppearanceTab() {
         </div>
 
         <div className="flex min-w-0 flex-col gap-4">
+          <Section
+            id="class-resources"
+            title={ts('classResourcesTitle')}
+            hint={ts('classResourcesHint')}
+          >
+            <EditionSettings />
+          </Section>
           <Section title={t('colorTitle')} hint={t('colorHint')}>
             <AccentColorPicker />
           </Section>

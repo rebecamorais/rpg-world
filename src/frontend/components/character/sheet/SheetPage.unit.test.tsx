@@ -1,7 +1,8 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { messages } from '@tests/helpers/render';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
 
@@ -28,6 +29,8 @@ function renderPage() {
 }
 
 describe('SheetPage', () => {
+  beforeEach(() => localStorage.clear());
+
   it('na ficha do dono, a engrenagem leva à aparência e vem logo antes de salvar', () => {
     params.value = { id: 'c1' };
     renderPage();
@@ -44,5 +47,35 @@ describe('SheetPage', () => {
     renderPage();
 
     expect(screen.queryByRole('link', { name: gearName })).not.toBeInTheDocument();
+  });
+
+  it('destaca a engrenagem com a dica e clicar nela dispensa o destaque', async () => {
+    params.value = { id: 'c1' };
+    renderPage();
+    const hint = messages.sheetSettings.hint;
+
+    expect(await screen.findByText(hint)).toBeInTheDocument();
+    await userEvent.setup().click(screen.getByRole('link', { name: gearName }));
+
+    expect(screen.queryByText(hint)).not.toBeInTheDocument();
+    expect(localStorage.getItem('rpgworld:hint:sheet-settings-177')).toBe('1');
+  });
+
+  it('o botão de dispensar esconde a dica', async () => {
+    params.value = { id: 'c1' };
+    renderPage();
+
+    await userEvent
+      .setup()
+      .click(await screen.findByRole('button', { name: messages.sheetSettings.dismiss }));
+
+    expect(screen.queryByText(messages.sheetSettings.hint)).not.toBeInTheDocument();
+  });
+
+  it('quem só lê a ficha não vê a dica', () => {
+    params.value = { partyId: 'p1', id: 'c1' };
+    renderPage();
+
+    expect(screen.queryByText(messages.sheetSettings.hint)).not.toBeInTheDocument();
   });
 });

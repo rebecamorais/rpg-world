@@ -490,9 +490,17 @@
     "hideIdentity": "Esconder detalhes",
     "showIdentity": "Ver detalhes"
   },
+  "sheetSettings": {
+    "classResourcesTitle": "Recursos de classe",
+    "classResourcesHint": "Edição das regras usada para montar as caixinhas da classe.",
+    "edition2014": "2014 (SRD 5.1)",
+    "edition2024": "2024 (SRD 5.2)",
+    "hint": "Novo: edição e recursos aqui",
+    "dismiss": "Entendi"
+  },
   "characterAppearance": {
-    "title": "Aparência da ficha",
-    "description": "Aqui só muda o visual da ficha. Os dados do personagem continuam iguais.",
+    "title": "Configurar ficha",
+    "description": "Aqui muda o visual da ficha e os recursos da classe. Os dados do personagem continuam iguais.",
     "back": "Voltar para a ficha",
     "colorTitle": "Cor",
     "colorHint": "Usada no nome, na moldura do avatar e nos destaques da ficha.",
