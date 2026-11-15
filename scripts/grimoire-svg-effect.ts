@@ -33,10 +33,15 @@ const svg = readFileSync(input, 'utf-8');
 const viewBox = /<svg[^>]*\bviewBox="([^"]+)"/.exec(svg)?.[1];
 if (!viewBox) throw new Error('The drawing has no viewBox.');
 
-const clean = svg
-  .replace(/<!--[\s\S]*?-->/g, '')
-  .replace(/<(title|desc|style)\b[\s\S]*?<\/\1>/g, '')
-  .replace(/<animate\w*\b[^>]*\/>/g, '');
+// Repeat until nothing changes: one pass could leave a piece that, joined, forms the tag again
+let clean = svg;
+for (let previous = ''; clean !== previous;) {
+  previous = clean;
+  clean = clean
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<(title|desc|style)\b[\s\S]*?<\/\1>/g, '')
+    .replace(/<animate\w*\b[^>]*\/>/g, '');
+}
 
 // The drawing: inside the group that carries its mask or clip, else everything after <defs>
 const body = (() => {
@@ -97,6 +102,12 @@ const recolour = (markup: string) =>
 const markup = recolour(`<defs>${defs}</defs>${body}`);
 if (/#[0-9a-fA-F]{3,6}\b/.test(markup))
   throw new Error('A colour was left behind; the converter missed an attribute.');
+// The card renders this markup as HTML (dangerouslySetInnerHTML): only plain shapes and gradients
+// may pass. Anything that could run code, load something or carry markup is refused, not cleaned.
+const UNSAFE =
+  /<!--|<\/?(?:script|style|foreignObject|iframe|object|embed|image|use|a|animate\w*|set)\b|\son\w+\s*=|(?:java|vb)script:|\b(?:xlink:)?href\s*=|url\((?!#__ID__)/i;
+const unsafe = UNSAFE.exec(markup);
+if (unsafe) throw new Error(`The drawing has something unsafe to render: "${unsafe[0]}".`);
 
 await writeFormatted(
   path.join(ART_DIR, `${name}.ts`),
