@@ -395,6 +395,25 @@
     linear-gradient(to right, transparent 40%, rgb(0 0 0 / 0.3) 55%, #000 72%),
     linear-gradient(to bottom, #000 28%, rgb(0 0 0 / 0.45) 52%, transparent 76%);
 }
+/* Thunder: only the drawing and a glow of the spell's colour along the waves (it sits in the
+   drawing's own box, so the same mask fades both); from 38% of the width, gone before the rules */
+.art[data-art='thunder-soundwaves'] {
+  background:
+    radial-gradient(
+      ellipse 55% 90% at 78% 30%,
+      color-mix(in oklab, var(--t), transparent 72%),
+      transparent 70%
+    ),
+    linear-gradient(
+      155deg,
+      transparent 40%,
+      color-mix(in oklab, var(--t), transparent 86%) 62%,
+      transparent 85%
+    );
+  mask-image:
+    linear-gradient(to right, transparent 38%, rgb(0 0 0 / 0.3) 52%, #000 70%),
+    linear-gradient(to bottom, #000 28%, rgb(0 0 0 / 0.45) 52%, transparent 76%);
+}
 /* Psychic: the drawing's own fades (from 42% of the width; gone by 93% of the height) */
 .art[data-art='resonance'] {
   mask-image:

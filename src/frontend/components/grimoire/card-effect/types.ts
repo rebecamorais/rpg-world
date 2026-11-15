@@ -45,6 +45,8 @@ export const EFFECTS = {
   // Poison: organic mist, branching filaments, drops and spores, top right (the owner's drawing)
   'toxic-mist-filaments': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
   miasma: { parts: 'fx', enter: 'rise', ripple: ['round', 2] },
+  // Thunder: pressure waves bending from the top toward the bottom right (the owner's drawing)
+  'thunder-soundwaves': { parts: 'art', enter: 'fade', ripple: ['thick', 3] },
   soundwave: { parts: 'fx', enter: 'grow', ripple: ['thick', 3] },
   slashes: { parts: 'fx', enter: 'flash', ripple: ['round', 2] },
   'alchemy-circle': { parts: 'fx', enter: 'spin', ripple: ['round', 2] },
