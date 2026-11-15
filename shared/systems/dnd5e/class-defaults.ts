@@ -13,7 +13,7 @@ import type { AttributeKey } from './types';
  */
 
 /** Something the class lets the player pick at level 1. */
-export interface ClassChoiceDefault {
+interface ClassChoiceDefault {
   /**
    * Stable across languages: `<edition>/<class>/<choice>`, e.g. `2014/bard/skills`. What was
    * picked or dismissed for one class is never counted for another.
