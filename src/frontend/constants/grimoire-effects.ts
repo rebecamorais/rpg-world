@@ -8,7 +8,7 @@ import type { EffectId } from '@frontend/components/grimoire/card-effect/types';
 
 const BY_DAMAGE: Partial<Record<string, EffectId>> = {
   fire: 'flame-ribbons',
-  necrotic: 'grave-mist',
+  necrotic: 'necrotic-stag-skull',
   radiant: 'sunburst',
   psychic: 'resonance',
   force: 'arcane-paths',

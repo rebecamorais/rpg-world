@@ -5,6 +5,7 @@ import { art as flameRibbons } from './flame-ribbons';
 import { art as frostCrystals } from './frost-crystals';
 import { art as impactFractures } from './impact-fractures';
 import { art as lightningBranches } from './lightning-branches';
+import { art as necroticStagSkull } from './necrotic-stag-skull';
 import { art as piercingNeedleThrusts } from './piercing-needle-thrusts';
 import { art as resonance } from './resonance';
 import { art as slashingSlashMarks } from './slashing-slash-marks';
@@ -18,6 +19,7 @@ export const ART = {
   'frost-crystals': frostCrystals,
   'impact-fractures': impactFractures,
   'lightning-branches': lightningBranches,
+  'necrotic-stag-skull': necroticStagSkull,
   'piercing-needle-thrusts': piercingNeedleThrusts,
   resonance: resonance,
   'slashing-slash-marks': slashingSlashMarks,
