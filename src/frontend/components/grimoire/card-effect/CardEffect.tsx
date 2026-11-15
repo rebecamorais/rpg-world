@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 
-import { ArcanePaths } from './ArcanePaths';
+import { EffectArt } from './EffectArt';
+import type { ArtName } from './art';
 import styles from './effects.module.css';
 import { type CardEffect, EFFECTS, type EffectId } from './types';
 
@@ -52,8 +53,9 @@ export function EffectLayers({ effect }: { effect: EffectId }) {
 
   return (
     <span ref={ref} aria-hidden="true" className={styles.layer} data-enter={enter}>
-      {parts === 'paths' ? (
-        <ArcanePaths />
+      {parts === 'art' ? (
+        // An 'art' effect's id is its drawing's name (types.unit.test.ts checks every one has one)
+        <EffectArt name={effect as ArtName} />
       ) : parts === 'glow+icons' ? (
         <>
           <span className={styles.glow} data-effect={effect} />

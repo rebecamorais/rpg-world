@@ -2,10 +2,10 @@ import type { ReactNode } from 'react';
 
 /**
  * How an effect is built: `fx` is one gradient motif, `glow+icons` is a glow placed per effect
- * plus icon details (one big and faded, a few small), `fx+bolt` adds a lightning shape, `paths`
- * is an inline SVG of floating trails (ArcanePaths).
+ * plus icon details (one big and faded, a few small), `fx+bolt` adds a lightning shape, `art` is
+ * one of the owner's drawings (art/, by effect id; scripts/grimoire-svg-effect.ts converts them).
  */
-type Parts = 'fx' | 'glow+icons' | 'fx+bolt' | 'paths';
+type Parts = 'fx' | 'glow+icons' | 'fx+bolt' | 'art';
 /** The entrance accent, played once when the card opens. */
 type Enter = 'fade' | 'rise' | 'grow' | 'flash' | 'flicker' | 'spin';
 type RippleShape = 'round' | 'diamond' | 'splash' | 'dashed' | 'thick' | 'glow' | 'smoke';
@@ -27,9 +27,11 @@ export const EFFECTS = {
   sunlight: { parts: 'glow+icons', enter: 'fade', ripple: ['glow', 3] },
   // Radiant: sun rays fanning from just above the top edge, fading before the rules text
   sunburst: { parts: 'fx', enter: 'fade', ripple: ['glow', 3] },
+  // Psychic: thought-wave contours around a focal point on the right (the owner's drawing)
+  resonance: { parts: 'art', enter: 'fade', ripple: ['dashed', 3] },
   echo: { parts: 'fx', enter: 'grow', ripple: ['dashed', 3] },
   // Force: fine floating trails and energy points on the right, static
-  'arcane-paths': { parts: 'paths', enter: 'fade', ripple: ['thick', 2] },
+  'arcane-paths': { parts: 'art', enter: 'fade', ripple: ['thick', 2] },
   shockwave: { parts: 'fx', enter: 'grow', ripple: ['thick', 2] },
   impact: { parts: 'fx', enter: 'flash', ripple: ['round', 2] },
   drips: { parts: 'glow+icons', enter: 'fade', ripple: ['splash', 3] },

@@ -103,6 +103,7 @@ export const GAME_ICON_NAMES: ReadonlySet<string> = new Set([
   'quick-slash',
   'quill-ink',
   'read',
+  'resonance',
   'robber-mask',
   'rogue',
   'rolling-energy',
