@@ -36,6 +36,8 @@ export const EFFECTS = {
   'arcane-paths': { parts: 'art', enter: 'fade', ripple: ['thick', 2] },
   shockwave: { parts: 'fx', enter: 'grow', ripple: ['thick', 2] },
   impact: { parts: 'fx', enter: 'flash', ripple: ['round', 2] },
+  // Acid: slime dripping from the top edge and a bubbling pool in the bottom right (the owner's drawing)
+  'acid-bubbles': { parts: 'art', enter: 'fade', ripple: ['splash', 3] },
   drips: { parts: 'glow+icons', enter: 'fade', ripple: ['splash', 3] },
   // Cold: faceted ice glass and a six-armed crystal on the right (the owner's drawing)
   'frost-crystals': { parts: 'art', enter: 'fade', ripple: ['diamond', 2] },

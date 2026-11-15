@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="740" height="168" viewBox="0 0 740 168" fill="none">
+  <defs>
+    <linearGradient id="acidSlime" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F4FF9C"/>
+      <stop offset="0.48" stop-color="#B4D63E"/>
+      <stop offset="1" stop-color="#6F911C"/>
+    </linearGradient>
+    <linearGradient id="acidDark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6F911C"/>
+      <stop offset="1" stop-color="#485F12"/>
+    </linearGradient>
+    <radialGradient id="bubbleGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0) rotate(90) scale(1)">
+      <stop offset="0" stop-color="#F5FBD0"/>
+      <stop offset="0.55" stop-color="#C8E85C"/>
+      <stop offset="1" stop-color="#7D9C21"/>
+    </radialGradient>
+    <linearGradient id="slimeShine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F5FBD0"/>
+      <stop offset="1" stop-color="#B4D63E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- top acid drips -->
+  <path d="M0 2H188c11 0 22 2 33 5 8 2 17 3 26 3h104c10 0 20 1 30 4 12 4 25 6 37 6h80c10 0 20-1 29-3 8-2 17-3 26-3h87v19c-9 0-17 0-26 1-9 1-18 3-27 3-9 0-19-1-28-3-12-2-25-2-37 1-11 3-18 9-18 18 0 7-3 13-7 18-4 4-9 6-14 6-6 0-10-2-13-7-3-5-4-10-4-15 0-9-4-16-11-20-8-4-18-6-27-6h-52c-10 0-20 2-28 6-7 4-10 10-10 18 0 6-2 11-6 15-3 4-7 6-12 6-6 0-10-2-13-6-4-4-6-10-6-16 0-9-4-15-11-18-8-3-18-5-27-5h-80c-9 0-18 2-25 6-8 4-12 10-12 20 0 7-2 13-5 18-3 6-8 9-15 9-6 0-10-2-13-7-4-4-6-10-6-17 0-9-3-15-10-18-8-4-18-6-27-6h-84c-8 0-15 2-21 5-8 4-12 11-12 20 0 9-2 18-6 25-5 9-12 14-22 14-9 0-16-5-20-14-4-7-6-16-6-25 0-9-3-16-11-20-5-3-11-5-18-5H0V2Z" fill="url(#acidDark)"/>
+  <path d="M0 2H188c11 0 22 2 33 5 8 2 17 3 26 3h104c10 0 20 1 30 4 12 4 25 6 37 6h80c10 0 20-1 29-3 8-2 17-3 26-3h87v10c-10 0-20 0-29 1-9 1-18 2-27 2-9 0-18-1-27-2-12-2-25-1-37 1-10 2-17 7-17 14 0 5-2 10-5 13-3 3-7 5-11 5-4 0-8-2-10-5-2-4-3-8-3-12 0-7-4-12-11-15-8-4-18-5-27-5h-52c-10 0-20 2-28 5-7 3-10 8-10 14 0 5-2 9-5 12-3 3-6 4-10 4-5 0-8-1-11-5-3-3-4-7-4-12 0-7-4-12-11-15-8-3-18-4-27-4h-80c-9 0-18 1-25 4-8 3-12 9-12 16 0 5-1 10-4 14-2 5-6 7-12 7s-9-2-12-6c-2-4-4-8-4-14 0-7-3-12-10-15-8-4-18-5-27-5h-84c-8 0-15 1-21 4-8 4-12 9-12 16 0 7-1 14-5 19-4 7-10 11-18 11-7 0-13-4-17-11-3-5-5-12-5-19 0-7-3-12-11-16-5-3-11-4-18-4H0V2Z" fill="url(#acidSlime)"/>
+
+  <!-- top droplets -->
+  <path d="M93 32c7 0 12 10 12 22 0 17-6 32-12 32s-12-15-12-32c0-12 5-22 12-22Z" fill="url(#acidSlime)"/>
+  <path d="M312 33c7 0 12 8 12 19 0 15-6 28-12 28s-12-13-12-28c0-11 5-19 12-19Z" fill="url(#acidSlime)"/>
+  <path d="M537 29c8 0 13 10 13 23 0 18-6 33-13 33-6 0-12-15-12-33 0-13 5-23 12-23Z" fill="url(#acidSlime)"/>
+  <path d="M610 26c5 0 9 7 9 17 0 13-4 24-9 24s-10-11-10-24c0-10 5-17 10-17Z" fill="url(#acidSlime)"/>
+
+  <!-- bubble cluster at top -->
+  <circle cx="118" cy="22" r="22" fill="url(#bubbleGlow)"/>
+  <circle cx="155" cy="38" r="6" fill="#B4D63E"/>
+  <circle cx="166" cy="29" r="4" fill="#F5FBD0"/>
+  <circle cx="208" cy="18" r="5" fill="#B4D63E"/>
+  <circle cx="245" cy="27" r="7" fill="#F5FBD0"/>
+  <circle cx="366" cy="18" r="5" fill="#B4D63E"/>
+  <circle cx="458" cy="26" r="4" fill="#F5FBD0"/>
+  <circle cx="652" cy="20" r="19" fill="url(#bubbleGlow)"/>
+  <circle cx="687" cy="35" r="4" fill="#B4D63E"/>
+  <circle cx="710" cy="28" r="7" fill="#F5FBD0"/>
+
+  <!-- right-bottom acid mass -->
+  <path d="M740 56v108H465c7-6 14-11 21-17 8-6 12-13 12-21 0-7 2-14 6-20 4-7 10-11 19-13 8-3 17-4 26-4 12 0 23 1 34 4 12 4 24 6 36 6 10 0 18-3 24-9 7-7 11-15 11-26 0-9 3-17 8-23 5-7 13-11 24-13 10-2 19-5 27-10 11-6 20-14 27-25Z" fill="url(#acidDark)"/>
+  <path d="M740 78v86H479c7-5 14-10 20-15 7-6 11-12 11-20 0-6 2-12 5-17 4-5 9-9 17-11 8-2 16-3 24-3 11 0 22 1 32 4 11 3 23 5 34 5 9 0 17-3 23-8 6-5 9-12 9-21 0-8 3-15 8-20 5-6 13-10 22-12 9-2 18-5 25-10 10-6 18-13 24-22Z" fill="url(#acidSlime)"/>
+  <path d="M681 129c6 0 10 7 10 15 0 11-4 20-10 20s-10-9-10-20c0-8 4-15 10-15Z" fill="url(#acidSlime)"/>
+  <path d="M595 142c5 0 8 5 8 12 0 8-3 14-8 14s-9-6-9-14c0-7 4-12 9-12Z" fill="url(#acidSlime)"/>
+  <circle cx="642" cy="125" r="34" fill="url(#bubbleGlow)"/>
+  <circle cx="696" cy="114" r="13" fill="url(#bubbleGlow)"/>
+  <circle cx="591" cy="139" r="18" fill="url(#bubbleGlow)"/>
+  <circle cx="704" cy="94" r="22" fill="url(#bubbleGlow)"/>
+  <circle cx="719" cy="101" r="3" fill="#F5FBD0"/>
+  <circle cx="673" cy="77" r="10" fill="#B4D63E"/>
+  <circle cx="701" cy="71" r="5" fill="#F5FBD0"/>
+  <circle cx="723" cy="79" r="7" fill="#B4D63E"/>
+  <circle cx="662" cy="59" r="6" fill="#F5FBD0"/>
+  <circle cx="726" cy="137" r="6" fill="#B4D63E"/>
+  <circle cx="703" cy="147" r="4" fill="#F5FBD0"/>
+
+  <!-- porous/corrosive cells -->
+  <ellipse cx="628" cy="148" rx="10" ry="7" fill="#6F911C"/>
+  <ellipse cx="660" cy="141" rx="7" ry="5" fill="#6F911C"/>
+  <ellipse cx="674" cy="145" rx="9" ry="6" fill="#6F911C"/>
+  <ellipse cx="692" cy="132" rx="7" ry="6" fill="#6F911C"/>
+  <ellipse cx="709" cy="125" rx="11" ry="8" fill="#6F911C"/>
+  <ellipse cx="686" cy="99" rx="8" ry="6" fill="#6F911C"/>
+  <ellipse cx="713" cy="111" rx="6" ry="5" fill="#6F911C"/>
+
+  <!-- bottom-left spray from right mass -->
+  <path d="M459 156c9-1 19 0 28 3 8 3 16 5 24 5 7 0 13-1 20-3 8-2 15-5 21-10 7-6 13-8 20-8 7 0 13 2 18 6 5 4 9 8 11 15H459v-8Z" fill="url(#acidSlime)"/>
+  <circle cx="447" cy="157" r="6" fill="#B4D63E"/>
+  <circle cx="434" cy="151" r="4" fill="#F5FBD0"/>
+  <circle cx="421" cy="162" r="3" fill="#B4D63E"/>
+  <circle cx="409" cy="158" r="5" fill="#B4D63E"/>
+  <circle cx="497" cy="145" r="4" fill="#F5FBD0"/>
+  <circle cx="511" cy="152" r="3" fill="#B4D63E"/>
+
+  <!-- subtle corrosion/hazard bars -->
+  <path d="M685 147h14l-6 9h-14l6-9Z" fill="url(#slimeShine)"/>
+  <path d="M707 147h14l-6 9h-14l6-9Z" fill="url(#slimeShine)"/>
+  <path d="M728 147h8l-6 9h-8l6-9Z" fill="url(#slimeShine)"/>
+
+  <!-- tiny fizz particles -->
+  <circle cx="17" cy="24" r="4" fill="#B4D63E"/>
+  <circle cx="32" cy="17" r="2" fill="#F5FBD0"/>
+  <circle cx="54" cy="11" r="2" fill="#B4D63E"/>
+  <circle cx="171" cy="46" r="3" fill="#B4D63E"/>
+  <circle cx="174" cy="53" r="2" fill="#F5FBD0"/>
+  <circle cx="287" cy="17" r="2" fill="#B4D63E"/>
+  <circle cx="292" cy="22" r="2" fill="#F5FBD0"/>
+  <circle cx="628" cy="62" r="3" fill="#F5FBD0"/>
+  <circle cx="640" cy="68" r="2" fill="#B4D63E"/>
+  <circle cx="649" cy="60" r="2" fill="#F5FBD0"/>
+</svg>
