@@ -45,42 +45,6 @@ function Detail({
 const SEPARATOR =
   "[&>li+li]:before:text-muted-foreground/40 [&>li+li]:before:mr-1 [&>li+li]:before:content-['•'_/_'']";
 
-/** The V/S/M icons, each with its tooltip. */
-function Components({
-  components,
-  className,
-}: {
-  components: SpellComponentDisplay[];
-  className?: string;
-}) {
-  if (components.length === 0) return null;
-  return (
-    <div className={cn('pointer-events-auto shrink-0 items-center gap-1', className)}>
-      {components.map((comp) => (
-        <Tooltip key={comp.letter}>
-          <TooltipTrigger asChild>
-            {/* Not focusable: the label is already in the text for screen readers. */}
-            <span className="flex size-6 items-center justify-center">
-              <span className="sr-only">{comp.label}</span>
-              <AppIcon
-                variant="game"
-                name={comp.icon}
-                size="xs"
-                className={cn('shrink-0', comp.color)}
-                aria-hidden="true"
-              />
-            </span>
-          </TooltipTrigger>
-          <TooltipContent className="max-w-xs">
-            <p className="text-foreground font-semibold">{comp.label}</p>
-            {comp.hint && <p className="text-muted-foreground">{comp.hint}</p>}
-          </TooltipContent>
-        </Tooltip>
-      ))}
-    </div>
-  );
-}
-
 export const SpellHeader = React.memo(
   ({
     spell,
@@ -124,10 +88,6 @@ export const SpellHeader = React.memo(
               </div>
             )}
           </div>
-
-          {/* Beside the name from sm up; on a phone they go down to the details line, so the name
-              keeps the width (the hidden copy is display: none, read by nobody) */}
-          <Components components={displayValues.components} className="hidden sm:flex" />
         </div>
 
         {/* Caption type: uppercase would read "18 m" as "18M" and "8d6" as "8D6". Only the level
@@ -187,6 +147,33 @@ export const SpellHeader = React.memo(
                 {displayValues.damage}
               </Detail>
             )}
+
+            {/* Verbal, somatic, material: on the details line, so the title's corner stays free */}
+            {displayValues.components.length > 0 && (
+              <li className="pointer-events-auto flex items-center">
+                {displayValues.components.map((comp: SpellComponentDisplay) => (
+                  <Tooltip key={comp.letter}>
+                    <TooltipTrigger asChild>
+                      {/* Not focusable: the label is already in the text for screen readers. */}
+                      <span className="flex size-5 items-center justify-center">
+                        <span className="sr-only">{comp.label}</span>
+                        <AppIcon
+                          variant="game"
+                          name={comp.icon}
+                          size="xs"
+                          className={cn('shrink-0', comp.color)}
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p className="text-foreground font-semibold">{comp.label}</p>
+                      {comp.hint && <p className="text-muted-foreground">{comp.hint}</p>}
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </li>
+            )}
           </ul>
 
           {/* Wraps instead of running past the card's edge at 320px ("INSTANTÂNE") */}
@@ -214,8 +201,6 @@ export const SpellHeader = React.memo(
               </div>
             </div>
           )}
-
-          <Components components={displayValues.components} className="-my-1 flex sm:hidden" />
         </div>
       </div>
 
