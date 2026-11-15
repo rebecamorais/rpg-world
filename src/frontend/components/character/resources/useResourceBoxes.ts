@@ -9,7 +9,8 @@ import type { ResourceBox } from '@shared/systems/dnd5e/class-resources';
 export function useResourceBoxes() {
   const character = useLoadedCharacter();
   const { classOf } = useCharacterChoices();
-  const { content, isLoading } = useClassResources(character.edition, classOf(character.class));
+  const classId = classOf(character.class);
+  const { content } = useClassResources(character.edition, classId);
 
   const boxes: ResourceBox[] = content
     ? buildResourceBoxes({
@@ -21,5 +22,5 @@ export function useResourceBoxes() {
       })
     : [];
 
-  return { boxes, content, isLoading };
+  return { boxes, content, classId };
 }

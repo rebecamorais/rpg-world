@@ -500,7 +500,7 @@
   },
   "characterAppearance": {
     "title": "Configurar ficha",
-    "description": "Aqui muda o visual da ficha e os recursos da classe. Os dados do personagem continuam iguais.",
+    "description": "Aqui muda o visual da ficha e a edição que os recursos da classe seguem.",
     "back": "Voltar para a ficha",
     "colorTitle": "Cor",
     "colorHint": "Usada no nome, na moldura do avatar e nos destaques da ficha.",
@@ -591,7 +591,8 @@
     "notBackShort": "Espaços de magia e PV não voltam no descanso curto",
     "fullHp": "PV cheio",
     "hitDiceBack": "Recupere {count, plural, one {# dado de vida} other {# dados de vida}}",
-    "spellSlotsBack": "Espaços de magia voltam"
+    "spellSlotsBack": "Espaços de magia voltam",
+    "spellPointsBack": "Pontos de magia voltam"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Buscar magia…",

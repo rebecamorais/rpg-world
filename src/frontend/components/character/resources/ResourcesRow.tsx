@@ -13,10 +13,12 @@ function useRowKind() {
   const character = useLoadedCharacter();
   const { id } = useCharacterMeta();
   const { readOnly } = useSheetSource(id);
-  const { boxes } = useResourceBoxes();
+  const { boxes, classId } = useResourceBoxes();
 
-  const kind = !readOnly && !character.edition ? 'edition' : boxes.length > 0 ? 'resources' : null;
-  return { kind, boxes };
+  // The edition card only for one of the 12 classes: choosing would show nothing for another
+  const kind =
+    !readOnly && !character.edition && classId ? 'edition' : boxes.length > 0 ? 'resources' : null;
+  return { kind, boxes, classId };
 }
 
 /** Whether the row is on screen: the death saves leave the side column when it is. */
@@ -26,12 +28,16 @@ export function useResourcesRowVisible(): boolean {
 
 /** Under the header: the class resources (or the edition card) beside the death saves. */
 export function ResourcesRow() {
-  const { kind, boxes } = useRowKind();
+  const { kind, boxes, classId } = useRowKind();
   if (!kind) return null;
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-      {kind === 'edition' ? <EditionCard /> : <ResourcesCard boxes={boxes} />}
+      {kind === 'edition' && classId ? (
+        <EditionCard classId={classId} />
+      ) : (
+        <ResourcesCard boxes={boxes} />
+      )}
       <DeathSavesCard />
     </div>
   );

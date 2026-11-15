@@ -175,7 +175,7 @@ describe('StatusView e a linha de recursos', () => {
 
   it('sem edição, o cartão da edição vem logo abaixo do cabeçalho com as mortes ao lado', () => {
     params.value = { id: 'c1' };
-    renderStatus();
+    renderStatus({ ...character, class: 'Monk' });
 
     expect(screen.getByText(messages.classResources.newTitle)).toBeInTheDocument();
     expect(deathSaves().closest('.md\\:grid-cols-2')).not.toBeNull();
