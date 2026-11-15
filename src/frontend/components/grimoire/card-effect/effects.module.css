@@ -87,27 +87,63 @@
   --ray-b: color-mix(in srgb, var(--ray), transparent 72%);
 }
 
-/* ---------- School-like motifs ---------- */
+/* ---------- School motifs ----------
+   One motif per school, refined (15/11) with details lifted from the retired damage effects, so
+   the 499 spells without damage get the same finish: each detail lives inside the school's own
+   layer, never as a second effect. Still in validation (decision 27). */
+
+/* Transmutation: the alchemy circle with alchemical droplets orbiting it (from drips) */
 .fx[data-effect='alchemy-circle'] {
+  --o: 86% 32%;
   background:
+    radial-gradient(circle, var(--s5) 0 1.8px, transparent 2.6px) calc(86% + 70px - 2.6px)
+      calc(32% - 2.6px) / 5.2px 5.2px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1.4px, transparent 2.2px) calc(86% - 70px - 2.2px)
+      calc(32% - 2.2px) / 4.4px 4.4px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1.6px, transparent 2.4px) calc(86% - 2.4px)
+      calc(32% + 70px - 2.4px) / 4.8px 4.8px no-repeat,
+    radial-gradient(circle, var(--s5) 0 1.4px, transparent 2.2px) calc(86% - 2.2px)
+      calc(32% - 70px - 2.2px) / 4.4px 4.4px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1px, transparent 1.8px) calc(86% + 50px - 1.8px)
+      calc(32% - 50px - 1.8px) / 3.6px 3.6px no-repeat,
+    radial-gradient(circle, var(--s5) 0 1.2px, transparent 2px) calc(86% - 50px - 2px)
+      calc(32% + 50px - 2px) / 4px 4px no-repeat,
+    radial-gradient(circle, var(--s3) 0 1px, transparent 1.8px) calc(86% - 50px - 1.8px)
+      calc(32% - 50px - 1.8px) / 3.6px 3.6px no-repeat,
+    radial-gradient(circle, var(--s3) 0 1px, transparent 1.8px) calc(86% + 50px - 1.8px)
+      calc(32% + 50px - 1.8px) / 3.6px 3.6px no-repeat,
     radial-gradient(
-      circle at 86% 32%,
+      circle at var(--o),
       transparent 0 40px,
       var(--s4) 41px 42px,
       transparent 43px 56px,
       var(--s3) 57px 58px,
-      transparent 59px
+      transparent 59px 66px,
+      var(--s2) 66px 67px,
+      transparent 68px
     ),
-    repeating-conic-gradient(from 0deg at 86% 32%, var(--s3) 0 1deg, transparent 1deg 30deg);
-  mask-image: radial-gradient(circle at 86% 32%, #000 0 60px, transparent 62px);
+    repeating-conic-gradient(from 0deg at var(--o), var(--s3) 0 1deg, transparent 1deg 30deg);
+  mask-image: radial-gradient(circle at 86% 32%, #000 0 76px, transparent 80px);
 }
+/* Abjuration: the ward mesh, with protective arcs closing in from the corner (from shockwave) */
 .fx[data-effect='ward-mesh'] {
   background:
+    radial-gradient(
+      circle at 100% 0%,
+      transparent 0 58px,
+      var(--s4) 59px 60px,
+      transparent 61px 104px,
+      var(--s3) 105px 106px,
+      transparent 107px 160px,
+      var(--s2) 161px 162px,
+      transparent 163px
+    ),
     repeating-linear-gradient(0deg, var(--s2) 0 1px, transparent 1px 20px),
     repeating-linear-gradient(60deg, var(--s2) 0 1px, transparent 1px 20px),
     repeating-linear-gradient(-60deg, var(--s2) 0 1px, transparent 1px 20px),
     radial-gradient(60% 90% at 100% 0, var(--s3), transparent 70%);
 }
+/* Conjuration: the portal, with concentric reverberations around it (from echo) */
 .fx[data-effect='portal'] {
   background:
     radial-gradient(circle at 86% 40%, var(--s3) 0 18px, transparent 34px),
@@ -117,39 +153,106 @@
       var(--s5) 35px 37px,
       transparent 38px 46px,
       var(--s3) 47px 48px,
-      transparent 49px
+      transparent 49px 60px,
+      var(--s3) 60px 61px,
+      transparent 62px 74px,
+      var(--s2) 74px 75px,
+      transparent 76px 90px,
+      var(--s1) 90px 91px,
+      transparent 92px
     );
 }
+/* Divination: the star map under a discreet celestial halo, with a few brighter stars (from sunlight) */
 .fx[data-effect='star-map'] {
   background:
+    radial-gradient(circle, var(--s5) 0 1.8px, transparent 2.8px) calc(72% - 2.8px)
+      calc(18% - 2.8px) / 5.6px 5.6px no-repeat,
+    radial-gradient(circle, var(--s5) 0 1.4px, transparent 2.4px) calc(90% - 2.4px)
+      calc(34% - 2.4px) / 4.8px 4.8px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1.4px, transparent 2.4px) calc(58% - 2.4px)
+      calc(8% - 2.4px) / 4.8px 4.8px no-repeat,
     radial-gradient(circle, var(--s5) 0 1px, transparent 1.6px) 0 0 / 22px 22px,
     radial-gradient(circle, var(--s4) 0 1px, transparent 1.6px) 11px 11px / 22px 22px,
+    radial-gradient(55% 70% at 80% -12%, var(--s3), transparent 72%),
     radial-gradient(60% 90% at 100% 0, var(--s3), transparent 70%);
 }
+/* Enchantment: the swirl, with hypnotic waves of influence around its centre (from soundwave) */
 .fx[data-effect='swirl'] {
-  background: conic-gradient(
-    from 0deg at 84% 22%,
-    var(--s3),
-    transparent 22%,
-    var(--s3) 48%,
-    transparent 72%,
-    var(--s3)
-  );
+  background:
+    repeating-radial-gradient(circle at 84% 22%, var(--s2) 0 1.5px, transparent 1.5px 18px),
+    conic-gradient(
+      from 0deg at 84% 22%,
+      var(--s3),
+      transparent 22%,
+      var(--s3) 48%,
+      transparent 72%,
+      var(--s3)
+    );
 }
+/* Illusion: the mirage bands, with translucent veils layered over them (from miasma, without
+   its bubbles, so nothing reads as poison) */
 .fx[data-effect='mirage'] {
   background:
+    radial-gradient(38% 30% at 68% 16%, var(--s2), transparent 70%),
+    radial-gradient(34% 26% at 92% 42%, var(--s2), transparent 70%),
+    radial-gradient(30% 22% at 82% 4%, var(--s3), transparent 70%),
     repeating-linear-gradient(170deg, var(--s2) 0 10px, transparent 10px 26px),
     radial-gradient(70% 90% at 100% 0, var(--s3), transparent 70%);
 }
+/* Evocation: the burst, with small sparks of energy thrown from it (from embers, without flames) */
 .fx[data-effect='burst'] {
   background:
+    radial-gradient(circle, var(--s5) 0 1.4px, transparent 2.4px) calc(86% - 62px - 2.4px)
+      calc(24% + 18px - 2.4px) / 4.8px 4.8px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1.2px, transparent 2px) calc(86% - 40px - 2px)
+      calc(24% + 46px - 2px) / 4px 4px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1px, transparent 1.8px) calc(86% - 84px - 1.8px)
+      calc(24% - 6px - 1.8px) / 3.6px 3.6px no-repeat,
+    radial-gradient(circle, var(--s5) 0 1.2px, transparent 2px) calc(86% + 30px - 2px)
+      calc(24% + 52px - 2px) / 4px 4px no-repeat,
+    radial-gradient(circle, var(--s3) 0 1px, transparent 1.8px) calc(86% - 20px - 1.8px)
+      calc(24% + 72px - 1.8px) / 3.6px 3.6px no-repeat,
+    radial-gradient(circle, var(--s3) 0 1px, transparent 1.8px) calc(86% - 96px - 1.8px)
+      calc(24% + 30px - 1.8px) / 3.6px 3.6px no-repeat,
     repeating-conic-gradient(from 0deg at 86% 24%, var(--s3) 0 4deg, transparent 4deg 18deg),
     radial-gradient(circle at 86% 24%, var(--s4), transparent 30%);
 }
+/* Necromancy (crypt fog, v2): a mausoleum's funerary mist. Three fog banks rise from the foot of
+   the card at different heights and densities; a translucent spectral veil hangs on the right in
+   soft vertical folds; flakes of ash (uneven ellipses, not round dots) drift through the low
+   mist; a vignette gives the layers depth. No skulls, no blur, nothing over the title. */
 .fx[data-effect='crypt-fog'] {
   background:
-    radial-gradient(50% 30% at 20% 108%, var(--s3), transparent 70%),
-    radial-gradient(50% 30% at 75% 108%, var(--s3), transparent 70%),
+    /* ash: uneven flakes in the low mist and in front of the veil */
+    radial-gradient(closest-side, var(--s4) 55%, transparent) calc(14% - 2.2px) calc(86% - 1px) /
+      4.4px 2px no-repeat,
+    radial-gradient(closest-side, var(--s3) 55%, transparent) calc(27% - 1.2px) calc(74% - 2px) /
+      2.4px 4px no-repeat,
+    radial-gradient(closest-side, var(--s3) 55%, transparent) calc(41% - 2.6px) calc(90% - 1.2px) /
+      5.2px 2.4px no-repeat,
+    radial-gradient(closest-side, var(--s4) 55%, transparent) calc(53% - 1.4px) calc(78% - 1.4px) /
+      2.8px 2.8px no-repeat,
+    radial-gradient(closest-side, var(--s4) 55%, transparent) calc(66% - 2px) calc(68% - 0.9px) /
+      4px 1.8px no-repeat,
+    radial-gradient(closest-side, var(--s3) 55%, transparent) calc(78% - 1.1px) calc(84% - 1.8px) /
+      2.2px 3.6px no-repeat,
+    radial-gradient(closest-side, var(--s4) 55%, transparent) calc(88% - 2.4px) calc(58% - 1.1px) /
+      4.8px 2.2px no-repeat,
+    radial-gradient(closest-side, var(--s3) 55%, transparent) calc(93% - 1.3px) calc(76% - 2.2px) /
+      2.6px 4.4px no-repeat,
+    radial-gradient(closest-side, var(--s3) 55%, transparent) calc(82% - 1.8px) calc(36% - 0.8px) /
+      3.6px 1.6px no-repeat,
+    /* spectral veil: soft vertical folds on the right, a lighter seam inside */
+    radial-gradient(5% 46% at 89% 34%, var(--s3), transparent 72%),
+    radial-gradient(14% 62% at 86% 40%, var(--s2), transparent 70%),
+    radial-gradient(10% 55% at 96% 28%, var(--s2), transparent 72%),
+    radial-gradient(22% 70% at 80% 48%, var(--s1), transparent 72%),
+    /* fog banks: low and dense, middle, high and thin */
+    radial-gradient(120% 42% at 28% 116%, var(--s4), transparent 70%),
+    radial-gradient(95% 36% at 78% 104%, var(--s3), transparent 72%),
+    radial-gradient(80% 30% at 50% 88%, var(--s1), transparent 74%),
+    linear-gradient(to top, var(--s2), transparent 38%),
+    /* depth: the crypt's darkness at the edges */
     radial-gradient(circle at 50% 45%, transparent 40%, var(--fx-shade) 125%);
 }
 /* Motifs that stay in the top corner, away from the rules text */
