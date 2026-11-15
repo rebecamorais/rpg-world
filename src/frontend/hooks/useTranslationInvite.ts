@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
-import { CROWDIN_PROJECT } from '@frontend/constants/site';
+import { WEBLATE_PROJECT } from '@frontend/constants/site';
 
 const INVITE_DURATION_MS = 10_000;
 // Survives the reload that switching language does (see LanguageSwitcher)
@@ -34,7 +34,7 @@ export function useTranslationInvite(enabled: boolean) {
       duration: INVITE_DURATION_MS,
       action: {
         label: t('action'),
-        onClick: () => window.open(CROWDIN_PROJECT, '_blank', 'noopener,noreferrer'),
+        onClick: () => window.open(WEBLATE_PROJECT, '_blank', 'noopener,noreferrer'),
       },
     });
   }, [t]);

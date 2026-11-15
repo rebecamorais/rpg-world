@@ -11,4 +11,4 @@ export const GITHUB_REPO = 'https://github.com/rebecamorais/rpg-world';
 export const DISCORD_INVITE = 'https://discord.gg/7u6guShqhQ';
 
 /** Community translations of the interface and the rules content. */
-export const CROWDIN_PROJECT = 'https://crowdin.com/project/rpgworld';
+export const WEBLATE_PROJECT = 'https://hosted.weblate.org/engage/rpgworldapp/';

@@ -7,7 +7,7 @@
  * Only entries 5etools marks as SRD (`srd`, `srd52`): classes, subclasses, features, and the
  * Metamagic options or feats a feature lists. Resources (Rage, Ki…) come from class-resources.ts.
  * Rewrites the rules data and the English texts, keeping the 5etools tags in the text.
- * Translations (i18n/<locale>/) come from Crowdin and are never touched, apart from creating an
+ * Translations (i18n/<locale>/) come from Weblate and are never touched, apart from creating an
  * empty file for Portuguese the first time.
  */
 import { existsSync } from 'node:fs';
