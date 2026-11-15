@@ -14,6 +14,9 @@ describe('stripTags', () => {
     ['either a {@filter Beast|bestiary|type=beast} or not', 'either a Beast or not'],
     ['the rules on {@book mounted combat|XPHB|1|Mounted Combat}.', 'the rules on mounted combat.'],
     ['make a {@dc 15} Intelligence saving throw', 'make a DC 15 Intelligence saving throw'],
+    ['uma salvaguarda de Inteligência {@dc 15|CD 15}', 'uma salvaguarda de Inteligência CD 15'],
+    ['behind {@quickref Cover||3||total cover}', 'behind total cover'],
+    ['in {@quickref difficult terrain||3}', 'in difficult terrain'],
   ])('marcação %s', (text, expected) => {
     expect(stripTags(text)).toBe(expected);
   });
@@ -60,10 +63,10 @@ describe('parseTags', () => {
 
 describe('tagsOf', () => {
   it('lista as tags de dentro para fora', () => {
-    expect(tagsOf('{@b {@condition prone}} e {@damage 8d6}')).toEqual([
-      { tag: 'condition', target: 'prone' },
-      { tag: 'damage', target: '8d6' },
-      { tag: 'b', target: 'prone' },
+    expect(tagsOf('{@b {@condition prone|XPHB}} e {@damage 8d6}')).toEqual([
+      { tag: 'condition', target: 'prone', rest: 'XPHB' },
+      { tag: 'damage', target: '8d6', rest: '' },
+      { tag: 'b', target: 'prone', rest: '' },
     ]);
   });
 });
