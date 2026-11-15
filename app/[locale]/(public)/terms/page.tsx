@@ -17,6 +17,7 @@ const CREDIT_HREFS = {
   database: 'https://github.com/5e-bits/5e-database',
   fivetools: 'https://github.com/5etools-mirror-3/5etools-src',
   foundry: 'https://gitlab.com/fvtt-brasil/dnd5e',
+  foundryEs: 'https://github.com/foundryvtt-sinregistrar/translate-dnd5e-sdr2-es',
   notice: 'https://github.com/rebecamorais/rpg-world/blob/main/NOTICE.md',
 };
 

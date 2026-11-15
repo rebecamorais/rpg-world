@@ -1,0 +1,48 @@
+name: Crowdin Foundry
+
+# Run by hand (Actions → Crowdin Foundry → Run workflow) to send the class names translated by the
+# Foundry VTT community (pt-BR: Foundry VTT Brasil; es: translate-dnd5e-sdr2-es, see NOTICE.md) to
+# Crowdin as suggestions. Nothing arrives approved: review them on Crowdin, then /sync-crowdin
+# brings what was approved, like any other translation.
+# A name already translated in the repository or on Crowdin is skipped, so running it again only
+# sends what is new.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    # Same queue as the Crowdin sync: the two never run at once
+    concurrency:
+      group: crowdin
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Send the Foundry translations to Crowdin
+        env:
+          CROWDIN_PROJECT_ID: ${{ vars.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          # Names the Foundry ids in English (GitHub API, a couple of calls)
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          npm run -s content:foundry-class-names | tee "$RUNNER_TEMP/report.txt"
+          {
+            echo "### Traduções do Foundry → Crowdin"
+            echo '```text'
+            cat "$RUNNER_TEMP/report.txt"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

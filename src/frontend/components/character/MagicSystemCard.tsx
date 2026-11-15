@@ -29,11 +29,7 @@ export function MagicSystemCard({
   const system = character.spellcastingSystem || 'points';
 
   // The system is changed in the card's settings (the gear), so here it is just the title
-  const systemLabel = (
-    <span className="text-label text-muted-foreground">
-      {system === 'slots' ? t('spellSlots') : t('spellPoints')}
-    </span>
-  );
+  const systemLabel = system === 'slots' ? t('spellSlots') : t('spellPoints');
 
   if (system === 'points') {
     return (

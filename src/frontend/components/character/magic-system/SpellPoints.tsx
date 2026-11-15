@@ -5,9 +5,10 @@ import * as React from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Card } from '@frontend/components/ui/card';
-import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { cn } from '@frontend/lib/utils';
+
+import { ResourceCardHeader } from '../ResourceCardHeader';
 
 interface Props extends React.ComponentProps<'div'> {
   current: number;
@@ -32,18 +33,17 @@ export function SpellPoints({
   return (
     <Card
       className={cn(
-        'group bg-background/60 hover:border-info-muted relative flex min-h-[160px] flex-col justify-between overflow-hidden p-3 shadow-sm transition-colors',
+        'group bg-background/60 hover:border-info-muted relative flex min-h-[160px] flex-col justify-between overflow-hidden p-4 shadow-sm transition-colors',
         className,
       )}
       {...props}
     >
-      <div className="flex items-center justify-between gap-1.5">
-        <div className="flex items-center gap-1.5">
-          <AppIcon name="Droplet" size={14} className="text-info-flare" aria-hidden="true" />
-          {systemLabel}
-        </div>
-        {action}
-      </div>
+      <ResourceCardHeader
+        icon="Droplet"
+        iconClassName="text-info-flare"
+        title={systemLabel}
+        action={action}
+      />
 
       <div className="flex flex-1 flex-col items-center justify-center gap-1 py-1">
         <div className="flex items-baseline justify-center gap-1.5 font-bold">

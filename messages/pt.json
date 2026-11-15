@@ -272,8 +272,6 @@
     },
     "loreFields": {
       "appearance": "Aparência",
-      "personality": "Personalidade",
-      "narrative": "Narrativa",
       "age": "Idade",
       "height": "Altura",
       "weight": "Peso",
@@ -464,8 +462,22 @@
         "S": "Especial",
         "T": "Arremesso",
         "V": "Versátil"
+      },
+      "view": "Visualização",
+      "viewList": "Lista",
+      "viewGrid": "Grade",
+      "tile": "{name}, {quantity} un.",
+      "group": {
+        "weapons": "Armas",
+        "armor": "Armaduras e escudos",
+        "magic": "Magia",
+        "tools": "Ferramentas e kits",
+        "gear": "Equipamento",
+        "other": "Outros"
       }
-    }
+    },
+    "untranslatedNotice": "Descrição em inglês por enquanto.",
+    "untranslatedHelp": "Ajude a traduzir"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
@@ -868,7 +880,8 @@
           "This work includes material from the System Reference Document 5.2 (“SRD 5.2”) by Wizards of the Coast LLC, available at <srd52>https://www.dndbeyond.com/srd</srd52>. The SRD 5.2 is licensed under the Creative Commons Attribution 4.0 International License, available at <ccby>https://creativecommons.org/licenses/by/4.0/legalcode</ccby>.",
           "As magias e condições em espanhol das regras de 2014 vêm da edição oficial em espanhol do SRD 5.1: Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (“SRD 5.1”) de Wizards of the Coast LLC, que está disponible en <srdEs>https://dnd.wizards.com/es/resources/systems-reference-document</srdEs>. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en <ccbyEs>https://creativecommons.org/licenses/by/4.0/legalcode.es</ccbyEs>.",
           "Os dados estruturados das magias de 2014 foram obtidos da <api>5e SRD API</api>, do projeto <database>5e-bits/5e-database</database>, sob a licença MIT. As magias de 2024 foram extraídas do <fivetools>5etools</fivetools>, só das entradas que fazem parte do SRD 5.2.",
-          "As traduções em português das magias vêm do <foundry>módulo de tradução do D&D 5e para o Foundry VTT</foundry>, da comunidade Foundry VTT Brasil (Cauã Pessoa e colaboradores), sob a licença MIT.",
+          "As traduções em português das magias e dos nomes de classes vêm do <foundry>módulo de tradução do D&D 5e para o Foundry VTT</foundry>, da comunidade Foundry VTT Brasil (Cauã Pessoa e colaboradores), Open Game Content sob a Open Game License v1.0a.",
+          "Os nomes de classes em espanhol das regras de 2024 vêm do módulo <foundryEs>D&D 5e SRD 2024 Spanish Translation</foundryEs> para o Foundry VTT, de foundryvtt-sinregistrar, sob a licença Creative Commons Atribuição 4.0 Internacional.",
           "O RPG World não é afiliado, endossado nem patrocinado pela Wizards of the Coast. Dungeons & Dragons e D&D são marcas da Wizards of the Coast LLC.",
           "Os créditos completos e os textos das licenças estão no arquivo <notice>NOTICE.md</notice> do repositório."
         ]

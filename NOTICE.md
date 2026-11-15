@@ -72,13 +72,18 @@ SOFTWARE.
 
 ## Tradução em português do Brasil: Foundry VTT Brasil
 
-As traduções em português das magias do SRD 5.1 (`content/dnd5e/srd-5.1/i18n/pt/spells.json`) vêm do
-módulo de tradução do sistema D&D 5e para o Foundry VTT, mantido pela comunidade Foundry VTT
-Brasil: <https://gitlab.com/fvtt-brasil/dnd5e>. Agradecemos a Cauã Pessoa e a todas as pessoas que
-contribuíram com essa tradução.
+As traduções em português das magias do SRD 5.1 (`content/dnd5e/srd-5.1/i18n/pt/spells.json`) e
+dos nomes das classes, subclasses e características (`content/dnd5e/srd-5.{1,2}/i18n/pt/classes.json`,
+enviados ao Crowdin por `npm run content:foundry-class-names` e revisados lá) vêm do módulo de
+tradução do sistema D&D 5e para o Foundry VTT, mantido pela comunidade Foundry VTT Brasil:
+<https://gitlab.com/fvtt-brasil/dnd5e>. Agradecemos a Cauã Pessoa e a todas as pessoas que
+contribuíram com essa tradução. No SRD 5.2 só se reaproveitam os nomes cujo original em inglês não
+mudou.
 
-O texto traduzido é uma adaptação do SRD 5.1 (CC-BY-4.0, atribuição acima). O módulo é distribuído
-sob a licença MIT:
+O texto traduzido é Open Game Content sob a Open Game License v1.0a, como o módulo declara. O texto
+completo da licença, com a seção 15 (Copyright Notice), está em
+[`content/dnd5e/OGL-1.0a.txt`](content/dnd5e/OGL-1.0a.txt). A licença MIT abaixo cobre só o código
+do módulo:
 
 ```text
 MIT License
@@ -103,3 +108,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## Game Icons
+
+Ícones de <https://game-icons.net> por Lorc, Delapouite e colaboradores, licenciados sob
+Creative Commons Attribution 3.0 (CC BY 3.0), disponível em
+<https://creativecommons.org/licenses/by/3.0/>.
+
+Usado em: ícones de jogo da interface (`src/frontend/constants/game-icons.svg`), inclusive as
+imagens padrão dos itens.
+
+## Traducción al español del SRD 5.2.1: translate-dnd5e-sdr2-es
+
+Os nomes em espanhol das classes, subclasses e características do SRD 5.2
+(`content/dnd5e/srd-5.2/i18n/es/classes.json`, enviados ao Crowdin por
+`npm run content:foundry-class-names` e revisados lá) vêm do módulo "D&D 5e SRD 2024 Spanish
+Translation" para o Foundry VTT, de [foundryvtt-sinregistrar](https://github.com/foundryvtt-sinregistrar):
+<https://github.com/foundryvtt-sinregistrar/translate-dnd5e-sdr2-es>. O módulo é licenciado sob a
+Creative Commons Attribution 4.0 International (CC BY 4.0,
+<https://creativecommons.org/licenses/by/4.0/legalcode>) e incorpora material do System Reference
+Document 5.2.1 da Wizards of the Coast LLC (CC BY 4.0, atribuição acima). Só a forma foi adaptada:
+cada nome foi associado à característica correspondente do RPG World pelo nome em inglês.
