@@ -40,7 +40,7 @@ Sucesso: na mesa, a jogadora vê as caixinhas da classe dela já com o máximo c
 ## Restrições do projeto
 
 - Next.js 16 do repositório (ler `node_modules/next/dist/docs/` antes de API nova), Supabase, TanStack Query, next-intl.
-- Textos de interface só por next-intl, chaves em `messages/en.json` e `messages/pt.json` (es/sv pelo Crowdin). Guardas de teste: texto fixo, tokens de design (nada de paleta crua do Tailwind), nomes de ícones do game-icons.
+- Textos de interface só por next-intl, chaves em `messages/en.json` e `messages/pt.json` (es/sv vêm do Weblate; o que falta cai no inglês). Guardas de teste: texto fixo, tokens de design (nada de paleta crua do Tailwind), nomes de ícones do game-icons.
 - Estilo: fantasia sóbria, tema escuro padrão, tokens; mobile primeiro, alvos de toque ≥ 44px no celular (`pointer-coarse`).
 - Comentários em inglês, descrições de teste em português.
 - Sem migration esperada: tudo cabe em `characters.system_data` (JSON). Se aparecer necessidade de migration, parar e perguntar (merge no `main` aplica migration em produção).

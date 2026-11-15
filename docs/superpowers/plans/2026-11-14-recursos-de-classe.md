@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - No migration. Everything fits in `characters.system_data`. If a migration looks necessary, stop and ask, because a merge to `main` applies migrations in production.
-- UI text only through next-intl. Add keys to `messages/en.json` and `messages/pt.json` only (es/sv come from Crowdin).
+- UI text only through next-intl. Add keys to `messages/en.json` and `messages/pt.json` only (es/sv come from Weblate; missing keys fall back to English).
 - Each task adds its keys in **its own new top-level namespace**, inserted right after the existing namespace named in the task. This keeps parallel branches from conflicting.
 - The unit guards must stay green: no hardcoded UI text, design tokens only (no raw Tailwind palette such as `bg-blue-500`), game-icons names valid.
 - Code comments in English. Test descriptions (`it('…')`) in Portuguese.
