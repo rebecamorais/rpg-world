@@ -14,7 +14,7 @@ import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 import { CoinPouch } from './CoinPouch';
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
-vi.mock('@client', () => ({ rpgWorldApi: { get: vi.fn(), put: vi.fn() } }));
+vi.mock('@client', () => ({ rpgWorldApi: { get: vi.fn(), patch: vi.fn() } }));
 const params = vi.hoisted(() => ({ value: {} as Record<string, string> }));
 vi.mock('next/navigation', () => ({ useParams: () => params.value }));
 
@@ -50,7 +50,7 @@ describe('CoinPouch', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     params.value = {};
-    api.put.mockResolvedValue(undefined);
+    api.patch.mockResolvedValue(undefined);
   });
 
   it('enquanto carrega, não mostra as moedas zeradas', async () => {
@@ -80,13 +80,15 @@ describe('CoinPouch', () => {
 
     await user.clear(gold);
     await user.type(gold, '120');
-    expect(api.put).not.toHaveBeenCalled();
+    expect(api.patch).not.toHaveBeenCalled();
     await user.tab();
 
-    await waitFor(() => expect(api.put).toHaveBeenCalledTimes(1));
-    expect(api.put).toHaveBeenCalledWith('/api/characters/c1/inventory/coins', {
+    await waitFor(() => expect(api.patch).toHaveBeenCalledTimes(1));
+    // The change, not the final value: two tabs paying at once both count
+    expect(api.patch).toHaveBeenCalledWith('/api/characters/c1/inventory/coins', {
       containerId: 'pouch1',
-      coins: { ...PURSE, gp: 120 },
+      delta: { gp: 75 },
+      key: expect.any(String),
     });
     expect(gold).toHaveValue('120');
   });
@@ -106,9 +108,10 @@ describe('CoinPouch', () => {
     api.get.mockResolvedValue(inventory({ cp: 12, sp: 3, ep: 0, gp: 5, pp: 1 }));
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
 
-    expect(api.put).toHaveBeenCalledWith('/api/characters/c1/inventory/coins', {
+    expect(api.patch).toHaveBeenCalledWith('/api/characters/c1/inventory/coins', {
       containerId: 'pouch1',
-      coins: { cp: 12, sp: 3, ep: 0, gp: 5, pp: 1 },
+      delta: { gp: -40, pp: -1 },
+      key: expect.any(String),
     });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(screen.getByLabelText('Gold pieces')).toHaveValue('5');
@@ -157,9 +160,10 @@ describe('CoinPouch', () => {
     await user.type(amount, '10');
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
 
-    expect(api.put).toHaveBeenCalledWith('/api/characters/c1/inventory/coins', {
+    expect(api.patch).toHaveBeenCalledWith('/api/characters/c1/inventory/coins', {
       containerId: 'pouch1',
-      coins: { cp: 12, sp: 3, ep: 0, gp: 55, pp: 2 },
+      delta: { gp: 10 },
+      key: expect.any(String),
     });
   });
 
@@ -171,12 +175,12 @@ describe('CoinPouch', () => {
     await user.clear(gold);
     await user.type(gold, '70{Enter}');
 
-    await waitFor(() => expect(api.put).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(api.patch).toHaveBeenCalledTimes(1));
   });
 
   it('servidor recusa: os números voltam ao que eram e avisa (Ponto 4)', async () => {
     const user = userEvent.setup();
-    api.put.mockRejectedValue(new Error('boom'));
+    api.patch.mockRejectedValue(new Error('boom'));
     await renderPouch();
 
     await user.click(screen.getByRole('button', { name: 'Pay' }));
@@ -199,6 +203,6 @@ describe('CoinPouch', () => {
     expect(screen.getByRole('button', { name: 'Pay' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Receive' })).toBeDisabled();
     fireEvent.change(screen.getByLabelText('Gold pieces'), { target: { value: '50' } });
-    expect(api.put).not.toHaveBeenCalled();
+    expect(api.patch).not.toHaveBeenCalled();
   });
 });

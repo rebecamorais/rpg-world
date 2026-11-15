@@ -36,14 +36,40 @@ describe('CombatStatsSection', () => {
     ['AC', 'ac', '17', 17],
     ['Initiative', 'initiative', '-1', -1],
     ['Speed', 'speed', '7.5', 7.5],
-    ['Hit Points', 'hpCurrent', '4', 4],
-  ])('edita %s', (label, field, typed, expected) => {
+  ])('edita %s no rascunho', (label, field, typed, expected) => {
     const { draft, isDirty } = renderCombat();
 
     fireEvent.change(screen.getByLabelText(label), { target: { value: typed } });
 
     expect(draft()[field as keyof DnD5eCharacter]).toBe(expected);
     expect(isDirty()).toBe(true);
+  });
+
+  it('o PV é de jogo: salva na hora, sem passar pelo rascunho', async () => {
+    const { sentNow, isDirty } = renderCombat();
+
+    fireEvent.change(screen.getByLabelText('Hit Points'), { target: { value: '4' } });
+    expect(sentNow()).toEqual({ hpCurrent: 4 });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Lose 1 HP' }));
+    expect(sentNow()).toEqual({ hpCurrent: 8 });
+    expect(isDirty()).toBe(false);
+  });
+
+  it('gastar um espaço de magia salva na hora, mantendo a capacidade do servidor', async () => {
+    const { saveNow, isDirty } = renderCombat({
+      spellcastingSystem: 'slots',
+      spellSlots: { '1': { max: 2, used: 0 } },
+    });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Level 1 slot 1, available' }));
+
+    const patch = saveNow.mock.calls.at(-1)![0] as (c: DnD5eCharacter) => Partial<DnD5eCharacter>;
+    // Read on the server copy: a capacity still only in the draft isn't saved with the tap
+    expect(patch({ ...character, spellSlots: { '1': { max: 2, used: 0 } } })).toEqual({
+      spellSlots: { '1': { max: 2, used: 1 } },
+    });
+    expect(isDirty()).toBe(false);
   });
 
   it('apagar o deslocamento deixa o campo vazio, com o erro só ao sair', async () => {
@@ -80,15 +106,15 @@ describe('CombatStatsSection', () => {
     expect(draft().hitDice).toEqual({ total: '1d12', current: 1 });
   });
 
-  it('mostra os pontos de magia e repassa a edição', () => {
-    const { draft } = renderCombat();
+  it('mostra os pontos de magia e salva o gasto na hora', () => {
+    const { sentNow, isDirty } = renderCombat();
 
     const points = screen.getByLabelText('Spell Points');
     expect(points).toHaveValue('3');
     fireEvent.change(points, { target: { value: '5' } });
 
-    expect(draft().spellPoints).toEqual({ current: 5, max: 6 });
-    expect(points).toHaveValue('5');
+    expect(sentNow()).toEqual({ spellPoints: { current: 5, max: 6 } });
+    expect(isDirty()).toBe(false);
   });
 
   it('troca o sistema de magia só pela engrenagem, e o card acompanha', async () => {

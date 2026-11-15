@@ -1,5 +1,10 @@
 import type { Coins } from '@shared/systems/dnd5e/coins';
 
+import type {
+  AddInventoryItemInput,
+  CoinsChange,
+  QuantityChange,
+} from '../application/inventory/inventory.use-cases';
 import type { CharacterKind } from '../domain/entity/Character';
 import { CharacterContext, CharacterUpdates, CreateCharacterInput } from '../index';
 
@@ -23,17 +28,21 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
     id,
     ownerUsername,
     updates,
+    revision,
   }: {
     id: string;
     ownerUsername: string;
     updates: CharacterUpdates;
+    revision?: number;
   }) => {
     const character = await characterContext.update({
       id,
       ownerUsername,
       updates,
+      revision,
     });
-    return { id: character.id };
+    // The new revision: the client sends it with its next save
+    return { id: character.id, revision: character.revision };
   },
 
   duplicate: (id: string, name: string) => characterContext.duplicate(id, name),
@@ -63,32 +72,33 @@ export const makeCharactersApi = (characterContext: CharacterContext) => ({
 
   getInventory: (id: string, requesterId: string, locale?: string) =>
     characterContext.getInventory(id, requesterId, locale),
-  addItem: (
-    id: string,
-    requesterId: string,
-    input: { ref: string; containerId: string; quantity: number },
-    locale?: string,
-  ) => characterContext.addItem(id, requesterId, input, locale),
+  addItem: (id: string, requesterId: string, input: AddInventoryItemInput, locale?: string) =>
+    characterContext.addItem(id, requesterId, input, locale),
   setItemQuantity: (id: string, requesterId: string, itemId: string, quantity: number) =>
     characterContext.setItemQuantity(id, requesterId, itemId, quantity),
   removeItem: (id: string, requesterId: string, itemId: string) =>
     characterContext.removeItem(id, requesterId, itemId),
   setCoins: (id: string, requesterId: string, containerId: string, coins: Coins) =>
     characterContext.setCoins(id, requesterId, containerId, coins),
+  changeItemQuantity: (id: string, requesterId: string, itemId: string, change: QuantityChange) =>
+    characterContext.changeItemQuantity(id, requesterId, itemId, change),
+  changeCoins: (id: string, requesterId: string, containerId: string, change: CoinsChange) =>
+    characterContext.changeCoins(id, requesterId, containerId, change),
 
   getPartyChest: (partyId: string, locale?: string) =>
     characterContext.getPartyChest(partyId, locale),
-  addPartyChestItem: (
-    partyId: string,
-    input: { ref: string; containerId: string; quantity: number },
-    locale?: string,
-  ) => characterContext.addPartyChestItem(partyId, input, locale),
+  addPartyChestItem: (partyId: string, input: AddInventoryItemInput, locale?: string) =>
+    characterContext.addPartyChestItem(partyId, input, locale),
   setPartyChestItemQuantity: (partyId: string, itemId: string, quantity: number) =>
     characterContext.setPartyChestItemQuantity(partyId, itemId, quantity),
   removePartyChestItem: (partyId: string, itemId: string) =>
     characterContext.removePartyChestItem(partyId, itemId),
   setPartyChestCoins: (partyId: string, containerId: string, coins: Coins) =>
     characterContext.setPartyChestCoins(partyId, containerId, coins),
+  changePartyChestItemQuantity: (partyId: string, itemId: string, change: QuantityChange) =>
+    characterContext.changePartyChestItemQuantity(partyId, itemId, change),
+  changePartyChestCoins: (partyId: string, containerId: string, change: CoinsChange) =>
+    characterContext.changePartyChestCoins(partyId, containerId, change),
 
   getForPartyGm: async (partyId: string, id: string, gmId: string) => {
     const character = await characterContext.getForPartyGm(partyId, id, gmId);

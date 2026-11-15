@@ -4,44 +4,38 @@ import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { cn } from '@frontend/lib/utils';
 
 export const MAX_QUANTITY = 9999;
+
+// 44px on touch screens (the real size, not a hit area that would overlap the next button)
+const STEP = 'hover:bg-muted size-8 rounded-sm p-0 pointer-coarse:size-11';
 
 interface Props {
   name: string;
   quantity: number;
   onQuantity: (quantity: number) => void;
-  onRemove: () => void;
 }
 
-/** − / + quantity control. At 1 the left button becomes the trash can: one less would be zero. */
-export function QuantityStepper({ name, quantity, onQuantity, onRemove }: Props) {
+/**
+ * − / + quantity control, the same in the list and in the grid's panel. − stops at 1: removing is
+ * its own button (`RemoveItemButton`), away from it, so quick taps on − never delete the item.
+ */
+export function QuantityStepper({ name, quantity, onQuantity }: Props) {
   const t = useTranslations('characters.inventory');
-  const atOne = quantity <= 1;
 
   return (
-    <div className="border-border bg-muted flex items-center gap-1 rounded-md border p-0.5">
-      {atOne ? (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="hover:bg-background touch-target text-danger-flare h-6 w-6 rounded-sm p-0"
-          aria-label={t('remove', { name })}
-          onClick={onRemove}
-        >
-          <AppIcon name="Trash2" size={12} aria-hidden="true" />
-        </Button>
-      ) : (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="hover:bg-background touch-target h-6 w-6 rounded-sm p-0"
-          aria-label={t('decrease', { name })}
-          onClick={() => onQuantity(quantity - 1)}
-        >
-          <AppIcon name="Minus" size={12} aria-hidden="true" />
-        </Button>
-      )}
+    <div className="border-border bg-background/60 flex items-center gap-0.5 rounded-md border p-0.5">
+      <Button
+        variant="ghost"
+        size="icon"
+        className={STEP}
+        aria-label={t('decrease', { name })}
+        disabled={quantity <= 1}
+        onClick={() => onQuantity(quantity - 1)}
+      >
+        <AppIcon name="Minus" size={14} aria-hidden="true" />
+      </Button>
       {/* <output>, not a <span>: a name on a plain span is not read; this one also announces
           the new quantity after − / + */}
       <output
@@ -53,13 +47,38 @@ export function QuantityStepper({ name, quantity, onQuantity, onRemove }: Props)
       <Button
         variant="ghost"
         size="icon"
-        className="hover:bg-background touch-target h-6 w-6 rounded-sm p-0"
+        className={STEP}
         aria-label={t('increase', { name })}
         disabled={quantity >= MAX_QUANTITY}
         onClick={() => onQuantity(quantity + 1)}
       >
-        <AppIcon name="Plus" size={12} aria-hidden="true" />
+        <AppIcon name="Plus" size={14} aria-hidden="true" />
       </Button>
     </div>
+  );
+}
+
+/** Takes the item out of the backpack. Red, and never where − was: the toast offers Undo. */
+export function RemoveItemButton({
+  name,
+  onRemove,
+  className,
+}: {
+  name: string;
+  onRemove: () => void;
+  className?: string;
+}) {
+  const t = useTranslations('characters.inventory');
+
+  return (
+    <Button
+      variant="destructive-ghost"
+      size="icon"
+      className={cn('size-8 shrink-0 rounded-md p-0 pointer-coarse:size-11', className)}
+      aria-label={t('remove', { name })}
+      onClick={onRemove}
+    >
+      <AppIcon name="Trash2" size={16} aria-hidden="true" />
+    </Button>
   );
 }

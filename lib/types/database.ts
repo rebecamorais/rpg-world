@@ -153,6 +153,8 @@ export type Database = {
           level: number;
           name: string;
           owner_id: string;
+          revision: number;
+          row_version: number;
           sheet_background_url: string | null;
           system: Database['public']['Enums']['rpg_system'];
           system_data: NonNullable<Json>;
@@ -172,6 +174,8 @@ export type Database = {
           level?: number;
           name: string;
           owner_id: string;
+          revision?: number;
+          row_version?: number;
           sheet_background_url?: string | null;
           system?: Database['public']['Enums']['rpg_system'];
           system_data?: NonNullable<Json>;
@@ -190,6 +194,8 @@ export type Database = {
           level?: number;
           name?: string;
           owner_id?: string;
+          revision?: number;
+          row_version?: number;
           sheet_background_url?: string | null;
           system?: Database['public']['Enums']['rpg_system'];
           system_data?: NonNullable<Json>;
@@ -710,10 +716,44 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      add_inventory_item_once: {
+        Args: { p_container_id: string; p_item_ref: string; p_key: string; p_quantity: number };
+        Returns: {
+          container_id: string;
+          created_at: string;
+          id: string;
+          item_ref: string;
+          quantity: number;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'inventory_items';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       auth_user_exists: { Args: { p_email: string }; Returns: boolean };
       auth_user_has_password: { Args: { p_user_id: string }; Returns: boolean };
       auth_user_id_exists: { Args: { p_user_id: string }; Returns: boolean };
       cancel_party_gm_claim: { Args: { p_party_id: string }; Returns: undefined };
+      change_container_coins: {
+        Args: { p_container_id: string; p_delta: Json; p_key: string; p_owner_id: string };
+        Returns: Json;
+      };
+      change_inventory_item_quantity: {
+        Args: { p_delta: number; p_item_id: string; p_key: string; p_owner_id: string };
+        Returns: number;
+      };
+      change_participant_condition: {
+        Args: {
+          p_active: boolean;
+          p_key: string;
+          p_level: number;
+          p_participant_id: string;
+          p_party_id: string;
+        };
+        Returns: boolean;
+      };
       claim_account_deletion_email: { Args: { p_user_id: string }; Returns: boolean };
       claim_account_deletion_password_attempt: { Args: { p_user_id: string }; Returns: boolean };
       claim_party_gm: { Args: { p_party_id: string }; Returns: string };

@@ -4,14 +4,16 @@ import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import type { InventoryItem } from '@frontend/hooks/useInventory';
 import { cn } from '@frontend/lib/utils';
 
 import { ItemDetails } from './ItemDetails';
 import { ItemImage } from './ItemImage';
-import { QuantityStepper } from './QuantityStepper';
+import { QuantityStepper, RemoveItemButton } from './QuantityStepper';
 import { groupOf, itemGroupStyle } from './item-visuals';
+import { useRemovedItem } from './removed-items';
 import { useItemFormat } from './useItemFormat';
 
 interface Props {
@@ -21,17 +23,65 @@ interface Props {
 }
 
 /**
- * One line of the backpack: name, quantity with − / +, weight and price. The details open under it.
- * An item that left the catalog shows its id; its trash (the stepper's − at 1) still removes it.
+ * One line of the backpack: name, quantity with − / +, weight, price and the trash at the end. The
+ * details open under it. An item that left the catalog shows its id; its trash still removes it.
  */
 export function ItemRow({ entry, onQuantity, onRemove }: Props) {
   const t = useTranslations('characters.inventory');
   const fmt = useItemFormat();
   const [open, setOpen] = useState(false);
+  const { removed, undo } = useRemovedItem(entry.id);
   const { item, quantity } = entry;
   const name = item?.name ?? entry.ref;
   const group = groupOf(item?.category ?? null);
   const detailsId = `item-details-${entry.id}`;
+
+  // The controls wrap to their own line together, at the right: the trash stays at the far end,
+  // with + and the price between it and −
+  const controls = (
+    <div className="ml-auto flex items-center gap-3">
+      <QuantityStepper name={name} quantity={quantity} onQuantity={onQuantity} />
+      <span className="text-muted-foreground hidden w-16 text-right text-sm tabular-nums sm:inline">
+        {item?.weight != null ? fmt.weight(item.weight) : ''}
+      </span>
+      <span className="text-muted-foreground w-20 text-right text-sm tabular-nums">
+        {item?.value != null ? fmt.price(item.value) : ''}
+      </span>
+      <RemoveItemButton name={name} onRemove={onRemove} />
+    </div>
+  );
+
+  if (removed) {
+    return (
+      <li className="border-border border-b last:border-b-0">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2">
+          <div
+            className="item-context bg-item-surface text-item-flare flex size-8 shrink-0 items-center justify-center rounded-md opacity-40"
+            style={itemGroupStyle(group)}
+          >
+            <ItemImage item={item} size={20} />
+          </div>
+          <div className="flex min-w-0 flex-1 basis-40 items-center gap-2">
+            <span className="text-muted-foreground truncate line-through">{name}</span>
+            <span className="sr-only">{t('removedTag')}</span>
+            <Button
+              variant="link"
+              size="sm"
+              className="h-auto shrink-0 p-0"
+              aria-label={t('undoRemove', { name })}
+              onClick={undo}
+            >
+              {t('undo')}
+            </Button>
+          </div>
+          {/* Same size as the live row, but not there: a tap where the trash was does nothing */}
+          <div className="invisible ml-auto" aria-hidden="true" inert>
+            {controls}
+          </div>
+        </div>
+      </li>
+    );
+  }
 
   return (
     <li className="border-border border-b last:border-b-0">
@@ -87,19 +137,7 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
           )}
         </div>
 
-        <QuantityStepper
-          name={name}
-          quantity={quantity}
-          onQuantity={onQuantity}
-          onRemove={onRemove}
-        />
-
-        <span className="text-muted-foreground hidden w-16 text-right text-sm tabular-nums sm:inline">
-          {item?.weight != null ? fmt.weight(item.weight) : ''}
-        </span>
-        <span className="text-muted-foreground w-20 text-right text-sm tabular-nums">
-          {item?.value != null ? fmt.price(item.value) : ''}
-        </span>
+        {controls}
       </div>
 
       {item && open && (

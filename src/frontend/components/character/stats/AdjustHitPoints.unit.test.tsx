@@ -117,6 +117,58 @@ describe('AdjustHitPoints', () => {
     });
   });
 
+  it('abre com o foco no campo do número', async () => {
+    renderAdjust();
+    await open();
+
+    expect(screen.getByLabelText(t.adjustHpAmount)).toHaveFocus();
+  });
+
+  it('Enter aplica Dano, a ação selecionada no começo', async () => {
+    const { saveNow } = renderAdjust();
+    await open();
+
+    await userEvent.keyboard('7{Enter}');
+
+    expect(saveNow).toHaveBeenCalledTimes(1);
+    expect(saveNow).toHaveBeenCalledWith({ hpCurrent: 24, hpTemp: 0 });
+  });
+
+  it('depois de usar Cura, Enter aplica Cura', async () => {
+    const { saveNow } = renderAdjust({ hpCurrent: 10 });
+    await open();
+    await userEvent.keyboard('2');
+    await userEvent.click(screen.getByRole('button', { name: t.heal }));
+
+    await open();
+    expect(screen.getByText('Enter applies: Heal')).toBeInTheDocument();
+    await userEvent.keyboard('3{Enter}');
+
+    expect(saveNow).toHaveBeenLastCalledWith({ hpCurrent: 13 });
+  });
+
+  it('Enter duas vezes enquanto salva manda uma vez só', async () => {
+    const { saveNow } = renderAdjust();
+    let finish = () => {};
+    saveNow.mockImplementationOnce(() => new Promise<void>((resolve) => (finish = resolve)));
+    await open();
+
+    await userEvent.keyboard('5{Enter}{Enter}');
+
+    expect(saveNow).toHaveBeenCalledTimes(1);
+    finish();
+  });
+
+  it('Enter sem número não faz nada', async () => {
+    const { saveNow } = renderAdjust();
+    await open();
+
+    await userEvent.keyboard('{Enter}');
+
+    expect(saveNow).not.toHaveBeenCalled();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
   it('se salvar falha, a folha continua aberta com o número', async () => {
     const { saveNow } = renderAdjust();
     saveNow.mockRejectedValueOnce(new Error('offline'));

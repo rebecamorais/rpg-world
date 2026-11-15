@@ -133,7 +133,8 @@ export const CombatStatsDialog = ({
                   return (
                     <NumberStepper
                       key={lvl}
-                      label={tm('circle', { level: lvl })}
+                      // Same name as the card's levels
+                      label={tm('level', { level: lvl })}
                       value={character.spellSlots?.[level]?.max || 0}
                       onChange={(max) =>
                         update({
@@ -173,7 +174,9 @@ export const CombatStatsDialog = ({
         </div>
       )}
 
-      <DialogFooter className="border-border bg-muted/50 border-t p-6">
+      {/* The settings go into the draft: the sheet still needs saving (its bar is under this) */}
+      <DialogFooter className="border-border bg-muted/50 items-center gap-3 border-t p-6 sm:justify-between">
+        <p className="text-caption text-muted-foreground">{tcommon('draftNote')}</p>
         <DialogClose asChild>
           <Button variant="character" className="h-9 px-6 text-sm font-bold uppercase">
             {tcommon('done')}

@@ -87,6 +87,9 @@
       "character_error_item_limit": "A mochila está cheia: um personagem guarda no máximo 500 itens diferentes.",
       "character_error_resource_limit": "Um personagem tem no máximo 200 caixinhas de recurso.",
       "character_error_container_limit": "Um personagem tem no máximo 20 lugares.",
+      "character_error_conflict": "Esta ficha mudou em outro lugar. Recarregue para ver a versão atual.",
+      "character_error_not_enough_coins": "As moedas mudaram em outro lugar e não dá mais para gastar isso. Os valores foram atualizados.",
+      "character_error_item_quantity_conflict": "A quantidade mudou em outro lugar. Os valores foram atualizados.",
       "combat_error_not_found": "Combate não encontrado.",
       "combat_error_exists": "Esta mesa já tem um combate.",
       "combat_error_empty": "Adicione alguém ao combate antes de começar.",
@@ -95,7 +98,8 @@
       "combat_error_invalid_condition": "Essa condição não é válida.",
       "combat_error_invalid_change": "Essa mudança não vale para jogadores.",
       "combat_error_at_start": "O combate já está no primeiro turno.",
-      "combat_error_character_not_allowed": "Este personagem não pode entrar neste combate."
+      "combat_error_character_not_allowed": "Este personagem não pode entrar neste combate.",
+      "common_error_network": "Sem conexão. Nada foi salvo."
     },
     "save": "Salvar",
     "saving": "Salvando…",
@@ -139,7 +143,14 @@
     },
     "fixFieldsToSave": "Corrija os campos em vermelho para salvar",
     "whatIs": "O que é {label}?",
-    "done": "Concluir"
+    "done": "Concluir",
+    "retry": "Tentar de novo",
+    "reload": "Recarregar",
+    "apply": "Aplicar",
+    "offline": "Sem conexão. Nada do que você mudar agora é salvo.",
+    "offlineDraft": "Sem conexão: as alterações continuam aqui",
+    "changedElsewhere": "Mudou em outro lugar. Recarregue para ver; suas alterações continuam aqui.",
+    "draftNote": "As mudanças entram na ficha. Salve a ficha para guardar."
   },
   "login": {
     "title": "Entrar no RPG World",
@@ -384,6 +395,9 @@
       "details": "Detalhes de {name}",
       "remove": "Remover {name}",
       "removed": "Item removido: {name}",
+      "removedMany": "{count} itens removidos",
+      "removedTag": "removido",
+      "undoRemove": "Desfazer a remoção de {name}",
       "undo": "Desfazer",
       "quantity": "Quantidade de {name}",
       "decrease": "Diminuir quantidade de {name}",
@@ -638,7 +652,8 @@
     "undo": "Desfazer",
     "summary": "Combate num relance",
     "speedShort": "Desloc.",
-    "passivePerceptionShort": "Percepção"
+    "passivePerceptionShort": "Percepção",
+    "adjustHpEnter": "Enter aplica: {action}"
   },
   "hitDiceRemaining": {
     "label": "Dados de vida restantes"
@@ -660,7 +675,11 @@
     "fullHp": "PV cheio",
     "hitDiceBack": "Recupere {count, plural, one {# dado de vida} other {# dados de vida}}",
     "spellSlotsBack": "Espaços de magia voltam",
-    "spellPointsBack": "Pontos de magia voltam"
+    "spellPointsBack": "Pontos de magia voltam",
+    "recover": "Recuperar",
+    "recoverHint": "Aplica de uma vez o que volta sozinho. O resto continua na lista.",
+    "recovered": "{title}: recuperado",
+    "undo": "Desfazer"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Buscar magia…",
@@ -684,6 +703,11 @@
       "prepared": "Magia preparada.",
       "unprepared": "Magia não preparada.",
       "undo": "Desfazer"
+    },
+    "forgetConfirm": {
+      "description": "{name} sai do grimório e das magias preparadas.",
+      "descriptionUnnamed": "A magia sai do grimório e das magias preparadas.",
+      "confirm": "Esquecer"
     },
     "searchLabel": "Buscar magias",
     "clearActiveFilters": "Limpar filtros ({count})",
@@ -885,7 +909,9 @@
     "successes": "Sucessos",
     "failures": "Falhas",
     "hint": "Rolagem para resistir a magias, venenos e outros perigos: d20 + modificador do atributo + proficiência, se marcada.",
-    "deathSavesHint": "Com 0 PV, role um d20 a cada turno: 10 ou mais é sucesso. 3 sucessos estabilizam; 3 falhas, morte. Um 1 conta como duas falhas; um 20 te levanta com 1 PV."
+    "deathSavesHint": "Com 0 PV, role um d20 a cada turno: 10 ou mais é sucesso. 3 sucessos estabilizam; 3 falhas, morte. Um 1 conta como duas falhas; um 20 te levanta com 1 PV.",
+    "deathSavesReset": "Testes contra a morte zerados",
+    "undo": "Desfazer"
   },
   "terms": {
     "title": "Termos de Uso",
@@ -1636,7 +1662,8 @@
     "addNpc": "Adicionar NPC",
     "turnsUntil": "<strong>{name}</strong> em {count, plural, one {# turno} other {# turnos}}",
     "endTurnOf": "Encerrar turno de {name}",
-    "newTab": "(abre em nova aba)"
+    "newTab": "(abre em nova aba)",
+    "offline": "Sem conexão. A tela não atualiza e nada é enviado até a conexão voltar."
   },
   "characterRaces": {
     "dragonborn": "Draconato",

@@ -12,10 +12,23 @@ describe('errorToHttp', () => {
     ['not_found', 404],
     ['forbidden', 403],
     ['rate_limited', 429],
+    ['conflict', 409],
   ] as const)('mapeia AppError %s para %i com o código', (kind, status) => {
     expect(errorToHttp(new AppError('some_code', kind))).toEqual({
       status,
       body: { error: 'some_code' },
+    });
+  });
+
+  it('põe os detalhes do erro ao lado do código, sem trocar o código', () => {
+    const err = new AppError('some_code', 'conflict', {
+      code: 'conflict',
+      revision: 4,
+      error: 'x',
+    });
+    expect(errorToHttp(err)).toEqual({
+      status: 409,
+      body: { code: 'conflict', revision: 4, error: 'some_code' },
     });
   });
 

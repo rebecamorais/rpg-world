@@ -20,6 +20,12 @@ export const CharacterErrorCodes = {
   ITEM_LIMIT: 'character_error_item_limit',
   RESOURCE_LIMIT: 'character_error_resource_limit',
   CONTAINER_LIMIT: 'character_error_container_limit',
+  /** The sheet changed elsewhere since the revision the client sent. */
+  CONFLICT: 'character_error_conflict',
+  /** Another tab spent the coins first. */
+  NOT_ENOUGH_COINS: 'character_error_not_enough_coins',
+  /** Another tab took the last of the item first. */
+  ITEM_QUANTITY_CONFLICT: 'character_error_item_quantity_conflict',
   DOMAIN_ATTRIBUTE_BELOW_ONE: 'domain_error_attribute_below_one',
   DOMAIN_HP_MAX_BELOW_ONE: 'domain_error_hp_max_below_one',
   DOMAIN_HP_DAMAGE_NEGATIVE: 'domain_error_hp_damage_negative',
@@ -40,11 +46,14 @@ const ERROR_KINDS: Partial<Record<CharacterErrorCode, AppErrorKind>> = {
   [CharacterErrorCodes.UPDATE_UNAUTHORIZED]: 'forbidden',
   [CharacterErrorCodes.DELETE_UNAUTHORIZED]: 'forbidden',
   [CharacterErrorCodes.ACCESS_FORBIDDEN]: 'forbidden',
+  [CharacterErrorCodes.CONFLICT]: 'conflict',
+  [CharacterErrorCodes.NOT_ENOUGH_COINS]: 'conflict',
+  [CharacterErrorCodes.ITEM_QUANTITY_CONFLICT]: 'conflict',
 };
 
 export class CharacterError extends AppError {
-  constructor(code: CharacterErrorCode) {
-    super(code, ERROR_KINDS[code]);
+  constructor(code: CharacterErrorCode, details?: Record<string, unknown>) {
+    super(code, ERROR_KINDS[code], details);
     this.name = 'CharacterError';
   }
 }

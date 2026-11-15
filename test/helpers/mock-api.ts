@@ -40,6 +40,10 @@ export const api = {
     setPartyChestItemQuantity: vi.fn(),
     removePartyChestItem: vi.fn(),
     setPartyChestCoins: vi.fn(),
+    changeItemQuantity: vi.fn(),
+    changeCoins: vi.fn(),
+    changePartyChestItemQuantity: vi.fn(),
+    changePartyChestCoins: vi.fn(),
     getInventoryForPartyGm: vi.fn(),
     getSpellsForPartyGm: vi.fn(),
     duplicate: vi.fn(),
@@ -62,6 +66,7 @@ export const api = {
     setMyInitiative: vi.fn(),
     finish: vi.fn(),
     setConditions: vi.fn(),
+    changeCondition: vi.fn(),
   },
   partiesApi: {
     rename: vi.fn(),

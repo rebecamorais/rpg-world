@@ -11,7 +11,50 @@ import type {
   EncounterView,
   NpcSide,
 } from '@backend/contexts/combat/domain/Encounter';
-import type { ParticipantPatch } from '@backend/contexts/combat/domain/repository/combat.repo';
+import type {
+  ConditionChange,
+  ParticipantPatch,
+} from '@backend/contexts/combat/domain/repository/combat.repo';
+
+type Snapshot = { previous: EncounterView | null | undefined };
+
+/**
+ * The changes from `before` to `after`, one per condition: the picker hands over the whole list,
+ * but sending the list back would undo what someone else switched meanwhile.
+ */
+export function conditionChanges(
+  before: ActiveCondition[],
+  after: ActiveCondition[],
+): ConditionChange[] {
+  const was = new Map(before.map((c) => [c.key, c]));
+  const is = new Map(after.map((c) => [c.key, c]));
+  const changes: ConditionChange[] = [];
+  for (const { key, level } of after) {
+    const previous = was.get(key);
+    if (!previous || previous.level !== level) changes.push({ key, active: true, level });
+  }
+  for (const { key } of before) if (!is.has(key)) changes.push({ key, active: false });
+  return changes;
+}
+
+/** `conditions` with `change` applied, as the database does it (in place, or at the end). */
+function applyChange(conditions: ActiveCondition[], change: ConditionChange): ActiveCondition[] {
+  if (!change.active) return conditions.filter((c) => c.key !== change.key);
+  const next = { key: change.key, level: change.level };
+  return conditions.some((c) => c.key === change.key)
+    ? conditions.map((c) => (c.key === change.key ? next : c))
+    : [...conditions, next];
+}
+
+/** The participant's conditions as the cache has them (the GM's rows, or the player's turns). */
+function conditionsIn(view: EncounterView | null | undefined, participantId: string) {
+  if (view?.role === 'gm')
+    return view.rows.find((r) => r.participantId === participantId)?.conditions;
+  if (view?.role === 'player') {
+    return view.turns.find((t) => t.participantId === participantId)?.conditions;
+  }
+  return undefined;
+}
 
 /** The party's combat (null without one) and everything done on it; each change reloads it. */
 export function useEncounter(partyId: string) {
@@ -44,6 +87,20 @@ export function useEncounter(partyId: string) {
   const onError = (err: Error) => toast.error(getErrorMessage(err));
   const options = { mutationKey, onSettled, onError };
 
+  // Optimistic changes take a snapshot and go back to it on failure. Only when nothing else is on
+  // its way: going back then would also undo the newer change on screen; the refetch of the last
+  // change to finish fixes the screen instead
+  const snapshot = async (): Promise<Snapshot> => {
+    await queryClient.cancelQueries({ queryKey: encounterQueryKey(partyId) });
+    return { previous: queryClient.getQueryData<EncounterView | null>(encounterQueryKey(partyId)) };
+  };
+  const rollback = (err: Error, _vars: unknown, context: Snapshot | undefined) => {
+    if (context && queryClient.isMutating({ mutationKey }) === 1) {
+      queryClient.setQueryData(encounterQueryKey(partyId), context.previous);
+    }
+    onError(err);
+  };
+
   const create = useMutation({ mutationFn: () => rpgWorldApi.post(base), ...options });
   const finish = useMutation({ mutationFn: () => rpgWorldApi.delete(base), ...options });
   const start = useMutation({ mutationFn: () => rpgWorldApi.post(`${base}/start`), ...options });
@@ -57,7 +114,7 @@ export function useEncounter(partyId: string) {
       rpgWorldApi.patch(`${base}/participants/${participantId}`, patch),
     // Shown at once: "Sort by initiative" clicked right after typing the last one must see it
     onMutate: async ({ participantId, ...patch }) => {
-      await queryClient.cancelQueries({ queryKey: encounterQueryKey(partyId) });
+      const context = await snapshot();
       queryClient.setQueryData<EncounterView | null>(encounterQueryKey(partyId), (view) =>
         view?.role === 'gm'
           ? {
@@ -95,8 +152,10 @@ export function useEncounter(partyId: string) {
             }
           : view,
       );
+      return context;
     },
     ...options,
+    onError: rollback,
   });
   const removeParticipant = useMutation({
     mutationFn: (participantId: string) =>
@@ -107,7 +166,7 @@ export function useEncounter(partyId: string) {
     mutationFn: (participantIds: string[]) => rpgWorldApi.put(`${base}/order`, { participantIds }),
     // Shown at once; a fetch already on its way read the old order, so it's cancelled
     onMutate: async (participantIds) => {
-      await queryClient.cancelQueries({ queryKey: encounterQueryKey(partyId) });
+      const context = await snapshot();
       queryClient.setQueryData<EncounterView | null>(encounterQueryKey(partyId), (view) => {
         if (view?.role !== 'gm') return view;
         const position = new Map(participantIds.map((id, index) => [id, index]));
@@ -117,8 +176,10 @@ export function useEncounter(partyId: string) {
           rows: [...view.rows].sort((a, b) => rank(a.participantId) - rank(b.participantId)),
         };
       });
+      return context;
     },
     ...options,
+    onError: rollback,
   });
   const endTurn = useMutation({
     mutationFn: (participantId: string) => rpgWorldApi.post(`${base}/turn`, { participantId }),
@@ -138,7 +199,7 @@ export function useEncounter(partyId: string) {
     }) => rpgWorldApi.put(`${base}/participants/${participantId}/initiative`, { initiative }),
     // Shown at once, on the player's own row
     onMutate: async ({ participantId, initiative }) => {
-      await queryClient.cancelQueries({ queryKey: encounterQueryKey(partyId) });
+      const context = await snapshot();
       queryClient.setQueryData<EncounterView | null>(encounterQueryKey(partyId), (view) =>
         view?.role === 'player'
           ? {
@@ -149,43 +210,85 @@ export function useEncounter(partyId: string) {
             }
           : view,
       );
+      return context;
     },
     ...options,
+    onError: rollback,
   });
 
-  const setConditions = useMutation({
-    mutationFn: ({
+  /** Applies `change` to the participant's conditions in the cache (rows for the GM, turns too). */
+  const showChange = (participantId: string, change: ConditionChange) =>
+    queryClient.setQueryData<EncounterView | null>(encounterQueryKey(partyId), (view) => {
+      if (view?.role === 'gm') {
+        return {
+          ...view,
+          rows: view.rows.map((row) =>
+            row.participantId === participantId
+              ? { ...row, conditions: applyChange(row.conditions, change) }
+              : row,
+          ),
+        };
+      }
+      if (view?.role === 'player') {
+        return {
+          ...view,
+          turns: view.turns.map((turn) =>
+            turn.participantId === participantId
+              ? { ...turn, conditions: applyChange(turn.conditions, change) }
+              : turn,
+          ),
+        };
+      }
+      return view;
+    });
+
+  // One condition per request, so the GM and a player switching different ones keep both. They go
+  // one at a time (scope): on, then off, of the same condition can't arrive the other way round
+  const changeCondition = useMutation({
+    mutationFn: ({ participantId, change }: { participantId: string; change: ConditionChange }) =>
+      rpgWorldApi.patch(`${base}/participants/${participantId}/conditions`, change),
+    scope: { id: `conditions-${partyId}` },
+    onMutate: async ({ participantId, change }) => {
+      const before = conditionsIn(
+        queryClient.getQueryData<EncounterView | null>(encounterQueryKey(partyId)),
+        participantId,
+      );
+      await queryClient.cancelQueries({ queryKey: encounterQueryKey(partyId) });
+      showChange(participantId, change);
+      return { before: before?.find((c) => c.key === change.key) };
+    },
+    ...options,
+    // Undoes only this switch (back to how that condition was), not the others still on their way
+    onError: (err, { participantId, change }, context) => {
+      const was = context?.before;
+      showChange(
+        participantId,
+        was ? { key: was.key, active: true, level: was.level } : { key: change.key, active: false },
+      );
+      onError(err);
+    },
+  });
+
+  /**
+   * Takes the whole list the picker builds (same call as before) and sends only what changed from
+   * what is on screen, one condition at a time.
+   */
+  const setConditions = {
+    mutate: ({
       participantId,
       conditions,
     }: {
       participantId: string;
       conditions: ActiveCondition[];
-    }) => rpgWorldApi.put(`${base}/participants/${participantId}/conditions`, { conditions }),
-    // Shown at once: the picker sends the whole list, so a second toggle must build on the first
-    onMutate: async ({ participantId, conditions }) => {
-      await queryClient.cancelQueries({ queryKey: encounterQueryKey(partyId) });
-      queryClient.setQueryData<EncounterView | null>(encounterQueryKey(partyId), (view) => {
-        if (view?.role === 'gm') {
-          return {
-            ...view,
-            rows: view.rows.map((row) =>
-              row.participantId === participantId ? { ...row, conditions } : row,
-            ),
-          };
-        }
-        if (view?.role === 'player') {
-          return {
-            ...view,
-            turns: view.turns.map((turn) =>
-              turn.participantId === participantId ? { ...turn, conditions } : turn,
-            ),
-          };
-        }
-        return view;
-      });
+    }) => {
+      const view = queryClient.getQueryData<EncounterView | null>(encounterQueryKey(partyId));
+      const before = conditionsIn(view, participantId) ?? [];
+      for (const change of conditionChanges(before, conditions)) {
+        changeCondition.mutate({ participantId, change });
+      }
     },
-    ...options,
-  });
+    isPending: changeCondition.isPending,
+  };
 
   return {
     encounter: query.data,

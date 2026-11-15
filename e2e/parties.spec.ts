@@ -286,7 +286,7 @@ test.describe('mesas', () => {
     const dialog = player.page.getByRole('dialog', { name: 'Receive' });
     await dialog.getByLabel('Amount').fill('25');
     const coins = player.page.waitForResponse(
-      (r) => r.url().includes('/chest/coins') && r.request().method() === 'PUT' && r.ok(),
+      (r) => r.url().includes('/chest/coins') && r.request().method() === 'PATCH' && r.ok(),
     );
     await dialog.getByRole('button', { name: 'Confirm' }).click();
     await coins;

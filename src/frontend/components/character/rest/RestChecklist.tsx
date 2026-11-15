@@ -4,12 +4,18 @@ import { useEffect, useId, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 import { createPortal } from 'react-dom';
+import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
-import { useCharacterState, useLoadedCharacter } from '@frontend/context/CharacterContext';
+import {
+  useCharacterActions,
+  useCharacterState,
+  useLoadedCharacter,
+} from '@frontend/context/CharacterContext';
 import { hitDiceAvailable, hitDieSides } from '@frontend/lib/character-sheet-updates';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { type RestItem, buildRestChecklist } from '@frontend/lib/rest-checklist';
+import { restRecovery } from '@frontend/lib/rest-recovery';
 import { cn } from '@frontend/lib/utils';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
@@ -45,20 +51,25 @@ function focusTarget(block: HTMLElement) {
 }
 
 /**
- * What to update on the sheet after a rest. Ticks live only here: nothing is written to the sheet.
- * Not modal and no focus trap, so the sheet stays editable. On a phone it is a bar above the tab bar.
+ * What to update on the sheet after a rest. "Recover" gives back, in one save with an Undo, what
+ * comes back by itself (HP, hit dice, slots, boxes) and ticks those items; the rest (spending hit
+ * dice) is for the player, and ticks live only here. Not modal and no focus trap, so the sheet
+ * stays editable. On a phone it is a bar above the tab bar.
  */
 export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClose: () => void }) {
   const t = useTranslations('restChecklist');
   const character = useLoadedCharacter();
   const { boxes, content } = useResourceBoxes();
   const { isDirty } = useCharacterState();
+  const { saveNow } = useCharacterActions();
   const slot = useSaveBarSlot();
   const titleId = useId();
   const heading = useRef<HTMLHeadingElement>(null);
   const [ticked, setTicked] = useState<ReadonlySet<string>>(new Set());
   // Phone only: collapsed, the list hides and the bar is one button tall
   const [collapsed, setCollapsed] = useState(false);
+  const [recovering, setRecovering] = useState(false);
+  const [recovered, setRecovered] = useState(false);
 
   const level = character.level;
   const items = buildRestChecklist({
@@ -112,6 +123,40 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
   };
 
   const title = rest === 'short' ? t('shortTitle') : t('longTitle');
+  const recoverable = restRecovery(rest, character, boxes);
+
+  const recover = async () => {
+    const { fields, items: done } = recoverable;
+    // What Undo puts back: these fields as the sheet shows them now
+    const before = Object.fromEntries(
+      Object.keys(fields).map((key) => [key, character[key as keyof DnD5eCharacter]]),
+    ) as Partial<DnD5eCharacter>;
+    setRecovering(true);
+    try {
+      // Read on the server copy, like every tap during play: a pending sheet edit stays pending
+      await saveNow((server) => restRecovery(rest, server, boxes).fields);
+    } catch {
+      // saveNow already showed the error, with "Try again"
+      return;
+    } finally {
+      setRecovering(false);
+    }
+    setRecovered(true);
+    setTicked((current) => new Set([...current, ...done]));
+    toast.success(t('recovered', { title }), {
+      action: {
+        label: t('undo'),
+        onClick: () =>
+          saveNow(before)
+            .then(() => {
+              setRecovered(false);
+              setTicked((current) => new Set([...current].filter((id) => !done.includes(id))));
+            })
+            .catch(() => {}),
+      },
+    });
+  };
+
   const progress = t('progress', { title, done: ticked.size, total: items.length });
   const theme = characterTheme(character.accentColor);
 
@@ -161,6 +206,25 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
           {t('done')}
         </Button>
       </div>
+      {recoverable.items.length > 0 && (
+        <div
+          className={cn('flex items-center gap-3 px-3 pb-2', collapsed ? 'hidden md:flex' : 'flex')}
+        >
+          <Button
+            variant="character"
+            size="sm"
+            onClick={recover}
+            loading={recovering}
+            disabled={recovered}
+            aria-describedby={`${titleId}-recover`}
+          >
+            {t('recover')}
+          </Button>
+          <p id={`${titleId}-recover`} className="text-caption text-muted-foreground">
+            {t('recoverHint')}
+          </p>
+        </div>
+      )}
       <ul
         className={`flex-col gap-1 overflow-y-auto px-3 pb-3 ${collapsed ? 'hidden md:flex' : 'flex'}`}
       >

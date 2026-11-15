@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { buildResourceBoxes } from '@shared/systems/dnd5e/class-resources';
@@ -12,6 +13,7 @@ import { RestButtons } from './RestButtons';
 const sheet = vi.hoisted(() => ({ readOnly: false }));
 
 vi.mock('next/navigation', () => ({ useParams: () => ({ id: 'c1' }) }));
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 vi.mock('@frontend/hooks/useSheetSource', () => ({
   useSheetSource: () => ({ readOnly: sheet.readOnly }),
 }));
@@ -45,6 +47,7 @@ const monk = () => ({
 const scrollIntoView = vi.fn();
 
 beforeEach(() => {
+  vi.mocked(toast.success).mockClear();
   sheet.readOnly = false;
   Element.prototype.scrollIntoView = scrollIntoView;
 });
@@ -249,5 +252,65 @@ describe('RestChecklist', () => {
     renderWithCharacter(<RestButtons />, monk());
     expect(screen.queryByRole('button', { name: 'Short rest' })).toBeNull();
     expect(screen.queryByRole('button', { name: 'Long rest' })).toBeNull();
+  });
+
+  describe('Recuperar', () => {
+    it('no longo, salva numa operação só o que volta sozinho e marca esses itens', async () => {
+      const user = userEvent.setup();
+      const { saveNow, sentNow } = renderWithCharacter(<RestButtons />, {
+        ...monk(),
+        hpCurrent: 3,
+        hpMax: 30,
+        resources: { 'class:monk:ki': { used: 4 } },
+      });
+      await user.click(screen.getByRole('button', { name: 'Long rest' }));
+
+      await user.click(screen.getByRole('button', { name: 'Recover' }));
+
+      expect(saveNow).toHaveBeenCalledTimes(1);
+      expect(sentNow()).toMatchObject({
+        hpCurrent: 30,
+        hitDice: { total: '5d8', current: 5 },
+        resources: { 'class:monk:ki': { used: 0 } },
+      });
+      expect(screen.getByRole('checkbox', { name: 'Full HP' })).toBeChecked();
+      expect(screen.getByRole('checkbox', { name: /Ki returns/ })).toBeChecked();
+      expect(screen.getByRole('button', { name: 'Recover' })).toBeDisabled();
+    });
+
+    it('Desfazer devolve o que havia e desmarca', async () => {
+      const user = userEvent.setup();
+      const { saveNow } = renderWithCharacter(<RestButtons />, {
+        ...monk(),
+        hpCurrent: 3,
+        hpMax: 30,
+      });
+      await user.click(screen.getByRole('button', { name: 'Long rest' }));
+      await user.click(screen.getByRole('button', { name: 'Recover' }));
+
+      const { action } = vi.mocked(toast.success).mock.calls[0][1] as unknown as {
+        action: { onClick: () => Promise<void> };
+      };
+      await action.onClick();
+
+      expect(saveNow).toHaveBeenLastCalledWith(
+        expect.objectContaining({ hpCurrent: 3, hitDice: { total: '5d8', current: 3 } }),
+      );
+      expect(await screen.findByRole('button', { name: 'Recover' })).toBeEnabled();
+      expect(screen.getByRole('checkbox', { name: 'Full HP' })).not.toBeChecked();
+    });
+
+    it('se falhar, não marca nada nem oferece Desfazer', async () => {
+      const user = userEvent.setup();
+      const { saveNow } = renderWithCharacter(<RestButtons />, monk());
+      saveNow.mockRejectedValueOnce(new Error('offline'));
+      await user.click(screen.getByRole('button', { name: 'Long rest' }));
+
+      await user.click(screen.getByRole('button', { name: 'Recover' }));
+
+      expect(toast.success).not.toHaveBeenCalled();
+      expect(screen.getByRole('checkbox', { name: 'Full HP' })).not.toBeChecked();
+      expect(screen.getByRole('button', { name: 'Recover' })).toBeEnabled();
+    });
   });
 });

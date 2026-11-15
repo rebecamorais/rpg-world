@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { renderWithProviders } from '@tests/helpers/render';
@@ -18,7 +18,9 @@ import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import { Backpack } from './Backpack';
 
-vi.mock('sonner', () => ({ toast: Object.assign(vi.fn(), { error: vi.fn() }) }));
+vi.mock('sonner', () => ({
+  toast: Object.assign(vi.fn(), { error: vi.fn(), dismiss: vi.fn() }),
+}));
 vi.mock('@client', () => ({
   rpgWorldApi: { get: vi.fn(), post: vi.fn(), patch: vi.fn(), delete: vi.fn() },
 }));
@@ -149,9 +151,9 @@ describe('Backpack', () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 1)]);
 
-    // At 1 the − is the trash can: there is no "one less"
-    expect(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' })).toBeEnabled();
-    expect(screen.queryByRole('button', { name: 'One less Corda de Cânhamo' })).toBeNull();
+    // At 1 the − stops; removing is its own button
+    expect(await screen.findByRole('button', { name: 'One less Corda de Cânhamo' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Remove Corda de Cânhamo' })).toBeEnabled();
     api.get.mockImplementation(async (url: string) =>
       url.startsWith('/api/items') ? CATALOG : inventory([entry('e1', ROPE, 2)]),
     );
@@ -163,7 +165,7 @@ describe('Backpack', () => {
     expect(screen.getByLabelText('Quantity of Corda de Cânhamo')).toHaveTextContent('2');
   });
 
-  it('na quantidade 1 o − vira lixeira; remover avisa e Undo devolve', async () => {
+  it('a lixeira remove, avisa e Undo devolve', async () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 1)]);
 
@@ -266,13 +268,89 @@ describe('Backpack', () => {
     expect(within(gear).getAllByText('10 lb').length).toBeGreaterThan(0);
   });
 
-  it('detalhes abertos não têm botão de remover fora do stepper', async () => {
+  it('a lixeira fica na linha com qualquer quantidade, e só uma', async () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 3)]);
 
     await user.click(await screen.findByRole('button', { name: 'Details for Corda de Cânhamo' }));
 
-    expect(screen.queryByRole('button', { name: /^Remove / })).toBeNull();
+    expect(screen.getAllByRole('button', { name: /^Remove / })).toHaveLength(1);
+    expect(screen.getByRole('button', { name: 'One less Corda de Cânhamo' })).toBeEnabled();
+  });
+
+  describe('a linha removida segura o lugar', () => {
+    /** The options of the last toast. */
+    const lastToast = () =>
+      vi.mocked(toast).mock.calls.at(-1) as unknown as [
+        string,
+        {
+          id: string;
+          action: { label: string; onClick: () => void };
+          onAutoClose: () => void;
+        },
+      ];
+
+    it('a linha fica no lugar, sem controles, até o toast fechar', async () => {
+      const user = userEvent.setup();
+      renderBackpack([entry('e1', ROPE, 1), entry('e2', TORCH, 1)]);
+      api.get.mockImplementation(async (url: string) =>
+        url.startsWith('/api/items') ? CATALOG : inventory([entry('e2', TORCH, 1)]),
+      );
+
+      await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
+
+      const gear = screen.getByRole('region', { name: 'Gear' });
+      const rows = within(gear).getAllByRole('listitem');
+      expect(rows).toHaveLength(2);
+      expect(rows[0]).toHaveTextContent('Corda de Cânhamo');
+      expect(within(rows[0]).getByRole('button', { name: 'Undo removing Corda de Cânhamo' }));
+      // Where the trash was there is nothing to tap
+      expect(within(rows[0]).queryByRole('button', { name: /^Remove / })).toBeNull();
+      // The placeholder weighs nothing
+      expect(screen.getByText('Total weight: 1 lb')).toBeInTheDocument();
+
+      act(() => lastToast()[1].onAutoClose());
+      await waitFor(() => expect(within(gear).getAllByRole('listitem')).toHaveLength(1));
+    });
+
+    it('o Desfazer da própria linha devolve o item e fecha o toast', async () => {
+      const user = userEvent.setup();
+      renderBackpack([entry('e1', ROPE, 2), entry('e2', TORCH, 1)]);
+      api.get.mockImplementation(async (url: string) =>
+        url.startsWith('/api/items') ? CATALOG : inventory([entry('e2', TORCH, 1)]),
+      );
+
+      await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
+      await user.click(screen.getByRole('button', { name: 'Undo removing Corda de Cânhamo' }));
+
+      expect(api.post).toHaveBeenCalledWith('/api/characters/c1/inventory/items?locale=en', {
+        ref: ROPE.key,
+        containerId: 'bag1',
+        quantity: 2,
+      });
+      expect(toast.dismiss).toHaveBeenCalledWith(lastToast()[1].id);
+    });
+
+    it('duas remoções seguidas viram um toast só, cujo Undo devolve as duas', async () => {
+      const user = userEvent.setup();
+      renderBackpack([entry('e1', ROPE, 1), entry('e2', TORCH, 3), entry('e3', ROPE, 1)]);
+
+      await user.click(await screen.findByRole('button', { name: 'Remove Torch' }));
+      const [first, { id }] = lastToast();
+      expect(first).toBe('Torch removed');
+      await user.click(screen.getAllByRole('button', { name: 'Remove Corda de Cânhamo' })[0]);
+
+      const [second, options] = lastToast();
+      expect(second).toBe('2 items removed');
+      // Same id: the toast is updated, not stacked over the first one's Undo
+      expect(options.id).toBe(id);
+
+      options.action.onClick();
+      await waitFor(() => expect(api.post).toHaveBeenCalledTimes(2));
+      expect(
+        api.post.mock.calls.map(([, body]) => (body as { quantity: number }).quantity),
+      ).toEqual([3, 1]);
+    });
   });
 
   it('mestre (somente leitura): a lixeira (quantidade 1) fica desativada', async () => {

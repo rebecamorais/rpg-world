@@ -144,4 +144,28 @@ describe('usePartyChannel', () => {
 
     expect(invalidate).not.toHaveBeenCalled();
   });
+
+  describe('sem conexão', () => {
+    const setOnline = (online: boolean) => {
+      vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(online);
+      window.dispatchEvent(new Event(online ? 'online' : 'offline'));
+    };
+
+    it('live fica falso offline mesmo com o canal ainda assinado, e busca de novo ao voltar', async () => {
+      const { result, queryClient } = renderHookWithProviders(() => usePartyChannel('party-1'));
+      await subscribed();
+      await act(async () => fake.state.status!('SUBSCRIBED'));
+      expect(result.current.live).toBe(true);
+      const invalidate = vi.spyOn(queryClient, 'invalidateQueries');
+
+      act(() => setOnline(false));
+      expect(result.current.live).toBe(false);
+      expect(invalidate).not.toHaveBeenCalled();
+
+      act(() => setOnline(true));
+      expect(result.current.live).toBe(true);
+      expect(invalidate).toHaveBeenCalledWith({ queryKey: encounterQueryKey('party-1') });
+      vi.restoreAllMocks();
+    });
+  });
 });

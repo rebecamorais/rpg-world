@@ -53,6 +53,10 @@ export interface CharacterUpdates {
 
 const MAX_RESOURCES = 200;
 
+// The save is a compare-and-set on the row: when another write lands between the read and the
+// write (often game state, like the GM's damage), it reads again and reapplies, a few times
+const MAX_ATTEMPTS = 3;
+
 // Campos copiados diretamente. Qualquer chave fora desta lista (id, ownerUsername, system...)
 // é ignorada para impedir mass-assignment vindo do cliente.
 const SIMPLE_FIELDS = [
@@ -95,15 +99,55 @@ export class UpdateCharacterUseCase {
     private readonly storageRepository?: StorageRepository,
   ) {}
 
+  /**
+   * Applies `updates` on top of the stored character. With `revision` (the one the client last
+   * saw), a sheet whose draft fields changed since is a conflict (409 with the current revision)
+   * and nothing is written; game state (HP, spent slots...) does not move the revision, so it
+   * never conflicts. Without it (the app published before revisions), the changes go on top of
+   * whatever is there now.
+   */
   async execute({
     id,
     ownerUsername,
     updates,
+    revision,
   }: {
     id: string;
     ownerUsername: string;
     updates: CharacterUpdates;
+    revision?: number;
   }): Promise<DnD5eCharacter> {
+    for (let attempt = 1; ; attempt++) {
+      const character = await this.load(id, ownerUsername);
+      if (revision !== undefined && revision !== character.revision) {
+        throw conflict(character.revision);
+      }
+
+      const previous = { avatarUrl: character.avatarUrl, background: character.sheetBackgroundUrl };
+      this.apply(character, updates);
+
+      let saved = await this.repository.saveIfUnchanged(character);
+      if (!saved && attempt >= MAX_ATTEMPTS) {
+        if (revision !== undefined) {
+          // Only a client that sent a revision can handle a 409
+          const current = await this.repository.findById(id);
+          if (!current) throw new CharacterError(CharacterErrorCodes.UPDATE_NOT_FOUND);
+          throw conflict(current.revision);
+        }
+        // The published app has no 409 handling: keep its old last-write-wins save
+        await this.repository.save(character);
+        // The upsert answers nothing: read back the revision the trigger left
+        character.revision = (await this.repository.findById(id))?.revision ?? character.revision;
+        saved = true;
+      }
+      if (!saved) continue;
+
+      await this.removeReplacedFiles(character, updates, previous);
+      return character;
+    }
+  }
+
+  private async load(id: string, ownerUsername: string): Promise<DnD5eCharacter> {
     const character = await findOwnedCharacter(this.repository, id, ownerUsername, 'write', {
       notFound: CharacterErrorCodes.UPDATE_NOT_FOUND,
       forbidden: CharacterErrorCodes.UPDATE_UNAUTHORIZED,
@@ -112,11 +156,12 @@ export class UpdateCharacterUseCase {
     if (!(character instanceof DnD5eCharacter)) {
       throw new CharacterError(CharacterErrorCodes.UPDATE_SYSTEM_NOT_SUPPORTED);
     }
+    return character;
+  }
 
+  private apply(character: DnD5eCharacter, updates: CharacterUpdates): void {
     const { level, hpCurrent, hpMax, attributes, skills, savingThrowProficiencies, resources } =
       updates;
-    const previousAvatarUrl = character.avatarUrl;
-    const previousSheetBackgroundUrl = character.sheetBackgroundUrl;
 
     // Aplica atualizações diretas para campos simples
     applyUpdates(character, pickSimpleUpdates(updates));
@@ -161,21 +206,23 @@ export class UpdateCharacterUseCase {
         boolean
       >;
     }
+  }
 
-    await this.repository.save(character);
-
+  private async removeReplacedFiles(
+    character: DnD5eCharacter,
+    updates: CharacterUpdates,
+    previous: { avatarUrl?: string; background?: string },
+  ): Promise<void> {
     if (this.storageRepository && updates.avatarUrl !== undefined) {
-      await removeCharacterAvatar(this.storageRepository, character, previousAvatarUrl);
+      await removeCharacterAvatar(this.storageRepository, character, previous.avatarUrl);
     }
 
     if (this.storageRepository && updates.sheetBackgroundUrl !== undefined) {
-      await removeCharacterSheetBackground(
-        this.storageRepository,
-        character,
-        previousSheetBackgroundUrl,
-      );
+      await removeCharacterSheetBackground(this.storageRepository, character, previous.background);
     }
-
-    return character;
   }
 }
+
+/** 409 with what the client needs to reload: `{ code: 'conflict', revision }`. */
+const conflict = (revision: number) =>
+  new CharacterError(CharacterErrorCodes.CONFLICT, { code: 'conflict', revision });

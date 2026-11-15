@@ -16,7 +16,13 @@ export const GET = withAuth(
 export const PUT = withAuth(
   async ({ user, body, params }) => {
     const { charactersApi } = await getApi();
-    return charactersApi.update({ id: params.id, ownerUsername: user.id, updates: body.updates });
+    // With `revision`, a sheet that changed since answers 409 { code: 'conflict', revision }
+    return charactersApi.update({
+      id: params.id,
+      ownerUsername: user.id,
+      updates: body.updates,
+      revision: body.revision,
+    });
   },
   { params: uuidParamsSchema, body: updateCharacterSchema },
 );

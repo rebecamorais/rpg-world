@@ -69,6 +69,34 @@ export class SupabaseCharacterRepository implements CharacterRepo {
   }
 
   async save(character: Character): Promise<void> {
+    const { error: charError } = await this.client.from('characters').upsert(this.toRow(character));
+
+    if (charError) {
+      throw new Error(`Failed to save character: ${charError.message}`);
+    }
+  }
+
+  async saveIfUnchanged(character: Character): Promise<boolean> {
+    // The trigger bumps row_version (and revision, on sheet changes) in the same statement; the
+    // row_version filter makes it compare-and-set
+    const { id: _id, ...row } = this.toRow(character);
+    const { data, error } = await this.client
+      .from('characters')
+      .update(row)
+      .eq('id', character.id)
+      .eq('row_version', character.rowVersion)
+      .is('deleted_at', null)
+      .select('revision, row_version');
+
+    if (error) throw new Error(`Failed to save character: ${error.message}`);
+    const saved = data[0];
+    if (!saved) return false;
+    character.revision = saved.revision;
+    character.rowVersion = saved.row_version;
+    return true;
+  }
+
+  private toRow(character: Character): DbCharacterInsert {
     const json = character.toJSON();
     const {
       hpCurrent,
@@ -84,10 +112,11 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       avatarUrl: _avatarUrl,
       sheetBackgroundUrl: _sheetBackgroundUrl,
       kind: _kind,
+      revision: _revision,
       ...rest
     } = json;
 
-    const dbRow: DbCharacterInsert = {
+    return {
       id: character.id,
       name: character.name,
       owner_id: character.ownerUsername,
@@ -103,12 +132,6 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       system_data: { ...rest, hpTemp: hpTemp ?? 0 } as unknown as NonNullable<Json>,
       updated_at: new Date().toISOString(),
     };
-
-    const { error: charError } = await this.client.from('characters').upsert(dbRow);
-
-    if (charError) {
-      throw new Error(`Failed to save character: ${charError.message}`);
-    }
   }
 
   async delete(id: string): Promise<boolean> {
@@ -144,7 +167,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
 
     if (row.system === 'dnd_5e') {
       const dndData = (row.system_data as Record<string, unknown>) || {};
-      return new DnD5eCharacter({
+      const character = new DnD5eCharacter({
         id: row.id,
         name: row.name,
         ownerUsername: row.owner_id,
@@ -181,6 +204,9 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         sheetBackgroundUrl: row.sheet_background_url ?? undefined,
         kind: row.kind as CharacterKind,
       });
+      character.revision = row.revision;
+      character.rowVersion = row.row_version;
+      return character;
     }
 
     throw new Error(`System ${row.system} not implemented in repository mapping`);

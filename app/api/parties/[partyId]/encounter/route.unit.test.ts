@@ -2,7 +2,10 @@ import { SESSION_USER, api, jsonRequest, resetApi, routeContext } from '@tests/h
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PUT as setOrder } from './order/route';
-import { PUT as setConditions } from './participants/[participantId]/conditions/route';
+import {
+  PATCH as changeCondition,
+  PUT as setConditions,
+} from './participants/[participantId]/conditions/route';
 import { PUT as setMyInitiative } from './participants/[participantId]/initiative/route';
 import {
   DELETE as removeParticipant,
@@ -91,6 +94,33 @@ describe('/api/parties/[partyId]/encounter', () => {
     const bad = await setConditions(jsonRequest(url, 'PUT', { conditions: many }), row());
     expect(bad.status).toBe(400);
     expect(api.combatApi.setConditions).not.toHaveBeenCalled();
+  });
+
+  it('condições: PATCH liga ou desliga UMA condição; corpo sem active responde 400', async () => {
+    const url = `${base}/participants/${PARTICIPANT}/conditions`;
+    const key = 'dnd5e:srd-5.2:condition:exhaustion';
+    const on = await changeCondition(
+      jsonRequest(url, 'PATCH', { key, active: true, level: 2 }),
+      row(),
+    );
+    expect(on.status).toBe(204);
+    expect(api.combatApi.changeCondition).toHaveBeenCalledWith(PARTY, PARTICIPANT, {
+      key,
+      active: true,
+      level: 2,
+    });
+
+    const off = await changeCondition(jsonRequest(url, 'PATCH', { key, active: false }), row());
+    expect(off.status).toBe(204);
+    expect(api.combatApi.changeCondition).toHaveBeenLastCalledWith(PARTY, PARTICIPANT, {
+      key,
+      active: false,
+    });
+
+    api.combatApi.changeCondition.mockClear();
+    const bad = await changeCondition(jsonRequest(url, 'PATCH', { key }), row());
+    expect(bad.status).toBe(400);
+    expect(api.combatApi.changeCondition).not.toHaveBeenCalled();
   });
 
   it('ordem e turno', async () => {

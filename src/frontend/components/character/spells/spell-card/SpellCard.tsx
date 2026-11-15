@@ -3,6 +3,7 @@
 import React, { useMemo } from 'react';
 
 import { AppIcon } from '@frontend/components/ui/icon';
+import { useIsSpellPending } from '@frontend/hooks/useCharacterSpells';
 import { cn } from '@frontend/lib/utils';
 import type { Spell } from '@frontend/types/spells';
 
@@ -37,12 +38,15 @@ export const SpellCard = React.memo(function SpellCard({
   showLevel,
 }: SpellCardProps) {
   const { theme, mainIcon, displayValues } = useSpellDisplay(spell);
+  // This spell's own write, not the whole list's: the other cards stay usable meanwhile
+  const pending = useIsSpellPending(spell.id);
 
   const quickAction = onLearnSpell ? (
     <LearnSpellAction
       isLearned={!!isLearned}
       learnLabel={displayValues.learnLabel}
       forgetLabel={displayValues.forgetLabel}
+      pending={pending}
       onLearn={() => onLearnSpell(spell.id)}
       onForget={() => onForgetSpell?.(spell.id)}
     />
@@ -51,6 +55,7 @@ export const SpellCard = React.memo(function SpellCard({
       isPrepared={!!spell.isPrepared}
       prepareLabel={displayValues.prepareLabel}
       unprepareLabel={displayValues.unprepareLabel}
+      pending={pending}
       onToggle={() => onTogglePrepared(spell.id, !spell.isPrepared)}
     />
   ) : null;
@@ -124,6 +129,7 @@ export const SpellCard = React.memo(function SpellCard({
                   <SpellActions
                     spell={spell}
                     onForgetSpell={onForgetSpell}
+                    pending={pending}
                     displayValues={displayValues}
                   />
                 </div>

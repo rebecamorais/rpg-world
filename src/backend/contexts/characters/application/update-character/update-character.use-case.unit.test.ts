@@ -376,4 +376,107 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
       expect(result.resources?.['class:monk:r0']).toEqual({ used: 4 });
     });
   });
+
+  describe('revisão', () => {
+    const save = (updates: CharacterUpdates, revision?: number) =>
+      useCase.execute({ id: 'char-1', ownerUsername: 'owner-1', updates, revision });
+
+    it('sem revisão salva por cima, como antes, e devolve a revisão nova', async () => {
+      expect((await save({ ac: 20 })).revision).toBe(1);
+      expect((await save({ ac: 18 })).revision).toBe(2);
+    });
+
+    it('com a revisão vista salva e sobe a revisão', async () => {
+      const result = await save({ ac: 20 }, 0);
+      expect(result.revision).toBe(1);
+      expect(result.ac).toBe(20);
+    });
+
+    it('com revisão antiga responde conflito com a revisão de agora e não grava', async () => {
+      await save({ ac: 20 }, 0);
+
+      await expect(save({ ac: 18 }, 0)).rejects.toMatchObject({
+        code: CharacterErrorCodes.CONFLICT,
+        kind: 'conflict',
+        details: { code: 'conflict', revision: 1 },
+      });
+      expect(((await repo.findById('char-1')) as DnD5eCharacter).ac).toBe(20);
+    });
+
+    it('escrita de outro entre a leitura e a gravação: lê de novo e aplica por cima', async () => {
+      // The first compare-and-set loses the race once, the second one goes through
+      const saveIfUnchanged = repo.saveIfUnchanged.bind(repo);
+      const spy = vi
+        .spyOn(repo, 'saveIfUnchanged')
+        .mockResolvedValueOnce(false)
+        .mockImplementation(saveIfUnchanged);
+
+      expect((await save({ ac: 15 }, 0)).ac).toBe(15);
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    it('perdendo a corrida sempre, com revisão: desiste com conflito', async () => {
+      const spy = vi.spyOn(repo, 'saveIfUnchanged').mockResolvedValue(false);
+
+      await expect(save({ ac: 15 }, 0)).rejects.toMatchObject({
+        code: CharacterErrorCodes.CONFLICT,
+        details: { code: 'conflict', revision: 0 },
+      });
+      expect(spy).toHaveBeenCalledTimes(3);
+    });
+
+    it('perdendo a corrida sempre, sem revisão (app publicado): grava por cima como antes', async () => {
+      vi.spyOn(repo, 'saveIfUnchanged').mockResolvedValue(false);
+      const upsert = vi.spyOn(repo, 'save');
+
+      const result = await save({ ac: 15 });
+      expect(result.ac).toBe(15);
+      expect(result.revision).toBe(1);
+      expect(upsert).toHaveBeenCalledTimes(1);
+    });
+
+    describe('estado de jogo não sobe a revisão', () => {
+      it.each<[string, CharacterUpdates]>([
+        ['PV atual', { hpCurrent: 3 }],
+        ['PV temporário', { hpTemp: 5 }],
+        ['testes contra a morte', { deathSaves: { successes: 1, failures: 2 } }],
+        ['avatar', { avatarUrl: 'https://example.test/a.webp' }],
+        ['fundo', { sheetBackgroundUrl: 'https://example.test/b.webp' }],
+      ])('%s', async (_label, updates) => {
+        expect((await save(updates, 0)).revision).toBe(0);
+      });
+
+      it('espaços, pontos, recursos e dados de vida gastos; o máximo sobe', async () => {
+        await save({
+          spellSlots: { '1': { max: 2, used: 0 } },
+          spellPoints: { max: 4, current: 4 },
+        });
+        await save({ hitDice: { total: '1d8', current: 1 } });
+        const base = (await repo.findById('char-1'))!.revision;
+
+        await save({ spellSlots: { '1': { max: 2, used: 1 } } }, base);
+        await save({ spellPoints: { max: 4, current: 1 } }, base);
+        await save({ hitDice: { total: '1d8', current: 0 } }, base);
+        // Spending a class box the first time creates its entry: still game state
+        await save({ resources: { 'class:monk:r0': { used: 1 } } }, base);
+        expect((await repo.findById('char-1'))!.revision).toBe(base);
+
+        expect((await save({ spellSlots: { '1': { max: 3, used: 1 } } }, base)).revision).toBe(
+          base + 1,
+        );
+        expect(
+          (await save({ resources: { 'class:monk:r0': { used: 1, hidden: true } } }, base + 1))
+            .revision,
+        ).toBe(base + 2);
+      });
+
+      it('o dano do mestre não dá conflito no rascunho da CA', async () => {
+        const seen = (await repo.findById('char-1'))!.revision;
+        await save({ hpCurrent: 2 }); // the GM, from combat
+        const result = await save({ ac: 19 }, seen);
+        expect(result.ac).toBe(19);
+        expect(result.hp.current).toBe(2);
+      });
+    });
+  });
 });

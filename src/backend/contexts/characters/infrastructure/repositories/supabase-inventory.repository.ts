@@ -6,6 +6,7 @@ import { Database } from '@database-types';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import {
+  CoinsDelta,
   InventoryContainer,
   InventoryEntry,
   InventoryRepo,
@@ -26,6 +27,12 @@ function limitError(error: { code?: string; message: string }): CharacterError |
   if (error.message === 'item_limit') return new CharacterError(CharacterErrorCodes.ITEM_LIMIT);
   if (error.message === 'container_limit') {
     return new CharacterError(CharacterErrorCodes.CONTAINER_LIMIT);
+  }
+  if (error.message === 'not_enough_coins') {
+    return new CharacterError(CharacterErrorCodes.NOT_ENOUGH_COINS);
+  }
+  if (error.message === 'item_quantity_conflict') {
+    return new CharacterError(CharacterErrorCodes.ITEM_QUANTITY_CONFLICT);
   }
   return null;
 }
@@ -65,14 +72,13 @@ export class SupabaseInventoryRepository implements InventoryRepo {
     return { containers, items };
   }
 
-  async addItem(ownerId: string, containerId: string, ref: string, quantity: number) {
+  async addItem(ownerId: string, containerId: string, ref: string, quantity: number, key?: string) {
     if (!(await this.ownsContainer(ownerId, containerId))) return null;
 
-    const { data, error } = await this.client.rpc('add_inventory_item', {
-      p_container_id: containerId,
-      p_item_ref: ref,
-      p_quantity: quantity,
-    });
+    const args = { p_container_id: containerId, p_item_ref: ref, p_quantity: quantity };
+    const { data, error } = key
+      ? await this.client.rpc('add_inventory_item_once', { ...args, p_key: key })
+      : await this.client.rpc('add_inventory_item', args);
     if (error) throw limitError(error) ?? new Error(`Failed to add item: ${error.message}`);
     return toEntry(data);
   }
@@ -87,6 +93,17 @@ export class SupabaseInventoryRepository implements InventoryRepo {
       .select('id');
     if (error) throw new Error(`Failed to set item quantity: ${error.message}`);
     return data.length > 0;
+  }
+
+  async changeQuantity(ownerId: string, itemId: string, delta: number, key: string) {
+    const { data, error } = await this.client.rpc('change_inventory_item_quantity', {
+      p_owner_id: ownerId,
+      p_item_id: itemId,
+      p_delta: delta,
+      p_key: key,
+    });
+    if (error) throw limitError(error) ?? new Error(`Failed to change quantity: ${error.message}`);
+    return data;
   }
 
   async remove(ownerId: string, itemId: string) {
@@ -110,6 +127,17 @@ export class SupabaseInventoryRepository implements InventoryRepo {
       .select('id');
     if (error) throw new Error(`Failed to set coins: ${error.message}`);
     return data.length > 0;
+  }
+
+  async changeCoins(ownerId: string, containerId: string, delta: CoinsDelta, key: string) {
+    const { data, error } = await this.client.rpc('change_container_coins', {
+      p_owner_id: ownerId,
+      p_container_id: containerId,
+      p_delta: delta,
+      p_key: key,
+    });
+    if (error) throw limitError(error) ?? new Error(`Failed to change coins: ${error.message}`);
+    return data as Coins | null;
   }
 
   private async containerIds(ownerId: string): Promise<string[]> {

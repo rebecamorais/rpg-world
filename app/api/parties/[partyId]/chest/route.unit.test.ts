@@ -1,7 +1,9 @@
 import { api, jsonRequest, resetApi, routeContext } from '@tests/helpers/mock-api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { PUT } from './coins/route';
+import { AppError } from '@backend/shared/domain/AppError';
+
+import { PATCH as CHANGE_COINS, PUT } from './coins/route';
 import { DELETE, PATCH } from './items/[itemId]/route';
 import { POST } from './items/route';
 import { GET } from './route';
@@ -13,6 +15,7 @@ const CONTAINER = '0b8f6a52-3c1d-4e7a-8d2b-5a9c7e1f4b30';
 const ITEM = '9a3b1c2d-4e5f-4a6b-8c7d-0e1f2a3b4c5d';
 const base = `/api/parties/${PARTY}/chest`;
 const coins = { cp: 0, sp: 3, ep: 0, gp: 12, pp: 1 };
+const KEY = '3d2c1b0a-9f8e-4d7c-8b6a-5f4e3d2c1b0a';
 
 describe('/api/parties/[partyId]/chest', () => {
   beforeEach(() => resetApi());
@@ -80,5 +83,54 @@ describe('/api/parties/[partyId]/chest', () => {
     );
     expect(res.status).toBe(400);
     expect(api.charactersApi.setPartyChestItemQuantity).not.toHaveBeenCalled();
+  });
+
+  it('PATCH com delta e chave soma na quantidade e devolve a nova', async () => {
+    api.charactersApi.changePartyChestItemQuantity.mockResolvedValue({ quantity: 4 });
+
+    const res = await PATCH(
+      jsonRequest(`${base}/items/${ITEM}`, 'PATCH', { delta: -1, key: KEY }),
+      routeContext({ partyId: PARTY, itemId: ITEM }),
+    );
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ quantity: 4 });
+    expect(api.charactersApi.changePartyChestItemQuantity).toHaveBeenCalledWith(PARTY, ITEM, {
+      delta: -1,
+      key: KEY,
+    });
+    expect(api.charactersApi.setPartyChestItemQuantity).not.toHaveBeenCalled();
+  });
+
+  it('PATCH das moedas soma a diferença com a chave e devolve as moedas de agora', async () => {
+    api.charactersApi.changePartyChestCoins.mockResolvedValue({ coins });
+
+    const res = await CHANGE_COINS(
+      jsonRequest(`${base}/coins`, 'PATCH', { containerId: CONTAINER, delta: { gp: 1 }, key: KEY }),
+      routeContext({ partyId: PARTY }),
+    );
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ coins });
+    expect(api.charactersApi.changePartyChestCoins).toHaveBeenCalledWith(PARTY, CONTAINER, {
+      delta: { gp: 1 },
+      key: KEY,
+    });
+  });
+
+  it('PATCH das moedas: sem chave ou com moeda desconhecida é 400; gastar demais é 409', async () => {
+    const send = (body: unknown) =>
+      CHANGE_COINS(jsonRequest(`${base}/coins`, 'PATCH', body), routeContext({ partyId: PARTY }));
+
+    expect((await send({ containerId: CONTAINER, delta: { gp: 1 } })).status).toBe(400);
+    expect((await send({ containerId: CONTAINER, delta: { xp: 1 }, key: KEY })).status).toBe(400);
+    expect(api.charactersApi.changePartyChestCoins).not.toHaveBeenCalled();
+
+    api.charactersApi.changePartyChestCoins.mockRejectedValue(
+      new AppError('character_error_not_enough_coins', 'conflict'),
+    );
+    const res = await send({ containerId: CONTAINER, delta: { gp: -500 }, key: KEY });
+    expect(res.status).toBe(409);
+    expect(await res.json()).toEqual({ error: 'character_error_not_enough_coins' });
   });
 });
