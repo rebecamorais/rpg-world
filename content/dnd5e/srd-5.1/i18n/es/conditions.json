@@ -8,11 +8,11 @@
     "description": "• Una criatura hechizada no puede atacar ni elegir como objetivo de efectos dañinos o mágicos a quien la hechizó.\n• Quien hechizó a la criatura tiene ventaja en las pruebas de característica para interaccionar socialmente con ella."
   },
   "deafened": {
-    "name": "Ensordecido",
+    "name": "Sordo",
     "description": "• Una criatura ensordecida no puede oír y falla automáticamente cualquier prueba de característica que requiera el oído."
   },
   "exhaustion": {
-    "name": "Cansancio",
+    "name": "Agotamiento",
     "description": "Algunas capacidades especiales y ciertos peligros ambientales, como la inanición o una larga exposición a los efectos de unas temperaturas particularmente frías o calientes, pueden producir un estado especial llamado “cansancio”. El cansancio se mide con seis niveles. Un efecto puede sumar uno o más niveles de cansancio a una criatura, según se especifique en la descripción de dicho efecto.\nNivel | Efecto\n1 | Desventaja en pruebas de característica\n2 | Velocidad reducida a la mitad\n3 | Desventaja en tiradas de ataque y de salvación\n4 | Puntos de golpe máximos reducidos a la mitad\n5 | Velocidad reducida a 0\n6 | Muerte\nSi una criatura que ya está cansada sufre un efecto que provoca cansancio, su nivel de cansancio actual aumentará en la cantidad especificada en la descripción de dicho efecto.\nUna criatura sufre el efecto de su nivel de cansancio actual, pero también el de los niveles inferiores. Por ejemplo, si sufre un nivel de cansancio 2, tendrá su velocidad reducida a la mitad y desventaja en las pruebas de característica.\nLos efectos que eliminan cansancio reducen el nivel de este en la cantidad que especifique su descripción y todos sus efectos desaparecen si el nivel de cansancio de una criatura desciende a menos de 1.\nSi se finaliza un descanso largo, el nivel de cansancio de una criatura se reduce en 1, siempre que haya podido comer y beber algo."
   },
   "frightened": {
@@ -48,7 +48,7 @@
     "description": "• Una criatura derribada solo podrá moverse arrastrándose, salvo que se levante para concluir este estado.\n• La criatura tiene desventaja en las tiradas de ataque.\n• Las tiradas de ataque contra la criatura tienen ventaja si el atacante está a 1,5 m o menos de ella. Si no es así, las tiradas de ataque tienen desventaja."
   },
   "restrained": {
-    "name": "Apresado",
+    "name": "Restringido",
     "description": "• La velocidad de una criatura apresada pasa a ser 0 y no puede beneficiarse de ningún bonificador a su velocidad.\n• Las tiradas de ataque contra la criatura tienen ventaja y las tiradas de ataque realizadas por la criatura tienen desventaja.\n• La criatura tiene desventaja en las tiradas de salvación de Destreza."
   },
   "stunned": {
