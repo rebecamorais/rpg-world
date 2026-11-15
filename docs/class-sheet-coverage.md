@@ -1,8 +1,8 @@
 # Matriz de cobertura e fases — classe na ficha, SRD 5.1 / Coverage matrix and phases — class on the sheet, SRD 5.1
 
-> **RASCUNHO para revisão (#181).** Complemento do [mapa](class-sheet-map.md). Tudo aqui é **PROPOSTA**: nenhum destino, fase ou critério está aprovado.
+> **Planejamento (#181).** Complemento do [mapa](class-sheet-map.md). Destinos, fases e critérios são **PROPOSTA**. Aprovadas pela Rebeca em 2026-11-15: as decisões 1, 2, 7 e 9, que liberam a **Fase 1**.
 >
-> **DRAFT for review (#181).** Companion to the [map](class-sheet-map.md). Everything here is a **PROPOSAL**; no destination, phase or criterion is approved. English summary at the end.
+> **Planning (#181).** Companion to the [map](class-sheet-map.md). Destinations, phases and criteria are a **PROPOSAL**. Approved by Rebeca on 2026-11-15: decisions 1, 2, 7 and 9, which unblock **Phase 1**. English summary at the end.
 
 ## PT
 
@@ -281,7 +281,7 @@ Cinco fases pequenas, cada uma entregável sozinha. A ordem importa: a fase 1 n�
 
 Campos, ids, padrão + ajuste, e o que acontece com ficha antiga. Sem tela nova.
 
-- Depende de: decisões 1 (contrato), 2 (dados de vida), 7 (deslocamento), 9 (edição).
+- Depende de: decisões 1 (contrato), 2 (dados de vida), 7 (deslocamento), 9 (edição). **As quatro foram aprovadas em 2026-11-15: a fase está liberada.**
 - **Critérios de aceite**
   - Uma ficha existente, aberta e salva depois da mudança, tem **exatamente** os mesmos valores visíveis de antes: salvaguardas, perícias, máximos de espaços, CD e ataque de magia, PV, CA, deslocamento, dado de vida.
   - O dado de vida é lido de `1d8`, `5d8` e vazio com o mesmo resultado; a quantidade mostrada é sempre o nível.
