@@ -175,6 +175,31 @@ describe('Sidebar', () => {
       expect(panel()).toHaveAttribute('data-expanded', 'false');
     });
 
+    it('recolher pelo teclado com o mouse fora: o mouse que chega depois abre o menu', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Sidebar initialPinned />);
+
+      sidebar().getByRole('button', { name: tDash.collapseMenu }).focus();
+      await user.keyboard('{Enter}');
+      expect(panel()).toHaveAttribute('data-expanded', 'false');
+
+      // No mouseLeave before: the pointer was never on the menu
+      fireEvent.mouseEnter(screen.getByRole('complementary'));
+      expect(panel()).toHaveAttribute('data-expanded', 'true');
+    });
+
+    it('Esc no trilho aberto pelo foco, com o mouse fora: o mouse que chega depois abre o menu', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(<Sidebar initialPinned={false} />);
+
+      await user.tab();
+      await user.keyboard('{Escape}');
+      expect(panel()).toHaveAttribute('data-expanded', 'false');
+
+      fireEvent.mouseEnter(screen.getByRole('complementary'));
+      expect(panel()).toHaveAttribute('data-expanded', 'true');
+    });
+
     it('recolhido, cresce com o mouse e encolhe quando ele sai', () => {
       renderWithProviders(<Sidebar initialPinned={false} />);
       expect(panel()).toHaveAttribute('data-expanded', 'false');

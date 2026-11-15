@@ -36,7 +36,9 @@ export default async function GlobalHeader({ session }: { session: 'server' | 'c
             size={40}
             className="text-primary-flare shrink-0"
           />
-          <span className="font-display sr-only text-2xl font-bold whitespace-nowrap sm:not-sr-only">
+          {/* From md: between 640 and 767px, signed in, the right side ("My characters", "Sign
+              out", theme, contact, language) needs the room, in Portuguese most of all */}
+          <span className="font-display sr-only text-2xl font-bold whitespace-nowrap md:not-sr-only">
             {tHome('title')}
           </span>
         </Link>

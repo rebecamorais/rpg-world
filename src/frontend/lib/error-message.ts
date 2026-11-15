@@ -28,15 +28,18 @@ export function statusOf(err: unknown): number | undefined {
   return typeof status === 'number' ? status : undefined;
 }
 
+/** Answers that say "not now" rather than "no": too many requests, and a request that timed out. */
+const TRANSIENT_STATUSES = new Set([408, 429]);
+
 /**
  * Whether sending the very same request again can work: it never got an answer (the connection),
- * or the server failed (5xx). Any other answer (409 conflict, 404 gone, 400 invalid) would come
- * back the same, so offering "Try again" there only fails twice.
+ * the server failed (5xx), or it asked to wait (408, 429). Any other answer (409 conflict, 404
+ * gone, 400 invalid) would come back the same, so offering "Try again" there only fails twice.
  */
 export function isRetryable(err: unknown): boolean {
   if (isNetworkError(err)) return true;
   const status = statusOf(err);
-  return status !== undefined && status >= 500;
+  return status !== undefined && (status >= 500 || TRANSIENT_STATUSES.has(status));
 }
 
 /**

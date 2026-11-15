@@ -71,6 +71,10 @@ test('logada, o 404 leva aos personagens, não à landing', async ({ page, user:
   const response = await page.goto('/esta-pagina-nao-existe');
 
   expect(response?.status()).toBe(404);
+  // The logo stays the site's: home, as in the signed-in header
+  await expect(
+    page.getByRole('banner').getByRole('link', { name: 'Go to the home page' }),
+  ).toHaveAttribute('href', '/');
   await page.getByRole('main').getByRole('link', { name: 'Go to my characters' }).click();
   await expect(page).toHaveURL(/\/characters$/);
 });

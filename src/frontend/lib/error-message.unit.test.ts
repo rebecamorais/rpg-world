@@ -93,6 +93,10 @@ describe('isRetryable', () => {
     expect(isRetryable(new APIError('common_error_unexpected', status))).toBe(true);
   });
 
+  it.each([408, 429])('an answer asking to wait (%i) can work next time', (status) => {
+    expect(isRetryable(new APIError('common_error_rate_limited', status))).toBe(true);
+  });
+
   it.each([400, 403, 404, 409])('an answer that would come back the same (%i) is not', (status) => {
     expect(isRetryable(new APIError('character_error_conflict', status))).toBe(false);
   });

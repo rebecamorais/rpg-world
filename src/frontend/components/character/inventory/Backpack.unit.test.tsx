@@ -197,6 +197,20 @@ describe('Backpack', () => {
     );
   });
 
+  it('dois toques na lixeira antes de a linha virar o lugar guardado removem uma vez só', async () => {
+    renderBackpack([entry('e1', ROPE, 1), entry('e2', ROPE, 2)]);
+    const trash = (await screen.findAllByRole('button', { name: 'Remove Corda de Cânhamo' }))[0];
+
+    // The same button, tapped again before the removed row takes its place
+    fireEvent.click(trash);
+    fireEvent.click(trash);
+
+    await waitFor(() => expect(toast).toHaveBeenCalled());
+    expect(api.delete).toHaveBeenCalledTimes(1);
+    // One removal in the toast, not "2 items removed"
+    expect(vi.mocked(toast).mock.calls.at(-1)?.[0]).toBe('Corda de Cânhamo removed');
+  });
+
   it('remover pela lixeira leva o foco ao item seguinte, não ao topo da página', async () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', ROPE, 1), entry('e2', TORCH, 1)]);

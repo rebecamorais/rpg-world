@@ -16,8 +16,8 @@ export const metadata: Metadata = { title: 'Page not found · Página não encon
 /**
  * The 404 for any URL no route matches. The root layout is app/[locale], which a 404 can't
  * compose with, so this page brings its own document, styles and fonts. It doesn't know the
- * visitor's language, so it says it in both. Signed in, the way out is the app (the characters),
- * not the landing page.
+ * visitor's language, so it says it in both. Signed in, the way out in the page is the app (the
+ * characters), not the landing page; the logo goes home, as in the site's header.
  */
 export default async function GlobalNotFound() {
   const [en, pt, user] = await Promise.all([
@@ -42,7 +42,7 @@ export default async function GlobalNotFound() {
         className={`${fontVariables} bg-background text-foreground flex min-h-screen flex-col antialiased`}
       >
         <header className="border-border bg-card flex h-[var(--header-height)] items-center border-b px-4 sm:px-8">
-          <Link href={home} className="focus-ring rounded-md" aria-label={en(homeLabel)}>
+          <Link href="/" className="focus-ring rounded-md" aria-label={en('home')}>
             <AppIcon name="dice-fire" variant="game" size={40} className="text-primary-flare" />
           </Link>
         </header>

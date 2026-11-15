@@ -384,7 +384,7 @@
       "missing": "Not enough money: {amount} short.",
       "tooMany": "The pouch holds at most {max} of each coin.",
       "confirm": "Confirm",
-      "changedElsewhere": "Changed somewhere else: it's now {amount}. What you typed was not saved."
+      "changedElsewhere": "Changed somewhere else: {count, plural, one {it's now # {coin}} other {it's now # {coin}}}. What you typed was not saved."
     },
     "inventory": {
       "itemGone": "This item was already taken out somewhere else. The list was updated.",

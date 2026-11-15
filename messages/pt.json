@@ -384,7 +384,7 @@
       "missing": "Dinheiro insuficiente: faltam {amount}.",
       "tooMany": "A algibeira guarda no máximo {max} de cada moeda.",
       "confirm": "Confirmar",
-      "changedElsewhere": "Mudou em outro lugar: agora são {amount}. O valor digitado não foi salvo."
+      "changedElsewhere": "Mudou em outro lugar: {count, plural, one {agora é # {coin}} other {agora são # {coin}}}. O valor digitado não foi salvo."
     },
     "inventory": {
       "itemGone": "Este item já saiu daqui em outro lugar. A lista foi atualizada.",

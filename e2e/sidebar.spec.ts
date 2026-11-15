@@ -1,4 +1,4 @@
-import { expect, hydrated, test } from './support/fixtures';
+import { characterUrl, createCharacter, expect, hydrated, test } from './support/fixtures';
 
 test('o menu recolhe em ícones, cresce com o mouse sem mover a página e a escolha fica', async ({
   page,
@@ -106,6 +106,29 @@ test('"Recolher menu" fica no pé do menu, longe do nome da pessoa', async ({ pa
   expect(collapse.y).toBeGreaterThan(newCharacter.y + newCharacter.height);
   // At the foot of the visible menu (the header is 80px)
   expect(collapse.y + collapse.height).toBeGreaterThan(800 - 80);
+});
+
+test('numa página longa, rolada além do header, o menu vai até o fim da tela', async ({
+  page,
+  user: _,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const id = await createCharacter(page, 'Long Sheet');
+  await page.goto(characterUrl(id));
+  const collapse = page.getByRole('complementary').getByRole('button', { name: 'Collapse menu' });
+  await hydrated(collapse);
+
+  // Unscrolled, the header takes the top and the button still sits at the bottom of the screen
+  let box = (await collapse.boundingBox())!;
+  expect(box.y + box.height).toBeGreaterThan(800 - 24);
+  expect(box.y + box.height).toBeLessThanOrEqual(800);
+
+  await page.mouse.move(800, 400);
+  await page.mouse.wheel(0, 400);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(80);
+  box = (await collapse.boundingBox())!;
+  expect(box.y + box.height).toBeGreaterThan(800 - 24);
+  expect(box.y + box.height).toBeLessThanOrEqual(800);
 });
 
 test('pular para o conteúdo cai na página: o menu lateral fica fora do main', async ({

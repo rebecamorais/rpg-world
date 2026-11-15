@@ -1,10 +1,13 @@
 import { act, waitFor } from '@testing-library/react';
 import { renderHookWithProviders } from '@tests/helpers/render';
+import { createTranslator } from 'next-intl';
 import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
 
+import en from '../../../messages/en.json';
+import pt from '../../../messages/pt.json';
 import { coinsDelta, useInventory, usePartyChest } from './useInventory';
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
@@ -389,6 +392,34 @@ describe('useInventory', () => {
       expect(retryAction()).toBeUndefined();
       // The refetch brings what the server has, not what was typed
       await waitFor(() => expect(result.current.pouch?.coins.gp).toBe(55));
+    });
+
+    it('mudou em outro lugar com 1 moeda: a frase concorda com o número', async () => {
+      const request = failLater(
+        answered(409, 'character_error_coins_changed', { coins: { ...ZERO, gp: 1 } }),
+      );
+      api.patch.mockReturnValueOnce(request.promise);
+      const { result } = await renderInventory();
+
+      act(() => result.current.setCoinTo('gp', 70, 5));
+      await waitFor(() => expect(result.current.pouch?.coins.gp).toBe(70));
+      act(() => request.fail());
+
+      await waitFor(() => expect(toast.error).toHaveBeenCalled());
+      expect(vi.mocked(toast.error).mock.lastCall?.[0]).toBe(
+        "Changed somewhere else: it's now 1 GP. What you typed was not saved.",
+      );
+    });
+
+    it.each([
+      ['pt', pt, 1, 'Mudou em outro lugar: agora é 1 PO. O valor digitado não foi salvo.'],
+      ['pt', pt, 55, 'Mudou em outro lugar: agora são 55 PO. O valor digitado não foi salvo.'],
+      ['pt', pt, 1200, 'Mudou em outro lugar: agora são 1.200 PO. O valor digitado não foi salvo.'],
+      ['en', en, 1, "Changed somewhere else: it's now 1 GP. What you typed was not saved."],
+      ['en', en, 1200, "Changed somewhere else: it's now 1,200 GP. What you typed was not saved."],
+    ])('o aviso em %s com %i concorda no plural', (locale, messages, count, text) => {
+      const t = createTranslator({ locale, messages, namespace: 'characters.coins' });
+      expect(t('changedElsewhere', { count, coin: t('gp.short') })).toBe(text);
     });
 
     it('erro do servidor (5xx): volta ao que era e oferece "Tentar de novo" com a mesma chave', async () => {

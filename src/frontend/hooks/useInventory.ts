@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useFormatter, useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
@@ -79,7 +79,6 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
   const t = useTranslations('common');
   const tCoins = useTranslations('characters.coins');
   const tInventory = useTranslations('characters.inventory');
-  const formatter = useFormatter();
   const key = ['inventory', ownerKey, locale];
   const mutationKey = ['inventory-write', ownerKey, locale];
 
@@ -179,8 +178,8 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
   const typedCoinMessage = (err: unknown, coin: Coin) => {
     const now = (err as { data?: { coins?: Partial<Coins> } } | undefined)?.data?.coins?.[coin];
     if (statusOf(err) !== 409 || typeof now !== 'number') return undefined;
-    const amount = `${formatter.number(now)} ${tCoins(`${coin}.short`)}`;
-    return tCoins('changedElsewhere', { amount });
+    // Count and coin apart: the ICU plural agrees with the count ("agora é 1 PO", "agora são 55 PO")
+    return tCoins('changedElsewhere', { count: now, coin: tCoins(`${coin}.short`) });
   };
 
   // The callbacks name their return type: they call their own mutation (the retry), and an

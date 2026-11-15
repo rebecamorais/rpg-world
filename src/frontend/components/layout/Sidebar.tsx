@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
@@ -69,18 +69,8 @@ function UserAvatar() {
   );
 }
 
-/**
- * `withLogout`: the phone drawer; on the desktop the header's user menu has "Sign out".
- * `action`: at the foot of the menu, the desktop control to keep it open or collapse it. Under
- * the username it read as an account item.
- */
-function SidebarContent({
-  withLogout = false,
-  action,
-}: {
-  withLogout?: boolean;
-  action?: ReactNode;
-}) {
+/** `withLogout`: the phone drawer; on the desktop the header's user menu has "Sign out". */
+function SidebarContent({ withLogout = false }: { withLogout?: boolean }) {
   const params = useParams();
   const pathname = usePathname();
   const characterId = params?.id as string;
@@ -142,6 +132,9 @@ function SidebarContent({
                 className={cn(
                   'grid transition-[grid-template-rows] duration-200',
                   expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
+                  // Before hydration (globals.css), folded where the strip is a rail, so the
+                  // icons below stay where the rail has them
+                  'sm:max-lg:[[data-sidebar=auto]_&]:grid-rows-[0fr]',
                 )}
               >
                 <div className="min-h-0 overflow-hidden">
@@ -167,8 +160,6 @@ function SidebarContent({
           {characterId && <CharacterNavSection characterId={characterId} />}
         </nav>
       </div>
-
-      {action && <div className="mt-auto pt-6">{action}</div>}
 
       {withLogout && (
         <div className="mt-auto pt-6">
@@ -218,11 +209,16 @@ export default function Sidebar({ initialPinned }: { initialPinned?: boolean }) 
   // still on it; it grows again only once that has left it
   const holdHover = useRef(false);
   const holdFocus = useRef(false);
+  const pointerInside = useRef(false);
+  const asideRef = useRef<HTMLElement>(null);
   const expanded = pinned !== false || hovered || focused;
 
+  // Holds only what is still on the menu: after the keyboard or Esc closed it with the pointer
+  // elsewhere, the next mouseenter has to open it
   const close = () => {
-    holdHover.current = true;
-    holdFocus.current = true;
+    // :hover too: a pointer resting on the menu since the page loaded never sent a mouseenter
+    holdHover.current = pointerInside.current || Boolean(asideRef.current?.matches(':hover'));
+    holdFocus.current = Boolean(asideRef.current?.contains(document.activeElement));
     setHovered(false);
     setFocused(false);
   };
@@ -236,11 +232,14 @@ export default function Sidebar({ initialPinned }: { initialPinned?: boolean }) 
 
   return (
     <aside
+      ref={asideRef}
       data-sidebar={mode}
       onMouseEnter={() => {
+        pointerInside.current = true;
         if (!holdHover.current) setHovered(true);
       }}
       onMouseLeave={() => {
+        pointerInside.current = false;
         holdHover.current = false;
         setHovered(false);
       }}
@@ -264,6 +263,8 @@ export default function Sidebar({ initialPinned }: { initialPinned?: boolean }) 
     >
       <SidebarExpandedContext.Provider value={expanded}>
         <div
+          // data-sidebar-panel: what globals.css styles before hydration; the testid is for tests
+          data-sidebar-panel
           data-testid="sidebar-panel"
           data-expanded={expanded}
           className={cn(
@@ -273,9 +274,17 @@ export default function Sidebar({ initialPinned }: { initialPinned?: boolean }) 
           )}
         >
           {/* Sticky: stays on screen on a long page, where the panel itself runs past the fold.
-              As tall as the screen under the header, so "Collapse menu" sits at its foot */}
-          <div className="sticky top-0 flex h-[calc(100dvh-var(--header-height))] w-64 flex-col overflow-x-hidden overflow-y-auto px-3 pt-6 pb-2">
-            <SidebarContent action={<PinButton pinned={pinned !== false} onToggle={toggle} />} />
+              As tall as the screen once the header has scrolled away, never past the panel (a
+              short page); the links scroll inside it. Not a scroll container itself, so "Collapse
+              menu" sticks to the bottom of the screen while the header still takes its top */}
+          <div className="sticky top-0 flex h-dvh max-h-full w-64 flex-col">
+            <div className="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto px-3 pt-6">
+              <SidebarContent />
+            </div>
+            {/* At the foot of the menu: under the username it read as an account item */}
+            <div className="bg-sidebar sticky bottom-0 px-3 pt-6 pb-2">
+              <PinButton pinned={pinned !== false} onToggle={toggle} />
+            </div>
           </div>
         </div>
       </SidebarExpandedContext.Provider>

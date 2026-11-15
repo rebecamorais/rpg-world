@@ -540,10 +540,14 @@
     }
   }
   /* Until hydration says which, 'auto' draws the open menu inside the rail's width: its labels
-     would peek out of the strip for a moment */
+     would peek out of the strip for a moment. Only the icons and the avatar show, where the rail
+     keeps them (Sidebar folds the party links the same way) */
   @media (40rem <= width < 64rem) {
-    [data-sidebar='auto'] [data-testid='sidebar-panel'] > * {
+    [data-sidebar='auto'] [data-sidebar-panel] > * {
       visibility: hidden;
+    }
+    [data-sidebar='auto'] [data-sidebar-panel] :is(svg, [data-slot='avatar']) {
+      visibility: visible;
     }
   }
 
