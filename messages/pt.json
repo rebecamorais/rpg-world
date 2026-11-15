@@ -556,6 +556,9 @@
     "speedShort": "Desloc.",
     "passivePerceptionShort": "Percepção"
   },
+  "hitDiceRemaining": {
+    "label": "Dados de vida restantes"
+  },
   "spellsDrawer": {
     "searchPlaceholder": "Buscar magia…",
     "learn": "Aprender",

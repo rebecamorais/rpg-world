@@ -556,6 +556,9 @@
     "speedShort": "Speed",
     "passivePerceptionShort": "Perception"
   },
+  "hitDiceRemaining": {
+    "label": "Hit dice remaining"
+  },
   "spellsDrawer": {
     "searchPlaceholder": "Search spells…",
     "learn": "Learn",
