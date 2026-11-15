@@ -111,6 +111,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## Tradução em português do Brasil do SRD 5.2: decito/dnd5e-pt-br
+
+Os nomes em português das classes, subclasses e características do SRD 5.2
+(`content/dnd5e/srd-5.2/i18n/pt/classes.json`) que não vêm do módulo acima são sugeridos a partir do
+módulo "Translation: Português (Brasil) [D&D 5E](SRD)" para o Foundry VTT, de decito, java3040 e
+MagelaCE: <https://github.com/decito/dnd5e-pt-br>. Ele continua o módulo do Foundry VTT Brasil e
+traduz material do System Reference Document 5.2 da Wizards of the Coast LLC (CC BY 4.0, atribuição
+acima). Os nomes são enviados ao Weblate por `npm run content:foundry-class-names` e só entram
+depois de conferidos. O repositório não declara uma licença própria para o texto traduzido.
+
 ## Game Icons
 
 Ícones de <https://game-icons.net> por Lorc, Delapouite e colaboradores, licenciados sob

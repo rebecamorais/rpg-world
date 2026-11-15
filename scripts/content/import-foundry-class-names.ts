@@ -15,8 +15,13 @@ import path from 'node:path';
 
 import { writeFormatted } from '../write-formatted';
 import { type TextTree, translateClassNames } from './foundry-class-names';
-import { type NameIndex, esNameIndex, ptNameIndex } from './foundry-names';
-import { fetchDnd5eClassNames, fetchEsClasses, fetchPtCompendia } from './foundry-sources';
+import { type NameIndex, firstOf, idNameIndex, ptNameIndex } from './foundry-names';
+import {
+  fetchDnd5eClassNames,
+  fetchEsClasses,
+  fetchPtClasses24,
+  fetchPtCompendia,
+} from './foundry-sources';
 import { componentOf, languageOf, readToken, uploadSuggestions } from './weblate-translations';
 
 const ROOT = path.join(import.meta.dirname, '../..');
@@ -31,18 +36,20 @@ if (!dryRun && !token) {
 const readJson = (file: string): TextTree =>
   existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')) as TextTree) : {};
 
-const [ptFiles, esEntries, enNameById] = await Promise.all([
+const [ptFiles, pt24Entries, esEntries, enNameById] = await Promise.all([
   fetchPtCompendia(),
+  fetchPtClasses24(),
   fetchEsClasses(),
   fetchDnd5eClassNames(),
 ]);
 const pt = ptNameIndex(ptFiles);
-const es = esNameIndex(esEntries, enNameById);
+const pt24 = idNameIndex(pt24Entries, enNameById);
+const es = idNameIndex(esEntries, enNameById);
 
 const batches: { book: string; locale: 'pt' | 'es'; index: NameIndex }[] = [
   { book: 'srd-5.1', locale: 'pt', index: pt },
-  // 5.2 has no pt source: the 5.1 names are reused when the English name didn't change
-  { book: 'srd-5.2', locale: 'pt', index: pt },
+  // What decito lacks reuses the 5.1 name, when the English name didn't change
+  { book: 'srd-5.2', locale: 'pt', index: firstOf(pt24, pt) },
   { book: 'srd-5.2', locale: 'es', index: es },
 ];
 

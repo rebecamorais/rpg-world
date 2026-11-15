@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { cleanName, esNameIndex, ptNameIndex } from './foundry-names';
+import { cleanName, firstOf, idNameIndex, ptNameIndex } from './foundry-names';
 
 describe('ptNameIndex', () => {
   const index = ptNameIndex([
@@ -40,14 +40,14 @@ describe('ptNameIndex', () => {
     expect(index.get('Weapon Mastery', ['Fighter'])).toBeUndefined());
 });
 
-describe('esNameIndex', () => {
+describe('idNameIndex', () => {
   const ids = new Map([
     ['a', 'Rage'],
     ['b', 'Spellcasting'],
     ['c', 'Spellcasting'],
     ['d', 'Rage'],
   ]);
-  const index = esNameIndex(
+  const index = idNameIndex(
     {
       a: { name: 'Furia' },
       b: { name: 'Lanzamiento de conjuros' },
@@ -65,6 +65,21 @@ describe('esNameIndex', () => {
     expect(index.ambiguous).toContain('Spellcasting');
     expect(index.ambiguous).not.toContain('Rage');
   });
+});
+
+describe('firstOf', () => {
+  const first = ptNameIndex([{ Rage: { name: 'Fúria' } }]);
+  const second = ptNameIndex([
+    { Rage: { name: 'Raiva' }, 'Sneak Attack': { name: 'Ataque Furtivo' } },
+  ]);
+  const index = firstOf(first, second);
+
+  it('prefers the first index', () => expect(index.get('Rage', [])).toBe('Fúria'));
+
+  it('falls back to the next one', () =>
+    expect(index.get('Sneak Attack', [])).toBe('Ataque Furtivo'));
+
+  it('misses what none has', () => expect(index.get('Ki', [])).toBeUndefined());
 });
 
 describe('cleanName', () => {
