@@ -15,7 +15,11 @@ test('no celular, a faixa do descanso fica acima da barra de abas e o "go" recol
   expect(res.ok()).toBe(true);
   await page.goto(characterUrl(id));
 
-  await (await hydrated(page.getByRole('button', { name: 'Short rest' }))).click();
+  const shortRest = await hydrated(page.getByRole('button', { name: 'Short rest' }));
+  // The header's actions wrap: nothing widens the page past the phone
+  const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+  expect(scrollWidth).toBeLessThanOrEqual(page.viewportSize()!.width);
+  await shortRest.click();
   const bar = page.getByRole('complementary', { name: /^Short rest/ });
   await expect(bar).toBeVisible();
 

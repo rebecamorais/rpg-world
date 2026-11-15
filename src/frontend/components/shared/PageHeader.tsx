@@ -42,7 +42,12 @@ export function PageHeader({
           <p className="text-body text-muted-foreground max-w-prose">{description}</p>
         )}
       </div>
-      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+      {/* Wraps instead of widening the page: a phone can't fit a long row of actions */}
+      {actions && (
+        <div className="flex min-w-0 flex-wrap items-center gap-2 pointer-coarse:gap-3">
+          {actions}
+        </div>
+      )}
     </header>
   );
 }
