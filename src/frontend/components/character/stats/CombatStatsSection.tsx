@@ -27,13 +27,13 @@ import {
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import {
   hitDiceAvailable,
-  hitDieSides,
-  setHitDice,
-  setHitDiceRemaining,
+  setHitDiceSpent,
+  setHitDie,
   setSpellPoints,
 } from '@frontend/lib/character-sheet-updates';
 
 import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
+import { HIT_DIE_OPTIONS, readHitDice } from '@shared/systems/dnd5e/hit-dice';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import { AdjustHitPoints } from './AdjustHitPoints';
@@ -43,13 +43,6 @@ import { UsePips } from './UsePips';
 // Sized to its content, so a unit (speed's "m") sits right after the number
 const STAT_INPUT =
   'field-sizing-content h-7 w-auto min-w-[1ch] p-0 font-mono text-xl font-bold focus-visible:px-1 md:text-xl';
-const HIT_DIE_OPTIONS = ['d6', 'd8', 'd10', 'd12'];
-
-/** The die in a hit dice total: `5d6` → `d6`. Totals used to be stored with the level. */
-function hitDie(total: string | undefined) {
-  const die = `d${hitDieSides(total)}`;
-  return HIT_DIE_OPTIONS.includes(die) ? die : 'd8';
-}
 
 const CombatHeader = () => {
   const t = useTranslations('combatStats');
@@ -61,6 +54,8 @@ const CombatHeader = () => {
   const { readOnly } = useSheetSource(id);
   const level = character.level;
   const available = hitDiceAvailable(character);
+  // A sheet with no die yet shows a d8
+  const hitDie = readHitDice(character.hitDice, level).die ?? 'd8';
   const passivePerception = calculatePassivePerception(
     character.attributes.WIS ?? 10,
     character.level,
@@ -123,8 +118,11 @@ const CombatHeader = () => {
 
         <StatBlock icon="dice-target" label={t('hitDice')} hint={t('hints.hitDice')}>
           <Select
-            value={`1${hitDie(character.hitDice?.total)}`}
-            onValueChange={(val) => update(setHitDice(val))}
+            value={`1${hitDie}`}
+            onValueChange={(val) => {
+              const die = HIT_DIE_OPTIONS.find((option) => `1${option}` === val);
+              if (die) update(setHitDie(die));
+            }}
           >
             <SelectTrigger
               aria-label={t('hitDice')}
@@ -133,7 +131,7 @@ const CombatHeader = () => {
               {/* One die per level: a level 5 wizard has 5d6 */}
               <SelectValue>
                 {character.level}
-                {hitDie(character.hitDice?.total)}
+                {hitDie}
               </SelectValue>
             </SelectTrigger>
             <SelectContent className="min-w-[80px]">
@@ -163,7 +161,7 @@ const CombatHeader = () => {
           max={level}
           used={level - available}
           disabled={readOnly}
-          onChange={(used) => saveNow(setHitDiceRemaining(level - used))}
+          onChange={(used) => saveNow(setHitDiceSpent(used))}
         />
       </div>
     </CardHeader>

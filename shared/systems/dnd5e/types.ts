@@ -3,6 +3,7 @@ import type { CharacterBase } from '@shared/types/character';
 import type { ResourceState } from './class-resources';
 import type { SkillKey } from './constants';
 import type { Edition } from './content/editions';
+import type { HitDice, LegacyHitDice } from './hit-dice';
 
 export type AttributeKey = 'STR' | 'DEX' | 'CON' | 'INT' | 'WIS' | 'CHA';
 
@@ -27,7 +28,8 @@ interface DnD5eCharacterData {
   speed: number;
   initiative: number;
 
-  hitDice?: { total: string; current: number };
+  // A copy cached on the client may still hold the legacy shape: read it with `readHitDice`
+  hitDice?: HitDice | LegacyHitDice;
   deathSaves?: { successes: number; failures: number };
 
   attributes: Record<AttributeKey, number>;

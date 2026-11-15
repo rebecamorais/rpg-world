@@ -45,7 +45,7 @@ const monk = () => ({
   id: 'c1',
   level: 5,
   attributes: { ...createDnD5eCharacter('owner', 'Thor').attributes, CON: 14 },
-  hitDice: { total: '5d8', current: 3 },
+  hitDice: { die: 'd8' as const, spent: 2 },
 });
 
 const scrollIntoView = vi.fn();
@@ -81,6 +81,14 @@ describe('RestChecklist', () => {
 
   it('o dado do curto vem do dado da ficha, não do da classe', async () => {
     const user = userEvent.setup();
+    renderWithCharacter(<RestButtons />, { ...monk(), hitDice: { die: 'd10', spent: 2 } });
+    await user.click(screen.getByRole('button', { name: 'Short rest' }));
+
+    expect(screen.getByText('Roll d10 +2 per hit die spent (3 left)')).toBeInTheDocument();
+  });
+
+  it('ficha no formato antigo: lê o dado e os dados restantes do total guardado', async () => {
+    const user = userEvent.setup();
     renderWithCharacter(<RestButtons />, { ...monk(), hitDice: { total: '5d10', current: 3 } });
     await user.click(screen.getByRole('button', { name: 'Short rest' }));
 
@@ -88,6 +96,14 @@ describe('RestChecklist', () => {
   });
 
   it('ficha sem dado escolhido usa o dado da classe', async () => {
+    const user = userEvent.setup();
+    renderWithCharacter(<RestButtons />, { ...monk(), hitDice: { spent: 2 } });
+    await user.click(screen.getByRole('button', { name: 'Short rest' }));
+
+    expect(screen.getByText('Roll d8 +2 per hit die spent (3 left)')).toBeInTheDocument();
+  });
+
+  it('ficha no formato antigo sem dado no total usa o dado da classe', async () => {
     const user = userEvent.setup();
     renderWithCharacter(<RestButtons />, { ...monk(), hitDice: { total: '', current: 3 } });
     await user.click(screen.getByRole('button', { name: 'Short rest' }));
@@ -374,7 +390,7 @@ describe('RestChecklist', () => {
       expect(saveNow).toHaveBeenCalledTimes(1);
       expect(sentNow()).toMatchObject({
         hpCurrent: 30,
-        hitDice: { total: '5d8', current: 5 },
+        hitDice: { die: 'd8', spent: 0 },
         resources: { 'class:monk:ki': { used: 0 } },
       });
       expect(screen.getByRole('checkbox', { name: 'Full HP' })).toBeChecked();
@@ -409,7 +425,7 @@ describe('RestChecklist', () => {
     it('Desfazer devolve o que havia e desmarca', async () => {
       const undo = await recoverAndUndo({ ...monk(), hpCurrent: 3, hpMax: 30 });
 
-      expect(undo).toMatchObject({ hpCurrent: 3, hitDice: { total: '5d8', current: 3 } });
+      expect(undo).toMatchObject({ hpCurrent: 3, hitDice: { die: 'd8', spent: 2 } });
       expect(await screen.findByRole('button', { name: 'Recover' })).toBeEnabled();
       expect(screen.getByRole('checkbox', { name: 'Full HP' })).not.toBeChecked();
     });
@@ -422,7 +438,7 @@ describe('RestChecklist', () => {
       }));
 
       expect(undo).not.toHaveProperty('hpCurrent');
-      expect(undo).toMatchObject({ hitDice: { total: '5d8', current: 3 } });
+      expect(undo).toMatchObject({ hitDice: { die: 'd8', spent: 2 } });
     });
 
     it('se falhar, não marca nada nem oferece Desfazer', async () => {

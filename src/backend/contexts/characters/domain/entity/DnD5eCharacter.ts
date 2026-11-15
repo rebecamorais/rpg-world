@@ -3,6 +3,7 @@ import { Lore } from '@backend/contexts/lore/domain/Lore';
 import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
 import type { SkillKey } from '@shared/systems/dnd5e/constants/skill';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
+import type { HitDice } from '@shared/systems/dnd5e/hit-dice';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 import { Attributes } from '../value-object/Attributes';
@@ -38,7 +39,7 @@ export interface DnD5eCharacterOptions {
   background?: string;
   alignment?: string;
   xp?: number;
-  hitDice?: { total: string; current: number };
+  hitDice?: HitDice;
   deathSaves?: { successes: number; failures: number };
   spellcastingSystem?: 'slots' | 'points';
   spellcastingAbility?: AttributeKey;
@@ -71,7 +72,7 @@ export class DnD5eCharacter extends Character {
   public alignment?: string;
   public xp?: number;
 
-  public hitDice?: { total: string; current: number };
+  public hitDice?: HitDice;
   public deathSaves?: { successes: number; failures: number };
 
   public spellcastingSystem?: 'slots' | 'points';

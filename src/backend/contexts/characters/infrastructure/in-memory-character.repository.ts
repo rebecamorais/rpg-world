@@ -9,6 +9,15 @@ const stripKey = (value: unknown, key: string) => {
   const { [key]: _drop, ...rest } = value as Record<string, unknown>;
   return rest;
 };
+// Only the die is a sheet field, in either shape hit dice were stored: what was spent is game state
+const HIT_DIE = /^(d6|d8|d10|d12)$/;
+const LEGACY_HIT_DIE = /(d6|d8|d10|d12)$/;
+const hitDieOnly = (value: unknown) => {
+  if (!value || typeof value !== 'object') return value;
+  const { die, total } = value as { die?: unknown; total?: unknown };
+  if (typeof die === 'string' && HIT_DIE.test(die)) return { die };
+  return { die: typeof total === 'string' ? total.match(LEGACY_HIT_DIE)?.[1] : undefined };
+};
 // An empty map counts as absent, as jsonb_object_agg over nothing is null
 const stripEach = (map: unknown, key: string, dropEmpty: boolean) => {
   if (!map || typeof map !== 'object') return undefined;
@@ -24,7 +33,7 @@ const sheetFields = (character: Character): string => {
   json.spellSlots = stripEach(json.spellSlots, 'used', false);
   json.resources = stripEach(json.resources, 'used', true);
   json.spellPoints = stripKey(json.spellPoints, 'current');
-  json.hitDice = stripKey(json.hitDice, 'current');
+  json.hitDice = hitDieOnly(json.hitDice);
   return JSON.stringify(json);
 };
 

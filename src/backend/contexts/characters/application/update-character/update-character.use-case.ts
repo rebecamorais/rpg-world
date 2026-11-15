@@ -3,6 +3,7 @@ import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 
 import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
+import { type HitDice, type LegacyHitDice, readHitDice } from '@shared/systems/dnd5e/hit-dice';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import {
@@ -39,7 +40,7 @@ export interface CharacterUpdates {
   background?: string;
   alignment?: string;
   xp?: number;
-  hitDice?: { total: string; current: number };
+  hitDice?: HitDice | LegacyHitDice;
   deathSaves?: { successes: number; failures: number };
   spellcastingSystem?: 'slots' | 'points';
   spellcastingAbility?: AttributeKey;
@@ -75,7 +76,6 @@ const SIMPLE_FIELDS = [
   'background',
   'alignment',
   'xp',
-  'hitDice',
   'deathSaves',
   'spellcastingSystem',
   'spellcastingAbility',
@@ -160,14 +160,26 @@ export class UpdateCharacterUseCase {
   }
 
   private apply(character: DnD5eCharacter, updates: CharacterUpdates): void {
-    const { level, hpCurrent, hpMax, attributes, skills, savingThrowProficiencies, resources } =
-      updates;
+    const {
+      level,
+      hitDice,
+      hpCurrent,
+      hpMax,
+      attributes,
+      skills,
+      savingThrowProficiencies,
+      resources,
+    } = updates;
 
     // Aplica atualizações diretas para campos simples
     applyUpdates(character, pickSimpleUpdates(updates));
 
     // Lógica customizada para campos com regras de negócio
     if (level !== undefined) character.level = Math.max(1, level);
+
+    // A client from before 2026-11 still sends the dice left: the sheet only keeps what was spent,
+    // counted at the level being saved
+    if (hitDice) character.hitDice = readHitDice(hitDice, character.level);
 
     if (hpCurrent !== undefined || hpMax !== undefined) {
       const currentHp = hpCurrent !== undefined ? hpCurrent : character.hp.current;

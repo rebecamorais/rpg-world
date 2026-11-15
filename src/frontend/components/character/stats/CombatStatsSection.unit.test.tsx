@@ -13,7 +13,7 @@ import CombatStatsSection from './CombatStatsSection';
 const character = {
   ...createDnD5eCharacter('owner', 'Thor', { hpCurrent: 9, hpMax: 12, ac: 14, initiative: 2 }),
   id: 'c1',
-  hitDice: { total: '1d10', current: 1 },
+  hitDice: { die: 'd10', spent: 0 },
   spellcastingSystem: 'points',
   spellPoints: { current: 3, max: 6 },
 } as DnD5eCharacter;
@@ -105,7 +105,26 @@ describe('CombatStatsSection', () => {
     await userEvent.click(screen.getByRole('combobox', { name: 'Hit Dice' }));
     await userEvent.click(screen.getByRole('option', { name: '1d12' }));
 
-    expect(draft().hitDice).toEqual({ total: '1d12', current: 1 });
+    expect(draft().hitDice).toEqual({ die: 'd12', spent: 0 });
+  });
+
+  it('mostra um dado por nível, e d8 quando a ficha não tem dado', () => {
+    const { unmount } = renderCombat({ level: 5 });
+    expect(screen.getByRole('combobox', { name: 'Hit Dice' })).toHaveTextContent('5d10');
+    unmount();
+
+    renderCombat({ level: 4, hitDice: undefined });
+    expect(screen.getByRole('combobox', { name: 'Hit Dice' })).toHaveTextContent('4d8');
+  });
+
+  it('ficha no formato antigo: mostra o dado do total e troca gravando o formato novo', async () => {
+    const { draft } = renderCombat({ level: 5, hitDice: { total: '5d6', current: 3 } });
+    expect(screen.getByRole('combobox', { name: 'Hit Dice' })).toHaveTextContent('5d6');
+
+    await userEvent.click(screen.getByRole('combobox', { name: 'Hit Dice' }));
+    await userEvent.click(screen.getByRole('option', { name: '1d12' }));
+
+    expect(draft().hitDice).toEqual({ die: 'd12', spent: 2 });
   });
 
   it('mostra os pontos de magia e salva o gasto na hora', () => {
@@ -193,43 +212,88 @@ describe('CombatStatsSection', () => {
       ).toBeInTheDocument();
     });
 
-    it('gastar um dado salva na hora, mantendo o total guardado', async () => {
-      const { sentNow } = renderCombat({ level: 4, hitDice: { total: '4d10', current: 4 } });
+    it('gastar um dado salva na hora, mantendo o dado guardado', async () => {
+      const { sentNow } = renderCombat({ level: 4, hitDice: { die: 'd10', spent: 0 } });
 
       await userEvent.click(
         screen.getByRole('button', { name: 'Hit dice remaining 4, available' }),
       );
 
-      expect(sentNow()).toEqual({ hitDice: { total: '4d10', current: 3 } });
+      expect(sentNow()).toEqual({ hitDice: { die: 'd10', spent: 1 } });
     });
 
-    it('sem total guardado, salva o total vazio', async () => {
+    it('sem dado guardado, salva só os gastos', async () => {
       const { sentNow } = renderCombat(noHitDice);
 
       await userEvent.click(
         screen.getByRole('button', { name: 'Hit dice remaining 4, available' }),
       );
 
-      expect(sentNow()).toEqual({ hitDice: { total: '', current: 3 } });
+      expect(sentNow()).toEqual({ hitDice: { spent: 1 } });
     });
 
-    it('com 0 guardado, nenhum dado disponível e devolver um vai a 1', async () => {
-      const { sentNow } = renderCombat({ level: 4, hitDice: { total: '4d8', current: 0 } });
+    it('com todos gastos, nenhum dado disponível e devolver um deixa 3 gastos', async () => {
+      const { sentNow } = renderCombat({ level: 4, hitDice: { die: 'd8', spent: 4 } });
       expect(
         screen.getByRole('group', { name: 'Hit dice remaining, 0 of 4 available' }),
       ).toBeInTheDocument();
 
       await userEvent.click(screen.getByRole('button', { name: 'Hit dice remaining 1, spent' }));
 
-      expect(sentNow()).toEqual({ hitDice: { total: '4d8', current: 1 } });
+      expect(sentNow()).toEqual({ hitDice: { die: 'd8', spent: 3 } });
     });
 
-    it('guardado acima do nível mostra só o nível', () => {
-      renderCombat({ level: 4, hitDice: { total: '4d8', current: 9 } });
-
+    it('gastos guardados acima do nível mostram só os dados do nível', async () => {
+      // Spent 5 at level 5, then went down to 3: what was saved stays for when the level is back
+      const { sentNow } = renderCombat({ level: 3, hitDice: { die: 'd8', spent: 5 } });
       expect(
-        screen.getByRole('group', { name: 'Hit dice remaining, 4 of 4 available' }),
+        screen.getByRole('group', { name: 'Hit dice remaining, 0 of 3 available' }),
       ).toBeInTheDocument();
+
+      // Giving one back is the player's action: it saves what the pips show
+      await userEvent.click(screen.getByRole('button', { name: 'Hit dice remaining 1, spent' }));
+      expect(sentNow()).toEqual({ hitDice: { die: 'd8', spent: 2 } });
+    });
+
+    describe('ficha no formato antigo (total e dados restantes)', () => {
+      it('gastar um dado salva o formato novo, com o dado do total', async () => {
+        const { sentNow } = renderCombat({ level: 4, hitDice: { total: '4d10', current: 4 } });
+
+        await userEvent.click(
+          screen.getByRole('button', { name: 'Hit dice remaining 4, available' }),
+        );
+
+        expect(sentNow()).toEqual({ hitDice: { die: 'd10', spent: 1 } });
+      });
+
+      it('sem dado no total, salva só os gastos', async () => {
+        const { sentNow } = renderCombat({ level: 4, hitDice: { total: '', current: 3 } });
+        expect(
+          screen.getByRole('group', { name: 'Hit dice remaining, 3 of 4 available' }),
+        ).toBeInTheDocument();
+
+        await userEvent.click(
+          screen.getByRole('button', { name: 'Hit dice remaining 3, available' }),
+        );
+
+        expect(sentNow()).toEqual({ hitDice: { spent: 2 } });
+      });
+
+      it('com 0 guardado, nenhum dado disponível', () => {
+        renderCombat({ level: 4, hitDice: { total: '4d8', current: 0 } });
+
+        expect(
+          screen.getByRole('group', { name: 'Hit dice remaining, 0 of 4 available' }),
+        ).toBeInTheDocument();
+      });
+
+      it('guardado acima do nível mostra só o nível', () => {
+        renderCombat({ level: 4, hitDice: { total: '4d8', current: 9 } });
+
+        expect(
+          screen.getByRole('group', { name: 'Hit dice remaining, 4 of 4 available' }),
+        ).toBeInTheDocument();
+      });
     });
 
     it('somente leitura deixa os dados desabilitados', () => {

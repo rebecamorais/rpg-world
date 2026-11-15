@@ -17,7 +17,7 @@ export interface Sheet {
   subclass?: Bilingual;
   /** STR, DEX, CON, INT, WIS, CHA */
   scores: [number, number, number, number, number, number];
-  hitDie: number;
+  hitDie: 6 | 8 | 10 | 12;
   ac: number;
   /** In metres, as the sheet shows it: 9 is the SRD's 30 ft. */
   speed: number;

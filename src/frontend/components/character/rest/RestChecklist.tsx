@@ -13,13 +13,13 @@ import {
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
 import { MERGED_BY_KEY } from '@frontend/lib/character-changes';
-import { hitDiceAvailable, hitDieSides } from '@frontend/lib/character-sheet-updates';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { type RestItem, buildRestChecklist } from '@frontend/lib/rest-checklist';
 import { restRecovery } from '@frontend/lib/rest-recovery';
 import { cn } from '@frontend/lib/utils';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
+import { hitDiceRemaining, hitDieSides } from '@shared/systems/dnd5e/hit-dice';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import { useResourceBoxes } from '../resources/useResourceBoxes';
@@ -124,9 +124,9 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
     rest,
     level,
     // The sheet's own die first: the player may have set one other than the class's
-    hitDie: hitDieSides(character.hitDice?.total) ?? content?.hitDie ?? null,
+    hitDie: hitDieSides(character.hitDice) ?? content?.hitDie ?? null,
     conMod: getModifier(character.attributes.CON ?? 10),
-    hitDiceAvailable: hitDiceAvailable(character),
+    hitDiceAvailable: hitDiceRemaining(character.hitDice, level),
     boxes,
     magic: magicToRestore(character),
     hasPactSlots: !!content?.resources.some((r) => r.unit === 'spell-slots' && r.level <= level),

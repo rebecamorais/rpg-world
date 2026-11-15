@@ -62,6 +62,35 @@ describe('characterUpdatesSchema', () => {
     expect(updates).toEqual({});
   });
 
+  describe('dados de vida', () => {
+    const parse = (hitDice: unknown) => characterUpdatesSchema.safeParse({ hitDice });
+
+    it('aceita o dado e os gastos, com ou sem dado', () => {
+      expect(parse({ die: 'd8', spent: 2 }).data).toEqual({ hitDice: { die: 'd8', spent: 2 } });
+      expect(parse({ spent: 0 }).data).toEqual({ hitDice: { spent: 0 } });
+      expect(parse({ die: null, spent: 1 }).data).toEqual({ hitDice: { spent: 1 } });
+    });
+
+    it('aceita o formato antigo, de uma aba aberta ou da fila offline de antes', () => {
+      expect(parse({ total: '5d10', current: 3 }).data).toEqual({
+        hitDice: { total: '5d10', current: 3 },
+      });
+      expect(parse({ total: '', current: 0 }).success).toBe(true);
+    });
+
+    it.each([
+      ['dado desconhecido', { die: 'd20', spent: 1 }],
+      ['gastos negativos', { die: 'd8', spent: -1 }],
+      ['gastos não inteiros', { spent: 1.5 }],
+      ['gastos acima do limite', { spent: 1_001 }],
+      ['total gigante', { total: 'x'.repeat(21), current: 1 }],
+      ['restantes negativos', { total: '1d8', current: -1 }],
+      ['nenhum dos dois formatos', {}],
+    ])('rejeita %s', (_label, hitDice) => {
+      expect(parse(hitDice).success).toBe(false);
+    });
+  });
+
   it('aceita atributos parciais', () => {
     expect(characterUpdatesSchema.parse({ attributes: { STR: 18 } }).attributes).toEqual({
       STR: 18,

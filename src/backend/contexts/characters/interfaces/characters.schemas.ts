@@ -9,6 +9,7 @@ import {
 } from '@shared/systems/dnd5e/class-resources';
 import { ATTRIBUTE_KEYS, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import { EDITIONS } from '@shared/systems/dnd5e/content/editions';
+import { HIT_DIE_OPTIONS } from '@shared/systems/dnd5e/hit-dice';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 // Shape and sanity limits only. Game rules (name required, max HP >= 1...) stay in the domain,
@@ -99,7 +100,13 @@ export const characterUpdatesSchema = z.object({
   ),
   savingThrowProficiencies: optional(z.partialRecord(attributeKey, z.boolean())),
 
-  hitDice: optional(z.object({ total: text(20), current: int(0, 1_000) })),
+  hitDice: optional(
+    z.union([
+      z.object({ die: optional(z.enum(HIT_DIE_OPTIONS)), spent: int(0, 1_000) }),
+      // How it was sent before 2026-11: a tab left open or an offline queue may still send it
+      z.object({ total: text(20), current: int(0, 1_000) }),
+    ]),
+  ),
   deathSaves: optional(z.object({ successes: int(0, 3), failures: int(0, 3) })),
 
   spellcastingSystem: optional(z.enum(['slots', 'points'])),

@@ -5,6 +5,7 @@ import { Lore } from '@backend/contexts/lore/domain/Lore';
 
 import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
+import { type HitDice, type LegacyHitDice, readHitDice } from '@shared/systems/dnd5e/hit-dice';
 
 import { Database, Json } from '@database-types';
 
@@ -188,7 +189,10 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         background: dndData.background as string | undefined,
         alignment: dndData.alignment as string | undefined,
         xp: dndData.xp as number | undefined,
-        hitDice: dndData.hitDice as { total: string; current: number } | undefined,
+        // A sheet last saved before 2026-11 still has the dice left: read as what was spent
+        hitDice: dndData.hitDice
+          ? readHitDice(dndData.hitDice as HitDice | LegacyHitDice, row.level)
+          : undefined,
         deathSaves: dndData.deathSaves as { successes: number; failures: number } | undefined,
         spellcastingSystem: dndData.spellcastingSystem as 'slots' | 'points' | undefined,
         spellcastingAbility: dndData.spellcastingAbility as AttributeKey | undefined,

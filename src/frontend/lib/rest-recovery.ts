@@ -1,6 +1,6 @@
-import { hitDiceAvailable } from '@frontend/lib/character-sheet-updates';
-
 import { type ResourceBox, recoveryOn } from '@shared/systems/dnd5e/class-resources';
+import { readHitDice } from '@shared/systems/dnd5e/hit-dice';
+import { effectiveState } from '@shared/systems/dnd5e/sheet-values';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 /**
@@ -22,8 +22,10 @@ export function restRecovery(
     items.push('full-hp');
 
     const back = Math.max(1, Math.floor(character.level / 2));
-    const left = Math.min(character.level, hitDiceAvailable(character) + back);
-    fields.hitDice = { total: character.hitDice?.total ?? '', current: left };
+    const { die, spent } = readHitDice(character.hitDice, character.level);
+    // From what the sheet shows: spent dice a lower level hides don't hold the recovery back
+    const stillSpent = Math.max(effectiveState(spent, character.level) - back, 0);
+    fields.hitDice = { ...(die && { die }), spent: stillSpent };
     items.push('hit-dice-back');
 
     if (character.spellcastingSystem === 'slots') {
