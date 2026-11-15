@@ -32,15 +32,7 @@
 
   <!-- bubble cluster at top -->
   <circle cx="118" cy="22" r="22" fill="url(#bubbleGlow)"/>
-  <circle cx="155" cy="38" r="6" fill="#B4D63E"/>
-  <circle cx="166" cy="29" r="4" fill="#F5FBD0"/>
-  <circle cx="208" cy="18" r="5" fill="#B4D63E"/>
-  <circle cx="245" cy="27" r="7" fill="#F5FBD0"/>
-  <circle cx="366" cy="18" r="5" fill="#B4D63E"/>
-  <circle cx="458" cy="26" r="4" fill="#F5FBD0"/>
   <circle cx="652" cy="20" r="19" fill="url(#bubbleGlow)"/>
-  <circle cx="687" cy="35" r="4" fill="#B4D63E"/>
-  <circle cx="710" cy="28" r="7" fill="#F5FBD0"/>
 
   <!-- right-bottom acid mass -->
   <path d="M740 56v108H465c7-6 14-11 21-17 8-6 12-13 12-21 0-7 2-14 6-20 4-7 10-11 19-13 8-3 17-4 26-4 12 0 23 1 34 4 12 4 24 6 36 6 10 0 18-3 24-9 7-7 11-15 11-26 0-9 3-17 8-23 5-7 13-11 24-13 10-2 19-5 27-10 11-6 20-14 27-25Z" fill="url(#acidDark)"/>
@@ -51,46 +43,9 @@
   <circle cx="696" cy="114" r="13" fill="url(#bubbleGlow)"/>
   <circle cx="591" cy="139" r="18" fill="url(#bubbleGlow)"/>
   <circle cx="704" cy="94" r="22" fill="url(#bubbleGlow)"/>
-  <circle cx="719" cy="101" r="3" fill="#F5FBD0"/>
   <circle cx="673" cy="77" r="10" fill="#B4D63E"/>
-  <circle cx="701" cy="71" r="5" fill="#F5FBD0"/>
-  <circle cx="723" cy="79" r="7" fill="#B4D63E"/>
-  <circle cx="662" cy="59" r="6" fill="#F5FBD0"/>
-  <circle cx="726" cy="137" r="6" fill="#B4D63E"/>
-  <circle cx="703" cy="147" r="4" fill="#F5FBD0"/>
-
-  <!-- porous/corrosive cells -->
-  <ellipse cx="628" cy="148" rx="10" ry="7" fill="#6F911C"/>
-  <ellipse cx="660" cy="141" rx="7" ry="5" fill="#6F911C"/>
-  <ellipse cx="674" cy="145" rx="9" ry="6" fill="#6F911C"/>
-  <ellipse cx="692" cy="132" rx="7" ry="6" fill="#6F911C"/>
-  <ellipse cx="709" cy="125" rx="11" ry="8" fill="#6F911C"/>
-  <ellipse cx="686" cy="99" rx="8" ry="6" fill="#6F911C"/>
-  <ellipse cx="713" cy="111" rx="6" ry="5" fill="#6F911C"/>
 
   <!-- bottom-left spray from right mass -->
   <path d="M459 156c9-1 19 0 28 3 8 3 16 5 24 5 7 0 13-1 20-3 8-2 15-5 21-10 7-6 13-8 20-8 7 0 13 2 18 6 5 4 9 8 11 15H459v-8Z" fill="url(#acidSlime)"/>
-  <circle cx="447" cy="157" r="6" fill="#B4D63E"/>
-  <circle cx="434" cy="151" r="4" fill="#F5FBD0"/>
-  <circle cx="421" cy="162" r="3" fill="#B4D63E"/>
-  <circle cx="409" cy="158" r="5" fill="#B4D63E"/>
-  <circle cx="497" cy="145" r="4" fill="#F5FBD0"/>
-  <circle cx="511" cy="152" r="3" fill="#B4D63E"/>
 
-  <!-- subtle corrosion/hazard bars -->
-  <path d="M685 147h14l-6 9h-14l6-9Z" fill="url(#slimeShine)"/>
-  <path d="M707 147h14l-6 9h-14l6-9Z" fill="url(#slimeShine)"/>
-  <path d="M728 147h8l-6 9h-8l6-9Z" fill="url(#slimeShine)"/>
-
-  <!-- tiny fizz particles -->
-  <circle cx="17" cy="24" r="4" fill="#B4D63E"/>
-  <circle cx="32" cy="17" r="2" fill="#F5FBD0"/>
-  <circle cx="54" cy="11" r="2" fill="#B4D63E"/>
-  <circle cx="171" cy="46" r="3" fill="#B4D63E"/>
-  <circle cx="174" cy="53" r="2" fill="#F5FBD0"/>
-  <circle cx="287" cy="17" r="2" fill="#B4D63E"/>
-  <circle cx="292" cy="22" r="2" fill="#F5FBD0"/>
-  <circle cx="628" cy="62" r="3" fill="#F5FBD0"/>
-  <circle cx="640" cy="68" r="2" fill="#B4D63E"/>
-  <circle cx="649" cy="60" r="2" fill="#F5FBD0"/>
-</svg>
+  </svg>
