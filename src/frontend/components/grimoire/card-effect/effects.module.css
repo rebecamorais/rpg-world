@@ -381,19 +381,15 @@
     ),
     linear-gradient(to bottom, #000 25%, rgb(0 0 0 / 0.45) 50%, transparent 72%);
 }
-/* Cold: the ice starts at 40% of the width (the title stays clear) and thaws before the rules
-   text, also on a tall phone card */
+/* Cold: the crystal is an object, so it keeps its shape, filling the card's height from the top
+   right (EffectArt's FIT, the SVG cropped to the ice), shown whole: the rules text has its own
+   backdrop, so no fade */
 .art[data-art='frost-crystals'] {
-  mask-image:
-    linear-gradient(to right, transparent 40%, rgb(0 0 0 / 0.3) 55%, #000 72%),
-    linear-gradient(to bottom, #000 28%, rgb(0 0 0 / 0.45) 52%, transparent 76%);
+  height: 100%;
 }
-/* Poison: the mist starts at 40% of the width (the title stays clear) and settles before the
-   rules text, also on a tall phone card */
+/* Poison: like thunder, the mist stretched over the whole card (the SVG cropped to where it is) */
 .art[data-art='toxic-mist-filaments'] {
-  mask-image:
-    linear-gradient(to right, transparent 40%, rgb(0 0 0 / 0.3) 55%, #000 72%),
-    linear-gradient(to bottom, #000 28%, rgb(0 0 0 / 0.45) 52%, transparent 76%);
+  height: 100%;
 }
 /* Thunder: the drawing stretched over the whole card (EffectArt's FULL_CARD), with a glow of the
    spell's colour along the waves in the drawing's own box; no fade, only a softer strength so the
@@ -765,18 +761,10 @@
   mask-composite: intersect;
 }
 :global(:root[data-theme='light']) .textBackdrop::before {
+  /* Grey, not tinted: on a light page the tinted veil left the text short of contrast */
   background:
-    radial-gradient(
-        color-mix(
-            in oklab,
-            color-mix(in oklab, var(--grimoire-tint, currentColor), black 20%),
-            transparent 45%
-          )
-          0.75px,
-        transparent 1.25px
-      )
-      0 0 / 9px 9px,
-    color-mix(in srgb, var(--card), transparent 35%);
+    radial-gradient(rgb(24 24 27 / 0.16) 0.75px, transparent 1.25px) 0 0 / 9px 9px,
+    color-mix(in srgb, #e4e4e7, transparent 18%);
 }
 
 @media (forced-colors: active) {
