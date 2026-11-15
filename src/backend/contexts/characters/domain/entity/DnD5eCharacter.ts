@@ -101,7 +101,7 @@ export class DnD5eCharacter extends Character {
     this.class = options.classStr ?? '';
     this.race = options.race ?? '';
     this.ac = options.ac ?? 10;
-    this.speed = options.speed ?? 30;
+    this.speed = options.speed ?? 9; // metres: the SRD's 30 ft
     this.initiative = options.initiative ?? 0;
     this.hpTemp = options.hpTemp ?? 0;
     this.skills = options.skills ?? {};

@@ -28,7 +28,7 @@ describe('CombatStatsSection', () => {
 
     expect(screen.getByLabelText('AC')).toHaveValue('14');
     expect(screen.getByLabelText('Initiative')).toHaveValue('2');
-    expect(screen.getByLabelText('Speed')).toHaveValue('30');
+    expect(screen.getByLabelText('Speed')).toHaveValue('9');
     expect(screen.getByLabelText('Hit Points')).toHaveValue('9');
   });
 

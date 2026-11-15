@@ -112,7 +112,7 @@ const CombatHeader = () => {
             ghost
             decimal
             aria-label={t('speed')}
-            value={character.speed ?? 30}
+            value={character.speed ?? 9}
             min={0}
             max={10_000}
             onValueChange={(speed) => update({ speed })}

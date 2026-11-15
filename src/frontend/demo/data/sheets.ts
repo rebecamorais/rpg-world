@@ -19,6 +19,7 @@ export interface Sheet {
   scores: [number, number, number, number, number, number];
   hitDie: number;
   ac: number;
+  /** In metres, as the sheet shows it: 9 is the SRD's 30 ft. */
   speed: number;
   saves: AttributeKey[];
   skills: SkillKey[];
@@ -40,7 +41,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [8, 14, 14, 17, 12, 10],
     hitDie: 8,
     ac: 14,
-    speed: 30,
+    speed: 9,
     saves: ['CON', 'INT'],
     skills: ['ARCANA', 'INVESTIGATION', 'HISTORY'],
     caster: {
@@ -69,7 +70,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [8, 14, 13, 18, 14, 12],
     hitDie: 6,
     ac: 12,
-    speed: 30,
+    speed: 9,
     saves: ['INT', 'WIS'],
     skills: ['ARCANA', 'INSIGHT', 'INVESTIGATION', 'HISTORY'],
     caster: {
@@ -124,7 +125,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [16, 12, 15, 13, 12, 14],
     hitDie: 10,
     ac: 18,
-    speed: 30,
+    speed: 9,
     saves: ['STR', 'CON'],
     skills: ['ATHLETICS', 'PERSUASION', 'HISTORY', 'INSIGHT'],
     gear: [
@@ -147,7 +148,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [8, 14, 12, 14, 10, 17],
     hitDie: 8,
     ac: 13,
-    speed: 30,
+    speed: 9,
     saves: ['DEX', 'CHA'],
     skills: ['PERFORMANCE', 'DECEPTION', 'INVESTIGATION', 'PERSUASION', 'STEALTH'],
     caster: {
@@ -184,7 +185,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [11, 16, 14, 13, 15, 8],
     hitDie: 10,
     ac: 15,
-    speed: 30,
+    speed: 9,
     saves: ['STR', 'DEX'],
     skills: ['SURVIVAL', 'PERCEPTION', 'NATURE', 'STEALTH'],
     caster: {
@@ -212,7 +213,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [16, 10, 14, 9, 12, 16],
     hitDie: 10,
     ac: 18,
-    speed: 30,
+    speed: 9,
     saves: ['WIS', 'CHA'],
     skills: ['ATHLETICS', 'RELIGION', 'PERSUASION', 'INSIGHT'],
     caster: {
@@ -239,7 +240,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [8, 14, 13, 14, 17, 10],
     hitDie: 8,
     ac: 14,
-    speed: 35,
+    speed: 10.5,
     saves: ['INT', 'WIS'],
     skills: ['NATURE', 'PERCEPTION', 'INVESTIGATION', 'MEDICINE'],
     caster: {
@@ -276,7 +277,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [10, 17, 13, 14, 12, 14],
     hitDie: 8,
     ac: 14,
-    speed: 30,
+    speed: 9,
     saves: ['DEX', 'INT'],
     skills: ['DECEPTION', 'INSIGHT', 'INTIMIDATION', 'PERSUASION', 'STEALTH'],
     gear: [
@@ -298,7 +299,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [12, 17, 14, 10, 15, 13],
     hitDie: 8,
     ac: 16,
-    speed: 40,
+    speed: 12,
     saves: ['STR', 'DEX'],
     skills: ['ACROBATICS', 'HISTORY', 'INSIGHT', 'PERSUASION'],
     gear: [
@@ -319,7 +320,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [8, 14, 14, 16, 12, 17],
     hitDie: 6,
     ac: 13,
-    speed: 30,
+    speed: 9,
     saves: ['CON', 'CHA'],
     skills: ['ARCANA', 'HISTORY', 'INSIGHT', 'PERSUASION'],
     caster: {
@@ -357,7 +358,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [10, 12, 14, 13, 17, 14],
     hitDie: 8,
     ac: 17,
-    speed: 30,
+    speed: 9,
     saves: ['WIS', 'CHA'],
     skills: ['MEDICINE', 'INSIGHT', 'RELIGION', 'PERSUASION'],
     caster: {
@@ -396,7 +397,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [17, 14, 16, 8, 12, 12],
     hitDie: 12,
     ac: 15,
-    speed: 30,
+    speed: 9,
     saves: ['STR', 'CON'],
     skills: ['ATHLETICS', 'INTIMIDATION', 'SURVIVAL', 'PERCEPTION'],
     gear: [
@@ -417,7 +418,7 @@ export const SHEETS: Record<string, Sheet> = {
     scores: [8, 14, 14, 15, 12, 17],
     hitDie: 8,
     ac: 13,
-    speed: 30,
+    speed: 9,
     saves: ['WIS', 'CHA'],
     skills: ['ARCANA', 'INVESTIGATION', 'HISTORY', 'DECEPTION'],
     caster: {

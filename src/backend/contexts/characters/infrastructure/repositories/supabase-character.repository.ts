@@ -177,6 +177,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         classStr: (dndData.class as string) || '',
         race: (dndData.race as string) || '',
         ac: (dndData.ac as number) || 10,
+        // A sheet saved without a speed keeps the old default: only new sheets start at 9 m
         speed: (dndData.speed as number) || 30,
         initiative: (dndData.initiative as number) || 0,
         skills: (dndData.skills as Partial<Record<SkillKey, CharacterSkill>>) || {},
