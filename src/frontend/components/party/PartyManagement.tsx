@@ -29,8 +29,8 @@ const useOrigin = () =>
     () => '',
   );
 
-/** The GM's controls: invite, the link, players, name and deleting the party. */
-export function PartyManagement({ party, onDeleted }: { party: PartyView; onDeleted: () => void }) {
+/** The GM's controls: invite, the link, players, name and rules edition. Deleting is in PartyDangerZone. */
+export function PartyManagement({ party }: { party: PartyView }) {
   const t = useTranslations('parties.manage');
   const confirm = useConfirm();
   const ids = {
@@ -41,7 +41,7 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
     editionHint: useId(),
   };
   const origin = useOrigin();
-  const { invite, rotateCode, removeMember, rename, setEdition, remove } = useParty(party.id);
+  const { invite, rotateCode, removeMember, rename, setEdition } = useParty(party.id);
   const [username, setUsername] = useState('');
   const [name, setName] = useState(party.name);
 
@@ -77,25 +77,6 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
   const saveName = (event: FormEvent) => {
     event.preventDefault();
     rename.mutate(name, { onSuccess: () => toast.success(t('renamed')) });
-  };
-
-  const deleteParty = async () => {
-    const ok = await confirm({
-      title: t('deleteParty'),
-      description: t('deleteConfirm'),
-      confirmLabel: t('deleteParty'),
-      destructive: true,
-    });
-    if (!ok) return;
-    // mutateAsync, not mutate's callbacks: the party reload that follows answers "not found" and
-    // unmounts this panel before a callback would run
-    try {
-      await remove.mutateAsync();
-      toast.success(t('deleted'));
-      onDeleted();
-    } catch {
-      // useParty already shows the error
-    }
   };
 
   return (
@@ -216,16 +197,6 @@ export function PartyManagement({ party, onDeleted }: { party: PartyView; onDele
             className="max-w-xs"
           />
         </div>
-
-        <Button
-          type="button"
-          variant="destructive"
-          onClick={deleteParty}
-          loading={remove.isPending}
-          className="self-start"
-        >
-          {t('deleteParty')}
-        </Button>
       </SectionCard.Body>
     </SectionCard>
   );

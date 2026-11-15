@@ -36,8 +36,9 @@
   --success: #22c55e;
   --info: #3b82f6;
   --warning: #eab308;
-  --destructive: var(--danger);
-  --destructive-foreground: #000000;
+  /* Deeper than --danger: white text on it is 4.8:1 (AA). Black on #ef4444 read as a warning sign. */
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
 
   /* Brand. Inside a character sheet, --character-color replaces it (see .character-context). */
   --brand: #663399;
