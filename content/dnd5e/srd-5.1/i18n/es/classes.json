@@ -1,22 +1,22 @@
 {
   "barbarian": {
-    "name": "",
+    "name": "Bárbaro",
     "subclassTitle": "",
     "features": {
       "rage": {
-        "name": "",
+        "name": "Furia",
         "description": ""
       },
       "unarmored-defense": {
-        "name": "",
+        "name": "Defensa sin armadura",
         "description": ""
       },
       "danger-sense": {
-        "name": "",
+        "name": "Sentir el peligro",
         "description": ""
       },
       "reckless-attack": {
-        "name": "",
+        "name": "Ataque temerario",
         "description": ""
       },
       "primal-path": {
@@ -28,11 +28,11 @@
         "description": ""
       },
       "extra-attack": {
-        "name": "",
+        "name": "Ataque adicional",
         "description": ""
       },
       "fast-movement": {
-        "name": "",
+        "name": "Movimiento rápido",
         "description": ""
       },
       "path-feature-6": {
@@ -40,7 +40,7 @@
         "description": ""
       },
       "feral-instinct": {
-        "name": "",
+        "name": "Instinto feroz",
         "description": ""
       },
       "ability-score-improvement-8": {
@@ -56,7 +56,7 @@
         "description": ""
       },
       "relentless-rage": {
-        "name": "",
+        "name": "Furia implacable",
         "description": ""
       },
       "ability-score-improvement-12": {
@@ -72,7 +72,7 @@
         "description": ""
       },
       "persistent-rage": {
-        "name": "",
+        "name": "Furia persistente",
         "description": ""
       },
       "ability-score-improvement-16": {
@@ -84,7 +84,7 @@
         "description": ""
       },
       "indomitable-might": {
-        "name": "",
+        "name": "Poderío indómito",
         "description": ""
       },
       "ability-score-improvement-19": {
@@ -92,55 +92,53 @@
         "description": ""
       },
       "primal-champion": {
-        "name": "",
+        "name": "Campeón primordial",
         "description": ""
       }
     },
     "resources": {
       "rage": {
-        "name": ""
+        "name": "Furia"
       }
     },
-    "choices": {},
     "subclasses": {
       "berserker": {
-        "name": "",
+        "name": "Senda del berserker",
         "features": {
           "path-of-the-berserker": {
-            "name": "",
+            "name": "Senda del berserker",
             "description": ""
           },
           "mindless-rage": {
-            "name": "",
+            "name": "Furia irracional",
             "description": ""
           },
           "intimidating-presence": {
-            "name": "",
+            "name": "Presencia intimidante",
             "description": ""
           },
           "retaliation": {
-            "name": "",
+            "name": "Represalia",
             "description": ""
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "bard": {
-    "name": "",
+    "name": "Bardo",
     "subclassTitle": "",
     "features": {
       "bardic-inspiration": {
-        "name": "",
+        "name": "Inspiración bárdica",
         "description": ""
       },
       "spellcasting": {
-        "name": "",
+        "name": "Lanzamiento de conjuros",
         "description": ""
       },
       "jack-of-all-trades": {
-        "name": "",
+        "name": "Aprendiz de todo",
         "description": ""
       },
       "song-of-rest-d6": {
@@ -164,11 +162,11 @@
         "description": ""
       },
       "font-of-inspiration": {
-        "name": "",
+        "name": "Fuente de inspiración",
         "description": ""
       },
       "countercharm": {
-        "name": "",
+        "name": "Contracanto",
         "description": ""
       },
       "bard-college-feature-6": {
@@ -232,22 +230,21 @@
         "description": ""
       },
       "superior-inspiration": {
-        "name": "",
+        "name": "Inspiración superior",
         "description": ""
       }
     },
     "resources": {
       "bardic-inspiration": {
-        "name": ""
+        "name": "Inspiración bárdica"
       }
     },
-    "choices": {},
     "subclasses": {
       "lore": {
-        "name": "",
+        "name": "Colegio del Saber",
         "features": {
           "college-of-lore": {
-            "name": "",
+            "name": "Colegio del Saber",
             "description": ""
           },
           "additional-magical-secrets": {
@@ -255,20 +252,19 @@
             "description": ""
           },
           "peerless-skill": {
-            "name": "",
+            "name": "Habilidad sin par",
             "description": ""
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "cleric": {
-    "name": "",
+    "name": "Clérigo",
     "subclassTitle": "",
     "features": {
       "spellcasting": {
-        "name": "",
+        "name": "Lanzamiento de conjuros",
         "description": ""
       },
       "divine-domain": {
@@ -312,7 +308,7 @@
         "description": ""
       },
       "divine-intervention": {
-        "name": "",
+        "name": "Intervención divina",
         "description": ""
       },
       "destroy-undead-cr-2": {
@@ -354,20 +350,19 @@
     },
     "resources": {
       "channel-divinity": {
-        "name": ""
+        "name": "Canalizar Divinidad"
       },
       "divine-intervention": {
-        "name": "",
+        "name": "Intervención divina",
         "note": ""
       }
     },
-    "choices": {},
     "subclasses": {
       "life": {
-        "name": "",
+        "name": "Dominio de la Vida",
         "features": {
           "life-domain": {
-            "name": "",
+            "name": "Dominio de la Vida",
             "description": ""
           },
           "channel-divinity-preserve-life": {
@@ -375,7 +370,7 @@
             "description": ""
           },
           "blessed-healer": {
-            "name": "",
+            "name": "Sanador bendito",
             "description": ""
           },
           "divine-strike": {
@@ -383,28 +378,27 @@
             "description": ""
           },
           "supreme-healing": {
-            "name": "",
+            "name": "Curación suprema",
             "description": ""
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "druid": {
-    "name": "",
+    "name": "Druida",
     "subclassTitle": "",
     "features": {
       "druidic": {
-        "name": "",
+        "name": "Druídico",
         "description": ""
       },
       "spellcasting": {
-        "name": "",
+        "name": "Lanzamiento de conjuros",
         "description": ""
       },
       "wild-shape": {
-        "name": "",
+        "name": "Forma salvaje",
         "description": ""
       },
       "druid-circle": {
@@ -452,7 +446,7 @@
         "description": ""
       },
       "beast-spells": {
-        "name": "",
+        "name": "Conjuros bestiales",
         "description": ""
       },
       "ability-score-improvement-19": {
@@ -460,22 +454,21 @@
         "description": ""
       },
       "archdruid": {
-        "name": "",
+        "name": "Archidruida",
         "description": ""
       }
     },
     "resources": {
       "wild-shape": {
-        "name": ""
+        "name": "Forma salvaje"
       }
     },
-    "choices": {},
     "subclasses": {
       "land": {
-        "name": "",
+        "name": "Círculo de la Tierra",
         "features": {
           "circle-of-the-land": {
-            "name": "",
+            "name": "Círculo de la Tierra",
             "description": ""
           },
           "land-s-stride": {
@@ -483,11 +476,11 @@
             "description": ""
           },
           "nature-s-ward": {
-            "name": "",
+            "name": "Guardián de la naturaleza",
             "description": ""
           },
           "nature-s-sanctuary": {
-            "name": "",
+            "name": "Santuario de la naturaleza",
             "description": ""
           }
         },
@@ -501,15 +494,15 @@
     }
   },
   "fighter": {
-    "name": "",
+    "name": "Guerrero",
     "subclassTitle": "",
     "features": {
       "fighting-style": {
-        "name": "",
+        "name": "Estilo de combate",
         "description": ""
       },
       "second-wind": {
-        "name": "",
+        "name": "Segundo aliento",
         "description": ""
       },
       "action-surge": {
@@ -525,7 +518,7 @@
         "description": ""
       },
       "extra-attack": {
-        "name": "",
+        "name": "Ataque adicional",
         "description": ""
       },
       "ability-score-improvement-6": {
@@ -595,26 +588,26 @@
     },
     "resources": {
       "second-wind": {
-        "name": ""
+        "name": "Segundo aliento"
       },
       "action-surge": {
-        "name": ""
+        "name": "Oleada de acción"
       },
       "indomitable": {
-        "name": ""
+        "name": "Indomable"
       }
     },
     "choices": {
       "fighting-style": {
-        "name": ""
+        "name": "Estilo de combate"
       }
     },
     "subclasses": {
       "champion": {
-        "name": "",
+        "name": "Campeón",
         "features": {
           "champion": {
-            "name": "",
+            "name": "Campeón",
             "description": ""
           },
           "remarkable-athlete": {
@@ -622,32 +615,31 @@
             "description": ""
           },
           "additional-fighting-style": {
-            "name": "",
+            "name": "Estilo de combate adicional",
             "description": ""
           },
           "superior-critical": {
-            "name": "",
+            "name": "Crítico superior",
             "description": ""
           },
           "survivor": {
-            "name": "",
+            "name": "Superviviente",
             "description": ""
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "monk": {
-    "name": "",
+    "name": "Monje",
     "subclassTitle": "",
     "features": {
       "unarmored-defense": {
-        "name": "",
+        "name": "Defensa sin armadura",
         "description": ""
       },
       "martial-arts": {
-        "name": "",
+        "name": "Artes marciales",
         "description": ""
       },
       "ki": {
@@ -655,7 +647,7 @@
         "description": ""
       },
       "unarmored-movement": {
-        "name": "",
+        "name": "Movimiento sin armadura",
         "description": ""
       },
       "deflect-missiles": {
@@ -671,15 +663,15 @@
         "description": ""
       },
       "slow-fall": {
-        "name": "",
+        "name": "Caída lenta",
         "description": ""
       },
       "extra-attack": {
-        "name": "",
+        "name": "Ataque adicional",
         "description": ""
       },
       "stunning-strike": {
-        "name": "",
+        "name": "Golpe aturdidor",
         "description": ""
       },
       "ki-empowered-strikes": {
@@ -691,7 +683,7 @@
         "description": ""
       },
       "evasion": {
-        "name": "",
+        "name": "Evasión",
         "description": ""
       },
       "stillness-of-mind": {
@@ -756,7 +748,6 @@
         "name": ""
       }
     },
-    "choices": {},
     "subclasses": {
       "open-hand": {
         "name": "",
@@ -766,7 +757,7 @@
             "description": ""
           },
           "wholeness-of-body": {
-            "name": "",
+            "name": "Plenitud del cuerpo",
             "description": ""
           },
           "tranquility": {
@@ -774,20 +765,20 @@
             "description": ""
           },
           "quivering-palm": {
-            "name": "",
+            "name": "Palma vibrante",
             "description": ""
           }
         },
         "resources": {
           "wholeness-of-body": {
-            "name": ""
+            "name": "Plenitud del cuerpo"
           }
         }
       }
     }
   },
   "paladin": {
-    "name": "",
+    "name": "Paladín",
     "subclassTitle": "",
     "features": {
       "divine-sense": {
@@ -795,7 +786,7 @@
         "description": ""
       },
       "lay-on-hands": {
-        "name": "",
+        "name": "Imposición de manos",
         "description": ""
       },
       "divine-smite": {
@@ -803,11 +794,11 @@
         "description": ""
       },
       "fighting-style": {
-        "name": "",
+        "name": "Estilo de combate",
         "description": ""
       },
       "spellcasting": {
-        "name": "",
+        "name": "Lanzamiento de conjuros",
         "description": ""
       },
       "divine-health": {
@@ -823,11 +814,11 @@
         "description": ""
       },
       "extra-attack": {
-        "name": "",
+        "name": "Ataque adicional",
         "description": ""
       },
       "aura-of-protection": {
-        "name": "",
+        "name": "Aura de protección",
         "description": ""
       },
       "sacred-oath-feature-7": {
@@ -839,7 +830,7 @@
         "description": ""
       },
       "aura-of-courage": {
-        "name": "",
+        "name": "Aura de valor",
         "description": ""
       },
       "improved-divine-smite": {
@@ -880,10 +871,10 @@
         "name": ""
       },
       "lay-on-hands": {
-        "name": ""
+        "name": "Imposición de manos"
       },
       "channel-divinity": {
-        "name": ""
+        "name": "Canalización divina"
       },
       "cleansing-touch": {
         "name": ""
@@ -891,19 +882,19 @@
     },
     "choices": {
       "fighting-style": {
-        "name": ""
+        "name": "Estilo de combate"
       }
     },
     "subclasses": {
       "devotion": {
-        "name": "",
+        "name": "Juramento de devoción",
         "features": {
           "oath-of-devotion": {
-            "name": "",
+            "name": "Juramento de devoción",
             "description": ""
           },
           "aura-of-devotion": {
-            "name": "",
+            "name": "Aura de devoción",
             "description": ""
           },
           "purity-of-spirit": {
@@ -911,24 +902,24 @@
             "description": ""
           },
           "holy-nimbus": {
-            "name": "",
+            "name": "Nimbo sagrado",
             "description": ""
           }
         },
         "resources": {
           "holy-nimbus": {
-            "name": ""
+            "name": "Nimbo sagrado"
           }
         }
       }
     }
   },
   "ranger": {
-    "name": "",
+    "name": "Explorador",
     "subclassTitle": "",
     "features": {
       "favored-enemy": {
-        "name": "",
+        "name": "Enemigo predilecto",
         "description": ""
       },
       "natural-explorer": {
@@ -936,11 +927,11 @@
         "description": ""
       },
       "fighting-style": {
-        "name": "",
+        "name": "Estilo de combate",
         "description": ""
       },
       "spellcasting": {
-        "name": "",
+        "name": "Lanzamiento de conjuros",
         "description": ""
       },
       "ranger-archetype": {
@@ -956,7 +947,7 @@
         "description": ""
       },
       "extra-attack": {
-        "name": "",
+        "name": "Ataque adicional",
         "description": ""
       },
       "favored-enemy-and-natural-explorer-improvements": {
@@ -1008,7 +999,7 @@
         "description": ""
       },
       "feral-senses": {
-        "name": "",
+        "name": "Sentidos ferales",
         "description": ""
       },
       "ability-score-improvement-19": {
@@ -1016,26 +1007,25 @@
         "description": ""
       },
       "foe-slayer": {
-        "name": "",
+        "name": "Azote de enemigos",
         "description": ""
       }
     },
-    "resources": {},
     "choices": {
       "fighting-style": {
-        "name": ""
+        "name": "Estilo de combate"
       }
     },
     "subclasses": {
       "hunter": {
-        "name": "",
+        "name": "Cazador",
         "features": {
           "hunter": {
-            "name": "",
+            "name": "Cazador",
             "description": ""
           },
           "defensive-tactics": {
-            "name": "",
+            "name": "Tácticas defensivas",
             "description": ""
           },
           "multiattack": {
@@ -1043,32 +1033,31 @@
             "description": ""
           },
           "superior-hunter-s-defense": {
-            "name": "",
+            "name": "Defensa superior del cazador",
             "description": ""
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "rogue": {
-    "name": "",
+    "name": "Pícaro",
     "subclassTitle": "",
     "features": {
       "expertise-1": {
-        "name": "",
+        "name": "Pericia",
         "description": ""
       },
       "sneak-attack": {
-        "name": "",
+        "name": "Ataque furtivo",
         "description": ""
       },
       "thieves-cant": {
-        "name": "",
+        "name": "Jerga de ladrones",
         "description": ""
       },
       "cunning-action": {
-        "name": "",
+        "name": "Acción astuta",
         "description": ""
       },
       "roguish-archetype": {
@@ -1080,15 +1069,15 @@
         "description": ""
       },
       "uncanny-dodge": {
-        "name": "",
+        "name": "Esquiva asombrosa",
         "description": ""
       },
       "expertise-6": {
-        "name": "",
+        "name": "Pericia",
         "description": ""
       },
       "evasion": {
-        "name": "",
+        "name": "Evasión",
         "description": ""
       },
       "ability-score-improvement-8": {
@@ -1104,7 +1093,7 @@
         "description": ""
       },
       "reliable-talent": {
-        "name": "",
+        "name": "Talento fiable",
         "description": ""
       },
       "ability-score-improvement-12": {
@@ -1120,7 +1109,7 @@
         "description": ""
       },
       "slippery-mind": {
-        "name": "",
+        "name": "Mente escurridiza",
         "description": ""
       },
       "ability-score-improvement-16": {
@@ -1132,7 +1121,7 @@
         "description": ""
       },
       "elusive": {
-        "name": "",
+        "name": "Escurridizo",
         "description": ""
       },
       "ability-score-improvement-19": {
@@ -1140,47 +1129,45 @@
         "description": ""
       },
       "stroke-of-luck": {
-        "name": "",
+        "name": "Golpe de suerte",
         "description": ""
       }
     },
     "resources": {
       "stroke-of-luck": {
-        "name": ""
+        "name": "Golpe de suerte"
       }
     },
-    "choices": {},
     "subclasses": {
       "thief": {
-        "name": "",
+        "name": "Ladrón",
         "features": {
           "thief": {
-            "name": "",
+            "name": "Ladrón",
             "description": ""
           },
           "supreme-sneak": {
-            "name": "",
+            "name": "Sigilo supremo",
             "description": ""
           },
           "use-magic-device": {
-            "name": "",
+            "name": "Usar objeto mágico",
             "description": ""
           },
           "thief-s-reflexes": {
-            "name": "",
+            "name": "Reflejos de ladrón",
             "description": ""
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "sorcerer": {
-    "name": "",
+    "name": "Hechicero",
     "subclassTitle": "",
     "features": {
       "spellcasting": {
-        "name": "",
+        "name": "Lanzamiento de conjuros",
         "description": ""
       },
       "sorcerous-origin": {
@@ -1188,7 +1175,7 @@
         "description": ""
       },
       "font-of-magic": {
-        "name": "",
+        "name": "Fuente de magia",
         "description": ""
       },
       "metamagic-3": {
@@ -1208,7 +1195,7 @@
         "description": ""
       },
       "metamagic-10": {
-        "name": "",
+        "name": "Metamagia",
         "description": ""
       },
       "ability-score-improvement-12": {
@@ -1224,7 +1211,7 @@
         "description": ""
       },
       "metamagic-17": {
-        "name": "",
+        "name": "Metamagia",
         "description": ""
       },
       "sorcerous-origin-feature-18": {
@@ -1236,18 +1223,18 @@
         "description": ""
       },
       "sorcerous-restoration": {
-        "name": "",
+        "name": "Restauración hechiceril",
         "description": ""
       }
     },
     "resources": {
       "sorcery-points": {
-        "name": ""
+        "name": "Puntos de hechicería"
       }
     },
     "choices": {
       "metamagic": {
-        "name": ""
+        "name": "Metamagia"
       }
     },
     "subclasses": {
@@ -1259,28 +1246,27 @@
             "description": ""
           },
           "elemental-affinity": {
-            "name": "",
+            "name": "Afinidad elemental",
             "description": ""
           },
           "dragon-wings": {
-            "name": "",
+            "name": "Alas de dragón",
             "description": ""
           },
           "draconic-presence": {
             "name": "",
             "description": ""
           }
-        },
-        "resources": {}
+        }
       }
     }
   },
   "warlock": {
-    "name": "",
+    "name": "Brujo",
     "subclassTitle": "",
     "features": {
       "pact-magic": {
-        "name": "",
+        "name": "Magia de pacto",
         "description": ""
       },
       "otherworldly-patron": {
@@ -1288,7 +1274,7 @@
         "description": ""
       },
       "eldritch-invocations": {
-        "name": "",
+        "name": "Invocaciones arcanas",
         "description": ""
       },
       "pact-boon": {
@@ -1344,13 +1330,13 @@
         "description": ""
       },
       "eldritch-master": {
-        "name": "",
+        "name": "Maestro arcano",
         "description": ""
       }
     },
     "resources": {
       "pact-slots": {
-        "name": ""
+        "name": "Espacios de conjuro de Magia de pacto"
       },
       "mystic-arcanum-6": {
         "name": ""
@@ -1370,7 +1356,7 @@
     },
     "choices": {
       "eldritch-invocations": {
-        "name": ""
+        "name": "Invocaciones arcanas"
       },
       "pact-boon": {
         "name": ""
@@ -1385,39 +1371,39 @@
             "description": ""
           },
           "dark-one-s-own-luck": {
-            "name": "",
+            "name": "Suerte propia del Oscuro",
             "description": ""
           },
           "fiendish-resilience": {
-            "name": "",
+            "name": "Resiliencia infernal",
             "description": ""
           },
           "hurl-through-hell": {
-            "name": "",
+            "name": "Arrojar a través del Infierno",
             "description": ""
           }
         },
         "resources": {
           "dark-one-s-own-luck": {
-            "name": ""
+            "name": "Suerte propia del Oscuro"
           },
           "hurl-through-hell": {
-            "name": ""
+            "name": "Arrojar a través del Infierno"
           }
         }
       }
     }
   },
   "wizard": {
-    "name": "",
+    "name": "Mago",
     "subclassTitle": "",
     "features": {
       "arcane-recovery": {
-        "name": "",
+        "name": "Recuperación arcana",
         "description": ""
       },
       "spellcasting": {
-        "name": "",
+        "name": "Lanzamiento de conjuros",
         "description": ""
       },
       "arcane-tradition": {
@@ -1453,7 +1439,7 @@
         "description": ""
       },
       "spell-mastery": {
-        "name": "",
+        "name": "Maestría de conjuros",
         "description": ""
       },
       "ability-score-improvement-19": {
@@ -1461,21 +1447,20 @@
         "description": ""
       },
       "signature-spells": {
-        "name": "",
+        "name": "Conjuros característicos",
         "description": ""
       }
     },
     "resources": {
       "arcane-recovery": {
-        "name": "",
+        "name": "Recuperación arcana",
         "note": ""
       },
       "signature-spells": {
-        "name": "",
+        "name": "Conjuros característicos",
         "note": ""
       }
     },
-    "choices": {},
     "subclasses": {
       "evocation": {
         "name": "",
