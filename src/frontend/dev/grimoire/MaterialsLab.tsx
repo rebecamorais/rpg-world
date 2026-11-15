@@ -16,16 +16,38 @@ import {
   type CardMaterial,
   MATERIAL_IDS,
   type MaterialId,
+  type MaterialVariant,
 } from '@frontend/components/grimoire/material-surface/types';
 import type { Spell } from '@frontend/types/spells';
 
 import type { LabParams } from './lab-params';
 
-// Built once: stable objects keep SpellCard's memo working
-const MATERIALS = Object.fromEntries(MATERIAL_IDS.map((id) => [id, cardMaterial(id)])) as Record<
-  MaterialId,
-  CardMaterial
->;
+// Built once and cached: stable objects keep SpellCard's memo working
+const MATERIALS = new Map<string, CardMaterial>();
+const materialFor = (id: MaterialId, variant: MaterialVariant | null) => {
+  const key = `${id}:${variant ?? ''}`;
+  if (!MATERIALS.has(key)) MATERIALS.set(key, cardMaterial(id, variant ?? undefined));
+  return MATERIALS.get(key)!;
+};
+
+/** Original vs optimized, side by side */
+const COMPARISONS: { id: MaterialId; variant: MaterialVariant; label: string }[] = [
+  {
+    id: 'alchemical-corrosion',
+    variant: 'baked',
+    label: 'detalhes num asset estático (7 camadas, antes ~18)',
+  },
+  {
+    id: 'crypt-stone',
+    variant: 'webp',
+    label: 'texturas em WebP pré-renderizado, em vez de SVG feTurbulence',
+  },
+  {
+    id: 'divine-parchment',
+    variant: 'webp',
+    label: 'texturas em WebP pré-renderizado, em vez de SVG feTurbulence',
+  },
+];
 
 const NAMES: Record<MaterialId, string> = {
   'glacial-glass': 'Glacial Glass · vidro gelado',
@@ -38,6 +60,7 @@ const href = (params: Partial<LabParams>, current: LabParams) => {
   const next = { ...current, ...params };
   const query = new URLSearchParams();
   if (next.material) query.set('material', next.material);
+  if (next.material && next.variant) query.set('variant', next.variant);
   query.set('count', String(next.count));
   if (next.expanded) query.set('expanded', '1');
   return `?${query}`;
@@ -63,13 +86,14 @@ function Sample({ size }: { size: 'sm' | 'md' | 'lg' }) {
 export function MaterialsLab({
   spells,
   material,
+  variant,
   count,
   expanded,
 }: LabParams & { spells: Spell[] }) {
-  const current = { material, count, expanded };
+  const current = { material, variant, count, expanded };
   const [openId, setOpenId] = useState<string | null>(expanded ? (spells[0]?.id ?? null) : null);
   const toggle = useCallback((id: string) => setOpenId((prev) => (prev === id ? null : id)), []);
-  const cardMat = material ? MATERIALS[material] : undefined;
+  const cardMat = material ? materialFor(material, variant) : undefined;
 
   return (
     <main className="mx-auto flex max-w-4xl flex-col gap-10 px-4 py-10">
@@ -104,6 +128,30 @@ export function MaterialsLab({
         ))}
       </section>
 
+      {/* 1b. Original vs optimized variants */}
+      <section className="flex flex-col gap-4" aria-labelledby="lab-variants">
+        <h2 id="lab-variants" className="text-title">
+          Original × otimizada
+        </h2>
+        {COMPARISONS.map(({ id, variant: v, label }) => (
+          <div key={`${id}-${v}`} className="flex flex-col gap-3" data-lab-compare={`${id}-${v}`}>
+            <h3 className="text-heading">
+              {NAMES[id]} · {v}: {label}
+            </h3>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <MaterialSurface material={id}>
+                <p className="text-caption text-muted-foreground px-5 pt-4">original</p>
+                <Sample size="md" />
+              </MaterialSurface>
+              <MaterialSurface material={id} variant={v}>
+                <p className="text-caption text-muted-foreground px-5 pt-4">{v}</p>
+                <Sample size="md" />
+              </MaterialSurface>
+            </div>
+          </div>
+        ))}
+      </section>
+
       {/* 2. OverflowBorders: does an ornament get past the edge? */}
       <section className="flex flex-col gap-4" aria-labelledby="lab-overflow">
         <h2 id="lab-overflow" className="text-title">
@@ -127,7 +175,7 @@ export function MaterialsLab({
               <SpellCard
                 spell={spells[0]}
                 material={{
-                  ...MATERIALS['glacial-glass'],
+                  ...materialFor('glacial-glass', null),
                   ornament: (
                     <span
                       aria-hidden="true"
@@ -152,8 +200,21 @@ export function MaterialsLab({
             Original
           </a>
           {MATERIAL_IDS.map((id) => (
-            <a key={id} className="text-body underline" href={href({ material: id }, current)}>
+            <a
+              key={id}
+              className="text-body underline"
+              href={href({ material: id, variant: null }, current)}
+            >
               {id}
+            </a>
+          ))}
+          {COMPARISONS.map(({ id, variant: v }) => (
+            <a
+              key={`${id}-${v}`}
+              className="text-body underline"
+              href={href({ material: id, variant: v }, current)}
+            >
+              {id}+{v}
             </a>
           ))}
           <a className="text-body underline" href={href({ count: 100 }, current)}>
@@ -164,7 +225,7 @@ export function MaterialsLab({
           </a>
         </nav>
         <p className="text-caption text-muted-foreground" data-lab-scenario="">
-          {`material=${material ?? 'none'} · ${Math.min(count, spells.length)} cards`}
+          {`material=${material ?? 'none'}${variant ? `+${variant}` : ''} · ${Math.min(count, spells.length)} cards`}
         </p>
         <div className="flex flex-col gap-3" data-lab-list="">
           {spells.slice(0, count).map((spell) => (

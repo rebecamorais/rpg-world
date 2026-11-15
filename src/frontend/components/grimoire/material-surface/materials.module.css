@@ -7,7 +7,9 @@
  *               past the edge where the host has no clip (see the OverflowBorders note in
  *               docs/grimoire-enchantments/explorations/material-surfaces.md).
  *
- * Colors come from the app's tokens (--card, --foreground) mixed with each material's own hue.
+ * Color: every material is tinted by the spell's own --spell-color (set by SpellCard), so the
+ * material never fights the card's stripe, icon and badges. Each material's own hue is only the
+ * fallback where there is no spell (the lab's sample panels).
  * Dark is the default theme; :root[data-theme='light'] adjusts the mix.
  */
 
@@ -66,8 +68,9 @@
  * ======================================================================================= */
 .surface[data-material='glacial-glass'],
 .ornament[data-material='glacial-glass'] {
-  --m: #7dd3fc;
-  --m-deep: #0c4a6e;
+  /* The spell's own color drives the material; ice blue only when there is no spell */
+  --m: var(--spell-color, #7dd3fc);
+  --m-deep: color-mix(in oklab, var(--m), black 72%);
 }
 .surface[data-material='glacial-glass'] {
   background:
@@ -125,8 +128,8 @@
  * ======================================================================================= */
 .surface[data-material='alchemical-corrosion'],
 .ornament[data-material='alchemical-corrosion'] {
-  --m: #84cc16;
-  --m-deep: #1a2e05;
+  --m: var(--spell-color, #84cc16);
+  --m-deep: color-mix(in oklab, var(--m), black 82%);
 }
 .surface[data-material='alchemical-corrosion'] {
   background:
@@ -196,8 +199,8 @@
  * ======================================================================================= */
 .surface[data-material='crypt-stone'],
 .ornament[data-material='crypt-stone'] {
-  --m: #a855f7;
-  --stone: #57534e;
+  --m: var(--spell-color, #a855f7);
+  --stone: #57534e; /* the stone itself stays neutral; the spell color is the glow */
 }
 .surface[data-material='crypt-stone'] {
   background:
@@ -237,8 +240,8 @@
  * ======================================================================================= */
 .surface[data-material='divine-parchment'],
 .ornament[data-material='divine-parchment'] {
-  --m: #fde68a;
-  --vellum: #a16207;
+  --m: var(--spell-color, #fde68a);
+  --vellum: color-mix(in oklab, var(--m), black 45%);
 }
 .surface[data-material='divine-parchment'] {
   background:
@@ -358,6 +361,71 @@
 }
 :global(:root[data-theme='light']) .ornament[data-material='divine-parchment'] {
   border-color: color-mix(in srgb, var(--vellum), transparent 45%);
+}
+
+/* =========================================================================================
+ * Variants (lab comparison). The originals above stay untouched.
+ * ======================================================================================= */
+
+/* webp: the same noise textures, pre-rendered by scripts/grimoire-bake-textures.ts at 2x,
+   instead of SVG feTurbulence. Only the texture source changes; every rule above still applies. */
+.surface[data-variant='webp'],
+.ornament[data-variant='webp'] {
+  --grain-dark: url('/grimoire/materials/grain-dark.webp');
+  --grain-light: url('/grimoire/materials/grain-light.webp');
+  --mottle: url('/grimoire/materials/mottle.webp');
+  --mottle-soft: url('/grimoire/materials/mottle-soft.webp');
+  --fibers: url('/grimoire/materials/fibers.webp');
+}
+
+/* baked: Alchemical Corrosion with its bubbles, pits and drips in three small static SVG assets
+   (reused) instead of ~18 gradient layers. */
+.surface[data-material='alchemical-corrosion'][data-variant='baked'] {
+  background:
+    linear-gradient(172deg, transparent 18%, rgb(255 255 255 / 0.045) 24%, transparent 32%),
+    url('/grimoire/materials/acid-pits.svg') right 6px bottom 2px / 120px 90px no-repeat,
+    url('/grimoire/materials/acid-pits.svg') left -56px bottom -30px / 120px 90px no-repeat,
+    radial-gradient(
+      70% 90% at 100% 100%,
+      color-mix(in srgb, var(--m), transparent 76%),
+      transparent 70%
+    ),
+    linear-gradient(
+      20deg,
+      color-mix(in srgb, var(--m-deep) 55%, var(--card)),
+      color-mix(in srgb, var(--m) 12%, var(--card)) 55%,
+      color-mix(in srgb, var(--m) 7%, var(--card))
+    );
+}
+/* Drips, the wet film on top and the bubble rims: one layer painted in the spell color and cut
+   by static masks (the assets are black shapes), so they follow any spell's hue */
+.ornament[data-material='alchemical-corrosion'][data-variant='baked'] {
+  background: var(--m);
+  mask:
+    url('/grimoire/materials/acid-drips.svg') 0 0 / 200px 26px repeat-x,
+    linear-gradient(to bottom, rgb(0 0 0 / 0.3), transparent 9px),
+    url('/grimoire/materials/acid-bubbles.svg') right 4px bottom 0 / 80px 60px no-repeat,
+    url('/grimoire/materials/acid-bubbles.svg') left -40px bottom -24px / 80px 60px no-repeat;
+}
+:global(:root[data-theme='light'])
+  .surface[data-material='alchemical-corrosion'][data-variant='baked'] {
+  background-color: color-mix(in srgb, var(--m) 14%, var(--card));
+  background-image:
+    url('/grimoire/materials/acid-pits.svg'), url('/grimoire/materials/acid-pits.svg'),
+    radial-gradient(
+      70% 90% at 100% 100%,
+      color-mix(in srgb, var(--m), transparent 65%),
+      transparent 70%
+    );
+  background-position:
+    right 6px bottom 2px,
+    left -56px bottom -30px,
+    0 0;
+  background-size:
+    120px 90px,
+    120px 90px,
+    auto;
+  background-repeat: no-repeat;
 }
 
 /* High contrast: materials step aside, the plain card stays */

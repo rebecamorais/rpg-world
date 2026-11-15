@@ -11,11 +11,21 @@ export const MATERIAL_IDS = [
 export type MaterialId = (typeof MATERIAL_IDS)[number];
 
 /**
+ * Lab variants of a material, compared against the original:
+ * - `webp`: noise textures pre-rendered to WebP instead of SVG feTurbulence
+ * - `baked`: decorative details in a static asset instead of many gradient layers
+ */
+export const MATERIAL_VARIANTS = ['webp', 'baked'] as const;
+
+export type MaterialVariant = (typeof MATERIAL_VARIANTS)[number];
+
+/**
  * What a card needs to wear a material. The card places the layers itself, so it never imports
  * the material styles: a card without a material ships none of them.
  */
 export interface CardMaterial {
   id: MaterialId;
+  variant?: MaterialVariant;
   /** Color, texture and light. Goes inside the card's clip, under everything else. */
   surface: ReactNode;
   /**
