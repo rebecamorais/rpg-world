@@ -65,7 +65,7 @@ describe('ItemDetails', () => {
   it('nested usa o aviso compacto', () => {
     renderWithProviders(<ItemDetails item={{ ...plate, untranslated: true }} nested />);
 
-    expect(screen.getByRole('note')).toHaveClass('text-label');
+    expect(screen.getByRole('note')).toHaveClass('text-caption');
   });
 
   it('preço fracionário fica em cobre', () => {

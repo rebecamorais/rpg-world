@@ -38,6 +38,16 @@ const MAX_COINS = 1_000_000_000;
 
 type Mode = 'pay' | 'receive';
 
+/**
+ * The dialog's lines that name where the coins are. A character's are in the pouch; the party
+ * chest passes its own, or its dialog would talk about a pouch it doesn't have.
+ */
+export interface CoinDialogText {
+  receiveDescription: string;
+  after: string;
+  tooMany: (max: string) => string;
+}
+
 /** "45 PO + 1 PL", skipping the coins at zero. */
 function useFormatCoins() {
   const t = useTranslations('characters.coins');
@@ -52,11 +62,13 @@ function useFormatCoins() {
 function CoinDialog({
   mode,
   inventory,
+  text,
   style,
   onDone,
 }: {
   mode: Mode;
   inventory: InventoryApi;
+  text?: CoinDialogText;
   style?: React.CSSProperties;
   onDone: () => void;
 }) {
@@ -85,7 +97,9 @@ function CoinDialog({
     <DialogContent className="character-context sm:max-w-[420px]" style={style}>
       <DialogHeader>
         <DialogTitle>{t(mode)}</DialogTitle>
-        <DialogDescription>{t(`${mode}Description`)}</DialogDescription>
+        <DialogDescription>
+          {mode === 'receive' && text ? text.receiveDescription : t(`${mode}Description`)}
+        </DialogDescription>
       </DialogHeader>
 
       <form
@@ -123,7 +137,9 @@ function CoinDialog({
           </p>
         ) : overflow ? (
           <p role="alert" className="text-danger-flare text-sm">
-            {t('tooMany', { max: formatter.number(MAX_COINS) })}
+            {text
+              ? text.tooMany(formatter.number(MAX_COINS))
+              : t('tooMany', { max: formatter.number(MAX_COINS) })}
           </p>
         ) : (
           <dl className="text-sm" aria-live="polite">
@@ -141,7 +157,7 @@ function CoinDialog({
             )}
             {after && (
               <div className="flex justify-between gap-4 py-1.5">
-                <dt className="text-muted-foreground">{t('after')}</dt>
+                <dt className="text-muted-foreground">{text?.after ?? t('after')}</dt>
                 <dd className="text-right">{format(after, ' · ')}</dd>
               </div>
             )}
@@ -183,11 +199,14 @@ export function CoinPurse({
   inventory,
   title,
   hint,
+  dialogText,
   dialogStyle,
 }: {
   inventory: InventoryApi;
   title: string;
   hint: string;
+  /** Left out for a character's pouch, whose lines are the default. */
+  dialogText?: CoinDialogText;
   dialogStyle?: React.CSSProperties;
 }) {
   const t = useTranslations('characters.coins');
@@ -269,6 +288,7 @@ export function CoinPurse({
             key={mode}
             mode={mode}
             inventory={inventory}
+            text={dialogText}
             style={dialogStyle}
             onDone={() => setMode(null)}
           />

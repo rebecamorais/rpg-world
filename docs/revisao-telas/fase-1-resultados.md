@@ -53,7 +53,20 @@ Decisões técnicas tomadas na rodada 2, além das de cima:
 - **Recarregar, no conflito, mantém o rascunho por cima** da versão nova. Para ver só a outra versão, Descartar.
 - **Sem cliente antigo quebrado:** quem não manda a revisão (o app já publicado) continua salvando como antes. Os endpoints de valor absoluto continuam no ar.
 
-Ainda em aberto: o Recuperar do descanso longo não zera o PV temporário (no 2024 ele some no descanso longo), e o aviso no topo cobre o cabeçalho no celular por cerca de 4 segundos.
+O PV temporário e o aviso no topo foram decididos na rodada 3 (veja abaixo).
+
+## Rodada 3: status
+
+As causas 6 a 12 estão corrigidas, cada uma com e2e (`e2e/layout-bars*.spec.ts`, `e2e/text-label.mobile.spec.ts` e `e2e/focus-permissions.spec.ts`). Com isso as 12 causas da fase 1 estão fechadas; os achados de uma tela só (abaixo) continuam abertos.
+
+Decisões da rodada 3:
+
+- **Números de combate só com ícone (decisão da Rebeca).** CA, iniciativa, deslocamento, dado de vida e percepção passiva mostram ícone e valor; o nome (e a explicação, quando há) abre num balão ao passar o mouse ou ao tocar no ícone. Substitui o "rótulo sempre visível" de ficha 1. O leitor de tela ouve o nome antes do valor. Num bloco estreito o ícone vai para cima do valor.
+- **Ficha de colega privada:** o jogador não vê "Ver ficha" do colega. Pela URL, um personagem da mesa diz "Esta ficha é privada"; um que não está na mesa diz "Este personagem não está na mesa". A API continua com 404.
+- **Configurações da mesa:** o jogador que abre volta para a mesa com um aviso de que só o mestre gerencia.
+- **Glossário aplicado:** "mesa" também na landing e nas features; "Nível" nos espaços de magia; "Remover das preparadas".
+
+Respostas da Rebeca (2026-11-15): "mesa" também nos textos de privacidade e termos; o modal de busca se chama "Adicionar magia", como o botão; o aviso das configurações fica como toast; o descanso longo lembra de zerar o PV temporário na lista, sem fazer sozinho; o aviso no topo do celular fica como está.
 
 ## Causas
 

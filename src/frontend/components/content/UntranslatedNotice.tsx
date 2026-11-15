@@ -15,7 +15,8 @@ export function UntranslatedNotice({ compact = false }: { compact?: boolean }) {
       role="note"
       className={cn(
         'bg-info-surface border-info-muted text-info-flare flex items-center gap-1.5 rounded-md border',
-        compact ? 'text-label px-2 py-1' : 'px-3 py-2 text-sm',
+        // A sentence, so normal case even in the compact popover version
+        compact ? 'text-caption px-2 py-1' : 'px-3 py-2 text-sm',
       )}
     >
       <AppIcon name="Info" size="xs" aria-hidden="true" className="shrink-0" />

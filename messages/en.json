@@ -653,6 +653,8 @@
     "summary": "Combat at a glance",
     "speedShort": "Speed",
     "passivePerceptionShort": "Perception",
+    "initiativeShort": "Init.",
+    "passivePerceptionAbbr": "Pass. Perc.",
     "adjustHpEnter": "Enter applies: {action}"
   },
   "hitDiceRemaining": {
@@ -673,6 +675,7 @@
     "pactSlotsBack": "Pact slots return",
     "notBackShort": "Spell slots and HP do not return on a short rest",
     "fullHp": "Full HP",
+    "tempHpGone": "Clear temporary HP, if any are left",
     "hitDiceBack": "Recover {count, plural, one {# hit die} other {# hit dice}}",
     "spellSlotsBack": "Spell slots return",
     "spellPointsBack": "Spell points return",
@@ -684,7 +687,7 @@
   "spellsDrawer": {
     "searchPlaceholder": "Search spells…",
     "learn": "Learn",
-    "title": "Spell list",
+    "title": "Add Spell",
     "description": "Manage your character's known spells.",
     "emptyState": "No spells learned yet.",
     "allLevels": "All levels",
@@ -1529,17 +1532,25 @@
     },
     "sheet": {
       "back": "Back to the party",
-      "readOnly": "Read only"
+      "readOnly": "Read only",
+      "privateTitle": "This sheet is private",
+      "privateDescription": "Only the character’s player and the party’s GM can see the sheet.",
+      "missingTitle": "This character isn’t in the party",
+      "missingDescription": "They may have left or been deleted."
     },
     "settings": {
       "eyebrow": "Party settings",
       "manage": "Manage",
-      "backToTable": "Back to the table"
+      "backToTable": "Back to the table",
+      "gmOnly": "Only the GM can open the party settings."
     },
     "chest": {
       "title": "Party inventory",
       "coinsTitle": "Party coins",
       "coinsHint": "The party's money. The GM and the players can change it; saved right away.",
+      "coinsReceiveDescription": "Adds the amount to the chest, in the coin it came in.",
+      "coinsAfter": "Chest after",
+      "coinsTooMany": "The chest holds at most {max} of each coin.",
       "itemsTitle": "Party chest",
       "itemsHint": "What the party keeps together. The GM and the players can add and remove; saved right away.",
       "empty": "The chest is empty.",
@@ -1599,7 +1610,8 @@
     "start": "Start",
     "endTurn": "End turn",
     "endCombat": "End combat",
-    "endCombatConfirm": "End the combat? The order and the enemies' HP will be lost.",
+    "endCombatTitle": "End combat?",
+    "endCombatConfirm": "The order, the NPCs' HP and everyone's conditions, characters included, will be lost.",
     "initiative": "Initiative",
     "initiativeOf": "{name}'s initiative",
     "hp": "HP",

@@ -45,6 +45,15 @@ interface SaveBarSlot {
   claimCharacterBar: () => () => void;
 }
 
+/**
+ * Where the fixed save bars sit: above the sheet's tab bar while it's there (below md), across
+ * the same span with a 1rem gutter. Between sm and md that span starts right of the side menu
+ * (`--sidebar-offset`, as SheetTabBar), or a long label would push the bar under the menu.
+ * From md the tab bar is gone and the bar keeps to the bottom right corner.
+ */
+const SAVE_BAR_POSITION =
+  'fixed inset-x-4 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 sm:left-[calc(var(--sidebar-offset)+1rem)] md:right-6 md:bottom-4 md:left-auto';
+
 const SaveBarSlotContext = createContext<SaveBarSlot | null>(null);
 
 /** Frame for the sheet's save bars. Renders the character's bar on tabs without a save button. */
@@ -65,7 +74,10 @@ export function SaveBarSlotProvider({ children }: { children: ReactNode }) {
       {claims === 0 && <CharacterSaveBar />}
       <div
         ref={setElement}
-        className="pointer-events-none fixed inset-x-4 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 flex flex-col items-stretch gap-2 sm:right-6 sm:left-auto md:bottom-4 [&>*]:pointer-events-auto"
+        className={cn(
+          SAVE_BAR_POSITION,
+          'pointer-events-none flex flex-col items-stretch gap-2 [&>*]:pointer-events-auto',
+        )}
       />
     </SaveBarSlotContext.Provider>
   );
@@ -105,7 +117,7 @@ export function SaveControls({
         <span
           role="status"
           title={isDirty ? t('saveShortcut') : undefined}
-          className="text-label text-warning-flare sr-only order-first mr-1 items-center gap-1.5 sm:not-sr-only sm:flex"
+          className="text-warning-flare sr-only order-first mr-1 items-center gap-1.5 text-sm sm:not-sr-only sm:flex"
         >
           {isDirty && (
             <>
@@ -121,7 +133,8 @@ export function SaveControls({
           // After a conflict the bar's Reload comes first: saving again would be refused again
           disabled={!isDirty || hasErrors || conflict}
           loading={isSaving}
-          className="text-label h-8 px-4"
+          // No text-label: buttons keep the case of their text
+          className="h-8 px-4"
         >
           {isSaving ? t('saving') : t('saveChanges')}
         </Button>
@@ -179,8 +192,7 @@ function SaveBar({
       className={cn(
         'border-border bg-popover/95 flex items-center justify-between gap-4 rounded-xl border p-3 shadow-2xl backdrop-blur-md sm:pl-4',
         // Outside a sheet (no slot), the bar places itself
-        !slot &&
-          'fixed inset-x-4 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 sm:right-6 sm:left-auto md:bottom-4',
+        !slot && SAVE_BAR_POSITION,
       )}
     >
       {conflict ? (
@@ -189,7 +201,7 @@ function SaveBar({
           {t('changedElsewhere')}
         </span>
       ) : hasErrors ? (
-        <span role="alert" className="text-label text-danger-flare flex items-center gap-1.5">
+        <span role="alert" className="text-danger-flare flex items-center gap-1.5 text-sm">
           <span className="bg-danger h-2 w-2 rounded-full" aria-hidden="true" />
           {t('fixFieldsToSave')}
         </span>
@@ -199,7 +211,7 @@ function SaveBar({
           {t('offlineDraft')}
         </span>
       ) : (
-        <span className="text-label text-warning-flare flex items-center gap-1.5">
+        <span className="text-warning-flare flex items-center gap-1.5 text-sm">
           <span className="bg-warning h-2 w-2 rounded-full" aria-hidden="true" />
           {label ?? t('unsavedChanges')}
         </span>

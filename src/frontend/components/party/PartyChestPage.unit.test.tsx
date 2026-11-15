@@ -86,6 +86,20 @@ describe('PartyChestPage', () => {
     ).toBeVisible();
   });
 
+  // The chest has no pouch: its dialog names the chest, not the character's pouch
+  it('o diálogo de receber fala do baú, não da algibeira', async () => {
+    renderWithProviders(<PartyChestPage partyId="party-1" />);
+    const receive = screen.getByRole('button', { name: messages.characters.coins.receive });
+    await waitFor(() => expect(receive).toBeEnabled());
+
+    await userEvent.click(receive);
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toHaveTextContent(t.coinsReceiveDescription);
+    expect(dialog).toHaveTextContent(t.coinsAfter);
+    expect(dialog).not.toHaveTextContent(messages.characters.coins.after);
+    expect(dialog).not.toHaveTextContent(messages.characters.coins.receiveDescription);
+  });
+
   it('mesa que a pessoa não vê: não encontrada', () => {
     hook.party = null;
     renderWithProviders(<PartyChestPage partyId="party-1" />);

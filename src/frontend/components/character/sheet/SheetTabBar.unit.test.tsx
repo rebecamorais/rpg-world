@@ -34,4 +34,13 @@ describe('SheetTabBar', () => {
     expect(screen.getByRole('link', { name: tabs.status })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: tabs.lore })).not.toHaveAttribute('aria-current');
   });
+
+  it('entre sm e md começa à direita do menu lateral, em vez de ficar por baixo dele', () => {
+    route.pathname = '/system/dnd5e/character/c1';
+    renderWithProviders(<SheetTabBar characterId="c1" system="dnd5e" />);
+
+    // The menu shows from sm up and the bar hides from md up: same breakpoints as the Sidebar
+    const nav = screen.getByRole('navigation', { name: tabs.label });
+    expect(nav).toHaveClass('sm:left-(--sidebar-offset)', 'md:hidden');
+  });
 });

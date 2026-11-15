@@ -36,10 +36,11 @@ export function OwnerOrSideBadge({
 }) {
   if (side !== 'player' || !ownerUsername) return <SideBadge side={side} />;
   return (
-    // A long username shrinks with an ellipsis instead of running under the HP bar
+    // A long username shrinks with an ellipsis instead of running under the HP bar.
+    // Caption in its own case: usernames are case-sensitive, and uppercase is wider on a phone.
     <span
       className={cn(
-        'text-label inline-flex max-w-full min-w-0 items-center gap-1',
+        'text-caption inline-flex max-w-full min-w-0 items-center gap-1 font-medium',
         SIDES.player.color,
       )}
     >

@@ -124,6 +124,46 @@ describe('AdjustHitPoints', () => {
     expect(screen.getByLabelText(t.adjustHpAmount)).toHaveFocus();
   });
 
+  it('reabrir com um número esquecido: o que se digita substitui, não soma', async () => {
+    renderAdjust();
+    await open();
+    await userEvent.keyboard('3{Escape}');
+
+    await open();
+    await userEvent.keyboard('5');
+
+    expect(screen.getByLabelText(t.adjustHpAmount)).toHaveValue('5');
+  });
+
+  it('Tab passa pelas ações e Esc devolve o foco ao botão que abriu', async () => {
+    renderAdjust();
+    const dialog = await open();
+    await userEvent.type(screen.getByLabelText(t.adjustHpAmount), '3');
+
+    await userEvent.tab();
+    expect(screen.getByRole('button', { name: t.damage })).toHaveFocus();
+    await userEvent.tab();
+    expect(screen.getByRole('button', { name: t.heal })).toHaveFocus();
+    await userEvent.tab();
+    expect(screen.getByRole('button', { name: t.setTempHp })).toHaveFocus();
+    // The focus stays inside: the next stop is the close button, at the top
+    await userEvent.tab();
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+
+    await userEvent.keyboard('{Escape}');
+    expect(screen.getByRole('button', { name: t.adjustHp })).toHaveFocus();
+  });
+
+  it('depois de aplicar com Enter, o foco volta ao botão que abriu', async () => {
+    renderAdjust();
+    await open();
+
+    await userEvent.keyboard('7{Enter}');
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: t.adjustHp })).toHaveFocus();
+  });
+
   it('Enter aplica Dano, a ação selecionada no começo', async () => {
     const { saveNow } = renderAdjust();
     await open();

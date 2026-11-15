@@ -55,7 +55,7 @@ export const SpellHeader = React.memo(
     showLevel,
     action,
   }: SpellHeaderProps) => (
-    <header className="flex items-center gap-4">
+    <header className="flex items-center gap-3 sm:gap-4">
       <div
         className="bg-spell-surface text-spell-flare ring-spell-muted shrink-0 rounded-lg p-2.5 ring-1"
         aria-hidden="true"
@@ -66,9 +66,12 @@ export const SpellHeader = React.memo(
       <div className="flex min-w-0 flex-1 flex-col justify-center">
         <div className="flex items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-2">
+            {/* Two lines before cutting, between words: truncated on a phone, "Bola de Fogo" and
+                "Bola de Fogo Adiável" both read "Bola ..." */}
             <h3
               id={`spell-name-${spell.id}`}
-              className="text-foreground font-display truncate text-lg font-semibold"
+              title={spell.name}
+              className="text-foreground font-display line-clamp-2 text-lg font-semibold break-normal hyphens-auto"
             >
               {spell.name}
             </h3>
@@ -87,7 +90,9 @@ export const SpellHeader = React.memo(
           </div>
         </div>
 
-        <div className="text-label text-muted-foreground mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+        {/* Caption type: uppercase would read "18 m" as "18M" and "8d6" as "8D6". Only the level
+            and the school, words, take the label style */}
+        <div className="text-caption text-muted-foreground mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
           {/* Open, the chips below carry casting time, range and duration: the header says
               what the spell is (level, school, damage) instead of repeating them */}
           <ul className={cn('flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1', SEPARATOR)}>
@@ -101,10 +106,12 @@ export const SpellHeader = React.memo(
               </Detail>
             )}
 
-            {showLevel && <Detail className="text-foreground">{displayValues.level}</Detail>}
+            {showLevel && (
+              <Detail className="text-label text-foreground">{displayValues.level}</Detail>
+            )}
 
             {isExpanded ? (
-              <Detail>{displayValues.school}</Detail>
+              <Detail className="text-label">{displayValues.school}</Detail>
             ) : (
               <Detail
                 icon={
@@ -169,8 +176,9 @@ export const SpellHeader = React.memo(
             )}
           </ul>
 
+          {/* Wraps instead of running past the card's edge at 320px ("INSTANTÂNE") */}
           {!isExpanded && (
-            <div className="flex shrink-0 items-center gap-3">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
               <div className="flex items-center gap-1">
                 <AppIcon name="Crosshair" size="xs" className="opacity-60" aria-hidden="true" />
                 <span>

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 
 import { UsePips } from '@frontend/components/character/stats/UsePips';
 import { RulesBlocks } from '@frontend/components/content/RulesBlocks';
+import { UntranslatedNotice } from '@frontend/components/content/UntranslatedNotice';
 import { Card } from '@frontend/components/ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '@frontend/components/ui/popover';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
@@ -74,10 +75,20 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
                     {box.name}
                   </span>
                 </PopoverTrigger>
-                <PopoverContent>
+                {/* Capped: a long rule (Channel Divinity) would cover the card it explains */}
+                <PopoverContent className="max-h-[min(24rem,var(--radix-popover-content-available-height))]">
                   <p className="font-semibold">{box.name}</p>
+                  {box.description && box.untranslated && (
+                    <div className="mt-1">
+                      <UntranslatedNotice compact />
+                    </div>
+                  )}
                   {box.description && (
-                    <div className="text-muted-foreground">
+                    // An untranslated description is the English one: screen readers read it so
+                    <div
+                      lang={box.untranslated ? 'en' : undefined}
+                      className="text-muted-foreground mt-1"
+                    >
                       <RulesBlocks text={box.description} source={source} />
                     </div>
                   )}

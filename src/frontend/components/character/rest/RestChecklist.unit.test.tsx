@@ -4,6 +4,7 @@ import { renderWithCharacter } from '@tests/helpers/character';
 import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { useCharacterActions } from '@frontend/context/CharacterContext';
 import { resolvePatch } from '@frontend/hooks/useDraft';
 
 import { buildResourceBoxes } from '@shared/systems/dnd5e/class-resources';
@@ -248,6 +249,106 @@ describe('RestChecklist', () => {
       'aria-expanded',
       'false',
     );
+  });
+
+  describe('com a barra de salvar (rascunho aberto)', () => {
+    // A sheet edit, which opens the save bar under the checklist
+    function EditAc() {
+      const { update } = useCharacterActions();
+      return (
+        <button type="button" onClick={() => update({ ac: 15 })}>
+          editar CA
+        </button>
+      );
+    }
+
+    it('recolhe a lista quando a barra de salvar aparece', async () => {
+      const user = userEvent.setup();
+      renderWithCharacter(
+        <>
+          <RestButtons />
+          <EditAc />
+        </>,
+        monk(),
+      );
+      await user.click(screen.getByRole('button', { name: 'Short rest' }));
+      const toggle = screen.getByRole('button', { name: /Short rest · / });
+      expect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+      await user.click(screen.getByRole('button', { name: 'editar CA' }));
+
+      expect(toggle).toHaveAttribute('aria-expanded', 'false');
+      // Still one tap from opening again
+      await user.click(toggle);
+      expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    function Discard() {
+      const { discard } = useCharacterActions();
+      return (
+        <button type="button" onClick={discard}>
+          descartar
+        </button>
+      );
+    }
+
+    it('reabre a lista quando a barra de salvar some, se foi ela que recolheu', async () => {
+      const user = userEvent.setup();
+      renderWithCharacter(
+        <>
+          <RestButtons />
+          <EditAc />
+          <Discard />
+        </>,
+        monk(),
+      );
+      await user.click(screen.getByRole('button', { name: 'Short rest' }));
+      const toggle = screen.getByRole('button', { name: /Short rest · / });
+
+      await user.click(screen.getByRole('button', { name: 'editar CA' }));
+      expect(toggle).toHaveAttribute('aria-expanded', 'false');
+
+      await user.click(screen.getByRole('button', { name: 'descartar' }));
+      expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    it('não reabre a lista que o jogador recolheu', async () => {
+      const user = userEvent.setup();
+      renderWithCharacter(
+        <>
+          <RestButtons />
+          <EditAc />
+          <Discard />
+        </>,
+        monk(),
+      );
+      await user.click(screen.getByRole('button', { name: 'Short rest' }));
+      const toggle = screen.getByRole('button', { name: /Short rest · / });
+      await user.click(toggle);
+      expect(toggle).toHaveAttribute('aria-expanded', 'false');
+
+      await user.click(screen.getByRole('button', { name: 'editar CA' }));
+      await user.click(screen.getByRole('button', { name: 'descartar' }));
+      expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('com a barra já na tela, abre recolhida', async () => {
+      const user = userEvent.setup();
+      renderWithCharacter(
+        <>
+          <RestButtons />
+          <EditAc />
+        </>,
+        monk(),
+      );
+      await user.click(screen.getByRole('button', { name: 'editar CA' }));
+      await user.click(screen.getByRole('button', { name: 'Long rest' }));
+
+      expect(screen.getByRole('button', { name: /Long rest · / })).toHaveAttribute(
+        'aria-expanded',
+        'false',
+      );
+    });
   });
 
   it('só leitura não mostra os botões de descanso', () => {

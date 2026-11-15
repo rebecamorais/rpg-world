@@ -29,13 +29,14 @@ export function GroupedItemList({ entries, onQuantity, onRemove }: Props) {
         return (
           <section key={group} aria-labelledby={headingId}>
             <div
-              className="item-context border-border bg-muted/40 text-item-flare text-label flex items-center justify-between border-b px-4 py-1.5 font-semibold"
+              className="item-context border-border bg-muted/40 text-item-flare flex items-center justify-between border-b px-4 py-1.5"
               style={itemGroupStyle(group)}
             >
-              <h3 id={headingId} className="text-item-flare">
+              <h3 id={headingId} className="text-item-flare text-label">
                 {t(`group.${group}`)}
               </h3>
-              <span className="tabular-nums">{fmt.weight(weight)}</span>
+              {/* The weight keeps its unit's case ("35,5 kg"), like the total below the list */}
+              <span className="text-caption font-semibold tabular-nums">{fmt.weight(weight)}</span>
             </div>
             <ul>
               {inGroup.map((entry) => (

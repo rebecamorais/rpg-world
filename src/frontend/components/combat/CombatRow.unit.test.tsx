@@ -100,6 +100,25 @@ describe('CombatRow', () => {
       expect(within(row).getByRole('button', { name: 'Caído, condition' })).toBeInTheDocument();
     });
 
+    it('nome longo quebra entre palavras, com o nome inteiro no title', () => {
+      renderRow(gmRow({ name: 'Katherine Johnson' }));
+
+      const link = screen.getByRole('link', { name: /^Katherine Johnson/ });
+      expect(link).toHaveAttribute('title', 'Katherine Johnson');
+      expect(link).toHaveClass('line-clamp-2', 'break-normal');
+      expect(link).not.toHaveClass('break-words');
+    });
+
+    it('no celular o PV vai para a linha de baixo do nome, sem coluna fixa ao lado', () => {
+      renderRow(goblin());
+
+      // One HP element (never a hidden copy), placed by the grid: row 2 under the name on a
+      // phone, its own column from sm
+      const hp = screen.getByText('5 / 7').parentElement!;
+      expect(hp).toHaveClass('col-start-3', 'row-start-2', 'sm:col-start-4', 'sm:row-start-1');
+      expect(hp).not.toHaveClass('w-16');
+    });
+
     it('sem iniciativa mostra um traço', () => {
       renderRow(gmRow({ initiative: null }));
       expect(screen.getByText('—')).toBeInTheDocument();
@@ -203,11 +222,11 @@ describe('CombatRow', () => {
     it('clicar na linha abre; clicar num campo da linha aberta não fecha', async () => {
       renderRow(goblin());
       expect(details('Goblin')).toHaveAttribute('aria-expanded', 'false');
-      expect(screen.getByText(messages.combatStats.armorClass)).not.toBeVisible();
+      expect(screen.getByText(`${messages.combatStats.armorClass}:`)).not.toBeVisible();
 
       await userEvent.click(screen.getByText('5 / 7'));
       expect(details('Goblin')).toHaveAttribute('aria-expanded', 'true');
-      expect(screen.getByText(messages.combatStats.armorClass)).toBeVisible();
+      expect(screen.getByText(`${messages.combatStats.armorClass}:`)).toBeVisible();
 
       await userEvent.click(screen.getByLabelText(fill(t.hpOf, { name: 'Goblin' })));
       await userEvent.click(screen.getByLabelText(fill(t.initiativeOf, { name: 'Goblin' })));
@@ -267,9 +286,9 @@ describe('CombatRow', () => {
       expect(
         screen.getByRole('button', { name: `${messages.sheetViewer.open} Goblin` }),
       ).toBeVisible();
-      expect(screen.getByText(messages.combatStats.armorClass)).toBeVisible();
-      expect(screen.getByText(t.passivePerception)).toBeVisible();
-      expect(screen.getByText(messages.combatStats.speed)).toBeVisible();
+      expect(screen.getByText(`${messages.combatStats.armorClass}:`)).toBeVisible();
+      expect(screen.getByText(`${t.passivePerception}:`)).toBeVisible();
+      expect(screen.getByText(`${messages.combatStats.speed}:`)).toBeVisible();
 
       await userEvent.click(
         screen.getByRole('button', { name: fill(t.remove, { name: 'Goblin' }) }),

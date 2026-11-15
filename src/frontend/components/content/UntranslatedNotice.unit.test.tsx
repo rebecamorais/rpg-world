@@ -17,4 +17,13 @@ describe('UntranslatedNotice', () => {
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });
+
+  // A whole sentence in uppercase is hard to read; text-label is for short labels only
+  it('a versão compacta é caption em caixa normal, não text-label', () => {
+    renderWithProviders(<UntranslatedNotice compact />);
+
+    const note = screen.getByRole('note');
+    expect(note).toHaveClass('text-caption');
+    expect(note).not.toHaveClass('text-label');
+  });
 });

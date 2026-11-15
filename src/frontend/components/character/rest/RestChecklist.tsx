@@ -99,8 +99,23 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
   const titleId = useId();
   const heading = useRef<HTMLHeadingElement>(null);
   const [ticked, setTicked] = useState<ReadonlySet<string>>(new Set());
-  // Phone only: collapsed, the list hides and the bar is one button tall
-  const [collapsed, setCollapsed] = useState(false);
+  // Phone only: collapsed, the list hides and the bar is one button tall. It starts and goes
+  // collapsed while the save bar shows: stacked open, the two took ~70% of a 390px screen and
+  // covered the VitalsBar. When the save bar goes away the list opens again, unless the player
+  // collapsed or opened it themselves meanwhile
+  const [collapsed, setCollapsed] = useState(isDirty);
+  const [autoCollapsed, setAutoCollapsed] = useState(isDirty);
+  const [dirtySeen, setDirtySeen] = useState(isDirty);
+  if (dirtySeen !== isDirty) {
+    setDirtySeen(isDirty);
+    if (isDirty && !collapsed) {
+      setCollapsed(true);
+      setAutoCollapsed(true);
+    } else if (!isDirty && autoCollapsed) {
+      setCollapsed(false);
+      setAutoCollapsed(false);
+    }
+  }
   const [recovering, setRecovering] = useState(false);
   const [recovered, setRecovered] = useState(false);
 
@@ -115,6 +130,7 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
     boxes,
     magic: magicToRestore(character),
     hasPactSlots: !!content?.resources.some((r) => r.unit === 'spell-slots' && r.level <= level),
+    hasTempHp: (character.hpTemp ?? 0) > 0,
   });
 
   // Opening moves the focus here, so the list is what the keyboard reads next. No trap: Tab
@@ -145,6 +161,7 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
     element?.scrollIntoView({ block: 'center' });
     if (element) focusTarget(element)?.focus({ preventScroll: true });
     setCollapsed(true);
+    setAutoCollapsed(false);
   };
 
   const text = (item: RestItem) => {
@@ -218,7 +235,8 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
                 ? 'max-h-[min(60dvh,calc(100dvh_-_9rem_-_env(safe-area-inset-bottom)_-_9rem))] md:max-h-[min(70dvh,calc(100dvh_-_5.5rem_-_9rem))] lg:max-h-[calc(70dvh_-_4.5rem)]'
                 : 'max-h-[min(60dvh,calc(100dvh_-_4.5rem_-_env(safe-area-inset-bottom)_-_9rem))] md:max-h-[min(70dvh,calc(100dvh_-_1rem_-_9rem))] lg:max-h-[70dvh]',
             )
-          : 'fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 max-h-[min(60dvh,calc(100dvh_-_3.5rem_-_env(safe-area-inset-bottom)_-_9rem))] border-t md:inset-x-auto md:right-4 md:bottom-4 md:max-h-[min(70dvh,calc(100dvh_-_1rem_-_9rem))] md:w-80 md:rounded-lg md:border lg:max-h-[70dvh]',
+          : // From sm the side menu is open: start to its right, as the tab bar does
+            'fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 max-h-[min(60dvh,calc(100dvh_-_3.5rem_-_env(safe-area-inset-bottom)_-_9rem))] border-t sm:left-(--sidebar-offset) md:inset-x-auto md:right-4 md:bottom-4 md:max-h-[min(70dvh,calc(100dvh_-_1rem_-_9rem))] md:w-80 md:rounded-lg md:border lg:max-h-[70dvh]',
       )}
       style={theme.style}
     >
@@ -232,7 +250,10 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
           <button
             type="button"
             aria-expanded={!collapsed}
-            onClick={() => setCollapsed((value) => !value)}
+            onClick={() => {
+              setCollapsed((value) => !value);
+              setAutoCollapsed(false);
+            }}
             className="focus-ring min-h-11 w-full truncate text-left md:hidden"
           >
             {progress}

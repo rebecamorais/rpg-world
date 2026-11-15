@@ -119,8 +119,10 @@ export function CombatRow({
         )}
       />
 
-      <div className="flex items-center gap-3">
-        <span className="text-foreground w-7 shrink-0 text-center font-mono text-lg font-bold tabular-nums">
+      {/* Phones: the HP goes to a second line under the name, so no fixed column beside it
+          squeezes the name. From sm, it is a column of its own between the name and the chevron */}
+      <div className="grid grid-cols-[auto_auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 sm:grid-cols-[auto_auto_minmax(0,1fr)_7rem_auto]">
+        <span className="text-foreground row-span-2 w-7 shrink-0 text-center font-mono text-lg font-bold tabular-nums sm:row-span-1">
           <span className="sr-only">{t('initiative')} </span>
           {row.initiative ?? '—'}
         </span>
@@ -128,7 +130,10 @@ export function CombatRow({
         <ZoomablePortrait
           src={row.avatarUrl}
           name={row.name}
-          className={cn('size-11 sm:size-12', down ? 'opacity-60 grayscale' : faded && fadedArt)}
+          className={cn(
+            'row-span-2 size-11 sm:row-span-1 sm:size-12',
+            down ? 'opacity-60 grayscale' : faded && fadedArt,
+          )}
         >
           <CharacterPortrait
             avatarUrl={row.avatarUrl}
@@ -145,9 +150,11 @@ export function CombatRow({
             rel="noopener noreferrer"
             // The visible name first, then where it opens
             aria-label={`${row.name} ${t('newTab')}`}
+            title={row.name}
             className={cn(
-              // Two lines before cutting: the name matters more than the space on a phone
-              'text-title focus-ring line-clamp-2 max-w-full self-start rounded-sm break-words hover:underline',
+              // Two lines before cutting, between words: the name matters more than the space on
+              // a phone, and break-words cut it mid-word ("KATHERIN/E")
+              'text-title focus-ring line-clamp-2 max-w-full self-start rounded-sm break-normal hyphens-auto hover:underline',
               faded ? 'text-muted-foreground' : 'text-character-flare',
             )}
           >
@@ -173,8 +180,8 @@ export function CombatRow({
           </div>
         </div>
 
-        <div className="flex w-16 shrink-0 flex-col items-end gap-1 sm:w-28">
-          <span className="text-foreground font-mono text-sm font-bold tabular-nums">
+        <div className="col-start-3 row-start-2 flex min-w-0 items-center gap-2 sm:col-start-4 sm:row-start-1 sm:flex-col sm:items-end sm:gap-1">
+          <span className="text-foreground shrink-0 font-mono text-sm font-bold whitespace-nowrap tabular-nums">
             {/* Without it a screen reader only says "12 / 20" */}
             <span className="sr-only">{t('hp')} </span>
             {`${row.hp.current} / ${row.hp.max}`}
@@ -196,7 +203,7 @@ export function CombatRow({
             ? { 'aria-expanded': expanded, 'aria-controls': detailsId }
             : { 'aria-pressed': selected })}
           onClick={toggle}
-          className="shrink-0"
+          className="col-start-4 row-span-2 row-start-1 shrink-0 sm:col-start-5 sm:row-span-1"
         >
           <AppIcon
             name="ChevronRight"
