@@ -11,6 +11,7 @@ import {
   SURFACES,
   type ThemeName,
   contrastRatio,
+  flare,
   over,
   parseHex,
   toHex,
@@ -116,6 +117,20 @@ describe.each(THEMES)('%s theme', (theme) => {
         3,
       ),
     ).toEqual([]));
+
+  // The icon and the group title use --item-flare on --item-surface (the color at 10% over the
+  // card or the page): text, so 4.5:1
+  it('item group flare reaches 4.5:1 on its own tinted surface', () => {
+    const bad = ['weapons', 'armor', 'magic', 'tools', 'gear', 'other'].flatMap((group) => {
+      const base = rgb(theme, `item-${group}`);
+      const fg = flare(base, theme);
+      return (['background', 'card'] as const)
+        .map((bg) => [bg, contrastRatio(fg, over(base, 0.1, rgb(theme, bg)))] as const)
+        .filter(([, ratio]) => ratio < 4.5)
+        .map(([bg, ratio]) => `--item-${group} flare on surface over --${bg}: ${ratio.toFixed(2)}`);
+    });
+    expect(bad).toEqual([]);
+  });
 
   it('SURFACES in contrast.ts match globals.css', () => {
     for (const name of ['background', 'card', 'popover', 'muted'] as const)

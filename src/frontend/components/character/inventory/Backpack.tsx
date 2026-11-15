@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -25,6 +25,7 @@ import { AddItemDialog } from './AddItemDialog';
 import { GroupedItemList } from './GroupedItemList';
 import { ItemGrid } from './ItemGrid';
 import { ItemListSkeleton } from './ItemListSkeleton';
+import { ADD_ITEM_FOCUS, groupEntries } from './item-visuals';
 import { useItemFormat } from './useItemFormat';
 
 /** The edition most of the backpack's items are from; 2024 when it is empty (or a tie). */
@@ -84,12 +85,14 @@ export function ItemList({
   const fmt = useItemFormat();
   const [adding, setAdding] = useState(false);
   const [view, setView] = useInventoryView(viewKey);
+  const { root: focusRoot, next: focusNext } = useFocusAfterRemove();
 
   const entries = (inventory?.items ?? []).filter((i) => i.containerId === backpack?.id);
   const totalWeight = entries.reduce((sum, i) => sum + (i.item?.weight ?? 0) * i.quantity, 0);
 
   const remove = (entry: InventoryItem) => {
     const name = entry.item?.name ?? entry.ref;
+    focusNext(entries, entry);
     removeItem(entry.id);
     toast(t('removed', { name }), {
       action: { label: t('undo'), onClick: () => restoreItem(entry) },
@@ -103,6 +106,7 @@ export function ItemList({
       disabled={!backpack}
       onClick={() => setAdding(true)}
       className="text-label h-8 px-3"
+      data-item-focus={ADD_ITEM_FOCUS}
     >
       <AppIcon name="Plus" size={14} aria-hidden="true" />
       {tCharacters('addItem')}
@@ -110,7 +114,7 @@ export function ItemList({
   );
 
   return (
-    <SectionCard>
+    <SectionCard ref={focusRoot}>
       <SectionCard.Header>
         <SectionCard.Title icon={icon} hint={hint}>
           {title}
@@ -164,6 +168,36 @@ export function ItemList({
       />
     </SectionCard>
   );
+}
+
+/**
+ * After a removal, focus the item that took its place (the next one, else the one before, else
+ * "Add Item"): the trash can unmounts with its row, and focus would fall back to the page's top.
+ */
+function useFocusAfterRemove() {
+  const root = useRef<HTMLDivElement>(null);
+  const pending = useRef<string | null>(null);
+
+  // Every render: the target shows up once the removal has re-rendered the list
+  useEffect(() => {
+    const target = pending.current;
+    if (!target) return;
+    const el = [...(root.current?.querySelectorAll<HTMLElement>('[data-item-focus]') ?? [])].find(
+      (candidate) => candidate.dataset.itemFocus === target,
+    );
+    if (el) {
+      el.focus();
+      pending.current = null;
+    }
+  });
+
+  const next = (entries: InventoryItem[], removed: InventoryItem) => {
+    const ordered = groupEntries(entries).flatMap((g) => g.entries);
+    const index = ordered.findIndex((e) => e.id === removed.id);
+    pending.current = ordered[index + 1]?.id ?? ordered[index - 1]?.id ?? ADD_ITEM_FOCUS;
+  };
+
+  return { root, next };
 }
 
 const VIEWS: { value: InventoryView; icon: string; label: 'viewList' | 'viewGrid' }[] = [

@@ -188,6 +188,32 @@ describe('Backpack', () => {
     );
   });
 
+  it('remover pela lixeira leva o foco ao item seguinte, não ao topo da página', async () => {
+    const user = userEvent.setup();
+    renderBackpack([entry('e1', ROPE, 1), entry('e2', TORCH, 1)]);
+    api.get.mockImplementation(async (url: string) =>
+      url.startsWith('/api/items') ? CATALOG : inventory([entry('e2', TORCH, 1)]),
+    );
+
+    await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
+
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Details for Torch' })).toHaveFocus(),
+    );
+  });
+
+  it('remover o último item leva o foco a "Add Item"', async () => {
+    const user = userEvent.setup();
+    renderBackpack([entry('e1', ROPE, 1)]);
+    api.get.mockImplementation(async (url: string) =>
+      url.startsWith('/api/items') ? CATALOG : inventory([]),
+    );
+
+    await user.click(await screen.findByRole('button', { name: 'Remove Corda de Cânhamo' }));
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Add Item' })).toHaveFocus());
+  });
+
   it('item que saiu do catálogo mostra a ref e deixa remover (Ponto 2)', async () => {
     const user = userEvent.setup();
     renderBackpack([entry('e1', 'dnd5e:srd-5.2:item:gone')]);
@@ -355,6 +381,27 @@ describe('Backpack', () => {
           quantity: 1,
         }),
       );
+    });
+
+    it('grade: o selo ×N só aparece com mais de um', async () => {
+      renderBackpack([entry('e1', RICH_ROPE, 2), entry('e2', TORCH, 1)]);
+      await toGrid();
+
+      expect(screen.getByRole('button', { name: 'Rope, 2' })).toHaveTextContent('×2');
+      expect(screen.getByRole('button', { name: 'Torch, 1' })).not.toHaveTextContent('×');
+    });
+
+    it('grade: remover o selecionado leva o foco ao quadrado seguinte', async () => {
+      renderBackpack([entry('e1', RICH_ROPE, 1), entry('e2', TORCH, 1)]);
+      await toGrid();
+      fireEvent.click(screen.getByRole('button', { name: 'Rope, 1' }));
+      api.get.mockImplementation(async (url: string) =>
+        url.startsWith('/api/items') ? CATALOG : inventory([entry('e2', TORCH, 1)]),
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'Remove Rope' }));
+
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Torch, 1' })).toHaveFocus());
     });
 
     it('grade: item fora do catálogo', async () => {
