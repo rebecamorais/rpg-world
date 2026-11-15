@@ -518,6 +518,14 @@
     "backgroundSending": "Enviando…",
     "preview": "Prévia"
   },
+  "classResources": {
+    "newTitle": "Novo: recursos de classe",
+    "newText": "Escolha a edição para ver os recursos da sua classe e o que volta no descanso.",
+    "short": "curto",
+    "long": "longo",
+    "edit": "editar",
+    "title": "Recursos de classe"
+  },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",
     "adjustValue": "Ajuste o valor base deste atributo (1 a 30).",

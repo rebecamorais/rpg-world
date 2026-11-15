@@ -518,6 +518,14 @@
     "backgroundSending": "Sending…",
     "preview": "Preview"
   },
+  "classResources": {
+    "newTitle": "New: class resources",
+    "newText": "Pick the edition to see your class resources and what comes back on a rest.",
+    "short": "short",
+    "long": "long",
+    "edit": "edit",
+    "title": "Class resources"
+  },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",
     "adjustValue": "Adjust the base value of this attribute (1 to 30).",

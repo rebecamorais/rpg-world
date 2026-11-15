@@ -22,6 +22,10 @@ vi.mock('@frontend/lib/crop-image', () => ({
   cropImage: vi.fn(async () => new File(['small'], 'image.webp', { type: 'image/webp' })),
 }));
 
+vi.mock('@frontend/hooks/useClassResources', () => ({
+  useClassResources: () => ({ content: null, isLoading: false }),
+}));
+
 const character = { ...createDnD5eCharacter('owner', 'Thor'), id: 'c1' };
 const SAVED_AVATAR = 'https://img.test/avatars/u/a.webp';
 const NEW_AVATAR = 'https://img.test/avatars/u/b.webp';
@@ -163,5 +167,26 @@ describe('StatusView no celular', () => {
       screen.getByRole('button', { name: messages.characterHeader.hideIdentity }),
     ).toHaveAttribute('aria-expanded', 'true');
     expect(document.getElementById('char-identity')).not.toHaveClass('max-md:hidden');
+  });
+});
+
+describe('StatusView e a linha de recursos', () => {
+  const deathSaves = () => screen.getByText(messages.savingThrows.deathSaves);
+
+  it('sem edição, o cartão da edição vem logo abaixo do cabeçalho com as mortes ao lado', () => {
+    params.value = { id: 'c1' };
+    renderStatus();
+
+    expect(screen.getByText(messages.classResources.newTitle)).toBeInTheDocument();
+    expect(deathSaves().closest('.md\\:grid-cols-2')).not.toBeNull();
+  });
+
+  it('com edição e sem caixas, as mortes continuam na coluna lateral', () => {
+    params.value = { id: 'c1' };
+    renderStatus({ ...character, edition: '2014', class: 'Artífice' });
+
+    expect(screen.queryByText(messages.classResources.newTitle)).not.toBeInTheDocument();
+    expect(deathSaves().closest('.md\\:grid-cols-2')).toBeNull();
+    expect(deathSaves().closest('.\\[grid-area\\:side\\]')).not.toBeNull();
   });
 });

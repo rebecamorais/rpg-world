@@ -3,6 +3,10 @@
 import { useTranslations } from 'next-intl';
 
 import CharacterHeader from '@frontend/components/character/CharacterHeader';
+import {
+  ResourcesRow,
+  useResourcesRowVisible,
+} from '@frontend/components/character/resources/ResourcesRow';
 import { SheetFieldset } from '@frontend/components/character/sheet/SheetFieldset';
 import AttributesSection from '@frontend/components/character/stats/AttributesSection';
 import CombatStatsSection from '@frontend/components/character/stats/CombatStatsSection';
@@ -22,6 +26,7 @@ export default function StatusView() {
   const { id, error } = useCharacterMeta();
   const { embedded } = useSheetSource(id);
   const t = useTranslations('characters');
+  const rowVisible = useResourcesRowVisible();
 
   return (
     <div className="flex flex-col gap-6">
@@ -34,13 +39,15 @@ export default function StatusView() {
       <CharacterHeader />
 
       <SheetFieldset>
+        <ResourcesRow />
+
         {/* Phones: combat first, it is what changes during play. Desktop: two columns. */}
         <div className="grid grid-cols-1 gap-6 [grid-template-areas:'combat'_'side'_'skills'] lg:grid-cols-[280px_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:[grid-template-areas:'side_combat'_'side_skills']">
           <div className="[grid-area:combat]">
             <CombatStatsSection />
           </div>
           <div className="flex flex-col gap-6 [grid-area:side]">
-            <DeathSavesCard />
+            {!rowVisible && <DeathSavesCard />}
             <SavingThrowsSection />
             <AttributesSection />
           </div>
