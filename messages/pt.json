@@ -550,7 +550,7 @@
     "newText": "Escolha a edição para ver os recursos da sua classe e o que volta no descanso.",
     "short": "curto",
     "long": "longo",
-    "edit": "editar",
+    "editLabel": "Editar recursos de classe",
     "title": "Recursos de classe"
   },
   "resourceEditor": {
