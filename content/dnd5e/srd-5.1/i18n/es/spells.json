@@ -27,13 +27,13 @@
   "animal-friendship": {
     "name": "Encantar animal",
     "description": "Este conjuro te permite convencer a una bestia de que no quieres causarle ningún daño. Elige a una bestia que puedas ver dentro del alcance. Debe poder verte y oírte. Si su Inteligencia es de 4 o más, el conjuro falla. De lo contrario, la bestia deberá superar una tirada de salvación de Sabiduría o quedará {@condition charmed||hechizada} por ti hasta que termine el conjuro. Si alguno de tus compañeros o tú hacéis daño al objetivo, el conjuro terminará.",
-    "material": "Unas migajas de comida."
+    "material": "Unas migajas de comida"
   },
   "animal-messenger": {
     "name": "Mensajero animal",
     "description": "Mediante este conjuro, usas un animal para que entregue un mensaje. Elige a una bestia Diminuta que puedas ver dentro del alcance, como una ardilla, un arrendajo azul o un murciélago. Indica un lugar, que tienes que haber visitado, y da una descripción general del destinatario, como “un hombre o una mujer que lleva un uniforme de guardia de la ciudad” o “una enana pelirroja con un gorro puntiagudo”. Además, le transmites al animal un mensaje de hasta 25 palabras. Hasta que termine el conjuro, la bestia objetivo viajará hacia el lugar elegido y recorrerá aproximadamente 75 km cada 24 horas si se trata de un mensajero volador y 37,5 km en el caso de otros animales.\nCuando el mensajero llegue a su destino, entregará tu mensaje a la criatura que le hayas descrito y reproducirá el sonido de tu voz. El mensajero solo le hablará a una criatura que coincida con la descripción que le hayas dado. Si el mensajero no llega a su destino antes de que el conjuro termine, el mensaje se pierde y la bestia regresa al lugar donde lanzaste el conjuro.",
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 3 o superior, la duración aumenta en 48 horas por cada nivel por encima de 2 que tenga el espacio que hayas empleado.",
-    "material": "Unas migajas de comida."
+    "material": "Unas migajas de comida"
   },
   "animal-shapes": {
     "name": "Aspectos animales",
@@ -43,7 +43,7 @@
     "name": "Animar a los muertos",
     "description": "Este conjuro crea un siervo muerto viviente. Elige un montón de huesos o un cadáver de un humanoide Mediano o Pequeño dentro del alcance. El conjuro insufla en el objetivo una infame imitación de vida y este se alza como un muerto viviente. Si has elegido unos huesos, el objetivo se convierte en un esqueleto y, si has elegido un cadáver, en un zombi (tu GM tiene el perfil de la criatura).\nEn cada uno de tus turnos, puedes usar una acción adicional para dar órdenes mentalmente a cada criatura que hayas creado con el conjuro que esté a 18 m o menos de ti (si controlas a varias criaturas, puedes dar órdenes a cualquiera de ellas o a todas a la vez transmitiéndole la misma orden a cada una). Tú decides qué acción llevará a cabo la criatura y adónde se moverá durante su siguiente turno, o puedes dar una orden general, como proteger una cámara o un pasadizo en concreto. Si no le das ninguna orden, la criatura solo se defenderá a sí misma de las criaturas hostiles. En cuanto se le dé una orden, la criatura la cumplirá hasta completar su tarea.\nLa criatura estará bajo tu control durante 24 horas, tras las cuales dejará de obedecer cualquier orden que le hayas dado. Para mantener el control sobre ella otras 24 horas, deberás volver a lanzarle este conjuro antes de que acabe el periodo actual de 24 horas. Este uso del conjuro refuerza tu control sobre hasta cuatro criaturas que hayas animado con él, no anima una nueva criatura.",
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 4 o superior, animas o refuerzas el control sobre dos criaturas muertas vivientes adicionales por cada nivel por encima de 3 que tenga el espacio que hayas empleado. Cada una de las criaturas debe proceder de un cadáver o un montón de huesos distinto.",
-    "material": "Una gota de sangre, un pedazo de carne y una pizca de polvo de hueso."
+    "material": "Una gota de sangre, un pedazo de carne y una pizca de polvo de hueso"
   },
   "animate-objects": {
     "name": "Animar objetos",
@@ -60,14 +60,14 @@
     "material": "Una pizca hierro en polvo o virutas de hierro"
   },
   "antipathy-sympathy": {
-    "name": "Antipatía/Simpatía",
+    "name": "Antipatía/simpatía",
     "description": "Este conjuro atrae o repele a las criaturas que elijas. Haz objetivo a algo dentro del alcance, bien un objeto Enorme o menor o bien una criatura o una zona que no sean mayores que un cubo de 60 m de lado. A continuación, selecciona un tipo de criatura inteligente, como dragones rojos, goblins o vampiros. Hasta que termine el conjuro, infundes al objetivo un aura que atrae o repele a las criaturas especificadas, en función de si eliges simpatía o antipatía respectivamente como efecto del aura.\n***Antipatía.*** El encantamiento hace que las criaturas del tipo que hayas elegido sientan una urgente necesidad de abandonar la zona y evitar al objetivo. Cuando una de estas criaturas pueda ver al objetivo o esté a 18 m o menos de él, deberá superar una tirada de salvación de Sabiduría o quedará {@condition frightened||asustada} y permanecerá {@condition frightened||asustada} mientras pueda verlo o esté a 18 m o menos de él. Mientras esté {@condition frightened||asustada} del objetivo, la criatura deberá usar su movimiento para dirigirse al lugar seguro más cercano desde el que no pueda verlo. Si la criatura se mueve a más de 18 m del objetivo y no lo puede ver, dejará de estar {@condition frightened||asustada}, pero {@condition frightened||lo volverá a estar} si ve al objetivo otra vez o se acerca a 18 m o menos de él.\n***Simpatía.*** El encantamiento hace que las criaturas elegidas sientan una urgente necesidad de acercarse al objetivo mientras estén a 18 m o menos de él o puedan verlo. Cuando una de estas criaturas pueda ver al objetivo o esté a 18 m o menos de él, deberá superar una tirada de salvación de Sabiduría o usará su movimiento en cada uno de sus turnos para entrar en la zona o acercarse al alcance del objetivo. Cuando lo haya hecho, la criatura no podrá alejarse del objetivo voluntariamente.\nSi el objetivo hace daño o perjudica de cualquier forma a una criatura afectada, esta podrá realizar una tirada de salvación de Sabiduría para poner fin al efecto como se explica a continuación.\n***Poner fin al efecto.*** Si una criatura afectada termina su turno y no está a 18 m o menos del objetivo o no puede verlo, dicha criatura hará una tirada de salvación de Sabiduría. Si la supera, ya no estará afectada por el objetivo y se dará cuenta de que el sentimiento de repugnancia o atracción es de origen mágico. Además, cualquier criatura afectada por el conjuro podrá hacer otra tirada de salvación de Sabiduría cada 24 horas mientras el conjuro persista.\nLas criaturas que superen la tirada de salvación contra este efecto serán inmunes a él durante 1 minuto y después podrán verse afectadas otra vez.",
     "material": "Un pedazo de alumbre empapado en vinagre para el efecto de antipatía o una gota de miel para el efecto de simpatía"
   },
   "arcane-eye": {
     "name": "Ojo arcano",
     "description": "Creas un ojo mágico e invisible dentro del alcance que levitará en el aire hasta que termine el conjuro.\nRecibes mentalmente información visual desde el ojo, que tiene visión normal y visión en la oscuridad hasta 9 m. El ojo puede mirar en todas las direcciones.\nComo acción, puedes mover el ojo hasta 9 m en cualquier dirección. No hay límite a la distancia que se puede alejar el ojo, pero no puede entrar en otro plano de existencia. El ojo no podrá atravesar una barrera sólida, pero podrá pasar por cualquier abertura de 2,5 cm de diámetro como mínimo.",
-    "material": "Un poco de pelo de murciélago."
+    "material": "Un poco de pelo de murciélago"
   },
   "arcane-hand": {
     "name": "Mano arcana",
@@ -88,7 +88,7 @@
   "arcanists-magic-aura": {
     "name": "Aura mágica de arcanista",
     "description": "Colocas una ilusión en una criatura o un objeto que toques para que los conjuros de adivinación den información falsa sobre el objetivo. Este puede ser una criatura voluntaria o un objeto que no lleve consigo ni vista otra criatura.\nCuando lances el conjuro, elige uno o ambos de los efectos detallados más adelante. El efecto durará hasta que termine el conjuro. Si lanzas este conjuro sobre la misma criatura o el mismo objeto cada día durante 30 días con el mismo efecto cada vez, la ilusión durará hasta que sea disipada.\n***Aura falsa.*** Cambias la forma en la que el objetivo se revela ante conjuros y efectos mágicos que detectan las auras mágicas, como el de detectar magia. Puedes hacer que un objeto no mágico parezca mágico, que un objeto mágico parezca no mágico o cambiar el aura mágica de un objeto para que parezca pertenecer a una escuela mágica específica de tu elección. Cuando uses este efecto en un objeto, podrás hacer que cualquier criatura que lo sostenga y lo manipule se dé cuenta de que esta magia es falsa.\n***Enmascarar.*** Cambias la forma en la que el objetivo se revela ante conjuros y efectos mágicos que detectan los tipos de criatura y los alineamientos, como los Sentidos Divinos de un paladín o el disparador de un conjuro símbolo. Eliges un tipo de criatura y los demás conjuros y efectos mágicos tratan al objetivo como si fuera una criatura de ese tipo o ese alineamiento.",
-    "material": "Un pequeño cuadrado de seda."
+    "material": "Un pequeño cuadrado de seda"
   },
   "astral-projection": {
     "name": "Proyección astral",
@@ -109,7 +109,7 @@
     "name": "Perdición",
     "description": "Hasta tres criaturas de tu elección a las que puedas ver dentro del alcance deberán hacer tiradas de salvación de Carisma. Hasta que el conjuro termine, siempre que un objetivo que falle esta tirada de salvación haga una tirada de ataque o una tirada de salvación, deberá tirar 1d4 y restar el resultado de esas tiradas.",
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 2 o superior, puedes elegir como objetivo a una criatura adicional por cada nivel por encima de 1 que tenga el espacio que hayas empleado.",
-    "material": "Una gota de sangre."
+    "material": "Una gota de sangre"
   },
   "banishment": {
     "name": "Destierro",
@@ -118,9 +118,9 @@
     "material": "Un objeto desagradable para el objetivo"
   },
   "barkskin": {
-    "name": "Piel Robliza",
+    "name": "Piel robliza",
     "description": "Tocas a una criatura voluntaria. Hasta que el conjuro termine, la piel del objetivo tendrá una apariencia rugosa similar a la corteza de un árbol y su CA no podrá ser inferior a 16, con independencia del tipo de armadura que lleve.",
-    "material": "Un puñado de corteza."
+    "material": "Un puñado de corteza de roble"
   },
   "beacon-of-hope": {
     "name": "Señal de esperanza",
@@ -152,7 +152,7 @@
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 5 o superior, el daño aumenta en 1d8 por cada nivel por encima de 4 que tenga el espacio que hayas empleado."
   },
   "blindness-deafness": {
-    "name": "Sordera/Ceguera",
+    "name": "Sordera/ceguera",
     "description": "Puedes cegar o dejar sordo a un enemigo. Elige a una criatura que puedas ver dentro del alcance para que haga una tirada de salvación de Constitución. Si la falla, el objetivo quedará {@condition blinded||cegado} o {@condition deafened||ensordecido} (a tu elección) hasta que termine el conjuro. Al final de cada uno de sus turnos, el objetivo puede realizar una tirada de salvación de Constitución. Si la supera, el conjuro termina.",
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 3 o superior, puedes elegir como objetivo a una criatura adicional por cada nivel por encima de 2 que tenga el espacio que hayas empleado."
   },
@@ -242,7 +242,7 @@
   "comprehend-languages": {
     "name": "Entender idiomas",
     "description": "Hasta que termine el conjuro, entiendes el significado literal de las palabras que escuches en cualquier idioma. También comprendes todas las palabras escritas que ves, independientemente del idioma en el que estén, pero debes tocar la superficie en la que estén inscritas. Tardas aproximadamente 1 minuto en leer una página.\nEste conjuro no descifra mensajes secretos de un texto o un glifo, como un sello arcano, que no formen parte de un lenguaje escrito.",
-    "material": "Una pizca de hollín y sal."
+    "material": "Una pizca de hollín y sal"
   },
   "compulsion": {
     "name": "Compulsión",
@@ -252,7 +252,7 @@
     "name": "Cono de frío",
     "description": "De tus manos surge una ráfaga de aire frío. Todas las criaturas situadas en un cono de 18 m deberán hacer una tirada de salvación de Constitución. Sufrirán 8d8 de daño de frío si la fallan o la mitad del daño si la superan.\nSi una criatura muere a causa de este conjuro, se convertirá en una estatua congelada hasta que se descongele.",
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 6 o superior, el daño aumenta en 1d8 por cada nivel por encima de 5 que tenga el espacio que hayas empleado.",
-    "material": "Un cono pequeño de cristal o vidrio."
+    "material": "Un cono pequeño de cristal o vidrio"
   },
   "confusion": {
     "name": "Confusión",
@@ -397,7 +397,7 @@
   "detect-poison-and-disease": {
     "name": "Detectar venenos y enfermedades",
     "description": "Hasta que termine el conjuro, podrás percibir la presencia y la ubicación de venenos, criaturas venenosas y enfermedades a 9 m o menos de ti. También identificarás el tipo de veneno, criatura venenosa o enfermedad, respectivamente.\nEste conjuro es capaz de atravesar la mayoría de las barreras, pero se ve bloqueado por 30 cm de piedra, 2,5 cm de cualquier metal común, una lámina fina de plomo o 90 cm de madera o tierra.",
-    "material": "Una hoja de tejo."
+    "material": "Una hoja de tejo"
   },
   "detect-thoughts": {
     "name": "Detectar pensamientos",
@@ -462,7 +462,7 @@
     "material": "Un puñado de arena, una pincelada de tinta y una pluma de escribir arrancada de un pájaro dormido"
   },
   "druidcraft": {
-    "name": "Saber Druídico",
+    "name": "Saber druídico",
     "description": "Susurras a los espíritus de la naturaleza y produces uno de los siguientes efectos dentro del alcance:\n- Creas un efecto sensorial diminuto e inofensivo que predice el clima que habrá en tu ubicación durante las siguientes 24 horas. El efecto se manifiesta como un orbe dorado para los cielos despejados, una nube para la lluvia, copos de nieve para la nieve, etc. Este efecto persiste durante 1 asalto.\n- Haces que, al instante, una flor florezca, una vaina de semillas se abra o el brote de una hoja germine.\n- Creas un efecto sensorial instantáneo e inofensivo, como la caída de unas hojas, un soplo de viento, el sonido de un animal pequeño o un tenue olor a mofeta. El efecto debe caber en un cubo de 1,5 m de lado.\n- Enciendes o apagas al instante una vela, una antorcha o una hoguera pequeña."
   },
   "earthquake": {
@@ -481,7 +481,7 @@
     "material": "Piel o una pluma de una bestia"
   },
   "enlarge-reduce": {
-    "name": "Agrandar/Reducir",
+    "name": "Agrandar/reducir",
     "description": "Puedes hacer que una criatura o un objeto que puedas ver dentro del alcance aumente su tamaño o lo reduzca hasta que termine el conjuro. Elige una criatura o un objeto que no lleve ni vista nadie. Si no es un objetivo voluntario, puede hacer una tirada de salvación de Constitución. Si la supera, el conjuro no tiene efecto.\nSi el objetivo es una criatura, todo lo que lleve y vista cambiará de tamaño a la vez que ella. Cualquier objeto que suelte una criatura afectada recobrará su tamaño normal de inmediato.\n***Agrandar.*** El tamaño del objetivo se dobla en todas las dimensiones y su peso se multiplica por ocho. Este crecimiento aumenta su tamaño en una categoría; por ejemplo, de Mediano a Grande. Si no hay suficiente espacio para que el objetivo doble su tamaño, la criatura o el objeto alcanzarán el máximo tamaño posible en el espacio disponible. Hasta que el conjuro termine, el objetivo también tendrá ventaja en las pruebas de Fuerza y en las tiradas de salvación de Fuerza. Las armas del objetivo crecerán igualmente para corresponderse con su nuevo tamaño. Mientras estas armas estén agrandadas, los ataques del objetivo con ellas causarán 1d4 de daño adicional.\n***Reducir.*** El tamaño del objetivo se reduce a la mitad en todas las dimensiones y su peso se divide a un octavo de su peso normal. Esta reducción disminuye su tamaño en una categoría; por ejemplo, de Mediano a Pequeño. Hasta que el conjuro termine, el objetivo también tendrá desventaja en las pruebas de Fuerza y en las tiradas de salvación de Fuerza. Las armas del objetivo se encogerán igualmente para corresponderse con su nuevo tamaño. Mientras estas armas estén reducidas, los ataques del objetivo con ellas causarán 1d4 menos de daño (esto no puede reducir el daño a menos de 1).",
     "material": "Una pizca hierro en polvo"
   },
@@ -494,7 +494,7 @@
     "description": "Creas una serie de palabras encantadoras que provocan que una o más criaturas de tu elección a las que puedas ver dentro del alcance y que puedan oírte deban hacer una tirada de salvación de Sabiduría. Cualquier criatura que no pueda ser {@condition charmed||hechizada} superará la tirada de salvación automáticamente y, si tú o tus compañeros estáis luchando contra una criatura, esta tendrá ventaja en la tirada. Si la falla, el objetivo tendrá desventaja en las pruebas de Sabiduría (Percepción) hechas para percibir a cualquier criatura que no seas tú hasta que el conjuro termine o hasta que ya no pueda oírte. El conjuro termina si te {@condition incapacitated||incapacitan} o ya no puedes hablar."
   },
   "etherealness": {
-    "name": "Excursion eterea",
+    "name": "Excursión etérea",
     "description": "Entras en las regiones fronterizas del Plano Etéreo, en la zona donde se superpone con tu plano actual. Permaneces en la Frontera Etérea hasta que termine el conjuro o hasta que uses tu acción para finalizarlo. Durante este tiempo, puedes moverte en cualquier dirección. Si te mueves hacia arriba o hacia abajo, cada metro de movimiento te cuesta 1 m adicional. Puedes ver y oír lo que sucede en el plano del que procedes, pero todo tiene un aspecto grisáceo y no puedes ver nada que esté a más de 18 m.\nMientras estés en el Plano Etéreo, solo puedes afectar a criaturas que estén en ese plano y solo estas criaturas te pueden afectar a ti. Las criaturas que no estén en el Plano Etéreo no podrán percibirte ni interactuar contigo, a menos que tengan una capacidad especial o algún tipo de magia que les confiera la posibilidad de hacerlo.\nIgnoras todos los objetos y efectos que no estén en el Plano Etéreo, lo que te permite atravesar los objetos que percibes en el plano del que procedes.\nCuando el conjuro termine, regresarás inmediatamente al plano del que procedes en el punto que ocupes en ese momento. Si ocupas el mismo punto que un objeto sólido o una criatura cuando esto suceda, te desplazarás inmediatamente al espacio sin ocupar más cercano que puedas ocupar y recibirás 2 de daño de fuerza por cada 30 cm que te hayas movido.\nEste conjuro no tiene efecto si lo lanzas mientras estás en el Plano Etéreo o en un plano que no tenga frontera con él, como alguno de los Planos Exteriores.",
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 8 o superior, puedes elegir como objetivo a hasta tres criaturas voluntarias (incluida tú) por cada nivel por encima de 7 que tenga el espacio que hayas empleado. Estas criaturas deben estar a 3 m o menos de ti cuando lances este conjuro."
   },
@@ -503,7 +503,7 @@
     "description": "Este conjuro te permite moverte a una gran velocidad. Cuando lo lances, y luego como acción adicional en cada uno de tus turnos hasta que el conjuro termine, puedes realizar la acción de correr."
   },
   "eyebite": {
-    "name": "Mal del ojo",
+    "name": "Mal de ojo",
     "description": "Hasta que el conjuro termine, tus ojos se convierten en un vacío oscuro dotado de un poder terrorífico. Una criatura de tu elección que puedas ver a 18 m o menos de ti deberá superar una tirada de salvación de Sabiduría o se verá afectada por uno de los efectos descritos debajo, a tu elección, hasta que termine el conjuro. En cada uno de tus turnos hasta que el conjuro termine, puedes usar tu acción para hacer objetivo a otra criatura, pero no puedes volver a elegir a una que haya superado una tirada de salvación contra este lanzamiento de mal de ojo.\n***Náuseas.*** El objetivo tiene desventaja en las tiradas de ataque y las pruebas de característica. Al final de cada uno de sus turnos, puede realizar otra tirada de salvación de Sabiduría. Si la supera, el efecto termina.\n***Pánico.*** El objetivo queda {@condition frightened||asustado} de ti. En cada uno de sus turnos, la criatura {@condition frightened||asustada} deberá realizar la acción de correr para alejarse de ti por la ruta más corta y segura disponible, a menos que no haya por dónde huir. Si el objetivo se mueve a un lugar que esté al menos a 18 m de ti donde no pueda verte, el efecto termina.\n***Sueño.*** El objetivo cae {@condition unconscious||inconsciente}. Se despierta si recibe daño o si otra criatura utiliza una acción para zarandearlo y despertarlo."
   },
   "fabricate": {
@@ -608,7 +608,7 @@
   "floating-disk": {
     "name": "Disco flotante",
     "description": "Este conjuro crea un plano de fuerza horizontal de 90 cm de diámetro y 2,5 cm de grosor que flota 90 cm por encima del suelo en un espacio sin ocupar de tu elección que puedas ver dentro del alcance. El disco dura hasta que termina el conjuro y puede soportar un peso de hasta 250 kg. Si se pone más peso sobre él, el conjuro termina y todo lo que hay en el disco cae al suelo.\nEl disco permanecerá inmóvil mientras estés a 6 m o menos de él. Si te alejas a más de 6 m de él, te seguirá para mantenerse a 6 m de ti. Se puede mover por terreno irregular y subir y bajar escaleras, pendientes y similares, pero no puede superar un cambio de elevación de 3 m o más. Por ejemplo, el disco no puede cruzar un pozo de 3 m de profundidad ni salir de él si se crea en el fondo de este.\nSi te alejas más de 30 m del disco (normalmente, porque no pueda superar un obstáculo para seguirte), el conjuro termina.",
-    "material": "Una gota de mercurio."
+    "material": "Una gota de mercurio"
   },
   "fly": {
     "name": "Volar",
@@ -632,9 +632,9 @@
     "material": "Polvo de rubí con un valor de 1500 po"
   },
   "foresight": {
-    "name": "Presciencia",
+    "name": "Presagio",
     "description": "Tocas a una criatura voluntaria y la dotas de una capacidad limitada de ver el futuro inmediato. Hasta que termine el conjuro, el objetivo no puede ser sorprendido y tiene ventaja en las tiradas de ataque, pruebas de característica y tiradas de salvación. Además, otras criaturas tienen desventaja en las tiradas de ataque contra el objetivo hasta que termine el conjuro.\nEste conjuro termina inmediatamente si lo vuelves a lanzar antes de que termine su duración.",
-    "material": "Una pluma de colibrí."
+    "material": "Una pluma de colibrí"
   },
   "freedom-of-movement": {
     "name": "Libertad de movimiento",
@@ -673,7 +673,7 @@
   },
   "glibness": {
     "name": "Labia",
-    "description": "Hasta que el conjuro termine, cuando hagas una prueba de Carisma, puedes sustituir el resultado de tu tirada por un 15. Además, sin importar lo que digas, la magia que determine si estás diciendo la verdad indica que lo estás haciendo."
+    "description": "Hasta que el conjuro termine, cuando hagas una prueba de Carisma, puedes sustituir el resultado de la tirada por un 15. Además, digas lo que digas, cualquier magia usada para detectar si dices la verdad indicará que la estás diciendo."
   },
   "globe-of-invulnerability": {
     "name": "Globo de invulnerabilidad",
@@ -690,12 +690,12 @@
   "goodberry": {
     "name": "Buenas bayas",
     "description": "En tu mano aparecen hasta 10 bayas, que están impregnadas de magia hasta que termine el conjuro. Una criatura puede utilizar su acción para comerse una de ellas, lo que le permite recuperar 1 punto de golpe. Además, la baya proporciona alimento suficiente como para mantener a una criatura durante 1 día.\nLas bayas pierden su potencia si no se consumen en un plazo de 24 horas desde que se lanza el conjuro.",
-    "material": "Una rama de muérdago."
+    "material": "Una rama de muérdago"
   },
   "grease": {
     "name": "Grasa",
     "description": "Una grasa resbaladiza cubre una zona cuadrada del suelo de 3 m de lado centrada en un punto dentro del alcance y que la convierte en terreno difícil hasta que termina el conjuro.\nCuando aparezca la grasa, las criaturas que haya en esa zona deberán superar una tirada de salvación de Destreza o caerán {@condition prone||derribadas}. Una criatura que entre en la zona o empiece su turno ahí deberá superar una tirada de salvación de Destreza o caerá {@condition prone||derribada}.",
-    "material": "Un poco de piel de cerdo o de mantequilla."
+    "material": "Un poco de piel de cerdo o de mantequilla"
   },
   "greater-invisibility": {
     "name": "Invisibilidad mejorada",
@@ -727,7 +727,7 @@
   "gust-of-wind": {
     "name": "Ráfaga de viento",
     "description": "De ti surge una ráfaga de viento fuerte en una línea recta de 18 m de largo y 3 m de ancho en la dirección que elijas hasta que el conjuro termine. Todas las criaturas que empiecen su turno en esa línea deberán superar una tirada de salvación de Fuerza o serán empujadas 4,5 m en la dirección de la línea.\nCualquier criatura que esté en la línea deberá gastar 2 m de movimiento por cada metro que se mueva para acercarse a ti.\nLa ráfaga dispersa el gas o el vapor y apaga velas, antorchas y otras llamas desprotegidas de la zona. Hace que las llamas protegidas, como las de los faroles, se agiten salvajemente y tienen un 50 % de probabilidad de apagarse.\nComo acción adicional en cada uno de tus turnos antes de que el conjuro termine, puedes cambiar la dirección en la que la línea surge de ti.",
-    "material": "La semilla de una legumbre."
+    "material": "La semilla de una legumbre"
   },
   "hallow": {
     "name": "Consagrar",
@@ -746,7 +746,7 @@
   "haste": {
     "name": "Acelerar",
     "description": "Elige a una criatura voluntaria que puedas ver dentro del alcance. Hasta que el conjuro termine, la velocidad del objetivo se duplica, gana un bonificador de +2 a su CA, tiene ventaja en tiradas de salvación de Destreza y consigue una segunda acción en cada uno de sus turnos. Solo puede utilizar esta acción para atacar (solo un ataque con arma), correr, destrabarse, esconderse o usar un objeto.\nCuando el conjuro termine, el objetivo no podrá moverse o realizar acciones hasta después de su siguiente turno, debido a una ola de somnolencia que lo afecta.",
-    "material": "Un viruta de raíz de regaliz."
+    "material": "Una viruta de raíz de regaliz"
   },
   "heal": {
     "name": "Curar",
@@ -762,7 +762,7 @@
     "name": "Calentar metal",
     "description": "Elige un objeto metálico fabricado que puedas ver dentro del alcance, como un arma de metal o una armadura metálica media o pesada. Haces que el objeto se ponga al rojo vivo. Cualquier criatura que esté en contacto físico con el objeto recibirá 2d8 de daño de fuego cuando lances el conjuro. Hasta que el conjuro termine, podrás usar una acción adicional en cada uno de tus turnos posteriores para volver a causar este daño.\nSi una criatura sostiene o lleva puesto el objeto y recibe el daño de este, deberá superar una tirada de salvación de Constitución o dejará caer el objeto si puede. Si no lo deja caer, tendrá desventaja en las tiradas de ataque y las pruebas de característica hasta el principio de tu siguiente turno.",
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 3 o superior, el daño aumenta en 1d8 por cada nivel por encima de 2 que tenga el espacio que hayas empleado.",
-    "material": "Un trozo de hierro y una llama."
+    "material": "Un trozo de hierro y una llama"
   },
   "hellish-rebuke": {
     "name": "Reprensión infernal",
@@ -866,7 +866,7 @@
   "jump": {
     "name": "Salto",
     "description": "Tocas a una criatura y su distancia de salto se triplica hasta que el conjuro termine.",
-    "material": "La pata trasera de un saltamontes."
+    "material": "La pata trasera de un saltamontes"
   },
   "knock": {
     "name": "Abrir",
@@ -889,7 +889,7 @@
   "light": {
     "name": "Luz",
     "description": "Tocas un objeto cuyo tamaño no supere los 3 m en ninguna dimensión. Hasta el final del conjuro, el objeto emitirá luz brillante en un radio de 6 m y luz tenue otros 6 m más allá. La luz puede tener el color que desees. Tapar completamente el objeto con un material opaco bloquea la luz. El conjuro termina si lo lanzas de nuevo o si utilizas una acción para finalizarlo.\nSi eliges como objetivo un objeto que una criatura hostil sostenga o lleve puesto, dicha criatura deberá superar una tirada de salvación de Destreza para evitar el conjuro.",
-    "material": "Una luciérnaga o musgo fosforescente."
+    "material": "Una luciérnaga o musgo fosforescente"
   },
   "lightning-bolt": {
     "name": "Relámpago",
@@ -910,18 +910,18 @@
   "locate-object": {
     "name": "Localizar objeto",
     "description": "Describe o nombra un objeto que conozcas. Presientes la dirección en la que se encuentra dicho objeto, siempre y cuando esté a 300 m o menos de ti. Si el objeto se está moviendo, conoces la dirección de su movimiento.\nEl conjuro puede localizar un objeto específico que conozcas, siempre que lo hayas visto de cerca (a 9 m o menos) al menos una vez. Como alternativa, el conjuro puede localizar el objeto más cercano de un tipo particular, como un cierto tipo de ropa, joyas, muebles, herramientas o armas.\nEl conjuro no puede localizar un objeto si hay cualquier grosor de plomo, incluso una fina lámina, que bloquee cualquier ruta directa entre dicho objeto y tú.",
-    "material": "Una ramita con forma de horquilla."
+    "material": "Una ramita con forma de horquilla"
   },
   "longstrider": {
     "name": "Zancada prodigiosa",
     "description": "Tocas a una criatura y su velocidad aumenta en 3 m hasta que el conjuro termine.",
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 2 o superior, puedes elegir como objetivo a una criatura adicional por cada nivel por encima de 1 que tenga el espacio que hayas empleado.",
-    "material": "Una pizca de tierra."
+    "material": "Una pizca de tierra"
   },
   "mage-armor": {
     "name": "Armadura de mago",
     "description": "Tocas a una criatura voluntaria que no lleve armadura y una fuerza mágica protectora la rodeará hasta que el conjuro termine. La CA del objetivo pasa a ser 13 + su modificador por Destreza. El conjuro termina si el objetivo se pone una armadura o si utilizas una acción para finalizarlo.",
-    "material": "Un trozo de piel curtida."
+    "material": "Un trozo de piel curtida"
   },
   "mage-hand": {
     "name": "Mano de mago",
@@ -962,7 +962,7 @@
     "name": "Imagen mayor",
     "description": "Creas una imagen de un objeto, una criatura u otro tipo de fenómeno visible cuyas dimensiones no excedan las de un cubo de 6 m de lado. La imagen aparece en un sitio que puedas ver dentro del alcance y se mantiene hasta el final del conjuro. Parece completamente real, incluidos los sonidos, olores y temperatura, que corresponden a lo que se representa. No puedes crear suficiente calor o frío para hacer daño, ni un sonido lo bastante fuerte como para causar daño de trueno o {@condition deafened||ensordecer} a una criatura ni un olor que pueda causar náuseas a una criatura (como el hedor de un troglodita).\nMientras estés dentro del alcance de la ilusión, puedes utilizar tu acción para moverla a otro sitio dentro de dicho alcance. Al cambiarla de sitio, puedes alterar su apariencia de forma que sus movimientos parezcan naturales. Por ejemplo, si creas la imagen de una criatura y la mueves, puedes alterarla de forma que parezca estar andando. De forma similar, puedes hacer que la ilusión produzca distintos sonidos en diferentes momentos e incluso mantener una conversación, por ejemplo.\nLa interacción física con la imagen revela que es una ilusión, ya que las cosas pueden atravesarla. Si una criatura emplea su acción para examinar la imagen, puede determinar que es una ilusión si supera una prueba de Inteligencia (Investigación) contra tu CD de salvación de conjuros. Si la criatura descubre que la imagen es una ilusión, no se dejará engañar por ella y sus otras cualidades sensoriales se irán desvaneciendo para esa criatura.",
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 6 o superior, el conjuro se mantiene hasta que es disipado, sin requerir concentración.",
-    "material": "Un poco de vellón."
+    "material": "Un poco de vellón"
   },
   "mass-cure-wounds": {
     "name": "Curar heridas en masa",
@@ -995,7 +995,7 @@
   "mending": {
     "name": "Reparar",
     "description": "Este conjuro repara una sola grieta o desgarrón en un objeto que toques, como un eslabón roto en una cadena, las dos mitades de una llave partida, una capa rasgada o una fuga en una bota de vino. Mientras la grieta o el desgarrón no tengan más de 30 cm de tamaño en ninguna de sus dimensiones, lo arreglarás sin dejar rastro del daño.\nEste conjuro puede reparar el componente físico de un objeto mágico o de un autómata, pero no puede restaurar su magia.",
-    "material": "Dos imanes naturales."
+    "material": "Dos imanes naturales"
   },
   "message": {
     "name": "Mensaje",
@@ -1013,7 +1013,7 @@
   "minor-illusion": {
     "name": "Ilusión menor",
     "description": "Creas un sonido o una imagen de un objeto situado dentro del alcance que permanecerá hasta que termine el conjuro. La ilusión también termina si lanzas el conjuro de nuevo o si utilizas una acción para finalizarlo.\nSi creas un sonido, su volumen se situará entre el de un susurro y el de un grito. Puede ser tu voz, la de otra criatura, el rugido de un león, un redoblar de tambores o cualquier otro sonido que elijas. El sonido continúa incesante mientras dure el conjuro o puedes originar sonidos distintos en diferentes momentos antes del fin del conjuro.\nSi creas la imagen de un objeto (como una silla, pisadas embarradas o un pequeño cofre), este no podrá ser mayor que un cubo de 1,5 m de lado. La imagen no puede generar sonido, luz, olor o cualquier otro efecto sensorial. La interacción física con la imagen revela que es una ilusión, ya que las cosas pueden atravesarla.\nSi una criatura emplea su acción para examinar la imagen o el sonido, puede determinar que es una ilusión si tiene éxito en una prueba de Inteligencia (Investigación) contra tu CD de salvación de conjuros. Si la criatura descubre que se trata de una ilusión, esta se irá desvaneciendo para esa criatura.",
-    "material": "Un poco de vellón."
+    "material": "Un poco de vellón"
   },
   "mirage-arcane": {
     "name": "Espejismo arcano",
@@ -1060,7 +1060,7 @@
   "passwall": {
     "name": "Pasamuros",
     "description": "Aparece un pasaje en un punto de tu elección que puedas ver en una superficie de madera, yeso o piedra (como una pared, un techo o un suelo) dentro del alcance y se mantiene hasta que termine el conjuro. Tú eliges las dimensiones de la abertura: hasta 1,5 m de ancho, 2,4 m de alto y 6 m de largo. El pasaje no crea ninguna inestabilidad en la estructura que lo rodea.\nCuando la abertura desaparece, las criaturas o los objetos que sigan en el pasaje creado por el conjuro serán expulsados sin daño alguno al espacio sin ocupar más cercano a la superficie sobre la que lanzaste el conjuro.",
-    "material": "Una pizca de semillas de sésamo."
+    "material": "Una pizca de semillas de sésamo"
   },
   "phantasmal-killer": {
     "name": "Asesino fantasmal",
@@ -1097,7 +1097,7 @@
   "polymorph": {
     "name": "Polimorfar",
     "description": "Este conjuro transforma a una criatura que puedas ver dentro del alcance y le da una nueva forma. Una criatura no voluntaria debe hacer una tirada de salvación de Sabiduría para evitar el efecto. El conjuro no surte ningún efecto en un cambiaformas o en una criatura con 0 puntos de golpe.\nEsta transformación dura hasta que termine el conjuro o hasta que los puntos de golpe del objetivo se reduzcan a 0 o este muera. La nueva forma puede ser cualquier bestia cuyo valor de desafío sea igual o menor que el del objetivo (o que el nivel del objetivo si este no tiene un valor de desafío). El perfil del objetivo, incluidas las puntuaciones de característica mentales, se sustituye por el de la bestia elegida, pero conserva su alineamiento y su personalidad.\nEl objetivo asume los puntos de golpe de su nuevo aspecto y, cuando recupera su forma normal, también recupera los puntos de golpe que tenía antes de la transformación. Si recupera su aspecto porque sus puntos de golpe se reducen a 0, cualquier daño sobrante se aplica a su forma normal. Mientras este daño sobrante no reduzca los puntos de golpe de su forma normal a 0, no quedará {@condition unconscious||inconsciente}.\nLas acciones que puede realizar la criatura están limitadas por la naturaleza de su nueva forma y no podrá hablar ni lanzar conjuros, ni tampoco realizar acciones que requieran de las manos o el habla.\nEl equipo del objetivo se funde con su nueva forma y no puede activar, usar, empuñar ni beneficiarse de ninguno de sus objetos.",
-    "material": "Un capullo de oruga."
+    "material": "Un capullo de oruga"
   },
   "power-word-kill": {
     "name": "Palabra de poder: matar",
@@ -1206,7 +1206,7 @@
   "reverse-gravity": {
     "name": "Invertir la gravedad",
     "description": "Este conjuro invierte la gravedad en un cilindro de 15 m de radio y 30 m de alto centrado en un punto dentro del alcance. Todos los objetos y las criaturas que no estén fijados al suelo de la zona de alguna forma caerán hacia arriba y llegarán a la parte superior del área cuando lances este conjuro. Una criatura puede hacer una tirada de salvación de Destreza para agarrarse a un objeto fijo a su alcance y así evitar la caída.\nSi en esta caída se encuentran objetos sólidos (como un techo), los objetos y las criaturas que caen se golpearán contra ellos igual que sucedería en una caída hacia abajo normal. Si un objeto o una criatura llega a la parte superior de la zona sin golpearse contra nada, permanecerá allí hasta que termine el conjuro.\nAl final del conjuro, los objetos y las criaturas afectados volverán a caer, esta vez hacia abajo.",
-    "material": "Un imán natural y virutas de hierro."
+    "material": "Un imán natural y virutas de hierro"
   },
   "revivify": {
     "name": "Revivir",
@@ -1298,7 +1298,7 @@
   "silent-image": {
     "name": "Imagen silenciosa",
     "description": "Creas una imagen de un objeto, una criatura u otro tipo de fenómeno visible cuyas dimensiones no excedan las de un cubo de 4,5 m de lado. La imagen aparece en un sitio que puedas ver dentro del alcance y se mantiene hasta el final del conjuro. La imagen es solamente visual; no está acompañada de sonido, olor u otros efectos sensoriales.\nPuedes utilizar tu acción para moverla a otro sitio dentro del alcance. Al cambiarla de sitio, puedes alterar su apariencia de forma que sus movimientos parezcan naturales. Por ejemplo, si creas la imagen de una criatura y la mueves, puedes alterarla de forma que parezca estar andando.\nLa interacción física con la imagen revela que es una ilusión, ya que las cosas pueden atravesarla. Si una criatura emplea su acción para examinar la imagen, puede determinar que es una ilusión si supera una prueba de Inteligencia (Investigación) contra tu CD de salvación de conjuros. Si la criatura descubre que la imagen es una ilusión, no se dejará engañar por ella.",
-    "material": "Un poco de vellón."
+    "material": "Un poco de vellón"
   },
   "simulacrum": {
     "name": "Simulacro",
@@ -1319,7 +1319,7 @@
   "slow": {
     "name": "Ralentizar",
     "description": "Alteras el tiempo alrededor de hasta seis criaturas de tu elección en un cubo de 12 m de lado dentro del alcance. Cada objetivo deberá superar una tirada de salvación de Sabiduría o se verá afectado hasta que termine el conjuro.\nUn objetivo afectado ve cómo su velocidad se reduce a la mitad, sufre un penalizador de −2 a la CA y a las tiradas de salvación de Destreza, y no puede llevar a cabo reacciones. En su turno, podrá usar una acción o una acción adicional, pero no ambas. Con independencia de las capacidades o los objetos mágicos de la criatura, no podrá realizar más de un ataque cuerpo a cuerpo o a distancia durante su turno.\nSi la criatura intenta lanzar un conjuro con un tiempo de lanzamiento de 1 acción, tira 1d20. Si el resultado es 11 o más, el conjuro no tendrá efecto hasta el siguiente turno de la criatura y esta deberá usar su acción en dicho turno para completar el conjuro. Si no puede, el conjuro se perderá.\nUna criatura afectada por este conjuro realiza una tirada de salvación de Sabiduría al final de su turno. Si la supera, el efecto acaba para ella.",
-    "material": "Una gota de melaza."
+    "material": "Una gota de melaza"
   },
   "spare-the-dying": {
     "name": "Piedad con los moribundos",
@@ -1332,7 +1332,7 @@
   "speak-with-dead": {
     "name": "Hablar con los muertos",
     "description": "Otorgas una apariencia de vida e inteligencia a un cadáver de tu elección dentro del alcance para que pueda responder a tus preguntas. El cadáver debe tener boca y no puede ser un muerto viviente. El conjuro falla si el cadáver ya ha sido el objetivo de este conjuro durante los últimos 10 días.\nHasta que el conjuro termine, puedes hacerle al cadáver hasta cinco preguntas. Este solo sabe lo que sabía en vida, incluidos los idiomas. Sus respuestas suelen ser breves, crípticas o repetitivas, y no se siente obligado a darte una respuesta verdadera si eres hostil con él o te reconoce como un enemigo. Este conjuro no devuelve el alma de la criatura a su cuerpo, solo anima su espíritu. Por tanto, el cadáver no puede aprender nueva información, no entiende nada que haya sucedido después su muerte y no puede especular sobre eventos futuros.",
-    "material": "Incienso para quemar."
+    "material": "Incienso para quemar"
   },
   "speak-with-plants": {
     "name": "Hablar con las plantas",
@@ -1341,7 +1341,7 @@
   "spider-climb": {
     "name": "Trepar cual arácnido",
     "description": "Hasta que el conjuro termine, una criatura voluntaria a la que toques gana la capacidad de moverse hacia arriba, hacia abajo y de lado por superficies verticales, así como boca abajo por techos. Esta manera de moverse no requiere del uso de las manos, que quedan libres. Además, el objetivo obtiene una velocidad trepando igual a su velocidad caminando.",
-    "material": "Una gota de betún y una araña."
+    "material": "Una gota de betún y una araña"
   },
   "spike-growth": {
     "name": "Crecimiento espinoso",
@@ -1386,7 +1386,7 @@
   "sunbeam": {
     "name": "Rayo solar",
     "description": "De tu mano surge un rayo de luz brillante en una línea de 1,5 m de ancho y 18 m de largo. Todas las criaturas situadas en esa línea deberán hacer una tirada de salvación de Constitución. Si la fallan, recibirán 6d8 de daño radiante y quedarán {@condition blinded||cegadas} hasta tu siguiente turno. Si la superan, recibirán la mitad de daño y no quedarán {@condition blinded||cegadas} por este conjuro. Los muertos vivientes y los cienos tienen desventaja en esta tirada de salvación.\nComo acción en cada uno de tus turnos hasta que el conjuro termine, puedes crear una nueva línea de luz radiante.\nHasta que termine el conjuro, en tu mano brilla una mota de luz brillante, que emite luz brillante en un radio de 9 m y luz tenue 9 m más allá. Esta luz es luz solar.",
-    "material": "Una lupa."
+    "material": "Una lupa"
   },
   "sunburst": {
     "name": "Explosión solar",
@@ -1441,7 +1441,7 @@
   },
   "transport-via-plants": {
     "name": "Viajar mediante plantas",
-    "description": "Este conjuro crea un vínculo mágico entre una planta inanimada Grande o mayor dentro del alcance y otra planta, a cualquier distancia, en el mismo plano de existencia. Debes haber visto o tocado la planta de destino al menos una vez antes. Durante la duración, cualquier criatura puede entrar en la planta objetivo y salir de la planta de destino usando 5 pies de movimiento."
+    "description": "Este conjuro crea un vínculo mágico entre una planta inanimada de tamaño Grande o mayor dentro del alcance y otra planta a cualquier distancia en el mismo plano de existencia. Tienes que haber visto o tocado la planta de destino al menos una vez antes. Hasta que termine el conjuro, cualquier criatura puede entrar en la planta objetivo y salir por la de destino gastando 1,5 m de movimiento."
   },
   "tree-stride": {
     "name": "Paso arbóreo",
@@ -1450,7 +1450,7 @@
   "true-polymorph": {
     "name": "Polimorfar verdadero",
     "description": "Elige a una criatura o un objeto no mágico que puedas ver dentro del alcance. Transformas a la criatura en otra diferente o en un objeto, o al objeto en una criatura (el objeto no lo puede llevar ni vestir otra criatura). Esta transformación dura hasta que termine el conjuro o hasta que los puntos de golpe del objetivo se reduzcan a 0 o este muera. Si te concentras en este conjuro durante toda su duración, la transformación dura hasta que se disipe.\nEste conjuro no surte ningún efecto en un cambiaformas o en una criatura con 0 puntos de golpe. Una criatura no voluntaria puede hacer una tirada de salvación de Sabiduría y, si la supera, el conjuro no le afectará.\n***Criatura en criatura.*** Si conviertes a una criatura en otro tipo de criatura, la nueva forma puede ser cualquier tipo que elijas cuyo valor de desafío sea igual o menor que el del objetivo (o que su nivel si el objetivo no tiene un valor de desafío). El perfil del objetivo, incluidas las puntuaciones de característica mentales, se sustituye por el de la nueva forma, pero conserva su alineamiento y su personalidad.\nEl objetivo asume los puntos de golpe de su nuevo aspecto y, cuando recupera su forma normal, también recupera los puntos de golpe que tenía antes de la transformación. Si recupera su aspecto porque sus puntos de golpe se reducen a 0, cualquier daño sobrante se aplica a su forma normal. Mientras este daño sobrante no reduzca los puntos de golpe de su forma normal a 0, no quedará {@condition unconscious||inconsciente}.\nLas acciones que puede realizar la criatura están limitadas por la naturaleza de su nueva forma y no podrá hablar ni lanzar conjuros, ni tampoco realizar acciones que requieran de las manos o el habla, a menos que su nueva forma sea capaz de realizar dichas acciones.\nEl equipo del objetivo se funde con su nueva forma y no puede activar, usar, empuñar ni beneficiarse de ninguno de sus objetos.\n***Objeto en criatura.*** Puedes convertir un objeto en cualquier tipo de criatura, siempre que el tamaño de dicha criatura no sea mayor que el del objeto y que su valor de desafío sea de 9 o menos. La criatura es amistosa contigo y tus compañeros y actúa en cada uno de tus turnos. Tú decides qué acción realiza y cómo se mueve. Tu GM tiene el perfil de la criatura y resuelve todas sus acciones y su movimiento.\nSi el conjuro se vuelve permanente, dejas de controlar a la criatura, que puede seguir siendo amistosa contigo en función de cómo la hayas tratado.\n***Criatura en objeto.*** Si conviertes a una criatura en un objeto, se transforma en esa forma junto con todo lo que lleve o vista. El perfil de la criatura pasa a ser el del objeto y no tiene recuerdos del tiempo pasado en esa forma después de que el conjuro termine y recupere su forma normal.",
-    "material": "Una gota de mercurio, un poco de goma arábiga y un jirón de humo."
+    "material": "Una gota de mercurio, un poco de goma arábiga y un jirón de humo"
   },
   "true-resurrection": {
     "name": "Resurrección verdadera",
@@ -1506,7 +1506,7 @@
     "name": "Muro de espinas",
     "description": "Creas un resistente muro de maleza, enmarañada y flexible, que está repleta de espinas puntiagudas como agujas. Este muro aparecerá dentro del alcance sobre una superficie sólida y durará hasta que termine el conjuro. Eliges si crear un muro recto de hasta 18 m de longitud, 3 m de altura y 1,5 m de grosor o un círculo de arbustos de hasta 6 m de diámetro, 6 m de altura y 1,5 m de grosor. El muro bloquea la línea de visión.\nCuando el muro aparezca, todas las criaturas situadas en su área de efecto deberán hacer una tirada de salvación de Destreza. Si la fallan, sufrirán 7d8 de daño perforante, o la mitad del daño si la superan.\nUna criatura puede atravesar el muro, pero es un proceso lento y doloroso. Una criatura que atraviese el muro deberá gastar 4 m de movimiento por cada metro que avance. Además, la primera vez que una criatura entre en el muro en un turno o comience su turno allí, deberá hacer una tirada de salvación de Destreza. Recibirá 7d8 de daño cortante si la falla o la mitad del daño si la supera.",
     "higherLevel": "Cuando lanzas este conjuro mediante un espacio de conjuro de nivel 7 o superior, ambos tipos de daño aumentan en 1d8 por cada nivel por encima de 6 que tenga el espacio que hayas empleado.",
-    "material": "Un puñado de espinas vegetales."
+    "material": "Un puñado de espinas vegetales"
   },
   "warding-bond": {
     "name": "Vínculo protector",
@@ -1521,12 +1521,12 @@
   "water-walk": {
     "name": "Caminar sobre el agua",
     "description": "Este conjuro concede la capacidad de moverse por encima de cualquier superficie líquida, como agua, ácido, barro, nieve, arenas movedizas o lava, como si se tratara de un suelo sólido inofensivo (aunque las criaturas que crucen lava derretida pueden seguir sufriendo daño por el calor). Hasta diez criaturas voluntarias que puedas ver dentro del alcance obtienen esta capacidad hasta que termine el conjuro.\nSi haces objetivo a una criatura sumergida en un líquido, el conjuro la trasporta a la superficie de este líquido a una velocidad de 18 m por asalto.",
-    "material": "Un trozo de corcho."
+    "material": "Un trozo de corcho"
   },
   "web": {
     "name": "Telaraña",
     "description": "Conjuras una masa de telarañas densa y pegajosa en un punto que elijas dentro del alcance. Las telarañas ocupan un cubo de 6 m de lado desde ese punto hasta que el conjuro termine. La zona cubierta se considera ligeramente oscura y terreno difícil.\nSi las telarañas no están ancladas entre dos objetos sólidos (como muros o árboles) o extendidas sobre un suelo, muro o techo, se vendrán abajo y el conjuro terminará al principio de tu siguiente turno. Las telarañas dispuestas sobre una superficie plana tienen una profundidad de 1,5 m.\nCualquier criatura que comience su turno en las telarañas o que entre en ellas durante este deberá hacer una tirada de salvación de Destreza. Si la falla, quedará {@condition restrained||apresada} mientras siga en las telarañas o hasta que se libere.\nUna criatura {@condition restrained||apresada} puede utilizar su acción para hacer una prueba de Fuerza contra tu CD de salvación de conjuros. Si la supera, dejará de estar {@condition restrained||apresada}.\nLas telarañas son inflamables. Cualquier cubo de telarañas de 1,5 m de lado expuesto al fuego se quema por completo en 1 asalto y causa 2d4 de daño de fuego a cualquier criatura que comience su turno en el incendio.",
-    "material": "Un poco de tela de araña."
+    "material": "Un poco de tela de araña"
   },
   "weird": {
     "name": "Terror abyecto",
