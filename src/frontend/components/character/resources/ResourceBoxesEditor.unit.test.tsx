@@ -137,10 +137,38 @@ describe('ResourceBoxesEditor', () => {
     expect(screen.getByRole('status')).toHaveTextContent('free');
   });
 
+  it('a descrição da caixinha da classe vem preenchida com o texto da regra, sem marcações', async () => {
+    catalog.classes = {
+      monk: {
+        ...MONK,
+        resources: [{ ...MONK.resources[0], description: 'Fall {@condition prone}.' }],
+      },
+    };
+    const { draft } = renderEditor();
+    await open('Ki');
+    const description = fields('Ki').getByLabelText(t.description);
+
+    expect(description).toHaveValue('Fall prone.');
+
+    // Edited, only the new text is kept; back to the rule's text, nothing is
+    await userEvent.type(description, ' Twice.');
+    expect(draft().resources?.[KI].overrides).toEqual({ description: 'Fall prone. Twice.' });
+    await userEvent.type(description, '{Backspace>7}');
+    expect(draft().resources).toEqual({ [KI]: { used: 0 } });
+
+    // Emptied: the field stays empty while typing and the box goes back to the rule
+    await userEvent.clear(description);
+    expect(description).toHaveValue('');
+    expect(draft().resources).toEqual({ [KI]: { used: 0 } });
+    await userEvent.tab();
+    expect(description).toHaveValue('Fall prone.');
+  });
+
   it('descrição e cor entram na edição; "voltar ao que a classe diz" tira tudo', async () => {
     const { draft } = renderEditor();
     await open('Ki');
 
+    await userEvent.clear(fields('Ki').getByLabelText(t.description));
     await userEvent.type(fields('Ki').getByLabelText(t.description), 'Mine');
     await userEvent.click(
       fields('Ki').getByRole('button', { name: messages.profileForm.colors.red }),

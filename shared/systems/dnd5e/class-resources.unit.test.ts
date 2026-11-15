@@ -472,7 +472,19 @@ describe('customFromClass', () => {
   });
 
   it('corta a descrição no limite que a ficha aceita', () => {
-    const long = res({ id: 'x', max: once, description: 'a'.repeat(2500) });
-    expect(customFromClass(long, 'class', 1, ATTRS).description).toHaveLength(2000);
+    const long = res({ id: 'x', max: once, description: 'a'.repeat(5500) });
+    expect(customFromClass(long, 'class', 1, ATTRS).description).toHaveLength(5000);
+  });
+
+  it('copia a descrição como texto, sem as marcações do 5etools', () => {
+    const tagged = res({
+      id: 'x',
+      max: once,
+      description:
+        'Max CR {@filter 1/4|bestiary|challenge rating=[&0;&1/4]}; you fall {@condition unconscious}.',
+    });
+    expect(customFromClass(tagged, 'class', 1, ATTRS).description).toBe(
+      'Max CR 1/4; you fall unconscious.',
+    );
   });
 });

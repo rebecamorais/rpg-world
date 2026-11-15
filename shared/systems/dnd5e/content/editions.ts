@@ -9,6 +9,11 @@ export const SOURCE_EDITION: Record<string, Edition> = {
   'srd-5.2': '2024',
 };
 
+/** The SRD book of an edition; 2014 (SRD 5.1) when the sheet has none yet. */
+export function editionSource(edition: Edition | undefined): string {
+  return edition === '2024' ? 'srd-5.2' : 'srd-5.1';
+}
+
 export function editionOfKey(key: string): Edition | null {
   const source = parseSpellKey(key)?.source;
   return (source && Object.hasOwn(SOURCE_EDITION, source) && SOURCE_EDITION[source]) || null;

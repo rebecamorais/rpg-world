@@ -28,6 +28,7 @@ import { characterTheme, sixDigitHex } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 import { CharacterClass } from '@frontend/types/spells';
 
+import { stripTags } from '@shared/content/tags';
 import {
   type CustomResource,
   type EditableResourceBox,
@@ -166,6 +167,48 @@ function BoxColorPicker({
   );
 }
 
+/**
+ * The box's description. On a class box it starts with the rule's text (tags as plain text), ready
+ * to edit: only a text that differs from it is kept, and emptying it goes back to the rule.
+ */
+function DescriptionField({
+  id,
+  value,
+  classText,
+  onChange,
+}: {
+  id: string;
+  value: string | undefined;
+  classText: string | undefined;
+  onChange: (value: string | undefined) => void;
+}) {
+  const t = useTranslations('resourceEditor');
+  // While typing, the field keeps what is typed, even emptied; on leaving it shows what is kept
+  const [typing, setTyping] = useState<string | null>(null);
+
+  return (
+    <div className="flex flex-col gap-1">
+      <FieldLabel htmlFor={id}>{t('description')}</FieldLabel>
+      <Textarea
+        id={id}
+        value={typing ?? value ?? classText ?? ''}
+        maxLength={MAX_RESOURCE_DESCRIPTION}
+        rows={classText ? 6 : 3}
+        aria-describedby={`${id}-hint`}
+        onChange={(e) => {
+          const text = e.target.value;
+          setTyping(text);
+          onChange(text === '' || text === classText ? undefined : text);
+        }}
+        onBlur={() => setTyping(null)}
+      />
+      <p id={`${id}-hint`} className="text-caption text-muted-foreground">
+        {t(classText ? 'descriptionHintClass' : 'descriptionHint')}
+      </p>
+    </div>
+  );
+}
+
 /** The fields of one box. A class box shows what the class says wherever the player set nothing. */
 function BoxFields({
   box,
@@ -271,20 +314,12 @@ function BoxFields({
 
       <BoxColorPicker color={edits.color} onChange={(color) => change({ color })} />
 
-      <div className="flex flex-col gap-1">
-        <FieldLabel htmlFor={`${id}-description`}>{t('description')}</FieldLabel>
-        <Textarea
-          id={`${id}-description`}
-          value={edits.description ?? ''}
-          placeholder={box.base ? t('descriptionAsClass') : undefined}
-          maxLength={MAX_RESOURCE_DESCRIPTION}
-          aria-describedby={`${id}-description-hint`}
-          onChange={(e) => change({ description: e.target.value })}
-        />
-        <p id={`${id}-description-hint`} className="text-caption text-muted-foreground">
-          {t('descriptionHint')}
-        </p>
-      </div>
+      <DescriptionField
+        id={`${id}-description`}
+        value={edits.description}
+        classText={box.base && stripTags(box.base.description)}
+        onChange={(description) => change({ description })}
+      />
 
       <div className="flex justify-end">
         {own ? (
