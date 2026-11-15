@@ -26,7 +26,7 @@ const hero = (overrides: Partial<DnD5eCharacter> = {}) =>
     level: 5,
     hpCurrent: 4,
     hpMax: 38,
-    hitDice: { total: '5d8', current: 1 },
+    hitDice: { die: 'd8', spent: 4 },
     resources: {
       [KI.key]: { used: 4 },
       [RAGE.key]: { used: 3 },
@@ -58,7 +58,7 @@ describe('restRecovery', () => {
 
     expect(fields).toMatchObject({
       hpCurrent: 38,
-      hitDice: { total: '5d8', current: 3 },
+      hitDice: { die: 'd8', spent: 2 },
       spellSlots: { '1': { max: 4, used: 0 } },
       resources: { [KI.key]: { used: 0 }, [LUCK.key]: { used: 0, hidden: false } },
     });
@@ -72,8 +72,27 @@ describe('restRecovery', () => {
   });
 
   it('os dados de vida não passam do nível', () => {
-    const { fields } = restRecovery('long', hero({ hitDice: { total: '5d8', current: 4 } }), []);
-    expect(fields.hitDice).toEqual({ total: '5d8', current: 5 });
+    const { fields } = restRecovery('long', hero({ hitDice: { die: 'd8', spent: 1 } }), []);
+    expect(fields.hitDice).toEqual({ die: 'd8', spent: 0 });
+  });
+
+  it('gastos guardados acima do nível: devolve a partir do que a ficha mostra', () => {
+    // Spent 5 at level 5, now level 3: the sheet shows 3 spent, and 1 comes back
+    const { fields } = restRecovery(
+      'long',
+      hero({ level: 3, hitDice: { die: 'd8', spent: 5 } }),
+      [],
+    );
+    expect(fields.hitDice).toEqual({ die: 'd8', spent: 2 });
+  });
+
+  it('ficha no formato antigo sai no formato novo, e sem dado não grava a chave', () => {
+    const legacy = restRecovery('long', hero({ hitDice: { total: '5d10', current: 1 } }), []);
+    expect(legacy.fields.hitDice).toEqual({ die: 'd10', spent: 2 });
+
+    const noDie = restRecovery('long', hero({ hitDice: undefined }), []);
+    expect(noDie.fields.hitDice).toEqual({ spent: 0 });
+    expect(noDie.fields.hitDice).not.toHaveProperty('die');
   });
 
   it('pontos de magia voltam ao máximo', () => {

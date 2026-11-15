@@ -185,7 +185,7 @@ const BASE_UPDATES = {
   accentColor: '#6d28d9',
   ac: 15,
   initiative: 3,
-  speed: 30,
+  speed: 9,
   hpMax: 32,
   hpCurrent: 24,
   hpTemp: 5,

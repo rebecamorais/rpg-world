@@ -35,8 +35,6 @@ export const GAME_ICON_NAMES: ReadonlySet<string> = new Set([
   'crystal-ball',
   'crystal-shine',
   'crystal-wand',
-  'd10',
-  'd12',
   'dart',
   'death-skull',
   'despair',

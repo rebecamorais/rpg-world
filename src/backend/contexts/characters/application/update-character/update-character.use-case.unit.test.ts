@@ -165,11 +165,41 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
   it('aplica campos simples (classe, dados de vida)', async () => {
     const updated = await update({
       class: 'Wizard',
-      hitDice: { total: '3d6', current: 2 },
+      hitDice: { die: 'd6', spent: 2 },
     });
 
     expect(updated.class).toBe('Wizard');
-    expect(updated.hitDice).toEqual({ total: '3d6', current: 2 });
+    expect(updated.hitDice).toEqual({ die: 'd6', spent: 2 });
+  });
+
+  describe('dados de vida no formato antigo (aba aberta ou fila offline de antes)', () => {
+    it('guarda o dado e os gastos, pelo nível do personagem', async () => {
+      await update({ level: 3 });
+
+      const updated = await update({ hitDice: { total: '3d6', current: 2 } });
+
+      expect(updated.hitDice).toEqual({ die: 'd6', spent: 1 });
+    });
+
+    it('com o nível no mesmo salvamento, conta pelo nível que chega', async () => {
+      const updated = await update({ level: 5, hitDice: { total: '4d8', current: 2 } });
+
+      expect(updated.hitDice).toEqual({ die: 'd8', spent: 3 });
+    });
+
+    it('sem dado no total, guarda só os gastos', async () => {
+      const updated = await update({ hitDice: { total: '', current: 0 } });
+
+      expect(updated.hitDice).toEqual({ spent: 1 });
+      expect(updated.hitDice).not.toHaveProperty('die');
+    });
+  });
+
+  it('mudar o nível não mexe nos dados de vida gastos', async () => {
+    await update({ level: 5, hitDice: { die: 'd8', spent: 5 } });
+
+    expect((await update({ level: 3 })).hitDice).toEqual({ die: 'd8', spent: 5 });
+    expect((await update({ level: 5 })).hitDice).toEqual({ die: 'd8', spent: 5 });
   });
 
   it('não deve permitir alteração se não for o dono', async () => {
@@ -451,12 +481,12 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
           spellSlots: { '1': { max: 2, used: 0 } },
           spellPoints: { max: 4, current: 4 },
         });
-        await save({ hitDice: { total: '1d8', current: 1 } });
+        await save({ hitDice: { die: 'd8', spent: 0 } });
         const base = (await repo.findById('char-1'))!.revision;
 
         await save({ spellSlots: { '1': { max: 2, used: 1 } } }, base);
         await save({ spellPoints: { max: 4, current: 1 } }, base);
-        await save({ hitDice: { total: '1d8', current: 0 } }, base);
+        await save({ hitDice: { die: 'd8', spent: 1 } }, base);
         // Spending a class box the first time creates its entry: still game state
         await save({ resources: { 'class:monk:r0': { used: 1 } } }, base);
         expect((await repo.findById('char-1'))!.revision).toBe(base);
@@ -468,6 +498,28 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
           (await save({ resources: { 'class:monk:r0': { used: 1, hidden: true } } }, base + 1))
             .revision,
         ).toBe(base + 2);
+      });
+
+      it('dados de vida: do formato antigo para o novo com o mesmo dado não sobe', async () => {
+        // A sheet as it is stored from before 2026-11: the repository keeps what it is given
+        const stored = (await repo.findById('char-1')) as DnD5eCharacter;
+        stored.hitDice = { total: '1d8', current: 1 } as never;
+        await repo.save(stored);
+        const base = (await repo.findById('char-1'))!.revision;
+
+        expect((await save({ hitDice: { die: 'd8', spent: 0 } }, base)).revision).toBe(base);
+        expect((await save({ hitDice: { die: 'd8', spent: 1 } }, base)).revision).toBe(base);
+      });
+
+      it('dados de vida: trocar o dado é edição da ficha e sobe', async () => {
+        await save({ hitDice: { die: 'd8', spent: 1 } });
+        const base = (await repo.findById('char-1'))!.revision;
+
+        expect((await save({ hitDice: { die: 'd10', spent: 1 } }, base)).revision).toBe(base + 1);
+        // The legacy shape with another die counts the same
+        expect((await save({ hitDice: { total: '1d12', current: 0 } }, base + 1)).revision).toBe(
+          base + 2,
+        );
       });
 
       it('o dano do mestre não dá conflito no rascunho da CA', async () => {

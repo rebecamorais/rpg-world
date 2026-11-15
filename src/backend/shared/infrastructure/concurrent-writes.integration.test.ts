@@ -390,6 +390,57 @@ describe('Escritas concorrentes (Integration)', () => {
       expect(await write({ system_data: { ...played, ac: 15 } })).toBe(3);
     });
 
+    describe('dados de vida', () => {
+      const sheetWith = async (hitDice: unknown) => {
+        const id = await createCharacter(player.userId);
+        const write = async (next: unknown) => {
+          const { error } = await player.client
+            .from('characters')
+            .update({ system_data: { ac: 12, hitDice: next } as never })
+            .eq('id', id);
+          if (error) throw error;
+          return (await versionsOf(id)).revision;
+        };
+        return { write, revision: await write(hitDice) };
+      };
+
+      it('gastar e recuperar dados não sobe a revisão', async () => {
+        const { write, revision } = await sheetWith({ die: 'd8', spent: 0 });
+
+        expect(await write({ die: 'd8', spent: 3 })).toBe(revision);
+        expect(await write({ die: 'd8', spent: 1 })).toBe(revision);
+      });
+
+      it('trocar o dado sobe a revisão', async () => {
+        const { write, revision } = await sheetWith({ die: 'd8', spent: 2 });
+
+        expect(await write({ die: 'd10', spent: 2 })).toBe(revision + 1);
+      });
+
+      it.each([
+        ['com o nível no total', { total: '5d8', current: 5 }, { die: 'd8', spent: 2 }],
+        ['só com o dado', { total: '1d10', current: 1 }, { die: 'd10', spent: 0 }],
+        ['sem dado', { total: '', current: 3 }, { spent: 1 }],
+        ['com um dado que a ficha não conhece', { total: '3d7', current: 3 }, { spent: 0 }],
+      ])('ficha antiga %s: a primeira gravação no formato novo não sobe', async (_l, old, next) => {
+        const { write, revision } = await sheetWith(old);
+
+        expect(await write(next)).toBe(revision);
+      });
+
+      it('ficha antiga: gastar no formato antigo continua sem subir', async () => {
+        const { write, revision } = await sheetWith({ total: '5d8', current: 5 });
+
+        expect(await write({ total: '5d8', current: 2 })).toBe(revision);
+      });
+
+      it('ficha antiga: trocar o dado ao gravar no formato novo sobe', async () => {
+        const { write, revision } = await sheetWith({ total: '5d8', current: 5 });
+
+        expect(await write({ die: 'd12', spent: 0 })).toBe(revision + 1);
+      });
+    });
+
     it('UPDATE condicionado ao row_version visto: o segundo com o antigo não muda nada', async () => {
       const id = await createCharacter(player.userId);
       const save = (ac: number) =>

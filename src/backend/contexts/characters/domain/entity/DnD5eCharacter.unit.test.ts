@@ -33,4 +33,19 @@ describe('DnD5eCharacter (Domain Entity)', () => {
     // Atributos foram convertidos para object standard?
     expect((json.attributes as unknown as { STR: number }).STR).toBe(18);
   });
+
+  it('sem deslocamento informado, nasce com 9 m (30 pés do SRD)', () => {
+    const char = new DnD5eCharacter({
+      id: 'id-1',
+      name: 'Nova',
+      ownerUsername: 'user1',
+      attributes: new Attributes({}),
+      hp: new HealthPoints(1, 1),
+      level: 1,
+      classStr: '',
+      race: '',
+    });
+
+    expect(char.speed).toBe(9);
+  });
 });

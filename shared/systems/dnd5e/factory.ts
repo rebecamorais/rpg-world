@@ -39,7 +39,7 @@ export function createDnD5eCharacter(
     hpCurrent: overrides?.hpCurrent ?? 1,
     hpMax: overrides?.hpMax ?? 1,
     ac: overrides?.ac ?? 10,
-    speed: overrides?.speed ?? 30, // Default 30ft speed
+    speed: overrides?.speed ?? 9, // Metres: the SRD's 30 ft
     initiative: overrides?.initiative ?? 0,
     attributes: { ...defaultAttributes, ...overrides?.attributes },
     skills: overrides?.skills ?? defaultSkills(),

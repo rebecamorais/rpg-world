@@ -26,6 +26,13 @@ describe('demo catalog', () => {
     expect(Object.keys(data.inspirations)).toHaveLength(13);
   });
 
+  it('o deslocamento das fichas está em metros, em passos de 1,5 m', () => {
+    for (const c of Object.values(buildDemoData('pt').characters)) {
+      expect(c.speed).toBeLessThanOrEqual(15);
+      expect(c.speed % 1.5).toBe(0);
+    }
+  });
+
   it('toda magia e item existe em content/', async () => {
     const data = buildDemoData('en');
     const allSpells = Object.values(data.spells as Record<string, string[]>).flat();

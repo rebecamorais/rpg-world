@@ -27,29 +27,21 @@ import {
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import {
   hitDiceAvailable,
-  hitDieSides,
-  setHitDice,
-  setHitDiceRemaining,
+  setHitDiceSpent,
+  setHitDie,
   setSpellPoints,
 } from '@frontend/lib/character-sheet-updates';
 
 import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
+import { HIT_DIE_OPTIONS, readHitDice } from '@shared/systems/dnd5e/hit-dice';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import { AdjustHitPoints } from './AdjustHitPoints';
 import { CombatConfigSection, CombatStatsDialog } from './CombatStatsDialog';
-import { UsePips } from './UsePips';
 
 // Sized to its content, so a unit (speed's "m") sits right after the number
 const STAT_INPUT =
   'field-sizing-content h-7 w-auto min-w-[1ch] p-0 font-mono text-xl font-bold focus-visible:px-1 md:text-xl';
-const HIT_DIE_OPTIONS = ['d6', 'd8', 'd10', 'd12'];
-
-/** The die in a hit dice total: `5d6` → `d6`. Totals used to be stored with the level. */
-function hitDie(total: string | undefined) {
-  const die = `d${hitDieSides(total)}`;
-  return HIT_DIE_OPTIONS.includes(die) ? die : 'd8';
-}
 
 const CombatHeader = () => {
   const t = useTranslations('combatStats');
@@ -61,6 +53,8 @@ const CombatHeader = () => {
   const { readOnly } = useSheetSource(id);
   const level = character.level;
   const available = hitDiceAvailable(character);
+  // A sheet with no die yet shows a d8
+  const hitDie = readHitDice(character.hitDice, level).die ?? 'd8';
   const passivePerception = calculatePassivePerception(
     character.attributes.WIS ?? 10,
     character.level,
@@ -71,9 +65,10 @@ const CombatHeader = () => {
   return (
     // Columns by the card's own width, not the screen's: with the sidebar open, or in the party's
     // sheet panel, the card is much narrower than the viewport. Icon-only blocks are narrow: five
-    // fit from 28rem
+    // fit from 28rem. The hit dice block holds three things ("5/5 d8"): two columns while there
+    // are three, a wider one once all five sit side by side
     <CardHeader className="border-border bg-muted/30 @container border-b px-4 py-4 md:px-6 md:py-3">
-      <div className="grid grid-cols-3 gap-3 @md:grid-cols-5">
+      <div className="grid grid-cols-3 gap-3 @md:grid-cols-[repeat(3,minmax(0,1fr))_minmax(0,1.7fr)_minmax(0,1fr)]">
         <StatBlock icon="shoulder-armor" label={t('armorClass')} hint={t('hints.armorClass')}>
           <NumberInput
             ghost
@@ -112,7 +107,7 @@ const CombatHeader = () => {
             ghost
             decimal
             aria-label={t('speed')}
-            value={character.speed ?? 30}
+            value={character.speed ?? 9}
             min={0}
             max={10_000}
             onValueChange={(speed) => update({ speed })}
@@ -121,24 +116,49 @@ const CombatHeader = () => {
           />
         </StatBlock>
 
-        <StatBlock icon="dice-target" label={t('hitDice')} hint={t('hints.hitDice')}>
+        <StatBlock
+          id="sheet-hit-dice"
+          // Wider than its neighbours, so it stays side by side when they stack: centred in the row's height
+          className="col-span-2 flex items-center @md:col-span-1"
+          icon="dice-target"
+          label={t('hitDice')}
+          hint={t('hints.hitDice')}
+        >
+          {/* Dice left to spend, of one per level: "3/5 d6" */}
+          <NumberInput
+            ghost
+            aria-label={tRemaining('label')}
+            // Where the rest checklist's "go" lands
+            data-rest-focus
+            value={available}
+            min={0}
+            max={level}
+            disabled={readOnly}
+            // Spending a die is play, not a sheet edit: it saves at once
+            onValueChange={(left) => saveNow(setHitDiceSpent(level - left))}
+            showIcon={false}
+            className={STAT_INPUT}
+          />
+          <span data-testid="hit-dice-total" className="text-muted-foreground text-base">
+            <span aria-hidden="true">/</span>
+            {level}
+          </span>
           <Select
-            value={`1${hitDie(character.hitDice?.total)}`}
-            onValueChange={(val) => update(setHitDice(val))}
+            value={hitDie}
+            onValueChange={(val) => {
+              const die = HIT_DIE_OPTIONS.find((option) => option === val);
+              if (die) update(setHitDie(die));
+            }}
           >
             <SelectTrigger
               aria-label={t('hitDice')}
-              className="h-7 gap-1 border-none bg-transparent p-0 font-mono text-xl font-bold shadow-none backdrop-blur-none hover:bg-transparent [&>span]:line-clamp-none"
+              className="ml-1.5 h-7 gap-0.5 border-none bg-transparent p-0 font-mono text-base font-bold shadow-none backdrop-blur-none hover:bg-transparent [&>span]:line-clamp-none"
             >
-              {/* One die per level: a level 5 wizard has 5d6 */}
-              <SelectValue>
-                {character.level}
-                {hitDie(character.hitDice?.total)}
-              </SelectValue>
+              <SelectValue>{hitDie}</SelectValue>
             </SelectTrigger>
             <SelectContent className="min-w-[80px]">
               {HIT_DIE_OPTIONS.map((key) => (
-                <SelectItem key={key} value={`1${key}`} className="font-mono">
+                <SelectItem key={key} value={key} className="font-mono">
                   {t(`diceOptions.${key}`)}
                 </SelectItem>
               ))}
@@ -153,18 +173,6 @@ const CombatHeader = () => {
         >
           {passivePerception}
         </StatBlock>
-      </div>
-
-      <div id="sheet-hit-dice" className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
-        <span className="text-label text-muted-foreground">{tRemaining('label')}</span>
-        <UsePips
-          label={tRemaining('label')}
-          data-rest-focus
-          max={level}
-          used={level - available}
-          disabled={readOnly}
-          onChange={(used) => saveNow(setHitDiceRemaining(level - used))}
-        />
       </div>
     </CardHeader>
   );

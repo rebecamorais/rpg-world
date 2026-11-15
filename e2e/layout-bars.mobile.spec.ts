@@ -148,7 +148,7 @@ test.describe('em 320px', () => {
     const id = await createCharacter(page, 'Tiny Hero');
     await page.goto(characterUrl(id));
 
-    const header = page.locator('#sheet-hit-dice').locator('xpath=..');
+    const header = page.locator('#sheet-hit-dice').locator('xpath=../..');
     await expect(header).toBeVisible();
     const cut = await header
       .locator('.font-mono')

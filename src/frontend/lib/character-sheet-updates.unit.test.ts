@@ -9,14 +9,14 @@ import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 import {
   addCustomResource,
   editResourceBox,
-  hitDieSides,
+  hitDiceAvailable,
   newCustomKey,
   removeCustomResource,
   resetResourceBox,
   setAttribute,
   setDeathSaves,
-  setHitDice,
-  setHitDiceRemaining,
+  setHitDiceSpent,
+  setHitDie,
   setLevel,
   setResourceHidden,
   setResourceUsed,
@@ -56,9 +56,7 @@ describe('character sheet patches', () => {
 
   it('completa pontos de magia e dados de vida com o valor atual', () => {
     expect(apply(setSpellPoints('max', 12))).toEqual({ spellPoints: { current: 0, max: 12 } });
-    expect(apply(setHitDice('5d10'))).toEqual({
-      hitDice: { total: '5d10', current: character.level },
-    });
+    expect(apply(setHitDie('d10'))).toEqual({ hitDice: { die: 'd10', spent: 0 } });
   });
 
   it('troca um nível de espaços sem perder os outros', () => {
@@ -74,24 +72,38 @@ describe('character sheet patches', () => {
     expect(apply(setDeathSaves(2, 1))).toEqual({ deathSaves: { successes: 2, failures: 1 } });
   });
 
-  it('dados de vida sem valor salvo começam cheios, no nível do personagem', () => {
-    const patch = (setHitDice('d10') as (c: DnD5eCharacter) => Partial<DnD5eCharacter>)({
-      ...character,
-      level: 4,
-      hitDice: undefined,
-    });
+  it('escolher o dado numa ficha sem dados de vida guardados não gasta nenhum', () => {
+    const patch = resolvePatch(setHitDie('d10'), { ...character, level: 4, hitDice: undefined });
 
-    expect(patch).toEqual({ hitDice: { total: 'd10', current: 4 } });
+    expect(patch).toEqual({ hitDice: { die: 'd10', spent: 0 } });
   });
 
-  it('muda os dados de vida restantes sem perder o total', () => {
-    const withDice = { ...character, hitDice: { total: '4d10', current: 4 } };
-    const patch = (setHitDiceRemaining(2) as (c: DnD5eCharacter) => Partial<DnD5eCharacter>)(
-      withDice,
-    );
+  it('trocar o dado mantém os gastos, também numa ficha no formato antigo', () => {
+    const withDice = { ...character, level: 4, hitDice: { die: 'd10' as const, spent: 3 } };
+    expect(resolvePatch(setHitDie('d12'), withDice)).toEqual({
+      hitDice: { die: 'd12', spent: 3 },
+    });
 
-    expect(patch).toEqual({ hitDice: { total: '4d10', current: 2 } });
-    expect(apply(setHitDiceRemaining(1))).toEqual({ hitDice: { total: '', current: 1 } });
+    const legacy = { ...character, level: 4, hitDice: { total: '4d10', current: 1 } };
+    expect(resolvePatch(setHitDie('d12'), legacy)).toEqual({ hitDice: { die: 'd12', spent: 3 } });
+  });
+
+  it('muda os dados de vida gastos sem perder o dado', () => {
+    const withDice = { ...character, level: 4, hitDice: { die: 'd10' as const, spent: 0 } };
+
+    expect(resolvePatch(setHitDiceSpent(2), withDice)).toEqual({
+      hitDice: { die: 'd10', spent: 2 },
+    });
+    // Sheets saved before 2026-11: the die comes from the total, and the new shape is what is saved
+    const legacy = { ...character, level: 4, hitDice: { total: '4d10', current: 4 } };
+    expect(resolvePatch(setHitDiceSpent(1), legacy)).toEqual({ hitDice: { die: 'd10', spent: 1 } });
+  });
+
+  it('sem dado escolhido, grava os gastos sem a chave do dado', () => {
+    const patch = apply(setHitDiceSpent(1));
+
+    expect(patch).toEqual({ hitDice: { spent: 1 } });
+    expect(patch.hitDice).not.toHaveProperty('die');
   });
 
   it('marca o uso de uma caixinha sem perder as outras', () => {
@@ -110,39 +122,52 @@ describe('character sheet patches', () => {
   });
 
   describe('subir e descer de nível', () => {
-    const at = (level: number, current?: number) =>
+    const at = (level: number, spent?: number) =>
       ({
         ...character,
         level,
-        hitDice: current === undefined ? undefined : { total: `${level}d8`, current },
+        hitDice: spent === undefined ? undefined : { die: 'd8', spent },
       }) as DnD5eCharacter;
 
+    it('muda só o nível: os dados de vida gastos não entram no patch', () => {
+      expect(resolvePatch(setLevel(5), at(4, 0))).toEqual({ level: 5 });
+      expect(resolvePatch(setLevel(3), at(4, 4))).toEqual({ level: 3 });
+      expect(resolvePatch(setLevel(5), at(4))).toEqual({ level: 5 });
+    });
+
     it('subir traz o dado novo já disponível', () => {
-      expect(resolvePatch(setLevel(5), at(4, 4))).toEqual({
-        level: 5,
-        hitDice: { total: '4d8', current: 5 },
-      });
-      expect(resolvePatch(setLevel(6), at(4, 1))).toEqual({
-        level: 6,
-        hitDice: { total: '4d8', current: 3 },
-      });
+      const leveled = resolveAll(at(5, 2), setLevel(6));
+
+      expect(resolvePatch(setLevel(6), at(5, 2))).not.toHaveProperty('hitDice');
+      expect(hitDiceAvailable(leveled)).toBe(4);
     });
 
     it('descer limita aos dados do novo nível, sem ficar negativo', () => {
-      expect(resolvePatch(setLevel(3), at(4, 4)).hitDice?.current).toBe(3);
-      expect(resolvePatch(setLevel(1), at(4, 0)).hitDice?.current).toBe(0);
+      expect(hitDiceAvailable(resolveAll(at(4, 0), setLevel(3)))).toBe(3);
+      expect(hitDiceAvailable(resolveAll(at(4, 4), setLevel(1)))).toBe(0);
     });
 
-    it('ficha que nunca marcou os dados só muda o nível', () => {
-      expect(resolvePatch(setLevel(5), at(4))).toEqual({ level: 5 });
+    it('nível 5 com 0 dados restantes → nível 3 → nível 5 = 0 dados restantes', () => {
+      const down = resolveAll(at(5, 5), setLevel(3));
+      expect(hitDiceAvailable(down)).toBe(0);
+      // What was spent stays as saved, so going back up brings the sheet back as it was
+      expect(down.hitDice).toEqual({ die: 'd8', spent: 5 });
+
+      const backUp = resolveAll(down, setLevel(5));
+      expect(hitDiceAvailable(backUp)).toBe(0);
+      expect(backUp.hitDice).toEqual({ die: 'd8', spent: 5 });
+    });
+
+    it('ficha no formato antigo mostra os mesmos dados restantes no nível em que foi salva', () => {
+      const legacy = { ...character, level: 5, hitDice: { total: '5d8', current: 3 } };
+
+      expect(hitDiceAvailable(legacy)).toBe(3);
     });
   });
 
-  it('lê os lados do dado de vida no total', () => {
-    expect(hitDieSides('5d10')).toBe(10);
-    expect(hitDieSides('d6')).toBe(6);
-    expect(hitDieSides('')).toBeNull();
-    expect(hitDieSides(undefined)).toBeNull();
+  it('ficha que nunca marcou os dados tem todos os do nível', () => {
+    expect(hitDiceAvailable({ level: 4, hitDice: undefined })).toBe(4);
+    expect(hitDiceAvailable({ level: 4, hitDice: { spent: 9 } })).toBe(0);
   });
 });
 

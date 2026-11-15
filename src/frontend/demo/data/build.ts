@@ -68,7 +68,7 @@ function buildCharacter(hero: Hero, sheet: Sheet, locale: DemoLocale): DnD5eChar
     ac: sheet.ac,
     speed: sheet.speed,
     initiative: mod(attributes.DEX),
-    hitDice: { total: `${sheet.level}d${sheet.hitDie}`, current: sheet.level },
+    hitDice: { die: `d${sheet.hitDie}`, spent: 0 },
     deathSaves: { successes: 0, failures: 0 },
     attributes,
     skills,

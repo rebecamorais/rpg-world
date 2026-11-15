@@ -73,8 +73,9 @@ test('os números de combate mostram só o ícone, e o nome abre no ícone', asy
   const id = await createCharacter(page, 'Label Hero');
   await page.goto(characterUrl(id));
 
-  // The combat card's header: its five numbers in one row, icon and value only
-  const header = page.locator('#sheet-hit-dice').locator('xpath=..');
+  // The combat card's header (the hit dice block sits in its grid): five numbers in one row,
+  // icon and value only
+  const header = page.locator('#sheet-hit-dice').locator('xpath=../..');
   const blocks = header.locator(':scope > .grid > *');
   await expect(blocks).toHaveCount(5);
   const tops = await blocks.evaluateAll((els) =>
@@ -103,7 +104,7 @@ test('em 768px com o menu aberto o card de combate cabe inteiro', async ({ page,
   await expectInside(page.getByRole('button', { name: 'Lose 1 HP' }), hp);
   await expectInside(page.getByRole('button', { name: 'Heal 1 HP' }), hp);
   // No stat label nor value runs out of its block ("5d8", "30m", "PASSIVE PE…")
-  const header = page.locator('#sheet-hit-dice').locator('xpath=..');
+  const header = page.locator('#sheet-hit-dice').locator('xpath=../..');
   await expectNoOverflow(header.locator('.text-label'));
   await expectNoOverflow(header.locator('.font-mono'));
 });
@@ -127,7 +128,7 @@ test('a ficha no painel lateral da mesa não estoura o card de combate', async (
   await expect(hp).toBeVisible();
 
   // The panel is far narrower than the 1280px screen: the card follows its own width
-  const header = panel.locator('#sheet-hit-dice').locator('xpath=..');
+  const header = panel.locator('#sheet-hit-dice').locator('xpath=../..');
   await expectNoOverflow(header.locator('.text-label'));
   await expectNoOverflow(header.locator('.font-mono'));
   await expectInside(panel.getByRole('button', { name: 'Lose 1 HP' }), hp);

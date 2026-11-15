@@ -625,10 +625,10 @@
     "speedUnit": "m",
     "hitDice": "Hit Dice",
     "diceOptions": {
-      "d6": "1d6",
-      "d8": "1d8",
-      "d10": "1d10",
-      "d12": "1d12"
+      "d6": "d6",
+      "d8": "d8",
+      "d10": "d10",
+      "d12": "d12"
     },
     "loseHp": "Lose 1 HP",
     "gainHp": "Heal 1 HP",
