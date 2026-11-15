@@ -2,7 +2,14 @@ import { normalizeSearch } from '@shared/content/normalize-search';
 import { stripTags } from '@shared/content/tags';
 
 import { getModifier } from './calculations';
-import type { ClassResource } from './content/class.schema';
+import type {
+  ClassChoice,
+  ClassFeature,
+  ClassProficiencies,
+  ClassResource,
+  ClassSpellcasting,
+  ClassTable,
+} from './content/class.schema';
 import type { Edition } from './content/editions';
 import type { AttributeKey } from './types';
 
@@ -39,7 +46,7 @@ export interface ResourceState {
   custom?: CustomResource;
 }
 
-/** What GET /api/content/classes returns: one class, its SRD subclass, resource texts resolved to one locale. */
+/** A resource of one class or its SRD subclass, texts resolved to one locale. */
 export interface ResourceContent extends ClassResource {
   name: string;
   note?: string;
@@ -55,6 +62,26 @@ export interface ClassResourcesContent {
   resources: ResourceContent[];
   /** names: English + locale name, for matching */
   subclass: { id: string; names: string[]; resources: ResourceContent[] };
+}
+
+/** A feature by its id, with its name in the locale. Its rules text is not sent: nothing shows it yet. */
+export interface FeatureContent extends ClassFeature {
+  name: string;
+}
+
+/** Everything GET /api/content/classes returns: the resource boxes' content plus the class's rules data, by id. */
+export interface ClassContent extends ClassResourcesContent {
+  /** Saving throws, armor, weapons and tools by id, and the skills (and tools) to pick from. */
+  proficiencies: ClassProficiencies;
+  /** Absent for a class that casts no spells. */
+  spellcasting?: ClassSpellcasting;
+  features: FeatureContent[];
+  /** The SRD subclass's features; they only count when the sheet has that subclass. */
+  subclassFeatures: FeatureContent[];
+  /** Numbers of the class table that are not spent: Rage Damage, Martial Arts, Sneak Attack… */
+  tables: ClassTable[];
+  /** Options picked by level: Fighting Style, Metamagic, Eldritch Invocations… */
+  choices: (ClassChoice & { name: string })[];
 }
 
 /**
@@ -97,7 +124,7 @@ export interface EditableResourceBox extends ResourceBox {
 }
 
 /** The value of the last step whose level is <= `level`, or undefined if none applies yet. */
-function stepValue<T>(
+export function stepValue<T>(
   steps: { level: number; value: T }[],
   level: number,
 ): { value: T } | undefined {

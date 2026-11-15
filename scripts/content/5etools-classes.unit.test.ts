@@ -10,7 +10,9 @@ import {
   toClass,
   toProficiencies,
   toResource,
+  toSpellcasting,
   toSteps,
+  toTable,
   withIds,
 } from './5etools-classes';
 
@@ -328,5 +330,183 @@ describe('proficiências', () => {
       },
     };
     expect(toProficiencies(rogue).tools).toEqual(['thieves-tools']);
+  });
+});
+
+describe('números da tabela que não são recurso', () => {
+  const features = [{ id: 'rage', level: 1 }];
+
+  it('o dano de fúria vem da coluna, como bônus', () => {
+    const spec = {
+      id: 'rage-damage',
+      feature: 'rage',
+      kind: 'bonus' as const,
+      column: 'Rage Damage',
+    };
+    expect(toTable(spec, barbarian, features)).toEqual({
+      id: 'rage-damage',
+      feature: 'rage',
+      kind: 'bonus',
+      values: [
+        { level: 1, value: 2 },
+        { level: 6, value: 3 },
+        { level: 17, value: 4 },
+      ],
+    });
+    expect(
+      toClass(barbarian, ctx, { class: [rage], subclass: [] }, [spec]).data.tables,
+    ).toHaveLength(1);
+  });
+
+  it('classe sem número assim não ganha o campo', () => {
+    expect(toClass(barbarian, ctx, { class: [rage], subclass: [] }).data).not.toHaveProperty(
+      'tables',
+    );
+  });
+
+  it('dados do mesmo tamanho viram a quantidade e as faces', () => {
+    const dice = (number: number) => ({ type: 'dice' as const, toRoll: [{ number, faces: 6 }] });
+    const rogue = {
+      ...barbarian,
+      classTableGroups: [{ colLabels: ['Sneak Attack'], rows: [[dice(1)], [dice(1)], [dice(2)]] }],
+    };
+    const spec = {
+      id: 'sneak-attack',
+      feature: 'rage',
+      kind: 'dice' as const,
+      column: 'Sneak Attack',
+    };
+    expect(toTable(spec, rogue, features)).toEqual({
+      id: 'sneak-attack',
+      feature: 'rage',
+      kind: 'dice',
+      faces: 6,
+      values: [
+        { level: 1, value: 1 },
+        { level: 3, value: 2 },
+      ],
+    });
+  });
+
+  it('recusa característica que não existe, coluna que não existe e "Unlimited"', () => {
+    const spec = { id: 'x', feature: 'rage', kind: 'bonus' as const, column: 'Rage Damage' };
+    expect(() => toTable({ ...spec, feature: 'nope' }, barbarian, features)).toThrow('no feature');
+    expect(() => toTable({ ...spec, column: 'Nope' }, barbarian, features)).toThrow(
+      'no table column',
+    );
+    expect(() => toTable({ ...spec, column: 'Rages' }, barbarian, features)).toThrow('Unlimited');
+  });
+});
+
+describe('conjuração', () => {
+  // The full caster table of the book, as 5etools has it: zeros where there is no slot yet
+  const FULL = [
+    [2],
+    [3],
+    [4, 2],
+    [4, 3],
+    [4, 3, 2],
+    [4, 3, 3],
+    [4, 3, 3, 1],
+    [4, 3, 3, 2],
+    [4, 3, 3, 3, 1],
+    [4, 3, 3, 3, 2],
+    [4, 3, 3, 3, 2, 1],
+    [4, 3, 3, 3, 2, 1],
+    [4, 3, 3, 3, 2, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1, 1, 1],
+    [4, 3, 3, 3, 3, 1, 1, 1, 1],
+    [4, 3, 3, 3, 3, 2, 1, 1, 1],
+    [4, 3, 3, 3, 3, 2, 2, 1, 1],
+  ].map((row) => [...row, ...Array.from({ length: 9 - row.length }, () => 0)]);
+  const slots = (rows: number[][]) => [
+    { colLabels: ['Rages', 'Rage Damage'], rows: barbarian.classTableGroups![0].rows },
+    { colLabels: [], rowsSpellProgression: rows },
+  ];
+  const caster = (over: Partial<FiveToolsClass>): FiveToolsClass => ({
+    ...barbarian,
+    spellcastingAbility: 'wis',
+    casterProgression: 'full',
+    classTableGroups: slots(FULL),
+    ...over,
+  });
+  const convert = (c: FiveToolsClass) =>
+    toClass(c, ctx, { class: [rage], subclass: [] }).data.spellcasting;
+
+  it('truques, magias conhecidas e a fórmula das preparadas', () => {
+    expect(
+      convert(
+        caster({
+          cantripProgression: [3, 3, 3, 4],
+          preparedSpells: '<$level$> + <$wis_mod$>',
+        }),
+      ),
+    ).toEqual({
+      ability: 'WIS',
+      progression: 'full',
+      cantrips: [
+        { level: 1, value: 3 },
+        { level: 4, value: 4 },
+      ],
+      prepared: { levelDivisor: 1 },
+    });
+    expect(convert(caster({ spellsKnownProgression: [0, 2, 3] }))?.spellsKnown).toEqual([
+      { level: 2, value: 2 },
+      { level: 3, value: 3 },
+    ]);
+    expect(convert(caster({ preparedSpells: '<$level$> / 2 + <$wis_mod$>' }))?.prepared).toEqual({
+      levelDivisor: 2,
+    });
+    expect(convert(caster({ spellsKnownProgressionFixed: [6, 2, 2, 2] }))?.spellbook).toEqual({
+      initial: 6,
+      perLevel: 2,
+    });
+  });
+
+  it('recusa fórmula que não conhece ou de outro atributo', () => {
+    expect(() => convert(caster({ preparedSpells: '<$level$> * 2' }))).toThrow('formula');
+    expect(() => convert(caster({ preparedSpells: '<$level$> + <$cha_mod$>' }))).toThrow('formula');
+  });
+
+  it('só o SRD 5.1 ganha as contagens', () => {
+    const c = caster({ cantripProgression: [3, 3, 3, 4] });
+    expect(toSpellcasting(c, 'srd-5.2').spellcasting).toEqual({
+      ability: 'WIS',
+      progression: 'full',
+    });
+  });
+
+  it('recusa uma tabela de espaços diferente da que a ficha calcula', () => {
+    const wrong = FULL.map((row, i) => (i === 4 ? [4, 3, 3, 0, 0, 0, 0, 0, 0] : row));
+    expect(() => convert(caster({ classTableGroups: slots(wrong) }))).toThrow('level 5');
+    expect(() => convert(caster({ classTableGroups: barbarian.classTableGroups }))).toThrow(
+      'no spell slot table',
+    );
+  });
+
+  it('exige as 20 linhas e o espaço no círculo certo', () => {
+    expect(() => convert(caster({ classTableGroups: slots(FULL.slice(0, 19)) }))).toThrow(
+      '19 rows',
+    );
+    expect(() => convert(caster({ classTableGroups: slots([...FULL, FULL[19]]) }))).toThrow(
+      '21 rows',
+    );
+    // Nível 3: os mesmos números (4 e 2), mas o 2 um círculo adiante
+    const shifted = FULL.map((row, i) => (i === 2 ? [4, 0, 2, 0, 0, 0, 0, 0, 0] : row));
+    expect(() => convert(caster({ classTableGroups: slots(shifted) }))).toThrow('level 3');
+    // Linha mais curta que a calculada também é recusada
+    const short = FULL.map((row, i) => (i === 2 ? [4] : row));
+    expect(() => convert(caster({ classTableGroups: slots(short) }))).toThrow('level 3');
+  });
+
+  it('Magia de Pacto não tem tabela de espaços comuns', () => {
+    const warlock = caster({
+      casterProgression: 'pact',
+      classTableGroups: barbarian.classTableGroups,
+    });
+    expect(convert(warlock)).toEqual({ ability: 'WIS', progression: 'pact' });
   });
 });

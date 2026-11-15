@@ -5,7 +5,8 @@
  *   npm run content:classes
  *
  * Only entries 5etools marks as SRD (`srd`, `srd52`): classes, subclasses, features, and the
- * Metamagic options or feats a feature lists. Resources (Rage, Ki…) come from class-resources.ts.
+ * Metamagic options or feats a feature lists. Resources (Rage, Ki…) come from class-resources.ts,
+ * the other numbers of the class table (Rage Damage, Sneak Attack…) from class-tables.ts.
  * Rewrites the rules data and the English texts, keeping the 5etools tags in the text.
  * Translations (i18n/<locale>/) come from Weblate and are never touched, apart from creating an
  * empty file for Portuguese the first time.
@@ -26,6 +27,7 @@ import {
 } from './5etools-classes';
 import { VERSION, fetchJson } from './5etools-source';
 import { CLASS_RESOURCES } from './class-resources';
+import { CLASS_TABLES } from './class-tables';
 
 const ROOT = path.join(import.meta.dirname, '../../content/dnd5e');
 
@@ -52,7 +54,7 @@ function importBook(
   const converted = classes.map(({ c, file }) => {
     const resources = specs[toClassId(c)];
     if (!resources) throw new Error(`${book}: no resources listed for ${c.name}`);
-    return toClass(c, { book, file, inSrd }, resources);
+    return toClass(c, { book, file, inSrd }, resources, CLASS_TABLES[book][toClassId(c)]);
   });
   return {
     data: z.array(classDataSchema).parse(converted.map((c) => c.data)),

@@ -5,6 +5,7 @@ import {
   calculatePassivePerception,
   calculateSavingThrow,
   calculateSkillValue,
+  getHalfProficiencyBonus,
   getModifier,
   getProficiencyBonus,
 } from './calculations';
@@ -78,6 +79,48 @@ describe('D&D 5e calculations', () => {
     it('counts expertise and follows the level', () => {
       expect(calculatePassivePerception(14, 5, true, true)).toBe(18);
       expect(calculatePassivePerception(14, 9, true, true)).toBe(20);
+    });
+  });
+
+  describe('meia proficiência', () => {
+    const JACK = { rounding: 'down' } as const;
+    const ATHLETE = { rounding: 'up', abilities: ['STR', 'DEX', 'CON'] } as const;
+
+    // PB +2 (nv 1), +3 (5), +4 (9), +5 (13), +6 (17)
+    it.each([
+      [1, 1, 1],
+      [5, 1, 2],
+      [9, 2, 2],
+      [13, 2, 3],
+      [17, 3, 3],
+    ])('nível %i: +%i pra baixo, +%i pra cima', (level, down, up) => {
+      expect(getHalfProficiencyBonus(JACK, level, 'INT', false)).toBe(down);
+      expect(getHalfProficiencyBonus(ATHLETE, level, 'STR', false)).toBe(up);
+    });
+
+    it('não se soma a um teste que já tem proficiência', () => {
+      expect(getHalfProficiencyBonus(JACK, 5, 'DEX', true)).toBe(0);
+      expect(getHalfProficiencyBonus(ATHLETE, 5, 'STR', true)).toBe(0);
+      // A perícia proficiente fica só com o PB: mod. +2, PB +3
+      expect(calculateSkillValue(14, 5, true) + getHalfProficiencyBonus(JACK, 5, 'DEX', true)).toBe(
+        5,
+      );
+    });
+
+    it('Pau pra Toda Obra vale para todo atributo; Atleta Extraordinário só FOR, DES e CON', () => {
+      for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'] as const) {
+        expect(getHalfProficiencyBonus(JACK, 5, ability, false)).toBe(1);
+      }
+      expect(getHalfProficiencyBonus(ATHLETE, 5, 'CON', false)).toBe(2);
+      for (const ability of ['INT', 'WIS', 'CHA'] as const) {
+        expect(getHalfProficiencyBonus(ATHLETE, 5, ability, false)).toBe(0);
+      }
+    });
+
+    it('a salvaguarda não recebe meia proficiência', () => {
+      // Sem proficiência: só o modificador, com ou sem a característica
+      expect(calculateSavingThrow(14, 5, false)).toBe(2);
+      expect(calculateSavingThrow(14, 5, true)).toBe(5);
     });
   });
 });

@@ -82,6 +82,44 @@ const choiceSchema = z.object({
   count: steps(z.number().int().min(1)),
 });
 
+/**
+ * A number of the class table that is not spent: Rage Damage, Martial Arts, Sneak Attack… What the
+ * value is depends on `kind`: a `bonus`, the faces of one `die`, how many `dice` of `faces` faces,
+ * or a `speed` bonus in feet (as the book has it; the sheet shows metres).
+ */
+const tableSchema = z
+  .object({
+    id,
+    /** The feature the number belongs to, in the same class. */
+    feature: id,
+    kind: z.enum(['bonus', 'die', 'dice', 'speed']),
+    /** Only for `dice`: the faces of each die (Sneak Attack rolls d6s). */
+    faces: z.number().int().min(2).optional(),
+    values: steps(z.number().int().min(1)),
+  })
+  .refine((table) => (table.kind === 'dice') === (table.faces !== undefined), {
+    message: 'faces goes with dice, and only with it',
+  });
+
+const spellcastingSchema = z.object({
+  ability,
+  /** `half-round-up`: half casters that already have slots at level 1 (SRD 5.2). */
+  progression: z.enum(['full', 'half', 'half-round-up', 'pact']),
+  /** Cantrips known, by level. */
+  cantrips: steps(z.number().int().min(1)).optional(),
+  /** Classes that learn a fixed number of spells: how many, by level. */
+  spellsKnown: steps(z.number().int().min(1)).optional(),
+  /**
+   * Classes that prepare spells: the ability modifier plus the class level over `levelDivisor`
+   * (rounded down), never under 1. Cleric: 1; paladin: 2.
+   */
+  prepared: z.object({ levelDivisor: z.union([z.literal(1), z.literal(2)]) }).optional(),
+  /** Wizard: spells in the spellbook at level 1, and how many each later level adds. */
+  spellbook: z
+    .object({ initial: z.number().int().min(1), perLevel: z.number().int().min(1) })
+    .optional(),
+});
+
 const subclassDataSchema = z.object({
   /** Unique within its class, e.g. `berserker`. */
   id,
@@ -118,12 +156,11 @@ export const classDataSchema = z.object({
   /** Faces of the hit die, e.g. 12 for a d12. */
   hitDie: z.union([z.literal(6), z.literal(8), z.literal(10), z.literal(12)]),
   proficiencies: proficienciesSchema,
-  /** `half-round-up`: half casters that already have slots at level 1 (SRD 5.2). */
-  spellcasting: z
-    .object({ ability, progression: z.enum(['full', 'half', 'half-round-up', 'pact']) })
-    .optional(),
+  spellcasting: spellcastingSchema.optional(),
   features: z.array(featureSchema).min(1),
   resources: z.array(resourceSchema),
+  /** Absent when the class table has only what `resources` and `spellcasting` already say. */
+  tables: z.array(tableSchema).optional(),
   choices: z.array(choiceSchema),
   /** The book's subclasses: one in the SRD. */
   subclasses: z.array(subclassDataSchema).min(1),
@@ -182,6 +219,8 @@ export type ClassData = z.infer<typeof classDataSchema>;
 export type ClassText = z.infer<typeof classTextSchema>;
 export type ClassTranslation = z.infer<typeof classTranslationSchema>;
 export type ClassFeature = z.infer<typeof featureSchema>;
+export type ClassTable = z.infer<typeof tableSchema>;
+export type ClassSpellcasting = z.infer<typeof spellcastingSchema>;
 export type ClassResource = z.infer<typeof resourceSchema>;
 export type ClassChoice = z.infer<typeof choiceSchema>;
 export type ClassProficiencies = z.infer<typeof proficienciesSchema>;
