@@ -7,11 +7,10 @@ import styles from './effects.module.css';
  * How a drawing fits the card. By default it is a banner on the card's top edge (cut to the
  * card's width). Some cover the whole card, stretched (textures: waves, cracks, cuts, mist), and
  * objects that must keep their shape fill the card's height on the right: the necrotic skull
- * centred, the cold crystal and the acid drawings from the top.
+ * centred, the cold crystal and the acid from the top.
  * The ones that fill the height also take `height: 100%` in effects.module.css.
  */
 const FIT: Partial<Record<ArtName, string>> = {
-  'acid-effervescence': 'none',
   'impact-fractures': 'none',
   'toxic-mist-filaments': 'none',
   'lightning-branches': 'none',
@@ -20,7 +19,6 @@ const FIT: Partial<Record<ArtName, string>> = {
   'thunder-soundwaves': 'none',
   'necrotic-stag-skull': 'xMaxYMid meet',
   'frost-crystals': 'xMaxYMin meet',
-  'acid-etching': 'xMaxYMin meet',
   'acid-bloom': 'xMaxYMin meet',
 };
 

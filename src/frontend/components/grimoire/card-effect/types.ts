@@ -42,10 +42,6 @@ export const EFFECTS = {
   impact: { parts: 'fx', enter: 'flash', ripple: ['round', 2] },
   // Acid: an acid film on top, a corrosive pool blooming from the bottom right, bubbles (the owner's drawing, v4)
   'acid-bloom': { parts: 'art', enter: 'fade', ripple: ['splash', 3] },
-  // Acid, v3: corroded pits and etched rings with a few bubbles, a film on the top edge (the owner's drawing, v3)
-  'acid-etching': { parts: 'art', enter: 'fade', ripple: ['splash', 3] },
-  // Acid, v2: an acid film on the top edge, effervescent bubbles and corrosion pits (the owner's drawing)
-  'acid-effervescence': { parts: 'art', enter: 'fade', ripple: ['splash', 3] },
   drips: { parts: 'glow+icons', enter: 'fade', ripple: ['splash', 3] },
   // Cold: faceted ice glass and a six-armed crystal on the right (the owner's drawing)
   'frost-crystals': { parts: 'art', enter: 'fade', ripple: ['diamond', 2] },
