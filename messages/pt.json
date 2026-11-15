@@ -587,7 +587,11 @@
     "copyPick": "Escolha",
     "copyAdd": "Copiar",
     "copyHint": "É uma cópia no seu nível: daí em diante, só você muda.",
-    "copyNeedsEdition": "Escolha a edição acima para copiar um recurso de uma classe."
+    "copyNeedsEdition": "Escolha a edição acima para copiar um recurso de uma classe.",
+    "own": "Própria",
+    "removeBox": "Excluir {name}",
+    "classBoxNote": "Caixinha da classe: dá para esconder, não para excluir.",
+    "copyNoneLeft": "A ficha já tem todos os recursos desta classe."
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",

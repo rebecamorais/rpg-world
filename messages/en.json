@@ -587,7 +587,11 @@
     "copyPick": "Pick one",
     "copyAdd": "Copy",
     "copyHint": "It is a copy at your level: from then on, only you change it.",
-    "copyNeedsEdition": "Pick the edition above to copy a resource from a class."
+    "copyNeedsEdition": "Pick the edition above to copy a resource from a class.",
+    "own": "Own",
+    "removeBox": "Delete {name}",
+    "classBoxNote": "A class box can be hidden, not deleted.",
+    "copyNoneLeft": "Your sheet already has every resource of this class."
   },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",
