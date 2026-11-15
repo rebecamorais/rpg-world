@@ -67,3 +67,6 @@ next-env.d.ts
 /.playwright-mcp/
 /.superpowers/
 /.claude/worktrees/
+
+# Foundry translations sent to Weblate (npm run content:foundry-class-names)
+/.foundry-import/

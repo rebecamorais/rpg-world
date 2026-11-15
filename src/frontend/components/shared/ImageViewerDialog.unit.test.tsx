@@ -27,6 +27,13 @@ function renderViewer(props: Partial<React.ComponentProps<typeof ImageViewerDial
 const image = () => screen.getByRole('img', { name: 'Lyra' });
 const stage = () => screen.getByRole('group', { name: t.viewTitle });
 const button = (name: string) => screen.getByRole('button', { name });
+// CSSOM serializes `translate(x, 0px)` as `translate(x)`, so compare numbers, not strings
+const offset = () => {
+  const [, x, y = '0'] = /translate\((-?[\d.]+)px(?:, (-?[\d.]+)px)?\)/.exec(
+    image().style.transform,
+  )!;
+  return [Number(x), Number(y)];
+};
 
 describe('ImageViewerDialog', () => {
   beforeEach(() => {
@@ -80,12 +87,12 @@ describe('ImageViewerDialog', () => {
 
     stage().focus();
     await userEvent.keyboard('{ArrowRight}');
-    expect(image().style.transform).toContain('translate(0px, 0px)');
+    expect(offset()).toEqual([0, 0]);
 
     await userEvent.click(button(t.zoomIn));
     stage().focus();
     await userEvent.keyboard('{ArrowRight}');
-    expect(image().style.transform).toContain('translate(40px, 0px)');
+    expect(offset()).toEqual([40, 0]);
   });
 
   it('arrastar move a imagem ampliada', async () => {
@@ -96,7 +103,7 @@ describe('ImageViewerDialog', () => {
     fireEvent.pointerMove(stage(), { pointerId: 1, clientX: 130, clientY: 90 });
     fireEvent.pointerUp(stage(), { pointerId: 1 });
 
-    expect(image().style.transform).toContain('translate(30px, -10px)');
+    expect(offset()).toEqual([30, -10]);
   });
 
   it('pinça com dois dedos aproxima', () => {
@@ -164,7 +171,7 @@ describe('ImageViewerDialog', () => {
     fireEvent.pointerDown(stage(), { pointerId: 1, button: 2, clientX: 100, clientY: 100 });
     fireEvent.pointerMove(stage(), { pointerId: 1, clientX: 130, clientY: 90 });
 
-    expect(image().style.transform).toContain('translate(0px, 0px)');
+    expect(offset()).toEqual([0, 0]);
   });
 
   it('perder o ponteiro encerra o arrasto', async () => {
@@ -175,7 +182,7 @@ describe('ImageViewerDialog', () => {
     fireEvent.lostPointerCapture(stage(), { pointerId: 1 });
     fireEvent.pointerMove(stage(), { pointerId: 1, clientX: 130, clientY: 90 });
 
-    expect(image().style.transform).toContain('translate(0px, 0px)');
+    expect(offset()).toEqual([0, 0]);
   });
 
   it('o botão de fechar tem fundo próprio, para o contraste não depender da imagem', () => {

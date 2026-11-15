@@ -167,6 +167,30 @@ describe('useDraft', () => {
     expect(result.current.draft?.hp).toBe(9);
   });
 
+  it('saveFields com patch em função lê o servidor e mantém o resto da edição do mesmo campo', async () => {
+    const { result } = renderDraft(server);
+    act(() => result.current.update({ stats: { str: 18, dex: 10 } }));
+    let fields: Partial<Hero> | undefined;
+    let base: Hero | undefined;
+
+    await act(() =>
+      result.current.saveFields(
+        (hero) => ({ stats: { ...hero.stats, dex: 14 } }),
+        async (_whole, patch, from) => {
+          fields = patch;
+          base = from;
+        },
+      ),
+    );
+
+    // Saved on top of the server copy: the pending STR does not go along
+    expect(base).toEqual(server);
+    expect(fields).toEqual({ stats: { str: 10, dex: 14 } });
+    // ...and stays pending, with the saved DEX under it
+    expect(result.current.isDirty).toBe(true);
+    expect(result.current.draft?.stats).toEqual({ str: 18, dex: 14 });
+  });
+
   it('update, commit e discard mantêm a identidade entre renders', () => {
     const { result } = renderDraft(server);
     const before = result.current;

@@ -151,3 +151,82 @@ describe('fichas de inimigo (kind)', () => {
     expect(charactersQuerySchema.safeParse({ kind: 'x' }).success).toBe(false);
   });
 });
+
+describe('edition e resources no update', () => {
+  const parse = (updates: unknown) => characterUpdatesSchema.safeParse(updates).success;
+
+  it('aceita edição e uso de uma caixinha', () => {
+    expect(parse({ edition: '2024', resources: { 'class:monk:ki': { used: 2 } } })).toBe(true);
+    expect(parse({ resources: { 'subclass:barbarian/berserker:frenzy': { used: 0 } } })).toBe(true);
+    expect(
+      parse({ resources: { 'custom:3f2b8c1e-4d5a-4b6c-8d7e-9f0a1b2c3d4e': { used: 0 } } }),
+    ).toBe(true);
+  });
+
+  it('recusa edição desconhecida, chave inválida e uso negativo', () => {
+    expect(parse({ edition: '2025' })).toBe(false);
+    expect(parse({ resources: { Monk: { used: 0 } } })).toBe(false);
+    expect(parse({ resources: { 'class:Monk:ki': { used: 0 } } })).toBe(false);
+    expect(parse({ resources: { foo: { used: 0 } } })).toBe(false);
+    expect(parse({ resources: { 'class:monk:ki;drop': { used: 0 } } })).toBe(false);
+    expect(parse({ resources: { 'class:monk:ki': { used: -1 } } })).toBe(false);
+  });
+
+  it('aceita hidden, overrides e custom dentro dos limites', () => {
+    const ok = {
+      used: 1,
+      hidden: true,
+      overrides: {
+        max: 1000,
+        recovery: [
+          { rest: 'short', amount: 'all' },
+          { rest: 'long', amount: 2, fromLevel: 5 },
+        ],
+        color: 'red',
+        name: 'x'.repeat(100),
+        description: 'y'.repeat(2000),
+      },
+      custom: {
+        name: 'Bênção',
+        max: 3,
+        recovery: [{ rest: 'long', amount: 'all' }],
+        source: 'manual',
+      },
+    };
+    expect(parse({ resources: { 'class:monk:ki': ok } })).toBe(true);
+  });
+
+  it('caixinha própria aceita descrição até 2000 caracteres e recusa origem desconhecida', () => {
+    const KEY = 'custom:3f2b8c1e-4d5a-4b6c-8d7e-9f0a1b2c3d4e';
+    const own = (extra: object) => ({
+      resources: {
+        [KEY]: {
+          used: 0,
+          custom: { name: 'Anel', max: 1, recovery: [], source: 'item', ...extra },
+        },
+      },
+    });
+
+    expect(parse(own({ description: 'y'.repeat(2000) }))).toBe(true);
+    expect(parse(own({ description: 'y'.repeat(2001) }))).toBe(false);
+    expect(parse(own({ source: 'potion' }))).toBe(false);
+  });
+
+  it('aceita 100 caixinhas por pedido e recusa 101', () => {
+    const boxes = (n: number) =>
+      Object.fromEntries(Array.from({ length: n }, (_, i) => [`class:monk:r${i}`, { used: 0 }]));
+    expect(parse({ resources: boxes(100) })).toBe(true);
+    expect(parse({ resources: boxes(101) })).toBe(false);
+  });
+
+  it('recusa valores acima dos limites', () => {
+    const box = (overrides: object) => ({ resources: { 'class:monk:ki': { used: 0, overrides } } });
+    expect(parse(box({ max: 1001 }))).toBe(false);
+    expect(parse(box({ max: -1 }))).toBe(false);
+    expect(parse(box({ name: 'x'.repeat(101) }))).toBe(false);
+    expect(parse(box({ description: 'y'.repeat(2001) }))).toBe(false);
+    expect(parse(box({ color: 'z'.repeat(33) }))).toBe(false);
+    const long = { rest: 'long', amount: 'all' };
+    expect(parse(box({ recovery: [long, long, long, long, long] }))).toBe(false);
+  });
+});

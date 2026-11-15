@@ -5,6 +5,7 @@
       "unknown": "Ocorreu um erro desconhecido. Tente novamente.",
       "common_error_invalid_request": "Dados inválidos. Verifique os campos e tente novamente.",
       "common_error_unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
+      "class_error_not_found": "Classe não encontrada.",
       "demo_read_only": "Esta é uma demo somente leitura. Crie uma conta gratuita para jogar.",
       "account_deletion_error_username_mismatch": "Esse não é o seu username.",
       "account_deletion_error_password_invalid": "Senha incorreta. Se você nunca criou uma, por exemplo porque entrava com link por e-mail, use “Esqueceu a senha?” para criar.",
@@ -84,6 +85,7 @@
       "character_error_item_not_found": "Item não encontrado.",
       "character_error_container_not_found": "Lugar não encontrado.",
       "character_error_item_limit": "A mochila está cheia: um personagem guarda no máximo 500 itens diferentes.",
+      "character_error_resource_limit": "Um personagem tem no máximo 200 caixinhas de recurso.",
       "character_error_container_limit": "Um personagem tem no máximo 20 lugares.",
       "combat_error_not_found": "Combate não encontrado.",
       "combat_error_exists": "Esta mesa já tem um combate.",
@@ -270,8 +272,6 @@
     },
     "loreFields": {
       "appearance": "Aparência",
-      "personality": "Personalidade",
-      "narrative": "Narrativa",
       "age": "Idade",
       "height": "Altura",
       "weight": "Peso",
@@ -303,7 +303,7 @@
     "learnedBadge": "Aprendida",
     "spellCount": "{count, plural, one {# magia} other {# magias}}",
     "untranslatedBadge": "Em inglês",
-    "untranslatedHint": "Ainda sem tradução. Você pode ajudar no Crowdin.",
+    "untranslatedHint": "Ainda sem tradução. Você pode ajudar no Weblate.",
     "edition": "Edição",
     "cantripUpgrade": "Melhoria do Truque",
     "duplicate": "Duplicar",
@@ -462,8 +462,22 @@
         "S": "Especial",
         "T": "Arremesso",
         "V": "Versátil"
+      },
+      "view": "Visualização",
+      "viewList": "Lista",
+      "viewGrid": "Grade",
+      "tile": "{name}, {quantity} un.",
+      "group": {
+        "weapons": "Armas",
+        "armor": "Armaduras e escudos",
+        "magic": "Magia",
+        "tools": "Ferramentas e kits",
+        "gear": "Equipamento",
+        "other": "Outros"
       }
-    }
+    },
+    "untranslatedNotice": "Descrição em inglês por enquanto.",
+    "untranslatedHelp": "Ajude a traduzir"
   },
   "characterHeader": {
     "namePlaceholder": "Nome do Personagem",
@@ -488,9 +502,17 @@
     "hideIdentity": "Esconder detalhes",
     "showIdentity": "Ver detalhes"
   },
+  "sheetSettings": {
+    "classResourcesTitle": "Recursos de classe",
+    "classResourcesHint": "Edição das regras usada para montar as caixinhas da classe.",
+    "edition2014": "2014 (SRD 5.1)",
+    "edition2024": "2024 (SRD 5.2)",
+    "hint": "Novo: edição e recursos aqui",
+    "dismiss": "Entendi"
+  },
   "characterAppearance": {
-    "title": "Aparência da ficha",
-    "description": "Aqui só muda o visual da ficha. Os dados do personagem continuam iguais.",
+    "title": "Configurar ficha",
+    "description": "Aqui muda o visual da ficha e a edição que os recursos da classe seguem.",
     "back": "Voltar para a ficha",
     "colorTitle": "Cor",
     "colorHint": "Usada no nome, na moldura do avatar e nos destaques da ficha.",
@@ -507,6 +529,65 @@
     "backgroundRemove": "Remover fundo",
     "backgroundSending": "Enviando…",
     "preview": "Prévia"
+  },
+  "classResources": {
+    "newTitle": "Novo: recursos de classe",
+    "newText": "Escolha a edição para ver os recursos da sua classe e o que volta no descanso.",
+    "short": "curto",
+    "long": "longo",
+    "edit": "editar",
+    "title": "Recursos de classe"
+  },
+  "resourceEditor": {
+    "title": "Caixinhas",
+    "hint": "Mude o que a classe dá, esconda o que não usa ou crie as suas. O que você mudar continua quando subir de nível.",
+    "empty": "Nenhuma caixinha ainda. Escolha a edição acima para ter as da sua classe, ou crie a sua.",
+    "edit": "Editar",
+    "close": "Fechar",
+    "editBox": "Editar {name}",
+    "closeBox": "Fechar {name}",
+    "hide": "Esconder",
+    "show": "Mostrar",
+    "hideBox": "Esconder {name}",
+    "showBox": "Mostrar {name}",
+    "hidden": "escondida",
+    "unnamed": "Caixinha sem nome",
+    "usesCount": "{count, plural, one {# uso} other {# usos}}",
+    "name": "Nome",
+    "nameRequired": "Dê um nome para a caixinha.",
+    "uses": "Usos",
+    "asClassHint": "Deixe um campo vazio para seguir a classe.",
+    "recoveryLabel": "Volta no",
+    "recoveryAsClass": "Como a classe diz",
+    "recovery": {
+      "short": "Descanso curto",
+      "long": "Descanso longo",
+      "none": "Nenhum descanso"
+    },
+    "source": "Vem de",
+    "sources": {
+      "class": "Classe",
+      "subclass": "Subclasse",
+      "feat": "Talento",
+      "item": "Item",
+      "manual": "Criação minha"
+    },
+    "color": "Cor",
+    "sheetColor": "Cor da ficha",
+    "description": "Descrição",
+    "descriptionAsClass": "Vazio: o texto da regra.",
+    "descriptionHint": "Aparece ao passar o mouse ou tocar no nome da caixinha, na ficha.",
+    "reset": "Voltar ao que a classe diz",
+    "remove": "Excluir caixinha",
+    "add": "Criar caixinha",
+    "newName": "Nova caixinha",
+    "copy": "Copiar de uma classe",
+    "copyClass": "Classe",
+    "copyResource": "Recurso",
+    "copyPick": "Escolha",
+    "copyAdd": "Copiar",
+    "copyHint": "É uma cópia no seu nível: daí em diante, só você muda.",
+    "copyNeedsEdition": "Escolha a edição acima para copiar um recurso de uma classe."
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",
@@ -553,6 +634,28 @@
     "summary": "Combate num relance",
     "speedShort": "Desloc.",
     "passivePerceptionShort": "Percepção"
+  },
+  "hitDiceRemaining": {
+    "label": "Dados de vida restantes"
+  },
+  "restChecklist": {
+    "shortRest": "Descanso curto",
+    "longRest": "Descanso longo",
+    "shortTitle": "Descanso curto",
+    "longTitle": "Descanso longo",
+    "progress": "{title} · {done} de {total}",
+    "done": "Terminei",
+    "go": "ir",
+    "goTo": "ir: {item}",
+    "spendHitDice": "Role {die} {bonus} por dado de vida gasto (sobram {left})",
+    "spendHitDiceNoDie": "Gaste dados de vida, se quiser (sobram {left})",
+    "boxBack": "{name} volta: {amount, select, all {todos} other {{amount}}}",
+    "pactSlotsBack": "Espaços de pacto voltam",
+    "notBackShort": "Espaços de magia e PV não voltam no descanso curto",
+    "fullHp": "PV cheio",
+    "hitDiceBack": "Recupere {count, plural, one {# dado de vida} other {# dados de vida}}",
+    "spellSlotsBack": "Espaços de magia voltam",
+    "spellPointsBack": "Pontos de magia voltam"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Buscar magia…",
@@ -609,6 +712,14 @@
     "configure": "Configurar sistema de magia",
     "slotAvailable": "Espaço {slot} do {level}º círculo, disponível",
     "slotSpent": "Espaço {slot} do {level}º círculo, gasto"
+  },
+  "usePips": {
+    "summary": "{label}, {available} de {max} disponíveis",
+    "available": "{label} {slot}, disponível",
+    "spent": "{label} {slot}, gasto",
+    "unlimited": "ilimitado",
+    "spendOne": "Gastar um uso de {label}",
+    "returnOne": "Devolver um uso de {label}"
   },
   "dashboard": {
     "menu": "Menu",
@@ -820,7 +931,8 @@
           "This work includes material from the System Reference Document 5.2 (“SRD 5.2”) by Wizards of the Coast LLC, available at <srd52>https://www.dndbeyond.com/srd</srd52>. The SRD 5.2 is licensed under the Creative Commons Attribution 4.0 International License, available at <ccby>https://creativecommons.org/licenses/by/4.0/legalcode</ccby>.",
           "As magias e condições em espanhol das regras de 2014 vêm da edição oficial em espanhol do SRD 5.1: Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (“SRD 5.1”) de Wizards of the Coast LLC, que está disponible en <srdEs>https://dnd.wizards.com/es/resources/systems-reference-document</srdEs>. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en <ccbyEs>https://creativecommons.org/licenses/by/4.0/legalcode.es</ccbyEs>.",
           "Os dados estruturados das magias de 2014 foram obtidos da <api>5e SRD API</api>, do projeto <database>5e-bits/5e-database</database>, sob a licença MIT. As magias de 2024 foram extraídas do <fivetools>5etools</fivetools>, só das entradas que fazem parte do SRD 5.2.",
-          "As traduções em português das magias vêm do <foundry>módulo de tradução do D&D 5e para o Foundry VTT</foundry>, da comunidade Foundry VTT Brasil (Cauã Pessoa e colaboradores), sob a licença MIT.",
+          "As traduções em português das magias e dos nomes de classes vêm do <foundry>módulo de tradução do D&D 5e para o Foundry VTT</foundry>, da comunidade Foundry VTT Brasil (Cauã Pessoa e colaboradores), Open Game Content sob a Open Game License v1.0a.",
+          "Os nomes de classes em espanhol das regras de 2024 vêm do módulo <foundryEs>D&D 5e SRD 2024 Spanish Translation</foundryEs> para o Foundry VTT, de foundryvtt-sinregistrar, sob a licença Creative Commons Atribuição 4.0 Internacional.",
           "O RPG World não é afiliado, endossado nem patrocinado pela Wizards of the Coast. Dungeons & Dragons e D&D são marcas da Wizards of the Coast LLC.",
           "Os créditos completos e os textos das licenças estão no arquivo <notice>NOTICE.md</notice> do repositório."
         ]
@@ -1204,8 +1316,8 @@
   },
   "translationInvite": {
     "title": "Ajude a traduzir o RPG World",
-    "description": "As traduções são feitas pela comunidade no Crowdin. Qualquer pessoa pode sugerir ou revisar textos e magias, em português ou em outro idioma.",
-    "action": "Traduzir no Crowdin"
+    "description": "As traduções são feitas pela comunidade no Weblate. Qualquer pessoa pode sugerir ou revisar textos e magias, em português ou em outro idioma.",
+    "action": "Traduzir no Weblate"
   },
   "notFound": {
     "title": "Página não encontrada",

@@ -30,4 +30,4 @@ Dentro do escopo: o app em `rpgworldapp.com`, este repositório e as políticas 
 banco.
 
 Fora do escopo: ataques de negação de serviço, engenharia social, spam e falhas em serviços de
-terceiros (Supabase, Vercel, Cloudflare, Crowdin) que não dependam da nossa configuração.
+terceiros (Supabase, Vercel, Cloudflare, Weblate) que não dependam da nossa configuração.

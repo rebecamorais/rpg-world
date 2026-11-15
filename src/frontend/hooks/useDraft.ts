@@ -5,29 +5,39 @@ import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 /** A change to the draft: the fields to set, or a function of the current draft that returns them. */
 export type DraftPatch<T> = Partial<T> | ((draft: T) => Partial<T>);
 
+/** The fields a patch sets on `draft`. */
+export const resolvePatch = <T>(patch: DraftPatch<T>, draft: T): Partial<T> =>
+  typeof patch === 'function' ? patch(draft) : patch;
+
 type Edits<T> = Partial<T> | null;
 
 type DraftAction<T> =
   | { type: 'update'; patch: DraftPatch<T>; base: T }
   | { type: 'commit'; saved: Edits<T> }
-  | { type: 'forget'; keys: string[] }
+  | { type: 'saved'; patch: DraftPatch<T>; saved: Partial<T>; base: T }
   | { type: 'discard' };
+
+const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
 function reducer<T>(edits: Edits<T>, action: DraftAction<T>): Edits<T> {
   switch (action.type) {
     case 'update': {
-      const current = { ...action.base, ...edits };
-      const patch = typeof action.patch === 'function' ? action.patch(current) : action.patch;
+      const patch = resolvePatch(action.patch, { ...action.base, ...edits });
       return { ...edits, ...patch };
     }
     case 'commit':
       // Keeps what the user typed while the save was in flight
       return edits === action.saved ? null : edits;
-    case 'forget': {
+    case 'saved': {
       if (!edits) return edits;
-      const rest = Object.fromEntries(
-        Object.entries(edits).filter(([key]) => !action.keys.includes(key)),
-      ) as Partial<T>;
+      // A saved field that was also edited keeps the edit, with the patch applied on top of it
+      // (a hit die tap keeps the unsaved die). It stops being an edit once it matches what was saved
+      const rebased = resolvePatch(action.patch, { ...action.base, ...edits });
+      const rest: Partial<T> = {};
+      for (const [key, value] of Object.entries(edits) as [keyof T, T[keyof T]][]) {
+        if (!(key in action.saved)) rest[key] = value;
+        else if (!same(rebased[key], action.saved[key])) rest[key] = rebased[key];
+      }
       return Object.keys(rest).length > 0 ? rest : null;
     }
     case 'discard':
@@ -75,16 +85,21 @@ export function useDraft<T extends object>(server: T | undefined) {
   );
 
   /**
-   * Saves `fields` right away, on top of the server data and not of the draft, so the other edits
-   * stay pending. `persist` gets the server data with the fields applied, and the fields alone.
-   * Once it resolves, those fields stop being edits: the server copy has them now.
+   * Saves `patch` right away, applied to the server data and not to the draft, so the other edits
+   * stay pending. `persist` gets the server data with the patch applied, the fields the patch set,
+   * and the server data it started from. Once it resolves, those fields stop being edits: the
+   * server copy has them now (an edited field keeps the rest of its edit, see 'saved').
    */
   const saveFields = useCallback(
-    async (fields: Partial<T>, persist: (saved: T, fields: Partial<T>) => Promise<unknown>) => {
+    async (
+      patch: DraftPatch<T>,
+      persist: (saved: T, fields: Partial<T>, base: T) => Promise<unknown>,
+    ) => {
       const base = serverRef.current;
       if (!base) return;
-      await persist({ ...base, ...fields } as T, fields);
-      dispatch({ type: 'forget', keys: Object.keys(fields) });
+      const fields = resolvePatch(patch, base);
+      await persist({ ...base, ...fields } as T, fields, base);
+      dispatch({ type: 'saved', patch, saved: fields, base });
     },
     [],
   );

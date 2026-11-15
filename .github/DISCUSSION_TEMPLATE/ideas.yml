@@ -1,0 +1,21 @@
+title: '[Ideia / Idea] '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ideias ainda em aberto, para conversar antes de virar issue. Dúvidas e suporte ficam no [Discord](https://discord.gg/7u6guShqhQ).
+        Open-ended ideas, to talk through before they become an issue. Questions and support go to [Discord](https://discord.gg/7u6guShqhQ).
+
+        Escreva em português ou inglês. / Write in Portuguese or English.
+  - type: textarea
+    id: idea
+    attributes:
+      label: A ideia / The idea
+      description: O que você gostaria de ver no RPG World e por quê. / What you'd like to see in RPG World and why.
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Sistema / System
+      placeholder: D&D 5e (2014), D&D 2024, Feiticeiros & Maldições...

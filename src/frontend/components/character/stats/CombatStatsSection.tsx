@@ -25,12 +25,20 @@ import {
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
-import { setHitDice, setSpellPoints, setSpellSlots } from '@frontend/lib/character-sheet-updates';
+import {
+  hitDiceAvailable,
+  hitDieSides,
+  setHitDice,
+  setHitDiceRemaining,
+  setSpellPoints,
+  setSpellSlots,
+} from '@frontend/lib/character-sheet-updates';
 
 import { calculatePassivePerception } from '@shared/systems/dnd5e/calculations';
 
 import { AdjustHitPoints } from './AdjustHitPoints';
 import { CombatConfigSection, CombatStatsDialog } from './CombatStatsDialog';
+import { UsePips } from './UsePips';
 
 // Sized to its content, so a unit (speed's "m") sits right after the number
 const STAT_INPUT =
@@ -39,15 +47,20 @@ const HIT_DIE_OPTIONS = ['d6', 'd8', 'd10', 'd12'];
 
 /** The die in a hit dice total: `5d6` → `d6`. Totals used to be stored with the level. */
 function hitDie(total: string | undefined) {
-  const die = total?.match(/d\d+$/)?.[0];
-  return die && HIT_DIE_OPTIONS.includes(die) ? die : 'd8';
+  const die = `d${hitDieSides(total)}`;
+  return HIT_DIE_OPTIONS.includes(die) ? die : 'd8';
 }
 
 const CombatHeader = () => {
   const t = useTranslations('combatStats');
   const character = useLoadedCharacter();
   const tCharacters = useTranslations('characters');
-  const { update } = useCharacterActions();
+  const { update, saveNow } = useCharacterActions();
+  const tRemaining = useTranslations('hitDiceRemaining');
+  const { id } = useCharacterMeta();
+  const { readOnly } = useSheetSource(id);
+  const level = character.level;
+  const available = hitDiceAvailable(character);
   const passivePerception = calculatePassivePerception(
     character.attributes.WIS ?? 10,
     character.level,
@@ -139,6 +152,18 @@ const CombatHeader = () => {
           {passivePerception}
         </StatBlock>
       </div>
+
+      <div id="sheet-hit-dice" className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span className="text-label text-muted-foreground">{tRemaining('label')}</span>
+        <UsePips
+          label={tRemaining('label')}
+          data-rest-focus
+          max={level}
+          used={level - available}
+          disabled={readOnly}
+          onChange={(used) => saveNow(setHitDiceRemaining(level - used))}
+        />
+      </div>
     </CardHeader>
   );
 };
@@ -170,6 +195,7 @@ const ResourceGrid = () => {
     <CardContent className="p-4 sm:p-6">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <HealthPointsCard
+          id="sheet-hp"
           currentHp={character.hpCurrent ?? 0}
           maxHp={character.hpMax || 1}
           tempHp={character.hpTemp ?? 0}
@@ -187,6 +213,7 @@ const ResourceGrid = () => {
         />
 
         <MagicSystemCard
+          id="sheet-spell-slots"
           character={character}
           onPointsChange={(field, value) => update(setSpellPoints(field, value))}
           onSlotsChange={(level, max, used) => update(setSpellSlots(level, max, used))}

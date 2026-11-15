@@ -2,7 +2,13 @@ import { z } from 'zod';
 
 import { ITEM_KEY, SPELL_KEY } from '@shared/content/content-key';
 import { httpUrlOrEmpty, optional, optionalQuery } from '@shared/http/validation';
+import {
+  MAX_RESOURCE_DESCRIPTION,
+  RESOURCE_KEY,
+  RESOURCE_SOURCES,
+} from '@shared/systems/dnd5e/class-resources';
 import { ATTRIBUTE_KEYS, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
+import { EDITIONS } from '@shared/systems/dnd5e/content/editions';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 // Shape and sanity limits only. Game rules (name required, max HP >= 1...) stay in the domain,
@@ -32,6 +38,36 @@ export const charactersQuerySchema = z.object({
 });
 
 export const duplicateCharacterSchema = z.object({ name: text().min(1) });
+
+const recovery = z.object({
+  rest: z.enum(['short', 'long']),
+  amount: z.union([z.literal('all'), int(1, 1_000)]),
+  fromLevel: optional(int(1, 20)),
+});
+
+const resourceState = z.object({
+  used: int(0, 1_000),
+  hidden: optional(z.boolean()),
+  overrides: optional(
+    z.object({
+      max: optional(int(0, 1_000)),
+      recovery: optional(z.array(recovery).max(4)),
+      color: optional(text(32)),
+      name: optional(text()),
+      description: optional(text(MAX_RESOURCE_DESCRIPTION)),
+    }),
+  ),
+  custom: optional(
+    z.object({
+      name: text(),
+      max: int(0, 1_000),
+      recovery: z.array(recovery).max(4),
+      color: optional(text(32)),
+      description: optional(text(MAX_RESOURCE_DESCRIPTION)),
+      source: z.enum(RESOURCE_SOURCES),
+    }),
+  ),
+});
 
 export const characterUpdatesSchema = z.object({
   name: optional(text()),
@@ -74,6 +110,13 @@ export const characterUpdatesSchema = z.object({
     z.record(z.string().regex(/^[1-9]$/), z.object({ max: int(0, 100), used: int(0, 100) })),
   ),
   spellPoints: optional(z.object({ max: int(0, 10_000), current: int(0, 10_000) })),
+
+  edition: optional(z.enum(EDITIONS)),
+  resources: optional(
+    z
+      .record(z.string().max(200).regex(RESOURCE_KEY), resourceState)
+      .refine((boxes) => Object.keys(boxes).length <= 100),
+  ),
 });
 
 export const updateCharacterSchema = z.object({ updates: characterUpdatesSchema });

@@ -16,6 +16,7 @@ import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
+import { Skeleton } from '@frontend/components/ui/skeleton';
 import { useItems } from '@frontend/hooks/useItems';
 
 import type { ItemDto } from '@backend/contexts/items/domain/item';
@@ -162,7 +163,19 @@ function AddItemContent({
       </p>
 
       <div className="custom-scrollbar flex-1 overflow-y-auto p-2 sm:p-4" aria-busy={isLoading}>
-        {!isLoading && matches.length === 0 ? (
+        {isLoading ? (
+          <ul aria-hidden="true">
+            {Array.from({ length: 8 }, (_, i) => (
+              <li key={i} className="flex items-center gap-3 px-3 py-2">
+                <span className="flex flex-1 flex-col gap-1.5">
+                  <Skeleton className="h-4 w-2/5" />
+                  <Skeleton className="h-3 w-1/4" />
+                </span>
+                <Skeleton className="h-8 w-14" />
+              </li>
+            ))}
+          </ul>
+        ) : matches.length === 0 ? (
           <EmptyState
             icon="Search"
             title={tAdd('noResults')}

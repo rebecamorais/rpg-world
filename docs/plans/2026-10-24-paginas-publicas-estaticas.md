@@ -1,7 +1,8 @@
 # Páginas públicas estáticas, com o idioma escolhido pelo proxy
 
 **Data:** 2026-10-24
-**Status:** design para revisão. O plano de implementação vem depois, neste mesmo arquivo.
+**Status:** entregue no [#118](https://github.com/rebecamorais/rpg-world/pull/118); a medição depois da entrega está no fim deste arquivo
+([#120](https://github.com/rebecamorais/rpg-world/pull/120)).
 
 ## Por quê
 

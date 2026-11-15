@@ -11,6 +11,7 @@ import {
   SURFACES,
   type ThemeName,
   contrastRatio,
+  flare,
   over,
   parseHex,
   toHex,
@@ -107,6 +108,30 @@ describe.each(THEMES)('%s theme', (theme) => {
   it('--input border reaches 3:1 on background and card', () =>
     expect(failures(theme, ['input'], surfaces(theme, ['background', 'card']), 3)).toEqual([]));
 
+  it('item group colors reach 3:1 on background and card', () =>
+    expect(
+      failures(
+        theme,
+        ['weapons', 'armor', 'magic', 'tools', 'gear', 'other'].map((g) => `item-${g}`),
+        surfaces(theme, ['background', 'card']),
+        3,
+      ),
+    ).toEqual([]));
+
+  // The icon and the group title use --item-flare on --item-surface (the color at 10% over the
+  // card or the page): text, so 4.5:1
+  it('item group flare reaches 4.5:1 on its own tinted surface', () => {
+    const bad = ['weapons', 'armor', 'magic', 'tools', 'gear', 'other'].flatMap((group) => {
+      const base = rgb(theme, `item-${group}`);
+      const fg = flare(base, theme);
+      return (['background', 'card'] as const)
+        .map((bg) => [bg, contrastRatio(fg, over(base, 0.1, rgb(theme, bg)))] as const)
+        .filter(([, ratio]) => ratio < 4.5)
+        .map(([bg, ratio]) => `--item-${group} flare on surface over --${bg}: ${ratio.toFixed(2)}`);
+    });
+    expect(bad).toEqual([]);
+  });
+
   it('SURFACES in contrast.ts match globals.css', () => {
     for (const name of ['background', 'card', 'popover', 'muted'] as const)
       expect(toHex(SURFACES[theme][name]), `--${name}`).toBe(color(theme, name).toLowerCase());
@@ -124,4 +149,10 @@ it.each([
   const found = [...css.matchAll(pattern)].map(([, n]) => Number(n));
   expect(found.length).toBeGreaterThan(0);
   expect(found.filter((n) => n !== expected)).toEqual([]);
+});
+
+it('every selector list that declares --spell-flare also includes .item-context', () => {
+  const rules = [...css.matchAll(/([^{}]+)\{([^{}]*--spell-flare:[^{}]*)\}/g)];
+  expect(rules.length).toBeGreaterThanOrEqual(4);
+  for (const [, selectors] of rules) expect(selectors).toContain('.item-context');
 });

@@ -34,10 +34,12 @@ export interface CharacterActions {
   update: (patch: DraftPatch<DnD5eCharacter>) => void;
   save: () => Promise<void>;
   /**
-   * Saves these fields at once, leaving the other edits pending: what changes during play (hit
-   * points) doesn't wait for the save button. Rejects when the save fails (the error is shown).
+   * Saves this patch at once, leaving the other edits pending: what changes during play (hit
+   * points) doesn't wait for the save button. A function patch reads the server copy, not the
+   * draft, so a pending edit in the same field isn't saved with it. Only what changed is sent.
+   * Rejects when the save fails (the error is shown).
    */
-  saveNow: (fields: Partial<DnD5eCharacter>) => Promise<void>;
+  saveNow: (patch: DraftPatch<DnD5eCharacter>) => Promise<void>;
   /** Drops the unsaved edits. */
   discard: () => void;
 }
@@ -118,8 +120,12 @@ export function CharacterProvider({
   }, [commit, updateCharacter, t]);
 
   const saveNow = useCallback(
-    (fields: Partial<DnD5eCharacter>) =>
-      saveFields(fields, (character, changes) => updateCharacter({ character, changes })),
+    (patch: DraftPatch<DnD5eCharacter>) =>
+      saveFields(patch, async (character, fields, base) => {
+        // Key by key for the merged maps: a tap on one resource box doesn't resend the others
+        const changes = characterChanges(base, fields);
+        if (Object.keys(changes).length > 0) await updateCharacter({ character, changes });
+      }),
     [saveFields, updateCharacter],
   );
 

@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { RulesText } from '@frontend/components/content/RulesText';
-import { AppIcon } from '@frontend/components/ui/icon';
+import { UntranslatedNotice } from '@frontend/components/content/UntranslatedNotice';
 
 import type { ItemDto } from '@backend/contexts/items/domain/item';
 
@@ -14,7 +14,6 @@ import { useItemFormat } from './useItemFormat';
 /** The rules of an item: price, weight, armor and weapon numbers, and its description. `nested` keeps tags in the description as plain text (inside a popover). */
 export function ItemDetails({ item, nested = false }: { item: ItemDto; nested?: boolean }) {
   const t = useTranslations('characters.inventory.stats');
-  const tCharacters = useTranslations('characters');
   const tCategory = useTranslations('characters.inventory.category');
   const tProps = useTranslations('characters.inventory.properties');
   const tDamage = useTranslations('spellsData.damageTypes');
@@ -53,13 +52,7 @@ export function ItemDetails({ item, nested = false }: { item: ItemDto; nested?: 
 
   return (
     <div className="flex flex-col gap-3 text-sm">
-      {item.untranslated && (
-        <p className="text-muted-foreground text-label flex items-center gap-1.5">
-          <AppIcon name="Languages" size="xs" aria-hidden="true" />
-          <span className="text-foreground font-medium">{tCharacters('untranslatedBadge')}</span>
-          <span>{tCharacters('untranslatedHint')}</span>
-        </p>
-      )}
+      {item.untranslated && <UntranslatedNotice compact={nested} />}
       {stats.length > 0 && (
         <dl className="grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-3">
           {stats.map(({ label, value }) => (

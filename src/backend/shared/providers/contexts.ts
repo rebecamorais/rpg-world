@@ -1,4 +1,5 @@
 import { createCharacterContext } from '@backend/contexts/characters';
+import { createClassesContext } from '@backend/contexts/classes';
 import { createCombatContext } from '@backend/contexts/combat';
 import { createConditionsContext } from '@backend/contexts/conditions';
 import { createFeedbackContext } from '@backend/contexts/feedback';
@@ -15,6 +16,7 @@ export class Contexts {
   private _auth: ReturnType<typeof createAuthContext> | null = null;
   private _userProfile: ReturnType<typeof createUserProfileContext> | null = null;
   private _lore: ReturnType<typeof createLoreContext> | null = null;
+  private _classes: ReturnType<typeof createClassesContext> | null = null;
   private _conditions: ReturnType<typeof createConditionsContext> | null = null;
   private _items: ReturnType<typeof createItemsContext> | null = null;
   private _spells: ReturnType<typeof createSpellsContext> | null = null;
@@ -66,6 +68,11 @@ export class Contexts {
       });
     }
     return this._lore;
+  }
+
+  get classes() {
+    this._classes ??= createClassesContext();
+    return this._classes;
   }
 
   get conditions() {

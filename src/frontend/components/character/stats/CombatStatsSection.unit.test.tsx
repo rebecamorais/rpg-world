@@ -3,6 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { describe, expect, it } from 'vitest';
 
+import { SheetSourceContext } from '@frontend/hooks/useSheetSource';
+
 import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
@@ -149,6 +151,80 @@ describe('CombatStatsSection', () => {
       await user.click(screen.getByRole('button', { name: 'Done' }));
 
       expect(isDirty()).toBe(false);
+    });
+  });
+
+  describe('dados de vida restantes', () => {
+    const noHitDice = { level: 4, hitDice: undefined } as Partial<DnD5eCharacter>;
+
+    it('sem dados guardados, todos os dados do nível estão disponíveis', () => {
+      renderCombat(noHitDice);
+
+      expect(
+        screen.getByRole('group', { name: 'Hit dice remaining, 4 of 4 available' }),
+      ).toBeInTheDocument();
+    });
+
+    it('gastar um dado salva na hora, mantendo o total guardado', async () => {
+      const { sentNow } = renderCombat({ level: 4, hitDice: { total: '4d10', current: 4 } });
+
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Hit dice remaining 4, available' }),
+      );
+
+      expect(sentNow()).toEqual({ hitDice: { total: '4d10', current: 3 } });
+    });
+
+    it('sem total guardado, salva o total vazio', async () => {
+      const { sentNow } = renderCombat(noHitDice);
+
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Hit dice remaining 4, available' }),
+      );
+
+      expect(sentNow()).toEqual({ hitDice: { total: '', current: 3 } });
+    });
+
+    it('com 0 guardado, nenhum dado disponível e devolver um vai a 1', async () => {
+      const { sentNow } = renderCombat({ level: 4, hitDice: { total: '4d8', current: 0 } });
+      expect(
+        screen.getByRole('group', { name: 'Hit dice remaining, 0 of 4 available' }),
+      ).toBeInTheDocument();
+
+      await userEvent.click(screen.getByRole('button', { name: 'Hit dice remaining 1, spent' }));
+
+      expect(sentNow()).toEqual({ hitDice: { total: '4d8', current: 1 } });
+    });
+
+    it('guardado acima do nível mostra só o nível', () => {
+      renderCombat({ level: 4, hitDice: { total: '4d8', current: 9 } });
+
+      expect(
+        screen.getByRole('group', { name: 'Hit dice remaining, 4 of 4 available' }),
+      ).toBeInTheDocument();
+    });
+
+    it('somente leitura deixa os dados desabilitados', () => {
+      renderWithCharacter(
+        <SheetSourceContext.Provider
+          value={{ readOnly: true, partyId: null, apiPath: '/x', pagesPath: '/x' }}
+        >
+          <CombatStatsSection />
+        </SheetSourceContext.Provider>,
+        { ...character, level: 4 } as DnD5eCharacter,
+      );
+
+      expect(
+        screen.getByRole('button', { name: 'Hit dice remaining 1, available' }),
+      ).toBeDisabled();
+    });
+
+    it('marca os alvos de rolagem do descanso', () => {
+      const { container } = renderCombat();
+
+      expect(container.querySelector('#sheet-hp')).toBeInTheDocument();
+      expect(container.querySelector('#sheet-hit-dice')).toBeInTheDocument();
+      expect(container.querySelector('#sheet-spell-slots')).toBeInTheDocument();
     });
   });
 });

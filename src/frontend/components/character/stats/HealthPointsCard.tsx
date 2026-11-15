@@ -11,6 +11,8 @@ import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { cn } from '@frontend/lib/utils';
 
+import { ResourceCardHeader } from '../ResourceCardHeader';
+
 export interface HealthPointsCardProps extends React.ComponentProps<'div'> {
   currentHp: number;
   maxHp: number;
@@ -28,13 +30,12 @@ const SMALLINT_MAX = 32_767;
 const HealthHeader = ({ action }: { action?: React.ReactNode }) => {
   const t = useTranslations('combatStats');
   return (
-    <div className="flex items-center justify-between gap-2">
-      <div className="flex items-center gap-2">
-        <AppIcon name="Heart" size={16} className="text-danger-flare" aria-hidden="true" />
-        <span className="text-label text-danger-flare">{t('hitPointsShort')}</span>
-      </div>
-      {action}
-    </div>
+    <ResourceCardHeader
+      icon="Heart"
+      iconClassName="text-danger-flare"
+      title={t('hitPointsShort')}
+      action={action}
+    />
   );
 };
 
@@ -64,6 +65,8 @@ const HealthValues = ({ currentHp, maxHp, tempHp, onHpChange }: HealthValuesProp
           <NumberInput
             ghost
             aria-label={t('hitPoints')}
+            // Where the rest checklist's "go" lands, rather than the settings gear above it
+            data-rest-focus
             value={currentHp}
             min={0}
             max={SMALLINT_MAX}

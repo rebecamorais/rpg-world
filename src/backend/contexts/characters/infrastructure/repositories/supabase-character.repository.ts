@@ -3,6 +3,9 @@ import 'server-only';
 
 import { Lore } from '@backend/contexts/lore/domain/Lore';
 
+import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 import { Database, Json } from '@database-types';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
@@ -169,6 +172,8 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         spellAttackBonus: dndData.spellAttackBonus as number | undefined,
         spellSlots: dndData.spellSlots as Record<string, { max: number; used: number }> | undefined,
         spellPoints: dndData.spellPoints as { max: number; current: number } | undefined,
+        edition: dndData.edition as Edition | undefined,
+        resources: dndData.resources as Record<string, ResourceState> | undefined,
         hpTemp: (dndData.hpTemp as number) || 0,
         lore,
         accentColor: (row.theme_color as string) ?? undefined,

@@ -2,6 +2,7 @@ import { makeCharactersApi } from '@backend/contexts/characters/interfaces/chara
 import { makeAuthApi } from '@backend/contexts/users/interfaces/auth.api';
 import { makeProfileApi } from '@backend/contexts/users/interfaces/profile.api';
 
+import { makeClassesApi } from './contexts/classes/interfaces/classes.api';
 import { makeCombatApi } from './contexts/combat/interfaces/combat.api';
 import { makeConditionsApi } from './contexts/conditions/interfaces/conditions.api';
 import { makeFeedbackApi } from './contexts/feedback/interfaces/feedback.api';
@@ -21,6 +22,7 @@ export const getApi = async () => {
     partiesApi: makePartiesApi(container.contexts.party),
     combatApi: makeCombatApi(container.contexts.combat),
 
+    classesApi: makeClassesApi(container.contexts.classes),
     conditionsApi: makeConditionsApi(container.contexts.conditions),
     itemsApi: makeItemsApi(container.contexts.items),
     spellsApi: makeSpellsApi(container.contexts.spells),

@@ -103,8 +103,8 @@ test('a engrenagem abre a aparência, e a cor escolhida só grava com Salvar', a
   const id = await createCharacter(page, 'Stylish Hero');
   await page.goto(characterUrl(id));
 
-  await (await hydrated(page.getByRole('link', { name: 'Sheet appearance' }))).click();
-  await expect(page.getByRole('heading', { level: 1, name: 'Sheet appearance' })).toBeVisible();
+  await (await hydrated(page.getByRole('link', { name: 'Sheet settings' }))).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Sheet settings' })).toBeVisible();
 
   const code = page.getByLabel('Color code');
   await (await hydrated(code)).fill('#c2410c');
@@ -144,7 +144,7 @@ test('ajustar a imagem na ficha só grava com Salvar', async ({ page, user: _ })
     await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
   };
 
-  await (await hydrated(page.getByRole('link', { name: 'Sheet appearance' }))).click();
+  await (await hydrated(page.getByRole('link', { name: 'Sheet settings' }))).click();
   await page.getByTestId('image-upload-input').setInputFiles(AVATAR);
   await cropSave().click();
   await expect(page.getByRole('button', { name: 'View image' })).toBeVisible();
@@ -209,7 +209,7 @@ test('guarda a imagem completa, usa no modal e limpa o par anterior', async ({ p
     return (data ?? []).map((file) => file.name);
   };
 
-  await (await hydrated(page.getByRole('link', { name: 'Sheet appearance' }))).click();
+  await (await hydrated(page.getByRole('link', { name: 'Sheet settings' }))).click();
   // 300 x 100: the crop is square, so a whole image keeps its proportion only if it was kept
   await page.getByTestId('image-upload-input').setInputFiles({
     name: 'wide.png',

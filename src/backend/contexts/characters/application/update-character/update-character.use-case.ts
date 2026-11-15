@@ -1,6 +1,9 @@
 import { applyUpdates } from '@backend/shared/application/apply-updates';
 import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 
+import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import {
   AttributeKey,
@@ -44,7 +47,11 @@ export interface CharacterUpdates {
   spellAttackBonus?: number;
   spellSlots?: Record<string, { max: number; used: number }>;
   spellPoints?: { max: number; current: number };
+  edition?: Edition;
+  resources?: Record<string, ResourceState>;
 }
+
+const MAX_RESOURCES = 200;
 
 // Campos copiados diretamente. Qualquer chave fora desta lista (id, ownerUsername, system...)
 // é ignorada para impedir mass-assignment vindo do cliente.
@@ -72,6 +79,7 @@ const SIMPLE_FIELDS = [
   'spellAttackBonus',
   'spellSlots',
   'spellPoints',
+  'edition',
 ] as const satisfies readonly (keyof CharacterUpdates & keyof DnD5eCharacter)[];
 
 type SimpleField = (typeof SIMPLE_FIELDS)[number];
@@ -105,7 +113,8 @@ export class UpdateCharacterUseCase {
       throw new CharacterError(CharacterErrorCodes.UPDATE_SYSTEM_NOT_SUPPORTED);
     }
 
-    const { level, hpCurrent, hpMax, attributes, skills, savingThrowProficiencies } = updates;
+    const { level, hpCurrent, hpMax, attributes, skills, savingThrowProficiencies, resources } =
+      updates;
     const previousAvatarUrl = character.avatarUrl;
     const previousSheetBackgroundUrl = character.sheetBackgroundUrl;
 
@@ -129,6 +138,21 @@ export class UpdateCharacterUseCase {
 
     if (skills) {
       character.skills = { ...character.skills, ...skills };
+    }
+
+    if (resources) {
+      // Merged key by key. A `custom:` key sent without its box removes it: that is how a box of
+      // the player's own is deleted, since a key left out of the update means "unchanged"
+      const merged = Object.fromEntries(
+        Object.entries({ ...character.resources, ...resources }).filter(
+          ([key, state]) => !key.startsWith('custom:') || state.custom,
+        ),
+      );
+      // Class boxes are never deleted, so cap the stored map
+      if (Object.keys(merged).length > MAX_RESOURCES) {
+        throw new CharacterError(CharacterErrorCodes.RESOURCE_LIMIT);
+      }
+      character.resources = merged;
     }
 
     if (savingThrowProficiencies !== undefined) {
