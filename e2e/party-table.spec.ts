@@ -90,11 +90,11 @@ test.describe('aba Mesa: retorno, vazios e lista de mesas', () => {
     await player.page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
     await expect(
-      player.page.getByRole('region', { name: 'Characters at the table' }).getByText('Arani'),
+      player.page.getByRole('region', { name: 'Characters in the party' }).getByText('Arani'),
     ).toBeVisible();
     // "Choose characters" is gone with the empty state: the focus lands on the list's heading
     await expect(
-      player.page.getByRole('heading', { name: 'Characters at the table' }),
+      player.page.getByRole('heading', { name: 'Characters in the party' }),
     ).toBeFocused();
 
     // Leaving: its own title, apart from Save, saying what happens to the characters
