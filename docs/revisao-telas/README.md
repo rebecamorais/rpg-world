@@ -14,6 +14,7 @@ Severidade: **Alta** atrapalha o uso ou pode fazer perder dados. **Média** é i
 
 | Documento                                                        | O que tem                                                                                                        |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| [fase-2-resultados.md](fase-2-resultados.md)                     | Fase 2 (mesa, baú, diário, listas e navegação): causas, achados de uma tela só e o status dos achados antigos    |
 | [fase-1-resultados.md](fase-1-resultados.md)                     | Fase 1 (ficha, combate e modais): 12 causas, achados de uma tela só e o status dos achados antigos               |
 | [plano-por-tela.md](plano-por-tela.md)                           | O plano de review de UX/UI de cada tela e modal: método, checklist, ordem e pontos de cada uma                   |
 | [acoes-destrutivas.md](acoes-destrutivas.md)                     | A regra de vermelho e confirmação, e o inventário das 21 ações que apagam ou removem algo                        |
