@@ -5,6 +5,7 @@
       "unknown": "Ocorreu um erro desconhecido. Tente novamente.",
       "common_error_invalid_request": "Dados inválidos. Verifique os campos e tente novamente.",
       "common_error_unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
+      "class_error_not_found": "Classe não encontrada.",
       "demo_read_only": "Esta é uma demo somente leitura. Crie uma conta gratuita para jogar.",
       "account_deletion_error_username_mismatch": "Esse não é o seu username.",
       "account_deletion_error_password_invalid": "Senha incorreta. Se você nunca criou uma, por exemplo porque entrava com link por e-mail, use “Esqueceu a senha?” para criar.",
@@ -84,6 +85,7 @@
       "character_error_item_not_found": "Item não encontrado.",
       "character_error_container_not_found": "Lugar não encontrado.",
       "character_error_item_limit": "A mochila está cheia: um personagem guarda no máximo 500 itens diferentes.",
+      "character_error_resource_limit": "Um personagem tem no máximo 200 caixinhas de recurso.",
       "character_error_container_limit": "Um personagem tem no máximo 20 lugares.",
       "combat_error_not_found": "Combate não encontrado.",
       "combat_error_exists": "Esta mesa já tem um combate.",
@@ -500,9 +502,17 @@
     "hideIdentity": "Esconder detalhes",
     "showIdentity": "Ver detalhes"
   },
+  "sheetSettings": {
+    "classResourcesTitle": "Recursos de classe",
+    "classResourcesHint": "Edição das regras usada para montar as caixinhas da classe.",
+    "edition2014": "2014 (SRD 5.1)",
+    "edition2024": "2024 (SRD 5.2)",
+    "hint": "Novo: edição e recursos aqui",
+    "dismiss": "Entendi"
+  },
   "characterAppearance": {
-    "title": "Aparência da ficha",
-    "description": "Aqui só muda o visual da ficha. Os dados do personagem continuam iguais.",
+    "title": "Configurar ficha",
+    "description": "Aqui muda o visual da ficha e a edição que os recursos da classe seguem.",
     "back": "Voltar para a ficha",
     "colorTitle": "Cor",
     "colorHint": "Usada no nome, na moldura do avatar e nos destaques da ficha.",
@@ -519,6 +529,14 @@
     "backgroundRemove": "Remover fundo",
     "backgroundSending": "Enviando…",
     "preview": "Prévia"
+  },
+  "classResources": {
+    "newTitle": "Novo: recursos de classe",
+    "newText": "Escolha a edição para ver os recursos da sua classe e o que volta no descanso.",
+    "short": "curto",
+    "long": "longo",
+    "edit": "editar",
+    "title": "Recursos de classe"
   },
   "attributeCard": {
     "modifierCalc": "Cálculo do Modificador",
@@ -565,6 +583,28 @@
     "summary": "Combate num relance",
     "speedShort": "Desloc.",
     "passivePerceptionShort": "Percepção"
+  },
+  "hitDiceRemaining": {
+    "label": "Dados de vida restantes"
+  },
+  "restChecklist": {
+    "shortRest": "Descanso curto",
+    "longRest": "Descanso longo",
+    "shortTitle": "Descanso curto",
+    "longTitle": "Descanso longo",
+    "progress": "{title} · {done} de {total}",
+    "done": "Terminei",
+    "go": "ir",
+    "goTo": "ir: {item}",
+    "spendHitDice": "Role {die} {bonus} por dado de vida gasto (sobram {left})",
+    "spendHitDiceNoDie": "Gaste dados de vida, se quiser (sobram {left})",
+    "boxBack": "{name} volta: {amount, select, all {todos} other {{amount}}}",
+    "pactSlotsBack": "Espaços de pacto voltam",
+    "notBackShort": "Espaços de magia e PV não voltam no descanso curto",
+    "fullHp": "PV cheio",
+    "hitDiceBack": "Recupere {count, plural, one {# dado de vida} other {# dados de vida}}",
+    "spellSlotsBack": "Espaços de magia voltam",
+    "spellPointsBack": "Pontos de magia voltam"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Buscar magia…",
@@ -621,6 +661,14 @@
     "configure": "Configurar sistema de magia",
     "slotAvailable": "Espaço {slot} do {level}º círculo, disponível",
     "slotSpent": "Espaço {slot} do {level}º círculo, gasto"
+  },
+  "usePips": {
+    "summary": "{label}, {available} de {max} disponíveis",
+    "available": "{label} {slot}, disponível",
+    "spent": "{label} {slot}, gasto",
+    "unlimited": "ilimitado",
+    "spendOne": "Gastar um uso de {label}",
+    "returnOne": "Devolver um uso de {label}"
   },
   "dashboard": {
     "menu": "Menu",

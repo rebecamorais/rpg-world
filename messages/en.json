@@ -5,6 +5,7 @@
       "unknown": "An unknown error occurred. Please try again.",
       "common_error_invalid_request": "Invalid data. Check the fields and try again.",
       "common_error_unexpected": "Something went wrong on our side. Please try again shortly.",
+      "class_error_not_found": "Class not found.",
       "demo_read_only": "This is a read-only demo. Create a free account to play.",
       "account_deletion_error_username_mismatch": "That is not your username.",
       "account_deletion_error_password_invalid": "Incorrect password. If you never created one, for example because you signed in with an e-mail link, use “Forgot password?” to set it.",
@@ -84,6 +85,7 @@
       "character_error_item_not_found": "This item was not found.",
       "character_error_container_not_found": "This container was not found.",
       "character_error_item_limit": "The backpack is full: a character holds at most 500 entries.",
+      "character_error_resource_limit": "A character has at most 200 resource boxes.",
       "character_error_container_limit": "A character has at most 20 containers.",
       "combat_error_not_found": "Combat not found.",
       "combat_error_exists": "This party already has a combat.",
@@ -500,9 +502,17 @@
     "hideIdentity": "Hide details",
     "showIdentity": "Show details"
   },
+  "sheetSettings": {
+    "classResourcesTitle": "Class resources",
+    "classResourcesHint": "Rules edition used to build the class boxes.",
+    "edition2014": "2014 (SRD 5.1)",
+    "edition2024": "2024 (SRD 5.2)",
+    "hint": "New: edition and resources here",
+    "dismiss": "Got it"
+  },
   "characterAppearance": {
-    "title": "Sheet appearance",
-    "description": "This only changes how the sheet looks. The character's data stays the same.",
+    "title": "Sheet settings",
+    "description": "This changes how the sheet looks and which edition its class resources follow.",
     "back": "Back to the sheet",
     "colorTitle": "Color",
     "colorHint": "Used for the name, the avatar's frame and the sheet's highlights.",
@@ -519,6 +529,14 @@
     "backgroundRemove": "Remove background",
     "backgroundSending": "Sending…",
     "preview": "Preview"
+  },
+  "classResources": {
+    "newTitle": "New: class resources",
+    "newText": "Pick the edition to see your class resources and what comes back on a rest.",
+    "short": "short",
+    "long": "long",
+    "edit": "edit",
+    "title": "Class resources"
   },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",
@@ -565,6 +583,28 @@
     "summary": "Combat at a glance",
     "speedShort": "Speed",
     "passivePerceptionShort": "Perception"
+  },
+  "hitDiceRemaining": {
+    "label": "Hit dice remaining"
+  },
+  "restChecklist": {
+    "shortRest": "Short rest",
+    "longRest": "Long rest",
+    "shortTitle": "Short rest",
+    "longTitle": "Long rest",
+    "progress": "{title} · {done} of {total}",
+    "done": "Done",
+    "go": "go",
+    "goTo": "go: {item}",
+    "spendHitDice": "Roll {die} {bonus} per hit die spent ({left} left)",
+    "spendHitDiceNoDie": "Spend hit dice, if you want ({left} left)",
+    "boxBack": "{name} returns: {amount, select, all {all} other {{amount}}}",
+    "pactSlotsBack": "Pact slots return",
+    "notBackShort": "Spell slots and HP do not return on a short rest",
+    "fullHp": "Full HP",
+    "hitDiceBack": "Recover {count, plural, one {# hit die} other {# hit dice}}",
+    "spellSlotsBack": "Spell slots return",
+    "spellPointsBack": "Spell points return"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Search spells…",
@@ -621,6 +661,14 @@
     "configure": "Configure magic system",
     "slotAvailable": "Level {level} slot {slot}, available",
     "slotSpent": "Level {level} slot {slot}, spent"
+  },
+  "usePips": {
+    "summary": "{label}, {available} of {max} available",
+    "available": "{label} {slot}, available",
+    "spent": "{label} {slot}, spent",
+    "unlimited": "unlimited",
+    "spendOne": "Spend one use of {label}",
+    "returnOne": "Return one use of {label}"
   },
   "dashboard": {
     "menu": "Menu",

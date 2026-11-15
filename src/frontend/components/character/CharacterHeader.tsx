@@ -26,6 +26,7 @@ import {
 } from '@frontend/context/CharacterContext';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
+import { setLevel } from '@frontend/lib/character-sheet-updates';
 import { cn } from '@frontend/lib/utils';
 import { CharacterClass } from '@frontend/types/spells';
 
@@ -163,7 +164,7 @@ export default function CharacterHeader() {
                       min={1}
                       max={20}
                       value={level || 1}
-                      onChange={(val) => update({ level: val })}
+                      onChange={(val) => update(setLevel(val))}
                       size="sm"
                       containerClassName="py-0 gap-2"
                     />

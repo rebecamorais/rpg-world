@@ -65,7 +65,8 @@ export function SpellSlots({
         action={action}
       />
 
-      <div className="my-auto grid grid-cols-5 gap-x-1 gap-y-3 pt-4">
+      {/* The rest checklist's "go" focuses the first slot in here, not the gear */}
+      <div data-rest-focus className="my-auto grid grid-cols-5 gap-x-1 gap-y-3 pt-4">
         {allLevels.map((lvl) => {
           const slotData = slots[lvl.toString()];
           const isActive = (slotData?.max || 0) > 0;

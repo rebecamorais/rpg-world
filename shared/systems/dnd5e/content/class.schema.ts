@@ -180,6 +180,7 @@ export const classTranslationSchema = z
 
 export type ClassData = z.infer<typeof classDataSchema>;
 export type ClassText = z.infer<typeof classTextSchema>;
+export type ClassTranslation = z.infer<typeof classTranslationSchema>;
 export type ClassFeature = z.infer<typeof featureSchema>;
 export type ClassResource = z.infer<typeof resourceSchema>;
 export type ClassChoice = z.infer<typeof choiceSchema>;
