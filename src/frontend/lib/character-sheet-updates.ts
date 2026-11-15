@@ -31,11 +31,20 @@ export const setSkill =
   (key: SkillKey, skill: CharacterSkill): Patch =>
   (c) => ({ skills: { ...c.skills, [key]: skill } });
 
+/** Sets one saving throw by hand, on or off: it stops following the class. The others stay. */
 export const setSavingThrow =
   (key: AttributeKey, isProficient: boolean): Patch =>
   (c) => ({
     savingThrowProficiencies: { ...c.savingThrowProficiencies, [key]: isProficient },
   });
+
+/** One saving throw back to what the class gives: its stored value is removed, the others stay. */
+export const inheritSavingThrow =
+  (key: AttributeKey): Patch =>
+  (c) => {
+    const { [key]: _, ...others } = c.savingThrowProficiencies;
+    return { savingThrowProficiencies: others };
+  };
 
 export const setSpellPoints =
   (field: 'current' | 'max', value: number): Patch =>

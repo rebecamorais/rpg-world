@@ -905,6 +905,7 @@
   },
   "savingThrows": {
     "title": "Saving Throws",
+    "followClass": "Set {label} back to what the class says",
     "deathSaveSuccess": "Death save success {count}",
     "deathSaveFailure": "Death save failure {count}",
     "resetDeathSaves": "Reset death saves",

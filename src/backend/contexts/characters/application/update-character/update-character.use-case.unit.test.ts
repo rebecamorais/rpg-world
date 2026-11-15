@@ -162,6 +162,23 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
     );
   });
 
+  it('salvaguardas: salvar outro campo não grava nenhuma; ausente não vira false', async () => {
+    expect((await update({ ac: 15 })).savingThrowProficiencies).toEqual({});
+    expect((await update({ level: 3 })).savingThrowProficiencies).toEqual({});
+  });
+
+  it('salvaguardas: guarda só as definidas à mão, e a que sai do mapa volta a herdar', async () => {
+    expect(
+      (await update({ savingThrowProficiencies: { STR: false, WIS: true } }))
+        .savingThrowProficiencies,
+    ).toEqual({ STR: false, WIS: true });
+    // Outro campo depois: as duas continuam, e só elas
+    expect((await update({ ac: 12 })).savingThrowProficiencies).toEqual({ STR: false, WIS: true });
+    expect(
+      (await update({ savingThrowProficiencies: { WIS: true } })).savingThrowProficiencies,
+    ).toEqual({ WIS: true });
+  });
+
   it('aplica campos simples (classe, dados de vida)', async () => {
     const updated = await update({
       class: 'Wizard',

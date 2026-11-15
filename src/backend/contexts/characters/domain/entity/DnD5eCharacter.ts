@@ -64,7 +64,8 @@ export class DnD5eCharacter extends Character {
   public initiative: number;
   public hpTemp: number;
   public skills: Partial<Record<SkillKey, CharacterSkill>>;
-  public savingThrowProficiencies: Record<AttributeKey, boolean>;
+  /** Only the saving throws set by hand, on or off; an ability left out follows the class. */
+  public savingThrowProficiencies: Partial<Record<AttributeKey, boolean>>;
   public passivePerception: number;
 
   public subclass?: string;
@@ -106,9 +107,8 @@ export class DnD5eCharacter extends Character {
     this.initiative = options.initiative ?? 0;
     this.hpTemp = options.hpTemp ?? 0;
     this.skills = options.skills ?? {};
-    this.savingThrowProficiencies = this.normalizeSavingThrows(
-      options.savingThrowProficiencies ?? {},
-    );
+    // Kept as stored: an ability left out follows the class, which is not the same as `false`
+    this.savingThrowProficiencies = { ...options.savingThrowProficiencies };
     this.passivePerception = options.passivePerception ?? 10;
     this.subclass = options.subclass;
     this.background = options.background;
@@ -124,20 +124,6 @@ export class DnD5eCharacter extends Character {
     this.spellPoints = options.spellPoints;
     this.edition = options.edition;
     this.resources = options.resources;
-  }
-
-  private normalizeSavingThrows(
-    saves: Partial<Record<AttributeKey, boolean>>,
-  ): Record<AttributeKey, boolean> {
-    const defaultSaves: Record<AttributeKey, boolean> = {
-      STR: false,
-      DEX: false,
-      CON: false,
-      INT: false,
-      WIS: false,
-      CHA: false,
-    };
-    return { ...defaultSaves, ...saves };
   }
 
   toJSON(): Record<string, unknown> {
