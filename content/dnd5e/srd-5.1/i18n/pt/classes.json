@@ -1,1 +1,1509 @@
-{}
+{
+  "barbarian": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "rage": {
+        "name": "",
+        "description": ""
+      },
+      "unarmored-defense": {
+        "name": "",
+        "description": ""
+      },
+      "danger-sense": {
+        "name": "",
+        "description": ""
+      },
+      "reckless-attack": {
+        "name": "",
+        "description": ""
+      },
+      "primal-path": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "extra-attack": {
+        "name": "",
+        "description": ""
+      },
+      "fast-movement": {
+        "name": "",
+        "description": ""
+      },
+      "path-feature-6": {
+        "name": "",
+        "description": ""
+      },
+      "feral-instinct": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "brutal-critical-1-die": {
+        "name": "",
+        "description": ""
+      },
+      "path-feature-10": {
+        "name": "",
+        "description": ""
+      },
+      "relentless-rage": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "brutal-critical-2-dice": {
+        "name": "",
+        "description": ""
+      },
+      "path-feature-14": {
+        "name": "",
+        "description": ""
+      },
+      "persistent-rage": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "brutal-critical-3-dice": {
+        "name": "",
+        "description": ""
+      },
+      "indomitable-might": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "primal-champion": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "rage": {
+        "name": ""
+      }
+    },
+    "choices": {},
+    "subclasses": {
+      "berserker": {
+        "name": "",
+        "features": {
+          "path-of-the-berserker": {
+            "name": "",
+            "description": ""
+          },
+          "mindless-rage": {
+            "name": "",
+            "description": ""
+          },
+          "intimidating-presence": {
+            "name": "",
+            "description": ""
+          },
+          "retaliation": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "bard": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "bardic-inspiration": {
+        "name": "",
+        "description": ""
+      },
+      "spellcasting": {
+        "name": "",
+        "description": ""
+      },
+      "jack-of-all-trades": {
+        "name": "",
+        "description": ""
+      },
+      "song-of-rest-d6": {
+        "name": "",
+        "description": ""
+      },
+      "bard-college": {
+        "name": "",
+        "description": ""
+      },
+      "expertise-3": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "bardic-inspiration-d8": {
+        "name": "",
+        "description": ""
+      },
+      "font-of-inspiration": {
+        "name": "",
+        "description": ""
+      },
+      "countercharm": {
+        "name": "",
+        "description": ""
+      },
+      "bard-college-feature-6": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "song-of-rest-d8": {
+        "name": "",
+        "description": ""
+      },
+      "bardic-inspiration-d10": {
+        "name": "",
+        "description": ""
+      },
+      "expertise-10": {
+        "name": "",
+        "description": ""
+      },
+      "magical-secrets-10": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "song-of-rest-d10": {
+        "name": "",
+        "description": ""
+      },
+      "magical-secrets-14": {
+        "name": "",
+        "description": ""
+      },
+      "bard-college-feature-14": {
+        "name": "",
+        "description": ""
+      },
+      "bardic-inspiration-d12": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "song-of-rest-d12": {
+        "name": "",
+        "description": ""
+      },
+      "magical-secrets-18": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "superior-inspiration": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "bardic-inspiration": {
+        "name": ""
+      }
+    },
+    "choices": {},
+    "subclasses": {
+      "lore": {
+        "name": "",
+        "features": {
+          "college-of-lore": {
+            "name": "",
+            "description": ""
+          },
+          "additional-magical-secrets": {
+            "name": "",
+            "description": ""
+          },
+          "peerless-skill": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "cleric": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "spellcasting": {
+        "name": "",
+        "description": ""
+      },
+      "divine-domain": {
+        "name": "",
+        "description": ""
+      },
+      "channel-divinity-2": {
+        "name": "",
+        "description": ""
+      },
+      "divine-domain-feature-2": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "destroy-undead-cr-1-2": {
+        "name": "",
+        "description": ""
+      },
+      "channel-divinity-6": {
+        "name": "",
+        "description": ""
+      },
+      "divine-domain-feature-6": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "destroy-undead-cr-1": {
+        "name": "",
+        "description": ""
+      },
+      "divine-domain-feature-8": {
+        "name": "",
+        "description": ""
+      },
+      "divine-intervention": {
+        "name": "",
+        "description": ""
+      },
+      "destroy-undead-cr-2": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "destroy-undead-cr-3": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "destroy-undead-cr-4": {
+        "name": "",
+        "description": ""
+      },
+      "divine-domain-feature-17": {
+        "name": "",
+        "description": ""
+      },
+      "channel-divinity-18": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "divine-intervention-improvement": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "channel-divinity": {
+        "name": ""
+      },
+      "divine-intervention": {
+        "name": "",
+        "note": ""
+      }
+    },
+    "choices": {},
+    "subclasses": {
+      "life": {
+        "name": "",
+        "features": {
+          "life-domain": {
+            "name": "",
+            "description": ""
+          },
+          "channel-divinity-preserve-life": {
+            "name": "",
+            "description": ""
+          },
+          "blessed-healer": {
+            "name": "",
+            "description": ""
+          },
+          "divine-strike": {
+            "name": "",
+            "description": ""
+          },
+          "supreme-healing": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "druid": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "druidic": {
+        "name": "",
+        "description": ""
+      },
+      "spellcasting": {
+        "name": "",
+        "description": ""
+      },
+      "wild-shape": {
+        "name": "",
+        "description": ""
+      },
+      "druid-circle": {
+        "name": "",
+        "description": ""
+      },
+      "wild-shape-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "druid-circle-feature-6": {
+        "name": "",
+        "description": ""
+      },
+      "wild-shape-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "druid-circle-feature-10": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "druid-circle-feature-14": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "timeless-body": {
+        "name": "",
+        "description": ""
+      },
+      "beast-spells": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "archdruid": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "wild-shape": {
+        "name": ""
+      }
+    },
+    "choices": {},
+    "subclasses": {
+      "land": {
+        "name": "",
+        "features": {
+          "circle-of-the-land": {
+            "name": "",
+            "description": ""
+          },
+          "land-s-stride": {
+            "name": "",
+            "description": ""
+          },
+          "nature-s-ward": {
+            "name": "",
+            "description": ""
+          },
+          "nature-s-sanctuary": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {
+          "natural-recovery": {
+            "name": "",
+            "note": ""
+          }
+        }
+      }
+    }
+  },
+  "fighter": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "fighting-style": {
+        "name": "",
+        "description": ""
+      },
+      "second-wind": {
+        "name": "",
+        "description": ""
+      },
+      "action-surge": {
+        "name": "",
+        "description": ""
+      },
+      "martial-archetype": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "extra-attack": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-6": {
+        "name": "",
+        "description": ""
+      },
+      "martial-archetype-feature-7": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "indomitable": {
+        "name": "",
+        "description": ""
+      },
+      "martial-archetype-feature-10": {
+        "name": "",
+        "description": ""
+      },
+      "extra-attack-2": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "indomitable-two-uses": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-14": {
+        "name": "",
+        "description": ""
+      },
+      "martial-archetype-feature-15": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "action-surge-two-uses": {
+        "name": "",
+        "description": ""
+      },
+      "indomitable-three-uses": {
+        "name": "",
+        "description": ""
+      },
+      "martial-archetype-feature-18": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "extra-attack-3": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "second-wind": {
+        "name": ""
+      },
+      "action-surge": {
+        "name": ""
+      },
+      "indomitable": {
+        "name": ""
+      }
+    },
+    "choices": {
+      "fighting-style": {
+        "name": ""
+      }
+    },
+    "subclasses": {
+      "champion": {
+        "name": "",
+        "features": {
+          "champion": {
+            "name": "",
+            "description": ""
+          },
+          "remarkable-athlete": {
+            "name": "",
+            "description": ""
+          },
+          "additional-fighting-style": {
+            "name": "",
+            "description": ""
+          },
+          "superior-critical": {
+            "name": "",
+            "description": ""
+          },
+          "survivor": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "monk": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "unarmored-defense": {
+        "name": "",
+        "description": ""
+      },
+      "martial-arts": {
+        "name": "",
+        "description": ""
+      },
+      "ki": {
+        "name": "",
+        "description": ""
+      },
+      "unarmored-movement": {
+        "name": "",
+        "description": ""
+      },
+      "deflect-missiles": {
+        "name": "",
+        "description": ""
+      },
+      "monastic-tradition": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "slow-fall": {
+        "name": "",
+        "description": ""
+      },
+      "extra-attack": {
+        "name": "",
+        "description": ""
+      },
+      "stunning-strike": {
+        "name": "",
+        "description": ""
+      },
+      "ki-empowered-strikes": {
+        "name": "",
+        "description": ""
+      },
+      "monastic-tradition-feature-6": {
+        "name": "",
+        "description": ""
+      },
+      "evasion": {
+        "name": "",
+        "description": ""
+      },
+      "stillness-of-mind": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "unarmored-movement-improvement": {
+        "name": "",
+        "description": ""
+      },
+      "purity-of-body": {
+        "name": "",
+        "description": ""
+      },
+      "monastic-tradition-feature-11": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "tongue-of-the-sun-and-moon": {
+        "name": "",
+        "description": ""
+      },
+      "diamond-soul": {
+        "name": "",
+        "description": ""
+      },
+      "timeless-body": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "monastic-tradition-feature-17": {
+        "name": "",
+        "description": ""
+      },
+      "empty-body": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "perfect-self": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "ki": {
+        "name": ""
+      }
+    },
+    "choices": {},
+    "subclasses": {
+      "open-hand": {
+        "name": "",
+        "features": {
+          "way-of-the-open-hand": {
+            "name": "",
+            "description": ""
+          },
+          "wholeness-of-body": {
+            "name": "",
+            "description": ""
+          },
+          "tranquility": {
+            "name": "",
+            "description": ""
+          },
+          "quivering-palm": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {
+          "wholeness-of-body": {
+            "name": ""
+          }
+        }
+      }
+    }
+  },
+  "paladin": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "divine-sense": {
+        "name": "",
+        "description": ""
+      },
+      "lay-on-hands": {
+        "name": "",
+        "description": ""
+      },
+      "divine-smite": {
+        "name": "",
+        "description": ""
+      },
+      "fighting-style": {
+        "name": "",
+        "description": ""
+      },
+      "spellcasting": {
+        "name": "",
+        "description": ""
+      },
+      "divine-health": {
+        "name": "",
+        "description": ""
+      },
+      "sacred-oath": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "extra-attack": {
+        "name": "",
+        "description": ""
+      },
+      "aura-of-protection": {
+        "name": "",
+        "description": ""
+      },
+      "sacred-oath-feature-7": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "aura-of-courage": {
+        "name": "",
+        "description": ""
+      },
+      "improved-divine-smite": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "cleansing-touch": {
+        "name": "",
+        "description": ""
+      },
+      "sacred-oath-feature-15": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "aura-improvements": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "sacred-oath-feature-20": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "divine-sense": {
+        "name": ""
+      },
+      "lay-on-hands": {
+        "name": ""
+      },
+      "channel-divinity": {
+        "name": ""
+      },
+      "cleansing-touch": {
+        "name": ""
+      }
+    },
+    "choices": {
+      "fighting-style": {
+        "name": ""
+      }
+    },
+    "subclasses": {
+      "devotion": {
+        "name": "",
+        "features": {
+          "oath-of-devotion": {
+            "name": "",
+            "description": ""
+          },
+          "aura-of-devotion": {
+            "name": "",
+            "description": ""
+          },
+          "purity-of-spirit": {
+            "name": "",
+            "description": ""
+          },
+          "holy-nimbus": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {
+          "holy-nimbus": {
+            "name": ""
+          }
+        }
+      }
+    }
+  },
+  "ranger": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "favored-enemy": {
+        "name": "",
+        "description": ""
+      },
+      "natural-explorer": {
+        "name": "",
+        "description": ""
+      },
+      "fighting-style": {
+        "name": "",
+        "description": ""
+      },
+      "spellcasting": {
+        "name": "",
+        "description": ""
+      },
+      "ranger-archetype": {
+        "name": "",
+        "description": ""
+      },
+      "primeval-awareness": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "extra-attack": {
+        "name": "",
+        "description": ""
+      },
+      "favored-enemy-and-natural-explorer-improvements": {
+        "name": "",
+        "description": ""
+      },
+      "ranger-archetype-feature-7": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "land-s-stride": {
+        "name": "",
+        "description": ""
+      },
+      "hide-in-plain-sight": {
+        "name": "",
+        "description": ""
+      },
+      "natural-explorer-improvement": {
+        "name": "",
+        "description": ""
+      },
+      "ranger-archetype-feature-11": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "vanish": {
+        "name": "",
+        "description": ""
+      },
+      "favored-enemy-improvement": {
+        "name": "",
+        "description": ""
+      },
+      "ranger-archetype-feature-15": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "feral-senses": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "foe-slayer": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {},
+    "choices": {
+      "fighting-style": {
+        "name": ""
+      }
+    },
+    "subclasses": {
+      "hunter": {
+        "name": "",
+        "features": {
+          "hunter": {
+            "name": "",
+            "description": ""
+          },
+          "defensive-tactics": {
+            "name": "",
+            "description": ""
+          },
+          "multiattack": {
+            "name": "",
+            "description": ""
+          },
+          "superior-hunter-s-defense": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "rogue": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "expertise-1": {
+        "name": "",
+        "description": ""
+      },
+      "sneak-attack": {
+        "name": "",
+        "description": ""
+      },
+      "thieves-cant": {
+        "name": "",
+        "description": ""
+      },
+      "cunning-action": {
+        "name": "",
+        "description": ""
+      },
+      "roguish-archetype": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "uncanny-dodge": {
+        "name": "",
+        "description": ""
+      },
+      "expertise-6": {
+        "name": "",
+        "description": ""
+      },
+      "evasion": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "roguish-archetype-feature-9": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-10": {
+        "name": "",
+        "description": ""
+      },
+      "reliable-talent": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "roguish-archetype-feature-13": {
+        "name": "",
+        "description": ""
+      },
+      "blindsense": {
+        "name": "",
+        "description": ""
+      },
+      "slippery-mind": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "roguish-archetype-feature-17": {
+        "name": "",
+        "description": ""
+      },
+      "elusive": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "stroke-of-luck": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "stroke-of-luck": {
+        "name": ""
+      }
+    },
+    "choices": {},
+    "subclasses": {
+      "thief": {
+        "name": "",
+        "features": {
+          "thief": {
+            "name": "",
+            "description": ""
+          },
+          "supreme-sneak": {
+            "name": "",
+            "description": ""
+          },
+          "use-magic-device": {
+            "name": "",
+            "description": ""
+          },
+          "thief-s-reflexes": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "sorcerer": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "spellcasting": {
+        "name": "",
+        "description": ""
+      },
+      "sorcerous-origin": {
+        "name": "",
+        "description": ""
+      },
+      "font-of-magic": {
+        "name": "",
+        "description": ""
+      },
+      "metamagic-3": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "sorcerous-origin-feature-6": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "metamagic-10": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "sorcerous-origin-feature-14": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "metamagic-17": {
+        "name": "",
+        "description": ""
+      },
+      "sorcerous-origin-feature-18": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "sorcerous-restoration": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "sorcery-points": {
+        "name": ""
+      }
+    },
+    "choices": {
+      "metamagic": {
+        "name": ""
+      }
+    },
+    "subclasses": {
+      "draconic": {
+        "name": "",
+        "features": {
+          "draconic-bloodline": {
+            "name": "",
+            "description": ""
+          },
+          "elemental-affinity": {
+            "name": "",
+            "description": ""
+          },
+          "dragon-wings": {
+            "name": "",
+            "description": ""
+          },
+          "draconic-presence": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {}
+      }
+    }
+  },
+  "warlock": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "pact-magic": {
+        "name": "",
+        "description": ""
+      },
+      "otherworldly-patron": {
+        "name": "",
+        "description": ""
+      },
+      "eldritch-invocations": {
+        "name": "",
+        "description": ""
+      },
+      "pact-boon": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "otherworldly-patron-feature-6": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "otherworldly-patron-feature-10": {
+        "name": "",
+        "description": ""
+      },
+      "mystic-arcanum-6th-level": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "mystic-arcanum-7th-level": {
+        "name": "",
+        "description": ""
+      },
+      "otherworldly-patron-feature-14": {
+        "name": "",
+        "description": ""
+      },
+      "mystic-arcanum-8th-level": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "mystic-arcanum-9th-level": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "eldritch-master": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "pact-slots": {
+        "name": ""
+      },
+      "mystic-arcanum-6": {
+        "name": ""
+      },
+      "mystic-arcanum-7": {
+        "name": ""
+      },
+      "mystic-arcanum-8": {
+        "name": ""
+      },
+      "mystic-arcanum-9": {
+        "name": ""
+      },
+      "eldritch-master": {
+        "name": ""
+      }
+    },
+    "choices": {
+      "eldritch-invocations": {
+        "name": ""
+      },
+      "pact-boon": {
+        "name": ""
+      }
+    },
+    "subclasses": {
+      "fiend": {
+        "name": "",
+        "features": {
+          "the-fiend": {
+            "name": "",
+            "description": ""
+          },
+          "dark-one-s-own-luck": {
+            "name": "",
+            "description": ""
+          },
+          "fiendish-resilience": {
+            "name": "",
+            "description": ""
+          },
+          "hurl-through-hell": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {
+          "dark-one-s-own-luck": {
+            "name": ""
+          },
+          "hurl-through-hell": {
+            "name": ""
+          }
+        }
+      }
+    }
+  },
+  "wizard": {
+    "name": "",
+    "subclassTitle": "",
+    "features": {
+      "arcane-recovery": {
+        "name": "",
+        "description": ""
+      },
+      "spellcasting": {
+        "name": "",
+        "description": ""
+      },
+      "arcane-tradition": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-4": {
+        "name": "",
+        "description": ""
+      },
+      "arcane-tradition-feature-6": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-8": {
+        "name": "",
+        "description": ""
+      },
+      "arcane-tradition-feature-10": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-12": {
+        "name": "",
+        "description": ""
+      },
+      "arcane-tradition-feature-14": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-16": {
+        "name": "",
+        "description": ""
+      },
+      "spell-mastery": {
+        "name": "",
+        "description": ""
+      },
+      "ability-score-improvement-19": {
+        "name": "",
+        "description": ""
+      },
+      "signature-spells": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "resources": {
+      "arcane-recovery": {
+        "name": "",
+        "note": ""
+      },
+      "signature-spells": {
+        "name": "",
+        "note": ""
+      }
+    },
+    "choices": {},
+    "subclasses": {
+      "evocation": {
+        "name": "",
+        "features": {
+          "school-of-evocation": {
+            "name": "",
+            "description": ""
+          },
+          "potent-cantrip": {
+            "name": "",
+            "description": ""
+          },
+          "empowered-evocation": {
+            "name": "",
+            "description": ""
+          },
+          "overchannel": {
+            "name": "",
+            "description": ""
+          }
+        },
+        "resources": {
+          "overchannel": {
+            "name": "",
+            "note": ""
+          }
+        }
+      }
+    }
+  }
+}

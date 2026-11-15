@@ -5,6 +5,12 @@
       "unknown": "An unknown error occurred. Please try again.",
       "common_error_invalid_request": "Invalid data. Check the fields and try again.",
       "common_error_unexpected": "Something went wrong on our side. Please try again shortly.",
+      "demo_read_only": "This is a read-only demo. Create a free account to play.",
+      "account_deletion_error_username_mismatch": "That is not your username.",
+      "account_deletion_error_password_invalid": "Incorrect password. If you never created one, for example because you signed in with an e-mail link, use “Forgot password?” to set it.",
+      "account_deletion_error_too_soon": "This e-mail was sent less than a minute ago. Check your inbox, or wait a moment and ask again.",
+      "account_deletion_error_too_many_attempts": "Too many incorrect passwords. Wait 15 minutes and try again, or use “Forgot password?” to set a new one.",
+      "account_deletion_error_link_invalid": "This link has expired or was already used. Please request a new one.",
       "auth_error_signin_invalid_credentials": "Incorrect email or password.",
       "auth_error_signin_email_not_confirmed": "Confirm your email before signing in.",
       "auth_error_rate_limited": "Too many attempts. Wait a moment and try again.",
@@ -52,6 +58,15 @@
       "party_error_gm_cannot_join": "You are the GM of this party.",
       "party_error_already_member": "This person is already in the party.",
       "party_error_character_not_allowed": "This character can’t be brought to the party.",
+      "party_error_journal_url_invalid": "Paste the link of a Google Docs document (docs.google.com/document/…).",
+      "party_error_image_too_large": "The image exceeds the 5 MB limit.",
+      "party_error_image_invalid_type": "Use a JPEG, PNG or WebP image.",
+      "party_error_has_gm": "This party already has a GM.",
+      "party_error_without_gm": "This party has no GM right now, so it can’t take new people.",
+      "party_error_not_active_member": "Only players of the party can ask to become its GM.",
+      "party_error_claim_exists": "Someone already asked to become the GM of this party.",
+      "party_error_claim_not_found": "There is no open request to become the GM.",
+      "party_error_cannot_vote": "You can’t vote on this request.",
       "feedback_error_invalid_email": "Please enter a valid e-mail.",
       "feedback_error_message_too_short": "The message must be at least 10 characters long.",
       "security_token_missing": "Please complete the security verification.",
@@ -76,6 +91,8 @@
       "combat_error_not_your_turn": "It is not this participant's turn (it may have passed already).",
       "combat_error_full": "A combat has at most 50 participants.",
       "combat_error_invalid_condition": "That condition is not valid.",
+      "combat_error_invalid_change": "That change doesn't apply to players.",
+      "combat_error_at_start": "The combat is already at its first turn.",
       "combat_error_character_not_allowed": "This character can't join this combat."
     },
     "save": "Save",
@@ -103,6 +120,8 @@
     "increase": "Increase",
     "skipToContent": "Skip to content",
     "unsavedChanges": "Unsaved changes",
+    "unsavedSheet": "Unsaved sheet changes",
+    "unsavedLore": "Unsaved lore changes",
     "allSaved": "All changes saved",
     "discard": "Discard",
     "discardConfirm": "Discard your unsaved changes?",
@@ -177,7 +196,8 @@
     "ctaStart": "Start Playing",
     "previewLabel": "Example character sheet",
     "previewName": "Ada the Wise",
-    "previewClass": "High elf wizard · Level 5"
+    "previewClass": "High elf wizard · Level 5",
+    "ctaDemo": "See the demo"
   },
   "home": {
     "title": "RPG World"
@@ -239,7 +259,9 @@
       "status": "Status",
       "lore": "Lore",
       "spells": "Spellbook",
-      "inventory": "Inventory"
+      "inventory": "Inventory",
+      "appearance": "Appearance",
+      "label": "Sheet tabs"
     },
     "emptyStates": {
       "lore": "Biography and physical characteristics will appear here soon.",
@@ -261,7 +283,8 @@
       "flaws": "Flaws",
       "alliesAndEnemies": "Allies & Enemies",
       "organizations": "Organizations",
-      "treasure": "Treasure"
+      "treasure": "Treasure",
+      "notFilled": "Not filled in"
     },
     "spells": {
       "preparedLabels": "{count} prepared",
@@ -437,8 +460,22 @@
         "S": "Special",
         "T": "Thrown",
         "V": "Versatile"
+      },
+      "view": "View",
+      "viewList": "List",
+      "viewGrid": "Grid",
+      "tile": "{name}, {quantity}",
+      "group": {
+        "weapons": "Weapons",
+        "armor": "Armor and shields",
+        "magic": "Magic",
+        "tools": "Tools and kits",
+        "gear": "Gear",
+        "other": "Other"
       }
-    }
+    },
+    "untranslatedNotice": "Description in English for now.",
+    "untranslatedHelp": "Help translate"
   },
   "characterHeader": {
     "namePlaceholder": "Character Name",
@@ -453,17 +490,35 @@
     "alignment": "Alignment",
     "alignmentPlaceholder": "Define Alignment...",
     "xp": "Experience",
-    "customizeDescription": "Change the avatar and accent color of the character",
-    "customizeTitle": "Customize Character",
-    "avatarLabel": "Avatar",
-    "accentColorLabel": "Accent Color",
     "xpProgress": "Progress to next level",
     "name": "Name",
     "otherOption": "Other…",
     "classOtherPlaceholder": "Class name",
     "raceOtherPlaceholder": "Race name",
     "backgroundOtherPlaceholder": "Background name",
-    "alignmentOtherPlaceholder": "Alignment"
+    "alignmentOtherPlaceholder": "Alignment",
+    "hideIdentity": "Hide details",
+    "showIdentity": "Show details"
+  },
+  "characterAppearance": {
+    "title": "Sheet appearance",
+    "description": "This only changes how the sheet looks. The character's data stays the same.",
+    "back": "Back to the sheet",
+    "colorTitle": "Color",
+    "colorHint": "Used for the name, the avatar's frame and the sheet's highlights.",
+    "systemColors": "System colors",
+    "anyColor": "Any color",
+    "colorCode": "Color code",
+    "colorCodeInvalid": "Use a code like #c2410c.",
+    "imageTitle": "Character image",
+    "imageHint": "Appears on the sheet, on cards and in combat.",
+    "backgroundTitle": "Sheet background",
+    "backgroundHint": "Fills the page behind the sheet, on every tab. It's yours alone: the GM sees it when opening this sheet.",
+    "backgroundAdd": "Add background",
+    "backgroundReplace": "Replace background",
+    "backgroundRemove": "Remove background",
+    "backgroundSending": "Sending…",
+    "preview": "Preview"
   },
   "attributeCard": {
     "modifierCalc": "Modifier Calculation",
@@ -497,7 +552,19 @@
       "passivePerception": "10 + your Perception bonus. What you notice without looking."
     },
     "configureHp": "Configure hit points",
-    "configureHpDescription": "This character's maximum and temporary hit points"
+    "configureHpDescription": "This character's maximum and temporary hit points",
+    "adjustHp": "Adjust HP",
+    "adjustHpDescription": "Damage, healing or temporary HP. Saved right away.",
+    "adjustHpAmount": "How much?",
+    "damage": "Damage",
+    "heal": "Heal",
+    "setTempHp": "Temporary",
+    "hpSaved": "HP {current} / {max}",
+    "hpSavedTemp": "HP {current} / {max} (+{temp})",
+    "undo": "Undo",
+    "summary": "Combat at a glance",
+    "speedShort": "Speed",
+    "passivePerceptionShort": "Perception"
   },
   "spellsDrawer": {
     "searchPlaceholder": "Search spells",
@@ -511,6 +578,10 @@
     "noSpellsFound": "No spells found.",
     "clearFilters": "Clear all filters",
     "pagination": "{from}–{to} of {total} spells",
+    "paginationLabel": "Spell pages",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "goToPage": "Page {page}",
     "toasts": {
       "learned": "Spell learned!",
       "forgotten": "Spell forgotten.",
@@ -547,8 +618,9 @@
     "level": "Lv {level}",
     "pointsCapacity": "Spell Points Capacity",
     "systemPlaceholder": "Magic",
-    "slot": "Level {level} slot {slot}",
-    "configure": "Configure magic system"
+    "configure": "Configure magic system",
+    "slotAvailable": "Level {level} slot {slot}, available",
+    "slotSpent": "Level {level} slot {slot}, spent"
   },
   "dashboard": {
     "menu": "Menu",
@@ -560,7 +632,9 @@
     "settingsTitle": "Settings",
     "settingsSubtitle": "Manage your adventurer profile information.",
     "menuDescription": "Main navigation and shortcuts.",
-    "openMenu": "Open menu"
+    "openMenu": "Open menu",
+    "collapseMenu": "Collapse menu",
+    "keepMenuOpen": "Keep menu open"
   },
   "changePassword": {
     "title": "Change Your Password",
@@ -616,7 +690,14 @@
     "zoom": "Zoom",
     "save": "Save",
     "view": "View image",
-    "viewTitle": "Full-screen image"
+    "viewTitle": "Full-screen image",
+    "viewOf": "View {name}'s image",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "zoomFit": "Fit to screen",
+    "adjust": "Adjust image",
+    "adjusting": "Updating…",
+    "adjustLoadError": "Couldn't load the saved image. Try uploading it again."
   },
   "skills": {
     "title": "Skills",
@@ -644,6 +725,8 @@
     "proficientIn": "Proficient in {label}",
     "expertiseIn": "Expertise in {label}",
     "noProficiencyIn": "No proficiency in {label}",
+    "legend": "Legend",
+    "legendHint": "Tap a skill to cycle through them.",
     "usesAttribute": "Uses {attribute}.",
     "descriptions": {
       "ACROBATICS": "Keep your balance, perform stunts and slip out of tight spots.",
@@ -769,6 +852,7 @@
           "Profile: username, avatar and preferred color.",
           "Characters: sheets, backstory, learned spells and the images you upload.",
           "Support: email, type and message, when you use the contact form.",
+          "Technical data: when you visit the site, <vercel>Vercel</vercel> and <supabase>Supabase</supabase> log the IP address, browser and requested pages, for security and error diagnosis. On protected forms, <cloudflare>Cloudflare Turnstile</cloudflare> checks the IP and browser signals to tell people from bots. To count visits we use <cloudflare>Cloudflare Web Analytics</cloudflare>, which uses no cookies and does not identify you: it only records aggregate numbers, such as page views and load times.",
           "Technical data: when you visit the site, <vercel>Vercel</vercel> and <supabase>Supabase</supabase> log the IP address, browser and requested pages, for security and error diagnosis. On protected forms, <cloudflare>Cloudflare Turnstile</cloudflare> checks the IP and browser signals to tell people from bots. To count visits we use <cloudflare>Cloudflare Web Analytics</cloudflare>, which uses no cookies and does not identify you: it only records aggregate numbers, such as page views and load times."
         ]
       },
@@ -787,7 +871,14 @@
       },
       "rights": {
         "title": "4. Your Rights",
-        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data through our <server>Discord server</server>, telling us your account's email. We will process your request within 5 business days."
+        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. While the automatic deletion feature is under development, you can request the total deletion of your account and all associated data through our <server>Discord server</server>, telling us your account's email. We will process your request within 5 business days.",
+        "deletionIntro": "When you delete your account:",
+        "deletionItems": [
+          "Your login, profile, characters and NPCs are deleted, with everything they hold. The images you uploaded lose their owner and a daily job removes them within 2 days; cached copies can last up to 1 day.",
+          "Parties where you are GM: if there are active players, the party stays with them and has no GM; without active players, the party is deleted. A party without a GM loses its picture and any ongoing combat. In other people's parties, your membership is deleted and your characters leave them.",
+          "What you put in the party chest and the journal link stay with the party.",
+          "In feedback, we remove your email and the link to your account; the text, type and date remain, and the text may contain what you wrote in it. Copies of messages sent to support on Discord and the text of feedback are deleted if you ask."
+        ]
       },
       "cookies": {
         "title": "5. Cookies",
@@ -940,7 +1031,8 @@
       "pixTitle": "Make a Pix",
       "pixCopy": "Pix key copied!",
       "pixCopyLabel": "Copy Pix key",
-      "githubSponsorsCta": "Sponsor on GitHub"
+      "githubSponsorsCta": "Sponsor on GitHub",
+      "pixCopyFailed": "Couldn't copy. The Pix key is: {key}"
     },
     "copyright": "© {year} Rebs Tech Studio. All rights reserved."
   },
@@ -962,6 +1054,7 @@
     "typeLabel": "Message Type",
     "messageLabel": "Message",
     "messagePlaceholder": "Which mimic bit you? Describe your issue or idea...",
+    "partyMessage": "Hello! My party (ID: {partyId}) has no GM and a request to become the GM that someone still hasn’t answered. Could you help?\n\n",
     "submit": "Cast Message",
     "submitting": "Channeling...",
     "sendAnother": "Send another message",
@@ -972,7 +1065,8 @@
       "feature": "Feature Request",
       "feedback": "General Feedback",
       "account": "Account / Access"
-    }
+    },
+    "messageMin": "Write at least {min} characters."
   },
   "seo": {
     "title": "RPG World: free D&D 5e character sheets",
@@ -1023,16 +1117,28 @@
       "languages": {
         "title": "In English and Portuguese",
         "description": "The interface and the spells in both languages. Switch any time."
+      },
+      "inventory": {
+        "title": "Inventory and coins",
+        "description": "A coin pouch with pay and receive (change comes back on its own) and a backpack with the SRD items and total weight."
+      },
+      "parties": {
+        "title": "Parties with a GM and players",
+        "description": "Invite by link or username. The GM sees the party's characters in Role Play mode and runs combat with initiative, HP and conditions in real time."
+      },
+      "partyChest": {
+        "title": "Party chest and journal",
+        "description": "Coins and items the party keeps together, and a Google Docs journal opened right inside the party."
       }
     },
     "planned": {
-      "parties": {
-        "title": "Parties and campaigns",
-        "description": "Dungeon Master and players at the same table, with invites and session notes."
+      "classes": {
+        "title": "Class mechanics",
+        "description": "Sorcery points, Wild Shape and every other class resource, with short and long rests."
       },
-      "inventory": {
-        "title": "Inventory and items",
-        "description": "Equipment, magic items and coins on the sheet."
+      "sessions": {
+        "title": "Sessions and calendar",
+        "description": "Scheduled sessions, who is coming, a calendar and reminders on Discord."
       },
       "systems": {
         "title": "More systems and languages",
@@ -1080,9 +1186,34 @@
           "title": "Your character's story",
           "description": "Appearance, personality, ideals, bonds, flaws and the full backstory, next to the sheet.",
           "alt": "Story page with appearance, personality traits, ideals, bonds, flaws and the character's backstory"
+        },
+        "inventory": {
+          "tab": "Inventory",
+          "title": "Coins and backpack",
+          "description": "Pay and receive with automatic change and keep the SRD gear, with total weight.",
+          "alt": "A character's inventory with the five coins and a backpack of items with total weight"
+        },
+        "party": {
+          "tab": "Party",
+          "title": "The GM's table",
+          "description": "The players' characters in Role Play mode: traits, ideals, passive Perception and Insight at hand.",
+          "alt": "A party seen by the GM, with Role Play cards of the players' characters"
+        },
+        "combat": {
+          "tab": "Combat",
+          "title": "Real-time combat",
+          "description": "Initiative, HP and conditions for every participant. Players follow the turn order as it happens.",
+          "alt": "The GM's initiative tracker with players and enemies, hit points and conditions"
+        },
+        "chest": {
+          "tab": "Party chest",
+          "title": "The party chest",
+          "description": "The party's coins and items, which the GM and the players can change.",
+          "alt": "The party inventory with coins and a chest of items"
         }
       }
-    }
+    },
+    "ctaDemo": "See the demo"
   },
   "translationInvite": {
     "title": "Help translate RPG World",
@@ -1111,6 +1242,7 @@
     "requests": "Waiting for the GM",
     "pendingRequests": "{count, plural, one {# request} other {# requests}}",
     "gmBy": "GM: @{username}",
+    "noGm": "No GM",
     "accept": "Accept",
     "decline": "Decline",
     "withdraw": "Cancel request",
@@ -1126,11 +1258,7 @@
       "title": "Create a party"
     },
     "nav": {
-      "parties": "Parties",
-      "gm": "GM",
-      "player": "Player",
-      "overview": "Party",
-      "settings": "Settings"
+      "parties": "Parties"
     },
     "join": {
       "title": "Party invite",
@@ -1138,9 +1266,14 @@
       "request": "Ask to join",
       "requested": "Request sent. The GM will approve it.",
       "alreadyInvited": "You've already been invited to this party.",
+      "withoutGm": "This party has no GM right now, so it can’t take new people. Ask the players to name a new one.",
       "invalidTitle": "This invite is no longer valid",
       "invalidDescription": "Ask the GM for a new link.",
-      "goToParties": "Go to my parties"
+      "goToParties": "Go to my parties",
+      "ogTitle": "Invite: {name}",
+      "ogDescription": "You're invited to the party {name} on RPG World.",
+      "signInHint": "Sign in to ask to join.",
+      "signIn": "Sign in to join"
     },
     "page": {
       "gmEyebrow": "You are the GM",
@@ -1161,14 +1294,20 @@
       "openSheet": "Open {name}'s sheet",
       "notFoundTitle": "Party not found",
       "notFoundDescription": "It may have been deleted, or you're no longer in it.",
-      "backToParties": "Back to my parties"
+      "backToParties": "Back to my parties",
+      "goToCombat": "Go to combat"
     },
     "requestsSection": {
       "title": "Join requests",
       "approve": "Approve",
       "decline": "Decline",
       "invitedTitle": "Invites sent",
-      "cancel": "Cancel invite"
+      "cancel": "Cancel invite",
+      "approveFrom": "Approve {name}'s request",
+      "declineFrom": "Decline {name}'s request",
+      "declineConfirm": "Decline {name}'s request to join the party?",
+      "cancelFor": "Cancel invite for {name}",
+      "cancelConfirm": "Cancel the invite for {name}?"
     },
     "manage": {
       "title": "Manage the party",
@@ -1188,6 +1327,7 @@
       "noMembers": "No players yet.",
       "remove": "Remove",
       "removeConfirm": "Remove {name} from the party? Their characters stay with them.",
+      "removeConfirmJournal": "Remove {name} from the party? Their characters stay with them. They may have kept the journal link: to cut off access, restrict sharing in Google Docs.",
       "nameLabel": "Party name",
       "rename": "Rename",
       "renamed": "Party renamed",
@@ -1201,6 +1341,26 @@
       "edition2024": "2024 rules",
       "editionSaved": "Rules edition saved"
     },
+    "journal": {
+      "title": "Party journal",
+      "linkLabel": "Google Docs link",
+      "linkPlaceholder": "https://docs.google.com/document/d/…",
+      "save": "Save",
+      "saved": "Journal saved",
+      "remove": "Remove",
+      "removeConfirm": "Remove the party journal? The document in Google Docs is not deleted.",
+      "removed": "Journal removed",
+      "stepShare": "In Google Docs, click <b>Share</b>.",
+      "stepOpen": "<b>Open link (easier):</b> under General access, choose <i>Anyone with the link</i> → <i>Editor</i>. Works without signing in.",
+      "stepInvited": "<b>Invited only (safer):</b> add each player's email. Each one must be signed in to Google in this browser; if the journal doesn't open here, use <i>Open in Google Docs</i>.",
+      "tab": "Journal",
+      "open": "Open in Google Docs",
+      "setUp": "Set up the journal",
+      "emptyGm": "Paste the link of a Google Docs document in the party settings.",
+      "emptyPlayer": "The GM hasn't set up the journal yet",
+      "mobileNotice": "On a phone the journal opens straight in Google Docs. To edit it in here, use a computer.",
+      "frameTitle": "Party journal"
+    },
     "mine": {
       "title": "My characters at the table",
       "description": "Choose who you bring. You can change it any time.",
@@ -1209,7 +1369,30 @@
       "none": "You have no characters yet.",
       "leave": "Leave party",
       "leaveConfirm": "Leave this party? Your characters stay with you.",
-      "left": "You left the party"
+      "leaveConfirmLastPlayer": "You are the last active player of this party, which has no GM. If you leave, the party is deleted, with its chest and journal. Leave anyway?",
+      "left": "You left the party",
+      "open": "My characters"
+    },
+    "gmClaim": {
+      "title": "This party has no GM",
+      "description": "The GM’s account was deleted. The party, characters, chest and journal still work; combat, invites and settings wait for a new GM.",
+      "claim": "I want to be the GM",
+      "claimHint": "Everyone else in the party has to agree. The GM reads the full sheet of every character at the table. You stop being a player and your characters leave the party, keeping their sheets.",
+      "claimHintSolo": "You are the only active player, so you become the GM right away, with no one to agree. The GM reads the full sheet of every character at the table. You stop being a player and your characters leave the party, keeping their sheets.",
+      "claimConfirm": "Ask to be the GM? If everyone agrees, you stop being a player and your characters leave the party, keeping their sheets.",
+      "claimConfirmSolo": "Become the GM of this party now? You stop being a player and your characters leave the party, keeping their sheets.",
+      "limit": "You are already the GM of {max} parties, the most one account can have.",
+      "yourRequest": "You asked to become the GM of this party.",
+      "cancel": "Give up",
+      "askedBy": "{name} asked to become the GM of this party.",
+      "sheetWarning": "If you agree, the new GM will read the full sheet of the characters at the table, yours included.",
+      "accept": "Agree",
+      "decline": "Decline",
+      "youAccepted": "You agreed to this request.",
+      "waitingOn": "Waiting for: {names}",
+      "askSupport": "Ask support for help",
+      "supportLater": "Available one day after the request, for whoever hasn’t answered.",
+      "supportHint": "Support writes to whoever hasn’t answered and gives them 7 days before stepping in."
     },
     "sheet": {
       "back": "Back to the party",
@@ -1217,7 +1400,42 @@
     },
     "settings": {
       "eyebrow": "Party settings",
-      "open": "Settings"
+      "manage": "Manage",
+      "backToTable": "Back to the table"
+    },
+    "chest": {
+      "title": "Party inventory",
+      "coinsTitle": "Party coins",
+      "coinsHint": "The party's money. The GM and the players can change it; saved right away.",
+      "itemsTitle": "Party chest",
+      "itemsHint": "What the party keeps together. The GM and the players can add and remove; saved right away.",
+      "empty": "The chest is empty.",
+      "emptyHint": "Add what the party keeps together: treasure, supplies, items found along the way."
+    },
+    "image": {
+      "title": "Party picture",
+      "hint": "Shown on the invite and when someone pastes the link on Discord or WhatsApp. Anyone with the link sees the party name and picture, even signed out.",
+      "alt": "Party picture",
+      "empty": "No picture: the link shows the RPG World image.",
+      "upload": "Upload picture",
+      "change": "Change picture",
+      "uploading": "Uploading…",
+      "remove": "Remove",
+      "removeConfirm": "Remove the party picture?",
+      "saved": "Picture saved",
+      "removed": "Picture removed"
+    },
+    "acceptInvite": "Accept the invite to {name}",
+    "declineInvite": "Decline the invite to {name}",
+    "declineInviteConfirm": "Decline the invite to {name}? You'll need a new invite to join later.",
+    "withdrawFrom": "Cancel request to join {name}",
+    "withdrawConfirm": "Cancel your request to join {name}?",
+    "tabs": {
+      "label": "Party tabs",
+      "overview": "Table",
+      "combat": "Combat",
+      "journal": "Journal",
+      "chest": "Chest"
     }
   },
   "enemies": {
@@ -1231,8 +1449,6 @@
   },
   "combat": {
     "title": "Combat",
-    "modeRolePlay": "Role Play",
-    "modeCombat": "Combat",
     "prepare": "Prepare combat",
     "noCombat": "No combat going on. Prepare one to set up the initiative order.",
     "round": "Round {round}",
@@ -1258,8 +1474,6 @@
     "tempHpOf": "{name}'s temporary HP",
     "ac": "AC",
     "passivePerception": "Passive perception",
-    "moveUp": "Move {name} up",
-    "moveDown": "Move {name} down",
     "remove": "Remove {name} from the combat",
     "removeConfirm": "Remove {name} from the combat?",
     "currentTurn": "Current turn",
@@ -1267,7 +1481,7 @@
     "enemy": "Enemy",
     "reconnecting": "Reconnecting… the screen updates by itself when the connection is back.",
     "yourTurn": "Your turn",
-    "endMyTurn": "End my turn",
+    "yourInitiative": "Your initiative",
     "playerPreparing": "The GM is preparing the combat.",
     "order": "Combat order",
     "yours": "yours",
@@ -1277,7 +1491,45 @@
     "ally": "Ally",
     "addAlly": "Add ally",
     "side": "Side",
-    "conditionsOf": "Conditions of {name}"
+    "conditionsOf": "Conditions of {name}",
+    "player": "Player",
+    "neutral": "Neutral",
+    "unknownEnemy": "Unknown enemy",
+    "unknownAlly": "Unknown ally",
+    "unknownNeutral": "Unknown neutral",
+    "gmTurn": "The GM is running this turn",
+    "down": "Down",
+    "dead": "Dead",
+    "chooseFate": "What happens to {name}?",
+    "fateDeathSaves": "Death saves",
+    "fateDead": "Dead",
+    "undoDead": "Not dead",
+    "revealDeath": "Reveal death",
+    "hideDeath": "Hide death",
+    "deathSuccess": "Success {n}",
+    "deathFailure": "Failure {n}",
+    "deathStable": "Stable",
+    "deathHiddenHint": "Players only see “down”.",
+    "show": "Show",
+    "anonymize": "Make anonymous",
+    "hide": "Hide",
+    "visibilityVisible": "Visible",
+    "visibilityAnonymous": "Anonymous",
+    "visibilityHidden": "Hidden",
+    "changeSideOf": "Side of {name}",
+    "addNeutral": "Add neutral",
+    "previousTurn": "Previous turn",
+    "turnBackTo": "Turn went back to {name}",
+    "swapWith": "Swap with {name}",
+    "orderChanged": "order changed",
+    "forPlayers": "For the players",
+    "turnPassedTo": "Now it's {name}'s turn",
+    "noCombatPlayer": "No combat going on. When the GM starts one, it shows here.",
+    "nextUp": "Next: <strong>{name}</strong>",
+    "addNpc": "Add NPC",
+    "turnsUntil": "<strong>{name}</strong> in {count, plural, one {# turn} other {# turns}}",
+    "endTurnOf": "End {name}'s turn",
+    "newTab": "(opens in a new tab)"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",
@@ -1320,5 +1572,82 @@
     "edition": "Edition",
     "pickerDescription": "Turn on the conditions affecting this creature.",
     "exhaustionLevel": "Exhaustion level"
+  },
+  "accountDeletion": {
+    "dangerZone": {
+      "title": "Danger zone",
+      "intro": "Deleting your account is permanent and cannot be undone. This will erase:",
+      "erasesLogin": "Your login and profile",
+      "erasesCharacters": "All your characters and NPCs, with everything on them",
+      "erasesImages": "Your images, such as avatars (they are removed shortly after)",
+      "keptTitle": "Parties that stay without a GM",
+      "keptHint": "Their active players can still use them and choose a new GM.",
+      "deletedTitle": "Parties that will be deleted",
+      "deletedHint": "They have no active players.",
+      "lastPlayerTitle": "Parties without a GM where you are the last player",
+      "lastPlayerHint": "They will be deleted too.",
+      "partiesLoading": "Checking your parties…",
+      "partiesError": "We could not load your parties, so we cannot show what the deletion affects.",
+      "partiesRetry": "Try again",
+      "open": "Delete my account",
+      "dialogTitle": "Delete your account?",
+      "dialogDescription": "First we confirm it is you, then we e-mail you a link. Nothing is deleted until you confirm there.",
+      "usernameInstruction": "To continue, type your username: <bold>{username}</bold>",
+      "usernameLabel": "Your username",
+      "passwordLabel": "Password",
+      "forgotPassword": "Forgot my password",
+      "passwordHelp": "If you signed in with an e-mail link before, you have a password you never saw. Set a new one with “Forgot my password”.",
+      "submit": "Send confirmation e-mail",
+      "sentTitle": "Check your e-mail",
+      "sentDescription": "We sent a link to the e-mail of your account. It works once and for 1 hour. Your account is only deleted when you confirm there.",
+      "sendAgain": "Send again",
+      "sendAgainHint": "Sending again makes the previous link stop working."
+    },
+    "confirm": {
+      "title": "Confirm account deletion",
+      "description": "You are about to permanently delete the account <bold>{username}</bold>, with its characters, NPCs and images. This cannot be undone.",
+      "descriptionNoName": "You are about to permanently delete your account, with its characters, NPCs and images. This cannot be undone.",
+      "button": "Delete my account for good",
+      "invalidTitle": "This link does not work",
+      "invalidDescription": "It has expired, was already used or was replaced by a newer one. Request a new one in your profile settings.",
+      "backToSettings": "Go to settings",
+      "metaTitle": "Delete account"
+    },
+    "deleted": "Your account was deleted."
+  },
+  "demo": {
+    "metaTitle": "Demo · The Pioneers",
+    "npcsTitle": "NPCs",
+    "inspiration": {
+      "title": "Meet the Inspiration",
+      "realName": "Inspired by",
+      "period": "Lived",
+      "contribution": "What she did",
+      "sources": "Sources"
+    },
+    "notice": "Meet the women who inspired a world of adventure. This collection celebrates remarkable women from history, science, technology, literature, and leadership through original fantasy reinterpretations. Each character is inspired by a historical figure, but her abilities, equipment, adventures, and fictional biography belong to the RPG World fantasy setting. These characters are fictional tributes, not historically accurate portrayals or official endorsements.",
+    "banner": {
+      "text": "The Pioneers demo: you are exploring a read-only campaign.",
+      "signUp": "Create account",
+      "back": "Back to app"
+    },
+    "nav": {
+      "label": "Demo navigation",
+      "overview": "Overview",
+      "chest": "Chest",
+      "npcs": "NPCs"
+    },
+    "invite": {
+      "title": "Make your own adventure",
+      "description": "The demo is read only. Create a free account to build your characters, join a party and save your progress.",
+      "create": "Create account",
+      "keep": "Keep exploring"
+    }
+  },
+  "sheetViewer": {
+    "open": "View sheet",
+    "description": "Read only. To change anything, open the sheet.",
+    "edit": "Edit sheet",
+    "newTab": "(opens in a new tab)"
   }
 }
