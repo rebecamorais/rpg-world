@@ -3,7 +3,11 @@
 Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tipografia, acessórios e interações que fazem a interface parecer um objeto encantado. As decisões estão na [spec-mãe](../superpowers/specs/2026-11-13-grimoire-enchantments-design.md).
 
 - **Épico:** [#194](https://github.com/rebecamorais/rpg-world/issues/194)
-- **Fase atual:** 1, pesquisa e especificação ([#195](https://github.com/rebecamorais/rpg-world/issues/195)). Nada daqui existe no código ainda.
+- **Branch e PR:** `feat/grimoire-library` ([#219](https://github.com/rebecamorais/rpg-world/pull/219)), de longa duração e em rascunho.
+- **Estado:**
+  - **Catálogo:** fase 1 ([#195](https://github.com/rebecamorais/rpg-world/issues/195)) concluída.
+  - **Laboratório:** existe em `/dev/grimoire/materials`, com 4 superfícies de material. Só abre fora da produção.
+  - **Spellbook:** ainda não usa nada daqui.
 
 ## Como ler
 
@@ -49,7 +53,7 @@ Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tip
   | `F4`  | Interação ocasional (um evento, efeito único) |
 
 - **Custo:** Muito baixo, Baixo, Moderado ou Alto. São estimativas de engenharia; o benchmark do Playground confirma.
-- **Cores:** só tokens (`--spell-*`, `--character-*`, `--primary-*`, `--grimoire-*`). O `design-tokens.unit.test.ts` barra a paleta crua.
+- **Cores:** todo efeito e todo material usa a **cor da magia** (`--spell-color`), nunca uma cor fixa (decisão 21 da spec-mãe). Fora isso, só tokens (`--spell-*`, `--character-*`, `--primary-*`, `--grimoire-*`). O `design-tokens.unit.test.ts` barra a paleta crua.
 - **Runas:** as runas reais vêm da Noto Sans Runic (REF-84) e são sempre decorativas (`aria-hidden`). As runas inventadas da arte da dona entram depois, como alternativa.
 - **Código de terceiros:** só se copia o que a biblioteca de referências marca como **Código: Sim** (MIT: Magic UI, forever, 3 itens do 21st), e o aviso vai para o `NOTICE.md`. Aceternity, SVGBackgrounds e itens sem licença declarada servem só de inspiração.
 - **Pasta futura do código:** `src/frontend/components/grimoire/`, um arquivo por componente. O CSS compartilhado fica em `@utility`/`@layer components`.

@@ -58,6 +58,24 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
 
     A "Revelação", com o sigilo girando e o brilho no nome, foi rejeitada. Shaders (WebGL) e o Motion (#156) ficam fora por enquanto. Os efeitos aprovados estão em [explorations/open-card-effects.md](../../grimoire-enchantments/explorations/open-card-effects.md). Ainda não vão para o spellbook, porque a exploração continua.
 
+### Revisão de 15/11 (efeitos por tipo, materiais e biblioteca)
+
+21. **(dona)** **Cor:** todo efeito e todo material usa a **cor da magia** (`--spell-color`), a mesma do card, da faixa e dos selos. Uma cor própria só existe como reserva, fora de uma magia. A cor de cada magia continua vindo de `useSpellDisplay` (dano, senão escola).
+22. **(dona)** **Efeitos por tipo de magia:** o efeito do card aberto segue a mesma regra da cor (o tipo de dano, senão a escola). Ele combina:
+    - uma superfície tingida;
+    - ícones do tipo (um grande e apagado, alguns pequenos);
+    - um brilho em posição própria;
+    - uma ondulação por evento com formato próprio.
+
+    Está em [explorations/spell-type-effects.md](../../grimoire-enchantments/explorations/spell-type-effects.md).
+
+23. **(dona)** **Superfícies de material:** Glacial Glass, Alchemical Corrosion (versão em máscaras SVG), Crypt Stone e Divine Parchment são os candidatos, todos na cor da magia e aprovados na revisão visual. Foram medidos em 3 rodadas de benchmark. As variantes descartadas (Corrosion só de gradientes, texturas em WebP) saíram do código. Está em [explorations/material-surfaces.md](../../grimoire-enchantments/explorations/material-surfaces.md). **Ainda não estão no spellbook.**
+24. **(dona)** **Biblioteca:**
+    - O Grimório é uma biblioteca de estilos e componentes de card.
+    - Ele cresce numa **branch de longa duração**, `feat/grimoire-library`, com **um PR só** (#219), que fica em rascunho e reúne docs, assets, componentes e o laboratório `/dev/grimoire`.
+    - O PR do catálogo (#198) foi fechado sem merge: os commits dele estão nessa branch.
+    - Nada chega ao spellbook antes de uma decisão explícita.
+
 ## Fora do escopo
 
 - Implementar componentes, instalar pacotes, alterar a UI atual ou o banco de dados.
