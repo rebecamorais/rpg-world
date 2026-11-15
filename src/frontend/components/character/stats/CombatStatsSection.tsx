@@ -27,6 +27,7 @@ import {
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import {
   hitDiceAvailable,
+  hitDieSides,
   setHitDice,
   setHitDiceRemaining,
   setSpellPoints,
@@ -46,8 +47,8 @@ const HIT_DIE_OPTIONS = ['d6', 'd8', 'd10', 'd12'];
 
 /** The die in a hit dice total: `5d6` → `d6`. Totals used to be stored with the level. */
 function hitDie(total: string | undefined) {
-  const die = total?.match(/d\d+$/)?.[0];
-  return die && HIT_DIE_OPTIONS.includes(die) ? die : 'd8';
+  const die = `d${hitDieSides(total)}`;
+  return HIT_DIE_OPTIONS.includes(die) ? die : 'd8';
 }
 
 const CombatHeader = () => {
@@ -160,11 +161,7 @@ const CombatHeader = () => {
           max={level}
           used={level - available}
           disabled={readOnly}
-          onChange={(used) => {
-            // setHitDiceRemaining is the function form of a patch: resolve it against the sheet
-            const patch = setHitDiceRemaining(level - used) as (c: typeof character) => object;
-            return saveNow(patch(character));
-          }}
+          onChange={(used) => saveNow(setHitDiceRemaining(level - used))}
         />
       </div>
     </CardHeader>

@@ -166,34 +166,34 @@ describe('CombatStatsSection', () => {
     });
 
     it('gastar um dado salva na hora, mantendo o total guardado', async () => {
-      const { saveNow } = renderCombat({ level: 4, hitDice: { total: '4d10', current: 4 } });
+      const { sentNow } = renderCombat({ level: 4, hitDice: { total: '4d10', current: 4 } });
 
       await userEvent.click(
         screen.getByRole('button', { name: 'Hit dice remaining 4, available' }),
       );
 
-      expect(saveNow).toHaveBeenCalledWith({ hitDice: { total: '4d10', current: 3 } });
+      expect(sentNow()).toEqual({ hitDice: { total: '4d10', current: 3 } });
     });
 
     it('sem total guardado, salva o total vazio', async () => {
-      const { saveNow } = renderCombat(noHitDice);
+      const { sentNow } = renderCombat(noHitDice);
 
       await userEvent.click(
         screen.getByRole('button', { name: 'Hit dice remaining 4, available' }),
       );
 
-      expect(saveNow).toHaveBeenCalledWith({ hitDice: { total: '', current: 3 } });
+      expect(sentNow()).toEqual({ hitDice: { total: '', current: 3 } });
     });
 
     it('com 0 guardado, nenhum dado disponível e devolver um vai a 1', async () => {
-      const { saveNow } = renderCombat({ level: 4, hitDice: { total: '4d8', current: 0 } });
+      const { sentNow } = renderCombat({ level: 4, hitDice: { total: '4d8', current: 0 } });
       expect(
         screen.getByRole('group', { name: 'Hit dice remaining, 0 of 4 available' }),
       ).toBeInTheDocument();
 
       await userEvent.click(screen.getByRole('button', { name: 'Hit dice remaining 1, spent' }));
 
-      expect(saveNow).toHaveBeenCalledWith({ hitDice: { total: '4d8', current: 1 } });
+      expect(sentNow()).toEqual({ hitDice: { total: '4d8', current: 1 } });
     });
 
     it('guardado acima do nível mostra só o nível', () => {

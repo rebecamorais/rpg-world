@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { useTranslations } from 'next-intl';
 
 import { UsePips } from '@frontend/components/character/stats/UsePips';
@@ -21,6 +23,18 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
   const character = useLoadedCharacter();
   const { saveNow } = useCharacterActions();
   const { readOnly, pagesPath } = useSheetSource(character.id, character.system);
+  // One save at a time for the whole card: the server rewrites the sheet's data on each save, so
+  // two taps on different boxes in flight together could undo each other
+  const [saving, setSaving] = useState(false);
+
+  const spend = async (key: string, used: number) => {
+    setSaving(true);
+    try {
+      await saveNow(setResourceUsed(key, used));
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <Card id="sheet-resources" className="bg-background/60 flex flex-col gap-3 p-4 shadow-sm">
@@ -29,7 +43,7 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
         {!readOnly && (
           <AppLink
             href={`${pagesPath}/appearance#class-resources`}
-            className="text-caption text-character-flare focus-ring inline-flex items-center rounded-sm underline pointer-coarse:min-h-11"
+            className="text-caption text-character-flare focus-ring inline-flex items-center justify-center rounded-sm underline pointer-coarse:min-h-11 pointer-coarse:min-w-11"
           >
             {t('edit')}
           </AppLink>
@@ -42,12 +56,20 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
             <div className="flex flex-wrap items-center gap-2">
               <Popover>
                 <PopoverTrigger asChild>
-                  <button
-                    type="button"
-                    className="focus-ring inline-flex items-center text-sm font-semibold underline decoration-dotted underline-offset-4 pointer-coarse:min-h-11"
+                  {/* Not a <button>: the read-only sheet's disabled fieldset would turn it off,
+                      and the rule's text is there to be read */}
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(event) => {
+                      if (event.key !== 'Enter' && event.key !== ' ') return;
+                      event.preventDefault();
+                      event.currentTarget.click();
+                    }}
+                    className="focus-ring inline-flex cursor-pointer items-center text-sm font-semibold underline decoration-dotted underline-offset-4 pointer-coarse:min-h-11"
                   >
                     {box.name}
-                  </button>
+                  </span>
                 </PopoverTrigger>
                 <PopoverContent>
                   <p className="font-semibold">{box.name}</p>
@@ -74,12 +96,9 @@ export function ResourcesCard({ boxes }: { boxes: ResourceBox[] }) {
               max={box.max}
               used={box.used}
               asNumber={box.unit === 'hit-points'}
-              disabled={readOnly}
+              disabled={readOnly || saving}
               data-rest-focus={index === 0}
-              onChange={(used) => {
-                const patch = setResourceUsed(box.key, used);
-                return saveNow(typeof patch === 'function' ? patch(character) : patch);
-              }}
+              onChange={(used) => spend(box.key, used)}
             />
           </li>
         ))}

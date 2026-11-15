@@ -1,9 +1,11 @@
-import { screen } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { messages } from '@tests/helpers/render';
 import { NextIntlClientProvider } from 'next-intl';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { SheetFieldset } from '@frontend/components/character/sheet/SheetFieldset';
 
 import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
@@ -11,6 +13,15 @@ import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 import pt from '../../../../../messages/pt.json';
 import { ResourcesRow } from './ResourcesRow';
 import { MONK, PALADIN } from './fixtures';
+
+/** Monk with a second box, to tap two boxes of the same card. */
+const MONK_TWO_BOXES = {
+  ...MONK,
+  resources: [
+    ...MONK.resources,
+    { ...MONK.resources[0], id: 'focus', name: 'Focus', description: 'Focus text' },
+  ],
+};
 
 const params = vi.hoisted(() => ({ value: {} as Record<string, string> }));
 vi.mock('next/navigation', () => ({
@@ -23,7 +34,10 @@ const loaded = vi.hoisted(() => ({ content: null as { classId: string } | null }
 vi.mock('@frontend/hooks/useClassResources', () => ({
   useClassResources: (edition: unknown, classId: string | null) => ({
     content: edition && classId && loaded.content?.classId === classId ? loaded.content : null,
-    isLoading: false,
+  }),
+  classResourcesQuery: (...key: unknown[]) => ({
+    queryKey: ['class-resources', ...key],
+    queryFn: async () => loaded.content,
   }),
 }));
 
@@ -52,23 +66,52 @@ describe('ResourcesRow', () => {
     expect(deathSaves()).toBeInTheDocument();
   });
 
-  it('gastar um uso salva o mapa inteiro, sem perder as outras chaves', async () => {
-    const other = { used: 2 };
-    const { saveNow } = renderWithCharacter(
+  it('gastar um uso envia só a chave que mudou', async () => {
+    const { sentNow } = renderWithCharacter(
       <ResourcesRow />,
       sheet({
         class: 'monk',
         level: 5,
         edition: '2014',
-        resources: { 'class:barbarian:rage': other },
+        resources: { 'class:barbarian:rage': { used: 2 }, 'class:monk:ki': { used: 0 } },
       }),
     );
 
     await userEvent.click(screen.getByRole('button', { name: 'Ki 1, available' }));
 
-    const saved = saveNow.mock.calls[0][0].resources!;
-    expect(saved['class:monk:ki'].used).toBe(1);
-    expect(saved['class:barbarian:rage']).toEqual(other);
+    expect(sentNow()).toEqual({ resources: { 'class:monk:ki': { used: 1 } } });
+  });
+
+  it('o primeiro uso numa ficha sem recursos guardados cria só aquela chave', async () => {
+    const { sentNow } = renderWithCharacter(
+      <ResourcesRow />,
+      sheet({ class: 'monk', level: 5, edition: '2014', resources: undefined }),
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Ki 1, available' }));
+
+    expect(sentNow()).toEqual({ resources: { 'class:monk:ki': { used: 1 } } });
+  });
+
+  it('enquanto uma caixinha salva, as outras da caixa esperam', async () => {
+    loaded.content = MONK_TWO_BOXES;
+    let finish = () => {};
+    const { saveNow } = renderWithCharacter(
+      <ResourcesRow />,
+      sheet({ class: 'monk', level: 5, edition: '2014' }),
+    );
+    saveNow.mockImplementationOnce(() => new Promise<void>((resolve) => (finish = resolve)));
+
+    await userEvent.click(screen.getByRole('button', { name: 'Ki 1, available' }));
+
+    const focus = screen.getAllByRole('button', { name: /^Focus \d, available$/ });
+    for (const pip of focus) expect(pip).toBeDisabled();
+    await userEvent.click(focus[0]);
+    expect(saveNow).toHaveBeenCalledTimes(1);
+
+    await act(async () => finish());
+    for (const pip of screen.getAllByRole('button', { name: /^Focus \d, available$/ }))
+      expect(pip).toBeEnabled();
   });
 
   it('a classe em português ("Monge") também acha o Ki', () => {
@@ -112,13 +155,20 @@ describe('ResourcesRow', () => {
     expect(deathSaves()).not.toBeInTheDocument();
   });
 
+  it('sem edição e com classe fora das 12, não oferece o cartão da edição', () => {
+    renderWithCharacter(<ResourcesRow />, sheet({ class: 'Artífice', level: 5 }));
+
+    expect(screen.queryByText(tRes.newTitle)).not.toBeInTheDocument();
+    expect(deathSaves()).not.toBeInTheDocument();
+  });
+
   it('sem edição mostra o cartão da edição e escolher salva a edição', async () => {
     const { saveNow } = renderWithCharacter(<ResourcesRow />, sheet({ class: 'monk', level: 5 }));
 
     expect(screen.getByText(tRes.newTitle)).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: '2024' }));
 
-    expect(saveNow).toHaveBeenCalledWith({ edition: '2024' });
+    await waitFor(() => expect(saveNow).toHaveBeenCalledWith({ edition: '2024' }));
   });
 
   describe('só leitura', () => {
@@ -131,6 +181,24 @@ describe('ResourcesRow', () => {
 
       expect(screen.queryByText(tRes.newTitle)).not.toBeInTheDocument();
       expect(deathSaves()).not.toBeInTheDocument();
+    });
+
+    it('a descrição da caixinha abre mesmo só de leitura', async () => {
+      renderWithCharacter(
+        <SheetFieldset>
+          <ResourcesRow />
+        </SheetFieldset>,
+        sheet({ class: 'monk', level: 5, edition: '2014' }),
+      );
+
+      for (const pip of kiPips()) expect(pip).toBeDisabled();
+      // fireEvent: user-event skips anything inside a disabled fieldset, while browsers only
+      // turn off its form controls
+      const trigger = screen.getByRole('button', { name: 'Ki' });
+      expect(trigger).toBeEnabled();
+      fireEvent.click(trigger);
+
+      expect(await screen.findByText('Ki feature text')).toBeInTheDocument();
     });
 
     it('com caixas, os usos ficam desabilitados e não há "editar"', () => {
