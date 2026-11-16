@@ -100,9 +100,25 @@ describe('CombatStatsSection', () => {
       expect(followClass()).toBeNull();
     });
 
+    it('ficha de 2024 herda o d12 do SRD 5.2, e a antiga com d8 pode seguir a classe', async () => {
+      loaded.content = { ...BARBARIAN, edition: '2024' };
+      const sheet = { class: 'barbarian', edition: '2024' as const };
+      const { unmount } = renderCombat({ ...sheet, hitDice: undefined });
+      expect(die()).toHaveTextContent(/^d12$/);
+      unmount();
+
+      const { draft } = renderCombat({ ...sheet, hitDice: { die: 'd8', spent: 1 } });
+      expect(die()).toHaveTextContent(/^d8$/);
+      await userEvent.click(die());
+      await userEvent.click(followClass()!);
+
+      expect(draft().hitDice).toEqual({ spent: 1 });
+      expect(die()).toHaveTextContent(/^d12$/);
+    });
+
     it.each([
       ['sem edição', { class: 'barbarian' }],
-      ['em 2024', { class: 'barbarian', edition: '2024' as const }],
+      ['em 2024 com conteúdo de 2014', { class: 'barbarian', edition: '2024' as const }],
     ])('%s: sem dado salvo continua d8 e não há "seguir a classe"', async (_, sheet) => {
       renderCombat({ ...sheet, hitDice: undefined });
       expect(die()).toHaveTextContent(/^d8$/);

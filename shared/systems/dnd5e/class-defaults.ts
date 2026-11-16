@@ -3,7 +3,7 @@ import type { ClassContent } from './class-resources';
 import { ATTRIBUTE_KEYS } from './constants';
 import type { Edition } from './content/editions';
 import { type HitDice, type HitDie, type LegacyHitDice, readHitDice } from './hit-dice';
-import { followsSrd2014 } from './sheet-values';
+import { followsClass, followsClassFully } from './sheet-values';
 import type { AttributeKey } from './types';
 
 /*
@@ -40,21 +40,48 @@ export interface ClassDefaults {
   choices: ClassChoiceDefault[];
 }
 
+/**
+ * The two things every checked edition gets from the class: the hit die and the saving throws.
+ * Read from the content of the sheet's own edition (SRD 5.1 or 5.2), never from the other one,
+ * even where the two books agree.
+ */
+export type ClassBasics = Partial<Pick<ClassDefaults, 'hitDie' | 'savingThrows'>>;
+
+/**
+ * The class's hit die and saving throws for a sheet, each only if its edition has that part
+ * (`CLASS_AUTOMATION`). Null when the sheet follows no class: no edition, a class that is not one
+ * of the SRD's (`content` is null), or content of another edition.
+ */
+export function classBasics(
+  edition: Edition | undefined,
+  content: Pick<ClassContent, 'edition' | 'hitDie' | 'proficiencies'> | null,
+): ClassBasics | null {
+  if (!content || !edition || content.edition !== edition) return null;
+  const basics: ClassBasics = {
+    ...(followsClass('hitDie', edition) && { hitDie: `d${content.hitDie}` as const }),
+    ...(followsClass('savingThrows', edition) && {
+      savingThrows: [...content.proficiencies.savingThrows],
+    }),
+  };
+  return Object.keys(basics).length > 0 ? basics : null;
+}
+
 type DefaultsContent = Pick<
   ClassContent,
   'classId' | 'edition' | 'hitDie' | 'proficiencies' | 'spellcasting'
 >;
 
 /**
- * The class's defaults, or null when the sheet does not follow the class: no edition yet, the
- * 2024 edition, or a class that is not one of the SRD's (`content` is null for those).
+ * Everything the class gives at level 1, or null when the sheet's edition does not have all of
+ * it yet (only 2014 does: see `classBasics` for what 2024 gets), it has no edition, or its class
+ * is not one of the SRD's (`content` is null for those).
  */
 export function classDefaults(
   edition: Edition | undefined,
   content: DefaultsContent | null,
   attributes: Record<AttributeKey, number>,
 ): ClassDefaults | null {
-  if (!content || !followsSrd2014(edition) || !followsSrd2014(content.edition)) return null;
+  if (!content || !followsClassFully(edition) || content.edition !== edition) return null;
   const { classId, hitDie, proficiencies, spellcasting } = content;
   const { skills, toolChoice, martialWeaponsWithProperty } = proficiencies;
   const key = (choice: string) => `${content.edition}/${classId}/${choice}`;
@@ -103,11 +130,11 @@ export interface EffectiveSavingThrow {
  */
 export function effectiveSavingThrows(
   saved: SavedSavingThrows | undefined,
-  defaults: Pick<ClassDefaults, 'savingThrows'> | null,
+  defaults: Pick<ClassBasics, 'savingThrows'> | null,
 ): Record<AttributeKey, EffectiveSavingThrow> {
   return Object.fromEntries(
     ATTRIBUTE_KEYS.map((key) => {
-      const classDefault = defaults?.savingThrows.includes(key) ?? false;
+      const classDefault = defaults?.savingThrows?.includes(key) ?? false;
       const stored = saved?.[key];
       const manual = typeof stored === 'boolean';
       return [
@@ -140,7 +167,7 @@ const FALLBACK_HIT_DIE: HitDie = 'd8';
  */
 export function effectiveHitDie(
   hitDice: HitDice | LegacyHitDice | undefined | null,
-  defaults: Pick<ClassDefaults, 'hitDie'> | null,
+  defaults: Pick<ClassBasics, 'hitDie'> | null,
 ): EffectiveHitDie {
   const stored = readHitDice(hitDice, 0).die;
   const classDefault = defaults?.hitDie ?? null;

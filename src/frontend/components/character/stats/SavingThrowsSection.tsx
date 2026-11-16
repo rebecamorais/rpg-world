@@ -10,7 +10,7 @@ import {
   useCharacterMeta,
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
-import { useClassDefaults } from '@frontend/hooks/useClassDefaults';
+import { useClassBasics } from '@frontend/hooks/useClassBasics';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { inheritSavingThrow, setSavingThrow } from '@frontend/lib/character-sheet-updates';
 import { cn } from '@frontend/lib/utils';
@@ -26,7 +26,7 @@ export default function SavingThrowsSection() {
   const { attributes, level, savingThrowProficiencies, system } = useLoadedCharacter();
   const { id } = useCharacterMeta();
   const { readOnly } = useSheetSource(id, system);
-  const defaults = useClassDefaults();
+  const defaults = useClassBasics();
   // What the player set by hand wins; the rest is what the class gives
   const savingThrows = effectiveSavingThrows(savingThrowProficiencies, defaults);
   const { update } = useCharacterActions();
@@ -52,7 +52,7 @@ export default function SavingThrowsSection() {
           // Only where it shows: a value set by hand that is what the class gives anyway changes
           // nothing on screen, so it gets no button
           const differsFromClass =
-            defaults !== null && source === 'manual' && isProficient !== classDefault;
+            !!defaults?.savingThrows && source === 'manual' && isProficient !== classDefault;
           const label = t(key);
 
           const finalValue = calculateSavingThrow(attrVal, level, isProficient);
