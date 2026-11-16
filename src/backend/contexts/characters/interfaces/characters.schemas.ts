@@ -10,6 +10,8 @@ import {
 import { ATTRIBUTE_KEYS, SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import { EDITIONS } from '@shared/systems/dnd5e/content/editions';
 import { HIT_DIE_OPTIONS } from '@shared/systems/dnd5e/hit-dice';
+import { LANGUAGE_IDS, type LanguageId } from '@shared/systems/dnd5e/languages';
+import { ARMOR_IDS } from '@shared/systems/dnd5e/proficiencies';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 // Shape and sanity limits only. Game rules (name required, max HP >= 1...) stay in the domain,
@@ -44,6 +46,28 @@ const recovery = z.object({
   rest: z.enum(['short', 'long']),
   amount: z.union([z.literal('all'), int(1, 1_000)]),
   fromLevel: optional(int(1, 20)),
+});
+
+/**
+ * Ids, never names, as the sheet stores them: armor and languages from their lists, weapons and
+ * tools by item id. The player's own text goes in `own`.
+ */
+const proficiencyId = z
+  .string()
+  .max(64)
+  .regex(/^[a-z0-9-]+$/);
+const proficiencyList = (id: z.ZodType<string>) =>
+  z.object({
+    added: optional(z.array(id).max(50)),
+    own: optional(z.array(text().min(1)).max(50)),
+    off: optional(z.array(id).max(50)),
+  });
+
+const proficiencies = z.object({
+  armor: optional(proficiencyList(z.enum(ARMOR_IDS))),
+  weapons: optional(proficiencyList(proficiencyId)),
+  tools: optional(proficiencyList(proficiencyId)),
+  languages: optional(proficiencyList(z.enum(LANGUAGE_IDS as [LanguageId, ...LanguageId[]]))),
 });
 
 const resourceState = z.object({
@@ -99,6 +123,7 @@ export const characterUpdatesSchema = z.object({
     ),
   ),
   savingThrowProficiencies: optional(z.partialRecord(attributeKey, z.boolean())),
+  proficiencies: optional(proficiencies),
 
   hitDice: optional(
     z.union([

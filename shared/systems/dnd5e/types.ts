@@ -4,6 +4,7 @@ import type { ResourceState } from './class-resources';
 import type { SkillKey } from './constants';
 import type { Edition } from './content/editions';
 import type { HitDice, LegacyHitDice } from './hit-dice';
+import type { SavedProficiencies } from './proficiencies';
 
 export type AttributeKey = 'STR' | 'DEX' | 'CON' | 'INT' | 'WIS' | 'CHA';
 
@@ -37,6 +38,11 @@ interface DnD5eCharacterData {
   /** Only the ones set by hand, on or off; the rest follow the class (see `effectiveSavingThrows`). */
   savingThrowProficiencies: Partial<Record<AttributeKey, boolean>>;
   passivePerception?: number;
+  /**
+   * Armor, weapons, tools and languages: only what the player added, wrote or turned off; what the
+   * class gives is not stored (see `effectiveProficiencies`). Absent on sheets that never changed one.
+   */
+  proficiencies?: SavedProficiencies;
 
   spellcastingSystem?: 'slots' | 'points';
   spellcastingAbility?: AttributeKey;

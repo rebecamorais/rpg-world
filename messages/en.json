@@ -921,6 +921,65 @@
     "deathSavesReset": "Death saves cleared",
     "undo": "Undo"
   },
+  "proficiencies": {
+    "title": "Proficiencies & Languages",
+    "hint": "What your character knows how to use and speak. What the class gives shows on its own; add the rest from the lists or write your own.",
+    "kinds": {
+      "armor": "Armor",
+      "weapons": "Weapons",
+      "tools": "Tools",
+      "languages": "Languages"
+    },
+    "armor": {
+      "light": "Light armor",
+      "medium": "Medium armor",
+      "heavy": "Heavy armor",
+      "shield": "Shields"
+    },
+    "weapons": {
+      "simple": "Simple weapons",
+      "martial": "Martial weapons"
+    },
+    "languages": {
+      "common": "Common",
+      "dwarvish": "Dwarvish",
+      "elvish": "Elvish",
+      "giant": "Giant",
+      "gnomish": "Gnomish",
+      "goblin": "Goblin",
+      "halfling": "Halfling",
+      "orc": "Orc",
+      "abyssal": "Abyssal",
+      "celestial": "Celestial",
+      "draconic": "Draconic",
+      "deep-speech": "Deep Speech",
+      "infernal": "Infernal",
+      "primordial": "Primordial",
+      "sylvan": "Sylvan",
+      "undercommon": "Undercommon",
+      "druidic": "Druidic",
+      "thieves-cant": "Thieves' Cant"
+    },
+    "origin": {
+      "class": "From the class",
+      "subclass": "From the subclass: {feature}",
+      "feature": "From the class feature {feature}",
+      "chosen": "Added by you",
+      "own": "Written by you"
+    },
+    "off": "Turned off",
+    "none": "None yet",
+    "add": "Add to {kind}",
+    "addLabel": "New in {kind}",
+    "placeholder": "Pick from the list",
+    "other": "Other…",
+    "otherPlaceholder": "Write it as you want it",
+    "confirmAdd": "Add",
+    "cancel": "Cancel",
+    "turnOff": "Turn off {label}",
+    "turnOn": "Turn {label} back on",
+    "remove": "Remove {label}"
+  },
   "terms": {
     "title": "Terms of Use",
     "lastUpdated": "Last updated: November 3, 2026",

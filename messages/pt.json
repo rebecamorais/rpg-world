@@ -921,6 +921,65 @@
     "deathSavesReset": "Testes contra a morte zerados",
     "undo": "Desfazer"
   },
+  "proficiencies": {
+    "title": "Proficiências e idiomas",
+    "hint": "O que seu personagem sabe usar e falar. O que a classe dá aparece sozinho; adicione o resto pelas listas ou escreva o seu.",
+    "kinds": {
+      "armor": "Armaduras",
+      "weapons": "Armas",
+      "tools": "Ferramentas",
+      "languages": "Idiomas"
+    },
+    "armor": {
+      "light": "Armaduras leves",
+      "medium": "Armaduras médias",
+      "heavy": "Armaduras pesadas",
+      "shield": "Escudos"
+    },
+    "weapons": {
+      "simple": "Armas simples",
+      "martial": "Armas marciais"
+    },
+    "languages": {
+      "common": "Comum",
+      "dwarvish": "Anão",
+      "elvish": "Élfico",
+      "giant": "Gigante",
+      "gnomish": "Gnômico",
+      "goblin": "Goblin",
+      "halfling": "Halfling",
+      "orc": "Orc",
+      "abyssal": "Abissal",
+      "celestial": "Celestial",
+      "draconic": "Dracônico",
+      "deep-speech": "Dialeto Subterrâneo",
+      "infernal": "Infernal",
+      "primordial": "Primordial",
+      "sylvan": "Silvestre",
+      "undercommon": "Subcomum",
+      "druidic": "Druídico",
+      "thieves-cant": "Gíria do Ladrão"
+    },
+    "origin": {
+      "class": "Da classe",
+      "subclass": "Da subclasse: {feature}",
+      "feature": "Da característica de classe {feature}",
+      "chosen": "Adicionado por você",
+      "own": "Escrito por você"
+    },
+    "off": "Desligado",
+    "none": "Nada ainda",
+    "add": "Adicionar em {kind}",
+    "addLabel": "Novo em {kind}",
+    "placeholder": "Escolha da lista",
+    "other": "Outro…",
+    "otherPlaceholder": "Escreva como quiser",
+    "confirmAdd": "Adicionar",
+    "cancel": "Cancelar",
+    "turnOff": "Desligar {label}",
+    "turnOn": "Religar {label}",
+    "remove": "Remover {label}"
+  },
   "terms": {
     "title": "Termos de Uso",
     "lastUpdated": "Última atualização: 3 de novembro de 2026",

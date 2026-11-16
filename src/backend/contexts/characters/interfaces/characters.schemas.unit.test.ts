@@ -259,3 +259,35 @@ describe('edition e resources no update', () => {
     expect(parse(box({ recovery: [long, long, long, long, long] }))).toBe(false);
   });
 });
+
+describe('proficiências e idiomas no update', () => {
+  const parse = (updates: unknown) => characterUpdatesSchema.safeParse(updates);
+
+  it('aceita ids das listas, texto próprio e as desligadas', () => {
+    const proficiencies = {
+      armor: { added: ['heavy'], off: ['shield'] },
+      weapons: { added: ['martial', 'hand-crossbow'] },
+      tools: { added: ['lute'], own: ['Kit de navegação estelar'] },
+      languages: { added: ['elvish', 'deep-speech'], own: ['Língua dos Corvos'], off: ['druidic'] },
+    };
+    const result = parse({ proficiencies });
+
+    expect(result.success).toBe(true);
+    expect(result.data?.proficiencies).toEqual(proficiencies);
+    expect(parse({ proficiencies: {} }).success).toBe(true);
+  });
+
+  it('recusa nome traduzido no lugar do id', () => {
+    expect(parse({ proficiencies: { languages: { added: ['Élfico'] } } }).success).toBe(false);
+    expect(parse({ proficiencies: { languages: { added: ['klingon'] } } }).success).toBe(false);
+    expect(parse({ proficiencies: { armor: { added: ['Pesada'] } } }).success).toBe(false);
+    expect(parse({ proficiencies: { tools: { added: ['Alaúde'] } } }).success).toBe(false);
+  });
+
+  it('recusa texto próprio vazio ou longo demais, e listas grandes demais', () => {
+    expect(parse({ proficiencies: { tools: { own: [''] } } }).success).toBe(false);
+    expect(parse({ proficiencies: { tools: { own: ['x'.repeat(101)] } } }).success).toBe(false);
+    const many = Array.from({ length: 51 }, (_, i) => `item-${i}`);
+    expect(parse({ proficiencies: { tools: { added: many } } }).success).toBe(false);
+  });
+});
