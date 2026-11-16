@@ -102,9 +102,18 @@ describe('SavingThrowsSection', () => {
     expect(reset('Wisdom')).toBeNull();
   });
 
+  it('ficha de 2024 herda as salvaguardas do SRD 5.2', () => {
+    loaded.content = { ...FIGHTER, edition: '2024' };
+    const { draft } = renderSaves({ edition: '2024' });
+
+    expect(screen.getByRole('button', { name: 'Proficient in Strength' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Proficient in Constitution' })).toBeInTheDocument();
+    expect(draft().savingThrowProficiencies).toEqual({});
+  });
+
   it.each([
     ['sem edição', { edition: undefined }],
-    ['em 2024', { edition: '2024' as const }],
+    ['em 2024 com conteúdo de 2014', { edition: '2024' as const }],
     ['com classe escrita à mão', { class: 'Cavaleiro Rúnico' }],
   ])('%s: nada é herdado e não há botão de voltar à classe', (_, extra) => {
     if ('class' in extra) loaded.content = null;
