@@ -15,19 +15,23 @@ import {
 import type { SkillKey } from '@shared/systems/dnd5e/constants';
 
 /**
- * The class's level 1 picks (skills, tools) on the creation form, each with how many are picked
- * out of how many it asks for. Nothing here is required: the character is created with whatever
- * is picked. Picks are kept by the choice's identity, so switching class and back finds them.
+ * The class's level 1 picks (skills, tools), each with how many are picked out of how many it
+ * asks for: on the creation form, and on the sheet when a pending choice is resolved. Nothing here
+ * is required: the character is created with whatever is picked. Picks are kept by the choice's
+ * identity, so switching class and back finds them.
  */
 export function ClassChoicesStep({
   choices,
   picks,
   disabled,
+  hint,
   onChange,
 }: {
   choices: ClassChoice[];
   picks: ClassChoiceSelections;
   disabled?: boolean;
+  /** The line above the choices: the creation form's when left out, none with null. */
+  hint?: string | null;
   onChange: (picks: ClassChoiceSelections) => void;
 }) {
   const t = useTranslations('characterCreation');
@@ -35,7 +39,9 @@ export function ClassChoicesStep({
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-caption text-muted-foreground">{t('choicesHint')}</p>
+      {hint !== null && (
+        <p className="text-caption text-muted-foreground">{hint ?? t('choicesHint')}</p>
+      )}
       {choices.map((choice) =>
         choice.kind === 'skills' ? (
           <SkillChoice

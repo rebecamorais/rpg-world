@@ -206,6 +206,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         edition: dndData.edition as Edition | undefined,
         resources: dndData.resources as Record<string, ResourceState> | undefined,
         classChoices: dndData.classChoices as ClassChoiceSelections | undefined,
+        dismissedChoices: dndData.dismissedChoices as string[] | undefined,
         hpTemp: (dndData.hpTemp as number) || 0,
         lore,
         accentColor: (row.theme_color as string) ?? undefined,

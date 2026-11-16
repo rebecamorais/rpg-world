@@ -67,3 +67,18 @@ describe('SupabaseCharacterRepository: escolhas da classe na leitura', () => {
     expect(await choicesOf({})).toBeUndefined();
   });
 });
+
+describe('SupabaseCharacterRepository: escolhas dispensadas na leitura', () => {
+  const dismissedOf = async (systemData: Record<string, unknown>) =>
+    ((await repoWithSheet(systemData).findById('c1')) as DnD5eCharacter).dismissedChoices;
+
+  it('vêm pela identidade da escolha, como foram guardadas', async () => {
+    expect(await dismissedOf({ dismissedChoices: ['2014/bard/tools'] })).toEqual([
+      '2014/bard/tools',
+    ]);
+  });
+
+  it('ficha sem dispensas continua sem elas', async () => {
+    expect(await dismissedOf({})).toBeUndefined();
+  });
+});

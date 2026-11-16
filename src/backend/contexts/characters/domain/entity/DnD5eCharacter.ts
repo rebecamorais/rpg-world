@@ -53,6 +53,7 @@ export interface DnD5eCharacterOptions {
   edition?: Edition;
   resources?: Record<string, ResourceState>;
   classChoices?: ClassChoiceSelections;
+  dismissedChoices?: string[];
   hpTemp?: number;
   lore?: Lore;
   accentColor?: string;
@@ -92,6 +93,8 @@ export class DnD5eCharacter extends Character {
   public resources?: Record<string, ResourceState>;
   /** The player's picks for the class's choices, by the choice's identity; kept on a class change. */
   public classChoices?: ClassChoiceSelections;
+  /** The class's choices the player left open on purpose, by the choice's identity. */
+  public dismissedChoices?: string[];
 
   constructor(options: DnD5eCharacterOptions) {
     super(
@@ -134,6 +137,7 @@ export class DnD5eCharacter extends Character {
     this.edition = options.edition;
     this.resources = options.resources;
     this.classChoices = options.classChoices;
+    this.dismissedChoices = options.dismissedChoices;
   }
 
   toJSON(): Record<string, unknown> {
@@ -182,6 +186,7 @@ export class DnD5eCharacter extends Character {
       edition: this.edition,
       resources: this.resources,
       classChoices: this.classChoices,
+      dismissedChoices: this.dismissedChoices,
     };
   }
 }

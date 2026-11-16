@@ -27,6 +27,11 @@ export const spellKeySchema = z.string().max(200).regex(SPELL_KEY);
 const attributeKey = z.enum(ATTRIBUTE_KEYS as [AttributeKey, ...AttributeKey[]]);
 const skillKey = z.enum(SKILL_KEYS as [SkillKey, ...SkillKey[]]);
 
+/** Picks for the class's choices, by the choice's identity; the use cases keep only valid ones. */
+const classChoices = z
+  .record(z.string().max(100).regex(CHOICE_KEY), z.array(text()).max(30))
+  .refine((choices) => Object.keys(choices).length <= 10);
+
 export const createCharacterSchema = z.object({
   name: text(),
   system: optional(z.literal('DnD_5e')),
@@ -35,12 +40,7 @@ export const createCharacterSchema = z.object({
   race: optional(text()),
   level: optional(int(1, 20)),
   kind: optional(z.enum(['pc', 'npc'])),
-  /** Picks for the class's choices, by the choice's identity; the use case keeps only valid ones. */
-  classChoices: optional(
-    z
-      .record(z.string().max(100).regex(CHOICE_KEY), z.array(text()).max(30))
-      .refine((choices) => Object.keys(choices).length <= 10),
-  ),
+  classChoices: optional(classChoices),
 });
 
 /** GET /api/characters: playable characters, or the GM's enemy sheets with ?kind=npc. */
@@ -157,6 +157,10 @@ export const characterUpdatesSchema = z.object({
       .record(z.string().max(200).regex(RESOURCE_KEY), resourceState)
       .refine((boxes) => Object.keys(boxes).length <= 100),
   ),
+  /** Merged by the choice's identity; a choice sent with no picks has them removed. */
+  classChoices: optional(classChoices),
+  /** The whole list, as the sheet has it. */
+  dismissedChoices: optional(z.array(z.string().max(100).regex(CHOICE_KEY)).max(50)),
 });
 
 export const updateCharacterSchema = z.object({
