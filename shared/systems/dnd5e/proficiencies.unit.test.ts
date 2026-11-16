@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+import type { ClassChoiceSelections } from './class-choices';
 import { classDefaults } from './class-defaults';
 import type { ClassData } from './content/class.schema';
 import type { Edition } from './content/editions';
@@ -52,11 +53,12 @@ interface Sheet {
   level?: number;
   subclassId?: string | null;
   saved?: SavedProficiencies;
+  classChoices?: ClassChoiceSelections;
 }
 
 /** What the sheet shows, as the sheet computes it. */
 function shown(sheet: Sheet) {
-  const { classId, level = 1, subclassId = null, saved } = sheet;
+  const { classId, level = 1, subclassId = null, saved, classChoices } = sheet;
   // Only a sheet that says nothing about its edition is on 2014 here; `edition: undefined` has none
   const edition = 'edition' in sheet ? sheet.edition : '2014';
   const c = classId ? content(classId) : null;
@@ -65,6 +67,7 @@ function shown(sheet: Sheet) {
     content: c,
     level,
     subclassId,
+    classChoices,
   });
 }
 
@@ -237,6 +240,111 @@ describe('o que a ficha guarda', () => {
     ).toEqual({
       type: 'class',
     });
+  });
+});
+
+describe('ferramentas escolhidas na criação', () => {
+  const picks: ClassChoiceSelections = {
+    '2014/bard/skills': ['PERFORMANCE', 'PERSUASION', 'DECEPTION'],
+    '2014/bard/tools': ['lute', 'flute'],
+  };
+
+  it('Bardo com alaúde e flauta escolhidos: aparecem, com origem na escolha da classe', () => {
+    expect(shown({ classId: 'bard', classChoices: picks }).tools).toEqual([
+      {
+        kind: 'tools',
+        id: 'lute',
+        origin: { type: 'classChoice', choice: '2014/bard/tools' },
+        active: true,
+      },
+      {
+        kind: 'tools',
+        id: 'flute',
+        origin: { type: 'classChoice', choice: '2014/bard/tools' },
+        active: true,
+      },
+    ]);
+    // As perícias escolhidas não são desta seção: só as ferramentas vêm da escolha
+    const { tools: _tools, ...others } = shown({ classId: 'bard', classChoices: picks });
+    expect(
+      Object.values(others)
+        .flat()
+        .some((p) => p.origin.type === 'classChoice'),
+    ).toBe(false);
+  });
+
+  it('Bardo → Ladino → Bardo: o alaúde some e volta, com a escolha guardada', () => {
+    expect(on({ classId: 'bard', classChoices: picks }, 'tools')).toEqual(['lute', 'flute']);
+    // No Ladino, só a ferramenta da classe; as escolhas do Bardo ficam guardadas, sem aparecer
+    expect(on({ classId: 'rogue', classChoices: picks }, 'tools')).toEqual(['thieves-tools']);
+    expect(on({ classId: 'bard', classChoices: picks }, 'tools')).toEqual(['lute', 'flute']);
+  });
+
+  it('só conta o que a escolha aceita: id fora da lista, repetido ou em excesso não aparece', () => {
+    const classChoices: ClassChoiceSelections = {
+      '2014/bard/tools': ['lute', 'thieves-tools', 'lute', 'nope', 'flute', 'drum', 'lyre'],
+      // Identidade de outra edição ou de outra classe não vale para o Bardo de 2014
+      '2024/bard/tools': ['viol'],
+      '2014/monk/tools': ['horn'],
+    };
+
+    expect(on({ classId: 'bard', classChoices }, 'tools')).toEqual(['lute', 'flute', 'drum']);
+  });
+
+  it('Monge: a ferramenta de artesão ou o instrumento escolhido aparece', () => {
+    const classChoices = { '2014/monk/tools': ['smith-s-tools'] };
+
+    expect(shown({ classId: 'monk', classChoices }).tools).toEqual([
+      {
+        kind: 'tools',
+        id: 'smith-s-tools',
+        origin: { type: 'classChoice', choice: '2014/monk/tools' },
+        active: true,
+      },
+    ]);
+  });
+
+  it('fora do portão (2024, sem edição, classe à mão) as escolhas não aparecem', () => {
+    expect(on({ classId: 'bard', edition: '2024', classChoices: picks }, 'tools')).toEqual([]);
+    expect(on({ classId: 'bard', edition: undefined, classChoices: picks }, 'tools')).toEqual([]);
+    expect(on({ classId: null, classChoices: picks }, 'tools')).toEqual([]);
+  });
+
+  it('ficha sem classChoices fica como antes', () => {
+    for (const classId of ['bard', 'monk', 'rogue', 'druid']) {
+      expect(shown({ classId, classChoices: undefined })).toEqual(shown({ classId }));
+      expect(shown({ classId, classChoices: {} })).toEqual(shown({ classId }));
+    }
+    expect(on({ classId: 'bard' }, 'tools')).toEqual([]);
+  });
+
+  it('desligar uma escolhida vira off e não apaga a escolha; religar volta', () => {
+    const lute = shown({ classId: 'bard', classChoices: picks }).tools[0];
+
+    const off = removeProficiency(undefined, lute);
+    expect(off).toEqual({ tools: { off: ['lute'] } });
+    const turnedOff = shown({ classId: 'bard', classChoices: picks, saved: off }).tools[0];
+    expect(turnedOff).toMatchObject({ id: 'lute', active: false, origin: { type: 'classChoice' } });
+
+    expect(
+      on(
+        { classId: 'bard', classChoices: picks, saved: restoreProficiency(off, 'tools', 'lute') },
+        'tools',
+      ),
+    ).toContain('lute');
+  });
+
+  it('escolhida e também adicionada pela lista aparece uma vez, como escolha da classe', () => {
+    const saved: SavedProficiencies = { tools: { added: ['lute'] } };
+    const bard = shown({ classId: 'bard', classChoices: picks, saved }).tools;
+
+    expect(bard.filter((p) => p.id === 'lute')).toHaveLength(1);
+    expect(bard.find((p) => p.id === 'lute')?.origin.type).toBe('classChoice');
+    // No Ladino, continua a adicionada pela pessoa
+    expect(
+      shown({ classId: 'rogue', classChoices: picks, saved }).tools.find((p) => p.id === 'lute')
+        ?.origin,
+    ).toEqual({ type: 'chosen' });
   });
 });
 

@@ -1,3 +1,4 @@
+import { type ClassChoiceSelections, acceptedSelections } from './class-choices';
 import type { ClassDefaults } from './class-defaults';
 import type { ClassFeature } from './content/class.schema';
 
@@ -5,7 +6,8 @@ import type { ClassFeature } from './content/class.schema';
  * Armor, weapon and tool proficiencies and languages (docs/plans/2026-11-15-criacao-com-classe.md,
  * 3.2). Same contract as the saving throws: what the class, its SRD subclass or one of its features
  * gives is computed here and never stored. The sheet stores only what the player changed: what was
- * added from the lists (by id), their own text (as typed) and what was given and turned off.
+ * added from the lists (by id), their own text (as typed) and what was given and turned off. The
+ * tools picked for the class's own choices (3.3) are read from the sheet's `classChoices`.
  */
 
 export const PROFICIENCY_KINDS = ['armor', 'weapons', 'tools', 'languages'] as const;
@@ -22,18 +24,23 @@ interface SavedProficiencyList {
   added?: string[];
   /** The player's own, as typed (after "Other…"). */
   own?: string[];
-  /** Ids the class, subclass or a feature gives, turned off by hand. Like a saving throw set to
-   *  "not proficient", it holds in any class. */
+  /** Ids the class, subclass or a feature gives, or picked for a class choice, turned off by hand.
+   *  Like a saving throw set to "not proficient", it holds in any class. */
   off?: string[];
 }
 
 export type SavedProficiencies = Partial<Record<ProficiencyKind, SavedProficiencyList>>;
 
-/** Where an effective proficiency comes from. `feature` is the id of the feature that gives it. */
+/**
+ * Where an effective proficiency comes from. `feature` is the id of the feature that gives it.
+ * `classChoice`: picked for one of the class's choices (`choice` is its identity, `2014/bard/tools`).
+ * `chosen`: added by the player from the lists, on the sheet.
+ */
 type ProficiencyOrigin =
   | { type: 'class' }
   | { type: 'subclass'; feature: string }
   | { type: 'feature'; feature: string }
+  | { type: 'classChoice'; choice: string }
   | { type: 'chosen' }
   | { type: 'own' };
 
@@ -74,7 +81,7 @@ type Feature = Pick<ClassFeature, 'id' | 'level'>;
 
 interface ProficiencyInput {
   /** What the class gives (`classDefaults`); null when the sheet does not follow a class. */
-  defaults: Pick<ClassDefaults, 'armor' | 'weapons' | 'tools'> | null;
+  defaults: Pick<ClassDefaults, 'armor' | 'weapons' | 'tools' | 'choices'> | null;
   /** The class content, for its features and its SRD subclass. */
   content: {
     classId: string;
@@ -85,6 +92,11 @@ interface ProficiencyInput {
   level: number;
   /** The SRD subclass the sheet has (`matchSubclass`), or null. */
   subclassId: string | null;
+  /**
+   * The sheet's picks for class choices, by identity (`classChoices`). Only the current class's
+   * tool choices count, and only their valid picks: those of another class stay saved, unshown.
+   */
+  classChoices?: ClassChoiceSelections;
 }
 
 interface Grant {
@@ -93,15 +105,27 @@ interface Grant {
   origin: ProficiencyOrigin;
 }
 
-/** What the class, its subclass and its features give at this level, before the player's changes. */
-function grants({ defaults, content, level, subclassId }: ProficiencyInput): Grant[] {
+/** The tools picked for the class's tool choices, as they count (`acceptedSelections`). */
+function picked(defaults: Pick<ClassDefaults, 'choices'>, saved?: ClassChoiceSelections): Grant[] {
+  const toolChoices = defaults.choices.filter((choice) => choice.kind === 'tools');
+  return Object.entries(acceptedSelections(toolChoices, saved)).flatMap(([choice, ids]) =>
+    ids.map((id) => ({ kind: 'tools' as const, id, origin: { type: 'classChoice', choice } })),
+  );
+}
+
+/**
+ * What the class, its subclass and its features give at this level, and the tools picked for the
+ * class's choices, before the player's changes.
+ */
+function grants({ defaults, content, level, subclassId, classChoices }: ProficiencyInput): Grant[] {
   if (!defaults) return [];
   const fromClass: Grant[] = [
     ...defaults.armor.map((id) => ({ kind: 'armor' as const, id })),
     ...defaults.weapons.map((id) => ({ kind: 'weapons' as const, id })),
     ...defaults.tools.map((id) => ({ kind: 'tools' as const, id })),
   ].map((grant) => ({ ...grant, origin: { type: 'class' } }));
-  if (!content) return fromClass;
+  const fromChoices = picked(defaults, classChoices);
+  if (!content) return [...fromClass, ...fromChoices];
 
   const reached = (features: Feature[], feature: string) =>
     features.some((f) => f.id === feature && f.level <= level);
@@ -116,14 +140,15 @@ function grants({ defaults, content, level, subclassId }: ProficiencyInput): Gra
     .filter((grant) => reached(content.features, grant.feature))
     .map(({ kind, id, feature }) => ({ kind, id, origin: { type: 'feature', feature } }));
 
-  return [...fromClass, ...fromSubclass, ...fromFeatures];
+  return [...fromClass, ...fromSubclass, ...fromFeatures, ...fromChoices];
 }
 
 /**
  * Every proficiency and language the sheet shows, by kind, each with where it comes from: what the
- * class, the SRD subclass and the class's features give (the ones turned off too, marked inactive),
- * then what the player added from the lists, then their own text. Each id shows once: the first
- * origin wins, so something the class gives and the player also added shows as the class's.
+ * class, the SRD subclass and the class's features give and the tools picked for the class's
+ * choices (the ones turned off too, marked inactive), then what the player added from the lists,
+ * then their own text. Each id shows once: the first origin wins, so something the class gives
+ * and the player also added shows as the class's.
  */
 export function effectiveProficiencies(
   saved: SavedProficiencies | undefined,
@@ -212,7 +237,8 @@ export const addOwnProficiency = (
 
 /**
  * Takes one off the sheet: one the player added or wrote is removed; one the class, subclass or a
- * feature gives is turned off (kept as off, so it can be turned back on).
+ * feature gives, or one picked for a class choice, is turned off (kept as off, so it can be turned
+ * back on). The pick itself stays in `classChoices`: turning it off is not unpicking it.
  */
 export const removeProficiency = (
   saved: SavedProficiencies | undefined,
@@ -226,7 +252,7 @@ export const removeProficiency = (
     return { added, own, off: off.includes(id) ? off : [...off, id] };
   });
 
-/** One the class, subclass or a feature gives, turned back on. */
+/** One the class, subclass or a feature gives, or picked for a class choice, turned back on. */
 export const restoreProficiency = (
   saved: SavedProficiencies | undefined,
   kind: ProficiencyKind,

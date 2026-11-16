@@ -971,6 +971,7 @@
       "class": "Da classe",
       "subclass": "Da subclasse: {feature}",
       "feature": "Da característica de classe {feature}",
+      "classChoice": "Escolhido com a classe",
       "chosen": "Adicionado por você",
       "own": "Escrito por você"
     },
