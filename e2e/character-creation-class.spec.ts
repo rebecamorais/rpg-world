@@ -15,7 +15,9 @@ async function startCreation(page: Page, name: string, className: string) {
 
 async function pick(page: Page, group: 'Skills' | 'Tools', options: string[]) {
   const fieldset = page.getByRole('group', { name: group });
-  for (const option of options) await fieldset.getByRole('checkbox', { name: option }).check();
+  // exact: "Lute" would also match "Flute" and "Pan Flute"
+  for (const option of options)
+    await fieldset.getByRole('checkbox', { name: option, exact: true }).check();
 }
 
 /** Creates and waits for the sheet; answers the new character's id. */
