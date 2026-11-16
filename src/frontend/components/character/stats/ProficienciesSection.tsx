@@ -15,12 +15,12 @@ import {
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
-import { useClassDefaults } from '@frontend/hooks/useClassDefaults';
 import { useClassResources } from '@frontend/hooks/useClassResources';
 import { useItems } from '@frontend/hooks/useItems';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { cn } from '@frontend/lib/utils';
 
+import { classDefaults } from '@shared/systems/dnd5e/class-defaults';
 import { matchSubclass } from '@shared/systems/dnd5e/class-resources';
 import { LANGUAGE_IDS, isLanguageId } from '@shared/systems/dnd5e/languages';
 import {
@@ -55,14 +55,23 @@ const GRANTED = new Set(['class', 'subclass', 'feature']);
  */
 export default function ProficienciesSection() {
   const character = useLoadedCharacter();
-  const { edition, class: className, subclass, level, proficiencies: saved, system } = character;
+  const {
+    edition,
+    class: className,
+    subclass,
+    level,
+    attributes,
+    proficiencies: saved,
+    system,
+  } = character;
   const { id } = useCharacterMeta();
   const { readOnly } = useSheetSource(id, system);
   const { update } = useCharacterActions();
   const t = useTranslations('proficiencies');
   const { classOf } = useCharacterChoices();
-  const defaults = useClassDefaults();
   const { content } = useClassResources(edition, classOf(className));
+  // Proficiencies still follow the class only on 2014 (`CLASS_AUTOMATION`)
+  const defaults = classDefaults(edition, content, attributes);
   const { list: items } = useItems();
 
   const shown = effectiveProficiencies(saved, {
