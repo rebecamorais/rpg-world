@@ -90,7 +90,9 @@ export class CreateCharacterUseCase {
       kind: input.kind ?? 'pc',
       edition: input.edition,
       skills: pickedSkills(classChoices),
-      ...(Object.keys(classChoices).length > 0 && { classChoices }),
+      // Stored even when empty: the key marks a sheet born with class picks, the only kind that
+      // shows the picks left open. Sheets from before it keep what the player filled in, untouched
+      ...(defaults && { classChoices }),
     });
 
     await this.repository.save(character);

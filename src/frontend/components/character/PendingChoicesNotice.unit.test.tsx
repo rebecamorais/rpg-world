@@ -60,6 +60,8 @@ function renderNotice(extra: Partial<DnD5eCharacter> = {}) {
     level: 1,
     class: 'bard',
     edition: '2014',
+    // Born with class picks; a sheet from before them has no key at all
+    classChoices: {},
     ...extra,
   } as DnD5eCharacter;
   return renderWithCharacter(
@@ -224,6 +226,11 @@ describe('PendingChoicesNotice', () => {
     renderNotice(extra);
 
     expect(notice()).not.toBeInTheDocument();
+  });
+
+  it('ficha de antes das escolhas (sem classChoices): sem aviso, mesmo com perícias marcadas à mão', () => {
+    renderNotice({ classChoices: undefined, skills: { ARCANA: { isProficient: true } } });
+    expect(notice()).toBeNull();
   });
 
   it('ficha só de leitura (o mestre lendo): sem aviso', () => {
