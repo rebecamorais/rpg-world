@@ -2,9 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import {
   type Adjustment,
+  CLASS_AUTOMATION,
   effectiveState,
   effectiveValue,
-  followsSrd2014,
+  followsClass,
+  followsClassFully,
   switchAdjustment,
 } from './sheet-values';
 
@@ -82,12 +84,31 @@ describe('effectiveState', () => {
   });
 });
 
-describe('followsSrd2014', () => {
-  it('only a sheet explicitly set to 2014 gets SRD 5.1 defaults', () => {
-    expect(followsSrd2014('2014')).toBe(true);
+describe('o que a classe preenche, por edição', () => {
+  it('salvaguardas e dado de vida valem em 2014 e em 2024', () => {
+    for (const edition of ['2014', '2024'] as const) {
+      expect(followsClass('savingThrows', edition)).toBe(true);
+      expect(followsClass('hitDie', edition)).toBe(true);
+    }
   });
 
-  it.each([['2024' as const], [undefined]])('%s gets none', (edition) => {
-    expect(followsSrd2014(edition)).toBe(false);
+  it.each(['proficiencies', 'skillChoices', 'spellProgression'] as const)(
+    '%s só em 2014: 2024 não herda regra de 2014',
+    (part) => {
+      expect(followsClass(part, '2014')).toBe(true);
+      expect(followsClass(part, '2024')).toBe(false);
+    },
+  );
+
+  it('ficha sem edição não segue nada', () => {
+    for (const part of Object.keys(CLASS_AUTOMATION) as (keyof typeof CLASS_AUTOMATION)[]) {
+      expect(followsClass(part, undefined)).toBe(false);
+    }
+  });
+
+  it('só 2014 tem tudo', () => {
+    expect(followsClassFully('2014')).toBe(true);
+    expect(followsClassFully('2024')).toBe(false);
+    expect(followsClassFully(undefined)).toBe(false);
   });
 });

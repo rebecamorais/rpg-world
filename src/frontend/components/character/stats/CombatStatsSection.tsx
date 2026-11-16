@@ -24,7 +24,7 @@ import {
   useCharacterMeta,
   useLoadedCharacter,
 } from '@frontend/context/CharacterContext';
-import { useClassDefaults } from '@frontend/hooks/useClassDefaults';
+import { useClassBasics } from '@frontend/hooks/useClassBasics';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import {
   hitDiceAvailable,
@@ -64,7 +64,7 @@ const CombatHeader = () => {
     die: hitDie,
     source: hitDieSource,
     classDefault: classHitDie,
-  } = effectiveHitDie(character.hitDice, useClassDefaults());
+  } = effectiveHitDie(character.hitDice, useClassBasics());
   // Only where it shows: a die set by hand that is the class's anyway needs no way back
   const canFollowClass =
     hitDieSource === 'manual' && classHitDie !== null && classHitDie !== hitDie;

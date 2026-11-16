@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   type SavedSavingThrows,
+  classBasics,
   classDefaults,
   effectiveHitDie,
   effectiveSavingThrows,
@@ -225,5 +226,105 @@ describe('dado de vida: herdar ou definido à mão', () => {
     expect(effectiveHitDie({ spent: 1 }, wizard).die).toBe('d6');
     expect(effectiveHitDie({ spent: 1 }, barbarian).die).toBe('d12');
     expect(effectiveHitDie({ die: 'd8', spent: 1 }, wizard).die).toBe('d8');
+  });
+});
+
+describe('dado de vida e salvaguardas nas duas edições', () => {
+  const book = (source: string) =>
+    JSON.parse(
+      readFileSync(join(process.cwd(), `content/dnd5e/${source}/classes.json`), 'utf8'),
+    ) as ClassData[];
+  const BOOKS = { '2014': book('srd-5.1'), '2024': book('srd-5.2') };
+  /** The class from the SRD of that edition, as the content API sends it. */
+  const from = (edition: Edition, id: string) => {
+    const data = BOOKS[edition].find((c) => c.id === id);
+    if (!data) throw new Error(`no ${id} in ${edition}`);
+    return { classId: id, edition, hitDie: data.hitDie, proficiencies: data.proficiencies };
+  };
+  const basicsOf = (edition: Edition, id: string) => classBasics(edition, from(edition, id));
+
+  // SRD 5.1 e SRD 5.2: as duas tabelas, escritas a partir de cada livro. São iguais nas 12
+  // classes, e é por isso que estas duas partes valem nas duas edições.
+  const EXPECTED: [string, string, AttributeKey[]][] = [
+    ['barbarian', 'd12', ['STR', 'CON']],
+    ['bard', 'd8', ['DEX', 'CHA']],
+    ['cleric', 'd8', ['WIS', 'CHA']],
+    ['druid', 'd8', ['INT', 'WIS']],
+    ['fighter', 'd10', ['STR', 'CON']],
+    ['monk', 'd8', ['STR', 'DEX']],
+    ['paladin', 'd10', ['WIS', 'CHA']],
+    ['ranger', 'd10', ['STR', 'DEX']],
+    ['rogue', 'd8', ['DEX', 'INT']],
+    ['sorcerer', 'd6', ['CON', 'CHA']],
+    ['warlock', 'd8', ['WIS', 'CHA']],
+    ['wizard', 'd6', ['INT', 'WIS']],
+  ];
+
+  describe.each(['2014', '2024'] as const)('edição %s', (edition) => {
+    it('as 12 classes do livro dessa edição', () => {
+      expect(BOOKS[edition].map((c) => c.id).sort()).toEqual(EXPECTED.map(([id]) => id).sort());
+    });
+
+    it.each(EXPECTED)('%s: %s e salvaguardas', (id, hitDie, savingThrows) => {
+      expect(basicsOf(edition, id)).toEqual({ hitDie, savingThrows });
+    });
+
+    it('ficha nova herda; trocar de classe muda só o que é herdado', () => {
+      const fighter = basicsOf(edition, 'fighter');
+      const wizard = basicsOf(edition, 'wizard');
+      const profs = (saved: SavedSavingThrows, basics: typeof fighter) => {
+        const saves = effectiveSavingThrows(saved, basics);
+        return (Object.keys(saves) as AttributeKey[]).filter((key) => saves[key].proficient);
+      };
+
+      expect(profs({}, fighter)).toEqual(['STR', 'CON']);
+      expect(profs({}, wizard)).toEqual(['INT', 'WIS']);
+      // FOR desligada à mão continua desligada nas duas classes e na volta
+      expect(profs({ STR: false }, fighter)).toEqual(['CON']);
+      expect(profs({ STR: false }, wizard)).toEqual(['INT', 'WIS']);
+      expect(profs({ STR: false }, fighter)).toEqual(['CON']);
+
+      expect(effectiveHitDie({ spent: 2 }, fighter).die).toBe('d10');
+      expect(effectiveHitDie({ spent: 2 }, wizard).die).toBe('d6');
+      expect(effectiveHitDie({ die: 'd8', spent: 2 }, wizard).die).toBe('d8');
+    });
+
+    it('"seguir a classe": tirar o valor salvo devolve o da classe', () => {
+      const barbarian = basicsOf(edition, 'barbarian');
+      // Ficha antiga com d8 gravado pela migração e as seis salvaguardas salvas
+      const old = { STR: false, DEX: true, CON: false, INT: false, WIS: false, CHA: false };
+      expect(effectiveHitDie({ die: 'd8', spent: 1 }, barbarian)).toMatchObject({
+        die: 'd8',
+        source: 'manual',
+        classDefault: 'd12',
+      });
+      expect(effectiveSavingThrows(old, barbarian).STR.proficient).toBe(false);
+
+      expect(effectiveHitDie({ spent: 1 }, barbarian).die).toBe('d12');
+      const { STR: _, ...withoutStr } = old;
+      expect(effectiveSavingThrows(withoutStr, barbarian).STR).toEqual({
+        proficient: true,
+        source: 'inherit',
+        classDefault: true,
+      });
+    });
+
+    it('o conteúdo do outro livro não serve, mesmo sendo igual', () => {
+      const other = edition === '2014' ? '2024' : '2014';
+      expect(classBasics(edition, from(other, 'fighter'))).toBeNull();
+    });
+  });
+
+  it('sem edição ou sem classe do SRD, nada é herdado', () => {
+    expect(classBasics(undefined, from('2014', 'fighter'))).toBeNull();
+    expect(classBasics('2024', null)).toBeNull();
+  });
+
+  it('2024 não ganha o resto: proficiências, escolhas e PV seguem só em 2014', () => {
+    const { spellcasting } = BOOKS['2024'].find((c) => c.id === 'wizard')!;
+    const wizard2024 = { ...from('2024', 'wizard'), spellcasting };
+    expect(classDefaults('2024', wizard2024, ATTRS)).toBeNull();
+    expect(classBasics('2024', wizard2024)).toEqual({ hitDie: 'd6', savingThrows: ['INT', 'WIS'] });
+    expect(classDefaults('2014', content('wizard'), ATTRS)).not.toBeNull();
   });
 });
