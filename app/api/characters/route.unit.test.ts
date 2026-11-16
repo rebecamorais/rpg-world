@@ -44,6 +44,38 @@ describe('/api/characters', () => {
     });
   });
 
+  it('POST passa edição, classe e escolhas ao caso de uso', async () => {
+    api.charactersApi.create.mockResolvedValue({ id: 'c1' });
+    const body = {
+      name: 'Bard',
+      edition: '2014',
+      class: 'bard',
+      classChoices: { '2014/bard/skills': ['ARCANA', 'HISTORY'] },
+    };
+
+    const res = await POST(jsonRequest('/api/characters', 'POST', body), routeContext());
+
+    expect(res.status).toBe(201);
+    expect(api.charactersApi.create).toHaveBeenCalledWith({
+      ...body,
+      ownerUsername: SESSION_USER.id,
+    });
+  });
+
+  it.each([
+    ['edição desconhecida', { edition: '2016' }],
+    ['identidade de escolha fora do formato', { classChoices: { bard: ['ARCANA'] } }],
+    ['escolha que não é lista', { classChoices: { '2014/bard/skills': 'ARCANA' } }],
+  ])('POST responde 400 com %s', async (_case, extra) => {
+    const res = await POST(
+      jsonRequest('/api/characters', 'POST', { name: 'Hero', ...extra }),
+      routeContext(),
+    );
+
+    expect(res.status).toBe(400);
+    expect(api.charactersApi.create).not.toHaveBeenCalled();
+  });
+
   it('POST responde 400 sem criar quando o body é inválido', async () => {
     const res = await POST(jsonRequest('/api/characters', 'POST', { level: 99 }), routeContext());
 

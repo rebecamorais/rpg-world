@@ -10,7 +10,10 @@ import {
   CharacterUpdates,
   CreateCharacterInput,
 } from './application/CharacterContext';
-import { CreateCharacterUseCase } from './application/create-character/create-character.use-case';
+import {
+  ClassLookup,
+  CreateCharacterUseCase,
+} from './application/create-character/create-character.use-case';
 import { DeleteCharacterUseCase } from './application/delete-character/delete-character.use-case';
 import { DuplicateCharacterUseCase } from './application/duplicate-character/duplicate-character.use-case';
 import { GetCharactersByOwnerUseCase } from './application/get-characters/get-characters-by-owner.use-case';
@@ -49,7 +52,7 @@ export type { CharacterContext, CharacterUpdates, CreateCharacterInput };
 
 export const createCharacterContext = (
   dbClient: SupabaseClient,
-  { partyGmAccess }: { partyGmAccess: PartyGmAccess },
+  { partyGmAccess, classes }: { partyGmAccess: PartyGmAccess; classes: ClassLookup },
 ): CharacterContext => {
   const repository = new SupabaseCharacterRepository(dbClient);
   const spellRepository = new SupabaseCharacterSpellRepository(dbClient);
@@ -59,7 +62,7 @@ export const createCharacterContext = (
 
   const getCharacterUseCase = new GetCharacterUseCase(repository);
   const getCharactersByOwnerUseCase = new GetCharactersByOwnerUseCase(repository);
-  const createCharacterUseCase = new CreateCharacterUseCase(repository);
+  const createCharacterUseCase = new CreateCharacterUseCase(repository, classes);
   const updateCharacterUseCase = new UpdateCharacterUseCase(repository, storageRepository);
   const deleteCharacterUseCase = new DeleteCharacterUseCase(repository, storageRepository);
   const duplicateCharacterUseCase = new DuplicateCharacterUseCase(repository);

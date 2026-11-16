@@ -5,9 +5,17 @@ import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
 
+import type { ClassChoiceSelections } from '@shared/systems/dnd5e/class-choices';
+import type { Edition } from '@shared/systems/dnd5e/content/editions';
+
 interface CreateCharacterVariables {
   name: string;
   system: string;
+  edition?: Edition;
+  /** A class id from the list, or the player's own text. */
+  class?: string;
+  /** The class's picks, by the choice's identity; the server keeps only the valid ones. */
+  classChoices?: ClassChoiceSelections;
   kind?: 'npc';
 }
 
