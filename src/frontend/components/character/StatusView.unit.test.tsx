@@ -26,6 +26,11 @@ vi.mock('@frontend/hooks/useClassResources', () => ({
   useClassResources: () => ({ content: null, isLoading: false }),
 }));
 
+// The proficiencies card names weapons and tools from the items; the image tests stub fetch
+vi.mock('@frontend/hooks/useItems', () => ({
+  useItems: () => ({ list: [], byKey: new Map(), isLoading: false }),
+}));
+
 const character = { ...createDnD5eCharacter('owner', 'Thor'), id: 'c1' };
 const SAVED_AVATAR = 'https://img.test/avatars/u/a.webp';
 const NEW_AVATAR = 'https://img.test/avatars/u/b.webp';

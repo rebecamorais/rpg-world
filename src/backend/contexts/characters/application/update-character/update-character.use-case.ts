@@ -4,6 +4,7 @@ import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import { type HitDice, type LegacyHitDice, readHitDice } from '@shared/systems/dnd5e/hit-dice';
+import type { SavedProficiencies } from '@shared/systems/dnd5e/proficiencies';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import {
@@ -36,6 +37,8 @@ export interface CharacterUpdates {
   skills?: Partial<Record<SkillKey, CharacterSkill>>;
   savingThrowProficiencies?: Partial<Record<AttributeKey, boolean>>;
   passivePerception?: number;
+  /** The whole map, as the sheet has it (like the saving throws). */
+  proficiencies?: SavedProficiencies;
   subclass?: string;
   background?: string;
   alignment?: string;
@@ -72,6 +75,7 @@ const SIMPLE_FIELDS = [
   'initiative',
   'hpTemp',
   'passivePerception',
+  'proficiencies',
   'subclass',
   'background',
   'alignment',

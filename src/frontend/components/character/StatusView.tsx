@@ -11,6 +11,7 @@ import { SheetFieldset } from '@frontend/components/character/sheet/SheetFieldse
 import AttributesSection from '@frontend/components/character/stats/AttributesSection';
 import CombatStatsSection from '@frontend/components/character/stats/CombatStatsSection';
 import { DeathSavesCard } from '@frontend/components/character/stats/DeathSavesCard';
+import ProficienciesSection from '@frontend/components/character/stats/ProficienciesSection';
 import SavingThrowsSection from '@frontend/components/character/stats/SavingThrowsSection';
 import SkillsSection from '@frontend/components/character/stats/SkillsSection';
 import { VitalsBar } from '@frontend/components/character/stats/VitalsBar';
@@ -70,6 +71,9 @@ export default function StatusView() {
             </div>
             <div className={cn('order-6', WIDE)}>
               <SkillsSection />
+            </div>
+            <div className={cn('order-7', WIDE)}>
+              <ProficienciesSection />
             </div>
           </div>
         </div>

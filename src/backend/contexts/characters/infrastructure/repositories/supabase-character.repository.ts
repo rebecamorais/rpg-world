@@ -6,6 +6,7 @@ import { Lore } from '@backend/contexts/lore/domain/Lore';
 import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import { type HitDice, type LegacyHitDice, readHitDice } from '@shared/systems/dnd5e/hit-dice';
+import type { SavedProficiencies } from '@shared/systems/dnd5e/proficiencies';
 
 import { Database, Json } from '@database-types';
 
@@ -185,6 +186,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         savingThrowProficiencies:
           (dndData.savingThrowProficiencies as Partial<Record<AttributeKey, boolean>>) || {},
         passivePerception: (dndData.passivePerception as number) || 10,
+        proficiencies: dndData.proficiencies as SavedProficiencies | undefined,
         subclass: dndData.subclass as string | undefined,
         background: dndData.background as string | undefined,
         alignment: dndData.alignment as string | undefined,

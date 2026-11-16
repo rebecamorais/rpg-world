@@ -179,6 +179,19 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
     ).toEqual({ WIS: true });
   });
 
+  it('proficiências: nada gravado até a pessoa mexer; depois guarda o mapa como veio', async () => {
+    expect((await update({ ac: 15 })).proficiencies).toBeUndefined();
+
+    const proficiencies = {
+      armor: { off: ['heavy'] },
+      languages: { added: ['elvish'], own: ['Língua dos Corvos'] },
+    };
+    expect((await update({ proficiencies })).proficiencies).toEqual(proficiencies);
+    // Trocar de classe não mexe nelas
+    expect((await update({ class: 'wizard' })).proficiencies).toEqual(proficiencies);
+    expect((await update({ proficiencies: {} })).proficiencies).toEqual({});
+  });
+
   it('aplica campos simples (classe, dados de vida)', async () => {
     const updated = await update({
       class: 'Wizard',

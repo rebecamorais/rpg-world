@@ -4,6 +4,7 @@ import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
 import type { SkillKey } from '@shared/systems/dnd5e/constants/skill';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import type { HitDice } from '@shared/systems/dnd5e/hit-dice';
+import type { SavedProficiencies } from '@shared/systems/dnd5e/proficiencies';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 import { Attributes } from '../value-object/Attributes';
@@ -35,6 +36,7 @@ export interface DnD5eCharacterOptions {
   skills?: Partial<Record<SkillKey, CharacterSkill>>;
   savingThrowProficiencies?: Partial<Record<AttributeKey, boolean>>;
   passivePerception?: number;
+  proficiencies?: SavedProficiencies;
   subclass?: string;
   background?: string;
   alignment?: string;
@@ -67,6 +69,8 @@ export class DnD5eCharacter extends Character {
   /** Only the saving throws set by hand, on or off; an ability left out follows the class. */
   public savingThrowProficiencies: Partial<Record<AttributeKey, boolean>>;
   public passivePerception: number;
+  /** Only what the player added, wrote or turned off; absent until they change one. */
+  public proficiencies?: SavedProficiencies;
 
   public subclass?: string;
   public background?: string;
@@ -110,6 +114,7 @@ export class DnD5eCharacter extends Character {
     // Kept as stored: an ability left out follows the class, which is not the same as `false`
     this.savingThrowProficiencies = { ...options.savingThrowProficiencies };
     this.passivePerception = options.passivePerception ?? 10;
+    this.proficiencies = options.proficiencies;
     this.subclass = options.subclass;
     this.background = options.background;
     this.alignment = options.alignment;
@@ -150,6 +155,8 @@ export class DnD5eCharacter extends Character {
       passivePerception: this.passivePerception,
       skills: this.skills,
       savingThrowProficiencies: this.savingThrowProficiencies,
+      // Undefined leaves the key out of the row: an old sheet saved again stays without it
+      proficiencies: this.proficiencies,
 
       subclass: this.subclass,
       background: this.background,
