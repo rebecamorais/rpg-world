@@ -66,6 +66,35 @@ describe('/api/characters/[id]', () => {
     expect(api.charactersApi.update).not.toHaveBeenCalled();
   });
 
+  it('PUT passa as escolhas da classe e as dispensadas ao caso de uso', async () => {
+    api.charactersApi.update.mockResolvedValue({ id: ID });
+    const updates = {
+      classChoices: { '2014/bard/skills': ['ARCANA', 'HISTORY', 'STEALTH'] },
+      dismissedChoices: ['2014/bard/tools'],
+    };
+
+    const res = await PUT(jsonRequest(url, 'PUT', { updates }), routeContext({ id: ID }));
+
+    expect(res.status).toBe(200);
+    expect(api.charactersApi.update).toHaveBeenCalledWith({
+      id: ID,
+      ownerUsername: SESSION_USER.id,
+      updates,
+    });
+  });
+
+  it.each([
+    ['identidade de escolha fora do formato', { classChoices: { bard: ['ARCANA'] } }],
+    ['escolha que não é lista', { classChoices: { '2014/bard/skills': 'ARCANA' } }],
+    ['dispensa fora do formato', { dismissedChoices: ['Bard skills'] }],
+    ['dispensas que não são lista', { dismissedChoices: '2014/bard/skills' }],
+  ])('PUT responde 400 com %s', async (_case, updates) => {
+    const res = await PUT(jsonRequest(url, 'PUT', { updates }), routeContext({ id: ID }));
+
+    expect(res.status).toBe(400);
+    expect(api.charactersApi.update).not.toHaveBeenCalled();
+  });
+
   it('PUT com a revisão vista repassa a revisão e devolve a nova', async () => {
     api.charactersApi.update.mockResolvedValue({ id: ID, revision: 8 });
 

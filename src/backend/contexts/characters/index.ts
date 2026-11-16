@@ -63,7 +63,7 @@ export const createCharacterContext = (
   const getCharacterUseCase = new GetCharacterUseCase(repository);
   const getCharactersByOwnerUseCase = new GetCharactersByOwnerUseCase(repository);
   const createCharacterUseCase = new CreateCharacterUseCase(repository, classes);
-  const updateCharacterUseCase = new UpdateCharacterUseCase(repository, storageRepository);
+  const updateCharacterUseCase = new UpdateCharacterUseCase(repository, storageRepository, classes);
   const deleteCharacterUseCase = new DeleteCharacterUseCase(repository, storageRepository);
   const duplicateCharacterUseCase = new DuplicateCharacterUseCase(repository);
 

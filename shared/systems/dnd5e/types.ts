@@ -57,6 +57,8 @@ interface DnD5eCharacterData {
   resources?: Record<string, ResourceState>;
   /** What the player picked for the class's choices, by the choice's identity (`2014/bard/skills`). */
   classChoices?: ClassChoiceSelections;
+  /** The class's choices the player chose to leave open, by the choice's identity. */
+  dismissedChoices?: string[];
 
   // D&D 5e Specific Lore
   personalityTraits?: string;

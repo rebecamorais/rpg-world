@@ -50,4 +50,18 @@ describe('characterChanges', () => {
       resources: { 'class:monk:ki': { used: 1 } },
     });
   });
+
+  it('em classChoices manda só a escolha que mudou: as de outra classe não vão', () => {
+    const withPicks = {
+      ...base,
+      classChoices: { '2014/bard/skills': ['ARCANA'], '2014/rogue/skills': ['STEALTH'] },
+    } as unknown as DnD5eCharacter;
+    const edits = {
+      classChoices: { '2014/bard/skills': ['ARCANA', 'HISTORY'], '2014/rogue/skills': ['STEALTH'] },
+    } as unknown as Partial<DnD5eCharacter>;
+
+    expect(characterChanges(withPicks, edits)).toEqual({
+      classChoices: { '2014/bard/skills': ['ARCANA', 'HISTORY'] },
+    });
+  });
 });

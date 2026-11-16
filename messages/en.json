@@ -239,6 +239,17 @@
       "dnd5e": "D&D 5th Edition"
     }
   },
+  "pendingChoices": {
+    "title": "Class picks left open",
+    "description": "{className} still has picks to make. Resolve them now, or dismiss them if you won't use them.",
+    "progress": "{picked} of {count} picked",
+    "resolve": "Resolve",
+    "dismiss": "Dismiss",
+    "resolveLabel": "Resolve: {choice}",
+    "dismissLabel": "Dismiss: {choice}",
+    "dialogTitle": "{className}: {choice}",
+    "dialogHint": "Picked skills are marked as proficient on the sheet. The notice stays until every pick is made or you dismiss it."
+  },
   "characters": {
     "loading": "Loading characters…",
     "emptyState": "No characters yet",

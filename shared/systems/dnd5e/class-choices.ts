@@ -86,5 +86,34 @@ export function acceptedSelections(
   );
 }
 
+/** A choice of the sheet's class still waiting for picks, as the sheet's notice shows it. */
+export interface PendingChoice {
+  choice: ClassChoice;
+  /** The picks that count so far (`countedSelections`). */
+  picked: string[];
+  /** How many are still to pick: at least 1. */
+  open: number;
+}
+
+/**
+ * The class's choices with fewer counted picks than it asks for and not dismissed. Worked out on
+ * every read, never stored: only the dismissals are (by the choice's identity), so dismissing the
+ * Bard's skills leaves the Rogue's open, and going back to the Bard finds them dismissed.
+ */
+export function pendingChoices(
+  choices: readonly ClassChoice[],
+  selections: Readonly<Record<string, readonly string[]>> | undefined,
+  dismissed: readonly string[] | undefined,
+): PendingChoice[] {
+  const off = new Set(dismissed ?? []);
+  return choices
+    .filter((choice) => !off.has(choice.key))
+    .map((choice) => {
+      const picked = countedSelections(choice, selections?.[choice.key]);
+      return { choice, picked, open: choice.count - picked.length };
+    })
+    .filter(({ open }) => open > 0);
+}
+
 /** Identity of a choice: `<edition>/<class>/<choice>`, all ids. */
 export const CHOICE_KEY = /^\d{4}\/[a-z0-9-]+\/[a-z0-9-]+$/;

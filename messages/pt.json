@@ -239,6 +239,17 @@
       "dnd5e": "D&D 5ª Edição"
     }
   },
+  "pendingChoices": {
+    "title": "Escolhas da classe em aberto",
+    "description": "{className}: ainda há escolhas a fazer. Resolva agora ou dispense se não for usar.",
+    "progress": "{picked} de {count} escolhidas",
+    "resolve": "Resolver",
+    "dismiss": "Dispensar",
+    "resolveLabel": "Resolver: {choice}",
+    "dismissLabel": "Dispensar: {choice}",
+    "dialogTitle": "{className}: {choice}",
+    "dialogHint": "As perícias escolhidas ficam marcadas como proficientes na ficha. O aviso fica até todas serem escolhidas ou você dispensar."
+  },
   "characters": {
     "loading": "Carregando personagens…",
     "emptyState": "Nenhum personagem ainda",

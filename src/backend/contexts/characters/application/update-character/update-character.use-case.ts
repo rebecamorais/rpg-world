@@ -1,7 +1,10 @@
 import { applyUpdates } from '@backend/shared/application/apply-updates';
 import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 
+import { acceptedSelections } from '@shared/systems/dnd5e/class-choices';
+import { classDefaults } from '@shared/systems/dnd5e/class-defaults';
 import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
+import { ATTRIBUTE_KEYS, SKILL_KEYS } from '@shared/systems/dnd5e/constants';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import { type HitDice, type LegacyHitDice, readHitDice } from '@shared/systems/dnd5e/hit-dice';
 import type { SavedProficiencies } from '@shared/systems/dnd5e/proficiencies';
@@ -15,6 +18,7 @@ import {
 } from '../../domain/entity/DnD5eCharacter';
 import { CharacterRepo } from '../../domain/repository';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
+import type { ClassLookup } from '../create-character/create-character.use-case';
 import { findOwnedCharacter } from '../find-owned-character';
 import { removeCharacterSheetBackground } from '../sheet-background/sheet-background-file';
 import { removeCharacterAvatar } from '../upload-avatar/character-avatar-file';
@@ -53,9 +57,14 @@ export interface CharacterUpdates {
   spellPoints?: { max: number; current: number };
   edition?: Edition;
   resources?: Record<string, ResourceState>;
+  /** Picks for the sheet's class's choices, by the choice's identity; merged choice by choice. */
+  classChoices?: Record<string, string[]>;
+  /** The whole list of dismissed choices, as the sheet has it. */
+  dismissedChoices?: string[];
 }
 
 const MAX_RESOURCES = 200;
+const SKILLS = new Set<string>(SKILL_KEYS);
 
 // The save is a compare-and-set on the row: when another write lands between the read and the
 // write (often game state, like the GM's damage), it reads again and reapplies, a few times
@@ -101,6 +110,7 @@ export class UpdateCharacterUseCase {
   constructor(
     private repository: CharacterRepo,
     private readonly storageRepository?: StorageRepository,
+    private readonly classes?: ClassLookup,
   ) {}
 
   /**
@@ -173,6 +183,8 @@ export class UpdateCharacterUseCase {
       skills,
       savingThrowProficiencies,
       resources,
+      classChoices,
+      dismissedChoices,
     } = updates;
 
     // Aplica atualizações diretas para campos simples
@@ -219,6 +231,56 @@ export class UpdateCharacterUseCase {
     if (savingThrowProficiencies !== undefined) {
       // The whole map, as the sheet has it: an ability left out goes back to following the class
       character.savingThrowProficiencies = { ...savingThrowProficiencies };
+    }
+
+    // After the class and the edition: the picks are checked against the ones being saved
+    if (classChoices) this.applyClassChoices(character, classChoices);
+
+    if (dismissedChoices) {
+      // The whole list, as the sheet has it; each choice once
+      character.dismissedChoices = [...new Set(dismissedChoices)];
+    }
+  }
+
+  /**
+   * Picks for the sheet's class, checked as on creation (`acceptedSelections`): only the class's
+   * own, each once and up to what it asks for. Merged choice by choice: a choice sent with no
+   * valid pick has its picks removed, and the picks of any other class are kept as stored (a sheet
+   * that goes back to that class finds them). Picked skills are marked proficient, as on creation;
+   * a pick taken out leaves its skill as it is. Without a class to follow, nothing is stored.
+   */
+  private applyClassChoices(character: DnD5eCharacter, sent: Record<string, string[]>): void {
+    const content =
+      character.edition && character.class
+        ? (this.classes?.resources(character.edition, character.class) ?? null)
+        : null;
+    const scores = Object.fromEntries(
+      ATTRIBUTE_KEYS.map((key) => [key, character.attributes.get(key)]),
+    ) as Record<AttributeKey, number>;
+    const defaults = classDefaults(character.edition, content, scores);
+    if (!defaults) return;
+
+    const choices = defaults.choices.filter((choice) => Object.hasOwn(sent, choice.key));
+    if (choices.length === 0) return;
+    const accepted = acceptedSelections(choices, sent);
+
+    const stored = { ...character.classChoices };
+    for (const { key } of choices) {
+      if (accepted[key]) stored[key] = accepted[key];
+      else delete stored[key];
+    }
+    character.classChoices = Object.keys(stored).length > 0 ? stored : undefined;
+
+    const picked = Object.values(accepted)
+      .flat()
+      .filter((id): id is SkillKey => SKILLS.has(id));
+    if (picked.length > 0) {
+      character.skills = {
+        ...character.skills,
+        ...Object.fromEntries(
+          picked.map((key) => [key, { ...character.skills?.[key], isProficient: true }]),
+        ),
+      };
     }
   }
 

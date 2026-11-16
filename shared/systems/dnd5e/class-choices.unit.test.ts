@@ -8,6 +8,7 @@ import {
   acceptedSelections,
   choiceOptions,
   countedSelections,
+  pendingChoices,
 } from './class-choices';
 import { classDefaults } from './class-defaults';
 import type { ClassData } from './content/class.schema';
@@ -96,5 +97,57 @@ describe('acceptedSelections', () => {
     for (const data of classes) {
       for (const choice of choicesOf(data.id)) expect(choice.key).toMatch(CHOICE_KEY);
     }
+  });
+});
+
+describe('pendingChoices', () => {
+  const bard = choicesOf('bard');
+  const rogue = choicesOf('rogue');
+  const open = (pending: ReturnType<typeof pendingChoices>) =>
+    Object.fromEntries(pending.map(({ choice, open }) => [choice.key, open]));
+
+  it('criar com 2 de 3 perícias deixa 1 pendente; com as 3, nenhuma', () => {
+    const picks = { '2014/bard/skills': ['ARCANA', 'HISTORY'], '2014/bard/tools': ['lute'] };
+    expect(open(pendingChoices(bard, picks, undefined))).toEqual({
+      '2014/bard/skills': 1,
+      '2014/bard/tools': 2,
+    });
+
+    const resolved = { '2014/bard/skills': ['ARCANA', 'HISTORY', 'STEALTH'] };
+    expect(open(pendingChoices(bard, resolved, ['2014/bard/tools']))).toEqual({});
+  });
+
+  it('traz as que já contam, para o seletor abrir com elas marcadas', () => {
+    const [skills] = pendingChoices(bard, { '2014/bard/skills': ['ARCANA', 'NOPE'] }, []);
+    expect(skills.picked).toEqual(['ARCANA']);
+  });
+
+  it('dispensar some com ela; a outra da mesma classe continua', () => {
+    expect(open(pendingChoices(bard, {}, ['2014/bard/skills']))).toEqual({
+      '2014/bard/tools': 3,
+    });
+  });
+
+  it('Bardo com as 3 → Ladino: as 4 do Ladino em aberto, as do Bardo guardadas', () => {
+    const picks = { '2014/bard/skills': ['ARCANA', 'HISTORY', 'STEALTH'] };
+    expect(open(pendingChoices(rogue, picks, undefined))).toEqual({ '2014/rogue/skills': 4 });
+    // Back to the Bard, the picks are found where they were
+    expect(open(pendingChoices(bard, picks, ['2014/bard/tools']))).toEqual({});
+  });
+
+  it('perícia marcada à mão, fora da escolha, não reduz a pendência', () => {
+    // The sheet's skills are not read here at all: only the picks under the choice's identity
+    expect(open(pendingChoices(rogue, {}, undefined))).toEqual({ '2014/rogue/skills': 4 });
+  });
+
+  it('dispensar no Bardo e trocar para Ladino: a do Ladino aparece; no Bardo, segue dispensada', () => {
+    const dismissed = ['2014/bard/skills', '2014/bard/tools'];
+    expect(open(pendingChoices(rogue, {}, dismissed))).toEqual({ '2014/rogue/skills': 4 });
+    expect(open(pendingChoices(bard, {}, dismissed))).toEqual({});
+  });
+
+  it('a mesma perícia duas vezes conta uma', () => {
+    const picks = { '2014/rogue/skills': ['STEALTH', 'STEALTH', 'ACROBATICS'] };
+    expect(open(pendingChoices(rogue, picks, undefined))).toEqual({ '2014/rogue/skills': 2 });
   });
 });

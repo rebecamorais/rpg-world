@@ -2,7 +2,7 @@ import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 // The server merges these key by key, so only the keys that changed go: STR edited on one device
 // and DEX on another both survive
-export const MERGED_BY_KEY = ['attributes', 'skills', 'resources'] as const;
+export const MERGED_BY_KEY = ['attributes', 'skills', 'resources', 'classChoices'] as const;
 
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 

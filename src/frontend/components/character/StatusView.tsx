@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import CharacterHeader from '@frontend/components/character/CharacterHeader';
+import { PendingChoicesNotice } from '@frontend/components/character/PendingChoicesNotice';
 import {
   ResourcesRow,
   useResourcesRowVisible,
@@ -42,6 +43,9 @@ export default function StatusView() {
       {!embedded && <VitalsBar />}
 
       <CharacterHeader />
+
+      {/* Right under the class it comes from: the class's picks still open */}
+      <PendingChoicesNotice />
 
       <SheetFieldset>
         {/* Desktop: two columns that stack on their own, so a tall card on one side never opens a

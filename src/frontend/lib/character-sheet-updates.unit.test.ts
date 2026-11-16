@@ -8,6 +8,7 @@ import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
 import {
   addCustomResource,
+  dismissClassChoice,
   editResourceBox,
   hitDiceAvailable,
   inheritHitDie,
@@ -16,6 +17,7 @@ import {
   removeCustomResource,
   resetResourceBox,
   setAttribute,
+  setClassChoice,
   setDeathSaves,
   setHitDiceSpent,
   setHitDie,
@@ -277,5 +279,50 @@ describe('editar caixinhas de recurso', () => {
     expect(first).toMatch(RESOURCE_KEY);
     expect(first < second).toBe(true);
     expect(newCustomKey(1_700_000_000_000)).not.toBe(first);
+  });
+});
+
+describe('escolhas da classe', () => {
+  const bard = {
+    ...character,
+    classChoices: { '2014/bard/skills': ['ARCANA'], '2014/rogue/skills': ['STEALTH'] },
+    skills: { ARCANA: { isProficient: true }, STEALTH: { isProficient: true, expertise: true } },
+  } as DnD5eCharacter;
+
+  it('resolver guarda só aquela escolha e marca as perícias, mantendo a especialização', () => {
+    expect(
+      resolvePatch(setClassChoice('2014/bard/skills', ['ARCANA', 'STEALTH', 'HISTORY']), bard),
+    ).toEqual({
+      classChoices: {
+        '2014/bard/skills': ['ARCANA', 'STEALTH', 'HISTORY'],
+        '2014/rogue/skills': ['STEALTH'],
+      },
+      skills: {
+        ARCANA: { isProficient: true },
+        STEALTH: { isProficient: true, expertise: true },
+        HISTORY: { isProficient: true },
+      },
+    });
+  });
+
+  it('ferramentas e escolha esvaziada não mexem nas perícias', () => {
+    expect(resolvePatch(setClassChoice('2014/bard/tools', ['lute']), bard)).not.toHaveProperty(
+      'skills',
+    );
+    // Sent empty, the server removes the choice's picks; the skill stays as the sheet has it
+    expect(resolvePatch(setClassChoice('2014/bard/skills', []), bard)).toEqual({
+      classChoices: { '2014/bard/skills': [], '2014/rogue/skills': ['STEALTH'] },
+    });
+  });
+
+  it('dispensar junta à lista, cada uma uma vez', () => {
+    const once = resolveAll(character, dismissClassChoice('2014/bard/skills'));
+    expect(once.dismissedChoices).toEqual(['2014/bard/skills']);
+    const twice = resolveAll(once, dismissClassChoice('2014/bard/skills'));
+    expect(twice.dismissedChoices).toEqual(['2014/bard/skills']);
+    expect(resolveAll(twice, dismissClassChoice('2014/rogue/skills')).dismissedChoices).toEqual([
+      '2014/bard/skills',
+      '2014/rogue/skills',
+    ]);
   });
 });

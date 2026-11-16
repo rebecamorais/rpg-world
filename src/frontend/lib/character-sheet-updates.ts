@@ -6,7 +6,7 @@ import type {
   ResourceSource,
   ResourceState,
 } from '@shared/systems/dnd5e/class-resources';
-import type { SkillKey } from '@shared/systems/dnd5e/constants';
+import { SKILL_KEYS, type SkillKey } from '@shared/systems/dnd5e/constants';
 import { type HitDie, hitDiceRemaining, readHitDice } from '@shared/systems/dnd5e/hit-dice';
 import type { AttributeKey, CharacterSkill, DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
@@ -155,6 +155,36 @@ export function newCustomKey(now = Date.now()): string {
   const time = now.toString(16).padStart(12, '0');
   return `custom:${time.slice(0, 8)}-${time.slice(8)}-7${crypto.randomUUID().slice(15)}`;
 }
+
+const SKILLS = new Set<string>(SKILL_KEYS);
+
+/**
+ * The picks for one of the class's choices, as the sheet's "resolve" leaves them. Picked skills
+ * are marked proficient, as on creation (the server checks the picks and does the same); a pick
+ * taken out leaves its skill as the sheet has it. Saved with no picks, the choice's are removed:
+ * the server merges the picks choice by choice.
+ */
+export const setClassChoice =
+  (key: string, picked: string[]): Patch =>
+  (c) => {
+    const skills = picked.filter((id): id is SkillKey => SKILLS.has(id));
+    return {
+      classChoices: { ...c.classChoices, [key]: picked },
+      ...(skills.length > 0 && {
+        skills: {
+          ...c.skills,
+          ...Object.fromEntries(
+            skills.map((skill) => [skill, { ...c.skills[skill], isProficient: true }]),
+          ),
+        },
+      }),
+    };
+  };
+
+/** Leaves one of the class's choices open on purpose: its notice goes, for that class only. */
+export const dismissClassChoice =
+  (key: string): Patch =>
+  (c) => ({ dismissedChoices: [...new Set([...(c.dismissedChoices ?? []), key])] });
 
 export const setDeathSaves = (successes: number, failures: number): Patch => ({
   deathSaves: { successes, failures },
