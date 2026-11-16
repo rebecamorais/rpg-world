@@ -971,6 +971,7 @@
       "class": "From the class",
       "subclass": "From the subclass: {feature}",
       "feature": "From the class feature {feature}",
+      "classChoice": "Picked with the class",
       "chosen": "Added by you",
       "own": "Written by you"
     },

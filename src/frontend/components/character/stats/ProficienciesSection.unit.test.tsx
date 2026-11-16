@@ -99,7 +99,7 @@ async function addOwn(kind: string, text: string) {
 describe('ProficienciesSection', () => {
   beforeEach(() => {
     loaded.classes = Object.fromEntries(
-      ['fighter', 'wizard', 'cleric', 'druid', 'rogue'].map((id) => [id, contentOf(id)]),
+      ['fighter', 'wizard', 'cleric', 'druid', 'rogue', 'bard'].map((id) => [id, contentOf(id)]),
     );
   });
 
@@ -170,6 +170,34 @@ describe('ProficienciesSection', () => {
     expect(tag('Languages', "Thieves' Cant")).toHaveTextContent(
       "(From the class feature Thieves' Cant)",
     );
+  });
+
+  it('Bardo: o alaúde escolhido na criação aparece; no Ladino some, e volta no Bardo', () => {
+    const classChoices = { '2014/bard/tools': ['lute'] };
+    const { unmount } = renderSection({ class: 'bard', classChoices });
+    expect(tag('Tools', 'Lute')).toHaveTextContent('(Picked with the class)');
+    unmount();
+
+    const { unmount: unmountRogue } = renderSection({ class: 'rogue', classChoices });
+    expect(group('Tools').queryByText('Lute')).not.toBeInTheDocument();
+    unmountRogue();
+
+    renderSection({ class: 'bard', classChoices });
+    expect(group('Tools').getByText('Lute')).toBeInTheDocument();
+  });
+
+  it('desligar uma ferramenta escolhida não apaga a escolha, e religa', async () => {
+    const classChoices = { '2014/bard/tools': ['lute'] };
+    const { draft } = renderSection({ class: 'bard', classChoices });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Turn off Lute' }));
+    expect(draft().proficiencies).toEqual({ tools: { off: ['lute'] } });
+    expect(draft().classChoices).toEqual(classChoices);
+    expect(tag('Tools', 'Lute')).toHaveTextContent('(Picked with the class, Turned off)');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Turn Lute back on' }));
+    expect(draft().proficiencies).toEqual({});
+    expect(tag('Tools', 'Lute')).toHaveTextContent('(Picked with the class)');
   });
 
   it('em 2024 nada vem da classe', () => {

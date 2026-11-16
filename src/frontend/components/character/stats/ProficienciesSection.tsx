@@ -46,12 +46,14 @@ const KIND_ICONS: Record<ProficiencyKind, string> = {
 /** Same limit as the other free-text fields of the sheet (and the server's). */
 const OWN_MAX = 100;
 
-const GRANTED = new Set(['class', 'subclass', 'feature']);
+/** Turned off (and back on), never removed: a pick for a class choice too, which stays picked. */
+const GRANTED = new Set(['class', 'subclass', 'feature', 'classChoice']);
 
 /**
  * Armor, weapons, tools and languages, as tags. What the class, its SRD subclass and its features
- * give shows on its own and can be turned off (and back on); the player adds from the lists or
- * writes their own after "Other…". Only the player's changes are saved (`effectiveProficiencies`).
+ * give, and the tools picked for the class's choices at creation, show on their own and can be
+ * turned off (and back on); the player adds from the lists or writes their own after "Other…".
+ * Only the player's changes are saved (`effectiveProficiencies`).
  */
 export default function ProficienciesSection() {
   const character = useLoadedCharacter();
@@ -62,6 +64,7 @@ export default function ProficienciesSection() {
     level,
     attributes,
     proficiencies: saved,
+    classChoices,
     system,
   } = character;
   const { id } = useCharacterMeta();
@@ -79,6 +82,7 @@ export default function ProficienciesSection() {
     content,
     level,
     subclassId: content && matchSubclass(content, subclass),
+    classChoices,
   });
 
   // Weapons and tools are items of the SRD 5.1, by id: the class data uses those ids
