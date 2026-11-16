@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { ITEM_KEY, SPELL_KEY } from '@shared/content/content-key';
 import { httpUrlOrEmpty, optional, optionalQuery } from '@shared/http/validation';
+import { CHOICE_KEY } from '@shared/systems/dnd5e/class-choices';
 import {
   MAX_RESOURCE_DESCRIPTION,
   RESOURCE_KEY,
@@ -29,10 +30,17 @@ const skillKey = z.enum(SKILL_KEYS as [SkillKey, ...SkillKey[]]);
 export const createCharacterSchema = z.object({
   name: text(),
   system: optional(z.literal('DnD_5e')),
+  edition: optional(z.enum(EDITIONS)),
   class: optional(text()),
   race: optional(text()),
   level: optional(int(1, 20)),
   kind: optional(z.enum(['pc', 'npc'])),
+  /** Picks for the class's choices, by the choice's identity; the use case keeps only valid ones. */
+  classChoices: optional(
+    z
+      .record(z.string().max(100).regex(CHOICE_KEY), z.array(text()).max(30))
+      .refine((choices) => Object.keys(choices).length <= 10),
+  ),
 });
 
 /** GET /api/characters: playable characters, or the GM's enemy sheets with ?kind=npc. */

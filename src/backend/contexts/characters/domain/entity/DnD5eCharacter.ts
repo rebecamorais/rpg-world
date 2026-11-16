@@ -1,5 +1,6 @@
 import { Lore } from '@backend/contexts/lore/domain/Lore';
 
+import type { ClassChoiceSelections } from '@shared/systems/dnd5e/class-choices';
 import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
 import type { SkillKey } from '@shared/systems/dnd5e/constants/skill';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
@@ -51,6 +52,7 @@ export interface DnD5eCharacterOptions {
   spellPoints?: { max: number; current: number };
   edition?: Edition;
   resources?: Record<string, ResourceState>;
+  classChoices?: ClassChoiceSelections;
   hpTemp?: number;
   lore?: Lore;
   accentColor?: string;
@@ -88,6 +90,8 @@ export class DnD5eCharacter extends Character {
   public spellPoints?: { max: number; current: number };
   public edition?: Edition;
   public resources?: Record<string, ResourceState>;
+  /** The player's picks for the class's choices, by the choice's identity; kept on a class change. */
+  public classChoices?: ClassChoiceSelections;
 
   constructor(options: DnD5eCharacterOptions) {
     super(
@@ -129,6 +133,7 @@ export class DnD5eCharacter extends Character {
     this.spellPoints = options.spellPoints;
     this.edition = options.edition;
     this.resources = options.resources;
+    this.classChoices = options.classChoices;
   }
 
   toJSON(): Record<string, unknown> {
@@ -176,6 +181,7 @@ export class DnD5eCharacter extends Character {
       spellPoints: this.spellPoints,
       edition: this.edition,
       resources: this.resources,
+      classChoices: this.classChoices,
     };
   }
 }

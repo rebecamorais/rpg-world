@@ -1,5 +1,6 @@
 import type { CharacterBase } from '@shared/types/character';
 
+import type { ClassChoiceSelections } from './class-choices';
 import type { ResourceState } from './class-resources';
 import type { SkillKey } from './constants';
 import type { Edition } from './content/editions';
@@ -54,6 +55,8 @@ interface DnD5eCharacterData {
   // Class resource boxes (Rage, Ki...) and the rules edition they follow
   edition?: Edition;
   resources?: Record<string, ResourceState>;
+  /** What the player picked for the class's choices, by the choice's identity (`2014/bard/skills`). */
+  classChoices?: ClassChoiceSelections;
 
   // D&D 5e Specific Lore
   personalityTraits?: string;

@@ -53,3 +53,17 @@ describe('SupabaseCharacterRepository: dados de vida na leitura', () => {
     expect(await hitDiceOf({})).toBeUndefined();
   });
 });
+
+describe('SupabaseCharacterRepository: escolhas da classe na leitura', () => {
+  const choicesOf = async (systemData: Record<string, unknown>) =>
+    ((await repoWithSheet(systemData).findById('c1')) as DnD5eCharacter).classChoices;
+
+  it('vêm pela identidade da escolha, como foram guardadas', async () => {
+    const classChoices = { '2014/bard/skills': ['ARCANA'], '2014/rogue/skills': ['STEALTH'] };
+    expect(await choicesOf({ classChoices })).toEqual(classChoices);
+  });
+
+  it('ficha sem escolhas continua sem elas', async () => {
+    expect(await choicesOf({})).toBeUndefined();
+  });
+});

@@ -34,6 +34,8 @@ export class Contexts {
     if (!this._character) {
       this._character = createCharacterContext(this.container.get('userClient'), {
         partyGmAccess: this.party,
+        // The SRD classes a new sheet's defaults come from
+        classes: this.classes.catalog,
       });
     }
     return this._character;

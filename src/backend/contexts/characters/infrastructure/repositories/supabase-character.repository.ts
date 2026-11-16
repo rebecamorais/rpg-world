@@ -3,6 +3,7 @@ import 'server-only';
 
 import { Lore } from '@backend/contexts/lore/domain/Lore';
 
+import type { ClassChoiceSelections } from '@shared/systems/dnd5e/class-choices';
 import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import { type HitDice, type LegacyHitDice, readHitDice } from '@shared/systems/dnd5e/hit-dice';
@@ -204,6 +205,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
         spellPoints: dndData.spellPoints as { max: number; current: number } | undefined,
         edition: dndData.edition as Edition | undefined,
         resources: dndData.resources as Record<string, ResourceState> | undefined,
+        classChoices: dndData.classChoices as ClassChoiceSelections | undefined,
         hpTemp: (dndData.hpTemp as number) || 0,
         lore,
         accentColor: (row.theme_color as string) ?? undefined,
