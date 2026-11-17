@@ -1,14 +1,18 @@
 import { EFFECT_IDS, type EffectId } from '@frontend/components/grimoire/card-effect/types';
 
+const ICONS = ['emblem', 'webp', 'mask'] as const;
+type LabIcons = (typeof ICONS)[number];
+
 export interface LabParams {
   /** The open card's effect: null = today's background; 'auto' = each spell by the D&D map */
   effect: EffectId | 'auto' | null;
   count: number;
   /**
    * The header icon: 'emblem' = the school emblem as SVG, in the spell colour; 'webp' = the owner's
-   * emblem images (96px, fixed colours); null = the game icon
+   * emblem images (96px, fixed colours); 'mask' = the same images as a mask, painted in the spell
+   * colour; null = the game icon
    */
-  icons: 'emblem' | 'webp' | null;
+  icons: LabIcons | null;
   /** Open the first card */
   expanded: boolean;
 }
@@ -27,10 +31,9 @@ export function parseLabParams(query: Record<string, string | string[] | undefin
           ? (effect as EffectId)
           : null,
     count: Number.isInteger(count) && count > 0 ? Math.min(count, 100) : 24,
-    icons:
-      one(query.icons) === 'emblem' || one(query.icons) === 'webp'
-        ? (one(query.icons) as 'emblem' | 'webp')
-        : null,
+    icons: (ICONS as readonly string[]).includes(one(query.icons) ?? '')
+      ? (one(query.icons) as LabIcons)
+      : null,
     expanded: one(query.expanded) === '1',
   };
 }

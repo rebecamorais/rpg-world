@@ -46,6 +46,28 @@ const SCHOOL_IMAGES = Object.fromEntries(
   ]),
 ) as Record<string, ReactNode>;
 
+// The same images as a mask, painted in the header's colour (text-spell-flare: the spell colour,
+// lighter on dark, deeper on light). The image's alpha cuts the shape, its soft glow included; the
+// image is still decoded once per school
+const SCHOOL_MASKS = Object.fromEntries(
+  Object.keys(SCHOOL_THEMES).map((school) => {
+    const url = `url(/grimoire/emblems/${school}.webp)`;
+    return [
+      school,
+      <span
+        key={school}
+        className="block size-full bg-current"
+        style={{
+          maskImage: url,
+          maskSize: 'contain',
+          maskRepeat: 'no-repeat',
+          maskPosition: 'center',
+        }}
+      />,
+    ];
+  }),
+) as Record<string, ReactNode>;
+
 const EFFECTS = Object.fromEntries(EFFECT_IDS.map((id) => [id, cardEffect(id)])) as Record<
   EffectId,
   CardEffect
@@ -91,6 +113,7 @@ export function GrimoireLab({
   // 'auto': each spell wears what the D&D map gives it (damage type, else school), or nothing
   const iconOf = (spell: Spell) => {
     if (icons === 'webp') return SCHOOL_IMAGES[spell.school?.toLowerCase() ?? ''];
+    if (icons === 'mask') return SCHOOL_MASKS[spell.school?.toLowerCase() ?? ''];
     const name = spellEmblemOf(spell);
     return name ? EMBLEMS[name] : undefined;
   };
@@ -175,6 +198,9 @@ export function GrimoireLab({
           </a>
           <a className="text-body underline" href={href({ icons: 'webp' }, current)}>
             ícones: emblemas em WebP
+          </a>
+          <a className="text-body underline" href={href({ icons: 'mask' }, current)}>
+            ícones: WebP como máscara, na cor da magia
           </a>
           <a className="text-body underline" href={href({ count: 100 }, current)}>
             100 cards
