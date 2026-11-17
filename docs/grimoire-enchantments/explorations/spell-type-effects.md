@@ -314,6 +314,22 @@ Os efeitos de escola em CSS continuam no catálogo, mas o mapa não usa mais nen
 
 O fundo de cor custa pouco. Os ícones em SVG pesam um pouco na rolagem: +40% de style, +19% de paint e um ou dois quadros lentos a mais na rolagem inteira do celular lento (no desktop, +23% de raster). Uma saída mais leve seria usar as imagens WebP da dona reduzidas (cerca de 88 px), ao custo de a cor ficar fixa e não seguir o tema.
 
+### Ícones: SVG ou WebP (17/11)
+
+A dona mandou também as imagens dos 8 emblemas (720 × 720, com transparência). Reduzidas para 96 px em WebP, o bastante para o quadrado de 36 px em telas 2× e 3×, ficam com 4 a 6 KB cada, 38 KB no total, em `public/grimoire/emblems/<escola>.webp`. No laboratório, `?icons=webp` usa essas imagens; `?icons=emblem` usa o SVG.
+
+Rolagem de 100 cards no celular com a CPU 4x mais lenta (4 amostras por tema, mediana em ms; dados em [card-effects-bench-icons.json](card-effects-bench-icons.json)):
+
+| Ícone           | style      | paint      | raster | decodificar imagens |
+| --------------- | ---------- | ---------- | ------ | ------------------- |
+| do jogo (hoje)  | 103        | 336        | 232    | 0                   |
+| emblema em SVG  | 150 (+46%) | 406 (+21%) | 241    | 0                   |
+| emblema em WebP | 104        | 341        | 231    | 2                   |
+
+O WebP custa o mesmo que o ícone de hoje: são 8 imagens, decodificadas uma vez e reaproveitadas por todos os cards. O SVG desenha um emblema com gradientes em cada card.
+
+O que pesa contra o WebP é visual: a cor é a do desenho, fixa, e não a do card (o portal da Conjuração sai verde-água num card verde de ácido), e no tema claro os traços claros ficam lavados. O SVG segue a cor do card e escurece no tema claro.
+
 ## Fundo para o texto das regras (15/11)
 
 Com os desenhos ocupando o card inteiro, cada um precisava de uma força baixa para não atrapalhar a leitura (35% a 70%). A dona sugeriu o contrário: o texto das regras ganha um fundo próprio. Com efeito, o `SpellCard` põe a descrição numa caixa `bg-card/80` com cantos arredondados e uma margem negativa, para o texto continuar alinhado com o cabeçalho. O contêiner que anima a abertura ganha a mesma folga dos lados, senão a caixa seria cortada.
