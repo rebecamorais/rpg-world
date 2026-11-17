@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import type { CardBorder } from '@frontend/components/grimoire/card-border/types';
 import { effectTextBackdrop } from '@frontend/components/grimoire/card-effect/CardEffect';
@@ -30,17 +30,15 @@ interface SpellCardProps {
   onLearnSpell?: (id: string) => void;
   isLearned?: boolean;
   showLevel?: boolean;
-  /**
-   * Grimoire exploration (lab only): the open card's effect, in place of the current background.
-   * Without it the card renders exactly as before. Pass a stable object.
+  /*
+   * The Grimoire (spellGrimoireOf gives all three; the lab picks them one by one). Without them
+   * the card renders exactly as before. Pass stable objects, or the memo re-renders every card.
    */
+  /** The open card's effect, in place of the current background. */
   effect?: CardEffect;
-  /** Grimoire exploration (lab only): an emblem in place of the header's game icon. */
+  /** An emblem in place of the header's game icon. */
   icon?: React.ReactNode;
-  /**
-   * Grimoire exploration (lab only): border effects (the arcane border when open, a hover effect,
-   * an opening effect). Pass a stable object.
-   */
+  /** Border effects: the arcane border when open, a hover effect, an opening effect. */
   border?: CardBorder;
 }
 
@@ -98,7 +96,12 @@ export const SpellCard = React.memo(function SpellCard({
   const stripe = <span aria-hidden="true" className="bg-spell absolute inset-y-0 left-0 w-1" />;
   // The open card's background: the Grimoire effect when there is one, else today's
   const openLayer =
-    isExpanded && (effect ? effect.layers() : <SpellVFX mainIcon={mainIcon} spell={spell} />);
+    isExpanded &&
+    (effect ? (
+      <AfterNextFrame>{effect.layers()}</AfterNextFrame>
+    ) : (
+      <SpellVFX mainIcon={mainIcon} spell={spell} />
+    ));
 
   return (
     <article
@@ -187,6 +190,24 @@ export const SpellCard = React.memo(function SpellCard({
     </article>
   );
 });
+
+/**
+ * Mounts its children once the next frame is painted. The Grimoire effect's drawing (SVG markup,
+ * up to ~50 KB) parsed in the click's own frame made that frame pass 50 ms on a slow phone; one
+ * frame later the card has already opened, and the effect enters with a fade, so the wait doesn't
+ * show. Only this wrapper re-renders, not the card.
+ */
+function AfterNextFrame({ children }: { children: React.ReactNode }) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    // The first callback runs before the opening frame is painted; the second, in the next one
+    let id = requestAnimationFrame(() => {
+      id = requestAnimationFrame(() => setReady(true));
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+  return ready ? children : null;
+}
 
 /**
  * Thematic background, only on the open card and faded out before the description, so the

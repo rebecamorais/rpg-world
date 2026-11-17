@@ -13,6 +13,7 @@ import { cn } from '@frontend/lib/utils';
 
 import { SpellbookFilterBar } from './SpellbookFilterBar';
 import { SpellCard } from './spell-card/SpellCard';
+import { spellGrimoireOf } from './spell-card/spell-grimoire';
 
 interface SpellbookProps {
   characterSpells: CharacterSpell[];
@@ -222,6 +223,7 @@ export function Spellbook({
                       onToggle={toggleExpand}
                       onForgetSpell={onForgetSpell}
                       onTogglePrepared={onTogglePrepared}
+                      {...spellGrimoireOf(spell)}
                     />
                   ))}
                 </div>

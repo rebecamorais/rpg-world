@@ -215,7 +215,7 @@ describe('SpellCard com efeito (exploração do Grimoire)', () => {
     expect(container.querySelector('article')).not.toHaveAttribute('data-grimoire-host');
   });
 
-  it('o efeito só aparece com o card aberto, no lugar do fundo de hoje, na cor da magia', () => {
+  it('o efeito só aparece com o card aberto, no lugar do fundo de hoje, na cor da magia', async () => {
     const { container, rerender } = renderWithProviders(
       <SpellCard spell={FIREBALL} effect={effect} />,
     );
@@ -225,7 +225,9 @@ describe('SpellCard com efeito (exploração do Grimoire)', () => {
     expect(card.style.getPropertyValue('--grimoire-tint')).toBe('var(--spell-color)');
 
     rerender(<SpellCard spell={FIREBALL} effect={effect} isExpanded />);
-    expect(screen.getByTestId('effect')).toBeInTheDocument();
+    // One frame after the card opens, so its drawing isn't parsed in the click's frame
+    expect(screen.queryByTestId('effect')).toBeNull();
+    expect(await screen.findByTestId('effect')).toBeInTheDocument();
     // The ripple's starting point: the spell's icon
     expect(card.querySelector('[data-grimoire-origin]')).not.toBeNull();
   });

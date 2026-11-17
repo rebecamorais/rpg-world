@@ -8,6 +8,7 @@
 import { type CSSProperties, type ReactNode, useCallback, useState } from 'react';
 
 import { SpellCard } from '@frontend/components/character/spells/spell-card/SpellCard';
+import { schoolEmblemOf } from '@frontend/components/character/spells/spell-card/spell-grimoire';
 import { cardBorder } from '@frontend/components/grimoire/card-border/CardBorder';
 import {
   BORDER_HOVERS,
@@ -56,28 +57,6 @@ const SCHOOL_IMAGES = Object.fromEntries(
       className="size-full"
     />,
   ]),
-) as Record<string, ReactNode>;
-
-// The same images as a mask, painted in the header's colour (text-spell-flare: the spell colour,
-// lighter on dark, deeper on light). The image's alpha cuts the shape, its soft glow included; the
-// image is still decoded once per school
-const SCHOOL_MASKS = Object.fromEntries(
-  Object.keys(SCHOOL_THEMES).map((school) => {
-    const url = `url(/grimoire/emblems/${school}.webp)`;
-    return [
-      school,
-      <span
-        key={school}
-        className="block size-full bg-current"
-        style={{
-          maskImage: url,
-          maskSize: 'contain',
-          maskRepeat: 'no-repeat',
-          maskPosition: 'center',
-        }}
-      />,
-    ];
-  }),
 ) as Record<string, ReactNode>;
 
 const EFFECTS = Object.fromEntries(EFFECT_IDS.map((id) => [id, cardEffect(id)])) as Record<
@@ -151,7 +130,7 @@ export function GrimoireLab({
   // 'auto': each spell wears what the D&D map gives it (damage type, else school), or nothing
   const iconOf = (spell: Spell) => {
     if (icons === 'webp') return SCHOOL_IMAGES[spell.school?.toLowerCase() ?? ''];
-    if (icons === 'mask') return SCHOOL_MASKS[spell.school?.toLowerCase() ?? ''];
+    if (icons === 'mask') return schoolEmblemOf(spell.school);
     const name = spellEmblemOf(spell);
     return name ? EMBLEMS[name] : undefined;
   };
@@ -166,8 +145,8 @@ export function GrimoireLab({
       <header className="flex flex-col gap-2">
         <h1 className="text-display">Grimoire · Laboratório</h1>
         <p className="text-body text-muted-foreground max-w-prose">
-          Laboratório interno da biblioteca do Grimório: os efeitos do card aberto. Tudo existe só
-          nesta página; o spellbook continua igual.
+          Laboratório interno da biblioteca do Grimório: os efeitos do card aberto. O spellbook usa
+          a combinação escolhida (o último link da lista de cards).
         </p>
       </header>
 
