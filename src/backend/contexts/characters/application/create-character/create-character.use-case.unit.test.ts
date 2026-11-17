@@ -100,7 +100,8 @@ describe('CreateCharacterUseCase ', () => {
       expect(character.savingThrowProficiencies).toEqual({});
       expect(character.hitDice).toBeUndefined();
       expect(character.skills).toEqual({});
-      expect(character.classChoices).toBeUndefined();
+      // Empty, but present: the sheet is born with class picks, so the open ones show
+      expect(character.classChoices).toEqual({});
     });
 
     it('grava as perícias escolhidas, marcadas e sob a identidade da escolha', async () => {

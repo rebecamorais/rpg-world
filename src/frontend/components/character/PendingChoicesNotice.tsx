@@ -62,7 +62,9 @@ export function PendingChoicesNotice() {
   const defaults = classId ? classDefaults(edition, content, attributes) : null;
   const [resolving, setResolving] = useState<ClassChoice | null>(null);
 
-  if (readOnly || !defaults || !classId) return null;
+  // Only sheets born with class picks (the key, even empty): a sheet from before them keeps what
+  // the player filled in by hand and never shows the notice
+  if (readOnly || !defaults || !classId || !classChoices) return null;
   const pending = pendingChoices(defaults.choices, classChoices, dismissedChoices);
   const classLabel = classLabelOf(classId);
   const choiceLabel = (choice: ClassChoice) =>

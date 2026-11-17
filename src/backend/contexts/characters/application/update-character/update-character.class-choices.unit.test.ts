@@ -37,6 +37,8 @@ describe('UpdateCharacterUseCase: escolhas da classe na ficha', () => {
         attributes: new Attributes(),
         hp: new HealthPoints(8, 8),
         level: 1,
+        // A sheet born with class picks; a sheet from before them has no key at all
+        classChoices: {},
         ...options,
       }),
     );
@@ -157,7 +159,7 @@ describe('UpdateCharacterUseCase: escolhas da classe na ficha', () => {
     await save({ classChoices: { '2014/bard/skills': ['ARCANA'] } });
 
     const character = await stored();
-    expect(character.classChoices).toBeUndefined();
+    expect(character.classChoices).toEqual({});
     expect(character.skills).toEqual({});
   });
 
@@ -183,5 +185,31 @@ describe('UpdateCharacterUseCase: escolhas da classe na ficha', () => {
     const character = await stored();
     expect(character.classChoices).toEqual(classChoices);
     expect(character.dismissedChoices).toEqual(['2014/bard/tools']);
+  });
+  it('ficha de antes das escolhas (sem classChoices): nada muda, nem as perícias marcadas à mão', async () => {
+    await seed({
+      edition: '2014',
+      classStr: 'bard',
+      classChoices: undefined,
+      skills: { ARCANA: { isProficient: true } },
+    });
+
+    await save({ classChoices: { '2014/bard/skills': ['STEALTH'] } });
+
+    const character = await stored();
+    expect(character.classChoices).toBeUndefined();
+    expect(character.skills).toEqual({ ARCANA: { isProficient: true } });
+  });
+
+  it('tirar a última escolha mantém a chave vazia: a ficha continua sendo das que têm escolhas', async () => {
+    await seed({
+      edition: '2014',
+      classStr: 'bard',
+      classChoices: { '2014/bard/skills': ['ARCANA'] },
+    });
+
+    await save({ classChoices: { '2014/bard/skills': [] } });
+
+    expect((await stored()).classChoices).toEqual({});
   });
 });

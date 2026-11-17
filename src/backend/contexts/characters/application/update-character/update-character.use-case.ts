@@ -248,8 +248,11 @@ export class UpdateCharacterUseCase {
    * valid pick has its picks removed, and the picks of any other class are kept as stored (a sheet
    * that goes back to that class finds them). Picked skills are marked proficient, as on creation;
    * a pick taken out leaves its skill as it is. Without a class to follow, nothing is stored.
+   * A sheet from before class picks (no `classChoices` at all) is never touched: what the player
+   * filled in by hand stays exactly as it is.
    */
   private applyClassChoices(character: DnD5eCharacter, sent: Record<string, string[]>): void {
+    if (!character.classChoices) return;
     const content =
       character.edition && character.class
         ? (this.classes?.resources(character.edition, character.class) ?? null)
@@ -269,7 +272,8 @@ export class UpdateCharacterUseCase {
       if (accepted[key]) stored[key] = accepted[key];
       else delete stored[key];
     }
-    character.classChoices = Object.keys(stored).length > 0 ? stored : undefined;
+    // Kept even when empty: the key is what marks a sheet that tracks class picks
+    character.classChoices = stored;
 
     const picked = Object.values(accepted)
       .flat()
