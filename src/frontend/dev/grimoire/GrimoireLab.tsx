@@ -8,6 +8,14 @@
 import { type CSSProperties, type ReactNode, useCallback, useState } from 'react';
 
 import { SpellCard } from '@frontend/components/character/spells/spell-card/SpellCard';
+import { cardBorder } from '@frontend/components/grimoire/card-border/CardBorder';
+import {
+  BORDER_HOVERS,
+  BORDER_OPENINGS,
+  type BorderHover,
+  type BorderOpening,
+  type CardBorder,
+} from '@frontend/components/grimoire/card-border/types';
 import { EffectLayers, cardEffect } from '@frontend/components/grimoire/card-effect/CardEffect';
 import { EffectEmblem } from '@frontend/components/grimoire/card-effect/EffectArt';
 import { ART, type ArtName } from '@frontend/components/grimoire/card-effect/art';
@@ -17,7 +25,11 @@ import {
   type EffectId,
 } from '@frontend/components/grimoire/card-effect/types';
 import { DAMAGE_THEMES, SCHOOL_THEMES } from '@frontend/constants/damage-themes';
-import { spellEffectOf, spellEmblemOf } from '@frontend/constants/grimoire-effects';
+import {
+  SPELL_CARD_BORDER,
+  spellEffectOf,
+  spellEmblemOf,
+} from '@frontend/constants/grimoire-effects';
 import type { Spell } from '@frontend/types/spells';
 
 import type { LabParams } from './lab-params';
@@ -73,6 +85,26 @@ const EFFECTS = Object.fromEntries(EFFECT_IDS.map((id) => [id, cardEffect(id)]))
   CardEffect
 >;
 
+// Every hover × opening pair, built once (stable objects for SpellCard's memo)
+const BORDERS = new Map<string, CardBorder>(
+  [null, ...BORDER_HOVERS].flatMap((hover) =>
+    [null, ...BORDER_OPENINGS].map((opening) => [
+      `${hover}-${opening}`,
+      cardBorder(hover, opening),
+    ]),
+  ),
+);
+const HOVER_LABELS: Record<BorderHover, string> = {
+  glow: 'anel de luz',
+  shine: 'brilho que percorre',
+  turn: 'borda que gira',
+};
+const OPENING_LABELS: Record<BorderOpening, string> = {
+  beam: 'feixe',
+  spin: 'giro de luz',
+  corners: 'cantos',
+};
+
 /** The gallery: every D&D damage type and school, in its own color, with its effect */
 const GALLERY = [
   ...Object.entries(DAMAGE_THEMES).map(([key, theme]) => ({
@@ -94,6 +126,8 @@ const href = (params: Partial<LabParams>, current: LabParams) => {
   const query = new URLSearchParams();
   if (next.effect) query.set('effect', next.effect);
   if (next.icons) query.set('icons', next.icons);
+  if (next.hover) query.set('hover', next.hover);
+  if (next.opening) query.set('opening', next.opening);
   query.set('count', String(next.count));
   if (next.expanded) query.set('expanded', '1');
   return `?${query}`;
@@ -105,8 +139,12 @@ export function GrimoireLab({
   count,
   expanded,
   icons,
+  hover,
+  opening,
 }: LabParams & { spells: Spell[] }) {
-  const current = { effect, count, expanded, icons };
+  const current = { effect, count, expanded, icons, hover, opening };
+  // Borders only when asked for: without them the card is exactly today's
+  const border = hover || opening ? BORDERS.get(`${hover}-${opening}`) : undefined;
   const [replay, setReplay] = useState(0);
   const [openId, setOpenId] = useState<string | null>(expanded ? (spells[0]?.id ?? null) : null);
   const toggle = useCallback((id: string) => setOpenId((prev) => (prev === id ? null : id)), []);
@@ -209,8 +247,40 @@ export function GrimoireLab({
             {expanded ? 'fechar o primeiro' : 'abrir o primeiro'}
           </a>
         </nav>
+        <a
+          className="text-body self-start underline"
+          href={href({ effect: 'auto', icons: 'mask', ...SPELL_CARD_BORDER }, current)}
+        >
+          o card de magia escolhido: desenhos, ícones na cor da magia, anel de luz e giro de luz
+        </a>
+        <nav className="flex flex-wrap gap-2" aria-label="Bordas">
+          <span className="text-body text-muted-foreground">Borda no hover:</span>
+          {[null, ...BORDER_HOVERS].map((h) => (
+            <a
+              key={h ?? 'none'}
+              className="text-body underline aria-[current=true]:font-semibold"
+              aria-current={h === hover}
+              href={href({ hover: h }, current)}
+            >
+              {h ? HOVER_LABELS[h] : 'nenhum'}
+            </a>
+          ))}
+        </nav>
+        <nav className="flex flex-wrap gap-2" aria-label="Abertura">
+          <span className="text-body text-muted-foreground">Borda ao abrir:</span>
+          {[null, ...BORDER_OPENINGS].map((o) => (
+            <a
+              key={o ?? 'none'}
+              className="text-body underline aria-[current=true]:font-semibold"
+              aria-current={o === opening}
+              href={href({ opening: o }, current)}
+            >
+              {o ? OPENING_LABELS[o] : 'nenhum'}
+            </a>
+          ))}
+        </nav>
         <p className="text-caption text-muted-foreground" data-lab-scenario="">
-          {`effect=${effect ?? 'none'} · icons=${icons ?? 'game'} · ${Math.min(count, spells.length)} cards`}
+          {`effect=${effect ?? 'none'} · icons=${icons ?? 'game'} · hover=${hover ?? 'none'} · opening=${opening ?? 'none'} · ${Math.min(count, spells.length)} cards`}
         </p>
         <div className="flex flex-col gap-3" data-lab-list="">
           {spells.slice(0, count).map((spell) => (
@@ -222,6 +292,7 @@ export function GrimoireLab({
               onToggle={toggle}
               effect={effectOf(spell)}
               icon={icons ? iconOf(spell) : undefined}
+              border={border}
             />
           ))}
         </div>

@@ -1,3 +1,4 @@
+import type { BorderHover, BorderOpening } from '@frontend/components/grimoire/card-border/types';
 import { ART, type ArtName } from '@frontend/components/grimoire/card-effect/art';
 import type { EffectId } from '@frontend/components/grimoire/card-effect/types';
 
@@ -54,3 +55,13 @@ export function spellEmblemOf(spell: { school?: string | null }): ArtName | null
   const id = BY_SCHOOL[spell.school?.toLowerCase() ?? ''];
   return id && id in ART ? (id as ArtName) : null;
 }
+
+/**
+ * The spell card's border effects (owner's choice, 17/11): the ring of light on hover and the
+ * light that turns once around the border on open, which read as one gesture. The library's other
+ * border effects (shine, turn, beam, corners) stay as options for other places.
+ */
+export const SPELL_CARD_BORDER: { hover: BorderHover; opening: BorderOpening } = {
+  hover: 'glow',
+  opening: 'spin',
+};

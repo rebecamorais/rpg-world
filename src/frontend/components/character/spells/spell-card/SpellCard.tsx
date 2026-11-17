@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 
+import type { CardBorder } from '@frontend/components/grimoire/card-border/types';
 import { effectTextBackdrop } from '@frontend/components/grimoire/card-effect/CardEffect';
 import type { CardEffect } from '@frontend/components/grimoire/card-effect/types';
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -36,6 +37,11 @@ interface SpellCardProps {
   effect?: CardEffect;
   /** Grimoire exploration (lab only): an emblem in place of the header's game icon. */
   icon?: React.ReactNode;
+  /**
+   * Grimoire exploration (lab only): border effects (the arcane border when open, a hover effect,
+   * an opening effect). Pass a stable object.
+   */
+  border?: CardBorder;
 }
 
 export const SpellCard = React.memo(function SpellCard({
@@ -50,6 +56,7 @@ export const SpellCard = React.memo(function SpellCard({
   showLevel,
   effect,
   icon,
+  border,
 }: SpellCardProps) {
   const { theme, mainIcon, displayValues } = useSpellDisplay(spell);
   // This spell's own write, not the whole list's: the other cards stay usable meanwhile
@@ -78,13 +85,13 @@ export const SpellCard = React.memo(function SpellCard({
     () =>
       ({
         '--spell-color': theme.hex,
-        // An effect takes the spell's color
-        ...(effect && { '--grimoire-tint': 'var(--spell-color)' }),
+        // Grimoire effects and borders take the spell's color
+        ...((effect || border) && { '--grimoire-tint': 'var(--spell-color)' }),
         contentVisibility: 'auto',
         // Height of a collapsed card, so off-screen cards don't make the scrollbar jump
         containIntrinsicSize: 'auto 96px',
       }) as React.CSSProperties,
-    [theme.hex, effect],
+    [theme.hex, effect, border],
   );
 
   // The spell's color lives in this stripe, the icon and the badges; the surface stays plain
@@ -99,10 +106,13 @@ export const SpellCard = React.memo(function SpellCard({
         'spell-context group bg-card relative overflow-hidden rounded-xl border p-4 pl-5 outline-none sm:p-5 sm:pl-6',
         'transition-[border-color] duration-200',
         isExpanded ? 'border-spell-muted' : 'border-border hover:border-spell-muted',
+        border?.className,
       )}
       style={cardStyles}
       aria-labelledby={`spell-name-${spell.id}`}
       data-grimoire-host={effect ? '' : undefined}
+      data-border-hover={border?.hover ?? undefined}
+      data-border-open={border && isExpanded ? '' : undefined}
     >
       {stripe}
 
@@ -120,6 +130,7 @@ export const SpellCard = React.memo(function SpellCard({
       </button>
 
       {openLayer}
+      {isExpanded && border?.layers()}
 
       <div className="pointer-events-none relative z-10 flex h-full flex-col">
         <SpellHeader
