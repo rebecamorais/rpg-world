@@ -264,6 +264,17 @@ Não foi aproveitado nada de `impact`, `frost`, `bolt`, `thrust` e `slashes`: as
 
 Nenhuma escola aumentou os frames lentos ao abrir. O `crypt-fog` V2 é a escola mais cara no raster (+47 ms sobre o original, uma vez ao abrir), na faixa do efeito mais caro já medido (`embers`, 148 ms). Os efeitos só aparecem com o card aberto; o card fechado não muda.
 
+**`crypt-fog` V2 em ladrilhos (2026-11-17).** As 7 outras escolas foram aprovadas; o `crypt-fog` V2 ficou pendente pelo custo. Oito das suas camadas eram gradientes do tamanho do card, embora o véu só apareça na faixa da direita e a névoa só no rodapé. Agora o véu é pintado num ladrilho dos 36% da direita e a névoa num ladrilho dos 40% de baixo, com as coordenadas convertidas: o desenho é o mesmo (conferido em captura de tela nos dois temas), e só a vinheta cobre o card inteiro. Testei também uma versão enxuta (uma dobra do véu e um banco de névoa a menos, véu mais estreito), que mudava o desenho e quase não ganhava nada a mais. Raster ao abrir no celular com a CPU 4x mais lenta (mediana dos dois temas, 5 amostras, em ms; dados em [card-effects-bench-crypt-fog-tiles.json](card-effects-bench-crypt-fog-tiles.json)):
+
+| Versão                      | raster | a mais que sem efeito | frames > 33 ms |
+| --------------------------- | ------ | --------------------- | -------------- |
+| sem efeito                  | 65     | (base)                | 0              |
+| `crypt-fog` V2 (antes)      | 166    | +101                  | 0              |
+| `crypt-fog` V2 em ladrilhos | 88     | +23                   | 0              |
+| enxuta (descartada)         | 83     | +18                   | 1              |
+
+A versão em ladrilhos é a que fica. O mesmo truque (pintar cada gradiente só onde ele aparece) serve para outros efeitos em CSS com camadas do tamanho do card.
+
 ## Fundo para o texto das regras (15/11)
 
 Com os desenhos ocupando o card inteiro, cada um precisava de uma força baixa para não atrapalhar a leitura (35% a 70%). A dona sugeriu o contrário: o texto das regras ganha um fundo próprio. Com efeito, o `SpellCard` põe a descrição numa caixa `bg-card/80` com cantos arredondados e uma margem negativa, para o texto continuar alinhado com o cabeçalho. O contêiner que anima a abertura ganha a mesma folga dos lados, senão a caixa seria cortada.

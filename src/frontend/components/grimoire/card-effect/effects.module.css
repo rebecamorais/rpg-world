@@ -220,7 +220,9 @@
 /* Necromancy (crypt fog, v2): a mausoleum's funerary mist. Three fog banks rise from the foot of
    the card at different heights and densities; a translucent spectral veil hangs on the right in
    soft vertical folds; flakes of ash (uneven ellipses, not round dots) drift through the low
-   mist; a vignette gives the layers depth. No skulls, no blur, nothing over the title. */
+   mist; a vignette gives the layers depth. No skulls, no blur, nothing over the title.
+   Cost: the veil and the fog are each painted only over their own strip (a tile), not the whole
+   card: same picture, about a fifth of the raster added on open (101 -> 23 ms, slow phone). */
 .fx[data-effect='crypt-fog'] {
   background:
     /* ash: uneven flakes in the low mist and in front of the veil */
@@ -242,17 +244,21 @@
       2.6px 4.4px no-repeat,
     radial-gradient(closest-side, var(--s3) 55%, transparent) calc(82% - 1.8px) calc(36% - 0.8px) /
       3.6px 1.6px no-repeat,
-    /* spectral veil: soft vertical folds on the right, a lighter seam inside */
-    radial-gradient(5% 46% at 89% 34%, var(--s3), transparent 72%),
-    radial-gradient(14% 62% at 86% 40%, var(--s2), transparent 70%),
-    radial-gradient(10% 55% at 96% 28%, var(--s2), transparent 72%),
-    radial-gradient(22% 70% at 80% 48%, var(--s1), transparent 72%),
-    /* fog banks: low and dense, middle, high and thin */
-    radial-gradient(120% 42% at 28% 116%, var(--s4), transparent 70%),
-    radial-gradient(95% 36% at 78% 104%, var(--s3), transparent 72%),
-    radial-gradient(80% 30% at 50% 88%, var(--s1), transparent 74%),
-    linear-gradient(to top, var(--s2), transparent 38%),
-    /* depth: the crypt's darkness at the edges */
+    /* spectral veil, in one strip over the right 36% (64%-100%): soft vertical folds, a lighter seam */
+    radial-gradient(13.89% 46% at 69.44% 34%, var(--s3), transparent 72%) 100% 0 / 36% 100%
+      no-repeat,
+    radial-gradient(38.89% 62% at 61.11% 40%, var(--s2), transparent 70%) 100% 0 / 36% 100%
+      no-repeat,
+    radial-gradient(27.78% 55% at 88.89% 28%, var(--s2), transparent 72%) 100% 0 / 36% 100%
+      no-repeat,
+    radial-gradient(61.11% 70% at 44.44% 48%, var(--s1), transparent 72%) 100% 0 / 36% 100%
+      no-repeat,
+    /* fog banks, in one strip over the bottom 40% (60%-100%): low and dense, middle, high and thin */
+    radial-gradient(120% 105% at 28% 140%, var(--s4), transparent 70%) 0 100% / 100% 40% no-repeat,
+    radial-gradient(95% 90% at 78% 110%, var(--s3), transparent 72%) 0 100% / 100% 40% no-repeat,
+    radial-gradient(80% 75% at 50% 70%, var(--s1), transparent 74%) 0 100% / 100% 40% no-repeat,
+    linear-gradient(to top, var(--s2), transparent 95%) 0 100% / 100% 40% no-repeat,
+    /* depth: the crypt's darkness at the edges (the only layer over the whole card) */
     radial-gradient(circle at 50% 45%, transparent 40%, var(--fx-shade) 125%);
 }
 /* Motifs that stay in the top corner, away from the rules text */
