@@ -18,6 +18,8 @@ interface Result {
   initial: Row;
   scroll: Row;
   open?: Row;
+  /** Desktop only: the phone has no hover */
+  hover?: Row;
 }
 
 const { env, results } = JSON.parse(readFileSync(process.argv[2], 'utf8')) as {
@@ -35,6 +37,7 @@ const fmt = (n: number) => (Math.abs(n) >= 100 ? n.toFixed(0) : n.toFixed(1));
 const PHASES = {
   initial: ['style', 'layout', 'paint', 'raster', 'composite', 'decode', 'lcp'],
   open: ['style', 'layout', 'paint', 'raster', 'composite', 'frameP95', 'framesOver33ms'],
+  hover: ['style', 'paint', 'raster', 'composite', 'frameP95', 'framesOver33ms'],
   scroll: [
     'style',
     'layout',
@@ -52,7 +55,12 @@ const PHASES = {
 const scenarios = [...new Set(results.map((r) => r.scenario))];
 const devices = [...new Set(results.map((r) => r.device))];
 const themes = [...new Set(results.map((r) => r.theme ?? 'dark'))];
-const LABEL = { initial: 'renderização inicial', scroll: 'rolagem', open: 'abrir o card' };
+const LABEL = {
+  initial: 'renderização inicial',
+  scroll: 'rolagem',
+  open: 'abrir o card',
+  hover: 'hover em 6 cards',
+};
 
 const values = (device: string, theme: string, scenario: string, phase: string, metric: string) =>
   results
@@ -72,7 +80,8 @@ for (const device of devices) {
       keyof typeof PHASES,
       readonly string[],
     ][]) {
-      if (!results.some((r) => (r as unknown as Record<string, unknown>)[phase])) continue;
+      const ran = results.filter((r) => r.device === device);
+      if (!ran.some((r) => (r as unknown as Record<string, unknown>)[phase])) continue;
       console.log(`\n### ${device} · ${theme} · ${LABEL[phase]} (ms, mediana [mín–máx])\n`);
       console.log(`| Métrica | ${scenarios.join(' | ')} |`);
       console.log(`|---|${scenarios.map(() => '---').join('|')}|`);

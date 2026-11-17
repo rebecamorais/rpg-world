@@ -39,9 +39,12 @@ const SCENARIOS: readonly string[] = process.env.SCENARIOS
       (s) =>
         (ALL_SCENARIOS as readonly string[]).includes(s) ||
         s.startsWith('fx:') ||
-        s.startsWith('icons:'),
+        s.startsWith('icons:') ||
+        s.startsWith('border:'),
     )
   : ALL_SCENARIOS;
+// DEVICES=phone re-measures one device
+const ONLY_DEVICES = process.env.DEVICES?.split(',');
 const THEMES = (process.env.THEMES ?? 'dark,light').split(',') as ('dark' | 'light')[];
 const DEVICES = {
   desktop: { viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1, cpu: 1, mobile: false },
@@ -138,6 +141,17 @@ async function scrollPhase(page: Page) {
   return readFrames(page);
 }
 
+/** Moves the mouse over cards 2 to 7 (their hover effects run), 450 ms on each. */
+async function hoverPhase(page: Page) {
+  await recordFrames(page);
+  const cards = page.locator('[data-lab-list] > article');
+  for (let i = 1; i < 7; i++) {
+    await cards.nth(i).hover({ position: { x: 200, y: 30 } });
+    await page.waitForTimeout(450);
+  }
+  return readFrames(page);
+}
+
 /** Opens the first card of the list (SpellVFX appears) and waits for its transition. */
 async function openPhase(page: Page) {
   await recordFrames(page);
@@ -166,13 +180,17 @@ async function sample(
   const page = await context.newPage();
   const cdp = await context.newCDPSession(page);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: d.cpu });
-  // none | fx:<effect id> | icons:emblem (every card's header icon is its school emblem)
+  // none | fx:<effect id> | icons:<emblem|webp|mask> | border:<hover>-<opening> (either 'none')
+  const [kind, value = ''] = scenario.split(':');
+  const [hoverId, openingId] = value.split('-');
   const query =
-    scenario === 'none'
-      ? `count=${COUNT}`
-      : scenario.startsWith('icons:')
-        ? `icons=${scenario.slice(6)}&count=${COUNT}`
-        : `effect=${scenario.slice(3)}&count=${COUNT}`;
+    kind === 'icons'
+      ? `icons=${value}&count=${COUNT}`
+      : kind === 'fx'
+        ? `effect=${value}&count=${COUNT}`
+        : kind === 'border'
+          ? `hover=${hoverId}&opening=${openingId}&count=${COUNT}`
+          : `count=${COUNT}`;
 
   let lcp = 0;
   const initial = await trace(cdp, async () => {
@@ -196,9 +214,19 @@ async function sample(
   const scroll = await trace(cdp, async () => {
     frames = await scrollPhase(page);
   });
-  // Back to the top of the list (not measured), then open the first card
+  // Back to the top of the list (not measured)
   await page.locator('[data-lab-list]').evaluate((el) => el.scrollIntoView({ block: 'start' }));
   await page.waitForTimeout(500);
+  // Hover over a few closed cards, on devices with a mouse (the phone has no hover)
+  let hovering: Awaited<ReturnType<typeof readFrames>> | undefined;
+  const hover = d.mobile
+    ? undefined
+    : await trace(cdp, async () => {
+        hovering = await hoverPhase(page);
+      });
+  await page.mouse.move(0, 0);
+  await page.waitForTimeout(300);
+  // Then open the first card
   let opening: Awaited<ReturnType<typeof readFrames>> | undefined;
   const open = await trace(cdp, async () => {
     opening = await openPhase(page);
@@ -211,6 +239,7 @@ async function sample(
     initial: { ...initial, lcp },
     scroll: { ...scroll, ...frames! },
     open: { ...open, ...opening! },
+    ...(hover && { hover: { ...hover, ...hovering! } }),
   };
 }
 
@@ -246,6 +275,7 @@ const results: Awaited<ReturnType<typeof sample>>[] = [];
 await sample(browser, 'desktop', 'dark', 'none');
 for (let s = 0; s < SAMPLES; s++) {
   for (const device of Object.keys(DEVICES) as (keyof typeof DEVICES)[]) {
+    if (ONLY_DEVICES && !ONLY_DEVICES.includes(device)) continue;
     for (const theme of THEMES) {
       for (const scenario of SCENARIOS) {
         results.push(await sample(browser, device, theme, scenario));
