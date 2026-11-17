@@ -100,6 +100,13 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
 
 29. **(dona)** **Bordas (17/11):** os efeitos de borda da decisão 20 viraram a peça `card-border` da biblioteca. No card de magia ficam o **Anel de luz** no hover e o **Giro de luz** ao abrir, que se conectam, sobre a Borda arcana parada (`SPELL_CARD_BORDER`). O Brilho que percorre, a Borda que gira, o Feixe e os Cantos ficam como opção para outros lugares (item, ficha, outras telas). Os fundos Aura e Brasa saíram: os desenhos ocupam esse lugar. Medição em [explorations/open-card-effects.md](../../grimoire-enchantments/explorations/open-card-effects.md). **Ainda não estão no spellbook.**
 
+30. **(dona)** **Ícone do cabeçalho (17/11):** toda magia mostra o **emblema da sua escola** no cabeçalho, inclusive as que causam dano (Bola de Fogo: emblema de Evocação no cabeçalho, efeito de fogo no card aberto). Hoje nenhuma magia tem ícone próprio: as de dano mostram o ícone do tipo de dano e as sem dano mostram o ícone da categoria (417 de 499 com o mesmo ícone de "utilidade").
+    - **Cor:** a do mapeamento atual da magia (o dano, senão a escola).
+    - **Técnica:** a imagem WebP do emblema como máscara, pintada na cor da magia, que custa o mesmo que o ícone de hoje.
+    - **Dano:** continua na linha de detalhes, com o ícone do tipo de dano, também no card fechado.
+    - **Efeito do card aberto:** continua priorizando o dano, senão a escola.
+    - Decisão fechada: o PR de integração não reabre a escolha.
+
 ## Fora do escopo
 
 - Implementar componentes, instalar pacotes, alterar a UI atual ou o banco de dados.

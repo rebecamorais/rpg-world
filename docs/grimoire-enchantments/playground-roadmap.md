@@ -18,7 +18,7 @@ Tudo isso está na biblioteca e no laboratório (PR #219), sem tocar no spellboo
 - Ficam de fora: inventário, ficha, seletor de tema, materiais e componentes novos do catálogo.
 - Validação: os 13 danos e as 8 escolas, card fechado e aberto, temas claro e escuro, celular, teclado, movimento reduzido, `forced-colors`, e as ações de aprender, preparar e esquecer.
 - Medição: 100 cards com e sem Grimório no spellbook real. Critérios: CLS 0, nenhum quadro de abertura acima de 50 ms, rolagem sem regressão.
-- Decisão em aberto: o ícone do cabeçalho das magias com dano (o ícone do dano de hoje ou o emblema da escola).
+- Ícone do cabeçalho: o emblema da escola em todas as magias, inclusive as de dano, em WebP como máscara na cor da magia (decisão 30). O dano segue na linha de detalhes, com o seu ícone. Validar primeiro o card fechado: dá para ver a escola e o dano sem abrir a magia.
 
 O resto deste arquivo é o plano original, guardado como referência.
 
