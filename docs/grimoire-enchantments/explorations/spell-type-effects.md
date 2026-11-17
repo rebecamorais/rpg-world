@@ -296,6 +296,24 @@ A dona desenhou um emblema para cada escola, e os oito estão aprovados (decisã
 
 Os efeitos de escola em CSS continuam no catálogo, mas o mapa não usa mais nenhum deles.
 
+## Fundo de cor e emblemas como ícones (17/11, no laboratório)
+
+**Fundo de cor.** A pedido da dona, os 8 emblemas ganharam uma lavagem da cor da escola atrás deles: um brilho vindo da direita, onde está o emblema, e uma bruma subindo do pé do card. São dois gradientes num `::before` da camada do efeito, pintados uma vez ao abrir, sem animação com movimento reduzido.
+
+**Emblemas como ícones.** No laboratório (`?icons=emblem`), o ícone do cabeçalho de cada magia vira o emblema da escola dela (`spellEmblemOf`), num quadrado de 36 px, pela peça `EffectEmblem` e pela prop opcional `icon` do `SpellCard`. Sem a prop, o card é idêntico. O emblema sai na cor da magia, como o resto do card.
+
+**Medição** (dados em [card-effects-bench-emblems.json](card-effects-bench-emblems.json); celular com a CPU 4x mais lenta, mediana dos dois temas, em ms):
+
+| Cenário                         | Fase    | style | paint | raster | frames > 33 ms |
+| ------------------------------- | ------- | ----- | ----- | ------ | -------------- |
+| card de hoje                    | abrir   | 13    | 37    | 65     | 0              |
+| emblema da Evocação + fundo     | abrir   | 46    | 57    | 92     | 1              |
+| emblema da Abjuração + fundo    | abrir   | 45    | 56    | 94     | 0              |
+| card de hoje                    | rolagem | 122   | 397   | 234    | 1              |
+| emblemas como ícone (100 cards) | rolagem | 171   | 471   | 243    | 2,5            |
+
+O fundo de cor custa pouco. Os ícones em SVG pesam um pouco na rolagem: +40% de style, +19% de paint e um ou dois quadros lentos a mais na rolagem inteira do celular lento (no desktop, +23% de raster). Uma saída mais leve seria usar as imagens WebP da dona reduzidas (cerca de 88 px), ao custo de a cor ficar fixa e não seguir o tema.
+
 ## Fundo para o texto das regras (15/11)
 
 Com os desenhos ocupando o card inteiro, cada um precisava de uma força baixa para não atrapalhar a leitura (35% a 70%). A dona sugeriu o contrário: o texto das regras ganha um fundo próprio. Com efeito, o `SpellCard` põe a descrição numa caixa `bg-card/80` com cantos arredondados e uma margem negativa, para o texto continuar alinhado com o cabeçalho. O contêiner que anima a abertura ganha a mesma folga dos lados, senão a caixa seria cortada.
