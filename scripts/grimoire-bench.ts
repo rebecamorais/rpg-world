@@ -36,7 +36,10 @@ const ALL_SCENARIOS = [
 // (any fx:<effect id> works here too, beyond the ones listed above)
 const SCENARIOS: readonly string[] = process.env.SCENARIOS
   ? process.env.SCENARIOS.split(',').filter(
-      (s) => (ALL_SCENARIOS as readonly string[]).includes(s) || s.startsWith('fx:'),
+      (s) =>
+        (ALL_SCENARIOS as readonly string[]).includes(s) ||
+        s.startsWith('fx:') ||
+        s.startsWith('icons:'),
     )
   : ALL_SCENARIOS;
 const THEMES = (process.env.THEMES ?? 'dark,light').split(',') as ('dark' | 'light')[];
@@ -163,8 +166,13 @@ async function sample(
   const page = await context.newPage();
   const cdp = await context.newCDPSession(page);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: d.cpu });
+  // none | fx:<effect id> | icons:emblem (every card's header icon is its school emblem)
   const query =
-    scenario === 'none' ? `count=${COUNT}` : `effect=${scenario.slice(3)}&count=${COUNT}`;
+    scenario === 'none'
+      ? `count=${COUNT}`
+      : scenario.startsWith('icons:')
+        ? `icons=${scenario.slice(6)}&count=${COUNT}`
+        : `effect=${scenario.slice(3)}&count=${COUNT}`;
 
   let lcp = 0;
   const initial = await trace(cdp, async () => {

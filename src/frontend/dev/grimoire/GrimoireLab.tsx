@@ -5,22 +5,29 @@
  * its text is in Portuguese and stays out of next-intl on purpose (it lives outside the folders
  * the hardcoded-text guard reads).
  */
-import { type CSSProperties, useCallback, useState } from 'react';
+import { type CSSProperties, type ReactNode, useCallback, useState } from 'react';
 
 import { SpellCard } from '@frontend/components/character/spells/spell-card/SpellCard';
 import { EffectLayers, cardEffect } from '@frontend/components/grimoire/card-effect/CardEffect';
+import { EffectEmblem } from '@frontend/components/grimoire/card-effect/EffectArt';
+import { ART, type ArtName } from '@frontend/components/grimoire/card-effect/art';
 import {
   type CardEffect,
   EFFECT_IDS,
   type EffectId,
 } from '@frontend/components/grimoire/card-effect/types';
 import { DAMAGE_THEMES, SCHOOL_THEMES } from '@frontend/constants/damage-themes';
-import { spellEffectOf } from '@frontend/constants/grimoire-effects';
+import { spellEffectOf, spellEmblemOf } from '@frontend/constants/grimoire-effects';
 import type { Spell } from '@frontend/types/spells';
 
 import type { LabParams } from './lab-params';
 
 // Built once: stable objects keep SpellCard's memo working
+// One element per emblem, built once: the same object keeps SpellCard's memo working
+const EMBLEMS = Object.fromEntries(
+  (Object.keys(ART) as ArtName[]).map((name) => [name, <EffectEmblem key={name} name={name} />]),
+) as Record<ArtName, ReactNode>;
+
 const EFFECTS = Object.fromEntries(EFFECT_IDS.map((id) => [id, cardEffect(id)])) as Record<
   EffectId,
   CardEffect
@@ -46,17 +53,28 @@ const href = (params: Partial<LabParams>, current: LabParams) => {
   const next = { ...current, ...params };
   const query = new URLSearchParams();
   if (next.effect) query.set('effect', next.effect);
+  if (next.icons) query.set('icons', next.icons);
   query.set('count', String(next.count));
   if (next.expanded) query.set('expanded', '1');
   return `?${query}`;
 };
 
-export function GrimoireLab({ spells, effect, count, expanded }: LabParams & { spells: Spell[] }) {
-  const current = { effect, count, expanded };
+export function GrimoireLab({
+  spells,
+  effect,
+  count,
+  expanded,
+  icons,
+}: LabParams & { spells: Spell[] }) {
+  const current = { effect, count, expanded, icons };
   const [replay, setReplay] = useState(0);
   const [openId, setOpenId] = useState<string | null>(expanded ? (spells[0]?.id ?? null) : null);
   const toggle = useCallback((id: string) => setOpenId((prev) => (prev === id ? null : id)), []);
   // 'auto': each spell wears what the D&D map gives it (damage type, else school), or nothing
+  const emblemOf = (spell: Spell) => {
+    const name = spellEmblemOf(spell);
+    return name ? EMBLEMS[name] : undefined;
+  };
   const effectOf = (spell: Spell) => {
     if (effect !== 'auto') return effect ? EFFECTS[effect] : undefined;
     const id = spellEffectOf(spell);
@@ -130,6 +148,12 @@ export function GrimoireLab({ spells, effect, count, expanded }: LabParams & { s
           >
             {effect ? 'sem efeitos' : 'efeitos: auto (por tipo de magia)'}
           </a>
+          <a
+            className="text-body underline"
+            href={href({ icons: icons ? null : 'emblem' }, current)}
+          >
+            {icons ? 'ícones do jogo' : 'ícones: emblemas das escolas'}
+          </a>
           <a className="text-body underline" href={href({ count: 100 }, current)}>
             100 cards
           </a>
@@ -138,7 +162,7 @@ export function GrimoireLab({ spells, effect, count, expanded }: LabParams & { s
           </a>
         </nav>
         <p className="text-caption text-muted-foreground" data-lab-scenario="">
-          {`effect=${effect ?? 'none'} · ${Math.min(count, spells.length)} cards`}
+          {`effect=${effect ?? 'none'} · icons=${icons ?? 'game'} · ${Math.min(count, spells.length)} cards`}
         </p>
         <div className="flex flex-col gap-3" data-lab-list="">
           {spells.slice(0, count).map((spell) => (
@@ -149,6 +173,7 @@ export function GrimoireLab({ spells, effect, count, expanded }: LabParams & { s
               isExpanded={openId === spell.id}
               onToggle={toggle}
               effect={effectOf(spell)}
+              icon={icons ? emblemOf(spell) : undefined}
             />
           ))}
         </div>

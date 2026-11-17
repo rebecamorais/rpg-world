@@ -50,3 +50,23 @@ export function EffectArt({ name }: { name: ArtName }) {
     />
   );
 }
+
+/**
+ * The same drawing as a small emblem that fills its box (a spell's icon, for example), in the
+ * tones of --grimoire-tint (else the text colour). Decorative: the host labels it.
+ */
+export function EffectEmblem({ name }: { name: ArtName }) {
+  const prefix = useId().replace(/[^\w-]/g, '');
+  const { viewBox, markup } = ART[name];
+  return (
+    <svg
+      className={styles.emblem}
+      viewBox={viewBox}
+      preserveAspectRatio="xMidYMid meet"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      dangerouslySetInnerHTML={{ __html: markup.replaceAll('__ID__', prefix) }}
+    />
+  );
+}

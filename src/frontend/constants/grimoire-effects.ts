@@ -1,3 +1,4 @@
+import { ART, type ArtName } from '@frontend/components/grimoire/card-effect/art';
 import type { EffectId } from '@frontend/components/grimoire/card-effect/types';
 
 /*
@@ -43,4 +44,13 @@ export function spellEffectOf(spell: {
     BY_SCHOOL[spell.school?.toLowerCase() ?? ''] ??
     null
   );
+}
+
+/**
+ * A spell's school emblem (lab: the header icon). The school effects are the owner's emblems, so
+ * the emblem is the school's effect drawing; null when the school has none.
+ */
+export function spellEmblemOf(spell: { school?: string | null }): ArtName | null {
+  const id = BY_SCHOOL[spell.school?.toLowerCase() ?? ''];
+  return id && id in ART ? (id as ArtName) : null;
 }

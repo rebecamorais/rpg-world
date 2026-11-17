@@ -34,6 +34,8 @@ interface SpellCardProps {
    * Without it the card renders exactly as before. Pass a stable object.
    */
   effect?: CardEffect;
+  /** Grimoire exploration (lab only): an emblem in place of the header's game icon. */
+  icon?: React.ReactNode;
 }
 
 export const SpellCard = React.memo(function SpellCard({
@@ -47,6 +49,7 @@ export const SpellCard = React.memo(function SpellCard({
   isLearned,
   showLevel,
   effect,
+  icon,
 }: SpellCardProps) {
   const { theme, mainIcon, displayValues } = useSpellDisplay(spell);
   // This spell's own write, not the whole list's: the other cards stay usable meanwhile
@@ -123,6 +126,7 @@ export const SpellCard = React.memo(function SpellCard({
           spell={spell}
           isExpanded={isExpanded}
           mainIcon={mainIcon}
+          icon={icon}
           displayValues={displayValues}
           isLearned={isLearned}
           showLevel={showLevel}

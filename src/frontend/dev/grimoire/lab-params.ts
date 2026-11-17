@@ -4,6 +4,8 @@ export interface LabParams {
   /** The open card's effect: null = today's background; 'auto' = each spell by the D&D map */
   effect: EffectId | 'auto' | null;
   count: number;
+  /** 'emblem': each spell's school emblem in place of the header's game icon */
+  icons: 'emblem' | null;
   /** Open the first card */
   expanded: boolean;
 }
@@ -22,6 +24,7 @@ export function parseLabParams(query: Record<string, string | string[] | undefin
           ? (effect as EffectId)
           : null,
     count: Number.isInteger(count) && count > 0 ? Math.min(count, 100) : 24,
+    icons: one(query.icons) === 'emblem' ? 'emblem' : null,
     expanded: one(query.expanded) === '1',
   };
 }
