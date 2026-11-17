@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="aegisOuter" x1="44" y1="31" x2="201" y2="221" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E9F4FF"/>
+      <stop offset="0.40" stop-color="#98C1F0"/>
+      <stop offset="1" stop-color="#476F9F"/>
+    </linearGradient>
+    <linearGradient id="aegisInner" x1="67" y1="55" x2="171" y2="188" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C6E2FC"/>
+      <stop offset="0.58" stop-color="#779BC9"/>
+      <stop offset="1" stop-color="#36567B"/>
+    </linearGradient>
+    <linearGradient id="aegisCore" x1="91" y1="88" x2="157" y2="164" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F6FBFF"/>
+      <stop offset="0.56" stop-color="#B5D8FA"/>
+      <stop offset="1" stop-color="#618FC2"/>
+    </linearGradient>
+    <linearGradient id="aegisFacet" x1="71" y1="77" x2="170" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C6E2FC" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#36567B" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Abjuration: protective architecture, not a summoning circle or an attack effect. -->
+  <!-- Staggered external containment brackets -->
+  <g stroke="url(#aegisOuter)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 43L38 55V101" stroke-width="2.7" stroke-opacity="0.66"/>
+    <path d="M38 144V157L61 182" stroke-width="2.7" stroke-opacity="0.66"/>
+    <path d="M180 43L202 55V101" stroke-width="2.7" stroke-opacity="0.66"/>
+    <path d="M202 144V157L179 182" stroke-width="2.7" stroke-opacity="0.66"/>
+    <path d="M55 98L48 106V134L55 142" stroke-width="2" stroke-opacity="0.55"/>
+    <path d="M185 98L192 106V134L185 142" stroke-width="2" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- The main aegis: angular upper shield with a clean tapered base -->
+  <path d="M120 21L194 58V125C194 168 173 197 120 222C67 197 46 168 46 125V58L120 21Z"
+        fill="url(#aegisFacet)" stroke="url(#aegisOuter)" stroke-width="4.1" stroke-linejoin="round"/>
+  <path d="M120 39L177 68V125C177 158 161 181 120 202C79 181 63 158 63 125V68L120 39Z"
+        stroke="url(#aegisInner)" stroke-width="2.6" stroke-linejoin="round"/>
+
+  <!-- Reinforcing armor-like seams echoing the ward geometry -->
+  <path d="M47 87L64 97M193 87L176 97M64 161L81 169M176 161L159 169"
+        stroke="#779BC9" stroke-width="2" stroke-opacity="0.68" stroke-linecap="round"/>
+  <path d="M120 47V63M120 178V198" stroke="#C6E2FC" stroke-width="2.3" stroke-linecap="round"/>
+  <path d="M72 120H87M153 120H168" stroke="#98C1F0" stroke-width="2.1" stroke-linecap="round"/>
+
+  <!-- Interlocked containment geometry (wards are not just a generic shield icon) -->
+  <path d="M120 67L161 98V139L120 175L79 139V98L120 67Z"
+        fill="#36567B" fill-opacity="0.08" stroke="url(#aegisOuter)" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M120 82L146 107V131L120 155L94 131V107L120 82Z"
+        stroke="url(#aegisInner)" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M120 67V82M161 98L146 107M161 139L146 131M120 175V155M79 139L94 131M79 98L94 107"
+        stroke="#E9F4FF" stroke-width="1.9" stroke-opacity="0.65" stroke-linecap="round"/>
+
+  <!-- The sealed core: luminous diamond, not crossed weapons or a skull -->
+  <path d="M120 99L139 119L120 141L101 119L120 99Z"
+        fill="#779BC9" fill-opacity="0.14" stroke="url(#aegisCore)" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M120 107L131 119L120 132L109 119L120 107Z"
+        stroke="#F6FBFF" stroke-width="2.1" stroke-linejoin="round"/>
+  <path d="M120 111V127M112 119H128" stroke="#E9F4FF" stroke-width="1.7" stroke-linecap="round"/>
+
+  <!-- Four locks around the ward, designed as abstract original runes -->
+  <g stroke="url(#aegisOuter)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M86 82L79 79L72 86L79 93L86 90"/>
+    <path d="M154 82L161 79L168 86L161 93L154 90"/>
+    <path d="M86 152L79 149L72 156L79 163L86 160"/>
+    <path d="M154 152L161 149L168 156L161 163L154 160"/>
+  </g>
+  <g fill="#C6E2FC">
+    <path d="M120 10L124 16L120 22L116 16L120 10Z"/>
+    <path d="M120 231L116 225L120 219L124 225L120 231Z"/>
+    <path d="M30 119L36 115L42 119L36 123L30 119Z"/>
+    <path d="M210 119L204 115L198 119L204 123L210 119Z"/>
+  </g>
+  <!-- Narrow light flecks suggest deflected magic, no continuous animation or filters -->
+  <g stroke="#E9F4FF" stroke-width="1.6" stroke-opacity="0.78" stroke-linecap="round">
+    <path d="M67 50L73 54"/>
+    <path d="M173 50L167 54"/>
+    <path d="M58 185L65 191"/>
+    <path d="M182 185L175 191"/>
+  </g>
+</svg>

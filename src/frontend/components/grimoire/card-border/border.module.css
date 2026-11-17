@@ -1,0 +1,282 @@
+/*
+ * Border effects of the Grimoire (approved on 14/11, docs/grimoire-enchantments/explorations/
+ * open-card-effects.md), from the owner's 21st favourites. Everything stays on the border's ring,
+ * never over the text. Still while nothing happens: hover effects run only on the card under the
+ * mouse and only with a real hover; opening effects run once (up to 1.1 s) and go. No blur, no
+ * loop, no pointer tracking. The colour is the host's (--grimoire-tint, decision 25).
+ */
+
+@property --grimoire-border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 210deg;
+}
+
+.host {
+  --t: var(--grimoire-tint, currentColor);
+}
+:global(:root[data-theme='light']) .host {
+  /* A deeper tone, so a pale tint (lime, yellow) still shows on a thin light border */
+  --t: color-mix(in oklab, var(--grimoire-tint, currentColor), black 30%);
+}
+
+/* ---------- The open card's still base: the arcane border (Info Card, REF-111) ----------
+   A conic gradient in the tint, painted under the card's own border; the card stays its colour */
+.host[data-border-open] {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    conic-gradient(
+        from 210deg,
+        var(--t) 0 12%,
+        color-mix(in srgb, var(--t), transparent 65%) 25%,
+        var(--border) 45% 70%,
+        color-mix(in srgb, var(--t), transparent 55%) 88%,
+        var(--t)
+      )
+      border-box;
+}
+
+/* The ring: a layer cut to a thin band inside the border, so effects never reach the text */
+.ring {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+/* ---------- Hover (closed cards) ----------
+   All inside (hover: hover): on a phone none of it exists, so a long list scrolls as today
+   (measured on 17/11: the ring on every card cost paint on the phone for an effect it never runs) */
+@media (hover: hover) {
+  /* The same ring, as the closed card's ::after, only for the effects that paint on it */
+  .host:is([data-border-hover='glow'], [data-border-hover='shine'])::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    border-radius: inherit;
+    padding: 1.5px;
+    pointer-events: none;
+    opacity: 0;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+  }
+
+  /* Ring of light: a fixed glow in a corner of the border fades in (Spotlight, REF-21, no
+     tracking) */
+  .host[data-border-hover='glow']:not([data-border-open])::after {
+    background: radial-gradient(
+      70% 140% at 100% 0%,
+      var(--t),
+      color-mix(in srgb, var(--t), transparent 60%) 40%,
+      transparent 75%
+    );
+    transition: opacity 0.25s ease;
+  }
+  .host[data-border-hover='glow']:not([data-border-open]):hover::after {
+    opacity: 1;
+  }
+
+  /* Shine: one sweep of light along the border per hover (Shine Border, REF-16, MIT) */
+  .host[data-border-hover='shine']:not([data-border-open])::after {
+    background: linear-gradient(100deg, transparent 35%, var(--t) 50%, transparent 65%) 120% 0 /
+      300% 100% no-repeat;
+  }
+  .host[data-border-hover='shine']:not([data-border-open]):hover::after {
+    opacity: 1;
+    animation: sweep 0.9s ease-in-out both;
+  }
+
+  /* Turning border: the card's own border light turns a little and back (Info Card, REF-111); a
+     transition of a registered angle, not a loop. The gradient border sits on every closed card */
+  .host[data-border-hover='turn']:not([data-border-open]) {
+    border-color: transparent;
+    background:
+      linear-gradient(var(--card), var(--card)) padding-box,
+      conic-gradient(
+          from var(--grimoire-border-angle),
+          color-mix(in srgb, var(--t), transparent 30%) 0 10%,
+          var(--border) 25% 80%,
+          color-mix(in srgb, var(--t), transparent 30%)
+        )
+        border-box;
+    transition: --grimoire-border-angle 0.7s ease;
+  }
+  .host[data-border-hover='turn']:not([data-border-open]):hover {
+    --grimoire-border-angle: 330deg;
+  }
+}
+
+@keyframes sweep {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -20% 0;
+  }
+}
+
+/* ---------- Opening (once) ---------- */
+
+/* Beam: a point of light runs one lap of the border and goes (Border Beam, REF-34, MIT). Where
+   offset-path: rect() is missing, the card opens without it */
+.beam {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 90px;
+  aspect-ratio: 1;
+  opacity: 0;
+  background: radial-gradient(
+    closest-side,
+    var(--t),
+    color-mix(in srgb, var(--t), transparent 50%) 50%,
+    transparent
+  );
+}
+@supports (offset-path: rect(0 auto auto 0 round 12px)) {
+  .beam {
+    offset-path: rect(0 auto auto 0 round 0.75rem);
+    offset-anchor: 50% 50%;
+    animation: lap 1.1s cubic-bezier(0.45, 0, 0.25, 1) both;
+  }
+}
+@keyframes lap {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+/* Spin: a light turns once around the border and goes; rotation only (Animated Border, REF-17) */
+.spin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  opacity: 0;
+  background: conic-gradient(from 0deg, transparent 0 62%, var(--t) 82%, transparent 96%);
+  animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    rotate: 360deg;
+    opacity: 0;
+  }
+}
+
+/* Corners: the four corners light up one after another and stay marked, dimmer (Focus Frame,
+   REF-38). Opacity and scale only */
+.corners {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+.corners i {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--t);
+  opacity: 0.55;
+  animation: flare 0.5s ease-out both;
+}
+.corners i:nth-child(1) {
+  top: 6px;
+  left: 10px;
+  border-right: 0;
+  border-bottom: 0;
+  border-top-left-radius: 6px;
+}
+.corners i:nth-child(2) {
+  top: 6px;
+  right: 6px;
+  border-left: 0;
+  border-bottom: 0;
+  border-top-right-radius: 6px;
+  animation-delay: 0.08s;
+}
+.corners i:nth-child(3) {
+  bottom: 6px;
+  right: 6px;
+  border-left: 0;
+  border-top: 0;
+  border-bottom-right-radius: 6px;
+  animation-delay: 0.16s;
+}
+.corners i:nth-child(4) {
+  bottom: 6px;
+  left: 10px;
+  border-right: 0;
+  border-top: 0;
+  border-bottom-left-radius: 6px;
+  animation-delay: 0.24s;
+}
+@keyframes flare {
+  0% {
+    opacity: 0;
+    scale: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.55;
+    scale: 1;
+  }
+}
+
+/* Reduced motion: nothing moves. The glow appears at once, the shine and the lights don't run,
+   the corners rest marked, the border doesn't turn */
+@media (prefers-reduced-motion: reduce) {
+  .host,
+  .host::after,
+  .corners i {
+    animation: none !important;
+    transition: none !important;
+  }
+  .host[data-border-hover='shine']::after,
+  .ring {
+    display: none;
+  }
+}
+
+/* Forced colours (high contrast): the ornaments go, the card keeps the system's plain border */
+@media (forced-colors: active) {
+  .host::after,
+  .ring,
+  .corners {
+    display: none;
+  }
+  .host[data-border-open],
+  .host[data-border-hover] {
+    background: Canvas;
+    border-color: CanvasText;
+  }
+}

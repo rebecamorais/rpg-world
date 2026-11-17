@@ -3,6 +3,8 @@ name: CI - RPG World Tests
 on:
   pull_request:
     branches: [main]
+    # ready_for_review: a draft leaving draft runs the whole CI once
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
@@ -14,6 +16,8 @@ concurrency:
 
 jobs:
   test:
+    # Drafts skip CI (a skipped job counts as passing for the ruleset, and a draft can't merge)
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -74,6 +78,7 @@ jobs:
   # Ponta a ponta com Playwright: build de produção + Supabase de teste.
   # Informativo por enquanto: não está entre os checks obrigatórios do ruleset.
   e2e:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
 

@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { describe, expect, it, vi } from 'vitest';
 
+import type { CardEffect } from '@frontend/components/grimoire/card-effect/types';
 import type { Spell } from '@frontend/types/spells';
 
 import { SpellCard } from './SpellCard';
@@ -203,5 +204,29 @@ describe('SpellCard: condições', () => {
     );
     // The badge and the tag in the text
     expect(screen.getAllByRole('button', { name: 'Frightened, condition' })).toHaveLength(2);
+  });
+});
+
+describe('SpellCard com efeito (exploração do Grimoire)', () => {
+  const effect: CardEffect = { id: 'flame-ribbons', layers: () => <span data-testid="effect" /> };
+
+  it('sem efeito, não vira anfitrião de efeitos', () => {
+    const { container } = renderWithProviders(<SpellCard spell={FIREBALL} isExpanded />);
+    expect(container.querySelector('article')).not.toHaveAttribute('data-grimoire-host');
+  });
+
+  it('o efeito só aparece com o card aberto, no lugar do fundo de hoje, na cor da magia', () => {
+    const { container, rerender } = renderWithProviders(
+      <SpellCard spell={FIREBALL} effect={effect} />,
+    );
+    const card = container.querySelector('article')!;
+    expect(screen.queryByTestId('effect')).toBeNull();
+    expect(card).toHaveAttribute('data-grimoire-host');
+    expect(card.style.getPropertyValue('--grimoire-tint')).toBe('var(--spell-color)');
+
+    rerender(<SpellCard spell={FIREBALL} effect={effect} isExpanded />);
+    expect(screen.getByTestId('effect')).toBeInTheDocument();
+    // The ripple's starting point: the spell's icon
+    expect(card.querySelector('[data-grimoire-origin]')).not.toBeNull();
   });
 });

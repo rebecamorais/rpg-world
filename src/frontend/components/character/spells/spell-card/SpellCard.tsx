@@ -2,6 +2,9 @@
 
 import React, { useMemo } from 'react';
 
+import type { CardBorder } from '@frontend/components/grimoire/card-border/types';
+import { effectTextBackdrop } from '@frontend/components/grimoire/card-effect/CardEffect';
+import type { CardEffect } from '@frontend/components/grimoire/card-effect/types';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useIsSpellPending } from '@frontend/hooks/useCharacterSpells';
 import { cn } from '@frontend/lib/utils';
@@ -27,6 +30,18 @@ interface SpellCardProps {
   onLearnSpell?: (id: string) => void;
   isLearned?: boolean;
   showLevel?: boolean;
+  /**
+   * Grimoire exploration (lab only): the open card's effect, in place of the current background.
+   * Without it the card renders exactly as before. Pass a stable object.
+   */
+  effect?: CardEffect;
+  /** Grimoire exploration (lab only): an emblem in place of the header's game icon. */
+  icon?: React.ReactNode;
+  /**
+   * Grimoire exploration (lab only): border effects (the arcane border when open, a hover effect,
+   * an opening effect). Pass a stable object.
+   */
+  border?: CardBorder;
 }
 
 export const SpellCard = React.memo(function SpellCard({
@@ -39,6 +54,9 @@ export const SpellCard = React.memo(function SpellCard({
   onLearnSpell,
   isLearned,
   showLevel,
+  effect,
+  icon,
+  border,
 }: SpellCardProps) {
   const { theme, mainIcon, displayValues } = useSpellDisplay(spell);
   // This spell's own write, not the whole list's: the other cards stay usable meanwhile
@@ -67,12 +85,20 @@ export const SpellCard = React.memo(function SpellCard({
     () =>
       ({
         '--spell-color': theme.hex,
+        // Grimoire effects and borders take the spell's color
+        ...((effect || border) && { '--grimoire-tint': 'var(--spell-color)' }),
         contentVisibility: 'auto',
         // Height of a collapsed card, so off-screen cards don't make the scrollbar jump
         containIntrinsicSize: 'auto 96px',
       }) as React.CSSProperties,
-    [theme.hex],
+    [theme.hex, effect, border],
   );
+
+  // The spell's color lives in this stripe, the icon and the badges; the surface stays plain
+  const stripe = <span aria-hidden="true" className="bg-spell absolute inset-y-0 left-0 w-1" />;
+  // The open card's background: the Grimoire effect when there is one, else today's
+  const openLayer =
+    isExpanded && (effect ? effect.layers() : <SpellVFX mainIcon={mainIcon} spell={spell} />);
 
   return (
     <article
@@ -80,12 +106,15 @@ export const SpellCard = React.memo(function SpellCard({
         'spell-context group bg-card relative overflow-hidden rounded-xl border p-4 pl-5 outline-none sm:p-5 sm:pl-6',
         'transition-[border-color] duration-200',
         isExpanded ? 'border-spell-muted' : 'border-border hover:border-spell-muted',
+        border?.className,
       )}
       style={cardStyles}
       aria-labelledby={`spell-name-${spell.id}`}
+      data-grimoire-host={effect ? '' : undefined}
+      data-border-hover={border?.hover ?? undefined}
+      data-border-open={border && isExpanded ? '' : undefined}
     >
-      {/* The spell's color lives in this stripe, the icon and the badges; the surface stays plain */}
-      <span aria-hidden="true" className="bg-spell absolute inset-y-0 left-0 w-1" />
+      {stripe}
 
       {/* Primary Toggle Action (Clickable Background) */}
       <button
@@ -100,13 +129,15 @@ export const SpellCard = React.memo(function SpellCard({
         </span>
       </button>
 
-      {isExpanded && <SpellVFX mainIcon={mainIcon} spell={spell} />}
+      {openLayer}
+      {isExpanded && border?.layers()}
 
       <div className="pointer-events-none relative z-10 flex h-full flex-col">
         <SpellHeader
           spell={spell}
           isExpanded={isExpanded}
           mainIcon={mainIcon}
+          icon={icon}
           displayValues={displayValues}
           isLearned={isLearned}
           showLevel={showLevel}
@@ -121,9 +152,21 @@ export const SpellCard = React.memo(function SpellCard({
           )}
         >
           {/* inert while collapsed: hidden content can't take focus or be read. */}
-          <div className="overflow-hidden" inert={!isExpanded}>
+          {/* With an effect, the room the rules text's backdrop reaches into (it would be clipped) */}
+          <div className={cn('overflow-hidden', effect && '-mx-3 px-3')} inert={!isExpanded}>
             <div className="flex flex-col gap-4 pt-4">
-              <SpellDetails spell={spell} castingTime={displayValues.castingTime} />
+              {effect ? (
+                // A backdrop for the rules text, so the effect never gets in the way of reading it;
+                // the negative margin keeps the text in line with the header
+                <div
+                  data-grimoire-backdrop=""
+                  className={cn(effectTextBackdrop, '-mx-3 px-3 py-2.5')}
+                >
+                  <SpellDetails spell={spell} castingTime={displayValues.castingTime} />
+                </div>
+              ) : (
+                <SpellDetails spell={spell} castingTime={displayValues.castingTime} />
+              )}
 
               <SpellChipsRow spell={spell} displayValues={displayValues} />
 

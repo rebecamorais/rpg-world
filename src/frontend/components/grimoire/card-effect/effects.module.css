@@ -1,0 +1,712 @@
+/*
+ * Grimoire card effects (exploration): a motif per kind of content, shown on an OPEN card.
+ * Carried over from the approved sample (docs/grimoire-enchantments/explorations/spell-type-effects.md).
+ *
+ * Color: every effect is tinted by --grimoire-tint, set by the HOST card to its own color.
+ * Effect ids are neutral motifs (sunburst, ward-mesh...): which content
+ * wears which one is a game system's map, outside this library.
+ *
+ * Cost: gradients, masks and tiny inline SVGs, painted once when the card opens. Motion only on
+ * events, always with an end: one entrance accent (up to 1s) and short-lived ripples. No loops,
+ * canvas, WebGL or blur. Reduced motion: no entrance, no ripples.
+ */
+
+.layer {
+  --t: var(--grimoire-tint, #94a3b8);
+  --k: 1; /* motif strength: lower on the light theme */
+  --fx-shade: rgb(0 0 0 / 0.6);
+  --s1: color-mix(in srgb, var(--t), transparent 92%);
+  --s2: color-mix(in srgb, var(--t), transparent 85%);
+  --s3: color-mix(in srgb, var(--t), transparent 75%);
+  --s4: color-mix(in srgb, var(--t), transparent 60%);
+  --s5: color-mix(in srgb, var(--t), transparent 35%);
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+:global(:root[data-theme='light']) .layer {
+  --k: 0.8;
+  --fx-shade: rgb(0 0 0 / 0.1);
+}
+
+.fx {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: var(--k);
+}
+
+/*
+ * Sunburst (radiant): long alternating rays fanning out from a light source just above the top
+ * edge, at ~68% of the width so they don't compete with the title. Two repeating conics (strong
+ * and faint rays) make the alternation; a soft halo sits at the source; the masks fade the rays
+ * away from the source and keep the lower part of the card quiet for the rules text. Tinted by the
+ * host (lightened toward ivory), scales with any card size, static once shown.
+ */
+.fx[data-effect='sunburst'] {
+  --ray: color-mix(in oklab, var(--t), #fffbeb 35%);
+  --ray-a: color-mix(in srgb, var(--ray), transparent 66%);
+  --ray-b: color-mix(in srgb, var(--ray), transparent 82%);
+  background:
+    radial-gradient(
+      ellipse 34% 60% at 68% -8%,
+      color-mix(in srgb, var(--ray), transparent 45%),
+      color-mix(in srgb, var(--ray), transparent 80%) 45%,
+      transparent 75%
+    ),
+    repeating-conic-gradient(
+      from 0deg at 68% -28px,
+      var(--ray-a) 0deg 2.6deg,
+      transparent 3.4deg 11deg
+    ),
+    repeating-conic-gradient(
+      from 5.5deg at 68% -28px,
+      var(--ray-b) 0deg 1.6deg,
+      transparent 2.2deg 11deg
+    ),
+    linear-gradient(to bottom, color-mix(in srgb, var(--ray), transparent 88%), transparent 45%);
+  mask-image:
+    radial-gradient(farthest-side at 68% 0%, #000 10%, rgb(0 0 0 / 0.45) 55%, transparent 100%),
+    /* capped in px: on a tall (phone, open) card the rays still end before the rules text */
+    linear-gradient(
+        to bottom,
+        #000 0%,
+        rgb(0 0 0 / 0.6) min(35%, 56px),
+        transparent min(72%, 150px)
+      );
+  mask-composite: intersect;
+}
+:global(:root[data-theme='light']) .fx[data-effect='sunburst'] {
+  /* On a light page the rays need a deeper tone of the tint to show at all */
+  --ray: color-mix(in oklab, var(--t), #b45309 38%);
+  --ray-a: color-mix(in srgb, var(--ray), transparent 48%);
+  --ray-b: color-mix(in srgb, var(--ray), transparent 72%);
+}
+
+/* ---------- School motifs ----------
+   One motif per school, refined (15/11) with details lifted from the retired damage effects, so
+   the 499 spells without damage get the same finish: each detail lives inside the school's own
+   layer, never as a second effect. Still in validation (decision 27). */
+
+/* Transmutation: the alchemy circle with alchemical droplets orbiting it (from drips) */
+.fx[data-effect='alchemy-circle'] {
+  --o: 86% 32%;
+  background:
+    radial-gradient(circle, var(--s5) 0 1.8px, transparent 2.6px) calc(86% + 70px - 2.6px)
+      calc(32% - 2.6px) / 5.2px 5.2px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1.4px, transparent 2.2px) calc(86% - 70px - 2.2px)
+      calc(32% - 2.2px) / 4.4px 4.4px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1.6px, transparent 2.4px) calc(86% - 2.4px)
+      calc(32% + 70px - 2.4px) / 4.8px 4.8px no-repeat,
+    radial-gradient(circle, var(--s5) 0 1.4px, transparent 2.2px) calc(86% - 2.2px)
+      calc(32% - 70px - 2.2px) / 4.4px 4.4px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1px, transparent 1.8px) calc(86% + 50px - 1.8px)
+      calc(32% - 50px - 1.8px) / 3.6px 3.6px no-repeat,
+    radial-gradient(circle, var(--s5) 0 1.2px, transparent 2px) calc(86% - 50px - 2px)
+      calc(32% + 50px - 2px) / 4px 4px no-repeat,
+    radial-gradient(circle, var(--s3) 0 1px, transparent 1.8px) calc(86% - 50px - 1.8px)
+      calc(32% - 50px - 1.8px) / 3.6px 3.6px no-repeat,
+    radial-gradient(circle, var(--s3) 0 1px, transparent 1.8px) calc(86% + 50px - 1.8px)
+      calc(32% + 50px - 1.8px) / 3.6px 3.6px no-repeat,
+    radial-gradient(
+      circle at var(--o),
+      transparent 0 40px,
+      var(--s4) 41px 42px,
+      transparent 43px 56px,
+      var(--s3) 57px 58px,
+      transparent 59px 66px,
+      var(--s2) 66px 67px,
+      transparent 68px
+    ),
+    repeating-conic-gradient(from 0deg at var(--o), var(--s3) 0 1deg, transparent 1deg 30deg);
+  mask-image: radial-gradient(circle at 86% 32%, #000 0 76px, transparent 80px);
+}
+/* Abjuration: the ward mesh, with protective arcs closing in from the corner (from shockwave) */
+.fx[data-effect='ward-mesh'] {
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      transparent 0 58px,
+      var(--s4) 59px 60px,
+      transparent 61px 104px,
+      var(--s3) 105px 106px,
+      transparent 107px 160px,
+      var(--s2) 161px 162px,
+      transparent 163px
+    ),
+    repeating-linear-gradient(0deg, var(--s2) 0 1px, transparent 1px 20px),
+    repeating-linear-gradient(60deg, var(--s2) 0 1px, transparent 1px 20px),
+    repeating-linear-gradient(-60deg, var(--s2) 0 1px, transparent 1px 20px),
+    radial-gradient(60% 90% at 100% 0, var(--s3), transparent 70%);
+}
+/* Conjuration: the portal, with concentric reverberations around it (from echo) */
+.fx[data-effect='portal'] {
+  background:
+    radial-gradient(circle at 86% 40%, var(--s3) 0 18px, transparent 34px),
+    radial-gradient(
+      circle at 86% 40%,
+      transparent 0 34px,
+      var(--s5) 35px 37px,
+      transparent 38px 46px,
+      var(--s3) 47px 48px,
+      transparent 49px 60px,
+      var(--s3) 60px 61px,
+      transparent 62px 74px,
+      var(--s2) 74px 75px,
+      transparent 76px 90px,
+      var(--s1) 90px 91px,
+      transparent 92px
+    );
+}
+/* Divination: the star map under a discreet celestial halo, with a few brighter stars (from sunlight) */
+.fx[data-effect='star-map'] {
+  background:
+    radial-gradient(circle, var(--s5) 0 1.8px, transparent 2.8px) calc(72% - 2.8px)
+      calc(18% - 2.8px) / 5.6px 5.6px no-repeat,
+    radial-gradient(circle, var(--s5) 0 1.4px, transparent 2.4px) calc(90% - 2.4px)
+      calc(34% - 2.4px) / 4.8px 4.8px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1.4px, transparent 2.4px) calc(58% - 2.4px)
+      calc(8% - 2.4px) / 4.8px 4.8px no-repeat,
+    radial-gradient(circle, var(--s5) 0 1px, transparent 1.6px) 0 0 / 22px 22px,
+    radial-gradient(circle, var(--s4) 0 1px, transparent 1.6px) 11px 11px / 22px 22px,
+    radial-gradient(55% 70% at 80% -12%, var(--s3), transparent 72%),
+    radial-gradient(60% 90% at 100% 0, var(--s3), transparent 70%);
+}
+/* Enchantment: the swirl, with hypnotic waves of influence around its centre (from soundwave) */
+.fx[data-effect='swirl'] {
+  background:
+    repeating-radial-gradient(circle at 84% 22%, var(--s2) 0 1.5px, transparent 1.5px 18px),
+    conic-gradient(
+      from 0deg at 84% 22%,
+      var(--s3),
+      transparent 22%,
+      var(--s3) 48%,
+      transparent 72%,
+      var(--s3)
+    );
+}
+/* Illusion: the mirage bands, with translucent veils layered over them (from miasma, without
+   its bubbles, so nothing reads as poison) */
+.fx[data-effect='mirage'] {
+  background:
+    radial-gradient(38% 30% at 68% 16%, var(--s2), transparent 70%),
+    radial-gradient(34% 26% at 92% 42%, var(--s2), transparent 70%),
+    radial-gradient(30% 22% at 82% 4%, var(--s3), transparent 70%),
+    repeating-linear-gradient(170deg, var(--s2) 0 10px, transparent 10px 26px),
+    radial-gradient(70% 90% at 100% 0, var(--s3), transparent 70%);
+}
+/* Evocation: the burst, with small sparks of energy thrown from it (from embers, without flames) */
+.fx[data-effect='burst'] {
+  background:
+    radial-gradient(circle, var(--s5) 0 1.4px, transparent 2.4px) calc(86% - 62px - 2.4px)
+      calc(24% + 18px - 2.4px) / 4.8px 4.8px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1.2px, transparent 2px) calc(86% - 40px - 2px)
+      calc(24% + 46px - 2px) / 4px 4px no-repeat,
+    radial-gradient(circle, var(--s4) 0 1px, transparent 1.8px) calc(86% - 84px - 1.8px)
+      calc(24% - 6px - 1.8px) / 3.6px 3.6px no-repeat,
+    radial-gradient(circle, var(--s5) 0 1.2px, transparent 2px) calc(86% + 30px - 2px)
+      calc(24% + 52px - 2px) / 4px 4px no-repeat,
+    radial-gradient(circle, var(--s3) 0 1px, transparent 1.8px) calc(86% - 20px - 1.8px)
+      calc(24% + 72px - 1.8px) / 3.6px 3.6px no-repeat,
+    radial-gradient(circle, var(--s3) 0 1px, transparent 1.8px) calc(86% - 96px - 1.8px)
+      calc(24% + 30px - 1.8px) / 3.6px 3.6px no-repeat,
+    repeating-conic-gradient(from 0deg at 86% 24%, var(--s3) 0 4deg, transparent 4deg 18deg),
+    radial-gradient(circle at 86% 24%, var(--s4), transparent 30%);
+}
+/* Necromancy (crypt fog, v2): a mausoleum's funerary mist. Three fog banks rise from the foot of
+   the card at different heights and densities; a translucent spectral veil hangs on the right in
+   soft vertical folds; flakes of ash (uneven ellipses, not round dots) drift through the low
+   mist; a vignette gives the layers depth. No skulls, no blur, nothing over the title.
+   Cost: the veil and the fog are each painted only over their own strip (a tile), not the whole
+   card: same picture, about a fifth of the raster added on open (101 -> 23 ms, slow phone). */
+.fx[data-effect='crypt-fog'] {
+  background:
+    /* ash: uneven flakes in the low mist and in front of the veil */
+    radial-gradient(closest-side, var(--s4) 55%, transparent) calc(14% - 2.2px) calc(86% - 1px) /
+      4.4px 2px no-repeat,
+    radial-gradient(closest-side, var(--s3) 55%, transparent) calc(27% - 1.2px) calc(74% - 2px) /
+      2.4px 4px no-repeat,
+    radial-gradient(closest-side, var(--s3) 55%, transparent) calc(41% - 2.6px) calc(90% - 1.2px) /
+      5.2px 2.4px no-repeat,
+    radial-gradient(closest-side, var(--s4) 55%, transparent) calc(53% - 1.4px) calc(78% - 1.4px) /
+      2.8px 2.8px no-repeat,
+    radial-gradient(closest-side, var(--s4) 55%, transparent) calc(66% - 2px) calc(68% - 0.9px) /
+      4px 1.8px no-repeat,
+    radial-gradient(closest-side, var(--s3) 55%, transparent) calc(78% - 1.1px) calc(84% - 1.8px) /
+      2.2px 3.6px no-repeat,
+    radial-gradient(closest-side, var(--s4) 55%, transparent) calc(88% - 2.4px) calc(58% - 1.1px) /
+      4.8px 2.2px no-repeat,
+    radial-gradient(closest-side, var(--s3) 55%, transparent) calc(93% - 1.3px) calc(76% - 2.2px) /
+      2.6px 4.4px no-repeat,
+    radial-gradient(closest-side, var(--s3) 55%, transparent) calc(82% - 1.8px) calc(36% - 0.8px) /
+      3.6px 1.6px no-repeat,
+    /* spectral veil, in one strip over the right 36% (64%-100%): soft vertical folds, a lighter seam */
+    radial-gradient(13.89% 46% at 69.44% 34%, var(--s3), transparent 72%) 100% 0 / 36% 100%
+      no-repeat,
+    radial-gradient(38.89% 62% at 61.11% 40%, var(--s2), transparent 70%) 100% 0 / 36% 100%
+      no-repeat,
+    radial-gradient(27.78% 55% at 88.89% 28%, var(--s2), transparent 72%) 100% 0 / 36% 100%
+      no-repeat,
+    radial-gradient(61.11% 70% at 44.44% 48%, var(--s1), transparent 72%) 100% 0 / 36% 100%
+      no-repeat,
+    /* fog banks, in one strip over the bottom 40% (60%-100%): low and dense, middle, high and thin */
+    radial-gradient(120% 105% at 28% 140%, var(--s4), transparent 70%) 0 100% / 100% 40% no-repeat,
+    radial-gradient(95% 90% at 78% 110%, var(--s3), transparent 72%) 0 100% / 100% 40% no-repeat,
+    radial-gradient(80% 75% at 50% 70%, var(--s1), transparent 74%) 0 100% / 100% 40% no-repeat,
+    linear-gradient(to top, var(--s2), transparent 95%) 0 100% / 100% 40% no-repeat,
+    /* depth: the crypt's darkness at the edges (the only layer over the whole card) */
+    radial-gradient(circle at 50% 45%, transparent 40%, var(--fx-shade) 125%);
+}
+/* The necromantic circle: a faded seal behind the veil. A broken double ring with runes between
+   the rings, a broken inner ring and four chords crossing at the centre (no pentagram, no skull).
+   A static mask in the tint, ~150px, rasterised once; it dissolves into the fog toward the bottom. */
+.fx[data-effect='crypt-fog']::before {
+  content: '';
+  position: absolute;
+  left: calc(85% - 75px);
+  top: calc(24% - 75px);
+  width: 150px;
+  height: 150px;
+  background: var(--s4);
+  mask:
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><circle cx='100' cy='100' r='93' fill='none' stroke='%23000' stroke-width='1.6' stroke-opacity='0.95' stroke-dasharray='150 6 90 34 120 4 140 34' stroke-dashoffset='0'/><circle cx='100' cy='100' r='77' fill='none' stroke='%23000' stroke-width='1' stroke-opacity='0.8' stroke-dasharray='60 5 140 18 90 4 110 22' stroke-dashoffset='40'/><circle cx='100' cy='100' r='24' fill='none' stroke='%23000' stroke-width='1' stroke-opacity='0.7' stroke-dasharray='40 8 60 12 20 11' stroke-dashoffset='0'/><path d='M0 0L0 10M0 2L4 0M0 5L4 3' transform='rotate(0.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M0 3L3 5M3 5L0 7' transform='rotate(20.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M4 0L4 10M0 3L4 6' transform='rotate(40.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M0 0L4 2M0 3L4 5' transform='rotate(60.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M2 0L2 10M2 4L0 0M2 4L4 0' transform='rotate(120.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M0 0L3 2M3 2L0 5M0 5L4 10' transform='rotate(140.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M2 0L2 10M2 0L0 3M2 0L4 3' transform='rotate(160.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M0 0L3 2.5M3 2.5L0 5M0 5L3 7.5M3 7.5L0 10' transform='rotate(180.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M4 0L0 5M0 5L4 10' transform='rotate(200.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M2 0L2 10M2 0L4 2M2 10L0 8' transform='rotate(220.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M3 0L0 4M0 4L4 6M4 6L1 10' transform='rotate(260.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M2 0L2 10M0 3L4 6' transform='rotate(280.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M0 0L4 3M4 3L4 10' transform='rotate(300.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L4 10M4 0L0 10' transform='rotate(320.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M2 0L2 10' transform='rotate(340.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M30.5 81.4L127.0 107.2M138.6 110.4L169.5 118.6' stroke='%23000' stroke-width='.9' stroke-opacity='.55'/><path d='M64.0 37.6L75.0 56.7M83.0 70.6L136.0 162.4' stroke='%23000' stroke-width='.9' stroke-opacity='.55'/><path d='M118.6 30.5L88.6 142.5M85.0 156.0L81.4 169.5' stroke='%23000' stroke-width='.9' stroke-opacity='.55'/><path d='M162.4 64.0L117.3 90.0M110.4 94.0L37.6 136.0' stroke='%23000' stroke-width='.9' stroke-opacity='.55'/><circle cx='169.5' cy='118.6' r='2' fill='%23000' fill-opacity='.7'/><circle cx='81.4' cy='169.5' r='2' fill='%23000' fill-opacity='.7'/><circle cx='100' cy='100' r='3' fill='%23000' fill-opacity='.6'/></svg>")
+      center / contain no-repeat,
+    radial-gradient(circle at 55% 35%, #000 35%, transparent 78%);
+  mask-composite: intersect;
+  opacity: 0.85;
+}
+/* Motifs that stay in the top corner, away from the rules text */
+.fx[data-effect='ward-mesh'],
+.fx[data-effect='star-map'],
+.fx[data-effect='swirl'],
+.fx[data-effect='mirage'],
+.fx[data-effect='burst'] {
+  mask-image: radial-gradient(85% 120% at 100% 0%, #000 20%, transparent 75%);
+}
+
+/*
+ * The owner's drawings (EffectArt, art/*.ts): 740x168 card banners whose colours were turned into
+ * four tones of the host's tint (data-tone/-fill/-stop 0 = darkest … 3 = lightest, "core" = the
+ * brightest point). Anchored top right, at most the drawing's own 168px tall; each drawing's fade
+ * toward the title and away from the rules text is its mask below.
+ */
+/* The four tones (and the core) of a drawing, from the host's tint; shared by the card-sized
+   drawing (.art) and the same drawing as a small emblem (.emblem, e.g. a spell's icon) */
+.art,
+.emblem {
+  --p0: color-mix(in oklab, var(--t), black 30%);
+  --p1: var(--t);
+  --p2: color-mix(in oklab, var(--t), white 35%);
+  --p3: color-mix(in oklab, var(--t), white 65%);
+  --core: color-mix(in oklab, var(--t), white 85%);
+}
+.emblem {
+  --t: var(--grimoire-tint, currentColor);
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.art {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: min(100%, 168px);
+  opacity: var(--k);
+  mask-composite: intersect;
+}
+:global(:root[data-theme='light']) .art,
+:global(:root[data-theme='light']) .emblem {
+  /* Deeper tones, so a pale tint (force is near white) still draws on a light page */
+  --p0: color-mix(in oklab, var(--t), black 60%);
+  --p1: color-mix(in oklab, var(--t), black 48%);
+  --p2: color-mix(in oklab, var(--t), black 36%);
+  --p3: color-mix(in oklab, var(--t), black 24%);
+  --core: color-mix(in oklab, var(--t), black 12%);
+}
+:is(.art, .emblem) [data-tone='0'] {
+  stroke: var(--p0);
+}
+:is(.art, .emblem) [data-tone='1'] {
+  stroke: var(--p1);
+}
+:is(.art, .emblem) [data-tone='2'] {
+  stroke: var(--p2);
+}
+:is(.art, .emblem) [data-tone='3'] {
+  stroke: var(--p3);
+}
+:is(.art, .emblem) [data-tone='core'] {
+  stroke: var(--core);
+}
+:is(.art, .emblem) [data-fill='0'] {
+  fill: var(--p0);
+}
+:is(.art, .emblem) [data-fill='1'] {
+  fill: var(--p1);
+}
+:is(.art, .emblem) [data-fill='2'] {
+  fill: var(--p2);
+}
+:is(.art, .emblem) [data-fill='3'] {
+  fill: var(--p3);
+}
+:is(.art, .emblem) [data-fill='core'] {
+  fill: var(--core);
+}
+:is(.art, .emblem) [data-stop='0'] {
+  stop-color: var(--p0);
+}
+:is(.art, .emblem) [data-stop='1'] {
+  stop-color: var(--p1);
+}
+:is(.art, .emblem) [data-stop='2'] {
+  stop-color: var(--p2);
+}
+:is(.art, .emblem) [data-stop='3'] {
+  stop-color: var(--p3);
+}
+:is(.art, .emblem) [data-stop='core'] {
+  stop-color: var(--core);
+}
+/* Force: the drawing's own fade toward the title, and off the bottom third so on a narrow
+   (phone) card the lowest energy point doesn't sit on the rules text */
+.art[data-art='arcane-paths'] {
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent 0%,
+      rgb(0 0 0 / 0.02) 30%,
+      rgb(0 0 0 / 0.37) 48%,
+      rgb(0 0 0 / 0.9) 67%,
+      #000 100%
+    ),
+    linear-gradient(to bottom, #000 45%, transparent 85%);
+}
+/* Fire: filled ribbons weigh more than the other drawings' fine lines, so they burn at half
+   strength; they start at 44% of the width (the title stays clear) and burn out before the rules
+   text, also on a tall phone card */
+.art[data-art='flame-ribbons'] {
+  opacity: calc(var(--k) * 0.55);
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent 44%,
+      rgb(0 0 0 / 0.1) 54%,
+      rgb(0 0 0 / 0.6) 68%,
+      #000 84%
+    ),
+    linear-gradient(to bottom, #000 25%, rgb(0 0 0 / 0.45) 50%, transparent 72%);
+}
+/* Cold: the crystal is an object, so it keeps its shape, filling the card's height from the top
+   right (EffectArt's FIT, the SVG cropped to the ice), shown whole: the rules text has its own
+   backdrop, so no fade */
+.art[data-art='frost-crystals'] {
+  height: 100%;
+}
+/* Poison: like thunder, the mist stretched over the whole card (the SVG cropped to where it is) */
+.art[data-art='toxic-mist-filaments'] {
+  height: 100%;
+}
+/* Thunder: the drawing stretched over the whole card (EffectArt's FULL_CARD), with a glow of the
+   spell's colour along the waves in the drawing's own box; no fade, only a softer strength so the
+   rules text stays readable over the waves */
+.art[data-art='thunder-soundwaves'] {
+  height: 100%;
+  opacity: calc(var(--k) * 0.7);
+  background:
+    radial-gradient(
+      ellipse 55% 70% at 78% 35%,
+      color-mix(in oklab, var(--t), transparent 74%),
+      transparent 70%
+    ),
+    linear-gradient(
+      155deg,
+      transparent 35%,
+      color-mix(in oklab, var(--t), transparent 86%) 62%,
+      transparent 90%
+    );
+}
+/* Acid: like the cold crystal, the bloom keeps its shape, filling the card's height from the top
+   right (EffectArt's FIT, the SVG cropped to the drawing) */
+.art[data-art='acid-bloom'] {
+  height: 100%;
+}
+/* Slashing: like thunder, the cuts stretched over the whole card (the SVG cropped to where they
+   are). Solid shapes, so they sit well below full strength behind the text */
+.art[data-art='slashing-slash-marks'] {
+  height: 100%;
+  opacity: calc(var(--k) * 0.35);
+}
+/* Bludgeoning: like thunder, the cracks stretched over the whole card (the SVG cropped to where
+   they are), with the point of impact on the right; the bright cracks cross the text, so like
+   lightning it sits at under half strength */
+.art[data-art='impact-fractures'] {
+  height: 100%;
+  opacity: calc(var(--k) * 0.45);
+}
+/* Piercing: like thunder, the needles stretched over the whole card (the SVG cropped to where
+   they are); thin lines, and the rules text has its own backdrop */
+.art[data-art='piercing-needle-thrusts'] {
+  height: 100%;
+  opacity: calc(var(--k) * 0.65);
+}
+/* Necrotic: an object, not a texture, so it keeps its shape: the skull and antlers fill the card's
+   height on the right (EffectArt's FIT, the SVG cropped to them), behind the rules text's backdrop */
+.art[data-art='necrotic-stag-skull'] {
+  height: 100%;
+  opacity: calc(var(--k) * 0.7);
+}
+/* School emblems (the owner's, approved): objects, so like the necrotic skull they keep their
+   shape (EffectArt's FIT), on the right, centred on the card's height. At most 220px wide: on a
+   tall, narrow phone card the full height would make one fill the whole card like a watermark.
+   Bold drawings with filled cores, so a softer strength behind the rules text's backdrop */
+.art[data-art='abjuration-aegis-ward'],
+.art[data-art='conjuration-threshold-gate'],
+.art[data-art='divination-astral-sight'],
+.art[data-art='enchantment-charmweave'],
+.art[data-art='evocation-arcane-burst'],
+.art[data-art='illusion-mirage-veil'],
+.art[data-art='necromancy-circle'],
+.art[data-art='transmutation-metamorphosis'] {
+  width: min(100%, 220px);
+  height: 100%;
+  opacity: calc(var(--k) * 0.55);
+}
+/* Behind a school emblem, a wash of the school's colour: a glow from the right, where the emblem
+   sits, and a mist rising from the foot of the card. Two gradients, painted once on open */
+.layer:has(
+    > .art:is(
+        [data-art='abjuration-aegis-ward'],
+        [data-art='conjuration-threshold-gate'],
+        [data-art='divination-astral-sight'],
+        [data-art='enchantment-charmweave'],
+        [data-art='evocation-arcane-burst'],
+        [data-art='illusion-mirage-veil'],
+        [data-art='necromancy-circle'],
+        [data-art='transmutation-metamorphosis']
+      )
+  )::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: var(--k);
+  background:
+    radial-gradient(
+      48% 90% at 100% 50%,
+      color-mix(in oklab, var(--t), transparent 74%),
+      transparent 72%
+    ),
+    linear-gradient(to top, color-mix(in oklab, var(--t), transparent 84%), transparent 45%);
+  animation: fade 0.7s ease-out both;
+}
+/* Lightning: like thunder, the drawing over the whole card, with a glow of the spell's colour
+   where the bolt strikes (top right) and along its path down to the left */
+.art[data-art='lightning-branches'] {
+  height: 100%;
+  /* Thin bright zigzags cut through text more than thunder's soft waves: a lower strength */
+  opacity: calc(var(--k) * 0.55);
+  background:
+    radial-gradient(
+      ellipse 50% 75% at 92% 8%,
+      color-mix(in oklab, var(--t), transparent 55%),
+      transparent 70%
+    ),
+    linear-gradient(200deg, color-mix(in oklab, var(--t), transparent 72%) 10%, transparent 65%);
+}
+/* Psychic: the drawing's own fades (from 42% of the width; gone by 93% of the height) */
+.art[data-art='resonance'] {
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent 42%,
+      rgb(0 0 0 / 0.04) 55%,
+      rgb(0 0 0 / 0.51) 67%,
+      #000 83%
+    ),
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      rgb(0 0 0 / 0.95) 44%,
+      rgb(0 0 0 / 0.47) 65%,
+      rgb(0 0 0 / 0.03) 83%,
+      transparent 93%
+    );
+}
+
+/* ---------- Entrance: once, when the card opens ---------- */
+
+.layer[data-enter='grow'] .fx {
+  animation: grow 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  transform-origin: 86% 18%;
+}
+
+.layer[data-enter='fade'] .fx,
+.layer[data-enter='fade'] .art {
+  animation: fade 0.7s ease-out both;
+}
+
+/* A light that runs once around the border */
+.ring {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  border-radius: inherit;
+  padding: 1.5px;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+.spin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: conic-gradient(from 0deg, transparent 0 62%, var(--t) 82%, transparent 96%);
+  animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes grow {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    rotate: 360deg;
+    opacity: 0;
+  }
+}
+
+/* ---------- Ripples: short-lived rings; only scale and opacity animate ---------- */
+.ripple {
+  position: absolute;
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  left: var(--rx);
+  top: var(--ry);
+  translate: -50% -50%;
+  border: 1.5px solid var(--t);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ripple var(--rd, 0.9s) cubic-bezier(0.2, 0.7, 0.3, 1) var(--rdl, 0s) forwards;
+}
+.ripple[data-shape='diamond'] {
+  border-radius: 4px;
+  rotate: 45deg;
+}
+.ripple[data-shape='splash'] {
+  border: 0;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--t), transparent 55%),
+    transparent 70%
+  );
+  --rs: 5;
+}
+.ripple[data-shape='dashed'] {
+  border-style: dashed;
+}
+.ripple[data-shape='thick'] {
+  border-width: 4px;
+  --rd: 0.6s;
+}
+.ripple[data-shape='glow'] {
+  border-width: 1px;
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--t), transparent 40%),
+    inset 0 0 10px color-mix(in srgb, var(--t), transparent 60%);
+}
+.ripple[data-shape='smoke'] {
+  border-width: 6px;
+  border-color: color-mix(in srgb, var(--t), transparent 70%);
+  --rd: 1.5s;
+  --rs: 5;
+}
+@keyframes ripple {
+  0% {
+    opacity: 0.85;
+    scale: 0.25;
+  }
+  100% {
+    opacity: 0;
+    scale: var(--rs, 7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer *,
+  .layer::before,
+  .layer {
+    animation: none !important;
+  }
+  .ring,
+  .ripple {
+    display: none;
+  }
+}
+
+/* ---------- The text's backdrop ----------
+   Under an effect, the host puts its reading text (a spell's rules) on this: a see-through veil of
+   the card's own colour with a fine dot grain in the tint, its edges fading out (no hard box). It
+   all sits on ::before, behind the text, so the mask never touches the letters. No blur. */
+.textBackdrop {
+  position: relative;
+  isolation: isolate;
+}
+.textBackdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 0.75rem;
+  background:
+    radial-gradient(
+        color-mix(in oklab, var(--grimoire-tint, currentColor), transparent 55%) 0.75px,
+        transparent 1.25px
+      )
+      0 0 / 9px 9px,
+    color-mix(in srgb, var(--card), transparent 45%);
+  /* Soft edges on every side, but full strength across the text */
+  mask-image:
+    linear-gradient(to right, transparent, #000 4%, #000 96%, transparent),
+    linear-gradient(to bottom, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+  mask-composite: intersect;
+}
+:global(:root[data-theme='light']) .textBackdrop::before {
+  /* Grey, not tinted: on a light page the tinted veil left the text short of contrast */
+  background:
+    radial-gradient(rgb(24 24 27 / 0.16) 0.75px, transparent 1.25px) 0 0 / 9px 9px,
+    color-mix(in srgb, #e4e4e7, transparent 18%);
+}
+
+@media (forced-colors: active) {
+  .layer,
+  .textBackdrop::before {
+    display: none;
+  }
+}

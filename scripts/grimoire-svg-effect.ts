@@ -1,0 +1,147 @@
+/**
+ * Turns a static SVG drawing (the owner draws the Grimoire's effects as 740x168 card banners) into
+ * an effect drawing for the card-effect library:
+ *
+ *   npx tsx scripts/grimoire-svg-effect.ts <drawing.svg> <effect-id>
+ *
+ * It writes src/frontend/components/grimoire/card-effect/art/<effect-id>.ts and the art index.
+ * What it changes in the drawing:
+ * - colours: every fixed colour becomes one of four tones of the card's own colour, by lightness
+ *   (data-tone / data-fill / data-stop 0 = darkest … 3 = lightest; white = "core"), so the
+ *   drawing follows --grimoire-tint like every other effect;
+ * - ids: gradient ids get a per-card prefix (__ID__), so two cards on a page never share one;
+ * - the drawing's own mask and clip go away: the fade toward the title and the rules text is CSS
+ *   (effects.module.css, .art[data-art='<effect-id>']), so it can adapt to the card's size;
+ * - <title>, <desc>, <style>, comments and any animation are dropped: effects are static.
+ *
+ * Then add the effect to EFFECTS (types.ts) with parts 'art', and its mask to effects.module.css.
+ */
+import { readFileSync, readdirSync } from 'node:fs';
+import path from 'node:path';
+
+import { writeFormatted } from './write-formatted';
+
+const ART_DIR = 'src/frontend/components/grimoire/card-effect/art';
+
+const [input, name] = process.argv.slice(2);
+if (!input || !name || !/^[a-z][a-z0-9-]*$/.test(name)) {
+  console.error('Usage: npx tsx scripts/grimoire-svg-effect.ts <drawing.svg> <effect-id>');
+  process.exit(1);
+}
+
+const svg = readFileSync(input, 'utf-8');
+const viewBox = /<svg[^>]*\bviewBox="([^"]+)"/.exec(svg)?.[1];
+if (!viewBox) throw new Error('The drawing has no viewBox.');
+
+/**
+ * Cuts every piece from `open` to `close` (both included), by position, not by regex: a piece cut
+ * out can't leave another one behind. An unclosed piece takes the rest of the file with it.
+ */
+function cutAll(text: string, open: string, close: string) {
+  let out = text;
+  for (let at = out.indexOf(open); at !== -1; at = out.indexOf(open)) {
+    const end = out.indexOf(close, at + open.length);
+    out = out.slice(0, at) + (end === -1 ? '' : out.slice(end + close.length));
+  }
+  return out;
+}
+
+let clean = cutAll(svg, '<!--', '-->');
+for (const tag of ['title', 'desc', 'style']) clean = cutAll(clean, `<${tag}`, `</${tag}>`);
+clean = cutAll(clean, '<animate', '/>');
+
+// The drawing: inside the group that carries its mask or clip, else everything after <defs>
+const body = (() => {
+  const afterDefs = clean.slice(clean.indexOf('</defs>') + 7, clean.lastIndexOf('</svg>'));
+  const wrapper = /^\s*<g\b[^>]*\b(?:mask|clip-path)="[^"]*"[^>]*>([\s\S]*)<\/g>\s*$/.exec(
+    afterDefs,
+  );
+  return wrapper ? wrapper[1] : afterDefs;
+})();
+
+// Keep only the gradients the drawing itself uses (mask gradients go with the mask)
+const used = new Set([...body.matchAll(/url\(#([^)]+)\)/g)].map((m) => m[1]));
+const defs = [
+  ...clean.matchAll(/<(linearGradient|radialGradient)\b[^>]*\bid="([^"]+)"[\s\S]*?<\/\1>/g),
+]
+  .filter((m) => used.has(m[2]))
+  .map((m) => m[0])
+  .join('');
+
+// Colours → tones of the host's colour, by OKLab lightness
+const HEX = /#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b/g;
+const expand = (hex: string) =>
+  hex.length === 4 ? `#${[...hex.slice(1)].map((c) => c + c).join('')}` : hex;
+const isWhite = (hex: string) => expand(hex).toLowerCase() === '#ffffff';
+const lightness = (hex: string) => {
+  const [r, g, b] = [1, 3, 5].map((i) => {
+    const c = parseInt(expand(hex).slice(i, i + 2), 16) / 255;
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+};
+const colours = [...new Set([...(defs + body).matchAll(HEX)].map((m) => m[0].toLowerCase()))]
+  .filter((hex) => !isWhite(hex))
+  .sort((a, b) => lightness(a) - lightness(b));
+const toneOf = (hex: string) =>
+  isWhite(hex)
+    ? 'core'
+    : String(Math.floor((colours.indexOf(hex.toLowerCase()) * 4) / colours.length));
+
+const recolour = (markup: string) =>
+  markup
+    .replace(
+      /\b(stroke|fill|stop-color)="(#[0-9a-fA-F]{3,6}|white)"/g,
+      (_, attr: string, value: string) => {
+        const tone = toneOf(value === 'white' ? '#ffffff' : value);
+        return `data-${attr === 'stroke' ? 'tone' : attr === 'fill' ? 'fill' : 'stop'}="${tone}"`;
+      },
+    )
+    .replace(/\bid="([^"]+)"/g, 'id="__ID__$1"')
+    .replace(/url\(#([^)]+)\)/g, 'url(#__ID__$1)')
+    .replace(/\s+/g, ' ')
+    .replace(/>\s+</g, '><')
+    .trim();
+
+const markup = recolour(`<defs>${defs}</defs>${body}`);
+if (/#[0-9a-fA-F]{3,6}\b/.test(markup))
+  throw new Error('A colour was left behind; the converter missed an attribute.');
+// The card renders this markup as HTML (dangerouslySetInnerHTML): only plain shapes and gradients
+// may pass. Anything that could run code, load something or carry markup is refused, not cleaned.
+const UNSAFE =
+  /<!--|<\/?(?:script|style|foreignObject|iframe|object|embed|image|use|a|animate\w*|set)\b|\son\w+\s*=|(?:java|vb)script:|\b(?:xlink:)?href\s*=|url\((?!#__ID__)/i;
+const unsafe = UNSAFE.exec(markup);
+if (unsafe) throw new Error(`The drawing has something unsafe to render: "${unsafe[0]}".`);
+
+await writeFormatted(
+  path.join(ART_DIR, `${name}.ts`),
+  `// Generated by scripts/grimoire-svg-effect.ts from ${path.basename(input)}: re-run it, don't edit.
+export const art = {
+  viewBox: '${viewBox}',
+  markup: ${JSON.stringify(markup)},
+} as const;
+`,
+);
+
+const names = readdirSync(ART_DIR)
+  .filter((file) => file.endsWith('.ts') && file !== 'index.ts')
+  .map((file) => file.slice(0, -3))
+  .sort();
+const camel = (id: string) => id.replace(/-([a-z0-9])/g, (_, c: string) => c.toUpperCase());
+await writeFormatted(
+  path.join(ART_DIR, 'index.ts'),
+  `// Generated by scripts/grimoire-svg-effect.ts: the effect drawings, by effect id.
+${names.map((id) => `import { art as ${camel(id)} } from './${id}';`).join('\n')}
+
+export const ART = {
+${names.map((id) => `  '${id}': ${camel(id)},`).join('\n')}
+} as const;
+
+export type ArtName = keyof typeof ART;
+`,
+);
+
+console.log(`✨ ${name}: ${colours.length} colours → 4 tones, written to ${ART_DIR}/${name}.ts`);

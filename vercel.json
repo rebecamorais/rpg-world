@@ -6,5 +6,11 @@
       "path": "/api/cron/cleanup-avatars",
       "schedule": "0 6 * * *"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "**": false
+    }
+  }
 }

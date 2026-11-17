@@ -21,6 +21,8 @@ interface SpellHeaderProps {
   showLevel?: boolean;
   /** Quick action at the end of the header, visible even when the card is collapsed. */
   action?: React.ReactNode;
+  /** Grimoire exploration (lab only): an emblem in place of the game icon. */
+  icon?: React.ReactNode;
 }
 
 /** One item of the details line; the line puts a separator between items. */
@@ -54,13 +56,20 @@ export const SpellHeader = React.memo(
     isLearned,
     showLevel,
     action,
+    icon,
   }: SpellHeaderProps) => (
     <header className="flex items-center gap-3 sm:gap-4">
       <div
-        className="bg-spell-surface text-spell-flare ring-spell-muted shrink-0 rounded-lg p-2.5 ring-1"
+        className={cn(
+          'bg-spell-surface text-spell-flare ring-spell-muted shrink-0 rounded-lg ring-1',
+          // An emblem fills the same 44px box the game icon sits in
+          icon ? 'size-11 p-1' : 'p-2.5',
+        )}
         aria-hidden="true"
+        // Where a Grimoire effect's opening ripple starts (inert otherwise)
+        data-grimoire-origin=""
       >
-        <AppIcon variant="game" name={mainIcon} size="lg" />
+        {icon ?? <AppIcon variant="game" name={mainIcon} size="lg" />}
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col justify-center">
