@@ -4,8 +4,11 @@ export interface LabParams {
   /** The open card's effect: null = today's background; 'auto' = each spell by the D&D map */
   effect: EffectId | 'auto' | null;
   count: number;
-  /** 'emblem': each spell's school emblem in place of the header's game icon */
-  icons: 'emblem' | null;
+  /**
+   * The header icon: 'emblem' = the school emblem as SVG, in the spell colour; 'webp' = the owner's
+   * emblem images (96px, fixed colours); null = the game icon
+   */
+  icons: 'emblem' | 'webp' | null;
   /** Open the first card */
   expanded: boolean;
 }
@@ -24,7 +27,10 @@ export function parseLabParams(query: Record<string, string | string[] | undefin
           ? (effect as EffectId)
           : null,
     count: Number.isInteger(count) && count > 0 ? Math.min(count, 100) : 24,
-    icons: one(query.icons) === 'emblem' ? 'emblem' : null,
+    icons:
+      one(query.icons) === 'emblem' || one(query.icons) === 'webp'
+        ? (one(query.icons) as 'emblem' | 'webp')
+        : null,
     expanded: one(query.expanded) === '1',
   };
 }

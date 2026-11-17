@@ -28,6 +28,24 @@ const EMBLEMS = Object.fromEntries(
   (Object.keys(ART) as ArtName[]).map((name) => [name, <EffectEmblem key={name} name={name} />]),
 ) as Record<ArtName, ReactNode>;
 
+// The owner's emblem images, one per school (public/grimoire/emblems, 96px WebP, fixed colours)
+const SCHOOL_IMAGES = Object.fromEntries(
+  Object.keys(SCHOOL_THEMES).map((school) => [
+    school,
+    // A plain img: a tiny static file, decoded once and shared by every card of the school
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      key={school}
+      src={`/grimoire/emblems/${school}.webp`}
+      alt=""
+      width={36}
+      height={36}
+      decoding="async"
+      className="size-full"
+    />,
+  ]),
+) as Record<string, ReactNode>;
+
 const EFFECTS = Object.fromEntries(EFFECT_IDS.map((id) => [id, cardEffect(id)])) as Record<
   EffectId,
   CardEffect
@@ -71,7 +89,8 @@ export function GrimoireLab({
   const [openId, setOpenId] = useState<string | null>(expanded ? (spells[0]?.id ?? null) : null);
   const toggle = useCallback((id: string) => setOpenId((prev) => (prev === id ? null : id)), []);
   // 'auto': each spell wears what the D&D map gives it (damage type, else school), or nothing
-  const emblemOf = (spell: Spell) => {
+  const iconOf = (spell: Spell) => {
+    if (icons === 'webp') return SCHOOL_IMAGES[spell.school?.toLowerCase() ?? ''];
     const name = spellEmblemOf(spell);
     return name ? EMBLEMS[name] : undefined;
   };
@@ -148,11 +167,14 @@ export function GrimoireLab({
           >
             {effect ? 'sem efeitos' : 'efeitos: auto (por tipo de magia)'}
           </a>
-          <a
-            className="text-body underline"
-            href={href({ icons: icons ? null : 'emblem' }, current)}
-          >
-            {icons ? 'ícones do jogo' : 'ícones: emblemas das escolas'}
+          <a className="text-body underline" href={href({ icons: null }, current)}>
+            ícones do jogo
+          </a>
+          <a className="text-body underline" href={href({ icons: 'emblem' }, current)}>
+            ícones: emblemas em SVG
+          </a>
+          <a className="text-body underline" href={href({ icons: 'webp' }, current)}>
+            ícones: emblemas em WebP
           </a>
           <a className="text-body underline" href={href({ count: 100 }, current)}>
             100 cards
@@ -173,7 +195,7 @@ export function GrimoireLab({
               isExpanded={openId === spell.id}
               onToggle={toggle}
               effect={effectOf(spell)}
-              icon={icons ? emblemOf(spell) : undefined}
+              icon={icons ? iconOf(spell) : undefined}
             />
           ))}
         </div>
