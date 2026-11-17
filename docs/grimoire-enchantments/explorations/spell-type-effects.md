@@ -318,17 +318,26 @@ O fundo de cor custa pouco. Os ícones em SVG pesam um pouco na rolagem: +40% de
 
 A dona mandou também as imagens dos 8 emblemas (720 × 720, com transparência). Reduzidas para 96 px em WebP, o bastante para o quadrado de 36 px em telas 2× e 3×, ficam com 4 a 6 KB cada, 38 KB no total, em `public/grimoire/emblems/<escola>.webp`. No laboratório, `?icons=webp` usa essas imagens; `?icons=emblem` usa o SVG.
 
-Rolagem de 100 cards no celular com a CPU 4x mais lenta (4 amostras por tema, mediana em ms; dados em [card-effects-bench-icons.json](card-effects-bench-icons.json)):
+Rolagem de 100 cards no celular com a CPU 4x mais lenta (tema escuro, 4 amostras, mediana em ms; dados dos dois temas em [card-effects-bench-icons.json](card-effects-bench-icons.json), refeitos com a máscara abaixo):
 
-| Ícone           | style      | paint      | raster | decodificar imagens |
-| --------------- | ---------- | ---------- | ------ | ------------------- |
-| do jogo (hoje)  | 103        | 336        | 232    | 0                   |
-| emblema em SVG  | 150 (+46%) | 406 (+21%) | 241    | 0                   |
-| emblema em WebP | 104        | 341        | 231    | 2                   |
+| Ícone             | style      | paint      | raster | decodificar imagens |
+| ----------------- | ---------- | ---------- | ------ | ------------------- |
+| do jogo (hoje)    | 107        | 358        | 234    | 0                   |
+| emblema em SVG    | 156 (+46%) | 439 (+23%) | 240    | 0                   |
+| emblema em WebP   | 110        | 371        | 237    | 2                   |
+| WebP como máscara | 113        | 381        | 237    | 2                   |
 
-O WebP custa o mesmo que o ícone de hoje: são 8 imagens, decodificadas uma vez e reaproveitadas por todos os cards. O SVG desenha um emblema com gradientes em cada card.
+O WebP custa o mesmo que o ícone de hoje: são 8 imagens, decodificadas uma vez e reaproveitadas por todos os cards. O SVG desenha um emblema com gradientes em cada card. No tema claro os números são parecidos (SVG: style +60%, paint +28%).
 
 O que pesa contra o WebP é visual: a cor é a do desenho, fixa, e não a do card (o portal da Conjuração sai verde-água num card verde de ácido), e no tema claro os traços claros ficam lavados. O SVG segue a cor do card e escurece no tema claro.
+
+### WebP como máscara, na cor da magia (17/11)
+
+A saída escolhida: a imagem vira só o recorte (`mask-image`) de um `span` pintado com `currentColor`. A caixa do ícone já usa `text-spell-flare`, a cor da magia mais clara no tema escuro e mais funda no claro, então o emblema segue o card e o tema sem regra nova. No laboratório, `?icons=mask`.
+
+Comparamos dois modos de máscara. Por luminância, os traços escuros do desenho ficam mais transparentes e o emblema perde força, sobretudo no tema escuro. Por alfa (o padrão de uma imagem), o desenho sai inteiro, com o brilho suave das bordas, e fica nítido nos dois temas. Ficou o alfa. Perdem-se os tons internos: o emblema tem uma cor só, o que num quadrado de 36 px quase não se nota.
+
+O custo fica dentro do ruído (tabela acima, sem diferença marcada em nenhuma métrica): a imagem é decodificada uma vez por escola, como no WebP puro.
 
 ## Fundo para o texto das regras (15/11)
 
