@@ -48,6 +48,49 @@ A Borda arcana combina com qualquer um dos dois fundos. A sugestão em aberto é
 - **Revelação:** a Aura com uma entrada única ao abrir, em que o sigilo girava até o lugar e um brilho atravessava o nome da magia.
 - **Shaders (WebGL) e Motion (#156) por enquanto:** a dona não quer penalizar o desempenho. A análise dos shaders, com as regras de uso (uma instância por página, pausas obrigatórias, opt-in), fica registrada na biblioteca de referências caso a ideia volte.
 
+## Na biblioteca e a escolha do card de magia (17/11)
+
+As bordas aprovadas viraram a peça `card-border` da biblioteca (`src/frontend/components/grimoire/card-border/`), com o CSS da amostra e a cor do card (`--grimoire-tint`, decisão 25):
+
+- **Base parada:** o card aberto ganha sempre a Borda arcana.
+- **Hover:** `glow` (Anel de luz), `shine` (Brilho que percorre) e `turn` (Borda que gira). Ficam todos dentro de `@media (hover: hover)`: no celular nada disso existe.
+- **Abertura:** `beam` (Feixe), `spin` (Giro de luz) e `corners` (Cantos), uma vez, num anel ou nos cantos que só existem com o card aberto.
+- **Tema claro:** a cor fica 30% mais funda, senão um tom claro (lima, amarelo) some numa borda fina.
+- **Movimento reduzido:** nada se mexe. **Alto contraste (`forced-colors`):** os enfeites somem e o card fica com a borda do sistema.
+
+O `SpellCard` ganhou a prop opcional `border` (só no laboratório). Os fundos Aura e Brasa ficaram de fora: os desenhos da dona e o fundo de cor dos emblemas ocupam esse lugar.
+
+**Escolha da dona:** no card de magia, o **Anel de luz** no hover e o **Giro de luz** ao abrir, que se conectam (a luz do canto vira a luz que dá a volta). Está em `SPELL_CARD_BORDER`, em `src/frontend/constants/grimoire-effects.ts`. O Brilho que percorre, a Borda que gira, o Feixe e os Cantos ficam na biblioteca como opção para outros lugares.
+
+No laboratório: `/dev/grimoire?hover=glow&opening=spin` (ou o link "o card de magia escolhido", com desenhos e ícones).
+
+### Medição
+
+Build de produção, 100 cards, 4 amostras por cenário, mediana em ms. A medição ganhou uma fase de hover, só no computador: o mouse passa por 6 cards fechados, 450 ms em cada. Em nenhum cenário houve quadro lento (`frameP95` 16,7 ms, nenhum quadro acima de 33 ms).
+
+Computador, tema escuro ([card-effects-bench-borders.json](card-effects-bench-borders.json)):
+
+| Cenário                    | hover: style | hover: raster | abrir: raster | abrir: composite | rolagem: raster |
+| -------------------------- | ------------ | ------------- | ------------- | ---------------- | --------------- |
+| sem bordas                 | 22           | 186           | 177           | 30               | 1039            |
+| Anel de luz + Feixe        | 33           | 351           | 218           | 109              | 1076 (+4%)      |
+| Brilho que percorre + Giro | 34           | 407           | 230           | 35               | 1160 (+12%)     |
+| Borda que gira + Cantos    | 63           | 694           | 310           | 48               | 1868 (+80%)     |
+
+- O **Anel de luz** é o hover mais barato. A **Borda que gira** é o mais caro, e é a única que pesa na rolagem: ela pinta uma borda em gradiente em todos os cards fechados.
+- O **Giro de luz** é a abertura mais leve no composite (gira só por `rotate`); o **Feixe** (`offset-path`) triplica o composite da abertura.
+
+Celular com a CPU 4x mais lenta, tema escuro ([card-effects-bench-borders-phone.json](card-effects-bench-borders-phone.json), medido depois de pôr o hover dentro de `(hover: hover)`):
+
+| Cenário                     | abrir: style | abrir: paint | abrir: raster | abrir: composite | rolagem: paint |
+| --------------------------- | ------------ | ------------ | ------------- | ---------------- | -------------- |
+| sem bordas                  | 13           | 36           | 67            | 95               | 390            |
+| Anel de luz + Giro de luz   | 26           | 53           | 86            | 100 (+6%)        | 404 (ruído)    |
+| Brilho que percorre + Feixe | 27           | 79           | 81            | 357 (+278%)      | 388            |
+| Borda que gira + Cantos     | 26           | 59           | 90            | 108              | 375            |
+
+A rolagem no celular ficou igual à de hoje nos três cenários. Na primeira rodada, o anel dos cards fechados existia também no celular, onde nunca roda, e custava +9% de pintura; ele passou para dentro de `(hover: hover)`, o que a segunda rodada confirma. Abrir o card com Anel + Giro custa uns 13 ms de style e 19 ms de raster a mais, uma vez, sem quadro lento.
+
 ## Para medir quando for ao spellbook
 
 - A abertura do card não pode ter frame acima de 50 ms (`long-animation-frame`) e precisa de CLS 0.

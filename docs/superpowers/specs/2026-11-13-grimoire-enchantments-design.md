@@ -98,6 +98,8 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
     - **Força:** 55%, atrás da caixa do texto das regras.
     - Os efeitos de escola em CSS (`alchemy-circle`, `ward-mesh`, `portal`, `star-map`, `swirl`, `mirage`, `burst` e `crypt-fog`) deixam de ser usados pelo mapa. **Ainda não estão no spellbook.**
 
+29. **(dona)** **Bordas (17/11):** os efeitos de borda da decisão 20 viraram a peça `card-border` da biblioteca. No card de magia ficam o **Anel de luz** no hover e o **Giro de luz** ao abrir, que se conectam, sobre a Borda arcana parada (`SPELL_CARD_BORDER`). O Brilho que percorre, a Borda que gira, o Feixe e os Cantos ficam como opção para outros lugares (item, ficha, outras telas). Os fundos Aura e Brasa saíram: os desenhos ocupam esse lugar. Medição em [explorations/open-card-effects.md](../../grimoire-enchantments/explorations/open-card-effects.md). **Ainda não estão no spellbook.**
+
 ## Fora do escopo
 
 - Implementar componentes, instalar pacotes, alterar a UI atual ou o banco de dados.
