@@ -3,7 +3,7 @@
 Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tipografia, acessórios e interações que fazem a interface parecer um objeto encantado. As decisões estão na [spec-mãe](../superpowers/specs/2026-11-13-grimoire-enchantments-design.md).
 
 - **Épico:** [#194](https://github.com/rebecamorais/rpg-world/issues/194)
-- **Branch e PR:** `feat/grimoire-material-surfaces` ([#219](https://github.com/rebecamorais/rpg-world/pull/219)), a fundação da biblioteca. A integração ao spellbook vem num PR próprio, depois do merge dele.
+- **Branch e PR:** `feat/grimoire-material-surfaces` ([#219](https://github.com/rebecamorais/rpg-world/pull/219)), a fundação da biblioteca, já na `main`. A integração ao spellbook está em `feat/grimoire-spellbook-integration` (decisão 31).
 - **Estado (17/11):**
   - **Catálogo:** fase 1 ([#195](https://github.com/rebecamorais/rpg-world/issues/195)) concluída. As 12 specs de `catalog/` são o catálogo original; o que virou código foi outro conjunto, abaixo.
   - **Biblioteca (código):** em `src/frontend/components/grimoire/`:
@@ -12,7 +12,7 @@ Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tip
     - O mapa de D&D 5e fica fora da biblioteca, em `src/frontend/constants/grimoire-effects.ts`: `spellEffectOf` (o dano, senão a escola), `spellEmblemOf` e `SPELL_CARD_BORDER` (Anel de luz no hover + Giro de luz ao abrir).
   - **Laboratório:** `/dev/grimoire`, só fora da produção, com o `SpellCard` real e os benchmarks (`scripts/grimoire-bench.ts`).
   - **Amostras:** todas as amostras visuais feitas com a dona estão num artifact só, [Grimório](https://claude.ai/artifact/AtKgqUc3DDRpAZfNgCTpfm), com uma aba para cada (por tipo de dano, escolas, bordas, fontes e o histórico). É privado: só a dona tem acesso.
-  - **Spellbook:** ainda não usa nada daqui. O `SpellCard` só ganhou props opcionais (`effect`, `icon`, `border`); sem elas, ele é idêntico ao de hoje.
+  - **Spellbook:** os cards de magia do spellbook e da busca usam os efeitos, os emblemas e as bordas, por `spellGrimoireOf` (decisão 31). `NEXT_PUBLIC_GRIMOIRE_SPELLBOOK=off` volta ao estilo de hoje. Medição em [explorations/spellbook-integration.md](explorations/spellbook-integration.md) (`scripts/grimoire-spellbook-bench.ts`).
   - **Fora de uso:** os materiais (decisão 23), o primeiro grupo do Playground e o tema `arcane-scholar` (ver [playground-roadmap.md](playground-roadmap.md)).
 
 ## Como ler

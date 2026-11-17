@@ -107,6 +107,11 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
     - **Efeito do card aberto:** continua priorizando o dano, senão a escola.
     - Decisão fechada: o PR de integração não reabre a escolha.
 
+31. **Grimório no spellbook (17/11):** as decisões 26 a 30 entram nos cards reais de magia, no spellbook e na busca de magias, por `spellGrimoireOf` (`src/frontend/components/character/spells/spell-card/spell-grimoire.tsx`). Inventário, ficha, seletor de tema e componentes novos ficam de fora.
+    - **Volta ao estilo de hoje:** `NEXT_PUBLIC_GRIMOIRE_SPELLBOOK=off` e uma build nova. Nenhum dado muda.
+    - **O efeito entra um quadro depois de o card abrir**, para o desenho não pesar no quadro do clique no celular lento.
+    - **Medição:** com e sem Grimório, 100 cards no spellbook real, o Grimório não acrescenta CLS, quadro lento na rolagem nem frame longo ao abrir. Detalhes e números em [explorations/spellbook-integration.md](../../grimoire-enchantments/explorations/spellbook-integration.md).
+
 ## Fora do escopo
 
 - Implementar componentes, instalar pacotes, alterar a UI atual ou o banco de dados.

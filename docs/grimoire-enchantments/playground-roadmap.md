@@ -9,9 +9,9 @@ O plano abaixo (os 4 componentes do primeiro grupo e o tema `arcane-scholar`) **
 - os efeitos do card aberto por tipo de magia: os desenhos da dona por dano e os emblemas das escolas (decisões 26 a 28);
 - as bordas da `card-border`, com o Anel de luz e o Giro de luz no card de magia (decisão 29).
 
-Tudo isso está na biblioteca e no laboratório (PR #219), sem tocar no spellbook.
+Tudo isso está na biblioteca e no laboratório (PR #219).
 
-**Próximo passo: integrar ao spellbook, num PR próprio**, com escopo fechado:
+**Integração ao spellbook (feita, decisão 31):** os itens abaixo estão em `feat/grimoire-spellbook-integration`; validação e medição em [explorations/spellbook-integration.md](explorations/spellbook-integration.md). O escopo que guiou o PR:
 
 - Ligar os efeitos (`spellEffectOf`), as bordas (`SPELL_CARD_BORDER`) e o fundo de leitura do texto aos cards reais de magia, com objetos estáveis para o memo.
 - Manter o estilo de hoje como volta simples (rollback), sem mudar dados.
