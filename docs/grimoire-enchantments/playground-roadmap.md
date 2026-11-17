@@ -2,6 +2,26 @@
 
 O épico fica no [Project 1](https://github.com/users/rebecamorais/projects/1), e cada fase ganha a sua sub-issue só quando começa. O status mora no Project, não aqui.
 
+## Estado em 17/11: o plano mudou
+
+O plano abaixo (os 4 componentes do primeiro grupo e o tema `arcane-scholar`) **é histórico e não deve ser implementado**. Na exploração com a dona, ele foi trocado por:
+
+- os efeitos do card aberto por tipo de magia: os desenhos da dona por dano e os emblemas das escolas (decisões 26 a 28);
+- as bordas da `card-border`, com o Anel de luz e o Giro de luz no card de magia (decisão 29).
+
+Tudo isso está na biblioteca e no laboratório (PR #219), sem tocar no spellbook.
+
+**Próximo passo: integrar ao spellbook, num PR próprio**, com escopo fechado:
+
+- Ligar os efeitos (`spellEffectOf`), as bordas (`SPELL_CARD_BORDER`) e o fundo de leitura do texto aos cards reais de magia, com objetos estáveis para o memo.
+- Manter o estilo de hoje como volta simples (rollback), sem mudar dados.
+- Ficam de fora: inventário, ficha, seletor de tema, materiais e componentes novos do catálogo.
+- Validação: os 13 danos e as 8 escolas, card fechado e aberto, temas claro e escuro, celular, teclado, movimento reduzido, `forced-colors`, e as ações de aprender, preparar e esquecer.
+- Medição: 100 cards com e sem Grimório no spellbook real. Critérios: CLS 0, nenhum quadro de abertura acima de 50 ms, rolagem sem regressão.
+- Decisão em aberto: o ícone do cabeçalho das magias com dano (o ícone do dano de hoje ou o emblema da escola).
+
+O resto deste arquivo é o plano original, guardado como referência.
+
 ## Pontuação
 
 Cada critério vale de 1 a 5:

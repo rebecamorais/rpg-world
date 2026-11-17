@@ -3,12 +3,17 @@
 Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tipografia, acessórios e interações que fazem a interface parecer um objeto encantado. As decisões estão na [spec-mãe](../superpowers/specs/2026-11-13-grimoire-enchantments-design.md).
 
 - **Épico:** [#194](https://github.com/rebecamorais/rpg-world/issues/194)
-- **Branch e PR:** `feat/grimoire-material-surfaces` ([#219](https://github.com/rebecamorais/rpg-world/pull/219)), de longa duração e em rascunho.
-- **Estado:**
-  - **Catálogo:** fase 1 ([#195](https://github.com/rebecamorais/rpg-world/issues/195)) concluída.
-  - **Laboratório:** existe em `/dev/grimoire`, com os efeitos do card aberto (os desenhos SVG da dona e os efeitos em CSS). Só abre fora da produção.
-  - **Amostras:** todas as amostras visuais feitas com a dona estão num artifact só, [Grimório](https://claude.ai/artifact/AtKgqUc3DDRpAZfNgCTpfm), com uma aba para cada (por tipo de dano, efeitos por tipo, card aberto, fontes). É privado: só a dona tem acesso.
-  - **Spellbook:** ainda não usa nada daqui.
+- **Branch e PR:** `feat/grimoire-material-surfaces` ([#219](https://github.com/rebecamorais/rpg-world/pull/219)), a fundação da biblioteca. A integração ao spellbook vem num PR próprio, depois do merge dele.
+- **Estado (17/11):**
+  - **Catálogo:** fase 1 ([#195](https://github.com/rebecamorais/rpg-world/issues/195)) concluída. As 12 specs de `catalog/` são o catálogo original; o que virou código foi outro conjunto, abaixo.
+  - **Biblioteca (código):** em `src/frontend/components/grimoire/`:
+    - `card-effect`: os efeitos do card aberto. São os 12 desenhos de dano da dona (decisão 27), os 8 emblemas das escolas (decisão 28) e o radiante em CSS, ainda não validado; os efeitos de escola em CSS ficam no catálogo, sem uso. Inclui o fundo de leitura do texto das regras (`effectTextBackdrop`).
+    - `card-border`: a borda arcana do card aberto, 3 efeitos de hover e 3 de abertura (decisão 29).
+    - O mapa de D&D 5e fica fora da biblioteca, em `src/frontend/constants/grimoire-effects.ts`: `spellEffectOf` (o dano, senão a escola), `spellEmblemOf` e `SPELL_CARD_BORDER` (Anel de luz no hover + Giro de luz ao abrir).
+  - **Laboratório:** `/dev/grimoire`, só fora da produção, com o `SpellCard` real e os benchmarks (`scripts/grimoire-bench.ts`).
+  - **Amostras:** todas as amostras visuais feitas com a dona estão num artifact só, [Grimório](https://claude.ai/artifact/AtKgqUc3DDRpAZfNgCTpfm), com uma aba para cada (por tipo de dano, escolas, bordas, fontes e o histórico). É privado: só a dona tem acesso.
+  - **Spellbook:** ainda não usa nada daqui. O `SpellCard` só ganhou props opcionais (`effect`, `icon`, `border`); sem elas, ele é idêntico ao de hoje.
+  - **Fora de uso:** os materiais (decisão 23), o primeiro grupo do Playground e o tema `arcane-scholar` (ver [playground-roadmap.md](playground-roadmap.md)).
 
 ## Como ler
 
@@ -21,7 +26,7 @@ Catálogo de encantamentos visuais do RPG World: bordas, fundos, ornamentos, tip
 | [catalog/](catalog/)                                                     | Uma spec por componente, organizadas por categoria                                                                                                                       |
 | [themes/theme-presets.md](themes/theme-presets.md)                       | `legacy` (RPG World Classic) + 6 temas montados com os componentes                                                                                                       |
 | [component-registry.json](component-registry.json)                       | Metadados dos 12 componentes, para filtrar                                                                                                                               |
-| [playground-roadmap.md](playground-roadmap.md)                           | Pontuação, primeiro grupo e plano da fase 2 (`/dev/grimoire`)                                                                                                            |
+| [playground-roadmap.md](playground-roadmap.md)                           | O próximo passo (integração ao spellbook) e o plano original do Playground, guardado como histórico                                                                      |
 
 ## Componentes
 
