@@ -93,6 +93,11 @@ Sucesso é ter uma coleção de peças pequenas e combináveis que funcionem em 
 
     O catálogo de desenhos está fechado; a implementação continua em validação no laboratório. **Ainda não estão no spellbook.**
 
+28. **(dona)** **Emblemas das escolas (17/11):** cada uma das 8 escolas é representada por um emblema desenhado pela dona e aprovado: Transmutação (`transmutation-metamorphosis`), Abjuração (`abjuration-aegis-ward`), Conjuração (`conjuration-threshold-gate`), Adivinhação (`divination-astral-sight`), Encantamento (`enchantment-charmweave`), Ilusão (`illusion-mirage-veil`), Evocação (`evocation-arcane-burst`) e Necromancia (`necromancy-circle`). São SVGs de 240 × 240, convertidos para a cor da escola pelo mesmo `scripts/grimoire-svg-effect.ts`.
+    - **Posição:** são objetos, então não esticam. Ficam à direita, centrados na altura do card, com no máximo 220 px de largura, para não virar uma marca d'água do card inteiro no celular.
+    - **Força:** 55%, atrás da caixa do texto das regras.
+    - Os efeitos de escola em CSS (`alchemy-circle`, `ward-mesh`, `portal`, `star-map`, `swirl`, `mirage`, `burst` e `crypt-fog`) deixam de ser usados pelo mapa. **Ainda não estão no spellbook.**
+
 ## Fora do escopo
 
 - Implementar componentes, instalar pacotes, alterar a UI atual ou o banco de dados.

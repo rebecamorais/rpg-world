@@ -275,6 +275,27 @@ Nenhuma escola aumentou os frames lentos ao abrir. O `crypt-fog` V2 é a escola 
 
 A versão em ladrilhos é a que fica. Depois, por pedido da dona, a Necromancia ganhou o **círculo necromântico** atrás do véu: anel duplo quebrado, runas entre os anéis, um anel interno e quatro linhas cruzando no centro, apagado na névoa (sem pentagrama, que lembra mais o infernal, e sem caveira). É uma máscara SVG parada de 150 px na cor da magia, pintada uma vez ao abrir; ainda não medida no benchmark. Em validação. O mesmo truque (pintar cada gradiente só onde ele aparece) serve para outros efeitos em CSS com camadas do tamanho do card.
 
+## Emblemas das escolas (17/11, aprovados)
+
+A dona desenhou um emblema para cada escola, e os oito estão aprovados (decisão 28 da spec-mãe). Eles substituem os efeitos de escola em CSS no mapa:
+
+| Escola       | Emblema                       | O desenho                                                        |
+| ------------ | ----------------------------- | ---------------------------------------------------------------- |
+| Transmutação | `transmutation-metamorphosis` | um poliedro em anéis alquímicos, com fragmentos girando em volta |
+| Abjuração    | `abjuration-aegis-ward`       | um escudo com proteções encaixadas e um núcleo selado            |
+| Conjuração   | `conjuration-threshold-gate`  | um portal gótico com um cristal dobrado atravessando             |
+| Adivinhação  | `divination-astral-sight`     | um olho clarividente num astrolábio aberto, com constelações     |
+| Encantamento | `enchantment-charmweave`      | fitas de encanto entrelaçadas, presas por uma gema facetada      |
+| Ilusão       | `illusion-mirage-veil`        | um losango velado, espelhado em contornos que se deslocam        |
+| Evocação     | `evocation-arcane-burst`      | uma explosão de oito pontas num anel calibrado                   |
+| Necromancia  | `necromancy-circle`           | um anel duplo partido em volta de uma runa presa                 |
+
+**Cores:** o conversor troca as 4 a 17 cores de cada desenho por quatro tons da cor da escola, pela luminosidade, então cada emblema segue a cor da escola nos dois temas.
+
+**Posição:** são objetos, então mantêm a proporção (`xMaxYMid meet`, no mapa `FIT`). Ficam à direita, centrados na altura do card, com no máximo 220 px de largura. Sem esse limite, no card alto e estreito do celular o emblema ocupava a largura toda, como uma marca d'água. Entram com 55% da força, atrás da caixa do texto.
+
+Os efeitos de escola em CSS continuam no catálogo, mas o mapa não usa mais nenhum deles.
+
 ## Fundo para o texto das regras (15/11)
 
 Com os desenhos ocupando o card inteiro, cada um precisava de uma força baixa para não atrapalhar a leitura (35% a 70%). A dona sugeriu o contrário: o texto das regras ganha um fundo próprio. Com efeito, o `SpellCard` põe a descrição numa caixa `bg-card/80` com cantos arredondados e uma margem negativa, para o texto continuar alinhado com o cabeçalho. O contêiner que anima a abertura ganha a mesma folga dos lados, senão a caixa seria cortada.
