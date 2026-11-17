@@ -33,15 +33,22 @@ const svg = readFileSync(input, 'utf-8');
 const viewBox = /<svg[^>]*\bviewBox="([^"]+)"/.exec(svg)?.[1];
 if (!viewBox) throw new Error('The drawing has no viewBox.');
 
-// Repeat until nothing changes: one pass could leave a piece that, joined, forms the tag again
-let clean = svg;
-for (let previous = ''; clean !== previous;) {
-  previous = clean;
-  clean = clean
-    .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/<(title|desc|style)\b[\s\S]*?<\/\1>/g, '')
-    .replace(/<animate\w*\b[^>]*\/>/g, '');
+/**
+ * Cuts every piece from `open` to `close` (both included), by position, not by regex: a piece cut
+ * out can't leave another one behind. An unclosed piece takes the rest of the file with it.
+ */
+function cutAll(text: string, open: string, close: string) {
+  let out = text;
+  for (let at = out.indexOf(open); at !== -1; at = out.indexOf(open)) {
+    const end = out.indexOf(close, at + open.length);
+    out = out.slice(0, at) + (end === -1 ? '' : out.slice(end + close.length));
+  }
+  return out;
 }
+
+let clean = cutAll(svg, '<!--', '-->');
+for (const tag of ['title', 'desc', 'style']) clean = cutAll(clean, `<${tag}`, `</${tag}>`);
+clean = cutAll(clean, '<animate', '/>');
 
 // The drawing: inside the group that carries its mask or clip, else everything after <defs>
 const body = (() => {
