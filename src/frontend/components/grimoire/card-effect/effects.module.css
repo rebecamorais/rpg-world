@@ -294,12 +294,23 @@
  * brightest point). Anchored top right, at most the drawing's own 168px tall; each drawing's fade
  * toward the title and away from the rules text is its mask below.
  */
-.art {
+/* The four tones (and the core) of a drawing, from the host's tint; shared by the card-sized
+   drawing (.art) and the same drawing as a small emblem (.emblem, e.g. a spell's icon) */
+.art,
+.emblem {
   --p0: color-mix(in oklab, var(--t), black 30%);
   --p1: var(--t);
   --p2: color-mix(in oklab, var(--t), white 35%);
   --p3: color-mix(in oklab, var(--t), white 65%);
   --core: color-mix(in oklab, var(--t), white 85%);
+}
+.emblem {
+  --t: var(--grimoire-tint, currentColor);
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.art {
   position: absolute;
   top: 0;
   right: 0;
@@ -308,7 +319,8 @@
   opacity: var(--k);
   mask-composite: intersect;
 }
-:global(:root[data-theme='light']) .art {
+:global(:root[data-theme='light']) .art,
+:global(:root[data-theme='light']) .emblem {
   /* Deeper tones, so a pale tint (force is near white) still draws on a light page */
   --p0: color-mix(in oklab, var(--t), black 60%);
   --p1: color-mix(in oklab, var(--t), black 48%);
@@ -316,49 +328,49 @@
   --p3: color-mix(in oklab, var(--t), black 24%);
   --core: color-mix(in oklab, var(--t), black 12%);
 }
-.art [data-tone='0'] {
+:is(.art, .emblem) [data-tone='0'] {
   stroke: var(--p0);
 }
-.art [data-tone='1'] {
+:is(.art, .emblem) [data-tone='1'] {
   stroke: var(--p1);
 }
-.art [data-tone='2'] {
+:is(.art, .emblem) [data-tone='2'] {
   stroke: var(--p2);
 }
-.art [data-tone='3'] {
+:is(.art, .emblem) [data-tone='3'] {
   stroke: var(--p3);
 }
-.art [data-tone='core'] {
+:is(.art, .emblem) [data-tone='core'] {
   stroke: var(--core);
 }
-.art [data-fill='0'] {
+:is(.art, .emblem) [data-fill='0'] {
   fill: var(--p0);
 }
-.art [data-fill='1'] {
+:is(.art, .emblem) [data-fill='1'] {
   fill: var(--p1);
 }
-.art [data-fill='2'] {
+:is(.art, .emblem) [data-fill='2'] {
   fill: var(--p2);
 }
-.art [data-fill='3'] {
+:is(.art, .emblem) [data-fill='3'] {
   fill: var(--p3);
 }
-.art [data-fill='core'] {
+:is(.art, .emblem) [data-fill='core'] {
   fill: var(--core);
 }
-.art [data-stop='0'] {
+:is(.art, .emblem) [data-stop='0'] {
   stop-color: var(--p0);
 }
-.art [data-stop='1'] {
+:is(.art, .emblem) [data-stop='1'] {
   stop-color: var(--p1);
 }
-.art [data-stop='2'] {
+:is(.art, .emblem) [data-stop='2'] {
   stop-color: var(--p2);
 }
-.art [data-stop='3'] {
+:is(.art, .emblem) [data-stop='3'] {
   stop-color: var(--p3);
 }
-.art [data-stop='core'] {
+:is(.art, .emblem) [data-stop='core'] {
   stop-color: var(--core);
 }
 /* Force: the drawing's own fade toward the title, and off the bottom third so on a narrow
@@ -464,6 +476,33 @@
   width: min(100%, 220px);
   height: 100%;
   opacity: calc(var(--k) * 0.55);
+}
+/* Behind a school emblem, a wash of the school's colour: a glow from the right, where the emblem
+   sits, and a mist rising from the foot of the card. Two gradients, painted once on open */
+.layer:has(
+    > .art:is(
+        [data-art='abjuration-aegis-ward'],
+        [data-art='conjuration-threshold-gate'],
+        [data-art='divination-astral-sight'],
+        [data-art='enchantment-charmweave'],
+        [data-art='evocation-arcane-burst'],
+        [data-art='illusion-mirage-veil'],
+        [data-art='necromancy-circle'],
+        [data-art='transmutation-metamorphosis']
+      )
+  )::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: var(--k);
+  background:
+    radial-gradient(
+      48% 90% at 100% 50%,
+      color-mix(in oklab, var(--t), transparent 74%),
+      transparent 72%
+    ),
+    linear-gradient(to top, color-mix(in oklab, var(--t), transparent 84%), transparent 45%);
+  animation: fade 0.7s ease-out both;
 }
 /* Lightning: like thunder, the drawing over the whole card, with a glow of the spell's colour
    where the bolt strikes (top right) and along its path down to the left */
@@ -621,6 +660,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .layer *,
+  .layer::before,
   .layer {
     animation: none !important;
   }
