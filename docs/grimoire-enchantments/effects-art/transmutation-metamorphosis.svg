@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="transOuter" x1="34" y1="28" x2="208" y2="212" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F3E3A2"/>
+      <stop offset="0.42" stop-color="#D7B85B"/>
+      <stop offset="1" stop-color="#8B6A1D"/>
+    </linearGradient>
+    <linearGradient id="transInner" x1="62" y1="54" x2="182" y2="188" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF3C7"/>
+      <stop offset="0.5" stop-color="#E2C86D"/>
+      <stop offset="1" stop-color="#A27A26"/>
+    </linearGradient>
+    <linearGradient id="transShard" x1="96" y1="64" x2="162" y2="146" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF5D7"/>
+      <stop offset="1" stop-color="#C99C2D"/>
+    </linearGradient>
+  </defs>
+
+  <!-- outer alchemical ring -->
+  <path d="M120 24c-28.9 0-55 12.1-73.5 31.4" stroke="url(#transOuter)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M38.5 68.8A95.2 95.2 0 0 0 24 120c0 53 43 96 96 96 43.8 0 80.7-29.4 92.1-69.5" stroke="url(#transOuter)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M214.3 134.8c.5-4.8.7-9.8.7-14.8 0-21.8-7.3-41.8-19.5-57.8" stroke="url(#transOuter)" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- second ring with construction marks -->
+  <circle cx="120" cy="120" r="73" stroke="url(#transInner)" stroke-width="3.6" stroke-dasharray="44 10 8 10" stroke-linecap="round"/>
+  <circle cx="120" cy="120" r="58" stroke="url(#transInner)" stroke-width="1.8" stroke-opacity="0.72" stroke-dasharray="3.2 7.2"/>
+
+  <!-- cardinal anchors -->
+  <g fill="#F3E3A2">
+    <path d="M120 16l4 5-4 5-4-5 4-5Z"/>
+    <path d="M224 120l-5 4-5-4 5-4 5 4Z"/>
+    <path d="M120 224l-4-5 4-5 4 5-4 5Z"/>
+    <path d="M16 120l5-4 5 4-5 4-5-4Z"/>
+  </g>
+
+  <!-- central geometry: matter transforming -->
+  <g stroke="url(#transInner)" stroke-linecap="round" stroke-linejoin="round">
+    <!-- stable hexagon -->
+    <path d="M95 77h50l25 43-25 43H95l-25-43 25-43Z" stroke-width="2.9"/>
+    <!-- inscribed triangle -->
+    <path d="M120 86l32 55H88l32-55Z" stroke-width="2.6"/>
+    <!-- vertical transformation axis -->
+    <path d="M120 62v116" stroke-width="2.4" stroke-opacity="0.84"/>
+    <!-- horizontal calibration line -->
+    <path d="M72 120h96" stroke-width="1.9" stroke-opacity="0.62"/>
+    <!-- lower reconstruction arc -->
+    <path d="M86 153c11 9 22 13 34 13 13 0 24-4 35-13" stroke-width="2.2" stroke-opacity="0.78"/>
+  </g>
+
+  <!-- metamorphosis: left side stable polygon, right side dissolves into orbiting circle -->
+  <g>
+    <path d="M120 88l26 15v34l-26 15-26-15v-34l26-15Z" fill="url(#transShard)" fill-opacity="0.08" stroke="url(#transInner)" stroke-width="1.8"/>
+
+    <!-- right-side transformation shards -->
+    <path d="M148 86l14 8-8 12-14-6 8-14Z" fill="url(#transShard)" fill-opacity="0.22" stroke="url(#transInner)" stroke-width="1.4"/>
+    <path d="M161 98l14 9-8 12-14-6 8-15Z" fill="url(#transShard)" fill-opacity="0.25" stroke="url(#transInner)" stroke-width="1.4"/>
+    <path d="M166 118l16 2-2 15-16-3 2-14Z" fill="url(#transShard)" fill-opacity="0.24" stroke="url(#transInner)" stroke-width="1.3"/>
+    <path d="M160 139l15-8 8 12-14 9-9-13Z" fill="url(#transShard)" fill-opacity="0.22" stroke="url(#transInner)" stroke-width="1.4"/>
+    <path d="M148 151l13-9 8 12-13 9-8-12Z" fill="url(#transShard)" fill-opacity="0.18" stroke="url(#transInner)" stroke-width="1.3"/>
+
+    <!-- target circular form on right -->
+    <circle cx="173" cy="120" r="18" stroke="url(#transOuter)" stroke-width="2.7" stroke-dasharray="22 6 4 6"/>
+    <circle cx="173" cy="120" r="8" stroke="url(#transInner)" stroke-width="2.1"/>
+  </g>
+
+  <!-- small alchemical glyphs / calibration marks -->
+  <g stroke="url(#transOuter)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+    <path d="M120 42v9"/>
+    <path d="M116 47h8"/>
+
+    <path d="M178 61l6 6"/>
+    <path d="M184 61l-6 6"/>
+
+    <path d="M198 120h9"/>
+    <path d="M203 115v10"/>
+
+    <path d="M178 179l6-6"/>
+    <path d="M184 179l-6-6"/>
+
+    <path d="M120 189v9"/>
+    <path d="M116 194h8"/>
+
+    <path d="M56 179l6-6"/>
+    <path d="M62 179l-6-6"/>
+
+    <path d="M33 120h9"/>
+    <path d="M38 115v10"/>
+
+    <path d="M56 61l6 6"/>
+    <path d="M62 61l-6 6"/>
+  </g>
+
+  <!-- reconstruction dots / sparks -->
+  <g fill="#FFF3C7">
+    <circle cx="153" cy="90" r="2.2"/>
+    <circle cx="168" cy="104" r="2"/>
+    <circle cx="181" cy="120" r="2.4"/>
+    <circle cx="168" cy="137" r="2"/>
+    <circle cx="153" cy="151" r="2.2"/>
+  </g>
+</svg>

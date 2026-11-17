@@ -8,7 +8,7 @@ import { spellEffectOf } from './grimoire-effects';
 describe('spellEffectOf', () => {
   it('uses the damage type first, then the school', () => {
     expect(spellEffectOf({ damageType: 'Cold', school: 'abjuration' })).toBe('frost-crystals');
-    expect(spellEffectOf({ damageType: null, school: 'abjuration' })).toBe('ward-mesh');
+    expect(spellEffectOf({ damageType: null, school: 'abjuration' })).toBe('abjuration-aegis-ward');
   });
 
   it('gives each of the 13 damage types and 8 schools an effect from the catalog', () => {

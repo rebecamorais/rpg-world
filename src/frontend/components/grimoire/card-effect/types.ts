@@ -47,6 +47,22 @@ export const EFFECTS = {
   'thunder-soundwaves': { parts: 'art', enter: 'fade', ripple: ['thick', 3] },
   // Slashing: three blade cuts with trailing winds, nicks and splinters (the owner's drawing)
   'slashing-slash-marks': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
+  // Abjuration: an aegis with interlocked wards and a sealed core (the owner's emblem)
+  'abjuration-aegis-ward': { parts: 'art', enter: 'fade', ripple: ['diamond', 2] },
+  // Conjuration: a gothic threshold gate with a folded crystal crossing it (the owner's emblem)
+  'conjuration-threshold-gate': { parts: 'art', enter: 'fade', ripple: ['glow', 2] },
+  // Divination: a clairvoyant eye in an open astrolabe, with constellations (the owner's emblem)
+  'divination-astral-sight': { parts: 'art', enter: 'fade', ripple: ['glow', 2] },
+  // Enchantment: interlaced charm ribbons locked by a faceted gem (the owner's emblem)
+  'enchantment-charmweave': { parts: 'art', enter: 'fade', ripple: ['dashed', 2] },
+  // Evocation: an eight-pointed burst in a calibrated ring (the owner's emblem)
+  'evocation-arcane-burst': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
+  // Transmutation: a polyhedron in alchemical rings, with fragments turning around it (the owner's emblem)
+  'transmutation-metamorphosis': { parts: 'art', enter: 'fade', ripple: ['round', 2] },
+  // Necromancy: a broken double ring around a bound rune (the owner's emblem)
+  'necromancy-circle': { parts: 'art', enter: 'fade', ripple: ['smoke', 2] },
+  // Illusion: a veiled diamond mirrored in shifting outlines (the owner's emblem)
+  'illusion-mirage-veil': { parts: 'art', enter: 'fade', ripple: ['dashed', 2] },
   'alchemy-circle': { parts: 'fx', enter: 'spin', ripple: ['round', 2] },
   'ward-mesh': { parts: 'fx', enter: 'fade', ripple: ['diamond', 2] },
   portal: { parts: 'fx', enter: 'grow', ripple: ['glow', 2] },

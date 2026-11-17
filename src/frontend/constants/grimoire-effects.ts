@@ -23,14 +23,14 @@ const BY_DAMAGE: Partial<Record<string, EffectId>> = {
 };
 
 const BY_SCHOOL: Partial<Record<string, EffectId>> = {
-  transmutation: 'alchemy-circle',
-  abjuration: 'ward-mesh',
-  conjuration: 'portal',
-  divination: 'star-map',
-  enchantment: 'swirl',
-  illusion: 'mirage',
-  evocation: 'burst',
-  necromancy: 'crypt-fog',
+  transmutation: 'transmutation-metamorphosis',
+  abjuration: 'abjuration-aegis-ward',
+  conjuration: 'conjuration-threshold-gate',
+  divination: 'divination-astral-sight',
+  enchantment: 'enchantment-charmweave',
+  illusion: 'illusion-mirage-veil',
+  evocation: 'evocation-arcane-burst',
+  necromancy: 'necromancy-circle',
 };
 
 /** A spell's effect, by the same rule as its color: the damage type, else the school. */

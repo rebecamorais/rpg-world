@@ -449,6 +449,22 @@
   height: 100%;
   opacity: calc(var(--k) * 0.7);
 }
+/* School emblems (the owner's, approved): objects, so like the necrotic skull they keep their
+   shape (EffectArt's FIT), on the right, centred on the card's height. At most 220px wide: on a
+   tall, narrow phone card the full height would make one fill the whole card like a watermark.
+   Bold drawings with filled cores, so a softer strength behind the rules text's backdrop */
+.art[data-art='abjuration-aegis-ward'],
+.art[data-art='conjuration-threshold-gate'],
+.art[data-art='divination-astral-sight'],
+.art[data-art='enchantment-charmweave'],
+.art[data-art='evocation-arcane-burst'],
+.art[data-art='illusion-mirage-veil'],
+.art[data-art='necromancy-circle'],
+.art[data-art='transmutation-metamorphosis'] {
+  width: min(100%, 220px);
+  height: 100%;
+  opacity: calc(var(--k) * 0.55);
+}
 /* Lightning: like thunder, the drawing over the whole card, with a glow of the spell's colour
    where the bolt strikes (top right) and along its path down to the left */
 .art[data-art='lightning-branches'] {

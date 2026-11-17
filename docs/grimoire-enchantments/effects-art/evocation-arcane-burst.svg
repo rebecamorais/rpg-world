@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="evOuter" x1="34" y1="28" x2="208" y2="214" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFE1A8"/>
+      <stop offset="0.48" stop-color="#FFAE4D"/>
+      <stop offset="1" stop-color="#C4621A"/>
+    </linearGradient>
+    <linearGradient id="evInner" x1="68" y1="58" x2="178" y2="186" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF4D6"/>
+      <stop offset="0.52" stop-color="#FFC971"/>
+      <stop offset="1" stop-color="#E17B22"/>
+    </linearGradient>
+    <linearGradient id="evCore" x1="95" y1="86" x2="146" y2="154" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFB95A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- outer containment ring -->
+  <path d="M120 24c-32 0-60.4 14.7-79.1 37.7" stroke="url(#evOuter)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M33.8 74.1A95.5 95.5 0 0 0 24 117c0 53 43 96 96 96 41.8 0 77.4-26.8 90.5-64.1" stroke="url(#evOuter)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M214 131.5c.7-4.7 1-9.5 1-14.5 0-20.1-6.2-38.8-16.8-54.2" stroke="url(#evOuter)" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- secondary ring / calibration -->
+  <circle cx="120" cy="120" r="74" stroke="url(#evInner)" stroke-width="3.8" stroke-dasharray="26 8 8 8" stroke-linecap="round"/>
+  <circle cx="120" cy="120" r="58" stroke="url(#evInner)" stroke-width="1.8" stroke-opacity="0.7" stroke-dasharray="3 6"/>
+
+  <!-- cardinal anchors -->
+  <g fill="#FFE1A8">
+    <path d="M120 16l4 5-4 5-4-5 4-5Z"/>
+    <path d="M224 120l-5 4-5-4 5-4 5 4Z"/>
+    <path d="M120 224l-4-5 4-5 4 5-4 5Z"/>
+    <path d="M16 120l5-4 5 4-5 4-5-4Z"/>
+  </g>
+
+  <!-- radiant burst star -->
+  <g>
+    <path d="M120 62l12 28 30-10-16 26 29 14-31 7 18 28-29-11-13 34-13-34-29 11 18-28-31-7 29-14-16-26 30 10 12-28Z" fill="url(#evCore)" fill-opacity="0.08" stroke="url(#evInner)" stroke-width="2.8" stroke-linejoin="round"/>
+    <path d="M120 79l8 20 22-7-11 18 21 10-22 5 12 20-21-8-9 24-9-24-21 8 12-20-22-5 21-10-11-18 22 7 8-20Z" fill="url(#evCore)" fill-opacity="0.12" stroke="url(#evInner)" stroke-width="1.9" stroke-linejoin="round"/>
+  </g>
+
+  <!-- central energy core -->
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="120" cy="120" r="16" fill="url(#evCore)" fill-opacity="0.18" stroke="url(#evInner)" stroke-width="2.2"/>
+    <circle cx="120" cy="120" r="8" fill="#FFF4D6" fill-opacity="0.7" stroke="url(#evOuter)" stroke-width="1.8"/>
+    <path d="M120 98v44" stroke="url(#evOuter)" stroke-width="2.2"/>
+    <path d="M98 120h44" stroke="url(#evOuter)" stroke-width="2.2"/>
+    <path d="M105 105l30 30" stroke="url(#evInner)" stroke-width="1.8" stroke-opacity="0.82"/>
+    <path d="M135 105l-30 30" stroke="url(#evInner)" stroke-width="1.8" stroke-opacity="0.82"/>
+  </g>
+
+  <!-- outward energy sparks -->
+  <g stroke="url(#evOuter)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M120 36v11" stroke-width="2.3"/>
+    <path d="M173 52l-6 10" stroke-width="2.1"/>
+    <path d="M206 120h-11" stroke-width="2.3"/>
+    <path d="M188 176l-9-7" stroke-width="2.1"/>
+    <path d="M120 204v-11" stroke-width="2.3"/>
+    <path d="M52 188l7-9" stroke-width="2.1"/>
+    <path d="M34 120h11" stroke-width="2.3"/>
+    <path d="M52 52l9 7" stroke-width="2.1"/>
+  </g>
+
+  <!-- arcane runic markers -->
+  <g stroke="url(#evInner)" stroke-width="2" stroke-linecap="round" opacity="0.95">
+    <path d="M120 45h8"/>
+    <path d="M120 45h-8"/>
+    <path d="M176 63l6 6"/>
+    <path d="M176 63l6-6"/>
+    <path d="M195 120v8"/>
+    <path d="M195 120v-8"/>
+    <path d="M176 177l6 6"/>
+    <path d="M176 177l6-6"/>
+    <path d="M120 195h8"/>
+    <path d="M120 195h-8"/>
+    <path d="M64 177l-6 6"/>
+    <path d="M64 177l-6-6"/>
+    <path d="M45 120v8"/>
+    <path d="M45 120v-8"/>
+    <path d="M64 63l-6 6"/>
+    <path d="M64 63l-6-6"/>
+  </g>
+
+  <!-- floating embers / motes -->
+  <g fill="#FFF4D6">
+    <circle cx="95" cy="71" r="2.2"/>
+    <circle cx="146" cy="72" r="2.2"/>
+    <circle cx="170" cy="95" r="2"/>
+    <circle cx="169" cy="146" r="2"/>
+    <circle cx="145" cy="170" r="2.2"/>
+    <circle cx="95" cy="169" r="2.2"/>
+    <circle cx="70" cy="145" r="2"/>
+    <circle cx="71" cy="95" r="2"/>
+  </g>
+</svg>
