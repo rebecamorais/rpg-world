@@ -3,13 +3,14 @@
  * the Grimoire, on production builds against the local test stack (database/db-test).
  *
  *   # with the Grimoire (the default build), as the e2e suite builds it
- *   NEXT_DIST_DIR=.next-e2e npm run build && npm run start -- -p 3100
+ *   NEXT_DIST_DIR=.next-e2e npm run build && NEXT_DIST_DIR=.next-e2e npm run start -- -p 3100
  *   # without it (rollback), another folder and port
  *   NEXT_PUBLIC_GRIMOIRE_SPELLBOOK=off NEXT_DIST_DIR=.next-bench-off npm run build
- *   npm run start -- -p 3102
+ *   NEXT_DIST_DIR=.next-bench-off npm run start -- -p 3102
  *   npx tsx scripts/grimoire-spellbook-bench.ts http://localhost:3100 http://localhost:3102 out.json
  *
- * Both builds need the e2e environment (e2e/support/env.ts appEnv, with the site URL of each port).
+ * Both builds and servers need the rest of the e2e environment (e2e/support/env.ts appEnv), with
+ * the site URL of each port. NEXT_DIST_DIR is read at start too, so pass it to both commands.
  * For each build, theme, device (desktop; phone with a 4x slower CPU) and sample it records the
  * initial load (LCP, CLS), scrolling the whole list with the mouse wheel, hovering a few closed
  * cards (desktop) and opening three cards one after another. Samples are interleaved across the

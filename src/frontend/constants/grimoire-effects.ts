@@ -8,12 +8,19 @@ import type { EffectId } from '@frontend/components/grimoire/card-effect/types';
  * Every damage type and every school has one, so every spell gets an effect.
  */
 
+/** Whether a NEXT_PUBLIC_GRIMOIRE_SPELLBOOK value turns the Grimoire off ('off', 'false', '0'). */
+export function grimoireSwitchedOff(value: string | undefined): boolean {
+  return ['off', 'false', '0'].includes(value?.trim().toLowerCase() ?? '');
+}
+
 /**
  * The Grimoire on the spellbook's cards. Rollback without touching data: set
  * NEXT_PUBLIC_GRIMOIRE_SPELLBOOK=off and rebuild (on Vercel, the project's env and a redeploy), and
- * every spell card is exactly today's again.
+ * every spell card is exactly today's again. It's inlined at build time: set it before building.
  */
-export const GRIMOIRE_IN_SPELLBOOK = process.env.NEXT_PUBLIC_GRIMOIRE_SPELLBOOK !== 'off';
+export const GRIMOIRE_IN_SPELLBOOK = !grimoireSwitchedOff(
+  process.env.NEXT_PUBLIC_GRIMOIRE_SPELLBOOK,
+);
 
 const BY_DAMAGE: Partial<Record<string, EffectId>> = {
   fire: 'flame-ribbons',

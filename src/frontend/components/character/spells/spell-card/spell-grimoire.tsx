@@ -41,10 +41,16 @@ const SCHOOL_EMBLEMS = Object.fromEntries(
       key={school}
       data-school-emblem={school}
       className="block size-full bg-current forced-colors:bg-[CanvasText] forced-colors:forced-color-adjust-none"
+      // Inline styles get no vendor prefixes: Chrome and Edge 111-119 (in Next's browser targets)
+      // only know -webkit-mask, and without it the box would be a solid square
       style={{
+        WebkitMaskImage: `url(/grimoire/emblems/${school}.webp)`,
         maskImage: `url(/grimoire/emblems/${school}.webp)`,
+        WebkitMaskSize: 'contain',
         maskSize: 'contain',
+        WebkitMaskRepeat: 'no-repeat',
         maskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center',
         maskPosition: 'center',
       }}
     />,

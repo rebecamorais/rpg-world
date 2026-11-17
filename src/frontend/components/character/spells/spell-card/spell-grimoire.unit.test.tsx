@@ -1,10 +1,11 @@
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
+import { existsSync } from 'node:fs';
 import { describe, expect, it, vi } from 'vitest';
 
 import { DAMAGE_THEMES, SCHOOL_THEMES } from '@frontend/constants/damage-themes';
-import { SPELL_CARD_BORDER } from '@frontend/constants/grimoire-effects';
+import { SPELL_CARD_BORDER, grimoireSwitchedOff } from '@frontend/constants/grimoire-effects';
 import type { Spell } from '@frontend/types/spells';
 
 import { SpellCard } from './SpellCard';
@@ -48,8 +49,9 @@ describe('spellGrimoireOf', () => {
   it('todos os 13 danos e as 8 escolas têm efeito, e toda escola tem emblema', () => {
     expect(Object.keys(DAMAGE_THEMES)).toHaveLength(13);
     expect(Object.keys(SCHOOL_THEMES)).toHaveLength(8);
+    // Without a school: the effect has to come from the damage type itself
     for (const damageType of Object.keys(DAMAGE_THEMES)) {
-      expect(spellGrimoireOf({ damageType, school: 'evocation' }, true).effect).toBeDefined();
+      expect(spellGrimoireOf({ damageType }, true).effect, damageType).toBeDefined();
     }
     for (const school of Object.keys(SCHOOL_THEMES)) {
       const { effect, icon } = spellGrimoireOf({ school }, true);
@@ -71,6 +73,21 @@ describe('spellGrimoireOf', () => {
     expect(b.border).toBe(a.border);
     // Other spells share the border and, by school, the emblem
     expect(spellGrimoireOf(SHIELD, true).border).toBe(a.border);
+  });
+
+  it('toda escola tem a imagem do emblema em public/grimoire/emblems', () => {
+    for (const school of Object.keys(SCHOOL_THEMES)) {
+      expect(existsSync(`public/grimoire/emblems/${school}.webp`), school).toBe(true);
+    }
+  });
+
+  it('a chave desliga com off, false ou 0, sem diferenciar maiúsculas', () => {
+    for (const value of ['off', 'OFF', ' Off ', 'false', '0']) {
+      expect(grimoireSwitchedOff(value), value).toBe(true);
+    }
+    for (const value of [undefined, '', 'on', 'true', '1']) {
+      expect(grimoireSwitchedOff(value), String(value)).toBe(false);
+    }
   });
 
   it('escola desconhecida: sem emblema (fica o ícone do jogo)', () => {
@@ -106,6 +123,17 @@ describe('SpellCard com o Grimório', () => {
     expect(card).toHaveAttribute('data-grimoire-host');
     expect(card).toHaveAttribute('data-border-open');
     expect(card.querySelector('[data-grimoire-backdrop]')).not.toBeNull();
+  });
+
+  it('fechar antes do quadro seguinte não monta o efeito', async () => {
+    const props = spellGrimoireOf(FIREBALL, true);
+    const { container, rerender } = renderWithProviders(
+      <SpellCard spell={FIREBALL} isExpanded {...props} />,
+    );
+    rerender(<SpellCard spell={FIREBALL} {...props} />);
+    // Past the two frames the effect would have waited for
+    await act(() => new Promise((resolve) => setTimeout(resolve, 100)));
+    expect(container.querySelector('[data-enter]')).toBeNull();
   });
 
   it('desligado, o card não ganha nada do Grimório', () => {

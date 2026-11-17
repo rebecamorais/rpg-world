@@ -33,17 +33,21 @@ Com um personagem com uma magia de cada dano (13) e de cada escola sem dano (8),
 
 `scripts/grimoire-spellbook-bench.ts`: builds de produção com e sem Grimório, lado a lado, contra o banco de teste; um personagem com 100 magias (todas as de dano primeiro, as 13 tipos); 3 amostras por cenário, intercaladas. Fases: carga (LCP, CLS), rolagem da lista inteira, hover em 6 cards (computador) e abrir 3 cards seguidos. Celular = 390 × 844, DPR 2, CPU 4x mais lenta. Dados em [spellbook-bench.json](spellbook-bench.json) (final) e [spellbook-bench-round1.json](spellbook-bench-round1.json) (antes do `AfterNextFrame`).
 
-| Aparelho | Tema   | Build    | CLS máx | Rolagem: quadro p95 | Rolagem: quadros > 33 ms | Rolagem: style (ms) | Abrir: quadro mais longo | Abrir: frames longos (LoAF) |
-| -------- | ------ | -------- | ------- | ------------------- | ------------------------ | ------------------- | ------------------------ | --------------------------- |
-| desktop  | escuro | Grimório | 0,0027  | 16,8                | 0                        | 172                 | 16,8                     | 0                           |
-| desktop  | escuro | hoje     | 0,0027  | 16,8                | 0                        | 140                 | 16,8                     | 0                           |
-| desktop  | claro  | Grimório | 0,0027  | 16,7                | 0                        | 177                 | 16,8                     | 0                           |
-| desktop  | claro  | hoje     | 0,0027  | 16,8                | 0                        | 140                 | 16,8                     | 0                           |
-| celular  | escuro | Grimório | 0       | 16,8                | 0                        | 329                 | 50,1                     | 6 por amostra               |
-| celular  | escuro | hoje     | 0       | 16,8                | 0                        | 311                 | 50,0                     | 6 por amostra               |
-| celular  | claro  | Grimório | 0       | 16,8                | 0                        | 340                 | 50,0                     | 6 por amostra               |
-| celular  | claro  | hoje     | 0       | 16,7                | 0                        | 302                 | 33,4                     | 6 por amostra               |
+| Aparelho | Tema   | Build    | CLS máx | Rolagem: quadro p95 | Rolagem: quadros > 33 ms | Rolagem: style (ms) | Abrir: quadro mais longo | Abrir: frames longos (LoAF) | Abrir: quadros > 33 ms (9 aberturas) |
+| -------- | ------ | -------- | ------- | ------------------- | ------------------------ | ------------------- | ------------------------ | --------------------------- | ------------------------------------ |
+| desktop  | escuro | Grimório | 0,0027  | 16,8                | 0                        | 172                 | 16,8                     | 0                           | 0                                    |
+| desktop  | escuro | hoje     | 0,0027  | 16,8                | 0                        | 140                 | 16,8                     | 0                           | 0                                    |
+| desktop  | claro  | Grimório | 0,0027  | 16,7                | 0                        | 177                 | 16,8                     | 0                           | 0                                    |
+| desktop  | claro  | hoje     | 0,0027  | 16,8                | 0                        | 140                 | 16,8                     | 0                           | 0                                    |
+| celular  | escuro | Grimório | 0       | 16,8                | 0                        | 329                 | 50,1                     | 6 por amostra               | 5                                    |
+| celular  | escuro | hoje     | 0       | 16,8                | 0                        | 311                 | 50,0                     | 6 por amostra               | 1                                    |
+| celular  | claro  | Grimório | 0       | 16,8                | 0                        | 340                 | 50,0                     | 6 por amostra               | 6                                    |
+| celular  | claro  | hoje     | 0       | 16,7                | 0                        | 302                 | 33,4                     | 6 por amostra               | 0                                    |
 
 - **CLS:** o Grimório não acrescenta nada. Os 0,0027 do computador existem nas duas builds e vêm do aviso "Novo: edição e recursos aqui" que aparece no cabeçalho da página depois do primeiro quadro. Numa lista curta há ainda o tamanho reservado dos cards antes de renderizar (`contain-intrinsic-size`), igual nas duas.
 - **Rolagem:** sem regressão nos quadros (p95 de 16,7 ms, nenhum acima de 33 ms nas duas). O style da rolagem inteira sobe uns 20% no computador (máscara do emblema e o anel dentro de `(hover: hover)`), sem efeito nos quadros.
-- **Abrir:** no computador, nenhum quadro acima de 16,8 ms. No celular lento, o quadro mais longo é o mesmo de hoje (três atualizações de tela, 50 ms) e os frames longos também: o card de hoje já tem 2 por abertura nesse aparelho, da renderização do React, e o Grimório não acrescenta nenhum (cerca de 325 ms nas três aberturas, nas duas builds; antes do `AfterNextFrame` eram 435 ms). O desenho custa paint e raster a mais ao abrir (de 490 para 830 ms nas três aberturas, no celular), fora da thread principal e sem quadro perdido.
+- **Abrir:** no computador, nenhum quadro acima de 16,8 ms. No celular lento:
+  - **Frames longos (acima de 50 ms):** o card de hoje já tem 2 por abertura nesse aparelho, da renderização do React, e o Grimório não acrescenta nenhum (cerca de 325 ms nas três aberturas, nas duas builds; antes do `AfterNextFrame` eram 435 ms).
+  - **Quadro mais longo:** 50 ms, três atualizações de tela, como hoje no tema escuro. Uma amostra mediu 50,1 ms, que conta como acima de 50 ms pelo arredondamento do relógio.
+  - **Quadros de 33 ms (um quadro perdido):** o Grimório acrescenta. Foram 11 em 18 aberturas, contra 1 hoje. O `AfterNextFrame` tirou a leitura do desenho do quadro do clique, mas ela continua custando um quadro logo depois, quando o efeito entra (com fade). O próximo passo, se for preciso, é baratear o próprio desenho: o do frio tem 54 KB de SVG. Esperar mais quadros só mudaria o quadro perdido de lugar.
+  - **Paint e raster:** sobem ao abrir (de 490 para 830 ms nas três aberturas), fora da thread principal.
