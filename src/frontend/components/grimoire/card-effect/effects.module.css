@@ -261,6 +261,24 @@
     /* depth: the crypt's darkness at the edges (the only layer over the whole card) */
     radial-gradient(circle at 50% 45%, transparent 40%, var(--fx-shade) 125%);
 }
+/* The necromantic circle: a faded seal behind the veil. A broken double ring with runes between
+   the rings, a broken inner ring and four chords crossing at the centre (no pentagram, no skull).
+   A static mask in the tint, ~150px, rasterised once; it dissolves into the fog toward the bottom. */
+.fx[data-effect='crypt-fog']::before {
+  content: '';
+  position: absolute;
+  left: calc(85% - 75px);
+  top: calc(24% - 75px);
+  width: 150px;
+  height: 150px;
+  background: var(--s4);
+  mask:
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><circle cx='100' cy='100' r='93' fill='none' stroke='%23000' stroke-width='1.6' stroke-opacity='0.95' stroke-dasharray='150 6 90 34 120 4 140 34' stroke-dashoffset='0'/><circle cx='100' cy='100' r='77' fill='none' stroke='%23000' stroke-width='1' stroke-opacity='0.8' stroke-dasharray='60 5 140 18 90 4 110 22' stroke-dashoffset='40'/><circle cx='100' cy='100' r='24' fill='none' stroke='%23000' stroke-width='1' stroke-opacity='0.7' stroke-dasharray='40 8 60 12 20 11' stroke-dashoffset='0'/><path d='M0 0L0 10M0 2L4 0M0 5L4 3' transform='rotate(0.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M0 3L3 5M3 5L0 7' transform='rotate(20.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M4 0L4 10M0 3L4 6' transform='rotate(40.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M0 0L4 2M0 3L4 5' transform='rotate(60.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M2 0L2 10M2 4L0 0M2 4L4 0' transform='rotate(120.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M0 0L3 2M3 2L0 5M0 5L4 10' transform='rotate(140.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M2 0L2 10M2 0L0 3M2 0L4 3' transform='rotate(160.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M0 0L3 2.5M3 2.5L0 5M0 5L3 7.5M3 7.5L0 10' transform='rotate(180.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M4 0L0 5M0 5L4 10' transform='rotate(200.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M2 0L2 10M2 0L4 2M2 10L0 8' transform='rotate(220.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M3 0L0 4M0 4L4 6M4 6L1 10' transform='rotate(260.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M2 0L2 10M0 3L4 6' transform='rotate(280.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L0 10M0 0L4 3M4 3L4 10' transform='rotate(300.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M0 0L4 10M4 0L0 10' transform='rotate(320.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M2 0L2 10' transform='rotate(340.0 100 100) translate(98 10)' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-opacity='.85'/><path d='M30.5 81.4L127.0 107.2M138.6 110.4L169.5 118.6' stroke='%23000' stroke-width='.9' stroke-opacity='.55'/><path d='M64.0 37.6L75.0 56.7M83.0 70.6L136.0 162.4' stroke='%23000' stroke-width='.9' stroke-opacity='.55'/><path d='M118.6 30.5L88.6 142.5M85.0 156.0L81.4 169.5' stroke='%23000' stroke-width='.9' stroke-opacity='.55'/><path d='M162.4 64.0L117.3 90.0M110.4 94.0L37.6 136.0' stroke='%23000' stroke-width='.9' stroke-opacity='.55'/><circle cx='169.5' cy='118.6' r='2' fill='%23000' fill-opacity='.7'/><circle cx='81.4' cy='169.5' r='2' fill='%23000' fill-opacity='.7'/><circle cx='100' cy='100' r='3' fill='%23000' fill-opacity='.6'/></svg>")
+      center / contain no-repeat,
+    radial-gradient(circle at 55% 35%, #000 35%, transparent 78%);
+  mask-composite: intersect;
+  opacity: 0.85;
+}
 /* Motifs that stay in the top corner, away from the rules text */
 .fx[data-effect='ward-mesh'],
 .fx[data-effect='star-map'],

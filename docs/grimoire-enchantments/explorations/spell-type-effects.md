@@ -273,7 +273,7 @@ Nenhuma escola aumentou os frames lentos ao abrir. O `crypt-fog` V2 é a escola 
 | `crypt-fog` V2 em ladrilhos | 88     | +23                   | 0              |
 | enxuta (descartada)         | 83     | +18                   | 1              |
 
-A versão em ladrilhos é a que fica. O mesmo truque (pintar cada gradiente só onde ele aparece) serve para outros efeitos em CSS com camadas do tamanho do card.
+A versão em ladrilhos é a que fica. Depois, por pedido da dona, a Necromancia ganhou o **círculo necromântico** atrás do véu: anel duplo quebrado, runas entre os anéis, um anel interno e quatro linhas cruzando no centro, apagado na névoa (sem pentagrama, que lembra mais o infernal, e sem caveira). É uma máscara SVG parada de 150 px na cor da magia, pintada uma vez ao abrir; ainda não medida no benchmark. Em validação. O mesmo truque (pintar cada gradiente só onde ele aparece) serve para outros efeitos em CSS com camadas do tamanho do card.
 
 ## Fundo para o texto das regras (15/11)
 
