@@ -79,6 +79,9 @@ test.describe('escritas concorrentes', () => {
     const ac = (tab: Page) => tab.getByLabel('AC', { exact: true });
     const other = await page.context().newPage();
     for (const tab of [page, other]) await tab.goto(characterUrl(id));
+    // Twice, on a cold server, the label matched two fields for a moment (the sheet mounting
+    // over its own server render?); wait until there is one before reading it once, unretried
+    for (const tab of [page, other]) await expect(ac(tab)).toHaveCount(1);
     await expect(ac(other)).toHaveValue(/\d+/);
     const before = await ac(other).inputValue();
 
