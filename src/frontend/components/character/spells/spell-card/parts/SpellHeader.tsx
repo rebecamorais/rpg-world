@@ -96,6 +96,9 @@ export const SpellHeader = React.memo(
                 <span className="sr-only">{displayValues.ritualLabel}</span>
               </div>
             )}
+            {/* Closed, the school shows only in the emblem (aria-hidden): say it to screen
+                readers too. Open, the details line already names it */}
+            {icon && !isExpanded && <span className="sr-only">{displayValues.school}</span>}
           </div>
         </div>
 
