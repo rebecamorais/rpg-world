@@ -1,23 +1,14 @@
 import { UserError, UserErrorCodes } from '../domain/UserError';
 import { AuthRepository } from '../domain/auth.repo';
-import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
-
-export interface SignInWithPasswordResult {
-  passwordChangeRequired: boolean;
-}
 
 export class SignInWithPasswordUseCase {
   constructor(private readonly authRepository: AuthRepository) {}
 
-  async execute(email: string, password: string): Promise<SignInWithPasswordResult> {
+  async execute(email: string, password: string): Promise<void> {
     if (!email || !password) {
       throw new UserError(UserErrorCodes.SIGNIN_REQUIRED_FIELDS);
     }
 
     await this.authRepository.signInWithPassword(email, password);
-
-    return {
-      passwordChangeRequired: password === DEFAULT_FIRST_ACCESS_PASSWORD,
-    };
   }
 }

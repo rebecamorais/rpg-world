@@ -3,7 +3,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { EmailService } from '../../../shared/domain/email.service';
 import { UserError, UserErrorCodes } from '../domain/UserError';
 import { AuthRepository } from '../domain/auth.repo';
-import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
 import { SignUpUseCase } from './sign-up.use-case';
 
 const REDIRECT = 'https://app.test/auth/confirm';
@@ -55,24 +54,6 @@ describe('SignUpUseCase', () => {
       UserErrorCodes.SIGNUP_REQUIRED_FIELDS,
     );
     expect(mockRepository.generateSignUpLink).not.toHaveBeenCalled();
-  });
-
-  it('should throw error if default reset password is used', async () => {
-    const mockRepository = {
-      existsByEmail: vi.fn(),
-      generateSignUpLink: vi.fn(),
-    } as unknown as AuthRepository;
-
-    const mockEmailService = {
-      sendConfirmationEmail: vi.fn(),
-      sendPasswordResetEmail: vi.fn(),
-    } as unknown as EmailService;
-
-    const useCase = new SignUpUseCase(mockRepository, mockEmailService);
-
-    await expect(
-      useCase.execute('test@example.com', DEFAULT_FIRST_ACCESS_PASSWORD, REDIRECT),
-    ).rejects.toThrow(UserErrorCodes.SIGNUP_INVALID_PASSWORD);
   });
 
   it('responde como sucesso para e-mail já cadastrado e avisa o dono, sem mexer na conta', async () => {

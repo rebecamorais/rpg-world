@@ -13,8 +13,8 @@ export const makeAuthApi = (authContext: AuthContext) => ({
   },
 
   signInWithPassword: async (email: string, password: string) => {
-    const result = await authContext.signInWithPassword.execute(email, password);
-    return { success: true, ...result };
+    await authContext.signInWithPassword.execute(email, password);
+    return { success: true };
   },
 
   signUp: async (email: string, password: string, redirectTo: string) => {

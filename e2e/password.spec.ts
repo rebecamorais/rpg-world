@@ -26,20 +26,3 @@ test('esqueci a senha: link por e-mail, nova senha e login com ela', async ({ pa
   });
   expect(login.ok()).toBe(true);
 });
-
-test('senha provisória obriga a troca antes de entrar', async ({ page }) => {
-  const user = await createUser('first-access', '123MudaASenha@');
-  await page.goto('/login');
-
-  await (await hydrated(page.getByLabel('Email'))).fill(user.email);
-  await page.getByLabel('Password').fill('123MudaASenha@');
-  await page.getByRole('button', { name: 'Sign In' }).click();
-  await expect(page).toHaveURL(/\/change-password$/);
-
-  await (await hydrated(page.getByLabel('New Password', { exact: true }))).fill(NEW_PASSWORD);
-  await page.getByLabel('Confirm New Password').fill(NEW_PASSWORD);
-  await page.getByRole('button', { name: 'Update Password' }).click();
-
-  await expect(page).toHaveURL(/\/characters$/);
-  await signIn(page, { ...user }, NEW_PASSWORD);
-});

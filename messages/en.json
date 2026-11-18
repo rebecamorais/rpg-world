@@ -23,7 +23,6 @@
       "auth_error_update_password_same": "The new password must be different from the current one.",
       "auth_error_signup_duplicate_email": "This email is already in use.",
       "auth_error_signup_required_fields": "Please fill in all required fields.",
-      "auth_error_signup_invalid_password": "This password cannot be used for initial registration.",
       "auth_error_signin_required_fields": "Email and password are required.",
       "auth_error_signin_magic_link_email_required": "Email is required for magic link.",
       "auth_error_update_password_required": "New password is required.",

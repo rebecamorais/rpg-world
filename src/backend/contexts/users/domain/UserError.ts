@@ -2,7 +2,6 @@ import { AppError, AppErrorKind } from '@backend/shared/domain/AppError';
 
 export const UserErrorCodes = {
   SIGNUP_REQUIRED_FIELDS: 'auth_error_signup_required_fields',
-  SIGNUP_INVALID_PASSWORD: 'auth_error_signup_invalid_password',
   SIGNUP_DUPLICATE_EMAIL: 'auth_error_signup_duplicate_email',
   AUTH_CODE_REQUIRED: 'auth_error_code_required',
   AUTH_LINK_EXPIRED: 'auth_error_link_expired',

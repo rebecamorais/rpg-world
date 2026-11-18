@@ -23,7 +23,6 @@
       "auth_error_update_password_same": "A nova senha deve ser diferente da atual.",
       "auth_error_signup_duplicate_email": "Este e-mail já está em uso.",
       "auth_error_signup_required_fields": "Preencha todos os campos obrigatórios.",
-      "auth_error_signup_invalid_password": "Esta senha não pode ser utilizada para cadastro inicial.",
       "auth_error_signin_required_fields": "E-mail e senha são obrigatórios.",
       "auth_error_signin_magic_link_email_required": "E-mail é obrigatório para o link mágico.",
       "auth_error_update_password_required": "Nova senha é obrigatória.",
