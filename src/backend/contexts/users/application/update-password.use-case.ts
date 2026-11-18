@@ -41,8 +41,12 @@ export class UpdatePasswordUseCase {
       { userId: input.userId, email: input.email, password: input.currentPassword },
       UserErrorCodes.UPDATE_PASSWORD_CURRENT_INVALID,
     );
+    // The admin API doesn't refuse the same password, as the session did
+    if (input.newPassword === input.currentPassword) {
+      throw new UserError(UserErrorCodes.UPDATE_PASSWORD_SAME);
+    }
 
-    await this.authRepository.updatePassword(input.newPassword);
+    await this.authRepository.updatePassword(input.userId, input.newPassword);
 
     await this.passwordAttempts.clearPasswordAttempts(input.userId).catch((error: Error) => {
       console.error('Failed to clear password attempts:', error.message);

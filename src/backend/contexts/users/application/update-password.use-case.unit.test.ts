@@ -45,8 +45,16 @@ describe('UpdatePasswordUseCase', () => {
     await useCase.execute(INPUT, FORGOT);
 
     expect(verifyPassword).toHaveBeenCalledWith('hero@example.com', 'old-secret');
-    expect(updatePassword).toHaveBeenCalledWith('new-secret');
+    expect(updatePassword).toHaveBeenCalledWith('user-1', 'new-secret');
     expect(sendPasswordChangedEmail).toHaveBeenCalledWith('hero@example.com', FORGOT);
+  });
+
+  it('a nova igual à atual é recusada (a API de administrador não recusa sozinha)', async () => {
+    await expect(
+      useCase.execute({ ...INPUT, newPassword: INPUT.currentPassword }, FORGOT),
+    ).rejects.toThrow(UserErrorCodes.UPDATE_PASSWORD_SAME);
+
+    expect(updatePassword).not.toHaveBeenCalled();
   });
 
   it('senha atual errada: não troca nem manda e-mail', async () => {
