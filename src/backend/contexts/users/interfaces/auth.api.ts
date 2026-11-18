@@ -1,5 +1,5 @@
 import { RequestAccountDeletionInput } from '../application/request-account-deletion.use-case';
-import { EmailLinkType } from '../domain/AuthRepository';
+import { EmailLinkType } from '../domain/auth.repo';
 import { AuthContext } from '../index';
 
 export const makeAuthApi = (authContext: AuthContext) => ({

@@ -1,5 +1,5 @@
-import { AccountDeletionRepo } from '../domain/AccountDeletionRepo';
 import { hashAccountDeletionToken } from '../domain/account-deletion-token';
+import { AccountDeletionRepo } from '../domain/account-deletion.repo';
 
 /**
  * What the page of the e-mailed link shows. Only reads, because antivirus and mail readers open

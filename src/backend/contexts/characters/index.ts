@@ -2,14 +2,14 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 import { getItemCatalog } from '@backend/contexts/items';
 import { getSpellCatalog } from '@backend/contexts/spells';
-import { PartyGmAccess } from '@backend/shared/domain/PartyGmAccess';
+import { PartyGmAccess } from '@backend/shared/domain/party-gm-access';
 
 import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import {
   CharacterContext,
   CharacterUpdates,
   CreateCharacterInput,
-} from './application/CharacterContext';
+} from './application/character-context';
 import {
   ClassLookup,
   CreateCharacterUseCase,

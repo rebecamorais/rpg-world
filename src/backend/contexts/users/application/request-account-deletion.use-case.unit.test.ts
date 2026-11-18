@@ -1,10 +1,10 @@
 import { createHash } from 'node:crypto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { EmailService } from '../../../shared/domain/EmailService';
-import { AccountDeletionRepo } from '../domain/AccountDeletionRepo';
-import { AuthRepository } from '../domain/AuthRepository';
+import { EmailService } from '../../../shared/domain/email.service';
 import { UserErrorCodes } from '../domain/UserError';
+import { AccountDeletionRepo } from '../domain/account-deletion.repo';
+import { AuthRepository } from '../domain/auth.repo';
 import { RequestAccountDeletionUseCase } from './request-account-deletion.use-case';
 
 const NOW = new Date('2026-11-04T12:00:00.000Z');

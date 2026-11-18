@@ -1,5 +1,5 @@
-import { AuthRepository } from '../domain/AuthRepository';
 import { User } from '../domain/User';
+import { AuthRepository } from '../domain/auth.repo';
 
 export class GetSessionUserUseCase {
   constructor(private readonly authRepository: AuthRepository) {}

@@ -1,4 +1,4 @@
-import { PartyGmAccess } from '@backend/shared/domain/PartyGmAccess';
+import { PartyGmAccess } from '@backend/shared/domain/party-gm-access';
 
 import { LoreError, LoreErrorCodes } from '../../domain/LoreError';
 import { LoreRepository } from '../../domain/repository/lore.repo';

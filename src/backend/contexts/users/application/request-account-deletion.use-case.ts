@@ -1,12 +1,12 @@
-import { EmailService } from '../../../shared/domain/EmailService';
-import { AccountDeletionRepo } from '../domain/AccountDeletionRepo';
-import { AuthRepository } from '../domain/AuthRepository';
+import { EmailService } from '../../../shared/domain/email.service';
 import { UserError, UserErrorCodes } from '../domain/UserError';
 import {
   ACCOUNT_DELETION_LINK_LIFETIME_MS,
   generateAccountDeletionToken,
   hashAccountDeletionToken,
 } from '../domain/account-deletion-token';
+import { AccountDeletionRepo } from '../domain/account-deletion.repo';
+import { AuthRepository } from '../domain/auth.repo';
 
 export interface RequestAccountDeletionInput {
   userId: string;

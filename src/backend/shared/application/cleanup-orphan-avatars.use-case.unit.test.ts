@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { StorageRepository } from '../domain/StorageRepository';
+import { StorageRepository } from '../domain/storage.repo';
 import { CleanupOrphanAvatarsUseCase } from './cleanup-orphan-avatars.use-case';
 
 function setup(orphans: string[]) {

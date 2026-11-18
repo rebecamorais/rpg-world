@@ -1,6 +1,6 @@
 import { Profile } from '../domain/Profile';
-import { ProfileRepository } from '../domain/ProfileRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { ProfileRepository } from '../domain/profile.repo';
 
 export class GetProfileUseCase {
   constructor(private readonly profileRepository: ProfileRepository) {}

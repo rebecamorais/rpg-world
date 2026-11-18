@@ -1,5 +1,5 @@
-import { StorageRepository } from '../domain/StorageRepository';
 import { AVATAR_BUCKET } from '../domain/avatar';
+import { StorageRepository } from '../domain/storage.repo';
 
 // Storage removes up to 1000 files per call; smaller batches keep each request quick
 const BATCH_SIZE = 100;

@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { SupabaseFactory } from '@lib/supabase';
 
 import { createSignedInClient } from '../../../../../test/helpers/signed-in-client';
-import { EmailService } from '../../../shared/domain/EmailService';
+import { EmailService } from '../../../shared/domain/email.service';
 import { SupabaseStorageRepository } from '../../../shared/infrastructure/repositories/supabase-storage-repository';
 import { UserErrorCodes } from '../domain/UserError';
 import { SupabaseAccountDeletionRepository } from '../infrastructure/repositories/supabase-account-deletion.repository';

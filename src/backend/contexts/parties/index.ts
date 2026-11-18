@@ -2,7 +2,6 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 import { SupabaseStorageRepository } from '@backend/shared/infrastructure/repositories/supabase-storage-repository';
 
-import { PartyContext } from './application/PartyContext';
 import { AcceptMemberUseCase } from './application/accept-member.use-case';
 import { CreatePartyUseCase } from './application/create-party.use-case';
 import { DeletePartyUseCase } from './application/delete-party.use-case';
@@ -11,6 +10,7 @@ import { GetPartyUseCase } from './application/get-party.use-case';
 import { InviteByUsernameUseCase } from './application/invite-by-username.use-case';
 import { IsGmOfCharacterUseCase } from './application/is-gm-of-character.use-case';
 import { ListMyPartiesUseCase } from './application/list-my-parties.use-case';
+import { PartyContext } from './application/party-context';
 import {
   CancelGmClaimUseCase,
   ClaimPartyGmUseCase,

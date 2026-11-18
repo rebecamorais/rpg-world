@@ -1,5 +1,5 @@
-import { AuthRepository } from '../domain/AuthRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { AuthRepository } from '../domain/auth.repo';
 
 export class UpdatePasswordUseCase {
   constructor(private readonly authRepository: AuthRepository) {}

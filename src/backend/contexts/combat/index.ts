@@ -2,9 +2,9 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 import { ConditionCatalog } from '@backend/contexts/conditions/domain/condition';
 
-import { CombatContext } from './application/CombatContext';
 import { AddParticipantUseCase } from './application/add-participant.use-case';
 import { ChangeConditionUseCase } from './application/change-condition.use-case';
+import { CombatContext } from './application/combat-context';
 import { EncounterCommands } from './application/encounter-commands';
 import { GetEncounterUseCase } from './application/get-encounter.use-case';
 import { SetConditionsUseCase } from './application/set-conditions.use-case';

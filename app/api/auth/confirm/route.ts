@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { getApi } from '@api';
 
-import type { EmailLinkType } from '@backend/contexts/users/domain/AuthRepository';
+import type { EmailLinkType } from '@backend/contexts/users/domain/auth.repo';
 
 import { errorCode } from '@shared/http/error-response';
 

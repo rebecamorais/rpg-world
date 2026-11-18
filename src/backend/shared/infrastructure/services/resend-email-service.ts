@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Resend } from 'resend';
 import 'server-only';
 
-import { EmailService } from '../../domain/EmailService';
+import { EmailService } from '../../domain/email.service';
 import { AccountDeletionTemplate } from '../email/templates/AccountDeletion';
 import { AccountExistsTemplate } from '../email/templates/AccountExists';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';

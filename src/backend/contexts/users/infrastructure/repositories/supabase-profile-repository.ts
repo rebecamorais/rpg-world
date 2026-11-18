@@ -2,8 +2,8 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
 import { Profile } from '../../domain/Profile';
-import { ProfileRepository } from '../../domain/ProfileRepository';
 import { UserError, UserErrorCodes } from '../../domain/UserError';
+import { ProfileRepository } from '../../domain/profile.repo';
 
 // Postgres unique_violation; on update it can only come from profile.username
 const UNIQUE_VIOLATION = '23505';

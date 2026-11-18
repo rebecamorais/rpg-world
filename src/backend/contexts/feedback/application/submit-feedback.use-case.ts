@@ -3,8 +3,8 @@
  */
 import { Feedback, NewFeedback } from '../domain/Feedback';
 import { FeedbackError, FeedbackErrorCodes } from '../domain/FeedbackError';
-import { FeedbackNotifier } from '../domain/FeedbackNotifier';
-import { FeedbackRepository } from '../domain/FeedbackRepository';
+import { FeedbackNotifier } from '../domain/feedback-notifier';
+import { FeedbackRepository } from '../domain/feedback.repo';
 
 export class SubmitFeedbackUseCase {
   constructor(

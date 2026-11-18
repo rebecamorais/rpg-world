@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { EmailService } from '../../../shared/domain/EmailService';
-import { AuthRepository } from '../domain/AuthRepository';
+import { EmailService } from '../../../shared/domain/email.service';
+import { AuthRepository } from '../domain/auth.repo';
 import { SignInWithMagicLinkUseCase } from './sign-in-with-magic-link.use-case';
 
 const CONFIRM_URL = 'https://app.test/api/auth/confirm';

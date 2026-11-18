@@ -1,5 +1,5 @@
 import { applyUpdates } from '@backend/shared/application/apply-updates';
-import { StorageRepository } from '@backend/shared/domain/StorageRepository';
+import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { acceptedSelections } from '@shared/systems/dnd5e/class-choices';
 import { classDefaults } from '@shared/systems/dnd5e/class-defaults';

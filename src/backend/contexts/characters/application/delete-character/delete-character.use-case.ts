@@ -1,4 +1,4 @@
-import { StorageRepository } from '@backend/shared/domain/StorageRepository';
+import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { CharacterErrorCodes } from '../../domain/CharacterError';
 import { CharacterRepo } from '../../domain/repository';

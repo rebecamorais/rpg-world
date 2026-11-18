@@ -1,4 +1,4 @@
-import { PartyGmAccess } from '@backend/shared/domain/PartyGmAccess';
+import { PartyGmAccess } from '@backend/shared/domain/party-gm-access';
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 

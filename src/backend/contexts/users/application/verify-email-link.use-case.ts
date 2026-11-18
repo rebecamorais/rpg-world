@@ -1,5 +1,5 @@
-import { AuthRepository, EmailLinkType } from '../domain/AuthRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { AuthRepository, EmailLinkType } from '../domain/auth.repo';
 
 export class VerifyEmailLinkUseCase {
   constructor(private readonly authRepository: AuthRepository) {}

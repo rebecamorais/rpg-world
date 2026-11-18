@@ -1,10 +1,10 @@
-import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 import { AssetVersionGenerator, newAssetVersion } from '@backend/shared/domain/asset-version';
 import {
   ALLOWED_AVATAR_TYPES,
   AVATAR_BUCKET,
   MAX_AVATAR_SIZE_BYTES,
 } from '@backend/shared/domain/avatar';
+import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { PartyError, PartyErrorCodes } from '../domain/PartyError';
 import { PartyRepo } from '../domain/repository/party.repo';

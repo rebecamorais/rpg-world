@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { EmailService } from '../../../shared/domain/EmailService';
-import { AuthRepository } from '../domain/AuthRepository';
+import { EmailService } from '../../../shared/domain/email.service';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { AuthRepository } from '../domain/auth.repo';
 import { RequestPasswordResetUseCase } from './request-password-reset.use-case';
 
 const makeEmailService = () =>
