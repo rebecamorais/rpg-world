@@ -1,4 +1,4 @@
-import { ConditionCatalog } from '@backend/contexts/conditions/domain/condition';
+import { ConditionCatalog } from '@backend/contexts/conditions/domain/condition.repo';
 
 import { CombatError, CombatErrorCodes } from '../domain/CombatError';
 import { CombatRepo, ConditionChange } from '../domain/repository/combat.repo';

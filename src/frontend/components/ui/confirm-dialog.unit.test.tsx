@@ -105,4 +105,24 @@ describe('ConfirmProvider / useConfirm', () => {
     expect(() => renderHook(() => useConfirm())).toThrow(/ConfirmProvider/);
     silence.mockRestore();
   });
+
+  it('com confirmText, só confirma depois de digitar o texto (sem contar espaços nas pontas)', async () => {
+    const { user, dialog } = await ask({
+      title: 'Delete A Torre?',
+      description: 'Gone for good.',
+      confirmLabel: 'Delete',
+      confirmText: 'A Torre',
+    });
+    const field = within(dialog).getByRole('textbox', { name: t.typeToConfirmLabel });
+    const button = within(dialog).getByRole('button', { name: 'Delete' });
+
+    expect(field).toHaveFocus();
+    expect(button).toBeDisabled();
+    await user.type(field, 'A Tore{Enter}');
+    expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+    await user.clear(field);
+    await user.type(field, ' A Torre {Enter}');
+
+    await waitFor(() => expect(answer()).toHaveTextContent('true'));
+  });
 });

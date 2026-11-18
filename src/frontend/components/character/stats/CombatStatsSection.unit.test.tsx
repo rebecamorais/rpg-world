@@ -50,7 +50,7 @@ describe('CombatStatsSection', () => {
   });
 
   describe('dado de vida e a classe', () => {
-    const die = () => screen.getByRole('combobox', { name: 'Hit Dice' });
+    const die = () => screen.getByRole('combobox', { name: 'Hit dice' });
     const followClass = () => screen.queryByRole('option', { name: 'Follow the class (d12)' });
 
     beforeEach(() => {
@@ -135,7 +135,7 @@ describe('CombatStatsSection', () => {
     expect(screen.getByLabelText('AC')).toHaveValue('14');
     expect(screen.getByLabelText('Initiative')).toHaveValue('2');
     expect(screen.getByLabelText('Speed')).toHaveValue('9');
-    expect(screen.getByLabelText('Hit Points')).toHaveValue('9');
+    expect(screen.getByLabelText('Hit points')).toHaveValue('9');
   });
 
   it.each([
@@ -154,7 +154,7 @@ describe('CombatStatsSection', () => {
   it('o PV é de jogo: salva na hora, sem passar pelo rascunho', async () => {
     const { sentNow, isDirty } = renderCombat();
 
-    fireEvent.change(screen.getByLabelText('Hit Points'), { target: { value: '4' } });
+    fireEvent.change(screen.getByLabelText('Hit points'), { target: { value: '4' } });
     expect(sentNow()).toEqual({ hpCurrent: 4 });
 
     await userEvent.click(screen.getByRole('button', { name: 'Lose 1 HP' }));
@@ -208,7 +208,7 @@ describe('CombatStatsSection', () => {
   it('troca o dado de vida', async () => {
     const { draft } = renderCombat();
 
-    await userEvent.click(screen.getByRole('combobox', { name: 'Hit Dice' }));
+    await userEvent.click(screen.getByRole('combobox', { name: 'Hit dice' }));
     await userEvent.click(screen.getByRole('option', { name: 'd12' }));
 
     expect(draft().hitDice).toEqual({ die: 'd12', spent: 0 });
@@ -216,18 +216,18 @@ describe('CombatStatsSection', () => {
 
   it('mostra o dado, e d8 quando a ficha não tem dado', () => {
     const { unmount } = renderCombat({ level: 5 });
-    expect(screen.getByRole('combobox', { name: 'Hit Dice' })).toHaveTextContent(/^d10$/);
+    expect(screen.getByRole('combobox', { name: 'Hit dice' })).toHaveTextContent(/^d10$/);
     unmount();
 
     renderCombat({ level: 4, hitDice: undefined });
-    expect(screen.getByRole('combobox', { name: 'Hit Dice' })).toHaveTextContent(/^d8$/);
+    expect(screen.getByRole('combobox', { name: 'Hit dice' })).toHaveTextContent(/^d8$/);
   });
 
   it('ficha no formato antigo: mostra o dado do total e troca gravando o formato novo', async () => {
     const { draft } = renderCombat({ level: 5, hitDice: { total: '5d6', current: 3 } });
-    expect(screen.getByRole('combobox', { name: 'Hit Dice' })).toHaveTextContent(/^d6$/);
+    expect(screen.getByRole('combobox', { name: 'Hit dice' })).toHaveTextContent(/^d6$/);
 
-    await userEvent.click(screen.getByRole('combobox', { name: 'Hit Dice' }));
+    await userEvent.click(screen.getByRole('combobox', { name: 'Hit dice' }));
     await userEvent.click(screen.getByRole('option', { name: 'd12' }));
 
     expect(draft().hitDice).toEqual({ die: 'd12', spent: 2 });
@@ -236,7 +236,7 @@ describe('CombatStatsSection', () => {
   it('mostra os pontos de magia e salva o gasto na hora', () => {
     const { sentNow, isDirty } = renderCombat();
 
-    const points = screen.getByLabelText('Spell Points');
+    const points = screen.getByLabelText('Spell points');
     expect(points).toHaveValue('3');
     fireEvent.change(points, { target: { value: '5' } });
 
@@ -247,20 +247,20 @@ describe('CombatStatsSection', () => {
   it('troca o sistema de magia só pela engrenagem, e o card acompanha', async () => {
     const user = userEvent.setup();
     const { draft } = renderCombat();
-    expect(screen.queryByRole('combobox', { name: 'System Used' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: 'System used' })).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Configure magic system' }));
-    await user.click(screen.getByRole('tab', { name: 'Spell Slots' }));
+    await user.click(screen.getByRole('tab', { name: 'Spell slots' }));
     await user.click(screen.getByRole('button', { name: 'Done' }));
 
     expect(draft().spellcastingSystem).toBe('slots');
-    expect(screen.queryByLabelText('Spell Points')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Spell points')).not.toBeInTheDocument();
   });
 
   it('com espaços de magia, não mostra o campo de pontos', () => {
     renderCombat({ spellcastingSystem: 'slots', spellSlots: { '1': { max: 2, used: 1 } } });
 
-    expect(screen.queryByLabelText('Spell Points')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Spell points')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Configure magic system' })).toBeInTheDocument();
   });
 
@@ -275,7 +275,7 @@ describe('CombatStatsSection', () => {
       const { draft, isDirty } = renderCombat();
       const { user } = await openConfig();
 
-      fireEvent.change(screen.getByLabelText('Max Hit Points'), { target: { value: '20' } });
+      fireEvent.change(screen.getByLabelText('Max hit points'), { target: { value: '20' } });
       expect(draft().hpMax).toBe(20);
       expect(isDirty()).toBe(true);
 
@@ -288,13 +288,13 @@ describe('CombatStatsSection', () => {
       renderCombat();
 
       const { user, dialog } = await openConfig();
-      expect(dialog).toHaveTextContent('Max Hit Points');
-      expect(dialog).not.toHaveTextContent('Spell Slots');
+      expect(dialog).toHaveTextContent('Max hit points');
+      expect(dialog).not.toHaveTextContent('Spell slots');
       await user.click(screen.getByRole('button', { name: 'Done' }));
 
       const magic = (await openConfig('Configure magic system')).dialog;
-      expect(magic).toHaveTextContent('Spell Slots');
-      expect(magic).not.toHaveTextContent('Max Hit Points');
+      expect(magic).toHaveTextContent('Spell slots');
+      expect(magic).not.toHaveTextContent('Max hit points');
     });
 
     it('abrir e concluir sem mudar nada não deixa a ficha com alterações pendentes', async () => {
@@ -321,7 +321,7 @@ describe('CombatStatsSection', () => {
 
       expect(remaining()).toHaveValue('3');
       expect(screen.getByTestId('hit-dice-total')).toHaveTextContent('/4');
-      expect(screen.getByRole('combobox', { name: 'Hit Dice' })).toHaveTextContent(/^d10$/);
+      expect(screen.getByRole('combobox', { name: 'Hit dice' })).toHaveTextContent(/^d10$/);
       expect(screen.queryByRole('group', { name: /Hit dice remaining/ })).not.toBeInTheDocument();
     });
 

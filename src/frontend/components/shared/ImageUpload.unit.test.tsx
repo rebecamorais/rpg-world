@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { toast } from 'sonner';
@@ -157,5 +157,62 @@ describe('ImageUpload', () => {
     );
     expect(onUploadSuccess).not.toHaveBeenCalled();
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:preview');
+  });
+
+  it('diz o que faz em texto visível, também no toque: Enviar sem imagem, Trocar com', async () => {
+    const { rerender } = renderWithProviders(
+      <FileUploaderProvider>
+        <ImageUpload target="profile" onUploadSuccess={vi.fn()} />
+      </FileUploaderProvider>,
+    );
+    const input = document.querySelector<HTMLInputElement>('input[type="file"]')!;
+    const pick = vi.spyOn(input, 'click');
+
+    await userEvent.click(screen.getByRole('button', { name: messages.avatarUpload.add }));
+    expect(pick).toHaveBeenCalled();
+    expect(screen.queryByRole('button', { name: messages.avatarUpload.view })).toBeNull();
+
+    rerender(
+      <FileUploaderProvider>
+        <ImageUpload
+          target="profile"
+          currentUrl="https://img.test/a.png"
+          onUploadSuccess={vi.fn()}
+        />
+      </FileUploaderProvider>,
+    );
+    expect(screen.getByRole('button', { name: messages.avatarUpload.button })).toBeVisible();
+    expect(screen.getByRole('button', { name: messages.avatarUpload.view })).toBeVisible();
+  });
+
+  it('remover só aparece com imagem e só chama depois de confirmar', async () => {
+    const onRemove = vi.fn();
+    renderUpload({ currentUrl: 'https://img.test/a.png', onRemove });
+
+    await userEvent.click(screen.getByRole('button', { name: messages.avatarUpload.remove }));
+    expect(onRemove).not.toHaveBeenCalled();
+    const confirm = await screen.findByRole('alertdialog', {
+      name: messages.avatarUpload.removeConfirmTitle,
+    });
+    await userEvent.click(
+      within(confirm).getByRole('button', { name: messages.avatarUpload.remove }),
+    );
+
+    await waitFor(() => expect(onRemove).toHaveBeenCalledOnce());
+  });
+
+  it('sem imagem não oferece remover', () => {
+    renderUpload({ onRemove: vi.fn() });
+
+    expect(screen.queryByRole('button', { name: messages.avatarUpload.remove })).toBeNull();
+  });
+
+  it('o texto alternativo diz de quem é a imagem', async () => {
+    renderUpload({ currentUrl: 'https://img.test/a.png', name: 'Arani' });
+    const alt = messages.avatarUpload.imageOf.replace('{name}', 'Arani');
+
+    await userEvent.click(screen.getByRole('button', { name: messages.avatarUpload.view }));
+
+    expect(within(await screen.findByRole('dialog')).getByAltText(alt)).toBeInTheDocument();
   });
 });

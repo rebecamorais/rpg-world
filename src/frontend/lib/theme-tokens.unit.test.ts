@@ -3,6 +3,8 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import {
+  FILL_MAX_L_LIGHT,
+  FILL_MIN_L_DARK,
   FLARE_MAX_C,
   FLARE_MAX_L_LIGHT,
   FLARE_MIN_L_DARK,
@@ -11,6 +13,7 @@ import {
   SURFACES,
   type ThemeName,
   contrastRatio,
+  fill,
   flare,
   over,
   parseHex,
@@ -140,8 +143,10 @@ describe.each(THEMES)('%s theme', (theme) => {
 
 // Every occurrence of each formula in globals.css must use the contrast.ts number.
 it.each([
-  ['max(l, X)', /max\(l, ([\d.]+)\)/g, FLARE_MIN_L_DARK],
-  ['min(l, X)', /min\(l, ([\d.]+)\)/g, FLARE_MAX_L_LIGHT],
+  ['-flare max(l, X)', /-flare: oklch\(from var\([\w-]+\) max\(l, ([\d.]+)\)/g, FLARE_MIN_L_DARK],
+  ['-flare min(l, X)', /-flare: oklch\(from var\([\w-]+\) min\(l, ([\d.]+)\)/g, FLARE_MAX_L_LIGHT],
+  ['-fill max(l, X)', /-fill: oklch\(from var\([\w-]+\) max\(l, ([\d.]+)\)/g, FILL_MIN_L_DARK],
+  ['-fill min(l, X)', /-fill: oklch\(from var\([\w-]+\) min\(l, ([\d.]+)\)/g, FILL_MAX_L_LIGHT],
   ['min(c, X)', /min\(c, ([\d.]+)\)/g, FLARE_MAX_C],
   ['-on threshold', /clamp\(\s*0,\s*\(([\d.]+) -/g, ON_LUMINANCE],
   ['-on ramp', /\)\s*\*\s*([\d.e]+),\s*1\s*\)/g, ON_RAMP],
@@ -149,6 +154,43 @@ it.each([
   const found = [...css.matchAll(pattern)].map(([, n]) => Number(n));
   expect(found.length).toBeGreaterThan(0);
   expect(found.filter((n) => n !== expected)).toEqual([]);
+});
+
+it('every lightness bound in globals.css belongs to a -flare or a -fill', () => {
+  const bounds = [...css.matchAll(/(?:max|min)\(l, /g)].length;
+  const known = [...css.matchAll(/-(?:flare|fill): oklch\(from var\([\w-]+\) (?:max|min)\(l, /g)]
+    .length;
+  expect(bounds).toBe(known);
+});
+
+// The character's color fills buttons, the XP bar, the portrait frame and the proficiency dot:
+// any saved color is accepted, and only the derived fill moves, never the saved value
+describe('--character-fill', () => {
+  const EXTREMES = ['#fafafa', '#ffffff', '#ffff00', '#111111', '#000000', '#09090b', '#1e1b4b'];
+  const SOLID = ['background', 'card', 'popover', 'muted'] as const;
+
+  it.each(THEMES)('reaches 3:1 on every %s surface, even for extreme colors', (theme) => {
+    const bad = EXTREMES.flatMap((hex) =>
+      SOLID.map(
+        (bg) => [bg, contrastRatio(fill(parseHex(hex), theme), SURFACES[theme][bg])] as const,
+      )
+        .filter(([, ratio]) => ratio < 3)
+        .map(([bg, ratio]) => `${hex} on --${bg}: ${ratio.toFixed(2)}`),
+    );
+    expect(bad).toEqual([]);
+  });
+
+  it('leaves a color that already contrasts as it is', () => {
+    expect(toHex(fill(parseHex('#ef4444'), 'dark'))).toBe('#ef4444');
+    expect(toHex(fill(parseHex('#991b1b'), 'light'))).toBe('#991b1b');
+  });
+
+  it("is what bg-character, border-character and the sheet's primary-* paint with", () => {
+    expect(css).toMatch(/--color-character: var\(--character-fill\);/);
+    expect(css).toMatch(/\.character-context \{\s*--primary: var\(--character-fill\);\s*\}/);
+    // Text on the fill is picked from the fill itself
+    expect(css).toMatch(/--character-on: color\(\s*from var\(--character-fill\)/);
+  });
 });
 
 it('every selector list that declares --spell-flare also includes .item-context', () => {

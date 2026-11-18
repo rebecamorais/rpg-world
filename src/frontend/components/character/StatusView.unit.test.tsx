@@ -92,16 +92,17 @@ describe('StatusView', () => {
 
     afterEach(() => vi.unstubAllGlobals());
 
-    it('o dono ajusta pelo cabeçalho e só a imagem muda no rascunho', async () => {
+    it('o dono ajusta pelo cabeçalho: a imagem grava na hora, e o nome editado fica no rascunho', async () => {
       params.value = { id: 'c1' };
-      const { draft, save } = renderStatus(withAvatar);
+      const { draft, save, saveNow, sentNow } = renderStatus(withAvatar);
       await userEvent.type(screen.getByLabelText(messages.characterHeader.name), ' II');
 
       await userEvent.click(screen.getByRole('button', { name: tImage.view }));
       await userEvent.click(screen.getByRole('button', { name: tImage.adjust }));
       await userEvent.click(await screen.findByRole('button', { name: tImage.save }));
 
-      await waitFor(() => expect(draft().avatarUrl).toBe(NEW_AVATAR));
+      await waitFor(() => expect(saveNow).toHaveBeenCalled());
+      expect(sentNow()).toEqual({ avatarUrl: NEW_AVATAR });
       expect(draft().name).toBe('Thor II');
       expect(save).not.toHaveBeenCalled();
     });
@@ -119,7 +120,7 @@ describe('StatusView', () => {
           return new Response(JSON.stringify({ url: NEW_AVATAR }));
         }),
       );
-      const { draft } = renderStatus(withAvatar);
+      const { saveNow } = renderStatus(withAvatar);
 
       await userEvent.click(screen.getByRole('button', { name: tImage.view }));
       await userEvent.click(screen.getByRole('button', { name: tImage.adjust }));
@@ -128,7 +129,7 @@ describe('StatusView', () => {
       expect(await screen.findByText(tImage.adjusting)).toBeInTheDocument();
 
       finishUpload();
-      await waitFor(() => expect(draft().avatarUrl).toBe(NEW_AVATAR));
+      await waitFor(() => expect(saveNow).toHaveBeenCalled());
       expect(screen.queryByText(tImage.adjusting)).not.toBeInTheDocument();
     });
 

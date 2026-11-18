@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 import { ImageViewerDialog } from '@frontend/components/shared/ImageViewerDialog';
 import { LazyImageCropDialog } from '@frontend/components/shared/LazyImageCropDialog';
@@ -9,8 +10,8 @@ import { useFileUploader } from '@frontend/context/FileUploaderContext';
 import { useImageCrop } from '@frontend/hooks/useImageCrop';
 
 /**
- * The image viewer for whoever can edit the sheet. The adjusted image goes to the sheet's draft,
- * like a new upload: only Save keeps it, and discarding the draft brings the previous one back.
+ * The image viewer for whoever can edit the sheet. The adjusted image is saved at once, like a new
+ * upload in the sheet's settings, without waiting for the sheet's Save.
  * Rendered inside the positioned box of the portrait, which it covers while the image updates.
  */
 export function AdjustableAvatarViewer({
@@ -28,11 +29,18 @@ export function AdjustableAvatarViewer({
 }) {
   const t = useTranslations('avatarUpload');
   const { upload } = useFileUploader();
-  const { update } = useCharacterActions();
+  const { saveNow } = useCharacterActions();
   const crop = useImageCrop({
     keepFull: true,
     upload: (file, full) => upload({ file, full, target: 'character', id: characterId }),
-    onUploaded: (url) => update({ avatarUrl: url }),
+    onUploaded: async (url) => {
+      try {
+        await saveNow({ avatarUrl: url });
+        toast.success(t('saved'));
+      } catch {
+        // The save already showed the error, with "Try again"
+      }
+    },
   });
 
   return (

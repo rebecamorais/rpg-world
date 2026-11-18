@@ -2,6 +2,6 @@
   "formulas": {
     "passivePerception": "passivePerception = 10 + SAB + PB (prof) + PB (expert)",
     "savingThrow": "savingThrow = base + PB (prof)",
-    "attributeModifier": "attributeModifier = round((atrib - 10) / 2)"
+    "attributeModifier": "attributeModifier = floor((atrib - 10) / 2)"
   }
 }

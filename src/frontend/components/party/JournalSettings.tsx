@@ -94,8 +94,10 @@ export function JournalSettings({ party }: { party: PartyView }) {
               spellCheck={false}
               className="max-w-md"
             />
+            {/* Outline, as the other forms here (invite, rename): one weight on the page */}
             <Button
               type="submit"
+              variant="outline"
               disabled={!docId || docId === party.journalDocId || setJournal.isPending}
               loading={setJournal.isPending}
             >

@@ -4,6 +4,8 @@ import { messages, renderWithProviders } from '@tests/helpers/render';
 import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { APIError } from '@client';
+
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { PartySettings } from './PartySettings';
@@ -29,6 +31,13 @@ const hook = {
   remove: mutation(),
 };
 vi.mock('@frontend/hooks/useParty', () => ({ useParty: () => hook }));
+const channel = vi.hoisted(() => vi.fn(() => ({ live: true })));
+vi.mock('@frontend/hooks/usePartyChannel', () => ({ usePartyChannel: channel }));
+// The danger zone asks whether the chest or a combat would be lost: nothing here
+vi.mock('@frontend/hooks/useEncounter', () => ({ useEncounter: () => ({ encounter: null }) }));
+vi.mock('@frontend/hooks/useInventory', () => ({
+  usePartyChest: () => ({ inventory: { containers: [], items: [] } }),
+}));
 vi.mock('@frontend/context/FileUploaderContext', () => ({
   useFileUploader: () => ({ upload: vi.fn(), isUploading: false }),
 }));
@@ -76,10 +85,10 @@ describe('PartySettings', () => {
     expect(screen.queryByLabelText(t.manage.inviteLabel)).not.toBeInTheDocument();
   });
 
-  it('quem não está na mesa continua vendo mesa não encontrada', () => {
+  it('quem não está na mesa continua vendo mesa não encontrada, como título da página', () => {
     renderWithProviders(<PartySettings partyId="party-1" />);
 
-    expect(screen.getByText(t.page.notFoundTitle)).toBeVisible();
+    expect(screen.getByRole('heading', { level: 1, name: t.page.notFoundTitle })).toBeVisible();
     expect(router.replace).not.toHaveBeenCalled();
     expect(toast).not.toHaveBeenCalled();
   });
@@ -154,5 +163,154 @@ describe('PartySettings', () => {
     await userEvent.click(screen.getByRole('option', { name: t.manage.edition2014 }));
 
     expect(hook.setEdition.mutate).toHaveBeenCalledWith('2014', expect.anything());
+  });
+});
+
+const people = (...ids: string[]) =>
+  ids.map((userId) => ({ userId, username: userId, avatarUrl: null, status: 'active' as const }));
+const removeFrom = (name: string) => t.manage.removeFrom.replace('{name}', name);
+
+describe('PartySettings: tempo real, Tirar e o link (fase 3)', () => {
+  beforeEach(() => {
+    hook.party = null;
+    hook.removeMember.mutateAsync.mockReset();
+    vi.mocked(toast).mockClear();
+    channel.mockClear();
+  });
+
+  // d-fase2-tempo-real#1: outside PartyFrame, nothing listened, so Players never changed
+  it('ouve o canal da mesa, como as abas', () => {
+    hook.party = party('gm');
+    renderWithProviders(<PartySettings partyId="party-1" />);
+
+    expect(channel).toHaveBeenCalledWith('party-1');
+  });
+
+  // d-fase2-tempo-real#1: the person had already left; the toast said "party not found"
+  it('"Tirar" quem já saiu diz que a pessoa já não está na mesa, sem erro', async () => {
+    hook.party = { ...party('gm'), people: people('ana') } as PartyView;
+    hook.removeMember.mutateAsync.mockRejectedValue(new APIError('party_error_not_found', 404));
+    const error = vi.spyOn(toast, 'error');
+    renderWithProviders(<PartySettings partyId="party-1" />);
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: removeFrom('@ana') }));
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.manage.remove }),
+    );
+
+    await vi.waitFor(() =>
+      expect(toast).toHaveBeenCalledWith(t.manage.alreadyGone.replace('{name}', '@ana')),
+    );
+    expect(error).not.toHaveBeenCalled();
+  });
+
+  // a-mesa-convite#7: the row went away and the focus fell to the page's start
+  it('depois de tirar alguém, o foco vai para o próximo "Tirar"', async () => {
+    hook.party = { ...party('gm'), people: people('ana', 'bia') } as PartyView;
+    hook.removeMember.mutateAsync.mockImplementation(async () => {
+      hook.party = { ...party('gm'), people: people('bia') } as PartyView;
+    });
+    const { rerender } = renderWithProviders(<PartySettings partyId="party-1" />);
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: removeFrom('@ana') }));
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.manage.remove }),
+    );
+    // The party reloads without her (useParty's refetch)
+    await vi.waitFor(() => expect(hook.removeMember.mutateAsync).toHaveBeenCalled());
+    rerender(<PartySettings partyId="party-1" />);
+
+    await vi.waitFor(() =>
+      expect(screen.getByRole('button', { name: removeFrom('@bia') })).toHaveFocus(),
+    );
+  });
+
+  it('tirando o último jogador, o foco vai para o título Jogadores', async () => {
+    hook.party = { ...party('gm'), people: people('ana') } as PartyView;
+    hook.removeMember.mutateAsync.mockImplementation(async () => {
+      hook.party = party('gm');
+    });
+    const { rerender } = renderWithProviders(<PartySettings partyId="party-1" />);
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: removeFrom('@ana') }));
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.manage.remove }),
+    );
+    await vi.waitFor(() => expect(hook.removeMember.mutateAsync).toHaveBeenCalled());
+    rerender(<PartySettings partyId="party-1" />);
+
+    await vi.waitFor(() =>
+      expect(screen.getByRole('heading', { name: t.manage.members })).toHaveFocus(),
+    );
+  });
+
+  // mesas 28: without clipboard permission nothing showed on screen
+  it('copiar sem permissão avisa e deixa o link selecionado', async () => {
+    hook.party = party('gm');
+    renderWithProviders(<PartySettings partyId="party-1" />);
+    const user = userEvent.setup();
+    vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new Error('NotAllowedError'));
+    const select = vi.spyOn(HTMLInputElement.prototype, 'select');
+    const error = vi.spyOn(toast, 'error');
+
+    await user.click(screen.getByRole('button', { name: t.manage.copy }));
+
+    await vi.waitFor(() => expect(error).toHaveBeenCalledWith(t.manage.copyFailed));
+    expect(select.mock.contexts[0]).toBe(screen.getByLabelText(t.manage.link));
+    select.mockRestore();
+  });
+
+  // a-mesa-convite#5: "Change link" and "Remove" picture fell on "Are you sure?"
+  it('trocar o link e remover a imagem perguntam com título próprio', async () => {
+    hook.party = { ...party('gm'), imageUrl: 'https://example.com/a.png' } as PartyView;
+    renderWithProviders(<PartySettings partyId="party-1" />);
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: t.manage.rotate }));
+    expect(screen.getByRole('alertdialog', { name: t.manage.rotateTitle })).toBeVisible();
+    await user.click(screen.getByRole('button', { name: messages.common.cancel }));
+
+    await user.click(screen.getByRole('button', { name: t.image.remove }));
+    expect(screen.getByRole('alertdialog', { name: t.image.removeTitle })).toHaveTextContent(
+      t.image.removeConfirm,
+    );
+  });
+
+  // a-mesa-convite#11: invite and journal were primary, rename outline
+  it('os três formulários têm o mesmo peso', () => {
+    hook.party = party('gm');
+    renderWithProviders(<PartySettings partyId="party-1" />);
+
+    const invite = screen.getByRole('button', { name: t.manage.inviteSubmit });
+    const rename = screen.getByRole('button', { name: t.manage.rename });
+    const journal = screen.getByRole('button', { name: t.journal.save });
+    expect(invite.className).toBe(rename.className);
+    expect(journal.className).toBe(rename.className);
+  });
+
+  // mesas 30: "Manage", "Party settings" and "Manage the party" for one screen
+  it('o card se chama Convites e jogadores', () => {
+    hook.party = party('gm');
+    renderWithProviders(<PartySettings partyId="party-1" />);
+
+    expect(screen.getByRole('heading', { level: 2, name: t.manage.title })).toBeVisible();
+    expect(t.manage.title).toBe('Invites and players');
+    expect(t.settings.manage).toBe('Settings');
+  });
+
+  // a-mesa-convite#9: the hint's button was inside the h2, in its name
+  it('o título do card com dica tem só o nome, e a dica fica ao lado', () => {
+    hook.party = party('gm');
+    renderWithProviders(<PartySettings partyId="party-1" />);
+
+    expect(screen.getByRole('heading', { level: 2, name: t.image.title })).toBeVisible();
+    expect(
+      screen.getByRole('button', {
+        name: messages.common.whatIs.replace('{label}', t.image.title),
+      }),
+    ).toBeVisible();
   });
 });

@@ -30,6 +30,7 @@ describe('SupabaseAuthRepository', () => {
         admin: {
           generateLink: vi.fn(),
           deleteUser: vi.fn(),
+          updateUserById: vi.fn(),
         },
       },
     } as unknown as InstanceType<typeof SupabaseClient>;
@@ -198,12 +199,26 @@ describe('SupabaseAuthRepository', () => {
       expect(error.code).toBe(expected);
     });
 
+    it('updatePassword: troca pela API de administrador, não pela sessão', async () => {
+      vi.mocked(mockDbClient.auth.admin.updateUserById).mockResolvedValueOnce({
+        data: { user: null },
+        error: null,
+      } as never);
+      await repository.updatePassword('user-1', '123456');
+      expect(mockDbClient.auth.admin.updateUserById).toHaveBeenCalledWith('user-1', {
+        password: '123456',
+      });
+      expect(mockAuthClient.auth.updateUser).not.toHaveBeenCalled();
+    });
+
     it.each([
       ['weak_password', UserErrorCodes.UPDATE_PASSWORD_WEAK],
       ['same_password', UserErrorCodes.UPDATE_PASSWORD_SAME],
     ])('updatePassword: %s vira %s', async (code, expected) => {
-      vi.mocked(mockAuthClient.auth.updateUser).mockResolvedValueOnce(failWith(code));
-      await expect(repository.updatePassword('123456')).rejects.toThrow(expected);
+      vi.mocked(mockDbClient.auth.admin.updateUserById).mockResolvedValueOnce(
+        failWith(code) as never,
+      );
+      await expect(repository.updatePassword('user-1', '123456')).rejects.toThrow(expected);
     });
 
     it('generateRecoveryLink: user_not_found vira AUTH_USER_NOT_FOUND', async () => {

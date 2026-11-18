@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 import Cropper, { type Area } from 'react-easy-crop';
+import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
 import {
@@ -14,8 +15,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@frontend/components/ui/dialog';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useReturnFocus } from '@frontend/hooks/useReturnFocus';
-import { CropArea } from '@frontend/lib/crop-image';
+import { CropArea, ImageDecodeError } from '@frontend/lib/crop-image';
 
 interface ImageCropDialogProps {
   /** URL of the picked image; the dialog is open while it is set. */
@@ -27,7 +29,10 @@ interface ImageCropDialogProps {
   aspect?: number;
 }
 
-/** Crop with drag and zoom (a square avatar by default), shown before the image is uploaded. */
+/**
+ * Crop with drag and zoom (a square avatar by default), shown before the image is uploaded.
+ * A file the browser can't read as an image (text named `.png`) closes it at once, with a toast.
+ */
 export function ImageCropDialog({ source, onCancel, onConfirm, aspect = 1 }: ImageCropDialogProps) {
   const returnFocus = useReturnFocus();
 
@@ -54,6 +59,12 @@ function CropBody({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [area, setArea] = useState<Area | null>(null);
+  const { getErrorMessage } = useErrorMessage();
+
+  const onUnreadable = () => {
+    toast.error(getErrorMessage(new ImageDecodeError()));
+    onCancel();
+  };
 
   return (
     <>
@@ -77,6 +88,7 @@ function CropBody({
           onCropChange={setCrop}
           onZoomChange={setZoom}
           onCropComplete={(_, pixels) => setArea(pixels)}
+          mediaProps={{ onError: onUnreadable }}
         />
       </div>
 
@@ -89,7 +101,8 @@ function CropBody({
           step={0.05}
           value={zoom}
           onChange={(e) => setZoom(Number(e.target.value))}
-          className="accent-primary flex-1"
+          // 44 px to grab on a touch screen; the track stays the same
+          className="accent-primary flex-1 pointer-coarse:h-11"
         />
       </label>
 

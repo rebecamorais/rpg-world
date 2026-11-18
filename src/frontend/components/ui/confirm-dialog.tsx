@@ -1,6 +1,14 @@
 'use client';
 
-import { type ReactNode, createContext, useCallback, useContext, useRef, useState } from 'react';
+import {
+  type ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -14,6 +22,7 @@ import {
   DialogTitle,
 } from '@frontend/components/ui/dialog';
 import { AppIcon } from '@frontend/components/ui/icon';
+import { Input } from '@frontend/components/ui/input';
 import { cn } from '@frontend/lib/utils';
 
 export interface ConfirmOptions {
@@ -25,6 +34,11 @@ export interface ConfirmOptions {
   confirmLabel?: string;
   /** Deletes or removes something: the dialog and its button turn red. */
   destructive?: boolean;
+  /**
+   * What the person types before the button works (a party's name), for a delete that loses a
+   * lot. Compared with trim(), as the character's delete does.
+   */
+  confirmText?: string;
 }
 
 type Confirm = (options: ConfirmOptions) => Promise<boolean>;
@@ -86,17 +100,29 @@ function ConfirmDialog({
 }) {
   const t = useTranslations('common');
   const cancelRef = useRef<HTMLButtonElement>(null);
+  const typedRef = useRef<HTMLInputElement>(null);
+  const formId = useId();
+  const [typed, setTyped] = useState('');
   const destructive = !!options?.destructive;
+  const confirmText = options?.confirmText;
+  const canConfirm = !confirmText || typed.trim() === confirmText.trim();
+  // Each question starts with an empty field
+  const [shownFor, setShownFor] = useState(options);
+  if (shownFor !== options) {
+    setShownFor(options);
+    setTyped('');
+  }
 
   return (
     <Dialog open={open} onOpenChange={(next) => !next && onAnswer(false)}>
       <DialogContent
         role="alertdialog"
         className={cn('max-w-md', destructive && 'border-danger-muted')}
-        // Cancel gets the focus: Enter right after the click must not delete anything
+        // Cancel gets the focus: Enter right after the click must not delete anything. With a name
+        // to type, the field does (the button stays off until it matches)
         onOpenAutoFocus={(event) => {
           event.preventDefault();
-          cancelRef.current?.focus();
+          (confirmText ? typedRef : cancelRef).current?.focus();
         }}
       >
         <DialogHeader className="flex-row items-start gap-3 space-y-0 text-left">
@@ -110,11 +136,42 @@ function ConfirmDialog({
             <DialogDescription>{options?.description}</DialogDescription>
           </div>
         </DialogHeader>
+        {confirmText && (
+          // A form, so Enter confirms once the text matches
+          <form
+            id={formId}
+            className="flex flex-col gap-2"
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (canConfirm) onAnswer(true);
+            }}
+          >
+            {/* t.rich builds React elements, so the name is always text, never HTML */}
+            <p className="text-body wrap-anywhere">
+              {t.rich('typeToConfirm', {
+                text: confirmText,
+                bold: (chunks) => <strong>{chunks}</strong>,
+              })}
+            </p>
+            <Input
+              ref={typedRef}
+              aria-label={t('typeToConfirmLabel')}
+              autoComplete="off"
+              spellCheck={false}
+              value={typed}
+              onChange={(event) => setTyped(event.target.value)}
+            />
+          </form>
+        )}
         <DialogFooter>
           <Button ref={cancelRef} variant="secondary" onClick={() => onAnswer(false)}>
             {t('cancel')}
           </Button>
-          <Button variant={destructive ? 'destructive' : 'default'} onClick={() => onAnswer(true)}>
+          <Button
+            variant={destructive ? 'destructive' : 'default'}
+            disabled={!canConfirm}
+            onClick={() => onAnswer(true)}
+          >
             {options?.confirmLabel ?? t('confirm')}
           </Button>
         </DialogFooter>

@@ -1,6 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { EmailService } from '../../shared/domain/email.service';
+import { isOwnAssetUrl } from '../../shared/infrastructure/helpers/format-asset-url';
 import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import { CallbackExchangeUseCase } from './application/callback-exchange.use-case';
 import { DeleteAccountUseCase } from './application/delete-account.use-case';
@@ -66,7 +67,11 @@ export const createAuthContext = (config: AuthContextConfig): AuthContext => {
     signInWithPassword: new SignInWithPasswordUseCase(authRepository),
     signUp: new SignUpUseCase(authRepository, config.emailService),
     requestPasswordReset: new RequestPasswordResetUseCase(authRepository, config.emailService),
-    updatePassword: new UpdatePasswordUseCase(authRepository),
+    updatePassword: new UpdatePasswordUseCase(
+      authRepository,
+      accountDeletionRepo,
+      config.emailService,
+    ),
     callbackExchange: new CallbackExchangeUseCase(authRepository, profileRepository),
     verifyEmailLink: new VerifyEmailLinkUseCase(authRepository),
     signOut: new SignOutUseCase(authRepository),
@@ -87,7 +92,7 @@ export const createUserProfileContext = (config: UserProfileContextConfig): User
 
   return {
     getProfile: new GetProfileUseCase(profileRepository),
-    updateProfile: new UpdateProfileUseCase(profileRepository, storageRepository),
+    updateProfile: new UpdateProfileUseCase(profileRepository, storageRepository, isOwnAssetUrl),
     uploadAvatar: new UploadAvatarUseCase(storageRepository),
   };
 };

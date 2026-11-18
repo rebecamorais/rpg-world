@@ -58,7 +58,7 @@ test.describe('ficha só leitura', () => {
 
     // The values stay; the buttons that would change them are on the page, and hidden (counted
     // first: a hidden-element check passes on a button that isn't there at all)
-    await expect(viewer.getByLabel('Hit Points', { exact: true })).toHaveValue('12');
+    await expect(viewer.getByLabel('Hit points', { exact: true })).toHaveValue('12');
     for (const name of ['Lose 1 HP', 'Heal 1 HP', 'Configure hit points']) {
       await expectHiddenButton(viewer, name);
     }

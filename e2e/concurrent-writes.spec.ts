@@ -79,8 +79,9 @@ test.describe('escritas concorrentes', () => {
     const ac = (tab: Page) => tab.getByLabel('AC', { exact: true });
     const other = await page.context().newPage();
     for (const tab of [page, other]) await tab.goto(characterUrl(id));
-    await expect(ac(other)).toHaveValue(/\d+/);
-    const before = await ac(other).inputValue();
+    // Twice, on a cold server, the label matched two fields for a moment (during hydration?);
+    // hydrated() polls through that, so the unretried inputValue() reads a single field
+    const before = await (await hydrated(ac(other))).inputValue();
 
     await (await hydrated(ac(page))).fill('20');
     await page.keyboard.press('ControlOrMeta+s');

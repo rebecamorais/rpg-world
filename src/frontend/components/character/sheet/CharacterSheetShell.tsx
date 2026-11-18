@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { LoadingState } from '@frontend/components/shared/LoadingState';
+import { OfflineNotice } from '@frontend/components/shared/OfflineNotice';
 import { Badge } from '@frontend/components/ui/badge';
 import { Button } from '@frontend/components/ui/button';
 import { EmptyState } from '@frontend/components/ui/empty-state';
@@ -91,24 +92,28 @@ export function CharacterSheetShell({ children }: { children: ReactNode }) {
   const theme = characterTheme(character.accentColor);
 
   return (
-    <div
-      // Not positioned, so the backdrop reaches past the page's width to the dashboard's content area
-      className={cn(theme.className, 'isolate w-full')}
-      style={theme.style}
-    >
-      {character.sheetBackgroundUrl && <SheetBackdrop url={character.sheetBackgroundUrl} />}
-      {/* Room for the fixed save bar (and, on phones, the tab bar under it); width and padding come
-          from the dashboard layout */}
-      <div className="relative pb-36 md:pb-20">
-        {/* The character's color lights the top of their sheet */}
-        <div
-          aria-hidden="true"
-          className="bg-character pointer-events-none absolute top-0 left-[10%] -z-10 h-64 w-2/3 -translate-y-1/3 rounded-full opacity-15 blur-3xl"
-        />
-        {readOnly && partyId && <ReadOnlyBar partyId={partyId} />}
-        <SaveBarSlotProvider>{children}</SaveBarSlotProvider>
+    // The save bars go outside the `isolate` wrapper (see SaveBarSlotProvider)
+    <SaveBarSlotProvider className={theme.className} style={theme.style}>
+      <div
+        // Not positioned, so the backdrop reaches past the page's width to the dashboard's content area
+        className={cn(theme.className, 'isolate w-full')}
+        style={theme.style}
+      >
+        {character.sheetBackgroundUrl && <SheetBackdrop url={character.sheetBackgroundUrl} />}
+        {/* Room for the fixed save bar (and, on phones, the tab bar under it); width and padding come
+            from the dashboard layout */}
+        <div className="relative pb-36 md:pb-20">
+          {/* The character's color lights the top of their sheet */}
+          <div
+            aria-hidden="true"
+            className="bg-character pointer-events-none absolute top-0 left-[10%] -z-10 h-64 w-2/3 -translate-y-1/3 rounded-full opacity-15 blur-3xl"
+          />
+          {readOnly && partyId && <ReadOnlyBar partyId={partyId} />}
+          <OfflineNotice />
+          {children}
+        </div>
+        <SheetTabBar characterId={id} system={character.system} />
       </div>
-      <SheetTabBar characterId={id} system={character.system} />
-    </div>
+    </SaveBarSlotProvider>
   );
 }

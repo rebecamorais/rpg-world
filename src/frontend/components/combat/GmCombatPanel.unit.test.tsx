@@ -357,6 +357,20 @@ describe('GmCombatPanel', () => {
     expect(hook.finish.mutate).toHaveBeenCalled();
   });
 
+  // Phase 3 (configuracoes-da-mesa): it fell on "Are you sure?"
+  it('tirar alguém do combate pergunta com título próprio', async () => {
+    hook.encounter = running(1);
+    renderWithProviders(<GmCombatPanel party={party} live />);
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Goblin' }) }));
+    await user.click(screen.getByRole('button', { name: fill(t.remove, { name: 'Goblin' }) }));
+
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveAccessibleName(fill(t.removeConfirm, { name: 'Goblin' }));
+    expect(dialog).toHaveTextContent(t.removeConfirmDescription);
+  });
+
   it('sem conexão em tempo real mostra "Reconectando…"', () => {
     hook.encounter = running(1);
     renderWithProviders(<GmCombatPanel party={party} live={false} />);

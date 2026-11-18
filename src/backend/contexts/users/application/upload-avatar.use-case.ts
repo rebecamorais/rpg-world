@@ -3,6 +3,7 @@ import {
   ALLOWED_AVATAR_TYPES,
   AVATAR_BUCKET,
   MAX_AVATAR_SIZE_BYTES,
+  hasImageSignature,
 } from '@backend/shared/domain/avatar';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
@@ -23,12 +24,14 @@ export class UploadAvatarUseCase {
       throw new UserError(UserErrorCodes.AVATAR_UPLOAD_SIZE_LIMIT);
     }
 
-    if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+    // The declared type comes from the file name; the first bytes say what it really is
+    if (!ALLOWED_AVATAR_TYPES.includes(file.type) || !(await hasImageSignature(file))) {
       throw new UserError(UserErrorCodes.AVATAR_UPLOAD_INVALID_TYPE);
     }
 
     // Versioned path: the proxy lets images be cached, so each upload needs a new URL.
-    // The previous file is kept because the new URL is only saved when the profile form is.
+    // The previous file stays until the new URL is saved on the profile (right after the upload),
+    // which removes the file it replaces.
     const extension = file.type.split('/')[1];
     const path = `${userId}/avatar-${this.newVersion()}.${extension}`;
 

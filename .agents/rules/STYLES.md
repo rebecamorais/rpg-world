@@ -37,13 +37,13 @@ Para suportar interfaces personalizadas baseadas no `accentColor` do personagem 
 
 ### Tokens Disponíveis:
 
-| Token               | Variável CSS          | Descrição                                                     |
-| ------------------- | --------------------- | ------------------------------------------------------------- |
-| `character`         | `--character-primary` | Cor base do personagem (passa por fallback para `--primary`). |
-| `character-flare`   | `--character-flare`   | Cor vibrante para ícones e destaques.                         |
-| `character-surface` | `--character-surface` | Fundo sutil (10% opacidade) para cards e inputs.              |
-| `character-muted`   | `--character-muted`   | Cor atenuada (30% opacidade) para bordas e estados inativos.  |
-| `character-glow`    | `--character-glow`    | Brilho suave (50% opacidade) para sombras e efeitos de hover. |
+| Token               | Variável CSS          | Descrição                                                                                                                                      |
+| ------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `character`         | `--character-fill`    | Cor do personagem para preenchimentos, barras e bordas, com luminosidade ajustada até 3:1 contra as superfícies do tema. A cor salva não muda. |
+| `character-flare`   | `--character-flare`   | Cor vibrante para ícones e destaques.                                                                                                          |
+| `character-surface` | `--character-surface` | Fundo sutil (10% opacidade) para cards e inputs.                                                                                               |
+| `character-muted`   | `--character-muted`   | Cor atenuada (30% opacidade) para bordas e estados inativos.                                                                                   |
+| `character-glow`    | `--character-glow`    | Brilho suave (50% opacidade) para sombras e efeitos de hover.                                                                                  |
 
 ### Regras de Implementação:
 

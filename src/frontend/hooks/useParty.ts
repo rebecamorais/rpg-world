@@ -72,13 +72,15 @@ export function useParty(partyId: string) {
     },
     ...options,
   });
+  // No toast of their own: a 404 here means the person is gone, not the party, so the callers
+  // say what failed (useMemberAnswers, MyPartyMenu's leave)
   const acceptMember = useMutation({
     mutationFn: (userId: string) => rpgWorldApi.patch(`${base}/members/${userId}`),
-    ...options,
+    onSettled,
   });
   const removeMember = useMutation({
     mutationFn: (userId: string) => rpgWorldApi.delete(`${base}/members/${userId}`),
-    ...options,
+    onSettled,
   });
   const setMyCharacters = useMutation({
     mutationFn: (characterIds: string[]) =>

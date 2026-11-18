@@ -229,8 +229,9 @@ export function ImageViewerDialog({
           if (adjustOnClose.current) onAdjust?.();
           adjustOnClose.current = false;
         }}
-        // The close button sits over the image: its contrast needs a background of its own
-        className="[&>button]:bg-background max-w-[min(90vw,80vh)] border-none bg-transparent p-0 shadow-none [&>button]:top-2 [&>button]:right-2 [&>button]:rounded-full [&>button]:p-1.5"
+        // The close button sits over the image: its contrast needs a background of its own, and
+        // z-10 because the image comes later and its transform would otherwise paint over it
+        className="[&>button]:bg-background max-w-[min(90vw,80vh)] border-none bg-transparent p-0 shadow-none [&>button]:top-2 [&>button]:right-2 [&>button]:z-10 [&>button]:rounded-full [&>button]:p-1.5"
       >
         <DialogTitle className="sr-only">{t('viewTitle')}</DialogTitle>
         {src ? <ZoomStage src={src} alt={alt} onAdjust={adjust} /> : null}

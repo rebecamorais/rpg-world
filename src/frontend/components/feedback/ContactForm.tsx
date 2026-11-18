@@ -35,6 +35,7 @@ import {
 } from '@frontend/components/ui/select';
 import { Textarea } from '@frontend/components/ui/textarea';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { isNetworkError } from '@frontend/lib/error-message';
 
 import { UNEXPECTED_ERROR } from '@shared/http/error-response';
 
@@ -128,7 +129,8 @@ export default function ContactForm({
       }
     } catch (error) {
       console.error('Feedback submission error:', error);
-      form.setError('root', { message: t('error') });
+      // A dropped connection says so: the message is still in the form, ready to send again
+      form.setError('root', { message: isNetworkError(error) ? t('networkError') : t('error') });
     }
     // Tokens are single-use, so a new submission needs a fresh challenge either way
     resetTurnstile();

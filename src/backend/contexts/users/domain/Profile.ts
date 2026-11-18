@@ -5,6 +5,5 @@ export interface Profile {
   usernameChosen?: boolean;
   fullName?: string;
   avatarUrl?: string;
-  primaryColor?: string;
   updatedAt?: string;
 }

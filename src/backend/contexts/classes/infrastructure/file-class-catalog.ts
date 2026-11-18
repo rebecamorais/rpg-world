@@ -12,7 +12,7 @@ import type {
 } from '@shared/systems/dnd5e/content/class.schema';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
-import type { ClassCatalog } from '../domain/class-resources';
+import type { ClassCatalog } from '../domain/class-resources.repo';
 
 /** The classes of one book: rules data, English texts and translations by locale. */
 export interface ClassSource {

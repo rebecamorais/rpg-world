@@ -1,133 +1,30 @@
-'use client';
+import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import type { z } from 'zod/mini';
+import { getApi } from '@api';
 
-import { Button } from '@frontend/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@frontend/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormRootError,
-} from '@frontend/components/ui/form';
-import { Input } from '@frontend/components/ui/input';
-import { useAuth } from '@frontend/hooks/useAuth';
-import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
-import { setServerError } from '@frontend/lib/form-errors';
-import { newPasswordSchema } from '@frontend/lib/password-schema';
+import ChangePasswordForm from '@frontend/components/auth/ChangePasswordForm';
 
-export default function ChangePasswordPage() {
-  const t = useTranslations('changePassword');
-  const commonT = useTranslations('common');
-  const { updatePassword } = useAuth();
-  const { getErrorMessage } = useErrorMessage();
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('changePassword');
+  return { title: t('title') };
+}
 
-  const changePasswordSchema = newPasswordSchema(commonT);
+/** Signed in only: the (app) layout doesn't protect it, so the page does, like choose-username. */
+export default async function ChangePasswordPage() {
+  const { authApi } = await getApi();
+  const user = await authApi.getSessionUser();
+  if (!user) redirect(`/login?next=${encodeURIComponent('/change-password')}`);
 
-  type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
-
-  const form = useForm<ChangePasswordValues>({
-    resolver: zodResolver(changePasswordSchema),
-    defaultValues: { password: '', confirmPassword: '' },
+  // An account without a password creates one through the e-mail link, not with a session alone.
+  // If the check fails, the form shows: the server checks again
+  const hasPassword = await authApi.hasPassword(user.id).catch((error: unknown) => {
+    console.error('Failed to check whether the account has a password:', error);
+    return true;
   });
+  if (!hasPassword) redirect('/forgot-password');
 
-  const onSubmit = async (data: ChangePasswordValues) => {
-    try {
-      await updatePassword(data.password);
-      toast.success(t('success'));
-    } catch (err: unknown) {
-      const code = err instanceof Error ? err.message : null;
-      setServerError(form.setError, ['password'], code, getErrorMessage(err));
-    }
-  };
-
-  return (
-    <div className="relative flex flex-1 items-center justify-center p-8">
-      <div className="absolute top-4 left-4">
-        {/* Only opened signed in (a password change asked at login): back goes to the account */}
-        <Link
-          href="/settings/profile"
-          className="text-muted-foreground hover:text-foreground focus-ring rounded-sm text-sm transition-colors"
-        >
-          {commonT('back')}
-        </Link>
-      </div>
-
-      <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
-        <CardHeader>
-          <CardTitle as="h1">{t('title')}</CardTitle>
-          <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('newPasswordLabel')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={t('newPasswordPlaceholder')}
-                        autoComplete="new-password"
-                        className="bg-muted/50"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('confirmPasswordLabel')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={t('confirmPasswordPlaceholder')}
-                        autoComplete="new-password"
-                        className="bg-muted/50"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormRootError />
-              <Button
-                type="submit"
-                loading={form.formState.isSubmitting}
-                className="mt-2 w-full font-semibold"
-              >
-                {form.formState.isSubmitting ? t('processing') : t('submit')}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
-  );
+  return <ChangePasswordForm hasPassword />;
 }

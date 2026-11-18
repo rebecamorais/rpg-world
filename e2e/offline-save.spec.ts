@@ -40,7 +40,7 @@ function countPuts(page: Page, id: string) {
   return puts;
 }
 
-const hitPoints = (page: Page) => page.getByLabel('Hit Points', { exact: true });
+const hitPoints = (page: Page) => page.getByLabel('Hit points', { exact: true });
 
 async function openAdjustHp(page: Page) {
   await (
@@ -86,7 +86,7 @@ test.describe('sem conexão', () => {
     await (await hydrated(page.getByLabel('AC', { exact: true }))).fill('17');
 
     await context.setOffline(true);
-    await page.getByRole('button', { name: 'Save Changes' }).click();
+    await page.getByRole('button', { name: 'Save changes' }).click();
 
     await expect(page.getByText(NO_CONNECTION)).toBeVisible();
     await expect(page.getByText('No connection: your changes are still here')).toBeVisible();
@@ -191,7 +191,7 @@ test.describe('o jogo salva na hora', () => {
 
     await (await hydrated(page.getByRole('button', { name: 'Lose 1 HP' }))).click();
     await page.getByRole('button', { name: 'Death save failure 1' }).click();
-    await expect(page.getByRole('button', { name: 'Save Changes' })).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Save changes' })).toBeDisabled();
 
     await expect
       .poll(async () => (await (await page.request.get(`/api/characters/${id}`)).json()).hpCurrent)
@@ -215,7 +215,7 @@ test.describe('o jogo salva na hora', () => {
 
     await expect(hitPoints(page)).toHaveValue('30');
     await expect(page.getByRole('checkbox', { name: 'Full HP' })).toBeChecked();
-    await expect(page.getByRole('button', { name: 'Save Changes' })).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Save changes' })).toBeDisabled();
 
     await page.getByRole('button', { name: 'Undo' }).click();
     await expect(hitPoints(page)).toHaveValue('5');
@@ -232,7 +232,7 @@ test.describe('salvar sem envio duplicado', () => {
     await (await hydrated(page.getByLabel('AC', { exact: true }))).fill('15');
     const puts = countPuts(page, id);
 
-    await page.getByRole('button', { name: 'Save Changes' }).dblclick();
+    await page.getByRole('button', { name: 'Save changes' }).dblclick();
 
     await expect(page.getByText('Character saved successfully!')).toBeVisible();
     expect(puts).toHaveLength(1);
@@ -273,11 +273,11 @@ test.describe('conflito entre abas', () => {
     await other.goto(characterUrl(id));
 
     await (await hydrated(page.getByLabel('AC', { exact: true }))).fill('20');
-    await page.getByRole('button', { name: 'Save Changes' }).click();
+    await page.getByRole('button', { name: 'Save changes' }).click();
     await expect(page.getByText('Character saved successfully!')).toBeVisible();
 
     await (await hydrated(other.getByLabel('AC', { exact: true }))).fill('18');
-    await other.getByRole('button', { name: 'Save Changes' }).click();
+    await other.getByRole('button', { name: 'Save changes' }).click();
 
     await expect(other.getByText(/^Changed somewhere else/)).toBeVisible();
     // The draft stays until the person chooses

@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
+import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
@@ -11,7 +12,12 @@ import type { MyParties, PartySummary } from '@backend/contexts/parties/domain/P
 
 import PartyList from './PartyList';
 
-vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }));
+const push = vi.hoisted(() => vi.fn());
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
+vi.mock('sonner', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('sonner')>();
+  return { ...actual, toast: Object.assign(vi.fn(), actual.toast, { success: vi.fn() }) };
+});
 
 vi.mock('@client', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@client')>()),
@@ -239,5 +245,48 @@ describe('PartyList', () => {
     await vi.waitFor(() => expect(acceptA).toHaveAttribute('aria-busy', 'true'));
     expect(screen.getByRole('button', { name: named(t.declineInvite, 'Mesa a') })).toBeDisabled();
     expect(screen.getByRole('button', { name: named(t.acceptInvite, 'Mesa b') })).toBeEnabled();
+  });
+
+  // d-fase2-tempo-real#2: accepting from the list said nothing and stayed on /parties
+  it('aceitar um convite avisa e leva para a mesa', async () => {
+    vi.mocked(rpgWorldApi.patch).mockResolvedValue(undefined);
+    renderList(mine({ invites: [party('invite', { status: 'invited' })] }));
+
+    await userEvent
+      .setup()
+      .click(await screen.findByRole('button', { name: named(t.acceptInvite, 'Mesa invite') }));
+
+    await vi.waitFor(() => expect(push).toHaveBeenCalledWith('/parties/invite'));
+    expect(toast.success).toHaveBeenCalledWith(named(t.joinedParty, 'Mesa invite'));
+  });
+
+  it('recusar um convite e cancelar um pedido avisam', async () => {
+    vi.mocked(rpgWorldApi.delete).mockResolvedValue(undefined);
+    renderList(
+      mine({
+        invites: [party('invite', { status: 'invited' })],
+        requests: [party('pedido', { status: 'requested' })],
+      }),
+    );
+    const user = userEvent.setup();
+
+    await user.click(
+      await screen.findByRole('button', { name: named(t.declineInvite, 'Mesa invite') }),
+    );
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.decline }),
+    );
+    await vi.waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith(named(t.inviteDeclined, 'Mesa invite')),
+    );
+
+    await user.click(screen.getByRole('button', { name: named(t.withdrawFrom, 'Mesa pedido') }));
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.withdraw }),
+    );
+    await vi.waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith(named(t.requestWithdrawn, 'Mesa pedido')),
+    );
+    expect(push).not.toHaveBeenCalled();
   });
 });

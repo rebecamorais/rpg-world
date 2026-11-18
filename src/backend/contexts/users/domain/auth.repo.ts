@@ -27,7 +27,11 @@ export interface AuthRepository {
   /** Verifies the token of an e-mail link and starts the session. */
   verifyEmailLink(tokenHash: string, type: EmailLinkType): Promise<void>;
   exchangeCodeForSession(code: string): Promise<void>;
-  updatePassword(newPassword: string): Promise<void>;
+  /**
+   * Sets the account's password on the server's behalf. Only after the current password was
+   * checked: Supabase's "secure password change" would refuse the session itself after 24 h.
+   */
+  updatePassword(userId: string, newPassword: string): Promise<void>;
   existsByEmail(email: string): Promise<boolean>;
   signOut(): Promise<void>;
   /** Whether the account still exists: a session's JWT outlives a deleted account. */

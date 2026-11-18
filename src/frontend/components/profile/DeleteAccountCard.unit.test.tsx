@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -218,17 +218,33 @@ describe('DeleteAccountCard', () => {
     });
   });
 
-  it('permite pedir de novo depois de enviar', async () => {
-    const user = userEvent.setup();
-    renderCard({ hasPassword: false });
-    const dialog = await openDialog(user);
-    await user.type(within(dialog).getByLabelText(t.usernameLabel), 'thorin');
-    await user.click(within(dialog).getByRole('button', { name: t.submit }));
+  it('reenvia sem pedir tudo de novo, depois de esperar um minuto', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      renderCard();
+      const dialog = await openDialog(user);
+      await user.type(within(dialog).getByLabelText(t.usernameLabel), 'thorin');
+      await user.type(within(dialog).getByLabelText(t.passwordLabel), 'segredo123');
+      await user.click(within(dialog).getByRole('button', { name: t.submit }));
 
-    await user.click(await within(dialog).findByRole('button', { name: t.sendAgain }));
-    await user.click(within(dialog).getByRole('button', { name: t.submit }));
+      // The server takes one e-mail a minute: the button counts down instead of failing
+      const waiting = await within(dialog).findByRole('button', { name: /\(60 s\)/ });
+      expect(waiting).toBeDisabled();
 
-    await waitFor(() => expect(api.post).toHaveBeenCalledTimes(2));
+      await act(() => vi.advanceTimersByTimeAsync(60_000));
+      await user.click(within(dialog).getByRole('button', { name: t.sendAgain }));
+
+      await waitFor(() => expect(api.post).toHaveBeenCalledTimes(2));
+      expect(api.post).toHaveBeenLastCalledWith('/api/profile/deletion-request', {
+        username: 'thorin',
+        password: 'segredo123',
+      });
+      expect(await within(dialog).findByText(t.sentAgain)).toBeInTheDocument();
+      expect(within(dialog).queryByLabelText(t.usernameLabel)).not.toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('senha errada aparece no campo, com o caminho para "esqueci minha senha"', async () => {

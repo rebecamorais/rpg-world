@@ -88,34 +88,26 @@ describe('SupabaseAuthRepository (integração)', () => {
 
   describe('troca de senha', () => {
     async function signedIn() {
-      const { email } = await createUser('password');
+      const { email, id } = await createUser('password');
       const repo = newRepository();
       await repo.signInWithPassword(email, PASSWORD);
-      return { repo, email };
+      return { repo, email, id };
     }
 
-    it('troca a senha do usuário logado', async () => {
-      const { repo, email } = await signedIn();
+    it('troca a senha da conta', async () => {
+      const { repo, email, id } = await signedIn();
 
-      await repo.updatePassword('BrandNewPass456!');
+      await repo.updatePassword(id, 'BrandNewPass456!');
 
       await expect(newRepository().signInWithPassword(email, 'BrandNewPass456!')).resolves.toBe(
         undefined,
       );
     });
 
-    it('recusa a mesma senha', async () => {
-      const { repo } = await signedIn();
-
-      const error = await errorOf(repo.updatePassword(PASSWORD));
-
-      expect((error as UserError).code).toBe(UserErrorCodes.UPDATE_PASSWORD_SAME);
-    });
-
     it('recusa senha fraca', async () => {
-      const { repo } = await signedIn();
+      const { repo, id } = await signedIn();
 
-      const error = await errorOf(repo.updatePassword('123'));
+      const error = await errorOf(repo.updatePassword(id, '123'));
 
       expect((error as UserError).code).toBe(UserErrorCodes.UPDATE_PASSWORD_WEAK);
     });

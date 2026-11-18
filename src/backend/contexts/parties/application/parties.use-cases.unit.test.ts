@@ -1,3 +1,4 @@
+import { imageBlob, textAsImage } from '@tests/helpers/image-blob';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PartySummary } from '../domain/Party';
@@ -282,7 +283,7 @@ describe('casos de uso das mesas', () => {
 
   describe('imagem da mesa', () => {
     const storage = { upload: vi.fn(), download: vi.fn(), remove: vi.fn() };
-    const image = (type = 'image/webp', size = 1000) => new Blob([new Uint8Array(size)], { type });
+    const image = (type = 'image/webp', size = 1000) => imageBlob(type, size);
     const upload = () => new UploadPartyImageUseCase(repo, storage, () => 'v1');
 
     beforeEach(() => {
@@ -319,6 +320,14 @@ describe('casos de uso das mesas', () => {
         PartyErrorCodes.IMAGE_INVALID_TYPE,
       );
       expect(storage.upload).not.toHaveBeenCalled();
+    });
+
+    it('recusa um arquivo de texto declarado image/png: a imagem é pública no convite', async () => {
+      expect(await codeOf(upload().execute('p', 'gm-1', textAsImage('image/png')))).toBe(
+        PartyErrorCodes.IMAGE_INVALID_TYPE,
+      );
+      expect(storage.upload).not.toHaveBeenCalled();
+      expect(repo.setImage).not.toHaveBeenCalled();
     });
 
     it('o mestre remove a imagem', async () => {

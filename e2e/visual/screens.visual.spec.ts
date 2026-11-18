@@ -197,7 +197,7 @@ test.describe('tema claro', () => {
     await snap(page, 'home-light');
   });
 
-  test('ficha e combate', async ({ page, user: _ }, testInfo) => {
+  test('ficha e combate', async ({ page, user }, testInfo) => {
     const res = await page.request.patch('/api/profile', {
       data: {
         username: `${testInfo.project.name}_light`.replace(/\W+/g, '_').slice(0, 30),
@@ -226,6 +226,20 @@ test.describe('tema claro', () => {
     await expect(catalog.getByRole('article')).toHaveCount(12);
     await snap(page, 'spells-search-light');
     await page.keyboard.press('Escape');
+
+    // The phase 3 fixes changed these (Lore fields, the character's fill tone, the Account card)
+    await page.goto(characterUrl(id, '/lore'));
+    await expect(page.getByText(/Candlekeep/).first()).toBeVisible();
+    await snap(page, 'sheet-lore-light');
+    await page.goto(characterUrl(id, '/inventory'));
+    await expect(page.getByLabel('Gold pieces')).toBeVisible();
+    await snap(page, 'sheet-inventory-light');
+    await page.goto('/characters');
+    await expect(page.getByText('Arani the Bold')).toBeVisible();
+    await snap(page, 'characters-light');
+    await page.goto('/settings/profile');
+    await page.getByRole('main').first().waitFor();
+    await snap(page, 'profile-light', [page.getByText(user.email)]);
 
     const { id: partyId } = await createParty(page, 'Mesa do Tema');
     const goblinId = await createEnemySheet(page, 'Goblin', 7);

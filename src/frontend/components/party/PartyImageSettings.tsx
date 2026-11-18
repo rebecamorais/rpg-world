@@ -67,6 +67,7 @@ export function PartyImageSettings({ party }: { party: PartyView }) {
 
   const remove = async () => {
     const ok = await confirm({
+      title: t('removeTitle'),
       description: t('removeConfirm'),
       confirmLabel: t('remove'),
       destructive: true,

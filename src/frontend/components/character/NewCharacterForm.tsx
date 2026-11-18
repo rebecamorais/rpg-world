@@ -24,19 +24,13 @@ import {
   FormRootError,
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@frontend/components/ui/select';
 import { CLASS_ICONS } from '@frontend/constants/character-choices';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { useClassResources } from '@frontend/hooks/useClassResources';
 import { useCreateCharacter } from '@frontend/hooks/useCreateCharacter';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { cn } from '@frontend/lib/utils';
 import { CharacterClass } from '@frontend/types/spells';
 
 import {
@@ -49,6 +43,8 @@ import type { AttributeKey } from '@shared/systems/dnd5e/types';
 
 /** Same limit as the API's character schema. */
 const TEXT_MAX = 100;
+/** The only system there is: shown as text until there is a second one to pick. */
+const SYSTEM = 'DnD_5e';
 const LISTED_CLASSES = new Set<string>(Object.values(CharacterClass));
 // A new sheet's: the class's picks don't depend on them, only its hit points do (on the server)
 const NEW_SHEET_ATTRIBUTES: Record<AttributeKey, number> = {
@@ -67,12 +63,13 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
   const tCommon = useTranslations('common');
   const tHeader = useTranslations('characterHeader');
   const tEditions = useTranslations('sheetSettings');
-  const { getMessage } = useErrorMessage();
+  const { getErrorMessage } = useErrorMessage();
   const createMutation = useCreateCharacter(t('success'));
   const choices = useCharacterChoices();
 
-  // Edition, class and the class's picks never stop the creation, so they live outside the form
-  const [edition, setEdition] = useState<Edition | undefined>();
+  // Edition, class and the class's picks never stop the creation, so they live outside the form.
+  // 2014 comes picked: it's the edition that fills the sheet from the class
+  const [edition, setEdition] = useState<Edition>('2014');
   const [characterClass, setCharacterClass] = useState('');
   const [picks, setPicks] = useState<ClassChoiceSelections>({});
   // Only a class picked from the list has SRD picks; the player's own text gets today's sheet
@@ -82,7 +79,6 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
 
   const newCharacterSchema = z.object({
     name: z.string().check(z.trim(), z.minLength(1, t('nameRequired')), z.maxLength(100)),
-    system: z.string().check(z.minLength(1, t('systemPlaceholder'))),
   });
 
   type NewCharacterFormValues = z.infer<typeof newCharacterSchema>;
@@ -91,7 +87,6 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
     resolver: zodResolver(newCharacterSchema),
     defaultValues: {
       name: '',
-      system: 'DnD_5e',
     },
   });
 
@@ -110,18 +105,15 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
     createMutation.mutate(
       {
         name: data.name.trim(),
-        system: data.system,
-        ...(edition && { edition }),
+        system: SYSTEM,
+        edition,
         ...(className && { class: className }),
         ...(Object.keys(classChoices).length > 0 && { classChoices }),
         ...(kind === 'npc' && { kind }),
       },
       {
-        onError: (err: Error) => {
-          const errorCode = err.message;
-          const localizedMsg = getMessage(errorCode);
-          form.setError('root', { message: localizedMsg });
-        },
+        // Not the raw message: offline says so instead of "unknown error"
+        onError: (err: Error) => form.setError('root', { message: getErrorMessage(err) }),
       },
     );
   };
@@ -135,11 +127,17 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
               <FormField
                 control={form.control}
                 name="name"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel>{t('nameLabel')}</FormLabel>
+                    {/* The same label and field as the class below */}
+                    <FormLabel
+                      className={cn('text-label', !fieldState.error && 'text-muted-foreground')}
+                    >
+                      {t('nameLabel')}
+                    </FormLabel>
                     <FormControl>
                       <Input
+                        className="bg-muted h-10 font-medium"
                         maxLength={100}
                         // A character's name, not the user's: no personal autofill
                         autoComplete="off"
@@ -153,31 +151,10 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="system"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('systemLabel')}</FormLabel>
-                    <Select
-                      disabled={createMutation.isPending}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder={t('systemPlaceholder')} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="DnD_5e">{t('systems.dnd5e')}</SelectItem>
-                        {/* Future systems will be added here */}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex flex-col gap-1">
+                <span className="text-label text-muted-foreground">{t('systemLabel')}</span>
+                <p className="text-sm font-medium">{t('systems.dnd5e')}</p>
+              </div>
 
               <fieldset disabled={createMutation.isPending} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
@@ -224,10 +201,8 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
                   otherPlaceholder={tHeader('classOtherPlaceholder')}
                 />
 
-                {classId && edition !== '2014' && (
-                  <p className="text-caption text-muted-foreground">
-                    {t(edition === '2024' ? 'classHint2024' : 'classHintEdition')}
-                  </p>
+                {classId && edition === '2024' && (
+                  <p className="text-caption text-muted-foreground">{t('classHint2024')}</p>
                 )}
 
                 {defaults && (

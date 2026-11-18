@@ -7,7 +7,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
 
-import type { ItemDto } from '@backend/contexts/items/domain/item';
+import type { ItemDto } from '@backend/contexts/items/domain/item.repo';
 
 import pt from '../../../../../messages/pt.json';
 import { ItemDetails } from './ItemDetails';

@@ -2,7 +2,6 @@ import { AppError, AppErrorKind } from '@backend/shared/domain/AppError';
 
 export const UserErrorCodes = {
   SIGNUP_REQUIRED_FIELDS: 'auth_error_signup_required_fields',
-  SIGNUP_INVALID_PASSWORD: 'auth_error_signup_invalid_password',
   SIGNUP_DUPLICATE_EMAIL: 'auth_error_signup_duplicate_email',
   AUTH_CODE_REQUIRED: 'auth_error_code_required',
   AUTH_LINK_EXPIRED: 'auth_error_link_expired',
@@ -16,9 +15,12 @@ export const UserErrorCodes = {
   UPDATE_PASSWORD_REQUIRED: 'auth_error_update_password_required',
   UPDATE_PASSWORD_WEAK: 'auth_error_update_password_weak',
   UPDATE_PASSWORD_SAME: 'auth_error_update_password_same',
+  UPDATE_PASSWORD_CURRENT_INVALID: 'auth_error_update_password_current_invalid',
+  UPDATE_PASSWORD_NO_PASSWORD: 'auth_error_update_password_no_password',
   PROFILE_UPDATE_ID_REQUIRED: 'profile_error_update_id_required',
   PROFILE_GET_ID_REQUIRED: 'profile_error_get_id_required',
   PROFILE_USERNAME_TAKEN: 'profile_error_username_taken',
+  PROFILE_AVATAR_INVALID: 'profile_error_avatar_invalid',
   AVATAR_UPLOAD_USERID_REQUIRED: 'storage_error_upload_avatar_userid_required',
   AVATAR_UPLOAD_SIZE_LIMIT: 'storage_error_upload_avatar_size_limit',
   AVATAR_UPLOAD_INVALID_TYPE: 'storage_error_upload_avatar_invalid_type',

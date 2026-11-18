@@ -18,16 +18,27 @@ interface Answer {
 const RESPOND_KEY = ['parties-respond'] as const;
 
 /**
- * The person's parties (as GM and player), their invitations and pending requests. Also used by
- * the phone menu, which renders outside the dashboard's UserProvider.
+ * How often the list asks again. An invite reaches someone not in the party yet, so no party
+ * channel tells them; the list asks every minute, and when the window comes back into focus.
  */
-export function useParties() {
+export const PARTIES_POLL_MS = 60_000;
+
+/**
+ * The person's parties (as GM and player), their invitations and pending requests. Also used by
+ * the phone menu, which renders outside the dashboard's UserProvider. Only the parties list
+ * (`poll`) asks again on its own: the menu is on every screen, and a request a minute from each
+ * open tab isn't worth it there.
+ */
+export function useParties({ poll = false }: { poll?: boolean } = {}) {
   const queryClient = useQueryClient();
   const { getErrorMessage } = useErrorMessage();
 
   const query = useQuery({
     queryKey: PARTIES_QUERY_KEY,
     queryFn: () => rpgWorldApi.get<MyParties>('/api/parties'),
+    // TanStack polls a shared query only while an observer that asks for it is mounted
+    refetchInterval: poll ? PARTIES_POLL_MS : false,
+    refetchOnWindowFocus: poll,
   });
 
   const onSettled = () => queryClient.invalidateQueries({ queryKey: PARTIES_QUERY_KEY });
@@ -64,6 +75,11 @@ export function useParties() {
     createParty: create.mutateAsync,
     isCreating: create.isPending,
     respond: respond.mutate,
+    /**
+     * The same answer, as a promise of its own: mutate's callbacks only run for the last call,
+     * and two rows can be answered at once. It rejects on failure, after the toast above.
+     */
+    respondAsync: respond.mutateAsync,
     /** The answer about this party on its way, if any: accepting, or declining / withdrawing. */
     respondingTo: (partyId: string): 'accept' | 'decline' | undefined => {
       const answer = pendingAnswers.find((a) => a?.partyId === partyId);

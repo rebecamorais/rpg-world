@@ -8,6 +8,7 @@ import { AccountDeletionTemplate } from '../email/templates/AccountDeletion';
 import { AccountExistsTemplate } from '../email/templates/AccountExists';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';
 import { MagicLinkTemplate } from '../email/templates/MagicLink';
+import { PasswordChangedTemplate } from '../email/templates/PasswordChanged';
 import { PasswordResetTemplate } from '../email/templates/PasswordReset';
 
 export class ResendEmailService implements EmailService {
@@ -83,6 +84,20 @@ export class ResendEmailService implements EmailService {
     // Only the error's name: the provider's message can repeat the address
     if (error) {
       throw new Error(`Failed to send account deletion email: ${error.name}`);
+    }
+  }
+
+  async sendPasswordChangedEmail(email: string, forgotPasswordLink: string): Promise<void> {
+    const { error } = await this.resend.emails.send({
+      from: this.fromEmail,
+      to: [email],
+      subject: 'Sua senha foi alterada - RPG World',
+      react: React.createElement(PasswordChangedTemplate, { forgotPasswordLink }),
+    });
+
+    // Only the error's name: the provider's message can repeat the address
+    if (error) {
+      throw new Error(`Failed to send password changed email: ${error.name}`);
     }
   }
 }

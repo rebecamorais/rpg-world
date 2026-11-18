@@ -9,23 +9,47 @@ import { Button } from '@frontend/components/ui/button';
 import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
+import { useEncounter } from '@frontend/hooks/useEncounter';
+import { usePartyChest } from '@frontend/hooks/useInventory';
 import { useParty } from '@frontend/hooks/useParty';
 
+import type { InventoryDto } from '@backend/contexts/characters/domain/repository/inventory.repo';
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
-/** Deleting the party, apart at the end of the settings so it is never clicked on the way. */
+import { COINS } from '@shared/systems/dnd5e/coins';
+
+/** Whether the chest holds anything: an item, or a coin of any kind. */
+function chestHasSomething(chest: InventoryDto): boolean {
+  return (
+    chest.items.length > 0 || chest.containers.some((c) => COINS.some((coin) => c.coins[coin] > 0))
+  );
+}
+
+/**
+ * Deleting the party, apart at the end of the settings so it is never clicked on the way. The
+ * confirmation names the party; with something to lose (a chest with items or coins, a combat)
+ * the GM types the name too. Until both have loaded it asks for the name, to be safe.
+ */
 export function PartyDangerZone({ party, onDeleted }: { party: PartyView; onDeleted: () => void }) {
   const t = useTranslations('parties.manage');
   const confirm = useConfirm();
   const titleId = useId();
   const { remove } = useParty(party.id);
+  const chest = usePartyChest(party.id);
+  const combat = useEncounter(party.id);
+  const losesALot =
+    !chest.inventory ||
+    chestHasSomething(chest.inventory) ||
+    combat.encounter === undefined ||
+    combat.encounter !== null;
 
   const deleteParty = async () => {
     const ok = await confirm({
-      title: t('deleteParty'),
+      title: t('deleteTitle', { name: party.name }),
       description: t('deleteConfirm'),
       confirmLabel: t('deleteParty'),
       destructive: true,
+      confirmText: losesALot ? party.name : undefined,
     });
     if (!ok) return;
     // mutateAsync, not mutate's callbacks: the party reload that follows answers "not found" and

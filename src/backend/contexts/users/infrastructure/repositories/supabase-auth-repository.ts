@@ -179,9 +179,12 @@ export class SupabaseAuthRepository implements AuthRepository {
     }
   }
 
-  async updatePassword(newPassword: string): Promise<void> {
+  async updatePassword(userId: string, newPassword: string): Promise<void> {
     this.sessionUser = undefined;
-    const { error } = await this.authClient.auth.updateUser({
+    // The admin API, not the session: with "secure password change" on, Supabase asks a session
+    // older than 24 h for an e-mailed code. The use case already checked the current password,
+    // which is the proof; changing it straight through Supabase still needs that code.
+    const { error } = await this.dbClient.auth.admin.updateUserById(userId, {
       password: newPassword,
     });
 

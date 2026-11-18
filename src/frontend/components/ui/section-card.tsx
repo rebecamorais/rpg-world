@@ -62,19 +62,25 @@ function SectionCardTitle({
   children,
   ...props
 }: SectionCardTitleProps) {
+  // The hint's button sits beside the heading, not inside it: inside, its "What is …?" became
+  // part of the heading's name ("What is Party picture? Party picture")
+  if (icon && hint && typeof children === 'string') {
+    return (
+      <div className={cn('text-label text-muted-foreground flex items-center gap-2', className)}>
+        <Hint label={children} hint={hint}>
+          {titleIcon(icon, iconVariant)}
+        </Hint>
+        <Tag {...props}>{children}</Tag>
+      </div>
+    );
+  }
+
   return (
     <Tag
       className={cn('text-label text-muted-foreground flex items-center gap-2', className)}
       {...props}
     >
-      {icon &&
-        (hint && typeof children === 'string' ? (
-          <Hint label={children} hint={hint}>
-            {titleIcon(icon, iconVariant)}
-          </Hint>
-        ) : (
-          titleIcon(icon, iconVariant)
-        ))}
+      {icon && titleIcon(icon, iconVariant)}
       {children}
     </Tag>
   );

@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 
+import { usePathname } from 'next/navigation';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm, useWatch } from 'react-hook-form';
@@ -23,10 +25,10 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { SectionCard } from '@frontend/components/ui/section-card';
-import { ACCENT_COLORS } from '@frontend/constants/accent-colors';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
-import { cn } from '@frontend/lib/utils';
+import { useLeaveGuard } from '@frontend/hooks/useUnsavedChanges';
+import { errorCodeOf } from '@frontend/lib/error-message';
 
 /** Optional, and an empty field counts as not filled in. */
 const orEmpty = <T extends z.ZodMiniType>(schema: T) =>
@@ -34,7 +36,10 @@ const orEmpty = <T extends z.ZodMiniType>(schema: T) =>
 
 export default function ProfileForm() {
   const t = useTranslations('profileForm');
-  const { getMessage } = useErrorMessage();
+  const tAvatar = useTranslations('avatarUpload');
+  const tCommon = useTranslations('common');
+  const { getErrorMessage } = useErrorMessage();
+  const pathname = usePathname();
 
   const profileSchema = z.object({
     username: orEmpty(
@@ -48,9 +53,6 @@ export default function ProfileForm() {
     ),
     fullName: orEmpty(z.string().check(z.maxLength(100, t('validation.fullNameMax')))),
     avatarUrl: orEmpty(z.url(t('validation.avatarUrlInvalid'))),
-    primaryColor: orEmpty(
-      z.string().check(z.regex(/^#[0-9a-fA-F]{6}$/, t('validation.primaryColorInvalid'))),
-    ),
   });
 
   type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -62,9 +64,12 @@ export default function ProfileForm() {
       username: '',
       fullName: '',
       avatarUrl: '',
-      primaryColor: '#663399',
     },
   });
+
+  // Leaving with an edited name asks first, like the sheet. The avatar never counts: it is saved
+  // as soon as it's uploaded.
+  useLeaveGuard(form.formState.isDirty, (path) => path === pathname, tCommon('leaveConfirm'));
 
   const avatarUrl = useWatch({
     control: form.control,
@@ -79,7 +84,6 @@ export default function ProfileForm() {
           username: profile.username ?? '',
           fullName: profile.fullName ?? '',
           avatarUrl: profile.avatarUrl ?? '',
-          primaryColor: profile.primaryColor ?? '#663399',
         },
         { keepDirtyValues: true },
       );
@@ -88,7 +92,8 @@ export default function ProfileForm() {
 
   // The upload only stores the file: its URL (versioned, so used as is) is saved right away,
   // like the success toast says, instead of waiting for the form's Save button
-  const handleAvatarUploadSuccess = async (url: string) => {
+  // `url` is '' to remove the avatar
+  const saveAvatar = async (url: string, successMessage = t('saveSuccess')) => {
     // Shown at once (the upload's preview is already gone). Dirty while saving, so a refetch still
     // answering for the previous upload can't put the old URL back (the backend deletes the file
     // an avatar replaces); once saved it becomes the field's value, or is undone if saving fails.
@@ -96,27 +101,29 @@ export default function ProfileForm() {
     try {
       await updateProfile({ avatarUrl: url });
       form.resetField('avatarUrl', { defaultValue: url });
-      toast.success(t('saveSuccess'));
+      toast.success(successMessage);
     } catch (err: unknown) {
       form.resetField('avatarUrl');
-      toast.error(getMessage(err instanceof Error ? err.message : 'unknown'));
+      toast.error(getErrorMessage(err));
     }
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
     try {
+      // An empty name is sent as empty, which clears it; an empty username keeps the current one
+      // (it can't be blank). The avatar isn't sent: it was saved when uploaded.
       await updateProfile({
         username: data.username || undefined,
-        fullName: data.fullName || undefined,
-        avatarUrl: data.avatarUrl || undefined,
-        primaryColor: data.primaryColor || undefined,
+        fullName: data.fullName ?? '',
       });
+      // What was saved is the new starting point, so leaving no longer asks
+      form.reset(data);
       toast.success(t('saveSuccess'));
     } catch (err: unknown) {
-      // Shown on the form, where it can be read and fixed: a taken username under its field
-      const errorCode = err instanceof Error ? err.message : 'unknown';
-      const message = getMessage(errorCode);
-      if (errorCode === 'profile_error_username_taken') {
+      // Shown on the form, where it can be read and fixed: a taken username under its field. A
+      // dropped connection says so, and the edits stay in the fields.
+      const message = getErrorMessage(err);
+      if (errorCodeOf(err) === 'profile_error_username_taken') {
         form.setError('username', { message }, { shouldFocus: true });
       } else {
         form.setError('root', { message });
@@ -147,8 +154,10 @@ export default function ProfileForm() {
             <div className="flex justify-center md:shrink-0">
               <ImageUpload
                 currentUrl={avatarUrl}
+                name={profile?.username}
                 target="profile"
-                onUploadSuccess={handleAvatarUploadSuccess}
+                onUploadSuccess={saveAvatar}
+                onRemove={() => saveAvatar('', tAvatar('removed'))}
                 size="lg"
               />
             </div>
@@ -166,7 +175,6 @@ export default function ProfileForm() {
                         autoComplete="username"
                         spellCheck={false}
                         autoCapitalize="none"
-                        className="border-border bg-muted text-foreground focus:border-primary-flare"
                         {...field}
                       />
                     </FormControl>
@@ -185,55 +193,8 @@ export default function ProfileForm() {
                       <Input
                         placeholder={t('fullNamePlaceholder')}
                         autoComplete="name"
-                        className="border-border bg-muted text-foreground focus:border-primary-flare"
                         {...field}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="primaryColor"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('primaryColorLabel')}</FormLabel>
-                    <FormControl>
-                      <div className="flex flex-wrap gap-2 pt-1">
-                        {ACCENT_COLORS.map((color) => {
-                          const isSelected =
-                            color.value === field.value || (!color.value && !field.value);
-
-                          return (
-                            <button
-                              key={color.name}
-                              type="button"
-                              onClick={() => field.onChange(color.value)}
-                              className={cn(
-                                'group focus-ring relative flex h-10 w-10 items-center justify-center rounded-full border-2 transition-transform hover:scale-110',
-                                isSelected
-                                  ? 'border-primary-flare ring-primary-flare/20 ring-2'
-                                  : 'border-transparent',
-                              )}
-                              title={t(`colors.${color.name}`)}
-                              aria-label={t(`colors.${color.name}`)}
-                              aria-pressed={isSelected}
-                            >
-                              <div
-                                className="h-7 w-7 rounded-full shadow-sm"
-                                style={{ backgroundColor: color.value || 'var(--brand)' }}
-                              />
-                              {isSelected && (
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                  <div className="bg-foreground h-1.5 w-1.5 rounded-full shadow-sm" />
-                                </div>
-                              )}
-                            </button>
-                          );
-                        })}
-                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

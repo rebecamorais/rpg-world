@@ -48,7 +48,7 @@ test.describe('mesa em tempo real', () => {
     test.setTimeout(90_000);
     const { id: partyId, code } = await createParty(page, 'Mesa ao Vivo');
     await page.goto(partyUrl(partyId));
-    await hydrated(page.getByRole('main').getByRole('link', { name: 'Manage' }));
+    await hydrated(page.getByRole('main').getByRole('link', { name: 'Settings', exact: true }));
 
     const player = await person(browser, 'live-asker');
     await player.page.goto(`/parties/join/${code}`);
@@ -102,7 +102,7 @@ test.describe('mesa em tempo real', () => {
     // Joined before the change: otherwise the refetch on SUBSCRIBED alone would bring it
     const joined = channelJoined(page, partyId);
     await page.goto(partyUrl(partyId));
-    await hydrated(page.getByRole('main').getByRole('link', { name: 'Manage' }));
+    await hydrated(page.getByRole('main').getByRole('link', { name: 'Settings', exact: true }));
     await expect(page.getByText('Arani Ao Vivo')).toHaveCount(0);
     await joined;
 

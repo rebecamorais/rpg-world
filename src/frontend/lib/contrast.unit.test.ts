@@ -4,6 +4,7 @@ import {
   type Rgb,
   SURFACES,
   contrastRatio,
+  fill,
   flare,
   fromOklch,
   onColor,
@@ -72,6 +73,19 @@ const seededColors = (count: number): Rgb[] => {
   return Array.from({ length: count }, () => ({ r: random(), g: random(), b: random() }));
 };
 const offGrid = seededColors(50_000);
+
+// Non-text (WCAG 1.4.11): buttons, bars and dots on the page, cards, dialogs and inputs
+describe.each(['dark', 'light'] as const)('fill on %s', (theme) => {
+  it('reaches 3:1 on every solid surface of the theme, for every color', () => {
+    const solid = ['background', 'card', 'popover', 'muted'] as const;
+    const failures = [...sweep(), ...offGrid].flatMap((color) =>
+      solid
+        .filter((name) => contrastRatio(fill(color, theme), SURFACES[theme][name]) < 3)
+        .map((name) => `${toHex(color)} on ${name}`),
+    );
+    expect(failures).toEqual([]);
+  });
+});
 
 it('onColor reaches 4.5:1 off the grid too (seeded random sRGB sweep)', () => {
   const failures = offGrid

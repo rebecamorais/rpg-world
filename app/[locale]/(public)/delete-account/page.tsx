@@ -31,11 +31,14 @@ export default async function DeleteAccountPage({
   const value = typeof token === 'string' ? token : '';
 
   const { authApi } = await getApi();
-  const account = value ? await authApi.getAccountDeletion(value) : null;
+  const [account, user] = await Promise.all([
+    value ? authApi.getAccountDeletion(value) : null,
+    authApi.getSessionUser(),
+  ]);
 
   return (
     <div className="flex flex-1 items-center justify-center p-4">
-      <ConfirmAccountDeletion account={account} token={value} />
+      <ConfirmAccountDeletion account={account} token={value} signedIn={!!user} />
     </div>
   );
 }

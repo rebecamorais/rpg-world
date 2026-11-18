@@ -30,14 +30,18 @@ describe('/api/profile', () => {
     });
   });
 
-  it('PATCH responde 400 com cor fora do formato hex', async () => {
+  it('PATCH com o nome vazio repassa o vazio, que apaga o nome', async () => {
     const res = await PATCH(
-      jsonRequest('/api/profile', 'PATCH', { primaryColor: 'red' }),
+      jsonRequest('/api/profile', 'PATCH', { fullName: '', primaryColor: '#ef4444' }),
       routeContext(),
     );
 
-    expect(res.status).toBe(400);
-    expect(api.profileApi.updateProfile).not.toHaveBeenCalled();
+    expect(res.status).toBe(204);
+    // The theme color left the profile: it doesn't reach the use case
+    expect(api.profileApi.updateProfile).toHaveBeenCalledWith({
+      fullName: '',
+      id: SESSION_USER.id,
+    });
   });
 
   it('responde 401 sem sessão', async () => {

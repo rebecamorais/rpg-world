@@ -1,4 +1,8 @@
-import { isFileIn, removeReplacedAsset } from '@backend/shared/application/remove-replaced-asset';
+import {
+  isFileIn,
+  removeReplacedAsset,
+  storagePathFromAssetUrl,
+} from '@backend/shared/application/remove-replaced-asset';
 import { AVATAR_BUCKET } from '@backend/shared/domain/avatar';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
@@ -10,6 +14,8 @@ export class UpdateProfileUseCase {
   constructor(
     private readonly profileRepository: ProfileRepository,
     private readonly storageRepository?: StorageRepository,
+    /** Whether a URL is on this environment's asset host (`isOwnAssetUrl`). */
+    private readonly isOwnAssetUrl: (url: string) => boolean = () => false,
   ) {}
 
   async execute(profile: Profile): Promise<void> {
@@ -17,20 +23,37 @@ export class UpdateProfileUseCase {
       throw new UserError(UserErrorCodes.PROFILE_UPDATE_ID_REQUIRED);
     }
 
-    const storage = profile.avatarUrl !== undefined ? this.storageRepository : undefined;
-    const previous = storage ? await this.profileRepository.getById(profile.id) : null;
+    const { avatarUrl } = profile;
+    const previous =
+      avatarUrl !== undefined ? await this.profileRepository.getById(profile.id) : null;
+
+    // Empty (no picture), the one it already has (a Google picture) or one this account uploaded:
+    // any other URL would show someone else's file, or a tracker, as this person's picture
+    if (
+      avatarUrl &&
+      avatarUrl !== previous?.avatarUrl &&
+      !this.isOwnAvatar(profile.id, avatarUrl)
+    ) {
+      throw new UserError(UserErrorCodes.PROFILE_AVATAR_INVALID);
+    }
 
     await this.profileRepository.update(profile);
 
-    if (storage && previous) {
+    if (this.storageRepository && previous) {
       // Only the files UploadAvatarUseCase creates: `<userId>/avatar-<version>.<ext>`
       await removeReplacedAsset(
-        storage,
+        this.storageRepository,
         AVATAR_BUCKET,
         previous.avatarUrl,
         profile.avatarUrl,
         (path) => isFileIn(path, profile.id, 'avatar-'),
       );
     }
+  }
+
+  private isOwnAvatar(userId: string, url: string): boolean {
+    if (!this.isOwnAssetUrl(url)) return false;
+    const path = storagePathFromAssetUrl(url, AVATAR_BUCKET);
+    return !!path && isFileIn(path, userId, 'avatar-');
   }
 }

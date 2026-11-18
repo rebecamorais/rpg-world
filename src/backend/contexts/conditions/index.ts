@@ -1,4 +1,4 @@
-import type { ConditionCatalog } from './domain/condition';
+import type { ConditionCatalog } from './domain/condition.repo';
 import { getConditionCatalog } from './infrastructure/srd-conditions';
 
 export { getConditionCatalog };

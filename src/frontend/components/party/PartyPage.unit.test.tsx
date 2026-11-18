@@ -219,7 +219,8 @@ describe('Aba Mesa: vazios e respostas do mestre', () => {
     expect(await screen.findByRole('dialog', { name: t.mine.title })).toBeInTheDocument();
   });
 
-  it('salvar dali enche a mesa sem fechar o diálogo; ao fechar, o foco vai à lista', async () => {
+  // d-fase2-tempo-real#4: saved, the dialog closes (the toast stays); the focus goes to the list
+  it('salvar dali enche a mesa e fecha o diálogo; o foco vai à lista', async () => {
     mine.characters = [{ id: 'c1', name: 'Arani', level: 3, class: 'wizard' }];
     const arani = {
       characterId: 'c1',
@@ -248,12 +249,8 @@ describe('Aba Mesa: vazios e respostas do mestre', () => {
       await user.click(within(dialog).getByRole('checkbox', { name: /Arani/ }));
       await user.click(within(dialog).getByRole('button', { name: t.mine.save }));
 
-      // Behind the open dialog, so hidden from the accessibility tree for now
-      const list = await screen.findByRole('region', { name: t.page.characters, hidden: true });
+      const list = await screen.findByRole('region', { name: t.page.characters });
       expect(await within(list).findByText('Arani')).toBeInTheDocument();
-      expect(screen.getByRole('dialog', { name: t.mine.title })).toBeInTheDocument();
-
-      await user.keyboard('{Escape}');
       await waitFor(() =>
         expect(screen.queryByRole('dialog', { name: t.mine.title })).not.toBeInTheDocument(),
       );

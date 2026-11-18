@@ -8,17 +8,18 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@frontend/components/ui/dialog';
+import { FieldLabel } from '@frontend/components/ui/field';
 import { AppIcon } from '@frontend/components/ui/icon';
-import { Label } from '@frontend/components/ui/label';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import { NumberStepper } from '@frontend/components/ui/number-stepper';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@frontend/components/ui/tabs';
 import { useCharacterActions, useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { characterTheme } from '@frontend/lib/color-utils';
+
+import { DraftDialogFooter } from './DraftDialogFooter';
 
 export type CombatConfigSection = 'hp' | 'magic';
 
@@ -37,6 +38,8 @@ export const CombatStatsDialog = ({
   const t = useTranslations('combatStats');
   const tm = useTranslations('magicSystem');
   const tcommon = useTranslations('common');
+  // Same look as the steppers' labels (text-label), and the tabs keep the case of their text
+  const tab = 'data-[state=active]:bg-muted data-[state=active]:text-foreground h-7 text-sm';
 
   // Same default as the card on the sheet (MagicSystemCard)
   const system = character.spellcastingSystem || 'points';
@@ -65,9 +68,7 @@ export const CombatStatsDialog = ({
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="hpMax" className="text-muted-foreground text-sm font-bold uppercase">
-                {t('hitPointsMax')}
-              </Label>
+              <FieldLabel htmlFor="hpMax">{t('hitPointsMax')}</FieldLabel>
               <NumberInput
                 id="hpMax"
                 value={character.hpMax}
@@ -101,26 +102,17 @@ export const CombatStatsDialog = ({
             className="w-full"
           >
             <TabsList className="border-border bg-muted grid w-full grid-cols-2 border p-1">
-              <TabsTrigger
-                value="slots"
-                className="data-[state=active]:bg-muted data-[state=active]:text-foreground h-7 text-sm font-bold uppercase"
-              >
+              <TabsTrigger value="slots" className={tab}>
                 {tm('spellSlots')}
               </TabsTrigger>
-              <TabsTrigger
-                value="points"
-                className="data-[state=active]:bg-muted data-[state=active]:text-foreground h-7 text-sm font-bold uppercase"
-              >
+              <TabsTrigger value="points" className={tab}>
                 {tm('spellPoints')}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="slots" className="mt-4 space-y-1">
               {/* Names the group of steppers below: a <label> needs a single control to point at */}
-              <p
-                id="spell-slots-capacity"
-                className="text-muted-foreground mb-2 block text-sm leading-none font-bold uppercase"
-              >
+              <p id="spell-slots-capacity" className="text-label text-muted-foreground mb-2">
                 {tm('slotsCapacity')}
               </p>
               <div
@@ -152,12 +144,7 @@ export const CombatStatsDialog = ({
 
             <TabsContent value="points" className="mt-4 space-y-4">
               <div className="space-y-2">
-                <Label
-                  htmlFor="spell-points-capacity"
-                  className="text-muted-foreground text-sm font-bold uppercase"
-                >
-                  {tm('pointsCapacity')}
-                </Label>
+                <FieldLabel htmlFor="spell-points-capacity">{tm('pointsCapacity')}</FieldLabel>
                 <NumberInput
                   id="spell-points-capacity"
                   value={character.spellPoints?.max ?? 0}
@@ -175,14 +162,13 @@ export const CombatStatsDialog = ({
       )}
 
       {/* The settings go into the draft: the sheet still needs saving (its bar is under this) */}
-      <DialogFooter className="border-border bg-muted/50 items-center gap-3 border-t p-6 sm:justify-between">
-        <p className="text-caption text-muted-foreground">{tcommon('draftNote')}</p>
+      <DraftDialogFooter className="border-border bg-muted/50 border-t p-6">
         <DialogClose asChild>
-          <Button variant="character" className="h-9 px-6 text-sm font-bold uppercase">
+          <Button variant="character" className="h-9 px-6">
             {tcommon('done')}
           </Button>
         </DialogClose>
-      </DialogFooter>
+      </DraftDialogFooter>
     </DialogContent>
   );
 };

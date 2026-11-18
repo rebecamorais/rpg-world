@@ -15,6 +15,12 @@ const buttonVariants = cva(
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm',
         /** Red text, no fill: removing one row of a list. A whole-thing delete uses `destructive`. */
         'destructive-ghost': 'text-danger-flare hover:bg-danger-surface hover:text-danger-flare',
+        /**
+         * Red text on a red tint: the irreversible step of a flow (deleting the account). Not
+         * `destructive`, whose white on red is 3.8:1, under the 4.5:1 of 14px text (WCAG AA).
+         */
+        danger:
+          'border-danger-muted bg-danger-surface text-danger-flare hover:bg-danger-muted hover:text-foreground border shadow-sm',
         outline:
           'border-border bg-background hover:bg-muted hover:text-foreground border shadow-sm',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-muted border shadow-sm',

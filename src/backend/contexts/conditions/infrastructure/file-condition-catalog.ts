@@ -6,7 +6,7 @@ import type {
 } from '@shared/systems/dnd5e/content/condition.schema';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
-import type { ConditionCatalog, ConditionDto } from '../domain/condition';
+import type { ConditionCatalog, ConditionDto } from '../domain/condition.repo';
 
 /** The conditions of one book: rules data, English texts and translations by locale. */
 export interface ConditionSource {

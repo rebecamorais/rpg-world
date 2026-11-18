@@ -26,7 +26,9 @@ test.describe('mesas', () => {
   test('jogador entra pelo link e o mestre aprova', async ({ page, browser, user: _ }) => {
     const { id: partyId } = await createParty(page, 'Mesa de Quinta');
     await page.goto(partyUrl(partyId));
-    await (await hydrated(page.getByRole('main').getByRole('link', { name: 'Manage' }))).click();
+    await (
+      await hydrated(page.getByRole('main').getByRole('link', { name: 'Settings', exact: true }))
+    ).click();
     await expect.poll(() => new URL(page.url()).pathname).toBe(`${partyUrl(partyId)}/settings`);
     // The origin is filled in once the page hydrates (the server doesn't know it)
     const linkField = await hydrated(page.getByLabel('Invite link'));
@@ -97,11 +99,9 @@ test.describe('mesas', () => {
     await player.page.goto('/parties');
     const invites = player.page.getByRole('region', { name: 'Invitations' });
     await (await hydrated(invites.getByRole('button', { name: 'Accept' }))).click();
-    await expect(
-      player.page.getByRole('region', { name: 'As player' }).getByRole('link', {
-        name: 'Mesa do Convite',
-      }),
-    ).toBeVisible();
+    // Accepting says so and goes into the party, as the invite page does
+    await expect(player.page.getByText('You joined Mesa do Convite')).toBeVisible();
+    await expect.poll(() => new URL(player.page.url()).pathname).toBe(partyUrl(partyId));
 
     await player.context.close();
   });
@@ -229,7 +229,11 @@ test.describe('mesas', () => {
     const { id: partyId } = await createParty(page, 'Mesa Para Apagar');
     await page.goto(`${partyUrl(partyId)}/settings`);
     await (await hydrated(page.getByRole('button', { name: 'Delete party' }))).click();
-    await page.getByRole('alertdialog').getByRole('button', { name: 'Delete party' }).click();
+    const dialog = page.getByRole('alertdialog', { name: 'Delete Mesa Para Apagar?' });
+    // An empty party asks only to confirm; until its chest and combat load it asks for the name
+    const typeName = dialog.getByRole('textbox', { name: 'Type the exact text above' });
+    if (await typeName.isVisible()) await typeName.fill('Mesa Para Apagar');
+    await dialog.getByRole('button', { name: 'Delete party' }).click();
     await expect(page.getByText('Party deleted')).toBeVisible();
     await expect.poll(() => new URL(page.url()).pathname).toBe('/parties');
   });
@@ -345,6 +349,12 @@ test.describe('mesas', () => {
         url.pathname === '/login' && url.searchParams.get('next') === `/parties/join/${code}`,
     );
 
+    // A link that no longer works still has a way on (a-mesa-convite#4)
+    await anon.goto(`/parties/join/${'0'.repeat(32)}`);
+    await expect(anon.getByText('This invite is no longer valid')).toBeVisible();
+    await anon.getByRole('link', { name: 'Sign in', exact: true }).click();
+    await expect(anon).toHaveURL((url) => url.pathname === '/login');
+
     // Other pages of the app still send a signed-out visitor to the login
     await anon.goto('/parties');
     await expect(anon).toHaveURL((url) => url.pathname === '/login');
@@ -386,7 +396,10 @@ test.describe('mesas', () => {
     await expect(bia.page.getByText('This party has no GM')).toBeVisible();
     await expect(bia.page.getByRole('list', { name: 'Combat order' })).toHaveCount(0);
     await (await hydrated(bia.page.getByRole('button', { name: 'I want to be the GM' }))).click();
-    await bia.page.getByRole('alertdialog').getByRole('button', { name: 'Confirm' }).click();
+    await bia.page
+      .getByRole('alertdialog')
+      .getByRole('button', { name: 'I want to be the GM' })
+      .click();
     await expect(bia.page.getByText('You asked to become the GM of this party.')).toBeVisible();
     await expect(bia.page.getByRole('button', { name: 'Ask support for help' })).toBeDisabled();
 
@@ -409,7 +422,9 @@ test.describe('mesas', () => {
     // The new GM sees the GM's view
     // No reload: the page polls while the party has no GM
     await expect(bia.page.getByText('You are the GM')).toBeVisible({ timeout: 30_000 });
-    await expect(bia.page.getByRole('link', { name: 'Manage' })).toBeVisible();
+    await expect(
+      bia.page.getByRole('main').getByRole('link', { name: 'Settings', exact: true }),
+    ).toBeVisible();
     await expect(bia.page.getByText('This party has no GM')).toHaveCount(0);
 
     await bia.context.close();

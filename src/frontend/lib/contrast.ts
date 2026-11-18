@@ -10,6 +10,13 @@ export const FLARE_MIN_L_DARK = 0.74;
 /** Light flare: lightness ceiling (calibrated by the sweep test). */
 export const FLARE_MAX_L_LIGHT = 0.42;
 export const FLARE_MAX_C = 0.2;
+/**
+ * Fill variant (buttons, bars, dots, borders): lightness bounds that keep any color at 3:1 (WCAG
+ * 1.4.11, non-text) on the theme's solid surfaces, calibrated by the sweep test with a little
+ * margin. Chroma stays as is, so a color already inside the bounds comes out unchanged.
+ */
+export const FILL_MIN_L_DARK = 0.58;
+export const FILL_MAX_L_LIGHT = 0.59;
 /** `-on` picks black above this relative luminance (gamma 2.2), white otherwise. */
 export const ON_LUMINANCE = 0.179;
 /**
@@ -120,6 +127,13 @@ export function flare(color: Rgb, theme: ThemeName): Rgb {
   const { l, c, h } = toOklch(color);
   const nextL = theme === 'dark' ? Math.max(l, FLARE_MIN_L_DARK) : Math.min(l, FLARE_MAX_L_LIGHT);
   return fromOklch({ l: nextL, c: Math.min(c, FLARE_MAX_C), h });
+}
+
+/** Solid fill variant of a color: lightness bounded per theme, hue and chroma kept. */
+export function fill(color: Rgb, theme: ThemeName): Rgb {
+  const { l, c, h } = toOklch(color);
+  const nextL = theme === 'dark' ? Math.max(l, FILL_MIN_L_DARK) : Math.min(l, FILL_MAX_L_LIGHT);
+  return fromOklch({ l: nextL, c, h });
 }
 
 /** Text color on top of a solid fill, exactly as the CSS computes it (see ON_RAMP). */

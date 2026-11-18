@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { ItemDto } from '@backend/contexts/items/domain/item';
+import type { ItemDto } from '@backend/contexts/items/domain/item.repo';
 
 import { CharacterErrorCodes } from '../../domain/CharacterError';
 import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';

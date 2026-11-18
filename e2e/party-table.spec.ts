@@ -85,9 +85,7 @@ test.describe('aba Mesa: retorno, vazios e lista de mesas', () => {
     await dialog.getByRole('checkbox', { name: /Arani/ }).check();
     await dialog.getByRole('button', { name: 'Save' }).click();
     await expect(player.page.getByText('Characters updated')).toBeVisible();
-    // The table fills behind it, and the dialog stays open until she closes it
-    await expect(dialog).toBeVisible();
-    await player.page.keyboard.press('Escape');
+    // Saved, the dialog closes (d-fase2-tempo-real#4) and the table fills
     await expect(dialog).toBeHidden();
     await expect(
       player.page.getByRole('region', { name: 'Characters in the party' }).getByText('Arani'),

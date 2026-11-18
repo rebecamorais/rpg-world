@@ -6,7 +6,7 @@ import type {
   ItemTranslation,
 } from '@shared/systems/dnd5e/content/item.schema';
 
-import type { ItemCatalog, ItemDto } from '../domain/item';
+import type { ItemCatalog, ItemDto } from '../domain/item.repo';
 
 /** The items of one book: rules data, English texts and translations by locale. */
 export interface ItemSource {

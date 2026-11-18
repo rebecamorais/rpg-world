@@ -170,6 +170,7 @@ export function useCharacterSpells(
       if (inFlight.current.has(id)) return;
       const spell = spells.find((s) => s.id === id);
       const ok = await confirm({
+        title: spell ? tConfirm('title', { name: spell.name }) : tConfirm('titleUnnamed'),
         description: spell
           ? tConfirm('description', { name: spell.name })
           : tConfirm('descriptionUnnamed'),

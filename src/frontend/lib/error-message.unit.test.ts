@@ -4,8 +4,10 @@ import { APIError } from './api-client';
 import {
   NETWORK_ERROR,
   errorCodeOf,
+  isClientError,
   isNetworkError,
   isRetryable,
+  retryQuery,
   statusOf,
   translateErrorCode,
 } from './error-message';
@@ -112,5 +114,32 @@ describe('statusOf', () => {
     expect(statusOf(new APIError('x', 404))).toBe(404);
     expect(statusOf(new TypeError('Failed to fetch'))).toBeUndefined();
     expect(statusOf('boom')).toBeUndefined();
+  });
+});
+
+describe('isClientError', () => {
+  it.each([400, 401, 403, 404, 409])('a "no" from the server (%i) is', (status) => {
+    expect(isClientError(new APIError('x', status))).toBe(true);
+  });
+
+  it.each([408, 429, 500])('"not now" or a server failure (%i) is not', (status) => {
+    expect(isClientError(new APIError('x', status))).toBe(false);
+  });
+
+  it('nor an error without an answer', () => {
+    expect(isClientError(new TypeError('Failed to fetch'))).toBe(false);
+  });
+});
+
+describe('retryQuery', () => {
+  it('opening a character that is not yours (404) is not tried again', () => {
+    expect(retryQuery(0, new APIError('character_error_not_found', 404))).toBe(false);
+  });
+
+  it('a server failure or a lost connection is tried up to 3 more times', () => {
+    const failed = new APIError('common_error_unexpected', 500);
+    expect(retryQuery(0, failed)).toBe(true);
+    expect(retryQuery(2, new TypeError('Failed to fetch'))).toBe(true);
+    expect(retryQuery(3, failed)).toBe(false);
   });
 });

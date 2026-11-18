@@ -65,11 +65,14 @@ jobs:
             echo "::warning::DEPENDABOT_AUTOMERGE_TOKEN não configurado; nada a fazer. / not set; skipping."
             exit 0
           fi
-          # Só o mais antigo: os outros esperam a vez, senão o CI roda à toa em todos
-          read -r pr old < <(gh pr list --author app/dependabot --state open \
+          # Só o mais antigo: os outros esperam a vez, senão o CI roda à toa em todos.
+          # O gh roda fora do read para que uma falha dele (token vencido, rede) derrube o job;
+          # fila vazia: o read não recebe linha e sai com 1, e o || true deixa o pr vazio seguir
+          queue=$(gh pr list --author app/dependabot --state open \
             --label automerge --json number,autoMergeRequest,headRefOid,createdAt \
             --jq '[.[] | select(.autoMergeRequest != null)] | sort_by(.createdAt) | .[0]
                   | select(. != null) | "\(.number) \(.headRefOid)"')
+          read -r pr old <<<"$queue" || true
           if [ -z "$pr" ]; then
             echo "Nenhum PR do Dependabot na fila."
             exit 0

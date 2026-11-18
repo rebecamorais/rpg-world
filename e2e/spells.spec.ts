@@ -74,3 +74,33 @@ test('esquecer pelo teclado leva o foco ao próximo card', async ({ page, user: 
   await expect(fireball).toHaveCount(0);
   await expect(page.getByRole('button', { name: /Expand Lightning Bolt/ })).toBeFocused();
 });
+
+// The open card's background layers cover its toggle button, which hid the button's own ring
+test('o anel do teclado aparece no card aberto, por cima do efeito', async ({ page, user: _ }) => {
+  const id = await createCharacter(page, 'Elminster');
+  await page.goto(characterUrl(id, '/spells'));
+
+  await page.getByRole('button', { name: 'Add Spell' }).first().click();
+  const catalog = page.getByRole('dialog', { name: 'Add Spell' });
+  await catalog.getByRole('searchbox', { name: 'Search spells' }).fill('fireball');
+  const inCatalog = catalog.getByRole('article', { name: /^Fireball/ });
+  await inCatalog.getByRole('button', { name: 'Learn spell' }).click();
+  await expect(inCatalog.getByText('Learned')).toBeVisible();
+  await page.keyboard.press('Escape');
+
+  const fireball = page.getByRole('article', { name: /Fireball/ });
+  await fireball.getByRole('button', { name: /Expand Fireball/ }).focus();
+  await page.keyboard.press('Enter');
+  await expect(fireball.getByRole('button', { name: /Collapse Fireball/ })).toBeFocused();
+
+  const ring = await fireball.evaluate((card) => {
+    const style = getComputedStyle(card);
+    return { style: style.outlineStyle, width: style.outlineWidth };
+  });
+  expect(ring).toEqual({ style: 'solid', width: '2px' });
+
+  // Closed again, from the keyboard: the ring stays
+  await page.keyboard.press('Enter');
+  await expect(fireball.getByRole('button', { name: /Expand Fireball/ })).toBeFocused();
+  await expect(fireball).toHaveCSS('outline-style', 'solid');
+});

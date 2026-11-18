@@ -108,6 +108,9 @@ export const SpellCard = React.memo(function SpellCard({
       className={cn(
         'spell-context group bg-card relative overflow-hidden rounded-xl border p-4 pl-5 outline-none sm:p-5 sm:pl-6',
         'transition-[border-color] duration-200',
+        // The keyboard ring is the card's, not the toggle's: on the open card the background
+        // layers cover the button, and an outline is painted over the card's own content
+        'has-[>button:focus-visible]:outline-spell-flare has-[>button:focus-visible]:outline-2 has-[>button:focus-visible]:-outline-offset-2 has-[>button:focus-visible]:outline-solid',
         isExpanded ? 'border-spell-muted' : 'border-border hover:border-spell-muted',
         border?.className,
       )}
@@ -125,7 +128,7 @@ export const SpellCard = React.memo(function SpellCard({
         aria-expanded={isExpanded}
         aria-controls={`spell-details-${spell.id}`}
         onClick={() => onToggle?.(spell.id)}
-        className="focus-visible:outline-spell-flare absolute inset-0 z-0 h-full w-full rounded-xl bg-transparent outline-none focus-visible:outline-2 focus-visible:-outline-offset-2"
+        className="absolute inset-0 z-0 h-full w-full rounded-xl bg-transparent outline-none"
       >
         <span className="sr-only">
           {isExpanded ? displayValues.collapseLabel : displayValues.expandLabel} {spell.name}

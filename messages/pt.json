@@ -8,9 +8,9 @@
       "class_error_not_found": "Classe não encontrada.",
       "demo_read_only": "Esta é uma demo somente leitura. Crie uma conta gratuita para jogar.",
       "account_deletion_error_username_mismatch": "Esse não é o seu username.",
-      "account_deletion_error_password_invalid": "Senha incorreta. Se você nunca criou uma, por exemplo porque entrava com link por e-mail, use “Esqueceu a senha?” para criar.",
+      "account_deletion_error_password_invalid": "Senha incorreta. Se você nunca criou uma, por exemplo porque entrava com link por e-mail, use “Esqueci minha senha” para criar.",
       "account_deletion_error_too_soon": "Este e-mail foi enviado há menos de um minuto. Confira sua caixa de entrada ou espere um pouco para pedir de novo.",
-      "account_deletion_error_too_many_attempts": "Muitas senhas incorretas. Espere 15 minutos e tente de novo, ou use “Esqueceu a senha?” para criar uma nova.",
+      "account_deletion_error_too_many_attempts": "Muitas senhas incorretas. Espere 15 minutos e tente de novo, ou use “Esqueci minha senha” para criar uma nova.",
       "account_deletion_error_link_invalid": "Este link expirou ou já foi usado. Solicite um novo.",
       "auth_error_signin_invalid_credentials": "E-mail ou senha incorretos.",
       "auth_error_signin_email_not_confirmed": "Confirme seu e-mail antes de entrar.",
@@ -21,15 +21,17 @@
       "auth_error_provider": "O login foi cancelado ou recusado pelo provedor.",
       "auth_error_update_password_weak": "Senha fraca. Escolha uma senha mais forte.",
       "auth_error_update_password_same": "A nova senha deve ser diferente da atual.",
+      "auth_error_update_password_current_invalid": "Senha atual incorreta. Se não lembra dela, use “Esqueci minha senha”.",
+      "auth_error_update_password_no_password": "Esta conta ainda não tem senha. Crie uma pelo “Esqueci minha senha”, que manda um link para o seu e-mail.",
       "auth_error_signup_duplicate_email": "Este e-mail já está em uso.",
       "auth_error_signup_required_fields": "Preencha todos os campos obrigatórios.",
-      "auth_error_signup_invalid_password": "Esta senha não pode ser utilizada para cadastro inicial.",
       "auth_error_signin_required_fields": "E-mail e senha são obrigatórios.",
       "auth_error_signin_magic_link_email_required": "E-mail é obrigatório para o link mágico.",
       "auth_error_update_password_required": "Nova senha é obrigatória.",
       "profile_error_update_id_required": "ID do perfil é obrigatório para atualização.",
       "profile_error_get_id_required": "ID do usuário é obrigatório.",
       "profile_error_username_taken": "Este nome de usuário já está em uso.",
+      "profile_error_avatar_invalid": "Essa imagem não pode ser o seu avatar. Envie uma pelo perfil.",
       "storage_error_upload_avatar_userid_required": "ID do usuário é obrigatório para upload.",
       "storage_error_upload_avatar_size_limit": "O arquivo excede o limite de 5MB.",
       "storage_error_upload_avatar_invalid_type": "Tipo de arquivo inválido. Use JPEG, PNG ou WEBP.",
@@ -112,7 +114,7 @@
     "logout": "Sair",
     "confirm": "Confirmar",
     "confirmTitle": "Tem certeza?",
-    "saveChanges": "Salvar Alterações",
+    "saveChanges": "Salvar alterações",
     "close": "Fechar",
     "title": "RPG World",
     "contactTooltip": "Fale conosco",
@@ -129,9 +131,11 @@
     "unsavedChanges": "Alterações não salvas",
     "unsavedSheet": "Alterações na ficha não salvas",
     "unsavedLore": "Alterações na história não salvas",
+    "unsavedLoreAndSheet": "Alterações na história e na ficha não salvas",
+    "saveAll": "Salvar tudo",
     "allSaved": "Tudo salvo",
     "discard": "Descartar",
-    "discardConfirm": "Descartar as alterações não salvas?",
+    "discardConfirm": "O que você mudou desde o último salvamento se perde.",
     "leaveConfirm": "Você tem alterações não salvas. Sair mesmo assim?",
     "saveShortcut": "Ctrl+S para salvar",
     "numberField": {
@@ -150,7 +154,10 @@
     "offline": "Sem conexão. Nada do que você mudar agora é salvo.",
     "offlineDraft": "Sem conexão: as alterações continuam aqui",
     "changedElsewhere": "Mudou em outro lugar. Recarregue para ver; suas alterações continuam aqui.",
-    "draftNote": "As mudanças entram na ficha. Salve a ficha para guardar."
+    "draftNote": "As mudanças entram na ficha. Salve a ficha para guardar.",
+    "typeToConfirm": "Para confirmar, digite: <bold>{text}</bold>",
+    "typeToConfirmLabel": "Digite exatamente o texto acima",
+    "discardConfirmTitle": "Descartar as alterações?"
   },
   "login": {
     "title": "Entrar no RPG World",
@@ -218,14 +225,12 @@
   },
   "characterCreation": {
     "title": "Novo personagem",
-    "description": "Defina o nome e escolha o sistema de regras.",
+    "description": "Dê um nome, escolha a edição das regras e, se quiser, a classe.",
     "nameLabel": "Nome *",
     "namePlaceholder": "Nome do personagem",
     "nameRequired": "Dê um nome ao personagem.",
-    "systemLabel": "Sistema RPG",
-    "systemPlaceholder": "Selecione o Sistema",
+    "systemLabel": "Sistema",
     "editionLabel": "Edição das regras",
-    "classHintEdition": "Escolha a edição 2014 e a ficha já nasce com os pontos de vida, as salvaguardas e as perícias desta classe.",
     "classHint2024": "A edição 2024 ainda não preenche a ficha pela classe: você preenche na ficha.",
     "choicesHint": "Escolha agora ou deixe para depois: o personagem é criado do mesmo jeito.",
     "choiceSkills": "Perícias",
@@ -264,6 +269,7 @@
     "collapse": "Recolher",
     "school": "Escola",
     "saveSuccess": "Personagem salvo com sucesso!",
+    "loreSaved": "História salva.",
     "passivePerception": "Percepção passiva",
     "allDamage": "Todos os danos",
     "forgetSpell": "Esquecer magia",
@@ -309,11 +315,11 @@
       "skin": "Pele",
       "hair": "Cabelo",
       "backstory": "História",
-      "personalityTraits": "Traços de Personalidade",
+      "personalityTraits": "Traços de personalidade",
       "ideals": "Ideais",
       "bonds": "Vínculos",
       "flaws": "Defeitos",
-      "alliesAndEnemies": "Aliados e Inimigos",
+      "alliesAndEnemies": "Aliados e inimigos",
       "organizations": "Organizações",
       "treasure": "Tesouro",
       "notFilled": "Não preenchido"
@@ -518,14 +524,14 @@
     "namePlaceholder": "Nome do Personagem",
     "proficiencyBonus": "Bônus",
     "class": "Classe",
-    "classPlaceholder": "Definir Classe…",
+    "classPlaceholder": "Definir classe…",
     "level": "Nível",
     "race": "Raça",
-    "racePlaceholder": "Definir Raça…",
+    "racePlaceholder": "Definir raça…",
     "background": "Antecedente",
-    "backgroundPlaceholder": "Definir Antecedente…",
+    "backgroundPlaceholder": "Definir antecedente…",
     "alignment": "Alinhamento",
-    "alignmentPlaceholder": "Definir Alinhamento…",
+    "alignmentPlaceholder": "Definir alinhamento…",
     "xp": "Experiência",
     "xpProgress": "Progresso para o próximo nível",
     "name": "Nome",
@@ -631,12 +637,13 @@
   "attributeCard": {
     "modifierCalc": "Como o modificador é calculado",
     "adjustValue": "Ajuste o valor base deste atributo (1 a 30).",
+    "modifierFormula": "Modificador = (valor − 10) ÷ 2, arredondado para baixo",
     "baseValue": "Valor base"
   },
   "combatStats": {
     "status": "Status de combate",
     "armorClass": "CA",
-    "hitPoints": "Pontos de Vida",
+    "hitPoints": "Pontos de vida",
     "hitPointsMax": "PV máximos",
     "hitPointsShort": "PV",
     "tempHp": "PV temporário",
@@ -644,7 +651,7 @@
     "initiative": "Iniciativa",
     "speedUnit": "m",
     "followClassDie": "Seguir a classe ({die})",
-    "hitDice": "Dados de Vida",
+    "hitDice": "Dados de vida",
     "diceOptions": {
       "d6": "d6",
       "d8": "d8",
@@ -731,7 +738,9 @@
     "forgetConfirm": {
       "description": "{name} sai do grimório e das magias preparadas.",
       "descriptionUnnamed": "A magia sai do grimório e das magias preparadas.",
-      "confirm": "Esquecer"
+      "confirm": "Esquecer",
+      "title": "Esquecer {name}?",
+      "titleUnnamed": "Esquecer a magia?"
     },
     "searchLabel": "Buscar magias",
     "clearActiveFilters": "Limpar filtros ({count})",
@@ -782,43 +791,44 @@
     "myProfile": "Meu perfil",
     "attributes": "Atributos",
     "spells": "Magias",
-    "settingsTitle": "Configurações",
-    "settingsSubtitle": "Gerencie as informações do seu perfil de aventureiro.",
+    "settingsSubtitle": "Seu perfil, sua conta e a exclusão dela.",
     "menuDescription": "Navegação principal e atalhos.",
     "openMenu": "Abrir menu",
     "collapseMenu": "Recolher menu",
     "keepMenuOpen": "Manter menu aberto"
   },
   "changePassword": {
-    "title": "Altere sua Senha",
-    "subtitle": "Você está usando uma senha temporária. Para sua segurança, escolha uma nova senha.",
-    "newPasswordLabel": "Nova Senha",
+    "title": "Trocar senha",
+    "subtitle": "Escolha uma senha nova para a sua conta.",
+    "currentPasswordLabel": "Senha atual",
+    "currentPasswordRequired": "Digite a senha atual.",
+    "forgotHint": "Não lembra dela?",
+    "forgotLink": "Esqueci minha senha",
+    "newPasswordLabel": "Nova senha",
     "newPasswordPlaceholder": "••••••••",
-    "confirmPasswordLabel": "Confirmar Nova Senha",
+    "confirmPasswordLabel": "Confirme a nova senha",
     "confirmPasswordPlaceholder": "••••••••",
-    "submit": "Atualizar Senha",
-    "processing": "Atualizando…",
-    "success": "Senha atualizada com sucesso!",
-    "error": "Falha ao atualizar senha."
+    "submit": "Trocar senha",
+    "processing": "Trocando…",
+    "error": "Falha ao atualizar senha.",
+    "backToProfile": "← Voltar ao perfil"
   },
   "profileForm": {
-    "title": "Editar Perfil",
+    "title": "Perfil",
     "subtitle": "Personalize as informações do seu perfil de aventureiro.",
     "usernameLabel": "Nome de usuário",
     "usernamePlaceholder": "ex: elfo_negro_42",
     "fullNameLabel": "Nome",
     "fullNamePlaceholder": "ex: Rebeca",
-    "primaryColorLabel": "Cor do Tema",
-    "save": "Salvar Perfil",
+    "save": "Salvar perfil",
     "saving": "Salvando…",
     "saveSuccess": "Perfil atualizado com sucesso!",
     "validation": {
-      "usernameMin": "Username deve ter ao menos 3 caracteres.",
-      "usernameMax": "Username deve ter no máximo 30 caracteres.",
-      "usernamePattern": "Apenas letras minúsculas, números e underscores são permitidos.",
-      "fullNameMax": "Nome deve ter no máximo 100 caracteres.",
-      "avatarUrlInvalid": "URL inválida.",
-      "primaryColorInvalid": "Escolha uma das cores."
+      "usernameMin": "O nome de usuário deve ter ao menos 3 caracteres.",
+      "usernameMax": "O nome de usuário deve ter no máximo 30 caracteres.",
+      "usernamePattern": "Use só letras minúsculas, números e _.",
+      "fullNameMax": "O nome deve ter no máximo 100 caracteres.",
+      "avatarUrlInvalid": "URL inválida."
     },
     "colors": {
       "default": "Padrão",
@@ -833,8 +843,16 @@
       "slate": "Ardósia"
     }
   },
+  "profileAccount": {
+    "title": "Conta",
+    "emailLabel": "E-mail de acesso",
+    "changePassword": "Alterar senha",
+    "createPassword": "Criar senha",
+    "noPasswordHint": "Você entra com o Google. Para entrar também com senha, crie uma pelo e-mail de recuperação.",
+    "passwordChanged": "Senha alterada. Enviamos um aviso para o seu e-mail."
+  },
   "avatarUpload": {
-    "button": "Alterar Avatar",
+    "button": "Trocar imagem",
     "loading": "Enviando…",
     "currentAlt": "Avatar atual",
     "error": "Erro ao carregar imagem.",
@@ -845,6 +863,13 @@
     "view": "Ver imagem",
     "viewTitle": "Imagem em tela cheia",
     "viewOf": "Ver imagem de {name}",
+    "imageOf": "Imagem de {name}",
+    "add": "Enviar imagem",
+    "remove": "Remover",
+    "removeConfirmTitle": "Remover a imagem?",
+    "removeConfirm": "A imagem é apagada e o lugar dela volta ao ícone padrão.",
+    "saved": "Imagem atualizada",
+    "removed": "Imagem removida",
     "zoomIn": "Aproximar",
     "zoomOut": "Afastar",
     "zoomFit": "Ajustar à tela",
@@ -920,8 +945,8 @@
       "WIS": "SAB",
       "CHA": "CAR"
     },
-    "bulkEditTitle": "Valores Base de Atributos",
-    "bulkEditDescription": "Ajuste os valores base de todos os atributos de uma vez",
+    "bulkEditTitle": "Valores base dos atributos",
+    "bulkEditDescription": "Ajuste os valores base de todos os atributos de uma vez (1 a 30).",
     "save": "Salvar",
     "cancel": "Cancelar"
   },
@@ -1225,7 +1250,7 @@
       "title": "Explorar",
       "home": "Início",
       "characters": "Personagens",
-      "settings": "Configurações",
+      "settings": "Meu perfil",
       "login": "Entrar",
       "register": "Criar conta",
       "features": "Funcionalidades"
@@ -1282,7 +1307,8 @@
       "feedback": "Dúvida ou comentário",
       "account": "Conta / Acesso"
     },
-    "messageMin": "Escreva pelo menos {min} caracteres."
+    "messageMin": "Escreva pelo menos {min} caracteres.",
+    "networkError": "Sem conexão. A mensagem não foi enviada e continua aqui para enviar de novo."
   },
   "seo": {
     "title": "RPG World: fichas de D&D 5e grátis",
@@ -1496,7 +1522,8 @@
       "ogTitle": "Convite: {name}",
       "ogDescription": "Você foi convidado para a mesa {name} no RPG World.",
       "signInHint": "Entre na sua conta para pedir para participar.",
-      "signIn": "Entrar para participar"
+      "signIn": "Entrar para participar",
+      "signInAction": "Entrar"
     },
     "page": {
       "gmEyebrow": "Você é o mestre",
@@ -1544,10 +1571,11 @@
       "cancelInvite": "Cancelar convite",
       "approved": "{name} entrou na mesa",
       "declined": "Pedido de {name} recusado",
-      "canceled": "Convite para {name} cancelado"
+      "canceled": "Convite para {name} cancelado",
+      "alreadyAnswered": "{name} já não estava esperando resposta"
     },
     "manage": {
-      "title": "Gerenciar a mesa",
+      "title": "Convites e jogadores",
       "inviteLabel": "Convidar pelo nome de usuário",
       "invitePlaceholder": "nome_de_usuario",
       "inviteSubmit": "Convidar",
@@ -1558,7 +1586,7 @@
       "copy": "Copiar link",
       "copied": "Link copiado",
       "rotate": "Trocar link",
-      "rotateConfirm": "O link atual vai parar de funcionar, e os pedidos pendentes serão descartados. Continuar?",
+      "rotateConfirm": "O link atual para de funcionar, e os pedidos pendentes são descartados.",
       "rotated": "Link novo pronto",
       "members": "Jogadores",
       "noMembers": "Nenhum jogador ainda.",
@@ -1574,14 +1602,18 @@
       "deleteParty": "Apagar mesa",
       "dangerZone": "Zona de perigo",
       "deleteHint": "Apagar a mesa desfaz tudo o que é dela: baú (moedas e itens), combate, imagem, link do diário, convites e pedidos. Os personagens continuam com os donos.",
-      "deleteConfirm": "Apagar esta mesa? O baú, o combate, a imagem, o diário e os convites somem para sempre. Nenhum personagem é apagado.",
+      "deleteConfirm": "O baú, o combate, a imagem, o diário e os convites somem para sempre. Nenhum personagem é apagado.",
       "deleted": "Mesa apagada",
       "unnamed": "jogador sem nome de usuário",
       "editionLabel": "Edição das regras",
       "editionHint": "A edição mostrada primeiro ao escolher condições.",
       "edition2014": "Regras de 2014",
       "edition2024": "Regras de 2024",
-      "editionSaved": "Edição das regras salva"
+      "editionSaved": "Edição das regras salva",
+      "rotateTitle": "Trocar o link de convite?",
+      "copyFailed": "Não deu para copiar. O link ficou selecionado no campo: copie de lá.",
+      "alreadyGone": "{name} já não está na mesa",
+      "deleteTitle": "Apagar {name}?"
     },
     "journal": {
       "title": "Diário da mesa",
@@ -1629,8 +1661,8 @@
       "claim": "Quero ser mestre",
       "claimHint": "Todos os outros jogadores da mesa precisam concordar. O mestre lê a ficha completa de todos os personagens da mesa. Você deixa de ser jogador e seus personagens saem da mesa, mantendo as fichas.",
       "claimHintSolo": "Você é a única pessoa jogando nesta mesa, então vira mestre na hora, sem ninguém para concordar. O mestre lê a ficha completa de todos os personagens da mesa. Você deixa de ser jogador e seus personagens saem da mesa, mantendo as fichas.",
-      "claimConfirm": "Pedir para ser o mestre? Se todos concordarem, você deixa de ser jogador e seus personagens saem da mesa, mantendo as fichas.",
-      "claimConfirmSolo": "Virar o mestre desta mesa agora? Você deixa de ser jogador e seus personagens saem da mesa, mantendo as fichas.",
+      "claimConfirm": "Se todos concordarem, você deixa de ser jogador e seus personagens saem da mesa, mantendo as fichas.",
+      "claimConfirmSolo": "Você deixa de ser jogador e seus personagens saem da mesa, mantendo as fichas.",
       "limit": "Você já é mestre de {max} mesas, o máximo que uma conta pode ter.",
       "yourRequest": "Você pediu para ser o mestre desta mesa.",
       "cancel": "Desistir",
@@ -1642,7 +1674,9 @@
       "waitingOn": "Aguardando: {names}",
       "askSupport": "Pedir ajuda ao suporte",
       "supportLater": "Disponível 1 dia depois do pedido, para quem ainda não foi respondido.",
-      "supportHint": "O suporte escreve para quem não respondeu e dá 7 dias antes de agir."
+      "supportHint": "O suporte escreve para quem não respondeu e dá 7 dias antes de agir.",
+      "claimConfirmTitle": "Pedir para ser o mestre?",
+      "claimConfirmSoloTitle": "Virar o mestre desta mesa agora?"
     },
     "sheet": {
       "back": "Voltar para a mesa",
@@ -1654,7 +1688,7 @@
     },
     "settings": {
       "eyebrow": "Configurações da mesa",
-      "manage": "Gerenciar",
+      "manage": "Configurações",
       "backToTable": "Voltar para a mesa",
       "gmOnly": "Só o mestre abre as configurações da mesa."
     },
@@ -1680,9 +1714,10 @@
       "change": "Trocar imagem",
       "uploading": "Enviando…",
       "remove": "Remover",
-      "removeConfirm": "Remover a imagem da mesa?",
+      "removeConfirm": "O convite e a prévia do link voltam a mostrar a imagem do RPG World.",
       "saved": "Imagem salva",
-      "removed": "Imagem removida"
+      "removed": "Imagem removida",
+      "removeTitle": "Remover a imagem da mesa?"
     },
     "acceptInvite": "Aceitar o convite para {name}",
     "declineInvite": "Recusar o convite para {name}",
@@ -1698,7 +1733,10 @@
       "journal": "Diário",
       "chest": "Baú",
       "combatRound": "Combate, rodada {round}"
-    }
+    },
+    "joinedParty": "Você entrou em {name}",
+    "inviteDeclined": "Convite para {name} recusado",
+    "requestWithdrawn": "Pedido para entrar em {name} cancelado"
   },
   "enemies": {
     "subtitle": "Fichas de quem não é jogador: inimigos nos combates das suas mesas, e quem mais aparecer na história.",
@@ -1797,7 +1835,8 @@
     "turnsUntil": "<strong>{name}</strong> em {count, plural, one {# turno} other {# turnos}}",
     "endTurnOf": "Encerrar turno de {name}",
     "newTab": "(abre em nova aba)",
-    "offline": "Sem conexão. A tela não atualiza e nada do que você fizer é enviado."
+    "offline": "Sem conexão. A tela não atualiza e nada do que você fizer é enviado.",
+    "removeConfirmDescription": "A ficha continua como está: sai só da ordem de iniciativa, com as condições deste combate."
   },
   "characterRaces": {
     "dragonborn": "Draconato",
@@ -1860,16 +1899,18 @@
       "open": "Excluir minha conta",
       "dialogTitle": "Excluir sua conta?",
       "dialogDescription": "Primeiro confirmamos que é você, depois enviamos um link por e-mail. Nada é apagado até você confirmar lá.",
-      "usernameInstruction": "Para continuar, digite seu username: <bold>{username}</bold>",
-      "usernameLabel": "Seu username",
+      "usernameInstruction": "Para continuar, digite seu nome de usuário: <bold>{username}</bold>",
+      "usernameLabel": "Seu nome de usuário",
       "passwordLabel": "Senha",
       "forgotPassword": "Esqueci minha senha",
-      "passwordHelp": "Se você já entrou por link no e-mail, tem uma senha que nunca viu. Crie uma nova em “Esqueci minha senha”.",
+      "passwordHelp": "Não lembra a senha?",
       "submit": "Enviar e-mail de confirmação",
       "sentTitle": "Confira seu e-mail",
       "sentDescription": "Enviamos um link para o e-mail da sua conta. Ele vale uma vez e por 1 hora. A conta só é excluída quando você confirmar lá.",
       "sendAgain": "Enviar de novo",
-      "sendAgainHint": "Enviar de novo faz o link anterior parar de valer."
+      "sendAgainHint": "Enviar de novo faz o link anterior parar de valer.",
+      "sendAgainIn": "Enviar de novo ({seconds} s)",
+      "sentAgain": "Enviado de novo. Só o link mais novo vale."
     },
     "confirm": {
       "title": "Confirmar a exclusão da conta",
@@ -1877,9 +1918,12 @@
       "descriptionNoName": "Você vai excluir de vez a sua conta, com personagens, NPCs e imagens. Isso não tem volta.",
       "button": "Excluir minha conta de vez",
       "invalidTitle": "Este link não funciona",
-      "invalidDescription": "Ele venceu, já foi usado ou foi trocado por um mais novo. Peça outro nas configurações do perfil.",
-      "backToSettings": "Ir para as configurações",
-      "metaTitle": "Excluir conta"
+      "invalidDescription": "Ele venceu, já foi usado ou foi trocado por um mais novo. Peça outro na zona de perigo do seu perfil.",
+      "backToSettings": "Ir para o meu perfil",
+      "metaTitle": "Excluir conta",
+      "keepAccount": "Manter minha conta",
+      "signInForNewLink": "Entre para pedir um link novo.",
+      "signIn": "Entrar"
     },
     "deleted": "Sua conta foi excluída."
   },

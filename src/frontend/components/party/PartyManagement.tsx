@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useId, useState, useSyncExternalStore } from 'react';
+import { FormEvent, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -30,6 +30,9 @@ const useOrigin = () =>
     () => '',
   );
 
+/** Who the GM just removed, and where the focus goes once their row is gone (null: the heading). */
+type Removed = { userId: string; next: string | null };
+
 /** The GM's controls: invite, the link, players, name and rules edition. Deleting is in PartyDangerZone. */
 export function PartyManagement({ party }: { party: PartyView }) {
   const t = useTranslations('parties.manage');
@@ -46,9 +49,43 @@ export function PartyManagement({ party }: { party: PartyView }) {
   const { pending, answer } = useMemberAnswers(party.id);
   const [username, setUsername] = useState('');
   const [name, setName] = useState(party.name);
+  const linkField = useRef<HTMLInputElement>(null);
+  const playersHeading = useRef<HTMLHeadingElement>(null);
+  const removeButtons = useRef(new Map<string, HTMLButtonElement>());
+  const [removed, setRemoved] = useState<Removed | null>(null);
+  // The removal the focus already moved for: once is enough
+  const focusedFor = useRef<Removed | null>(null);
 
   const link = `${origin}/parties/join/${party.gm?.inviteCode ?? ''}`;
   const players = party.people.filter((p) => p.status === 'active');
+
+  // The removed row is gone: the focus would fall to the page's start, so it goes to the next
+  // "Remove" (the one before, at the end of the list), or to the heading when nobody is left
+  useEffect(() => {
+    if (!removed || focusedFor.current === removed) return;
+    if (party.people.some((p) => p.userId === removed.userId)) return;
+    focusedFor.current = removed;
+    const next = removed.next ? removeButtons.current.get(removed.next) : undefined;
+    (next ?? playersHeading.current)?.focus();
+  }, [removed, party.people]);
+
+  const removePlayer = async (userId: string, label: string) => {
+    const key = party.journalDocId ? 'removeConfirmJournal' : 'removeConfirm';
+    const ok = await confirm({
+      title: t('removeTitle', { name: label }),
+      description: t(key, { name: label }),
+      confirmLabel: t('remove'),
+      destructive: true,
+    });
+    if (!ok) return;
+    const index = players.findIndex((p) => p.userId === userId);
+    const next = players[index + 1] ?? players[index - 1];
+    const gone = await answer(userId, 'remove', {
+      success: t('removed', { name: label }),
+      gone: t('alreadyGone', { name: label }),
+    });
+    if (gone) setRemoved({ userId, next: next?.userId ?? null });
+  };
 
   const sendInvite = async (event: FormEvent) => {
     event.preventDefault();
@@ -62,12 +99,19 @@ export function PartyManagement({ party }: { party: PartyView }) {
   };
 
   const copy = async () => {
-    await navigator.clipboard.writeText(link);
-    toast.success(t('copied'));
+    try {
+      await navigator.clipboard.writeText(link);
+      toast.success(t('copied'));
+    } catch {
+      // No clipboard permission (or no clipboard): the link is selected, to copy by hand
+      linkField.current?.select();
+      toast.error(t('copyFailed'));
+    }
   };
 
   const rotate = async () => {
     const ok = await confirm({
+      title: t('rotateTitle'),
       description: t('rotateConfirm'),
       confirmLabel: t('rotate'),
       destructive: true,
@@ -84,7 +128,7 @@ export function PartyManagement({ party }: { party: PartyView }) {
   return (
     <SectionCard>
       <SectionCard.Header>
-        <SectionCard.Title icon="Settings2">{t('title')}</SectionCard.Title>
+        <SectionCard.Title icon="Users">{t('title')}</SectionCard.Title>
       </SectionCard.Header>
       <SectionCard.Body className="flex flex-col gap-6">
         {/* #invite: where "Invite players" on an empty table lands */}
@@ -103,7 +147,13 @@ export function PartyManagement({ party }: { party: PartyView }) {
               maxLength={60}
               className="max-w-xs"
             />
-            <Button type="submit" disabled={!username.trim()} loading={invite.isPending}>
+            {/* Outline, as the other forms here (rename, journal): one weight on the page */}
+            <Button
+              type="submit"
+              variant="outline"
+              disabled={!username.trim()}
+              loading={invite.isPending}
+            >
               {t('inviteSubmit')}
             </Button>
           </div>
@@ -113,7 +163,13 @@ export function PartyManagement({ party }: { party: PartyView }) {
           <Label htmlFor={ids.link}>{t('link')}</Label>
           <p className="text-caption text-muted-foreground">{t('linkHint')}</p>
           <div className="flex flex-wrap gap-2">
-            <Input id={ids.link} value={link} readOnly className="max-w-md font-mono text-xs" />
+            <Input
+              ref={linkField}
+              id={ids.link}
+              value={link}
+              readOnly
+              className="max-w-md font-mono text-xs"
+            />
             <Button type="button" variant="outline" onClick={copy}>
               {t('copy')}
             </Button>
@@ -124,7 +180,13 @@ export function PartyManagement({ party }: { party: PartyView }) {
         </div>
 
         <div className="flex flex-col gap-2">
-          <h3 className="text-label text-muted-foreground">{t('members')}</h3>
+          <h3
+            ref={playersHeading}
+            tabIndex={-1}
+            className="text-label text-muted-foreground outline-none"
+          >
+            {t('members')}
+          </h3>
           {players.length === 0 && <p className="text-muted-foreground">{t('noMembers')}</p>}
           <ul className="flex flex-col gap-2">
             {players.map((person) => {
@@ -137,20 +199,15 @@ export function PartyManagement({ party }: { party: PartyView }) {
                   <span>{label}</span>
                   {/* Every row has the same button: the label names who it removes */}
                   <Button
+                    ref={(button) => {
+                      if (button) removeButtons.current.set(person.userId, button);
+                      else removeButtons.current.delete(person.userId);
+                    }}
                     size="sm"
                     variant="destructive-ghost"
                     loading={pending.has(person.userId)}
                     aria-label={t('removeFrom', { name: label })}
-                    onClick={async () => {
-                      const key = party.journalDocId ? 'removeConfirmJournal' : 'removeConfirm';
-                      const ok = await confirm({
-                        title: t('removeTitle', { name: label }),
-                        description: t(key, { name: label }),
-                        confirmLabel: t('remove'),
-                        destructive: true,
-                      });
-                      if (ok) answer(person.userId, 'remove', t('removed', { name: label }));
-                    }}
+                    onClick={() => removePlayer(person.userId, label)}
                   >
                     {t('remove')}
                   </Button>

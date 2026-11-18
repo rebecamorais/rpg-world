@@ -1,9 +1,12 @@
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SupabaseFactory } from '@lib/supabase';
 
+import { EmailService } from '../../../shared/domain/email.service';
+import { UserErrorCodes } from '../domain/UserError';
+import { SupabaseAccountDeletionRepository } from '../infrastructure/repositories/supabase-account-deletion.repository';
 import { SupabaseAuthRepository } from '../infrastructure/repositories/supabase-auth-repository';
 import { SignInWithPasswordUseCase } from './sign-in-with-password.use-case';
 import { UpdatePasswordUseCase } from './update-password.use-case';
@@ -25,29 +28,16 @@ describe('Auth Flow (Integration)', () => {
   const authClient = SupabaseFactory.createClient(mockCookieStore);
   const repo = new SupabaseAuthRepository(authClient, dbClient);
   const signInUseCase = new SignInWithPasswordUseCase(repo);
-  const updatePasswordUseCase = new UpdatePasswordUseCase(repo);
+  const sendPasswordChangedEmail = vi.fn();
+  const updatePasswordUseCase = new UpdatePasswordUseCase(
+    repo,
+    new SupabaseAccountDeletionRepository(dbClient),
+    { sendPasswordChangedEmail } as unknown as EmailService,
+  );
 
   // Limpa o estado entre os testes
   beforeEach(() => {
     cookieJar.clear();
-  });
-
-  it('deve identificar se a senha precisa ser alterada', async () => {
-    // E-mail único para evitar conflito com execuções anteriores
-    const uniqueEmail = `test-change-pass-${Math.random().toString(36).substring(7)}@example.com`;
-    const defaultPassword = '123MudaASenha@';
-
-    const { error } = await dbClient.auth.admin.createUser({
-      email: uniqueEmail,
-      password: defaultPassword,
-      email_confirm: true,
-      user_metadata: { needs_password_change: true },
-    });
-
-    if (error) throw error;
-
-    const result = await signInUseCase.execute(uniqueEmail, defaultPassword);
-    expect(result.passwordChangeRequired).toBe(true);
   });
 
   it('deve permitir atualizar a senha', async () => {
@@ -55,13 +45,14 @@ describe('Auth Flow (Integration)', () => {
     const oldPassword = 'OldPassword123!';
     const newPassword = 'NewPassword456!';
 
-    const { error: createError } = await dbClient.auth.admin.createUser({
+    const { data: created, error: createError } = await dbClient.auth.admin.createUser({
       email: uniqueEmail,
       password: oldPassword,
       email_confirm: true,
     });
 
     if (createError) throw createError;
+    const account = { userId: created.user.id, email: uniqueEmail, newPassword };
 
     await new Promise((r) => setTimeout(r, 200));
 
@@ -73,11 +64,16 @@ describe('Auth Flow (Integration)', () => {
 
     if (signInError) throw signInError;
 
-    await updatePasswordUseCase.execute(newPassword);
+    // The open session alone is not enough: the current password is checked against Auth
+    await expect(
+      updatePasswordUseCase.execute({ ...account, currentPassword: 'wrong-password' }, 'u'),
+    ).rejects.toMatchObject({ code: UserErrorCodes.UPDATE_PASSWORD_CURRENT_INVALID });
 
-    const result = await signInUseCase.execute(uniqueEmail, newPassword);
-    expect(result).toBeDefined();
-    expect(result.passwordChangeRequired).toBe(false);
+    await updatePasswordUseCase.execute({ ...account, currentPassword: oldPassword }, 'u');
+    expect(sendPasswordChangedEmail).toHaveBeenCalledWith(uniqueEmail, 'u');
+
+    // The new password is the one that signs in now
+    await expect(signInUseCase.execute(uniqueEmail, newPassword)).resolves.toBeUndefined();
   });
 
   it('existsByEmail acha a conta pelo e-mail, sem diferenciar maiúsculas', async () => {
