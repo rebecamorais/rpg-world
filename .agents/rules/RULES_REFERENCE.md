@@ -40,7 +40,7 @@ trigger: always_on
 
 ## 6. Nomenclatura de Arquivos
 
-Só dois casos usam letra maiúscula: o que é **um componente React** e o que é **um tipo do domínio**. Todo o resto é `kebab-case`.
+Só dois casos usam letra maiúscula: o que é **um componente React** (inclusive um `Provider` de contexto) e o que é **um tipo do domínio**. Todo o resto é `kebab-case`.
 
 | O que o arquivo exporta                                         | Formato                     | Exemplo                                                 |
 | --------------------------------------------------------------- | --------------------------- | ------------------------------------------------------- |
@@ -54,8 +54,9 @@ Só dois casos usam letra maiúscula: o que é **um componente React** e o que �
 | **UI do Shadcn**                                                | `kebab-case.tsx`            | `button.tsx`                                            |
 
 - **`.tsx` não quer dizer componente**: um arquivo de helpers que devolve JSX (`rich-links.tsx`, `spell-grimoire.tsx`) segue em `kebab-case`. O nome em PascalCase é para quando a exportação principal é um componente.
-- **Contexto React com hooks** (`Provider` + `useAlgo`) fora de `src/frontend/context/` é `kebab-case`: `party-live.ts`, `removed-items.tsx`.
+- **Contexto React**: com um componente `Provider` próprio é componente, em PascalCase (`UserContext.tsx`, `DemoContext.tsx`); só o `createContext` e hooks, sem componente, é `kebab-case` (`party-live.ts`, `removed-items.tsx`).
 - **Testes** levam o nome do arquivo testado mais `.unit.test` ou `.integration.test`: `SpellCard.unit.test.tsx`.
+- **E2E** (`e2e/`): `kebab-case.spec.ts`, com `.mobile.spec.ts` para o celular e `.visual.spec.ts` para as baselines.
 - **Next.js**: os arquivos de `app/` seguem os nomes reservados (`page.tsx`, `layout.tsx`, `route.ts`).
 
 ## 7. Internacionalização (i18n) & Frontend

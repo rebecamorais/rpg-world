@@ -14,7 +14,7 @@ const config = {
     'src/backend/contexts/*/application/**/*.ts',
     'shared/systems/dnd5e/calculations.ts',
     '!**/*.test.ts',
-    '!**/*Repository.ts',
+    '!**/*.repo.ts',
   ],
   reporters: ['clear-text', 'progress', 'html'],
   htmlReporter: { fileName: 'reports/mutation/index.html' },

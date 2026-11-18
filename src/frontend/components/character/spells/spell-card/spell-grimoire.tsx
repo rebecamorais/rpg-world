@@ -41,8 +41,9 @@ const SCHOOL_EMBLEMS = Object.fromEntries(
       key={school}
       data-school-emblem={school}
       className="block size-full bg-current mask-(--school-emblem) mask-contain mask-center mask-no-repeat forced-colors:bg-[CanvasText] forced-colors:forced-color-adjust-none"
-      // Only the image's address is inline; the mask itself comes from Tailwind, which adds the
-      // -webkit- prefix that Chrome and Edge 111-119 (in Next's browser targets) need
+      // Only the image's address is inline; the mask itself comes from Tailwind, whose production
+      // build adds the -webkit- prefix Chrome and Edge 111-119 (in Next's browser targets) need.
+      // The dev build doesn't prefix, so on those browsers the emblem is a solid square in dev only
       style={{ '--school-emblem': `url(/grimoire/emblems/${school}.webp)` } as CSSProperties}
     />,
   ]),
