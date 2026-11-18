@@ -4,25 +4,26 @@ Este documento serve como um guia de navegação para desenvolvedores e agentes 
 
 ## 📂 Diretórios Raiz
 
-- **`.docs/`**: Documentação técnica e regras de ouro (Single Source of Truth).
+- **`docs/`**: Planos (`docs/plans/`), specs com decisões (`docs/superpowers/specs/`), revisão de telas (`docs/revisao-telas/`) e Grimório. O processo de contribuição está no `CONTRIBUTING.md`.
+- **`content/`**: Conteúdo SRD em JSON: `content/dnd5e/srd-5.1/` (2014) e `content/dnd5e/srd-5.2/` (2024), importados pelos scripts de `scripts/content/`.
 - **`app/`**: Rotas do Next.js (App Router), layouts e Route Handlers da API.
 - **`database/`**: Migrations do banco de dados, seeds e configurações locais (Dev/Test) do Supabase.
 - **`public/`**: Assets estáticos (imagens, ícones, fontes).
+- **`shared/`**: Código compartilhado entre Frontend e Backend (veja abaixo).
 - **`scripts/`**: Utilitários de automação e manutenção.
 - **`src/`**: Código-fonte principal da aplicação.
 - **`test/`**: Testes E2E e configurações globais de teste.
 
 ## 🏗️ Estrutura em `src/`
 
-A `src/` está dividida em três pilares principais seguindo a Clean Architecture:
+A `src/` está dividida em dois pilares principais, mais o `shared/` na raiz, seguindo a Clean Architecture:
 
 ### 1. `src/backend/`
 
 Coração da lógica de negócio e integração com serviços.
 
 - **`src/backend/contexts/`**: Divisão por contextos delimitados (Bounded Contexts).
-  - `src/backend/contexts/characters/`: Domínio, Casos de Uso e Repositórios de personagens.
-  - `src/backend/contexts/users/`: Gerenciamento de usuários e autenticação.
+  - Cada contexto tem Domínio, Casos de Uso e Repositórios: `characters`, `classes`, `combat`, `conditions`, `feedback`, `items`, `lore`, `parties`, `spells` e `users` (usuários e autenticação).
 - **`src/backend/shared/`**: Infraestrutura compartilhada do backend (HTTP wrappers, DI Container).
 - **`src/backend/index.ts`**: Exporta `getApi()`, ponto de entrada único para o Frontend. Use `import { getApi } from '@api';`
 
@@ -35,12 +36,12 @@ Camada de apresentação e estado do cliente.
 - **`src/frontend/hooks/`**: Custom hooks para lógica de UI e data fetching (React Query).
 - **`src/frontend/lib/`**: Clientes de API e utilitários exclusivos do frontend.
 
-### 3. `src/shared/` (Raiz de `src/`)
+### 3. `shared/` (Raiz do repositório, fora de `src/`)
 
 Código compartilhado entre Frontend e Backend.
 
-- **`src/shared/systems/`**: Regras específicas de sistemas de RPG (ex: `dnd5e/` com schemas Zod e cálculos).
-- **`src/shared/types/`**: Definições de tipos TypeScript globais.
+- **`shared/systems/dnd5e/`**: Regras de D&D 5e: cálculos, `constants/` e `content/` (schemas Zod do conteúdo e as edições em `content/editions.ts`).
+- **`shared/types/`**: Definições de tipos TypeScript globais.
 
 ## 🔄 Fluxo de Comunicação
 
