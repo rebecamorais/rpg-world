@@ -221,8 +221,11 @@ test('guarda a imagem completa, usa no modal e limpa o par anterior', async ({ p
   await cropSave().click();
   await expect(saved()).toBeVisible();
 
+  // The first save's toast may still be on screen: wait for the files themselves to change
+  await expect
+    .poll(async () => (await stored()).some((file) => first.includes(file)), { timeout: 15_000 })
+    .toBe(false);
   await expect.poll(stored).toHaveLength(2);
-  expect((await stored()).some((file) => first.includes(file))).toBe(false);
 
   await page.getByRole('button', { name: 'View image', exact: true }).click();
   await expect

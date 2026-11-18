@@ -229,7 +229,11 @@ test.describe('mesas', () => {
     const { id: partyId } = await createParty(page, 'Mesa Para Apagar');
     await page.goto(`${partyUrl(partyId)}/settings`);
     await (await hydrated(page.getByRole('button', { name: 'Delete party' }))).click();
-    await page.getByRole('alertdialog').getByRole('button', { name: 'Delete party' }).click();
+    const dialog = page.getByRole('alertdialog', { name: 'Delete Mesa Para Apagar?' });
+    // An empty party asks only to confirm; until its chest and combat load it asks for the name
+    const typeName = dialog.getByRole('textbox', { name: 'Type the exact text above' });
+    if (await typeName.isVisible()) await typeName.fill('Mesa Para Apagar');
+    await dialog.getByRole('button', { name: 'Delete party' }).click();
     await expect(page.getByText('Party deleted')).toBeVisible();
     await expect.poll(() => new URL(page.url()).pathname).toBe('/parties');
   });
@@ -392,7 +396,10 @@ test.describe('mesas', () => {
     await expect(bia.page.getByText('This party has no GM')).toBeVisible();
     await expect(bia.page.getByRole('list', { name: 'Combat order' })).toHaveCount(0);
     await (await hydrated(bia.page.getByRole('button', { name: 'I want to be the GM' }))).click();
-    await bia.page.getByRole('alertdialog').getByRole('button', { name: 'Confirm' }).click();
+    await bia.page
+      .getByRole('alertdialog')
+      .getByRole('button', { name: 'I want to be the GM' })
+      .click();
     await expect(bia.page.getByText('You asked to become the GM of this party.')).toBeVisible();
     await expect(bia.page.getByRole('button', { name: 'Ask support for help' })).toBeDisabled();
 
