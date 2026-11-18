@@ -4,19 +4,26 @@ trigger: always_on
 
 ## 11. Tipografia & Design System (Tailwind Standard)
 
-Para garantir consistência visual e manutenibilidade, o projeto segue estritamente a escala tipográfica padrão do Tailwind CSS. Evite o uso de valores arbitrários (ex: `text-[10px]`) exceto em casos de extrema necessidade técnica.
+Para garantir consistência visual, a tipografia usa utilitários por papel definidos em `app/globals.css`. Cada papel fixa família, tamanho, peso e altura de linha juntos: escolha o papel em vez de combinar `text-xs font-bold tracking-widest`. Evite valores arbitrários (ex: `text-[10px]`) exceto em casos de extrema necessidade técnica.
 
-### Escala Padrão Recomendada:
+### Escala por Papel:
 
-| Classe          | Tamanho (px) | Line Height | Uso Comum                                                       |
-| :-------------- | :----------- | :---------- | :-------------------------------------------------------------- |
-| **`text-xs`**   | 12px         | 16px        | Labels secundários, mini-badges, notas de rodapé.               |
-| **`text-sm`**   | 14px         | 20px        | **Padrão do Projeto.** Textos de interface, botões, descrições. |
-| **`text-base`** | 16px         | 24px        | Corpo de texto longo, parágrafos de lore.                       |
-| **`text-lg`**   | 18px         | 28px        | Subtítulos ou destaques de UI.                                  |
+| Classe             | Uso Comum                                                                     |
+| :----------------- | :---------------------------------------------------------------------------- |
+| **`text-display`** | Títulos grandes de página (Cinzel).                                           |
+| **`text-title`**   | Nomes, títulos de página e de seção (Cinzel).                                 |
+| **`text-heading`** | Subtítulos e destaques de UI.                                                 |
+| **`text-body`**    | **Padrão do Projeto.** Texto corrido, descrições, parágrafos de lore.         |
+| **`text-label`**   | Só rótulo curto (uma a três palavras): nome de seção ou de campo. Caixa alta. |
+| **`text-caption`** | Notas, textos de ajuda e erros de campo.                                      |
 
-- **Estilo Premium**: Para labels pequenos, prefira combinar `text-sm` ou `text-xs` with `font-bold`, `tracking-wider` e `uppercase` em vez de reduzir ainda mais a fonte.
-- **Acessibilidade**: O tamanho `text-xs` (12px) é o limite mínimo sugerido para garantir a legibilidade.
+- **Cinzel**: só em `text-display` e `text-title`, nunca em texto corrido.
+- **Regras completas**: `docs/revisao-telas/componentes-e-design-system.md`.
+
+### Temas e Ações Destrutivas:
+
+- **Temas**: O escuro é o padrão (`:root`); o claro é `[data-theme='light']` e tem que passar WCAG AA, como o escuro (testado em `src/frontend/lib/theme-tokens.unit.test.ts`).
+- **Ação Destrutiva**: Vermelho + confirmação, conforme `docs/revisao-telas/acoes-destrutivas.md`.
 
 ## 12. Sistema de Cores Dinâmicas (Proxy de Cores do Personagem)
 

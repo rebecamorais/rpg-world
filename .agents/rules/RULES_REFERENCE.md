@@ -16,14 +16,13 @@ trigger: always_on
 ## 2. Estratégia de Testes (Colocation)
 
 - **Localização**: Testes unitários (`.unit.test.ts`) e de integração (`.integration.test.ts`) devem residir na mesma pasta do arquivo alvo dentro de `src/`.
-- **Setup Dinâmico**: Os testes de integração utilizam o script `tests/setup-env.ts` para injetar credenciais dinâmicas capturadas via `supabase status`.
+- **Setup Dinâmico**: Os testes de integração utilizam o script `test/setup-env.ts` (configs em `test/vitest.config.{unit,integration}.ts`) para injetar credenciais dinâmicas capturadas via `supabase status`.
 
 ## 3. Autenticação & Ciclo de Vida do Usuário
 
-- **Criação de Conta**: Novos usuários são criados **manualmente** via Dashboard do Supabase (medida temporária).
-- **Senha de Primeiro Acesso**: Senha padrão obrigatória: `123MudaASenha@`.
-- **Política de Troca**: O sistema deve interceptar usuários com a senha padrão ou onde `last_password_change == null`, forçando o redirecionamento para `/settings/change-password`.
-- **Auth Server-Side**: Autenticação 100% via Supabase SSR (Proxy Pattern). O `proxy.ts` (antigo `middleware.ts`) gerencia apenas o refresh do token JWT.
+- **Criação de Conta**: Novos usuários se cadastram pela página de cadastro (`app/[locale]/(public)/register/`).
+- **Troca de Senha**: A troca fica em `/change-password`; a recuperação, em `/forgot-password` e `/reset-password`.
+- **Auth Server-Side**: Autenticação 100% via Supabase SSR (Proxy Pattern). O `proxy.ts` (antigo `middleware.ts`) faz o refresh do token JWT e escolhe o idioma; a proteção das rotas fica nos layouts.
 
 ## 4. Arquitetura (Clean Architecture & SOLID)
 
@@ -53,13 +52,13 @@ trigger: always_on
 
 - **Obrigatoriedade**: Nenhum texto em "hardcoded string" é permitido em componentes de UI. Todo conteúdo textual deve passar pela camada de internacionalização.
 - **Stack**: Uso mandatório de `next-intl` (ou similar compatível com Server Components) utilizando o hook `useTranslations`.
-- **Idiomas Suportados**: Inglês (`en`) e Português (`pt-br`).
-- **Localização de Dicionários**: Arquivos JSON organizados por escopo (ex: `messages/pt-br.json`).
+- **Idiomas Suportados**: Inglês (`en`) e Português (`pt`), definidos em `src/i18n/routing.ts`. `en` é a fonte e `pt` está completo.
+- **Localização de Dicionários**: `messages/{en,pt,es,sv}.json`. `es` e `sv` vêm do Weblate e ainda não estão ativos; o que falta em uma língua é completado com o inglês (`src/i18n/messages.ts`). Não edite `es`/`sv` à mão.
 - **Convenção de Chaves**: Uso de `camelCase` para chaves de tradução, seguindo a hierarquia do componente (ex: `Common.buttons.save`).
 
 ### Exemplo Prático de Implementação (Padronizado)
 
-Para manter a consistência que você definiu na **Rebs Tech Studio**, todo componente deve seguir este padrão:
+Para manter a consistência, todo componente deve seguir este padrão:
 
 ```tsx
 'use client';
