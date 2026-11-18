@@ -4,9 +4,23 @@ import type { EffectId } from '@frontend/components/grimoire/card-effect/types';
 
 /*
  * D&D 5e: which Grimoire effect an open spell card wears. The library knows nothing about
- * spells; this map is an example used by the lab (/dev/grimoire)
- * only. Every damage type and every school has one, so every spell gets an effect.
+ * spells; this map is the game system's side, used by the spellbook and the lab (/dev/grimoire).
+ * Every damage type and every school has one, so every spell gets an effect.
  */
+
+/** Whether a NEXT_PUBLIC_GRIMOIRE_SPELLBOOK value turns the Grimoire off ('off', 'false', '0'). */
+export function grimoireSwitchedOff(value: string | undefined): boolean {
+  return ['off', 'false', '0'].includes(value?.trim().toLowerCase() ?? '');
+}
+
+/**
+ * The Grimoire on the spellbook's cards. Rollback without touching data: set
+ * NEXT_PUBLIC_GRIMOIRE_SPELLBOOK=off and rebuild (on Vercel, the project's env and a redeploy), and
+ * every spell card is exactly today's again. It's inlined at build time: set it before building.
+ */
+export const GRIMOIRE_IN_SPELLBOOK = !grimoireSwitchedOff(
+  process.env.NEXT_PUBLIC_GRIMOIRE_SPELLBOOK,
+);
 
 const BY_DAMAGE: Partial<Record<string, EffectId>> = {
   fire: 'flame-ribbons',

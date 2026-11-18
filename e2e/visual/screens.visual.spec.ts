@@ -210,6 +210,23 @@ test.describe('tema claro', () => {
     await expect(page.getByRole('heading', { name: 'Arani the Bold' })).toBeVisible();
     await snap(page, 'sheet-status-light');
 
+    // The spell cards wear the Grimoire (emblems, effects): their light tones need their own shots
+    await page.goto(characterUrl(id, '/spells'));
+    // By the heading: the hidden "Use light theme" text would match the spell's name first
+    await expect(page.getByRole('heading', { name: SPELLS.light.name, exact: true })).toBeVisible();
+    await snap(page, 'sheet-spells-light');
+    await page.getByRole('button', { name: /Expand Fireball/ }).click();
+    await snap(page, 'sheet-spells-open-light');
+    await page
+      .getByRole('button', { name: /Collapse Fireball/ })
+      .click({ position: { x: 40, y: 24 } });
+    await expect(page.getByRole('button', { name: /Expand Fireball/ })).toBeVisible();
+    await page.getByRole('button', { name: 'Add Spell' }).click();
+    const catalog = page.getByRole('dialog', { name: 'Add Spell' });
+    await expect(catalog.getByRole('article')).toHaveCount(12);
+    await snap(page, 'spells-search-light');
+    await page.keyboard.press('Escape');
+
     const { id: partyId } = await createParty(page, 'Mesa do Tema');
     const goblinId = await createEnemySheet(page, 'Goblin', 7);
     const base = `/api/parties/${partyId}/encounter`;

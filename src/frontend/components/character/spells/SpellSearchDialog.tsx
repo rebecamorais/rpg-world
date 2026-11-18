@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { SpellCard } from '@frontend/components/character/spells/spell-card/SpellCard';
 import { SpellCardSkeleton } from '@frontend/components/character/spells/spell-card/SpellCardSkeleton';
+import { spellGrimoireOf } from '@frontend/components/character/spells/spell-card/spell-grimoire';
 import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
@@ -385,6 +386,7 @@ export default function SpellSearchDialog({
                   onForgetSpell={onForgetSpell}
                   isLearned={learnedSet.has(spell.id)}
                   showLevel
+                  {...spellGrimoireOf(spell)}
                 />
               ))}
             </div>

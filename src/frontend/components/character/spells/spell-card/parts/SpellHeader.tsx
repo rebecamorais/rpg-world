@@ -21,7 +21,7 @@ interface SpellHeaderProps {
   showLevel?: boolean;
   /** Quick action at the end of the header, visible even when the card is collapsed. */
   action?: React.ReactNode;
-  /** Grimoire exploration (lab only): an emblem in place of the game icon. */
+  /** Grimoire: an emblem (the school's) in place of the game icon. */
   icon?: React.ReactNode;
 }
 
