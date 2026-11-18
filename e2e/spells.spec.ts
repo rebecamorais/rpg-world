@@ -98,5 +98,9 @@ test('o anel do teclado aparece no card aberto, por cima do efeito', async ({ pa
     return { style: style.outlineStyle, width: style.outlineWidth };
   });
   expect(ring).toEqual({ style: 'solid', width: '2px' });
-  await fireball.screenshot({ path: test.info().outputPath('open-card-focus.png') });
+
+  // Closed again, from the keyboard: the ring stays
+  await page.keyboard.press('Enter');
+  await expect(fireball.getByRole('button', { name: /Expand Fireball/ })).toBeFocused();
+  await expect(fireball).toHaveCSS('outline-style', 'solid');
 });
