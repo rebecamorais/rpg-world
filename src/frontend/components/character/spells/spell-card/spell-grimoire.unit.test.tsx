@@ -115,6 +115,22 @@ describe('SpellCard com o Grimório', () => {
     expect(damage.querySelector('svg')).not.toBeNull();
   });
 
+  it('fechado, o leitor de tela ouve a escola que o emblema mostra', () => {
+    renderWithProviders(<SpellCard spell={FIREBALL} {...spellGrimoireOf(FIREBALL, true)} />);
+    expect(screen.getByText(messages.spellsData.schools.evocation)).toHaveClass('sr-only');
+  });
+
+  it('o emblema é uma máscara do Tailwind com a imagem da escola', () => {
+    const { container } = renderWithProviders(
+      <SpellCard spell={FIREBALL} {...spellGrimoireOf(FIREBALL, true)} />,
+    );
+    const emblem = container.querySelector<HTMLElement>('[data-school-emblem="evocation"]')!;
+    expect(emblem).toHaveClass('mask-(--school-emblem)', 'mask-contain', 'mask-no-repeat');
+    expect(emblem.style.getPropertyValue('--school-emblem')).toBe(
+      'url(/grimoire/emblems/evocation.webp)',
+    );
+  });
+
   it('aberto: o efeito do dano, o texto na caixa de leitura e a borda aberta', () => {
     const { container } = renderWithProviders(
       <SpellCard spell={FIREBALL} isExpanded {...spellGrimoireOf(FIREBALL, true)} />,

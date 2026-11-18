@@ -1,6 +1,6 @@
-import { AuthRepository } from '../domain/AuthRepository';
-import { ProfileRepository } from '../domain/ProfileRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { AuthRepository } from '../domain/auth.repo';
+import { ProfileRepository } from '../domain/profile.repo';
 
 export class CallbackExchangeUseCase {
   constructor(

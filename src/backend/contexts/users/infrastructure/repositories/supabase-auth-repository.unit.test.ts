@@ -1,8 +1,8 @@
 import { AuthError, JwtPayload, Session, SupabaseClient, User } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { DeleteUserDatabaseError } from '../../domain/AuthRepository';
 import { UserError, UserErrorCodes } from '../../domain/UserError';
+import { DeleteUserDatabaseError } from '../../domain/auth.repo';
 import { SupabaseAuthRepository } from './supabase-auth-repository';
 
 vi.mock('server-only', () => ({}));

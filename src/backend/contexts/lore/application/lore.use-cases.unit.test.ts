@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CharacterOwnership } from '../domain/CharacterOwnership';
 import { Lore } from '../domain/Lore';
 import { LoreErrorCodes } from '../domain/LoreError';
+import { CharacterOwnership } from '../domain/character-ownership';
 import { LoreRepository } from '../domain/repository/lore.repo';
 import { DeleteLoreUseCase } from './delete-lore/delete-lore.use-case';
 import { GetLoreUseCase } from './get-lore/get-lore.use-case';

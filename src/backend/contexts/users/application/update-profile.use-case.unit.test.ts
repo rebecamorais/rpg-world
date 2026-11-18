@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { StorageRepository } from '@backend/shared/domain/StorageRepository';
+import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { Profile } from '../domain/Profile';
-import { ProfileRepository } from '../domain/ProfileRepository';
+import { ProfileRepository } from '../domain/profile.repo';
 import { GetProfileUseCase } from './get-profile.use-case';
 import { UpdateProfileUseCase } from './update-profile.use-case';
 

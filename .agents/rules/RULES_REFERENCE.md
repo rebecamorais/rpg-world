@@ -40,17 +40,28 @@ trigger: always_on
 
 ## 6. Nomenclatura de Arquivos
 
-| Camada / Tipo                      | Formato          | Exemplo                        |
-| ---------------------------------- | ---------------- | ------------------------------ |
-| **Domínio (Entidades/Interfaces)** | `PascalCase.ts`  | `User.ts`, `AuthRepository.ts` |
-| **Application/Infra (Backend)**    | `kebab-case.ts`  | `supabase-auth-repository.ts`  |
-| **Componentes React (Frontend)**   | `PascalCase.tsx` | `LoginForm.tsx`                |
-| **UI Components (Shadcn)**         | `kebab-case.tsx` | `button.tsx`                   |
-| **Hooks / Utils**                  | `camelCase.ts`   | `useAuth.ts`                   |
+Só dois casos usam letra maiúscula: o que é **um componente React** (inclusive um `Provider` de contexto) e o que é **um tipo do domínio**. Todo o resto é `kebab-case`.
+
+| O que o arquivo exporta                                         | Formato                     | Exemplo                                                 |
+| --------------------------------------------------------------- | --------------------------- | ------------------------------------------------------- |
+| **Componente React** (inclusive templates de e-mail)            | `PascalCase.tsx`            | `SpellCard.tsx`, `MagicLink.tsx`                        |
+| **Hook** (no `hooks/` ou junto do componente)                   | `useAlgo.ts(x)`             | `useCharacter.ts`, `useSheetTabs.ts`                    |
+| **Domínio: entidade, value object, erro**                       | `PascalCase.ts`             | `User.ts`, `HealthPoints.ts`, `CharacterError.ts`       |
+| **Domínio: interface de repositório**                           | `kebab-case.repo.ts`        | `auth.repo.ts`, `character-spell.repo.ts`               |
+| **Domínio: serviço externo** (e-mail)                           | `kebab-case.service.ts`     | `email.service.ts`                                      |
+| **Casos de uso** (um, ou vários do mesmo assunto)               | `kebab-case.use-case(s).ts` | `add-participant.use-case.ts`, `inventory.use-cases.ts` |
+| **Todo o resto** (utils, constantes, contextos, infra, scripts) | `kebab-case.ts(x)`          | `api-client.ts`, `party-live.ts`, `spell-grimoire.tsx`  |
+| **UI do Shadcn**                                                | `kebab-case.tsx`            | `button.tsx`                                            |
+
+- **`.tsx` não quer dizer componente**: um arquivo de helpers que devolve JSX (`rich-links.tsx`, `spell-grimoire.tsx`) segue em `kebab-case`. O nome em PascalCase é para quando a exportação principal é um componente.
+- **Contexto React**: com um componente `Provider` próprio é componente, em PascalCase (`UserContext.tsx`, `DemoContext.tsx`); só o `createContext` e hooks, sem componente, é `kebab-case` (`party-live.ts`, `removed-items.tsx`).
+- **Testes** levam o nome do arquivo testado mais `.unit.test` ou `.integration.test`: `SpellCard.unit.test.tsx`.
+- **E2E** (`e2e/`): `kebab-case.spec.ts`, com `.mobile.spec.ts` para o celular e `.visual.spec.ts` para as baselines.
+- **Next.js**: os arquivos de `app/` seguem os nomes reservados (`page.tsx`, `layout.tsx`, `route.ts`).
 
 ## 7. Internacionalização (i18n) & Frontend
 
-- **Obrigatoriedade**: Nenhum texto em "hardcoded string" é permitido em componentes de UI. Todo conteúdo textual deve passar pela camada de internacionalização.
+- **Obrigatoriedade**: Nenhum texto em "hardcoded string" é permitido em componentes de UI. Todo conteúdo textual deve passar pela camada de internacionalização (conferido por `src/frontend/hardcoded-text.unit.test.ts`). A exceção são as ferramentas internas de `src/frontend/dev/` (ex.: o laboratório do Grimório), que dão 404 em produção.
 - **Stack**: Uso mandatório de `next-intl` (ou similar compatível com Server Components) utilizando o hook `useTranslations`.
 - **Idiomas Suportados**: Inglês (`en`) e Português (`pt`), definidos em `src/i18n/routing.ts`. `en` é a fonte e `pt` está completo.
 - **Localização de Dicionários**: `messages/{en,pt,es,sv}.json`. `es` e `sv` vêm do Weblate e ainda não estão ativos; o que falta em uma língua é completado com o inglês (`src/i18n/messages.ts`). Não edite `es`/`sv` à mão.

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { AuthRepository } from '../domain/AuthRepository';
+import { AuthRepository } from '../domain/auth.repo';
 import { GetSessionUserUseCase } from './get-session-user.use-case';
 
 describe('GetSessionUserUseCase', () => {

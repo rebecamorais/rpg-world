@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { StorageRepository } from '@backend/shared/domain/StorageRepository';
+import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { CharacterErrorCodes } from '../../domain/CharacterError';
 import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';

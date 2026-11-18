@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { EmailService } from '../../shared/domain/EmailService';
+import { EmailService } from '../../shared/domain/email.service';
 import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import { CallbackExchangeUseCase } from './application/callback-exchange.use-case';
 import { DeleteAccountUseCase } from './application/delete-account.use-case';

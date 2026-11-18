@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/reac
 import { render, renderHook, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { rpgWorldApi } from '@frontend/lib/api-client/rpgWorldApi';
+import { rpgWorldApi } from '@frontend/lib/api-client/rpg-world-api';
 
 import { DemoProvider, useDemo } from './DemoContext';
 import type { DemoData } from './types';

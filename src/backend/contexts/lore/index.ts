@@ -1,14 +1,14 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { PartyGmAccess } from '@backend/shared/domain/PartyGmAccess';
+import { PartyGmAccess } from '@backend/shared/domain/party-gm-access';
 
 import { DeleteLoreUseCase } from './application/delete-lore/delete-lore.use-case';
 import { GetLoreUseCase } from './application/get-lore/get-lore.use-case';
 import { GetPartyLoreUseCase } from './application/get-lore/get-party-lore.use-case';
 import { UpdateLoreUseCase } from './application/update-lore/update-lore.use-case';
-import { CharacterOwnership } from './domain/CharacterOwnership';
 import { Lore } from './domain/Lore';
-import { LoreContext } from './domain/LoreContext';
+import { CharacterOwnership } from './domain/character-ownership';
+import { LoreContext } from './domain/lore-context';
 import { SupabaseLoreRepository } from './infrastructure/repositories/supabase-lore.repository';
 
 export { Lore };

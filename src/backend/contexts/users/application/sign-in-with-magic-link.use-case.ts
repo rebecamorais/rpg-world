@@ -1,6 +1,6 @@
-import { EmailService } from '../../../shared/domain/EmailService';
-import { AuthRepository } from '../domain/AuthRepository';
+import { EmailService } from '../../../shared/domain/email.service';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { AuthRepository } from '../domain/auth.repo';
 
 export class SignInWithMagicLinkUseCase {
   constructor(

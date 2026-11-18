@@ -1,4 +1,4 @@
-import { StorageRepository } from '../domain/StorageRepository';
+import { StorageRepository } from '../domain/storage.repo';
 
 /**
  * Path inside `bucket` of an uploaded asset's URL, whatever host served it (the image proxy,

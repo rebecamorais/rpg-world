@@ -3,13 +3,9 @@ import 'server-only';
 
 import { SupabaseFactory } from '@lib/supabase';
 
-import {
-  AuthRepository,
-  DeleteUserDatabaseError,
-  EmailLinkType,
-} from '../../domain/AuthRepository';
 import { User } from '../../domain/User';
 import { UserError, UserErrorCode, UserErrorCodes } from '../../domain/UserError';
+import { AuthRepository, DeleteUserDatabaseError, EmailLinkType } from '../../domain/auth.repo';
 
 // Supabase Auth failures that are expected outcomes (wrong password, weak password...) become
 // UserErrors the UI can translate. Anything else stays a plain Error and surfaces as a 500.

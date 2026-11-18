@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { AuthRepository } from '../domain/AuthRepository';
-import { ProfileRepository } from '../domain/ProfileRepository';
+import { AuthRepository } from '../domain/auth.repo';
+import { ProfileRepository } from '../domain/profile.repo';
 import { CallbackExchangeUseCase } from './callback-exchange.use-case';
 
 describe('CallbackExchangeUseCase', () => {

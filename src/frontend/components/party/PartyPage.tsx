@@ -36,7 +36,7 @@ import { PartyGmClaim } from './PartyGmClaim';
 import { PartyRequests, personName } from './PartyRequests';
 import { PartyRoster } from './PartyRoster';
 import { RolePlayCard } from './RolePlayCard';
-import { usePartyLive } from './partyLive';
+import { usePartyLive } from './party-live';
 import { useMemberAnswers } from './useMemberAnswers';
 
 /** Nobody brought a character yet: invite players, or wait for the ones already in. */

@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
-import { EmailService } from '../domain/EmailService';
+import { EmailService } from '../domain/email.service';
 import { createEmailService } from '../infrastructure/email/email-service-factory';
 import { Contexts } from './contexts';
 

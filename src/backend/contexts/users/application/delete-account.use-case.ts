@@ -1,7 +1,7 @@
-import { AccountDeletionRepo } from '../domain/AccountDeletionRepo';
-import { AuthRepository, DeleteUserDatabaseError } from '../domain/AuthRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
 import { hashAccountDeletionToken } from '../domain/account-deletion-token';
+import { AccountDeletionRepo } from '../domain/account-deletion.repo';
+import { AuthRepository, DeleteUserDatabaseError } from '../domain/auth.repo';
 
 // The cascade can cross a concurrent invite acceptance or GM claim settlement and lose a deadlock.
 // Trying again right away just waits for the other transaction, which by then holds what it needs.

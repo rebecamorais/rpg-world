@@ -1,6 +1,6 @@
 import { isFileIn, removeReplacedAsset } from '@backend/shared/application/remove-replaced-asset';
-import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 import { AVATAR_BUCKET } from '@backend/shared/domain/avatar';
+import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { fullImageUrl } from '@shared/avatar-files';
 

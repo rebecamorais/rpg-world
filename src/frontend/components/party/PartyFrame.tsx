@@ -26,7 +26,7 @@ import type { PartyRole } from '@backend/contexts/parties/domain/Party';
 
 import { MyPartyMenu, PartyNotFound } from './PartyPage';
 import { PartyTabs } from './PartyTabs';
-import { PartyLiveContext } from './partyLive';
+import { PartyLiveContext } from './party-live';
 
 /** How soon after the person's own "leave" a "not found" counts as that leave, not a removal. */
 const OWN_LEAVE_MS = 10_000;

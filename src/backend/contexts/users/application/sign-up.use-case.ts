@@ -1,6 +1,6 @@
-import { EmailService } from '../../../shared/domain/EmailService';
-import { AuthRepository } from '../domain/AuthRepository';
+import { EmailService } from '../../../shared/domain/email.service';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { AuthRepository } from '../domain/auth.repo';
 import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
 
 export class SignUpUseCase {

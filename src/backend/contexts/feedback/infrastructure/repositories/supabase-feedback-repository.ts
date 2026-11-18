@@ -5,7 +5,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
 import { Feedback, FeedbackStatus, FeedbackType, NewFeedback } from '../../domain/Feedback';
-import { FeedbackRepository } from '../../domain/FeedbackRepository';
+import { FeedbackRepository } from '../../domain/feedback.repo';
 
 export class SupabaseFeedbackRepository implements FeedbackRepository {
   constructor(private readonly dbClient: SupabaseClient) {}

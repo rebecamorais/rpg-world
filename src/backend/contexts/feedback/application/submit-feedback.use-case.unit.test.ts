@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { FeedbackStatus, FeedbackType, NewFeedback } from '../domain/Feedback';
 import { FeedbackError, FeedbackErrorCodes } from '../domain/FeedbackError';
-import { FeedbackRepository } from '../domain/FeedbackRepository';
+import { FeedbackRepository } from '../domain/feedback.repo';
 import { SubmitFeedbackUseCase } from './submit-feedback.use-case';
 
 const FEEDBACK: NewFeedback = {

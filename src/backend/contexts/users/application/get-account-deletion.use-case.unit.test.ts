@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AccountDeletionRepo } from '../domain/AccountDeletionRepo';
+import { AccountDeletionRepo } from '../domain/account-deletion.repo';
 import { GetAccountDeletionUseCase } from './get-account-deletion.use-case';
 
 describe('GetAccountDeletionUseCase', () => {

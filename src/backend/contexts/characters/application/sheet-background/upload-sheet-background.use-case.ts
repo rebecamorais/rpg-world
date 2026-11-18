@@ -1,6 +1,6 @@
-import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 import { AssetVersionGenerator, newAssetVersion } from '@backend/shared/domain/asset-version';
 import { AVATAR_BUCKET } from '@backend/shared/domain/avatar';
+import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { CharacterRepo } from '../../domain/repository/character.repo';
 import { assertOwnsCharacter } from '../find-owned-character';

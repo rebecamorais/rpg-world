@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
-import { AccountDeletionRepo } from '../../domain/AccountDeletionRepo';
+import { AccountDeletionRepo } from '../../domain/account-deletion.repo';
 
 /** Service role only: the table has no grant for anyone else, and the link works without a session. */
 export class SupabaseAccountDeletionRepository implements AccountDeletionRepo {

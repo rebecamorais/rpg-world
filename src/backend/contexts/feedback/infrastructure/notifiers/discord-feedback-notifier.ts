@@ -4,7 +4,7 @@
 import 'server-only';
 
 import { Feedback, FeedbackType } from '../../domain/Feedback';
-import { FeedbackNotifier } from '../../domain/FeedbackNotifier';
+import { FeedbackNotifier } from '../../domain/feedback-notifier';
 
 const TYPES: Record<FeedbackType, { label: string; color: number }> = {
   [FeedbackType.BUG]: { label: '🐞 Bug', color: 0xed4245 },

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { StorageRepository } from '@backend/shared/domain/StorageRepository';
 import { ALLOWED_AVATAR_TYPES, MAX_AVATAR_SIZE_BYTES } from '@backend/shared/domain/avatar';
+import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { UploadAvatarUseCase } from './upload-avatar.use-case';
 

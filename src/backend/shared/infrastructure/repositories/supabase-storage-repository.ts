@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import 'server-only';
 
-import { StorageRepository } from '../../domain/StorageRepository';
+import { StorageRepository } from '../../domain/storage.repo';
 import { formatAssetUrl } from '../helpers/format-asset-url';
 
 export class SupabaseStorageRepository implements StorageRepository {

@@ -1,9 +1,9 @@
 import { createHash } from 'node:crypto';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AccountDeletionRepo } from '../domain/AccountDeletionRepo';
-import { AuthRepository, DeleteUserDatabaseError } from '../domain/AuthRepository';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { AccountDeletionRepo } from '../domain/account-deletion.repo';
+import { AuthRepository, DeleteUserDatabaseError } from '../domain/auth.repo';
 import { DeleteAccountUseCase } from './delete-account.use-case';
 
 const LINK_INVALID = { code: UserErrorCodes.DELETION_LINK_INVALID };

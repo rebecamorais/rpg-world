@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { AuthRepository } from '../domain/AuthRepository';
+import { AuthRepository } from '../domain/auth.repo';
 import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
 import { SignInWithPasswordUseCase } from './sign-in-with-password.use-case';
 

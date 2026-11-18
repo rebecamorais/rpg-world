@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { EmailService } from '../../domain/EmailService';
+import { EmailService } from '../../domain/email.service';
 import { ResendEmailService } from '../services/resend-email-service';
 import { SupabaseEmailService } from '../services/supabase-email-service';
 

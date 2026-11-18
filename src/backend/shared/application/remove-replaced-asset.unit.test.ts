@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { StorageRepository } from '../domain/StorageRepository';
+import { StorageRepository } from '../domain/storage.repo';
 import { isFileIn, removeReplacedAsset, storagePathFromAssetUrl } from './remove-replaced-asset';
 
 const USER = '6f1c2a4e-8b3d-4c5e-9f7a-1b2c3d4e5f60';

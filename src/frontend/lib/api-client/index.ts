@@ -1,2 +1,2 @@
-export * from './apiClient';
-export * from './rpgWorldApi';
+export * from './api-client';
+export * from './rpg-world-api';

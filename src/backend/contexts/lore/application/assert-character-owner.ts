@@ -1,5 +1,5 @@
-import { CharacterOwnership } from '../domain/CharacterOwnership';
 import { LoreError, LoreErrorCodes } from '../domain/LoreError';
+import { CharacterOwnership } from '../domain/character-ownership';
 
 // Missing and foreign characters fail the same way, so lore never reveals that a character exists.
 export async function assertCharacterOwner(

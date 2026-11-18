@@ -4,7 +4,7 @@ import { createContext, useContext, useLayoutEffect, useMemo, useState } from 'r
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { rpgWorldApi } from '@frontend/lib/api-client/rpgWorldApi';
+import { rpgWorldApi } from '@frontend/lib/api-client/rpg-world-api';
 
 import { createDemoTransport } from './transport';
 import type { DemoData } from './types';

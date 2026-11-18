@@ -1,4 +1,4 @@
-import { PartyGmAccess } from '@backend/shared/domain/PartyGmAccess';
+import { PartyGmAccess } from '@backend/shared/domain/party-gm-access';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import { Character } from '../../domain/entity/Character';

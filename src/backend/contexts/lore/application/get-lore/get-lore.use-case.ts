@@ -1,4 +1,4 @@
-import { CharacterOwnership } from '../../domain/CharacterOwnership';
+import { CharacterOwnership } from '../../domain/character-ownership';
 import { LoreRepository } from '../../domain/repository/lore.repo';
 import { assertCharacterOwner } from '../assert-character-owner';
 

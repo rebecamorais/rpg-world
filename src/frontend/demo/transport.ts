@@ -1,5 +1,5 @@
-import { APIError } from '@frontend/lib/api-client/apiClient';
-import type { ApiTransport } from '@frontend/lib/api-client/apiClient';
+import { APIError } from '@frontend/lib/api-client/api-client';
+import type { ApiTransport } from '@frontend/lib/api-client/api-client';
 
 import { DEMO_PARTY_ID } from './ids';
 import type { DemoData } from './types';
