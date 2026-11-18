@@ -1,4 +1,4 @@
-import { expect, hydrated, signIn, test } from './support/fixtures';
+import { expect, hydrated, test } from './support/fixtures';
 import { linkIn, waitForEmail } from './support/mailbox';
 import { PASSWORD, createUser } from './support/supabase';
 
@@ -25,24 +25,6 @@ test('esqueci a senha: link por e-mail, nova senha e login com ela', async ({ pa
     data: { email: user.email, password: NEW_PASSWORD },
   });
   expect(login.ok()).toBe(true);
-});
-
-test('senha provisória obriga a troca antes de entrar', async ({ page }) => {
-  const user = await createUser('first-access', '123MudaASenha@');
-  await page.goto('/login');
-
-  await (await hydrated(page.getByLabel('Email'))).fill(user.email);
-  await page.getByLabel('Password').fill('123MudaASenha@');
-  await page.getByRole('button', { name: 'Sign In' }).click();
-  await expect(page).toHaveURL(/\/change-password$/);
-
-  await (await hydrated(page.getByLabel('Current password'))).fill('123MudaASenha@');
-  await page.getByLabel('New password', { exact: true }).fill(NEW_PASSWORD);
-  await page.getByLabel('Confirm new password').fill(NEW_PASSWORD);
-  await page.getByRole('button', { name: 'Change password' }).click();
-
-  await expect(page).toHaveURL(/\/settings\/profile\?passwordChanged=1$/);
-  await signIn(page, { ...user }, NEW_PASSWORD);
 });
 
 test('sem sessão, a troca de senha leva ao login', async ({ page }) => {

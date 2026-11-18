@@ -1,7 +1,6 @@
 import { EmailService } from '../../../shared/domain/email.service';
 import { UserError, UserErrorCodes } from '../domain/UserError';
 import { AuthRepository } from '../domain/auth.repo';
-import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
 
 export class SignUpUseCase {
   constructor(
@@ -12,11 +11,6 @@ export class SignUpUseCase {
   async execute(email: string, password: string, confirmUrl: string): Promise<void> {
     if (!email || !password) {
       throw new UserError(UserErrorCodes.SIGNUP_REQUIRED_FIELDS);
-    }
-
-    // A senha de primeiro acesso NÃO pode ser a senha padrão de reset/migração
-    if (password === DEFAULT_FIRST_ACCESS_PASSWORD) {
-      throw new UserError(UserErrorCodes.SIGNUP_INVALID_PASSWORD);
     }
 
     // An e-mail that already has an account gets the same answer as a new one, and its owner gets

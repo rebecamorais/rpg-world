@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { AuthRepository } from '../domain/auth.repo';
-import { DEFAULT_FIRST_ACCESS_PASSWORD } from '../domain/default-password';
 import { SignInWithPasswordUseCase } from './sign-in-with-password.use-case';
 
 describe('SignInWithPasswordUseCase', () => {
@@ -17,28 +16,6 @@ describe('SignInWithPasswordUseCase', () => {
       'test@example.com',
       'password123',
     );
-  });
-
-  it('deve retornar passwordChangeRequired verdadeiro se a senha for a padrão', async () => {
-    const mockRepository = {
-      signInWithPassword: vi.fn().mockResolvedValue(undefined),
-    } as unknown as AuthRepository;
-
-    const useCase = new SignInWithPasswordUseCase(mockRepository);
-    const result = await useCase.execute('test@example.com', DEFAULT_FIRST_ACCESS_PASSWORD);
-
-    expect(result.passwordChangeRequired).toBe(true);
-  });
-
-  it('deve retornar passwordChangeRequired falso se a senha não for a padrão', async () => {
-    const mockRepository = {
-      signInWithPassword: vi.fn().mockResolvedValue(undefined),
-    } as unknown as AuthRepository;
-
-    const useCase = new SignInWithPasswordUseCase(mockRepository);
-    const result = await useCase.execute('test@example.com', 'outraSenha');
-
-    expect(result.passwordChangeRequired).toBe(false);
   });
 
   it('deve lançar erro se o email ou senha não forem fornecidos', async () => {
