@@ -68,7 +68,7 @@ const SaveBarSlotContext = createContext<SaveBarSlot | null>(null);
  * while there is a bar: the footer keeps that much room under its last line (FooterContent) and
  * the toasts open above it (AppToasterClient), so neither ends up under Discard and Save.
  */
-export const SAVE_BAR_SPACE = '--save-bar-space';
+const SAVE_BAR_SPACE = '--save-bar-space';
 
 function useReserveSaveBarSpace(slot: HTMLElement | null) {
   useEffect(() => {

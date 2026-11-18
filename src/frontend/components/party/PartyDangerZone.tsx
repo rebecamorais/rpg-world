@@ -19,7 +19,7 @@ import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 import { COINS } from '@shared/systems/dnd5e/coins';
 
 /** Whether the chest holds anything: an item, or a coin of any kind. */
-export function chestHasSomething(chest: InventoryDto): boolean {
+function chestHasSomething(chest: InventoryDto): boolean {
   return (
     chest.items.length > 0 || chest.containers.some((c) => COINS.some((coin) => c.coins[coin] > 0))
   );
