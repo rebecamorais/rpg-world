@@ -12,16 +12,17 @@ Severidade: **Alta** atrapalha o uso ou pode fazer perder dados. **Média** é i
 
 ## Documentos
 
-| Documento                                                        | O que tem                                                                                                        |
-| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| [fase-2-resultados.md](fase-2-resultados.md)                     | Fase 2 (mesa, baú, diário, listas e navegação): causas, achados de uma tela só e o status dos achados antigos    |
-| [fase-1-resultados.md](fase-1-resultados.md)                     | Fase 1 (ficha, combate e modais): 12 causas, achados de uma tela só e o status dos achados antigos               |
-| [plano-por-tela.md](plano-por-tela.md)                           | O plano de review de UX/UI de cada tela e modal: método, checklist, ordem e pontos de cada uma                   |
-| [acoes-destrutivas.md](acoes-destrutivas.md)                     | A regra de vermelho e confirmação, e o inventário das 21 ações que apagam ou removem algo                        |
-| [componentes-e-design-system.md](componentes-e-design-system.md) | Cores e tokens (inclusive o tema claro), tipografia, espaçamento, raio e sombra, ícones e primitivos duplicados  |
-| [telas-publicas-e-conta.md](telas-publicas-e-conta.md)           | Landing, features, login, cadastro, senha, username, perfil, exclusão de conta, header, sidebar e footer         |
-| [telas-personagens-e-ficha.md](telas-personagens-e-ficha.md)     | Lista de personagens e NPCs, novo personagem, ficha (status, lore, grimório, inventário), modo só leitura e demo |
-| [telas-mesas.md](telas-mesas.md)                                 | Lista de mesas, convite, abas Mesa, Combate, Diário e Baú, configurações e ficha vista pela mesa                 |
+| Documento                                                        | O que tem                                                                                                                                                 |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [fase-3-resultados.md](fase-3-resultados.md)                     | Fase 3 (configurações da mesa, convite, perfil e conta, novo personagem, Lore e Aparência): causas, achados de uma tela só e o status dos achados antigos |
+| [fase-2-resultados.md](fase-2-resultados.md)                     | Fase 2 (mesa, baú, diário, listas e navegação): causas, achados de uma tela só e o status dos achados antigos                                             |
+| [fase-1-resultados.md](fase-1-resultados.md)                     | Fase 1 (ficha, combate e modais): 12 causas, achados de uma tela só e o status dos achados antigos                                                        |
+| [plano-por-tela.md](plano-por-tela.md)                           | O plano de review de UX/UI de cada tela e modal: método, checklist, ordem e pontos de cada uma                                                            |
+| [acoes-destrutivas.md](acoes-destrutivas.md)                     | A regra de vermelho e confirmação, e o inventário das 21 ações que apagam ou removem algo                                                                 |
+| [componentes-e-design-system.md](componentes-e-design-system.md) | Cores e tokens (inclusive o tema claro), tipografia, espaçamento, raio e sombra, ícones e primitivos duplicados                                           |
+| [telas-publicas-e-conta.md](telas-publicas-e-conta.md)           | Landing, features, login, cadastro, senha, username, perfil, exclusão de conta, header, sidebar e footer                                                  |
+| [telas-personagens-e-ficha.md](telas-personagens-e-ficha.md)     | Lista de personagens e NPCs, novo personagem, ficha (status, lore, grimório, inventário), modo só leitura e demo                                          |
+| [telas-mesas.md](telas-mesas.md)                                 | Lista de mesas, convite, abas Mesa, Combate, Diário e Baú, configurações e ficha vista pela mesa                                                          |
 
 ## Feito neste PR
 
@@ -34,8 +35,8 @@ Severidade: **Alta** atrapalha o uso ou pode fazer perder dados. **Média** é i
 ## Prioridades sugeridas (próximos PRs)
 
 1. **Tema claro com camadas visíveis:** card, muted e secondary têm a mesma cor, e a borda fica em 1,2:1 ([design system #1–3](componentes-e-design-system.md#cores-e-tokens)).
-2. **`text-label` fora de textos de ajuda e botões:** frases longas em caixa alta nas configurações da mesa, nos botões da ficha e no "Jogado por @USERNAME" ([design system #13](componentes-e-design-system.md#tipografia)).
-3. **Perfil:** a cor do tema é salva mas não é usada em lugar nenhum, nenhum swatch aparece selecionado, e não há onde trocar a senha ([públicas #1–3](telas-publicas-e-conta.md#configurações--perfil-settingsprofile)).
+2. **`text-label` fora de textos de ajuda e botões:** frases longas em caixa alta nas configurações da mesa, nos botões da ficha e no "Jogado por @USERNAME" ([design system #13](componentes-e-design-system.md#tipografia)). _Em parte resolvido: as dicas das configurações da mesa já estão em `text-caption` (mesas 25, [fase 3](fase-3-resultados.md#achados-antigos)); sobram rótulos e o botão "CONCLUIR" do Configurar card ([fase 3, causa 11](fase-3-resultados.md#11-modais-da-status))._
+3. **Perfil:** a cor do tema é salva mas não é usada em lugar nenhum, nenhum swatch aparece selecionado, e não há onde trocar a senha ([públicas #1–3](telas-publicas-e-conta.md#configurações--perfil-settingsprofile)). _Continua aberto: a fase 3 confirmou os três e achou que o perfil não apaga o nome nem a cor ([fase 3, causas 3 e 5](fase-3-resultados.md#3-perfil-nao-apaga))._
 4. **Rótulos dos números de combate** sempre visíveis na ficha ([ficha #1](telas-personagens-e-ficha.md#ficha-status)).
 5. **Modo só leitura** sem controles desabilitados: lixeiras e steppers que não fazem nada ([ficha #12](telas-personagens-e-ficha.md#ficha-modo-só-leitura-mestre-e-demo), [mesas #32](telas-mesas.md#ficha-vista-pela-mesa-partiesidcharactersid)).
 6. **Primitivos que faltam:** `Button size="icon-sm"/"xl"`, `variant="destructive-soft"`, `Card padding` e um `Badge` com tom ([design system](componentes-e-design-system.md#primitivos-e-duplicação)).
