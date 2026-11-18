@@ -256,6 +256,24 @@ Achados: c-personagem#11, b-perfil-conta#13 (parte do en), públicas 8.
 - fase 2 `bau-conflito-sem-saida` — corrigida: nada sumiu nem foi somado errado, e o valor digitado sobre um baú que mudou mostra "Mudou em outro lugar"
 - fase 2 permissões do combate — fechada: o caso permitido do jogador funciona e o resto é recusado
 
+## Decisões (2026-11-18)
+
+A Rebeca aceitou todas as recomendações das [perguntas de produto](#perguntas-de-produto):
+
+| Tema                              | Decisão                                                                                                                                    |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Apagar a mesa                     | O nome da mesa no título da confirmação; digitar o nome só se a mesa tiver baú ou combate.                                                 |
+| Página do convite                 | Ganha "Cancelar pedido". A aprovação ou a recusa continua chegando em até 20 s.                                                            |
+| Limite de jogadores por mesa      | Nenhum, por enquanto.                                                                                                                      |
+| Aceitar convite pela lista        | Leva para a mesa.                                                                                                                          |
+| Cor do tema do perfil             | Sai do perfil.                                                                                                                             |
+| Troca de senha                    | Card "Conta" no perfil (e-mail e "Alterar senha"; sem senha, "Criar senha"). Pede a senha atual e manda o e-mail "Sua senha foi alterada". |
+| Nome da tela                      | "Meu perfil", com os cards Perfil, Conta e Zona de perigo.                                                                                 |
+| Edição padrão ao criar personagem | 2014.                                                                                                                                      |
+| Imagem do personagem              | Grava na hora, como o fundo da ficha.                                                                                                      |
+| Cor do personagem                 | Qualquer cor; o app deriva um tom com contraste para preenchimentos.                                                                       |
+| Barras de salvar na Lore          | Uma só ("Salvar tudo").                                                                                                                    |
+
 ## Perguntas de produto
 
 1. **Apagar a mesa pede para digitar o nome?** (mesas 24) Hoje é um clique, e a confirmação diz "esta mesa". Recomendação: o nome no título ("Apagar Revisão F3 A Mesa?"), e digitar o nome só se a mesa tiver baú ou combate.
