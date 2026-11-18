@@ -1,7 +1,7 @@
 import { AppIcon } from '@frontend/components/ui/icon';
 import { cn } from '@frontend/lib/utils';
 
-import type { ItemDto } from '@backend/contexts/items/domain/item';
+import type { ItemDto } from '@backend/contexts/items/domain/item.repo';
 
 import { ITEM_ART } from './item-art';
 import { gameIconOf } from './item-visuals';

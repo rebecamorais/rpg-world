@@ -1,4 +1,4 @@
-import type { ItemCatalog } from './domain/item';
+import type { ItemCatalog } from './domain/item.repo';
 import { getItemCatalog } from './infrastructure/srd-items';
 
 export { getItemCatalog };

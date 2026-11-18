@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 
 import type { InventoryItem } from '@frontend/hooks/useInventory';
 
-import type { ItemDto } from '@backend/contexts/items/domain/item';
+import type { ItemDto } from '@backend/contexts/items/domain/item.repo';
 
 import type { ItemCategory } from '@shared/systems/dnd5e/content/item.schema';
 

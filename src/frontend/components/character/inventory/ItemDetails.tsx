@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { RulesText } from '@frontend/components/content/RulesText';
 import { UntranslatedNotice } from '@frontend/components/content/UntranslatedNotice';
 
-import type { ItemDto } from '@backend/contexts/items/domain/item';
+import type { ItemDto } from '@backend/contexts/items/domain/item.repo';
 
 import { parseContentKey } from '@shared/content/content-key';
 

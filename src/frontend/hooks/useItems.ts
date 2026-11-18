@@ -5,7 +5,7 @@ import { useLocale } from 'next-intl';
 
 import { rpgWorldApi } from '@client';
 
-import type { ItemDto } from '@backend/contexts/items/domain/item';
+import type { ItemDto } from '@backend/contexts/items/domain/item.repo';
 
 const NO_ITEMS: ItemDto[] = [];
 

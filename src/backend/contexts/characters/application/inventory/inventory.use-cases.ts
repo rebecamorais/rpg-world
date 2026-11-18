@@ -1,4 +1,4 @@
-import type { ItemCatalog } from '@backend/contexts/items/domain/item';
+import type { ItemCatalog } from '@backend/contexts/items/domain/item.repo';
 
 import type { Coins } from '@shared/systems/dnd5e/coins';
 
