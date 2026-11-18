@@ -790,7 +790,7 @@
   },
   "changePassword": {
     "title": "Change Your Password",
-    "subtitle": "You are using a temporary password. For your security, please choose a new one.",
+    "subtitle": "Choose a new password for your account.",
     "newPasswordLabel": "New Password",
     "newPasswordPlaceholder": "••••••••",
     "confirmPasswordLabel": "Confirm New Password",

@@ -59,7 +59,7 @@ export default function ChangePasswordPage() {
   return (
     <div className="relative flex flex-1 items-center justify-center p-8">
       <div className="absolute top-4 left-4">
-        {/* Only opened signed in (a password change asked at login): back goes to the account */}
+        {/* Only opened signed in: back goes to the account */}
         <Link
           href="/settings/profile"
           className="text-muted-foreground hover:text-foreground focus-ring rounded-sm text-sm transition-colors"

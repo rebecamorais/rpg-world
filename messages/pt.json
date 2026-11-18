@@ -790,7 +790,7 @@
   },
   "changePassword": {
     "title": "Altere sua Senha",
-    "subtitle": "Você está usando uma senha temporária. Para sua segurança, escolha uma nova senha.",
+    "subtitle": "Escolha uma nova senha para a sua conta.",
     "newPasswordLabel": "Nova Senha",
     "newPasswordPlaceholder": "••••••••",
     "confirmPasswordLabel": "Confirmar Nova Senha",
