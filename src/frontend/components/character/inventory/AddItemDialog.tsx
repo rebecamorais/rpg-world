@@ -19,7 +19,7 @@ import { SelectField } from '@frontend/components/ui/select-field';
 import { Skeleton } from '@frontend/components/ui/skeleton';
 import { useItems } from '@frontend/hooks/useItems';
 
-import type { ItemDto } from '@backend/contexts/items/domain/item';
+import type { ItemDto } from '@backend/contexts/items/domain/item.repo';
 
 import { normalizeSearch } from '@shared/content/normalize-search';
 import { EDITIONS, type Edition } from '@shared/systems/dnd5e/content/editions';

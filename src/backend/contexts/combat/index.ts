@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { ConditionCatalog } from '@backend/contexts/conditions/domain/condition';
+import { ConditionCatalog } from '@backend/contexts/conditions/domain/condition.repo';
 
 import { AddParticipantUseCase } from './application/add-participant.use-case';
 import { ChangeConditionUseCase } from './application/change-condition.use-case';

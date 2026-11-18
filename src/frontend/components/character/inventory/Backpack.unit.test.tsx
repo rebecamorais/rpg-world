@@ -11,7 +11,7 @@ import { SheetFieldset } from '@frontend/components/character/sheet/SheetFieldse
 import { PartyChest } from '@frontend/components/party/PartyChestPage';
 import { INVENTORY_VIEW_KEYS } from '@frontend/hooks/useInventoryView';
 
-import type { ItemDto } from '@backend/contexts/items/domain/item';
+import type { ItemDto } from '@backend/contexts/items/domain/item.repo';
 
 import { createDnD5eCharacter } from '@shared/systems/dnd5e/factory';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';

@@ -5,7 +5,7 @@ import { type MockInstance, afterEach, beforeEach, describe, expect, it, vi } fr
 
 import type { InventoryItem } from '@frontend/hooks/useInventory';
 
-import type { ItemDto } from '@backend/contexts/items/domain/item';
+import type { ItemDto } from '@backend/contexts/items/domain/item.repo';
 
 import { ItemGrid } from './ItemGrid';
 import { ItemRow } from './ItemRow';

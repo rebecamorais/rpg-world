@@ -5,7 +5,7 @@ import { useLocale } from 'next-intl';
 
 import { rpgWorldApi } from '@client';
 
-import type { ConditionDto } from '@backend/contexts/conditions/domain/condition';
+import type { ConditionDto } from '@backend/contexts/conditions/domain/condition.repo';
 
 const NO_CONDITIONS: ConditionDto[] = [];
 

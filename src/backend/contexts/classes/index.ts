@@ -1,6 +1,6 @@
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 
-import type { ClassCatalog } from './domain/class-resources';
+import type { ClassCatalog } from './domain/class-resources.repo';
 import { getClassCatalog } from './infrastructure/srd-classes';
 
 export class ClassesContext {
