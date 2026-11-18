@@ -8,9 +8,9 @@
       "class_error_not_found": "Class not found.",
       "demo_read_only": "This is a read-only demo. Create a free account to play.",
       "account_deletion_error_username_mismatch": "That is not your username.",
-      "account_deletion_error_password_invalid": "Incorrect password. If you never created one, for example because you signed in with an e-mail link, use “Forgot password?” to set it.",
+      "account_deletion_error_password_invalid": "Incorrect password. If you never created one, for example because you signed in with an e-mail link, use “Forgot my password” to set it.",
       "account_deletion_error_too_soon": "This e-mail was sent less than a minute ago. Check your inbox, or wait a moment and ask again.",
-      "account_deletion_error_too_many_attempts": "Too many incorrect passwords. Wait 15 minutes and try again, or use “Forgot password?” to set a new one.",
+      "account_deletion_error_too_many_attempts": "Too many incorrect passwords. Wait 15 minutes and try again, or use “Forgot my password” to set a new one.",
       "account_deletion_error_link_invalid": "This link has expired or was already used. Please request a new one.",
       "auth_error_signin_invalid_credentials": "Incorrect email or password.",
       "auth_error_signin_email_not_confirmed": "Confirm your email before signing in.",
@@ -21,6 +21,7 @@
       "auth_error_provider": "Sign-in was cancelled or refused by the provider.",
       "auth_error_update_password_weak": "Weak password. Choose a stronger one.",
       "auth_error_update_password_same": "The new password must be different from the current one.",
+      "auth_error_update_password_current_invalid": "Incorrect current password. If you don’t remember it, use “Forgot my password”.",
       "auth_error_signup_duplicate_email": "This email is already in use.",
       "auth_error_signup_required_fields": "Please fill in all required fields.",
       "auth_error_signup_invalid_password": "This password cannot be used for initial registration.",
@@ -30,6 +31,7 @@
       "profile_error_update_id_required": "Profile ID is required for update.",
       "profile_error_get_id_required": "User ID is required.",
       "profile_error_username_taken": "This username is already taken.",
+      "profile_error_avatar_invalid": "This image can’t be your avatar. Upload one from your profile.",
       "storage_error_upload_avatar_userid_required": "User ID is required for upload.",
       "storage_error_upload_avatar_size_limit": "File size exceeds 5MB limit.",
       "storage_error_upload_avatar_invalid_type": "Invalid file type. Allowed: JPEG, PNG, WEBP.",
@@ -112,7 +114,7 @@
     "logout": "Log out",
     "confirm": "Confirm",
     "confirmTitle": "Are you sure?",
-    "saveChanges": "Save Changes",
+    "saveChanges": "Save changes",
     "close": "Close",
     "title": "RPG World",
     "contactTooltip": "Contact us",
@@ -129,9 +131,11 @@
     "unsavedChanges": "Unsaved changes",
     "unsavedSheet": "Unsaved sheet changes",
     "unsavedLore": "Unsaved lore changes",
+    "unsavedLoreAndSheet": "Unsaved lore and sheet changes",
+    "saveAll": "Save all",
     "allSaved": "All changes saved",
     "discard": "Discard",
-    "discardConfirm": "Discard your unsaved changes?",
+    "discardConfirm": "What you changed since the last save is lost.",
     "leaveConfirm": "You have unsaved changes. Leave anyway?",
     "saveShortcut": "Ctrl+S to save",
     "numberField": {
@@ -150,7 +154,10 @@
     "offline": "No connection. Nothing you change now is saved.",
     "offlineDraft": "No connection: your changes are still here",
     "changedElsewhere": "Changed somewhere else. Reload to see it; your changes stay here.",
-    "draftNote": "Changes go into the sheet. Save the sheet to keep them."
+    "draftNote": "Changes go into the sheet. Save the sheet to keep them.",
+    "typeToConfirm": "To confirm, type: <bold>{text}</bold>",
+    "typeToConfirmLabel": "Type the exact text above",
+    "discardConfirmTitle": "Discard your changes?"
   },
   "login": {
     "title": "Sign in to RPG World",
@@ -218,14 +225,12 @@
   },
   "characterCreation": {
     "title": "New character",
-    "description": "Define the name and choose the ruleset system.",
+    "description": "Name your character, pick the rules edition and, if you like, a class.",
     "nameLabel": "Name *",
     "namePlaceholder": "Character name",
     "nameRequired": "Give your character a name.",
-    "systemLabel": "RPG System",
-    "systemPlaceholder": "Select the System",
+    "systemLabel": "System",
     "editionLabel": "Rules edition",
-    "classHintEdition": "Pick the 2014 edition and the sheet starts with this class's hit points, saving throws and skills.",
     "classHint2024": "The 2024 edition doesn't fill the sheet from the class yet: you fill it in on the sheet.",
     "choicesHint": "Pick now or leave some for later: the character is created either way.",
     "choiceSkills": "Skills",
@@ -264,6 +269,7 @@
     "collapse": "Collapse",
     "school": "School",
     "saveSuccess": "Character saved successfully!",
+    "loreSaved": "Lore saved.",
     "passivePerception": "Passive Perception",
     "allDamage": "All Damage",
     "forgetSpell": "Forget spell",
@@ -309,11 +315,11 @@
       "skin": "Skin",
       "hair": "Hair",
       "backstory": "Backstory",
-      "personalityTraits": "Personality Traits",
+      "personalityTraits": "Personality traits",
       "ideals": "Ideals",
       "bonds": "Bonds",
       "flaws": "Flaws",
-      "alliesAndEnemies": "Allies & Enemies",
+      "alliesAndEnemies": "Allies & enemies",
       "organizations": "Organizations",
       "treasure": "Treasure",
       "notFilled": "Not filled in"
@@ -518,14 +524,14 @@
     "namePlaceholder": "Character Name",
     "proficiencyBonus": "Bonus",
     "class": "Class",
-    "classPlaceholder": "Define Class…",
+    "classPlaceholder": "Set class…",
     "level": "Level",
     "race": "Race",
-    "racePlaceholder": "Define Race…",
+    "racePlaceholder": "Set race…",
     "background": "Background",
-    "backgroundPlaceholder": "Define Background…",
+    "backgroundPlaceholder": "Set background…",
     "alignment": "Alignment",
-    "alignmentPlaceholder": "Define Alignment…",
+    "alignmentPlaceholder": "Set alignment…",
     "xp": "Experience",
     "xpProgress": "Progress to next level",
     "name": "Name",
@@ -629,22 +635,23 @@
     "copyNoneLeft": "Your sheet already has every resource of this class."
   },
   "attributeCard": {
-    "modifierCalc": "Modifier Calculation",
+    "modifierCalc": "How the modifier is calculated",
     "adjustValue": "Adjust the base value of this attribute (1 to 30).",
-    "baseValue": "Base Value"
+    "modifierFormula": "Modifier = (score − 10) ÷ 2, rounded down",
+    "baseValue": "Base value"
   },
   "combatStats": {
     "status": "Combat Status",
     "armorClass": "AC",
-    "hitPoints": "Hit Points",
-    "hitPointsMax": "Max Hit Points",
+    "hitPoints": "Hit points",
+    "hitPointsMax": "Max hit points",
     "hitPointsShort": "HP",
     "tempHp": "Temp HP",
     "speed": "Speed",
     "initiative": "Initiative",
     "speedUnit": "m",
     "followClassDie": "Follow the class ({die})",
-    "hitDice": "Hit Dice",
+    "hitDice": "Hit dice",
     "diceOptions": {
       "d6": "d6",
       "d8": "d8",
@@ -731,7 +738,9 @@
     "forgetConfirm": {
       "description": "{name} leaves the spellbook and the prepared spells.",
       "descriptionUnnamed": "The spell leaves the spellbook and the prepared spells.",
-      "confirm": "Forget"
+      "confirm": "Forget",
+      "title": "Forget {name}?",
+      "titleUnnamed": "Forget the spell?"
     },
     "searchLabel": "Search spells",
     "clearActiveFilters": "Clear filters ({count})",
@@ -754,13 +763,13 @@
   "magicSystem": {
     "titleConfig": "Configure magic",
     "configDescription": "Configure the magic system used by this character",
-    "systemUsed": "System Used",
-    "slotsCapacity": "Slots Capacity per Level",
+    "systemUsed": "System used",
+    "slotsCapacity": "Slots per level",
     "circle": "Circle {level}",
-    "spellPoints": "Spell Points",
-    "spellSlots": "Spell Slots",
+    "spellPoints": "Spell points",
+    "spellSlots": "Spell slots",
     "level": "Lv {level}",
-    "pointsCapacity": "Spell Points Capacity",
+    "pointsCapacity": "Spell points (max)",
     "systemPlaceholder": "Magic",
     "configure": "Configure magic system",
     "slotAvailable": "Level {level} slot {slot}, available",
@@ -782,34 +791,36 @@
     "myProfile": "My profile",
     "attributes": "Attributes",
     "spells": "Spells",
-    "settingsTitle": "Settings",
-    "settingsSubtitle": "Manage your adventurer profile information.",
+    "settingsSubtitle": "Your profile, your account and its deletion.",
     "menuDescription": "Main navigation and shortcuts.",
     "openMenu": "Open menu",
     "collapseMenu": "Collapse menu",
     "keepMenuOpen": "Keep menu open"
   },
   "changePassword": {
-    "title": "Change Your Password",
-    "subtitle": "You are using a temporary password. For your security, please choose a new one.",
-    "newPasswordLabel": "New Password",
+    "title": "Change password",
+    "subtitle": "Choose a new password for your account.",
+    "currentPasswordLabel": "Current password",
+    "currentPasswordRequired": "Type your current password.",
+    "forgotHint": "Don’t remember it?",
+    "forgotLink": "Forgot my password",
+    "newPasswordLabel": "New password",
     "newPasswordPlaceholder": "••••••••",
-    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordLabel": "Confirm new password",
     "confirmPasswordPlaceholder": "••••••••",
-    "submit": "Update Password",
-    "processing": "Updating…",
-    "success": "Password updated successfully!",
-    "error": "Failed to update password."
+    "submit": "Change password",
+    "processing": "Changing…",
+    "error": "Failed to update password.",
+    "backToProfile": "← Back to profile"
   },
   "profileForm": {
-    "title": "Edit Profile",
+    "title": "Profile",
     "subtitle": "Customize your adventurer profile information.",
     "usernameLabel": "Username",
     "usernamePlaceholder": "e.g.: dark_elf_42",
     "fullNameLabel": "Name",
     "fullNamePlaceholder": "e.g.: Rebeca",
-    "primaryColorLabel": "Theme Color",
-    "save": "Save Profile",
+    "save": "Save profile",
     "saving": "Saving…",
     "saveSuccess": "Profile updated successfully!",
     "validation": {
@@ -817,8 +828,7 @@
       "usernameMax": "Username must be at most 30 characters.",
       "usernamePattern": "Only lowercase letters, numbers, and underscores are allowed.",
       "fullNameMax": "Name must be at most 100 characters.",
-      "avatarUrlInvalid": "Invalid URL.",
-      "primaryColorInvalid": "Pick one of the colors."
+      "avatarUrlInvalid": "Invalid URL."
     },
     "colors": {
       "default": "Default",
@@ -833,8 +843,16 @@
       "slate": "Slate"
     }
   },
+  "profileAccount": {
+    "title": "Account",
+    "emailLabel": "Sign-in e-mail",
+    "changePassword": "Change password",
+    "createPassword": "Create a password",
+    "noPasswordHint": "You sign in with Google. To also sign in with a password, create one through the recovery e-mail.",
+    "passwordChanged": "Password changed. We sent a notice to your e-mail."
+  },
   "avatarUpload": {
-    "button": "Change Avatar",
+    "button": "Change image",
     "loading": "Uploading…",
     "currentAlt": "Current avatar",
     "error": "Error uploading image.",
@@ -845,6 +863,13 @@
     "view": "View image",
     "viewTitle": "Full-screen image",
     "viewOf": "View {name}'s image",
+    "imageOf": "{name}'s image",
+    "add": "Add image",
+    "remove": "Remove",
+    "removeConfirmTitle": "Remove the image?",
+    "removeConfirm": "The image is deleted and the default icon takes its place.",
+    "saved": "Image updated",
+    "removed": "Image removed",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "zoomFit": "Fit to screen",
@@ -920,8 +945,8 @@
       "WIS": "WIS",
       "CHA": "CHA"
     },
-    "bulkEditTitle": "Base Attribute Values",
-    "bulkEditDescription": "Adjust the base values of all attributes at once",
+    "bulkEditTitle": "Base attribute values",
+    "bulkEditDescription": "Adjust the base values of all attributes at once (1 to 30).",
     "save": "Save",
     "cancel": "Cancel"
   },
@@ -1225,7 +1250,7 @@
       "title": "Explore",
       "home": "Home",
       "characters": "Characters",
-      "settings": "Settings",
+      "settings": "My profile",
       "login": "Sign in",
       "register": "Sign up",
       "features": "Features"
@@ -1271,7 +1296,7 @@
     "messageLabel": "Message",
     "messagePlaceholder": "Which mimic bit you? Describe your issue or idea…",
     "partyMessage": "Hello! My party (ID: {partyId}) has no GM and a request to become the GM that someone still hasn’t answered. Could you help?\n\n",
-    "submit": "Cast message",
+    "submit": "Send message",
     "submitting": "Channeling…",
     "sendAnother": "Send another message",
     "success": "Message sent! The RPG World team will read it.",
@@ -1282,7 +1307,8 @@
       "feedback": "Question or comment",
       "account": "Account / Access"
     },
-    "messageMin": "Write at least {min} characters."
+    "messageMin": "Write at least {min} characters.",
+    "networkError": "No connection. The message was not sent; it is still here to send again."
   },
   "seo": {
     "title": "RPG World: free D&D 5e character sheets",
@@ -1496,7 +1522,8 @@
       "ogTitle": "Invite: {name}",
       "ogDescription": "You're invited to the party {name} on RPG World.",
       "signInHint": "Sign in to ask to join.",
-      "signIn": "Sign in to join"
+      "signIn": "Sign in to join",
+      "signInAction": "Sign in"
     },
     "page": {
       "gmEyebrow": "You are the GM",
@@ -1544,10 +1571,11 @@
       "cancelInvite": "Cancel invite",
       "approved": "{name} joined the party",
       "declined": "{name}'s request declined",
-      "canceled": "Invite for {name} canceled"
+      "canceled": "Invite for {name} canceled",
+      "alreadyAnswered": "{name} was no longer waiting for an answer"
     },
     "manage": {
-      "title": "Manage the party",
+      "title": "Invites and players",
       "inviteLabel": "Invite by username",
       "invitePlaceholder": "username",
       "inviteSubmit": "Invite",
@@ -1558,7 +1586,7 @@
       "copy": "Copy link",
       "copied": "Link copied",
       "rotate": "New link",
-      "rotateConfirm": "The current link will stop working, and pending requests will be discarded. Continue?",
+      "rotateConfirm": "The current link stops working, and pending requests are discarded.",
       "rotated": "New link ready",
       "members": "Players",
       "noMembers": "No players yet.",
@@ -1574,14 +1602,18 @@
       "deleteParty": "Delete party",
       "dangerZone": "Danger zone",
       "deleteHint": "Deleting the party removes everything that belongs to it: the chest (coins and items), combat, picture, journal link, invites and requests. Characters stay with their owners.",
-      "deleteConfirm": "Delete this party? The chest, combat, picture, journal and invites are gone for good. No character is deleted.",
+      "deleteConfirm": "The chest, combat, picture, journal and invites are gone for good. No character is deleted.",
       "deleted": "Party deleted",
       "unnamed": "player without a username",
       "editionLabel": "Rules edition",
       "editionHint": "The edition shown first when picking conditions.",
       "edition2014": "2014 rules",
       "edition2024": "2024 rules",
-      "editionSaved": "Rules edition saved"
+      "editionSaved": "Rules edition saved",
+      "rotateTitle": "Change the invite link?",
+      "copyFailed": "Couldn't copy. The link is selected in the field: copy it from there.",
+      "alreadyGone": "{name} is no longer in the party",
+      "deleteTitle": "Delete {name}?"
     },
     "journal": {
       "title": "Party journal",
@@ -1629,8 +1661,8 @@
       "claim": "I want to be the GM",
       "claimHint": "Everyone else in the party has to agree. The GM reads the full sheet of every character in the party. You stop being a player and your characters leave the party, keeping their sheets.",
       "claimHintSolo": "You are the only active player, so you become the GM right away, with no one to agree. The GM reads the full sheet of every character in the party. You stop being a player and your characters leave the party, keeping their sheets.",
-      "claimConfirm": "Ask to be the GM? If everyone agrees, you stop being a player and your characters leave the party, keeping their sheets.",
-      "claimConfirmSolo": "Become the GM of this party now? You stop being a player and your characters leave the party, keeping their sheets.",
+      "claimConfirm": "If everyone agrees, you stop being a player and your characters leave the party, keeping their sheets.",
+      "claimConfirmSolo": "You stop being a player and your characters leave the party, keeping their sheets.",
       "limit": "You are already the GM of {max} parties, the most one account can have.",
       "yourRequest": "You asked to become the GM of this party.",
       "cancel": "Give up",
@@ -1642,7 +1674,9 @@
       "waitingOn": "Waiting for: {names}",
       "askSupport": "Ask support for help",
       "supportLater": "Available one day after the request, for whoever hasn’t answered.",
-      "supportHint": "Support writes to whoever hasn’t answered and gives them 7 days before stepping in."
+      "supportHint": "Support writes to whoever hasn’t answered and gives them 7 days before stepping in.",
+      "claimConfirmTitle": "Ask to be the GM?",
+      "claimConfirmSoloTitle": "Become the GM of this party now?"
     },
     "sheet": {
       "back": "Back to the party",
@@ -1654,7 +1688,7 @@
     },
     "settings": {
       "eyebrow": "Party settings",
-      "manage": "Manage",
+      "manage": "Settings",
       "backToTable": "Back to the party",
       "gmOnly": "Only the GM can open the party settings."
     },
@@ -1680,9 +1714,10 @@
       "change": "Change picture",
       "uploading": "Uploading…",
       "remove": "Remove",
-      "removeConfirm": "Remove the party picture?",
+      "removeConfirm": "The invite and the link preview go back to the RPG World image.",
       "saved": "Picture saved",
-      "removed": "Picture removed"
+      "removed": "Picture removed",
+      "removeTitle": "Remove the party picture?"
     },
     "acceptInvite": "Accept the invite to {name}",
     "declineInvite": "Decline the invite to {name}",
@@ -1698,7 +1733,10 @@
       "journal": "Journal",
       "chest": "Chest",
       "combatRound": "Combat, round {round}"
-    }
+    },
+    "joinedParty": "You joined {name}",
+    "inviteDeclined": "Invite to {name} declined",
+    "requestWithdrawn": "Request to join {name} withdrawn"
   },
   "enemies": {
     "subtitle": "Sheets for everyone who isn't a player: enemies in your parties' combats, and anyone else in the story.",
@@ -1797,7 +1835,8 @@
     "turnsUntil": "<strong>{name}</strong> in {count, plural, one {# turn} other {# turns}}",
     "endTurnOf": "End {name}'s turn",
     "newTab": "(opens in a new tab)",
-    "offline": "No connection. The screen won’t update and nothing you do is sent."
+    "offline": "No connection. The screen won’t update and nothing you do is sent.",
+    "removeConfirmDescription": "The sheet stays as it is: it only leaves the initiative order, with its conditions in this combat."
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",
@@ -1864,12 +1903,14 @@
       "usernameLabel": "Your username",
       "passwordLabel": "Password",
       "forgotPassword": "Forgot my password",
-      "passwordHelp": "If you signed in with an e-mail link before, you have a password you never saw. Set a new one with “Forgot my password”.",
+      "passwordHelp": "Don’t remember it?",
       "submit": "Send confirmation e-mail",
       "sentTitle": "Check your e-mail",
       "sentDescription": "We sent a link to the e-mail of your account. It works once and for 1 hour. Your account is only deleted when you confirm there.",
       "sendAgain": "Send again",
-      "sendAgainHint": "Sending again makes the previous link stop working."
+      "sendAgainHint": "Sending again makes the previous link stop working.",
+      "sendAgainIn": "Send again ({seconds} s)",
+      "sentAgain": "Sent again. Only the newest link works."
     },
     "confirm": {
       "title": "Confirm account deletion",
@@ -1877,9 +1918,12 @@
       "descriptionNoName": "You are about to permanently delete your account, with its characters, NPCs and images. This cannot be undone.",
       "button": "Delete my account for good",
       "invalidTitle": "This link does not work",
-      "invalidDescription": "It has expired, was already used or was replaced by a newer one. Request a new one in your profile settings.",
-      "backToSettings": "Go to settings",
-      "metaTitle": "Delete account"
+      "invalidDescription": "It has expired, was already used or was replaced by a newer one. Ask for a new one in the danger zone of your profile.",
+      "backToSettings": "Go to my profile",
+      "metaTitle": "Delete account",
+      "keepAccount": "Keep my account",
+      "signInForNewLink": "Sign in to ask for a new link.",
+      "signIn": "Sign in"
     },
     "deleted": "Your account was deleted."
   },

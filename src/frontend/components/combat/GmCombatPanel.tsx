@@ -226,7 +226,8 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
       combat.setConditions.mutate({ participantId: row.participantId, conditions }),
     onRemove: async () => {
       const ok = await confirm({
-        description: t('removeConfirm', { name: row.name }),
+        title: t('removeConfirm', { name: row.name }),
+        description: t('removeConfirmDescription'),
         confirmLabel: t('remove', { name: row.name }),
         destructive: true,
       });

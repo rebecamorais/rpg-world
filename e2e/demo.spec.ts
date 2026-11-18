@@ -18,7 +18,7 @@ test.describe('demo pública', () => {
 
     await page.locator('a[href="/demo/characters/ada"]').first().click();
     await expect(page).toHaveURL(/\/demo\/characters\/ada$/);
-    await expect(page.getByLabel('Hit Points', { exact: true })).toBeDisabled();
+    await expect(page.getByLabel('Hit points', { exact: true })).toBeDisabled();
     await expect(page.getByRole('heading', { name: 'Meet the Inspiration' })).toBeVisible();
 
     for (const tab of ['Lore', 'Spellbook', 'Inventory', 'Status']) {
@@ -41,7 +41,7 @@ test.describe('demo pública', () => {
   }) => {
     await page.goto('/demo/characters/mirela');
     await page.reload();
-    await expect(page.getByLabel('Hit Points', { exact: true })).toBeVisible();
+    await expect(page.getByLabel('Hit points', { exact: true })).toBeVisible();
 
     const missing = await page.goto('/demo/characters/inexistente');
     expect(missing?.status()).toBe(404);

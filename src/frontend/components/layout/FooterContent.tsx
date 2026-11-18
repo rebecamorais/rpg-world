@@ -104,7 +104,7 @@ export default function FooterContent({
 
   if (compact) {
     return (
-      <footer className="border-border bg-sidebar mt-auto border-t pt-4 pb-[calc(1rem+var(--bottom-bar-height,0px))]">
+      <footer className="border-border bg-sidebar mt-auto border-t pt-4 pb-[calc(1rem+max(var(--bottom-bar-height,0px),var(--save-bar-space,0px)))]">
         {/* Two groups, each wrapping on its own: on phones the support line starts with its
             label, instead of the label falling mid-line between Discord and Ko-fi */}
         <div className="container mx-auto flex flex-col gap-2 px-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-5">
@@ -180,7 +180,7 @@ export default function FooterContent({
   return (
     // On a page with a fixed tab bar (sheet, party) the bottom padding grows by the bar's height
     // and the safe area, set in globals.css: its last links ended up under the bar
-    <footer className="border-border bg-sidebar mt-auto border-t pt-10 pb-[calc(2rem+var(--bottom-bar-height,0px))] sm:pt-16 sm:pb-[calc(2.5rem+var(--bottom-bar-height,0px))]">
+    <footer className="border-border bg-sidebar mt-auto border-t pt-10 pb-[calc(2rem+max(var(--bottom-bar-height,0px),var(--save-bar-space,0px)))] sm:pt-16 sm:pb-[calc(2.5rem+max(var(--bottom-bar-height,0px),var(--save-bar-space,0px)))]">
       {/* Phones: Explore across, Legal and Community side by side, then Support across */}
       <div className="container mx-auto grid grid-cols-2 gap-x-6 gap-y-8 px-6 sm:grid-cols-3 lg:grid-cols-[2fr_1fr_1fr_1fr_2fr]">
         <div className="col-span-2 flex flex-col gap-2 sm:col-span-3 lg:col-span-1">

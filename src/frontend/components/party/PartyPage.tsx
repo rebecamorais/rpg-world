@@ -27,6 +27,7 @@ import { useCurrentUser } from '@frontend/context/UserContext';
 import AppLink from '@frontend/demo/AppLink';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useEncounter } from '@frontend/hooks/useEncounter';
+import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useParty } from '@frontend/hooks/useParty';
 
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
@@ -150,16 +151,18 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
         <PartyRequests
           people={party.people}
           onApprove={(userId) =>
-            answer(userId, 'approve', tRequests('approved', { name: nameOf(userId) }))
+            answer(userId, 'approve', {
+              success: tRequests('approved', { name: nameOf(userId) }),
+              gone: tRequests('alreadyAnswered', { name: nameOf(userId) }),
+            })
           }
           onRemove={(userId) =>
-            answer(
-              userId,
-              'remove',
-              tRequests(find(userId)?.status === 'invited' ? 'canceled' : 'declined', {
+            answer(userId, 'remove', {
+              success: tRequests(find(userId)?.status === 'invited' ? 'canceled' : 'declined', {
                 name: nameOf(userId),
               }),
-            )
+              gone: tRequests('alreadyAnswered', { name: nameOf(userId) }),
+            })
           }
           pending={pending}
         />
@@ -236,12 +239,19 @@ export function MyPartyMenu({
   const router = useRouter();
   const { currentUser } = useCurrentUser();
   const { characters } = useCharacters();
+  const { getErrorMessage } = useErrorMessage();
   const { setMyCharacters, removeMember } = useParty(party.id);
+  // Opened from outside (`open`), or by its own button
+  const [ownOpen, setOwnOpen] = useState(false);
+  const isOpen = open ?? ownOpen;
+  const setOpen = onOpenChange ?? setOwnOpen;
 
+  // Saved, it closes: the toast says it worked, and the dialog has nothing left to do
   const save = async (characterIds: string[]) => {
     try {
       await setMyCharacters.mutateAsync(characterIds);
       toast.success(t('mine.saved'));
+      setOpen(false);
     } catch {
       // useParty already shows the error
     }
@@ -265,13 +275,13 @@ export function MyPartyMenu({
       await removeMember.mutateAsync(currentUser.id);
       toast.success(t('mine.left'));
       router.push('/parties');
-    } catch {
-      // useParty already shows the error
+    } catch (err) {
+      toast.error(getErrorMessage(err));
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       {open === undefined && (
         <DialogTrigger asChild>
           <Button variant="outline">
@@ -316,6 +326,8 @@ export function PartyNotFound() {
   return (
     <EmptyState
       icon="Shield"
+      // The page's only heading: nothing else on it names it
+      titleAs="h1"
       title={t('notFoundTitle')}
       description={t('notFoundDescription')}
       className="w-full max-w-lg"

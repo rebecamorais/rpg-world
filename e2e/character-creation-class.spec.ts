@@ -90,7 +90,7 @@ test.describe('criação com classe', () => {
       );
       const id = await create(page);
 
-      await expect(page.getByLabel('Hit Points', { exact: true })).toHaveValue(String(cls.hp));
+      await expect(page.getByLabel('Hit points', { exact: true })).toHaveValue(String(cls.hp));
       for (const save of cls.saves) {
         await expect(page.getByRole('button', { name: `Proficient in ${save}` })).toBeVisible();
       }
@@ -128,18 +128,25 @@ test.describe('criação com classe', () => {
     });
   });
 
-  test('só nome e sistema: manda só isso e a ficha é a de sempre', async ({ page, user: _ }) => {
+  test('só o nome: vai com a edição 2014, que vem marcada, e sem classe a ficha é a de sempre', async ({
+    page,
+    user: _,
+  }) => {
     await page.goto('/characters/new');
     await (await hydrated(page.getByLabel('Name *'))).fill('Plain Hero');
+    await expect(page.getByRole('radio', { name: '2014 (SRD 5.1)' })).toBeChecked();
     const request = page.waitForRequest(
       (r) => r.method() === 'POST' && new URL(r.url()).pathname === '/api/characters',
     );
     const id = await create(page);
 
-    expect((await request).postDataJSON()).toEqual({ name: 'Plain Hero', system: 'DnD_5e' });
+    expect((await request).postDataJSON()).toEqual({
+      name: 'Plain Hero',
+      system: 'DnD_5e',
+      edition: '2014',
+    });
     const sheet = await stored(page, id);
-    expect(sheet).toMatchObject({ hpMax: 10, class: '' });
-    expect(sheet.edition).toBeUndefined();
+    expect(sheet).toMatchObject({ hpMax: 10, class: '', edition: '2014' });
     expect(sheet.classChoices).toBeUndefined();
   });
 

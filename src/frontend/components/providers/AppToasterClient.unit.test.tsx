@@ -111,4 +111,22 @@ describe('AppToasterClient', () => {
       ),
     );
   });
+
+  // The sheet's save bar holds the same bottom-right corner on wider screens
+  it('no computador, os toasts abrem acima da barra de salvar da ficha', async () => {
+    stubPhone(false);
+    renderWithProviders(<AppToasterClient label="Notifications" />);
+    act(() => {
+      toast('Saved');
+    });
+
+    const toaster = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-sonner-toaster]');
+      expect(el).not.toBeNull();
+      return el!;
+    });
+    expect(toaster.style.getPropertyValue('--offset-bottom')).toBe(
+      'calc(24px + var(--save-bar-space, 0px))',
+    );
+  });
 });

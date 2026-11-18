@@ -47,7 +47,7 @@ export function SelectedPanel({
   return (
     <section
       aria-labelledby="combat-selected-name"
-      style={{ ...theme.style, '--primary': 'var(--character-color)' } as CSSProperties}
+      style={{ ...theme.style, '--primary': 'var(--character-fill)' } as CSSProperties}
       className={cn(
         theme.className,
         'bg-card/60 border-character-muted sticky top-4 flex flex-col gap-4 rounded-xl border p-4',

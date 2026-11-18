@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import Link from 'next/link';
 
@@ -11,7 +11,6 @@ import { z } from 'zod/mini';
 
 import { rpgWorldApi } from '@client';
 
-import { DANGER_BUTTON } from '@frontend/components/profile/danger-button';
 import { Button } from '@frontend/components/ui/button';
 import {
   Dialog,
@@ -36,7 +35,6 @@ import { SectionCard } from '@frontend/components/ui/section-card';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useParties } from '@frontend/hooks/useParties';
 import { useProfile } from '@frontend/hooks/useProfile';
-import { cn } from '@frontend/lib/utils';
 
 interface DeleteAccountCardProps {
   /** Whether the account has a password; without one, the e-mail link alone confirms. */
@@ -45,6 +43,8 @@ interface DeleteAccountCardProps {
 
 const PASSWORD_INVALID = 'account_deletion_error_password_invalid';
 const USERNAME_MISMATCH = 'account_deletion_error_username_mismatch';
+/** The server sends one e-mail a minute: the button waits as long. */
+const RESEND_AFTER_SECONDS = 60;
 
 function PartyGroup({ title, hint, names }: { title: string; hint: string; names: string[] }) {
   const titleId = useId();
@@ -125,8 +125,8 @@ export function DeleteAccountCard({ hasPassword }: DeleteAccountCardProps) {
           )
         )}
         <Button
-          variant="outline"
-          className={cn(DANGER_BUTTON, 'w-full sm:w-auto sm:self-start')}
+          variant="danger"
+          className="w-full sm:w-auto sm:self-start"
           onClick={() => setOpen(true)}
         >
           <AppIcon name="Trash2" size={16} aria-hidden="true" />
@@ -163,7 +163,19 @@ function RequestDeletionDialog({
   const t = useTranslations('accountDeletion.dangerZone');
   const tCommon = useTranslations('common');
   const { getErrorMessage } = useErrorMessage();
-  const [sent, setSent] = useState(false);
+  // What was sent, so "Send again" doesn't ask for it all again
+  const [sentWith, setSentWith] = useState<{ username: string; password?: string } | null>(null);
+  const [secondsLeft, setSecondsLeft] = useState(0);
+  const [resending, setResending] = useState(false);
+  const [resendError, setResendError] = useState<string | null>(null);
+  const [resent, setResent] = useState(false);
+
+  const counting = secondsLeft > 0;
+  useEffect(() => {
+    if (!counting) return;
+    const timer = setInterval(() => setSecondsLeft((s) => Math.max(0, s - 1)), 1000);
+    return () => clearInterval(timer);
+  }, [counting]);
 
   const schema = z.object({ username: z.string(), password: z.string() });
   type Values = z.infer<typeof schema>;
@@ -175,12 +187,14 @@ function RequestDeletionDialog({
   const typedPassword = useWatch({ control: form.control, name: 'password' });
 
   const onSubmit = async (values: Values) => {
+    const request = {
+      username: values.username,
+      ...(hasPassword && { password: values.password }),
+    };
     try {
-      await rpgWorldApi.post('/api/profile/deletion-request', {
-        username: values.username,
-        ...(hasPassword && { password: values.password }),
-      });
-      setSent(true);
+      await rpgWorldApi.post('/api/profile/deletion-request', request);
+      setSentWith(request);
+      setSecondsLeft(RESEND_AFTER_SECONDS);
     } catch (err) {
       const message = getErrorMessage(err);
       const code = err instanceof Error ? err.message : '';
@@ -191,7 +205,23 @@ function RequestDeletionDialog({
     }
   };
 
-  if (sent) {
+  const sendAgain = async () => {
+    if (!sentWith) return;
+    setResending(true);
+    setResendError(null);
+    setResent(false);
+    try {
+      await rpgWorldApi.post('/api/profile/deletion-request', sentWith);
+      setResent(true);
+      setSecondsLeft(RESEND_AFTER_SECONDS);
+    } catch (err) {
+      setResendError(getErrorMessage(err));
+    } finally {
+      setResending(false);
+    }
+  };
+
+  if (sentWith) {
     return (
       <>
         <DialogHeader>
@@ -199,9 +229,24 @@ function RequestDeletionDialog({
           <DialogDescription>{t('sentDescription')}</DialogDescription>
         </DialogHeader>
         <p className="text-muted-foreground text-sm">{t('sendAgainHint')}</p>
+        {resent && (
+          <p role="status" className="text-success-flare text-sm">
+            {t('sentAgain')}
+          </p>
+        )}
+        {resendError && (
+          <p role="alert" className="text-danger-flare text-sm">
+            {resendError}
+          </p>
+        )}
         <DialogFooter>
-          <Button variant="secondary" onClick={() => setSent(false)}>
-            {t('sendAgain')}
+          <Button
+            variant="secondary"
+            onClick={sendAgain}
+            disabled={secondsLeft > 0}
+            loading={resending}
+          >
+            {secondsLeft > 0 ? t('sendAgainIn', { seconds: secondsLeft }) : t('sendAgain')}
           </Button>
           <Button variant="secondary" onClick={onCancel}>
             {tCommon('close')}
@@ -232,13 +277,7 @@ function RequestDeletionDialog({
               <FormItem>
                 <FormLabel>{t('usernameLabel')}</FormLabel>
                 <FormControl>
-                  <Input
-                    autoComplete="off"
-                    spellCheck={false}
-                    autoCapitalize="none"
-                    className="bg-muted"
-                    {...field}
-                  />
+                  <Input autoComplete="off" spellCheck={false} autoCapitalize="none" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -252,12 +291,7 @@ function RequestDeletionDialog({
                 <FormItem>
                   <FormLabel>{t('passwordLabel')}</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      autoComplete="current-password"
-                      className="bg-muted"
-                      {...field}
-                    />
+                    <Input type="password" autoComplete="current-password" {...field} />
                   </FormControl>
                   <FormMessage />
                   <p className="text-muted-foreground text-sm">
@@ -277,8 +311,7 @@ function RequestDeletionDialog({
             </Button>
             <Button
               type="submit"
-              variant="outline"
-              className={DANGER_BUTTON}
+              variant="danger"
               disabled={
                 !partiesLoaded || !username || typed !== username || (hasPassword && !typedPassword)
               }

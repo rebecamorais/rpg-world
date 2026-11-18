@@ -17,7 +17,7 @@ test('no celular, ajustar PV salva na hora e desfazer devolve', async ({ page, u
   // Saved with no save button: the sheet has nothing pending
   await expect(page.getByText('HP 13 / 20')).toBeVisible();
   await expect(vitals).toContainText('13 / 20');
-  await expect(page.getByRole('button', { name: 'Save Changes' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Save changes' })).toBeDisabled();
 
   await page.reload();
   await expect(page.getByRole('region', { name: 'Combat at a glance' })).toContainText('13 / 20');

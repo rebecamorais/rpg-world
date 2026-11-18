@@ -38,4 +38,21 @@ describe('CharacterSheetShell', () => {
     expect(back.className).toMatch(/\bborder\b/);
     expect(screen.getByText(t.readOnly)).toBeInTheDocument();
   });
+
+  // Inside the sheet's `isolate`, the bars' z-40 only counted there: the footer's "Copy Pix key"
+  // was painted over Discard and Save, and clicking Save copied the key
+  it('as barras de salvar ficam fora do isolate da ficha, com a cor do personagem', () => {
+    const { container } = renderWithCharacter(
+      <CharacterSheetShell>
+        <p>sheet</p>
+      </CharacterSheetShell>,
+      character,
+    );
+
+    const slot = container.querySelector('[data-save-bar-slot]');
+    expect(slot).not.toBeNull();
+    expect(slot!.closest('.isolate')).toBeNull();
+    expect(slot).toHaveClass('character-context');
+    expect(container.querySelector('.isolate')).toContainElement(screen.getByText('sheet'));
+  });
 });

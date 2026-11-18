@@ -46,7 +46,11 @@ export function PartyGmClaim({ party }: { party: PartyView }) {
     party.people.some((person) => person.userId === currentUser?.id && person.status === 'active');
 
   const onClaim = async () => {
-    const ok = await confirm({ description: t(onlyPlayer ? 'claimConfirmSolo' : 'claimConfirm') });
+    const ok = await confirm({
+      title: t(onlyPlayer ? 'claimConfirmSoloTitle' : 'claimConfirmTitle'),
+      description: t(onlyPlayer ? 'claimConfirmSolo' : 'claimConfirm'),
+      confirmLabel: t('claim'),
+    });
     if (ok) claimGm.mutate();
   };
 

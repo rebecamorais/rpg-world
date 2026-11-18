@@ -103,7 +103,7 @@ export function CombatRow({
         toggle();
       }}
       // The turn's glow and border take the character's color too
-      style={{ ...theme.style, '--primary': 'var(--character-color)' } as CSSProperties}
+      style={{ ...theme.style, '--primary': 'var(--character-fill)' } as CSSProperties}
       className={cn(
         theme.className,
         'group bg-card/60 border-character-muted relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-xl border p-3',

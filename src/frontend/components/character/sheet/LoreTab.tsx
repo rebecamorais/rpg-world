@@ -15,11 +15,15 @@ import { useDraft } from '@frontend/hooks/useDraft';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { useLeaveGuard } from '@frontend/hooks/useUnsavedChanges';
 
-import { SaveControls } from './SaveControls';
+import { SaveControls, useCharacterSave, useClaimCharacterBar } from './SaveControls';
 import { SheetFieldset } from './SheetFieldset';
 import { SheetPage } from './SheetPage';
 
-/** The Lore tab: loads the lore only here and edits it in its own draft. */
+/**
+ * The Lore tab: loads the lore only here and edits it in its own draft. The character's draft
+ * (edits made on other tabs) can be pending too: one bar saves both ("Save all"), instead of two
+ * bars that took a quarter of a phone's screen.
+ */
 export function LoreTab() {
   const { id } = useCharacterMeta();
   const t = useTranslations('characters');
@@ -31,14 +35,27 @@ export function LoreTab() {
   // The lore draft lives in this tab: leaving it, even to another tab, drops the edits
   useLeaveGuard(isDirty, (path) => path === pathname, tCommon('leaveConfirm'));
 
-  const save = useCallback(async () => {
+  const saveLore = useCallback(async () => {
     try {
       await commit((draft) => updateLore(draft));
-      toast.success(t('saveSuccess'));
+      toast.success(t('loreSaved'));
     } catch {
       // useCharacterLore already shows the error
     }
   }, [commit, updateLore, t]);
+
+  // The character's draft joins this tab's bar
+  useClaimCharacterBar();
+  const sheet = useCharacterSave();
+  const sheetDirty = sheet?.isDirty ?? false;
+  const both = isDirty && sheetDirty;
+  const save = async () => {
+    await Promise.all([isDirty && saveLore(), sheetDirty && sheet?.onSave()]);
+  };
+  const discardAll = () => {
+    if (isDirty) discard();
+    if (sheetDirty) sheet?.onDiscard();
+  };
 
   return (
     <SheetPage
@@ -47,11 +64,22 @@ export function LoreTab() {
       actions={
         readOnly ? null : (
           <SaveControls
-            isDirty={isDirty}
-            isSaving={isSaving}
+            isDirty={isDirty || sheetDirty}
+            isSaving={isSaving || (sheet?.isSaving ?? false)}
             onSave={save}
-            onDiscard={discard}
-            label={tCommon('unsavedLore')}
+            onDiscard={discardAll}
+            // A field with an error or a conflict is on the sheet's draft: it holds the sheet's save
+            hasErrors={sheetDirty && sheet?.hasErrors}
+            conflict={sheetDirty && sheet?.conflict}
+            onReload={sheet?.onReload}
+            label={
+              both
+                ? tCommon('unsavedLoreAndSheet')
+                : sheetDirty
+                  ? tCommon('unsavedSheet')
+                  : tCommon('unsavedLore')
+            }
+            saveLabel={both ? tCommon('saveAll') : undefined}
           />
         )
       }

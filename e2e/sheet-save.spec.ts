@@ -121,47 +121,35 @@ test('a engrenagem abre a aparência, e a cor escolhida só grava com Salvar', a
   await expect(page.getByLabel('Color code')).toHaveValue('#c2410c');
 });
 
-test('ajustar a imagem na ficha só grava com Salvar', async ({ page, user: _ }) => {
-  page.on('dialog', (dialog) => dialog.accept()); // the unsaved changes warning on reload
+test('a imagem do personagem grava na hora, sem o Salvar da ficha', async ({ page, user: _ }) => {
   const name = 'Adjusted Hero';
   const id = await createCharacter(page, name);
   await page.goto(characterUrl(id));
 
   const cropSave = () =>
     page.getByRole('dialog', { name: 'Adjust image' }).getByRole('button', { name: 'Save' });
-  const saveSheet = async () => {
-    await page.keyboard.press('ControlOrMeta+s');
-    await expect(page.getByText('Character saved successfully!').first()).toBeVisible();
+  const imageSaved = async () => {
+    await expect(page.getByText('Image updated').first()).toBeVisible();
+    await expect(page.getByText('Unsaved changes')).toBeHidden();
   };
   const openViewer = async () => {
     await (await hydrated(page.getByRole('button', { name: 'View image', exact: true }))).click();
     return page.getByRole('img', { name });
   };
-  const adjust = async () => {
-    await openViewer();
-    await page.getByRole('button', { name: 'Adjust image' }).click();
-    await cropSave().click();
-    await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
-  };
 
   await (await hydrated(page.getByRole('link', { name: 'Sheet settings' }))).click();
   await page.getByTestId('image-upload-input').setInputFiles(AVATAR);
   await cropSave().click();
-  await expect(page.getByRole('button', { name: 'View image' })).toBeVisible();
-  await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
-  await saveSheet();
+  await imageSaved();
 
+  // Reloading would ask about unsaved changes if the image were still in the draft
   await page.goto(characterUrl(id));
   const saved = await (await openViewer()).getAttribute('src');
-  await page.keyboard.press('Escape');
+  expect(saved).toMatch(/\/api\/images\/avatars\//);
 
-  await adjust();
-  await page.reload();
-  await expect(await openViewer()).toHaveAttribute('src', saved!);
-  await page.keyboard.press('Escape');
-
-  await adjust();
-  await saveSheet();
+  await page.getByRole('button', { name: 'Adjust image' }).click();
+  await cropSave().click();
+  await imageSaved();
   await page.reload();
   await expect(await openViewer()).not.toHaveAttribute('src', saved!);
 });
@@ -184,9 +172,7 @@ test('ajusta uma imagem salva com caminho relativo, como as do seed local', asyn
     .getByRole('dialog', { name: 'Adjust image' })
     .getByRole('button', { name: 'Save' })
     .click();
-  await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
-  await page.keyboard.press('ControlOrMeta+s');
-  await expect(page.getByText('Character saved successfully!').first()).toBeVisible();
+  await expect(page.getByText('Image updated').first()).toBeVisible();
 
   await page.reload();
   await (await hydrated(page.getByRole('button', { name: 'View image', exact: true }))).click();
@@ -203,7 +189,7 @@ test('guarda a imagem completa, usa no modal e limpa o par anterior', async ({ p
 
   const cropSave = () =>
     page.getByRole('dialog', { name: 'Adjust image' }).getByRole('button', { name: 'Save' });
-  const saved = () => page.getByText('Character saved successfully!').first();
+  const saved = () => page.getByText('Image updated').first();
   const stored = async () => {
     const { data } = await adminClient().storage.from('avatars').list(`${user.id}/characters`);
     return (data ?? []).map((file) => file.name);
@@ -218,7 +204,6 @@ test('guarda a imagem completa, usa no modal e limpa o par anterior', async ({ p
   });
   await cropSave().click();
   await expect(page.getByRole('button', { name: 'View image' })).toBeVisible();
-  await page.keyboard.press('ControlOrMeta+s');
   await expect(saved()).toBeVisible();
 
   await page.getByRole('link', { name: 'Back to the sheet' }).click();
@@ -234,8 +219,6 @@ test('guarda a imagem completa, usa no modal e limpa o par anterior', async ({ p
 
   await page.getByRole('button', { name: 'Adjust image' }).click();
   await cropSave().click();
-  await expect(page.getByRole('status').filter({ hasText: 'Unsaved changes' })).toBeVisible();
-  await page.keyboard.press('ControlOrMeta+s');
   await expect(saved()).toBeVisible();
 
   await expect.poll(stored).toHaveLength(2);

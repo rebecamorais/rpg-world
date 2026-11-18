@@ -19,9 +19,10 @@ export function useAuth() {
     }
   };
 
-  const updatePassword = async (newPassword: string): Promise<void> => {
-    await rpgWorldApi.post<void>('/api/auth/update-password', { newPassword });
-    reloadAt('/characters');
+  /** `currentPassword` only for an account that has one. Lands on the profile, which confirms it. */
+  const updatePassword = async (newPassword: string, currentPassword?: string): Promise<void> => {
+    await rpgWorldApi.post<void>('/api/auth/update-password', { newPassword, currentPassword });
+    reloadAt('/settings/profile?passwordChanged=1');
   };
 
   const signOut = async (): Promise<void> => {

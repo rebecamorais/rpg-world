@@ -48,22 +48,24 @@ describe('loreSchema', () => {
 });
 
 describe('updateProfileSchema', () => {
-  it('aceita o payload do formulário de perfil', () => {
+  it('aceita o payload do formulário de perfil, com o nome vazio que apaga', () => {
     expect(
       updateProfileSchema.parse({
         username: 'hero',
         fullName: '',
         avatarUrl: '',
-        primaryColor: '#663399',
         id: 'someone-else',
       }),
-    ).toEqual({ username: 'hero', fullName: '', avatarUrl: '', primaryColor: '#663399' });
+    ).toEqual({ username: 'hero', fullName: '', avatarUrl: '' });
+  });
+
+  it('a cor do tema saiu do perfil: o campo é ignorado', () => {
+    expect(updateProfileSchema.parse({ primaryColor: '#663399' })).toEqual({});
   });
 
   it.each([
     ['username curto', { username: 'ab' }],
     ['avatar que não é URL', { avatarUrl: 'javascript:alert(1)' }],
-    ['cor inválida', { primaryColor: 'red; background:url(x)' }],
   ])('rejeita %s', (_label, body) => {
     expect(updateProfileSchema.safeParse(body).success).toBe(false);
   });

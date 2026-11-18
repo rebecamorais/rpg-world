@@ -8,7 +8,6 @@ import { useTranslations } from 'next-intl';
 
 import { rpgWorldApi } from '@client';
 
-import { DANGER_BUTTON } from '@frontend/components/profile/danger-button';
 import { Button } from '@frontend/components/ui/button';
 import {
   Card,
@@ -18,19 +17,20 @@ import {
   CardTitle,
 } from '@frontend/components/ui/card';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
-import { cn } from '@frontend/lib/utils';
 
 interface ConfirmAccountDeletionProps {
   /** What the link points at; null when it expired, was used or was replaced. */
   account: { username: string | null } | null;
   token: string;
+  /** Whether this browser is signed in: a new link is asked from the profile, after signing in. */
+  signedIn: boolean;
 }
 
 /**
  * Second step of the deletion, opened from the e-mailed link. Opening only shows the account (mail
  * readers open links on their own); the account goes with the button.
  */
-export function ConfirmAccountDeletion({ account, token }: ConfirmAccountDeletionProps) {
+export function ConfirmAccountDeletion({ account, token, signedIn }: ConfirmAccountDeletionProps) {
   const t = useTranslations('accountDeletion.confirm');
   const { getErrorMessage } = useErrorMessage();
   const [pending, setPending] = useState(false);
@@ -60,9 +60,19 @@ export function ConfirmAccountDeletion({ account, token }: ConfirmAccountDeletio
             {t('invalidDescription')}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-3">
+          {/* Signed out, the profile goes through the login: say why before it does */}
+          {!signedIn && <p className="text-muted-foreground text-sm">{t('signInForNewLink')}</p>}
           <Button asChild className="w-full">
-            <Link href="/settings/profile">{t('backToSettings')}</Link>
+            <Link
+              href={
+                signedIn
+                  ? '/settings/profile'
+                  : `/login?next=${encodeURIComponent('/settings/profile')}`
+              }
+            >
+              {signedIn ? t('backToSettings') : t('signIn')}
+            </Link>
           </Button>
         </CardContent>
       </Card>
@@ -91,13 +101,12 @@ export function ConfirmAccountDeletion({ account, token }: ConfirmAccountDeletio
             {error}
           </p>
         )}
-        <Button
-          variant="outline"
-          className={cn(DANGER_BUTTON, 'w-full')}
-          onClick={onDelete}
-          loading={pending}
-        >
+        <Button variant="danger" className="w-full" onClick={onDelete} loading={pending}>
           {t('button')}
+        </Button>
+        {/* A way out that isn't the irreversible button */}
+        <Button asChild variant="secondary" className="w-full">
+          <Link href={signedIn ? '/settings/profile' : '/'}>{t('keepAccount')}</Link>
         </Button>
       </CardContent>
     </Card>

@@ -16,7 +16,7 @@ import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { fullImage } from '@frontend/lib/crop-image';
 
 /**
- * Picks the art behind the sheet. It goes to the sheet's draft, like the avatar: only Save keeps it.
+ * Picks the art behind the sheet. It goes to the sheet's draft (the avatar doesn't): only Save keeps it.
  * Re-encoded in the browser, which fits it to the limit and drops the photo's GPS and other metadata.
  */
 export function SheetBackgroundSettings() {

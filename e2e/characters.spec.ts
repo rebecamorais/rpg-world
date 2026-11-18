@@ -24,21 +24,21 @@ test.describe('ciclo do personagem', () => {
     // Strength 10 → 16 (modifier +3) through the attribute dialog
     await page.getByRole('button', { name: /^STR/ }).click();
     const dialog = page.getByRole('dialog', { name: 'Edit STR' });
-    await dialog.getByLabel('Base Value').fill('16');
+    await dialog.getByLabel('Base value').fill('16');
     // An attribute goes into the draft: the dialog applies it, the sheet's Save keeps it
     await dialog.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByRole('button', { name: /^STR/ })).toContainText('+3');
 
-    await page.getByLabel('Hit Points', { exact: true }).fill('7');
+    await page.getByLabel('Hit points', { exact: true }).fill('7');
 
-    const save = page.getByRole('button', { name: 'Save Changes' });
+    const save = page.getByRole('button', { name: 'Save changes' });
     await save.click();
     await expect(page.getByText('Character saved successfully!')).toBeVisible();
     await expect(save).toBeDisabled();
 
     await page.reload();
     await expect(page.getByRole('button', { name: /^STR/ })).toContainText('16');
-    await expect(page.getByLabel('Hit Points', { exact: true })).toHaveValue('7');
+    await expect(page.getByLabel('Hit points', { exact: true })).toHaveValue('7');
 
     await page.goto(`${page.url()}/lore`);
     await expect(page).toHaveTitle('Lore · Thorin · RPG World');

@@ -1,3 +1,4 @@
+import { imageBlob, textAsImage } from '@tests/helpers/image-blob';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
@@ -12,7 +13,7 @@ import { UploadSheetBackgroundUseCase } from './upload-sheet-background.use-case
 
 vi.mock('server-only', () => ({}));
 
-const image = (type = 'image/webp', size = 1024) => new Blob([new Uint8Array(size)], { type });
+const image = (type = 'image/webp', size = 1024) => imageBlob(type, size);
 const url = (path: string) => `https://images.rpgworldapp.com/avatars/${path}`;
 
 describe('fundo da ficha', () => {
@@ -62,6 +63,13 @@ describe('fundo da ficha', () => {
       await expect(useCase.execute('char-a', 'owner', image('text/html'))).rejects.toMatchObject({
         code: CharacterErrorCodes.AVATAR_INVALID_TYPE,
       });
+      expect(storage.upload).not.toHaveBeenCalled();
+    });
+
+    it('recusa um arquivo de texto declarado image/png', async () => {
+      await expect(
+        useCase.execute('char-a', 'owner', textAsImage('image/png')),
+      ).rejects.toMatchObject({ code: CharacterErrorCodes.AVATAR_INVALID_TYPE });
       expect(storage.upload).not.toHaveBeenCalled();
     });
   });

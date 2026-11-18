@@ -1,4 +1,5 @@
 import { RequestAccountDeletionInput } from '../application/request-account-deletion.use-case';
+import { UpdatePasswordInput } from '../application/update-password.use-case';
 import { EmailLinkType } from '../domain/auth.repo';
 import { AuthContext } from '../index';
 
@@ -27,8 +28,8 @@ export const makeAuthApi = (authContext: AuthContext) => ({
     return { success: true };
   },
 
-  updatePassword: async (newPassword: string) => {
-    await authContext.updatePassword.execute(newPassword);
+  updatePassword: async (input: UpdatePasswordInput, forgotPasswordLink: string) => {
+    await authContext.updatePassword.execute(input, forgotPasswordLink);
     return { success: true };
   },
 

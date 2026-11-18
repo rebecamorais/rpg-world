@@ -3,6 +3,7 @@ import {
   ALLOWED_AVATAR_TYPES,
   AVATAR_BUCKET,
   MAX_AVATAR_SIZE_BYTES,
+  hasImageSignature,
 } from '@backend/shared/domain/avatar';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
@@ -23,7 +24,8 @@ export class UploadAvatarUseCase {
       throw new UserError(UserErrorCodes.AVATAR_UPLOAD_SIZE_LIMIT);
     }
 
-    if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+    // The declared type comes from the file name; the first bytes say what it really is
+    if (!ALLOWED_AVATAR_TYPES.includes(file.type) || !(await hasImageSignature(file))) {
       throw new UserError(UserErrorCodes.AVATAR_UPLOAD_INVALID_TYPE);
     }
 

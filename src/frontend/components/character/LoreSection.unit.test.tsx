@@ -61,4 +61,18 @@ describe('LoreSection', () => {
     // 14 fields, 2 of them filled
     expect(screen.getAllByText(labels.notFilled)).toHaveLength(12);
   });
+
+  // There were three: a bordered box, a faint fill without border and a transparent text area
+  it('na edição, todo campo tem o mesmo visual', () => {
+    renderWithProviders(<LoreSection data={{}} onChange={vi.fn()} />);
+
+    for (const field of ['age', 'skin', 'personalityTraits', 'backstory'] as const) {
+      expect(screen.getByLabelText(labels[field])).toHaveClass(
+        'bg-muted',
+        'border-input',
+        'border',
+        'hover:border-character-muted',
+      );
+    }
+  });
 });

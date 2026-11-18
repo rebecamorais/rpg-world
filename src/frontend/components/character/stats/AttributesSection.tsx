@@ -9,7 +9,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -25,17 +24,20 @@ import type { AttributeKey } from '@shared/systems/dnd5e';
 import { ATTRIBUTE_KEYS, MAX_ATTRIBUTE, MIN_ATTRIBUTE } from '@shared/systems/dnd5e/constants';
 
 import AttributeCard from './AttributeCard';
+import { DraftDialogFooter } from './DraftDialogFooter';
 
 export default function AttributesSection() {
   const { attributes } = useLoadedCharacter();
   const { update } = useCharacterActions();
   const t = useTranslations('attributes');
+  const tCommon = useTranslations('common');
   const [isOpen, setIsOpen] = useState(false);
   const [tempValues, setTempValues] = useState<Record<AttributeKey, number>>(attributes);
   // Fields whose text isn't a valid score yet; saving waits for them
   const [invalid, setInvalid] = useState<Set<AttributeKey>>(new Set());
 
-  const handleSave = () => {
+  // Like editing one attribute: the values go into the sheet's draft, the sheet saves them
+  const handleApply = () => {
     if (invalid.size > 0) return;
     update(setAttributes(tempValues));
     setIsOpen(false);
@@ -101,11 +103,11 @@ export default function AttributesSection() {
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>{t('bulkEditTitle')}</DialogTitle>
-                <DialogDescription className="sr-only">
-                  {t('bulkEditDescription')}
-                </DialogDescription>
+                {/* Visible: it says the range (1 to 30), or a score out of it held Apply silently */}
+                <DialogDescription>{t('bulkEditDescription')}</DialogDescription>
               </DialogHeader>
-              <div className="grid grid-cols-2 gap-4 py-4">
+              {/* Column by column, as on the card (STR DEX CON, then INT WIS CHA), and Tab follows */}
+              <div className="grid grid-flow-col grid-cols-2 grid-rows-3 gap-4 py-4">
                 {ATTRIBUTE_KEYS.map((key) => (
                   <div key={key} className="flex flex-col gap-2">
                     <Label htmlFor={key} className="text-label">
@@ -125,14 +127,14 @@ export default function AttributesSection() {
                   </div>
                 ))}
               </div>
-              <DialogFooter>
+              <DraftDialogFooter>
                 <Button variant="outline" onClick={() => setIsOpen(false)}>
                   {t('cancel')}
                 </Button>
-                <Button onClick={handleSave} disabled={invalid.size > 0}>
-                  {t('save')}
+                <Button onClick={handleApply} disabled={invalid.size > 0}>
+                  {tCommon('apply')}
                 </Button>
-              </DialogFooter>
+              </DraftDialogFooter>
             </DialogContent>
           </Dialog>
         </SectionCard.Actions>

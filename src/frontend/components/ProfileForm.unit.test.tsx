@@ -19,7 +19,7 @@ vi.mock('@client', async (importOriginal) => ({
 const api = vi.mocked(rpgWorldApi);
 const t = messages.profileForm;
 
-const PROFILE = { id: 'u1', username: 'thorin', fullName: 'Thorin', primaryColor: '#663399' };
+const PROFILE = { id: 'u1', username: 'thorin', fullName: 'Thorin' };
 
 async function renderForm() {
   renderWithProviders(
@@ -45,7 +45,7 @@ describe('ProfileForm', () => {
     expect(fullName).toHaveValue('Thorin');
   });
 
-  it('salva nome, username e cor (todas as cores são hex aceitos pela API)', async () => {
+  it('salva nome e username', async () => {
     const user = userEvent.setup();
     const { username, fullName } = await renderForm();
 
@@ -53,18 +53,67 @@ describe('ProfileForm', () => {
     await user.type(username, 'dark_elf');
     await user.clear(fullName);
     await user.type(fullName, 'Drizzt');
-    await user.click(screen.getByRole('button', { name: t.colors.yellow }));
     await user.click(screen.getByRole('button', { name: t.save }));
 
     await waitFor(() =>
       expect(api.patch).toHaveBeenCalledWith('/api/profile', {
         username: 'dark_elf',
         fullName: 'Drizzt',
-        avatarUrl: undefined,
-        primaryColor: '#eab308',
       }),
     );
     expect(toast.success).toHaveBeenCalledWith(t.saveSuccess);
+  });
+
+  it('apagar o nome manda o nome vazio, que apaga no servidor', async () => {
+    const user = userEvent.setup();
+    const { fullName } = await renderForm();
+
+    await user.clear(fullName);
+    await user.click(screen.getByRole('button', { name: t.save }));
+
+    await waitFor(() =>
+      expect(api.patch).toHaveBeenCalledWith('/api/profile', { username: 'thorin', fullName: '' }),
+    );
+  });
+
+  it('a cor do tema saiu do perfil', async () => {
+    await renderForm();
+
+    expect(screen.queryByRole('button', { name: t.colors.default })).not.toBeInTheDocument();
+  });
+
+  it('sem conexão, diz que é a conexão e mantém o que foi digitado', async () => {
+    api.patch.mockRejectedValue(new TypeError('Failed to fetch'));
+    const user = userEvent.setup();
+    const { fullName } = await renderForm();
+
+    await user.clear(fullName);
+    await user.type(fullName, 'Drizzt');
+    await user.click(screen.getByRole('button', { name: t.save }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      messages.common.errors.common_error_network,
+    );
+    expect(fullName).toHaveValue('Drizzt');
+  });
+
+  it('com o nome alterado e não salvo, sair da página pede confirmação', async () => {
+    const user = userEvent.setup();
+    const { fullName } = await renderForm();
+    const event = () => {
+      const e = new Event('beforeunload', { cancelable: true });
+      window.dispatchEvent(e);
+      return e;
+    };
+
+    expect(event().defaultPrevented).toBe(false);
+    await user.type(fullName, '!');
+    expect(event().defaultPrevented).toBe(true);
+
+    await user.click(screen.getByRole('button', { name: t.save }));
+    await waitFor(() => expect(toast.success).toHaveBeenCalled());
+    // Saved: nothing left to lose
+    await waitFor(() => expect(event().defaultPrevented).toBe(false));
   });
 
   it('recusa username com caracteres inválidos sem chamar a API', async () => {
@@ -105,18 +154,6 @@ describe('ProfileForm', () => {
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
       messages.common.errors.common_error_unexpected,
-    );
-  });
-
-  it('marca a cor escolhida', async () => {
-    const user = userEvent.setup();
-    await renderForm();
-
-    await user.click(screen.getByRole('button', { name: t.colors.blue }));
-
-    expect(screen.getByRole('button', { name: t.colors.blue })).toHaveAttribute(
-      'aria-pressed',
-      'true',
     );
   });
 });

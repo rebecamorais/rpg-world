@@ -43,6 +43,26 @@ export function isRetryable(err: unknown): boolean {
 }
 
 /**
+ * Whether the server answered "no" to this request (4xx), so asking again gets the same answer:
+ * 404 not found or not yours, 401, 403, 400. A 408 or 429 means "not now" and doesn't count.
+ */
+export function isClientError(err: unknown): boolean {
+  const status = statusOf(err);
+  return status !== undefined && status >= 400 && status < 500 && !TRANSIENT_STATUSES.has(status);
+}
+
+/** How many times a failed query is tried again (React Query's default). */
+const QUERY_RETRIES = 3;
+
+/**
+ * React Query's `retry` for loading data: up to 3 more tries, none after a 4xx. Opening someone
+ * else's character waited about 7 s on the loading screen before its 404, retried three times.
+ */
+export function retryQuery(failureCount: number, err: unknown): boolean {
+  return failureCount < QUERY_RETRIES && !isClientError(err);
+}
+
+/**
  * Candidate error code of a thrown error. Our API and server actions carry the code in
  * `Error.message` (see `APIError`); any other message is not a known code and is never shown,
  * because `translateErrorCode` falls back to the generic message. A request that never reached

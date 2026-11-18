@@ -1,3 +1,4 @@
+import { imageBlob, textAsImage } from '@tests/helpers/image-blob';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
@@ -11,7 +12,7 @@ import { UploadCharacterAvatarUseCase } from './upload-character-avatar.use-case
 
 vi.mock('server-only', () => ({}));
 
-const image = (type = 'image/png', size = 1024) => new Blob([new Uint8Array(size)], { type });
+const image = (type = 'image/png', size = 1024) => imageBlob(type, size);
 
 describe('UploadCharacterAvatarUseCase', () => {
   let characterRepo: InMemoryCharacterRepository;
@@ -93,6 +94,13 @@ describe('UploadCharacterAvatarUseCase', () => {
     );
   });
 
+  it('recusa um arquivo de texto declarado image/png, sem gravar nada', async () => {
+    await expect(useCase.execute('char-1', 'owner-1', textAsImage('image/png'))).rejects.toThrow(
+      CharacterErrorCodes.AVATAR_INVALID_TYPE,
+    );
+    expect(storage.upload).not.toHaveBeenCalled();
+  });
+
   describe('com a imagem completa', () => {
     const webp = (size = 1024) => image('image/webp', size);
 
@@ -120,6 +128,13 @@ describe('UploadCharacterAvatarUseCase', () => {
     it('recusa completa de tipo proibido, sem gravar nada', async () => {
       await expect(
         useCase.execute('char-1', 'owner-1', image('image/gif'), image('image/gif')),
+      ).rejects.toThrow(CharacterErrorCodes.AVATAR_INVALID_TYPE);
+      expect(storage.upload).not.toHaveBeenCalled();
+    });
+
+    it('recusa uma completa que é texto declarado image/webp, sem gravar nada', async () => {
+      await expect(
+        useCase.execute('char-1', 'owner-1', webp(), textAsImage('image/webp')),
       ).rejects.toThrow(CharacterErrorCodes.AVATAR_INVALID_TYPE);
       expect(storage.upload).not.toHaveBeenCalled();
     });

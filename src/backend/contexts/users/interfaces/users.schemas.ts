@@ -22,7 +22,12 @@ export const signInWithPasswordSchema = z.object({
 
 export const magicLinkSchema = z.object({ email, turnstileToken });
 
-export const updatePasswordSchema = z.object({ newPassword: newPassword });
+// The current password is checked only when the account has one (the account says, never the
+// request), like the account deletion
+export const updatePasswordSchema = z.object({
+  currentPassword: optional(z.string().max(MAX_PASSWORD_LENGTH)),
+  newPassword: newPassword,
+});
 
 export const signUpSchema = z.object({
   email,
@@ -44,7 +49,7 @@ export const deleteAccountSchema = z.object({ token: z.string().min(1).max(128) 
 export const updateProfileSchema = z.object({
   // DB constraint: username has at least 3 characters
   username: optional(z.string().min(3).max(30)),
+  // An empty name or avatar clears it
   fullName: optional(z.string().max(100)),
   avatarUrl: optional(httpUrlOrEmpty),
-  primaryColor: optional(z.string().regex(/^#[0-9a-f]{3,8}$/i)),
 });

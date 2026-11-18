@@ -1,11 +1,17 @@
 'use client';
 
-import { type ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import {
+  type CSSProperties,
+  type ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { useTranslations } from 'next-intl';
 import { createPortal } from 'react-dom';
 
-import { OfflineNotice } from '@frontend/components/shared/OfflineNotice';
 import { Button } from '@frontend/components/ui/button';
 import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import {
@@ -31,13 +37,14 @@ interface SaveControlsProps {
   /** The save was refused because the sheet changed elsewhere: the bar offers Reload instead. */
   conflict?: boolean;
   onReload?: () => void;
+  /** Names the buttons when they save more than one draft ("Save all"). */
+  saveLabel?: string;
 }
 
 /**
- * Where the sheet stacks its fixed save bars. A tab can have two drafts at once (the
- * character's, kept across tabs, and the lore's): their bars sit one above the other.
- * The page header's save button tells the sheet it's there, so the sheet doesn't add a
- * second one for the character.
+ * Where the sheet stacks its fixed save bars. The character's draft is kept across tabs, so the
+ * sheet shows its bar on every tab, unless the tab claims it: the Status tab (its header has the
+ * save button) and the Lore tab (one bar saves the lore and the sheet together).
  */
 interface SaveBarSlot {
   element: HTMLElement | null;
@@ -56,8 +63,56 @@ const SAVE_BAR_POSITION =
 
 const SaveBarSlotContext = createContext<SaveBarSlot | null>(null);
 
-/** Frame for the sheet's save bars. Renders the character's bar on tabs without a save button. */
-export function SaveBarSlotProvider({ children }: { children: ReactNode }) {
+/**
+ * How much of the bottom of the window the save bars cover, on `<html>` as `--save-bar-space`
+ * while there is a bar: the footer keeps that much room under its last line (FooterContent) and
+ * the toasts open above it (AppToasterClient), so neither ends up under Discard and Save.
+ */
+export const SAVE_BAR_SPACE = '--save-bar-space';
+
+function useReserveSaveBarSpace(slot: HTMLElement | null) {
+  useEffect(() => {
+    if (!slot) return;
+    const root = document.documentElement;
+    const measure = () => {
+      if (slot.childElementCount === 0) {
+        root.style.removeProperty(SAVE_BAR_SPACE);
+        return;
+      }
+      const space = Math.max(0, window.innerHeight - slot.getBoundingClientRect().top);
+      root.style.setProperty(SAVE_BAR_SPACE, `${Math.ceil(space)}px`);
+    };
+    measure();
+    // Bars come and go, a bar's text wraps, and a resize moves the slot (above the tab bar on phones)
+    const bars = new MutationObserver(measure);
+    bars.observe(slot, { childList: true });
+    const size = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
+    size?.observe(slot);
+    window.addEventListener('resize', measure);
+    return () => {
+      bars.disconnect();
+      size?.disconnect();
+      window.removeEventListener('resize', measure);
+      root.style.removeProperty(SAVE_BAR_SPACE);
+    };
+  }, [slot]);
+}
+
+/**
+ * Frame for the sheet's save bars. Renders the character's bar on tabs that don't claim it.
+ * The column of bars goes after `children`, outside the sheet's `isolate` wrapper: inside it, the
+ * bars' `z-40` only counted within the sheet, and the footer (later in the page) was painted over
+ * Discard and Save. `className` and `style` carry the character's colors to the bars.
+ */
+export function SaveBarSlotProvider({
+  children,
+  className,
+  style,
+}: {
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+}) {
   const [element, setElement] = useState<HTMLElement | null>(null);
   const [claims, setClaims] = useState(0);
   const [slot] = useState<Omit<SaveBarSlot, 'element'>>(() => ({
@@ -66,18 +121,21 @@ export function SaveBarSlotProvider({ children }: { children: ReactNode }) {
       return () => setClaims((n) => n - 1);
     },
   }));
+  useReserveSaveBarSpace(element);
 
   return (
     <SaveBarSlotContext.Provider value={{ element, ...slot }}>
-      <OfflineNotice />
       {children}
       {claims === 0 && <CharacterSaveBar />}
       <div
         ref={setElement}
+        data-save-bar-slot
         className={cn(
           SAVE_BAR_POSITION,
           'pointer-events-none flex flex-col items-stretch gap-2 [&>*]:pointer-events-auto',
+          className,
         )}
+        style={style}
       />
     </SaveBarSlotContext.Provider>
   );
@@ -104,6 +162,7 @@ export function SaveControls({
   label,
   conflict,
   onReload,
+  saveLabel,
 }: SaveControlsProps) {
   const t = useTranslations('common');
 
@@ -136,7 +195,7 @@ export function SaveControls({
           // No text-label: buttons keep the case of their text
           className="h-8 px-4"
         >
-          {isSaving ? t('saving') : t('saveChanges')}
+          {isSaving ? t('saving') : (saveLabel ?? t('saveChanges'))}
         </Button>
       </div>
 
@@ -149,6 +208,7 @@ export function SaveControls({
         label={label}
         conflict={conflict}
         onReload={onReload}
+        saveLabel={saveLabel}
       />
     </>
   );
@@ -168,6 +228,7 @@ function SaveBar({
   label,
   conflict = false,
   onReload,
+  saveLabel,
 }: SaveControlsProps) {
   const t = useTranslations('common');
   const slot = useSaveBarSlot();
@@ -180,6 +241,7 @@ function SaveBar({
 
   const discard = async () => {
     const ok = await confirm({
+      title: t('discardConfirmTitle'),
       description: t('discardConfirm'),
       confirmLabel: t('discard'),
       destructive: true,
@@ -232,7 +294,7 @@ function SaveBar({
             loading={isSaving}
             disabled={hasErrors}
           >
-            {t('save')}
+            {saveLabel ?? t('save')}
           </Button>
         )}
       </div>
@@ -242,7 +304,7 @@ function SaveBar({
 }
 
 /** The character draft's state and actions, for its save controls. Null on a read-only sheet. */
-function useCharacterSave() {
+export function useCharacterSave() {
   const { isDirty } = useCharacterState();
   const { id, isSaving, conflict } = useCharacterMeta();
   const { save, discard, reload } = useCharacterActions();
@@ -272,11 +334,16 @@ function CharacterSaveBar() {
   return <SaveBar {...save} label={t('unsavedSheet')} />;
 }
 
+/** Tells the sheet this tab shows the character's save controls itself. */
+export function useClaimCharacterBar() {
+  const claimCharacterBar = useContext(SaveBarSlotContext)?.claimCharacterBar;
+  useEffect(() => claimCharacterBar?.(), [claimCharacterBar]);
+}
+
 /** Save controls of the Status tab, wired to the character draft. None on a read-only sheet. */
 export function SaveCharacterButton() {
   const save = useCharacterSave();
-  const claimCharacterBar = useContext(SaveBarSlotContext)?.claimCharacterBar;
-  useEffect(() => claimCharacterBar?.(), [claimCharacterBar]);
+  useClaimCharacterBar();
 
   if (!save) return null;
   return <SaveControls {...save} />;

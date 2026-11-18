@@ -1,3 +1,4 @@
+import { imageBlob, textAsImage } from '@tests/helpers/image-blob';
 import { describe, expect, it, vi } from 'vitest';
 
 import { ALLOWED_AVATAR_TYPES, MAX_AVATAR_SIZE_BYTES } from '@backend/shared/domain/avatar';
@@ -11,9 +12,7 @@ const mockStorageRepository = (): StorageRepository => ({
   remove: vi.fn(),
 });
 
-const makeBlob = (type: string, sizeBytes: number): Blob => {
-  return new Blob([new Uint8Array(sizeBytes)], { type });
-};
+const makeBlob = (type: string, sizeBytes: number): Blob => imageBlob(type, sizeBytes);
 
 describe('UploadAvatarUseCase', () => {
   it('deve fazer upload e retornar a URL pública', async () => {
@@ -70,6 +69,16 @@ describe('UploadAvatarUseCase', () => {
     const invalidFile = makeBlob('image/gif', 1024);
 
     await expect(useCase.execute('user-1', invalidFile)).rejects.toThrow(
+      'storage_error_upload_avatar_invalid_type',
+    );
+    expect(repository.upload).not.toHaveBeenCalled();
+  });
+
+  it('recusa um arquivo de texto declarado image/png', async () => {
+    const repository = mockStorageRepository();
+    const useCase = new UploadAvatarUseCase(repository);
+
+    await expect(useCase.execute('user-1', textAsImage('image/png'))).rejects.toThrow(
       'storage_error_upload_avatar_invalid_type',
     );
     expect(repository.upload).not.toHaveBeenCalled();

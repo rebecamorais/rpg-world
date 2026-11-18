@@ -13,6 +13,7 @@ import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import AppLink from '@frontend/demo/AppLink';
 import { useParty } from '@frontend/hooks/useParty';
+import { usePartyChannel } from '@frontend/hooks/usePartyChannel';
 
 import { JournalSettings } from './JournalSettings';
 import { PartyDangerZone } from './PartyDangerZone';
@@ -20,11 +21,16 @@ import { PartyImageSettings } from './PartyImageSettings';
 import { PartyManagement } from './PartyManagement';
 import { PartyNotFound } from './PartyPage';
 
-/** The GM's party settings, apart from the table: invite, players, name, picture and journal. */
+/**
+ * The GM's party settings, apart from the table: invite, players, name, picture and journal. It
+ * sits outside PartyFrame, so it listens to the party's channel itself: a player leaving or an
+ * invite accepted shows up in Players without reloading.
+ */
 export function PartySettings({ partyId }: { partyId: string }) {
   const t = useTranslations('parties.settings');
   const router = useRouter();
   const { party, isLoading } = useParty(partyId);
+  usePartyChannel(partyId);
   // A player at this table already knows it exists: "not found" read like a bug, so they go to
   // the table and are told why. Strangers still get "not found" (nothing to reveal).
   const notTheGm = !!party && party.role !== 'gm';

@@ -111,7 +111,7 @@ test('no celular, salva pela barra fixa que aparece com alterações', async ({ 
   // A sheet edit (AC), not a play action: HP saves at once and never opens the bar
   await (await hydrated(page.getByLabel('AC', { exact: true }))).fill('15');
 
-  // Only the fixed bar has a plain "Save" (the header's button is "Save Changes")
+  // Only the fixed bar has a plain "Save" (the header's button is "Save changes")
   await page.getByRole('button', { name: 'Save', exact: true }).click();
 
   await expect(page.getByText('Character saved successfully!')).toBeVisible();

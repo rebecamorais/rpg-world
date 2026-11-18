@@ -44,3 +44,21 @@ describe('SupabaseEmailService.sendAccountDeletionEmail', () => {
     warn.mockRestore();
   });
 });
+
+describe('SupabaseEmailService.sendPasswordChangedEmail', () => {
+  it('avisa da troca, com o link para redefinir', async () => {
+    sendMail.mockReset();
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    await new SupabaseEmailService('from@rpg.test').sendPasswordChangedEmail(
+      EMAIL,
+      'https://rpg.test/forgot-password',
+    );
+
+    const mail = sendMail.mock.calls[0][0];
+    expect(mail.to).toBe(EMAIL);
+    expect(mail.subject).toBe('Sua senha foi alterada - RPG World');
+    expect(mail.html).toContain('https://rpg.test/forgot-password');
+    log.mockRestore();
+  });
+});

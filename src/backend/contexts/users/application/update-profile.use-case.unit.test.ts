@@ -52,7 +52,11 @@ describe('UpdateProfileUseCase', () => {
         avatarUrl: previousAvatarUrl,
       });
       const storage = { remove: vi.fn().mockResolvedValue(undefined) };
-      const useCase = new UpdateProfileUseCase(repository, storage as unknown as StorageRepository);
+      const useCase = new UpdateProfileUseCase(
+        repository,
+        storage as unknown as StorageRepository,
+        (u) => u.startsWith('https://images.rpgworldapp.com/'),
+      );
       return { repository, storage, useCase };
     }
 
@@ -81,6 +85,31 @@ describe('UpdateProfileUseCase', () => {
 
       await useCase.execute({ id: USER, avatarUrl: url('v2') });
 
+      expect(storage.remove).not.toHaveBeenCalled();
+    });
+
+    it('recusa o arquivo de outra conta ou de outro site como avatar', async () => {
+      const { repository, useCase } = setup(url('v1'));
+
+      for (const avatarUrl of [
+        'https://images.rpgworldapp.com/avatars/other-user/avatar-v1.png',
+        `https://evil.example/avatars/${USER}/avatar-v2.png`,
+      ]) {
+        await expect(useCase.execute({ id: USER, avatarUrl })).rejects.toMatchObject({
+          code: 'profile_error_avatar_invalid',
+        });
+      }
+      expect(repository.update).not.toHaveBeenCalled();
+    });
+
+    it('aceita o avatar que a conta já tem (a foto do Google) e o vazio, que apaga', async () => {
+      const google = 'https://lh3.googleusercontent.com/a/photo';
+      const { repository, storage, useCase } = setup(google);
+
+      await useCase.execute({ id: USER, avatarUrl: google });
+      await useCase.execute({ id: USER, avatarUrl: '' });
+
+      expect(repository.update).toHaveBeenCalledTimes(2);
       expect(storage.remove).not.toHaveBeenCalled();
     });
 

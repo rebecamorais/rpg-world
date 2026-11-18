@@ -3,6 +3,7 @@ import {
   ALLOWED_AVATAR_TYPES,
   AVATAR_BUCKET,
   MAX_AVATAR_SIZE_BYTES,
+  hasImageSignature,
 } from '@backend/shared/domain/avatar';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
@@ -12,11 +13,12 @@ import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError
 import { CharacterRepo } from '../../domain/repository/character.repo';
 import { assertOwnsCharacter } from '../find-owned-character';
 
-export function assertValidImage(image: Blob) {
+export async function assertValidImage(image: Blob) {
   if (image.size > MAX_AVATAR_SIZE_BYTES) {
     throw new CharacterError(CharacterErrorCodes.AVATAR_FILE_TOO_LARGE);
   }
-  if (!ALLOWED_AVATAR_TYPES.includes(image.type)) {
+  // The declared type comes from the file name; the first bytes say what it really is
+  if (!ALLOWED_AVATAR_TYPES.includes(image.type) || !(await hasImageSignature(image))) {
     throw new CharacterError(CharacterErrorCodes.AVATAR_INVALID_TYPE);
   }
 }
@@ -35,9 +37,9 @@ export class UploadCharacterAvatarUseCase {
   async execute(characterId: string, userId: string, file: Blob, full?: Blob): Promise<string> {
     await assertOwnsCharacter(this.characterRepository, characterId, userId, 'write');
 
-    assertValidImage(file);
+    await assertValidImage(file);
     if (full) {
-      assertValidImage(full);
+      await assertValidImage(full);
       // Both names share one extension: the viewer finds the whole image from the avatar's URL
       if (full.type !== file.type)
         throw new CharacterError(CharacterErrorCodes.AVATAR_INVALID_TYPE);

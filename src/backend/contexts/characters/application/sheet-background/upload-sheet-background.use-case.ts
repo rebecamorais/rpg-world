@@ -20,7 +20,7 @@ export class UploadSheetBackgroundUseCase {
 
   async execute(characterId: string, userId: string, file: Blob): Promise<string> {
     await assertOwnsCharacter(this.characterRepository, characterId, userId, 'write');
-    assertValidImage(file);
+    await assertValidImage(file);
 
     const extension = file.type.split('/')[1];
     const path = sheetBackgroundPath(userId, characterId, this.newVersion(), extension);

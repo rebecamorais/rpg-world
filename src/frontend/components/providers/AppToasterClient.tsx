@@ -56,7 +56,8 @@ function useToasterNeverHidden(ref: RefObject<HTMLElement | null>) {
 
 /**
  * The app's toasts. On phones they sit at the top, under the notch: at the bottom they covered the
- * tab bar, the save bar and the HP panel that had just been used. `pointer-events-auto` because
+ * tab bar, the save bar and the HP panel that had just been used. On wider screens, bottom right,
+ * above the sheet's save bar when it's there. `pointer-events-auto` because
  * an open Radix modal turns pointer events off on the body, and the toaster inherited it.
  * `label`: the region's name for screen readers (Sonner adds the shortcut, "alt+T").
  */
@@ -73,6 +74,10 @@ export function AppToasterClient({ label }: { label: string }) {
       containerAriaLabel={label}
       className="toaster group pointer-events-auto"
       position={phone ? 'top-center' : 'bottom-right'}
+      // On a sheet with edits, the save bar holds the same bottom corner: the toasts open above it
+      // (`--save-bar-space`, set by the sheet's SaveBarSlotProvider), so an error toast doesn't sit
+      // over Save. 24px is Sonner's own offset
+      offset={{ bottom: 'calc(24px + var(--save-bar-space, 0px))' }}
       mobileOffset={{ top: 'calc(0.5rem + env(safe-area-inset-top))' }}
     />
   );

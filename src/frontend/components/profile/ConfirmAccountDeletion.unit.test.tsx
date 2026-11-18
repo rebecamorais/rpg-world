@@ -25,7 +25,9 @@ describe('ConfirmAccountDeletion', () => {
   afterEach(() => vi.unstubAllGlobals());
 
   it('mostra o username e o botão', () => {
-    renderWithProviders(<ConfirmAccountDeletion account={{ username: 'thorin' }} token="tok" />);
+    renderWithProviders(
+      <ConfirmAccountDeletion account={{ username: 'thorin' }} token="tok" signedIn />,
+    );
 
     expect(screen.getByRole('heading', { name: t.title })).toBeInTheDocument();
     expect(screen.getByText('thorin')).toBeInTheDocument();
@@ -33,13 +35,36 @@ describe('ConfirmAccountDeletion', () => {
   });
 
   it('sem username escolhido, mostra o texto sem nome', () => {
-    renderWithProviders(<ConfirmAccountDeletion account={{ username: null }} token="tok" />);
+    renderWithProviders(
+      <ConfirmAccountDeletion account={{ username: null }} token="tok" signedIn />,
+    );
 
     expect(screen.getByText(t.descriptionNoName)).toBeInTheDocument();
   });
 
+  it('tem uma saída que não é o botão de excluir', () => {
+    renderWithProviders(
+      <ConfirmAccountDeletion account={{ username: 'thorin' }} token="tok" signedIn />,
+    );
+
+    expect(screen.getByRole('link', { name: t.keepAccount })).toHaveAttribute(
+      'href',
+      '/settings/profile',
+    );
+  });
+
+  it('sem sessão, o link inválido diz que é preciso entrar para pedir outro', () => {
+    renderWithProviders(<ConfirmAccountDeletion account={null} token="tok" signedIn={false} />);
+
+    expect(screen.getByText(t.signInForNewLink)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: t.signIn })).toHaveAttribute(
+      'href',
+      '/login?next=%2Fsettings%2Fprofile',
+    );
+  });
+
   it('link inválido ou vencido (null) mostra o aviso e o caminho para pedir outro', () => {
-    renderWithProviders(<ConfirmAccountDeletion account={null} token="tok" />);
+    renderWithProviders(<ConfirmAccountDeletion account={null} token="tok" signedIn />);
 
     expect(screen.getByRole('heading', { name: t.invalidTitle })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: t.button })).not.toBeInTheDocument();
@@ -52,7 +77,9 @@ describe('ConfirmAccountDeletion', () => {
   it('o clique chama a rota e carrega a página inicial por inteiro com o aviso accountDeleted', async () => {
     api.post.mockResolvedValue({});
     const user = userEvent.setup();
-    renderWithProviders(<ConfirmAccountDeletion account={{ username: 'thorin' }} token="tok" />);
+    renderWithProviders(
+      <ConfirmAccountDeletion account={{ username: 'thorin' }} token="tok" signedIn />,
+    );
 
     await user.click(screen.getByRole('button', { name: t.button }));
 
@@ -63,7 +90,9 @@ describe('ConfirmAccountDeletion', () => {
   it('link que valeu até abrir a página mas não vale mais: mostra o erro e não sai da página', async () => {
     api.post.mockRejectedValue(new APIError('account_deletion_error_link_invalid', 400));
     const user = userEvent.setup();
-    renderWithProviders(<ConfirmAccountDeletion account={{ username: 'thorin' }} token="tok" />);
+    renderWithProviders(
+      <ConfirmAccountDeletion account={{ username: 'thorin' }} token="tok" signedIn />,
+    );
 
     await user.click(screen.getByRole('button', { name: t.button }));
 

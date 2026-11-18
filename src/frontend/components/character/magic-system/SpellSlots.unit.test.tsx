@@ -8,7 +8,7 @@ import { SpellSlots } from './SpellSlots';
 function renderSlots(slots: Record<string, { max: number; used: number }>) {
   const onSlotsChange = vi.fn();
   renderWithProviders(
-    <SpellSlots slots={slots} onSlotsChange={onSlotsChange} systemLabel="Spell Slots" />,
+    <SpellSlots slots={slots} onSlotsChange={onSlotsChange} systemLabel="Spell slots" />,
   );
   return { onSlotsChange };
 }

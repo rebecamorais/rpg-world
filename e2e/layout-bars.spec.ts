@@ -93,7 +93,7 @@ test('os números de combate mostram só o ícone, e o nome abre no ícone', asy
   );
   expect(new Set(tops).size).toBe(1);
   // Each icon names its number: on hover with a mouse, on tap on a phone
-  for (const label of ['AC', 'Initiative', 'Speed', 'Hit Dice', 'Passive Perception']) {
+  for (const label of ['AC', 'Initiative', 'Speed', 'Hit dice', 'Passive Perception']) {
     await expect(header.getByRole('button', { name: `What is ${label}?` })).toBeVisible();
   }
   await (await hydrated(header.getByRole('button', { name: 'What is Speed?' }))).hover();

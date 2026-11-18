@@ -7,6 +7,7 @@ import {
 } from '../domain/account-deletion-token';
 import { AccountDeletionRepo } from '../domain/account-deletion.repo';
 import { AuthRepository } from '../domain/auth.repo';
+import { checkAccountPassword } from './check-account-password';
 
 export interface RequestAccountDeletionInput {
   userId: string;
@@ -32,7 +33,12 @@ export class RequestAccountDeletionUseCase {
     // The account says whether it has a password, never the request: otherwise anyone holding an
     // open session could leave the field empty and skip the check
     if (await this.authRepository.hasPassword(input.userId)) {
-      await this.checkPassword(input);
+      await checkAccountPassword(
+        this.authRepository,
+        this.accountDeletionRepo,
+        input,
+        UserErrorCodes.DELETION_PASSWORD_INVALID,
+      );
     }
 
     if (!(await this.accountDeletionRepo.claimEmailSlot(input.userId))) {
@@ -50,32 +56,5 @@ export class RequestAccountDeletionUseCase {
     await this.emailService.sendAccountDeletionEmail(input.email, `${confirmUrl}?token=${token}`);
 
     await this.accountDeletionRepo.clearPasswordAttempts(input.userId);
-  }
-
-  /**
-   * The attempt is taken before asking Auth, so simultaneous guesses can't all pass the limit, and
-   * given back unless the answer was "wrong password".
-   */
-  private async checkPassword({ userId, email, password }: RequestAccountDeletionInput) {
-    if (!password) {
-      throw new UserError(UserErrorCodes.DELETION_PASSWORD_INVALID);
-    }
-
-    if (!(await this.accountDeletionRepo.claimPasswordAttempt(userId))) {
-      throw new UserError(UserErrorCodes.DELETION_TOO_MANY_ATTEMPTS);
-    }
-
-    let correct: boolean;
-    try {
-      correct = await this.authRepository.verifyPassword(email, password);
-    } catch (error) {
-      await this.accountDeletionRepo.releasePasswordAttempt(userId);
-      throw error;
-    }
-
-    if (!correct) {
-      throw new UserError(UserErrorCodes.DELETION_PASSWORD_INVALID);
-    }
-    await this.accountDeletionRepo.releasePasswordAttempt(userId);
   }
 }

@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Button } from '@frontend/components/ui/button';
@@ -113,9 +115,30 @@ export default function PartyList() {
   const t = useTranslations('parties');
   const confirm = useConfirm();
   const { getErrorMessage } = useErrorMessage();
-  const { parties, isLoading, error, respond, respondingTo } = useParties();
+  const { parties, isLoading, error, respondAsync, respondingTo } = useParties();
   const { currentUser } = useCurrentUser();
+  const router = useRouter();
   const userId = currentUser?.id ?? '';
+
+  // Accepting goes into the party, as the invite page does: it's the next thing to do there
+  const accept = async (party: PartySummary) => {
+    try {
+      await respondAsync({ partyId: party.id, userId, accept: true });
+    } catch {
+      return; // useParties already shows the error
+    }
+    toast.success(t('joinedParty', { name: party.name }));
+    router.push(`/parties/${party.id}`);
+  };
+  // Declining or withdrawing: the row just leaves, so a toast says it was done
+  const leave = async (party: PartySummary, done: string) => {
+    try {
+      await respondAsync({ partyId: party.id, userId, accept: false });
+    } catch {
+      return; // useParties already shows the error
+    }
+    toast.success(done);
+  };
 
   if (error) return <ErrorState title={t('loadErrorTitle')} description={getErrorMessage(error)} />;
   if (isLoading || !parties) return <LoadingState thematic />;
@@ -142,7 +165,7 @@ export default function PartyList() {
                       confirmLabel: t('decline'),
                       destructive: true,
                     });
-                    if (ok) respond({ partyId: party.id, userId, accept: false });
+                    if (ok) leave(party, t('inviteDeclined', { name: party.name }));
                   }}
                 >
                   {t('decline')}
@@ -154,7 +177,7 @@ export default function PartyList() {
                     disabled={!!answer}
                     loading={answer === 'accept'}
                     aria-label={t('acceptInvite', { name: party.name })}
-                    onClick={() => respond({ partyId: party.id, userId, accept: true })}
+                    onClick={() => accept(party)}
                   >
                     <AppIcon name="Check" size={16} aria-hidden="true" />
                     {t('accept')}
@@ -184,7 +207,7 @@ export default function PartyList() {
                     confirmLabel: t('withdraw'),
                     destructive: true,
                   });
-                  if (ok) respond({ partyId: party.id, userId, accept: false });
+                  if (ok) leave(party, t('requestWithdrawn', { name: party.name }));
                 }}
               >
                 {t('withdraw')}

@@ -8,6 +8,7 @@ import { ImageViewerDialog } from '@frontend/components/shared/ImageViewerDialog
 import { LazyImageCropDialog } from '@frontend/components/shared/LazyImageCropDialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/avatar';
 import { Button } from '@frontend/components/ui/button';
+import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { UploadTarget, useFileUploader } from '@frontend/context/FileUploaderContext';
 import { useImageCrop } from '@frontend/hooks/useImageCrop';
 import { cn } from '@frontend/lib/utils';
@@ -23,6 +24,10 @@ interface ImageUploadProps {
   size?: 'sm' | 'md' | 'lg';
   /** Also keeps the whole image, for the viewer and to crop again without a new upload. */
   keepFullImage?: boolean;
+  /** Whose image it is (a character, a username): the image's text alternative. */
+  name?: string;
+  /** Offers "Remove" while there is an image; called once the person confirms. */
+  onRemove?: () => Promise<void> | void;
 }
 
 /**
@@ -41,8 +46,12 @@ export default function ImageUpload({
   targetId,
   size = 'md',
   keepFullImage = false,
+  name,
+  onRemove,
 }: ImageUploadProps) {
   const t = useTranslations('avatarUpload');
+  const confirm = useConfirm();
+  const alt = name ? t('imageOf', { name }) : t('currentAlt');
   const { upload: contextUpload, isUploading: isUploadingContext } = useFileUploader();
   const inputRef = useRef<HTMLInputElement>(null);
   // Unique per instance: a page can show more than one uploader
@@ -77,44 +86,62 @@ export default function ImageUpload({
     if (file) crop.pickFile(file);
   };
 
+  const remove =
+    onRemove &&
+    (async () => {
+      const ok = await confirm({
+        title: t('removeConfirmTitle'),
+        description: t('removeConfirm'),
+        confirmLabel: t('remove'),
+        destructive: true,
+      });
+      if (ok) await onRemove();
+    });
+
+  const pick = () => inputRef.current?.click();
+
   return (
     <div className="flex flex-col items-center gap-3">
-      {/* Image display / Trigger */}
-      <button
-        type="button"
-        onClick={() => inputRef.current?.click()}
-        disabled={isUploading}
-        aria-label={t('button')}
+      {/* Only shows the image: the buttons below say what each action does, also on touch */}
+      <Avatar
         className={cn(
-          'group focus-ring relative rounded-lg transition-transform hover:scale-105 active:scale-95 disabled:opacity-60',
+          'border-border bg-muted border-2 shadow-md transition-opacity',
+          sizeClasses[size],
+          isUploading && 'opacity-60',
         )}
       >
-        <Avatar
-          className={cn(
-            'border-border bg-muted group-hover:border-primary-flare group-focus-visible:border-primary-flare border-2 shadow-md transition-colors',
-            sizeClasses[size],
-          )}
-        >
-          {displayUrl ? (
-            <AvatarImage src={displayUrl} alt={t('currentAlt')} className="object-cover" />
-          ) : null}
-          <AvatarFallback className="bg-muted text-2xl font-bold">🧙</AvatarFallback>
-        </Avatar>
+        {displayUrl ? <AvatarImage src={displayUrl} alt={alt} className="object-cover" /> : null}
+        <AvatarFallback className="bg-muted text-2xl font-bold">🧙</AvatarFallback>
+      </Avatar>
 
-        {/* Upload overlay: also on keyboard focus and while uploading, not only on hover */}
-        <div
-          className={cn(
-            'bg-overlay absolute inset-0 flex items-center justify-center rounded-lg opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100',
-            isUploading && 'opacity-100',
-          )}
+      <div className="flex flex-wrap justify-center gap-1">
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          onClick={pick}
+          disabled={isUploading}
+          loading={isUploading}
         >
-          {isUploading ? (
-            <span className="text-foreground text-xs font-medium">{t('loading')}</span>
-          ) : (
-            <span className="text-foreground text-xs font-medium">{t('button')}</span>
-          )}
-        </div>
-      </button>
+          {isUploading ? t('loading') : currentUrl ? t('button') : t('add')}
+        </Button>
+        {currentUrl ? (
+          <Button type="button" variant="ghost" size="sm" onClick={() => setIsViewerOpen(true)}>
+            {t('view')}
+          </Button>
+        ) : null}
+        {currentUrl && remove ? (
+          <Button
+            type="button"
+            variant="destructive-ghost"
+            size="sm"
+            onClick={remove}
+            disabled={isUploading}
+          >
+            {t('remove')}
+          </Button>
+        ) : null}
+      </div>
 
       {/* Hidden file input */}
       <input
@@ -127,12 +154,6 @@ export default function ImageUpload({
         data-testid="image-upload-input"
       />
 
-      {currentUrl ? (
-        <Button type="button" variant="ghost" size="sm" onClick={() => setIsViewerOpen(true)}>
-          {t('view')}
-        </Button>
-      ) : null}
-
       <LazyImageCropDialog
         source={crop.cropSource}
         onCancel={crop.cancel}
@@ -140,7 +161,7 @@ export default function ImageUpload({
       />
       <ImageViewerDialog
         src={currentUrl}
-        alt={t('currentAlt')}
+        alt={alt}
         open={isViewerOpen}
         onOpenChange={setIsViewerOpen}
         onAdjust={currentUrl ? () => crop.adjust(currentUrl) : undefined}

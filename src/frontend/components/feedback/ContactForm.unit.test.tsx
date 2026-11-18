@@ -80,6 +80,17 @@ describe('ContactForm', () => {
     await waitFor(() => expect(turnstile.render).toHaveBeenCalledTimes(2));
   });
 
+  it('sem conexão, diz que é a conexão e mantém a mensagem', async () => {
+    submitFeedback.mockRejectedValue(new TypeError('Failed to fetch'));
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    renderWithProviders(<ContactForm initialEmail="hero@example.com" />);
+
+    await fillAndSubmit();
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(t.networkError);
+    expect(screen.getByLabelText(t.messageLabel)).toHaveValue('A mimic ate my spellbook.');
+  });
+
   it('com o ID de uma mesa, abre como Conta / Acesso com o ID na mensagem, pronta para editar', async () => {
     const partyId = '3f2b8c1e-5d4a-4b7e-9a10-2c6d8e0f1a23';
     renderWithProviders(<ContactForm initialEmail="hero@example.com" partyId={partyId} />);

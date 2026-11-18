@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { messages, renderWithProviders } from '@tests/helpers/render';
@@ -73,7 +73,7 @@ describe('SaveCharacterButton', () => {
     await user.type(screen.getByLabelText('AC'), '15');
     await user.click(screen.getByRole('button', { name: t.discard }));
 
-    const dialog = screen.getByRole('alertdialog');
+    const dialog = screen.getByRole('alertdialog', { name: t.discardConfirmTitle });
     expect(dialog).toHaveTextContent(t.discardConfirm);
     await user.click(within(dialog).getByRole('button', { name: t.cancel }));
     expect(screen.getByLabelText('AC')).toHaveValue('15');
@@ -141,6 +141,25 @@ describe('SaveBarSlotProvider', () => {
       'md:right-6',
       'md:left-auto',
     );
+  });
+
+  // The footer and the toasts keep this much room, so neither ends up under Discard and Save
+  it('com uma barra na tela, reserva o espaço dela embaixo; sem barra, devolve', async () => {
+    const { unmount } = renderWithCharacter(
+      <SaveBarSlotProvider>
+        <CombatStatsSection />
+      </SaveBarSlotProvider>,
+      character,
+    );
+    const space = () => document.documentElement.style.getPropertyValue('--save-bar-space');
+    expect(space()).toBe('');
+
+    await editAc();
+
+    // jsdom lays nothing out: the bar's top is 0, so it "covers" the whole window
+    await waitFor(() => expect(space()).toBe(`${window.innerHeight}px`));
+    unmount();
+    expect(space()).toBe('');
   });
 });
 

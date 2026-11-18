@@ -103,6 +103,9 @@
  * -flare: text and icon variant, lightened (dark) or darkened (light) until it passes WCAG AA on
  *   the theme's surfaces.
  * -on: text on top of a solid fill (white or black, whichever contrasts).
+ * --character-fill: the character's color for solid fills, borders and bars, with its lightness
+ *   bounded until it reaches 3:1 (WCAG 1.4.11) on the theme's surfaces. Any color is accepted;
+ *   only this derived tone moves. bg-character / border-character and the sheet's --primary use it.
  * The numbers come from src/frontend/lib/contrast.ts, whose sweep test proves them: change both.
  * Without relative color support the fallbacks below are best effort.
  */
@@ -119,6 +122,7 @@
   --ring: var(--primary-flare);
 
   --character-primary: var(--character-color);
+  --character-fill: var(--character-primary);
   --character-flare: color-mix(in oklch, var(--character-primary), white 45%);
   --character-on: #ffffff;
   --character-surface: color-mix(in srgb, var(--character-primary), transparent 90%);
@@ -198,9 +202,10 @@
           1
         )
     );
+    --character-fill: oklch(from var(--character-primary) max(l, 0.58) c h);
     --character-flare: oklch(from var(--character-primary) max(l, 0.74) min(c, 0.2) h);
     --character-on: color(
-      from var(--character-primary) srgb
+      from var(--character-fill) srgb
         clamp(
           0,
           (0.179 - (0.2126 * pow(r, 2.2) + 0.7152 * pow(g, 2.2) + 0.0722 * pow(b, 2.2))) *
@@ -229,6 +234,7 @@
   [data-theme='light'] .spell-context,
   [data-theme='light'] .item-context {
     --primary-flare: oklch(from var(--primary) min(l, 0.42) min(c, 0.2) h);
+    --character-fill: oklch(from var(--character-primary) min(l, 0.59) c h);
     --character-flare: oklch(from var(--character-primary) min(l, 0.42) min(c, 0.2) h);
     --spell-flare: oklch(from var(--spell-color) min(l, 0.42) min(c, 0.2) h);
     --item-flare: oklch(from var(--item-color) min(l, 0.42) min(c, 0.2) h);
@@ -239,9 +245,9 @@
   }
 }
 
-/* The player's color drives every primary-* utility inside the sheet. */
+/* The player's color, as a fill with contrast, drives every primary-* utility inside the sheet. */
 .character-context {
-  --primary: var(--character-color);
+  --primary: var(--character-fill);
 }
 
 @theme inline {
@@ -276,7 +282,7 @@
   --color-primary-muted: var(--primary-muted);
   --color-primary-glow: var(--primary-glow);
 
-  --color-character: var(--character-primary);
+  --color-character: var(--character-fill);
   --color-character-flare: var(--character-flare);
   --color-character-on: var(--character-on);
   --color-character-surface: var(--character-surface);

@@ -86,7 +86,7 @@ export default async function JoinPartyPage({ params }: { params: Params }) {
           {card ? (
             <Card className="w-full max-w-lg">
               <CardContent className="flex flex-col gap-4 p-6">
-                <h2 className="text-heading">{card.name}</h2>
+                <h2 className="text-title">{card.name}</h2>
                 <p className="text-muted-foreground">{t('signInHint')}</p>
                 <Button asChild className="self-start">
                   <Link href={`/login?next=${encodeURIComponent(`/parties/join/${code}`)}`}>
@@ -101,6 +101,12 @@ export default async function JoinPartyPage({ params }: { params: Params }) {
               title={t('invalidTitle')}
               description={t('invalidDescription')}
               className="w-full max-w-lg"
+              // Signed out, the way on is the account: with it, the GM's new link works
+              action={
+                <Link href="/login" className="text-primary-flare text-sm underline">
+                  {t('signInAction')}
+                </Link>
+              }
             />
           )}
         </div>

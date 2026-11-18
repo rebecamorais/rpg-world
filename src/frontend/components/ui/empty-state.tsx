@@ -11,8 +11,21 @@ interface StateProps extends Omit<React.ComponentProps<'div'>, 'title'> {
   action?: React.ReactNode;
 }
 
+interface EmptyStateProps extends StateProps {
+  /** The title's element: a heading when the state is the whole page (h1). */
+  titleAs?: 'p' | 'h1' | 'h2';
+}
+
 /** Nothing to show yet: what is missing and how to start. */
-function EmptyState({ icon, title, description, action, className, ...props }: StateProps) {
+function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+  titleAs: Title = 'p',
+  className,
+  ...props
+}: EmptyStateProps) {
   return (
     <div
       className={cn(
@@ -26,7 +39,7 @@ function EmptyState({ icon, title, description, action, className, ...props }: S
           <AppIcon name={icon} size={28} aria-hidden="true" />
         </div>
       )}
-      <p className="text-heading text-foreground">{title}</p>
+      <Title className="text-heading text-foreground">{title}</Title>
       {description && (
         <p className="text-body text-muted-foreground max-w-sm text-balance">{description}</p>
       )}

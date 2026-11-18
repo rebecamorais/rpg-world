@@ -103,9 +103,10 @@ describe('PartyGmClaim', () => {
 
     const user = userEvent.setup();
     await user.click(button);
-    const dialog = screen.getByRole('alertdialog');
+    // A title of its own, not "Are you sure?"
+    const dialog = screen.getByRole('alertdialog', { name: t.claimConfirmTitle });
     expect(dialog).toHaveTextContent(t.claimConfirm);
-    await user.click(within(dialog).getByRole('button', { name: messages.common.confirm }));
+    await user.click(within(dialog).getByRole('button', { name: t.claim }));
     await waitFor(() => expect(rpgWorldApi.post).toHaveBeenCalledWith('/api/parties/p1/gm-claim'));
   });
 
@@ -137,9 +138,9 @@ describe('PartyGmClaim', () => {
 
     const user = userEvent.setup();
     await user.click(button);
-    const dialog = screen.getByRole('alertdialog');
+    const dialog = screen.getByRole('alertdialog', { name: t.claimConfirmSoloTitle });
     expect(dialog).toHaveTextContent(t.claimConfirmSolo);
-    await user.click(within(dialog).getByRole('button', { name: messages.common.confirm }));
+    await user.click(within(dialog).getByRole('button', { name: t.claim }));
     await waitFor(() => expect(rpgWorldApi.post).toHaveBeenCalledWith('/api/parties/p1/gm-claim'));
   });
 
@@ -214,7 +215,7 @@ describe('PartyGmClaim', () => {
     await user.click(await screen.findByRole('button', { name: t.claim }));
     await user.click(
       within(screen.getByRole('alertdialog')).getByRole('button', {
-        name: messages.common.confirm,
+        name: t.claim,
       }),
     );
 

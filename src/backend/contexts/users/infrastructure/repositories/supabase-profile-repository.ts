@@ -8,6 +8,9 @@ import { ProfileRepository } from '../../domain/profile.repo';
 // Postgres unique_violation; on update it can only come from profile.username
 const UNIQUE_VIOLATION = '23505';
 
+/** An empty field clears the column; undefined leaves it as it is. */
+const emptyToNull = (value: string | undefined) => (value === '' ? null : value);
+
 export class SupabaseProfileRepository implements ProfileRepository {
   constructor(private readonly dbClient: SupabaseClient) {}
 
@@ -32,7 +35,6 @@ export class SupabaseProfileRepository implements ProfileRepository {
       usernameChosen: data.username_chosen ?? false,
       fullName: data.full_name ?? undefined,
       avatarUrl: data.avatar_url ?? undefined,
-      primaryColor: data.primary_color ?? undefined,
       updatedAt: data.updated_at ?? undefined,
     };
   }
@@ -46,7 +48,6 @@ export class SupabaseProfileRepository implements ProfileRepository {
         username: profile.username,
         full_name: profile.fullName,
         avatar_url: profile.avatarUrl,
-        primary_color: profile.primaryColor,
       },
       { onConflict: 'id', ignoreDuplicates: true },
     );
@@ -63,9 +64,8 @@ export class SupabaseProfileRepository implements ProfileRepository {
         username: profile.username,
         // Saving a username means the person picked it (undefined keeps the current mark)
         username_chosen: profile.username !== undefined ? true : undefined,
-        full_name: profile.fullName,
-        avatar_url: profile.avatarUrl,
-        primary_color: profile.primaryColor,
+        full_name: emptyToNull(profile.fullName),
+        avatar_url: emptyToNull(profile.avatarUrl),
       })
       .eq('id', profile.id);
 

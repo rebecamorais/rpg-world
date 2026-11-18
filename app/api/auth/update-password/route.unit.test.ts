@@ -1,4 +1,4 @@
-import { api, jsonRequest, resetApi, routeContext } from '@tests/helpers/mock-api';
+import { SESSION_USER, api, jsonRequest, resetApi, routeContext } from '@tests/helpers/mock-api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { POST } from './route';
@@ -10,13 +10,29 @@ const url = '/api/auth/update-password';
 describe('POST /api/auth/update-password', () => {
   beforeEach(() => resetApi());
 
-  it('troca a senha do usuário logado', async () => {
+  it('troca a senha do usuário logado, com a senha atual e o e-mail da sessão', async () => {
     api.authApi.updatePassword.mockResolvedValue({ success: true });
 
-    const res = await POST(jsonRequest(url, 'POST', { newPassword: 'new-secret' }), routeContext());
+    const res = await POST(
+      jsonRequest(url, 'POST', {
+        currentPassword: 'old-secret',
+        newPassword: 'new-secret',
+        userId: 'someone-else',
+        email: 'other@example.com',
+      }),
+      routeContext(),
+    );
 
     expect(res.status).toBe(200);
-    expect(api.authApi.updatePassword).toHaveBeenCalledWith('new-secret');
+    expect(api.authApi.updatePassword).toHaveBeenCalledWith(
+      {
+        userId: SESSION_USER.id,
+        email: SESSION_USER.email,
+        currentPassword: 'old-secret',
+        newPassword: 'new-secret',
+      },
+      expect.stringMatching(/\/forgot-password$/),
+    );
   });
 
   it('responde 400 com senha curta demais', async () => {

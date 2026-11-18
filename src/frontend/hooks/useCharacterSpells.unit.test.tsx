@@ -22,7 +22,9 @@ async function forget(forgetSpell: (id: string) => Promise<void>, id: string, an
   act(() => {
     done = forgetSpell(id);
   });
-  const dialog = await screen.findByRole('alertdialog');
+  const dialog = await screen.findByRole('alertdialog', {
+    name: tConfirm.title.replace('{name}', 'Fly'),
+  });
   expect(dialog).toHaveTextContent(tConfirm.description.replace('{name}', 'Fly'));
   await userEvent.click(
     screen.getByRole('button', { name: answer ? tConfirm.confirm : messages.common.cancel }),

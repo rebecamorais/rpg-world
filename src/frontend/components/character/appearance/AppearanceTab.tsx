@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 import { ResourceBoxesEditor } from '@frontend/components/character/resources/ResourceBoxesEditor';
 import { SaveCharacterButton } from '@frontend/components/character/sheet/SaveControls';
@@ -76,6 +77,38 @@ function EditionSettings() {
 }
 
 /**
+ * The character's image. Saved as soon as it is cropped or removed, not left in the sheet's draft:
+ * the file is already uploaded, and leaving without Save would lose it.
+ */
+function CharacterImageUpload() {
+  const t = useTranslations('avatarUpload');
+  const { id } = useCharacterMeta();
+  const { avatarUrl, name } = useLoadedCharacter();
+  const { saveNow } = useCharacterActions();
+
+  const save = async (url: string, message: string) => {
+    try {
+      await saveNow({ avatarUrl: url });
+      toast.success(message);
+    } catch {
+      // The save already showed the error, with "Try again"
+    }
+  };
+
+  return (
+    <ImageUpload
+      currentUrl={avatarUrl}
+      name={name}
+      target="character"
+      targetId={id}
+      onUploadSuccess={(url) => save(url, t('saved'))}
+      onRemove={() => save('', t('removed'))}
+      keepFullImage
+    />
+  );
+}
+
+/**
  * The sheet's settings: how it looks and which edition its class resources follow. Opened by the
  * gear on the sheet and left out of its menu. The page exists only under the owner's route, so
  * whoever only reads a sheet never reaches it.
@@ -84,8 +117,7 @@ export function AppearanceTab() {
   const t = useTranslations('characterAppearance');
   const ts = useTranslations('sheetSettings');
   const { id } = useCharacterMeta();
-  const { avatarUrl, system } = useLoadedCharacter();
-  const { update } = useCharacterActions();
+  const { system } = useLoadedCharacter();
   const { pagesPath } = useSheetSource(id, system);
 
   return (
@@ -120,13 +152,7 @@ export function AppearanceTab() {
           </Section>
           <Section title={t('imageTitle')} hint={t('imageHint')}>
             <div className="self-start">
-              <ImageUpload
-                currentUrl={avatarUrl}
-                target="character"
-                targetId={id}
-                onUploadSuccess={(url) => update({ avatarUrl: url })}
-                keepFullImage
-              />
+              <CharacterImageUpload />
             </div>
           </Section>
           <Section title={t('backgroundTitle')} hint={t('backgroundHint')}>

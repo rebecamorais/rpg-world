@@ -9,6 +9,13 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
   return <Label className={cn('text-label text-muted-foreground', className)} {...props} />;
 }
 
+/**
+ * The sheet's field look: a filled box with a border that takes the character's color on hover.
+ * InlineField uses it, and so do the Lore's text boxes, so every field there looks the same.
+ */
+const FIELD_SURFACE =
+  'bg-muted border-input hover:border-character-muted focus-visible:bg-background border border-solid';
+
 interface InlineFieldProps extends React.ComponentProps<typeof GhostInput> {
   id: string;
   label: string;
@@ -21,14 +28,11 @@ function InlineField({ id, label, className, containerClassName, ...props }: Inl
       <FieldLabel htmlFor={id}>{label}</FieldLabel>
       <GhostInput
         id={id}
-        className={cn(
-          'bg-muted border-input hover:border-character-muted focus-visible:bg-background h-10 border border-solid px-3 font-medium',
-          className,
-        )}
+        className={cn(FIELD_SURFACE, 'h-10 px-3 font-medium', className)}
         {...props}
       />
     </div>
   );
 }
 
-export { FieldLabel, InlineField };
+export { FIELD_SURFACE, FieldLabel, InlineField };

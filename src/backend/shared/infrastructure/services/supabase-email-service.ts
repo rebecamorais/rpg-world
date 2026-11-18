@@ -9,6 +9,7 @@ import { AccountDeletionTemplate } from '../email/templates/AccountDeletion';
 import { AccountExistsTemplate } from '../email/templates/AccountExists';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';
 import { MagicLinkTemplate } from '../email/templates/MagicLink';
+import { PasswordChangedTemplate } from '../email/templates/PasswordChanged';
 import { PasswordResetTemplate } from '../email/templates/PasswordReset';
 
 /**
@@ -135,5 +136,27 @@ export class SupabaseEmailService implements EmailService {
     } catch {
       console.warn('Warning: Could not send the account deletion email to local Inbucket.');
     }
+  }
+
+  async sendPasswordChangedEmail(email: string, forgotPasswordLink: string): Promise<void> {
+    const html = await render(React.createElement(PasswordChangedTemplate, { forgotPasswordLink }));
+
+    console.log('\n--- DEVELOPMENT EMAIL (CONSOLE) ---');
+    console.log(`To: ${email}`);
+    console.log('Password changed notice');
+
+    try {
+      await this.transporter.sendMail({
+        from: this.fromEmail,
+        to: email,
+        subject: 'Sua senha foi alterada - RPG World',
+        html,
+      });
+      console.log('Status: Email sent to local Inbucket.');
+    } catch (error) {
+      console.warn('Warning: Could not connect to the local Inbucket SMTP server.');
+      console.warn(`Error: ${(error as Error).message}`);
+    }
+    console.log('-------------------------------------\n');
   }
 }

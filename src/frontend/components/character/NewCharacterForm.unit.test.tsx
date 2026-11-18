@@ -82,6 +82,7 @@ describe('NewCharacterForm', () => {
     expect(post).toHaveBeenCalledWith('/api/characters', {
       name: 'Thor',
       system: 'DnD_5e',
+      edition: '2014',
     });
     expect(toast.success).toHaveBeenCalledWith(t.success);
   });
@@ -99,6 +100,7 @@ describe('NewCharacterForm', () => {
     expect(post).toHaveBeenCalledWith('/api/characters', {
       name: 'Goblin',
       system: 'DnD_5e',
+      edition: '2014',
       kind: 'npc',
     });
   });
@@ -122,6 +124,40 @@ describe('NewCharacterForm', () => {
     // Inline only: a toast too would say the same thing twice
     expect(await screen.findByRole('alert')).toHaveTextContent(message);
     expect(toast.error).not.toHaveBeenCalled();
+    expect(push).not.toHaveBeenCalled();
+  });
+
+  it('começa com a edição 2014 marcada e mostra o único sistema como texto', () => {
+    renderWithProviders(<NewCharacterForm />);
+
+    expect(screen.getByRole('radio', { name: messages.sheetSettings.edition2014 })).toBeChecked();
+    expect(screen.getByText(t.systems.dnd5e)).toBeInTheDocument();
+    // The class is the only list left to pick from
+    expect(screen.getAllByRole('combobox')).toHaveLength(1);
+  });
+
+  it('nome e classe com o mesmo rótulo e a mesma altura', () => {
+    renderWithProviders(<NewCharacterForm />);
+
+    const name = screen.getByLabelText(t.nameLabel);
+    const nameLabel = screen.getByText(t.nameLabel);
+    const classLabel = screen.getByText(messages.characterHeader.class);
+    const classField = screen.getByRole('combobox', { name: messages.characterHeader.class });
+    expect(nameLabel).toHaveClass('text-label', 'text-muted-foreground');
+    expect(classLabel).toHaveClass('text-label', 'text-muted-foreground');
+    expect(name).toHaveClass('h-10');
+    expect(classField).toHaveClass('h-10');
+  });
+
+  it('sem rede, diz que é a conexão e não um erro desconhecido', async () => {
+    post.mockRejectedValue(new TypeError('Failed to fetch'));
+    renderWithProviders(<NewCharacterForm />);
+
+    await createCharacter('Thor');
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      messages.common.errors.common_error_network,
+    );
     expect(push).not.toHaveBeenCalled();
   });
 
@@ -200,19 +236,20 @@ describe('NewCharacterForm', () => {
       });
     });
 
-    it('sem edição: não pede escolhas, avisa da edição 2014 e cria só com a classe', async () => {
+    it('sem tocar na edição: a 2014 já marcada pede as escolhas da classe', async () => {
       renderWithProviders(<NewCharacterForm />);
 
       await pickClass('Cleric');
 
-      expect(screen.getByText(t.classHintEdition)).toBeInTheDocument();
-      expect(screen.queryByRole('group', { name: t.choiceSkills })).not.toBeInTheDocument();
+      expect(await screen.findByRole('group', { name: t.choiceSkills })).toBeInTheDocument();
+      expect(screen.queryByText(t.classHint2024)).not.toBeInTheDocument();
       await createCharacter('Pike');
 
       await waitFor(() => expect(post).toHaveBeenCalled());
       expect(post).toHaveBeenCalledWith('/api/characters', {
         name: 'Pike',
         system: 'DnD_5e',
+        edition: '2014',
         class: 'cleric',
       });
     });

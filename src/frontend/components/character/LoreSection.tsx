@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 
-import { FieldLabel, InlineField } from '@frontend/components/ui/field';
+import { FIELD_SURFACE, FieldLabel, InlineField } from '@frontend/components/ui/field';
 import type { IconName } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import type { LoreData } from '@frontend/hooks/useCharacterLore';
@@ -96,10 +96,7 @@ function AppearanceField({ field, wide, value, onChange }: AppearanceFieldProps)
         maxLength={APPEARANCE_MAX_LENGTH}
         placeholder="—"
         onChange={(e) => onChange(field, e.target.value)}
-        className={cn(
-          AUTO_HEIGHT,
-          'bg-muted/40 hover:bg-muted focus-visible:bg-background min-h-10 border-none font-medium shadow-none',
-        )}
+        className={cn(AUTO_HEIGHT, FIELD_SURFACE, 'min-h-10 font-medium')}
       />
     </div>
   );
@@ -117,9 +114,7 @@ function TextField({ field, icon, value, onChange, readOnly }: TextFieldProps) {
   const t = useTranslations('characters.loreFields');
 
   return (
-    <SectionCard
-      className={cn('flex flex-col transition-colors', !readOnly && 'hover:border-character-muted')}
-    >
+    <SectionCard className="flex flex-col">
       <SectionCard.Header>
         <SectionCard.Title icon={icon}>{t(field)}</SectionCard.Title>
       </SectionCard.Header>
@@ -128,17 +123,17 @@ function TextField({ field, icon, value, onChange, readOnly }: TextFieldProps) {
           <LoreText value={value} />
         </p>
       ) : (
-        <Textarea
-          aria-label={t(field)}
-          maxLength={TEXT_MAX_LENGTH}
-          value={value || ''}
-          placeholder="—"
-          onChange={(e) => onChange(field, e.target.value)}
-          className={cn(
-            AUTO_HEIGHT,
-            'text-foreground min-h-20 flex-1 rounded-none border-none bg-transparent px-4 py-3 leading-relaxed shadow-none focus-visible:-outline-offset-2',
-          )}
-        />
+        // The same field as the appearance's, inside the card
+        <SectionCard.Body className="flex flex-1 flex-col">
+          <Textarea
+            aria-label={t(field)}
+            maxLength={TEXT_MAX_LENGTH}
+            value={value || ''}
+            placeholder="—"
+            onChange={(e) => onChange(field, e.target.value)}
+            className={cn(AUTO_HEIGHT, FIELD_SURFACE, 'min-h-20 flex-1 leading-relaxed')}
+          />
+        </SectionCard.Body>
       )}
     </SectionCard>
   );

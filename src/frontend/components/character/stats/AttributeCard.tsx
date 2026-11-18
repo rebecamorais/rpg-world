@@ -9,7 +9,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -21,7 +20,8 @@ import { cn, getStatColorClass } from '@frontend/lib/utils';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
 import { MAX_ATTRIBUTE, MIN_ATTRIBUTE } from '@shared/systems/dnd5e/constants';
-import rules from '@shared/systems/dnd5e/rules.json';
+
+import { DraftDialogFooter } from './DraftDialogFooter';
 
 interface Props {
   label: string;
@@ -114,20 +114,18 @@ export default function AttributeCard({ label, value, onChange, icon }: Props) {
               autoFocus
             />
           </div>
+          {/* In words, the way getModifier counts (rounded down: 11 is +0) */}
           <div className="text-sm">
             <p className="font-semibold">{tAttr('modifierCalc')}</p>
-            <p className="text-muted-foreground font-mono text-xs">
-              {rules.formulas.attributeModifier}
-            </p>
+            <p className="text-caption text-muted-foreground">{tAttr('modifierFormula')}</p>
           </div>
         </div>
         {/* An attribute is a sheet edit: it goes into the draft, so the button doesn't say Save */}
-        <DialogFooter className="items-center gap-3 sm:justify-between">
-          <p className="text-caption text-muted-foreground">{tCommon('draftNote')}</p>
+        <DraftDialogFooter>
           <Button onClick={handleSave} disabled={!isValid}>
             {tCommon('apply')}
           </Button>
-        </DialogFooter>
+        </DraftDialogFooter>
       </DialogContent>
     </Dialog>
   );

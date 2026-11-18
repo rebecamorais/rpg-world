@@ -9,6 +9,7 @@ const FIELD_BY_ERROR: Record<string, string> = {
   auth_error_signup_invalid_password: 'password',
   auth_error_update_password_weak: 'password',
   auth_error_update_password_same: 'password',
+  auth_error_update_password_current_invalid: 'currentPassword',
 };
 
 /**
