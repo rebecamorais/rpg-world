@@ -7,7 +7,7 @@ import { checkAccountPassword } from './check-account-password';
 export interface UpdatePasswordInput {
   userId: string;
   email: string;
-  /** Required when the account has a password; ignored when it has none (Google only). */
+  /** The password the account has now: always asked. */
   currentPassword?: string;
   newPassword: string;
 }
@@ -15,7 +15,9 @@ export interface UpdatePasswordInput {
 /**
  * Changes the password of the signed-in account. An open session alone is not enough: whoever
  * holds one (a borrowed computer) could lock the owner out, so the current password is asked
- * again, and the owner gets an e-mail saying it changed.
+ * again, and the owner gets an e-mail saying it changed. An account without a password (Google
+ * only) can't get one here: a session alone would then add a lasting way in, so it goes through
+ * "Forgot my password", which proves the e-mail.
  */
 export class UpdatePasswordUseCase {
   constructor(
@@ -30,23 +32,21 @@ export class UpdatePasswordUseCase {
     }
 
     // The account says whether it has a password, never the request
-    const hadPassword = await this.authRepository.hasPassword(input.userId);
-    if (hadPassword) {
-      await checkAccountPassword(
-        this.authRepository,
-        this.passwordAttempts,
-        { userId: input.userId, email: input.email, password: input.currentPassword },
-        UserErrorCodes.UPDATE_PASSWORD_CURRENT_INVALID,
-      );
+    if (!(await this.authRepository.hasPassword(input.userId))) {
+      throw new UserError(UserErrorCodes.UPDATE_PASSWORD_NO_PASSWORD);
     }
+    await checkAccountPassword(
+      this.authRepository,
+      this.passwordAttempts,
+      { userId: input.userId, email: input.email, password: input.currentPassword },
+      UserErrorCodes.UPDATE_PASSWORD_CURRENT_INVALID,
+    );
 
     await this.authRepository.updatePassword(input.newPassword);
 
-    if (hadPassword) {
-      await this.passwordAttempts.clearPasswordAttempts(input.userId).catch((error: Error) => {
-        console.error('Failed to clear password attempts:', error.message);
-      });
-    }
+    await this.passwordAttempts.clearPasswordAttempts(input.userId).catch((error: Error) => {
+      console.error('Failed to clear password attempts:', error.message);
+    });
 
     // The password already changed: a failed e-mail must not report the change as failed
     try {

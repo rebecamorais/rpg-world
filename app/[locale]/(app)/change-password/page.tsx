@@ -18,12 +18,13 @@ export default async function ChangePasswordPage() {
   const user = await authApi.getSessionUser();
   if (!user) redirect(`/login?next=${encodeURIComponent('/change-password')}`);
 
-  // If the check fails, the current password is asked anyway: the server decides, and an account
-  // without one is not refused for sending it
+  // An account without a password creates one through the e-mail link, not with a session alone.
+  // If the check fails, the form shows: the server checks again
   const hasPassword = await authApi.hasPassword(user.id).catch((error: unknown) => {
     console.error('Failed to check whether the account has a password:', error);
     return true;
   });
+  if (!hasPassword) redirect('/forgot-password');
 
-  return <ChangePasswordForm hasPassword={hasPassword} />;
+  return <ChangePasswordForm hasPassword />;
 }

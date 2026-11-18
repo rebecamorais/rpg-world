@@ -102,4 +102,16 @@ describe('LoreTab', () => {
     expect(save).toHaveBeenCalledOnce();
     expect(updateLore).not.toHaveBeenCalled();
   });
+
+  it('um campo inválido na ficha não segura a lore: ela salva sozinha', async () => {
+    const { save } = renderLore();
+    await userEvent.clear(screen.getByLabelText('AC'));
+    await userEvent.type(screen.getByLabelText('AC'), '5000');
+    await editLore();
+
+    await userEvent.click(screen.getAllByRole('button', { name: t.save }).at(-1)!);
+
+    expect(updateLore).toHaveBeenCalledWith(expect.objectContaining({ age: '31' }));
+    expect(save).not.toHaveBeenCalled();
+  });
 });

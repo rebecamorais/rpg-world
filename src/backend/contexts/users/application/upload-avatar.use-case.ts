@@ -30,7 +30,8 @@ export class UploadAvatarUseCase {
     }
 
     // Versioned path: the proxy lets images be cached, so each upload needs a new URL.
-    // The previous file is kept because the new URL is only saved when the profile form is.
+    // The previous file stays until the new URL is saved on the profile (right after the upload),
+    // which removes the file it replaces.
     const extension = file.type.split('/')[1];
     const path = `${userId}/avatar-${this.newVersion()}.${extension}`;
 

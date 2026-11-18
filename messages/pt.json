@@ -22,6 +22,7 @@
       "auth_error_update_password_weak": "Senha fraca. Escolha uma senha mais forte.",
       "auth_error_update_password_same": "A nova senha deve ser diferente da atual.",
       "auth_error_update_password_current_invalid": "Senha atual incorreta. Se não lembra dela, use “Esqueci minha senha”.",
+      "auth_error_update_password_no_password": "Esta conta ainda não tem senha. Crie uma pelo “Esqueci minha senha”, que manda um link para o seu e-mail.",
       "auth_error_signup_duplicate_email": "Este e-mail já está em uso.",
       "auth_error_signup_required_fields": "Preencha todos os campos obrigatórios.",
       "auth_error_signup_invalid_password": "Esta senha não pode ser utilizada para cadastro inicial.",

@@ -115,7 +115,7 @@ export default function PartyList() {
   const t = useTranslations('parties');
   const confirm = useConfirm();
   const { getErrorMessage } = useErrorMessage();
-  const { parties, isLoading, error, respondAsync, respondingTo } = useParties();
+  const { parties, isLoading, error, respondAsync, respondingTo } = useParties({ poll: true });
   const { currentUser } = useCurrentUser();
   const router = useRouter();
   const userId = currentUser?.id ?? '';

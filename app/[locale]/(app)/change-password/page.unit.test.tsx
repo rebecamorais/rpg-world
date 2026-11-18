@@ -22,12 +22,19 @@ describe('ChangePasswordPage', () => {
     expect(hasPassword).not.toHaveBeenCalled();
   });
 
-  it.each([true, false])('diz ao form se a conta tem senha (%s)', async (has) => {
+  it('com senha, mostra o form que pede a senha atual', async () => {
     getSessionUser.mockResolvedValue({ id: 'user-1', email: 'hero@example.com' });
-    hasPassword.mockResolvedValue(has);
+    hasPassword.mockResolvedValue(true);
 
     const page = await ChangePasswordPage();
 
-    expect(page.props.hasPassword).toBe(has);
+    expect(page.props.hasPassword).toBe(true);
+  });
+
+  it('sem senha (só Google), cria a senha pelo e-mail: vai para o esqueci a senha', async () => {
+    getSessionUser.mockResolvedValue({ id: 'user-1', email: 'hero@example.com' });
+    hasPassword.mockResolvedValue(false);
+
+    await expect(ChangePasswordPage()).rejects.toThrow('redirect:/forgot-password');
   });
 });

@@ -17,6 +17,7 @@ export const UserErrorCodes = {
   UPDATE_PASSWORD_WEAK: 'auth_error_update_password_weak',
   UPDATE_PASSWORD_SAME: 'auth_error_update_password_same',
   UPDATE_PASSWORD_CURRENT_INVALID: 'auth_error_update_password_current_invalid',
+  UPDATE_PASSWORD_NO_PASSWORD: 'auth_error_update_password_no_password',
   PROFILE_UPDATE_ID_REQUIRED: 'profile_error_update_id_required',
   PROFILE_GET_ID_REQUIRED: 'profile_error_get_id_required',
   PROFILE_USERNAME_TAKEN: 'profile_error_username_taken',

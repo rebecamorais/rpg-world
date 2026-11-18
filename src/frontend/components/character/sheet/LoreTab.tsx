@@ -48,13 +48,16 @@ export function LoreTab() {
   useClaimCharacterBar();
   const sheet = useCharacterSave();
   const sheetDirty = sheet?.isDirty ?? false;
-  const both = isDirty && sheetDirty;
+  // A field with an error or a conflict on the sheet's draft holds only the sheet's save: the lore
+  // still saves, and once it has, the bar shows the sheet's problem with its own way out
+  const sheetBlocked = !!(sheet?.hasErrors || sheet?.conflict);
+  const both = isDirty && sheetDirty && !sheetBlocked;
   const save = async () => {
-    await Promise.all([isDirty && saveLore(), sheetDirty && sheet?.onSave()]);
+    await Promise.all([isDirty && saveLore(), sheetDirty && !sheetBlocked && sheet?.onSave()]);
   };
   const discardAll = () => {
     if (isDirty) discard();
-    if (sheetDirty) sheet?.onDiscard();
+    if (sheetDirty && !sheetBlocked) sheet?.onDiscard();
   };
 
   return (
@@ -68,16 +71,17 @@ export function LoreTab() {
             isSaving={isSaving || (sheet?.isSaving ?? false)}
             onSave={save}
             onDiscard={discardAll}
-            // A field with an error or a conflict is on the sheet's draft: it holds the sheet's save
-            hasErrors={sheetDirty && sheet?.hasErrors}
-            conflict={sheetDirty && sheet?.conflict}
+            // Shown only once the lore is saved: until then Save keeps the lore, and Discard
+            // (which would drop the lore too) isn't offered as the way out of the sheet's conflict
+            hasErrors={!isDirty && sheetDirty && sheet?.hasErrors}
+            conflict={!isDirty && sheetDirty && sheet?.conflict}
             onReload={sheet?.onReload}
             label={
               both
                 ? tCommon('unsavedLoreAndSheet')
-                : sheetDirty
-                  ? tCommon('unsavedSheet')
-                  : tCommon('unsavedLore')
+                : isDirty
+                  ? tCommon('unsavedLore')
+                  : tCommon('unsavedSheet')
             }
             saveLabel={both ? tCommon('saveAll') : undefined}
           />

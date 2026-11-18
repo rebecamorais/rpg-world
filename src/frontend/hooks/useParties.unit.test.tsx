@@ -38,7 +38,28 @@ describe('useParties', () => {
   });
 
   // d-fase2-tempo-real#3: an invite reaches someone not in the party: no channel tells them
-  it('pergunta de novo a cada minuto, para um convite novo aparecer', async () => {
+  it('a lista de mesas pergunta de novo a cada minuto, para um convite novo aparecer', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      vi.mocked(rpgWorldApi.get).mockReset().mockResolvedValue({
+        asGm: [],
+        asPlayer: [],
+        invites: [],
+        requests: [],
+      });
+      const { result } = renderHookWithProviders(() => useParties({ poll: true }));
+      await waitFor(() => expect(result.current.parties).toBeDefined());
+      expect(rpgWorldApi.get).toHaveBeenCalledTimes(1);
+
+      await act(() => vi.advanceTimersByTimeAsync(PARTIES_POLL_MS));
+
+      expect(rpgWorldApi.get).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('fora da lista (o menu em toda tela) não pergunta sozinho', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     try {
       vi.mocked(rpgWorldApi.get).mockReset().mockResolvedValue({
@@ -49,11 +70,10 @@ describe('useParties', () => {
       });
       const { result } = renderHookWithProviders(() => useParties());
       await waitFor(() => expect(result.current.parties).toBeDefined());
+
+      await act(() => vi.advanceTimersByTimeAsync(PARTIES_POLL_MS * 2));
+
       expect(rpgWorldApi.get).toHaveBeenCalledTimes(1);
-
-      await act(() => vi.advanceTimersByTimeAsync(PARTIES_POLL_MS));
-
-      expect(rpgWorldApi.get).toHaveBeenCalledTimes(2);
     } finally {
       vi.useRealTimers();
     }

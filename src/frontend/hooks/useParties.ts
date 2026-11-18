@@ -25,17 +25,20 @@ export const PARTIES_POLL_MS = 60_000;
 
 /**
  * The person's parties (as GM and player), their invitations and pending requests. Also used by
- * the phone menu, which renders outside the dashboard's UserProvider.
+ * the phone menu, which renders outside the dashboard's UserProvider. Only the parties list
+ * (`poll`) asks again on its own: the menu is on every screen, and a request a minute from each
+ * open tab isn't worth it there.
  */
-export function useParties() {
+export function useParties({ poll = false }: { poll?: boolean } = {}) {
   const queryClient = useQueryClient();
   const { getErrorMessage } = useErrorMessage();
 
   const query = useQuery({
     queryKey: PARTIES_QUERY_KEY,
     queryFn: () => rpgWorldApi.get<MyParties>('/api/parties'),
-    refetchInterval: PARTIES_POLL_MS,
-    refetchOnWindowFocus: true,
+    // TanStack polls a shared query only while an observer that asks for it is mounted
+    refetchInterval: poll ? PARTIES_POLL_MS : false,
+    refetchOnWindowFocus: poll,
   });
 
   const onSettled = () => queryClient.invalidateQueries({ queryKey: PARTIES_QUERY_KEY });

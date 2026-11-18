@@ -22,6 +22,7 @@
       "auth_error_update_password_weak": "Weak password. Choose a stronger one.",
       "auth_error_update_password_same": "The new password must be different from the current one.",
       "auth_error_update_password_current_invalid": "Incorrect current password. If you don’t remember it, use “Forgot my password”.",
+      "auth_error_update_password_no_password": "This account has no password yet. Create one with “Forgot my password”, which sends a link to your e-mail.",
       "auth_error_signup_duplicate_email": "This email is already in use.",
       "auth_error_signup_required_fields": "Please fill in all required fields.",
       "auth_error_signup_invalid_password": "This password cannot be used for initial registration.",

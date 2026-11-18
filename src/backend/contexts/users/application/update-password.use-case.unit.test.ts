@@ -77,14 +77,15 @@ describe('UpdatePasswordUseCase', () => {
     expect(updatePassword).not.toHaveBeenCalled();
   });
 
-  it('conta sem senha (só Google) cria a senha sem pedir a atual', async () => {
+  it('conta sem senha (só Google) não cria senha só com a sessão: vai pelo e-mail', async () => {
     hasPassword.mockResolvedValue(false);
 
-    await useCase.execute({ ...INPUT, currentPassword: undefined }, FORGOT);
+    await expect(useCase.execute({ ...INPUT, currentPassword: undefined }, FORGOT)).rejects.toThrow(
+      UserErrorCodes.UPDATE_PASSWORD_NO_PASSWORD,
+    );
 
-    expect(verifyPassword).not.toHaveBeenCalled();
-    expect(updatePassword).toHaveBeenCalledWith('new-secret');
-    expect(sendPasswordChangedEmail).toHaveBeenCalled();
+    expect(updatePassword).not.toHaveBeenCalled();
+    expect(sendPasswordChangedEmail).not.toHaveBeenCalled();
   });
 
   it('o e-mail que falha não faz a troca, já feita, parecer falha', async () => {
