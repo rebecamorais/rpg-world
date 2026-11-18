@@ -39,8 +39,12 @@ test('apagar o nome real grava o vazio, e ele continua apagado depois de recarre
   await expect(page.getByText('Profile updated successfully!')).toBeVisible();
 
   await name.fill('');
+  // The first save's toast may still be up: wait for this save's own answer
+  const saved = page.waitForResponse(
+    (r) => new URL(r.url()).pathname === '/api/profile' && r.request().method() !== 'GET' && r.ok(),
+  );
   await page.getByRole('button', { name: 'Save profile' }).click();
-  await expect(page.getByText('Profile updated successfully!').last()).toBeVisible();
+  await saved;
 
   await page.reload();
   await expect(page.getByLabel('Name', { exact: true })).toHaveValue('');
