@@ -14,6 +14,7 @@ const makeEmailService = () =>
     sendAccountExistsEmail: vi.fn(),
     sendAccountDeletionEmail: vi.fn(),
     sendPasswordChangedEmail: vi.fn(),
+    sendFinishSignUpEmail: vi.fn(),
   }) satisfies EmailService;
 
 const makeThrottle = (claimed = true) =>

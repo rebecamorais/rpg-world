@@ -23,10 +23,12 @@ function setup({
     existsByEmail: vi.fn().mockResolvedValue(exists),
     isEmailConfirmed: vi.fn().mockResolvedValue(confirmed),
     generateSignUpLink: signUpLink,
+    generateRecoveryLink: vi.fn().mockResolvedValue('http://recovery-link'),
   };
   const emailService = {
     sendConfirmationEmail: vi.fn().mockResolvedValue(undefined),
     sendAccountExistsEmail: vi.fn().mockResolvedValue(undefined),
+    sendFinishSignUpEmail: vi.fn().mockResolvedValue(undefined),
   };
   const throttle = { claim: vi.fn().mockResolvedValue(claimed) };
   const useCase = new SignUpUseCase(
@@ -82,35 +84,31 @@ describe('SignUpUseCase', () => {
     );
   });
 
-  it('conta que existe e não confirmou recebe uma confirmação nova, e não o aviso', async () => {
+  // Someone may have started it with their own password: confirming must not keep that password
+  it('conta que existe e não confirmou recebe o link para confirmar e escolher a senha', async () => {
     const { repository, emailService, useCase } = setup({ exists: true, confirmed: false });
 
     await expect(
       useCase.execute('pending@example.com', 'Password123!', REDIRECT),
     ).resolves.toBeUndefined();
 
-    expect(repository.generateSignUpLink).toHaveBeenCalledWith(
+    expect(repository.generateRecoveryLink).toHaveBeenCalledWith('pending@example.com', REDIRECT);
+    expect(repository.generateSignUpLink).not.toHaveBeenCalled();
+    expect(emailService.sendFinishSignUpEmail).toHaveBeenCalledWith(
       'pending@example.com',
-      'Password123!',
-      REDIRECT,
+      'http://recovery-link',
     );
-    expect(emailService.sendConfirmationEmail).toHaveBeenCalledWith(
-      'pending@example.com',
-      'http://mock-link',
-    );
+    expect(emailService.sendConfirmationEmail).not.toHaveBeenCalled();
     expect(emailService.sendAccountExistsEmail).not.toHaveBeenCalled();
   });
 
-  it('conta que confirmou entre a checagem e o link recebe o aviso', async () => {
-    const { emailService, useCase } = setup({
-      exists: true,
-      confirmed: false,
-      signUpLink: vi.fn().mockRejectedValue(new UserError(UserErrorCodes.SIGNUP_DUPLICATE_EMAIL)),
-    });
+  it('conta nova: sem a reserva do intervalo (outro pedido igual levou), não manda a confirmação', async () => {
+    const { emailService, useCase } = setup({ claimed: false });
 
-    await useCase.execute('pending@example.com', 'Password123!', REDIRECT);
+    await expect(
+      useCase.execute('new@example.com', 'Password123!', REDIRECT),
+    ).resolves.toBeUndefined();
 
-    expect(emailService.sendAccountExistsEmail).toHaveBeenCalled();
     expect(emailService.sendConfirmationEmail).not.toHaveBeenCalled();
   });
 
@@ -138,7 +136,7 @@ describe('SignUpUseCase', () => {
   );
 
   it('dá a mesma resposta quando o e-mail é cadastrado entre a checagem e a criação', async () => {
-    const { emailService, useCase } = setup({
+    const { emailService, throttle, useCase } = setup({
       signUpLink: vi.fn().mockRejectedValue(new UserError(UserErrorCodes.SIGNUP_DUPLICATE_EMAIL)),
     });
 
@@ -147,6 +145,8 @@ describe('SignUpUseCase', () => {
     ).resolves.toBeUndefined();
     expect(emailService.sendAccountExistsEmail).toHaveBeenCalled();
     expect(emailService.sendConfirmationEmail).not.toHaveBeenCalled();
+    // One claim: the account isn't new after all, so only the existing-account path claims
+    expect(throttle.claim).toHaveBeenCalledOnce();
   });
 
   it.each([new UserError(UserErrorCodes.UPDATE_PASSWORD_WEAK), new Error('connect ECONNREFUSED')])(

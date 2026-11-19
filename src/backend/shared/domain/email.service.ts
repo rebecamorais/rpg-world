@@ -7,4 +7,9 @@ export interface EmailService {
   sendAccountDeletionEmail(email: string, confirmLink: string): Promise<void>;
   /** Tells the owner the password changed, with a way to pick a new one if it wasn't them. */
   sendPasswordChangedEmail(email: string, forgotPasswordLink: string): Promise<void>;
+  /**
+   * For an account started but never confirmed: confirms the e-mail and has the owner choose the
+   * password, so one set by whoever started the sign-up never stays.
+   */
+  sendFinishSignUpEmail(email: string, finishLink: string): Promise<void>;
 }

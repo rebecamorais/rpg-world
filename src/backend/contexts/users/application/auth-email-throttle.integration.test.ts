@@ -23,6 +23,7 @@ function setup() {
     sendAccountExistsEmail: vi.fn(),
     sendAccountDeletionEmail: vi.fn(),
     sendPasswordChangedEmail: vi.fn(),
+    sendFinishSignUpEmail: vi.fn(),
   } satisfies EmailService;
   // No session is ever read: the admin client stands in for the request's client
   const authRepo = new SupabaseAuthRepository(admin, admin);
@@ -129,28 +130,47 @@ describe('Intervalo entre os e-mails de entrada (integração)', () => {
     expect(flow.email.sendConfirmationEmail).not.toHaveBeenCalled();
   });
 
-  it('conta não confirmada que se cadastra de novo recebe uma confirmação nova, e a senha continua a primeira', async () => {
+  // Account pre-hijacking: someone starts the sign-up with the owner's e-mail and their own
+  // password. Confirming must go through choosing a password, so theirs never stays
+  it('conta não confirmada que se cadastra de novo: o link confirma e obriga a escolher a senha, que tira a de quem começou', async () => {
     const { address } = await createAccount('throttle-unconfirmed', false);
     const flow = setup();
 
     await flow.signUp.execute(address, 'OtherPass123!', CONFIRM_URL);
 
     expect(flow.email.sendAccountExistsEmail).not.toHaveBeenCalled();
-    expect(flow.email.sendConfirmationEmail).toHaveBeenCalledTimes(1);
+    expect(flow.email.sendConfirmationEmail).not.toHaveBeenCalled();
+    expect(flow.email.sendFinishSignUpEmail).toHaveBeenCalledTimes(1);
 
-    // The new link confirms the account
-    const link = new URL(flow.email.sendConfirmationEmail.mock.calls[0][1]);
-    expect(link.searchParams.get('type')).toBe('signup');
-    const { error } = await SupabaseFactory.createAnon().auth.verifyOtp({
+    // The link is a recovery one: opening it confirms the e-mail and starts a session
+    const link = new URL(flow.email.sendFinishSignUpEmail.mock.calls[0][1]);
+    expect(link.searchParams.get('type')).toBe('recovery');
+    const owner = SupabaseFactory.createAnon();
+    const { error } = await owner.auth.verifyOtp({
       token_hash: link.searchParams.get('token_hash')!,
-      type: 'signup',
+      type: 'recovery',
     });
     expect(error).toBeNull();
     expect(await flow.authRepo.isEmailConfirmed(address)).toBe(true);
 
-    // Whoever signed up again did not get to pick the password
-    expect(await flow.authRepo.verifyPassword(address, PASSWORD)).toBe(true);
+    // The owner chooses the password (what /reset-password does), and the first one stops working
+    const { error: updateError } = await owner.auth.updateUser({ password: 'OwnersPass456!' });
+    expect(updateError).toBeNull();
+    expect(await flow.authRepo.verifyPassword(address, 'OwnersPass456!')).toBe(true);
+    expect(await flow.authRepo.verifyPassword(address, PASSWORD)).toBe(false);
     expect(await flow.authRepo.verifyPassword(address, 'OtherPass123!')).toBe(false);
+  });
+
+  it('link mágico para conta não confirmada também manda confirmar e escolher a senha', async () => {
+    const { address } = await createAccount('throttle-unconfirmed-magic', false);
+    const flow = setup();
+
+    await flow.magicLink.execute(address, CONFIRM_URL);
+
+    expect(flow.email.sendMagicLinkEmail).not.toHaveBeenCalled();
+    expect(flow.email.sendFinishSignUpEmail).toHaveBeenCalledTimes(1);
+    const link = new URL(flow.email.sendFinishSignUpEmail.mock.calls[0][1]);
+    expect(link.searchParams.get('type')).toBe('recovery');
   });
 
   it('a chave pública não alcança a tabela nem as funções', async () => {

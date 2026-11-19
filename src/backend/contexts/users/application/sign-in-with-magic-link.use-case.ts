@@ -21,6 +21,14 @@ export class SignInWithMagicLinkUseCase {
     // registered nor to flood an inbox. New accounts come from sign-up or Google.
     if (!(await this.emailThrottle.claim(email, 'magiclink'))) return;
 
+    // A magic link would confirm an account someone else may have started with their own
+    // password, and leave that password in place. Its owner chooses the password instead
+    if (!(await this.authRepository.isEmailConfirmed(email))) {
+      const link = await this.authRepository.generateRecoveryLink(email, confirmUrl);
+      await this.emailService.sendFinishSignUpEmail(email, link);
+      return;
+    }
+
     const link = await this.authRepository.generateMagicLink(email, confirmUrl);
     await this.emailService.sendMagicLinkEmail(email, link);
   }

@@ -8,11 +8,18 @@ import { SignInWithMagicLinkUseCase } from './sign-in-with-magic-link.use-case';
 const CONFIRM_URL = 'https://app.test/api/auth/confirm';
 
 /** `claimed` is false both for an unknown e-mail and inside the interval. */
-function setup(claimed: boolean) {
+function setup(claimed: boolean, confirmed = true) {
   const repository = {
     generateMagicLink: vi.fn().mockResolvedValue('https://app.test/api/auth/confirm?token_hash=t'),
+    generateRecoveryLink: vi
+      .fn()
+      .mockResolvedValue('https://app.test/api/auth/confirm?token_hash=r'),
+    isEmailConfirmed: vi.fn().mockResolvedValue(confirmed),
   };
-  const emailService = { sendMagicLinkEmail: vi.fn().mockResolvedValue(undefined) };
+  const emailService = {
+    sendMagicLinkEmail: vi.fn().mockResolvedValue(undefined),
+    sendFinishSignUpEmail: vi.fn().mockResolvedValue(undefined),
+  };
   const throttle = { claim: vi.fn().mockResolvedValue(claimed) };
   const useCase = new SignInWithMagicLinkUseCase(
     repository as unknown as AuthRepository,
@@ -33,6 +40,24 @@ describe('SignInWithMagicLinkUseCase', () => {
       'hero@example.com',
       'https://app.test/api/auth/confirm?token_hash=t',
     );
+  });
+
+  // A magic link would confirm it with the password whoever started it chose still in place
+  it('conta que não confirmou recebe o link para confirmar e escolher a senha, não o de acesso', async () => {
+    const { repository, emailService, useCase } = setup(true, false);
+
+    await useCase.execute('pending@example.com', CONFIRM_URL);
+
+    expect(repository.generateMagicLink).not.toHaveBeenCalled();
+    expect(repository.generateRecoveryLink).toHaveBeenCalledWith(
+      'pending@example.com',
+      CONFIRM_URL,
+    );
+    expect(emailService.sendFinishSignUpEmail).toHaveBeenCalledWith(
+      'pending@example.com',
+      'https://app.test/api/auth/confirm?token_hash=r',
+    );
+    expect(emailService.sendMagicLinkEmail).not.toHaveBeenCalled();
   });
 
   it('responde igual para e-mail desconhecido ou dentro do intervalo, sem gerar link nem mandar e-mail', async () => {

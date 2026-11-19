@@ -19,7 +19,7 @@ export class SignUpUseCase {
     // an e-mail instead, so the form can't be used to find out who is registered (like the
     // password reset).
     if (await this.authRepository.existsByEmail(email)) {
-      await this.answerExistingAccount(email, password, confirmUrl);
+      await this.answerExistingAccount(email, confirmUrl);
       return;
     }
 
@@ -30,39 +30,34 @@ export class SignUpUseCase {
     } catch (error) {
       // Registered between the check and the call: same answer
       if (error instanceof UserError && error.code === UserErrorCodes.SIGNUP_DUPLICATE_EMAIL) {
-        await this.answerExistingAccount(email, password, confirmUrl);
+        await this.answerExistingAccount(email, confirmUrl);
         return;
       }
       throw error;
     }
 
-    // Starts the interval, so signing up again right away waits like a second request would
-    await this.emailThrottle.claim(email, 'signup');
+    // The interval can only be claimed once the account exists (it is keyed by the user). A second
+    // sign-up of the same new e-mail at the same moment reaches the existing-account path instead,
+    // which claims the same interval: only one of them sends
+    if (!(await this.emailThrottle.claim(email, 'signup'))) return;
     await this.emailService.sendConfirmationEmail(email, confirmationLink);
   }
 
   /**
    * At most one e-mail per interval, and none inside it, with the same answer. A confirmed account
-   * gets the notice to sign in with its password. One that never confirmed gets a new confirmation
-   * link instead, since its password sign-in fails until then.
+   * gets the notice to sign in with its password.
+   *
+   * One that never confirmed may have been started by someone else, with a password they know.
+   * Its owner gets a recovery link instead of a new confirmation: opening it confirms the e-mail
+   * and asks for a password, so the one set at sign-up never stays in the owner's account.
    */
-  private async answerExistingAccount(email: string, password: string, confirmUrl: string) {
+  private async answerExistingAccount(email: string, confirmUrl: string) {
     if (!(await this.emailThrottle.claim(email, 'signup'))) return;
 
     if (!(await this.authRepository.isEmailConfirmed(email))) {
-      try {
-        // For a user that exists and never confirmed, Supabase only issues a new token: the
-        // password stays the one of the first sign-up (pinned in auth-email-throttle.integration.test.ts),
-        // so whoever signs up again can't set the password of someone else's account
-        const link = await this.authRepository.generateSignUpLink(email, password, confirmUrl);
-        await this.emailService.sendConfirmationEmail(email, link);
-        return;
-      } catch (error) {
-        // Confirmed in the meantime: the notice below
-        if (!(error instanceof UserError && error.code === UserErrorCodes.SIGNUP_DUPLICATE_EMAIL)) {
-          throw error;
-        }
-      }
+      const link = await this.authRepository.generateRecoveryLink(email, confirmUrl);
+      await this.emailService.sendFinishSignUpEmail(email, link);
+      return;
     }
 
     const forgotPasswordLink = `${new URL(confirmUrl).origin}/forgot-password`;
