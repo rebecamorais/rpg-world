@@ -15,6 +15,16 @@ const from = vi.fn(() => ({
   select: () => ({ eq: () => ({ maybeSingle: profileLookup }) }),
 }));
 let cookieAdapter: CookieAdapter;
+const maintenanceOn = vi.fn();
+
+// Returns the flag's value, or an Error for a flag that fails
+vi.mock('./shared/flags', () => ({
+  maintenanceFlag: async () => {
+    const value = maintenanceOn();
+    if (value instanceof Error) throw value;
+    return value;
+  },
+}));
 
 vi.mock('@supabase/ssr', () => ({
   createServerClient: (_url: string, _key: string, options: { cookies: CookieAdapter }) => {
@@ -47,6 +57,7 @@ describe('proxy', () => {
     getClaims.mockReset().mockResolvedValue({ data: null, error: null });
     from.mockClear();
     profileLookup.mockReset().mockResolvedValue({ data: { id: 'u1' }, error: null });
+    maintenanceOn.mockReset().mockReturnValue(false);
   });
 
   it('não consulta o Supabase para visitantes sem cookie de sessão', async () => {
@@ -378,6 +389,55 @@ describe('proxy', () => {
     expect(cookieAdapter.getAll()).toEqual(
       expect.arrayContaining([{ name: 'sb-127-auth-token', value: 'token' }]),
     );
+  });
+
+  describe('manutenção', () => {
+    beforeEach(() => maintenanceOn.mockReturnValue(true));
+
+    it('mostra a tela de manutenção na mesma URL, no idioma do navegador, com 503', async () => {
+      const res = await proxy(
+        request({ 'sb-127-auth-token': 'token' }, { path: '/characters', acceptLanguage: 'pt-BR' }),
+      );
+
+      expect(res.status).toBe(503);
+      expect(res.headers.get('location')).toBeNull();
+      expect(rewrittenTo(res)).toBe('/pt/maintenance');
+      expect(res.headers.get('retry-after')).toBe('600');
+      // The database is what's down: the session isn't refreshed
+      expect(getClaims).not.toHaveBeenCalled();
+    });
+
+    it('usa o idioma do cookie antes do navegador', async () => {
+      const res = await proxy(request({ NEXT_LOCALE: 'en' }, { acceptLanguage: 'pt-BR' }));
+
+      expect(rewrittenTo(res)).toBe('/en/maintenance');
+    });
+
+    it('numa página pública com idioma no caminho, usa o do caminho', async () => {
+      const res = await proxy(request({}, { path: '/pt/features' }));
+
+      expect(res.status).toBe(503);
+      expect(rewrittenTo(res)).toBe('/pt/maintenance');
+    });
+
+    // E.g. a Flags Explorer override cookie without FLAGS_SECRET: the site stays up
+    it('se a flag falha, a página abre normalmente', async () => {
+      maintenanceOn.mockReturnValue(new Error('flags: Missing FLAGS_SECRET'));
+
+      const res = await proxy(request({}, { path: '/characters', acceptLanguage: 'pt-BR' }));
+
+      expect(res.status).toBe(200);
+      expect(rewrittenTo(res)).toBe('/pt/characters');
+    });
+
+    it('só liga com true: "false" como texto não fecha o site', async () => {
+      maintenanceOn.mockReturnValue('false');
+
+      const res = await proxy(request({}, { path: '/characters', acceptLanguage: 'pt-BR' }));
+
+      expect(res.status).toBe(200);
+      expect(rewrittenTo(res)).toBe('/pt/characters');
+    });
   });
 
   it('não roda em assets estáticos nem no proxy de imagens', () => {

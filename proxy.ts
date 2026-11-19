@@ -1,8 +1,9 @@
-import { type NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { type CookieOptions, createServerClient } from '@supabase/ssr';
 import createMiddleware from 'next-intl/middleware';
 
+import { maintenanceFlag } from './shared/flags';
 import { PATHNAME_HEADER } from './shared/http/pathname-header';
 import { safeRedirectPath } from './src/backend/shared/infrastructure/helpers/safe-redirect-path';
 import { NEXT_COOKIE } from './src/frontend/lib/post-login-next';
@@ -28,18 +29,26 @@ function handleI18n(request: NextRequest) {
 // Signed in, these pages only send you on: straight to the characters
 const SIGNED_OUT_ONLY = new Set(['/login', '/register']);
 const IMAGES_HOST = 'images.rpgworldapp.com';
+const LOCALE_PREFIX = new RegExp(`^/(${routing.locales.join('|')})(?=/|$)`);
+// Tells browsers and search engines it's temporary; nothing caches the maintenance answer
+const MAINTENANCE_HEADERS = { 'Retry-After': '600', 'Cache-Control': 'no-store' };
 
 /**
  * Runs before every page:
- * 1. Refreshes an expired Supabase session. Server Components cannot write cookies, so this is the
+ * 1. In maintenance (shared/flags.ts), answers with the maintenance screen, before anything that
+ *    needs the database. The API stays out of the proxy: with every page replaced, only tabs
+ *    already open still call it, and those calls fail on their own.
+ * 2. Refreshes an expired Supabase session. Server Components cannot write cookies, so this is the
  *    only place the refreshed JWT reaches the browser. Route protection stays in the layouts.
- * 2. Picks the language (NEXT_LOCALE cookie, else Accept-Language) and rewrites the page to
+ * 3. Picks the language (NEXT_LOCALE cookie, else Accept-Language) and rewrites the page to
  *    /<locale>/... internally, so the public pages can be prebuilt per language. The app's URLs
  *    never show the language; the public pages have one address per language (LOCALIZED_PATHS).
  */
 export async function proxy(request: NextRequest) {
   // Avatars served on their own host (next.config.ts rewrites it to /api/images): never localized
   if (request.headers.get('host') === IMAGES_HOST) return NextResponse.next();
+
+  if (await inMaintenance(request)) return maintenance(request);
 
   // The path asked for, for Server Components (layouts don't get it): the dashboard sends someone
   // who hasn't picked a username to /choose-username and back here afterwards
@@ -95,6 +104,34 @@ export async function proxy(request: NextRequest) {
 
   for (const { name, value, options } of refreshed) response.cookies.set(name, value, options);
   return response;
+}
+
+/**
+ * Only `true` turns it on: a typo in the Edge Config ("false" as text) must not close the site. The
+ * catch covers what the flag's default doesn't: a Flags Explorer override cookie throws before it,
+ * since FLAGS_SECRET isn't set.
+ */
+async function inMaintenance(request: NextRequest): Promise<boolean> {
+  return (await maintenanceFlag(request).catch(() => false)) === true;
+}
+
+/**
+ * The maintenance screen at the same URL, with a 503, in the language of the path (/pt/features)
+ * or else the one the app would pick (cookie, browser).
+ */
+function maintenance(request: NextRequest): NextResponse {
+  const { pathname } = request.nextUrl;
+  const url = request.nextUrl.clone();
+  url.search = '';
+  const locale = pathname.match(LOCALE_PREFIX)?.[1];
+  if (locale) {
+    url.pathname = `/${locale}/maintenance`;
+  } else {
+    url.pathname = '/maintenance';
+    const picked = handleAppI18n(new NextRequest(url, request)).headers.get('x-middleware-rewrite');
+    if (picked) url.pathname = new URL(picked).pathname;
+  }
+  return NextResponse.rewrite(url, { status: 503, headers: MAINTENANCE_HEADERS });
 }
 
 /**

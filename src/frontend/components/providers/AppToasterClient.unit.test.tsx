@@ -45,8 +45,11 @@ async function renderWithModal() {
 }
 
 describe('AppToasterClient', () => {
-  afterEach(() => {
+  afterEach(async () => {
     act(() => toast.dismiss());
+    // Sonner removes a dismissed toast 200 ms later, in a timer: let it run while the DOM is
+    // still here, or it fires after the file's environment is torn down ("window is not defined")
+    await act(() => new Promise((resolve) => setTimeout(resolve, 250)));
     vi.restoreAllMocks();
   });
 

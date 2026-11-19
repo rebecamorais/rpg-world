@@ -1489,6 +1489,11 @@
     "description": "The translations are made by the community on Weblate. Anyone can suggest or review texts and spells, in Portuguese or another language.",
     "action": "Translate on Weblate"
   },
+  "maintenance": {
+    "title": "We'll be right back",
+    "description": "RPG World is under maintenance and will be back in a few minutes. Your characters and parties are safe.",
+    "discord": "Updates on our <discord>Discord</discord>."
+  },
   "notFound": {
     "title": "Page not found",
     "description": "The page you are looking for doesn't exist or has moved.",
