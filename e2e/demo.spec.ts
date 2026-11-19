@@ -103,9 +103,10 @@ test.describe('demo: o que gruda, o convite e os títulos', () => {
     await page.goto('/demo/characters/ada/spells');
     const index = page.getByRole('navigation', { name: 'Index' });
     await expect(index).toBeVisible();
-    await page.mouse.wheel(0, 1500);
+    // Far enough to stick, not past the end of the spell list (the index then leaves with it)
+    await page.mouse.wheel(0, 500);
 
-    const header = await page.getByRole('banner').boundingBox();
+    const header = await page.getByRole('banner').first().boundingBox();
     const headerBottom = (header?.y ?? 0) + (header?.height ?? 0);
     await expect
       .poll(async () => (await index.boundingBox())?.y ?? 0)
@@ -121,7 +122,7 @@ test.describe('demo: o que gruda, o convite e os títulos', () => {
 
     // Pay refuses at once: no payment form to fill in first
     await pay.click();
-    const invite = page.getByRole('dialog', { name: 'Create your adventure' });
+    const invite = page.getByRole('dialog', { name: 'Make your own adventure' });
     await expect(invite).toBeVisible();
     await expect(toast).toHaveCount(0);
     await invite.getByRole('button', { name: 'Keep exploring' }).click();

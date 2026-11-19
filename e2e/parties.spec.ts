@@ -352,7 +352,8 @@ test.describe('mesas', () => {
     // A link that no longer works still has a way on (a-mesa-convite#4)
     await anon.goto(`/parties/join/${'0'.repeat(32)}`);
     await expect(anon.getByText('This invite is no longer valid')).toBeVisible();
-    await anon.getByRole('link', { name: 'Sign in', exact: true }).click();
+    // The page's own action, not the header's "Sign in"
+    await anon.getByRole('main').getByRole('link', { name: 'Sign in', exact: true }).click();
     await expect(anon).toHaveURL((url) => url.pathname === '/login');
 
     // Other pages of the app still send a signed-out visitor to the login
