@@ -191,11 +191,19 @@ test.describe('tema claro', () => {
     await context.addCookies([{ name: 'theme', value: 'light', url: BASE_URL }]);
   });
 
-  test('home', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('heading').first().waitFor();
-    await snap(page, 'home-light');
-  });
+  // The phase 4 fixes reworked these public pages: their light tones need their own shots
+  for (const [name, path] of [
+    ['home', '/'],
+    ['features', '/features'],
+    ['login', '/login'],
+    ['register', '/register'],
+  ] as const) {
+    test(name, async ({ page }) => {
+      await page.goto(path);
+      await page.getByRole('heading').first().waitFor();
+      await snap(page, `${name}-light`);
+    });
+  }
 
   test('ficha e combate', async ({ page, user }, testInfo) => {
     const res = await page.request.patch('/api/profile', {
