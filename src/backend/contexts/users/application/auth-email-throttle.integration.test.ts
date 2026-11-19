@@ -141,6 +141,8 @@ describe('Intervalo entre os e-mails de entrada (integração)', () => {
     expect(flow.email.sendAccountExistsEmail).not.toHaveBeenCalled();
     expect(flow.email.sendConfirmationEmail).not.toHaveBeenCalled();
     expect(flow.email.sendFinishSignUpEmail).toHaveBeenCalledTimes(1);
+    // The password set at sign-up stops working at once, even if the link is never finished
+    expect(await flow.authRepo.verifyPassword(address, PASSWORD)).toBe(false);
 
     // The link is a recovery one: opening it confirms the e-mail and starts a session
     const link = new URL(flow.email.sendFinishSignUpEmail.mock.calls[0][1]);
@@ -169,8 +171,16 @@ describe('Intervalo entre os e-mails de entrada (integração)', () => {
 
     expect(flow.email.sendMagicLinkEmail).not.toHaveBeenCalled();
     expect(flow.email.sendFinishSignUpEmail).toHaveBeenCalledTimes(1);
+    expect(await flow.authRepo.verifyPassword(address, PASSWORD)).toBe(false);
+
+    // The link sent is the newest one, and it still works after the password was replaced
     const link = new URL(flow.email.sendFinishSignUpEmail.mock.calls[0][1]);
     expect(link.searchParams.get('type')).toBe('recovery');
+    const { error } = await SupabaseFactory.createAnon().auth.verifyOtp({
+      token_hash: link.searchParams.get('token_hash')!,
+      type: 'recovery',
+    });
+    expect(error).toBeNull();
   });
 
   it('a chave pública não alcança a tabela nem as funções', async () => {

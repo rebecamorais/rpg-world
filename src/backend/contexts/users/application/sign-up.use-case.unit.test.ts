@@ -23,7 +23,7 @@ function setup({
     existsByEmail: vi.fn().mockResolvedValue(exists),
     isEmailConfirmed: vi.fn().mockResolvedValue(confirmed),
     generateSignUpLink: signUpLink,
-    generateRecoveryLink: vi.fn().mockResolvedValue('http://recovery-link'),
+    generateFinishSignUpLink: vi.fn().mockResolvedValue('http://recovery-link'),
   };
   const emailService = {
     sendConfirmationEmail: vi.fn().mockResolvedValue(undefined),
@@ -92,7 +92,10 @@ describe('SignUpUseCase', () => {
       useCase.execute('pending@example.com', 'Password123!', REDIRECT),
     ).resolves.toBeUndefined();
 
-    expect(repository.generateRecoveryLink).toHaveBeenCalledWith('pending@example.com', REDIRECT);
+    expect(repository.generateFinishSignUpLink).toHaveBeenCalledWith(
+      'pending@example.com',
+      REDIRECT,
+    );
     expect(repository.generateSignUpLink).not.toHaveBeenCalled();
     expect(emailService.sendFinishSignUpEmail).toHaveBeenCalledWith(
       'pending@example.com',

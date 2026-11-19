@@ -24,6 +24,12 @@ export interface AuthRepository {
   generateSignUpLink(email: string, password: string, confirmUrl: string): Promise<string>;
   /** Returns the password recovery link to `confirmUrl`. */
   generateRecoveryLink(email: string, confirmUrl: string): Promise<string>;
+  /**
+   * For an account started but never confirmed: replaces its password with a random one nobody
+   * knows, then returns a recovery link (it confirms the e-mail and leads to choosing a password).
+   * The password set at sign-up stops working at once, even if the link is never finished.
+   */
+  generateFinishSignUpLink(email: string, confirmUrl: string): Promise<string>;
   /** Verifies the token of an e-mail link and starts the session. */
   verifyEmailLink(tokenHash: string, type: EmailLinkType): Promise<void>;
   exchangeCodeForSession(code: string): Promise<void>;

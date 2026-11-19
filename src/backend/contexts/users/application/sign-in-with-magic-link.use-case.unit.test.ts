@@ -11,7 +11,7 @@ const CONFIRM_URL = 'https://app.test/api/auth/confirm';
 function setup(claimed: boolean, confirmed = true) {
   const repository = {
     generateMagicLink: vi.fn().mockResolvedValue('https://app.test/api/auth/confirm?token_hash=t'),
-    generateRecoveryLink: vi
+    generateFinishSignUpLink: vi
       .fn()
       .mockResolvedValue('https://app.test/api/auth/confirm?token_hash=r'),
     isEmailConfirmed: vi.fn().mockResolvedValue(confirmed),
@@ -49,7 +49,7 @@ describe('SignInWithMagicLinkUseCase', () => {
     await useCase.execute('pending@example.com', CONFIRM_URL);
 
     expect(repository.generateMagicLink).not.toHaveBeenCalled();
-    expect(repository.generateRecoveryLink).toHaveBeenCalledWith(
+    expect(repository.generateFinishSignUpLink).toHaveBeenCalledWith(
       'pending@example.com',
       CONFIRM_URL,
     );

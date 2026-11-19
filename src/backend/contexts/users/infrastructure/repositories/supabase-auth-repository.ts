@@ -93,6 +93,29 @@ export class SupabaseAuthRepository implements AuthRepository {
     return confirmLink(confirmUrl, data.properties?.hashed_token, 'recovery');
   }
 
+  async generateFinishSignUpLink(email: string, confirmUrl: string): Promise<string> {
+    // A first link only to learn the user's id (generateLink returns it), then the password is
+    // scrambled, then the link that is sent: the newest token replaces the first one
+    const { data: found, error: findError } = await this.dbClient.auth.admin.generateLink({
+      type: 'recovery',
+      email,
+    });
+    if (findError || !found.user) {
+      throw findError
+        ? authFailure(findError, 'Failed to find the account to finish')
+        : new Error('Failed to find the account to finish');
+    }
+
+    const { error: scrambleError } = await this.dbClient.auth.admin.updateUserById(found.user.id, {
+      password: `${crypto.randomUUID()}${crypto.randomUUID()}`,
+    });
+    if (scrambleError) {
+      throw authFailure(scrambleError, 'Failed to replace the sign-up password');
+    }
+
+    return this.generateRecoveryLink(email, confirmUrl);
+  }
+
   async verifyEmailLink(tokenHash: string, type: EmailLinkType): Promise<void> {
     this.sessionUser = undefined;
     const { error } = await this.authClient.auth.verifyOtp({ token_hash: tokenHash, type });

@@ -55,7 +55,7 @@ export class SignUpUseCase {
     if (!(await this.emailThrottle.claim(email, 'signup'))) return;
 
     if (!(await this.authRepository.isEmailConfirmed(email))) {
-      const link = await this.authRepository.generateRecoveryLink(email, confirmUrl);
+      const link = await this.authRepository.generateFinishSignUpLink(email, confirmUrl);
       await this.emailService.sendFinishSignUpEmail(email, link);
       return;
     }
