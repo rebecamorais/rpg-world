@@ -3,7 +3,7 @@
  * handed to the browser on every page; a client component that needs one must be listed out of
  * here first (client-messages.unit.test.ts checks).
  */
-export const SERVER_ONLY_NAMESPACES = ['terms', 'privacy', 'seo', 'home'] as const;
+export const SERVER_ONLY_NAMESPACES = ['terms', 'privacy', 'seo', 'home', 'maintenance'] as const;
 
 /** The messages the client components use: everything but the server-only namespaces. */
 export function clientMessages(messages: Record<string, unknown>): Record<string, unknown> {

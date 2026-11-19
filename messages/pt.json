@@ -5,7 +5,6 @@
       "unknown": "Ocorreu um erro desconhecido. Tente novamente.",
       "common_error_invalid_request": "Dados inválidos. Verifique os campos e tente novamente.",
       "common_error_unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
-      "common_error_maintenance": "O RPG World está em manutenção. Tente novamente em alguns minutos.",
       "class_error_not_found": "Classe não encontrada.",
       "demo_read_only": "Esta é uma demo somente leitura. Crie uma conta gratuita para jogar.",
       "account_deletion_error_username_mismatch": "Esse não é o seu username.",

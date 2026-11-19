@@ -1,8 +1,8 @@
 # Suporte: modo manutenção
 
 Para upgrades do Supabase ou qualquer janela em que o banco fica fora do ar. Com a flag ligada, toda
-página mostra a tela "Voltamos já" na própria URL (status 503) e a API responde 503 com
-`common_error_maintenance`. Nada disso lê o banco nem a sessão. Código em `shared/flags.ts` e
+página mostra a tela "Voltamos já" na própria URL (status 503), sem ler o banco nem a sessão. A API
+fica fora: só abas já abertas a chamam, e essas mostram o erro de sempre. Código em `shared/flags.ts` e
 `proxy.ts`.
 
 ## Preparar (uma vez)
@@ -18,6 +18,9 @@ página mostra a tela "Voltamos já" na própria URL (status 503) e a API respon
 
 Sem o store, sem a chave `flags` ou sem `maintenance` dentro dela, a flag fica desligada: um erro na
 flag nunca derruba o site.
+
+Não rode `vercel env pull` para o `.env.local`: ele traz o `EDGE_CONFIG` de produção, e o `next dev`
+passa a seguir a manutenção de produção.
 
 ## Ligar e desligar
 

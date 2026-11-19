@@ -17,7 +17,14 @@ const from = vi.fn(() => ({
 let cookieAdapter: CookieAdapter;
 const maintenanceOn = vi.fn();
 
-vi.mock('./shared/flags', () => ({ maintenanceFlag: () => maintenanceOn() }));
+// Returns the flag's value, or an Error for a flag that fails
+vi.mock('./shared/flags', () => ({
+  maintenanceFlag: async () => {
+    const value = maintenanceOn();
+    if (value instanceof Error) throw value;
+    return value;
+  },
+}));
 
 vi.mock('@supabase/ssr', () => ({
   createServerClient: (_url: string, _key: string, options: { cookies: CookieAdapter }) => {
@@ -50,7 +57,7 @@ describe('proxy', () => {
     getClaims.mockReset().mockResolvedValue({ data: null, error: null });
     from.mockClear();
     profileLookup.mockReset().mockResolvedValue({ data: { id: 'u1' }, error: null });
-    maintenanceOn.mockReset().mockResolvedValue(false);
+    maintenanceOn.mockReset().mockReturnValue(false);
   });
 
   it('não consulta o Supabase para visitantes sem cookie de sessão', async () => {
@@ -385,7 +392,7 @@ describe('proxy', () => {
   });
 
   describe('manutenção', () => {
-    beforeEach(() => maintenanceOn.mockResolvedValue(true));
+    beforeEach(() => maintenanceOn.mockReturnValue(true));
 
     it('mostra a tela de manutenção na mesma URL, no idioma do navegador, com 503', async () => {
       const res = await proxy(
@@ -413,21 +420,24 @@ describe('proxy', () => {
       expect(rewrittenTo(res)).toBe('/pt/maintenance');
     });
 
-    it('a API responde 503 com o código de manutenção', async () => {
-      const res = await proxy(request({}, { path: '/api/characters' }));
+    // E.g. a Flags Explorer override cookie without FLAGS_SECRET: the site stays up
+    it('se a flag falha, a página abre normalmente', async () => {
+      maintenanceOn.mockReturnValue(new Error('flags: Missing FLAGS_SECRET'));
 
-      expect(res.status).toBe(503);
-      expect(await res.json()).toEqual({ error: 'common_error_maintenance' });
-      expect(rewrittenTo(res)).toBeNull();
+      const res = await proxy(request({}, { path: '/characters', acceptLanguage: 'pt-BR' }));
+
+      expect(res.status).toBe(200);
+      expect(rewrittenTo(res)).toBe('/pt/characters');
     });
-  });
 
-  it('fora da manutenção, deixa a API passar sem sessão nem idioma', async () => {
-    const res = await proxy(request({ 'sb-127-auth-token': 'token' }, { path: '/api/characters' }));
+    it('só liga com true: "false" como texto não fecha o site', async () => {
+      maintenanceOn.mockReturnValue('false');
 
-    expect(res.status).toBe(200);
-    expect(rewrittenTo(res)).toBeNull();
-    expect(getClaims).not.toHaveBeenCalled();
+      const res = await proxy(request({}, { path: '/characters', acceptLanguage: 'pt-BR' }));
+
+      expect(res.status).toBe(200);
+      expect(rewrittenTo(res)).toBe('/pt/characters');
+    });
   });
 
   it('não roda em assets estáticos nem no proxy de imagens', () => {
@@ -437,8 +447,7 @@ describe('proxy', () => {
     expect(matcher.test('/_next/static/chunk.js')).toBe(false);
     expect(matcher.test('/api/images/avatars/u1/a.png')).toBe(false);
     expect(matcher.test('/logo.svg')).toBe(false);
-    // The API goes through, only for the maintenance check
-    expect(matcher.test('/api/characters')).toBe(true);
+    expect(matcher.test('/api/characters')).toBe(false);
     expect(matcher.test('/_vercel/insights/script.js')).toBe(false);
   });
 });
