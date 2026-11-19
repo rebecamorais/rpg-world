@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { EmailService } from '../../../shared/domain/email.service';
+import { UserError, UserErrorCodes } from '../domain/UserError';
 import { AuthEmailThrottleRepo } from '../domain/auth-email-throttle.repo';
 import { AuthRepository } from '../domain/auth.repo';
 import { SignInWithMagicLinkUseCase } from './sign-in-with-magic-link.use-case';
@@ -58,6 +59,18 @@ describe('SignInWithMagicLinkUseCase', () => {
       'https://app.test/api/auth/confirm?token_hash=r',
     );
     expect(emailService.sendMagicLinkEmail).not.toHaveBeenCalled();
+  });
+
+  it('conta confirmada entre a checagem e a troca da senha recebe o link de acesso de sempre', async () => {
+    const { repository, emailService, useCase } = setup(true, false);
+    repository.generateFinishSignUpLink.mockRejectedValue(
+      new UserError(UserErrorCodes.SIGNUP_DUPLICATE_EMAIL),
+    );
+
+    await useCase.execute('pending@example.com', CONFIRM_URL);
+
+    expect(emailService.sendFinishSignUpEmail).not.toHaveBeenCalled();
+    expect(emailService.sendMagicLinkEmail).toHaveBeenCalled();
   });
 
   it('responde igual para e-mail desconhecido ou dentro do intervalo, sem gerar link nem mandar e-mail', async () => {

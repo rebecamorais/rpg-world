@@ -24,9 +24,16 @@ export class SignInWithMagicLinkUseCase {
     // A magic link would confirm an account someone else may have started with their own
     // password, and leave that password in place. Its owner chooses the password instead
     if (!(await this.authRepository.isEmailConfirmed(email))) {
-      const link = await this.authRepository.generateFinishSignUpLink(email, confirmUrl);
-      await this.emailService.sendFinishSignUpEmail(email, link);
-      return;
+      try {
+        const link = await this.authRepository.generateFinishSignUpLink(email, confirmUrl);
+        await this.emailService.sendFinishSignUpEmail(email, link);
+        return;
+      } catch (error) {
+        // Confirmed in the meantime: nothing was changed, and it gets the usual magic link
+        if (!(error instanceof UserError && error.code === UserErrorCodes.SIGNUP_DUPLICATE_EMAIL)) {
+          throw error;
+        }
+      }
     }
 
     const link = await this.authRepository.generateMagicLink(email, confirmUrl);

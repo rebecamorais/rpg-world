@@ -28,6 +28,7 @@ export interface AuthRepository {
    * For an account started but never confirmed: replaces its password with a random one nobody
    * knows, then returns a recovery link (it confirms the e-mail and leads to choosing a password).
    * The password set at sign-up stops working at once, even if the link is never finished.
+   * Throws SIGNUP_DUPLICATE_EMAIL, changing nothing, when the account is confirmed by then.
    */
   generateFinishSignUpLink(email: string, confirmUrl: string): Promise<string>;
   /** Verifies the token of an e-mail link and starts the session. */

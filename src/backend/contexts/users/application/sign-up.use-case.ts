@@ -55,9 +55,16 @@ export class SignUpUseCase {
     if (!(await this.emailThrottle.claim(email, 'signup'))) return;
 
     if (!(await this.authRepository.isEmailConfirmed(email))) {
-      const link = await this.authRepository.generateFinishSignUpLink(email, confirmUrl);
-      await this.emailService.sendFinishSignUpEmail(email, link);
-      return;
+      try {
+        const link = await this.authRepository.generateFinishSignUpLink(email, confirmUrl);
+        await this.emailService.sendFinishSignUpEmail(email, link);
+        return;
+      } catch (error) {
+        // Confirmed in the meantime: nothing was changed, and it gets the notice below
+        if (!(error instanceof UserError && error.code === UserErrorCodes.SIGNUP_DUPLICATE_EMAIL)) {
+          throw error;
+        }
+      }
     }
 
     const forgotPasswordLink = `${new URL(confirmUrl).origin}/forgot-password`;

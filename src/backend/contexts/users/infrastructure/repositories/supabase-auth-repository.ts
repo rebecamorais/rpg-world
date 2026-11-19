@@ -105,6 +105,11 @@ export class SupabaseAuthRepository implements AuthRepository {
         ? authFailure(findError, 'Failed to find the account to finish')
         : new Error('Failed to find the account to finish');
     }
+    // Checked again right before the overwrite: confirmed since the caller looked, it is the
+    // owner's account and its password stays. The caller then answers as for a confirmed one
+    if (found.user.email_confirmed_at) {
+      throw new UserError(UserErrorCodes.SIGNUP_DUPLICATE_EMAIL);
+    }
 
     const { error: scrambleError } = await this.dbClient.auth.admin.updateUserById(found.user.id, {
       password: `${crypto.randomUUID()}${crypto.randomUUID()}`,

@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { SupabaseFactory } from '@lib/supabase';
 
 import { EmailService } from '../../../shared/domain/email.service';
+import { UserErrorCodes } from '../domain/UserError';
 import { SupabaseAuthEmailThrottleRepository } from '../infrastructure/repositories/supabase-auth-email-throttle.repository';
 import { SupabaseAuthRepository } from '../infrastructure/repositories/supabase-auth-repository';
 import { RequestPasswordResetUseCase } from './request-password-reset.use-case';
@@ -161,6 +162,19 @@ describe('Intervalo entre os e-mails de entrada (integração)', () => {
     expect(await flow.authRepo.verifyPassword(address, 'OwnersPass456!')).toBe(true);
     expect(await flow.authRepo.verifyPassword(address, PASSWORD)).toBe(false);
     expect(await flow.authRepo.verifyPassword(address, 'OtherPass123!')).toBe(false);
+  });
+
+  // The owner confirmed between the caller's check and the overwrite: nothing changes
+  it('conta já confirmada: generateFinishSignUpLink recusa e não troca a senha', async () => {
+    const { address } = await createAccount('throttle-confirmed-race', true);
+    const flow = setup();
+
+    await expect(
+      flow.authRepo.generateFinishSignUpLink(address, CONFIRM_URL),
+    ).rejects.toMatchObject({
+      code: UserErrorCodes.SIGNUP_DUPLICATE_EMAIL,
+    });
+    expect(await flow.authRepo.verifyPassword(address, PASSWORD)).toBe(true);
   });
 
   it('link mágico para conta não confirmada também manda confirmar e escolher a senha', async () => {

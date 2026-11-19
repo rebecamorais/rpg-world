@@ -105,6 +105,20 @@ describe('SignUpUseCase', () => {
     expect(emailService.sendAccountExistsEmail).not.toHaveBeenCalled();
   });
 
+  it('conta confirmada entre a checagem e a troca da senha recebe o aviso, e nada muda nela', async () => {
+    const { repository, emailService, useCase } = setup({ exists: true, confirmed: false });
+    repository.generateFinishSignUpLink.mockRejectedValue(
+      new UserError(UserErrorCodes.SIGNUP_DUPLICATE_EMAIL),
+    );
+
+    await expect(
+      useCase.execute('pending@example.com', 'Password123!', REDIRECT),
+    ).resolves.toBeUndefined();
+
+    expect(emailService.sendFinishSignUpEmail).not.toHaveBeenCalled();
+    expect(emailService.sendAccountExistsEmail).toHaveBeenCalled();
+  });
+
   it('conta nova: sem a reserva do intervalo (outro pedido igual levou), não manda a confirmação', async () => {
     const { emailService, useCase } = setup({ claimed: false });
 
