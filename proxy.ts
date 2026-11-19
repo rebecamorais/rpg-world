@@ -107,7 +107,7 @@ export async function proxy(request: NextRequest) {
 }
 
 /**
- * Only `true` turns it on: a typo in the Edge Config ("false" as text) must not close the site. The
+ * Only `true` turns it on: a typo in the Global Config ("false" as text) must not close the site. The
  * catch covers what the flag's default doesn't: a Flags Explorer override cookie throws before it,
  * since FLAGS_SECRET isn't set.
  */
