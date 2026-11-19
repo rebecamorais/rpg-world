@@ -63,4 +63,13 @@ describe('LanguageSwitcher', () => {
 
     expect(replace).toHaveBeenCalledWith('/pt');
   });
+
+  it('numa página pública que já tem o idioma no caminho, troca o idioma em vez de somar outro', async () => {
+    stubLocation('/en/features', '', '#tabs');
+    renderWithProviders(<LanguageSwitcher />);
+
+    await pick('Português');
+
+    expect(replace).toHaveBeenCalledWith('/pt/features#tabs');
+  });
 });

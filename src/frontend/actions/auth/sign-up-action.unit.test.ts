@@ -7,6 +7,9 @@ import { signUpAction } from './sign-up-action';
 
 const signUp = vi.fn();
 
+// The links carry the language the e-mail was asked in
+vi.mock('next-intl/server', () => ({ getLocale: async () => 'pt' }));
+
 vi.mock('@backend/shared/application/minimum-duration', () => ({
   AUTH_EMAIL_MIN_DURATION_MS: 1500,
   withMinimumDuration: (_ms: number, work: () => Promise<unknown>) => work(),
@@ -49,7 +52,7 @@ describe('signUpAction', () => {
     expect(signUp).toHaveBeenCalledWith(
       'user@example.com',
       'longpassword',
-      'https://rpg.test/api/auth/confirm',
+      'https://rpg.test/api/auth/confirm?locale=pt',
     );
   });
 

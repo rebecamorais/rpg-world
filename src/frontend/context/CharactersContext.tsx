@@ -16,6 +16,8 @@ import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
 
+import { useDemo } from '@frontend/demo/DemoContext';
+import { isDemoReadOnly } from '@frontend/demo/transport';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { charactersQueryKey } from '@frontend/lib/query-keys';
@@ -69,10 +71,16 @@ export function CharactersProvider({
   const focusAfterDelete = useRef<{ next: string | null } | null>(null);
   // The id whose dialog is open: a delete that lands after its dialog closed leaves no focus behind
   const openId = useRef<string | null>(null);
-  const selectToDelete = useCallback((character: CharacterSummary | null) => {
-    openId.current = character?.id ?? null;
-    setCharacterToDelete(character);
-  }, []);
+  const { isDemo, refuseWrite } = useDemo();
+  const selectToDelete = useCallback(
+    (character: CharacterSummary | null) => {
+      // The demo refuses at once, before asking to type the name of what it would never delete
+      if (character && isDemo) return refuseWrite();
+      openId.current = character?.id ?? null;
+      setCharacterToDelete(character);
+    },
+    [isDemo, refuseWrite],
+  );
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -91,13 +99,16 @@ export function CharactersProvider({
       setConfirmName('');
     },
     onError: (err: Error) => {
-      toast.error(getErrorMessage(err));
+      if (!isDemoReadOnly(err)) toast.error(getErrorMessage(err));
     },
   });
 
   const handleDelete = useCallback(async () => {
-    if (characterToDelete) {
+    if (!characterToDelete) return;
+    try {
       await deleteMutation.mutateAsync(characterToDelete.id);
+    } catch {
+      // onError already said why; the dialog stays open to try again or cancel
     }
   }, [characterToDelete, deleteMutation]);
 

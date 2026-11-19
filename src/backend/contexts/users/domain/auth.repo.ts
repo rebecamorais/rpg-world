@@ -33,6 +33,8 @@ export interface AuthRepository {
    */
   updatePassword(userId: string, newPassword: string): Promise<void>;
   existsByEmail(email: string): Promise<boolean>;
+  /** Whether the account of `email` confirmed its address; false when there is no account. */
+  isEmailConfirmed(email: string): Promise<boolean>;
   signOut(): Promise<void>;
   /** Whether the account still exists: a session's JWT outlives a deleted account. */
   accountExists(userId: string): Promise<boolean>;

@@ -128,6 +128,30 @@ describe('ProfileForm', () => {
     expect(api.patch).not.toHaveBeenCalled();
   });
 
+  it('um username antigo fora do formato (playerChilli) continua salvando o perfil', async () => {
+    api.get.mockResolvedValue({ ...PROFILE, username: 'playerChilli' });
+    const user = userEvent.setup();
+    renderWithProviders(
+      <FileUploaderProvider>
+        <ProfileForm />
+      </FileUploaderProvider>,
+    );
+    const fullName = await screen.findByLabelText(t.fullNameLabel, { exact: true });
+    await waitFor(() => expect(screen.getByLabelText(t.usernameLabel)).toHaveValue('playerChilli'));
+
+    await user.clear(fullName);
+    await user.type(fullName, 'Chilli');
+    await user.click(screen.getByRole('button', { name: t.save }));
+
+    await waitFor(() =>
+      expect(api.patch).toHaveBeenCalledWith('/api/profile', {
+        username: 'playerChilli',
+        fullName: 'Chilli',
+      }),
+    );
+    expect(screen.queryByText(t.validation.usernamePattern)).not.toBeInTheDocument();
+  });
+
   it('mostra a mensagem traduzida quando o username já está em uso', async () => {
     api.patch.mockRejectedValue(new APIError('profile_error_username_taken', 400));
     const user = userEvent.setup();

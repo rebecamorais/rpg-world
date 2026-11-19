@@ -1,10 +1,12 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { messages, renderWithProviders } from '@tests/helpers/render';
+import { NextIntlClientProvider } from 'next-intl';
 import { toast } from 'sonner';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
 
+import pt from '../../../../messages/pt.json';
 import FooterContent from './FooterContent';
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
@@ -91,5 +93,37 @@ describe('FooterContent', () => {
     expect(within(support).getByRole('link', { name: t.support.kofi })).toBeInTheDocument();
     expect(within(support).queryByRole('link', { name: t.socials.discord })).toBeNull();
     expect(support.firstElementChild).toHaveTextContent(t.support.title);
+  });
+
+  it('em português, as páginas públicas abrem no endereço em português e o app fica sem prefixo', () => {
+    renderWithProviders(
+      <NextIntlClientProvider locale="pt" messages={pt} timeZone="UTC">
+        <FooterContent />
+      </NextIntlClientProvider>,
+    );
+
+    const tPt = pt.footer;
+    expect(screen.getByRole('link', { name: tPt.explore.home })).toHaveAttribute('href', '/pt');
+    expect(screen.getByRole('link', { name: tPt.explore.features })).toHaveAttribute(
+      'href',
+      '/pt/features',
+    );
+    expect(screen.getByRole('link', { name: tPt.legal.privacy })).toHaveAttribute(
+      'href',
+      '/pt/privacy',
+    );
+  });
+
+  it('logada em português, o link dos personagens continua sem prefixo', () => {
+    renderWithProviders(
+      <NextIntlClientProvider locale="pt" messages={pt} timeZone="UTC">
+        <FooterContent serverUser={{ id: 'u1' }} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('link', { name: pt.footer.explore.characters })).toHaveAttribute(
+      'href',
+      '/characters',
+    );
   });
 });

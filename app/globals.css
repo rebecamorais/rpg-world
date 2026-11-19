@@ -490,8 +490,11 @@
   /* Fixed and sticky bars must not cover the field that gets keyboard focus: the browser keeps
      this much room when it scrolls a focused element into view. Each bar marks itself with
      data-scroll-pad; the sizes follow the bars' heights (plus a little air). */
-  html:has([data-scroll-pad='demo-header']) {
-    scroll-padding-top: 7rem;
+  /* The demo's header sticks from md up only (DemoFrame): on a phone it scrolls away */
+  @media (width >= 48rem) {
+    html:has([data-scroll-pad='demo-header']) {
+      scroll-padding-top: 7rem;
+    }
   }
   /* The VitalsBar is ~8.5rem tall with its "Adjust HP" button, more once its numbers wrap (narrow
      screens, zoom): 6rem left a focused field behind it. Partial: a fixed guess, not the bar's
@@ -511,6 +514,12 @@
     /* Important: this base rule has to beat the bar's own `sticky` utility */
     [data-scroll-pad='vitals'] {
       position: static !important;
+    }
+  }
+  /* Demo, md to lg: the VitalsBar sticks under the demo's header, so both heights count */
+  @media (48rem <= width < 64rem) and (height >= 30rem) {
+    html:has([data-scroll-pad='demo-header']):has([data-scroll-pad='vitals']) {
+      scroll-padding-top: 15rem;
     }
   }
   @media (width < 48rem) {

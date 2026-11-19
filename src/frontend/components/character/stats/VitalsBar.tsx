@@ -52,7 +52,7 @@ export function VitalsBar() {
     <section
       data-scroll-pad="vitals"
       aria-label={t('summary')}
-      className="border-border bg-card/95 sticky top-0 z-30 -mx-1 flex flex-col gap-3 rounded-xl border p-3 shadow-lg backdrop-blur-md lg:hidden"
+      className="border-border bg-card/95 sticky top-[var(--sticky-top,0px)] z-30 -mx-1 flex flex-col gap-3 rounded-xl border p-3 shadow-lg backdrop-blur-md lg:hidden"
     >
       <div className="flex items-center gap-3">
         <div className="flex min-w-0 flex-1 flex-col gap-2">

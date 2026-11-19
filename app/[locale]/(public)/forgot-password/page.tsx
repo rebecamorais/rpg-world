@@ -1,25 +1,24 @@
-import Link from 'next/link';
+import type { Metadata } from 'next';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
+import AuthLayout from '@frontend/components/auth/AuthLayout';
 import ForgotPasswordForm from '@frontend/components/auth/ForgotPasswordForm';
 
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'forgotPassword' });
+  return { title: t('metaTitle'), description: t('metaDescription') };
+}
+
+/** No way back above the card: the card already leads back to sign in. */
 export default async function ForgotPasswordPage({ params }: LocaleParams) {
   setRequestLocale((await params).locale);
-  const t = await getTranslations('common');
 
   return (
-    <div className="relative flex flex-1 items-center justify-center p-8">
-      <div className="absolute top-4 left-4">
-        <Link
-          href="/login"
-          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-        >
-          {t('back')}
-        </Link>
-      </div>
+    <AuthLayout>
       <ForgotPasswordForm />
-    </div>
+    </AuthLayout>
   );
 }

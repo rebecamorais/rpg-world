@@ -6,6 +6,14 @@ import { getTranslations } from 'next-intl/server';
 import { getApi } from '@api';
 
 import ChooseUsernameForm from '@frontend/components/ChooseUsernameForm';
+import AuthLayout from '@frontend/components/auth/AuthLayout';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@frontend/components/ui/card';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('chooseUsername');
@@ -24,14 +32,16 @@ export default async function ChooseUsernamePage() {
   const t = await getTranslations('chooseUsername');
 
   return (
-    <div className="flex flex-1 items-center justify-center p-8">
-      <div className="bg-card border-border flex w-full max-w-md flex-col gap-6 rounded-xl border p-6">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-title">{t('title')}</h1>
-          <p className="text-muted-foreground text-body">{t('description')}</p>
-        </div>
-        <ChooseUsernameForm />
-      </div>
-    </div>
+    <AuthLayout className="max-w-md">
+      <Card>
+        <CardHeader>
+          <CardTitle as="h1">{t('title')}</CardTitle>
+          <CardDescription>{t('description')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChooseUsernameForm />
+        </CardContent>
+      </Card>
+    </AuthLayout>
   );
 }

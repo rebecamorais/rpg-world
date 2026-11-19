@@ -1,12 +1,10 @@
-import Link from 'next/link';
-
 import { useTranslations } from 'next-intl';
 
-import { Button } from '@frontend/components/ui/button';
+import { PlayCta } from '@frontend/components/layout/PlayCta';
 
 /**
- * A plain link (server-rendered, prefetched). Always to the characters: the home is prebuilt, and
- * the dashboard sends whoever isn't signed in to the login.
+ * The home's hero. "Start playing" creates the account (signed in, it opens the characters): the
+ * phone header only has "Sign in", so this is the way to sign up from the first screen.
  */
 export default function HeroCTA() {
   const tLanding = useTranslations('landing');
@@ -17,14 +15,7 @@ export default function HeroCTA() {
       <p className="text-muted-foreground mb-10 max-w-xl text-lg sm:text-xl">
         {tLanding('heroSubtitle')}
       </p>
-      <div className="flex flex-wrap items-center gap-3">
-        <Button asChild size="lg" className="px-8 py-6 text-lg font-semibold">
-          <Link href="/characters">{tLanding('ctaStart')}</Link>
-        </Button>
-        <Button asChild size="lg" variant="secondary" className="px-8 py-6 text-lg font-semibold">
-          <Link href="/demo">{tLanding('ctaDemo')}</Link>
-        </Button>
-      </div>
+      <PlayCta startLabel={tLanding('ctaStart')} demoLabel={tLanding('ctaDemo')} />
     </>
   );
 }

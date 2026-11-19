@@ -40,6 +40,60 @@ describe('UpdateProfileUseCase', () => {
     expect(repository.update).not.toHaveBeenCalled();
   });
 
+  describe('username', () => {
+    function setup(previousUsername: string) {
+      const repository = mockProfileRepository();
+      (repository.getById as ReturnType<typeof vi.fn>).mockResolvedValue({
+        id: 'user-123',
+        username: previousUsername,
+        avatarUrl: 'https://images.rpgworldapp.com/avatars/user-123/avatar-v1.png',
+      });
+      const storage = { remove: vi.fn().mockResolvedValue(undefined) };
+      const useCase = new UpdateProfileUseCase(repository, storage as unknown as StorageRepository);
+      return { repository, storage, useCase };
+    }
+
+    it.each([
+      ['com espaço', 'mestre '],
+      ['com caractere invisível', 'mes\u200btre'],
+      ['com "е" cirílico', 'mestr\u0435'],
+      ['com maiúscula', 'Mestre'],
+      ['com HTML', '<b>x</b>'],
+    ])('recusa um username novo %s', async (_, username) => {
+      const { repository, useCase } = setup('aria_bold');
+
+      await expect(useCase.execute({ id: 'user-123', username })).rejects.toMatchObject({
+        code: 'profile_error_username_invalid',
+      });
+      expect(repository.update).not.toHaveBeenCalled();
+    });
+
+    it('aceita um username novo no formato', async () => {
+      const { repository, useCase } = setup('aria_bold');
+
+      await useCase.execute({ id: 'user-123', username: 'corvo_99' });
+
+      expect(repository.update).toHaveBeenCalledWith({ id: 'user-123', username: 'corvo_99' });
+    });
+
+    it('salva o perfil com o username antigo fora do formato, sem mexer nele', async () => {
+      const { repository, useCase } = setup('playerChilli');
+      const profile = { id: 'user-123', username: 'playerChilli', fullName: 'Chilli' };
+
+      await useCase.execute(profile);
+
+      expect(repository.update).toHaveBeenCalledWith(profile);
+    });
+
+    it('trocar só o username não apaga o avatar', async () => {
+      const { storage, useCase } = setup('aria_bold');
+
+      await useCase.execute({ id: 'user-123', username: 'corvo_99' });
+
+      expect(storage.remove).not.toHaveBeenCalled();
+    });
+  });
+
   describe('avatar substituído', () => {
     const USER = 'user-123';
     const url = (version: string) =>

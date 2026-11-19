@@ -9,6 +9,7 @@ import { EmptyState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { useWriteGuard } from '@frontend/demo/DemoContext';
 import { type InventoryApi, type InventoryItem, useInventory } from '@frontend/hooks/useInventory';
 import {
   INVENTORY_VIEW_KEYS,
@@ -84,6 +85,9 @@ export function ItemList({
   const { backpack, inventory, isLoading, addItem, setQuantity, removeItem, restoreItem } = source;
   const fmt = useItemFormat();
   const [adding, setAdding] = useState(false);
+  // The demo answers Add item with its invite: its catalog is empty, and nothing would be added
+  const guard = useWriteGuard();
+  const openAdd = guard(() => setAdding(true));
   const [view, setView] = useInventoryView(viewKey);
   const { root: focusRoot, next: focusNext } = useFocusAfterRemove();
 
@@ -110,7 +114,7 @@ export function ItemList({
       variant="outline"
       size="sm"
       disabled={!backpack}
-      onClick={() => setAdding(true)}
+      onClick={openAdd}
       // No text-label: buttons keep the case of their text
       className="h-8 px-3"
       data-item-focus={ADD_ITEM_FOCUS}
@@ -155,7 +159,7 @@ export function ItemList({
               entries={removal.display}
               onQuantity={setQuantity}
               onRemove={remove}
-              onAdd={() => setAdding(true)}
+              onAdd={openAdd}
               canAdd={!!backpack}
             />
           ) : (

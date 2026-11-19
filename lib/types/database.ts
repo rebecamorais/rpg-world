@@ -41,6 +41,25 @@ export type Database = {
         };
         Relationships: [];
       };
+      auth_email_throttle: {
+        Row: {
+          kind: string;
+          last_sent_at: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          kind: string;
+          last_sent_at: string;
+          user_id: string;
+        };
+        Update: {
+          kind?: string;
+          last_sent_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       character_lore: {
         Row: {
           age: string | null;
@@ -732,6 +751,7 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      auth_user_email_confirmed: { Args: { p_email: string }; Returns: boolean };
       auth_user_exists: { Args: { p_email: string }; Returns: boolean };
       auth_user_has_password: { Args: { p_user_id: string }; Returns: boolean };
       auth_user_id_exists: { Args: { p_user_id: string }; Returns: boolean };
@@ -756,6 +776,7 @@ export type Database = {
       };
       claim_account_deletion_email: { Args: { p_user_id: string }; Returns: boolean };
       claim_account_deletion_password_attempt: { Args: { p_user_id: string }; Returns: boolean };
+      claim_auth_email: { Args: { p_email: string; p_kind: string }; Returns: boolean };
       claim_party_gm: { Args: { p_party_id: string }; Returns: string };
       duplicate_character: { Args: { p_character_id: string; p_name: string }; Returns: string };
       encounter_turns: {

@@ -182,6 +182,28 @@ describe('SupabaseAuthRepository', () => {
     });
   });
 
+  describe('isEmailConfirmed', () => {
+    it('pergunta à função do banco', async () => {
+      vi.mocked(mockDbClient.rpc).mockResolvedValueOnce({ data: false, error: null } as never);
+
+      expect(await repository.isEmailConfirmed('pending@example.com')).toBe(false);
+      expect(mockDbClient.rpc).toHaveBeenCalledWith('auth_user_email_confirmed', {
+        p_email: 'pending@example.com',
+      });
+    });
+
+    it('lança erro caso falhe a busca, em vez de supor um dos casos', async () => {
+      vi.mocked(mockDbClient.rpc).mockResolvedValueOnce({
+        data: null,
+        error: { message: 'Database unreachable' },
+      } as never);
+
+      await expect(repository.isEmailConfirmed('a@example.com')).rejects.toThrow(
+        'Failed to check if the e-mail is confirmed: Database unreachable',
+      );
+    });
+  });
+
   describe('mapeamento de erros esperados do Supabase Auth', () => {
     const failWith = (code: string) => ({ data: {}, error: mockAuthError(code, code) }) as never;
 

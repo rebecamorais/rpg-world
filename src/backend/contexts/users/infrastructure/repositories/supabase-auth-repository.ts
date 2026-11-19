@@ -170,6 +170,18 @@ export class SupabaseAuthRepository implements AuthRepository {
     return data === true;
   }
 
+  async isEmailConfirmed(email: string): Promise<boolean> {
+    const { data, error } = await this.dbClient.rpc('auth_user_email_confirmed', {
+      p_email: email,
+    });
+
+    if (error) {
+      throw new Error(`Failed to check if the e-mail is confirmed: ${error.message}`);
+    }
+
+    return data === true;
+  }
+
   async exchangeCodeForSession(code: string): Promise<void> {
     this.sessionUser = undefined;
     const { error } = await this.authClient.auth.exchangeCodeForSession(code);

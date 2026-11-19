@@ -82,4 +82,62 @@ test.describe('demo no celular', () => {
     );
     expect(fits).toBe(true);
   });
+
+  test('o header rola com a página, e a VitalsBar gruda no topo', async ({ page }) => {
+    await page.goto('/demo/characters/ada');
+    const vitals = page.getByRole('region', { name: 'Combat at a glance' });
+    await expect(vitals).toBeVisible();
+    await page.mouse.wheel(0, 1200);
+
+    await expect
+      .poll(async () => (await page.getByRole('banner').boundingBox())?.y ?? 0)
+      .toBeLessThan(0);
+    await expect.poll(async () => (await vitals.boundingBox())?.y ?? -1).toBeLessThan(8);
+  });
+});
+
+test.describe('demo: o que gruda, o convite e os títulos', () => {
+  test('no desktop, o índice do Grimório gruda logo abaixo do header, não por baixo', async ({
+    page,
+  }) => {
+    await page.goto('/demo/characters/ada/spells');
+    const index = page.getByRole('navigation', { name: 'Index' });
+    await expect(index).toBeVisible();
+    await page.mouse.wheel(0, 1500);
+
+    const header = await page.getByRole('banner').boundingBox();
+    const headerBottom = (header?.y ?? 0) + (header?.height ?? 0);
+    await expect
+      .poll(async () => (await index.boundingBox())?.y ?? 0)
+      .toBeGreaterThanOrEqual(headerBottom - 1);
+  });
+
+  test('a primeira recusa abre o convite; as seguintes, um toast só, sem empilhar', async ({
+    page,
+  }) => {
+    await page.goto('/demo/inventory');
+    const pay = page.getByRole('button', { name: 'Pay' });
+    const toast = page.getByText('The demo is read only: nothing here is saved.');
+
+    // Pay refuses at once: no payment form to fill in first
+    await pay.click();
+    const invite = page.getByRole('dialog', { name: 'Create your adventure' });
+    await expect(invite).toBeVisible();
+    await expect(toast).toHaveCount(0);
+    await invite.getByRole('button', { name: 'Keep exploring' }).click();
+
+    await pay.click();
+    await pay.click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(toast).toHaveCount(1);
+  });
+
+  test('cada página da demo tem o seu título na aba', async ({ page }) => {
+    await page.goto('/demo');
+    await expect(page).toHaveTitle('Demo · The Pioneers · RPG World');
+    await page.goto('/demo/npcs');
+    await expect(page).toHaveTitle('NPCs · Demo · The Pioneers · RPG World');
+    await page.goto('/demo/inventory');
+    await expect(page).toHaveTitle('Chest · Demo · The Pioneers · RPG World');
+  });
 });

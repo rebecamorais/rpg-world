@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 
@@ -10,6 +10,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod/mini';
 
 import { requestPasswordResetAction } from '@frontend/actions/auth/request-password-reset-action';
+import { AuthSuccessCard } from '@frontend/components/auth/AuthSuccessCard';
+import { authErrorCodeOf } from '@frontend/components/auth/auth-error-code';
 import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
 import { Button } from '@frontend/components/ui/button';
 import {
@@ -34,8 +36,12 @@ import { setServerError } from '@frontend/lib/form-errors';
 
 export default function ForgotPasswordForm() {
   const t = useTranslations('forgotPassword');
+  const tRegister = useTranslations('register');
+  const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
+  // Back from the success card, the e-mail field takes the focus (the button that was clicked is gone)
+  const focusEmail = useRef(false);
   const {
     token: turnstileToken,
     setToken: setTurnstileToken,
@@ -44,7 +50,7 @@ export default function ForgotPasswordForm() {
   } = useTurnstile();
 
   const schema = z.object({
-    email: z.email(t('emailLabel')), // Simplificado para usar a label como erro se falhar zod
+    email: z.email(tRegister('errors.invalidEmail')),
   });
 
   type Values = z.infer<typeof schema>;
@@ -53,6 +59,19 @@ export default function ForgotPasswordForm() {
     resolver: zodResolver(schema),
     defaultValues: { email: '' },
   });
+
+  useEffect(() => {
+    if (!focusEmail.current || isSuccess) return;
+    focusEmail.current = false;
+    form.setFocus('email', { shouldSelect: true });
+  }, [isSuccess, form]);
+
+  const tryAnotherEmail = () => {
+    // The challenge was spent on the request already sent
+    resetTurnstile();
+    focusEmail.current = true;
+    setIsSuccess(false);
+  };
 
   const onSubmit = async (data: Values) => {
     if (!turnstileToken) {
@@ -68,27 +87,28 @@ export default function ForgotPasswordForm() {
         setServerError(form.setError, ['email'], result.error, getMessage(result.error));
         resetTurnstile();
       }
-    } catch {
-      form.setError('root', { message: getMessage(null) });
+    } catch (err: unknown) {
+      form.setError('root', { message: getMessage(authErrorCodeOf(err)) });
       resetTurnstile();
     }
   };
 
   if (isSuccess) {
     return (
-      <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
-        <CardHeader>
-          <CardTitle as="h1">{t('successTitle')}</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            {t('successDescription')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button asChild className="w-full">
-            <Link href="/login">{t('backToLogin')}</Link>
-          </Button>
-        </CardContent>
-      </Card>
+      <AuthSuccessCard
+        title={t('successTitle')}
+        description={t.rich('successDescription', {
+          email: form.getValues('email'),
+          bold: (chunks) => <strong className="text-foreground">{chunks}</strong>,
+        })}
+      >
+        <Button variant="outline" className="w-full" onClick={tryAnotherEmail}>
+          {tCommon('useAnotherEmail')}
+        </Button>
+        <Button variant="ghost" asChild className="w-full">
+          <Link href="/login">{t('backToLogin')}</Link>
+        </Button>
+      </AuthSuccessCard>
     );
   }
 
@@ -113,7 +133,6 @@ export default function ForgotPasswordForm() {
                       placeholder={t('emailPlaceholder')}
                       autoComplete="email"
                       spellCheck={false}
-                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>
@@ -134,7 +153,10 @@ export default function ForgotPasswordForm() {
               {form.formState.isSubmitting ? t('processing') : t('submit')}
             </Button>
             <div className="text-muted-foreground mt-2 text-center text-sm">
-              <Link href="/login" className="text-primary-flare hover:underline">
+              <Link
+                href="/login"
+                className="text-primary-flare focus-ring rounded-sm hover:underline"
+              >
                 {t('backToLogin')}
               </Link>
             </div>

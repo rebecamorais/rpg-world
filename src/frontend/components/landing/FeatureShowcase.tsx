@@ -106,7 +106,7 @@ export function FeatureShowcase() {
           <TabsContent
             key={slide}
             value={slide}
-            className="motion-safe:animate-fade-in mt-0 grid gap-6 lg:grid-cols-[1fr_2fr] lg:items-center"
+            className="motion-safe:animate-fade-in mt-0 grid gap-6 lg:grid-cols-[1fr_2fr] lg:items-start"
           >
             <div className="flex flex-col gap-2">
               <h3 className="text-title">{t(`slides.${slide}.title`)}</h3>

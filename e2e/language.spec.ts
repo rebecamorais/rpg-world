@@ -1,4 +1,5 @@
 import { characterUrl, createCharacter, expect, hydrated, test } from './support/fixtures';
+import { PASSWORD, createUser } from './support/supabase';
 
 test('troca o idioma da interface para português', async ({ page, user: _ }) => {
   await page.goto('/characters');
@@ -61,6 +62,32 @@ test('depois de trocar para português, um link já pré-carregado abre em portu
 
   await page.getByRole('contentinfo').getByRole('link', { name: 'Funcionalidades' }).click();
 
-  await expect(page).toHaveURL(/\/features$/);
+  await expect(page).toHaveURL(/\/pt\/features$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt');
+});
+
+test('numa página pública em português, voltar ao inglês leva ao endereço sem /pt', async ({
+  page,
+}) => {
+  await page.goto('/pt/privacy');
+  await page.getByRole('combobox').filter({ hasText: 'Português' }).click();
+  await page.getByRole('option', { name: 'English' }).click();
+
+  await expect(page).toHaveURL(/\/privacy$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  // The app follows the choice
+  await page.goto('/login');
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+});
+
+test('em português, entrar pelo /pt/login leva ao app sem prefixo', async ({ page }) => {
+  const user = await createUser('login-pt');
+  await page.goto('/pt/login');
+  await (await hydrated(page.getByLabel('E-mail'))).fill(user.email);
+  await page.getByLabel('Senha', { exact: true }).fill(PASSWORD);
+  await page.getByRole('button', { name: 'Entrar', exact: true }).click();
+
+  await expect(page).toHaveURL(/\/characters$/);
+  await expect(page.getByText('Nenhum personagem ainda')).toBeVisible();
 });

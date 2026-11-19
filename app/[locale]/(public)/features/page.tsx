@@ -1,40 +1,36 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import type { LocaleParams } from '@/i18n/routing';
+import { type LocaleParams, localizedHref } from '@/i18n/routing';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { FeaturesCta } from '@frontend/components/features/FeaturesCta';
 import {
   AVAILABLE_FEATURES,
   FeatureGrid,
   PLANNED_FEATURES,
 } from '@frontend/components/landing/FeatureGrid';
 import { FeatureShowcase } from '@frontend/components/landing/FeatureShowcase';
+import { PlayCta } from '@frontend/components/layout/PlayCta';
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { GITHUB_REPO } from '@frontend/constants/site';
+import { publicPageMetadata } from '@frontend/lib/public-metadata';
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'features' });
-  return {
+  return publicPageMetadata({
+    locale,
+    path: '/features',
     title: t('metaTitle'),
     description: t('metaDescription'),
-    alternates: { canonical: '/features' },
-    // openGraph replaces the layout's whole object, so the image has to be repeated here
-    openGraph: {
-      title: t('metaTitle'),
-      description: t('metaDescription'),
-      url: '/features',
-      images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
-    },
-  };
+  });
 }
 
 /** Public page: what the app does, so visitors can see it before creating an account. */
 export default async function FeaturesPage({ params }: LocaleParams) {
-  setRequestLocale((await params).locale);
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations('features');
 
   return (
@@ -59,7 +55,8 @@ export default async function FeaturesPage({ params }: LocaleParams) {
         <h2 id="available-title" className="text-title">
           {t('availableTitle')}
         </h2>
-        <FeatureGrid features={AVAILABLE_FEATURES} group="items" />
+        {/* 3 columns: 11 cards in 4 left a hole the size of a card in the last row */}
+        <FeatureGrid features={AVAILABLE_FEATURES} group="items" className="lg:grid-cols-3" />
       </section>
 
       <section aria-labelledby="planned-title" className="flex flex-col gap-6">
@@ -88,7 +85,7 @@ export default async function FeaturesPage({ params }: LocaleParams) {
             </a>
           </Button>
           <Button asChild variant="ghost">
-            <Link href="/terms">{t('credits')}</Link>
+            <Link href={localizedHref('/terms', locale)}>{t('credits')}</Link>
           </Button>
         </div>
       </section>
@@ -97,7 +94,11 @@ export default async function FeaturesPage({ params }: LocaleParams) {
         <h2 id="cta-title" className="text-title">
           {t('ctaTitle')}
         </h2>
-        <FeaturesCta />
+        <PlayCta
+          startLabel={t('ctaStart')}
+          signedInLabel={t('ctaCharacters')}
+          demoLabel={t('ctaDemo')}
+        />
       </section>
     </div>
   );

@@ -4,8 +4,9 @@ import { useEffect } from 'react';
 
 import Link from 'next/link';
 
+import { localizedHref } from '@/i18n/routing';
 import { useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import LanguageSwitcher from '@frontend/components/LanguageSwitcher';
 import { HeaderSupportLink } from '@frontend/components/layout/HeaderSupportLink';
@@ -34,9 +35,9 @@ export function HeaderSessionMobileMenu({ serverUser }: KnownSession) {
  * the signed-out buttons.
  */
 export function HeaderSessionActions({ serverUser }: KnownSession) {
-  const tLogin = useTranslations('login');
-  const tRegister = useTranslations('register');
+  const tCommon = useTranslations('common');
   const tDash = useTranslations('dashboard');
+  const locale = useLocale();
   const { user, status } = useSession(serverUser);
 
   const queryClient = useQueryClient();
@@ -65,12 +66,12 @@ export function HeaderSessionActions({ serverUser }: KnownSession) {
             size="sm"
             className="text-muted-foreground hover:text-foreground"
           >
-            <Link href="/login">{tLogin('submit')}</Link>
+            <Link href={localizedHref('/login', locale)}>{tCommon('signIn')}</Link>
           </Button>
           <Button asChild size="sm" className="hidden sm:inline-flex">
-            <Link href="/register" className="flex items-center gap-2">
+            <Link href={localizedHref('/register', locale)} className="flex items-center gap-2">
               <AppIcon name="UserPlus" size={16} />
-              {tRegister('submit')}
+              {tCommon('signUp')}
             </Link>
           </Button>
         </div>

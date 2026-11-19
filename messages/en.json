@@ -17,7 +17,7 @@
       "auth_error_rate_limited": "Too many attempts. Wait a moment and try again.",
       "auth_error_user_not_found": "User not found.",
       "auth_error_code_required": "The sign-in link is incomplete. Please request a new one.",
-      "auth_error_link_expired": "This link has expired or was already used. Please request a new one.",
+      "auth_error_link_expired": "This link has expired or was already used. Request a new one.",
       "auth_error_provider": "Sign-in was cancelled or refused by the provider.",
       "auth_error_update_password_weak": "Weak password. Choose a stronger one.",
       "auth_error_update_password_same": "The new password must be different from the current one.",
@@ -76,10 +76,9 @@
       "security_verification_failed": "Security verification failed. Please try again.",
       "internal_configuration_error": "Internal configuration error. Contact support.",
       "network_error_security_verification": "Network error during security verification.",
-      "no_code_provided": "Auth code was not provided by the provider.",
-      "expired_link_title": "Link Expired",
-      "expired_link_description": "The access link has expired or has already been used.",
-      "auth_error_title": "Authentication Error",
+      "no_code_provided": "This link is incomplete. Open the full link from the email or request a new one.",
+      "expired_link_title": "This link no longer works",
+      "auth_error_title": "Authentication error",
       "auth_error_description": "We could not complete the operation at this time.",
       "security_widget_unavailable": "Could not load the security check. Disable content blockers for this site or reload the page.",
       "image_error_decode": "Couldn't read this image. Try another file (JPEG, PNG or WebP).",
@@ -102,7 +101,9 @@
       "combat_error_invalid_change": "That change doesn't apply to players.",
       "combat_error_at_start": "The combat is already at its first turn.",
       "combat_error_character_not_allowed": "This character can't join this combat.",
-      "common_error_network": "No connection. Nothing was saved."
+      "common_error_network": "No connection. Nothing was saved.",
+      "common_error_offline": "No connection. Check your internet and try again.",
+      "profile_error_username_invalid": "Use 3 to 30 lowercase letters, numbers or _."
     },
     "save": "Save",
     "saving": "Saving…",
@@ -157,13 +158,17 @@
     "draftNote": "Changes go into the sheet. Save the sheet to keep them.",
     "typeToConfirm": "To confirm, type: <bold>{text}</bold>",
     "typeToConfirmLabel": "Type the exact text above",
-    "discardConfirmTitle": "Discard your changes?"
+    "discardConfirmTitle": "Discard your changes?",
+    "useAnotherEmail": "Use another email",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "onThisPage": "On this page"
   },
   "login": {
     "title": "Sign in to RPG World",
     "subtitle": "Choose how you prefer to access your account.",
-    "magicLinkTab": "Magic Link",
-    "passwordTab": "Email and Password",
+    "magicLinkTab": "Magic link",
+    "passwordTab": "Password",
     "emailLabel": "Email",
     "emailPlaceholder": "your@email.com",
     "passwordLabel": "Password",
@@ -173,48 +178,49 @@
     "dividerText": "or",
     "googleLogin": "Continue with Google",
     "processing": "Processing…",
-    "verifyEmailTitle": "Check your email 📬",
+    "verifyEmailTitle": "Check your email",
     "verifyEmailDescription": "If <bold>{email}</bold> has an account, a magic link is on its way. Click it to sign in.",
     "invalidEmailError": "Invalid email.",
     "passwordRequiredError": "Password is required.",
     "forgotPassword": "Forgot password?",
-    "submit": "Sign In",
+    "submit": "Sign in",
     "noAccount": "Don't have an account?",
-    "noAccountSubtitle": "Join the community and start managing your characters.",
-    "register": "Sign up"
+    "register": "Sign up",
+    "unconfirmedHint": "Haven't confirmed your email yet? <magic>Sign in with a magic link.</magic>",
+    "metaTitle": "Sign in",
+    "metaDescription": "Sign in to RPG World to open your D&D 5e characters and parties."
   },
   "register": {
-    "title": "Create Account",
+    "title": "Sign up for RPG World",
     "subtitle": "Join RPG World and start your journey.",
     "emailLabel": "Email",
     "emailPlaceholder": "your@email.com",
     "passwordLabel": "Password",
     "passwordPlaceholder": "••••••••",
-    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordLabel": "Confirm password",
     "confirmPasswordPlaceholder": "••••••••",
-    "submit": "Register",
+    "submit": "Sign up",
     "processing": "Creating account…",
-    "successTitle": "Account created!",
-    "successDescription": "Check your email to confirm your registration.",
+    "successTitle": "Check your email",
+    "successDescription": "We sent the next step to <bold>{email}</bold>.",
     "alreadyHaveAccount": "Already have an account?",
-    "login": "Sign In",
+    "login": "Sign in",
     "errors": {
       "turnstileRequired": "Please complete the security verification.",
       "invalidEmail": "Invalid email."
-    }
+    },
+    "passwordHint": "At least {min} characters.",
+    "metaTitle": "Sign up",
+    "metaDescription": "Create a free RPG World account for your D&D 5e characters and parties."
   },
   "auth": {
-    "confirm": {
-      "title": "Confirming…",
-      "errorTitle": "Authentication Error",
-      "waiting": "Please wait while we validate your access.",
-      "redirecting": "Redirecting to login…"
-    }
+    "requestNewLink": "Request a new link",
+    "toLogin": "Go to sign in"
   },
   "landing": {
     "heroTitle": "Your ultimate RPG companion.",
     "heroSubtitle": "Manage your character sheets, play with your party and track attributes, spells, items and combat effortlessly.",
-    "ctaStart": "Start Playing",
+    "ctaStart": "Start playing",
     "previewLabel": "Example character sheet",
     "previewName": "Ada the Wise",
     "previewClass": "High elf wizard · Level 5",
@@ -1027,13 +1033,14 @@
   "terms": {
     "title": "Terms of Use",
     "lastUpdated": "Last updated: November 3, 2026",
+    "metaDescription": "The rules for using RPG World, and the credits and licenses of the D&D 5e content it shows.",
     "sections": {
       "acceptance": {
-        "title": "1. Acceptance of Terms",
+        "title": "1. Acceptance of terms",
         "content": "By accessing RPG World, you agree to comply with these terms. This software is provided by Rebs Tech Studio \"as is\", without warranties of any kind."
       },
       "conduct": {
-        "title": "2. User Conduct",
+        "title": "2. User conduct",
         "content": "RPG World is a space for creativity and fun. It is strictly prohibited:",
         "items": [
           "Publishing content that promotes hate, racism, or any form of discrimination.",
@@ -1042,7 +1049,7 @@
         ]
       },
       "content": {
-        "title": "3. User Content",
+        "title": "3. User content",
         "content": "You retain ownership of all stories and characters created. However, by using our platform, you grant us a worldwide, royalty-free license to store and display this content solely for game operation."
       },
       "donations": {
@@ -1050,23 +1057,23 @@
         "content": "Financial contributions are voluntary donations to support development. They do not constitute the purchase of services, do not grant ownership rights over the software, and are non-refundable."
       },
       "liability": {
-        "title": "5. Limitation of Liability",
+        "title": "5. Limitation of liability",
         "content": "We are not responsible for data loss, connection errors, or service interruptions. As the code is open source (GPLv3), you have the right to host your own instance if you wish for full control over your data."
       },
       "age": {
-        "title": "6. Minimum Age and Child Protection",
+        "title": "6. Minimum age and child protection",
         "content": "RPG World is intended for users who are at least 13 years old. We do not intentionally collect data from children under 13. If we become aware that a minor under 13 has provided us with personal data, we will take steps to delete such information and close the account."
       },
       "updates": {
-        "title": "7. Changes to the Terms",
+        "title": "7. Changes to the terms",
         "content": "We reserve the right to update these terms at any time. We will notify users about significant changes through system notices or by email. Continued use of the platform after changes constitutes acceptance of the new terms."
       },
       "law": {
-        "title": "8. Governing Law and Jurisdiction",
+        "title": "8. Governing law and jurisdiction",
         "content": "These terms are governed by the laws of the Federative Republic of Brazil. Any dispute will be resolved in the jurisdiction of the city of São José dos Campos, SP, with express waiver of any other."
       },
       "gameContent": {
-        "title": "9. Game Content and Credits",
+        "title": "9. Game content and credits",
         "content": "The rules and spells shown in RPG World come from open sources, used under their licenses. The attributions of the System Reference Documents are reproduced exactly as Wizards of the Coast asks:",
         "items": [
           "This work includes material taken from the System Reference Document 5.1 (“SRD 5.1”) by Wizards of the Coast LLC and available at <srd>https://dnd.wizards.com/resources/systems-reference-document</srd>. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at <ccby>https://creativecommons.org/licenses/by/4.0/legalcode</ccby>.",
@@ -1084,9 +1091,10 @@
   "privacy": {
     "title": "Privacy Policy",
     "lastUpdated": "Last updated: November 4, 2026",
+    "metaDescription": "How RPG World collects, uses and protects your data, and how to exercise your rights under the LGPD.",
     "sections": {
       "data": {
-        "title": "1. Data Collected",
+        "title": "1. Data collected",
         "content": "We collect only what is essential for your experience:",
         "items": [
           "Account: email and password (the password is stored encrypted by <supabase>Supabase</supabase>) or, if you sign in with <google>Google</google>, the email and name of your Google account.",
@@ -1098,7 +1106,7 @@
         ]
       },
       "usage": {
-        "title": "2. Data Usage",
+        "title": "2. Data usage",
         "content": "Your data is used exclusively to:",
         "items": [
           "Keep you signed in and protect your account.",
@@ -1108,10 +1116,26 @@
       },
       "sharing": {
         "title": "3. Sharing",
-        "content": "We do not sell your data to third parties. To run RPG World we use these services: <supabase>Supabase</supabase> (database, sign-in and image storage), <vercel>Vercel</vercel> (hosting), <resend>Resend</resend> (email delivery), <cloudflare>Cloudflare Turnstile</cloudflare> (bot protection on sign-up, the magic link, password reset and the contact form; and anonymous visit counts, with Cloudflare Web Analytics), <discord>Discord</discord> (where the support team receives the messages sent through the contact form: email, type, message and, if you are signed in, your account id) and <google>Google</google> (only if you sign in with Google). Your profile (username and avatar) and a summary of the characters you bring to a party (name, avatar, race, class and level) are seen by the people in that party; the GM also sees the sheet of those characters. In a party without a GM, an active player can become the GM with the agreement of all the other active players and, from then on, sees the sheets of the party's characters. Someone who does not answer that request can be removed from the party by support, after an email and 7 days without a reply, and that person's characters leave the party with them. The journal link and the party inventory are seen only by the GM and active players. The party name and picture show to anyone with the invite link, even without an account (that's what Discord and WhatsApp display when the link is pasted). Everything else stays visible only to you; avatar images are stored at a public address that is not listed anywhere."
+        "intro": "We do not sell your data to third parties. To run RPG World we use these services:",
+        "services": [
+          "<supabase>Supabase</supabase>: database, sign-in and image storage.",
+          "<vercel>Vercel</vercel>: hosting.",
+          "<resend>Resend</resend>: email delivery.",
+          "<cloudflare>Cloudflare Turnstile</cloudflare>: bot protection on sign-up, the magic link, password reset and the contact form; and anonymous visit counts, with Cloudflare Web Analytics.",
+          "<discord>Discord</discord>: where the support team receives the messages sent through the contact form (email, type, message and, if you are signed in, your account id).",
+          "<google>Google</google>: only if you sign in with Google."
+        ],
+        "visibilityIntro": "Inside RPG World:",
+        "visibility": [
+          "Your profile (username and avatar) and a summary of the characters you bring to a party (name, avatar, race, class and level) are seen by the people in that party; the GM also sees the sheet of those characters.",
+          "In a party without a GM, an active player can become the GM with the agreement of all the other active players and, from then on, sees the sheets of the party's characters. Someone who does not answer that request can be removed from the party by support, after an email and 7 days without a reply, and that person's characters leave the party with them.",
+          "The journal link and the party inventory are seen only by the GM and active players.",
+          "The party name and picture show to anyone with the invite link, even without an account (that's what Discord and WhatsApp display when the link is pasted).",
+          "Everything else stays visible only to you; avatar images are stored at a public address that is not listed anywhere."
+        ]
       },
       "rights": {
-        "title": "4. Your Rights",
+        "title": "4. Your rights",
         "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. You can delete your account at any time in Settings > Profile: you enter your username and password (if you only signed in with Google there is no password step) and we send a confirmation link to the account's email, valid for 1 hour. After the final button, deletion is immediate and cannot be undone. For your other rights, or if you cannot delete from there, contact us through the <support>support form</support> or on <server>Discord</server>; we reply within 5 business days.",
         "deletionIntro": "When you delete your account:",
         "deletionItems": [
@@ -1126,43 +1150,44 @@
         "content": "We only use necessary cookies: the ones for your sign-in session, the language you chose and your time zone. We do not use advertising or tracking cookies."
       },
       "transfer": {
-        "title": "6. International Data Transfer",
+        "title": "6. International data transfer",
         "content": "To operate the system, we use third-party infrastructure: <supabase>Supabase</supabase>, <vercel>Vercel</vercel>, <resend>Resend</resend>, <cloudflare>Cloudflare</cloudflare>, <discord>Discord</discord> and, only if you sign in with Google, <google>Google</google>. As a result, your data may be processed and stored on servers located outside of Brazil, specifically in the United States. This transfer is necessary to provide the service you asked for when you created the account (<lgpd>LGPD</lgpd>, art. 33, IX, combined with art. 7, V) and is carried out under strict security and encryption standards."
       },
       "retention": {
-        "title": "7. Data Retention and Deletion",
+        "title": "7. Data retention and deletion",
         "content": "Your data remains stored in our database as long as your account is active. If your account remains inactive for more than 24 months, we reserve the right to perform automatic deletion for security and resource saving."
       },
       "contact": {
-        "title": "8. Contact and Data Controller",
+        "title": "8. Contact and data controller",
         "content": "For any questions regarding your privacy or to exercise your rights (<lgpd>LGPD</lgpd>), talk to the team through the <support>support form</support> or on our <server>Discord server</server>. For matters about your account, prefer a direct message to the team over the public channels."
       }
     }
   },
   "forgotPassword": {
-    "title": "Recover Password",
+    "title": "Recover password",
     "subtitle": "Enter your email to receive a recovery link.",
     "emailLabel": "Email",
     "emailPlaceholder": "your@email.com",
     "submit": "Send recovery email",
     "processing": "Sending…",
-    "successTitle": "Email sent! 📬",
-    "successDescription": "If this email is registered, you will receive a recovery link shortly.",
-    "backToLogin": "Back to Login"
+    "successTitle": "Email sent",
+    "successDescription": "If <bold>{email}</bold> is registered, the recovery link will arrive shortly.",
+    "backToLogin": "Back to sign in",
+    "metaTitle": "Forgot password",
+    "metaDescription": "Request a link to choose a new RPG World password."
   },
   "resetPassword": {
-    "title": "Reset Password",
+    "title": "New password",
     "subtitle": "Choose a strong new password for your account.",
-    "newPasswordLabel": "New Password",
+    "newPasswordLabel": "New password",
     "newPasswordPlaceholder": "••••••••",
-    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordLabel": "Confirm new password",
     "confirmPasswordPlaceholder": "••••••••",
-    "submit": "Update Password",
+    "submit": "Update password",
     "processing": "Updating…",
-    "successTitle": "Password changed! 🎉",
-    "successDescription": "Your password has been successfully reset. You can now log in.",
-    "login": "Log In",
-    "sessionNotFound": "Reset session not found. Try the link from the e-mail again."
+    "sessionNotFound": "The link session has ended. Request a new link.",
+    "subtitleForEmail": "Choose a strong new password for {email}.",
+    "changed": "Password changed"
   },
   "spellsData": {
     "schools": {
@@ -1300,6 +1325,8 @@
     "submitting": "Channeling…",
     "sendAnother": "Send another message",
     "success": "Message sent! The RPG World team will read it.",
+    "replyByEmail": "We'll reply to the email you entered.",
+    "discord": "Prefer to chat? Talk to us on <discord>Discord</discord>.",
     "error": "Failed to send message. Try again after a short rest.",
     "types": {
       "bug": "Bug",
@@ -1396,7 +1423,7 @@
     "openSource": "See the code on GitHub",
     "credits": "Content credits",
     "ctaTitle": "Ready to create your character?",
-    "ctaStart": "Create a free account",
+    "ctaStart": "Sign up",
     "ctaCharacters": "Go to my characters",
     "showcase": {
       "title": "Take a look inside",
@@ -1474,7 +1501,8 @@
     "label": "Username",
     "placeholder": "e.g.: aria_the_bold",
     "submit": "Continue",
-    "saving": "Saving…"
+    "saving": "Saving…",
+    "rules": "3 to 30 characters: lowercase letters, numbers and _."
   },
   "parties": {
     "title": "Parties",
@@ -1930,6 +1958,8 @@
   "demo": {
     "metaTitle": "Demo · The Pioneers",
     "npcsTitle": "NPCs",
+    "gmEyebrow": "You see the party as the GM",
+    "readOnly": "The demo is read only: nothing here is saved.",
     "inspiration": {
       "title": "Meet the Inspiration",
       "realName": "Inspired by",
@@ -1953,7 +1983,9 @@
       "title": "Make your own adventure",
       "description": "The demo is read only. Create a free account to build your characters, join a party and save your progress.",
       "create": "Create account",
-      "keep": "Keep exploring"
+      "keep": "Keep exploring",
+      "signedInTitle": "This is only a demo",
+      "signedInDescription": "The demo is read only. Your sheets are in the app."
     }
   },
   "sheetViewer": {

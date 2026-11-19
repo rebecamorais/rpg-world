@@ -17,7 +17,7 @@
       "auth_error_rate_limited": "Muitas tentativas. Aguarde um pouco e tente novamente.",
       "auth_error_user_not_found": "Usuário não encontrado.",
       "auth_error_code_required": "O link de acesso está incompleto. Solicite um novo.",
-      "auth_error_link_expired": "Este link expirou ou já foi usado. Solicite um novo.",
+      "auth_error_link_expired": "Este link expirou ou já foi usado. Peça outro.",
       "auth_error_provider": "O login foi cancelado ou recusado pelo provedor.",
       "auth_error_update_password_weak": "Senha fraca. Escolha uma senha mais forte.",
       "auth_error_update_password_same": "A nova senha deve ser diferente da atual.",
@@ -76,10 +76,9 @@
       "security_verification_failed": "Falha na verificação de segurança. Tente novamente.",
       "internal_configuration_error": "Erro de configuração interna. Contate o suporte.",
       "network_error_security_verification": "Erro de rede na verificação de segurança.",
-      "no_code_provided": "O código de autenticação não foi fornecido pelo provedor.",
-      "expired_link_title": "Link Expirado",
-      "expired_link_description": "O link de acesso expirou ou já foi utilizado.",
-      "auth_error_title": "Erro de Autenticação",
+      "no_code_provided": "Este link está incompleto. Abra o link inteiro do e-mail ou peça outro.",
+      "expired_link_title": "Este link não vale mais",
+      "auth_error_title": "Erro de autenticação",
       "auth_error_description": "Não foi possível completar a operação no momento.",
       "security_widget_unavailable": "Não foi possível carregar a verificação de segurança. Desative bloqueadores de conteúdo para este site ou recarregue a página.",
       "image_error_decode": "Não foi possível ler essa imagem. Tente outro arquivo (JPEG, PNG ou WebP).",
@@ -102,7 +101,9 @@
       "combat_error_invalid_change": "Essa mudança não vale para jogadores.",
       "combat_error_at_start": "O combate já está no primeiro turno.",
       "combat_error_character_not_allowed": "Este personagem não pode entrar neste combate.",
-      "common_error_network": "Sem conexão. Nada foi salvo."
+      "common_error_network": "Sem conexão. Nada foi salvo.",
+      "common_error_offline": "Sem conexão. Confira a internet e tente de novo.",
+      "profile_error_username_invalid": "Use de 3 a 30 letras minúsculas, números ou _."
     },
     "save": "Salvar",
     "saving": "Salvando…",
@@ -157,13 +158,17 @@
     "draftNote": "As mudanças entram na ficha. Salve a ficha para guardar.",
     "typeToConfirm": "Para confirmar, digite: <bold>{text}</bold>",
     "typeToConfirmLabel": "Digite exatamente o texto acima",
-    "discardConfirmTitle": "Descartar as alterações?"
+    "discardConfirmTitle": "Descartar as alterações?",
+    "useAnotherEmail": "Usar outro e-mail",
+    "signIn": "Entrar",
+    "signUp": "Criar conta",
+    "onThisPage": "Nesta página"
   },
   "login": {
     "title": "Entrar no RPG World",
     "subtitle": "Escolha como prefere acessar sua conta.",
-    "magicLinkTab": "Link Mágico",
-    "passwordTab": "E-mail e Senha",
+    "magicLinkTab": "Link mágico",
+    "passwordTab": "Senha",
     "emailLabel": "E-mail",
     "emailPlaceholder": "seu@email.com",
     "passwordLabel": "Senha",
@@ -173,48 +178,49 @@
     "dividerText": "ou",
     "googleLogin": "Continuar com Google",
     "processing": "Processando…",
-    "verifyEmailTitle": "Verifique seu e-mail 📬",
+    "verifyEmailTitle": "Confira seu e-mail",
     "verifyEmailDescription": "Se <bold>{email}</bold> tiver uma conta, o link mágico já está a caminho. Clique nele para entrar.",
     "invalidEmailError": "E-mail inválido.",
     "passwordRequiredError": "Senha é obrigatória.",
     "forgotPassword": "Esqueceu a senha?",
     "submit": "Entrar",
     "noAccount": "Não tem uma conta?",
-    "noAccountSubtitle": "Junte-se à comunidade e comece a gerenciar seus personagens.",
-    "register": "Cadastre-se"
+    "register": "Criar conta",
+    "unconfirmedHint": "Ainda não confirmou o e-mail? <magic>Entre com o link mágico.</magic>",
+    "metaTitle": "Entrar",
+    "metaDescription": "Entre no RPG World para abrir suas fichas de D&D 5e e suas mesas."
   },
   "register": {
-    "title": "Criar Conta",
+    "title": "Criar conta no RPG World",
     "subtitle": "Junte-se ao RPG World e comece sua jornada.",
     "emailLabel": "E-mail",
     "emailPlaceholder": "seu@email.com",
     "passwordLabel": "Senha",
     "passwordPlaceholder": "••••••••",
-    "confirmPasswordLabel": "Confirmar Senha",
+    "confirmPasswordLabel": "Confirmar senha",
     "confirmPasswordPlaceholder": "••••••••",
-    "submit": "Cadastrar",
+    "submit": "Criar conta",
     "processing": "Criando conta…",
-    "successTitle": "Conta criada!",
-    "successDescription": "Verifique seu e-mail para confirmar seu cadastro.",
+    "successTitle": "Confira seu e-mail",
+    "successDescription": "Enviamos para <bold>{email}</bold> o próximo passo.",
     "alreadyHaveAccount": "Já tem uma conta?",
     "login": "Entrar",
     "errors": {
       "turnstileRequired": "Por favor, complete a verificação de segurança.",
       "invalidEmail": "E-mail inválido."
-    }
+    },
+    "passwordHint": "Pelo menos {min} caracteres.",
+    "metaTitle": "Criar conta",
+    "metaDescription": "Crie uma conta grátis no RPG World para suas fichas de D&D 5e e suas mesas."
   },
   "auth": {
-    "confirm": {
-      "title": "Confirmando…",
-      "errorTitle": "Erro na Autenticação",
-      "waiting": "Aguarde um momento enquanto validamos seu acesso.",
-      "redirecting": "Redirecionando para login…"
-    }
+    "requestNewLink": "Pedir outro link",
+    "toLogin": "Ir para o login"
   },
   "landing": {
     "heroTitle": "O seu companheiro definitivo de RPG.",
     "heroSubtitle": "Gerencie suas fichas, jogue com a sua mesa e acompanhe atributos, magias, itens e combates sem esforço.",
-    "ctaStart": "Começar a Jogar",
+    "ctaStart": "Começar a jogar",
     "previewLabel": "Exemplo de ficha de personagem",
     "previewName": "Ada, a Sábia",
     "previewClass": "Maga elfa · Nível 5",
@@ -1027,13 +1033,14 @@
   "terms": {
     "title": "Termos de Uso",
     "lastUpdated": "Última atualização: 3 de novembro de 2026",
+    "metaDescription": "As regras de uso do RPG World e os créditos e licenças do conteúdo de D&D 5e que ele mostra.",
     "sections": {
       "acceptance": {
-        "title": "1. Aceitação dos Termos",
+        "title": "1. Aceitação dos termos",
         "content": "Ao acessar o RPG World, você concorda em cumprir estes termos. Este software é fornecido pela Rebs Tech Studio \"como está\", sem garantias de qualquer tipo."
       },
       "conduct": {
-        "title": "2. Conduta do Usuário",
+        "title": "2. Conduta do usuário",
         "content": "O RPG World é um espaço para criatividade e diversão. É estritamente proibido:",
         "items": [
           "Publicar conteúdo que promova ódio, racismo ou qualquer forma de discriminação.",
@@ -1042,7 +1049,7 @@
         ]
       },
       "content": {
-        "title": "3. Conteúdo do Usuário",
+        "title": "3. Conteúdo do usuário",
         "content": "Você mantém a propriedade de todas as histórias e personagens criados. No entanto, ao usar nossa plataforma, você nos concede uma licença mundial e gratuita para armazenar e exibir esse conteúdo apenas para o funcionamento do jogo."
       },
       "donations": {
@@ -1050,23 +1057,23 @@
         "content": "Contribuições financeiras são doações voluntárias para apoiar o desenvolvimento. Elas não constituem compra de serviços, não dão direito a propriedade sobre o software e não são reembolsáveis."
       },
       "liability": {
-        "title": "5. Limitação de Responsabilidade",
+        "title": "5. Limitação de responsabilidade",
         "content": "Não nos responsabilizamos por perdas de dados, erros de conexão ou interrupções no serviço. Como o código é aberto (GPLv3), você tem o direito de hospedar sua própria instância caso deseje controle total sobre seus dados."
       },
       "age": {
-        "title": "6. Idade Mínima e Proteção de Menores",
+        "title": "6. Idade mínima e proteção de menores",
         "content": "O RPG World é destinado a usuários com pelo menos 13 anos de idade. Não coletamos intencionalmente dados de menores de 13 anos. Se tomarmos conhecimento de que um menor de 13 anos nos forneceu dados pessoais, tomaremos medidas para excluir tais informações e encerrar a conta."
       },
       "updates": {
-        "title": "7. Alterações nos Termos",
+        "title": "7. Alterações nos termos",
         "content": "Reservamo-nos o direito de atualizar estes termos a qualquer momento. Notificaremos os usuários sobre mudanças significativas através de avisos no sistema ou por e-mail. O uso continuado da plataforma após as alterações constitui aceitação dos novos termos."
       },
       "law": {
-        "title": "8. Foro e Legislação Aplicável",
+        "title": "8. Foro e legislação aplicável",
         "content": "Estes termos são regidos pelas leis da República Federativa do Brasil. Qualquer disputa será resolvida no foro da comarca de São José dos Campos, SP, com renúncia expressa a qualquer outro."
       },
       "gameContent": {
-        "title": "9. Conteúdo de Jogo e Créditos",
+        "title": "9. Conteúdo de jogo e créditos",
         "content": "As regras e magias exibidas no RPG World vêm de fontes abertas, usadas de acordo com as suas licenças. As atribuições dos System Reference Documents estão reproduzidas exatamente como a Wizards of the Coast pede:",
         "items": [
           "This work includes material taken from the System Reference Document 5.1 (“SRD 5.1”) by Wizards of the Coast LLC and available at <srd>https://dnd.wizards.com/resources/systems-reference-document</srd>. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at <ccby>https://creativecommons.org/licenses/by/4.0/legalcode</ccby>.",
@@ -1084,9 +1091,10 @@
   "privacy": {
     "title": "Política de Privacidade",
     "lastUpdated": "Última atualização: 4 de novembro de 2026",
+    "metaDescription": "Como o RPG World coleta, usa e protege seus dados, e como exercer seus direitos pela LGPD.",
     "sections": {
       "data": {
-        "title": "1. Dados Coletados",
+        "title": "1. Dados coletados",
         "content": "Coletamos apenas o essencial para a sua experiência:",
         "items": [
           "Conta: e-mail e senha (guardada de forma criptografada pelo <supabase>Supabase</supabase>) ou, se você entrar com o <google>Google</google>, o e-mail e o nome da sua conta Google.",
@@ -1098,7 +1106,7 @@
         ]
       },
       "usage": {
-        "title": "2. Uso dos Dados",
+        "title": "2. Uso dos dados",
         "content": "Seus dados são usados exclusivamente para:",
         "items": [
           "Manter você conectado e proteger sua conta.",
@@ -1108,10 +1116,26 @@
       },
       "sharing": {
         "title": "3. Compartilhamento",
-        "content": "Nós não vendemos seus dados para terceiros. Para operar o RPG World usamos estes serviços: <supabase>Supabase</supabase> (banco de dados, login e armazenamento de imagens), <vercel>Vercel</vercel> (hospedagem), <resend>Resend</resend> (envio de e-mails), <cloudflare>Cloudflare Turnstile</cloudflare> (proteção contra robôs no cadastro, no link mágico, na recuperação de senha e no formulário de contato; e contagem anônima de visitas, com o Cloudflare Web Analytics), <discord>Discord</discord> (onde a equipe de suporte recebe as mensagens enviadas pelo formulário de contato: e-mail, tipo, mensagem e, se você estiver logado, o identificador da sua conta) e <google>Google</google> (só se você entrar com o Google). Seu perfil (nome de usuário e avatar) e um resumo dos personagens que você leva para uma mesa (nome, avatar, raça, classe e nível) são vistos pelas pessoas dessa mesa; o Mestre também vê a ficha desses personagens. Numa mesa sem Mestre, um jogador ativo pode virar Mestre com o acordo de todos os outros jogadores ativos e, a partir daí, passa a ver a ficha dos personagens da mesa. Quem não responde a esse pedido pode ser retirado da mesa pelo suporte, depois de um e-mail e de 7 dias sem resposta, e os personagens dessa pessoa saem da mesa junto. O link do diário e o inventário da mesa são vistos só pelo Mestre e pelos jogadores ativos. O nome e a imagem da mesa aparecem para qualquer pessoa com o link de convite, mesmo sem conta (é o que o Discord e o WhatsApp mostram quando o link é colado). O resto continua visível só para você; as imagens de avatar ficam em um endereço público que não é listado em lugar nenhum."
+        "intro": "Nós não vendemos seus dados para terceiros. Para operar o RPG World usamos estes serviços:",
+        "services": [
+          "<supabase>Supabase</supabase>: banco de dados, login e armazenamento de imagens.",
+          "<vercel>Vercel</vercel>: hospedagem.",
+          "<resend>Resend</resend>: envio de e-mails.",
+          "<cloudflare>Cloudflare Turnstile</cloudflare>: proteção contra robôs no cadastro, no link mágico, na recuperação de senha e no formulário de contato; e contagem anônima de visitas, com o Cloudflare Web Analytics.",
+          "<discord>Discord</discord>: onde a equipe de suporte recebe as mensagens enviadas pelo formulário de contato (e-mail, tipo, mensagem e, se você estiver logado, o identificador da sua conta).",
+          "<google>Google</google>: só se você entrar com o Google."
+        ],
+        "visibilityIntro": "Dentro do RPG World:",
+        "visibility": [
+          "Seu perfil (nome de usuário e avatar) e um resumo dos personagens que você leva para uma mesa (nome, avatar, raça, classe e nível) são vistos pelas pessoas dessa mesa; o Mestre também vê a ficha desses personagens.",
+          "Numa mesa sem Mestre, um jogador ativo pode virar Mestre com o acordo de todos os outros jogadores ativos e, a partir daí, passa a ver a ficha dos personagens da mesa. Quem não responde a esse pedido pode ser retirado da mesa pelo suporte, depois de um e-mail e de 7 dias sem resposta, e os personagens dessa pessoa saem da mesa junto.",
+          "O link do diário e o inventário da mesa são vistos só pelo Mestre e pelos jogadores ativos.",
+          "O nome e a imagem da mesa aparecem para qualquer pessoa com o link de convite, mesmo sem conta (é o que o Discord e o WhatsApp mostram quando o link é colado).",
+          "O resto continua visível só para você; as imagens de avatar ficam em um endereço público que não é listado em lugar nenhum."
+        ]
       },
       "rights": {
-        "title": "4. Seus Direitos",
+        "title": "4. Seus direitos",
         "content": "De acordo com a <lgpd>LGPD</lgpd>, você tem o direito de acessar, corrigir ou excluir seus dados. Você pode excluir sua conta a qualquer momento em Configurações > Perfil: você informa seu nome de usuário e sua senha (quem entrou só com o Google não tem a etapa da senha) e enviamos um link de confirmação para o e-mail da conta, válido por 1 hora. Depois do botão final, a exclusão é imediata e não pode ser desfeita. Para os demais direitos, ou se não conseguir excluir por lá, fale conosco pelo <support>formulário de suporte</support> ou pelo <server>Discord</server>; respondemos em até 5 dias úteis.",
         "deletionIntro": "Ao excluir a conta:",
         "deletionItems": [
@@ -1126,43 +1150,44 @@
         "content": "Usamos apenas cookies necessários: os da sua sessão de login, o do idioma escolhido e o do seu fuso horário. Não usamos cookies de publicidade nem de rastreamento."
       },
       "transfer": {
-        "title": "6. Transferência Internacional de Dados",
+        "title": "6. Transferência internacional de dados",
         "content": "Para o funcionamento do sistema, utilizamos infraestrutura de terceiros: <supabase>Supabase</supabase>, <vercel>Vercel</vercel>, <resend>Resend</resend>, <cloudflare>Cloudflare</cloudflare>, <discord>Discord</discord> e, só se você entrar com o Google, <google>Google</google>. Como resultado, seus dados podem ser processados e armazenados em servidores localizados fora do Brasil, especificamente nos Estados Unidos. Essa transferência é necessária para prestar o serviço que você pediu ao criar a conta (<lgpd>LGPD</lgpd>, art. 33, IX, combinado com o art. 7º, V) e é realizada sob rígidos padrões de segurança e criptografia."
       },
       "retention": {
-        "title": "7. Retenção e Exclusão de Dados",
+        "title": "7. Retenção e exclusão de dados",
         "content": "Seus dados permanecem armazenados em nossa base enquanto sua conta estiver ativa. Caso sua conta permaneça inativa por um período superior a 24 meses, reservamo-nos o direito de realizar a exclusão automática para segurança e economia de recursos."
       },
       "contact": {
-        "title": "8. Contato e Encarregado de Dados",
+        "title": "8. Contato e encarregado de dados",
         "content": "Para qualquer dúvida sobre sua privacidade ou para exercer seus direitos (<lgpd>LGPD</lgpd>), fale com a equipe pelo <support>formulário de suporte</support> ou pelo nosso <server>servidor no Discord</server>. Para assuntos da sua conta, prefira uma mensagem direta à equipe em vez dos canais públicos."
       }
     }
   },
   "forgotPassword": {
-    "title": "Recuperar Senha",
+    "title": "Recuperar senha",
     "subtitle": "Informe seu e-mail para receber um link de recuperação.",
     "emailLabel": "E-mail",
     "emailPlaceholder": "seu@email.com",
     "submit": "Enviar e-mail de recuperação",
     "processing": "Enviando…",
-    "successTitle": "E-mail enviado! 📬",
-    "successDescription": "Se esse e-mail estiver cadastrado, você receberá um link de recuperação em instantes.",
-    "backToLogin": "Voltar para o Login"
+    "successTitle": "E-mail enviado",
+    "successDescription": "Se <bold>{email}</bold> estiver cadastrado, o link de recuperação chega em instantes.",
+    "backToLogin": "Voltar para o login",
+    "metaTitle": "Esqueci a senha",
+    "metaDescription": "Peça um link para escolher uma nova senha do RPG World."
   },
   "resetPassword": {
-    "title": "Redefinir Senha",
+    "title": "Nova senha",
     "subtitle": "Escolha uma nova senha forte para sua conta.",
-    "newPasswordLabel": "Nova Senha",
+    "newPasswordLabel": "Nova senha",
     "newPasswordPlaceholder": "••••••••",
-    "confirmPasswordLabel": "Confirmar Nova Senha",
+    "confirmPasswordLabel": "Confirmar nova senha",
     "confirmPasswordPlaceholder": "••••••••",
-    "submit": "Atualizar Senha",
+    "submit": "Atualizar senha",
     "processing": "Atualizando…",
-    "successTitle": "Senha alterada! 🎉",
-    "successDescription": "Sua senha foi redefinida com sucesso. Você já pode fazer login.",
-    "login": "Fazer Login",
-    "sessionNotFound": "Sessão de redefinição não encontrada. Tente o link do e-mail novamente."
+    "sessionNotFound": "A sessão do link terminou. Peça outro link.",
+    "subtitleForEmail": "Escolha uma nova senha forte para {email}.",
+    "changed": "Senha alterada"
   },
   "spellsData": {
     "schools": {
@@ -1300,6 +1325,8 @@
     "submitting": "Canalizando…",
     "sendAnother": "Enviar outra mensagem",
     "success": "Mensagem enviada! A equipe do RPG World vai ler.",
+    "replyByEmail": "Respondemos no e-mail que você informou.",
+    "discord": "Prefere conversar? Fale com a gente no <discord>Discord</discord>.",
     "error": "Falha ao enviar mensagem. Tente novamente após um descanso curto.",
     "types": {
       "bug": "Bug",
@@ -1396,7 +1423,7 @@
     "openSource": "Ver o código no GitHub",
     "credits": "Créditos do conteúdo",
     "ctaTitle": "Pronto para criar o seu personagem?",
-    "ctaStart": "Criar conta grátis",
+    "ctaStart": "Criar conta",
     "ctaCharacters": "Ir para meus personagens",
     "showcase": {
       "title": "Veja por dentro",
@@ -1474,7 +1501,8 @@
     "label": "Nome de usuário",
     "placeholder": "ex.: aria_a_valente",
     "submit": "Continuar",
-    "saving": "Salvando…"
+    "saving": "Salvando…",
+    "rules": "De 3 a 30 caracteres: letras minúsculas, números e _."
   },
   "parties": {
     "title": "Mesas",
@@ -1930,6 +1958,8 @@
   "demo": {
     "metaTitle": "Demo · The Pioneers",
     "npcsTitle": "NPCs",
+    "gmEyebrow": "Você vê a mesa como mestre",
+    "readOnly": "A demo é somente leitura: nada aqui é salvo.",
     "inspiration": {
       "title": "Conheça a inspiração",
       "realName": "Inspirada em",
@@ -1953,7 +1983,9 @@
       "title": "Crie a sua aventura",
       "description": "A demo é somente leitura. Crie uma conta gratuita para montar seus personagens, entrar numa mesa e salvar seu progresso.",
       "create": "Criar conta",
-      "keep": "Continuar explorando"
+      "keep": "Continuar explorando",
+      "signedInTitle": "Isto é só uma demo",
+      "signedInDescription": "A demo é somente leitura. Suas fichas ficam no app."
     }
   },
   "sheetViewer": {

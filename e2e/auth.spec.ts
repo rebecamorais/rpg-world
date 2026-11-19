@@ -38,13 +38,14 @@ test.describe('autenticação', () => {
     const user = await createUser('magic-link');
     await page.goto('/login');
 
-    await (await hydrated(page.getByRole('button', { name: 'Magic Link' }))).click();
+    await (await hydrated(page.getByRole('tab', { name: 'Magic link' }))).click();
     await page.getByLabel('Email').fill(user.email);
     // Cloudflare's test site key solves the challenge on its own and enables the button
     const submit = page.getByRole('button', { name: 'Send magic link' });
     await expect(submit).toBeEnabled({ timeout: 15_000 });
     await submit.click();
-    await expect(page.getByText('Check your email 📬')).toBeVisible();
+    // The focus moves to the result, so a screen reader reads it
+    await expect(page.getByRole('heading', { name: 'Check your email' })).toBeFocused();
 
     await page.goto(linkIn(await waitForEmail(user.email), '/api/auth/confirm'));
 
@@ -62,6 +63,14 @@ test.describe('autenticação', () => {
 
     await expect(page.locator('form').getByText('Incorrect email or password.')).toBeVisible();
     await expect(page).toHaveURL(/\/login$/);
+
+    // An unconfirmed account gets the same answer, so it always points to the magic link
+    await page.getByRole('button', { name: 'Sign in with a magic link.' }).click();
+    await expect(page.getByRole('tab', { name: 'Magic link' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    await expect(page.getByLabel('Email')).toHaveValue(user.email);
   });
 
   test('logout encerra a sessão', async ({ page, user: _user }) => {

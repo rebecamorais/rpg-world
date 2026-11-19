@@ -163,7 +163,7 @@ export function Spellbook({
           <nav
             aria-label={t('spellbookIndex')}
             data-scroll-pad="spell-index"
-            className="bg-sidebar sticky top-0 z-20 -mx-4 px-4 py-2 sm:-mx-6 sm:px-6 md:top-6 md:mx-0 md:w-48 md:shrink-0 md:bg-transparent md:p-0"
+            className="bg-sidebar sticky top-[var(--sticky-top,0px)] z-20 -mx-4 px-4 py-2 sm:-mx-6 sm:px-6 md:top-[calc(var(--sticky-top,0px)+1.5rem)] md:mx-0 md:w-48 md:shrink-0 md:bg-transparent md:p-0"
           >
             <p className="text-label text-muted-foreground mb-3 hidden md:block">
               {t('spellbookIndex')}
@@ -204,7 +204,7 @@ export function Spellbook({
                 aria-labelledby={`${sectionId(level)}-title`}
                 className="scroll-mt-16 md:scroll-mt-6"
               >
-                <header className="bg-sidebar border-border mb-4 flex items-center justify-between gap-4 border-b py-3 md:sticky md:top-0 md:z-10">
+                <header className="bg-sidebar border-border mb-4 flex items-center justify-between gap-4 border-b py-3 md:sticky md:top-[var(--sticky-top,0px)] md:z-10">
                   <h2 id={`${sectionId(level)}-title`} className="text-title text-foreground">
                     {levelTitle(level)}
                   </h2>

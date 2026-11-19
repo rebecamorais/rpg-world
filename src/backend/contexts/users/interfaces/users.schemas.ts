@@ -5,6 +5,7 @@ import {
   MIN_PASSWORD_LENGTH,
   fitsPasswordBytes,
 } from '@shared/auth/password-policy';
+import { MAX_USERNAME_LENGTH, MIN_USERNAME_LENGTH } from '@shared/auth/username-policy';
 import { httpUrlOrEmpty, optional } from '@shared/http/validation';
 
 const email = z.email().max(320);
@@ -47,8 +48,9 @@ export const accountDeletionRequestSchema = z.object({
 export const deleteAccountSchema = z.object({ token: z.string().min(1).max(128) });
 
 export const updateProfileSchema = z.object({
-  // DB constraint: username has at least 3 characters
-  username: optional(z.string().min(3).max(30)),
+  // Only the length here: a username saved before USERNAME_PATTERN may be sent back unchanged.
+  // UpdateProfileUseCase checks the pattern when the username changes.
+  username: optional(z.string().min(MIN_USERNAME_LENGTH).max(MAX_USERNAME_LENGTH)),
   // An empty name or avatar clears it
   fullName: optional(z.string().max(100)),
   avatarUrl: optional(httpUrlOrEmpty),

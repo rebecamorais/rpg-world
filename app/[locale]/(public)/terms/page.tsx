@@ -1,17 +1,25 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
+import {
+  LegalDocument,
+  LegalList,
+  LegalParagraph,
+  type LegalSection,
+} from '@frontend/components/legal/LegalDocument';
 import { richLinks } from '@frontend/components/shared/rich-links';
+import { publicPageMetadata } from '@frontend/lib/public-metadata';
 
 // Links inside the game content credits, one per tag in the messages
 const CREDIT_HREFS = {
   srd: 'https://dnd.wizards.com/resources/systems-reference-document',
   srd52: 'https://www.dndbeyond.com/srd',
   ccby: 'https://creativecommons.org/licenses/by/4.0/legalcode',
-  srdEs: 'https://dnd.wizards.com/es/resources/systems-reference-document',
+  // The attribution text keeps the address Wizards asks for, which now redirects to the
+  // dungeonsanddragons.com home; the link goes to the official Spanish SRD 5.1 itself
+  srdEs: 'https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf',
   ccbyEs: 'https://creativecommons.org/licenses/by/4.0/legalcode.es',
   api: 'https://www.dnd5eapi.co',
   database: 'https://github.com/5e-bits/5e-database',
@@ -23,93 +31,69 @@ const CREDIT_HREFS = {
 
 const CREDIT_LINKS = richLinks(CREDIT_HREFS);
 
+// The sections with a single paragraph, in order between "conduct" and "gameContent"
+const PLAIN_SECTIONS = ['content', 'donations', 'liability', 'age', 'updates', 'law'] as const;
+
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'terms' });
-  return { title: t('title') };
+  return publicPageMetadata({
+    locale,
+    path: '/terms',
+    title: t('title'),
+    description: t('metaDescription'),
+  });
 }
 
 export default async function TermsPage({ params }: LocaleParams) {
   setRequestLocale((await params).locale);
   const t = await getTranslations('terms');
   const commonT = await getTranslations('common');
+  // Every item of a list in the messages, so none is left out when one is added
+  const items = (list: string) =>
+    (t.raw(list) as unknown[]).map((_, index) => t.rich(`${list}.${index}`, CREDIT_LINKS));
+
+  const sections: LegalSection[] = [
+    {
+      id: 'acceptance',
+      title: t('sections.acceptance.title'),
+      body: <LegalParagraph>{t('sections.acceptance.content')}</LegalParagraph>,
+    },
+    {
+      id: 'conduct',
+      title: t('sections.conduct.title'),
+      body: (
+        <>
+          <LegalParagraph>{t('sections.conduct.content')}</LegalParagraph>
+          <LegalList items={items('sections.conduct.items')} />
+        </>
+      ),
+    },
+    ...PLAIN_SECTIONS.map((id) => ({
+      id,
+      title: t(`sections.${id}.title`),
+      body: <LegalParagraph>{t(`sections.${id}.content`)}</LegalParagraph>,
+    })),
+    {
+      id: 'game-content',
+      title: t('sections.gameContent.title'),
+      body: (
+        <>
+          <LegalParagraph>{t('sections.gameContent.content')}</LegalParagraph>
+          <div className="break-words">
+            <LegalList items={items('sections.gameContent.items')} />
+          </div>
+        </>
+      ),
+    },
+  ];
 
   return (
-    <div className="container mx-auto max-w-4xl flex-1 px-4 py-20">
-      <div className="mb-8">
-        <Link
-          href="/"
-          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-        >
-          {commonT('back')}
-        </Link>
-      </div>
-
-      <h1 className="mb-2 text-4xl font-bold tracking-tight">{t('title')}</h1>
-      <p className="text-muted-foreground mb-8 text-sm italic">{t('lastUpdated')}</p>
-
-      <div className="space-y-8">
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.acceptance.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            {t('sections.acceptance.content')}
-          </p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.conduct.title')}</h2>
-          <p className="text-muted-foreground mb-4 leading-relaxed">
-            {t('sections.conduct.content')}
-          </p>
-          <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed">
-            {['0', '1', '2'].map((key) => (
-              <li key={key}>{t(`sections.conduct.items.${key}`)}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.content.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.content.content')}</p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.donations.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.donations.content')}</p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.liability.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.liability.content')}</p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.age.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.age.content')}</p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.updates.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.updates.content')}</p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.law.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.law.content')}</p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.gameContent.title')}</h2>
-          <p className="text-muted-foreground mb-4 leading-relaxed">
-            {t('sections.gameContent.content')}
-          </p>
-          <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed break-words">
-            {['0', '1', '2', '3', '4', '5', '6'].map((key) => (
-              <li key={key}>{t.rich(`sections.gameContent.items.${key}`, CREDIT_LINKS)}</li>
-            ))}
-          </ul>
-        </section>
-      </div>
-    </div>
+    <LegalDocument
+      title={t('title')}
+      lastUpdated={t('lastUpdated')}
+      tocLabel={commonT('onThisPage')}
+      sections={sections}
+    />
   );
 }

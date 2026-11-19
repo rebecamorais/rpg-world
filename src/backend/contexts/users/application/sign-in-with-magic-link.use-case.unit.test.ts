@@ -1,22 +1,25 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { EmailService } from '../../../shared/domain/email.service';
+import { AuthEmailThrottleRepo } from '../domain/auth-email-throttle.repo';
 import { AuthRepository } from '../domain/auth.repo';
 import { SignInWithMagicLinkUseCase } from './sign-in-with-magic-link.use-case';
 
 const CONFIRM_URL = 'https://app.test/api/auth/confirm';
 
-function setup(exists: boolean) {
+/** `claimed` is false both for an unknown e-mail and inside the interval. */
+function setup(claimed: boolean) {
   const repository = {
-    existsByEmail: vi.fn().mockResolvedValue(exists),
     generateMagicLink: vi.fn().mockResolvedValue('https://app.test/api/auth/confirm?token_hash=t'),
   };
   const emailService = { sendMagicLinkEmail: vi.fn().mockResolvedValue(undefined) };
+  const throttle = { claim: vi.fn().mockResolvedValue(claimed) };
   const useCase = new SignInWithMagicLinkUseCase(
     repository as unknown as AuthRepository,
     emailService as unknown as EmailService,
+    throttle as AuthEmailThrottleRepo,
   );
-  return { repository, emailService, useCase };
+  return { repository, emailService, throttle, useCase };
 }
 
 describe('SignInWithMagicLinkUseCase', () => {
@@ -32,21 +35,22 @@ describe('SignInWithMagicLinkUseCase', () => {
     );
   });
 
-  it('responde igual para e-mail desconhecido, sem criar conta nem mandar e-mail', async () => {
-    const { repository, emailService, useCase } = setup(false);
+  it('responde igual para e-mail desconhecido ou dentro do intervalo, sem gerar link nem mandar e-mail', async () => {
+    const { repository, emailService, throttle, useCase } = setup(false);
 
     await expect(useCase.execute('ghost@example.com', CONFIRM_URL)).resolves.toBeUndefined();
 
+    expect(throttle.claim).toHaveBeenCalledWith('ghost@example.com', 'magiclink');
     expect(repository.generateMagicLink).not.toHaveBeenCalled();
     expect(emailService.sendMagicLinkEmail).not.toHaveBeenCalled();
   });
 
   it('deve lançar erro se o email não for fornecido', async () => {
-    const { repository, useCase } = setup(true);
+    const { throttle, useCase } = setup(true);
 
     await expect(useCase.execute('', CONFIRM_URL)).rejects.toThrow(
       'auth_error_signin_magic_link_email_required',
     );
-    expect(repository.existsByEmail).not.toHaveBeenCalled();
+    expect(throttle.claim).not.toHaveBeenCalled();
   });
 });

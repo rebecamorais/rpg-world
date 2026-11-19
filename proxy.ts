@@ -6,9 +6,24 @@ import createMiddleware from 'next-intl/middleware';
 import { PATHNAME_HEADER } from './shared/http/pathname-header';
 import { safeRedirectPath } from './src/backend/shared/infrastructure/helpers/safe-redirect-path';
 import { NEXT_COOKIE } from './src/frontend/lib/post-login-next';
-import { routing } from './src/i18n/routing';
+import { LOCALIZED_PATHS, routing, withoutLocale } from './src/i18n/routing';
 
-const handleI18n = createMiddleware(routing);
+// The app: one address per page, the language from the cookie (/pt/x saves it and goes to /x)
+const handleAppI18n = createMiddleware(routing);
+// The public pages: English plain, Portuguese under /pt, so search engines index both. A plain
+// path opened in Portuguese (cookie or browser) goes to its /pt address. The hreflang links come
+// from the pages' metadata and the sitemap, not from a Link header.
+const handlePublicI18n = createMiddleware({
+  ...routing,
+  localePrefix: 'as-needed',
+  alternateLinks: false,
+});
+
+function handleI18n(request: NextRequest) {
+  return LOCALIZED_PATHS.has(withoutLocale(request.nextUrl.pathname))
+    ? handlePublicI18n(request)
+    : handleAppI18n(request);
+}
 
 // Signed in, these pages only send you on: straight to the characters
 const SIGNED_OUT_ONLY = new Set(['/login', '/register']);
@@ -19,7 +34,8 @@ const IMAGES_HOST = 'images.rpgworldapp.com';
  * 1. Refreshes an expired Supabase session. Server Components cannot write cookies, so this is the
  *    only place the refreshed JWT reaches the browser. Route protection stays in the layouts.
  * 2. Picks the language (NEXT_LOCALE cookie, else Accept-Language) and rewrites the page to
- *    /<locale>/... internally, so the public pages can be prebuilt per language with clean URLs.
+ *    /<locale>/... internally, so the public pages can be prebuilt per language. The app's URLs
+ *    never show the language; the public pages have one address per language (LOCALIZED_PATHS).
  */
 export async function proxy(request: NextRequest) {
   // Avatars served on their own host (next.config.ts rewrites it to /api/images): never localized
@@ -60,7 +76,7 @@ export async function proxy(request: NextRequest) {
   let target = data?.claims ? signedInRedirect(request) : null;
   // The JWT of a deleted account stays valid until it expires. The app already treats it as signed
   // out and sends it to /login, so bouncing it back from there would be a redirect loop.
-  if (target && SIGNED_OUT_ONLY.has(request.nextUrl.pathname)) {
+  if (target && SIGNED_OUT_ONLY.has(withoutLocale(request.nextUrl.pathname))) {
     const { data: profile, error } = await supabaseAuth
       .from('profile')
       .select('id')
@@ -87,7 +103,8 @@ export async function proxy(request: NextRequest) {
  */
 function signedInRedirect(request: NextRequest): string | null {
   const { pathname } = request.nextUrl;
-  if (SIGNED_OUT_ONLY.has(pathname)) return '/characters';
+  // /pt/login too: the sign-in pages have an address per language
+  if (SIGNED_OUT_ONLY.has(withoutLocale(pathname))) return '/characters';
   if (pathname !== '/characters') return null;
 
   // Next already decodes cookie values

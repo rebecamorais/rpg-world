@@ -43,3 +43,17 @@ describe('TabsList', () => {
     expect(list.style.getPropertyValue('--tab-height')).toBe('32px');
   });
 });
+
+describe('TabsTrigger', () => {
+  it('tem a área de toque de 44px (touch-target), como o Button', () => {
+    renderWithProviders(
+      <Tabs defaultValue="a">
+        <TabsList>
+          <TabsTrigger value="a">Ficha</TabsTrigger>
+        </TabsList>
+      </Tabs>,
+    );
+
+    expect(screen.getByRole('tab', { name: 'Ficha' })).toHaveClass('touch-target');
+  });
+});

@@ -32,6 +32,8 @@ const buttonVariants = cva(
         default: 'h-9 px-4 py-2',
         sm: 'h-8 rounded-md px-3 text-sm',
         lg: 'h-10 rounded-md px-8',
+        /** The pages' big calls to action (the home's hero, the end of Features). */
+        xl: 'h-12 rounded-md px-8 text-base font-semibold',
         icon: 'h-9 w-9',
       },
     },

@@ -26,6 +26,16 @@ vi.mock('@client', () => ({
 }));
 const params = vi.hoisted(() => ({ value: {} as Record<string, string> }));
 vi.mock('next/navigation', () => ({ useParams: () => params.value }));
+const demo = vi.hoisted(() => ({ isDemo: false, refuseWrite: vi.fn() }));
+// The real guard reads the demo from its own context; here the demo is whatever the test says
+vi.mock('@frontend/demo/DemoContext', async (actual) => ({
+  ...(await actual<typeof import('@frontend/demo/DemoContext')>()),
+  useWriteGuard:
+    () =>
+    <Args extends unknown[]>(open: (...args: Args) => void) =>
+    (...args: Args) =>
+      demo.isDemo ? demo.refuseWrite() : open(...args),
+}));
 
 const api = vi.mocked(rpgWorldApi);
 const character = { ...createDnD5eCharacter('owner', 'Thor'), id: 'c1' } as DnD5eCharacter;
@@ -105,6 +115,7 @@ describe('Backpack', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     params.value = {};
+    demo.isDemo = false;
     localStorage.clear();
     api.patch.mockResolvedValue(undefined);
     api.delete.mockResolvedValue(undefined);
@@ -124,6 +135,17 @@ describe('Backpack', () => {
 
     expect(await screen.findByText('The backpack is empty.')).toBeInTheDocument();
     expect(await screen.findByRole('button', { name: 'Add item' })).toBeEnabled();
+  });
+
+  it('na demo, "Add item" recusa na hora em vez de abrir um catálogo vazio', async () => {
+    const user = userEvent.setup();
+    demo.isDemo = true;
+    renderBackpack([]);
+
+    await user.click(await screen.findByRole('button', { name: 'Add item' }));
+
+    expect(demo.refuseWrite).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('lista nome, quantidade, peso e preço, e soma o peso total', async () => {

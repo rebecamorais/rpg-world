@@ -6,6 +6,9 @@ import { requestMagicLinkAction } from './request-magic-link-action';
 
 const signInWithMagicLink = vi.fn();
 
+// The links carry the language the e-mail was asked in
+vi.mock('next-intl/server', () => ({ getLocale: async () => 'pt' }));
+
 vi.mock('@backend/shared/application/minimum-duration', () => ({
   AUTH_EMAIL_MIN_DURATION_MS: 1500,
   withMinimumDuration: (_ms: number, work: () => Promise<unknown>) => work(),
@@ -47,7 +50,7 @@ describe('requestMagicLinkAction', () => {
     expect(result).toEqual({ success: true });
     expect(signInWithMagicLink).toHaveBeenCalledWith(
       'user@example.com',
-      'https://rpg.test/api/auth/confirm',
+      'https://rpg.test/api/auth/confirm?locale=pt',
     );
   });
 

@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
 
+import { isDemoReadOnly } from '@frontend/demo/transport';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { isRetryable, statusOf } from '@frontend/lib/error-message';
@@ -167,6 +168,8 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
    */
   const failed = (err: unknown, undo: () => void, retry: () => void, message?: string) => {
     undo();
+    // The demo already answered with its invite (or its own toast): a second one would stack
+    if (isDemoReadOnly(err)) return;
     toast.error(message ?? getErrorMessage(err), {
       action: isRetryable(err) ? { label: t('retry'), onClick: retry } : undefined,
     });

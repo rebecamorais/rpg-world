@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
 
+import { isDemoReadOnly } from '@frontend/demo/transport';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { CHARACTERS_QUERY_KEY } from '@frontend/lib/query-keys';
 
@@ -28,6 +29,9 @@ export function useDuplicateCharacter() {
       toast.success(t('duplicateSuccess'));
       router.push(`/system/${character.system}/character/${data.id}`);
     },
-    onError: (error: Error) => toast.error(getErrorMessage(error)),
+    // The demo answers a refused write itself (its invite or its toast)
+    onError: (error: Error) => {
+      if (!isDemoReadOnly(error)) toast.error(getErrorMessage(error));
+    },
   });
 }

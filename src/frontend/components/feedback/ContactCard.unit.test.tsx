@@ -56,6 +56,8 @@ describe('ContactCard', () => {
     const user = await fillAndSubmit();
 
     expect(await screen.findByRole('heading', { level: 1, name: t.success })).toBeInTheDocument();
+    // Says where the answer arrives
+    expect(screen.getByText(t.replyByEmail)).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: t.sendAnother }));
     expect(screen.getByRole('heading', { level: 1, name: t.title })).toBeInTheDocument();

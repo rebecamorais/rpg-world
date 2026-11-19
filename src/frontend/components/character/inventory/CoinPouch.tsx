@@ -19,6 +19,7 @@ import { SectionCard } from '@frontend/components/ui/section-card';
 import { SelectField } from '@frontend/components/ui/select-field';
 import { Skeleton } from '@frontend/components/ui/skeleton';
 import { useLoadedCharacter } from '@frontend/context/CharacterContext';
+import { useWriteGuard } from '@frontend/demo/DemoContext';
 import { type InventoryApi, useInventory } from '@frontend/hooks/useInventory';
 import { characterTheme } from '@frontend/lib/color-utils';
 
@@ -218,6 +219,8 @@ export function CoinPurse({
   const tCommon = useTranslations('common');
   const { pouch, isLoading, setCoinTo } = inventory;
   const [mode, setMode] = useState<Mode | null>(null);
+  // The demo refuses Pay and Receive at once, not after the whole form was filled in
+  const openDialog = useWriteGuard()((next: Mode) => setMode(next));
   // What was typed in each field and not yet sent, and what the field showed before it
   const [typed, setTyped] = useState<Partial<Record<Coin, { value: number; seen: number }>>>({});
 
@@ -282,10 +285,15 @@ export function CoinPurse({
 
         {/* data-sheet-edit: the read-only sheet (the GM reading it) hides Pay and Receive */}
         <div data-sheet-edit className="flex gap-2">
-          <Button variant="outline" size="sm" disabled={!pouch} onClick={() => setMode('pay')}>
+          <Button variant="outline" size="sm" disabled={!pouch} onClick={() => openDialog('pay')}>
             {t('pay')}
           </Button>
-          <Button variant="outline" size="sm" disabled={!pouch} onClick={() => setMode('receive')}>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={!pouch}
+            onClick={() => openDialog('receive')}
+          >
             {t('receive')}
           </Button>
         </div>
