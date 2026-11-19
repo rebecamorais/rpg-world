@@ -239,6 +239,15 @@ Achados: a-publicas#15, públicas 40.
 - fase 3 `componentes-de-imagem` na demo — ok: o X do Ver imagem fecha pelo mouse em 390 e 1280
 - fase 3 `cor-do-personagem-sem-contraste` na demo — ok: o `--character-fill` fica em 3:1 ou mais contra o `--card` nas 6 heroínas e num NPC, nos dois temas (o menor é 3,49, da Mirela no claro)
 
+## Decisões (2026-11-19)
+
+A Rebeca aceitou as recomendações das [perguntas de produto](#perguntas-de-produto), com duas exceções:
+
+- **10 (usernames fora do formato): em aberto.** Primeiro a lista dos casos de produção, por motivo. Enquanto isso, a regra nova do servidor vale só para quem **muda** o username: quem já tem um nome fora do formato continua com ele.
+- **16 (nomes das NPCs da demo): não traduzir.** Os nomes ficam como estão nos dois idiomas.
+
+A 12 depende de uma configuração de produção, que é dela: o `jwt_expiry` vai para 15 min no painel do Supabase.
+
 ## Perguntas de produto
 
 1. **O português deve aparecer no Google?** (a-publicas#2) Hoje uma URL serve os dois idiomas, e o robô vê só o inglês. Recomendação: sim, porque o público é sobretudo brasileiro. Endereço por idioma só nas páginas públicas (`/`, `/features`, `/support`, `/privacy`, `/terms`, `/login`, `/register`), com `hreflang`, e o app sem prefixo. Até lá, nenhum CDN com cache na frente da Vercel, porque as páginas saem sem `Vary` de idioma.
