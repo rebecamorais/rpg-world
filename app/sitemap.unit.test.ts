@@ -7,7 +7,9 @@ const WWW = 'https://www.rpgworldapp.com';
 
 describe('sitemap', () => {
   it('aponta para o domínio com www, que é o que a Vercel serve sem redirecionar', () => {
-    expect(sitemap().every((entry) => entry.url.startsWith(WWW))).toBe(true);
+    // Compared by host, not by prefix: "https://www.rpgworldapp.com.evil" also starts with it
+    const hosts = new Set(sitemap().map((entry) => new URL(entry.url).origin));
+    expect([...hosts]).toEqual([WWW]);
     expect(robots().sitemap).toBe(`${WWW}/sitemap.xml`);
   });
 
