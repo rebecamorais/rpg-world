@@ -12,17 +12,18 @@ Severidade: **Alta** atrapalha o uso ou pode fazer perder dados. **Média** é i
 
 ## Documentos
 
-| Documento                                                        | O que tem                                                                                                                                                 |
-| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [fase-3-resultados.md](fase-3-resultados.md)                     | Fase 3 (configurações da mesa, convite, perfil e conta, novo personagem, Lore e Aparência): causas, achados de uma tela só e o status dos achados antigos |
-| [fase-2-resultados.md](fase-2-resultados.md)                     | Fase 2 (mesa, baú, diário, listas e navegação): causas, achados de uma tela só e o status dos achados antigos                                             |
-| [fase-1-resultados.md](fase-1-resultados.md)                     | Fase 1 (ficha, combate e modais): 12 causas, achados de uma tela só e o status dos achados antigos                                                        |
-| [plano-por-tela.md](plano-por-tela.md)                           | O plano de review de UX/UI de cada tela e modal: método, checklist, ordem e pontos de cada uma                                                            |
-| [acoes-destrutivas.md](acoes-destrutivas.md)                     | A regra de vermelho e confirmação, e o inventário das 21 ações que apagam ou removem algo                                                                 |
-| [componentes-e-design-system.md](componentes-e-design-system.md) | Cores e tokens (inclusive o tema claro), tipografia, espaçamento, raio e sombra, ícones e primitivos duplicados                                           |
-| [telas-publicas-e-conta.md](telas-publicas-e-conta.md)           | Landing, features, login, cadastro, senha, username, perfil, exclusão de conta, header, sidebar e footer                                                  |
-| [telas-personagens-e-ficha.md](telas-personagens-e-ficha.md)     | Lista de personagens e NPCs, novo personagem, ficha (status, lore, grimório, inventário), modo só leitura e demo                                          |
-| [telas-mesas.md](telas-mesas.md)                                 | Lista de mesas, convite, abas Mesa, Combate, Diário e Baú, configurações e ficha vista pela mesa                                                          |
+| Documento                                                        | O que tem                                                                                                                                                      |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [fase-4-resultados.md](fase-4-resultados.md)                     | Fase 4 (landing, features, suporte, legais, login, cadastro, senha, username, `/auth/*` e demo): causas, achados de uma tela só e o status dos achados antigos |
+| [fase-3-resultados.md](fase-3-resultados.md)                     | Fase 3 (configurações da mesa, convite, perfil e conta, novo personagem, Lore e Aparência): causas, achados de uma tela só e o status dos achados antigos      |
+| [fase-2-resultados.md](fase-2-resultados.md)                     | Fase 2 (mesa, baú, diário, listas e navegação): causas, achados de uma tela só e o status dos achados antigos                                                  |
+| [fase-1-resultados.md](fase-1-resultados.md)                     | Fase 1 (ficha, combate e modais): 12 causas, achados de uma tela só e o status dos achados antigos                                                             |
+| [plano-por-tela.md](plano-por-tela.md)                           | O plano de review de UX/UI de cada tela e modal: método, checklist, ordem e pontos de cada uma                                                                 |
+| [acoes-destrutivas.md](acoes-destrutivas.md)                     | A regra de vermelho e confirmação, e o inventário das 21 ações que apagam ou removem algo                                                                      |
+| [componentes-e-design-system.md](componentes-e-design-system.md) | Cores e tokens (inclusive o tema claro), tipografia, espaçamento, raio e sombra, ícones e primitivos duplicados                                                |
+| [telas-publicas-e-conta.md](telas-publicas-e-conta.md)           | Landing, features, login, cadastro, senha, username, perfil, exclusão de conta, header, sidebar e footer                                                       |
+| [telas-personagens-e-ficha.md](telas-personagens-e-ficha.md)     | Lista de personagens e NPCs, novo personagem, ficha (status, lore, grimório, inventário), modo só leitura e demo                                               |
+| [telas-mesas.md](telas-mesas.md)                                 | Lista de mesas, convite, abas Mesa, Combate, Diário e Baú, configurações e ficha vista pela mesa                                                               |
 
 ## Feito neste PR
 
