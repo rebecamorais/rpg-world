@@ -3,6 +3,8 @@ import { AppError, AppErrorKind } from '@backend/shared/domain/AppError';
 import { InvalidRequestError, ValidationIssue } from './validation';
 
 export const UNEXPECTED_ERROR = 'common_error_unexpected';
+/** The API's answer while the site is in maintenance (proxy.ts). */
+export const MAINTENANCE_ERROR = 'common_error_maintenance';
 
 const STATUS_BY_KIND: Record<AppErrorKind, number> = {
   validation: 400,

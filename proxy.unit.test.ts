@@ -15,6 +15,9 @@ const from = vi.fn(() => ({
   select: () => ({ eq: () => ({ maybeSingle: profileLookup }) }),
 }));
 let cookieAdapter: CookieAdapter;
+const maintenanceOn = vi.fn();
+
+vi.mock('./shared/flags', () => ({ maintenanceFlag: () => maintenanceOn() }));
 
 vi.mock('@supabase/ssr', () => ({
   createServerClient: (_url: string, _key: string, options: { cookies: CookieAdapter }) => {
@@ -47,6 +50,7 @@ describe('proxy', () => {
     getClaims.mockReset().mockResolvedValue({ data: null, error: null });
     from.mockClear();
     profileLookup.mockReset().mockResolvedValue({ data: { id: 'u1' }, error: null });
+    maintenanceOn.mockReset().mockResolvedValue(false);
   });
 
   it('não consulta o Supabase para visitantes sem cookie de sessão', async () => {
@@ -380,6 +384,52 @@ describe('proxy', () => {
     );
   });
 
+  describe('manutenção', () => {
+    beforeEach(() => maintenanceOn.mockResolvedValue(true));
+
+    it('mostra a tela de manutenção na mesma URL, no idioma do navegador, com 503', async () => {
+      const res = await proxy(
+        request({ 'sb-127-auth-token': 'token' }, { path: '/characters', acceptLanguage: 'pt-BR' }),
+      );
+
+      expect(res.status).toBe(503);
+      expect(res.headers.get('location')).toBeNull();
+      expect(rewrittenTo(res)).toBe('/pt/maintenance');
+      expect(res.headers.get('retry-after')).toBe('600');
+      // The database is what's down: the session isn't refreshed
+      expect(getClaims).not.toHaveBeenCalled();
+    });
+
+    it('usa o idioma do cookie antes do navegador', async () => {
+      const res = await proxy(request({ NEXT_LOCALE: 'en' }, { acceptLanguage: 'pt-BR' }));
+
+      expect(rewrittenTo(res)).toBe('/en/maintenance');
+    });
+
+    it('numa página pública com idioma no caminho, usa o do caminho', async () => {
+      const res = await proxy(request({}, { path: '/pt/features' }));
+
+      expect(res.status).toBe(503);
+      expect(rewrittenTo(res)).toBe('/pt/maintenance');
+    });
+
+    it('a API responde 503 com o código de manutenção', async () => {
+      const res = await proxy(request({}, { path: '/api/characters' }));
+
+      expect(res.status).toBe(503);
+      expect(await res.json()).toEqual({ error: 'common_error_maintenance' });
+      expect(rewrittenTo(res)).toBeNull();
+    });
+  });
+
+  it('fora da manutenção, deixa a API passar sem sessão nem idioma', async () => {
+    const res = await proxy(request({ 'sb-127-auth-token': 'token' }, { path: '/api/characters' }));
+
+    expect(res.status).toBe(200);
+    expect(rewrittenTo(res)).toBeNull();
+    expect(getClaims).not.toHaveBeenCalled();
+  });
+
   it('não roda em assets estáticos nem no proxy de imagens', () => {
     const matcher = new RegExp(`^${config.matcher[0]}$`);
 
@@ -387,7 +437,8 @@ describe('proxy', () => {
     expect(matcher.test('/_next/static/chunk.js')).toBe(false);
     expect(matcher.test('/api/images/avatars/u1/a.png')).toBe(false);
     expect(matcher.test('/logo.svg')).toBe(false);
-    expect(matcher.test('/api/characters')).toBe(false);
+    // The API goes through, only for the maintenance check
+    expect(matcher.test('/api/characters')).toBe(true);
     expect(matcher.test('/_vercel/insights/script.js')).toBe(false);
   });
 });
