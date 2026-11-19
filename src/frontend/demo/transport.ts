@@ -9,6 +9,12 @@ const SHEET = new RegExp(`^${PARTY}/characters/([^/]+)(?:/(lore|spells|inventory
 
 const notFound = () => new APIError('Not found', 404);
 
+/** Code of a write the demo refused: the demo itself says so, so callers show no error toast. */
+const DEMO_READ_ONLY = 'demo_read_only';
+
+export const isDemoReadOnly = (err: unknown): boolean =>
+  err instanceof Error && err.message === DEMO_READ_ONLY;
+
 function read(data: DemoData, path: string, query: URLSearchParams): unknown {
   if (path === '/api/parties') return data.parties;
   if (path === PARTY) return data.party;
@@ -40,7 +46,7 @@ export function createDemoTransport(data: DemoData, onBlockedWrite: () => void):
   return (method, url) => {
     if (method !== 'GET') {
       onBlockedWrite();
-      return Promise.reject(new APIError('demo_read_only', 403));
+      return Promise.reject(new APIError(DEMO_READ_ONLY, 403));
     }
     const { pathname, searchParams } = new URL(url, 'http://demo.local');
     if (pathname === '/api/auth/session') return undefined;

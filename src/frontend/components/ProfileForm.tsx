@@ -41,22 +41,26 @@ export default function ProfileForm() {
   const { getErrorMessage } = useErrorMessage();
   const pathname = usePathname();
 
+  const { profile, isLoading, updateProfile, isUpdating } = useProfile();
+
   const profileSchema = z.object({
     username: orEmpty(
-      z
-        .string()
-        .check(
-          z.minLength(3, t('validation.usernameMin')),
-          z.maxLength(30, t('validation.usernameMax')),
-          z.regex(/^[a-z0-9_]+$/, t('validation.usernamePattern')),
+      z.string().check(
+        z.minLength(3, t('validation.usernameMin')),
+        z.maxLength(30, t('validation.usernameMax')),
+        // The format applies to a new username only: one chosen before the rule (an old
+        // "playerChilli") keeps saving as is, as the server allows
+        z.refine(
+          (username) => username === profile?.username || /^[a-z0-9_]+$/.test(username),
+          t('validation.usernamePattern'),
         ),
+      ),
     ),
     fullName: orEmpty(z.string().check(z.maxLength(100, t('validation.fullNameMax')))),
     avatarUrl: orEmpty(z.url(t('validation.avatarUrlInvalid'))),
   });
 
   type ProfileFormValues = z.infer<typeof profileSchema>;
-  const { profile, isLoading, updateProfile, isUpdating } = useProfile();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),

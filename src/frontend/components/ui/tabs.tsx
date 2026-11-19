@@ -66,7 +66,8 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        'focus-ring data-[state=active]:bg-background data-[state=active]:text-foreground hover:text-foreground relative inline-flex items-center justify-center rounded-sm px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm group-data-indicator/tabs:data-[state=active]:bg-transparent group-data-indicator/tabs:data-[state=active]:shadow-none',
+        // touch-target: the trigger is 32px tall, the touch area grows to 44px
+        'focus-ring touch-target data-[state=active]:bg-background data-[state=active]:text-foreground hover:text-foreground inline-flex items-center justify-center rounded-sm px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm group-data-indicator/tabs:data-[state=active]:bg-transparent group-data-indicator/tabs:data-[state=active]:shadow-none',
         className,
       )}
       {...props}

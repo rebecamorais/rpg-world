@@ -7,6 +7,7 @@ import { EmailService } from '../../domain/email.service';
 import { AccountDeletionTemplate } from '../email/templates/AccountDeletion';
 import { AccountExistsTemplate } from '../email/templates/AccountExists';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';
+import { FinishSignUpTemplate } from '../email/templates/FinishSignUp';
 import { MagicLinkTemplate } from '../email/templates/MagicLink';
 import { PasswordChangedTemplate } from '../email/templates/PasswordChanged';
 import { PasswordResetTemplate } from '../email/templates/PasswordReset';
@@ -98,6 +99,20 @@ export class ResendEmailService implements EmailService {
     // Only the error's name: the provider's message can repeat the address
     if (error) {
       throw new Error(`Failed to send password changed email: ${error.name}`);
+    }
+  }
+
+  async sendFinishSignUpEmail(email: string, finishLink: string): Promise<void> {
+    const { error } = await this.resend.emails.send({
+      from: this.fromEmail,
+      to: [email],
+      subject: 'Termine seu cadastro - RPG World',
+      react: React.createElement(FinishSignUpTemplate, { finishLink }),
+    });
+
+    // Only the error's name: the provider's message can repeat the address
+    if (error) {
+      throw new Error(`Failed to send finish sign-up email: ${error.name}`);
     }
   }
 }

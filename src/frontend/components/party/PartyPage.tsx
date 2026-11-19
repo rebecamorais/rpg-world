@@ -345,14 +345,15 @@ export function PartyNotFound() {
  * (PartyFrame) around PartyTableTab and the other tabs.
  */
 export function PartyPage({ partyId }: { partyId: string }) {
-  const t = useTranslations('parties');
+  const tDemo = useTranslations('demo');
   const { party, isLoading } = useParty(partyId);
 
   if (isLoading) return <LoadingState thematic />;
   if (!party) return <PartyNotFound />;
 
+  // The visitor gets the GM's view, which shows more of the app; she is not the GM, so it says so
   return (
-    <PageContainer title={party.name} eyebrow={t('page.gmEyebrow')}>
+    <PageContainer title={party.name} eyebrow={tDemo('gmEyebrow')}>
       <RolePlayList party={party} />
     </PageContainer>
   );

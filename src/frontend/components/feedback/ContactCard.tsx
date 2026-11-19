@@ -48,6 +48,8 @@ export default function ContactCard({
           <CardTitle as="h1" className="mb-2">
             {t('success')}
           </CardTitle>
+          {/* How the answer comes back: to the e-mail of the form */}
+          <p className="text-body text-muted-foreground">{t('replyByEmail')}</p>
           <Button
             variant="ghost"
             onClick={() => setIsSuccess(false)}

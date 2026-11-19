@@ -8,6 +8,7 @@ import { EmailService } from '../../domain/email.service';
 import { AccountDeletionTemplate } from '../email/templates/AccountDeletion';
 import { AccountExistsTemplate } from '../email/templates/AccountExists';
 import { EmailConfirmationTemplate } from '../email/templates/EmailConfirmation';
+import { FinishSignUpTemplate } from '../email/templates/FinishSignUp';
 import { MagicLinkTemplate } from '../email/templates/MagicLink';
 import { PasswordChangedTemplate } from '../email/templates/PasswordChanged';
 import { PasswordResetTemplate } from '../email/templates/PasswordReset';
@@ -150,6 +151,28 @@ export class SupabaseEmailService implements EmailService {
         from: this.fromEmail,
         to: email,
         subject: 'Sua senha foi alterada - RPG World',
+        html,
+      });
+      console.log('Status: Email sent to local Inbucket.');
+    } catch (error) {
+      console.warn('Warning: Could not connect to the local Inbucket SMTP server.');
+      console.warn(`Error: ${(error as Error).message}`);
+    }
+    console.log('-------------------------------------\n');
+  }
+
+  async sendFinishSignUpEmail(email: string, finishLink: string): Promise<void> {
+    const html = await render(React.createElement(FinishSignUpTemplate, { finishLink }));
+
+    console.log('\n--- DEVELOPMENT EMAIL (CONSOLE) ---');
+    console.log(`To: ${email}`);
+    console.log(`Finish sign-up link: ${finishLink}`);
+
+    try {
+      await this.transporter.sendMail({
+        from: this.fromEmail,
+        to: email,
+        subject: 'Termine seu cadastro - RPG World',
         html,
       });
       console.log('Status: Email sent to local Inbucket.');

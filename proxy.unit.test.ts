@@ -64,12 +64,13 @@ describe('proxy', () => {
       expect(location.searchParams.get('token')).toBe('abc');
     });
 
-    it('reescreve / para /pt com Accept-Language pt-BR e sem cookie', async () => {
+    it('no app, reescreve para /pt com Accept-Language pt-BR e sem cookie, sem mudar a URL', async () => {
       const res = await proxy(
-        request({}, { path: '/', acceptLanguage: 'pt-BR,pt;q=0.9,en;q=0.8' }),
+        request({}, { path: '/characters', acceptLanguage: 'pt-BR,pt;q=0.9,en;q=0.8' }),
       );
 
-      expect(rewrittenTo(res)).toBe('/pt');
+      expect(res.headers.get('location')).toBeNull();
+      expect(rewrittenTo(res)).toBe('/pt/characters');
     });
 
     it('fr-FR cai em /en', async () => {
@@ -88,17 +89,10 @@ describe('proxy', () => {
 
     it('NEXT_LOCALE=de é ignorado e vale o navegador', async () => {
       const res = await proxy(
-        request({ NEXT_LOCALE: 'de' }, { path: '/', acceptLanguage: 'pt-BR' }),
+        request({ NEXT_LOCALE: 'de' }, { path: '/characters', acceptLanguage: 'pt-BR' }),
       );
 
-      expect(rewrittenTo(res)).toBe('/pt');
-    });
-
-    it('redireciona /pt/features para /features', async () => {
-      const res = await proxy(request({}, { path: '/pt/features' }));
-
-      expect([307, 308]).toContain(res.status);
-      expect(new URL(res.headers.get('location')!).pathname).toBe('/features');
+      expect(rewrittenTo(res)).toBe('/pt/characters');
     });
 
     it('corrige um NEXT_LOCALE inválido e guarda por um ano', async () => {
@@ -116,6 +110,99 @@ describe('proxy', () => {
 
       expect(res.headers.get('set-cookie') ?? '').not.toMatch(/NEXT_LOCALE/);
     });
+  });
+
+  describe('páginas públicas: um endereço por idioma', () => {
+    const locationOf = (res: Response) => {
+      const location = res.headers.get('location');
+      return location ? `${new URL(location).pathname}${new URL(location).search}` : null;
+    };
+
+    it('sem cookie nem Accept-Language (um robô), /features abre em inglês', async () => {
+      const res = await proxy(request({}, { path: '/features' }));
+
+      expect(res.headers.get('location')).toBeNull();
+      expect(rewrittenTo(res)).toBe('/en/features');
+    });
+
+    it.each(['/pt', '/pt/features', '/pt/support', '/pt/privacy', '/pt/terms', '/pt/register'])(
+      '%s abre em português no próprio endereço, sem redirecionar',
+      async (path) => {
+        const res = await proxy(request({}, { path }));
+
+        expect(res.headers.get('location')).toBeNull();
+        // Already the internal path: served as is, in Portuguese
+        expect(res.headers.get('x-middleware-next')).toBe('1');
+        expect(res.headers.get('x-middleware-request-x-next-intl-locale')).toBe('pt');
+      },
+    );
+
+    it('com NEXT_LOCALE=pt, /features vai para /pt/features e leva a query junto', async () => {
+      const res = await proxy(request({ NEXT_LOCALE: 'pt' }, { path: '/features?tab=1' }));
+
+      expect([307, 308]).toContain(res.status);
+      expect(locationOf(res)).toBe('/pt/features?tab=1');
+    });
+
+    it('com o navegador em português e sem cookie, / vai para /pt', async () => {
+      const res = await proxy(request({}, { path: '/', acceptLanguage: 'pt-BR,pt;q=0.9' }));
+
+      expect(locationOf(res)).toBe('/pt');
+    });
+
+    it('/en/features vai para /features e grava NEXT_LOCALE=en (trocar para o inglês)', async () => {
+      const res = await proxy(request({ NEXT_LOCALE: 'pt' }, { path: '/en/features' }));
+
+      expect(locationOf(res)).toBe('/features');
+      expect(res.cookies.get('NEXT_LOCALE')?.value).toBe('en');
+    });
+
+    it('abrir /pt/features com o cookie em inglês grava NEXT_LOCALE=pt para o app', async () => {
+      const res = await proxy(request({ NEXT_LOCALE: 'en' }, { path: '/pt/features' }));
+
+      expect(res.cookies.get('NEXT_LOCALE')?.value).toBe('pt');
+    });
+
+    it('o app continua sem prefixo: com NEXT_LOCALE=pt, /characters não redireciona', async () => {
+      const res = await proxy(request({ NEXT_LOCALE: 'pt' }, { path: '/characters' }));
+
+      expect(res.headers.get('location')).toBeNull();
+      expect(rewrittenTo(res)).toBe('/pt/characters');
+    });
+
+    it('uma tela de conta fora da lista continua sem prefixo: /pt/forgot-password volta para /forgot-password', async () => {
+      const res = await proxy(request({}, { path: '/pt/forgot-password' }));
+
+      expect(locationOf(res)).toBe('/forgot-password');
+      expect(res.cookies.get('NEXT_LOCALE')?.value).toBe('pt');
+    });
+
+    it('/pt/login guarda o ?next= de quem foi mandado entrar', async () => {
+      const res = await proxy(request({}, { path: '/pt/login?next=%2Fparties%2Fabc' }));
+
+      expect(res.headers.get('location')).toBeNull();
+      expect(res.headers.get('x-middleware-next')).toBe('1');
+      expect(res.headers.get('x-middleware-request-x-pathname')).toBe(
+        '/pt/login?next=%2Fparties%2Fabc',
+      );
+    });
+
+    it('não manda o cabeçalho Link: o hreflang sai dos metadados', async () => {
+      const res = await proxy(request({}, { path: '/pt/features' }));
+
+      expect(res.headers.get('link')).toBeNull();
+    });
+
+    it.each(['/pt/login', '/pt/register'])(
+      'com sessão válida, %s também redireciona para /characters',
+      async (path) => {
+        signedIn();
+
+        const res = await proxy(request({ 'sb-127-auth-token': 'token' }, { path }));
+
+        expect(locationOf(res)).toBe('/characters');
+      },
+    );
   });
 
   it('o host de imagens não passa pelo roteamento de idioma (avatares antigos sem extensão)', async () => {

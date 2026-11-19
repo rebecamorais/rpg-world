@@ -19,10 +19,23 @@ describe('proxy: trocar de idioma pelo caminho', () => {
     expect(res.headers.get('set-cookie') ?? '').toMatch(/NEXT_LOCALE=pt/);
   });
 
-  it('/pt sozinho volta para a página inicial', async () => {
-    const res = await proxy(new NextRequest('http://localhost/pt'));
+  it('/pt, a página inicial em português, fica no próprio endereço e grava NEXT_LOCALE=pt', async () => {
+    const request = new NextRequest('http://localhost/pt');
+    request.cookies.set('NEXT_LOCALE', 'en');
 
-    expect(new URL(res.headers.get('location')!).pathname).toBe('/');
+    const res = await proxy(request);
+
+    expect(res.headers.get('location')).toBeNull();
     expect(res.headers.get('set-cookie') ?? '').toMatch(/NEXT_LOCALE=pt/);
+  });
+
+  it('/en/<página pública> volta para o endereço em inglês e grava NEXT_LOCALE=en', async () => {
+    const request = new NextRequest('http://localhost/en/privacy');
+    request.cookies.set('NEXT_LOCALE', 'pt');
+
+    const res = await proxy(request);
+
+    expect(new URL(res.headers.get('location')!).pathname).toBe('/privacy');
+    expect(res.headers.get('set-cookie') ?? '').toMatch(/NEXT_LOCALE=en/);
   });
 });

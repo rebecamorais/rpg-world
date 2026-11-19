@@ -85,6 +85,19 @@ describe('useInventory', () => {
     expect(toast.error).toHaveBeenCalled();
   });
 
+  it('na demo, a escrita recusada desfaz sem toast: o convite da demo já respondeu', async () => {
+    const request = failLater(answered(403, 'demo_read_only'));
+    api.patch.mockReturnValueOnce(request.promise);
+    const { result } = await renderInventory();
+
+    act(() => result.current.setQuantity('i1', 7));
+    await waitFor(() => expect(api.patch).toHaveBeenCalled());
+    act(() => request.fail());
+
+    await waitFor(() => expect(result.current.inventory?.items[0].quantity).toBe(2));
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
   it('removeItem tira da lista na hora; falha devolve', async () => {
     const request = failLater();
     api.delete.mockReturnValueOnce(request.promise);

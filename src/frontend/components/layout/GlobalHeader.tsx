@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
-import { getTranslations } from 'next-intl/server';
+import { localizedHref } from '@/i18n/routing';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { getApi } from '@api';
 
@@ -17,6 +18,7 @@ import { AppIcon } from '@frontend/components/ui/icon';
  */
 export default async function GlobalHeader({ session }: { session: 'server' | 'client' }) {
   const tHome = await getTranslations('home');
+  const locale = await getLocale();
 
   // undefined = unknown here, found in the browser
   const serverUser =
@@ -27,7 +29,7 @@ export default async function GlobalHeader({ session }: { session: 'server' | 'c
       <div className="flex min-w-0 items-center gap-1">
         <HeaderSessionMobileMenu serverUser={serverUser} />
         <Link
-          href="/"
+          href={localizedHref('/', locale)}
           className="focus-ring flex min-w-0 items-center gap-2 rounded-md transition-opacity hover:opacity-80 sm:gap-3"
         >
           <AppIcon

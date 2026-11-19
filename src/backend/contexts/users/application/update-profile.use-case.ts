@@ -6,6 +6,8 @@ import {
 import { AVATAR_BUCKET } from '@backend/shared/domain/avatar';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
+import { USERNAME_PATTERN } from '@shared/auth/username-policy';
+
 import { Profile } from '../domain/Profile';
 import { UserError, UserErrorCodes } from '../domain/UserError';
 import { ProfileRepository } from '../domain/profile.repo';
@@ -23,9 +25,21 @@ export class UpdateProfileUseCase {
       throw new UserError(UserErrorCodes.PROFILE_UPDATE_ID_REQUIRED);
     }
 
-    const { avatarUrl } = profile;
+    const { avatarUrl, username } = profile;
     const previous =
-      avatarUrl !== undefined ? await this.profileRepository.getById(profile.id) : null;
+      avatarUrl !== undefined || username !== undefined
+        ? await this.profileRepository.getById(profile.id)
+        : null;
+
+    // Only a new username has to follow the rule: one saved before it, sent back as it is (the
+    // profile form sends it with every save), keeps working
+    if (
+      username !== undefined &&
+      username !== previous?.username &&
+      !USERNAME_PATTERN.test(username)
+    ) {
+      throw new UserError(UserErrorCodes.PROFILE_USERNAME_INVALID);
+    }
 
     // Empty (no picture), the one it already has (a Google picture) or one this account uploaded:
     // any other URL would show someone else's file, or a tracker, as this person's picture
@@ -39,7 +53,7 @@ export class UpdateProfileUseCase {
 
     await this.profileRepository.update(profile);
 
-    if (this.storageRepository && previous) {
+    if (this.storageRepository && previous && avatarUrl !== undefined) {
       // Only the files UploadAvatarUseCase creates: `<userId>/avatar-<version>.<ext>`
       await removeReplacedAsset(
         this.storageRepository,

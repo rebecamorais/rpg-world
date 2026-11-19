@@ -20,6 +20,7 @@ export const UserErrorCodes = {
   PROFILE_UPDATE_ID_REQUIRED: 'profile_error_update_id_required',
   PROFILE_GET_ID_REQUIRED: 'profile_error_get_id_required',
   PROFILE_USERNAME_TAKEN: 'profile_error_username_taken',
+  PROFILE_USERNAME_INVALID: 'profile_error_username_invalid',
   PROFILE_AVATAR_INVALID: 'profile_error_avatar_invalid',
   AVATAR_UPLOAD_USERID_REQUIRED: 'storage_error_upload_avatar_userid_required',
   AVATAR_UPLOAD_SIZE_LIMIT: 'storage_error_upload_avatar_size_limit',

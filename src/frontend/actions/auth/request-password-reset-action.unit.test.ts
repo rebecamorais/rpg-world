@@ -6,6 +6,9 @@ import { requestPasswordResetAction } from './request-password-reset-action';
 
 const requestPasswordReset = vi.fn();
 
+// The links carry the language the e-mail was asked in
+vi.mock('next-intl/server', () => ({ getLocale: async () => 'pt' }));
+
 vi.mock('@backend/shared/application/minimum-duration', () => ({
   AUTH_EMAIL_MIN_DURATION_MS: 1500,
   withMinimumDuration: (_ms: number, work: () => Promise<unknown>) => work(),

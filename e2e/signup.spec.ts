@@ -8,13 +8,13 @@ test('cadastro: conta criada, e-mail confirmado e acesso liberado', async ({ pag
 
   await (await hydrated(page.getByLabel('Email'))).fill(email);
   await page.getByLabel('Password', { exact: true }).fill(PASSWORD);
-  await page.getByLabel('Confirm Password').fill(PASSWORD);
+  await page.getByLabel('Confirm password').fill(PASSWORD);
   // Cloudflare's test site key solves the challenge on its own and enables the button
-  const submit = page.getByRole('button', { name: 'Register' });
+  const submit = page.getByRole('button', { name: 'Sign up' });
   await expect(submit).toBeEnabled({ timeout: 15_000 });
   await submit.click();
 
-  await expect(page.getByText('Account created!').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Check your email' })).toBeFocused();
 
   const confirmation = linkIn(await waitForEmail(email), '/api/auth/confirm');
   await page.goto(confirmation);
@@ -34,12 +34,12 @@ test('cadastro com e-mail já usado responde igual e avisa o dono por e-mail', a
   await page.goto('/register');
   await (await hydrated(page.getByLabel('Email'))).fill(user.email);
   await page.getByLabel('Password', { exact: true }).fill(PASSWORD);
-  await page.getByLabel('Confirm Password').fill(PASSWORD);
-  const submit = page.getByRole('button', { name: 'Register' });
+  await page.getByLabel('Confirm password').fill(PASSWORD);
+  const submit = page.getByRole('button', { name: 'Sign up' });
   await expect(submit).toBeEnabled({ timeout: 15_000 });
   await submit.click();
 
-  await expect(page.getByText('Account created!').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Check your email' })).toBeFocused();
   await expect(page.getByText('This email is already in use.')).toHaveCount(0);
 
   const notice = await waitForEmail(user.email);

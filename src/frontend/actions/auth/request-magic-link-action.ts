@@ -7,13 +7,13 @@ import {
   AUTH_EMAIL_MIN_DURATION_MS,
   withMinimumDuration,
 } from '@backend/shared/application/minimum-duration';
-import { siteUrl } from '@backend/shared/infrastructure/helpers/site-url';
 import { verifyHuman } from '@backend/shared/infrastructure/services/verify-human';
 
 import { errorCode } from '@shared/http/error-response';
 import { INVALID_REQUEST } from '@shared/http/validation';
 
 import type { ActionResponse } from '../action-response';
+import { emailConfirmUrl } from './email-confirm-url';
 
 export async function requestMagicLinkAction(
   email: string,
@@ -33,8 +33,9 @@ export async function requestMagicLinkAction(
 
   try {
     const api = await getApi();
+    const confirmUrl = await emailConfirmUrl();
     await withMinimumDuration(AUTH_EMAIL_MIN_DURATION_MS, () =>
-      api.authApi.signInWithMagicLink(input.data.email, `${siteUrl()}/api/auth/confirm`),
+      api.authApi.signInWithMagicLink(input.data.email, confirmUrl),
     );
     return { success: true };
   } catch (error: unknown) {

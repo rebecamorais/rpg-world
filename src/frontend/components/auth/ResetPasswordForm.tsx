@@ -1,8 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
@@ -29,6 +27,7 @@ import {
 } from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { NETWORK_ERROR } from '@frontend/lib/error-message';
 import { setServerError } from '@frontend/lib/form-errors';
 import { newPasswordSchema } from '@frontend/lib/password-schema';
 
@@ -41,43 +40,27 @@ const PASSWORD_ERROR_CODES: Record<string, string> = {
   over_request_rate_limit: 'auth_error_rate_limited',
 };
 
-export default function ResetPasswordForm() {
+/** Supabase answers a request that never reached it with status 0 instead of throwing. */
+function passwordErrorCode(error: { code?: string; status?: number }): string | undefined {
+  return PASSWORD_ERROR_CODES[error.code ?? ''] ?? (error.status === 0 ? NETWORK_ERROR : undefined);
+}
+
+interface ResetPasswordFormProps {
+  /** The account whose password changes, masked (`c***@email.com`). */
+  email?: string;
+}
+
+/**
+ * The new password after the recovery link. The page only shows it with the link's session, so the
+ * person is already signed in: once saved, the app opens, with a toast that says it worked.
+ */
+export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
   const t = useTranslations('resetPassword');
   const tCommon = useTranslations('common');
-  const { getMessage } = useErrorMessage();
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isInitializing, setIsInitializing] = useState(true);
+  const { getMessage, getErrorMessage } = useErrorMessage();
+  const router = useRouter();
 
   const supabase = getSupabaseBrowserClient();
-
-  useEffect(() => {
-    const handleSession = async () => {
-      const url = new URL(window.location.href);
-      const code = url.searchParams.get('code');
-
-      // The recovery e-mail goes through /api/auth/confirm, which starts the session on the server.
-      // Session tokens in the URL hash are deliberately not accepted: any page could put its own
-      // there and log the visitor into that account.
-      if (code) {
-        await supabase.auth.exchangeCodeForSession(code);
-      }
-
-      setIsInitializing(false);
-    };
-
-    handleSession();
-
-    // Also listen for changes (the session can arrive a moment after the page loads)
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        setIsInitializing(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [supabase.auth]);
 
   const schema = newPasswordSchema(tCommon);
 
@@ -94,6 +77,7 @@ export default function ResetPasswordForm() {
         data: { session },
       } = await supabase.auth.getSession();
 
+      // The session can end while the form is open (the page checked it when it loaded)
       if (!session) {
         form.setError('root', { message: t('sessionNotFound') });
         return;
@@ -104,54 +88,25 @@ export default function ResetPasswordForm() {
       });
 
       if (error) {
-        const code = PASSWORD_ERROR_CODES[error.code ?? ''];
+        const code = passwordErrorCode(error);
         setServerError(form.setError, ['password'], code, getMessage(code));
-      } else {
-        setIsSuccess(true);
-        toast.success(t('successTitle'));
+        return;
       }
-    } catch {
-      form.setError('root', { message: getMessage(null) });
+
+      toast.success(t('changed'));
+      router.replace('/characters');
+    } catch (err: unknown) {
+      form.setError('root', { message: getErrorMessage(err) });
     }
   };
-
-  if (isInitializing) {
-    return (
-      <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
-        <CardContent role="status" className="text-muted-foreground pt-6 text-center">
-          <div
-            aria-hidden="true"
-            className="border-primary-flare mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"
-          />
-          {t('processing')}
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (isSuccess) {
-    return (
-      <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
-        <CardHeader>
-          <CardTitle as="h1">{t('successTitle')}</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            {t('successDescription')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button asChild className="w-full">
-            <Link href="/login">{t('login')}</Link>
-          </Button>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
     <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
       <CardHeader>
         <CardTitle as="h1">{t('title')}</CardTitle>
-        <CardDescription className="text-muted-foreground">{t('subtitle')}</CardDescription>
+        <CardDescription className="text-muted-foreground">
+          {email ? t('subtitleForEmail', { email }) : t('subtitle')}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -197,7 +152,7 @@ export default function ResetPasswordForm() {
             <FormRootError />
             <Button
               type="submit"
-              loading={form.formState.isSubmitting}
+              loading={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
               className="mt-2 w-full font-semibold"
             >
               {form.formState.isSubmitting ? t('processing') : t('submit')}

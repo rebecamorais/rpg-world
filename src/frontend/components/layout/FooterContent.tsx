@@ -7,7 +7,8 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { useTranslations } from 'next-intl';
+import { localizedHref } from '@/i18n/routing';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { Button } from '@frontend/components/ui/button';
@@ -86,6 +87,8 @@ export default function FooterContent({
   const isAuthenticated = status === 'signed-in';
   const t = useTranslations('footer');
   const tLanding = useTranslations('landing');
+  // The public pages' links go to their address in this language (/pt/privacy)
+  const locale = useLocale();
   const [hasCopied, setHasCopied] = useState(false);
 
   const handleCopyPix = async () => {
@@ -112,10 +115,10 @@ export default function FooterContent({
             <span className="text-muted-foreground text-xs">
               {t('copyright', { year: new Date().getFullYear() })}
             </span>
-            <Link href="/terms" className={linkClass}>
+            <Link href={localizedHref('/terms', locale)} className={linkClass}>
               {t('legal.terms')}
             </Link>
-            <Link href="/privacy" className={linkClass}>
+            <Link href={localizedHref('/privacy', locale)} className={linkClass}>
               {t('legal.privacy')}
             </Link>
             <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" className={linkClass}>
@@ -198,7 +201,7 @@ export default function FooterContent({
         <FooterColumn title={t('explore.title')} className="col-span-2 sm:col-span-1">
           {explore.map((link) => (
             <li key={link.href}>
-              <Link href={link.href} className={linkClass}>
+              <Link href={localizedHref(link.href, locale)} className={linkClass}>
                 {link.label}
               </Link>
             </li>
@@ -207,12 +210,12 @@ export default function FooterContent({
 
         <FooterColumn title={t('legal.title')}>
           <li>
-            <Link href="/terms" className={linkClass}>
+            <Link href={localizedHref('/terms', locale)} className={linkClass}>
               {t('legal.terms')}
             </Link>
           </li>
           <li>
-            <Link href="/privacy" className={linkClass}>
+            <Link href={localizedHref('/privacy', locale)} className={linkClass}>
               {t('legal.privacy')}
             </Link>
           </li>

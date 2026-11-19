@@ -1,16 +1,18 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod/mini';
 
 import { signUpAction } from '@frontend/actions/auth/sign-up-action';
+import { AuthSuccessCard } from '@frontend/components/auth/AuthSuccessCard';
+import { GoogleSignIn } from '@frontend/components/auth/GoogleSignIn';
+import { authErrorCodeOf } from '@frontend/components/auth/auth-error-code';
 import { TurnstileWidget, useTurnstile } from '@frontend/components/security/TurnstileWidget';
 import { Button } from '@frontend/components/ui/button';
 import {
@@ -23,6 +25,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -35,6 +38,8 @@ import { setServerError } from '@frontend/lib/form-errors';
 import { newPasswordFields, passwordsMustMatch } from '@frontend/lib/password-schema';
 import { rememberNext } from '@frontend/lib/post-login-next';
 
+import { MIN_PASSWORD_LENGTH } from '@shared/auth/password-policy';
+
 export default function SignUpForm() {
   // Kept through the e-mail confirmation: the person lands back on the link they opened
   useEffect(rememberNext, []);
@@ -42,6 +47,8 @@ export default function SignUpForm() {
   const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
+  // Back from the success card, the e-mail field takes the focus (the button that was clicked is gone)
+  const focusEmail = useRef(false);
   const {
     token: turnstileToken,
     setToken: setTurnstileToken,
@@ -63,6 +70,19 @@ export default function SignUpForm() {
     defaultValues: { email: '', password: '', confirmPassword: '' },
   });
 
+  useEffect(() => {
+    if (!focusEmail.current || isSuccess) return;
+    focusEmail.current = false;
+    form.setFocus('email', { shouldSelect: true });
+  }, [isSuccess, form]);
+
+  const tryAnotherEmail = () => {
+    // The challenge was spent on the sign-up already sent; the passwords stay filled in
+    resetTurnstile();
+    focusEmail.current = true;
+    setIsSuccess(false);
+  };
+
   const onSubmit = useCallback(
     async (data: SignUpValues) => {
       if (!turnstileToken) {
@@ -78,7 +98,6 @@ export default function SignUpForm() {
       try {
         const result = await signUpAction(formData);
         if (result.success) {
-          toast.success(t('successTitle'));
           setIsSuccess(true);
         } else {
           setServerError(
@@ -89,28 +108,32 @@ export default function SignUpForm() {
           );
           resetTurnstile();
         }
-      } catch {
-        form.setError('root', { message: tCommon('errors.unknown') });
+      } catch (err: unknown) {
+        form.setError('root', { message: getMessage(authErrorCodeOf(err)) });
+        resetTurnstile();
       }
     },
-    [form, turnstileToken, t, resetTurnstile, getMessage, tCommon],
+    [form, turnstileToken, t, resetTurnstile, getMessage],
   );
 
   if (isSuccess) {
+    // The same answer whether the e-mail is new or already has an account: it reveals nothing,
+    // and "Account created!" would be false for the second (decision 5 of the review's phase 4)
     return (
-      <Card className="bg-card/80 mx-auto w-full max-w-sm shadow-2xl backdrop-blur-md">
-        <CardHeader>
-          <CardTitle as="h1">{t('successTitle')}</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            {t('successDescription')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button asChild className="w-full">
-            <Link href="/login">{t('login')}</Link>
-          </Button>
-        </CardContent>
-      </Card>
+      <AuthSuccessCard
+        title={t('successTitle')}
+        description={t.rich('successDescription', {
+          email: form.getValues('email'),
+          bold: (chunks) => <strong className="text-foreground">{chunks}</strong>,
+        })}
+      >
+        <Button variant="outline" className="w-full" onClick={tryAnotherEmail}>
+          {tCommon('useAnotherEmail')}
+        </Button>
+        <Button variant="ghost" asChild className="w-full">
+          <Link href="/login">{t('login')}</Link>
+        </Button>
+      </AuthSuccessCard>
     );
   }
 
@@ -135,7 +158,6 @@ export default function SignUpForm() {
                       placeholder={t('emailPlaceholder')}
                       autoComplete="email"
                       spellCheck={false}
-                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>
@@ -155,10 +177,13 @@ export default function SignUpForm() {
                       type="password"
                       placeholder={t('passwordPlaceholder')}
                       autoComplete="new-password"
-                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>
+                  {/* The rule shows up front, not only as an error after sending */}
+                  <FormDescription>
+                    {t('passwordHint', { min: MIN_PASSWORD_LENGTH })}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -175,7 +200,6 @@ export default function SignUpForm() {
                       type="password"
                       placeholder={t('confirmPasswordPlaceholder')}
                       autoComplete="new-password"
-                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>
@@ -199,9 +223,14 @@ export default function SignUpForm() {
           </form>
         </Form>
 
+        <GoogleSignIn />
+
         <div className="border-border text-muted-foreground mt-4 border-t pt-6 text-center text-sm">
           {t('alreadyHaveAccount')}{' '}
-          <Link href="/login" className="text-primary-flare font-semibold hover:underline">
+          <Link
+            href="/login"
+            className="text-primary-flare focus-ring rounded-sm font-semibold hover:underline"
+          >
             {t('login')}
           </Link>
         </div>

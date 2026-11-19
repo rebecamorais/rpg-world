@@ -1,11 +1,13 @@
 import { EmailService } from '../../../shared/domain/email.service';
 import { UserError, UserErrorCodes } from '../domain/UserError';
+import { AuthEmailThrottleRepo } from '../domain/auth-email-throttle.repo';
 import { AuthRepository } from '../domain/auth.repo';
 
 export class SignInWithMagicLinkUseCase {
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly emailService: EmailService,
+    private readonly emailThrottle: AuthEmailThrottleRepo,
   ) {}
 
   async execute(email: string, confirmUrl: string): Promise<void> {
@@ -14,9 +16,25 @@ export class SignInWithMagicLinkUseCase {
     }
 
     // Only existing accounts get a link: generating one for an unknown e-mail would create the
-    // account. The answer is the same either way, so the form can't be used to find out who is
-    // registered (like the password reset). New accounts come from sign-up or Google.
-    if (!(await this.authRepository.existsByEmail(email))) return;
+    // account. The claim is false for an unknown e-mail and for one that got a link too recently,
+    // and the answer is the same in every case, so the form can't be used to find out who is
+    // registered nor to flood an inbox. New accounts come from sign-up or Google.
+    if (!(await this.emailThrottle.claim(email, 'magiclink'))) return;
+
+    // A magic link would confirm an account someone else may have started with their own
+    // password, and leave that password in place. Its owner chooses the password instead
+    if (!(await this.authRepository.isEmailConfirmed(email))) {
+      try {
+        const link = await this.authRepository.generateFinishSignUpLink(email, confirmUrl);
+        await this.emailService.sendFinishSignUpEmail(email, link);
+        return;
+      } catch (error) {
+        // Confirmed in the meantime: nothing was changed, and it gets the usual magic link
+        if (!(error instanceof UserError && error.code === UserErrorCodes.SIGNUP_DUPLICATE_EMAIL)) {
+          throw error;
+        }
+      }
+    }
 
     const link = await this.authRepository.generateMagicLink(email, confirmUrl);
     await this.emailService.sendMagicLinkEmail(email, link);

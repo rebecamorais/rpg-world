@@ -1,5 +1,6 @@
 'use client';
 
+import { withoutLocale } from '@/i18n/routing';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { AppIcon } from '@frontend/components/ui/icon';
@@ -21,11 +22,14 @@ type Language = keyof typeof LANGUAGE_NAMES;
 
 /**
  * The current page in `locale`. The proxy (next-intl) answers a path prefixed with the language
- * by saving it in the NEXT_LOCALE cookie and redirecting to the plain path. So the choice is only
- * saved if the page is really left: cancelling "leave with unsaved changes?" keeps the old one.
+ * by saving it in the NEXT_LOCALE cookie: an app page then redirects to the plain path, a public
+ * page stays at (or goes to) its address in that language. So the choice is only saved if the page
+ * is really left: cancelling "leave with unsaved changes?" keeps the old one. A public page may
+ * already carry its language (/pt/features), which is swapped, not stacked.
  */
 function localeSwitchUrl(locale: string, { pathname, search, hash }: Location): string {
-  return `/${locale}${pathname === '/' ? '' : pathname}${search}${hash}`;
+  const path = withoutLocale(pathname);
+  return `/${locale}${path === '/' ? '' : path}${search}${hash}`;
 }
 
 /** `signedIn`: whoever switches language is invited to help translate. */

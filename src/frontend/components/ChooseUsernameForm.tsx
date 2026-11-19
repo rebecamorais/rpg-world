@@ -6,11 +6,31 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod/mini';
 
 import { Button } from '@frontend/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormRootError,
+} from '@frontend/components/ui/form';
 import { Input } from '@frontend/components/ui/input';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useProfile } from '@frontend/hooks/useProfile';
+import { errorCodeOf } from '@frontend/lib/error-message';
 
 import { safeRedirectPath } from '@backend/shared/infrastructure/helpers/safe-redirect-path';
+
+import {
+  MAX_USERNAME_LENGTH,
+  MIN_USERNAME_LENGTH,
+  USERNAME_PATTERN,
+} from '@shared/auth/username-policy';
+
+/** Server answers about the username itself: shown under the field, the rest above the button. */
+const USERNAME_ERRORS = new Set(['profile_error_username_taken', 'profile_error_username_invalid']);
 
 /**
  * Asks for a username before the app is used. Starts empty: the generated placeholder is never
@@ -19,16 +39,16 @@ import { safeRedirectPath } from '@backend/shared/infrastructure/helpers/safe-re
 export default function ChooseUsernameForm() {
   const t = useTranslations('chooseUsername');
   const tValidation = useTranslations('profileForm.validation');
-  const { getMessage } = useErrorMessage();
+  const { getErrorMessage } = useErrorMessage();
   const { updateProfile, isUpdating } = useProfile();
 
   const schema = z.object({
     username: z
       .string()
       .check(
-        z.minLength(3, tValidation('usernameMin')),
-        z.maxLength(30, tValidation('usernameMax')),
-        z.regex(/^[a-z0-9_]+$/, tValidation('usernamePattern')),
+        z.minLength(MIN_USERNAME_LENGTH, tValidation('usernameMin')),
+        z.maxLength(MAX_USERNAME_LENGTH, tValidation('usernameMax')),
+        z.regex(USERNAME_PATTERN, tValidation('usernamePattern')),
       ),
   });
 
@@ -44,40 +64,48 @@ export default function ChooseUsernameForm() {
       const next = new URLSearchParams(window.location.search).get('next');
       window.location.assign(safeRedirectPath(next, window.location.origin, '/characters'));
     } catch (error) {
-      form.setError('username', {
-        message: getMessage(error instanceof Error ? error.message : 'unknown'),
-      });
+      const message = getErrorMessage(error);
+      if (USERNAME_ERRORS.has(errorCodeOf(error) ?? '')) {
+        form.setError('username', { message }, { shouldFocus: true });
+      } else {
+        form.setError('root', { message });
+      }
     }
   };
 
-  const error = form.formState.errors.username?.message;
+  const saving = isUpdating || form.formState.isSubmitting;
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
-      <div className="flex flex-col gap-2">
-        <label htmlFor="choose-username" className="text-sm font-medium">
-          {t('label')}
-        </label>
-        <Input
-          id="choose-username"
-          autoComplete="username"
-          // Usernames are lowercase: phones would otherwise capitalize and "correct" them
-          spellCheck={false}
-          autoCapitalize="none"
-          placeholder={t('placeholder')}
-          aria-invalid={!!error}
-          aria-describedby={error ? 'choose-username-error' : undefined}
-          {...form.register('username')}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('label')}</FormLabel>
+              <FormControl>
+                <Input
+                  autoComplete="username"
+                  // Usernames are lowercase: phones would otherwise capitalize and "correct" them
+                  spellCheck={false}
+                  autoCapitalize="none"
+                  placeholder={t('placeholder')}
+                  {...field}
+                  // "Aria" becomes "aria" as it is typed: the rule only stops spaces and symbols
+                  onChange={(e) => field.onChange(e.target.value.toLowerCase())}
+                />
+              </FormControl>
+              <FormDescription>{t('rules')}</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        {error && (
-          <p id="choose-username-error" role="alert" className="text-danger-flare text-sm">
-            {error}
-          </p>
-        )}
-      </div>
-      <Button type="submit" disabled={isUpdating}>
-        {isUpdating ? t('saving') : t('submit')}
-      </Button>
-    </form>
+        <FormRootError />
+        <Button type="submit" loading={saving}>
+          {saving ? t('saving') : t('submit')}
+        </Button>
+      </form>
+    </Form>
   );
 }

@@ -20,6 +20,7 @@ import { UpdateProfileUseCase } from './application/update-profile.use-case';
 import { UploadAvatarUseCase } from './application/upload-avatar.use-case';
 import { VerifyEmailLinkUseCase } from './application/verify-email-link.use-case';
 import { SupabaseAccountDeletionRepository } from './infrastructure/repositories/supabase-account-deletion.repository';
+import { SupabaseAuthEmailThrottleRepository } from './infrastructure/repositories/supabase-auth-email-throttle.repository';
 import { SupabaseAuthRepository } from './infrastructure/repositories/supabase-auth-repository';
 import { SupabaseProfileRepository } from './infrastructure/repositories/supabase-profile-repository';
 
@@ -60,13 +61,22 @@ export const createAuthContext = (config: AuthContextConfig): AuthContext => {
   const authRepository = new SupabaseAuthRepository(config.userClient, config.adminClient);
   const profileRepository = new SupabaseProfileRepository(config.userClient);
   const accountDeletionRepo = new SupabaseAccountDeletionRepository(config.adminClient);
+  const emailThrottle = new SupabaseAuthEmailThrottleRepository(config.adminClient);
 
   return {
     getSession: new GetSessionUserUseCase(authRepository),
-    signInWithMagicLink: new SignInWithMagicLinkUseCase(authRepository, config.emailService),
+    signInWithMagicLink: new SignInWithMagicLinkUseCase(
+      authRepository,
+      config.emailService,
+      emailThrottle,
+    ),
     signInWithPassword: new SignInWithPasswordUseCase(authRepository),
-    signUp: new SignUpUseCase(authRepository, config.emailService),
-    requestPasswordReset: new RequestPasswordResetUseCase(authRepository, config.emailService),
+    signUp: new SignUpUseCase(authRepository, config.emailService, emailThrottle),
+    requestPasswordReset: new RequestPasswordResetUseCase(
+      authRepository,
+      config.emailService,
+      emailThrottle,
+    ),
     updatePassword: new UpdatePasswordUseCase(
       authRepository,
       accountDeletionRepo,

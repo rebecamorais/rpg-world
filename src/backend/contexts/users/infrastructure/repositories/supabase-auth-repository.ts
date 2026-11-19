@@ -93,6 +93,34 @@ export class SupabaseAuthRepository implements AuthRepository {
     return confirmLink(confirmUrl, data.properties?.hashed_token, 'recovery');
   }
 
+  async generateFinishSignUpLink(email: string, confirmUrl: string): Promise<string> {
+    // A first link only to learn the user's id (generateLink returns it), then the password is
+    // scrambled, then the link that is sent: the newest token replaces the first one
+    const { data: found, error: findError } = await this.dbClient.auth.admin.generateLink({
+      type: 'recovery',
+      email,
+    });
+    if (findError || !found.user) {
+      throw findError
+        ? authFailure(findError, 'Failed to find the account to finish')
+        : new Error('Failed to find the account to finish');
+    }
+    // Checked again right before the overwrite: confirmed since the caller looked, it is the
+    // owner's account and its password stays. The caller then answers as for a confirmed one
+    if (found.user.email_confirmed_at) {
+      throw new UserError(UserErrorCodes.SIGNUP_DUPLICATE_EMAIL);
+    }
+
+    const { error: scrambleError } = await this.dbClient.auth.admin.updateUserById(found.user.id, {
+      password: `${crypto.randomUUID()}${crypto.randomUUID()}`,
+    });
+    if (scrambleError) {
+      throw authFailure(scrambleError, 'Failed to replace the sign-up password');
+    }
+
+    return this.generateRecoveryLink(email, confirmUrl);
+  }
+
   async verifyEmailLink(tokenHash: string, type: EmailLinkType): Promise<void> {
     this.sessionUser = undefined;
     const { error } = await this.authClient.auth.verifyOtp({ token_hash: tokenHash, type });
@@ -165,6 +193,18 @@ export class SupabaseAuthRepository implements AuthRepository {
 
     if (error) {
       throw new Error(`Failed to check if user exists: ${error.message}`);
+    }
+
+    return data === true;
+  }
+
+  async isEmailConfirmed(email: string): Promise<boolean> {
+    const { data, error } = await this.dbClient.rpc('auth_user_email_confirmed', {
+      p_email: email,
+    });
+
+    if (error) {
+      throw new Error(`Failed to check if the e-mail is confirmed: ${error.message}`);
     }
 
     return data === true;

@@ -63,6 +63,46 @@ describe('ChooseUsernameForm', () => {
     expect(assign).not.toHaveBeenCalled();
   });
 
+  it('mostra as regras desde o começo, ligadas ao campo', () => {
+    renderWithProviders(<ChooseUsernameForm />);
+
+    expect(screen.getByLabelText(t.label)).toHaveAccessibleDescription(t.rules);
+  });
+
+  it('passa para minúscula ao digitar', async () => {
+    renderWithProviders(<ChooseUsernameForm />);
+
+    await choose('Aria_Bold');
+
+    await waitFor(() =>
+      expect(patch).toHaveBeenCalledWith('/api/profile', { username: 'aria_bold' }),
+    );
+  });
+
+  it('mostra sob o campo a recusa do servidor ao formato', async () => {
+    patch.mockRejectedValue(new APIError('profile_error_username_invalid', 400));
+    renderWithProviders(<ChooseUsernameForm />);
+
+    await choose('aria_bold');
+
+    expect(
+      await screen.findByText(messages.common.errors.profile_error_username_invalid),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText(t.label)).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  it('sem conexão, diz que é a conexão, não "erro desconhecido"', async () => {
+    patch.mockRejectedValue(new TypeError('Failed to fetch'));
+    renderWithProviders(<ChooseUsernameForm />);
+
+    await choose('aria_bold');
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      messages.common.errors.common_error_network,
+    );
+    expect(assign).not.toHaveBeenCalled();
+  });
+
   it('salvar envia o username e segue para /characters', async () => {
     renderWithProviders(<ChooseUsernameForm />);
 

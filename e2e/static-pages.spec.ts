@@ -34,9 +34,12 @@ test.describe('primeira visita', () => {
   // A browser in Portuguese (it sends Accept-Language: pt-BR)
   test.use({ locale: 'pt-BR' });
 
-  test('com o navegador em português, a home abre em português', async ({ page }) => {
+  test('com o navegador em português, a home abre em português, no endereço /pt', async ({
+    page,
+  }) => {
     await page.goto('/');
 
+    await expect(page).toHaveURL(/\/pt$/);
     await expect(page.locator('html')).toHaveAttribute('lang', 'pt');
     await expect(page.getByRole('link', { name: 'Entrar' }).first()).toBeVisible();
   });
@@ -50,10 +53,47 @@ test.describe('primeira visita', () => {
   });
 });
 
-test('/pt/features redireciona para /features', async ({ page }) => {
+test('/pt/features é o endereço em português, com hreflang para o inglês', async ({ page }) => {
   await page.goto('/pt/features');
 
+  await expect(page).toHaveURL(/\/pt\/features$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pt');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    'href',
+    'https://www.rpgworldapp.com/pt/features',
+  );
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute(
+    'href',
+    'https://www.rpgworldapp.com/features',
+  );
+  await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute(
+    'href',
+    'https://www.rpgworldapp.com/features',
+  );
+});
+
+test('sem cookie nem idioma do navegador (um robô), /features abre em inglês', async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ extraHTTPHeaders: { 'accept-language': '' } });
+  const page = await context.newPage();
+
+  await page.goto('/features');
+
   await expect(page).toHaveURL(/\/features$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await context.close();
+});
+
+test('o app continua sem prefixo: /pt/characters volta para /characters, em português', async ({
+  page,
+  user: _,
+}) => {
+  await page.goto('/pt/characters');
+
+  await expect(page).toHaveURL(/\/characters$/);
+  await expect(page).not.toHaveURL(/\/pt\//);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pt');
 });
 
 test('uma página que não existe responde 404 com o layout do site', async ({ page }) => {

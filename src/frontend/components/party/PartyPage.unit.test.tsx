@@ -360,6 +360,9 @@ describe('PartyPage na demo', () => {
     );
 
     expect((await screen.findAllByText('Ada'))[0]).toBeInTheDocument();
+    // The GM's view, said as a view: the visitor is not the party's GM
+    expect(screen.getByText(messages.demo.gmEyebrow)).toBeInTheDocument();
+    expect(screen.queryByText(t.page.gmEyebrow)).not.toBeInTheDocument();
     expect(screen.queryByRole('navigation', { name: t.tabs.label })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: t.settings.manage })).not.toBeInTheDocument();
   });

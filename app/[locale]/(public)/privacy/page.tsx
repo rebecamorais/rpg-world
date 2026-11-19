@@ -1,121 +1,125 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
-import type { LocaleParams } from '@/i18n/routing';
+import { type LocaleParams, localizedHref } from '@/i18n/routing';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
+import {
+  LegalDocument,
+  LegalList,
+  LegalParagraph,
+  type LegalSection,
+} from '@frontend/components/legal/LegalDocument';
 import { richLinks } from '@frontend/components/shared/rich-links';
 import { DISCORD_INVITE } from '@frontend/constants/site';
+import { publicPageMetadata } from '@frontend/lib/public-metadata';
 
 // Links inside the privacy texts, one per tag in the messages
-const PRIVACY_LINKS = richLinks({
-  server: DISCORD_INVITE,
-  lgpd: 'https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm',
-  supabase: 'https://supabase.com/privacy',
-  google: 'https://policies.google.com/privacy',
-  vercel: 'https://vercel.com/legal/privacy-policy',
-  resend: 'https://resend.com/legal/privacy-policy',
-  cloudflare: 'https://www.cloudflare.com/privacypolicy/',
-  discord: 'https://discord.com/privacy',
-  support: '/support',
-});
+const privacyLinks = (locale: string) =>
+  richLinks({
+    server: DISCORD_INVITE,
+    lgpd: 'https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm',
+    supabase: 'https://supabase.com/privacy',
+    google: 'https://policies.google.com/privacy',
+    vercel: 'https://vercel.com/legal/privacy-policy',
+    resend: 'https://resend.com/legal/privacy-policy',
+    cloudflare: 'https://www.cloudflare.com/privacypolicy/',
+    discord: 'https://discord.com/privacy',
+    support: localizedHref('/support', locale),
+  });
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'privacy' });
-  return { title: t('title') };
+  return publicPageMetadata({
+    locale,
+    path: '/privacy',
+    title: t('title'),
+    description: t('metaDescription'),
+  });
 }
 
 export default async function PrivacyPage({ params }: LocaleParams) {
-  setRequestLocale((await params).locale);
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations('privacy');
   const commonT = await getTranslations('common');
+  const links = privacyLinks(locale);
+  // Every item of a list in the messages, so none is left out when one is added
+  const items = (list: string) =>
+    (t.raw(list) as unknown[]).map((_, index) => t.rich(`${list}.${index}`, links));
+
+  const sections: LegalSection[] = [
+    {
+      id: 'data',
+      title: t('sections.data.title'),
+      body: (
+        <>
+          <LegalParagraph>{t('sections.data.content')}</LegalParagraph>
+          <LegalList items={items('sections.data.items')} />
+        </>
+      ),
+    },
+    {
+      id: 'usage',
+      title: t('sections.usage.title'),
+      body: (
+        <>
+          <LegalParagraph>{t('sections.usage.content')}</LegalParagraph>
+          <LegalList items={items('sections.usage.items')} />
+        </>
+      ),
+    },
+    {
+      id: 'sharing',
+      title: t('sections.sharing.title'),
+      body: (
+        <>
+          <LegalParagraph>{t('sections.sharing.intro')}</LegalParagraph>
+          <LegalList items={items('sections.sharing.services')} />
+          <LegalParagraph>{t('sections.sharing.visibilityIntro')}</LegalParagraph>
+          <LegalList items={items('sections.sharing.visibility')} />
+        </>
+      ),
+    },
+    {
+      id: 'rights',
+      title: t('sections.rights.title'),
+      body: (
+        <>
+          <LegalParagraph>{t.rich('sections.rights.content', links)}</LegalParagraph>
+          <LegalParagraph>{t('sections.rights.deletionIntro')}</LegalParagraph>
+          <LegalList items={items('sections.rights.deletionItems')} />
+        </>
+      ),
+    },
+    {
+      id: 'cookies',
+      title: t('sections.cookies.title'),
+      body: <LegalParagraph>{t.rich('sections.cookies.content', links)}</LegalParagraph>,
+    },
+    {
+      id: 'transfer',
+      title: t('sections.transfer.title'),
+      body: <LegalParagraph>{t.rich('sections.transfer.content', links)}</LegalParagraph>,
+    },
+    {
+      id: 'retention',
+      title: t('sections.retention.title'),
+      body: <LegalParagraph>{t('sections.retention.content')}</LegalParagraph>,
+    },
+    {
+      id: 'contact',
+      title: t('sections.contact.title'),
+      body: <LegalParagraph>{t.rich('sections.contact.content', links)}</LegalParagraph>,
+    },
+  ];
 
   return (
-    <div className="container mx-auto max-w-4xl flex-1 px-4 py-20">
-      <div className="mb-8">
-        <Link
-          href="/"
-          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-        >
-          {commonT('back')}
-        </Link>
-      </div>
-
-      <h1 className="mb-2 text-4xl font-bold tracking-tight">{t('title')}</h1>
-      <p className="text-muted-foreground mb-8 text-sm italic">{t('lastUpdated')}</p>
-
-      <div className="space-y-8">
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.data.title')}</h2>
-          <p className="text-muted-foreground mb-4 leading-relaxed">{t('sections.data.content')}</p>
-          <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed">
-            {['0', '1', '2', '3', '4'].map((key) => (
-              <li key={key}>{t.rich(`sections.data.items.${key}`, PRIVACY_LINKS)}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.usage.title')}</h2>
-          <p className="text-muted-foreground mb-4 leading-relaxed">
-            {t('sections.usage.content')}
-          </p>
-          <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed">
-            {['0', '1', '2'].map((key) => (
-              <li key={key}>{t.rich(`sections.usage.items.${key}`, PRIVACY_LINKS)}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.sharing.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            {t.rich('sections.sharing.content', PRIVACY_LINKS)}
-          </p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.rights.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            {t.rich('sections.rights.content', PRIVACY_LINKS)}
-          </p>
-          <p className="text-muted-foreground mt-4 mb-2 leading-relaxed">
-            {t('sections.rights.deletionIntro')}
-          </p>
-          <ul className="text-muted-foreground list-inside list-disc space-y-2 leading-relaxed">
-            {['0', '1', '2', '3'].map((key) => (
-              <li key={key}>{t(`sections.rights.deletionItems.${key}`)}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.cookies.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            {t.rich('sections.cookies.content', PRIVACY_LINKS)}
-          </p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.transfer.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            {t.rich('sections.transfer.content', PRIVACY_LINKS)}
-          </p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.retention.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">{t('sections.retention.content')}</p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">{t('sections.contact.title')}</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            {t.rich('sections.contact.content', PRIVACY_LINKS)}
-          </p>
-        </section>
-      </div>
-    </div>
+    <LegalDocument
+      title={t('title')}
+      lastUpdated={t('lastUpdated')}
+      tocLabel={commonT('onThisPage')}
+      sections={sections}
+    />
   );
 }

@@ -1,6 +1,7 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
+import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ResetPasswordForm from './ResetPasswordForm';
@@ -10,11 +11,12 @@ const auth = {
   getSession: vi.fn(),
   setSession: vi.fn(),
   updateUser: vi.fn(),
-  onAuthStateChange: vi.fn(() => ({ data: { subscription: { unsubscribe: vi.fn() } } })),
 };
+const replace = vi.fn();
 
 vi.mock('@lib/supabase-browser', () => ({ getSupabaseBrowserClient: () => ({ auth }) }));
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({ replace }) }));
 
 const t = messages.resetPassword;
 const SESSION = { data: { session: { access_token: 'token' } } };
@@ -34,29 +36,33 @@ describe('ResetPasswordForm', () => {
     auth.updateUser.mockResolvedValue({ error: null });
   });
 
-  it('troca o código do link de recuperação pela sessão', async () => {
-    window.history.replaceState(null, '', '/reset-password?code=recovery-code');
-    renderWithProviders(<ResetPasswordForm />);
-
-    expect(await screen.findByLabelText(t.newPasswordLabel)).toBeInTheDocument();
-    expect(auth.exchangeCodeForSession).toHaveBeenCalledWith('recovery-code');
-  });
-
   it('ignora tokens de sessão no hash da URL (login CSRF)', async () => {
     window.history.replaceState(null, '', '/reset-password#access_token=at&refresh_token=rt');
     renderWithProviders(<ResetPasswordForm />);
 
     await screen.findByLabelText(t.newPasswordLabel);
     expect(auth.setSession).not.toHaveBeenCalled();
+    expect(auth.exchangeCodeForSession).not.toHaveBeenCalled();
   });
 
-  it('atualiza a senha e mostra a confirmação', async () => {
+  it('diz de qual conta é a senha', () => {
+    renderWithProviders(<ResetPasswordForm email="c***@email.com" />);
+
+    expect(
+      screen.getByText(t.subtitleForEmail.replace('{email}', 'c***@email.com')),
+    ).toBeInTheDocument();
+  });
+
+  it('atualiza a senha e abre o app com o aviso "Senha alterada"', async () => {
     renderWithProviders(<ResetPasswordForm />);
 
     await submit();
 
-    expect(await screen.findByText(t.successDescription)).toBeInTheDocument();
+    await waitFor(() => expect(replace).toHaveBeenCalledWith('/characters'));
     expect(auth.updateUser).toHaveBeenCalledWith({ password: 'new-password' });
+    expect(toast.success).toHaveBeenCalledWith(t.changed);
+    // No card telling someone already signed in to "log in"
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 
   it('explica o erro quando as senhas não conferem, sem enviar', async () => {
@@ -77,7 +83,7 @@ describe('ResetPasswordForm', () => {
     expect(auth.updateUser).not.toHaveBeenCalled();
   });
 
-  it('avisa quando a sessão de recuperação não existe', async () => {
+  it('avisa quando a sessão do link terminou enquanto o form estava aberto', async () => {
     renderWithProviders(<ResetPasswordForm />);
     await screen.findByLabelText(t.newPasswordLabel);
     auth.getSession.mockResolvedValue({ data: { session: null } });
@@ -89,7 +95,7 @@ describe('ResetPasswordForm', () => {
   });
 
   it('traduz o erro de senha fraca do Supabase', async () => {
-    auth.updateUser.mockResolvedValue({ error: { code: 'weak_password' } });
+    auth.updateUser.mockResolvedValue({ error: { code: 'weak_password', status: 422 } });
     renderWithProviders(<ResetPasswordForm />);
 
     await submit();
@@ -101,6 +107,32 @@ describe('ResetPasswordForm', () => {
     ).toBeInTheDocument();
     expect(field).toHaveAttribute('aria-invalid', 'true');
     expect(field).toHaveFocus();
-    expect(screen.queryByText(t.successDescription)).not.toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it('sem conexão, diz que é a conexão, não "erro desconhecido"', async () => {
+    // What supabase-js answers when fetch fails: an AuthRetryableFetchError with status 0
+    auth.updateUser.mockResolvedValue({
+      error: { name: 'AuthRetryableFetchError', message: 'Failed to fetch', status: 0 },
+    });
+    renderWithProviders(<ResetPasswordForm />);
+
+    await submit();
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      messages.common.errors.common_error_network,
+    );
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it('sem conexão ao ler a sessão, também fala da conexão', async () => {
+    auth.getSession.mockRejectedValue(new TypeError('Failed to fetch'));
+    renderWithProviders(<ResetPasswordForm />);
+
+    await submit();
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      messages.common.errors.common_error_network,
+    );
   });
 });

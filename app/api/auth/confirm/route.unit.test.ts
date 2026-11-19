@@ -47,7 +47,7 @@ describe('GET /api/auth/confirm', () => {
     expect(location).toBe(`${ORIGIN}/characters`);
   });
 
-  it.each(['', 'type=signup', 'token_hash=abc', 'token_hash=abc&type=invite'])(
+  it.each(['', 'token_hash=abc', 'token_hash=abc&type=invite'])(
     'manda para a página de erro sem verificar nada quando a URL é "%s"',
     async (query) => {
       const { location } = await confirm(query);
@@ -57,13 +57,44 @@ describe('GET /api/auth/confirm', () => {
     },
   );
 
-  it('repassa o código de erro esperado quando o link expirou ou já foi usado', async () => {
+  it('sem o token, a página de erro sabe o tipo do link para oferecer outro', async () => {
+    const { location } = await confirm('type=recovery');
+
+    expect(location).toBe(`${ORIGIN}/auth/error?message=no_code_provided&type=recovery`);
+    expect(api.authApi.verifyEmailLink).not.toHaveBeenCalled();
+  });
+
+  it('repassa o código de erro esperado e o tipo quando o link expirou ou já foi usado', async () => {
     api.authApi.verifyEmailLink.mockRejectedValue(new UserError(UserErrorCodes.AUTH_LINK_EXPIRED));
 
     const { location } = await confirm('token_hash=abc&type=signup');
 
-    expect(location).toBe(`${ORIGIN}/auth/error?message=auth_error_link_expired`);
+    expect(location).toBe(`${ORIGIN}/auth/error?message=auth_error_link_expired&type=signup`);
   });
+
+  it('abre a página no idioma em que o e-mail foi pedido', async () => {
+    const { location } = await confirm('token_hash=abc&type=recovery&locale=pt');
+
+    // The proxy saves the prefix in NEXT_LOCALE and drops it from the address
+    expect(location).toBe(`${ORIGIN}/pt/reset-password`);
+  });
+
+  it('o link vencido também abre no idioma do pedido', async () => {
+    api.authApi.verifyEmailLink.mockRejectedValue(new UserError(UserErrorCodes.AUTH_LINK_EXPIRED));
+
+    const { location } = await confirm('token_hash=abc&type=recovery&locale=pt');
+
+    expect(location).toBe(`${ORIGIN}/pt/auth/error?message=auth_error_link_expired&type=recovery`);
+  });
+
+  it.each(['xx', 'pt-BR', '..', '%2Fevil.com'])(
+    'ignora um idioma que não é do app ("%s")',
+    async (locale) => {
+      const { location } = await confirm(`token_hash=abc&type=recovery&locale=${locale}`);
+
+      expect(location).toBe(`${ORIGIN}/reset-password`);
+    },
+  );
 
   it('não coloca a mensagem de um erro inesperado na URL', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -71,6 +102,6 @@ describe('GET /api/auth/confirm', () => {
 
     const { location } = await confirm('token_hash=abc&type=recovery');
 
-    expect(location).toBe(`${ORIGIN}/auth/error?message=common_error_unexpected`);
+    expect(location).toBe(`${ORIGIN}/auth/error?message=common_error_unexpected&type=recovery`);
   });
 });

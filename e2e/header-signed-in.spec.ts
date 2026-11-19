@@ -30,7 +30,8 @@ for (const width of [640, 700]) {
         .locator('a, button, [role="combobox"]')
         .evaluateAll((elements) =>
           elements
-            .filter((element) => element.getAttribute('href') !== '/')
+            // The logo: the home, at its address in Portuguese
+            .filter((element) => !['/', '/pt'].includes(element.getAttribute('href') ?? ''))
             .map((element) => {
               const box = element.getBoundingClientRect();
               return { name: element.textContent?.trim(), left: box.left, right: box.right };

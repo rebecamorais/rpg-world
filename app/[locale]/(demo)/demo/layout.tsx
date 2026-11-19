@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
 import { type LocaleParams } from '@/i18n/routing';
-import { setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { UserProvider } from '@frontend/context/UserContext';
 import { DemoProvider } from '@frontend/demo/DemoContext';
@@ -12,8 +12,17 @@ import { buildDemoData, resolveDemoSpells } from '@frontend/demo/data/build';
 import { DEMO_USER } from '@frontend/demo/ids';
 import type { DemoLocale } from '@frontend/demo/types';
 
-// A showcase, not content to rank: the sheets are fiction and the page is the same for everyone
-export const metadata: Metadata = { robots: { index: false, follow: false } };
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'demo' });
+  const name = t('metaTitle');
+  return {
+    // "Demo · The Pioneers · RPG World" (the root template), and its pages before it
+    title: { default: name, template: `%s · ${name} · RPG World` },
+    // A showcase, not content to rank: the sheets are fiction and the page is the same for everyone
+    robots: { index: false, follow: false },
+  };
+}
 
 /** Public and read only: no session, no database. The whole campaign comes from `buildDemoData`. */
 export default async function DemoLayout({

@@ -17,6 +17,16 @@ vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
 vi.mock('@client', () => ({ rpgWorldApi: { get: vi.fn(), patch: vi.fn() } }));
 const params = vi.hoisted(() => ({ value: {} as Record<string, string> }));
 vi.mock('next/navigation', () => ({ useParams: () => params.value }));
+const demo = vi.hoisted(() => ({ isDemo: false, refuseWrite: vi.fn() }));
+// The real guard reads the demo from its own context; here the demo is whatever the test says
+vi.mock('@frontend/demo/DemoContext', async (actual) => ({
+  ...(await actual<typeof import('@frontend/demo/DemoContext')>()),
+  useWriteGuard:
+    () =>
+    <Args extends unknown[]>(open: (...args: Args) => void) =>
+    (...args: Args) =>
+      demo.isDemo ? demo.refuseWrite() : open(...args),
+}));
 
 const api = vi.mocked(rpgWorldApi);
 const character = { ...createDnD5eCharacter('owner', 'Thor'), id: 'c1' } as DnD5eCharacter;
@@ -50,7 +60,20 @@ describe('CoinPouch', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     params.value = {};
+    demo.isDemo = false;
     api.patch.mockResolvedValue(undefined);
+  });
+
+  it('na demo, Pagar e Receber recusam na hora, sem abrir o formulário', async () => {
+    const user = userEvent.setup();
+    demo.isDemo = true;
+    await renderPouch();
+
+    await user.click(screen.getByRole('button', { name: 'Pay' }));
+    await user.click(screen.getByRole('button', { name: 'Receive' }));
+
+    expect(demo.refuseWrite).toHaveBeenCalledTimes(2);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('enquanto carrega, não mostra as moedas zeradas', async () => {
