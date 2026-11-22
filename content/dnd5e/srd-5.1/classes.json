@@ -676,7 +676,7 @@
         "feature": "divine-sense",
         "level": 1,
         "unit": "uses",
-        "max": { "type": "ability", "ability": "CHA", "bonus": 1, "minimum": 1 },
+        "max": { "type": "ability", "ability": "CHA", "bonus": 1, "minimum": 0 },
         "recovery": [{ "rest": "long", "amount": "all" }]
       },
       {

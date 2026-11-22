@@ -1181,7 +1181,12 @@
         "description": "At 20th level, you regain 4 expended sorcery points whenever you finish a short rest."
       }
     },
-    "resources": { "sorcery-points": { "name": "Sorcery Points" } },
+    "resources": {
+      "sorcery-points": {
+        "name": "Sorcery Points",
+        "note": "Never more than your Sorcerer level, even from converting spell slots."
+      }
+    },
     "choices": { "metamagic": { "name": "Metamagic" } },
     "subclasses": {
       "draconic": {
