@@ -20,6 +20,9 @@ import {
   spellTranslationSchema,
 } from '@shared/systems/dnd5e/content/spell.schema';
 
+import type { ClassBook } from '../../scripts/content/5etools-classes';
+import { CLASS_RESOURCES } from '../../scripts/content/class-resources';
+
 const read = (source: string, file: string): unknown =>
   JSON.parse(readFileSync(path.join(import.meta.dirname, source, file), 'utf8'));
 
@@ -261,6 +264,120 @@ describe('recursos de classe', () => {
       const slots = resource(source, 'warlock', 'pact-slots');
       expect(slots?.recovery).toContainEqual({ rest: 'short', amount: 'all' });
       expect(slots?.spellLevel?.at(-1)).toEqual({ level: 9, value: 5 });
+    }
+  });
+
+  it('no SRD 5.1, o Sentido Divino é 1 + Carisma, sem mínimo de 1', () => {
+    expect(resource('srd-5.1', 'paladin', 'divine-sense')?.max).toEqual({
+      type: 'ability',
+      ability: 'CHA',
+      bonus: 1,
+      minimum: 0,
+    });
+  });
+});
+
+/*
+ * The sheet saves what the player did to a class box (used, hidden, edits) under this key. A key
+ * that disappears or changes loses that, so the importer may add resources but never drop or
+ * rename one (#213). Changing what a saved value means needs its own plan, like Signature Spells.
+ */
+const SAVED_KEYS: Record<string, string[]> = {
+  'srd-5.1': [
+    'class:barbarian:rage',
+    'class:bard:bardic-inspiration',
+    'class:cleric:channel-divinity',
+    'class:cleric:divine-intervention',
+    'class:druid:wild-shape',
+    'subclass:druid/land:natural-recovery',
+    'class:fighter:second-wind',
+    'class:fighter:action-surge',
+    'class:fighter:indomitable',
+    'class:monk:ki',
+    'subclass:monk/open-hand:wholeness-of-body',
+    'class:paladin:divine-sense',
+    'class:paladin:lay-on-hands',
+    'class:paladin:channel-divinity',
+    'class:paladin:cleansing-touch',
+    'subclass:paladin/devotion:holy-nimbus',
+    'class:rogue:stroke-of-luck',
+    'class:sorcerer:sorcery-points',
+    'class:warlock:pact-slots',
+    'class:warlock:mystic-arcanum-6',
+    'class:warlock:mystic-arcanum-7',
+    'class:warlock:mystic-arcanum-8',
+    'class:warlock:mystic-arcanum-9',
+    'class:warlock:eldritch-master',
+    'subclass:warlock/fiend:dark-one-s-own-luck',
+    'subclass:warlock/fiend:hurl-through-hell',
+    'class:wizard:arcane-recovery',
+    'class:wizard:signature-spells',
+    'subclass:wizard/evocation:overchannel',
+  ],
+  'srd-5.2': [
+    'class:barbarian:rage',
+    'class:barbarian:persistent-rage',
+    'subclass:barbarian/berserker:intimidating-presence',
+    'class:bard:bardic-inspiration',
+    'class:cleric:channel-divinity',
+    'class:cleric:divine-intervention',
+    'class:druid:wild-shape',
+    'class:druid:wild-resurgence',
+    'class:druid:nature-magician',
+    'subclass:druid/land:natural-recovery-spell',
+    'subclass:druid/land:natural-recovery-slots',
+    'class:fighter:second-wind',
+    'class:fighter:action-surge',
+    'class:fighter:indomitable',
+    'class:monk:focus-points',
+    'class:monk:uncanny-metabolism',
+    'subclass:monk/open-hand:wholeness-of-body',
+    'class:paladin:lay-on-hands',
+    'class:paladin:paladin-s-smite',
+    'class:paladin:channel-divinity',
+    'class:paladin:faithful-steed',
+    'subclass:paladin/devotion:holy-nimbus',
+    'class:ranger:favored-enemy',
+    'class:ranger:tireless',
+    'class:ranger:nature-s-veil',
+    'class:rogue:stroke-of-luck',
+    'class:sorcerer:innate-sorcery',
+    'class:sorcerer:sorcery-points',
+    'class:sorcerer:sorcerous-restoration',
+    'subclass:sorcerer/draconic:dragon-wings',
+    'subclass:sorcerer/draconic:dragon-companion',
+    'class:warlock:pact-slots',
+    'class:warlock:magical-cunning',
+    'class:warlock:contact-patron',
+    'class:warlock:mystic-arcanum-6',
+    'class:warlock:mystic-arcanum-7',
+    'class:warlock:mystic-arcanum-8',
+    'class:warlock:mystic-arcanum-9',
+    'subclass:warlock/fiend:dark-one-s-own-luck',
+    'subclass:warlock/fiend:hurl-through-hell',
+    'class:wizard:arcane-recovery',
+    'class:wizard:signature-spells',
+    'subclass:wizard/evoker:overchannel',
+  ],
+};
+
+describe.each(SOURCES)('chaves salvas nas fichas do %s', (source) => {
+  it('todo recurso que já existia continua com o mesmo id', () => {
+    const keys = classesOf(source).flatMap((c) => [
+      ...c.resources.map((r) => `class:${c.id}:${r.id}`),
+      ...c.subclasses.flatMap((s) => s.resources.map((r) => `subclass:${c.id}/${s.id}:${r.id}`)),
+    ]);
+    expect(keys).toEqual(expect.arrayContaining(SAVED_KEYS[source]));
+  });
+
+  // The ids above are read from the generated file: this keeps it in step with the importer's
+  // source, so a change there that wasn't regenerated (or that drops an id) fails here too
+  it('os ids do arquivo são os mesmos do class-resources.ts do importador', () => {
+    const specs = CLASS_RESOURCES[source as ClassBook];
+    for (const c of classesOf(source)) {
+      const ids = (list: { id: string }[]) => list.map((r) => r.id);
+      expect(ids(c.resources), c.id).toEqual(ids(specs[c.id].class));
+      expect(ids(c.subclasses[0].resources), c.id).toEqual(ids(specs[c.id].subclass));
     }
   });
 });
