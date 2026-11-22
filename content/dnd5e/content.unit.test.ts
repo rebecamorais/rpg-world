@@ -5,6 +5,7 @@ import { z } from 'zod';
 
 import { conditionIdsOf, stripTags, tagsOf } from '@shared/content/tags';
 import {
+  type ClassData,
   classDataSchema,
   classTextSchema,
   classTranslationSchema,
@@ -370,14 +371,52 @@ describe.each(SOURCES)('chaves salvas nas fichas do %s', (source) => {
     expect(keys).toEqual(expect.arrayContaining(SAVED_KEYS[source]));
   });
 
-  // The ids above are read from the generated file: this keeps it in step with the importer's
-  // source, so a change there that wasn't regenerated (or that drops an id) fails here too
-  it('os ids do arquivo são os mesmos do class-resources.ts do importador', () => {
+  // The keys above are read from the generated file: this keeps it in step with the importer's
+  // source, so a fix made there and never regenerated (`npm run content:classes`) fails here too.
+  // Values read from the class table (`column`) are checked by the importer itself.
+  it('o arquivo gerado bate com o class-resources.ts do importador', () => {
     const specs = CLASS_RESOURCES[source as ClassBook];
-    for (const c of classesOf(source)) {
-      const ids = (list: { id: string }[]) => list.map((r) => r.id);
-      expect(ids(c.resources), c.id).toEqual(ids(specs[c.id].class));
-      expect(ids(c.subclasses[0].resources), c.id).toEqual(ids(specs[c.id].subclass));
+    const classes = classesOf(source);
+    const texts = englishClassTextsOf(source);
+    expect(classes.map((c) => c.id).sort()).toEqual(Object.keys(specs).sort());
+
+    const fromTable = (value: unknown) =>
+      typeof value === 'object' && value !== null && 'column' in value;
+    const compare = (
+      label: string,
+      data: ClassData['resources'],
+      spec: (typeof specs)[string]['class'],
+      resourceTexts: Record<string, { name: string; note?: string }>,
+    ) => {
+      expect(
+        data.map((r) => r.id),
+        label,
+      ).toEqual(spec.map((s) => s.id));
+      for (const [i, s] of spec.entries()) {
+        const r = data[i];
+        const at = `${label}:${s.id}`;
+        expect(r.feature, at).toBe(s.feature);
+        expect(r.unit, at).toBe(s.unit);
+        expect(r.recovery, at).toEqual(s.recovery);
+        for (const field of ['max', 'die', 'spellLevel'] as const) {
+          if (!fromTable(s[field])) expect(r[field], `${at} ${field}`).toEqual(s[field]);
+        }
+        expect(resourceTexts[s.id], at).toEqual(
+          s.note ? { name: s.name, note: s.note } : { name: s.name },
+        );
+      }
+    };
+
+    for (const c of classes) {
+      expect(c.subclasses, c.id).toHaveLength(1);
+      const [sub] = c.subclasses;
+      compare(c.id, c.resources, specs[c.id].class, texts[c.id].resources);
+      compare(
+        `${c.id}/${sub.id}`,
+        sub.resources,
+        specs[c.id].subclass,
+        texts[c.id].subclasses[sub.id].resources,
+      );
     }
   });
 });
