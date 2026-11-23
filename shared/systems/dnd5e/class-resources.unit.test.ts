@@ -327,6 +327,19 @@ describe('o que a jogadora mudou numa caixinha da classe', () => {
     expect(build(c, 3, { state: fixed })[0].max).toBe(4);
   });
 
+  it('o máximo 0 que ela pôs vence o da classe', () => {
+    const [box] = build(c, 3, { state: { [KEY]: { used: 2, overrides: { max: 0 } } } });
+    expect(box).toMatchObject({ max: 0, used: 0 });
+  });
+
+  it('a classe passar a dar menos não muda o que ficou salvo', () => {
+    const state = { [KEY]: { used: 3, overrides: { name: 'Fúria' } } };
+    const before = structuredClone(state);
+    const fewer = content('barbarian', [{ ...rage, max: once }]);
+    expect(build(fewer, 3, { state })[0]).toMatchObject({ name: 'Fúria', max: 1, used: 1 });
+    expect(state).toEqual(before);
+  });
+
   it('o máximo dela vale mesmo onde a classe diz ilimitado, e limita o que foi gasto', () => {
     const [box] = build(c, 20, { state: { [KEY]: { used: 9, overrides: { max: 6 } } } });
     expect(box).toMatchObject({ max: 6, used: 6 });

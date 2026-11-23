@@ -223,7 +223,12 @@
         "description": "You have mastered two of the Words of Creation: the words of life and death. You therefore always have the {@spell Power Word Heal|XPHB} and {@spell Power Word Kill|XPHB} spells prepared. When you cast either spell, you can target a second creature with it if that creature is within 10 feet of the first target."
       }
     },
-    "resources": { "bardic-inspiration": { "name": "Bardic Inspiration" } },
+    "resources": {
+      "bardic-inspiration": {
+        "name": "Bardic Inspiration",
+        "note": "From level 5, you can also expend a spell slot to regain one use."
+      }
+    },
     "choices": { "epic-boon": { "name": "Epic Boon" } },
     "subclasses": {
       "lore": {
@@ -1271,7 +1276,10 @@
         "name": "Innate Sorcery",
         "note": "From level 7, you can also use it by spending 2 Sorcery Points."
       },
-      "sorcery-points": { "name": "Sorcery Points" },
+      "sorcery-points": {
+        "name": "Sorcery Points",
+        "note": "Never more than your Sorcerer level, even from converting spell slots."
+      },
       "sorcerous-restoration": {
         "name": "Sorcerous Restoration",
         "note": "On a short rest, regain Sorcery Points up to half your Sorcerer level."
@@ -1397,7 +1405,7 @@
       "pact-slots": { "name": "Pact Magic Spell Slots" },
       "magical-cunning": {
         "name": "Magical Cunning",
-        "note": "Regain up to half your Pact Magic spell slots."
+        "note": "Regain up to half your Pact Magic spell slots; all of them from level 20."
       },
       "contact-patron": {
         "name": "Contact Patron",

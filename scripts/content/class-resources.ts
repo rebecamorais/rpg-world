@@ -23,11 +23,11 @@ const ONE_ON_SHORT: Recovery = [
 ];
 
 const once = (level: number) => ({ type: 'steps' as const, steps: [{ level, value: 1 }] });
-const byAbility = (ability: 'CHA' | 'WIS', bonus = 0) => ({
+const byAbility = (ability: 'CHA' | 'WIS', bonus = 0, minimum = 1) => ({
   type: 'ability' as const,
   ability,
   bonus,
-  minimum: 1,
+  minimum,
 });
 
 const SRD_51: Record<string, ResourceSpecs> = {
@@ -197,7 +197,8 @@ const SRD_51: Record<string, ResourceSpecs> = {
         name: 'Divine Sense',
         feature: 'divine-sense',
         unit: 'uses',
-        max: byAbility('CHA', 1),
+        // 1 + the Charisma modifier and nothing more: Charisma 8 gives no uses
+        max: byAbility('CHA', 1, 0),
         recovery: LONG,
       },
       {
@@ -255,6 +256,7 @@ const SRD_51: Record<string, ResourceSpecs> = {
       {
         id: 'sorcery-points',
         name: 'Sorcery Points',
+        note: 'Never more than your Sorcerer level, even from converting spell slots.',
         feature: 'font-of-magic',
         unit: 'points',
         max: { column: 'Sorcery Points' },
@@ -388,6 +390,7 @@ const SRD_52: Record<string, ResourceSpecs> = {
       {
         id: 'bardic-inspiration',
         name: 'Bardic Inspiration',
+        note: 'From level 5, you can also expend a spell slot to regain one use.',
         feature: 'bardic-inspiration',
         unit: 'uses',
         max: byAbility('CHA'),
@@ -652,6 +655,7 @@ const SRD_52: Record<string, ResourceSpecs> = {
       {
         id: 'sorcery-points',
         name: 'Sorcery Points',
+        note: 'Never more than your Sorcerer level, even from converting spell slots.',
         feature: 'font-of-magic',
         unit: 'points',
         max: { column: 'Sorcery Points' },
@@ -702,7 +706,7 @@ const SRD_52: Record<string, ResourceSpecs> = {
       {
         id: 'magical-cunning',
         name: 'Magical Cunning',
-        note: 'Regain up to half your Pact Magic spell slots.',
+        note: 'Regain up to half your Pact Magic spell slots; all of them from level 20.',
         feature: 'magical-cunning',
         unit: 'uses',
         max: once(2),
