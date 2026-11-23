@@ -1,13 +1,12 @@
-import type { Locator, Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 import { characterUrl, createCharacter, expect, hydrated, test } from './support/fixtures';
 
 // "10 lb" or "5 kg", by the screen's language
 const WEIGHT = /\d\s?(lb|kg)$/;
 
-/** The CSS text-transform the browser applies to an element. */
-const textTransform = (locator: Locator) =>
-  locator.evaluate((el) => getComputedStyle(el).textTransform);
+// text-transform is checked with the retrying toHaveCSS, not a one-shot getComputedStyle: the
+// list re-renders after an item is added, and a read on a just-detached node returns ""
 
 async function addRope(page: Page) {
   await (await hydrated(page.getByRole('button', { name: 'Add item' }).first())).click();
@@ -16,7 +15,7 @@ async function addRope(page: Page) {
   // The weight in the catalog row keeps its unit's case ("10 lb", not "10 LB")
   const rope = catalog.getByRole('button', { name: 'Add Rope', exact: true });
   await expect(rope.getByText(WEIGHT)).toBeVisible();
-  expect(await textTransform(rope.getByText(WEIGHT))).toBe('none');
+  await expect(rope.getByText(WEIGHT)).toHaveCSS('text-transform', 'none');
   const written = page.waitForResponse(
     (r) => r.url().includes('/inventory/items') && r.request().method() === 'POST' && r.ok(),
   );
@@ -42,7 +41,7 @@ test.describe('text-label só em rótulos curtos (causa 8)', () => {
       .locator('xpath=ancestor::div[contains(concat(" ", @class, " "), " rounded-xl ")][1]');
     const add = backpack.getByRole('button', { name: 'Add item' });
     await expect(add).toBeVisible();
-    expect(await textTransform(add)).toBe('none');
+    await expect(add).toHaveCSS('text-transform', 'none');
 
     // The header wraps instead of pushing the button past the card's right edge
     const card = await backpack.boundingBox();
@@ -57,8 +56,8 @@ test.describe('text-label só em rótulos curtos (causa 8)', () => {
     // The group's weight ("10 lb") keeps its unit's case; the group's name is the label
     const group = backpack.getByRole('region').first();
     const weight = group.getByText(WEIGHT).first();
-    expect(await textTransform(weight)).toBe('none');
-    expect(await textTransform(group.getByRole('heading', { level: 3 }))).toBe('uppercase');
+    await expect(weight).toHaveCSS('text-transform', 'none');
+    await expect(group.getByRole('heading', { level: 3 })).toHaveCSS('text-transform', 'uppercase');
   });
 
   test('o botão "Add spell" do grimório não fica em caixa alta', async ({ page, user: _ }) => {
@@ -66,6 +65,6 @@ test.describe('text-label só em rótulos curtos (causa 8)', () => {
     await page.goto(characterUrl(id, '/spells'));
 
     const add = await hydrated(page.getByRole('button', { name: 'Add spell' }).first());
-    expect(await textTransform(add)).toBe('none');
+    await expect(add).toHaveCSS('text-transform', 'none');
   });
 });
