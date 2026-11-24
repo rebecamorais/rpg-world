@@ -91,6 +91,21 @@ export function SpellsTab() {
 
   const preparedCount = spells.filter((s) => s.isPrepared).length;
 
+  // The empty state's "Add spell" goes away once a spell is learned with the search open: on
+  // close, the header's button takes the focus instead of the page's top
+  const opener = useRef<Element | null>(null);
+  const openSearch = () => {
+    opener.current = document.activeElement;
+    setIsSearchOpen(true);
+  };
+  const focusAfterSearch = (event: Event) => {
+    const gone = opener.current && !opener.current.isConnected;
+    opener.current = null;
+    if (!gone || !addRef.current) return;
+    event.preventDefault();
+    addRef.current.focus();
+  };
+
   const actions = (
     <div className="flex items-center gap-3 md:gap-6">
       <span className="text-label text-muted-foreground">
@@ -101,7 +116,7 @@ export function SpellsTab() {
           ref={addRef}
           variant="outline"
           size="sm"
-          onClick={() => setIsSearchOpen(true)}
+          onClick={openSearch}
           // No text-label: buttons keep the case of their text
           className="h-8 px-3"
         >
@@ -131,7 +146,7 @@ export function SpellsTab() {
             characterSpells={spells}
             onForgetSpell={readOnly ? undefined : forgetFromSpellbook}
             onTogglePrepared={readOnly ? undefined : togglePrepared}
-            onAddSpell={readOnly ? undefined : () => setIsSearchOpen(true)}
+            onAddSpell={readOnly ? undefined : openSearch}
           />
         </div>
       )}
@@ -144,6 +159,7 @@ export function SpellsTab() {
           learnedSpells={spells.map((s) => s.id)}
           onLearnSpell={learnSpell}
           onForgetSpell={forgetSpell}
+          onCloseAutoFocus={focusAfterSearch}
         />
       )}
     </SheetPage>

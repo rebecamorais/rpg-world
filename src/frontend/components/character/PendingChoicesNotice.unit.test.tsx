@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithCharacter } from '@tests/helpers/character';
 import { readFileSync } from 'node:fs';
@@ -245,5 +245,37 @@ describe('PendingChoicesNotice', () => {
     );
 
     expect(notice()).not.toBeInTheDocument();
+  });
+});
+
+describe('PendingChoicesNotice: foco ao concluir a última', () => {
+  // "Done" on the last open pick takes the notice away, "Resolve" with it: the focus would fall
+  // to the page's top
+  it('concluir a última leva o foco ao título da página', async () => {
+    const character = {
+      ...base,
+      id: 'c1',
+      level: 1,
+      class: 'bard',
+      edition: '2014',
+      ...BARD_2_OF_3,
+      dismissedChoices: ['2014/bard/tools'],
+    } as DnD5eCharacter;
+    renderWithCharacter(
+      <main id="main-content" tabIndex={-1}>
+        <h1>Elminster</h1>
+        <PendingChoicesNotice />
+      </main>,
+      character,
+    );
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: 'Resolve: Skills' }));
+    const dialog = screen.getByRole('dialog', { name: 'Bard: Skills' });
+    await user.click(within(dialog).getByRole('checkbox', { name: 'Stealth' }));
+    await user.click(within(dialog).getByRole('button', { name: 'Done' }));
+
+    expect(notice()).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole('heading', { level: 1 })).toHaveFocus());
   });
 });

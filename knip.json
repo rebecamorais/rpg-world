@@ -8,6 +8,7 @@
     "test/vitest.config.mutation.ts"
   ],
   "ignore": ["lib/types/database.ts"],
+  "ignoreBinaries": ["taskset"],
   "ignoreDependencies": ["@stryker-mutator/api", "@stryker-mutator/command-runner"],
   "ignoreIssues": {
     "src/frontend/components/ui/**": ["exports", "types"]

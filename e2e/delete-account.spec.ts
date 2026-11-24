@@ -5,6 +5,9 @@ import { expect, hydrated, signIn, test } from './support/fixtures';
 import { linkIn, waitForEmail } from './support/mailbox';
 import { PASSWORD, type TestUser, adminClient, createUser, uniqueEmail } from './support/supabase';
 
+/** Usernames are unique: a fixed one breaks the second run of `--repeat-each` (the weekly hunt). */
+const uniqueUsername = (name: string) => `${name}_${crypto.randomUUID().slice(0, 8)}`;
+
 /** The username a person typed to confirm has to be one they chose. */
 async function chooseUsername(user: TestUser, username: string) {
   const { error } = await adminClient()
@@ -63,7 +66,8 @@ async function deletionLink(user: TestUser) {
 
 test('com senha: pede na zona de perigo, confirma pelo e-mail e a conta some', async ({ page }) => {
   const user = await createUser('delete-password');
-  await chooseUsername(user, 'thorin_e2e');
+  const thorin = uniqueUsername('thorin');
+  await chooseUsername(user, thorin);
   await signIn(page, user);
   await page.goto('/settings/profile');
 
@@ -77,7 +81,7 @@ test('com senha: pede na zona de perigo, confirma pelo e-mail e a conta some', a
   await expect(send).toBeDisabled();
   expect(await violations(page)).toEqual([]);
 
-  await dialog.getByLabel('Your username').fill('thorin_e2e');
+  await dialog.getByLabel('Your username').fill(thorin);
   await dialog.getByLabel('Password').fill(PASSWORD);
   await send.click();
   await expect(dialog.getByText('Check your e-mail')).toBeVisible();
@@ -85,7 +89,7 @@ test('com senha: pede na zona de perigo, confirma pelo e-mail e a conta some', a
   // Opening the link only shows the account: nothing is deleted yet
   await page.goto(await deletionLink(user));
   await expect(page.getByRole('heading', { name: 'Confirm account deletion' })).toBeVisible();
-  await expect(page.getByText('thorin_e2e')).toBeVisible();
+  await expect(page.getByText(thorin)).toBeVisible();
   expect(await violations(page)).toEqual([]);
   expect(page.url()).not.toContain('next=');
   await page.reload();
@@ -104,13 +108,14 @@ test('com senha: pede na zona de perigo, confirma pelo e-mail e a conta some', a
 });
 
 test('sem senha: só o username e o link do e-mail', async ({ page, browser }) => {
-  const user = await signInWithoutPassword(page, 'bilbo_e2e');
+  const bilbo = uniqueUsername('bilbo');
+  const user = await signInWithoutPassword(page, bilbo);
   await page.goto('/settings/profile');
 
   await (await hydrated(page.getByRole('button', { name: 'Delete my account' }))).click();
   const dialog = page.getByRole('dialog');
   await expect(dialog.getByLabel('Password')).toHaveCount(0);
-  await dialog.getByLabel('Your username').fill('bilbo_e2e');
+  await dialog.getByLabel('Your username').fill(bilbo);
   await dialog.getByRole('button', { name: 'Send confirmation e-mail' }).click();
   await expect(dialog.getByText('Check your e-mail')).toBeVisible();
 
@@ -130,13 +135,14 @@ test('sem senha: só o username e o link do e-mail', async ({ page, browser }) =
 
 test('senha errada fica no campo e leva a "esqueci minha senha"', async ({ page }) => {
   const user = await createUser('delete-wrong-password');
-  await chooseUsername(user, 'frodo_e2e');
+  const frodo = uniqueUsername('frodo');
+  await chooseUsername(user, frodo);
   await signIn(page, user);
   await page.goto('/settings/profile');
 
   await (await hydrated(page.getByRole('button', { name: 'Delete my account' }))).click();
   const dialog = page.getByRole('dialog');
-  await dialog.getByLabel('Your username').fill('frodo_e2e');
+  await dialog.getByLabel('Your username').fill(frodo);
   await dialog.getByLabel('Password').fill('not-the-password');
   await dialog.getByRole('button', { name: 'Send confirmation e-mail' }).click();
 
@@ -168,7 +174,8 @@ test('a página do link não se indexa nem manda o endereço adiante', async ({ 
 
 test('no celular, a zona de perigo e o diálogo cabem na tela e passam no axe', async ({ page }) => {
   const user = await createUser('delete-phone');
-  await chooseUsername(user, 'sam_e2e');
+  const sam = uniqueUsername('sam');
+  await chooseUsername(user, sam);
   await signIn(page, user);
   await page.setViewportSize({ width: 360, height: 640 });
   await page.goto('/settings/profile');
@@ -191,7 +198,8 @@ test('a sessão antiga de outro aparelho cai no login depois da exclusão, sem l
   browser,
 }) => {
   const user = await createUser('delete-stale');
-  await chooseUsername(user, 'pippin_e2e');
+  const pippin = uniqueUsername('pippin');
+  await chooseUsername(user, pippin);
 
   const old = await browser.newContext();
   const oldPage = await old.newPage();
@@ -203,7 +211,7 @@ test('a sessão antiga de outro aparelho cai no login depois da exclusão, sem l
   const phone = await browser.newContext();
   const phonePage = await phone.newPage();
   await signIn(phonePage, user);
-  await requestDeletion(phonePage, 'pippin_e2e', PASSWORD);
+  await requestDeletion(phonePage, pippin, PASSWORD);
   await phonePage.goto(await deletionLink(user));
   await phonePage.getByRole('button', { name: 'Delete my account for good' }).click();
   await expect(phonePage).toHaveURL(/\/\?accountDeleted=1$/);

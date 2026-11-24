@@ -13,6 +13,10 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 1 : 0,
+  // A test that fails and then passes on the retry fails the run: it shows on the PR that made it
+  // flaky, instead of weeks later on someone else's. The weekly hunt (e2e-flake-hunt.yml) runs
+  // without retries and repeats the suite, to catch the ones a single run misses
+  failOnFlakyTests: isCI,
   reporter: isCI ? [['github'], ['html', { open: 'never' }]] : 'list',
   use: {
     baseURL: BASE_URL,

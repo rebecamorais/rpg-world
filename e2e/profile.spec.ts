@@ -104,7 +104,8 @@ test('troca o avatar, servido pelo proxy com uma URL nova a cada envio', async (
   const avatar = profileAvatar(page);
 
   async function upload(previousSrc: string | null) {
-    await page.getByTestId('image-upload-input').setInputFiles(AVATAR);
+    // Before hydration the file is picked but nobody hears the change, and the crop never opens
+    await (await hydrated(page.getByTestId('image-upload-input'))).setInputFiles(AVATAR);
     await page.getByRole('dialog').getByRole('button', { name: 'Save' }).click();
     if (previousSrc) await expect(avatar).not.toHaveAttribute('src', previousSrc);
     await expect(avatar).toHaveAttribute('src', new RegExp(`/api/images/avatars/${user.id}/`));

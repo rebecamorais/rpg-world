@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { rpgWorldApi } from '@client';
 
 import { UserProvider } from '@frontend/context/UserContext';
+import { partyQueryKey } from '@frontend/lib/query-keys';
 
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
@@ -330,6 +331,54 @@ describe('Aba Mesa: vazios e respostas do mestre', () => {
         expect(screen.queryByRole('dialog', { name: t.mine.title })).not.toBeInTheDocument(),
       );
       expect(screen.getByRole('heading', { name: t.page.characters })).toHaveFocus();
+    } finally {
+      mine.characters = [];
+    }
+  });
+
+  // e2e party-table:68 under load: the realtime refetch cancels the save's own, so the dialog
+  // closes with the cache still empty and the roster arrives a moment later
+  it('se a lista chega depois de fechar, o foco sai do botão que sumiu e vai à lista', async () => {
+    mine.characters = [{ id: 'c1', name: 'Arani', level: 3, class: 'wizard' }];
+    try {
+      const { queryClient } = renderPage(party({ hasGm: true }));
+      vi.mocked(rpgWorldApi.put).mockResolvedValue(undefined);
+      const user = userEvent.setup();
+      await user.click(await screen.findByRole('button', { name: t.page.chooseCharacters }));
+      const dialog = await screen.findByRole('dialog', { name: t.mine.title });
+      await user.click(within(dialog).getByRole('checkbox', { name: /Arani/ }));
+      await user.click(within(dialog).getByRole('button', { name: t.mine.save }));
+      await waitFor(() =>
+        expect(screen.queryByRole('dialog', { name: t.mine.title })).not.toBeInTheDocument(),
+      );
+      // Still the empty table: the focus is back on the button that opened the dialog
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: t.page.chooseCharacters })).toHaveFocus(),
+      );
+
+      queryClient.setQueryData(
+        partyQueryKey('p1'),
+        party({
+          hasGm: true,
+          myCharacterIds: ['c1'],
+          roster: [
+            {
+              characterId: 'c1',
+              ownerId: 'ana',
+              name: 'Arani',
+              avatarUrl: null,
+              race: 'elf',
+              class: 'wizard',
+              level: 3,
+              accentColor: null,
+            },
+          ],
+        }),
+      );
+
+      await waitFor(() =>
+        expect(screen.getByRole('heading', { name: t.page.characters })).toHaveFocus(),
+      );
     } finally {
       mine.characters = [];
     }

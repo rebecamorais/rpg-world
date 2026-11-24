@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { APIError, rpgWorldApi } from '@client';
 
 import { UserProvider } from '@frontend/context/UserContext';
-import { PARTIES_QUERY_KEY } from '@frontend/lib/query-keys';
+import { PARTIES_QUERY_KEY, partyInviteQueryKey } from '@frontend/lib/query-keys';
 
 import { INVITE_POLL_MS, JoinPartyCard } from './JoinPartyCard';
 
@@ -59,6 +59,29 @@ describe('JoinPartyCard', () => {
 
     expect(await screen.findByText(t.join.requested)).toBeInTheDocument();
     expect(invalidate).toHaveBeenCalledWith({ queryKey: PARTIES_QUERY_KEY });
+  });
+
+  // The answer lands on the cache as it is then, not on the invite this render saw before the
+  // request: a poll (or a refetch) that came in meanwhile keeps its news
+  it('pedir para entrar mantém o que chegou ao cache enquanto o pedido ia', async () => {
+    let answer!: (value: { status: Status }) => void;
+    vi.mocked(rpgWorldApi.post).mockImplementation(
+      () => new Promise((resolve) => (answer = resolve as typeof answer)),
+    );
+    const { queryClient } = renderCard(null);
+
+    await userEvent.setup().click(screen.getByRole('button', { name: t.join.request }));
+    act(() => {
+      queryClient.setQueryData(partyInviteQueryKey('a'.repeat(32)), {
+        ...invite,
+        name: 'Mesa Nova',
+      });
+    });
+    await act(async () => answer({ status: 'requested' }));
+
+    expect(await screen.findByText(t.join.requested)).toBeInTheDocument();
+    expect(screen.getByText('Mesa Nova')).toBeInTheDocument();
+    expect(screen.queryByText('Mesa')).not.toBeInTheDocument();
   });
 
   it('mesa sem mestre avisa e não oferece entrar nem aceitar', () => {

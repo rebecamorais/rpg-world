@@ -96,7 +96,12 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
       // The party list (sidebar, /parties) shows the new invite or request status
       await queryClient.invalidateQueries({ queryKey: PARTIES_QUERY_KEY });
       if (next === 'active') router.push(`/parties/${shown.partyId}`);
-      else queryClient.setQueryData<InvitePreview>(queryKey, { ...shown, myStatus: next });
+      // On the cache as it is now: a poll may have brought news while the request went
+      else
+        queryClient.setQueryData<InvitePreview>(queryKey, (prev) => ({
+          ...(prev ?? shown),
+          myStatus: next,
+        }));
       if (done) toast.success(done);
     } catch (err) {
       // The link changed (or the party went) while the page was open: asking again shows where
