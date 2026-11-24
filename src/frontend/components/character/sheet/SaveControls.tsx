@@ -4,9 +4,11 @@ import {
   type CSSProperties,
   type ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
+  useSyncExternalStore,
 } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -47,9 +49,51 @@ interface SaveControlsProps {
  * save button) and the Lore tab (one bar saves the lore and the sheet together).
  */
 interface SaveBarSlot {
-  element: HTMLElement | null;
+  /** The column's element, set by its ref once it mounts. */
+  setElement: (element: HTMLElement | null) => void;
+  getElement: () => HTMLElement | null;
+  subscribe: (listener: () => void) => () => void;
   /** Called by SaveCharacterButton while mounted; returns the cleanup. */
   claimCharacterBar: () => () => void;
+}
+
+/**
+ * The context value never changes. The slot's ref fires as the sheet hydrates, while the tab below
+ * may still be a streamed Suspense boundary waiting to be revealed. A new context value then would
+ * make React drop that boundary's server HTML and render it again in the browser, and for a moment
+ * the page had the tab twice (the e2e saw two "AC" fields). The element goes through a store instead.
+ */
+function createSaveBarSlot(onClaimsChange: (change: number) => void): SaveBarSlot {
+  let element: HTMLElement | null = null;
+  const listeners = new Set<() => void>();
+  return {
+    setElement: (next) => {
+      if (next === element) return;
+      element = next;
+      listeners.forEach((listener) => listener());
+    },
+    getElement: () => element,
+    subscribe: (listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+    claimCharacterBar: () => {
+      onClaimsChange(1);
+      return () => onClaimsChange(-1);
+    },
+  };
+}
+
+const noElement = () => null;
+const noSubscription = () => () => {};
+
+/** The column's element; null on the server, while hydrating and outside a sheet. */
+function useSlotElement(slot: SaveBarSlot | null): HTMLElement | null {
+  return useSyncExternalStore(
+    slot?.subscribe ?? noSubscription,
+    slot?.getElement ?? noElement,
+    noElement,
+  );
 }
 
 /**
@@ -113,22 +157,17 @@ export function SaveBarSlotProvider({
   className?: string;
   style?: CSSProperties;
 }) {
-  const [element, setElement] = useState<HTMLElement | null>(null);
   const [claims, setClaims] = useState(0);
-  const [slot] = useState<Omit<SaveBarSlot, 'element'>>(() => ({
-    claimCharacterBar: () => {
-      setClaims((n) => n + 1);
-      return () => setClaims((n) => n - 1);
-    },
-  }));
-  useReserveSaveBarSpace(element);
+  const [slot] = useState(() => createSaveBarSlot((change) => setClaims((n) => n + change)));
+  const attachSlot = useCallback((element: HTMLElement | null) => slot.setElement(element), [slot]);
+  useReserveSaveBarSpace(useSlotElement(slot));
 
   return (
-    <SaveBarSlotContext.Provider value={{ element, ...slot }}>
+    <SaveBarSlotContext.Provider value={slot}>
       {children}
       {claims === 0 && <CharacterSaveBar />}
       <div
-        ref={setElement}
+        ref={attachSlot}
         data-save-bar-slot
         className={cn(
           SAVE_BAR_POSITION,
@@ -143,7 +182,7 @@ export function SaveBarSlotProvider({
 
 /** The sheet's column of fixed bottom bars, or null outside a sheet. */
 export function useSaveBarSlot(): HTMLElement | null {
-  return useContext(SaveBarSlotContext)?.element ?? null;
+  return useSlotElement(useContext(SaveBarSlotContext));
 }
 
 /**
