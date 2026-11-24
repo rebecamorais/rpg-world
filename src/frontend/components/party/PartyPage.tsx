@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -29,6 +29,7 @@ import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useEncounter } from '@frontend/hooks/useEncounter';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useParty } from '@frontend/hooks/useParty';
+import { useLeaveGuard } from '@frontend/hooks/useUnsavedChanges';
 
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
@@ -245,6 +246,22 @@ export function MyPartyMenu({
   const [ownOpen, setOwnOpen] = useState(false);
   const isOpen = open ?? ownOpen;
   const setOpen = onOpenChange ?? setOwnOpen;
+  const tCommon = useTranslations('common');
+  const pathname = usePathname();
+  // Picks not saved yet: closing (X, Esc, a tap outside) or leaving the page asks first
+  const [dirty, setDirty] = useState(false);
+  useLeaveGuard(isOpen && dirty, (path) => path === pathname, tCommon('leaveConfirm'));
+
+  const closeOrAsk = async (next: boolean) => {
+    if (next || !dirty) return setOpen(next);
+    const ok = await confirm({
+      title: tCommon('discardConfirmTitle'),
+      description: tCommon('discardConfirm'),
+      confirmLabel: tCommon('discard'),
+      destructive: true,
+    });
+    if (ok) setOpen(false);
+  };
 
   // Saved, it closes: the toast says it worked, and the dialog has nothing left to do
   const save = async (characterIds: string[]) => {
@@ -281,7 +298,7 @@ export function MyPartyMenu({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={closeOrAsk}>
       {open === undefined && (
         <DialogTrigger asChild>
           <Button variant="outline">
@@ -302,6 +319,7 @@ export function MyPartyMenu({
           selected={party.myCharacterIds}
           onSave={save}
           isSaving={setMyCharacters.isPending}
+          onDirtyChange={setDirty}
         />
         {/* Apart from Save, below a rule: leaving is not one more way to save the list */}
         <div className="border-border border-t pt-4">

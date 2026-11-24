@@ -19,6 +19,7 @@ import {
 } from '@frontend/components/ui/dialog';
 import { Spinner } from '@frontend/components/ui/spinner';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@frontend/components/ui/tooltip';
+import { useLeaveGuard } from '@frontend/hooks/useUnsavedChanges';
 
 // The header is on every page, but the form (react-hook-form, zod, Turnstile) is only
 // needed once someone opens the dialog
@@ -41,6 +42,9 @@ export function HeaderSupportLink({ email = '' }: { email?: string }) {
   // The form unmounts with the dialog: what was typed is kept here, so an Esc or a tap outside
   // doesn't throw it away. A sent message clears it.
   const [draft, setDraft] = useState<FeedbackDraft | null>(null);
+  // Closing the tab is the one way left to lose a written message: ask first. Links don't count,
+  // as the header (and the draft with it) stays across pages
+  useLeaveGuard(!!draft?.message?.trim(), () => true, t('leaveConfirm'));
   // Closing the dialog gives focus back to the button, which would pop the tooltip up again
   const skipNextTooltip = useRef(false);
 
