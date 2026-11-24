@@ -131,9 +131,15 @@ export const test = base.extend<Fixtures>({
     async ({ page }, use) => {
       const errors: string[] = [];
       page.on('console', (message) => {
-        // Chrome also logs every 4xx/5xx response; tests assert expected statuses themselves
-        if (message.type() === 'error' && !message.text().startsWith('Failed to load resource')) {
-          errors.push(message.text());
+        const text = message.text();
+        if (
+          message.type() === 'error' &&
+          // Chrome also logs every 4xx/5xx response; tests assert expected statuses themselves
+          !text.startsWith('Failed to load resource') &&
+          // Only `setOffline(true)` makes it: the realtime socket retrying while the test is offline
+          !text.includes('net::ERR_INTERNET_DISCONNECTED')
+        ) {
+          errors.push(text);
         }
       });
       page.on('pageerror', (error) => errors.push(error.message));
