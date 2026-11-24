@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -141,6 +141,18 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
   const [mineOpen, setMineOpen] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const queryClient = useQueryClient();
+  // The empty table's button had the focus. The roster can arrive after the dialog closed (a
+  // realtime refetch cancels the save's own, and the save resolves early): the button then goes
+  // with the empty state, and the focus would drop to the top of the page
+  const emptyActionFocused = useRef(false);
+  const filled = (party?.roster.length ?? 0) > 0;
+  useEffect(() => {
+    if (!filled || !emptyActionFocused.current) return;
+    emptyActionFocused.current = false;
+    if (document.activeElement === document.body || document.activeElement === null) {
+      heading.current?.focus();
+    }
+  }, [filled]);
   if (!party) return null;
 
   if (party.role === 'gm') {
@@ -188,7 +200,16 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
           people={party.people}
           myCharacterIds={party.myCharacterIds}
           // The empty table leads straight to picking who to bring
-          emptyAction={<Button onClick={() => setMineOpen(true)}>{t('chooseCharacters')}</Button>}
+          emptyAction={
+            <Button
+              onClick={() => setMineOpen(true)}
+              // A removed element fires no blur, so this stays true when the button goes away
+              onFocus={() => (emptyActionFocused.current = true)}
+              onBlur={() => (emptyActionFocused.current = false)}
+            >
+              {t('chooseCharacters')}
+            </Button>
+          }
         />
       </section>
       {/* Outside the roster's empty state: saving fills the table, and that would unmount it
