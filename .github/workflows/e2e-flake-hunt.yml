@@ -1,0 +1,153 @@
+name: E2E Flake Hunt
+
+# Caça semanal de testes e2e instáveis na main: roda a suíte 3 vezes, sem retry, e posta no
+# Discord quais testes falharam alguma vez. Não bloqueia nada: é para achar o instável antes
+# que ele caia no PR de alguém. Para reproduzir um achado local: npm run test:e2e:ci-like.
+on:
+  schedule:
+    # Segunda-feira, 09:00 UTC (06:00 em Brasília)
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-flake-hunt
+  cancel-in-progress: true
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Playwright version
+        id: playwright
+        run: echo "version=$(npx playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright Browser
+        id: playwright-cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium
+
+      - name: Install Playwright Browser
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Playwright System Dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      - name: Initialize Database Structure (Symlinks)
+        run: npm run infra sync
+
+      - name: Start Supabase Test Environment
+        run: npx supabase start --workdir database/db-test
+
+      # Sem retry: aqui o que interessa é contar as falhas, não passar
+      - name: Run E2E 3 times
+        continue-on-error: true
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: results.json
+        run: npx playwright test --repeat-each=3 --retries=0 --reporter=line,json
+
+      - name: Summarize failures
+        id: summary
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ ! -s results.json ]; then
+            echo "Sem results.json: a suíte não chegou a rodar."
+            echo "broken=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Uma linha por teste que falhou alguma vez: "N/M  arquivo:linha › título [projeto]"
+          jq -r '
+            [.. | objects | select(has("specs")) | .specs[]
+              | . as $spec | .tests[]
+              | { key: "\($spec.file):\($spec.line) › \($spec.title) [\(.projectName)]",
+                  failed: ([.results[] | select(.status == "failed" or .status == "timedOut" or .status == "interrupted")] | length),
+                  total: (.results | length) } ]
+            | group_by(.key)
+            | map({ key: .[0].key, failed: (map(.failed) | add), total: (map(.total) | add) })
+            | map(select(.failed > 0))
+            | sort_by(-.failed)
+            | .[] | "\(.failed)/\(.total)  \(.key)"
+          ' results.json > flaky.txt
+          TOTAL=$(jq '[.. | objects | select(has("specs")) | .specs[]] | length' results.json)
+          echo "total=$TOTAL" >> "$GITHUB_OUTPUT"
+          echo "count=$(wc -l < flaky.txt | tr -d ' ')" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Testes que falharam alguma vez em 3 rodadas"
+            echo
+            if [ -s flaky.txt ]; then sed 's/^/- /' flaky.txt; else echo "Nenhum."; fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Post to Discord
+        if: always()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          COUNT: ${{ steps.summary.outputs.count }}
+          TOTAL: ${{ steps.summary.outputs.total }}
+          BROKEN: ${{ steps.summary.outputs.broken }}
+        run: |
+          set -euo pipefail
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "Secret DISCORD_WEBHOOK_URL não configurado. Nada a postar."
+            exit 0
+          fi
+
+          if [ "${BROKEN:-}" = "true" ]; then
+            TITLE="🔧 Caça de instáveis: a suíte e2e não rodou"
+            DESC="Veja o log da execução."
+            COLOR=15548997
+          elif [ "${COUNT:-0}" = "0" ]; then
+            TITLE="🧪 Caça de instáveis: nenhum"
+            DESC="$TOTAL testes, 3 rodadas, nenhuma falha."
+            COLOR=5763719
+          else
+            TITLE="🧪 Caça de instáveis: $COUNT teste(s) falharam alguma vez"
+            # O Discord corta a descrição em 4096 caracteres
+            DESC=$(printf 'Falhas/rodadas, em %s testes:\n```\n%s\n```\nPara reproduzir: `npm run test:e2e:ci-like -- <arquivo>:<linha> --repeat-each=10 --retries=0`' "$TOTAL" "$(head -c 3200 flaky.txt)")
+            COLOR=16705372
+          fi
+
+          jq -n \
+            --arg title "$TITLE" \
+            --arg url "$RUN_URL" \
+            --arg desc "$DESC" \
+            --argjson color "$COLOR" \
+            '{
+              allowed_mentions: { parse: [] },
+              embeds: [{ title: $title, url: $url, description: $desc, color: $color }]
+            }' > payload.json
+
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            --data @payload.json "$DISCORD_WEBHOOK_URL"
+
+      - name: Upload Playwright Report
+        if: always() && steps.summary.outputs.count != '0'
+        uses: actions/upload-artifact@v7
+        with:
+          name: flake-hunt-report
+          path: |
+            playwright-report/
+            test-results/
+            results.json
+          retention-days: 14
