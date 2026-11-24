@@ -253,7 +253,9 @@ test.describe('salvar sem envio duplicado', () => {
     await page.keyboard.press('Enter');
     await page.keyboard.press('Enter');
 
-    await expect(page.getByText('HP 26 / 38')).toBeVisible();
+    // In the toast: the closing sheet shows the new HP too while it animates out
+    const toasts = page.getByRole('region', { name: /Notifications/ });
+    await expect(toasts.getByText('HP 26 / 38')).toBeVisible();
     await expect(hitPoints(page)).toHaveValue('26');
     expect(puts).toHaveLength(1);
   });
