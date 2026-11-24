@@ -1500,6 +1500,12 @@
     "home": "Ir para o início",
     "characters": "Ir para meus personagens"
   },
+  "errorPage": {
+    "title": "Algo deu errado",
+    "description": "Esta página não carregou. Tente de novo; se o erro continuar, conte para a gente o que você estava fazendo.",
+    "support": "Falar com o suporte",
+    "reference": "Código de referência: {code}"
+  },
   "chooseUsername": {
     "title": "Escolha seu nome de usuário",
     "description": "É por ele que o mestre te encontra para convidar para uma mesa. Dá para trocar depois no perfil.",

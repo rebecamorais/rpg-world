@@ -14,8 +14,11 @@ import './globals.css';
 export const metadata: Metadata = { title: 'Page not found · Página não encontrada' };
 
 /**
- * The 404 for any URL no route matches. The root layout is app/[locale], which a 404 can't
- * compose with, so this page brings its own document, styles and fonts. It doesn't know the
+ * The last-resort 404. The app's pages answer theirs in (app)/not-found.tsx, with the header and
+ * the sidebar ((app)/[...rest] catches the URLs no page matches); this one is left for what never
+ * reaches app/[locale]: the URLs the proxy skips (/api/x, a missing /x.png).
+ * The root layout is app/[locale], which a 404 can't compose with, so this page brings its own
+ * document, styles and fonts. It doesn't know the
  * visitor's language, so it says it in both. Signed in, the way out in the page is the app (the
  * characters), not the landing page; the logo goes home, as in the site's header.
  */

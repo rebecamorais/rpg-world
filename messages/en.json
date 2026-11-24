@@ -1500,6 +1500,12 @@
     "home": "Go to the home page",
     "characters": "Go to my characters"
   },
+  "errorPage": {
+    "title": "Something went wrong",
+    "description": "This page didn't load. Try again; if the error keeps happening, tell us what you were doing.",
+    "support": "Contact support",
+    "reference": "Reference code: {code}"
+  },
   "chooseUsername": {
     "title": "Choose your username",
     "description": "It's how your game master finds you to invite you to a party. You can change it later in your profile.",

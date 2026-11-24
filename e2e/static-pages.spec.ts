@@ -96,25 +96,41 @@ test('o app continua sem prefixo: /pt/characters volta para /characters, em port
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt');
 });
 
-test('uma página que não existe responde 404 com o layout do site', async ({ page }) => {
+test('uma página que não existe responde 404 com o header do site e leva ao início', async ({
+  page,
+}) => {
   const response = await page.goto('/esta-pagina-nao-existe');
 
   expect(response?.status()).toBe(404);
-  await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Página não encontrada' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible();
+  // The site's header, signed out
+  await expect(page.getByRole('banner').getByRole('link', { name: 'Sign in' })).toBeVisible();
   await expect(
-    page.getByRole('banner').getByRole('link', { name: 'Go to the home page' }),
-  ).toBeVisible();
+    page.getByRole('main').getByRole('link', { name: 'Go to the home page' }),
+  ).toHaveAttribute('href', '/');
 });
 
-test('logada, o 404 leva aos personagens, não à landing', async ({ page, user: _ }) => {
+test('o 404 sai no idioma de quem visita', async ({ page }) => {
+  await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'pt', url: BASE_URL }]);
   const response = await page.goto('/esta-pagina-nao-existe');
 
   expect(response?.status()).toBe(404);
-  // The logo stays the site's: home, as in the signed-in header
   await expect(
-    page.getByRole('banner').getByRole('link', { name: 'Go to the home page' }),
-  ).toHaveAttribute('href', '/');
+    page.getByRole('heading', { level: 1, name: 'Página não encontrada' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('main').getByRole('link', { name: 'Ir para o início' }),
+  ).toHaveAttribute('href', '/pt');
+});
+
+test('logada, o 404 fica dentro do app, com o menu, e leva aos personagens', async ({
+  page,
+  user: _,
+}) => {
+  const response = await page.goto('/esta-pagina-nao-existe');
+
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
   await page.getByRole('main').getByRole('link', { name: 'Go to my characters' }).click();
   await expect(page).toHaveURL(/\/characters$/);
 });
