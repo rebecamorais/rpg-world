@@ -2,7 +2,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
 import { toast } from 'sonner';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
 
@@ -197,6 +197,81 @@ describe('Abas da mesa', () => {
 
     await userEvent.setup().click(screen.getByRole('button', { name: t.mine.open }));
     expect(await screen.findByRole('dialog', { name: t.mine.title })).toBeInTheDocument();
+  });
+});
+
+describe('Minha participação: escolha não salva', () => {
+  const tCommon = messages.common;
+  const leavingAsks = () => {
+    const event = new Event('beforeunload', { cancelable: true });
+    window.dispatchEvent(event);
+    return event.defaultPrevented;
+  };
+
+  beforeEach(() => {
+    demo.isDemo = false;
+    encounter.view = null;
+    vi.clearAllMocks();
+    mine.characters = [{ id: 'c1', name: 'Arani', level: 3, class: 'wizard' }];
+  });
+  afterEach(() => {
+    mine.characters = [];
+  });
+
+  async function openAndPick() {
+    renderPage(party({ hasGm: true }));
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole('button', { name: t.mine.open }));
+    const dialog = await screen.findByRole('dialog', { name: t.mine.title });
+    await user.click(within(dialog).getByRole('checkbox', { name: /Arani/ }));
+    return user;
+  }
+
+  it('fechar pergunta antes; Cancelar continua editando com a escolha', async () => {
+    const user = await openAndPick();
+
+    await user.keyboard('{Escape}');
+    const ask = await screen.findByRole('alertdialog', { name: tCommon.discardConfirmTitle });
+    await user.click(within(ask).getByRole('button', { name: tCommon.cancel }));
+
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument());
+    const dialog = screen.getByRole('dialog', { name: t.mine.title });
+    expect(within(dialog).getByRole('checkbox', { name: /Arani/ })).toBeChecked();
+  });
+
+  it('Descartar fecha o diálogo, e ao abrir de novo a escolha voltou à salva', async () => {
+    const user = await openAndPick();
+
+    await user.keyboard('{Escape}');
+    const ask = await screen.findByRole('alertdialog', { name: tCommon.discardConfirmTitle });
+    await user.click(within(ask).getByRole('button', { name: tCommon.discard }));
+
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog', { name: t.mine.title })).not.toBeInTheDocument(),
+    );
+    await user.click(screen.getByRole('button', { name: t.mine.open }));
+    const dialog = await screen.findByRole('dialog', { name: t.mine.title });
+    expect(within(dialog).getByRole('checkbox', { name: /Arani/ })).not.toBeChecked();
+  });
+
+  it('sem mudança, fecha direto', async () => {
+    renderPage(party({ hasGm: true }));
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole('button', { name: t.mine.open }));
+    await screen.findByRole('dialog', { name: t.mine.title });
+
+    await user.keyboard('{Escape}');
+
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog', { name: t.mine.title })).not.toBeInTheDocument(),
+    );
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+  });
+
+  it('com a escolha não salva, fechar a aba pede confirmação', async () => {
+    expect(leavingAsks()).toBe(false);
+    await openAndPick();
+    expect(leavingAsks()).toBe(true);
   });
 });
 
