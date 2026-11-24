@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 
 import { usePathname, useRouter } from 'next/navigation';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
@@ -30,6 +31,7 @@ import { useEncounter } from '@frontend/hooks/useEncounter';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { useParty } from '@frontend/hooks/useParty';
 import { useLeaveGuard } from '@frontend/hooks/useUnsavedChanges';
+import { partyQueryKey } from '@frontend/lib/query-keys';
 
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
@@ -138,6 +140,7 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
   // The empty table's own way into the player's menu: one dialog, mounted whatever the roster is
   const [mineOpen, setMineOpen] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
+  const queryClient = useQueryClient();
   if (!party) return null;
 
   if (party.role === 'gm') {
@@ -195,7 +198,11 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
         open={mineOpen}
         onOpenChange={setMineOpen}
         onCloseAutoFocus={(event) => {
-          if (party.roster.length > 0) {
+          // The cache, not `party`: a save closes the dialog as soon as the refetch is in, and
+          // React Query tells this component a tick later, so `party` can still be the empty table
+          const roster =
+            queryClient.getQueryData<PartyView>(partyQueryKey(partyId))?.roster ?? party.roster;
+          if (roster.length > 0) {
             event.preventDefault();
             heading.current?.focus();
           }
