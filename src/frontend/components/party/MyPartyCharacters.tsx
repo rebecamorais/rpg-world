@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -17,20 +17,29 @@ export function MyPartyCharacters({
   selected,
   onSave,
   isSaving,
+  onDirtyChange,
 }: {
   characters: Option[];
   selected: string[];
   onSave: (characterIds: string[]) => Promise<void>;
   isSaving: boolean;
+  /** Whether the picks differ from `selected`, so the dialog can ask before closing. */
+  onDirtyChange?: (dirty: boolean) => void;
 }) {
   const t = useTranslations('parties.mine');
   const tPage = useTranslations('parties.page');
   const { classLabel } = useCharacterChoices();
   const [picked, setPicked] = useState(() => new Set(selected));
 
+  const changed = picked.size !== selected.length || selected.some((id) => !picked.has(id));
+  // Unmounted (closed, or started over by a new list), nothing is left unsaved
+  useEffect(() => {
+    onDirtyChange?.(changed);
+    return () => onDirtyChange?.(false);
+  }, [changed, onDirtyChange]);
+
   if (characters.length === 0) return <p className="text-muted-foreground">{t('none')}</p>;
 
-  const changed = picked.size !== selected.length || selected.some((id) => !picked.has(id));
   const toggle = (id: string) =>
     setPicked((current) => {
       const next = new Set(current);
