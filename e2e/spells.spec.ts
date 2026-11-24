@@ -1,4 +1,15 @@
+import type { Page } from '@playwright/test';
+
 import { characterUrl, createCharacter, expect, test } from './support/fixtures';
+
+/**
+ * Closes the catalog from the keyboard and waits for its focus to return to Add Spell. The dialog
+ * hands focus back a moment after it unmounts: a card focused before that loses it to the button.
+ */
+async function closeCatalog(page: Page) {
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('button', { name: 'Add Spell' }).first()).toBeFocused();
+}
 
 test('aprende, prepara e esquece uma magia', async ({ page, user: _ }) => {
   const id = await createCharacter(page, 'Elminster');
@@ -53,7 +64,7 @@ test('esquecer pelo teclado leva o foco ao próximo card', async ({ page, user: 
     await card.getByRole('button', { name: 'Learn spell' }).click();
     await expect(card.getByText('Learned')).toBeVisible();
   }
-  await page.keyboard.press('Escape');
+  await closeCatalog(page);
 
   // Both are 3rd level, in name order: Fireball, then Lightning Bolt
   const fireball = page.getByRole('article', { name: /Fireball/ });
@@ -86,7 +97,7 @@ test('o anel do teclado aparece no card aberto, por cima do efeito', async ({ pa
   const inCatalog = catalog.getByRole('article', { name: /^Fireball/ });
   await inCatalog.getByRole('button', { name: 'Learn spell' }).click();
   await expect(inCatalog.getByText('Learned')).toBeVisible();
-  await page.keyboard.press('Escape');
+  await closeCatalog(page);
 
   const fireball = page.getByRole('article', { name: /Fireball/ });
   await fireball.getByRole('button', { name: /Expand Fireball/ }).focus();
