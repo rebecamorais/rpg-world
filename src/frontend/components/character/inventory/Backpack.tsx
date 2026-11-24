@@ -109,6 +109,16 @@ export function ItemList({
   // Empty by what is drawn: the last item's placeholder (and its Undo) stays until the toast goes
   const isEmpty = removal.display.length === 0;
 
+  // Added from the empty state: the dialog gives the focus back to its "Add item", which unmounts
+  // when the POST is in and the list shows up. The header's "Add item" takes it then. A failed
+  // POST leaves the list empty, and the empty state's button keeps the focus.
+  const justAdded = useRef(false);
+  useEffect(() => {
+    if (isEmpty || !justAdded.current) return;
+    justAdded.current = false;
+    focusRoot.current?.querySelector<HTMLElement>(`[data-item-focus="${ADD_ITEM_FOCUS}"]`)?.focus();
+  }, [isEmpty, focusRoot]);
+
   const addButton = (
     <Button
       variant="outline"
@@ -175,7 +185,10 @@ export function ItemList({
         open={adding}
         onOpenChange={setAdding}
         initialEdition={commonEdition(entries)}
-        onPick={(key) => addItem(key)}
+        onPick={(key) => {
+          justAdded.current = isEmpty;
+          addItem(key);
+        }}
         style={dialogStyle}
       />
     </SectionCard>

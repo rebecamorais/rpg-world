@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -61,6 +61,7 @@ export function PendingChoicesNotice() {
   // The picks follow the class only on 2014 (`CLASS_AUTOMATION`)
   const defaults = classId ? classDefaults(edition, content, attributes) : null;
   const [resolving, setResolving] = useState<ClassChoice | null>(null);
+  const opener = useRef<HTMLElement | null>(null);
 
   // Only sheets born with class picks (the key, even empty): a sheet from before them keeps what
   // the player filled in by hand and never shows the notice
@@ -103,7 +104,10 @@ export function PendingChoicesNotice() {
                       size="sm"
                       variant="character"
                       aria-label={t('resolveLabel', { choice: label })}
-                      onClick={() => setResolving(choice)}
+                      onClick={(event) => {
+                        opener.current = event.currentTarget;
+                        setResolving(choice);
+                      }}
                     >
                       {t('resolve')}
                     </Button>
@@ -131,6 +135,21 @@ export function PendingChoicesNotice() {
             title={t('dialogTitle', { className: classLabel, choice: choiceLabel(resolving) })}
             picks={classChoices ?? {}}
             accentColor={character.accentColor}
+            onCloseAutoFocus={(event) => {
+              const gone = opener.current && !opener.current.isConnected;
+              opener.current = null;
+              if (!gone) return;
+              // "Done" on the last open pick took the notice away, "Resolve" with it: the page's
+              // title takes the focus instead of its top (the main area, when there is no h1)
+              const target =
+                document.querySelector<HTMLElement>('main h1') ??
+                document.getElementById('main-content');
+              if (!target) return;
+              event.preventDefault();
+              // A title isn't focusable by itself; -1 lets the script focus it without a Tab stop
+              if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+              target.focus();
+            }}
             onDone={(picked) => {
               update(setClassChoice(resolving.key, picked));
               setResolving(null);
@@ -151,12 +170,14 @@ function ResolveChoiceDialog({
   title,
   picks,
   accentColor,
+  onCloseAutoFocus,
   onDone,
 }: {
   choice: ClassChoice;
   title: string;
   picks: ClassChoiceSelections;
   accentColor?: string;
+  onCloseAutoFocus: (event: Event) => void;
   onDone: (picked: string[]) => void;
 }) {
   const t = useTranslations('pendingChoices');
@@ -169,6 +190,7 @@ function ResolveChoiceDialog({
     <DialogContent
       className="character-context border-border bg-background p-0 shadow-2xl sm:max-w-[480px]"
       style={characterTheme(accentColor).style}
+      onCloseAutoFocus={onCloseAutoFocus}
     >
       <DialogHeader className="border-border border-b p-6 pb-4">
         <DialogTitle>{title}</DialogTitle>

@@ -38,6 +38,8 @@ interface Props {
   learnedSpells: string[];
   onLearnSpell: (spellId: string) => void;
   onForgetSpell: (spellId: string) => void;
+  /** Where the focus goes on close, when the button that opened it may be gone (see `DialogContent`). */
+  onCloseAutoFocus?: (event: Event) => void;
 }
 
 const PAGE_SIZE = 12;
@@ -68,6 +70,7 @@ export default function SpellSearchDialog({
   learnedSpells,
   onLearnSpell,
   onForgetSpell,
+  onCloseAutoFocus,
 }: Props) {
   const t = useTranslations('spellsDrawer');
   const tCharacters = useTranslations('characters');
@@ -187,6 +190,7 @@ export default function SpellSearchDialog({
       <DialogContent
         className="character-context bg-background flex h-[90dvh] max-w-4xl flex-col p-0"
         style={characterTheme(accentColor).style}
+        onCloseAutoFocus={onCloseAutoFocus}
       >
         {/* Thematic Glow */}
         <div

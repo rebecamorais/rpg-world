@@ -707,5 +707,34 @@ describe('Backpack', () => {
       });
       await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     });
+
+    it('mochila vazia: depois de adicionar, o foco vai ao "Add item" do cabeçalho, não ao topo da página', async () => {
+      let answer!: (value: unknown) => void;
+      api.post.mockImplementation(() => new Promise((resolve) => (answer = resolve)));
+      const { user, dialog } = await openDialog();
+
+      await user.click(within(dialog).getByRole('button', { name: 'Add Torch' }));
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+      // The empty state's button gets the focus back while the POST is on its way
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Add item' })).toHaveFocus());
+
+      api.get.mockImplementation(serve([entry('new', TORCH)]));
+      await act(async () => answer(entry('new', TORCH)));
+
+      expect(await screen.findByRole('button', { name: 'Details for Torch' })).toBeInTheDocument();
+      expect(screen.queryByText('The backpack is empty.')).not.toBeInTheDocument();
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Add item' })).toHaveFocus());
+    });
+
+    it('mochila vazia: se adicionar falhar, o foco fica no "Add item" do estado vazio', async () => {
+      api.post.mockRejectedValue(new Error('boom'));
+      const { user, dialog } = await openDialog();
+
+      await user.click(within(dialog).getByRole('button', { name: 'Add Torch' }));
+
+      await waitFor(() => expect(toast.error).toHaveBeenCalled());
+      expect(screen.getByText('The backpack is empty.')).toBeInTheDocument();
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Add item' })).toHaveFocus());
+    });
   });
 });
