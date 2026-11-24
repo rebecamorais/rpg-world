@@ -155,3 +155,12 @@ O projeto adota uma mentalidade **Server-First**. O objetivo é manter o process
 | **Browser APIs**         | Acesso a `window`, `document`, `localStorage`, `sessionStorage` ou Geolocalização.                                                   |
 | **Context Providers**    | Envolver o `children` num Client Component dedicado, mantendo o restante da árvore como Server Components.                           |
 | **Formulários**          | Manter a página como Server Component e isolar apenas o formulário (ex: usando `react-hook-form`) num componente cliente específico. |
+
+## 11. Dado novo depois de um `await` (foco, fechar, navegar)
+
+O React Query avisa os componentes **um tick depois** que a query termina (o `notifyManager` agenda com `setTimeout`). Então, logo depois de `await mutation.mutateAsync(...)`, de um `refetch` ou de um `invalidateQueries`, as props e os dados de `useQuery` da closure ainda são os da renderização **anterior**. Sob carga (CI, celular lento), isso vira bug: foco perdido, decisão tomada com a lista vazia, botão que some logo depois de receber o foco.
+
+- **Depois de um `await`, decida pelo dado novo**: `queryClient.getQueryData(chave)`, ou o próprio valor que acabou de ser salvo. Nunca pela prop ou pelo `data` da closure. Exemplo: o `onCloseAutoFocus` do diálogo "Meus personagens" em `PartyPage.tsx`.
+- **Foco num elemento que só existe depois dos dados**: mova o foco num efeito que reage à mudança (o elemento montou, a lista cresceu), não num callback que roda uma vez antes da tela atualizar.
+- **`setTimeout`/`requestAnimationFrame` não são "esperar a tela"**: sob carga, o dado pode chegar depois. Use o dado do cache ou um efeito.
+- **Teste e2e de foco**: se passa local e falha no CI, reproduza com `npm run test:e2e:ci-like` (veja o `CONTRIBUTING.md`) antes de mexer no teste. Quase sempre é uma corrida real no app.
