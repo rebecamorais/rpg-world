@@ -39,6 +39,16 @@ describe('FooterContent', () => {
     expect(vi.mocked(rpgWorldApi).get).not.toHaveBeenCalled();
   });
 
+  it('completo: o nome em destaque é o do app, e o estúdio fica só no copyright', () => {
+    renderWithProviders(<FooterContent serverUser={{ id: 'u1' }} />);
+
+    expect(screen.getByText(messages.common.title)).toBeInTheDocument();
+    expect(screen.queryByText('Rebs Tech Studio')).not.toBeInTheDocument();
+    expect(screen.getByText(/Rebs Tech Studio/)).toHaveTextContent(
+      t.copyright.replace('{year}', String(new Date().getFullYear())),
+    );
+  });
+
   it('compacto (dentro do app): uma linha com os links legais e as formas de apoio', () => {
     renderWithProviders(<FooterContent serverUser={{ id: 'u1' }} compact />);
 
