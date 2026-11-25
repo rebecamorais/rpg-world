@@ -819,7 +819,7 @@
     "material": ""
   },
   "identify": {
-    "name": "Indentificar",
+    "name": "Identificar",
     "description": "Escolha um objeto que você deve tocar durante a conjuração da magia. Se for um item mágico ou algum outro tipo de objeto imbuído de magia, você descobre as propriedades dele e como usá-las, se ele exige sintonização para ser usado e quantas cargas tem, caso as tenha. Você também descobre se alguma magia está afetando o objeto e que magia é essa. Se o item foi criado por uma magia, você também identifica qual magia o criou.\nSe em vez disso você tocar uma criatura durante a conjuração, você descobre quais magias a estão afetando, caso estejam.",
     "material": ""
   },

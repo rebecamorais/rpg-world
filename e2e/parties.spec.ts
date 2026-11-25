@@ -120,7 +120,7 @@ test.describe('mesas', () => {
     await visitor.getByRole('button', { name: 'Sign In' }).click();
 
     await expect.poll(() => new URL(visitor.url()).pathname).toBe(`/parties/join/${code}`);
-    await expect(visitor.getByText('Mesa Aberta')).toBeVisible();
+    await expect(visitor.getByRole('heading', { name: 'Mesa Aberta' })).toBeVisible();
 
     await context.close();
   });
