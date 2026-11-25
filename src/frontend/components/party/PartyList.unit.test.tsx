@@ -355,11 +355,7 @@ describe('PartyList', () => {
       await confirmFrom(decline, t.decline);
 
       await vi.waitFor(() => expect(rpgWorldApi.delete).toHaveBeenCalled());
-      await vi.waitFor(() => expect(decline).toBeEnabled());
-      expect(decline).toBeInTheDocument();
-      expect(
-        screen.getByRole('button', { name: named(t.declineInvite, 'Mesa b') }),
-      ).not.toHaveFocus();
+      await vi.waitFor(() => expect(decline).toHaveFocus());
     });
   });
 });

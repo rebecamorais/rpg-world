@@ -185,7 +185,7 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
           ? neighbours(invited, userId, requested.at(-1), ROLEPLAY_FOCUS)
           : neighbours(requested, userId, invited[0], ROLEPLAY_FOCUS),
       );
-      if (!(await run())) focusCancel(); // the row stays, and so does the focus
+      if (!(await run())) focusCancel(userId); // the row stays, and so does the focus
     };
     return (
       <div ref={focusRoot} className="flex flex-col gap-6">

@@ -157,7 +157,7 @@ export default function PartyList() {
     try {
       await respondAsync({ partyId: party.id, userId, accept: false });
     } catch {
-      focusCancel(); // the row stays, and so does the focus
+      focusCancel(party.id); // the row stays, and so does the focus
       return; // useParties already shows the error
     }
     toast.success(done);
