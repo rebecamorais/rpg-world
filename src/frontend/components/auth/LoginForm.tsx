@@ -4,8 +4,9 @@ import { useEffect, useId, useRef, useState } from 'react';
 
 import Link from 'next/link';
 
+import { localizedHref } from '@/i18n/routing';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod/mini';
 
@@ -59,6 +60,7 @@ export default function LoginForm() {
   useEffect(rememberNext, []);
   const { signInWithPassword } = useAuth();
   const t = useTranslations('login');
+  const locale = useLocale();
   const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
   const titleId = useId();
@@ -280,7 +282,7 @@ export default function LoginForm() {
         <div className="border-border text-muted-foreground mt-4 border-t pt-6 text-center text-sm">
           {t('noAccount')}{' '}
           <Link
-            href="/register"
+            href={localizedHref('/register', locale)}
             className="text-primary-flare focus-ring rounded-sm font-semibold hover:underline"
           >
             {t('register')}

@@ -6,6 +6,9 @@ import { useAuth } from './useAuth';
 
 vi.mock('@client', () => ({ rpgWorldApi: { post: vi.fn() } }));
 
+const locale = vi.hoisted(() => ({ current: 'en' }));
+vi.mock('next-intl', () => ({ useLocale: () => locale.current }));
+
 describe('useAuth.updatePassword', () => {
   const location = { href: '' };
 
@@ -25,5 +28,34 @@ describe('useAuth.updatePassword', () => {
     });
     // The reload drops any toast: the profile reads the flag and says it changed
     expect(location.href).toBe('/settings/profile?passwordChanged=1');
+  });
+});
+
+describe('useAuth.signOut', () => {
+  const location = { href: '' };
+
+  beforeEach(() => {
+    vi.mocked(rpgWorldApi.post).mockResolvedValue(undefined);
+    vi.stubGlobal('window', { location });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    locale.current = 'en';
+  });
+
+  it('volta ao login no endereço do idioma, sem passar por outro redirecionamento', async () => {
+    locale.current = 'pt';
+
+    await useAuth().signOut();
+
+    expect(rpgWorldApi.post).toHaveBeenCalledWith('/api/auth/signout');
+    expect(location.href).toBe('/pt/login');
+  });
+
+  it('em inglês, o login fica sem prefixo', async () => {
+    await useAuth().signOut();
+
+    expect(location.href).toBe('/login');
   });
 });

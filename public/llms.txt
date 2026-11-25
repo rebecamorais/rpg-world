@@ -1,6 +1,6 @@
 # RPG World
 
-> RPG World (https://rpgworldapp.com) is a free, open-source web app for creating and managing
+> RPG World (https://www.rpgworldapp.com) is a free, open-source web app for creating and managing
 > tabletop RPG character sheets, starting with Dungeons & Dragons 5th Edition (SRD 5.1 and 5.2). It is
 > available in English and Brazilian Portuguese, works on desktop and phone, and is licensed under
 > the GNU GPLv3. In Portuguese: um app gratuito e de código aberto para fichas de personagem de RPG
@@ -46,12 +46,12 @@ by Rebeca Morais (Rebs Tech Studio), not affiliated with or endorsed by Wizards 
 
 ## Pages
 
-- [Home](https://rpgworldapp.com): what RPG World is, with a sample character sheet.
-- [Features](https://rpgworldapp.com/features): everything available today and what is planned.
-- [Create an account](https://rpgworldapp.com/register)
-- [Support the project](https://rpgworldapp.com/support)
-- [Terms of Use](https://rpgworldapp.com/terms): includes game content credits.
-- [Privacy Policy](https://rpgworldapp.com/privacy)
+- [Home](https://www.rpgworldapp.com): what RPG World is, with a sample character sheet.
+- [Features](https://www.rpgworldapp.com/features): everything available today and what is planned.
+- [Create an account](https://www.rpgworldapp.com/register)
+- [Support the project](https://www.rpgworldapp.com/support)
+- [Terms of Use](https://www.rpgworldapp.com/terms): includes game content credits.
+- [Privacy Policy](https://www.rpgworldapp.com/privacy)
 
 ## Optional
 

@@ -4,8 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 
+import { localizedHref } from '@/i18n/routing';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod/mini';
 
@@ -44,6 +45,7 @@ export default function SignUpForm() {
   // Kept through the e-mail confirmation: the person lands back on the link they opened
   useEffect(rememberNext, []);
   const t = useTranslations('register');
+  const locale = useLocale();
   const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
   const [isSuccess, setIsSuccess] = useState(false);
@@ -131,7 +133,7 @@ export default function SignUpForm() {
           {tCommon('useAnotherEmail')}
         </Button>
         <Button variant="ghost" asChild className="w-full">
-          <Link href="/login">{t('login')}</Link>
+          <Link href={localizedHref('/login', locale)}>{t('login')}</Link>
         </Button>
       </AuthSuccessCard>
     );
@@ -228,7 +230,7 @@ export default function SignUpForm() {
         <div className="border-border text-muted-foreground mt-4 border-t pt-6 text-center text-sm">
           {t('alreadyHaveAccount')}{' '}
           <Link
-            href="/login"
+            href={localizedHref('/login', locale)}
             className="text-primary-flare focus-ring rounded-sm font-semibold hover:underline"
           >
             {t('login')}

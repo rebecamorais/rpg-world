@@ -3,7 +3,7 @@
 ## Versões com suporte
 
 O RPG World é publicado continuamente a partir da branch `main` em
-[rpgworldapp.com](https://rpgworldapp.com/). Só a versão em produção recebe correções de
+[www.rpgworldapp.com](https://www.rpgworldapp.com/). Só a versão em produção recebe correções de
 segurança.
 
 ## Como reportar uma vulnerabilidade

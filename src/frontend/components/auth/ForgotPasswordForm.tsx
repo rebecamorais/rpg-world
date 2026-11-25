@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 
+import { localizedHref } from '@/i18n/routing';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod/mini';
 
@@ -36,6 +37,7 @@ import { setServerError } from '@frontend/lib/form-errors';
 
 export default function ForgotPasswordForm() {
   const t = useTranslations('forgotPassword');
+  const locale = useLocale();
   const tRegister = useTranslations('register');
   const tCommon = useTranslations('common');
   const { getMessage } = useErrorMessage();
@@ -106,7 +108,7 @@ export default function ForgotPasswordForm() {
           {tCommon('useAnotherEmail')}
         </Button>
         <Button variant="ghost" asChild className="w-full">
-          <Link href="/login">{t('backToLogin')}</Link>
+          <Link href={localizedHref('/login', locale)}>{t('backToLogin')}</Link>
         </Button>
       </AuthSuccessCard>
     );
@@ -154,7 +156,7 @@ export default function ForgotPasswordForm() {
             </Button>
             <div className="text-muted-foreground mt-2 text-center text-sm">
               <Link
-                href="/login"
+                href={localizedHref('/login', locale)}
                 className="text-primary-flare focus-ring rounded-sm hover:underline"
               >
                 {t('backToLogin')}

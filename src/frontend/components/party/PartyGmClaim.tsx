@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 
-import { useTranslations } from 'next-intl';
+import { localizedHref } from '@/i18n/routing';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
 import { useConfirm } from '@frontend/components/ui/confirm-dialog';
@@ -21,6 +22,7 @@ const MAX_GM_PARTIES = 5;
 /** A party without a GM: ask to become it, answer someone else's request, or call support. */
 export function PartyGmClaim({ party }: { party: PartyView }) {
   const t = useTranslations('parties.gmClaim');
+  const locale = useLocale();
   const confirm = useConfirm();
   const unnamed = useTranslations('parties.manage')('unnamed');
   const { currentUser } = useCurrentUser();
@@ -150,7 +152,9 @@ export function PartyGmClaim({ party }: { party: PartyView }) {
             {claim.canAskSupport ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href={`/support?party=${party.id}`}>{t('askSupport')}</Link>
+                  <Link href={localizedHref(`/support?party=${party.id}`, locale)}>
+                    {t('askSupport')}
+                  </Link>
                 </Button>
                 <p className="text-label text-muted-foreground">{t('supportHint')}</p>
               </>

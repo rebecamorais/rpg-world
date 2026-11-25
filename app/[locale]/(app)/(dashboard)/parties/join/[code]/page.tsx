@@ -4,7 +4,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import { getTranslations } from 'next-intl/server';
+import { localizedHref } from '@/i18n/routing';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { getApi } from '@api';
 
@@ -61,10 +62,11 @@ async function loadInvite(code: string) {
 export default async function JoinPartyPage({ params }: { params: Params }) {
   const { code } = await params;
   const { authApi } = await getApi();
-  const [t, user, card] = await Promise.all([
+  const [t, user, card, locale] = await Promise.all([
     getTranslations('parties.join'),
     authApi.getSessionUser(),
     loadCard(code),
+    getLocale(),
   ]);
 
   const picture = card?.imageUrl ? (
@@ -89,7 +91,12 @@ export default async function JoinPartyPage({ params }: { params: Params }) {
                 <h2 className="text-title">{card.name}</h2>
                 <p className="text-muted-foreground">{t('signInHint')}</p>
                 <Button asChild className="self-start">
-                  <Link href={`/login?next=${encodeURIComponent(`/parties/join/${code}`)}`}>
+                  <Link
+                    href={localizedHref(
+                      `/login?next=${encodeURIComponent(`/parties/join/${code}`)}`,
+                      locale,
+                    )}
+                  >
                     {t('signIn')}
                   </Link>
                 </Button>
@@ -103,7 +110,10 @@ export default async function JoinPartyPage({ params }: { params: Params }) {
               className="w-full max-w-lg"
               // Signed out, the way on is the account: with it, the GM's new link works
               action={
-                <Link href="/login" className="text-primary-flare text-sm underline">
+                <Link
+                  href={localizedHref('/login', locale)}
+                  className="text-primary-flare text-sm underline"
+                >
                   {t('signInAction')}
                 </Link>
               }

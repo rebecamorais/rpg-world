@@ -87,6 +87,7 @@ export default function FooterContent({
   const isAuthenticated = status === 'signed-in';
   const t = useTranslations('footer');
   const tLanding = useTranslations('landing');
+  const tCommon = useTranslations('common');
   // The public pages' links go to their address in this language (/pt/privacy)
   const locale = useLocale();
   const [hasCopied, setHasCopied] = useState(false);
@@ -187,8 +188,18 @@ export default function FooterContent({
       {/* Phones: Explore across, Legal and Community side by side, then Support across */}
       <div className="container mx-auto grid grid-cols-2 gap-x-6 gap-y-8 px-6 sm:grid-cols-3 lg:grid-cols-[2fr_1fr_1fr_1fr_2fr]">
         <div className="col-span-2 flex flex-col gap-2 sm:col-span-3 lg:col-span-1">
-          <span translate="no" className="text-foreground text-lg font-bold tracking-tight">
-            Rebs Tech Studio
+          {/* The app's name with its icon, as in the header; the studio stays in the copyright */}
+          <span
+            translate="no"
+            className="font-display text-foreground flex items-center gap-2 text-lg font-bold tracking-tight"
+          >
+            <AppIcon
+              name="dice-fire"
+              variant="game"
+              size={24}
+              className="text-primary-flare shrink-0"
+            />
+            {tCommon('title')}
           </span>
           <p className="text-muted-foreground max-w-xs text-sm leading-relaxed">
             {tLanding('heroSubtitle')}

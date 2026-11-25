@@ -4,7 +4,7 @@
 
 Fichas de RPG de mesa no navegador, começando por **Dungeons & Dragons 5ª Edição**. Gratuito, de código aberto, em português e inglês, com tema escuro e claro.
 
-🔗 **Acesse:** [rpgworldapp.com](https://rpgworldapp.com/) · **Conheça sem conta:** [demo da mesa The Pioneers](https://rpgworldapp.com/demo)
+🔗 **Acesse:** [www.rpgworldapp.com](https://www.rpgworldapp.com/) · **Conheça sem conta:** [demo da mesa The Pioneers](https://www.rpgworldapp.com/demo)
 
 ## ✨ O que já dá para fazer
 
