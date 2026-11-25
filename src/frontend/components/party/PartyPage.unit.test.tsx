@@ -457,6 +457,93 @@ describe('Aba Mesa: vazios e respostas do mestre', () => {
   });
 });
 
+describe('Aba Mesa: foco depois das respostas do mestre', () => {
+  const gmParty = (people: PartyView['people']) =>
+    party({ role: 'gm', hasGm: true, people, gm: { inviteCode: 'X', rolePlay: [] } });
+
+  beforeEach(() => {
+    demo.isDemo = false;
+    encounter.view = null;
+    vi.clearAllMocks();
+  });
+
+  /** The party as the server answers it, before and after the GM's answer. */
+  function serve(before: PartyView, after: PartyView) {
+    let answered = false;
+    const done = async () => {
+      answered = true;
+      return undefined;
+    };
+    vi.mocked(rpgWorldApi.delete).mockImplementation(done);
+    vi.mocked(rpgWorldApi.patch).mockImplementation(done);
+    renderPage(before);
+    vi.mocked(rpgWorldApi.get).mockImplementation(async (url: string) => {
+      if (url === '/api/parties') return { asGm: [], asPlayer: [], invites: [], requests: [] };
+      if (url.endsWith('/encounter')) return {};
+      return answered ? after : before;
+    });
+  }
+
+  it('recusar um pedido leva o foco ao pedido seguinte', async () => {
+    serve(
+      gmParty([person('ana', 'requested'), person('bia', 'requested')]),
+      gmParty([person('bia', 'requested')]),
+    );
+    const user = userEvent.setup();
+
+    await user.click(
+      await screen.findByRole('button', { name: named(t.requestsSection.declineFrom, '@ana') }),
+    );
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', {
+        name: t.requestsSection.decline,
+      }),
+    );
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: named(t.requestsSection.declineFrom, '@bia') }),
+      ).toHaveFocus(),
+    );
+  });
+
+  it('aprovar o último pedido leva o foco ao título do Role Play', async () => {
+    serve(gmParty([person('ana', 'requested')]), gmParty([person('ana')]));
+    const user = userEvent.setup();
+
+    await user.click(
+      await screen.findByRole('button', { name: named(t.requestsSection.approveFrom, '@ana') }),
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: t.page.rolePlay })).toHaveFocus(),
+    );
+  });
+
+  it('cancelar o último convite, com um pedido na lista, leva o foco a esse pedido', async () => {
+    serve(
+      gmParty([person('ana', 'requested'), person('caio', 'invited')]),
+      gmParty([person('ana', 'requested')]),
+    );
+    const user = userEvent.setup();
+
+    await user.click(
+      await screen.findByRole('button', { name: named(t.requestsSection.cancelFor, '@caio') }),
+    );
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', {
+        name: t.requestsSection.cancelInvite,
+      }),
+    );
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: named(t.requestsSection.declineFrom, '@ana') }),
+      ).toHaveFocus(),
+    );
+  });
+});
+
 describe('PartyPage na demo', () => {
   it('mostra os cards de Role Play, sem a aba Combate nem as configurações, mesmo com ?mode=combat', async () => {
     demo.isDemo = true;

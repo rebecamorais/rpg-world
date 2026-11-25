@@ -29,6 +29,7 @@ import AppLink from '@frontend/demo/AppLink';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useEncounter } from '@frontend/hooks/useEncounter';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { neighbours, useFocusAfterRemove } from '@frontend/hooks/useFocusAfterRemove';
 import { useParty } from '@frontend/hooks/useParty';
 import { useLeaveGuard } from '@frontend/hooks/useUnsavedChanges';
 import { partyQueryKey } from '@frontend/lib/query-keys';
@@ -74,6 +75,9 @@ function RolePlayEmpty({ party }: { party: PartyView }) {
   );
 }
 
+// Where the focus goes when the last request or invite is answered: the section after them
+const ROLEPLAY_FOCUS = 'roleplay';
+
 /** The GM's Role Play cards: who is at the table, their passives and what drives them. */
 function RolePlayList({ party }: { party: PartyView }) {
   const t = useTranslations('parties.page');
@@ -82,7 +86,12 @@ function RolePlayList({ party }: { party: PartyView }) {
   return (
     // Columns follow the room the section has, not the screen: the sidebar takes 256px of it
     <section aria-labelledby="party-roleplay" className="@container flex flex-col gap-4">
-      <h2 id="party-roleplay" className="text-heading">
+      <h2
+        id="party-roleplay"
+        tabIndex={-1}
+        data-focus-key={ROLEPLAY_FOCUS}
+        className="text-heading outline-none"
+      >
         {t('rolePlay')}
       </h2>
       {cards.length === 0 ? (
@@ -137,6 +146,8 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
   const unnamed = useTranslations('parties.manage')('unnamed');
   const { party } = useParty(partyId);
   const { pending, answer } = useMemberAnswers(partyId);
+  // The answered row leaves with its buttons, and with the focus the confirmation gave back
+  const { root: focusRoot, next: focusNext, cancel: focusCancel } = useFocusAfterRemove();
   // The empty table's own way into the player's menu: one dialog, mounted whatever the roster is
   const [mineOpen, setMineOpen] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -162,23 +173,41 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
       const person = find(userId);
       return person ? personName(person, unnamed) : unnamed;
     };
+    // The next row of the same list, the one before, the other list, then the Role Play heading
+    const idsOf = (status: 'requested' | 'invited') =>
+      party.people.filter((p) => p.status === status).map((p) => p.userId);
+    const requested = idsOf('requested');
+    const invited = idsOf('invited');
+    const respond = async (userId: string, run: () => Promise<boolean>) => {
+      focusNext(
+        userId,
+        find(userId)?.status === 'invited'
+          ? neighbours(invited, userId, requested.at(-1), ROLEPLAY_FOCUS)
+          : neighbours(requested, userId, invited[0], ROLEPLAY_FOCUS),
+      );
+      if (!(await run())) focusCancel(); // the row stays, and so does the focus
+    };
     return (
-      <div className="flex flex-col gap-6">
+      <div ref={focusRoot} className="flex flex-col gap-6">
         <PartyRequests
           people={party.people}
           onApprove={(userId) =>
-            answer(userId, 'approve', {
-              success: tRequests('approved', { name: nameOf(userId) }),
-              gone: tRequests('alreadyAnswered', { name: nameOf(userId) }),
-            })
+            respond(userId, () =>
+              answer(userId, 'approve', {
+                success: tRequests('approved', { name: nameOf(userId) }),
+                gone: tRequests('alreadyAnswered', { name: nameOf(userId) }),
+              }),
+            )
           }
           onRemove={(userId) =>
-            answer(userId, 'remove', {
-              success: tRequests(find(userId)?.status === 'invited' ? 'canceled' : 'declined', {
-                name: nameOf(userId),
+            respond(userId, () =>
+              answer(userId, 'remove', {
+                success: tRequests(find(userId)?.status === 'invited' ? 'canceled' : 'declined', {
+                  name: nameOf(userId),
+                }),
+                gone: tRequests('alreadyAnswered', { name: nameOf(userId) }),
               }),
-              gone: tRequests('alreadyAnswered', { name: nameOf(userId) }),
-            })
+            )
           }
           pending={pending}
         />

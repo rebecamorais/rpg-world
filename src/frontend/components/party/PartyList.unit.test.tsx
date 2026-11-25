@@ -289,4 +289,77 @@ describe('PartyList', () => {
     );
     expect(push).not.toHaveBeenCalled();
   });
+  describe('foco depois de responder', () => {
+    /** The list as the server answers it, before and after the answer. */
+    function serve(before: MyParties, after: MyParties) {
+      let answered = false;
+      vi.mocked(rpgWorldApi.delete).mockImplementation(async () => {
+        answered = true;
+        return undefined;
+      });
+      vi.mocked(rpgWorldApi.get).mockImplementation(async () => (answered ? after : before));
+      return renderWithProviders(
+        <UserProvider user={{ id: 'user-1', email: 'u@example.com' }}>
+          <PartyList />
+        </UserProvider>,
+      );
+    }
+
+    async function confirmFrom(button: HTMLElement, confirmLabel: string) {
+      const user = userEvent.setup();
+      await user.click(button);
+      await user.click(
+        within(screen.getByRole('alertdialog')).getByRole('button', { name: confirmLabel }),
+      );
+    }
+
+    it('recusar um convite leva o foco ao convite seguinte', async () => {
+      const a = party('a', { status: 'invited' });
+      const b = party('b', { status: 'invited' });
+      serve(mine({ invites: [a, b] }), mine({ invites: [b] }));
+
+      await confirmFrom(
+        await screen.findByRole('button', { name: named(t.declineInvite, 'Mesa a') }),
+        t.decline,
+      );
+
+      await vi.waitFor(() =>
+        expect(
+          screen.getByRole('button', { name: named(t.declineInvite, 'Mesa b') }),
+        ).toHaveFocus(),
+      );
+    });
+
+    it('cancelar o último pedido leva o foco ao título das mesas como mestre', async () => {
+      serve(mine({ requests: [party('pedido', { status: 'requested' })] }), mine());
+
+      await confirmFrom(
+        await screen.findByRole('button', { name: named(t.withdrawFrom, 'Mesa pedido') }),
+        t.withdraw,
+      );
+
+      await vi.waitFor(() => expect(screen.getByRole('heading', { name: t.asGm })).toHaveFocus());
+    });
+
+    it('se a recusa falha, a linha fica e o foco volta ao botão dela', async () => {
+      const invites = [party('a', { status: 'invited' }), party('b', { status: 'invited' })];
+      vi.mocked(rpgWorldApi.get).mockResolvedValue(mine({ invites }));
+      vi.mocked(rpgWorldApi.delete).mockRejectedValue(new Error('offline'));
+      renderWithProviders(
+        <UserProvider user={{ id: 'user-1', email: 'u@example.com' }}>
+          <PartyList />
+        </UserProvider>,
+      );
+
+      const decline = await screen.findByRole('button', { name: named(t.declineInvite, 'Mesa a') });
+      await confirmFrom(decline, t.decline);
+
+      await vi.waitFor(() => expect(rpgWorldApi.delete).toHaveBeenCalled());
+      await vi.waitFor(() => expect(decline).toBeEnabled());
+      expect(decline).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: named(t.declineInvite, 'Mesa b') }),
+      ).not.toHaveFocus();
+    });
+  });
 });

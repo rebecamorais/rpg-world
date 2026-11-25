@@ -60,6 +60,7 @@ export function PartyRequests({
                       disabled={!!answer}
                       loading={answer === 'remove'}
                       aria-label={t('declineFrom', { name })}
+                      data-focus-key={person.userId}
                       onClick={async () => {
                         const ok = await confirm({
                           title: t('declineTitle', { name }),
@@ -104,6 +105,7 @@ export function PartyRequests({
                       variant="destructive-ghost"
                       loading={pending.has(person.userId)}
                       aria-label={t('cancelFor', { name })}
+                      data-focus-key={person.userId}
                       onClick={async () => {
                         const ok = await confirm({
                           title: t('cancelTitle', { name }),
