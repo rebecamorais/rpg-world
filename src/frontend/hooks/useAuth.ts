@@ -1,3 +1,6 @@
+import { localizedHref } from '@/i18n/routing';
+import { useLocale } from 'next-intl';
+
 import { rpgWorldApi } from '@client';
 
 // A full page load, not router.push: the session cookie changed, so the server components and
@@ -7,6 +10,8 @@ function reloadAt(path: string) {
 }
 
 export function useAuth() {
+  const locale = useLocale();
+
   const signInWithPassword = async (email: string, password: string): Promise<void> => {
     await rpgWorldApi.post<void>('/api/auth/login', { email, password });
     reloadAt('/characters');
@@ -24,7 +29,7 @@ export function useAuth() {
     } catch (err) {
       console.error('Sign out error:', err);
     } finally {
-      reloadAt('/login');
+      reloadAt(localizedHref('/login', locale));
     }
   };
 

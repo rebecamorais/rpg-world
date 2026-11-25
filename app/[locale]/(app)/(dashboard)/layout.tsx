@@ -1,6 +1,9 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import { localizedHref } from '@/i18n/routing';
+import { getLocale } from 'next-intl/server';
+
 import { getApi } from '@api';
 
 import DashboardShell, { loadDashboardShell } from '@frontend/components/layout/DashboardShell';
@@ -28,7 +31,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </MainContent>
       );
     }
-    redirect(`/login${back}`);
+    redirect(localizedHref(`/login${back}`, await getLocale()));
   }
 
   // The layout stays mounted while navigating the dashboard, so this only runs on a full page load

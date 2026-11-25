@@ -78,7 +78,7 @@ export default async function AuthErrorPage({ searchParams }: AuthErrorPageProps
           )}
           {newLinkPage && (
             <Button asChild className="w-full">
-              <Link href={newLinkPage}>{tAuth('requestNewLink')}</Link>
+              <Link href={localizedHref(newLinkPage, locale)}>{tAuth('requestNewLink')}</Link>
             </Button>
           )}
           {newLinkPage !== '/login' && (

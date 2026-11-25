@@ -4,7 +4,8 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { useTranslations } from 'next-intl';
+import { localizedHref } from '@/i18n/routing';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { rpgWorldApi } from '@client';
 
@@ -32,6 +33,7 @@ interface ConfirmAccountDeletionProps {
  */
 export function ConfirmAccountDeletion({ account, token, signedIn }: ConfirmAccountDeletionProps) {
   const t = useTranslations('accountDeletion.confirm');
+  const locale = useLocale();
   const { getErrorMessage } = useErrorMessage();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,8 +45,8 @@ export function ConfirmAccountDeletion({ account, token, signedIn }: ConfirmAcco
       await rpgWorldApi.post('/api/account/delete', { token });
       // A full page load, like useAuth: the session cookie changed, so the layout and the query
       // cache of whoever is signed in on this browser must not survive
-      // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- deliberate
-      window.location.assign('/?accountDeleted=1');
+
+      window.location.assign(localizedHref('/?accountDeleted=1', locale));
     } catch (err) {
       setError(getErrorMessage(err));
       setPending(false);
@@ -68,7 +70,7 @@ export function ConfirmAccountDeletion({ account, token, signedIn }: ConfirmAcco
               href={
                 signedIn
                   ? '/settings/profile'
-                  : `/login?next=${encodeURIComponent('/settings/profile')}`
+                  : localizedHref(`/login?next=${encodeURIComponent('/settings/profile')}`, locale)
               }
             >
               {signedIn ? t('backToSettings') : t('signIn')}
@@ -106,7 +108,9 @@ export function ConfirmAccountDeletion({ account, token, signedIn }: ConfirmAcco
         </Button>
         {/* A way out that isn't the irreversible button */}
         <Button asChild variant="secondary" className="w-full">
-          <Link href={signedIn ? '/settings/profile' : '/'}>{t('keepAccount')}</Link>
+          <Link href={signedIn ? '/settings/profile' : localizedHref('/', locale)}>
+            {t('keepAccount')}
+          </Link>
         </Button>
       </CardContent>
     </Card>
