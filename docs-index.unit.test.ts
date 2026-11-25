@@ -9,6 +9,7 @@ import { describe, expect, it } from 'vitest';
 const INDEX = 'docs/INDEX.md';
 const text = readFileSync(INDEX, 'utf8');
 
+// Inline links only: titled (`[a](b "t")`) and reference-style links are not checked.
 const relativeLinks = [...text.matchAll(/\]\(([^)\s]+)\)/g)]
   .map((match) => match[1].split('#')[0])
   .filter((target) => target && !/^[a-z]+:/i.test(target));
