@@ -5,7 +5,8 @@ import { type ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
-import { useTranslations } from 'next-intl';
+import { localizedHref } from '@/i18n/routing';
+import { useLocale, useTranslations } from 'next-intl';
 
 import CharacterNavSection from '@frontend/components/character/CharacterNavSection';
 import { Button } from '@frontend/components/ui/button';
@@ -34,6 +35,7 @@ function useHeaderHeight() {
 /** The demo's own header, banner and navigation: no sidebar, profile or account menus. */
 export function DemoFrame({ children }: { children: ReactNode }) {
   const t = useTranslations('demo');
+  const locale = useLocale();
   const pathname = usePathname();
   const { id } = useParams<{ id?: string }>();
   const { status } = useSession();
@@ -65,7 +67,7 @@ export function DemoFrame({ children }: { children: ReactNode }) {
             {status === 'signed-in' ? (
               <Link href="/characters">{t('banner.back')}</Link>
             ) : (
-              <Link href="/register">{t('banner.signUp')}</Link>
+              <Link href={localizedHref('/register', locale)}>{t('banner.signUp')}</Link>
             )}
           </Button>
         </div>

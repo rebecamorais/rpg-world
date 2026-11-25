@@ -8,6 +8,7 @@ import AuthErrorPage, { generateMetadata } from './page';
 vi.mock('next-intl/server', () => ({
   getTranslations: async (namespace?: string) =>
     createTranslator({ locale: 'en', messages, namespace: namespace as never }),
+  getLocale: async () => 'en',
 }));
 
 const errors = messages.common.errors;

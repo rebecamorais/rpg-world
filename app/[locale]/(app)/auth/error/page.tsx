@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { getTranslations } from 'next-intl/server';
+import { localizedHref } from '@/i18n/routing';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import AuthLayout from '@frontend/components/auth/AuthLayout';
 import { Button } from '@frontend/components/ui/button';
@@ -54,6 +55,7 @@ export async function generateMetadata({ searchParams }: AuthErrorPageProps): Pr
 export default async function AuthErrorPage({ searchParams }: AuthErrorPageProps) {
   const t = await getTranslations('common');
   const tAuth = await getTranslations('auth');
+  const locale = await getLocale();
   const { code, isExpiredLink, newLinkPage } = await readError(searchParams);
   const errorMessage = translateErrorCode(t, code);
 
@@ -81,7 +83,7 @@ export default async function AuthErrorPage({ searchParams }: AuthErrorPageProps
           )}
           {newLinkPage !== '/login' && (
             <Button asChild variant={newLinkPage ? 'ghost' : 'default'} className="w-full">
-              <Link href="/login">{tAuth('toLogin')}</Link>
+              <Link href={localizedHref('/login', locale)}>{tAuth('toLogin')}</Link>
             </Button>
           )}
         </CardContent>

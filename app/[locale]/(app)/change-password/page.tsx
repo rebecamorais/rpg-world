@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
-import { getTranslations } from 'next-intl/server';
+import { localizedHref } from '@/i18n/routing';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { getApi } from '@api';
 
@@ -16,7 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ChangePasswordPage() {
   const { authApi } = await getApi();
   const user = await authApi.getSessionUser();
-  if (!user) redirect(`/login?next=${encodeURIComponent('/change-password')}`);
+  if (!user) {
+    redirect(
+      localizedHref(`/login?next=${encodeURIComponent('/change-password')}`, await getLocale()),
+    );
+  }
 
   // An account without a password creates one through the e-mail link, not with a session alone.
   // If the check fails, the form shows: the server checks again

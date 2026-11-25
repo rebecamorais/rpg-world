@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import type { LocaleParams } from '@/i18n/routing';
+import { type LocaleParams, localizedHref } from '@/i18n/routing';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import AuthLayout from '@frontend/components/auth/AuthLayout';
@@ -21,11 +21,12 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
 
 /** Whoever is already signed in never sees this page: the proxy sends them to /characters. */
 export default async function LoginPage({ params }: LocaleParams) {
-  setRequestLocale((await params).locale);
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations('common');
 
   return (
-    <AuthLayout back={{ href: '/', label: t('back') }}>
+    <AuthLayout back={{ href: localizedHref('/', locale), label: t('back') }}>
       <LoginForm />
     </AuthLayout>
   );

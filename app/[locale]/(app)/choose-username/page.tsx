@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
-import { getTranslations } from 'next-intl/server';
+import { localizedHref } from '@/i18n/routing';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { getApi } from '@api';
 
@@ -24,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ChooseUsernamePage() {
   const { authApi, profileApi } = await getApi();
   const user = await authApi.getSessionUser();
-  if (!user) redirect('/login');
+  if (!user) redirect(localizedHref('/login', await getLocale()));
 
   const profile = await profileApi.getProfile(user.id);
   if (profile?.usernameChosen) redirect('/characters');
