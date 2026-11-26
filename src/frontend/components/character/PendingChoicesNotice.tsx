@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -23,6 +23,7 @@ import {
 } from '@frontend/context/CharacterContext';
 import { useCharacterChoices } from '@frontend/hooks/useCharacterChoices';
 import { useClassResources } from '@frontend/hooks/useClassResources';
+import { focusIsLost, neighbours } from '@frontend/hooks/useFocusAfterRemove';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { dismissClassChoice, setClassChoice } from '@frontend/lib/character-sheet-updates';
 import { characterTheme } from '@frontend/lib/color-utils';
@@ -38,6 +39,20 @@ import { classDefaults } from '@shared/systems/dnd5e/class-defaults';
 // As on the creation form: only a class picked from the list has SRD picks, and it is what the
 // server checks them against. The player's own text keeps today's sheet
 const LISTED_CLASSES = new Set<string>(Object.values(CharacterClass));
+
+/**
+ * The page's title, once the notice (and the button that had the focus) is gone: not its top. The
+ * main area when there is no h1.
+ */
+function focusPageTitle(): boolean {
+  const target =
+    document.querySelector<HTMLElement>('main h1') ?? document.getElementById('main-content');
+  if (!target) return false;
+  // A title isn't focusable by itself; -1 lets the script focus it without a Tab stop
+  if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+  target.focus();
+  return true;
+}
 
 /**
  * The class's picks still open on the sheet (skills, tools), each with "resolve" and "dismiss".
@@ -62,12 +77,29 @@ export function PendingChoicesNotice() {
   const defaults = classId ? classDefaults(edition, content, attributes) : null;
   const [resolving, setResolving] = useState<ClassChoice | null>(null);
   const opener = useRef<HTMLElement | null>(null);
+  // "Dismiss" goes with its row: the focus moves to the next row's, else the one before, else
+  // (the notice gone with the last one) to the page's title
+  const list = useRef<HTMLUListElement>(null);
+  const dismissed = useRef<{ key: string; targets: string[] } | null>(null);
+  useEffect(() => {
+    const entry = dismissed.current;
+    if (!entry) return;
+    const buttons = [...(list.current?.querySelectorAll<HTMLElement>('[data-focus-key]') ?? [])];
+    const byKey = (key: string) => buttons.find((el) => el.dataset.focusKey === key);
+    if (byKey(entry.key)) return;
+    dismissed.current = null;
+    if (!focusIsLost()) return;
+    const next = entry.targets.map(byKey).find((el) => el !== undefined);
+    if (next) next.focus();
+    else focusPageTitle();
+  });
 
   // Only sheets born with class picks (the key, even empty): a sheet from before them keeps what
   // the player filled in by hand and never shows the notice
   if (readOnly || !defaults || !classId || !classChoices) return null;
   const pending = pendingChoices(defaults.choices, classChoices, dismissedChoices);
   const classLabel = classLabelOf(classId);
+  const keys = pending.map(({ choice }) => choice.key);
   const choiceLabel = (choice: ClassChoice) =>
     tCreation(choice.kind === 'skills' ? 'choiceSkills' : 'choiceTools');
 
@@ -87,7 +119,7 @@ export function PendingChoicesNotice() {
               {t('description', { className: classLabel })}
             </p>
           </div>
-          <ul className="flex flex-col gap-2">
+          <ul ref={list} className="flex flex-col gap-2">
             {pending.map(({ choice, picked }) => {
               const label = choiceLabel(choice);
               return (
@@ -116,7 +148,14 @@ export function PendingChoicesNotice() {
                       size="sm"
                       variant="ghost"
                       aria-label={t('dismissLabel', { choice: label })}
-                      onClick={() => update(dismissClassChoice(choice.key))}
+                      data-focus-key={choice.key}
+                      onClick={() => {
+                        dismissed.current = {
+                          key: choice.key,
+                          targets: neighbours(keys, choice.key),
+                        };
+                        update(dismissClassChoice(choice.key));
+                      }}
                     >
                       {t('dismiss')}
                     </Button>
@@ -139,16 +178,8 @@ export function PendingChoicesNotice() {
               const gone = opener.current && !opener.current.isConnected;
               opener.current = null;
               if (!gone) return;
-              // "Done" on the last open pick took the notice away, "Resolve" with it: the page's
-              // title takes the focus instead of its top (the main area, when there is no h1)
-              const target =
-                document.querySelector<HTMLElement>('main h1') ??
-                document.getElementById('main-content');
-              if (!target) return;
-              event.preventDefault();
-              // A title isn't focusable by itself; -1 lets the script focus it without a Tab stop
-              if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
-              target.focus();
+              // "Done" on the last open pick took the notice away, "Resolve" with it
+              if (focusPageTitle()) event.preventDefault();
             }}
             onDone={(picked) => {
               update(setClassChoice(resolving.key, picked));

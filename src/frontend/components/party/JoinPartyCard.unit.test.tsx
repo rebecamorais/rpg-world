@@ -250,6 +250,33 @@ describe('JoinPartyCard', () => {
     expect(toastSuccess).toHaveBeenCalledWith(t.requestWithdrawn.replace('{name}', 'Mesa'));
   });
 
+  describe('foco depois de responder', () => {
+    // The answer swaps the button that had the focus for another: it would fall to the page's top
+    it('pedir para entrar leva o foco a "Retirar"', async () => {
+      vi.mocked(rpgWorldApi.post).mockResolvedValue({ status: 'requested' });
+      renderCard(null);
+
+      await userEvent.setup().click(screen.getByRole('button', { name: t.join.request }));
+
+      await waitFor(() => expect(screen.getByRole('button', { name: t.withdraw })).toHaveFocus());
+    });
+
+    it('retirar o pedido leva o foco a "Pedir para entrar"', async () => {
+      vi.mocked(rpgWorldApi.delete).mockResolvedValue(undefined);
+      renderCard('requested');
+      const user = userEvent.setup();
+
+      await user.click(screen.getByRole('button', { name: t.withdraw }));
+      await user.click(
+        within(screen.getByRole('alertdialog')).getByRole('button', { name: t.withdraw }),
+      );
+
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: t.join.request })).toHaveFocus(),
+      );
+    });
+  });
+
   // mesas 4: the party's name in Cinzel, as on /parties
   it('o nome da mesa usa o papel de título', () => {
     renderCard(null);

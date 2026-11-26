@@ -10,7 +10,11 @@ import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 import { GmCombatPanel } from './GmCombatPanel';
 import { gmRow } from './fixtures';
 
-const mutation = () => ({ mutate: vi.fn(), isPending: false });
+const mutation = () => ({
+  mutate: vi.fn(),
+  mutateAsync: vi.fn(async () => undefined),
+  isPending: false,
+});
 const hook = {
   encounter: null as GmEncounterView | null,
   isLoading: false,
@@ -369,6 +373,76 @@ describe('GmCombatPanel', () => {
     const dialog = screen.getByRole('alertdialog');
     expect(dialog).toHaveAccessibleName(fill(t.removeConfirm, { name: 'Goblin' }));
     expect(dialog).toHaveTextContent(t.removeConfirmDescription);
+  });
+
+  describe('foco depois de confirmar', () => {
+    it('se tirar alguém falha, a linha fica e o foco não pula depois para outra', async () => {
+      hook.encounter = running(1);
+      hook.removeParticipant.mutateAsync.mockRejectedValueOnce(new Error('offline'));
+      const { rerender } = renderWithProviders(<GmCombatPanel party={party} live />);
+      const user = userEvent.setup();
+
+      await user.click(screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Goblin' }) }));
+      const remove = screen.getByRole('button', { name: fill(t.remove, { name: 'Goblin' }) });
+      await user.click(remove);
+      await user.click(
+        within(screen.getByRole('alertdialog')).getByRole('button', {
+          name: fill(t.remove, { name: 'Goblin' }),
+        }),
+      );
+      await vi.waitFor(() => expect(hook.removeParticipant.mutateAsync).toHaveBeenCalled());
+      // Much later the Goblin leaves for another reason (another tab): the failed answer is over
+      const view = running(1);
+      hook.encounter = { ...view, rows: view.rows.filter((row) => row.participantId !== 'b') };
+      rerender(<GmCombatPanel party={party} live />);
+
+      expect(
+        screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Brom' }) }),
+      ).not.toHaveFocus();
+    });
+
+    it('tirar alguém do combate leva o foco à linha seguinte', async () => {
+      hook.encounter = running(1);
+      const { rerender } = renderWithProviders(<GmCombatPanel party={party} live />);
+      const user = userEvent.setup();
+
+      await user.click(screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Goblin' }) }));
+      const remove = screen.getByRole('button', { name: fill(t.remove, { name: 'Goblin' }) });
+      await user.click(remove);
+      await user.click(
+        within(screen.getByRole('alertdialog')).getByRole('button', {
+          name: fill(t.remove, { name: 'Goblin' }),
+        }),
+      );
+      await vi.waitFor(() => expect(remove).toHaveFocus());
+      // The refetch brings the combat without the Goblin
+      const view = running(1);
+      hook.encounter = { ...view, rows: view.rows.filter((row) => row.participantId !== 'b') };
+      rerender(<GmCombatPanel party={party} live />);
+
+      await vi.waitFor(() =>
+        expect(
+          screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Brom' }) }),
+        ).toHaveFocus(),
+      );
+    });
+
+    it('encerrar o combate leva o foco a "Preparar combate"', async () => {
+      hook.encounter = running(1);
+      const { rerender } = renderWithProviders(<GmCombatPanel party={party} live />);
+      const user = userEvent.setup();
+
+      const end = screen.getByRole('button', { name: t.endCombat });
+      await user.click(end);
+      await user.click(
+        within(screen.getByRole('alertdialog')).getByRole('button', { name: t.endCombat }),
+      );
+      await vi.waitFor(() => expect(end).toHaveFocus());
+      hook.encounter = null;
+      rerender(<GmCombatPanel party={party} live />);
+
+      await vi.waitFor(() => expect(screen.getByRole('button', { name: t.prepare })).toHaveFocus());
+    });
   });
 
   it('sem conexão em tempo real mostra "Reconectando…"', () => {

@@ -108,7 +108,7 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
               aria-expanded={open}
               aria-controls={detailsId}
               aria-label={t('details', { name })}
-              data-item-focus={entry.id}
+              data-focus-key={entry.id}
               onClick={() => setOpen((o) => !o)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -140,7 +140,7 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
                 tabIndex={-1}
                 title={name}
                 className="text-foreground line-clamp-2 font-medium break-normal hyphens-auto"
-                data-item-focus={entry.id}
+                data-focus-key={entry.id}
               >
                 {name}
               </p>

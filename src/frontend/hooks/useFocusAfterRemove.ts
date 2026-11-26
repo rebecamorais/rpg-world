@@ -17,7 +17,7 @@ const CLOSING_DIALOG =
  * is closing (its exit animation keeps it mounted, and the button it would give the focus back to
  * may already be gone).
  */
-function focusIsLost() {
+export function focusIsLost() {
   const active = document.activeElement;
   return !active || active === document.body || !!active.closest(CLOSING_DIALOG);
 }

@@ -518,6 +518,8 @@ describe('Aba Mesa: foco depois das respostas do mestre', () => {
     await waitFor(() =>
       expect(screen.getByRole('heading', { name: t.page.rolePlay })).toHaveFocus(),
     );
+    // The landing spot shows a ring, as any control with the keyboard's focus
+    expect(screen.getByRole('heading', { name: t.page.rolePlay })).toHaveClass('focus-ring');
   });
 
   it('cancelar o último convite, com um pedido na lista, leva o foco a esse pedido', async () => {

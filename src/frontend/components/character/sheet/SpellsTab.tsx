@@ -11,6 +11,7 @@ import { SpellCardSkeleton } from '@frontend/components/character/spells/spell-c
 import { Button } from '@frontend/components/ui/button';
 import { useCharacterMeta } from '@frontend/context/CharacterContext';
 import { useCharacterSpells } from '@frontend/hooks/useCharacterSpells';
+import { focusIsLost } from '@frontend/hooks/useFocusAfterRemove';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 
 import { SheetPage } from './SheetPage';
@@ -94,6 +95,11 @@ export function SpellsTab() {
   // The empty state's "Add spell" goes away once a spell is learned with the search open: on
   // close, the header's button takes the focus instead of the page's top
   const opener = useRef<Element | null>(null);
+  // Learning isn't optimistic: closed before the POST came back, the search gave the focus back
+  // to the empty state's "Add spell", which goes away once the spell arrives. The header's button
+  // takes it then, unless the person moved it elsewhere meanwhile
+  const closedOnOpener = useRef(false);
+  const hasSpells = spells.length > 0;
   const openSearch = () => {
     opener.current = document.activeElement;
     setIsSearchOpen(true);
@@ -101,10 +107,17 @@ export function SpellsTab() {
   const focusAfterSearch = (event: Event) => {
     const gone = opener.current && !opener.current.isConnected;
     opener.current = null;
+    // Still there: the focus goes back to it, and the list may fill after (below)
+    closedOnOpener.current = !gone && !hasSpells;
     if (!gone || !addRef.current) return;
     event.preventDefault();
     addRef.current.focus();
   };
+  useEffect(() => {
+    if (!hasSpells || !closedOnOpener.current) return;
+    closedOnOpener.current = false;
+    if (focusIsLost()) addRef.current?.focus();
+  }, [hasSpells]);
 
   const actions = (
     <div className="flex items-center gap-3 md:gap-6">

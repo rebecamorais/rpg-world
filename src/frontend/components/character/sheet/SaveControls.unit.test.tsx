@@ -86,6 +86,25 @@ describe('SaveCharacterButton', () => {
   });
 });
 
+describe('SaveControls: foco quando a barra some', () => {
+  // Discard and Save unmount the whole bar: the focus would fall to the page's start
+  it('descartar devolve o foco ao campo de onde ele veio', async () => {
+    const user = userEvent.setup();
+    renderSheet();
+
+    const ac = screen.getByLabelText('AC');
+    await user.clear(ac);
+    await user.type(ac, '15');
+    await user.click(screen.getByRole('button', { name: t.discard }));
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.discard }),
+    );
+
+    expect(ac).toHaveValue('14');
+    await waitFor(() => expect(ac).toHaveFocus());
+  });
+});
+
 describe('SaveBarSlotProvider', () => {
   async function editAc() {
     const user = userEvent.setup();

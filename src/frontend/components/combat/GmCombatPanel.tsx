@@ -20,6 +20,7 @@ import {
 } from '@frontend/components/ui/select';
 import { useCharacters } from '@frontend/hooks/useCharacters';
 import { useEncounter } from '@frontend/hooks/useEncounter';
+import { neighbours, useFocusAfterRemove } from '@frontend/hooks/useFocusAfterRemove';
 import { useMediaQuery } from '@frontend/hooks/useMediaQuery';
 import {
   isSortedByInitiative,
@@ -46,6 +47,10 @@ const NPC_SIDES: NpcSide[] = ['enemy', 'ally', 'neutral'];
 const ADD_LABEL = { enemy: 'addEnemy', ally: 'addAlly', neutral: 'addNeutral' } as const;
 // One "whose turn" toast at a time: each turn replaces the last instead of stacking over the panel
 const TURN_TOAST_ID = 'combat-turn';
+// Where the focus goes when the last row leaves, and when ending the combat swaps the panel
+const ADD_NPC_FOCUS = 'add-npc';
+const END_COMBAT_FOCUS = 'end-combat';
+const PREPARE_FOCUS = 'prepare';
 
 /**
  * Who gets the turn back, as `previous_turn` picks it: the last row before the current one that
@@ -190,12 +195,19 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
     setTurnSeen(currentId);
     setPicked(null);
   }
+  // A removed row leaves with its "Remove", and ending the combat swaps the whole panel: the focus
+  // the confirmation gave back would fall to the page's start
+  const { root: focusRoot, next: focusNext, cancel: focusCancel } = useFocusAfterRemove();
 
   if (!encounter) {
     return (
-      <div className="flex flex-col items-start gap-4">
+      <div ref={focusRoot} className="flex flex-col items-start gap-4">
         <p className="text-muted-foreground">{t('noCombat')}</p>
-        <Button onClick={() => combat.create.mutate()} loading={combat.create.isPending}>
+        <Button
+          onClick={() => combat.create.mutate()}
+          loading={combat.create.isPending}
+          data-focus-key={PREPARE_FOCUS}
+        >
           {t('prepare')}
         </Button>
       </div>
@@ -231,7 +243,15 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
         confirmLabel: t('remove', { name: row.name }),
         destructive: true,
       });
-      if (ok) combat.removeParticipant.mutate(row.participantId);
+      if (!ok) return;
+      // The next row, else the one before, else "Add NPC"
+      focusNext(row.participantId, neighbours(ids, row.participantId, ADD_NPC_FOCUS));
+      // mutateAsync, not mutate's own onError: TanStack drops that one when a newer remove started
+      try {
+        await combat.removeParticipant.mutateAsync(row.participantId);
+      } catch {
+        focusCancel(row.participantId); // the row stays, and so does the focus
+      }
     },
   });
 
@@ -288,6 +308,7 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
           aria-expanded={addingNpc}
           aria-controls="combat-add-npc"
           onClick={() => setAddingNpc((open) => !open)}
+          data-focus-key={ADD_NPC_FOCUS}
         >
           <AppIcon name={addingNpc ? 'X' : 'Plus'} size={16} aria-hidden="true" />
           {t('addNpc')}
@@ -368,12 +389,13 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
 
   return (
     // Phones: room under the list for the turn bar, above the tab bar
-    <div className="flex flex-col gap-5 pb-20 md:pb-0">
+    <div ref={focusRoot} className="flex flex-col gap-5 pb-20 md:pb-0">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-heading">{round === 0 ? t('preparing') : t('round', { round })}</h2>
         <Button
           variant="destructive-ghost"
           loading={combat.finish.isPending}
+          data-focus-key={END_COMBAT_FOCUS}
           onClick={async () => {
             const ok = await confirm({
               title: t('endCombatTitle'),
@@ -381,7 +403,11 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
               confirmLabel: t('endCombat'),
               destructive: true,
             });
-            if (ok) combat.finish.mutate();
+            if (!ok) return;
+            focusNext(END_COMBAT_FOCUS, [PREPARE_FOCUS]);
+            combat.finish.mutate(undefined, {
+              onError: () => focusCancel(END_COMBAT_FOCUS), // the combat goes on
+            });
           }}
         >
           {t('endCombat')}

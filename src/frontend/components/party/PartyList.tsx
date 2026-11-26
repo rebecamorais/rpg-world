@@ -38,7 +38,11 @@ function Section({
   return (
     <section aria-label={title} className="flex flex-col gap-3">
       <h2
-        className="text-label text-muted-foreground outline-none"
+        // The focus can land here after an answer: a ring shows it, as on any control
+        className={cn(
+          'text-label text-muted-foreground outline-none',
+          focusKey && 'focus-ring rounded-sm',
+        )}
         data-focus-key={focusKey}
         tabIndex={focusKey ? -1 : undefined}
       >

@@ -10,6 +10,7 @@ import { AppIcon } from '@frontend/components/ui/icon';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { useWriteGuard } from '@frontend/demo/DemoContext';
+import { neighbours, useFocusAfterRemove } from '@frontend/hooks/useFocusAfterRemove';
 import { type InventoryApi, type InventoryItem, useInventory } from '@frontend/hooks/useInventory';
 import {
   INVENTORY_VIEW_KEYS,
@@ -102,8 +103,11 @@ export function ItemList({
     toastId: `inventory-removed-${viewKey}`,
   });
 
+  // The trash can unmounts with its row (the placeholder takes its place): the focus goes to the
+  // item after it, else the one before, else "Add item"
   const remove = (entry: InventoryItem) => {
-    focusNext(entries, entry);
+    const ordered = groupEntries(entries).flatMap((g) => g.entries.map((e) => e.id));
+    focusNext(entry.id, neighbours(ordered, entry.id, ADD_ITEM_FOCUS));
     removal.remove(entry);
   };
   // Empty by what is drawn: the last item's placeholder (and its Undo) stays until the toast goes
@@ -116,7 +120,7 @@ export function ItemList({
   useEffect(() => {
     if (isEmpty || !justAdded.current) return;
     justAdded.current = false;
-    focusRoot.current?.querySelector<HTMLElement>(`[data-item-focus="${ADD_ITEM_FOCUS}"]`)?.focus();
+    focusRoot.current?.querySelector<HTMLElement>(`[data-focus-key="${ADD_ITEM_FOCUS}"]`)?.focus();
   }, [isEmpty, focusRoot]);
 
   const addButton = (
@@ -127,7 +131,7 @@ export function ItemList({
       onClick={openAdd}
       // No text-label: buttons keep the case of their text
       className="h-8 px-3"
-      data-item-focus={ADD_ITEM_FOCUS}
+      data-focus-key={ADD_ITEM_FOCUS}
     >
       <AppIcon name="Plus" size={14} aria-hidden="true" />
       {tCharacters('addItem')}
@@ -193,42 +197,6 @@ export function ItemList({
       />
     </SectionCard>
   );
-}
-
-/**
- * After a removal, focus the item that took its place (the next one, else the one before, else
- * "Add Item"): the trash can unmounts with its row, and focus would fall back to the page's top.
- */
-function useFocusAfterRemove() {
-  const root = useRef<HTMLDivElement>(null);
-  const pending = useRef<{ target: string; removed: string } | null>(null);
-
-  // Every render: the target shows up once the removal has re-rendered the list. Not before the
-  // removed row is gone: the header's "Add Item" is still there on that first render.
-  useEffect(() => {
-    if (!pending.current) return;
-    const { target, removed } = pending.current;
-    const candidates = [
-      ...(root.current?.querySelectorAll<HTMLElement>('[data-item-focus]') ?? []),
-    ];
-    if (candidates.some((candidate) => candidate.dataset.itemFocus === removed)) return;
-    const el = candidates.find((candidate) => candidate.dataset.itemFocus === target);
-    if (el) {
-      el.focus();
-      pending.current = null;
-    }
-  });
-
-  const next = (entries: InventoryItem[], removed: InventoryItem) => {
-    const ordered = groupEntries(entries).flatMap((g) => g.entries);
-    const index = ordered.findIndex((e) => e.id === removed.id);
-    pending.current = {
-      target: ordered[index + 1]?.id ?? ordered[index - 1]?.id ?? ADD_ITEM_FOCUS,
-      removed: removed.id,
-    };
-  };
-
-  return { root, next };
 }
 
 const VIEWS: { value: InventoryView; icon: string; label: 'viewList' | 'viewGrid' }[] = [

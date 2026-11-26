@@ -111,6 +111,25 @@ describe('JournalSettings', () => {
     expect(hook.setJournal.mutate).toHaveBeenCalledWith(null, expect.anything());
   });
 
+  it('remover o diário leva o foco ao campo do link, não ao topo da página', async () => {
+    const user = userEvent.setup();
+    const { rerender } = renderWithProviders(<JournalSettings party={party(DOC_ID)} />);
+
+    const remove = screen.getByRole('button', { name: t.remove });
+    await user.click(remove);
+    await user.click(
+      within(screen.getByRole('alertdialog', { name: t.removeTitle })).getByRole('button', {
+        name: t.remove,
+      }),
+    );
+    // The confirmation gives the focus back to "Remove"
+    await vi.waitFor(() => expect(remove).toHaveFocus());
+    // The refetch brings the party without its journal: "Remove" goes away
+    rerender(<JournalSettings party={party(null)} />);
+
+    await vi.waitFor(() => expect(screen.getByLabelText(t.linkLabel)).toHaveFocus());
+  });
+
   it('enquanto salva, Remover fica desabilitado', () => {
     hook.setJournal.isPending = true;
     try {

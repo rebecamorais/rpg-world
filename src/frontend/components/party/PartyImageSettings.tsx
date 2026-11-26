@@ -13,6 +13,7 @@ import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { SectionCard } from '@frontend/components/ui/section-card';
 import { useFileUploader } from '@frontend/context/FileUploaderContext';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { useFocusAfterRemove } from '@frontend/hooks/useFocusAfterRemove';
 import { useParty } from '@frontend/hooks/useParty';
 import { CropArea, cropImage } from '@frontend/lib/crop-image';
 import { partyQueryKey } from '@frontend/lib/query-keys';
@@ -29,6 +30,10 @@ const ImageCropDialog = dynamic(
 const PREVIEW_WIDTH = 1200;
 const PREVIEW_HEIGHT = 630;
 
+// Where the focus goes once "Remove" is gone: the button that sends a new image
+const REMOVE_FOCUS = 'remove';
+const UPLOAD_FOCUS = 'upload';
+
 /** The GM's picture for the party: the invite link's preview. Saved as soon as it is cropped. */
 export function PartyImageSettings({ party }: { party: PartyView }) {
   const t = useTranslations('parties.image');
@@ -39,6 +44,8 @@ export function PartyImageSettings({ party }: { party: PartyView }) {
   const { removeImage } = useParty(party.id);
   const inputRef = useRef<HTMLInputElement>(null);
   const [pending, setPending] = useState<{ file: File; source: string } | null>(null);
+  // "Remove" leaves with the image, and with the focus the confirmation gave back to it
+  const { root: focusRoot, next: focusNext, cancel: focusCancel } = useFocusAfterRemove();
 
   const clearPending = () => {
     if (pending) URL.revokeObjectURL(pending.source);
@@ -73,11 +80,15 @@ export function PartyImageSettings({ party }: { party: PartyView }) {
       destructive: true,
     });
     if (!ok) return;
-    removeImage.mutate(undefined, { onSuccess: () => toast.success(t('removed')) });
+    focusNext(REMOVE_FOCUS, [UPLOAD_FOCUS]);
+    removeImage.mutate(undefined, {
+      onSuccess: () => toast.success(t('removed')),
+      onError: () => focusCancel(REMOVE_FOCUS), // the image stays, and so does the focus
+    });
   };
 
   return (
-    <SectionCard>
+    <SectionCard ref={focusRoot}>
       <SectionCard.Header>
         <SectionCard.Title icon="Palette" hint={t('hint')}>
           {t('title')}
@@ -102,11 +113,17 @@ export function PartyImageSettings({ party }: { party: PartyView }) {
             onClick={() => inputRef.current?.click()}
             disabled={isUploading}
             loading={isUploading}
+            data-focus-key={UPLOAD_FOCUS}
           >
             {isUploading ? t('uploading') : party.imageUrl ? t('change') : t('upload')}
           </Button>
           {party.imageUrl && (
-            <Button variant="destructive-ghost" onClick={remove} disabled={removeImage.isPending}>
+            <Button
+              variant="destructive-ghost"
+              onClick={remove}
+              disabled={removeImage.isPending}
+              data-focus-key={REMOVE_FOCUS}
+            >
               {t('remove')}
             </Button>
           )}

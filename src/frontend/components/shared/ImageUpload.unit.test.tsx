@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
@@ -199,6 +201,38 @@ describe('ImageUpload', () => {
     );
 
     await waitFor(() => expect(onRemove).toHaveBeenCalledOnce());
+  });
+
+  it('remover leva o foco ao botão de adicionar, não ao topo da página', async () => {
+    // As the profile does: the image goes at once, while the save is on its way
+    function Removable() {
+      const [url, setUrl] = useState<string | undefined>('https://img.test/a.png');
+      return (
+        <ImageUpload
+          target="profile"
+          currentUrl={url}
+          onUploadSuccess={vi.fn()}
+          onRemove={() => setUrl(undefined)}
+        />
+      );
+    }
+    renderWithProviders(
+      <FileUploaderProvider>
+        <Removable />
+      </FileUploaderProvider>,
+    );
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: messages.avatarUpload.remove }));
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', {
+        name: messages.avatarUpload.remove,
+      }),
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: messages.avatarUpload.add })).toHaveFocus(),
+    );
   });
 
   it('sem imagem não oferece remover', () => {

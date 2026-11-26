@@ -134,6 +134,6 @@ export function itemGroupStyle(group: ItemGroup): CSSProperties {
   return { '--item-color': `var(--item-${group})` } as CSSProperties;
 }
 
-/** `data-item-focus` of the "Add Item" controls; items carry their entry id there. After a
- * removal, focus moves to one of them (see `useFocusAfterRemove` in Backpack). */
+/** `data-focus-key` of the "Add Item" controls; items carry their entry id there. After a
+ * removal, focus moves to one of them (see `useFocusAfterRemove`). */
 export const ADD_ITEM_FOCUS = 'add';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -17,6 +17,7 @@ import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { EmptyState } from '@frontend/components/ui/empty-state';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { focusIsLost } from '@frontend/hooks/useFocusAfterRemove';
 import { PARTIES_QUERY_KEY, partyInviteQueryKey } from '@frontend/lib/query-keys';
 
 import type { InvitePreview, MemberStatus } from '@backend/contexts/parties/domain/Party';
@@ -72,6 +73,18 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
     router.push(`/parties/${partyId}`);
   }, [status, partyId, queryClient, router, t]);
 
+  // An answer swaps the action button (Request, then Withdraw, then Request again), and the one
+  // the focus was on (or went back to, after the confirmation) unmounts. Once the new status is
+  // on screen and its button is ready, the focus goes there, unless the person moved it
+  const swapTo = useRef<{ status: MemberStatus | null } | null>(null);
+  const action = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const swap = swapTo.current;
+    if (!swap || isSending || status !== swap.status) return;
+    swapTo.current = null;
+    if (focusIsLost()) action.current?.focus();
+  }, [status, isSending]);
+
   if (!shown || isGone(error)) {
     return (
       <EmptyState
@@ -97,11 +110,13 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
       await queryClient.invalidateQueries({ queryKey: PARTIES_QUERY_KEY });
       if (next === 'active') router.push(`/parties/${shown.partyId}`);
       // On the cache as it is now: a poll may have brought news while the request went
-      else
+      else {
+        swapTo.current = { status: next };
         queryClient.setQueryData<InvitePreview>(queryKey, (prev) => ({
           ...(prev ?? shown),
           myStatus: next,
         }));
+      }
       if (done) toast.success(done);
     } catch (err) {
       // The link changed (or the party went) while the page was open: asking again shows where
@@ -154,7 +169,12 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
               {t('requested')}
             </p>
             <div className="flex flex-wrap items-center gap-2">
-              <Button variant="destructive-ghost" onClick={withdraw} loading={isSending}>
+              <Button
+                ref={action}
+                variant="destructive-ghost"
+                onClick={withdraw}
+                loading={isSending}
+              >
                 {tParties('withdraw')}
               </Button>
               <Button asChild variant="outline">
@@ -177,13 +197,13 @@ export function JoinPartyCard({ code, invite }: { code: string; invite: InvitePr
         {status === 'invited' && shown.hasGm && (
           <>
             <p>{t('alreadyInvited')}</p>
-            <Button onClick={acceptInvite} loading={isSending} className="self-start">
+            <Button ref={action} onClick={acceptInvite} loading={isSending} className="self-start">
               {tParties('accept')}
             </Button>
           </>
         )}
         {(status === null || status === 'declined') && shown.hasGm && (
-          <Button onClick={requestJoin} loading={isSending} className="self-start">
+          <Button ref={action} onClick={requestJoin} loading={isSending} className="self-start">
             {status === 'declined' ? t('requestAgain') : t('request')}
           </Button>
         )}
