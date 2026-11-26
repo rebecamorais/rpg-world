@@ -19,6 +19,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,6 +31,8 @@ import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { NETWORK_ERROR } from '@frontend/lib/error-message';
 import { setServerError } from '@frontend/lib/form-errors';
 import { newPasswordSchema } from '@frontend/lib/password-schema';
+
+import { MIN_PASSWORD_LENGTH } from '@shared/auth/password-policy';
 
 import { getSupabaseBrowserClient } from '@lib/supabase-browser';
 
@@ -122,10 +125,13 @@ export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
                       type="password"
                       placeholder={t('newPasswordPlaceholder')}
                       autoComplete="new-password"
-                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>
+                  {/* The rule shows up front, as on sign-up, not only as an error after sending */}
+                  <FormDescription>
+                    {t('passwordHint', { min: MIN_PASSWORD_LENGTH })}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -141,7 +147,6 @@ export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
                       type="password"
                       placeholder={t('confirmPasswordPlaceholder')}
                       autoComplete="new-password"
-                      className="bg-muted/50"
                       {...field}
                     />
                   </FormControl>

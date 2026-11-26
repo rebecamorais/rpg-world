@@ -239,4 +239,15 @@ describe('SpellSearchDialog', () => {
     expect(await screen.findAllByRole('article')).toHaveLength(12);
     expect(screen.getByRole('status')).toHaveTextContent('12 spells');
   });
+
+  // 32px buttons a gap apart: on a touch screen their tap areas overlapped
+  it('a paginação tem alvo de 44px no toque, e o rodapé quebra de linha no celular', async () => {
+    renderDialog();
+
+    const nav = await screen.findByRole('navigation', { name: t.paginationLabel });
+    for (const button of within(nav).getAllByRole('button')) {
+      expect(button).toHaveClass('pointer-coarse:size-11');
+    }
+    expect(nav.closest('footer')).toHaveClass('flex-wrap');
+  });
 });

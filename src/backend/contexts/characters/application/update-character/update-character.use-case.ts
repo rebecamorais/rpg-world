@@ -1,4 +1,9 @@
 import { applyUpdates } from '@backend/shared/application/apply-updates';
+import {
+  isFileIn,
+  storagePathFromAssetUrl,
+} from '@backend/shared/application/remove-replaced-asset';
+import { AVATAR_BUCKET } from '@backend/shared/domain/avatar';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { acceptedSelections } from '@shared/systems/dnd5e/class-choices';
@@ -111,6 +116,8 @@ export class UpdateCharacterUseCase {
     private repository: CharacterRepo,
     private readonly storageRepository?: StorageRepository,
     private readonly classes?: ClassLookup,
+    /** Whether a URL is on this environment's asset host (`isOwnAssetUrl`). */
+    private readonly isOwnAssetUrl: (url: string) => boolean = () => false,
   ) {}
 
   /**
@@ -138,6 +145,7 @@ export class UpdateCharacterUseCase {
       }
 
       const previous = { avatarUrl: character.avatarUrl, background: character.sheetBackgroundUrl };
+      this.assertOwnImages(character, updates, ownerUsername);
       this.apply(character, updates);
 
       let saved = await this.repository.saveIfUnchanged(character);
@@ -158,6 +166,30 @@ export class UpdateCharacterUseCase {
 
       await this.removeReplacedFiles(character, updates, previous);
       return character;
+    }
+  }
+
+  /**
+   * Empty (no image), the one it already has, or a file uploaded for this character by whoever is
+   * saving: any other URL would show someone else's file, or a tracker, on the sheet. As the
+   * profile avatar does (UpdateProfileUseCase). An image saved before this check, sent back as it
+   * is, keeps working.
+   */
+  private assertOwnImages(
+    character: DnD5eCharacter,
+    { avatarUrl, sheetBackgroundUrl }: CharacterUpdates,
+    userId: string,
+  ): void {
+    const changed = [
+      [avatarUrl, character.avatarUrl],
+      [sheetBackgroundUrl, character.sheetBackgroundUrl],
+    ].filter(([next, current]) => next && next !== current);
+    for (const [url] of changed) {
+      // The uploads are `<userId>/characters/<characterId>-…` (avatar and background alike)
+      const path = this.isOwnAssetUrl(url!) ? storagePathFromAssetUrl(url!, AVATAR_BUCKET) : null;
+      if (!path || !isFileIn(path, `${userId}/characters`, `${character.id}-`)) {
+        throw new CharacterError(CharacterErrorCodes.IMAGE_INVALID);
+      }
     }
   }
 

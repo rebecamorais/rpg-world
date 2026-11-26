@@ -27,18 +27,28 @@ interface SpellbookProps {
 
 const sectionId = (level: number) => `spell-level-${level}`;
 
-/** The level whose section is at the top of the viewport, for the index highlight. */
+/**
+ * The level whose section is at the top of the viewport, for the index highlight: the lowest one
+ * on the page among those in the upper third. After a jump, the end of the section before still
+ * crosses that third; the one just jumped to starts below it, so it wins.
+ */
 function useLevelInView(levels: number[]) {
   const [inView, setInView] = useState<number | null>(null);
 
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return;
+    // Each callback only brings the sections that changed: the others keep their last state
+    const crossing = new Set<number>();
     const observer = new IntersectionObserver(
       (entries) => {
-        const top = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-        if (top) setInView(Number((top.target as HTMLElement).dataset.level));
+        for (const entry of entries) {
+          const level = Number((entry.target as HTMLElement).dataset.level);
+          if (entry.isIntersecting) crossing.add(level);
+          else crossing.delete(level);
+        }
+        // `levels` is in page order
+        const last = levels.findLast((level) => crossing.has(level));
+        if (last !== undefined) setInView(last);
       },
       // A section counts once it reaches the upper third of the screen
       { rootMargin: '0px 0px -66% 0px' },

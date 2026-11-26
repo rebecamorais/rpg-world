@@ -45,18 +45,22 @@ function matchOption<T extends string>(
   );
 }
 
-// Feminine forms (pt, es) the sheet's free text often uses; the labels are the masculine ones
-const FEMININE_CLASSES: Partial<Record<CharacterClass, string[]>> = {
-  [CharacterClass.BARD]: ['barda'],
-  [CharacterClass.CLERIC]: ['cleriga'],
-  [CharacterClass.FIGHTER]: ['guerreira'],
-  [CharacterClass.MONK]: ['monja'],
-  [CharacterClass.PALADIN]: ['paladina'],
-  [CharacterClass.RANGER]: ['patrulheira'],
-  [CharacterClass.ROGUE]: ['ladina'],
-  [CharacterClass.SORCERER]: ['feiticeira', 'hechicera'],
-  [CharacterClass.WARLOCK]: ['bruxa', 'bruja'],
-  [CharacterClass.WIZARD]: ['maga'],
+// The pt names, masculine and feminine (plus a few es forms): the sheet keeps the class as free
+// text, so a "Mago" written with the app in pt must still match with the app in en. The current
+// locale's label comes from `labelOf`; the ids are the en names
+const CLASS_FORMS: Record<CharacterClass, string[]> = {
+  [CharacterClass.BARBARIAN]: ['barbaro', 'barbara'],
+  [CharacterClass.BARD]: ['bardo', 'barda'],
+  [CharacterClass.CLERIC]: ['clerigo', 'cleriga'],
+  [CharacterClass.DRUID]: ['druida'],
+  [CharacterClass.FIGHTER]: ['guerreiro', 'guerreira'],
+  [CharacterClass.MONK]: ['monge', 'monja'],
+  [CharacterClass.PALADIN]: ['paladino', 'paladina'],
+  [CharacterClass.RANGER]: ['patrulheiro', 'patrulheira'],
+  [CharacterClass.ROGUE]: ['ladino', 'ladina'],
+  [CharacterClass.SORCERER]: ['feiticeiro', 'feiticeira', 'hechicera'],
+  [CharacterClass.WARLOCK]: ['bruxo', 'bruxa', 'bruja'],
+  [CharacterClass.WIZARD]: ['mago', 'maga'],
 };
 
 const FEMININE_RACES: Partial<Record<CharacterRace, string[]>> = {
@@ -75,7 +79,7 @@ export function matchCharacterClass(
   text: string | null | undefined,
   labelOf: (cls: CharacterClass) => string,
 ): CharacterClass | null {
-  return matchOption(text, Object.values(CharacterClass), labelOf, FEMININE_CLASSES);
+  return matchOption(text, Object.values(CharacterClass), labelOf, CLASS_FORMS);
 }
 
 /** The listed race in a character's race field ("elf", "Elfa", "Meio-Elfo"), or null. */

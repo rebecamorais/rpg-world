@@ -13,7 +13,8 @@ vi.mock('next/navigation', () => ({
   usePathname: () => navigation.pathname,
   useParams: () => ({}),
 }));
-vi.mock('@frontend/hooks/useProfile', () => ({ useProfile: () => ({ profile: null }) }));
+const profile = vi.hoisted(() => ({ value: null as { username: string } | null }));
+vi.mock('@frontend/hooks/useProfile', () => ({ useProfile: () => ({ profile: profile.value }) }));
 vi.mock('@frontend/hooks/useAuth', () => ({ useAuth: () => ({ signOut: vi.fn() }) }));
 
 const party = (id: string, role: PartySummary['role']): PartySummary => ({
@@ -51,6 +52,18 @@ describe('Sidebar', () => {
     );
     expect(sidebar().getByRole('link', { name: 'Mesa pl1' })).not.toHaveAttribute('aria-current');
     expect(sidebar().queryByRole('link', { name: /journal|diário/i })).not.toBeInTheDocument();
+  });
+
+  // The label truncates with an ellipsis: without a title, a long username can't be read whole
+  it('o nome de usuário cortado tem title com o nome inteiro', () => {
+    profile.value = { username: 'uma_pessoa_de_nome_bem_comprido' };
+    renderWithProviders(<Sidebar />);
+
+    expect(sidebar().getByText('uma_pessoa_de_nome_bem_comprido')).toHaveAttribute(
+      'title',
+      'uma_pessoa_de_nome_bem_comprido',
+    );
+    profile.value = null;
   });
 
   it('todas as mesas ficam sob Mesas, sem separar Mestre e Jogador', () => {

@@ -1,7 +1,7 @@
-import { screen, within } from '@testing-library/react';
+import { act, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { Spell } from '@frontend/types/spells';
 
@@ -105,6 +105,53 @@ describe('Spellbook', () => {
       t.cantrips,
       'Level 3 Spells',
     ]);
+  });
+
+  describe('destaque do índice', () => {
+    let report: (entries: Partial<IntersectionObserverEntry>[]) => void = () => {};
+    beforeEach(() => {
+      vi.stubGlobal(
+        'IntersectionObserver',
+        class {
+          constructor(callback: (entries: Partial<IntersectionObserverEntry>[]) => void) {
+            report = callback;
+          }
+          observe() {}
+          disconnect() {}
+        },
+      );
+    });
+    afterEach(() => vi.unstubAllGlobals());
+
+    const section = (level: number) => document.getElementById(`spell-level-${level}`)!;
+    const crossing = (level: number, isIntersecting: boolean, top = 0) => ({
+      target: section(level),
+      isIntersecting,
+      boundingClientRect: { top } as DOMRect,
+    });
+    const current = () =>
+      within(screen.getByRole('navigation', { name: t.spellbookIndex }))
+        .getAllByRole('link')
+        .find((link) => link.getAttribute('aria-current') === 'location')?.textContent;
+
+    // After a jump the end of the section before still crosses the upper third
+    it('depois do salto, destaca o nível do salto, e não o anterior', () => {
+      renderWithProviders(<Spellbook characterSpells={SPELLS} />);
+
+      act(() => report([crossing(0, true, -300), crossing(3, true, 60)]));
+
+      expect(current()).toBe('Level 33');
+    });
+
+    // Each callback only brings the sections that changed
+    it('voltando para cima, o nível de cima volta a ser o destacado', () => {
+      renderWithProviders(<Spellbook characterSpells={SPELLS} />);
+      act(() => report([crossing(0, true, -300), crossing(3, true, 60)]));
+
+      act(() => report([crossing(3, false, 400)]));
+
+      expect(current()).toBe('Cantrips2');
+    });
   });
 
   it('em cada nível, as preparadas primeiro e o resto em ordem alfabética', () => {

@@ -28,6 +28,14 @@ describe('UnexpectedError', () => {
     expect(document.body).not.toHaveTextContent('relation');
   });
 
+  // The route announcer only speaks on a navigation: the error would go unannounced
+  it('leva o foco ao título e põe o erro no título da aba', () => {
+    renderWithProviders(<UnexpectedError error={serverError()} retry={vi.fn()} />);
+
+    expect(screen.getByRole('heading', { level: 1, name: t.title })).toHaveFocus();
+    expect(document.title).toBe(`${t.title} · ${messages.common.title}`);
+  });
+
   it('"Tentar de novo" chama o retry do Next', async () => {
     const retry = vi.fn();
     renderWithProviders(<UnexpectedError error={serverError()} retry={retry} />);

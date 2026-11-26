@@ -312,7 +312,23 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
         containerId = backpack?.id,
       }: { quantity?: number; containerId?: string } = {},
     ) => {
-      if (containerId) add.mutate({ ref, containerId, quantity: n, key: crypto.randomUUID() });
+      if (!containerId) return;
+      // The dialog closes at once, so the toast is the only sign the item went in; the count it
+      // shows makes a second add on a slow network visible. One id: the next add replaces it.
+      // Not on restoreItem: an undo already has its own toast
+      add.mutate(
+        { ref, containerId, quantity: n, key: crypto.randomUUID() },
+        {
+          onSuccess: (entry) =>
+            toast(
+              tInventory('added', {
+                name: entry.item?.name ?? entry.ref,
+                quantity: entry.quantity,
+              }),
+              { id: `inventory-added-${ownerKey}` },
+            ),
+        },
+      );
     },
     /** Shows `n` at once; the server gets the difference from what is shown now. */
     setQuantity: (itemId: string, n: number) => {

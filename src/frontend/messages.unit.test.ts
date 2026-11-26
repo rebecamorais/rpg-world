@@ -26,4 +26,22 @@ describe('mensagens', () => {
       'só em en',
     ).toEqual([]);
   });
+
+  // The text says "nome de usuário"; {username} placeholders and @{username} are values, not text
+  it('pt não diz "username" no texto', () => {
+    const texts = keys(pt).map((key) =>
+      key.split('.').reduce<unknown>((node, part) => (node as Record<string, unknown>)[part], pt),
+    );
+    const visible = texts.flat().map((text) => String(text).replace(/\{username\}/g, ''));
+    expect(visible.filter((text) => /\busername\b/i.test(text))).toEqual([]);
+  });
+
+  // The screen is "My profile" now; there is no "Settings > Profile" to look for
+  it('a Privacidade aponta para "Meu perfil", o nome da tela', () => {
+    const where = (messages: typeof en) => messages.privacy.sections;
+    expect(JSON.stringify(where(pt))).not.toContain('Configurações > Perfil');
+    expect(JSON.stringify(where(en))).not.toContain('Settings > Profile');
+    expect(JSON.stringify(where(pt))).toContain(pt.dashboard.myProfile);
+    expect(JSON.stringify(where(en))).toContain(en.dashboard.myProfile);
+  });
 });

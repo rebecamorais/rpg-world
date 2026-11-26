@@ -158,7 +158,8 @@ describe('SpellsTab: foco ao fechar a busca', () => {
     renderWithCharacter(<SpellsTab />, character);
 
     await screen.findByText(messages.spellsDrawer.emptyState);
-    const [header, empty] = screen.getAllByRole('button', { name: tc.spells.addBtn });
+    // Empty, only the empty state has "Add spell"; the header's comes with the first spell
+    const [empty] = screen.getAllByRole('button', { name: tc.spells.addBtn });
     await user.click(empty);
     const dialog = await screen.findByRole('dialog');
     await user.click(await within(dialog).findByRole('button', { name: tc.learnSpell }));
@@ -169,7 +170,9 @@ describe('SpellsTab: foco ao fechar a busca', () => {
     await user.keyboard('{Escape}');
 
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
-    await waitFor(() => expect(header).toHaveFocus());
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: tc.spells.addBtn })).toHaveFocus(),
+    );
   });
 
   // The search closed before the learn POST came back: the focus went back to the empty state's
@@ -186,7 +189,7 @@ describe('SpellsTab: foco ao fechar a busca', () => {
     renderWithCharacter(<SpellsTab />, character);
 
     await screen.findByText(messages.spellsDrawer.emptyState);
-    const [header, empty] = screen.getAllByRole('button', { name: tc.spells.addBtn });
+    const [empty] = screen.getAllByRole('button', { name: tc.spells.addBtn });
     await user.click(empty);
     const dialog = await screen.findByRole('dialog');
     await user.click(await within(dialog).findByRole('button', { name: tc.learnSpell }));
@@ -200,6 +203,21 @@ describe('SpellsTab: foco ao fechar a busca', () => {
     await waitFor(() =>
       expect(screen.queryByText(messages.spellsDrawer.emptyState)).not.toBeInTheDocument(),
     );
-    await waitFor(() => expect(header).toHaveFocus());
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: tc.spells.addBtn })).toHaveFocus(),
+    );
+  });
+
+  // Two "Add spell" in two styles, and "0 prepared", on an empty spellbook
+  it('grimório vazio: só o "Add spell" do estado vazio, sem "0 preparadas" no cabeçalho', async () => {
+    api.get.mockImplementation(async (url: string) =>
+      url.startsWith('/api/characters/') ? [] : { data: [], total: 0 },
+    );
+    const character = { ...createDnD5eCharacter('owner', 'Elminster'), id: 'c1' } as DnD5eCharacter;
+    renderWithCharacter(<SpellsTab />, character);
+
+    await screen.findByText(messages.spellsDrawer.emptyState);
+    expect(screen.getAllByRole('button', { name: tc.spells.addBtn })).toHaveLength(1);
+    expect(screen.queryByText(/0 prepared/i)).not.toBeInTheDocument();
   });
 });

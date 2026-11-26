@@ -78,13 +78,18 @@ export function ConditionsPicker({
                     const on = active.get(c.key);
                     const hasLevels = c.maxLevel !== null;
                     return (
-                      <li key={c.key} className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      // Fixed columns: the Exhaustion stepper sits between the switch and the
+                      // book instead of wrapping both onto a line of their own
+                      <li
+                        key={c.key}
+                        className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3"
+                      >
                         <button
                           type="button"
                           role="switch"
                           aria-checked={!!on}
                           onClick={() => toggle(c.key, hasLevels)}
-                          className="focus-ring flex min-h-11 flex-1 cursor-pointer items-center gap-3 rounded-sm text-left"
+                          className="focus-ring col-start-1 flex min-h-11 cursor-pointer items-center gap-3 rounded-sm text-left"
                         >
                           <span
                             aria-hidden="true"
@@ -95,8 +100,10 @@ export function ConditionsPicker({
                           >
                             <span
                               className={cn(
-                                'bg-foreground absolute top-0.5 left-0.5 size-3.5 rounded-full transition-transform',
-                                on && 'translate-x-4',
+                                'absolute top-0.5 left-0.5 size-3.5 rounded-full transition-transform',
+                                // The knob changes colour too: the same one on and off read as "on"
+                                // in the light theme
+                                on ? 'bg-primary-on translate-x-4' : 'bg-muted-foreground',
                               )}
                             />
                           </span>
@@ -109,12 +116,14 @@ export function ConditionsPicker({
                             min={1}
                             max={c.maxLevel ?? MAX_LEVEL}
                             onChange={(level) => setLevel(c.key, level)}
-                            containerClassName="py-0"
+                            containerClassName="col-start-2 py-0"
                           />
                         )}
-                        <ConditionHint conditionKey={c.key} accessibleName={c.name}>
-                          <AppIcon name="Book" size={16} aria-hidden="true" />
-                        </ConditionHint>
+                        <span className="col-start-3">
+                          <ConditionHint conditionKey={c.key} accessibleName={c.name}>
+                            <AppIcon name="Book" size={16} aria-hidden="true" />
+                          </ConditionHint>
+                        </span>
                       </li>
                     );
                   })}

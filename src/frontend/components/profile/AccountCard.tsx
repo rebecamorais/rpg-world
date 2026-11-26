@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@frontend/components/ui/button';
 import { SectionCard } from '@frontend/components/ui/section-card';
 
+import { ForgetSearchParam } from './ForgetSearchParam';
+
 interface AccountCardProps {
   email: string;
   /** Without a password (Google only), the way to get one is the recovery e-mail. */
@@ -24,12 +26,16 @@ export function AccountCard({ email, hasPassword, passwordChanged = false }: Acc
       </SectionCard.Header>
       <SectionCard.Body className="flex flex-col gap-5 sm:p-6">
         {passwordChanged && (
-          <p
-            role="status"
-            className="border-success-muted bg-success-surface text-success-flare rounded-md border px-4 py-3 text-sm"
-          >
-            {t('passwordChanged')}
-          </p>
+          <>
+            <p
+              role="status"
+              className="border-success-muted bg-success-surface text-success-flare rounded-md border px-4 py-3 text-sm"
+            >
+              {t('passwordChanged')}
+            </p>
+            {/* Shown once: a reload or a shared link doesn't say it again */}
+            <ForgetSearchParam name="passwordChanged" />
+          </>
         )}
         <dl className="flex flex-col gap-1">
           <dt className="text-label text-muted-foreground">{t('emailLabel')}</dt>

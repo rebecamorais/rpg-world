@@ -34,4 +34,15 @@ describe('AccountCard', () => {
 
     expect(screen.getByRole('status')).toHaveTextContent(t.passwordChanged);
   });
+
+  // Left in the address, the notice came back on every reload or shared link
+  it('depois de mostrar o aviso, tira o ?passwordChanged do endereço e deixa o resto', () => {
+    window.history.replaceState(null, '', '/settings/profile?passwordChanged=1&tab=x');
+
+    renderWithProviders(<AccountCard email="hero@example.com" hasPassword passwordChanged />);
+
+    expect(screen.getByRole('status')).toHaveTextContent(t.passwordChanged);
+    expect(window.location.pathname).toBe('/settings/profile');
+    expect(window.location.search).toBe('?tab=x');
+  });
 });

@@ -130,6 +130,15 @@ describe('Backpack', () => {
     expect(screen.queryByText('The backpack is empty.')).not.toBeInTheDocument();
   });
 
+  it('enquanto carrega, o cabeçalho já tem a troca de vista e o "Add item" (desligado)', async () => {
+    api.get.mockImplementation(() => new Promise(() => {}));
+    renderWithCharacter(<Backpack />, character);
+
+    await screen.findByRole('status');
+    expect(screen.getByRole('radiogroup')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Add item' })).toBeDisabled();
+  });
+
   it('vazia, mostra o estado vazio com "Add item"', async () => {
     renderBackpack([]);
 
@@ -141,8 +150,9 @@ describe('Backpack', () => {
     const user = userEvent.setup();
     demo.isDemo = true;
     renderBackpack([]);
+    await screen.findByText('The backpack is empty.');
 
-    await user.click(await screen.findByRole('button', { name: 'Add item' }));
+    await user.click(screen.getByRole('button', { name: 'Add item' }));
 
     expect(demo.refuseWrite).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -450,8 +460,12 @@ describe('Backpack', () => {
   describe('grade', () => {
     const RICH_ROPE = item({ id: 'rope', name: 'Rope', description: 'Strong rope.', weight: 10 });
 
+    // The toggle is there while loading too: wait for the list itself
+    const loaded = () =>
+      waitFor(() => expect(screen.queryByText('Loading items')).not.toBeInTheDocument());
     async function toGrid() {
-      fireEvent.click(await screen.findByRole('radio', { name: 'Grid' }));
+      await loaded();
+      fireEvent.click(screen.getByRole('radio', { name: 'Grid' }));
     }
 
     it('começa na lista e lembra a grade', async () => {
@@ -474,7 +488,8 @@ describe('Backpack', () => {
     it('setas trocam a visualização', async () => {
       renderBackpack([entry('e1', RICH_ROPE, 2)]);
 
-      fireEvent.keyDown(await screen.findByRole('radio', { name: 'List' }), { key: 'ArrowRight' });
+      await loaded();
+      fireEvent.keyDown(screen.getByRole('radio', { name: 'List' }), { key: 'ArrowRight' });
       expect(screen.getByRole('button', { name: 'Rope, 2' })).toBeInTheDocument();
       fireEvent.keyDown(screen.getByRole('radio', { name: 'Grid' }), { key: 'ArrowLeft' });
       expect(screen.queryByRole('button', { name: 'Rope, 2' })).toBeNull();

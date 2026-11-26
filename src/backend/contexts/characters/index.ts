@@ -4,6 +4,7 @@ import { getItemCatalog } from '@backend/contexts/items';
 import { getSpellCatalog } from '@backend/contexts/spells';
 import { PartyGmAccess } from '@backend/shared/domain/party-gm-access';
 
+import { isOwnAssetUrl } from '../../shared/infrastructure/helpers/format-asset-url';
 import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import {
   CharacterContext,
@@ -63,7 +64,12 @@ export const createCharacterContext = (
   const getCharacterUseCase = new GetCharacterUseCase(repository);
   const getCharactersByOwnerUseCase = new GetCharactersByOwnerUseCase(repository);
   const createCharacterUseCase = new CreateCharacterUseCase(repository, classes);
-  const updateCharacterUseCase = new UpdateCharacterUseCase(repository, storageRepository, classes);
+  const updateCharacterUseCase = new UpdateCharacterUseCase(
+    repository,
+    storageRepository,
+    classes,
+    isOwnAssetUrl,
+  );
   const deleteCharacterUseCase = new DeleteCharacterUseCase(repository, storageRepository);
   const duplicateCharacterUseCase = new DuplicateCharacterUseCase(repository);
 

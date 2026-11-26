@@ -10,7 +10,7 @@ import en from '../../../messages/en.json';
 import pt from '../../../messages/pt.json';
 import { coinsDelta, useInventory, usePartyChest } from './useInventory';
 
-vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+vi.mock('sonner', () => ({ toast: Object.assign(vi.fn(), { error: vi.fn(), success: vi.fn() }) }));
 vi.mock('@client', () => ({
   rpgWorldApi: { get: vi.fn(), post: vi.fn(), put: vi.fn(), patch: vi.fn(), delete: vi.fn() },
 }));
@@ -128,6 +128,28 @@ describe('useInventory', () => {
       }),
     );
     await waitFor(() => expect(result.current.inventory?.items).toHaveLength(2));
+  });
+
+  // The dialog closes at once: without a toast, a slow network looks like nothing happened
+  it('addItem avisa o que entrou e quantos há agora', async () => {
+    const torch = {
+      ...rope,
+      id: 'i2',
+      ref: 'dnd5e:srd:item:torch',
+      quantity: 3,
+      item: { name: 'Torch' },
+    };
+    api.post.mockResolvedValue(torch);
+    const { result } = await renderInventory();
+
+    act(() => result.current.addItem('dnd5e:srd:item:torch'));
+
+    await waitFor(() =>
+      expect(toast).toHaveBeenCalledWith(
+        'Torch added (3 now)',
+        expect.objectContaining({ id: expect.any(String) }),
+      ),
+    );
   });
 
   it('addItem de item que já está soma: a resposta troca a linha, não duplica', async () => {
