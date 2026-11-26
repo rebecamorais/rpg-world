@@ -3,7 +3,7 @@ import 'server-only';
 
 import { Lore } from '@backend/contexts/lore/domain/Lore';
 
-import { type SystemId, toDbSystem } from '@shared/systems/registry';
+import { parseSystemId, toDbSystem } from '@shared/systems/registry';
 
 import { Database, Json } from '@database-types';
 
@@ -109,11 +109,14 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       ...rest
     } = json;
 
+    const systemId = parseSystemId(String(system));
+    if (!systemId) throw new Error(`Unknown system ${system}`);
+
     return {
       id: character.id,
       name: character.name,
       owner_id: character.ownerUsername,
-      system: toDbSystem(system as SystemId),
+      system: toDbSystem(systemId),
       level: character.level,
       hp_current: hpCurrent as number,
       hp_max: hpMax as number,

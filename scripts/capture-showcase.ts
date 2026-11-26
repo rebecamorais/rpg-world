@@ -355,7 +355,7 @@ async function main() {
     'create character',
   );
   const { id } = (await created.json()) as { id: string };
-  const sheet = `/system/DnD_5e/character/${id}`;
+  const sheet = `/system/dnd5e/character/${id}`;
 
   const companionContext = await browser.newContext({ baseURL: BASE_URL });
   const companion = companionContext.request;

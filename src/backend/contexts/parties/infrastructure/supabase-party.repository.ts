@@ -4,6 +4,7 @@ import 'server-only';
 import { isOwnAssetUrl } from '@backend/shared/infrastructure/helpers/format-asset-url';
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
+import { fromDbSystem } from '@shared/systems/registry';
 
 import { Database } from '@database-types';
 
@@ -59,7 +60,7 @@ export class SupabasePartyRepository implements PartyRepo {
     return data.map((row) => ({
       id: row.party_id,
       name: row.name,
-      system: row.system,
+      system: fromDbSystem(row.system) ?? row.system,
       role: row.role as PartySummary['role'],
       status: row.status as MemberStatus | 'gm',
       gmUsername: row.gm_username,
@@ -198,7 +199,7 @@ export class SupabasePartyRepository implements PartyRepo {
       data && {
         id: data.id,
         name: data.name,
-        system: data.system,
+        system: fromDbSystem(data.system) ?? data.system,
         gmId: data.gm_id,
         edition: data.edition as Edition,
         imageUrl: partyImage(data.image_url),

@@ -166,7 +166,7 @@ async function sample(base: string, device: keyof typeof DEVICES, theme: 'dark' 
 
   let lcp = 0;
   const initial = await trace(cdp, async () => {
-    await page.goto(`/system/DnD_5e/character/${id}/spells`, { waitUntil: 'load' });
+    await page.goto(`/system/dnd5e/character/${id}/spells`, { waitUntil: 'load' });
     await page
       .getByRole('article')
       .nth(COUNT - 1)
