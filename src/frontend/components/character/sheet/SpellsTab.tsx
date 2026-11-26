@@ -99,6 +99,7 @@ export function SpellsTab() {
   // to the empty state's "Add spell", which goes away once the spell arrives. The header's button
   // takes it then, unless the person moved it elsewhere meanwhile
   const closedOnOpener = useRef(false);
+  const hasSpells = spells.length > 0;
   const openSearch = () => {
     opener.current = document.activeElement;
     setIsSearchOpen(true);
@@ -107,12 +108,11 @@ export function SpellsTab() {
     const gone = opener.current && !opener.current.isConnected;
     opener.current = null;
     // Still there: the focus goes back to it, and the list may fill after (below)
-    closedOnOpener.current = !gone;
+    closedOnOpener.current = !gone && !hasSpells;
     if (!gone || !addRef.current) return;
     event.preventDefault();
     addRef.current.focus();
   };
-  const hasSpells = spells.length > 0;
   useEffect(() => {
     if (!hasSpells || !closedOnOpener.current) return;
     closedOnOpener.current = false;

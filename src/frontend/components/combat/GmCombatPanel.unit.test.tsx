@@ -10,7 +10,11 @@ import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 import { GmCombatPanel } from './GmCombatPanel';
 import { gmRow } from './fixtures';
 
-const mutation = () => ({ mutate: vi.fn(), isPending: false });
+const mutation = () => ({
+  mutate: vi.fn(),
+  mutateAsync: vi.fn(async () => undefined),
+  isPending: false,
+});
 const hook = {
   encounter: null as GmEncounterView | null,
   isLoading: false,
@@ -372,6 +376,31 @@ describe('GmCombatPanel', () => {
   });
 
   describe('foco depois de confirmar', () => {
+    it('se tirar alguém falha, a linha fica e o foco não pula depois para outra', async () => {
+      hook.encounter = running(1);
+      hook.removeParticipant.mutateAsync.mockRejectedValueOnce(new Error('offline'));
+      const { rerender } = renderWithProviders(<GmCombatPanel party={party} live />);
+      const user = userEvent.setup();
+
+      await user.click(screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Goblin' }) }));
+      const remove = screen.getByRole('button', { name: fill(t.remove, { name: 'Goblin' }) });
+      await user.click(remove);
+      await user.click(
+        within(screen.getByRole('alertdialog')).getByRole('button', {
+          name: fill(t.remove, { name: 'Goblin' }),
+        }),
+      );
+      await vi.waitFor(() => expect(hook.removeParticipant.mutateAsync).toHaveBeenCalled());
+      // Much later the Goblin leaves for another reason (another tab): the failed answer is over
+      const view = running(1);
+      hook.encounter = { ...view, rows: view.rows.filter((row) => row.participantId !== 'b') };
+      rerender(<GmCombatPanel party={party} live />);
+
+      expect(
+        screen.getByRole('button', { name: fill(t.detailsOf, { name: 'Brom' }) }),
+      ).not.toHaveFocus();
+    });
+
     it('tirar alguém do combate leva o foco à linha seguinte', async () => {
       hook.encounter = running(1);
       const { rerender } = renderWithProviders(<GmCombatPanel party={party} live />);

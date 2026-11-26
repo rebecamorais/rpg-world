@@ -246,9 +246,12 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
       if (!ok) return;
       // The next row, else the one before, else "Add NPC"
       focusNext(row.participantId, neighbours(ids, row.participantId, ADD_NPC_FOCUS));
-      combat.removeParticipant.mutate(row.participantId, {
-        onError: () => focusCancel(row.participantId), // the row stays, and so does the focus
-      });
+      // mutateAsync, not mutate's own onError: TanStack drops that one when a newer remove started
+      try {
+        await combat.removeParticipant.mutateAsync(row.participantId);
+      } catch {
+        focusCancel(row.participantId); // the row stays, and so does the focus
+      }
     },
   });
 
