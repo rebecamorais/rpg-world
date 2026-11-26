@@ -1,4 +1,5 @@
 import {
+  bring,
   createCharacter,
   createParty,
   expect,
@@ -125,6 +126,23 @@ test.describe('aba Mesa: retorno, vazios e lista de mesas', () => {
     await viewSheet.focus();
     await page.keyboard.press('Shift+Tab');
     await expect(page.getByRole('link', { name: /Arani/ })).not.toBeFocused();
+
+    await player.context.close();
+  });
+
+  test('a ficha da mesa que é sua redireciona para o endereço novo da ficha', async ({
+    page,
+    browser,
+    user: _,
+  }) => {
+    const { id: partyId, code } = await createParty(page, 'Mesa do Redirect');
+    const player = await person(browser, 'redirect-player');
+    const characterId = await createCharacter(player.page, 'Brynn');
+    await joinParty(page, player.page, player.user.id, partyId, code);
+    await bring(player.page, partyId, [characterId]);
+
+    await player.page.goto(`${partyUrl(partyId)}/characters/${characterId}`);
+    await expect(player.page).toHaveURL(new RegExp(`/system/dnd5e/character/${characterId}$`));
 
     await player.context.close();
   });
