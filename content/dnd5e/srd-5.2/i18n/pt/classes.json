@@ -112,6 +112,10 @@
       "rage": {
         "name": "Fúria"
       },
+      "relentless-rage": {
+        "name": "Fúria Implacável",
+        "note": "CD 10, +5 para cada uso gasto."
+      },
       "persistent-rage": {
         "name": "Fúria Persistente",
         "note": ""
@@ -1610,6 +1614,14 @@
       "signature-spells": {
         "name": "Assinatura Mágica",
         "note": ""
+      },
+      "signature-spell-1": {
+        "name": "Primeira Assinatura Mágica",
+        "note": "Um lançamento grátis desta magia. Dá para renomear a caixinha com o nome dela."
+      },
+      "signature-spell-2": {
+        "name": "Segunda Assinatura Mágica",
+        "note": "Um lançamento grátis desta magia. Dá para renomear a caixinha com o nome dela."
       }
     },
     "choices": {

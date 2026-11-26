@@ -154,6 +154,10 @@ function resolveMax(
 const clamp = (used: number, max: number | null) =>
   max === null ? 0 : Math.min(Math.max(used, 0), max);
 
+/** Something the player did to a class box that a box taking its place couldn't keep. */
+const hasOwnUse = (saved: ResourceState | undefined) =>
+  (saved?.used ?? 0) > 0 || Object.keys(saved?.overrides ?? {}).length > 0;
+
 interface BoxesInput {
   /** null when the sheet has no edition yet or its class isn't a listed one: only the player's own boxes. */
   content: ClassResourcesContent | null;
@@ -175,11 +179,24 @@ export function listResourceBoxes(input: BoxesInput): EditableResourceBox[] {
     resources: ResourceContent[],
     prefix: string,
     source: ResourceBox['source'],
-  ): EditableResourceBox[] =>
-    resources.flatMap((r) => {
+  ): EditableResourceBox[] => {
+    // A replaced box the sheet saved something in stays instead of its replacements; else they
+    // take its place, hidden as it was until they have a state of their own
+    const replacements = new Map<string, { kept: boolean; hidden: boolean }>();
+    for (const r of resources) {
+      const saved = state?.[`${prefix}:${r.id}`];
+      const kept = hasOwnUse(saved);
+      for (const id of r.replacedBy ?? []) {
+        replacements.set(id, { kept, hidden: saved?.hidden === true });
+      }
+    }
+    return resources.flatMap((r) => {
       if (r.level > level || r.unit === 'spell-slots') return [];
       const key = `${prefix}:${r.id}`;
       const saved = state?.[key];
+      const replacing = replacements.get(r.id);
+      if (r.replacedBy && !hasOwnUse(saved)) return [];
+      if (replacing?.kept) return [];
       const edits = saved?.overrides ?? {};
       const base = {
         name: r.name,
@@ -203,11 +220,12 @@ export function listResourceBoxes(input: BoxesInput): EditableResourceBox[] {
           ...(die && { die }),
           source,
           ...(edits.color && { color: edits.color }),
-          hidden: saved?.hidden === true,
+          hidden: saved ? saved.hidden === true : replacing?.hidden === true,
           base,
         },
       ];
     });
+  };
 
   const custom = Object.keys(state ?? {})
     .filter((key) => key.startsWith(CUSTOM_PREFIX))
@@ -320,4 +338,25 @@ export function matchSubclass(
   if (!wanted) return null;
   const { id, names } = content.subclass;
   return [id, ...names].some((n) => normalize(n) === wanted) ? id : null;
+}
+
+const SONG_OF_REST = /^song-of-rest-d(\d+)$/;
+
+/**
+ * Song of Rest (bard, SRD 5.1; 5.2 has none): the feature the level reached, with its die. Not a
+ * box, it spends nothing: the short rest reminds of it. The die is in the feature's id, one per
+ * step (`song-of-rest-d6` at 2, `-d8` at 9…), as the importer names them.
+ */
+export function songOfRest(
+  features: Pick<FeatureContent, 'id' | 'level' | 'name'>[],
+  level: number,
+): { name: string; die: number } | null {
+  let found: { name: string; die: number } | null = null;
+  for (const f of features) {
+    const die = SONG_OF_REST.exec(f.id)?.[1];
+    if (die && f.level <= level && (!found || Number(die) > found.die)) {
+      found = { name: f.name, die: Number(die) };
+    }
+  }
+  return found;
 }

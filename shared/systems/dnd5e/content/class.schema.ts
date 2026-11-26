@@ -70,6 +70,12 @@ const resourceSchema = z.object({
   ).optional(),
   /** The spell level of what it casts: pact slots (1 → 5), Mystic Arcanum (6 to 9). */
   spellLevel: steps(z.number().int().min(1).max(9)).optional(),
+  /**
+   * Resources of the same list that took this one's place: Signature Spells, a pool of 2, became
+   * one box per spell (#262). The old one stays only on a sheet that saved something in it, whose
+   * meaning the new ones can't keep (#213); there it is shown instead of them.
+   */
+  replacedBy: z.array(id).min(1).optional(),
 });
 
 /** How many options of a kind the class picks, by level: Metamagic, Eldritch Invocations… */

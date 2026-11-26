@@ -13,6 +13,7 @@ import {
   recoveryFor,
   recoveryOn,
   restChoiceOf,
+  songOfRest,
 } from './class-resources';
 import type { ClassData, ClassText } from './content/class.schema';
 import type { AttributeKey } from './types';
@@ -73,6 +74,41 @@ function build(
     attributes: extra.attributes ?? ATTRS,
     state: extra.state,
   });
+}
+
+/** A class as the API sends it, from the generated content of one SRD (English texts). */
+function srdContent(source: 'srd-5.1' | 'srd-5.2', classId: string): ClassResourcesContent {
+  const base = join(process.cwd(), 'content/dnd5e', source);
+  const data = (JSON.parse(readFileSync(join(base, 'classes.json'), 'utf8')) as ClassData[]).find(
+    (c) => c.id === classId,
+  )!;
+  const text = (
+    JSON.parse(readFileSync(join(base, 'i18n/en/classes.json'), 'utf8')) as Record<
+      string,
+      ClassText
+    >
+  )[classId];
+  const sub = data.subclasses[0];
+  const toContent = (
+    r: ClassData['resources'][number],
+    t: ClassText['resources'],
+  ): ResourceContent => ({
+    ...r,
+    name: t[r.id].name,
+    note: t[r.id].note,
+    description: text.features[r.feature]?.description ?? '',
+  });
+  return {
+    classId,
+    edition: source === 'srd-5.1' ? '2014' : '2024',
+    hitDie: data.hitDie,
+    resources: data.resources.map((r) => toContent(r, text.resources)),
+    subclass: {
+      id: sub.id,
+      names: [sub.id, text.subclasses[sub.id].name],
+      resources: sub.resources.map((r) => toContent(r, text.subclasses[sub.id].resources)),
+    },
+  };
 }
 
 const rage = res({
@@ -234,42 +270,48 @@ describe('buildResourceBoxes', () => {
   });
 
   it('monge 5 (conteúdo real do SRD 5.1): Ki com 5 pontos, descanso curto e longo', () => {
-    const base = join(process.cwd(), 'content/dnd5e/srd-5.1');
-    const data = (JSON.parse(readFileSync(join(base, 'classes.json'), 'utf8')) as ClassData[]).find(
-      (c) => c.id === 'monk',
-    )!;
-    const text = (
-      JSON.parse(readFileSync(join(base, 'i18n/en/classes.json'), 'utf8')) as Record<
-        string,
-        ClassText
-      >
-    ).monk;
-    const sub = data.subclasses[0];
-    const toContent = (
-      r: ClassData['resources'][number],
-      t: ClassText['resources'],
-    ): ResourceContent => ({
-      ...r,
-      name: t[r.id].name,
-      note: t[r.id].note,
-      description: text.features[r.feature]?.description ?? '',
-    });
-    const c: ClassResourcesContent = {
-      classId: 'monk',
-      edition: '2014',
-      hitDie: data.hitDie,
-      resources: data.resources.map((r) => toContent(r, text.resources)),
-      subclass: {
-        id: sub.id,
-        names: [sub.id, text.subclasses[sub.id].name],
-        resources: sub.resources.map((r) => toContent(r, text.subclasses[sub.id].resources)),
-      },
-    };
+    const c = srdContent('srd-5.1', 'monk');
     const ki = build(c, 5).find((b) => b.key === 'class:monk:ki')!;
     expect(ki.max).toBe(5);
     expect(ki.unit).toBe('points');
     expect(recoveryOn(ki, 'short')).toBe('all');
     expect(recoveryOn(ki, 'long')).toBe('all');
+  });
+
+  describe.each(['srd-5.1', 'srd-5.2'] as const)('conteúdo real do %s (#262)', (source) => {
+    it('bárbaro 11: Fúria Implacável com 5 bolinhas (CD até 35), volta no curto e no longo', () => {
+      const c = srdContent(source, 'barbarian');
+      expect(build(c, 10).some((b) => b.key === 'class:barbarian:relentless-rage')).toBe(false);
+      const box = build(c, 11).find((b) => b.key === 'class:barbarian:relentless-rage')!;
+      expect(box).toMatchObject({ max: 5, used: 0, unit: 'uses' });
+      expect(box.note).toMatch(/DC 10/);
+      expect(recoveryOn(box, 'short')).toBe('all');
+      expect(recoveryOn(box, 'long')).toBe('all');
+      expect(build(c, 20).find((b) => b.key === box.key)?.max).toBe(5);
+    });
+
+    it('mago 20 sem nada salvo: uma Magia Assinatura por caixinha, de 1 uso, volta no curto', () => {
+      const c = srdContent(source, 'wizard');
+      const boxes = build(c, 20).filter((b) => b.key.startsWith('class:wizard:signature-'));
+      expect(boxes.map((b) => b.key)).toEqual([
+        'class:wizard:signature-spell-1',
+        'class:wizard:signature-spell-2',
+      ]);
+      for (const box of boxes) {
+        expect(box.max).toBe(1);
+        expect(recoveryOn(box, 'short')).toBe('all');
+        expect(recoveryOn(box, 'long')).toBe('all');
+      }
+    });
+
+    it('mago 20 com a reserva antiga gasta: continua a reserva de 2', () => {
+      const c = srdContent(source, 'wizard');
+      const state = { 'class:wizard:signature-spells': { used: 1 } };
+      const boxes = build(c, 20, { state }).filter((b) =>
+        b.key.startsWith('class:wizard:signature-'),
+      );
+      expect(boxes).toMatchObject([{ key: 'class:wizard:signature-spells', max: 2, used: 1 }]);
+    });
   });
 });
 
@@ -448,6 +490,111 @@ describe('caixinhas próprias', () => {
   });
 });
 
+/*
+ * Signature Spells was one pool of 2 and is now one box per spell (#262). `used = 1` in the pool
+ * can't say which spell was cast, so a sheet with something saved in it keeps the pool (#213).
+ */
+describe('caixinha trocada por outras (Magias Assinatura)', () => {
+  const short = [
+    { rest: 'short', amount: 'all' },
+    { rest: 'long', amount: 'all' },
+  ] as ResourceContent['recovery'];
+  const at20 = (value: number): ResourceContent['max'] => ({
+    type: 'steps',
+    steps: [{ level: 20, value }],
+  });
+  const wizard = content('wizard', [
+    res({ id: 'arcane-recovery', max: once }),
+    res({
+      id: 'signature-spells',
+      level: 20,
+      max: at20(2),
+      recovery: short,
+      replacedBy: ['signature-spell-1', 'signature-spell-2'],
+    }),
+    res({
+      id: 'signature-spell-1',
+      feature: 'signature-spells',
+      level: 20,
+      max: at20(1),
+      recovery: short,
+    }),
+    res({
+      id: 'signature-spell-2',
+      feature: 'signature-spells',
+      level: 20,
+      max: at20(1),
+      recovery: short,
+    }),
+  ]);
+  const OLD = 'class:wizard:signature-spells';
+  const ONE = 'class:wizard:signature-spell-1';
+  const TWO = 'class:wizard:signature-spell-2';
+  const keys = (state?: Record<string, ResourceState>) =>
+    listResourceBoxes({
+      content: wizard,
+      subclassId: null,
+      level: 20,
+      attributes: ATTRS,
+      state,
+    }).map((b) => b.key);
+
+  it('sem nada salvo na antiga, mostra as duas novas no lugar dela, com 1 uso cada', () => {
+    expect(keys()).toEqual(['class:wizard:arcane-recovery', ONE, TWO]);
+    expect(keys({ [OLD]: { used: 0 } })).toEqual(['class:wizard:arcane-recovery', ONE, TWO]);
+    const boxes = build(wizard, 20);
+    expect(boxes.find((b) => b.key === ONE)).toMatchObject({ max: 1, used: 0 });
+    expect(boxes.find((b) => b.key === TWO)).toMatchObject({ max: 1, used: 0 });
+  });
+
+  it.each([1, 2])('used = %i salvo na antiga: continua a reserva de 2, sem as novas', (used) => {
+    const state = { [OLD]: { used } };
+    const before = structuredClone(state);
+    expect(keys(state)).toEqual(['class:wizard:arcane-recovery', OLD]);
+    expect(build(wizard, 20, { state }).find((b) => b.key === OLD)).toMatchObject({
+      max: 2,
+      used,
+    });
+    expect(state).toEqual(before);
+  });
+
+  it('o que ela editou na antiga a mantém, mesmo sem nada gasto', () => {
+    const state = { [OLD]: { used: 0, overrides: { name: 'Bola de Fogo e Contramágica' } } };
+    expect(keys(state)).toEqual(['class:wizard:arcane-recovery', OLD]);
+    expect(build(wizard, 20, { state }).find((b) => b.key === OLD)?.name).toBe(
+      'Bola de Fogo e Contramágica',
+    );
+  });
+
+  it('a antiga escondida esconde as novas até elas terem estado próprio', () => {
+    const state: Record<string, ResourceState> = { [OLD]: { used: 0, hidden: true } };
+    const list = () =>
+      listResourceBoxes({ content: wizard, subclassId: null, level: 20, attributes: ATTRS, state });
+    expect(list().filter((b) => b.key !== 'class:wizard:arcane-recovery')).toMatchObject([
+      { key: ONE, hidden: true },
+      { key: TWO, hidden: true },
+    ]);
+    // Showing one again in the settings saves a state of its own for it
+    state[ONE] = { used: 0 };
+    expect(list().filter((b) => b.key !== 'class:wizard:arcane-recovery')).toMatchObject([
+      { key: ONE, hidden: false },
+      { key: TWO, hidden: true },
+    ]);
+  });
+
+  it('o gasto de cada nova é dela: lançar uma não gasta a outra', () => {
+    const boxes = build(wizard, 20, { state: { [ONE]: { used: 1 } } });
+    expect(boxes.find((b) => b.key === ONE)?.used).toBe(1);
+    expect(boxes.find((b) => b.key === TWO)?.used).toBe(0);
+  });
+
+  it('abaixo do nível 20 não aparece nenhuma das três', () => {
+    expect(build(wizard, 19, { state: { [OLD]: { used: 1 } } }).map((b) => b.key)).toEqual([
+      'class:wizard:arcane-recovery',
+    ]);
+  });
+});
+
 describe('recoveryFor e restChoiceOf', () => {
   it('curto também volta no longo; longo só no longo; nenhuma, em nenhum', () => {
     expect(recoveryFor('short')).toEqual([{ rest: 'short', amount: 'all' }, LONG]);
@@ -508,5 +655,30 @@ describe('customFromClass', () => {
     expect(customFromClass(tagged, 'class', 1, ATTRS).description).toBe(
       'Max CR 1/4; you fall unconscious.',
     );
+  });
+});
+
+describe('songOfRest (Canção de Descanso, bardo do SRD 5.1)', () => {
+  const read = (source: 'srd-5.1' | 'srd-5.2') =>
+    (
+      JSON.parse(
+        readFileSync(join(process.cwd(), 'content/dnd5e', source, 'classes.json'), 'utf8'),
+      ) as ClassData[]
+    ).find((c) => c.id === 'bard')!.features;
+  const named = (features: ClassData['features']) =>
+    features.map((f) => ({ ...f, name: `name ${f.id}` }));
+
+  it('o dado sobe com o nível: d6 no 2, d8 no 9, d10 no 13, d12 no 17', () => {
+    const features = named(read('srd-5.1'));
+    expect(songOfRest(features, 1)).toBeNull();
+    expect(songOfRest(features, 2)).toEqual({ name: 'name song-of-rest-d6', die: 6 });
+    expect(songOfRest(features, 8)?.die).toBe(6);
+    expect(songOfRest(features, 9)?.die).toBe(8);
+    expect(songOfRest(features, 13)?.die).toBe(10);
+    expect(songOfRest(features, 20)).toEqual({ name: 'name song-of-rest-d12', die: 12 });
+  });
+
+  it('o bardo do SRD 5.2 não tem Canção de Descanso', () => {
+    expect(songOfRest(named(read('srd-5.2')), 20)).toBeNull();
   });
 });

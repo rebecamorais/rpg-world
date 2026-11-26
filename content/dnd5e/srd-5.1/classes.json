@@ -55,6 +55,17 @@
           ]
         },
         "recovery": [{ "rest": "long", "amount": "all" }]
+      },
+      {
+        "id": "relentless-rage",
+        "feature": "relentless-rage",
+        "level": 11,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 11, "value": 5 }] },
+        "recovery": [
+          { "rest": "short", "amount": "all" },
+          { "rest": "long", "amount": "all" }
+        ]
       }
     ],
     "tables": [
@@ -1280,6 +1291,29 @@
         "level": 20,
         "unit": "uses",
         "max": { "type": "steps", "steps": [{ "level": 20, "value": 2 }] },
+        "recovery": [
+          { "rest": "short", "amount": "all" },
+          { "rest": "long", "amount": "all" }
+        ],
+        "replacedBy": ["signature-spell-1", "signature-spell-2"]
+      },
+      {
+        "id": "signature-spell-1",
+        "feature": "signature-spells",
+        "level": 20,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 20, "value": 1 }] },
+        "recovery": [
+          { "rest": "short", "amount": "all" },
+          { "rest": "long", "amount": "all" }
+        ]
+      },
+      {
+        "id": "signature-spell-2",
+        "feature": "signature-spells",
+        "level": 20,
+        "unit": "uses",
+        "max": { "type": "steps", "steps": [{ "level": 20, "value": 1 }] },
         "recovery": [
           { "rest": "short", "amount": "all" },
           { "rest": "long", "amount": "all" }

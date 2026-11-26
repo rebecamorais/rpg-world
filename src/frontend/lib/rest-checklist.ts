@@ -28,6 +28,8 @@ export function buildRestChecklist(input: {
   hasPactSlots: boolean;
   /** Temporary HP left: they end on a long rest, but by hand (Recover leaves them). */
   hasTempHp?: boolean;
+  /** Song of Rest at this level (bard, SRD 5.1): its name in the locale and its die. */
+  songOfRest?: { name: string; die: number } | null;
 }): RestItem[] {
   const { rest, boxes } = input;
 
@@ -66,6 +68,16 @@ export function buildRestChecklist(input: {
           };
     return [
       spend,
+      ...(input.songOfRest
+        ? [
+            {
+              id: 'song-of-rest',
+              target: 'sheet-hit-dice' as const,
+              message: 'songOfRest',
+              values: { name: input.songOfRest.name, die: `1d${input.songOfRest.die}` },
+            },
+          ]
+        : []),
       ...boxItems,
       ...(input.hasPactSlots
         ? [{ id: 'pact-slots', target: 'sheet-spell-slots' as const, message: 'pactSlotsBack' }]

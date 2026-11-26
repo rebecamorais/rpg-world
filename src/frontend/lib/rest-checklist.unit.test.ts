@@ -166,4 +166,34 @@ describe('buildRestChecklist', () => {
     expect(at('long').map((i) => i.message)).not.toContain('spellSlotsBack');
     expect(at('short').map((i) => i.message)).not.toContain('spellPointsBack');
   });
+
+  it('Canção de Descanso no descanso curto, logo depois dos dados de vida; não no longo', () => {
+    const songOfRest = { name: 'Song of Rest (d8)', die: 8 };
+    const short = buildRestChecklist({
+      ...base,
+      rest: 'short',
+      level: 9,
+      hitDie: 8,
+      boxes: [],
+      songOfRest,
+    });
+    expect(short.slice(0, 2).map((i) => [i.id, i.message, i.values])).toEqual([
+      ['spend-hit-dice', 'spendHitDice', { die: 'd8', bonus: '+2', left: 3 }],
+      ['song-of-rest', 'songOfRest', { name: 'Song of Rest (d8)', die: '1d8' }],
+    ]);
+    const long = buildRestChecklist({
+      ...base,
+      rest: 'long',
+      level: 9,
+      hitDie: 8,
+      boxes: [],
+      songOfRest,
+    });
+    expect(long.some((i) => i.id === 'song-of-rest')).toBe(false);
+  });
+
+  it('sem Canção de Descanso, nada muda no curto', () => {
+    const items = buildRestChecklist({ ...base, rest: 'short', level: 5, hitDie: 8, boxes: [] });
+    expect(items.some((i) => i.id === 'song-of-rest')).toBe(false);
+  });
 });

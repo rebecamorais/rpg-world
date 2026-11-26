@@ -482,6 +482,8 @@ function CopyFromClass({
       ].filter(({ resource, source }) => {
         // Spell slots are tracked with the sheet's magic, never in a box
         if (resource.unit === 'spell-slots') return false;
+        // Kept only for sheets that saved something in it; a copy takes the boxes in its place
+        if (resource.replacedBy) return false;
         const key =
           source === 'class'
             ? `class:${content.classId}:${resource.id}`

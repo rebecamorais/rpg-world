@@ -286,6 +286,7 @@ describe('recursos de classe', () => {
 const SAVED_KEYS: Record<string, string[]> = {
   'srd-5.1': [
     'class:barbarian:rage',
+    'class:barbarian:relentless-rage',
     'class:bard:bardic-inspiration',
     'class:cleric:channel-divinity',
     'class:cleric:divine-intervention',
@@ -313,10 +314,13 @@ const SAVED_KEYS: Record<string, string[]> = {
     'subclass:warlock/fiend:hurl-through-hell',
     'class:wizard:arcane-recovery',
     'class:wizard:signature-spells',
+    'class:wizard:signature-spell-1',
+    'class:wizard:signature-spell-2',
     'subclass:wizard/evocation:overchannel',
   ],
   'srd-5.2': [
     'class:barbarian:rage',
+    'class:barbarian:relentless-rage',
     'class:barbarian:persistent-rage',
     'subclass:barbarian/berserker:intimidating-presence',
     'class:bard:bardic-inspiration',
@@ -358,6 +362,8 @@ const SAVED_KEYS: Record<string, string[]> = {
     'subclass:warlock/fiend:hurl-through-hell',
     'class:wizard:arcane-recovery',
     'class:wizard:signature-spells',
+    'class:wizard:signature-spell-1',
+    'class:wizard:signature-spell-2',
     'subclass:wizard/evoker:overchannel',
   ],
 };
@@ -369,6 +375,21 @@ describe.each(SOURCES)('chaves salvas nas fichas do %s', (source) => {
       ...c.subclasses.flatMap((s) => s.resources.map((r) => `subclass:${c.id}/${s.id}:${r.id}`)),
     ]);
     expect(keys).toEqual(expect.arrayContaining(SAVED_KEYS[source]));
+  });
+
+  it('uma caixinha trocada aponta para recursos da mesma lista, que não são trocados', () => {
+    for (const c of classesOf(source)) {
+      for (const list of [c.resources, ...c.subclasses.map((s) => s.resources)]) {
+        for (const r of list.filter((r) => r.replacedBy)) {
+          for (const id of r.replacedBy!) {
+            const by = list.find((other) => other.id === id);
+            expect(by, `${c.id}:${r.id} -> ${id}`).toBeDefined();
+            expect(by!.replacedBy, `${c.id}:${id}`).toBeUndefined();
+            expect(by!.level, `${c.id}:${id}`).toBe(r.level);
+          }
+        }
+      }
+    }
   });
 
   // The keys above are read from the generated file: this keeps it in step with the importer's
@@ -398,6 +419,7 @@ describe.each(SOURCES)('chaves salvas nas fichas do %s', (source) => {
         expect(r.feature, at).toBe(s.feature);
         expect(r.unit, at).toBe(s.unit);
         expect(r.recovery, at).toEqual(s.recovery);
+        expect(r.replacedBy, at).toEqual(s.replacedBy);
         for (const field of ['max', 'die', 'spellLevel'] as const) {
           if (!fromTable(s[field])) expect(r[field], `${at} ${field}`).toEqual(s[field]);
         }

@@ -27,7 +27,8 @@ vi.mock('../resources/useResourceBoxes', async () => {
     useResourceBoxes: () => {
       const character = useLoadedCharacter();
       return {
-        content: MONK,
+        // A class with no Song of Rest: ClassContent's features, as the API sends them
+        content: { ...MONK, features: [] },
         boxes: buildResourceBoxes({
           content: MONK,
           subclassId: null,

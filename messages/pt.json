@@ -708,6 +708,7 @@
     "goTo": "ir: {item}",
     "spendHitDice": "Role {die} {bonus} por dado de vida gasto (sobram {left})",
     "spendHitDiceNoDie": "Gaste dados de vida, se quiser (sobram {left})",
+    "songOfRest": "{name}: se você se apresentar, quem gastar dados de vida recupera {die} PV a mais",
     "boxBack": "{name} volta: {amount, select, all {todos} other {{amount}}}",
     "pactSlotsBack": "Espaços de pacto voltam",
     "notBackShort": "Espaços de magia e PV não voltam no descanso curto",

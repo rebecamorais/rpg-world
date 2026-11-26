@@ -20,6 +20,7 @@ import { cn } from '@frontend/lib/utils';
 
 import { getModifier } from '@shared/systems/dnd5e/calculations';
 import { classBasics, effectiveHitDie } from '@shared/systems/dnd5e/class-defaults';
+import { songOfRest } from '@shared/systems/dnd5e/class-resources';
 import { hitDiceRemaining } from '@shared/systems/dnd5e/hit-dice';
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
 
@@ -134,6 +135,7 @@ export function RestChecklist({ rest, onClose }: { rest: 'short' | 'long'; onClo
     magic: magicToRestore(character),
     hasPactSlots: !!content?.resources.some((r) => r.unit === 'spell-slots' && r.level <= level),
     hasTempHp: (character.hpTemp ?? 0) > 0,
+    songOfRest: content && songOfRest(content.features, level),
   });
 
   // Opening moves the focus here, so the list is what the keyboard reads next. No trap: Tab
