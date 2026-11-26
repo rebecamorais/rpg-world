@@ -36,8 +36,8 @@ interface Props {
   onOpenChange: (open: boolean) => void;
   /** The edition the filter starts on. */
   initialEdition: Edition;
-  /** Called with the item's key; the dialog closes itself. */
-  onPick: (key: string) => void;
+  /** Called with the catalog item; the dialog closes itself. */
+  onPick: (item: ItemDto) => void;
   /** The sheet's accent colors (a character's dialog); the app's own without it. */
   style?: React.CSSProperties;
 }
@@ -50,8 +50,8 @@ export function AddItemDialog({ open, onOpenChange, initialEdition, onPick, styl
         <AddItemContent
           initialEdition={initialEdition}
           style={style}
-          onPick={(key) => {
-            onPick(key);
+          onPick={(item) => {
+            onPick(item);
             onOpenChange(false);
           }}
         />
@@ -199,7 +199,7 @@ function AddItemContent({
                 edition={edition ? null : tEditions(item.edition)}
                 price={item.value !== null ? fmt.price(item.value) : null}
                 weight={item.weight !== null ? fmt.weight(item.weight) : null}
-                onPick={() => onPick(item.key)}
+                onPick={() => onPick(item)}
               />
             ))}
           </ul>

@@ -730,15 +730,63 @@ describe('Backpack', () => {
 
       await user.click(within(dialog).getByRole('button', { name: 'Add Torch' }));
       await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
-      // The empty state's button gets the focus back while the POST is on its way
+
+      // The row shows while the POST is on its way, so the header's "Add item" takes the focus
+      expect(await screen.findByRole('button', { name: 'Details for Torch' })).toBeInTheDocument();
+      expect(screen.queryByText('The backpack is empty.')).not.toBeInTheDocument();
       await waitFor(() => expect(screen.getByRole('button', { name: 'Add item' })).toHaveFocus());
 
       api.get.mockImplementation(serve([entry('new', TORCH)]));
       await act(async () => answer(entry('new', TORCH)));
+      await waitFor(() => expect(screen.queryByText('Saving…')).not.toBeInTheDocument());
+      expect(screen.getByRole('button', { name: 'Add item' })).toHaveFocus();
+    });
 
-      expect(await screen.findByRole('button', { name: 'Details for Torch' })).toBeInTheDocument();
-      expect(screen.queryByText('The backpack is empty.')).not.toBeInTheDocument();
-      await waitFor(() => expect(screen.getByRole('button', { name: 'Add item' })).toHaveFocus());
+    // #294: on a slow network the item showed only when the server answered, and a second tap
+    // summed without anyone seeing
+    it('o item entra na hora marcado como salvando, sem − / + até o servidor responder', async () => {
+      let answer!: (value: unknown) => void;
+      api.post.mockImplementation(() => new Promise((resolve) => (answer = resolve)));
+      const { user, dialog } = await openDialog();
+
+      await user.click(within(dialog).getByRole('button', { name: 'Add Torch' }));
+
+      const row = (await screen.findByRole('button', { name: 'Details for Torch' })).closest('li')!;
+      expect(row).toHaveAttribute('aria-busy', 'true');
+      expect(within(row).getByText('Saving…')).toHaveAttribute('role', 'status');
+      // Nothing to change on a row the server doesn't have yet
+      // (jsdom doesn't take inert out of reach, so the attribute is what can be checked)
+      expect(
+        within(row).getByRole('button', { name: 'Remove Torch' }).closest('[inert]'),
+      ).not.toBeNull();
+
+      api.get.mockImplementation(serve([entry('new', TORCH)]));
+      await act(async () => answer(entry('new', TORCH)));
+      // The server's row replaces the saving one (a new element: its id is the key)
+      await waitFor(() =>
+        expect(
+          screen.getByRole('button', { name: 'Details for Torch' }).closest('li'),
+        ).not.toHaveAttribute('aria-busy'),
+      );
+      expect(screen.getAllByRole('button', { name: 'Details for Torch' })).toHaveLength(1);
+    });
+
+    it('o foco na linha que estava salvando passa para a linha do servidor', async () => {
+      let answer!: (value: unknown) => void;
+      api.post.mockImplementation(() => new Promise((resolve) => (answer = resolve)));
+      const { user, dialog } = await openDialog();
+
+      await user.click(within(dialog).getByRole('button', { name: 'Add Torch' }));
+      const saving = await screen.findByRole('button', { name: 'Details for Torch' });
+      act(() => saving.focus());
+
+      api.get.mockImplementation(serve([entry('new', TORCH)]));
+      await act(async () => answer(entry('new', TORCH)));
+
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: 'Details for Torch' })).not.toBe(saving),
+      );
+      expect(screen.getByRole('button', { name: 'Details for Torch' })).toHaveFocus();
     });
 
     it('mochila vazia: se adicionar falhar, o foco fica no "Add item" do estado vazio', async () => {

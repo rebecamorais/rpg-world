@@ -11,7 +11,12 @@ import { SectionCard } from '@frontend/components/ui/section-card';
 import { useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { useWriteGuard } from '@frontend/demo/DemoContext';
 import { neighbours, useFocusAfterRemove } from '@frontend/hooks/useFocusAfterRemove';
-import { type InventoryApi, type InventoryItem, useInventory } from '@frontend/hooks/useInventory';
+import {
+  type InventoryApi,
+  type InventoryItem,
+  isPendingEntry,
+  useInventory,
+} from '@frontend/hooks/useInventory';
 import {
   INVENTORY_VIEW_KEYS,
   type InventoryView,
@@ -114,14 +119,43 @@ export function ItemList({
   const isEmpty = removal.display.length === 0;
 
   // Added from the empty state: the dialog gives the focus back to its "Add item", which unmounts
-  // when the POST is in and the list shows up. The header's "Add item" takes it then. A failed
-  // POST leaves the list empty, and the empty state's button keeps the focus.
+  // when the new row shows up (at once, while it saves). The header's "Add item" takes it then.
+  // A failed add takes the row back out: the list is empty again, the header's button unmounts,
+  // and the empty state's one takes the focus, if nothing else has it.
   const justAdded = useRef(false);
+  const wasEmpty = useRef(isEmpty);
   useEffect(() => {
+    const addButtonEl = () =>
+      focusRoot.current?.querySelector<HTMLElement>(`[data-focus-key="${ADD_ITEM_FOCUS}"]`);
+    const becameEmpty = isEmpty && !wasEmpty.current;
+    wasEmpty.current = isEmpty;
+    if (becameEmpty) {
+      const active = document.activeElement;
+      if (!active || active === document.body) addButtonEl()?.focus();
+      return;
+    }
     if (isEmpty || !justAdded.current) return;
     justAdded.current = false;
-    focusRoot.current?.querySelector<HTMLElement>(`[data-focus-key="${ADD_ITEM_FOCUS}"]`)?.focus();
+    addButtonEl()?.focus();
   }, [isEmpty, focusRoot]);
+
+  // A saving row is replaced by the server's (a new id, so a new element): whoever had the focus on
+  // it gets it on the row that took its place, not on the page's top
+  const pendingRefs = useRef(new Map<string, string>());
+  useEffect(() => {
+    const now = new Set(entries.filter(isPendingEntry).map((e) => e.id));
+    for (const [id, ref] of pendingRefs.current) {
+      if (now.has(id)) continue;
+      pendingRefs.current.delete(id);
+      const active = document.activeElement;
+      if (active && active !== document.body) continue;
+      const landed = entries.find((e) => e.ref === ref && !isPendingEntry(e));
+      if (landed) {
+        focusRoot.current?.querySelector<HTMLElement>(`[data-focus-key="${landed.id}"]`)?.focus();
+      }
+    }
+    for (const e of entries) if (isPendingEntry(e)) pendingRefs.current.set(e.id, e.ref);
+  });
 
   const addButton = (
     <Button
@@ -190,9 +224,9 @@ export function ItemList({
         open={adding}
         onOpenChange={setAdding}
         initialEdition={commonEdition(entries)}
-        onPick={(key) => {
+        onPick={(item) => {
           justAdded.current = isEmpty;
-          addItem(key);
+          addItem(item.key, { item });
         }}
         style={dialogStyle}
       />

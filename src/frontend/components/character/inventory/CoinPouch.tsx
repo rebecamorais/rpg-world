@@ -47,6 +47,8 @@ type Mode = 'pay' | 'receive';
 export interface CoinDialogText {
   receiveDescription: string;
   after: string;
+  /** Under a payment that doesn't fit: what is there now, to compare with the amount. */
+  now: string;
   tooMany: (max: string) => string;
 }
 
@@ -135,10 +137,19 @@ function CoinDialog({
 
         {/* Nothing for a field that isn't a valid amount: the last valid one would be shown */}
         {!valid ? null : payment && !payment.ok ? (
-          <p role="alert" className="text-danger-flare text-sm">
-            {/* In the coin being paid and smaller ones: "3 SP + 49 GP", not "3 SP + 9 GP + 4 PP" */}
-            {t('missing', { amount: format(fromCopper(payment.missing, coin)) })}
-          </p>
+          <div className="flex flex-col gap-1">
+            <p role="alert" className="text-danger-flare text-sm">
+              {/* In the coin being paid and smaller ones: "3 SP + 49 GP", not "3 SP + 9 GP + 4 PP" */}
+              {t('missing', { amount: format(fromCopper(payment.missing, coin)) })}
+            </p>
+            {/* What there is, to compare while typing an amount that doesn't fit */}
+            <dl className="text-sm">
+              <div className="flex justify-between gap-4 py-1.5">
+                <dt className="text-muted-foreground">{text?.now ?? t('now')}</dt>
+                <dd className="text-right">{format(purse, ' · ')}</dd>
+              </div>
+            </dl>
+          </div>
         ) : overflow ? (
           <p role="alert" className="text-danger-flare text-sm">
             {text

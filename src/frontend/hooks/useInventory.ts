@@ -13,6 +13,7 @@ import type {
   InventoryDto,
   InventoryItem,
 } from '@backend/contexts/characters/domain/repository/inventory.repo';
+import type { ItemDto } from '@backend/contexts/items/domain/item.repo';
 
 import { COINS, type Coin, type Coins } from '@shared/systems/dnd5e/coins';
 
@@ -20,13 +21,27 @@ export type { InventoryItem };
 
 type CoinsDelta = Partial<Coins>;
 
-type AddVars = { ref: string; containerId: string; quantity: number; key: string };
+/** `preview`: the catalog entry, to show a new item's row before the server answers. Not sent. */
+type AddVars = {
+  ref: string;
+  containerId: string;
+  quantity: number;
+  key: string;
+  preview?: ItemDto;
+};
+/** What an add changed in the cache before the answer: a row of its own, or another's quantity. */
+type Added = { pendingId: string } | { shiftedId: string } | undefined;
 type QuantityVars = { itemId: string; delta: number; key: string };
 type CoinsVars = { containerId: string; delta: CoinsDelta; key: string };
 /** A coin typed by hand: its final `value`, and what the screen showed (`seen`) when typing began. */
 type TypedCoinVars = { containerId: string; coin: Coin; value: number; seen: number; key: string };
 /** The entry a DELETE took out of the cache, and where it was, to put back if it fails. */
 type Removed = { entry: InventoryItem; index: number } | undefined;
+
+const PENDING = 'pending:';
+
+/** A row an add put on screen before the server answered: no id yet, so nothing to change on it. */
+export const isPendingEntry = (entry: Pick<InventoryItem, 'id'>) => entry.id.startsWith(PENDING);
 
 /** What changes from `from` to `to`, only the coins that do. */
 export function coinsDelta(from: Coins, to: Coins): CoinsDelta {
@@ -129,6 +144,30 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
     },
   };
 
+  /**
+   * Puts the server's entry where the add's own row was. If the entry is already in the list (the
+   * item was there, and another add's answer brought it), the own row just goes.
+   */
+  const replacePending = (pendingId: string, entry: InventoryItem) =>
+    queryClient.setQueryData<InventoryDto>(key, (c) => {
+      if (!c) return c;
+      if (c.items.some((i) => i.id === entry.id)) {
+        return {
+          ...c,
+          items: c.items
+            .filter((i) => i.id !== pendingId)
+            .map((i) => (i.id === entry.id ? entry : i)),
+        };
+      }
+      const at = c.items.findIndex((i) => i.id === pendingId);
+      if (at === -1) return { ...c, items: [...c.items, entry] };
+      return { ...c, items: c.items.map((i) => (i.id === pendingId ? entry : i)) };
+    });
+  const dropEntry = (itemId: string) =>
+    queryClient.setQueryData<InventoryDto>(key, (c) =>
+      c ? { ...c, items: c.items.filter((i) => i.id !== itemId) } : c,
+    );
+
   /** Puts a removed entry back at its place, unless it is there again (an undo that landed). */
   const restoreEntry = ({ entry, index }: { entry: InventoryItem; index: number }) =>
     queryClient.setQueryData<InventoryDto>(key, (c) => {
@@ -185,17 +224,49 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
     return tCoins('changedElsewhere', { count: now, coin: tCoins(`${coin}.short`) });
   };
 
+  /** What the cache shows now (with the writes still on their way), not what the last render saw. */
+  const cached = () => queryClient.getQueryData<InventoryDto>(key);
+
   // The callbacks name their return type: they call their own mutation (the retry), and an
   // inferred one would make its type depend on itself
+  // Shows the add at once: the item already in the container gets the quantity (the server sums
+  // it too), a new one gets a row of its own, built from the catalog entry the dialog had. Without
+  // that entry (an undo), a new item waits for the answer
   const add = useMutation({
     ...settle,
-    mutationFn: (v: AddVars) =>
-      rpgWorldApi.post<InventoryItem>(`${path}/items?locale=${locale}`, v),
-    onSuccess: upsert,
-    onError: (err, v): void =>
+    mutationFn: ({ preview: _, ...body }: AddVars) =>
+      rpgWorldApi.post<InventoryItem>(`${path}/items?locale=${locale}`, body),
+    onMutate: (v): Added => {
+      void queryClient.cancelQueries({ queryKey: key });
+      const there = cached()?.items.find((i) => i.ref === v.ref && i.containerId === v.containerId);
+      if (there) {
+        shiftQuantity(there.id, v.quantity);
+        return { shiftedId: there.id };
+      }
+      if (!v.preview) return undefined;
+      const pendingId = `${PENDING}${v.key}`;
+      const row: InventoryItem = {
+        id: pendingId,
+        containerId: v.containerId,
+        ref: v.ref,
+        quantity: v.quantity,
+        item: v.preview,
+      };
+      queryClient.setQueryData<InventoryDto>(key, (c) =>
+        c ? { ...c, items: [...c.items, row] } : c,
+      );
+      return { pendingId };
+    },
+    onSuccess: (entry, _v, added) =>
+      added && 'pendingId' in added ? replacePending(added.pendingId, entry) : upsert(entry),
+    // Takes back only this add: its own row, or what it put on another's quantity
+    onError: (err, v, added): void =>
       failed(
         err,
-        () => {},
+        () => {
+          if (added && 'pendingId' in added) dropEntry(added.pendingId);
+          else if (added) shiftQuantity(added.shiftedId, -v.quantity);
+        },
         () => add.mutate(v),
       ),
   });
@@ -256,9 +327,6 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
       ),
   });
 
-  /** What the cache shows now (with the writes still on their way), not what the last render saw. */
-  const cached = () => queryClient.getQueryData<InventoryDto>(key);
-
   /** Puts `value` as `coin` of a container in the cache, if it still shows `from` there. */
   const putCoin = (containerId: string, coin: Coin, from: number, value: number) =>
     queryClient.setQueryData<InventoryDto>(key, (c) =>
@@ -304,20 +372,24 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
     isLoading: query.isLoading,
     pouch,
     backpack,
-    /** Adds to the backpack (or `containerId`); an item already there has its quantity summed. */
+    /**
+     * Adds to the backpack (or `containerId`); an item already there has its quantity summed.
+     * `item`, the catalog entry, lets a new item show at once, marked as saving.
+     */
     addItem: (
       ref: string,
       {
         quantity: n = 1,
         containerId = backpack?.id,
-      }: { quantity?: number; containerId?: string } = {},
+        item,
+      }: { quantity?: number; containerId?: string; item?: ItemDto } = {},
     ) => {
       if (!containerId) return;
-      // The dialog closes at once, so the toast is the only sign the item went in; the count it
+      // The row shows at once, marked as saving; the toast says it went in, and the count it
       // shows makes a second add on a slow network visible. One id: the next add replaces it.
       // Not on restoreItem: an undo already has its own toast
       add.mutate(
-        { ref, containerId, quantity: n, key: crypto.randomUUID() },
+        { ref, containerId, quantity: n, key: crypto.randomUUID(), preview: item },
         {
           onSuccess: (entry) =>
             toast(
@@ -333,10 +405,13 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
     /** Shows `n` at once; the server gets the difference from what is shown now. */
     setQuantity: (itemId: string, n: number) => {
       const current = cached()?.items.find((i) => i.id === itemId);
-      if (!current || current.quantity === n) return;
+      // A row still saving has no id on the server yet
+      if (!current || current.quantity === n || isPendingEntry(current)) return;
       quantity.mutate({ itemId, delta: n - current.quantity, key: crypto.randomUUID() });
     },
-    removeItem: (itemId: string) => remove.mutate(itemId),
+    removeItem: (itemId: string) => {
+      if (!isPendingEntry({ id: itemId })) remove.mutate(itemId);
+    },
     /** Puts back an entry that was removed (for an "undo"): same ref, quantity and container. */
     restoreItem: (item: Pick<InventoryItem, 'ref' | 'quantity' | 'containerId'>) =>
       add.mutate({

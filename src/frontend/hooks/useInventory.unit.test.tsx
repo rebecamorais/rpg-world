@@ -8,7 +8,7 @@ import { rpgWorldApi } from '@client';
 
 import en from '../../../messages/en.json';
 import pt from '../../../messages/pt.json';
-import { coinsDelta, useInventory, usePartyChest } from './useInventory';
+import { coinsDelta, isPendingEntry, useInventory, usePartyChest } from './useInventory';
 
 vi.mock('sonner', () => ({ toast: Object.assign(vi.fn(), { error: vi.fn(), success: vi.fn() }) }));
 vi.mock('@client', () => ({
@@ -161,6 +161,85 @@ describe('useInventory', () => {
 
     await waitFor(() => expect(result.current.inventory?.items[0].quantity).toBe(3));
     expect(result.current.inventory?.items).toHaveLength(1);
+  });
+
+  // #294: the row shows before the answer, built from the catalog entry the dialog had
+  describe('adicionar sem esperar a rede', () => {
+    const torchItem = { key: 'dnd5e:srd:item:torch', name: 'Torch' } as never;
+    const torch = { id: 'i2', containerId: 'bag1', ref: 'dnd5e:srd:item:torch', quantity: 1 };
+
+    it('um item novo entra na hora, e a resposta troca a linha pela do servidor', async () => {
+      let answer!: (value: unknown) => void;
+      api.post.mockImplementation(() => new Promise((resolve) => (answer = resolve)));
+      const { result } = await renderInventory();
+
+      act(() => result.current.addItem(torch.ref, { item: torchItem }));
+
+      await waitFor(() => expect(result.current.inventory?.items).toHaveLength(2));
+      const pending = result.current.inventory!.items[1];
+      expect(isPendingEntry(pending)).toBe(true);
+      expect(pending).toMatchObject({ ref: torch.ref, quantity: 1, item: torchItem });
+      // The catalog entry stays out of the request
+      expect(api.post.mock.lastCall?.[1]).not.toHaveProperty('preview');
+
+      api.get.mockResolvedValue({ ...inventory(), items: [rope, { ...torch, item: torchItem }] });
+      await act(async () => answer({ ...torch, item: torchItem }));
+      await waitFor(() => expect(result.current.inventory?.items[1].id).toBe('i2'));
+      expect(result.current.inventory?.items).toHaveLength(2);
+    });
+
+    it('um item que já está soma na hora na linha dele', async () => {
+      let answer!: (value: unknown) => void;
+      api.post.mockImplementation(() => new Promise((resolve) => (answer = resolve)));
+      const { result } = await renderInventory();
+
+      act(() => result.current.addItem(rope.ref, { item: torchItem }));
+
+      await waitFor(() => expect(result.current.inventory?.items[0].quantity).toBe(3));
+      expect(result.current.inventory?.items).toHaveLength(1);
+      await act(async () => answer({ ...rope, quantity: 3 }));
+    });
+
+    it('a falha tira só a linha do item novo e oferece "Tentar de novo"', async () => {
+      const request = failLater(answered(503, 'common_error_unexpected'));
+      api.post.mockReturnValueOnce(request.promise);
+      const { result } = await renderInventory();
+
+      act(() => result.current.addItem(torch.ref, { item: torchItem }));
+      await waitFor(() => expect(result.current.inventory?.items).toHaveLength(2));
+      act(() => request.fail());
+
+      await waitFor(() => expect(result.current.inventory?.items).toEqual([rope]));
+      expect(retryAction()?.label).toBe('Try again');
+    });
+
+    it('a falha num item que já está devolve só a quantidade somada', async () => {
+      const request = failLater();
+      api.post.mockReturnValueOnce(request.promise);
+      const { result } = await renderInventory();
+
+      act(() => result.current.addItem(rope.ref, { quantity: 2 }));
+      await waitFor(() => expect(result.current.inventory?.items[0].quantity).toBe(4));
+      act(() => request.fail());
+
+      await waitFor(() => expect(result.current.inventory?.items[0].quantity).toBe(2));
+      expect(toast.error).toHaveBeenCalled();
+    });
+
+    it('a linha que ainda está salvando não muda nem sai', async () => {
+      api.post.mockImplementation(() => new Promise(() => {}));
+      const { result } = await renderInventory();
+
+      act(() => result.current.addItem(torch.ref, { item: torchItem }));
+      await waitFor(() => expect(result.current.inventory?.items).toHaveLength(2));
+      const pendingId = result.current.inventory!.items[1].id;
+      act(() => result.current.setQuantity(pendingId, 5));
+      act(() => result.current.removeItem(pendingId));
+
+      expect(api.patch).not.toHaveBeenCalled();
+      expect(api.delete).not.toHaveBeenCalled();
+      expect(result.current.inventory?.items[1].quantity).toBe(1);
+    });
   });
 
   it('restoreItem manda de volta a mesma ref, quantidade e lugar', async () => {
