@@ -3,7 +3,7 @@ import { type SystemId, fromDbSystem } from '@shared/systems/registry';
 import { dnd5eSheetMapper } from './dnd5e';
 import type { SheetMapper } from './types';
 
-export type { CommonCharacterFields, DbCharacterRow, SheetMapper } from './types';
+export type { DbCharacterRow, SheetMapper } from './types';
 
 const SHEET_MAPPERS: Record<SystemId, SheetMapper> = {
   dnd5e: dnd5eSheetMapper,
