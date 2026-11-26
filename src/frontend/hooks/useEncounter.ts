@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { rpgWorldApi } from '@client';
@@ -59,6 +60,7 @@ function conditionsIn(view: EncounterView | null | undefined, participantId: str
 /** The party's combat (null without one) and everything done on it; each change reloads it. */
 export function useEncounter(partyId: string) {
   const queryClient = useQueryClient();
+  const t = useTranslations('combat');
   const { getErrorMessage } = useErrorMessage();
   const base = `/api/parties/${partyId}/encounter`;
 
@@ -108,6 +110,27 @@ export function useEncounter(partyId: string) {
     mutationFn: (input: { characterId: string; count?: number; side?: NpcSide }) =>
       rpgWorldApi.post(`${base}/participants`, input),
     ...options,
+  });
+  // The party's characters in one go: every one is sent, so one failure doesn't stop the rest,
+  // and one toast says how many didn't make it instead of one toast per character
+  const addParticipants = useMutation({
+    mutationFn: async (characterIds: string[]) => {
+      const results = await Promise.allSettled(
+        characterIds.map((characterId) =>
+          rpgWorldApi.post(`${base}/participants`, { characterId }),
+        ),
+      );
+      const failures = results.flatMap((r) => (r.status === 'rejected' ? [r.reason as Error] : []));
+      // Nobody made it: an ordinary failure, with its own message
+      if (failures.length === characterIds.length && failures.length > 0) throw failures[0];
+      return failures;
+    },
+    ...options,
+    onSuccess: (failures) => {
+      if (failures.length === 0) return;
+      const reason = getErrorMessage(failures[0]);
+      toast.error(t('addPartyCharactersPartial', { failed: failures.length, reason }));
+    },
   });
   const updateParticipant = useMutation({
     mutationFn: ({ participantId, ...patch }: ParticipantPatch & { participantId: string }) =>
@@ -293,10 +316,14 @@ export function useEncounter(partyId: string) {
   return {
     encounter: query.data,
     isLoading: query.isLoading,
+    // A failed load isn't "no combat": the GM would be offered to prepare one that already exists
+    isError: query.isError,
+    refetch: query.refetch,
     create,
     finish,
     start,
     addParticipant,
+    addParticipants,
     updateParticipant,
     removeParticipant,
     setOrder,

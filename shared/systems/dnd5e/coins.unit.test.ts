@@ -15,6 +15,12 @@ describe('fromCopper', () => {
     expect(fromCopper(1234)).toEqual(purse({ pp: 1, gp: 2, sp: 3, cp: 4 }));
     expect(fromCopper(50)).toEqual(purse({ sp: 5 }));
   });
+
+  it('com upTo, não passa da moeda pedida', () => {
+    expect(fromCopper(4930, 'gp')).toEqual(purse({ gp: 49, sp: 3 }));
+    expect(fromCopper(4930, 'sp')).toEqual(purse({ sp: 493 }));
+    expect(fromCopper(120, 'ep')).toEqual(purse({ ep: 2, sp: 2 }));
+  });
 });
 
 describe('pay', () => {

@@ -145,7 +145,8 @@ export function ItemList({
         <SectionCard.Title icon={icon} hint={hint}>
           {title}
         </SectionCard.Title>
-        {!isEmpty && (
+        {/* Also while loading: the skeleton is a list, and the header doesn't jump when it fills */}
+        {(isLoading || !isEmpty) && (
           <div className="ml-auto flex items-center gap-2">
             <ViewToggle view={view} onChange={setView} />
             {addButton}

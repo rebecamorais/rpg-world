@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { formatAssetUrl, isOwnAssetUrl } from './format-asset-url';
+import { formatAssetUrl, isOwnAssetUrl, ownAssetPath } from './format-asset-url';
 
 describe('formatAssetUrl', () => {
   const originalEnv = process.env;
@@ -108,5 +108,20 @@ describe('isOwnAssetUrl', () => {
     expect(isOwnAssetUrl('https://images.rpgworldapp.com/avatars/u/parties/p-v1.webp')).toBe(true);
     expect(isOwnAssetUrl('https://images.rpgworldapp.com.evil.test/avatars/x.webp')).toBe(false);
     expect(isOwnAssetUrl('https://evil.test/avatars/u/parties/p-v1.webp')).toBe(false);
+  });
+});
+
+describe('ownAssetPath', () => {
+  beforeEach(() => vi.stubEnv('NODE_ENV', 'production'));
+  afterEach(() => vi.unstubAllEnvs());
+
+  it('só o bucket logo depois do host de imagens deste ambiente', () => {
+    expect(ownAssetPath('https://images.rpgworldapp.com/avatars/u/c-v1.webp', 'avatars')).toBe(
+      'u/c-v1.webp',
+    );
+    expect(ownAssetPath('https://images.rpgworldapp.com/other/x/avatars/u/c.webp', 'avatars')).toBe(
+      null,
+    );
+    expect(ownAssetPath('https://evil.test/avatars/u/c-v1.webp', 'avatars')).toBeNull();
   });
 });

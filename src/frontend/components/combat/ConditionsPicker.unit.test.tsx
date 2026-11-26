@@ -107,6 +107,27 @@ describe('ConditionsPicker', () => {
     expect(onChange).toHaveBeenLastCalledWith([{ key: EXHAUSTION, level: 2 }]);
   });
 
+  // The same knob colour both ways read as "on" in the light theme
+  it('a bolinha do switch muda de cor, e não só de lugar', async () => {
+    await open({ initial: [PRONE], onChange: vi.fn() });
+    const knob = (name: string) =>
+      screen.getByRole('switch', { name }).querySelector('[aria-hidden] > span')!;
+
+    expect(knob('Caído')).toHaveClass('bg-primary-on');
+    expect(knob('Exaustão')).toHaveClass('bg-muted-foreground');
+    expect(knob('Exaustão')).not.toHaveClass('bg-primary-on');
+  });
+
+  // flex-wrap pushed the stepper and the book onto a line of their own
+  it('com a exaustão ligada, o stepper e o livro ficam em colunas fixas', async () => {
+    await open({ initial: [{ key: EXHAUSTION, level: 2 }], onChange: vi.fn() });
+    const row = screen.getByRole('switch', { name: 'Exaustão' }).closest('li')!;
+
+    expect(row).toHaveClass('grid');
+    expect(row).not.toHaveClass('flex-wrap');
+    expect(row.lastElementChild).toHaveClass('col-start-3');
+  });
+
   it('ligar na outra edição mantém as condições já ligadas', async () => {
     const onChange = vi.fn();
     const user = await open({ initial: [PRONE], onChange });

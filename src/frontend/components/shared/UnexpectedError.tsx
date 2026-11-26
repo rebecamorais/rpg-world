@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import Link from 'next/link';
 
@@ -46,9 +46,22 @@ export function UnexpectedError({
     console.error(error);
   }, [error]);
 
+  // The page changed without a navigation, so the route announcer says nothing: the focus goes to
+  // the heading, and a screen reader reads it. -1 lets the script focus it without a Tab stop
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const heading = root.current?.querySelector<HTMLElement>('h1');
+    if (!heading) return;
+    heading.tabIndex = -1;
+    heading.focus();
+  }, []);
+
   const content = (
     <div className="flex flex-1 items-center justify-center px-4 py-10">
+      {/* The tab says it too, not the title of the page that failed */}
+      <title>{`${t('title')} · ${tCommon('title')}`}</title>
       <EmptyState
+        ref={root}
         icon="TriangleAlert"
         // The page's only heading
         titleAs="h1"

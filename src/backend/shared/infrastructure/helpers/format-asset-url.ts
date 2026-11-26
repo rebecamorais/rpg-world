@@ -6,6 +6,7 @@
  * routing through images.rpgworldapp.com in production and falling back
  * to localhost in development.
  */
+import { storagePathFromAssetUrl } from '../../application/remove-replaced-asset';
 import { siteUrl } from './site-url';
 
 function assetBaseUrl(): string {
@@ -31,4 +32,12 @@ export function formatAssetUrl(path: string): string {
 /** Whether `url` points at our own asset host (what an upload here returns), in this environment. */
 export function isOwnAssetUrl(url: string): boolean {
   return url.startsWith(`${assetBaseUrl()}/`);
+}
+
+/**
+ * Path inside `bucket` of a URL on our own asset host (`<base>/<bucket>/<path>`, what an upload
+ * here returns), or null for any other URL, including another bucket on the same host.
+ */
+export function ownAssetPath(url: string, bucket: string): string | null {
+  return storagePathFromAssetUrl(url, bucket, assetBaseUrl());
 }

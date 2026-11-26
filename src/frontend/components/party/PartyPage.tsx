@@ -22,7 +22,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@frontend/components/ui/dialog';
-import { EmptyState } from '@frontend/components/ui/empty-state';
+import { EmptyState, ErrorState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import AppLink from '@frontend/demo/AppLink';
@@ -267,13 +267,27 @@ export function PartyTableTab({ partyId }: { partyId: string }) {
 export function PartyCombatTab({ partyId }: { partyId: string }) {
   const t = useTranslations('combat');
   const { party } = useParty(partyId);
-  const { encounter, isLoading } = useEncounter(partyId);
+  const tCommon = useTranslations('common');
+  const { encounter, isLoading, isError, refetch } = useEncounter(partyId);
   const live = usePartyLive();
   if (!party) return null;
 
   if (party.role === 'gm') return <GmCombatPanel party={party} live={live} />;
   if (!party.hasGm) return <PartyGmClaim party={party} />;
   if (isLoading) return <LoadingState thematic />;
+  // A failed load isn't "no combat"
+  if (!encounter && isError) {
+    return (
+      <ErrorState
+        title={t('loadErrorTitle')}
+        action={
+          <Button variant="outline" onClick={() => void refetch()}>
+            {tCommon('retry')}
+          </Button>
+        }
+      />
+    );
+  }
   if (!encounter) return <EmptyState icon="Swords" title={t('noCombatPlayer')} />;
   return <PlayerCombatPanel partyId={party.id} edition={party.edition} live={live} />;
 }

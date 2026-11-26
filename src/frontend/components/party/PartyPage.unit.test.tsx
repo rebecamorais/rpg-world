@@ -60,13 +60,16 @@ const party = (overrides: Partial<PartyView> = {}): PartyView => ({
   ...overrides,
 });
 
-const encounter = vi.hoisted(() => ({ view: null as unknown }));
+const encounter = vi.hoisted(() => ({ view: null as unknown, fail: false }));
 
 /** The party at a tab: the frame (name, menu, tabs) around that tab's content. */
 function renderPage(view: PartyView, tab: 'overview' | 'combat' | 'demo' = 'overview') {
   vi.mocked(rpgWorldApi.get).mockImplementation(async (url: string) => {
     if (url === '/api/parties') return { asGm: [], asPlayer: [], invites: [], requests: [] };
-    if (url.endsWith('/encounter')) return encounter.view ?? {};
+    if (url.endsWith('/encounter')) {
+      if (encounter.fail) throw new Error('boom');
+      return encounter.view ?? {};
+    }
     return view;
   });
   const content =
@@ -94,6 +97,7 @@ describe('PartyPage sem mestre', () => {
     demo.isDemo = false;
     demo.search = '';
     encounter.view = null;
+    encounter.fail = false;
     vi.clearAllMocks();
     vi.mocked(rpgWorldApi.delete).mockResolvedValue(undefined);
   });
@@ -121,6 +125,15 @@ describe('PartyPage sem mestre', () => {
   it('com mestre e sem combate, a aba Combate diz que não há combate', async () => {
     renderPage(party({ hasGm: true }), 'combat');
     expect(await screen.findByText(messages.combat.noCombatPlayer)).toBeInTheDocument();
+  });
+
+  it('com mestre, o combate que não carregou mostra o erro, e não "sem combate"', async () => {
+    encounter.fail = true;
+    renderPage(party({ hasGm: true }), 'combat');
+
+    expect(await screen.findByText(messages.combat.loadErrorTitle)).toBeInTheDocument();
+    expect(screen.queryByText(messages.combat.noCombatPlayer)).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: messages.common.retry })).toBeInTheDocument();
   });
 
   it('o último jogador que sai é avisado de que a mesa será apagada', async () => {

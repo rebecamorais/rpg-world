@@ -51,6 +51,7 @@
       "character_error_forbidden": "Unauthorized to modify this character.",
       "character_error_avatar_file_too_large": "The file exceeds the 5 MB limit.",
       "character_error_avatar_invalid_type": "Invalid file type. Use JPEG, PNG or WEBP.",
+      "character_error_image_invalid": "This image can’t be used on the sheet. Upload one from the sheet’s appearance.",
       "character_error_spell_action_invalid": "Invalid spell action.",
       "lore_error_character_not_found": "Character not found.",
       "party_error_name_invalid": "The party name must have 1 to 60 characters.",
@@ -86,6 +87,7 @@
       "character_error_item_not_found": "This item was not found.",
       "character_error_container_not_found": "This container was not found.",
       "character_error_item_limit": "The backpack is full: a character holds at most 500 entries.",
+      "character_error_chest_item_limit": "The chest is full: a party keeps at most 500 entries.",
       "character_error_resource_limit": "A character has at most 200 resource boxes.",
       "character_error_container_limit": "A character has at most 20 containers.",
       "character_error_conflict": "This sheet changed somewhere else. Reload to see the current version.",
@@ -521,7 +523,8 @@
         "tools": "Tools and kits",
         "gear": "Gear",
         "other": "Other"
-      }
+      },
+      "added": "{name} added ({quantity} now)"
     },
     "untranslatedNotice": "Description in English for now.",
     "untranslatedHelp": "Help translate"
@@ -1136,7 +1139,7 @@
       },
       "rights": {
         "title": "4. Your rights",
-        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. You can delete your account at any time in Settings > Profile: you enter your username and password (if you only signed in with Google there is no password step) and we send a confirmation link to the account's email, valid for 1 hour. After the final button, deletion is immediate and cannot be undone. For your other rights, or if you cannot delete from there, contact us through the <support>support form</support> or on <server>Discord</server>; we reply within 5 business days.",
+        "content": "In accordance with <lgpd>LGPD</lgpd>/GDPR, you have the right to access, correct, or delete your data. You can delete your account at any time in My profile: you enter your username and password (if you only signed in with Google there is no password step) and we send a confirmation link to the account's email, valid for 1 hour. After the final button, deletion is immediate and cannot be undone. For your other rights, or if you cannot delete from there, contact us through the <support>support form</support> or on <server>Discord</server>; we reply within 5 business days.",
         "deletionIntro": "When you delete your account:",
         "deletionItems": [
           "Your login, profile, characters and NPCs are deleted, with everything they hold. The images you uploaded lose their owner and a daily job removes them within 2 days; cached copies can last up to 1 day.",
@@ -1187,7 +1190,8 @@
     "processing": "Updating…",
     "sessionNotFound": "The link session has ended. Request a new link.",
     "subtitleForEmail": "Choose a strong new password for {email}.",
-    "changed": "Password changed"
+    "changed": "Password changed",
+    "passwordHint": "At least {min} characters."
   },
   "spellsData": {
     "schools": {
@@ -1498,7 +1502,8 @@
     "title": "Page not found",
     "description": "The page you are looking for doesn't exist or has moved.",
     "home": "Go to the home page",
-    "characters": "Go to my characters"
+    "characters": "Go to my characters",
+    "demo": "Go to the demo start"
   },
   "errorPage": {
     "title": "Something went wrong",
@@ -1875,7 +1880,9 @@
     "endTurnOf": "End {name}'s turn",
     "newTab": "(opens in a new tab)",
     "offline": "No connection. The screen won’t update and nothing you do is sent.",
-    "removeConfirmDescription": "The sheet stays as it is: it only leaves the initiative order, with its conditions in this combat."
+    "removeConfirmDescription": "The sheet stays as it is: it only leaves the initiative order, with its conditions in this combat.",
+    "loadErrorTitle": "Couldn't load the combat.",
+    "addPartyCharactersPartial": "{failed, plural, one {# character wasn't added} other {# characters weren't added}}: {reason}"
   },
   "characterRaces": {
     "dragonborn": "Dragonborn",

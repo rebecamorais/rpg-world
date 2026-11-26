@@ -93,6 +93,8 @@ function SidebarContent({ withLogout = false }: { withLogout?: boolean }) {
               navLabelClass(expanded),
               'text-foreground text-sm font-bold tracking-tight',
             )}
+            // The label truncates a long username: the title shows it whole on hover
+            title={username}
           >
             {username}
           </span>

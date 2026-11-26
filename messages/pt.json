@@ -7,7 +7,7 @@
       "common_error_unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
       "class_error_not_found": "Classe não encontrada.",
       "demo_read_only": "Esta é uma demo somente leitura. Crie uma conta gratuita para jogar.",
-      "account_deletion_error_username_mismatch": "Esse não é o seu username.",
+      "account_deletion_error_username_mismatch": "Esse não é o seu nome de usuário.",
       "account_deletion_error_password_invalid": "Senha incorreta. Se você nunca criou uma, por exemplo porque entrava com link por e-mail, use “Esqueci minha senha” para criar.",
       "account_deletion_error_too_soon": "Este e-mail foi enviado há menos de um minuto. Confira sua caixa de entrada ou espere um pouco para pedir de novo.",
       "account_deletion_error_too_many_attempts": "Muitas senhas incorretas. Espere 15 minutos e tente de novo, ou use “Esqueci minha senha” para criar uma nova.",
@@ -42,7 +42,7 @@
       "character_error_delete_not_found": "Personagem não encontrado.",
       "character_error_delete_unauthorized": "Não autorizado a excluir este personagem.",
       "character_error_get_not_found": "Personagem não encontrado.",
-      "character_error_get_by_owner_required": "Username do proprietário é obrigatório.",
+      "character_error_get_by_owner_required": "O nome de usuário do dono é obrigatório.",
       "domain_error_attribute_below_one": "Atributo não pode ser menor que 1.",
       "domain_error_hp_max_below_one": "A vida máxima deve ser pelo menos 1.",
       "domain_error_hp_damage_negative": "Dano não pode ser negativo.",
@@ -51,6 +51,7 @@
       "character_error_forbidden": "Não autorizado a modificar este personagem.",
       "character_error_avatar_file_too_large": "O arquivo excede o limite de 5 MB.",
       "character_error_avatar_invalid_type": "Tipo de arquivo inválido. Use JPEG, PNG ou WEBP.",
+      "character_error_image_invalid": "Essa imagem não pode ser usada na ficha. Envie uma pela aparência da ficha.",
       "character_error_spell_action_invalid": "Ação de magia inválida.",
       "lore_error_character_not_found": "Personagem não encontrado.",
       "party_error_name_invalid": "O nome da mesa precisa ter de 1 a 60 caracteres.",
@@ -86,6 +87,7 @@
       "character_error_item_not_found": "Item não encontrado.",
       "character_error_container_not_found": "Lugar não encontrado.",
       "character_error_item_limit": "A mochila está cheia: um personagem guarda no máximo 500 itens diferentes.",
+      "character_error_chest_item_limit": "O baú está cheio: uma mesa guarda no máximo 500 itens diferentes.",
       "character_error_resource_limit": "Um personagem tem no máximo 200 caixinhas de recurso.",
       "character_error_container_limit": "Um personagem tem no máximo 20 lugares.",
       "character_error_conflict": "Esta ficha mudou em outro lugar. Recarregue para ver a versão atual.",
@@ -521,7 +523,8 @@
         "tools": "Ferramentas e kits",
         "gear": "Equipamento",
         "other": "Outros"
-      }
+      },
+      "added": "Item adicionado: {name} (agora {quantity})"
     },
     "untranslatedNotice": "Descrição em inglês por enquanto.",
     "untranslatedHelp": "Ajude a traduzir"
@@ -1136,7 +1139,7 @@
       },
       "rights": {
         "title": "4. Seus direitos",
-        "content": "De acordo com a <lgpd>LGPD</lgpd>, você tem o direito de acessar, corrigir ou excluir seus dados. Você pode excluir sua conta a qualquer momento em Configurações > Perfil: você informa seu nome de usuário e sua senha (quem entrou só com o Google não tem a etapa da senha) e enviamos um link de confirmação para o e-mail da conta, válido por 1 hora. Depois do botão final, a exclusão é imediata e não pode ser desfeita. Para os demais direitos, ou se não conseguir excluir por lá, fale conosco pelo <support>formulário de suporte</support> ou pelo <server>Discord</server>; respondemos em até 5 dias úteis.",
+        "content": "De acordo com a <lgpd>LGPD</lgpd>, você tem o direito de acessar, corrigir ou excluir seus dados. Você pode excluir sua conta a qualquer momento em Meu perfil: você informa seu nome de usuário e sua senha (quem entrou só com o Google não tem a etapa da senha) e enviamos um link de confirmação para o e-mail da conta, válido por 1 hora. Depois do botão final, a exclusão é imediata e não pode ser desfeita. Para os demais direitos, ou se não conseguir excluir por lá, fale conosco pelo <support>formulário de suporte</support> ou pelo <server>Discord</server>; respondemos em até 5 dias úteis.",
         "deletionIntro": "Ao excluir a conta:",
         "deletionItems": [
           "São apagados o login, o perfil, os personagens e os NPCs, com tudo o que têm. As imagens que você enviou ficam sem dono e uma rotina diária as remove em até 2 dias; cópias em cache podem durar até 1 dia.",
@@ -1187,7 +1190,8 @@
     "processing": "Atualizando…",
     "sessionNotFound": "A sessão do link terminou. Peça outro link.",
     "subtitleForEmail": "Escolha uma nova senha forte para {email}.",
-    "changed": "Senha alterada"
+    "changed": "Senha alterada",
+    "passwordHint": "Pelo menos {min} caracteres."
   },
   "spellsData": {
     "schools": {
@@ -1498,7 +1502,8 @@
     "title": "Página não encontrada",
     "description": "A página que você procura não existe ou mudou de lugar.",
     "home": "Ir para o início",
-    "characters": "Ir para meus personagens"
+    "characters": "Ir para meus personagens",
+    "demo": "Ir para o início da demo"
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -1875,7 +1880,9 @@
     "endTurnOf": "Encerrar turno de {name}",
     "newTab": "(abre em nova aba)",
     "offline": "Sem conexão. A tela não atualiza e nada do que você fizer é enviado.",
-    "removeConfirmDescription": "A ficha continua como está: sai só da ordem de iniciativa, com as condições deste combate."
+    "removeConfirmDescription": "A ficha continua como está: sai só da ordem de iniciativa, com as condições deste combate.",
+    "loadErrorTitle": "Não deu para carregar o combate.",
+    "addPartyCharactersPartial": "{failed, plural, one {# personagem não entrou} other {# personagens não entraram}}: {reason}"
   },
   "characterRaces": {
     "dragonborn": "Draconato",

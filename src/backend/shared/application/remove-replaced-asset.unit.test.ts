@@ -22,6 +22,30 @@ describe('storagePathFromAssetUrl', () => {
     expect(storagePathFromAssetUrl(url, 'avatars')).toBeNull();
   });
 
+  describe('com a base do host', () => {
+    it.each([
+      ['https://images.rpgworldapp.com', `https://images.rpgworldapp.com/avatars/${USER}/a-v1.png`],
+      ['https://rpg.test/api/images', `https://rpg.test/api/images/avatars/${USER}/a-v1.png`],
+    ])('acha o caminho com o bucket logo depois de %s', (base, url) => {
+      expect(storagePathFromAssetUrl(url, 'avatars', base)).toBe(`${USER}/a-v1.png`);
+    });
+
+    it.each([
+      [
+        'outro bucket com "avatars" no meio',
+        `https://images.rpgworldapp.com/docs/x/avatars/${USER}/a.png`,
+      ],
+      ['outro host', `https://evil.test/avatars/${USER}/a.png`],
+      [
+        'host que só começa igual',
+        `https://images.rpgworldapp.com.evil.test/avatars/${USER}/a.png`,
+      ],
+      ['só o bucket', 'https://images.rpgworldapp.com/avatars/'],
+    ])('devolve null para %s', (_label, url) => {
+      expect(storagePathFromAssetUrl(url, 'avatars', 'https://images.rpgworldapp.com')).toBeNull();
+    });
+  });
+
   it('resolve "..", então o caminho sai da pasta do usuário e não passa no isFileIn', () => {
     const path = storagePathFromAssetUrl(
       `https://x.test/avatars/${USER}/%2E%2E/other/avatar-v1.png`,

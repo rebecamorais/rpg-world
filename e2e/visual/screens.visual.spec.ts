@@ -28,6 +28,9 @@ async function settle(page: Page) {
   // now. Its slot keeps the same reserved height either way, so making it transparent makes the
   // screen the same in both cases.
   await page.addStyleTag({ content: '[data-turnstile] { opacity: 0 !important; }' });
+  // A toast from the step before (an item added, a profile saved) may still be on screen or
+  // already gone, depending on timing. The screens are what is compared, not the toasts.
+  await page.addStyleTag({ content: '[data-sonner-toaster] { display: none !important; }' });
   // Client data (profile, character) and image decoding settle
   await page.waitForTimeout(800);
 }

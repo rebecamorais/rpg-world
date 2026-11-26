@@ -18,10 +18,13 @@ const mutation = () => ({
 const hook = {
   encounter: null as GmEncounterView | null,
   isLoading: false,
+  isError: false,
+  refetch: vi.fn(),
   create: mutation(),
   finish: mutation(),
   start: mutation(),
   addParticipant: mutation(),
+  addParticipants: mutation(),
   updateParticipant: mutation(),
   removeParticipant: mutation(),
   setOrder: mutation(),
@@ -74,6 +77,8 @@ describe('GmCombatPanel', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     hook.encounter = null;
+    hook.isLoading = false;
+    hook.isError = false;
   });
 
   it('sem combate: "Preparar combate" cria um', async () => {
@@ -82,6 +87,23 @@ describe('GmCombatPanel', () => {
     await userEvent.click(screen.getByRole('button', { name: t.prepare }));
 
     expect(hook.create.mutate).toHaveBeenCalled();
+  });
+
+  it('o combate não carregou: mostra o erro com "Tentar de novo", sem "Preparar combate"', async () => {
+    hook.isError = true;
+    renderWithProviders(<GmCombatPanel party={party} live />);
+
+    expect(screen.getByRole('alert')).toHaveTextContent(t.loadErrorTitle);
+    expect(screen.queryByRole('button', { name: t.prepare })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: messages.common.retry }));
+    expect(hook.refetch).toHaveBeenCalled();
+  });
+
+  it('carregando, não oferece "Preparar combate"', () => {
+    hook.isLoading = true;
+    renderWithProviders(<GmCombatPanel party={party} live />);
+
+    expect(screen.queryByRole('button', { name: t.prepare })).not.toBeInTheDocument();
   });
 
   it('com o combate andando, só quem não está na vez esmaece; preparando, ninguém', () => {
@@ -285,8 +307,19 @@ describe('GmCombatPanel', () => {
 
     await userEvent.click(screen.getByRole('button', { name: t.addPartyCharacters }));
 
-    expect(hook.addParticipant.mutate).toHaveBeenCalledTimes(1);
-    expect(hook.addParticipant.mutate).toHaveBeenCalledWith({ characterId: 'newbie' });
+    expect(hook.addParticipants.mutate).toHaveBeenCalledTimes(1);
+    expect(hook.addParticipants.mutate).toHaveBeenCalledWith(['newbie']);
+  });
+
+  it('"Adicionar personagens da mesa" manda todos que faltam num lote só', async () => {
+    hook.encounter = { role: 'gm', round: 0, rows: [] };
+    renderWithProviders(<GmCombatPanel party={party} live />);
+
+    await userEvent.click(screen.getByRole('button', { name: t.addPartyCharacters }));
+
+    expect(hook.addParticipants.mutate).toHaveBeenCalledTimes(1);
+    expect(hook.addParticipants.mutate).toHaveBeenCalledWith(['hero', 'friend', 'newbie']);
+    expect(hook.addParticipant.mutate).not.toHaveBeenCalled();
   });
 
   it('com todos da mesa no combate, "Adicionar personagens da mesa" some', () => {

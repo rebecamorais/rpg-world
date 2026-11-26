@@ -143,6 +143,24 @@ describe('CoinPouch', () => {
     await waitFor(() => expect(gold).toHaveValue('50'));
   });
 
+  it('com uma moeda digitada e ainda não enviada, recarregar a aba pergunta antes', async () => {
+    const user = userEvent.setup();
+    await renderPouch();
+    const unload = () => {
+      const event = new Event('beforeunload', { cancelable: true });
+      window.dispatchEvent(event);
+      return event.defaultPrevented;
+    };
+
+    const gold = screen.getByLabelText('Gold pieces');
+    await user.clear(gold);
+    await user.type(gold, '120');
+    expect(unload()).toBe(true);
+
+    fireEvent.blur(gold);
+    expect(unload()).toBe(false);
+  });
+
   it('digitar e voltar ao mesmo número não manda nada', async () => {
     const user = userEvent.setup();
     await renderPouch();
@@ -200,6 +218,33 @@ describe('CoinPouch', () => {
     await user.type(amount, '5');
 
     expect(screen.getByRole('alert')).toHaveTextContent('5 SP short');
+    expect(screen.getByRole('button', { name: 'Confirm' })).toBeDisabled();
+  });
+
+  it('a falta vem na moeda do pagamento, e não convertida para platina', async () => {
+    const user = userEvent.setup();
+    await renderPouch({ cp: 0, sp: 7, ep: 0, gp: 0, pp: 0 });
+
+    await user.click(screen.getByRole('button', { name: 'Pay' }));
+    const amount = screen.getByLabelText('Amount');
+    await user.clear(amount);
+    await user.type(amount, '50');
+
+    expect(screen.getByRole('alert')).toHaveTextContent('3 SP + 49 GP short');
+  });
+
+  // The field keeps the last valid amount: the summary would still show what 1 buys
+  it('com o campo vazio ou inválido, o resumo some', async () => {
+    const user = userEvent.setup();
+    await renderPouch();
+
+    await user.click(screen.getByRole('button', { name: 'Pay' }));
+    expect(screen.getByText('Pouch after')).toBeInTheDocument();
+    const amount = screen.getByLabelText('Amount');
+    await user.clear(amount);
+
+    expect(screen.queryByText('Pouch after')).not.toBeInTheDocument();
+    expect(screen.queryByText('Paid')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeDisabled();
   });
 
