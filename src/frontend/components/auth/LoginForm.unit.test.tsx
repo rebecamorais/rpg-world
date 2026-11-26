@@ -4,6 +4,7 @@ import { messages, renderWithProviders } from '@tests/helpers/render';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestMagicLinkAction } from '@frontend/actions/auth/request-magic-link-action';
+import { APIError } from '@frontend/lib/api-client/api-client';
 
 import LoginForm from './LoginForm';
 
@@ -117,6 +118,32 @@ describe('LoginForm', () => {
 
     expect(await screen.findByText(errors.auth_error_rate_limited)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: magicLinkHintAction })).not.toBeInTheDocument();
+  });
+
+  it('muitas tentativas: mostra a espera em minutos, sem dizer se o e-mail existe', async () => {
+    signInWithPassword.mockRejectedValue(
+      new APIError('auth_error_signin_too_many_attempts', 429, {
+        error: 'auth_error_signin_too_many_attempts',
+        retryAfterMinutes: 12,
+      }),
+    );
+    renderWithProviders(<LoginForm />);
+
+    await fillAndSubmit('hero@example.com', 'wrong');
+
+    expect(
+      await screen.findByText(/Too many sign-in attempts\. Wait 12 minutes and try again/),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: magicLinkHintAction })).not.toBeInTheDocument();
+  });
+
+  it('muitas tentativas sem os minutos na resposta: usa os 15 do bloqueio', async () => {
+    signInWithPassword.mockRejectedValue(new Error('auth_error_signin_too_many_attempts'));
+    renderWithProviders(<LoginForm />);
+
+    await fillAndSubmit('hero@example.com', 'wrong');
+
+    expect(await screen.findByText(/Wait 15 minutes/)).toBeInTheDocument();
   });
 
   it('sem rede, diz para conferir a conexão', async () => {

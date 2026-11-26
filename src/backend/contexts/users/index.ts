@@ -21,6 +21,7 @@ import { UploadAvatarUseCase } from './application/upload-avatar.use-case';
 import { VerifyEmailLinkUseCase } from './application/verify-email-link.use-case';
 import { SupabaseAccountDeletionRepository } from './infrastructure/repositories/supabase-account-deletion.repository';
 import { SupabaseAuthEmailThrottleRepository } from './infrastructure/repositories/supabase-auth-email-throttle.repository';
+import { SupabaseAuthLoginThrottleRepository } from './infrastructure/repositories/supabase-auth-login-throttle.repository';
 import { SupabaseAuthRepository } from './infrastructure/repositories/supabase-auth-repository';
 import { SupabaseProfileRepository } from './infrastructure/repositories/supabase-profile-repository';
 
@@ -70,7 +71,10 @@ export const createAuthContext = (config: AuthContextConfig): AuthContext => {
       config.emailService,
       emailThrottle,
     ),
-    signInWithPassword: new SignInWithPasswordUseCase(authRepository),
+    signInWithPassword: new SignInWithPasswordUseCase(
+      authRepository,
+      new SupabaseAuthLoginThrottleRepository(config.adminClient),
+    ),
     signUp: new SignUpUseCase(authRepository, config.emailService, emailThrottle),
     requestPasswordReset: new RequestPasswordResetUseCase(
       authRepository,
