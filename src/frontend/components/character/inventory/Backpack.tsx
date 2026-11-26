@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -11,7 +11,12 @@ import { SectionCard } from '@frontend/components/ui/section-card';
 import { useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { useWriteGuard } from '@frontend/demo/DemoContext';
 import { neighbours, useFocusAfterRemove } from '@frontend/hooks/useFocusAfterRemove';
-import { type InventoryApi, type InventoryItem, useInventory } from '@frontend/hooks/useInventory';
+import {
+  type InventoryApi,
+  type InventoryItem,
+  isPendingEntry,
+  useInventory,
+} from '@frontend/hooks/useInventory';
 import {
   INVENTORY_VIEW_KEYS,
   type InventoryView,
@@ -113,15 +118,75 @@ export function ItemList({
   // Empty by what is drawn: the last item's placeholder (and its Undo) stays until the toast goes
   const isEmpty = removal.display.length === 0;
 
-  // Added from the empty state: the dialog gives the focus back to its "Add item", which unmounts
-  // when the POST is in and the list shows up. The header's "Add item" takes it then. A failed
-  // POST leaves the list empty, and the empty state's button keeps the focus.
-  const justAdded = useRef(false);
+  // Whether the focus is in this card. It stays true when the focused element is removed (a row
+  // replaced or rolled back): then the focus fell to the page, and this card takes it back. A
+  // focus that left on purpose (another field, a click elsewhere) is not ours to move
+  const focusWithin = useRef(false);
   useEffect(() => {
+    const root = focusRoot.current;
+    if (!root) return;
+    const onIn = () => (focusWithin.current = true);
+    const onOut = (e: FocusEvent) => {
+      const to = e.relatedTarget as Node | null;
+      if (to) {
+        focusWithin.current = root.contains(to);
+        return;
+      }
+      const from = e.target as Node;
+      requestAnimationFrame(() => {
+        if (from.isConnected) focusWithin.current = false;
+      });
+    };
+    root.addEventListener('focusin', onIn);
+    root.addEventListener('focusout', onOut);
+    return () => {
+      root.removeEventListener('focusin', onIn);
+      root.removeEventListener('focusout', onOut);
+    };
+  }, [focusRoot]);
+  /** The focus was in this card and fell to the page with what held it. */
+  const focusFellFromHere = useCallback(() => {
+    const active = document.activeElement;
+    return focusWithin.current && (!active || active === document.body);
+  }, []);
+  const focusKey = useCallback(
+    (key: string) =>
+      focusRoot.current?.querySelector<HTMLElement>(`[data-focus-key="${key}"]`)?.focus(),
+    [focusRoot],
+  );
+
+  // Added from the empty state: the dialog gives the focus back to its "Add item", which unmounts
+  // when the new row shows up (at once, while it saves). The header's "Add item" takes it then.
+  // A failed add takes the row back out: the list is empty again, the header's button unmounts,
+  // and the empty state's one takes the focus back
+  const justAdded = useRef(false);
+  const wasEmpty = useRef(isEmpty);
+  useEffect(() => {
+    const becameEmpty = isEmpty && !wasEmpty.current;
+    wasEmpty.current = isEmpty;
+    if (becameEmpty) {
+      if (focusFellFromHere()) focusKey(ADD_ITEM_FOCUS);
+      return;
+    }
     if (isEmpty || !justAdded.current) return;
     justAdded.current = false;
-    focusRoot.current?.querySelector<HTMLElement>(`[data-focus-key="${ADD_ITEM_FOCUS}"]`)?.focus();
-  }, [isEmpty, focusRoot]);
+    focusKey(ADD_ITEM_FOCUS);
+  }, [isEmpty, focusFellFromHere, focusKey]);
+
+  // A saving row is replaced by the server's (a new id, so a new element): whoever had the focus on
+  // it gets it on the row that took its place. A failed add takes the row out: "Add item" then
+  const pendingRefs = useRef(new Map<string, string>());
+  useEffect(() => {
+    const now = new Set(entries.filter(isPendingEntry).map((e) => e.id));
+    for (const [id, ref] of pendingRefs.current) {
+      if (now.has(id)) continue;
+      pendingRefs.current.delete(id);
+      if (!focusFellFromHere()) continue;
+      const landed = entries.find((e) => e.ref === ref && !isPendingEntry(e));
+      focusKey(landed ? landed.id : ADD_ITEM_FOCUS);
+    }
+    for (const e of entries) if (isPendingEntry(e)) pendingRefs.current.set(e.id, e.ref);
+  });
 
   const addButton = (
     <Button
@@ -190,9 +255,9 @@ export function ItemList({
         open={adding}
         onOpenChange={setAdding}
         initialEdition={commonEdition(entries)}
-        onPick={(key) => {
+        onPick={(item) => {
           justAdded.current = isEmpty;
-          addItem(key);
+          addItem(item.key, { item });
         }}
         style={dialogStyle}
       />

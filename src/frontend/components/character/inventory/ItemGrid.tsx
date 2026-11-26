@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
-import type { InventoryItem } from '@frontend/hooks/useInventory';
+import { type InventoryItem, isPendingEntry } from '@frontend/hooks/useInventory';
 import { cn } from '@frontend/lib/utils';
 
 import { ItemDetails } from './ItemDetails';
@@ -30,15 +30,23 @@ interface Props {
 export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props) {
   const t = useTranslations('characters.inventory');
   const tCharacters = useTranslations('characters');
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [picked, setPicked] = useState<Pick<InventoryItem, 'id' | 'ref'> | null>(null);
   const isRemoved = useIsRemoved();
   // Derived. A removed entry keeps its panel (as a placeholder) while its toast shows, so what is
-  // under the panel doesn't move up under the finger; it closes once the entry leaves the list
-  const selected = entries.find((e) => e.id === selectedId) ?? null;
+  // under the panel doesn't move up under the finger; it closes once the entry leaves the list.
+  // A tile still saving hands its panel to the server's entry that replaces it
+  const selected =
+    (picked &&
+      (entries.find((e) => e.id === picked.id) ??
+        (isPendingEntry(picked)
+          ? entries.find((e) => e.ref === picked.ref && !isPendingEntry(e))
+          : undefined))) ??
+    null;
   const ordered = groupEntries(entries).flatMap((g) => g.entries);
   const panelId = useId();
 
-  const toggle = (id: string) => setSelectedId((current) => (current === id ? null : id));
+  const toggle = (entry: InventoryItem) =>
+    setPicked(selected?.id === entry.id ? null : { id: entry.id, ref: entry.ref });
 
   return (
     <div className="flex flex-col gap-3 p-4">
@@ -57,17 +65,20 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
               aria-pressed={isSelected}
               aria-controls={isSelected ? panelId : undefined}
               aria-label={t('tile', { name, quantity: entry.quantity })}
+              aria-busy={isPendingEntry(entry) || undefined}
               data-focus-key={entry.id}
-              onClick={() => toggle(entry.id)}
+              onClick={() => toggle(entry)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  toggle(entry.id);
+                  toggle(entry);
                 }
               }}
               className={cn(
                 'item-context bg-item-surface text-item-flare focus-visible:outline-ring relative flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-md border p-1 focus-visible:outline-2',
                 isSelected ? 'border-item ring-item ring-2' : 'border-item-muted',
+                // Still saving: there, but not yet the server's
+                isPendingEntry(entry) && 'animate-pulse border-dashed',
               )}
               style={itemGroupStyle(groupOf(entry.item?.category ?? null))}
             >
@@ -146,7 +157,9 @@ function GridPanel({
   onRemove: () => void;
 }) {
   const t = useTranslations('characters.inventory');
+  const tCommon = useTranslations('common');
   const { removed, undo } = useRemovedItem(entry.id);
+  const pending = isPendingEntry(entry);
   const { item, quantity } = entry;
   const name = item?.name ?? entry.ref;
   const nameId = `${id}-name`;
@@ -199,11 +212,17 @@ function GridPanel({
             {name}
           </p>
         )}
-        {/* Removed: same size, but not there, so a tap where the trash was does nothing */}
+        {pending && (
+          <span role="status" className="text-muted-foreground text-caption">
+            {tCommon('saving')}
+          </span>
+        )}
+        {/* Removed: same size, but not there, so a tap where the trash was does nothing. Still
+            saving: there, but nothing to change until the server has the item */}
         <div
-          className={cn('flex items-center gap-3', removed && 'invisible')}
+          className={cn('flex items-center gap-3', removed && 'invisible', pending && 'opacity-50')}
           aria-hidden={removed || undefined}
-          inert={removed}
+          inert={removed || pending}
         >
           <QuantityStepper name={name} quantity={quantity} onQuantity={onQuantity} />
           <RemoveItemButton name={name} onRemove={onRemove} />

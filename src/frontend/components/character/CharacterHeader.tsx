@@ -288,6 +288,7 @@ export default function CharacterHeader() {
                       <div className="flex items-center gap-1 text-xs font-medium">
                         <NumberInput
                           ghost
+                          grouped
                           id="char-xp"
                           min={0}
                           max={10_000_000}

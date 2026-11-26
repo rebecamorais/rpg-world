@@ -132,6 +132,23 @@ describe('PartyChestPage', () => {
     expect(dialog).not.toHaveTextContent(messages.characters.coins.receiveDescription);
   });
 
+  it('pagar mais do que o baú tem mostra o baú de agora, não a algibeira', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<PartyChestPage partyId="party-1" />);
+    const payButton = screen.getByRole('button', { name: messages.characters.coins.pay });
+    await waitFor(() => expect(payButton).toBeEnabled());
+
+    await user.click(payButton);
+    const dialog = await screen.findByRole('dialog');
+    const amount = within(dialog).getByLabelText(messages.characters.coins.amount);
+    await user.clear(amount);
+    await user.type(amount, '50');
+
+    expect(within(dialog).getByRole('alert')).toBeVisible();
+    expect(dialog).toHaveTextContent(t.coinsNow);
+    expect(dialog).not.toHaveTextContent(messages.characters.coins.now);
+  });
+
   it('mesa que a pessoa não vê: não encontrada', () => {
     hook.party = null;
     renderWithProviders(<PartyChestPage partyId="party-1" />);

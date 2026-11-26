@@ -28,6 +28,7 @@ export function PartyChest({ partyId }: { partyId: string }) {
         dialogText={{
           receiveDescription: t('coinsReceiveDescription'),
           after: t('coinsAfter'),
+          now: t('coinsNow'),
           tooMany: (max) => t('coinsTooMany', { max }),
         }}
       />

@@ -23,6 +23,12 @@ export const THEME_COLORS: Record<Theme, string> = { dark: '#09090b', light: '#f
  */
 export const THEME_SCRIPT = `(function(){var m=document.cookie.match(/(?:^|;\\s*)${THEME_COOKIE}=([^;]*)/);var t=m&&m[1]==='light'?'light':'dark';document.documentElement.dataset.theme=t;var c=document.createElement('meta');c.name='theme-color';c.content=t==='light'?'${THEME_COLORS.light}':'${THEME_COLORS.dark}';document.head.appendChild(c)})()`;
 
+/** The theme in the browser's cookie (the default when there is none). */
+export function themeFromCookie(cookie: string): Theme {
+  const match = cookie.match(new RegExp(`(?:^|;\\s*)${THEME_COOKIE}=([^;]*)`));
+  return parseTheme(match?.[1]);
+}
+
 export function applyTheme(theme: Theme): void {
   document.cookie = themeCookie(theme);
   document.documentElement.dataset.theme = theme;

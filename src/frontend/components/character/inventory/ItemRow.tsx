@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
-import type { InventoryItem } from '@frontend/hooks/useInventory';
+import { type InventoryItem, isPendingEntry } from '@frontend/hooks/useInventory';
 import { cn } from '@frontend/lib/utils';
 
 import { ItemDetails } from './ItemDetails';
@@ -28,7 +28,10 @@ interface Props {
  */
 export function ItemRow({ entry, onQuantity, onRemove }: Props) {
   const t = useTranslations('characters.inventory');
+  const tCommon = useTranslations('common');
   const fmt = useItemFormat();
+  // Added and still on its way to the server: shown, but nothing to change on it yet
+  const pending = isPendingEntry(entry);
   const [open, setOpen] = useState(false);
   const { removed, undo } = useRemovedItem(entry.id);
   const { item, quantity } = entry;
@@ -39,7 +42,7 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
   // The controls wrap to their own line together, at the right: the trash stays at the far end,
   // with + and the price between it and −
   const controls = (
-    <div className="ml-auto flex items-center gap-3">
+    <div className={cn('ml-auto flex items-center gap-3', pending && 'opacity-50')} inert={pending}>
       <QuantityStepper name={name} quantity={quantity} onQuantity={onQuantity} />
       <span className="text-muted-foreground hidden w-16 text-right text-sm tabular-nums sm:inline">
         {item?.weight != null ? fmt.weight(item.weight) : ''}
@@ -90,10 +93,13 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
   }
 
   return (
-    <li className="border-border border-b last:border-b-0">
+    <li className="border-border border-b last:border-b-0" aria-busy={pending || undefined}>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2">
         <div
-          className="item-context bg-item-surface text-item-flare flex size-8 shrink-0 items-center justify-center rounded-md"
+          className={cn(
+            'item-context bg-item-surface text-item-flare flex size-8 shrink-0 items-center justify-center rounded-md',
+            pending && 'animate-pulse',
+          )}
           style={itemGroupStyle(group)}
         >
           <ItemImage item={item} size={20} />
@@ -146,6 +152,11 @@ export function ItemRow({ entry, onQuantity, onRemove }: Props) {
               </p>
               <p className="text-muted-foreground text-caption">{t('unknownHint')}</p>
             </div>
+          )}
+          {pending && (
+            <p role="status" className="text-muted-foreground text-caption">
+              {tCommon('saving')}
+            </p>
           )}
         </div>
 

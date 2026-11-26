@@ -44,6 +44,13 @@ describe('CharacterHeader', () => {
     expect(screen.getByRole('button', { name: messages.common.increase })).toBeInTheDocument();
   });
 
+  it('na edição, a XP sai com separador de milhar como o alvo', () => {
+    renderHeader({}, false);
+
+    expect(screen.getByRole('textbox', { name: t.xp })).toHaveValue('6,500');
+    expect(screen.getByText('/ 14,000')).toBeInTheDocument();
+  });
+
   it('só leitura: a identidade é texto, sem select, campo nem −/+', () => {
     renderHeader(
       { race: 'elf', class: 'wizard', background: 'sage', alignment: 'lawful-good' },
