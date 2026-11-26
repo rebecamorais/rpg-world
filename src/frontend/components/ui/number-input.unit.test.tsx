@@ -113,4 +113,25 @@ describe('NumberInput', () => {
     await user.type(field(), '9');
     expect(onValidityChange).toHaveBeenLastCalledWith(true);
   });
+
+  it('grouped: separador de milhar fora do foco, número cru ao digitar', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Harness grouped initial={6500} />);
+
+    expect(field()).toHaveValue('6,500');
+    await user.click(field());
+    expect(field()).toHaveValue('6500');
+    await user.clear(field());
+    await user.type(field(), '14000');
+    await user.tab();
+
+    expect(field()).toHaveValue('14,000');
+    expect(screen.getByRole('status', { hidden: true })).toHaveTextContent('14000');
+  });
+
+  it('sem grouped, o número fica cru mesmo fora do foco', () => {
+    renderWithProviders(<Harness initial={6500} />);
+
+    expect(field()).toHaveValue('6500');
+  });
 });
