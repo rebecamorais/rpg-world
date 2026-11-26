@@ -1502,7 +1502,8 @@
     "title": "Page not found",
     "description": "The page you are looking for doesn't exist or has moved.",
     "home": "Go to the home page",
-    "characters": "Go to my characters"
+    "characters": "Go to my characters",
+    "demo": "Go to the demo start"
   },
   "errorPage": {
     "title": "Something went wrong",

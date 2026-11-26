@@ -1502,7 +1502,8 @@
     "title": "Página não encontrada",
     "description": "A página que você procura não existe ou mudou de lugar.",
     "home": "Ir para o início",
-    "characters": "Ir para meus personagens"
+    "characters": "Ir para meus personagens",
+    "demo": "Ir para o início da demo"
   },
   "errorPage": {
     "title": "Algo deu errado",

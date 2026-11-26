@@ -142,11 +142,12 @@ export function SpellsTab() {
 
   return (
     // Empty, the empty state has its own "Add spell", and "0 prepared" says nothing: the header
-    // would show a second button in another style. Kept while loading, so the header doesn't jump
+    // would show a second button in another style. Not while loading either: on an empty
+    // spellbook the header's button would unmount when the list arrives, focus and all
     <SheetPage
       icon="BookOpen"
       tab={t('tabs.spells')}
-      actions={isLoading || hasSpells ? actions : undefined}
+      actions={!isLoading && hasSpells ? actions : undefined}
     >
       {isLoading ? (
         <div className="grid grid-cols-1 gap-4" aria-busy="true">

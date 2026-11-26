@@ -27,38 +27,60 @@ interface SpellbookProps {
 
 const sectionId = (level: number) => `spell-level-${level}`;
 
+/** Room for a jump that stops a few pixels off (rounding, a smooth scroll cut short). */
+const LANDING_SLACK = 8;
+
 /**
- * The level whose section is at the top of the viewport, for the index highlight: the lowest one
- * on the page among those in the upper third. After a jump, the end of the section before still
- * crosses that third; the one just jumped to starts below it, so it wins.
+ * Where a jump from the index leaves a section's top: the page's scroll padding (the sticky bars,
+ * globals.css) plus the section's scroll margin. Read from the styles, as both change by breakpoint.
+ */
+function landingLine(section: HTMLElement) {
+  const padding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  const margin = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
+  return padding + margin + LANDING_SLACK;
+}
+
+/**
+ * The level whose section is at the top of the viewport, for the index highlight: the last one, in
+ * page order, whose top has reached the line where a jump leaves it. Not "the last one crossing the
+ * upper part of the screen": after a jump to a short level, the next one starts there too and would
+ * win. The observer watches a 1px band on that line, so it calls back whenever a section's top or
+ * bottom crosses it; the callback then measures every section, not only the ones that changed.
  */
 function useLevelInView(levels: number[]) {
   const [inView, setInView] = useState<number | null>(null);
+  // The band is in pixels from the viewport's top and bottom: a resize redraws it
+  const [viewportVersion, setViewportVersion] = useState(0);
+
+  useEffect(() => {
+    const onResize = () => setViewportVersion((version) => version + 1);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return;
-    // Each callback only brings the sections that changed: the others keep their last state
-    const crossing = new Set<number>();
+    // `levels` is in page order, so these are too
+    const sections = levels
+      .map((level) => document.getElementById(sectionId(level)))
+      .filter((section): section is HTMLElement => section !== null);
+    if (sections.length === 0) return;
+
+    const height = window.innerHeight;
+    const line = Math.min(Math.max(landingLine(sections[0]), 0), Math.max(height - 1, 0));
     const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const level = Number((entry.target as HTMLElement).dataset.level);
-          if (entry.isIntersecting) crossing.add(level);
-          else crossing.delete(level);
+      () => {
+        let current = levels[0];
+        for (const section of sections) {
+          if (section.getBoundingClientRect().top <= line) current = Number(section.dataset.level);
         }
-        // `levels` is in page order
-        const last = levels.findLast((level) => crossing.has(level));
-        if (last !== undefined) setInView(last);
+        setInView(current);
       },
-      // A section counts once it reaches the upper third of the screen
-      { rootMargin: '0px 0px -66% 0px' },
+      { rootMargin: `${-line}px 0px ${-Math.max(height - line - 1, 0)}px 0px` },
     );
-    for (const level of levels) {
-      const section = document.getElementById(sectionId(level));
-      if (section) observer.observe(section);
-    }
+    for (const section of sections) observer.observe(section);
     return () => observer.disconnect();
-  }, [levels]);
+  }, [levels, viewportVersion]);
 
   return inView ?? levels[0];
 }

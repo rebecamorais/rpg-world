@@ -61,9 +61,10 @@ test('trocar a senha pelo perfil pede a atual, avisa por e-mail e mostra o retor
   await page.getByLabel('Current password').fill(PASSWORD);
   await page.getByRole('button', { name: 'Change password' }).click();
 
-  // The confirmation survives the reload that follows the change
-  await expect(page).toHaveURL(/\/settings\/profile\?passwordChanged=1$/);
+  // The confirmation survives the reload that follows the change, then leaves the address
+  // (shown once: a reload or a shared link doesn't say it again)
   await expect(page.getByRole('status').filter({ hasText: 'Password changed.' })).toBeVisible();
+  await expect(page).toHaveURL(/\/settings\/profile$/);
   expect(await waitForEmail(user.email)).toContain('Sua senha foi alterada');
 
   const login = await page.request.post('/api/auth/login', {

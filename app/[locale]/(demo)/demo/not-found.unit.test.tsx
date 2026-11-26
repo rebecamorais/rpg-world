@@ -8,10 +8,10 @@ const t = messages.notFound;
 
 // A demo sheet that doesn't exist fell to Next's built-in 404, outside the demo
 describe('demo not-found', () => {
-  it('diz que a página não existe e leva ao início', () => {
+  it('diz que a página não existe e leva ao início da demo', () => {
     renderWithProviders(<DemoNotFound />);
 
     expect(screen.getByRole('heading', { level: 1, name: t.title })).toBeVisible();
-    expect(screen.getByRole('link', { name: t.home })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('link', { name: t.demo })).toHaveAttribute('href', '/demo');
   });
 });

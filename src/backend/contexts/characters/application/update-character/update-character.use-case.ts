@@ -1,8 +1,5 @@
 import { applyUpdates } from '@backend/shared/application/apply-updates';
-import {
-  isFileIn,
-  storagePathFromAssetUrl,
-} from '@backend/shared/application/remove-replaced-asset';
+import { isFileIn } from '@backend/shared/application/remove-replaced-asset';
 import { AVATAR_BUCKET } from '@backend/shared/domain/avatar';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
@@ -116,8 +113,8 @@ export class UpdateCharacterUseCase {
     private repository: CharacterRepo,
     private readonly storageRepository?: StorageRepository,
     private readonly classes?: ClassLookup,
-    /** Whether a URL is on this environment's asset host (`isOwnAssetUrl`). */
-    private readonly isOwnAssetUrl: (url: string) => boolean = () => false,
+    /** Path in `bucket` of a URL on this environment's asset host, or null (`ownAssetPath`). */
+    private readonly ownAssetPath: (url: string, bucket: string) => string | null = () => null,
   ) {}
 
   /**
@@ -186,7 +183,7 @@ export class UpdateCharacterUseCase {
     ].filter(([next, current]) => next && next !== current);
     for (const [url] of changed) {
       // The uploads are `<userId>/characters/<characterId>-…` (avatar and background alike)
-      const path = this.isOwnAssetUrl(url!) ? storagePathFromAssetUrl(url!, AVATAR_BUCKET) : null;
+      const path = this.ownAssetPath(url!, AVATAR_BUCKET);
       if (!path || !isFileIn(path, `${userId}/characters`, `${character.id}-`)) {
         throw new CharacterError(CharacterErrorCodes.IMAGE_INVALID);
       }

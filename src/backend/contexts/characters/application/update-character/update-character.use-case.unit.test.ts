@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { storagePathFromAssetUrl } from '@backend/shared/application/remove-replaced-asset';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { CharacterErrorCodes } from '../../domain/CharacterError';
@@ -10,8 +11,8 @@ import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-char
 import { CharacterUpdates, UpdateCharacterUseCase } from './update-character.use-case';
 
 const ASSETS = 'https://images.rpgworldapp.com';
-/** The asset host of these tests, as `isOwnAssetUrl` answers in production. */
-const isOwnAssetUrl = (url: string) => url.startsWith(`${ASSETS}/`);
+/** The asset host of these tests, as `ownAssetPath` answers in production. */
+const ownAssetPath = (url: string, bucket: string) => storagePathFromAssetUrl(url, bucket, ASSETS);
 
 const makeCharacter = (id: string, ownerUsername: string) =>
   new DnD5eCharacter({
@@ -76,7 +77,7 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
 
   beforeEach(async () => {
     repo = new InMemoryCharacterRepository();
-    useCase = new UpdateCharacterUseCase(repo, undefined, undefined, isOwnAssetUrl);
+    useCase = new UpdateCharacterUseCase(repo, undefined, undefined, ownAssetPath);
 
     const char = new DnD5eCharacter({
       id: 'char-1',
@@ -262,7 +263,7 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
           repository,
           storage as unknown as StorageRepository,
           undefined,
-          isOwnAssetUrl,
+          ownAssetPath,
         ),
       };
     }
@@ -309,7 +310,7 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
         repo,
         storage as unknown as StorageRepository,
         undefined,
-        isOwnAssetUrl,
+        ownAssetPath,
       );
       return { storage, useCase };
     }
@@ -469,6 +470,11 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
       [
         'fundo fora do bucket',
         { sheetBackgroundUrl: `${ASSETS}/other/owner-1/characters/char-1-background-v1.webp` },
+      ],
+      // The bucket has to come right after the host, not anywhere further along the path
+      [
+        'avatar de outro bucket com "avatars" no meio do caminho',
+        { avatarUrl: `${ASSETS}/other/x/avatars/owner-1/characters/char-1-v1.webp` },
       ],
     ])('recusa %s e não salva', async (_label, updates) => {
       await expect(

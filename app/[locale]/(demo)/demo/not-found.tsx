@@ -11,8 +11,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * The 404 of a demo page (`notFound()` for a sheet the demo doesn't have), inside the demo's frame
- * and its navigation. Without it, the 404 fell past the demo to Next's built-in page.
+ * and its navigation. Without it, the 404 fell past the demo to Next's built-in page. The way back
+ * is the demo's start, not the site's home page.
  */
 export default function DemoNotFound() {
-  return <NotFoundState signedIn={false} />;
+  return <NotFoundState signedIn={false} demo />;
 }

@@ -208,6 +208,25 @@ describe('SpellsTab: foco ao fechar a busca', () => {
     );
   });
 
+  // Shown while loading, it unmounted once an empty spellbook arrived, taking the focus to body
+  it('carregando, o cabeçalho ainda não oferece "Add spell"', async () => {
+    let resolveSpells: (spells: unknown[]) => void = () => {};
+    api.get.mockImplementation((url: string) =>
+      url.startsWith('/api/characters/')
+        ? new Promise((resolve) => (resolveSpells = resolve))
+        : Promise.resolve({ data: [], total: 0 }),
+    );
+    const character = { ...createDnD5eCharacter('owner', 'Elminster'), id: 'c1' } as DnD5eCharacter;
+    renderWithCharacter(<SpellsTab />, character);
+
+    await screen.findByText(messages.spellsDrawer.loading);
+    expect(screen.queryByRole('button', { name: tc.spells.addBtn })).not.toBeInTheDocument();
+
+    resolveSpells([learned('shield')]);
+    await screen.findByText('shield');
+    expect(screen.getByRole('button', { name: tc.spells.addBtn })).toBeInTheDocument();
+  });
+
   // Two "Add spell" in two styles, and "0 prepared", on an empty spellbook
   it('grimório vazio: só o "Add spell" do estado vazio, sem "0 preparadas" no cabeçalho', async () => {
     api.get.mockImplementation(async (url: string) =>
