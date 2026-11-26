@@ -11,6 +11,7 @@ export const UserErrorCodes = {
   SIGNIN_REQUIRED_FIELDS: 'auth_error_signin_required_fields',
   SIGNIN_INVALID_CREDENTIALS: 'auth_error_signin_invalid_credentials',
   SIGNIN_EMAIL_NOT_CONFIRMED: 'auth_error_signin_email_not_confirmed',
+  SIGNIN_TOO_MANY_ATTEMPTS: 'auth_error_signin_too_many_attempts',
   SIGNIN_MAGIC_LINK_EMAIL_REQUIRED: 'auth_error_signin_magic_link_email_required',
   UPDATE_PASSWORD_REQUIRED: 'auth_error_update_password_required',
   UPDATE_PASSWORD_WEAK: 'auth_error_update_password_weak',
@@ -37,13 +38,14 @@ export type UserErrorCode = (typeof UserErrorCodes)[keyof typeof UserErrorCodes]
 // Codes not listed here are validation errors.
 const ERROR_KINDS: Partial<Record<UserErrorCode, AppErrorKind>> = {
   [UserErrorCodes.AUTH_USER_NOT_FOUND]: 'not_found',
+  [UserErrorCodes.SIGNIN_TOO_MANY_ATTEMPTS]: 'rate_limited',
   [UserErrorCodes.DELETION_TOO_SOON]: 'rate_limited',
   [UserErrorCodes.DELETION_TOO_MANY_ATTEMPTS]: 'rate_limited',
 };
 
 export class UserError extends AppError {
-  constructor(code: UserErrorCode) {
-    super(code, ERROR_KINDS[code]);
+  constructor(code: UserErrorCode, details?: Record<string, unknown>) {
+    super(code, ERROR_KINDS[code], details);
     this.name = 'UserError';
   }
 }

@@ -14,6 +14,7 @@
       "account_deletion_error_link_invalid": "This link has expired or was already used. Please request a new one.",
       "auth_error_signin_invalid_credentials": "Incorrect email or password.",
       "auth_error_signin_email_not_confirmed": "Confirm your email before signing in.",
+      "auth_error_signin_too_many_attempts": "Too many sign-in attempts. Wait {minutes, plural, one {# minute} other {# minutes}} and try again, or sign in with a magic link or reset your password.",
       "auth_error_rate_limited": "Too many attempts. Wait a moment and try again.",
       "auth_error_user_not_found": "User not found.",
       "auth_error_code_required": "The sign-in link is incomplete. Please request a new one.",

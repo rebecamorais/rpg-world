@@ -14,6 +14,7 @@
       "account_deletion_error_link_invalid": "Este link expirou ou já foi usado. Solicite um novo.",
       "auth_error_signin_invalid_credentials": "E-mail ou senha incorretos.",
       "auth_error_signin_email_not_confirmed": "Confirme seu e-mail antes de entrar.",
+      "auth_error_signin_too_many_attempts": "Muitas tentativas de entrar. Espere {minutes, plural, one {# minuto} other {# minutos}} e tente de novo, ou entre com o link mágico ou crie uma nova senha.",
       "auth_error_rate_limited": "Muitas tentativas. Aguarde um pouco e tente novamente.",
       "auth_error_user_not_found": "Usuário não encontrado.",
       "auth_error_code_required": "O link de acesso está incompleto. Solicite um novo.",

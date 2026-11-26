@@ -7,6 +7,7 @@ import { SupabaseFactory } from '@lib/supabase';
 import { EmailService } from '../../../shared/domain/email.service';
 import { UserErrorCodes } from '../domain/UserError';
 import { SupabaseAccountDeletionRepository } from '../infrastructure/repositories/supabase-account-deletion.repository';
+import { SupabaseAuthLoginThrottleRepository } from '../infrastructure/repositories/supabase-auth-login-throttle.repository';
 import { SupabaseAuthRepository } from '../infrastructure/repositories/supabase-auth-repository';
 import { SignInWithPasswordUseCase } from './sign-in-with-password.use-case';
 import { UpdatePasswordUseCase } from './update-password.use-case';
@@ -27,7 +28,10 @@ describe('Auth Flow (Integration)', () => {
   const dbClient = SupabaseFactory.createAdmin();
   const authClient = SupabaseFactory.createClient(mockCookieStore);
   const repo = new SupabaseAuthRepository(authClient, dbClient);
-  const signInUseCase = new SignInWithPasswordUseCase(repo);
+  const signInUseCase = new SignInWithPasswordUseCase(
+    repo,
+    new SupabaseAuthLoginThrottleRepository(dbClient),
+  );
   const sendPasswordChangedEmail = vi.fn();
   const updatePasswordUseCase = new UpdatePasswordUseCase(
     repo,
