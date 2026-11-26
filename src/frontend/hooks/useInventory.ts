@@ -148,9 +148,14 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
    * Puts the server's entry where the add's own row was. If the entry is already in the list (the
    * item was there, and another add's answer brought it), the own row just goes.
    */
-  const replacePending = (pendingId: string, entry: InventoryItem) =>
+  const replacePending = (pendingId: string, added: number, answer: InventoryItem) =>
     queryClient.setQueryData<InventoryDto>(key, (c) => {
       if (!c) return c;
+      // Another add of the same item, still on its way, put its quantity on the own row: it stays
+      // on screen until its own answer comes
+      const own = c.items.find((i) => i.id === pendingId);
+      const extra = own ? own.quantity - added : 0;
+      const entry = extra > 0 ? { ...answer, quantity: answer.quantity + extra } : answer;
       if (c.items.some((i) => i.id === entry.id)) {
         return {
           ...c,
@@ -257,8 +262,10 @@ function useInventoryAt(path: string, ownerKey: string, { shared = false } = {})
       );
       return { pendingId };
     },
-    onSuccess: (entry, _v, added) =>
-      added && 'pendingId' in added ? replacePending(added.pendingId, entry) : upsert(entry),
+    onSuccess: (entry, v, added) =>
+      added && 'pendingId' in added
+        ? replacePending(added.pendingId, v.quantity, entry)
+        : upsert(entry),
     // Takes back only this add: its own row, or what it put on another's quantity
     onError: (err, v, added): void =>
       failed(

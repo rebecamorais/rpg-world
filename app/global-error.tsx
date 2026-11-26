@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 
 import { Button } from '@frontend/components/ui/button';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { fontVariables } from '@frontend/lib/fonts';
-import { THEME_SCRIPT } from '@frontend/lib/theme';
+import { THEME_SCRIPT, themeFromCookie } from '@frontend/lib/theme';
 
 import { common as enCommon, errorPage as enErrorPage } from '../messages/en.json';
 import { common as ptCommon, errorPage as ptErrorPage } from '../messages/pt.json';
@@ -30,6 +30,12 @@ function digestOf(error: unknown): string | undefined {
  */
 export default function GlobalError({ error, retry }: { error: unknown; retry: () => void }) {
   const digest = digestOf(error);
+
+  // Rendered in the browser (the layout failed after the page loaded), the inline script doesn't
+  // run, and the new <html> lost the layout's data-theme: set it here, before paint
+  useLayoutEffect(() => {
+    document.documentElement.dataset.theme = themeFromCookie(document.cookie);
+  }, []);
 
   useEffect(() => {
     // Still in the browser's console, for whoever is debugging
@@ -58,7 +64,11 @@ export default function GlobalError({ error, retry }: { error: unknown; retry: (
               </Button>
             </section>
           ))}
-          {digest && <p className="text-caption text-muted-foreground font-mono">{digest}</p>}
+          {digest && (
+            <p className="text-caption text-muted-foreground">
+              {LANGUAGES.map(({ page }) => page.reference.replace('{code}', digest)).join(' · ')}
+            </p>
+          )}
         </main>
       </body>
     </html>

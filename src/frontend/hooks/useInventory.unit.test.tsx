@@ -226,6 +226,20 @@ describe('useInventory', () => {
       expect(toast.error).toHaveBeenCalled();
     });
 
+    it('dois toques num item novo: a primeira resposta não apaga o segundo', async () => {
+      const answers: ((value: unknown) => void)[] = [];
+      api.post.mockImplementation(() => new Promise((resolve) => answers.push(resolve)));
+      const { result } = await renderInventory();
+
+      act(() => result.current.addItem(torch.ref, { item: torchItem }));
+      act(() => result.current.addItem(torch.ref, { item: torchItem }));
+      await waitFor(() => expect(result.current.inventory?.items[1].quantity).toBe(2));
+
+      await act(async () => answers[0]({ ...torch, item: torchItem }));
+      await waitFor(() => expect(result.current.inventory?.items[1].id).toBe('i2'));
+      expect(result.current.inventory?.items[1].quantity).toBe(2);
+    });
+
     it('a linha que ainda está salvando não muda nem sai', async () => {
       api.post.mockImplementation(() => new Promise(() => {}));
       const { result } = await renderInventory();

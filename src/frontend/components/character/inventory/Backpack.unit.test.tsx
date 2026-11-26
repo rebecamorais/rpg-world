@@ -789,6 +789,24 @@ describe('Backpack', () => {
       expect(screen.getByRole('button', { name: 'Details for Torch' })).toHaveFocus();
     });
 
+    it('se adicionar falhar com o foco na linha salvando, o foco vai ao "Add item"', async () => {
+      let fail!: (err: unknown) => void;
+      api.post.mockImplementation(() => new Promise((_, reject) => (fail = reject)));
+      const { user, dialog } = await openDialog([
+        entry('e1', item({ ...TORCH, id: 'lamp', name: 'Lamp', key: 'dnd5e:srd-5.2:item:lamp' })),
+      ]);
+
+      await user.click(within(dialog).getByRole('button', { name: 'Add Torch' }));
+      const saving = await screen.findByRole('button', { name: 'Details for Torch' });
+      act(() => saving.focus());
+      await act(async () => fail(new Error('boom')));
+
+      await waitFor(() =>
+        expect(screen.queryByRole('button', { name: 'Details for Torch' })).not.toBeInTheDocument(),
+      );
+      expect(screen.getByRole('button', { name: 'Add item' })).toHaveFocus();
+    });
+
     it('mochila vazia: se adicionar falhar, o foco fica no "Add item" do estado vazio', async () => {
       api.post.mockRejectedValue(new Error('boom'));
       const { user, dialog } = await openDialog();

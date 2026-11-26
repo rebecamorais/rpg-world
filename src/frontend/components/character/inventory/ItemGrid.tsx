@@ -30,15 +30,23 @@ interface Props {
 export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props) {
   const t = useTranslations('characters.inventory');
   const tCharacters = useTranslations('characters');
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [picked, setPicked] = useState<Pick<InventoryItem, 'id' | 'ref'> | null>(null);
   const isRemoved = useIsRemoved();
   // Derived. A removed entry keeps its panel (as a placeholder) while its toast shows, so what is
-  // under the panel doesn't move up under the finger; it closes once the entry leaves the list
-  const selected = entries.find((e) => e.id === selectedId) ?? null;
+  // under the panel doesn't move up under the finger; it closes once the entry leaves the list.
+  // A tile still saving hands its panel to the server's entry that replaces it
+  const selected =
+    (picked &&
+      (entries.find((e) => e.id === picked.id) ??
+        (isPendingEntry(picked)
+          ? entries.find((e) => e.ref === picked.ref && !isPendingEntry(e))
+          : undefined))) ??
+    null;
   const ordered = groupEntries(entries).flatMap((g) => g.entries);
   const panelId = useId();
 
-  const toggle = (id: string) => setSelectedId((current) => (current === id ? null : id));
+  const toggle = (entry: InventoryItem) =>
+    setPicked(selected?.id === entry.id ? null : { id: entry.id, ref: entry.ref });
 
   return (
     <div className="flex flex-col gap-3 p-4">
@@ -59,11 +67,11 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
               aria-label={t('tile', { name, quantity: entry.quantity })}
               aria-busy={isPendingEntry(entry) || undefined}
               data-focus-key={entry.id}
-              onClick={() => toggle(entry.id)}
+              onClick={() => toggle(entry)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  toggle(entry.id);
+                  toggle(entry);
                 }
               }}
               className={cn(

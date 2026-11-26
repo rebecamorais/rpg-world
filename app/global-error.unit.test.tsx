@@ -33,6 +33,17 @@ describe('global error', () => {
     const error = Object.assign(new Error('boom'), { digest: '12345' });
     render(<GlobalError error={error} retry={vi.fn()} />, { container: document });
 
-    expect(screen.getByText('12345')).toBeVisible();
+    expect(
+      screen.getByText(new RegExp(en.errorPage.reference.replace('{code}', '12345'))),
+    ).toBeVisible();
+  });
+
+  // In the browser the inline theme script doesn't run, so the light theme came back dark
+  it('no navegador, aplica o tema do cookie', () => {
+    document.cookie = 'theme=light; path=/';
+    render(<GlobalError error={new Error('boom')} retry={vi.fn()} />, { container: document });
+
+    expect(document.documentElement.dataset.theme).toBe('light');
+    document.cookie = 'theme=; path=/; max-age=0';
   });
 });
