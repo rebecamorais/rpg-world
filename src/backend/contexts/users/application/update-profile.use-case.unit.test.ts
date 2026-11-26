@@ -1,11 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { storagePathFromAssetUrl } from '@backend/shared/application/remove-replaced-asset';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { Profile } from '../domain/Profile';
 import { ProfileRepository } from '../domain/profile.repo';
 import { GetProfileUseCase } from './get-profile.use-case';
 import { UpdateProfileUseCase } from './update-profile.use-case';
+
+const ASSETS = 'https://images.rpgworldapp.com';
+/** The asset host of these tests, as `ownAssetPath` answers in production. */
+const ownAssetPath = (url: string, bucket: string) => storagePathFromAssetUrl(url, bucket, ASSETS);
 
 const mockProfileRepository = () =>
   ({
@@ -109,7 +114,7 @@ describe('UpdateProfileUseCase', () => {
       const useCase = new UpdateProfileUseCase(
         repository,
         storage as unknown as StorageRepository,
-        (u) => u.startsWith('https://images.rpgworldapp.com/'),
+        ownAssetPath,
       );
       return { repository, storage, useCase };
     }
@@ -148,12 +153,39 @@ describe('UpdateProfileUseCase', () => {
       for (const avatarUrl of [
         'https://images.rpgworldapp.com/avatars/other-user/avatar-v1.png',
         `https://evil.example/avatars/${USER}/avatar-v2.png`,
+        // The bucket has to come right after the host, not anywhere further along the path
+        `${ASSETS}/other/x/avatars/${USER}/avatar-v2.png`,
+        // Another file of this account's folder that isn't a profile picture
+        `${ASSETS}/avatars/${USER}/characters/char-1-v1.webp`,
       ]) {
         await expect(useCase.execute({ id: USER, avatarUrl })).rejects.toMatchObject({
           code: 'profile_error_avatar_invalid',
         });
       }
       expect(repository.update).not.toHaveBeenCalled();
+    });
+
+    it('aceita o que foi enviado para esta conta', async () => {
+      const { repository, useCase } = setup(url('v1'));
+
+      await useCase.execute({ id: USER, avatarUrl: url('v2') });
+
+      expect(repository.update).toHaveBeenCalledWith({ id: USER, avatarUrl: url('v2') });
+    });
+
+    // Saved before the check (the profile form sends it back with every save)
+    it('uma imagem de fora salva antes continua valendo se voltar igual', async () => {
+      const old = `${ASSETS}/other/x/avatars/${USER}/avatar-v1.png`;
+      const { repository, storage, useCase } = setup(old);
+
+      await useCase.execute({ id: USER, avatarUrl: old, fullName: 'Rebeca' });
+
+      expect(repository.update).toHaveBeenCalledWith({
+        id: USER,
+        avatarUrl: old,
+        fullName: 'Rebeca',
+      });
+      expect(storage.remove).not.toHaveBeenCalled();
     });
 
     it('aceita o avatar que a conta já tem (a foto do Google) e o vazio, que apaga', async () => {

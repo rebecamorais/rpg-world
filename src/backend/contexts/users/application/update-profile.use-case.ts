@@ -1,8 +1,4 @@
-import {
-  isFileIn,
-  removeReplacedAsset,
-  storagePathFromAssetUrl,
-} from '@backend/shared/application/remove-replaced-asset';
+import { isFileIn, removeReplacedAsset } from '@backend/shared/application/remove-replaced-asset';
 import { AVATAR_BUCKET } from '@backend/shared/domain/avatar';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
@@ -16,8 +12,8 @@ export class UpdateProfileUseCase {
   constructor(
     private readonly profileRepository: ProfileRepository,
     private readonly storageRepository?: StorageRepository,
-    /** Whether a URL is on this environment's asset host (`isOwnAssetUrl`). */
-    private readonly isOwnAssetUrl: (url: string) => boolean = () => false,
+    /** Path in `bucket` of a URL on this environment's asset host, or null (`ownAssetPath`). */
+    private readonly ownAssetPath: (url: string, bucket: string) => string | null = () => null,
   ) {}
 
   async execute(profile: Profile): Promise<void> {
@@ -65,9 +61,9 @@ export class UpdateProfileUseCase {
     }
   }
 
+  /** The bucket right after the host, as the character images (UpdateCharacterUseCase). */
   private isOwnAvatar(userId: string, url: string): boolean {
-    if (!this.isOwnAssetUrl(url)) return false;
-    const path = storagePathFromAssetUrl(url, AVATAR_BUCKET);
+    const path = this.ownAssetPath(url, AVATAR_BUCKET);
     return !!path && isFileIn(path, userId, 'avatar-');
   }
 }
