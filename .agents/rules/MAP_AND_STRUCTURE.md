@@ -41,6 +41,8 @@ Camada de apresentação e estado do cliente.
 Código compartilhado entre Frontend e Backend.
 
 - **`shared/systems/dnd5e/`**: Regras de D&D 5e: cálculos, `constants/` e `content/` (schemas Zod do conteúdo e as edições em `content/editions.ts`).
+- **`shared/systems/registry.ts`** e **`sheet-href.ts`**: registro de sistemas (`SystemId`, aliases, chave do banco) e `sheetHref`, a única forma de montar o endereço de uma ficha.
+- **Fronteira do sistema:** só código dentro de uma pasta `dnd5e/` ou de um arquivo `dnd5e*` pode importar `@shared/systems/dnd5e` livremente. Os demais estão em `system-boundary.allowlist.json`, que só encolhe: não adicione arquivo novo à lista, passe pelo registro ou pelo mapper do sistema (`.../repositories/sheet-mappers/`). O teste é `system-boundary.unit.test.ts`.
 - **`shared/types/`**: Definições de tipos TypeScript globais.
 
 ## 🔄 Fluxo de Comunicação
