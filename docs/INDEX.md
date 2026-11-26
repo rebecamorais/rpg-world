@@ -39,7 +39,8 @@ As regras de verdade estão nos docs da revisão de telas, não no CONTRIBUTING:
 - **Dados:** `content/dnd5e/srd-5.1/` (2014) e `content/dnd5e/srd-5.2/` (2024), importados por `scripts/content/`.
 - **Cálculos:** `shared/systems/dnd5e/`.
 - **Classe na ficha:** [class-sheet-map.md](class-sheet-map.md) (o que cada classe muda) e [class-sheet-coverage.md](class-sheet-coverage.md) (cobertura e fases).
-- **Como conferir uma regra:** ainda não há procedimento escrito. O que já foi usado: o PDF oficial do SRD 5.1 e os JSON de `content/`. As tabelas de classe (espaços de magia, pacto, truques, Ataque Furtivo, Fúria…) foram conferidas no PDF e entraram nos dados na fase 2 (#237), por `scripts/content/class-tables.ts`.
+- **Fontes oficiais e o que falta do SRD:** [srd-o-que-falta.md](plans/2026-11-26-srd-o-que-falta.md) (26/11). A versão atual de 2024 é o **SRD 5.2.1** (só PDF, em dndbeyond.com/srd); não existe SRD oficial em português nem em sueco. O 5etools fixado (`scripts/content/5etools-source.ts`) já segue o 5.2.1. As lacunas viraram as issues #277 a #289.
+- **Como conferir uma regra:** ainda não há procedimento escrito. O que já foi usado: o PDF oficial do SRD 5.1 (para 2024, o do 5.2.1) e os JSON de `content/`. As tabelas de classe (espaços de magia, pacto, truques, Ataque Furtivo, Fúria…) foram conferidas no PDF e entraram nos dados na fase 2 (#237), por `scripts/content/class-tables.ts`.
 
 ### Edição 2014 × 2024
 
@@ -60,15 +61,16 @@ Estado tirado do cabeçalho de cada plano e do histórico do git, em 2026-11-25.
 
 **Em andamento ou com próximo passo:**
 
-| Plano                                                                              | Estado                                                                                                                                                        |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [criacao-com-classe.md](plans/2026-11-15-criacao-com-classe.md)                    | Fases 3.1 a 3.4 entregues (#239, #244, #243, #246). O cabeçalho ainda diz "nada foi implementado", e os pontos em aberto não foram atualizados depois da 3.4. |
-| [Grimório: do catálogo ao Playground](grimoire-enchantments/playground-roadmap.md) | Catálogo (#195), biblioteca (#219) e Grimório no spellbook (#249) entregues. Próximas fases no Project.                                                       |
-| [conteudo-e-homebrew.md](plans/2026-10-15-conteudo-e-homebrew.md)                  | **Pausado em 2026-11-11** (mecânicas de classe antes). Passos 1 a 3 feitos para magias.                                                                       |
-| [traducoes-comunitarias.md](plans/2026-10-15-traducoes-comunitarias.md)            | Base entregue (#101); traduções no Weblate.                                                                                                                   |
-| [5etools-e-traducoes.md](plans/2026-10-15-5etools-e-traducoes.md)                  | Entregue para magias (#97).                                                                                                                                   |
-| [configuracao-vida-e-magia.md](plans/2026-10-15-configuracao-vida-e-magia.md)      | C1 a C5 feitos; C6 sem registro.                                                                                                                              |
-| [Revisão das telas](revisao-telas/README.md)                                       | Fases 1 a 4 com resultados e correções ([plano](revisao-telas/plano-por-tela.md)).                                                                            |
+| Plano                                                                              | Estado                                                                                                                                                                               |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [criacao-com-classe.md](plans/2026-11-15-criacao-com-classe.md)                    | Fases 3.1 a 3.4 entregues (#239, #244, #243, #246). O cabeçalho ainda diz "nada foi implementado", e os pontos em aberto não foram atualizados depois da 3.4.                        |
+| [Grimório: do catálogo ao Playground](grimoire-enchantments/playground-roadmap.md) | Catálogo (#195), biblioteca (#219) e Grimório no spellbook (#249) entregues. Próximas fases no Project.                                                                              |
+| [conteudo-e-homebrew.md](plans/2026-10-15-conteudo-e-homebrew.md)                  | **Pausado em 2026-11-11** (mecânicas de classe antes). Passos 1 a 3 feitos para magias.                                                                                              |
+| [traducoes-comunitarias.md](plans/2026-10-15-traducoes-comunitarias.md)            | Base entregue (#101); traduções no Weblate.                                                                                                                                          |
+| [5etools-e-traducoes.md](plans/2026-10-15-5etools-e-traducoes.md)                  | Entregue para magias (#97).                                                                                                                                                          |
+| [configuracao-vida-e-magia.md](plans/2026-10-15-configuracao-vida-e-magia.md)      | C1 a C5 feitos; C6 sem registro.                                                                                                                                                     |
+| [srd-o-que-falta.md](plans/2026-11-26-srd-o-que-falta.md)                          | Levantamento de 26/11: fontes oficiais do SRD 5.1 e 5.2.1 e o que falta, por prioridade. Lacunas abertas como #277 a #289; Magias Assinatura e Fúria Implacável já entregues (#296). |
+| [Revisão das telas](revisao-telas/README.md)                                       | Fases 1 a 4 com resultados e correções ([plano](revisao-telas/plano-por-tela.md)).                                                                                                   |
 
 **Só ideia ou planejamento, nada implementado:**
 
