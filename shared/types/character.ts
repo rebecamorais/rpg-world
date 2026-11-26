@@ -1,4 +1,7 @@
-type GameSystem = 'DnD_5e';
+import type { SystemId } from '../systems/registry';
+
+// Temporary `'DnD_5e'` keeps this task green on its own; task 3 removes it.
+type GameSystem = SystemId | 'DnD_5e';
 
 export interface CharacterBase {
   id: string;
