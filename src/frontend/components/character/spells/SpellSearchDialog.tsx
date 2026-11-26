@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from '@frontend/components/ui/dialog';
 import { EmptyState } from '@frontend/components/ui/empty-state';
+import { FieldLabel } from '@frontend/components/ui/field';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { Input } from '@frontend/components/ui/input';
 import { SelectField } from '@frontend/components/ui/select-field';
@@ -84,17 +85,21 @@ export default function SpellSearchDialog({
   const [searchInput, setSearchInput] = useState('');
   const search = useDebouncedValue(searchInput.trim(), SEARCH_DEBOUNCE_MS);
   // Starts on the character's class when it names one of the system's, and on the edition most
-  // of their spells are from
-  const [filters, setFilters] = useState<Filters>(() => ({
+  // of their spells are from. Those came from the sheet, not from the person: they don't count as
+  // filters, and clearing goes back to them
+  const [sheetFilters] = useState<Filters>(() => ({
     ...NO_FILTERS,
     edition: inferEdition(learnedSpells),
     class: matchCharacterClass(character?.class, (c) =>
       tSpellsData(`classes.${c}` as Parameters<typeof tSpellsData>[0]),
     ),
   }));
+  const [filters, setFilters] = useState<Filters>(sheetFilters);
   const setFilter = <K extends keyof Filters>(key: K, value: Filters[K]) =>
     setFilters((prev) => ({ ...prev, [key]: value }));
-  const activeFilterCount = Object.values(filters).filter((v) => v !== null).length;
+  const activeFilterCount = (Object.keys(filters) as (keyof Filters)[]).filter(
+    (key) => filters[key] !== sheetFilters[key],
+  ).length;
 
   // The page belongs to one search: a new search or filter starts back on the first page
   const queryKey = JSON.stringify([search, filters]);
@@ -115,7 +120,7 @@ export default function SpellSearchDialog({
 
   const clearAll = () => {
     setSearchInput('');
-    setFilters(NO_FILTERS);
+    setFilters(sheetFilters);
   };
 
   const {
@@ -250,94 +255,114 @@ export default function SpellSearchDialog({
             <div
               id={FILTERS_ID}
               className={cn(
-                'grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center',
+                'grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-end',
                 !filtersOpen && 'max-sm:hidden',
               )}
             >
-              <SelectField
-                aria-label={t('filterLabels.edition')}
-                value={filters.edition ?? 'all'}
-                onValueChange={(val) =>
-                  setFilter('edition', val === 'all' ? null : (val as Edition))
-                }
-                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
-                placeholder={t('allEditions')}
-                options={[
-                  { value: 'all', label: t('allEditions') },
-                  ...EDITIONS.map((edition) => ({
-                    value: edition,
-                    label: t(`editions.${edition}`),
-                  })),
-                ]}
-              />
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor={`${FILTERS_ID}-edition`}>
+                  {t('filterLabels.edition')}
+                </FieldLabel>
+                <SelectField
+                  id={`${FILTERS_ID}-edition`}
+                  value={filters.edition ?? 'all'}
+                  onValueChange={(val) =>
+                    setFilter('edition', val === 'all' ? null : (val as Edition))
+                  }
+                  className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
+                  placeholder={t('allEditions')}
+                  options={[
+                    { value: 'all', label: t('allEditions') },
+                    ...EDITIONS.map((edition) => ({
+                      value: edition,
+                      label: t(`editions.${edition}`),
+                    })),
+                  ]}
+                />
+              </div>
 
-              <SelectField
-                aria-label={t('filterLabels.level')}
-                value={filters.level === null ? 'all' : filters.level.toString()}
-                onValueChange={(val) => setFilter('level', val === 'all' ? null : Number(val))}
-                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[120px]"
-                placeholder={t('allLevels')}
-                options={[
-                  { value: 'all', label: t('allLevels') },
-                  { value: '0', label: tCharacters('cantrip') },
-                  ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map((lvl) => ({
-                    value: lvl.toString(),
-                    label: tCharacters('levelDetail', { level: lvl }),
-                  })),
-                ]}
-              />
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor={`${FILTERS_ID}-level`}>{t('filterLabels.level')}</FieldLabel>
+                <SelectField
+                  id={`${FILTERS_ID}-level`}
+                  value={filters.level === null ? 'all' : filters.level.toString()}
+                  onValueChange={(val) => setFilter('level', val === 'all' ? null : Number(val))}
+                  className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[120px]"
+                  placeholder={t('allLevels')}
+                  options={[
+                    { value: 'all', label: t('allLevels') },
+                    { value: '0', label: tCharacters('cantrip') },
+                    ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map((lvl) => ({
+                      value: lvl.toString(),
+                      label: tCharacters('levelDetail', { level: lvl }),
+                    })),
+                  ]}
+                />
+              </div>
 
-              <SelectField
-                aria-label={t('filterLabels.school')}
-                value={filters.school ?? 'all'}
-                onValueChange={(val) =>
-                  setFilter('school', val === 'all' ? null : (val as SpellSchool))
-                }
-                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
-                placeholder={t('allSchools')}
-                options={schoolOptions}
-              />
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor={`${FILTERS_ID}-school`}>{t('filterLabels.school')}</FieldLabel>
+                <SelectField
+                  id={`${FILTERS_ID}-school`}
+                  value={filters.school ?? 'all'}
+                  onValueChange={(val) =>
+                    setFilter('school', val === 'all' ? null : (val as SpellSchool))
+                  }
+                  className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
+                  placeholder={t('allSchools')}
+                  options={schoolOptions}
+                />
+              </div>
 
-              <SelectField
-                aria-label={t('filterLabels.class')}
-                value={filters.class ?? 'all'}
-                onValueChange={(val) =>
-                  setFilter('class', val === 'all' ? null : (val as CharacterClass))
-                }
-                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[140px]"
-                placeholder={t('allClasses')}
-                options={classesOptions}
-              />
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor={`${FILTERS_ID}-class`}>{t('filterLabels.class')}</FieldLabel>
+                <SelectField
+                  id={`${FILTERS_ID}-class`}
+                  value={filters.class ?? 'all'}
+                  onValueChange={(val) =>
+                    setFilter('class', val === 'all' ? null : (val as CharacterClass))
+                  }
+                  className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[140px]"
+                  placeholder={t('allClasses')}
+                  options={classesOptions}
+                />
+              </div>
 
-              <SelectField
-                aria-label={t('filterLabels.damage')}
-                value={filters.damage ?? 'all'}
-                onValueChange={(val) => setFilter('damage', val === 'all' ? null : val)}
-                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
-                placeholder={tCharacters('allDamage')}
-                options={[
-                  { value: 'all', label: tCharacters('allDamage') },
-                  ...damageTypes.map((type) => ({
-                    value: type,
-                    label: tSpellsData(`damageTypes.${type}`),
-                  })),
-                ]}
-              />
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor={`${FILTERS_ID}-damage`}>{t('filterLabels.damage')}</FieldLabel>
+                <SelectField
+                  id={`${FILTERS_ID}-damage`}
+                  value={filters.damage ?? 'all'}
+                  onValueChange={(val) => setFilter('damage', val === 'all' ? null : val)}
+                  className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
+                  placeholder={tCharacters('allDamage')}
+                  options={[
+                    { value: 'all', label: tCharacters('allDamage') },
+                    ...damageTypes.map((type) => ({
+                      value: type,
+                      label: tSpellsData(`damageTypes.${type}`),
+                    })),
+                  ]}
+                />
+              </div>
 
-              <SelectField
-                aria-label={tConditions('filter')}
-                value={filters.condition ?? 'all'}
-                onValueChange={(val) => setFilter('condition', val === 'all' ? null : val)}
-                className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
-                placeholder={tConditions('any')}
-                options={conditionOptions}
-              />
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor={`${FILTERS_ID}-condition`}>{tConditions('filter')}</FieldLabel>
+                <SelectField
+                  id={`${FILTERS_ID}-condition`}
+                  value={filters.condition ?? 'all'}
+                  onValueChange={(val) => setFilter('condition', val === 'all' ? null : val)}
+                  className="border-border bg-muted text-foreground h-10 w-full gap-2 sm:w-auto sm:min-w-[150px]"
+                  placeholder={tConditions('any')}
+                  options={conditionOptions}
+                />
+              </div>
 
               {activeFilterCount > 0 && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setFilters(NO_FILTERS)}
+                  onClick={() => setFilters(sheetFilters)}
                   className="text-character-flare hover:bg-character-surface hover:text-character-flare col-span-2 justify-self-start"
                 >
                   <AppIcon name="X" size={16} aria-hidden="true" />

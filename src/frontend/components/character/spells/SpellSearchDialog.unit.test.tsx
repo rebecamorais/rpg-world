@@ -114,16 +114,53 @@ describe('SpellSearchDialog', () => {
     expect(screen.queryByRole('option', { name: 'Frightened' })).not.toBeInTheDocument();
   });
 
-  it('começa filtrando pela classe do personagem, e dá para limpar', async () => {
+  it('começa na classe do personagem, sem contar como filtro, e limpar volta para ela', async () => {
     const user = userEvent.setup();
     renderDialog('Wizard');
 
     await waitFor(() => expect(lastQuery().class).toBe('wizard'));
+    // What came from the sheet isn't a filter the person set
+    expect(screen.getByRole('button', { name: 'Filters' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Clear filters/ })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('combobox', { name: t.filterLabels.class }));
+    await user.click(screen.getByRole('option', { name: t.allClasses }));
+    await user.click(screen.getByRole('combobox', { name: t.filterLabels.level }));
+    await user.click(screen.getByRole('option', { name: messages.characters.cantrip }));
+    await waitFor(() => expect(lastQuery().class).toBeUndefined());
+    expect(screen.getByRole('button', { name: 'Filters (2)' })).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Clear filters (2)' }));
-    await waitFor(() => expect(lastQuery().class).toBeUndefined());
-    expect(lastQuery().edition).toBeUndefined();
+    // The first search again (from the cache, so the selects say it, not a new request)
+    expect(screen.getByRole('combobox', { name: t.filterLabels.class })).toHaveTextContent(
+      messages.spellsData.classes.wizard,
+    );
+    expect(screen.getByRole('combobox', { name: t.filterLabels.level })).toHaveTextContent(
+      t.allLevels,
+    );
+    expect(screen.getByRole('combobox', { name: t.filterLabels.edition })).toHaveTextContent(
+      t.editions['2024'],
+    );
     expect(screen.queryByRole('button', { name: /Clear filters/ })).not.toBeInTheDocument();
+  });
+
+  it('cada filtro tem um rótulo visível ligado ao select', () => {
+    renderDialog();
+
+    for (const name of [
+      t.filterLabels.edition,
+      t.filterLabels.level,
+      t.filterLabels.school,
+      t.filterLabels.class,
+      t.filterLabels.damage,
+      messages.conditions.filter,
+    ]) {
+      const label = screen.getByText(name, { selector: 'label' });
+      expect(screen.getByRole('combobox', { name })).toHaveAttribute(
+        'id',
+        label.getAttribute('for'),
+      );
+    }
   });
 
   it('grimório vazio começa na edição de 2024', async () => {
@@ -209,7 +246,7 @@ describe('SpellSearchDialog', () => {
     const user = userEvent.setup();
     renderDialog('Wizard');
 
-    const toggle = screen.getByRole('button', { name: 'Filters (2)' });
+    const toggle = screen.getByRole('button', { name: 'Filters' });
     expect(toggle).toHaveAttribute('aria-expanded', 'false');
     const panel = document.getElementById(toggle.getAttribute('aria-controls')!)!;
     expect(panel).toHaveClass('max-sm:hidden');
