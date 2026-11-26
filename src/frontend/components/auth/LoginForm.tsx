@@ -46,6 +46,17 @@ interface LoginFormValues {
 
 type AuthMode = 'password' | 'magic';
 
+const TOO_MANY_ATTEMPTS = 'auth_error_signin_too_many_attempts';
+/** The lockout length, for an answer that came without the minutes left. */
+const LOCKOUT_MINUTES = 15;
+
+/** Minutes left on a locked sign-in, sent next to the error code (see APIError.data). */
+function retryAfterMinutes(err: unknown): number {
+  const data = err instanceof Error ? (err as { data?: unknown }).data : undefined;
+  const minutes = (data as { retryAfterMinutes?: unknown } | undefined)?.retryAfterMinutes;
+  return typeof minutes === 'number' && minutes > 0 ? minutes : LOCKOUT_MINUTES;
+}
+
 /**
  * An unconfirmed account gets the same "Incorrect email or password." as a wrong password (so the
  * answer reveals nothing), and only the magic link confirms it. So that answer always points there.
@@ -136,7 +147,11 @@ export default function LoginForm() {
       }
     } catch (err: unknown) {
       const errorCode = authErrorCodeOf(err);
-      setServerError(form.setError, ['email', 'password'], errorCode, getMessage(errorCode));
+      const message =
+        errorCode === TOO_MANY_ATTEMPTS
+          ? tCommon(`errors.${TOO_MANY_ATTEMPTS}`, { minutes: retryAfterMinutes(err) })
+          : getMessage(errorCode);
+      setServerError(form.setError, ['email', 'password'], errorCode, message);
       if (authMode === 'magic') resetTurnstile();
       setShowMagicLinkHint(authMode === 'password' && POINTS_TO_MAGIC_LINK.has(errorCode ?? ''));
     }

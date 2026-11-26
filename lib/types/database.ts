@@ -60,6 +60,31 @@ export type Database = {
         };
         Relationships: [];
       };
+      auth_login_throttle: {
+        Row: {
+          failed_at: string[];
+          key_hash: string;
+          last_failed_at: string;
+          locked_until: string | null;
+          scope: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          failed_at?: string[];
+          key_hash: string;
+          last_failed_at?: string;
+          locked_until?: string | null;
+          scope: string;
+        };
+        Update: {
+          failed_at?: string[];
+          key_hash?: string;
+          last_failed_at?: string;
+          locked_until?: string | null;
+          scope?: string;
+        };
+        Relationships: [];
+      };
       character_lore: {
         Row: {
           age: string | null;
@@ -777,6 +802,7 @@ export type Database = {
       claim_account_deletion_email: { Args: { p_user_id: string }; Returns: boolean };
       claim_account_deletion_password_attempt: { Args: { p_user_id: string }; Returns: boolean };
       claim_auth_email: { Args: { p_email: string; p_kind: string }; Returns: boolean };
+      claim_login_attempt: { Args: { p_email_hash: string; p_ip_hash?: string }; Returns: number };
       claim_party_gm: { Args: { p_party_id: string }; Returns: string };
       duplicate_character: { Args: { p_character_id: string; p_name: string }; Returns: string };
       encounter_turns: {
@@ -798,6 +824,10 @@ export type Database = {
         }[];
       };
       end_turn: { Args: { p_participant_id: string; p_party_id: string }; Returns: undefined };
+      finish_login_attempt: {
+        Args: { p_email_hash: string; p_ip_hash?: string; p_success?: boolean };
+        Returns: undefined;
+      };
       get_party_invite: {
         Args: { p_code: string };
         Returns: {
