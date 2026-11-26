@@ -45,4 +45,24 @@ describe('PartyImageSettings', () => {
     await user.click(within(dialog).getByRole('button', { name: t.remove }));
     expect(removeImage.mutate).toHaveBeenCalled();
   });
+
+  it('remover a imagem leva o foco ao botão de enviar, não ao topo da página', async () => {
+    const { rerender } = renderWithProviders(
+      <PartyImageSettings party={party('https://images.test/mesa.webp')} />,
+    );
+    const user = userEvent.setup();
+
+    const remove = screen.getByRole('button', { name: t.remove });
+    await user.click(remove);
+    await user.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', { name: t.remove }),
+    );
+    expect(removeImage.mutate).toHaveBeenCalled();
+    // The confirmation gives the focus back to "Remove"
+    await vi.waitFor(() => expect(remove).toHaveFocus());
+    // The refetch brings the party without its image: "Remove" goes away
+    rerender(<PartyImageSettings party={party(null)} />);
+
+    await vi.waitFor(() => expect(screen.getByRole('button', { name: t.upload })).toHaveFocus());
+  });
 });

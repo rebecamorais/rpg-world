@@ -10,8 +10,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@frontend/components/ui/ava
 import { Button } from '@frontend/components/ui/button';
 import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { UploadTarget, useFileUploader } from '@frontend/context/FileUploaderContext';
+import { useFocusAfterRemove } from '@frontend/hooks/useFocusAfterRemove';
 import { useImageCrop } from '@frontend/hooks/useImageCrop';
 import { cn } from '@frontend/lib/utils';
+
+// Where the focus goes once "Remove" is gone with the image: the button that picks a new one
+const REMOVE_FOCUS = 'remove';
+const PICK_FOCUS = 'pick';
 
 interface ImageUploadProps {
   currentUrl?: string;
@@ -57,6 +62,8 @@ export default function ImageUpload({
   // Unique per instance: a page can show more than one uploader
   const inputId = useId();
   const [isViewerOpen, setIsViewerOpen] = useState(false);
+  // "Remove" leaves with the image, and with the focus the confirmation gave back to it
+  const { root: focusRoot, next: focusNext, cancel: focusCancel } = useFocusAfterRemove();
   const crop = useImageCrop({
     keepFull: keepFullImage,
     upload: (file, full) =>
@@ -95,13 +102,20 @@ export default function ImageUpload({
         confirmLabel: t('remove'),
         destructive: true,
       });
-      if (ok) await onRemove();
+      if (!ok) return;
+      focusNext(REMOVE_FOCUS, [PICK_FOCUS]);
+      try {
+        await onRemove();
+      } catch (err) {
+        focusCancel(REMOVE_FOCUS); // the image stays, and so does the focus
+        throw err;
+      }
     });
 
   const pick = () => inputRef.current?.click();
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div ref={focusRoot} className="flex flex-col items-center gap-3">
       {/* Only shows the image: the buttons below say what each action does, also on touch */}
       <Avatar
         className={cn(
@@ -122,6 +136,7 @@ export default function ImageUpload({
           onClick={pick}
           disabled={isUploading}
           loading={isUploading}
+          data-focus-key={PICK_FOCUS}
         >
           {isUploading ? t('loading') : currentUrl ? t('button') : t('add')}
         </Button>
@@ -137,6 +152,7 @@ export default function ImageUpload({
             size="sm"
             onClick={remove}
             disabled={isUploading}
+            data-focus-key={REMOVE_FOCUS}
           >
             {t('remove')}
           </Button>

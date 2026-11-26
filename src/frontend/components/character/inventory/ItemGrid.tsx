@@ -57,7 +57,7 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
               aria-pressed={isSelected}
               aria-controls={isSelected ? panelId : undefined}
               aria-label={t('tile', { name, quantity: entry.quantity })}
-              data-item-focus={entry.id}
+              data-focus-key={entry.id}
               onClick={() => toggle(entry.id)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -93,7 +93,7 @@ export function ItemGrid({ entries, onQuantity, onRemove, onAdd, canAdd }: Props
           aria-label={tCharacters('addItem')}
           disabled={!canAdd}
           onClick={onAdd}
-          data-item-focus={ADD_ITEM_FOCUS}
+          data-focus-key={ADD_ITEM_FOCUS}
           className="text-muted-foreground aspect-square h-auto rounded-md border-dashed"
         >
           <AppIcon name="Plus" size={20} aria-hidden="true" />

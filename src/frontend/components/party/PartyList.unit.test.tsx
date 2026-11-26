@@ -339,6 +339,8 @@ describe('PartyList', () => {
       );
 
       await vi.waitFor(() => expect(screen.getByRole('heading', { name: t.asGm })).toHaveFocus());
+      // The landing spot shows a ring, as any control with the keyboard's focus
+      expect(screen.getByRole('heading', { name: t.asGm })).toHaveClass('focus-ring');
     });
 
     it('se a recusa falha, a linha fica e o foco volta ao botão dela', async () => {

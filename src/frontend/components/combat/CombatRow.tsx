@@ -203,6 +203,8 @@ export function CombatRow({
             ? { 'aria-expanded': expanded, 'aria-controls': detailsId }
             : { 'aria-pressed': selected })}
           onClick={toggle}
+          // Where the focus goes when a row near it leaves the combat (GmCombatPanel)
+          data-focus-key={row.participantId}
           className="col-start-4 row-span-2 row-start-1 shrink-0 sm:col-start-5 sm:row-span-1"
         >
           <AppIcon

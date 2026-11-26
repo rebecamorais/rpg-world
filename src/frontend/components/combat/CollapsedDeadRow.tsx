@@ -40,6 +40,8 @@ export function CollapsedDeadRow({ row, onExpand }: { row: GmRow; onExpand: () =
         aria-label={t('detailsOf', { name: row.name })}
         aria-expanded={false}
         onClick={onExpand}
+        // Where the focus goes when a row near it leaves the combat (GmCombatPanel)
+        data-focus-key={row.participantId}
       >
         <AppIcon name="ChevronRight" size={16} aria-hidden="true" />
       </Button>

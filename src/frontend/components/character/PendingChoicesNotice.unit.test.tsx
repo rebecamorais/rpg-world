@@ -279,3 +279,46 @@ describe('PendingChoicesNotice: foco ao concluir a última', () => {
     await waitFor(() => expect(screen.getByRole('heading', { level: 1 })).toHaveFocus());
   });
 });
+
+describe('PendingChoicesNotice: foco ao dispensar', () => {
+  // "Dismiss" goes with its row: the focus would fall to the page's top
+  function renderInPage() {
+    const character = {
+      ...base,
+      id: 'c1',
+      level: 1,
+      class: 'bard',
+      edition: '2014',
+      ...BARD_2_OF_3,
+    } as DnD5eCharacter;
+    renderWithCharacter(
+      <main id="main-content" tabIndex={-1}>
+        <h1>Elminster</h1>
+        <PendingChoicesNotice />
+      </main>,
+      character,
+    );
+  }
+
+  it('dispensar uma leva o foco ao "Dispensar" da outra', async () => {
+    renderInPage();
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: 'Dismiss: Skills' }));
+
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Dismiss: Tools' })).toHaveFocus(),
+    );
+  });
+
+  it('dispensar a última leva o foco ao título da página', async () => {
+    renderInPage();
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: 'Dismiss: Skills' }));
+    await user.click(screen.getByRole('button', { name: 'Dismiss: Tools' }));
+
+    expect(notice()).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole('heading', { level: 1 })).toHaveFocus());
+  });
+});

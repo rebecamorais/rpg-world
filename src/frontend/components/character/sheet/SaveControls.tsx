@@ -7,6 +7,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
   useSyncExternalStore,
 } from 'react';
@@ -22,6 +23,7 @@ import {
   useCharacterState,
 } from '@frontend/context/CharacterContext';
 import { useHasFieldErrors } from '@frontend/context/FieldValidityContext';
+import { focusIsLost } from '@frontend/hooks/useFocusAfterRemove';
 import { useOnline } from '@frontend/hooks/useOnline';
 import { useSheetSource } from '@frontend/hooks/useSheetSource';
 import { useSaveShortcut } from '@frontend/hooks/useUnsavedChanges';
@@ -275,6 +277,15 @@ function SaveBar({
   const canSave = isDirty && !isSaving && !hasErrors && !conflict;
   useSaveShortcut(canSave ? onSave : null);
   const confirm = useConfirm();
+  // Saving or discarding unmounts the bar with the button the focus was on: it goes back to where
+  // it came from (the field just edited, most often) rather than to the page's start
+  const cameFrom = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (isDirty) return;
+    const target = cameFrom.current;
+    cameFrom.current = null;
+    if (target?.isConnected && !target.matches(':disabled') && focusIsLost()) target.focus();
+  }, [isDirty]);
 
   if (!isDirty || typeof document === 'undefined') return null;
 
@@ -290,6 +301,13 @@ function SaveBar({
 
   return createPortal(
     <div
+      onFocus={(event) => {
+        const from = event.relatedTarget;
+        // From inside the bar, or back from its own confirmation: where it came from stays
+        if (!(from instanceof HTMLElement) || event.currentTarget.contains(from)) return;
+        if (from.closest('[role="dialog"], [role="alertdialog"]')) return;
+        cameFrom.current = from;
+      }}
       className={cn(
         'border-border bg-popover/95 flex items-center justify-between gap-4 rounded-xl border p-3 shadow-2xl backdrop-blur-md sm:pl-4',
         // Outside a sheet (no slot), the bar places itself

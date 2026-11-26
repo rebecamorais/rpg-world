@@ -171,4 +171,35 @@ describe('SpellsTab: foco ao fechar a busca', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     await waitFor(() => expect(header).toHaveFocus());
   });
+
+  // The search closed before the learn POST came back: the focus went back to the empty state's
+  // button, which then goes away with the empty state
+  it('grimório vazio: fechar antes de o aprender voltar leva o foco ao "Add spell" do cabeçalho', async () => {
+    const spell = learned('shield');
+    let answer: (value: unknown) => void = () => {};
+    api.get.mockImplementation(async (url: string) =>
+      url.startsWith('/api/characters/') ? [] : { data: [spell], total: 1 },
+    );
+    api.post.mockImplementation(() => new Promise((resolve) => (answer = resolve)));
+    const user = userEvent.setup();
+    const character = { ...createDnD5eCharacter('owner', 'Elminster'), id: 'c1' } as DnD5eCharacter;
+    renderWithCharacter(<SpellsTab />, character);
+
+    await screen.findByText(messages.spellsDrawer.emptyState);
+    const [header, empty] = screen.getAllByRole('button', { name: tc.spells.addBtn });
+    await user.click(empty);
+    const dialog = await screen.findByRole('dialog');
+    await user.click(await within(dialog).findByRole('button', { name: tc.learnSpell }));
+    await waitFor(() => expect(api.post).toHaveBeenCalled());
+
+    await user.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    await waitFor(() => expect(empty).toHaveFocus());
+    answer({ spell });
+
+    await waitFor(() =>
+      expect(screen.queryByText(messages.spellsDrawer.emptyState)).not.toBeInTheDocument(),
+    );
+    await waitFor(() => expect(header).toHaveFocus());
+  });
 });

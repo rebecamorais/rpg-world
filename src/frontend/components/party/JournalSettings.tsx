@@ -12,11 +12,16 @@ import { useConfirm } from '@frontend/components/ui/confirm-dialog';
 import { Input } from '@frontend/components/ui/input';
 import { Label } from '@frontend/components/ui/label';
 import { SectionCard } from '@frontend/components/ui/section-card';
+import { useFocusAfterRemove } from '@frontend/hooks/useFocusAfterRemove';
 import { useParty } from '@frontend/hooks/useParty';
 
 import type { PartyView } from '@backend/contexts/parties/domain/PartyView';
 
 import { googleDocUrl, parseGoogleDocId } from '@shared/google-docs';
+
+// Where the focus goes once "Remove" is gone with the link: the field, to paste another one
+const REMOVE_FOCUS = 'remove';
+const LINK_FOCUS = 'link';
 
 /** The GM pastes, swaps or removes the Google Docs link of the party journal. */
 export function JournalSettings({ party }: { party: PartyView }) {
@@ -30,6 +35,8 @@ export function JournalSettings({ party }: { party: PartyView }) {
   const [url, setUrl] = useState(party.journalDocId ? googleDocUrl(party.journalDocId) : '');
   // Not while typing the link letter by letter: after a paste, or once the field is left
   const [checked, setChecked] = useState(false);
+  // "Remove" leaves with the link, and with the focus the confirmation gave back to it
+  const { root: focusRoot, next: focusNext, cancel: focusCancel } = useFocusAfterRemove();
 
   const docId = parseGoogleDocId(url);
   // Save alone turning grey said nothing about why
@@ -61,17 +68,19 @@ export function JournalSettings({ party }: { party: PartyView }) {
       destructive: true,
     });
     if (!ok) return;
+    focusNext(REMOVE_FOCUS, [LINK_FOCUS]);
     setJournal.mutate(null, {
       onSuccess: () => {
         setUrl('');
         toast.success(t('removed'));
       },
+      onError: () => focusCancel(REMOVE_FOCUS), // the link stays, and so does the focus
     });
   };
 
   return (
     // #journal: where "Set up the journal" on the empty tab lands
-    <SectionCard id="journal" className="scroll-mt-24">
+    <SectionCard ref={focusRoot} id="journal" className="scroll-mt-24">
       <SectionCard.Header>
         <SectionCard.Title icon="BookOpen">{t('title')}</SectionCard.Title>
       </SectionCard.Header>
@@ -93,6 +102,7 @@ export function JournalSettings({ party }: { party: PartyView }) {
               autoComplete="off"
               spellCheck={false}
               className="max-w-md"
+              data-focus-key={LINK_FOCUS}
             />
             {/* Outline, as the other forms here (invite, rename): one weight on the page */}
             <Button
@@ -109,6 +119,7 @@ export function JournalSettings({ party }: { party: PartyView }) {
                 variant="destructive-ghost"
                 onClick={removeJournal}
                 disabled={setJournal.isPending}
+                data-focus-key={REMOVE_FOCUS}
               >
                 {t('remove')}
               </Button>

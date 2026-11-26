@@ -90,7 +90,8 @@ function RolePlayList({ party }: { party: PartyView }) {
         id="party-roleplay"
         tabIndex={-1}
         data-focus-key={ROLEPLAY_FOCUS}
-        className="text-heading outline-none"
+        // The focus can land here after an answer: a ring shows it, as on any control
+        className="text-heading focus-ring rounded-sm outline-none"
       >
         {t('rolePlay')}
       </h2>
