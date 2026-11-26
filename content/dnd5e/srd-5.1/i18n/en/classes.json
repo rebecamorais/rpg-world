@@ -96,7 +96,10 @@
         "description": "At 20th level, you embody the power of the wilds. Your Strength and Constitution scores increase by 4. Your maximum for those scores is now 24."
       }
     },
-    "resources": { "rage": { "name": "Rage" } },
+    "resources": {
+      "rage": { "name": "Rage" },
+      "relentless-rage": { "name": "Relentless Rage", "note": "DC 10, +5 for each use spent." }
+    },
     "choices": {},
     "subclasses": {
       "berserker": {
@@ -1391,6 +1394,14 @@
       "signature-spells": {
         "name": "Signature Spells",
         "note": "One free casting of each of the two spells."
+      },
+      "signature-spell-1": {
+        "name": "First Signature Spell",
+        "note": "One free casting of this spell. You can rename the box after it."
+      },
+      "signature-spell-2": {
+        "name": "Second Signature Spell",
+        "note": "One free casting of this spell. You can rename the box after it."
       }
     },
     "choices": {},

@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { EmailService } from '../../shared/domain/email.service';
-import { isOwnAssetUrl } from '../../shared/infrastructure/helpers/format-asset-url';
+import { ownAssetPath } from '../../shared/infrastructure/helpers/format-asset-url';
 import { SupabaseStorageRepository } from '../../shared/infrastructure/repositories/supabase-storage-repository';
 import { CallbackExchangeUseCase } from './application/callback-exchange.use-case';
 import { DeleteAccountUseCase } from './application/delete-account.use-case';
@@ -106,7 +106,7 @@ export const createUserProfileContext = (config: UserProfileContextConfig): User
 
   return {
     getProfile: new GetProfileUseCase(profileRepository),
-    updateProfile: new UpdateProfileUseCase(profileRepository, storageRepository, isOwnAssetUrl),
+    updateProfile: new UpdateProfileUseCase(profileRepository, storageRepository, ownAssetPath),
     uploadAvatar: new UploadAvatarUseCase(storageRepository),
   };
 };

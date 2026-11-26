@@ -1,6 +1,6 @@
 import type { ClassResource } from '@shared/systems/dnd5e/content/class.schema';
 
-import type { ClassBook, ResourceSpecs } from './5etools-classes';
+import type { ClassBook, ResourceSpec, ResourceSpecs } from './5etools-classes';
 
 /*
  * Class resources: what a feature lets you spend and get back on a rest. 5etools has this only in
@@ -30,6 +30,48 @@ const byAbility = (ability: 'CHA' | 'WIS', bonus = 0, minimum = 1) => ({
   minimum,
 });
 
+/*
+ * Relentless Rage (both editions): the DC starts at 10 and goes up 5 for each use until a rest.
+ * `used` counts the uses since the last rest, so the DC is 10 + 5 × used; #213 will show it from
+ * that same number. A max of 5 (DC 35) is the app's cap, not the SRD's: the rule has none.
+ */
+const RELENTLESS_RAGE: ResourceSpec = {
+  id: 'relentless-rage',
+  name: 'Relentless Rage',
+  note: 'DC 10, +5 for each use spent.',
+  feature: 'relentless-rage',
+  unit: 'uses',
+  max: { type: 'steps', steps: [{ level: 11, value: 5 }] },
+  recovery: SHORT,
+};
+
+/*
+ * Signature Spells (both editions): each of the two spells is cast once, so one box per spell.
+ * It was one pool of 2 (`signature-spells`), where `used = 1` can't say which spell was cast: that
+ * key stays for the sheets that saved something in it, and is shown there instead (#262, #213).
+ */
+const SIGNATURE_SPELLS: ResourceSpec[] = [
+  {
+    id: 'signature-spells',
+    name: 'Signature Spells',
+    note: 'One free casting of each of the two spells.',
+    feature: 'signature-spells',
+    unit: 'uses',
+    max: { type: 'steps', steps: [{ level: 20, value: 2 }] },
+    recovery: SHORT,
+    replacedBy: ['signature-spell-1', 'signature-spell-2'],
+  },
+  ...([1, 2] as const).map((n): ResourceSpec => ({
+    id: `signature-spell-${n}`,
+    name: n === 1 ? 'First Signature Spell' : 'Second Signature Spell',
+    note: 'One free casting of this spell. You can rename the box after it.',
+    feature: 'signature-spells',
+    unit: 'uses',
+    max: once(20),
+    recovery: SHORT,
+  })),
+];
+
 const SRD_51: Record<string, ResourceSpecs> = {
   barbarian: {
     class: [
@@ -41,6 +83,7 @@ const SRD_51: Record<string, ResourceSpecs> = {
         max: { column: 'Rages' },
         recovery: LONG,
       },
+      RELENTLESS_RAGE,
     ],
     subclass: [],
   },
@@ -328,15 +371,7 @@ const SRD_51: Record<string, ResourceSpecs> = {
         max: once(1),
         recovery: LONG,
       },
-      {
-        id: 'signature-spells',
-        name: 'Signature Spells',
-        note: 'One free casting of each of the two spells.',
-        feature: 'signature-spells',
-        unit: 'uses',
-        max: { type: 'steps', steps: [{ level: 20, value: 2 }] },
-        recovery: SHORT,
-      },
+      ...SIGNATURE_SPELLS,
     ],
     subclass: [
       {
@@ -363,6 +398,7 @@ const SRD_52: Record<string, ResourceSpecs> = {
         max: { column: 'Rages' },
         recovery: ONE_ON_SHORT,
       },
+      RELENTLESS_RAGE,
       {
         id: 'persistent-rage',
         name: 'Persistent Rage',
@@ -762,15 +798,7 @@ const SRD_52: Record<string, ResourceSpecs> = {
         max: once(1),
         recovery: LONG,
       },
-      {
-        id: 'signature-spells',
-        name: 'Signature Spells',
-        note: 'One free casting of each of the two spells.',
-        feature: 'signature-spells',
-        unit: 'uses',
-        max: { type: 'steps', steps: [{ level: 20, value: 2 }] },
-        recovery: SHORT,
-      },
+      ...SIGNATURE_SPELLS,
     ],
     subclass: [
       {

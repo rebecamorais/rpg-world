@@ -307,4 +307,40 @@ describe('ResourceBoxesEditor', () => {
     );
     expect(screen.getByText(t.copyNoneLeft)).toBeInTheDocument();
   });
+
+  it('copiar não oferece uma caixinha que a classe trocou por outras, só as que ficaram no lugar', async () => {
+    const at20 = { type: 'steps' as const, steps: [{ level: 20, value: 1 }] };
+    const spell = (id: string, name: string) => ({
+      id,
+      feature: 'signature-spells',
+      level: 20,
+      name,
+      description: '',
+      unit: 'uses' as const,
+      max: at20,
+      recovery: LONG,
+    });
+    catalog.classes.wizard = {
+      ...MONK,
+      classId: 'wizard',
+      resources: [
+        {
+          ...spell('signature-spells', 'Signature Spells'),
+          replacedBy: ['signature-spell-1', 'signature-spell-2'],
+        },
+        spell('signature-spell-1', 'First Signature Spell'),
+        spell('signature-spell-2', 'Second Signature Spell'),
+      ],
+    } satisfies ClassResourcesContent;
+    renderEditor();
+    await userEvent.click(screen.getByRole('button', { name: t.copy }));
+    await userEvent.click(screen.getByRole('combobox', { name: t.copyClass }));
+    await userEvent.click(screen.getByRole('option', { name: messages.spellsData.classes.wizard }));
+    await userEvent.click(screen.getByRole('combobox', { name: t.copyResource }));
+
+    expect(screen.getAllByRole('option').map((o) => o.textContent)).toEqual([
+      'First Signature Spell',
+      'Second Signature Spell',
+    ]);
+  });
 });

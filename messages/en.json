@@ -709,6 +709,7 @@
     "goTo": "go: {item}",
     "spendHitDice": "Roll {die} {bonus} per hit die spent ({left} left)",
     "spendHitDiceNoDie": "Spend hit dice, if you want ({left} left)",
+    "songOfRest": "{name}: if you perform, everyone who spends hit dice regains an extra {die} HP",
     "boxBack": "{name} returns: {amount, select, all {all} other {{amount}}}",
     "pactSlotsBack": "Pact slots return",
     "notBackShort": "Spell slots and HP do not return on a short rest",

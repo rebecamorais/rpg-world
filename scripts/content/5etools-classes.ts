@@ -136,6 +136,8 @@ export interface ResourceSpec {
   recovery: ClassResource['recovery'];
   die?: NonNullable<ClassResource['die']> | { column: string };
   spellLevel?: Steps<number> | { column: string };
+  /** Ids of the resources of the same list that took its place (see the schema). */
+  replacedBy?: string[];
 }
 
 /** A number of the class table that is not spent (Rage Damage, Sneak Attack…), read from `column`. */
@@ -613,6 +615,7 @@ export function toResource(
     recovery: spec.recovery,
     ...(die ? { die } : {}),
     ...(spellLevel ? { spellLevel } : {}),
+    ...(spec.replacedBy ? { replacedBy: spec.replacedBy } : {}),
   };
 }
 
