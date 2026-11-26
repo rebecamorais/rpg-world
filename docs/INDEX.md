@@ -74,6 +74,7 @@ Estado tirado do cabeçalho de cada plano e do histórico do git, em 2026-11-25.
 
 **Só ideia ou planejamento, nada implementado:**
 
+- [r1-fronteira-do-sistema.md](plans/2026-11-26-r1-fronteira-do-sistema.md): primeiro passo para vários sistemas (registro, id único `dnd5e`, mapper por sistema, catraca de imports). Proposta no artifact "RPGWorld Multissistema"; R2 (conteúdo com manifesto) ainda sem plano.
 - [dnd-2024-novo-sistema.md](plans/2026-10-15-dnd-2024-novo-sistema.md)
 - [feiticeiros-e-maldicoes.md](plans/2026-10-15-feiticeiros-e-maldicoes.md) (perguntas em aberto no fim)
 - [sessoes-calendario-discord.md](plans/2026-10-15-sessoes-calendario-discord.md)
