@@ -3,16 +3,27 @@ import { StorageRepository } from '../domain/storage.repo';
 /**
  * Path inside `bucket` of an uploaded asset's URL, whatever host served it (the image proxy,
  * images.rpgworldapp.com or a Supabase public URL all end in `/<bucket>/<path>`).
+ *
+ * With `base` (the asset host, as `formatAssetUrl` builds URLs), the bucket has to come right
+ * after it: without, the first `<bucket>` segment anywhere counts, so `<base>/other/x/avatars/…`
+ * would read as a path in `avatars`. Checks that decide what a URL may point at pass it.
  */
-export function storagePathFromAssetUrl(url: string, bucket: string): string | null {
+export function storagePathFromAssetUrl(url: string, bucket: string, base?: string): string | null {
   let segments: string[];
+  let start: number;
   try {
     segments = new URL(url).pathname.split('/').map(decodeURIComponent);
+    if (base === undefined) {
+      start = segments.indexOf(bucket);
+    } else {
+      if (!url.startsWith(`${base}/${bucket}/`)) return null;
+      // The base's own path (`/api/images` on the proxy) comes first, then the bucket
+      start = new URL(base).pathname.split('/').filter(Boolean).length + 1;
+      if (segments[start] !== bucket) return null;
+    }
   } catch {
     return null;
   }
-
-  const start = segments.indexOf(bucket);
   if (start === -1) return null;
 
   const path = segments.slice(start + 1);

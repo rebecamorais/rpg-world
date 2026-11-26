@@ -16,7 +16,7 @@ test('aprende, prepara e esquece uma magia', async ({ page, user: _ }) => {
   await page.goto(characterUrl(id, '/spells'));
 
   // Learn Fireball from the catalog
-  // The empty spellbook also offers it; use the page header's
+  // Empty, only the empty state offers it: the header's comes with the first spell
   await page.getByRole('button', { name: 'Add Spell' }).first().click();
   const catalog = page.getByRole('dialog', { name: 'Add Spell' });
   const search = catalog.getByRole('searchbox', { name: 'Search spells' });

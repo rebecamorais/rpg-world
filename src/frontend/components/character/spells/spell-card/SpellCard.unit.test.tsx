@@ -65,6 +65,16 @@ describe('SpellCard na busca de magias', () => {
     expect(onForgetSpell).toHaveBeenCalledWith('fireball');
   });
 
+  // On phones "Learned" shrinks to its check, and a "•" after it read as a loose separator
+  it('aprendida, no celular não há "•" entre o ✓ e o nível', () => {
+    renderWithProviders(
+      <SpellCard spell={FIREBALL} isLearned onLearnSpell={vi.fn()} onForgetSpell={vi.fn()} />,
+    );
+
+    const details = screen.getByText(t.learnedBadge).closest('ul')!;
+    expect(details).toHaveClass('max-sm:[&>li:first-child+li]:before:content-none');
+  });
+
   it('enquanto a magia salva, o botão dela trava; o de outra magia não', async () => {
     const onLearnSpell = vi.fn();
     const { queryClient } = renderWithProviders(

@@ -398,8 +398,9 @@ export default function SpellSearchDialog({
         </div>
 
         {/* Improved Pagination Footer */}
+        {/* Wraps at 320px: the count above, the pages below, instead of running off the edge */}
         {totalPages > 1 && (
-          <footer className="border-border bg-muted/50 flex items-center justify-between border-t p-4">
+          <footer className="border-border bg-muted/50 flex flex-wrap items-center justify-between gap-2 border-t p-4">
             <p className="text-muted-foreground text-xs font-medium">
               {t('pagination', {
                 from: page * PAGE_SIZE + 1,
@@ -408,14 +409,14 @@ export default function SpellSearchDialog({
               })}
             </p>
 
-            <nav aria-label={t('paginationLabel')} className="flex items-center gap-2">
+            <nav aria-label={t('paginationLabel')} className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 disabled={page === 0}
                 onClick={() => goToPage(page - 1)}
                 aria-label={t('previousPage')}
-                className="border-border bg-muted text-foreground hover:bg-background h-8 w-8 p-0 disabled:opacity-40"
+                className="border-border bg-muted text-foreground hover:bg-background size-8 p-0 disabled:opacity-40 pointer-coarse:size-11"
               >
                 <AppIcon name="ChevronLeft" size={16} />
               </Button>
@@ -442,7 +443,8 @@ export default function SpellSearchDialog({
                       aria-current={isActive ? 'page' : undefined}
                       aria-label={t('goToPage', { page: pageNum + 1 })}
                       className={cn(
-                        'h-8 w-8 p-0 font-mono text-xs',
+                        // A 44px target on touch screens: at 32px the neighbours' tap areas overlap
+                        'size-8 p-0 font-mono text-xs pointer-coarse:size-11',
                         isActive
                           ? 'border-character bg-character text-character-on hover:bg-character/90 hover:text-character-on font-bold'
                           : 'border-border bg-muted text-muted-foreground',
@@ -460,7 +462,7 @@ export default function SpellSearchDialog({
                 disabled={page >= totalPages - 1}
                 onClick={() => goToPage(page + 1)}
                 aria-label={t('nextPage')}
-                className="border-border bg-muted text-foreground hover:bg-background h-8 w-8 p-0 disabled:opacity-40"
+                className="border-border bg-muted text-foreground hover:bg-background size-8 p-0 disabled:opacity-40 pointer-coarse:size-11"
               >
                 <AppIcon name="ChevronRight" size={16} />
               </Button>

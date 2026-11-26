@@ -21,6 +21,7 @@ import { Skeleton } from '@frontend/components/ui/skeleton';
 import { useLoadedCharacter } from '@frontend/context/CharacterContext';
 import { useWriteGuard } from '@frontend/demo/DemoContext';
 import { type InventoryApi, useInventory } from '@frontend/hooks/useInventory';
+import { useLeaveGuard } from '@frontend/hooks/useUnsavedChanges';
 import { characterTheme } from '@frontend/lib/color-utils';
 
 import {
@@ -132,9 +133,11 @@ function CoinDialog({
           />
         </div>
 
-        {payment && !payment.ok ? (
+        {/* Nothing for a field that isn't a valid amount: the last valid one would be shown */}
+        {!valid ? null : payment && !payment.ok ? (
           <p role="alert" className="text-danger-flare text-sm">
-            {t('missing', { amount: format(fromCopper(payment.missing)) })}
+            {/* In the coin being paid and smaller ones: "3 SP + 49 GP", not "3 SP + 9 GP + 4 PP" */}
+            {t('missing', { amount: format(fromCopper(payment.missing, coin)) })}
           </p>
         ) : overflow ? (
           <p role="alert" className="text-danger-flare text-sm">
@@ -225,6 +228,9 @@ export function CoinPurse({
   const [typed, setTyped] = useState<Partial<Record<Coin, { value: number; seen: number }>>>({});
 
   const purse = pouch?.coins ?? EMPTY_PURSE;
+  // A typed coin goes out on blur or Enter: closing or reloading the tab before that would lose
+  // it, so the browser asks. Links blur the field first, so they need no question
+  useLeaveGuard(Object.keys(typed).length > 0, () => true, tCommon('leaveConfirm'));
 
   const type = (coin: Coin, value: number) =>
     setTyped((all) => ({ ...all, [coin]: { value, seen: all[coin]?.seen ?? purse[coin] } }));

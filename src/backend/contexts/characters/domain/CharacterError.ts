@@ -13,11 +13,15 @@ export const CharacterErrorCodes = {
   ACCESS_FORBIDDEN: 'character_error_forbidden',
   AVATAR_FILE_TOO_LARGE: 'character_error_avatar_file_too_large',
   AVATAR_INVALID_TYPE: 'character_error_avatar_invalid_type',
+  /** An avatar or background URL that isn't a file uploaded for this character. */
+  IMAGE_INVALID: 'character_error_image_invalid',
   SPELL_ACTION_INVALID: 'character_error_spell_action_invalid',
   SPELL_NOT_FOUND: 'character_error_spell_not_found',
   ITEM_NOT_FOUND: 'character_error_item_not_found',
   CONTAINER_NOT_FOUND: 'character_error_container_not_found',
   ITEM_LIMIT: 'character_error_item_limit',
+  /** The same limit on a party chest, which isn't a character's backpack. */
+  CHEST_ITEM_LIMIT: 'character_error_chest_item_limit',
   RESOURCE_LIMIT: 'character_error_resource_limit',
   CONTAINER_LIMIT: 'character_error_container_limit',
   /** The sheet changed elsewhere since the revision the client sent. */

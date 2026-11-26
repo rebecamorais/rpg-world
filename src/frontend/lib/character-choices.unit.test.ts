@@ -42,6 +42,16 @@ describe('matchCharacterClass', () => {
       expect(matchCharacterClass(text, labelOf)).toBeNull();
     },
   );
+
+  // The sheet keeps the class as typed: a "Mago" written in pt opens the en app on Wizard
+  it.each([
+    ['Mago', CharacterClass.WIZARD],
+    ['Guerreira 2', CharacterClass.FIGHTER],
+    ['Patrulheiro', CharacterClass.RANGER],
+    ['Bárbaro', CharacterClass.BARBARIAN],
+  ])('com o app em en, %s → %s', (text, expected) => {
+    expect(matchCharacterClass(text, (cls) => cls)).toBe(expected);
+  });
 });
 
 const RACES_PT: Partial<Record<CharacterRace, string>> = {

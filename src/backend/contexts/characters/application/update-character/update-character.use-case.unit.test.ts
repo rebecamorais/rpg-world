@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { storagePathFromAssetUrl } from '@backend/shared/application/remove-replaced-asset';
 import { StorageRepository } from '@backend/shared/domain/storage.repo';
 
 import { CharacterErrorCodes } from '../../domain/CharacterError';
@@ -8,6 +9,10 @@ import { Attributes } from '../../domain/value-object/Attributes';
 import { HealthPoints } from '../../domain/value-object/HealthPoints';
 import { InMemoryCharacterRepository } from '../../infrastructure/in-memory-character.repository';
 import { CharacterUpdates, UpdateCharacterUseCase } from './update-character.use-case';
+
+const ASSETS = 'https://images.rpgworldapp.com';
+/** The asset host of these tests, as `ownAssetPath` answers in production. */
+const ownAssetPath = (url: string, bucket: string) => storagePathFromAssetUrl(url, bucket, ASSETS);
 
 const makeCharacter = (id: string, ownerUsername: string) =>
   new DnD5eCharacter({
@@ -72,7 +77,7 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
 
   beforeEach(async () => {
     repo = new InMemoryCharacterRepository();
-    useCase = new UpdateCharacterUseCase(repo);
+    useCase = new UpdateCharacterUseCase(repo, undefined, undefined, ownAssetPath);
 
     const char = new DnD5eCharacter({
       id: 'char-1',
@@ -254,7 +259,12 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
       await repository.save(character);
       return {
         storage,
-        useCase: new UpdateCharacterUseCase(repository, storage as unknown as StorageRepository),
+        useCase: new UpdateCharacterUseCase(
+          repository,
+          storage as unknown as StorageRepository,
+          undefined,
+          ownAssetPath,
+        ),
       };
     }
 
@@ -296,7 +306,12 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
       character.avatarUrl = previousAvatarUrl;
       await repo.save(character);
       const storage = { remove: vi.fn().mockResolvedValue(undefined) };
-      const useCase = new UpdateCharacterUseCase(repo, storage as unknown as StorageRepository);
+      const useCase = new UpdateCharacterUseCase(
+        repo,
+        storage as unknown as StorageRepository,
+        undefined,
+        ownAssetPath,
+      );
       return { storage, useCase };
     }
 
@@ -437,6 +452,61 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
     });
   });
 
+  // As the profile avatar: any other URL would show someone else's file, or a tracker, on the sheet
+  describe('imagens da ficha', () => {
+    const own = `${ASSETS}/avatars/owner-1/characters/char-1-v2.webp`;
+
+    it.each<[string, CharacterUpdates]>([
+      ['avatar de outro servidor', { avatarUrl: 'https://tracker.example/pixel.png' }],
+      ['fundo de outro servidor', { sheetBackgroundUrl: 'https://tracker.example/bg.png' }],
+      [
+        'avatar da pasta de outra pessoa',
+        { avatarUrl: `${ASSETS}/avatars/someone/characters/char-1-v1.webp` },
+      ],
+      [
+        'avatar de outro personagem',
+        { avatarUrl: `${ASSETS}/avatars/owner-1/characters/char-2-v1.webp` },
+      ],
+      [
+        'fundo fora do bucket',
+        { sheetBackgroundUrl: `${ASSETS}/other/owner-1/characters/char-1-background-v1.webp` },
+      ],
+      // The bucket has to come right after the host, not anywhere further along the path
+      [
+        'avatar de outro bucket com "avatars" no meio do caminho',
+        { avatarUrl: `${ASSETS}/other/x/avatars/owner-1/characters/char-1-v1.webp` },
+      ],
+    ])('recusa %s e não salva', async (_label, updates) => {
+      await expect(
+        useCase.execute({ id: 'char-1', ownerUsername: 'owner-1', updates }),
+      ).rejects.toMatchObject({ code: CharacterErrorCodes.IMAGE_INVALID, kind: 'validation' });
+      expect((await repo.findById('char-1'))!.avatarUrl).toBeUndefined();
+    });
+
+    it('aceita o que foi enviado para este personagem, e tirar a imagem', async () => {
+      const saved = await useCase.execute({
+        id: 'char-1',
+        ownerUsername: 'owner-1',
+        updates: { avatarUrl: own, sheetBackgroundUrl: '' },
+      });
+      expect(saved.avatarUrl).toBe(own);
+    });
+
+    // Saved before the check: the sheet sends it back with every save
+    it('uma imagem de fora salva antes continua valendo se voltar igual', async () => {
+      const stored = (await repo.findById('char-1'))!;
+      stored.avatarUrl = 'https://old.example/a.png';
+      await repo.save(stored);
+
+      const saved = await useCase.execute({
+        id: 'char-1',
+        ownerUsername: 'owner-1',
+        updates: { avatarUrl: 'https://old.example/a.png', name: 'Novo' },
+      });
+      expect(saved.name).toBe('Novo');
+    });
+  });
+
   describe('revisão', () => {
     const save = (updates: CharacterUpdates, revision?: number) =>
       useCase.execute({ id: 'char-1', ownerUsername: 'owner-1', updates, revision });
@@ -500,8 +570,11 @@ describe('UpdateCharacterUseCase — campos e dono', () => {
         ['PV atual', { hpCurrent: 3 }],
         ['PV temporário', { hpTemp: 5 }],
         ['testes contra a morte', { deathSaves: { successes: 1, failures: 2 } }],
-        ['avatar', { avatarUrl: 'https://example.test/a.webp' }],
-        ['fundo', { sheetBackgroundUrl: 'https://example.test/b.webp' }],
+        ['avatar', { avatarUrl: `${ASSETS}/avatars/owner-1/characters/char-1-v1.webp` }],
+        [
+          'fundo',
+          { sheetBackgroundUrl: `${ASSETS}/avatars/owner-1/characters/char-1-background-v1.webp` },
+        ],
       ])('%s', async (_label, updates) => {
         expect((await save(updates, 0)).revision).toBe(0);
       });

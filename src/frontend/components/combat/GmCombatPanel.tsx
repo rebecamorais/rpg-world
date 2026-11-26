@@ -7,8 +7,10 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
+import { LoadingState } from '@frontend/components/shared/LoadingState';
 import { Button } from '@frontend/components/ui/button';
 import { useConfirm } from '@frontend/components/ui/confirm-dialog';
+import { EmptyState, ErrorState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { NumberInput } from '@frontend/components/ui/number-input';
 import {
@@ -181,6 +183,7 @@ function AddNpc({
  */
 export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean }) {
   const t = useTranslations('combat');
+  const tCommon = useTranslations('common');
   const confirm = useConfirm();
   const combat = useEncounter(party.id);
   const encounter = combat.encounter?.role === 'gm' ? combat.encounter : null;
@@ -199,17 +202,36 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
   // the confirmation gave back would fall to the page's start
   const { root: focusRoot, next: focusNext, cancel: focusCancel } = useFocusAfterRemove();
 
+  // Not loaded isn't "no combat": "Prepare combat" there would only hit the one that exists
+  if (!encounter && combat.isLoading) return <LoadingState thematic />;
+  if (!encounter && combat.isError) {
+    return (
+      <ErrorState
+        title={t('loadErrorTitle')}
+        action={
+          <Button variant="outline" onClick={() => void combat.refetch()}>
+            {tCommon('retry')}
+          </Button>
+        }
+      />
+    );
+  }
   if (!encounter) {
     return (
-      <div ref={focusRoot} className="flex flex-col items-start gap-4">
-        <p className="text-muted-foreground">{t('noCombat')}</p>
-        <Button
-          onClick={() => combat.create.mutate()}
-          loading={combat.create.isPending}
-          data-focus-key={PREPARE_FOCUS}
-        >
-          {t('prepare')}
-        </Button>
+      <div ref={focusRoot}>
+        <EmptyState
+          icon="Swords"
+          title={t('noCombat')}
+          action={
+            <Button
+              onClick={() => combat.create.mutate()}
+              loading={combat.create.isPending}
+              data-focus-key={PREPARE_FOCUS}
+            >
+              {t('prepare')}
+            </Button>
+          }
+        />
       </div>
     );
   }
@@ -281,10 +303,8 @@ export function GmCombatPanel({ party, live }: { party: PartyView; live: boolean
         {missing.length > 0 && (
           <Button
             variant="outline"
-            loading={combat.addParticipant.isPending}
-            onClick={() =>
-              missing.forEach((c) => combat.addParticipant.mutate({ characterId: c.characterId }))
-            }
+            loading={combat.addParticipants.isPending}
+            onClick={() => combat.addParticipants.mutate(missing.map((c) => c.characterId))}
           >
             {t('addPartyCharacters')}
           </Button>

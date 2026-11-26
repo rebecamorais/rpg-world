@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { AccountCard } from './AccountCard';
 
@@ -33,5 +33,22 @@ describe('AccountCard', () => {
     renderWithProviders(<AccountCard email="hero@example.com" hasPassword passwordChanged />);
 
     expect(screen.getByRole('status')).toHaveTextContent(t.passwordChanged);
+  });
+
+  // Left in the address, the notice came back on every reload or shared link
+  // The state passed is `null`: Next's own history state (`__NA`) would make its patched
+  // replaceState skip the router sync, and the router would write the param back later
+  it('depois de mostrar o aviso, tira o ?passwordChanged do endereço e deixa o resto', () => {
+    window.history.replaceState({ __NA: true }, '', '/settings/profile?passwordChanged=1&tab=x');
+    const replaceState = vi.spyOn(window.history, 'replaceState');
+
+    renderWithProviders(<AccountCard email="hero@example.com" hasPassword passwordChanged />);
+
+    expect(screen.getByRole('status')).toHaveTextContent(t.passwordChanged);
+    expect(replaceState).toHaveBeenCalledTimes(1);
+    expect(replaceState.mock.calls[0]?.[0]).toBeNull();
+    expect(window.location.pathname).toBe('/settings/profile');
+    expect(window.location.search).toBe('?tab=x');
+    replaceState.mockRestore();
   });
 });

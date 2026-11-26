@@ -1,11 +1,13 @@
 import { waitFor } from '@testing-library/react';
 import { renderHookWithProviders } from '@tests/helpers/render';
+import { toast } from 'sonner';
 import { describe, expect, it, vi } from 'vitest';
 
 import { rpgWorldApi } from '@client';
 
 import { conditionChanges, useEncounter } from './useEncounter';
 
+vi.mock('sonner', () => ({ toast: Object.assign(vi.fn(), { error: vi.fn() }) }));
 vi.mock('@client', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@client')>()),
   rpgWorldApi: { get: vi.fn(), patch: vi.fn(), put: vi.fn(), post: vi.fn() },
@@ -208,6 +210,31 @@ describe('useEncounter', () => {
       '/api/parties/party-1/encounter/participants/a/initiative',
       { initiative: 17 },
     );
+  });
+
+  it('o combate não carregou: isError, e não "sem combate"', async () => {
+    vi.mocked(rpgWorldApi.get).mockRejectedValue(new Error('boom'));
+
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(result.current.encounter).toBeUndefined();
+  });
+
+  it('addParticipants manda todos e, com falha parcial, dá um toast só', async () => {
+    vi.mocked(rpgWorldApi.get).mockResolvedValue({});
+    vi.mocked(toast.error).mockClear();
+    vi.mocked(rpgWorldApi.post)
+      .mockResolvedValueOnce(undefined)
+      .mockRejectedValueOnce(new Error('boom'))
+      .mockResolvedValueOnce(undefined);
+    const { result } = renderHookWithProviders(() => useEncounter('party-1'));
+
+    result.current.addParticipants.mutate(['a', 'b', 'c']);
+
+    await waitFor(() => expect(toast.error).toHaveBeenCalledTimes(1));
+    expect(rpgWorldApi.post).toHaveBeenCalledTimes(3);
+    expect(vi.mocked(toast.error).mock.calls[0][0]).toMatch(/^1 /);
   });
 
   it('previousTurn chama a rota de voltar turno', async () => {

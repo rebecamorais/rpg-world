@@ -45,6 +45,16 @@ describe('ResetPasswordForm', () => {
     expect(auth.exchangeCodeForSession).not.toHaveBeenCalled();
   });
 
+  // As on sign-up: the rule up front, not only as an error after sending
+  it('mostra a regra da senha como ajuda do campo, com os campos no estilo padrão', async () => {
+    renderWithProviders(<ResetPasswordForm />);
+
+    const password = await screen.findByLabelText(t.newPasswordLabel);
+    expect(password).toHaveAccessibleDescription(t.passwordHint.replace('{min}', '8'));
+    expect(password).not.toHaveClass('bg-muted/50');
+    expect(screen.getByLabelText(t.confirmPasswordLabel)).not.toHaveClass('bg-muted/50');
+  });
+
   it('diz de qual conta é a senha', () => {
     renderWithProviders(<ResetPasswordForm email="c***@email.com" />);
 

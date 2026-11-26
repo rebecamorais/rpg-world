@@ -21,14 +21,20 @@ const toEntry = (row: ItemRow): InventoryEntry => ({
   quantity: row.quantity,
 });
 
-/** The database triggers raise these as P0001 with the rule's name as the message. */
-function limitError(error: {
-  code?: string;
-  message: string;
-  details?: string;
-}): CharacterError | null {
+/**
+ * The database triggers raise these as P0001 with the rule's name as the message. The item limit
+ * is one rule for both owners, but a full chest isn't "the backpack is full".
+ */
+function limitError(
+  error: { code?: string; message: string; details?: string },
+  owner: InventoryOwner,
+): CharacterError | null {
   if (error.code !== 'P0001') return null;
-  if (error.message === 'item_limit') return new CharacterError(CharacterErrorCodes.ITEM_LIMIT);
+  if (error.message === 'item_limit') {
+    return new CharacterError(
+      owner === 'party_id' ? CharacterErrorCodes.CHEST_ITEM_LIMIT : CharacterErrorCodes.ITEM_LIMIT,
+    );
+  }
   if (error.message === 'container_limit') {
     return new CharacterError(CharacterErrorCodes.CONTAINER_LIMIT);
   }
@@ -97,7 +103,8 @@ export class SupabaseInventoryRepository implements InventoryRepo {
     const { data, error } = key
       ? await this.client.rpc('add_inventory_item_once', { ...args, p_key: key })
       : await this.client.rpc('add_inventory_item', args);
-    if (error) throw limitError(error) ?? new Error(`Failed to add item: ${error.message}`);
+    if (error)
+      throw limitError(error, this.owner) ?? new Error(`Failed to add item: ${error.message}`);
     return toEntry(data);
   }
 
@@ -120,7 +127,10 @@ export class SupabaseInventoryRepository implements InventoryRepo {
       p_delta: delta,
       p_key: key,
     });
-    if (error) throw limitError(error) ?? new Error(`Failed to change quantity: ${error.message}`);
+    if (error)
+      throw (
+        limitError(error, this.owner) ?? new Error(`Failed to change quantity: ${error.message}`)
+      );
     return data;
   }
 
@@ -154,7 +164,8 @@ export class SupabaseInventoryRepository implements InventoryRepo {
       p_delta: delta,
       p_key: key,
     });
-    if (error) throw limitError(error) ?? new Error(`Failed to change coins: ${error.message}`);
+    if (error)
+      throw limitError(error, this.owner) ?? new Error(`Failed to change coins: ${error.message}`);
     return data as Coins | null;
   }
 
@@ -172,7 +183,8 @@ export class SupabaseInventoryRepository implements InventoryRepo {
       p_expected: expected,
       p_key: key,
     });
-    if (error) throw limitError(error) ?? new Error(`Failed to set coins: ${error.message}`);
+    if (error)
+      throw limitError(error, this.owner) ?? new Error(`Failed to set coins: ${error.message}`);
     return data as Coins | null;
   }
 

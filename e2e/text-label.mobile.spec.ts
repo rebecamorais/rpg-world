@@ -62,9 +62,16 @@ test.describe('text-label só em rótulos curtos (causa 8)', () => {
 
   test('o botão "Add spell" do grimório não fica em caixa alta', async ({ page, user: _ }) => {
     const id = await createCharacter(page, 'Elminster');
+    // The header's button only shows with a spell learned: empty, the empty state has its own
+    const learn = await page.request.post(`/api/characters/${id}/spells`, {
+      data: { id: 'dnd5e:srd-5.2:spell:hold-person', action: 'learn' },
+    });
+    expect(learn.ok()).toBe(true);
     await page.goto(characterUrl(id, '/spells'));
+    await expect(page.getByRole('article', { name: /Hold Person/ })).toBeVisible();
 
-    const add = await hydrated(page.getByRole('button', { name: 'Add spell' }).first());
+    // The only one left on the page is the header's
+    const add = await hydrated(page.getByRole('button', { name: 'Add spell' }));
     await expect(add).toHaveCSS('text-transform', 'none');
   });
 });

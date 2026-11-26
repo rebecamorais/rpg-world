@@ -1,7 +1,7 @@
-import { screen, within } from '@testing-library/react';
+import { act, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { messages, renderWithProviders } from '@tests/helpers/render';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { Spell } from '@frontend/types/spells';
 
@@ -105,6 +105,78 @@ describe('Spellbook', () => {
       t.cantrips,
       'Level 3 Spells',
     ]);
+  });
+
+  describe('destaque do índice', () => {
+    let report: (entries: Partial<IntersectionObserverEntry>[]) => void = () => {};
+    beforeEach(() => {
+      vi.stubGlobal(
+        'IntersectionObserver',
+        class {
+          constructor(callback: (entries: Partial<IntersectionObserverEntry>[]) => void) {
+            report = callback;
+          }
+          observe() {}
+          disconnect() {}
+        },
+      );
+    });
+    afterEach(() => vi.unstubAllGlobals());
+
+    const section = (level: number) => document.getElementById(`spell-level-${level}`)!;
+    // The callback measures every section itself: `top` is where this one now is on screen.
+    // jsdom has no CSS, so a jump leaves the section's top at 0 (no scroll padding or margin)
+    const crossing = (level: number, isIntersecting: boolean, top = 0) => {
+      vi.spyOn(section(level), 'getBoundingClientRect').mockReturnValue({ top } as DOMRect);
+      return { target: section(level), isIntersecting };
+    };
+    const current = () =>
+      within(screen.getByRole('navigation', { name: t.spellbookIndex }))
+        .getAllByRole('link')
+        .find((link) => link.getAttribute('aria-current') === 'location')?.textContent;
+
+    // After a jump the end of the section before is still on screen, above the line
+    it('depois do salto, destaca o nível do salto, e não o anterior', () => {
+      renderWithProviders(<Spellbook characterSpells={SPELLS} />);
+
+      act(() => report([crossing(0, true, -300), crossing(3, true, 0)]));
+
+      expect(current()).toBe('Level 33');
+    });
+
+    // Each callback only brings the sections that changed
+    it('voltando para cima, o nível de cima volta a ser o destacado', () => {
+      renderWithProviders(<Spellbook characterSpells={SPELLS} />);
+      act(() => report([crossing(0, true, -300), crossing(3, true, 0)]));
+
+      act(() => report([crossing(3, false, 400)]));
+
+      expect(current()).toBe('Cantrips2');
+    });
+
+    // A one-spell level is short: the next one starts in the upper part of the screen too
+    it('depois do salto para um nível curto, destaca ele, e não o seguinte', () => {
+      renderWithProviders(
+        <Spellbook
+          characterSpells={[
+            ...SPELLS,
+            spell('magic-missile', 'Magic Missile', 1),
+            spell('shatter', 'Shatter', 2),
+          ]}
+        />,
+      );
+
+      act(() =>
+        report([
+          crossing(0, true, -500),
+          crossing(1, true, 0),
+          crossing(2, true, 180),
+          crossing(3, false, 600),
+        ]),
+      );
+
+      expect(current()).toBe('Level 11');
+    });
   });
 
   it('em cada nível, as preparadas primeiro e o resto em ordem alfabética', () => {

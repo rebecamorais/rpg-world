@@ -14,11 +14,16 @@ export const EMPTY_PURSE: Coins = { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
 export const toCopper = (coins: Coins) =>
   COINS.reduce((total, coin) => total + coins[coin] * COIN_VALUE[coin], 0);
 
-/** `copper` in the biggest coins possible, without electrum (as change comes back at most tables). */
-export function fromCopper(copper: number): Coins {
+/**
+ * `copper` in the biggest coins possible, without electrum (as change comes back at most tables).
+ * With `upTo`, no coin bigger than it: what is short of "50 GP" reads in gold, not in platinum.
+ */
+export function fromCopper(copper: number, upTo?: Coin): Coins {
   const coins = { ...EMPTY_PURSE };
   let left = copper;
-  for (const c of CHANGE_COINS) {
+  const largest = upTo ? COIN_VALUE[upTo] : Infinity;
+  const steps = upTo && !CHANGE_COINS.includes(upTo) ? [upTo, ...CHANGE_COINS] : CHANGE_COINS;
+  for (const c of steps.filter((c) => COIN_VALUE[c] <= largest)) {
     coins[c] = Math.floor(left / COIN_VALUE[c]);
     left -= coins[c] * COIN_VALUE[c];
   }

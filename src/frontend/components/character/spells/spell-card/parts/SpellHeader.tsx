@@ -47,6 +47,8 @@ function Detail({
 const SEPARATOR =
   "[&>li+li]:before:text-muted-foreground/40 [&>li+li]:before:mr-1 [&>li+li]:before:content-['•'_/_'']";
 
+const LEARNED_ICON_ONLY = 'max-sm:[&>li:first-child+li]:before:content-none';
+
 export const SpellHeader = React.memo(
   ({
     spell,
@@ -107,7 +109,14 @@ export const SpellHeader = React.memo(
         <div className="text-caption text-muted-foreground mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
           {/* Open, the chips below carry casting time, range and duration: the header says
               what the spell is (level, school, damage) instead of repeating them */}
-          <ul className={cn('flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1', SEPARATOR)}>
+          <ul
+            className={cn(
+              'flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1',
+              SEPARATOR,
+              // On phones "Learned" is only its check: no "•" after it ("✓ • Level 3")
+              isLearned && LEARNED_ICON_ONLY,
+            )}
+          >
             {isLearned && (
               <Detail
                 className="text-success-flare"

@@ -4,10 +4,13 @@ import { describe, expect, it } from 'vitest';
 import type { Database } from '@database-types';
 
 import { CharacterErrorCodes } from '../../domain/CharacterError';
-import { SupabaseInventoryRepository } from './supabase-inventory.repository';
+import { type InventoryOwner, SupabaseInventoryRepository } from './supabase-inventory.repository';
 
 /** A client whose container lookup finds the container and whose rpc fails with `error`. */
-function repoFailingWith(error: { code?: string; message: string; details?: string }) {
+function repoFailingWith(
+  error: { code?: string; message: string; details?: string },
+  owner: InventoryOwner = 'character_id',
+) {
   const lookup = {
     select: () => lookup,
     eq: () => lookup,
@@ -18,7 +21,7 @@ function repoFailingWith(error: { code?: string; message: string; details?: stri
     from: () => lookup,
     rpc: async () => ({ data: null, error }),
   } as unknown as SupabaseClient<Database>;
-  return new SupabaseInventoryRepository(client);
+  return new SupabaseInventoryRepository(client, owner);
 }
 
 describe('SupabaseInventoryRepository.addItem', () => {
@@ -27,6 +30,16 @@ describe('SupabaseInventoryRepository.addItem', () => {
 
     await expect(repo.addItem('c1', 'k1', 'dnd5e:srd:item:rope', 1)).rejects.toMatchObject({
       message: CharacterErrorCodes.ITEM_LIMIT,
+      kind: 'validation',
+    });
+  });
+
+  // One rule in the database for both owners, but a full chest isn't "the backpack is full"
+  it('no baú da mesa, o limite de entradas tem a mensagem do baú', async () => {
+    const repo = repoFailingWith({ code: 'P0001', message: 'item_limit' }, 'party_id');
+
+    await expect(repo.addItem('p1', 'k1', 'dnd5e:srd:item:rope', 1)).rejects.toMatchObject({
+      message: CharacterErrorCodes.CHEST_ITEM_LIMIT,
       kind: 'validation',
     });
   });
