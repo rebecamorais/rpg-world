@@ -39,7 +39,7 @@ const claim = (overrides: Partial<GmClaim> = {}): GmClaim => ({
 const party = (overrides: Partial<PartyView> = {}): PartyView => ({
   id: 'p1',
   name: 'Mesa',
-  system: 'dnd_5e',
+  system: 'dnd5e',
   edition: '2014',
   imageUrl: null,
   role: 'player',
@@ -61,7 +61,7 @@ const party = (overrides: Partial<PartyView> = {}): PartyView => ({
 const summary = (id: string, role: 'gm' | 'player'): PartySummary => ({
   id,
   name: id,
-  system: 'dnd_5e',
+  system: 'dnd5e',
   role,
   status: role === 'gm' ? 'gm' : 'active',
   gmUsername: null,

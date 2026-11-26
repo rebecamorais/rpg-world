@@ -62,17 +62,16 @@ Estado tirado do cabeçalho de cada plano e do histórico do git, em 2026-11-25.
 
 **Em andamento ou com próximo passo:**
 
-| Plano                                                                              | Estado                                                                                                                                                                                            |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [criacao-com-classe.md](plans/2026-11-15-criacao-com-classe.md)                    | Fases 3.1 a 3.4 entregues (#239, #244, #243, #246). O cabeçalho ainda diz "nada foi implementado", e os pontos em aberto não foram atualizados depois da 3.4.                                     |
-| [Grimório: do catálogo ao Playground](grimoire-enchantments/playground-roadmap.md) | Catálogo (#195), biblioteca (#219) e Grimório no spellbook (#249) entregues. Próximas fases no Project.                                                                                           |
-| [conteudo-e-homebrew.md](plans/2026-10-15-conteudo-e-homebrew.md)                  | **Pausado em 2026-11-11** (mecânicas de classe antes). Passos 1 a 3 feitos para magias.                                                                                                           |
-| [traducoes-comunitarias.md](plans/2026-10-15-traducoes-comunitarias.md)            | Base entregue (#101); traduções no Weblate.                                                                                                                                                       |
-| [5etools-e-traducoes.md](plans/2026-10-15-5etools-e-traducoes.md)                  | Entregue para magias (#97).                                                                                                                                                                       |
-| [configuracao-vida-e-magia.md](plans/2026-10-15-configuracao-vida-e-magia.md)      | C1 a C5 feitos; C6 sem registro.                                                                                                                                                                  |
-| [srd-o-que-falta.md](plans/2026-11-26-srd-o-que-falta.md)                          | Levantamento de 26/11: fontes oficiais do SRD 5.1 e 5.2.1 e o que falta, por prioridade. Lacunas abertas como #277 a #289; Magias Assinatura e Fúria Implacável já entregues (#296).              |
-| [r1-fronteira-do-sistema.md](plans/2026-11-26-r1-fronteira-do-sistema.md)          | Entregue no #298: registro de sistemas, id `dnd5e`, mapper de ficha por sistema e catraca de imports. R2 (conteúdo com manifesto) ainda sem plano. Proposta no artifact "RPGWorld Multissistema". |
-| [Revisão das telas](revisao-telas/README.md)                                       | Fases 1 a 4 com resultados e correções ([plano](revisao-telas/plano-por-tela.md)).                                                                                                                |
+| Plano                                                                              | Estado                                                                                                                                                                               |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [criacao-com-classe.md](plans/2026-11-15-criacao-com-classe.md)                    | Fases 3.1 a 3.4 entregues (#239, #244, #243, #246). O cabeçalho ainda diz "nada foi implementado", e os pontos em aberto não foram atualizados depois da 3.4.                        |
+| [Grimório: do catálogo ao Playground](grimoire-enchantments/playground-roadmap.md) | Catálogo (#195), biblioteca (#219) e Grimório no spellbook (#249) entregues. Próximas fases no Project.                                                                              |
+| [conteudo-e-homebrew.md](plans/2026-10-15-conteudo-e-homebrew.md)                  | **Pausado em 2026-11-11** (mecânicas de classe antes). Passos 1 a 3 feitos para magias.                                                                                              |
+| [traducoes-comunitarias.md](plans/2026-10-15-traducoes-comunitarias.md)            | Base entregue (#101); traduções no Weblate.                                                                                                                                          |
+| [5etools-e-traducoes.md](plans/2026-10-15-5etools-e-traducoes.md)                  | Entregue para magias (#97).                                                                                                                                                          |
+| [configuracao-vida-e-magia.md](plans/2026-10-15-configuracao-vida-e-magia.md)      | C1 a C5 feitos; C6 sem registro.                                                                                                                                                     |
+| [srd-o-que-falta.md](plans/2026-11-26-srd-o-que-falta.md)                          | Levantamento de 26/11: fontes oficiais do SRD 5.1 e 5.2.1 e o que falta, por prioridade. Lacunas abertas como #277 a #289; Magias Assinatura e Fúria Implacável já entregues (#296). |
+| [Revisão das telas](revisao-telas/README.md)                                       | Fases 1 a 4 com resultados e correções ([plano](revisao-telas/plano-por-tela.md)).                                                                                                   |
 
 **Só ideia ou planejamento, nada implementado:**
 
@@ -97,6 +96,7 @@ Estado tirado do cabeçalho de cada plano e do histórico do git, em 2026-11-25.
 - [revisao-ux-mesas.md](plans/2026-11-01-revisao-ux-mesas.md) (#128)
 - [itens-e-mochila.md](plans/2026-11-02-itens-e-mochila.md) (#138)
 - [exclusao-de-conta.md](plans/2026-11-03-exclusao-de-conta.md) (#147)
+- [r1-fronteira-do-sistema.md](plans/2026-11-26-r1-fronteira-do-sistema.md) (#298): registro de sistemas, id `dnd5e`, mapper de ficha por sistema e catraca de imports. R2 (conteúdo com manifesto) ainda sem plano; proposta no artifact "RPGWorld Multissistema".
 
 **Processo:** [roadmap.md](plans/2026-10-20-roadmap.md).
 

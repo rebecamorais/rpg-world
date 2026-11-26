@@ -5,6 +5,7 @@ import createMiddleware from 'next-intl/middleware';
 
 import { maintenanceFlag } from './shared/flags';
 import { PATHNAME_HEADER } from './shared/http/pathname-header';
+import { parseSystemId } from './shared/systems/registry';
 import { safeRedirectPath } from './src/backend/shared/infrastructure/helpers/safe-redirect-path';
 import { NEXT_COOKIE } from './src/frontend/lib/post-login-next';
 import { LOCALIZED_PATHS, routing, withoutLocale } from './src/i18n/routing';
@@ -37,7 +38,8 @@ const MAINTENANCE_HEADERS = { 'Retry-After': '600', 'Cache-Control': 'no-store' 
  * Runs before every page:
  * 1. In maintenance (shared/flags.ts), answers with the maintenance screen, before anything that
  *    needs the database. The API stays out of the proxy: with every page replaced, only tabs
- *    already open still call it, and those calls fail on their own.
+ *    already open still call it, and those calls fail on their own. Old sheet links then go to
+ *    the system's id (canonicalSheetPath).
  * 2. Refreshes an expired Supabase session. Server Components cannot write cookies, so this is the
  *    only place the refreshed JWT reaches the browser. Route protection stays in the layouts.
  * 3. Picks the language (NEXT_LOCALE cookie, else Accept-Language) and rewrites the page to
@@ -49,6 +51,9 @@ export async function proxy(request: NextRequest) {
   if (request.headers.get('host') === IMAGES_HOST) return NextResponse.next();
 
   if (await inMaintenance(request)) return maintenance(request);
+
+  const canonical = canonicalSheetPath(request);
+  if (canonical) return NextResponse.redirect(canonical, 308);
 
   // The path asked for, for Server Components (layouts don't get it): the dashboard sends someone
   // who hasn't picked a username to /choose-username and back here afterwards
@@ -132,6 +137,23 @@ function maintenance(request: NextRequest): NextResponse {
     if (picked) url.pathname = new URL(picked).pathname;
   }
   return NextResponse.rewrite(url, { status: 503, headers: MAINTENANCE_HEADERS });
+}
+
+const SYSTEM_SEGMENT = /^\/system\/([^/]+)(?=\/)/;
+
+/**
+ * Old sheet links (/system/DnD_5e/..., /system/dnd_5e/...) go to the system's id, keeping the rest
+ * of the path and the query. The sheet's tabs link to the id, so on the old address no tab looked
+ * active and changing tabs looked like leaving the sheet (the unsaved-changes prompt).
+ */
+function canonicalSheetPath(request: NextRequest): URL | null {
+  const segment = request.nextUrl.pathname.match(SYSTEM_SEGMENT)?.[1];
+  if (!segment) return null;
+  const id = parseSystemId(segment);
+  if (!id || id === segment) return null;
+  const url = request.nextUrl.clone();
+  url.pathname = `/system/${id}${url.pathname.slice(`/system/${segment}`.length)}`;
+  return url;
 }
 
 /**

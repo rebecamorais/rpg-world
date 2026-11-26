@@ -30,7 +30,7 @@ const named = (text: string, name: string) => text.replace('{name}', name);
 const party = (id: string, overrides: Partial<PartySummary> = {}): PartySummary => ({
   id,
   name: `Mesa ${id}`,
-  system: 'dnd_5e',
+  system: 'dnd5e',
   role: 'player',
   status: 'active',
   gmUsername: 'mestra',

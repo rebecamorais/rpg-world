@@ -82,8 +82,14 @@ test.describe('ciclo do personagem', () => {
     const id = await createCharacter(page, 'Old Link Hero');
 
     for (const system of ['DnD_5e', 'dnd_5e']) {
-      await page.goto(`/system/${system}/character/${id}`);
+      await page.goto(`/system/${system}/character/${id}/lore?from=old`);
       await expect(page.getByText('Old Link Hero').first()).toBeVisible();
+      // Goes to the new address, so the tabs (which link to it) know where the person is
+      const url = new URL(page.url());
+      expect(`${url.pathname}${url.search}`).toBe(`/system/dnd5e/character/${id}/lore?from=old`);
+      await expect(
+        page.locator('a[aria-current="page"]').filter({ hasText: 'Lore' }).first(),
+      ).toBeVisible();
     }
   });
 
