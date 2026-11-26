@@ -276,7 +276,7 @@ describe('ResourcesRow', () => {
 
     expect(screen.getByRole('link', { name: tRes.editLabel })).toHaveAttribute(
       'href',
-      '/system/DnD_5e/character/c1/appearance#class-resources',
+      '/system/dnd5e/character/c1/appearance#class-resources',
     );
   });
 });

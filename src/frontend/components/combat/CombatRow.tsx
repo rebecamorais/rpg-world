@@ -17,6 +17,8 @@ import type { ActiveCondition, GmRow } from '@backend/contexts/combat/domain/Enc
 import type { ParticipantPatch } from '@backend/contexts/combat/domain/repository/combat.repo';
 
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
+import { DEFAULT_SYSTEM } from '@shared/systems/registry';
+import { sheetHref } from '@shared/systems/sheet-href';
 
 import { CollapsedDeadRow } from './CollapsedDeadRow';
 import { CombatRowDetails } from './CombatRowDetails';
@@ -27,7 +29,7 @@ import { ZoomablePortrait } from './ZoomablePortrait';
 /** An npc (enemy or ally) opens the GM's own sheet; a player's, the read-only one of the party. */
 const sheetHrefOf = (partyId: string, row: GmRow) =>
   row.side !== 'player'
-    ? `/system/DnD_5e/character/${row.characterId}`
+    ? sheetHref(DEFAULT_SYSTEM, row.characterId)
     : `/parties/${partyId}/characters/${row.characterId}`;
 
 /**

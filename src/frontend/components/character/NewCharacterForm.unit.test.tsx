@@ -78,7 +78,7 @@ describe('NewCharacterForm', () => {
 
     await createCharacter('  Thor  ');
 
-    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/DnD_5e/character/char-1'));
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/dnd5e/character/char-1'));
     expect(post).toHaveBeenCalledWith('/api/characters', {
       name: 'Thor',
       system: 'DnD_5e',
@@ -96,7 +96,7 @@ describe('NewCharacterForm', () => {
     );
     await createCharacter('Goblin');
 
-    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/DnD_5e/character/char-1'));
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/dnd5e/character/char-1'));
     expect(post).toHaveBeenCalledWith('/api/characters', {
       name: 'Goblin',
       system: 'DnD_5e',
@@ -182,7 +182,7 @@ describe('NewCharacterForm', () => {
 
       await createCharacter('Lia');
 
-      await waitFor(() => expect(push).toHaveBeenCalledWith('/system/DnD_5e/character/char-1'));
+      await waitFor(() => expect(push).toHaveBeenCalledWith('/system/dnd5e/character/char-1'));
       expect(post).toHaveBeenCalledWith('/api/characters', {
         name: 'Lia',
         system: 'DnD_5e',

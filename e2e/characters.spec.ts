@@ -16,7 +16,7 @@ test.describe('ciclo do personagem', () => {
     await (await hydrated(page.getByLabel('Name *'))).fill('Thorin');
     await page.getByRole('button', { name: 'Create' }).click();
 
-    await expect(page).toHaveURL(/\/system\/DnD_5e\/character\/[0-9a-f-]{36}$/);
+    await expect(page).toHaveURL(/\/system\/dnd5e\/character\/[0-9a-f-]{36}$/);
     await expect(page.getByText('Thorin').first()).toBeVisible();
     // Each tab says which sheet it is
     await expect(page).toHaveTitle('Status · Thorin · RPG World');
@@ -76,6 +76,15 @@ test.describe('ciclo do personagem', () => {
     await expect(page.getByText(name).first()).toBeVisible();
 
     expect(await page.evaluate(() => (window as { __xss?: boolean }).__xss)).toBeUndefined();
+  });
+
+  test('abre a ficha pelos endereços antigos', async ({ page, user: _ }) => {
+    const id = await createCharacter(page, 'Old Link Hero');
+
+    for (const system of ['DnD_5e', 'dnd_5e']) {
+      await page.goto(`/system/${system}/character/${id}`);
+      await expect(page.getByText('Old Link Hero').first()).toBeVisible();
+    }
   });
 
   test('a lista, a sidebar e a ficha chegam com a página, sem buscar de novo pela API', async ({

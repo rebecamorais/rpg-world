@@ -10,6 +10,8 @@ import { PartySheetUnavailable } from '@frontend/components/party/PartySheetUnav
 import { CharacterProvider } from '@frontend/context/CharacterContext';
 
 import type { DnD5eCharacter } from '@shared/systems/dnd5e/types';
+import { DEFAULT_SYSTEM } from '@shared/systems/registry';
+import { sheetHref } from '@shared/systems/sheet-href';
 
 import CharacterLoading from '../../../../system/[system_name]/character/[id]/loading';
 import { loadParty } from '../../load-party';
@@ -64,7 +66,7 @@ async function CharacterSheet({ children, params }: { children: ReactNode; param
     // it, so they are told why instead. Strangers keep the generic "not found" below.
     const party = await loadParty(partyId);
     // Their own character, through the party: its own sheet, where they can edit it
-    if (party?.myCharacterIds.includes(id)) redirect(`/system/DnD_5e/character/${id}`);
+    if (party?.myCharacterIds.includes(id)) redirect(sheetHref(DEFAULT_SYSTEM, id));
     // A player hears a sheet is private only for a character at this table; anything else (and
     // anything for the GM, who reads every sheet there) isn't at the table
     const atTable = party?.roster.some((entry) => entry.characterId === id);

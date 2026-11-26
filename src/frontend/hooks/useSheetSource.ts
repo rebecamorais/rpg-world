@@ -5,6 +5,9 @@ import { useParams } from 'next/navigation';
 import { useDemo } from '@frontend/demo/DemoContext';
 import { DEMO_PARTY_ID } from '@frontend/demo/ids';
 
+import { DEFAULT_SYSTEM } from '@shared/systems/registry';
+import { sheetHref } from '@shared/systems/sheet-href';
+
 export interface SheetSource {
   /** The GM of a party reading a sheet brought to it: nothing on the sheet can be changed. */
   readOnly: boolean;
@@ -58,6 +61,6 @@ export function useSheetSource(characterId: string, system?: string): SheetSourc
     readOnly: false,
     partyId: null,
     apiPath: `/api/characters/${characterId}`,
-    pagesPath: `/system/${system}/character/${characterId}`,
+    pagesPath: sheetHref(system ?? DEFAULT_SYSTEM, characterId),
   };
 }

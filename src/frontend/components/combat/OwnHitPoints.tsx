@@ -16,6 +16,9 @@ import { cn } from '@frontend/lib/utils';
 
 import type { OwnVitals } from '@backend/contexts/combat/domain/Encounter';
 
+import { DEFAULT_SYSTEM } from '@shared/systems/registry';
+import { sheetHref } from '@shared/systems/sheet-href';
+
 type Hp = OwnVitals['hp'];
 
 /**
@@ -68,7 +71,7 @@ const ownSheetSource = (characterId: string): SheetSource => ({
   readOnly: false,
   partyId: null,
   apiPath: `/api/characters/${characterId}`,
-  pagesPath: `/system/DnD_5e/character/${characterId}`,
+  pagesPath: sheetHref(DEFAULT_SYSTEM, characterId),
   embedded: true,
 });
 

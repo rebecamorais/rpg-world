@@ -7,6 +7,7 @@ import { rpgWorldApi } from '@client';
 
 import type { ClassChoiceSelections } from '@shared/systems/dnd5e/class-choices';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
+import { sheetHref } from '@shared/systems/sheet-href';
 
 interface CreateCharacterVariables {
   name: string;
@@ -31,7 +32,7 @@ export function useCreateCharacter(tSuccess: string) {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['characters'] });
       toast.success(tSuccess);
-      router.push(`/system/${variables.system}/character/${data.id}`);
+      router.push(sheetHref(variables.system, data.id));
     },
   });
 }

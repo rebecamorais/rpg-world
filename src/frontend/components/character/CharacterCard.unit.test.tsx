@@ -84,7 +84,7 @@ describe('CharacterCard', () => {
     );
     await user.click(await screen.findByRole('menuitem', { name: t.duplicate }));
 
-    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/DnD_5e/character/copy-1'));
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/dnd5e/character/copy-1'));
     expect(post).toHaveBeenCalledWith('/api/characters/npc-1/duplicate', {
       name: t.copyName.replace('{name}', 'Goblin'),
     });

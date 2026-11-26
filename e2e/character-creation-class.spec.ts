@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test';
 
 import { expect, hydrated, test } from './support/fixtures';
 
-const SHEET_PATH = /^\/system\/DnD_5e\/character\/([0-9a-f-]{36})$/;
+const SHEET_PATH = /^\/system\/dnd5e\/character\/([0-9a-f-]{36})$/;
 
 /** Opens the creation form, names the character and picks the 2014 edition and the class. */
 async function startCreation(page: Page, name: string, className: string) {
