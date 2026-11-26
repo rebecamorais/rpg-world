@@ -8,6 +8,7 @@ import type { ResourceState } from '@shared/systems/dnd5e/class-resources';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import { type HitDice, type LegacyHitDice, readHitDice } from '@shared/systems/dnd5e/hit-dice';
 import type { SavedProficiencies } from '@shared/systems/dnd5e/proficiencies';
+import { type SystemId, toDbSystem } from '@shared/systems/registry';
 
 import { Database, Json } from '@database-types';
 
@@ -123,7 +124,7 @@ export class SupabaseCharacterRepository implements CharacterRepo {
       id: character.id,
       name: character.name,
       owner_id: character.ownerUsername,
-      system: (system as string).toLowerCase() as Database['public']['Enums']['rpg_system'],
+      system: toDbSystem(system as SystemId),
       level: character.level,
       hp_current: hpCurrent as number,
       hp_max: hpMax as number,

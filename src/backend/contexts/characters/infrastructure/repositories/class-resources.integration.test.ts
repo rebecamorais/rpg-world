@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
+import { SupabaseFactory } from '@lib/supabase';
+
 import { createSignedInClient } from '../../../../../../test/helpers/signed-in-client';
 import { UpdateCharacterUseCase } from '../../application/update-character/update-character.use-case';
 import { DnD5eCharacter } from '../../domain/entity/DnD5eCharacter';
@@ -36,6 +38,17 @@ describe('edição e recursos de classe (Integration)', () => {
 
     expect(found.edition).toBe('2024');
     expect(found.resources).toEqual({ 'class:monk:ki': { used: 2 } });
+  });
+
+  it('grava dnd_5e no banco e devolve dnd5e no domínio', async () => {
+    const { data: row } = await SupabaseFactory.createAdmin()
+      .from('characters')
+      .select('system')
+      .eq('id', characterId)
+      .single();
+
+    expect(row?.system).toBe('dnd_5e');
+    expect((await repo.findById(characterId))?.system).toBe('dnd5e');
   });
 
   it('atualizar um recurso pelo caso de uso mantém os que já estavam salvos', async () => {

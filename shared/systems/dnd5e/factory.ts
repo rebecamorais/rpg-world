@@ -23,7 +23,7 @@ export function createDnD5eCharacter(
 ): Omit<DnD5eCharacter, 'id'> {
   return {
     ownerUsername,
-    system: 'DnD_5e',
+    system: 'dnd5e',
     name: name.trim() || 'Sem nome',
     level: Math.max(1, overrides?.level ?? 1),
     race: overrides?.race ?? '',

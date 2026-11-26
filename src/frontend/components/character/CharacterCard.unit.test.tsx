@@ -25,7 +25,7 @@ vi.mock('@client', async (importOriginal) => ({
 
 const t = messages.characters;
 const post = vi.mocked(rpgWorldApi.post);
-const goblin = { id: 'npc-1', name: 'Goblin', system: 'DnD_5e', level: 1 } as CharacterSummary;
+const goblin = { id: 'npc-1', name: 'Goblin', system: 'dnd5e', level: 1 } as CharacterSummary;
 
 describe('CharacterCard', () => {
   beforeEach(() => {

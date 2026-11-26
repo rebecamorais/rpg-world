@@ -51,7 +51,7 @@ describe('UpdateCharacterUseCase', () => {
 
     expect(result.id).toBe('attacker-char');
     expect(result.ownerUsername).toBe('attacker');
-    expect(result.system).toBe('DnD_5e');
+    expect(result.system).toBe('dnd5e');
     expect(result.name).toBe('Renamed');
 
     const victim = await repo.findById('victim-char');

@@ -7,7 +7,7 @@ import type { CharacterKind, CharacterSummary } from '@shared/types/character';
 
 import { DeleteCharacterDialog } from './DeleteCharacterDialog';
 
-const goblin = { id: 'npc-1', name: 'Goblin', system: 'DnD_5e', level: 1 } as CharacterSummary;
+const goblin = { id: 'npc-1', name: 'Goblin', system: 'dnd5e', level: 1 } as CharacterSummary;
 
 function renderDialog(
   confirmName: string,

@@ -50,7 +50,7 @@ function buildCharacter(hero: Hero, sheet: Sheet, locale: DemoLocale): DnD5eChar
   const character: DnD5eCharacter = {
     id: hero.slug,
     ownerUsername: DEMO_OWNER,
-    system: 'DnD_5e',
+    system: 'dnd5e',
     name: hero.name,
     level: sheet.level,
     avatarUrl: imageOf(hero),
@@ -211,7 +211,7 @@ export function buildDemoData(locale: DemoLocale): DemoData {
   const party: PartyView = {
     id: DEMO_PARTY_ID,
     name: PARTY_NAME,
-    system: 'DnD_5e',
+    system: 'dnd5e',
     edition: '2014',
     imageUrl: imageOf(HEROES[0]),
     role: 'gm',
@@ -237,7 +237,7 @@ export function buildDemoData(locale: DemoLocale): DemoData {
       {
         id: DEMO_PARTY_ID,
         name: PARTY_NAME,
-        system: 'DnD_5e',
+        system: 'dnd5e',
         role: 'gm',
         status: 'gm',
         gmUsername: DEMO_OWNER,
@@ -258,7 +258,7 @@ export function buildDemoData(locale: DemoLocale): DemoData {
       name: c.name,
       level: c.level,
       class: c.class,
-      system: 'DnD_5e',
+      system: 'dnd5e',
       accentColor: c.accentColor,
       avatarUrl: c.avatarUrl,
     };

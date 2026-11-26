@@ -142,7 +142,7 @@ test.describe('criação com classe', () => {
 
     expect((await request).postDataJSON()).toEqual({
       name: 'Plain Hero',
-      system: 'DnD_5e',
+      system: 'dnd5e',
       edition: '2014',
     });
     const sheet = await stored(page, id);

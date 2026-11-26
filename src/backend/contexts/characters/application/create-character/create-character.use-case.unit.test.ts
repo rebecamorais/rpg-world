@@ -21,7 +21,7 @@ describe('CreateCharacterUseCase ', () => {
       id: 'char-new',
       name: 'Gimli',
       ownerUsername: 'user1',
-      system: 'DnD_5e',
+      system: 'dnd5e',
       class: 'Fighter',
       race: 'Dwarf',
       level: 1,
@@ -41,7 +41,7 @@ describe('CreateCharacterUseCase ', () => {
         id: 'id1',
         name: '   ',
         ownerUsername: 'u',
-        system: 'D',
+        system: 'dnd5e',
         class: 'C',
         race: 'R',
         level: 1,
@@ -54,7 +54,7 @@ describe('CreateCharacterUseCase ', () => {
       id: 'char-defaults',
       name: '  Legolas  ',
       ownerUsername: 'user1',
-      system: 'DnD_5e',
+      system: 'dnd5e',
     });
 
     expect(character.toJSON()).toMatchObject({

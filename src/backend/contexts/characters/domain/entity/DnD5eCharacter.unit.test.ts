@@ -28,7 +28,7 @@ describe('DnD5eCharacter (Domain Entity)', () => {
 
     expect(json.id).toBeDefined();
     expect(json.name).toBe('Thor');
-    expect(json.system).toBe('DnD_5e');
+    expect(json.system).toBe('dnd5e');
 
     // Atributos foram convertidos para object standard?
     expect((json.attributes as unknown as { STR: number }).STR).toBe(18);

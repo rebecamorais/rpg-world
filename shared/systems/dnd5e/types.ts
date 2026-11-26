@@ -71,5 +71,5 @@ interface DnD5eCharacterData {
 }
 
 export type DnD5eCharacter = CharacterBase & {
-  system: 'DnD_5e';
+  system: 'dnd5e';
 } & DnD5eCharacterData;

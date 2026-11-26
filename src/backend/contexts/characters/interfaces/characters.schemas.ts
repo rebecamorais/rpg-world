@@ -14,6 +14,7 @@ import { HIT_DIE_OPTIONS } from '@shared/systems/dnd5e/hit-dice';
 import { LANGUAGE_IDS, type LanguageId } from '@shared/systems/dnd5e/languages';
 import { ARMOR_IDS } from '@shared/systems/dnd5e/proficiencies';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
+import { type SystemId, parseSystemId } from '@shared/systems/registry';
 
 // Shape and sanity limits only. Game rules (name required, max HP >= 1...) stay in the domain,
 // which reports them with translated error codes.
@@ -32,9 +33,16 @@ const classChoices = z
   .record(z.string().max(100).regex(CHOICE_KEY), z.array(text()).max(30))
   .refine((choices) => Object.keys(choices).length <= 10);
 
+/** Any spelling the app has ever used (`dnd5e`, old `DnD_5e`, database `dnd_5e`), read as `SystemId`. */
+const systemId = z
+  .string()
+  .max(40)
+  .transform((value) => parseSystemId(value))
+  .refine((id): id is SystemId => id !== null);
+
 export const createCharacterSchema = z.object({
   name: text(),
-  system: optional(z.literal('DnD_5e')),
+  system: optional(systemId),
   edition: optional(z.enum(EDITIONS)),
   class: optional(text()),
   race: optional(text()),
