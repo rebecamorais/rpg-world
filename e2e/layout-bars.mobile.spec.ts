@@ -26,11 +26,14 @@ test('no fim da ficha o rodapé não fica por baixo da barra de abas', async ({ 
   const tabs = page.getByRole('navigation', { name: 'Sheet tabs' });
   await expect(tabs).toBeVisible();
 
-  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  const footer = page.getByRole('contentinfo');
-  const lastLink = footer.getByRole('link').last();
-  const barTop = (await tabs.boundingBox())!.y;
-  expect(await bottom(lastLink)).toBeLessThanOrEqual(barTop);
+  const lastLink = page.getByRole('contentinfo').getByRole('link').last();
+  // The sheet keeps growing while its sections load: scroll to the end again until it settles
+  await expect
+    .poll(async () => {
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      return (await bottom(lastLink)) - (await tabs.boundingBox())!.y;
+    })
+    .toBeLessThanOrEqual(0);
 });
 
 test('o foco num campo não fica atrás da barra de vitais', async ({ page, user: _ }) => {

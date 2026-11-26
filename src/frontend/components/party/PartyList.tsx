@@ -14,6 +14,7 @@ import { ErrorState } from '@frontend/components/ui/empty-state';
 import { AppIcon } from '@frontend/components/ui/icon';
 import { useCurrentUser } from '@frontend/context/UserContext';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
+import { neighbours, useFocusAfterRemove } from '@frontend/hooks/useFocusAfterRemove';
 import { useParties } from '@frontend/hooks/useParties';
 import { cn } from '@frontend/lib/utils';
 
@@ -21,10 +22,28 @@ import type { PartySummary } from '@backend/contexts/parties/domain/Party';
 
 import { CreatePartyForm } from './CreatePartyForm';
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+// Where the focus goes when the last invite or request leaves: the section after them
+const AS_GM_FOCUS = 'as-gm';
+
+function Section({
+  title,
+  focusKey,
+  children,
+}: {
+  title: string;
+  /** Lets the focus land on the heading (see `useFocusAfterRemove`). */
+  focusKey?: string;
+  children: React.ReactNode;
+}) {
   return (
     <section aria-label={title} className="flex flex-col gap-3">
-      <h2 className="text-label text-muted-foreground">{title}</h2>
+      <h2
+        className="text-label text-muted-foreground outline-none"
+        data-focus-key={focusKey}
+        tabIndex={focusKey ? -1 : undefined}
+      >
+        {title}
+      </h2>
       {children}
     </section>
   );
@@ -119,6 +138,8 @@ export default function PartyList() {
   const { currentUser } = useCurrentUser();
   const router = useRouter();
   const userId = currentUser?.id ?? '';
+  // The answered row leaves with the button the confirmation gave the focus back to
+  const { root: focusRoot, next: focusNext, cancel: focusCancel } = useFocusAfterRemove();
 
   // Accepting goes into the party, as the invite page does: it's the next thing to do there
   const accept = async (party: PartySummary) => {
@@ -131,10 +152,12 @@ export default function PartyList() {
     router.push(`/parties/${party.id}`);
   };
   // Declining or withdrawing: the row just leaves, so a toast says it was done
-  const leave = async (party: PartySummary, done: string) => {
+  const leave = async (party: PartySummary, done: string, focusTargets: string[]) => {
+    focusNext(party.id, focusTargets);
     try {
       await respondAsync({ partyId: party.id, userId, accept: false });
     } catch {
+      focusCancel(party.id); // the row stays, and so does the focus
       return; // useParties already shows the error
     }
     toast.success(done);
@@ -143,8 +166,11 @@ export default function PartyList() {
   if (error) return <ErrorState title={t('loadErrorTitle')} description={getErrorMessage(error)} />;
   if (isLoading || !parties) return <LoadingState thematic />;
 
+  const inviteIds = parties.invites.map((p) => p.id);
+  const requestIds = parties.requests.map((p) => p.id);
+
   return (
-    <div className="flex flex-col gap-8">
+    <div ref={focusRoot} className="flex flex-col gap-8">
       {parties.invites.length > 0 && (
         <Section title={t('invites')}>
           {parties.invites.map((party) => {
@@ -158,6 +184,7 @@ export default function PartyList() {
                   disabled={!!answer}
                   loading={answer === 'decline'}
                   aria-label={t('declineInvite', { name: party.name })}
+                  data-focus-key={party.id}
                   onClick={async () => {
                     const ok = await confirm({
                       title: t('declineInviteTitle'),
@@ -165,7 +192,13 @@ export default function PartyList() {
                       confirmLabel: t('decline'),
                       destructive: true,
                     });
-                    if (ok) leave(party, t('inviteDeclined', { name: party.name }));
+                    if (ok) {
+                      leave(
+                        party,
+                        t('inviteDeclined', { name: party.name }),
+                        neighbours(inviteIds, party.id, requestIds[0], AS_GM_FOCUS),
+                      );
+                    }
                   }}
                 >
                   {t('decline')}
@@ -200,6 +233,7 @@ export default function PartyList() {
                 variant="destructive-ghost"
                 loading={!!respondingTo(party.id)}
                 aria-label={t('withdrawFrom', { name: party.name })}
+                data-focus-key={party.id}
                 onClick={async () => {
                   const ok = await confirm({
                     title: t('withdrawTitle'),
@@ -207,7 +241,13 @@ export default function PartyList() {
                     confirmLabel: t('withdraw'),
                     destructive: true,
                   });
-                  if (ok) leave(party, t('requestWithdrawn', { name: party.name }));
+                  if (ok) {
+                    leave(
+                      party,
+                      t('requestWithdrawn', { name: party.name }),
+                      neighbours(requestIds, party.id, inviteIds.at(-1), AS_GM_FOCUS),
+                    );
+                  }
                 }}
               >
                 {t('withdraw')}
@@ -217,7 +257,7 @@ export default function PartyList() {
         </Section>
       )}
 
-      <Section title={t('asGm')}>
+      <Section title={t('asGm')} focusKey={AS_GM_FOCUS}>
         {parties.asGm.length === 0 && <p className="text-muted-foreground">{t('emptyGm')}</p>}
         {parties.asGm.map((party) => (
           <PartyRow key={party.id} party={party} />
