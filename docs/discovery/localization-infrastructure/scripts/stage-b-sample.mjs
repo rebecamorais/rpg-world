@@ -9,7 +9,12 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const args = Object.fromEntries(
-  process.argv.slice(2).reduce((acc, a, i, all) => (a.startsWith('--') ? [...acc, [a.slice(2), all[i + 1]]] : acc), []),
+  process.argv
+    .slice(2)
+    .reduce(
+      (acc, a, i, all) => (a.startsWith('--') ? [...acc, [a.slice(2), all[i + 1]]] : acc),
+      [],
+    ),
 );
 const ROOT = path.resolve(import.meta.dirname, '../../../..');
 const OUT = path.resolve(import.meta.dirname, '../stage-b/manifest.json');
@@ -47,12 +52,15 @@ const QUOTA = {
   'conditions.description': [2, 4, 9],
 };
 const categoryOf = (file, field) =>
-  file === 'spells' && (field === 'material' || field === 'trigger') ? 'spells.other' : `${file}.${field}`;
+  file === 'spells' && (field === 'material' || field === 'trigger')
+    ? 'spells.other'
+    : `${file}.${field}`;
 
 const excluded = new Set();
 const excludeFile = args.exclude?.replace(/^~/, process.env.HOME);
 if (excludeFile && existsSync(excludeFile))
-  for (const row of JSON.parse(readFileSync(excludeFile, 'utf8')).results ?? []) excluded.add(row.key ?? row.id);
+  for (const row of JSON.parse(readFileSync(excludeFile, 'utf8')).results ?? [])
+    excluded.add(row.key ?? row.id);
 
 const population = [];
 for (const file of ['spells', 'items', 'conditions', 'classes']) {
@@ -78,7 +86,11 @@ for (const file of ['spells', 'items', 'conditions', 'classes']) {
 
 const stages = { b0: [], b1: [], b2: [] };
 for (const [category, quota] of Object.entries(QUOTA)) {
-  const pool = shuffle(population.filter((s) => s.category === category && !s.seenInTuning).sort((a, b) => a.key.localeCompare(b.key)));
+  const pool = shuffle(
+    population
+      .filter((s) => s.category === category && !s.seenInTuning)
+      .sort((a, b) => a.key.localeCompare(b.key)),
+  );
   const median = [...pool].map((s) => s.words).sort((a, b) => a - b)[pool.length >> 1];
   // Three kinds, taken in turn so each stage gets all of them: with unit conversion, tag-heavy or long, simple.
   const kind = (s) => (s.units ? 0 : s.tags >= 3 || s.words > median ? 1 : 2);
@@ -96,7 +108,8 @@ for (const [category, quota] of Object.entries(QUOTA)) {
   stages.b1.push(...take(quota[1], MAX_WORDS_EARLY));
   stages.b2.push(...take(quota[2], Infinity));
 }
-for (const stage of Object.values(stages)) for (const s of stage) delete s.complex, delete s.seenInTuning;
+for (const stage of Object.values(stages))
+  for (const s of stage) (delete s.complex, delete s.seenInTuning);
 
 const describe = (list) => ({
   segments: list.length,
@@ -104,13 +117,21 @@ const describe = (list) => ({
   withTags: list.filter((s) => s.tags).length,
   withUnits: list.filter((s) => s.units).length,
   withDice: list.filter((s) => s.dice).length,
-  byCategory: Object.fromEntries(Object.keys(QUOTA).map((c) => [c, list.filter((s) => s.category === c).length])),
+  byCategory: Object.fromEntries(
+    Object.keys(QUOTA).map((c) => [c, list.filter((s) => s.category === c).length]),
+  ),
 });
 const manifest = {
   seed: SEED,
-  population: { segments: population.length, words: population.reduce((a, s) => a + s.words, 0), excludedAsSeen: population.filter((s) => s.seenInTuning).length },
+  population: {
+    segments: population.length,
+    words: population.reduce((a, s) => a + s.words, 0),
+    excludedAsSeen: population.filter((s) => s.seenInTuning).length,
+  },
   summary: { b0: describe(stages.b0), b1: describe(stages.b1), b2: describe(stages.b2) },
   stages: Object.fromEntries(Object.entries(stages).map(([name, list]) => [name, shuffle(list)])),
 };
 writeFileSync(OUT, `${JSON.stringify(manifest, null, 2)}\n`);
-console.log(JSON.stringify({ population: manifest.population, summary: manifest.summary }, null, 2));
+console.log(
+  JSON.stringify({ population: manifest.population, summary: manifest.summary }, null, 2),
+);

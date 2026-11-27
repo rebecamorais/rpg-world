@@ -6,15 +6,15 @@
 
 Conferido só na documentação oficial; não entrei no projeto nem mudei configuração.
 
-| Pergunta | Resposta | Confiança |
-|---|---|---|
-| Quem administra o projeto configura serviço de tradução? | Sim, por projeto, desde a versão 4.13 | Alta |
-| Aceita URL própria? | Sim: OpenAI (URL base e nome de modelo), Ollama, LibreTranslate, LTEngine | Alta |
-| Dá para ajustar o prompt? | Campos de "persona" e "estilo" e instruções por idioma; o glossário do projeto entra sozinho | Alta |
-| Dá para desligar o raciocínio do modelo, ou mexer em temperatura e tempo limite? | Não documentado | Não verificado |
-| O complemento de tradução automática tem modo sugestão? | Sim: sugestão, tradução, "precisa de edição", aprovado | Alta |
-| O endpoint precisa ser alcançável pelo servidor do Weblate? | Sim ("must be reachable from the Weblate server") | Alta |
-| O Weblate hospedado restringe algo disso? | — | Não verificado |
+| Pergunta                                                                         | Resposta                                                                                     | Confiança      |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------- |
+| Quem administra o projeto configura serviço de tradução?                         | Sim, por projeto, desde a versão 4.13                                                        | Alta           |
+| Aceita URL própria?                                                              | Sim: OpenAI (URL base e nome de modelo), Ollama, LibreTranslate, LTEngine                    | Alta           |
+| Dá para ajustar o prompt?                                                        | Campos de "persona" e "estilo" e instruções por idioma; o glossário do projeto entra sozinho | Alta           |
+| Dá para desligar o raciocínio do modelo, ou mexer em temperatura e tempo limite? | Não documentado                                                                              | Não verificado |
+| O complemento de tradução automática tem modo sugestão?                          | Sim: sugestão, tradução, "precisa de edição", aprovado                                       | Alta           |
+| O endpoint precisa ser alcançável pelo servidor do Weblate?                      | Sim ("must be reachable from the Weblate server")                                            | Alta           |
+| O Weblate hospedado restringe algo disso?                                        | —                                                                                            | Não verificado |
 
 **Conclusão:** o notebook fica atrás de rede residencial e só liga durante o lote. Usar o Weblate como motor exigiria um túnel público estável e a máquina ligada sempre que o complemento disparar, sem controle do raciocínio do modelo. O script de lote local continua no plano.
 
@@ -24,28 +24,28 @@ Fonte: `docs.weblate.org/en/latest/admin/machine.html` e `docs.weblate.org/en/la
 
 ### Ambiente
 
-| | |
-|---|---|
-| GPU | NVIDIA RTX 5070 Laptop, 8.151 MiB, driver 621.14, sob WSL2 |
+|          |                                                                                                                                |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| GPU      | NVIDIA RTX 5070 Laptop, 8.151 MiB, driver 621.14, sob WSL2                                                                     |
 | Servidor | `ghcr.io/ggml-org/llama.cpp:server-cuda` (imagem `sha256:c94503b4e783…`), via Docker com `--gpus all`, porta só em `127.0.0.1` |
-| Modelo | `unsloth/Qwen3.5-9B-GGUF`, arquivo `Qwen3.5-9B-Q4_K_M.gguf` (5,68 GB) |
-| Opções | `-ngl 99 --reasoning-budget 0`; contexto 8.192 com 1 slot, 16.384 com 4 slots |
-| Amostra | 200 strings com semente fixa: 50 de interface, 150 de regras do SRD 5.2; 5.996 palavras de fonte |
-| Script | [`scripts/poc1-bench.mjs`](../scripts/poc1-bench.mjs) |
+| Modelo   | `unsloth/Qwen3.5-9B-GGUF`, arquivo `Qwen3.5-9B-Q4_K_M.gguf` (5,68 GB)                                                          |
+| Opções   | `-ngl 99 --reasoning-budget 0`; contexto 8.192 com 1 slot, 16.384 com 4 slots                                                  |
+| Amostra  | 200 strings com semente fixa: 50 de interface, 150 de regras do SRD 5.2; 5.996 palavras de fonte                               |
+| Script   | [`scripts/poc1-bench.mjs`](../scripts/poc1-bench.mjs)                                                                          |
 
 ### Medições
 
-| | 1 fluxo | 4 fluxos |
-|---|---:|---:|
-| Tempo para as 200 strings | 229,1 s | 108,6 s |
-| Tokens gerados por segundo | 48,9 | 103,8 |
-| Palavras de fonte por segundo | 26,2 | 55,2 |
-| VRAM no pico (placa inteira) | 6.739 MiB | 6.733 MiB |
-| Potência média da GPU | 99,5 W | 77,4 W |
-| Potência máxima da GPU | 113 W | 113 W |
-| Falhas, respostas cortadas, respostas vazias | 0 | 0 |
-| Respostas com raciocínio | 0 | 0 |
-| **Projeção para 160 mil palavras** | **1,7 h** | **0,81 h** |
+|                                              |   1 fluxo |   4 fluxos |
+| -------------------------------------------- | --------: | ---------: |
+| Tempo para as 200 strings                    |   229,1 s |    108,6 s |
+| Tokens gerados por segundo                   |      48,9 |      103,8 |
+| Palavras de fonte por segundo                |      26,2 |       55,2 |
+| VRAM no pico (placa inteira)                 | 6.739 MiB |  6.733 MiB |
+| Potência média da GPU                        |    99,5 W |     77,4 W |
+| Potência máxima da GPU                       |     113 W |      113 W |
+| Falhas, respostas cortadas, respostas vazias |         0 |          0 |
+| Respostas com raciocínio                     |         0 |          0 |
+| **Projeção para 160 mil palavras**           | **1,7 h** | **0,81 h** |
 
 - **Cabe:** a placa tinha ~0,9 a 1,3 GB ocupados pelo Windows; com o modelo, 6,7 GB de 8,2 GB. Sobra ~1,4 GB.
 - **Rende:** a estimativa do [04](../04-translation-engines.md) (1 a 2,2 h por idioma) se confirma, um pouco melhor com 4 fluxos.
@@ -62,13 +62,13 @@ Fonte: `docs.weblate.org/en/latest/admin/machine.html` e `docs.weblate.org/en/la
 
 Passei as 200 saídas por verificações determinísticas. **Isto não é o benchmark de qualidade** (PoC 2): o prompt era o mais simples possível, com 9 termos de glossário.
 
-| Verificação | Strings com o elemento | Quebradas |
-|---|---:|---:|
-| Placeholders `{nome}` | 6 | 0 |
-| Dados (`2d6`) | 17 | 0 |
-| Tags HTML | — | 0 |
-| Texto igual à fonte (não traduziu) | — | 0 |
-| **Identificadores de tags `{@…}`** | **52** | **20 (38%)** |
+| Verificação                        | Strings com o elemento |    Quebradas |
+| ---------------------------------- | ---------------------: | -----------: |
+| Placeholders `{nome}`              |                      6 |            0 |
+| Dados (`2d6`)                      |                     17 |            0 |
+| Tags HTML                          |                      — |            0 |
+| Texto igual à fonte (não traduziu) |                      — |            0 |
+| **Identificadores de tags `{@…}`** |                 **52** | **20 (38%)** |
 
 O modelo traduziu a parte que é identificador, mesmo com instrução para não mexer:
 
@@ -84,19 +84,19 @@ Consequências para o desenho:
 
 1. **Mascarar as tags antes de enviar** (trocar cada `{@…}` por um marcador opaco e devolver depois, traduzindo só o terceiro segmento, que é texto de exibição). Instrução no prompt não basta.
 2. **O teste que o projeto já tem pegaria esses 20 casos** (`content/dnd5e/content.unit.test.ts` confere a paridade das tags). O validador funciona como rede.
-3. Vistos de passagem, sem contar: "20 pés" sem converter para metros, "feitiço" onde o pt do projeto usa "magia", "Pontos de capacidade" para *Ability scores*, "partida" para *party*. São casos de glossário e de convenção de unidades, que o PoC 2 mede com o glossário de verdade.
+3. Vistos de passagem, sem contar: "20 pés" sem converter para metros, "feitiço" onde o pt do projeto usa "magia", "Pontos de capacidade" para _Ability scores_, "partida" para _party_. São casos de glossário e de convenção de unidades, que o PoC 2 mede com o glossário de verdade.
 
 ## PoC 3 — Dá para usar uma ferramenta pronta? **Não, sem reescrever o essencial**
 
 `i18n-ai-translate` 5.4.0 (GPL-3.0), instalado numa pasta temporária e apontado para o mesmo servidor local (motor `chatgpt` com `OPENAI_BASE_URL=http://127.0.0.1:8080/v1`; funciona). Amostra: 8 magias reais do SRD 5.2 (25 campos) e 8 mensagens ICU reais da interface. Modo `json`, `--reasoning-effort none`, glossário de 6 termos, delimitadores `{` e `}`.
 
-| O que o projeto precisa | O que aconteceu |
-|---|---|
-| Traduzir todos os campos | Pulou 3 das 8 descrições de magia (`fireball`, `silence`, `sleep`) e 2 das 8 mensagens ICU (as duas com `plural`), depois de 5 tentativas cada |
-| Preservar as tags `{@…}` | Quebrou em 7 dos 22 campos gravados. Chegou a **inventar tags** que não existem na fonte: `{@saving throw}`, `{@spell slot}` |
-| Manter ordem e formato do JSON | Reordenou as chaves e gravou com 4 espaços (o projeto usa 2, sem ordenar) |
-| Não sobrescrever tradução existente | Uma edição humana plantada no `pt.json` foi apagada ao rodar de novo |
-| Mensagens ICU simples com tags `<bold>` | Corretas nas 6 que traduziu, incluindo um `plural` aninhado |
+| O que o projeto precisa                 | O que aconteceu                                                                                                                                |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Traduzir todos os campos                | Pulou 3 das 8 descrições de magia (`fireball`, `silence`, `sleep`) e 2 das 8 mensagens ICU (as duas com `plural`), depois de 5 tentativas cada |
+| Preservar as tags `{@…}`                | Quebrou em 7 dos 22 campos gravados. Chegou a **inventar tags** que não existem na fonte: `{@saving throw}`, `{@spell slot}`                   |
+| Manter ordem e formato do JSON          | Reordenou as chaves e gravou com 4 espaços (o projeto usa 2, sem ordenar)                                                                      |
+| Não sobrescrever tradução existente     | Uma edição humana plantada no `pt.json` foi apagada ao rodar de novo                                                                           |
+| Mensagens ICU simples com tags `<bold>` | Corretas nas 6 que traduziu, incluindo um `plural` aninhado                                                                                    |
 
 Uma execução de cada, amostra pequena: serve para decidir "serve como está?", não para medir taxa de erro.
 
@@ -108,13 +108,13 @@ Uma execução de cada, amostra pequena: serve para decidir "serve como está?",
 
 Cinco coisas diferentes, que este relatório não mistura mais:
 
-| O que | Significa | Onde está |
-|---|---|---|
-| Acerto bruto do modelo | Saída válida na primeira tentativa, sem ajuda | 94 a 97% nas regras |
-| Sucesso do pipeline | Saída válida depois de conserto e novas tentativas | 99 a 100% nas regras (A2) |
-| Rejeição segura | O que continua inválido **não é entregue**: a chave fica vazia e entra num relatório | Vale para todo o resto, **com uma falha encontrada e descrita na A2** |
-| Correção como regra | A tradução diz o que a regra diz | **Não medida.** Só a etapa B |
-| Pronto para produção | Tudo acima, mais custo de revisão sustentável | **Não.** Depende da etapa B |
+| O que                  | Significa                                                                            | Onde está                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| Acerto bruto do modelo | Saída válida na primeira tentativa, sem ajuda                                        | 94 a 97% nas regras                                                   |
+| Sucesso do pipeline    | Saída válida depois de conserto e novas tentativas                                   | 99 a 100% nas regras (A2)                                             |
+| Rejeição segura        | O que continua inválido **não é entregue**: a chave fica vazia e entra num relatório | Vale para todo o resto, **com uma falha encontrada e descrita na A2** |
+| Correção como regra    | A tradução diz o que a regra diz                                                     | **Não medida.** Só a etapa B                                          |
+| Pronto para produção   | Tudo acima, mais custo de revisão sustentável                                        | **Não.** Depende da etapa B                                           |
 
 O chrF **não** é evidência de correção mecânica nem de correção como regra. Mede letras em comum com a referência e serve só para comparar variantes do mesmo pipeline.
 
@@ -129,17 +129,17 @@ Só verificações automáticas: nenhuma pessoa avaliou e nenhum modelo se avali
 
 ### Resultado
 
-| | Qwen3.5-9B Q4 | Gemma 4 E4B Q4 | EuroLLM-9B Q4 |
-|---|---:|---:|---:|
-| VRAM com o modelo carregado | 6,4 GB | 4,2 GB | 7,0 GB |
-| Tempo para as 150 strings | 291 s | 221 s | 1.568 s |
-| **Regras:** passou em tudo na 1ª tentativa | 95% | 94% | 93% |
-| **Regras:** passou depois das novas tentativas | 96% | 96% | 95% |
-| **Regras:** acerto de glossário (201 ocorrências) | 96,5% | 100% | 76,6% |
-| **Regras:** chrF médio contra o pt aprovado | 71,2 | 72,2 | 69,5 |
-| **Interface:** falhas reais em 50 | 1 | 2 | 0 |
-| **Interface:** chrF médio | 75,0 | 78,2 | 69,5 |
-| Números e dados errados nas regras | 0 | 0 | 0 |
+|                                                   | Qwen3.5-9B Q4 | Gemma 4 E4B Q4 | EuroLLM-9B Q4 |
+| ------------------------------------------------- | ------------: | -------------: | ------------: |
+| VRAM com o modelo carregado                       |        6,4 GB |         4,2 GB |        7,0 GB |
+| Tempo para as 150 strings                         |         291 s |          221 s |       1.568 s |
+| **Regras:** passou em tudo na 1ª tentativa        |           95% |            94% |           93% |
+| **Regras:** passou depois das novas tentativas    |           96% |            96% |           95% |
+| **Regras:** acerto de glossário (201 ocorrências) |         96,5% |           100% |         76,6% |
+| **Regras:** chrF médio contra o pt aprovado       |          71,2 |           72,2 |          69,5 |
+| **Interface:** falhas reais em 50                 |             1 |              2 |             0 |
+| **Interface:** chrF médio                         |          75,0 |           78,2 |          69,5 |
+| Números e dados errados nas regras                |             0 |              0 |             0 |
 
 - **Gemma contra Qwen nas regras:** diferença média de chrF de +1,0 ponto (intervalo de 95% por reamostragem: +0,3 a +1,8). Pequena, mas consistente.
 - **EuroLLM** não coube com folga na placa (7,0 de 8,2 GB), ficou cinco vezes mais lento e errou um em cada quatro termos de glossário.
@@ -149,19 +149,19 @@ Só verificações automáticas: nenhuma pessoa avaliou e nenhum modelo se avali
 
 ### Limiares do plano
 
-| Limiar da etapa A | Qwen | Gemma |
-|---|---|---|
-| Glossário ≥ 95% | passa (96,5%) | passa (100%) |
-| Placeholders 100% depois das novas tentativas | **falha** (49 de 50: traduziu `{coin}` para `{moeda}`) | passa (50 de 50) |
-| Dados e números iguais | passa nas regras | passa nas regras; **falha na interface** (2 de 50) |
-| Todas as verificações, regras | 96% | 96% |
-| Correção como regra | não medida | não medida |
+| Limiar da etapa A                             | Qwen                                                   | Gemma                                              |
+| --------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------- |
+| Glossário ≥ 95%                               | passa (96,5%)                                          | passa (100%)                                       |
+| Placeholders 100% depois das novas tentativas | **falha** (49 de 50: traduziu `{coin}` para `{moeda}`) | passa (50 de 50)                                   |
+| Dados e números iguais                        | passa nas regras                                       | passa nas regras; **falha na interface** (2 de 50) |
+| Todas as verificações, regras                 | 96%                                                    | 96%                                                |
+| Correção como regra                           | não medida                                             | não medida                                         |
 
 As duas falhas do Gemma na interface: escreveu `1d20` onde a fonte diz `d20`, e numa string **recusou a tarefa** ("Não tenho a capacidade de navegar…") em vez de traduzir. As duas foram barradas pelo validador.
 
 ### O que dá para ver num exemplo
 
-Magia *Grease*, mesma fonte:
+Magia _Grease_, mesma fonte:
 
 ```text
 REF : … ou é considerada {@condition prone||caída}.
@@ -169,7 +169,7 @@ QWEN: … ou cair {@condition prone||prone}.      (não traduziu o termo; perdeu
 GEMM: … ou cair {@condition prone||caído}.
 ```
 
-O Qwen deixou "prone" em inglês 4 vezes no conjunto; o glossário pegou. O Qwen também traduziu *round* como "volta" na interface, onde o projeto usa "rodada": termo que falta no glossário.
+O Qwen deixou "prone" em inglês 4 vezes no conjunto; o glossário pegou. O Qwen também traduziu _round_ como "volta" na interface, onde o projeto usa "rodada": termo que falta no glossário.
 
 ### Limites desta etapa
 
@@ -186,10 +186,10 @@ Mesmo conjunto de teste da etapa A (100 regras e 50 de interface, SRD 5.1). Scri
 
 Das 8 falhas (4 por motor), 7 segmentos distintos:
 
-| Causa | Casos | Exemplo |
-|---|---:|---|
+| Causa                                                                                                                                   |  Casos | Exemplo                                                                                                                                                |
+| --------------------------------------------------------------------------------------------------------------------------------------- | -----: | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Marcador a mais:** o modelo imita o padrão e marca também outra ocorrência do mesmo termo, ou um nome de magia que a fonte não marcou | 7 de 8 | `speak-with-plants`: a fonte marca "restrained" uma vez; a saída traz `<t0>` duas vezes. `arcane-lock`: fonte sem marcador; saída com `<t0>bater</t0>` |
-| **Marcador a menos:** o modelo reescreveu a frase e o termo marcado sumiu | 1 de 8 | `major-image`: "<t0>deafen</t0> a creature" virou "deixar uma criatura surda" |
+| **Marcador a menos:** o modelo reescreveu a frase e o termo marcado sumiu                                                               | 1 de 8 | `major-image`: "<t0>deafen</t0> a creature" virou "deixar uma criatura surda"                                                                          |
 
 Nenhuma falha veio do formato do identificador (`<t0>`): os números nunca foram trocados nem os marcadores quebrados no meio. Testar identificadores mais curtos não mudaria esse quadro; não foi testado.
 
@@ -197,21 +197,21 @@ Nenhuma falha veio do formato do identificador (`<t0>`): os números nunca foram
 
 ### O que foi testado
 
-| Variante | O que muda |
-|---|---|
-| base | A etapa A: mesma pergunta repetida até 2 vezes quando falha |
-| v2 | Regra no prompt contra marcador a mais e a menos; nova tentativa **com o erro descrito**; **conserto determinístico** (tira marcadores que a fonte não tinha e repetições do mesmo marcador; só remove invólucro, nunca texto); ICU comparado pela árvore da mensagem |
-| v3 | v2 + dados, CDs e medidas já convertidas trocados por marcadores opacos antes do modelo |
+| Variante | O que muda                                                                                                                                                                                                                                                            |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| base     | A etapa A: mesma pergunta repetida até 2 vezes quando falha                                                                                                                                                                                                           |
+| v2       | Regra no prompt contra marcador a mais e a menos; nova tentativa **com o erro descrito**; **conserto determinístico** (tira marcadores que a fonte não tinha e repetições do mesmo marcador; só remove invólucro, nunca texto); ICU comparado pela árvore da mensagem |
+| v3       | v2 + dados, CDs e medidas já convertidas trocados por marcadores opacos antes do modelo                                                                                                                                                                               |
 
 ### Resultado nas 100 regras
 
-| | Gemma base | Gemma v2 | Gemma v3 | Qwen base | Qwen v2 | Qwen v3 |
-|---|---:|---:|---:|---:|---:|---:|
-| Válida na 1ª tentativa, bruta | 94 | 97 | 94 | 95 | 96 | 95 |
-| Válida na 1ª tentativa, com conserto | — | 99 | 94 | — | 100 | 99 |
-| Válida ao final | 96 | 99 | 98 | 96 | 100 | 99 |
-| Glossário | 100% | 100% | 99,5% | 96,5% | 97,5% | 96,5% |
-| chrF | 72,2 | 72,0 | 70,1 | 71,2 | 71,0 | 70,7 |
+|                                      | Gemma base | Gemma v2 | Gemma v3 | Qwen base | Qwen v2 | Qwen v3 |
+| ------------------------------------ | ---------: | -------: | -------: | --------: | ------: | ------: |
+| Válida na 1ª tentativa, bruta        |         94 |       97 |       94 |        95 |      96 |      95 |
+| Válida na 1ª tentativa, com conserto |          — |       99 |       94 |         — |     100 |      99 |
+| Válida ao final                      |         96 |       99 |       98 |        96 |     100 |      99 |
+| Glossário                            |       100% |     100% |    99,5% |     96,5% |   97,5% |   96,5% |
+| chrF                                 |       72,2 |     72,0 |     70,1 |      71,2 |    71,0 |    70,7 |
 
 **Interface (50):** com a comparação por árvore, os 3 a 4 falsos positivos por motor sumiram. Sobram as falhas reais, todas barradas: Gemma 2 (as mesmas da etapa A, que 2 novas tentativas não resolveram), Qwen 1 (`{coin}` traduzido, também nas 3 tentativas).
 
@@ -238,27 +238,27 @@ Procurei o mesmo defeito nas outras execuções com essas duas verificações: n
 
 ### Testes de regressão (plano; cada falha observada vira um caso)
 
-| Caso | Verificação que tem de barrar ou consertar |
-|---|---|
-| Identificador de tag traduzido (`{@condition Encantado|XPHB}`, PoC 1) | Teste de paridade de tags que já existe |
-| Tag inventada (`{@saving throw}`, PoC 3) | Idem |
-| Marcador repetido, marcador de número inexistente | Conserto, depois validação |
-| Marcador perdido (`major-image`) | Barrar; segundo motor; senão chave vazia |
-| Marcador opaco perdido ou sem fechar (`wall-of-ice`, `demiplane`, v3) | Barrar; nunca consertar |
-| `{coin}` traduzido para `{moeda}` | Árvore ICU |
-| `one {hour}` → `one {hora}` (correto) | Árvore ICU **não** pode barrar |
-| `d20` virou `1d20` | Paridade de dados |
-| Recusa do modelo ("Não tenho a capacidade…") | Números, tamanho e eco de instrução |
-| Mensagem de erro traduzida no lugar do texto | Tamanho e eco de instrução |
-| Unidade convertida duas vezes ou não convertida | Conversão refeita a partir da fonte |
-| JSON reordenado, tradução humana sobrescrita (PoC 3) | Teste do gravador: só chave vazia, mesma ordem |
+| Caso                                                                  | Verificação que tem de barrar ou consertar     |
+| --------------------------------------------------------------------- | ---------------------------------------------- |
+| Identificador de tag traduzido (`{@condition Encantado                | XPHB}`, PoC 1)                                 | Teste de paridade de tags que já existe |
+| Tag inventada (`{@saving throw}`, PoC 3)                              | Idem                                           |
+| Marcador repetido, marcador de número inexistente                     | Conserto, depois validação                     |
+| Marcador perdido (`major-image`)                                      | Barrar; segundo motor; senão chave vazia       |
+| Marcador opaco perdido ou sem fechar (`wall-of-ice`, `demiplane`, v3) | Barrar; nunca consertar                        |
+| `{coin}` traduzido para `{moeda}`                                     | Árvore ICU                                     |
+| `one {hour}` → `one {hora}` (correto)                                 | Árvore ICU **não** pode barrar                 |
+| `d20` virou `1d20`                                                    | Paridade de dados                              |
+| Recusa do modelo ("Não tenho a capacidade…")                          | Números, tamanho e eco de instrução            |
+| Mensagem de erro traduzida no lugar do texto                          | Tamanho e eco de instrução                     |
+| Unidade convertida duas vezes ou não convertida                       | Conversão refeita a partir da fonte            |
+| JSON reordenado, tradução humana sobrescrita (PoC 3)                  | Teste do gravador: só chave vazia, mesma ordem |
 
 Os testes do projeto que já conferem tags e chaves (`content/dnd5e/content.unit.test.ts`, `src/frontend/messages.unit.test.ts`) são reaproveitados, não duplicados. Para o ICU, `@formatjs/icu-messageformat-parser` **já está instalado** no projeto como dependência do `next-intl`; o analisador pequeno do script do PoC serve só ao experimento. (O relatório anterior dizia que não havia analisador de ICU instalado; estava errado, eu tinha olhado numa pasta sem `node_modules`.)
 
 ### Achados fora do validador (vistos ao ler saídas; não contados)
 
 - Palavra deixada em inglês: "sentience" (`speak-with-plants`). Nenhuma verificação automática pega.
-- Nome de magia traduzido ao pé da letra: *knock* virou "bater". No SRD 5.2 os nomes vêm em tags (`{@spell …}`), então o código pode pôr o nome em português já aprovado em vez de deixar o modelo inventar.
+- Nome de magia traduzido ao pé da letra: _knock_ virou "bater". No SRD 5.2 os nomes vêm em tags (`{@spell …}`), então o código pode pôr o nome em português já aprovado em vez de deixar o modelo inventar.
 - Português fraco: "dura durante a duração", "Você banir".
 
 ### Limites

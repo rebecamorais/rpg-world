@@ -10,13 +10,13 @@ O recurso escasso é gente para revisar, e o repositório mostra que hoje não h
 
 ## Achados conferidos no repositório
 
-| Achado | Conferido | Efeito |
-|---|---|---|
-| 186 de 319 descrições de magia do pt 5.1 têm números diferentes do inglês (pés viram metros) | Sim, mesma contagem | A verificação "números iguais" barraria tradução aprovada. O validador precisa entender unidades e o projeto precisa de convenção escrita |
-| Descrições do pt 5.1 com sobra em inglês entre colchetes (`6 metros [20-foot-radius sphere]`) | Sim: 69 com um padrão mais estreito; o revisor contou 78 | A referência do benchmark precisa de limpeza antes de servir de gabarito ou exemplo |
-| Já existe teste de paridade de tags e marcação para regras (`content/dnd5e/content.unit.test.ts`) | Sim | [01](../01-current-state.md) corrigido; a lacuna real são dados soltos, ICU e números |
-| O app é GPL-3.0-or-later; um script dentro dele também é | Sim (`package.json`) | Adaptar ou embutir `i18n-ai-translate` (GPL-3.0) é permitido. Apache-2.0 só vale para um projeto separado |
-| [07] dizia "sugestão por padrão" numa seção e "rascunho com selo" em outra | Sim | Unificado: texto de máquina só entra na `main` depois de revisado |
+| Achado                                                                                            | Conferido                                                | Efeito                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 186 de 319 descrições de magia do pt 5.1 têm números diferentes do inglês (pés viram metros)      | Sim, mesma contagem                                      | A verificação "números iguais" barraria tradução aprovada. O validador precisa entender unidades e o projeto precisa de convenção escrita |
+| Descrições do pt 5.1 com sobra em inglês entre colchetes (`6 metros [20-foot-radius sphere]`)     | Sim: 69 com um padrão mais estreito; o revisor contou 78 | A referência do benchmark precisa de limpeza antes de servir de gabarito ou exemplo                                                       |
+| Já existe teste de paridade de tags e marcação para regras (`content/dnd5e/content.unit.test.ts`) | Sim                                                      | [01](../01-current-state.md) corrigido; a lacuna real são dados soltos, ICU e números                                                     |
+| O app é GPL-3.0-or-later; um script dentro dele também é                                          | Sim (`package.json`)                                     | Adaptar ou embutir `i18n-ai-translate` (GPL-3.0) é permitido. Apache-2.0 só vale para um projeto separado                                 |
+| [07] dizia "sugestão por padrão" numa seção e "rascunho com selo" em outra                        | Sim                                                      | Unificado: texto de máquina só entra na `main` depois de revisado                                                                         |
 
 ## Achados aceitos sem conferência própria
 

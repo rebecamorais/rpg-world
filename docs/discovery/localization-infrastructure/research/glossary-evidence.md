@@ -15,11 +15,11 @@ node docs/discovery/localization-infrastructure/scripts/glossary-evidence.mjs --
 
 **Corpus.** 3.989 pares de strings (mesmo caminho no JSON em `en` e `pt`, os dois não vazios):
 
-| Fonte | Pares | Observação |
-| --- | ---: | --- |
+| Fonte        | Pares | Observação                                                                                                                                       |
+| ------------ | ----: | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 5.1 (regras) | 1.566 | `spells`, `items`, `conditions`, `classes` de `content/dnd5e/srd-5.1/i18n`. Em `conditions` só os 15 nomes têm `pt`; as descrições estão vazias. |
-| 5.2 (regras) | 771 | Quase só nomes (spells 313 de 999 strings; classes 227 de 740; items 216 de 347; conditions 15 de 30). |
-| UI | 1.652 | `messages/en.json` × `messages/pt.json`. |
+| 5.2 (regras) |   771 | Quase só nomes (spells 313 de 999 strings; classes 227 de 740; items 216 de 347; conditions 15 de 30).                                           |
+| UI           | 1.652 | `messages/en.json` × `messages/pt.json`.                                                                                                         |
 
 **Alinhamento.** Só em nível de string. Para cada termo em inglês (regex com fronteira de palavra, singular e plural), pega as strings que o contêm e conta quais formas candidatas em português aparecem na string pareada. A contagem é de **strings**, não de ocorrências.
 
@@ -41,13 +41,13 @@ node docs/discovery/localization-infrastructure/scripts/glossary-evidence.mjs --
 
 ### 2.1 Linhas por classe (230 linhas)
 
-| Classe | Linhas |
-| --- | ---: |
-| `unconditional` | 137 |
-| `unconfirmed` | 35 |
-| `contextual` | 28 |
-| `inconsistent` | 22 |
-| `no-evidence` | 8 |
+| Classe          | Linhas |
+| --------------- | -----: |
+| `unconditional` |    137 |
+| `unconfirmed`   |     35 |
+| `contextual`    |     28 |
+| `inconsistent`  |     22 |
+| `no-evidence`   |      8 |
 
 Uma palavra com vários sentidos ocupa várias linhas (por isso são 230 linhas e não 230 palavras). Das 137 `unconditional`, **43 têm menos de 5 strings** (a maioria das 18 perícias, das escolas e das características de classe, como `Sneak Attack` e `Divine Smite`) e 76 têm menos de 10. No CSV, toda linha com `total_count` menor que 5 leva `low n` na coluna `note`. Confira `total_count` antes de confiar numa linha `unconditional` com n pequeno.
 
@@ -67,38 +67,38 @@ Não há arquivo de glossário nem lista de termos em `docs/`, `scripts/content/
 
 Contagens são de strings. `[5.1 / 5.2 / UI]` = quantas strings de cada fonte têm a forma. n = strings com o termo em inglês.
 
-| Termo (en) | Formas no `pt` aprovado | Onde | Exemplo real |
-| --- | --- | --- | --- |
-| saving throw (n=158) | salvaguarda 153 [5.1 150 / UI 3]; teste de resistência 6 [5.1 5 / UI 1]; teste de salvaguarda 2 [5.1 2] | Magias usam "salvaguarda"; texto de classe do 5.1 (druida, guerreiro, monge) usa "teste de resistência"; uma string da UI também | `r51/classes/fighter.features.indomitable.description`: "reroll a saving throw" → "jogar de novo um teste de resistência" |
-| death saving throw (n=9) | teste contra a morte 7 [UI 7]; salvaguarda contra a morte 1 [UI 1]; "e contra a morte" (elíptico) 1 [5.1 1] | UI diz "teste"; magia do 5.1 diz "salvaguardas de Sabedoria e contra a morte" | `ui/savingThrows.deathSaveSuccess` → "Sucesso no teste contra a morte {count}"; `ui/features.items.combat.description` → "salvaguardas contra a morte" |
-| ability check (n=24) | teste de atributo 22; teste de habilidade 2 (ambos 5.1) | Só 5.1 | `r51/classes/bard.subclasses.lore…college-of-lore` → "teste de habilidade" |
-| turn, substantivo (n=145) | turno 131 [5.1 124 / UI 7]; vez 56 contando co-ocorrência, **6 sozinhas, todas UI** | Regras: "turno". UI de combate: "Sua vez", "Vez atual" | `ui/combat.yourTurn` → "Sua vez"; `ui/combat.turnPassedTo` → "Agora é a vez de {name}" |
-| spell level (UI × regras) | regras 5.1: círculo 112 de 115; UI: nível 8 de 8, círculo 0 | UI × regras. Decisão da Rebeca registrada em `fase-1-resultados.md` | `ui/magicSystem.circle`: en "Circle {level}" → "Nível {level}"; `r51/spells/counterspell.higherLevel` → "4º círculo" |
-| expertise (n=12) | especialização 9 [5.1 4 / 5.2 4 / UI 1]; especialista 2 [UI 2] | UI usa "Especialista" como rótulo do estado | `ui/skills.expertise` → "Especialista"; `r51/classes/bard.features.expertise-3.name` → "Especialização" |
-| HP, abreviação (n=21, só UI) | PV 18; vida 4 (sozinha 3) | Só UI | `ui/combatStats.hitPointsShort` → "PV"; `ui/common.errors.domain_error_hp_max_below_one` → "A vida máxima deve ser…" |
-| temporary hit points (n=10) | pontos de vida temporários 4 [5.1]; PV temporário 4 [UI]; vida temporária 2 [UI] | 5.1 × UI e dentro da UI | `ui/combatStats.tempHp` → "PV temporário"; `ui/combatStats.configureHpDescription` → "vida temporária" |
-| hit point maximum (n=12) | máximo de pontos de vida 8 [5.1]; PV máximo 1 [UI] | 5.1 × UI | `ui/combatStats.hitPointsMax` → "PV máximos" |
-| GM (n=102) | Mestre 63 [UI 63]; **DM 33 [5.1 33]**; "Mestre" 0 no 5.1 | **5.1 diz "DM" onde o inglês diz "GM"**; a UI diz "Mestre" | `r51/spells/animate-dead.description`: "the GM has…" → "o DM fornece…"; `ui/common.errors.party_error_gm_limit` → "mestre de no máximo 5 mesas" |
-| DM (n=6) | DM 5; Mestre 1 (5.1) | só 5.1 | `r51/items/lock.description` → "O DM pode decidir"; `…college-of-lore` → "antes do Mestre determinar" |
-| roll, verbo (n=50) | jogar 28 [5.1]; rolar 9 [5.1 5 / UI 4] | 5.1 prefere "jogue"; UI "role" | `r51/spells/confusion.description`: "must roll a d10" → "precisa rolar"; `r51/spells/augury…`: "rolling dragon bones" → "jogar ossos" |
-| hit, verbo (n=23) | atingir 14; acertar 9; golpear 2 (todos 5.1; acertar também 1 UI) | 5.1 | `…branding-smite` → "atingir uma criatura" |
-| miss (n=6) | falhar 4; errar 2; erro 1 | 5.1 | `…acid-arrow`: "On a miss" → "Se errar" |
-| weapon attack (n=13) | ataque armado 7; ataque com arma 1 | 5.1 | `…haste` → "ataque armado"; `…hunter` → "ataque com arma" |
-| unarmed strike (n=3) | golpe desarmado 2; ataque desarmado 1 | 5.1 | `…monk.features.ki` → "golpes desarmados" |
-| Tipos de dano, UI × regras | ver 3.1 | UI × regras | `ui/spellsData.damageTypes.cold` → "Frio"; `r51/spells/cone-of-cold` → "dano gélido" |
+| Termo (en)                   | Formas no `pt` aprovado                                                                                     | Onde                                                                                                                             | Exemplo real                                                                                                                                           |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| saving throw (n=158)         | salvaguarda 153 [5.1 150 / UI 3]; teste de resistência 6 [5.1 5 / UI 1]; teste de salvaguarda 2 [5.1 2]     | Magias usam "salvaguarda"; texto de classe do 5.1 (druida, guerreiro, monge) usa "teste de resistência"; uma string da UI também | `r51/classes/fighter.features.indomitable.description`: "reroll a saving throw" → "jogar de novo um teste de resistência"                              |
+| death saving throw (n=9)     | teste contra a morte 7 [UI 7]; salvaguarda contra a morte 1 [UI 1]; "e contra a morte" (elíptico) 1 [5.1 1] | UI diz "teste"; magia do 5.1 diz "salvaguardas de Sabedoria e contra a morte"                                                    | `ui/savingThrows.deathSaveSuccess` → "Sucesso no teste contra a morte {count}"; `ui/features.items.combat.description` → "salvaguardas contra a morte" |
+| ability check (n=24)         | teste de atributo 22; teste de habilidade 2 (ambos 5.1)                                                     | Só 5.1                                                                                                                           | `r51/classes/bard.subclasses.lore…college-of-lore` → "teste de habilidade"                                                                             |
+| turn, substantivo (n=145)    | turno 131 [5.1 124 / UI 7]; vez 56 contando co-ocorrência, **6 sozinhas, todas UI**                         | Regras: "turno". UI de combate: "Sua vez", "Vez atual"                                                                           | `ui/combat.yourTurn` → "Sua vez"; `ui/combat.turnPassedTo` → "Agora é a vez de {name}"                                                                 |
+| spell level (UI × regras)    | regras 5.1: círculo 112 de 115; UI: nível 8 de 8, círculo 0                                                 | UI × regras. Decisão da Rebeca registrada em `fase-1-resultados.md`                                                              | `ui/magicSystem.circle`: en "Circle {level}" → "Nível {level}"; `r51/spells/counterspell.higherLevel` → "4º círculo"                                   |
+| expertise (n=12)             | especialização 9 [5.1 4 / 5.2 4 / UI 1]; especialista 2 [UI 2]                                              | UI usa "Especialista" como rótulo do estado                                                                                      | `ui/skills.expertise` → "Especialista"; `r51/classes/bard.features.expertise-3.name` → "Especialização"                                                |
+| HP, abreviação (n=21, só UI) | PV 18; vida 4 (sozinha 3)                                                                                   | Só UI                                                                                                                            | `ui/combatStats.hitPointsShort` → "PV"; `ui/common.errors.domain_error_hp_max_below_one` → "A vida máxima deve ser…"                                   |
+| temporary hit points (n=10)  | pontos de vida temporários 4 [5.1]; PV temporário 4 [UI]; vida temporária 2 [UI]                            | 5.1 × UI e dentro da UI                                                                                                          | `ui/combatStats.tempHp` → "PV temporário"; `ui/combatStats.configureHpDescription` → "vida temporária"                                                 |
+| hit point maximum (n=12)     | máximo de pontos de vida 8 [5.1]; PV máximo 1 [UI]                                                          | 5.1 × UI                                                                                                                         | `ui/combatStats.hitPointsMax` → "PV máximos"                                                                                                           |
+| GM (n=102)                   | Mestre 63 [UI 63]; **DM 33 [5.1 33]**; "Mestre" 0 no 5.1                                                    | **5.1 diz "DM" onde o inglês diz "GM"**; a UI diz "Mestre"                                                                       | `r51/spells/animate-dead.description`: "the GM has…" → "o DM fornece…"; `ui/common.errors.party_error_gm_limit` → "mestre de no máximo 5 mesas"        |
+| DM (n=6)                     | DM 5; Mestre 1 (5.1)                                                                                        | só 5.1                                                                                                                           | `r51/items/lock.description` → "O DM pode decidir"; `…college-of-lore` → "antes do Mestre determinar"                                                  |
+| roll, verbo (n=50)           | jogar 28 [5.1]; rolar 9 [5.1 5 / UI 4]                                                                      | 5.1 prefere "jogue"; UI "role"                                                                                                   | `r51/spells/confusion.description`: "must roll a d10" → "precisa rolar"; `r51/spells/augury…`: "rolling dragon bones" → "jogar ossos"                  |
+| hit, verbo (n=23)            | atingir 14; acertar 9; golpear 2 (todos 5.1; acertar também 1 UI)                                           | 5.1                                                                                                                              | `…branding-smite` → "atingir uma criatura"                                                                                                             |
+| miss (n=6)                   | falhar 4; errar 2; erro 1                                                                                   | 5.1                                                                                                                              | `…acid-arrow`: "On a miss" → "Se errar"                                                                                                                |
+| weapon attack (n=13)         | ataque armado 7; ataque com arma 1                                                                          | 5.1                                                                                                                              | `…haste` → "ataque armado"; `…hunter` → "ataque com arma"                                                                                              |
+| unarmed strike (n=3)         | golpe desarmado 2; ataque desarmado 1                                                                       | 5.1                                                                                                                              | `…monk.features.ki` → "golpes desarmados"                                                                                                              |
+| Tipos de dano, UI × regras   | ver 3.1                                                                                                     | UI × regras                                                                                                                      | `ui/spellsData.damageTypes.cold` → "Frio"; `r51/spells/cone-of-cold` → "dano gélido"                                                                   |
 
 ### 3.1 Tipos de dano: rótulos da UI × texto das regras
 
 A UI (`messages/pt.json`, `spellsData.damageTypes`) usa um vocabulário e as regras do 5.1 outro. Concordam em ácido, elétrico, necrótico, psíquico, radiante, cortante e trovejante. **Discordam em 6:**
 
-| en | Regras 5.1 | UI |
-| --- | --- | --- |
-| bludgeoning | contundente (14) | **Contusão** |
-| piercing | perfurante (12) | **Perfuração** |
-| cold | gélido (9) | **Frio** |
-| fire | ígneo (23) | **Fogo** |
-| force | energético (9) | **Força** |
-| poison | venenoso (6) | **Veneno** |
+| en          | Regras 5.1       | UI             |
+| ----------- | ---------------- | -------------- |
+| bludgeoning | contundente (14) | **Contusão**   |
+| piercing    | perfurante (12)  | **Perfuração** |
+| cold        | gélido (9)       | **Frio**       |
+| fire        | ígneo (23)       | **Fogo**       |
+| force       | energético (9)   | **Força**      |
+| poison      | venenoso (6)     | **Veneno**     |
 
 ("Força" na UI também é o nome do atributo Strength: colisão dentro da própria UI.)
 
@@ -108,28 +108,28 @@ Outras: "spell" é "magia" (462 de 467), mas 4 strings do 5.1 dizem "feitiço" (
 
 Cada sentido tem sua forma. Os exemplos são pares reais (chave do arquivo).
 
-| Termo | Sentido → forma no `pt` | Exemplo real |
-| --- | --- | --- |
-| **turn** | turno de combate → **turno** (e "vez" na UI); verbo "transformar/virar" → **transformar** 8, **tornar** 8, **em pedra** 3; "Turn Undead" → **Expulsar** | `r51/spells/animal-shapes`: "Your magic turns others into beasts" → "Sua magia transforma outras criaturas em feras"; `r51/classes/cleric…channel-divinity-2`: "Turn Undead" → "Expulsar Mortos-Vivos" |
-| **round** | rodada de combate → **rodada** (17 de 18); "round up/down" → **arredondar** | `r51/classes/wizard…arcane-recovery`: "(rounded up)" → "(arredondado para cima)" |
-| **level** | nível de personagem/classe → **nível** (146 de 158); nível de magia/espaço → **círculo** (112 de 115, 5.1); nível de exaustão → nível | `r51/spells/acid-splash`: "when you reach 5th level" → "o 5º nível"; `r51/spells/counterspell.higherLevel`: "slot of 4th level" → "4º círculo" |
-| **save** | substantivo curto de "saving throw" → **elidido**: "on a failed save" → "Se falhar" (não há palavra); botão "Save" → **Salvar** (UI, 14) | `r51/spells/blight`: "on a failed save" → "Se falhar"; `ui/common.save` → "Salvar" |
-| **check** | "Strength check" → **teste** (45 de 47; "teste de Força" em 38); "Security check" → **verificação**; "Checking your parties…" → **Conferindo** | `ui/common.errors.security_widget_unavailable` → "verificação de segurança" |
-| **cast** | lançar magia → **conjurar** (210 de 216); "casting gem-inlaid sticks", "cast into the Astral plane" → **lançar** | `r51/spells/augury`: "By casting gem-inlaid sticks" → "Ao lançar varetas…" |
-| **target** | substantivo → **alvo** (147 de 166); verbo "target one more creature" → **atingir** 12, **afetar** 10 | `r51/spells/banishment.higherLevel`: "you can target one additional creature" → "você pode atingir uma criatura adicional" |
-| **hit** | "On a hit" → **Em caso de acerto** (21 de 25); verbo → **atingir** / **acertar**; "hit points" → pontos de vida | `r51/spells/acid-arrow`: "On a hit" → "Em caso de acerto" |
-| **heal / regain** | "regain hit points" → **recuperar** (32 de 34); "heal" → **curar** 18, "healing" → **cura** | `r51/spells/heal.higherLevel`: "amount of healing" → "pontos de vida recuperados" |
-| **speed** | deslocamento da criatura → **deslocamento** (26 de 29); velocidade do vento → **velocidade** | `r51/spells/fog-cloud`: "a wind of moderate or greater speed" → "um vento de velocidade moderada" |
-| **range** / **reach** | alcance de magia → **alcance** (184 de 192, mais "intervalo" em strings do 5.1 mal traduzidas); "reach" substantivo → **alcance**; "reach 5th level" → **alcançar/atingir/chegar** | `r51/spells/arcane-sword`: "within range" → "dentro do intervalo" |
-| **cover** | cobertura de combate → **cobertura**; verbo → **cobrir** | `r51/spells/arcane-hand`: "half cover" → "meia cobertura" |
-| **duration** | "for the duration" → **enquanto a magia durar** (129 de 136); substantivo → **duração** | `r51/spells/animal-friendship`: "for the spell's duration" → "enquanto a magia durar" |
-| **prone** | estado → **caído**; "fall prone" (verbo) → **cair** ("cairá") | `r51/items/ball-bearings-bag-of-1-000`: "fall prone" → "cairá" |
-| **condition** | estado de jogo e sentido comum → **condição** nos dois (31 de 31); 2 vezes "estado" | `r51/spells/awaken`: "the charmed condition" → "a condição de enfeitiçada" |
-| **Nature** | perícia → **Natureza**; nome de característica "Nature's Ward" → **Proteção Natural** | `r51/classes/druid…nature-s-ward.name` → "Proteção Natural" |
-| **beast** | tipo de criatura → **fera** (11); "beast shape" → **forma animal** | `r51/classes/druid.features.archdruid`: "your beast shape" → "Forma Animal" |
-| **fire, cold, force, poison** (não dano) | fire → fogo/chama; cold → frio; force → força/energia/forçar; poison → veneno/envenenar | `r51/spells/floating-disk`: "plane of force" → "feito de energia" |
-| **light** | luz → **luz**; armadura leve → **leve** | `ui/proficiencies.armor.light` → "Armaduras leves" |
-| **rest** (verbo) | descansar | n=11 |
+| Termo                                    | Sentido → forma no `pt`                                                                                                                                                            | Exemplo real                                                                                                                                                                                           |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **turn**                                 | turno de combate → **turno** (e "vez" na UI); verbo "transformar/virar" → **transformar** 8, **tornar** 8, **em pedra** 3; "Turn Undead" → **Expulsar**                            | `r51/spells/animal-shapes`: "Your magic turns others into beasts" → "Sua magia transforma outras criaturas em feras"; `r51/classes/cleric…channel-divinity-2`: "Turn Undead" → "Expulsar Mortos-Vivos" |
+| **round**                                | rodada de combate → **rodada** (17 de 18); "round up/down" → **arredondar**                                                                                                        | `r51/classes/wizard…arcane-recovery`: "(rounded up)" → "(arredondado para cima)"                                                                                                                       |
+| **level**                                | nível de personagem/classe → **nível** (146 de 158); nível de magia/espaço → **círculo** (112 de 115, 5.1); nível de exaustão → nível                                              | `r51/spells/acid-splash`: "when you reach 5th level" → "o 5º nível"; `r51/spells/counterspell.higherLevel`: "slot of 4th level" → "4º círculo"                                                         |
+| **save**                                 | substantivo curto de "saving throw" → **elidido**: "on a failed save" → "Se falhar" (não há palavra); botão "Save" → **Salvar** (UI, 14)                                           | `r51/spells/blight`: "on a failed save" → "Se falhar"; `ui/common.save` → "Salvar"                                                                                                                     |
+| **check**                                | "Strength check" → **teste** (45 de 47; "teste de Força" em 38); "Security check" → **verificação**; "Checking your parties…" → **Conferindo**                                     | `ui/common.errors.security_widget_unavailable` → "verificação de segurança"                                                                                                                            |
+| **cast**                                 | lançar magia → **conjurar** (210 de 216); "casting gem-inlaid sticks", "cast into the Astral plane" → **lançar**                                                                   | `r51/spells/augury`: "By casting gem-inlaid sticks" → "Ao lançar varetas…"                                                                                                                             |
+| **target**                               | substantivo → **alvo** (147 de 166); verbo "target one more creature" → **atingir** 12, **afetar** 10                                                                              | `r51/spells/banishment.higherLevel`: "you can target one additional creature" → "você pode atingir uma criatura adicional"                                                                             |
+| **hit**                                  | "On a hit" → **Em caso de acerto** (21 de 25); verbo → **atingir** / **acertar**; "hit points" → pontos de vida                                                                    | `r51/spells/acid-arrow`: "On a hit" → "Em caso de acerto"                                                                                                                                              |
+| **heal / regain**                        | "regain hit points" → **recuperar** (32 de 34); "heal" → **curar** 18, "healing" → **cura**                                                                                        | `r51/spells/heal.higherLevel`: "amount of healing" → "pontos de vida recuperados"                                                                                                                      |
+| **speed**                                | deslocamento da criatura → **deslocamento** (26 de 29); velocidade do vento → **velocidade**                                                                                       | `r51/spells/fog-cloud`: "a wind of moderate or greater speed" → "um vento de velocidade moderada"                                                                                                      |
+| **range** / **reach**                    | alcance de magia → **alcance** (184 de 192, mais "intervalo" em strings do 5.1 mal traduzidas); "reach" substantivo → **alcance**; "reach 5th level" → **alcançar/atingir/chegar** | `r51/spells/arcane-sword`: "within range" → "dentro do intervalo"                                                                                                                                      |
+| **cover**                                | cobertura de combate → **cobertura**; verbo → **cobrir**                                                                                                                           | `r51/spells/arcane-hand`: "half cover" → "meia cobertura"                                                                                                                                              |
+| **duration**                             | "for the duration" → **enquanto a magia durar** (129 de 136); substantivo → **duração**                                                                                            | `r51/spells/animal-friendship`: "for the spell's duration" → "enquanto a magia durar"                                                                                                                  |
+| **prone**                                | estado → **caído**; "fall prone" (verbo) → **cair** ("cairá")                                                                                                                      | `r51/items/ball-bearings-bag-of-1-000`: "fall prone" → "cairá"                                                                                                                                         |
+| **condition**                            | estado de jogo e sentido comum → **condição** nos dois (31 de 31); 2 vezes "estado"                                                                                                | `r51/spells/awaken`: "the charmed condition" → "a condição de enfeitiçada"                                                                                                                             |
+| **Nature**                               | perícia → **Natureza**; nome de característica "Nature's Ward" → **Proteção Natural**                                                                                              | `r51/classes/druid…nature-s-ward.name` → "Proteção Natural"                                                                                                                                            |
+| **beast**                                | tipo de criatura → **fera** (11); "beast shape" → **forma animal**                                                                                                                 | `r51/classes/druid.features.archdruid`: "your beast shape" → "Forma Animal"                                                                                                                            |
+| **fire, cold, force, poison** (não dano) | fire → fogo/chama; cold → frio; force → força/energia/forçar; poison → veneno/envenenar                                                                                            | `r51/spells/floating-disk`: "plane of force" → "feito de energia"                                                                                                                                      |
+| **light**                                | luz → **luz**; armadura leve → **leve**                                                                                                                                            | `ui/proficiencies.armor.light` → "Armaduras leves"                                                                                                                                                     |
+| **rest** (verbo)                         | descansar                                                                                                                                                                          | n=11                                                                                                                                                                                                   |
 
 ## 5. `unconfirmed` (35 linhas, provavelmente seguras)
 
@@ -188,28 +188,28 @@ Rodei as 33 entradas sobre o corpus inteiro (`--check33`). Passam bem: spell slo
 
 Valem para o texto novo (SRD 5.2). O texto aprovado do 5.1 não é alterado pelo pipeline; alinhar o 5.1 é trabalho à parte, em PR próprio.
 
-| Termo | Decisão | O que muda em relação ao 5.1 |
-|---|---|---|
-| Nível de magia e de espaço de magia | **nível** | O 5.1 diz "círculo" em 112 de 115 textos; a interface já diz "nível" |
-| Saving throw | **salvaguarda** | Nada; 6 textos de classe do 5.1 dizem "teste de resistência" |
-| GM | **Mestre** | O 5.1 diz "DM" em 33 textos |
-| Roll (verbo) | **rolar** | O 5.1 diz "jogar" em 28 textos. "Jogada de ataque" continua |
-| Tipos de dano | **Os dois ficam:** adjetivo na frase ("dano ígneo"), substantivo no rótulo da interface ("Fogo") | Nada |
+| Termo                               | Decisão                                                                                          | O que muda em relação ao 5.1                                         |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| Nível de magia e de espaço de magia | **nível**                                                                                        | O 5.1 diz "círculo" em 112 de 115 textos; a interface já diz "nível" |
+| Saving throw                        | **salvaguarda**                                                                                  | Nada; 6 textos de classe do 5.1 dizem "teste de resistência"         |
+| GM                                  | **Mestre**                                                                                       | O 5.1 diz "DM" em 33 textos                                          |
+| Roll (verbo)                        | **rolar**                                                                                        | O 5.1 diz "jogar" em 28 textos. "Jogada de ataque" continua          |
+| Tipos de dano                       | **Os dois ficam:** adjetivo na frase ("dano ígneo"), substantivo no rótulo da interface ("Fogo") | Nada                                                                 |
 
 ### Ainda sem decisão: proposta de usar a forma dominante
 
 Interpretação minha; vale até a Rebeca dizer o contrário. Contagens na lista de inconsistentes, acima.
 
-| Termo | Proposta |
-|---|---|
-| Death saving throw | salvaguarda contra a morte (segue a decisão de "salvaguarda"; a interface hoje diz "teste contra a morte" em 7 textos) |
-| Ability check | teste de atributo |
-| Turn (substantivo) | turno nas regras; "vez" só nos rótulos de combate da interface |
-| Expertise | especialização |
-| Temporary hit points | pontos de vida temporários nas regras; "PV" só na interface |
-| Hit (verbo) | atingir; "em caso de acerto" para "on a hit" |
-| Miss | falhar |
-| Weapon attack | ataque armado |
-| Unarmed strike | golpe desarmado |
+| Termo                | Proposta                                                                                                               |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Death saving throw   | salvaguarda contra a morte (segue a decisão de "salvaguarda"; a interface hoje diz "teste contra a morte" em 7 textos) |
+| Ability check        | teste de atributo                                                                                                      |
+| Turn (substantivo)   | turno nas regras; "vez" só nos rótulos de combate da interface                                                         |
+| Expertise            | especialização                                                                                                         |
+| Temporary hit points | pontos de vida temporários nas regras; "PV" só na interface                                                            |
+| Hit (verbo)          | atingir; "em caso de acerto" para "on a hit"                                                                           |
+| Miss                 | falhar                                                                                                                 |
+| Weapon attack        | ataque armado                                                                                                          |
+| Unarmed strike       | golpe desarmado                                                                                                        |
 
 O CSV ainda marca essas linhas como `inconsistent`; ele é atualizado quando o glossário entrar no pipeline.

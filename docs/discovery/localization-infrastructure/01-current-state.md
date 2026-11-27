@@ -19,16 +19,16 @@
 
 ## 2. Framework e versões
 
-| Item | Valor | Fonte |
-|---|---|---|
-| Next.js | 16.4.6 instalado (`^16.4.6`) | `package.json`, `node_modules/next/package.json` |
-| next-intl | 4.15.1 instalado (`^4.15.1`); sintaxe ICU (depende de `icu-minify`) | idem |
-| Node | 24.x | `package.json` `engines` |
-| Config de rota | `defineRouting({ locales: ['en','pt'], defaultLocale: 'en', localePrefix: 'never' })` | `src/i18n/routing.ts` |
-| Escolha do idioma | cookie `NEXT_LOCALE` (seletor) ou `Accept-Language`; o `proxy.ts` reescreve para `/<locale>/...` internamente; só as páginas públicas em `LOCALIZED_PATHS` têm endereço por idioma (`/pt/features`) com `hreflang` | `src/i18n/routing.ts` |
-| Carregamento | `src/i18n/request.ts`: `en` direto; outros idiomas por `import(\`messages/${locale}.json\`)` completados por `withFallback` | `src/i18n/request.ts` |
-| Fuso | fixo em `UTC`; nenhum componente formata data com `next-intl` | comentário em `request.ts` |
-| Seletor de idioma | `src/frontend/components/LanguageSwitcher.tsx`, nomes fixos `{ en: 'English', pt: 'Português' }` | código |
+| Item              | Valor                                                                                                                                                                                                              | Fonte                                            |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ |
+| Next.js           | 16.4.6 instalado (`^16.4.6`)                                                                                                                                                                                       | `package.json`, `node_modules/next/package.json` |
+| next-intl         | 4.15.1 instalado (`^4.15.1`); sintaxe ICU (depende de `icu-minify`)                                                                                                                                                | idem                                             |
+| Node              | 24.x                                                                                                                                                                                                               | `package.json` `engines`                         |
+| Config de rota    | `defineRouting({ locales: ['en','pt'], defaultLocale: 'en', localePrefix: 'never' })`                                                                                                                              | `src/i18n/routing.ts`                            |
+| Escolha do idioma | cookie `NEXT_LOCALE` (seletor) ou `Accept-Language`; o `proxy.ts` reescreve para `/<locale>/...` internamente; só as páginas públicas em `LOCALIZED_PATHS` têm endereço por idioma (`/pt/features`) com `hreflang` | `src/i18n/routing.ts`                            |
+| Carregamento      | `src/i18n/request.ts`: `en` direto; outros idiomas por `import(\`messages/${locale}.json\`)`completados por`withFallback`                                                                                          | `src/i18n/request.ts`                            |
+| Fuso              | fixo em `UTC`; nenhum componente formata data com `next-intl`                                                                                                                                                      | comentário em `request.ts`                       |
+| Seletor de idioma | `src/frontend/components/LanguageSwitcher.tsx`, nomes fixos `{ en: 'English', pt: 'Português' }`                                                                                                                   | código                                           |
 
 **Teste que protege a interface:** `src/frontend/messages.unit.test.ts` exige que `en` e `pt` tenham **exatamente as mesmas chaves**. Não há teste equivalente para `es`/`sv` (nem faria sentido: o Weblate deixa chaves de fora).
 
@@ -49,12 +49,12 @@ Há duas camadas por livro:
 - **Dados mecânicos** (`spells.json`, `items.json`, `conditions.json`, `classes.json`): ids, nível, escola, componentes, dado de vida etc. **Nenhuma string com espaço (texto livre) neste nível** (medido: 0 em todos os oito arquivos). Não se traduz.
 - **Textos traduzíveis** em `i18n/<idioma>/<tipo>.json`, um objeto por id de entrada, mesma estrutura em todos os idiomas, com o `en` como fonte:
 
-| Tipo | Forma | Campos traduzíveis (medido no `en`) |
-|---|---|---|
-| `spells` | `{ "acid-arrow": { name, description, higherLevel, material, trigger? } }` | `name` (658), `description` (658), `higherLevel` (215), `material` (373), `trigger` (12) |
-| `items` | `{ "abacus": { name, description? } }` | `name` (467), `description` (217) |
-| `conditions` | `{ "blinded": { name, description } }` | `name` (30), `description` (30) |
-| `classes` | `{ "barbarian": { name, subclassTitle, features: { id: { name, description } }, resources: { id: { name, note } }, choices: { id: { name } }, subclasses: { id: { name, features, resources } } } }` | `name` 24, `subclassTitle` 24, e por habilidade/recurso/escolha: `name`, `description`, `note`. Total de 1.367 strings (soma dos dois livros) |
+| Tipo         | Forma                                                                                                                                                                                                | Campos traduzíveis (medido no `en`)                                                                                                           |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `spells`     | `{ "acid-arrow": { name, description, higherLevel, material, trigger? } }`                                                                                                                           | `name` (658), `description` (658), `higherLevel` (215), `material` (373), `trigger` (12)                                                      |
+| `items`      | `{ "abacus": { name, description? } }`                                                                                                                                                               | `name` (467), `description` (217)                                                                                                             |
+| `conditions` | `{ "blinded": { name, description } }`                                                                                                                                                               | `name` (30), `description` (30)                                                                                                               |
+| `classes`    | `{ "barbarian": { name, subclassTitle, features: { id: { name, description } }, resources: { id: { name, note } }, choices: { id: { name } }, subclasses: { id: { name, features, resources } } } }` | `name` 24, `subclassTitle` 24, e por habilidade/recurso/escolha: `name`, `description`, `note`. Total de 1.367 strings (soma dos dois livros) |
 
 - **Contagem de entradas:** 319 magias no 5.1, 339 no 5.2, 251 e 216 itens, 15 condições em cada, 12 classes em cada.
 - Um idioma ainda não traduzido tem **as mesmas chaves com `""`** (caso do `sv`, e de campos pendentes em `pt`/`es`). Em `classes`, chaves de habilidade podem faltar (ex.: 1 a 8 chaves ausentes por livro/idioma, medido).
@@ -73,11 +73,11 @@ Há duas camadas por livro:
 
 ## 4. Idiomas de origem e de destino
 
-| Camada | Fonte | pt | es | sv |
-|---|---|---|---|---|
-| Interface | `en` (inglês escrito pela mantenedora) | completo, escrito no repositório | vazio | vazio |
-| Regras SRD 5.1 | `en` vindo da 5e SRD API / SRD oficial | magias e nomes de itens em grande parte, vindo do módulo Foundry VTT Brasil (OGL 1.0a), mais Crowdin/Weblate | magias e condições copiadas do **PDF oficial do SRD 5.1 em espanhol** (CC-BY 4.0), commit `71749aa7`/#140 | esqueleto vazio |
-| Regras SRD 5.2 | `en` extraído do 5etools v2.38.0 (só entradas `srd52`) | quase só nomes (não existe fonte pt do SRD 5.2) | magias 98% preenchidas; classes parciais (módulo `translate-dnd5e-sdr2-es`, CC-BY 4.0, para nomes de classe) | esqueleto vazio |
+| Camada         | Fonte                                                  | pt                                                                                                           | es                                                                                                           | sv              |
+| -------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------- |
+| Interface      | `en` (inglês escrito pela mantenedora)                 | completo, escrito no repositório                                                                             | vazio                                                                                                        | vazio           |
+| Regras SRD 5.1 | `en` vindo da 5e SRD API / SRD oficial                 | magias e nomes de itens em grande parte, vindo do módulo Foundry VTT Brasil (OGL 1.0a), mais Crowdin/Weblate | magias e condições copiadas do **PDF oficial do SRD 5.1 em espanhol** (CC-BY 4.0), commit `71749aa7`/#140    | esqueleto vazio |
+| Regras SRD 5.2 | `en` extraído do 5etools v2.38.0 (só entradas `srd52`) | quase só nomes (não existe fonte pt do SRD 5.2)                                                              | magias 98% preenchidas; classes parciais (módulo `translate-dnd5e-sdr2-es`, CC-BY 4.0, para nomes de classe) | esqueleto vazio |
 
 **Fato:** o plano diz que `es` e `sv` "chegam pelo PR do Weblate antes de o app oferecer o idioma". **Inferência:** a origem do texto `es` das magias do 5.2 (98% preenchidas) não está documentada no repositório; os commits são "traduções do Crowdin" (#98, #102) e "update translations" (#224), então o texto entrou pela plataforma, sem dizer de qual fonte. Ver "Perguntas em aberto".
 
@@ -135,13 +135,13 @@ Passo a passo (tudo isto é fato, vindo do plano e do código, salvo onde marcad
 
 ## 6. Scripts existentes
 
-| Comando | Arquivo | O que faz |
-|---|---|---|
-| `npm run content:spells` / `:conditions` / `:items` / `:classes` | `scripts/content/import-5etools-*.ts` (+ `5etools-*.ts`) | Importa do 5etools (v2.38.0 fixada) só o SRD; gera `content/.../*.json` e `i18n/en/*.json`; tabelas de classe via `class-tables.ts`, recursos via `class-resources.ts` |
-| `npm run content:foundry-class-names` | `scripts/content/import-foundry-class-names.ts`, `foundry-class-names.ts`, `foundry-names.ts`, `foundry-sources.ts` | Lê traduções de módulos do Foundry (pt-BR: `gitlab.com/fvtt-brasil/dnd5e` e `decito/dnd5e-pt-br`; es: `foundryvtt-sinregistrar/translate-dnd5e-sdr2-es`, todas fixadas por commit) e envia nomes de classes como sugestões ao Weblate |
-| (biblioteca) | `scripts/content/weblate-translations.ts` | Cliente da API do Weblate (`https://hosted.weblate.org/api/`), só `uploadSuggestions`; projeto `rpgworldapp`; `componentOf` (`srd-5.2` + `classes` → `srd-5-2-classes`), `languageOf` (`pt`→`pt_BR`) |
-| (sem script npm) | `scripts/content/tag-conditions.ts`, `tag-conditions-51.ts` | Marcam menções a condições com `{@condition …}` nos textos; existem como arquivos, mas `package.json` não tem comando para eles |
-| `npm run showcase` | `scripts/capture-showcase.ts` | Capturas da landing por idioma |
+| Comando                                                          | Arquivo                                                                                                             | O que faz                                                                                                                                                                                                                             |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run content:spells` / `:conditions` / `:items` / `:classes` | `scripts/content/import-5etools-*.ts` (+ `5etools-*.ts`)                                                            | Importa do 5etools (v2.38.0 fixada) só o SRD; gera `content/.../*.json` e `i18n/en/*.json`; tabelas de classe via `class-tables.ts`, recursos via `class-resources.ts`                                                                |
+| `npm run content:foundry-class-names`                            | `scripts/content/import-foundry-class-names.ts`, `foundry-class-names.ts`, `foundry-names.ts`, `foundry-sources.ts` | Lê traduções de módulos do Foundry (pt-BR: `gitlab.com/fvtt-brasil/dnd5e` e `decito/dnd5e-pt-br`; es: `foundryvtt-sinregistrar/translate-dnd5e-sdr2-es`, todas fixadas por commit) e envia nomes de classes como sugestões ao Weblate |
+| (biblioteca)                                                     | `scripts/content/weblate-translations.ts`                                                                           | Cliente da API do Weblate (`https://hosted.weblate.org/api/`), só `uploadSuggestions`; projeto `rpgworldapp`; `componentOf` (`srd-5.2` + `classes` → `srd-5-2-classes`), `languageOf` (`pt`→`pt_BR`)                                  |
+| (sem script npm)                                                 | `scripts/content/tag-conditions.ts`, `tag-conditions-51.ts`                                                         | Marcam menções a condições com `{@condition …}` nos textos; existem como arquivos, mas `package.json` não tem comando para eles                                                                                                       |
+| `npm run showcase`                                               | `scripts/capture-showcase.ts`                                                                                       | Capturas da landing por idioma                                                                                                                                                                                                        |
 
 Testes que tocam i18n: `src/frontend/messages.unit.test.ts` (chaves en = pt, sem "username" no pt, referências da Privacidade), `src/i18n/messages.unit.test.ts`, `src/i18n/routing.unit.test.ts`, `proxy.language-switch.unit.test.ts`, `scripts/content/*.unit.test.ts`, `content/dnd5e/content.unit.test.ts`.
 
@@ -175,42 +175,42 @@ Testes que tocam i18n: `src/frontend/messages.unit.test.ts` (chaves en = pt, sem
 
 ## 11. Decisões existentes que a nova descoberta afetaria
 
-| Decisão registrada | Onde | Relação com a descoberta |
-|---|---|---|
-| "Sem tradução automática, nem como rascunho" | `docs/plans/2026-10-15-traducoes-comunitarias.md`, "Decisões que mudaram desde o plano original"; objetivo do plano: "feito em comunidade, sem tradução automática" | **A descoberta (tradução com IA/LLM) reverteria esta decisão.** Convém registrar a reversão, ou o escopo da exceção (rascunho marcado, só para idiomas sem comunidade, etc.), num plano novo e atualizar o `INDEX.md` |
-| "Tradução automática (LLM, com glossário versionado no repo) só para o que não existir em nenhuma fonte, gravada como não verificada" | `docs/plans/2026-10-15-5etools-e-traducoes.md` (versão anterior do plano, de 15/10) | **Contradiz o plano de 23/10 e 15/11.** Mostra que a ideia de MT marcada como "não verificada" já foi aceita antes de ser descartada. O plano de 5etools ainda não foi marcado como superado neste ponto |
-| "Nada de IA no pipeline" (script determinístico, sem tokens) | `docs/superpowers/specs/2026-11-14-traducoes-do-foundry-classes-design.md`, "Intenção" | Vale para o **script do Foundry**, não proíbe o resto, mas mostra a preferência por reaproveitar tradução existente antes de gastar tokens |
-| Conteúdo em arquivo, não no banco; `is_verified` por linha deixou de existir | `traducoes-comunitarias.md` | Se o resultado de IA precisa de "rascunho vs. verificado", **hoje não há campo para isso**: o arquivo só tem o texto. Seria preciso metadado externo (Weblate: estado "precisa de edição"/sugestão) ou arquivo separado |
-| `es` e `sv` "não edite à mão" | `.agents/rules/RULES_REFERENCE.md`, `docs/INDEX.md` | Qualquer geração automática para `es`/`sv` precisaria passar pelo Weblate (como sugestão) ou mudar essa regra |
-| "Em dúvida, não traduz; melhor faltar do que errar" | Foundry spec, "Como casar as entradas" | Princípio de qualidade que um fluxo de IA deveria declarar se mantém |
+| Decisão registrada                                                                                                                    | Onde                                                                                                                                                                | Relação com a descoberta                                                                                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "Sem tradução automática, nem como rascunho"                                                                                          | `docs/plans/2026-10-15-traducoes-comunitarias.md`, "Decisões que mudaram desde o plano original"; objetivo do plano: "feito em comunidade, sem tradução automática" | **A descoberta (tradução com IA/LLM) reverteria esta decisão.** Convém registrar a reversão, ou o escopo da exceção (rascunho marcado, só para idiomas sem comunidade, etc.), num plano novo e atualizar o `INDEX.md`   |
+| "Tradução automática (LLM, com glossário versionado no repo) só para o que não existir em nenhuma fonte, gravada como não verificada" | `docs/plans/2026-10-15-5etools-e-traducoes.md` (versão anterior do plano, de 15/10)                                                                                 | **Contradiz o plano de 23/10 e 15/11.** Mostra que a ideia de MT marcada como "não verificada" já foi aceita antes de ser descartada. O plano de 5etools ainda não foi marcado como superado neste ponto                |
+| "Nada de IA no pipeline" (script determinístico, sem tokens)                                                                          | `docs/superpowers/specs/2026-11-14-traducoes-do-foundry-classes-design.md`, "Intenção"                                                                              | Vale para o **script do Foundry**, não proíbe o resto, mas mostra a preferência por reaproveitar tradução existente antes de gastar tokens                                                                              |
+| Conteúdo em arquivo, não no banco; `is_verified` por linha deixou de existir                                                          | `traducoes-comunitarias.md`                                                                                                                                         | Se o resultado de IA precisa de "rascunho vs. verificado", **hoje não há campo para isso**: o arquivo só tem o texto. Seria preciso metadado externo (Weblate: estado "precisa de edição"/sugestão) ou arquivo separado |
+| `es` e `sv` "não edite à mão"                                                                                                         | `.agents/rules/RULES_REFERENCE.md`, `docs/INDEX.md`                                                                                                                 | Qualquer geração automática para `es`/`sv` precisaria passar pelo Weblate (como sugestão) ou mudar essa regra                                                                                                           |
+| "Em dúvida, não traduz; melhor faltar do que errar"                                                                                   | Foundry spec, "Como casar as entradas"                                                                                                                              | Princípio de qualidade que um fluxo de IA deveria declarar se mantém                                                                                                                                                    |
 
 Também relevante para o desenho: **a mantenedora faz o merge de cada PR do Weblate** (memória de projeto: "ela faz o merge; sem menu"), e a regra de trabalho é PR com descrição em português e inglês. Um fluxo automático que abra PRs grandes precisa respeitar isso.
 
 ## 12. Conteúdo gerado versus mantido à mão
 
-| Conteúdo | Origem | Pode ser regenerado? |
-|---|---|---|
-| `content/**/<tipo>.json` (mecânica) | Importador 5etools / 5e SRD API | Sim, `npm run content:*` (versão fixada) |
-| `content/**/i18n/en/*.json` | Importador (texto), com tags `{@…}` e markup | Sim |
-| `content/**/i18n/pt|es/*.json` | Weblate + commits manuais (importação do PDF `es` do 5.1, #140; ajustes de nomes) | **Não**: é a única cópia das traduções revisadas |
-| `content/**/i18n/sv/*.json` | Esqueleto vazio | Sim (derivável do `en`) |
-| `messages/en.json`, `messages/pt.json` | À mão, na mesma PR da funcionalidade | Não |
-| `messages/es.json`, `messages/sv.json` | Weblate (hoje `{}`) | — |
-| `NOTICE.md`, Termos | À mão; o plano prevê gerar de `content-sources.json` (não existe) | — |
+| Conteúdo                               | Origem                                                            | Pode ser regenerado?                                                              |
+| -------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `content/**/<tipo>.json` (mecânica)    | Importador 5etools / 5e SRD API                                   | Sim, `npm run content:*` (versão fixada)                                          |
+| `content/**/i18n/en/*.json`            | Importador (texto), com tags `{@…}` e markup                      | Sim                                                                               |
+| `content/**/i18n/pt                    | es/*.json`                                                        | Weblate + commits manuais (importação do PDF `es` do 5.1, #140; ajustes de nomes) | **Não**: é a única cópia das traduções revisadas |
+| `content/**/i18n/sv/*.json`            | Esqueleto vazio                                                   | Sim (derivável do `en`)                                                           |
+| `messages/en.json`, `messages/pt.json` | À mão, na mesma PR da funcionalidade                              | Não                                                                               |
+| `messages/es.json`, `messages/sv.json` | Weblate (hoje `{}`)                                               | —                                                                                 |
+| `NOTICE.md`, Termos                    | À mão; o plano prevê gerar de `content-sources.json` (não existe) | —                                                                                 |
 
 Risco apontado em commit: o sync do Crowdin (#139) **descartou traduções idênticas ao inglês** (Glaive, Piton, Totem, Perfume) e deixou o nome vazio; foi corrigido à mão em `71749aa7`. Mostra que ida e volta por plataforma pode perder dados quando o texto traduzido é igual ao fonte.
 
 ## 13. Infraestrutura e hospedagem
 
-| Item | Fato | Fonte |
-|---|---|---|
-| Hospedagem do app | **Vercel**, região `gru1` (São Paulo), cron diário `/api/cron/cleanup-avatars`, deploy só da `main` (`git.deploymentEnabled`: `main: true`, `**: false`) | `vercel.json` |
-| Banco e auth | **Supabase** (Postgres com RLS, Auth, Storage, Realtime); migrações aplicadas por `.github/workflows/deploy-migrations.yml` | README, workflows |
-| E-mail | `resend` e `nodemailer`, templates `react-email` | `package.json` |
-| CI | GitHub Actions: `test.yml` (tsc, lint, knip, testes unitários com piso de cobertura, integração com Supabase local, e2e Playwright), `deploy-migrations.yml`, `dependabot-auto-merge.yml`, `discord-merges.yml` (avisa no Discord cada PR mergeado), `e2e-flake-hunt.yml` (cron semanal). **Nenhum workflow toca em tradução** | `.github/workflows/*` |
-| Tradução | Hosted Weblate, plano gratuito para software livre, projeto público `rpgworldapp` | docs, README |
-| Comunidade | Discord (canal de suporte, tradução e comunidade), GitHub Discussions só Anúncios e Ideias | memória de projeto |
-| Licenças do conteúdo | GPLv3 (código); SRD 5.1/5.2 em CC-BY-4.0; 5e SRD API em MIT; Foundry VTT Brasil em OGL 1.0a; `translate-dnd5e-sdr2-es` em CC-BY-4.0. Créditos em `NOTICE.md` e nos Termos | `NOTICE.md`, README |
+| Item                 | Fato                                                                                                                                                                                                                                                                                                                           | Fonte                 |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| Hospedagem do app    | **Vercel**, região `gru1` (São Paulo), cron diário `/api/cron/cleanup-avatars`, deploy só da `main` (`git.deploymentEnabled`: `main: true`, `**: false`)                                                                                                                                                                       | `vercel.json`         |
+| Banco e auth         | **Supabase** (Postgres com RLS, Auth, Storage, Realtime); migrações aplicadas por `.github/workflows/deploy-migrations.yml`                                                                                                                                                                                                    | README, workflows     |
+| E-mail               | `resend` e `nodemailer`, templates `react-email`                                                                                                                                                                                                                                                                               | `package.json`        |
+| CI                   | GitHub Actions: `test.yml` (tsc, lint, knip, testes unitários com piso de cobertura, integração com Supabase local, e2e Playwright), `deploy-migrations.yml`, `dependabot-auto-merge.yml`, `discord-merges.yml` (avisa no Discord cada PR mergeado), `e2e-flake-hunt.yml` (cron semanal). **Nenhum workflow toca em tradução** | `.github/workflows/*` |
+| Tradução             | Hosted Weblate, plano gratuito para software livre, projeto público `rpgworldapp`                                                                                                                                                                                                                                              | docs, README          |
+| Comunidade           | Discord (canal de suporte, tradução e comunidade), GitHub Discussions só Anúncios e Ideias                                                                                                                                                                                                                                     | memória de projeto    |
+| Licenças do conteúdo | GPLv3 (código); SRD 5.1/5.2 em CC-BY-4.0; 5e SRD API em MIT; Foundry VTT Brasil em OGL 1.0a; `translate-dnd5e-sdr2-es` em CC-BY-4.0. Créditos em `NOTICE.md` e nos Termos                                                                                                                                                      | `NOTICE.md`, README   |
 
 **Máquina local do mantenedor (do pedido, não verificada aqui):** WSL2, 24 threads, ~15 GB de RAM visíveis, GPU NVIDIA RTX 5070 Laptop com 8 GB de VRAM.
 
@@ -231,18 +231,18 @@ Risco apontado em commit: o sync do Crowdin (#139) **descartou traduções idên
 
 ## Nível de confiança
 
-| Afirmação | Confiança | Por quê |
-|---|---|---|
-| Stack (Next 16.4.6, next-intl 4.15.1), `locales: ['en','pt']` | alto | lido do `package.json`, `node_modules` e `routing.ts` |
-| Não há Action, `crowdin.yml` nem config do Weblate no repo | alto | `git ls-files` e leitura dos 5 workflows |
-| O Weblate lê por webhook e abre PRs de uma branch `weblate` | médio | vem do plano `traducoes-comunitarias.md` e dos commits do Weblate; o webhook em si não foi inspecionado |
-| Formato e campos traduzíveis de cada tipo de regra | alto | medido nos JSON |
-| Só `pt` é lido pelo backend de regras | alto | `srd-spells.ts` (código lido); itens/condições/classes inferidos do padrão e do plano |
-| Origem do texto `es` das magias do 5.2 | baixo | não documentada |
-| Os e-mails não usam i18n | médio | busca textual negativa, sem leitura dos templates |
-| Decisão "sem MT, nem rascunho" é a vigente | alto | texto do plano de 15/11, mais recente que o plano de 5etools que dizia o contrário |
-| Hospedagem Vercel + Supabase | alto | `vercel.json`, README, workflows |
-| Terminologia só em uso, não documentada | médio | busca por glossário/terminologia em `docs/`, README, CONTRIBUTING, NOTICE sem resultado |
+| Afirmação                                                     | Confiança | Por quê                                                                                                 |
+| ------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------- |
+| Stack (Next 16.4.6, next-intl 4.15.1), `locales: ['en','pt']` | alto      | lido do `package.json`, `node_modules` e `routing.ts`                                                   |
+| Não há Action, `crowdin.yml` nem config do Weblate no repo    | alto      | `git ls-files` e leitura dos 5 workflows                                                                |
+| O Weblate lê por webhook e abre PRs de uma branch `weblate`   | médio     | vem do plano `traducoes-comunitarias.md` e dos commits do Weblate; o webhook em si não foi inspecionado |
+| Formato e campos traduzíveis de cada tipo de regra            | alto      | medido nos JSON                                                                                         |
+| Só `pt` é lido pelo backend de regras                         | alto      | `srd-spells.ts` (código lido); itens/condições/classes inferidos do padrão e do plano                   |
+| Origem do texto `es` das magias do 5.2                        | baixo     | não documentada                                                                                         |
+| Os e-mails não usam i18n                                      | médio     | busca textual negativa, sem leitura dos templates                                                       |
+| Decisão "sem MT, nem rascunho" é a vigente                    | alto      | texto do plano de 15/11, mais recente que o plano de 5etools que dizia o contrário                      |
+| Hospedagem Vercel + Supabase                                  | alto      | `vercel.json`, README, workflows                                                                        |
+| Terminologia só em uso, não documentada                       | médio     | busca por glossário/terminologia em `docs/`, README, CONTRIBUTING, NOTICE sem resultado                 |
 
 ## Perguntas em aberto
 

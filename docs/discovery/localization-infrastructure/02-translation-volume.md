@@ -4,14 +4,14 @@
 
 **Regra de leitura:** o documento mistura de propósito cinco unidades diferentes e as mantém separadas.
 
-| Unidade | Definição usada |
-|---|---|
-| **Arquivo** | arquivo no disco |
+| Unidade            | Definição usada                                                                                                                                                  |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Arquivo**        | arquivo no disco                                                                                                                                                 |
 | **Chave / string** | uma folha de texto de um JSON (ou, em Markdown, um bloco separado por linha em branco, fora de blocos de código). "Chave" e "string" são 1:1 dentro de um idioma |
-| **Única** | string distinta depois de dedup **exato** (mesmos caracteres) dentro do escopo reportado |
-| **Palavra** | token separado por espaço em branco |
-| **Caractere** | ponto de código Unicode |
-| **Token** | **ESTIMATIVA**, nunca medida (seção 2) |
+| **Única**          | string distinta depois de dedup **exato** (mesmos caracteres) dentro do escopo reportado                                                                         |
+| **Palavra**        | token separado por espaço em branco                                                                                                                              |
+| **Caractere**      | ponto de código Unicode                                                                                                                                          |
+| **Token**          | **ESTIMATIVA**, nunca medida (seção 2)                                                                                                                           |
 
 Marcação: **[MEDIDO]** = saiu do script. **[ESTIMATIVA]** = heurística. **[PROJEÇÃO]** = aritmética sobre números medidos.
 
@@ -47,28 +47,29 @@ Strings não vazias do idioma-fonte. "Única" = dedup exato dentro da categoria.
 
 ### 3.1 Tabela principal
 
-| Grupo | Categoria | Arquivos | Strings | Únicas | Palavras | Caracteres | Tokens est. (chars/4) |
-|---|---|---:|---:|---:|---:|---:|---:|
-| Interface | `messages/en.json` | 1 | 1.652 | 1.468 | 8.714 | 51.158 | 12.790 |
-| SRD 5.1 | magias | 1 | 917 | 900 | 50.698 | 281.876 | 70.469 |
-| SRD 5.1 | itens | 1 | 337 | 334 | 3.645 | 20.711 | 5.178 |
-| SRD 5.1 | condições | 1 | 30 | 30 | 821 | 5.042 | 1.261 |
-| SRD 5.1 | classes | 1 | 675 | 452 | 22.704 | 130.796 | 32.699 |
-| SRD 5.2 | magias | 1 | 999 | 957 | 45.307 | 266.761 | 66.690 |
-| SRD 5.2 | itens | 1 | 347 | 329 | 6.034 | 36.004 | 9.001 |
-| SRD 5.2 | condições | 1 | 30 | 30 | 969 | 7.078 | 1.770 |
-| SRD 5.2 | classes | 1 | 740 | 461 | 21.354 | 133.564 | 33.391 |
-| `docs/plans` | Markdown pt | 26 | 832 | 717 | 36.781 | 260.270 | 65.068 |
-| `docs/superpowers` | Markdown pt | 12 | 355 | 319 | 18.471 | 117.336 | 29.334 |
-| `docs/revisao-telas` | Markdown pt | 11 | 610 | 589 | 55.177 | 525.467 | 131.367 |
-| `docs/grimoire-enchantments` | Markdown | 21 | 730 | 608 | 38.785 | 354.680 | 88.670 |
-| `docs/` (outros) | Markdown pt | 6 | 289 | 274 | 20.942 | 202.200 | 50.550 |
-| Raiz `*.md` | Markdown pt | 8 | 163 | 154 | 3.960 | 28.416 | 7.104 |
-| `.agents/` + `.github/` `*.md` | Markdown pt | 4 | 93 | 93 | 3.199 | 24.825 | 6.206 |
-| `public/llms.txt` | texto en | 1 | 13 | 13 | 459 | 3.217 | 804 |
-| `content/dnd5e/OGL-1.0a.txt` | texto legal de terceiros (não é nosso) | 1 | 21 | 21 | 1.016 | 6.593 | 1.648 |
+| Grupo                          | Categoria                              | Arquivos | Strings | Únicas | Palavras | Caracteres | Tokens est. (chars/4) |
+| ------------------------------ | -------------------------------------- | -------: | ------: | -----: | -------: | ---------: | --------------------: |
+| Interface                      | `messages/en.json`                     |        1 |   1.652 |  1.468 |    8.714 |     51.158 |                12.790 |
+| SRD 5.1                        | magias                                 |        1 |     917 |    900 |   50.698 |    281.876 |                70.469 |
+| SRD 5.1                        | itens                                  |        1 |     337 |    334 |    3.645 |     20.711 |                 5.178 |
+| SRD 5.1                        | condições                              |        1 |      30 |     30 |      821 |      5.042 |                 1.261 |
+| SRD 5.1                        | classes                                |        1 |     675 |    452 |   22.704 |    130.796 |                32.699 |
+| SRD 5.2                        | magias                                 |        1 |     999 |    957 |   45.307 |    266.761 |                66.690 |
+| SRD 5.2                        | itens                                  |        1 |     347 |    329 |    6.034 |     36.004 |                 9.001 |
+| SRD 5.2                        | condições                              |        1 |      30 |     30 |      969 |      7.078 |                 1.770 |
+| SRD 5.2                        | classes                                |        1 |     740 |    461 |   21.354 |    133.564 |                33.391 |
+| `docs/plans`                   | Markdown pt                            |       26 |     832 |    717 |   36.781 |    260.270 |                65.068 |
+| `docs/superpowers`             | Markdown pt                            |       12 |     355 |    319 |   18.471 |    117.336 |                29.334 |
+| `docs/revisao-telas`           | Markdown pt                            |       11 |     610 |    589 |   55.177 |    525.467 |               131.367 |
+| `docs/grimoire-enchantments`   | Markdown                               |       21 |     730 |    608 |   38.785 |    354.680 |                88.670 |
+| `docs/` (outros)               | Markdown pt                            |        6 |     289 |    274 |   20.942 |    202.200 |                50.550 |
+| Raiz `*.md`                    | Markdown pt                            |        8 |     163 |    154 |    3.960 |     28.416 |                 7.104 |
+| `.agents/` + `.github/` `*.md` | Markdown pt                            |        4 |      93 |     93 |    3.199 |     24.825 |                 6.206 |
+| `public/llms.txt`              | texto en                               |        1 |      13 |     13 |      459 |      3.217 |                   804 |
+| `content/dnd5e/OGL-1.0a.txt`   | texto legal de terceiros (não é nosso) |        1 |      21 |     21 |    1.016 |      6.593 |                 1.648 |
 
 Observações:
+
 - Blocos de código cercados (` ``` `) foram **excluídos** da contagem de Markdown (por exemplo 7.795 caracteres em `docs/grimoire-enchantments`).
 - Os `docs/` e `README`/`CONTRIBUTING`/`.agents` **estão escritos em português**, não em inglês; se um dia fossem traduzidos, a fonte seria pt.
 - `docs/` tem também 13 JSON e 29 imagens (PNG e SVG, a maior parte em `docs/grimoire-enchantments`) que o script **não** conta (não é prosa).
@@ -76,26 +77,26 @@ Observações:
 
 ### 3.2 Subtotais por grupo (dedup exato em todo o grupo)
 
-| Grupo | Arquivos | Strings | Únicas | Palavras | Caracteres | Tokens est. | Palavras (únicas) | Caracteres (únicos) |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Interface | 1 | 1.652 | 1.468 | 8.714 | 51.158 | 12.790 | 8.411 | 49.348 |
-| SRD 5.1 (4 tipos) | 4 | 1.959 | 1.715 | 77.868 | 438.425 | 109.606 | 73.886 | 415.947 |
-| SRD 5.2 (4 tipos) | 4 | 2.116 | 1.776 | 73.664 | 443.407 | 110.852 | 70.686 | 424.425 |
-| **CORPO DO PRODUTO = Interface + SRD 5.1 + SRD 5.2** | **9** | **5.727** | **4.282** | **160.246** | **932.990** | **233.248** | **151.547** | **880.747** |
-| `docs/` (md, sem `docs/discovery`) | 76 | 2.816 | 2.488 | 170.156 | 1.459.953 | 364.988 (+14% se pt) | 169.034 | 1.453.243 |
-| Raiz `*.md` + `.agents/.github` `*.md` | 12 | 256 | 247 | 7.159 | 53.241 | 13.310 | 7.148 | 53.193 |
-| `public/llms.txt` | 1 | 13 | 13 | 459 | 3.217 | 804 | 459 | 3.217 |
+| Grupo                                                | Arquivos |   Strings |    Únicas |    Palavras |  Caracteres |          Tokens est. | Palavras (únicas) | Caracteres (únicos) |
+| ---------------------------------------------------- | -------: | --------: | --------: | ----------: | ----------: | -------------------: | ----------------: | ------------------: |
+| Interface                                            |        1 |     1.652 |     1.468 |       8.714 |      51.158 |               12.790 |             8.411 |              49.348 |
+| SRD 5.1 (4 tipos)                                    |        4 |     1.959 |     1.715 |      77.868 |     438.425 |              109.606 |            73.886 |             415.947 |
+| SRD 5.2 (4 tipos)                                    |        4 |     2.116 |     1.776 |      73.664 |     443.407 |              110.852 |            70.686 |             424.425 |
+| **CORPO DO PRODUTO = Interface + SRD 5.1 + SRD 5.2** |    **9** | **5.727** | **4.282** | **160.246** | **932.990** |          **233.248** |       **151.547** |         **880.747** |
+| `docs/` (md, sem `docs/discovery`)                   |       76 |     2.816 |     2.488 |     170.156 |   1.459.953 | 364.988 (+14% se pt) |           169.034 |           1.453.243 |
+| Raiz `*.md` + `.agents/.github` `*.md`               |       12 |       256 |       247 |       7.159 |      53.241 |               13.310 |             7.148 |              53.193 |
+| `public/llms.txt`                                    |        1 |        13 |        13 |         459 |       3.217 |                  804 |               459 |               3.217 |
 
 **Conferência cruzada:** o Crowdin contava ~5,4 mil strings e ~158 mil palavras (dado do pedido). O corpo do produto aqui tem **5.727 strings e 160.246 palavras**: mesma ordem de grandeza, diferença plausível por segmentação e por atualizações desde então.
 
 ### 3.3 SRD por tipo, dois livros lado a lado
 
-| Tipo | Strings 5.1 | Strings 5.2 | Palavras 5.1 | Palavras 5.2 |
-|---|---:|---:|---:|---:|
-| magias | 917 | 999 | 50.698 | 45.307 |
-| itens | 337 | 347 | 3.645 | 6.034 |
-| condições | 30 | 30 | 821 | 969 |
-| classes | 675 | 740 | 22.704 | 21.354 |
+| Tipo      | Strings 5.1 | Strings 5.2 | Palavras 5.1 | Palavras 5.2 |
+| --------- | ----------: | ----------: | -----------: | -----------: |
+| magias    |         917 |         999 |       50.698 |       45.307 |
+| itens     |         337 |         347 |        3.645 |        6.034 |
+| condições |          30 |          30 |          821 |          969 |
+| classes   |         675 |         740 |       22.704 |       21.354 |
 
 Papel de cada campo (somando os dois livros, `[MEDIDO]`): `spells.description` 658 strings / 86.361 palavras; `classes.*` (nome, descrição, nota de todas as habilidades, recursos, escolhas, subclasses) 1.367 / 43.986; `items.description` 217 / 8.924; `spells.higherLevel` 215 / 5.091; `spells.material` 373 / 3.121; `conditions.description` 30 / 1.760; `spells.name` 658 / 1.226; `items.name` 467 / 755; `spells.trigger` 12 / 206. **Descrições de magia sozinhas são 54% das palavras do corpo do produto.**
 
@@ -109,18 +110,18 @@ Papel de cada campo (somando os dois livros, `[MEDIDO]`): `spells.description` 6
 
 Caracteres por string (palavras nas duas últimas colunas).
 
-| Categoria | Média | Mediana | p95 | Máx. | Mediana palavras | Máx. palavras |
-|---|---:|---:|---:|---:|---:|---:|
-| Interface | 31 | 15 | 98 | 607 | 3 | 95 |
-| SRD 5.1 magias | 307 | 71 | 1.249 | 3.879 | 14 | 707 |
-| SRD 5.1 itens | 61 | 13 | 313 | 766 | 2 | 152 |
-| SRD 5.1 condições | 168 | 13 | 613 | 1.282 | 1 | 210 |
-| SRD 5.1 classes | 194 | 25 | 718 | 5.944 | 4 | 1.042 |
-| SRD 5.2 magias | 267 | 52 | 1.175 | 3.848 | 9 | 680 |
-| SRD 5.2 itens | 104 | 14 | 413 | 5.429 | 2 | 1.113 |
-| SRD 5.2 condições | 236 | 13 | 728 | 824 | 1 | 107 |
-| SRD 5.2 classes | 180 | 25 | 773 | 4.451 | 3 | 755 |
-| `public/llms.txt` | 247 | 190 | 898 | 898 | 8 | 140 |
+| Categoria         | Média | Mediana |   p95 |  Máx. | Mediana palavras | Máx. palavras |
+| ----------------- | ----: | ------: | ----: | ----: | ---------------: | ------------: |
+| Interface         |    31 |      15 |    98 |   607 |                3 |            95 |
+| SRD 5.1 magias    |   307 |      71 | 1.249 | 3.879 |               14 |           707 |
+| SRD 5.1 itens     |    61 |      13 |   313 |   766 |                2 |           152 |
+| SRD 5.1 condições |   168 |      13 |   613 | 1.282 |                1 |           210 |
+| SRD 5.1 classes   |   194 |      25 |   718 | 5.944 |                4 |         1.042 |
+| SRD 5.2 magias    |   267 |      52 | 1.175 | 3.848 |                9 |           680 |
+| SRD 5.2 itens     |   104 |      14 |   413 | 5.429 |                2 |         1.113 |
+| SRD 5.2 condições |   236 |      13 |   728 |   824 |                1 |           107 |
+| SRD 5.2 classes   |   180 |      25 |   773 | 4.451 |                3 |           755 |
+| `public/llms.txt` |   247 |     190 |   898 |   898 |                8 |           140 |
 
 Leitura: a distribuição é **bimodal** nas regras (muitos nomes de 1 a 4 palavras, mais uma cauda de descrições longas). A maior string (5.429 caracteres, um item do 5.2; 5.944 em uma classe do 5.1) cabe com folga num contexto de LLM, mas exige que a segmentação preserve tabelas e listas.
 
@@ -134,12 +135,12 @@ Detalhe do formato em [01-current-state.md](01-current-state.md#3-formatos-de-ar
 
 **Verificação de paridade já feita sobre o que está traduzido [MEDIDO, aproximada]:** compara o conjunto de dados `NdM`, tipos de tag `{@…}`, argumentos ICU e tags `<x>` entre fonte e tradução.
 
-| Categoria | Idioma | Traduzidas | Quebras de paridade | Valores de comprimento fora de 0,5×–2,0× (fonte ≥ 80 caracteres) |
-|---|---|---:|---:|---:|
-| Interface | pt | 1.652 | 11 | 0 |
-| SRD 5.1 magias | pt | 733 | 13 | 2 |
-| SRD 5.1 magias | es | 917 | 15 | 1 |
-| demais categorias (itens, condições, classes, 5.2) | pt, es | 3.661 | 0 | 0 |
+| Categoria                                          | Idioma | Traduzidas | Quebras de paridade | Valores de comprimento fora de 0,5×–2,0× (fonte ≥ 80 caracteres) |
+| -------------------------------------------------- | ------ | ---------: | ------------------: | ---------------------------------------------------------------: |
+| Interface                                          | pt     |      1.652 |                  11 |                                                                0 |
+| SRD 5.1 magias                                     | pt     |        733 |                  13 |                                                                2 |
+| SRD 5.1 magias                                     | es     |        917 |                  15 |                                                                1 |
+| demais categorias (itens, condições, classes, 5.2) | pt, es |      3.661 |                   0 |                                                                0 |
 
 **Como interpretar:** as 11 da interface são falsos positivos quase certos (o literal dentro de um `select`/`plural` é traduzido, por exemplo `{amount, select, all {all} other {…}}` vira `{amount, select, all {todos} other {…}}`; o script lê `{all}` como argumento). As 28 de magias 5.1 **não foram inspecionadas uma a uma**; a primeira da lista é `srd51:spells/pt/bane.description` (o inglês escreve "a d4"; o pt, "1d4"). São candidatas a revisão, não erros comprovados. **Os 0 do resto não provam ausência de erro**: a checagem só vê dado, tag, argumento e tag HTML.
 
@@ -150,56 +151,56 @@ Definições: **traduzida** = chave presente com texto não vazio; **vazia** = c
 ### 6.1 Resumo por idioma
 
 | Idioma | Chaves en | Traduzidas | Vazias | Ausentes | % chaves traduzidas | Palavras en cobertas | Palavras en a traduzir | % palavras cobertas |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| pt | 5.727 | 3.989 | 1.735 | 3 | 69,7% | 72.027 | 88.219 | **44,9%** |
-| es | 5.727 | 2.974 | 1.086 | 1.667 | 51,9% | 116.805 | 43.441 | **72,9%** |
-| sv | 5.727 | 0 | 4.060 | 1.667 | 0,0% | 0 | 160.246 | **0,0%** |
+| ------ | --------: | ---------: | -----: | -------: | ------------------: | -------------------: | ---------------------: | ------------------: |
+| pt     |     5.727 |      3.989 |  1.735 |        3 |               69,7% |               72.027 |                 88.219 |           **44,9%** |
+| es     |     5.727 |      2.974 |  1.086 |    1.667 |               51,9% |              116.805 |                 43.441 |           **72,9%** |
+| sv     |     5.727 |          0 |  4.060 |    1.667 |                0,0% |                    0 |                160.246 |            **0,0%** |
 
 (Escopo: Interface + SRD 5.1 + SRD 5.2. Docs e Markdown não têm tradução.) **Surpresa: o `es` cobre mais palavras que o `pt`**, porque o espanhol tem 651 descrições de magia (5.1 e 5.2) e o português só 319 (as do 5.1); no 5.2, o `pt` tem sobretudo nomes. O `pt` tem 100% da interface; o `es` tem 0% dela. O `sv` não tem uma única palavra.
 
 ### 6.2 Por categoria
 
-| Categoria | Idioma | Chaves en | Traduzidas | Vazias | Ausentes | % chaves | Igual ao en | % palavras en cobertas |
-|---|---|---:|---:|---:|---:|---:|---:|---:|
-| Interface | pt | 1.652 | 1.652 | 0 | 0 | 100,0% | 61 | 100,0% |
-| Interface | es | 1.652 | 0 | 0 | 1.652 | 0,0% | 0 | 0,0% |
-| Interface | sv | 1.652 | 0 | 0 | 1.652 | 0,0% | 0 | 0,0% |
-| 5.1 magias | pt | 917 | 733 | 184 | 0 | 79,9% | 1 | 96,1% |
-| 5.1 magias | es | 917 | 917 | 0 | 0 | 100,0% | 2 | 100,0% |
-| 5.1 itens | pt | 337 | 324 | 13 | 0 | 96,1% | 3 | 87,5% |
-| 5.1 itens | es | 337 | 147 | 190 | 0 | 43,6% | 1 | 6,2% |
-| 5.1 condições | pt | 30 | 15 | 15 | 0 | 50,0% | 0 | 1,8% |
-| 5.1 condições | es | 30 | 30 | 0 | 0 | 100,0% | 1 | 100,0% |
-| 5.1 classes | pt | 675 | 494 | 180 | 1 | 73,2% | 1 | 43,8% |
-| 5.1 classes | es | 675 | 146 | 522 | 7 | 21,6% | 0 | 1,3% |
-| 5.2 magias | pt | 999 | 313 | 686 | 0 | 31,3% | 1 | **1,3%** |
-| 5.2 magias | es | 999 | 983 | 16 | 0 | 98,4% | 3 | 95,8% |
-| 5.2 itens | pt | 347 | 216 | 131 | 0 | 62,2% | 2 | 5,4% |
-| 5.2 itens | es | 347 | 287 | 60 | 0 | 82,7% | 2 | 64,0% |
-| 5.2 condições | pt | 30 | 15 | 15 | 0 | 50,0% | 0 | 1,5% |
-| 5.2 condições | es | 30 | 15 | 15 | 0 | 50,0% | 1 | 1,5% |
-| 5.2 classes | pt | 740 | 227 | 511 | 2 | 30,7% | 0 | 2,5% |
-| 5.2 classes | es | 740 | 449 | 283 | 8 | 60,7% | 0 | 81,9% |
+| Categoria     | Idioma | Chaves en | Traduzidas | Vazias | Ausentes | % chaves | Igual ao en | % palavras en cobertas |
+| ------------- | ------ | --------: | ---------: | -----: | -------: | -------: | ----------: | ---------------------: |
+| Interface     | pt     |     1.652 |      1.652 |      0 |        0 |   100,0% |          61 |                 100,0% |
+| Interface     | es     |     1.652 |          0 |      0 |    1.652 |     0,0% |           0 |                   0,0% |
+| Interface     | sv     |     1.652 |          0 |      0 |    1.652 |     0,0% |           0 |                   0,0% |
+| 5.1 magias    | pt     |       917 |        733 |    184 |        0 |    79,9% |           1 |                  96,1% |
+| 5.1 magias    | es     |       917 |        917 |      0 |        0 |   100,0% |           2 |                 100,0% |
+| 5.1 itens     | pt     |       337 |        324 |     13 |        0 |    96,1% |           3 |                  87,5% |
+| 5.1 itens     | es     |       337 |        147 |    190 |        0 |    43,6% |           1 |                   6,2% |
+| 5.1 condições | pt     |        30 |         15 |     15 |        0 |    50,0% |           0 |                   1,8% |
+| 5.1 condições | es     |        30 |         30 |      0 |        0 |   100,0% |           1 |                 100,0% |
+| 5.1 classes   | pt     |       675 |        494 |    180 |        1 |    73,2% |           1 |                  43,8% |
+| 5.1 classes   | es     |       675 |        146 |    522 |        7 |    21,6% |           0 |                   1,3% |
+| 5.2 magias    | pt     |       999 |        313 |    686 |        0 |    31,3% |           1 |               **1,3%** |
+| 5.2 magias    | es     |       999 |        983 |     16 |        0 |    98,4% |           3 |                  95,8% |
+| 5.2 itens     | pt     |       347 |        216 |    131 |        0 |    62,2% |           2 |                   5,4% |
+| 5.2 itens     | es     |       347 |        287 |     60 |        0 |    82,7% |           2 |                  64,0% |
+| 5.2 condições | pt     |        30 |         15 |     15 |        0 |    50,0% |           0 |                   1,5% |
+| 5.2 condições | es     |        30 |         15 |     15 |        0 |    50,0% |           1 |                   1,5% |
+| 5.2 classes   | pt     |       740 |        227 |    511 |        2 |    30,7% |           0 |                   2,5% |
+| 5.2 classes   | es     |       740 |        449 |    283 |        8 |    60,7% |           0 |                  81,9% |
 
 `sv` em todas as categorias de regras: **0 traduzidas**, todas as chaves vazias (ou ausentes: 7 em classes 5.1, 8 em classes 5.2).
 
 O que isso diz: **"percentual de chaves" engana**, porque os campos curtos (nomes) estão traduzidos e os longos (descrições) não. Por exemplo, o `pt` do 5.2 tem 313 de 999 chaves de magia (31,3%) mas só **1,3% das palavras**: tem os nomes e quase nenhuma descrição. Por campo (SRD, dois livros):
 
-| Campo | Chaves en | pt traduzidas | es traduzidas | sv |
-|---|---:|---:|---:|---:|
-| `classes.name` | 752 | 574 (76,3%) | 407 (54,1%) | 0 |
-| `spells.name` | 658 | 632 (96,0%) | 658 (100%) | 0 |
-| `spells.description` | 658 | 319 (48,5%) | 651 (98,9%) | 0 |
-| `classes.description` | 603 | 128 (21,2%) | 188 (31,2%) | 0 |
-| `items.name` | 467 | 467 (100%) | 326 (69,8%) | 0 |
-| `spells.material` | 373 | **0 (0%)** | 372 (99,7%) | 0 |
-| `items.description` | 217 | 73 (33,6%) | 108 (49,8%) | 0 |
-| `spells.higherLevel` | 215 | 91 (42,3%) | 215 (100%) | 0 |
-| `classes.note` | 36 | 7 (19,4%) | 0 | 0 |
-| `conditions.name` | 30 | 30 (100%) | 30 (100%) | 0 |
-| `conditions.description` | 30 | 0 | 15 (50%) | 0 |
-| `classes.subclassTitle` | 24 | 12 (50%) | 0 | 0 |
-| `spells.trigger` | 12 | 4 (33,3%) | 4 (33,3%) | 0 |
+| Campo                    | Chaves en | pt traduzidas | es traduzidas |  sv |
+| ------------------------ | --------: | ------------: | ------------: | --: |
+| `classes.name`           |       752 |   574 (76,3%) |   407 (54,1%) |   0 |
+| `spells.name`            |       658 |   632 (96,0%) |    658 (100%) |   0 |
+| `spells.description`     |       658 |   319 (48,5%) |   651 (98,9%) |   0 |
+| `classes.description`    |       603 |   128 (21,2%) |   188 (31,2%) |   0 |
+| `items.name`             |       467 |    467 (100%) |   326 (69,8%) |   0 |
+| `spells.material`        |       373 |    **0 (0%)** |   372 (99,7%) |   0 |
+| `items.description`      |       217 |    73 (33,6%) |   108 (49,8%) |   0 |
+| `spells.higherLevel`     |       215 |    91 (42,3%) |    215 (100%) |   0 |
+| `classes.note`           |        36 |     7 (19,4%) |             0 |   0 |
+| `conditions.name`        |        30 |     30 (100%) |     30 (100%) |   0 |
+| `conditions.description` |        30 |             0 |      15 (50%) |   0 |
+| `classes.subclassTitle`  |        24 |      12 (50%) |             0 |   0 |
+| `spells.trigger`         |        12 |     4 (33,3%) |     4 (33,3%) |   0 |
 
 Note que `pt` **não tem nenhum `spells.material` traduzido** (0 de 373) e nenhuma descrição de condição. Parte disso é esperado no pt do 5.1 (o módulo Foundry traduz algumas coisas e não outras); a lacuna do 5.2 é a documentada.
 
@@ -220,50 +221,50 @@ Dedup **exato**; um "alvo" de tradução só precisa de uma passada por string �
 
 **Dentro de cada categoria:**
 
-| Categoria | Strings | Únicas | Repetidas | Palavras economizadas |
-|---|---:|---:|---:|---:|
-| Interface | 1.652 | 1.468 | 184 | 303 |
-| 5.1 magias | 917 | 900 | 17 | 319 |
-| 5.1 itens | 337 | 334 | 3 | 95 |
-| 5.1 condições | 30 | 30 | 0 | 0 |
-| 5.1 classes | 675 | 452 | 223 | **3.567** |
-| 5.2 magias | 999 | 957 | 42 | 505 |
-| 5.2 itens | 347 | 329 | 18 | 620 |
-| 5.2 condições | 30 | 30 | 0 | 0 |
-| 5.2 classes | 740 | 461 | 279 | 1.852 |
+| Categoria     | Strings | Únicas | Repetidas | Palavras economizadas |
+| ------------- | ------: | -----: | --------: | --------------------: |
+| Interface     |   1.652 |  1.468 |       184 |                   303 |
+| 5.1 magias    |     917 |    900 |        17 |                   319 |
+| 5.1 itens     |     337 |    334 |         3 |                    95 |
+| 5.1 condições |      30 |     30 |         0 |                     0 |
+| 5.1 classes   |     675 |    452 |       223 |             **3.567** |
+| 5.2 magias    |     999 |    957 |        42 |                   505 |
+| 5.2 itens     |     347 |    329 |        18 |                   620 |
+| 5.2 condições |      30 |     30 |         0 |                     0 |
+| 5.2 classes   |     740 |    461 |       279 |                 1.852 |
 
 As **classes** têm muita repetição interna (33% das strings do 5.1 e 38% do 5.2 são repetidas; provavelmente descrições idênticas de habilidades comuns replicadas em cada classe, causa não inspecionada).
 
 **Entre categorias:** no corpo do produto há 4.282 strings distintas; **655 aparecem em mais de uma categoria** (1.413 palavras contadas uma vez). Só 7 delas têm ≥ 40 caracteres (166 palavras). As trocas mais valiosas:
 
-| Par | Strings idênticas | Palavras |
-|---|---:|---:|
-| 5.1 magias ↔ 5.2 magias | 349 | 850 |
-| 5.1 classes ↔ 5.2 classes | 119 | 282 |
-| 5.1 itens ↔ 5.2 itens | 170 | 263 |
-| 5.1 condições ↔ 5.2 condições | 15 | 15 |
-| classes / magias / itens ↔ interface | 4 a 15 cada | 4 a 16 |
+| Par                                  | Strings idênticas | Palavras |
+| ------------------------------------ | ----------------: | -------: |
+| 5.1 magias ↔ 5.2 magias              |               349 |      850 |
+| 5.1 classes ↔ 5.2 classes            |               119 |      282 |
+| 5.1 itens ↔ 5.2 itens                |               170 |      263 |
+| 5.1 condições ↔ 5.2 condições        |                15 |       15 |
+| classes / magias / itens ↔ interface |       4 a 15 cada |   4 a 16 |
 
 **Ou seja, o SRD 5.1 e o 5.2 quase não repetem texto literal** (principalmente nomes): são edições reescritas, mesmo para a mesma magia.
 
 **5.1 × 5.2 pelo mesmo id (mesma magia nas duas edições):**
 
-| Tipo | Chaves 5.1 | Chaves 5.2 | Mesma chave nos dois | Idênticas | Palavras idênticas | Quase iguais (Jaccard de palavras ≥ 0,8) | Palavras quase iguais | Palavras (lado 5.2) nas chaves comuns |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| magias | 917 | 999 | 905 | 352 | 862 | 100 | 10.171 | 42.447 |
-| itens | 337 | 347 | 221 | 170 | 263 | 3 | 72 | 1.832 |
-| condições | 30 | 30 | 30 | 15 | 15 | 0 | 0 | 969 |
-| classes | 675 | 740 | 379 | 210 | 524 | 0 | 0 | 12.904 |
+| Tipo      | Chaves 5.1 | Chaves 5.2 | Mesma chave nos dois | Idênticas | Palavras idênticas | Quase iguais (Jaccard de palavras ≥ 0,8) | Palavras quase iguais | Palavras (lado 5.2) nas chaves comuns |
+| --------- | ---------: | ---------: | -------------------: | --------: | -----------------: | ---------------------------------------: | --------------------: | ------------------------------------: |
+| magias    |        917 |        999 |                  905 |       352 |                862 |                                      100 |                10.171 |                                42.447 |
+| itens     |        337 |        347 |                  221 |       170 |                263 |                                        3 |                    72 |                                 1.832 |
+| condições |         30 |         30 |                   30 |        15 |                 15 |                                        0 |                     0 |                                   969 |
+| classes   |        675 |        740 |                  379 |       210 |                524 |                                        0 |                     0 |                                12.904 |
 
 Nas magias, 100 chaves têm texto quase igual entre as edições, **10.171 palavras**: candidatas a sugestão por correspondência fuzzy. As "idênticas" somam só 862 palavras, em sua maioria nomes.
 
 **Quase-duplicatas gerais** (método: strings com ≥ 8 palavras, dedup exato, shingles de 4 palavras minúsculas, índice invertido ignorando shingles com frequência > 200, Jaccard sobre os conjuntos de shingles, chaves diferentes): 2.032 strings comparadas (145.816 palavras).
 
 | Jaccard ≥ | Pares | Strings com ≥ 1 parceiro | Palavras nessas strings |
-|---:|---:|---:|---:|
-| 0,9 | 21 | 36 | 2.487 |
-| 0,8 | 89 | 97 | 6.884 |
-| 0,7 | 169 | 165 | 12.529 |
+| --------: | ----: | -----------------------: | ----------------------: |
+|       0,9 |    21 |                       36 |                   2.487 |
+|       0,8 |    89 |                       97 |                   6.884 |
+|       0,7 |   169 |                      165 |                  12.529 |
 
 Dos 89 pares a ≥ 0,8, **19 cruzam categorias**. O método é barato e **conservador** (shingles de 4 palavras e limite de frequência; textos reordenados escapam). Ganho possível de memória de tradução: o **dedup exato** poupa 8.699 palavras (160.246 → 151.547, **5,4%**, [MEDIDO]); as quase-duplicatas a ≥ 0,8 envolvem outras 6.884 palavras (≈ 4%) e as a ≥ 0,7, 12.529 (≈ 8%), como candidatas a correspondência fuzzy. Esses dois grupos se sobrepõem em parte, então **não os some**; e a quase-duplicata só poupa trabalho de revisão, não de tradução.
 
@@ -272,6 +273,7 @@ Dos 89 pares a ≥ 0,8, **19 cruzam categorias**. O método é barato e **conser
 **Método.** Para cada arquivo-fonte em inglês, replay de `git log --first-parent --reverse -- <arquivo>`; compara os mapas chave→string de versões consecutivas. "Adicionada" = chave nova ou antes vazia; "alterada" = valor não vazio que mudou; palavras = as do valor **novo**. Data = data do commit (squash/merge na `main`).
 
 **Ruído, explícito:**
+
 - O histórico é linear (0 merges, 402 commits), mas **um commit de formatação ou de reimportação pode reescrever o valor** (por exemplo, o commit `f3c99541` de 2026-11-01, "condições nas magias e no combate", "alterou" 39.083 palavras de magias 5.2 e 15.109 de 5.1, provavelmente só para inserir as tags `{@condition …}`; isso é re-marcação, não texto novo, mas o script não distingue).
 - Em `messages/en.json` não há commits de maio a setembro de 2026: hiato entre abril e outubro (causa não investigada). Média mensal depende de como se conta esses meses.
 - O repositório tem 9 meses de vida, mas o conteúdo de regras em arquivo existe há **5 semanas** (primeiro commit 2026-10-21). Não há série longa para extrapolar.
@@ -279,13 +281,13 @@ Dos 89 pares a ≥ 0,8, **19 cruzam categorias**. O método é barato e **conser
 
 ### 8.1 Interface (`messages/en.json`), 125 commits
 
-| Mês | Commits | Chaves adicionadas | Palavras adicionadas | Chaves alteradas | Palavras alteradas | Chaves removidas |
-|---|---:|---:|---:|---:|---:|---:|
-| 2026-02 | 6 | 97 | 272 | 0 | 0 | 0 |
-| 2026-03 | 26 | 298 | 1.404 | 9 | 12 | 18 |
-| 2026-04 | 13 | 122 | 299 | 4 | 15 | 0 |
-| 2026-10 | 28 | 348 | 1.978 | 38 | 969 | 50 |
-| 2026-11 (até dia 27) | 52 | 907 | 4.889 | 211 | 2.458 | 52 |
+| Mês                  | Commits | Chaves adicionadas | Palavras adicionadas | Chaves alteradas | Palavras alteradas | Chaves removidas |
+| -------------------- | ------: | -----------------: | -------------------: | ---------------: | -----------------: | ---------------: |
+| 2026-02              |       6 |                 97 |                  272 |                0 |                  0 |                0 |
+| 2026-03              |      26 |                298 |                1.404 |                9 |                 12 |               18 |
+| 2026-04              |      13 |                122 |                  299 |                4 |                 15 |                0 |
+| 2026-10              |      28 |                348 |                1.978 |               38 |                969 |               50 |
+| 2026-11 (até dia 27) |      52 |                907 |                4.889 |              211 |              2.458 |               52 |
 
 - Palavras (adicionadas + alteradas) por mês de atividade: média **2.459**, mediana **1.416**, máximo 7.347 (novembro).
 - **Estimativa de ritmo atual:** média de outubro e novembro = **5.147 palavras/mês** (adicionadas 3.434 + alteradas 1.714), ou **~1.400 a ~5.100 palavras/mês** como faixa realista. Em chaves, **~350 a ~900 novas por mês** recentemente. [ESTIMATIVA sobre 2 meses, alta variância.]
@@ -294,25 +296,25 @@ Dos 89 pares a ≥ 0,8, **19 cruzam categorias**. O método é barato e **conser
 
 ### 8.2 Regras (8 arquivos `i18n/en/*.json`), 17 commits de arquivo
 
-| Data | Commit | Arquivo | Chaves + | Palavras + | Chaves ~ | Palavras ~ |
-|---|---|---|---:|---:|---:|---:|
-| 2026-10-21 | `5eadcb0a` | 5.1 magias | 912 | 50.438 | 0 | 0 |
-| 2026-10-22 | `22cc3e91` | 5.1 magias | 1 | 26 | 0 | 0 |
-| 2026-10-22 | `21be6722` | 5.2 magias | 991 | 43.360 | 0 | 0 |
-| 2026-10-23 | `d0644b07` | 5.1 magias | 4 | 67 | 0 | 0 |
-| 2026-10-23 | `d0644b07` | 5.2 magias | 8 | 136 | 0 | 0 |
-| 2026-11-01 | `f3c99541` | 5.1 magias | 0 | 0 | 83 | 15.109 |
-| 2026-11-01 | `f3c99541` | 5.1 condições | 30 | 821 | 0 | 0 |
-| 2026-11-01 | `f3c99541` | 5.2 magias | 0 | 0 | 387 | 39.083 |
-| 2026-11-01 | `f3c99541` | 5.2 condições | 30 | 969 | 0 | 0 |
-| 2026-11-03 | `db5ba784` | 5.1 itens | 337 | 3.645 | 0 | 0 |
-| 2026-11-03 | `db5ba784` | 5.2 itens | 347 | 6.034 | 0 | 0 |
-| 2026-11-13 | `9be56f6c` | 5.1 classes | 668 | 22.652 | 0 | 0 |
-| 2026-11-13 | `9be56f6c` | 5.2 classes | 732 | 21.282 | 0 | 0 |
-| 2026-11-23 | `9156c31d` | 5.1 classes | 1 | 11 | 0 | 0 |
-| 2026-11-23 | `9156c31d` | 5.2 classes | 2 | 25 | 1 | 15 |
-| 2026-11-26 | `91c07a23` | 5.1 classes | 6 | 41 | 0 | 0 |
-| 2026-11-26 | `91c07a23` | 5.2 classes | 6 | 41 | 0 | 0 |
+| Data       | Commit     | Arquivo       | Chaves + | Palavras + | Chaves ~ | Palavras ~ |
+| ---------- | ---------- | ------------- | -------: | ---------: | -------: | ---------: |
+| 2026-10-21 | `5eadcb0a` | 5.1 magias    |      912 |     50.438 |        0 |          0 |
+| 2026-10-22 | `22cc3e91` | 5.1 magias    |        1 |         26 |        0 |          0 |
+| 2026-10-22 | `21be6722` | 5.2 magias    |      991 |     43.360 |        0 |          0 |
+| 2026-10-23 | `d0644b07` | 5.1 magias    |        4 |         67 |        0 |          0 |
+| 2026-10-23 | `d0644b07` | 5.2 magias    |        8 |        136 |        0 |          0 |
+| 2026-11-01 | `f3c99541` | 5.1 magias    |        0 |          0 |       83 |     15.109 |
+| 2026-11-01 | `f3c99541` | 5.1 condições |       30 |        821 |        0 |          0 |
+| 2026-11-01 | `f3c99541` | 5.2 magias    |        0 |          0 |      387 |     39.083 |
+| 2026-11-01 | `f3c99541` | 5.2 condições |       30 |        969 |        0 |          0 |
+| 2026-11-03 | `db5ba784` | 5.1 itens     |      337 |      3.645 |        0 |          0 |
+| 2026-11-03 | `db5ba784` | 5.2 itens     |      347 |      6.034 |        0 |          0 |
+| 2026-11-13 | `9be56f6c` | 5.1 classes   |      668 |     22.652 |        0 |          0 |
+| 2026-11-13 | `9be56f6c` | 5.2 classes   |      732 |     21.282 |        0 |          0 |
+| 2026-11-23 | `9156c31d` | 5.1 classes   |        1 |         11 |        0 |          0 |
+| 2026-11-23 | `9156c31d` | 5.2 classes   |        2 |         25 |        1 |         15 |
+| 2026-11-26 | `91c07a23` | 5.1 classes   |        6 |         41 |        0 |          0 |
+| 2026-11-26 | `91c07a23` | 5.2 classes   |        6 |         41 |        0 |          0 |
 
 **Leitura.** O conteúdo de regras **não cresce de forma contínua: cresce por eventos de importação** (magias em 2026-10-21/22, itens em 11-03, classes em 11-13). Entre importações, o fluxo é de dezenas de palavras (11-23 e 11-26). Portanto **não existe um "ritmo mensal" estável de regras**; os números por mês seriam artefato de quando um novo tipo foi importado. Em vez disso, o que importa é o **roteiro de importações futuras**: o plano `2026-11-26-srd-o-que-falta.md` lista espécies, antecedentes, talentos, itens mágicos, maestria de armas, glossário de regras e **criaturas (~320 a 330 por edição)**. Isso **não está medido** (ainda não existe no repositório), mas as magias sozinhas (~50 mil palavras por edição) mostram que a escala de um bestiário completo pode ser da mesma ordem do corpo atual inteiro, ou maior.
 
@@ -325,6 +327,7 @@ Dos 89 pares a ≥ 0,8, **19 cruzam categorias**. O método é barato e **conser
 ## 9. Projeções [PROJEÇÃO, aritmética, não medição]
 
 **Suposições** (as mesmas da saída completa):
+
 - Fonte atual: **corpo do produto** = Interface + SRD 5.1 + SRD 5.2 = 160.246 palavras, 932.990 caracteres.
 - Saída por idioma-alvo: caracteres = fonte × **1,116**; palavras = fonte × **1,074** (média de pt e es medidos; **sv sem medição**); tokens de saída = caracteres de saída / 3,5 [ESTIMATIVA].
 - Tokens de entrada = caracteres da fonte / 4, **reenviados uma vez por idioma** (sem agrupar idiomas numa chamada) [ESTIMATIVA].
@@ -334,23 +337,23 @@ Dos 89 pares a ≥ 0,8, **19 cruzam categorias**. O método é barato e **conser
 ### 9.1 Base: corpo do produto, todas as strings, sem dedup (160.246 palavras / 932.990 caracteres)
 
 | Conteúdo | Idiomas-alvo | Palavras de fonte | Palavras de saída | Caracteres de saída | Tokens de entrada (est.) | Tokens de saída (est.) |
-|---|---:|---:|---:|---:|---:|---:|
-| 1× | 2 | 160.246 | 344.132 | 2.081.985 | 466.495 | 594.853 |
-| 1× | 5 | 160.246 | 860.329 | 5.204.963 | 1.166.238 | 1.487.132 |
-| 1× | 10 | 160.246 | 1.720.659 | 10.409.926 | 2.332.475 | 2.974.265 |
-| 1× | 20 | 160.246 | 3.441.318 | 20.819.852 | 4.664.950 | 5.948.529 |
-| 2× | 2 | 320.492 | 688.264 | 4.163.970 | 932.990 | 1.189.706 |
-| 2× | 5 | 320.492 | 1.720.659 | 10.409.926 | 2.332.475 | 2.974.265 |
-| 2× | 10 | 320.492 | 3.441.318 | 20.819.852 | 4.664.950 | 5.948.529 |
-| 2× | 20 | 320.492 | 6.882.636 | 41.639.705 | 9.329.900 | 11.897.059 |
-| 5× | 2 | 801.230 | 1.720.659 | 10.409.926 | 2.332.475 | 2.974.265 |
-| 5× | 5 | 801.230 | 4.301.647 | 26.024.816 | 5.831.188 | 7.435.662 |
-| 5× | 10 | 801.230 | 8.603.295 | 52.049.631 | 11.662.375 | 14.871.323 |
-| 5× | 20 | 801.230 | 17.206.589 | 104.099.262 | 23.324.750 | 29.742.646 |
-| 10× | 2 | 1.602.460 | 3.441.318 | 20.819.852 | 4.664.950 | 5.948.529 |
-| 10× | 5 | 1.602.460 | 8.603.295 | 52.049.631 | 11.662.375 | 14.871.323 |
-| 10× | 10 | 1.602.460 | 17.206.589 | 104.099.262 | 23.324.750 | 29.742.646 |
-| 10× | 20 | 1.602.460 | 34.413.178 | 208.198.524 | 46.649.500 | 59.485.293 |
+| -------- | -----------: | ----------------: | ----------------: | ------------------: | -----------------------: | ---------------------: |
+| 1×       |            2 |           160.246 |           344.132 |           2.081.985 |                  466.495 |                594.853 |
+| 1×       |            5 |           160.246 |           860.329 |           5.204.963 |                1.166.238 |              1.487.132 |
+| 1×       |           10 |           160.246 |         1.720.659 |          10.409.926 |                2.332.475 |              2.974.265 |
+| 1×       |           20 |           160.246 |         3.441.318 |          20.819.852 |                4.664.950 |              5.948.529 |
+| 2×       |            2 |           320.492 |           688.264 |           4.163.970 |                  932.990 |              1.189.706 |
+| 2×       |            5 |           320.492 |         1.720.659 |          10.409.926 |                2.332.475 |              2.974.265 |
+| 2×       |           10 |           320.492 |         3.441.318 |          20.819.852 |                4.664.950 |              5.948.529 |
+| 2×       |           20 |           320.492 |         6.882.636 |          41.639.705 |                9.329.900 |             11.897.059 |
+| 5×       |            2 |           801.230 |         1.720.659 |          10.409.926 |                2.332.475 |              2.974.265 |
+| 5×       |            5 |           801.230 |         4.301.647 |          26.024.816 |                5.831.188 |              7.435.662 |
+| 5×       |           10 |           801.230 |         8.603.295 |          52.049.631 |               11.662.375 |             14.871.323 |
+| 5×       |           20 |           801.230 |        17.206.589 |         104.099.262 |               23.324.750 |             29.742.646 |
+| 10×      |            2 |         1.602.460 |         3.441.318 |          20.819.852 |                4.664.950 |              5.948.529 |
+| 10×      |            5 |         1.602.460 |         8.603.295 |          52.049.631 |               11.662.375 |             14.871.323 |
+| 10×      |           10 |         1.602.460 |        17.206.589 |         104.099.262 |               23.324.750 |             29.742.646 |
+| 10×      |           20 |         1.602.460 |        34.413.178 |         208.198.524 |               46.649.500 |             59.485.293 |
 
 **Pontos de referência dentro da tabela:** o caso "1× e 2 idiomas" é ~0,6 milhão de tokens de saída; o caso "1× e 3 idiomas" (pt, es, sv, completando o que falta) seria ~0,89 milhão de tokens de saída estimados, **mas** a maior parte do `es` e parte do `pt` já existe, então o **trabalho real hoje é bem menor que o "do zero"**: ficam por traduzir 88.219 palavras (pt) + 43.441 (es) + 160.246 (sv) = **291.906 palavras-fonte** (seção 6.1, [MEDIDO]).
 
@@ -377,21 +380,21 @@ Só se um dia a documentação fosse traduzida (hoje **nada indica isso**; é pa
 
 ## Nível de confiança
 
-| Afirmação | Confiança | Motivo |
-|---|---|---|
-| Contagens de arquivos, strings, palavras e caracteres por categoria | alto | contagem direta por script, reproduzível |
-| Strings únicas e duplicidade exata | alto | dedup por igualdade de string |
-| Coincide com o Crowdin (~5,4 mil strings, ~158 mil palavras) | médio | o número do Crowdin vem do pedido, não verificado por mim |
-| Cobertura por idioma (traduzida / vazia / ausente) | alto | contagem direta dos JSON |
-| `es` cobre mais palavras que `pt` | alto | consequência das contagens |
-| Estimativas de token | baixo a médio | heurística `chars/4` e `chars/3,5`, sem tokenizador |
-| Expansão pt 1,096× e es 1,135× em caracteres | médio | medida em pares reais, mas viés de seleção |
-| Expansão sv | baixo | sem dado; é suposição |
-| "Possivelmente desatualizado" via git | baixo | proxy com falsos positivos e negativos; o 0 das regras é pouco informativo |
-| Quase-duplicatas | médio | método simples, conservador |
-| Ritmo mensal da interface (1,4 a 5,1 mil palavras) | médio-baixo | só 2 meses recentes com atividade, hiato de 6 meses antes |
-| Regras crescem por eventos, sem ritmo mensal | médio | 17 commits em 5 semanas; padrão pode mudar |
-| Projeções | alto como aritmética, baixo como previsão | dependem dos fatores acima e de multiplicadores arbitrários (1×–10×, 2–20 idiomas) |
+| Afirmação                                                           | Confiança                                 | Motivo                                                                             |
+| ------------------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------- |
+| Contagens de arquivos, strings, palavras e caracteres por categoria | alto                                      | contagem direta por script, reproduzível                                           |
+| Strings únicas e duplicidade exata                                  | alto                                      | dedup por igualdade de string                                                      |
+| Coincide com o Crowdin (~5,4 mil strings, ~158 mil palavras)        | médio                                     | o número do Crowdin vem do pedido, não verificado por mim                          |
+| Cobertura por idioma (traduzida / vazia / ausente)                  | alto                                      | contagem direta dos JSON                                                           |
+| `es` cobre mais palavras que `pt`                                   | alto                                      | consequência das contagens                                                         |
+| Estimativas de token                                                | baixo a médio                             | heurística `chars/4` e `chars/3,5`, sem tokenizador                                |
+| Expansão pt 1,096× e es 1,135× em caracteres                        | médio                                     | medida em pares reais, mas viés de seleção                                         |
+| Expansão sv                                                         | baixo                                     | sem dado; é suposição                                                              |
+| "Possivelmente desatualizado" via git                               | baixo                                     | proxy com falsos positivos e negativos; o 0 das regras é pouco informativo         |
+| Quase-duplicatas                                                    | médio                                     | método simples, conservador                                                        |
+| Ritmo mensal da interface (1,4 a 5,1 mil palavras)                  | médio-baixo                               | só 2 meses recentes com atividade, hiato de 6 meses antes                          |
+| Regras crescem por eventos, sem ritmo mensal                        | médio                                     | 17 commits em 5 semanas; padrão pode mudar                                         |
+| Projeções                                                           | alto como aritmética, baixo como previsão | dependem dos fatores acima e de multiplicadores arbitrários (1×–10×, 2–20 idiomas) |
 
 ## Perguntas em aberto
 

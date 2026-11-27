@@ -8,194 +8,189 @@ Para regenerar: copiar de novo a seção "Fontes" de cada doc abaixo.
 
 ## Plataformas e ferramentas ([03-market-research.md](03-market-research.md))
 
-
-| Área | URL | Data de verificação |
-|---|---|---|
-| Weblate: preços/Libre/hosting | https://weblate.org/en/hosting/ | 2026-11-27 |
-| Weblate: Libre e trial | https://weblate.org/try/ | 2026-11-27 |
-| Weblate: critérios Libre (2020) | https://weblate.org/news/archive/weblate-even-more-open-now/ | 2026-11-27 |
-| Weblate: fila Libre (2024-07-01) | https://weblate.org/news/archive/versions-libre-projects-company/ | 2026-11-27 |
-| Weblate: relato de remoção (2023) | https://lists.gnu.org:443/archive/html/js-shield/2023-09/msg00011.html | 2026-11-27 (via busca; trecho de resultado) |
-| Weblate: instalação/requisitos | https://docs.weblate.org/en/latest/admin/install.html | 2026-11-27 |
-| Weblate: Docker/workers/RAM | https://docs.weblate.org/en/latest/admin/install/docker.html | 2026-11-27 |
-| Weblate: MT | https://docs.weblate.org/en/latest/admin/machine.html | 2026-11-27 |
-| Weblate: add-ons | https://docs.weblate.org/en/latest/admin/addons.html | 2026-11-27 |
-| Weblate: formatos | https://docs.weblate.org/en/latest/formats.html | 2026-11-27 |
-| Weblate: checagens | https://docs.weblate.org/en/latest/user/checks.html | 2026-11-27 |
-| Weblate: integração contínua | https://docs.weblate.org/en/latest/admin/continuous.html | 2026-11-27 |
-| Weblate: VCS/PR | https://docs.weblate.org/en/latest/vcs.html | 2026-11-27 |
-| Weblate: backup | https://docs.weblate.org/en/latest/admin/backup.html | 2026-11-27 |
-| Weblate: licença | https://docs.weblate.org/en/latest/contributing/license.html | 2026-11-27 |
-| Weblate: repo e releases | https://api.github.com/repos/WeblateOrg/weblate (e `/releases`) | 2026-11-27 |
-| Weblate: Docker Hub | https://hub.docker.com/r/weblate/weblate/tags | 2026-11-27 |
-| Tolgee: repo/releases | https://api.github.com/repos/tolgee/tolgee-platform (e `/releases`) | 2026-11-27 |
-| Tolgee: licença | https://raw.githubusercontent.com/tolgee/tolgee-platform/main/LICENSE e `/ee/LICENSE` | 2026-11-27 |
-| Tolgee: preços self-hosted | https://tolgee.io/pricing/self-hosted | 2026-11-27 |
-| Tolgee: preços cloud | https://tolgee.io/pricing | 2026-11-27 |
-| Tolgee: requisitos | https://docs.tolgee.io/platform/self_hosting/getting_started | 2026-11-27 |
-| Tolgee: Docker | https://docs.tolgee.io/platform/self_hosting/running_with_docker | 2026-11-27 |
-| Tolgee: MT | https://docs.tolgee.io/platform/translation_process/machine_translation | 2026-11-27 |
-| Tolgee: licenciamento | https://docs.tolgee.io/platform/self_hosting/licensing | 2026-11-27 |
-| Pontoon: repo/releases | https://api.github.com/repos/mozilla/pontoon (e `/releases`) | 2026-11-27 |
-| Pontoon: README | https://raw.githubusercontent.com/mozilla/pontoon/main/README.md | 2026-11-27 |
-| Pontoon: deploy | https://pontoon.mozilla.org/docs/dev/deployment/ | 2026-11-27 |
-| Pontoon: admin | https://pontoon.mozilla.org/docs/admin/ | 2026-11-27 |
-| Traduora: repo/releases/commits | https://api.github.com/repos/ever-co/ever-traduora (e `/releases`, `/commits`) | 2026-11-27 |
-| Traduora: README | https://raw.githubusercontent.com/ever-co/ever-traduora/develop/README.md | 2026-11-27 |
-| Localazy: preços | https://localazy.com/pricing | 2026-11-27 |
-| Crowdin: programa OSS | https://crowdin.com/product/for-open-source | 2026-11-27 |
-| Crowdin: preços | https://crowdin.com/pricing | 2026-11-27 |
-| Transifex: programa OSS | https://www.transifex.com/open-source/ | 2026-11-27 |
-| Accent | https://api.github.com/repos/mirego/accent e README raw | 2026-11-27 |
-| Texterify | https://api.github.com/repos/txty-io/texterify, https://github.com/texterify/texterify, https://texterify.com/pricing | 2026-11-27 |
-| Inlang | https://raw.githubusercontent.com/opral/inlang/main/README.md, https://api.github.com/repos/opral/inlang | 2026-11-27 |
-| Inlang CLI | https://inlang.com/m/2qj2w8pu/app-inlang-cli | 2026-11-27 |
-| Fink | https://fink.inlang.com/ | 2026-11-27 |
-| Paraglide | https://api.github.com/repos/opral/paraglide-js | 2026-11-27 |
-| Lingo.dev | https://api.github.com/repos/lingodotdev/lingo.dev, https://github.com/lingodotdev/lingo.dev, https://lingo.dev/en/pricing, https://lingo.dev/en/cli/fundamentals/how-it-works, https://lingo.dev/en/docs/devtools/cli-v0 | 2026-11-27 |
-| i18n-ai-translate | https://api.github.com/repos/taahamahdi/i18n-ai-translate, https://unpkg.com/i18n-ai-translate@5.1.0/README.md, https://registry.npmjs.org/i18n-ai-translate | 2026-11-27 |
-| Languine | https://api.github.com/repos/languine-ai/languine | 2026-11-27 |
-| LibreTranslate | https://api.github.com/repos/LibreTranslate/LibreTranslate | 2026-11-27 |
-| Zanata, Pootle, Mojito | https://api.github.com/repos/zanata/zanata-platform; https://api.github.com/repos/translate/pootle (+`/releases`); https://api.github.com/repos/box/mojito (+`/releases`); busca com comunicados Red Hat/Fedora/OpenStack | 2026-11-27 |
-| Okapi, OmegaT | https://gitlab.com/okapiframework/Okapi; https://omegat.org/ | 2026-11-27 |
+| Área                              | URL                                                                                                                                                                                                                       | Data de verificação                         |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Weblate: preços/Libre/hosting     | https://weblate.org/en/hosting/                                                                                                                                                                                           | 2026-11-27                                  |
+| Weblate: Libre e trial            | https://weblate.org/try/                                                                                                                                                                                                  | 2026-11-27                                  |
+| Weblate: critérios Libre (2020)   | https://weblate.org/news/archive/weblate-even-more-open-now/                                                                                                                                                              | 2026-11-27                                  |
+| Weblate: fila Libre (2024-07-01)  | https://weblate.org/news/archive/versions-libre-projects-company/                                                                                                                                                         | 2026-11-27                                  |
+| Weblate: relato de remoção (2023) | https://lists.gnu.org:443/archive/html/js-shield/2023-09/msg00011.html                                                                                                                                                    | 2026-11-27 (via busca; trecho de resultado) |
+| Weblate: instalação/requisitos    | https://docs.weblate.org/en/latest/admin/install.html                                                                                                                                                                     | 2026-11-27                                  |
+| Weblate: Docker/workers/RAM       | https://docs.weblate.org/en/latest/admin/install/docker.html                                                                                                                                                              | 2026-11-27                                  |
+| Weblate: MT                       | https://docs.weblate.org/en/latest/admin/machine.html                                                                                                                                                                     | 2026-11-27                                  |
+| Weblate: add-ons                  | https://docs.weblate.org/en/latest/admin/addons.html                                                                                                                                                                      | 2026-11-27                                  |
+| Weblate: formatos                 | https://docs.weblate.org/en/latest/formats.html                                                                                                                                                                           | 2026-11-27                                  |
+| Weblate: checagens                | https://docs.weblate.org/en/latest/user/checks.html                                                                                                                                                                       | 2026-11-27                                  |
+| Weblate: integração contínua      | https://docs.weblate.org/en/latest/admin/continuous.html                                                                                                                                                                  | 2026-11-27                                  |
+| Weblate: VCS/PR                   | https://docs.weblate.org/en/latest/vcs.html                                                                                                                                                                               | 2026-11-27                                  |
+| Weblate: backup                   | https://docs.weblate.org/en/latest/admin/backup.html                                                                                                                                                                      | 2026-11-27                                  |
+| Weblate: licença                  | https://docs.weblate.org/en/latest/contributing/license.html                                                                                                                                                              | 2026-11-27                                  |
+| Weblate: repo e releases          | https://api.github.com/repos/WeblateOrg/weblate (e `/releases`)                                                                                                                                                           | 2026-11-27                                  |
+| Weblate: Docker Hub               | https://hub.docker.com/r/weblate/weblate/tags                                                                                                                                                                             | 2026-11-27                                  |
+| Tolgee: repo/releases             | https://api.github.com/repos/tolgee/tolgee-platform (e `/releases`)                                                                                                                                                       | 2026-11-27                                  |
+| Tolgee: licença                   | https://raw.githubusercontent.com/tolgee/tolgee-platform/main/LICENSE e `/ee/LICENSE`                                                                                                                                     | 2026-11-27                                  |
+| Tolgee: preços self-hosted        | https://tolgee.io/pricing/self-hosted                                                                                                                                                                                     | 2026-11-27                                  |
+| Tolgee: preços cloud              | https://tolgee.io/pricing                                                                                                                                                                                                 | 2026-11-27                                  |
+| Tolgee: requisitos                | https://docs.tolgee.io/platform/self_hosting/getting_started                                                                                                                                                              | 2026-11-27                                  |
+| Tolgee: Docker                    | https://docs.tolgee.io/platform/self_hosting/running_with_docker                                                                                                                                                          | 2026-11-27                                  |
+| Tolgee: MT                        | https://docs.tolgee.io/platform/translation_process/machine_translation                                                                                                                                                   | 2026-11-27                                  |
+| Tolgee: licenciamento             | https://docs.tolgee.io/platform/self_hosting/licensing                                                                                                                                                                    | 2026-11-27                                  |
+| Pontoon: repo/releases            | https://api.github.com/repos/mozilla/pontoon (e `/releases`)                                                                                                                                                              | 2026-11-27                                  |
+| Pontoon: README                   | https://raw.githubusercontent.com/mozilla/pontoon/main/README.md                                                                                                                                                          | 2026-11-27                                  |
+| Pontoon: deploy                   | https://pontoon.mozilla.org/docs/dev/deployment/                                                                                                                                                                          | 2026-11-27                                  |
+| Pontoon: admin                    | https://pontoon.mozilla.org/docs/admin/                                                                                                                                                                                   | 2026-11-27                                  |
+| Traduora: repo/releases/commits   | https://api.github.com/repos/ever-co/ever-traduora (e `/releases`, `/commits`)                                                                                                                                            | 2026-11-27                                  |
+| Traduora: README                  | https://raw.githubusercontent.com/ever-co/ever-traduora/develop/README.md                                                                                                                                                 | 2026-11-27                                  |
+| Localazy: preços                  | https://localazy.com/pricing                                                                                                                                                                                              | 2026-11-27                                  |
+| Crowdin: programa OSS             | https://crowdin.com/product/for-open-source                                                                                                                                                                               | 2026-11-27                                  |
+| Crowdin: preços                   | https://crowdin.com/pricing                                                                                                                                                                                               | 2026-11-27                                  |
+| Transifex: programa OSS           | https://www.transifex.com/open-source/                                                                                                                                                                                    | 2026-11-27                                  |
+| Accent                            | https://api.github.com/repos/mirego/accent e README raw                                                                                                                                                                   | 2026-11-27                                  |
+| Texterify                         | https://api.github.com/repos/txty-io/texterify, https://github.com/texterify/texterify, https://texterify.com/pricing                                                                                                     | 2026-11-27                                  |
+| Inlang                            | https://raw.githubusercontent.com/opral/inlang/main/README.md, https://api.github.com/repos/opral/inlang                                                                                                                  | 2026-11-27                                  |
+| Inlang CLI                        | https://inlang.com/m/2qj2w8pu/app-inlang-cli                                                                                                                                                                              | 2026-11-27                                  |
+| Fink                              | https://fink.inlang.com/                                                                                                                                                                                                  | 2026-11-27                                  |
+| Paraglide                         | https://api.github.com/repos/opral/paraglide-js                                                                                                                                                                           | 2026-11-27                                  |
+| Lingo.dev                         | https://api.github.com/repos/lingodotdev/lingo.dev, https://github.com/lingodotdev/lingo.dev, https://lingo.dev/en/pricing, https://lingo.dev/en/cli/fundamentals/how-it-works, https://lingo.dev/en/docs/devtools/cli-v0 | 2026-11-27                                  |
+| i18n-ai-translate                 | https://api.github.com/repos/taahamahdi/i18n-ai-translate, https://unpkg.com/i18n-ai-translate@5.1.0/README.md, https://registry.npmjs.org/i18n-ai-translate                                                              | 2026-11-27                                  |
+| Languine                          | https://api.github.com/repos/languine-ai/languine                                                                                                                                                                         | 2026-11-27                                  |
+| LibreTranslate                    | https://api.github.com/repos/LibreTranslate/LibreTranslate                                                                                                                                                                | 2026-11-27                                  |
+| Zanata, Pootle, Mojito            | https://api.github.com/repos/zanata/zanata-platform; https://api.github.com/repos/translate/pootle (+`/releases`); https://api.github.com/repos/box/mojito (+`/releases`); busca com comunicados Red Hat/Fedora/OpenStack | 2026-11-27                                  |
+| Okapi, OmegaT                     | https://gitlab.com/okapiframework/Okapi; https://omegat.org/                                                                                                                                                              | 2026-11-27                                  |
 
 ## Motores de tradução ([04-translation-engines.md](04-translation-engines.md))
 
-
 Todas verificadas em 2026-11-27 (data da pesquisa).
 
-| Área da afirmação | URL | Data verificada |
-|---|---|---|
-| TranslateGemma: anúncio, tamanhos, WMT24++ | https://blog.google/innovation-and-ai/technology/developers-tools/translategemma/ | 2026-11-27 |
-| TranslateGemma: relatório técnico (resumo) | https://arxiv.org/abs/2601.09012 | 2026-11-27 |
-| TranslateGemma 12B: licença "gemma", MetricX, 2K contexto, template | https://huggingface.co/google/translategemma-12b-it | 2026-11-27 |
-| TranslateGemma 4B: treino, avaliação, limitações | https://huggingface.co/google/translategemma-4b-it | 2026-11-27 |
-| Gemma Terms of Use (definição de Model Derivatives, redistribuição) | https://gemma.ai/resources/terms/ (redirecionado de https://ai.google.dev/gemma/terms) | 2026-11-27 |
-| Gemma 4: anúncio, tamanhos, Apache 2.0, 2026-04-02 | https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/ | 2026-11-27 |
-| Gemma 4: Apache 2.0 (blog open source) | https://opensource.googleblog.com/2026/03/gemma-4-expanding-the-gemmaverse-with-apache-20.html | 2026-11-27 |
-| Gemma 4 E4B: licença, parâmetros, contexto, idiomas | https://huggingface.co/google/gemma-4-E4B-it | 2026-11-27 |
-| Qwen3.5-9B: licença, benchmarks, thinking | https://huggingface.co/Qwen/Qwen3.5-9B | 2026-11-27 |
-| Qwen3.5 small (lançamento, Apache 2.0) | https://artificialanalysis.ai/articles/qwen3-5-small-models | 2026-11-27 |
-| Tower+ 9B: licença, idiomas, base | https://huggingface.co/Unbabel/Tower-Plus-9B | 2026-11-27 |
-| Tower+: paper (WMT24++ xCOMET, IF-MT) | https://arxiv.org/html/2506.17080 | 2026-11-27 |
-| TowerInstruct v0.1: CC-BY-NC | https://huggingface.co/Unbabel/TowerInstruct-7B-v0.1 | 2026-11-27 |
-| Seed-X-PPO-7B: card, idiomas, OpenMDW | https://huggingface.co/ByteDance-Seed/Seed-X-PPO-7B | 2026-11-27 |
-| Seed-X: texto da licença OpenMDW-1.0 | https://huggingface.co/ByteDance-Seed/Seed-X-PPO-7B/blob/main/LICENSE | 2026-11-27 |
-| Seed-X: paper (COMET, humano en→pt) | https://arxiv.org/html/2507.13618v2 | 2026-11-27 |
-| Hunyuan-MT-7B: card | https://huggingface.co/tencent/Hunyuan-MT-7B | 2026-11-27 |
-| Hunyuan-MT-7B: licença (Território, MAU, §5(b)) | https://huggingface.co/tencent/Hunyuan-MT-7B/blob/main/License.txt | 2026-11-27 |
-| HY-MT1.5-7B: card (templates de terminologia, contexto, formato) | https://huggingface.co/tencent/HY-MT1.5-7B | 2026-11-27 |
-| HY-MT1.5: licença (Tencent HY, 2025-12-30) | https://huggingface.co/tencent/HY-MT1.5-7B/blob/main/License.txt | 2026-11-27 |
-| HY-MT1.5: relatório técnico | https://arxiv.org/html/2512.24092v1 | 2026-11-27 |
-| NLLB-200: cc-by-nc-4.0, "not for production" | https://huggingface.co/facebook/nllb-200-distilled-600M | 2026-11-27 |
-| MADLAD-400: Apache 2.0, tamanhos, limitações | https://huggingface.co/google/madlad400-10b-mt | 2026-11-27 |
-| OPUS-MT tc-big en-pt: CC-BY-4.0, chrF/BLEU, tokens `pob`/`por` | https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt | 2026-11-27 |
-| EuroLLM-9B-Instruct: Apache 2.0, idiomas | https://huggingface.co/utter-project/EuroLLM-9B-Instruct | 2026-11-27 |
-| Aya Expanse 8B: cc-by-nc-4.0 | https://huggingface.co/CohereLabs/aya-expanse-8b | 2026-11-27 |
-| Ministral 3 (Apache 2.0, tamanhos) | https://docs.mistral.ai/models/ministral-3-8b-25-12.md | 2026-11-27 (via busca) |
-| CTranslate2: MIT, famílias, quantização, desempenho | https://github.com/OpenNMT/CTranslate2 | 2026-11-27 |
-| LibreTranslate: AGPL-3.0, Argos | https://github.com/LibreTranslate/LibreTranslate | 2026-11-27 |
-| Argos Translate: MIT/CC0, idiomas | https://github.com/argosopentech/argos-translate | 2026-11-27 |
-| llama.cpp: MIT, servidor OpenAI-compatível | https://github.com/ggml-org/llama.cpp | 2026-11-27 |
-| Ollama: MIT | https://github.com/ollama/ollama | 2026-11-27 |
-| Ollama: concorrência, contexto 4096, keep-alive | https://docs.ollama.com/faq | 2026-11-27 |
-| NVIDIA RTX 5070 Laptop: 8/12 GB GDDR7, 384 GB/s | https://www.nvidia.com/en-us/geforce/laptops/50-series/ | 2026-11-27 |
-| Vazão reportada (terceiro, método não declarado) | https://llmrun.dev/gpu/rtx-5070-laptop | 2026-11-27 (via busca) |
-| COMET wmt22-comet-da: Apache-2.0 | https://huggingface.co/Unbabel/wmt22-comet-da | 2026-11-27 |
-| CometKiwi wmt22-cometkiwi-da: cc-by-nc-sa-4.0 | https://huggingface.co/Unbabel/wmt22-cometkiwi-da | 2026-11-27 |
-| WMT25 findings (lista de sistemas, ESA) | https://aclanthology.org/2025.wmt-1.22 | 2026-11-27 (via busca) |
-| Claude Code: legal e conformidade, autenticação | https://code.claude.com/docs/en/legal-and-compliance.md | 2026-11-27 |
-| Anthropic: Agent SDK com plano (atualizações 2026-06-15 e 2026-10-07) | https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan | 2026-11-27 |
-| Anthropic: termos de consumidor (acesso automatizado) | https://www.anthropic.com/legal/consumer-terms | 2026-11-27 |
-| Repositório local (contagens e exemplos) | `messages/{en,pt}.json`, `content/dnd5e/srd-5.{1,2}/i18n/{en,pt}/*.json` | 2026-11-27 |
+| Área da afirmação                                                     | URL                                                                                            | Data verificada        |
+| --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------- |
+| TranslateGemma: anúncio, tamanhos, WMT24++                            | https://blog.google/innovation-and-ai/technology/developers-tools/translategemma/              | 2026-11-27             |
+| TranslateGemma: relatório técnico (resumo)                            | https://arxiv.org/abs/2601.09012                                                               | 2026-11-27             |
+| TranslateGemma 12B: licença "gemma", MetricX, 2K contexto, template   | https://huggingface.co/google/translategemma-12b-it                                            | 2026-11-27             |
+| TranslateGemma 4B: treino, avaliação, limitações                      | https://huggingface.co/google/translategemma-4b-it                                             | 2026-11-27             |
+| Gemma Terms of Use (definição de Model Derivatives, redistribuição)   | https://gemma.ai/resources/terms/ (redirecionado de https://ai.google.dev/gemma/terms)         | 2026-11-27             |
+| Gemma 4: anúncio, tamanhos, Apache 2.0, 2026-04-02                    | https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/                     | 2026-11-27             |
+| Gemma 4: Apache 2.0 (blog open source)                                | https://opensource.googleblog.com/2026/03/gemma-4-expanding-the-gemmaverse-with-apache-20.html | 2026-11-27             |
+| Gemma 4 E4B: licença, parâmetros, contexto, idiomas                   | https://huggingface.co/google/gemma-4-E4B-it                                                   | 2026-11-27             |
+| Qwen3.5-9B: licença, benchmarks, thinking                             | https://huggingface.co/Qwen/Qwen3.5-9B                                                         | 2026-11-27             |
+| Qwen3.5 small (lançamento, Apache 2.0)                                | https://artificialanalysis.ai/articles/qwen3-5-small-models                                    | 2026-11-27             |
+| Tower+ 9B: licença, idiomas, base                                     | https://huggingface.co/Unbabel/Tower-Plus-9B                                                   | 2026-11-27             |
+| Tower+: paper (WMT24++ xCOMET, IF-MT)                                 | https://arxiv.org/html/2506.17080                                                              | 2026-11-27             |
+| TowerInstruct v0.1: CC-BY-NC                                          | https://huggingface.co/Unbabel/TowerInstruct-7B-v0.1                                           | 2026-11-27             |
+| Seed-X-PPO-7B: card, idiomas, OpenMDW                                 | https://huggingface.co/ByteDance-Seed/Seed-X-PPO-7B                                            | 2026-11-27             |
+| Seed-X: texto da licença OpenMDW-1.0                                  | https://huggingface.co/ByteDance-Seed/Seed-X-PPO-7B/blob/main/LICENSE                          | 2026-11-27             |
+| Seed-X: paper (COMET, humano en→pt)                                   | https://arxiv.org/html/2507.13618v2                                                            | 2026-11-27             |
+| Hunyuan-MT-7B: card                                                   | https://huggingface.co/tencent/Hunyuan-MT-7B                                                   | 2026-11-27             |
+| Hunyuan-MT-7B: licença (Território, MAU, §5(b))                       | https://huggingface.co/tencent/Hunyuan-MT-7B/blob/main/License.txt                             | 2026-11-27             |
+| HY-MT1.5-7B: card (templates de terminologia, contexto, formato)      | https://huggingface.co/tencent/HY-MT1.5-7B                                                     | 2026-11-27             |
+| HY-MT1.5: licença (Tencent HY, 2025-12-30)                            | https://huggingface.co/tencent/HY-MT1.5-7B/blob/main/License.txt                               | 2026-11-27             |
+| HY-MT1.5: relatório técnico                                           | https://arxiv.org/html/2512.24092v1                                                            | 2026-11-27             |
+| NLLB-200: cc-by-nc-4.0, "not for production"                          | https://huggingface.co/facebook/nllb-200-distilled-600M                                        | 2026-11-27             |
+| MADLAD-400: Apache 2.0, tamanhos, limitações                          | https://huggingface.co/google/madlad400-10b-mt                                                 | 2026-11-27             |
+| OPUS-MT tc-big en-pt: CC-BY-4.0, chrF/BLEU, tokens `pob`/`por`        | https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt                                       | 2026-11-27             |
+| EuroLLM-9B-Instruct: Apache 2.0, idiomas                              | https://huggingface.co/utter-project/EuroLLM-9B-Instruct                                       | 2026-11-27             |
+| Aya Expanse 8B: cc-by-nc-4.0                                          | https://huggingface.co/CohereLabs/aya-expanse-8b                                               | 2026-11-27             |
+| Ministral 3 (Apache 2.0, tamanhos)                                    | https://docs.mistral.ai/models/ministral-3-8b-25-12.md                                         | 2026-11-27 (via busca) |
+| CTranslate2: MIT, famílias, quantização, desempenho                   | https://github.com/OpenNMT/CTranslate2                                                         | 2026-11-27             |
+| LibreTranslate: AGPL-3.0, Argos                                       | https://github.com/LibreTranslate/LibreTranslate                                               | 2026-11-27             |
+| Argos Translate: MIT/CC0, idiomas                                     | https://github.com/argosopentech/argos-translate                                               | 2026-11-27             |
+| llama.cpp: MIT, servidor OpenAI-compatível                            | https://github.com/ggml-org/llama.cpp                                                          | 2026-11-27             |
+| Ollama: MIT                                                           | https://github.com/ollama/ollama                                                               | 2026-11-27             |
+| Ollama: concorrência, contexto 4096, keep-alive                       | https://docs.ollama.com/faq                                                                    | 2026-11-27             |
+| NVIDIA RTX 5070 Laptop: 8/12 GB GDDR7, 384 GB/s                       | https://www.nvidia.com/en-us/geforce/laptops/50-series/                                        | 2026-11-27             |
+| Vazão reportada (terceiro, método não declarado)                      | https://llmrun.dev/gpu/rtx-5070-laptop                                                         | 2026-11-27 (via busca) |
+| COMET wmt22-comet-da: Apache-2.0                                      | https://huggingface.co/Unbabel/wmt22-comet-da                                                  | 2026-11-27             |
+| CometKiwi wmt22-cometkiwi-da: cc-by-nc-sa-4.0                         | https://huggingface.co/Unbabel/wmt22-cometkiwi-da                                              | 2026-11-27             |
+| WMT25 findings (lista de sistemas, ESA)                               | https://aclanthology.org/2025.wmt-1.22                                                         | 2026-11-27 (via busca) |
+| Claude Code: legal e conformidade, autenticação                       | https://code.claude.com/docs/en/legal-and-compliance.md                                        | 2026-11-27             |
+| Anthropic: Agent SDK com plano (atualizações 2026-06-15 e 2026-10-07) | https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan | 2026-11-27             |
+| Anthropic: termos de consumidor (acesso automatizado)                 | https://www.anthropic.com/legal/consumer-terms                                                 | 2026-11-27             |
+| Repositório local (contagens e exemplos)                              | `messages/{en,pt}.json`, `content/dnd5e/srd-5.{1,2}/i18n/{en,pt}/*.json`                       | 2026-11-27             |
 
 ## Hospedagem ([05-hosting-research.md](05-hosting-research.md))
 
-
 Todas lidas em **2026-11-27**, salvo indicação.
 
-| Área da afirmação | URL | Data |
-|---|---|---|
-| Oracle Always Free (A1, ociosidade, bloco, saída) | https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm | 2026-11-27 |
-| Oracle: redução do A1 (secundária) | https://infoq.com/news/2026/07/oracle-cloud-free-tier-limits/ | 2026-11-27 |
-| Oracle: capacidade em São Paulo (comunidade) | https://community.oracle.com/CustomerConnect/discussion/949983/cannot-upgrade-free-tier-to-payg-a1-flex-out-of-capacity-in-sa-saopaulo-1-for-3-days | 2026-11-27 (conteúdo via resumo de busca) |
-| Google Cloud free (e2-micro, Cloud Run, Firestore, trial) | https://docs.cloud.google.com/free/docs/free-cloud-features | 2026-11-27 |
-| AWS Free | https://aws.amazon.com/free/ | 2026-11-27 |
-| Azure free | https://azure.microsoft.com/en-us/pricing/free-services/ | 2026-11-27 |
-| Cloudflare Workers limites | https://developers.cloudflare.com/workers/platform/limits/ | 2026-11-27 |
-| Cloudflare Workers AI preços | https://developers.cloudflare.com/workers-ai/platform/pricing/ | 2026-11-27 |
-| Cloudflare Workers AI limites | https://developers.cloudflare.com/workers-ai/platform/limits/ | 2026-11-27 |
-| Cloudflare D1 | https://developers.cloudflare.com/d1/platform/pricing/ | 2026-11-27 |
-| Cloudflare R2 | https://developers.cloudflare.com/r2/pricing/ | 2026-11-27 |
-| Cloudflare Queues | https://developers.cloudflare.com/queues/platform/pricing/ | 2026-11-27 |
-| Cloudflare Durable Objects | https://developers.cloudflare.com/durable-objects/platform/pricing/ | 2026-11-27 |
-| Cloudflare Pages | https://developers.cloudflare.com/pages/platform/limits/ | 2026-11-27 |
-| Cloudflare Tunnel (técnico) | https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/ | 2026-11-27 |
-| Cloudflare CDN (termos) | https://www.cloudflare.com/service-specific-terms-application-services/ | 2026-11-27 |
-| GitHub Actions billing | https://docs.github.com/en/billing/concepts/product-billing/github-actions | 2026-11-27 |
-| GitHub runners hospedados | https://docs.github.com/en/actions/reference/runners/github-hosted-runners | 2026-11-27 |
-| GitHub Actions limites | https://docs.github.com/en/actions/reference/limits | 2026-11-27 |
-| GitHub Actions: workflows agendados desativados | https://docs.github.com/en/actions/how-tos/manage-workflow-runs/disable-and-enable-workflows | 2026-11-27 |
-| GitHub ToS (Actions, Pages) | https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features | 2026-11-27 |
-| GitHub segurança (self-hosted, fork, pull_request_target) | https://docs.github.com/en/actions/reference/security/secure-use | 2026-11-27 |
-| GitHub Pages limites | https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits | 2026-11-27 |
-| GitHub Models aposentado | https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models | 2026-11-27 |
-| Taxa self-hosted adiada (secundária) | https://www.theregister.com/2025/12/17/github_charge_dev_own_hardware/ | 2026-11-27 (via busca) |
-| Supabase | https://supabase.com/pricing | 2026-11-27 |
-| Neon | https://neon.com/pricing | 2026-11-27 |
-| Firebase Spark | https://firebase.google.com/pricing | 2026-11-27 |
-| Render Free | https://render.com/docs/free | 2026-11-27 |
-| Railway | https://docs.railway.com/reference/pricing/plans | 2026-11-27 |
-| Fly.io | https://docs.fly.io/about/pricing | 2026-11-27 |
-| Hugging Face Spaces | https://huggingface.co/docs/hub/spaces-overview | 2026-11-27 |
-| Koyeb | https://www.koyeb.com/pricing | 2026-11-27 |
-| Northflank | https://northflank.com/pricing | 2026-11-27 |
-| Deno Deploy | https://deno.com/deploy/pricing | 2026-11-27 |
-| Netlify | https://www.netlify.com/pricing/ | 2026-11-27 |
-| Vercel Hobby | https://vercel.com/docs/plans/hobby | 2026-11-27 |
-| Vercel fair use | https://vercel.com/docs/limits/fair-use-guidelines | 2026-11-27 |
-| Turso | https://turso.tech/pricing | 2026-11-27 |
-| Upstash Redis | https://upstash.com/pricing/redis | 2026-11-27 |
-| Tailscale planos | https://tailscale.com/pricing | 2026-11-27 |
-| Tailscale Funnel | https://tailscale.com/kb/1223/funnel | 2026-11-27 |
-| Weblate requisitos | https://docs.weblate.org/en/latest/admin/install.html | 2026-11-27 |
-| Tolgee self-hosting | https://docs.tolgee.io/platform/self_hosting/running_with_docker | 2026-11-27 |
-| Hetzner Cloud (preços) | https://www.hetzner.com/cloud/cost-optimized/ | 2026-11-27 |
-| NVIDIA CUDA no WSL2 | https://docs.nvidia.com/cuda/wsl-user-guide/index.html | 2026-11-27 |
-| Tarifa ANEEL 2026 (projeção, via notícias; não a página da ANEEL) | https://www.gov.br/aneel/pt-br/assuntos/noticias/2026-defeso-eleitoral/bandeira-tarifaria-em-julho-permanece-amarela | 2026-11-27 (via busca) |
+| Área da afirmação                                                 | URL                                                                                                                                                 | Data                                      |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| Oracle Always Free (A1, ociosidade, bloco, saída)                 | https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm                                                        | 2026-11-27                                |
+| Oracle: redução do A1 (secundária)                                | https://infoq.com/news/2026/07/oracle-cloud-free-tier-limits/                                                                                       | 2026-11-27                                |
+| Oracle: capacidade em São Paulo (comunidade)                      | https://community.oracle.com/CustomerConnect/discussion/949983/cannot-upgrade-free-tier-to-payg-a1-flex-out-of-capacity-in-sa-saopaulo-1-for-3-days | 2026-11-27 (conteúdo via resumo de busca) |
+| Google Cloud free (e2-micro, Cloud Run, Firestore, trial)         | https://docs.cloud.google.com/free/docs/free-cloud-features                                                                                         | 2026-11-27                                |
+| AWS Free                                                          | https://aws.amazon.com/free/                                                                                                                        | 2026-11-27                                |
+| Azure free                                                        | https://azure.microsoft.com/en-us/pricing/free-services/                                                                                            | 2026-11-27                                |
+| Cloudflare Workers limites                                        | https://developers.cloudflare.com/workers/platform/limits/                                                                                          | 2026-11-27                                |
+| Cloudflare Workers AI preços                                      | https://developers.cloudflare.com/workers-ai/platform/pricing/                                                                                      | 2026-11-27                                |
+| Cloudflare Workers AI limites                                     | https://developers.cloudflare.com/workers-ai/platform/limits/                                                                                       | 2026-11-27                                |
+| Cloudflare D1                                                     | https://developers.cloudflare.com/d1/platform/pricing/                                                                                              | 2026-11-27                                |
+| Cloudflare R2                                                     | https://developers.cloudflare.com/r2/pricing/                                                                                                       | 2026-11-27                                |
+| Cloudflare Queues                                                 | https://developers.cloudflare.com/queues/platform/pricing/                                                                                          | 2026-11-27                                |
+| Cloudflare Durable Objects                                        | https://developers.cloudflare.com/durable-objects/platform/pricing/                                                                                 | 2026-11-27                                |
+| Cloudflare Pages                                                  | https://developers.cloudflare.com/pages/platform/limits/                                                                                            | 2026-11-27                                |
+| Cloudflare Tunnel (técnico)                                       | https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/                                                             | 2026-11-27                                |
+| Cloudflare CDN (termos)                                           | https://www.cloudflare.com/service-specific-terms-application-services/                                                                             | 2026-11-27                                |
+| GitHub Actions billing                                            | https://docs.github.com/en/billing/concepts/product-billing/github-actions                                                                          | 2026-11-27                                |
+| GitHub runners hospedados                                         | https://docs.github.com/en/actions/reference/runners/github-hosted-runners                                                                          | 2026-11-27                                |
+| GitHub Actions limites                                            | https://docs.github.com/en/actions/reference/limits                                                                                                 | 2026-11-27                                |
+| GitHub Actions: workflows agendados desativados                   | https://docs.github.com/en/actions/how-tos/manage-workflow-runs/disable-and-enable-workflows                                                        | 2026-11-27                                |
+| GitHub ToS (Actions, Pages)                                       | https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features                                               | 2026-11-27                                |
+| GitHub segurança (self-hosted, fork, pull_request_target)         | https://docs.github.com/en/actions/reference/security/secure-use                                                                                    | 2026-11-27                                |
+| GitHub Pages limites                                              | https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits                                                              | 2026-11-27                                |
+| GitHub Models aposentado                                          | https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models                                                               | 2026-11-27                                |
+| Taxa self-hosted adiada (secundária)                              | https://www.theregister.com/2025/12/17/github_charge_dev_own_hardware/                                                                              | 2026-11-27 (via busca)                    |
+| Supabase                                                          | https://supabase.com/pricing                                                                                                                        | 2026-11-27                                |
+| Neon                                                              | https://neon.com/pricing                                                                                                                            | 2026-11-27                                |
+| Firebase Spark                                                    | https://firebase.google.com/pricing                                                                                                                 | 2026-11-27                                |
+| Render Free                                                       | https://render.com/docs/free                                                                                                                        | 2026-11-27                                |
+| Railway                                                           | https://docs.railway.com/reference/pricing/plans                                                                                                    | 2026-11-27                                |
+| Fly.io                                                            | https://docs.fly.io/about/pricing                                                                                                                   | 2026-11-27                                |
+| Hugging Face Spaces                                               | https://huggingface.co/docs/hub/spaces-overview                                                                                                     | 2026-11-27                                |
+| Koyeb                                                             | https://www.koyeb.com/pricing                                                                                                                       | 2026-11-27                                |
+| Northflank                                                        | https://northflank.com/pricing                                                                                                                      | 2026-11-27                                |
+| Deno Deploy                                                       | https://deno.com/deploy/pricing                                                                                                                     | 2026-11-27                                |
+| Netlify                                                           | https://www.netlify.com/pricing/                                                                                                                    | 2026-11-27                                |
+| Vercel Hobby                                                      | https://vercel.com/docs/plans/hobby                                                                                                                 | 2026-11-27                                |
+| Vercel fair use                                                   | https://vercel.com/docs/limits/fair-use-guidelines                                                                                                  | 2026-11-27                                |
+| Turso                                                             | https://turso.tech/pricing                                                                                                                          | 2026-11-27                                |
+| Upstash Redis                                                     | https://upstash.com/pricing/redis                                                                                                                   | 2026-11-27                                |
+| Tailscale planos                                                  | https://tailscale.com/pricing                                                                                                                       | 2026-11-27                                |
+| Tailscale Funnel                                                  | https://tailscale.com/kb/1223/funnel                                                                                                                | 2026-11-27                                |
+| Weblate requisitos                                                | https://docs.weblate.org/en/latest/admin/install.html                                                                                               | 2026-11-27                                |
+| Tolgee self-hosting                                               | https://docs.tolgee.io/platform/self_hosting/running_with_docker                                                                                    | 2026-11-27                                |
+| Hetzner Cloud (preços)                                            | https://www.hetzner.com/cloud/cost-optimized/                                                                                                       | 2026-11-27                                |
+| NVIDIA CUDA no WSL2                                               | https://docs.nvidia.com/cuda/wsl-user-guide/index.html                                                                                              | 2026-11-27                                |
+| Tarifa ANEEL 2026 (projeção, via notícias; não a página da ANEEL) | https://www.gov.br/aneel/pt-br/assuntos/noticias/2026-defeso-eleitoral/bandeira-tarifaria-em-julho-permanece-amarela                                | 2026-11-27 (via busca)                    |
 
 ## Licenças ([research/licensing.md](research/licensing.md))
 
-
 Todas verificadas em 2026-11-27.
 
-| Área | URL |
-| --- | --- |
-| Licença e CLA no Weblate | https://docs.weblate.org/en/latest/admin/licensing.html ; https://docs.weblate.org/en/latest/admin/projects.html |
-| Licença do Weblate | https://docs.weblate.org/en/latest/contributing/license.html ; https://raw.githubusercontent.com/WeblateOrg/weblate/main/LICENSE |
-| Hosted Weblate Libre | https://weblate.org/en/hosting/ ; https://weblate.org/en/news/archive/weblate-even-more-open-now/ |
-| FSF FAQ (saída, serviço, AGPL, agregação) | https://www.gnu.org/licenses/gpl-faq.html |
-| Tolgee | https://raw.githubusercontent.com/tolgee/tolgee-platform/main/LICENSE ; https://raw.githubusercontent.com/tolgee/tolgee-platform/main/ee/LICENSE |
-| Pontoon | https://github.com/mozilla/pontoon |
-| Traduora | https://github.com/ever-co/traduora |
-| CC-BY-4.0 texto legal | https://creativecommons.org/licenses/by/4.0/legalcode.en |
-| FAQ do Creative Commons | http://wiki.creativecommons.org/Frequently_Asked_Questions ; https://creativecommons.org/faq/ |
-| SRD, CC-BY e OGL, WotC | https://www.dndbeyond.com/resources/1781-systems-reference-document-srd |
-| Copyright Office, IA Parte 2 | https://www.copyright.gov/newsnet/2025/1060.html |
-| Lei 9.610/98 | https://www.planalto.gov.br/ccivil_03/leis/l9610.htm |
-| UE, IA e autoria (busca) | https://www.ivir.nl/publicaties/download/AI-Copyright.pdf |
-| NLLB-200 | https://huggingface.co/facebook/nllb-200-distilled-600M |
-| MADLAD-400 | https://huggingface.co/google/madlad400-3b-mt |
-| OPUS-MT | https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt ; https://huggingface.co/Helsinki-NLP/opus-mt-en-ROMANCE |
-| Gemma 4 / Gemma 3 | https://opensource.googleblog.com/2026/03/gemma-4-expanding-the-gemmaverse-with-apache-20.html ; https://huggingface.co/google/gemma-3-4b-it |
-| Llama 3.1 | https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_1/LICENSE |
-| Qwen | https://huggingface.co/Qwen/Qwen3-8B ; https://huggingface.co/Qwen/Qwen2.5-3B-Instruct ; https://huggingface.co/Qwen/Qwen2.5-72B-Instruct |
-| Mistral | https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3 ; https://huggingface.co/mistralai/Mistral-Small-24B-Instruct-2501 ; https://huggingface.co/mistralai/Mistral-Large-Instruct-2411 |
-| Tower, Aya | https://huggingface.co/Unbabel/TowerInstruct-7B-v0.2 ; https://huggingface.co/CohereLabs/aya-expanse-8b |
-| LibreTranslate, Argos | https://github.com/LibreTranslate/LibreTranslate ; https://github.com/argosopentech/argos-translate ; https://github.com/argosopentech/argospm-index |
-| CTranslate2, llama.cpp, Ollama, translate-toolkit | https://github.com/OpenNMT/CTranslate2 ; https://github.com/ggml-org/llama.cpp ; https://github.com/ollama/ollama ; https://github.com/translate/translate |
-| DCO, Apache-2.0 | https://developercertificate.org/ ; https://www.apache.org/licenses/LICENSE-2.0.txt |
-| GitHub Actions | https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features |
-| Vercel | https://vercel.com/legal/terms ; https://vercel.com/docs/limits/fair-use-guidelines |
-| Repositório | `LICENSE`, `NOTICE.md`, `content/dnd5e/OGL-1.0a.txt`, `package.json`, `docs/plans/2026-10-15-traducoes-comunitarias.md` |
-
+| Área                                              | URL                                                                                                                                                                                         |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Licença e CLA no Weblate                          | https://docs.weblate.org/en/latest/admin/licensing.html ; https://docs.weblate.org/en/latest/admin/projects.html                                                                            |
+| Licença do Weblate                                | https://docs.weblate.org/en/latest/contributing/license.html ; https://raw.githubusercontent.com/WeblateOrg/weblate/main/LICENSE                                                            |
+| Hosted Weblate Libre                              | https://weblate.org/en/hosting/ ; https://weblate.org/en/news/archive/weblate-even-more-open-now/                                                                                           |
+| FSF FAQ (saída, serviço, AGPL, agregação)         | https://www.gnu.org/licenses/gpl-faq.html                                                                                                                                                   |
+| Tolgee                                            | https://raw.githubusercontent.com/tolgee/tolgee-platform/main/LICENSE ; https://raw.githubusercontent.com/tolgee/tolgee-platform/main/ee/LICENSE                                            |
+| Pontoon                                           | https://github.com/mozilla/pontoon                                                                                                                                                          |
+| Traduora                                          | https://github.com/ever-co/traduora                                                                                                                                                         |
+| CC-BY-4.0 texto legal                             | https://creativecommons.org/licenses/by/4.0/legalcode.en                                                                                                                                    |
+| FAQ do Creative Commons                           | http://wiki.creativecommons.org/Frequently_Asked_Questions ; https://creativecommons.org/faq/                                                                                               |
+| SRD, CC-BY e OGL, WotC                            | https://www.dndbeyond.com/resources/1781-systems-reference-document-srd                                                                                                                     |
+| Copyright Office, IA Parte 2                      | https://www.copyright.gov/newsnet/2025/1060.html                                                                                                                                            |
+| Lei 9.610/98                                      | https://www.planalto.gov.br/ccivil_03/leis/l9610.htm                                                                                                                                        |
+| UE, IA e autoria (busca)                          | https://www.ivir.nl/publicaties/download/AI-Copyright.pdf                                                                                                                                   |
+| NLLB-200                                          | https://huggingface.co/facebook/nllb-200-distilled-600M                                                                                                                                     |
+| MADLAD-400                                        | https://huggingface.co/google/madlad400-3b-mt                                                                                                                                               |
+| OPUS-MT                                           | https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt ; https://huggingface.co/Helsinki-NLP/opus-mt-en-ROMANCE                                                                           |
+| Gemma 4 / Gemma 3                                 | https://opensource.googleblog.com/2026/03/gemma-4-expanding-the-gemmaverse-with-apache-20.html ; https://huggingface.co/google/gemma-3-4b-it                                                |
+| Llama 3.1                                         | https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_1/LICENSE                                                                                                      |
+| Qwen                                              | https://huggingface.co/Qwen/Qwen3-8B ; https://huggingface.co/Qwen/Qwen2.5-3B-Instruct ; https://huggingface.co/Qwen/Qwen2.5-72B-Instruct                                                   |
+| Mistral                                           | https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3 ; https://huggingface.co/mistralai/Mistral-Small-24B-Instruct-2501 ; https://huggingface.co/mistralai/Mistral-Large-Instruct-2411 |
+| Tower, Aya                                        | https://huggingface.co/Unbabel/TowerInstruct-7B-v0.2 ; https://huggingface.co/CohereLabs/aya-expanse-8b                                                                                     |
+| LibreTranslate, Argos                             | https://github.com/LibreTranslate/LibreTranslate ; https://github.com/argosopentech/argos-translate ; https://github.com/argosopentech/argospm-index                                        |
+| CTranslate2, llama.cpp, Ollama, translate-toolkit | https://github.com/OpenNMT/CTranslate2 ; https://github.com/ggml-org/llama.cpp ; https://github.com/ollama/ollama ; https://github.com/translate/translate                                  |
+| DCO, Apache-2.0                                   | https://developercertificate.org/ ; https://www.apache.org/licenses/LICENSE-2.0.txt                                                                                                         |
+| GitHub Actions                                    | https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features                                                                                       |
+| Vercel                                            | https://vercel.com/legal/terms ; https://vercel.com/docs/limits/fair-use-guidelines                                                                                                         |
+| Repositório                                       | `LICENSE`, `NOTICE.md`, `content/dnd5e/OGL-1.0a.txt`, `package.json`, `docs/plans/2026-10-15-traducoes-comunitarias.md`                                                                     |

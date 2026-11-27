@@ -55,11 +55,11 @@ Exportar o backup do projeto `rpgworldapp` no Weblate hospedado e guardar fora d
 
 **Amostra.** Sorteada com semente fixa por [`scripts/stage-b-sample.mjs`](scripts/stage-b-sample.mjs) e gravada em [`stage-b/manifest.json`](stage-b/manifest.json) (chave, categoria, palavras, tags e hash da fonte de cada segmento). População: 1.113 campos de texto do SRD 5.2 ainda sem português, 71,5 mil palavras (**medido**). Segmento é o campo inteiro (uma descrição), não uma frase.
 
-| Etapa | Segmentos | Palavras de fonte | Com conversão de unidade | Com tags | Para quê |
-|---|---:|---:|---:|---:|---|
-| B0 | 30 | 2.931 | 12 | 27 | Calibrar a rubrica, medir o ritmo, achar defeito do pipeline |
-| B1 | 70 | 5.388 | 26 | 54 | Comparação cega Gemma × Qwen |
-| B2 | 200 | 16.590 | 63 | 156 | Validar o pipeline escolhido, congelado |
+| Etapa | Segmentos | Palavras de fonte | Com conversão de unidade | Com tags | Para quê                                                     |
+| ----- | --------: | ----------------: | -----------------------: | -------: | ------------------------------------------------------------ |
+| B0    |        30 |             2.931 |                       12 |       27 | Calibrar a rubrica, medir o ritmo, achar defeito do pipeline |
+| B1    |        70 |             5.388 |                       26 |       54 | Comparação cega Gemma × Qwen                                 |
+| B2    |       200 |            16.590 |                       63 |      156 | Validar o pipeline escolhido, congelado                      |
 
 - **Estratos:** descrições de magia (41%), efeitos em nível superior, material e gatilho, características de classe (31%), itens (13%), condições (as 15 que existem entram todas). Dentro de cada estrato o sorteio alterna três tipos: com conversão de unidade, carregado de tags ou longo, simples.
 - **O que não entra, porque o produto não tem:** regras de combate e habilidades de monstro. O conteúdo do repositório hoje é magias, itens, condições e classes. As condições e as características de classe são o texto mais próximo de "regra geral".
@@ -77,13 +77,13 @@ Exportar o backup do projeto `rpgworldapp` no Weblate hospedado e guardar fora d
 
 **Rubrica.** Em cada saída: a pior severidade encontrada, o veredito e o texto corrigido.
 
-| Severidade | O que é | Exemplo |
-|---|---|---|
-| P0 crítico | Muda regra, condição, efeito, número ou alvo | "desvantagem" por "vantagem"; "metade do dano" sumiu |
-| P1 grave | Omite informação ou erra o sentido, sem mudar mecânica | frase de ambientação cortada |
-| P2 moderado | Termo fora do glossário | "feitiço" por "magia" |
-| P3 leve | Frase pouco natural | "dura durante a duração" |
-| P4 cosmético | Pontuação, preferência de estilo | |
+| Severidade   | O que é                                                | Exemplo                                              |
+| ------------ | ------------------------------------------------------ | ---------------------------------------------------- |
+| P0 crítico   | Muda regra, condição, efeito, número ou alvo           | "desvantagem" por "vantagem"; "metade do dano" sumiu |
+| P1 grave     | Omite informação ou erra o sentido, sem mudar mecânica | frase de ambientação cortada                         |
+| P2 moderado  | Termo fora do glossário                                | "feitiço" por "magia"                                |
+| P3 leve      | Frase pouco natural                                    | "dura durante a duração"                             |
+| P4 cosmético | Pontuação, preferência de estilo                       |                                                      |
 
 Vereditos: **aprovo como está**, **aprovo com ajuste** (texto corrigido na hora), **refiz**, **rejeito** (fica vazio, traduzir depois).
 
@@ -91,13 +91,13 @@ Vereditos: **aprovo como está**, **aprovo com ajuste** (texto corrigido na hora
 
 **Limiares, definidos antes de ver qualquer saída:**
 
-| Momento | Regra |
-|---|---|
-| B0 | Não decide qualidade. **Para e volta ao pipeline** se houver 3 ou mais P0 em 30 |
-| B1 | Fica o motor com menos P0 + P1. Empate: o preferido mais vezes. Novo empate: Gemma (menos VRAM) |
-| B2, vai | No máximo 2 P0 em 200 **e** no máximo 10 com P0 ou P1 **e** ≥ 80% em "como está" ou "com ajuste" |
-| B2, não vai | 6 ou mais P0 nos primeiros 100, ou menos de 60% aproveitável. Pode parar ali |
-| Custo | O ritmo medido, projetado para as 71,5 mil palavras, dá o total de horas. Se o total cabe ou não na vida dela é decisão da Rebeca; a proposta é "vai" até 150 h |
+| Momento     | Regra                                                                                                                                                           |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| B0          | Não decide qualidade. **Para e volta ao pipeline** se houver 3 ou mais P0 em 30                                                                                 |
+| B1          | Fica o motor com menos P0 + P1. Empate: o preferido mais vezes. Novo empate: Gemma (menos VRAM)                                                                 |
+| B2, vai     | No máximo 2 P0 em 200 **e** no máximo 10 com P0 ou P1 **e** ≥ 80% em "como está" ou "com ajuste"                                                                |
+| B2, não vai | 6 ou mais P0 nos primeiros 100, ou menos de 60% aproveitável. Pode parar ali                                                                                    |
+| Custo       | O ritmo medido, projetado para as 71,5 mil palavras, dá o total de horas. Se o total cabe ou não na vida dela é decisão da Rebeca; a proposta é "vai" até 150 h |
 
 **O que a amostra permite afirmar:** com 0 P0 em 200, a taxa real fica abaixo de 1,5% (95% de confiança); com 2 em 200, abaixo de 3,2%. Mesmo no melhor caso, isso ainda admite mais de dez segmentos com erro crítico nos 1.113. **A revisão antes de publicar continua, qualquer que seja o resultado.**
 
@@ -146,12 +146,12 @@ Vereditos: **aprovo como está**, **aprovo com ajuste** (texto corrigido na hora
 
 ## Ir ou não ir
 
-| Resultado | Decisão |
-|---|---|
-| PoC 0 passa | Não escrever script de lote; só o validador |
-| PoC 2 B0 com 3 ou mais erros críticos em 30 | Voltar ao pipeline antes de gastar mais revisão |
-| PoC 1 e 2 passam | Gerar o pt do SRD 5.2 em lote e revisar tudo antes de publicar |
-| PoC 2 fica no meio | Gerar só descrições longas; nomes e regras curtas, humanos |
-| PoC 2 falha | Não gerar. Fazer só o validador e seguir com tradução humana |
-| PoC 3 passa | Usar a ferramenta pronta |
-| PoC 4 passa | Ligar o validador no CI, com ou sem máquina |
+| Resultado                                   | Decisão                                                        |
+| ------------------------------------------- | -------------------------------------------------------------- |
+| PoC 0 passa                                 | Não escrever script de lote; só o validador                    |
+| PoC 2 B0 com 3 ou mais erros críticos em 30 | Voltar ao pipeline antes de gastar mais revisão                |
+| PoC 1 e 2 passam                            | Gerar o pt do SRD 5.2 em lote e revisar tudo antes de publicar |
+| PoC 2 fica no meio                          | Gerar só descrições longas; nomes e regras curtas, humanos     |
+| PoC 2 falha                                 | Não gerar. Fazer só o validador e seguir com tradução humana   |
+| PoC 3 passa                                 | Usar a ferramenta pronta                                       |
+| PoC 4 passa                                 | Ligar o validador no CI, com ou sem máquina                    |

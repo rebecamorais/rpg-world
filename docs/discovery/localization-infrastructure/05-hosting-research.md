@@ -23,35 +23,35 @@ Regra usada: todo limite abaixo veio de página oficial do provedor, lida em 202
 
 Legenda de custo: **Grátis permanente** = sem data de fim anunciada; **Promo/trial** = crédito ou prazo; **Cartão** = exigido para abrir conta; **Falha dura** = ao estourar a cota o serviço para ou recusa, sem cobrar.
 
-| Provedor / plano | Permanente? | Cartão | Cobrança surpresa | Teto de gasto / falha dura | Mais limitante |
-|---|---|---|---|---|---|
-| Oracle Always Free | Sim (com ressalvas) | Não verificado (página FAQ bloqueada, 403) | Sim, ao virar PAYG ou fora da home region | Não (falha dura só enquanto não for PAYG) | A1 2 OCPU/12 GB; ociosidade; capacidade |
-| Google Cloud Always Free | Sim (sem data de fim; aviso de 30 dias para mudar) | Sim (conta de faturamento) | Sim, se passar da cota ou usar GPU/regiões fora do free | Não (orçamentos só alertam) | e2-micro só nos EUA; 1 GB de saída/mês |
-| AWS Free plan | Não: conta fecha em 6 meses ou ao fim do crédito | Não verificado | Não no plano Free; sim se virar Paid | Sim no plano Free | Prazo de 6 meses |
-| Azure free | 12 meses + sempre-grátis | Não verificado | Sim | Não verificado | Página oficial não detalhou limites |
-| Cloudflare Workers/D1/R2/Queues/DO (Free) | Sim | Não verificado | Não (Free não tem tarifa) | **Sim**: operações falham | 10 ms CPU por requisição; 100 mil req/dia |
-| Cloudflare Pages Free | Sim | Não verificado | Não | Sim | 500 builds/mês |
-| Cloudflare Workers AI (Free) | Sim | Não verificado | Não | **Sim**: "operations fail" | 10.000 Neurons/dia |
-| Cloudflare Tunnel | Gratuito segundo prática conhecida; **não verificado** nas páginas oficiais lidas | Não verificado | Não | n/a | ToS do CDN (conteúdo não-HTML) |
-| GitHub Actions (repo público) | Sim | Não | Não | Sim | 6 h por job; ToS de uso como computação |
-| GitHub Pages | Sim | Não | Não | Soft limits | 1 GB de site; ~100 GB/mês (soft) |
-| GitHub Models | **Aposentado** | n/a | n/a | n/a | "fully retired" |
-| Supabase Free | Sim | Não verificado | Não | Sim | Pausa após 1 semana; 2 projetos; 500 MB |
-| Neon Free | Sim | Não | Não | Sim (suspende compute) | 100 CU-h/mês; 1 GB/projeto |
-| Firebase Spark | Sim | Não ("No payment method needed") | Não | Não declarado na página | Sem Cloud Functions no Spark |
-| Render Free | Parcial | Não verificado | Sem cartão, serviços suspensos | Sim | Dorme em 15 min; Postgres expira em 30 dias |
-| Railway Free | $1/mês de uso | Não | Não | Sim (plano Free) | Orçamento de $1/mês |
-| Fly.io | $1 sem cartão; $5/mês com cartão | Para os $5 | Sim (pay as you go) | Não declarado | Sem teto de gasto documentado |
-| Hugging Face Spaces | Estático grátis; Docker/Gradio exigem pago | Sim (PRO) | Sim, em hardware pago | Não verificado | Sem compute grátis |
-| Koyeb | Só Postgres "Free 5h" | Não verificado | Não verificado | Não verificado | Sem compute gratuito listado |
-| Northflank Sandbox | Sim (até $20/mês de recursos) | **Sim** | Possível | Não verificado | Cartão obrigatório |
-| Deno Deploy Free | Sim, mas página avisa **sunset em abril de 2027** | Não verificado | Não verificado | Não verificado | Descontinuação |
-| Vercel Hobby | Sim | Não | Não | **Sim** (espera 30 dias) | Cláusula comercial: não verificado |
-| Netlify Free | Sim | Não verificado | Não verificado | Não verificado | 300 créditos; página não explica o estouro |
-| Turso Free | Sim | Não | Só se ativar overage | Sim | 5 GB; 10 M escritas/mês |
-| Upstash Redis Free | Sim | Não | Cartão converte para pay-as-you-go | Sim | 500 mil comandos/mês |
-| Tailscale Personal | Sim | Não verificado | Não | n/a | **Somente uso não comercial** |
-| Hetzner (pago) | Não | Sim | Cobra por hora/mês | n/a | Sem região no Brasil |
+| Provedor / plano                          | Permanente?                                                                       | Cartão                                     | Cobrança surpresa                                       | Teto de gasto / falha dura                | Mais limitante                              |
+| ----------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------- | ----------------------------------------- | ------------------------------------------- |
+| Oracle Always Free                        | Sim (com ressalvas)                                                               | Não verificado (página FAQ bloqueada, 403) | Sim, ao virar PAYG ou fora da home region               | Não (falha dura só enquanto não for PAYG) | A1 2 OCPU/12 GB; ociosidade; capacidade     |
+| Google Cloud Always Free                  | Sim (sem data de fim; aviso de 30 dias para mudar)                                | Sim (conta de faturamento)                 | Sim, se passar da cota ou usar GPU/regiões fora do free | Não (orçamentos só alertam)               | e2-micro só nos EUA; 1 GB de saída/mês      |
+| AWS Free plan                             | Não: conta fecha em 6 meses ou ao fim do crédito                                  | Não verificado                             | Não no plano Free; sim se virar Paid                    | Sim no plano Free                         | Prazo de 6 meses                            |
+| Azure free                                | 12 meses + sempre-grátis                                                          | Não verificado                             | Sim                                                     | Não verificado                            | Página oficial não detalhou limites         |
+| Cloudflare Workers/D1/R2/Queues/DO (Free) | Sim                                                                               | Não verificado                             | Não (Free não tem tarifa)                               | **Sim**: operações falham                 | 10 ms CPU por requisição; 100 mil req/dia   |
+| Cloudflare Pages Free                     | Sim                                                                               | Não verificado                             | Não                                                     | Sim                                       | 500 builds/mês                              |
+| Cloudflare Workers AI (Free)              | Sim                                                                               | Não verificado                             | Não                                                     | **Sim**: "operations fail"                | 10.000 Neurons/dia                          |
+| Cloudflare Tunnel                         | Gratuito segundo prática conhecida; **não verificado** nas páginas oficiais lidas | Não verificado                             | Não                                                     | n/a                                       | ToS do CDN (conteúdo não-HTML)              |
+| GitHub Actions (repo público)             | Sim                                                                               | Não                                        | Não                                                     | Sim                                       | 6 h por job; ToS de uso como computação     |
+| GitHub Pages                              | Sim                                                                               | Não                                        | Não                                                     | Soft limits                               | 1 GB de site; ~100 GB/mês (soft)            |
+| GitHub Models                             | **Aposentado**                                                                    | n/a                                        | n/a                                                     | n/a                                       | "fully retired"                             |
+| Supabase Free                             | Sim                                                                               | Não verificado                             | Não                                                     | Sim                                       | Pausa após 1 semana; 2 projetos; 500 MB     |
+| Neon Free                                 | Sim                                                                               | Não                                        | Não                                                     | Sim (suspende compute)                    | 100 CU-h/mês; 1 GB/projeto                  |
+| Firebase Spark                            | Sim                                                                               | Não ("No payment method needed")           | Não                                                     | Não declarado na página                   | Sem Cloud Functions no Spark                |
+| Render Free                               | Parcial                                                                           | Não verificado                             | Sem cartão, serviços suspensos                          | Sim                                       | Dorme em 15 min; Postgres expira em 30 dias |
+| Railway Free                              | $1/mês de uso                                                                     | Não                                        | Não                                                     | Sim (plano Free)                          | Orçamento de $1/mês                         |
+| Fly.io                                    | $1 sem cartão; $5/mês com cartão                                                  | Para os $5                                 | Sim (pay as you go)                                     | Não declarado                             | Sem teto de gasto documentado               |
+| Hugging Face Spaces                       | Estático grátis; Docker/Gradio exigem pago                                        | Sim (PRO)                                  | Sim, em hardware pago                                   | Não verificado                            | Sem compute grátis                          |
+| Koyeb                                     | Só Postgres "Free 5h"                                                             | Não verificado                             | Não verificado                                          | Não verificado                            | Sem compute gratuito listado                |
+| Northflank Sandbox                        | Sim (até $20/mês de recursos)                                                     | **Sim**                                    | Possível                                                | Não verificado                            | Cartão obrigatório                          |
+| Deno Deploy Free                          | Sim, mas página avisa **sunset em abril de 2027**                                 | Não verificado                             | Não verificado                                          | Não verificado                            | Descontinuação                              |
+| Vercel Hobby                              | Sim                                                                               | Não                                        | Não                                                     | **Sim** (espera 30 dias)                  | Cláusula comercial: não verificado          |
+| Netlify Free                              | Sim                                                                               | Não verificado                             | Não verificado                                          | Não verificado                            | 300 créditos; página não explica o estouro  |
+| Turso Free                                | Sim                                                                               | Não                                        | Só se ativar overage                                    | Sim                                       | 5 GB; 10 M escritas/mês                     |
+| Upstash Redis Free                        | Sim                                                                               | Não                                        | Cartão converte para pay-as-you-go                      | Sim                                       | 500 mil comandos/mês                        |
+| Tailscale Personal                        | Sim                                                                               | Não verificado                             | Não                                                     | n/a                                       | **Somente uso não comercial**               |
+| Hetzner (pago)                            | Não                                                                               | Sim                                        | Cobra por hora/mês                                      | n/a                                       | Sem região no Brasil                        |
 
 ## Seções por provedor
 
@@ -178,30 +178,30 @@ Ver seção própria abaixo.
 
 Legenda: **Cabe** / **Cabe com ressalvas** / **Não cabe**; entre parênteses, a cota limitante.
 
-| Provedor | W1 Weblate/Tolgee | W2 API/webhook + DB pequeno | W3 MT em lote | W4 CI | W5 Páginas estáticas |
-|---|---|---|---|---|---|
-| Oracle A1 (home SP) | Cabe com ressalvas (capacidade; ociosidade; 2 OCPU/12 GB) | Cabe com ressalvas | Não cabe (CPU lenta, sem GPU) | Cabe com ressalvas | Cabe com ressalvas |
-| GCP e2-micro | Não cabe (1 GB RAM; só EUA) | Cabe com ressalvas (Cloud Run grátis, cartão) | Não cabe | Não cabe | Cabe com ressalvas |
-| AWS Free | Não cabe (conta expira em 6 meses) | Não cabe (idem) | Não cabe | Não cabe | Não cabe |
-| Azure free | Não cabe (12 meses; limites não verificados) | Não verificado | Não cabe | Não verificado | Não verificado |
-| Cloudflare Workers/D1/Queues | Não cabe (sem container; 10 ms CPU) | **Cabe** (D1 100 mil escritas/dia; Queues 10 mil ops/dia) | Não cabe (Workers AI 10 mil Neurons/dia) | Não cabe | **Cabe** (Pages) |
-| GitHub Actions (público) | Não cabe | Cabe com ressalvas (sem endpoint; só agendado) | Cabe com ressalvas (6 h; ToS) | **Cabe** | Cabe (Pages) |
-| GitHub Pages | Não cabe | Não cabe | Não cabe | Não cabe | **Cabe** (1 GB) |
-| Supabase Free | Não cabe | **Cabe** (500 MB; pausa em 1 semana) | Não cabe | Não cabe | Não cabe |
-| Neon Free | Não cabe (suspende) | **Cabe** (100 CU-h; 1 GB) | Não cabe | Não cabe | Não cabe |
-| Firebase Spark | Não cabe | Cabe com ressalvas (sem Functions) | Não cabe | Não cabe | Cabe (Hosting 360 MB/dia) |
-| Render Free | Não cabe (0,1 CPU/512 MB; efêmero) | Cabe com ressalvas (dorme; Postgres expira) | Não cabe | Não cabe | Cabe com ressalvas |
-| Railway Free | Não cabe (US$ 1/mês) | Cabe com ressalvas | Não cabe | Não cabe | Não cabe |
-| Fly.io | Não cabe (grátis só US$ 1) | Cabe com ressalvas (pago na prática) | Não cabe | Não cabe | n/a |
-| HF Spaces | Não cabe (Docker exige pago) | Não cabe | Não cabe no grátis (ZeroGPU: 2 Spaces Gradio, termos não verificados) | Não cabe | Cabe (estático) |
-| Koyeb | Não cabe | Não cabe | Não cabe | Não cabe | Não cabe |
-| Northflank Sandbox | Cabe com ressalvas (precisa mais que US$ 20/mês de 2 vCPU/4 GB; cartão) | Cabe com ressalvas | Não cabe | Não cabe | Não cabe |
-| Deno Deploy | Não cabe | Descartado (sunset 04/2027) | Não cabe | Não cabe | Descartado |
-| Vercel Hobby | Não cabe | Cabe com ressalvas (funções; restrição comercial não verificada) | Não cabe | Não cabe | Cabe |
-| Netlify Free | Não cabe | Cabe com ressalvas (estouro não verificado) | Não cabe | Não cabe | Cabe |
-| Turso / Upstash | Não cabe | **Cabe** (como dados/fila: Turso 10 M escritas/mês; Upstash 500 mil comandos/mês) | Não cabe | Não cabe | Não cabe |
-| Notebook local (WSL2+GPU) | Cabe com ressalvas (não fica ligado; CGNAT) | Cabe com ressalvas | **Cabe** | Cabe com ressalvas | n/a |
-| Hetzner CX23 (pago) | **Cabe** (€ 5,99) | Cabe | Não cabe (sem GPU) | Cabe | Cabe |
+| Provedor                     | W1 Weblate/Tolgee                                                       | W2 API/webhook + DB pequeno                                                       | W3 MT em lote                                                         | W4 CI              | W5 Páginas estáticas      |
+| ---------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------ | ------------------------- |
+| Oracle A1 (home SP)          | Cabe com ressalvas (capacidade; ociosidade; 2 OCPU/12 GB)               | Cabe com ressalvas                                                                | Não cabe (CPU lenta, sem GPU)                                         | Cabe com ressalvas | Cabe com ressalvas        |
+| GCP e2-micro                 | Não cabe (1 GB RAM; só EUA)                                             | Cabe com ressalvas (Cloud Run grátis, cartão)                                     | Não cabe                                                              | Não cabe           | Cabe com ressalvas        |
+| AWS Free                     | Não cabe (conta expira em 6 meses)                                      | Não cabe (idem)                                                                   | Não cabe                                                              | Não cabe           | Não cabe                  |
+| Azure free                   | Não cabe (12 meses; limites não verificados)                            | Não verificado                                                                    | Não cabe                                                              | Não verificado     | Não verificado            |
+| Cloudflare Workers/D1/Queues | Não cabe (sem container; 10 ms CPU)                                     | **Cabe** (D1 100 mil escritas/dia; Queues 10 mil ops/dia)                         | Não cabe (Workers AI 10 mil Neurons/dia)                              | Não cabe           | **Cabe** (Pages)          |
+| GitHub Actions (público)     | Não cabe                                                                | Cabe com ressalvas (sem endpoint; só agendado)                                    | Cabe com ressalvas (6 h; ToS)                                         | **Cabe**           | Cabe (Pages)              |
+| GitHub Pages                 | Não cabe                                                                | Não cabe                                                                          | Não cabe                                                              | Não cabe           | **Cabe** (1 GB)           |
+| Supabase Free                | Não cabe                                                                | **Cabe** (500 MB; pausa em 1 semana)                                              | Não cabe                                                              | Não cabe           | Não cabe                  |
+| Neon Free                    | Não cabe (suspende)                                                     | **Cabe** (100 CU-h; 1 GB)                                                         | Não cabe                                                              | Não cabe           | Não cabe                  |
+| Firebase Spark               | Não cabe                                                                | Cabe com ressalvas (sem Functions)                                                | Não cabe                                                              | Não cabe           | Cabe (Hosting 360 MB/dia) |
+| Render Free                  | Não cabe (0,1 CPU/512 MB; efêmero)                                      | Cabe com ressalvas (dorme; Postgres expira)                                       | Não cabe                                                              | Não cabe           | Cabe com ressalvas        |
+| Railway Free                 | Não cabe (US$ 1/mês)                                                    | Cabe com ressalvas                                                                | Não cabe                                                              | Não cabe           | Não cabe                  |
+| Fly.io                       | Não cabe (grátis só US$ 1)                                              | Cabe com ressalvas (pago na prática)                                              | Não cabe                                                              | Não cabe           | n/a                       |
+| HF Spaces                    | Não cabe (Docker exige pago)                                            | Não cabe                                                                          | Não cabe no grátis (ZeroGPU: 2 Spaces Gradio, termos não verificados) | Não cabe           | Cabe (estático)           |
+| Koyeb                        | Não cabe                                                                | Não cabe                                                                          | Não cabe                                                              | Não cabe           | Não cabe                  |
+| Northflank Sandbox           | Cabe com ressalvas (precisa mais que US$ 20/mês de 2 vCPU/4 GB; cartão) | Cabe com ressalvas                                                                | Não cabe                                                              | Não cabe           | Não cabe                  |
+| Deno Deploy                  | Não cabe                                                                | Descartado (sunset 04/2027)                                                       | Não cabe                                                              | Não cabe           | Descartado                |
+| Vercel Hobby                 | Não cabe                                                                | Cabe com ressalvas (funções; restrição comercial não verificada)                  | Não cabe                                                              | Não cabe           | Cabe                      |
+| Netlify Free                 | Não cabe                                                                | Cabe com ressalvas (estouro não verificado)                                       | Não cabe                                                              | Não cabe           | Cabe                      |
+| Turso / Upstash              | Não cabe                                                                | **Cabe** (como dados/fila: Turso 10 M escritas/mês; Upstash 500 mil comandos/mês) | Não cabe                                                              | Não cabe           | Não cabe                  |
+| Notebook local (WSL2+GPU)    | Cabe com ressalvas (não fica ligado; CGNAT)                             | Cabe com ressalvas                                                                | **Cabe**                                                              | Cabe com ressalvas | n/a                       |
+| Hetzner CX23 (pago)          | **Cabe** (€ 5,99)                                                       | Cabe                                                                              | Não cabe (sem GPU)                                                    | Cabe               | Cabe                      |
 
 ### O que não roda de forma realista em infraestrutura gratuita de nuvem
 
@@ -220,12 +220,12 @@ Legenda: **Cabe** / **Cabe com ressalvas** / **Não cabe**; entre parênteses, a
 
 ### Padrões de worker "somente saída" (CGNAT)
 
-| Padrão | Como funciona | Segurança | Observação |
-|---|---|---|---|
-| Polling da API do GitHub ou de uma fila (D1/Queues/Neon) | Worker local pergunta "há trabalho?" | Token com o mínimo de escopo; sem porta aberta | Mais simples; Queues Free retém 24 h e tem 10 mil ops/dia |
-| Cloudflare Tunnel | `cloudflared` abre túnel de saída; hostname público | Bloqueia toda entrada; exponha só o que for necessário | Gratuidade e ToS: **não verificado** nas páginas oficiais lidas |
-| Tailscale | Rede privada entre seus dispositivos | Acesso por ACL | Personal é **só uso não comercial**; Funnel (beta) expõe 443/8443/10000 |
-| GitHub self-hosted runner | Runner local recebe jobs do GitHub | **Docs: "almost never" em repo público** | Só se o workflow aceitar código de fork: não. Se usar, JIT/efêmero, em VM ou contêiner descartável, sem segredos |
+| Padrão                                                   | Como funciona                                       | Segurança                                              | Observação                                                                                                       |
+| -------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Polling da API do GitHub ou de uma fila (D1/Queues/Neon) | Worker local pergunta "há trabalho?"                | Token com o mínimo de escopo; sem porta aberta         | Mais simples; Queues Free retém 24 h e tem 10 mil ops/dia                                                        |
+| Cloudflare Tunnel                                        | `cloudflared` abre túnel de saída; hostname público | Bloqueia toda entrada; exponha só o que for necessário | Gratuidade e ToS: **não verificado** nas páginas oficiais lidas                                                  |
+| Tailscale                                                | Rede privada entre seus dispositivos                | Acesso por ACL                                         | Personal é **só uso não comercial**; Funnel (beta) expõe 443/8443/10000                                          |
+| GitHub self-hosted runner                                | Runner local recebe jobs do GitHub                  | **Docs: "almost never" em repo público**               | Só se o workflow aceitar código de fork: não. Se usar, JIT/efêmero, em VM ou contêiner descartável, sem segredos |
 
 **Recomendação de arquitetura:** polling de saída (API do GitHub) com o worker autenticado só com leitura, mais a abertura de PR a partir de um fork da própria pessoa.
 
@@ -247,11 +247,11 @@ Limite do modelo: sem revisão humana ou de CI, saída de MT não é confiável.
 
 **Tarifa:** a ANEEL projeta a tarifa média residencial (B1) em **R$ 851/MWh em dezembro de 2026, sem tributos** (R$ 0,851/kWh), alta média de 8,6% no ano (fonte: notícia sobre projeção da ANEEL). A bandeira amarela adiciona **R$ 1,885 por 100 kWh**. Com impostos (ICMS, PIS/Cofins) a tarifa final costuma ficar bem acima; uso o intervalo **R$ 0,85 a R$ 1,20/kWh** como **estimativa**, porque a tarifa exata da distribuidora de quem executa não foi verificada. Bandeira de dezembro: anunciada em 27/11, **não verificada**.
 
-| Cenário (estimativa) | Potência | Horas | kWh | Custo |
-|---|---|---|---|---|
-| Lote LLM: 20 idiomas × 158 mil palavras (≈ 4,7 M tokens de saída, a ~300 tok/s com batch; **tempo estimado, não medido**) | 150 W | ~4,4 h | ~0,66 | R$ 0,56 a R$ 0,79 |
-| Lote NMT em GPU: 10x conteúdo × 20 idiomas (≈ 95 M tokens, a ~1.000 tok/s; **tempo estimado, não medido**) | 150 W | ~26 h | ~4 | R$ 3,4 a R$ 4,8 |
-| Notebook ligado 24 h como servidor W1, ocioso a ~30 W (**estimativa**) | 30 W | 720 h | ~21,6 | R$ 18 a R$ 26/mês |
+| Cenário (estimativa)                                                                                                      | Potência | Horas  | kWh   | Custo             |
+| ------------------------------------------------------------------------------------------------------------------------- | -------- | ------ | ----- | ----------------- |
+| Lote LLM: 20 idiomas × 158 mil palavras (≈ 4,7 M tokens de saída, a ~300 tok/s com batch; **tempo estimado, não medido**) | 150 W    | ~4,4 h | ~0,66 | R$ 0,56 a R$ 0,79 |
+| Lote NMT em GPU: 10x conteúdo × 20 idiomas (≈ 95 M tokens, a ~1.000 tok/s; **tempo estimado, não medido**)                | 150 W    | ~26 h  | ~4    | R$ 3,4 a R$ 4,8   |
+| Notebook ligado 24 h como servidor W1, ocioso a ~30 W (**estimativa**)                                                    | 30 W     | 720 h  | ~21,6 | R$ 18 a R$ 26/mês |
 
 Conclusão: **o custo de energia do lote é desprezível** (centavos a poucos reais por rodada). Manter o notebook ligado 24 h como servidor sai **mais caro** que um VPS de € 5,99 e ainda sofre com CGNAT e quedas.
 
@@ -259,12 +259,12 @@ Conclusão: **o custo de energia do lote é desprezível** (centavos a poucos re
 
 Estimativas a partir dos limites oficiais acima.
 
-| Cenário | Weblate/DB local (≈300 MB por 1 M de palavras, pior caso) | D1 Free (5 GB; 100 mil escritas/dia) | Queues Free (≈ 3.300 mensagens/dia) | Workers AI Free (10 mil Neurons/dia) | Supabase Free (500 MB) |
-|---|---|---|---|---|---|
-| Hoje × 5 idiomas (≈ 0,8 M palavras) | ~0,24 GB | ok | ok se agrupar | **Neurons por palavra: não verificado** | ok |
-| Hoje × 20 idiomas (≈ 3,2 M) | ~0,95 GB | ok | ~108 mil strings se uma por mensagem: **33 dias**; agrupe em lotes | provável limite primeiro, mas **não verificado** | ~950 MB: **estoura** se tudo for para o banco |
-| 5x × 10 idiomas (≈ 7,9 M) | ~2,4 GB | ok | estoura sem agrupar | idem | **estoura** |
-| 10x × 20 idiomas (≈ 31,6 M) | ~9,5 GB | **estoura os 5 GB** | estoura | idem | **estoura** |
+| Cenário                             | Weblate/DB local (≈300 MB por 1 M de palavras, pior caso) | D1 Free (5 GB; 100 mil escritas/dia) | Queues Free (≈ 3.300 mensagens/dia)                                | Workers AI Free (10 mil Neurons/dia)             | Supabase Free (500 MB)                        |
+| ----------------------------------- | --------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------ | ------------------------------------------------ | --------------------------------------------- |
+| Hoje × 5 idiomas (≈ 0,8 M palavras) | ~0,24 GB                                                  | ok                                   | ok se agrupar                                                      | **Neurons por palavra: não verificado**          | ok                                            |
+| Hoje × 20 idiomas (≈ 3,2 M)         | ~0,95 GB                                                  | ok                                   | ~108 mil strings se uma por mensagem: **33 dias**; agrupe em lotes | provável limite primeiro, mas **não verificado** | ~950 MB: **estoura** se tudo for para o banco |
+| 5x × 10 idiomas (≈ 7,9 M)           | ~2,4 GB                                                   | ok                                   | estoura sem agrupar                                                | idem                                             | **estoura**                                   |
+| 10x × 20 idiomas (≈ 31,6 M)         | ~9,5 GB                                                   | **estoura os 5 GB**                  | estoura                                                            | idem                                             | **estoura**                                   |
 
 - **Primeiro a quebrar no W2:** Supabase (500 MB) ou a escrita diária do D1 (100 mil linhas) quando a memória de tradução crescer; depois Queues (10 mil operações/dia).
 - **Primeiro a quebrar no W1:** RAM (3 GB mínimo, 4 GB recomendado) vem antes do disco. Em 10x × 20, o banco chega perto de 10 GB, o que cabe em 40 GB de disco de um CX23.
@@ -275,12 +275,12 @@ Estimativas a partir dos limites oficiais acima.
 
 Fonte: hetzner.com/cloud/cost-optimized, lido em 2026-11-27. Preços mensais **sem IVA**.
 
-| Plano | vCPU | RAM | Disco | Tráfego | Preço/mês | Serve ao W1? |
-|---|---|---|---|---|---|---|
-| CX23 | 2 (x86) | 4 GB | 40 GB | 20 TB | **€ 5,99** | Sim (no limite recomendado) |
-| CAX11 | 2 (ARM) | 4 GB | 40 GB | 20 TB | € 6,49 | Sim (ARM64) |
-| CX33 | 4 | 8 GB | 80 GB | 20 TB | € 8,99 | Folga para Celery + Valkey + PostgreSQL |
-| CAX21 | 4 (ARM) | 8 GB | 80 GB | 20 TB | € 10,99 | Idem |
+| Plano | vCPU    | RAM  | Disco | Tráfego | Preço/mês  | Serve ao W1?                            |
+| ----- | ------- | ---- | ----- | ------- | ---------- | --------------------------------------- |
+| CX23  | 2 (x86) | 4 GB | 40 GB | 20 TB   | **€ 5,99** | Sim (no limite recomendado)             |
+| CAX11 | 2 (ARM) | 4 GB | 40 GB | 20 TB   | € 6,49     | Sim (ARM64)                             |
+| CX33  | 4       | 8 GB | 80 GB | 20 TB   | € 8,99     | Folga para Celery + Valkey + PostgreSQL |
+| CAX21 | 4 (ARM) | 8 GB | 80 GB | 20 TB   | € 10,99    | Idem                                    |
 
 - Locais listados: NBG1 e HEL1 (UE); a página mostra "currently unavailable" para todos os planos na captura. Datacenters gerais: Falkenstein, Nuremberg, Helsinki, Singapura, Hillsboro, Ashburn. **Nenhum no Brasil**: latência maior, mas aceitável para uma ferramenta de tradução.
 - Backups pagos do Hetzner: **não verificado**; custo extra provável. Alternativa: `pg_dump` agendado para R2 (10 GB grátis).
@@ -299,22 +299,22 @@ Fonte: hetzner.com/cloud/cost-optimized, lido em 2026-11-27. Preços mensais **s
 
 ## Nível de confiança
 
-| Afirmação | Confiança |
-|---|---|
-| Oracle A1 é 2 OCPU/12 GB hoje; regra de ociosidade de 7 dias | Alta (doc oficial) |
-| A redução aconteceu em 2026-06-15 | Média (artigo secundário) |
-| Falta de capacidade A1 em São Paulo | Baixa a média (relato anedótico, sem data) |
-| Cota do Workers Free, D1, Queues, DO, Workers AI, Pages | Alta (docs oficiais) |
-| Queues está no plano Free | Alta |
-| Tunnel é gratuito e sem cartão | Baixa (não verificado nas páginas oficiais lidas) |
-| GitHub Actions: 4 vCPU/16 GB, ARM, 6 h, 60 dias | Alta |
-| GitHub self-hosted: nenhuma taxa hoje | Média a alta (billing docs "remains free"); risco de volta da taxa |
-| GitHub Models aposentado | Alta (página oficial) |
-| HF Spaces Docker/Gradio exigem plano pago | Alta (docs oficiais) |
-| Supabase pausa em 1 semana; 2 projetos | Alta (página de preços) |
-| Hetzner CX23 € 5,99 | Alta no preço; média na disponibilidade ("unavailable" na captura) |
-| Vercel Hobby: restrição comercial | Não verificado |
-| Estimativas de energia e tempo de inferência | Baixa a média (estimativas) |
+| Afirmação                                                    | Confiança                                                          |
+| ------------------------------------------------------------ | ------------------------------------------------------------------ |
+| Oracle A1 é 2 OCPU/12 GB hoje; regra de ociosidade de 7 dias | Alta (doc oficial)                                                 |
+| A redução aconteceu em 2026-06-15                            | Média (artigo secundário)                                          |
+| Falta de capacidade A1 em São Paulo                          | Baixa a média (relato anedótico, sem data)                         |
+| Cota do Workers Free, D1, Queues, DO, Workers AI, Pages      | Alta (docs oficiais)                                               |
+| Queues está no plano Free                                    | Alta                                                               |
+| Tunnel é gratuito e sem cartão                               | Baixa (não verificado nas páginas oficiais lidas)                  |
+| GitHub Actions: 4 vCPU/16 GB, ARM, 6 h, 60 dias              | Alta                                                               |
+| GitHub self-hosted: nenhuma taxa hoje                        | Média a alta (billing docs "remains free"); risco de volta da taxa |
+| GitHub Models aposentado                                     | Alta (página oficial)                                              |
+| HF Spaces Docker/Gradio exigem plano pago                    | Alta (docs oficiais)                                               |
+| Supabase pausa em 1 semana; 2 projetos                       | Alta (página de preços)                                            |
+| Hetzner CX23 € 5,99                                          | Alta no preço; média na disponibilidade ("unavailable" na captura) |
+| Vercel Hobby: restrição comercial                            | Não verificado                                                     |
+| Estimativas de energia e tempo de inferência                 | Baixa a média (estimativas)                                        |
 
 ## Perguntas em aberto
 
@@ -333,52 +333,52 @@ Fonte: hetzner.com/cloud/cost-optimized, lido em 2026-11-27. Preços mensais **s
 
 Todas lidas em **2026-11-27**, salvo indicação.
 
-| Área da afirmação | URL | Data |
-|---|---|---|
-| Oracle Always Free (A1, ociosidade, bloco, saída) | https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm | 2026-11-27 |
-| Oracle: redução do A1 (secundária) | https://infoq.com/news/2026/07/oracle-cloud-free-tier-limits/ | 2026-11-27 |
-| Oracle: capacidade em São Paulo (comunidade) | https://community.oracle.com/CustomerConnect/discussion/949983/cannot-upgrade-free-tier-to-payg-a1-flex-out-of-capacity-in-sa-saopaulo-1-for-3-days | 2026-11-27 (conteúdo via resumo de busca) |
-| Google Cloud free (e2-micro, Cloud Run, Firestore, trial) | https://docs.cloud.google.com/free/docs/free-cloud-features | 2026-11-27 |
-| AWS Free | https://aws.amazon.com/free/ | 2026-11-27 |
-| Azure free | https://azure.microsoft.com/en-us/pricing/free-services/ | 2026-11-27 |
-| Cloudflare Workers limites | https://developers.cloudflare.com/workers/platform/limits/ | 2026-11-27 |
-| Cloudflare Workers AI preços | https://developers.cloudflare.com/workers-ai/platform/pricing/ | 2026-11-27 |
-| Cloudflare Workers AI limites | https://developers.cloudflare.com/workers-ai/platform/limits/ | 2026-11-27 |
-| Cloudflare D1 | https://developers.cloudflare.com/d1/platform/pricing/ | 2026-11-27 |
-| Cloudflare R2 | https://developers.cloudflare.com/r2/pricing/ | 2026-11-27 |
-| Cloudflare Queues | https://developers.cloudflare.com/queues/platform/pricing/ | 2026-11-27 |
-| Cloudflare Durable Objects | https://developers.cloudflare.com/durable-objects/platform/pricing/ | 2026-11-27 |
-| Cloudflare Pages | https://developers.cloudflare.com/pages/platform/limits/ | 2026-11-27 |
-| Cloudflare Tunnel (técnico) | https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/ | 2026-11-27 |
-| Cloudflare CDN (termos) | https://www.cloudflare.com/service-specific-terms-application-services/ | 2026-11-27 |
-| GitHub Actions billing | https://docs.github.com/en/billing/concepts/product-billing/github-actions | 2026-11-27 |
-| GitHub runners hospedados | https://docs.github.com/en/actions/reference/runners/github-hosted-runners | 2026-11-27 |
-| GitHub Actions limites | https://docs.github.com/en/actions/reference/limits | 2026-11-27 |
-| GitHub Actions: workflows agendados desativados | https://docs.github.com/en/actions/how-tos/manage-workflow-runs/disable-and-enable-workflows | 2026-11-27 |
-| GitHub ToS (Actions, Pages) | https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features | 2026-11-27 |
-| GitHub segurança (self-hosted, fork, pull_request_target) | https://docs.github.com/en/actions/reference/security/secure-use | 2026-11-27 |
-| GitHub Pages limites | https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits | 2026-11-27 |
-| GitHub Models aposentado | https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models | 2026-11-27 |
-| Taxa self-hosted adiada (secundária) | https://www.theregister.com/2025/12/17/github_charge_dev_own_hardware/ | 2026-11-27 (via busca) |
-| Supabase | https://supabase.com/pricing | 2026-11-27 |
-| Neon | https://neon.com/pricing | 2026-11-27 |
-| Firebase Spark | https://firebase.google.com/pricing | 2026-11-27 |
-| Render Free | https://render.com/docs/free | 2026-11-27 |
-| Railway | https://docs.railway.com/reference/pricing/plans | 2026-11-27 |
-| Fly.io | https://docs.fly.io/about/pricing | 2026-11-27 |
-| Hugging Face Spaces | https://huggingface.co/docs/hub/spaces-overview | 2026-11-27 |
-| Koyeb | https://www.koyeb.com/pricing | 2026-11-27 |
-| Northflank | https://northflank.com/pricing | 2026-11-27 |
-| Deno Deploy | https://deno.com/deploy/pricing | 2026-11-27 |
-| Netlify | https://www.netlify.com/pricing/ | 2026-11-27 |
-| Vercel Hobby | https://vercel.com/docs/plans/hobby | 2026-11-27 |
-| Vercel fair use | https://vercel.com/docs/limits/fair-use-guidelines | 2026-11-27 |
-| Turso | https://turso.tech/pricing | 2026-11-27 |
-| Upstash Redis | https://upstash.com/pricing/redis | 2026-11-27 |
-| Tailscale planos | https://tailscale.com/pricing | 2026-11-27 |
-| Tailscale Funnel | https://tailscale.com/kb/1223/funnel | 2026-11-27 |
-| Weblate requisitos | https://docs.weblate.org/en/latest/admin/install.html | 2026-11-27 |
-| Tolgee self-hosting | https://docs.tolgee.io/platform/self_hosting/running_with_docker | 2026-11-27 |
-| Hetzner Cloud (preços) | https://www.hetzner.com/cloud/cost-optimized/ | 2026-11-27 |
-| NVIDIA CUDA no WSL2 | https://docs.nvidia.com/cuda/wsl-user-guide/index.html | 2026-11-27 |
-| Tarifa ANEEL 2026 (projeção, via notícias; não a página da ANEEL) | https://www.gov.br/aneel/pt-br/assuntos/noticias/2026-defeso-eleitoral/bandeira-tarifaria-em-julho-permanece-amarela | 2026-11-27 (via busca) |
+| Área da afirmação                                                 | URL                                                                                                                                                 | Data                                      |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| Oracle Always Free (A1, ociosidade, bloco, saída)                 | https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm                                                        | 2026-11-27                                |
+| Oracle: redução do A1 (secundária)                                | https://infoq.com/news/2026/07/oracle-cloud-free-tier-limits/                                                                                       | 2026-11-27                                |
+| Oracle: capacidade em São Paulo (comunidade)                      | https://community.oracle.com/CustomerConnect/discussion/949983/cannot-upgrade-free-tier-to-payg-a1-flex-out-of-capacity-in-sa-saopaulo-1-for-3-days | 2026-11-27 (conteúdo via resumo de busca) |
+| Google Cloud free (e2-micro, Cloud Run, Firestore, trial)         | https://docs.cloud.google.com/free/docs/free-cloud-features                                                                                         | 2026-11-27                                |
+| AWS Free                                                          | https://aws.amazon.com/free/                                                                                                                        | 2026-11-27                                |
+| Azure free                                                        | https://azure.microsoft.com/en-us/pricing/free-services/                                                                                            | 2026-11-27                                |
+| Cloudflare Workers limites                                        | https://developers.cloudflare.com/workers/platform/limits/                                                                                          | 2026-11-27                                |
+| Cloudflare Workers AI preços                                      | https://developers.cloudflare.com/workers-ai/platform/pricing/                                                                                      | 2026-11-27                                |
+| Cloudflare Workers AI limites                                     | https://developers.cloudflare.com/workers-ai/platform/limits/                                                                                       | 2026-11-27                                |
+| Cloudflare D1                                                     | https://developers.cloudflare.com/d1/platform/pricing/                                                                                              | 2026-11-27                                |
+| Cloudflare R2                                                     | https://developers.cloudflare.com/r2/pricing/                                                                                                       | 2026-11-27                                |
+| Cloudflare Queues                                                 | https://developers.cloudflare.com/queues/platform/pricing/                                                                                          | 2026-11-27                                |
+| Cloudflare Durable Objects                                        | https://developers.cloudflare.com/durable-objects/platform/pricing/                                                                                 | 2026-11-27                                |
+| Cloudflare Pages                                                  | https://developers.cloudflare.com/pages/platform/limits/                                                                                            | 2026-11-27                                |
+| Cloudflare Tunnel (técnico)                                       | https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/                                                             | 2026-11-27                                |
+| Cloudflare CDN (termos)                                           | https://www.cloudflare.com/service-specific-terms-application-services/                                                                             | 2026-11-27                                |
+| GitHub Actions billing                                            | https://docs.github.com/en/billing/concepts/product-billing/github-actions                                                                          | 2026-11-27                                |
+| GitHub runners hospedados                                         | https://docs.github.com/en/actions/reference/runners/github-hosted-runners                                                                          | 2026-11-27                                |
+| GitHub Actions limites                                            | https://docs.github.com/en/actions/reference/limits                                                                                                 | 2026-11-27                                |
+| GitHub Actions: workflows agendados desativados                   | https://docs.github.com/en/actions/how-tos/manage-workflow-runs/disable-and-enable-workflows                                                        | 2026-11-27                                |
+| GitHub ToS (Actions, Pages)                                       | https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features                                               | 2026-11-27                                |
+| GitHub segurança (self-hosted, fork, pull_request_target)         | https://docs.github.com/en/actions/reference/security/secure-use                                                                                    | 2026-11-27                                |
+| GitHub Pages limites                                              | https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits                                                              | 2026-11-27                                |
+| GitHub Models aposentado                                          | https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models                                                               | 2026-11-27                                |
+| Taxa self-hosted adiada (secundária)                              | https://www.theregister.com/2025/12/17/github_charge_dev_own_hardware/                                                                              | 2026-11-27 (via busca)                    |
+| Supabase                                                          | https://supabase.com/pricing                                                                                                                        | 2026-11-27                                |
+| Neon                                                              | https://neon.com/pricing                                                                                                                            | 2026-11-27                                |
+| Firebase Spark                                                    | https://firebase.google.com/pricing                                                                                                                 | 2026-11-27                                |
+| Render Free                                                       | https://render.com/docs/free                                                                                                                        | 2026-11-27                                |
+| Railway                                                           | https://docs.railway.com/reference/pricing/plans                                                                                                    | 2026-11-27                                |
+| Fly.io                                                            | https://docs.fly.io/about/pricing                                                                                                                   | 2026-11-27                                |
+| Hugging Face Spaces                                               | https://huggingface.co/docs/hub/spaces-overview                                                                                                     | 2026-11-27                                |
+| Koyeb                                                             | https://www.koyeb.com/pricing                                                                                                                       | 2026-11-27                                |
+| Northflank                                                        | https://northflank.com/pricing                                                                                                                      | 2026-11-27                                |
+| Deno Deploy                                                       | https://deno.com/deploy/pricing                                                                                                                     | 2026-11-27                                |
+| Netlify                                                           | https://www.netlify.com/pricing/                                                                                                                    | 2026-11-27                                |
+| Vercel Hobby                                                      | https://vercel.com/docs/plans/hobby                                                                                                                 | 2026-11-27                                |
+| Vercel fair use                                                   | https://vercel.com/docs/limits/fair-use-guidelines                                                                                                  | 2026-11-27                                |
+| Turso                                                             | https://turso.tech/pricing                                                                                                                          | 2026-11-27                                |
+| Upstash Redis                                                     | https://upstash.com/pricing/redis                                                                                                                   | 2026-11-27                                |
+| Tailscale planos                                                  | https://tailscale.com/pricing                                                                                                                       | 2026-11-27                                |
+| Tailscale Funnel                                                  | https://tailscale.com/kb/1223/funnel                                                                                                                | 2026-11-27                                |
+| Weblate requisitos                                                | https://docs.weblate.org/en/latest/admin/install.html                                                                                               | 2026-11-27                                |
+| Tolgee self-hosting                                               | https://docs.tolgee.io/platform/self_hosting/running_with_docker                                                                                    | 2026-11-27                                |
+| Hetzner Cloud (preços)                                            | https://www.hetzner.com/cloud/cost-optimized/                                                                                                       | 2026-11-27                                |
+| NVIDIA CUDA no WSL2                                               | https://docs.nvidia.com/cuda/wsl-user-guide/index.html                                                                                              | 2026-11-27                                |
+| Tarifa ANEEL 2026 (projeção, via notícias; não a página da ANEEL) | https://www.gov.br/aneel/pt-br/assuntos/noticias/2026-defeso-eleitoral/bandeira-tarifaria-em-julho-permanece-amarela                                | 2026-11-27 (via busca)                    |

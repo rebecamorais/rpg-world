@@ -19,15 +19,15 @@ Consequência: o que falta ao projeto hoje não é uma plataforma. É (a) um lot
 
 Faixas de esforço: **inicial** em horas de engenharia; **manutenção** em horas por mês.
 
-| | Estratégia | Inicial | Manutenção | Custo recorrente | Veredito |
-|---|---|---:|---:|---|---|
-| A | Adotar: Weblate auto-hospedado, sem mudanças | 8–16 h | 2–4 h | ~€ 6/mês (VPS) ou Oracle com risco de recolhimento | Rejeitada como principal |
-| B | Estender: Weblate + worker local de tradução | 14–30 h | 1–3 h | Zero se o Libre for aprovado; senão igual a A | Reserva, se a comunidade crescer |
-| C | Fork de uma plataforma | 100–250 h | 5–10 h | Igual a A | Rejeitada |
-| D | Motor CLI como projeto independente | 80–200 h | 4–8 h | Zero | Rejeitada agora; revisitar |
-| E | Plataforma completa própria | 1.500–4.000 h | 20+ h | Zero a ~€ 6/mês | Desclassificada |
-| F | GitHub-nativa: script no repositório + CI + PR | 14–28 h | 0,5–2 h | Zero | **Arquitetura mínima** |
-| G | Híbrida: F + Weblate hospedado como tela de revisão opcional | 16–32 h | 1–3 h | Zero | **Recomendação principal** |
+|     | Estratégia                                                   |       Inicial | Manutenção | Custo recorrente                                   | Veredito                         |
+| --- | ------------------------------------------------------------ | ------------: | ---------: | -------------------------------------------------- | -------------------------------- |
+| A   | Adotar: Weblate auto-hospedado, sem mudanças                 |        8–16 h |      2–4 h | ~€ 6/mês (VPS) ou Oracle com risco de recolhimento | Rejeitada como principal         |
+| B   | Estender: Weblate + worker local de tradução                 |       14–30 h |      1–3 h | Zero se o Libre for aprovado; senão igual a A      | Reserva, se a comunidade crescer |
+| C   | Fork de uma plataforma                                       |     100–250 h |     5–10 h | Igual a A                                          | Rejeitada                        |
+| D   | Motor CLI como projeto independente                          |      80–200 h |      4–8 h | Zero                                               | Rejeitada agora; revisitar       |
+| E   | Plataforma completa própria                                  | 1.500–4.000 h |      20+ h | Zero a ~€ 6/mês                                    | Desclassificada                  |
+| F   | GitHub-nativa: script no repositório + CI + PR               |       14–28 h |    0,5–2 h | Zero                                               | **Arquitetura mínima**           |
+| G   | Híbrida: F + Weblate hospedado como tela de revisão opcional |       16–32 h |      1–3 h | Zero                                               | **Recomendação principal**       |
 
 ### A — Adotar (Weblate auto-hospedado)
 
@@ -97,25 +97,25 @@ F como núcleo, mais o **Weblate hospedado como tela de revisão opcional**: ele
 
 Os PoCs 0 e 3 mostraram que o script de lote é necessário, e a etapa A2 mostrou que o miolo dele não é trivial: mascarar tags, proteger números, consertar marcadores, tentar de novo, validar. A revisão humana continua sendo o gargalo, e nenhuma ferramenta pronta olhada cobre o que a etapa B precisa (comparação cega, severidade, cronômetro). Por isso a comparação foi refeita em cinco opções mais estreitas. Horas são **estimativas**.
 
-| | Opção | Inicial | Manutenção | Hospedagem | Veredito |
-|---|---|---:|---:|---|---|
-| 1 | Script de lote dentro do RPGWorld (é a F) | 16–30 h | 0,5–2 h/mês | Nenhuma | Insuficiente sozinha: não resolve a revisão |
-| 2 | CLI independente com adaptadores do RPGWorld | 60–120 h | 3–6 h/mês | Nenhuma | Cedo demais |
-| 3 | Pipeline + tela de revisão local, **dentro do repositório, com a divisão núcleo/adaptador já feita** | 28–50 h | 1–2 h/mês | Nenhuma | **Recomendada** |
-| 4 | Plataforma existente + motor próprio (é a G: Weblate hospedado como tela) | 18–34 h | 1–3 h/mês | De terceiro | Complemento opcional da 3, não substituto |
-| 5 | Plataforma independente completa | 1.500–4.000 h | 20+ h/mês | Própria | Continua desclassificada |
+|     | Opção                                                                                                |       Inicial |  Manutenção | Hospedagem  | Veredito                                    |
+| --- | ---------------------------------------------------------------------------------------------------- | ------------: | ----------: | ----------- | ------------------------------------------- |
+| 1   | Script de lote dentro do RPGWorld (é a F)                                                            |       16–30 h | 0,5–2 h/mês | Nenhuma     | Insuficiente sozinha: não resolve a revisão |
+| 2   | CLI independente com adaptadores do RPGWorld                                                         |      60–120 h |   3–6 h/mês | Nenhuma     | Cedo demais                                 |
+| 3   | Pipeline + tela de revisão local, **dentro do repositório, com a divisão núcleo/adaptador já feita** |       28–50 h |   1–2 h/mês | Nenhuma     | **Recomendada**                             |
+| 4   | Plataforma existente + motor próprio (é a G: Weblate hospedado como tela)                            |       18–34 h |   1–3 h/mês | De terceiro | Complemento opcional da 3, não substituto   |
+| 5   | Plataforma independente completa                                                                     | 1.500–4.000 h |   20+ h/mês | Própria     | Continua desclassificada                    |
 
 **Por que a 3.** A tela de revisão local é necessária de qualquer jeito para a etapa B, e é ela que ataca o gargalo. Feita uma vez, serve para o trabalho real: as mesmas telas revisam os 71,5 mil palavras que faltam.
 
 **Por que não a 2 agora, e o que se guarda dela.** Publicar um pacote para terceiros custa formatos genéricos, documentação, versões e suporte, e ainda não existe segundo usuário. O que vale fazer desde o primeiro dia, por 2 a 4 horas a mais, é a divisão de pastas:
 
-| Núcleo (não sabe o que é D&D) | Adaptador do RPGWorld |
-|---|---|
-| Protocolo de marcadores: mascarar, desmascarar, consertar | Gramática das tags `{@…}` do 5etools |
-| Validação: marcadores, ICU, números, glossário | Política de unidades (tabela de conversão) |
-| Orquestração: lotes, novas tentativas, segundo motor | Glossário pt-BR e termos contextuais |
-| Cliente do servidor de modelo (API compatível com OpenAI) | Formato e caminho dos arquivos `i18n/` |
-| Formato do estado de revisão e a tela | Resolução de nomes de entidades (`{@spell …}` → nome em pt) |
+| Núcleo (não sabe o que é D&D)                             | Adaptador do RPGWorld                                       |
+| --------------------------------------------------------- | ----------------------------------------------------------- |
+| Protocolo de marcadores: mascarar, desmascarar, consertar | Gramática das tags `{@…}` do 5etools                        |
+| Validação: marcadores, ICU, números, glossário            | Política de unidades (tabela de conversão)                  |
+| Orquestração: lotes, novas tentativas, segundo motor      | Glossário pt-BR e termos contextuais                        |
+| Cliente do servidor de modelo (API compatível com OpenAI) | Formato e caminho dos arquivos `i18n/`                      |
+| Formato do estado de revisão e a tela                     | Resolução de nomes de entidades (`{@spell …}` → nome em pt) |
 
 Com isso, extrair um projeto independente depois é mover uma pasta, não reescrever. **Licença:** dentro do repositório o código é GPL-3.0-or-later. Enquanto a Rebeca for a única autora e nada for copiado de código GPL de terceiros, ela pode publicar o núcleo sob outra licença quando extrair ([licenças](research/licensing.md)).
 

@@ -6,37 +6,37 @@
 
 Em todas as opções abaixo o dinheiro é pequeno. O que pesa são horas:
 
-| Tipo de custo | Ordem de grandeza |
-|---|---|
-| Energia para traduzir tudo o que falta (291 mil palavras) | menos de R$ 2 |
-| VPS de reserva, se um dia for necessária | ~€ 6/mês |
-| Experimentos | 14–26 h, uma vez |
-| Construir o validador e o lote | 14–28 h, uma vez |
-| Manter | 0,5–3 h por mês |
-| **Revisar o que a máquina traduziu** | **88–220 h só o português; 291–728 h tudo** |
+| Tipo de custo                                             | Ordem de grandeza                           |
+| --------------------------------------------------------- | ------------------------------------------- |
+| Energia para traduzir tudo o que falta (291 mil palavras) | menos de R$ 2                               |
+| VPS de reserva, se um dia for necessária                  | ~€ 6/mês                                    |
+| Experimentos                                              | 14–26 h, uma vez                            |
+| Construir o validador e o lote                            | 14–28 h, uma vez                            |
+| Manter                                                    | 0,5–3 h por mês                             |
+| **Revisar o que a máquina traduziu**                      | **88–220 h só o português; 291–728 h tudo** |
 
 ## Premissas
 
-| Premissa | Valor | Origem |
-|---|---|---|
-| Palavras de fonte no produto | 160.246 | medido |
-| Faltam traduzir | pt 88 mil, es 43 mil, sv 160 mil palavras | medido |
-| Tempo de GPU por 158 mil palavras | 1 a 2,2 h (Qwen3.5-9B Q4, 1 a 4 fluxos) | estimativa, [04](04-translation-engines.md) |
-| Energia por 158 mil palavras | 0,15 a 0,35 kWh | estimativa, [04](04-translation-engines.md) |
-| Tarifa residencial | R$ 0,85/kWh antes de impostos | projeção da ANEEL citada em [05](05-hosting-research.md) |
-| Ritmo de revisão de texto de regra | 400 a 1.000 palavras/h | **suposição**, sem fonte conferida; medir no PoC 2 |
-| Crescimento da interface | 1,4 a 5,1 mil palavras/mês | medido no git, ruidoso |
-| Crescimento das regras | em eventos de importação de 43 a 50 mil palavras | medido no git |
+| Premissa                           | Valor                                            | Origem                                                   |
+| ---------------------------------- | ------------------------------------------------ | -------------------------------------------------------- |
+| Palavras de fonte no produto       | 160.246                                          | medido                                                   |
+| Faltam traduzir                    | pt 88 mil, es 43 mil, sv 160 mil palavras        | medido                                                   |
+| Tempo de GPU por 158 mil palavras  | 1 a 2,2 h (Qwen3.5-9B Q4, 1 a 4 fluxos)          | estimativa, [04](04-translation-engines.md)              |
+| Energia por 158 mil palavras       | 0,15 a 0,35 kWh                                  | estimativa, [04](04-translation-engines.md)              |
+| Tarifa residencial                 | R$ 0,85/kWh antes de impostos                    | projeção da ANEEL citada em [05](05-hosting-research.md) |
+| Ritmo de revisão de texto de regra | 400 a 1.000 palavras/h                           | **suposição**, sem fonte conferida; medir no PoC 2       |
+| Crescimento da interface           | 1,4 a 5,1 mil palavras/mês                       | medido no git, ruidoso                                   |
+| Crescimento das regras             | em eventos de importação de 43 a 50 mil palavras | medido no git                                            |
 
 ## Tradução inicial
 
 Conta: palavras que faltam ÷ 158 mil × (tempo, energia) por idioma.
 
-| Idioma | Falta | GPU (h) | Energia (kWh) | Energia (R$) | Revisão (h) |
-|---|---:|---:|---:|---:|---:|
-| pt | 88 mil | 0,6–1,2 | 0,08–0,20 | 0,07–0,17 | 88–220 |
-| es | 43 mil | 0,3–0,6 | 0,04–0,10 | 0,03–0,08 | 43–108 |
-| sv | 160 mil | 1,0–2,2 | 0,15–0,35 | 0,13–0,30 | 160–400 |
+| Idioma    |       Falta |     GPU (h) | Energia (kWh) |  Energia (R$) | Revisão (h) |
+| --------- | ----------: | ----------: | ------------: | ------------: | ----------: |
+| pt        |      88 mil |     0,6–1,2 |     0,08–0,20 |     0,07–0,17 |      88–220 |
+| es        |      43 mil |     0,3–0,6 |     0,04–0,10 |     0,03–0,08 |      43–108 |
+| sv        |     160 mil |     1,0–2,2 |     0,15–0,35 |     0,13–0,30 |     160–400 |
 | **Total** | **291 mil** | **1,9–4,0** | **0,27–0,65** | **0,23–0,55** | **291–728** |
 
 Hoje só o português tem quem revise. O sueco não tem avaliador, e para o espanhol pode existir um SRD 5.2.1 oficial para importar (a confirmar).
@@ -53,12 +53,12 @@ Se o modo de raciocínio do modelo ficar ligado, o tempo de GPU multiplica por 3
 Conta: palavras de fonte × idiomas ÷ 158 mil × (1 a 2,2 h; 0,15 a 0,35 kWh). Supõe traduzir tudo do zero; a revisão não entra.
 
 | Conteúdo | Idiomas | Palavras a traduzir | GPU (h) | Energia (R$) |
-|---|---:|---:|---:|---:|
-| 1× | 2 | 0,32 mi | 2–4,5 | 0,3–0,6 |
-| 1× | 20 | 3,2 mi | 20–45 | 2,6–6 |
-| 2× | 5 | 1,6 mi | 10–22 | 1,3–3 |
-| 5× | 10 | 8 mi | 51–112 | 6,5–15 |
-| 10× | 20 | 32 mi | 203–446 | 26–60 |
+| -------- | ------: | ------------------: | ------: | -----------: |
+| 1×       |       2 |             0,32 mi |   2–4,5 |      0,3–0,6 |
+| 1×       |      20 |              3,2 mi |   20–45 |        2,6–6 |
+| 2×       |       5 |              1,6 mi |   10–22 |        1,3–3 |
+| 5×       |      10 |                8 mi |  51–112 |       6,5–15 |
+| 10×      |      20 |               32 mi | 203–446 |        26–60 |
 
 A 10× × 20 idiomas, a máquina leva de 8 a 19 dias de notebook ligado, em lotes. É viável. A revisão humana desse volume não é: 32 milhões de palavras a 1.000 por hora são 32 mil horas. **O que quebra primeiro é gente para revisar, muito antes da GPU.**
 
@@ -93,24 +93,24 @@ Cenário 1 + Weblate hospedado no plano Libre como tela de revisão.
 
 ### 5. Reserva paga, se o gratuito não bastar
 
-| Item | Preço | Quando |
-|---|---|---|
-| Hetzner CX23 (2 vCPU / 4 GB / 40 GB) para Weblate auto-hospedado | € 5,99/mês sem imposto | Comunidade ativa e plano Libre indisponível |
-| Backup em armazenamento de objetos | centavos/mês (não verificado) | Junto com a VPS |
-| API paga de tradução | não orçado | Não recomendado; contraria o requisito |
+| Item                                                             | Preço                         | Quando                                      |
+| ---------------------------------------------------------------- | ----------------------------- | ------------------------------------------- |
+| Hetzner CX23 (2 vCPU / 4 GB / 40 GB) para Weblate auto-hospedado | € 5,99/mês sem imposto        | Comunidade ativa e plano Libre indisponível |
+| Backup em armazenamento de objetos                               | centavos/mês (não verificado) | Junto com a VPS                             |
+| API paga de tradução                                             | não orçado                    | Não recomendado; contraria o requisito      |
 
 Ordem de grandeza: cerca de € 75 por ano. Não há datacenter da Hetzner no Brasil; para uma ferramenta de tradução, latência não é crítica.
 
 ## Pontos de quebra
 
-| O que cresce | O que quebra | Quando |
-|---|---|---|
-| Idiomas × conteúdo no Weblate hospedado | Teto de 160 mil strings | 5× conteúdo com 5 idiomas, ou 10× com 2 |
-| Texto de máquina sem revisão | Atenção humana | Já agora: 88–220 h só no português |
-| Tamanho dos PRs de tradução | Revisão por diff | Lotes acima de algumas centenas de strings |
-| Tradutores simultâneos sem Weblate | Conflitos de merge | A partir de um punhado de pessoas no mesmo arquivo |
-| VRAM | Modelos maiores que ~9B em Q4 | Só se o benchmark exigir modelo maior |
-| Banco do Weblate auto-hospedado | Disco de 40 GB | Não antes de 10× × 20 idiomas (~9,5 GB estimados) |
+| O que cresce                            | O que quebra                  | Quando                                             |
+| --------------------------------------- | ----------------------------- | -------------------------------------------------- |
+| Idiomas × conteúdo no Weblate hospedado | Teto de 160 mil strings       | 5× conteúdo com 5 idiomas, ou 10× com 2            |
+| Texto de máquina sem revisão            | Atenção humana                | Já agora: 88–220 h só no português                 |
+| Tamanho dos PRs de tradução             | Revisão por diff              | Lotes acima de algumas centenas de strings         |
+| Tradutores simultâneos sem Weblate      | Conflitos de merge            | A partir de um punhado de pessoas no mesmo arquivo |
+| VRAM                                    | Modelos maiores que ~9B em Q4 | Só se o benchmark exigir modelo maior              |
+| Banco do Weblate auto-hospedado         | Disco de 40 GB                | Não antes de 10× × 20 idiomas (~9,5 GB estimados)  |
 
 ## CI
 

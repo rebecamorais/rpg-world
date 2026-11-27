@@ -13,19 +13,19 @@
 
 ## Os números que decidem
 
-| | Valor | Tipo |
-|---|---|---|
-| Strings de fonte no produto | 5.727 | medido |
-| Palavras de fonte | 160.246 | medido |
-| Falta traduzir | pt 88 mil, es 43 mil, sv 160 mil palavras | medido |
-| GPU para um idioma inteiro | 0,8 h com 4 fluxos, 1,7 h com 1 | **medido** numa amostra de 200 strings, projetado |
-| Energia para tudo o que falta | menos de R$ 2 | estimativa |
-| Saídas válidas na forma, 100 regras | Gemma 99, Qwen 100, os dois juntos 100 | **medido**, uma execução |
-| Saídas certas como regra | — | **não medido** |
-| Revisão humana do português | 88 a 220 horas | suposição (400 a 1.000 palavras/h) |
-| Construir validador, pipeline e tela de revisão | 28 a 50 horas | estimativa |
-| RAM mínima de um Weblate próprio | 3 GB, sempre ligado | verificado |
-| Reserva paga, se um dia precisar | ~€ 6/mês | verificado |
+|                                                 | Valor                                     | Tipo                                              |
+| ----------------------------------------------- | ----------------------------------------- | ------------------------------------------------- |
+| Strings de fonte no produto                     | 5.727                                     | medido                                            |
+| Palavras de fonte                               | 160.246                                   | medido                                            |
+| Falta traduzir                                  | pt 88 mil, es 43 mil, sv 160 mil palavras | medido                                            |
+| GPU para um idioma inteiro                      | 0,8 h com 4 fluxos, 1,7 h com 1           | **medido** numa amostra de 200 strings, projetado |
+| Energia para tudo o que falta                   | menos de R$ 2                             | estimativa                                        |
+| Saídas válidas na forma, 100 regras             | Gemma 99, Qwen 100, os dois juntos 100    | **medido**, uma execução                          |
+| Saídas certas como regra                        | —                                         | **não medido**                                    |
+| Revisão humana do português                     | 88 a 220 horas                            | suposição (400 a 1.000 palavras/h)                |
+| Construir validador, pipeline e tela de revisão | 28 a 50 horas                             | estimativa                                        |
+| RAM mínima de um Weblate próprio                | 3 GB, sempre ligado                       | verificado                                        |
+| Reserva paga, se um dia precisar                | ~€ 6/mês                                  | verificado                                        |
 
 O gargalo é a revisão, não a máquina nem o dinheiro.
 
@@ -34,7 +34,7 @@ O gargalo é a revisão, não a máquina nem o dinheiro.
 1. **Rever "sem tradução automática, nem como rascunho"** ([traducoes-comunitarias.md](../../plans/2026-10-15-traducoes-comunitarias.md)). A proposta mantém "nada de máquina no app sem revisão".
 2. ~~Unidades~~ **decidido em 27/11:** converter; milha × 1,5; libra × 0,5 ([tabela](proposals/unit-conversion.md)).
 3. ~~Glossário, termos principais~~ **decidido em 27/11:** "nível" de magia, "salvaguarda", "Mestre", "rolar" ([registro](research/glossary-evidence.md)).
-3a. **Sim ou não para construir a tela de revisão local e gerar os 30 segmentos do B0.**
+   3a. **Sim ou não para construir a tela de revisão local e gerar os 30 segmentos do B0.**
 4. **Espanhol:** confirmar se existe SRD 5.2.1 oficial para importar antes de traduzir por máquina.
 5. **Licença das traduções da comunidade** (pode esperar).
 
@@ -42,28 +42,28 @@ O gargalo é a revisão, não a máquina nem o dinheiro.
 
 ## Docs
 
-| Doc | O que tem |
-|---|---|
-| [01-current-state.md](01-current-state.md) | Como a tradução funciona hoje no repositório |
-| [02-translation-volume.md](02-translation-volume.md) | Volume medido, cobertura por idioma, crescimento, projeções |
-| [03-market-research.md](03-market-research.md) | Weblate, Tolgee, Pontoon, Traduora, ferramentas de linha de comando |
-| [04-translation-engines.md](04-translation-engines.md) | Modelos, licenças dos pesos, desenho do benchmark |
-| [05-hosting-research.md](05-hosting-research.md) | O que cabe em nuvem gratuita e o que não cabe |
-| [06-build-vs-adopt.md](06-build-vs-adopt.md) | As sete estratégias comparadas |
-| [07-architecture-options.md](07-architecture-options.md) | Arquitetura mínima, principal, de reserva e de escala |
-| [08-cost-analysis.md](08-cost-analysis.md) | Cenários de custo e pontos de quebra |
-| [09-decision-matrix.md](09-decision-matrix.md) | Matriz ponderada e sensibilidade |
-| [10-poc-plan.md](10-poc-plan.md) | Seis experimentos, com critério de sucesso e de falha |
-| [11-recommendation.md](11-recommendation.md) | Recomendação, as 15 perguntas, roteiro, ir ou não ir |
-| [sources.md](sources.md) | Fontes externas, verificadas em 2026-11-27 |
-| [research/licensing.md](research/licensing.md) | O que as licenças significam para o projeto |
-| [research/poc-results.md](research/poc-results.md) | PoC 0, 1, 3 e etapas A e A2 do PoC 2: medições no notebook, causa das falhas, testes de regressão |
-| [proposals/unit-conversion.md](proposals/unit-conversion.md) | Proposta de tabela de conversão de unidades para o português |
-| [proposals/glossary.pt-BR.csv](proposals/glossary.pt-BR.csv) | Proposta de glossário v0.1 (230 linhas), não revisada |
-| [research/unit-conventions-evidence.md](research/unit-conventions-evidence.md) | O que o português aprovado faz com unidades, com contagens |
-| [research/glossary-evidence.md](research/glossary-evidence.md) | Como o português aprovado traduz cada termo, e onde se contradiz |
-| [stage-b/manifest.json](stage-b/manifest.json) | Amostras sorteadas da etapa B (30, 70 e 200 segmentos) |
-| [research/adversarial-review.md](research/adversarial-review.md) | A tentativa de derrubar a recomendação e o que mudou |
+| Doc                                                                            | O que tem                                                                                         |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| [01-current-state.md](01-current-state.md)                                     | Como a tradução funciona hoje no repositório                                                      |
+| [02-translation-volume.md](02-translation-volume.md)                           | Volume medido, cobertura por idioma, crescimento, projeções                                       |
+| [03-market-research.md](03-market-research.md)                                 | Weblate, Tolgee, Pontoon, Traduora, ferramentas de linha de comando                               |
+| [04-translation-engines.md](04-translation-engines.md)                         | Modelos, licenças dos pesos, desenho do benchmark                                                 |
+| [05-hosting-research.md](05-hosting-research.md)                               | O que cabe em nuvem gratuita e o que não cabe                                                     |
+| [06-build-vs-adopt.md](06-build-vs-adopt.md)                                   | As sete estratégias comparadas                                                                    |
+| [07-architecture-options.md](07-architecture-options.md)                       | Arquitetura mínima, principal, de reserva e de escala                                             |
+| [08-cost-analysis.md](08-cost-analysis.md)                                     | Cenários de custo e pontos de quebra                                                              |
+| [09-decision-matrix.md](09-decision-matrix.md)                                 | Matriz ponderada e sensibilidade                                                                  |
+| [10-poc-plan.md](10-poc-plan.md)                                               | Seis experimentos, com critério de sucesso e de falha                                             |
+| [11-recommendation.md](11-recommendation.md)                                   | Recomendação, as 15 perguntas, roteiro, ir ou não ir                                              |
+| [sources.md](sources.md)                                                       | Fontes externas, verificadas em 2026-11-27                                                        |
+| [research/licensing.md](research/licensing.md)                                 | O que as licenças significam para o projeto                                                       |
+| [research/poc-results.md](research/poc-results.md)                             | PoC 0, 1, 3 e etapas A e A2 do PoC 2: medições no notebook, causa das falhas, testes de regressão |
+| [proposals/unit-conversion.md](proposals/unit-conversion.md)                   | Proposta de tabela de conversão de unidades para o português                                      |
+| [proposals/glossary.pt-BR.csv](proposals/glossary.pt-BR.csv)                   | Proposta de glossário v0.1 (230 linhas), não revisada                                             |
+| [research/unit-conventions-evidence.md](research/unit-conventions-evidence.md) | O que o português aprovado faz com unidades, com contagens                                        |
+| [research/glossary-evidence.md](research/glossary-evidence.md)                 | Como o português aprovado traduz cada termo, e onde se contradiz                                  |
+| [stage-b/manifest.json](stage-b/manifest.json)                                 | Amostras sorteadas da etapa B (30, 70 e 200 segmentos)                                            |
+| [research/adversarial-review.md](research/adversarial-review.md)               | A tentativa de derrubar a recomendação e o que mudou                                              |
 
 ## Reproduzir os números
 

@@ -16,12 +16,12 @@ Por isso o primeiro passo não é infraestrutura de tradução contínua. É um 
 
 ## As quatro arquiteturas pedidas
 
-| | Arquitetura | Quando |
-|---|---|---|
-| **Principal** | Pipeline local + tela de revisão local + validador no CI, tudo dentro do repositório, com núcleo e adaptador separados ([06](06-build-vs-adopt.md), opção 3). Weblate hospedado opcional para tradutores de fora. Texto de máquina só entra depois de aprovado | Agora, se a etapa B passar |
-| **Mínima** | Git-nativa (F): o mesmo, sem a tela e sem Weblate; revisão por fatia em PR | Se a tela de revisão não se pagar na etapa B0 |
-| **Reserva** | Modelo reprovado: só o validador, tradução humana. Weblate hospedado indisponível e tradutores esperando: Weblate numa VPS de ~€ 6/mês | Conforme o que falhar |
-| **Escala** | Weblate auto-hospedado como dono da revisão; o mesmo script envia sugestões | Dezenas de tradutores ativos, ou 5× o conteúdo com 5 ou mais idiomas |
+|               | Arquitetura                                                                                                                                                                                                                                                    | Quando                                                               |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| **Principal** | Pipeline local + tela de revisão local + validador no CI, tudo dentro do repositório, com núcleo e adaptador separados ([06](06-build-vs-adopt.md), opção 3). Weblate hospedado opcional para tradutores de fora. Texto de máquina só entra depois de aprovado | Agora, se a etapa B passar                                           |
+| **Mínima**    | Git-nativa (F): o mesmo, sem a tela e sem Weblate; revisão por fatia em PR                                                                                                                                                                                     | Se a tela de revisão não se pagar na etapa B0                        |
+| **Reserva**   | Modelo reprovado: só o validador, tradução humana. Weblate hospedado indisponível e tradutores esperando: Weblate numa VPS de ~€ 6/mês                                                                                                                         | Conforme o que falhar                                                |
+| **Escala**    | Weblate auto-hospedado como dono da revisão; o mesmo script envia sugestões                                                                                                                                                                                    | Dezenas de tradutores ativos, ou 5× o conteúdo com 5 ou mais idiomas |
 
 Desenhos em [07](07-architecture-options.md). A [matriz](09-decision-matrix.md) deixa G, B e F empatadas (4,25, 4,20, 4,20); G foi escolhida porque é a única das três que tem tela de revisão **e** não depende de aprovação de terceiros.
 
@@ -60,41 +60,41 @@ Desenhos em [07](07-architecture-options.md). A [matriz](09-decision-matrix.md) 
 1. **Rever "sem tradução automática, nem como rascunho"** ([traducoes-comunitarias.md](../../plans/2026-10-15-traducoes-comunitarias.md)). A proposta mantém a parte que importa (nada de máquina no app sem revisão) e muda só a parte "nem como rascunho".
 2. ~~Unidades~~ **decidido em 27/11** ([tabela](proposals/unit-conversion.md)): converter; milha × 1,5; libra × 0,5; "1,5 quilômetro". O app precisa mudar uma linha para a milha.
 3. ~~Glossário, termos principais~~ **decidido em 27/11** ([registro](research/glossary-evidence.md#decisões-da-rebeca-2711)): "nível" de magia, "salvaguarda", "Mestre", "rolar", tipos de dano como estão. Nove termos menores seguem com a forma dominante até ela dizer o contrário.
-3a. **Construir a tela de revisão local** (12 a 20 h) e gerar o B0. É o próximo passo e precisa do seu sim.
+   3a. **Construir a tela de revisão local** (12 a 20 h) e gerar o B0. É o próximo passo e precisa do seu sim.
 4. **Espanhol:** confirmar se existe SRD 5.2.1 oficial em espanhol e sob qual licença, antes de traduzir por máquina.
 5. **Licença das traduções da comunidade** ([análise de licenças](research/licensing.md)). Pode esperar o primeiro tradutor de fora.
 
 ## Roteiro
 
-| Fase | O quê | Esforço | Sai com |
-|---|---|---:|---|
-| 0 | Exportar o backup do Weblate; decisões 1 a 3 | 1–2 h dela | Glossário e unidades fechados |
-| 1 | PoCs 0, 1, 3 e etapas A e A2 | **feito em 27/11** | Pipeline definido; motor provisório |
-| 2 | Validador completo, com os testes de regressão (PoC 4) | 6–12 h | Todo PR de tradução validado, com ou sem máquina |
-| 3 | Pipeline (núcleo + adaptador) e tela de revisão local | 22–38 h | Ferramenta pronta para a etapa B |
-| 4 | Etapa B0: 30 segmentos | 3–7 h de revisão | Rubrica calibrada, ritmo medido |
-| 5 | Etapa B1: 70 segmentos, comparação cega | 5–13 h de revisão | Motor escolhido |
-| 6 | Etapa B2: 200 segmentos, pipeline congelado | 17–41 h de revisão | **Vai ou não vai** |
-| 7 | O resto do pt do SRD 5.2, em fatias | restante das 72–179 h | Português completo |
-| 8 | Só com sinal real: espanhol, Weblate próprio, projeto independente | — | — |
+| Fase | O quê                                                              |               Esforço | Sai com                                          |
+| ---- | ------------------------------------------------------------------ | --------------------: | ------------------------------------------------ |
+| 0    | Exportar o backup do Weblate; decisões 1 a 3                       |            1–2 h dela | Glossário e unidades fechados                    |
+| 1    | PoCs 0, 1, 3 e etapas A e A2                                       |    **feito em 27/11** | Pipeline definido; motor provisório              |
+| 2    | Validador completo, com os testes de regressão (PoC 4)             |                6–12 h | Todo PR de tradução validado, com ou sem máquina |
+| 3    | Pipeline (núcleo + adaptador) e tela de revisão local              |               22–38 h | Ferramenta pronta para a etapa B                 |
+| 4    | Etapa B0: 30 segmentos                                             |      3–7 h de revisão | Rubrica calibrada, ritmo medido                  |
+| 5    | Etapa B1: 70 segmentos, comparação cega                            |     5–13 h de revisão | Motor escolhido                                  |
+| 6    | Etapa B2: 200 segmentos, pipeline congelado                        |    17–41 h de revisão | **Vai ou não vai**                               |
+| 7    | O resto do pt do SRD 5.2, em fatias                                | restante das 72–179 h | Português completo                               |
+| 8    | Só com sinal real: espanhol, Weblate próprio, projeto independente |                     — | —                                                |
 
 A fase 2 vale sozinha: mesmo se o modelo for reprovado, o validador protege as traduções humanas. O que for aprovado nas fases 5 e 6 já é tradução do produto.
 
 ## Portões
 
-| Portão | Passa se | Senão |
-|---|---|---|
-| Validador | ≥ 28 de 30 erros plantados; < 1% de falso positivo no pt aprovado; todos os casos de regressão | Corrigir antes de qualquer lote |
-| Rejeição segura | Nenhuma saída inválida gravada; toda chave não entregue aparece num relatório | Não rodar lote |
-| B0 | Menos de 3 erros críticos (P0) em 30 | Voltar ao pipeline |
-| B1 | Um motor escolhido pela regra escrita em [10](10-poc-plan.md) | — |
-| B2, vai | No máximo 2 P0 em 200, no máximo 10 com P0 ou P1, ≥ 80% aproveitável | Entre os dois: máquina só nas descrições longas |
-| B2, não vai | 6 ou mais P0 nos primeiros 100, ou < 60% aproveitável | Só o validador; tradução humana |
-| Custo de revisão | Ritmo medido projeta até 150 h para o que falta (proposta; a decisão é dela) | Reduzir escopo ou buscar segundo revisor |
-| Weblate auto-hospedado | Plano Libre indisponível **e** pelo menos 3 tradutores ativos que não usam Git | Não subir |
-| Interface pública para a comunidade | Pedidos reais de tradutores que a tela local e o Weblate não atendem | Não construir |
-| Projeto independente | Um segundo repositório real pedindo o pipeline | Fica dentro do RPGWorld |
-| Trava de hashes | Fluxo recorrente de tradução por máquina sem Weblate | Adiada |
+| Portão                              | Passa se                                                                                       | Senão                                           |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| Validador                           | ≥ 28 de 30 erros plantados; < 1% de falso positivo no pt aprovado; todos os casos de regressão | Corrigir antes de qualquer lote                 |
+| Rejeição segura                     | Nenhuma saída inválida gravada; toda chave não entregue aparece num relatório                  | Não rodar lote                                  |
+| B0                                  | Menos de 3 erros críticos (P0) em 30                                                           | Voltar ao pipeline                              |
+| B1                                  | Um motor escolhido pela regra escrita em [10](10-poc-plan.md)                                  | —                                               |
+| B2, vai                             | No máximo 2 P0 em 200, no máximo 10 com P0 ou P1, ≥ 80% aproveitável                           | Entre os dois: máquina só nas descrições longas |
+| B2, não vai                         | 6 ou mais P0 nos primeiros 100, ou < 60% aproveitável                                          | Só o validador; tradução humana                 |
+| Custo de revisão                    | Ritmo medido projeta até 150 h para o que falta (proposta; a decisão é dela)                   | Reduzir escopo ou buscar segundo revisor        |
+| Weblate auto-hospedado              | Plano Libre indisponível **e** pelo menos 3 tradutores ativos que não usam Git                 | Não subir                                       |
+| Interface pública para a comunidade | Pedidos reais de tradutores que a tela local e o Weblate não atendem                           | Não construir                                   |
+| Projeto independente                | Um segundo repositório real pedindo o pipeline                                                 | Fica dentro do RPGWorld                         |
+| Trava de hashes                     | Fluxo recorrente de tradução por máquina sem Weblate                                           | Adiada                                          |
 
 ## Riscos que continuam
 

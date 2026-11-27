@@ -17,7 +17,12 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const args = Object.fromEntries(
-  process.argv.slice(2).reduce((acc, a, i, all) => (a.startsWith('--') ? [...acc, [a.slice(2), all[i + 1]]] : acc), []),
+  process.argv
+    .slice(2)
+    .reduce(
+      (acc, a, i, all) => (a.startsWith('--') ? [...acc, [a.slice(2), all[i + 1]]] : acc),
+      [],
+    ),
 );
 const URL_BASE = args.url ?? 'http://127.0.0.1:8080';
 const PARALLEL = Number(args.parallel ?? 4);
@@ -52,13 +57,18 @@ const flatten = (obj, prefix = '', out = {}) => {
 
 // The approved pt of SRD 5.1 carries English leftovers in brackets ("6 metros [20-foot-radius sphere]").
 const cleanReference = (text) =>
-  text.replace(/\s*\[[^\]]*(ft|foot|feet|miles?|pounds?|inch|inches|gallons?|cube|radius|sphere|cone|line)[^\]]*\]/gi, '');
+  text.replace(
+    /\s*\[[^\]]*(ft|foot|feet|miles?|pounds?|inch|inches|gallons?|cube|radius|sphere|cone|line)[^\]]*\]/gi,
+    '',
+  );
 
 const random = prng(20261127);
 const spellsEn = json('content/dnd5e/srd-5.1/i18n/en/spells.json');
 const spellsPt = json('content/dnd5e/srd-5.1/i18n/pt/spells.json');
 const spellPairs = shuffle(
-  Object.keys(spellsEn).filter((k) => spellsEn[k].description?.trim() && spellsPt[k]?.description?.trim()),
+  Object.keys(spellsEn).filter(
+    (k) => spellsEn[k].description?.trim() && spellsPt[k]?.description?.trim(),
+  ),
   random,
 ).map((k) => ({
   key: `srd-5.1/spells/${k}.description`,
@@ -76,7 +86,9 @@ const uiPairs = shuffle(
   Object.keys(uiEn).filter((k) => uiEn[k].trim() && uiPt[k]?.trim()),
   random,
 ).map((k) => ({ key: `ui/${k}`, group: 'ui', source: uiEn[k], reference: uiPt[k] }));
-const icu = uiPairs.filter((p) => /\{[^}]*,\s*(plural|select)/.test(p.source) || /<\w+>/.test(p.source)).slice(0, 15);
+const icu = uiPairs
+  .filter((p) => /\{[^}]*,\s*(plural|select)/.test(p.source) || /<\w+>/.test(p.source))
+  .slice(0, 15);
 const ui = [...icu, ...uiPairs.filter((p) => !icu.includes(p)).slice(0, 35)];
 
 let sample = [...rules, ...ui];
@@ -86,11 +98,31 @@ if (LIMIT) sample = [...rules.slice(0, LIMIT), ...ui.slice(0, LIMIT)];
 const fmt = (n) => String(Math.round(n * 10) / 10);
 const km = (miles) => (miles === 1 ? 1.5 : Math.round(miles * 1.6));
 const UNITS = [
-  [/(\d+(?:,\d{3})*(?:\.\d+)?)[- ](?:foot|feet|ft\.?)(?=[- ]|\b)/gi, (n) => `${fmt(n * 0.3)}-meter`, (n) => `${fmt(n * 0.3)} meters`],
-  [/(\d+(?:,\d{3})*(?:\.\d+)?)[- ]miles?\b/gi, (n) => `${km(n)}-kilometer`, (n) => `${km(n)} kilometers`],
-  [/(\d+(?:,\d{3})*(?:\.\d+)?)[- ](?:pounds?|lb\.?)(?=[- ]|\b)/gi, (n) => `${fmt(Math.round(n * 0.45 * 2) / 2)}-kilogram`, (n) => `${fmt(Math.round(n * 0.45 * 2) / 2)} kilograms`],
-  [/(\d+(?:,\d{3})*(?:\.\d+)?)[- ]inch(?:es)?\b/gi, (n) => `${fmt(n * 2.5)}-centimeter`, (n) => `${fmt(n * 2.5)} centimeters`],
-  [/(\d+(?:,\d{3})*(?:\.\d+)?)[- ]gallons?\b/gi, (n) => `${fmt(n * 4)}-liter`, (n) => `${fmt(n * 4)} liters`],
+  [
+    /(\d+(?:,\d{3})*(?:\.\d+)?)[- ](?:foot|feet|ft\.?)(?=[- ]|\b)/gi,
+    (n) => `${fmt(n * 0.3)}-meter`,
+    (n) => `${fmt(n * 0.3)} meters`,
+  ],
+  [
+    /(\d+(?:,\d{3})*(?:\.\d+)?)[- ]miles?\b/gi,
+    (n) => `${km(n)}-kilometer`,
+    (n) => `${km(n)} kilometers`,
+  ],
+  [
+    /(\d+(?:,\d{3})*(?:\.\d+)?)[- ](?:pounds?|lb\.?)(?=[- ]|\b)/gi,
+    (n) => `${fmt(Math.round(n * 0.45 * 2) / 2)}-kilogram`,
+    (n) => `${fmt(Math.round(n * 0.45 * 2) / 2)} kilograms`,
+  ],
+  [
+    /(\d+(?:,\d{3})*(?:\.\d+)?)[- ]inch(?:es)?\b/gi,
+    (n) => `${fmt(n * 2.5)}-centimeter`,
+    (n) => `${fmt(n * 2.5)} centimeters`,
+  ],
+  [
+    /(\d+(?:,\d{3})*(?:\.\d+)?)[- ]gallons?\b/gi,
+    (n) => `${fmt(n * 4)}-liter`,
+    (n) => `${fmt(n * 4)} liters`,
+  ],
 ];
 const convertUnits = (text) =>
   UNITS.reduce(
@@ -103,7 +135,18 @@ const convertUnits = (text) =>
   );
 
 // ---------- tag masking ----------
-const OPAQUE = new Set(['damage', 'scaledamage', 'dice', 'scaledice', 'dc', 'chance', 'hit', 'recharge', 'filter', 'book']);
+const OPAQUE = new Set([
+  'damage',
+  'scaledamage',
+  'dice',
+  'scaledice',
+  'dc',
+  'chance',
+  'hit',
+  'recharge',
+  'filter',
+  'book',
+]);
 function mask(text) {
   const tags = [];
   const masked = text.replace(/\{@(\w+) ([^}]*)\}/g, (whole, type, body) => {
@@ -136,11 +179,26 @@ const markersOk = (text, tags) =>
   tags.every((tag, i) =>
     tag.opaque
       ? text.split(`<t${i}/>`).length === 2
-      : text.split(`<t${i}>`).length === 2 && text.split(`</t${i}>`).length === 2 && text.indexOf(`<t${i}>`) < text.indexOf(`</t${i}>`),
-  ) && !/<\/?t\d+\/?>/.test(tags.reduce((t, _, i) => t.replaceAll(`<t${i}/>`, '').replaceAll(`<t${i}>`, '').replaceAll(`</t${i}>`, ''), text));
+      : text.split(`<t${i}>`).length === 2 &&
+        text.split(`</t${i}>`).length === 2 &&
+        text.indexOf(`<t${i}>`) < text.indexOf(`</t${i}>`),
+  ) &&
+  !/<\/?t\d+\/?>/.test(
+    tags.reduce(
+      (t, _, i) =>
+        t.replaceAll(`<t${i}/>`, '').replaceAll(`<t${i}>`, '').replaceAll(`</t${i}>`, ''),
+      text,
+    ),
+  );
 
 // ---------- v3: protect dice, DCs and converted measurements ----------
-const PT_UNIT = { meter: ['metro', 'metros'], kilometer: ['quilômetro', 'quilômetros'], kilogram: ['quilo', 'quilos'], centimeter: ['centímetro', 'centímetros'], liter: ['litro', 'litros'] };
+const PT_UNIT = {
+  meter: ['metro', 'metros'],
+  kilometer: ['quilômetro', 'quilômetros'],
+  kilogram: ['quilo', 'quilos'],
+  centimeter: ['centímetro', 'centímetros'],
+  liter: ['litro', 'litros'],
+};
 function protect(masked, tags) {
   const push = (restored) => {
     tags.push({ whole: restored, opaque: true });
@@ -152,8 +210,10 @@ function protect(masked, tags) {
       part.startsWith('<')
         ? part
         : part
-            .replace(/(\d+(?:\.\d+)?)[- ](meter|kilometer|kilogram|centimeter|liter)s?\b/g, (_, n, unit) =>
-              push(`${n.replace('.', ',')} ${PT_UNIT[unit][Number(n) < 2 ? 0 : 1]}`),
+            .replace(
+              /(\d+(?:\.\d+)?)[- ](meter|kilometer|kilogram|centimeter|liter)s?\b/g,
+              (_, n, unit) =>
+                push(`${n.replace('.', ',')} ${PT_UNIT[unit][Number(n) < 2 ? 0 : 1]}`),
             )
             .replace(/\bDC (\d+)\b/g, (_, n) => push(`CD ${n}`))
             .replace(/\b\d*d\d+(?:\s*[+-]\s*\d+)?\b/g, (whole) => push(whole)),
@@ -172,7 +232,9 @@ function repairMarkers(raw, tags) {
   tags.forEach((tag, i) => {
     if (tag.opaque) return;
     let seen = 0;
-    out = out.replace(new RegExp(`<t${i}>([\\s\\S]*?)</t${i}>`, 'g'), (whole, inner) => (seen++ ? inner : whole));
+    out = out.replace(new RegExp(`<t${i}>([\\s\\S]*?)</t${i}>`, 'g'), (whole, inner) =>
+      seen++ ? inner : whole,
+    );
   });
   return out;
 }
@@ -339,16 +401,27 @@ async function complete(messages) {
   const response = await fetch(`${URL_BASE}/v1/chat/completions`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ messages, temperature: 0.2, max_tokens: 4096, chat_template_kwargs: { enable_thinking: false } }),
+    body: JSON.stringify({
+      messages,
+      temperature: 0.2,
+      max_tokens: 4096,
+      chat_template_kwargs: { enable_thinking: false },
+    }),
   });
   if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
   const body = await response.json();
-  return { text: (body.choices[0].message.content ?? '').trim(), tokens: body.usage.completion_tokens };
+  return {
+    text: (body.choices[0].message.content ?? '').trim(),
+    tokens: body.usage.completion_tokens,
+  };
 }
 
 // ---------- checks ----------
-const multiset = (text, pattern) => (text.match(pattern) ?? []).map((m) => m.toLowerCase().replace(/\s+/g, '')).sort().join('|');
-const placeholders = (text) => multiset(text.replace(/\{@[^}]*\}/g, ''), /\{\s*[a-zA-Z_][a-zA-Z0-9_]*\s*[,}]/g).replace(/,/g, '}');
+const multiset = (text, pattern) =>
+  (text.match(pattern) ?? [])
+    .map((m) => m.toLowerCase().replace(/\s+/g, ''))
+    .sort()
+    .join('|');
 const htmlTags = (text) => multiset(text, /<\/?[a-zA-Z][a-zA-Z0-9]*>/g);
 const dice = (text) => multiset(text, /\b\d*d\d+\b/gi);
 const balanced = (text) => {
@@ -362,18 +435,26 @@ const balanced = (text) => {
 };
 // Numbers outside tags and dice, with decimal comma or point treated alike.
 const numbers = (text) =>
-  (text.replace(/\{@[^}]*\}/g, ' ').replace(/<\/?t\d+\/?>/g, ' ').replace(/\b\d*d\d+\b/gi, ' ').match(/\d+(?:[.,]\d+)?/g) ?? [])
+  (
+    text
+      .replace(/\{@[^}]*\}/g, ' ')
+      .replace(/<\/?t\d+\/?>/g, ' ')
+      .replace(/\b\d*d\d+\b/gi, ' ')
+      .match(/\d+(?:[.,]\d+)?/g) ?? []
+  )
     .map((n) => String(Number(n.replace(/[.,](?=\d{3}\b)/g, '').replace(',', '.'))))
     .sort()
     .join('|');
-const stripTags = (text) => text.replace(/\{@\w+ ([^}]*)\}/g, (_, body) => body.split('|')[2] ?? body.split('|')[0]);
+const stripTags = (text) =>
+  text.replace(/\{@\w+ ([^}]*)\}/g, (_, body) => body.split('|')[2] ?? body.split('|')[0]);
 
 // chrF (character n-gram F-score, n = 1..6, beta = 2), whitespace removed.
 function chrF(hypothesis, reference) {
   const grams = (text, n) => {
     const s = text.replace(/\s+/g, '');
     const map = new Map();
-    for (let i = 0; i + n <= s.length; i++) map.set(s.slice(i, i + n), (map.get(s.slice(i, i + n)) ?? 0) + 1);
+    for (let i = 0; i + n <= s.length; i++)
+      map.set(s.slice(i, i + n), (map.get(s.slice(i, i + n)) ?? 0) + 1);
     return map;
   };
   let precision = 0;
@@ -405,7 +486,10 @@ function validate(item, prepared, tags, raw) {
     const icu = icuProblem(prepared, raw);
     if (icu) problems.push(icu);
   }
-  if (htmlTags(prepared.replace(/<\/?t\d+\/?>/g, '')) !== htmlTags(raw.replace(/<\/?t\d+\/?>/g, ''))) problems.push('html');
+  if (
+    htmlTags(prepared.replace(/<\/?t\d+\/?>/g, '')) !== htmlTags(raw.replace(/<\/?t\d+\/?>/g, ''))
+  )
+    problems.push('html');
   if (!balanced(raw)) problems.push('braces');
   if (dice(prepared) !== dice(raw)) problems.push('dice');
   if (numbers(prepared) !== numbers(raw)) problems.push('numbers');
@@ -417,8 +501,14 @@ async function translate(item) {
   const started = performance.now();
   const { prepared, tags } = prepare(item);
   const terms = termsFor(item.source);
-  const glossary = terms.length ? `\n\nGlossary for this text:\n${terms.map(([p, pt]) => `- ${p.source.replace(/\\b|\(\?<!dis\)|\(s\|ing\)\?|s\?/g, '')} = ${pt}`).join('\n')}` : '';
-  const messages = [{ role: 'system', content: SYSTEM + glossary }, ...exampleTurns, { role: 'user', content: prepared }];
+  const glossary = terms.length
+    ? `\n\nGlossary for this text:\n${terms.map(([p, pt]) => `- ${p.source.replace(/\\b|\(\?<!dis\)|\(s\|ing\)\?|s\?/g, '')} = ${pt}`).join('\n')}`
+    : '';
+  const messages = [
+    { role: 'system', content: SYSTEM + glossary },
+    ...exampleTurns,
+    { role: 'user', content: prepared },
+  ];
   let raw = '';
   let problems = [];
   let firstProblems = null;
@@ -426,8 +516,9 @@ async function translate(item) {
   let tokens = 0;
   const history = [];
   let repaired = false;
-  const expectedMarkers = tags.map((tag, i) => (tag.opaque ? `<t${i}/>` : `<t${i}>…</t${i}>`)).join(' ') || 'none';
-  for (; attempts < 3; ) {
+  const expectedMarkers =
+    tags.map((tag, i) => (tag.opaque ? `<t${i}/>` : `<t${i}>…</t${i}>`)).join(' ') || 'none';
+  for (; attempts < 3;) {
     attempts++;
     const turn = history.length
       ? [
@@ -494,7 +585,8 @@ await Promise.all(
 );
 const wall = (performance.now() - started) / 1000;
 const pct = (part, whole) => (whole ? +((100 * part) / whole).toFixed(1) : null);
-const mean = (list) => (list.length ? +(list.reduce((a, b) => a + b, 0) / list.length).toFixed(1) : null);
+const mean = (list) =>
+  list.length ? +(list.reduce((a, b) => a + b, 0) / list.length).toFixed(1) : null;
 const summarize = (rows) => {
   const terms = rows.reduce((a, r) => a + r.glossaryTerms, 0);
   const missed = rows.reduce((a, r) => a + r.glossaryMissed.length, 0);
@@ -504,10 +596,34 @@ const summarize = (rows) => {
     passFirstTryPct: pct(rows.filter((r) => !r.firstProblems.length).length, rows.length),
     passAfterRetriesPct: pct(rows.filter((r) => !r.problems.length).length, rows.length),
     stillFailing: Object.fromEntries(
-      ['markers', 'icu-structure', 'icu-syntax', 'html', 'braces', 'dice', 'numbers', 'empty', 'preamble'].map((n) => [n, count(n, 'problems')]).filter(([, c]) => c),
+      [
+        'markers',
+        'icu-structure',
+        'icu-syntax',
+        'html',
+        'braces',
+        'dice',
+        'numbers',
+        'empty',
+        'preamble',
+      ]
+        .map((n) => [n, count(n, 'problems')])
+        .filter(([, c]) => c),
     ),
     firstTryProblems: Object.fromEntries(
-      ['markers', 'icu-structure', 'icu-syntax', 'html', 'braces', 'dice', 'numbers', 'empty', 'preamble'].map((n) => [n, count(n, 'firstProblems')]).filter(([, c]) => c),
+      [
+        'markers',
+        'icu-structure',
+        'icu-syntax',
+        'html',
+        'braces',
+        'dice',
+        'numbers',
+        'empty',
+        'preamble',
+      ]
+        .map((n) => [n, count(n, 'firstProblems')])
+        .filter(([, c]) => c),
     ),
     glossaryHitPct: pct(terms - missed, terms),
     glossaryTerms: terms,

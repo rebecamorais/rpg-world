@@ -12,13 +12,13 @@ node docs/discovery/localization-infrastructure/scripts/decision-matrix.mjs
 
 ## Requisitos obrigatórios (eliminam antes de pontuar)
 
-| Requisito | A | B | C | D | E | F | G |
-|---|---|---|---|---|---|---|---|
-| Sem assinatura obrigatória | ⚠️ VPS ou Oracle | ⚠️ depende do Libre | ⚠️ | ✅ | ⚠️ | ✅ | ✅ |
-| Sem API paga obrigatória | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Sem depender de aprovação de terceiros | ✅ | ❌ se hospedado | ✅ | ✅ | ✅ | ✅ | ✅ (Weblate é opcional) |
-| Licença aberta, uso comercial futuro | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Manutenção cabível para uma pessoa | ✅ | ✅ | ❌ | ⚠️ | ❌ | ✅ | ✅ |
+| Requisito                              | A                | B                   | C   | D   | E   | F   | G                       |
+| -------------------------------------- | ---------------- | ------------------- | --- | --- | --- | --- | ----------------------- |
+| Sem assinatura obrigatória             | ⚠️ VPS ou Oracle | ⚠️ depende do Libre | ⚠️  | ✅  | ⚠️  | ✅  | ✅                      |
+| Sem API paga obrigatória               | ✅               | ✅                  | ✅  | ✅  | ✅  | ✅  | ✅                      |
+| Sem depender de aprovação de terceiros | ✅               | ❌ se hospedado     | ✅  | ✅  | ✅  | ✅  | ✅ (Weblate é opcional) |
+| Licença aberta, uso comercial futuro   | ✅               | ✅                  | ✅  | ✅  | ✅  | ✅  | ✅                      |
+| Manutenção cabível para uma pessoa     | ✅               | ✅                  | ❌  | ⚠️  | ❌  | ✅  | ✅                      |
 
 - **E está desclassificada** (1.500 a 4.000 h de construção). Fica na tabela só como referência.
 - **C falha** na manutenção (5 a 10 h por mês de sincronização com o upstream).
@@ -28,18 +28,18 @@ node docs/discovery/localization-infrastructure/scripts/decision-matrix.mjs
 
 Pesos: finanças 20, manutenção 20, capacidade 15, qualidade 10, infraestrutura 10, Git 10, licença 5, implementação 5, comunidade 5.
 
-| Critério | A | B | C | D | E | F | G |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Sustentabilidade financeira | 2 | 4 | 2 | 5 | 3 | 5 | 5 |
-| Esforço de manutenção | 3 | 4 | 1 | 2 | 0 | 4 | 3 |
-| Capacidade e escala | 4 | 4 | 4 | 3 | 4 | 3 | 4 |
-| Qualidade de tradução | 3 | 4 | 3 | 4 | 3 | 4 | 4 |
-| Viabilidade de infraestrutura | 2 | 5 | 2 | 5 | 2 | 5 | 5 |
-| Git e automação | 4 | 4 | 4 | 5 | 4 | 5 | 5 |
-| Licença e portabilidade | 5 | 5 | 3 | 5 | 5 | 5 | 5 |
-| Esforço de implementação | 5 | 4 | 1 | 2 | 0 | 4 | 4 |
-| Experiência da comunidade | 5 | 5 | 4 | 2 | 4 | 2 | 4 |
-| **Total ponderado** | **3,25** | **4,20** | **2,50** | **3,70** | **2,55** | **4,20** | **4,25** |
+| Critério                      |        A |        B |        C |        D |        E |        F |        G |
+| ----------------------------- | -------: | -------: | -------: | -------: | -------: | -------: | -------: |
+| Sustentabilidade financeira   |        2 |        4 |        2 |        5 |        3 |        5 |        5 |
+| Esforço de manutenção         |        3 |        4 |        1 |        2 |        0 |        4 |        3 |
+| Capacidade e escala           |        4 |        4 |        4 |        3 |        4 |        3 |        4 |
+| Qualidade de tradução         |        3 |        4 |        3 |        4 |        3 |        4 |        4 |
+| Viabilidade de infraestrutura |        2 |        5 |        2 |        5 |        2 |        5 |        5 |
+| Git e automação               |        4 |        4 |        4 |        5 |        4 |        5 |        5 |
+| Licença e portabilidade       |        5 |        5 |        3 |        5 |        5 |        5 |        5 |
+| Esforço de implementação      |        5 |        4 |        1 |        2 |        0 |        4 |        4 |
+| Experiência da comunidade     |        5 |        5 |        4 |        2 |        4 |        2 |        4 |
+| **Total ponderado**           | **3,25** | **4,20** | **2,50** | **3,70** | **2,55** | **4,20** | **4,25** |
 
 **Finanças.** F, G e D não têm nada pago nem cartão cadastrado (5). B é gratuita enquanto o plano Libre durar, com teto de 160 mil strings (4); a dependência do plano é contada **só aqui**. A e C precisam de € 6 por mês ou do Oracle A1, que recolhe instância ociosa (2).
 
@@ -63,12 +63,12 @@ Pesos: finanças 20, manutenção 20, capacidade 15, qualidade 10, infraestrutur
 
 Um critério sobe e os outros encolhem na mesma proporção.
 
-| Cenário | 1º | 2º | 3º |
-|---|---|---|---|
+| Cenário         | 1º     | 2º     | 3º     |
+| --------------- | ------ | ------ | ------ |
 | Pesos originais | G 4,25 | B 4,20 | F 4,20 |
-| Finanças 35% | G 4,39 | F 4,35 | B 4,16 |
-| Manutenção 35% | B 4,16 | F 4,16 | G 4,02 |
-| Comunidade 20% | B 4,33 | G 4,21 | F 3,85 |
+| Finanças 35%    | G 4,39 | F 4,35 | B 4,16 |
+| Manutenção 35%  | B 4,16 | F 4,16 | G 4,02 |
+| Comunidade 20%  | B 4,33 | G 4,21 | F 3,85 |
 
 Leitura:
 
@@ -80,11 +80,11 @@ Leitura:
 
 ## O que mudou nas notas depois da revisão
 
-| Mudança | Antes | Depois | Motivo |
-|---|---|---|---|
-| Capacidade de F e D | 4 | 3 | Revisão por diff tem menos vazão que uma tela de revisão |
-| Implementação de A | 4 | 5 | 8 a 16 h não é igual a 30 a 55 h |
-| Infraestrutura de B | 4 | 5 | A dependência do Libre já estava em finanças; contava duas vezes |
+| Mudança             | Antes | Depois | Motivo                                                           |
+| ------------------- | ----- | ------ | ---------------------------------------------------------------- |
+| Capacidade de F e D | 4     | 3      | Revisão por diff tem menos vazão que uma tela de revisão         |
+| Implementação de A  | 4     | 5      | 8 a 16 h não é igual a 30 a 55 h                                 |
+| Infraestrutura de B | 4     | 5      | A dependência do Libre já estava em finanças; contava duas vezes |
 
 Com as notas antigas, F ficava em primeiro com 4,35. Esse resultado não se sustentava.
 

@@ -21,25 +21,25 @@ Convenção de rótulos usados neste documento:
 
 Legenda de licença de pesos: OK = uso comercial permitido sem restrição relevante para o projeto; COND = permitido com condições que exigem leitura/revisão; NÃO = inadequado.
 
-| Candidato | Licença do software | Licença dos pesos (nome exato) | Pesos para o projeto? | pt-BR / es / sv | Cabe em 8 GB VRAM (Q4) | Glossário/placeholders | API OpenAI-compat | Evidência en→pt |
-|---|---|---|---|---|---|---|---|---|
-| LibreTranslate | AGPL-3.0 | usa pacotes Argos (licença por pacote: não verificado) | COND | Argos lista pt, pt-BR, es, sv | CPU/GPU leve | sem glossário documentado (README); HTML suportado: não verificado | API própria (não OpenAI) | nenhuma própria |
-| Argos Translate | MIT ou CC0 (dupla) | por pacote: não verificado | COND | pt, pt-BR, es, sv listados | sim, pequeno | sem glossário documentado | não (lib Python) | nenhuma própria |
-| CTranslate2 (runtime) | MIT | n/a | n/a | n/a | n/a | `target_prefix` etc. (não verificado nesta sessão) | não | n/a |
-| OPUS-MT tc-big en-pt (Marian) | MIT (ferramentas, não verificado) / CC-BY-4.0 nos pesos | **cc-by-4.0** | OK | alvo `>>pob<<` e `>>por<<`; es e sv são modelos separados | sim (0,2B) | sem glossário nativo; mascarar placeholders | não (via CT2/Transformers) | chrF 0,717 / BLEU 50,4 no flores101-devtest eng-por (MEDIDO, model card) |
-| MADLAD-400 (3B/7B/10B) | Apache-2.0 (card) | **Apache 2.0** | OK | tag `<2pt>`; distinção pt-BR/pt-PT: não verificado | 3B sim; 10B não | sem mecanismo nativo | não | card diz "não avaliado para produção" |
-| NLLB-200 | CC-BY-NC (card) | **cc-by-nc-4.0** | **NÃO** | sim | sim | n/a | n/a | n/a |
-| Qwen3.5 (9B, 4B) | Apache-2.0 | **Apache-2.0** | OK | 201 línguas/dialetos; pt, es, sv não nomeados no card | 9B em Q4 ~6,2 a 6,6 GB (fontes terceiras, não verificado) | prompt; JSON/GBNF via llama.cpp | sim via llama-server/Ollama | WMT24++ XCOMET-XXL 72,6 (55 idiomas, subset difícil, MEDIDO pela Qwen) |
-| Gemma 4 (E2B, E4B, 12B?, 26B A4B, 31B) | Apache-2.0 | **Apache 2.0** | OK | 35+ idiomas "out of the box", 140+ no pré-treino; pt/es/sv não nomeados no card | E4B sim (8B com embeddings); 26B/31B não | prompt | sim | sem benchmark de tradução no card |
-| TranslateGemma (4B/12B/27B) | n/a | tag **"gemma"** (Gemma Terms of Use) | COND | 55 idiomas; pt-BR e sv não confirmados no card | 4B sim; 12B apertado; 27B não | só src/tgt lang no template; sem glossário | via llama.cpp/Ollama | MetricX WMT24++: 4B 5,32 / 12B 3,60 / 27B 3,09 (MEDIDO, card; menor é melhor) |
-| Ministral 3 (3B/8B/14B) | Apache-2.0 | **Apache 2.0** | OK | não verificado para pt/es/sv | 8B sim | prompt | sim | nenhuma encontrada |
-| Llama (3.x) | n/a | Llama Community License (não verificado nesta sessão) | COND | não verificado | 8B sim | prompt | sim | nenhuma |
-| Phi (mini) | n/a | não verificado | não verificado | fraco em multilíngue (não verificado) | sim | prompt | sim | nenhuma |
-| Aya Expanse 8B | n/a | **cc-by-nc-4.0** + Acceptable Use Policy | **NÃO** | 23 idiomas incl. pt, es; **sv não listado** | sim | prompt | sim | n/a |
-| Tower / Tower+ (9B) | n/a | **CC-BY-NC-4.0** (card; tag `cc-by-nc-sa-4.0` na mesma página) | **NÃO** | 22 idiomas incl. pt-BR, es-ES/LatAm, sv | 9B Q4 sim | prompt (IF-MT avalia glossário) | via vLLM/llama.cpp | WMT24++ xCOMET-xxl 84,38 (24 idiomas, MEDIDO no paper) |
-| EuroLLM-9B-Instruct | n/a | **Apache License 2.0** | OK | pt, es, sv listados | 9B Q4 sim | prompt | sim | sem resultados de tradução no card |
-| Seed-X-PPO-7B | n/a | **OpenMDW License Agreement, version 1.0** | OK (texto permissivo) | pt, es, sv na lista de 28 | 7B Q4 sim (há AWQ/GPTQ/GGUF de terceiros) | prompt livre; sem template de glossário | via vLLM | COMET 94,60 EN⇒XX FLORES-200 (média de idiomas); humano EN⇒pt 3,88/4 (MEDIDO, paper) |
-| Hunyuan-MT-7B / HY-MT1.5-7B | n/a | **TENCENT HUNYUAN COMMUNITY LICENSE AGREEMENT** / **TENCENT HY COMMUNITY LICENSE AGREEMENT** | **NÃO** (Território exclui UE, UK, Coreia do Sul; §5(b) saídas) | 33 idiomas; pt e es sim; **sv não listado** | 7B sim | template nativo de terminologia, contexto e tags | via vLLM | 1º em 30 de 31 categorias no WMT25 (alegação do card) |
+| Candidato                              | Licença do software                                     | Licença dos pesos (nome exato)                                                               | Pesos para o projeto?                                           | pt-BR / es / sv                                                                 | Cabe em 8 GB VRAM (Q4)                                    | Glossário/placeholders                                             | API OpenAI-compat           | Evidência en→pt                                                                      |
+| -------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------- | ------------------------------------------------------------------------------------ |
+| LibreTranslate                         | AGPL-3.0                                                | usa pacotes Argos (licença por pacote: não verificado)                                       | COND                                                            | Argos lista pt, pt-BR, es, sv                                                   | CPU/GPU leve                                              | sem glossário documentado (README); HTML suportado: não verificado | API própria (não OpenAI)    | nenhuma própria                                                                      |
+| Argos Translate                        | MIT ou CC0 (dupla)                                      | por pacote: não verificado                                                                   | COND                                                            | pt, pt-BR, es, sv listados                                                      | sim, pequeno                                              | sem glossário documentado                                          | não (lib Python)            | nenhuma própria                                                                      |
+| CTranslate2 (runtime)                  | MIT                                                     | n/a                                                                                          | n/a                                                             | n/a                                                                             | n/a                                                       | `target_prefix` etc. (não verificado nesta sessão)                 | não                         | n/a                                                                                  |
+| OPUS-MT tc-big en-pt (Marian)          | MIT (ferramentas, não verificado) / CC-BY-4.0 nos pesos | **cc-by-4.0**                                                                                | OK                                                              | alvo `>>pob<<` e `>>por<<`; es e sv são modelos separados                       | sim (0,2B)                                                | sem glossário nativo; mascarar placeholders                        | não (via CT2/Transformers)  | chrF 0,717 / BLEU 50,4 no flores101-devtest eng-por (MEDIDO, model card)             |
+| MADLAD-400 (3B/7B/10B)                 | Apache-2.0 (card)                                       | **Apache 2.0**                                                                               | OK                                                              | tag `<2pt>`; distinção pt-BR/pt-PT: não verificado                              | 3B sim; 10B não                                           | sem mecanismo nativo                                               | não                         | card diz "não avaliado para produção"                                                |
+| NLLB-200                               | CC-BY-NC (card)                                         | **cc-by-nc-4.0**                                                                             | **NÃO**                                                         | sim                                                                             | sim                                                       | n/a                                                                | n/a                         | n/a                                                                                  |
+| Qwen3.5 (9B, 4B)                       | Apache-2.0                                              | **Apache-2.0**                                                                               | OK                                                              | 201 línguas/dialetos; pt, es, sv não nomeados no card                           | 9B em Q4 ~6,2 a 6,6 GB (fontes terceiras, não verificado) | prompt; JSON/GBNF via llama.cpp                                    | sim via llama-server/Ollama | WMT24++ XCOMET-XXL 72,6 (55 idiomas, subset difícil, MEDIDO pela Qwen)               |
+| Gemma 4 (E2B, E4B, 12B?, 26B A4B, 31B) | Apache-2.0                                              | **Apache 2.0**                                                                               | OK                                                              | 35+ idiomas "out of the box", 140+ no pré-treino; pt/es/sv não nomeados no card | E4B sim (8B com embeddings); 26B/31B não                  | prompt                                                             | sim                         | sem benchmark de tradução no card                                                    |
+| TranslateGemma (4B/12B/27B)            | n/a                                                     | tag **"gemma"** (Gemma Terms of Use)                                                         | COND                                                            | 55 idiomas; pt-BR e sv não confirmados no card                                  | 4B sim; 12B apertado; 27B não                             | só src/tgt lang no template; sem glossário                         | via llama.cpp/Ollama        | MetricX WMT24++: 4B 5,32 / 12B 3,60 / 27B 3,09 (MEDIDO, card; menor é melhor)        |
+| Ministral 3 (3B/8B/14B)                | Apache-2.0                                              | **Apache 2.0**                                                                               | OK                                                              | não verificado para pt/es/sv                                                    | 8B sim                                                    | prompt                                                             | sim                         | nenhuma encontrada                                                                   |
+| Llama (3.x)                            | n/a                                                     | Llama Community License (não verificado nesta sessão)                                        | COND                                                            | não verificado                                                                  | 8B sim                                                    | prompt                                                             | sim                         | nenhuma                                                                              |
+| Phi (mini)                             | n/a                                                     | não verificado                                                                               | não verificado                                                  | fraco em multilíngue (não verificado)                                           | sim                                                       | prompt                                                             | sim                         | nenhuma                                                                              |
+| Aya Expanse 8B                         | n/a                                                     | **cc-by-nc-4.0** + Acceptable Use Policy                                                     | **NÃO**                                                         | 23 idiomas incl. pt, es; **sv não listado**                                     | sim                                                       | prompt                                                             | sim                         | n/a                                                                                  |
+| Tower / Tower+ (9B)                    | n/a                                                     | **CC-BY-NC-4.0** (card; tag `cc-by-nc-sa-4.0` na mesma página)                               | **NÃO**                                                         | 22 idiomas incl. pt-BR, es-ES/LatAm, sv                                         | 9B Q4 sim                                                 | prompt (IF-MT avalia glossário)                                    | via vLLM/llama.cpp          | WMT24++ xCOMET-xxl 84,38 (24 idiomas, MEDIDO no paper)                               |
+| EuroLLM-9B-Instruct                    | n/a                                                     | **Apache License 2.0**                                                                       | OK                                                              | pt, es, sv listados                                                             | 9B Q4 sim                                                 | prompt                                                             | sim                         | sem resultados de tradução no card                                                   |
+| Seed-X-PPO-7B                          | n/a                                                     | **OpenMDW License Agreement, version 1.0**                                                   | OK (texto permissivo)                                           | pt, es, sv na lista de 28                                                       | 7B Q4 sim (há AWQ/GPTQ/GGUF de terceiros)                 | prompt livre; sem template de glossário                            | via vLLM                    | COMET 94,60 EN⇒XX FLORES-200 (média de idiomas); humano EN⇒pt 3,88/4 (MEDIDO, paper) |
+| Hunyuan-MT-7B / HY-MT1.5-7B            | n/a                                                     | **TENCENT HUNYUAN COMMUNITY LICENSE AGREEMENT** / **TENCENT HY COMMUNITY LICENSE AGREEMENT** | **NÃO** (Território exclui UE, UK, Coreia do Sul; §5(b) saídas) | 33 idiomas; pt e es sim; **sv não listado**                                     | 7B sim                                                    | template nativo de terminologia, contexto e tags                   | via vLLM                    | 1º em 30 de 31 categorias no WMT25 (alegação do card)                                |
 
 ## 2. O que importa na hora de escolher (critérios do projeto)
 
@@ -122,7 +122,7 @@ Legenda de licença de pesos: OK = uso comercial permitido sem restrição relev
 - **API**: `llama-server` oferece servidor compatível com OpenAI (README principal). Gramáticas GBNF existem (link na README). Detalhes de `--parallel`, `--jinja`, `response_format`: a página de documentação do servidor retornou 503 nesta sessão; **não verificado agora**.
 - **Blackwell (RTX 50)**: não confirmado nesta sessão; exigiria build CUDA compatível com sm_120 (CUDA 12.8+, não verificado).
 - **Uso recomendado**: `llama-server -m <gguf> -ngl 99 -c <ctx> -np <slots>`; `llama-bench` para medir pp/tg.
-- **Restrição decodificada**: GBNF pode garantir estrutura (JSON com chaves fixas, presença dos marcadores de placeholder), mas **não** garante "se a fonte tem *saving throw*, o alvo contém *salvaguarda*". Isso é verificação pós-geração.
+- **Restrição decodificada**: GBNF pode garantir estrutura (JSON com chaves fixas, presença dos marcadores de placeholder), mas **não** garante "se a fonte tem _saving throw_, o alvo contém _salvaguarda_". Isso é verificação pós-geração.
 - **Veredito**: runtime principal recomendado para qualquer LLM da lista.
 
 ### 3.9 Qwen (geração atual)
@@ -208,16 +208,16 @@ Legenda de licença de pesos: OK = uso comercial permitido sem restrição relev
 
 ## 4. Mecanismos de glossário, placeholders e consistência
 
-| Mecanismo | Onde existe | Garantia | Limite |
-|---|---|---|---|
-| Glossário no prompt (lista termo-fonte → termo-alvo) | qualquer LLM instruct (Qwen3.5, Gemma 4, EuroLLM, Ministral) | probabilística | pode ignorar em textos longos; gênero e número em pt (a salvaguarda / as salvaguardas) |
-| Template nativo de terminologia | HY-MT1.5 (licença NÃO) | probabilística, treinada para isso | licença |
-| Few-shot com pares aprovados do próprio SRD (recuperados da TM) | LLMs com contexto longo | melhora consistência | custa tokens de prompt |
-| Gramática GBNF / JSON schema | llama.cpp | **estrutural** (garante chaves JSON, formato) | não garante terminologia |
-| Mascaramento de placeholders (`⟦1⟧` no lugar de `{count}`, `<bold>`, `{@damage 2d6}`) | qualquer motor, necessário para NMT | determinístico se o motor preserva o marcador | NMT às vezes remove ou duplica marcadores; verificar |
-| Pós-checagem determinística + nova tentativa | nosso código | **garantia no que é verificável** (ICU, dados, tags, termos obrigatórios) | só pega o que sabemos checar |
-| Restrição lexical em tempo de decodificação | CTranslate2 (não verificado se há restrição de termos obrigatórios; sei de `target_prefix` e supressão) | não verificado | não verificado |
-| Memória de tradução (TM) | nosso código/Weblate | **exata** para repetições | só cobre o que já foi traduzido |
+| Mecanismo                                                                             | Onde existe                                                                                             | Garantia                                                                  | Limite                                                                                 |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Glossário no prompt (lista termo-fonte → termo-alvo)                                  | qualquer LLM instruct (Qwen3.5, Gemma 4, EuroLLM, Ministral)                                            | probabilística                                                            | pode ignorar em textos longos; gênero e número em pt (a salvaguarda / as salvaguardas) |
+| Template nativo de terminologia                                                       | HY-MT1.5 (licença NÃO)                                                                                  | probabilística, treinada para isso                                        | licença                                                                                |
+| Few-shot com pares aprovados do próprio SRD (recuperados da TM)                       | LLMs com contexto longo                                                                                 | melhora consistência                                                      | custa tokens de prompt                                                                 |
+| Gramática GBNF / JSON schema                                                          | llama.cpp                                                                                               | **estrutural** (garante chaves JSON, formato)                             | não garante terminologia                                                               |
+| Mascaramento de placeholders (`⟦1⟧` no lugar de `{count}`, `<bold>`, `{@damage 2d6}`) | qualquer motor, necessário para NMT                                                                     | determinístico se o motor preserva o marcador                             | NMT às vezes remove ou duplica marcadores; verificar                                   |
+| Pós-checagem determinística + nova tentativa                                          | nosso código                                                                                            | **garantia no que é verificável** (ICU, dados, tags, termos obrigatórios) | só pega o que sabemos checar                                                           |
+| Restrição lexical em tempo de decodificação                                           | CTranslate2 (não verificado se há restrição de termos obrigatórios; sei de `target_prefix` e supressão) | não verificado                                                            | não verificado                                                                         |
+| Memória de tradução (TM)                                                              | nosso código/Weblate                                                                                    | **exata** para repetições                                                 | só cobre o que já foi traduzido                                                        |
 
 Conclusão: nenhum motor open-weight com licença limpa dá glossário **garantido**. A garantia vem da etapa de validação mais nova tentativa, e da revisão humana.
 
@@ -233,12 +233,12 @@ Conclusão: nenhum motor open-weight com licença limpa dá glossário **garanti
 
 ### 5.2 O que cada camada faz bem e mal
 
-| Camada | Bom | Ruim |
-|---|---|---|
-| TM | Exata, instantânea, de graça | Só repetições |
-| NMT (OPUS-MT) | Rápido, determinístico, tradução literal previsível | Sem contexto e sem glossário; qualidade em jargão fraca |
-| LLM local | Contexto longo, glossário no prompt, JSON, explicações | Lento, pode "melhorar" o texto, alucinar ou omitir; 8 GB de VRAM limita |
-| Humano | Pega erro mecânico sutil (ex.: "can't" vs "doesn't have to") | Caro, lento; a mantenedora é uma pessoa |
+| Camada        | Bom                                                          | Ruim                                                                    |
+| ------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| TM            | Exata, instantânea, de graça                                 | Só repetições                                                           |
+| NMT (OPUS-MT) | Rápido, determinístico, tradução literal previsível          | Sem contexto e sem glossário; qualidade em jargão fraca                 |
+| LLM local     | Contexto longo, glossário no prompt, JSON, explicações       | Lento, pode "melhorar" o texto, alucinar ou omitir; 8 GB de VRAM limita |
+| Humano        | Pega erro mecânico sutil (ex.: "can't" vs "doesn't have to") | Caro, lento; a mantenedora é uma pessoa                                 |
 
 ### 5.3 Idiomas além de pt-BR
 
@@ -274,23 +274,23 @@ Para es e sv não há referências humanas ainda no repositório. O fluxo precis
 
 Chaves em `messages/en.json` (notação com ponto) e entradas em `content/dnd5e/srd-5.1/i18n/{en,pt}/*.json` e `srd-5.2/...`. Tamanho total ~600 segmentos, estratificados; as seleções automáticas usam semente fixa.
 
-| Estrato | n alvo | Exemplos concretos (verificados no repo) | O que testa |
-|---|---|---|---|
-| E1 UI curta | 60 | `common.save`, `common.saving`, `common.cancel`, `common.back`, `magicSystem.spellSlots` ("Spell slots"), `restChecklist.spellSlotsBack` | termos de 1 a 3 palavras, glossário (espaço de magia) |
-| E2 Placeholders simples | 40 | `common.passwordMinLength` ("Password must be at least {min} characters."), `common.numberField.range` ("Between {min} and {max}"), `common.numberField.min` | `{min}`, `{max}` intactos |
-| E3 ICU plural | 40 | `characters.spellCount` (`{count, plural, one {# spell} other {# spells}}`), `characters.inventory.add.count`, `resourceEditor.usesCount`, `common.errors.auth_error_signin_too_many_attempts` (plural aninhado em frase), `characters.coins.changedElsewhere` (plural com `#` e `{coin}`) | categorias CLDR válidas por idioma, `#` preservado, texto fora do bloco |
-| E4 ICU select | 10 | `restChecklist.boxBack` (`{name} returns: {amount, select, all {all} other {{amount}}}`) | `select` com chaves `all`/`other` inalteradas |
-| E5 Rich tags | 20 | `common.typeToConfirm` (`<bold>{text}</bold>`), `login.verifyEmailDescription` (`<bold>{email}</bold>`), `login.unconfirmedHint` (`<magic>...</magic>`) | tags pareadas, conteúdo traduzido só dentro |
-| E6 Magias longas | 40 | `srd-5.1` `fireball` (description 2 parágrafos + `higherLevel` + `material`), `acid-splash`; magias 5.1 com pt presente selecionadas por script | dado `8d6`, `1d6`, "círculo", conversão pés→metros, "salvaguarda" |
-| E7 Recursos de classe | 30 | `srd-5.1` `classes.barbarian.features.unarmored-defense` (pt presente); `rage` tem pt **vazio** em 5.1, então fora da amostra com referência | texto com fórmula (`10 + modificador de Destreza + ...`), "Classe de Armadura" |
-| E8 Regras de combate/condições | 30 | `srd-5.1/conditions` (só 15/30 com pt; usar só os com pt); `srd-5.2` `conditions/blinded` (nome com pt "Cego"; descrição sem pt: só medir checagens determinísticas, sem chrF) | "advantage/disadvantage", "automatically fail", bullets "•" |
-| E9 Expressões de dados | 40 | `srd-5.1/items/acid-vial` (`{@damage 2d6}`), fireball (`8d6`, `1d6`), acid-splash (`1d6`, `2d6`, `3d6`, `4d6`); buscar por regex `\d+d\d+\s*[+-]\s*\d+` ("1d8 + 3" e variantes) no momento da amostragem (não achei um exemplo exato nas buscas desta sessão: **a lista final precisa ser gerada por script**) | paridade de dados e números |
-| E10 Salvaguardas | 30 | fireball ("dexterity saving throw", "failed save", "half as much damage"), acid-splash, 5.2 `counterspell` e `hold-person` ("Wisdom saving throw ... repeats the save") | "salvaguarda de Destreza", sucesso/falha |
-| E11 Tags 5etools | 30 | 5.2 `hold-person` (`{@condition Paralyzed|XPHB}`), `counterspell` (`{@variantrule Bonus Action|XPHB}`), `shield` (`{@spell Magic Missile|XPHB}`) | paridade de `{@...}` e conteúdo após o `|` |
-| E12 Markdown/estrutura | 20 | descrições com `\n` e bullets "•" (classes 5.1, rage) | quebras e marcadores |
-| E13 JSON estruturado | 40 | objeto completo `{name, description, higherLevel, material}` (fireball) e `{name, subclassTitle, features{...}}` (barbarian) | JSON válido, chaves idênticas, só valores traduzidos |
-| E14 Terminologia RPG | 60 | glossário derivado das referências: saving throw→salvaguarda; spell slot→espaço de magia; slot level→círculo; bonus action→ação bônus; advantage→vantagem; fire damage→dano ígneo; acid damage→dano ácido; 5 feet→1,5 metro; 20 feet→6 metros | taxa de acerto de glossário |
-| E15 Distinções delicadas | 40 | "slot level" vs "character level" (círculo vs nível) em fireball `higherLevel`; "within range" vs "within 5 feet"; "succeed or fail"; "half as much damage"; "can't" vs "doesn't have to"; "creature" vs "target"; "bonus to the damage roll" | erros que mudam regra mas parecem fluentes |
+| Estrato                        | n alvo | Exemplos concretos (verificados no repo)                                                                                                                                                                                                                                                                       | O que testa                                                                    |
+| ------------------------------ | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| E1 UI curta                    | 60     | `common.save`, `common.saving`, `common.cancel`, `common.back`, `magicSystem.spellSlots` ("Spell slots"), `restChecklist.spellSlotsBack`                                                                                                                                                                       | termos de 1 a 3 palavras, glossário (espaço de magia)                          |
+| E2 Placeholders simples        | 40     | `common.passwordMinLength` ("Password must be at least {min} characters."), `common.numberField.range` ("Between {min} and {max}"), `common.numberField.min`                                                                                                                                                   | `{min}`, `{max}` intactos                                                      |
+| E3 ICU plural                  | 40     | `characters.spellCount` (`{count, plural, one {# spell} other {# spells}}`), `characters.inventory.add.count`, `resourceEditor.usesCount`, `common.errors.auth_error_signin_too_many_attempts` (plural aninhado em frase), `characters.coins.changedElsewhere` (plural com `#` e `{coin}`)                     | categorias CLDR válidas por idioma, `#` preservado, texto fora do bloco        |
+| E4 ICU select                  | 10     | `restChecklist.boxBack` (`{name} returns: {amount, select, all {all} other {{amount}}}`)                                                                                                                                                                                                                       | `select` com chaves `all`/`other` inalteradas                                  |
+| E5 Rich tags                   | 20     | `common.typeToConfirm` (`<bold>{text}</bold>`), `login.verifyEmailDescription` (`<bold>{email}</bold>`), `login.unconfirmedHint` (`<magic>...</magic>`)                                                                                                                                                        | tags pareadas, conteúdo traduzido só dentro                                    |
+| E6 Magias longas               | 40     | `srd-5.1` `fireball` (description 2 parágrafos + `higherLevel` + `material`), `acid-splash`; magias 5.1 com pt presente selecionadas por script                                                                                                                                                                | dado `8d6`, `1d6`, "círculo", conversão pés→metros, "salvaguarda"              |
+| E7 Recursos de classe          | 30     | `srd-5.1` `classes.barbarian.features.unarmored-defense` (pt presente); `rage` tem pt **vazio** em 5.1, então fora da amostra com referência                                                                                                                                                                   | texto com fórmula (`10 + modificador de Destreza + ...`), "Classe de Armadura" |
+| E8 Regras de combate/condições | 30     | `srd-5.1/conditions` (só 15/30 com pt; usar só os com pt); `srd-5.2` `conditions/blinded` (nome com pt "Cego"; descrição sem pt: só medir checagens determinísticas, sem chrF)                                                                                                                                 | "advantage/disadvantage", "automatically fail", bullets "•"                    |
+| E9 Expressões de dados         | 40     | `srd-5.1/items/acid-vial` (`{@damage 2d6}`), fireball (`8d6`, `1d6`), acid-splash (`1d6`, `2d6`, `3d6`, `4d6`); buscar por regex `\d+d\d+\s*[+-]\s*\d+` ("1d8 + 3" e variantes) no momento da amostragem (não achei um exemplo exato nas buscas desta sessão: **a lista final precisa ser gerada por script**) | paridade de dados e números                                                    |
+| E10 Salvaguardas               | 30     | fireball ("dexterity saving throw", "failed save", "half as much damage"), acid-splash, 5.2 `counterspell` e `hold-person` ("Wisdom saving throw ... repeats the save")                                                                                                                                        | "salvaguarda de Destreza", sucesso/falha                                       |
+| E11 Tags 5etools               | 30     | 5.2 `hold-person` (`{@condition Paralyzed                                                                                                                                                                                                                                                                      | XPHB}`), `counterspell` (`{@variantrule Bonus Action                           | XPHB}`), `shield` (`{@spell Magic Missile | XPHB}`) | paridade de `{@...}` e conteúdo após o ` | `   |
+| E12 Markdown/estrutura         | 20     | descrições com `\n` e bullets "•" (classes 5.1, rage)                                                                                                                                                                                                                                                          | quebras e marcadores                                                           |
+| E13 JSON estruturado           | 40     | objeto completo `{name, description, higherLevel, material}` (fireball) e `{name, subclassTitle, features{...}}` (barbarian)                                                                                                                                                                                   | JSON válido, chaves idênticas, só valores traduzidos                           |
+| E14 Terminologia RPG           | 60     | glossário derivado das referências: saving throw→salvaguarda; spell slot→espaço de magia; slot level→círculo; bonus action→ação bônus; advantage→vantagem; fire damage→dano ígneo; acid damage→dano ácido; 5 feet→1,5 metro; 20 feet→6 metros                                                                  | taxa de acerto de glossário                                                    |
+| E15 Distinções delicadas       | 40     | "slot level" vs "character level" (círculo vs nível) em fireball `higherLevel`; "within range" vs "within 5 feet"; "succeed or fail"; "half as much damage"; "can't" vs "doesn't have to"; "creature" vs "target"; "bonus to the damage roll"                                                                  | erros que mudam regra mas parecem fluentes                                     |
 
 Fontes de verdade: pt de `content/.../pt/*.json` onde não vazio; UI de `messages/pt.json`. Para es/sv não há referência no repositório hoje; rodar só as checagens determinísticas e a avaliação humana por voluntário falante (ver 7.5).
 
@@ -314,7 +314,7 @@ Fontes de verdade: pt de `content/.../pt/*.json` onde não vazio; UI de `message
 
 ### 7.5 Avaliação humana cega
 
-- **Quem**: a mantenedora (falante nativa de pt-BR) e, se possível, uma segunda revisora; para es e sv, um voluntário de cada. 
+- **Quem**: a mantenedora (falante nativa de pt-BR) e, se possível, uma segunda revisora; para es e sv, um voluntário de cada.
 - **Material**: 200 segmentos de pt-BR (subamostra estratificada: E3, E5, E6, E7, E8, E10, E15 com peso maior), de cada sistema + a referência humana escondida como "sistema extra" + um controle ruim deliberado (ex.: "saving throw" → "teste de resistência"; "bonus action" → "ação extra"), embaralhados e anonimizados.
 - **Protocolo**: duas passagens. (a) MQM simplificado por segmento: marcar erros e severidade (menor = 1, maior = 5, crítico = 25) em categorias: Exatidão mecânica (altera regra), Terminologia/glossário, Omissão/adição, Fluência/gramática, Estilo, Marcação/placeholders. (b) Ranking cego de melhor a pior entre os sistemas para 60 segmentos.
 - **Concordância**: 20 segmentos duplicados entre as duas revisoras; reportar Cohen's κ (ou concordância por categoria). Se não houver segunda revisora, repetir 20 segmentos escondidos após 48 h para medir consistência da própria avaliadora.
@@ -382,13 +382,13 @@ Para OPUS-MT: converter com `ct2-opus-mt-converter` do CTranslate2 (a confirmar 
 - Paralelismo: 4 slots dão ~2 a 2,5x de vazão agregada (ESTIMADO; muito dependente do build e da VRAM).
 - Potência: sistema inteiro ~120 a 170 W sob carga (ESTIMADO; TGP desta GPU de laptop **não verificado**).
 
-| Candidato (Q4_K_M) | Pesos (GB, ESTIMADO) | tg teórico (384/GB) | tg realista | Tempo de geração 300k tok | Prefill 1M tok @ 2.000 t/s | Total 1 fluxo | Total 4 slots | Energia (150 W) |
-|---|---|---|---|---|---|---|---|---|
-| Qwen3.5-9B | ~6,2 | 62 tok/s | ~40 tok/s (terceiro: 39) | 7.500 s = 2,1 h | ~8 min | ~2,2 h | ~1,0 h | 0,33 kWh (1 fluxo) a 0,15 kWh |
-| Seed-X-PPO-7B | ~4,5 (7B x 4,85/8 ≈ 4,3 a 4,5) | ~85 tok/s | ~55 tok/s | 5.450 s = 1,5 h | ~8 min | ~1,6 h | ~0,8 h | 0,24 kWh a 0,12 kWh |
-| Gemma 4 E4B | ~4,8 (8B com embeddings) | ~80 tok/s | ~50 tok/s (se embeddings residem na GPU; não verificado) | 6.000 s = 1,7 h | ~8 min | ~1,8 h | ~0,9 h | 0,27 kWh a 0,14 kWh |
-| TranslateGemma 12B (referência) | ~7,3 | 53 tok/s se couber | ~15-25 tok/s com offload parcial (não cabe com KV em 8 GB) | 12.000-20.000 s = 3,3-5,6 h | ~15 min | ~3,5-6 h | n/a | 0,5-0,9 kWh |
-| OPUS-MT tc-big (0,2B, CT2) | ~0,2 | n/a | CPU na ordem de 10^2 a 10^3 tok/s (ESTIMADO a partir do README do CT2 com outro modelo) | minutos | n/a | < 15 min | n/a | < 0,04 kWh |
+| Candidato (Q4_K_M)              | Pesos (GB, ESTIMADO)           | tg teórico (384/GB) | tg realista                                                                             | Tempo de geração 300k tok   | Prefill 1M tok @ 2.000 t/s | Total 1 fluxo | Total 4 slots | Energia (150 W)               |
+| ------------------------------- | ------------------------------ | ------------------- | --------------------------------------------------------------------------------------- | --------------------------- | -------------------------- | ------------- | ------------- | ----------------------------- |
+| Qwen3.5-9B                      | ~6,2                           | 62 tok/s            | ~40 tok/s (terceiro: 39)                                                                | 7.500 s = 2,1 h             | ~8 min                     | ~2,2 h        | ~1,0 h        | 0,33 kWh (1 fluxo) a 0,15 kWh |
+| Seed-X-PPO-7B                   | ~4,5 (7B x 4,85/8 ≈ 4,3 a 4,5) | ~85 tok/s           | ~55 tok/s                                                                               | 5.450 s = 1,5 h             | ~8 min                     | ~1,6 h        | ~0,8 h        | 0,24 kWh a 0,12 kWh           |
+| Gemma 4 E4B                     | ~4,8 (8B com embeddings)       | ~80 tok/s           | ~50 tok/s (se embeddings residem na GPU; não verificado)                                | 6.000 s = 1,7 h             | ~8 min                     | ~1,8 h        | ~0,9 h        | 0,27 kWh a 0,14 kWh           |
+| TranslateGemma 12B (referência) | ~7,3                           | 53 tok/s se couber  | ~15-25 tok/s com offload parcial (não cabe com KV em 8 GB)                              | 12.000-20.000 s = 3,3-5,6 h | ~15 min                    | ~3,5-6 h      | n/a           | 0,5-0,9 kWh                   |
+| OPUS-MT tc-big (0,2B, CT2)      | ~0,2                           | n/a                 | CPU na ordem de 10^2 a 10^3 tok/s (ESTIMADO a partir do README do CT2 com outro modelo) | minutos                     | n/a                        | < 15 min      | n/a           | < 0,04 kWh                    |
 
 Aritmética exemplo (Qwen3.5-9B): 300.000 tok / 40 tok/s = 7.500 s = 2,08 h; mais prefill 1.000.000 / 2.000 = 500 s = 8,3 min; total ≈ 2,2 h. Energia: 2,2 h x 0,15 kW = 0,33 kWh; com 4 slots, ~1,0 h x 0,15 = 0,15 kWh. Em reais, com tarifa ilustrativa de R$ 1,00/kWh (a tarifa real da mantenedora é desconhecida): R$ 0,15 a R$ 0,35 por idioma, ou seja, desprezível. O custo real é revisão humana, não energia.
 
@@ -424,18 +424,18 @@ Hipótese de partida, a ser confirmada ou refutada pelo benchmark da seção 7.
 
 ## 12. Nível de confiança por afirmação principal
 
-| Afirmação | Confiança | Motivo |
-|---|---|---|
-| NLLB, Tower/Tower+ e Aya Expanse são não comerciais | Alta | texto/metadado de licença nos model cards lidos |
-| HY-MT/Hunyuan-MT excluem UE, UK e Coreia do Sul | Alta | texto da licença lido nos arquivos `License.txt` |
-| Qwen3.5-9B, Gemma 4, EuroLLM-9B, Ministral 3 são Apache-2.0 | Alta (Qwen, Gemma 4 E4B, EuroLLM) / Média (Ministral 3: só docs Mistral via busca) | cards lidos; Ministral por resultado de busca |
-| Seed-X é OpenMDW-1.0 com texto permissivo | Média-alta | arquivo LICENSE lido, mas resumido por ferramenta; revisar o texto integral |
-| TranslateGemma é "Gemma Terms of Use", não CC-BY-NC | Média-alta | tag HF e termos lidos; blog terceiro contradiz |
-| Qwen3.5-9B é o melhor para en→pt-BR | **Baixa** | sem benchmark direto; escolhido por licença, controlabilidade e encaixe |
-| Seed-X tem boa qualidade en→pt | Média | humano 3,88/4 vindo dos autores |
-| Tempo 1-2,5 h e 0,15-0,35 kWh por idioma | Baixa-média | arquitetura de gargalo de banda + premissas explícitas; medir |
-| Uso de `claude -p`/assinatura como automação | Média (fatos) / Baixa (interpretação) | páginas lidas, mas há tensão entre termos e artigo de suporte |
-| MT sem glossário garantido; garantia vem de validação | Alta | revisão dos mecanismos documentados |
+| Afirmação                                                   | Confiança                                                                          | Motivo                                                                      |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| NLLB, Tower/Tower+ e Aya Expanse são não comerciais         | Alta                                                                               | texto/metadado de licença nos model cards lidos                             |
+| HY-MT/Hunyuan-MT excluem UE, UK e Coreia do Sul             | Alta                                                                               | texto da licença lido nos arquivos `License.txt`                            |
+| Qwen3.5-9B, Gemma 4, EuroLLM-9B, Ministral 3 são Apache-2.0 | Alta (Qwen, Gemma 4 E4B, EuroLLM) / Média (Ministral 3: só docs Mistral via busca) | cards lidos; Ministral por resultado de busca                               |
+| Seed-X é OpenMDW-1.0 com texto permissivo                   | Média-alta                                                                         | arquivo LICENSE lido, mas resumido por ferramenta; revisar o texto integral |
+| TranslateGemma é "Gemma Terms of Use", não CC-BY-NC         | Média-alta                                                                         | tag HF e termos lidos; blog terceiro contradiz                              |
+| Qwen3.5-9B é o melhor para en→pt-BR                         | **Baixa**                                                                          | sem benchmark direto; escolhido por licença, controlabilidade e encaixe     |
+| Seed-X tem boa qualidade en→pt                              | Média                                                                              | humano 3,88/4 vindo dos autores                                             |
+| Tempo 1-2,5 h e 0,15-0,35 kWh por idioma                    | Baixa-média                                                                        | arquitetura de gargalo de banda + premissas explícitas; medir               |
+| Uso de `claude -p`/assinatura como automação                | Média (fatos) / Baixa (interpretação)                                              | páginas lidas, mas há tensão entre termos e artigo de suporte               |
+| MT sem glossário garantido; garantia vem de validação       | Alta                                                                               | revisão dos mecanismos documentados                                         |
 
 ## 13. Perguntas em aberto
 
@@ -454,47 +454,47 @@ Hipótese de partida, a ser confirmada ou refutada pelo benchmark da seção 7.
 
 Todas verificadas em 2026-11-27 (data da pesquisa).
 
-| Área da afirmação | URL | Data verificada |
-|---|---|---|
-| TranslateGemma: anúncio, tamanhos, WMT24++ | https://blog.google/innovation-and-ai/technology/developers-tools/translategemma/ | 2026-11-27 |
-| TranslateGemma: relatório técnico (resumo) | https://arxiv.org/abs/2601.09012 | 2026-11-27 |
-| TranslateGemma 12B: licença "gemma", MetricX, 2K contexto, template | https://huggingface.co/google/translategemma-12b-it | 2026-11-27 |
-| TranslateGemma 4B: treino, avaliação, limitações | https://huggingface.co/google/translategemma-4b-it | 2026-11-27 |
-| Gemma Terms of Use (definição de Model Derivatives, redistribuição) | https://gemma.ai/resources/terms/ (redirecionado de https://ai.google.dev/gemma/terms) | 2026-11-27 |
-| Gemma 4: anúncio, tamanhos, Apache 2.0, 2026-04-02 | https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/ | 2026-11-27 |
-| Gemma 4: Apache 2.0 (blog open source) | https://opensource.googleblog.com/2026/03/gemma-4-expanding-the-gemmaverse-with-apache-20.html | 2026-11-27 |
-| Gemma 4 E4B: licença, parâmetros, contexto, idiomas | https://huggingface.co/google/gemma-4-E4B-it | 2026-11-27 |
-| Qwen3.5-9B: licença, benchmarks, thinking | https://huggingface.co/Qwen/Qwen3.5-9B | 2026-11-27 |
-| Qwen3.5 small (lançamento, Apache 2.0) | https://artificialanalysis.ai/articles/qwen3-5-small-models | 2026-11-27 |
-| Tower+ 9B: licença, idiomas, base | https://huggingface.co/Unbabel/Tower-Plus-9B | 2026-11-27 |
-| Tower+: paper (WMT24++ xCOMET, IF-MT) | https://arxiv.org/html/2506.17080 | 2026-11-27 |
-| TowerInstruct v0.1: CC-BY-NC | https://huggingface.co/Unbabel/TowerInstruct-7B-v0.1 | 2026-11-27 |
-| Seed-X-PPO-7B: card, idiomas, OpenMDW | https://huggingface.co/ByteDance-Seed/Seed-X-PPO-7B | 2026-11-27 |
-| Seed-X: texto da licença OpenMDW-1.0 | https://huggingface.co/ByteDance-Seed/Seed-X-PPO-7B/blob/main/LICENSE | 2026-11-27 |
-| Seed-X: paper (COMET, humano en→pt) | https://arxiv.org/html/2507.13618v2 | 2026-11-27 |
-| Hunyuan-MT-7B: card | https://huggingface.co/tencent/Hunyuan-MT-7B | 2026-11-27 |
-| Hunyuan-MT-7B: licença (Território, MAU, §5(b)) | https://huggingface.co/tencent/Hunyuan-MT-7B/blob/main/License.txt | 2026-11-27 |
-| HY-MT1.5-7B: card (templates de terminologia, contexto, formato) | https://huggingface.co/tencent/HY-MT1.5-7B | 2026-11-27 |
-| HY-MT1.5: licença (Tencent HY, 2025-12-30) | https://huggingface.co/tencent/HY-MT1.5-7B/blob/main/License.txt | 2026-11-27 |
-| HY-MT1.5: relatório técnico | https://arxiv.org/html/2512.24092v1 | 2026-11-27 |
-| NLLB-200: cc-by-nc-4.0, "not for production" | https://huggingface.co/facebook/nllb-200-distilled-600M | 2026-11-27 |
-| MADLAD-400: Apache 2.0, tamanhos, limitações | https://huggingface.co/google/madlad400-10b-mt | 2026-11-27 |
-| OPUS-MT tc-big en-pt: CC-BY-4.0, chrF/BLEU, tokens `pob`/`por` | https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt | 2026-11-27 |
-| EuroLLM-9B-Instruct: Apache 2.0, idiomas | https://huggingface.co/utter-project/EuroLLM-9B-Instruct | 2026-11-27 |
-| Aya Expanse 8B: cc-by-nc-4.0 | https://huggingface.co/CohereLabs/aya-expanse-8b | 2026-11-27 |
-| Ministral 3 (Apache 2.0, tamanhos) | https://docs.mistral.ai/models/ministral-3-8b-25-12.md | 2026-11-27 (via busca) |
-| CTranslate2: MIT, famílias, quantização, desempenho | https://github.com/OpenNMT/CTranslate2 | 2026-11-27 |
-| LibreTranslate: AGPL-3.0, Argos | https://github.com/LibreTranslate/LibreTranslate | 2026-11-27 |
-| Argos Translate: MIT/CC0, idiomas | https://github.com/argosopentech/argos-translate | 2026-11-27 |
-| llama.cpp: MIT, servidor OpenAI-compatível | https://github.com/ggml-org/llama.cpp | 2026-11-27 |
-| Ollama: MIT | https://github.com/ollama/ollama | 2026-11-27 |
-| Ollama: concorrência, contexto 4096, keep-alive | https://docs.ollama.com/faq | 2026-11-27 |
-| NVIDIA RTX 5070 Laptop: 8/12 GB GDDR7, 384 GB/s | https://www.nvidia.com/en-us/geforce/laptops/50-series/ | 2026-11-27 |
-| Vazão reportada (terceiro, método não declarado) | https://llmrun.dev/gpu/rtx-5070-laptop | 2026-11-27 (via busca) |
-| COMET wmt22-comet-da: Apache-2.0 | https://huggingface.co/Unbabel/wmt22-comet-da | 2026-11-27 |
-| CometKiwi wmt22-cometkiwi-da: cc-by-nc-sa-4.0 | https://huggingface.co/Unbabel/wmt22-cometkiwi-da | 2026-11-27 |
-| WMT25 findings (lista de sistemas, ESA) | https://aclanthology.org/2025.wmt-1.22 | 2026-11-27 (via busca) |
-| Claude Code: legal e conformidade, autenticação | https://code.claude.com/docs/en/legal-and-compliance.md | 2026-11-27 |
-| Anthropic: Agent SDK com plano (atualizações 2026-06-15 e 2026-10-07) | https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan | 2026-11-27 |
-| Anthropic: termos de consumidor (acesso automatizado) | https://www.anthropic.com/legal/consumer-terms | 2026-11-27 |
-| Repositório local (contagens e exemplos) | `messages/{en,pt}.json`, `content/dnd5e/srd-5.{1,2}/i18n/{en,pt}/*.json` | 2026-11-27 |
+| Área da afirmação                                                     | URL                                                                                            | Data verificada        |
+| --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------- |
+| TranslateGemma: anúncio, tamanhos, WMT24++                            | https://blog.google/innovation-and-ai/technology/developers-tools/translategemma/              | 2026-11-27             |
+| TranslateGemma: relatório técnico (resumo)                            | https://arxiv.org/abs/2601.09012                                                               | 2026-11-27             |
+| TranslateGemma 12B: licença "gemma", MetricX, 2K contexto, template   | https://huggingface.co/google/translategemma-12b-it                                            | 2026-11-27             |
+| TranslateGemma 4B: treino, avaliação, limitações                      | https://huggingface.co/google/translategemma-4b-it                                             | 2026-11-27             |
+| Gemma Terms of Use (definição de Model Derivatives, redistribuição)   | https://gemma.ai/resources/terms/ (redirecionado de https://ai.google.dev/gemma/terms)         | 2026-11-27             |
+| Gemma 4: anúncio, tamanhos, Apache 2.0, 2026-04-02                    | https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/                     | 2026-11-27             |
+| Gemma 4: Apache 2.0 (blog open source)                                | https://opensource.googleblog.com/2026/03/gemma-4-expanding-the-gemmaverse-with-apache-20.html | 2026-11-27             |
+| Gemma 4 E4B: licença, parâmetros, contexto, idiomas                   | https://huggingface.co/google/gemma-4-E4B-it                                                   | 2026-11-27             |
+| Qwen3.5-9B: licença, benchmarks, thinking                             | https://huggingface.co/Qwen/Qwen3.5-9B                                                         | 2026-11-27             |
+| Qwen3.5 small (lançamento, Apache 2.0)                                | https://artificialanalysis.ai/articles/qwen3-5-small-models                                    | 2026-11-27             |
+| Tower+ 9B: licença, idiomas, base                                     | https://huggingface.co/Unbabel/Tower-Plus-9B                                                   | 2026-11-27             |
+| Tower+: paper (WMT24++ xCOMET, IF-MT)                                 | https://arxiv.org/html/2506.17080                                                              | 2026-11-27             |
+| TowerInstruct v0.1: CC-BY-NC                                          | https://huggingface.co/Unbabel/TowerInstruct-7B-v0.1                                           | 2026-11-27             |
+| Seed-X-PPO-7B: card, idiomas, OpenMDW                                 | https://huggingface.co/ByteDance-Seed/Seed-X-PPO-7B                                            | 2026-11-27             |
+| Seed-X: texto da licença OpenMDW-1.0                                  | https://huggingface.co/ByteDance-Seed/Seed-X-PPO-7B/blob/main/LICENSE                          | 2026-11-27             |
+| Seed-X: paper (COMET, humano en→pt)                                   | https://arxiv.org/html/2507.13618v2                                                            | 2026-11-27             |
+| Hunyuan-MT-7B: card                                                   | https://huggingface.co/tencent/Hunyuan-MT-7B                                                   | 2026-11-27             |
+| Hunyuan-MT-7B: licença (Território, MAU, §5(b))                       | https://huggingface.co/tencent/Hunyuan-MT-7B/blob/main/License.txt                             | 2026-11-27             |
+| HY-MT1.5-7B: card (templates de terminologia, contexto, formato)      | https://huggingface.co/tencent/HY-MT1.5-7B                                                     | 2026-11-27             |
+| HY-MT1.5: licença (Tencent HY, 2025-12-30)                            | https://huggingface.co/tencent/HY-MT1.5-7B/blob/main/License.txt                               | 2026-11-27             |
+| HY-MT1.5: relatório técnico                                           | https://arxiv.org/html/2512.24092v1                                                            | 2026-11-27             |
+| NLLB-200: cc-by-nc-4.0, "not for production"                          | https://huggingface.co/facebook/nllb-200-distilled-600M                                        | 2026-11-27             |
+| MADLAD-400: Apache 2.0, tamanhos, limitações                          | https://huggingface.co/google/madlad400-10b-mt                                                 | 2026-11-27             |
+| OPUS-MT tc-big en-pt: CC-BY-4.0, chrF/BLEU, tokens `pob`/`por`        | https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt                                       | 2026-11-27             |
+| EuroLLM-9B-Instruct: Apache 2.0, idiomas                              | https://huggingface.co/utter-project/EuroLLM-9B-Instruct                                       | 2026-11-27             |
+| Aya Expanse 8B: cc-by-nc-4.0                                          | https://huggingface.co/CohereLabs/aya-expanse-8b                                               | 2026-11-27             |
+| Ministral 3 (Apache 2.0, tamanhos)                                    | https://docs.mistral.ai/models/ministral-3-8b-25-12.md                                         | 2026-11-27 (via busca) |
+| CTranslate2: MIT, famílias, quantização, desempenho                   | https://github.com/OpenNMT/CTranslate2                                                         | 2026-11-27             |
+| LibreTranslate: AGPL-3.0, Argos                                       | https://github.com/LibreTranslate/LibreTranslate                                               | 2026-11-27             |
+| Argos Translate: MIT/CC0, idiomas                                     | https://github.com/argosopentech/argos-translate                                               | 2026-11-27             |
+| llama.cpp: MIT, servidor OpenAI-compatível                            | https://github.com/ggml-org/llama.cpp                                                          | 2026-11-27             |
+| Ollama: MIT                                                           | https://github.com/ollama/ollama                                                               | 2026-11-27             |
+| Ollama: concorrência, contexto 4096, keep-alive                       | https://docs.ollama.com/faq                                                                    | 2026-11-27             |
+| NVIDIA RTX 5070 Laptop: 8/12 GB GDDR7, 384 GB/s                       | https://www.nvidia.com/en-us/geforce/laptops/50-series/                                        | 2026-11-27             |
+| Vazão reportada (terceiro, método não declarado)                      | https://llmrun.dev/gpu/rtx-5070-laptop                                                         | 2026-11-27 (via busca) |
+| COMET wmt22-comet-da: Apache-2.0                                      | https://huggingface.co/Unbabel/wmt22-comet-da                                                  | 2026-11-27             |
+| CometKiwi wmt22-cometkiwi-da: cc-by-nc-sa-4.0                         | https://huggingface.co/Unbabel/wmt22-cometkiwi-da                                              | 2026-11-27             |
+| WMT25 findings (lista de sistemas, ESA)                               | https://aclanthology.org/2025.wmt-1.22                                                         | 2026-11-27 (via busca) |
+| Claude Code: legal e conformidade, autenticação                       | https://code.claude.com/docs/en/legal-and-compliance.md                                        | 2026-11-27             |
+| Anthropic: Agent SDK com plano (atualizações 2026-06-15 e 2026-10-07) | https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan | 2026-11-27             |
+| Anthropic: termos de consumidor (acesso automatizado)                 | https://www.anthropic.com/legal/consumer-terms                                                 | 2026-11-27             |
+| Repositório local (contagens e exemplos)                              | `messages/{en,pt}.json`, `content/dnd5e/srd-5.{1,2}/i18n/{en,pt}/*.json`                       | 2026-11-27             |

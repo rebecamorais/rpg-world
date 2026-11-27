@@ -9,7 +9,12 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const args = Object.fromEntries(
-  process.argv.slice(2).reduce((acc, a, i, all) => (a.startsWith('--') ? [...acc, [a.slice(2), all[i + 1]]] : acc), []),
+  process.argv
+    .slice(2)
+    .reduce(
+      (acc, a, i, all) => (a.startsWith('--') ? [...acc, [a.slice(2), all[i + 1]]] : acc),
+      [],
+    ),
 );
 const URL_BASE = args.url ?? 'http://127.0.0.1:8080';
 const PARALLEL = Number(args.parallel ?? 1);
@@ -37,7 +42,8 @@ const prng = (seed) => () => {
 const pick = (entries, count, random) => {
   const pool = [...entries];
   const chosen = [];
-  while (chosen.length < count && pool.length) chosen.push(pool.splice(Math.floor(random() * pool.length), 1)[0]);
+  while (chosen.length < count && pool.length)
+    chosen.push(pool.splice(Math.floor(random() * pool.length), 1)[0]);
   return chosen;
 };
 
