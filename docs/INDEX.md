@@ -78,6 +78,7 @@ Estado tirado do cabeçalho de cada plano e do histórico do git, em 2026-11-25.
 - [dnd-2024-novo-sistema.md](plans/2026-10-15-dnd-2024-novo-sistema.md)
 - [feiticeiros-e-maldicoes.md](plans/2026-10-15-feiticeiros-e-maldicoes.md) (perguntas em aberto no fim)
 - [sessoes-calendario-discord.md](plans/2026-10-15-sessoes-calendario-discord.md)
+- [Descoberta: infraestrutura de tradução](discovery/localization-infrastructure/README.md) (27/11): pesquisa, com recomendação condicional a experimentos. Propõe rever a regra "sem tradução automática, nem como rascunho" do plano de traduções comunitárias; espera decisão da Rebeca.
 
 **Arquivado:** [limites-de-uso.md](plans/2026-10-15-limites-de-uso.md) (2026-10-21).
 

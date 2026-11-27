@@ -1,0 +1,2763 @@
+{
+  "seed": 20261128,
+  "population": {
+    "segments": 1113,
+    "words": 71542,
+    "excludedAsSeen": 80
+  },
+  "summary": {
+    "b0": {
+      "segments": 30,
+      "words": 2931,
+      "withTags": 27,
+      "withUnits": 12,
+      "withDice": 10,
+      "byCategory": {
+        "spells.description": 12,
+        "spells.higherLevel": 2,
+        "spells.other": 1,
+        "classes.description": 9,
+        "items.description": 4,
+        "conditions.description": 2
+      }
+    },
+    "b1": {
+      "segments": 70,
+      "words": 5388,
+      "withTags": 54,
+      "withUnits": 26,
+      "withDice": 22,
+      "byCategory": {
+        "spells.description": 28,
+        "spells.higherLevel": 5,
+        "spells.other": 2,
+        "classes.description": 22,
+        "items.description": 9,
+        "conditions.description": 4
+      }
+    },
+    "b2": {
+      "segments": 200,
+      "words": 16590,
+      "withTags": 156,
+      "withUnits": 63,
+      "withDice": 54,
+      "byCategory": {
+        "spells.description": 83,
+        "spells.higherLevel": 14,
+        "spells.other": 6,
+        "classes.description": 62,
+        "items.description": 26,
+        "conditions.description": 9
+      }
+    }
+  },
+  "stages": {
+    "b0": [
+      {
+        "key": "srd-5.2/spells/vicious-mockery.description",
+        "category": "spells.description",
+        "words": 53,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "43f94c3428446d0d"
+      },
+      {
+        "key": "srd-5.2/spells/remove-curse.description",
+        "category": "spells.description",
+        "words": 40,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "a0b41dec21ed4977"
+      },
+      {
+        "key": "srd-5.2/spells/black-tentacles.description",
+        "category": "spells.description",
+        "words": 114,
+        "tags": 5,
+        "units": true,
+        "dice": true,
+        "sha256": "360cc9696d88d3ff"
+      },
+      {
+        "key": "srd-5.2/classes/bard.features.bardic-inspiration.description",
+        "category": "classes.description",
+        "words": 198,
+        "tags": 8,
+        "units": true,
+        "dice": true,
+        "sha256": "72e2540ba1af1453"
+      },
+      {
+        "key": "srd-5.2/spells/find-steed.description",
+        "category": "spells.description",
+        "words": 200,
+        "tags": 5,
+        "units": false,
+        "dice": false,
+        "sha256": "958c0873d4d0cd53"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.subclass-feature-15.description",
+        "category": "classes.description",
+        "words": 8,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "510f4f1970974a65"
+      },
+      {
+        "key": "srd-5.2/classes/warlock.features.mystic-arcanum-11.description",
+        "category": "classes.description",
+        "words": 125,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "85a012d745607cfc"
+      },
+      {
+        "key": "srd-5.2/spells/disintegrate.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 15,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "53fd8be9b9b0776e"
+      },
+      {
+        "key": "srd-5.2/items/grappling-hook.description",
+        "category": "items.description",
+        "words": 53,
+        "tags": 3,
+        "units": true,
+        "dice": true,
+        "sha256": "1eb5856c13fbfef9"
+      },
+      {
+        "key": "srd-5.2/items/navigator-s-tools.description",
+        "category": "items.description",
+        "words": 17,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "501b3c2ebd8a466e"
+      },
+      {
+        "key": "srd-5.2/spells/hunters-mark.description",
+        "category": "spells.description",
+        "words": 88,
+        "tags": 6,
+        "units": false,
+        "dice": true,
+        "sha256": "8bca538c8ebaf47f"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.weapon-mastery.description",
+        "category": "classes.description",
+        "words": 72,
+        "tags": 8,
+        "units": false,
+        "dice": false,
+        "sha256": "c8eb9843b763822b"
+      },
+      {
+        "key": "srd-5.2/items/hooded-lantern.description",
+        "category": "items.description",
+        "words": 50,
+        "tags": 4,
+        "units": true,
+        "dice": false,
+        "sha256": "bdc1c567553c106c"
+      },
+      {
+        "key": "srd-5.2/spells/grease.description",
+        "category": "spells.description",
+        "words": 69,
+        "tags": 3,
+        "units": true,
+        "dice": false,
+        "sha256": "26afe2d30be00b0e"
+      },
+      {
+        "key": "srd-5.2/items/weaver-s-tools.description",
+        "category": "items.description",
+        "words": 48,
+        "tags": 14,
+        "units": false,
+        "dice": true,
+        "sha256": "f1138f77a2aa181f"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.features.channel-divinity.description",
+        "category": "classes.description",
+        "words": 199,
+        "tags": 5,
+        "units": true,
+        "dice": false,
+        "sha256": "0c8cf0e1f79fd88e"
+      },
+      {
+        "key": "srd-5.2/classes/rogue.features.ability-score-improvement-4.description",
+        "category": "classes.description",
+        "words": 32,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "ba19606882ebd2b7"
+      },
+      {
+        "key": "srd-5.2/classes/monk.features.unarmored-movement.description",
+        "category": "classes.description",
+        "words": 32,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "56c13c49894fd13c"
+      },
+      {
+        "key": "srd-5.2/spells/hallow.description",
+        "category": "spells.description",
+        "words": 328,
+        "tags": 11,
+        "units": true,
+        "dice": false,
+        "sha256": "14a601be4fd5c37d"
+      },
+      {
+        "key": "srd-5.2/spells/banishment.description",
+        "category": "spells.description",
+        "words": 102,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "4943b85fd6c26c28"
+      },
+      {
+        "key": "srd-5.2/spells/contingency.description",
+        "category": "spells.description",
+        "words": 175,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "9a1882f29dc21672"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.features.ability-score-improvement-8.description",
+        "category": "classes.description",
+        "words": 19,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "98428acb3333768d"
+      },
+      {
+        "key": "srd-5.2/spells/suggestion.description",
+        "category": "spells.description",
+        "words": 149,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "874d507598d26e4d"
+      },
+      {
+        "key": "srd-5.2/spells/secret-chest.material",
+        "category": "spells.other",
+        "words": 32,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "fa2bf66459e423b7"
+      },
+      {
+        "key": "srd-5.2/spells/shillelagh.description",
+        "category": "spells.description",
+        "words": 80,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "8e096201a8464d40"
+      },
+      {
+        "key": "srd-5.2/conditions/blinded.description",
+        "category": "conditions.description",
+        "words": 42,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "75df5aaa1bddba54"
+      },
+      {
+        "key": "srd-5.2/spells/etherealness.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 31,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "407b90d44d563105"
+      },
+      {
+        "key": "srd-5.2/spells/wall-of-stone.description",
+        "category": "spells.description",
+        "words": 309,
+        "tags": 6,
+        "units": true,
+        "dice": false,
+        "sha256": "9ab20fbed601ef2e"
+      },
+      {
+        "key": "srd-5.2/conditions/grappled.description",
+        "category": "conditions.description",
+        "words": 70,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "937c88aec1b2ca3b"
+      },
+      {
+        "key": "srd-5.2/classes/monk.features.martial-arts.description",
+        "category": "classes.description",
+        "words": 181,
+        "tags": 9,
+        "units": false,
+        "dice": true,
+        "sha256": "02b482c2b433a7b6"
+      }
+    ],
+    "b1": [
+      {
+        "key": "srd-5.2/items/map-or-scroll-case.description",
+        "category": "items.description",
+        "words": 18,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "cd7a2aba56f69634"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.subclass-feature-7.description",
+        "category": "classes.description",
+        "words": 8,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "510f4f1970974a65"
+      },
+      {
+        "key": "srd-5.2/spells/confusion.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 18,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "1b0328d33ffc73e5"
+      },
+      {
+        "key": "srd-5.2/spells/conjure-elemental.description",
+        "category": "spells.description",
+        "words": 148,
+        "tags": 6,
+        "units": true,
+        "dice": true,
+        "sha256": "2729908fa285c545"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.roving.description",
+        "category": "classes.description",
+        "words": 30,
+        "tags": 4,
+        "units": true,
+        "dice": false,
+        "sha256": "8acc07276700d8bf"
+      },
+      {
+        "key": "srd-5.2/spells/sorcerous-burst.description",
+        "category": "spells.description",
+        "words": 88,
+        "tags": 3,
+        "units": false,
+        "dice": true,
+        "sha256": "20d90fb1155fed86"
+      },
+      {
+        "key": "srd-5.2/spells/private-sanctum.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 22,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "ab7e1ab99f60dda7"
+      },
+      {
+        "key": "srd-5.2/spells/alter-self.description",
+        "category": "spells.description",
+        "words": 221,
+        "tags": 7,
+        "units": false,
+        "dice": true,
+        "sha256": "e86e24b4a01fdd4d"
+      },
+      {
+        "key": "srd-5.2/conditions/prone.description",
+        "category": "conditions.description",
+        "words": 87,
+        "tags": 6,
+        "units": true,
+        "dice": false,
+        "sha256": "013285104dc0fa79"
+      },
+      {
+        "key": "srd-5.2/spells/locate-object.description",
+        "category": "spells.description",
+        "words": 105,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "73119e0c682a8d7b"
+      },
+      {
+        "key": "srd-5.2/spells/mind-blank.description",
+        "category": "spells.description",
+        "words": 60,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "642484d912773787"
+      },
+      {
+        "key": "srd-5.2/spells/mending.description",
+        "category": "spells.description",
+        "words": 75,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "466950a1f4618834"
+      },
+      {
+        "key": "srd-5.2/spells/ensnaring-strike.description",
+        "category": "spells.description",
+        "words": 104,
+        "tags": 5,
+        "units": false,
+        "dice": true,
+        "sha256": "2d97fd6dff82a8ab"
+      },
+      {
+        "key": "srd-5.2/spells/guardian-of-faith.description",
+        "category": "spells.description",
+        "words": 99,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "d6462a75d96ff09b"
+      },
+      {
+        "key": "srd-5.2/classes/rogue.features.stroke-of-luck.description",
+        "category": "classes.description",
+        "words": 47,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "7ef577c27b9f3d57"
+      },
+      {
+        "key": "srd-5.2/classes/rogue.subclasses.thief.features.use-magic-device.description",
+        "category": "classes.description",
+        "words": 127,
+        "tags": 4,
+        "units": false,
+        "dice": true,
+        "sha256": "bb2dbdbdbff4a769"
+      },
+      {
+        "key": "srd-5.2/spells/animate-dead.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 31,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "a22e720953a04321"
+      },
+      {
+        "key": "srd-5.2/classes/sorcerer.subclasses.draconic.features.dragon-wings.description",
+        "category": "classes.description",
+        "words": 73,
+        "tags": 3,
+        "units": true,
+        "dice": false,
+        "sha256": "c4e108df9cd0a2d5"
+      },
+      {
+        "key": "srd-5.2/classes/monk.features.body-and-mind.description",
+        "category": "classes.description",
+        "words": 23,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "95009f10a7033a50"
+      },
+      {
+        "key": "srd-5.2/spells/charm-person.description",
+        "category": "spells.description",
+        "words": 72,
+        "tags": 5,
+        "units": false,
+        "dice": false,
+        "sha256": "20f94fbf711dfcd3"
+      },
+      {
+        "key": "srd-5.2/classes/cleric.features.channel-divinity.description",
+        "category": "classes.description",
+        "words": 339,
+        "tags": 15,
+        "units": true,
+        "dice": true,
+        "sha256": "ef9907e962663591"
+      },
+      {
+        "key": "srd-5.2/spells/finger-of-death.description",
+        "category": "spells.description",
+        "words": 62,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "fe83cdfd7cb58d85"
+      },
+      {
+        "key": "srd-5.2/spells/divine-word.description",
+        "category": "spells.description",
+        "words": 163,
+        "tags": 10,
+        "units": false,
+        "dice": false,
+        "sha256": "f6fca0f3a83d2e43"
+      },
+      {
+        "key": "srd-5.2/items/painter-s-supplies.description",
+        "category": "items.description",
+        "words": 23,
+        "tags": 3,
+        "units": false,
+        "dice": true,
+        "sha256": "8f03716622677465"
+      },
+      {
+        "key": "srd-5.2/classes/druid.subclasses.land.features.nature-s-sanctuary.description",
+        "category": "classes.description",
+        "words": 105,
+        "tags": 7,
+        "units": true,
+        "dice": false,
+        "sha256": "0ccb8af8c12e597e"
+      },
+      {
+        "key": "srd-5.2/spells/chromatic-orb.description",
+        "category": "spells.description",
+        "words": 108,
+        "tags": 1,
+        "units": true,
+        "dice": true,
+        "sha256": "e91b0df117d83ef1"
+      },
+      {
+        "key": "srd-5.2/spells/detect-magic.description",
+        "category": "spells.description",
+        "words": 86,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "f43d169835af0da2"
+      },
+      {
+        "key": "srd-5.2/spells/mirror-image.description",
+        "category": "spells.description",
+        "words": 118,
+        "tags": 4,
+        "units": false,
+        "dice": true,
+        "sha256": "cd2ac4d7fe3ae740"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.subclasses.devotion.features.aura-of-devotion.description",
+        "category": "classes.description",
+        "words": 36,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "2055d0f47344a5c7"
+      },
+      {
+        "key": "srd-5.2/items/drum.description",
+        "category": "items.description",
+        "words": 17,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "24512ccb82bb5bbd"
+      },
+      {
+        "key": "srd-5.2/spells/magic-missile.description",
+        "category": "spells.description",
+        "words": 50,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "808abf5ce6514ae8"
+      },
+      {
+        "key": "srd-5.2/conditions/poisoned.description",
+        "category": "conditions.description",
+        "words": 26,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "b7644902ab957c63"
+      },
+      {
+        "key": "srd-5.2/spells/ice-knife.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 14,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "b3cc2095ce133192"
+      },
+      {
+        "key": "srd-5.2/conditions/incapacitated.description",
+        "category": "conditions.description",
+        "words": 51,
+        "tags": 6,
+        "units": false,
+        "dice": false,
+        "sha256": "f5a3bc927c29dc1a"
+      },
+      {
+        "key": "srd-5.2/classes/warlock.features.contact-patron.description",
+        "category": "classes.description",
+        "words": 74,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "9a5cb17ce7af319e"
+      },
+      {
+        "key": "srd-5.2/spells/command.description",
+        "category": "spells.description",
+        "words": 122,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "54fc141aa59e8340"
+      },
+      {
+        "key": "srd-5.2/spells/feather-fall.description",
+        "category": "spells.description",
+        "words": 47,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "099c14682eac0d9a"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.subclasses.hunter.features.superior-hunter-s-defense.description",
+        "category": "classes.description",
+        "words": 33,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "343fdaf86dd9a2cf"
+      },
+      {
+        "key": "srd-5.2/spells/comprehend-languages.description",
+        "category": "spells.description",
+        "words": 58,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "5d55fc890ab1013b"
+      },
+      {
+        "key": "srd-5.2/spells/goodberry.description",
+        "category": "spells.description",
+        "words": 55,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "177589990d318e22"
+      },
+      {
+        "key": "srd-5.2/spells/counterspell.trigger",
+        "category": "spells.other",
+        "words": 22,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "a8af4feee6f3e544"
+      },
+      {
+        "key": "srd-5.2/classes/barbarian.features.brutal-strike.description",
+        "category": "classes.description",
+        "words": 139,
+        "tags": 7,
+        "units": true,
+        "dice": true,
+        "sha256": "0bb310355b2f7711"
+      },
+      {
+        "key": "srd-5.2/classes/rogue.features.improved-cunning-strike.description",
+        "category": "classes.description",
+        "words": 22,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "290b0963c1a522db"
+      },
+      {
+        "key": "srd-5.2/classes/druid.subclasses.land.features.circle-of-the-land.description",
+        "category": "classes.description",
+        "words": 347,
+        "tags": 35,
+        "units": true,
+        "dice": true,
+        "sha256": "e4f1a337f663b529"
+      },
+      {
+        "key": "srd-5.2/classes/monk.features.subclass-feature-11.description",
+        "category": "classes.description",
+        "words": 8,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "69b2f6d63d5c173f"
+      },
+      {
+        "key": "srd-5.2/classes/sorcerer.features.subclass-feature-18.description",
+        "category": "classes.description",
+        "words": 8,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "68b9bba51bb836d1"
+      },
+      {
+        "key": "srd-5.2/spells/augury.description",
+        "category": "spells.description",
+        "words": 111,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "54112f023c0ff83e"
+      },
+      {
+        "key": "srd-5.2/conditions/unconscious.description",
+        "category": "conditions.description",
+        "words": 97,
+        "tags": 8,
+        "units": true,
+        "dice": false,
+        "sha256": "52eec433ce67f51b"
+      },
+      {
+        "key": "srd-5.2/classes/monk.features.perfect-focus.description",
+        "category": "classes.description",
+        "words": 25,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "68824bc265a1eb9a"
+      },
+      {
+        "key": "srd-5.2/classes/wizard.subclasses.evoker.features.overchannel.description",
+        "category": "classes.description",
+        "words": 111,
+        "tags": 6,
+        "units": false,
+        "dice": true,
+        "sha256": "d4c6bdeff8b804a7"
+      },
+      {
+        "key": "srd-5.2/spells/project-image.description",
+        "category": "spells.description",
+        "words": 176,
+        "tags": 3,
+        "units": true,
+        "dice": false,
+        "sha256": "8960d9ec1411310d"
+      },
+      {
+        "key": "srd-5.2/items/net.description",
+        "category": "items.description",
+        "words": 122,
+        "tags": 8,
+        "units": true,
+        "dice": true,
+        "sha256": "5afc5c0b01cf2879"
+      },
+      {
+        "key": "srd-5.2/spells/hold-person.description",
+        "category": "spells.description",
+        "words": 48,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "1c5eb0666646a826"
+      },
+      {
+        "key": "srd-5.2/classes/bard.subclasses.lore.features.magical-discoveries.description",
+        "category": "classes.description",
+        "words": 86,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "6098081f74cb7f27"
+      },
+      {
+        "key": "srd-5.2/classes/bard.features.countercharm.description",
+        "category": "classes.description",
+        "words": 59,
+        "tags": 4,
+        "units": true,
+        "dice": false,
+        "sha256": "ea8d7f6e4a1ab846"
+      },
+      {
+        "key": "srd-5.2/items/flute.description",
+        "category": "items.description",
+        "words": 17,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "24512ccb82bb5bbd"
+      },
+      {
+        "key": "srd-5.2/spells/mind-spike.description",
+        "category": "spells.description",
+        "words": 101,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "0888d45ef70b74b7"
+      },
+      {
+        "key": "srd-5.2/spells/mass-heal.description",
+        "category": "spells.description",
+        "words": 54,
+        "tags": 4,
+        "units": false,
+        "dice": false,
+        "sha256": "af2395f82e516d0d"
+      },
+      {
+        "key": "srd-5.2/spells/find-the-path.description",
+        "category": "spells.description",
+        "words": 100,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "8ae1d24dcbd4bce9"
+      },
+      {
+        "key": "srd-5.2/items/barrel.description",
+        "category": "items.description",
+        "words": 18,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "5ef3150461438086"
+      },
+      {
+        "key": "srd-5.2/classes/barbarian.subclasses.berserker.features.mindless-rage.description",
+        "category": "classes.description",
+        "words": 34,
+        "tags": 5,
+        "units": false,
+        "dice": false,
+        "sha256": "c65782bedd56c7ce"
+      },
+      {
+        "key": "srd-5.2/items/perfume.description",
+        "category": "items.description",
+        "words": 34,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "2090bbdbc42cad48"
+      },
+      {
+        "key": "srd-5.2/spells/barkskin.description",
+        "category": "spells.description",
+        "words": 33,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "5a47db0c3e37ee11"
+      },
+      {
+        "key": "srd-5.2/items/portable-ram.description",
+        "category": "items.description",
+        "words": 38,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "eb70c737cd53a39c"
+      },
+      {
+        "key": "srd-5.2/spells/darkness.material",
+        "category": "spells.other",
+        "words": 7,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "9db4fdb32afc88ec"
+      },
+      {
+        "key": "srd-5.2/spells/telepathic-bond.description",
+        "category": "spells.description",
+        "words": 74,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "11e12e42af3b9334"
+      },
+      {
+        "key": "srd-5.2/classes/bard.subclasses.lore.features.college-of-lore.description",
+        "category": "classes.description",
+        "words": 164,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "f23ddcb69a3f3395"
+      },
+      {
+        "key": "srd-5.2/spells/tsunami.description",
+        "category": "spells.description",
+        "words": 229,
+        "tags": 4,
+        "units": true,
+        "dice": true,
+        "sha256": "e10e4228d87c8c11"
+      },
+      {
+        "key": "srd-5.2/spells/circle-of-death.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 13,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "894e358e9935dcac"
+      },
+      {
+        "key": "srd-5.2/items/woodcarver-s-tools.description",
+        "category": "items.description",
+        "words": 48,
+        "tags": 13,
+        "units": false,
+        "dice": true,
+        "sha256": "aff8c8a3ba9e33c7"
+      }
+    ],
+    "b2": [
+      {
+        "key": "srd-5.2/spells/dissonant-whispers.description",
+        "category": "spells.description",
+        "words": 70,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "74314ca8cb48adc2"
+      },
+      {
+        "key": "srd-5.2/spells/dominate-person.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 28,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "f208e1dfe96b8814"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.features.abjure-foes.description",
+        "category": "classes.description",
+        "words": 106,
+        "tags": 5,
+        "units": true,
+        "dice": false,
+        "sha256": "19b18255925df79a"
+      },
+      {
+        "key": "srd-5.2/conditions/petrified.description",
+        "category": "conditions.description",
+        "words": 107,
+        "tags": 8,
+        "units": false,
+        "dice": false,
+        "sha256": "72c601340f73fd5f"
+      },
+      {
+        "key": "srd-5.2/spells/simulacrum.description",
+        "category": "spells.description",
+        "words": 217,
+        "tags": 6,
+        "units": true,
+        "dice": false,
+        "sha256": "01318a4c2aacb4f2"
+      },
+      {
+        "key": "srd-5.2/spells/revivify.description",
+        "category": "spells.description",
+        "words": 40,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "fc7d84fec859fc16"
+      },
+      {
+        "key": "srd-5.2/classes/wizard.features.wizard-subclass.description",
+        "category": "classes.description",
+        "words": 42,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "3c7405d93bc24671"
+      },
+      {
+        "key": "srd-5.2/items/lance.description",
+        "category": "items.description",
+        "words": 11,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "61eed9fd8060ad44"
+      },
+      {
+        "key": "srd-5.2/classes/druid.subclasses.land.features.natural-recovery.description",
+        "category": "classes.description",
+        "words": 144,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "dd1072148dc9ed95"
+      },
+      {
+        "key": "srd-5.2/conditions/deafened.description",
+        "category": "conditions.description",
+        "words": 25,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "a343385326fa8fc3"
+      },
+      {
+        "key": "srd-5.2/items/trinket.description",
+        "category": "items.description",
+        "words": 1113,
+        "tags": 1,
+        "units": true,
+        "dice": true,
+        "sha256": "116050caaaa2e2c2"
+      },
+      {
+        "key": "srd-5.2/spells/animal-friendship.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 13,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "f3f6fa95e301d627"
+      },
+      {
+        "key": "srd-5.2/conditions/exhaustion.description",
+        "category": "conditions.description",
+        "words": 96,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "7e21f7f0c36f3b30"
+      },
+      {
+        "key": "srd-5.2/spells/floating-disk.description",
+        "category": "spells.description",
+        "words": 178,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "8692699be931d7bc"
+      },
+      {
+        "key": "srd-5.2/spells/mass-suggestion.description",
+        "category": "spells.description",
+        "words": 162,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "189e4e5db043f087"
+      },
+      {
+        "key": "srd-5.2/classes/rogue.features.sneak-attack.description",
+        "category": "classes.description",
+        "words": 122,
+        "tags": 5,
+        "units": true,
+        "dice": true,
+        "sha256": "83508308e042105f"
+      },
+      {
+        "key": "srd-5.2/conditions/charmed.description",
+        "category": "conditions.description",
+        "words": 48,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "cc914cd617e50402"
+      },
+      {
+        "key": "srd-5.2/spells/gate.material",
+        "category": "spells.other",
+        "words": 5,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "58ff3a5321c456f8"
+      },
+      {
+        "key": "srd-5.2/spells/meteor-swarm.description",
+        "category": "spells.description",
+        "words": 110,
+        "tags": 5,
+        "units": true,
+        "dice": true,
+        "sha256": "7fd25fc545314052"
+      },
+      {
+        "key": "srd-5.2/spells/see-invisibility.description",
+        "category": "spells.description",
+        "words": 33,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "cd60c1c77a5ad73b"
+      },
+      {
+        "key": "srd-5.2/spells/feather-fall.trigger",
+        "category": "spells.other",
+        "words": 17,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "ade52259471d5d28"
+      },
+      {
+        "key": "srd-5.2/classes/bard.features.jack-of-all-trades.description",
+        "category": "classes.description",
+        "words": 199,
+        "tags": 7,
+        "units": false,
+        "dice": false,
+        "sha256": "3d5dff2d59b3559d"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.feral-senses.description",
+        "category": "classes.description",
+        "words": 17,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "7ed696d06626c124"
+      },
+      {
+        "key": "srd-5.2/classes/monk.features.unarmored-defense.description",
+        "category": "classes.description",
+        "words": 23,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "7cc4151dcef049bf"
+      },
+      {
+        "key": "srd-5.2/items/ink.description",
+        "category": "items.description",
+        "words": 15,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "df8c9fc0b367e509"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.ability-score-improvement-16.description",
+        "category": "classes.description",
+        "words": 19,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "03f8cb2bf5bcfbe7"
+      },
+      {
+        "key": "srd-5.2/spells/gaseous-form.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 13,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "d1dbaf922d3c14dc"
+      },
+      {
+        "key": "srd-5.2/classes/barbarian.features.weapon-mastery.description",
+        "category": "classes.description",
+        "words": 93,
+        "tags": 7,
+        "units": false,
+        "dice": false,
+        "sha256": "f08cf7b7390deefb"
+      },
+      {
+        "key": "srd-5.2/classes/cleric.features.divine-intervention.description",
+        "category": "classes.description",
+        "words": 67,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "1369284e1b5090bf"
+      },
+      {
+        "key": "srd-5.2/spells/alarm.description",
+        "category": "spells.description",
+        "words": 118,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "393ad1e3bd1b7c8d"
+      },
+      {
+        "key": "srd-5.2/classes/fighter.features.ability-score-improvement-16.description",
+        "category": "classes.description",
+        "words": 19,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "03f8cb2bf5bcfbe7"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.features.epic-boon.description",
+        "category": "classes.description",
+        "words": 24,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "3218ef1936cf1900"
+      },
+      {
+        "key": "srd-5.2/items/herbalism-kit.description",
+        "category": "items.description",
+        "words": 23,
+        "tags": 5,
+        "units": false,
+        "dice": true,
+        "sha256": "2951b014245ea644"
+      },
+      {
+        "key": "srd-5.2/spells/arcane-hand.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 28,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "82e55c8df1b8daf2"
+      },
+      {
+        "key": "srd-5.2/spells/animal-friendship.description",
+        "category": "spells.description",
+        "words": 42,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "d7279b9412e96600"
+      },
+      {
+        "key": "srd-5.2/spells/legend-lore.description",
+        "category": "spells.description",
+        "words": 109,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "bc77c2d0d1d2c8a7"
+      },
+      {
+        "key": "srd-5.2/spells/gentle-repose.description",
+        "category": "spells.description",
+        "words": 57,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "ca445af160d675ac"
+      },
+      {
+        "key": "srd-5.2/spells/creation.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 17,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "14680ccf35820891"
+      },
+      {
+        "key": "srd-5.2/spells/circle-of-death.description",
+        "category": "spells.description",
+        "words": 47,
+        "tags": 2,
+        "units": true,
+        "dice": true,
+        "sha256": "9b805f674c4c39a8"
+      },
+      {
+        "key": "srd-5.2/items/firearm-bullets-10.description",
+        "category": "items.description",
+        "words": 10,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "699a2e5addf7f5b4"
+      },
+      {
+        "key": "srd-5.2/spells/chill-touch.description",
+        "category": "spells.description",
+        "words": 40,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "b3350b634de4925d"
+      },
+      {
+        "key": "srd-5.2/classes/barbarian.subclasses.berserker.features.intimidating-presence.description",
+        "category": "classes.description",
+        "words": 126,
+        "tags": 7,
+        "units": true,
+        "dice": true,
+        "sha256": "61034c8182ae0cd1"
+      },
+      {
+        "key": "srd-5.2/spells/sunburst.description",
+        "category": "spells.description",
+        "words": 106,
+        "tags": 6,
+        "units": true,
+        "dice": true,
+        "sha256": "a708c8076dfe1168"
+      },
+      {
+        "key": "srd-5.2/items/cook-s-utensils.description",
+        "category": "items.description",
+        "words": 22,
+        "tags": 3,
+        "units": false,
+        "dice": true,
+        "sha256": "65d57486c3457c99"
+      },
+      {
+        "key": "srd-5.2/spells/arcanists-magic-aura.description",
+        "category": "spells.description",
+        "words": 147,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "6cc8692657b82d58"
+      },
+      {
+        "key": "srd-5.2/items/pouch.description",
+        "category": "items.description",
+        "words": 13,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "b9104d31132d048f"
+      },
+      {
+        "key": "srd-5.2/spells/spare-the-dying.description",
+        "category": "spells.description",
+        "words": 19,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "f78a29b2b98de7ce"
+      },
+      {
+        "key": "srd-5.2/classes/bard.features.words-of-creation.description",
+        "category": "classes.description",
+        "words": 55,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "dc87f63b972dbcbd"
+      },
+      {
+        "key": "srd-5.2/items/iron-pot.description",
+        "category": "items.description",
+        "words": 8,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "5024dd7bd482bbd8"
+      },
+      {
+        "key": "srd-5.2/classes/monk.features.disciplined-survivor.description",
+        "category": "classes.description",
+        "words": 37,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "c5418934ba0a4fbc"
+      },
+      {
+        "key": "srd-5.2/classes/monk.features.deflect-attacks.description",
+        "category": "classes.description",
+        "words": 142,
+        "tags": 3,
+        "units": true,
+        "dice": true,
+        "sha256": "136123287a5cc498"
+      },
+      {
+        "key": "srd-5.2/classes/warlock.features.epic-boon.description",
+        "category": "classes.description",
+        "words": 24,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "4ba689e356162edc"
+      },
+      {
+        "key": "srd-5.2/items/entertainer-s-pack.description",
+        "category": "items.description",
+        "words": 36,
+        "tags": 10,
+        "units": false,
+        "dice": false,
+        "sha256": "09992b6a24f0ac36"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.features.aura-expansion.description",
+        "category": "classes.description",
+        "words": 13,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "cfbd318dc957de1b"
+      },
+      {
+        "key": "srd-5.2/spells/scorching-ray.description",
+        "category": "spells.description",
+        "words": 35,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "9f19f2681f61ea22"
+      },
+      {
+        "key": "srd-5.2/spells/flame-strike.description",
+        "category": "spells.description",
+        "words": 55,
+        "tags": 3,
+        "units": true,
+        "dice": true,
+        "sha256": "02787bd28cb88a46"
+      },
+      {
+        "key": "srd-5.2/spells/longstrider.description",
+        "category": "spells.description",
+        "words": 16,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "d61dc161d78fe3c8"
+      },
+      {
+        "key": "srd-5.2/spells/giant-insect.description",
+        "category": "spells.description",
+        "words": 115,
+        "tags": 4,
+        "units": false,
+        "dice": false,
+        "sha256": "c320f6b0a61fd4a6"
+      },
+      {
+        "key": "srd-5.2/classes/fighter.features.tactical-shift.description",
+        "category": "classes.description",
+        "words": 26,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "6df29c02921886ed"
+      },
+      {
+        "key": "srd-5.2/spells/beacon-of-hope.description",
+        "category": "spells.description",
+        "words": 39,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "14d1796b8ae07d8d"
+      },
+      {
+        "key": "srd-5.2/classes/cleric.features.spellcasting.description",
+        "category": "classes.description",
+        "words": 399,
+        "tags": 18,
+        "units": false,
+        "dice": false,
+        "sha256": "67686832d2220f52"
+      },
+      {
+        "key": "srd-5.2/items/spyglass.description",
+        "category": "items.description",
+        "words": 11,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "97aad18d4de4f0fb"
+      },
+      {
+        "key": "srd-5.2/items/rope.description",
+        "category": "items.description",
+        "words": 97,
+        "tags": 11,
+        "units": false,
+        "dice": true,
+        "sha256": "77f98730797e711c"
+      },
+      {
+        "key": "srd-5.2/spells/cure-wounds.description",
+        "category": "spells.description",
+        "words": 20,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "f68e0967f043a6b3"
+      },
+      {
+        "key": "srd-5.2/spells/sending.description",
+        "category": "spells.description",
+        "words": 149,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "07e96f28b5f95c59"
+      },
+      {
+        "key": "srd-5.2/spells/compulsion.description",
+        "category": "spells.description",
+        "words": 91,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "dbef3dd92179de5f"
+      },
+      {
+        "key": "srd-5.2/spells/gate.description",
+        "category": "spells.description",
+        "words": 215,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "1375ea003d67082b"
+      },
+      {
+        "key": "srd-5.2/spells/cloudkill.description",
+        "category": "spells.description",
+        "words": 143,
+        "tags": 8,
+        "units": true,
+        "dice": true,
+        "sha256": "a2127cf35d8d20b9"
+      },
+      {
+        "key": "srd-5.2/classes/wizard.features.spellcasting.description",
+        "category": "classes.description",
+        "words": 755,
+        "tags": 18,
+        "units": true,
+        "dice": false,
+        "sha256": "3d18dacbc27410c7"
+      },
+      {
+        "key": "srd-5.2/spells/acid-splash.description",
+        "category": "spells.description",
+        "words": 43,
+        "tags": 3,
+        "units": true,
+        "dice": true,
+        "sha256": "a98ba1113b4cfe86"
+      },
+      {
+        "key": "srd-5.2/classes/sorcerer.features.ability-score-improvement-4.description",
+        "category": "classes.description",
+        "words": 31,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "f293e9ac799b29e7"
+      },
+      {
+        "key": "srd-5.2/spells/mass-cure-wounds.description",
+        "category": "spells.description",
+        "words": 47,
+        "tags": 3,
+        "units": true,
+        "dice": true,
+        "sha256": "d633b33fe28c3ad8"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.features.subclass-feature-15.description",
+        "category": "classes.description",
+        "words": 8,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "5e4b0f83738e18b8"
+      },
+      {
+        "key": "srd-5.2/spells/fire-bolt.description",
+        "category": "spells.description",
+        "words": 49,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "473ba258d4feacfe"
+      },
+      {
+        "key": "srd-5.2/spells/demiplane.description",
+        "category": "spells.description",
+        "words": 155,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "03139f2baaa47cab"
+      },
+      {
+        "key": "srd-5.2/classes/warlock.features.eldritch-invocations.description",
+        "category": "classes.description",
+        "words": 165,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "0e9ed8f9e525df61"
+      },
+      {
+        "key": "srd-5.2/classes/barbarian.features.epic-boon.description",
+        "category": "classes.description",
+        "words": 25,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "ae965bc5e7379e73"
+      },
+      {
+        "key": "srd-5.2/spells/poison-spray.description",
+        "category": "spells.description",
+        "words": 27,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "ddcbb8fd10009d76"
+      },
+      {
+        "key": "srd-5.2/items/emblem.description",
+        "category": "items.description",
+        "words": 25,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "e8db9257e252def6"
+      },
+      {
+        "key": "srd-5.2/items/robe.description",
+        "category": "items.description",
+        "words": 22,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "985b8aab637b6905"
+      },
+      {
+        "key": "srd-5.2/classes/fighter.features.weapon-mastery.description",
+        "category": "classes.description",
+        "words": 83,
+        "tags": 5,
+        "units": false,
+        "dice": false,
+        "sha256": "41939f30f8b30dca"
+      },
+      {
+        "key": "srd-5.2/spells/enhance-ability.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 22,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "43accc6b60b8cc8a"
+      },
+      {
+        "key": "srd-5.2/classes/barbarian.subclasses.berserker.features.retaliation.description",
+        "category": "classes.description",
+        "words": 36,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "6ae51d003689b226"
+      },
+      {
+        "key": "srd-5.2/spells/guiding-bolt.description",
+        "category": "spells.description",
+        "words": 46,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "5b49b48de1f07ee9"
+      },
+      {
+        "key": "srd-5.2/classes/druid.features.subclass-feature-6.description",
+        "category": "classes.description",
+        "words": 8,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "f44851651a153181"
+      },
+      {
+        "key": "srd-5.2/classes/warlock.features.eldritch-master.description",
+        "category": "classes.description",
+        "words": 16,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "8155c8c1f47c7c3a"
+      },
+      {
+        "key": "srd-5.2/items/shovel.description",
+        "category": "items.description",
+        "words": 25,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "69c05c3f5fb84175"
+      },
+      {
+        "key": "srd-5.2/spells/resilient-sphere.description",
+        "category": "spells.description",
+        "words": 153,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "102c71be20915b29"
+      },
+      {
+        "key": "srd-5.2/items/oil.description",
+        "category": "items.description",
+        "words": 234,
+        "tags": 5,
+        "units": true,
+        "dice": true,
+        "sha256": "bf960cd6b3059784"
+      },
+      {
+        "key": "srd-5.2/spells/divination.description",
+        "category": "spells.description",
+        "words": 96,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "32246bbc1f5037b4"
+      },
+      {
+        "key": "srd-5.2/spells/jump.description",
+        "category": "spells.description",
+        "words": 29,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "eb73670af351379c"
+      },
+      {
+        "key": "srd-5.2/spells/move-earth.material",
+        "category": "spells.other",
+        "words": 3,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "a666affd6d622c2a"
+      },
+      {
+        "key": "srd-5.2/items/bagpipes.description",
+        "category": "items.description",
+        "words": 17,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "24512ccb82bb5bbd"
+      },
+      {
+        "key": "srd-5.2/spells/telekinesis.description",
+        "category": "spells.description",
+        "words": 279,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "0ff2ebb6eca0b515"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.epic-boon.description",
+        "category": "classes.description",
+        "words": 25,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "602a43d8bf761827"
+      },
+      {
+        "key": "srd-5.2/classes/fighter.features.action-surge-2.description",
+        "category": "classes.description",
+        "words": 64,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "af437853854a853b"
+      },
+      {
+        "key": "srd-5.2/classes/bard.features.expertise-9.description",
+        "category": "classes.description",
+        "words": 13,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "1affb12c9985a899"
+      },
+      {
+        "key": "srd-5.2/spells/fog-cloud.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 14,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "e8f06c4af36a7eaf"
+      },
+      {
+        "key": "srd-5.2/spells/acid-arrow.description",
+        "category": "spells.description",
+        "words": 66,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "6722658e6008194d"
+      },
+      {
+        "key": "srd-5.2/spells/animal-shapes.description",
+        "category": "spells.description",
+        "words": 183,
+        "tags": 8,
+        "units": false,
+        "dice": false,
+        "sha256": "10d2ffea68246b57"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.ability-score-improvement-12.description",
+        "category": "classes.description",
+        "words": 19,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "03f8cb2bf5bcfbe7"
+      },
+      {
+        "key": "srd-5.2/items/paper.description",
+        "category": "items.description",
+        "words": 10,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "0bd60b9cd581b85b"
+      },
+      {
+        "key": "srd-5.2/spells/fire-shield.description",
+        "category": "spells.description",
+        "words": 103,
+        "tags": 6,
+        "units": true,
+        "dice": true,
+        "sha256": "3ff1773f36ef1c8a"
+      },
+      {
+        "key": "srd-5.2/spells/dominate-beast.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 28,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "4e55ffd5fd8d8098"
+      },
+      {
+        "key": "srd-5.2/items/glassblower-s-tools.description",
+        "category": "items.description",
+        "words": 30,
+        "tags": 5,
+        "units": false,
+        "dice": true,
+        "sha256": "870c88bc0c223da7"
+      },
+      {
+        "key": "srd-5.2/spells/water-breathing.description",
+        "category": "spells.description",
+        "words": 31,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "ca0d2a1f08fd0cf3"
+      },
+      {
+        "key": "srd-5.2/spells/bestow-curse.description",
+        "category": "spells.description",
+        "words": 119,
+        "tags": 4,
+        "units": false,
+        "dice": true,
+        "sha256": "2ad5f98a0ba19453"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.favored-enemy.description",
+        "category": "classes.description",
+        "words": 67,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "ff894dc30b5be328"
+      },
+      {
+        "key": "srd-5.2/items/map.description",
+        "category": "items.description",
+        "words": 28,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "2118721fd875b565"
+      },
+      {
+        "key": "srd-5.2/classes/rogue.features.cunning-strike.description",
+        "category": "classes.description",
+        "words": 218,
+        "tags": 8,
+        "units": false,
+        "dice": true,
+        "sha256": "0acaf33f301ab7fa"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.nature-s-veil.description",
+        "category": "classes.description",
+        "words": 59,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "41c1a8beefaf9162"
+      },
+      {
+        "key": "srd-5.2/conditions/restrained.description",
+        "category": "conditions.description",
+        "words": 51,
+        "tags": 6,
+        "units": false,
+        "dice": false,
+        "sha256": "8fba4f23b478584f"
+      },
+      {
+        "key": "srd-5.2/spells/illusory-script.material",
+        "category": "spells.other",
+        "words": 8,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "264c680ce68da495"
+      },
+      {
+        "key": "srd-5.2/classes/rogue.features.ability-score-improvement-12.description",
+        "category": "classes.description",
+        "words": 19,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "03f8cb2bf5bcfbe7"
+      },
+      {
+        "key": "srd-5.2/spells/blindness-deafness.description",
+        "category": "spells.description",
+        "words": 51,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "e4c01b2b4b74bd62"
+      },
+      {
+        "key": "srd-5.2/items/manacles.description",
+        "category": "items.description",
+        "words": 142,
+        "tags": 15,
+        "units": true,
+        "dice": true,
+        "sha256": "0b6e1a50a0ccf2d1"
+      },
+      {
+        "key": "srd-5.2/spells/resistance.description",
+        "category": "spells.description",
+        "words": 56,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "588015c28755ff03"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.subclass-feature-11.description",
+        "category": "classes.description",
+        "words": 8,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "510f4f1970974a65"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.features.extra-attack.description",
+        "category": "classes.description",
+        "words": 17,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "384cde44585de13b"
+      },
+      {
+        "key": "srd-5.2/spells/create-or-destroy-water.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 30,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "2f1480ac75bbfe39"
+      },
+      {
+        "key": "srd-5.2/items/basket.description",
+        "category": "items.description",
+        "words": 11,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "1ab9d857537d11ac"
+      },
+      {
+        "key": "srd-5.2/classes/druid.features.improved-elemental-fury.description",
+        "category": "classes.description",
+        "words": 49,
+        "tags": 1,
+        "units": true,
+        "dice": true,
+        "sha256": "3b4ab9f807cb2fa9"
+      },
+      {
+        "key": "srd-5.2/spells/aid.description",
+        "category": "spells.description",
+        "words": 25,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "da0e0cfd43207b13"
+      },
+      {
+        "key": "srd-5.2/spells/find-steed.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 13,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "48c9fd4e7fde85cc"
+      },
+      {
+        "key": "srd-5.2/classes/fighter.features.fighter-subclass.description",
+        "category": "classes.description",
+        "words": 42,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "08921a21792ee959"
+      },
+      {
+        "key": "srd-5.2/spells/searing-smite.description",
+        "category": "spells.description",
+        "words": 56,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "df671bdd96a65a3c"
+      },
+      {
+        "key": "srd-5.2/spells/sanctuary.description",
+        "category": "spells.description",
+        "words": 72,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "cf26a9c7c7a23e26"
+      },
+      {
+        "key": "srd-5.2/spells/flame-strike.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 18,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "c7e88965f42bdcd5"
+      },
+      {
+        "key": "srd-5.2/items/explorer-s-pack.description",
+        "category": "items.description",
+        "words": 31,
+        "tags": 8,
+        "units": false,
+        "dice": false,
+        "sha256": "ece7ef40b0788241"
+      },
+      {
+        "key": "srd-5.2/spells/harm.description",
+        "category": "spells.description",
+        "words": 72,
+        "tags": 3,
+        "units": false,
+        "dice": true,
+        "sha256": "4460418a692cef6b"
+      },
+      {
+        "key": "srd-5.2/conditions/invisible.description",
+        "category": "conditions.description",
+        "words": 91,
+        "tags": 5,
+        "units": false,
+        "dice": false,
+        "sha256": "16f0c4fccdded40c"
+      },
+      {
+        "key": "srd-5.2/conditions/frightened.description",
+        "category": "conditions.description",
+        "words": 48,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "c42ab21aeb76b6e2"
+      },
+      {
+        "key": "srd-5.2/spells/word-of-recall.description",
+        "category": "spells.description",
+        "words": 77,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "db9d44b5d71fdd6a"
+      },
+      {
+        "key": "srd-5.2/spells/dream.description",
+        "category": "spells.description",
+        "words": 203,
+        "tags": 3,
+        "units": false,
+        "dice": true,
+        "sha256": "bca784918386bf55"
+      },
+      {
+        "key": "srd-5.2/spells/planar-ally.description",
+        "category": "spells.description",
+        "words": 362,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "b9ab78dc24651609"
+      },
+      {
+        "key": "srd-5.2/spells/stone-shape.description",
+        "category": "spells.description",
+        "words": 94,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "f44a7ce6741047ca"
+      },
+      {
+        "key": "srd-5.2/spells/thunderwave.description",
+        "category": "spells.description",
+        "words": 86,
+        "tags": 3,
+        "units": true,
+        "dice": true,
+        "sha256": "310ad46edc8feb9f"
+      },
+      {
+        "key": "srd-5.2/conditions/paralyzed.description",
+        "category": "conditions.description",
+        "words": 74,
+        "tags": 6,
+        "units": true,
+        "dice": false,
+        "sha256": "f4d613e4c499773e"
+      },
+      {
+        "key": "srd-5.2/classes/barbarian.features.subclass-feature-10.description",
+        "category": "classes.description",
+        "words": 8,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "db24229a039c169f"
+      },
+      {
+        "key": "srd-5.2/spells/instant-summons.description",
+        "category": "spells.description",
+        "words": 119,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "6c2963c20fef29d7"
+      },
+      {
+        "key": "srd-5.2/classes/cleric.features.improved-blessed-strikes.description",
+        "category": "classes.description",
+        "words": 67,
+        "tags": 2,
+        "units": true,
+        "dice": true,
+        "sha256": "8eb6b2b42ce7a3c3"
+      },
+      {
+        "key": "srd-5.2/spells/regenerate.description",
+        "category": "spells.description",
+        "words": 40,
+        "tags": 3,
+        "units": false,
+        "dice": true,
+        "sha256": "e465f9b84a7daa75"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.features.aura-of-protection.description",
+        "category": "classes.description",
+        "words": 77,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "cc766f341bb5f518"
+      },
+      {
+        "key": "srd-5.2/spells/geas.description",
+        "category": "spells.description",
+        "words": 133,
+        "tags": 6,
+        "units": false,
+        "dice": true,
+        "sha256": "faeaa59cbf5b2947"
+      },
+      {
+        "key": "srd-5.2/spells/power-word-stun.description",
+        "category": "spells.description",
+        "words": 66,
+        "tags": 4,
+        "units": false,
+        "dice": false,
+        "sha256": "1444810b1a427cda"
+      },
+      {
+        "key": "srd-5.2/spells/sacred-flame.description",
+        "category": "spells.description",
+        "words": 43,
+        "tags": 3,
+        "units": false,
+        "dice": true,
+        "sha256": "3830e4ebec85aaaf"
+      },
+      {
+        "key": "srd-5.2/classes/monk.features.slow-fall.description",
+        "category": "classes.description",
+        "words": 28,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "fb3be38f2ace0c56"
+      },
+      {
+        "key": "srd-5.2/spells/divine-smite.description",
+        "category": "spells.description",
+        "words": 27,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "cee0d85d035dcb4a"
+      },
+      {
+        "key": "srd-5.2/spells/true-polymorph.description",
+        "category": "spells.description",
+        "words": 392,
+        "tags": 11,
+        "units": false,
+        "dice": false,
+        "sha256": "027ac4efcc07cdd5"
+      },
+      {
+        "key": "srd-5.2/spells/sequester.description",
+        "category": "spells.description",
+        "words": 116,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "c6557a5391d26998"
+      },
+      {
+        "key": "srd-5.2/spells/befuddlement.description",
+        "category": "spells.description",
+        "words": 88,
+        "tags": 5,
+        "units": false,
+        "dice": true,
+        "sha256": "d8e32b6c29f94eaf"
+      },
+      {
+        "key": "srd-5.2/conditions/stunned.description",
+        "category": "conditions.description",
+        "words": 41,
+        "tags": 4,
+        "units": false,
+        "dice": false,
+        "sha256": "479aa86e8bbbd058"
+      },
+      {
+        "key": "srd-5.2/spells/enthrall.description",
+        "category": "spells.description",
+        "words": 60,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "dae8903a40af0bec"
+      },
+      {
+        "key": "srd-5.2/spells/expeditious-retreat.description",
+        "category": "spells.description",
+        "words": 22,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "b67769e1b28d5a67"
+      },
+      {
+        "key": "srd-5.2/spells/dominate-monster.description",
+        "category": "spells.description",
+        "words": 161,
+        "tags": 6,
+        "units": false,
+        "dice": false,
+        "sha256": "6e9632edaede3c7e"
+      },
+      {
+        "key": "srd-5.2/spells/greater-invisibility.description",
+        "category": "spells.description",
+        "words": 13,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "79e5128f66e25ad2"
+      },
+      {
+        "key": "srd-5.2/items/holy-water.description",
+        "category": "items.description",
+        "words": 65,
+        "tags": 4,
+        "units": true,
+        "dice": true,
+        "sha256": "70e651be4992e3a8"
+      },
+      {
+        "key": "srd-5.2/spells/reincarnate.description",
+        "category": "spells.description",
+        "words": 145,
+        "tags": 11,
+        "units": false,
+        "dice": true,
+        "sha256": "8d8ae2b9ec83ab7d"
+      },
+      {
+        "key": "srd-5.2/spells/heal.description",
+        "category": "spells.description",
+        "words": 36,
+        "tags": 4,
+        "units": false,
+        "dice": false,
+        "sha256": "d709c5a5f7b7fb86"
+      },
+      {
+        "key": "srd-5.2/spells/prismatic-spray.description",
+        "category": "spells.description",
+        "words": 290,
+        "tags": 32,
+        "units": true,
+        "dice": true,
+        "sha256": "24ecc512413ba1eb"
+      },
+      {
+        "key": "srd-5.2/classes/barbarian.features.instinctive-pounce.description",
+        "category": "classes.description",
+        "words": 22,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "6c522ed46241c82d"
+      },
+      {
+        "key": "srd-5.2/classes/rogue.features.reliable-talent.description",
+        "category": "classes.description",
+        "words": 29,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "fc07ccac4f4a9f5b"
+      },
+      {
+        "key": "srd-5.2/classes/fighter.features.ability-score-improvement-8.description",
+        "category": "classes.description",
+        "words": 19,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "03f8cb2bf5bcfbe7"
+      },
+      {
+        "key": "srd-5.2/spells/lightning-bolt.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 13,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "9d101041c96a9d53"
+      },
+      {
+        "key": "srd-5.2/spells/detect-poison-and-disease.description",
+        "category": "spells.description",
+        "words": 55,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "34c02e7d34faea3c"
+      },
+      {
+        "key": "srd-5.2/items/bolt.description",
+        "category": "items.description",
+        "words": 88,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "c77d694b1c44264d"
+      },
+      {
+        "key": "srd-5.2/spells/polymorph.description",
+        "category": "spells.description",
+        "words": 190,
+        "tags": 9,
+        "units": false,
+        "dice": false,
+        "sha256": "ceb0969717c117f4"
+      },
+      {
+        "key": "srd-5.2/spells/ray-of-enfeeblement.description",
+        "category": "spells.description",
+        "words": 94,
+        "tags": 4,
+        "units": false,
+        "dice": true,
+        "sha256": "8833f4f6988f07ff"
+      },
+      {
+        "key": "srd-5.2/items/bullseye-lantern.description",
+        "category": "items.description",
+        "words": 25,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "a968d49f9e9e14b4"
+      },
+      {
+        "key": "srd-5.2/classes/warlock.subclasses.fiend.features.fiend-patron.description",
+        "category": "classes.description",
+        "words": 212,
+        "tags": 15,
+        "units": true,
+        "dice": false,
+        "sha256": "a71eddd4d9ed8e7b"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.features.ability-score-improvement-4.description",
+        "category": "classes.description",
+        "words": 31,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "1540206ed096be4e"
+      },
+      {
+        "key": "srd-5.2/classes/barbarian.features.fast-movement.description",
+        "category": "classes.description",
+        "words": 12,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "b37cb51ad8d6593e"
+      },
+      {
+        "key": "srd-5.2/spells/starry-wisp.description",
+        "category": "spells.description",
+        "words": 56,
+        "tags": 3,
+        "units": true,
+        "dice": true,
+        "sha256": "4e3e7c179cd1e25e"
+      },
+      {
+        "key": "srd-5.2/classes/cleric.subclasses.life.features.life-domain.description",
+        "category": "classes.description",
+        "words": 300,
+        "tags": 20,
+        "units": true,
+        "dice": false,
+        "sha256": "d86c8f2119dd8fe3"
+      },
+      {
+        "key": "srd-5.2/spells/true-seeing.description",
+        "category": "spells.description",
+        "words": 17,
+        "tags": 1,
+        "units": true,
+        "dice": false,
+        "sha256": "1e86a248622dbba5"
+      },
+      {
+        "key": "srd-5.2/spells/prayer-of-healing.description",
+        "category": "spells.description",
+        "words": 49,
+        "tags": 4,
+        "units": false,
+        "dice": true,
+        "sha256": "ad8f9fb0f9fe6ead"
+      },
+      {
+        "key": "srd-5.2/spells/spare-the-dying.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 17,
+        "tags": 0,
+        "units": true,
+        "dice": false,
+        "sha256": "5a5a500ce5e2ab17"
+      },
+      {
+        "key": "srd-5.2/classes/monk.features.heightened-focus.description",
+        "category": "classes.description",
+        "words": 122,
+        "tags": 2,
+        "units": true,
+        "dice": false,
+        "sha256": "acd393d47f72dcda"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.subclasses.devotion.features.oath-of-devotion.description",
+        "category": "classes.description",
+        "words": 334,
+        "tags": 14,
+        "units": true,
+        "dice": false,
+        "sha256": "1d96c48d39c6e075"
+      },
+      {
+        "key": "srd-5.2/spells/counterspell.description",
+        "category": "spells.description",
+        "words": 58,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "4ee4230dc2fdd468"
+      },
+      {
+        "key": "srd-5.2/spells/protection-from-evil-and-good.description",
+        "category": "spells.description",
+        "words": 87,
+        "tags": 6,
+        "units": false,
+        "dice": false,
+        "sha256": "5c333b9c07682e22"
+      },
+      {
+        "key": "srd-5.2/spells/fireball.material",
+        "category": "spells.other",
+        "words": 7,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "5e3fe98ec7b593ea"
+      },
+      {
+        "key": "srd-5.2/classes/rogue.features.thieves-cant.description",
+        "category": "classes.description",
+        "words": 37,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "521adf0bd9444844"
+      },
+      {
+        "key": "srd-5.2/spells/divine-favor.description",
+        "category": "spells.description",
+        "words": 18,
+        "tags": 1,
+        "units": false,
+        "dice": true,
+        "sha256": "a7d3700795741e60"
+      },
+      {
+        "key": "srd-5.2/classes/barbarian.features.extra-attack.description",
+        "category": "classes.description",
+        "words": 17,
+        "tags": 1,
+        "units": false,
+        "dice": false,
+        "sha256": "384cde44585de13b"
+      },
+      {
+        "key": "srd-5.2/classes/monk.subclasses.open-hand.features.warrior-of-the-open-hand.description",
+        "category": "classes.description",
+        "words": 114,
+        "tags": 3,
+        "units": true,
+        "dice": false,
+        "sha256": "3741346e29e065b7"
+      },
+      {
+        "key": "srd-5.2/spells/magic-weapon.description",
+        "category": "spells.description",
+        "words": 34,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "c2712f6b5b2cb14e"
+      },
+      {
+        "key": "srd-5.2/classes/cleric.features.ability-score-improvement-12.description",
+        "category": "classes.description",
+        "words": 19,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "03f8cb2bf5bcfbe7"
+      },
+      {
+        "key": "srd-5.2/spells/awaken.description",
+        "category": "spells.description",
+        "words": 154,
+        "tags": 6,
+        "units": false,
+        "dice": false,
+        "sha256": "cb720548f73df2e6"
+      },
+      {
+        "key": "srd-5.2/spells/flesh-to-stone.material",
+        "category": "spells.other",
+        "words": 3,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "97a3e0f56a0205eb"
+      },
+      {
+        "key": "srd-5.2/spells/summon-dragon.higherLevel",
+        "category": "spells.higherLevel",
+        "words": 13,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "48c9fd4e7fde85cc"
+      },
+      {
+        "key": "srd-5.2/spells/unseen-servant.description",
+        "category": "spells.description",
+        "words": 168,
+        "tags": 4,
+        "units": true,
+        "dice": false,
+        "sha256": "7e950537af61d048"
+      },
+      {
+        "key": "srd-5.2/classes/ranger.subclasses.hunter.features.hunter.description",
+        "category": "classes.description",
+        "words": 218,
+        "tags": 5,
+        "units": true,
+        "dice": true,
+        "sha256": "71a6a1d657f38056"
+      },
+      {
+        "key": "srd-5.2/spells/mislead.description",
+        "category": "spells.description",
+        "words": 97,
+        "tags": 3,
+        "units": false,
+        "dice": false,
+        "sha256": "008f41e00ad9f063"
+      },
+      {
+        "key": "srd-5.2/classes/paladin.subclasses.devotion.features.smite-of-protection.description",
+        "category": "classes.description",
+        "words": 39,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "d4b513cc238755c3"
+      },
+      {
+        "key": "srd-5.2/spells/guards-and-wards.description",
+        "category": "spells.description",
+        "words": 372,
+        "tags": 10,
+        "units": true,
+        "dice": false,
+        "sha256": "703f3dd30a25a39b"
+      },
+      {
+        "key": "srd-5.2/spells/create-undead.description",
+        "category": "spells.description",
+        "words": 221,
+        "tags": 4,
+        "units": true,
+        "dice": false,
+        "sha256": "c47f7deb4a58fb81"
+      },
+      {
+        "key": "srd-5.2/classes/wizard.features.ability-score-improvement-16.description",
+        "category": "classes.description",
+        "words": 19,
+        "tags": 2,
+        "units": false,
+        "dice": false,
+        "sha256": "98428acb3333768d"
+      },
+      {
+        "key": "srd-5.2/classes/sorcerer.features.sorcerer-subclass.description",
+        "category": "classes.description",
+        "words": 42,
+        "tags": 0,
+        "units": false,
+        "dice": false,
+        "sha256": "25fc4ca79011e692"
+      },
+      {
+        "key": "srd-5.2/items/forgery-kit.description",
+        "category": "items.description",
+        "words": 23,
+        "tags": 2,
+        "units": false,
+        "dice": true,
+        "sha256": "fce52644c437a891"
+      }
+    ]
+  }
+}
