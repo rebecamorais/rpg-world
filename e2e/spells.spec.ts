@@ -115,3 +115,30 @@ test('o anel do teclado aparece no card aberto, por cima do efeito', async ({ pa
   await expect(fireball.getByRole('button', { name: /Expand Fireball/ })).toBeFocused();
   await expect(fireball).toHaveCSS('outline-style', 'solid');
 });
+
+// b-grimorio#8 (#293): the edition and class the catalog opens on came from the sheet, not from
+// the person, so the phone's Filters button has no count until she changes something
+test('no celular, Filtros não conta o que veio da ficha e cada select tem rótulo', async ({
+  page,
+  user: _,
+}) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  const id = await createCharacter(page, 'Elminster');
+  await page.goto(characterUrl(id, '/spells'));
+
+  await page.getByRole('button', { name: 'Add Spell' }).first().click();
+  const catalog = page.getByRole('dialog', { name: 'Add Spell' });
+  const toggle = catalog.getByRole('button', { name: 'Filters', exact: true });
+  await expect(toggle).toBeVisible();
+  await toggle.click();
+
+  // Visible labels name each select
+  await expect(catalog.locator('label', { hasText: 'Edition' })).toBeVisible();
+  await expect(catalog.locator('label', { hasText: 'Level' })).toBeVisible();
+  await catalog.getByRole('combobox', { name: 'Level' }).click();
+  await page.getByRole('option', { name: 'Cantrip' }).click();
+
+  await expect(catalog.getByRole('button', { name: 'Filters (1)', exact: true })).toBeVisible();
+  await catalog.getByRole('button', { name: 'Clear filters (1)' }).click();
+  await expect(catalog.getByRole('button', { name: 'Filters', exact: true })).toBeVisible();
+});

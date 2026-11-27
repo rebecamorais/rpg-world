@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 
 import { GhostInput } from '@frontend/components/ui/ghost-input';
 import { Input } from '@frontend/components/ui/input';
@@ -22,6 +22,11 @@ interface NumberInputProps extends Omit<
   max?: number;
   /** Accepts decimals ("7.5" or "7,5"); whole numbers only otherwise. */
   decimal?: boolean;
+  /**
+   * Shows the number with the reader's thousands separator ("6,500", "6.500") while the field
+   * isn't focused; typing is always the plain number. For fields that pass four digits, like XP.
+   */
+  grouped?: boolean;
   /** Renders a GhostInput (inline sheet field) instead of a boxed Input. */
   ghost?: boolean;
   /** For GhostInput: whether to show its pencil icon. */
@@ -64,6 +69,7 @@ function NumberInput({
   min,
   max,
   decimal = false,
+  grouped = false,
   ghost = false,
   showIcon,
   onValidityChange,
@@ -74,6 +80,8 @@ function NumberInput({
   ...props
 }: NumberInputProps) {
   const t = useTranslations('common.numberField');
+  const format = useFormatter();
+  const [focused, setFocused] = React.useState(false);
   const messageId = React.useId();
   // `text` is what the user typed; `base` is the value it stood for. While `value` still
   // equals `base` the text stays; a change from outside (a +/- button, a refetch) replaces it.
@@ -82,6 +90,7 @@ function NumberInput({
 
   const editing = edit !== null && edit.base === value;
   const text = editing ? edit.text : String(value);
+  const shown = grouped && !focused && !editing ? format.number(value) : text;
   const result = parse(text, { min, max, decimal });
   const error = editing && showError ? result.error : undefined;
   // The form's save waits while the text isn't valid, even before the error shows
@@ -95,10 +104,13 @@ function NumberInput({
       <Field
         type="text"
         inputMode={decimal ? 'decimal' : 'numeric'}
-        value={text}
+        value={shown}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? messageId : undefined}
-        onFocus={onFocus}
+        onFocus={(e) => {
+          setFocused(true);
+          onFocus?.(e);
+        }}
         onChange={(e) => {
           const next = parse(e.target.value, { min, max, decimal });
           setEdit({ text: e.target.value, base: next.value ?? value });
@@ -106,6 +118,7 @@ function NumberInput({
           if (next.value !== undefined && next.value !== value) onValueChange(next.value);
         }}
         onBlur={(e) => {
+          setFocused(false);
           if (result.value !== undefined) {
             setEdit(null);
             setShowError(false);

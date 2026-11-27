@@ -221,6 +221,21 @@ describe('CoinPouch', () => {
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeDisabled();
   });
 
+  // #294: the "Pouch after" went away with the error, and the person couldn't see what she had
+  it('sem dinheiro suficiente, mostra a algibeira de agora para comparar', async () => {
+    const user = userEvent.setup();
+    await renderPouch({ cp: 0, sp: 5, ep: 0, gp: 4, pp: 0 });
+
+    await user.click(screen.getByRole('button', { name: 'Pay' }));
+    const amount = screen.getByLabelText('Amount');
+    await user.clear(amount);
+    await user.type(amount, '5');
+
+    const now = screen.getByText('Pouch now', { selector: 'dt' });
+    expect(now.nextElementSibling).toHaveTextContent('5 SP · 4 GP');
+    expect(screen.queryByText('Pouch after')).not.toBeInTheDocument();
+  });
+
   it('a falta vem na moeda do pagamento, e não convertida para platina', async () => {
     const user = userEvent.setup();
     await renderPouch({ cp: 0, sp: 7, ep: 0, gp: 0, pp: 0 });
