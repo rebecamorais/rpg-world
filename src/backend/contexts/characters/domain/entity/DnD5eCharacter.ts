@@ -7,6 +7,7 @@ import type { Edition } from '@shared/systems/dnd5e/content/editions';
 import type { HitDice } from '@shared/systems/dnd5e/hit-dice';
 import type { SavedProficiencies } from '@shared/systems/dnd5e/proficiencies';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
+import { SYSTEMS } from '@shared/systems/registry';
 
 import { Attributes } from '../value-object/Attributes';
 import { HealthPoints } from '../value-object/HealthPoints';
@@ -100,7 +101,7 @@ export class DnD5eCharacter extends Character {
     super(
       options.id,
       options.name,
-      'DnD_5e',
+      SYSTEMS.dnd5e.id,
       options.ownerUsername,
       options.attributes,
       options.hp,

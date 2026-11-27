@@ -25,7 +25,7 @@ vi.mock('@client', async (importOriginal) => ({
 
 const t = messages.characters;
 const post = vi.mocked(rpgWorldApi.post);
-const goblin = { id: 'npc-1', name: 'Goblin', system: 'DnD_5e', level: 1 } as CharacterSummary;
+const goblin = { id: 'npc-1', name: 'Goblin', system: 'dnd5e', level: 1 } as CharacterSummary;
 
 describe('CharacterCard', () => {
   beforeEach(() => {
@@ -84,7 +84,7 @@ describe('CharacterCard', () => {
     );
     await user.click(await screen.findByRole('menuitem', { name: t.duplicate }));
 
-    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/DnD_5e/character/copy-1'));
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/dnd5e/character/copy-1'));
     expect(post).toHaveBeenCalledWith('/api/characters/npc-1/duplicate', {
       name: t.copyName.replace('{name}', 'Goblin'),
     });

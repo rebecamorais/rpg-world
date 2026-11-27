@@ -22,6 +22,7 @@ import { useDuplicateCharacter } from '@frontend/hooks/useDuplicateCharacter';
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
+import { sheetHref } from '@shared/systems/sheet-href';
 import type { CharacterSummary } from '@shared/types/character';
 
 interface CharacterCardProps {
@@ -42,7 +43,7 @@ export function CharacterCard({ character }: CharacterCardProps) {
 
   const theme = characterTheme(character.accentColor);
 
-  const href = `/system/${character.system}/character/${character.id}`;
+  const href = sheetHref(character.system, character.id);
 
   /*
    * The whole card is clickable through the name's link (stretched over the card with ::after),

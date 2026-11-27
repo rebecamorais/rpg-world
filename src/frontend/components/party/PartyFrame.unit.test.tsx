@@ -32,7 +32,7 @@ const t = messages.parties.page;
 const party = (role: PartyView['role'] = 'player'): PartyView => ({
   id: 'p1',
   name: 'Mesa de Quinta',
-  system: 'dnd_5e',
+  system: 'dnd5e',
   edition: '2014',
   imageUrl: null,
   role,

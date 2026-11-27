@@ -10,6 +10,7 @@ import { isDemoReadOnly } from '@frontend/demo/transport';
 import { useErrorMessage } from '@frontend/hooks/useErrorMessage';
 import { CHARACTERS_QUERY_KEY } from '@frontend/lib/query-keys';
 
+import { sheetHref } from '@shared/systems/sheet-href';
 import type { CharacterSummary } from '@shared/types/character';
 
 /** Copies a sheet (sheet, lore and spells; not the avatar) as "<name> (copy)" and opens the copy. */
@@ -27,7 +28,7 @@ export function useDuplicateCharacter() {
     onSuccess: (data, character) => {
       queryClient.invalidateQueries({ queryKey: CHARACTERS_QUERY_KEY });
       toast.success(t('duplicateSuccess'));
-      router.push(`/system/${character.system}/character/${data.id}`);
+      router.push(sheetHref(character.system, data.id));
     },
     // The demo answers a refused write itself (its invite or its toast)
     onError: (error: Error) => {

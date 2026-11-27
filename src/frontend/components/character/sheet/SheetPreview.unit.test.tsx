@@ -36,7 +36,7 @@ describe('SheetPreview', () => {
 
     const edit = await screen.findByRole('link', { name: `${t.edit} ${t.newTab}` });
     expect(screen.getByRole('dialog', { name: 'Arani' })).toHaveTextContent(t.description);
-    expect(edit).toHaveAttribute('href', '/system/DnD_5e/character/c1');
+    expect(edit).toHaveAttribute('href', '/system/dnd5e/character/c1');
     expect(edit).toHaveAttribute('target', '_blank');
   });
 });

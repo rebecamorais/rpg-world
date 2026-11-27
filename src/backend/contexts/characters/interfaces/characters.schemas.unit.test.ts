@@ -120,7 +120,24 @@ describe('createCharacterSchema', () => {
   it('aceita o payload do formulário e ignora ownerUsername enviado pelo cliente', () => {
     expect(
       createCharacterSchema.parse({ name: 'Hero', system: 'DnD_5e', ownerUsername: 'someone' }),
-    ).toEqual({ name: 'Hero', system: 'DnD_5e' });
+    ).toEqual({ name: 'Hero', system: 'dnd5e' });
+  });
+
+  it.each(['DnD_5e', 'dnd5e', 'dnd_5e'])(
+    'accepts the system %s and keeps it as dnd5e',
+    (system) => {
+      expect(createCharacterSchema.parse({ name: 'Arani', system }).system).toBe('dnd5e');
+    },
+  );
+
+  it('rejects a system the app does not have', () => {
+    expect(
+      createCharacterSchema.safeParse({ name: 'Arani', system: 'pathfinder_2e' }).success,
+    ).toBe(false);
+  });
+
+  it('still accepts a character without a system', () => {
+    expect(createCharacterSchema.parse({ name: 'Arani' }).system).toBeUndefined();
   });
 
   it('rejeita sistema não suportado', () => {

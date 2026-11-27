@@ -115,7 +115,7 @@ export async function revealNpc(gm: Page, name: string) {
 
 export const partyUrl = (id: string, path = '') => `/parties/${id}${path}`;
 
-export const characterUrl = (id: string, tab = '') => `/system/DnD_5e/character/${id}${tab}`;
+export const characterUrl = (id: string, tab = '') => `/system/dnd5e/character/${id}${tab}`;
 
 interface Fixtures {
   /** A fresh user, already signed in on `page`. */

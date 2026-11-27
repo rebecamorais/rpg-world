@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test';
 
 import { expect, hydrated, test } from './support/fixtures';
 
-const SHEET_PATH = /^\/system\/DnD_5e\/character\/([0-9a-f-]{36})$/;
+const SHEET_PATH = /^\/system\/dnd5e\/character\/([0-9a-f-]{36})$/;
 
 /** Creates a 2014 Bard with only Arcana and History picked, and answers its id. */
 async function createHalfDoneBard(page: Page): Promise<string> {

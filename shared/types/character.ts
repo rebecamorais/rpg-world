@@ -1,4 +1,6 @@
-type GameSystem = 'DnD_5e';
+import type { SystemId } from '../systems/registry';
+
+type GameSystem = SystemId;
 
 export interface CharacterBase {
   id: string;

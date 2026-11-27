@@ -22,20 +22,25 @@ type AdminWithHold = {
  * request would overlap with `during`. Reports whether the transaction was still open when `during`
  * finished, which is how a test sees that something waited (or did not wait) for its locks.
  */
+const HOLD_MS = 2000;
+
 export async function whileTransactionOpen<T>(sql: string, during: () => PromiseLike<T>) {
-  const holder = (admin() as unknown as AdminWithHold)
-    .schema('test_helpers')
-    .rpc('run_and_hold', { p_sql: sql, p_seconds: 2 });
-  let committed = false;
-  const held = Promise.resolve(holder).then(({ error }) => {
+  const startedAt = Date.now();
+  const held = Promise.resolve(
+    (admin() as unknown as AdminWithHold)
+      .schema('test_helpers')
+      .rpc('run_and_hold', { p_sql: sql, p_seconds: HOLD_MS / 1000 }),
+  ).then(({ error }) => {
     if (error) throw new Error(error.message);
-    committed = true;
   });
 
   // Time for the request to reach the database and take its locks
   await new Promise((resolve) => setTimeout(resolve, 500));
   const result = await during();
-  const finishedBeforeCommit = !committed;
+  // By the clock, not by which response arrives first: the commit releases a waiting request, and
+  // both answers then come back together in either order. The commit can't happen before HOLD_MS
+  // has passed since startedAt, so finishing sooner means `during` did not wait for it.
+  const finishedBeforeCommit = Date.now() - startedAt < HOLD_MS;
   await held;
   return { result, finishedBeforeCommit };
 }

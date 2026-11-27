@@ -26,7 +26,7 @@ const api = vi.mocked(rpgWorldApi);
 const t = messages.characters;
 
 const sheet = (id: string, name: string) =>
-  ({ id, name, system: 'DnD_5e', level: 1 }) as CharacterSummary;
+  ({ id, name, system: 'dnd5e', level: 1 }) as CharacterSummary;
 
 function renderList(list: CharacterSummary[], kind: CharacterKind = 'pc') {
   let current = list;

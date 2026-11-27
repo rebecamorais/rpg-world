@@ -36,7 +36,7 @@ describe('useSheetSource', () => {
       readOnly: false,
       partyId: null,
       apiPath: '/api/characters/c1',
-      pagesPath: '/system/dnd_5e/character/c1',
+      pagesPath: '/system/dnd5e/character/c1',
     });
   });
 
@@ -60,7 +60,7 @@ describe('useSheetSource', () => {
       readOnly: true,
       partyId: null,
       apiPath: '/api/characters/c1',
-      pagesPath: '/system/DnD_5e/character/c1',
+      pagesPath: '/system/dnd5e/character/c1',
       embedded: true,
     };
 

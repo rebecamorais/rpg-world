@@ -78,10 +78,10 @@ describe('NewCharacterForm', () => {
 
     await createCharacter('  Thor  ');
 
-    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/DnD_5e/character/char-1'));
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/dnd5e/character/char-1'));
     expect(post).toHaveBeenCalledWith('/api/characters', {
       name: 'Thor',
-      system: 'DnD_5e',
+      system: 'dnd5e',
       edition: '2014',
     });
     expect(toast.success).toHaveBeenCalledWith(t.success);
@@ -96,10 +96,10 @@ describe('NewCharacterForm', () => {
     );
     await createCharacter('Goblin');
 
-    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/DnD_5e/character/char-1'));
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/system/dnd5e/character/char-1'));
     expect(post).toHaveBeenCalledWith('/api/characters', {
       name: 'Goblin',
-      system: 'DnD_5e',
+      system: 'dnd5e',
       edition: '2014',
       kind: 'npc',
     });
@@ -182,10 +182,10 @@ describe('NewCharacterForm', () => {
 
       await createCharacter('Lia');
 
-      await waitFor(() => expect(push).toHaveBeenCalledWith('/system/DnD_5e/character/char-1'));
+      await waitFor(() => expect(push).toHaveBeenCalledWith('/system/dnd5e/character/char-1'));
       expect(post).toHaveBeenCalledWith('/api/characters', {
         name: 'Lia',
-        system: 'DnD_5e',
+        system: 'dnd5e',
         edition: '2014',
         class: 'bard',
         classChoices: { '2014/bard/skills': ['ARCANA', 'HISTORY'] },
@@ -248,7 +248,7 @@ describe('NewCharacterForm', () => {
       await waitFor(() => expect(post).toHaveBeenCalled());
       expect(post).toHaveBeenCalledWith('/api/characters', {
         name: 'Pike',
-        system: 'DnD_5e',
+        system: 'dnd5e',
         edition: '2014',
         class: 'cleric',
       });

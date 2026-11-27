@@ -8,6 +8,7 @@ describe('toDemoHref', () => {
     ['/parties/the-pioneers/inventory', '/demo/inventory'],
     ['/parties/the-pioneers/characters/ada/lore', '/demo/characters/ada/lore'],
     ['/system/dnd5e/character/joan/spells', '/demo/characters/joan/spells'],
+    ['/system/DnD_5e/character/joan', '/demo/characters/joan'],
     ['/characters/npcs', '/demo/npcs'],
     ['/characters/new?kind=npc', '/register'],
     ['/settings/profile', '/register'],

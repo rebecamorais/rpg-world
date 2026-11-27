@@ -20,7 +20,7 @@ vi.mock('@frontend/hooks/useAuth', () => ({ useAuth: () => ({ signOut: vi.fn() }
 const party = (id: string, role: PartySummary['role']): PartySummary => ({
   id,
   name: `Mesa ${id}`,
-  system: 'dnd_5e',
+  system: 'dnd5e',
   role,
   status: role === 'gm' ? 'gm' : 'active',
   gmUsername: null,

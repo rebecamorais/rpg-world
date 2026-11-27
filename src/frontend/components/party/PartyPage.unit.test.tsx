@@ -46,7 +46,7 @@ const person = (userId: string, status: PartyView['people'][number]['status'] = 
 const party = (overrides: Partial<PartyView> = {}): PartyView => ({
   id: 'p1',
   name: 'Mesa',
-  system: 'dnd_5e',
+  system: 'dnd5e',
   edition: '2014',
   imageUrl: null,
   role: 'player',

@@ -283,9 +283,33 @@ describe('proxy', () => {
   });
 
   it('passa o caminho pedido aos Server Components (x-pathname)', async () => {
-    const res = await proxy(request({}, { path: '/system/DnD_5e/character/abc' }));
+    const res = await proxy(request({}, { path: '/system/dnd5e/character/abc' }));
 
-    expect(res.headers.get('x-middleware-request-x-pathname')).toBe('/system/DnD_5e/character/abc');
+    expect(res.headers.get('x-middleware-request-x-pathname')).toBe('/system/dnd5e/character/abc');
+  });
+
+  describe('endereços antigos da ficha', () => {
+    it.each([
+      ['/system/DnD_5e/character/abc', '/system/dnd5e/character/abc'],
+      ['/system/dnd_5e/character/abc/spells', '/system/dnd5e/character/abc/spells'],
+      ['/system/DnD_5e/character/abc/notes?x=1', '/system/dnd5e/character/abc/notes?x=1'],
+    ])('%s vai para %s, com o resto do caminho', async (path, target) => {
+      const res = await proxy(request({ 'sb-access-token': 'jwt' }, { path }));
+
+      expect(res.status).toBe(308);
+      const location = new URL(res.headers.get('location')!);
+      expect(`${location.pathname}${location.search}`).toBe(target);
+      expect(getClaims).not.toHaveBeenCalled();
+    });
+
+    it.each(['/system/dnd5e/character/abc', '/system/pathfinder_2e/character/abc'])(
+      '%s segue sem redirecionar',
+      async (path) => {
+        const res = await proxy(request({}, { path }));
+
+        expect(res.headers.get('location')).toBeNull();
+      },
+    );
   });
 
   describe('quem já está logado', () => {

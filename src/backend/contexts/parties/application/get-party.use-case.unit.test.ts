@@ -19,7 +19,7 @@ const makeRepo = (gmId: string | null) => ({
   findParty: vi.fn<PartyRepo['findParty']>().mockResolvedValue({
     id: 'p',
     name: 'Mesa',
-    system: 'dnd_5e',
+    system: 'dnd5e',
     gmId,
     edition: '2024',
     imageUrl: null,

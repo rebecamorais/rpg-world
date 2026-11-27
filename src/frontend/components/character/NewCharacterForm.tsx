@@ -40,11 +40,10 @@ import {
 import { classDefaults } from '@shared/systems/dnd5e/class-defaults';
 import { EDITIONS, type Edition } from '@shared/systems/dnd5e/content/editions';
 import type { AttributeKey } from '@shared/systems/dnd5e/types';
+import { DEFAULT_SYSTEM, SYSTEMS } from '@shared/systems/registry';
 
 /** Same limit as the API's character schema. */
 const TEXT_MAX = 100;
-/** The only system there is: shown as text until there is a second one to pick. */
-const SYSTEM = 'DnD_5e';
 const LISTED_CLASSES = new Set<string>(Object.values(CharacterClass));
 // A new sheet's: the class's picks don't depend on them, only its hit points do (on the server)
 const NEW_SHEET_ATTRIBUTES: Record<AttributeKey, number> = {
@@ -105,7 +104,7 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
     createMutation.mutate(
       {
         name: data.name.trim(),
-        system: SYSTEM,
+        system: DEFAULT_SYSTEM,
         edition,
         ...(className && { class: className }),
         ...(Object.keys(classChoices).length > 0 && { classChoices }),
@@ -153,7 +152,7 @@ export default function NewCharacterForm({ kind = 'pc' }: { kind?: 'pc' | 'npc' 
 
               <div className="flex flex-col gap-1">
                 <span className="text-label text-muted-foreground">{t('systemLabel')}</span>
-                <p className="text-sm font-medium">{t('systems.dnd5e')}</p>
+                <p className="text-sm font-medium">{t(SYSTEMS[DEFAULT_SYSTEM].labelKey)}</p>
               </div>
 
               <fieldset disabled={createMutation.isPending} className="flex flex-col gap-4">

@@ -41,7 +41,7 @@ const makePartyRepo = () =>
     findParty: vi.fn<PartyRepo['findParty']>().mockResolvedValue({
       id: 'p',
       name: 'Mesa',
-      system: 'dnd_5e',
+      system: 'dnd5e',
       gmId: 'gm-1',
       edition: '2024',
       imageUrl: null,
@@ -65,7 +65,7 @@ const makePartyRepo = () =>
 const summary = (overrides: Partial<PartySummary>): PartySummary => ({
   id: 'p',
   name: 'Mesa',
-  system: 'dnd_5e',
+  system: 'dnd5e',
   role: 'player',
   status: 'active',
   gmUsername: 'mestra',

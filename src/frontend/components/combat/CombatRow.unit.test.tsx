@@ -159,7 +159,7 @@ describe('CombatRow', () => {
       renderRow(goblin());
       expect(screen.getByRole('link', { name: /^Goblin/ })).toHaveAttribute(
         'href',
-        '/system/DnD_5e/character/goblin',
+        '/system/dnd5e/character/goblin',
       );
     });
 

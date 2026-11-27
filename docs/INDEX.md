@@ -38,6 +38,7 @@ As regras de verdade estão nos docs da revisão de telas, não no CONTRIBUTING:
 
 - **Dados:** `content/dnd5e/srd-5.1/` (2014) e `content/dnd5e/srd-5.2/` (2024), importados por `scripts/content/`.
 - **Cálculos:** `shared/systems/dnd5e/`.
+- **Sistemas:** `shared/systems/registry.ts` é o registro (`SystemId = 'dnd5e'`; o banco guarda `dnd_5e`). O endereço de uma ficha sai só de `sheetHref` (`shared/systems/sheet-href.ts`). A catraca `system-boundary.unit.test.ts` limita quem importa `@shared/systems/dnd5e`; a lista (`system-boundary.allowlist.json`) só encolhe. Plano: [r1](plans/2026-11-26-r1-fronteira-do-sistema.md).
 - **Classe na ficha:** [class-sheet-map.md](class-sheet-map.md) (o que cada classe muda) e [class-sheet-coverage.md](class-sheet-coverage.md) (cobertura e fases).
 - **Fontes oficiais e o que falta do SRD:** [srd-o-que-falta.md](plans/2026-11-26-srd-o-que-falta.md) (26/11). A versão atual de 2024 é o **SRD 5.2.1** (só PDF, em dndbeyond.com/srd); não existe SRD oficial em português nem em sueco. O 5etools fixado (`scripts/content/5etools-source.ts`) já segue o 5.2.1. As lacunas viraram as issues #277 a #289.
 - **Como conferir uma regra:** ainda não há procedimento escrito. O que já foi usado: o PDF oficial do SRD 5.1 (para 2024, o do 5.2.1) e os JSON de `content/`. As tabelas de classe (espaços de magia, pacto, truques, Ataque Furtivo, Fúria…) foram conferidas no PDF e entraram nos dados na fase 2 (#237), por `scripts/content/class-tables.ts`.
@@ -74,7 +75,6 @@ Estado tirado do cabeçalho de cada plano e do histórico do git, em 2026-11-25.
 
 **Só ideia ou planejamento, nada implementado:**
 
-- [r1-fronteira-do-sistema.md](plans/2026-11-26-r1-fronteira-do-sistema.md): primeiro passo para vários sistemas (registro, id único `dnd5e`, mapper por sistema, catraca de imports). Proposta no artifact "RPGWorld Multissistema"; R2 (conteúdo com manifesto) ainda sem plano.
 - [dnd-2024-novo-sistema.md](plans/2026-10-15-dnd-2024-novo-sistema.md)
 - [feiticeiros-e-maldicoes.md](plans/2026-10-15-feiticeiros-e-maldicoes.md) (perguntas em aberto no fim)
 - [sessoes-calendario-discord.md](plans/2026-10-15-sessoes-calendario-discord.md)
@@ -96,6 +96,7 @@ Estado tirado do cabeçalho de cada plano e do histórico do git, em 2026-11-25.
 - [revisao-ux-mesas.md](plans/2026-11-01-revisao-ux-mesas.md) (#128)
 - [itens-e-mochila.md](plans/2026-11-02-itens-e-mochila.md) (#138)
 - [exclusao-de-conta.md](plans/2026-11-03-exclusao-de-conta.md) (#147)
+- [r1-fronteira-do-sistema.md](plans/2026-11-26-r1-fronteira-do-sistema.md) (#298): registro de sistemas, id `dnd5e`, mapper de ficha por sistema e catraca de imports. R2 (conteúdo com manifesto) ainda sem plano; proposta no artifact "RPGWorld Multissistema".
 
 **Processo:** [roadmap.md](plans/2026-10-20-roadmap.md).
 

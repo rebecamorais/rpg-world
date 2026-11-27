@@ -40,7 +40,7 @@ describe('SupabasePartyRepository (Integration)', () => {
       {
         id,
         name: 'Mesa Nova',
-        system: 'dnd_5e',
+        system: 'dnd5e',
         role: 'gm',
         status: 'gm',
         gmUsername: null,
@@ -293,7 +293,7 @@ describe('SupabasePartyRepository — página da mesa (Integration)', () => {
     expect(await playerRepo.findParty(partyId)).toEqual({
       id: partyId,
       name: 'Mesa',
-      system: 'dnd_5e',
+      system: 'dnd5e',
       gmId: gm.userId,
       edition: '2024',
       imageUrl: null,

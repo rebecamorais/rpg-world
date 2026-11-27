@@ -20,7 +20,7 @@ const t = messages.accountDeletion.dangerZone;
 const party = (name: string, overrides: Partial<PartySummary> = {}): PartySummary => ({
   id: name,
   name,
-  system: 'dnd_5e',
+  system: 'dnd5e',
   role: 'gm',
   status: 'gm',
   gmUsername: null,

@@ -6,6 +6,7 @@ import { classDefaults } from '@shared/systems/dnd5e/class-defaults';
 import type { ClassContent } from '@shared/systems/dnd5e/class-resources';
 import { ATTRIBUTE_KEYS, SKILL_KEYS } from '@shared/systems/dnd5e/constants';
 import type { Edition } from '@shared/systems/dnd5e/content/editions';
+import type { SystemId } from '@shared/systems/registry';
 
 import { CharacterError, CharacterErrorCodes } from '../../domain/CharacterError';
 import { CharacterKind } from '../../domain/entity/Character';
@@ -23,7 +24,7 @@ export interface CreateCharacterInput {
   id?: string;
   name: string;
   ownerUsername: string;
-  system?: string;
+  system?: SystemId;
   edition?: Edition;
   /** A class id from the list (`bard`) or the player's own text. */
   class?: string;

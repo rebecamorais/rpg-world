@@ -9,7 +9,7 @@ const NAME = 'Revisão F2 A Chilli, a gata que comanda a mesa';
 vi.mock('next/navigation', () => ({ useParams: () => ({}), usePathname: () => '/x' }));
 vi.mock('@frontend/hooks/useCharacter', () => ({
   useCharacter: () => ({
-    character: { id: 'c1', name: NAME, system: 'DnD_5e', class: 'wizard', avatarUrl: null },
+    character: { id: 'c1', name: NAME, system: 'dnd5e', class: 'wizard', avatarUrl: null },
   }),
 }));
 

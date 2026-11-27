@@ -20,6 +20,9 @@ import { type SheetSource, SheetSourceContext } from '@frontend/hooks/useSheetSo
 import { characterTheme } from '@frontend/lib/color-utils';
 import { cn } from '@frontend/lib/utils';
 
+import { DEFAULT_SYSTEM } from '@shared/systems/registry';
+import { sheetHref } from '@shared/systems/sheet-href';
+
 import { LoreTab } from './LoreTab';
 import { SheetFieldset } from './SheetFieldset';
 import { SheetPage } from './SheetPage';
@@ -50,7 +53,7 @@ function sourceOf(characterId: string, source: SheetViewerSource): SheetSource {
     readOnly: true,
     partyId: null,
     apiPath: `/api/characters/${characterId}`,
-    pagesPath: `/system/DnD_5e/character/${characterId}`,
+    pagesPath: sheetHref(DEFAULT_SYSTEM, characterId),
     embedded: true,
   };
 }

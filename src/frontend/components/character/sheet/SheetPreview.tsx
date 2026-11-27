@@ -18,6 +18,9 @@ import {
 import AppLink from '@frontend/demo/AppLink';
 import { useMediaQuery } from '@frontend/hooks/useMediaQuery';
 
+import { DEFAULT_SYSTEM } from '@shared/systems/registry';
+import { sheetHref } from '@shared/systems/sheet-href';
+
 import type { SheetViewerSource } from './SheetViewer';
 
 // The whole sheet (spells, inventory...) only loads when someone opens it
@@ -72,7 +75,7 @@ export function SheetPreview({
           {canEdit && (
             <Button asChild variant="outline" size="sm" className="self-start">
               <AppLink
-                href={`/system/DnD_5e/character/${characterId}`}
+                href={sheetHref(DEFAULT_SYSTEM, characterId)}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${t('edit')} ${t('newTab')}`}
